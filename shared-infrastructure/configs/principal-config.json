@@ -1,0 +1,94 @@
+{
+  "principal_engineer": {
+    "version": "1.0.0",
+    "platforms": {
+      "hubspot": {
+        "enabled": true,
+        "base_path": "./ClaudeHubSpot",
+        "config_file": ".mcp.json",
+        "agents_path": "agents",
+        "orchestrator": "hubspot-orchestrator"
+      },
+      "salesforce": {
+        "enabled": true,
+        "base_path": "./ClaudeSFDC",
+        "config_file": ".mcp.json",
+        "agents_path": "agents",
+        "orchestrator": "sfdc-orchestrator"
+      }
+    },
+    "management_team": {
+      "config_manager": {
+        "enabled": true,
+        "agent": "config-manager",
+        "responsibilities": ["CLAUDE.md", ".mcp.json", "portal configs", "environment settings"]
+      },
+      "agent_maintainer": {
+        "enabled": true,
+        "agent": "agent-maintainer",
+        "responsibilities": ["agent YAML files", "agent lifecycle", "version management"]
+      },
+      "release_coordinator": {
+        "enabled": true,
+        "agent": "release-coordinator",
+        "responsibilities": ["deployments", "rollbacks", "CI/CD", "version control"]
+      },
+      "quality_auditor": {
+        "enabled": true,
+        "agent": "quality-auditor",
+        "responsibilities": ["performance monitoring", "error analysis", "quality metrics"]
+      },
+      "integration_architect": {
+        "enabled": true,
+        "agent": "integration-architect",
+        "responsibilities": ["cross-platform sync", "API management", "data mapping"]
+      },
+      "mcp_tools_manager": {
+        "enabled": true,
+        "agent": "mcp-tools-manager",
+        "responsibilities": ["MCP servers", "tool configurations", "performance tuning"]
+      },
+      "documentation_curator": {
+        "enabled": true,
+        "agent": "documentation-curator",
+        "responsibilities": ["README files", "API docs", "guides", "changelogs"]
+      }
+    },
+    "monitoring": {
+      "metrics_collection_interval": 300,
+      "health_check_interval": 60,
+      "alert_thresholds": {
+        "error_rate": 0.05,
+        "response_time_p95": 2000,
+        "success_rate": 0.95,
+        "availability": 0.999
+      },
+      "dashboards": {
+        "real_time": true,
+        "historical": true,
+        "predictive": true
+      }
+    },
+    "automation": {
+      "auto_recovery": true,
+      "self_healing": true,
+      "predictive_maintenance": true,
+      "auto_scaling": false,
+      "continuous_optimization": true
+    },
+    "governance": {
+      "audit_trail": true,
+      "compliance_checking": true,
+      "security_scanning": true,
+      "code_review_required": true,
+      "documentation_required": true
+    },
+    "integration": {
+      "sync_interval": 300,
+      "batch_size": 100,
+      "retry_attempts": 3,
+      "conflict_resolution": "last_write_wins",
+      "data_validation": true
+    }
+  }
+}

@@ -1,0 +1,226 @@
+# Shared LiteLLM Configuration for Multi-Platform Model Proxy
+# This configuration is used when both ClaudeHubSpot and ClaudeSFDC are present
+# Provides unified model management and cost optimization
+
+model_list:
+  # Shared premium models
+  - model_name: shared-opus
+    litellm_params:
+      model: claude-3-opus-20240229
+      api_key: ${ANTHROPIC_API_KEY}
+      max_tokens: 4096
+      temperature: 0.7
+    
+  - model_name: shared-gpt5
+    litellm_params:
+      model: gpt-5
+      api_key: ${OPENAI_API_KEY}
+      max_tokens: 4096
+      temperature: 0.7
+    
+  # Shared standard models
+  - model_name: shared-gpt5-mini
+    litellm_params:
+      model: gpt-5-mini
+      api_key: ${OPENAI_API_KEY}
+      max_tokens: 4096
+      temperature: 0.7
+    
+  - model_name: shared-sonnet
+    litellm_params:
+      model: claude-3-sonnet-20240229
+      api_key: ${ANTHROPIC_API_KEY}
+      max_tokens: 4096
+      temperature: 0.5
+    
+  # Shared fast models
+  - model_name: shared-haiku
+    litellm_params:
+      model: claude-3-haiku-20240307
+      api_key: ${ANTHROPIC_API_KEY}
+      max_tokens: 4096
+      temperature: 0.3
+    
+  - model_name: shared-gpt5-nano
+    litellm_params:
+      model: gpt-5-nano
+      api_key: ${OPENAI_API_KEY}
+      max_tokens: 4096
+      temperature: 0.3
+
+# Unified router configuration
+router_settings:
+  routing_strategy: "cost-optimized"
+  
+  # Cross-platform model rules
+  model_rules:
+    # Code generation (both Apex and JavaScript)
+    - pattern: "code|apex|trigger|class|function|component"
+      preferred_model: "shared-gpt5"
+      fallback_model: "shared-opus"
+    
+    # Automation and workflows
+    - pattern: "automation|workflow|flow|process"
+      preferred_model: "shared-gpt5-mini"
+      fallback_model: "shared-sonnet"
+    
+    # Data operations and queries
+    - pattern: "query|soql|data|import|export|bulk"
+      preferred_model: "shared-haiku"
+      fallback_model: "shared-gpt5-nano"
+    
+    # Analytics and reporting
+    - pattern: "analytics|report|dashboard|metrics"
+      preferred_model: "shared-sonnet"
+      fallback_model: "shared-gpt5-mini"
+    
+    # API and integrations
+    - pattern: "api|integration|webhook|rest|soap"
+      preferred_model: "shared-opus"
+      fallback_model: "shared-gpt5-mini"
+    
+    # Default fallback
+    - pattern: ".*"
+      preferred_model: "shared-opus"
+      fallback_model: "shared-sonnet"
+
+# Shared fallback configuration
+fallback_settings:
+  enable_fallback: true
+  max_retries: 3
+  retry_delay: 2
+  fallback_order:
+    - shared-opus
+    - shared-gpt5-mini
+    - shared-sonnet
+    - shared-haiku
+
+# Unified cost management
+cost_settings:
+  enable_cost_tracking: true
+  
+  # Combined limits for both platforms
+  daily_limit: 125.00
+  monthly_limit: 2500.00
+  alert_threshold: 0.75
+  
+  # Per-project allocations
+  project_allocations:
+    ClaudeHubSpot:
+      daily_limit: 50.00
+      priority: "normal"
+    ClaudeSFDC:
+      daily_limit: 75.00
+      priority: "high"  # Higher priority for complex Apex development
+  
+  # Model costs per 1K tokens
+  model_costs:
+    shared-gpt5: 0.15
+    shared-gpt5-mini: 0.03
+    shared-gpt5-nano: 0.01
+    shared-opus: 0.075
+    shared-sonnet: 0.025
+    shared-haiku: 0.001
+
+# Performance monitoring
+monitoring:
+  enable_logging: true
+  log_level: "info"
+  log_path: "./logs/shared-model-proxy.log"
+  metrics_enabled: true
+  metrics_port: 9090
+  
+  # Unified dashboard
+  dashboard:
+    enabled: true
+    port: 3000
+    refresh_interval: 5000
+
+# Shared cache configuration
+cache_settings:
+  enable_cache: true
+  cache_type: "redis"  # Use Redis for shared cache
+  redis_url: ${REDIS_URL:-redis://localhost:6379}
+  ttl: 7200
+  max_size: "500mb"
+  
+  # Cache sharing between projects
+  share_cache: true
+  namespace_separator: ":"
+
+# Load balancing
+load_balancing:
+  enabled: true
+  strategy: "round-robin"
+  
+  # Multiple proxy instances for scale
+  instances:
+    - host: "127.0.0.1"
+      port: 8000
+      weight: 1
+    - host: "127.0.0.1"
+      port: 8001
+      weight: 1
+
+# Cross-platform optimization
+cross_platform:
+  # Shared learning
+  learning:
+    enabled: true
+    share_patterns: true
+    optimize_routing: true
+  
+  # Resource pooling
+  pooling:
+    enabled: true
+    max_concurrent: 20
+    queue_size: 100
+  
+  # Priority management
+  priority:
+    enabled: true
+    rules:
+      - project: "ClaudeSFDC"
+        operation: "apex-generation"
+        priority: 10
+      - project: "ClaudeHubSpot"
+        operation: "bulk-import"
+        priority: 5
+
+# Environment configurations
+environments:
+  development:
+    default_model: "shared-haiku"
+    enable_cache: true
+    cache_type: "memory"
+    log_level: "debug"
+    daily_limit: 10.00
+  
+  staging:
+    default_model: "shared-sonnet"
+    enable_cache: true
+    cache_type: "redis"
+    log_level: "info"
+    daily_limit: 50.00
+  
+  production:
+    default_model: "shared-opus"
+    enable_cache: true
+    cache_type: "redis"
+    log_level: "warning"
+    daily_limit: 125.00
+
+# Security settings
+security:
+  api_key_rotation:
+    enabled: false
+    interval_days: 30
+  
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+  
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst_size: 20

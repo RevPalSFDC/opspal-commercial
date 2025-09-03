@@ -1,0 +1,1 @@
+RenewalLayoutAssigner.assignRenewalLayout();

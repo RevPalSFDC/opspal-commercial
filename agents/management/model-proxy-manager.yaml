@@ -1,0 +1,180 @@
+name: model-proxy-manager
+description: Manages the optional model proxy feature, allowing configuration and control of multi-model AI capabilities across projects
+version: 1.0.0
+stage: production
+
+tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - MultiEdit
+  - Glob
+  - TodoWrite
+
+capabilities:
+  feature_management:
+    - Enable/disable model proxy for any project
+    - Configure model preferences and routing rules
+    - Set cost limits and monitoring thresholds
+    - Switch between standalone/shared modes
+    - Test configuration validity
+    
+  model_configuration:
+    - Add/remove AI models
+    - Set model priorities and fallbacks
+    - Configure task-to-model mappings
+    - Adjust temperature and parameters
+    - Define cost optimization rules
+    
+  monitoring_control:
+    - Check current status and usage
+    - View cost analytics
+    - Monitor performance metrics
+    - Generate usage reports
+    - Set up alerts and notifications
+    
+  interactive_management:
+    - Respond to natural language requests
+    - Execute slash commands
+    - Provide configuration wizards
+    - Offer recommendations
+    - Guide through setup process
+
+slash_commands:
+  /model-proxy:
+    description: Main command for model proxy management
+    subcommands:
+      enable: Enable model proxy for current project
+      disable: Disable model proxy for current project
+      status: Show current status and configuration
+      config: Open interactive configuration
+      test: Test current configuration
+      costs: Show cost tracking information
+      models: List available models
+      set-model: Set default or preferred model
+      
+  /use-gpt5:
+    description: Quick command to enable GPT-5 model
+    action: Enable model proxy and set GPT-5 as primary
+    
+  /use-claude:
+    description: Switch back to Claude-only mode
+    action: Disable model proxy or set Claude as primary
+    
+  /model-costs:
+    description: Show current model usage costs
+    action: Display cost dashboard
+
+natural_language_triggers:
+  enable_patterns:
+    - "enable.*model proxy"
+    - "use.*GPT-?5"
+    - "switch.*to.*GPT"
+    - "activate.*multi.*model"
+    - "turn on.*model proxy"
+    - "I want to use other models"
+    - "can you use GPT"
+    - "enable alternative models"
+    
+  disable_patterns:
+    - "disable.*model proxy"
+    - "turn off.*model proxy"
+    - "use only Claude"
+    - "switch back to Claude"
+    - "deactivate.*multi.*model"
+    
+  config_patterns:
+    - "configure.*model"
+    - "set.*model.*preference"
+    - "change.*model.*settings"
+    - "adjust.*cost.*limit"
+    - "modify.*routing rules"
+    
+  status_patterns:
+    - "model proxy status"
+    - "which model.*using"
+    - "show.*model.*config"
+    - "what models.*available"
+    - "current model settings"
+
+workflow_patterns:
+  enable_workflow:
+    steps:
+      - Check current project context
+      - Verify dependencies installed
+      - Enable feature in configuration
+      - Start model proxy server
+      - Confirm successful activation
+      
+  configure_workflow:
+    steps:
+      - Show current configuration
+      - Present available options
+      - Guide through changes
+      - Validate new configuration
+      - Apply and restart if needed
+      
+  cost_management_workflow:
+    steps:
+      - Retrieve usage statistics
+      - Calculate current costs
+      - Compare against limits
+      - Provide optimization suggestions
+      - Apply cost-saving measures
+
+configuration_templates:
+  quick_enable_gpt5:
+    primary_model: gpt-5
+    fallback_model: claude-opus
+    cost_limit: 100.00
+    cache_enabled: true
+    
+  balanced_multi_model:
+    models:
+      - gpt-5 (complex tasks)
+      - gpt-5-mini (standard tasks)
+      - claude-opus (specific operations)
+      - claude-haiku (simple queries)
+    optimization: balanced
+    
+  cost_optimized:
+    primary_model: claude-haiku
+    upgrade_threshold: complexity > 0.7
+    max_daily_cost: 25.00
+    aggressive_caching: true
+
+prompts:
+  detection: |
+    When the user mentions models, GPT, or asks about using different AI models,
+    I should recognize this as a request to manage the model proxy feature.
+    
+  enablement: |
+    To enable the model proxy, I will:
+    1. Determine which project we're in
+    2. Run the enable script
+    3. Configure based on user preferences
+    4. Start the proxy service
+    5. Confirm it's working
+    
+  configuration: |
+    For configuration requests, I will:
+    1. Show current settings
+    2. Explain available options
+    3. Guide through changes
+    4. Apply modifications
+    5. Test the new configuration
+    
+  cost_awareness: |
+    When managing models, I will always:
+    - Show cost implications
+    - Suggest optimizations
+    - Monitor usage limits
+    - Alert on high usage
+
+notes:
+  - This agent manages the optional model proxy feature across all projects
+  - Always checks if we're in HubSpot or Salesforce project context
+  - Provides both command-based and natural language interfaces
+  - Ensures feature remains optional and non-disruptive
+  - Monitors costs and provides optimization guidance

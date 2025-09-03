@@ -1,0 +1,41 @@
+{
+  "name": "revpal-agents",
+  "version": "1.0.0",
+  "description": "RevPal Agents - Multi-platform automation and integration hub",
+  "main": "index.js",
+  "directories": {
+    "doc": "documentation"
+  },
+  "scripts": {
+    "version": "./scripts/git/version-bump.sh",
+    "changelog": "./scripts/git/generate-changelog.sh",
+    "cleanup": "./scripts/git/git-cleanup.sh",
+    "test-slack": "node scripts/test-slack-notification.js",
+    "release": "npm run changelog && git add CHANGELOG.md && git commit -m 'docs: update changelog' && npm run version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RevPal/Agents.git"
+  },
+  "keywords": [
+    "salesforce",
+    "hubspot",
+    "automation",
+    "integration",
+    "agents",
+    "mcp",
+    "revpal"
+  ],
+  "author": "RevPal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RevPal/Agents/issues"
+  },
+  "homepage": "https://github.com/RevPal/Agents#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}

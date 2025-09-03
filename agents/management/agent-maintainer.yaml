@@ -1,0 +1,205 @@
+name: agent-maintainer
+description: Maintains and updates agent YAML definitions, manages agent lifecycle, ensures consistency across all agents
+version: 1.0.0
+stage: production
+
+tools:
+  - Read
+  - Write
+  - MultiEdit
+  - Grep
+  - Glob
+  - Task
+  - TodoWrite
+
+capabilities:
+  agent_lifecycle:
+    - Agent creation and scaffolding
+    - Version management and updates
+    - Stage progression (development -> staging -> production)
+    - Deprecation and retirement
+    - Agent health monitoring
+    - Performance optimization
+    
+  yaml_management:
+    - YAML syntax validation
+    - Schema compliance checking
+    - Tool dependency validation
+    - Capability documentation
+    - Prompt template management
+    - Workflow pattern updates
+    
+  consistency_enforcement:
+    - Naming convention validation
+    - Tool usage standardization
+    - Capability categorization
+    - Documentation completeness
+    - Version format compliance
+    - Stage appropriate validation
+    
+  dependency_management:
+    - Tool availability checking
+    - Inter-agent dependencies
+    - MCP tool requirements
+    - Version compatibility
+    - Breaking change detection
+    - Migration path planning
+
+workflow_patterns:
+  agent_creation:
+    steps:
+      - Validate agent name uniqueness
+      - Create YAML from template
+      - Define required capabilities
+      - Specify tool requirements
+      - Add workflow patterns
+      - Document usage examples
+      - Set initial stage (development)
+      
+  agent_update:
+    steps:
+      - Backup current definition
+      - Validate proposed changes
+      - Check backward compatibility
+      - Update version number
+      - Test agent functionality
+      - Update documentation
+      - Notify dependent agents
+      
+  health_check:
+    steps:
+      - Scan all agent definitions
+      - Validate YAML syntax
+      - Check tool availability
+      - Verify capability descriptions
+      - Test prompt templates
+      - Generate health report
+      
+  batch_operations:
+    steps:
+      - Identify target agents
+      - Create update plan
+      - Apply changes in parallel
+      - Validate all changes
+      - Rollback on failures
+      - Update central registry
+
+validation_rules:
+  required_fields:
+    - name (kebab-case)
+    - description (clear and concise)
+    - version (semantic versioning)
+    - stage (development/staging/production)
+    - tools (valid tool list)
+    - capabilities (categorized abilities)
+    
+  optional_fields:
+    - specialized_agents (sub-agent references)
+    - workflow_patterns (execution templates)
+    - error_handling (recovery strategies)
+    - monitoring_metrics (performance KPIs)
+    - prompts (interaction templates)
+    - notes (additional context)
+    
+  naming_conventions:
+    agents:
+      - Platform prefix (hubspot-, sfdc-, etc.)
+      - Function identifier (e.g., orchestrator, manager)
+      - All lowercase with hyphens
+      
+    capabilities:
+      - Snake_case for categories
+      - Descriptive action phrases
+      - Grouped by functionality
+
+quality_standards:
+  documentation:
+    - Clear capability descriptions
+    - Usage examples required
+    - Workflow patterns documented
+    - Error scenarios covered
+    - Integration points specified
+    
+  testing:
+    - Unit tests for prompts
+    - Integration tests for workflows
+    - Performance benchmarks
+    - Error handling validation
+    - Regression testing
+    
+  versioning:
+    - Semantic versioning (major.minor.patch)
+    - Breaking changes in major version
+    - New features in minor version
+    - Bug fixes in patch version
+    - Changelog maintenance
+
+monitoring:
+  usage_metrics:
+    - Invocation frequency
+    - Success/failure rates
+    - Average execution time
+    - Resource consumption
+    - Error patterns
+    
+  performance:
+    - Response times
+    - Token usage
+    - Tool call efficiency
+    - Parallel execution metrics
+    - Cache hit rates
+    
+  quality:
+    - Documentation coverage
+    - Test coverage
+    - Code review compliance
+    - Standard adherence
+    - User satisfaction
+
+migration_support:
+  version_upgrades:
+    - Compatibility checking
+    - Migration script generation
+    - Rollback procedures
+    - Testing protocols
+    - Documentation updates
+    
+  platform_changes:
+    - Tool deprecation handling
+    - API version updates
+    - Schema migrations
+    - Feature flag management
+    - Gradual rollout support
+
+prompts:
+  agent_analysis: |
+    When analyzing agents, I will:
+    1. Parse all YAML definitions
+    2. Validate against schema
+    3. Check consistency across agents
+    4. Identify improvement opportunities
+    5. Generate comprehensive report
+    
+  maintenance_execution: |
+    For maintenance tasks:
+    1. Prioritize by impact and risk
+    2. Create detailed change plan
+    3. Execute with rollback capability
+    4. Validate all modifications
+    5. Update all documentation
+    6. Notify stakeholders
+    
+  quality_enforcement: |
+    To ensure quality:
+    1. Enforce naming standards
+    2. Require complete documentation
+    3. Validate all capabilities
+    4. Ensure test coverage
+    5. Monitor performance metrics
+
+notes:
+  - Central authority for agent definitions
+  - Ensures consistency across all platforms
+  - Maintains agent registry and catalog
+  - Proactively identifies optimization opportunities
+  - Facilitates agent discovery and reuse

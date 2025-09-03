@@ -1,0 +1,201 @@
+name: platform-adapter-template
+description: Template for creating new platform adapters for CRM and business systems
+version: 1.0.0
+stage: template
+
+# Replace [PLATFORM] with your platform name (e.g., monday, pipedrive, zoho)
+# This template provides the structure for integrating new platforms
+
+tools:
+  - Read
+  - Write
+  - WebFetch
+  - Bash
+  - Task
+  - TodoWrite
+
+capabilities:
+  authentication:
+    - OAuth 2.0 flow
+    - API key management
+    - Token refresh
+    - Session management
+    - Multi-tenant support
+    
+  data_operations:
+    - CRUD operations
+    - Bulk processing
+    - Data export/import
+    - Query execution
+    - Pagination handling
+    
+  synchronization:
+    - Real-time sync
+    - Batch sync
+    - Incremental updates
+    - Conflict resolution
+    - Data mapping
+    
+  platform_specific:
+    # Add platform-specific capabilities here
+    - Custom objects
+    - Workflow automation
+    - Reporting features
+    - Integration hooks
+
+configuration:
+  api:
+    base_url: "https://api.[platform].com"
+    version: "v1"
+    rate_limits:
+      requests_per_second: 10
+      requests_per_minute: 500
+      requests_per_hour: 10000
+    
+  authentication:
+    type: "oauth2"  # or "api_key", "basic", "custom"
+    oauth:
+      authorize_url: "https://[platform].com/oauth/authorize"
+      token_url: "https://[platform].com/oauth/token"
+      scopes: []
+    
+  data_model:
+    objects:
+      # Define platform objects and their mappings
+      contacts:
+        api_name: "contacts"
+        id_field: "id"
+        searchable_fields: ["email", "name", "phone"]
+        
+      accounts:
+        api_name: "accounts"
+        id_field: "id"
+        searchable_fields: ["name", "domain"]
+        
+      # Add more objects as needed
+
+field_mappings:
+  # Define how fields map between platforms
+  to_salesforce:
+    contacts:
+      "[platform]_field": "salesforce_field"
+      "email": "Email"
+      "first_name": "FirstName"
+      "last_name": "LastName"
+      
+  to_hubspot:
+    contacts:
+      "[platform]_field": "hubspot_field"
+      "email": "email"
+      "first_name": "firstname"
+      "last_name": "lastname"
+      
+  from_common:
+    # Map from common data model to platform
+    contacts:
+      "email": "[platform]_email_field"
+      "firstName": "[platform]_first_name"
+      "lastName": "[platform]_last_name"
+
+workflow_patterns:
+  initial_setup:
+    steps:
+      - Validate credentials
+      - Test API connectivity
+      - Fetch metadata
+      - Map data models
+      - Configure sync rules
+      - Set up webhooks
+      - Initialize monitoring
+      
+  data_sync:
+    steps:
+      - Detect changes
+      - Transform data
+      - Validate payload
+      - Execute API calls
+      - Handle responses
+      - Update sync log
+      - Trigger downstream
+
+error_handling:
+  retry_strategy:
+    max_attempts: 3
+    backoff_multiplier: 2
+    initial_delay: 1000
+    
+  error_codes:
+    rate_limit:
+      code: 429
+      action: "exponential_backoff"
+      
+    authentication:
+      code: 401
+      action: "refresh_token"
+      
+    not_found:
+      code: 404
+      action: "skip_record"
+      
+    server_error:
+      code: 500
+      action: "retry_with_backoff"
+
+monitoring:
+  metrics:
+    - api_calls_per_minute
+    - success_rate
+    - average_response_time
+    - data_volume
+    - error_frequency
+    
+  health_checks:
+    - api_availability
+    - authentication_validity
+    - rate_limit_status
+    - sync_lag
+    
+  alerts:
+    - high_error_rate
+    - authentication_failure
+    - rate_limit_exceeded
+    - sync_failure
+
+testing:
+  unit_tests:
+    - Authentication flow
+    - Data transformation
+    - Error handling
+    - Rate limiting
+    
+  integration_tests:
+    - End-to-end sync
+    - Bulk operations
+    - Conflict resolution
+    - Webhook handling
+    
+  performance_tests:
+    - Load testing
+    - Stress testing
+    - Scalability testing
+
+documentation:
+  required:
+    - Setup guide
+    - API reference
+    - Field mapping documentation
+    - Error code reference
+    - Troubleshooting guide
+    
+  examples:
+    - Authentication setup
+    - Basic CRUD operations
+    - Bulk sync
+    - Webhook configuration
+
+notes:
+  - This is a template - customize for your specific platform
+  - Ensure all API limits are respected
+  - Implement proper error handling
+  - Document all custom behaviors
+  - Test thoroughly before production use

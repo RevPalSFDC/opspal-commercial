@@ -1,0 +1,58 @@
+name: Release Slack Notification
+
+on:
+  release:
+    types: [published, created, released]
+
+jobs:
+  notify-slack:
+    name: Send Slack Notification
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Send Slack Notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Extract release information
+          VERSION="${{ github.event.release.tag_name }}"
+          TITLE="${{ github.event.release.name }}"
+          BODY="${{ github.event.release.body }}"
+          URL="${{ github.event.release.html_url }}"
+          AUTHOR="${{ github.event.release.author.login }}"
+          CREATED_AT="${{ github.event.release.created_at }}"
+          IS_DRAFT="${{ github.event.release.draft }}"
+          IS_PRERELEASE="${{ github.event.release.prerelease }}"
+          REPO_NAME="${{ github.event.repository.name }}"
+          REPO_URL="${{ github.event.repository.html_url }}"
+          
+          # Send notification
+          node scripts/slack-release-notifier.js \
+            --version "$VERSION" \
+            --title "$TITLE" \
+            --body "$BODY" \
+            --url "$URL" \
+            --author "$AUTHOR" \
+            --createdAt "$CREATED_AT" \
+            --draft "$IS_DRAFT" \
+            --prerelease "$IS_PRERELEASE" \
+            --projectName "$REPO_NAME" \
+            --repoUrl "$REPO_URL"
+            
+      - name: Log Notification Status
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ Slack notification sent successfully for release ${{ github.event.release.tag_name }}"
+          else
+            echo "❌ Failed to send Slack notification for release ${{ github.event.release.tag_name }}"
+          fi
