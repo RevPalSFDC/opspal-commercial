@@ -1,0 +1,87 @@
+{
+  "permissions": {
+    "allow": [
+      "Read", 
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "Grep", 
+      "Glob",
+      "Bash(git status:*)", 
+      "Bash(git diff:*)", 
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)",
+      "Bash(which:*)",
+      "Bash(pwd:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)", 
+      "Bash(git pull:*)",
+      "Bash(sf:*)", 
+      "Bash(sfdx:*)",
+      "Bash(npm install:*)",
+      "Bash(npm publish:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(**/.ssh/**)",
+      "Read(**/node_modules/**)"
+    ],
+    "additionalDirectories": [
+      "./ClaudeSFDC",
+      "./ClaudeHubSpot",
+      "./opspal"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/validate.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/notify_slack.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '{msg:(\"Subagent finished: \" + .tool_name)}' | tee /dev/null"
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
+    "CLAUDE_PROJECT_DIR": "/home/chris/Desktop/RevPal/Agents",
+    "USE_BUILTIN_RIPGREP": "0"
+  },
+  "model": {
+    "default": "opus",
+    "subagent": "sonnet"
+  }
+}

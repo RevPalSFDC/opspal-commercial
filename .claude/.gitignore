@@ -1,0 +1,20 @@
+# Local settings (contains personal preferences and secrets)
+settings.local.json
+
+# Logs (can be regenerated)
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+.vscode/
+.idea/

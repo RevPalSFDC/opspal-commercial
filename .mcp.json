@@ -1,0 +1,48 @@
+{
+  "mcpServers": {
+    "hubspot": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@hubspot/mcp-server"
+      ],
+      "env": {
+        "HUBSPOT_ACCESS_TOKEN": "${HUBSPOT_ACCESS_TOKEN}"
+      },
+      "disabled": false
+    },
+    "salesforce-dx": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@salesforce/mcp-server-sfdx"
+      ],
+      "env": {
+        "SALESFORCE_ORG_ALIAS": "${SALESFORCE_ORG_ALIAS:-production}"
+      },
+      "disabled": false
+    },
+    "error-logging": {
+      "command": "node",
+      "args": [
+        "./control-center/error-logger/mcp-server.js"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "LOG_FILE": ".claude/logs/errors.log"
+      },
+      "disabled": false
+    },
+    "model-proxy": {
+      "command": "node",
+      "args": [
+        "./control-center/model-proxy/mcp-server.js"
+      ],
+      "env": {
+        "ENABLE_MODEL_PROXY": "${ENABLE_MODEL_PROXY:-false}",
+        "DEFAULT_MODEL": "sonnet"
+      },
+      "disabled": true
+    }
+  }
+}
