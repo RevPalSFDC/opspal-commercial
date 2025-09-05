@@ -89,3 +89,18 @@ Top Issues:
 - Reports saved only to `./reports/` in parent
 - Process continues even if individual projects fail
 - Maximum processing time: 5 minutes total
+
+## CI Integration
+
+Set exit code based on worst scores across all projects:
+- **0**: All projects pass (all scores < 2)
+- **1**: Any project has warning (score = 2)
+- **2**: Any project fails (score ≥ 3)
+- **3**: Configuration errors detected
+
+Final output should include:
+```
+OVERALL_STATUS: FAIL
+WORST_SCORES: ClaudeSFDC(MB=3), ClaudeHubSpot(OPT=2)
+EXIT_CODE: 2
+```

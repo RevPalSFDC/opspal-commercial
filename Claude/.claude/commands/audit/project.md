@@ -12,9 +12,11 @@ Ask the user for the path to the target project (e.g., `../ClaudeSFDC`, `../Clau
 
 ### 2. Verify Project Structure
 Check that the path:
-- Exists and is accessible
+- Exists and is accessible (use `realpath` to resolve)
+- Is a sibling directory or in allowed paths (not symlink escape)
 - Contains `.claude/agents/` directory
 - Has at least one `.md` agent file
+- Reject if path contains `..` traversal attempts
 
 ### 3. Gather Agent Files
 Read all agent files from:
