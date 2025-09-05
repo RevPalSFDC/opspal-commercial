@@ -1,0 +1,127 @@
+{
+  "description": "Golden roster of expected agents and their allowed tools",
+  "version": "1.0.0",
+  "updated": "2025-09-05",
+  
+  "Agents": {
+    "description": "Main RevPal project (recently refactored)",
+    "expected": [
+      {
+        "name": "release-coordinator",
+        "tools": ["Task", "Read", "Grep", "Glob", "Bash(git:*)"],
+        "purpose": "Orchestrates releases across platforms"
+      },
+      {
+        "name": "hubspot-workflow",
+        "tools": ["mcp__hubspot", "Read", "Write"],
+        "purpose": "HubSpot workflow automation only"
+      },
+      {
+        "name": "hubspot-data",
+        "tools": ["mcp__hubspot", "Read", "Write", "Grep"],
+        "purpose": "HubSpot data operations only"
+      },
+      {
+        "name": "hubspot-api",
+        "tools": ["mcp__hubspot", "Read"],
+        "purpose": "HubSpot integrations and webhooks"
+      },
+      {
+        "name": "sfdc-metadata",
+        "tools": ["mcp__salesforce-dx", "Read", "Grep", "Glob", "Bash(sfdx:*)", "Bash(sf:*)"],
+        "purpose": "Salesforce metadata deployments"
+      },
+      {
+        "name": "sfdc-apex",
+        "tools": ["Read", "Write", "Grep", "Glob", "Bash(sfdx:*)", "Bash(sf:*)"],
+        "purpose": "APEX development and testing"
+      },
+      {
+        "name": "sfdc-discovery",
+        "tools": ["mcp__salesforce-dx", "Read", "Grep", "Glob"],
+        "purpose": "Read-only Salesforce analysis"
+      }
+    ],
+    "max_agents": 10,
+    "max_backstory_lines": 30
+  },
+  
+  "ClaudeSFDC": {
+    "description": "Salesforce project (needs refactoring from 30+ agents)",
+    "current_count": 30,
+    "target_count": 5,
+    "expected": [
+      "sfdc-metadata",
+      "sfdc-apex",
+      "sfdc-discovery",
+      "sfdc-automation",
+      "sfdc-data"
+    ],
+    "deprecated": [
+      "sfdc-orchestrator",
+      "sfdc-planner",
+      "instance-manager",
+      "instance-backup",
+      "instance-sync",
+      "sfdc-revops-auditor",
+      "sfdc-performance-optimizer"
+    ]
+  },
+  
+  "ClaudeHubSpot": {
+    "description": "HubSpot project (needs refactoring from 20 agents)",
+    "current_count": 20,
+    "target_count": 4,
+    "expected": [
+      "hubspot-workflow",
+      "hubspot-data",
+      "hubspot-api",
+      "hubspot-analytics"
+    ],
+    "deprecated": [
+      "hubspot-orchestrator",
+      "hubspot-contact-manager",
+      "hubspot-email-campaign-manager",
+      "hubspot-pipeline-manager",
+      "hubspot-marketing-automation"
+    ]
+  },
+  
+  "validation_rules": {
+    "max_tools_per_agent": 6,
+    "max_backstory_lines": 30,
+    "required_sections": [
+      "Use cases",
+      "Don'ts", 
+      "Handoffs",
+      "Success criteria"
+    ],
+    "forbidden_tools": [
+      "Bash(*)",
+      "Write(/etc/*)",
+      "Edit(/.env*)"
+    ],
+    "mcp_server_mapping": {
+      "mcp__hubspot": "hubspot",
+      "mcp__salesforce-dx": "salesforce-dx",
+      "mcp__salesforce": "salesforce-dx"
+    }
+  },
+  
+  "ci_thresholds": {
+    "pass": {
+      "all_scores": "< 2"
+    },
+    "warning": {
+      "any_score": "= 2"
+    },
+    "fail": {
+      "any_score": ">= 3"
+    },
+    "critical": {
+      "config_error": true,
+      "path_traversal": true,
+      "collision_detected": true
+    }
+  }
+}

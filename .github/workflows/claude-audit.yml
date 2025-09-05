@@ -1,0 +1,160 @@
+name: Claude Agent Audit
+on:
+  pull_request:
+    paths:
+      - '.claude/agents/**'
+      - 'Claude/**'
+      - 'ClaudeSFDC/.claude/agents/**'
+      - 'ClaudeHubSpot/.claude/agents/**'
+  push:
+    branches:
+      - main
+      - master
+  schedule:
+    # Run weekly on Mondays at 9am UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Specific project to audit (leave empty for all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - 'ClaudeSFDC'
+          - 'ClaudeHubSpot'
+          - 'Agents'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+          submodules: recursive
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install jq and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq ripgrep
+      
+      - name: Set up Claude CLI (if needed)
+        run: |
+          # Check if claude is already available
+          if ! command -v claude &> /dev/null; then
+            echo "Installing Claude CLI..."
+            curl -fsSL https://install.anthropic.com/claude-code | bash
+            echo "$HOME/.claude/bin" >> $GITHUB_PATH
+          else
+            echo "Claude CLI already available"
+          fi
+      
+      - name: Verify roster (pre-flight check)
+        working-directory: Claude
+        run: |
+          if [ -f "ci/verify_roster.sh" ]; then
+            chmod +x ci/verify_roster.sh
+            ./ci/verify_roster.sh || echo "::warning::Roster verification failed"
+          fi
+      
+      - name: Run parent audits
+        id: audit
+        working-directory: Claude
+        run: |
+          chmod +x ci/run_audit.sh
+          ./ci/run_audit.sh || echo "exit_code=$?" >> $GITHUB_OUTPUT
+      
+      - name: Parse audit results
+        if: always()
+        working-directory: Claude
+        run: |
+          # Extract scores from reports for PR comment
+          if ls reports/*-audit-*.md 1> /dev/null 2>&1; then
+            echo "## 📊 Agent Audit Summary" > audit_summary.md
+            echo "" >> audit_summary.md
+            
+            for report in reports/*-audit-*.md; do
+              project=$(basename "$report" | cut -d'-' -f1)
+              echo "### $project" >> audit_summary.md
+              # Extract scores table if present
+              sed -n '/^| Agent.*SRD.*OPT/,/^$/p' "$report" | head -20 >> audit_summary.md || true
+              echo "" >> audit_summary.md
+            done
+            
+            # Add exit code interpretation
+            exit_code="${{ steps.audit.outputs.exit_code }}"
+            case "$exit_code" in
+              0) echo "✅ **Status: PASS** - All agents meet quality standards" >> audit_summary.md ;;
+              1) echo "🟡 **Status: WARNING** - Some agents need improvements (score=2)" >> audit_summary.md ;;
+              2) echo "🔴 **Status: FAIL** - Critical issues found (score≥3)" >> audit_summary.md ;;
+              3) echo "⚠️ **Status: CONFIG ERROR** - MCP or path configuration issues" >> audit_summary.md ;;
+              *) echo "❓ **Status: UNKNOWN** - Unexpected exit code: $exit_code" >> audit_summary.md ;;
+            esac
+          fi
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const summaryPath = path.join('Claude', 'audit_summary.md');
+            
+            if (fs.existsSync(summaryPath)) {
+              const summary = fs.readFileSync(summaryPath, 'utf8');
+              
+              // Find or create comment
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+              
+              const botComment = comments.find(comment => 
+                comment.user.type === 'Bot' && 
+                comment.body.includes('Agent Audit Summary')
+              );
+              
+              if (botComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: summary
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: summary
+                });
+              }
+            }
+      
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-audit-reports-${{ github.run_number }}
+          path: |
+            Claude/reports/**/*.md
+            Claude/reports/patches/**/*.zip
+          retention-days: 30
+      
+      - name: Fail job on critical issues
+        if: steps.audit.outputs.exit_code == '2' || steps.audit.outputs.exit_code == '3'
+        run: |
+          echo "::error::Agent audit failed with critical issues. See reports for details."
+          exit 1
