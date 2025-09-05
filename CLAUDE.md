@@ -5,6 +5,20 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 
 ## Critical Rules & Conventions
 
+### Routing & Delegation Rules
+
+- Use **release-coordinator** for any tagged release or cross-platform change; it delegates to others.
+- Use **hubspot-workflow** for workflow logic; **do not** modify data there.
+- Use **hubspot-data** for properties/backfills; **do not** alter workflows there.
+- Use **hubspot-api** for webhooks/integrations; never store secrets in repo.
+- Use **sfdc-metadata** for metadata packaging/deploys; **do not** write APEX here.
+- Use **sfdc-apex** for APEX code/tests; hand off deploy to sfdc-metadata.
+- Use **sfdc-discovery** for read-only org analysis; propose changes, don't apply.
+
+General:
+- Reference shared standards via @imports to keep agent backstories short.
+- Prefer least-privilege tool sets; request escalation if needed.
+
 ### Agent Naming Convention
 - **Format**: lowercase-hyphen naming (e.g., `release-coordinator`, not `release_coordinator`)
 - **Location**: Project agents in `.claude/agents/`, user-wide in `~/.claude/agents/`
@@ -84,11 +98,6 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 - Validates data sync configurations
 - Handles portal-specific settings
 
-### principal-engineer
-- Top-level orchestration and decision-making
-- Cross-platform integration design
-- Architecture decisions and tech debt management
-- Team coordination and knowledge transfer
 
 ## Environment Configuration
 

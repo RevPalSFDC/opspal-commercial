@@ -1,0 +1,75 @@
+# Registry of child projects to audit
+# Path can be relative (from Claude/) or absolute
+
+projects:
+  - name: ClaudeSFDC
+    path: ../ClaudeSFDC
+    description: Salesforce automation and metadata management
+    status: needs-refactoring
+    agent_count: 30+
+    notes: |
+      - Massive agent proliferation (sfdc-orchestrator, sfdc-planner, etc.)
+      - Many overlapping responsibilities
+      - Candidates for 3-5 focused agents max
+  
+  - name: ClaudeHubSpot
+    path: ../ClaudeHubSpot
+    description: HubSpot integration and workflow management
+    status: needs-refactoring
+    agent_count: 20
+    notes: |
+      - Too many micro-specialized agents
+      - Should consolidate to 3-4 core agents
+      - Similar to pattern used in Agents project
+  
+  - name: Agents
+    path: ../Agents
+    description: Main RevPal agent system (parent of ClaudeSFDC/HubSpot)
+    status: recently-refactored
+    agent_count: 7
+    notes: |
+      - Successfully refactored to 7 focused agents
+      - Can serve as template for other projects
+      - Good example of clear delegation patterns
+
+# Audit configuration
+audit:
+  heuristics:
+    - code: SRD
+      name: Single Responsibility Drift
+      description: Agent spans multiple domains/platforms
+      max_score: 3
+    - code: OPT
+      name: Over-Permissioned Tools
+      description: Excessive tool access beyond needs
+      max_score: 3
+    - code: MB
+      name: Monolithic Backstory
+      description: Overly long narrative lacking structure
+      max_score: 3
+    - code: MH
+      name: Missing Handoffs
+      description: No delegation rules to other agents
+      max_score: 3
+    - code: OL
+      name: Overlap
+      description: Functional duplication with other agents
+      max_score: 3
+    - code: MEM
+      name: Memory Bloat
+      description: Content that belongs in shared CLAUDE.md
+      max_score: 3
+    - code: DC
+      name: Delegation Cues
+      description: Unclear activation triggers
+      max_score: 3
+  
+  target_state:
+    max_agents: 10
+    max_backstory_lines: 30
+    max_tools_per_agent: 5
+    required_sections:
+      - "Use cases"
+      - "Don'ts"
+      - "Handoffs"
+      - "Success criteria"
