@@ -19,6 +19,46 @@ General:
 - Reference shared standards via @imports to keep agent backstories short.
 - Prefer least-privilege tool sets; request escalation if needed.
 
+### 🧠 Complexity-Based Routing (Sequential Thinking MCP)
+
+The system now uses **automatic complexity assessment** to determine when to engage Sequential Thinking MCP:
+
+#### Always Use Sequential Thinking (HIGH Complexity > 0.7):
+- Cross-platform releases involving 3+ systems
+- Salesforce metadata deployments with 10+ objects
+- Circular dependency resolution
+- Production deployments with breaking changes
+- Multi-stage data migrations (>10,000 records)
+- Full org metadata comparisons
+
+#### Conditional Sequential Thinking (MEDIUM Complexity 0.3-0.7):
+- 3-10 object modifications
+- Workflow creation with 5+ steps
+- Permission restructuring
+- Integration setup
+- Uses Sequential if: unknown scope, production impact, or rollback needed
+
+#### Direct Execution (SIMPLE Complexity < 0.3):
+- Single field creation
+- Basic SOQL queries
+- Documentation updates
+- Single record operations
+- Configuration changes
+
+#### User Control Flags:
+- `[PLAN_CAREFULLY]` or `[SEQUENTIAL]` - Force Sequential Thinking
+- `[QUICK_MODE]` or `[DIRECT]` - Skip Sequential Thinking
+
+### Routing & Delegation (Coordinator)
+
+- Use **project-orchestrator** for multi-repo planning; it delegates work.
+- Use **project-auditor** to assess a specific project path (writes report in ./reports).
+- Use **agent-auditor** only when auditing the current directory.
+- Use **patch-smith** to generate patch bundles (./reports/patches); never writes into children.
+- Use **mcp-guardian** to validate tool ↔ MCP server alignment.
+- Use **router-doctor** to find project vs user-scope agent collisions.
+- Use **docs-keeper** to propose documentation and roster updates (diffs only).
+
 ### Agent Naming Convention
 - **Format**: lowercase-hyphen naming (e.g., `release-coordinator`, not `release_coordinator`)
 - **Location**: Project agents in `.claude/agents/`, user-wide in `~/.claude/agents/`
@@ -53,16 +93,55 @@ General:
 ## Platform-Specific Guidelines
 
 ### Salesforce (ClaudeSFDC)
+
+#### 🔴 MANDATORY Pre-Deployment Validation (Prevents 80% of Deployment Failures)
+```bash
+# Run BEFORE every deployment - NO EXCEPTIONS
+node scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
+```
+
+**Critical Validation Checks:**
+1. **Field History Tracking Limits** (Max 20 fields/object - HARD LIMIT)
+   - Query current count before adding tracked fields
+   - Deployment WILL FAIL if limit exceeded
+   
+2. **Picklist Formula Validation** (40% of formula errors)
+   - NEVER use `ISBLANK()` on picklist fields → Use `TEXT(field) = ""`
+   - NEVER use `ISNULL()` on picklist fields → Use `TEXT(field) = ""`
+   
+3. **Object Relationship Verification** (20% of requirement errors)
+   - ALWAYS confirm: QuoteLineItem vs OpportunityLineItem
+   - Verify parent-child relationships exist
+   - Check object accessibility in target org
+
+4. **Governor Limit Pre-checks**
+   - Field history tracking (20 per object)
+   - Validation rules (500 per object)
+   - Apex code coverage (75% minimum)
+
+#### Standard Discovery & Deployment Process
 - **🚨 ENVIRONMENT-FIRST DISCOVERY**: ALWAYS query the Salesforce org directly before ANY operation
   - Query Lightning Pages: `sf data query --query "SELECT DeveloperName FROM FlexiPage WHERE EntityDefinitionId = '[Object]'" --use-tooling-api`
   - Query Page Layouts: `sf data query --query "SELECT Name FROM Layout WHERE TableEnumOrId = '[Object]'" --use-tooling-api`
   - Check Fields: `sf sobject describe [Object] | jq '.fields[].name'`
   - NEVER rely on local files alone to understand org state
+- **Instance-Agnostic Metadata Framework**: All SFDC agents now use zero-hardcoded metadata retrieval
+  - Validation Rules: Complete formulas via individual Metadata queries or package.xml retrieval
+  - Flows: Entry criteria and trigger types through metadata API
+  - Layouts: Field requirements matrix across all record types
+  - Profiles: App visibility and record type access analysis
+  - Dynamic Discovery: No hardcoded object/field/record type names
 - **Metadata Management**: Always use `sf project deploy` with proper package.xml
 - **Org Types**: Distinguish between sandbox/production deployments
 - **Testing**: Run Apex tests for production deployments
 - **Permissions**: Verify profile/permission set updates
 - **API Version**: Maintain consistency across metadata (currently v62.0)
+
+#### Migration QA Requirements
+- Use template: `templates/salesforce-migration-qa-checklist.md`
+- Document ALL assumptions about object relationships
+- Get user confirmation on primary objects BEFORE implementation
+- Keep rollback scripts ready for every deployment
 
 ### HubSpot (ClaudeHubSpot)
 - **Property Naming**: Use snake_case for custom properties
@@ -91,6 +170,24 @@ General:
 - Handles org-specific configurations
 - Validates APEX code and tests
 - Manages permission sets and profiles
+
+### sfdc-metadata-analyzer
+- Comprehensive metadata analysis without hardcoded values
+- Extracts validation rule formulas and flow entry criteria
+- Generates field requirement matrices across layouts
+- Creates remediation plans for metadata issues
+
+### sfdc-remediation-executor
+- Executes remediation plans from metadata analysis
+- Implements phased fixes with rollback capability
+- Consolidates flows and standardizes layouts
+- Updates validation rules and profile access
+
+### sfdc-quality-auditor
+- Continuous quality auditing of Salesforce metadata
+- Performs health checks and drift detection
+- Validates best practices and security compliance
+- Generates quality scores and trend analysis
 
 ### claudehubspot
 - Configures HubSpot workflows and properties
