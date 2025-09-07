@@ -1,17 +1,51 @@
 #!/usr/bin/env node
 
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
-const webhookUrl = 'https://hooks.slack.com/services/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';
+// Load environment variables
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
+// Use environment variable (required)
+const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+
+if (!webhookUrl) {
+  console.error('❌ Error: SLACK_WEBHOOK_URL environment variable not configured');
+  console.error('Please set SLACK_WEBHOOK_URL in your .env file or environment');
+  process.exit(1);
+}
+
+// Get release info from command line args or use v2.0.0 as default
+const args = process.argv.slice(2);
+const version = args[0] || 'v2.0.0';
+const projectArg = args[1] || 'ClaudeHubSpot & ClaudeSFDC';
+
+// Smart project detection - determine the GitHub repo based on project name
+let project, repoName, repoUrl;
+if (projectArg.toLowerCase().includes('hubspot') || projectArg === 'ClaudeHubSpot') {
+  project = 'ClaudeHubSpot';
+  repoName = 'claude-hs';
+  repoUrl = 'https://github.com/RevPalSFDC/claude-hs';
+} else if (projectArg.toLowerCase().includes('sfdc') || projectArg === 'ClaudeSFDC') {
+  project = 'ClaudeSFDC';
+  repoName = 'claude-sfdc';
+  repoUrl = 'https://github.com/RevPalSFDC/claude-sfdc';
+} else {
+  // Default to both if not specific
+  project = projectArg;
+  repoName = 'RevPalSFDC';
+  repoUrl = 'https://github.com/RevPalSFDC';
+}
 
 const releaseMessage = {
-  text: "🚀 *RELEASE ANNOUNCEMENT* 🚀",
+  text: `🚀 *RELEASE ANNOUNCEMENT: ${version}* 🚀`,
   blocks: [
     {
       type: "header",
       text: {
         type: "plain_text",
-        text: "🚀 HubSpot Enterprise Platform v1.0.0 Released!",
+        text: `🎉 ${project} ${version} Released!`,
         emoji: true
       }
     },
@@ -19,11 +53,11 @@ const releaseMessage = {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*Repository Published: `claude-hs`*\n" +
-              "📍 GitHub URL: https://github.com/RevPalSFDC/claude-hs\n" +
-              "📄 Release Page: https://github.com/RevPalSFDC/claude-hs/releases/tag/v1.0.0\n" +
-              "🏷️ Version: `v1.0.0` (Initial Release)\n" +
-              "📊 Size: 181 files, 84,461+ lines of production code"
+        text: `*${project} Release ${version}*\n` +
+              `📍 Repository: ${repoUrl}\n` +
+              `🏷️ Version: \`${version}\`\n` +
+              `📦 Package: ${repoName}\n` +
+              `🚀 Status: Released and available`
       }
     },
     {
@@ -33,41 +67,89 @@ const releaseMessage = {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*Key Features:*\n" +
-              "• 9 core production modules with rate limiting\n" +
-              "• 9 enterprise modules (schema registry, policy guard, dedupe)\n" +
-              "• 25+ MCP tools via enhanced server v3\n" +
-              "• Real-time ops console with WebSocket monitoring\n" +
-              "• GDPR/CCPA compliance built-in\n" +
-              "• Multi-tenant with per-tenant policies"
+        text: project === 'ClaudeHubSpot' && version === 'v2.2.0' ?
+              "*🚀 Key Features - Production Ready:*\n" +
+              "• Fixed CRM Search API 400 errors (sorts as objects)\n" +
+              "• Added comprehensive capability detection\n" +
+              "• Implemented proper API patterns and validation\n" +
+              "• Created pre-flight checks and QA automation\n" +
+              "• 100x faster total count retrieval\n" +
+              "• Enhanced error handling with actionable messages"
+              :
+              project === 'ClaudeSFDC' && version === 'v2.6.0' ?
+              "*🚀 Key Features:*\n" +
+              "• Instance-agnostic metadata retrieval framework\n" +
+              "• Three new specialized SFDC agents\n" +
+              "• Complete Salesforce API error fixes\n" +
+              "• Automatic API fallback strategies\n" +
+              "• Zero hardcoded values - works with ANY org\n" +
+              "• Enhanced security (removed hardcoded webhooks)"
+              :
+              "*Key Updates:*\n" +
+              "• Check release notes for details\n" +
+              "• View changelog for full list\n" +
+              "• Test new features in development"
       }
     },
     {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*Quick Start:*\n```git clone https://github.com/RevPalSFDC/claude-hs.git\ncd claude-hs\nnpm install\ncp .env.example .env\nnpm run validate```"
+        text: "*💡 Quick Start:*\n" +
+              "```\n" +
+              "# Pull latest changes\n" +
+              "git pull origin main\n\n" +
+              "# Checkout this release\n" +
+              `git checkout ${version}\n` +
+              "```"
       }
     },
     {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*Highlights:*\n" +
-              "✅ Production-ready with dual-bucket rate limiting\n" +
-              "✅ Intelligent deduplication engine\n" +
-              "✅ Schema validation & policy enforcement\n" +
-              "✅ Multi-step workflow orchestration\n" +
-              "✅ Complete test suite & documentation"
+        text: project === 'ClaudeHubSpot' && version === 'v2.2.0' ?
+              "*✨ Highlights - Now Production Ready:*\n" +
+              "✅ Fixed all critical API errors\n" +
+              "✅ Comprehensive capability detection\n" +
+              "✅ Enterprise-grade patterns\n" +
+              "✅ Pre-flight checks and QA automation\n" +
+              "✅ 100x performance improvements"
+              :
+              project === 'ClaudeSFDC' && version === 'v2.6.0' ?
+              "*✨ Highlights:*\n" +
+              "✅ Works with ANY Salesforce instance\n" +
+              "✅ No hardcoded values required\n" +
+              "✅ Automatic API fallback strategies\n" +
+              "✅ Complete metadata extraction\n" +
+              "✅ Three new specialized agents"
+              :
+              "*✨ Highlights:*\n" +
+              "✅ Latest improvements\n" +
+              "✅ Bug fixes\n" +
+              "✅ Performance enhancements\n" +
+              "✅ View release notes for details"
       }
     },
     {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "🎉 *The platform is ready for production deployment!*\n\n" +
-              "This is our first public release of a production-ready, enterprise-grade HubSpot integration platform.\n\n" +
-              "Great work team! 👏"
+        text: project === 'ClaudeHubSpot' && version === 'v2.2.0' ?
+              "🎉 *ClaudeHubSpot is Now Production Ready!*\n\n" +
+              "After extensive API improvements, the platform is now fully functional for enterprise use. " +
+              "All critical issues have been fixed and the system implements enterprise-grade patterns.\n\n" +
+              "Ready for production deployments! 🚀"
+              :
+              project === 'ClaudeSFDC' && version === 'v2.6.0' ?
+              "🎉 *Instance-Agnostic Metadata Framework Now Available!*\n\n" +
+              "All SFDC agents can now work with ANY Salesforce instance without hardcoded values. " +
+              "Complete metadata retrieval with automatic API fallbacks!\n\n" +
+              "Zero configuration required - it just works! 🚀"
+              :
+              `🎉 *${project} ${version} Successfully Released!*\n\n` +
+              `Check the release notes for full details.\n\n` +
+              `Great work team! 👏`
       }
     },
     {
@@ -80,7 +162,7 @@ const releaseMessage = {
             text: "View Repository",
             emoji: true
           },
-          url: "https://github.com/RevPalSFDC/claude-hs",
+          url: repoUrl,
           style: "primary"
         },
         {
@@ -90,16 +172,16 @@ const releaseMessage = {
             text: "View Release",
             emoji: true
           },
-          url: "https://github.com/RevPalSFDC/claude-hs/releases/tag/v1.0.0"
+          url: `${repoUrl}/releases/tag/${version}`
         },
         {
           type: "button",
           text: {
             type: "plain_text",
-            text: "Read Docs",
+            text: "View Changelog",
             emoji: true
           },
-          url: "https://github.com/RevPalSFDC/claude-hs/blob/main/README.md"
+          url: `${repoUrl}/blob/main/CHANGELOG.md`
         }
       ]
     }
