@@ -1,0 +1,76 @@
+{
+  "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+  "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 176.72,
+      "start_time": 158.86,
+      "recording_attendee_id": "e4ef7d5b-f5d3-47bc-8157-59c795b525c3",
+      "text": "Okay. The global is voicemail. Please leave a detailed message, including your name and."
+    },
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 87.57,
+      "start_time": 85.65,
+      "recording_attendee_id": "e4ef7d5b-f5d3-47bc-8157-59c795b525c3",
+      "text": "Can I have your name and the reason for your call."
+    },
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 80.18,
+      "start_time": 1.15,
+      "recording_attendee_id": "e4ef7d5b-f5d3-47bc-8157-59c795b525c3",
+      "text": "Thank you for calling Ferrari Enterprises Incorporated affordable housing specialist to ensure the highest level of customer service. This call may be monitored and recorded. If you know your party's extension you may enter it at any time to dial by name, please press one for contact information including address and fax number please press two to request an application for our current communities know being leased press three for the operator, please press zero. Thank you and have a great day. Thank you bye. Hello, you've reached via Enterprises Incorporated lease appliance to ensure the highest level of customer service. This call may be monitored and recorded. Please be advised these lines or to get a mailing information calls from not be returned please be prepared to leave your name address apartment number is any City state and zip code and your telephone number with area code. I'll leave a message for me. Thank you have a guy totally how am I doing okay."
+    },
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 156.45,
+      "start_time": 101.04,
+      "recording_attendee_id": "e4ef7d5b-f5d3-47bc-8157-59c795b525c3",
+      "text": "Okay. Give me one second, I will transfer your call. Thanks for holding sir so she's now currently on another call. Do you want to left a message?"
+    },
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 98.46,
+      "start_time": 90.69,
+      "recording_attendee_id": "8a02d8cf-86ef-49d2-84f6-e8ddd7ef7632",
+      "text": "And I'm with rentable remarketing vendor, so, that's the nature of the call was trying to speak with Mary on marketing."
+    },
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 83.87,
+      "start_time": 81.83,
+      "recording_attendee_id": "8a02d8cf-86ef-49d2-84f6-e8ddd7ef7632",
+      "text": "Hey Marianne Oliver."
+    },
+    {
+      "id": "a19c647b-03dd-41ba-ad10-affc2eed1ed6",
+      "recording_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "end_time": 158.25,
+      "start_time": 157.29,
+      "recording_attendee_id": "8a02d8cf-86ef-49d2-84f6-e8ddd7ef7632",
+      "text": "Oh, yeah sure."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c71a6805-5f04-4a9a-92fe-d5ba6f80e0be",
+      "title": "Call: Dan Cellon and Mary Oliver @ Solari Enterprises, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+  "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 2.41,
+      "start_time": 1.12,
+      "recording_attendee_id": "55c4ba75-4ca9-490c-b11b-a6ce75299748",
+      "text": "This call may be recorded."
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 117.52,
+      "start_time": 89.15,
+      "recording_attendee_id": "dd515ce8-8e7a-4038-ad8d-0de9ea6a7427",
+      "text": "Sure. Show. Sure, I can give you a call tomorrow. I'll make a note of that."
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 98.01,
+      "start_time": 26.32,
+      "recording_attendee_id": "55c4ba75-4ca9-490c-b11b-a6ce75299748",
+      "text": "Yes, it is. You know happy back to you I need to speak to my broker about this and I actually did forward that email over to him as well. So it should be sitting in his inbox, but he he'll make the decisions on this. I'm I'm not authorized to set up a meeting with you in regards to this right. Now? I just started work over there. So and that's also part of my hesitation, even though he put me down as leasing direct and San Francisco. I don't not mine, but anyway, you know it would be a good idea to do. If you maybe give me a call tomorrow or you know you can call our main number even and and you know pitch directly to the broker. Why don't you give me a"
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 122.09,
+      "start_time": 121.31,
+      "recording_attendee_id": "dd515ce8-8e7a-4038-ad8d-0de9ea6a7427",
+      "text": "Thanks Rob, bye."
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 57.41,
+      "start_time": 24.65,
+      "recording_attendee_id": "dd515ce8-8e7a-4038-ad8d-0de9ea6a7427",
+      "text": "Hi, this is Rob. Hi, Rob. My name is Mitch Garcia. I'm calling from rentable. I sent you an email earlier this morning and and saw that you got it and the reason I was calling was to schedule a meeting with you I've worked with all the other property management companies in terms of generating them more qualified leads over the property specifically to our partnership with Facebook and the marketplace. I wanted to schedule brief demonstration should take about fifteen twenty minutes with you to see if it's arrived here from there. Just was wondering if you have any time next week for a brief call."
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 121.04,
+      "start_time": 118.55,
+      "recording_attendee_id": "55c4ba75-4ca9-490c-b11b-a6ce75299748",
+      "text": "Okay. Alright man thanks for reaching out appreciate it."
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 114.63,
+      "start_time": 98.01,
+      "recording_attendee_id": "55c4ba75-4ca9-490c-b11b-a6ce75299748",
+      "text": "call tomorrow would that be? Okay. And then I can kind of cause I'll be into work. I'll be in the works afternoon and I can say. Hey, did you get that email cause the guy followed up with phone call and he's interested in the meeting and stuff and if you just call me tomorrow, I'll be able to give you a kind of a little bit more of a definite Mike. Hey, yay or nay on a on a meet up."
+    },
+    {
+      "id": "db9423a0-7bf4-438d-959b-db431884c59f",
+      "recording_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "end_time": 123.59,
+      "start_time": 122.72,
+      "recording_attendee_id": "55c4ba75-4ca9-490c-b11b-a6ce75299748",
+      "text": "Okay. I'll see you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9f177ca6-5855-4cf6-9b97-df7369d4fa2d",
+      "title": "Call: Mitch  Scarski  and Rob  Sutro @ Sutro Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

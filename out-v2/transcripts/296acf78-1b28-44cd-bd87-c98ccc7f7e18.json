@@ -1,0 +1,28 @@
+{
+  "id": "296acf78-1b28-44cd-bd87-c98ccc7f7e18",
+  "recording_id": "adc7fa4c-8067-45be-92e3-32e0e71d8136",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "296acf78-1b28-44cd-bd87-c98ccc7f7e18",
+      "recording_id": "adc7fa4c-8067-45be-92e3-32e0e71d8136",
+      "end_time": 127.33,
+      "start_time": 0.05,
+      "recording_attendee_id": "72ee07eb-6af5-4741-8ba9-0b7d9dd2253e",
+      "text": "Thank you for calling a mirror development. If you know your party's three, digit extension you can press it at any time. Otherwise please press one for the company directory or dial zero for the operator. For Lisa manager, please dial extension one. One zero for Bruce Flynn, please dial extension one. One one from this is Amir, please dial extension one. One two four, Mr. Emmer, please dial extension one. One three for Howard and please dial extension one. Two three for Eva Jen, please dial extension one. One five for calling Wilkins, please dial extension one. One six for Sylvia Wang, please dial extension one. One seven for Blair Lilly, please dial extension one one nine. Please wait a moment incorrect entry for Lisa manager, please dial extension one. One zero for Bruce Flynn, please dial extension one. One one for miss is Amir, please dial extension one. One two four, Mr. Amir styling, wait a moment. Sorry. No one is available to answer the call to leave a message press one to call the operator press zero to enter another extension press Star. To leave a message press one to call the operator press zero to enter another extension press Star. To leave a message press one."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "adc7fa4c-8067-45be-92e3-32e0e71d8136",
+      "title": "Call: Dan Cellon and Herta Amir @ Amir Development Company",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

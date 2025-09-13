@@ -1,0 +1,28 @@
+{
+  "id": "c53b40bc-eabe-484f-af9c-11fb5a7777bb",
+  "recording_id": "9940ab44-cf2f-4614-b632-44478eab000c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c53b40bc-eabe-484f-af9c-11fb5a7777bb",
+      "recording_id": "9940ab44-cf2f-4614-b632-44478eab000c",
+      "end_time": 146.3,
+      "start_time": 106.73,
+      "recording_attendee_id": "aee7b804-d1fc-4342-a2ba-29a0283d7cef",
+      "text": "Automatic voice message system four six nine four, please record your message. When you have finished recording you may hang up or press one for more options. You. Hey this is Derek. One is silver a rentable, I think you and I have a a meeting scheduled here and didn't know if you're gonna be able to make it so I'm sending the zoom meeting if you could hop and that'd be great. We need to reschedule. Let me know, but I'll be here for another couple of minutes phone number for me is three. Oh three, five. Oh three nine nine one eight one more time three zero three five zero three nine nine one eight talk to you soon."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9940ab44-cf2f-4614-b632-44478eab000c",
+      "title": "Rentable Meeting",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-05-19T21:03:38.830000Z",
+      "call_date": "2021-05-19"
+    }
+  }
+}

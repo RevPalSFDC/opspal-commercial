@@ -1,0 +1,36 @@
+{
+  "id": "50bb48a6-1efa-46c6-bdb3-d82b177884c1",
+  "recording_id": "dc791a2c-5d51-478d-806d-c5bcc3152314",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "50bb48a6-1efa-46c6-bdb3-d82b177884c1",
+      "recording_id": "dc791a2c-5d51-478d-806d-c5bcc3152314",
+      "end_time": 126.33,
+      "start_time": 1.4,
+      "recording_attendee_id": "62cf0c50-6b97-4e73-92fa-354173e12332",
+      "text": "Thank you for calling South from property management our office hours are Monday through Friday nine AM to four PM. If you know your party's extension you may enter it at any time for a list of our extensions press two if you're having a maintenance issue press three, otherwise please remain on the line or press zero for an operator. Thank you for calling South on property management our office hours are nine AM to four PM Monday through Friday for after hours maintenance issue please call again and press one at the prompts. If you know your party's extension you may enter it at any time for thank you. Bye can't dial one zero one for Nicole Shoemake down when they have to provide a double dial one for Adriana Castro dial one zero, five for Monica Vasquez zero. One six the Claudia Ortiz five one zero seven for Elizabeth Nicky Hernandez dial, one, one six or David about one two nine one two six for Santa Fe man. Oh one two eight, otherwise please remain on the line to leave a message in our general mailbox and someone will return your call as soon as possible. Hello, you've reached the general voicemail inbox. Please leave a message after the tone and a team member will reach back out to you at our earliest opportunity. Thank you. After the tone please record your message. When finished you may hang up to deliver the message or press pound for more"
+    },
+    {
+      "id": "50bb48a6-1efa-46c6-bdb3-d82b177884c1",
+      "recording_id": "dc791a2c-5d51-478d-806d-c5bcc3152314",
+      "end_time": 126.69,
+      "start_time": 126.33,
+      "recording_attendee_id": "62cf0c50-6b97-4e73-92fa-354173e12332",
+      "text": "options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "dc791a2c-5d51-478d-806d-c5bcc3152314",
+      "title": "Call: Dan Cellon and Sara Peterson @ Cethron Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

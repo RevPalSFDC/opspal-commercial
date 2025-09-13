@@ -1,0 +1,60 @@
+{
+  "id": "04a67773-440b-4fc9-ab29-1f492c2d4895",
+  "recording_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "04a67773-440b-4fc9-ab29-1f492c2d4895",
+      "recording_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+      "end_time": 30.49,
+      "start_time": 2.31,
+      "recording_attendee_id": "35b7a402-c03f-4e18-b71d-5f404dbf1341",
+      "text": "Thank you for calling retirement housing Foundation. If you know your party's four, digit extension please dial it now for the operator, please dial zero. Retirement home direct your call."
+    },
+    {
+      "id": "04a67773-440b-4fc9-ab29-1f492c2d4895",
+      "recording_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+      "end_time": 189.68,
+      "start_time": 181.91,
+      "recording_attendee_id": "35b7a402-c03f-4e18-b71d-5f404dbf1341",
+      "text": "Hello, you've reached Christy Bagley National marketing director with retirement housing Foundation. Thank you for calling. I am unable to get to my."
+    },
+    {
+      "id": "04a67773-440b-4fc9-ab29-1f492c2d4895",
+      "recording_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+      "end_time": 134.94,
+      "start_time": 43.59,
+      "recording_attendee_id": "35b7a402-c03f-4e18-b71d-5f404dbf1341",
+      "text": "Um, hold on one moment. Okay, sir. I'm gonna put you on hold for just a moment. Okay, I'm gonna transfer you now."
+    },
+    {
+      "id": "04a67773-440b-4fc9-ab29-1f492c2d4895",
+      "recording_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+      "end_time": 42.52,
+      "start_time": 32.41,
+      "recording_attendee_id": "990a65f8-d60d-4089-9c12-d13092e9b42c",
+      "text": "Hey trying to speak to maybe like a marketing or an advertising manager for you guys whoever sends your listings out online."
+    },
+    {
+      "id": "04a67773-440b-4fc9-ab29-1f492c2d4895",
+      "recording_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+      "end_time": 136.66,
+      "start_time": 135.97,
+      "recording_attendee_id": "990a65f8-d60d-4089-9c12-d13092e9b42c",
+      "text": "Okay, thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ef778e8d-786a-4d67-bbbf-b9ac54a40883",
+      "title": "Call: Dan Cellon and Perry Glenn @ Retirement Housing Foundation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "bdb4c21b-81cb-482d-adb2-56f549522995",
+  "recording_id": "7903a2fa-f19e-401e-be3c-f4bec8065d0b",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bdb4c21b-81cb-482d-adb2-56f549522995",
+      "recording_id": "7903a2fa-f19e-401e-be3c-f4bec8065d0b",
+      "end_time": 85.95,
+      "start_time": 0,
+      "recording_attendee_id": "1ea3d958-a590-4e16-8897-8596f7767a38",
+      "order_number": 0,
+      "text": "Thank you for calling Jasmine Residential. If you know your party's extension, you may dial it at any time. For the operator, press zero or stay on the line. For the dial by name directory, press nine. To repeat this menu, Please enter at least the first three letters of the person's last name for Q. Press seven for Z. Press nine. For the main Samantha Allen Extension one hundred and twenty-two To select this extension, press one to repeat the current name, press three more. To start your please hold while I try to connect you. Mhm. Mhm. Bye. Your call has been forwarded to the voicemail for Samantha Allen. No one is available to take your call at the tone, Please record your message when you finished recording. You may hang up or press the pound key For more options."
+    },
+    {
+      "id": "bdb4c21b-81cb-482d-adb2-56f549522995",
+      "recording_id": "7903a2fa-f19e-401e-be3c-f4bec8065d0b",
+      "end_time": 117.75,
+      "start_time": 87.9,
+      "recording_attendee_id": "1c8158ef-355b-4b01-a6dd-8db7cb85801c",
+      "order_number": 1,
+      "text": "Hey there SAM, it's, uh, Alex with our checking you. A call here from rentable. I was just trying to touch base with you and mortgage in regards to uh, the offer and partnership, uh, to uh, work with us in regards to getting additional access to facebook marketplace. Uh, just overall exposure in the offer that we were talking touching base on, uh, feel free to give me a call back or an email, whichever's easiest. Just in regards to kind of what the status is. So I have a better understanding and follow up and, uh, kind of the direction you guys maybe going, uh, hopefully, uh, it's a guess,"
+    },
+    {
+      "id": "bdb4c21b-81cb-482d-adb2-56f549522995",
+      "recording_id": "7903a2fa-f19e-401e-be3c-f4bec8065d0b",
+      "end_time": 124.67,
+      "start_time": 117.75,
+      "recording_attendee_id": "1c8158ef-355b-4b01-a6dd-8db7cb85801c",
+      "order_number": 2,
+      "text": "but certainly let me know if it's no so uh, I can obviously plan accordingly. Thanks so much SAM and do look forward to uh hearing back from you, take care."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7903a2fa-f19e-401e-be3c-f4bec8065d0b",
+      "title": "Call: Alex Wodarczyk and Samantha Olang @ Dasmen Residential",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

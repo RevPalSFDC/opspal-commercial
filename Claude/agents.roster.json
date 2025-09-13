@@ -46,7 +46,7 @@
     "max_backstory_lines": 30
   },
   
-  "ClaudeSFDC": {
+  "platforms/SFDC": {
     "description": "Salesforce project (needs refactoring from 30+ agents)",
     "current_count": 30,
     "target_count": 5,
@@ -68,7 +68,7 @@
     ]
   },
   
-  "ClaudeHubSpot": {
+  "platforms/HS": {
     "description": "HubSpot project (needs refactoring from 20 agents)",
     "current_count": 20,
     "target_count": 4,

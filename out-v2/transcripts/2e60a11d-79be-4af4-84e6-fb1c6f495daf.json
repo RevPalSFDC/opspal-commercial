@@ -1,0 +1,29 @@
+{
+  "id": "2e60a11d-79be-4af4-84e6-fb1c6f495daf",
+  "recording_id": "23e35891-6b38-4ec2-b6ae-379a37d70b71",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2e60a11d-79be-4af4-84e6-fb1c6f495daf",
+      "recording_id": "23e35891-6b38-4ec2-b6ae-379a37d70b71",
+      "end_time": 59.4,
+      "start_time": 1.49,
+      "recording_attendee_id": "51b1d090-39b5-4fc1-abf6-782c2a59f037",
+      "order_number": 0,
+      "text": "Thank you for contacting C N R real estate Services company. If this is an after hours maintenance emergency please press six. If you know the name of the party you would like to speak to please press five for the dial by name directory. If you know, the extension of the person you are trying to reach you may dial it at any time our offices are currently closed to the public due to the COVID-19 pandemic. Our staff are continuing to work diligently maintain the properties and responding to the needs of our residents and customers. Please leave your full name phone number and the property or address you're calling about and someone will return your call within twenty, four hours. Please note there without this information the return call may be delayed. You have reached the general mailbox for C N R real Estate. Please leave a detailed message and we will return your call record your message at the tone. When you are finished hang up or stay on the line for further options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "23e35891-6b38-4ec2-b6ae-379a37d70b71",
+      "title": "Call: Dan Cellon and Vanessa Marshall @ C&R Real Estate Services ",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

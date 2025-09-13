@@ -1,0 +1,83 @@
+{
+  "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+  "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 1.48,
+      "start_time": 0.46,
+      "recording_attendee_id": "f0113049-530a-4dca-841b-51a2bb407d41",
+      "order_number": 0,
+      "text": "for quality and"
+    },
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 1.62,
+      "start_time": 1.38,
+      "recording_attendee_id": "1f3702f8-cec2-4ab3-bfae-b438de2598da",
+      "order_number": 1,
+      "text": "Yeah."
+    },
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 112.51,
+      "start_time": 1.48,
+      "recording_attendee_id": "f0113049-530a-4dca-841b-51a2bb407d41",
+      "order_number": 2,
+      "text": "training. This call may be recorded. Thank you for holding. Please stay on the line and we will be with you shortly? Yeah. Yeah. Yeah. Yeah. Yeah. Thank you for holding. Please stay on the line and we will be with you shortly? Yeah."
+    },
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 130.77,
+      "start_time": 124.38,
+      "recording_attendee_id": "1f3702f8-cec2-4ab3-bfae-b438de2598da",
+      "order_number": 3,
+      "text": "Okay. Okay."
+    },
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 132.15,
+      "start_time": 132.09,
+      "recording_attendee_id": "f0113049-530a-4dca-841b-51a2bb407d41",
+      "order_number": 4,
+      "text": "Yeah."
+    },
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 155.13,
+      "start_time": 144.86,
+      "recording_attendee_id": "1f3702f8-cec2-4ab3-bfae-b438de2598da",
+      "order_number": 5,
+      "text": "Okay. Okay."
+    },
+    {
+      "id": "3555d037-4148-4169-8fe6-486d05aac1ca",
+      "recording_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "end_time": 165.79,
+      "start_time": 159.27,
+      "recording_attendee_id": "f0113049-530a-4dca-841b-51a2bb407d41",
+      "order_number": 6,
+      "text": "The person at extension nine thousand nine hundred and one is unavailable."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1e2ea6ea-97d4-4d57-b401-208aa46e89dd",
+      "title": "Call: Brandon Winfield and +12693889105",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

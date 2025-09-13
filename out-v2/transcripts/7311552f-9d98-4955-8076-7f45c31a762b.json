@@ -1,0 +1,92 @@
+{
+  "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+  "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 80.78,
+      "start_time": 0.94,
+      "recording_attendee_id": "3d9eb387-74fa-4971-b6a8-09e660b65d7f",
+      "order_number": 0,
+      "text": "Thanks for calling here at locally. You have reached at two three nine one one business hours. If you know your party's extension you may dial it at any time to search our company directory by first name press Star or to search by last name press pound to hear our corporate office contact information please press one to contact the Regional manager for one of our apartment communities, please press two. If you are a vendor please press three. If you would like to hear these choices again please press seven. I do not understand that request. Thank you for calling Barrett and stickley. You have reached us during normal business hours. If you know your party's extension you may dial it at any time to search our company directory by first name press Star or to search by last name press pound to hear our corporate office contact information please press one to contact the Regional manager for one of our community. Please press two. If you have been pretty Rusty. If you like to hear these choices again, please press seven to reach our receptionist please press zero. Good morning Barrett and stokley."
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 83.68,
+      "start_time": 82.09,
+      "recording_attendee_id": "b17a381f-cf38-4953-9db0-c1a8b20b33af",
+      "order_number": 1,
+      "text": "Hi, good morning, how are you doing?"
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 86.1,
+      "start_time": 84.57,
+      "recording_attendee_id": "3d9eb387-74fa-4971-b6a8-09e660b65d7f",
+      "order_number": 2,
+      "text": "I'm doing well, thank you."
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 89.98,
+      "start_time": 87.07,
+      "recording_attendee_id": "b17a381f-cf38-4953-9db0-c1a8b20b33af",
+      "order_number": 3,
+      "text": "Good good. I was hoping to speak with Courtney Smith please."
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 101.39,
+      "start_time": 91.19,
+      "recording_attendee_id": "3d9eb387-74fa-4971-b6a8-09e660b65d7f",
+      "order_number": 4,
+      "text": "Let me see if she's available. I believe she's in a meeting right. Now let me see if she is Mark and meeting can put you through to her voicemail."
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 102.82,
+      "start_time": 95.5,
+      "recording_attendee_id": "b17a381f-cf38-4953-9db0-c1a8b20b33af",
+      "order_number": 5,
+      "text": "Okay. Yeah"
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 103.42,
+      "start_time": 102.82,
+      "recording_attendee_id": "b17a381f-cf38-4953-9db0-c1a8b20b33af",
+      "order_number": 6,
+      "text": "absolutely."
+    },
+    {
+      "id": "7311552f-9d98-4955-8076-7f45c31a762b",
+      "recording_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "end_time": 122.89,
+      "start_time": 104.21,
+      "recording_attendee_id": "3d9eb387-74fa-4971-b6a8-09e660b65d7f",
+      "order_number": 7,
+      "text": "Alright, just a moment es. Your colleague forwarded to one my tell voicemail system, extension two four one."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e10632b8-4f01-41ab-b205-504749047406",
+      "title": "Call: Brandon Winfield and +13178454171",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

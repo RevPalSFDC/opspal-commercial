@@ -1,0 +1,65 @@
+{
+  "id": "d5c3f1fa-6249-41a8-81f0-a605356c793d",
+  "recording_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "d5c3f1fa-6249-41a8-81f0-a605356c793d",
+      "recording_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+      "end_time": 92.35,
+      "start_time": 0.23,
+      "recording_attendee_id": "3367c27d-93cb-4848-8701-0163e872daac",
+      "order_number": 0,
+      "text": "Thank you for calling Liberty best apartment please choose from one of the following options for assistance with Lisa apartment, please press one. If you are calling regarding a maintenance emergency please press two. If you are calling with a question or concern, please press three. If this is pertaining to any other matter please press. Thanks for calling T West apartment. I'm I help you."
+    },
+    {
+      "id": "d5c3f1fa-6249-41a8-81f0-a605356c793d",
+      "recording_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+      "end_time": 100.78,
+      "start_time": 93.58,
+      "recording_attendee_id": "16afdbeb-72b0-4687-8162-2075f2ece326",
+      "order_number": 1,
+      "text": "Yeah, I was actually hoping maybe you could point me in the right direction. I was trying to get connected with the individual that handles the marketing efforts for the property there."
+    },
+    {
+      "id": "d5c3f1fa-6249-41a8-81f0-a605356c793d",
+      "recording_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+      "end_time": 110.17,
+      "start_time": 102.88,
+      "recording_attendee_id": "3367c27d-93cb-4848-8701-0163e872daac",
+      "order_number": 2,
+      "text": "I think someone call yesterday, I mean, I don't know of course, you're if you're saying it's working I give you the number so for you to call the home office."
+    },
+    {
+      "id": "d5c3f1fa-6249-41a8-81f0-a605356c793d",
+      "recording_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+      "end_time": 127.47,
+      "start_time": 108.86,
+      "recording_attendee_id": "16afdbeb-72b0-4687-8162-2075f2ece326",
+      "order_number": 3,
+      "text": "Yeah, yes, I I did and I thought that's what happened and then I I did kind of actually just call that home office again cause I called yesterday and couldn't get anybody and I pressed the the number on the dial by name directory or whatever to okay. Yeah let's say if for some reason it passed me over back to this number. So I apologize about that I guess."
+    },
+    {
+      "id": "d5c3f1fa-6249-41a8-81f0-a605356c793d",
+      "recording_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+      "end_time": 129.22,
+      "start_time": 120.75,
+      "recording_attendee_id": "3367c27d-93cb-4848-8701-0163e872daac",
+      "order_number": 4,
+      "text": "Someone will call you back. Okay."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1a3cbe06-dd7a-46d2-af77-a07b4ed65d78",
+      "title": "Call: Jordan Culp and Thomas Wu @ Independent",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

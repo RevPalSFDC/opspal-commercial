@@ -1,0 +1,92 @@
+{
+  "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+  "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 2.04,
+      "start_time": 0,
+      "recording_attendee_id": "916e1645-549e-4ab0-ae2e-70c28108f736",
+      "order_number": 0,
+      "text": "Good afternoon. Thank you for calling Properties."
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 4.03,
+      "start_time": 2.58,
+      "recording_attendee_id": "6ffde471-10a6-4c5f-a491-6b7cb220dcd5",
+      "order_number": 1,
+      "text": "can you please connect me to Jeremy?"
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 6.14,
+      "start_time": 4.56,
+      "recording_attendee_id": "916e1645-549e-4ab0-ae2e-70c28108f736",
+      "order_number": 2,
+      "text": "I certainly can I ask who's calling?"
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 7.79,
+      "start_time": 6.55,
+      "recording_attendee_id": "6ffde471-10a6-4c5f-a491-6b7cb220dcd5",
+      "order_number": 3,
+      "text": "Yeah. My name is lease."
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 10,
+      "start_time": 8.4,
+      "recording_attendee_id": "916e1645-549e-4ab0-ae2e-70c28108f736",
+      "order_number": 4,
+      "text": "At least? Hold on one moment. Please"
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 70.36,
+      "start_time": 10.49,
+      "recording_attendee_id": "6ffde471-10a6-4c5f-a491-6b7cb220dcd5",
+      "order_number": 5,
+      "text": "Thank you. Okay."
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 92.93,
+      "start_time": 86.79,
+      "recording_attendee_id": "916e1645-549e-4ab0-ae2e-70c28108f736",
+      "order_number": 6,
+      "text": "begin speaking after the tone. Then hang up when you are finished. Or press any key for further options."
+    },
+    {
+      "id": "c14be272-f7fa-4e9d-8e47-5c31b4eb0208",
+      "recording_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "end_time": 125.01,
+      "start_time": 93.95,
+      "recording_attendee_id": "6ffde471-10a6-4c5f-a491-6b7cb220dcd5",
+      "order_number": 7,
+      "text": "Hey Jeremy. It's Alice calling with principle. I know you didn't think I was gone forever. But I did give you like a three or four month break here. Just wanted to check in. I know things were good. Last time we spoke. I'm sure things are so good. But that doesn't mean I'm not gonna try. Um I'm gonna shoot you a quick email as well. Just wondering if maybe we could get up twenty minutes next week. My number is two oh thirty-four million six hundred forty-one thousand three hundred and ninety-nine Feel free to give me a call. Um uh I'll also email you now. Thanks so much. Bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c6650d43-855f-4e62-a291-4983da75acce",
+      "title": "Call: Elyse Stachelek and Jeremy Trainor @ Carrollton Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

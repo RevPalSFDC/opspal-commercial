@@ -1,0 +1,29 @@
+{
+  "id": "ea064d0f-9900-4df0-af1d-118e9e4e3710",
+  "recording_id": "c3b49cba-ae1f-477e-a782-761bd9b2301e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ea064d0f-9900-4df0-af1d-118e9e4e3710",
+      "recording_id": "c3b49cba-ae1f-477e-a782-761bd9b2301e",
+      "end_time": 0.71,
+      "start_time": 0.14,
+      "recording_attendee_id": "d628606d-d07d-4e17-8eec-4c660ebeaa1e",
+      "order_number": 0,
+      "text": "Okay, so."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c3b49cba-ae1f-477e-a782-761bd9b2301e",
+      "title": "Call: John Loughery and Neoshae McCurry @ Carmel Group LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

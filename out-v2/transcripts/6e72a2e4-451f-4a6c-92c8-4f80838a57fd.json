@@ -1,0 +1,44 @@
+{
+  "id": "6e72a2e4-451f-4a6c-92c8-4f80838a57fd",
+  "recording_id": "e6401d6d-4777-4ec3-9594-4a20ee4fc165",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6e72a2e4-451f-4a6c-92c8-4f80838a57fd",
+      "recording_id": "e6401d6d-4777-4ec3-9594-4a20ee4fc165",
+      "end_time": 107.78,
+      "start_time": 2.16,
+      "recording_attendee_id": "ed354144-0679-4de1-9232-a6f2d1ea5093",
+      "text": "Thank you for calling first priority management our business hours are Monday through Friday from eight AM to five PM our office closes for lunch from noon until one PM if you wish to contact someone directly or leave a voicemail by extension please press one for our directory. If this is an emergency please press two. If you know the extension of the person you are calling dial that extension number followed by the pound sign. Zero three is not a valid extension please try again. Your call is being transferred please hold. You've reached the desk of David Martin at first priority management, I'm sorry, David is unavailable to take your call. Right now. Please leave a message at the tone and he'll return your call as soon as possible. Thank you. At the tone, please record your message. When you finished recording you may hang up or press one for more options to leave a call back number press five."
+    },
+    {
+      "id": "6e72a2e4-451f-4a6c-92c8-4f80838a57fd",
+      "recording_id": "e6401d6d-4777-4ec3-9594-4a20ee4fc165",
+      "end_time": 149.28,
+      "start_time": 135.03,
+      "recording_attendee_id": "5d289c44-fa39-4b4c-bfe9-ad02596682db",
+      "text": "if occupancy isn't the issue, we're able to help lower your marketing spin. So I will follow up with an email if it's easier you can just respond there or give me a call back when you get a couple of minutes three one seven seven two zero three two six six, thank you."
+    },
+    {
+      "id": "6e72a2e4-451f-4a6c-92c8-4f80838a57fd",
+      "recording_id": "e6401d6d-4777-4ec3-9594-4a20ee4fc165",
+      "end_time": 135.03,
+      "start_time": 111.09,
+      "recording_attendee_id": "5d289c44-fa39-4b4c-bfe9-ad02596682db",
+      "text": "Hey, David, good afternoon. This is Jordan Cope over at or principal. Sorry. I missed you here reaching out today. I came across first priority management, I'm a kind of looked at your portfolio an aisle and the database. We use um thought it might be worth setting up at ten fifteen minute call just to get to know your properties a little bit better and explain a little bit more about what we do um, we've been helping people increase documents even if it's an issue with"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e6401d6d-4777-4ec3-9594-4a20ee4fc165",
+      "title": "Call: Jordan Culp and C. David Barton @ First Priority Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

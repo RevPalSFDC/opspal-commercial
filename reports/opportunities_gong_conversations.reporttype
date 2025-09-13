@@ -1,0 +1,33 @@
+{
+    "label": "Opportunities with Gong Conversations",
+    "name": "Opportunities_with_Gong_Conversations",
+    "type": "Opportunity",
+    "description": "Custom report type to show Opportunities with Gong Conversations",
+    "sections": [
+        {
+            "columns": [
+                "Name",
+                "Amount",
+                "StageName"
+            ]
+        }
+    ],
+    "relatedObjects": [
+        {
+            "relationshipName": "Gong_Related_Opportunities__r",
+            "type": "Gong__Related_Opportunity__c",
+            "columns": [
+                "Gong__Opportunity_ID__c",
+                "Gong__Related_Opportunity_ID__c"
+            ]
+        },
+        {
+            "relationshipName": "Gong_Calls__r", 
+            "type": "Gong__Gong_Call__c",
+            "columns": [
+                "Name",
+                "Gong__Call_Date_Time__c"
+            ]
+        }
+    ]
+}

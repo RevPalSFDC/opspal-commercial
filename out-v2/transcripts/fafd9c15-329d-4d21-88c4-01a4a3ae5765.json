@@ -1,0 +1,28 @@
+{
+  "id": "fafd9c15-329d-4d21-88c4-01a4a3ae5765",
+  "recording_id": "8322839b-d245-4eb8-a08c-64989112718c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "fafd9c15-329d-4d21-88c4-01a4a3ae5765",
+      "recording_id": "8322839b-d245-4eb8-a08c-64989112718c",
+      "end_time": 37.11,
+      "start_time": 0.73,
+      "recording_attendee_id": "38bcbf72-347b-4ad4-97ec-afda5d2a1c95",
+      "text": "Thank you for calling please way and a staff member will be with you shortly this call may be monitored or recorded for quality assurance. Thank you for calling. If you were looking for information on renting or leasing and department please press one. If you are a resident and have a maintenance need and your apartment."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8322839b-d245-4eb8-a08c-64989112718c",
+      "title": "Call: Austin Schleisner and Laura Orr @ Trinity Property Consultants",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

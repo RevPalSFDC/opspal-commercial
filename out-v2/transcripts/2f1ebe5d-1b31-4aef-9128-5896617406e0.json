@@ -1,0 +1,28 @@
+{
+  "id": "2f1ebe5d-1b31-4aef-9128-5896617406e0",
+  "recording_id": "beb3a917-7a8e-4fa3-a8f9-6820db283f43",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2f1ebe5d-1b31-4aef-9128-5896617406e0",
+      "recording_id": "beb3a917-7a8e-4fa3-a8f9-6820db283f43",
+      "end_time": 132.55,
+      "start_time": 27.2,
+      "recording_attendee_id": "122f6df3-2e81-4bc7-967a-e619d4818880",
+      "text": "Thank you for calling C W S Capital Partners. If you know your party's extension you may dial it at any time for a dial by name company directory press one to leave a message and the company voice mailbox press zero. Thank you for calling C W S Capital Partners. If you know your party's extension. Please spell the name of the person first name first press seven for Q and nine for Z to cancel. Press one for parking Sanchez press two for. Joshua my name is Del Mar T Rock Mall. Press three for. Extension seven eight two for press four for Lauren Ray for to cancel and enter a different name press Star. Please hold while I transfer your call. Hello, you've reached I watch not for Lauren Ray."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "beb3a917-7a8e-4fa3-a8f9-6820db283f43",
+      "title": "Call: Dan Cellon and Lori Valenti @ CWS Capital Partners LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

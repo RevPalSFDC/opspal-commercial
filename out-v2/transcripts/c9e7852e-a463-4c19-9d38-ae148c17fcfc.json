@@ -1,0 +1,36 @@
+{
+  "id": "c9e7852e-a463-4c19-9d38-ae148c17fcfc",
+  "recording_id": "7ac2668e-6be2-46dc-bb45-7177f3bc3bcf",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c9e7852e-a463-4c19-9d38-ae148c17fcfc",
+      "recording_id": "7ac2668e-6be2-46dc-bb45-7177f3bc3bcf",
+      "end_time": "108.55",
+      "start_time": "99.34",
+      "recording_attendee_id": "b1446fd2-0fbf-4bfc-b7e8-11c6ebc9a6ff",
+      "text": "Yeah. I'll look at that. 10:00 in the paper. Only for life. I mean, I would give you an I want that. On the record, I was the first time."
+    },
+    {
+      "id": "c9e7852e-a463-4c19-9d38-ae148c17fcfc",
+      "recording_id": "7ac2668e-6be2-46dc-bb45-7177f3bc3bcf",
+      "end_time": "98.76",
+      "start_time": "60.04",
+      "recording_attendee_id": null,
+      "text": "Oh, the record deal. Division one."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7ac2668e-6be2-46dc-bb45-7177f3bc3bcf",
+      "title": "Rentable : Vision & Beyond Capital Investments",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-12-15T18:42:25.565000Z",
+      "call_date": "2021-12-15"
+    }
+  }
+}

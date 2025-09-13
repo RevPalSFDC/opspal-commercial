@@ -1,0 +1,92 @@
+{
+  "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+  "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 27.33,
+      "start_time": 1.95,
+      "recording_attendee_id": "52cf4ab0-7428-4bc7-9ba1-2dcf62222e0d",
+      "order_number": 0,
+      "text": "Thank you for calling Winner. Would please listen carefully as our menu options have changed. If you know the party's extension, you may dial it at any time. To dial by name, press one. For accounts payable, press two. For Human Resources, Press three. For lease cancellations or security deposit questions, press four. For Winter. Would development, press five for the"
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 29.42,
+      "start_time": 29.33,
+      "recording_attendee_id": "090f9c09-b279-466b-8185-ff5d516c7e36",
+      "order_number": 1,
+      "text": "Okay."
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 66.24,
+      "start_time": 29.98,
+      "recording_attendee_id": "52cf4ab0-7428-4bc7-9ba1-2dcf62222e0d",
+      "order_number": 2,
+      "text": "mm record your message and press Pound or press star to contact the operator. Winter would incorporated."
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 69.35,
+      "start_time": 66.96,
+      "recording_attendee_id": "090f9c09-b279-466b-8185-ff5d516c7e36",
+      "order_number": 3,
+      "text": "Hi there is Jacob Gonzalez available, please."
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 73.62,
+      "start_time": 70.67,
+      "recording_attendee_id": "52cf4ab0-7428-4bc7-9ba1-2dcf62222e0d",
+      "order_number": 4,
+      "text": "I can put you through to his extension. Hang on, just a second."
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 74.6,
+      "start_time": 73.88,
+      "recording_attendee_id": "090f9c09-b279-466b-8185-ff5d516c7e36",
+      "order_number": 5,
+      "text": "Thank you."
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 104.52,
+      "start_time": 77.16,
+      "recording_attendee_id": "52cf4ab0-7428-4bc7-9ba1-2dcf62222e0d",
+      "order_number": 6,
+      "text": "If he does not, this is gonna bring through to a cell phone. Okay. Hang on Jacob Gonzalez."
+    },
+    {
+      "id": "7ad11cd2-01f2-4de6-9a9a-f6f1723c9333",
+      "recording_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "end_time": 127.06,
+      "start_time": 108.27,
+      "recording_attendee_id": "090f9c09-b279-466b-8185-ff5d516c7e36",
+      "order_number": 7,
+      "text": "Hey, good morning, Jacob. It's Brandon calling with dot com. Wanted to give you a call, uh, reached out a couple of weeks ago, wasn't able to grab you, but um I know that you were working with a bit in the past and wanted to follow up on that. If you could give me a call, that'd be great. nine hundred twenty thousand eight hundred and ninety-six fourteen ninety-six Thanks. Bye. Bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "37ae941c-98c3-4906-8644-9294126ab1b6",
+      "title": "Call: Brandon Winfield and +18592765388",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "b9d8f80c-c9eb-4ac8-9b00-a38c0ec40083",
+  "recording_id": "1cee4ed0-f2a1-4469-970c-cadec001d1e0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "b9d8f80c-c9eb-4ac8-9b00-a38c0ec40083",
+      "recording_id": "1cee4ed0-f2a1-4469-970c-cadec001d1e0",
+      "end_time": 243.16,
+      "start_time": 241.12,
+      "recording_attendee_id": "5babaae9-3839-49d7-b8b4-609f9f7576c7",
+      "text": "Difference of the Sky sure."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1cee4ed0-f2a1-4469-970c-cadec001d1e0",
+      "title": "ABODO Demo - Pioneer Property Management",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-09-25T16:40:15.812000Z",
+      "call_date": "2020-09-25"
+    }
+  }
+}

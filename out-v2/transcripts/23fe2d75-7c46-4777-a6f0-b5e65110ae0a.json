@@ -1,0 +1,36 @@
+{
+  "id": "23fe2d75-7c46-4777-a6f0-b5e65110ae0a",
+  "recording_id": "b5dc3baf-9729-43ca-b40b-2cff4b99e393",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "23fe2d75-7c46-4777-a6f0-b5e65110ae0a",
+      "recording_id": "b5dc3baf-9729-43ca-b40b-2cff4b99e393",
+      "end_time": 115.86,
+      "start_time": 112.95,
+      "recording_attendee_id": "51d41ab7-b964-4fb3-ab98-e9c8686eebdc",
+      "text": "after hours emergency line please press three."
+    },
+    {
+      "id": "23fe2d75-7c46-4777-a6f0-b5e65110ae0a",
+      "recording_id": "b5dc3baf-9729-43ca-b40b-2cff4b99e393",
+      "end_time": 112.95,
+      "start_time": 27.73,
+      "recording_attendee_id": "51d41ab7-b964-4fb3-ab98-e9c8686eebdc",
+      "text": "Thank you for calling to Sequoia equities corporate office our normal business hours are Monday through Friday from eight AM to five PM Pacific time and we are closed from twelve to one PM daily we are currently unavailable to answer your call. However your call is important to us. If you know the extension of the party you are calling please dial it now. If you would like to reach the company directory please press one. If you would like to leave a message in the general voicemail or if you are an employee reporting an absence please press two. If you are a resident one of our apartment communities and need to submit a maintenance request or reached the after hours emergency line please press three. Thank you for calling to supply and equities corporate office our normal business hours are Monday through Friday from eight AM to five PM Pacific time and we are closed from twelve to one PM daily we are currently unavailable to answer your call. However your call is important to us. If you know the extension of the party you are calling please dial it now. If you would like to reach the company directory please press one. If you would like to leave a message in the general voicemail or if you are an employee reporting an absence please press two. If you are a resident at one of our apartment communities and need to submit a maintenance request or reached the"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b5dc3baf-9729-43ca-b40b-2cff4b99e393",
+      "title": "Call: Dan Cellon and Carrie Caudill @ Sequoia Equities, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

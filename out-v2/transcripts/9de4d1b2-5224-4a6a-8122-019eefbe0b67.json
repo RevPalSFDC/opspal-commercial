@@ -1,0 +1,76 @@
+{
+  "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+  "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 15.92,
+      "start_time": 15.2,
+      "recording_attendee_id": "a900d1b2-efe6-4ac8-bdfb-97d1eb1fe4ae",
+      "text": "Good afternoon."
+    },
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 82.31,
+      "start_time": 28.1,
+      "recording_attendee_id": "a900d1b2-efe6-4ac8-bdfb-97d1eb1fe4ae",
+      "text": "Okay. Hello, you've reached the voicemail of Nicholas back. I cannot take your call right now. So please leave a message and I'll get back with you as soon as I can if this is an urgent matter please call my cellphone is seven seven three seven nine one four four zero one. Thank you. And have a great day."
+    },
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 24.45,
+      "start_time": 23.67,
+      "recording_attendee_id": "a900d1b2-efe6-4ac8-bdfb-97d1eb1fe4ae",
+      "text": "Nicole huh."
+    },
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 152.06,
+      "start_time": 143.24,
+      "recording_attendee_id": "f7ea2c82-f2c5-4181-8fd9-caad242c5e36",
+      "text": "before committing to a time slot. I'm happy to do that six one five five one zero six one seven eight thanks."
+    },
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 20.61,
+      "start_time": 17.91,
+      "recording_attendee_id": "f7ea2c82-f2c5-4181-8fd9-caad242c5e36",
+      "text": "Hey, I was trying to get a hold of Nicole."
+    },
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 143.24,
+      "start_time": 85.22,
+      "recording_attendee_id": "f7ea2c82-f2c5-4181-8fd9-caad242c5e36",
+      "text": "Hey Nicole, my name is Dan. My coworker John, Paul. I just sent you over an email um, maybe this morning or yesterday, basically I'm with a company called rentable and we have integration with Facebook for listing and leasing through the site. We we run targeted ads. They're prequalify release before we send them to you basically we were hoping to set up a call with you to demo um, how that works and just ultimately determine if it makes any sense for you guys to consider for your twenty twenty two bedrooms. We have a few trial promotions that we're running right now that would be essentially give you the opportunity to test it out before committing to an annual contract for twenty twenty. Two so I think timing is better than ever. If you like more info, please let us know, otherwise just keep an eye on your inbox and will send over some times. Do you want to give me a call back. I can answer any questions. You've got"
+    },
+    {
+      "id": "9de4d1b2-5224-4a6a-8122-019eefbe0b67",
+      "recording_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "end_time": 26.99,
+      "start_time": 25.4,
+      "recording_attendee_id": "f7ea2c82-f2c5-4181-8fd9-caad242c5e36",
+      "text": "Nicole Sprint OConnor."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "eb378fce-f3c7-43ce-bcb0-64a0d84daafa",
+      "title": "Call: Dan Cellon and Nicole Spreck O'Connor @ Inland Residential Real Estate Services LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

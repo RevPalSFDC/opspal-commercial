@@ -1,0 +1,36 @@
+{
+  "id": "6a70b086-6db4-479f-bb7d-d08ea8b49321",
+  "recording_id": "d08177a5-b339-4fbd-b980-aabbb794dac7",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6a70b086-6db4-479f-bb7d-d08ea8b49321",
+      "recording_id": "d08177a5-b339-4fbd-b980-aabbb794dac7",
+      "end_time": 129.47,
+      "start_time": 3.02,
+      "recording_attendee_id": "32d43349-3f2f-4bd3-adbd-55d7a9758409",
+      "text": "Thank you for calling Nova property network oklahoma's Premier property management company. If you know the extension of the party you are trying to reach you may dial it at any time for directory of corporate personnel, press one for resident concerns or general questions press two for human resources press three for account control or press four to be connected to a Nova property network location press five for to repeat these options press six. Please select the city location of the property you are trying to reach for properties in Oklahoma City press one for properties and X. For the Aberdeen press one for Eagle Crest press two for Heritage Pointe press three for vintage at fiftieth press four. If you know your party's extension you may dial it now to listen to these choices again press Star. You've reached I'm counting Kelly located at twenty, five O two North Philly Avenue conveniently located near our state Capital for information on your new apartment home press one for maintenance concerns press two for general inquiries or concerns for. All of our agents are busy assisting other."
+    },
+    {
+      "id": "6a70b086-6db4-479f-bb7d-d08ea8b49321",
+      "recording_id": "d08177a5-b339-4fbd-b980-aabbb794dac7",
+      "end_time": 128.06,
+      "start_time": 127.58,
+      "recording_attendee_id": "6ec27248-6ecc-419e-a6ad-f316fc63d3bc",
+      "text": "All of our."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d08177a5-b339-4fbd-b980-aabbb794dac7",
+      "title": "Call: Austin Schleisner and Teri Cook @ Nova Property Network",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

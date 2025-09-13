@@ -1,0 +1,36 @@
+{
+  "id": "f344ec16-6760-4a4e-a88e-a1e57b0f4cf3",
+  "recording_id": "c197abc7-03be-4ddf-a26a-a2c9753e162d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f344ec16-6760-4a4e-a88e-a1e57b0f4cf3",
+      "recording_id": "c197abc7-03be-4ddf-a26a-a2c9753e162d",
+      "end_time": 129.8,
+      "start_time": 101.6,
+      "recording_attendee_id": "c39a0418-f203-4bd3-99b2-1e0030c605af",
+      "text": "Marianne, my name is Mitch Garcia. I'm calling with the rentable sent you a couple of emails and the reason for the call was to set a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads and mentors to the property specifically for partnership up with Facebook and Facebook marketplace want to run by a few options and ideas with you if you could please return my call again the channel four seven zero eight two eight five three eight three four seven zero eight two eight five three thanks bye."
+    },
+    {
+      "id": "f344ec16-6760-4a4e-a88e-a1e57b0f4cf3",
+      "recording_id": "c197abc7-03be-4ddf-a26a-a2c9753e162d",
+      "end_time": 99.75,
+      "start_time": 31.96,
+      "recording_attendee_id": "a3739dcf-3954-4bf3-8a3e-c0117023d652",
+      "text": "Thank you for calling Stone Spear management. If you would like to hear the companies directory please press zero. Now? If you know your party's extension please dial it now for the opposite administrator press one for human resources press two for accounts payable press three for collections press four for accounting press five for Maryann fare print. The person you are trying to reach is unavailable leave your message at the tone press pound when finished."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c197abc7-03be-4ddf-a26a-a2c9753e162d",
+      "title": "Call: Mitch  Scarski  and Maryann Fair @ Stonesfair Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

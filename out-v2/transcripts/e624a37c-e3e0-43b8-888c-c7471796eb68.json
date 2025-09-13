@@ -1,0 +1,44 @@
+{
+  "id": "e624a37c-e3e0-43b8-888c-c7471796eb68",
+  "recording_id": "fe789531-fef6-47bc-b71d-448e21a9e861",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e624a37c-e3e0-43b8-888c-c7471796eb68",
+      "recording_id": "fe789531-fef6-47bc-b71d-448e21a9e861",
+      "end_time": "311.85",
+      "start_time": "301.64",
+      "recording_attendee_id": null,
+      "text": "Yeah. Mhm."
+    },
+    {
+      "id": "e624a37c-e3e0-43b8-888c-c7471796eb68",
+      "recording_id": "fe789531-fef6-47bc-b71d-448e21a9e861",
+      "end_time": "136.16",
+      "start_time": "3.74",
+      "recording_attendee_id": null,
+      "text": "Yeah. Yeah. Right. Yeah. Yeah. Hey, mm hmm. Yeah. Really?"
+    },
+    {
+      "id": "e624a37c-e3e0-43b8-888c-c7471796eb68",
+      "recording_id": "fe789531-fef6-47bc-b71d-448e21a9e861",
+      "end_time": "298.54",
+      "start_time": "151.54",
+      "recording_attendee_id": "14789ed8-d6b7-4410-b70c-4a582367169a",
+      "text": "Mhm. Well, yeah. Do you hear me? Yeah. It's like them again, Thanks, sir. Yeah. Yeah. Uh huh. Yeah. Yeah. Yeah."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fe789531-fef6-47bc-b71d-448e21a9e861",
+      "title": "Rentable - American Capital Realty Partners",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-11-16T17:42:32.170000Z",
+      "call_date": "2021-11-16"
+    }
+  }
+}

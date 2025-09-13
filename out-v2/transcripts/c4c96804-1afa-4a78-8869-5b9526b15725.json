@@ -1,0 +1,44 @@
+{
+  "id": "c4c96804-1afa-4a78-8869-5b9526b15725",
+  "recording_id": "d7d45e21-81f7-49d1-88aa-6f7879a995cd",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c4c96804-1afa-4a78-8869-5b9526b15725",
+      "recording_id": "d7d45e21-81f7-49d1-88aa-6f7879a995cd",
+      "end_time": 143.5,
+      "start_time": 0.72,
+      "recording_attendee_id": "d9aa0777-e243-4c9d-8966-203b609cd568",
+      "text": "Thank you for calling Addison Skyway Marina. We will connect your call shortly after the call, we would like to follow up with you by text message to respond more quickly. If you agree to text press one now we will also be able to sell schedule an appointment by text. If you do not agree to text press two. Thank you. This call may be recorded for quality and training purposes. Thank you for calling the Addison Skyway Marina. If you're calling about a fire or a life threatening emergency, please hang up and call nine one one if you're calling for leasing information press one. If you need routine maintenance service or if you would like to leave a message for office staff and your call can be returned during regular business hours press two if you're experiencing a maintenance emergency and you need an on call maintenance representative notified immediately press three if you're calling regarding a lockout, please hang up and call her local Locksmith. Thank you again for calling. Welcome to the Addison Skyway Marina saint, Pete newest luxury rental community. We will be opening this may and offering hard hat tours in the very near future. Please leave a message and we will return your call right away. We are available Monday through Friday from nine AM to six PM please visit us online at the Addison Skyway Marina. Dot. Com. We look forward to talking with you."
+    },
+    {
+      "id": "c4c96804-1afa-4a78-8869-5b9526b15725",
+      "recording_id": "d7d45e21-81f7-49d1-88aa-6f7879a995cd",
+      "end_time": 170.64,
+      "start_time": 148.23,
+      "recording_attendee_id": "7702a777-7633-4f92-a2d7-52d78f2b1d73",
+      "text": "name is Russell I'm calling from rentable. I was hoping to talk to you about setting up your property on rentable and syndicating over to Facebook marketplace. If you could give me a call back my number is nine zero four two nine four seven eight seven seven again my name is Russell calling from rental at nine zero four two nine four seven eight seven seven thanks."
+    },
+    {
+      "id": "c4c96804-1afa-4a78-8869-5b9526b15725",
+      "recording_id": "d7d45e21-81f7-49d1-88aa-6f7879a995cd",
+      "end_time": 148.23,
+      "start_time": 146.76,
+      "recording_attendee_id": "7702a777-7633-4f92-a2d7-52d78f2b1d73",
+      "text": "Hi, this message is for Ginger. My"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d7d45e21-81f7-49d1-88aa-6f7879a995cd",
+      "title": "Call: Russell Eldridge and Ginger Keaton @ ContraVest Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

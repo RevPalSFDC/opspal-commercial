@@ -1,0 +1,76 @@
+{
+  "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+  "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 46.7,
+      "start_time": 38.76,
+      "recording_attendee_id": "3863c758-715d-4f20-818b-18b80318bb9a",
+      "text": "Otherwise, I can just hang out on here. I'm gonna close is the meeting"
+    },
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 48.89,
+      "start_time": 48.59,
+      "recording_attendee_id": "36b8e043-bbab-4bb9-9324-9842b2557871",
+      "text": "will"
+    },
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 29.85,
+      "start_time": 26.73,
+      "recording_attendee_id": "36b8e043-bbab-4bb9-9324-9842b2557871",
+      "text": "don't know I've never had to do that."
+    },
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 52.37,
+      "start_time": 52.01,
+      "recording_attendee_id": "36b8e043-bbab-4bb9-9324-9842b2557871",
+      "text": "Okay."
+    },
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 51.32,
+      "start_time": 48.89,
+      "recording_attendee_id": "3863c758-715d-4f20-818b-18b80318bb9a",
+      "text": "leave and then just last me if the closest the meeting out."
+    },
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 26.49,
+      "start_time": 19.26,
+      "recording_attendee_id": "3863c758-715d-4f20-818b-18b80318bb9a",
+      "text": "what's up. Tonight passes to you somehow. I"
+    },
+    {
+      "id": "9652ca0a-6446-430f-b9be-bd6b08f26b12",
+      "recording_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "end_time": 19.26,
+      "start_time": 18.96,
+      "recording_attendee_id": null,
+      "text": "Hey"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f7afb604-bdf6-47d5-af32-1168328727be",
+      "title": "ABODO < > Park at 1824. ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-10-29T14:40:22.488000Z",
+      "call_date": "2020-10-29"
+    }
+  }
+}

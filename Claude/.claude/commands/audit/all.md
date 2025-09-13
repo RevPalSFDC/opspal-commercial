@@ -54,8 +54,8 @@ Projects Audited: [count]
 3. [Third priority]
 
 ## Individual Reports
-- ClaudeSFDC: ./reports/ClaudeSFDC-agents-audit-[date].md
-- ClaudeHubSpot: ./reports/ClaudeHubSpot-agents-audit-[date].md
+- platforms/SFDC: ./reports/platforms-SFDC-agents-audit-[date].md
+- platforms/HS: ./reports/platforms-HS-agents-audit-[date].md
 - Agents: ./reports/Agents-agents-audit-[date].md
 ```
 
@@ -101,6 +101,6 @@ Set exit code based on worst scores across all projects:
 Final output should include:
 ```
 OVERALL_STATUS: FAIL
-WORST_SCORES: ClaudeSFDC(MB=3), ClaudeHubSpot(OPT=2)
+WORST_SCORES: platforms/SFDC(MB=3), platforms/HS(OPT=2)
 EXIT_CODE: 2
 ```

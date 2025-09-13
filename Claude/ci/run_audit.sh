@@ -85,7 +85,7 @@ if [ -d "reports" ]; then
   echo "  Total agents across projects: $total_agents"
   
   # Count agents per project
-  for dir in ../ClaudeSFDC ../ClaudeHubSpot ../Agents; do
+  for dir in ../platforms/SFDC ../platforms/HS ../Agents; do
     if [ -d "$dir/.claude/agents" ]; then
       project=$(basename "$dir")
       count=$(ls -1 "$dir/.claude/agents"/*.md 2>/dev/null | wc -l || echo "0")

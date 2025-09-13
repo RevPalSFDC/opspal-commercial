@@ -1,0 +1,38 @@
+{
+  "id": "d23fe243-2b0a-4569-be06-326112239a9c",
+  "recording_id": "e19ac4cd-db20-49d8-8f50-e3a3293107ce",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "it-IT",
+  "created_at": "2024-03-29T16:11:20.076Z",
+  "updated_at": "2024-03-29T16:12:08.298Z",
+  "sentences": [
+    {
+      "id": "d23fe243-2b0a-4569-be06-326112239a9c",
+      "recording_id": "e19ac4cd-db20-49d8-8f50-e3a3293107ce",
+      "end_time": 0.81,
+      "start_time": 0.79,
+      "recording_attendee_id": "402af7e4-329a-4b82-a280-4b44bccf0335",
+      "order_number": 0,
+      "text": "sì,"
+    },
+    {
+      "id": "d23fe243-2b0a-4569-be06-326112239a9c",
+      "recording_id": "e19ac4cd-db20-49d8-8f50-e3a3293107ce",
+      "end_time": 3.7,
+      "start_time": 3.01,
+      "recording_attendee_id": "402af7e4-329a-4b82-a280-4b44bccf0335",
+      "order_number": 1,
+      "text": "eh, certo."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e19ac4cd-db20-49d8-8f50-e3a3293107ce",
+      "title": "Morgan Rose's Zoom Meeting",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-03-29T16:11:19Z",
+      "call_date": "2024-03-29"
+    }
+  }
+}

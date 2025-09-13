@@ -1,0 +1,68 @@
+{
+  "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+  "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+      "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "end_time": 24.33,
+      "start_time": 21.84,
+      "recording_attendee_id": "ff0b8c73-55a4-471e-864d-eabefbf0e6a4",
+      "text": "I have a problem I can help you."
+    },
+    {
+      "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+      "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "end_time": 70.82,
+      "start_time": 54.36,
+      "recording_attendee_id": "ff0b8c73-55a4-471e-864d-eabefbf0e6a4",
+      "text": "Your call is being processed by Mitel voicemail trying to. He's not available after the tone please record your message. When finished you may hang up to deliver the message or press pound for more options."
+    },
+    {
+      "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+      "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "end_time": 32.34,
+      "start_time": 30,
+      "recording_attendee_id": "ff0b8c73-55a4-471e-864d-eabefbf0e6a4",
+      "text": "Um, give me one second, let me transfer you to the tractor herself."
+    },
+    {
+      "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+      "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "end_time": 28.58,
+      "start_time": 25.43,
+      "recording_attendee_id": "42ecfcd1-cde4-4043-90be-29a6d84fd4ab",
+      "text": "Anna are you guys currently at least up right now. Alright."
+    },
+    {
+      "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+      "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "end_time": 116.6,
+      "start_time": 72.2,
+      "recording_attendee_id": "42ecfcd1-cde4-4043-90be-29a6d84fd4ab",
+      "text": "Hi, Leanne. This is Cameron with rentable. I was doing a quick research Valdosta area. I'm the Regional director of sales here net rentable and we actually help assisted and senior living communities reach the adult child decision maker am via Facebook. I was curious what your occupancy was and if there might be room that we could help so if you could give me a call back I'd be interested and just talking to you and see kind of what's going on here. We could schedule a time um, but he's got a little bit of free time, maybe twenty to thirty minutes, but if you could just give me a call back my phone number is seven six five seven four eight eight two one nine thank you."
+    },
+    {
+      "id": "50c941bd-8029-414d-aa47-f1f76ff17294",
+      "recording_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "end_time": 33.29,
+      "start_time": 32.96,
+      "recording_attendee_id": "42ecfcd1-cde4-4043-90be-29a6d84fd4ab",
+      "text": "Okay."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fe9d4e2d-cf1b-419e-9f48-451f69c77f7c",
+      "title": "Call: Cameron Youngblood and +12295525800",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

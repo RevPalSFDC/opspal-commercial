@@ -1,0 +1,76 @@
+{
+  "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+  "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 123.62,
+      "start_time": 113.18,
+      "recording_attendee_id": "6145d97e-0309-40ad-9e78-514c8e0fea35",
+      "text": "May I ask who's calling please rentable. Okay. Just one. Second, let me see if he's in the office."
+    },
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 201.72,
+      "start_time": 159.86,
+      "recording_attendee_id": "d842fc43-cdad-40bd-9a56-439d43e4d0e5",
+      "text": "Yes. Okay. No that's fine. I'll just send him an email. Um, yeah, I guess if you just want to let them know rentable, we were hoping to set up like a demo with him to go over our our Services. So but I'll send him an email. My direct number is six one five um five one zero six one seven eight. Alright thanks so much."
+    },
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 185.54,
+      "start_time": 158.18,
+      "recording_attendee_id": "6145d97e-0309-40ad-9e78-514c8e0fea35",
+      "text": "Hi, Dan, he's not answering. I didn't think he's in the office do you want his voicemail. Alright, sure do you want me to give him any message. Okay. Okay. Okay. And what is your your"
+    },
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 107.97,
+      "start_time": 1.36,
+      "recording_attendee_id": "6145d97e-0309-40ad-9e78-514c8e0fea35",
+      "text": "Hi, you have reached Schroeder companies for Schroeder management company problem. Personally investments press two for Clara construction process. Thank you for calling Schroeder management company my cable now, but I'm gonna try to take one of the sixty one. If you know your party's extension please dial it at any time for technical support press two for accounts receivable press three for accounts payable press four for ahead and all housing questions press five for the H R department press six for all other inquiries press zero to repeat these options press nine. Thank you for calling Schroeder management company my cable now, but I couldn't get sick when I was a sixty one. If you know your party's extension please dial it at any time for technical support press two for accounts receivable press three for accounting press four for ahead and I'll housing questions press five for the H R department press six for all other inquiries press zero to repeat these. Thanks for calling sure to management can I help you."
+    },
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 118.26,
+      "start_time": 115.47,
+      "recording_attendee_id": "d842fc43-cdad-40bd-9a56-439d43e4d0e5",
+      "text": "Yeah, my name's Dan, I'm with a company called rentable."
+    },
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 203.36,
+      "start_time": 185.54,
+      "recording_attendee_id": "6145d97e-0309-40ad-9e78-514c8e0fea35",
+      "text": "phone number down seven eight. Okay. I will give him the message for sure. Okay. You're very welcome. Bye bye."
+    },
+    {
+      "id": "87b52015-e214-44b3-9bae-51b435c2bbba",
+      "recording_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "end_time": 112.08,
+      "start_time": 109.5,
+      "recording_attendee_id": "d842fc43-cdad-40bd-9a56-439d43e4d0e5",
+      "text": "Hey, I was trying to get a hold of Paul shorter."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9a0a30af-3b69-4537-8867-2fc821c17e3d",
+      "title": "Call: Dan Cellon and Paul Schroeder @ Schroeder Management Company",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

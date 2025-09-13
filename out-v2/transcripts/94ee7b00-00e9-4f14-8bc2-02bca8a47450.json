@@ -1,0 +1,47 @@
+{
+  "id": "94ee7b00-00e9-4f14-8bc2-02bca8a47450",
+  "recording_id": "c59a4bcd-87da-442c-aaa0-b04d9365710e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "94ee7b00-00e9-4f14-8bc2-02bca8a47450",
+      "recording_id": "c59a4bcd-87da-442c-aaa0-b04d9365710e",
+      "end_time": 80.99,
+      "start_time": 0,
+      "recording_attendee_id": "2f96a435-adae-45cb-ac48-48c330e05b2b",
+      "order_number": 0,
+      "text": "Guiffre calling to see our own rental management where we're managing for your success your call is important to us. If you know the extension of the party you are trying to reach you may dial it at anytime during this message. If you don't know your party's extension please press four now for our directory. Please enter the first few letters of the name of the person you would like to speak to this election is invalid. Please reenter there was one match Sarah Sullivan to connect to this person press pound to cancel press Star. We will know connect you. Sarah Sullivan count to take your call now at the tone please record your message. When you have finished recording simply hang up or press pound for further options."
+    },
+    {
+      "id": "94ee7b00-00e9-4f14-8bc2-02bca8a47450",
+      "recording_id": "c59a4bcd-87da-442c-aaa0-b04d9365710e",
+      "end_time": 124.11,
+      "start_time": 84,
+      "recording_attendee_id": "4006882c-44b3-4097-8166-0b289766d860",
+      "order_number": 1,
+      "text": "Hey there, Sarah this is Alex what our tech working with company rentable we actually disconnected on linked in the other day. So I appreciate the network there. But we're just hoping I could catch you here on the phone. I'm gonna shoot you an email here right after this but just seeing if you might be the right person to contact over there at C R M rental management. In regards to marketing advertising and listing kind of your apartments across the portfolio online through listing Services things like that. We're a top ten air net listing site and do some unique things specifically with social media and had tons of success with very very similar portfolios to see"
+    },
+    {
+      "id": "94ee7b00-00e9-4f14-8bc2-02bca8a47450",
+      "recording_id": "c59a4bcd-87da-442c-aaa0-b04d9365710e",
+      "end_time": 147.96,
+      "start_time": 124.11,
+      "recording_attendee_id": "4006882c-44b3-4097-8166-0b289766d860",
+      "order_number": 2,
+      "text": "our and rental management would love to maybe get ten fifteen minutes of your time Macs on the calendar here maybe early next week just to kind of touch base and talk through what we do um, if you can give me a call back or respond via email. Whichever is easiest number for me is two six nine three one three one five one eight again two six nine three one three one five one eight thanks so much take care."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c59a4bcd-87da-442c-aaa0-b04d9365710e",
+      "title": "Call: Alex Wodarczyk and Sarah Sullivan @ CRM Rental Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+  "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 338.96,
+      "start_time": 338.24,
+      "recording_attendee_id": "bcc0cc02-595f-49a3-988f-34947f3f3a81",
+      "text": "I'm good and you."
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 373.81,
+      "start_time": 361.7,
+      "recording_attendee_id": "594f9c16-66e2-4bcc-b821-0716bb5a6f7d",
+      "text": "social media at all. No. Okay. I'm just curious are you guys as far as occupancy is concerned, you get where you wanna be at."
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 342.2,
+      "start_time": 341.78,
+      "recording_attendee_id": "bcc0cc02-595f-49a3-988f-34947f3f3a81",
+      "text": "Yes."
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 382.34,
+      "start_time": 375.84,
+      "recording_attendee_id": "594f9c16-66e2-4bcc-b821-0716bb5a6f7d",
+      "text": "Okay, awesome well. I will keep you on you have a good rest of your day thanks bye."
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 332.91,
+      "start_time": 2.88,
+      "recording_attendee_id": "bcc0cc02-595f-49a3-988f-34947f3f3a81",
+      "text": "Hi, thank you for calling Stone property management. If this is a maintenance emergency please call three one zero nine five six zero zero nine nine if you're interested in leasing one of our properties please press one. If you're interested in property service management Services. Please press two. If you're a tenant calling about your account please press three. If you are a vendor calling about your invoice please press four if you're following up on on this request, please press five, you can also submit a maintenance request online at W W W dot Sterling management dot. Com or you can go through the app for your portal. If you want to list of names or directory please press six. If you would like to speak to the receptionist. Please press zero welcome to the directory please enter the first three letters of your party's first or last name. Press one for J U L I a. Can help you?"
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 341.44,
+      "start_time": 339.67,
+      "recording_attendee_id": "594f9c16-66e2-4bcc-b821-0716bb5a6f7d",
+      "text": "good did I catch you at a good time"
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 374.74,
+      "start_time": 374.35,
+      "recording_attendee_id": "bcc0cc02-595f-49a3-988f-34947f3f3a81",
+      "text": "We are."
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 361.7,
+      "start_time": 343.37,
+      "recording_attendee_id": "594f9c16-66e2-4bcc-b821-0716bb5a6f7d",
+      "text": "awesome. I won't keep you too long. I'm actually just giving a call. I was checking out the listings on the Stern website. Um now is your name listed on there. So hopefully I'm in the right place. I just wanted to chat about where you guys are listing your vacant units and if you had an interest in getting those on"
+    },
+    {
+      "id": "0de52cb4-2727-49b5-abc6-8bbd1a575e9d",
+      "recording_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "end_time": 337.78,
+      "start_time": 333.79,
+      "recording_attendee_id": "594f9c16-66e2-4bcc-b821-0716bb5a6f7d",
+      "text": "Hey Julian, this is Alyssa. I'm reaching out from rentable. How are you"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3d4d569e-cb3e-4f61-9c71-9a605ff4a3c3",
+      "title": "Call: Alyssa Tillich and Ophir Stern @ Stern Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

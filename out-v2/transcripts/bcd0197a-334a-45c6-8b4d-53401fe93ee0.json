@@ -1,0 +1,44 @@
+{
+  "id": "bcd0197a-334a-45c6-8b4d-53401fe93ee0",
+  "recording_id": "957be952-51b0-4269-b151-a2051a819522",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bcd0197a-334a-45c6-8b4d-53401fe93ee0",
+      "recording_id": "957be952-51b0-4269-b151-a2051a819522",
+      "end_time": 131.44,
+      "start_time": 103,
+      "recording_attendee_id": "bbf744fd-6fba-44cd-a635-8204f46d187f",
+      "text": "Hi, Heather. Good afternoon. I'm sorry, I think I might have the wrong number. I was looking for Diane in Colorado. I'm with rental we automate Facebook marketplace listings for management companies. We do it for a handful of management companies in Colorado and I I thought it would be a good fit for her and the properties. She's responsible for over there. I'm if you don't mind taking a message for me or have someone in marketing."
+    },
+    {
+      "id": "bcd0197a-334a-45c6-8b4d-53401fe93ee0",
+      "recording_id": "957be952-51b0-4269-b151-a2051a819522",
+      "end_time": 101.43,
+      "start_time": 1.34,
+      "recording_attendee_id": "2cef4d4e-00b4-450a-86fb-3b906452208c",
+      "text": "Thank you for calling concert properties, please thank well. As our menu options have recently changed our regular business hours are eight AM to five PM Central standard time Monday through Friday. If you know the name of your party and need to search directory. Please dial one. If you are. Hey Springs, resident or potential Springs residence please. Using the telephone keypad. Please begin spelling. The first or last name of the person you wish to call to listen to these choices again press Star to return to no names match. The name you entered using the telephone keypad. Please begin spelling the. Dialing Kerry, Cameron extension for thirty seven. You have reached the voicemail box for Heather rigs. I'm currently away from my desk or on the other line. Please leave your name and number after the tone and I'll return your call as soon as possible. If you need immediate assistance, please press zero for the operator. When you have finished recording hang up or press pound for more options."
+    },
+    {
+      "id": "bcd0197a-334a-45c6-8b4d-53401fe93ee0",
+      "recording_id": "957be952-51b0-4269-b151-a2051a819522",
+      "end_time": 144.7,
+      "start_time": 132.79,
+      "recording_attendee_id": "bbf744fd-6fba-44cd-a635-8204f46d187f",
+      "text": "So it would be responsible get back to me it would be greatly appreciated. My number is nine two zero two two two one four zero five. Thank you very much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "957be952-51b0-4269-b151-a2051a819522",
+      "title": "Call: Brennan Waller and +12625025500",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

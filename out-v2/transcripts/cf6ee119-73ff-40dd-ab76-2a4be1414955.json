@@ -1,0 +1,29 @@
+{
+  "id": "cf6ee119-73ff-40dd-ab76-2a4be1414955",
+  "recording_id": "aa5f5a69-8d5f-438b-8108-b6b340ed574e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "cf6ee119-73ff-40dd-ab76-2a4be1414955",
+      "recording_id": "aa5f5a69-8d5f-438b-8108-b6b340ed574e",
+      "end_time": 147.14,
+      "start_time": 1.15,
+      "recording_attendee_id": "d9b4a98a-21d6-4c7c-8a87-05ec85a80e38",
+      "order_number": 0,
+      "text": "Thank you for calling M J C Companies. Your call may record monitored for quality assurance. If you know your party's extension, you may dial it at any time. For operator, press zero, or stay on the line For the dial by name directory, Press nine. Thank you for calling M J C companies. Mhm. Mhm. And all of our agents are busy helping other customers at the tone. Please record your message finished recording. You may hang"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "aa5f5a69-8d5f-438b-8108-b6b340ed574e",
+      "title": "Call: Brandon Winfield and +15862631203",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

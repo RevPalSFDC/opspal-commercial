@@ -1,0 +1,29 @@
+{
+  "id": "64224794-b3b7-46c8-9926-c719d2b8985b",
+  "recording_id": "5167cbdc-28a5-49a6-bf51-17e445ebc5e8",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-04-08T18:10:08.874Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "64224794-b3b7-46c8-9926-c719d2b8985b",
+      "recording_id": "5167cbdc-28a5-49a6-bf51-17e445ebc5e8",
+      "end_time": 464.28,
+      "start_time": 463.48,
+      "recording_attendee_id": "5c19a7e6-c993-4b64-b9c3-911d2c654c4a",
+      "order_number": 0,
+      "text": "Might be compatible."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "5167cbdc-28a5-49a6-bf51-17e445ebc5e8",
+      "title": "Rentable//MSM Services",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-04-08T18:11:54Z",
+      "call_date": "2024-04-08"
+    }
+  }
+}

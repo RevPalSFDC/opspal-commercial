@@ -1,0 +1,38 @@
+{
+  "id": "0f285d95-9101-4df0-becf-9610ccea8eb7",
+  "recording_id": "9f021ca6-74e7-4a07-88fe-8c70be33c7dc",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0f285d95-9101-4df0-becf-9610ccea8eb7",
+      "recording_id": "9f021ca6-74e7-4a07-88fe-8c70be33c7dc",
+      "end_time": 0.09,
+      "start_time": 0,
+      "recording_attendee_id": "2e4195ad-ad63-48fd-88fe-0afde4863a21",
+      "order_number": 0,
+      "text": "OKay."
+    },
+    {
+      "id": "0f285d95-9101-4df0-becf-9610ccea8eb7",
+      "recording_id": "9f021ca6-74e7-4a07-88fe-8c70be33c7dc",
+      "end_time": 132.42,
+      "start_time": 1.04,
+      "recording_attendee_id": "d04a8d73-015e-408a-bc52-e4d17748aeb8",
+      "order_number": 1,
+      "text": "Thank you for calling Continental Realty Corporation. If you know your party's extension, please dial it now. For our company directory, please dial one. To hear direction to our main enter the last name of the person you are calling followed by the first name, used the telephone keypad to spell the name, Press Pound. When finished entering, name zero at any time to I'm I'm sorry there are more than nine entries continue entering the name or press Star. To try again enter the last name of the person you are calling followed by the first name, used the telephone keypad to spell the name, Press Pound. When finished. I'm sorry There are eight entries for John Hall, Press one for Scott Hamlin Press two. For Helpdesk press three. For extension sixty-nine twenty-one press four. Lauren Henderson Press five four Mara Walter, Press six for David Oil, Press seven. for Lisa Walls, Press eight. Press zero at any time to exit"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9f021ca6-74e7-4a07-88fe-8c70be33c7dc",
+      "title": "Call: Jordan Culp and Belinda Torres @ Continental Realty Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

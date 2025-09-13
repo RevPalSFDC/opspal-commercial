@@ -1,0 +1,83 @@
+{
+  "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+  "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-03-19T17:11:57.359Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 81.63,
+      "start_time": 81.28,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 0,
+      "text": "Hmm."
+    },
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 249.71,
+      "start_time": 247.9,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 1,
+      "text": "thank you for calling Dunlap and Mcgee."
+    },
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 288.14,
+      "start_time": 285.17,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 2,
+      "text": "Your call has been forwarded to an automated voice."
+    },
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 300.6,
+      "start_time": 288.47,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 3,
+      "text": "Messaging system 602 769 4725 is not available at the tone."
+    },
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 348.82,
+      "start_time": 344.98,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 4,
+      "text": "Your call has been forwarded to voicemail the person you're"
+    },
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 425.62,
+      "start_time": 425.27,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 5,
+      "text": "huh!"
+    },
+    {
+      "id": "2aad95e5-f5a3-4da2-a323-604f2c7b6141",
+      "recording_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "end_time": 471.3,
+      "start_time": 470.96,
+      "recording_attendee_id": "9dc768d0-53a9-4feb-8bf3-22e866eafe12",
+      "order_number": 6,
+      "text": "Hmm!"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ba5a81b6-9167-48ce-a4a7-3664ce423ab4",
+      "title": "Dunlap & Magee (HQ) - Rentable Demo",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-03-19T17:13:23Z",
+      "call_date": "2024-03-19"
+    }
+  }
+}

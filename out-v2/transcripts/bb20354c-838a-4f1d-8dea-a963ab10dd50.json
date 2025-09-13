@@ -1,0 +1,101 @@
+{
+  "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+  "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 2.44,
+      "start_time": 1.05,
+      "recording_attendee_id": "b433bc83-a64c-4c42-9edd-522249edefd7",
+      "order_number": 0,
+      "text": "This is heather? Can I help you?"
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 6.94,
+      "start_time": 2.88,
+      "recording_attendee_id": "a91b1371-046d-432a-ab36-d3d58d46cbc1",
+      "order_number": 1,
+      "text": "Hi Heather. Good afternoon. It's Brandon calling with a boat. Oh, how are you doing today?"
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 9.16,
+      "start_time": 7.51,
+      "recording_attendee_id": "b433bc83-a64c-4c42-9edd-522249edefd7",
+      "order_number": 2,
+      "text": "I'm good. What can I do for you?"
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 31.02,
+      "start_time": 9.37,
+      "recording_attendee_id": "a91b1371-046d-432a-ab36-d3d58d46cbc1",
+      "order_number": 3,
+      "text": "Yeah, I wanted to call, I was on your business website and wanted to touch base with someone uh to see how you guys are doing in regards to your occupancy. And then um what you currently utilize for an system. We uh we have an exclusive partnership with Facebook marketplace. I'd love to set up some time down the road to to talk about and see if it might be a good fit for Windham Hill."
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 37.01,
+      "start_time": 32.17,
+      "recording_attendee_id": "b433bc83-a64c-4c42-9edd-522249edefd7",
+      "order_number": 4,
+      "text": "Let me um send you to the property manager and you can talk to Michelle about that. Okay."
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 38.33,
+      "start_time": 37.17,
+      "recording_attendee_id": "a91b1371-046d-432a-ab36-d3d58d46cbc1",
+      "order_number": 5,
+      "text": "Perfect. Thank you."
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 104.51,
+      "start_time": 38.74,
+      "recording_attendee_id": "b433bc83-a64c-4c42-9edd-522249edefd7",
+      "order_number": 6,
+      "text": "Hold on. Yeah. Yeah. Yeah. Thank you for calling Windham Hill in Nashville Apartments. This is Michelle Health. I am unable to take your call right now. But please leave your name, number and a brief message and I'll return your call as soon as I can. Thank you. Please leave your message after the tone when done, hang up or press the pound key."
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 122.33,
+      "start_time": 105.75,
+      "recording_attendee_id": "a91b1371-046d-432a-ab36-d3d58d46cbc1",
+      "order_number": 7,
+      "text": "Hi, good afternoon, Michelle. It's Brandon calling with a Boat dot com. Wanted to touch base. We are an exclusive partner with Facebook marketplace and wanted to see how you guys are currently doing in terms of your occupancy in your utilization of internet listing services. Would love to set up a call down the road to"
+    },
+    {
+      "id": "bb20354c-838a-4f1d-8dea-a963ab10dd50",
+      "recording_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "end_time": 133.05,
+      "start_time": 122.33,
+      "recording_attendee_id": "a91b1371-046d-432a-ab36-d3d58d46cbc1",
+      "order_number": 8,
+      "text": "talk about Windham Hill and a boat. Oh. Uh Partnering my number is nine hundred twenty thousand eight hundred and ninety-six fourteen ninety-six Again. Brandon calling with a boat. Oh, talk to you later. Bye bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "13b40e82-a77d-4e48-98e1-517840d5f490",
+      "title": "Call: Brandon Winfield and +17346688888",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "a196f022-743f-482e-baf9-5f43a4f9fafa",
+  "recording_id": "ca2ce37c-a4e6-4e13-831d-3ae37ef415c4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a196f022-743f-482e-baf9-5f43a4f9fafa",
+      "recording_id": "ca2ce37c-a4e6-4e13-831d-3ae37ef415c4",
+      "end_time": 50.77,
+      "start_time": 3.81,
+      "recording_attendee_id": "c3c1b6bb-c26f-4e68-8590-71150dee7a8e",
+      "text": "For quality assurance purposes. This call may be recorded. Thank you for calling Sparrow. If you're interested in renting a spiro home, please visit W W W dot spiro know dot. Com click on find your home and schedule a tour or apply online. If you would like to speak with a leasing associate about renting is spiro home, please press one. If you are a spiro residence ends need to submit a non, emergency maintenance request. Please visit your residence portal at W W W dot Sparrow know dot. Com your special residence and have a maintenance emergency please press two for all other inquiries, please email us Barrow team member at customer service desk please hold for the next available associate your call may be recorded for quality assurance purposes."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ca2ce37c-a4e6-4e13-831d-3ae37ef415c4",
+      "title": "Call: Mitch  Scarski  and +18778818484",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

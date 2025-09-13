@@ -1,0 +1,400 @@
+ClaudeSFDC/instances/rentable-production/docs/QUICK_REFERENCE.md:43:sf project deploy start --source-dir force-app
+ClaudeSFDC/instances/rentable-production/docs/QUICK_REFERENCE.md:53:1. **NEVER deploy untested code**
+ClaudeSFDC/instances/rentable-production/docs/QUICK_REFERENCE.md:66:6. Verify deployment
+ClaudeSFDC/instances/rentable-production/docs/QUICK_REFERENCE.md:95:1. **Rollback**: Use change sets or quick deploy
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:1:#!/bin/bash
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:6:sf data update record --sobject Contract --record-id 800TI00000KPFrgYAH --values "Monthly_Recurring_Revenue__c=8500 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:7:sf data update record --sobject Contract --record-id 800TI00000KPFrhYAH --values "Monthly_Recurring_Revenue__c=25000 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:8:sf data update record --sobject Contract --record-id 800TI00000KPFriYAH --values "Monthly_Recurring_Revenue__c=5500 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:9:sf data update record --sobject Contract --record-id 800TI00000KPFrjYAH --values "Monthly_Recurring_Revenue__c=18000 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:10:sf data update record --sobject Contract --record-id 800TI00000KPFrkYAH --values "Monthly_Recurring_Revenue__c=9500 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:11:sf data update record --sobject Contract --record-id 800TI00000KPFrlYAH --values "Monthly_Recurring_Revenue__c=3500 Contract_Term_Months__c=6" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:12:sf data update record --sobject Contract --record-id 800TI00000KPFrmYAH --values "Monthly_Recurring_Revenue__c=15500 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:13:sf data update record --sobject Contract --record-id 800TI00000KPFrnYAH --values "Monthly_Recurring_Revenue__c=11000 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_contracts.sh:14:sf data update record --sobject Contract --record-id 800TI00000KPFroYAH --values "Monthly_Recurring_Revenue__c=6750 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/rentable-production/docs/README.md:22:- Backup before deployment
+ClaudeSFDC/instances/rentable-production/docs/README.md:23:- Verification after deployment
+ClaudeSFDC/instances/rentable-production/docs/README.md:32:- NEVER deploy untested changes
+ClaudeSFDC/instances/rentable-production/scripts/complete-setup.sh:1:#!/bin/bash
+ClaudeSFDC/instances/rentable-production/scripts/complete-setup.sh:57:echo "• Always create backups before deployments"
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:1:#!/bin/bash
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:6:sf data update record --sobject Contract --record-id 800TI00000KPFrpYAH --values "Monthly_Recurring_Revenue__c=7250 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:7:sf data update record --sobject Contract --record-id 800TI00000KPFrqYAH --values "Monthly_Recurring_Revenue__c=14000 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:8:sf data update record --sobject Contract --record-id 800TI00000KPFrrYAH --values "Monthly_Recurring_Revenue__c=4500 Contract_Term_Months__c=6" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:9:sf data update record --sobject Contract --record-id 800TI00000KPFrsYAH --values "Monthly_Recurring_Revenue__c=22000 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:10:sf data update record --sobject Contract --record-id 800TI00000KPFrtYAH --values "Monthly_Recurring_Revenue__c=9750 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:11:sf data update record --sobject Contract --record-id 800TI00000KPYSnYAP --values "Monthly_Recurring_Revenue__c=16500 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:12:sf data update record --sobject Contract --record-id 800TI00000KPYSoYAP --values "Monthly_Recurring_Revenue__c=5750 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:13:sf data update record --sobject Contract --record-id 800TI00000KPYSpYAP --values "Monthly_Recurring_Revenue__c=19500 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:14:sf data update record --sobject Contract --record-id 800TI00000KPYSqYAP --values "Monthly_Recurring_Revenue__c=8250 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:15:sf data update record --sobject Contract --record-id 800TI00000KPYSrYAP --values "Monthly_Recurring_Revenue__c=13500 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:16:sf data update record --sobject Contract --record-id 800TI00000KPYSsYAP --values "Monthly_Recurring_Revenue__c=28000 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:17:sf data update record --sobject Contract --record-id 800TI00000KPYStYAP --values "Monthly_Recurring_Revenue__c=6500 Contract_Term_Months__c=6" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:18:sf data update record --sobject Contract --record-id 800TI00000KPYSuYAP --values "Monthly_Recurring_Revenue__c=17750 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:19:sf data update record --sobject Contract --record-id 800TI00000KPYSvYAP --values "Monthly_Recurring_Revenue__c=10500 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:20:sf data update record --sobject Contract --record-id 800TI00000KPYSwYAP --values "Monthly_Recurring_Revenue__c=21000 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:21:sf data update record --sobject Contract --record-id 800TI00000KPYSxYAP --values "Monthly_Recurring_Revenue__c=4250 Contract_Term_Months__c=6" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:22:sf data update record --sobject Contract --record-id 800TI00000KPYSyYAP --values "Monthly_Recurring_Revenue__c=15250 Contract_Term_Months__c=18" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:23:sf data update record --sobject Contract --record-id 800TI00000KPYSzYAP --values "Monthly_Recurring_Revenue__c=11750 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:24:sf data update record --sobject Contract --record-id 800TI00000KPYT0YAP --values "Monthly_Recurring_Revenue__c=24500 Contract_Term_Months__c=24" --target-org rentable-sandbox
+ClaudeSFDC/instances/shared/scripts/update_remaining_contracts.sh:25:sf data update record --sobject Contract --record-id 800TI00000KPYT1YAP --values "Monthly_Recurring_Revenue__c=7500 Contract_Term_Months__c=12" --target-org rentable-sandbox
+ClaudeSFDC/instances/wedgewood-production/EMAIL_DUPLICATE_ANALYSIS.md:135:3. **Creation Date Pattern**: Would need additional analysis to determine if these were bulk imports
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:1:# Flow Specifications for Duplicate Prevention & Data Quality
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:3:## 1. Phone Standardization Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:5:**Flow Type:** Before-Save Record-Triggered Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:9:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:32:## 2. Website Cleanup Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:34:**Flow Type:** Before-Save Record-Triggered Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:38:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:61:## 3. Account Search Before Create - Screen Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:63:**Flow Type:** Screen Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:85:## 4. Contact Duplicate Check Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:87:**Flow Type:** Screen Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:120:## 5. Data Quality Monitor - Scheduled Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:122:**Flow Type:** Scheduled Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:147:## 6. Bulk Update Helper - Screen Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:149:**Flow Type:** Screen Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:150:**Purpose:** Help users fix common data issues in bulk
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:231:## 7. Company Suffix Normalization Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:233:**Flow Type:** Before-Save Record-Triggered Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:237:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:297:## 9. State/Country Standardization Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:299:**Flow Type:** Before-Save Record-Triggered Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:303:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:327:## 10. Data Quality Alert Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:329:**Flow Type:** Scheduled Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:333:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:366:## 11. SLA Breach Escalation Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:368:**Flow Type:** Record-Triggered Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:378:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:404:## 12. Duplicate Check API Flag Flow
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:406:**Flow Type:** Before-Save Record-Triggered Flow  
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:410:### Flow Logic:
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:437:- [ ] Test bulk operations (Data Loader)
+ClaudeSFDC/instances/rentable-production/docs/FLOW_SPECIFICATIONS.md:448:- Check Flow error emails
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:30:        const query = `SELECT Id, Name, Website, Phone, BillingStreet, BillingCity, BillingState, BillingPostalCode, Type, Industry, CreatedDate, LastModifiedDate, OwnerId FROM Account ORDER BY Name`;
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:32:        const accounts = this.executeQuery(query);
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:90:            const query = `SELECT Id, FirstName, LastName, Email, Phone, MobilePhone, AccountId, Account.Name, Title, Department, CreatedDate, LastModifiedDate, OwnerId, MailingStreet, MailingCity, MailingState FROM Contact ORDER BY Email, LastName LIMIT ${batchSize} OFFSET ${offset}`;
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:92:            const batch = this.executeQuery(query);
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:152:    executeQuery(query) {
+ClaudeSFDC/instances/rentable-production/scripts/duplicate-analysis.js:155:                `sf data query --query "${query.replace(/\n/g, ' ')}" --target-org ${this.org} --json`,
+ClaudeSFDC/instances/rentable-production/scripts/authenticate.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/generate-audit-data.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:187:### Recommended Normalization Flows
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:189:**Before-Save Flow: Account Name Standardization**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:195:**Before-Save Flow: Address Standardization**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:353:1. **Flow-Based Data Standardization**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:354:   - **Phone Standardization Flow** (Before-Save)
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:359:   - **Website Cleanup Flow** (Before-Save)
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:378:   - Use Page Layouts to make fields required:
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:398:2. **Screen Flows for Guided Data Entry**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:399:   - **"Create New Account" Screen Flow:**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:405:   - **Contact Creation Helper Flow:**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:432:### Week 2 - Validation & Flows
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:434:- [ ] Build Phone Standardization Flow
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:435:- [ ] Build Website Cleanup Flow
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:441:- [ ] Create Screen Flow for Account creation
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:488:2. **Flow Builder Solutions**
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:489:   - Before-Save Record-Triggered Flows for data standardization
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:490:   - Screen Flows for guided data entry
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:491:   - Scheduled Flows for data quality checks
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:492:   - Auto-launched Flows for field updates
+ClaudeSFDC/instances/rentable-production/docs/DUPLICATE_ANALYSIS_REPORT.md:506:5. **Page Layout & Record Types**
+ClaudeSFDC/instances/neonone/run-audit.sh:1:#!/bin/bash
+ClaudeSFDC/instances/rentable-production/scripts/verify-connection.sh:1:#!/bin/bash
+ClaudeSFDC/instances/rentable-production/docs/REVOPS_ASSESSMENT_ENHANCED.md:136:   - **Recommendation**: Convert critical formulas to Apex/Flows
+ClaudeSFDC/instances/rentable-production/docs/REVOPS_ASSESSMENT_ENHANCED.md:228:   - Plan for Flow migration from Process Builder
+ClaudeSFDC/instances/wedgewood-production/ERROR_ANALYSIS_REPORT.md:135:From querying `/services/data/v64.0/analytics/reportTypes`, we discovered:
+ClaudeSFDC/instances/rentable-production/docs/DATA_GOVERNANCE_MODEL.md:316:#### Automation (Flows)
+ClaudeSFDC/instances/wedgewood-production/WEDGEWOOD_ACTIVITY_REPORT_FILTERS.md:5:Based on the deployed reports and any modifications made, here are the key filter patterns identified for Wedgewood activity reports:
+ClaudeSFDC/instances/wedgewood-production/WEDGEWOOD_ACTIVITY_REPORT_FILTERS.md:229:Before deploying activity reports for Wedgewood:
+ClaudeSFDC/instances/neonone/EVIDENCE_BASED_REVOPS_ASSESSMENT.md:405:- Advanced analytics deployment
+ClaudeSFDC/instances/neonone/run-revops-assessment.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/analyze-audit-data.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/neonone/analyze-audit-data.js:382:    // 5. Data Flow & Integration Health
+ClaudeSFDC/instances/neonone/analyze-audit-data.js:413:            category: 'Integration & Data Flow',
+ClaudeSFDC/instances/neonone/quick_assessment.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/quick_assessment.sh:14:sf data query --query "SELECT IsSandbox, OrganizationType FROM Organization" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/quick_assessment.sh:18:sf data query --query "SELECT COUNT(Id) as TotalLeads, SUM(CASE WHEN IsConverted = true THEN 1 ELSE 0 END) as ConvertedLeads FROM Lead WHERE CreatedDate >= LAST_N_MONTHS:6" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/quick_assessment.sh:22:sf data query --query "SELECT COUNT(Id) as TotalOpps, SUM(Amount) as TotalPipeline, AVG(Amount) as AvgDealSize FROM Opportunity WHERE IsClosed = false" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/quick_assessment.sh:26:sf data query --query "SELECT COUNT(Id) as WonDeals, SUM(Amount) as TotalRevenue FROM Opportunity WHERE IsWon = true AND CloseDate >= LAST_N_MONTHS:6" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/quick_assessment.sh:30:sf data query --query "SELECT COUNT(Id) as TotalUsers, COUNT(CASE WHEN LastLoginDate >= LAST_N_DAYS:30 THEN 1 END) as ActiveUsers FROM User WHERE IsActive = true AND UserType = 'Standard'" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/quick_assessment.sh:34:sf data query --query "SELECT Name, NumberOfLeads, NumberOfWonOpportunities, AmountWonOpportunities FROM Campaign WHERE IsActive = true ORDER BY AmountWonOpportunities DESC NULLS LAST LIMIT 5" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/quick_assessment.sh:38:sf data query --query "SELECT COUNT(Id) as TotalAccounts, COUNT(CASE WHEN Phone != null THEN 1 END) as WithPhone, COUNT(CASE WHEN Website != null THEN 1 END) as WithWebsite FROM Account" --target-org "$ORG_ALIAS" 2>/dev/null
+ClaudeSFDC/instances/neonone/revops-audit.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/neonone/revops-audit.js:22:        description: 'Lead Analysis - GTM Flow and Conversion Patterns',
+ClaudeSFDC/instances/neonone/revops-audit.js:23:        query: `SELECT Id, Name, Company, Title, Email, Phone, LeadSource, Status, 
+ClaudeSFDC/instances/neonone/revops-audit.js:36:        query: `SELECT Id, CampaignId, LeadId, ContactId, Status, 
+ClaudeSFDC/instances/neonone/revops-audit.js:46:        query: `SELECT Id, Name, AccountId, StageName, Amount, Probability, 
+ClaudeSFDC/instances/neonone/revops-audit.js:58:        query: `SELECT Id, Name, Type, Industry, AnnualRevenue, NumberOfEmployees, 
+ClaudeSFDC/instances/neonone/revops-audit.js:69:        query: `SELECT Id, Name, Title, Email, Phone, MobilePhone, AccountId, 
+ClaudeSFDC/instances/neonone/revops-audit.js:80:        query: `SELECT Id, Name, Username, Email, IsActive, LastLoginDate, 
+ClaudeSFDC/instances/neonone/revops-audit.js:89:        query: `SELECT Id, Subject, Status, Priority, Type, WhoId, WhatId, 
+ClaudeSFDC/instances/neonone/revops-audit.js:99:        query: `SELECT Id, Name, Type, Status, StartDate, EndDate, 
+ClaudeSFDC/instances/neonone/revops-audit.js:113:async function executeSFQuery(name, queryConfig) {
+ClaudeSFDC/instances/neonone/revops-audit.js:114:    const query = queryConfig.query.replace(/\s+/g, ' ').trim();
+ClaudeSFDC/instances/neonone/revops-audit.js:115:    const command = `sf data query --query "${query}" --result-format json --target-org ${ORG_ALIAS}`;
+ClaudeSFDC/instances/neonone/revops-audit.js:117:    console.log(`\nExecuting: ${queryConfig.description}`);
+ClaudeSFDC/instances/neonone/revops-audit.js:133:        console.log(`✓ Success: ${result.totalSize} records retrieved`);
+ClaudeSFDC/instances/neonone/revops-audit.js:139:            description: queryConfig.description,
+ClaudeSFDC/instances/neonone/revops-audit.js:150:            description: queryConfig.description,
+ClaudeSFDC/instances/neonone/revops-audit.js:169:    for (const [name, queryConfig] of Object.entries(auditQueries)) {
+ClaudeSFDC/instances/neonone/revops-audit.js:170:        const result = await executeSFQuery(name, queryConfig);
+ClaudeSFDC/instances/neonone/revops-audit.js:235:    for (const query of successfulQueries) {
+ClaudeSFDC/instances/neonone/revops-audit.js:236:        if (query.data && query.data.records) {
+ClaudeSFDC/instances/neonone/revops-audit.js:237:            console.log(`\nAnalyzing ${query.name}...`);
+ClaudeSFDC/instances/neonone/revops-audit.js:240:                name: query.name,
+ClaudeSFDC/instances/neonone/revops-audit.js:241:                totalRecords: query.totalSize,
+ClaudeSFDC/instances/neonone/revops-audit.js:246:            switch(query.name) {
+ClaudeSFDC/instances/neonone/revops-audit.js:248:                    analysis.insights = analyzeLeads(query.data.records);
+ClaudeSFDC/instances/neonone/revops-audit.js:251:                    analysis.insights = analyzeOpportunities(query.data.records);
+ClaudeSFDC/instances/neonone/revops-audit.js:254:                    analysis.insights = analyzeCampaignMembers(query.data.records);
+ClaudeSFDC/instances/neonone/revops-audit.js:257:                    analysis.insights = analyzeAccounts(query.data.records);
+ClaudeSFDC/instances/neonone/revops-audit.js:260:                    analysis.insights = analyzeTasks(query.data.records);
+ClaudeSFDC/instances/neonone/revops-audit.js:263:                    analysis.insights = [`Basic analysis for ${query.name}`];
+ClaudeSFDC/instances/neonone/run-generate-data.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:11:**256 competing automations are creating an unstable, unpredictable system that is one bad deployment away from catastrophic failure.** This is not hyperbole - this is the technical reality of your Salesforce instance.
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:21:├── Active Flows: 161 (including Process Builders)
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:49:- They execute in unpredictable order with Flows
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:57:Within your 161 "Flows," a significant portion are likely Process Builders - Salesforce's failed experiment that they're also retiring:
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:59:- **10x slower than Flows**
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:86:3. Which triggers Flow B
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:108:**What happens when someone deploys one more automation:**
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:134:#### The One Flow Framework
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:138:├── ONE Record-Triggered Flow (handles all triggers)
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:139:├── ONE Scheduled Flow (if needed)
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:140:├── ONE Screen Flow (for UI)
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:149:- Opportunity: Consolidate 20+ automations → 1-2 Flows
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:150:- Lead: Consolidate 15+ automations → 1-2 Flows
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:151:- Account: Consolidate 15+ automations → 1-2 Flows
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:154:- Contact: Migrate workflow rules → Flow
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:205:- One Flow Framework implemented
+ClaudeSFDC/instances/neonone/FOUNDATION_CHAOS_ASSESSMENT.md:235:4. **Data Flow Patterns**
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:17:function executeSFCommand(query, filename) {
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:19:        const command = `sf data query --query "${query.replace(/\n/g, ' ').replace(/\s+/g, ' ')}" --result-format json --target-org ${ORG_ALIAS}`;
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:21:        console.log(`\nExecuting query for ${filename}...`);
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:49:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:65:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:79:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:98:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:115:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:128:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:144:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:161:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:178:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:197:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:209:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:220:        query: `
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:244:    for (const query of auditQueries) {
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:245:        const result = await executeSFCommand(query.query, query.name);
+ClaudeSFDC/instances/neonone/revops-audit-queries.js:246:        results.push({ name: query.name, ...result });
+ClaudeSFDC/instances/neonone/ASSESSMENT_SUMMARY.md:14:   - Raw assessment output with query logs
+ClaudeSFDC/instances/neonone/execute-audit.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/REAL_DATA_ASSESSMENT_SUMMARY.md:16:- **What Happened**: The `sfdc-revops-auditor` sub-agent generated simulated/example data rather than querying the actual org
+ClaudeSFDC/instances/neonone/REAL_DATA_ASSESSMENT_SUMMARY.md:25:- **What Happened**: Sub-agent didn't report query execution failures
+ClaudeSFDC/instances/neonone/REAL_DATA_ASSESSMENT_SUMMARY.md:162:The sub-agent limitations masked these critical issues by providing "reasonable" simulated data that didn't reflect the actual chaos in the system. Direct query execution is essential for accurate assessment.
+ClaudeSFDC/instances/neonone/REAL_DATA_ASSESSMENT_SUMMARY.md:166:- `/data/assessment-[timestamp]/` - Raw query results
+ClaudeSFDC/instances/neonone/audit-queries.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/audit-queries.sh:18:# Function to execute and save query results
+ClaudeSFDC/instances/neonone/audit-queries.sh:19:execute_query() {
+ClaudeSFDC/instances/neonone/audit-queries.sh:20:    local query_name=$1
+ClaudeSFDC/instances/neonone/audit-queries.sh:21:    local query=$2
+ClaudeSFDC/instances/neonone/audit-queries.sh:22:    local output_file="$OUTPUT_DIR/${query_name}_${TIMESTAMP}.json"
+ClaudeSFDC/instances/neonone/audit-queries.sh:24:    echo -n "Executing $query_name... "
+ClaudeSFDC/instances/neonone/audit-queries.sh:26:    # Execute the query using sf CLI
+ClaudeSFDC/instances/neonone/audit-queries.sh:27:    sf data query --query "$query" --result-format json --target-org "$ORG_ALIAS" > "$output_file" 2>/dev/null
+ClaudeSFDC/instances/neonone/audit-queries.sh:38:# 1. Lead Analysis - GTM Flow and Conversion Patterns
+ClaudeSFDC/instances/neonone/audit-queries.sh:40:echo "1. LEAD ANALYSIS - GTM Flow Patterns"
+ClaudeSFDC/instances/neonone/audit-queries.sh:42:execute_query "lead_analysis" "SELECT Id, Name, Company, Title, Email, Phone, LeadSource, Status, ConvertedDate, ConvertedAccountId, ConvertedContactId, ConvertedOpportunityId, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, OwnerId, Owner.Name, IsConverted, Industry, NumberOfEmployees, AnnualRevenue, Rating, HasOptedOutOfEmail, EmailBouncedReason, LastActivityDate FROM Lead WHERE CreatedDate = LAST_N_DAYS:180 ORDER BY CreatedDate DESC LIMIT 300"
+ClaudeSFDC/instances/neonone/audit-queries.sh:48:execute_query "campaign_members" "SELECT Id, CampaignId, Campaign.Name, Campaign.Type, Campaign.Status, LeadId, Lead.Name, Lead.Company, Lead.Status, Lead.ConvertedDate, ContactId, Contact.Name, Contact.Account.Name, Status, HasResponded, FirstRespondedDate, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById FROM CampaignMember WHERE CreatedDate = LAST_N_DAYS:180 ORDER BY CreatedDate DESC LIMIT 300"
+ClaudeSFDC/instances/neonone/audit-queries.sh:54:execute_query "opportunities" "SELECT Id, Name, AccountId, Account.Name, Account.Type, StageName, Amount, Probability, CloseDate, Type, LeadSource, NextStep, IsClosed, IsWon, ForecastCategory, ForecastCategoryName, HasOpportunityLineItem, CampaignId, CreatedDate, CreatedById, CreatedBy.Name, LastModifiedDate, LastModifiedById, LastModifiedBy.Name, LastActivityDate, OwnerId, Owner.Name FROM Opportunity WHERE CreatedDate = LAST_N_DAYS:180 ORDER BY CreatedDate DESC LIMIT 150"
+ClaudeSFDC/instances/neonone/audit-queries.sh:60:execute_query "accounts" "SELECT Id, Name, Type, Industry, AnnualRevenue, NumberOfEmployees, BillingCity, BillingState, BillingCountry, Website, Phone, Rating, OwnerId, Owner.Name, ParentId, CreatedDate, CreatedById, CreatedBy.Name, LastModifiedDate, LastModifiedById, LastModifiedBy.Name, LastActivityDate FROM Account WHERE CreatedDate = LAST_N_DAYS:180 ORDER BY LastModifiedDate DESC LIMIT 150"
+ClaudeSFDC/instances/neonone/audit-queries.sh:66:execute_query "contacts" "SELECT Id, Name, Title, Email, Phone, MobilePhone, AccountId, Account.Name, Account.Type, Department, LeadSource, HasOptedOutOfEmail, EmailBouncedReason, CreatedDate, CreatedById, CreatedBy.Name, LastModifiedDate, LastModifiedById, LastModifiedBy.Name, LastActivityDate, OwnerId, Owner.Name FROM Contact WHERE CreatedDate = LAST_N_DAYS:180 ORDER BY LastModifiedDate DESC LIMIT 200"
+ClaudeSFDC/instances/neonone/audit-queries.sh:72:execute_query "users" "SELECT Id, Name, Username, Email, Profile.Name, UserRole.Name, IsActive, LastLoginDate, CreatedDate, CompanyName, Department FROM User WHERE IsActive = true ORDER BY LastLoginDate DESC LIMIT 200"
+ClaudeSFDC/instances/neonone/audit-queries.sh:78:execute_query "tasks" "SELECT Id, Subject, Status, Priority, Type, WhoId, WhatId, ActivityDate, IsClosed, CreatedDate, CreatedById, CreatedBy.Name, LastModifiedDate, LastModifiedById, LastModifiedBy.Name, OwnerId, Owner.Name FROM Task WHERE CreatedDate = LAST_N_DAYS:90 ORDER BY CreatedDate DESC LIMIT 250"
+ClaudeSFDC/instances/neonone/audit-queries.sh:84:execute_query "campaigns" "SELECT Id, Name, Type, Status, StartDate, EndDate, ExpectedRevenue, BudgetedCost, ActualCost, NumberOfLeads, NumberOfConvertedLeads, NumberOfContacts, NumberOfResponses, NumberOfOpportunities, NumberOfWonOpportunities, AmountAllOpportunities, AmountWonOpportunities, IsActive, CreatedDate, CreatedById, LastModifiedDate, OwnerId FROM Campaign WHERE CreatedDate = LAST_N_DAYS:180 ORDER BY CreatedDate DESC LIMIT 100"
+ClaudeSFDC/instances/neonone/audit-queries.sh:90:execute_query "duplicates" "SELECT Id, Name, Company, Email, Phone, LeadSource, Status, CreatedDate, LastModifiedDate, OwnerId FROM Lead WHERE Email != null AND CreatedDate = LAST_N_DAYS:180 ORDER BY Email, CreatedDate DESC LIMIT 500"
+ClaudeSFDC/instances/neonone/audit-queries.sh:96:execute_query "opp_history" "SELECT OpportunityId, CreatedDate, StageName, Amount, Probability, ForecastCategory, CreatedById FROM OpportunityHistory WHERE CreatedDate = LAST_N_DAYS:90 ORDER BY OpportunityId, CreatedDate DESC LIMIT 500"
+ClaudeSFDC/instances/wedgewood-production/docs/MANUAL_REPORT_CREATION_GUIDE.md:231:Folder URL: https://bluerabbit2021.lightning.force.com/lightning/r/Folder/00lUw000004h47hIAA/view?queryScope=userFolders
+ClaudeSFDC/instances/neonone/run-assessment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/instances/neonone/run-assessment.py:88:        print(f"Total Queries: {data_source.get('query_count', 0)}")
+ClaudeSFDC/instances/wedgewood-production/docs/SALES_ACTIVITIES_DASHBOARD_PLAN.md:286:#### Dashboard Layout
+ClaudeSFDC/instances/wedgewood-production/docs/SALES_ACTIVITIES_DASHBOARD_PLAN.md:293:**Layout Structure (12-column grid):**
+ClaudeSFDC/instances/wedgewood-production/docs/SALES_ACTIVITIES_DASHBOARD_PLAN.md:423:**Flow: Auto-Update Persona**
+ClaudeSFDC/instances/wedgewood-production/docs/SALES_ACTIVITIES_DASHBOARD_PLAN.md:427:**Flow: Calculate Calls to Demo**
+ClaudeSFDC/instances/neonone/REVOPS_AUDIT_REPORT.md:169:2. Implement Flow for automated follow-up task creation
+ClaudeSFDC/instances/neonone/run-revops-audit.sh:1:#!/bin/bash
+ClaudeSFDC/instances/wedgewood-production/docs/EXECUTIVE_SALES_DASHBOARD_PLAN.md:101:## 🎨 Dashboard Layout
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:25:            'query_log': []
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:28:    def execute_soql(self, query: str, description: str = "") -> List[Dict]:
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:29:        """Execute SOQL query and return results"""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:32:        query_meta = {
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:33:            'query': query[:100] + '...' if len(query) > 100 else query,
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:41:            cmd = ['sf', 'data', 'query', '--query', query, '--target-org', self.org_alias, '--json']
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:46:                # Try sfdx as fallback
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:47:                cmd = ['sfdx', 'force:data:soql:query', '--query', query, 
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:55:                query_meta['success'] = True
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:56:                query_meta['record_count'] = len(records)
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:58:                self.data_source_status['query_log'].append(query_meta)
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:65:            query_meta['error'] = str(e)
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:67:            self.data_source_status['query_log'].append(query_meta)
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:79:        leads = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:156:        opportunities = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:259:        rep_performance = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:309:        activities = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:357:        campaigns = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:440:        lead_source_performance = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:483:        accounts = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:529:        contacts = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:577:        conversion_analysis = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:590:        opp_lifecycle = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:637:        # This would typically check Flow, Process Builder, etc.
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:639:        recent_activities = self.execute_soql("""
+ClaudeSFDC/instances/neonone/comprehensive-revops-assessment.py:793:                    'query_log': self.data_source_status['query_log']
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:18:# Function to run query and save results
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:19:run_query() {
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:20:    local query_name=$1
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:21:    local query=$2
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:22:    local output_file="$OUTPUT_DIR/${query_name}_${TIMESTAMP}.json"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:24:    echo "Running: $query_name"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:25:    sf data query --query "$query" --target-org "$ORG_ALIAS" --json > "$output_file" 2>&1
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:28:        echo "✓ $query_name completed"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:30:        echo "✗ $query_name failed"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:38:run_query "lead_conversion" "SELECT COUNT(Id) as TotalLeads, SUM(CASE WHEN IsConverted = true THEN 1 ELSE 0 END) as ConvertedLeads, LeadSource FROM Lead WHERE CreatedDate >= LAST_N_MONTHS:6 GROUP BY LeadSource"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:40:run_query "opportunity_pipeline" "SELECT COUNT(Id) as TotalOpps, SUM(Amount) as PipelineValue, StageName FROM Opportunity WHERE CreatedDate >= LAST_N_MONTHS:6 AND IsClosed = false GROUP BY StageName"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:42:run_query "closed_won_analysis" "SELECT COUNT(Id) as WonDeals, SUM(Amount) as Revenue FROM Opportunity WHERE CreatedDate >= LAST_N_MONTHS:6 AND IsWon = true"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:48:run_query "user_performance" "SELECT Owner.Name, COUNT(Id) as OppCount, SUM(Amount) as Pipeline FROM Opportunity WHERE CreatedDate >= LAST_N_MONTHS:3 GROUP BY Owner.Name LIMIT 20"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:50:run_query "lead_response" "SELECT COUNT(Id) as Leads, AVG(CASE WHEN Status = 'Working' THEN 1.0 ELSE 0.0 END) * 100 as WorkingRate FROM Lead WHERE CreatedDate >= LAST_N_MONTHS:3"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:56:run_query "campaign_roi" "SELECT Name, Type, NumberOfLeads, NumberOfWonOpportunities, AmountWonOpportunities FROM Campaign WHERE CreatedDate >= LAST_N_MONTHS:6 AND IsActive = true ORDER BY AmountWonOpportunities DESC LIMIT 10"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:58:run_query "lead_sources" "SELECT LeadSource, COUNT(Id) as Count FROM Lead WHERE CreatedDate >= LAST_N_MONTHS:6 GROUP BY LeadSource"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:64:run_query "account_completeness" "SELECT COUNT(Id) as Total, COUNT(CASE WHEN Phone != null THEN 1 END) as WithPhone, COUNT(CASE WHEN Website != null THEN 1 END) as WithWebsite FROM Account WHERE CreatedDate >= LAST_N_MONTHS:12"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:66:run_query "opportunity_integrity" "SELECT COUNT(Id) as Total, COUNT(CASE WHEN Amount != null THEN 1 END) as WithAmount, COUNT(CASE WHEN NextStep != null THEN 1 END) as WithNextStep FROM Opportunity WHERE CreatedDate >= LAST_N_MONTHS:6"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:72:run_query "active_users" "SELECT COUNT(Id) as TotalUsers, COUNT(CASE WHEN LastLoginDate >= LAST_N_DAYS:30 THEN 1 END) as MonthlyActive, COUNT(CASE WHEN LastLoginDate >= LAST_N_DAYS:7 THEN 1 END) as WeeklyActive FROM User WHERE UserType = 'Standard' AND IsActive = true"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:78:run_query "task_automation" "SELECT COUNT(Id) as TotalTasks, Type, Status FROM Task WHERE CreatedDate >= LAST_N_MONTHS:3 GROUP BY Type, Status LIMIT 20"
+ClaudeSFDC/instances/neonone/run_executive_assessment.sh:84:run_query "org_info" "SELECT IsSandbox, OrganizationType, TrialExpirationDate FROM Organization"
+ClaudeSFDC/instances/wedgewood-production/docs/REPORT_CREATION_ERROR_ANALYSIS.md:120:Error (InvalidProjectWorkspaceError): /tmp/report-metadata-deploy does not contain a valid Salesforce DX project
+ClaudeSFDC/instances/wedgewood-production/docs/REPORT_CREATION_ERROR_ANALYSIS.md:199:   - Metadata API deployment
+ClaudeSFDC/instances/wedgewood-production/docs/REPORT_CREATION_ERROR_ANALYSIS.md:226:4. **Automated metadata deployment** - Schema validation too strict
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:150:## 🎨 Enhanced Dashboard Layout
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:152:### Layout Structure (4 Sections)
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:227:1. **Process Builder/Flow**:
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:270:#!/bin/bash
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:274:sfdx analytics:report:create \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:284:sfdx analytics:report:create \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:297:#!/bin/bash
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:300:sfdx analytics:dashboard:create \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:383:sfdx force:data:soql:query -u wedgewood-production \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:387:sfdx force:data:soql:query -u wedgewood-production \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:391:sfdx force:data:soql:query -u wedgewood-production \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:395:sfdx force:data:soql:query -u wedgewood-production \
+ClaudeSFDC/instances/wedgewood-production/docs/COMPLETE_SALES_ACTIVITIES_DASHBOARD_PLAN.md:405:3. **Automation**: Use Flow to auto-create follow-up tasks based on activity patterns
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:1:#!/bin/bash
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:23:sf data query --query "SELECT COUNT() FROM Lead" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:26:sf data query --query "SELECT COUNT() FROM Lead WHERE IsConverted = false" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:29:sf data query --query "SELECT COUNT() FROM Lead WHERE IsConverted = true" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:32:sf data query --query "SELECT Status, COUNT(Id) cnt FROM Lead GROUP BY Status ORDER BY COUNT(Id) DESC" --target-org $ORG_ALIAS --json > "$OUTPUT_DIR/lead-status.json"
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:33:sf data query --query "SELECT Status, COUNT(Id) cnt FROM Lead GROUP BY Status ORDER BY COUNT(Id) DESC LIMIT 10" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:36:sf data query --query "SELECT LeadSource, COUNT(Id) cnt FROM Lead WHERE LeadSource != null GROUP BY LeadSource ORDER BY COUNT(Id) DESC LIMIT 10" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:39:sf data query --query "SELECT LeadSource, COUNT(Id) total, SUM(CASE WHEN IsConverted = true THEN 1 ELSE 0 END) converted FROM Lead WHERE LeadSource != null GROUP BY LeadSource ORDER BY COUNT(Id) DESC LIMIT 10" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:46:sf data query --query "SELECT COUNT() FROM Opportunity" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:49:sf data query --query "SELECT SUM(Amount) FROM Opportunity WHERE IsClosed = false" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:52:sf data query --query "SELECT StageName, COUNT(Id) cnt, SUM(Amount) total_value FROM Opportunity GROUP BY StageName ORDER BY COUNT(Id) DESC" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:55:sf data query --query "SELECT StageName, AVG(CALENDAR_MONTH(CreatedDate, LastModifiedDate)) avg_days FROM Opportunity WHERE IsClosed = false GROUP BY StageName LIMIT 5" --target-org $ORG_ALIAS 2>/dev/null || echo "Stage duration analysis not available"
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:58:sf data query --query "SELECT Type, COUNT(Id) total, SUM(CASE WHEN IsWon = true THEN 1 ELSE 0 END) won FROM Opportunity WHERE Type != null GROUP BY Type" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:65:sf data query --query "SELECT COUNT(DISTINCT OwnerId) FROM Lead WHERE LastModifiedDate = LAST_N_DAYS:30" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:68:sf data query --query "SELECT Owner.Name, COUNT(Id) records_owned FROM Lead WHERE Owner.Name != null GROUP BY Owner.Name ORDER BY COUNT(Id) DESC LIMIT 10" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:71:sf data query --query "SELECT CALENDAR_MONTH(CreatedDate) month, COUNT(Id) cnt FROM Lead WHERE CreatedDate = LAST_N_MONTHS:6 GROUP BY CALENDAR_MONTH(CreatedDate)" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:78:sf data query --query "SELECT COUNT() FROM Lead WHERE Email != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:81:sf data query --query "SELECT COUNT() FROM Lead WHERE Phone != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:84:sf data query --query "SELECT COUNT() FROM Lead WHERE Company != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:87:sf data query --query "SELECT COUNT() FROM Contact WHERE Email != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:90:sf data query --query "SELECT COUNT() FROM Account WHERE Website != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:93:sf data query --query "SELECT COUNT() FROM Opportunity WHERE CloseDate != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:100:sf data query --query "SELECT COUNT() FROM Campaign" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:103:sf data query --query "SELECT COUNT() FROM Campaign WHERE IsActive = true" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:106:sf data query --query "SELECT COUNT() FROM CampaignMember" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:109:sf data query --query "SELECT COUNT(DISTINCT LeadId) FROM CampaignMember WHERE LeadId != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:112:sf data query --query "SELECT COUNT() FROM Opportunity WHERE CampaignId != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:119:sf data query --query "SELECT CreatedBy.Name, COUNT(Id) cnt FROM Lead WHERE CreatedDate = LAST_N_DAYS:30 AND CreatedBy.Name LIKE '%Integration%' GROUP BY CreatedBy.Name" --target-org $ORG_ALIAS 2>/dev/null || echo "No integration users found"
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:122:sf data query --query "SELECT CASE WHEN CreatedBy.Name LIKE '%Integration%' OR CreatedBy.Name LIKE '%System%' THEN 'Automated' ELSE 'Manual' END as Type, COUNT(Id) cnt FROM Lead WHERE CreatedDate = LAST_N_DAYS:30 GROUP BY CASE WHEN CreatedBy.Name LIKE '%Integration%' OR CreatedBy.Name LIKE '%System%' THEN 'Automated' ELSE 'Manual' END" --target-org $ORG_ALIAS 2>/dev/null || echo "Unable to determine automation ratio"
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:129:sf data query --query "SELECT COUNT() FROM Account" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:132:sf data query --query "SELECT COUNT(DISTINCT AccountId) FROM Opportunity WHERE AccountId != null" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:135:sf data query --query "SELECT AVG(cnt) FROM (SELECT AccountId, COUNT(Id) cnt FROM Contact WHERE AccountId != null GROUP BY AccountId)" --target-org $ORG_ALIAS 2>/dev/null || echo "Complex aggregation not supported"
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:138:sf data query --query "SELECT Type, COUNT(Id) cnt FROM Account WHERE Type != null GROUP BY Type ORDER BY COUNT(Id) DESC LIMIT 10" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:145:sf data query --query "SELECT CreatedDate FROM Lead WHERE IsConverted = false ORDER BY CreatedDate ASC LIMIT 1" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:148:sf data query --query "SELECT COUNT() FROM Lead WHERE IsConverted = false AND CreatedDate < LAST_N_DAYS:90" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/neonone/scripts/comprehensive-data-assessment.sh:151:sf data query --query "SELECT COUNT() FROM Opportunity WHERE IsClosed = false AND LastModifiedDate < LAST_N_DAYS:30" --target-org $ORG_ALIAS
+ClaudeSFDC/instances/wedgewood-production/scripts/quick-task-analysis.sh:1:#!/bin/bash
+ClaudeSFDC/instances/wedgewood-production/scripts/quick-task-analysis.sh:17:sf data query --query "SELECT Id, Subject, Type, Status, CallType, CallDurationInSeconds, TaskSubtype, Owner.Name FROM Task WHERE CreatedDate = LAST_N_DAYS:30 AND (Type = 'Call' OR TaskSubtype = 'Call') LIMIT 5" --target-org $ORG --json 2>/dev/null | jq '.result.records' 2>/dev/null
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:4:Successfully deployed 2 Gong activity reports to Salesforce using the Metadata API after encountering and resolving multiple blockers.
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:23:**Solution**: Used Metadata API deployment approach
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:32:- Removed `isActive` element (not required for deployment)
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:66:# Successful deployment command
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:67:sf deploy metadata --metadata-dir . --target-org wedgewood-production
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:69:# Result: 2/2 components deployed successfully
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:83:   - Validate folder existence before deployment
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:85:   - Test with single report before batch deployment
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:93:Successfully overcame multiple technical blockers to deploy reports via Metadata API. The key was understanding Salesforce's strict XML validation requirements and adapting the metadata format accordingly. Both reports are now live and accessible in the Sales and Marketing Reports folder.
+ClaudeSFDC/instances/wedgewood-production/REPORT_DEPLOYMENT_ANALYSIS.md:98:*Success rate: 100% (2/2 reports deployed)*
+ClaudeSFDC/instances/wedgewood-production/scripts/sales-touches-analysis.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/wedgewood-production/scripts/dashboard-analysis.js:1:#!/usr/bin/env node
+ClaudeSFDC/instances/wedgewood-production/scripts/dashboard-analysis.js:120:    const callTaskData = executeSF(`sf data query --query "${callTaskQuery}" --target-org ${org}`);
+ClaudeSFDC/instances/wedgewood-production/scripts/dashboard-analysis.js:205:    const durationData = executeSF(`sf data query --query "${durationQuery}" --target-org ${org}`);
+ClaudeSFDC/instances/wedgewood-production/scripts/dashboard-analysis.js:232:    const whoIdData = executeSF(`sf data query --query "${whoIdQuery}" --target-org ${org}`);
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:12:async function deployReportsAndDashboard(orgAlias = 'wedgewood-production') {
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:14:        console.log('🚀 Starting CEO Sales Dashboard deployment...');
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:23:        // Step 2: Define the reports to deploy
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:34:        const deployedReports = [];
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:44:                deployedReports.push({
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:51:                console.log(`✅ Successfully deployed: ${reportConfig.name}`);
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:57:                console.error(`❌ Failed to deploy ${reportFile}: ${error.message}`);
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:64:        console.log('📈 Dashboard deployment instructions...');
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:68:        const dashboardResult = provideDashboardInstructions(dashboardConfig, deployedReports);
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:75:        deployedReports.forEach((report, index) => {
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:81:        if (deployedReports.length === 0) {
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:82:            console.log('   ⚠️  No reports were successfully deployed');
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:90:            success: deployedReports.length > 0,
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:92:            reports: deployedReports,
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:118:        return '00lUw000000cKk5IAE'; // From the query results - this is a common public folder
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:258:    deployReportsAndDashboard(orgAlias)
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:262:                console.log(`📊 Successfully deployed ${result.reports.length} reports`);
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:264:                console.log('⚠️  Some deployment issues occurred - see above for details');
+ClaudeSFDC/instances/wedgewood-production/scripts/lib/deploy-reports-dashboard.js:275:module.exports = { deployReportsAndDashboard };
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:7:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:8:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNNUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:11:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:13:            "type": "Layout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:14:            "url": "/services/data/v64.0/tooling/sobjects/Layout/00h4U00000Uffk2QAB"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:30:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:31:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNOUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:34:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:36:            "type": "Layout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:37:            "url": "/services/data/v64.0/tooling/sobjects/Layout/00h4U00000Uffk2QAB"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:53:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:54:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNPUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:57:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:59:            "type": "Layout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:60:            "url": "/services/data/v64.0/tooling/sobjects/Layout/00h4U00000Uffk2QAB"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:76:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:77:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNRUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:80:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:82:            "type": "Layout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:83:            "url": "/services/data/v64.0/tooling/sobjects/Layout/00h4U00000Uffk2QAB"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:99:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:100:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNSUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:103:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:105:            "type": "Layout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:106:            "url": "/services/data/v64.0/tooling/sobjects/Layout/00h4U00000Uffk2QAB"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:122:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:123:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNTUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:126:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:128:            "type": "Layout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:129:            "url": "/services/data/v64.0/tooling/sobjects/Layout/00h4U00000Uffk2QAB"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:145:          "type": "ProfileLayout",
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:146:          "url": "/services/data/v64.0/tooling/sobjects/ProfileLayout/01G4U00004wYBNVUA4"
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:149:        "Layout": {
+ClaudeSFDC/instances/bluerabbit2021--omsuat.sandbox/scripts/wedgewood-app-details-20250909-154950/14-page-layout-assignments.json:151:            "type": "Layout",

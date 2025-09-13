@@ -1,0 +1,25 @@
+{
+    "label": "Gong Conversations with Scorecards",
+    "name": "Gong_Conversations_with_Scorecards",
+    "type": "Gong__Gong_Call__c",
+    "description": "Custom report type to show Gong Conversations with Scorecards",
+    "sections": [
+        {
+            "columns": [
+                "Name",
+                "Gong__Call_Date_Time__c"
+            ]
+        }
+    ],
+    "relatedObjects": [
+        {
+            "relationshipName": "Scorecards__r",
+            "type": "Gong__Gong_Scorecard__c",
+            "columns": [
+                "Name",
+                "Gong__Scorecard_Type__c",
+                "Gong__Total_Score__c"
+            ]
+        }
+    ]
+}

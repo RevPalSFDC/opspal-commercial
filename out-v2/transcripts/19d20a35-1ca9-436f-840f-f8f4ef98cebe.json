@@ -1,0 +1,60 @@
+{
+  "id": "19d20a35-1ca9-436f-840f-f8f4ef98cebe",
+  "recording_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "19d20a35-1ca9-436f-840f-f8f4ef98cebe",
+      "recording_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+      "end_time": 406.99,
+      "start_time": 389.05,
+      "recording_attendee_id": "5e1644fa-1ede-4028-b7ed-2c4acfc08027",
+      "text": "Hey Tracy, it's Nick from rental. I was waiting for you on the zoom link, but it looks like I missed you again, if you could just give me a call back nine two zero eight five eight three three zero one. I would love to chat with you again that number is nine two zero eight five eight three three zero one. Thank you bye."
+    },
+    {
+      "id": "19d20a35-1ca9-436f-840f-f8f4ef98cebe",
+      "recording_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+      "end_time": 511.74,
+      "start_time": 505.62,
+      "recording_attendee_id": "5e1644fa-1ede-4028-b7ed-2c4acfc08027",
+      "text": "voicemail left a voicemail gave me up for the second time and"
+    },
+    {
+      "id": "19d20a35-1ca9-436f-840f-f8f4ef98cebe",
+      "recording_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+      "end_time": 505.62,
+      "start_time": 504.39,
+      "recording_attendee_id": "8da0861e-2493-40d7-85a7-bcfc7f2973ca",
+      "text": "Nothing all"
+    },
+    {
+      "id": "19d20a35-1ca9-436f-840f-f8f4ef98cebe",
+      "recording_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+      "end_time": 517.11,
+      "start_time": 513.66,
+      "recording_attendee_id": "5e1644fa-1ede-4028-b7ed-2c4acfc08027",
+      "text": "don't understand why she keeps telling me that she wants to connect and then."
+    },
+    {
+      "id": "19d20a35-1ca9-436f-840f-f8f4ef98cebe",
+      "recording_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+      "end_time": 513.66,
+      "start_time": 513.51,
+      "recording_attendee_id": "8da0861e-2493-40d7-85a7-bcfc7f2973ca",
+      "text": "I"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8bc0df93-3872-4362-97dc-ebdfc0037502",
+      "title": "Ravinia | Rentable",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-02-01T21:41:59.771000Z",
+      "call_date": "2021-02-01"
+    }
+  }
+}

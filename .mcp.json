@@ -1,15 +1,30 @@
 {
   "mcpServers": {
-    "hubspot": {
+    "hubspot-v4": {
+      "command": "node",
+      "args": [
+        "./ClaudeHubSpot/scripts/enhanced-hubspot-mcp-v4.js"
+      ],
+      "env": {
+        "HUBSPOT_ACCESS_TOKEN": "${HUBSPOT_ACCESS_TOKEN_FILMHUB:-${HUBSPOT_ACCESS_TOKEN:-${HUBSPOT_API_KEY_FILMHUB:-${HUBSPOT_API_KEY}}}}",
+        "HUBSPOT_PORTAL_ID": "${HUBSPOT_PORTAL_ID:-${HUBSPOT_PORTAL_ID_FILMHUB}}",
+        "HUBSPOT_WEBHOOK_SECRET": "${HUBSPOT_WEBHOOK_SECRET}",
+        "HUBSPOT_SCOPES": "${HUBSPOT_SCOPES:-automation,sequences,crm.objects.contacts.read,crm.objects.contacts.write,crm.objects.companies.read,crm.objects.companies.write,crm.objects.deals.read,crm.objects.deals.write}"
+      },
+      "disabled": false,
+      "description": "HubSpot v4 Automation API with complete OAuth support"
+    },
+    "hubspot-legacy": {
       "command": "npx",
       "args": [
         "-y",
         "@hubspot/mcp-server"
       ],
       "env": {
-        "HUBSPOT_ACCESS_TOKEN": "${HUBSPOT_ACCESS_TOKEN}"
+        "PRIVATE_APP_ACCESS_TOKEN": "${HUBSPOT_ACCESS_TOKEN_FILMHUB:-${HUBSPOT_ACCESS_TOKEN:-${HUBSPOT_API_KEY_FILMHUB:-${HUBSPOT_API_KEY}}}}"
       },
-      "disabled": false
+      "disabled": true,
+      "description": "Legacy HubSpot MCP (disabled in favor of v4)"
     },
     "salesforce-dx": {
       "command": "npx",
@@ -43,6 +58,54 @@
         "DEFAULT_MODEL": "sonnet"
       },
       "disabled": true
+    },
+    "gdrive": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-gdrive"
+      ],
+      "env": {
+        "GDRIVE_CLIENT_ID": "${GDRIVE_CLIENT_ID}",
+        "GDRIVE_CLIENT_SECRET": "${GDRIVE_CLIENT_SECRET}",
+        "GDRIVE_REDIRECT_URI": "${GDRIVE_REDIRECT_URI:-http://localhost:3000/oauth/callback}"
+      },
+      "disabled": false
+    },
+    "hubspot-filmhub": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@hubspot/mcp-server"
+      ],
+      "env": {
+        "PRIVATE_APP_ACCESS_TOKEN": "${HUBSPOT_ACCESS_TOKEN_FILMHUB:-${HUBSPOT_API_KEY_FILMHUB}}"
+      },
+      "disabled": false
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {
+        "DISABLE_THOUGHT_LOGGING": "${SEQUENTIAL_THINKING_LOGGING:-false}"
+      },
+      "disabled": false
+    },
+    "salesloft": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cdata/salesloft-mcp-server"
+      ],
+      "env": {
+        "SALESLOFT_API_KEY": "${SALESLOFT_API_KEY}",
+        "SALESLOFT_INSTANCE": "default"
+      },
+      "disabled": false,
+      "description": "Salesloft CRM integration for sync monitoring and diagnostics"
     }
   }
 }

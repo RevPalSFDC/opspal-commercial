@@ -1,0 +1,44 @@
+{
+  "id": "248ae5f4-202f-435f-b6a5-38541c7e4d6e",
+  "recording_id": "e781b52c-abd8-4832-9203-ac162158ce46",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "248ae5f4-202f-435f-b6a5-38541c7e4d6e",
+      "recording_id": "e781b52c-abd8-4832-9203-ac162158ce46",
+      "end_time": 129.3,
+      "start_time": 90.03,
+      "recording_attendee_id": "d2ada773-4457-4449-a0da-0de3ecfe6fc8",
+      "text": "Hi, Max, my name is will Martin I'm calling with a company called rentable. We're in apartment lifting site and marketing platform or cause a lot of similar portfolios. Not only in Chicago here, but I'm around the around the country, but I'm wanting to get in touch see if there's an opportunity next week. I'm leaving tomorrow just for a quick fifteen twenty minute call. I'm curious what your current advertising strategy looks like and just want to quickly demo rentable and how we drive traffic and and provide leaves our customers. We have a partnership with Facebook marketplace as well. Um that that could be of interest to your portfolio"
+    },
+    {
+      "id": "248ae5f4-202f-435f-b6a5-38541c7e4d6e",
+      "recording_id": "e781b52c-abd8-4832-9203-ac162158ce46",
+      "end_time": 87.82,
+      "start_time": 2,
+      "recording_attendee_id": "33b7e231-3287-41fc-8c83-ded966b33d8c",
+      "text": "Hello, you've reached the offices of M property group and inspire to your health care. If you know the extension of the person you are trying to reach enter it now followed by the pound key to reach accounts payable dial one to reach human resources dial two to hear a directory by name dial three to reach the operator dial zero to repeat this menu press pound. You've made invalid selection. Hello, you've reached the offices of M property Group. Please hold while I try to connect you. Hi, you reached Max live in with them to property Group. I am unable to take your call at this time. Please leave me your name phone number and a brief message and I will return your call as soon as I'm able. Thank you and have a great day."
+    },
+    {
+      "id": "248ae5f4-202f-435f-b6a5-38541c7e4d6e",
+      "recording_id": "e781b52c-abd8-4832-9203-ac162158ce46",
+      "end_time": 144.6,
+      "start_time": 129.3,
+      "recording_attendee_id": "d2ada773-4457-4449-a0da-0de3ecfe6fc8",
+      "text": "as well just buy that kind of browsing through your website. But I'm give me a call when you chance six three zero nine three six two nine nine seven is my direct line um, otherwise the pricing the email or two from my come across in the last couple of weeks, but would love to talk soon take care bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e781b52c-abd8-4832-9203-ac162158ce46",
+      "title": "Call: Will Martin and Max Levin @ M2 Property Group, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

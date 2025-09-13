@@ -1,0 +1,28 @@
+{
+  "id": "84e16a77-3c2a-4438-a98d-b6f48e88eeb9",
+  "recording_id": "ed443721-3957-4a49-a87d-07cefb169e8c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "84e16a77-3c2a-4438-a98d-b6f48e88eeb9",
+      "recording_id": "ed443721-3957-4a49-a87d-07cefb169e8c",
+      "end_time": 11.39,
+      "start_time": 0,
+      "recording_attendee_id": "710694bf-b91e-4a25-8957-a0e73f29e91c",
+      "text": "You for calling Mercy community Joshua. If you are a potential one owner current landlord of the unit please press one. If you are perspective resident or queries please press two."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ed443721-3957-4a49-a87d-07cefb169e8c",
+      "title": "Call: Dan Cellon and +19053638207",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

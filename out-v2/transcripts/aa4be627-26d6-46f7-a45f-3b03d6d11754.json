@@ -1,0 +1,47 @@
+{
+  "id": "aa4be627-26d6-46f7-a45f-3b03d6d11754",
+  "recording_id": "9d16b101-a7ca-4679-9a31-b21632995429",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "aa4be627-26d6-46f7-a45f-3b03d6d11754",
+      "recording_id": "9d16b101-a7ca-4679-9a31-b21632995429",
+      "end_time": 69.44,
+      "start_time": 2.31,
+      "recording_attendee_id": "144c9735-9fed-4884-91b3-fd0cbe344426",
+      "order_number": 0,
+      "text": "Thank you for calling the Fulton asset management company tenant inquiry line. We look forward to speaking with you if you are unable to reach your contract initially. Please leave a voicemail and we will be sure to respond as quickly as possible. If you would like to speak with Joyce Sharon Morris, please press one. If you would like to speak with Brian drew, please press two. If you would like to speak with Melissa Davis, please press three. If you would like to speak with Daniel Lee please press for. Telephone number eight one six six eight three four six five one account to take your call now at the tone please record your message. When you have finished recording simply hang up or press pound for further options."
+    },
+    {
+      "id": "aa4be627-26d6-46f7-a45f-3b03d6d11754",
+      "recording_id": "9d16b101-a7ca-4679-9a31-b21632995429",
+      "end_time": 112.33,
+      "start_time": 73.18,
+      "recording_attendee_id": "7b97ffdf-4183-4d0e-bb71-1e5a9c5e1b40",
+      "order_number": 1,
+      "text": "Daniel John lottery calling from rentable. Hope you're well. Hope you had a an enjoyable long weekend um, but I apologize I missed you here. It's about ten till ten here on Tuesday morning. But then you'll just following up. I hadn't heard back from you yet, I know you'd asked me to follow up with you last week um, so thought I'd try to catch you over the phone here, but just looking to get your thoughts on the info. I sent over to you and to see um, you might still be open to setting up some time to to discuss rentable further. So if you could give me a call back or shoot me an email day"
+    },
+    {
+      "id": "aa4be627-26d6-46f7-a45f-3b03d6d11754",
+      "recording_id": "9d16b101-a7ca-4679-9a31-b21632995429",
+      "end_time": 125.62,
+      "start_time": 112.33,
+      "recording_attendee_id": "7b97ffdf-4183-4d0e-bb71-1e5a9c5e1b40",
+      "order_number": 2,
+      "text": "now when you have a chance, I'd appreciate it. I'm at three one seven four zero seven three five zero nine three one seven four zero seven three five zero nine look forward to hearing from you Daniel talk to you soon."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9d16b101-a7ca-4679-9a31-b21632995429",
+      "title": "Call: John Loughery and Danielle Lee @ Fulson Housing Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

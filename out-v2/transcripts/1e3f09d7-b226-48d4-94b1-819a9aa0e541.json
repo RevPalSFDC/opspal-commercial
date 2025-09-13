@@ -1,0 +1,44 @@
+{
+  "id": "1e3f09d7-b226-48d4-94b1-819a9aa0e541",
+  "recording_id": "fe8024be-ac46-4597-a736-5f7fb440d876",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1e3f09d7-b226-48d4-94b1-819a9aa0e541",
+      "recording_id": "fe8024be-ac46-4597-a736-5f7fb440d876",
+      "end_time": 113.41,
+      "start_time": 104.5,
+      "recording_attendee_id": "e5b6be96-0fd5-459e-a9cf-aff6a6fdbf53",
+      "text": "Hey, Mike, this is Alyssa from a bordeaux dot. Com calling to follow up the Starbucks gift card or Sentra. I just wanted you to know it's not a scam or anything"
+    },
+    {
+      "id": "1e3f09d7-b226-48d4-94b1-819a9aa0e541",
+      "recording_id": "fe8024be-ac46-4597-a736-5f7fb440d876",
+      "end_time": 103.29,
+      "start_time": 0.83,
+      "recording_attendee_id": "762bb706-683a-42d6-a0e7-ee7173fee718",
+      "text": "Thank you for calling Summit real estate management. You have reached our automated voicemail system. If you know, your party's extension you may enter it at any time for a director employees press the pound key or press zero for assistance. Please press one to enter the employees first name or press two to enter the employees last name using the keys on your telephone. Please spell the first name of the person then press pound for the letter, Q press seven. For the letter Z press nine to exit the directory press. My Cana if this is correct press pound for the previous name in the directory press one to here additional information press two to hear the next directory name press three to spell and you Mike Springer. If this is correct press pound for the previous name in the dirt please hold while your call is being transferred to Michael Springer. Hi, this is Mike Springer. Unfortunately, I'm away from my desk right now or out of the office. Please leave your name number and a brief message and I'll return your call at my first opportunity, thanks and have a great day. After the tone please record your message. When finished you may hang up to deliver the message or press pound for more options."
+    },
+    {
+      "id": "1e3f09d7-b226-48d4-94b1-819a9aa0e541",
+      "recording_id": "fe8024be-ac46-4597-a736-5f7fb440d876",
+      "end_time": 125.29,
+      "start_time": 113.41,
+      "recording_attendee_id": "e5b6be96-0fd5-459e-a9cf-aff6a6fdbf53",
+      "text": "like that just kind of wanted to chat there were Services. I know you worked with us in the past um, give me a call back when you get this message the best number to reach me at is two six two three eight three four five six eight thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fe8024be-ac46-4597-a736-5f7fb440d876",
+      "title": "Call: Alyssa Tillich and Mike Sprager @ Summit Real Estate Management, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

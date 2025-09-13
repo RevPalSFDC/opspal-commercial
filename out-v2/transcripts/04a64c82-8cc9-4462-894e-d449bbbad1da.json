@@ -1,0 +1,68 @@
+{
+  "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+  "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+      "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "end_time": 13.67,
+      "start_time": 10.04,
+      "recording_attendee_id": "799f5ae9-df96-4cbf-adcc-1674013080b7",
+      "text": "Good afternoon. Thank you for calling to see W S this is Christy how may I help you."
+    },
+    {
+      "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+      "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "end_time": 121.42,
+      "start_time": 108.16,
+      "recording_attendee_id": "799f5ae9-df96-4cbf-adcc-1674013080b7",
+      "text": "Your call is being forwarded to one my tell voicemail system, extension six, nine four eight is not available. Please leave a message at the tone when finished you may hang up or press pound for additional options."
+    },
+    {
+      "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+      "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "end_time": 45.83,
+      "start_time": 26.79,
+      "recording_attendee_id": "799f5ae9-df96-4cbf-adcc-1674013080b7",
+      "text": "Um, now let me go into the directory and find the. So let me think. Um, I think that's the digital marketing director. Let me transfer you to me. Okay."
+    },
+    {
+      "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+      "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "end_time": 26.28,
+      "start_time": 14.61,
+      "recording_attendee_id": "e47a3483-bc38-4a1b-bf4e-ae413ebe6f11",
+      "text": "Hi, Christy, my name is Alyssa. I'm reaching out from rentable. I'm hoping to get in touch with whoever handles um, the apartment listings on the website. I don't know if that would be you or somebody else."
+    },
+    {
+      "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+      "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "end_time": 131.44,
+      "start_time": 122.86,
+      "recording_attendee_id": "e47a3483-bc38-4a1b-bf4e-ae413ebe6f11",
+      "text": "Yeah, this is Alyssa I'm reaching out from rentable. If you could give me a call back at two six, two three eight three four five six eight that would be awesome thanks."
+    },
+    {
+      "id": "04a64c82-8cc9-4462-894e-d449bbbad1da",
+      "recording_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "end_time": 47.38,
+      "start_time": 46.18,
+      "recording_attendee_id": "e47a3483-bc38-4a1b-bf4e-ae413ebe6f11",
+      "text": "Okay. Thank you so much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "860c9fe1-8e7a-4211-8b01-c987563e7a4d",
+      "title": "Call: Alyssa Tillich and +18006486096",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

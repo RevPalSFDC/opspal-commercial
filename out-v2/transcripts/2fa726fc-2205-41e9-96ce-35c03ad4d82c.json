@@ -1,0 +1,60 @@
+{
+  "id": "2fa726fc-2205-41e9-96ce-35c03ad4d82c",
+  "recording_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2fa726fc-2205-41e9-96ce-35c03ad4d82c",
+      "recording_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+      "end_time": 236.96,
+      "start_time": 236.42,
+      "recording_attendee_id": "ffc3ac9e-8fe4-468b-9e38-dab2aed303f9",
+      "text": "Sure."
+    },
+    {
+      "id": "2fa726fc-2205-41e9-96ce-35c03ad4d82c",
+      "recording_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+      "end_time": 62.04,
+      "start_time": 57.3,
+      "recording_attendee_id": "ffc3ac9e-8fe4-468b-9e38-dab2aed303f9",
+      "text": "Bonnie my name is Mitch. I just was calling for Andrew hopes please."
+    },
+    {
+      "id": "2fa726fc-2205-41e9-96ce-35c03ad4d82c",
+      "recording_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+      "end_time": 257.56,
+      "start_time": 237.88,
+      "recording_attendee_id": "32135390-8ce1-4bb4-ad71-38c02a6260e8",
+      "text": "Okay. Thank you. We are sorry, there is no one available to take your call. Please record your message. After the tone press Star to discard the recording or press any digital to end the recording."
+    },
+    {
+      "id": "2fa726fc-2205-41e9-96ce-35c03ad4d82c",
+      "recording_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+      "end_time": 55.56,
+      "start_time": 0.5,
+      "recording_attendee_id": "32135390-8ce1-4bb4-ad71-38c02a6260e8",
+      "text": "Thank you for calling home River Group. Please listen carefully. As our options have recently changed if you know your party's extension you may dial it at any time or press zero for the company directory if you're looking to rent or have questions about rental applications press two. If you are a current for you manage on your behalf press five. If you were interested in having a manager property you own press six, if you're interested in buying or selling real estate press seven to speak with a real estate agent for all other calls press nine. This call may be recorded for training and quality assurance purposes. This is Benita."
+    },
+    {
+      "id": "2fa726fc-2205-41e9-96ce-35c03ad4d82c",
+      "recording_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+      "end_time": 235.96,
+      "start_time": 63.93,
+      "recording_attendee_id": "32135390-8ce1-4bb4-ad71-38c02a6260e8",
+      "text": "Oh, okay. For holding sir. She's not answering is it. Okay. If I send you over to his voicemail."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "986a42f3-d055-46b9-b089-cc40e821daec",
+      "title": "Call: Mitch  Scarski  and Andrew Propst @ HomeRiver Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

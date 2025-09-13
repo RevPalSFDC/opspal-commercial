@@ -1,0 +1,65 @@
+{
+  "id": "99809515-69db-472e-8a8d-4983bbb1d3f2",
+  "recording_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "99809515-69db-472e-8a8d-4983bbb1d3f2",
+      "recording_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+      "end_time": 17.94,
+      "start_time": 16.47,
+      "recording_attendee_id": "e5a660ff-be97-448d-a61a-55e48f2f4ca7",
+      "order_number": 0,
+      "text": "Partners is Patrice may help you."
+    },
+    {
+      "id": "99809515-69db-472e-8a8d-4983bbb1d3f2",
+      "recording_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+      "end_time": 24.58,
+      "start_time": 19.21,
+      "recording_attendee_id": "36ace3af-913a-4d48-aac6-327847614e33",
+      "order_number": 1,
+      "text": "Hey, I'm I was trying to speak with Tony susa is your Regional."
+    },
+    {
+      "id": "99809515-69db-472e-8a8d-4983bbb1d3f2",
+      "recording_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+      "end_time": 55.11,
+      "start_time": 40.32,
+      "recording_attendee_id": "e5a660ff-be97-448d-a61a-55e48f2f4ca7",
+      "order_number": 2,
+      "text": "Hi, you've reached the voicemail box of Tony Susan. Please leave your name and number and I'll be sure to get back to you as soon as I can thanks after the tone please record your message. When finished you may hang up to deliver the message or press pound for more options."
+    },
+    {
+      "id": "99809515-69db-472e-8a8d-4983bbb1d3f2",
+      "recording_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+      "end_time": 128.12,
+      "start_time": 56.45,
+      "recording_attendee_id": "36ace3af-913a-4d48-aac6-327847614e33",
+      "order_number": 3,
+      "text": "Tony the most interesting man in property management. Hey, I wasn't sure if you're overseeing the lease up for seventy six hundred Broadway in San Antonio. I'm with a company called rentable. We are I guess the multifamily leader and social ads with Facebook instagram Facebook marketplace believe, we worked with Embry under our previous name and photo it was years ago. Anyways, we'd love the opportunity to chat with you and demo what we're doing now in twenty twenty one see if there's any potential for a partnership. I'm on the upcoming calendar year. We are running some short, term basically test pilot. If you want to call it that I'm to prove success. Before we ask you to commit to an annual contract or anything. So it's easier than ever to to try it out basically, I'll send you a quick email, but what we'd be looking for would be like fifteen minutes of your time over resume where we just demo. How this works go over featured pricing learn a little bit about your marketing and"
+    },
+    {
+      "id": "99809515-69db-472e-8a8d-4983bbb1d3f2",
+      "recording_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+      "end_time": 143.36,
+      "start_time": 128.12,
+      "recording_attendee_id": "36ace3af-913a-4d48-aac6-327847614e33",
+      "order_number": 4,
+      "text": "see if that makes any sense to consider um, if there's any potential benefits are working together. So just keep an eye on your inbox. My name is Dan, I work at rentable. I'll send you over a quick email with some times and if you are interested we'd be honored to chat with you thanks so much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6acaa39f-7d86-4c6a-a0b5-ce6be7ca1743",
+      "title": "Call: Dan Cellon and Tony Sousa @ Embrey Management Services",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

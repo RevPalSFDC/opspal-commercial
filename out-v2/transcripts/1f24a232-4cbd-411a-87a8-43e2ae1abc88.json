@@ -1,0 +1,28 @@
+{
+  "id": "1f24a232-4cbd-411a-87a8-43e2ae1abc88",
+  "recording_id": "584206db-c18c-4472-bf52-a58209d2861f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1f24a232-4cbd-411a-87a8-43e2ae1abc88",
+      "recording_id": "584206db-c18c-4472-bf52-a58209d2861f",
+      "end_time": 182.91,
+      "start_time": 148.17,
+      "recording_attendee_id": "fc2607c3-2445-416c-8314-93e043dffe92",
+      "text": "Message for five. Hey Deborah. It's Cameron with the boat. We had a call scheduled for eleven thirty. This morning. Um. I was calling to see if you were still available at this time or if we should try to reschedule for later this week. My phone number is seven six five seven four eight eight two one nine or you should have an email in your inbox from you. Just let me know and I'll be happy to reschedule. Um. Again. This is Cameron with about I look forward to hearing from you thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "584206db-c18c-4472-bf52-a58209d2861f",
+      "title": "ABODO : Bradley Company",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-11-02T16:10:21.038000Z",
+      "call_date": "2020-11-02"
+    }
+  }
+}

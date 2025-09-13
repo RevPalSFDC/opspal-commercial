@@ -1,0 +1,60 @@
+{
+  "id": "b29b1437-72ba-4d1f-9930-e9dc78ebb2bb",
+  "recording_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "b29b1437-72ba-4d1f-9930-e9dc78ebb2bb",
+      "recording_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+      "end_time": 158.44,
+      "start_time": 135.04,
+      "recording_attendee_id": "f947b8f8-48fd-4aa9-af18-433d9a581931",
+      "text": "I said, we would love to just see if it would be a good fit. So fifteen minutes or so over a quick phone call with our area manager in L a and maybe our sales director as well kind of go over what's working for you guys and just you know determine if a partnership would be in everyone's best interest. So once again, it's Dan from rental and just keep an eye on your inbox and I'm looking forward to hearing back from you thanks so much."
+    },
+    {
+      "id": "b29b1437-72ba-4d1f-9930-e9dc78ebb2bb",
+      "recording_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+      "end_time": 56.54,
+      "start_time": 2.22,
+      "recording_attendee_id": "5b00bfec-5bc5-46bb-982a-66d51066a9e3",
+      "text": "Thank you for calling E N does ring management Corp. If you know your party's extension please press it now for our corporate directory press three for property management press four for human resources and payroll press five for accounting press six for maintenance operations. Purchasing enroll for operations press seven for advertising and marketing press eight for information systems and technology press nine, if you require further assistance press zero and an operator. In the Spring management."
+    },
+    {
+      "id": "b29b1437-72ba-4d1f-9930-e9dc78ebb2bb",
+      "recording_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+      "end_time": 96.77,
+      "start_time": 63.19,
+      "recording_attendee_id": "5b00bfec-5bc5-46bb-982a-66d51066a9e3",
+      "text": "Um, hold on one moment. Your call is being forwarded to one my tell voicemail system, extension seven. One six two is not available. Please leave a message at the tone when finished you may hang up or press pound for additional options."
+    },
+    {
+      "id": "b29b1437-72ba-4d1f-9930-e9dc78ebb2bb",
+      "recording_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+      "end_time": 62.22,
+      "start_time": 58.38,
+      "recording_attendee_id": "f947b8f8-48fd-4aa9-af18-433d9a581931",
+      "text": "Hey, good afternoon. I was trying to reach Cathy York."
+    },
+    {
+      "id": "b29b1437-72ba-4d1f-9930-e9dc78ebb2bb",
+      "recording_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+      "end_time": 135.04,
+      "start_time": 98.96,
+      "recording_attendee_id": "f947b8f8-48fd-4aa9-af18-433d9a581931",
+      "text": "Hey Kathy, my name is Dan, I'm calling from rentable um, we used to be a boat. Oh, so you may have some familiarity with a photo, but lots of this change for us. Obviously we have a new name I'm but really the reason I was reaching out is I wanted to see how you guys are currently reaching Facebook marketplace to see if it might be a good fit to partner with rentable to do that on your behalf. So we have a few different integrations there. Um, I think the main piece would be automation to marketplace as well as our lead prequalify her on that same site, but I'll shoot you an email as well like"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "35daf33e-27c0-4f72-ba46-9c5b9dadfba0",
+      "title": "Call: Dan Cellon and Cassie York @ E & S Ring Management Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

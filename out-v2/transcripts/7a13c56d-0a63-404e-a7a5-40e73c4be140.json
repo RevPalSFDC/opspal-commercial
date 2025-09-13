@@ -1,0 +1,44 @@
+{
+  "id": "7a13c56d-0a63-404e-a7a5-40e73c4be140",
+  "recording_id": "b982f88a-d4b3-4e5d-a514-7d806bd29fcc",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7a13c56d-0a63-404e-a7a5-40e73c4be140",
+      "recording_id": "b982f88a-d4b3-4e5d-a514-7d806bd29fcc",
+      "end_time": 6.17,
+      "start_time": 5.81,
+      "recording_attendee_id": null,
+      "text": "Morning"
+    },
+    {
+      "id": "7a13c56d-0a63-404e-a7a5-40e73c4be140",
+      "recording_id": "b982f88a-d4b3-4e5d-a514-7d806bd29fcc",
+      "end_time": 18.06,
+      "start_time": 7.34,
+      "recording_attendee_id": "47709947-a261-4e07-875d-6f74e9350a85",
+      "text": "morning. Hi"
+    },
+    {
+      "id": "7a13c56d-0a63-404e-a7a5-40e73c4be140",
+      "recording_id": "b982f88a-d4b3-4e5d-a514-7d806bd29fcc",
+      "end_time": 155.19,
+      "start_time": 18.06,
+      "recording_attendee_id": "1e4e3e12-2335-49a4-ab08-31899fb825ab",
+      "text": "Rose, I don't know if your audio is working but it says your commute is here. Rosemary can you hear me? Yeah, give me a minute, I'll call and then I'll give you guy's a call."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b982f88a-d4b3-4e5d-a514-7d806bd29fcc",
+      "title": "ABODO Implementation Call",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-11-12T14:40:20.428000Z",
+      "call_date": "2020-11-12"
+    }
+  }
+}

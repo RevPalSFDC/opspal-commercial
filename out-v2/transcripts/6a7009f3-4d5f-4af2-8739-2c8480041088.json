@@ -1,0 +1,36 @@
+{
+  "id": "6a7009f3-4d5f-4af2-8739-2c8480041088",
+  "recording_id": "a6522593-f9cf-4014-8494-597cfdea40e7",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6a7009f3-4d5f-4af2-8739-2c8480041088",
+      "recording_id": "a6522593-f9cf-4014-8494-597cfdea40e7",
+      "end_time": 122.67,
+      "start_time": 95.21,
+      "recording_attendee_id": "7d0d56ac-2d87-4fc5-8ac7-c2255618d098",
+      "text": "Hey, Terry, my name is Oscar ski I'm calling from. Last year, it was to send a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads and renters your partnership with Facebook wanted to run by a few options and ideas with you if you could please return my call can match with rentable four seven zero eight two eight five three three again four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "6a7009f3-4d5f-4af2-8739-2c8480041088",
+      "recording_id": "a6522593-f9cf-4014-8494-597cfdea40e7",
+      "end_time": 92.51,
+      "start_time": 1.11,
+      "recording_attendee_id": "93b78df9-c803-49fa-b2c1-bf60311a1c78",
+      "text": "Thank you for calling Hall equities group office hours are Monday through Friday eight AM to five PM Pacific time. If this is an after hours emergency please press five for dial directly two nine, two five nine three zero three six two four, if you know your party's extension please dial it now for a dial by name directory, please press one. If you would like to. Please use your telephone key pad enter the first two or more letters of the person's last name. Terry, day extension two two five to complete your call to this person press one to hear the next name press. Hi, you've reached the voicemail of Terry day. She's a staff from your call. Please leave your name number a brief message and I'll get back to you soon as I'm able thank you and have a great day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a6522593-f9cf-4014-8494-597cfdea40e7",
+      "title": "Call: Mitch  Scarski  and Teri Teri @ Hall Equities Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

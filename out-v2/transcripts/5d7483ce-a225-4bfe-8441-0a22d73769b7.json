@@ -1,0 +1,101 @@
+{
+  "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+  "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 2.72,
+      "start_time": 0.38,
+      "recording_attendee_id": "8e49c88e-3c9c-4268-abb7-0439651d9d8a",
+      "order_number": 0,
+      "text": "Twentieth Street is Sylvia, how may I assist you."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 5.95,
+      "start_time": 3.91,
+      "recording_attendee_id": "618752d4-190d-4a08-8819-a41d9373fc48",
+      "order_number": 1,
+      "text": "You have is Philip around by any chance."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 14.5,
+      "start_time": 6.97,
+      "recording_attendee_id": "8e49c88e-3c9c-4268-abb7-0439651d9d8a",
+      "order_number": 2,
+      "text": "Um, let's see here let me sign and um, I can transfer you to his voicemail if you like."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 32.61,
+      "start_time": 15.69,
+      "recording_attendee_id": "618752d4-190d-4a08-8819-a41d9373fc48",
+      "order_number": 3,
+      "text": "Well, maybe you can help um. I don't really need anything crazy important here. I just so I'm calling from a company called rentable, we're kind of in the marketing fate a space for multifamily properties. Um, it was actually just curious kind of occupancy was looking like for you guys and what like sources. You use to fill units. When you have them available."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 42.03,
+      "start_time": 33.18,
+      "recording_attendee_id": "8e49c88e-3c9c-4268-abb7-0439651d9d8a",
+      "order_number": 4,
+      "text": "I see and I'm sorry, what was your name. Again Jordan. Okay, Jordan and what was the name of your company cause I'm looking maybe I can transfer you to someone else. I can help you."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 43.8,
+      "start_time": 36.01,
+      "recording_attendee_id": "618752d4-190d-4a08-8819-a41d9373fc48",
+      "order_number": 5,
+      "text": "Jordan. Rentable."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 54.7,
+      "start_time": 44.32,
+      "recording_attendee_id": "8e49c88e-3c9c-4268-abb7-0439651d9d8a",
+      "order_number": 6,
+      "text": "Rentable. Okay, rentable. Okay, how far moment. Okay. I'm afraid I'm going to see the Angelo be able to help you hold please."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 56.18,
+      "start_time": 50.93,
+      "recording_attendee_id": "618752d4-190d-4a08-8819-a41d9373fc48",
+      "order_number": 7,
+      "text": "Yeah, no problem thank you. Okay, thank you."
+    },
+    {
+      "id": "5d7483ce-a225-4bfe-8441-0a22d73769b7",
+      "recording_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "end_time": 57.34,
+      "start_time": 56.74,
+      "recording_attendee_id": "8e49c88e-3c9c-4268-abb7-0439651d9d8a",
+      "order_number": 8,
+      "text": "My pleasure."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8bf01fe9-38ff-4733-91d3-244d22cdc68f",
+      "title": "Call: Jordan Culp and Garrett Kulash @ JBG Smith",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

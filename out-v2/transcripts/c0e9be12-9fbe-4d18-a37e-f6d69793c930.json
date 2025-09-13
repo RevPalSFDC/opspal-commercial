@@ -1,0 +1,83 @@
+{
+  "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+  "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:51:59.775Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 4.11,
+      "start_time": 0.74,
+      "recording_attendee_id": "88a25361-4c25-451d-9637-71c61cadc807",
+      "order_number": 0,
+      "text": "Michaelson Organization. This is Marine. May I help you?"
+    },
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 10.67,
+      "start_time": 6.23,
+      "recording_attendee_id": "aff25f4c-21ce-47ea-a886-050cb74e7973",
+      "order_number": 1,
+      "text": "Yeah. Hi Marie um is Daniel Gibson in this morning by chance?"
+    },
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 12.83,
+      "start_time": 11.6,
+      "recording_attendee_id": "88a25361-4c25-451d-9637-71c61cadc807",
+      "order_number": 2,
+      "text": "One moment, please?"
+    },
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 17.41,
+      "start_time": 14.2,
+      "recording_attendee_id": "aff25f4c-21ce-47ea-a886-050cb74e7973",
+      "order_number": 3,
+      "text": "Thank you. Mm"
+    },
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 62.02,
+      "start_time": 42.01,
+      "recording_attendee_id": "88a25361-4c25-451d-9637-71c61cadc807",
+      "order_number": 4,
+      "text": "Hi, you've reached the voicemail of dan Gibson. I'm unable to take your call at the moment. But if you leave me your name, telephone number, I'll get back to you as soon as I can. Thank you very much. Have a great day at the tone. Please record your message when you have finished recording. You may hang up or press one for more options."
+    },
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 129.54,
+      "start_time": 64.34,
+      "recording_attendee_id": "aff25f4c-21ce-47ea-a886-050cb74e7973",
+      "order_number": 5,
+      "text": "Hey dan john calling from Rental um Hope you're well Happy New Year. I apologize. I missed you here. Um It's about quarter till noon um on Wednesday the fifth. But um dan was um just following up, I sent a couple of emails your way, I'm not sure if you happen to come across those but um I was uh just do a little research on on Nicholson um and I thought I would reach out um was hoping to maybe grab a few minutes of your time at some point. Um Yeah uh we we do a number of different things. We we've uh as you may have seen in my emails um are working um have a solution around google business profile currently to to really help our our partners drive traffic to our partners um Main and subsequent property websites to get exposure. Um We're also and so um I was just hoping to"
+    },
+    {
+      "id": "c0e9be12-9fbe-4d18-a37e-f6d69793c930",
+      "recording_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "end_time": 158.88,
+      "start_time": 129.54,
+      "recording_attendee_id": "aff25f4c-21ce-47ea-a886-050cb74e7973",
+      "order_number": 6,
+      "text": "learn more about how marketing and advertising um for your various properties and to see if there might be an opportunity for us to help this year. So um so then if you could give me a call back or shoot me an email and you have some time I'd really appreciate it again, john from rentable thirty-one quintillion seven hundred forty quadrillion seven hundred thirty-five trillion ninety-three billion one hundred seventy-three million seventy-six thousand six hundred and ninety-two Look forward to hearing from you have a great day"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "63c11c80-ea89-4c5d-b3f2-d2b9ecc32224",
+      "title": "Call: John Loughery and Daniel Gibson @ Michelson Realty",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "id": "dded7a3c-e0bc-4d62-a0a1-f8af7680d906",
+  "recording_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "dded7a3c-e0bc-4d62-a0a1-f8af7680d906",
+      "recording_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+      "end_time": 52.75,
+      "start_time": 1.54,
+      "recording_attendee_id": "56514218-8a6d-4333-b1fe-d20628ebfb03",
+      "order_number": 0,
+      "text": "Welcome to Maine properties where your property is our priority. If you are experiencing a maintenance emergency please press one for our rental division, please press two for our condiment. Welcome to being properties rental division to view our most up to date availability or to submit an application please visit our website at W W W dot main M a I N E properties P R O P E R T I E S LLC dot. Com. If you are a current resident please press one. If you are applying for an apartment or have questions regarding a rental property, please press two."
+    },
+    {
+      "id": "dded7a3c-e0bc-4d62-a0a1-f8af7680d906",
+      "recording_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+      "end_time": 42.63,
+      "start_time": 42.36,
+      "recording_attendee_id": "05348ee4-c9dc-43d0-abd2-80d8126eec23",
+      "order_number": 1,
+      "text": "Yeah."
+    },
+    {
+      "id": "dded7a3c-e0bc-4d62-a0a1-f8af7680d906",
+      "recording_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+      "end_time": 72.48,
+      "start_time": 61.86,
+      "recording_attendee_id": "56514218-8a6d-4333-b1fe-d20628ebfb03",
+      "order_number": 2,
+      "text": "Thank you for calling all our representatives are busy please remain on the line your call will be answered in the order it was received you are the second caller in the queue."
+    },
+    {
+      "id": "dded7a3c-e0bc-4d62-a0a1-f8af7680d906",
+      "recording_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+      "end_time": 82.11,
+      "start_time": 76.41,
+      "recording_attendee_id": "05348ee4-c9dc-43d0-abd2-80d8126eec23",
+      "order_number": 3,
+      "text": "I I."
+    },
+    {
+      "id": "dded7a3c-e0bc-4d62-a0a1-f8af7680d906",
+      "recording_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+      "end_time": 126.88,
+      "start_time": 102.73,
+      "recording_attendee_id": "56514218-8a6d-4333-b1fe-d20628ebfb03",
+      "order_number": 4,
+      "text": "Please remain on the line you are the second caller in the queue. Thank you for waiting. You are the second caller in the queue."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a599ed4c-55ec-4a8f-b3fd-ba0cb5ccc7e5",
+      "title": "Call: Elyse Stachelek and Maria Risbara @ Maine Properties, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "36f4fa71-25cd-448a-9704-e648e2237065",
+  "recording_id": "ae5d903c-402e-4527-a1e0-4c188f0a174d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "36f4fa71-25cd-448a-9704-e648e2237065",
+      "recording_id": "ae5d903c-402e-4527-a1e0-4c188f0a174d",
+      "end_time": 27.92,
+      "start_time": 1.17,
+      "recording_attendee_id": "0680299a-a604-4a17-b611-59b101aa5e21",
+      "text": "Thank you for calling the wave at state place apartments press one if you'd like to speak with the leasing specialist press two to leave the. Hello. Thank you for calling Stadium place. This is Maria. Um, yes, hold on give me one second who who is it I'm just calling."
+    },
+    {
+      "id": "36f4fa71-25cd-448a-9704-e648e2237065",
+      "recording_id": "ae5d903c-402e-4527-a1e0-4c188f0a174d",
+      "end_time": 153.35,
+      "start_time": 146.66,
+      "recording_attendee_id": "0680299a-a604-4a17-b611-59b101aa5e21",
+      "text": "We are excited to answer your questions about the way of apartments. Please leave us a detailed message including your name and."
+    },
+    {
+      "id": "36f4fa71-25cd-448a-9704-e648e2237065",
+      "recording_id": "ae5d903c-402e-4527-a1e0-4c188f0a174d",
+      "end_time": 31.12,
+      "start_time": 19.85,
+      "recording_attendee_id": "abb8dc3f-6401-48d1-9b1f-4d21d9b1f03f",
+      "text": "April available. This is Alyssa calling from a bordeaux dot. Com."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ae5d903c-402e-4527-a1e0-4c188f0a174d",
+      "title": "Call: Alyssa Tillich and April Ramsey @ Pillar Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

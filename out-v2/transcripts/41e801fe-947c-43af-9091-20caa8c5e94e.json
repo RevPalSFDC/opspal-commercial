@@ -1,0 +1,76 @@
+{
+  "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+  "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 189.56,
+      "start_time": 188.3,
+      "recording_attendee_id": "e2271215-51c1-4c58-9a7f-de5c2a235946",
+      "text": "Okay. Thank you. I appreciate it."
+    },
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 145.51,
+      "start_time": 127.3,
+      "recording_attendee_id": "e2271215-51c1-4c58-9a7f-de5c2a235946",
+      "text": "And they're excuse me, I was hoping you could point me in the right direction. My name is will I'm calling with a company called rentable or an apartment listing says and work a lot of similar portfolios in the area here and was looking to get in touch with someone that would be involved with advertising your your rental properties."
+    },
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 179.84,
+      "start_time": 154.28,
+      "recording_attendee_id": "e2271215-51c1-4c58-9a7f-de5c2a235946",
+      "text": "That'd be fun. My name is William last name is Martin M a R T I N. Six three zero nine three six nine three six two nine nine seven. Six three zero for the area code."
+    },
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 191.19,
+      "start_time": 190.08,
+      "recording_attendee_id": "aa720306-d88a-4df3-b192-7fbea08119f3",
+      "text": "Welcome have a nice day."
+    },
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 156.29,
+      "start_time": 146.66,
+      "recording_attendee_id": "aa720306-d88a-4df3-b192-7fbea08119f3",
+      "text": "So that person is not here in the office do you mind if I could take down your name and number and have him give you a call back. Okay what's your name."
+    },
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 1.04,
+      "start_time": 0.29,
+      "recording_attendee_id": "aa720306-d88a-4df3-b192-7fbea08119f3",
+      "text": "And zero?"
+    },
+    {
+      "id": "41e801fe-947c-43af-9091-20caa8c5e94e",
+      "recording_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "end_time": 184.24,
+      "start_time": 182.37,
+      "recording_attendee_id": "aa720306-d88a-4df3-b192-7fbea08119f3",
+      "text": "Alrighty, sir, I will have somebody."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3aecf5f2-b8c1-4ac2-8ca0-e16e8da9fed6",
+      "title": "Call: Will Martin and Office",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

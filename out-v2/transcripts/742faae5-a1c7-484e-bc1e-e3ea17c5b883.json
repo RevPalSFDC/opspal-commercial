@@ -1,0 +1,28 @@
+{
+  "id": "742faae5-a1c7-484e-bc1e-e3ea17c5b883",
+  "recording_id": "b9db3f19-4262-46bb-9038-0f494c9c9952",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "742faae5-a1c7-484e-bc1e-e3ea17c5b883",
+      "recording_id": "b9db3f19-4262-46bb-9038-0f494c9c9952",
+      "end_time": 129.33,
+      "start_time": 0.68,
+      "recording_attendee_id": "0acdf74f-6d81-4fa9-943e-8f298233d848",
+      "text": "Thank you for calling Prime asset management. Please listen carefully. As our menu options have recently changed if you know your party's extension please press one for leasing please press two for the receptionist please press three for maintenance please press four for rental please press five for accounting please press six to dial by name, please press seven to leave a message in our general mailbox please press eight. If you were calling about a fire flood emergency, please press nine. Our fax number is eight five eight four and this key is not valid please. Try again. Thank you for calling Prime asset management. Please listen carefully. As our menu options have recently changed if you know your party's extension please press one for leasing please press two for the receptionist please press three for maintenance please press four for rental please press five for accounting please your call is being transferred please hold for Tony at extension one fifteen please press one for Lou. M at extension one eleven please press three for Jody at extension one eighteen. Please press four for Jim at extension one fourteen please press five to repeat this menu please press the star key. For Tony at extension one fifteen please press one for new am at extension one eleven. Please press three your call is being transferred please hold. All has been forwarded to an automated voice mess."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b9db3f19-4262-46bb-9038-0f494c9c9952",
+      "title": "Call: Dan Cellon and +18584909125",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

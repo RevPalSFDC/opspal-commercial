@@ -1,0 +1,68 @@
+{
+  "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+  "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+      "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "end_time": 4.7,
+      "start_time": 3.14,
+      "recording_attendee_id": "391e5491-5001-417b-a8d8-5e4cccde306b",
+      "text": "Hi is Lewis Crawford available."
+    },
+    {
+      "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+      "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "end_time": 124.52,
+      "start_time": 98.87,
+      "recording_attendee_id": "391e5491-5001-417b-a8d8-5e4cccde306b",
+      "text": "Hey Megan, my name is Austin I'm calling with rental. I was just referred over to you I'm calling about your listings with Facebook marketplace and your rental add go ahead and give me a call back when you have a few moments six zero eight nine two one two four one nine or you can reach me at my email, which is Austin a U S T I N at rentable R E N T a B L E dot P zero thanks."
+    },
+    {
+      "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+      "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "end_time": 29.29,
+      "start_time": 9.41,
+      "recording_attendee_id": "391e5491-5001-417b-a8d8-5e4cccde306b",
+      "text": "Oh really, I'm sorry, I just had I was just emailing her actually um, I guess we'll make it work. Would I guess it's who is your other Regional be that would make them? I was going back and forth with them on the marketing, I guess maybe."
+    },
+    {
+      "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+      "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "end_time": 7.44,
+      "start_time": 5.91,
+      "recording_attendee_id": "72cd3a79-1446-4065-bcb8-cbe4ca3dc974",
+      "text": "Well, that's Crockett no longer works here."
+    },
+    {
+      "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+      "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "end_time": 95.52,
+      "start_time": 28.57,
+      "recording_attendee_id": "72cd3a79-1446-4065-bcb8-cbe4ca3dc974",
+      "text": "Whatnot. Hi, you've reached magan price, my management company either stepped away from my desk or out of the office. If you could please leave your name and number. I will give you a call back. Thank you. At the tone, please record your message. When you have finished recording simply hang up or press pound for further options."
+    },
+    {
+      "id": "f77ec567-9a0d-4996-adac-8fa5dc43cc99",
+      "recording_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "end_time": 2.45,
+      "start_time": 0.2,
+      "recording_attendee_id": "72cd3a79-1446-4065-bcb8-cbe4ca3dc974",
+      "text": "Belmont management. This is Ann how my director ha."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c90ad9b5-647b-4993-b36f-8288bee1a67b",
+      "title": "Call: Austin Schleisner and Luis Crockett @ Belmont Management Company",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

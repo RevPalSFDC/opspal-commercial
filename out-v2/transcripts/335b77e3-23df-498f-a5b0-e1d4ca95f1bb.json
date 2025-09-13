@@ -1,0 +1,44 @@
+{
+  "id": "335b77e3-23df-498f-a5b0-e1d4ca95f1bb",
+  "recording_id": "2e686abf-7494-43cc-b7c8-c816e430ac3d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "335b77e3-23df-498f-a5b0-e1d4ca95f1bb",
+      "recording_id": "2e686abf-7494-43cc-b7c8-c816e430ac3d",
+      "end_time": 55.44,
+      "start_time": 0.69,
+      "recording_attendee_id": "e9cba949-d2d7-478e-b8e7-bd4655cc8860",
+      "text": "Thank you for calling Pasadena for brokerage and leasing please call eight five eight seven two nine nine three zero zero that number again, eight five eight seven two nine nine three zero zero. If you know your party's extension number. You may dial it at any time to search our company directory please press nine or you may press zero for the operator, thank you. Your call is now being forwarded please hold. Good afternoon. Thank you for calling to see if I and Cassidy that this is Christine."
+    },
+    {
+      "id": "335b77e3-23df-498f-a5b0-e1d4ca95f1bb",
+      "recording_id": "2e686abf-7494-43cc-b7c8-c816e430ac3d",
+      "end_time": 132,
+      "start_time": 72.68,
+      "recording_attendee_id": "e9cba949-d2d7-478e-b8e7-bd4655cc8860",
+      "text": "Let's see, okay hang on just a minute your call is now being forwarded please hold. Thank you for calling you reached the voicemail of Mike caskey at C F fi. If this is an after hours emergency and you need immediate assistance please press zero and what prompted press three. If this is an urgent matter during business hours, please press zero for the operator, otherwise. Please leave a detailed message and I will return your call as soon as possible. Thank you. Please leave a message after the tone."
+    },
+    {
+      "id": "335b77e3-23df-498f-a5b0-e1d4ca95f1bb",
+      "recording_id": "2e686abf-7494-43cc-b7c8-c816e430ac3d",
+      "end_time": 68.95,
+      "start_time": 58.9,
+      "recording_attendee_id": "fdfcdf85-095f-4b98-88d2-fe98c50e7a1d",
+      "text": "There. Hey, I was trying to get in touch with um, I guess the marketing team, maybe or who's ever responsible for running ads online for your vacancies."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "2e686abf-7494-43cc-b7c8-c816e430ac3d",
+      "title": "Call: Dan Cellon and Greg Wagner @ CFI - Capital Growth Properties, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

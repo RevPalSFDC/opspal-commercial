@@ -1,0 +1,100 @@
+{
+  "id": "a459a514-0a76-4af0-8289-be992d3957da",
+  "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 60.86,
+      "start_time": 49.23,
+      "recording_attendee_id": "b1fa4124-daea-4515-9670-f42d216c90e1",
+      "text": "Hi is David available. Please? This is Alyssa Village calling. Rentable."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 121.72,
+      "start_time": 118.95,
+      "recording_attendee_id": "b1fa4124-daea-4515-9670-f42d216c90e1",
+      "text": "Thank you so much. Alright, bye."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 98.48,
+      "start_time": 95.57,
+      "recording_attendee_id": "b1fa4124-daea-4515-9670-f42d216c90e1",
+      "text": "T I L L I C H."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 87.58,
+      "start_time": 82.06,
+      "recording_attendee_id": "b1fa4124-daea-4515-9670-f42d216c90e1",
+      "text": "It's two six two three eight three four five six eight."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 104.65,
+      "start_time": 102.4,
+      "recording_attendee_id": "b1fa4124-daea-4515-9670-f42d216c90e1",
+      "text": "Um, yeah, just calling to reschedule our meeting."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 81.65,
+      "start_time": 79.04,
+      "recording_attendee_id": "84b7ba41-09f0-4ff1-8825-a0516d6327fc",
+      "text": "What is your number, yes, actually in a meeting."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 101.74,
+      "start_time": 100.24,
+      "recording_attendee_id": "84b7ba41-09f0-4ff1-8825-a0516d6327fc",
+      "text": "And would you like to leave a message."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 95.2,
+      "start_time": 92.65,
+      "recording_attendee_id": "84b7ba41-09f0-4ff1-8825-a0516d6327fc",
+      "text": "Okay, and how do you spell your last name."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 118.55,
+      "start_time": 117.65,
+      "recording_attendee_id": "84b7ba41-09f0-4ff1-8825-a0516d6327fc",
+      "text": "I will pass that along."
+    },
+    {
+      "id": "a459a514-0a76-4af0-8289-be992d3957da",
+      "recording_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "end_time": 48.65,
+      "start_time": 0.87,
+      "recording_attendee_id": "84b7ba41-09f0-4ff1-8825-a0516d6327fc",
+      "text": "Thank you for calling from M I will know connect you your call may be recorded for quality assurance please hold while I connect you. Carolina, I'm not gonna ask him."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a38f16db-1639-41ee-b4c3-a6f952802aa9",
+      "title": "Call: Alyssa Tillich and David Cota @ Prop M Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

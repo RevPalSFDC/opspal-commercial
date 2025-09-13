@@ -1,0 +1,1051 @@
+{
+  "timestamp": "2025-09-11T19:07:31.886231+00:00",
+  "period": {
+    "start": "2025-09-08T00:00:00+00:00",
+    "end": "2025-09-11T19:07:22.578562+00:00"
+  },
+  "summary": {
+    "total_users_analyzed": 28,
+    "users_with_only_failures": 28,
+    "users_who_reauthenticated": 0,
+    "users_with_mixed_results": 0,
+    "crm_errors_found": 186
+  },
+  "failing_users": [
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 91,
+      "first_error": "2025-09-11T11:20:09.234334-04:00",
+      "last_error": "2025-09-11T13:20:51.871287-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:20:09.234334-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:20:07.908753-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:20:09.212543-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 43,
+      "first_error": "2025-09-11T15:07:15.547031-04:00",
+      "last_error": "2025-09-11T10:41:00.988088-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T15:07:15.547031-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T15:07:15.539287-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T15:07:15.533038-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 124,
+      "first_error": "2025-09-11T11:35:11.471867-04:00",
+      "last_error": "2025-09-11T11:42:25.460200-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:35:11.471867-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:35:11.464152-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:35:11.396077-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 98,
+      "first_error": "2025-09-11T12:47:10.519529-04:00",
+      "last_error": "2025-09-11T10:41:35.422915-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T12:47:10.519529-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T15:05:53.393013-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T15:05:53.378006-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 90,
+      "first_error": "2025-09-11T00:13:33.447883-04:00",
+      "last_error": "2025-09-11T00:12:57.929586-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T00:13:33.447883-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T00:13:33.017429-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T00:13:32.567106-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 14,
+      "first_error": "2025-09-09T17:50:16.163635-04:00",
+      "last_error": "2025-09-10T17:17:57.749349-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-09T17:50:16.163635-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:44:36.358345-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:44:36.339392-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 16,
+      "first_error": "2025-09-11T13:17:00.541226-04:00",
+      "last_error": "2025-06-23T18:30:09.074000-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T13:17:00.541226-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-05-22T17:41:02.978529-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-04-30T15:54:36.204845-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 5,
+      "first_error": "2025-09-11T13:49:23.246697-04:00",
+      "last_error": "2025-09-10T14:42:14.189060-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T13:49:23.246697-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:20:25.993092-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-10T15:19:06.494925-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 38,
+      "first_error": "2025-09-11T10:54:56.778021-04:00",
+      "last_error": "2025-09-11T10:59:15.426670-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T10:54:56.778021-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T00:09:41.261130-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T13:01:42.188026-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 75,
+      "first_error": "2025-09-09T12:47:36.965576-04:00",
+      "last_error": "2025-09-11T12:42:25.109360-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-09T12:47:36.965576-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:28:27.158651-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:28:17.052649-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 52,
+      "first_error": "2025-09-09T11:09:51.761764-04:00",
+      "last_error": "2025-09-11T10:41:30.672304-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-09T11:09:51.761764-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:39:27.365667-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:09:41.345630-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 65,
+      "first_error": "2025-08-28T16:29:09.067078-04:00",
+      "last_error": "2025-09-11T10:49:04.460861-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-08-28T16:29:09.067078-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:08:29.165302-04:00",
+          "subject": ""
+        },
+        {
+          "type": "call",
+          "created_at": "2025-09-11T15:04:48.227475-04:00",
+          "duration": 58
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 12,
+      "first_error": "2025-09-11T14:44:59.025123-04:00",
+      "last_error": "2025-09-11T11:35:52.254582-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:44:59.025123-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:43:15.663970-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:46:16.660241-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 52,
+      "first_error": "2025-09-10T16:29:47.583730-04:00",
+      "last_error": "2025-09-11T11:07:54.115378-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-10T16:29:47.583730-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:31:31.127572-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T11:38:27.086140-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 38,
+      "first_error": "2025-02-19T13:43:40.179630-05:00",
+      "last_error": "2025-09-11T10:41:44.889533-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-02-19T13:43:40.179630-05:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:15:59.584371-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:09:36.276326-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 2,
+      "first_error": "2025-09-11T10:56:54.106702-04:00",
+      "last_error": "2025-09-11T10:56:54.005810-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T10:56:54.106702-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T10:56:54.005810-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 1,
+      "first_error": "2025-09-11T00:12:08.895724-04:00",
+      "last_error": "2025-09-11T00:12:08.895724-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T00:12:08.895724-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 49,
+      "first_error": "2025-09-11T13:32:01.378797-04:00",
+      "last_error": "2025-09-11T10:41:01.421834-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T13:32:01.378797-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T13:43:50.184405-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T13:38:55.119427-04:00",
+          "subject": ""
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 5,
+      "first_error": "2025-09-11T14:29:09.649818-04:00",
+      "last_error": "2025-09-11T10:58:59.505707-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:29:09.649818-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-11T14:15:22.463864-04:00",
+          "subject": ""
+        },
+        {
+          "type": "call",
+          "created_at": "2025-09-11T15:04:33.313097-04:00",
+          "duration": 83
+        }
+      ]
+    },
+    {
+      "name": "Unknown",
+      "email": "",
+      "error_count": 2,
+      "first_error": "2025-09-09T16:34:33.554629-04:00",
+      "last_error": "2025-09-09T16:35:47.366591-04:00",
+      "sample_errors": [
+        {
+          "type": "email",
+          "created_at": "2025-09-09T16:34:33.554629-04:00",
+          "subject": ""
+        },
+        {
+          "type": "email",
+          "created_at": "2025-09-09T16:35:47.366591-04:00",
+          "subject": ""
+        }
+      ]
+    }
+  ],
+  "reauthenticated_users": [],
+  "users_from_error_metadata": [],
+  "sample_crm_errors": [
+    {
+      "id": 1583334112,
+      "type": "email",
+      "created_at": "2025-09-11T15:06:54.269374-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXzmzwxV1fS4yFwSgBTjohioiUnkrjM_fgcUHHmif8=6qg@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXxayzwaoeNokXpP5durXsCo=O0GoS9EiD56wtJ+OdRA-Q@mail.gmail.com>",
+          "References": "<CAPjJrXxayzwaoeNokXpP5durXsCo=O0GoS9EiD56wtJ+OdRA-Q@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "grillstone@argosyrep.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Genna Rillstone",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583332416,
+      "type": "email",
+      "created_at": "2025-09-11T15:05:24.917304-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXxfZFhUAB0H-NSQ8Mre=6phd7NmxFZDhya=37za1EQR2Q@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXzgs+HwT-_d7dbb7nQ9hYDKifJkEJ38wW_LXM7RtKxNew@mail.gmail.com>",
+          "References": "<CAPjJrXzgs+HwT-_d7dbb7nQ9hYDKifJkEJ38wW_LXM7RtKxNew@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "mhood@batsoncookdev.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Mike Hood",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583331404,
+      "type": "email",
+      "created_at": "2025-09-11T15:04:28.537228-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXzsEYC-5KXgjCyM+jyDiS7L=1hHuhOqOdgESywTB_M=gQ@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXzdMhT7v7DjqG5ByPAWUyOaxc5GXapyHEzdKfYomsVLkg@mail.gmail.com>",
+          "References": "<CAPjJrXzdMhT7v7DjqG5ByPAWUyOaxc5GXapyHEzdKfYomsVLkg@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "hadear.vargova@bluerdot.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "hadear vargova",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583329117,
+      "type": "email",
+      "created_at": "2025-09-11T15:02:24.625759-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXx2sN=L=P4QBGxm9z_L1xehjo2khHK-L6Znko0JuqVS1g@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXyOYZyXN4fTvZNN0gaksZcgWW+LPUBubXzGUdEqgGUVCQ@mail.gmail.com>",
+          "References": "<CAPjJrXyOYZyXN4fTvZNN0gaksZcgWW+LPUBubXzGUdEqgGUVCQ@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "dappleton@batson-cook.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Darin Appleton",
+        "from_name": "Sofia Miller",
+        "viewed_count": 2
+      }
+    },
+    {
+      "id": 1581731642,
+      "type": "email",
+      "created_at": "2025-09-09T17:50:16.248025-04:00",
+      "subject": "Email: Re: MavenAI + The Knoll at Fair Oaks | appr",
+      "user_name": null,
+      "custom_fields": {
+        "due_date": "2025-09-09T21:50:05Z",
+        "email_message_id": "<CALeb3Ps5QK0n8YB3Rdomz5TupiJBWW1pY679Nx9qt6jwGa2D-g@mail.gmail.com>",
+        "direction": "outbound",
+        "headers": {
+          "to": [
+            "Christina.Martinez1@cushwake.com"
+          ]
+        },
+        "additional_people_attributions": [],
+        "to_address": "christina.martinez1@cushwake.com",
+        "from_address": "kylee@hiremaven.ai",
+        "to_name": "Christina Martinez",
+        "from_name": "Kylee Binder",
+        "replies_count": 3
+      }
+    },
+    {
+      "id": 1583328683,
+      "type": "email",
+      "created_at": "2025-09-11T15:01:57.323327-04:00",
+      "subject": "Reply: Re: MavenAI + The Knoll at Fair Oaks | appr",
+      "user_name": null,
+      "custom_fields": {
+        "metadata": {},
+        "direction": "inbound",
+        "email_message_id": "<PH0PR08MB83747AC17982DED6D5AB8A6FDC09A@PH0PR08MB8374.namprd08.prod.outlook.com>",
+        "to_address": "kylee@hiremaven.ai",
+        "from_address": "christina.martinez1@cushwake.com",
+        "to_name": "Kylee Binder",
+        "from_name": "Christina Martinez"
+      }
+    },
+    {
+      "id": 1583327645,
+      "type": "email",
+      "created_at": "2025-09-11T15:00:59.447693-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXw3D+OiWMEq0PiL6Bj3pp8Oy1bJ1Z_TmW5s_AyHUZNVfA@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXy12mbPzQEwqsDOri7rHvL3XVvm+t2Rju64ROiiPTHT_g@mail.gmail.com>",
+          "References": "<CAPjJrXy12mbPzQEwqsDOri7rHvL3XVvm+t2Rju64ROiiPTHT_g@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "atofan@magmaequities.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Andreea Tofan",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583245413,
+      "type": "email",
+      "created_at": "2025-09-11T13:49:25.026490-04:00",
+      "subject": "Email: Re: [EXTERNAL] ApartmentIQ & Greystar",
+      "user_name": null,
+      "custom_fields": {
+        "direction": "outbound",
+        "metadata": {
+          "who": {
+            "crm_id": "0033j00003wOyQbAAK",
+            "crm_url": "https://rentable.my.salesforce.com/0033j00003wOyQbAAK",
+            "description1": "Alaina Emley",
+            "description2": "aemley@greystar.com",
+            "description3": "Greystar (Irving)",
+            "crm_object_type": "Contact",
+            "crm_object_label": "Contact"
+          },
+          "source": "client"
+        },
+        "headers": {},
+        "additional_people_attributions": [
+          225806244,
+          306814738
+        ],
+        "to_address": "aemley@greystar.com",
+        "from_address": "cspear@getapartmentiq.com",
+        "to_name": "Alaina Emley",
+        "from_name": "Catherine Spear",
+        "email_message_id": "<CADyh8+AnD+AR+UQ+O+Vr8T6HoFspoZhq02BAJRNYMUVoWkiJXQ@mail.gmail.com>",
+        "viewed_count": 1
+      }
+    },
+    {
+      "id": 1583065406,
+      "type": "email",
+      "created_at": "2025-09-11T11:20:27.640497-04:00",
+      "subject": "Email: ApartmentIQ & Greystar",
+      "user_name": null,
+      "custom_fields": {
+        "direction": "outbound",
+        "metadata": {
+          "who": {
+            "crm_id": "0033j00003wOyQbAAK",
+            "crm_url": "https://rentable.my.salesforce.com/0033j00003wOyQbAAK",
+            "description1": "Alaina Emley",
+            "description2": "aemley@greystar.com",
+            "description3": "Greystar (Irving)",
+            "crm_object_type": "Contact",
+            "crm_object_label": "Contact"
+          },
+          "source": "client"
+        },
+        "headers": {},
+        "additional_people_attributions": [
+          225806244,
+          306814738
+        ],
+        "to_address": "aemley@greystar.com",
+        "from_address": "cspear@getapartmentiq.com",
+        "to_name": "Alaina Emley",
+        "from_name": "Catherine Spear",
+        "email_message_id": "<CADyh8+CrxR1LC+RpJ47RpUbK2dzCZZobpw4DS3Hv7bReC2BxVA@mail.gmail.com>",
+        "viewed_count": 7,
+        "replies_count": 1
+      }
+    },
+    {
+      "id": 1573324998,
+      "type": "email",
+      "created_at": "2025-08-26T14:38:35.291457-04:00",
+      "subject": "Email: MavenAI follow up//offer - 1st Lake Propert",
+      "user_name": null,
+      "custom_fields": {
+        "direction": "outbound",
+        "metadata": {
+          "who": {
+            "crm_id": "0033j000041BpXiAAK",
+            "crm_url": "https://rentable.my.salesforce.com/0033j000041BpXiAAK",
+            "description1": "Ashley Bergeron",
+            "description2": "ashleyb@1st-lake.com",
+            "description3": "1st Lake Properties (HQ)",
+            "crm_object_type": "Contact",
+            "crm_object_label": "Contact"
+          },
+          "source": "client"
+        },
+        "headers": {},
+        "additional_people_attributions": [
+          307836804
+        ],
+        "to_address": "ashleyb@1st-lake.com",
+        "from_address": "shelby@hiremaven.ai",
+        "to_name": "Ashley Bergeron",
+        "from_name": "Shelby Buchanan",
+        "email_message_id": "<CA+dBUG4Nq3jBaoY44Pdz9Gk9RHpUQf0SuFmeBb+rL2Wt+p=Hwg@mail.gmail.com>",
+        "viewed_count": 4
+      }
+    },
+    {
+      "id": 1583325967,
+      "type": "email",
+      "created_at": "2025-09-11T14:59:28.714567-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXzFEKGVKwwCuhCaLH_xij+3nW9+-vkt669LVKnfTP2Jjg@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXwCSC1QLAXbimka=bog1Nj9QDWOk=HGmnnYwMYMe_Vbyw@mail.gmail.com>",
+          "References": "<CAPjJrXwCSC1QLAXbimka=bog1Nj9QDWOk=HGmnnYwMYMe_Vbyw@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "julia@aukum.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Julia Duncan",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583322629,
+      "type": "email",
+      "created_at": "2025-09-11T14:56:26.428512-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXy5sB23hBHZSjra6QhBMg5j4Z38BjgGGSHRVLT6F2qeSw@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXwiy6Jj_=ehaq4F=E_isrfiPdZp7CwCUyHHzMSCe_SoHA@mail.gmail.com>",
+          "References": "<CAPjJrXwiy6Jj_=ehaq4F=E_isrfiPdZp7CwCUyHHzMSCe_SoHA@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "crigney@batson-cook.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Curt Rigney",
+        "from_name": "Sofia Miller",
+        "viewed_count": 1
+      }
+    },
+    {
+      "id": 1583324194,
+      "type": "email",
+      "created_at": "2025-09-11T14:57:54.031420-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXzXHUQpVSoWdUmTB98tyPZaOA_-KJ6nt6o93f1SQ1mD5Q@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXy8HMXGuD6a-pEL96c=8QO+CVxz8bk739obrCU8H6ruLQ@mail.gmail.com>",
+          "References": "<CAPjJrXy8HMXGuD6a-pEL96c=8QO+CVxz8bk739obrCU8H6ruLQ@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "kayla@aukum.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Kayla Stolp",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583323744,
+      "type": "email",
+      "created_at": "2025-09-11T14:57:27.926347-04:00",
+      "subject": "Email: Automate your Google Profiles with AI",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CALeb3Pu3GOXw1u6ojUv_0PmbKmKbk=GH7U_VD6CZBnz=XAW7Fw@mail.gmail.com>",
+        "email_template_id": 180604298,
+        "email_template_title": "T1",
+        "cadence_id": 1742591,
+        "cadence_name": "VP's + 9/4/25 - Kylee B",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12457512,
+        "step_name": "T1",
+        "step_day": 1,
+        "step_type": "Email",
+        "metadata": {},
+        "headers": {},
+        "additional_people_attributions": [],
+        "to_address": "braxton.bodenhamer@cortland.com",
+        "from_address": "kylee@hiremaven.ai",
+        "to_name": "Brax Bodenhamer",
+        "from_name": "Kylee Binder"
+      }
+    },
+    {
+      "id": 1583320990,
+      "type": "email",
+      "created_at": "2025-09-11T14:54:57.204229-04:00",
+      "subject": "Email: Automate your Google Profiles with AI",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CALeb3PvzP6uMs691xhc3pUsXtggwiTc71oik-NzSYiH=t9vtDg@mail.gmail.com>",
+        "email_template_id": 180604298,
+        "email_template_title": "T1",
+        "cadence_id": 1742591,
+        "cadence_name": "VP's + 9/4/25 - Kylee B",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12457512,
+        "step_name": "T1",
+        "step_day": 1,
+        "step_type": "Email",
+        "metadata": {},
+        "headers": {},
+        "additional_people_attributions": [],
+        "to_address": "hhewitt@windermere.com",
+        "from_address": "kylee@hiremaven.ai",
+        "to_name": "Heather Hewitt",
+        "from_name": "Kylee Binder",
+        "viewed_count": 1,
+        "clicked_count": 2
+      }
+    },
+    {
+      "id": 1583322584,
+      "type": "email",
+      "created_at": "2025-09-11T14:56:24.960233-04:00",
+      "subject": "Email: Automate your Google Profiles with AI",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CALeb3Pu_5U7BiFtuBKPNXLGN-6FHrZv=_j02Tjtz-kNuFvMe6g@mail.gmail.com>",
+        "email_template_id": 180604298,
+        "email_template_title": "T1",
+        "cadence_id": 1742591,
+        "cadence_name": "VP's + 9/4/25 - Kylee B",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12457512,
+        "step_name": "T1",
+        "step_day": 1,
+        "step_type": "Email",
+        "metadata": {},
+        "headers": {},
+        "additional_people_attributions": [],
+        "to_address": "tim.hermeling@cortlandpartners.com",
+        "from_address": "kylee@hiremaven.ai",
+        "to_name": "Tim Tim Hermeling",
+        "from_name": "Kylee Binder",
+        "bounced": true
+      }
+    },
+    {
+      "id": 1583319340,
+      "type": "email",
+      "created_at": "2025-09-11T14:53:26.104963-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXxMsxAs-qqb-9VEuf4ZaB3SR+sWL70bhwseU5kQfU3O2g@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXwDf2Rmpi2Yn6M1HpNP7+jWhU8S8=7hr7952oGprm0dng@mail.gmail.com>",
+          "References": "<CAPjJrXwDf2Rmpi2Yn6M1HpNP7+jWhU8S8=7hr7952oGprm0dng@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "bfaircloth@batson-cook.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "Bonnie Faircloth",
+        "from_name": "Sofia Miller",
+        "viewed_count": 1
+      }
+    },
+    {
+      "id": 1583317775,
+      "type": "email",
+      "created_at": "2025-09-11T14:51:58.938977-04:00",
+      "subject": "Email: Automate your Google Profiles with AI",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CALeb3PtVkP3fk_Z8dXrHxO1n6NZUszToK2JVU5tzvNA5vm-3Cg@mail.gmail.com>",
+        "email_template_id": 180604298,
+        "email_template_title": "T1",
+        "cadence_id": 1742591,
+        "cadence_name": "VP's + 9/4/25 - Kylee B",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12457512,
+        "step_name": "T1",
+        "step_day": 1,
+        "step_type": "Email",
+        "metadata": {},
+        "headers": {},
+        "additional_people_attributions": [],
+        "to_address": "brooks.burton@windermere.com",
+        "from_address": "kylee@hiremaven.ai",
+        "to_name": "Brooks Burton",
+        "from_name": "Kylee Binder",
+        "clicked_count": 4,
+        "viewed_count": 3
+      }
+    },
+    {
+      "id": 1583320909,
+      "type": "email",
+      "created_at": "2025-09-11T14:54:54.350140-04:00",
+      "subject": "Email: Re: Comp report - current properties",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CAPjJrXx2Gsh6o2SX0VHn3ZkQahGW-EybfqXhvPrD2PsPCQiUxg@mail.gmail.com>",
+        "email_template_id": 181358942,
+        "email_template_title": "Gift Card Offer",
+        "cadence_id": 1708039,
+        "cadence_name": "SMB - Comp Report Offer",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12478166,
+        "step_name": "Gift Card Offer",
+        "step_day": 7,
+        "step_type": "Email",
+        "headers": {
+          "In-Reply-To": "<CAPjJrXxwT54VUrMZxRpRB_SGH5+=rUc5ZWtgNQ6=_HnvHkO-EQ@mail.gmail.com>",
+          "References": "<CAPjJrXxwT54VUrMZxRpRB_SGH5+=rUc5ZWtgNQ6=_HnvHkO-EQ@mail.gmail.com>"
+        },
+        "additional_people_attributions": [],
+        "to_address": "george@aukum.com",
+        "from_address": "sofia.miller@apartmentiq.io",
+        "to_name": "George Yandell",
+        "from_name": "Sofia Miller"
+      }
+    },
+    {
+      "id": 1583319851,
+      "type": "email",
+      "created_at": "2025-09-11T14:53:53.953949-04:00",
+      "subject": "Email: Automate your Google Profiles with AI",
+      "user_name": null,
+      "custom_fields": {
+        "email_message_id": "<CALeb3Pse-TGyFxh24qZNKcTZpDFD=kUALLtP7ZnszBmbQTHXBg@mail.gmail.com>",
+        "email_template_id": 180604298,
+        "email_template_title": "T1",
+        "cadence_id": 1742591,
+        "cadence_name": "VP's + 9/4/25 - Kylee B",
+        "cadence_external_identifier": "",
+        "direction": "outbound",
+        "step_id": 12457512,
+        "step_name": "T1",
+        "step_day": 1,
+        "step_type": "Email",
+        "metadata": {},
+        "headers": {},
+        "additional_people_attributions": [],
+        "to_address": "grayson.barnes@cortland.com",
+        "from_address": "kylee@hiremaven.ai",
+        "to_name": "Grayson Barnes",
+        "from_name": "Kylee Binder"
+      }
+    }
+  ]
+}

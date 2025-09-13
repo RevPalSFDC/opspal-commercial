@@ -1,0 +1,38 @@
+{
+  "id": "6c0882a0-c103-426f-9a9d-215da4388792",
+  "recording_id": "abba6c67-e185-44b0-9be1-51be3f6a29cb",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6c0882a0-c103-426f-9a9d-215da4388792",
+      "recording_id": "abba6c67-e185-44b0-9be1-51be3f6a29cb",
+      "end_time": 99.38,
+      "start_time": 0.33,
+      "recording_attendee_id": "7f2683b0-3f5c-4673-8969-e6fc3ecd1325",
+      "order_number": 0,
+      "text": "Thank you for calling them and T property management. If you know your party's extension number, you may dial it at any time. If I spell by name directory, please press nine. Otherwise please enter the first few letters of the name of the person you must speak, there were no matches. Please enter the first few letters of the name of the person you would like to speak to. There were no matches. Please enter the first few letters of the name of the person you would like to speak. There was one match Lokeesha Mark Ray to connect to this person, press pound. To cancel press star. We will now connect you Lokeesha Mark Ray can't take your call now at the tone, please record your message when you have finished recording, simply hang up or press pound for further options at the tone, please record your message when you have finished recording, simply hang up or press pound for further options"
+    },
+    {
+      "id": "6c0882a0-c103-426f-9a9d-215da4388792",
+      "recording_id": "abba6c67-e185-44b0-9be1-51be3f6a29cb",
+      "end_time": 119.82,
+      "start_time": 99.91,
+      "recording_attendee_id": "de80ad70-bd6c-4f36-b322-773fa77ffc82",
+      "order_number": 1,
+      "text": "Hey Lokeesha. This is Allison with rentable. Wanted to just give you a call, um, follow up our conversation. Um So I believe it was on Monday. I wanted to see if you're connected with your regional. I want to be able to honor that october pricing. Give me a call back when you get this message. two billion six hundred twenty-three million eight hundred thirty-four thousand five hundred and sixty-eight Thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "abba6c67-e185-44b0-9be1-51be3f6a29cb",
+      "title": "Call: Alyssa Tillich and Lakeisha Markray @ M & T Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

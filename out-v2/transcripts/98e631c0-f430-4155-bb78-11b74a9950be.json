@@ -1,0 +1,36 @@
+{
+  "id": "98e631c0-f430-4155-bb78-11b74a9950be",
+  "recording_id": "7c2ea79c-291e-4fdf-be3a-d631ec890324",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "98e631c0-f430-4155-bb78-11b74a9950be",
+      "recording_id": "7c2ea79c-291e-4fdf-be3a-d631ec890324",
+      "end_time": 352.37,
+      "start_time": 125.24,
+      "recording_attendee_id": "164ff591-3fd7-465b-8d23-a057e851b6a6",
+      "text": "hello, do I know. Gerardo. You driving or are you there? Gerardo. Gerardo are you there? Too hard to. Drago. Gerardo."
+    },
+    {
+      "id": "98e631c0-f430-4155-bb78-11b74a9950be",
+      "recording_id": "7c2ea79c-291e-4fdf-be3a-d631ec890324",
+      "end_time": 125.02,
+      "start_time": 125,
+      "recording_attendee_id": null,
+      "text": "Oh,"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7c2ea79c-291e-4fdf-be3a-d631ec890324",
+      "title": "Haas <> ABODO",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-02-07T17:45:15.222000Z",
+      "call_date": "2020-02-07"
+    }
+  }
+}

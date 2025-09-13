@@ -1,0 +1,56 @@
+{
+  "id": "354940c7-230e-4358-977b-da0d1a6e125c",
+  "recording_id": "0563243f-5e4b-496b-b867-6482219b2eb9",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2023-12-21T17:10:10.174Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "354940c7-230e-4358-977b-da0d1a6e125c",
+      "recording_id": "0563243f-5e4b-496b-b867-6482219b2eb9",
+      "end_time": 18.32,
+      "start_time": 17.22,
+      "recording_attendee_id": "d1d57aec-693e-4153-8ec8-8b8d51599e86",
+      "order_number": 0,
+      "text": "Let me just bring the volume down."
+    },
+    {
+      "id": "354940c7-230e-4358-977b-da0d1a6e125c",
+      "recording_id": "0563243f-5e4b-496b-b867-6482219b2eb9",
+      "end_time": 18.8,
+      "start_time": 18.48,
+      "recording_attendee_id": "d1d57aec-693e-4153-8ec8-8b8d51599e86",
+      "order_number": 1,
+      "text": "One more."
+    },
+    {
+      "id": "354940c7-230e-4358-977b-da0d1a6e125c",
+      "recording_id": "0563243f-5e4b-496b-b867-6482219b2eb9",
+      "end_time": 19.58,
+      "start_time": 18.95,
+      "recording_attendee_id": "d1d57aec-693e-4153-8ec8-8b8d51599e86",
+      "order_number": 2,
+      "text": "Yeah, there you go."
+    },
+    {
+      "id": "354940c7-230e-4358-977b-da0d1a6e125c",
+      "recording_id": "0563243f-5e4b-496b-b867-6482219b2eb9",
+      "end_time": 20.37,
+      "start_time": 19.74,
+      "recording_attendee_id": "d1d57aec-693e-4153-8ec8-8b8d51599e86",
+      "order_number": 3,
+      "text": "Thank you so much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "0563243f-5e4b-496b-b867-6482219b2eb9",
+      "title": "LivCor - Apartment IQ Connect",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2023-12-21T17:13:46Z",
+      "call_date": "2023-12-21"
+    }
+  }
+}

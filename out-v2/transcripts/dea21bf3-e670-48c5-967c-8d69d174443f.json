@@ -1,0 +1,44 @@
+{
+  "id": "dea21bf3-e670-48c5-967c-8d69d174443f",
+  "recording_id": "a3b63b4e-e114-4098-8f18-a87ffefa8a60",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "dea21bf3-e670-48c5-967c-8d69d174443f",
+      "recording_id": "a3b63b4e-e114-4098-8f18-a87ffefa8a60",
+      "end_time": 95.67,
+      "start_time": 92.28,
+      "recording_attendee_id": "ca4068fa-23a1-4d46-b43e-528dca963a99",
+      "text": "Was trying to speak to Joseph De Carlo?"
+    },
+    {
+      "id": "dea21bf3-e670-48c5-967c-8d69d174443f",
+      "recording_id": "a3b63b4e-e114-4098-8f18-a87ffefa8a60",
+      "end_time": 90.4,
+      "start_time": 2.04,
+      "recording_attendee_id": "a56cbaaf-084d-469c-8c10-652b2755687e",
+      "text": "Thank you for calling J D property management at this time, we anticipate no impact on our service level. Our employees will continue to perform their job duties, but have been educated on the symptoms of COVID-19. Please note that some of our employees are working remotely and on mobile devices to service our tenants needs while maintaining safe distance practices our office hours will remain in place through this current situation for the safety of staff and patrons walk and visits to the corporate office will be limited. We're currently open our regular hours are nine AM to five PM Monday through Friday, excluding holidays. If you know your party's three, digit extension you may dial it at any time to submit a maintenance request please press one for questions regarding management Services, please press two for our address and fax number please press three for a directory of personnel by first or last name please press four or if you need immediate assistance or have general questions, please press zero now to be connected to our operator, thank you. Good afternoon Jenny property management."
+    },
+    {
+      "id": "dea21bf3-e670-48c5-967c-8d69d174443f",
+      "recording_id": "a3b63b4e-e114-4098-8f18-a87ffefa8a60",
+      "end_time": 135.56,
+      "start_time": 97.83,
+      "recording_attendee_id": "a56cbaaf-084d-469c-8c10-652b2755687e",
+      "text": "One second. Thank you for your call a member of our staff. Hi, this is Joe I'm gonna be out of the office until November sixteenth. Please leave a message, thanks and have a good day. Please leave your message."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a3b63b4e-e114-4098-8f18-a87ffefa8a60",
+      "title": "Call: Dan Cellon and Kara Nomura",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

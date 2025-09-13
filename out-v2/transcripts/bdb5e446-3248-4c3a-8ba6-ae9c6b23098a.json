@@ -1,0 +1,28 @@
+{
+  "id": "bdb5e446-3248-4c3a-8ba6-ae9c6b23098a",
+  "recording_id": "f5a7986d-d5e1-4c72-9a1f-10811821c1f6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bdb5e446-3248-4c3a-8ba6-ae9c6b23098a",
+      "recording_id": "f5a7986d-d5e1-4c72-9a1f-10811821c1f6",
+      "end_time": 91.37,
+      "start_time": 1.7,
+      "recording_attendee_id": "e6a285bc-0b5e-44ed-9fc9-4ccaedd2de19",
+      "text": "Thank you for calling E C and S ring management Corp. If you know your party's extension please dial it now for a corporate directory press three now for property management press four for human resources and payroll press five for accounting press six for maintenance operations purchasing and Rover operations press seven for advertising and marketing press eight for information systems and technology press nine, if you require further assistance press zero and an operator will assist you thank you for calling E N S ring management Corp. Thank you for calling E N S ring management Corp. If you know your party's extension please dial it now for a corporate directory press three now for property manager. Please spell the name of the person's last name first press seven for cue press one for. Extension seven one six two to cancel and enter a different name press Star. Press one for. Please hold while I transfer your call."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f5a7986d-d5e1-4c72-9a1f-10811821c1f6",
+      "title": "Call: Dan Cellon and Cassie York @ E & S Ring Management Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

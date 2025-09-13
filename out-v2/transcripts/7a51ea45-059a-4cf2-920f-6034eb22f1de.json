@@ -1,0 +1,28 @@
+{
+  "id": "7a51ea45-059a-4cf2-920f-6034eb22f1de",
+  "recording_id": "58be5dd1-2c79-4f33-9833-f8c9afd08b4d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7a51ea45-059a-4cf2-920f-6034eb22f1de",
+      "recording_id": "58be5dd1-2c79-4f33-9833-f8c9afd08b4d",
+      "end_time": 167.52,
+      "start_time": 0.47,
+      "recording_attendee_id": "c0adde04-653c-4fa7-a808-e97a99633a5a",
+      "text": "Thank you for calling Addie real estate for calls regarding New York states emergency rental assistance program for residence with covered related rental rears, please press one to continue in Spanish press nine for calls regarding maintenance press two for calls regarding leasing press three for calls regarding accounting press four for calls regarding legal press five for all other inquiries press zero to repeat. You have reached the voicemail system. Please leave a mess."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "58be5dd1-2c79-4f33-9833-f8c9afd08b4d",
+      "title": "Call: Alex Wodarczyk and Maggie McCormick @ A&E Real Estate",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

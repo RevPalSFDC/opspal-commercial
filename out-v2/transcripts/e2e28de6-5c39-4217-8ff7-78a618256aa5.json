@@ -1,0 +1,44 @@
+{
+  "id": "e2e28de6-5c39-4217-8ff7-78a618256aa5",
+  "recording_id": "03e6eeff-62da-4a57-84ed-a8865a05b835",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e2e28de6-5c39-4217-8ff7-78a618256aa5",
+      "recording_id": "03e6eeff-62da-4a57-84ed-a8865a05b835",
+      "end_time": 28.89,
+      "start_time": 18.2,
+      "recording_attendee_id": "c296e157-491c-487c-90f9-69020e14d6d4",
+      "text": "Okay one. Second."
+    },
+    {
+      "id": "e2e28de6-5c39-4217-8ff7-78a618256aa5",
+      "recording_id": "03e6eeff-62da-4a57-84ed-a8865a05b835",
+      "end_time": 0.98,
+      "start_time": 0.05,
+      "recording_attendee_id": "c296e157-491c-487c-90f9-69020e14d6d4",
+      "text": "Have one of my friends?"
+    },
+    {
+      "id": "e2e28de6-5c39-4217-8ff7-78a618256aa5",
+      "recording_id": "03e6eeff-62da-4a57-84ed-a8865a05b835",
+      "end_time": 15.45,
+      "start_time": 3.06,
+      "recording_attendee_id": "ccb583ee-f2ce-44dc-9007-c63dffd6e6b0",
+      "text": "Hey good morning trying to get in touch with the pool. Yeah, this is Dan from rentable."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "03e6eeff-62da-4a57-84ed-a8865a05b835",
+      "title": "Call: Dan Cellon and Maria Molina",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

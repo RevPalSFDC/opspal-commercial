@@ -1,0 +1,28 @@
+{
+  "id": "55de4888-12cf-40ec-970c-05eec90d648c",
+  "recording_id": "96c5cb3b-539c-44f3-ac2a-43db39ff1a9c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "55de4888-12cf-40ec-970c-05eec90d648c",
+      "recording_id": "96c5cb3b-539c-44f3-ac2a-43db39ff1a9c",
+      "end_time": 340.26,
+      "start_time": 258.25,
+      "recording_attendee_id": "dc5e9167-79f8-4123-928f-ac077d90c9ec",
+      "text": "Hi is Mira available. Hi, Maria. This is Alex from rentable. How you doing today? I'm doing good I just calling because of are scheduled two o'clock call here demo, um, I was just wondering if you'd be I can expect you to help on or if now is not a good time, we could reschedule or. Sure, what later today or it is like Monday work better for you. Tuesday, depending on the time. Tuesday, twelve thirty, I am open. So um, I'll just fix the invite and that we already have established and yeah, it just want to. Yeah. I'll just I'll have to ship something around but that's that's all good. I can do one. Alright, yep, I'll just fix the invite and I'll talk to you on Tuesday. Alright, thanks man have a good one."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "96c5cb3b-539c-44f3-ac2a-43db39ff1a9c",
+      "title": "Rentable + Meera @ COCM Online Demo",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-05-21T20:40:34.624000Z",
+      "call_date": "2021-05-21"
+    }
+  }
+}

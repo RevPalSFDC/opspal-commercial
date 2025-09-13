@@ -1,0 +1,56 @@
+{
+  "id": "0a5485c1-ee97-4fef-b4ad-39e171b35424",
+  "recording_id": "cbf50589-67dc-4885-a345-557181808ffc",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0a5485c1-ee97-4fef-b4ad-39e171b35424",
+      "recording_id": "cbf50589-67dc-4885-a345-557181808ffc",
+      "end_time": 136.22,
+      "start_time": 1.22,
+      "recording_attendee_id": "0a29dc02-bed8-4577-9f46-072de4e7ace1",
+      "order_number": 0,
+      "text": "Thank you for calling FBI management. If you know your party's extension please press one for the company directory press pound for the employment line press five or you may press zero now for further assistance. Thanks calling. I've had plenty time. For holding how my direct your call."
+    },
+    {
+      "id": "0a5485c1-ee97-4fef-b4ad-39e171b35424",
+      "recording_id": "cbf50589-67dc-4885-a345-557181808ffc",
+      "end_time": 138.47,
+      "start_time": 137.72,
+      "recording_attendee_id": "0e5fc80d-4020-4e2c-9217-7a3403bda834",
+      "order_number": 1,
+      "text": "Calling for Cherry."
+    },
+    {
+      "id": "0a5485c1-ee97-4fef-b4ad-39e171b35424",
+      "recording_id": "cbf50589-67dc-4885-a345-557181808ffc",
+      "end_time": 156.83,
+      "start_time": 141.6,
+      "recording_attendee_id": "0a29dc02-bed8-4577-9f46-072de4e7ace1",
+      "order_number": 2,
+      "text": "Alright, just a moment. Your call has been answered by a via IP office extension for."
+    },
+    {
+      "id": "0a5485c1-ee97-4fef-b4ad-39e171b35424",
+      "recording_id": "cbf50589-67dc-4885-a345-557181808ffc",
+      "end_time": 152.37,
+      "start_time": 152.07,
+      "recording_attendee_id": "0e5fc80d-4020-4e2c-9217-7a3403bda834",
+      "order_number": 3,
+      "text": "Your."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "cbf50589-67dc-4885-a345-557181808ffc",
+      "title": "Call: Mitch  Scarski  and Carrie Briggs @ FPI Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

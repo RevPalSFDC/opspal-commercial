@@ -1,0 +1,52 @@
+{
+  "id": "01d0cf31-96a3-407a-86eb-e0be43fdfd7b",
+  "recording_id": "c26be881-7b43-4b47-bd7f-24a615faa08a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:51:59.775Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "01d0cf31-96a3-407a-86eb-e0be43fdfd7b",
+      "recording_id": "c26be881-7b43-4b47-bd7f-24a615faa08a",
+      "end_time": "37.46",
+      "start_time": "33.17",
+      "recording_attendee_id": "17da0193-1286-405f-8b72-1abbda53495c",
+      "text": "Honestly, either one usually Sam's just easier."
+    },
+    {
+      "id": "01d0cf31-96a3-407a-86eb-e0be43fdfd7b",
+      "recording_id": "c26be881-7b43-4b47-bd7f-24a615faa08a",
+      "end_time": "218.25",
+      "start_time": "37.47",
+      "recording_attendee_id": "7368e0a0-6246-4033-b693-ca886bdbecd1",
+      "text": "Got it. I wasn't sure my cousin is getting married to someone named Samantha. He called her Samantha, but she goes by Sammy, but I went to high school with her. She was called Sam. So there's just so many different variations of your name. So, I always like to ask, can you hear me? Oh, I think I lost you there. Mm hmm, mm hmm. Can you hear me now? Mhm says you're muted, but I don't know if you can hear me right?"
+    },
+    {
+      "id": "01d0cf31-96a3-407a-86eb-e0be43fdfd7b",
+      "recording_id": "c26be881-7b43-4b47-bd7f-24a615faa08a",
+      "end_time": "33.16",
+      "start_time": "7.64",
+      "recording_attendee_id": "7368e0a0-6246-4033-b693-ca886bdbecd1",
+      "text": "Good morning Samantha. Can you hear me? Um, just barely. Can you hear me? My microphone in? Oh, I hear you just now. That's better. How are you? Thanks, How are you? I'm good. Do you go by Sam or Samantha?"
+    },
+    {
+      "id": "01d0cf31-96a3-407a-86eb-e0be43fdfd7b",
+      "recording_id": "c26be881-7b43-4b47-bd7f-24a615faa08a",
+      "end_time": "2.16",
+      "start_time": "0.00",
+      "recording_attendee_id": null,
+      "text": "taking and coaching purposes."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c26be881-7b43-4b47-bd7f-24a615faa08a",
+      "title": "Rentable - Metro West Housing Solutions",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2022-01-04T17:42:24.647000Z",
+      "call_date": "2022-01-04"
+    }
+  }
+}

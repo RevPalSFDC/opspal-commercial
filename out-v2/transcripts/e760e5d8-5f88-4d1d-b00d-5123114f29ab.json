@@ -1,0 +1,44 @@
+{
+  "id": "e760e5d8-5f88-4d1d-b00d-5123114f29ab",
+  "recording_id": "59d59c10-ff41-4461-a7e1-3ef6382965da",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e760e5d8-5f88-4d1d-b00d-5123114f29ab",
+      "recording_id": "59d59c10-ff41-4461-a7e1-3ef6382965da",
+      "end_time": 29.99,
+      "start_time": 25.95,
+      "recording_attendee_id": "7b0d1db1-7f96-45e3-bdac-f68566fb84f3",
+      "text": "Fred sure bread sure."
+    },
+    {
+      "id": "e760e5d8-5f88-4d1d-b00d-5123114f29ab",
+      "recording_id": "59d59c10-ff41-4461-a7e1-3ef6382965da",
+      "end_time": 93.2,
+      "start_time": 0.17,
+      "recording_attendee_id": "4ce5f675-0548-442d-b428-2af131295d39",
+      "text": "Thank you for calling Russ property management company, but I spawn your old profile up on the ceiling in the middle single, if you know your party's extension you may enter it at any time for a company directory press the pound key for maintenance press one for available rentals press two to repeat this menu press nine. We have not received a valid responds. Please? Try again. Thank you for calling rocks property management company, but I spend your opening a feeling a little single. If you know your party's extension you may enter it at any time for a company directory press the pound key for Marina press for Vicky resident relation three zero. One Josh three zero to Cynthia three zero three zero three zero for Fred three zero five nine eight three zero six Star three zero seven Catherine three zero eight Tanya three one zero Victoria Butler three, one one Victoria have maintenance department three one two Rosemary three one three Justin three, one four R E three, one six AZ leasing department four two zero."
+    },
+    {
+      "id": "e760e5d8-5f88-4d1d-b00d-5123114f29ab",
+      "recording_id": "59d59c10-ff41-4461-a7e1-3ef6382965da",
+      "end_time": 143.87,
+      "start_time": 96.8,
+      "recording_attendee_id": "4ce5f675-0548-442d-b428-2af131295d39",
+      "text": "We have not received a valid responds. Please? Try again Vicky resident animation three zero. One just three zero to Cynthia three zero three V three, you know for Frank three zero five need to me. I'm sorry, I'm on the mail. Please leave a message. I'll call you back as soon as I can thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "59d59c10-ff41-4461-a7e1-3ef6382965da",
+      "title": "Call: Dan Cellon and Fred Schor @ Rohcs Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

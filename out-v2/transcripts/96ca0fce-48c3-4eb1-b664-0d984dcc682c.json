@@ -1,0 +1,36 @@
+{
+  "id": "96ca0fce-48c3-4eb1-b664-0d984dcc682c",
+  "recording_id": "8e51cd4f-86e1-424a-955c-b92d6d8e7f5b",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "96ca0fce-48c3-4eb1-b664-0d984dcc682c",
+      "recording_id": "8e51cd4f-86e1-424a-955c-b92d6d8e7f5b",
+      "end_time": 1286.14,
+      "start_time": 1284.88,
+      "recording_attendee_id": null,
+      "text": "I get go Studio."
+    },
+    {
+      "id": "96ca0fce-48c3-4eb1-b664-0d984dcc682c",
+      "recording_id": "8e51cd4f-86e1-424a-955c-b92d6d8e7f5b",
+      "end_time": 1284.88,
+      "start_time": 1275.41,
+      "recording_attendee_id": "8ee12e2a-10f2-4f08-9af1-4de2105e0a1b",
+      "text": "Uh-huh. Yeah,"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8e51cd4f-86e1-424a-955c-b92d6d8e7f5b",
+      "title": "ABODO Demo - Avenue5",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-10-16T17:40:12.941000Z",
+      "call_date": "2020-10-16"
+    }
+  }
+}

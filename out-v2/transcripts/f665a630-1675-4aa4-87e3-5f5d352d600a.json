@@ -1,0 +1,60 @@
+{
+  "id": "f665a630-1675-4aa4-87e3-5f5d352d600a",
+  "recording_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f665a630-1675-4aa4-87e3-5f5d352d600a",
+      "recording_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+      "end_time": 1.52,
+      "start_time": 0.23,
+      "recording_attendee_id": "99e059e3-c84f-4fc6-8c6b-1b7e9b01f337",
+      "text": "Good morning John from your company."
+    },
+    {
+      "id": "f665a630-1675-4aa4-87e3-5f5d352d600a",
+      "recording_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+      "end_time": 123.68,
+      "start_time": 115.46,
+      "recording_attendee_id": "10db780c-b18b-427b-8cd4-443a0e603a9e",
+      "text": "Angeles. He's he's an expert on everything and that market. So please. Let me know keep an eye on your inbox and I hope you have a great rest of your day."
+    },
+    {
+      "id": "f665a630-1675-4aa4-87e3-5f5d352d600a",
+      "recording_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+      "end_time": 59.52,
+      "start_time": 7.92,
+      "recording_attendee_id": "99e059e3-c84f-4fc6-8c6b-1b7e9b01f337",
+      "text": "Okay, one moment please. Hello, and thanks for calling you've reached Robert Crosby with the junk food company. You can leave me a message here for for faster response, please feel free to email me at our Crosby at J S C O dot net once again that's bar Crosby N J S C O dot net thank you for calling and have a great day."
+    },
+    {
+      "id": "f665a630-1675-4aa4-87e3-5f5d352d600a",
+      "recording_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+      "end_time": 6.96,
+      "start_time": 3.9,
+      "recording_attendee_id": "10db780c-b18b-427b-8cd4-443a0e603a9e",
+      "text": "Hey there good morning. I was trying to speak with Robert Crosby."
+    },
+    {
+      "id": "f665a630-1675-4aa4-87e3-5f5d352d600a",
+      "recording_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+      "end_time": 115.46,
+      "start_time": 64.43,
+      "recording_attendee_id": "10db780c-b18b-427b-8cd4-443a0e603a9e",
+      "text": "Hey, Robert my name is Dan. I'm with rentable. I was reaching out. I notice if you can pull, sorry Beacon point had a few vacancies um and just in general was hoping to probably about fifteen or twenty minutes to kind of I guess to learn how you guys typically send the listings out where your marketing where you advertise and how you typically get renters and the door go over our integration to Facebook marketplace and and how we're able to use different dialects is including our own to reach different letters for you and just help the occupancy. So really hoping to see if it's a good fit to maybe consider partnering up in twenty twenty. One so I'll shoot you a follow, up email, but like I said just looking to chat with you to see if it would even be a good fit before we start sending out proposals and stuff. We can connect you with Alex our local wrap in Los"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "66d3668c-bf51-4bf9-aab2-ed446f649ef1",
+      "title": "Call: Dan Cellon and Robert Crosby @ 1585 Studios",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

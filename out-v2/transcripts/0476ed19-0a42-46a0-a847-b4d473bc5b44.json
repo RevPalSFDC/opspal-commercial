@@ -1,0 +1,83 @@
+{
+  "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+  "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 82.39,
+      "start_time": 1.56,
+      "recording_attendee_id": "d809a0c5-afa4-459b-ad92-fec6343c2a93",
+      "order_number": 0,
+      "text": "Thank you for calling Westwood residential company. If you know your party's extension you may enter it now to contact the property management supervisor, please press six vendors press seven for accounts payable or construction and development press eight for payroll and human resources press nine for company directory please press pound. Oh gee to if this is correct press pound for the previous name in the directory press one to here additional information press two for mailbox number. One, one, seven extension number. One one seven zero G to if this is correct press pound for the previous name in the directory press one to here additional information press two to hear the next directory name press three to spell a new name press four to spell the last name press five to exit the directory press Star. Zero G to if this is correct press pound for the."
+    },
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 100.09,
+      "start_time": 93.01,
+      "recording_attendee_id": "0542650c-981e-4497-ad28-f88f9fff6e3a",
+      "order_number": 1,
+      "text": "Hey, I'm forgive me if I'm in the wrong place. I couldn't figure out the directory. I was trying to get in touch with Jennifer Stone."
+    },
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 110.02,
+      "start_time": 102.07,
+      "recording_attendee_id": "d809a0c5-afa4-459b-ad92-fec6343c2a93",
+      "order_number": 2,
+      "text": "Gotcha, um, I actually don't have the director numbers but I can get you her extension."
+    },
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 111.65,
+      "start_time": 110.75,
+      "recording_attendee_id": "0542650c-981e-4497-ad28-f88f9fff6e3a",
+      "order_number": 3,
+      "text": "Yeah that'd be great."
+    },
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 117.21,
+      "start_time": 112.17,
+      "recording_attendee_id": "d809a0c5-afa4-459b-ad92-fec6343c2a93",
+      "order_number": 4,
+      "text": "Gotcha, what's gonna end up being four twenty on that number."
+    },
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 119.07,
+      "start_time": 118.02,
+      "recording_attendee_id": "0542650c-981e-4497-ad28-f88f9fff6e3a",
+      "order_number": 5,
+      "text": "Gotcha, thank you."
+    },
+    {
+      "id": "0476ed19-0a42-46a0-a847-b4d473bc5b44",
+      "recording_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "end_time": 119.97,
+      "start_time": 119.43,
+      "recording_attendee_id": "d809a0c5-afa4-459b-ad92-fec6343c2a93",
+      "order_number": 6,
+      "text": "Getting it from."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a63b6c4e-1c95-4d43-8cd2-8aae3a605b32",
+      "title": "Call: Dan Cellon and Morgan Clevenger @ Westwood Residential",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

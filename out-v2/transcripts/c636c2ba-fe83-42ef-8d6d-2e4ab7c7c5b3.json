@@ -1,0 +1,52 @@
+{
+  "id": "c636c2ba-fe83-42ef-8d6d-2e4ab7c7c5b3",
+  "recording_id": "88ec0fef-438c-4deb-a481-57fa4b3ecced",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c636c2ba-fe83-42ef-8d6d-2e4ab7c7c5b3",
+      "recording_id": "88ec0fef-438c-4deb-a481-57fa4b3ecced",
+      "end_time": 124.19,
+      "start_time": 62.63,
+      "recording_attendee_id": "90e1016a-da25-4cc2-b42c-3bd540eb6ad5",
+      "text": "Hi, Lisa, my name is Alex with our checks and with a company called rentable shot you over a few emails as well, but was hoping to maybe catch up with you on the phone. Um, you know, we're we're talking and internet listing sites growing like crazy out that way and just wanted to share a couple of things with you you know see if you had ten fifteen minutes maybe sometime next week. I'll we work with a handful a big players out that way and New York Lisa management Rose Associates and a few others Hampshire Hampshire asset out of Brooklyn area as well just thinking of some of the top of my head, but certainly would love to see if Silverstein properties would be a good fit, um would like to share some info with you and see if we can maybe see a partnership in the future. If you could give me a call back most convenient number for me is my cell that's gonna be two six nine three one three one five one eight again. This is Alex with rentable look forward to hearing back from you um and hopefully we can touch base soon thanks Lisa bye."
+    },
+    {
+      "id": "c636c2ba-fe83-42ef-8d6d-2e4ab7c7c5b3",
+      "recording_id": "88ec0fef-438c-4deb-a481-57fa4b3ecced",
+      "end_time": 16.48,
+      "start_time": 14.32,
+      "recording_attendee_id": "90e1016a-da25-4cc2-b42c-3bd540eb6ad5",
+      "text": "Hi, there is Lisa Silverstein available."
+    },
+    {
+      "id": "c636c2ba-fe83-42ef-8d6d-2e4ab7c7c5b3",
+      "recording_id": "88ec0fef-438c-4deb-a481-57fa4b3ecced",
+      "end_time": 13.2,
+      "start_time": 11.52,
+      "recording_attendee_id": "6ec361af-5ded-4e33-b73f-cf5645970826",
+      "text": "Good morning silver same property."
+    },
+    {
+      "id": "c636c2ba-fe83-42ef-8d6d-2e4ab7c7c5b3",
+      "recording_id": "88ec0fef-438c-4deb-a481-57fa4b3ecced",
+      "end_time": 59.99,
+      "start_time": 17.37,
+      "recording_attendee_id": "6ec361af-5ded-4e33-b73f-cf5645970826",
+      "text": "One moment please. Sorry, Lisa hammerstein is not available record your message at the tone. When you are finished hang up or press pound for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "88ec0fef-438c-4deb-a481-57fa4b3ecced",
+      "title": "Call: Alex Wodarczyk and Lisa Silverstein @ Silverstein Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

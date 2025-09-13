@@ -1,0 +1,61 @@
+{
+  "recording_id": "15d48bf6-bc7b-4ba6-b1d4-9cf1462a4acc",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "sentences": [
+    {
+      "start_time": 386.26,
+      "end_time": 386.59,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Hmm",
+          "start_time": 386.26,
+          "end_time": 386.59,
+          "recording_attendee_id": "bd122fdd-6a92-4461-a82a-7b3788fda3e6"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "start_time": 386.59,
+          "end_time": 386.92,
+          "recording_attendee_id": "bd122fdd-6a92-4461-a82a-7b3788fda3e6"
+        }
+      ],
+      "text": "Hmm.",
+      "recording_attendee_id": "bd122fdd-6a92-4461-a82a-7b3788fda3e6"
+    },
+    {
+      "start_time": 394.74,
+      "end_time": 395.07,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "hmm",
+          "start_time": 394.74,
+          "end_time": 395.07,
+          "recording_attendee_id": "bd122fdd-6a92-4461-a82a-7b3788fda3e6"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "start_time": 395.07,
+          "end_time": 395.4,
+          "recording_attendee_id": "bd122fdd-6a92-4461-a82a-7b3788fda3e6"
+        }
+      ],
+      "text": "hmm.",
+      "recording_attendee_id": "bd122fdd-6a92-4461-a82a-7b3788fda3e6"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "15d48bf6-bc7b-4ba6-b1d4-9cf1462a4acc",
+      "title": null,
+      "platform": null,
+      "media_type": null,
+      "started_recording_at": null,
+      "call_date": null
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "36f43edd-d34f-43f9-b84d-7b83e3122769",
+  "recording_id": "f5b457de-7fee-4af0-823a-2f037a81f747",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "36f43edd-d34f-43f9-b84d-7b83e3122769",
+      "recording_id": "f5b457de-7fee-4af0-823a-2f037a81f747",
+      "end_time": 141.26,
+      "start_time": 111.35,
+      "recording_attendee_id": "97803364-f84f-46ef-b164-c027754c2300",
+      "text": "Hi, Casey. Good morning. This is Dena with rentable. I hope you're having a great week. I want to CVS fifteen minutes to connect real quick we spoke. I think it was like June tenth. I just want to touch base see where I could help you get this conversations over the next steps. I'm really interested in maybe getting a conversation started with the with the marketing team or I don't know if you've already got the feedback from them for me. Um anyways Dieter with rentable would love to connect nine five six is the area code four seven two four two eight zero"
+    },
+    {
+      "id": "36f43edd-d34f-43f9-b84d-7b83e3122769",
+      "recording_id": "f5b457de-7fee-4af0-823a-2f037a81f747",
+      "end_time": 109.49,
+      "start_time": 2.45,
+      "recording_attendee_id": "149a0843-d69d-4b04-b49f-9223e843b1b7",
+      "text": "Thank you for calling the core spaces management office in Austin, Texas. If you know your party's extension please dial it now for a dial by name directory, please press one to reach the office manager please press two. I am sorry that is not a valid extension. Thank you for calling the core spaces management office in Austin, Texas. If you know your party's extension please dial it now for a dial by name directory, please press one to reach her off. Please hold while I try that extension. Welcome to the directory please enter the first three letters of your party's name. K C Bert. If this is the person you are looking for press one otherwise. You have reached the voicemail box of K C Bert. Please leave your message after the tone when done hang up or press the pound key."
+    },
+    {
+      "id": "36f43edd-d34f-43f9-b84d-7b83e3122769",
+      "recording_id": "f5b457de-7fee-4af0-823a-2f037a81f747",
+      "end_time": 145.31,
+      "start_time": 141.38,
+      "recording_attendee_id": "97803364-f84f-46ef-b164-c027754c2300",
+      "text": "nine five six four seven two four two zero. Thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f5b457de-7fee-4af0-823a-2f037a81f747",
+      "title": "Call: Dither  Castro  and Casie Burt @ Core Spaces",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

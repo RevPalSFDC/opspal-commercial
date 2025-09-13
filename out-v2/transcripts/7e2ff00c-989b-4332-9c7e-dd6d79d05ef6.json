@@ -1,0 +1,84 @@
+{
+  "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+  "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 74.17,
+      "start_time": 2.16,
+      "recording_attendee_id": "ec5ea291-3591-40ba-a043-cada98c5d8c0",
+      "text": "Thank you for calling Ashcroft investment company. If you know your party's extension you may dial it at any time. Please note that in light of recent declarations from state and local government. In regards to COVID-19 our office will be closed to visitors until further notice please be assured that ashcraft staff will be available via phone and email and our office will remain fully operational during this time for maintenance emergencies after hours or on weekends press five now for immediate assistance dial extension one hundred now please listen carefully for the name and extension number of the person you would like to reach for Jim ashcraft, dial extension one, zero. One Alice ashcraft bodell one zero two can cause Bert one zero three Sarah Quincy dial one zero for Lisa Cooper. This is Sara."
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 131.26,
+      "start_time": 119.59,
+      "recording_attendee_id": "55a90f67-5511-44c2-8807-9bdaea7eecf6",
+      "text": "Okay sounds good. I will I'll set a reminder, I guess will give you a call in a couple of months and if you need anything in the meantime, don't hesitate to ask. I'll send you a follow up as well."
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 114.03,
+      "start_time": 104.67,
+      "recording_attendee_id": "ec5ea291-3591-40ba-a043-cada98c5d8c0",
+      "text": "I would be happy to what I have my to do this under control. I I'm I'm catching up on a lot of big big deadline. So"
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 139.75,
+      "start_time": 134.14,
+      "recording_attendee_id": "55a90f67-5511-44c2-8807-9bdaea7eecf6",
+      "text": "Yeah have a good couple of months. Yeah right."
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 103.72,
+      "start_time": 75.91,
+      "recording_attendee_id": "55a90f67-5511-44c2-8807-9bdaea7eecf6",
+      "text": "Hey Sarah. Hey my name's Dan. I'm I'm with rentable um, I think we reached out a couple of times, but my coworker Derek sent over um. A couple of emails to you and he asked me to reach out to you we were hoping to set up a call with you to go over, I guess marketing strategy for you at your properties and really the demo our Facebook marketplace integration see if it makes any sense to consider potentially partnering up in twenty twenty one."
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 133.32,
+      "start_time": 132.21,
+      "recording_attendee_id": "ec5ea291-3591-40ba-a043-cada98c5d8c0",
+      "text": "Thank you very much."
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 118.32,
+      "start_time": 114.66,
+      "recording_attendee_id": "ec5ea291-3591-40ba-a043-cada98c5d8c0",
+      "text": "you're welcome to reach out to me in two months would be a good amount of time."
+    },
+    {
+      "id": "7e2ff00c-989b-4332-9c7e-dd6d79d05ef6",
+      "recording_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "end_time": 138.24,
+      "start_time": 137.25,
+      "recording_attendee_id": "ec5ea291-3591-40ba-a043-cada98c5d8c0",
+      "text": "You too thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "48cdca29-a9ec-4618-9e2e-6615fc46b6b4",
+      "title": "Call: Dan Cellon and Sarah Quincy @ Ashcraft Investment Company, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

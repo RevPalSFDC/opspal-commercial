@@ -156,14 +156,14 @@ check_project "Agents" ".." || true
 check_tools "Agents" ".." || true
 echo ""
 
-# Check ClaudeSFDC
-check_project "ClaudeSFDC" "../ClaudeSFDC" || true
-check_tools "ClaudeSFDC" "../ClaudeSFDC" || true
+# Check platforms/SFDC
+check_project "platforms/SFDC" "../platforms/SFDC" || true
+check_tools "platforms/SFDC" "../platforms/SFDC" || true
 echo ""
 
-# Check ClaudeHubSpot  
-check_project "ClaudeHubSpot" "../ClaudeHubSpot" || true
-check_tools "ClaudeHubSpot" "../ClaudeHubSpot" || true
+# Check platforms/HS  
+check_project "platforms/HS" "../platforms/HS" || true
+check_tools "platforms/HS" "../platforms/HS" || true
 echo ""
 
 # Summary

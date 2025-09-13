@@ -82,6 +82,10 @@ reports/*.csv
 reports/*.xlsx
 reports/patches/
 
+# Config directory (contains sensitive configuration)
+config/
+*/config/
+
 # Archive sensitive data
 Archives/
 archives/

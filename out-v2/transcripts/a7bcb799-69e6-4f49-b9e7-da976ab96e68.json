@@ -1,0 +1,29 @@
+{
+  "id": "a7bcb799-69e6-4f49-b9e7-da976ab96e68",
+  "recording_id": "c4d5762e-a2c4-4555-b428-4387306531ea",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-AU",
+  "created_at": "2024-03-27T14:56:00.618Z",
+  "updated_at": "2024-03-27T14:57:51.414Z",
+  "sentences": [
+    {
+      "id": "a7bcb799-69e6-4f49-b9e7-da976ab96e68",
+      "recording_id": "c4d5762e-a2c4-4555-b428-4387306531ea",
+      "end_time": 6.3,
+      "start_time": 6.27,
+      "recording_attendee_id": "49df3722-c078-48cc-8a54-c9a5667f2404",
+      "order_number": 0,
+      "text": "OK."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c4d5762e-a2c4-4555-b428-4387306531ea",
+      "title": "Steward + Helm // Google Business Pro",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-03-27T14:56:00Z",
+      "call_date": "2024-03-27"
+    }
+  }
+}

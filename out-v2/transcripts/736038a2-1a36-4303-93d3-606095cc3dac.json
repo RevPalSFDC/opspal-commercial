@@ -1,0 +1,68 @@
+{
+  "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+  "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+      "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "end_time": 63,
+      "start_time": 61.05,
+      "recording_attendee_id": "809beda4-08e1-4f9f-897f-435a1c8f773f",
+      "text": "Hey, it's trying to get a hold of Leslie."
+    },
+    {
+      "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+      "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "end_time": 80.44,
+      "start_time": 80.08,
+      "recording_attendee_id": "809beda4-08e1-4f9f-897f-435a1c8f773f",
+      "text": "Thanks."
+    },
+    {
+      "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+      "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "end_time": 75.69,
+      "start_time": 72.3,
+      "recording_attendee_id": "809beda4-08e1-4f9f-897f-435a1c8f773f",
+      "text": "I'm sorry you just cut out there. So I was trying to get a hold of Leslie."
+    },
+    {
+      "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+      "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "end_time": 66.29,
+      "start_time": 65.3,
+      "recording_attendee_id": "ddc2c8f5-ad9c-4a60-a7a0-2cb5b6744c8a",
+      "text": "Leslie sooner."
+    },
+    {
+      "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+      "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "end_time": 78.42,
+      "start_time": 76.95,
+      "recording_attendee_id": "ddc2c8f5-ad9c-4a60-a7a0-2cb5b6744c8a",
+      "text": "Leslie one second please."
+    },
+    {
+      "id": "736038a2-1a36-4303-93d3-606095cc3dac",
+      "recording_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "end_time": 58.77,
+      "start_time": 0,
+      "recording_attendee_id": "ddc2c8f5-ad9c-4a60-a7a0-2cb5b6744c8a",
+      "text": "Hello, and thank you for calling Golden Ridge test you call is important to us. So please listen to our new menu options. If you know the name of the person you are trying to reach you can say it at any time for resident relations press or say one for I T help desk press or say two for affordable housing info line, press or say three to leave a message press four for the operator, press or say zero to hear this message again press the star key let me transfer you to the operator. Good afternoon, thanks for calling holberg check."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e810c548-b00a-4e8b-80b3-f620f8a55161",
+      "title": "Call: Dan Cellon and Mario Rosado @ Goldrich Kest",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

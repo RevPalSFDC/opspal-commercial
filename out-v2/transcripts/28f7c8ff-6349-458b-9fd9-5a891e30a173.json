@@ -1,0 +1,76 @@
+{
+  "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+  "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 104.37,
+      "start_time": 84.98,
+      "recording_attendee_id": "98f84065-ad93-4011-ae77-b6832fef4be1",
+      "text": "Yeah that'd be awesome. Just a moment write this down here. Alright, what was the name and email."
+    },
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 124.84,
+      "start_time": 122.77,
+      "recording_attendee_id": "98f84065-ad93-4011-ae77-b6832fef4be1",
+      "text": "Alright, I will get Megan an email."
+    },
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 77.05,
+      "start_time": 67.18,
+      "recording_attendee_id": "98f84065-ad93-4011-ae77-b6832fef4be1",
+      "text": "Hi, I was calling to look to speak with somebody about your marketing and specifically on Facebook marketplace. I come across to your listings and I'm just trying to find a marketing contact."
+    },
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 118.86,
+      "start_time": 105.02,
+      "recording_attendee_id": "3f59cce3-a74c-423c-a885-37573b17bf24",
+      "text": "It's Megan M E G a N at North Terrace. P as in Peter M as in Mary dot. Com."
+    },
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 65.94,
+      "start_time": 0.38,
+      "recording_attendee_id": "3f59cce3-a74c-423c-a885-37573b17bf24",
+      "text": "Thank you for calling North Terrace property management. We are currently experiencing unusually high call volume and our team is working remotely do to COVID-19 please hold on the line and the representative will be with you shortly. You may also press three to leave a message in our general mailbox and we will return your call as soon as possible. North Terrace property management. This is only see a speaking how can I help you hi."
+    },
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 128.16,
+      "start_time": 126.9,
+      "recording_attendee_id": "3f59cce3-a74c-423c-a885-37573b17bf24",
+      "text": "Alright, thank you have a great day."
+    },
+    {
+      "id": "28f7c8ff-6349-458b-9fd9-5a891e30a173",
+      "recording_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "end_time": 83.86,
+      "start_time": 79.93,
+      "recording_attendee_id": "3f59cce3-a74c-423c-a885-37573b17bf24",
+      "text": "Okay, um, she's not at this location. She works remotely. I can give you her email."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ce18dfce-b956-47da-bdd3-619ad959e74c",
+      "title": "Call: Austin Schleisner and +18165617368",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+  "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 1.97,
+      "start_time": 0.56,
+      "recording_attendee_id": "238b8705-1c69-484b-a38c-a5f37cbea9e2",
+      "order_number": 0,
+      "text": "Good afternoon, I'll peasy."
+    },
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 4.37,
+      "start_time": 2.84,
+      "recording_attendee_id": "7ed0d441-40ad-409a-a981-058be2eae220",
+      "order_number": 1,
+      "text": "Hi is Michael Becker available."
+    },
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 6.35,
+      "start_time": 5.39,
+      "recording_attendee_id": "238b8705-1c69-484b-a38c-a5f37cbea9e2",
+      "order_number": 2,
+      "text": "May I ask who's calling."
+    },
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 10.66,
+      "start_time": 7.03,
+      "recording_attendee_id": "7ed0d441-40ad-409a-a981-058be2eae220",
+      "order_number": 3,
+      "text": "Yeah, my name is Alex and I'm with a company called rentable."
+    },
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 71.11,
+      "start_time": 11.8,
+      "recording_attendee_id": "238b8705-1c69-484b-a38c-a5f37cbea9e2",
+      "order_number": 4,
+      "text": "Hold on please let me see if he's available. Your call has been answered by Avaya IP office extension one. Three, one is not available to leave a message wait for the tone when finished recording press pound for more options record at the tone."
+    },
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 124.98,
+      "start_time": 73.5,
+      "recording_attendee_id": "7ed0d441-40ad-409a-a981-058be2eae220",
+      "order_number": 5,
+      "text": "Hey, Michael, this is Alex with our tech giving you a call from a company called rentable apologies if I'm in the wrong place here, but I was seeing if I could connect with somebody that kind of handle the marketing advertising and lifting up some of your payments online whether it's how you typically work with like a listing site like an apartment dot. Com or something that's kind of our niche. We also do some social media exposure, but I've had tons of success with other companies out that way. I'm thinking of like Sterling properties Rock properties Solomon organization. A few others realistically it was hoping to maybe get ten fifteen minutes of your time to kind of share our growth is a company and see if we'd be a good fit for L T Z feel free to give me a call back best number to reach me at is my cell two six nine three one three one five one eight, otherwise feel free to respond to an email shoot you on here. Just a"
+    },
+    {
+      "id": "da2b0d11-73ec-4109-8132-8fb7085d9ce5",
+      "recording_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "end_time": 127.52,
+      "start_time": 124.98,
+      "recording_attendee_id": "7ed0d441-40ad-409a-a981-058be2eae220",
+      "order_number": 6,
+      "text": "second just follow, up thanks. So much Michael take care bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d0c52a56-8c8e-4b56-8c75-266ad3ac1413",
+      "title": "Call: Alex Wodarczyk and Michael Bick @ LPZ Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

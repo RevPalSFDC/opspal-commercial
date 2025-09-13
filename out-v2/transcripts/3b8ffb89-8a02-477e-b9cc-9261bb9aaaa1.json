@@ -1,0 +1,28 @@
+{
+  "id": "3b8ffb89-8a02-477e-b9cc-9261bb9aaaa1",
+  "recording_id": "fdabd278-40d5-4fff-98b2-f94581afe2c1",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3b8ffb89-8a02-477e-b9cc-9261bb9aaaa1",
+      "recording_id": "fdabd278-40d5-4fff-98b2-f94581afe2c1",
+      "end_time": 161.05,
+      "start_time": 91.39,
+      "recording_attendee_id": "dd82a4ba-c84b-4c46-9975-f9b15109706b",
+      "text": "My name is hey Jessica, Dan North here with the Moto. It's just after ten. I'm good on Friday. I'm hope you're getting ready for the weekend. Um. Hey looks like it didn't work out for you to to touch base here. This morning. So I'm wanted to just check in and see. If you've discussed anything with Jerry, how the two of you are feeling about this or if there's anything I can do um to make a little bit more beneficial were altered proposal in any way that we would um make this make sense for you so um, either way let me know, if this you know if you've already discussed and it's not something you're interested in or just isn't gonna work for whatever reason right now. Just let me know, alright, that's that's totally cool um and and if that's not the case let's, let's discuss um or see what we can do to move forward. So please give me a call back at six zero eight five one three seven seven six two and I will talk to you soon thanks Jessica."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fdabd278-40d5-4fff-98b2-f94581afe2c1",
+      "title": "Jessica / Dan - check in",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-11-06T15:40:29.746000Z",
+      "call_date": "2020-11-06"
+    }
+  }
+}

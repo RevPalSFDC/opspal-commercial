@@ -1,0 +1,56 @@
+{
+  "id": "5791b324-b073-462f-a0bf-5ed1c3b2dfe4",
+  "recording_id": "2af19020-9507-4289-9603-eab60281b39a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "5791b324-b073-462f-a0bf-5ed1c3b2dfe4",
+      "recording_id": "2af19020-9507-4289-9603-eab60281b39a",
+      "end_time": 3.02,
+      "start_time": 0.29,
+      "recording_attendee_id": "33756c61-70fc-4808-af3e-3b573a303506",
+      "order_number": 0,
+      "text": "Good morning Ashley management Corp. How may I help you?"
+    },
+    {
+      "id": "5791b324-b073-462f-a0bf-5ed1c3b2dfe4",
+      "recording_id": "2af19020-9507-4289-9603-eab60281b39a",
+      "end_time": 5.41,
+      "start_time": 3.82,
+      "recording_attendee_id": "9f2c5bd3-793e-499b-95e6-5ab47c2106c0",
+      "order_number": 1,
+      "text": "Yes, is Karen Miller and."
+    },
+    {
+      "id": "5791b324-b073-462f-a0bf-5ed1c3b2dfe4",
+      "recording_id": "2af19020-9507-4289-9603-eab60281b39a",
+      "end_time": 73.37,
+      "start_time": 6.71,
+      "recording_attendee_id": "33756c61-70fc-4808-af3e-3b573a303506",
+      "order_number": 2,
+      "text": "Just a moment. Your call has been forwarded to an automated voice messaging system five eight five three five zero nine nine seven seven is not available at the tone please record your message. When you finished recording you may hang up or press one for more options."
+    },
+    {
+      "id": "5791b324-b073-462f-a0bf-5ed1c3b2dfe4",
+      "recording_id": "2af19020-9507-4289-9603-eab60281b39a",
+      "end_time": 123.35,
+      "start_time": 75.35,
+      "recording_attendee_id": "9f2c5bd3-793e-499b-95e6-5ab47c2106c0",
+      "order_number": 3,
+      "text": "Hey, Sarah, this is Alex with our tech giving you a call back again from rentable hope you're doing well. I'm just wanted to kind of see how things are going over there. I'm not sure if I'm missing something or just timing isn't right or budgeting was just kind of push back just hoping to get some kind of answer direction from you over there. I'm certainly would love to work with Ashley management in some capacity. I know we had a really good call a few months ago and it seemed like there was some significant interest to to find a partnership and and use one of our Services and platform to drive some quality traffic your way um, if you could give me a call back email text whichever. I'm so I haven't better understanding and kind of timeline want to follow, up, et cetera. And then hopefully we connect soon thanks so much bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "2af19020-9507-4289-9603-eab60281b39a",
+      "title": "Call: Alex Wodarczyk and Kara Miller @ Ashley Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

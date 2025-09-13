@@ -1,0 +1,47 @@
+{
+  "id": "2333b9ab-d460-4562-a068-12a6bec1790c",
+  "recording_id": "8388d8c2-5f22-44b5-82da-8e7ec5a3864e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2333b9ab-d460-4562-a068-12a6bec1790c",
+      "recording_id": "8388d8c2-5f22-44b5-82da-8e7ec5a3864e",
+      "end_time": 38.5,
+      "start_time": 0.54,
+      "recording_attendee_id": "07bf4c10-a22d-48ca-a564-bd03e94002e1",
+      "order_number": 0,
+      "text": "Thank you for calling Third Coast Development. If you know your party's extension, you may dial it at any time. Otherwise, choose from one of the following options. For leasing, press one. For maintenance, press two. For accounting, press three for max, press four. For brad, press five. For Dave, press six. For all other inquiries, please press seven. Thank you for calling Morgan's. Please say your name after the tone, press the pound key. After you finished recording."
+    },
+    {
+      "id": "2333b9ab-d460-4562-a068-12a6bec1790c",
+      "recording_id": "8388d8c2-5f22-44b5-82da-8e7ec5a3864e",
+      "end_time": 39.93,
+      "start_time": 39.14,
+      "recording_attendee_id": "a29d46be-bf77-4bf2-a920-da2d66b93cd5",
+      "order_number": 1,
+      "text": "Brandon."
+    },
+    {
+      "id": "2333b9ab-d460-4562-a068-12a6bec1790c",
+      "recording_id": "8388d8c2-5f22-44b5-82da-8e7ec5a3864e",
+      "end_time": 130.67,
+      "start_time": 43.73,
+      "recording_attendee_id": "07bf4c10-a22d-48ca-a564-bd03e94002e1",
+      "order_number": 2,
+      "text": "Please hold while I try to connect you. Hello. You've reached the voice mailbox of Morgan's with 3rd Coast Property Management."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8388d8c2-5f22-44b5-82da-8e7ec5a3864e",
+      "title": "Call: Brandon Winfield and Morgan Denhartigh @ Third Coast Development",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

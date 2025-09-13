@@ -1,0 +1,36 @@
+{
+  "id": "c4acc77c-ecdd-42a0-ab66-4322a2a00c4d",
+  "recording_id": "a70592c0-0d44-458c-a4b3-617d15cc5302",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c4acc77c-ecdd-42a0-ab66-4322a2a00c4d",
+      "recording_id": "a70592c0-0d44-458c-a4b3-617d15cc5302",
+      "end_time": 236.19,
+      "start_time": 234.44,
+      "recording_attendee_id": null,
+      "text": "this meeting with tomorrow. Sorry, I was."
+    },
+    {
+      "id": "c4acc77c-ecdd-42a0-ab66-4322a2a00c4d",
+      "recording_id": "a70592c0-0d44-458c-a4b3-617d15cc5302",
+      "end_time": 233.3,
+      "start_time": 141.56,
+      "recording_attendee_id": "78c9dbda-0564-4603-aa0a-5578957ae180",
+      "text": "I think in the media. Hello. Hi. Hello. This is Allen. I know this is Rebecca reese with the boat. Oh are you. Good. I know we have a meeting at noon. I'm in the call were you able to get the week, I mean and and even gone into it. Okay. Did you want it's not? I don't really quick before we start, I mean fifteen minute phone call misunderstanding"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a70592c0-0d44-458c-a4b3-617d15cc5302",
+      "title": "ABODO Call: Lafont Realties",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-04-22T15:45:24.300000Z",
+      "call_date": "2020-04-22"
+    }
+  }
+}

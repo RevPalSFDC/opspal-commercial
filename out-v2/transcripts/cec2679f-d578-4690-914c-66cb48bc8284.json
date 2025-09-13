@@ -1,0 +1,56 @@
+{
+  "id": "cec2679f-d578-4690-914c-66cb48bc8284",
+  "recording_id": "210b7a6f-8bb8-4466-a872-d75127847e42",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "cec2679f-d578-4690-914c-66cb48bc8284",
+      "recording_id": "210b7a6f-8bb8-4466-a872-d75127847e42",
+      "end_time": 2.18,
+      "start_time": 0.05,
+      "recording_attendee_id": "8081f4ad-ba88-45ce-8e55-51c14383a17e",
+      "order_number": 0,
+      "text": "Thank you for calling X this is Bonnie."
+    },
+    {
+      "id": "cec2679f-d578-4690-914c-66cb48bc8284",
+      "recording_id": "210b7a6f-8bb8-4466-a872-d75127847e42",
+      "end_time": 5.98,
+      "start_time": 3.22,
+      "recording_attendee_id": "d2c2abd8-fe71-4f48-931b-6d91f437a803",
+      "order_number": 1,
+      "text": "Hi, there Bonnie is Gina available."
+    },
+    {
+      "id": "cec2679f-d578-4690-914c-66cb48bc8284",
+      "recording_id": "210b7a6f-8bb8-4466-a872-d75127847e42",
+      "end_time": 63.85,
+      "start_time": 7.06,
+      "recording_attendee_id": "8081f4ad-ba88-45ce-8e55-51c14383a17e",
+      "order_number": 2,
+      "text": "Hold on place. Tina back told you with Max properties marketing department. Please leave me a message at the tone, please record your message. When you finished recording you may hang up or press one for more options to leave a call back number press five."
+    },
+    {
+      "id": "cec2679f-d578-4690-914c-66cb48bc8284",
+      "recording_id": "210b7a6f-8bb8-4466-a872-d75127847e42",
+      "end_time": 121.68,
+      "start_time": 68,
+      "recording_attendee_id": "d2c2abd8-fe71-4f48-931b-6d91f437a803",
+      "order_number": 3,
+      "text": "Hey there Gina it's Alex over at rentable. Hope you're doing well and had a good Labor day holiday weekend. I'm just checking in I know last time we spoke sometime early July, he needs and we're cutting back at that point, which tends to be the trend there these days, but wanted to at least check in with you see kind of if you're planning on the twenty twenty to budget here soon and hopefully maybe get us in the mix here tomorrow affordable a low cost rate. Additionally, to I know you know next week facebooks that obviously adjusting kind of how partners are getting to the marketplace. We've got significant and solution. There that we're rolling out to a lot of our customers customers and then additionally new customers as well. So would love to fill you in on that as well. If you have the time, but feel free to shoot me an email or call me back whichever is easiest and hopefully we can connect to you soon thanks again Jena."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "210b7a6f-8bb8-4466-a872-d75127847e42",
+      "title": "Call: Alex Wodarczyk and Gina Bechtold-Yoo @ MAXX Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

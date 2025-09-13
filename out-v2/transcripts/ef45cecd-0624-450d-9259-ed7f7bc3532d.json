@@ -1,0 +1,56 @@
+{
+  "id": "ef45cecd-0624-450d-9259-ed7f7bc3532d",
+  "recording_id": "c7c119c5-88fe-4b3b-b25a-d369847f9a32",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ef45cecd-0624-450d-9259-ed7f7bc3532d",
+      "recording_id": "c7c119c5-88fe-4b3b-b25a-d369847f9a32",
+      "end_time": 19.5,
+      "start_time": 17.82,
+      "recording_attendee_id": "21fdfc51-1617-4abb-be1d-ab3069028d41",
+      "order_number": 0,
+      "text": "Good morning Samsung Group."
+    },
+    {
+      "id": "ef45cecd-0624-450d-9259-ed7f7bc3532d",
+      "recording_id": "c7c119c5-88fe-4b3b-b25a-d369847f9a32",
+      "end_time": 24.35,
+      "start_time": 20.96,
+      "recording_attendee_id": "be43b133-0791-464a-8d52-c7ad5cb76e71",
+      "order_number": 1,
+      "text": "I'm yes is Julie Garcia and this morning by chance."
+    },
+    {
+      "id": "ef45cecd-0624-450d-9259-ed7f7bc3532d",
+      "recording_id": "c7c119c5-88fe-4b3b-b25a-d369847f9a32",
+      "end_time": 69.35,
+      "start_time": 25.07,
+      "recording_attendee_id": "21fdfc51-1617-4abb-be1d-ab3069028d41",
+      "order_number": 2,
+      "text": "One moment. Please hold while I try to connect you. Julie Garcia I'm away from my desk or on the other line. Please leave a message after the tone."
+    },
+    {
+      "id": "ef45cecd-0624-450d-9259-ed7f7bc3532d",
+      "recording_id": "c7c119c5-88fe-4b3b-b25a-d369847f9a32",
+      "end_time": 138.19,
+      "start_time": 72.28,
+      "recording_attendee_id": "be43b133-0791-464a-8d52-c7ad5cb76e71",
+      "order_number": 3,
+      "text": "Hey Julie, John lottery calling from rentable. I'm happy Friday. I apologize. I missed you here. It's about ten till eleven AM but July was following up. I sent over a couple of emails your way. I'm not sure if you happen to come across those but I just wanted to follow up on that was hoping to um, maybe grab a few minutes of your time at some point. I'm curious I'm to learn a little bit more about seeing some Group. Um, how occupancy is with your properties and um and also curious about the marketing and advertising tools that you're using to remote your properties to see if there might be an opportunity for rentable to help. So if you could give me a call back or shoot me an email July when you have some time, I'd really appreciate it again, John from rentable three one seven four zero seven three five zero nine three one seven four zero seven three five zero nine zero to connect with you soon July and enjoy the rest of your Friday."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c7c119c5-88fe-4b3b-b25a-d369847f9a32",
+      "title": "Call: John Loughery and Julie  Garcia",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

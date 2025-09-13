@@ -1,0 +1,84 @@
+{
+  "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+  "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 83.75,
+      "start_time": 73.04,
+      "recording_attendee_id": "ac36e97d-5083-42c9-91a4-9ee303168f05",
+      "text": "Hey, good afternoon wasn't sure who to ask for um, but I guess was trying to be connected to whoever handles the advertising for your vacancies online."
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 115.75,
+      "start_time": 107.71,
+      "recording_attendee_id": "ac36e97d-5083-42c9-91a4-9ee303168f05",
+      "text": "Yeah, essentially where Facebook Marketplace partner. No, no not looking to rent or anything just trying to set up a call."
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 101.95,
+      "start_time": 91.12,
+      "recording_attendee_id": "ac36e97d-5083-42c9-91a4-9ee303168f05",
+      "text": "Yeah, just trying to be connected to I guess maybe marketing or who's ever in charge of your listings and I guess advertising vacancies online."
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 165.6,
+      "start_time": 161.13,
+      "recording_attendee_id": "0807e02c-ce4f-46d5-b3a4-e7062e7d1ea3",
+      "text": "at N a L S please leave your name and number and I'll call you back as soon as possible."
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 89.7,
+      "start_time": 84.18,
+      "recording_attendee_id": "0807e02c-ce4f-46d5-b3a4-e7062e7d1ea3",
+      "text": "And it's alright, one moment. I'll call you and like I had."
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 161.13,
+      "start_time": 108.02,
+      "recording_attendee_id": "0807e02c-ce4f-46d5-b3a4-e7062e7d1ea3",
+      "text": "or okay, you're not looking for like an open apartment. Okay, sure just a moment let me transfer you. Okay. Hi, you've reached Kayla Campbell"
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 106.1,
+      "start_time": 102.83,
+      "recording_attendee_id": "0807e02c-ce4f-46d5-b3a4-e7062e7d1ea3",
+      "text": "Okay, um and you're a vendor for like a marketing"
+    },
+    {
+      "id": "4ffaaf7c-91de-4c2f-8e1f-359f91ff037c",
+      "recording_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "end_time": 71.07,
+      "start_time": 2.05,
+      "recording_attendee_id": "0807e02c-ce4f-46d5-b3a4-e7062e7d1ea3",
+      "text": "Thank you for calling N a L S apartment homes. If you know your party's four, digit extension please dial it. Now? If you know your party's two, digit extension please dial one zero, and the extension number for the company directory please dial seven for the receptionist please dial zero. To search by first name press one to hear a list of all names please press two. Please enter the first three letters of the person's, first name whom you wish to reach. Please enter the first when you hear the name of the person you wish to reach please press the pound key and you will be transferred to know Singleton. No names matched one moment please. Thank you for calling N L S how many tracked your call."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a37fb42d-04af-4c25-8d71-e93c645b2338",
+      "title": "Call: Dan Cellon and Danielle Cota @ NALS Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

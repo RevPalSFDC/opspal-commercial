@@ -1,0 +1,74 @@
+{
+  "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+  "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+      "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "end_time": 32.59,
+      "start_time": 28.25,
+      "recording_attendee_id": "e7967ab1-a399-4937-9c7e-8c72ee9147eb",
+      "order_number": 0,
+      "text": "Good morning. Thank you for calling the company. This is Melissa. How may I direct your call?"
+    },
+    {
+      "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+      "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "end_time": 36.73,
+      "start_time": 32.96,
+      "recording_attendee_id": "5ee94c13-a9ac-41b8-9535-3e27a1e872fb",
+      "order_number": 1,
+      "text": "Hey, good morning, Melissa is uh available."
+    },
+    {
+      "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+      "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "end_time": 39.4,
+      "start_time": 36.98,
+      "recording_attendee_id": "e7967ab1-a399-4937-9c7e-8c72ee9147eb",
+      "order_number": 2,
+      "text": "I'm not sure but I can transfer you to his extension."
+    },
+    {
+      "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+      "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "end_time": 41.13,
+      "start_time": 39.86,
+      "recording_attendee_id": "5ee94c13-a9ac-41b8-9535-3e27a1e872fb",
+      "order_number": 3,
+      "text": "Thank you. That would be great."
+    },
+    {
+      "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+      "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "end_time": 80.14,
+      "start_time": 64.49,
+      "recording_attendee_id": "e7967ab1-a399-4937-9c7e-8c72ee9147eb",
+      "order_number": 4,
+      "text": "Hi. You've reached the voicemail Van Mire at you at the present time. I'm unavailable to take your call at the tone. Please leave your name and number and I'll get back to you as soon as I can. Thanks. And have a great day. Please leave a message at the tone when finished. You may hang up or press pound for additional options."
+    },
+    {
+      "id": "c9e32065-54d4-4100-879f-52e16a210e41",
+      "recording_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "end_time": 126.31,
+      "start_time": 81.11,
+      "recording_attendee_id": "5ee94c13-a9ac-41b8-9535-3e27a1e872fb",
+      "order_number": 5,
+      "text": "Hi, good morning. Mr it is Brandon giving you a call with dot com. Wanted to reach out, introduce myself. We are in internet listing service with a partnership with facebook marketplace, has some really cool things going on with um facebook marketplace, facebook rental ads on our chat. But um I would love to be a little bit more about what is working for our partners in the area and see if it might be something that um he might be interested in, I'll shoot you over an email as well. Um and probably give you a call back tomorrow if I don't hear back from you, but I just wanted to reach out, introduce myself and uh if you could give me a call, my number is nine hundred twenty thousand eight hundred and ninety-six fourteen ninety-six Thanks. Bye bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "eb3987be-1f79-4e6a-8918-9173aa6dee25",
+      "title": "Call: Brandon Winfield and +12693428600",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

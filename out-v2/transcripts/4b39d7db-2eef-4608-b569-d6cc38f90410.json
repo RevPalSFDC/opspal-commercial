@@ -1,0 +1,52 @@
+{
+  "id": "4b39d7db-2eef-4608-b569-d6cc38f90410",
+  "recording_id": "16b26b6a-7624-4f29-a2ea-2e892cabf8a1",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "4b39d7db-2eef-4608-b569-d6cc38f90410",
+      "recording_id": "16b26b6a-7624-4f29-a2ea-2e892cabf8a1",
+      "end_time": 102.45,
+      "start_time": 91.44,
+      "recording_attendee_id": "75dd0018-acaf-4a0a-9a1b-ca224cd9716e",
+      "text": "Are there um, let's try to get in touch with whoever does the the marketing for your vacancies online and I guess just generally deals with hi, Alex is for you guys."
+    },
+    {
+      "id": "4b39d7db-2eef-4608-b569-d6cc38f90410",
+      "recording_id": "16b26b6a-7624-4f29-a2ea-2e892cabf8a1",
+      "end_time": 120.69,
+      "start_time": 117.51,
+      "recording_attendee_id": "75dd0018-acaf-4a0a-9a1b-ca224cd9716e",
+      "text": "Okay. Okay go ahead. Thank you."
+    },
+    {
+      "id": "4b39d7db-2eef-4608-b569-d6cc38f90410",
+      "recording_id": "16b26b6a-7624-4f29-a2ea-2e892cabf8a1",
+      "end_time": 117.84,
+      "start_time": 103.96,
+      "recording_attendee_id": "c32d6eec-2503-44bd-a59e-6cf73285801c",
+      "text": "That's Daniel stoltenberg. D S T O L E N B E R G I E C R E dot net, I'm actually on another call. So I'm gonna have to hang up here."
+    },
+    {
+      "id": "4b39d7db-2eef-4608-b569-d6cc38f90410",
+      "recording_id": "16b26b6a-7624-4f29-a2ea-2e892cabf8a1",
+      "end_time": 67.6,
+      "start_time": 1.62,
+      "recording_attendee_id": "c32d6eec-2503-44bd-a59e-6cf73285801c",
+      "text": "Hello, and thank you for calling Interstate equities Corporation. If you know your party's extension you may enter it now to dial by name press one to dial by department press two to leave us a message in the general mailbox press three. Hello, and thank you for calling Interstate equities Corporation. If you know your party's extension you may enter it now to dial by name press one to dial by department press two to leave us a message in the general. For accounting please press one for acquisitions, please press two for human Resources. Please press three for investor relations. Please press four for property management please press five."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "16b26b6a-7624-4f29-a2ea-2e892cabf8a1",
+      "title": "Call: Dan Cellon and Danielle Stoltenberg @ Interstate Equities Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

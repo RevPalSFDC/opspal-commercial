@@ -1,0 +1,76 @@
+{
+  "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+  "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 38.87,
+      "start_time": 29.99,
+      "recording_attendee_id": "c294c3e8-3a39-4f59-a378-e39cddb1a306",
+      "text": "She is not well, she might be working remotely. She was not actually in today. Um, I can transfer you to her voicemail for thirty on a Friday."
+    },
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 123.45,
+      "start_time": 105.39,
+      "recording_attendee_id": "7dbb2758-aa53-472f-8d0b-bc4a5096819a",
+      "text": "looking for is like ten minutes. Keep it real short and sweet um, if you are Frank give me a call back my direct number is six. Oh eight, five one three seven seven six two otherwise feel free to shoot me an email just stand at rentable dot C O alright, Shelly hope you have a great weekend. We'll talk soon bye."
+    },
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 79.65,
+      "start_time": 43.18,
+      "recording_attendee_id": "c294c3e8-3a39-4f59-a378-e39cddb1a306",
+      "text": "Okay, I'm happy to hear I'll transfer you now here you go. Hello, you have reached Shelly states. The marketing manager for at home apartments. Please leave a message and I'll get back to you as soon as possible. Thank you record your message at the tone. When you are finished hang up or press pound for more options."
+    },
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 25.91,
+      "start_time": 0.2,
+      "recording_attendee_id": "c294c3e8-3a39-4f59-a378-e39cddb1a306",
+      "text": "Thanks for calling at home apartments. If you know, your party's extension you may dial nine at any time. If you would like rental information please dial one. If you are a current resident looking to speak with our management team, please dial three to reach the receptionist please dial zero. Wait, while I transfer your call good afternoon at home apartments. This is Michelle. How may I help?"
+    },
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 43.14,
+      "start_time": 39.81,
+      "recording_attendee_id": "7dbb2758-aa53-472f-8d0b-bc4a5096819a",
+      "text": "Yeah, I figured as much I can leave her a voicemail that's fine."
+    },
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 105.39,
+      "start_time": 81.09,
+      "recording_attendee_id": "7dbb2758-aa53-472f-8d0b-bc4a5096819a",
+      "text": "Shelly good afternoon, Dan North calling from rentable hope you're doing well four thirty on a Friday really surprised. I got your voicemail um anyways. I was I was reaching out. I was hoping we'd be able to reconnect for like ten minutes or so next week would love to hear how everything is going and and share some brand new stuff going on with us for marketing and advertising perspective so again, I'll be"
+    },
+    {
+      "id": "98b70442-97d5-4be3-aa6e-a72474106721",
+      "recording_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "end_time": 29.32,
+      "start_time": 26.53,
+      "recording_attendee_id": "7dbb2758-aa53-472f-8d0b-bc4a5096819a",
+      "text": "Good afternoon, Michelle is Shelly stolen today."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b4e97c3e-7845-44dc-9f49-d343c0df7297",
+      "title": "Call: Dan North and Shelly Steitz @ At Homes Apartments, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

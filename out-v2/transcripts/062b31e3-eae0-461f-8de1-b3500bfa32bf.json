@@ -1,0 +1,36 @@
+{
+  "id": "062b31e3-eae0-461f-8de1-b3500bfa32bf",
+  "recording_id": "e2dcc888-a34e-40d6-9fe9-234efed5691e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "062b31e3-eae0-461f-8de1-b3500bfa32bf",
+      "recording_id": "e2dcc888-a34e-40d6-9fe9-234efed5691e",
+      "end_time": 139.6,
+      "start_time": 115.93,
+      "recording_attendee_id": "9fa5f73c-99de-487b-a1a5-8a775e5443ca",
+      "text": "press two to reach one of our leasing agents press three to reach our accounting team press four, if you know your party's extension you may dial it at any time for all other inquiries press zero. I'm sorry, we have not been able to recognize your entry transferring your call."
+    },
+    {
+      "id": "062b31e3-eae0-461f-8de1-b3500bfa32bf",
+      "recording_id": "e2dcc888-a34e-40d6-9fe9-234efed5691e",
+      "end_time": 115.57,
+      "start_time": 0.08,
+      "recording_attendee_id": "9fa5f73c-99de-487b-a1a5-8a775e5443ca",
+      "text": "Hello, and thank you for calling coastline real estate Advisors. Please note that calls may be recorded for quality and training purposes our normal business hours are from eight AM to five PM Monday through Friday for more information visit our website coastline R E a dot. Com to speak to our front office press one for maintenance requests press two to reach one of our leasing agents press three to reach our accounting team press four, if you know your party's extension you may dial it at any time for all other inquiries press zero. Hello, and thank you for calling coastline real estate Advisors. Please note that calls may be recorded for quality and training purposes our normal business hours are from eight AM to five PM Monday through Friday for more information visit our website coastline R E a dot. Com to speak to our front office press one for maintenance requests press two to reach one of our leasing agents press three to reach our accounting team press four, if you know your party's extension you may dial it at any time for all other inquiries press zero. Hello, and thank you for calling coastline real estate Advisors. Please note that calls may be recorded for quality and training purposes our normal business hours are from eight AM to five PM Monday through Friday for more information visit our website coastline R E a dot. Com to speak to our front office press one for maintenance requests"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e2dcc888-a34e-40d6-9fe9-234efed5691e",
+      "title": "Call: Dan Cellon and Jimmy Ordaz @ Coastline Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

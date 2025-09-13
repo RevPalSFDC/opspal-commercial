@@ -1,0 +1,52 @@
+{
+  "id": "1dcc915e-999b-4321-adf3-5ba8616e143f",
+  "recording_id": "68f40e96-7dda-486a-b22d-ca6b30eeede1",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1dcc915e-999b-4321-adf3-5ba8616e143f",
+      "recording_id": "68f40e96-7dda-486a-b22d-ca6b30eeede1",
+      "end_time": 138.02,
+      "start_time": 136.55,
+      "recording_attendee_id": "af2e99ab-b88a-4cbe-83a1-bf522ba342e3",
+      "text": "Hi, I'm looking for normally you know."
+    },
+    {
+      "id": "1dcc915e-999b-4321-adf3-5ba8616e143f",
+      "recording_id": "68f40e96-7dda-486a-b22d-ca6b30eeede1",
+      "end_time": 153.66,
+      "start_time": 149.01,
+      "recording_attendee_id": "af2e99ab-b88a-4cbe-83a1-bf522ba342e3",
+      "text": "Okay, very fair and I completely understand I will follow up next week. You have a good rest of your day."
+    },
+    {
+      "id": "1dcc915e-999b-4321-adf3-5ba8616e143f",
+      "recording_id": "68f40e96-7dda-486a-b22d-ca6b30eeede1",
+      "end_time": 148.41,
+      "start_time": 140.34,
+      "recording_attendee_id": "823e8876-6af2-48d7-b0df-c0f4939f79f6",
+      "text": "She well, she's currently unavailable at the moment um, cause we're working from home. So we're not in the office."
+    },
+    {
+      "id": "1dcc915e-999b-4321-adf3-5ba8616e143f",
+      "recording_id": "68f40e96-7dda-486a-b22d-ca6b30eeede1",
+      "end_time": 135.85,
+      "start_time": 1.6,
+      "recording_attendee_id": "823e8876-6af2-48d7-b0df-c0f4939f79f6",
+      "text": "Thank you for calling Legacy at crown Meadows. This call may be recorded for quality assurance. Did you know you can know track and submit work orders and pay rent through our secure website. Crown Meadows dot begin dash communities. Dot. Com. If you would like to speak to the property office staff please press one to place a work order please press two or to leave a message for our staff. Please? Thank you for calling Legacy at crown Meadows please hold for the next available agent. Legacy your grandmother's."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "68f40e96-7dda-486a-b22d-ca6b30eeede1",
+      "title": "Call: Dither  Castro  and Nora Medina @ Beacon Communities",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

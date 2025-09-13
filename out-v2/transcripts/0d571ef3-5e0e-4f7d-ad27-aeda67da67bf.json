@@ -1,0 +1,92 @@
+{
+  "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+  "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 103.97,
+      "start_time": 102.23,
+      "recording_attendee_id": "e4abf380-b991-45a2-83bc-7803933bae9c",
+      "text": "Yes, it's Russell from rentable."
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 59.02,
+      "start_time": 58.09,
+      "recording_attendee_id": "e4abf380-b991-45a2-83bc-7803933bae9c",
+      "text": "Hi is let me try and."
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 110.16,
+      "start_time": 109.68,
+      "recording_attendee_id": "e4abf380-b991-45a2-83bc-7803933bae9c",
+      "text": "Yes."
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 97.89,
+      "start_time": 97.47,
+      "recording_attendee_id": "e4abf380-b991-45a2-83bc-7803933bae9c",
+      "text": "What was that?"
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 108.79,
+      "start_time": 107.65,
+      "recording_attendee_id": "ac940990-c586-4510-b29c-0d73e55aa1b6",
+      "text": "Russell preventable."
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 95.31,
+      "start_time": 62.2,
+      "recording_attendee_id": "ac940990-c586-4510-b29c-0d73e55aa1b6",
+      "text": "That's one moment. Ask who's calling me."
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 112.74,
+      "start_time": 112.2,
+      "recording_attendee_id": "ac940990-c586-4510-b29c-0d73e55aa1b6",
+      "text": "One moment."
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 57.1,
+      "start_time": 0.05,
+      "recording_attendee_id": "ac940990-c586-4510-b29c-0d73e55aa1b6",
+      "text": "Thank you for calling University court yard are leasing office is open by appointment and we would love to set up a virtual or in person tour at your convenience. We appreciate your patience during this time to speak with a member of our leasing team about an apartment please press one. If you are calling about a fire or a life threatening emergency, please hang up and dial nine one, one. If you are experiencing a maintenance emergency of a different type and eat immediate assistance, please press two to request routine maintenance service or speak with a member of our community management team, please press three, if you are a vendor or for all other calls please press for. Good evening. Thank you for calling University court yard. This is Rochelle. How may I help you?"
+    },
+    {
+      "id": "0d571ef3-5e0e-4f7d-ad27-aeda67da67bf",
+      "recording_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "end_time": 101.22,
+      "start_time": 100.2,
+      "recording_attendee_id": "ac940990-c586-4510-b29c-0d73e55aa1b6",
+      "text": "X is calling for."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1d43877c-5475-482f-8553-b7a85f99ec9f",
+      "title": "Call: Russell Eldridge and Lemetria Thomas @ Friedman Real Estate Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

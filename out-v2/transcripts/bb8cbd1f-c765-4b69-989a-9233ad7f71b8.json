@@ -1,0 +1,38 @@
+{
+  "id": "bb8cbd1f-c765-4b69-989a-9233ad7f71b8",
+  "recording_id": "1a546f09-23cd-46b0-9238-2dc567b3c803",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bb8cbd1f-c765-4b69-989a-9233ad7f71b8",
+      "recording_id": "1a546f09-23cd-46b0-9238-2dc567b3c803",
+      "end_time": 0.67,
+      "start_time": 0.15,
+      "recording_attendee_id": "ec08ee17-7d48-4e5d-b6a7-b8c6b64ad597",
+      "order_number": 0,
+      "text": "mm."
+    },
+    {
+      "id": "bb8cbd1f-c765-4b69-989a-9233ad7f71b8",
+      "recording_id": "1a546f09-23cd-46b0-9238-2dc567b3c803",
+      "end_time": 116.45,
+      "start_time": 0.67,
+      "recording_attendee_id": "50c3d97c-aba0-404c-930d-4b06151f2a25",
+      "order_number": 1,
+      "text": "Thank you for calling the Enemy Corporation. Our office is currently closed, but we are still working. If you know your party's extension, please dial it now. Or for tenant services press one. For company directory, press two. For our fax that was an invalid tree. Our office is currently closed, but we are still working For employees whose last names begin with the letters a through F. Press one. For employees whose let A man three hundred and six Hamptons brewer three oh nine Sean button Hagen three twenty-three Please hold while I try that extension, Sean Corporations leave your number and we'll get back to you as possible. Thank you. Bye then. Recording your message at the tone when you have finished. You may press the pound key or hang up message has not been recorded. Thank you for calling the Enemy Corporation. Our office is currently closed, but we are still working. If you know your party's extension, please dial it now. Or for tenant services press one. For company directory, press two. For our fax number and address, press three. Or to reach the receptionist, press zero. If you would like to speak to the operator, please say yes. At the tone"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1a546f09-23cd-46b0-9238-2dc567b3c803",
+      "title": "Call: Brandon Winfield and Shawn Buddenhagen @ Runnymede Corporation, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "4801ede7-edff-44fc-8778-7dce47a2f8d3",
+  "recording_id": "d5522aa2-2de6-4ea0-b1f7-7d32cf3df52a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "4801ede7-edff-44fc-8778-7dce47a2f8d3",
+      "recording_id": "d5522aa2-2de6-4ea0-b1f7-7d32cf3df52a",
+      "end_time": 63.87,
+      "start_time": 0.68,
+      "recording_attendee_id": "78a80fc1-1bfb-40dc-b0ab-896a82231446",
+      "order_number": 0,
+      "text": "Thank you for calling the corporate headquarters of M I N Molina investment management and Moline management. If you know your party's extension please enter it now for all other calls, please select one of the following options for Erica Simmons extension one zero two for Paul arena, extension one zero three for the park Wood town homes leasing of. You've reached Paula ring of em. I am willing investment management and Moline management. Please leave a message. I'll get back to you promptly. Thank you. Please leave your message after the tone when done hang up or press the pound key."
+    },
+    {
+      "id": "4801ede7-edff-44fc-8778-7dce47a2f8d3",
+      "recording_id": "d5522aa2-2de6-4ea0-b1f7-7d32cf3df52a",
+      "end_time": 117.09,
+      "start_time": 66.15,
+      "recording_attendee_id": "171a421b-47ef-4337-9f6a-cefed55ed5fb",
+      "order_number": 1,
+      "text": "Hey, Paul, John McCray calling from rentable. I'm hope you're enjoying your Friday apologize. I missed you here about one thirty, I'm just following up. I'm on a couple of emails. I sent your way not sure if you happen to come across those but was hoping to connect with you are a member of your staff call just to learn a little bit more about your properties at M I am I'm how occupancy is and curious to know the types of tools that you're using the market and advertise your properties. How that's going um and if you're maybe open open into my little bit more about rental. So if you could give me a call back or shoot me an email when you have a chance, I'd really appreciate it. Again. Paul this is John from rentable three one seven four zero seven three five zero"
+    },
+    {
+      "id": "4801ede7-edff-44fc-8778-7dce47a2f8d3",
+      "recording_id": "d5522aa2-2de6-4ea0-b1f7-7d32cf3df52a",
+      "end_time": 124.47,
+      "start_time": 117.09,
+      "recording_attendee_id": "171a421b-47ef-4337-9f6a-cefed55ed5fb",
+      "order_number": 2,
+      "text": "nine three one seven four zero seven three five zero nine, I'm hope to connect with you soon and have a great day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d5522aa2-2de6-4ea0-b1f7-7d32cf3df52a",
+      "title": "Call: John Loughery and Paul Arena @ Moline Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

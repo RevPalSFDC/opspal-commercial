@@ -1,0 +1,36 @@
+{
+  "id": "07c54365-3153-4d1c-98a2-b9c84910a8d8",
+  "recording_id": "c2409bea-9c8f-418d-b069-35ddb4160444",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "07c54365-3153-4d1c-98a2-b9c84910a8d8",
+      "recording_id": "c2409bea-9c8f-418d-b069-35ddb4160444",
+      "end_time": 87.87,
+      "start_time": 2.8,
+      "recording_attendee_id": "9f2b2d72-1eee-4b6c-8c14-1cdc14ef8a9b",
+      "text": "You have reached that knows voicemail system. Please enter the number nine, followed by the extension of the person you are calling at any time. If you did not know the extension please press one to reach the company directory. Enter last name and pound. Name not found. Enter last name and pound. Name not found. Enter last name and pound. Press one to select Robert malinski. You have reached the voice mailbox of Robin Melissa is Sky. You may leave a message after the tone."
+    },
+    {
+      "id": "07c54365-3153-4d1c-98a2-b9c84910a8d8",
+      "recording_id": "c2409bea-9c8f-418d-b069-35ddb4160444",
+      "end_time": 123.45,
+      "start_time": 91.14,
+      "recording_attendee_id": "99f53c09-e9de-4989-b67d-2af63bba4761",
+      "text": "Rob, this is Alyssa I'm calling from rentable. I'm actually giving you a call. I was referred over to buy best. My key over at one of your Oregon properties Baseline one fifty eight. I wanted to call chat through that property and see you know she said that there was a goal to get that priority to a hundred percent um. So wanted to talk about you know our strategies out how we could possibly do that for you guys give me a call back when you get this message the best number to reach me at is two six two three eight three four five six eight thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c2409bea-9c8f-418d-b069-35ddb4160444",
+      "title": "Call: Alyssa Tillich and Robert Maleszewski @ Sentinel Real Estate Corp",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

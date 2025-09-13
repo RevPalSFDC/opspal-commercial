@@ -1,0 +1,47 @@
+{
+  "id": "be065386-94d5-4193-8e8a-9a5c5b08c9cc",
+  "recording_id": "0b6b55fb-741f-43e8-bd2c-a23ce40d1183",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "be065386-94d5-4193-8e8a-9a5c5b08c9cc",
+      "recording_id": "0b6b55fb-741f-43e8-bd2c-a23ce40d1183",
+      "end_time": 136.56,
+      "start_time": 0.41,
+      "recording_attendee_id": "0d90e894-8750-40d3-bdb2-c9f8fd7b15b1",
+      "order_number": 0,
+      "text": "Hello, you have reached Alex. If you know your party's extension please dial it now or press pound for the company directory. If you are a tenant calling with a service request. Please dial one hundred for accounting dial to leasing dial for property management dial, six, and construction Services dial eight for anything else. Please remain on the line to leave a message in the general mailbox or dial zero for assistance. Thank you. Hello, you have reached the Dallas group Auto attendant. If you are a tenant calling with a service request. Please enter five nine zero. However for a service request after four thirty PM please enter five seven one five seven two our press three to reach our dispatch service. If you are calling for anyone else please press the pound sign for the company directory or remain on the line who is using the keys on your telephone. Please spell the first name of the person then press pound for the. Kevin Dallas, if this is correct press pound for the previous name in the delete hold. While your call is being transferred to Kevin Dallas. Hi, you've reached Kevin balance with the data group, I'm not available to take your call right now, but if you leave your name number and a message I will get back to you soon as possible thanks. Bye. After the tone please record your message. When finished you may hang up to deliver the message or press pound for"
+    },
+    {
+      "id": "be065386-94d5-4193-8e8a-9a5c5b08c9cc",
+      "recording_id": "0b6b55fb-741f-43e8-bd2c-a23ce40d1183",
+      "end_time": 137.37,
+      "start_time": 136.56,
+      "recording_attendee_id": "0d90e894-8750-40d3-bdb2-c9f8fd7b15b1",
+      "order_number": 1,
+      "text": "more options."
+    },
+    {
+      "id": "be065386-94d5-4193-8e8a-9a5c5b08c9cc",
+      "recording_id": "0b6b55fb-741f-43e8-bd2c-a23ce40d1183",
+      "end_time": 169.58,
+      "start_time": 138.89,
+      "recording_attendee_id": "4345c524-e884-4f37-8778-9352fc9b8f41",
+      "order_number": 2,
+      "text": "Hi, Kevin, this is Katie giving you a call from rentable you wanted to see if there was another email address that I can send over that proposal and try something that I tried sending it over yesterday, but it looks like it bounced and I have team polish at Dallas group dot. Com. So I'm I'm not sure if there's somewhere else that I can send it to but want to get that over and would love to get you know on board my direct line is two two four five seven seven five zero four eight eight."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "0b6b55fb-741f-43e8-bd2c-a23ce40d1183",
+      "title": "Call: Katee Hawkins and Kevin Ballish @ Dalad Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

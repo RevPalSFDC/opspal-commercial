@@ -1,0 +1,28 @@
+{
+  "id": "5872e695-cbbf-4940-ad29-36f5dcff563e",
+  "recording_id": "e2c220f2-85f9-4642-ad49-9dc66d4f57d0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "5872e695-cbbf-4940-ad29-36f5dcff563e",
+      "recording_id": "e2c220f2-85f9-4642-ad49-9dc66d4f57d0",
+      "end_time": 8.27,
+      "start_time": 0.56,
+      "recording_attendee_id": "8f2bebee-34b6-458a-af22-80a4a9d81f2c",
+      "text": "Please way and a staff member will be with you shortly this call may be monitored or recorded for quality assurance."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e2c220f2-85f9-4642-ad49-9dc66d4f57d0",
+      "title": "Call: Dan Cellon and Marsha Cheatham @ Volunteer Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

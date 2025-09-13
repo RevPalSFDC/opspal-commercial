@@ -1,0 +1,36 @@
+{
+  "id": "26a01d60-517d-4b7b-9e3c-5506a933cfdf",
+  "recording_id": "68f8633c-4c15-4ca1-b0d9-1b0ee3116164",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "26a01d60-517d-4b7b-9e3c-5506a933cfdf",
+      "recording_id": "68f8633c-4c15-4ca1-b0d9-1b0ee3116164",
+      "end_time": 134.26,
+      "start_time": 0.95,
+      "recording_attendee_id": "16c932fa-d905-4b01-8b48-cbfd80cbf751",
+      "text": "Thank you for calling red Rock welcome to the directory please enter the first three. Sherry Jones and Amy know, mainly Johnson and Billy. Hi by Bobby Bryan clack and this is the person you are looking for press one now otherwise. Is Brad clegg with red Rock realty Group? Please leave your name number and a brief message and I'll get back to you at my earliest convenience. Please leave your message. After the tone when done hang up or press the pound key."
+    },
+    {
+      "id": "26a01d60-517d-4b7b-9e3c-5506a933cfdf",
+      "recording_id": "68f8633c-4c15-4ca1-b0d9-1b0ee3116164",
+      "end_time": 165.76,
+      "start_time": 135.49,
+      "recording_attendee_id": "5446fb47-49de-4aec-94a5-a59910eaea43",
+      "text": "Hey, Brad, this is Jordan, giving you a call from a photo dot. Com. Hey leave me a ring. My associate Rebecca few months back just wanted to reach out to see if we could set up a quick advertising. The questions were you heading to the twenty twenty one budget you can reach me at six zero eight three two five one eight eight zero again zero eight three two five one eight eight zero and I'll send you a quick email to follow up as well thanks Brad."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "68f8633c-4c15-4ca1-b0d9-1b0ee3116164",
+      "title": "Call: Jordan Wilkins and Brad Cleage @ Red Rock Realty Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

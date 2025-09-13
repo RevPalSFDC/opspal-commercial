@@ -1,0 +1,29 @@
+{
+  "id": "955ef154-e356-476c-a289-c1e0aaf5a1dc",
+  "recording_id": "ff60ee74-b4c1-4d4a-8a1e-4a4a69cf8ade",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-03-12T15:33:10.461Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "955ef154-e356-476c-a289-c1e0aaf5a1dc",
+      "recording_id": "ff60ee74-b4c1-4d4a-8a1e-4a4a69cf8ade",
+      "end_time": 8.84,
+      "start_time": 8.34,
+      "recording_attendee_id": "81714724-54de-4b0e-b766-7814d1128286",
+      "order_number": 0,
+      "text": "Max."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ff60ee74-b4c1-4d4a-8a1e-4a4a69cf8ade",
+      "title": "Rentable/Centra Partners",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-03-12T15:35:00Z",
+      "call_date": "2024-03-12"
+    }
+  }
+}

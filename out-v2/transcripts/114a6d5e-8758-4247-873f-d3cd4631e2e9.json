@@ -1,0 +1,44 @@
+{
+  "id": "114a6d5e-8758-4247-873f-d3cd4631e2e9",
+  "recording_id": "b90b5e1c-0571-49dc-8598-126fe471d994",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "114a6d5e-8758-4247-873f-d3cd4631e2e9",
+      "recording_id": "b90b5e1c-0571-49dc-8598-126fe471d994",
+      "end_time": 115.7,
+      "start_time": 94.43,
+      "recording_attendee_id": "0b342e3d-cbd4-49f7-b5b9-8fecabc47ac9",
+      "text": "Hey man, this is Jordan calling about. Oh dot. Com. Just wanted to give you a quick call. We're actually gonna be heading right in the Boston on Wednesday afternoon. I wanted to get a few minutes to sit down discuss your marketing and advertising. I'm if you feel free to give me a call back six zero eight two two five one eight zero again, that's six zero eight two two five one eight zero. I'll be"
+    },
+    {
+      "id": "114a6d5e-8758-4247-873f-d3cd4631e2e9",
+      "recording_id": "b90b5e1c-0571-49dc-8598-126fe471d994",
+      "end_time": 117.61,
+      "start_time": 115.7,
+      "recording_attendee_id": "0b342e3d-cbd4-49f7-b5b9-8fecabc47ac9",
+      "text": "following this email as well thanks Mary."
+    },
+    {
+      "id": "114a6d5e-8758-4247-873f-d3cd4631e2e9",
+      "recording_id": "b90b5e1c-0571-49dc-8598-126fe471d994",
+      "end_time": 93.5,
+      "start_time": 1.59,
+      "recording_attendee_id": "ccc81378-6009-4cc4-bead-326690a221ec",
+      "text": "Thank you for calling the big in communities corporate office. Your call is important to us. Please listen as our options have changed our office is located at two Center Plaza Suite seven hundred in Boston Massachusetts and our office hours are nine am to five PM Monday through Friday. If you know your party's three, digit extension you may dial it now to access our dial by name directory, please press the star key other many welcome to the directory please enter the first three letters of your party's last name using your touchtone key pad use the seven key for Q and then ninety for the. Mary Taylor extension one two six if this is the person you are looking for press one now otherwise. You have reached Mary Taylor, I am away from my desk at the moment the please leave a brief message and I will return your call at my earliest convenience. Please leave your message after the tone when done hang up or press the pound key."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b90b5e1c-0571-49dc-8598-126fe471d994",
+      "title": "Call: Jordan Wilkins and Mary Taylor @ Beacon Communities LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

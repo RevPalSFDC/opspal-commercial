@@ -1,0 +1,46 @@
+{
+  "recording_id": "fbdad90f-b4c4-4e83-9d01-fd3adb3ea510",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "sentences": [
+    {
+      "start_time": 1.91,
+      "end_time": 2.32,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Can",
+          "start_time": 1.91,
+          "end_time": 2.11,
+          "recording_attendee_id": "79a73f94-748e-43a5-bc09-a496f6299d3f"
+        },
+        {
+          "type": "pronunciation",
+          "content": "be",
+          "start_time": 2.11,
+          "end_time": 2.32,
+          "recording_attendee_id": "79a73f94-748e-43a5-bc09-a496f6299d3f"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "start_time": 2.32,
+          "end_time": 2.52,
+          "recording_attendee_id": "79a73f94-748e-43a5-bc09-a496f6299d3f"
+        }
+      ],
+      "text": "Can be.",
+      "recording_attendee_id": "79a73f94-748e-43a5-bc09-a496f6299d3f"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fbdad90f-b4c4-4e83-9d01-fd3adb3ea510",
+      "title": null,
+      "platform": null,
+      "media_type": null,
+      "started_recording_at": null,
+      "call_date": null
+    }
+  }
+}

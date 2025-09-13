@@ -1,0 +1,84 @@
+{
+  "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+  "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 72.74,
+      "start_time": 72.26,
+      "recording_attendee_id": "b8ab3581-7ad7-4b8b-b328-3e0982db40dd",
+      "text": "Sure."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 16.59,
+      "start_time": 13.11,
+      "recording_attendee_id": "b8ab3581-7ad7-4b8b-b328-3e0982db40dd",
+      "text": "Maria my name is Mitch. I'm just calling for Bob and stuff she please."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 131.4,
+      "start_time": 102.72,
+      "recording_attendee_id": "b8ab3581-7ad7-4b8b-b328-3e0982db40dd",
+      "text": "Hi, Bob, my name is Mitch I'm calling with rental sent you a couple of emails said that you got them and the reason for the call was to set a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads to the property spelt they can see specifically through our partnership with Facebook and marketplace wanted to run by a few options and ideas with you if you can please return my call again Mitch rentable four seven zero eight two eight five three eight three again four seven zero eight two eight five three three thanks bye."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 23.83,
+      "start_time": 21.34,
+      "recording_attendee_id": "b8ab3581-7ad7-4b8b-b328-3e0982db40dd",
+      "text": "Yes, I had a note to follow up on the email I sent yesterday."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 101.23,
+      "start_time": 73.88,
+      "recording_attendee_id": "6766a2cc-7890-4b17-ade1-7c71a636bcd8",
+      "text": "One moment please thank you. Hi, this is Bob. Please leave your name and number and I'll get back to you as soon as possible thanks a lot bye."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 20.83,
+      "start_time": 19.3,
+      "recording_attendee_id": "6766a2cc-7890-4b17-ade1-7c71a636bcd8",
+      "text": "Mitch mance, but this is about."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 11.89,
+      "start_time": 0.44,
+      "recording_attendee_id": "6766a2cc-7890-4b17-ade1-7c71a636bcd8",
+      "text": "Please press one to be connected to the party you are calling. Debra this is Maria."
+    },
+    {
+      "id": "87ab4e21-2fd1-4893-8498-a3687183e50e",
+      "recording_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "end_time": 71.79,
+      "start_time": 26.74,
+      "recording_attendee_id": "6766a2cc-7890-4b17-ade1-7c71a636bcd8",
+      "text": "Okay, one moment please your call is important to us please continue to hold. We will answer your call as soon as possible. Thank you for holding. I'm sorry, he's not available at the moment. I can transfer you to his voicemail."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "917daee9-10a0-41e1-a181-36015b74a580",
+      "title": "Call: Mitch  Scarski  and +14084952153",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

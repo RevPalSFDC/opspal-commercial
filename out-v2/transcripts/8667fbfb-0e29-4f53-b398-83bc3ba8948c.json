@@ -1,0 +1,74 @@
+{
+  "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+  "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+      "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "end_time": 30.89,
+      "start_time": 0,
+      "recording_attendee_id": "d0fa941d-b09b-415e-b2c8-324becddca6c",
+      "order_number": 0,
+      "text": "Thank you for calling Bridge Investment Group. If you know your party's extension, press four. For questions or concerns, please press one. For Human resource questions. And employment verifications, please press two. For accounts payable questions, please press three. For any other questions, please press zero. To speak with the receptionist Bridge Investment Group. How may I direct your call?"
+    },
+    {
+      "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+      "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "end_time": 33.76,
+      "start_time": 31.1,
+      "recording_attendee_id": "46608764-70f7-4bf7-8593-85d64cbf13e6",
+      "order_number": 1,
+      "text": "Hi, can I speak with Melissa Shell, please?"
+    },
+    {
+      "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+      "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "end_time": 35.4,
+      "start_time": 34.41,
+      "recording_attendee_id": "d0fa941d-b09b-415e-b2c8-324becddca6c",
+      "order_number": 2,
+      "text": "Sure. Just one moment."
+    },
+    {
+      "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+      "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "end_time": 37.7,
+      "start_time": 35.69,
+      "recording_attendee_id": "46608764-70f7-4bf7-8593-85d64cbf13e6",
+      "order_number": 3,
+      "text": "Okay. Yeah."
+    },
+    {
+      "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+      "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "end_time": 119.34,
+      "start_time": 58.97,
+      "recording_attendee_id": "d0fa941d-b09b-415e-b2c8-324becddca6c",
+      "order_number": 4,
+      "text": "Yeah. Okay. Okay. You've reached Melissa Regional Manager with Bridge Property Management. I'm unavailable to take your call at the moment. Please leave me a message and I'll call you back. Thank you."
+    },
+    {
+      "id": "8667fbfb-0e29-4f53-b398-83bc3ba8948c",
+      "recording_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "end_time": 135.74,
+      "start_time": 125.04,
+      "recording_attendee_id": "46608764-70f7-4bf7-8593-85d64cbf13e6",
+      "order_number": 5,
+      "text": "Hey, Melissa. This is Alyssa with rentable. Give me a call back when you get this message. Best number to reach me at is two billion six hundred twenty-three million eight hundred thirty-four thousand five hundred and sixty-eight Thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7a7d6dd4-ccd0-4d46-8bd0-6afcf8c95cec",
+      "title": "Call: Alyssa Tillich and Mellissa Schultz @ Bridge Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

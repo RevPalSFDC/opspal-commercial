@@ -1,0 +1,44 @@
+{
+  "id": "e40bed16-d442-4c9c-8c6b-a50b7d088a64",
+  "recording_id": "b9ec9d0e-0992-4dc8-abe4-7257ae723c64",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e40bed16-d442-4c9c-8c6b-a50b7d088a64",
+      "recording_id": "b9ec9d0e-0992-4dc8-abe4-7257ae723c64",
+      "end_time": 148.28,
+      "start_time": 130.67,
+      "recording_attendee_id": "c804e3f5-1d0d-4766-862e-f34c1f517a50",
+      "text": "Hi, Julius, my name is will I'm calling with a photo dot. Com. Um, you probably seen an email or two for me to come by with the last month or so but wanted to reach I was hoping to connect and talk about some advertising for um your multi, family properties we work with a lot of similar properties similar companies"
+    },
+    {
+      "id": "e40bed16-d442-4c9c-8c6b-a50b7d088a64",
+      "recording_id": "b9ec9d0e-0992-4dc8-abe4-7257ae723c64",
+      "end_time": 175.07,
+      "start_time": 148.4,
+      "recording_attendee_id": "c804e3f5-1d0d-4766-862e-f34c1f517a50",
+      "text": "and you know throughout Ohio I'm gonna reach out to you that we could be a great fit of the advertising partner my phone number is six three zero nine three six two nine nine seven, I'll shoot you another email here as well um, but again, we would love to connect to North drive busy budget season. Right now. We're running some you're on special. So that it could be a good time to chat, but I'm hope you're doing well and hope the chance to connect soon take care bye."
+    },
+    {
+      "id": "e40bed16-d442-4c9c-8c6b-a50b7d088a64",
+      "recording_id": "b9ec9d0e-0992-4dc8-abe4-7257ae723c64",
+      "end_time": 128.94,
+      "start_time": 0.91,
+      "recording_attendee_id": "0d576c90-964c-46e2-baac-fb0b18c671e7",
+      "text": "Thank you for calling the Levin Group. If you know your party's extension you can dial it at any time or tenant related issues press two for residential accounting in Dayton defiance and Connie at Ohio press three for all other residential accounting press four for you then and C W P commercial accounting press five for all other commercial accounting press six, if you would like a dial by employee directory press eight to hear this maam. That was an invalid entry. If you know your party's. That was an invalid entry. If you know your party's extension you can dial it at any time. Please enter the first few letters of the first or last name of the person you wish to reach for. Judith well, then two zero eight to select is name press pound to hear the please hold while I try that extension. You've reached the mailbox of Judith love and she is not available to take your call. Please leave a message and she will return your call as soon as possible. Thank you begin recording. At the tone finish by pressing pound."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b9ec9d0e-0992-4dc8-abe4-7257ae723c64",
+      "title": "Call: Will Martin and Judith Levin @ Levin Group, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

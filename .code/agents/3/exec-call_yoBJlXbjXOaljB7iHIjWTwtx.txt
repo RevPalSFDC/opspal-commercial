@@ -1,0 +1,1523 @@
+ClaudeSFDC/model-proxy/setup.sh:1:#!/bin/bash
+ClaudeSFDC/model-proxy/wrapper.js:1:#!/usr/bin/env node
+ClaudeSFDC/model-proxy/wrapper.js:7:const { spawn } = require('child_process');
+ClaudeSFDC/model-proxy/wrapper.js:8:const fs = require('fs');
+ClaudeSFDC/model-proxy/wrapper.js:9:const path = require('path');
+ClaudeSFDC/model-proxy/wrapper.js:10:const yaml = require('js-yaml');
+ClaudeSFDC/model-proxy/wrapper.js:147:        const { exec } = require('child_process');
+ClaudeSFDC/model-proxy/wrapper.js:148:        const util = require('util');
+ClaudeSFDC/model-proxy/wrapper.js:249:        const { exec } = require('child_process');
+ClaudeSFDC/model-proxy/wrapper.js:250:        const util = require('util');
+ClaudeSFDC/model-proxy/wrapper.js:290:module.exports = ModelProxyWrapper;
+ClaudeSFDC/model-proxy/server.py:1:#!/usr/bin/env python3
+ClaudeSFDC/model-proxy/server.py:12:from pathlib import Path
+ClaudeSFDC/model-proxy/server.py:13:from typing import Optional, Dict, Any
+ClaudeSFDC/model-proxy/server.py:38:    from litellm import Router, completion
+ClaudeSFDC/model-proxy/server.py:39:    from litellm.proxy.proxy_server import ProxyConfig, initialize
+ClaudeSFDC/model-proxy/server.py:40:    from litellm.proxy.proxy_server import app
+ClaudeSFDC/model-proxy/server.py:193:def main():
+ClaudeSFDC/mcp-extensions/tools/base/enhanced-mcp-tool.js:10:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/base/enhanced-mcp-tool.js:11:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/base/enhanced-mcp-tool.js:12:const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/base/enhanced-mcp-tool.js:13:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/base/enhanced-mcp-tool.js:207:module.exports = EnhancedMCPTool;
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:11:const EnhancedMCPTool = require('./base/enhanced-mcp-tool');
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:12:const ProfileLayoutAssigner = require('../../scripts/lib/profile-layout-assigner');
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:13:const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:14:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:15:const xml2js = require('xml2js');
+ClaudeSFDC/mcp-extensions/tools/profile-manager-tools.js:531:module.exports = {
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:11:const fs = require('fs');
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:12:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:13:const { execSync } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:14:const EnhancedMCPTool = require('./base/enhanced-mcp-tool');
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:15:const FlexiPageValidator = require('../../scripts/lib/flexipage-validator');
+ClaudeSFDC/mcp-extensions/tools/flexipage-tools.js:581:module.exports = FlexiPageTools;
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:8:const EnhancedMCPTool = require('./base/enhanced-mcp-tool');
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:9:const FlexiPageTools = require('./flexipage-tools');
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:10:const ProfileLayoutAssigner = require('../../scripts/lib/profile-layout-assigner');
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:11:const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:12:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:598:module.exports = {
+ClaudeSFDC/mcp-extensions/tools/flow-tools.js:1:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/flow-tools.js:2:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/flow-tools.js:51:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/flow-tools.js:270:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/flow-tools.js:359:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/flow-tools.js:370:module.exports = { tools };
+ClaudeSFDC/mcp-extensions/tools/analytics-tools-old.js:1:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools-old.js:2:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools-old.js:178:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/analytics-tools-old.js:346:module.exports = { tools };
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:1:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:2:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:4:const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:5:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:8:const CompositeAPI = require('../../scripts/lib/composite-api');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:9:const FactMapParser = require('../../scripts/lib/factmap-parser');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:10:const QueryMonitor = require('../../scripts/monitoring/query-monitor');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:11:const BulkAPIHandler = require('../../scripts/lib/bulk-api-handler');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:12:const UniversalReportCreator = require('../../scripts/lib/universal-report-creator');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:13:const ReportsRestAPI = require('../../scripts/lib/reports-rest-api');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:14:const ReportTypeDiscovery = require('../../scripts/lib/report-type-discovery');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:1850:        const AnalyticsDiscoveryV2 = require('../../scripts/lib/analytics-discovery-v2');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:1971:          const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:1974:          const templates = require('../../scripts/templates/gong-report-templates.json');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:1998:        const AnalyticsDiscoveryV2 = require('../../scripts/lib/analytics-discovery-v2');
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:2025:module.exports = { tools };
+ClaudeSFDC/mcp-extensions/tools/security-tools.js:1:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/security-tools.js:2:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/security-tools.js:228:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/security-tools.js:340:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/security-tools.js:391:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/security-tools.js:404:module.exports = { tools };
+ClaudeSFDC/mcp-extensions/tools/apex-tools.js:1:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/apex-tools.js:2:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/apex-tools.js:4:const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/apex-tools.js:5:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/apex-tools.js:345:module.exports = { tools };
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:446:const ValidationTools = require('./mcp-extensions/tools/validation-tools.js');
+ClaudeSFDC/testing/test-suites/gpt5-adapter-smoke.js:1:#!/usr/bin/env node
+ClaudeSFDC/testing/test-suites/gpt5-adapter-smoke.js:5:const http = require('http');
+ClaudeSFDC/testing/test-suites/gpt5-adapter-smoke.js:6:const { spawn } = require('child_process');
+ClaudeSFDC/testing/test-suites/gpt-parity/readonly-parity.js:1:#!/usr/bin/env node
+ClaudeSFDC/testing/test-suites/gpt-parity/readonly-parity.js:6:const http = require('http');
+ClaudeSFDC/testing/test-suites/gpt-parity/readonly-parity.js:7:const { spawn } = require('child_process');
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:9:const path = require('path');
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:10:const fs = require('fs');
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:12:const { wrapMCPToolPack, wrapToolMap } = require('./wrap-mcp-tool');
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:13:const { createShellTool } = require('./wrap-shell-script');
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:40:            const mod = require(modPath);
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:42:            //  a) module.exports = { tools: <map>, MetadataTools: class }
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:43:            //  b) module.exports = class ... with getToolDefinitions()
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:222:                const raw = JSON.parse(require('fs').readFileSync(inventoryJson, 'utf8'));
+ClaudeSFDC/mcp-gpt5-adapter/tool-registry.js:257:module.exports = { buildRegistry, listSchemas, getTool };
+ClaudeSFDC/testing/test-suites/gpt-parity/write-guard.js:1:#!/usr/bin/env node
+ClaudeSFDC/testing/test-suites/gpt-parity/write-guard.js:4:const http = require('http');
+ClaudeSFDC/testing/test-suites/gpt-parity/write-guard.js:5:const { spawn } = require('child_process');
+ClaudeSFDC/mcp-extensions/tests/metadata-tools.test.js:1:const { tools } = require('../tools/metadata-tools');
+ClaudeSFDC/tests/validation-scenarios.js:1:#!/usr/bin/env node
+ClaudeSFDC/tests/validation-scenarios.js:10:const { OperationSequencer } = require('../scripts/lib/operation-sequencer');
+ClaudeSFDC/tests/validation-scenarios.js:11:const { ValidationBypassManager } = require('../scripts/lib/validation-bypass-manager');
+ClaudeSFDC/tests/validation-scenarios.js:12:const { DataSequencePlanner } = require('../scripts/lib/data-sequence-planner');
+ClaudeSFDC/tests/validation-scenarios.js:13:const { DependencyGraph } = require('../scripts/lib/operation-dependency-graph');
+ClaudeSFDC/tests/validation-scenarios.js:14:const { getMonitor } = require('../scripts/lib/execution-monitor');
+ClaudeSFDC/tests/validation-scenarios.js:494:module.exports = { ValidationTestRunner };
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:1:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:2:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:59:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:120:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:226:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:274:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:331:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:469:      const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/integration-tools.js:481:module.exports = { tools };
+ClaudeSFDC/mcp-gpt5-adapter/wrap-mcp-tool.js:44:module.exports = { wrapMCPToolPack };
+ClaudeSFDC/mcp-gpt5-adapter/wrap-mcp-tool.js:66:module.exports.wrapToolMap = wrapToolMap;
+ClaudeSFDC/mcp-tools/picklist-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-tools/picklist-validator.js:8:const fs = require('fs').promises;
+ClaudeSFDC/mcp-tools/picklist-validator.js:9:const { parse } = require('csv-parse/sync');
+ClaudeSFDC/mcp-tools/picklist-validator.js:10:const { exec } = require('child_process');
+ClaudeSFDC/mcp-tools/picklist-validator.js:11:const util = require('util');
+ClaudeSFDC/mcp-tools/picklist-validator.js:13:const path = require('path');
+ClaudeSFDC/mcp-tools/picklist-validator.js:363:module.exports = PicklistValidator;
+ClaudeSFDC/tests/framework-verification.js:1:#!/usr/bin/env node
+ClaudeSFDC/tests/framework-verification.js:23:    const module = require(framework.path);
+ClaudeSFDC/tests/framework-verification.js:49:    const { DependencyGraph } = require('../scripts/lib/operation-dependency-graph.js');
+ClaudeSFDC/tests/framework-verification.js:79:  console.log('1. Check module.exports in each framework file');
+ClaudeSFDC/mcp-gpt5-adapter/health.js:3:const fs = require('fs');
+ClaudeSFDC/mcp-gpt5-adapter/health.js:4:const http = require('http');
+ClaudeSFDC/mcp-gpt5-adapter/health.js:5:const { exec } = require('child_process');
+ClaudeSFDC/mcp-gpt5-adapter/health.js:6:const { promisify } = require('util');
+ClaudeSFDC/mcp-gpt5-adapter/health.js:53:module.exports = { healthCheck };
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:10:const chalk = require('chalk');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:11:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:12:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:16:const metadataTools = require('../tools/metadata-tools');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:17:const apexTools = require('../tools/apex-tools');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:18:const flowTools = require('../tools/flow-tools');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:19:const analyticsTools = require('../tools/analytics-tools');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:20:const securityTools = require('../tools/security-tools');
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:21:const integrationTools = require('../tools/integration-tools');
+ClaudeSFDC/mcp-tools/test-mcp-connection.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-tools/test-mcp-connection.js:7:const { exec } = require('child_process');
+ClaudeSFDC/mcp-tools/test-mcp-connection.js:8:const util = require('util');
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:164:#!/bin/bash
+ClaudeSFDC/mcp-extensions/server.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-extensions/server.js:3:const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
+ClaudeSFDC/mcp-extensions/server.js:4:const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
+ClaudeSFDC/mcp-extensions/server.js:5:const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+ClaudeSFDC/mcp-extensions/server.js:7:const metadataTools = require('./tools/metadata-tools');
+ClaudeSFDC/mcp-extensions/server.js:8:const apexTools = require('./tools/apex-tools');
+ClaudeSFDC/mcp-extensions/server.js:9:const flowTools = require('./tools/flow-tools');
+ClaudeSFDC/mcp-extensions/server.js:10:const analyticsTools = require('./tools/analytics-tools');
+ClaudeSFDC/mcp-extensions/server.js:11:const securityTools = require('./tools/security-tools');
+ClaudeSFDC/mcp-extensions/server.js:12:const integrationTools = require('./tools/integration-tools');
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:10:const { exec } = require('child_process');
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:11:const { promisify } = require('util');
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:12:const fs = require('fs').promises;
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:13:const path = require('path');
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:500:module.exports = ValidationToolsMCP;
+ClaudeSFDC/tests/test-asana-integration.js:1:#!/usr/bin/env node
+ClaudeSFDC/tests/test-asana-integration.js:17:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/tests/test-asana-integration.js:18:const { asanaTaskMatcher } = require('../integration/asana-task-matcher');
+ClaudeSFDC/tests/test-asana-integration.js:19:const { asanaSubtaskManager } = require('../integration/asana-subtask-manager');
+ClaudeSFDC/tests/test-asana-integration.js:20:const { asanaTimeIntegration } = require('../utils/asana-time-integration');
+ClaudeSFDC/tests/test-asana-integration.js:21:const { asanaEnhancedConfig } = require('../config/asana-enhanced-config');
+ClaudeSFDC/tests/test-asana-integration.js:378:module.exports = {
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:8:const express = require('express');
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:9:const bodyParser = require('body-parser');
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:10:const crypto = require('crypto');
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:11:const fs = require('fs');
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:13:const path = require('path');
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:15:const { buildRegistry, listSchemas, getTool } = require('./tool-registry');
+ClaudeSFDC/mcp-gpt5-adapter/adapter.js:16:const { healthCheck } = require('./health');
+ClaudeSFDC/mcp-tools/csv-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-tools/csv-validator.js:8:const fs = require('fs').promises;
+ClaudeSFDC/mcp-tools/csv-validator.js:9:const path = require('path');
+ClaudeSFDC/mcp-tools/csv-validator.js:10:const { parse } = require('csv-parse/sync');
+ClaudeSFDC/mcp-tools/csv-validator.js:11:const RecordTypeWrapper = require('./record-type-wrapper');
+ClaudeSFDC/mcp-tools/csv-validator.js:355:    const args = require('minimist')(process.argv.slice(2));
+ClaudeSFDC/mcp-tools/csv-validator.js:388:module.exports = CSVValidator;
+ClaudeSFDC/mcp-gpt5-adapter/wrap-shell-script.js:3:const { spawn } = require('child_process');
+ClaudeSFDC/mcp-gpt5-adapter/wrap-shell-script.js:4:const path = require('path');
+ClaudeSFDC/mcp-gpt5-adapter/wrap-shell-script.js:45:module.exports = { createShellTool };
+ClaudeSFDC/data-generation/scenarios/demo-scenarios.js:1:#!/usr/bin/env node
+ClaudeSFDC/data-generation/scenarios/demo-scenarios.js:669:            const fs = require('fs').promises;
+ClaudeSFDC/data-generation/scenarios/demo-scenarios.js:683:module.exports = { DemoScenarioGenerator };
+ClaudeSFDC/lib/ensure-initialized.js:8:const { checkAndInitialize } = require('../scripts/check-init');
+ClaudeSFDC/lib/ensure-initialized.js:9:const chalk = require('chalk');
+ClaudeSFDC/lib/ensure-initialized.js:27:module.exports = checkAndInitialize();
+ClaudeSFDC/data-generation/scenarios/testing-scenarios.js:1:#!/usr/bin/env node
+ClaudeSFDC/data-generation/scenarios/testing-scenarios.js:746:            const fs = require('fs').promises;
+ClaudeSFDC/data-generation/scenarios/testing-scenarios.js:760:module.exports = { TestingScenarioGenerator };
+ClaudeSFDC/mcp-tools/record-type-wrapper.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-tools/record-type-wrapper.js:9:const { Client } = require('@modelcontextprotocol/sdk/client');
+ClaudeSFDC/mcp-tools/record-type-wrapper.js:357:module.exports = RecordTypeWrapper;
+ClaudeSFDC/tests/integration-test-suite.js:1:#!/usr/bin/env node
+ClaudeSFDC/tests/integration-test-suite.js:10:const { OperationSequencer } = require('../scripts/lib/operation-sequencer');
+ClaudeSFDC/tests/integration-test-suite.js:11:const { ValidationBypassManager } = require('../scripts/lib/validation-bypass-manager');
+ClaudeSFDC/tests/integration-test-suite.js:12:const { DataSequencePlanner } = require('../scripts/lib/data-sequence-planner');
+ClaudeSFDC/tests/integration-test-suite.js:13:const { DependencyGraph } = require('../scripts/lib/operation-dependency-graph');
+ClaudeSFDC/tests/integration-test-suite.js:14:const { SharedStateManager } = require('../scripts/lib/shared-state-manager');
+ClaudeSFDC/tests/integration-test-suite.js:15:const { ConflictDetector } = require('../scripts/lib/conflict-detector');
+ClaudeSFDC/tests/integration-test-suite.js:16:const { getMonitor } = require('../scripts/lib/execution-monitor');
+ClaudeSFDC/tests/integration-test-suite.js:744:module.exports = { IntegrationTestSuite };
+ClaudeSFDC/examples/asana-bulk-deduplication.js:1:#!/usr/bin/env node
+ClaudeSFDC/examples/asana-bulk-deduplication.js:16:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/examples/asana-bulk-deduplication.js:17:const { asanaTaskMatcher } = require('../integration/asana-task-matcher');
+ClaudeSFDC/examples/asana-bulk-deduplication.js:18:const { asanaEnhancedConfig } = require('../config/asana-enhanced-config');
+ClaudeSFDC/examples/asana-bulk-deduplication.js:264:module.exports = { bulkCreateWithDeduplication };
+ClaudeSFDC/examples/asana-field-creation.js:1:#!/usr/bin/env node
+ClaudeSFDC/examples/asana-field-creation.js:16:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/examples/asana-field-creation.js:17:const { asanaSubtaskManager } = require('../integration/asana-subtask-manager');
+ClaudeSFDC/examples/asana-field-creation.js:18:const { asanaTimeIntegration } = require('../utils/asana-time-integration');
+ClaudeSFDC/examples/asana-field-creation.js:194:module.exports = { createFieldWithTracking };
+ClaudeSFDC/data-generation/generators/schema-analyzer.js:1:#!/usr/bin/env node
+ClaudeSFDC/data-generation/generators/schema-analyzer.js:10:const path = require('path');
+ClaudeSFDC/data-generation/generators/schema-analyzer.js:792:module.exports = {
+ClaudeSFDC/data-generation/generators/schema-analyzer.js:828:            const fs = require('fs').promises;
+ClaudeSFDC/integration/run-task-retrieval.sh:1:#!/bin/bash
+ClaudeSFDC/migration-framework/scripts/migration-completeness-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/migration-framework/scripts/migration-completeness-validator.js:9:const fs = require('fs');
+ClaudeSFDC/migration-framework/scripts/migration-completeness-validator.js:10:const path = require('path');
+ClaudeSFDC/migration-framework/scripts/migration-completeness-validator.js:381:module.exports = MigrationCompletenessValidator;
+ClaudeSFDC/utils/asana-connection-pool.js:7:const EventEmitter = require('events');
+ClaudeSFDC/utils/asana-connection-pool.js:470:module.exports = connectionPool;
+ClaudeSFDC/ci-cd/TROUBLESHOOTING.md:242:const coverage = JSON.parse(require('fs').readFileSync('coverage.json', 'utf8'));
+ClaudeSFDC/utils/time-tracker.js:372:module.exports = {
+ClaudeSFDC/integration/asana-field-audit-sync.js:1:#!/usr/bin/env node
+ClaudeSFDC/integration/asana-field-audit-sync.js:9:const https = require('https');
+ClaudeSFDC/integration/asana-field-audit-sync.js:10:const fs = require('fs').promises;
+ClaudeSFDC/integration/asana-field-audit-sync.js:11:const path = require('path');
+ClaudeSFDC/integration/asana-field-audit-sync.js:12:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/integration/asana-field-audit-sync.js:13:const { asanaTaskMatcher } = require('./asana-task-matcher');
+ClaudeSFDC/integration/asana-field-audit-sync.js:14:const { asanaSubtaskManager } = require('./asana-subtask-manager');
+ClaudeSFDC/integration/asana-field-audit-sync.js:15:const { asanaTimeIntegration } = require('../utils/asana-time-integration');
+ClaudeSFDC/integration/asana-field-audit-sync.js:601:module.exports = AsanaFieldAuditSync;
+ClaudeSFDC/utils/mcp-lock-manager.js:7:const fs = require('fs').promises;
+ClaudeSFDC/utils/mcp-lock-manager.js:8:const path = require('path');
+ClaudeSFDC/utils/mcp-lock-manager.js:283:module.exports = lockManager;
+ClaudeSFDC/test-flexipage-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/test-flexipage-validator.js:3:const FlexiPageValidator = require('./scripts/lib/flexipage-validator.js');
+ClaudeSFDC/test-flexipage-validator.js:4:const fs = require('fs');
+ClaudeSFDC/test-flexipage-validator.js:5:const path = require('path');
+ClaudeSFDC/config/asana-enhanced-config.js:348:module.exports = {
+ClaudeSFDC/utils/asana-enhanced-manager.js:15:const axios = require('axios');
+ClaudeSFDC/utils/asana-enhanced-manager.js:16:const { TimeTracker } = require('./time-tracker');
+ClaudeSFDC/utils/asana-enhanced-manager.js:514:module.exports = {
+ClaudeSFDC/integration/test-time-tracking.js:8:const { timeTracker, TimeTracker } = require('./utils/time-tracker.js');
+ClaudeSFDC/integration/test-time-tracking.js:9:const { asanaTimeIntegration, AsanaTimeIntegration } = require('./utils/asana-time-integration.js');
+ClaudeSFDC/integration/test-time-tracking.js:441:module.exports = {
+ClaudeSFDC/data-generation/utils/data-quality-checker.js:1:#!/usr/bin/env node
+ClaudeSFDC/data-generation/utils/data-quality-checker.js:630:            const fs = require('fs').promises;
+ClaudeSFDC/data-generation/utils/data-quality-checker.js:663:module.exports = { DataQualityChecker };
+ClaudeSFDC/utils/asana-time-integration.js:8:const { timeTracker } = require('./time-tracker.js');
+ClaudeSFDC/utils/asana-time-integration.js:495:module.exports = {
+ClaudeSFDC/utils/framework-loader.js:1:#!/usr/bin/env node
+ClaudeSFDC/utils/framework-loader.js:10:const fs = require('fs').promises;
+ClaudeSFDC/utils/framework-loader.js:11:const path = require('path');
+ClaudeSFDC/utils/framework-loader.js:355:module.exports = {
+ClaudeSFDC/TOOL_REFERENCE.md:254:const ValidationTools = require('./mcp-extensions/tools/validation-tools.js');
+ClaudeSFDC/ci-cd/azure-devops/azure-pipelines-validation.yml:213:                const coverage = JSON.parse(require('fs').readFileSync('coverage.json', 'utf8'));
+ClaudeSFDC/ci-cd/azure-devops/azure-pipelines-validation.yml:224:                const coverage = JSON.parse(require('fs').readFileSync('coverage.json', 'utf8'));
+ClaudeSFDC/ci-cd/azure-devops/azure-pipelines-validation.yml:322:                  const results = JSON.parse(require('fs').readFileSync('security-scan-results.json', 'utf8'));
+ClaudeSFDC/ci-cd/azure-devops/azure-pipelines-validation.yml:335:                    const results = JSON.parse(require('fs').readFileSync('security-scan-results.json', 'utf8'));
+ClaudeSFDC/test/agent-calibration-tests.js:1:#!/usr/bin/env node
+ClaudeSFDC/test/agent-calibration-tests.js:10:const assert = require('assert');
+ClaudeSFDC/test/agent-calibration-tests.js:11:const ChangeValidator = require('../scripts/lib/change-validator');
+ClaudeSFDC/test/agent-calibration-tests.js:12:const ChangeAuditor = require('../scripts/lib/change-auditor');
+ClaudeSFDC/test/agent-calibration-tests.js:334:module.exports = {
+ClaudeSFDC/integration/create-business-unit-tasks.js:1:#!/usr/bin/env node
+ClaudeSFDC/integration/create-business-unit-tasks.js:9:const { asanaTimeIntegration } = require('../utils/asana-time-integration.js');
+ClaudeSFDC/integration/create-business-unit-tasks.js:10:const { timeTracker } = require('../utils/time-tracker.js');
+ClaudeSFDC/integration/create-business-unit-tasks.js:13:const asanaConfig = require('./asana-projects.json');
+ClaudeSFDC/integration/create-business-unit-tasks.js:1090:    module.exports = {
+ClaudeSFDC/integration/asana-subtask-manager.js:7:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/integration/asana-subtask-manager.js:8:const { asanaEnhancedConfig } = require('../config/asana-enhanced-config');
+ClaudeSFDC/integration/asana-subtask-manager.js:282:module.exports = {
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:1:#!/usr/bin/env node
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:10:const path = require('path');
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:15:    const { TimeTracker } = require('../../utils/time-tracker.js');
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:16:    const { ErrorLogger } = require('../../error-logging/core/error-logger.js');
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:484:module.exports = {
+ClaudeSFDC/integration/run-asana-update.sh:1:#!/bin/bash
+ClaudeSFDC/knowledge-base/README.md:79:const { KnowledgeAwareAgent } = require('./knowledge-base/knowledge-aware-agent');
+ClaudeSFDC/knowledge-base/README.md:106:const { withKnowledge } = require('./knowledge-base/knowledge-aware-agent');
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:1:#!/usr/bin/env node
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:11:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:12:const { open } = require('sqlite');
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:13:const fs = require('fs').promises;
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:14:const path = require('path');
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:15:const crypto = require('crypto');
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:730:module.exports = KnowledgeBaseManager;
+ClaudeSFDC/integration/update-asana-field-audit.js:1:#!/usr/bin/env node
+ClaudeSFDC/integration/update-asana-field-audit.js:8:const https = require('https');
+ClaudeSFDC/integration/update-asana-field-audit.js:9:const config = require('./asana-projects.json');
+ClaudeSFDC/integration/update-asana-field-audit.js:415:module.exports = AsanaTaskUpdater;
+ClaudeSFDC/integration/update-asana-quote-validation-work.js:1:#!/usr/bin/env node
+ClaudeSFDC/integration/update-asana-quote-validation-work.js:9:const https = require('https');
+ClaudeSFDC/integration/update-asana-quote-validation-work.js:10:const fs = require('fs').promises;
+ClaudeSFDC/integration/update-asana-quote-validation-work.js:11:const path = require('path');
+ClaudeSFDC/integration/update-asana-quote-validation-work.js:264:module.exports = AsanaQuoteValidationUpdate;
+ClaudeSFDC/frameworks/revops-framework/README.md:281:const FrameworkLoader = require('../../../utils/framework-loader.js');
+ClaudeSFDC/ci-cd/jenkins/Jenkinsfile-validation:1:#!/usr/bin/env groovy
+ClaudeSFDC/ci-cd/jenkins/Jenkinsfile-validation:295:                                    const results = JSON.parse(require('fs').readFileSync('security-scan-results.json', 'utf8'));
+ClaudeSFDC/ci-cd/jenkins/Jenkinsfile-validation:308:                                        const results = JSON.parse(require('fs').readFileSync('security-scan-results.json', 'utf8'));
+ClaudeSFDC/ci-cd/jenkins/Jenkinsfile-validation:347:                                const coverage = JSON.parse(require('fs').readFileSync('coverage.json', 'utf8'));
+ClaudeSFDC/ci-cd/jenkins/Jenkinsfile-validation:358:                                const coverage = JSON.parse(require('fs').readFileSync('coverage.json', 'utf8'));
+ClaudeSFDC/monitoring/server.js:1:#!/usr/bin/env node
+ClaudeSFDC/monitoring/server.js:8:const http = require('http');
+ClaudeSFDC/monitoring/server.js:9:const fs = require('fs');
+ClaudeSFDC/monitoring/server.js:10:const path = require('path');
+ClaudeSFDC/monitoring/server.js:11:const { getMonitor } = require('../scripts/lib/execution-monitor');
+ClaudeSFDC/integration/asana-task-matcher.js:7:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/integration/asana-task-matcher.js:8:const { asanaEnhancedConfig } = require('../config/asana-enhanced-config');
+ClaudeSFDC/integration/asana-task-matcher.js:228:module.exports = {
+ClaudeSFDC/error-logging/core/error-logger.js:6:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/core/error-logger.js:7:const path = require('path');
+ClaudeSFDC/error-logging/core/error-logger.js:8:const crypto = require('crypto');
+ClaudeSFDC/error-logging/core/error-logger.js:9:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/error-logging/core/error-logger.js:10:const { v4: uuidv4 } = require('uuid');
+ClaudeSFDC/error-logging/core/error-logger.js:600:module.exports = {
+ClaudeSFDC/knowledge-base/knowledge-aware-agent.js:1:#!/usr/bin/env node
+ClaudeSFDC/knowledge-base/knowledge-aware-agent.js:10:const KnowledgeBaseManager = require('./knowledge-base-manager');
+ClaudeSFDC/knowledge-base/knowledge-aware-agent.js:11:const path = require('path');
+ClaudeSFDC/knowledge-base/knowledge-aware-agent.js:439:module.exports = {
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:1:#!/usr/bin/env node
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:18:const path = require('path');
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:19:const fs = require('fs').promises;
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:483:module.exports = { RevOpsFramework };
+ClaudeSFDC/ci-cd/jenkins/Jenkinsfile-deployment:1:#!/usr/bin/env groovy
+ClaudeSFDC/error-logging/README.md:140:const { wrapAgent } = require('./error-logging/integrations/agent-integration');
+ClaudeSFDC/error-logging/README.md:160:const { wrapSalesforceAPI } = require('./error-logging/integrations/agent-integration');
+ClaudeSFDC/error-logging/README.md:174:const { wrapMCPTool } = require('./error-logging/integrations/agent-integration');
+ClaudeSFDC/integration/system-integrator.js:1:#!/usr/bin/env node
+ClaudeSFDC/integration/system-integrator.js:14:const path = require('path');
+ClaudeSFDC/integration/system-integrator.js:15:const { FrameworkLoader } = require('../utils/framework-loader');
+ClaudeSFDC/integration/system-integrator.js:16:const { SchemaAnalyzer } = require('../data-generation/generators/schema-analyzer');
+ClaudeSFDC/integration/system-integrator.js:17:const { DemoScenarioGenerator } = require('../data-generation/scenarios/demo-scenarios');
+ClaudeSFDC/integration/system-integrator.js:18:const { TestingScenarioGenerator } = require('../data-generation/scenarios/testing-scenarios');
+ClaudeSFDC/integration/system-integrator.js:19:const { DataQualityChecker } = require('../data-generation/utils/data-quality-checker');
+ClaudeSFDC/integration/system-integrator.js:20:const { AgentIntegration } = require('../error-logging/integrations/agent-integration');
+ClaudeSFDC/integration/system-integrator.js:536:module.exports = { SystemIntegrator };
+ClaudeSFDC/integration/run-task-creation.js:1:#!/usr/bin/env node
+ClaudeSFDC/integration/run-task-creation.js:12:const taskCreator = require('./integration/create-business-unit-tasks.js');
+ClaudeSFDC/integration/run-task-creation.js:73:module.exports = { runTaskCreation };
+ClaudeSFDC/frameworks/data-hygiene/DataQualityScorer.js:1061:module.exports = DataQualityScorer;
+ClaudeSFDC/mcp-manager/index.js:1:#!/usr/bin/env node
+ClaudeSFDC/mcp-manager/index.js:9:const express = require('express');
+ClaudeSFDC/mcp-manager/index.js:10:const { spawn } = require('child_process');
+ClaudeSFDC/mcp-manager/index.js:11:const fs = require('fs').promises;
+ClaudeSFDC/mcp-manager/index.js:12:const path = require('path');
+ClaudeSFDC/mcp-manager/index.js:13:const net = require('net');
+ClaudeSFDC/mcp-manager/index.js:14:const { EventEmitter } = require('events');
+ClaudeSFDC/mcp-manager/index.js:15:const http = require('http');
+ClaudeSFDC/mcp-manager/index.js:507:module.exports = MCPServerManager;
+ClaudeSFDC/test-flexipage-system.js:1:#!/usr/bin/env node
+ClaudeSFDC/test-flexipage-system.js:9:const fs = require('fs');
+ClaudeSFDC/test-flexipage-system.js:10:const path = require('path');
+ClaudeSFDC/test-flexipage-system.js:11:const FlexiPageTools = require('./mcp-extensions/tools/flexipage-tools');
+ClaudeSFDC/test-flexipage-system.js:12:const FlexiPageValidator = require('./scripts/lib/flexipage-validator');
+ClaudeSFDC/test-flexipage-system.js:13:const FlexiPageRecovery = require('./scripts/lib/flexipage-recovery');
+ClaudeSFDC/test-flexipage-system.js:333:module.exports = runTests;
+ClaudeSFDC/frameworks/data-hygiene/AnomalyDetector.js:1153:module.exports = AnomalyDetector;
+ClaudeSFDC/error-logging/test-error-logging.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/test-error-logging.js:9:const Database = require('better-sqlite3');
+ClaudeSFDC/error-logging/test-error-logging.js:10:const { v4: uuidv4 } = require('uuid');
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:67:            const DeduplicationEngine = require('./DeduplicationEngine');
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:68:            const FieldStandardizer = require('./FieldStandardizer');
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:69:            const DataEnrichmentEngine = require('./DataEnrichmentEngine');
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:70:            const AutoCleansingRules = require('./AutoCleansingRules');
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:819:module.exports = BulkHygieneOperations;
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:6:const express = require('express');
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:7:const http = require('http');
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:8:const socketIo = require('socket.io');
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:9:const path = require('path');
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:10:const { ErrorLogger } = require('../core/error-logger');
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:11:const { PatternAnalyzer } = require('../analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:453:module.exports = { DashboardServer };
+ClaudeSFDC/frameworks/data-hygiene/README.md:60:const FrameworkLoader = require('../../../utils/framework-loader.js');
+ClaudeSFDC/frameworks/data-hygiene/README.md:74:const DeduplicationEngine = require('./DeduplicationEngine');
+ClaudeSFDC/frameworks/data-hygiene/README.md:75:const FieldStandardizer = require('./FieldStandardizer');
+ClaudeSFDC/frameworks/data-hygiene/README.md:76:const DataEnrichmentEngine = require('./DataEnrichmentEngine');
+ClaudeSFDC/frameworks/data-hygiene/README.md:77:const AutoCleansingRules = require('./AutoCleansingRules');
+ClaudeSFDC/frameworks/data-hygiene/README.md:78:const BulkHygieneOperations = require('./BulkHygieneOperations');
+ClaudeSFDC/frameworks/data-hygiene/FieldStandardizer.js:721:module.exports = FieldStandardizer;
+ClaudeSFDC/error-logging/index.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/index.js:6:const { ErrorLogger } = require('./core/error-logger');
+ClaudeSFDC/error-logging/index.js:7:const { PatternAnalyzer } = require('./analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/index.js:8:const { DashboardServer } = require('./dashboard/dashboard-server');
+ClaudeSFDC/error-logging/index.js:9:const { AlertSystem } = require('./alerts/alert-system');
+ClaudeSFDC/error-logging/index.js:10:const { AgentIntegration } = require('./integrations/agent-integration');
+ClaudeSFDC/error-logging/index.js:11:const { AdapterIngester } = require('./integrations/adapter-ingester');
+ClaudeSFDC/error-logging/index.js:13:const fs = require('fs');
+ClaudeSFDC/error-logging/index.js:14:const path = require('path');
+ClaudeSFDC/error-logging/index.js:140:module.exports = { ErrorLoggingSystem };
+ClaudeSFDC/frameworks/data-hygiene/AutoCleansingRules.js:895:module.exports = AutoCleansingRules;
+ClaudeSFDC/frameworks/data-hygiene/DeduplicationEngine.js:768:module.exports = DeduplicationEngine;
+ClaudeSFDC/error-logging/agent-wrapper.js:7:const { ErrorLogger } = require('./core/error-logger');
+ClaudeSFDC/error-logging/agent-wrapper.js:8:const { AlertSystem } = require('./alerts/alert-system');
+ClaudeSFDC/error-logging/agent-wrapper.js:9:const path = require('path');
+ClaudeSFDC/error-logging/agent-wrapper.js:10:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/agent-wrapper.js:11:const { v4: uuidv4 } = require('uuid');
+ClaudeSFDC/error-logging/agent-wrapper.js:477:module.exports = {
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:6:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:7:const path = require('path');
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:8:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:806:module.exports = { PatternAnalyzer };
+ClaudeSFDC/frameworks/data-hygiene/DataEnrichmentEngine.js:958:module.exports = DataEnrichmentEngine;
+ClaudeSFDC/scripts/test-date-fix.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/test-date-fix.js:7:const SOQLQueryBuilder = require('./soql-query-builder.js');
+ClaudeSFDC/scripts/agent-investigator.sh:1:#!/bin/bash
+ClaudeSFDC/agents/utilities/deploy-metadata.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/integrations/agent-update-snippet.md:16:const { createAgentWrapper } = require('../../error-logging/agent-wrapper');
+ClaudeSFDC/scripts/monitoring-dashboard.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/monitoring-dashboard.js:16:const express = require('express');
+ClaudeSFDC/scripts/monitoring-dashboard.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/monitoring-dashboard.js:18:const path = require('path');
+ClaudeSFDC/scripts/monitoring-dashboard.js:19:const { exec } = require('child_process');
+ClaudeSFDC/scripts/monitoring-dashboard.js:20:const { promisify } = require('util');
+ClaudeSFDC/agents/utilities/verify-deployment.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/object-analysis-engine.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/object-analysis-engine.js:1919:module.exports = ObjectAnalysisEngine;
+ClaudeSFDC/scripts/object-analysis-engine.js:1930:    const fs = require('fs');
+ClaudeSFDC/error-logging/integrations/agent-integration.js:6:const { ErrorLogger, withErrorLogging } = require('../core/error-logger');
+ClaudeSFDC/error-logging/integrations/agent-integration.js:7:const { AlertSystem } = require('../alerts/alert-system');
+ClaudeSFDC/error-logging/integrations/agent-integration.js:8:const path = require('path');
+ClaudeSFDC/error-logging/integrations/agent-integration.js:9:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/integrations/agent-integration.js:588:module.exports = {
+ClaudeSFDC/scripts/chunked-operations.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/chunked-operations.py:13:from pathlib import Path
+ClaudeSFDC/scripts/chunked-operations.py:14:from typing import List, Dict, Any, Optional, Iterator, Tuple
+ClaudeSFDC/scripts/chunked-operations.py:15:from datetime import datetime
+ClaudeSFDC/scripts/chunked-operations.py:38:    from safe_json_parser import SafeJSONParser
+ClaudeSFDC/scripts/chunked-operations.py:473:def main():
+ClaudeSFDC/agents/tests/test-deployment-execution.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/verify.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/error-logging/integrations/adapter-ingester.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/integrations/adapter-ingester.js:6:const fs = require('fs');
+ClaudeSFDC/error-logging/integrations/adapter-ingester.js:8:const path = require('path');
+ClaudeSFDC/error-logging/integrations/adapter-ingester.js:9:const readline = require('readline');
+ClaudeSFDC/error-logging/integrations/adapter-ingester.js:10:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/error-logging/integrations/adapter-ingester.js:118:module.exports = { AdapterIngester };
+ClaudeSFDC/scripts/soql-query-rewriter.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/soql-query-rewriter.js:14:const fs = require('fs').promises;
+ClaudeSFDC/scripts/soql-query-rewriter.js:15:const path = require('path');
+ClaudeSFDC/scripts/soql-query-rewriter.js:504:module.exports = SOQLQueryRewriter;
+ClaudeSFDC/scripts/gpt5-cli.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/run-revops-assessment.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/health-check.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/health-check.js:7:const { ErrorLogger } = require('../core/error-logger');
+ClaudeSFDC/error-logging/scripts/health-check.js:8:const { PatternAnalyzer } = require('../analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/scripts/health-check.js:9:const http = require('http');
+ClaudeSFDC/error-logging/scripts/health-check.js:10:const fs = require('fs');
+ClaudeSFDC/error-logging/scripts/health-check.js:11:const path = require('path');
+ClaudeSFDC/error-logging/scripts/health-check.js:114:        const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/error-logging/scripts/health-check.js:132:    const fs = require('fs');
+ClaudeSFDC/error-logging/scripts/health-check.js:133:    const path = require('path');
+ClaudeSFDC/error-logging/scripts/health-check.js:256:    const process = require('process');
+ClaudeSFDC/error-logging/scripts/health-check.js:371:module.exports = { HealthChecker };
+ClaudeSFDC/scripts/tool-inventory.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/tool-inventory.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/tool-inventory.js:10:const path = require('path');
+ClaudeSFDC/scripts/tool-inventory.js:11:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/tool-inventory.js:421:module.exports = {
+ClaudeSFDC/error-logging/scripts/update-database-schema.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/soql-query-builder.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/soql-query-builder.js:575:if (typeof module !== 'undefined' && module.exports) {
+ClaudeSFDC/scripts/soql-query-builder.js:576:    module.exports = SOQLQueryBuilder;
+ClaudeSFDC/error-logging/scripts/start-system.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/smart-import-orchestrator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/smart-import-orchestrator.sh:302:from simple_salesforce import Salesforce
+ClaudeSFDC/error-logging/scripts/backup-data.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/fix-soql-query.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/fix-soql-query.js:64:module.exports = { fixSOQLQuery };
+ClaudeSFDC/error-logging/scripts/stop-system.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/cleanup-mcp.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/batch-operations.sh:1:#!/bin/bash
+ClaudeSFDC/agents/execution/deployment-bridge.js:1:#!/usr/bin/env node
+ClaudeSFDC/agents/execution/deployment-bridge.js:8:const { exec } = require('child_process');
+ClaudeSFDC/agents/execution/deployment-bridge.js:9:const { promisify } = require('util');
+ClaudeSFDC/agents/execution/deployment-bridge.js:10:const fs = require('fs').promises;
+ClaudeSFDC/agents/execution/deployment-bridge.js:11:const path = require('path');
+ClaudeSFDC/agents/execution/deployment-bridge.js:414:module.exports = DeploymentBridge;
+ClaudeSFDC/error-logging/scripts/init-database.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/init-database.js:8:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/error-logging/scripts/init-database.js:9:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/scripts/init-database.js:10:const path = require('path');
+ClaudeSFDC/error-logging/scripts/init-database.js:235:module.exports = DatabaseInitializer;
+ClaudeSFDC/scripts/validate-soql.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/test-system.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/test-system.js:6:const path = require('path');
+ClaudeSFDC/error-logging/scripts/test-system.js:7:const { ErrorLogger } = require('../core/error-logger');
+ClaudeSFDC/error-logging/scripts/test-system.js:8:const { PatternAnalyzer } = require('../analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/scripts/test-system.js:9:const { AgentIntegration } = require('../integrations/agent-integration');
+ClaudeSFDC/scripts/test-renewal-automation.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/monitoring/setup-monitoring-crons.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/update-agents-mcp-priority.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/generate-safe-defaults.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/unified-system-validator.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:7:const { PatternAnalyzer } = require('../analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:8:const { ErrorLogger } = require('../core/error-logger');
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:9:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:10:const path = require('path');
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:302:module.exports = { ErrorAnalysisCLI };
+ClaudeSFDC/scripts/test-flow-deployment-system.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/monitoring/flow-consolidation-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-error-management.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/generate-agent-prompts.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/generate-agent-prompts.js:8:const fs = require('fs');
+ClaudeSFDC/scripts/generate-agent-prompts.js:9:const path = require('path');
+ClaudeSFDC/scripts/generate-agent-prompts.js:10:const yaml = require('js-yaml');
+ClaudeSFDC/scripts/cli/fields-search.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/cli/picklist.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/cli/flow-list.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:16:const { exec } = require('child_process');
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:17:const { promisify } = require('util');
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:18:const fs = require('fs').promises;
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:19:const path = require('path');
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:22:class FlowComplexityAuditor {
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:675:module.exports = FlowComplexityAuditor;
+ClaudeSFDC/scripts/bulk-operation-preflight.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation-rule-manager.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-rollup-solution.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:19:const { exec } = require('child_process');
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:20:const { promisify } = require('util');
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:21:const fs = require('fs').promises;
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:22:const path = require('path');
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:23:const crypto = require('crypto');
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:877:module.exports = ValidationRuleMonitor;
+ClaudeSFDC/scripts/agent-testing-framework.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/agent-testing-framework.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/agent-testing-framework.js:10:const path = require('path');
+ClaudeSFDC/scripts/agent-testing-framework.js:11:const yaml = require('js-yaml');
+ClaudeSFDC/scripts/agent-testing-framework.js:12:const { execSync, spawn } = require('child_process');
+ClaudeSFDC/scripts/agent-testing-framework.js:13:const { performance } = require('perf_hooks');
+ClaudeSFDC/scripts/agent-testing-framework.js:542:            const HealthMonitor = require(monitorScript);
+ClaudeSFDC/scripts/agent-testing-framework.js:565:            const ToolInventory = require(inventoryScript);
+ClaudeSFDC/scripts/agent-testing-framework.js:796:module.exports = AgentTestSuite;
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:25:const { exec } = require('child_process');
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:26:const { promisify } = require('util');
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:27:const fs = require('fs').promises;
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:28:const path = require('path');
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:29:const http = require('http');
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:1054:module.exports = SystemHealthDashboard;
+ClaudeSFDC/scripts/claude-instance-manager.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/fix-missing-error-handling.sh:1:#!/bin/bash
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:1:#!/usr/bin/env python3
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:12:from datetime import datetime, timedelta
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:13:from typing import Dict, List, Any, Tuple, Optional
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:15:from dataclasses import dataclass
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:32:class SalesforceRevOpsAuditor:
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:127:        from shutil import which
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:689:def main():
+ClaudeSFDC/scripts/update-opportunities-batch.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/enable-model-proxy.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/fix-flow-debug-actions.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/update-opportunities-test.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/monitoring/monitoring-utils.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/monitoring/monitoring-utils.js:15:const fs = require('fs').promises;
+ClaudeSFDC/scripts/monitoring/monitoring-utils.js:16:const path = require('path');
+ClaudeSFDC/scripts/monitoring/monitoring-utils.js:17:const { exec } = require('child_process');
+ClaudeSFDC/scripts/monitoring/monitoring-utils.js:18:const { promisify } = require('util');
+ClaudeSFDC/scripts/monitoring/monitoring-utils.js:574:module.exports = {
+ClaudeSFDC/scripts/monitoring/query-monitor.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/monitoring/query-monitor.js:17:const https = require('https');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:18:const url = require('url');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:19:const fs = require('fs').promises;
+ClaudeSFDC/scripts/monitoring/query-monitor.js:20:const path = require('path');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:21:const { exec } = require('child_process');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:22:const { promisify } = require('util');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:709:module.exports = QueryMonitor;
+ClaudeSFDC/scripts/sfdc-activity-reports.js:1:const { exec } = require('child_process');
+ClaudeSFDC/scripts/sfdc-activity-reports.js:2:const fs = require('fs');
+ClaudeSFDC/scripts/sfdc-activity-reports.js:3:const path = require('path');
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:79:#!/bin/bash
+ClaudeSFDC/scripts/test-framework.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-framework.sh:123:        python3 -c 'import sys; sys.path.insert(0, \"${SCRIPT_DIR}/lib\"); from python_commons import *'
+ClaudeSFDC/scripts/test-framework.sh:130:from python_commons import setup_logging, log_info
+ClaudeSFDC/scripts/csv-sanitizer.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/unified-data-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/report-creation-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/report-creation-validator.js:10:const { exec } = require('child_process');
+ClaudeSFDC/scripts/report-creation-validator.js:11:const { promisify } = require('util');
+ClaudeSFDC/scripts/report-creation-validator.js:610:    module.exports = { ReportCreationValidator, SAMPLE_REPORT_SPEC };
+ClaudeSFDC/scripts/approval-bypass.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment-pipeline.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/import-pipeline-test.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/import-pipeline-test.sh:109:const fs = require('fs');
+ClaudeSFDC/scripts/import-pipeline-test.sh:110:const path = require('path');
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:8:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:9:const path = require('path');
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:10:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:11:const { format } = require('date-fns');
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:608:module.exports = AgentErrorReporter;
+ClaudeSFDC/scripts/assign-layout-to-profiles.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-new-capabilities.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-new-capabilities.sh:160:const BulkAPIHandler = require('${LIB_DIR}/bulk-api-handler.js');
+ClaudeSFDC/scripts/test-new-capabilities.sh:163:    const data = require('${DATA_DIR}/large-dataset.json');
+ClaudeSFDC/scripts/test-new-capabilities.sh:191:const ErrorRecoverySystem = require('./lib/error-recovery.js');
+ClaudeSFDC/scripts/test-new-capabilities.sh:263:const PreFlightValidator = require('./lib/preflight-validator.js');
+ClaudeSFDC/scripts/test-new-capabilities.sh:264:const BulkAPIHandler = require('./lib/bulk-api-handler.js');
+ClaudeSFDC/scripts/test-new-capabilities.sh:265:const ErrorRecoverySystem = require('./lib/error-recovery.js');
+ClaudeSFDC/scripts/test-new-capabilities.sh:266:const OperationVerifier = require('./lib/operation-verifier.js');
+ClaudeSFDC/scripts/test-new-capabilities.sh:337:const BulkAPIHandler = require('./lib/bulk-api-handler.js');
+ClaudeSFDC/scripts/smart-retry.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/safe-update.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-cushman-scenario.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-cushman-scenario.sh:118:const BulkAPIHandler = require('./scripts/lib/bulk-api-handler.js');
+ClaudeSFDC/scripts/test-cushman-scenario.sh:119:const fs = require('fs');
+ClaudeSFDC/scripts/mcp-wrapper.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/salesforce-id-verifier.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/salesforce-id-verifier.js:10:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/salesforce-id-verifier.js:387:module.exports = SalesforceIdVerifier;
+ClaudeSFDC/scripts/gong-formula-library.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/gong-formula-library.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/gong-formula-library.js:10:const path = require('path');
+ClaudeSFDC/scripts/gong-formula-library.js:457:module.exports = {
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:3:const sqlite3 = require('sqlite3').verbose();
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:4:const path = require('path');
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:5:const fs = require('fs');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:226:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:259:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:284:#!/bin/bash
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:331:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:336:const path = require('path');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:337:const { ErrorLogger } = require('../core/error-logger');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:338:const { PatternAnalyzer } = require('../analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:339:const { AgentIntegration } = require('../integrations/agent-integration');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:413:#!/usr/bin/env node
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:418:const { ErrorLogger } = require('./core/error-logger');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:419:const { PatternAnalyzer } = require('./analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:420:const { DashboardServer } = require('./dashboard/dashboard-server');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:421:const { AlertSystem } = require('./alerts/alert-system');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:422:const { AgentIntegration } = require('./integrations/agent-integration');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:424:const fs = require('fs');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:425:const path = require('path');
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:535:module.exports = { ErrorLoggingSystem };
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:664:        const fs = require('fs');
+ClaudeSFDC/scripts/analysis/check_sfdx.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/error-pattern-learner.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/error-pattern-learner.py:12:from datetime import datetime, timedelta
+ClaudeSFDC/scripts/error-pattern-learner.py:13:from collections import defaultdict, Counter
+ClaudeSFDC/scripts/error-pattern-learner.py:14:from pathlib import Path
+ClaudeSFDC/scripts/error-pattern-learner.py:360:def main():
+ClaudeSFDC/scripts/report-type-resolver.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/report-type-resolver.js:10:const ReportsRestAPI = require('./lib/reports-rest-api');
+ClaudeSFDC/scripts/report-type-resolver.js:11:const fs = require('fs').promises;
+ClaudeSFDC/scripts/report-type-resolver.js:421:module.exports = ReportTypeResolver;
+ClaudeSFDC/agents/sfdc-data-hygiene-specialist.yaml:28:   const FrameworkLoader = require('../../../utils/framework-loader.js');
+ClaudeSFDC/scripts/job-monitor.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/test-simple.js:1:#!/usr/bin/env node
+ClaudeSFDC/error-logging/test-simple.js:7:const Database = require('better-sqlite3');
+ClaudeSFDC/error-logging/test-simple.js:8:const { v4: uuidv4 } = require('uuid');
+ClaudeSFDC/scripts/safe-json-parser.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/safe-json-parser.py:13:from pathlib import Path
+ClaudeSFDC/scripts/safe-json-parser.py:14:from typing import Dict, Any, Optional, Union, List
+ClaudeSFDC/scripts/safe-json-parser.py:16:from datetime import datetime
+ClaudeSFDC/scripts/safe-json-parser.py:415:def main():
+ClaudeSFDC/scripts/setup-claude-tools.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-agent-field-verification.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/analysis/analyze-agent-tools.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/analysis/analyze-agent-tools.py:5:from pathlib import Path
+ClaudeSFDC/scripts/analysis/analyze-agent-tools.py:6:from collections import defaultdict
+ClaudeSFDC/scripts/update-agent-models.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/update-agent-models.sh:80:#!/bin/bash
+ClaudeSFDC/scripts/validate-file-placement.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-flow-removal-system.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-renewal-opportunity-tracking.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/audit-logger.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/audit-logger.py:10:from typing import Dict, List, Any, Optional, Tuple
+ClaudeSFDC/scripts/audit-logger.py:11:from dataclasses import dataclass, field, asdict
+ClaudeSFDC/scripts/audit-logger.py:12:from datetime import datetime, timedelta
+ClaudeSFDC/scripts/audit-logger.py:13:from pathlib import Path
+ClaudeSFDC/scripts/audit-logger.py:16:from enum import Enum
+ClaudeSFDC/scripts/audit-logger.py:632:def main():
+ClaudeSFDC/scripts/claude-performance-monitor.sh:1:#!/bin/bash
+ClaudeSFDC/docs/ERROR_PREVENTION_TOOLKIT.md:292:#!/bin/bash
+ClaudeSFDC/scripts/deploy-renewal-field-with-verification.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation/check_layouts.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/validation/check_layouts.py:16:def main():
+ClaudeSFDC/scripts/mcp-health-monitor.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/credential-manager.sh:1:#!/bin/bash
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:62:const orchestrator = require('./agents/sfdc-merge-orchestrator');
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:129:const planner = require('./scripts/lib/data-sequence-planner');
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:273:const graph = require('./scripts/lib/operation-dependency-graph');
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:332:const sequencer = require('./scripts/lib/operation-sequencer');
+ClaudeSFDC/scripts/error-pattern-learner.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/error-pattern-learner.sh:374:#!/bin/bash
+ClaudeSFDC/scripts/validation/test.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation/test_instance_detection.py:1:#!/usr/bin/env python3
+ClaudeSFDC/docs/BULK_OPERATION_BEST_PRACTICES.md:220:#!/bin/bash
+ClaudeSFDC/docs/BULK_OPERATION_BEST_PRACTICES.md:255:#!/bin/bash
+ClaudeSFDC/docs/BULK_OPERATION_BEST_PRACTICES.md:310:#!/bin/bash
+ClaudeSFDC/scripts/lib/deploy-validator.sh:1:#!/bin/bash
+ClaudeSFDC/docs/JWT_AUTH_SETUP.md:170:#!/bin/bash
+ClaudeSFDC/docs/JWT_AUTH_SETUP.md:184:const { exec } = require('child_process');
+ClaudeSFDC/docs/JWT_AUTH_SETUP.md:185:const { promisify } = require('util');
+ClaudeSFDC/scripts/error-prevention-guard.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation/test_direct_connection.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/investigation-engine.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/investigation-engine.py:11:from typing import Dict, List, Any, Optional, Tuple, Set
+ClaudeSFDC/scripts/investigation-engine.py:12:from dataclasses import dataclass, field, asdict
+ClaudeSFDC/scripts/investigation-engine.py:13:from datetime import datetime, timedelta
+ClaudeSFDC/scripts/investigation-engine.py:14:from pathlib import Path
+ClaudeSFDC/scripts/investigation-engine.py:15:from enum import Enum
+ClaudeSFDC/scripts/investigation-engine.py:1255:def main():
+ClaudeSFDC/docs/DEPLOYMENT_BEST_PRACTICES.md:171:const generator = require('./scripts/lib/template-generator.js');
+ClaudeSFDC/scripts/validation/quick_security_check.py:1:#!/usr/bin/env python3
+ClaudeSFDC/docs/FLEXIPAGE_DEVELOPMENT_GUIDE.md:422:   const patterns = require('./scripts/lib/flexipage-patterns.js');
+ClaudeSFDC/docs/FLEXIPAGE_DEVELOPMENT_GUIDE.md:428:   const recovery = require('./scripts/lib/flexipage-recovery.js');
+ClaudeSFDC/scripts/update-subagents-metadata.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/update-subagents-metadata.sh:37:const MetadataRetriever = require('../../scripts/lib/metadata-retrieval-framework');
+ClaudeSFDC/scripts/update-subagents-metadata.sh:38:const InstanceAgnosticAnalyzer = require('../../scripts/lib/instance-agnostic-metadata-analyzer');
+ClaudeSFDC/scripts/update-subagents-metadata.sh:39:const PackageXMLGenerator = require('../../scripts/lib/package-xml-generator');
+ClaudeSFDC/scripts/analytics-automation-v2.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation/check_sfdx.py:1:#!/usr/bin/env python3
+ClaudeSFDC/docs/IMPLEMENTATION_FRAMEWORK.md:242:#!/bin/bash
+ClaudeSFDC/docs/IMPLEMENTATION_FRAMEWORK.md:275:#!/bin/bash
+ClaudeSFDC/scripts/deploy-revenue-fields-enhanced.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/safe-bulk-import.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation/test_connection.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/validation/test_connection.py:13:def main():
+ClaudeSFDC/docs/ASANA_ENHANCED_FEATURES.md:81:const { asanaEnhancedManager } = require('./utils/asana-enhanced-manager');
+ClaudeSFDC/docs/ASANA_ENHANCED_FEATURES.md:100:const { asanaSubtaskManager } = require('./integration/asana-subtask-manager');
+ClaudeSFDC/docs/ASANA_ENHANCED_FEATURES.md:116:const { asanaTaskMatcher } = require('./integration/asana-task-matcher');
+ClaudeSFDC/docs/ASANA_ENHANCED_FEATURES.md:136:const { asanaTimeIntegration } = require('./utils/asana-time-integration');
+ClaudeSFDC/scripts/validation/check-and-remove.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation/test_asana_connection.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/report-api-diagnostic.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/report-api-diagnostic.js:13:const { exec } = require('child_process');
+ClaudeSFDC/scripts/report-api-diagnostic.js:14:const { promisify } = require('util');
+ClaudeSFDC/scripts/report-api-diagnostic.js:16:const https = require('https');
+ClaudeSFDC/scripts/report-api-diagnostic.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/report-api-diagnostic.js:615:module.exports = { ReportAPIDiagnostic };
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:8:const readline = require('readline');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:14:const DocumentationOrganizer = require('./documentation-organizer');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:15:const ReportTypeCreator = require('./report-type-creator');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:16:const LightningPageEnhancer = require('./lightning-page-enhancer');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:17:const SalesforceStandardsValidator = require('./salesforce-standards-validator');
+ClaudeSFDC/scripts/lib/salesforce-standards-cli.js:665:module.exports = SalesforceStandardsCLI;
+ClaudeSFDC/docs/CLAUDE_VISUAL_CLI_GUIDE.md:233:#!/bin/bash
+ClaudeSFDC/scripts/gong-list-view-generator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/gong-list-view-generator.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/gong-list-view-generator.js:10:const path = require('path');
+ClaudeSFDC/scripts/gong-list-view-generator.js:662:module.exports = {
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:184:const SOQLQueryBuilder = require('./scripts/soql-query-builder.js');
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:200:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/report-migration-tool.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/report-migration-tool.sh:122:const fs = require('fs');
+ClaudeSFDC/scripts/report-migration-tool.sh:123:const path = require('path');
+ClaudeSFDC/scripts/report-migration-tool.sh:428:const fs = require('fs');
+ClaudeSFDC/scripts/report-migration-tool.sh:429:const { execSync } = require('child_process');
+ClaudeSFDC/docs/REPORTS_API_UPGRADE.md:54:const FactMapParser = require('./scripts/lib/factmap-parser');
+ClaudeSFDC/docs/REPORTS_API_UPGRADE.md:77:const CompositeAPI = require('./scripts/lib/composite-api');
+ClaudeSFDC/docs/REPORTS_API_UPGRADE.md:114:const QueryMonitor = require('./scripts/monitoring/query-monitor');
+ClaudeSFDC/docs/REPORTS_API_UPGRADE.md:134:const BulkAPIHandler = require('./scripts/lib/bulk-api-handler');
+ClaudeSFDC/scripts/validate-asana-compliance.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/validate-asana-compliance.js:9:const { asanaEnhancedManager } = require('../utils/asana-enhanced-manager');
+ClaudeSFDC/scripts/validate-asana-compliance.js:10:const { asanaEnhancedConfig } = require('../config/asana-enhanced-config');
+ClaudeSFDC/scripts/validate-asana-compliance.js:11:const { asanaTaskMatcher } = require('../integration/asana-task-matcher');
+ClaudeSFDC/scripts/validate-asana-compliance.js:263:module.exports = {
+ClaudeSFDC/scripts/preflight.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/lib/standards-monitor.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/standards-monitor.js:8:const fs = require('fs');
+ClaudeSFDC/scripts/lib/standards-monitor.js:9:const path = require('path');
+ClaudeSFDC/scripts/lib/standards-monitor.js:10:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/standards-monitor.js:11:const https = require('https');
+ClaudeSFDC/scripts/lib/standards-monitor.js:72:        const SalesforceStandardsValidator = require('./salesforce-standards-validator');
+ClaudeSFDC/scripts/lib/standards-monitor.js:483:module.exports = StandardsMonitor;
+ClaudeSFDC/docs/SLACK_INTEGRATION.md:166:const SlackReleaseNotifier = require('./scripts/slack-release-notifier');
+ClaudeSFDC/scripts/validate-phase4-automation.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/validate-phase4-automation.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/validate-phase4-automation.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/validate-phase4-automation.js:11:const path = require('path');
+ClaudeSFDC/scripts/validate-phase4-automation.js:465:module.exports = Phase4AutomationValidator;
+ClaudeSFDC/docs/SETUP_WIZARD_GUIDE.md:290:const fs = require('fs');
+ClaudeSFDC/scripts/deploy.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/docs/PICKLIST_VALIDATION_GUIDE.md:101:#!/bin/bash
+ClaudeSFDC/docs/PICKLIST_VALIDATION_GUIDE.md:164:const PicklistValidator = require('./mcp-tools/picklist-validator');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:25:const SOQLQueryBuilder = require('./scripts/soql-query-builder.js');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:40:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:186:const validator = require('./scripts/validate-soql.sh');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:197:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:270:const SOQLQueryBuilder = require('../../scripts/soql-query-builder.js');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:291:        const { exec } = require('child_process');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:310:const templates = require('./templates/soql-templates.json');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:388:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:447:from scripts.error_pattern_learner import ErrorPatternLearner
+ClaudeSFDC/scripts/add-date-context-to-agents.sh:1:#!/bin/bash
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:39:const MetadataRetriever = require('./lib/metadata-retrieval-framework');
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:65:const InstanceAgnosticAnalyzer = require('./lib/instance-agnostic-metadata-analyzer');
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:86:const PackageXMLGenerator = require('./lib/package-xml-generator');
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:105:const MetadataRetriever = require('../../scripts/lib/metadata-retrieval-framework');
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:106:const InstanceAgnosticAnalyzer = require('../../scripts/lib/instance-agnostic-metadata-analyzer');
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:253:const MetadataRetriever = require('./lib/metadata-retrieval-framework');
+ClaudeSFDC/scripts/discover-task-report-type.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/discover-task-report-type.js:8:const ReportsRestAPI = require('./lib/reports-rest-api');
+ClaudeSFDC/docs/PRODUCTION_SAFE_REPORTS.md:152:const UniversalReportCreator = require('./scripts/lib/universal-report-creator');
+ClaudeSFDC/scripts/SECURITY_FIXES_SUMMARY.md:141:#!/bin/bash
+ClaudeSFDC/scripts/SECURITY_FIXES_SUMMARY.md:149:#!/bin/bash
+ClaudeSFDC/scripts/config-manager.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/config-manager.js:15:const fs = require('fs').promises;
+ClaudeSFDC/scripts/config-manager.js:16:const path = require('path');
+ClaudeSFDC/scripts/config-manager.js:17:const chalk = require('chalk');
+ClaudeSFDC/scripts/config-manager.js:18:const ora = require('ora');
+ClaudeSFDC/scripts/config-manager.js:19:const axios = require('axios');
+ClaudeSFDC/scripts/config-manager.js:20:const { exec } = require('child_process');
+ClaudeSFDC/scripts/config-manager.js:21:const { promisify } = require('util');
+ClaudeSFDC/scripts/config-manager.js:489:module.exports = {
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:65:const ErrorRecoverySystem = require('./scripts/lib/error-recovery.js');
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:152:const data = require('./your_data.json');
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:246:const ErrorRecoverySystem = require('./scripts/lib/error-recovery.js');
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:276:  const ErrorRecoverySystem = require('./scripts/lib/error-recovery.js');
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:306:const ErrorRecoverySystem = require('./scripts/lib/error-recovery.js');
+ClaudeSFDC/scripts/lib/metadata-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/metadata-validator.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/metadata-validator.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/metadata-validator.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/metadata-validator.js:12:const xml2js = require('xml2js');
+ClaudeSFDC/scripts/lib/metadata-validator.js:717:module.exports = MetadataValidator;
+ClaudeSFDC/scripts/deploy-quote-segment-solution.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/verify-implementation.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:1:#!/bin/bash
+ClaudeSFDC/docs/FLEXIPAGE_TRAINING_EXAMPLES.md:21:const flexiPageTools = require('./mcp-extensions/tools/flexipage-tools');
+ClaudeSFDC/docs/FLEXIPAGE_TRAINING_EXAMPLES.md:665:#!/bin/bash
+ClaudeSFDC/docs/FLEXIPAGE_TRAINING_EXAMPLES.md:683:const assert = require('assert');
+ClaudeSFDC/docs/FLEXIPAGE_TRAINING_EXAMPLES.md:684:const validator = require('./scripts/lib/flexipage-validator');
+ClaudeSFDC/scripts/validation-first-creator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/validation-first-creator.js:10:const ReportsRestAPI = require('./lib/reports-rest-api');
+ClaudeSFDC/scripts/validation-first-creator.js:11:const fs = require('fs').promises;
+ClaudeSFDC/scripts/validation-first-creator.js:402:module.exports = ValidationFirstCreator;
+ClaudeSFDC/scripts/lib/documentation-organizer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/documentation-organizer.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/lib/documentation-organizer.js:10:const path = require('path');
+ClaudeSFDC/scripts/lib/documentation-organizer.js:11:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/documentation-organizer.js:336:module.exports = DocumentationOrganizer;
+ClaudeSFDC/scripts/smart-operation-wrapper.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/smart-operation-wrapper.py:15:from typing import Dict, List, Any, Optional, Tuple
+ClaudeSFDC/scripts/smart-operation-wrapper.py:16:from pathlib import Path
+ClaudeSFDC/scripts/smart-operation-wrapper.py:17:from datetime import datetime
+ClaudeSFDC/scripts/smart-operation-wrapper.py:18:from enum import Enum
+ClaudeSFDC/scripts/smart-operation-wrapper.py:28:    from auto_fix_engine import AutoFixEngine, FixConfidence
+ClaudeSFDC/scripts/smart-operation-wrapper.py:406:def main():
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:13:const { execSync, spawn } = require('child_process');
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:14:const fs = require('fs');
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:15:const path = require('path');
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:277:module.exports = SalesforceDiagnostic;
+ClaudeSFDC/scripts/validate-duplicates.sh:1:#!/bin/bash
+ClaudeSFDC/docs/COMPLETE_IMPORT_SOLUTION.md:339:#!/bin/bash
+ClaudeSFDC/docs/COMPLETE_IMPORT_SOLUTION.md:358:#!/bin/bash
+ClaudeSFDC/docs/COMPLETE_IMPORT_SOLUTION.md:372:#!/bin/bash
+ClaudeSFDC/scripts/claude-debug-setup.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/flow-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flow-validator.js:12:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/flow-validator.js:13:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-validator.js:14:const xml2js = require('xml2js');
+ClaudeSFDC/scripts/lib/flow-validator.js:15:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/flow-validator.js:16:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/flow-validator.js:885:module.exports = FlowValidator;
+ClaudeSFDC/scripts/audit-report-generator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/audit-report-generator.js:8:const fs = require('fs').promises;
+ClaudeSFDC/scripts/audit-report-generator.js:9:const path = require('path');
+ClaudeSFDC/scripts/audit-report-generator.js:1066:module.exports = AuditReportGenerator;
+ClaudeSFDC/scripts/audit-report-generator.js:1077:    const fs = require('fs');
+ClaudeSFDC/docs/VALIDATION_SUITE_GUIDE.md:156:#!/bin/bash
+ClaudeSFDC/docs/VALIDATION_SUITE_GUIDE.md:189:#!/bin/bash
+ClaudeSFDC/docs/guides/MULTI_INSTANCE_SETUP.md:165:#!/bin/bash
+ClaudeSFDC/docs/guides/MULTI_INSTANCE_SETUP.md:268:#!/bin/bash
+ClaudeSFDC/docs/guides/MULTI_INSTANCE_SETUP.md:446:#!/bin/bash
+ClaudeSFDC/scripts/lib/guard.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/fix-eval-usage.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/dashboard-refresh-system.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/dashboard-refresh-system.js:9:const { exec } = require('child_process');
+ClaudeSFDC/scripts/dashboard-refresh-system.js:10:const { promisify } = require('util');
+ClaudeSFDC/scripts/dashboard-refresh-system.js:11:const fs = require('fs').promises;
+ClaudeSFDC/scripts/dashboard-refresh-system.js:12:const path = require('path');
+ClaudeSFDC/scripts/dashboard-refresh-system.js:195:            const https = require('https');
+ClaudeSFDC/scripts/dashboard-refresh-system.js:196:            const url = require('url');
+ClaudeSFDC/scripts/dashboard-refresh-system.js:624:module.exports = DashboardRefreshSystem;
+ClaudeSFDC/docs/implementation/REPORT_CREATION_SOLUTION.md:31:const ReportsRestAPI = require('./scripts/lib/reports-rest-api');
+ClaudeSFDC/docs/implementation/REPORT_CREATION_SOLUTION.md:92:const discovery = require('./scripts/lib/report-type-discovery');
+ClaudeSFDC/docs/implementation/REPORT_CREATION_SOLUTION.md:240:const ReportsRestAPI = require('../scripts/lib/reports-rest-api');
+ClaudeSFDC/docs/implementation/FIELD_DEPLOYMENT_SOLUTION.md:68:const AdvancedFieldDeployer = require('./scripts/advanced-field-deployer.js');
+ClaudeSFDC/scripts/add-custom-patterns.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/add-custom-patterns.js:9:const ErrorRecoverySystem = require('./lib/error-recovery.js');
+ClaudeSFDC/scripts/add-custom-patterns.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/add-custom-patterns.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-removal-manager.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flow-removal-manager.js:18:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/flow-removal-manager.js:19:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/flow-removal-manager.js:20:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-removal-manager.js:287:        const readline = require('readline').createInterface({
+ClaudeSFDC/scripts/lib/flow-removal-manager.js:466:module.exports = FlowRemovalManager;
+ClaudeSFDC/load-env.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/claude-dashboard.sh:1:#!/bin/bash
+ClaudeSFDC/docs/FLEXIPAGE_ENHANCEMENT_GUIDE.md:159:const template = require('./templates/flexipages/standard-record-page.xml');
+ClaudeSFDC/scripts/sfdc-activity-query.js:1:const { exec } = require('child_process');
+ClaudeSFDC/scripts/sfdc-activity-query.js:2:const fs = require('fs');
+ClaudeSFDC/scripts/sfdc-activity-query.js:3:const path = require('path');
+ClaudeSFDC/docs/FRAMEWORK_INTEGRATION_GUIDE.md:30:   const FrameworkLoader = require('../../../utils/framework-loader.js');
+ClaudeSFDC/scripts/unified-import-manager.sh:1:#!/bin/bash
+ClaudeSFDC/docs/implementation/REPORT_CREATION_REMEDIATION_PLAN.md:400:#!/bin/bash
+ClaudeSFDC/scripts/lib/executive-reporter.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/executive-reporter.js:8:const fs = require('fs');
+ClaudeSFDC/scripts/lib/executive-reporter.js:9:const path = require('path');
+ClaudeSFDC/scripts/lib/executive-reporter.js:10:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/executive-reporter.js:98:            const SalesforceStandardsValidator = require('./salesforce-standards-validator');
+ClaudeSFDC/scripts/lib/executive-reporter.js:640:module.exports = ExecutiveReporter;
+ClaudeSFDC/scripts/validate-picklists.sh:1:#!/bin/bash
+ClaudeSFDC/docs/RUNBOOK_ROLLBACK.md:209:const changes = require('./partial_rollback.json');
+ClaudeSFDC/docs/RUNBOOK_ROLLBACK.md:210:const OperationVerifier = require('./scripts/lib/operation-verifier.js');
+ClaudeSFDC/scripts/install-mcp-service.sh:1:#!/bin/bash
+ClaudeSFDC/docs/implementation/UNIVERSAL_REPORT_SOLUTION.md:24:const UniversalReportCreator = require('./scripts/lib/universal-report-creator');
+ClaudeSFDC/docs/implementation/ASANA_TIME_TRACKING_IMPLEMENTATION.md:206:const { TimeTracker } = require('./utils/time-tracker');
+ClaudeSFDC/scripts/migrate-instances.sh:1:#!/bin/bash
+ClaudeSFDC/docs/implementation/OBJECT_AUDIT_GUIDE.md:229:module.exports = {
+ClaudeSFDC/docs/implementation/OBJECT_AUDIT_GUIDE.md:329:const ObjectAuditor = require('./scripts/object-audit');
+ClaudeSFDC/docs/implementation/OBJECT_AUDIT_GUIDE.md:353:const AnalysisEngine = require('./scripts/object-analysis-engine');
+ClaudeSFDC/docs/implementation/OBJECT_AUDIT_GUIDE.md:369:const ReportGenerator = require('./scripts/audit-report-generator');
+ClaudeSFDC/scripts/lib/report-type-cache.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/report-type-cache.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/report-type-cache.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/report-type-cache.js:12:const crypto = require('crypto');
+ClaudeSFDC/scripts/lib/report-type-cache.js:431:module.exports = ReportTypeCache;
+ClaudeSFDC/scripts/auto-fix-engine.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/auto-fix-engine.py:14:from typing import Dict, List, Any, Optional, Tuple, Callable
+ClaudeSFDC/scripts/auto-fix-engine.py:15:from dataclasses import dataclass, field
+ClaudeSFDC/scripts/auto-fix-engine.py:16:from datetime import datetime
+ClaudeSFDC/scripts/auto-fix-engine.py:17:from pathlib import Path
+ClaudeSFDC/scripts/auto-fix-engine.py:18:from enum import Enum
+ClaudeSFDC/scripts/auto-fix-engine.py:676:def main():
+ClaudeSFDC/scripts/test-contract-creation-flow.sh:1:#!/bin/bash
+ClaudeSFDC/docs/implementation/IMPLEMENTATION_COMPLETE.md:167:const FrameworkLoader = require('../../../utils/framework-loader.js');
+ClaudeSFDC/scripts/first-run-wizard.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/first-run-wizard.js:13:const inquirer = require('inquirer').default;
+ClaudeSFDC/scripts/first-run-wizard.js:14:const chalk = require('chalk');
+ClaudeSFDC/scripts/first-run-wizard.js:15:const ora = require('ora');
+ClaudeSFDC/scripts/first-run-wizard.js:16:const fs = require('fs').promises;
+ClaudeSFDC/scripts/first-run-wizard.js:17:const path = require('path');
+ClaudeSFDC/scripts/first-run-wizard.js:18:const { exec } = require('child_process');
+ClaudeSFDC/scripts/first-run-wizard.js:19:const { promisify } = require('util');
+ClaudeSFDC/scripts/first-run-wizard.js:21:const axios = require('axios');
+ClaudeSFDC/scripts/tool-availability-checker.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/flow-consolidation-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/performance-optimizer.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/init-salesforce-instance.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/init-salesforce-instance.sh:330:#!/bin/bash
+ClaudeSFDC/scripts/validate-all.sh:1:#!/bin/bash
+ClaudeSFDC/error-logging/alerts/alert-system.js:6:const nodemailer = require('nodemailer');
+ClaudeSFDC/error-logging/alerts/alert-system.js:7:const { Webhook } = require('discord-webhook-node');
+ClaudeSFDC/error-logging/alerts/alert-system.js:8:const fs = require('fs').promises;
+ClaudeSFDC/error-logging/alerts/alert-system.js:9:const path = require('path');
+ClaudeSFDC/error-logging/alerts/alert-system.js:10:const { ErrorLogger } = require('../core/error-logger');
+ClaudeSFDC/error-logging/alerts/alert-system.js:11:const { PatternAnalyzer } = require('../analysis/pattern-analyzer');
+ClaudeSFDC/error-logging/alerts/alert-system.js:796:module.exports = { AlertSystem };
+ClaudeSFDC/scripts/safe-soql-query.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/analyze-contract-validation-rules.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_make_executable.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/templates/python-script-template.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/templates/python-script-template.py:31:from pathlib import Path
+ClaudeSFDC/scripts/templates/python-script-template.py:32:from typing import Dict, List, Any, Optional
+ClaudeSFDC/scripts/templates/python-script-template.py:38:from python_commons import (
+ClaudeSFDC/scripts/templates/python-script-template.py:202:def main():
+ClaudeSFDC/scripts/templates/shell-script-template.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/diagnostic-toolkit.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/deploy-count-dvms-field.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/record-type-picklist-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/deploy-flows.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/salesforce-standards-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/salesforce-standards-validator.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/salesforce-standards-validator.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/salesforce-standards-validator.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/salesforce-standards-validator.js:542:module.exports = SalesforceStandardsValidator;
+ClaudeSFDC/scripts/update-agent-date-context.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/update-agent-date-context.js:14:const fs = require('fs').promises;
+ClaudeSFDC/scripts/update-agent-date-context.js:15:const path = require('path');
+ClaudeSFDC/scripts/update-agent-date-context.js:16:const yaml = require('js-yaml');
+ClaudeSFDC/scripts/update-agent-date-context.js:322:module.exports = AgentDateContextUpdater;
+ClaudeSFDC/scripts/agent-auto-resolver.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/execute_layout_modification.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/execute_layout_modification.py:7:def main():
+ClaudeSFDC/scripts/persist-instance-config.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/agent-health-monitor.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/agent-health-monitor.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/agent-health-monitor.js:10:const path = require('path');
+ClaudeSFDC/scripts/agent-health-monitor.js:11:const yaml = require('js-yaml');
+ClaudeSFDC/scripts/agent-health-monitor.js:12:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/agent-health-monitor.js:470:module.exports = {
+ClaudeSFDC/scripts/claude-optimize-config.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/execute-flow-removal.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/auto-import-pipeline.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/update-verifier.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/update-verifier.py:13:from pathlib import Path
+ClaudeSFDC/scripts/update-verifier.py:14:from typing import Dict, List, Any, Optional, Tuple
+ClaudeSFDC/scripts/update-verifier.py:15:from datetime import datetime
+ClaudeSFDC/scripts/update-verifier.py:18:from dataclasses import dataclass, asdict
+ClaudeSFDC/scripts/update-verifier.py:39:    from safe_json_parser import SafeJSONParser
+ClaudeSFDC/scripts/update-verifier.py:510:def main():
+ClaudeSFDC/scripts/deployment/run_test.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/analytics-automation.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/response-validator.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/response-validator.py:10:from typing import Dict, List, Any, Optional, Tuple
+ClaudeSFDC/scripts/response-validator.py:11:from dataclasses import dataclass, field
+ClaudeSFDC/scripts/response-validator.py:12:from datetime import datetime
+ClaudeSFDC/scripts/response-validator.py:13:from pathlib import Path
+ClaudeSFDC/scripts/response-validator.py:492:def main():
+ClaudeSFDC/scripts/deployment/execute-removal.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/create-activity-reports.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/create-activity-reports.js:8:const ReportsRestAPI = require('./lib/reports-rest-api');
+ClaudeSFDC/scripts/deploy-revenue-fields.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validate-required.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/setup-consolidation.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/setup-consolidation.sh:163:#!/bin/bash
+ClaudeSFDC/scripts/setup-consolidation.sh:196:#!/bin/bash
+ClaudeSFDC/scripts/setup-consolidation.sh:206:#!/bin/bash
+ClaudeSFDC/scripts/deployment/deploy-contract-flow-fix.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/send-slack-notification.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/send-slack-notification.js:18:const https = require('https');
+ClaudeSFDC/scripts/send-slack-notification.js:19:const fs = require('fs');
+ClaudeSFDC/scripts/send-slack-notification.js:20:const path = require('path');
+ClaudeSFDC/scripts/send-slack-notification.js:451:module.exports = {
+ClaudeSFDC/scripts/test-fixed-queries.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/make-executable.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/script-aliases.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/pre-deployment-checker.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/remove-flows.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/false-positive-regression-tests.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/false-positive-regression-tests.js:10:const { execSync, spawn } = require('child_process');
+ClaudeSFDC/scripts/false-positive-regression-tests.js:11:const fs = require('fs');
+ClaudeSFDC/scripts/false-positive-regression-tests.js:12:const path = require('path');
+ClaudeSFDC/scripts/false-positive-regression-tests.js:587:module.exports = FalsePositiveRegressionTests;
+ClaudeSFDC/scripts/lib/README.md:17:#!/bin/bash
+ClaudeSFDC/scripts/lib/README.md:30:#!/usr/bin/env python3
+ClaudeSFDC/scripts/lib/README.md:33:from python_commons import *
+ClaudeSFDC/scripts/lib/README.md:383:from lib.python_commons import CSVUtils
+ClaudeSFDC/scripts/claude-monitor.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/publish-release.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/auth/jwt-bearer-auth.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-verification-system.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/test-verification-system.sh:190:from scripts.update_verifier import UpdateVerifier
+ClaudeSFDC/scripts/test-verification-system.sh:199:from scripts.update_verifier import UpdateVerifier, UpdateSnapshot
+ClaudeSFDC/scripts/test-verification-system.sh:200:from datetime import datetime
+ClaudeSFDC/scripts/verify-field-accessibility.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/timeout-manager.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/deploy_revops_flows.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/deploy_revops_flows.py:10:from pathlib import Path
+ClaudeSFDC/scripts/deployment/deploy_revops_flows.py:162:def main():
+ClaudeSFDC/scripts/deploy-rollup-solution.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/create-report-safe.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/create-report-safe.js:14:const UniversalReportCreator = require('./lib/universal-report-creator');
+ClaudeSFDC/scripts/create-report-safe.js:15:const readline = require('readline');
+ClaudeSFDC/scripts/deployment/execute-reorganization.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/picklist-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/gong-dashboard-enhancer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/gong-dashboard-enhancer.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/gong-dashboard-enhancer.js:10:const path = require('path');
+ClaudeSFDC/scripts/gong-dashboard-enhancer.js:485:module.exports = {
+ClaudeSFDC/scripts/deployment/run_search.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/flow-test-runner.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/check-init.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/check-init.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/check-init.js:11:const path = require('path');
+ClaudeSFDC/scripts/check-init.js:12:const { spawn } = require('child_process');
+ClaudeSFDC/scripts/check-init.js:13:const chalk = require('chalk');
+ClaudeSFDC/scripts/check-init.js:155:module.exports = {
+ClaudeSFDC/scripts/monitor-agent-performance.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_security_analysis.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/daily-health-check.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/daily-health-check.sh:51:    const ErrorRecoverySystem = require('./scripts/lib/error-recovery.js');
+ClaudeSFDC/scripts/advanced-field-deployer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/advanced-field-deployer.js:10:const { exec } = require('child_process');
+ClaudeSFDC/scripts/advanced-field-deployer.js:11:const { promisify } = require('util');
+ClaudeSFDC/scripts/advanced-field-deployer.js:12:const fs = require('fs').promises;
+ClaudeSFDC/scripts/advanced-field-deployer.js:13:const path = require('path');
+ClaudeSFDC/scripts/advanced-field-deployer.js:592:    module.exports = AdvancedFieldDeployer;
+ClaudeSFDC/scripts/test-universal-report.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/test-universal-report.js:10:const UniversalReportCreator = require('./lib/universal-report-creator');
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/field-deployment-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/field-deployment-validator.js:10:const { exec } = require('child_process');
+ClaudeSFDC/scripts/field-deployment-validator.js:11:const { promisify } = require('util');
+ClaudeSFDC/scripts/field-deployment-validator.js:258:                const fs = require('fs').promises;
+ClaudeSFDC/scripts/field-deployment-validator.js:259:                const path = require('path');
+ClaudeSFDC/scripts/field-deployment-validator.js:378:    module.exports = FieldDeploymentValidator;
+ClaudeSFDC/scripts/test-import-suite.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_revops_deployment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/make-scripts-executable.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:20:const MetadataRetriever = require('./metadata-retrieval-framework');
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:21:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:22:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:23:const path = require('path');
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:788:module.exports = InstanceAgnosticAnalyzer;
+ClaudeSFDC/scripts/soql_helper.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/soql_helper.py:10:from typing import List, Dict, Any, Optional, Tuple, Union
+ClaudeSFDC/scripts/soql_helper.py:11:from dataclasses import dataclass, field
+ClaudeSFDC/scripts/soql_helper.py:12:from enum import Enum
+ClaudeSFDC/scripts/soql_helper.py:13:from datetime import datetime, date, timedelta
+ClaudeSFDC/scripts/soql_helper.py:713:def main():
+ClaudeSFDC/scripts/report-workarounds.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/report-workarounds.js:10:const { exec } = require('child_process');
+ClaudeSFDC/scripts/report-workarounds.js:11:const { promisify } = require('util');
+ClaudeSFDC/scripts/report-workarounds.js:98:        const ReportsRestAPI = require('./lib/reports-rest-api');
+ClaudeSFDC/scripts/report-workarounds.js:237:        const fs = require('fs').promises;
+ClaudeSFDC/scripts/report-workarounds.js:279:        const ReportsRestAPI = require('./lib/reports-rest-api');
+ClaudeSFDC/scripts/report-workarounds.js:384:module.exports = { ReportWorkarounds };
+ClaudeSFDC/scripts/deployment/deploy-dvm-fields.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/security-audit-report.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/exec_direct.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/chmod-deployment-scripts.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/field-verifier.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/deploy-compounding-opp-action.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/add_field_to_layout.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/add_field_to_layout.py:7:from pathlib import Path
+ClaudeSFDC/scripts/utilities/add_field_to_layout.py:40:def main():
+ClaudeSFDC/scripts/rollback.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/deployment/run_retrieve.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/run_retrieve.py:21:def main():
+ClaudeSFDC/scripts/utilities/switch-instance.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/execute-flow-deployment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/execute-flow-deployment.py:7:def main():
+ClaudeSFDC/scripts/deployment/deploy-subscription.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/add_is_dvm_to_contact_layout.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/retrieve_contact_layout.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/deploy-contract-enhancement-phase2.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/field-verification-service.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/field-verification-service.js:10:const { exec } = require('child_process');
+ClaudeSFDC/scripts/field-verification-service.js:11:const { promisify } = require('util');
+ClaudeSFDC/scripts/field-verification-service.js:12:const fs = require('fs').promises;
+ClaudeSFDC/scripts/field-verification-service.js:13:const path = require('path');
+ClaudeSFDC/scripts/field-verification-service.js:566:    module.exports = FieldVerificationService;
+ClaudeSFDC/scripts/utilities/basic_security_test.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/deploy-count-dvms.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/create_contract_revenue_fields.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/simple_retrieve.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/claude-with-retry.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/flow-audit.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/utilities/flow-audit.js:9:const { exec } = require('child_process');
+ClaudeSFDC/scripts/utilities/flow-audit.js:10:const { promisify } = require('util');
+ClaudeSFDC/scripts/utilities/flow-audit.js:11:const fs = require('fs').promises;
+ClaudeSFDC/scripts/utilities/flow-audit.js:12:const path = require('path');
+ClaudeSFDC/scripts/utilities/flow-audit.js:16:class FlowAuditor {
+ClaudeSFDC/scripts/utilities/flow-audit.js:593:module.exports = FlowAuditor;
+ClaudeSFDC/scripts/utilities/execute_add_field.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_check.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/exec_retrieve.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/exec_retrieve.py:6:def main():
+ClaudeSFDC/scripts/utilities/security_analysis.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/security_analysis.py:11:from datetime import datetime
+ClaudeSFDC/scripts/utilities/security_analysis.py:465:def main():
+ClaudeSFDC/scripts/utilities/execute_deployment.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/setup.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_final_script.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/run_final_script.py:7:def main():
+ClaudeSFDC/scripts/utilities/focused_security_analysis.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/focused_security_analysis.py:10:from datetime import datetime
+ClaudeSFDC/scripts/utilities/focused_security_analysis.py:384:def main():
+ClaudeSFDC/scripts/utilities/modify_contact_layout.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/modify_contact_layout.py:7:from pathlib import Path
+ClaudeSFDC/scripts/utilities/modify_contact_layout.py:18:def main():
+ClaudeSFDC/scripts/deployment/execute_count_dvms_deployment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/execute_count_dvms_deployment.py:26:def main():
+ClaudeSFDC/scripts/utilities/update_asana_audit_findings.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/update_asana_audit_findings.py:11:from datetime import datetime
+ClaudeSFDC/scripts/object-audit.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/object-audit.js:8:const { exec } = require('child_process');
+ClaudeSFDC/scripts/object-audit.js:9:const { promisify } = require('util');
+ClaudeSFDC/scripts/object-audit.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/object-audit.js:11:const path = require('path');
+ClaudeSFDC/scripts/object-audit.js:14:class ObjectAuditor {
+ClaudeSFDC/scripts/object-audit.js:1011:module.exports = ObjectAuditor;
+ClaudeSFDC/scripts/utilities/query-flow-status.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/update_asana_specific_findings.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/update_asana_specific_findings.py:11:from datetime import datetime
+ClaudeSFDC/scripts/utilities/manual_search_results.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/manual_search_results.py:68:def main():
+ClaudeSFDC/scripts/deployment/run_deployment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/run_deployment.py:26:def main():
+ClaudeSFDC/scripts/utilities/make_executable.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/reorganize-instances.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/cleanup-local-files.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/gong-report-builder.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/gong-report-builder.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/gong-report-builder.js:10:const path = require('path');
+ClaudeSFDC/scripts/gong-report-builder.js:479:module.exports = {
+ClaudeSFDC/scripts/utilities/retrieve_layout.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_sfdx_check.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/cleanup-main-directory.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/remove-compounding-flow.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/final_layout_script.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/final_layout_script.py:7:from pathlib import Path
+ClaudeSFDC/scripts/utilities/final_layout_script.py:286:def main():
+ClaudeSFDC/scripts/run_contract_flow_test.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/utilities/direct_execution.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/utilities/direct_execution.py:37:def main():
+ClaudeSFDC/scripts/run_contract_validation_analysis.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/ci-validate-flow.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validate-lookups.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/backup.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/disable-model-proxy.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/pre-import-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/mcp-validation-framework.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/mcp-validation-framework.js:10:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/mcp-validation-framework.js:401:module.exports = {
+ClaudeSFDC/scripts/qa/query-lint.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/qa/query-lint.js:6:const fs = require('fs');
+ClaudeSFDC/scripts/qa/query-lint.js:7:const path = require('path');
+ClaudeSFDC/scripts/lib/error-recovery.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/error-recovery.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/error-recovery.js:18:const path = require('path');
+ClaudeSFDC/scripts/lib/error-recovery.js:48:                const PreFlightValidator = require('./preflight-validator');
+ClaudeSFDC/scripts/lib/error-recovery.js:81:                const PreFlightValidator = require('./preflight-validator');
+ClaudeSFDC/scripts/lib/error-recovery.js:139:                const PreFlightValidator = require('./preflight-validator');
+ClaudeSFDC/scripts/lib/error-recovery.js:700:        const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/error-recovery.js:701:        const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/error-recovery.js:880:module.exports = ErrorRecoverySystem;
+ClaudeSFDC/scripts/lib/error-recovery.js:893:    const readline = require('readline');
+ClaudeSFDC/scripts/lib/record-type-commons.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/update_product2_field_permissions.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/bypass_Contract_validation.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/bypass_Contract_validation.sh:58:                    from datetime import date
+ClaudeSFDC/scripts/lib/validate_and_deploy_flow.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/lib/validate_and_deploy_flow.py:12:from pathlib import Path
+ClaudeSFDC/scripts/lib/validate_and_deploy_flow.py:243:def main():
+ClaudeSFDC/scripts/lib/reports-rest-api.js:11:const https = require('https');
+ClaudeSFDC/scripts/lib/reports-rest-api.js:12:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/reports-rest-api.js:13:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/reports-rest-api.js:15:const ReportTypeCache = require('./report-type-cache');
+ClaudeSFDC/scripts/lib/reports-rest-api.js:16:const SeedReportRegistry = require('./seed-report-registry');
+ClaudeSFDC/scripts/lib/reports-rest-api.js:719:module.exports = ReportsRestAPI;
+ClaudeSFDC/scripts/lib/conflict-detector.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/conflict-detector.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/conflict-detector.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/conflict-detector.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/conflict-detector.js:494:module.exports = ConflictDetector;
+ClaudeSFDC/scripts/test-report-validation.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/test-report-validation.js:10:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/test-report-validation.js:11:const fs = require('fs');
+ClaudeSFDC/scripts/test-report-validation.js:12:const path = require('path');
+ClaudeSFDC/scripts/test-report-validation.js:405:module.exports = ReportValidationTester;
+ClaudeSFDC/scripts/lib/change-auditor.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/change-auditor.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/change-auditor.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/change-auditor.js:13:class ChangeAuditor {
+ClaudeSFDC/scripts/lib/change-auditor.js:510:module.exports = ChangeAuditor;
+ClaudeSFDC/scripts/create-renewal-contracts.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/create-renewal-contracts.sh:38:from datetime import datetime, timedelta
+ClaudeSFDC/scripts/lib/factmap-parser.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/factmap-parser.js:15:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/factmap-parser.js:16:const path = require('path');
+ClaudeSFDC/scripts/lib/factmap-parser.js:521:module.exports = FactMapParser;
+ClaudeSFDC/scripts/lib/__init__.py:7:from .python_commons import *
+ClaudeSFDC/scripts/set-asana-project.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/operation-dependency-graph.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/operation-dependency-graph.js:611:module.exports = OperationDependencyGraph;
+ClaudeSFDC/scripts/lib/operation-dependency-graph.js:635:module.exports = { DependencyGraph, OperationDependencyGraph };
+ClaudeSFDC/scripts/preflight-check.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:17:const https = require('https');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:18:const url = require('url');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:19:const fs = require('fs');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:20:const path = require('path');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:21:const { Transform } = require('stream');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:22:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:23:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:1013:module.exports = BulkAPIHandler;
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:1096:                    const fsPromises = require('fs').promises;
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:1149:                const fsPromises = require('fs').promises;
+ClaudeSFDC/scripts/lib/change-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/change-validator.js:315:module.exports = ChangeValidator;
+ClaudeSFDC/scripts/lib/mcp-api-bridge.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/execution-monitor.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/execution-monitor.js:11:const EventEmitter = require('events');
+ClaudeSFDC/scripts/lib/execution-monitor.js:12:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/execution-monitor.js:13:const path = require('path');
+ClaudeSFDC/scripts/lib/execution-monitor.js:556:module.exports = { ExecutionMonitor, getMonitor };
+ClaudeSFDC/scripts/lib/flow-discovery-mapper.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flow-discovery-mapper.js:20:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/flow-discovery-mapper.js:21:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/flow-discovery-mapper.js:22:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-discovery-mapper.js:388:module.exports = FlowDiscoveryMapper;
+ClaudeSFDC/scripts/test-auto-fix.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation-rule-analyzer.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/validation-rule-analyzer.sh:441:#!/bin/bash
+ClaudeSFDC/scripts/validation-rule-analyzer.sh:498:                    from datetime import date
+ClaudeSFDC/scripts/deployment/execute-asana-sync.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/recordtype-resolver.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/recordtype-resolver.js:10:const ReportTypeCache = require('./report-type-cache');
+ClaudeSFDC/scripts/lib/recordtype-resolver.js:369:    const ReportsRestAPI = require('./reports-rest-api');
+ClaudeSFDC/scripts/lib/recordtype-resolver.js:445:module.exports = RecordTypeResolver;
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:14:const https = require('https');
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:15:const url = require('url');
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:16:const crypto = require('crypto');
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:17:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:18:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:20:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:21:const path = require('path');
+ClaudeSFDC/scripts/lib/analytics-discovery-v2.js:783:module.exports = AnalyticsDiscoveryV2;
+ClaudeSFDC/scripts/lib/report-type-creator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/report-type-creator.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/report-type-creator.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/report-type-creator.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/report-type-creator.js:552:module.exports = ReportTypeCreator;
+ClaudeSFDC/scripts/deployment/deploy-compounding-flow.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/universal-report-creator.js:8:const ReportsRestAPI = require('./reports-rest-api');
+ClaudeSFDC/scripts/lib/universal-report-creator.js:9:const ReportTypeDiscovery = require('./report-type-discovery');
+ClaudeSFDC/scripts/lib/universal-report-creator.js:324:            const hash = require('crypto').createHash('md5').update(base).digest('hex').substring(0, 8);
+ClaudeSFDC/scripts/lib/universal-report-creator.js:688:module.exports = UniversalReportCreator;
+ClaudeSFDC/scripts/setup-asana-integration.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/report-upsert-manager.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/report-upsert-manager.js:10:const crypto = require('crypto');
+ClaudeSFDC/scripts/lib/report-upsert-manager.js:438:    const ReportsRestAPI = require('./reports-rest-api');
+ClaudeSFDC/scripts/lib/report-upsert-manager.js:512:module.exports = ReportUpsertManager;
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:18:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:19:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:20:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:21:const FlowDiscoveryMapper = require('./flow-discovery-mapper');
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:271:        const readline = require('readline').createInterface({
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:342:        const FlowRemovalManager = require('./flow-removal-manager');
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:354:            const FlowDiscoveryMapper = require('./flow-discovery-mapper');
+ClaudeSFDC/scripts/lib/flow-deployment-wrapper.js:400:module.exports = FlowDeploymentWrapper;
+ClaudeSFDC/scripts/deployment/run_flow_deployment.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/lib/load_commons.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/deployment/run_deploy.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/flexipage-recovery.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flexipage-recovery.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/flexipage-recovery.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/flexipage-recovery.js:12:const FlexiPageValidator = require('./flexipage-validator');
+ClaudeSFDC/scripts/lib/flexipage-recovery.js:555:module.exports = FlexiPageRecovery;
+ClaudeSFDC/scripts/lib/lightning-page-enhancer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/lightning-page-enhancer.js:9:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/lightning-page-enhancer.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/lightning-page-enhancer.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/lightning-page-enhancer.js:12:const xml2js = require('xml2js');
+ClaudeSFDC/scripts/lib/lightning-page-enhancer.js:570:module.exports = LightningPageEnhancer;
+ClaudeSFDC/scripts/lib/python_commons.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/lib/python_commons.py:6:Usage: from lib.python_commons import *
+ClaudeSFDC/scripts/lib/python_commons.py:19:from datetime import datetime, timezone
+ClaudeSFDC/scripts/lib/python_commons.py:20:from pathlib import Path
+ClaudeSFDC/scripts/lib/python_commons.py:21:from typing import Dict, List, Optional, Any, Union, Callable, Tuple
+ClaudeSFDC/scripts/lib/python_commons.py:22:from dataclasses import dataclass
+ClaudeSFDC/scripts/lib/python_commons.py:24:from urllib.parse import quote_plus, urljoin
+ClaudeSFDC/scripts/deployment/deploy-flow-removal.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/composite-api.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/composite-api.js:16:const https = require('https');
+ClaudeSFDC/scripts/lib/composite-api.js:17:const url = require('url');
+ClaudeSFDC/scripts/lib/composite-api.js:18:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/composite-api.js:19:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/composite-api.js:369:            const FactMapParser = require('./factmap-parser');
+ClaudeSFDC/scripts/lib/composite-api.js:381:module.exports = CompositeAPI;
+ClaudeSFDC/scripts/lib/composite-api.js:468:                    const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/composite-api.js:476:                    const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/composite-api.js:487:                    const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/composite-api.js:506:                    const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/composite-api.js:524:                    const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/composite-api.js:538:                const fs = require('fs').promises;
+ClaudeSFDC/scripts/deployment/deploy_test.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/deployment/deploy_test.py:26:def main():
+ClaudeSFDC/scripts/lib/mcp-api-bridge.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/mcp-api-bridge.js:8:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/mcp-api-bridge.js:9:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/mcp-api-bridge.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/mcp-api-bridge.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/mcp-api-bridge.js:391:module.exports = MCPAPIBridge;
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:11:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:12:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:13:const path = require('path');
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:718:module.exports = ValidationBypassManager;
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:755:module.exports = { ValidationBypassManager };
+ClaudeSFDC/scripts/lib/package-xml-generator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/package-xml-generator.js:14:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/package-xml-generator.js:15:const path = require('path');
+ClaudeSFDC/scripts/lib/package-xml-generator.js:16:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/package-xml-generator.js:407:module.exports = PackageXMLGenerator;
+ClaudeSFDC/scripts/lib/template-generator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/template-generator.js:8:const fs = require('fs');
+ClaudeSFDC/scripts/lib/template-generator.js:9:const path = require('path');
+ClaudeSFDC/scripts/lib/template-generator.js:13:const dashboardTemplates = require(path.join(TEMPLATES_DIR, 'dashboard-components.json'));
+ClaudeSFDC/scripts/lib/template-generator.js:14:const reportTemplates = require(path.join(TEMPLATES_DIR, 'report-formats.json'));
+ClaudeSFDC/scripts/lib/template-generator.js:232:module.exports = TemplateGenerator;
+ClaudeSFDC/scripts/lib/test_python_commons.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/lib/test_python_commons.py:13:from pathlib import Path
+ClaudeSFDC/scripts/lib/test_python_commons.py:19:from python_commons import *
+ClaudeSFDC/scripts/lib/test_python_commons.py:283:   from lib.python_commons import *
+ClaudeSFDC/scripts/lib/test_python_commons.py:375:    from lib.python_commons import *
+ClaudeSFDC/scripts/lib/test_python_commons.py:377:    def main():
+ClaudeSFDC/scripts/lib/flexipage-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flexipage-validator.js:10:const fs = require('fs');
+ClaudeSFDC/scripts/lib/flexipage-validator.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/flexipage-validator.js:12:const xml2js = require('xml2js');
+ClaudeSFDC/scripts/lib/flexipage-validator.js:543:module.exports = FlexiPageValidator;
+ClaudeSFDC/scripts/lib/shell-commons.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/analytics-error-handler.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/analytics-error-handler.js:12:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/analytics-error-handler.js:13:const path = require('path');
+ClaudeSFDC/scripts/lib/analytics-error-handler.js:440:module.exports = AnalyticsErrorHandler;
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:15:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:16:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:17:const path = require('path');
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:18:const xml2js = require('xml2js');
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:671:module.exports = MetadataRetriever;
+ClaudeSFDC/scripts/lib/picklist-validation-wrapper.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/field-requirements.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/field-requirements.js:12:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/field-requirements.js:13:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/field-requirements.js:14:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/field-requirements.js:15:const path = require('path');
+ClaudeSFDC/scripts/lib/field-requirements.js:839:module.exports = FieldRequirementsAnalyzer;
+ClaudeSFDC/scripts/lib/flow-name-standardizer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flow-name-standardizer.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/flow-name-standardizer.js:18:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-name-standardizer.js:265:            const readline = require('readline').createInterface({
+ClaudeSFDC/scripts/lib/flow-name-standardizer.js:403:module.exports = FlowNameStandardizer;
+ClaudeSFDC/scripts/lib/data-sequence-planner.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/data-sequence-planner.js:11:const OperationDependencyGraph = require('./operation-dependency-graph');
+ClaudeSFDC/scripts/lib/data-sequence-planner.js:638:module.exports = DataSequencePlanner;
+ClaudeSFDC/scripts/lib/data-sequence-planner.js:670:module.exports = { DataSequencePlanner };
+ClaudeSFDC/scripts/lib/picklist-describer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/picklist-describer.js:12:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/picklist-describer.js:13:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/picklist-describer.js:14:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/picklist-describer.js:15:const path = require('path');
+ClaudeSFDC/scripts/lib/picklist-describer.js:669:module.exports = PicklistDescriber;
+ClaudeSFDC/scripts/lib/analytics-discovery.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/analytics-discovery.js:12:const https = require('https');
+ClaudeSFDC/scripts/lib/analytics-discovery.js:13:const url = require('url');
+ClaudeSFDC/scripts/lib/analytics-discovery.js:14:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/analytics-discovery.js:15:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/analytics-discovery.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/analytics-discovery.js:18:const path = require('path');
+ClaudeSFDC/scripts/lib/analytics-discovery.js:451:module.exports = AnalyticsDiscovery;
+ClaudeSFDC/scripts/lib/test-shell-commons.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/operation-sequencer.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/operation-sequencer.js:11:const EventEmitter = require('events');
+ClaudeSFDC/scripts/lib/operation-sequencer.js:12:const { DependencyGraph } = require('./operation-dependency-graph');
+ClaudeSFDC/scripts/lib/operation-sequencer.js:13:const { ValidationBypassManager } = require('./validation-bypass-manager');
+ClaudeSFDC/scripts/lib/operation-sequencer.js:14:const { DataSequencePlanner } = require('./data-sequence-planner');
+ClaudeSFDC/scripts/lib/operation-sequencer.js:15:const { getMonitor } = require('./execution-monitor');
+ClaudeSFDC/scripts/lib/operation-sequencer.js:16:const { SharedStateManager } = require('./shared-state-manager');
+ClaudeSFDC/scripts/lib/operation-sequencer.js:730:module.exports = { OperationSequencer };
+ClaudeSFDC/scripts/lib/operation-verifier.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/operation-verifier.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/operation-verifier.js:18:const path = require('path');
+ClaudeSFDC/scripts/lib/operation-verifier.js:19:const crypto = require('crypto');
+ClaudeSFDC/scripts/lib/operation-verifier.js:20:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/operation-verifier.js:21:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/operation-verifier.js:652:module.exports = OperationVerifier;
+ClaudeSFDC/scripts/lib/validation-commons.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/profile-layout-assigner.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/profile-layout-assigner.js:16:const EnhancedMCPTool = require('../../mcp-extensions/tools/base/enhanced-mcp-tool');
+ClaudeSFDC/scripts/lib/profile-layout-assigner.js:17:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/profile-layout-assigner.js:18:const path = require('path');
+ClaudeSFDC/scripts/lib/profile-layout-assigner.js:19:const xml2js = require('xml2js');
+ClaudeSFDC/scripts/lib/profile-layout-assigner.js:523:module.exports = ProfileLayoutAssigner;
+ClaudeSFDC/scripts/lib/env.sh:1:#!/usr/bin/env bash
+ClaudeSFDC/scripts/lib/mcp-adapter.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/lib/flow-deactivator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/flow-deactivator.js:15:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/flow-deactivator.js:16:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/flow-deactivator.js:17:const path = require('path');
+ClaudeSFDC/scripts/lib/flow-deactivator.js:283:        const readline = require('readline').createInterface({
+ClaudeSFDC/scripts/lib/flow-deactivator.js:358:module.exports = FlowDeactivator;
+ClaudeSFDC/scripts/lib/user-preference-tracker.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/user-preference-tracker.js:13:const fs = require('fs');
+ClaudeSFDC/scripts/lib/user-preference-tracker.js:14:const path = require('path');
+ClaudeSFDC/scripts/lib/user-preference-tracker.js:412:module.exports = UserPreferenceTracker;
+ClaudeSFDC/scripts/lib/deployment-rollback.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/deployment-rollback.js:8:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/deployment-rollback.js:9:const fs = require('fs');
+ClaudeSFDC/scripts/lib/deployment-rollback.js:10:const path = require('path');
+ClaudeSFDC/scripts/lib/deployment-rollback.js:92:module.exports = DeploymentRollback;
+ClaudeSFDC/scripts/lib/flow-consolidation-validator.sh:1:#!/bin/bash
+ClaudeSFDC/scripts/generate-script-inventory.py:1:#!/usr/bin/env python3
+ClaudeSFDC/scripts/generate-script-inventory.py:12:from pathlib import Path
+ClaudeSFDC/scripts/generate-script-inventory.py:13:from datetime import datetime
+ClaudeSFDC/scripts/generate-script-inventory.py:14:from typing import Dict, List, Any, Optional
+ClaudeSFDC/scripts/generate-script-inventory.py:392:def main():
+ClaudeSFDC/scripts/lib/report-type-discovery.js:8:const ReportsRestAPI = require('./reports-rest-api');
+ClaudeSFDC/scripts/lib/report-type-discovery.js:488:module.exports = ReportTypeDiscovery;
+ClaudeSFDC/scripts/lib/sfdx-parser.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/sfdx-parser.js:13:const { execSync } = require('child_process');
+ClaudeSFDC/scripts/lib/sfdx-parser.js:317:module.exports = SFDXParser;
+ClaudeSFDC/scripts/lib/shared-state-manager.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/shared-state-manager.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/shared-state-manager.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/shared-state-manager.js:12:const crypto = require('crypto');
+ClaudeSFDC/scripts/lib/shared-state-manager.js:648:module.exports = { SharedStateManager };
+ClaudeSFDC/scripts/lib/preflight-validator.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/preflight-validator.js:18:const { exec } = require('child_process');
+ClaudeSFDC/scripts/lib/preflight-validator.js:19:const { promisify } = require('util');
+ClaudeSFDC/scripts/lib/preflight-validator.js:739:module.exports = PreFlightValidator;
+ClaudeSFDC/scripts/lib/preflight-validator.js:782:                    const fs = require('fs');
+ClaudeSFDC/scripts/lib/preflight-validator.js:832:                const fs = require('fs');
+ClaudeSFDC/scripts/lib/seed-report-registry.js:1:#!/usr/bin/env node
+ClaudeSFDC/scripts/lib/seed-report-registry.js:10:const fs = require('fs').promises;
+ClaudeSFDC/scripts/lib/seed-report-registry.js:11:const path = require('path');
+ClaudeSFDC/scripts/lib/seed-report-registry.js:457:            const ReportsRestAPI = require('./reports-rest-api');
+ClaudeSFDC/scripts/lib/seed-report-registry.js:490:            const ReportsAPI = require('./reports-rest-api');
+ClaudeSFDC/scripts/lib/seed-report-registry.js:515:module.exports = SeedReportRegistry;

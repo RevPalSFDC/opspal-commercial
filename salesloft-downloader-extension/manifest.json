@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Salesloft Recording Downloader",
+  "version": "1.9.0",
+  "description": "Automatically download Salesloft call recordings",
+  
+  "permissions": [
+    "downloads",
+    "tabs",
+    "storage",
+    "scripting",
+    "alarms"
+  ],
+  
+  "host_permissions": [
+    "https://recordings.salesloft.com/*",
+    "https://*.salesloft.com/*",
+    "https://*.cloudfront.net/*",
+    "https://*.amazonaws.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "background-simple.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["https://recordings.salesloft.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://app.salesloft.com/app/calls*"],
+      "js": ["calls-scraper.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

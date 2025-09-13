@@ -1,0 +1,28 @@
+{
+  "id": "69b511f7-dfb3-4a80-b8fb-ff4731e5269a",
+  "recording_id": "18898ca4-bae1-4629-a0be-2b15d9dd1d4c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "69b511f7-dfb3-4a80-b8fb-ff4731e5269a",
+      "recording_id": "18898ca4-bae1-4629-a0be-2b15d9dd1d4c",
+      "end_time": 132.79,
+      "start_time": 0.17,
+      "recording_attendee_id": "96b01aa1-438e-4af4-9b9f-e58afd9f6752",
+      "text": "Thank you for calling M S properties. If you know your party's extension you can dial it now dial one to reach our accounting department dial two to reach our property management department dial three to reach our human resources department dial zero to reach our dial by name directory Hughes, please enter at least the first three letters of the person's first name for Q press seven. For Z press nine for the main menu press zero. Please enter at least the first three letters of the person's first name for Q press seven. For Z press nine for the main menu press zero. Retail Welsh extension two five two to select this extension press one to hear the next name press two to repeat the current name press three or to start your search over for us for. Sarah be all can extension four seven zero eight to select this extension press one to hear the next name press two to repeat the current name press Sarah scurlock extension two five zero to select this extension press one to repeat the current name please hold while I try to connect you your call has been forwarded to the voicemail for Sarah discovery. No one is available to take."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "18898ca4-bae1-4629-a0be-2b15d9dd1d4c",
+      "title": "Call: Dan Cellon and Sarah Juskovic @ NMS Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

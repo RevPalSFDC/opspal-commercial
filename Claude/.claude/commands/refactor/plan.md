@@ -8,7 +8,7 @@ You are creating a refactoring patch bundle based on audit findings. This is a r
 ## Process
 
 ### 1. Get Target Project
-Ask for the target project path (e.g., `../ClaudeSFDC`, `../ClaudeHubSpot`).
+Ask for the target project path (e.g., `../platforms/SFDC`, `../platforms/HS`).
 
 ### 2. Validate Target
 - Use `realpath` to resolve the path

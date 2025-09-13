@@ -1,0 +1,36 @@
+{
+  "id": "6dd6d742-0520-473d-aa26-dfc175a4e795",
+  "recording_id": "c4800114-af20-43cf-9b5d-985fef1dcb9f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6dd6d742-0520-473d-aa26-dfc175a4e795",
+      "recording_id": "c4800114-af20-43cf-9b5d-985fef1dcb9f",
+      "end_time": 168.09,
+      "start_time": 18.96,
+      "recording_attendee_id": "6d604e8e-9a45-476c-9c6d-450595befc13",
+      "text": "Thank you for holding will be right with please continue to hold your call is important to us. We're sorry for the delay will be with you in just a moment. Please continue to hold your call is important to will be right with you."
+    },
+    {
+      "id": "6dd6d742-0520-473d-aa26-dfc175a4e795",
+      "recording_id": "c4800114-af20-43cf-9b5d-985fef1dcb9f",
+      "end_time": 3.72,
+      "start_time": 2.31,
+      "recording_attendee_id": "939dad55-6ec7-4877-b2a5-9b22af80f131",
+      "text": "Hi, it's Tony us available."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c4800114-af20-43cf-9b5d-985fef1dcb9f",
+      "title": "Call: Alex Wodarczyk and Tony East @ Finkelstein Timberger East Real Estate",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

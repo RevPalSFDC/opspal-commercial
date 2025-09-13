@@ -1,0 +1,36 @@
+{
+  "id": "055dea5f-dffd-4e15-87c5-78787598cb51",
+  "recording_id": "df92b9a6-2c1c-4ed5-ab9d-7ea27bf4e27e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "055dea5f-dffd-4e15-87c5-78787598cb51",
+      "recording_id": "df92b9a6-2c1c-4ed5-ab9d-7ea27bf4e27e",
+      "end_time": 144.61,
+      "start_time": 2.55,
+      "recording_attendee_id": "28f1659c-e049-49c3-b61d-81c5c9d20d64",
+      "text": "Hello, and welcome to Bridge housing. If you know, your party's extension you may dial it at anytime. If this is the service emergency regarding a breach of property, please press one or you may call one eight eight eight three seven two three four nine zero that number once again one eight eight eight three seven two three four nine zero. If you are a current resident and need assistance, please contact your property management office. If you are seeking housing visit us on the web at W W W dot Parish housing dot. Com where you can find a list of properties that are leasing new units. If you have questions regarding your application or waitlist status for a specific property, please contact the leasing or management office for that property directly. If you want to request a list of operation properties. Please call four one five two six seven seven six seven three more information that number again, four one five two six seven seven six seven three for our company directory please press three. If you are trying to reach someone in a P account welcome to the directory please enter the first three letters of your party's first or last name using your touchtone key pad. Press one for K a R I E space a M a V I S C at extension three four seven three press two for. This is Kerry. Good luck. Hello executive assistant to Cynthia Parker average housing. Please leave"
+    },
+    {
+      "id": "055dea5f-dffd-4e15-87c5-78787598cb51",
+      "recording_id": "df92b9a6-2c1c-4ed5-ab9d-7ea27bf4e27e",
+      "end_time": 146.88,
+      "start_time": 144.61,
+      "recording_attendee_id": "28f1659c-e049-49c3-b61d-81c5c9d20d64",
+      "text": "me a message and I will call you back as soon as POS."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "df92b9a6-2c1c-4ed5-ab9d-7ea27bf4e27e",
+      "title": "Call: Dan Cellon and Kari Amavisca @ Bridge Housing Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

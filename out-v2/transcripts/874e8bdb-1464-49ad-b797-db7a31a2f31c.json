@@ -1,0 +1,84 @@
+{
+  "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+  "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 29.48,
+      "start_time": 23.12,
+      "recording_attendee_id": "af6c30bf-6df0-49f3-8bce-89848b264440",
+      "text": "Hi, Haley is Amy available, yes. This is Alyssa I'm calling from rentable."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 104.71,
+      "start_time": 103.75,
+      "recording_attendee_id": "af6c30bf-6df0-49f3-8bce-89848b264440",
+      "text": "Sure that'd be great."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 35.77,
+      "start_time": 31.75,
+      "recording_attendee_id": "af6c30bf-6df0-49f3-8bce-89848b264440",
+      "text": "Wrong rentable thanks."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 130.6,
+      "start_time": 126.49,
+      "recording_attendee_id": "af6c30bf-6df0-49f3-8bce-89848b264440",
+      "text": "Awesome. Thank you so much appreciate it you too bye."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 34.62,
+      "start_time": 25.75,
+      "recording_attendee_id": "f0c89275-ad43-4534-aa89-95f3a6e7acd2",
+      "text": "I may ask for calling. This is I'm rentable. Okay. Hold on once I got."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 129.49,
+      "start_time": 115.6,
+      "recording_attendee_id": "f0c89275-ad43-4534-aa89-95f3a6e7acd2",
+      "text": "H a R M O N at Holland partner group dot. Com. Yeah, of course have a good day."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 113.33,
+      "start_time": 94.52,
+      "recording_attendee_id": "f0c89275-ad43-4534-aa89-95f3a6e7acd2",
+      "text": "So it looks like she's on a conference call. Right now um, can I give you her email and you can connect with her and set up a time to talk then. Awesome so her email is going to be her first initial so a I heard last name is Harmon."
+    },
+    {
+      "id": "874e8bdb-1464-49ad-b797-db7a31a2f31c",
+      "recording_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "end_time": 22.34,
+      "start_time": 0.9,
+      "recording_attendee_id": "f0c89275-ad43-4534-aa89-95f3a6e7acd2",
+      "text": "Eva calling to ensure the highest level of customer care. This call may be recorded please hold while we connect your call. Thank you for calling on Lake front. This is Hailey how can I help you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "4774d8a5-fbb6-4e30-bf61-2fdfa68d5da2",
+      "title": "Call: Alyssa Tillich and Amy Harmon @ Holland Residential",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

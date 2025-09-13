@@ -1,0 +1,56 @@
+{
+  "id": "bbd72abf-3db6-4aa6-9515-5246c9290f3f",
+  "recording_id": "6e0de660-957f-4a82-a082-8ec873b7ff3d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bbd72abf-3db6-4aa6-9515-5246c9290f3f",
+      "recording_id": "6e0de660-957f-4a82-a082-8ec873b7ff3d",
+      "end_time": 0.13,
+      "start_time": 0,
+      "recording_attendee_id": "df90b50a-85ef-4851-8505-9c025f4320ad",
+      "order_number": 0,
+      "text": "Thank"
+    },
+    {
+      "id": "bbd72abf-3db6-4aa6-9515-5246c9290f3f",
+      "recording_id": "6e0de660-957f-4a82-a082-8ec873b7ff3d",
+      "end_time": 0.09,
+      "start_time": 0,
+      "recording_attendee_id": "6e787db4-7d5d-45e8-b558-2dfa298452f5",
+      "order_number": 1,
+      "text": "OKay."
+    },
+    {
+      "id": "bbd72abf-3db6-4aa6-9515-5246c9290f3f",
+      "recording_id": "6e0de660-957f-4a82-a082-8ec873b7ff3d",
+      "end_time": 104.7,
+      "start_time": 0.13,
+      "recording_attendee_id": "df90b50a-85ef-4851-8505-9c025f4320ad",
+      "order_number": 2,
+      "text": "you for calling the Norfolk redeveloped Housing authority. Welcome to our new automated service attendant at this time. Our offices are closed to the public, but the staff is still available. Your call is important to us. If you're calling regarding the coveted nineteen coronavirus, please hang up and dial three million one hundred forty-four thousand two hundred To reach the N. R H. A. Coveted hotline. Otherwise if you know the four digit extension of the person you are calling, please dial it now. Or to use our dial by name feature, press the pound key. Now for property management rental office numbers press one for public housing and housing choice voucher intake occupancy case managers press two for housing choice voucher. Section eight case managers and inspections, press three For the public housing and section eight Waitlist Press four for resident Program services, family self sufficiency, press five For the after hours, emergency maintenance in public housing, Press six. For Housing Operations Press seven. For accounts payable, Press eight. for recording of all other department numbers, Press nine, I did not recognize that as a valid entry. Thank you for calling the North Development Housing Authority. Welcome to our new automated service attendant at this time. Our offices are closed to the public but the staff is still available. Your call is important to us. If you're calling regarding the coveted nineteen coronavirus, please hang up and dial three million one hundred forty-four thousand two hundred to reach the N R H A coveted hotline. Otherwise if you know the four"
+    },
+    {
+      "id": "bbd72abf-3db6-4aa6-9515-5246c9290f3f",
+      "recording_id": "6e0de660-957f-4a82-a082-8ec873b7ff3d",
+      "end_time": 127.71,
+      "start_time": 104.7,
+      "recording_attendee_id": "df90b50a-85ef-4851-8505-9c025f4320ad",
+      "order_number": 3,
+      "text": "digit extension of the person you are calling, please dial it now or to use our dial by name. Feature, press the pound key. Now the product spell the last and first name, then press Pound for Q. No matching names. Try a different spelling."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6e0de660-957f-4a82-a082-8ec873b7ff3d",
+      "title": "Call: Brandon Winfield and Pamela Jones-Watford @ Norfolk Redevelopment  & Housing Authority",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

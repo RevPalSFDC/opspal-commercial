@@ -1,0 +1,44 @@
+{
+  "id": "ff78b59d-33c6-4826-a111-67d7f49ae522",
+  "recording_id": "b42d52df-dee4-4b66-b40d-0ba570c2f86a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ff78b59d-33c6-4826-a111-67d7f49ae522",
+      "recording_id": "b42d52df-dee4-4b66-b40d-0ba570c2f86a",
+      "end_time": 239.05,
+      "start_time": 16.55,
+      "recording_attendee_id": "44a6df4c-f2eb-46c4-9602-a1c0329d94d1",
+      "text": "Sarah sure hold on one moment. Hey, this is Sarah leave a message and I'll call you back."
+    },
+    {
+      "id": "ff78b59d-33c6-4826-a111-67d7f49ae522",
+      "recording_id": "b42d52df-dee4-4b66-b40d-0ba570c2f86a",
+      "end_time": 13.37,
+      "start_time": 11.48,
+      "recording_attendee_id": "44a6df4c-f2eb-46c4-9602-a1c0329d94d1",
+      "text": "Thank you for calling our C T how can I help ya."
+    },
+    {
+      "id": "ff78b59d-33c6-4826-a111-67d7f49ae522",
+      "recording_id": "b42d52df-dee4-4b66-b40d-0ba570c2f86a",
+      "end_time": 18,
+      "start_time": 13.95,
+      "recording_attendee_id": "a8db33ad-cdce-4b9b-8779-d51e6d74331d",
+      "text": "Can you please connect me to Sarah yes."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b42d52df-dee4-4b66-b40d-0ba570c2f86a",
+      "title": "Call: Elyse Stachelek and Sara Champagne @ RCG, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

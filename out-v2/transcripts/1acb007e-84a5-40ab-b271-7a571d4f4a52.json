@@ -1,0 +1,47 @@
+{
+  "id": "1acb007e-84a5-40ab-b271-7a571d4f4a52",
+  "recording_id": "ee01619c-9dc7-49ba-bdf1-9b3064c1f63e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-04-18T15:41:21.560Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1acb007e-84a5-40ab-b271-7a571d4f4a52",
+      "recording_id": "ee01619c-9dc7-49ba-bdf1-9b3064c1f63e",
+      "end_time": 26.01,
+      "start_time": 25.42,
+      "recording_attendee_id": "a4784360-73b6-43af-91dc-79ace216c52a",
+      "order_number": 0,
+      "text": "I hope."
+    },
+    {
+      "id": "1acb007e-84a5-40ab-b271-7a571d4f4a52",
+      "recording_id": "ee01619c-9dc7-49ba-bdf1-9b3064c1f63e",
+      "end_time": 29.21,
+      "start_time": 28.5,
+      "recording_attendee_id": "a4784360-73b6-43af-91dc-79ace216c52a",
+      "order_number": 1,
+      "text": "Good morning."
+    },
+    {
+      "id": "1acb007e-84a5-40ab-b271-7a571d4f4a52",
+      "recording_id": "ee01619c-9dc7-49ba-bdf1-9b3064c1f63e",
+      "end_time": 35.08,
+      "start_time": 33.95,
+      "recording_attendee_id": "a4784360-73b6-43af-91dc-79ace216c52a",
+      "order_number": 2,
+      "text": "Oh, can you hear me?"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ee01619c-9dc7-49ba-bdf1-9b3064c1f63e",
+      "title": "Rentable + Chelsea Management",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-04-18T15:43:44Z",
+      "call_date": "2024-04-18"
+    }
+  }
+}

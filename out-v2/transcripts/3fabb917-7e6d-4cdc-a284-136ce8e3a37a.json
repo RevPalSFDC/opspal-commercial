@@ -1,0 +1,44 @@
+{
+  "id": "3fabb917-7e6d-4cdc-a284-136ce8e3a37a",
+  "recording_id": "a5693497-b8f7-4204-b173-0069c1aaea8e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3fabb917-7e6d-4cdc-a284-136ce8e3a37a",
+      "recording_id": "a5693497-b8f7-4204-b173-0069c1aaea8e",
+      "end_time": 123.68,
+      "start_time": 120.11,
+      "recording_attendee_id": "7c66bbf5-6008-4074-94d6-d6ca82b5ee3e",
+      "text": "just keep an eye on your inbox and if you're interested. Just let me know thanks."
+    },
+    {
+      "id": "3fabb917-7e6d-4cdc-a284-136ce8e3a37a",
+      "recording_id": "a5693497-b8f7-4204-b173-0069c1aaea8e",
+      "end_time": 64.1,
+      "start_time": 0.11,
+      "recording_attendee_id": "5aa74fab-24e1-4591-b44f-4c5ce37ee369",
+      "text": "Thank you for calling Meridian Group. Please note all calls are recorded for quality assurance and training purposes. If you know your party's extension number. You may enter it at any time to reach our leasing department or the receptionist press zero to dial by name press two to reach our maintenance department. Welcome to the directory please enter the first three. Claudia never is this is the person you are looking for press one now otherwise. Claudia never is he is unavailable. Please leave your message. After the tone when done hang up or press the pound key."
+    },
+    {
+      "id": "3fabb917-7e6d-4cdc-a284-136ce8e3a37a",
+      "recording_id": "a5693497-b8f7-4204-b173-0069c1aaea8e",
+      "end_time": 119.36,
+      "start_time": 66.47,
+      "recording_attendee_id": "7c66bbf5-6008-4074-94d6-d6ca82b5ee3e",
+      "text": "Hey Claudia, my name is Dan, I'm calling from rentable couple of weeks ago. I had a conversation with Rob about maybe setting up a call with you in regards to our integration to Facebook marketplace. And if you things were doing um as far as listing leasing marketing vacancies goes um. Yeah, I just wanted to circle back on that. I'm just hoping to carve out a couple of minutes to really I guess kind of go over what you guys are doing go into our platform in detail and see if it's something that would even be a good fit for you before trying to take the next steps of maybe potentially partnering up with you guys um, so if there's a time that works please. Let me know we can do tomorrow or early next week. I'll shoot you an email as well once again, it's Dan from rentable"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a5693497-b8f7-4204-b173-0069c1aaea8e",
+      "title": "Call: Dan Cellon and Robert Kooyman @ Meridian Group Real Estate Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

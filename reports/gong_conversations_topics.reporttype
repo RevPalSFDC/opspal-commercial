@@ -1,0 +1,25 @@
+{
+    "label": "Gong Conversations with Topics",
+    "name": "Gong_Conversations_with_Topics",
+    "type": "Gong__Gong_Call__c",
+    "description": "Custom report type to show Gong Conversations with Topics",
+    "sections": [
+        {
+            "columns": [
+                "Name",
+                "Gong__Call_Date_Time__c"
+            ]
+        }
+    ],
+    "relatedObjects": [
+        {
+            "relationshipName": "Topics__r",
+            "type": "Gong__Topic__c",
+            "columns": [
+                "Name",
+                "Gong__Description__c",
+                "Gong__Duration__c"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "6d9a1598-d118-48d5-9db8-920c88406a38",
+  "recording_id": "17a580dd-b6b4-494d-babb-68133ffbfaa0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6d9a1598-d118-48d5-9db8-920c88406a38",
+      "recording_id": "17a580dd-b6b4-494d-babb-68133ffbfaa0",
+      "end_time": 0.09,
+      "start_time": 0,
+      "recording_attendee_id": "2f6f2bc7-dd4f-4618-8e23-0b1151aa497f",
+      "order_number": 0,
+      "text": "OKay."
+    },
+    {
+      "id": "6d9a1598-d118-48d5-9db8-920c88406a38",
+      "recording_id": "17a580dd-b6b4-494d-babb-68133ffbfaa0",
+      "end_time": 129.9,
+      "start_time": 1.34,
+      "recording_attendee_id": "e8c92d64-f87a-4cc0-8e8f-a57818565b5f",
+      "order_number": 1,
+      "text": "Thank you for calling Up Holdings. Please listen carefully to the following menu options. For Alison topic, press one for Caitlin Sarah Sino, press two for Ryan Wilson, press three. For Jessica Burdick, press four for Kyle Schmidt, press five For Alex kerner, press six for petra. Olympic, press seven. And for accounts payable, press eight, Please wait a moment. Sorry. No one is available to answer the call. To leave a message, Press one. To call the operator, Press zero. To enter another extension, press star. To leave a message, Press one. To call the operator. Thanks for calling up Holdings. Please listen carefully to the following menu options. For Allison topic, press one for Caitlin Sarah Sino, press two. For Ryan Wilson, press three. Please wait a moment. Sorry. No one is available to answer the call To leave a message, Press one. To call the operator, Press zero. To enter another extension, press star. To leave a message, press one"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "17a580dd-b6b4-494d-babb-68133ffbfaa0",
+      "title": "Call: Brandon Winfield and +13128704747",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

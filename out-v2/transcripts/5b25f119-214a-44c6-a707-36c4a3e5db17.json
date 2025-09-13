@@ -1,0 +1,29 @@
+{
+  "id": "5b25f119-214a-44c6-a707-36c4a3e5db17",
+  "recording_id": "533395a8-dc9d-4d20-a99f-a1bff2d99c62",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-AU",
+  "created_at": "2024-03-18T18:12:56.033Z",
+  "updated_at": "2024-03-18T18:15:54.485Z",
+  "sentences": [
+    {
+      "id": "5b25f119-214a-44c6-a707-36c4a3e5db17",
+      "recording_id": "533395a8-dc9d-4d20-a99f-a1bff2d99c62",
+      "end_time": 194.11,
+      "start_time": 194.08,
+      "recording_attendee_id": "a487b913-6eac-4745-8e5d-0e23a57ed5dd",
+      "order_number": 0,
+      "text": "no."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "533395a8-dc9d-4d20-a99f-a1bff2d99c62",
+      "title": "Hunter Stoldt's Personal Meeting Room",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-03-18T18:12:55Z",
+      "call_date": "2024-03-18"
+    }
+  }
+}

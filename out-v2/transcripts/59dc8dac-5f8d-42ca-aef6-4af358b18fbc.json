@@ -1,0 +1,28 @@
+{
+  "id": "59dc8dac-5f8d-42ca-aef6-4af358b18fbc",
+  "recording_id": "bc7fd9b5-0e78-4fa8-a667-e4486dddb1b4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "59dc8dac-5f8d-42ca-aef6-4af358b18fbc",
+      "recording_id": "bc7fd9b5-0e78-4fa8-a667-e4486dddb1b4",
+      "end_time": 158.14,
+      "start_time": 157.45,
+      "recording_attendee_id": null,
+      "text": "Oh, hello."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "bc7fd9b5-0e78-4fa8-a667-e4486dddb1b4",
+      "title": "Abodo & Signature ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-03-10T15:45:22.064000Z",
+      "call_date": "2020-03-10"
+    }
+  }
+}

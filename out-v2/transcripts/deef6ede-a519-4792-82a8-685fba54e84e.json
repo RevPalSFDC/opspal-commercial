@@ -1,0 +1,36 @@
+{
+  "id": "deef6ede-a519-4792-82a8-685fba54e84e",
+  "recording_id": "b3e05569-fca3-464c-954e-035f94d1cc5c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "deef6ede-a519-4792-82a8-685fba54e84e",
+      "recording_id": "b3e05569-fca3-464c-954e-035f94d1cc5c",
+      "end_time": 91.55,
+      "start_time": 1.64,
+      "recording_attendee_id": "5799e226-a0a1-4102-a5a9-4a3706b06140",
+      "text": "Thank you for calling bonaventure. Please take a moment to choose from the following options. So that we may properly direct your call. If you know your party's extension you may dial it at any time for a dial by name directory press one. If you are a resident and would like to. Please enter the first three or four letters of the first or last name of the person you are trying to reach Ben press pound for the letter Q press seven. The name you have entered does not exist. Please enter the first three or four letters of the first or last name of the person you are trying to reach. The following destinations have been identified using the name you have entered extension one. One one five to be transferred to this destination press one. Welcome to our voicemail system. You have reached the mailbox of one one one five at the tone, please record your message. When you have finished recording press pound or simply hang up."
+    },
+    {
+      "id": "deef6ede-a519-4792-82a8-685fba54e84e",
+      "recording_id": "b3e05569-fca3-464c-954e-035f94d1cc5c",
+      "end_time": 117.97,
+      "start_time": 94.27,
+      "recording_attendee_id": "e43fff53-d7d2-4223-a232-16282727f862",
+      "text": "Good afternoon. This message is for Liz Liz Andy calling from rentable following up an email sent over on Friday and wanted to see if we could set up some time to talk here later this week early next week. In regards to strategizing around your marketing and getting renter's over for bonaventure today. Um, I'll follow up with an email this is Andy at rentable and hope to talk to you soon."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b3e05569-fca3-464c-954e-035f94d1cc5c",
+      "title": "Call: Andy Keefe and Elizabeth Bogue @ Bonaventure Property Management Services",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "42bf9dab-07b6-4042-99f8-83e554077224",
+  "recording_id": "43846ec8-0856-48f6-b5dd-cf482f96ed8e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "42bf9dab-07b6-4042-99f8-83e554077224",
+      "recording_id": "43846ec8-0856-48f6-b5dd-cf482f96ed8e",
+      "end_time": 120.01,
+      "start_time": 115.06,
+      "recording_attendee_id": "872d2f1e-b474-45b9-9d46-dc82e642e054",
+      "text": "five three eight three again four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "42bf9dab-07b6-4042-99f8-83e554077224",
+      "recording_id": "43846ec8-0856-48f6-b5dd-cf482f96ed8e",
+      "end_time": 87.54,
+      "start_time": 0.95,
+      "recording_attendee_id": "e5886bc3-15c3-464a-b541-6adf7df17d7c",
+      "text": "Thank you for calling S P M properties providing professional property management for commercial and residential properties. Please listen to the full message as our extensions have changed please press nine for dial by directory name. If this is an actual emergency please hang up and dial nine one one for maintenance issue. Please dial one two three one. I'm sorry, but no names match that spelling. Please? Try again press up to six letters of the person's last name using seven for Q and. You are being transferred to Paul Shane. Hello, this is Paul, I'm not able to answer the phone right now, but please leave your name number and a brief message and I'll get back to you as soon as possible. You may press zero. If you need immediate attention. Thank you begin speaking. After the tone then hang up. When you are finished or press any key for further options."
+    },
+    {
+      "id": "42bf9dab-07b6-4042-99f8-83e554077224",
+      "recording_id": "43846ec8-0856-48f6-b5dd-cf482f96ed8e",
+      "end_time": 115.06,
+      "start_time": 88.81,
+      "recording_attendee_id": "872d2f1e-b474-45b9-9d46-dc82e642e054",
+      "text": "Hi, Paul, my name is Mitch Garcia. I'm calling with rental I sent you a couple of emails saw that you got them and the reason I was calling was to set a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads and renters to their vacant properties on specifically to our partnership with Facebook Facebook marketplace wanted to run by a few options and ideas with you if you could please return my call. Again, it's rentable four seven zero eight two eight"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "43846ec8-0856-48f6-b5dd-cf482f96ed8e",
+      "title": "Call: Mitch  Scarski  and Paul Chahin @ Stephens Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+  "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 2.22,
+      "start_time": 0.38,
+      "recording_attendee_id": "e4e0cb71-27ab-4605-9925-300bedf8f001",
+      "order_number": 0,
+      "text": "B. S. C. Holdings. How can I help you?"
+    },
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 4.96,
+      "start_time": 2.61,
+      "recording_attendee_id": "14c31b42-ee12-47db-b9b6-3b68a679d469",
+      "order_number": 1,
+      "text": "Hi. There is Lauren Walker available, please,"
+    },
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 7.75,
+      "start_time": 6.38,
+      "recording_attendee_id": "e4e0cb71-27ab-4605-9925-300bedf8f001",
+      "order_number": 2,
+      "text": "Can I tell her who's calling?"
+    },
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 10.91,
+      "start_time": 7.97,
+      "recording_attendee_id": "14c31b42-ee12-47db-b9b6-3b68a679d469",
+      "order_number": 3,
+      "text": "yep. Absolutely. It's Brandon Collins, rentable."
+    },
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 13.08,
+      "start_time": 12.07,
+      "recording_attendee_id": "e4e0cb71-27ab-4605-9925-300bedf8f001",
+      "order_number": 4,
+      "text": "Alright. One second."
+    },
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 13.83,
+      "start_time": 13.19,
+      "recording_attendee_id": "14c31b42-ee12-47db-b9b6-3b68a679d469",
+      "order_number": 5,
+      "text": "Thank you."
+    },
+    {
+      "id": "cb6fd99b-548c-4a57-bb6b-584c2652aa4b",
+      "recording_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "end_time": 175.81,
+      "start_time": 25.7,
+      "recording_attendee_id": "e4e0cb71-27ab-4605-9925-300bedf8f001",
+      "order_number": 6,
+      "text": "Mhm. Yeah. Yeah. Okay. Mhm. Okay. Yeah. Yeah. Yeah. Yeah. Okay. Yeah. Okay. Mhm. Okay. Okay. Yeah. Yeah. Yeah. Okay. Yeah. Okay. Mhm. Yeah."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c6eb2ca4-6b38-4f6e-83a0-1bcdefc224d2",
+      "title": "Call: Brandon Winfield and Lauren Walker @ BSC Holdings, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

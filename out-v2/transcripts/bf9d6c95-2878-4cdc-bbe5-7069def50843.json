@@ -1,0 +1,29 @@
+{
+  "id": "bf9d6c95-2878-4cdc-bbe5-7069def50843",
+  "recording_id": "32ae481e-f59a-42bf-b5f4-57432b3d9726",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bf9d6c95-2878-4cdc-bbe5-7069def50843",
+      "recording_id": "32ae481e-f59a-42bf-b5f4-57432b3d9726",
+      "end_time": 127.47,
+      "start_time": 1.05,
+      "recording_attendee_id": "4692d53e-8de7-4fe6-8cb7-dd3bf6526f4e",
+      "order_number": 0,
+      "text": "Thank you for calling Urban American. If you are calling about the Lincoln on Speer boulevard, please press one. Thank you for calling the Denver Office. Please listen carefully as our options may have changed. If this is a real emergency, hang up and call nine hundred and eleven If you know the extension of the person you're trying to reach, please press one. Otherwise, please select from the following menu. Press two. To reach the Maintenance Department, Press three. to rent a new apartment, Press four. For questions regarding your rent, charges and payments, press five. For questions regarding your move out and security deposit, Press six. For questions regarding your lease renewal. To repeat this menu, please press, please stay on the line while your call is transferred to the operator. Thank you for calling the Denver office. Please listen carefully as our options may have changed. If this is a real emergency."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "32ae481e-f59a-42bf-b5f4-57432b3d9726",
+      "title": "Call: Alyssa Tillich and Shirlyn Thomas @ Urban American",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

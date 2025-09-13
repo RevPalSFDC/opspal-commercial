@@ -1,0 +1,28 @@
+{
+  "id": "f861c66d-825d-4532-b2cb-de69f7e1df1c",
+  "recording_id": "09d1b001-b52a-419e-bc2a-f09fc452bb1f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f861c66d-825d-4532-b2cb-de69f7e1df1c",
+      "recording_id": "09d1b001-b52a-419e-bc2a-f09fc452bb1f",
+      "end_time": 384.46,
+      "start_time": 346.45,
+      "recording_attendee_id": "c1f42ba0-214f-4581-81ee-9878d350f44e",
+      "text": "Hello, this is Josh. I have an appointment this morning with Alison we had it scheduled for eleven AM I'm June call, just want to call. As a reminder, I sent an email as well and a calendar invite. So just give me a call when you get a chance. My cell is six five one seven one seven five six three four again. This is Joseph for my eleven o'clock am appointment time with Alison. I'm give me a call or else. They said we sent a couple emails back and forth and I sent you an email several minutes ago. As a reminder for a call this morning. So let me know if you could still help on I'm using right now or else. If you need to reschedule. Let me know thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "09d1b001-b52a-419e-bc2a-f09fc452bb1f",
+      "title": "ConAM <> Rentable",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-01-18T18:41:28.145000Z",
+      "call_date": "2021-01-18"
+    }
+  }
+}

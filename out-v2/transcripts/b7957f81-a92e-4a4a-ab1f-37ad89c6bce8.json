@@ -1,0 +1,84 @@
+{
+  "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+  "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 98.36,
+      "start_time": 96.92,
+      "recording_attendee_id": "e2a1dcaa-dbec-444b-b0fa-03f6a6ffd498",
+      "text": "He's no longer with the company."
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 141.73,
+      "start_time": 135.73,
+      "recording_attendee_id": "e2a1dcaa-dbec-444b-b0fa-03f6a6ffd498",
+      "text": "Hello, you have reached candy Nora. Please leave your name your telephone number and the reason for your call. I will return your call at my"
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 109.16,
+      "start_time": 104.93,
+      "recording_attendee_id": "e2a1dcaa-dbec-444b-b0fa-03f6a6ffd498",
+      "text": "Yes, and we transfer you to candy. She said it'd be you can leave her a voicemail."
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 90.14,
+      "start_time": 1.57,
+      "recording_attendee_id": "e2a1dcaa-dbec-444b-b0fa-03f6a6ffd498",
+      "text": "Thank you for calling this call may be recorded for training purposes, please hold and someone will be right with you. Hello, and thank you for calling Carlo Incorporated our normal business hours are Monday through Friday eight thirty AM to five thirty PM if you know your party's three, digit extension please enter it. Now? If you are calling regarding rental information please press two for zero now or visit our website at Carlo, Inc. Dot net to reach the receptionist please press two two. One, if you are a resident and this is an after hour emergency please call eight one eight five zero five five two three eight for the company directory please press pound. And then enter the first three letters of the parties, first name. Thank you for calling Carlo Incorporated and have a pleasant day using the dial pad, please enter the extension you wish to call to use the directory press number sign to leave a message press Star to reach an operator press zero. One moment please. Marilyn Carpenter this is Hillary."
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 103.34,
+      "start_time": 100.52,
+      "recording_attendee_id": "73a01181-ce6a-4c8d-a18c-87ba0768dfe1",
+      "text": "Oh, okay, is there a new Regional for Park to you."
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 142.33,
+      "start_time": 141.73,
+      "recording_attendee_id": "e2a1dcaa-dbec-444b-b0fa-03f6a6ffd498",
+      "text": "convenience."
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 110.82,
+      "start_time": 110.04,
+      "recording_attendee_id": "73a01181-ce6a-4c8d-a18c-87ba0768dfe1",
+      "text": "Okay, thank you."
+    },
+    {
+      "id": "b7957f81-a92e-4a4a-ab1f-37ad89c6bce8",
+      "recording_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "end_time": 94.82,
+      "start_time": 92.15,
+      "recording_attendee_id": "73a01181-ce6a-4c8d-a18c-87ba0768dfe1",
+      "text": "Hey, I was trying to reach our oh."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "bca316a3-52dd-405c-8e40-ce9a498d6966",
+      "title": "Call: Dan Cellon and Marcela Pasut @ Carlo Inc",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

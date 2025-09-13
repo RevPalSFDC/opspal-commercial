@@ -1,0 +1,100 @@
+{
+  "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+  "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 17.55,
+      "start_time": 13.03,
+      "recording_attendee_id": "9f4d7ce1-e752-44c0-b746-8d5d19562b64",
+      "text": "A meeting rescheduled. I'm like I'm putting in for it to work."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 1.58,
+      "start_time": 0.62,
+      "recording_attendee_id": "9f4d7ce1-e752-44c0-b746-8d5d19562b64",
+      "text": "Danielle this is Gabby."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 300.12,
+      "start_time": 280.36,
+      "recording_attendee_id": "9f4d7ce1-e752-44c0-b746-8d5d19562b64",
+      "text": "Sure. Um, we have a marketing team not goes through all that like fill out and apartments dot. Com and stuff like that."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 276.34,
+      "start_time": 23.17,
+      "recording_attendee_id": "9f4d7ce1-e752-44c0-b746-8d5d19562b64",
+      "text": "Okay, um, one moment, let me see if she's available. Hey, thanks for holding um. I did try to get a hold of her and wasn't able to for today. Um you could try tomorrow morning. It's gonna be slow to reach back then."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 6.31,
+      "start_time": 5.2,
+      "recording_attendee_id": "9f4d7ce1-e752-44c0-b746-8d5d19562b64",
+      "text": "Is there anything I can help you with."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 22.03,
+      "start_time": 18.67,
+      "recording_attendee_id": "fe5d1ebd-0c17-41b0-98ff-6bd2186c5ec4",
+      "text": "Now we have a call scheduled them with rentable for advertising."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 4.18,
+      "start_time": 2.77,
+      "recording_attendee_id": "fe5d1ebd-0c17-41b0-98ff-6bd2186c5ec4",
+      "text": "Hi, Gabby my please speak to Tiffany."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 303.85,
+      "start_time": 298.45,
+      "recording_attendee_id": "fe5d1ebd-0c17-41b0-98ff-6bd2186c5ec4",
+      "text": "Alright, gotcha. Okay, perfect. Alright. Thank you so much. I'll give a try tomorrow."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 291.4,
+      "start_time": 268.45,
+      "recording_attendee_id": "fe5d1ebd-0c17-41b0-98ff-6bd2186c5ec4",
+      "text": "Yeah. Okay, sure sure I pick your brain for a minute actually I am but we are and advertising company and I I looks like he's missing the lease up correct. The mail. Okay. Alright, and then what do you guys using for advertising right now."
+    },
+    {
+      "id": "0d3df99b-c993-419c-842e-f70e259d8dbb",
+      "recording_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "end_time": 12.67,
+      "start_time": 7.78,
+      "recording_attendee_id": "fe5d1ebd-0c17-41b0-98ff-6bd2186c5ec4",
+      "text": "We just been trying to get a meeting rescheduled that we weren't able to have."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3dffdd44-6ee5-42d1-8f8d-65724fdc55d5",
+      "title": "Call: Holly Streisel and Tiffany Capurso @ Davis Enterprises",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

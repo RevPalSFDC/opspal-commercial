@@ -1,0 +1,60 @@
+{
+  "id": "6896679b-6e21-4c94-8713-64db8e8ff354",
+  "recording_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6896679b-6e21-4c94-8713-64db8e8ff354",
+      "recording_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+      "end_time": 101.42,
+      "start_time": 1.73,
+      "recording_attendee_id": "28a051bb-ad36-4099-953a-00f778331bdb",
+      "text": "Thank you for calling M G our property management. We are happy to serve your property management needs seven days a week your call may be monitored or recorded for quality and training purposes. If you know your party's three, digit extension please enter it. Now? If you are inquiring regarding an available rental property, please press one. If you are a tenant with the maintenance request press two. If you are interested in property management Services press three for a directory of our management team press four, if you are I am sorry, that's not a valid extension please. Try again. Thank you for calling M G our property management. We are happy to serve your property management needs seven days a week your call, maybe monitored or recorded for quality and training purposes. If you know your party's three, digit extension please enter it. Now? If you are inquiring regarding an available rental property, please press one. If you are a tenant with the maintenance request press two. If you are interested in property management Services press three for a directory of our management team press four if you are calling regarding an owner's Association press five to reach our receptionist please press zero to repeat this menu. M J our property management, how may I help you."
+    },
+    {
+      "id": "6896679b-6e21-4c94-8713-64db8e8ff354",
+      "recording_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+      "end_time": 142.82,
+      "start_time": 139.46,
+      "recording_attendee_id": "28a051bb-ad36-4099-953a-00f778331bdb",
+      "text": "He's unavailable. Please leave your message after the tone."
+    },
+    {
+      "id": "6896679b-6e21-4c94-8713-64db8e8ff354",
+      "recording_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+      "end_time": 109.22,
+      "start_time": 108.05,
+      "recording_attendee_id": "28a051bb-ad36-4099-953a-00f778331bdb",
+      "text": "Okay one moment place."
+    },
+    {
+      "id": "6896679b-6e21-4c94-8713-64db8e8ff354",
+      "recording_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+      "end_time": 105.56,
+      "start_time": 102.38,
+      "recording_attendee_id": "4634288d-910b-427a-9042-dfa1757c7f1b",
+      "text": "Hey, I was trying to get a hold of Ms. Sylvia."
+    },
+    {
+      "id": "6896679b-6e21-4c94-8713-64db8e8ff354",
+      "recording_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+      "end_time": 110.51,
+      "start_time": 109.85,
+      "recording_attendee_id": "4634288d-910b-427a-9042-dfa1757c7f1b",
+      "text": "Alright, thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "70e3a258-2469-490b-b4d4-b78938eba359",
+      "title": "Call: Dan Cellon and Sylvia Padilla @ MGR Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

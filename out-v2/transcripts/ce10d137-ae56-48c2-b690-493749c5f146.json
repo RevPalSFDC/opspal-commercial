@@ -1,0 +1,28 @@
+{
+  "id": "ce10d137-ae56-48c2-b690-493749c5f146",
+  "recording_id": "bb020178-64c8-46af-964b-1beeb0f1528d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ce10d137-ae56-48c2-b690-493749c5f146",
+      "recording_id": "bb020178-64c8-46af-964b-1beeb0f1528d",
+      "end_time": 125.87,
+      "start_time": 11.91,
+      "recording_attendee_id": "e77d5b05-1e46-48a6-b4a1-0509d85ebbbe",
+      "text": "Thank you for calling Victoria Gardens our normal business hours are Monday through Friday nine to five. If you are calling about a rental please dial extension two, one four four and they need assistance. You can also visit our website at W W W dot post data org dot. Com for pricing availability and to schedule an appointment we are available for showings Monday through Saturday ten AM to four PM if you are resident calling about maintenance. Please submit your maintenance request online fee as a resident portal. If this is a maintenance emergency during normal business hours, please dial extension two zero. Three four, I mediate assistance for maintenance emergencies after or before normal business hours. Please call one eight three three five two seven four three zero nine for bookkeeping matters, please dial extension two zero eight for all other matters, please email management at Coast data org dot. Com. Thank you and have a great day. Leasing department. Thank you for contacting the leasing department. We are either on another line or away from her desk at the moment."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "bb020178-64c8-46af-964b-1beeb0f1528d",
+      "title": "Call: Alex Wodarczyk and Michele Cassata @ Cassata Organization",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

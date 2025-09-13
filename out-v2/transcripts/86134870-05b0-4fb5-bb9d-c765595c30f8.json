@@ -1,0 +1,28 @@
+{
+  "id": "86134870-05b0-4fb5-bb9d-c765595c30f8",
+  "recording_id": "48c203fb-87c7-48c2-a69b-7898138f5dc2",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "86134870-05b0-4fb5-bb9d-c765595c30f8",
+      "recording_id": "48c203fb-87c7-48c2-a69b-7898138f5dc2",
+      "end_time": 69.66,
+      "start_time": 0.5,
+      "recording_attendee_id": "25aa6ef4-5726-4642-a63a-70b5c7ae5cb0",
+      "text": "Thank you for calling Hill management Services our office hours are eight AM to five PM Monday through Friday. If this is an extreme emergency, please dial extension two. Two two, if you know your party's extension you may dial it at any time for a spaniel press the only extend ceiling seeing for general information and leasing please dial one one three for department listings, please press two. Otherwise, you may press three for our directory. Thank you for calling hail management Services our office hours are eight AM to five PM Monday through Friday. If this is an extreme emergency, please dial extension two. Two. Two, if you know your party's extension you may dial it at any time for a spaniel pressing one and extend C one. C N for general information and leasing please dial one one three for department listings, please press two. Otherwise, you may press three for our directory. Please hold while I transfer you to the attendant."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "48c203fb-87c7-48c2-a69b-7898138f5dc2",
+      "title": "Call: Dan Cellon and Detta @ Yale Management Services",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

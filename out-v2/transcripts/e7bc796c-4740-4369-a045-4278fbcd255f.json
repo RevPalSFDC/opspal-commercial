@@ -1,0 +1,110 @@
+{
+  "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+  "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 0.85,
+      "start_time": 0,
+      "recording_attendee_id": "ffc36775-baac-4aab-aa09-1ef4e73bf863",
+      "order_number": 0,
+      "text": "Can I help you?"
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 2.64,
+      "start_time": 1.21,
+      "recording_attendee_id": "6d06d022-94e4-4df9-ab3c-6b54e0a32d56",
+      "order_number": 1,
+      "text": "Hey. Is this Tiffany?"
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 3.41,
+      "start_time": 2.8,
+      "recording_attendee_id": "ffc36775-baac-4aab-aa09-1ef4e73bf863",
+      "order_number": 2,
+      "text": "Yes."
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 6.85,
+      "start_time": 3.77,
+      "recording_attendee_id": "6d06d022-94e4-4df9-ab3c-6b54e0a32d56",
+      "order_number": 3,
+      "text": "Hey Tiffany. It's Brandon calling back. Sorry about that. With"
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 6.86,
+      "start_time": 6.66,
+      "recording_attendee_id": "ffc36775-baac-4aab-aa09-1ef4e73bf863",
+      "order_number": 4,
+      "text": "Oh"
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 7.39,
+      "start_time": 6.85,
+      "recording_attendee_id": "6d06d022-94e4-4df9-ab3c-6b54e0a32d56",
+      "order_number": 5,
+      "text": "rental,"
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 11.99,
+      "start_time": 6.86,
+      "recording_attendee_id": "ffc36775-baac-4aab-aa09-1ef4e73bf863",
+      "order_number": 6,
+      "text": "no. Okay. I'm so sorry. Can I place you on hold for just a moment."
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 12.97,
+      "start_time": 11.93,
+      "recording_attendee_id": "6d06d022-94e4-4df9-ab3c-6b54e0a32d56",
+      "order_number": 7,
+      "text": "yep. All"
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 13.16,
+      "start_time": 12.59,
+      "recording_attendee_id": "ffc36775-baac-4aab-aa09-1ef4e73bf863",
+      "order_number": 8,
+      "text": "Thank you."
+    },
+    {
+      "id": "e7bc796c-4740-4369-a045-4278fbcd255f",
+      "recording_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "end_time": 239.71,
+      "start_time": 12.97,
+      "recording_attendee_id": "6d06d022-94e4-4df9-ab3c-6b54e0a32d56",
+      "order_number": 9,
+      "text": "good. Uh Okay. Hello."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "cd8b0143-7d08-46b9-8714-eecdccce7565",
+      "title": "Call: Brandon Winfield and Tiffany Donovan @ SVN | Tar Heel Commercial Realty",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "analysis_timestamp": "2025-09-11T15:55:27.088948+00:00",
+  "summary": {
+    "total_conversations": 10,
+    "conversations_with_matches": 0,
+    "conversations_without_matches": 10,
+    "match_rate": 0.0
+  },
+  "platform_breakdown": {
+    "zoom": 9,
+    "ms_teams": 1
+  },
+  "detailed_results": [
+    {
+      "conversation_id": "d31f0a42-1355-4d8b-96dd-5595e581ee02",
+      "platform": "zoom",
+      "started_recording_at": 1757601570,
+      "duration": 1650208,
+      "user_guid": "6394fbed-1248-43ff-b3a5-76dfe510d9e1",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "b9b9f970-d047-45e9-8716-6499d6f37bc5",
+      "platform": "zoom",
+      "started_recording_at": 1757531968,
+      "duration": 795424,
+      "user_guid": "58f8e5fe-e026-4c58-8548-e9685c451fb0",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "fc9850fa-6431-455d-83c3-fe7261d7a2cb",
+      "platform": "zoom",
+      "started_recording_at": 1757529099,
+      "duration": 1339968,
+      "user_guid": "e3255d4a-d0b2-482c-9429-f7e9b63271e0",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "59022b32-9076-423a-9e0c-da4b398dc1c0",
+      "platform": "zoom",
+      "started_recording_at": 1757527983,
+      "duration": 381376,
+      "user_guid": "096fd6f4-4197-439b-94cc-8322883e718e",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "6fb92e9c-51f4-49e8-b279-31161486c7c4",
+      "platform": "zoom",
+      "started_recording_at": 1757526429,
+      "duration": 706592,
+      "user_guid": "58f8e5fe-e026-4c58-8548-e9685c451fb0",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "39649ea8-cc92-46e5-b5ee-f94e0c979a12",
+      "platform": "zoom",
+      "started_recording_at": 1757528894,
+      "duration": 3301920,
+      "user_guid": "41c2357a-925e-460b-a39e-6a1fcf46e18f",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "e2582988-f5b5-4da3-9904-9533e5226323",
+      "platform": "ms_teams",
+      "started_recording_at": 1757523656184,
+      "duration": 2977204,
+      "user_guid": "e3255d4a-d0b2-482c-9429-f7e9b63271e0",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "513eebd4-019d-476e-9406-1831a322dae2",
+      "platform": "zoom",
+      "started_recording_at": 1757523768,
+      "duration": 2449696,
+      "user_guid": "2ac633c0-d88f-4308-a458-5a7ffab8ace9",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "8c3bf634-4ada-49ac-8c1a-cbdff1a7a662",
+      "platform": "zoom",
+      "started_recording_at": 1757521901,
+      "duration": 1432640,
+      "user_guid": "58f8e5fe-e026-4c58-8548-e9685c451fb0",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    },
+    {
+      "conversation_id": "cb14b321-c5d1-4d3a-adf5-1c45412c9ac8",
+      "platform": "zoom",
+      "started_recording_at": 1757519297,
+      "duration": 712032,
+      "user_guid": "e3255d4a-d0b2-482c-9429-f7e9b63271e0",
+      "matching_calls_count": 0,
+      "matching_calls": []
+    }
+  ]
+}

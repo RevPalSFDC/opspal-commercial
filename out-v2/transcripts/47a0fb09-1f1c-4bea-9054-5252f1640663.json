@@ -1,0 +1,76 @@
+{
+  "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+  "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 76.49,
+      "start_time": 74.33,
+      "recording_attendee_id": "e75b16e5-5ba8-4afb-8c04-ab4a7979adfb",
+      "text": "Okay about what I'm sorry."
+    },
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 60.56,
+      "start_time": 1.7,
+      "recording_attendee_id": "e75b16e5-5ba8-4afb-8c04-ab4a7979adfb",
+      "text": "Thank you for calling M G our property management. We are happy to serve your property management needs seven days a week your call, maybe monitored or recorded for quality and training purposes. If you know your party's three, digit extension please enter it. Now? If you are inquiring regarding an available rental property, please press one. If you are a tenant with the maintenance request press two. If you were interested in property management Services press three for a directory of our management team press four if you are calling regarding an owner's Association press five to reach our receptionist please press zero to repeat this menu press eight. Thank you for calling M G our property management. M G our property management, how may I help you."
+    },
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 151.24,
+      "start_time": 82.3,
+      "recording_attendee_id": "e75b16e5-5ba8-4afb-8c04-ab4a7979adfb",
+      "text": "Oh, okay, one moment. Please home button start is our system activates find my follow me to locate your party. Hello, this is Dana rademacher and your property management and finally on the phone right now, but if you please leave your name number and a brief message, I'll be sure to get back to you as soon as possible."
+    },
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 71.23,
+      "start_time": 64.93,
+      "recording_attendee_id": "e75b16e5-5ba8-4afb-8c04-ab4a7979adfb",
+      "text": "Sure, one moment place, but this would be in regards to."
+    },
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 81.77,
+      "start_time": 77.78,
+      "recording_attendee_id": "ddc26283-c175-4f07-af8c-e438bac16506",
+      "text": "I'm with I'm with rentable week. So it's about a Facebook marketplace."
+    },
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 64,
+      "start_time": 61.81,
+      "recording_attendee_id": "ddc26283-c175-4f07-af8c-e438bac16506",
+      "text": "Hey, I was trying to reach Dana."
+    },
+    {
+      "id": "47a0fb09-1f1c-4bea-9054-5252f1640663",
+      "recording_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "end_time": 73.44,
+      "start_time": 72.6,
+      "recording_attendee_id": "ddc26283-c175-4f07-af8c-e438bac16506",
+      "text": "I'm with rentable."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "72dd2874-a160-45ef-a21d-253fabcb1284",
+      "title": "Call: Dan Cellon and Dana Rademaker @ MGR Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "a08fe01a-e486-48ad-8902-12f2f6a36b0e",
+  "recording_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a08fe01a-e486-48ad-8902-12f2f6a36b0e",
+      "recording_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+      "end_time": 166.52,
+      "start_time": 142.88,
+      "recording_attendee_id": "c34ee500-ca17-4bd9-b82e-70ed4c87cb9e",
+      "text": "Hey, Michelle, this is Austin with principal calling calling regards a few emails and sent over, we'd love to hear your marketing strategy as far as your patient units. Right now I'm working with a bunch of properties with in your area and things that we have some new marketing one that could be a great fit with your portfolio go ahead, give me a call back when you have a few moments six zero eight nine two one two four one nine again, this is Austin with rental thanks."
+    },
+    {
+      "id": "a08fe01a-e486-48ad-8902-12f2f6a36b0e",
+      "recording_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+      "end_time": 90.58,
+      "start_time": 0.52,
+      "recording_attendee_id": "9681e2d4-4df7-4c9b-a326-d072d67b9f6f",
+      "text": "Thank you for calling Heritage properties. If you know your party's extension you may dial it at any time or press zero for the operator. If you need a company directory press four one one. Thank you. Again for calling Heritage properties. I'm sorry, I did not hear your selection. Please reenter your selection now. Thank you for calling Harris, please enter the first three letters of the person's last name for Q enter seven. For Z enter nine, please enter the letters. There are no matches to the three letters you entered to try another name enter one. I'm sorry, I did not hear your selection. Please reenter your selection now. Thank you for calling Heritage properties. If you know your party's extension you may dial it at any time or press zero for the operator. If you need updated for X ray press. Please hold on while I try that extension. Thank you for calling Heritage property. How can I help you today?"
+    },
+    {
+      "id": "a08fe01a-e486-48ad-8902-12f2f6a36b0e",
+      "recording_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+      "end_time": 139.86,
+      "start_time": 94.73,
+      "recording_attendee_id": "9681e2d4-4df7-4c9b-a326-d072d67b9f6f",
+      "text": "Okay, please hold. Hi, you've reached Michelle for the Heritage properties available. Please leave me a message and I'll get back with you as soon as possible. Thanks so much have a great day to disconnect press one. If you still want to leave a message for this person press three or simply stay on the line. At the tone please record your message. When you have finished recording you may hang up or press one"
+    },
+    {
+      "id": "a08fe01a-e486-48ad-8902-12f2f6a36b0e",
+      "recording_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+      "end_time": 93.79,
+      "start_time": 91.36,
+      "recording_attendee_id": "c34ee500-ca17-4bd9-b82e-70ed4c87cb9e",
+      "text": "Hello, I was looking to speak with Michelle Ford please."
+    },
+    {
+      "id": "a08fe01a-e486-48ad-8902-12f2f6a36b0e",
+      "recording_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+      "end_time": 140.85,
+      "start_time": 139.86,
+      "recording_attendee_id": "9681e2d4-4df7-4c9b-a326-d072d67b9f6f",
+      "text": "for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6279abff-ae02-417e-b911-6edd377c9c30",
+      "title": "Call: Austin Schleisner and Michelle Ford @ Heritage Properties Incorporated",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

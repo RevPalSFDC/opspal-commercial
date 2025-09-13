@@ -1,0 +1,52 @@
+{
+  "id": "a9bc05e1-6b45-4beb-bf11-32c42efdedf9",
+  "recording_id": "e6874184-4860-496b-ac2a-77f344ad9cb0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a9bc05e1-6b45-4beb-bf11-32c42efdedf9",
+      "recording_id": "e6874184-4860-496b-ac2a-77f344ad9cb0",
+      "end_time": 48.5,
+      "start_time": 45.65,
+      "recording_attendee_id": "1f6fc187-197d-4ac4-b144-84704bfe7a43",
+      "text": "Hi, my name is Mitch. This is calling for being mature."
+    },
+    {
+      "id": "a9bc05e1-6b45-4beb-bf11-32c42efdedf9",
+      "recording_id": "e6874184-4860-496b-ac2a-77f344ad9cb0",
+      "end_time": 178.99,
+      "start_time": 109.17,
+      "recording_attendee_id": "7eb73180-8cfc-426e-a27b-3f3ab2cc496b",
+      "text": "of the month from ten AM to two PM and Sundays by appointment only or whenever you need us. There's always someone to answer your call homeowner or tenant your problems will be dealt with twenty four. Seven so you can live an absolute company, thanks for holding will be right with you instead of booking time off work to view properties simply sir. I'm gonna transfer you over to Fresno. So give me one moment, while I get that. The person at extension five zero. One is not available record your message at the tone press any key."
+    },
+    {
+      "id": "a9bc05e1-6b45-4beb-bf11-32c42efdedf9",
+      "recording_id": "e6874184-4860-496b-ac2a-77f344ad9cb0",
+      "end_time": 109.17,
+      "start_time": 57.57,
+      "recording_attendee_id": "7eb73180-8cfc-426e-a27b-3f3ab2cc496b",
+      "text": "Your property portfolio is a business and it should be treated as such with the river drive properties as your partner your profits will be maximize and stress minimize with over twenty, five years of experience. If we've helped the numerous owners achieve their financial goals and free up their time to get on with the rest of their life see what we can do for you at River drive properties dot. Com. We take great pride and not only being effective but also being on it, you'll never have to worry about being shocked by hidden fees. All the terms of our partnership will be as clear and transparent as the windows and your property and you won't need a dictionary when reading through your contract our regular office hours are Monday through Friday eight AM to five thirty PM the first two Saturdays"
+    },
+    {
+      "id": "a9bc05e1-6b45-4beb-bf11-32c42efdedf9",
+      "recording_id": "e6874184-4860-496b-ac2a-77f344ad9cb0",
+      "end_time": 45.01,
+      "start_time": 2.11,
+      "recording_attendee_id": "7eb73180-8cfc-426e-a27b-3f3ab2cc496b",
+      "text": "Hello, and thank you for calling River Drive properties. If you are a current tenants please press one. If you are a current client please press two if you're interested in what River drive can do for you please press three. If you have a maintenance issue that needs to be addressed. Please press four for leasing please press five for our vendor Partners. Please press six for everything else, please press zero. Otherwise leave a message after the tone. Good afternoon. Thank you for calling over to our property. So I can help you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e6874184-4860-496b-ac2a-77f344ad9cb0",
+      "title": "Call: Mitch  Scarski  and Bryanna Turner @ River Drive Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+  "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 79.5,
+      "start_time": 40.58,
+      "recording_attendee_id": "3f240b24-4e0c-4986-95f2-28022fa55aad",
+      "text": "Okay one moment. Welcome to our voicemail system. You have reached the mailbox of one zero two seven at the tone please record your message. When you have finished recording press pound or simply hang up."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 13.19,
+      "start_time": 11.66,
+      "recording_attendee_id": "3f240b24-4e0c-4986-95f2-28022fa55aad",
+      "text": "I'm I can just see what was the name again."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 7.25,
+      "start_time": 6.08,
+      "recording_attendee_id": "3f240b24-4e0c-4986-95f2-28022fa55aad",
+      "text": "Hello kind of a realty."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 38.75,
+      "start_time": 37.04,
+      "recording_attendee_id": "3f240b24-4e0c-4986-95f2-28022fa55aad",
+      "text": "She is would you like me to transfer you to her."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 121.33,
+      "start_time": 81.01,
+      "recording_attendee_id": "4eaeb676-892e-4b56-b6dc-e8c304c92fc8",
+      "text": "Hi, this message is for Sean. Hey, this is Alex with our check with rentable. Hope you're doing well. Just wanted to touch base and see if you might be the right person to touch base regarding marketing at Julio few availabilities online to see our trials and that market. So I would love to maybe get ten fifteen minutes of your time here in the next week to sit down and chat. If you can give me a call back my number is two six nine three one five one eight, otherwise feel free to shoot me an email and looking forward to touching base."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 18.81,
+      "start_time": 13.7,
+      "recording_attendee_id": "4eaeb676-892e-4b56-b6dc-e8c304c92fc8",
+      "text": "Yeah, Sean pay S been all. Thank you."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 10.37,
+      "start_time": 8,
+      "recording_attendee_id": "4eaeb676-892e-4b56-b6dc-e8c304c92fc8",
+      "text": "Hi, there is Sean pay it's been all available."
+    },
+    {
+      "id": "fa5bff88-29e3-40dc-bbc8-baa76f8cc628",
+      "recording_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "end_time": 40.44,
+      "start_time": 39.39,
+      "recording_attendee_id": "4eaeb676-892e-4b56-b6dc-e8c304c92fc8",
+      "text": "Yes, please thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "54029440-e476-4365-b0a3-30d7162dafab",
+      "title": "Call: Alex Wodarczyk and Shonte' Espinal @ Conifer Realty, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

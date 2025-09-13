@@ -1,0 +1,92 @@
+{
+  "id": "96307478-7769-4c33-8561-7b003e8d82af",
+  "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 135.25,
+      "start_time": 133.66,
+      "recording_attendee_id": "74c97a75-b922-4f56-844f-d5dd4344b639",
+      "text": "No problem you have a good one."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 8.36,
+      "start_time": 5.33,
+      "recording_attendee_id": "74c97a75-b922-4f56-844f-d5dd4344b639",
+      "text": "Thank you for calling on sixteen communities. This is Steven speaking, how can help you."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 24.19,
+      "start_time": 21.19,
+      "recording_attendee_id": "74c97a75-b922-4f56-844f-d5dd4344b639",
+      "text": "Okay, I'm gonna put you on a quick hold on let me see if I can find her."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 16.52,
+      "start_time": 11.75,
+      "recording_attendee_id": "74c97a75-b922-4f56-844f-d5dd4344b639",
+      "text": "Let me double, check I'm not sure if she is she's kind of been in meetings all day in and out. Um, I ask who's calling."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 120.94,
+      "start_time": 109.51,
+      "recording_attendee_id": "74c97a75-b922-4f56-844f-d5dd4344b639",
+      "text": "I she's actually on a call right now um, I kind of was able to pop in my head and and she said just request for you to forward her the email again, she's actually working on it or inbox right now and then she'll just follow up with you."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 10.28,
+      "start_time": 8.87,
+      "recording_attendee_id": "2982d890-39b7-42ce-8b1e-6cab977094d8",
+      "text": "Hi, Steven, it's Nancy available."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 108.75,
+      "start_time": 24.47,
+      "recording_attendee_id": "2982d890-39b7-42ce-8b1e-6cab977094d8",
+      "text": "Okay, thanks. Yeah."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 20.74,
+      "start_time": 16.96,
+      "recording_attendee_id": "2982d890-39b7-42ce-8b1e-6cab977094d8",
+      "text": "Yeah, this is Alex just following up on the email I sent earlier today."
+    },
+    {
+      "id": "96307478-7769-4c33-8561-7b003e8d82af",
+      "recording_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "end_time": 135.13,
+      "start_time": 121.39,
+      "recording_attendee_id": "2982d890-39b7-42ce-8b1e-6cab977094d8",
+      "text": "Okay, cool, I will do that um and then. Yeah, if I don't hear from her in a few days or so, I'll just give her a call back and see if I can snag or so um appreciate you're following up. Thank you. Alright have a good."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7fb4f514-14aa-4d9b-95f2-b895efd29a76",
+      "title": "Call: Alex Rodier and Nancy Peñaloza @ Mosaic Student Communities",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

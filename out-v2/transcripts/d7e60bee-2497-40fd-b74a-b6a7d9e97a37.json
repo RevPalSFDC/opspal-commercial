@@ -1,0 +1,28 @@
+{
+  "id": "d7e60bee-2497-40fd-b74a-b6a7d9e97a37",
+  "recording_id": "bd3814bd-926d-43cd-903f-c8cff2505657",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "d7e60bee-2497-40fd-b74a-b6a7d9e97a37",
+      "recording_id": "bd3814bd-926d-43cd-903f-c8cff2505657",
+      "end_time": "122.34",
+      "start_time": "18.14",
+      "recording_attendee_id": "c6b72d70-cb75-40e4-b4b8-bfe40b66bad7",
+      "text": "Mhm Oh yeah. Mhm. Mhm. Uh huh Yeah."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "bd3814bd-926d-43cd-903f-c8cff2505657",
+      "title": "Rentable + Brown Harris Stevens",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-11-30T14:40:04.943000Z",
+      "call_date": "2021-11-30"
+    }
+  }
+}

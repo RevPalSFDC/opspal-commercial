@@ -1,0 +1,36 @@
+{
+  "id": "f7cf3760-696d-4a50-9b29-2392e328adfa",
+  "recording_id": "21b4d128-a9fb-47ea-aab1-52cbd729c56c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f7cf3760-696d-4a50-9b29-2392e328adfa",
+      "recording_id": "21b4d128-a9fb-47ea-aab1-52cbd729c56c",
+      "end_time": 124.78,
+      "start_time": 16.86,
+      "recording_attendee_id": "d468acbd-f975-4d22-a3b1-31e3b59ec9cc",
+      "text": "Thank you for calling Village Greens Midwest Regional office. The apartment Services company that strive to deliver authentic experiences and the moment that lead the stories people want to share our regular business hours are Monday through Friday from nine, AM to five PM eastern standard time to leave a message in our general voice mailbox press one for the company directory press pound. Please? Enter the last welcome to the directory please enter the first three letters of your party's first or last name using your touchtone key pad use the press one four five nine zero space P a R K says S a L E S extension one zero zero two press two four five nine zero space P a R K space S a L E S extension one zero zero five press three for V G space. O S space L a N S I N G extension one zero. Two two press four for K a T I E space G O O D E N extension one zero two seven press five for J O S H U M a."
+    },
+    {
+      "id": "f7cf3760-696d-4a50-9b29-2392e328adfa",
+      "recording_id": "21b4d128-a9fb-47ea-aab1-52cbd729c56c",
+      "end_time": 122.76,
+      "start_time": 122.43,
+      "recording_attendee_id": "2913d453-3c92-452a-999f-5ae88f4ec004",
+      "text": "What is?"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "21b4d128-a9fb-47ea-aab1-52cbd729c56c",
+      "title": "Call: Will Martin and Melissa Krepsik @ Village Green",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

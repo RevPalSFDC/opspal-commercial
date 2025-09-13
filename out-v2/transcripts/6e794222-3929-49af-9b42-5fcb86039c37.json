@@ -1,0 +1,44 @@
+{
+  "id": "6e794222-3929-49af-9b42-5fcb86039c37",
+  "recording_id": "a0aef885-607b-4087-81cb-dd4171840def",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6e794222-3929-49af-9b42-5fcb86039c37",
+      "recording_id": "a0aef885-607b-4087-81cb-dd4171840def",
+      "end_time": 132.02,
+      "start_time": 113.75,
+      "recording_attendee_id": "cc8c3718-080a-40fc-a0b2-09bf845c93d7",
+      "text": "Hey, this is Dan with rentable for Doreen. Um, we had a call scheduled. First week of January, I think you're out sick. I'm just trying to get that rescheduled um, so I can shoot you an email as well um, but just please let me know either way if you're not interested I"
+    },
+    {
+      "id": "6e794222-3929-49af-9b42-5fcb86039c37",
+      "recording_id": "a0aef885-607b-4087-81cb-dd4171840def",
+      "end_time": 145.94,
+      "start_time": 132.02,
+      "recording_attendee_id": "cc8c3718-080a-40fc-a0b2-09bf845c93d7",
+      "text": "can stop reaching back out um, but I just know things get really busy so I figured I'd at least give it a shot, but yeah, check your email. I'll shoot over a couple of times. If there's some some time that works for you. Just let me know thanks so much."
+    },
+    {
+      "id": "6e794222-3929-49af-9b42-5fcb86039c37",
+      "recording_id": "a0aef885-607b-4087-81cb-dd4171840def",
+      "end_time": 110.37,
+      "start_time": 1.36,
+      "recording_attendee_id": "2fe2b593-d223-4976-bb42-957f01e2beec",
+      "text": "Hello, and thank you for calling Union South Bay a lively apartment community in Carson, California, check us out online and Union South Bay dot. Com. This call is being recorded for quality assurance. If you are calling for leasing information press one. If you are a resident and need to reach our office staff press two. If you have a maintenance request press three for office hours press four. For quality assurance purposes. This call may be recorded. For the best customer service and in order to accurately assist you. Please listen to all of the following choices. If you are interested in leasing one of our apartment Holmes please press one to submit a maintenance request. Please press two. If you are current resident a vendor or trying to reach the management office to speak with a specific leasing associate please press three. We have stepped away from our desks, but your call is important to us. Please leave us a message with your name best contact number and reason for calling we will respond back to you just as soon as possible. We look forward to speaking to you and have a wonderful day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a0aef885-607b-4087-81cb-dd4171840def",
+      "title": "Call: Dan Cellon and +13109336144",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

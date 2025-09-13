@@ -1,0 +1,36 @@
+{
+  "id": "125d974d-0dfc-4147-a8ab-0ca52832fdfd",
+  "recording_id": "a3be0e83-6e31-48f8-a3a1-6da64329369f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "125d974d-0dfc-4147-a8ab-0ca52832fdfd",
+      "recording_id": "a3be0e83-6e31-48f8-a3a1-6da64329369f",
+      "end_time": 120.3,
+      "start_time": 100.56,
+      "recording_attendee_id": "bc241e34-2731-4e6e-bfae-f06015db84a1",
+      "text": "Hi, Karen. This is Alyssa. I'm calling from rentable actually was just giving you a call about getting a traffic boost over to your Pacific North West properties would love to schedule a meeting with you sometime next week. Give me a call back when you get this message the best number to reach me at is two six two three three four five six eight thanks."
+    },
+    {
+      "id": "125d974d-0dfc-4147-a8ab-0ca52832fdfd",
+      "recording_id": "a3be0e83-6e31-48f8-a3a1-6da64329369f",
+      "end_time": 98.49,
+      "start_time": 0,
+      "recording_attendee_id": "009d3d79-faed-4827-81c3-58a887bd053a",
+      "text": "You for calling Green Bridge properties. If you know your party's extension you can enter it at any time for a staff directory please press one. If you are currently unable to retrieve the number you entered is not valid extension. Thank you for calling Greens. To reach Gene press one Karen ten to Dave by calling the number you entered is not a valid extension to reach Gene press one. Connecting call. Thank you for calling Greenwich properties. You have reached Karen Pam. I am currently away from my phone or on the other line leave a message and I'll make sure to return your call as soon as possible. If this is an after hours maintenance emergency or if you would like more assistance, please contact our office at five zero three six one seven six four one four and follow, the prompts. Thank you for your patience and I hope you have a great day at the tone, please record your message. When you have finished recording you may hang up or press one for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a3be0e83-6e31-48f8-a3a1-6da64329369f",
+      "title": "Call: Alyssa Tillich and Karen Tam @ Greenbridge Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

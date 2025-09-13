@@ -1,0 +1,47 @@
+{
+  "id": "292a0a1c-3221-48c8-8dc6-49d0a516dd65",
+  "recording_id": "f97b100d-7e42-47fb-a8b6-8d817c10ea68",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "292a0a1c-3221-48c8-8dc6-49d0a516dd65",
+      "recording_id": "f97b100d-7e42-47fb-a8b6-8d817c10ea68",
+      "end_time": 71.22,
+      "start_time": 0.92,
+      "recording_attendee_id": "b2d0b010-7935-4af7-8336-8b0fc77cd9f2",
+      "order_number": 0,
+      "text": "Thank you for calling Dark Properties. Please note in response to COV. nineteen Our offices are currently closed, however, death and monitoring and responding the messages and emergencies. If this is an emergency such as fire flood, lockout, oil heat, please press pound, reach our on call after our service. If you know your party's extension, you may dial it at any time. If you do not know your party's extension, you know there last name, press one for the department. If you would like to leave them in our general voice mailbox, please press zero or remain on the line to repeat the customer again. Thank you for calling completely safe. This key is not valid. Please try again. Thank you for calling dark parties. Please hold and respond to C B A nineteen Our offices are currently closed. All of our staff is monitoring and responding to message and agencies, this is an emergency such fire flood lockout"
+    },
+    {
+      "id": "292a0a1c-3221-48c8-8dc6-49d0a516dd65",
+      "recording_id": "f97b100d-7e42-47fb-a8b6-8d817c10ea68",
+      "end_time": 70.93,
+      "start_time": 70.84,
+      "recording_attendee_id": "a76dea38-3a09-46f5-a47d-57b9e6f0327e",
+      "order_number": 1,
+      "text": "OKay."
+    },
+    {
+      "id": "292a0a1c-3221-48c8-8dc6-49d0a516dd65",
+      "recording_id": "f97b100d-7e42-47fb-a8b6-8d817c10ea68",
+      "end_time": 125.7,
+      "start_time": 71.23,
+      "recording_attendee_id": "b2d0b010-7935-4af7-8336-8b0fc77cd9f2",
+      "order_number": 2,
+      "text": "or please press Pound to reach our on call after our service. If you know your extension, email it a ninety-nine do not know your attention but their last name press eight or press one for a list of department you would like using the keys on your touch tone phone, please enter the name of the party. You wish to reach last name first is not available to take your call, please leave a message after the tone, press the pound key to end recording, the survey has"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f97b100d-7e42-47fb-a8b6-8d817c10ea68",
+      "title": "Call: Brandon Winfield and Tara Farrand @ Dart Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

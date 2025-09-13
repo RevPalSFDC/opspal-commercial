@@ -1,0 +1,28 @@
+{
+  "id": "40794c55-3785-47bb-b798-275e489c876d",
+  "recording_id": "e12d58e9-7ca7-422a-a85e-6239f1232ac6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "40794c55-3785-47bb-b798-275e489c876d",
+      "recording_id": "e12d58e9-7ca7-422a-a85e-6239f1232ac6",
+      "end_time": 644.65,
+      "start_time": 643.91,
+      "recording_attendee_id": "67f56cc3-6d47-409f-9a0a-8dd63a917538",
+      "text": "It's."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e12d58e9-7ca7-422a-a85e-6239f1232ac6",
+      "title": "Executive Properties + ABODO",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-03-16T17:45:08.990000Z",
+      "call_date": "2020-03-16"
+    }
+  }
+}

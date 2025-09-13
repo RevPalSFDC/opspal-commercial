@@ -1,0 +1,100 @@
+{
+  "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+  "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 123.94,
+      "start_time": 118.62,
+      "recording_attendee_id": "a0372336-71c6-4b91-8d16-58c642442ca8",
+      "text": "AT&T S like Sally. Okay cool."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 69.8,
+      "start_time": 52.25,
+      "recording_attendee_id": "a0372336-71c6-4b91-8d16-58c642442ca8",
+      "text": "Yeah, I'm with a photo we do leasing on Facebook marketplace so I just wanted to see if that property was currently accessing marketplace and see if it might be something we can automate for you now just a few vacancies there."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 48.88,
+      "start_time": 38.64,
+      "recording_attendee_id": "a0372336-71c6-4b91-8d16-58c642442ca8",
+      "text": "They're trying to speak with maybe the property manager for you guys. For Audrey sorry."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 134.43,
+      "start_time": 130.59,
+      "recording_attendee_id": "a0372336-71c6-4b91-8d16-58c642442ca8",
+      "text": "Gotcha. Okay. Yeah, I'll I'll shoot that over now. Thank you so much."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 74.33,
+      "start_time": 73.94,
+      "recording_attendee_id": "a0372336-71c6-4b91-8d16-58c642442ca8",
+      "text": "Okay."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 36.68,
+      "start_time": 35.27,
+      "recording_attendee_id": "c1928a62-9a3d-481a-b17d-16930798f23c",
+      "text": "Hi, you have reached time to time I can."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 129.46,
+      "start_time": 123.97,
+      "recording_attendee_id": "c1928a62-9a3d-481a-b17d-16930798f23c",
+      "text": "It's basically management at auction appointments dot. Com. It's just that management and apartments in order to."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 77.9,
+      "start_time": 70.88,
+      "recording_attendee_id": "c1928a62-9a3d-481a-b17d-16930798f23c",
+      "text": "My manager, I'm and I'm leasing agent on demand or you know."
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 51.34,
+      "start_time": 50.29,
+      "recording_attendee_id": "c1928a62-9a3d-481a-b17d-16930798f23c",
+      "text": "And what is this concerning?"
+    },
+    {
+      "id": "bee7ca1b-00ad-4634-a8e6-86afae002190",
+      "recording_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "end_time": 116.51,
+      "start_time": 97.47,
+      "recording_attendee_id": "c1928a62-9a3d-481a-b17d-16930798f23c",
+      "text": "Email and I've mentioned maam G as in golf. M as in man T as in Tom and then the at sign. And then entre S AT&T S dot. Com."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "cb866f50-1def-4931-b721-4f0136539a15",
+      "title": "Call: Dan Cellon and To whom it may concern @ 80",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

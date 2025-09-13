@@ -1,0 +1,44 @@
+{
+  "id": "7b35486d-db72-4827-858c-6df22eb6b9df",
+  "recording_id": "bd39ab7d-7599-4218-a21f-2d11d7564bde",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7b35486d-db72-4827-858c-6df22eb6b9df",
+      "recording_id": "bd39ab7d-7599-4218-a21f-2d11d7564bde",
+      "end_time": 121.25,
+      "start_time": 81.8,
+      "recording_attendee_id": "62afbea3-df9b-4996-9d1c-8139fc195952",
+      "text": "Sergio good afternoon, Peter with rentable. I was I want to give a quick call wanted to see if you could put me in the right direction. I was trying to identify the individual responsible for marketing and advertising of the unit at the Ma companies Rebel has started partnerships with portfolio similar to yours we work with companies like thorough living United apartments group and others in the greater oftentimes on your area. We have portfolios that cover the entire state of Texas. My goal was to share some data so you guys um some conversion to leases and what that looks like work for and customers just to make sure I just see if this makes sense for your portfolio. Again, my name is Peter"
+    },
+    {
+      "id": "7b35486d-db72-4827-858c-6df22eb6b9df",
+      "recording_id": "bd39ab7d-7599-4218-a21f-2d11d7564bde",
+      "end_time": 130.88,
+      "start_time": 121.25,
+      "recording_attendee_id": "62afbea3-df9b-4996-9d1c-8139fc195952",
+      "text": "I'm calling with the rentable my direct call back number area code is nine five six four seven two four two eight zero. Thank you have a great day."
+    },
+    {
+      "id": "7b35486d-db72-4827-858c-6df22eb6b9df",
+      "recording_id": "bd39ab7d-7599-4218-a21f-2d11d7564bde",
+      "end_time": 79.83,
+      "start_time": 0.05,
+      "recording_attendee_id": "e312f353-7930-414c-ba07-fc7540962849",
+      "text": "Thank you for calling to the only companies and may know the four, digit extension for your party at any time or press one for company directory press two for the operator. Welcome to the company directory please dial the first three digits of the last name of the person you wish to reach. For Sergio on my dial one for. Your call is being transferred. Hello, you reached Sergio my ass desk. I'm unable to get to your call. Right now. Please leave a message and I'll get back to you as soon as I can thank you to dial, another extension press one to leave a voicemail press two or simply stay on the line. Please leave a message after the tone."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "bd39ab7d-7599-4218-a21f-2d11d7564bde",
+      "title": "Call: Dither  Castro  and Sergio Amaya @ DMA Properties, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

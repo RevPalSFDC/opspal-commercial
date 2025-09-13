@@ -25,7 +25,7 @@
 ### Field History Tracking (Critical - Deployment Blocker)
 ```bash
 # Run before ANY deployment with field history changes
-node scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
+node platforms/SFDC/scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
 ```
 - [ ] Check current tracked field count (max 20 per object)
 - [ ] Verify new fields won't exceed limit

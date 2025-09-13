@@ -11,8 +11,8 @@ This is the parent orchestration project for managing and auditing all Claude-ba
 
 ## Child Projects
 Managed projects are listed in `children.yaml`:
-- **ClaudeSFDC**: Salesforce automation (30+ agents, needs consolidation)
-- **ClaudeHubSpot**: HubSpot integration (20 agents, needs refactoring)
+- **platforms/SFDC**: Salesforce automation (30+ agents, needs consolidation)
+- **platforms/HS**: HubSpot integration (20 agents, needs refactoring)
 - **Agents**: Main RevPal agents (7 agents, recently refactored - serves as template)
 
 ## Operating Principles
@@ -81,8 +81,8 @@ Claude/
 ```bash
 cd Claude/
 claude /audit/project
-# Enter: ../ClaudeSFDC
-# Output: reports/ClaudeSFDC-agents-audit-2025-09-05.md
+# Enter: ../platforms/SFDC
+# Output: reports/platforms-SFDC-agents-audit-2025-09-05.md
 ```
 
 ### Audit all children:
@@ -94,7 +94,7 @@ claude /audit/all
 
 ### Review findings:
 ```bash
-cat reports/ClaudeSFDC-agents-audit-*.md
+cat reports/platforms-SFDC-agents-audit-*.md
 ```
 
 ## Safety Features

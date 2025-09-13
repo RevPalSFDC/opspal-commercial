@@ -1,0 +1,28 @@
+{
+  "id": "bd7e7b1e-01a3-4e53-a296-e13af18b39cc",
+  "recording_id": "ec842b51-1fc5-47b8-a1d1-4cd068ce26fd",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bd7e7b1e-01a3-4e53-a296-e13af18b39cc",
+      "recording_id": "ec842b51-1fc5-47b8-a1d1-4cd068ce26fd",
+      "end_time": "120.25",
+      "start_time": "45.54",
+      "recording_attendee_id": "b08f362e-b5a7-455b-a75c-dd23c6c4bb86",
+      "text": "Oh my gosh, that's my damn Rachel's in here, Yeah, Okay, Yeah, it's Hi Elise Oh!"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ec842b51-1fc5-47b8-a1d1-4cd068ce26fd",
+      "title": "BC (Optional) hang",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-12-02T14:11:00.562000Z",
+      "call_date": "2021-12-02"
+    }
+  }
+}

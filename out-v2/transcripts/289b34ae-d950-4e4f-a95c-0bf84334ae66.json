@@ -1,0 +1,28 @@
+{
+  "id": "289b34ae-d950-4e4f-a95c-0bf84334ae66",
+  "recording_id": "a346d134-0694-4df4-bb06-9c71050f09c9",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "289b34ae-d950-4e4f-a95c-0bf84334ae66",
+      "recording_id": "a346d134-0694-4df4-bb06-9c71050f09c9",
+      "end_time": "23.16",
+      "start_time": "21.94",
+      "recording_attendee_id": null,
+      "text": "Cory Are You There?"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a346d134-0694-4df4-bb06-9c71050f09c9",
+      "title": "Rentable Weekly Sync",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-11-30T14:43:22.398000Z",
+      "call_date": "2021-11-30"
+    }
+  }
+}

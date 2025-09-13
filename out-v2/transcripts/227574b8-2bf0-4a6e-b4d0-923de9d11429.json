@@ -1,0 +1,74 @@
+{
+  "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+  "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-05-09T16:58:21.773Z",
+  "updated_at": "2024-05-09T16:59:46.226Z",
+  "sentences": [
+    {
+      "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+      "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "end_time": 31,
+      "start_time": 30.07,
+      "recording_attendee_id": "7e74d712-af02-4147-a35a-a32cac8c85c6",
+      "order_number": 0,
+      "text": "Good morning, Corey."
+    },
+    {
+      "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+      "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "end_time": 32.49,
+      "start_time": 31.01,
+      "recording_attendee_id": "7e74d712-af02-4147-a35a-a32cac8c85c6",
+      "order_number": 1,
+      "text": "Hope I didn't keep you waiting too long."
+    },
+    {
+      "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+      "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "end_time": 33.18,
+      "start_time": 32.85,
+      "recording_attendee_id": "7e74d712-af02-4147-a35a-a32cac8c85c6",
+      "order_number": 2,
+      "text": "Not"
+    },
+    {
+      "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+      "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "end_time": 33.69,
+      "start_time": 33.19,
+      "recording_attendee_id": "1b9e77dc-2b20-49ae-aeb8-3080d8d3be9c",
+      "order_number": 3,
+      "text": "at all."
+    },
+    {
+      "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+      "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "end_time": 37.25,
+      "start_time": 33.77,
+      "recording_attendee_id": "1b9e77dc-2b20-49ae-aeb8-3080d8d3be9c",
+      "order_number": 4,
+      "text": "My question is, what are we doing with the recording of the pre call here?"
+    },
+    {
+      "id": "227574b8-2bf0-4a6e-b4d0-923de9d11429",
+      "recording_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "end_time": 38.12,
+      "start_time": 37.26,
+      "recording_attendee_id": "1b9e77dc-2b20-49ae-aeb8-3080d8d3be9c",
+      "order_number": 5,
+      "text": "So, who's gonna be?"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "26ae4d44-6200-4bf7-91a0-dd9dd3b24c47",
+      "title": "Willow Bridge/ Lincoln pre call ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-05-09T16:58:21Z",
+      "call_date": "2024-05-09"
+    }
+  }
+}

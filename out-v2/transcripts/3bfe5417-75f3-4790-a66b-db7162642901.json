@@ -1,0 +1,47 @@
+{
+  "id": "3bfe5417-75f3-4790-a66b-db7162642901",
+  "recording_id": "f6f58802-4771-42df-b70d-a93dd03bd07d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3bfe5417-75f3-4790-a66b-db7162642901",
+      "recording_id": "f6f58802-4771-42df-b70d-a93dd03bd07d",
+      "end_time": 112.85,
+      "start_time": 1.3,
+      "recording_attendee_id": "7e224cd4-e482-4554-aa8e-9d27a928a287",
+      "order_number": 0,
+      "text": "Thank you from a plant. If you know your party's extension please press one for the company directory press pound for the employment line press five or you may press zero now for further assistance. Okay, please hold you for holding how my direct your call."
+    },
+    {
+      "id": "3bfe5417-75f3-4790-a66b-db7162642901",
+      "recording_id": "f6f58802-4771-42df-b70d-a93dd03bd07d",
+      "end_time": 114.6,
+      "start_time": 113.07,
+      "recording_attendee_id": "fff3f2d4-9c4a-4d5c-a969-62ff6112b819",
+      "order_number": 1,
+      "text": "I just was calling for Paul Ag."
+    },
+    {
+      "id": "3bfe5417-75f3-4790-a66b-db7162642901",
+      "recording_id": "f6f58802-4771-42df-b70d-a93dd03bd07d",
+      "end_time": 133.46,
+      "start_time": 117.71,
+      "recording_attendee_id": "7e224cd4-e482-4554-aa8e-9d27a928a287",
+      "order_number": 2,
+      "text": "Okay, just a moment. Your call has been answered by Avaya IP office extension two three eight."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f6f58802-4771-42df-b70d-a93dd03bd07d",
+      "title": "Call: Mitch  Scarski  and Paul Hagerty @ FPI Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

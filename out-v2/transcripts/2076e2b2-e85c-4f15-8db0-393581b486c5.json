@@ -1,0 +1,28 @@
+{
+  "id": "2076e2b2-e85c-4f15-8db0-393581b486c5",
+  "recording_id": "77a7b41e-f717-4fb3-9b93-c062fb7dead3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2076e2b2-e85c-4f15-8db0-393581b486c5",
+      "recording_id": "77a7b41e-f717-4fb3-9b93-c062fb7dead3",
+      "end_time": 9.44,
+      "start_time": 0.83,
+      "recording_attendee_id": "74e8694b-d9a8-4bd5-8d50-06f66b08f44a",
+      "text": "Thank you for calling please wait and a staff member will be with you shortly this call may be monitored or recorded for quality assurance."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "77a7b41e-f717-4fb3-9b93-c062fb7dead3",
+      "title": "Call: Alex Rodier and Victor Ledezma @ Trinity Property Consultants",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

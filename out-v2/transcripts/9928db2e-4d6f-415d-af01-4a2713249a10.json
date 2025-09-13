@@ -1,0 +1,4502 @@
+{
+  "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+  "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-04-01T18:39:19.512Z",
+  "updated_at": "2024-04-01T18:42:04.507Z",
+  "sentences": [
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 21.43,
+      "start_time": 20.93,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 0,
+      "text": "Hello."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 23.06,
+      "start_time": 22.22,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 1,
+      "text": "How are you?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 24.4,
+      "start_time": 23.43,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 2,
+      "text": "And how are you doing?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 25.44,
+      "start_time": 24.75,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 3,
+      "text": "Good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 26.08,
+      "start_time": 25.45,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 4,
+      "text": "I'm doing well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 27,
+      "start_time": 26.09,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 5,
+      "text": "Do you have a good Easter?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 29.52,
+      "start_time": 27.41,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 6,
+      "text": "Oh, yes, sure did."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 30.46,
+      "start_time": 29.53,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 7,
+      "text": "How about you?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 31.45,
+      "start_time": 30.97,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 8,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 32.44,
+      "start_time": 31.46,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 9,
+      "text": "Yeah, it was good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 33.48,
+      "start_time": 32.45,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 10,
+      "text": "The weather here."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 35.3,
+      "start_time": 33.49,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 11,
+      "text": "Um, I'm in Nashville, Tennessee."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 37.84,
+      "start_time": 35.31,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 12,
+      "text": "The weather was absolutely beautiful."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 38.29,
+      "start_time": 38.05,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 13,
+      "text": "Oh,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 40.43,
+      "start_time": 38.3,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 14,
+      "text": "I wish I could say the same thing."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 43.12,
+      "start_time": 40.44,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 15,
+      "text": "I am in Utah and it was not."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 46.01,
+      "start_time": 43.13,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 16,
+      "text": "Is it cold, cold, rainy hay?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 47.51,
+      "start_time": 46.35,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 17,
+      "text": "All of the fun."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 48.38,
+      "start_time": 47.65,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 18,
+      "text": "You never know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 51.09,
+      "start_time": 48.39,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 19,
+      "text": "With Utah it could be great and it cannot be so good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 51.67,
+      "start_time": 51.1,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 20,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 52.05,
+      "start_time": 51.74,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 21,
+      "text": "Oh,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 55.91,
+      "start_time": 52.06,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 22,
+      "text": "man, I, um, I think we're gonna be getting your cold weather."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 58.78,
+      "start_time": 55.92,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 23,
+      "text": "It's supposed to get cold here come Tuesday again."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 59.51,
+      "start_time": 59.06,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 24,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 61.87,
+      "start_time": 59.52,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 25,
+      "text": "I don't doubt it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 64.39,
+      "start_time": 61.88,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 26,
+      "text": "It's, I think we just like, we'll just push it out that way."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 65.3,
+      "start_time": 64.45,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 27,
+      "text": "We just, let's see."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 66.49,
+      "start_time": 65.31,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 28,
+      "text": "Let me look at the weather."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 68.43,
+      "start_time": 66.5,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 29,
+      "text": "It's supposed to kind of be ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 69.29,
+      "start_time": 68.89,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 30,
+      "text": "I don't know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 69.93,
+      "start_time": 69.3,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 31,
+      "text": "Let's see."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 72.42,
+      "start_time": 69.94,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 32,
+      "text": "It's like, oh, it still raining?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 74.78,
+      "start_time": 72.75,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 33,
+      "text": "Oh, maybe it will get sun for two days."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 76.61,
+      "start_time": 74.79,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 34,
+      "text": "But, yeah, I can't complain."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 78.63,
+      "start_time": 76.62,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 35,
+      "text": "It, the weather is totally ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 79.84,
+      "start_time": 78.64,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 36,
+      "text": "So, yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 82.03,
+      "start_time": 80.72,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 37,
+      "text": "Well, at least it is now."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 82.77,
+      "start_time": 82.04,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 38,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 83.74,
+      "start_time": 82.78,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 39,
+      "text": "Yes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 85.63,
+      "start_time": 85.01,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 40,
+      "text": "Awesome."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 87.87,
+      "start_time": 85.64,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 41,
+      "text": "Well, thank you for hopping on with me today."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 89.27,
+      "start_time": 88.01,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 42,
+      "text": "I know you're super busy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 89.51,
+      "start_time": 89.28,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 43,
+      "text": "With it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 90.74,
+      "start_time": 90.56,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 44,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 92.23,
+      "start_time": 90.78,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 45,
+      "text": "No, you're totally fine."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 99,
+      "start_time": 93.36,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 46,
+      "text": "And then are you the, so I, I realized your email was marketing at newer threads."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 103.08,
+      "start_time": 99.01,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 47,
+      "text": "Are you the VP of Ops and marketing or just the operations?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 107.62,
+      "start_time": 104.2,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 48,
+      "text": "Yeah, so I am, I'm the vice president of operations."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 110.92,
+      "start_time": 107.63,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 49,
+      "text": "Um We have a few of us so there's a few vice president of operations."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 112.58,
+      "start_time": 111.17,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 50,
+      "text": "Um So I have a few."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 116.4,
+      "start_time": 112.59,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 51,
+      "text": "I uh but I do our marketing as well so I'm over our marketing department as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 120.74,
+      "start_time": 116.41,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 52,
+      "text": "So yeah, I monitor our marketing email and then I have my other email."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 122.32,
+      "start_time": 120.75,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 53,
+      "text": "So yeah, I"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 123.38,
+      "start_time": 122.33,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 54,
+      "text": "do busy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 124.94,
+      "start_time": 123.39,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 55,
+      "text": "Sounds like a busy schedule."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 126.16,
+      "start_time": 125.16,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 56,
+      "text": "Yeah, it is."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 126.55,
+      "start_time": 126.17,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 57,
+      "text": "It is."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 128.39,
+      "start_time": 126.56,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 58,
+      "text": "I definitely love the marketing aspect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 129.36,
+      "start_time": 128.4,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 59,
+      "text": "So that's super fun."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 129.78,
+      "start_time": 129.37,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 60,
+      "text": "So"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 134.86,
+      "start_time": 130.9,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 61,
+      "text": "did you have a marketing background before coming to New Earth?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 143.74,
+      "start_time": 135.12,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 62,
+      "text": "So um yes and no, I've been in the industry for 20 years so I have um I've done lots of lease ups, all that stuff."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 153.1,
+      "start_time": 144.05,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 63,
+      "text": "Um you know, so yeah, other than that, um lots of lots of marketing just because I was on site and you know, did that marketing there."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 157.43,
+      "start_time": 153.11,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 64,
+      "text": "And um you know, all of that I had we had a marketing director at my last company."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 158.46,
+      "start_time": 157.44,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 65,
+      "text": "I worked closely with her."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 159.01,
+      "start_time": 158.47,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 66,
+      "text": "So yeah,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 161.39,
+      "start_time": 159.91,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 67,
+      "text": "perfect, perfect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 163.31,
+      "start_time": 161.4,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 68,
+      "text": "So it was a pretty smooth transition for you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 167.61,
+      "start_time": 163.32,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 69,
+      "text": "You just wear a wear a lot of hats now it looks like I sure do."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 169.03,
+      "start_time": 168.96,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 70,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 176.78,
+      "start_time": 169.04,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 71,
+      "text": "Well, um in terms of the call today, um I guess I have spoken with a couple of the regionals there."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 179.63,
+      "start_time": 176.79,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 72,
+      "text": "Um, originally I spoke with Ginny Romero."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 182.99,
+      "start_time": 180.21,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 73,
+      "text": "Yeah, she's our, she's the president of our company."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 183.83,
+      "start_time": 183.22,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 74,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 197.21,
+      "start_time": 183.93,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 75,
+      "text": "I had reached out to her and she said that typically it was more of like the regionals, make the, uh, the marketing decisions and whatnot um because they have better insights of the budgets for the owners."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 204.93,
+      "start_time": 197.26,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 76,
+      "text": "Um, but when I had spoken with a couple of them, they, I think they ran it up to you if I'm not mistaken, maybe, maybe not."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 205.42,
+      "start_time": 204.94,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 77,
+      "text": "So what they'll"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 207.52,
+      "start_time": 205.43,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 78,
+      "text": "do typically what happens."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 209.15,
+      "start_time": 207.53,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 79,
+      "text": "Um So I don't sign any contracts."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 213.76,
+      "start_time": 209.16,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 80,
+      "text": "So hold on, I'm gonna turn off the fan because I'm sure it's like super loud."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 214.56,
+      "start_time": 213.77,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 81,
+      "text": "Ok,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 216.16,
+      "start_time": 214.93,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 82,
+      "text": "I honestly couldn't hear it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 216.52,
+      "start_time": 216.17,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 83,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 216.64,
+      "start_time": 216.53,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 84,
+      "text": "00"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 217.48,
+      "start_time": 216.65,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 85,
+      "text": "good, good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 218.58,
+      "start_time": 217.49,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 86,
+      "text": "It was loud for me."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 220.23,
+      "start_time": 218.59,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 87,
+      "text": "So I was like, I can't do all these things."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 229.31,
+      "start_time": 220.45,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 88,
+      "text": "Um So essentially what happens as far as like how our marketing goes is um they sign all the contracts so they really are the final say, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 231.33,
+      "start_time": 229.48,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 89,
+      "text": "I can give them advice."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 233.71,
+      "start_time": 231.34,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 90,
+      "text": "Um I will give them new things that are happening."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 241.97,
+      "start_time": 233.85,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 91,
+      "text": "Um I definitely talk to new, you know, vendors and kind of see, um you know, is this something that I should pose to everybody as a whole?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 242.31,
+      "start_time": 241.99,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 92,
+      "text": "Right."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 243.59,
+      "start_time": 242.33,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 93,
+      "text": "So do we do the whole company?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 245.02,
+      "start_time": 243.59,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 94,
+      "text": "Is it just for a few sites?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 248.78,
+      "start_time": 245.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 95,
+      "text": "Um You know, and so that's kind of what I do."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 250.75,
+      "start_time": 248.78,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 96,
+      "text": "I do a lot of our ILS audits."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 255.78,
+      "start_time": 250.77,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 97,
+      "text": "And so, you know, I'll say, ok, what, what I think is working, you know, what I don't think is working."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 259.82,
+      "start_time": 255.88,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 98,
+      "text": "Um, but ultimately it is up to the R PM, Jenny."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 265.14,
+      "start_time": 259.82,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 99,
+      "text": "Um, and like us as VPs or like Jenny, we generally don't make those decisions."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 275.76,
+      "start_time": 265.19,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 100,
+      "text": "Um, like, unless it's for the whole company as a whole or like my portfolio as a whole or of course, if I look at it and I'm like, hey, well, you know, we're, we just don't have the money, we're not doing it at this site, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 282.67,
+      "start_time": 275.81,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 101,
+      "text": "Um, but RP MS are the ones that kind of, I mean, for lack of a better word, have you have to, like, win over in a sense, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 283.31,
+      "start_time": 283.02,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 102,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 288.39,
+      "start_time": 283.84,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 103,
+      "text": "Um I'm more like a consultant, I guess is what you could say as far as the marketing department"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 288.89,
+      "start_time": 288.4,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 104,
+      "text": "goes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 290.42,
+      "start_time": 288.98,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 105,
+      "text": "Fair enough, fair enough."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 294.08,
+      "start_time": 290.43,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 106,
+      "text": "I, I think it was, it might not have been you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 301.41,
+      "start_time": 294.09,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 107,
+      "text": "I don't know how I guess is it you and Erica that's, that, um, are over like multiple regionals."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 303.16,
+      "start_time": 303.03,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 108,
+      "text": "Um,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 309.58,
+      "start_time": 303.25,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 109,
+      "text": "so we have, um, Shannon Gammy and Erica and then me,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 312.19,
+      "start_time": 310.95,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 110,
+      "text": "yes and then yes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 316.71,
+      "start_time": 312.2,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 111,
+      "text": "And then, um, we have a regional vice president and she's over a few as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 318.66,
+      "start_time": 316.99,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 112,
+      "text": "Ok, cool, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 322.32,
+      "start_time": 318.77,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 113,
+      "text": "Um, so that means Mallory might not be under you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 323.57,
+      "start_time": 323.25,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 114,
+      "text": "So,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 324.94,
+      "start_time": 323.58,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 115,
+      "text": "Mallory is under Erica."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 326.31,
+      "start_time": 325.77,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 116,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 326.65,
+      "start_time": 326.32,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 117,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 328.19,
+      "start_time": 326.66,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 118,
+      "text": "And that's, and that's perfectly fine."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 331.07,
+      "start_time": 328.2,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 119,
+      "text": "Um, I knew that when I had spoken with one of them."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 334.11,
+      "start_time": 331.08,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 120,
+      "text": "They're like, well, let me talk to my VP about it and I'm like, ok, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 336.71,
+      "start_time": 334.12,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 121,
+      "text": "I've got four VPs that I see on a list."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 338.61,
+      "start_time": 336.72,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 122,
+      "text": "I'm like, I don't know which one to so,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 343.95,
+      "start_time": 340.34,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 123,
+      "text": "but, um, I did speak with Lily Ortega."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 347.15,
+      "start_time": 344.05,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 124,
+      "text": "Um, she decided to bring on three of her properties."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 348.03,
+      "start_time": 347.64,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 125,
+      "text": "Yes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 351.27,
+      "start_time": 348.04,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 126,
+      "text": "And she Shannon is over her Shannon gamy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 352.11,
+      "start_time": 351.64,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 127,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 352.75,
+      "start_time": 352.12,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 128,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 353.71,
+      "start_time": 352.89,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 129,
+      "text": "And that's fine."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 361.28,
+      "start_time": 353.72,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 130,
+      "text": "Um, uh, I guess I'll show you a little bit more about what we offer."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 369.12,
+      "start_time": 361.29,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 131,
+      "text": "Um You could see if maybe it would be a benefit for some of the regionals and their properties within your portfolio or even across the company."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 372.5,
+      "start_time": 369.42,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 132,
+      "text": "Um I'm down to do either either way."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 378.75,
+      "start_time": 372.51,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 133,
+      "text": "Um But yeah, um in terms of I Os S right now,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 381.69,
+      "start_time": 379.81,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 134,
+      "text": "I'm assuming it's just kind of all over the board."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 383.47,
+      "start_time": 381.7,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 135,
+      "text": "Everybody does a little bit something different."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 388.92,
+      "start_time": 384.18,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 136,
+      "text": "Um Yes and no, typically most of our sites are on uh apartments.com."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 395.3,
+      "start_time": 389.51,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 137,
+      "text": "Um you know, uh we have, and then other than that, it's very varied, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 397.55,
+      "start_time": 395.31,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 138,
+      "text": "So some will have Zillow, some won't."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 399.85,
+      "start_time": 397.79,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 139,
+      "text": "Um like in Utah we have rent."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 403.4,
+      "start_time": 400.09,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 140,
+      "text": "Well, no, what do we have rent in Utah?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 405.08,
+      "start_time": 403.41,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 141,
+      "text": "Um A lot of people do craigslist."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 406.16,
+      "start_time": 405.09,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 142,
+      "text": "Some people don't."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 409.16,
+      "start_time": 406.4,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 143,
+      "text": "Um So it's all you are, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 413.62,
+      "start_time": 409.17,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 144,
+      "text": "Just because we're nationwide, it's all very different on like what works and what doesn't work."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 415.35,
+      "start_time": 413.96,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 145,
+      "text": "Ok, perfect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 417.41,
+      "start_time": 415.79,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 146,
+      "text": "Um Well, I'll dive in for you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 420.78,
+      "start_time": 417.42,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 147,
+      "text": "Um If you have any questions, please feel free to stop me ask."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 422.32,
+      "start_time": 420.79,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 148,
+      "text": "Um That's what I'm here for."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 430.9,
+      "start_time": 422.64,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 149,
+      "text": "Um But yeah, um I guess in terms of us, I'll share my screen too, but we um our main focus, we, we are in I OS."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 433.38,
+      "start_time": 430.91,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 150,
+      "text": "That's how we originated, that's how we started out."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 437.17,
+      "start_time": 433.67,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 151,
+      "text": "Um We've kind of shifted gears the past six months we're still on I OS."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 455.53,
+      "start_time": 437.56,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 152,
+      "text": "Um but our main focus to help companies like like yours consolidate spend instead of having 678 different agreements with multiple different companies and trying to figure out which one's gonna work best on what site we have an A I tool that we've developed, that's an industry first that takes care of it for us."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 458.71,
+      "start_time": 456.21,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 153,
+      "text": "Um So my screen here, let's see,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 461.01,
+      "start_time": 460.54,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 154,
+      "text": "you see this."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 461.41,
+      "start_time": 461.02,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 155,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 462.33,
+      "start_time": 461.92,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 156,
+      "text": "Mhm."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 463.32,
+      "start_time": 462.35,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 157,
+      "text": "Ok, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 472.62,
+      "start_time": 463.65,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 158,
+      "text": "Um What I've heard a late a lot lately um especially and even with some of the regionals that I've, I've spoken to with you guys is they have some properties that are struggling."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 480.16,
+      "start_time": 472.99,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 159,
+      "text": "Um They don't really know how to get out of the jam and, and things aren't getting better in a sense is what they've mentioned."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 489.32,
+      "start_time": 480.7,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 160,
+      "text": "Uh We do relate some of that to the old marketing plan where you buy a feature listing, maybe upgrade to a bigger package because you didn't get those results, vacancies grow."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 490.73,
+      "start_time": 489.33,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 161,
+      "text": "So you add an additional feature listing."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 491.9,
+      "start_time": 490.74,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 162,
+      "text": "The cycle continues."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 493.69,
+      "start_time": 492.13,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 163,
+      "text": "We want to eliminate it for you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 501.81,
+      "start_time": 493.7,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 164,
+      "text": "Oh, first and foremost, um we wanna connect your properties with a massive audience automatically take the guess, work out of it and just bring more finite results."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 506.08,
+      "start_time": 502.7,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 165,
+      "text": "So, so how we do it is we have our rentable network first and foremost."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 508.16,
+      "start_time": 506.09,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 166,
+      "text": "So your properties would always be listed there."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 513.76,
+      "start_time": 508.85,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 167,
+      "text": "But where we differ from a lot of names like Zillow or apartments.com is we have a massive syndicate partnership."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 516.84,
+      "start_time": 514.14,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 168,
+      "text": "So we're reaching big names like realtor.com."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 520.47,
+      "start_time": 516.85,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 169,
+      "text": "We also reach walk score U loop rent lingo and there's several others."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 522.2,
+      "start_time": 520.48,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 170,
+      "text": "I'll dive into here in just a second."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 528.2,
+      "start_time": 522.98,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 171,
+      "text": "And the third key component is our ability to get your properties on Facebook and Instagram through paid social."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 530.14,
+      "start_time": 529.91,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 172,
+      "text": "OK."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 533.93,
+      "start_time": 531.24,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 173,
+      "text": "Um First thing I'll talk about is the syndicate partnership."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 539.14,
+      "start_time": 534.34,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 174,
+      "text": "So we are able to reach 80% of renters that search across all major Ilss."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 542.53,
+      "start_time": 540.19,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 175,
+      "text": "Um I would come out and say, hey, it's XY and Z."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 544.09,
+      "start_time": 542.54,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 176,
+      "text": "Those are the ones that we partner with."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 545.73,
+      "start_time": 544.1,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 177,
+      "text": "They made us sign an ND A."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 549.91,
+      "start_time": 546.16,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 178,
+      "text": "Um So we didn't come in, undercut their cost and take their clientele."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 553.97,
+      "start_time": 549.92,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 179,
+      "text": "However, this chart here kind of depicts the ones we are working with."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 556.4,
+      "start_time": 553.98,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 180,
+      "text": "The first grade outbox here is apartments.com."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 558.63,
+      "start_time": 556.41,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 181,
+      "text": "I can say we do not work with them, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 559.28,
+      "start_time": 558.73,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 182,
+      "text": "Yeah, that makes"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 559.36,
+      "start_time": 559.32,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 183,
+      "text": "sense."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 562.31,
+      "start_time": 559.87,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 184,
+      "text": "Unfortunately, they're all little giants, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 570.64,
+      "start_time": 562.52,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 185,
+      "text": "Yeah, if, if anybody is spending over a billion dollars in uh Super Bowl ads, it's uh I guess they don't really need to work with anybody else."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 571.8,
+      "start_time": 570.65,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 186,
+      "text": "But true story."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 573.46,
+      "start_time": 571.81,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 187,
+      "text": "Yeah, they're at their own little island."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 574.5,
+      "start_time": 573.5,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 188,
+      "text": "Yep."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 576.68,
+      "start_time": 574.6,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 189,
+      "text": "But, uh, we basically work with everybody else."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 580.02,
+      "start_time": 576.69,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 190,
+      "text": "So, um, I'll pause there for just a second."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 581.4,
+      "start_time": 580.03,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 191,
+      "text": "Do you have any questions about this?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 583.74,
+      "start_time": 582.4,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 192,
+      "text": "Ok, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 586.48,
+      "start_time": 583.82,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 193,
+      "text": "Um, second key piece targeted social ads."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 590.16,
+      "start_time": 586.49,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 194,
+      "text": "So, are you familiar with how targeted social ads work?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 591.84,
+      "start_time": 591.07,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 195,
+      "text": "Ok, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 593.96,
+      "start_time": 591.85,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 196,
+      "text": "And then it correct me if I'm wrong."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 601.52,
+      "start_time": 594.04,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 197,
+      "text": "You, most of your on site team handles like the normal postings on their Facebook pages and advertising specials and things of that nature."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 602.08,
+      "start_time": 601.53,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 198,
+      "text": "Correct?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 603.95,
+      "start_time": 603,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 199,
+      "text": "Ok, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 609.74,
+      "start_time": 604.02,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 200,
+      "text": "So with this one, basically we're going to gather the, I guess the cookie data."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 619.94,
+      "start_time": 609.75,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 201,
+      "text": "Um anytime somebody goes on a search engine and, and searches for apartments in X city, um, the next time they got on their Facebook or Instagram, they would see a targeted rable ad with a picture of your property."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 629.24,
+      "start_time": 620.23,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 202,
+      "text": "If they search specific details like in unit laundry or pet friendly or, or uh pool, we'll bullet point those to stand after that specific individual."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 639.11,
+      "start_time": 629.25,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 203,
+      "text": "And then we allow the person to flick in, see some more pictures about that individual property and then we push them to fill out a guest card form so we can deliver it directly into your ResMed or your knock."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 643.77,
+      "start_time": 639.43,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 204,
+      "text": "Um I'm assuming all the properties there use knock cr inventory scheduling."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 644.17,
+      "start_time": 643.78,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 205,
+      "text": "Correct?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 646.57,
+      "start_time": 646.12,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 206,
+      "text": "Yes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 646.79,
+      "start_time": 646.58,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 207,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 650.26,
+      "start_time": 646.8,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 208,
+      "text": "So they'll use one of the two I believe."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 650.4,
+      "start_time": 650.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 209,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 651.14,
+      "start_time": 650.7,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 210,
+      "text": "Ok,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 651.87,
+      "start_time": 651.15,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 211,
+      "text": "perfect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 659.65,
+      "start_time": 651.9,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 212,
+      "text": "So, um, knock would go ahead and pick up any leads that we sent over to them and go ahead and schedule them as well for the tour."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 661.22,
+      "start_time": 659.98,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 213,
+      "text": "So perfect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 664.5,
+      "start_time": 661.23,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 214,
+      "text": "Um And we do fully integrate with ResMed and knock both."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 670.78,
+      "start_time": 664.54,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 215,
+      "text": "So if you update pricing availability, anything of the sort, it'll automatically reflect in our system and all of our syndicate partners."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 678.55,
+      "start_time": 673.08,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 216,
+      "text": "So in the last, last key piece is the dynamic A I placement tool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 686.26,
+      "start_time": 678.66,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 217,
+      "text": "So this tool is learning and adapting day after day um to where your properties receive the highest performing audience."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 690.39,
+      "start_time": 686.27,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 218,
+      "text": "So we can get you over to those specific sites to bring more precise results."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 701.59,
+      "start_time": 690.89,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 219,
+      "text": "Um So if it says like property one in, in Tennessee, for example, down in Antioch is getting better results on site X compared to Y and Z, it will double down the efforts on site X."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 708.86,
+      "start_time": 701.6,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 220,
+      "text": "But then it may say the property in Nashville gets better results on site Z it'll double down the focus for that property on site."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 709.11,
+      "start_time": 708.87,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 221,
+      "text": "Z."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 720.68,
+      "start_time": 711.82,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 222,
+      "text": "So OK, cool, cool goal here I guess is to save you time, save you money, save the energy of trying to figure out what's gonna work best."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 729.04,
+      "start_time": 720.77,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 223,
+      "text": "Um And this tool is uh it has like a lot of the same capabilities, chat GP T it's a large learn, large learning language model."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 730.6,
+      "start_time": 729.43,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 224,
+      "text": "Um So"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 733.31,
+      "start_time": 731.97,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 225,
+      "text": "super cool with how it works."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 739.04,
+      "start_time": 734.58,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 226,
+      "text": "And then the other thing is just a success story."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 742.56,
+      "start_time": 739.05,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 227,
+      "text": "So we work portfolio wide with cornerstone residential."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 744.48,
+      "start_time": 742.93,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 228,
+      "text": "Um they're out of Salt Lake City."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 745.1,
+      "start_time": 744.49,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 229,
+      "text": "So"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 746.05,
+      "start_time": 745.51,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 230,
+      "text": "yeah, I know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 747.28,
+      "start_time": 746.29,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 231,
+      "text": "I know their owner."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 748.92,
+      "start_time": 747.69,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 232,
+      "text": "Oh, do you really,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 749.27,
+      "start_time": 748.98,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 233,
+      "text": "Jerry?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 750.46,
+      "start_time": 749.87,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 234,
+      "text": "Wow."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 750.96,
+      "start_time": 750.47,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 235,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 751.79,
+      "start_time": 750.97,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 236,
+      "text": "Small world."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 756,
+      "start_time": 751.8,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 237,
+      "text": "So they signed with us for all of 2024 again for their entire portfolio."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 764.69,
+      "start_time": 756.77,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 238,
+      "text": "Um, when they started with us last year, they, we're using apartments.com and some paid search on Google."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 767.81,
+      "start_time": 765.16,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 239,
+      "text": "They felt like they were paying a lot of money, not really getting results."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 774.01,
+      "start_time": 767.82,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 240,
+      "text": "And then in 2023 we provided them the most leases and the lowest cost per lead of less than $4."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 777.24,
+      "start_time": 777.1,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 241,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 778.78,
+      "start_time": 777.73,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 242,
+      "text": "I've seen a lot of success."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 780.48,
+      "start_time": 779.5,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 243,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 781.28,
+      "start_time": 780.49,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 244,
+      "text": "I know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 783.2,
+      "start_time": 781.45,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 245,
+      "text": "Good old cornerstone there."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 786.16,
+      "start_time": 783.21,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 246,
+      "text": "They just got a new marketing director"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 786.8,
+      "start_time": 786.3,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 247,
+      "text": "there."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 788.11,
+      "start_time": 787.13,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 248,
+      "text": "I think they did."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 788.44,
+      "start_time": 788.12,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 249,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 788.79,
+      "start_time": 788.45,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 250,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 789.24,
+      "start_time": 788.83,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 251,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 789.58,
+      "start_time": 789.34,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 252,
+      "text": "Uh huh."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 790.24,
+      "start_time": 789.65,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 253,
+      "text": "Oh, you're good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 790.98,
+      "start_time": 790.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 254,
+      "text": "Sorry, sorry."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 791.16,
+      "start_time": 791.02,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 255,
+      "text": "Hold on."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 795.03,
+      "start_time": 791.62,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 256,
+      "text": "Oh, I had a penal question for you, for marketing."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 795.72,
+      "start_time": 795.13,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 257,
+      "text": "Oh, ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 796.13,
+      "start_time": 795.73,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 258,
+      "text": "I can do that."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 796.72,
+      "start_time": 796.37,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 259,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 796.88,
+      "start_time": 796.73,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 260,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 797.65,
+      "start_time": 796.89,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 261,
+      "text": "If you want to email it to me."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 797.79,
+      "start_time": 797.66,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 262,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 797.96,
+      "start_time": 797.84,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 263,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 798.83,
+      "start_time": 798.62,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 264,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 800.3,
+      "start_time": 799.45,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 265,
+      "text": "Um, yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 801.91,
+      "start_time": 800.31,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 266,
+      "text": "No, Susie, I know her."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 805.41,
+      "start_time": 801.92,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 267,
+      "text": "So, yeah, she just started."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 808.08,
+      "start_time": 806.25,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 268,
+      "text": "Wow, that's awesome."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 810.46,
+      "start_time": 809.08,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 269,
+      "text": "Yeah, that is awesome."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 812.72,
+      "start_time": 810.77,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 270,
+      "text": "Where, where did Susie come over from?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 813.13,
+      "start_time": 812.89,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 271,
+      "text": "Ah,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 815.23,
+      "start_time": 813.15,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 272,
+      "text": "you go, I'm just gonna be honest with you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 816.42,
+      "start_time": 815.24,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 273,
+      "text": "I don't even remember."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 821.16,
+      "start_time": 816.51,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 274,
+      "text": "I just, I just know we're just, you know, we're just friends on Facebook and she actually just announced it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 822.34,
+      "start_time": 821.17,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 275,
+      "text": "So I didn't even know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 828.03,
+      "start_time": 822.6,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 276,
+      "text": "But, yeah, like, she's, it's so funny, like she, she was just posted and I was like, oh, that's awesome."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 829.26,
+      "start_time": 828.04,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 277,
+      "text": "But, yeah, I know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 833.81,
+      "start_time": 829.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 278,
+      "text": "I've known Sherry for, oh, gosh, like 15 or so years."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 834.16,
+      "start_time": 833.82,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 279,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 835.41,
+      "start_time": 834.91,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 280,
+      "text": "Wow."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 840.33,
+      "start_time": 837.18,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 281,
+      "text": "I guess you said 15 plus years."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 840.63,
+      "start_time": 840.34,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 282,
+      "text": "Did"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 841.81,
+      "start_time": 840.64,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 283,
+      "text": "you?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 845.68,
+      "start_time": 842.21,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 284,
+      "text": "She was my R PM at A MC many, many years ago."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 846.16,
+      "start_time": 845.69,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 285,
+      "text": "Mhm."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 846.83,
+      "start_time": 846.19,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 286,
+      "text": "Yep."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 848.67,
+      "start_time": 847.32,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 287,
+      "text": "Yeah, I know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 850.03,
+      "start_time": 848.68,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 288,
+      "text": "So that's"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 850.77,
+      "start_time": 850.04,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 289,
+      "text": "crazy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 851.57,
+      "start_time": 850.78,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 290,
+      "text": "Uh, yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 852.6,
+      "start_time": 851.72,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 291,
+      "text": "Uh, cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 856.71,
+      "start_time": 852.61,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 292,
+      "text": "Well, yeah, anyway, no, I'm glad they're, yeah, they're, they're doing that."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 857.27,
+      "start_time": 856.72,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 293,
+      "text": "So,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 859.27,
+      "start_time": 858.93,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 294,
+      "text": "yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 862.88,
+      "start_time": 860.18,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 295,
+      "text": "Um, any questions about anything,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 866.91,
+      "start_time": 866.05,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 296,
+      "text": "it broke up a little bit."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 867.43,
+      "start_time": 866.92,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 297,
+      "text": "I'm sorry?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 870.04,
+      "start_time": 868.94,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 298,
+      "text": "Oh, no, sorry, sorry."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 870.92,
+      "start_time": 870.05,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 299,
+      "text": "No, no questions."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 871.7,
+      "start_time": 870.93,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 300,
+      "text": "You're totally good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 872.73,
+      "start_time": 871.97,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 301,
+      "text": "Perfect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 881.35,
+      "start_time": 873.08,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 302,
+      "text": "Um I guess hearing this, seeing it compared to what your most of your portfolio is probably doing right now."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 881.76,
+      "start_time": 881.36,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 303,
+      "text": "Um"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 884.85,
+      "start_time": 883.64,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 304,
+      "text": "What, what are your thoughts?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 893.59,
+      "start_time": 886.86,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 305,
+      "text": "Um you know, I mean, it's, it's always nice to have a little bit of help posting at some places."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 895.48,
+      "start_time": 893.6,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 306,
+      "text": "Um I mean, I'm sure you get this all the time."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 897.42,
+      "start_time": 895.49,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 307,
+      "text": "It kind of comes down to like costs, right?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 899.68,
+      "start_time": 897.43,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 308,
+      "text": "Like, you know, what do we have now?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 903.8,
+      "start_time": 899.69,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 309,
+      "text": "What did they work, you know, well with and then um"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 909.01,
+      "start_time": 905.04,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 310,
+      "text": "what uh you know, what, what benefits they can get from it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 909.53,
+      "start_time": 909.02,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 311,
+      "text": "So yeah,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 910.49,
+      "start_time": 909.91,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 312,
+      "text": "definitely."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 914.65,
+      "start_time": 910.92,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 313,
+      "text": "So in terms of pricing, I'll show you 199 a month per property."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 915.73,
+      "start_time": 915.55,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 314,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 916.52,
+      "start_time": 915.74,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 315,
+      "text": "Oh, that's not bad."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 917.29,
+      "start_time": 916.53,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 316,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 922.38,
+      "start_time": 917.86,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 317,
+      "text": "Yeah, compared to apartments.com, that's like 12 to $1500 a property."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 924.53,
+      "start_time": 923.31,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 318,
+      "text": "They, they get it pretty"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 925.18,
+      "start_time": 924.54,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 319,
+      "text": "good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 925.58,
+      "start_time": 925.33,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 320,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 932.54,
+      "start_time": 926.62,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 321,
+      "text": "Um this 199 though it gets you everything we discussed, the rentable network, the I OS Partnerships, the Paid Social."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 935.51,
+      "start_time": 932.55,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 322,
+      "text": "It also comes with a dedicated account manager as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 944.66,
+      "start_time": 935.82,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 323,
+      "text": "Um so they're there to kind of go through do monthly checking calls with you your team and help ensure the success of your account."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 946.19,
+      "start_time": 946.03,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 324,
+      "text": "Awesome."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 951.98,
+      "start_time": 946.8,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 325,
+      "text": "So and then as you scale the scale, we also offer bigger discounts."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 957.6,
+      "start_time": 951.99,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 326,
+      "text": "So like if you got the 11 plus properties, we would also be able to get you down to 150 a month per property."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 962.58,
+      "start_time": 957.98,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 327,
+      "text": "Um if you got to do how many properties are there total there now?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 963.89,
+      "start_time": 962.59,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 328,
+      "text": "Like 43?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 964.16,
+      "start_time": 963.9,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 329,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 964.76,
+      "start_time": 964.17,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 330,
+      "text": "Mhm."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 965.51,
+      "start_time": 964.88,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 331,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 973.63,
+      "start_time": 965.88,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 332,
+      "text": "Um, so like if you were to do like 25 plus properties, we could do like 140 a property."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 979.86,
+      "start_time": 973.66,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 333,
+      "text": "Um, and then if you were to do like the entire portfolio, we can do something like where it's 100 bucks property or something."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 981.25,
+      "start_time": 981.16,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 334,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 982.25,
+      "start_time": 981.6,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 335,
+      "text": "That's not bad."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 983.17,
+      "start_time": 982.95,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 336,
+      "text": "So,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 988.08,
+      "start_time": 984.89,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 337,
+      "text": "yeah, so that's, uh, that's rentable."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 990.48,
+      "start_time": 989.38,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 338,
+      "text": "Oh, all right."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 992.14,
+      "start_time": 991.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 339,
+      "text": "That's us"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 995.49,
+      "start_time": 994.09,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 340,
+      "text": "pretty easy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 999.3,
+      "start_time": 995.5,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 341,
+      "text": "I guess how the teams, how do the teams manage it?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1000.21,
+      "start_time": 999.31,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 342,
+      "text": "Do they have?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1002.25,
+      "start_time": 1000.22,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 343,
+      "text": "Obviously they probably have like a log in?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1002.76,
+      "start_time": 1002.26,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 344,
+      "text": "Right."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1003.36,
+      "start_time": 1003.01,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 345,
+      "text": "Yep."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1006.6,
+      "start_time": 1003.37,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 346,
+      "text": "So we do have a log in for the back end of their systems."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1015.16,
+      "start_time": 1006.61,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 347,
+      "text": "Um, for someone like yourself, we could have it set up to where it's restricted where you can see everybody, but then your regionals can only see their individual properties."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1016.61,
+      "start_time": 1015.7,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 348,
+      "text": "Um, same thing."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1022.49,
+      "start_time": 1016.62,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 349,
+      "text": "We can also create logins for the property manager so they can see it and they can only see their properties as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1039.26,
+      "start_time": 1022.63,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 350,
+      "text": "Um, however you wanted to do it and then there, you can see the leads, they've come in, the phone calls that have been made to the property and then also, um, the amount of leads that have been generating and you can kind of go back and look for like, different time frames as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1039.82,
+      "start_time": 1039.52,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 351,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1040.25,
+      "start_time": 1039.83,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 352,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1040.76,
+      "start_time": 1040.26,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 353,
+      "text": "Cool."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1042.21,
+      "start_time": 1041.9,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 354,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1044.4,
+      "start_time": 1042.22,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 355,
+      "text": "No, I think that, I think it's nice."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1054.4,
+      "start_time": 1044.41,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 356,
+      "text": "Um, I think that again the, you know, the big thing is so Lily added the three that we, that she has or the three that she wanted to."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1058.66,
+      "start_time": 1054.77,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 357,
+      "text": "Um, yeah, I think it really is just depending on."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1063.16,
+      "start_time": 1058.67,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 358,
+      "text": "So, like I said, some of our sites need some, you know, leads some of them don't."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1068.07,
+      "start_time": 1063.54,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 359,
+      "text": "Um, and so have you reached out to all of our RP MS to see?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1074.22,
+      "start_time": 1068.47,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 360,
+      "text": "I have reached out to a few, I've spoken with Lily, um, Mallory Saltus."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1076.49,
+      "start_time": 1074.86,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 361,
+      "text": "And is she one of yours?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1077.67,
+      "start_time": 1076.5,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 362,
+      "text": "She's an Erica,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1078.9,
+      "start_time": 1078.76,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 363,
+      "text": "Erica."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1082.65,
+      "start_time": 1079.79,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 364,
+      "text": "And then who is the other one?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1087.3,
+      "start_time": 1086.3,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 365,
+      "text": "I got a list here?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1088.56,
+      "start_time": 1087.31,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 366,
+      "text": "Hang, uh, Ada Ada."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1090.32,
+      "start_time": 1090,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 367,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1095.71,
+      "start_time": 1090.9,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 368,
+      "text": "Um, I would reach out to Shannon Schultz."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1100.49,
+      "start_time": 1096.17,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 369,
+      "text": "Um, yeah, she has a few properties actually in Tennessee."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1108.43,
+      "start_time": 1100.97,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 370,
+      "text": "Um, yeah, and, uh, might have some room to add or change some things."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1111.38,
+      "start_time": 1108.95,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 371,
+      "text": "That's the only other one that I think,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1114.51,
+      "start_time": 1112.47,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 372,
+      "text": "uh, needs like that."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1117.65,
+      "start_time": 1114.52,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 373,
+      "text": "I could think of, like off the top of my head."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1119.45,
+      "start_time": 1117.66,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 374,
+      "text": "Um, that might be good to reach out to"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1121.49,
+      "start_time": 1119.89,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 375,
+      "text": "Shannon Schultz, you said?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1122.42,
+      "start_time": 1121.7,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 376,
+      "text": "Yes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1122.71,
+      "start_time": 1122.43,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 377,
+      "text": "Uh huh."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1124.53,
+      "start_time": 1122.72,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 378,
+      "text": "So it is S"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1126.47,
+      "start_time": 1124.54,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 379,
+      "text": "Houltz."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1126.85,
+      "start_time": 1126.48,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 380,
+      "text": "Yes."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1127.32,
+      "start_time": 1126.86,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 381,
+      "text": "Mhm."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1127.55,
+      "start_time": 1127.33,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 382,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1133.1,
+      "start_time": 1131.68,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 383,
+      "text": "I'm assuming she's one of yours."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1134.65,
+      "start_time": 1133.75,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 384,
+      "text": "Um, she is."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1135.31,
+      "start_time": 1134.66,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 385,
+      "text": "Yeah, she's ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1136.09,
+      "start_time": 1135.64,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 386,
+      "text": "Mhm."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1137.06,
+      "start_time": 1136.58,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 387,
+      "text": "Nice."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1137.53,
+      "start_time": 1137.07,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 388,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1138.79,
+      "start_time": 1137.87,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 389,
+      "text": "I will reach out to her."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1140.13,
+      "start_time": 1138.8,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 390,
+      "text": "Is she based out of Tennessee?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1144.86,
+      "start_time": 1141.21,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 391,
+      "text": "Um, so we don't have a corporate office there, so she travels there."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1146.05,
+      "start_time": 1145.52,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 392,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1146.72,
+      "start_time": 1146.17,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 393,
+      "text": "Mhm."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1148.73,
+      "start_time": 1147.28,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 394,
+      "text": "So, yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1149.13,
+      "start_time": 1148.76,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 395,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1152.32,
+      "start_time": 1149.14,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 396,
+      "text": "So she has, so she has four in Tennessee."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1154.19,
+      "start_time": 1152.33,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 397,
+      "text": "So there's, there's a few of them."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1162.52,
+      "start_time": 1154.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 398,
+      "text": "Um, so, yeah, that, that's the only, only one that I can think of that might, um, you know, that might benefit."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1166.22,
+      "start_time": 1162.53,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 399,
+      "text": "They have, you know, they're getting ready for their big leasing season."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1169.41,
+      "start_time": 1166.23,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 400,
+      "text": "So she, she might need some extra."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1180.6,
+      "start_time": 1169.42,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 401,
+      "text": "She hasn't, like, reached out to me and asked, but at the same time, like I see, you know, I mean, their leasing is really strong there, but I don't know, I would ask her, I would see if there's something if she was wanting to do something different."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1180.94,
+      "start_time": 1180.61,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 402,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1181.48,
+      "start_time": 1181.19,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 403,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1182.07,
+      "start_time": 1181.78,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 404,
+      "text": "Yeah,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1182.95,
+      "start_time": 1182.08,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 405,
+      "text": "I definitely can."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1188.78,
+      "start_time": 1182.97,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 406,
+      "text": "Um, I'll send her an email and, and however I can do you care if I say that you said I should reach out."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1189.17,
+      "start_time": 1188.93,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 407,
+      "text": "Oh, yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1189.41,
+      "start_time": 1189.18,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 408,
+      "text": "No,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1189.75,
+      "start_time": 1189.42,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 409,
+      "text": "it's fine."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1190.44,
+      "start_time": 1190.29,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 410,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1191.54,
+      "start_time": 1190.87,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 411,
+      "text": "Absolutely."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1192.46,
+      "start_time": 1191.74,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 412,
+      "text": "Yeah, go ahead."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1193.64,
+      "start_time": 1192.76,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 413,
+      "text": "That's totally fine."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1193.86,
+      "start_time": 1193.65,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 414,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1195.27,
+      "start_time": 1193.87,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 415,
+      "text": "No, I mean, I think it's great."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1201.97,
+      "start_time": 1195.28,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 416,
+      "text": "I think that, you know, less systems for my team is better so the more that we can kind of like combine is good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1207.22,
+      "start_time": 1202.47,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 417,
+      "text": "Um, other than that I don't really have, I don't really have a lot of questions."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1208.14,
+      "start_time": 1207.67,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 418,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1210.54,
+      "start_time": 1208.21,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 419,
+      "text": "Seems pretty, pretty streamlined."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1210.98,
+      "start_time": 1210.55,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 420,
+      "text": "So"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1212.35,
+      "start_time": 1211.62,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 421,
+      "text": "it's pretty easy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1213.55,
+      "start_time": 1212.36,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 422,
+      "text": "It's advertising."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1213.96,
+      "start_time": 1213.56,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 423,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1214.25,
+      "start_time": 1213.97,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 424,
+      "text": "Yeah."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1214.72,
+      "start_time": 1214.26,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 425,
+      "text": "Well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1214.97,
+      "start_time": 1214.73,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 426,
+      "text": "Right."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1215.55,
+      "start_time": 1214.98,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 427,
+      "text": "Exactly."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1223.37,
+      "start_time": 1215.56,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 428,
+      "text": "But it's just, you know, everything does just like a little different, you know, and it's, it's sometimes it's a little difficult because it's like a la carte at times."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1236.92,
+      "start_time": 1223.38,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 429,
+      "text": "So, but I think that if it hits what she feels like, you know, they need or they're struggling with, I think that the best thing and of course, if Lily is kind of paving the way we can kind of dive into Lily's numbers."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1238.13,
+      "start_time": 1236.93,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 430,
+      "text": "Sorry, I just got a new puppy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1245.93,
+      "start_time": 1238.13,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 431,
+      "text": "So I have like, I've been up all night, so I'm like, it's the cutest thing, but I'm like, oh, Dragon today, what kind you get?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1247.78,
+      "start_time": 1246.13,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 432,
+      "text": "It's a mini Australian Shepherd."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1248.69,
+      "start_time": 1248.14,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 433,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1250.65,
+      "start_time": 1248.79,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 434,
+      "text": "So I'm in the same boat as you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1252.89,
+      "start_time": 1250.66,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 435,
+      "text": "Um, luckily I didn't just get her."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1254.6,
+      "start_time": 1252.9,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 436,
+      "text": "She's been with me now for"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1257.64,
+      "start_time": 1256.59,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 437,
+      "text": "four weeks."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1258.29,
+      "start_time": 1257.73,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 438,
+      "text": "I think."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1258.89,
+      "start_time": 1258.3,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 439,
+      "text": "I don't know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1261.39,
+      "start_time": 1258.9,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 440,
+      "text": "I've lost so many hours of sleep because of this little"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1261.93,
+      "start_time": 1261.41,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 441,
+      "text": "third."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1262.46,
+      "start_time": 1261.94,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 442,
+      "text": "I know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1262.98,
+      "start_time": 1262.47,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 443,
+      "text": "I know."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1264.2,
+      "start_time": 1262.99,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 444,
+      "text": "And he's pretty good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1270.01,
+      "start_time": 1264.21,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 445,
+      "text": "Like he, he from comparatively, but still at the same time, I'm used to like my sleep."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1273.25,
+      "start_time": 1270.02,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 446,
+      "text": "So I'm like, trying to, like, focus all day today."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1282.57,
+      "start_time": 1273.35,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 447,
+      "text": "And I'm like, ah, but anyway, so, yeah, I, I think that if we look at Lily's, um, information as things come through that will help the team."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1284.48,
+      "start_time": 1282.58,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 448,
+      "text": "Um, when did they start?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1285.65,
+      "start_time": 1284.49,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 449,
+      "text": "When did Lily start,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1289.45,
+      "start_time": 1286.02,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 450,
+      "text": "Lily signed on here?"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1289.97,
+      "start_time": 1289.46,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 451,
+      "text": "I'll tell you"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1296.14,
+      "start_time": 1294,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 452,
+      "text": "she came on."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1305.72,
+      "start_time": 1303.14,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 453,
+      "text": "I said, Lily, hang on, maybe I was"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1309.24,
+      "start_time": 1308.35,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 454,
+      "text": "no, Lily."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1312.74,
+      "start_time": 1310.4,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 455,
+      "text": "Oh, this is the wrong, sorry."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1323.36,
+      "start_time": 1313.96,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 456,
+      "text": "Our systems have done something weird like where they automatically, like, I guess whenever you come on they automatically schedule another meeting within our system here, even though I didn't do it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1325.16,
+      "start_time": 1323.37,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 457,
+      "text": "Um, oh, that's good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1328.98,
+      "start_time": 1326.31,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 458,
+      "text": "She signed 318."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1335.33,
+      "start_time": 1329.06,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 459,
+      "text": "Um, so she should be up and running by now, I believe as long as implementation is finished."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1336.96,
+      "start_time": 1335.76,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 460,
+      "text": "Well, all right."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1337.94,
+      "start_time": 1336.97,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 461,
+      "text": "Well, I'll watch it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1338.82,
+      "start_time": 1337.95,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 462,
+      "text": "I'll see"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1340.01,
+      "start_time": 1339.32,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 463,
+      "text": "yours as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1341.14,
+      "start_time": 1340.02,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 464,
+      "text": "I think I already asked you that."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1341.86,
+      "start_time": 1341.28,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 465,
+      "text": "No,"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1346.86,
+      "start_time": 1341.87,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 466,
+      "text": "no, but I'll, I see all of the sites like a knock and I see um all of that."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1352.33,
+      "start_time": 1346.87,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 467,
+      "text": "So I'm sure she's added that, you know, the, that to her site and everything."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1354.3,
+      "start_time": 1352.34,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 468,
+      "text": "So I'll just kind of, you know, keep an eye on it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1357.82,
+      "start_time": 1354.31,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 469,
+      "text": "We do meetings all together and, you know, like once a month."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1362.07,
+      "start_time": 1357.83,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 470,
+      "text": "So it'd be good to kind of bring up and see what she's thought, you know, see."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1367.87,
+      "start_time": 1362.08,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 471,
+      "text": "But of course, you know, we really need like a month's worth of data, you know, because it's, you can't just like, do it in a week."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1371.32,
+      "start_time": 1367.88,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 472,
+      "text": "Like, which is funny because our, you know, like, they're always like, it doesn't work."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1374.74,
+      "start_time": 1371.33,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 473,
+      "text": "I'm like, dude, it's been three days, like give it, give it a half minute."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1385.16,
+      "start_time": 1375.57,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 474,
+      "text": "It'll be a, like, like let's get a month worth of data and then we can kind of go from there because uh it, it takes a minute to get those leads and get it ramped up like so"
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1388.89,
+      "start_time": 1386.55,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 475,
+      "text": "and this is now I'm like, I get it, I'm here for it."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1390.92,
+      "start_time": 1388.9,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 476,
+      "text": "Like let's give it a, let's give it a little bit."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1391.4,
+      "start_time": 1390.93,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 477,
+      "text": "So."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1392.62,
+      "start_time": 1391.68,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 478,
+      "text": "Oh boy."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1393.45,
+      "start_time": 1392.63,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 479,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1394.6,
+      "start_time": 1393.46,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 480,
+      "text": "So that's good."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1395.85,
+      "start_time": 1394.61,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 481,
+      "text": "So you can see her numbers."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1403.45,
+      "start_time": 1395.86,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 482,
+      "text": "I will reach out to Shannon and um, we'll see if we can get something going there and maybe we can help her out."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1404.76,
+      "start_time": 1404.12,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 483,
+      "text": "Awesome."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1405.89,
+      "start_time": 1404.77,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 484,
+      "text": "Well, thank you so much."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1409.28,
+      "start_time": 1405.9,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 485,
+      "text": "Sorry, it was late, but thank you for everything."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1412.42,
+      "start_time": 1409.29,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 486,
+      "text": "So I hope you have a fabulous day and you get some sleep."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1413.07,
+      "start_time": 1412.43,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 487,
+      "text": "Perfect."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1413.48,
+      "start_time": 1413.08,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 488,
+      "text": "Thank you."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1414.51,
+      "start_time": 1413.49,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 489,
+      "text": "I hope you do as well."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1415.26,
+      "start_time": 1414.52,
+      "recording_attendee_id": "59e68b14-e944-4c9d-a63a-a9065d5fad90",
+      "order_number": 490,
+      "text": "Ok."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1415.7,
+      "start_time": 1415.27,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 491,
+      "text": "All right."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1416.1,
+      "start_time": 1415.71,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 492,
+      "text": "Thanks."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1416.7,
+      "start_time": 1416.11,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 493,
+      "text": "See you later."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1417.83,
+      "start_time": 1416.79,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 494,
+      "text": "See you have a good one."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1418.14,
+      "start_time": 1417.84,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 495,
+      "text": "Bye."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1418.32,
+      "start_time": 1418.15,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 496,
+      "text": "You too."
+    },
+    {
+      "id": "9928db2e-4d6f-415d-af01-4a2713249a10",
+      "recording_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "end_time": 1418.7,
+      "start_time": 1418.33,
+      "recording_attendee_id": "d6823927-bad7-40d3-841a-df7399bc134f",
+      "order_number": 497,
+      "text": "Bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "97aff3ab-49aa-4ab2-9669-9a9fe7d4430e",
+      "title": "Rentable + New Earth Residential",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-04-01T18:39:16Z",
+      "call_date": "2024-04-01"
+    }
+  }
+}

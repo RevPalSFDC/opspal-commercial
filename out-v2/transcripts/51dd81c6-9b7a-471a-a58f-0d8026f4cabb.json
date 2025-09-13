@@ -1,0 +1,29 @@
+{
+  "id": "51dd81c6-9b7a-471a-a58f-0d8026f4cabb",
+  "recording_id": "97398df4-32cd-4471-b2c2-fcf56add90f5",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "51dd81c6-9b7a-471a-a58f-0d8026f4cabb",
+      "recording_id": "97398df4-32cd-4471-b2c2-fcf56add90f5",
+      "end_time": 29.43,
+      "start_time": 0.26,
+      "recording_attendee_id": "05676210-d9bb-4be8-9336-bf40e8468ccc",
+      "order_number": 0,
+      "text": "Thank you for calling West Dale one moment please. Can you hold please? Thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "97398df4-32cd-4471-b2c2-fcf56add90f5",
+      "title": "Call: Austin Schleisner and +12145157000",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

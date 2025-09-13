@@ -1,0 +1,76 @@
+{
+  "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+  "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 61.46,
+      "start_time": 59.39,
+      "recording_attendee_id": "a88333f2-7b7a-4bc2-b69f-230a2c8ca3ea",
+      "text": "Yeah, this is will and rentable."
+    },
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 69.21,
+      "start_time": 68.79,
+      "recording_attendee_id": "a88333f2-7b7a-4bc2-b69f-230a2c8ca3ea",
+      "text": "Thank you."
+    },
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 52.73,
+      "start_time": 47.85,
+      "recording_attendee_id": "a88333f2-7b7a-4bc2-b69f-230a2c8ca3ea",
+      "text": "Is working today? Is Lauren today?"
+    },
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 68.46,
+      "start_time": 64.29,
+      "recording_attendee_id": "18e28746-4eaa-4d73-b25c-3d16d5b319ac",
+      "text": "Okay, just hold on let me try to connect you to Laura. Okay."
+    },
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 51.14,
+      "start_time": 0.59,
+      "recording_attendee_id": "18e28746-4eaa-4d73-b25c-3d16d5b319ac",
+      "text": "Thank you for calling G C realty and development call may be recorded for quality control and training purposes. Please listen closely to our menu options before fucking as they have recently changed press one if you're interested in information on our rental qualification for an update on her application status press two for the property management department press three for the finance department press four, if you are a vendor press five. If you were looking for property management Services are looking to invest and Rosie. Hi, this is Eva from that you see we'll be happy to help I'm sorry."
+    },
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 142.88,
+      "start_time": 101.54,
+      "recording_attendee_id": "18e28746-4eaa-4d73-b25c-3d16d5b319ac",
+      "text": "Thank you for calling G C realty and development LLC. This call may be recorded for quality control and training purposes. Please listen closely to our menu options before selecting as they have recently changed press one. If you are interested in information on our rentals qualification or an update on your application press two for the property management department press three for the finance department press four, if you are a vendor press five. If you were looking for property management Services are looking to invest in real estate press six for the broker department press seven for preferred rate mortgage lending leave your message at the tone."
+    },
+    {
+      "id": "0e1c5e35-05cf-4379-9443-28b95f0f6159",
+      "recording_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "end_time": 58.41,
+      "start_time": 54.78,
+      "recording_attendee_id": "18e28746-4eaa-4d73-b25c-3d16d5b319ac",
+      "text": "Let me check may know who or what this is about."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "97fb108a-a7ea-4853-9e8e-7c33405e4000",
+      "title": "Call: Will Martin and Laura Smith @ GC Realty",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

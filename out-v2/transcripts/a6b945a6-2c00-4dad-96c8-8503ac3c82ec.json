@@ -1,0 +1,28 @@
+{
+  "id": "a6b945a6-2c00-4dad-96c8-8503ac3c82ec",
+  "recording_id": "df0c1aab-9149-4434-b588-86773f1b8042",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a6b945a6-2c00-4dad-96c8-8503ac3c82ec",
+      "recording_id": "df0c1aab-9149-4434-b588-86773f1b8042",
+      "end_time": 944.1,
+      "start_time": 543.51,
+      "recording_attendee_id": "bed3cee2-dbb8-411c-9c36-39b84d226080",
+      "text": "So let's get it. Baby."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "df0c1aab-9149-4434-b588-86773f1b8042",
+      "title": "ABODO Demo - The Waterfront",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-10-20T17:40:14.701000Z",
+      "call_date": "2020-10-20"
+    }
+  }
+}

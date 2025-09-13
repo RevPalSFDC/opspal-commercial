@@ -1,0 +1,44 @@
+{
+  "id": "c2e63065-39e1-4940-b09e-53cee73a62fd",
+  "recording_id": "3e492d85-d9aa-4caf-a808-99cf371f4fb3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c2e63065-39e1-4940-b09e-53cee73a62fd",
+      "recording_id": "3e492d85-d9aa-4caf-a808-99cf371f4fb3",
+      "end_time": 118.86,
+      "start_time": 110.73,
+      "recording_attendee_id": "e4a8d0b5-4327-4f2f-a6b0-9c49db886000",
+      "text": "Hey, Sarah, this is Cameron with rentable, not sure if that name sounds familiar and I don't think we actually been in contact since two thousand"
+    },
+    {
+      "id": "c2e63065-39e1-4940-b09e-53cee73a62fd",
+      "recording_id": "3e492d85-d9aa-4caf-a808-99cf371f4fb3",
+      "end_time": 109.42,
+      "start_time": 0.71,
+      "recording_attendee_id": "85d836da-e547-4502-92d1-e0b22f2c496f",
+      "text": "Thank you for calling the Michigan office of bill properties. We are located at twenty three North Washington Street in downtown ypsilanti. Please listen carefully. Because our menu options have changed. If you know your party's extension you may enter it at any time or choose from one of the following options for a dial by name company directory press the pound sign or select from the. Welcome to the directory please enter the first three letters of your party's first or last name using your touchtone. You've reached Sara mesler Regional manager with bill properties. I am either on another call or away from my desk at this time. Please leave your name a good contact phone number and your physical address and I will return your call within two business days. Thank you. If this is the person you are looking for press one now, otherwise please press Star now. You've reached there on that sling original. Hi, you've reached Sarah mesler Regional manager with bill properties. I am either on another call or away from my desk at this time. Please leave your name a good contact phone number and your physical address and I will return your call with the two business days. Thank you. Please leave your message after the tone when done hang up or press the pound key."
+    },
+    {
+      "id": "c2e63065-39e1-4940-b09e-53cee73a62fd",
+      "recording_id": "3e492d85-d9aa-4caf-a808-99cf371f4fb3",
+      "end_time": 168.48,
+      "start_time": 118.86,
+      "recording_attendee_id": "e4a8d0b5-4327-4f2f-a6b0-9c49db886000",
+      "text": "seventeen with bill properties. Back then we were a photo, so that might be more familiar to you. I was hoping that you and I could have a quick conversation about some other properties in your portfolio that you manage and just kinda see what you guys have been doing for marketing and how your documents Houston here lately. So if you could give me a call back my phone number is seven six five seven four eight eight two one nine I'm gonna send over a quick email as well um feel free to respond to that just give me a good time that we might be able to connect either sometime this week or early next again Cameron young blood at Regional director sales here rentable seven six five seven four eight eight two one nine and my email is Cameron at rentable dot. Com. Thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3e492d85-d9aa-4caf-a808-99cf371f4fb3",
+      "title": "Call: Cameron Youngblood and Sarah Metzler @ Beal Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

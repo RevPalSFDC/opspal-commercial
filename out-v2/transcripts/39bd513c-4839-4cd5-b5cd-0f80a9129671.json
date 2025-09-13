@@ -1,0 +1,92 @@
+{
+  "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+  "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 21.37,
+      "start_time": 19.48,
+      "recording_attendee_id": "8276bed4-0a5b-4aed-8241-1ab542baa940",
+      "text": "About oh a V O D O."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 8.97,
+      "start_time": 6.99,
+      "recording_attendee_id": "8276bed4-0a5b-4aed-8241-1ab542baa940",
+      "text": "Hey, I was trying to reach Sharon Penny."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 40.1,
+      "start_time": 24.83,
+      "recording_attendee_id": "8276bed4-0a5b-4aed-8241-1ab542baa940",
+      "text": "Um, I noticed redondo view had some vacancies hoping to speak to Sharon, I guess or whoever is in charge of listing. Those vacant see if we might be able to help you get those least."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 14.47,
+      "start_time": 12.82,
+      "recording_attendee_id": "8276bed4-0a5b-4aed-8241-1ab542baa940",
+      "text": "This is Dan with a photo."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 23.45,
+      "start_time": 22.46,
+      "recording_attendee_id": "50a1256d-ad29-44f9-814a-d4133aaa2025",
+      "text": "Oh what's a call regarding."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 11.89,
+      "start_time": 11.35,
+      "recording_attendee_id": "50a1256d-ad29-44f9-814a-d4133aaa2025",
+      "text": "Who's calling."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 4.64,
+      "start_time": 3.68,
+      "recording_attendee_id": "50a1256d-ad29-44f9-814a-d4133aaa2025",
+      "text": "Property management."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 42.25,
+      "start_time": 41.23,
+      "recording_attendee_id": "50a1256d-ad29-44f9-814a-d4133aaa2025",
+      "text": "Okay, hold on please."
+    },
+    {
+      "id": "39bd513c-4839-4cd5-b5cd-0f80a9129671",
+      "recording_id": "474a381e-5b15-4255-9695-35905da32233",
+      "end_time": 18.12,
+      "start_time": 17.22,
+      "recording_attendee_id": "50a1256d-ad29-44f9-814a-d4133aaa2025",
+      "text": "I'm sorry with his."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "474a381e-5b15-4255-9695-35905da32233",
+      "title": "Call: Dan Cellon and Gloria Tamou @ Ming Management, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

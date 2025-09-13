@@ -1,0 +1,76 @@
+{
+  "id": "22701038-9422-4273-934b-1d340dd5c390",
+  "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 148.46,
+      "start_time": 119.75,
+      "recording_attendee_id": "60a46b47-6465-411d-887e-aa7a3913af9f",
+      "text": "Hey Sylvia, this is Alex from rentable. I am on our schedule zoom demo and just wanted to see if I can expect you to hop on or if you needed to reschedule. Just let me know what works best for you. I'm happy to set something up maybe next week or the following just let me know, so um, I'll shoot you an email. Otherwise, I'll look forward to to to or you can give me a call"
+    },
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 56.75,
+      "start_time": 54.56,
+      "recording_attendee_id": "60a46b47-6465-411d-887e-aa7a3913af9f",
+      "text": "Oh, yeah, hoping to speak with Sylvia please."
+    },
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 60.16,
+      "start_time": 59.53,
+      "recording_attendee_id": "60a46b47-6465-411d-887e-aa7a3913af9f",
+      "text": "Thanks."
+    },
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 159.98,
+      "start_time": 148.46,
+      "recording_attendee_id": "60a46b47-6465-411d-887e-aa7a3913af9f",
+      "text": "back or just reply to my email. So my direct number is eight five six two one four five nine four five again alix with rentable have a great day bye."
+    },
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 59.08,
+      "start_time": 57.43,
+      "recording_attendee_id": "f6d07410-1d4d-41af-a6e0-f4b037bc75a7",
+      "text": "Of course, let me transfer you over really quick."
+    },
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 53.49,
+      "start_time": 1.69,
+      "recording_attendee_id": "f6d07410-1d4d-41af-a6e0-f4b037bc75a7",
+      "text": "Thank you for calling M G our property management. We are happy to serve your property management needs seven days a week your call, maybe monitored or recorded for quality and training purposes. If you know your party's three, digit extension please enter it. Now? If you are inquiring regarding an available rental property, please press one. If you are a tenant with the maintenance request press two. If you are interested in property management Services press three for a directory of our management team press four if you are calling regarding an owner's Association press five to reach our receptionist please press zero to repeat this menu press. And your property manager, how can help you."
+    },
+    {
+      "id": "22701038-9422-4273-934b-1d340dd5c390",
+      "recording_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "end_time": 117.76,
+      "start_time": 88.42,
+      "recording_attendee_id": "f6d07410-1d4d-41af-a6e0-f4b037bc75a7",
+      "text": "Please home button start is our system activates find my follow me to locate your party. Sylvia for DEA is unavailable. Please leave your message. After the tone when done hang up or press the pound key."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "dece0f97-239d-4d8c-8670-84d49d0ebd81",
+      "title": "Call: Alex Rodier and Sylvia Padilla @ MGR Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

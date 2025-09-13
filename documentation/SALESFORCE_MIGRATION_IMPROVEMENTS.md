@@ -17,7 +17,7 @@ Based on the ProductIntegration to Subscription migration analysis, we've identi
 ## Implemented Solutions
 
 ### 1. Pre-Deployment Validation Script
-**Location**: `scripts/sfdc-pre-deployment-validator.js`
+**Location**: `platforms/SFDC/scripts/sfdc-pre-deployment-validator.js`
 
 This automated validator checks:
 - Field history tracking limits (prevents deployment failures)
@@ -28,7 +28,7 @@ This automated validator checks:
 
 **Usage**:
 ```bash
-node scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
+node platforms/SFDC/scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
 ```
 
 ### 2. Migration QA Checklist Template
@@ -71,7 +71,7 @@ Added mandatory pre-deployment validation section with:
 
 1. **ALWAYS Run Pre-Deployment Validation**
    ```bash
-   node scripts/sfdc-pre-deployment-validator.js production .
+   node platforms/SFDC/scripts/sfdc-pre-deployment-validator.js production .
    ```
 
 2. **Follow QA Checklist**

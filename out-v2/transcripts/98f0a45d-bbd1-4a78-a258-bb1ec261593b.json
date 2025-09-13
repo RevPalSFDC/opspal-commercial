@@ -1,0 +1,44 @@
+{
+  "id": "98f0a45d-bbd1-4a78-a258-bb1ec261593b",
+  "recording_id": "a0b34882-510c-4a9c-a10e-9b24656e220f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "98f0a45d-bbd1-4a78-a258-bb1ec261593b",
+      "recording_id": "a0b34882-510c-4a9c-a10e-9b24656e220f",
+      "end_time": 100.78,
+      "start_time": 1.05,
+      "recording_attendee_id": "64a49695-c622-424b-8f6a-db3faeb35785",
+      "text": "Thank you for calling Ferrari Enterprises Incorporated affordable housing specialist to ensure the highest level of customer service. This call may be monitored and recorded. If you know your party's extension you may enter it at any time to dial by name, please press one for contact information including address and fax number please press two to request an application for our current communities know being leased, please press three for the operator welcome to the directory please enter the first three digits of your parties, first name using your touchtone key pad use this Y a N E T space C E R D a and this is the person you are looking for press one now, otherwise please press Star now. Hello, you have reached the voicemail. Please leave a detailed message, including your name and contact information so you. Thank you. Please leave your message after the tone when done hang up or press the pound key."
+    },
+    {
+      "id": "98f0a45d-bbd1-4a78-a258-bb1ec261593b",
+      "recording_id": "a0b34882-510c-4a9c-a10e-9b24656e220f",
+      "end_time": 132.93,
+      "start_time": 126.84,
+      "recording_attendee_id": "53110656-5391-4cfc-bfb0-855cf87e1f26",
+      "text": "message the best number to reach me at is two six two three eight three four five six eight thanks."
+    },
+    {
+      "id": "98f0a45d-bbd1-4a78-a258-bb1ec261593b",
+      "recording_id": "a0b34882-510c-4a9c-a10e-9b24656e220f",
+      "end_time": 126.84,
+      "start_time": 101.94,
+      "recording_attendee_id": "53110656-5391-4cfc-bfb0-855cf87e1f26",
+      "text": "Hey Annette, this is Alyssa calling from a bordeaux dot. Com. I'm really just reaching out to follow, up the Starbucks gift for gift card. I had sent you wanted to make sure you received that and let you know it's definitely not spam. I'm really just wanted to talk through our Services with you further see if the Laurie had any potential advertising needs at the moment. Um again, I'm calling from a bordeaux dot. Com or and internet listing service. Give me a call back when you get this"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a0b34882-510c-4a9c-a10e-9b24656e220f",
+      "title": "Call: Alyssa Tillich and Yanet Rodriguez @ Solari Enterprises, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

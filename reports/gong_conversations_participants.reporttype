@@ -1,0 +1,25 @@
+{
+    "label": "Gong Conversations with Participants",
+    "name": "Gong_Conversations_with_Participants",
+    "type": "Gong__Gong_Call__c",
+    "description": "Custom report type to show Gong Conversations with Call Participants",
+    "sections": [
+        {
+            "columns": [
+                "Name",
+                "Gong__Call_Date_Time__c"
+            ]
+        }
+    ],
+    "relatedObjects": [
+        {
+            "relationshipName": "Call_Participants__r",
+            "type": "Gong__Call_Participant__c",
+            "columns": [
+                "Gong__Participant_Name__c",
+                "Gong__Email__c",
+                "Gong__Participant_Type__c"
+            ]
+        }
+    ]
+}

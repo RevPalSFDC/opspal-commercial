@@ -192,7 +192,7 @@ const TEST_SCENARIOS = [
 const AGENT_KEYWORDS = {
   'release-coordinator': ['release', 'deploy', 'production', 'tag', 'merge to main', 'merged to main', 'just merged', 'rollout', 'merged the'],
   'project-orchestrator': ['across repos', 'ClaudeSFDC and ClaudeHubSpot', 'coordinate', 'multi-repo', 'multiple repositories'],
-  'sfdc-conflict-resolver': ['field history tracking', 'conflict', 'field mismatch', 'deployment error'],
+  'sfdc-conflict-resolver': ['deployment failed', 'deployment error', 'field history tracking', 'conflict', 'field mismatch', 'deployment blocker'],
   'sfdc-merge-orchestrator': ['merge fields', 'merge.*field', 'consolidate objects', 'combine', 'field consolidation', 'merge customer', 'merge account'],
   'sfdc-dependency-analyzer': ['dependencies', 'dependency analysis', 'circular dependency', 'analyze dependencies'],
   'sfdc-state-discovery': ['current state', 'org state', 'what is the state', 'drift detection'],
@@ -209,12 +209,17 @@ const AGENT_KEYWORDS = {
 // Function to determine expected agent based on keywords
 function determineAgent(input) {
   const lowerInput = input.toLowerCase();
-  
+
   // Check for direct execution flags
   if (lowerInput.includes('[direct]') || lowerInput.includes('[quick_mode]')) {
     return null;
   }
-  
+
+  // Check for specific error patterns first (higher priority)
+  if (lowerInput.includes('deployment failed') || lowerInput.includes('deployment error')) {
+    return 'sfdc-conflict-resolver';
+  }
+
   // Check each agent's keywords
   for (const [agent, keywords] of Object.entries(AGENT_KEYWORDS)) {
     for (const keyword of keywords) {

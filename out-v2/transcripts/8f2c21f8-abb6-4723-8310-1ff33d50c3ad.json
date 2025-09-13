@@ -1,0 +1,29 @@
+{
+  "id": "8f2c21f8-abb6-4723-8310-1ff33d50c3ad",
+  "recording_id": "0b79e25b-ece3-4c37-bbca-b4b79e5b88ed",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-AU",
+  "created_at": "2024-05-17T16:10:48.498Z",
+  "updated_at": "2024-05-17T16:12:28.657Z",
+  "sentences": [
+    {
+      "id": "8f2c21f8-abb6-4723-8310-1ff33d50c3ad",
+      "recording_id": "0b79e25b-ece3-4c37-bbca-b4b79e5b88ed",
+      "end_time": 4.73,
+      "start_time": 4.31,
+      "recording_attendee_id": "b2a3c1a6-557a-4d34-b777-a0953e01e7fb",
+      "order_number": 0,
+      "text": "Mm."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "0b79e25b-ece3-4c37-bbca-b4b79e5b88ed",
+      "title": "McCormack Baron + ApartmentIQ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-05-17T16:10:48Z",
+      "call_date": "2024-05-17"
+    }
+  }
+}

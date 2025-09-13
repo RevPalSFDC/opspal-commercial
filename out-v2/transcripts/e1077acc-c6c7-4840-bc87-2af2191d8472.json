@@ -1,0 +1,74 @@
+{
+  "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+  "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+      "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "end_time": 22.04,
+      "start_time": 1.13,
+      "recording_attendee_id": "3cd2462c-8b17-461b-956c-0be42e741d7d",
+      "order_number": 0,
+      "text": "Thank you for calling management please hold while we try to connect you this call is being recorded. If you do not wish to be recorded. Please disconnect at this time property management. This is Carlos how can I help you."
+    },
+    {
+      "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+      "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "end_time": 36.27,
+      "start_time": 23.13,
+      "recording_attendee_id": "f3691eb4-3735-476c-9cc4-cfdd8ab98b16",
+      "order_number": 1,
+      "text": "Yeah, I was actually hoping maybe you could point me in the right direction. As I'm not exactly sure who to ask for try and get connected with the individual are individuals that handle advertising or marketing of like the rent different rental properties."
+    },
+    {
+      "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+      "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "end_time": 41.33,
+      "start_time": 39.35,
+      "recording_attendee_id": "3cd2462c-8b17-461b-956c-0be42e741d7d",
+      "order_number": 2,
+      "text": "Out and let me check one moment please."
+    },
+    {
+      "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+      "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "end_time": 43.11,
+      "start_time": 42.36,
+      "recording_attendee_id": "f3691eb4-3735-476c-9cc4-cfdd8ab98b16",
+      "order_number": 3,
+      "text": "No problem thank you."
+    },
+    {
+      "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+      "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "end_time": 110.34,
+      "start_time": 103.92,
+      "recording_attendee_id": "3cd2462c-8b17-461b-956c-0be42e741d7d",
+      "order_number": 4,
+      "text": "Okay. Thank you for waiting. Um, I spoke with the team, but they said that they're not interested at the moment. They don't do advertise."
+    },
+    {
+      "id": "e1077acc-c6c7-4840-bc87-2af2191d8472",
+      "recording_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "end_time": 127.71,
+      "start_time": 112.17,
+      "recording_attendee_id": "f3691eb4-3735-476c-9cc4-cfdd8ab98b16",
+      "order_number": 5,
+      "text": "Not it's just I'm not sure what they'd be not be interested in I didn't even tell you what we do um do this so. Okay. I mean, it's really a conversation need to have with them. Basically I came across one of your guys is property is being listed on supper and most of."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e0af3f0a-08df-4ffd-863c-8d5f986f8dfc",
+      "title": "Call: Jordan Culp and info@rpmdcmetro.com @ RPM DC Metro",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

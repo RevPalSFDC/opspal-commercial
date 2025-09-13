@@ -1,0 +1,36 @@
+{
+  "id": "8c18a6ee-e742-4f32-b46d-6d84e6ab549e",
+  "recording_id": "6298d5a3-72d9-469c-8d95-086391d1b4a6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8c18a6ee-e742-4f32-b46d-6d84e6ab549e",
+      "recording_id": "6298d5a3-72d9-469c-8d95-086391d1b4a6",
+      "end_time": 274.44,
+      "start_time": 274.2,
+      "recording_attendee_id": null,
+      "text": "Hey,"
+    },
+    {
+      "id": "8c18a6ee-e742-4f32-b46d-6d84e6ab549e",
+      "recording_id": "6298d5a3-72d9-469c-8d95-086391d1b4a6",
+      "end_time": 299.74,
+      "start_time": 274.44,
+      "recording_attendee_id": "abe91bc0-5f56-4410-a9ac-5ba9838259ee",
+      "text": "Angela, it's Jordan go over our principal just wanted to see if I can catch you via phone call here. I'm still on the zoom meeting link that I sent over in the email. If you want to hop on or if you're still available to hear the next five minutes. I'll be here. If not I'll follow up with an email to see if maybe we can reschedule for another time thanks talk soon. Show City."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6298d5a3-72d9-469c-8d95-086391d1b4a6",
+      "title": "Angela & Jordan - Rentable",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-06-17T15:11:10.783000Z",
+      "call_date": "2021-06-17"
+    }
+  }
+}

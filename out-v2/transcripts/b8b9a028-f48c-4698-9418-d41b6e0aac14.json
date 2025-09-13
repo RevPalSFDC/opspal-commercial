@@ -1,0 +1,44 @@
+{
+  "id": "b8b9a028-f48c-4698-9418-d41b6e0aac14",
+  "recording_id": "eb2cd9b1-babf-42da-bd63-959c750e2cbe",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "b8b9a028-f48c-4698-9418-d41b6e0aac14",
+      "recording_id": "eb2cd9b1-babf-42da-bd63-959c750e2cbe",
+      "end_time": 152.11,
+      "start_time": 126.49,
+      "recording_attendee_id": "d6568683-dafb-41dd-aa16-f0e16508e53e",
+      "text": "Hey Kathy, this is Dan from rentable we spoke a couple of weeks ago. Now, um, you said you would send over a link to your calendar with some times, I know it can get pretty crazy busy every day um, so just let me know if there's a time that works here this week or next. I'll send you a follow, up email as well. Um, if you'd"
+    },
+    {
+      "id": "b8b9a028-f48c-4698-9418-d41b6e0aac14",
+      "recording_id": "eb2cd9b1-babf-42da-bd63-959c750e2cbe",
+      "end_time": 161.53,
+      "start_time": 152.11,
+      "recording_attendee_id": "d6568683-dafb-41dd-aa16-f0e16508e53e",
+      "text": "like to give me a call back I'm at six one five five one zero six one seven eight thanks so much look forward to hearing back from you would love to chat."
+    },
+    {
+      "id": "b8b9a028-f48c-4698-9418-d41b6e0aac14",
+      "recording_id": "eb2cd9b1-babf-42da-bd63-959c750e2cbe",
+      "end_time": 124.99,
+      "start_time": 1.61,
+      "recording_attendee_id": "b81238ea-0a29-49a9-b576-82a673a2884b",
+      "text": "Thank you for calling E C and S ring management Corp. If you know your party's extension please dial it now for a corporate directory press three now for property management press four for human resources and payroll press five for accounting press six for maintenance operations purchasing and Rover operations press seven for advertising and marketing press eight for information systems and technology press nine, if you require further assistance press zero and an operator will assist you thank you for calling E N S ring management Corp. Thank you for calling E C and S ring management Corp. If you know your party's extension please dial it now for a corporate directory press three now for property management. Please spell the name of the person's last name first press seven for cue. Press one for. Please hold while I transfer your call. Your call is being forwarded to one my tell voicemail system, extension seven. One six two is not available. Please leave a message at the tone when finished you may hang up or press pound for additional options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "eb2cd9b1-babf-42da-bd63-959c750e2cbe",
+      "title": "Call: Dan Cellon and Cassie York @ E & S Ring Management Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

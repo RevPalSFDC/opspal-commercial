@@ -1,0 +1,47 @@
+{
+  "id": "001039a7-43b1-4e87-8fc1-23c4383032bc",
+  "recording_id": "9b7ae543-0908-4f3f-8205-875f6caab795",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "001039a7-43b1-4e87-8fc1-23c4383032bc",
+      "recording_id": "9b7ae543-0908-4f3f-8205-875f6caab795",
+      "end_time": 101.91,
+      "start_time": 0.05,
+      "recording_attendee_id": "7aeb5836-dca4-4a4e-ac9d-8fdc91f2ee13",
+      "order_number": 0,
+      "text": "Thank you for calling Aspen square management. You may enter your party's extension at any time for a dial by name directory press zero for the receptionist press one. Please enter at least the first three letters of the person's last name for Q press seven. Please enter at least the first three letters of the person's last name for Q. Payments at extension six three seven five to select this extension press one to hear the next name press two to repeat the Medford extension six five nine nine to select this extension press one to review. Hi, you've reached Ashley Ledford with Aspen square management. I am either on the other line or away from my desk at the moment. Please leave your name your phone number the community you're calling from and a detailed message and I'll return your call as soon as possible. Thank you."
+    },
+    {
+      "id": "001039a7-43b1-4e87-8fc1-23c4383032bc",
+      "recording_id": "9b7ae543-0908-4f3f-8205-875f6caab795",
+      "end_time": 131.49,
+      "start_time": 103.44,
+      "recording_attendee_id": "55829a10-156b-411d-8029-982298f77602",
+      "order_number": 1,
+      "text": "Hi, Ashley. This is Fred. I'm Anita I'm calling from rentable reason for my call is I'm on the rentable account executive for the state of Georgia. I see that through your properties are just wanted to get an idea of what you were doing with your marketing and advertising the rest of the year and next year. We're running short, term specials. Right. Now? We're just hoping to catch you for a quick chat. I'll send you an email follow up as well. But if you'd like please give me a call six three one five two one one five four"
+    },
+    {
+      "id": "001039a7-43b1-4e87-8fc1-23c4383032bc",
+      "recording_id": "9b7ae543-0908-4f3f-8205-875f6caab795",
+      "end_time": 134.07,
+      "start_time": 131.49,
+      "recording_attendee_id": "55829a10-156b-411d-8029-982298f77602",
+      "order_number": 2,
+      "text": "two. Thank you. Hopefully, I'll talk to you soon bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9b7ae543-0908-4f3f-8205-875f6caab795",
+      "title": "Call: Fred Amenita and Ashley Ledford @ Aspen Square Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "43cd176f-cd72-4cbf-80e1-b1f9510bd63b",
+  "recording_id": "90b797a4-2e47-4e0a-afe0-5cab96063f0d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "43cd176f-cd72-4cbf-80e1-b1f9510bd63b",
+      "recording_id": "90b797a4-2e47-4e0a-afe0-5cab96063f0d",
+      "end_time": 134.16,
+      "start_time": 101.07,
+      "recording_attendee_id": "4c077380-12bf-466d-af13-324c537bac86",
+      "text": "Brianna, my name is marcy. I'm calling from rentable. I sent you told me no reason I was calling was to set a meeting with you I work a lot of other management companies terms of generating know more qualified leads in reference to the problems specifically drove with Facebook marketplace wondering, hi, and you are you if you could please return my call again zero four seven zero eight two eight five three four seven zero eight two eight five three two thanks."
+    },
+    {
+      "id": "43cd176f-cd72-4cbf-80e1-b1f9510bd63b",
+      "recording_id": "90b797a4-2e47-4e0a-afe0-5cab96063f0d",
+      "end_time": 45.14,
+      "start_time": 36.5,
+      "recording_attendee_id": "4c077380-12bf-466d-af13-324c537bac86",
+      "text": "Hi, Robyn, my name is Mitch. I just was trying to get in touch with Brian Turner please attention."
+    },
+    {
+      "id": "43cd176f-cd72-4cbf-80e1-b1f9510bd63b",
+      "recording_id": "90b797a4-2e47-4e0a-afe0-5cab96063f0d",
+      "end_time": 35.81,
+      "start_time": 1.75,
+      "recording_attendee_id": "36bdde35-100e-4d27-a0db-0038eb98aac1",
+      "text": "Hello, and thank you for calling River Drive properties. If you are a current tenants please press one. If you are a current client press two if you're interested in what River drive can do for you please press three. If you have a maintenance issue that needs to be addressed. Please press four for leasing please press five for our vendor Partners. And give a call over at properties. This is Robin how may I help you."
+    },
+    {
+      "id": "43cd176f-cd72-4cbf-80e1-b1f9510bd63b",
+      "recording_id": "90b797a4-2e47-4e0a-afe0-5cab96063f0d",
+      "end_time": 97.62,
+      "start_time": 43.7,
+      "recording_attendee_id": "36bdde35-100e-4d27-a0db-0038eb98aac1",
+      "text": "Um, okay, I can transfer you to friends know. We find her number. Okay. One moment. I'll transfer you to our. The person at extension five zero four is not available record your message at the tone press any key or stop talking to and the recording."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "90b797a4-2e47-4e0a-afe0-5cab96063f0d",
+      "title": "Call: Mitch  Scarski  and Bryanna Turner @ River Drive Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

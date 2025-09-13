@@ -1,0 +1,28 @@
+{
+  "id": "0949403b-f121-412a-8dfc-05dafb5b654a",
+  "recording_id": "f62e066a-bd86-43e3-a2e9-c8d124dd4bfd",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "0949403b-f121-412a-8dfc-05dafb5b654a",
+      "recording_id": "f62e066a-bd86-43e3-a2e9-c8d124dd4bfd",
+      "end_time": 30.7,
+      "start_time": 0.91,
+      "recording_attendee_id": "66c035a3-4bc8-4d14-8a5c-fa2801f615a2",
+      "text": "Thank you for calling regarding our office hours are nine AM to five PM Monday through Friday. If you know, the extension of the person you are calling you may enter it at any time for our company directory press Star to enter the first four letters of the person's first name. If you need immediate assistance press zero for the operator. Your call is being transferred to the operator."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f62e066a-bd86-43e3-a2e9-c8d124dd4bfd",
+      "title": "Call: Mitch  Scarski  and Susanne Susanne @ Grosvenor Properties, Ltd.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

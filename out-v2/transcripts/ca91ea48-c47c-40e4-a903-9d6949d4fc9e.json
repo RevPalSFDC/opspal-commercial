@@ -1,0 +1,44 @@
+{
+  "id": "ca91ea48-c47c-40e4-a903-9d6949d4fc9e",
+  "recording_id": "9f504f95-7c69-4e49-98fb-497a361ec1ad",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ca91ea48-c47c-40e4-a903-9d6949d4fc9e",
+      "recording_id": "9f504f95-7c69-4e49-98fb-497a361ec1ad",
+      "end_time": 125.26,
+      "start_time": 102.19,
+      "recording_attendee_id": "6c311521-313f-429e-9eb8-6fd4ef8c8202",
+      "text": "Hey Johan, this is Jordan. I'm calling with hotel dot. Com. We're on the internet with the multi, family marketing platform. Um, I was just eating squares website. Noticed you guys are offering a leasing special just wanted to get in touch and see if you'd be interested in hearing about our advertising Services. Um, you can reach me at six zero eight two two five one eight eight zero again six zero eight"
+    },
+    {
+      "id": "ca91ea48-c47c-40e4-a903-9d6949d4fc9e",
+      "recording_id": "9f504f95-7c69-4e49-98fb-497a361ec1ad",
+      "end_time": 100.51,
+      "start_time": 0.14,
+      "recording_attendee_id": "364eac08-2810-442a-9e06-42c41bfb2f5c",
+      "text": "Thank you for calling us into real estate partners your call and your business are very important to us so please stay on the line and an associate will be with you shortly, but I spend you all prissy oana of both. If you know your party's extension you can dial it at any time for residence Services. Please press three for resident accounts. Please press four for vendors press five for human resources press six for a directory by first name press seven for a directory by. Welcome to the company directory please dial the first three digits of the last name of the person you wish to reach. For dial one to enter another name dial nine. Your call is now being forwarded please hold. You have reached the voicemail of your laundry room where your evening and a brief message and a number where you can be reached. So, I'm returning your call at the tone please record your message. When you finished recording you may hang up or press one for more options."
+    },
+    {
+      "id": "ca91ea48-c47c-40e4-a903-9d6949d4fc9e",
+      "recording_id": "9f504f95-7c69-4e49-98fb-497a361ec1ad",
+      "end_time": 130.6,
+      "start_time": 125.38,
+      "recording_attendee_id": "6c311521-313f-429e-9eb8-6fd4ef8c8202",
+      "text": "two two five one eight eight zero I'm calling you back from you thanks John."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9f504f95-7c69-4e49-98fb-497a361ec1ad",
+      "title": "Call: Jordan Wilkins and Johan Zea @ Acento Real Estate Partners",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

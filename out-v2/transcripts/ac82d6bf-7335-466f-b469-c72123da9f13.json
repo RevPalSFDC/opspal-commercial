@@ -1,0 +1,68 @@
+{
+  "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+  "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+      "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "end_time": 124.34,
+      "start_time": 111.11,
+      "recording_attendee_id": "93f272db-fcc2-4cae-9759-7e9939b16053",
+      "text": "Yeah let me just check my calendar see if I don't have anything there I can do would like to thirty. Okay."
+    },
+    {
+      "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+      "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "end_time": 102.68,
+      "start_time": 89.05,
+      "recording_attendee_id": "93f272db-fcc2-4cae-9759-7e9939b16053",
+      "text": "Hello. Hi is on there. Yes. Hey, Tom, it's Alice would actually give me a call from rentable. Hey good, good is this still a good time or like I said at that time."
+    },
+    {
+      "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+      "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "end_time": 133.16,
+      "start_time": 128.48,
+      "recording_attendee_id": "93f272db-fcc2-4cae-9759-7e9939b16053",
+      "text": "Okay, I'll give you a call back they get."
+    },
+    {
+      "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+      "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "end_time": 88.88,
+      "start_time": 0.74,
+      "recording_attendee_id": "6eabd276-5b6c-4733-953e-14c9729ace37",
+      "text": "Thank you for calling all year management your call may be monitored for quality purposes. If you know your party's extension you may dial it at anytime for company information, please dial one. If you are a tenant please dial two for accounts payable, please dial four for emergency repairs, please dial five for company directory, please dial nine. For Patsy dial one zero, one. Four S T dial one zero, two four any dial one zero for for David dial, one zero five four eight, maybe dial one zero six for semi, dial one, one, two for Leah dial, one, one three four yet S dial one, one, four four mulkey dial, one, one, five for Nathan dial, one, one, six from Boise dial one, one, seven for Hector dial one one eight for Tom dial, one one nine for dial one two for for Ren dial. Three. Hello."
+    },
+    {
+      "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+      "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "end_time": 127.2,
+      "start_time": 126.72,
+      "recording_attendee_id": "6eabd276-5b6c-4733-953e-14c9729ace37",
+      "text": "Hi Sylvia."
+    },
+    {
+      "id": "ac82d6bf-7335-466f-b469-c72123da9f13",
+      "recording_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "end_time": 109.1,
+      "start_time": 106.22,
+      "recording_attendee_id": "6eabd276-5b6c-4733-953e-14c9729ace37",
+      "text": "Will work like three o'clock four o'clock, you will still be in."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c32b7e27-5424-490c-b1f2-72ea0c3e29f0",
+      "title": "Call: Alex Wodarczyk and Tom @ All Year Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

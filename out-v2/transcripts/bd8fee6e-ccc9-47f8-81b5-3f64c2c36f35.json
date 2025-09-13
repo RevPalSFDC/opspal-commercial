@@ -1,0 +1,44 @@
+{
+  "id": "bd8fee6e-ccc9-47f8-81b5-3f64c2c36f35",
+  "recording_id": "a67252e1-3c15-4fc5-ac5f-ddeee35830c6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bd8fee6e-ccc9-47f8-81b5-3f64c2c36f35",
+      "recording_id": "a67252e1-3c15-4fc5-ac5f-ddeee35830c6",
+      "end_time": 122.48,
+      "start_time": 65.52,
+      "recording_attendee_id": "ae696ff8-512e-4f5c-b931-60154ce38877",
+      "text": "Um, hold on a moment. Your call is being forwarded to one my tell voicemail system, extension seven. One six two is not available. Please leave a message at the tone when finished you may hang up or press pound for additional options."
+    },
+    {
+      "id": "bd8fee6e-ccc9-47f8-81b5-3f64c2c36f35",
+      "recording_id": "a67252e1-3c15-4fc5-ac5f-ddeee35830c6",
+      "end_time": 60.45,
+      "start_time": 2.17,
+      "recording_attendee_id": "ae696ff8-512e-4f5c-b931-60154ce38877",
+      "text": "Thank you for calling into Spring management Corp. If you know your party's extension please press it now for our corporate directory press three for property management press four for human resources and payroll press five for accounting press six for maintenance operations. Purchasing enroll for operations press seven for advertising and marketing press eight for information systems and technology press nine, if you require further assistance press zero and an operator will assist you thank you for calling and Spring management Corp. And a three management."
+    },
+    {
+      "id": "bd8fee6e-ccc9-47f8-81b5-3f64c2c36f35",
+      "recording_id": "a67252e1-3c15-4fc5-ac5f-ddeee35830c6",
+      "end_time": 64.05,
+      "start_time": 62.1,
+      "recording_attendee_id": "e6ad7411-0ff6-4374-b5f6-c99d1fbc50a3",
+      "text": "Hi, I was trying to reach Cathy York."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a67252e1-3c15-4fc5-ac5f-ddeee35830c6",
+      "title": "Call: Dan Cellon and Erik Alexander @ E & S Ring Management Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

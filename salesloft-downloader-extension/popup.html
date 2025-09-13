@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 400px;
+      min-height: 500px;
+      padding: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+    
+    .content {
+      padding: 20px;
+    }
+    
+    .status-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+    
+    .status-label {
+      color: #6c757d;
+      font-size: 14px;
+    }
+    
+    .status-value {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #28a745, #20c997);
+      transition: width 0.3s;
+      min-width: 0;
+    }
+    
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+    
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-warning {
+      background: #ffc107;
+      color: black;
+    }
+    
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .url-input {
+      margin-bottom: 20px;
+    }
+    
+    .url-input label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .url-input textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    
+    .info-text {
+      font-size: 12px;
+      color: #6c757d;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+    
+    .current-url {
+      background: #e7f3ff;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      word-break: break-all;
+      margin-top: 10px;
+    }
+    
+    .alert {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 13px;
+    }
+    
+    .alert-info {
+      background: #cff4fc;
+      border: 1px solid #0dcaf0;
+      color: #055160;
+    }
+    
+    .alert-success {
+      background: #d1f2eb;
+      border: 1px solid #28a745;
+      color: #0a3622;
+    }
+    
+    .alert-warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #664d03;
+    }
+    
+    #statusMessage {
+      margin-top: 10px;
+      font-size: 13px;
+      padding: 8px;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    #statusMessage.show {
+      display: block;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #e9ecef;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6c757d;
+      transition: all 0.2s;
+    }
+    
+    .tab.active {
+      color: #007bff;
+      border-bottom: 2px solid #007bff;
+      margin-bottom: -2px;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎙️ Salesloft Recording Downloader</h1>
+  </div>
+  
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" data-tab="download">Download</button>
+      <button class="tab" data-tab="status">Status</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </div>
+    
+    <div id="downloadTab" class="tab-content active">
+      <div class="alert alert-info">
+        Make sure you're logged into Salesloft before starting the download process.
+      </div>
+      
+      <div class="url-input">
+        <label for="urlList">Recording URLs (one per line):</label>
+        <textarea id="urlList" placeholder="https://recordings.salesloft.com/c/101314/...
+https://recordings.salesloft.com/c/101314/..."></textarea>
+      </div>
+      
+      <div class="controls">
+        <button id="loadFromFile" class="btn-secondary">📁 Load URLs from File</button>
+        <button id="importFromCalls" class="btn-primary">🔄 Import from Calls Page</button>
+        <button id="startDownload" class="btn-success">▶️ Start Download</button>
+      </div>
+      
+      <div id="statusMessage"></div>
+    </div>
+    
+    <div id="statusTab" class="tab-content">
+      <div class="status-card">
+        <h3 style="margin-top: 0;">Download Progress</h3>
+        
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">Total:</span>
+          <span class="status-value" id="totalCount">0</span>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">Downloaded:</span>
+          <span class="status-value" id="downloadedCount">0</span>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">Failed:</span>
+          <span class="status-value" id="failedCount">0</span>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">Remaining:</span>
+          <span class="status-value" id="remainingCount">0</span>
+        </div>
+        
+        <div class="current-url" id="currentUrl" style="display: none;">
+          Processing: <span id="currentUrlText"></span>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <button id="pauseDownload" class="btn-warning">⏸️ Pause</button>
+        <button id="resumeDownload" class="btn-success">▶️ Resume</button>
+        <button id="clearProgress" class="btn-danger">🗑️ Clear Progress</button>
+      </div>
+    </div>
+    
+    <div id="settingsTab" class="tab-content">
+      <div class="info-text">
+        <h3>How to Use:</h3>
+        <ol>
+          <li><strong>Ensure you're logged into Salesloft</strong></li>
+          <li><strong>Import from Calls Page (Recommended):</strong>
+            <ul>
+              <li>Click "🔄 Import from Calls Page"</li>
+              <li>Apply your filters on the Calls page</li>
+              <li>Choose how many pages to extract when prompted</li>
+              <li>URLs will auto-populate in the extension</li>
+            </ul>
+          </li>
+          <li><strong>Or manually add URLs:</strong> Paste recording URLs or load from file</li>
+          <li>Click "▶️ Start Download" to begin processing</li>
+          <li>Files save to: <code>~/Downloads/salesloft_recordings/</code></li>
+        </ol>
+        
+        <h3>Features:</h3>
+        <ul>
+          <li>✅ Multi-page extraction with page limit control</li>
+          <li>✅ Automatic retry on connection failures</li>
+          <li>✅ Resume downloads after pause or browser restart</li>
+          <li>✅ Sequential processing to avoid rate limits</li>
+          <li>✅ Real-time progress tracking</li>
+        </ul>
+        
+        <h3>Tips:</h3>
+        <ul>
+          <li>Each page typically contains ~50 recordings</li>
+          <li>Processing speed: ~8-10 recordings per minute</li>
+          <li>Test with a few recordings first</li>
+          <li>Keep Chrome active during large downloads</li>
+        </ul>
+        
+        <h3>About:</h3>
+        <p><strong>Version:</strong> 1.9.0</p>
+        <p><strong>Developed by:</strong> RevPal</p>
+        <p><strong>Last Updated:</strong> September 2025</p>
+        
+        <h3>Troubleshooting:</h3>
+        <ul>
+          <li>If import fails, reload the extension (chrome://extensions/)</li>
+          <li>Verify you're logged into Salesloft</li>
+          <li>Check console for detailed error messages</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

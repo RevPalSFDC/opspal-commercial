@@ -1,0 +1,28 @@
+{
+  "id": "e06ca57c-a57d-4c49-833e-fd75acc52a2d",
+  "recording_id": "8795b55b-5cd8-4794-b2f3-cc844be7f7a6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "e06ca57c-a57d-4c49-833e-fd75acc52a2d",
+      "recording_id": "8795b55b-5cd8-4794-b2f3-cc844be7f7a6",
+      "end_time": 149.74,
+      "start_time": 1.63,
+      "recording_attendee_id": "0dd112eb-e23e-4634-8975-de0af20c54ae",
+      "text": "Thank you for calling Princeton properties. If you know your party's extension you may dial it now to dial by name press pound one for the directory listing using the telephone keypad. Please begin spelling. The first or last name of the person you wish to call. No names match the name you entered using the telephone keypad. Please begin spelling. The first or last name of the person you wish to call to listen to these choices again press Star to return to the previous menu press pound. Thank you for calling Princeton properties. If you know your party's extension you may dial it now to dial by name press pound one for the directory listing press pound to you were calling you will now here a list of names and extensions, you may enter an extension at any time during the list to listen to these choices again press Star to return to the previous menu press pound, please extension one. One one five, Jeff Brown extension one. One zero eight, Andrew Chan extension one. One. One nine Claire Collins extension one. One five eight trouble during extension one. One two seven, Dan and extension one. One three zero, Terry klos extension one. One three, one Christie Flynn extension one. One two for Martha. Yeah, extension one one three eight, Scott, Randy extension one. One five nine, Sarah greeno extension one. One six zero, Dan Harvey extension two. Two zero one Charlene dialing Dan Harvey."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8795b55b-5cd8-4794-b2f3-cc844be7f7a6",
+      "title": "Call: Elyse Stachelek and Daniel Harvey @ Princeton Properties Management, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

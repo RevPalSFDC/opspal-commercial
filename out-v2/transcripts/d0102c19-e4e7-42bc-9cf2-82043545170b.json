@@ -1,0 +1,65 @@
+{
+  "id": "d0102c19-e4e7-42bc-9cf2-82043545170b",
+  "recording_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-02-28T01:09:27.080Z",
+  "updated_at": "2024-02-28T01:10:27.403Z",
+  "sentences": [
+    {
+      "id": "d0102c19-e4e7-42bc-9cf2-82043545170b",
+      "recording_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+      "end_time": 32.1,
+      "start_time": 31.56,
+      "recording_attendee_id": "5832a662-5be7-4392-ad06-7918b9c148f1",
+      "order_number": 0,
+      "text": "Oh,"
+    },
+    {
+      "id": "d0102c19-e4e7-42bc-9cf2-82043545170b",
+      "recording_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+      "end_time": 39.52,
+      "start_time": 38.58,
+      "recording_attendee_id": "5832a662-5be7-4392-ad06-7918b9c148f1",
+      "order_number": 1,
+      "text": "can you hear me?"
+    },
+    {
+      "id": "d0102c19-e4e7-42bc-9cf2-82043545170b",
+      "recording_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+      "end_time": 41.59,
+      "start_time": 40.98,
+      "recording_attendee_id": "cd57b58e-5c38-45ed-a995-3384ac6d5cbb",
+      "order_number": 2,
+      "text": "Oh, sorry."
+    },
+    {
+      "id": "d0102c19-e4e7-42bc-9cf2-82043545170b",
+      "recording_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+      "end_time": 47.84,
+      "start_time": 47.58,
+      "recording_attendee_id": "cd57b58e-5c38-45ed-a995-3384ac6d5cbb",
+      "order_number": 3,
+      "text": "Mm."
+    },
+    {
+      "id": "d0102c19-e4e7-42bc-9cf2-82043545170b",
+      "recording_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+      "end_time": 61.97,
+      "start_time": 61.04,
+      "recording_attendee_id": "5832a662-5be7-4392-ad06-7918b9c148f1",
+      "order_number": 4,
+      "text": "Do you wanna call me?"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "5dc6fe44-1c1d-4edf-8e1e-4bb21143a355",
+      "title": "Rentable x Wimmer Communities",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-02-28T01:09:24Z",
+      "call_date": "2024-02-28"
+    }
+  }
+}

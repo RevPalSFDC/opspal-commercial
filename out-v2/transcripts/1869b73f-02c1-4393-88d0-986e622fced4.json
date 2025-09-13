@@ -1,0 +1,84 @@
+{
+  "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+  "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 108.74,
+      "start_time": 103.33,
+      "recording_attendee_id": "68d20757-ae57-4afa-9b88-1106df8e6ab8",
+      "text": "Sure. Okay. Yeah, sure, let me transfer you over to someone that would be the right person to talk to."
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 63.98,
+      "start_time": 51.77,
+      "recording_attendee_id": "5531f919-6812-4343-814e-0ffea91c443d",
+      "text": "Randy, I'm my name's Dan, I'm calling from rentable. I'm just trying to get in touch with whoever does the marketing for your vacant units online like advertising in general is that something you handle."
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 143.3,
+      "start_time": 138.2,
+      "recording_attendee_id": "68d20757-ae57-4afa-9b88-1106df8e6ab8",
+      "text": "Record your message and press pound or press Star to contact the operator."
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 99.72,
+      "start_time": 73.74,
+      "recording_attendee_id": "5531f919-6812-4343-814e-0ffea91c443d",
+      "text": "Yeah, I mean you tell me, let me I'll tell you why I'm calling and then I guess you can determine I guess where to send me um, so we have an integration to Facebook marketplace and so that's that's kind of why I'm calling I don't expect you or whoever you would transfer me to have time right now, but we're just hoping to I don't know car about fifteen twenty minutes to set up a kind of like a discovery call to to go over what's working for you guys for marketing kind of learn how"
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 110.66,
+      "start_time": 109.64,
+      "recording_attendee_id": "5531f919-6812-4343-814e-0ffea91c443d",
+      "text": "Gotcha, alright."
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 72.88,
+      "start_time": 66.01,
+      "recording_attendee_id": "68d20757-ae57-4afa-9b88-1106df8e6ab8",
+      "text": "Yeah. That's that's our team here. I can transfer you to somebody to talk to about that and I'm more specifics would be like."
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 49.79,
+      "start_time": 1.89,
+      "recording_attendee_id": "68d20757-ae57-4afa-9b88-1106df8e6ab8",
+      "text": "Thank you for calling Avenue Partners. If you know the extension of the person you are trying to reach you may dial it at any time. If you are a vendor interested in new business with Avenue to press one to hear our staff directory by name press two for accounting press three for investor. Please enter the first three letters of the last name of the person you are trying to contact. Please enter the first three letters of the last name of the person you are trying to contact. This is Randy."
+    },
+    {
+      "id": "1869b73f-02c1-4393-88d0-986e622fced4",
+      "recording_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "end_time": 104.73,
+      "start_time": 99.72,
+      "recording_attendee_id": "5531f919-6812-4343-814e-0ffea91c443d",
+      "text": "you access marketplace. Right now and see if it would make sense to try our integration out."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a3c5b1ad-1d44-4f9f-a23a-8476e7f793a7",
+      "title": "Call: Dan Cellon and Randall Warlick @ Avenida Partners, LLC",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

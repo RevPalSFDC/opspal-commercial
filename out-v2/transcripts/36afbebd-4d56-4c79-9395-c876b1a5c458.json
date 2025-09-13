@@ -1,0 +1,28 @@
+{
+  "id": "36afbebd-4d56-4c79-9395-c876b1a5c458",
+  "recording_id": "f76bf0c5-8cfe-4460-b4ac-600833850e1e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "36afbebd-4d56-4c79-9395-c876b1a5c458",
+      "recording_id": "f76bf0c5-8cfe-4460-b4ac-600833850e1e",
+      "end_time": 145.6,
+      "start_time": 3.37,
+      "recording_attendee_id": "0247b7ba-6aa3-40e6-a2c8-4d3a26b76d97",
+      "text": "Thank you for calling Optima. If you know your party's four, digit extension you may dial it now press zero to reach the operator or press eight for the company directory please make your selection now. I'm sorry that number is not valid. Thank you for holding. I'm sorry that number is not valid. Thank you for calling Optima. If you know your party's four, digit extension you may dial it now press zero to reach the operator or press eight for the company directory please make your selection now. I'm sorry that number is not valid. Thank you for calling the Optima. If you know your party's four, digit extension you may dial it now press zero to reach the operator or press eight for the company directory please make your selection now. Welcome to the directory please enter the first three letters of your party's last name using your touchtone key pad use. The seven AM a N D a N space. J O H N S O N if this is the person you are looking for press one now, otherwise please press Star now. Hi, you reach Beth Mar a lot of."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f76bf0c5-8cfe-4460-b4ac-600833850e1e",
+      "title": "Call: Will Martin and Ali Burnham @ Optima, Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

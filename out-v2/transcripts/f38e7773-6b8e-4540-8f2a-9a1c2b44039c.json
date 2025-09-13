@@ -1,0 +1,101 @@
+{
+  "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+  "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 67.27,
+      "start_time": 2.44,
+      "recording_attendee_id": "86660542-cc5e-4e94-b182-e3b5f9b0e9a8",
+      "order_number": 0,
+      "text": "Is Jennifer available please? Okay. Hi, it's Jennifer available."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 72.14,
+      "start_time": 70.73,
+      "recording_attendee_id": "7fb1f3d4-967e-480e-9da9-cbc9392eec80",
+      "order_number": 1,
+      "text": "Yeah, I mean try again."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 136.94,
+      "start_time": 132.95,
+      "recording_attendee_id": "86660542-cc5e-4e94-b182-e3b5f9b0e9a8",
+      "order_number": 2,
+      "text": "Hi, this is Alyssa again. I think I keep getting transferred to you."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 149.7,
+      "start_time": 138.73,
+      "recording_attendee_id": "7fb1f3d4-967e-480e-9da9-cbc9392eec80",
+      "order_number": 3,
+      "text": "Okay, let me. Let me get that account number. She may not be here. That's kind of when you get a good number to call you back what was your name."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 150.83,
+      "start_time": 150.2,
+      "recording_attendee_id": "86660542-cc5e-4e94-b182-e3b5f9b0e9a8",
+      "order_number": 4,
+      "text": "All as well."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 155.49,
+      "start_time": 154.08,
+      "recording_attendee_id": "7fb1f3d4-967e-480e-9da9-cbc9392eec80",
+      "order_number": 5,
+      "text": "Okay, and what's a good phone number for you."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 161.49,
+      "start_time": 156,
+      "recording_attendee_id": "86660542-cc5e-4e94-b182-e3b5f9b0e9a8",
+      "order_number": 6,
+      "text": "Two six two three three four five six eight."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 167.67,
+      "start_time": 165.63,
+      "recording_attendee_id": "7fb1f3d4-967e-480e-9da9-cbc9392eec80",
+      "order_number": 7,
+      "text": "I'm a chance and I'll give her your number."
+    },
+    {
+      "id": "f38e7773-6b8e-4540-8f2a-9a1c2b44039c",
+      "recording_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "end_time": 168.8,
+      "start_time": 168.14,
+      "recording_attendee_id": "86660542-cc5e-4e94-b182-e3b5f9b0e9a8",
+      "order_number": 8,
+      "text": "Okay."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6ca5e68f-19f9-454a-a7e8-ab89aa9177f0",
+      "title": "Call: Alyssa Tillich and Jennifer  Whitley @ Arbour Valley Communities",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

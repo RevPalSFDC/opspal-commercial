@@ -1,0 +1,28 @@
+{
+  "id": "d739dcb7-a210-46de-b223-df728749c1cb",
+  "recording_id": "1929025a-0072-493a-a532-6c644dcaaa01",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "d739dcb7-a210-46de-b223-df728749c1cb",
+      "recording_id": "1929025a-0072-493a-a532-6c644dcaaa01",
+      "end_time": "147.05",
+      "start_time": "0.00",
+      "recording_attendee_id": null,
+      "text": "Reported mm mhm."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1929025a-0072-493a-a532-6c644dcaaa01",
+      "title": "Optim Real Estate Services <> Rentable",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-11-24T16:41:41.812000Z",
+      "call_date": "2021-11-24"
+    }
+  }
+}

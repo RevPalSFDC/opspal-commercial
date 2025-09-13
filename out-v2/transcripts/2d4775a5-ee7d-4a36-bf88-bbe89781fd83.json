@@ -1,0 +1,38 @@
+{
+  "id": "2d4775a5-ee7d-4a36-bf88-bbe89781fd83",
+  "recording_id": "b56285af-a363-4f34-a31c-22012af67510",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:51:59.775Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2d4775a5-ee7d-4a36-bf88-bbe89781fd83",
+      "recording_id": "b56285af-a363-4f34-a31c-22012af67510",
+      "end_time": 50.18,
+      "start_time": 1.25,
+      "recording_attendee_id": "5925d1af-522a-406c-868d-17083181ad78",
+      "order_number": 0,
+      "text": "Thank you for calling sky on main and ten main center. For Apartment Leasing Information, Press two. For the Management Office, Press one. Please wait a moment. Okay. Yeah. Please leave your message for (816) three hundred and ninety-four six thousand eight hundred and twenty"
+    },
+    {
+      "id": "2d4775a5-ee7d-4a36-bf88-bbe89781fd83",
+      "recording_id": "b56285af-a363-4f34-a31c-22012af67510",
+      "end_time": 125.96,
+      "start_time": 52.72,
+      "recording_attendee_id": "245dbf3f-755c-49d5-8e2e-376e2740df40",
+      "order_number": 1,
+      "text": "Hey john calling from rental. Um Hope you're Well, I apologize. I missed you here. Um about ten thirty Wednesday morning the fifth. Um But Tony was um just following up on an email I sent over to you um on monday. Um I was just doing a little um research on Sky on Main and um I was uh hoping to connect with you at some point. Um We'd love to to learn more about how your marketing and advertising. Um We do some things around um google business profiles as well um which looks like it's in pretty good shape. Um But uh would love an opportunity just to chat with you briefly ten fifteen minutes just to learn more about the property. Um So uh if you could give me a call back or shoot me an email Connie when you have some time, I really appreciate it. Um Again john from rentable thirty-one quintillion seven hundred forty quadrillion seven hundred thirty-five trillion ninety-three billion one hundred seventy-three million seventy-six thousand six hundred and ninety-two I hope to hear from you soon. Have a great day"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b56285af-a363-4f34-a31c-22012af67510",
+      "title": "Call: John Loughery and Connie Ambrose @ Sky on Main Luxury Apartments",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

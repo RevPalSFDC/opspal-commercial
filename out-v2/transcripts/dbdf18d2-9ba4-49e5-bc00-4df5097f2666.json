@@ -1,0 +1,44 @@
+{
+  "id": "dbdf18d2-9ba4-49e5-bc00-4df5097f2666",
+  "recording_id": "f29187a1-2a7e-41e8-a701-933f7ee5980c",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "dbdf18d2-9ba4-49e5-bc00-4df5097f2666",
+      "recording_id": "f29187a1-2a7e-41e8-a701-933f7ee5980c",
+      "end_time": 134.96,
+      "start_time": 132.65,
+      "recording_attendee_id": "6266d454-adfa-45a1-9056-8dd1349bc019",
+      "text": "T a B L E dot C O."
+    },
+    {
+      "id": "dbdf18d2-9ba4-49e5-bc00-4df5097f2666",
+      "recording_id": "f29187a1-2a7e-41e8-a701-933f7ee5980c",
+      "end_time": 101.22,
+      "start_time": 0.59,
+      "recording_attendee_id": "58445a63-d405-4130-a20c-9736ebb4cdd7",
+      "text": "Thank you for calling North Star properties. If you know your party's extension dial. It. Now if you're calling about one of our properties Norman Oklahoma City Edmond. Our telephone please visit our website at W W W dot North Star dash. Okay, dot. Com. Thank you. Enter the first few letters of the person's first or last name for the letter, Q press the seven key for the letter Z press the nine key. I'm sorry, I didn't hear you enter the first for Christy Carlson press one zero seven to try again press Star. Enter the first few letters of the person's first or last name for the letter Q press seven. For Jessica supposed to use. Press two zero eight to try again press Star. Transferring to Jessica supposed to use. Have reached Jessica scales with North Star properties? Please leave a message and I will get back to you as soon as possible. Thank you."
+    },
+    {
+      "id": "dbdf18d2-9ba4-49e5-bc00-4df5097f2666",
+      "recording_id": "f29187a1-2a7e-41e8-a701-933f7ee5980c",
+      "end_time": 132.65,
+      "start_time": 104.96,
+      "recording_attendee_id": "6266d454-adfa-45a1-9056-8dd1349bc019",
+      "text": "Hey, Jessica, this is Austin with rentable corn. Corn regards to your listings of your vacant units at the kitchen Bird property as well as the Quail run go ahead and give me a call back my up on your interesting marketing going out in your market that other property management companies have been taking advantage of the bundle here your strategy can reach me at six zero eight nine two one two four one nine as well as my email Austin U S T I N at rentable R E N"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f29187a1-2a7e-41e8-a701-933f7ee5980c",
+      "title": "Call: Austin Schleisner and Jessica Bustillos @ Northstar Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

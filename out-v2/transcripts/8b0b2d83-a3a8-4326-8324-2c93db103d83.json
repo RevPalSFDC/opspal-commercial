@@ -1,0 +1,36 @@
+{
+  "id": "8b0b2d83-a3a8-4326-8324-2c93db103d83",
+  "recording_id": "a706f609-9262-4c2a-aae5-ba36c983c9c7",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:51:59.775Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8b0b2d83-a3a8-4326-8324-2c93db103d83",
+      "recording_id": "a706f609-9262-4c2a-aae5-ba36c983c9c7",
+      "end_time": "1.26",
+      "start_time": "0.00",
+      "recording_attendee_id": null,
+      "text": "Coaching purposes,"
+    },
+    {
+      "id": "8b0b2d83-a3a8-4326-8324-2c93db103d83",
+      "recording_id": "a706f609-9262-4c2a-aae5-ba36c983c9c7",
+      "end_time": "80.25",
+      "start_time": "75.04",
+      "recording_attendee_id": "67864e8f-6a98-4e69-ad49-7073baa56082",
+      "text": "Aaron, I'm trying, I'm on a call right now, I'm I'm on it right now."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a706f609-9262-4c2a-aae5-ba36c983c9c7",
+      "title": "Rentable // Newport Glen",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2022-01-12T15:11:31.394000Z",
+      "call_date": "2022-01-12"
+    }
+  }
+}

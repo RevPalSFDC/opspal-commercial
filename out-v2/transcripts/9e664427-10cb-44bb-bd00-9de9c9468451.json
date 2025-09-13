@@ -1,0 +1,36 @@
+{
+  "id": "9e664427-10cb-44bb-bd00-9de9c9468451",
+  "recording_id": "bfca0c02-67d8-480b-969b-497cd717d7c3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9e664427-10cb-44bb-bd00-9de9c9468451",
+      "recording_id": "bfca0c02-67d8-480b-969b-497cd717d7c3",
+      "end_time": 128.24,
+      "start_time": 1.06,
+      "recording_attendee_id": "84d69cec-c587-48ad-a48c-a8f9d8c4e086",
+      "text": "Thank you for calling SAS management and property Services our office hours are from eight thirty to five Monday through Friday. If you know your party's extension you may enter it at any time for a staff directory please press eight for leasing press one for maintenance or move else press two to reach your property manager press welcome to the directory please enter the first three or more letters of the parties first or last name using your touchtone key pad use the one key for punctuation press zero to exit the directory and obtain further assistance. I'm sorry, there is no entry matching the key as you have entered. I'm sorry, you are having problem. We are now transferring you out of the company directory please hold on for further assistance. Thank you for calling SAS management and property Services our office hours are from eight thirty to five Monday through Friday. If you know your party's extension you may enter it at any time for a staff directory please press eight for leasing press one for maintenance or move else press two to reach your property manager press three for additional options please press for. For a company information press nine for new property management press five for accounts payable press six for our office manager and bookkeeper press seven, otherwise to be transferred to the receptionist. Hi, you've reached Shelly with that sounds property management sound unable to take your call. Please leave me a brief message"
+    },
+    {
+      "id": "9e664427-10cb-44bb-bd00-9de9c9468451",
+      "recording_id": "bfca0c02-67d8-480b-969b-497cd717d7c3",
+      "end_time": 128.9,
+      "start_time": 128.27,
+      "recording_attendee_id": "84d69cec-c587-48ad-a48c-a8f9d8c4e086",
+      "text": "along with your phone."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "bfca0c02-67d8-480b-969b-497cd717d7c3",
+      "title": "Call: Dan Cellon and Dena Mottola @ S.O.S. Management & Property Services",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

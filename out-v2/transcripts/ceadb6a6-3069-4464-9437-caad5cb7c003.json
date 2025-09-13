@@ -1,0 +1,36 @@
+{
+  "id": "ceadb6a6-3069-4464-9437-caad5cb7c003",
+  "recording_id": "8853f516-3024-4946-b16d-dc589003efcb",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ceadb6a6-3069-4464-9437-caad5cb7c003",
+      "recording_id": "8853f516-3024-4946-b16d-dc589003efcb",
+      "end_time": 122.34,
+      "start_time": 98.33,
+      "recording_attendee_id": "ac0ad4c0-f590-4483-b622-5f7e7a261be6",
+      "text": "these options press three. Thank you. Again for calling Beacon property management. Hello, and thank you for calling Beacon property management our business hours are from eight AM to five PM if you are calling outside our normal business hours and would like to leave a voicemail press two now. If you know your party's extension you may dial it at any time to use our."
+    },
+    {
+      "id": "ceadb6a6-3069-4464-9437-caad5cb7c003",
+      "recording_id": "8853f516-3024-4946-b16d-dc589003efcb",
+      "end_time": 98.33,
+      "start_time": 0.56,
+      "recording_attendee_id": "ac0ad4c0-f590-4483-b622-5f7e7a261be6",
+      "text": "Hello, and thank you for calling Beacon property management our business hours are from eight AM to five PM if you are calling outside our normal business hours and would like to leave a voicemail press two now. If you know your party's extension you may dial it at any time to use our dial by name directory press one to reach the operator press zero to repeat these options. By using the keys on your touch tone phone. Please enter the first or last name of the party you wish to reach press Star at anytime to return to the main menu. Hello, and thank you for calling Beacon property management our business hours are from eight AM to five PM if you are calling outside our normal business hours and would like to leave a voicemail press two now. If you know your party's extension you may dial it at any time to use our dial by name directory press one to reach the operator press zero to repeat these options press three. Thank you. Again for calling Beacon property management. Hello, and thank you for calling Beacon property management our business hours are from eight AM to five PM if you are calling outside our normal business hours and would like to leave a voicemail press two now. If you know your party's extension you may dial it at any time to use our dial by name directory press one to reach the operator press zero to repeat"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8853f516-3024-4946-b16d-dc589003efcb",
+      "title": "Call: Dan Cellon and Sharron Lambeth @ Beacon Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

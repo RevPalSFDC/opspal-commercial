@@ -1,0 +1,65 @@
+{
+  "id": "8c135d4a-537b-4118-812c-386cba34e566",
+  "recording_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8c135d4a-537b-4118-812c-386cba34e566",
+      "recording_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+      "end_time": 96.42,
+      "start_time": 0.35,
+      "recording_attendee_id": "6b20f354-0939-4881-860e-cc5d5964799f",
+      "order_number": 0,
+      "text": "Thank you for calling Golden please listen to the menu as our options have changed. If you know your party's extension please dial it. Now? If you are a current resident and have an after hours maintenance emergency, please hang up and call one eight hundred eight eight one three nine nine five, if you are a current resident and need to submit a maintenance service request during regular business hours, please press one for leasing information about a commercial property please press two. If you are a current resident. I need to speak with your property manager or if you are calling for apartment availability please choose from the following for Delta N court hurdle homes or the Remington labs, please press three to be connected to Eric records for Delaware Park and surrounding areas. Please press four to be connected to Christine boys for Allentown and ellenwood Village areas. Please press five to be connected to Kim Murry for gate Circle and surrounding areas. Please press six to be connected to Christie are saying if you are a current resident and have questions regarding your account, please press seven to be connected to Kelly for all other inquiries, please press eight to be connected to a member of our staff. Good morning Golden residential how can I help you."
+    },
+    {
+      "id": "8c135d4a-537b-4118-812c-386cba34e566",
+      "recording_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+      "end_time": 99.88,
+      "start_time": 97.39,
+      "recording_attendee_id": "e425116a-54f4-449c-9bed-a3e2ac302df2",
+      "order_number": 1,
+      "text": "Hi is Jeanie Gerardo available please."
+    },
+    {
+      "id": "8c135d4a-537b-4118-812c-386cba34e566",
+      "recording_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+      "end_time": 134.3,
+      "start_time": 100.96,
+      "recording_attendee_id": "6b20f354-0939-4881-860e-cc5d5964799f",
+      "order_number": 2,
+      "text": "I can send you over to her voicemail one moment. Jenny Jerome, he's unavailable. Please leave your message. After the tone when done hang"
+    },
+    {
+      "id": "8c135d4a-537b-4118-812c-386cba34e566",
+      "recording_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+      "end_time": 136.4,
+      "start_time": 134.3,
+      "recording_attendee_id": "6b20f354-0939-4881-860e-cc5d5964799f",
+      "order_number": 3,
+      "text": "up or press the pound key."
+    },
+    {
+      "id": "8c135d4a-537b-4118-812c-386cba34e566",
+      "recording_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+      "end_time": 147.08,
+      "start_time": 138.03,
+      "recording_attendee_id": "e425116a-54f4-449c-9bed-a3e2ac302df2",
+      "order_number": 4,
+      "text": "Hi, Jenny. This is Alyssa. I'm reaching out from rentable. Give me a call back when you get this message two six two three eight three four five six eight thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "39882700-fe0a-45cc-b1eb-751185910bed",
+      "title": "Call: Alyssa Tillich and Genee Giroux @ Gold Wynn Residential Inc.",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

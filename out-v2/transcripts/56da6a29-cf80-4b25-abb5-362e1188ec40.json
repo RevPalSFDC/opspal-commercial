@@ -1,0 +1,76 @@
+{
+  "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+  "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 46,
+      "start_time": 41.05,
+      "recording_attendee_id": "d99c4a59-77f3-421a-9928-21a2e248568b",
+      "text": "Okay, hold on well actually, he's in a meeting can I take a message and have him call you."
+    },
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 121.96,
+      "start_time": 118.21,
+      "recording_attendee_id": "2a962992-dbf4-4614-8fe0-e75ecac00d35",
+      "text": "four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 90.75,
+      "start_time": 50.03,
+      "recording_attendee_id": "d99c4a59-77f3-421a-9928-21a2e248568b",
+      "text": "He does hold on one second. Bruce Ash can't take your call. Now you can leave a message after the tone. When you have finished press the pound key or just hang up."
+    },
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 35.46,
+      "start_time": 0.62,
+      "recording_attendee_id": "d99c4a59-77f3-421a-9928-21a2e248568b",
+      "text": "Hello. Thank you for calling Porsche management company your call has been for to us and if you know the extension of the party you wish to reach please dial it at any time, otherwise please press zero and you will be transferred to the front desk. Thank you very much. Please stay on the line. While your call is transferred to the operator. Thank you for calling Porsche management. This is Natalie how can I help ya."
+    },
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 48.66,
+      "start_time": 46.68,
+      "recording_attendee_id": "2a962992-dbf4-4614-8fe0-e75ecac00d35",
+      "text": "Does he have a voicemail by chance are now?"
+    },
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 118.21,
+      "start_time": 92.23,
+      "recording_attendee_id": "2a962992-dbf4-4614-8fe0-e75ecac00d35",
+      "text": "Hey, Bruce, my name is Mitch barsky. I'm calling with rental I sent you a couple of emails saw that you got on the reason for the call was to set a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads and renters to their property specifically through our partnership up with Facebook and Facebook marketplace want to run by a few options and ideas with you if you could please return my call can Mitch renewal for seven zero eight two eight five three eight three again"
+    },
+    {
+      "id": "56da6a29-cf80-4b25-abb5-362e1188ec40",
+      "recording_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "end_time": 39.67,
+      "start_time": 36.01,
+      "recording_attendee_id": "2a962992-dbf4-4614-8fe0-e75ecac00d35",
+      "text": "Natalie my name is Mitch. I just was calling for Bruce ashbury."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e5d3c43e-b92b-4e9d-bb20-224b6177f3b2",
+      "title": "Call: Mitch  Scarski  and Bruce Ash @ Paul Ash Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

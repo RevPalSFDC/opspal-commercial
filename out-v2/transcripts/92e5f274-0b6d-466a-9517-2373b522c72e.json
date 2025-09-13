@@ -1,0 +1,28 @@
+{
+  "id": "92e5f274-0b6d-466a-9517-2373b522c72e",
+  "recording_id": "f45b580c-b833-456d-a1e7-93d5f5e8b229",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "92e5f274-0b6d-466a-9517-2373b522c72e",
+      "recording_id": "f45b580c-b833-456d-a1e7-93d5f5e8b229",
+      "end_time": 1288.09,
+      "start_time": 1286.8,
+      "recording_attendee_id": null,
+      "text": "And they're outstanding demo."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f45b580c-b833-456d-a1e7-93d5f5e8b229",
+      "title": "ABODO Call: The Current ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-06-09T20:40:10.692000Z",
+      "call_date": "2020-06-09"
+    }
+  }
+}

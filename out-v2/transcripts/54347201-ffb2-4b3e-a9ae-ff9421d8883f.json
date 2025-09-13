@@ -1,0 +1,92 @@
+{
+  "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+  "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 49.64,
+      "start_time": 41.22,
+      "recording_attendee_id": "cbe964c4-0556-45c0-b373-a3560144d3b2",
+      "text": "Alright, maam, yes, can you hear me. Hi, my name is Mitch Garcia. I was calling for Valerie this is Valerie."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 105.93,
+      "start_time": 101.22,
+      "recording_attendee_id": "cbe964c4-0556-45c0-b373-a3560144d3b2",
+      "text": "Do you guys do anything right now to to bring in leads or is it mostly just kind of word of mouth."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 91.88,
+      "start_time": 52.17,
+      "recording_attendee_id": "cbe964c4-0556-45c0-b373-a3560144d3b2",
+      "text": "Okay. Yep. Hi, Valerie, my name is Mitch. I'm with rental. I'm not sure if you've heard of us, but the reason for the call. This afternoon is I'd like to send a meeting with you because we work with a lot of other property management companies in terms of generating them more qualified leads to the property specific."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 122.31,
+      "start_time": 120.99,
+      "recording_attendee_id": "cbe964c4-0556-45c0-b373-a3560144d3b2",
+      "text": "Okay, well, thanks for the call."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 55.52,
+      "start_time": 51.02,
+      "recording_attendee_id": "1c729a4f-8f25-462e-8987-2034b7e43b63",
+      "text": "This is Tracey I'll get her and your name in."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 119.19,
+      "start_time": 107.1,
+      "recording_attendee_id": "1c729a4f-8f25-462e-8987-2034b7e43b63",
+      "text": "Know just people call and looking for looking for places around you know inventory on the line. So I haven't had a vacancy and I can't remember when I mean they're literally ran it before people move out."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 100.69,
+      "start_time": 91.51,
+      "recording_attendee_id": "1c729a4f-8f25-462e-8987-2034b7e43b63",
+      "text": "We we would not be interested we don't ever have any vacancies to be honest with you. We don't really have any need for any advertisement."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 123.67,
+      "start_time": 123.19,
+      "recording_attendee_id": "1c729a4f-8f25-462e-8987-2034b7e43b63",
+      "text": "I think."
+    },
+    {
+      "id": "54347201-ffb2-4b3e-a9ae-ff9421d8883f",
+      "recording_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "end_time": 42.44,
+      "start_time": 0.65,
+      "recording_attendee_id": "1c729a4f-8f25-462e-8987-2034b7e43b63",
+      "text": "Thank you for calling Scott water realty please choose from the following options for our Athens office press one for our mileage Dental office press two for accounts payable. I want to retain. Hello."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b820ba4a-0761-4b6c-84dc-6f9f4348492b",
+      "title": "Call: Mitch  Scarski  and Valerie Wilson @ Skywater Realty",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

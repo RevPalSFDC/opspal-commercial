@@ -1,0 +1,60 @@
+{
+  "recording_id": "07536876-9c63-46db-9d68-e959611c7ea3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "sentences": [
+    {
+      "start_time": 450.31,
+      "end_time": 451.47,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Get",
+          "start_time": 450.31,
+          "end_time": 450.6,
+          "recording_attendee_id": "46b3deaf-0152-4aeb-b94d-19cb59531836"
+        },
+        {
+          "type": "pronunciation",
+          "content": "the",
+          "start_time": 450.6,
+          "end_time": 450.89,
+          "recording_attendee_id": "46b3deaf-0152-4aeb-b94d-19cb59531836"
+        },
+        {
+          "type": "pronunciation",
+          "content": "kids",
+          "start_time": 450.89,
+          "end_time": 451.18,
+          "recording_attendee_id": "46b3deaf-0152-4aeb-b94d-19cb59531836"
+        },
+        {
+          "type": "pronunciation",
+          "content": "today",
+          "start_time": 451.18,
+          "end_time": 451.47,
+          "recording_attendee_id": "46b3deaf-0152-4aeb-b94d-19cb59531836"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "start_time": 451.47,
+          "end_time": 451.76,
+          "recording_attendee_id": "46b3deaf-0152-4aeb-b94d-19cb59531836"
+        }
+      ],
+      "text": "Get the kids today.",
+      "recording_attendee_id": "46b3deaf-0152-4aeb-b94d-19cb59531836"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "07536876-9c63-46db-9d68-e959611c7ea3",
+      "title": null,
+      "platform": null,
+      "media_type": null,
+      "started_recording_at": null,
+      "call_date": null
+    }
+  }
+}

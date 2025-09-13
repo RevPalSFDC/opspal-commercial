@@ -1,0 +1,29 @@
+{
+  "id": "9f87b85a-4fc3-4266-a549-09137a25b191",
+  "recording_id": "6aaa94af-8072-4a2d-9762-67ce63458f82",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9f87b85a-4fc3-4266-a549-09137a25b191",
+      "recording_id": "6aaa94af-8072-4a2d-9762-67ce63458f82",
+      "end_time": 81.39,
+      "start_time": 0.05,
+      "recording_attendee_id": "f905182a-df5e-4af4-8116-f4149c84109b",
+      "order_number": 0,
+      "text": "Thank you for calling being limit. This call may be recorded for quality assurance and training purposes for the dialtone press one for Peter privilege press two for gift Bay court press three for Parker counter press four and for a re press five. Thank you for calling being limit. This call may be recorded for quality assurance and training purposes force dot. Com press one for Peter privilege press two for gift Bay court press three for Parker Tower press four and for a re press five. Thank you for calling Parker towers. We realize that your time is valuable and we will be with you shortly this call may be recorded for quality assurance and training for management press one for leasing press two for lease renewal press three for billing inquiries press four."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6aaa94af-8072-4a2d-9762-67ce63458f82",
+      "title": "Call: Alex Wodarczyk and Jennifer Rubinstein @ Beam Living",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

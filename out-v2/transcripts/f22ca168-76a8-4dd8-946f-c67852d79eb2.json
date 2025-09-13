@@ -1,0 +1,84 @@
+{
+  "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+  "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 149.97,
+      "start_time": 149.31,
+      "recording_attendee_id": "8176307e-2af0-4d9e-a221-cce51ab20d71",
+      "text": "Yep bye."
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 137.47,
+      "start_time": 129.61,
+      "recording_attendee_id": "8176307e-2af0-4d9e-a221-cce51ab20d71",
+      "text": "Yeah. Sure, sounds good"
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 44.4,
+      "start_time": 40.59,
+      "recording_attendee_id": "8176307e-2af0-4d9e-a221-cce51ab20d71",
+      "text": "Hi, my name is Mitch. I just was calling for Sarah pleas."
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 146.63,
+      "start_time": 139.3,
+      "recording_attendee_id": "8176307e-2af0-4d9e-a221-cce51ab20d71",
+      "text": "um, it is four seven zero eight two eight five three."
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 39.02,
+      "start_time": 1.43,
+      "recording_attendee_id": "12778fe0-2cf2-42d6-9ce7-013dab5cc6f3",
+      "text": "Thank you for calling this call may be recorded for training purposes, please hold and someone will be right with you know. It's a great day Premier how can I help you."
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 138.35,
+      "start_time": 137.54,
+      "recording_attendee_id": "12778fe0-2cf2-42d6-9ce7-013dab5cc6f3",
+      "text": "and their number."
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 135.82,
+      "start_time": 45.81,
+      "recording_attendee_id": "12778fe0-2cf2-42d6-9ce7-013dab5cc6f3",
+      "text": "Once I can't and see if she's available. I don't even think she's here one second. Hey, Mitch, I'm actually trying to find her know um, I thought she was outside whenever she comes back and I'll have her call you back"
+    },
+    {
+      "id": "f22ca168-76a8-4dd8-946f-c67852d79eb2",
+      "recording_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "end_time": 149.16,
+      "start_time": 147.78,
+      "recording_attendee_id": "12778fe0-2cf2-42d6-9ce7-013dab5cc6f3",
+      "text": "Okay. No problem have a good day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d714be96-9182-4594-b1a8-1a053b6e5189",
+      "title": "Call: Mitch  Scarski  and Rozelyn Anderson @ Alexander Properties Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -8,7 +8,7 @@ You are auditing a child project's agent configuration. This is a read-only asse
 ## Process
 
 ### 1. Get Target Project
-Ask the user for the path to the target project (e.g., `../ClaudeSFDC`, `../ClaudeHubSpot`).
+Ask the user for the path to the target project (e.g., `../platforms/SFDC`, `../platforms/HS`).
 
 ### 2. Verify Project Structure
 Check that the path:

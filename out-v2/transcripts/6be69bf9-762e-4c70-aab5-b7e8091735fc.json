@@ -1,0 +1,28 @@
+{
+  "id": "6be69bf9-762e-4c70-aab5-b7e8091735fc",
+  "recording_id": "436595c4-d438-49c2-9769-4621c14dfaf4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6be69bf9-762e-4c70-aab5-b7e8091735fc",
+      "recording_id": "436595c4-d438-49c2-9769-4621c14dfaf4",
+      "end_time": 117.61,
+      "start_time": 2.22,
+      "recording_attendee_id": "0bd082e6-3cfc-442d-bfae-f1eb4a4b1bf9",
+      "text": "You have reached Robert integrity. Realty Corporation. There is no one available to take your call at this moment. So please leave a message after the tone or trying to simply stay on the line for a list of pockets extensions Henry manner. Carry one zero six Susan glickman one one zero Jonathan Cowen one three two three one two five, Eric Orange, one one seven Kenny McGill one one six via Vasquez. One two nine, Chris of stat one six five to S D zero. One three four my name is Candy one one five the tenth of June. Oh, one, three five nine Road. This boat one one four and then zero one three three at is Kendra. One zero three, I'll be my new Cherry one zero nine, Nick zilka one three one nation. The roof one zero eight Daniel Baines one two eight. Thank you for calling global. The person that extension one zero zero is unavailable can return to the main menu press Star or to reach an operator press zero or leave a message after the tone when finished hang up or press the pound key for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "436595c4-d438-49c2-9769-4621c14dfaf4",
+      "title": "Call: Dan Cellon and Albert Gabri @ Global Integrity Realty Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

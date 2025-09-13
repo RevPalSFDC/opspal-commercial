@@ -1,0 +1,36 @@
+{
+  "id": "bf48beff-8088-4617-941b-c56b7fd04b1a",
+  "recording_id": "8fa69da4-ff41-4b70-a3a7-0be8829749db",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "bf48beff-8088-4617-941b-c56b7fd04b1a",
+      "recording_id": "8fa69da4-ff41-4b70-a3a7-0be8829749db",
+      "end_time": 107.85,
+      "start_time": 49.53,
+      "recording_attendee_id": "720b1e05-6834-49d0-b74c-03c4a25eda38",
+      "text": "Hey Britney, it's will with about a dot. Com. Hope you're doing well. Um, I don't know if I got sent to Mark is Sam again, um, do you guys email system, but the reset few times since middle of may. I'm last couple of weeks and haven't heard back and you mentioned that he thought they'd have an answer a couple of weeks ago. So I'm just haven't heard back from today's the last day I cannot for that um discounted unlimited special um and also the last they were doing that Amazon gift card special as well. So let me know either way. He knows a lot going on. So I'm don't want to bug you with unnecessary follow, up. So I'm just let me know either way if there's something you guys want to get done today or if you've table the discussion for a while, but I'm looking forward to hearing back from you and hopefully can get you guys on we just brought on casto last week as well. So I'm on a lot of people are starting to take advantage of."
+    },
+    {
+      "id": "bf48beff-8088-4617-941b-c56b7fd04b1a",
+      "recording_id": "8fa69da4-ff41-4b70-a3a7-0be8829749db",
+      "end_time": 47.99,
+      "start_time": 5.36,
+      "recording_attendee_id": "286301c5-f324-4a93-aaec-29085285c988",
+      "text": "Please hold while I try to connect you your call has been forwarded to the voicemail for Brittany Landers. No one is available to take your call at the tone please record your message. When you finished recording you may hang up or press the pound key for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8fa69da4-ff41-4b70-a3a7-0be8829749db",
+      "title": "Call: Will Martin and Brittany Landers",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

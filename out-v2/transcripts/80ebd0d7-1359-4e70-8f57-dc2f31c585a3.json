@@ -1,0 +1,36 @@
+{
+  "id": "80ebd0d7-1359-4e70-8f57-dc2f31c585a3",
+  "recording_id": "157fc47c-8850-487e-abd7-1277a4a576f0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "80ebd0d7-1359-4e70-8f57-dc2f31c585a3",
+      "recording_id": "157fc47c-8850-487e-abd7-1277a4a576f0",
+      "end_time": 142.74,
+      "start_time": 110.43,
+      "recording_attendee_id": "e141db63-41f1-40cc-a83c-0449e6b0ecf1",
+      "text": "you. Call is important to us and will be with you shortly."
+    },
+    {
+      "id": "80ebd0d7-1359-4e70-8f57-dc2f31c585a3",
+      "recording_id": "157fc47c-8850-487e-abd7-1277a4a576f0",
+      "end_time": 110.43,
+      "start_time": 2.46,
+      "recording_attendee_id": "e141db63-41f1-40cc-a83c-0449e6b0ecf1",
+      "text": "Hello, and welcome to Bridge housing. If you know, your party's extension you may dial it at anytime. If this is the service emergency regarding a breach of property, please press one or you may call one eight eight eight three seven two three four nine zero that number once again one eight eight eight three seven two three four nine zero. If you are a current resident and need assistance, please contact your property management office. If you are seeking housing visit us on the web at W W W dot Parish housing dot. Com where you can find a list of properties that are leasing new units. If you have questions regarding your application or waitlist status for a specific property, please contact the leasing or management office for that property directly. If you want to request a list of all Bridge properties. Please call four one five two six seven seven six seven three more information that number again, four one five two six seven seven six seven three for our company directory please press three. If you are trying to reach someone in a P accounting. Please dial extension four zero six six, if you are trying to reach someone and I T please dial extension four thousand. If you are trying to reach someone in Hr, please dial extension three, five zero to you're trying to reach someone and development please dial three, five, one three for all other inquiries please hold for an operator, thank"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "157fc47c-8850-487e-abd7-1277a4a576f0",
+      "title": "Call: Dan Cellon and Miriam Tellez @ Bridge Housing Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "df967ab6-b84d-4200-b1d0-2e5fb8257e0f",
+  "recording_id": "559bcb6b-919b-4173-bebc-3d57b36d66e4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "df967ab6-b84d-4200-b1d0-2e5fb8257e0f",
+      "recording_id": "559bcb6b-919b-4173-bebc-3d57b36d66e4",
+      "end_time": 119.21,
+      "start_time": 88.01,
+      "recording_attendee_id": "4568a65d-48fd-4fc3-95e7-736e77cc75d6",
+      "text": "Hi, Crystal. Good afternoon. My name is Brennan. I'm your rental rep. I know I've sent you a handful of emails. Just wondering if you think Facebook marketplace might be a good fit for you guys to renters where we automate it for a lot of similar management companies, but you might be interested. Give me a ring back get this and you have a free minute and I'd love to chat marketing with you my number is nine two zero two two two one four zero five."
+    },
+    {
+      "id": "df967ab6-b84d-4200-b1d0-2e5fb8257e0f",
+      "recording_id": "559bcb6b-919b-4173-bebc-3d57b36d66e4",
+      "end_time": 82.77,
+      "start_time": 0.35,
+      "recording_attendee_id": "23eb8af5-e748-42f6-9970-3356cfa43746",
+      "text": "Thank you for calling E C M T management. If you know your party's extension please dial it now for a company directory press the pound key otherwise choose from the following for accounts payable dial, one, four, three Asher have one one three Megan Marshall one one for Nathan Johnson. One one Shelly Reagan. One two zero Candice Salazar one zero six Katie Calhoun one zero three Julie Heather Lee one four three Chrystal Fleming. One, one seven Wendy Pickering one zero nine. Please leave your message for Crystal Plumbing."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "559bcb6b-919b-4173-bebc-3d57b36d66e4",
+      "title": "Call: Brennan Waller and +18013632270",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

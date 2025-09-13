@@ -1,0 +1,91 @@
+{
+  "recording_id": "b49424ea-7f7b-472d-b916-2fb64c8ab4b3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "recording_transcription_id": "17b2b536-1f45-4a6c-9854-fd9b123101d6",
+  "language_code": "en-US",
+  "sentences": [
+    {
+      "start_time": 53,
+      "end_time": 53.47,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Hello",
+          "start_time": 53,
+          "end_time": 53.47,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        },
+        {
+          "type": "punctuation",
+          "content": "!",
+          "start_time": 53.47,
+          "end_time": 53.93,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        }
+      ],
+      "text": "Hello!",
+      "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+    },
+    {
+      "start_time": 55.75,
+      "end_time": 56.19,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Back",
+          "start_time": 55.75,
+          "end_time": 56.19,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        },
+        {
+          "type": "punctuation",
+          "content": "!",
+          "start_time": 56.19,
+          "end_time": 56.63,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        }
+      ],
+      "text": "Back!",
+      "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+    },
+    {
+      "start_time": 56.63,
+      "end_time": 57.51,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "What's",
+          "start_time": 56.63,
+          "end_time": 57.07,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        },
+        {
+          "type": "pronunciation",
+          "content": "up",
+          "start_time": 57.07,
+          "end_time": 57.51,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        },
+        {
+          "type": "punctuation",
+          "content": "?",
+          "start_time": 57.51,
+          "end_time": 57.95,
+          "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+        }
+      ],
+      "text": "What's up?",
+      "recording_attendee_id": "0763a8e2-75bf-43b6-adba-0b5ca34b6557"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b49424ea-7f7b-472d-b916-2fb64c8ab4b3",
+      "title": "Z < > Matthew 2025 Renewal Rates",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2025-07-15T19:44:41Z",
+      "call_date": "2025-07-15"
+    }
+  }
+}

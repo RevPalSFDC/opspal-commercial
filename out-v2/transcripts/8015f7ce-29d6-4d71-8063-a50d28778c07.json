@@ -1,0 +1,76 @@
+{
+  "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+  "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 46.55,
+      "start_time": 31.48,
+      "recording_attendee_id": "c6a33998-c830-4275-b798-95045c3216f9",
+      "text": "You have reached the voicemail of having a marketing and train manager for Landon company. Please leave your name and number and I'll get back to you as soon as possible. Thank you. Record your message at the tone when you're finished hang up or stay on the line for further options."
+    },
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 3.8,
+      "start_time": 0.32,
+      "recording_attendee_id": "c6a33998-c830-4275-b798-95045c3216f9",
+      "text": "Good afternoon Linda company. This is Diane can I help you."
+    },
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 125.75,
+      "start_time": 103.91,
+      "recording_attendee_id": "28186c77-f616-4478-aed1-8cb362e6cd9c",
+      "text": "one nine, I don't think I have a current email for you either. I'd love to disconnect and kind of chat for twenty to thirty minutes kind of catch up and introduce myself um. Yeah, again, this is Cameron. I'm the Regional director your principal you could call me back at seven six five seven four eight eight two one nine thanks Scott."
+    },
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 8.34,
+      "start_time": 6.48,
+      "recording_attendee_id": "c6a33998-c830-4275-b798-95045c3216f9",
+      "text": "I'll put you through to his desk. Thank you."
+    },
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 103.91,
+      "start_time": 48.17,
+      "recording_attendee_id": "28186c77-f616-4478-aed1-8cb362e6cd9c",
+      "text": "Hey Kyle, this is Cameron with the rentable sounds like you're the person to replace do. We view over there and landed to um, we actually work with and now over at the associated company where he works out of Detroit. Um, we have several conversations with my with the land and go we're unable to get anything done. But obviously you want to get hurt and now we're partnering with them, but his new employment. So I was hoping that you and I might be able to connect I'm just learning a little bit more about what you guys over there fairly familiar with your work folio, but I know there's things happening all the time, so and I think the last time I spoke with do we already and laugh when you're still waiting to go you guys had a few new bills or projects on Verizon. So just kinda curious, how things are going if you could call me back my phone number is seven six five seven four eight eight two"
+    },
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 5.52,
+      "start_time": 4.47,
+      "recording_attendee_id": "28186c77-f616-4478-aed1-8cb362e6cd9c",
+      "text": "Diane is Kyler."
+    },
+    {
+      "id": "8015f7ce-29d6-4d71-8063-a50d28778c07",
+      "recording_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "end_time": 8.95,
+      "start_time": 8.56,
+      "recording_attendee_id": "28186c77-f616-4478-aed1-8cb362e6cd9c",
+      "text": "You."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9db239d9-4d81-4807-a73a-64c75bde6ef8",
+      "title": "Call: Cameron Youngblood and Kyle Buiter",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -2,8 +2,8 @@
 # Path can be relative (from Claude/) or absolute
 
 projects:
-  - name: ClaudeSFDC
-    path: ../ClaudeSFDC
+  - name: platforms/SFDC
+    path: ../platforms/SFDC
     description: Salesforce automation and metadata management
     status: needs-refactoring
     agent_count: 30+
@@ -12,8 +12,8 @@ projects:
       - Many overlapping responsibilities
       - Candidates for 3-5 focused agents max
   
-  - name: ClaudeHubSpot
-    path: ../ClaudeHubSpot
+  - name: platforms/HS
+    path: ../platforms/HS
     description: HubSpot integration and workflow management
     status: needs-refactoring
     agent_count: 20
@@ -24,7 +24,7 @@ projects:
   
   - name: Agents
     path: ../Agents
-    description: Main RevPal agent system (parent of ClaudeSFDC/HubSpot)
+    description: Main RevPal agent system (parent of platforms/SFDC and platforms/HS)
     status: recently-refactored
     agent_count: 7
     notes: |

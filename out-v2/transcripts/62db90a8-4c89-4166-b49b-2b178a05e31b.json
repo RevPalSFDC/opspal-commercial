@@ -1,0 +1,92 @@
+{
+  "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+  "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 22.83,
+      "start_time": 21.06,
+      "recording_attendee_id": "42f4589c-dbac-4d42-9320-9883af743e1c",
+      "text": "Hi, I am looking to speak with Daniel please."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 38.72,
+      "start_time": 35.39,
+      "recording_attendee_id": "42f4589c-dbac-4d42-9320-9883af743e1c",
+      "text": "What about health dot? Com, maybe oh deal."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 30.96,
+      "start_time": 28.24,
+      "recording_attendee_id": "42f4589c-dbac-4d42-9320-9883af743e1c",
+      "text": "Oh, yes, maam this is Jordan with a boat out dot. Com."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 50.28,
+      "start_time": 43.98,
+      "recording_attendee_id": "42f4589c-dbac-4d42-9320-9883af743e1c",
+      "text": "I think you I I I."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 28.23,
+      "start_time": 24.52,
+      "recording_attendee_id": "c888514e-867c-4169-8c5d-6324068e1591",
+      "text": "Okay, I can check to see if she's available may I ask who's calling."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 46.54,
+      "start_time": 39.88,
+      "recording_attendee_id": "c888514e-867c-4169-8c5d-6324068e1591",
+      "text": "Okay. Thank you so much. Let me place on hold while I check to see if he's available if you want."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 35.5,
+      "start_time": 33.13,
+      "recording_attendee_id": "c888514e-867c-4169-8c5d-6324068e1591",
+      "text": "You said Jordan with I'm sorry, you're breaking up a little bit."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 20.71,
+      "start_time": 2.09,
+      "recording_attendee_id": "c888514e-867c-4169-8c5d-6324068e1591",
+      "text": "Thank you for calling hand of or Midtown this call, maybe monitored or recorded for quality assurance and thank you for calling him over to Tom. My name is Adrian if I could look at."
+    },
+    {
+      "id": "62db90a8-4c89-4166-b49b-2b178a05e31b",
+      "recording_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "end_time": 183.39,
+      "start_time": 88.05,
+      "recording_attendee_id": "c888514e-867c-4169-8c5d-6324068e1591",
+      "text": "I I. I I I I I I I I. Who in? The."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7d87df5a-aadd-4d68-9d61-bd8b36eb329f",
+      "title": "Call: Jordan Wilkins and Loni Burke @ Hanover Company",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

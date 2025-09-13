@@ -1,0 +1,52 @@
+{
+  "id": "3653f97a-1f51-42b1-b7bc-f08f9cf6fa80",
+  "recording_id": "617c053f-255b-4854-a0c4-387fc0db57c3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3653f97a-1f51-42b1-b7bc-f08f9cf6fa80",
+      "recording_id": "617c053f-255b-4854-a0c4-387fc0db57c3",
+      "end_time": 121.75,
+      "start_time": 77.8,
+      "recording_attendee_id": "f0027c2f-6d13-4f59-bbb9-d993aa5bd220",
+      "text": "Hey, Jeff, hope all is well. This is Tyler Ackerman was actually just calling just in regards to the email that I'd sent us to marketing on Facebook marketplace. The rentable. I'm just wanna connect with you real quick on that we actually are running a promotion going right now. So maybe a good time. If it does mine up if you do have some vacancies that you're looking to get filled if you can give me a call back just on my direct mobile or you can shoot me an email back on that same email throughout the night sometime my mobile is actually two five three five one four seven five seven seven and again this is Tyler from rental two five three five one four seven five seven seven thank you."
+    },
+    {
+      "id": "3653f97a-1f51-42b1-b7bc-f08f9cf6fa80",
+      "recording_id": "617c053f-255b-4854-a0c4-387fc0db57c3",
+      "end_time": 19,
+      "start_time": 16.99,
+      "recording_attendee_id": "f0027c2f-6d13-4f59-bbb9-d993aa5bd220",
+      "text": "Hi, I was trying to get in touch with Jeff."
+    },
+    {
+      "id": "3653f97a-1f51-42b1-b7bc-f08f9cf6fa80",
+      "recording_id": "617c053f-255b-4854-a0c4-387fc0db57c3",
+      "end_time": 15.82,
+      "start_time": 0.53,
+      "recording_attendee_id": "b548e1fc-f8c6-4634-b3bc-3b64dda00728",
+      "text": "Thanks for calling the kitchen. If you know, your party's extension dial it now or press zero to be connected to the front desk. Can have to know the kitchen Michelle speaking?"
+    },
+    {
+      "id": "3653f97a-1f51-42b1-b7bc-f08f9cf6fa80",
+      "recording_id": "617c053f-255b-4854-a0c4-387fc0db57c3",
+      "end_time": 76.52,
+      "start_time": 20.07,
+      "recording_attendee_id": "b548e1fc-f8c6-4634-b3bc-3b64dda00728",
+      "text": "Yes to munich. Hi, this is Jeff leave me a message and I'll call you back as soon as I can please leave your message. After the tone when done hang up or press the pound key."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "617c053f-255b-4854-a0c4-387fc0db57c3",
+      "title": "Call: Tyler Ackerman and Jeff Rens @ The Kitchen, Inc",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

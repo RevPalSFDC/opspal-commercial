@@ -1,0 +1,36 @@
+{
+  "id": "3a97d6d8-8a95-42b9-a722-2c40caf2cade",
+  "recording_id": "43941bb2-1108-49ca-919a-8d7bb37d99f6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3a97d6d8-8a95-42b9-a722-2c40caf2cade",
+      "recording_id": "43941bb2-1108-49ca-919a-8d7bb37d99f6",
+      "end_time": 316.21,
+      "start_time": 314.32,
+      "recording_attendee_id": null,
+      "text": "Yeah, it was supposed to not on yet."
+    },
+    {
+      "id": "3a97d6d8-8a95-42b9-a722-2c40caf2cade",
+      "recording_id": "43941bb2-1108-49ca-919a-8d7bb37d99f6",
+      "end_time": 277.34,
+      "start_time": 266.75,
+      "recording_attendee_id": "c38d7bb1-f97c-4c6a-9fc0-5aa51b3e36aa",
+      "text": "Know, I know it's not. Yeah, I don't want him to learn though that doesn't work either."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "43941bb2-1108-49ca-919a-8d7bb37d99f6",
+      "title": "ABODO + Robert Martin Company",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-11-09T15:10:33.281000Z",
+      "call_date": "2020-11-09"
+    }
+  }
+}

@@ -1,0 +1,381 @@
+total 384
+drwxrwxr-x  5 chris chris  4096 Sep  8 19:40 .
+drwxrwxrwx 42 chris chris  4096 Sep  8 19:46 ..
+-rwxrwxr-x  1 chris chris 17804 Sep  7 15:39 agent-analytics.js
+-rwxrwxr-x  1 chris chris 14764 Sep  7 15:35 agent-monitor.js
+-rwxrwxr-x  1 chris chris 13731 Sep  7 15:37 agent-selector.js
+-rw-rw-r--  1 chris chris  4507 Sep  3 11:04 announce-release.js
+-rw-rw-r--  1 chris chris  3416 Sep  5 13:43 auth-full-permissions.js
+-rw-rw-r--  1 chris chris  6784 Sep  3 11:08 check-agent-registration.js
+-rw-rw-r--  1 chris chris  3506 Sep  5 13:19 check-revpal-contents.js
+drwxrwxr-x  2 chris chris  4096 Sep  8 19:40 ci
+-rwxrwxr-x  1 chris chris 16533 Sep  6 19:13 complexity-metrics-dashboard.js
+-rwxrwxr-x  1 chris chris 10739 Sep  6 16:15 configure-filmhub-instance.js
+-rw-rw-r--  1 chris chris 13513 Sep  5 13:07 create-drive-folders.py
+-rw-rw-r--  1 chris chris 23919 Sep  3 11:11 create-release-artifacts.js
+-rw-rw-r--  1 chris chris  4339 Sep  5 13:41 create-revpal-folders.js
+-rwxrwxr-x  1 chris chris  9213 Sep  5 13:59 gdrive-write-access.js
+drwxrwxr-x  2 chris chris  4096 Sep  3 17:33 git
+drwxrwxr-x  2 chris chris  4096 Sep  8 19:41 hubspot
+-rwxrwxr-x  1 chris chris 11830 Sep  6 16:06 hubspot-environment-manager.js
+-rw-rw-r--  1 chris chris  3324 Sep  5 13:17 list-drive-folders.js
+-rw-rw-r--  1 chris chris  5133 Sep  3 11:07 manual-release-notification.js
+-rwxrwxr-x  1 chris chris  6623 Sep  5 07:20 publish-release.sh
+-rw-rw-r--  1 chris chris  2686 Sep  7 12:06 send-release-notification.js
+-rw-rw-r--  1 chris chris  7412 Sep  6 21:52 send-slack-notification.js
+-rw-rw-r--  1 chris chris  2776 Sep  8 08:41 send-slack-release-v261.js
+-rwxrwxr-x  1 chris chris  8440 Sep  5 12:35 setup-gdrive-folders.js
+-rwxrwxr-x  1 chris chris  2326 Sep  6 18:42 setup-hubspot-mcp.sh
+-rwxrwxr-x  1 chris chris  2560 Sep  5 13:20 setup-integration-folders.sh
+-rwxrwxr-x  1 chris chris  7293 Sep  3 08:02 setup-slack-webhook.sh
+-rw-rw-r--  1 chris chris 14577 Sep  7 10:51 sfdc-pre-deployment-validator.js
+-rwxrwxr-x  1 chris chris 12530 Sep  3 08:45 slack-release-notifier.js
+-rwxr-xr-x  1 chris chris  1125 Sep  6 16:15 switch-to-filmhub.sh
+-rwxrwxr-x  1 chris chris 11328 Sep  7 15:34 test-agent-routing.js
+-rwxrwxr-x  1 chris chris 10328 Sep  6 19:08 test-complexity-assessment.js
+-rwxrwxr-x  1 chris chris  4416 Sep  6 19:31 test-complex-merge.js
+-rwxrwxr-x  1 chris chris  5056 Sep  6 19:33 test-control-flags.js
+-rw-rw-r--  1 chris chris  4556 Sep  5 13:24 test-drive-capabilities.js
+-rwxr-xr-x  1 chris chris  1868 Sep  6 16:15 test-filmhub-connection.js
+-rwxrwxr-x  1 chris chris  4959 Sep  5 12:38 test-gdrive-connection.js
+-rwxrwxr-x  1 chris chris  3589 Sep  5 12:04 test-gdrive-integration.sh
+-rwxrwxr-x  1 chris chris  6480 Sep  3 08:40 test-slack-notification.js
+-rwxrwxr-x  1 chris chris  5863 Sep  7 15:27 validate-agents.sh
+-rwxrwxr-x  1 chris chris  2746 Sep  5 13:09 verify-drive-folders.sh
+total 28
+drwxrwxr-x 2 chris chris 4096 Sep  8 19:41 .
+drwxrwxr-x 5 chris chris 4096 Sep  8 19:40 ..
+-rw-rw-r-- 1 chris chris 1825 Sep  8 19:41 apply-migration.js
+-rw-rw-r-- 1 chris chris 1359 Sep  8 19:39 export-state.js
+-rw-rw-r-- 1 chris chris 3967 Sep  8 19:46 preflight.js
+-rw-rw-r-- 1 chris chris  663 Sep  8 19:41 README.md
+-rw-rw-r-- 1 chris chris 1061 Sep  8 19:40 validate-platform.js
+total 12
+drwxrwxr-x 2 chris chris 4096 Sep  8 19:40 .
+drwxrwxr-x 5 chris chris 4096 Sep  8 19:40 ..
+-rw-rw-r-- 1 chris chris  477 Sep  8 19:40 check-oauth.js
+scripts/configure-filmhub-instance.js:31:    updatePortalsConfig() {
+scripts/configure-filmhub-instance.js:47:            authType: 'api_key', // Will update to private_app when PAT is available
+scripts/configure-filmhub-instance.js:64:        // Save updated configuration
+scripts/configure-filmhub-instance.js:66:        console.log('✅ Portals configuration updated');
+scripts/configure-filmhub-instance.js:72:     * Step 2: Update MCP configuration for Filmhub
+scripts/configure-filmhub-instance.js:74:    updateMCPConfig() {
+scripts/configure-filmhub-instance.js:79:        // Update main HubSpot MCP server to support environment switching
+scripts/configure-filmhub-instance.js:105:        console.log('✅ MCP configuration updated');
+scripts/configure-filmhub-instance.js:111:     * Step 3: Create or update .env.template with Filmhub variables
+scripts/configure-filmhub-instance.js:113:    updateEnvTemplate() {
+scripts/configure-filmhub-instance.js:132:        console.log('✅ Environment template updated');
+scripts/configure-filmhub-instance.js:153:# Update active portal in config
+scripts/configure-filmhub-instance.js:304:            this.updatePortalsConfig();
+scripts/configure-filmhub-instance.js:305:            this.updateMCPConfig();
+scripts/configure-filmhub-instance.js:306:            this.updateEnvTemplate();
+scripts/setup-slack-webhook.sh:4:# Slack Webhook Setup Script
+scripts/setup-slack-webhook.sh:6:# Sets up Slack webhook integration for release notifications.
+scripts/setup-slack-webhook.sh:10:#   ./setup-slack-webhook.sh
+scripts/setup-slack-webhook.sh:13:#   1. Help you create an incoming webhook in Slack
+scripts/setup-slack-webhook.sh:26:# Slack Channel ID provided
+scripts/setup-slack-webhook.sh:27:SLACK_CHANNEL_ID="C09D86TQVU5"
+scripts/setup-slack-webhook.sh:37:echo -e "${BLUE}Slack Webhook Setup for ClaudeSFDC${NC}"
+scripts/setup-slack-webhook.sh:48:if grep -q "SLACK_WEBHOOK_URL=" "$ENV_FILE" 2>/dev/null; then
+scripts/setup-slack-webhook.sh:49:    echo -e "${YELLOW}Existing SLACK_WEBHOOK_URL found in .env${NC}"
+scripts/setup-slack-webhook.sh:50:    echo "Do you want to update it? (y/n)"
+scripts/setup-slack-webhook.sh:51:    read -r UPDATE_CHOICE
+scripts/setup-slack-webhook.sh:52:    if [[ "$UPDATE_CHOICE" != "y" ]]; then
+scripts/setup-slack-webhook.sh:54:        EXISTING_URL=$(grep "SLACK_WEBHOOK_URL=" "$ENV_FILE" | cut -d '=' -f2-)
+scripts/setup-slack-webhook.sh:60:    echo -e "${BLUE}To set up Slack notifications, you need to create an incoming webhook.${NC}"
+scripts/setup-slack-webhook.sh:63:    echo "1. Go to: https://api.slack.com/apps"
+scripts/setup-slack-webhook.sh:67:    echo "5. Select the channel with ID: ${SLACK_CHANNEL_ID}"
+scripts/setup-slack-webhook.sh:70:    echo -e "${YELLOW}Please enter your Slack Webhook URL:${NC}"
+scripts/setup-slack-webhook.sh:79:    if [[ ! "$WEBHOOK_URL" =~ ^https://hooks\.slack\.com/services/ ]]; then
+scripts/setup-slack-webhook.sh:81:        echo "URL should start with: https://hooks.slack.com/services/"
+scripts/setup-slack-webhook.sh:93:    grep -v "^SLACK_WEBHOOK_URL=" "$ENV_FILE" > "${ENV_FILE}.tmp" || true
+scripts/setup-slack-webhook.sh:94:    grep -v "^SLACK_CHANNEL=" "${ENV_FILE}.tmp" > "$ENV_FILE" || true
+scripts/setup-slack-webhook.sh:99:echo "SLACK_WEBHOOK_URL=${WEBHOOK_URL}" >> "$ENV_FILE"
+scripts/setup-slack-webhook.sh:100:echo "SLACK_CHANNEL=${SLACK_CHANNEL_ID}" >> "$ENV_FILE"
+scripts/setup-slack-webhook.sh:108:# Slack Integration Configuration
+scripts/setup-slack-webhook.sh:110:# To set up Slack notifications:
+scripts/setup-slack-webhook.sh:111:# 1. Run: ./scripts/setup-slack-webhook.sh
+scripts/setup-slack-webhook.sh:114:# Slack Webhook URL (required)
+scripts/setup-slack-webhook.sh:115:# Get this from: https://api.slack.com/apps > Your App > Incoming Webhooks
+scripts/setup-slack-webhook.sh:116:SLACK_WEBHOOK_URL=
+scripts/setup-slack-webhook.sh:118:# Slack Channel ID (optional - defaults to webhook's configured channel)
+scripts/setup-slack-webhook.sh:120:SLACK_CHANNEL=${SLACK_CHANNEL_ID}
+scripts/setup-slack-webhook.sh:122:# Slack App Credentials (for OAuth - optional)
+scripts/setup-slack-webhook.sh:123:# These are from your Slack app's Basic Information page
+scripts/setup-slack-webhook.sh:124:SLACK_CLIENT_ID=
+scripts/setup-slack-webhook.sh:125:SLACK_CLIENT_SECRET=
+scripts/setup-slack-webhook.sh:126:SLACK_SIGNING_SECRET=
+scripts/setup-slack-webhook.sh:127:SLACK_VERIFICATION_TOKEN=
+scripts/setup-slack-webhook.sh:134:echo -e "${BLUE}Testing Slack webhook connection...${NC}"
+scripts/setup-slack-webhook.sh:137:export SLACK_WEBHOOK_URL="$WEBHOOK_URL"
+scripts/setup-slack-webhook.sh:138:export SLACK_CHANNEL="$SLACK_CHANNEL_ID"
+scripts/setup-slack-webhook.sh:142:const SlackReleaseNotifier = require('./slack-release-notifier.js');
+scripts/setup-slack-webhook.sh:144:const notifier = new SlackReleaseNotifier();
+scripts/setup-slack-webhook.sh:150:    body: 'This is a test notification from the ClaudeSFDC setup script.\n\n✅ Your Slack integration is working correctly!\n\n• Channel ID: C09D86TQVU5\n• Integration is configured\n• Ready to receive release notifications',
+scripts/setup-slack-webhook.sh:169:    echo -e "${GREEN}Check your Slack channel (ID: ${SLACK_CHANNEL_ID}) for the test message.${NC}"
+scripts/setup-slack-webhook.sh:176:    echo "2. The Slack app is properly configured"
+scripts/setup-slack-webhook.sh:191:echo "3. Name: SLACK_WEBHOOK_URL"
+scripts/setup-slack-webhook.sh:211:echo -e "${GREEN}✅ Slack webhook setup complete!${NC}"
+scripts/setup-slack-webhook.sh:214:echo "Your ClaudeSFDC project is now configured to send release notifications to Slack!"
+scripts/setup-slack-webhook.sh:215:echo "Channel ID: ${SLACK_CHANNEL_ID}"
+scripts/setup-slack-webhook.sh:220:echo "3. Or run: node scripts/test-slack-notification.js"
+scripts/send-slack-release-v261.js:6:const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+scripts/send-slack-release-v261.js:9:    console.error('SLACK_WEBHOOK_URL not configured');
+scripts/send-slack-release-v261.js:38:                text: "*🔧 Key Fixes Applied:*\n• Fixed Flow/FlowDefinitionView Tooling API queries\n• Added `--use-tooling-api` flag to all metadata queries\n• Implemented sf → sfdx fallback for describe operations\n• Corrected Status/IsActive field usage in FlowDefinitionView\n• Updated 30+ scripts and modules for API compliance"
+scripts/send-slack-release-v261.js:52:                text: "*📋 Detailed Changes:*\n• 88 files updated\n• Robust error handling added\n• Query performance optimized\n• Deployment stability improved"
+scripts/send-slack-release-v261.js:84:        console.log('✅ Slack notification sent successfully');
+scripts/test-control-flags.js:13:    name: "Simple task with [PLAN_CAREFULLY] flag",
+scripts/test-control-flags.js:14:    task: "[PLAN_CAREFULLY] Create a single custom field on Account",
+scripts/test-control-flags.js:18:    description: "Forces Sequential Thinking even for simple tasks"
+scripts/test-control-flags.js:21:    name: "Simple task with [SEQUENTIAL] flag",
+scripts/test-control-flags.js:22:    task: "[SEQUENTIAL] Update a single validation rule",
+scripts/test-control-flags.js:29:    name: "Complex task with [QUICK_MODE] flag",
+scripts/test-control-flags.js:30:    task: "[QUICK_MODE] Deploy metadata to 8 objects with dependencies",
+scripts/test-control-flags.js:37:    name: "Complex task with [DIRECT] flag",
+scripts/test-control-flags.js:38:    task: "[DIRECT] Merge 12 duplicate records with relationships",
+scripts/test-control-flags.js:45:    name: "Medium task with no flags",
+scripts/test-control-flags.js:46:    task: "Create workflow with 6 steps and conditions",
+scripts/test-control-flags.js:55:function processControlFlags(task, baseComplexity) {
+scripts/test-control-flags.js:56:  const forceSequential = /\[PLAN_CAREFULLY\]|\[SEQUENTIAL\]/i.test(task);
+scripts/test-control-flags.js:57:  const forceDirect = /\[QUICK_MODE\]|\[DIRECT\]/i.test(task);
+scripts/test-control-flags.js:85:async function updateDashboard(scenario, result) {
+scripts/test-control-flags.js:87:    await axios.post('http://localhost:3005/api/update', {
+scripts/test-control-flags.js:89:      task: scenario.task,
+scripts/test-control-flags.js:115:    console.log(`   Task: "${scenario.task}"`);
+scripts/test-control-flags.js:118:    const result = processControlFlags(scenario.task, scenario.baseComplexity);
+scripts/test-control-flags.js:138:    // Update dashboard
+scripts/test-control-flags.js:139:    await updateDashboard(scenario, result);
+scripts/switch-to-filmhub.sh:12:# Update active portal in config
+scripts/slack-release-notifier.js:4: * Slack Release Notifier
+scripts/slack-release-notifier.js:6: * Sends formatted release notifications to Slack when new releases are published.
+scripts/slack-release-notifier.js:10: *   node slack-release-notifier.js --version v1.1.1 --title "Release Title" --body "Release notes" --url "https://github.com/..."
+scripts/slack-release-notifier.js:13: *   SLACK_WEBHOOK_URL - The incoming webhook URL for your Slack workspace
+scripts/slack-release-notifier.js:14: *   SLACK_CHANNEL (optional) - Override default channel
+scripts/slack-release-notifier.js:20:class SlackReleaseNotifier {
+scripts/slack-release-notifier.js:22:        this.webhookUrl = config.webhookUrl || process.env.SLACK_WEBHOOK_URL;
+scripts/slack-release-notifier.js:23:        this.channel = config.channel || process.env.SLACK_CHANNEL;
+scripts/slack-release-notifier.js:28:            throw new Error('SLACK_WEBHOOK_URL is required. Please set it as an environment variable.');
+scripts/slack-release-notifier.js:66:     * Send release notification to Slack
+scripts/slack-release-notifier.js:84:        // Build Slack message
+scripts/slack-release-notifier.js:85:        const message = this.buildSlackMessage({
+scripts/slack-release-notifier.js:98:        // Send to Slack
+scripts/slack-release-notifier.js:99:        return await this.sendToSlack(message);
+scripts/slack-release-notifier.js:103:     * Build formatted Slack message
+scripts/slack-release-notifier.js:105:    buildSlackMessage(data) {
+scripts/slack-release-notifier.js:310:     * Send message to Slack webhook
+scripts/slack-release-notifier.js:312:    async sendToSlack(message) {
+scripts/slack-release-notifier.js:336:                        reject(new Error(`Slack API error: ${res.statusCode} - ${data}`));
+scripts/slack-release-notifier.js:366:        console.error('Usage: node slack-release-notifier.js --version v1.0.0 --title "Title" --body "Body" --url "URL"');
+scripts/slack-release-notifier.js:371:    const notifier = new SlackReleaseNotifier({
+scripts/slack-release-notifier.js:389:        console.log('✅ Slack notification sent successfully!');
+scripts/slack-release-notifier.js:393:        console.error('❌ Failed to send Slack notification:', error.message);
+scripts/slack-release-notifier.js:398:module.exports = SlackReleaseNotifier;
+scripts/manual-release-notification.js:6: * Generates formatted release notification for manual posting to Slack
+scripts/manual-release-notification.js:39:// Generate Slack message for manual posting
+scripts/manual-release-notification.js:40:const slackMessage = `🚀 *MAJOR RELEASE ANNOUNCEMENT* 🚀
+scripts/manual-release-notification.js:76:console.log('Copy this message to post in your Slack channels:');
+scripts/manual-release-notification.js:78:console.log(slackMessage);
+scripts/manual-release-notification.js:164:console.log('📝 Consider setting up the Slack webhook for automated notifications in the future');
+scripts/send-slack-notification.js:11:const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+scripts/send-slack-notification.js:14:  console.error('❌ Error: SLACK_WEBHOOK_URL environment variable not configured');
+scripts/send-slack-notification.js:15:  console.error('Please set SLACK_WEBHOOK_URL in your .env file or environment');
+scripts/send-slack-notification.js:88:              "*Key Updates:*\n" +
+scripts/send-slack-notification.js:191:// Send to Slack
+scripts/send-slack-notification.js:210:      console.log('✅ Slack notification sent successfully!');
+scripts/send-slack-notification.js:211:      console.log('📢 Release announcement posted to Slack channel');
+scripts/send-slack-notification.js:213:      console.error('❌ Slack notification failed:', res.statusCode, data);
+scripts/send-slack-notification.js:219:  console.error('❌ Error sending to Slack:', error.message);
+scripts/complexity-metrics-dashboard.js:32:        lastUpdated: new Date().toISOString()
+scripts/complexity-metrics-dashboard.js:59: * Update metrics with new assessment
+scripts/complexity-metrics-dashboard.js:61:function updateMetrics(assessment) {
+scripts/complexity-metrics-dashboard.js:62:    // Update global metrics
+scripts/complexity-metrics-dashboard.js:76:    metrics.global.lastUpdated = new Date().toISOString();
+scripts/complexity-metrics-dashboard.js:78:    // Update agent-specific metrics
+scripts/complexity-metrics-dashboard.js:104:        task: assessment.taskDescription || 'Unknown task'
+scripts/complexity-metrics-dashboard.js:365:                        <th>Task</th>
+scripts/complexity-metrics-dashboard.js:375:            Auto-refreshing every 5 seconds | Last updated: ${new Date().toLocaleString()}
+scripts/complexity-metrics-dashboard.js:452:        const taskPreview = assessment.task.length > 50 
+scripts/complexity-metrics-dashboard.js:453:            ? assessment.task.substring(0, 50) + '...'
+scripts/complexity-metrics-dashboard.js:454:            : assessment.task;
+scripts/complexity-metrics-dashboard.js:463:                <td>${taskPreview}</td>
+scripts/complexity-metrics-dashboard.js:479:    } else if (req.url === '/api/update' && req.method === 'POST') {
+scripts/complexity-metrics-dashboard.js:485:                updateMetrics(assessment);
+scripts/complexity-metrics-dashboard.js:506:Update Endpoint: POST http://localhost:${PORT}/api/update
+scripts/agent-analytics.js:46:        lastUpdated: new Date().toISOString()
+scripts/agent-analytics.js:61:    this.data.timestamps.lastUpdated = new Date().toISOString();
+scripts/agent-analytics.js:316:      // Update summary
+scripts/agent-analytics.js:371:        action: 'Update CLAUDE.md with better triggers'
+scripts/setup-hubspot-mcp.sh:36:# Update .env with PRIVATE_APP_ACCESS_TOKEN if not already there
+scripts/publish-release.sh:19:SKIP_SLACK=false
+scripts/publish-release.sh:36:    --skip-slack)
+scripts/publish-release.sh:37:      SKIP_SLACK=true
+scripts/publish-release.sh:53:      echo "  --skip-slack       Skip Slack notification"
+scripts/publish-release.sh:180:# Function to send Slack notification
+scripts/publish-release.sh:181:send_slack_notification() {
+scripts/publish-release.sh:182:  if [ "$SKIP_SLACK" = true ]; then
+scripts/publish-release.sh:183:    echo -e "${YELLOW}Skipping Slack notification${NC}"
+scripts/publish-release.sh:187:  echo -e "${YELLOW}Sending Slack notification...${NC}"
+scripts/publish-release.sh:195:  if [ -z "$SLACK_WEBHOOK_URL" ]; then
+scripts/publish-release.sh:196:    echo -e "${YELLOW}Using hardcoded Slack webhook${NC}"
+scripts/publish-release.sh:197:    export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/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"
+scripts/publish-release.sh:200:  # Use the updated send-slack-notification.js script
+scripts/publish-release.sh:201:  node send-slack-notification.js "$VERSION" "$PROJECT_NAME"
+scripts/publish-release.sh:204:    echo -e "${GREEN}✓ Slack notification sent${NC}"
+scripts/publish-release.sh:206:    echo -e "${RED}✗ Slack notification failed${NC}"
+scripts/publish-release.sh:210:# Function to update changelog
+scripts/publish-release.sh:211:update_changelog() {
+scripts/publish-release.sh:223:      echo -e "${YELLOW}Note: Remember to update CHANGELOG.md with $VERSION details${NC}"
+scripts/publish-release.sh:234:# Step 1: Update changelog reminder
+scripts/publish-release.sh:235:update_changelog
+scripts/publish-release.sh:243:# Step 4: Send Slack notification
+scripts/publish-release.sh:244:send_slack_notification
+scripts/agent-monitor.js:58:  'complex task': {
+scripts/agent-monitor.js:61:    message: 'Complex task attempted without planning'
+scripts/agent-monitor.js:86:      lastUpdated: new Date().toISOString()
+scripts/agent-monitor.js:92:    this.metrics.lastUpdated = new Date().toISOString();
+scripts/agent-monitor.js:186:  analyzeComplexity(task, agentUsed) {
+scripts/agent-monitor.js:187:    const complexityScore = this.calculateComplexity(task);
+scripts/agent-monitor.js:191:        task: task.substring(0, 100),
+scripts/agent-monitor.js:193:        recommendation: 'Use sequential-planner for complex tasks'
+scripts/agent-monitor.js:200:  // Calculate task complexity (simplified heuristic)
+scripts/agent-monitor.js:201:  calculateComplexity(task) {
+scripts/agent-monitor.js:216:      if (indicator.pattern.test(task)) {
+scripts/agent-monitor.js:237:    // Send to Slack if configured
+scripts/agent-monitor.js:238:    if (process.env.SLACK_WEBHOOK_URL) {
+scripts/agent-monitor.js:239:      this.sendSlackAlert(alert);
+scripts/agent-monitor.js:264:  // Send Slack alert
+scripts/agent-monitor.js:265:  sendSlackAlert(alert) {
+scripts/agent-monitor.js:278:      execSync(`curl -X POST -H 'Content-type: application/json' --data '${JSON.stringify(message)}' ${process.env.SLACK_WEBHOOK_URL}`, {
+scripts/agent-monitor.js:282:      console.error('Failed to send Slack alert:', error.message);
+scripts/agent-monitor.js:330:      report.recommendations.push('Review missed opportunities and update agent triggers');
+scripts/test-complex-merge.js:5: * This simulates a high-complexity task that should trigger Sequential Thinking
+scripts/test-complex-merge.js:13:  task: "Merge duplicate Salesforce objects with complex dependencies",
+scripts/test-complex-merge.js:17:      'Account', 'Contact', 'Opportunity', 'Case', 'Task', 'Event',
+scripts/test-complex-merge.js:77:async function updateDashboard(scenario, complexity) {
+scripts/test-complex-merge.js:79:    const response = await axios.post('http://localhost:3005/api/update', {
+scripts/test-complex-merge.js:81:      task: scenario.task,
+scripts/test-complex-merge.js:88:    console.log('✅ Dashboard updated:', response.data);
+scripts/test-complex-merge.js:96:  console.log('📋 Scenario:', complexMergeScenario.task);
+scripts/test-complex-merge.js:110:  // Update dashboard
+scripts/test-complex-merge.js:111:  await updateDashboard(complexMergeScenario, complexity);
+scripts/test-complex-merge.js:115:    console.log('🎯 Action: This task would automatically use Sequential Thinking MCP');
+scripts/test-complex-merge.js:122:    console.log('⚡ Action: This task might use Sequential Thinking based on runtime conditions');
+scripts/test-complex-merge.js:124:    console.log('🚀 Action: This task would execute directly without Sequential Thinking');
+scripts/agent-selector.js:5: * Helps users find and invoke the right agent for their task
+scripts/agent-selector.js:23:    tools: ['Task', 'Read', 'Grep', 'Glob', 'Bash(git:*)']
+scripts/agent-selector.js:31:      'Update customer model in all repos',
+scripts/agent-selector.js:35:    tools: ['Task', 'Read', 'Grep', 'Glob', 'Bash(git:*)']
+scripts/agent-selector.js:39:    description: 'Plans complex tasks with unknown scope',
+scripts/agent-selector.js:71:    tools: ['mcp_salesforce', 'mcp_salesforce_metadata_deploy', 'TodoWrite', 'Task']
+scripts/agent-selector.js:143:    tools: ['gdrive', 'salesforce-dx', 'hubspot', 'Read', 'Write', 'Task']
+scripts/agent-selector.js:179:    tools: ['Read', 'Grep', 'Glob', 'Task']
+scripts/agent-selector.js:238:  // Generate Task tool invocation
+scripts/agent-selector.js:243:Task tool invocation:
+scripts/agent-selector.js:315:    console.log('Describe your task, and I\'ll help you find the right agent.\n');
+scripts/agent-selector.js:322:      this.rl.question('Your task: ', async (input) => {
+scripts/hubspot-environment-manager.js:58:            // Install/update HubSpot CLI to latest version
+scripts/hubspot-environment-manager.js:83:        // Update MCP configuration with modern auth
+scripts/hubspot-environment-manager.js:84:        const updatedMCPConfig = {
+scripts/hubspot-environment-manager.js:105:                updatedMCPConfig.mcpServers[`hubspot-${env}`] = {
+scripts/hubspot-environment-manager.js:118:        // Save updated MCP configuration
+scripts/hubspot-environment-manager.js:119:        fs.writeFileSync(this.mcpConfigPath, JSON.stringify(updatedMCPConfig, null, 2));
+scripts/hubspot-environment-manager.js:120:        console.log(`✅ MCP configuration updated for ${environment}`);
+scripts/hubspot-environment-manager.js:122:        return updatedMCPConfig;
+scripts/hubspot-environment-manager.js:126:     * Update environment variables for all configured portals
+scripts/hubspot-environment-manager.js:128:    updateEnvironmentVariables() {
+scripts/hubspot-environment-manager.js:137:            // Update or add access token
+scripts/hubspot-environment-manager.js:141:            envContent = this.updateEnvVar(envContent, tokenKey, portal.accessToken || portal.apiKey || '');
+scripts/hubspot-environment-manager.js:142:            envContent = this.updateEnvVar(envContent, portalIdKey, portal.portalId || '');
+scripts/hubspot-environment-manager.js:149:        envContent = this.updateEnvVar(envContent, 'HUBSPOT_ACCESS_TOKEN', 
+scripts/hubspot-environment-manager.js:151:        envContent = this.updateEnvVar(envContent, 'HUBSPOT_PORTAL_ID', 
+scripts/hubspot-environment-manager.js:153:        envContent = this.updateEnvVar(envContent, 'HUBSPOT_ACTIVE_ENVIRONMENT', activePortal);
+scripts/hubspot-environment-manager.js:156:        console.log('✅ Environment variables updated');
+scripts/hubspot-environment-manager.js:159:    updateEnvVar(content, key, value) {
+scripts/hubspot-environment-manager.js:178:        // Update active portal
+scripts/hubspot-environment-manager.js:185:        // Update environment variables
+scripts/hubspot-environment-manager.js:186:        this.updateEnvironmentVariables();
+scripts/hubspot-environment-manager.js:256:        // Update portal configuration
+scripts/hubspot-environment-manager.js:304:            manager.updateEnvironmentVariables();
+scripts/test-agent-routing.js:112:        input: 'Update customer model across ClaudeSFDC and ClaudeHubSpot',
+scripts/test-agent-routing.js:298:    console.log('  1. Review failed test cases and update CLAUDE.md keywords if needed');
+scripts/send-release-notification.js:9:const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+scripts/send-release-notification.js:13:if (!SLACK_WEBHOOK_URL) {
+scripts/send-release-notification.js:14:    console.error('❌ SLACK_WEBHOOK_URL not configured');
+scripts/send-release-notification.js:72:const webhookUrl = new URL(SLACK_WEBHOOK_URL);
+scripts/send-release-notification.js:85:        console.log(`✅ Slack notification sent for ${PROJECT} ${VERSION}`);
+scripts/create-release-artifacts.js:168:- [ ] Update runbooks for your environment
+scripts/create-release-artifacts.js:291:- [ ] Real-time updates working
+scripts/create-release-artifacts.js:312:- [ ] Property creation/update
+scripts/create-release-artifacts.js:478:- [ ] Support team updated
+scripts/create-release-artifacts.js:479:- [ ] Documentation updated
+scripts/create-release-artifacts.js:484:- [ ] Status page updated
+scripts/create-release-artifacts.js:509:- Documentation updates
+scripts/create-release-artifacts.js:849:### 1. Updates
+scripts/create-release-artifacts.js:851:# Update procedure
+scripts/announce-release.js:6: * Sends release notifications to Slack
+scripts/announce-release.js:12:async function sendSlackNotification(message) {
+scripts/announce-release.js:13:  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+scripts/announce-release.js:15:  if (!webhookUrl || webhookUrl === 'your-slack-webhook-url') {
+scripts/announce-release.js:16:    console.log('⚠️  Slack webhook not configured');
+scripts/announce-release.js:43:          console.log('✅ Slack notification sent successfully!');
+scripts/announce-release.js:46:          console.error('❌ Slack notification failed:', res.statusCode, data);
+scripts/announce-release.js:47:          reject(new Error(`Slack API error: ${res.statusCode}`));
+scripts/announce-release.js:152:sendSlackNotification(releaseMessage)
+scripts/test-slack-notification.js:4: * Test Slack Notification Script
+scripts/test-slack-notification.js:6: * Tests the Slack integration with sample release data.
+scripts/test-slack-notification.js:10: *   node test-slack-notification.js [--real-release]
+scripts/test-slack-notification.js:16:const SlackReleaseNotifier = require('./slack-release-notifier.js');
+scripts/test-slack-notification.js:40:    console.log('🧪 Testing Slack Release Notification...\n');
+scripts/test-slack-notification.js:43:    if (!process.env.SLACK_WEBHOOK_URL) {
+scripts/test-slack-notification.js:44:        console.error('❌ Error: SLACK_WEBHOOK_URL not set');
+scripts/test-slack-notification.js:45:        console.error('Run ./scripts/setup-slack-webhook.sh to configure');
+scripts/test-slack-notification.js:78:            title: '🧪 Test Release: Profile Management & Compliance Update',
+scripts/test-slack-notification.js:81:This is a test of the Slack release notification system for RevPal Agents.
+scripts/test-slack-notification.js:85:• MCP tool compliance updates
+scripts/test-slack-notification.js:115:    console.log('  Channel:', process.env.SLACK_CHANNEL || 'C09D86TQVU5');
+scripts/test-slack-notification.js:119:    const notifier = new SlackReleaseNotifier({
+scripts/test-slack-notification.js:120:        webhookUrl: process.env.SLACK_WEBHOOK_URL,
+scripts/test-slack-notification.js:121:        channel: process.env.SLACK_CHANNEL || 'C09D86TQVU5',
+scripts/test-slack-notification.js:127:    console.log('📤 Sending notification to Slack...');
+scripts/test-slack-notification.js:133:        console.log('✅ Success! Notification sent to Slack');
+scripts/test-slack-notification.js:135:        console.log('Check your Slack channel for the message.');
+scripts/test-slack-notification.js:136:        console.log('Channel ID:', process.env.SLACK_CHANNEL || 'C09D86TQVU5');
+scripts/test-slack-notification.js:144:        console.log('  ✓ Slack API connection established');
+scripts/test-slack-notification.js:153:        console.error('2. Ensure the Slack app has access to channel', process.env.SLACK_CHANNEL || 'C09D86TQVU5');
+scripts/test-slack-notification.js:155:        console.error('4. Run ./scripts/setup-slack-webhook.sh to reconfigure');
+scripts/test-slack-notification.js:185:console.log('Slack Notification Test');
+scripts/test-complexity-assessment.js:38:            task: {
+scripts/test-complexity-assessment.js:47:            task: {
+scripts/test-complexity-assessment.js:57:            task: {
+scripts/test-complexity-assessment.js:58:                description: "Merge 5 duplicate fields on Account object and update validation rules",
+scripts/test-complexity-assessment.js:67:            task: {
+scripts/test-complexity-assessment.js:78:            task: {
+scripts/test-complexity-assessment.js:90:            task: {
+scripts/test-complexity-assessment.js:120:            scenario.task.description += ' [PLAN_CAREFULLY]';
+scripts/test-complexity-assessment.js:122:            scenario.task.description += ' [QUICK_MODE]';
+scripts/test-complexity-assessment.js:126:    const analysis = analyzer.analyzeTask(scenario.task, agentProfile);
+scripts/test-complexity-assessment.js:134:        console.log('\nTask:', JSON.stringify(scenario.task, null, 2));
+scripts/test-complexity-assessment.js:176:    agent.executeDirect = async (task, complexity) => {
+scripts/test-complexity-assessment.js:194:    agent.executePlan = async (plan, task) => {
+scripts/test-complexity-assessment.js:204:        const result = await agent.execute(scenario.task);
+scripts/git/pre-commit-validator.js:57:    /xox[baprs]-[a-zA-Z0-9-]+/g, // Slack tokens
+scripts/git/pre-commit-validator.js:228:                result.types.push('Slack token');
+scripts/git/multi-repo-manager.js:359:  fetch     Fetch updates from all remotes
+scripts/git/multi-repo-manager.js:360:  pull      Pull updates for all repositories
+scripts/git/git-cleanup.sh:4:# Performs maintenance tasks to keep repository clean and optimized
+scripts/git/git-cleanup.sh:242:    # Run cleanup tasks
+scripts/git/smart-git-ops.js:198:            description = `update ${basename} documentation`;
+scripts/git/smart-git-ops.js:200:            description = `update ${basename}`;
+scripts/git/smart-git-ops.js:206:            description = `update ${components[0]} module`;
+scripts/git/smart-git-ops.js:208:            description = `update multiple components`;
+scripts/git/version-bump.sh:74:# Update version in file
+scripts/git/version-bump.sh:75:update_file_version() {
+scripts/git/version-bump.sh:82:        echo -e "${GREEN}✓${NC} Updated $file"
+scripts/git/version-bump.sh:125:    # Update package.json
+scripts/git/version-bump.sh:128:    # Update README.md badge
+scripts/git/version-bump.sh:132:        echo -e "${GREEN}✓${NC} Updated README.md"
+scripts/git/version-bump.sh:135:    # Update other files that might contain version
+scripts/git/version-bump.sh:136:    update_file_version "docs/CHANGELOG.md" "$current_version" "$new_version"
+scripts/git/version-bump.sh:137:    update_file_version ".env.example" "$current_version" "$new_version"
+scripts/git/version-bump.sh:148:- Updated package.json version
+scripts/git/version-bump.sh:149:- Updated README.md badges and references

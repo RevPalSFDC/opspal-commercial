@@ -1,0 +1,36 @@
+{
+  "id": "b6ca72e8-b8aa-4025-b32d-d00d624317ac",
+  "recording_id": "e2ac4356-c7f2-411c-9fc4-71ade7fdf7df",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "b6ca72e8-b8aa-4025-b32d-d00d624317ac",
+      "recording_id": "e2ac4356-c7f2-411c-9fc4-71ade7fdf7df",
+      "end_time": 215.86,
+      "start_time": 192.79,
+      "recording_attendee_id": "c3565886-6727-4068-bfd2-99d5bf063795",
+      "text": "Hi, Corey. This is Mitch rentable. Just was I'm calling in terms of our calls we had set I sent over a link to to join the zoom call. Just was waiting to see if we had trouble getting on if you please. Let me know when you have a moment the best phone number to reach me at would be for seven zero eight two eight five three eight three again Mitch rentable four seven zero eight two eight five three three thanks bye."
+    },
+    {
+      "id": "b6ca72e8-b8aa-4025-b32d-d00d624317ac",
+      "recording_id": "e2ac4356-c7f2-411c-9fc4-71ade7fdf7df",
+      "end_time": 191.4,
+      "start_time": 183.51,
+      "recording_attendee_id": "b9b1b774-0ca1-4b24-ba8e-2754fea70702",
+      "text": "All of our agents are busy helping other customers at the tone, please record your message. When you finished recording you may hang up or press pound for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e2ac4356-c7f2-411c-9fc4-71ade7fdf7df",
+      "title": "Call: Mitch  Scarski  and Qua James @ 87",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

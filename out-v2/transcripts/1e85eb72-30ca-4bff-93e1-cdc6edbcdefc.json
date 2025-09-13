@@ -1,0 +1,43 @@
+{
+  "recording_id": "81f23aec-ea3a-4a5e-bf8c-166488b47442",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "recording_transcription_id": "1e85eb72-30ca-4bff-93e1-cdc6edbcdefc",
+  "language_code": "nl-NL",
+  "sentences": [
+    {
+      "start_time": 141.93,
+      "end_time": 142.13,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Ja",
+          "start_time": 141.93,
+          "end_time": 142.13,
+          "recording_attendee_id": "b3b49fe6-683b-4d66-9ee0-94b245dbc36c"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "recording_attendee_id": "b3b49fe6-683b-4d66-9ee0-94b245dbc36c"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "recording_attendee_id": "b3b49fe6-683b-4d66-9ee0-94b245dbc36c"
+        }
+      ],
+      "text": "Ja..",
+      "recording_attendee_id": "b3b49fe6-683b-4d66-9ee0-94b245dbc36c"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "81f23aec-ea3a-4a5e-bf8c-166488b47442",
+      "title": "Rentable//Avant",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2025-02-28T18:42:17Z",
+      "call_date": "2025-02-28"
+    }
+  }
+}

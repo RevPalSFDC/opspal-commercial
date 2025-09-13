@@ -1,0 +1,84 @@
+{
+  "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+  "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 138.25,
+      "start_time": 120.22,
+      "recording_attendee_id": "25d226d2-1ef7-4112-a7f4-dcff11c3079a",
+      "text": "For a call has been forwarded to an automated voice messaging system Audrey, Sam is not available at the tone please record your message. When you finished recording you may hang up or press one for more options to leave a call back number press five."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 8.9,
+      "start_time": 7.1,
+      "recording_attendee_id": "25d226d2-1ef7-4112-a7f4-dcff11c3079a",
+      "text": "Let me see if she is mask is calling."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 2.69,
+      "start_time": 0.59,
+      "recording_attendee_id": "25d226d2-1ef7-4112-a7f4-dcff11c3079a",
+      "text": "Thank you for calling in to go. This is Noah how can I help you."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 113.17,
+      "start_time": 12.07,
+      "recording_attendee_id": "25d226d2-1ef7-4112-a7f4-dcff11c3079a",
+      "text": "Hold on one second. Looks like he's in a meeting right now. I can send you a voicemail."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 150.53,
+      "start_time": 141.95,
+      "recording_attendee_id": "28f7061a-82de-46bb-a901-4e0bf5b07d6c",
+      "text": "Audrey this is Alyssa reaching out from rentable. Give me a call back when you get this two six two three eight three four five six eight thanks."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 11.31,
+      "start_time": 9.33,
+      "recording_attendee_id": "28f7061a-82de-46bb-a901-4e0bf5b07d6c",
+      "text": "Yep, this is Alyssa Village calling."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 5.9,
+      "start_time": 3.32,
+      "recording_attendee_id": "28f7061a-82de-46bb-a901-4e0bf5b07d6c",
+      "text": "Hey, Noah, it's Audrey Sam available."
+    },
+    {
+      "id": "483fb6dc-2b11-4130-a083-fb2c62e3e928",
+      "recording_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "end_time": 115.56,
+      "start_time": 114.3,
+      "recording_attendee_id": "28f7061a-82de-46bb-a901-4e0bf5b07d6c",
+      "text": "Okay sure thanks."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "041474c9-8cc4-4fc4-b62a-57e411f79034",
+      "title": "Call: Alyssa Tillich and Audrey Stam @ Indigo Real Estate",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

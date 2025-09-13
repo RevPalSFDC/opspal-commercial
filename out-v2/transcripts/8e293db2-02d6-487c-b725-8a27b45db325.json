@@ -1,0 +1,44 @@
+{
+  "id": "8e293db2-02d6-487c-b725-8a27b45db325",
+  "recording_id": "f94c6f62-e6f3-457c-85aa-67f1105c4330",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8e293db2-02d6-487c-b725-8a27b45db325",
+      "recording_id": "f94c6f62-e6f3-457c-85aa-67f1105c4330",
+      "end_time": 144.69,
+      "start_time": 139.5,
+      "recording_attendee_id": "ef526588-95c3-4ccd-9d6f-d13e1f114d53",
+      "text": "Hi, Jenny. This is Alyssa. I'm reaching out from rental. Give me a call back when you get this message my number"
+    },
+    {
+      "id": "8e293db2-02d6-487c-b725-8a27b45db325",
+      "recording_id": "f94c6f62-e6f3-457c-85aa-67f1105c4330",
+      "end_time": 136.43,
+      "start_time": 0.08,
+      "recording_attendee_id": "f7bcae63-1b13-44b5-90a0-a2a180fd22ed",
+      "text": "Thank you for calling the Bellingham and walk them County, house in response to the COVID-19 public health agency. Our offices are open for business, but close to the public until further notice personnel are still available to assist you and people were can be submitted in the drop box at our two. Oh eight Unity Street location waiting list and contact information is also available on our website at W W W dot to Bellingham housing dot org. For spell by name staff directory press zero. Please use your telephone keypad to enter the first two or more letters of the person's first name. Jenny Vinson extension eight four six to complete your call to this person press one to hear the next name press two to repeat the current name. Penny Weinstein extension eight two zero to complete your call to this person press one to hear the next name. Hello, you've reached the desk of Jenny Weinstein director of asset development is a Bellingham walk and County housing authority in response to the COVID-19 public health emergency. The Bellingham welcome County housing authority as offices are open for business close to the public until further notice. Please leave a brief message including your name phone number and reason for your call. I review messages daily and follow up as needed within one business day. Thank you."
+    },
+    {
+      "id": "8e293db2-02d6-487c-b725-8a27b45db325",
+      "recording_id": "f94c6f62-e6f3-457c-85aa-67f1105c4330",
+      "end_time": 148.68,
+      "start_time": 144.69,
+      "recording_attendee_id": "ef526588-95c3-4ccd-9d6f-d13e1f114d53",
+      "text": "to reach me at is two six two three three four five six eight."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f94c6f62-e6f3-457c-85aa-67f1105c4330",
+      "title": "Call: Alyssa Tillich and Jenny Weinstein @ Bellingham & Whatcom County Housing Authority",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "7b0f5730-f7ff-4201-aef2-c0db1afa7fcd",
+  "recording_id": "c7bc3533-feba-4eea-9790-77682c33af7f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7b0f5730-f7ff-4201-aef2-c0db1afa7fcd",
+      "recording_id": "c7bc3533-feba-4eea-9790-77682c33af7f",
+      "end_time": 117.74,
+      "start_time": 116.15,
+      "recording_attendee_id": "99f3afc2-c7bb-418f-922d-76cdf1e50c29",
+      "text": "Hey, my name is Sean Brooke. I'm calling"
+    },
+    {
+      "id": "7b0f5730-f7ff-4201-aef2-c0db1afa7fcd",
+      "recording_id": "c7bc3533-feba-4eea-9790-77682c33af7f",
+      "end_time": 140.45,
+      "start_time": 117.74,
+      "recording_attendee_id": "99f3afc2-c7bb-418f-922d-76cdf1e50c29",
+      "text": "from a company called rentable. I'm not sure who to reach out to but we specialize in marketing and advertising for multifamily properties within your portfolio. I'm glad to further discuss the marketing strategy across Facebook and instagram um, as we can help and these areas to help attract renters for your open vacancies calling back to earliest convenience six, one zero five zero nine three seven six three thanks a lot."
+    },
+    {
+      "id": "7b0f5730-f7ff-4201-aef2-c0db1afa7fcd",
+      "recording_id": "c7bc3533-feba-4eea-9790-77682c33af7f",
+      "end_time": 114.06,
+      "start_time": 0.86,
+      "recording_attendee_id": "8210330a-31f2-49fb-9b96-0e97d2502d08",
+      "text": "Thank you for calling on the return for the management in response to the COVID-19 situation. Our physical office is closed with all staff working remotely. However, working hours will still be Monday through Friday, eight AM to five PM while we are attempting to take a live call. We will experience limitations on that front. However, we are monitoring all mailbox is very closely and receive email Transmissions a voicemail. So it's crucial to leave a message. If you do not receive a live answer for immediate service related to our available rental properties, including requesting a viewing please visit W W W dot my Omni realty dot. Com. You can also submit a contact form. We guarantee a quick response. We strongly encourage you to leave a message and we guarantee your prompt reply. If you know, your party's extension you may dial it at any time for questions about available rental properties press two. Please visit my Omni realty dot. Com to find all the details about available rental to submit an application and the request to viewing. Please note all meeting request must be submitted online. So we can manage them efficiently. If we can help you with anything further. Please leave a message and we will be happy to return your call as quickly as possible to dial another extension press one to leave a voicemail press two or simply fam. Please leave a message after the tone."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c7bc3533-feba-4eea-9790-77682c33af7f",
+      "title": "Call: Shawn Wilk and +16158264436",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

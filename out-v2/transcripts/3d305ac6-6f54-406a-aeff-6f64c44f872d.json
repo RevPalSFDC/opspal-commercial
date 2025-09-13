@@ -1,0 +1,36 @@
+{
+  "id": "3d305ac6-6f54-406a-aeff-6f64c44f872d",
+  "recording_id": "03623981-160d-4c35-a256-4b30859ab217",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3d305ac6-6f54-406a-aeff-6f64c44f872d",
+      "recording_id": "03623981-160d-4c35-a256-4b30859ab217",
+      "end_time": 82.4,
+      "start_time": 1.86,
+      "recording_attendee_id": "8cec8f0f-dab6-4a71-821f-605da8a0c103",
+      "text": "Thank you for calling adaptive realty. Please listen carefully. As some of our menu options have changed. If you are responding to a listing for a new apartment please call the number listed on the ad to speak directly with the leasing consultant you can find all this things at adaptive realty dot. Com. If you are a tenant wishing to place a maintenance request or to follow up on an existing request please press one. If you're a current tenant and I've been working with Eli brand line to make changes to your lease agreement. Please press two to speak with property manager Daniel Garcia, please press three to speak with property manager, Eric salsas, please press four. If you are a vendor calling about an invoice press five or email billing and adaptive realty dot. Com. We're located at three one two one West Temple Street suite B Los Angeles California nine zero zero two six our office hours are nine thirty AM to five thirty PM Monday through Friday. Thank you for calling adaptive realty. Please listen carefully. As some of our menu options have changed if you're responding to a listing for a new apartment please call the number listed on the ad to speak directly with the leasing consultant you can find all this things at adaptive realty dot. Com. If you are a tenant wishing to place the maintenance request or to follow up on an existing request please press one. If you're a current"
+    },
+    {
+      "id": "3d305ac6-6f54-406a-aeff-6f64c44f872d",
+      "recording_id": "03623981-160d-4c35-a256-4b30859ab217",
+      "end_time": 140.45,
+      "start_time": 82.4,
+      "recording_attendee_id": "8cec8f0f-dab6-4a71-821f-605da8a0c103",
+      "text": "tenant and I've been working with Eli brand line to make changes to your lease agreement. Please press two to speak with property manager Daniel Garcia, please press three to speak with property manager, Eric Francis, please press four. If you are a vendor calling about an invoice press five or email billing and adaptive realty dot. Com. Thank you for calling. Please leave a message and your call will be returned."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "03623981-160d-4c35-a256-4b30859ab217",
+      "title": "Call: Dan Cellon and Moses Kagan @ Adaptive Realty",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

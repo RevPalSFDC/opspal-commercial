@@ -1,0 +1,36 @@
+{
+  "id": "04706e45-22c3-4e75-a2cb-abdff344dc07",
+  "recording_id": "26051883-1153-4b2a-9b8c-7020a85dc924",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "04706e45-22c3-4e75-a2cb-abdff344dc07",
+      "recording_id": "26051883-1153-4b2a-9b8c-7020a85dc924",
+      "end_time": 121.7,
+      "start_time": 94.07,
+      "recording_attendee_id": "bca5be2a-114a-4014-9fb7-288d65967dd2",
+      "text": "Hi, Christine, my name is Mitch Garcia. I'm calling with rentable. I sent you a couple of emails and the reason for the call was to set a meeting with you I work for a lot of other property management companies in terms of generating them more qualified leads and renters to the property specifically through our partnership with Facebook and Facebook marketplace wanna run by a few options and ideas with you if you could please return my call again Mitch renewal for seven zero eight two eight five three eight three again four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "04706e45-22c3-4e75-a2cb-abdff344dc07",
+      "recording_id": "26051883-1153-4b2a-9b8c-7020a85dc924",
+      "end_time": 91.15,
+      "start_time": 0.59,
+      "recording_attendee_id": "60eae0d8-4c24-4081-86d4-669c4ab9fcd6",
+      "text": "Thank you for calling Dunlop and muggy property management. Please listen to the following list of extension choice cents by department ending and dial, the extension at any time address and fax six vendor information thirty six front desk ten President Christine Shipley fifteen Vice President and it is a bottle twenty nine C F L. You have reached Chris PM. I am unavailable to take your call. Please leave your name number message and I will return your call. Thank you and have a wonderful day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "26051883-1153-4b2a-9b8c-7020a85dc924",
+      "title": "Call: Mitch  Scarski  and Kristie Amaya @ Dunlap & Magee Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "analysis_timestamp": "2025-09-11T16:34:10.403462+00:00",
+  "date_range": {
+    "start": "2024-09-11T16:33:22.905455+00:00",
+    "end": "2025-09-11T16:33:22.905455+00:00"
+  },
+  "users_analyzed": 19,
+  "metrics": {
+    "num_recordings": 6976,
+    "avg_duration_seconds": 10.33,
+    "avg_file_size_mb": 0.17216666666666666,
+    "total_size_mb": 1201.0346666666667,
+    "total_size_gb": 1.1728854166666667,
+    "api_calls_needed": 13952,
+    "api_time_seconds": 1395.2,
+    "download_time_seconds": 1201.0346666666667,
+    "total_time_seconds": 2596.2346666666667,
+    "total_time_hours": 0.7211762962962963
+  },
+  "sample_recordings": [
+    {
+      "call_id": 314944755,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 7,
+      "created_at": "2025-04-30T16:10:47.822688-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/ccfff4cc-55f2-4e4e-9dee-f8cd3cc05546",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314944336,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 5,
+      "created_at": "2025-04-30T16:09:49.420275-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/c85c06fc-2a44-491f-a079-ba36bc274a62",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314889368,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 11,
+      "created_at": "2025-04-30T14:11:00.755975-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/3783480e-1e66-4b97-8862-3de3ecd35308",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314888657,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 7,
+      "created_at": "2025-04-30T14:09:12.051251-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/dd997275-5803-4812-8b8b-3096bfe25ede",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314854900,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 8,
+      "created_at": "2025-04-30T12:35:39.937614-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/5c2c9d81-1606-4292-a566-993a48918d51",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314854757,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 10,
+      "created_at": "2025-04-30T12:35:18.066034-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/8ac43a92-6c16-4c20-883c-f2f6331b8b9d",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314854469,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 7,
+      "created_at": "2025-04-30T12:34:30.638895-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/9ff2f7c3-284f-48ec-9be5-14a8f1022870",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314854371,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 2,
+      "created_at": "2025-04-30T12:34:16.187044-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/a5964566-7933-4ca0-8513-9969aa9da93d",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314854089,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 7,
+      "created_at": "2025-04-30T12:33:22.808096-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/7570b1e0-e318-4a57-a7b7-ad47f977069b",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314853973,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 13,
+      "created_at": "2025-04-30T12:33:03.103831-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/d7369673-ec1f-4281-8821-7b5752cf6e00",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314853820,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 12,
+      "created_at": "2025-04-30T12:32:38.546843-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/b32b0763-786b-41c4-af96-1783fdc260e9",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314836246,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 10,
+      "created_at": "2025-04-30T11:47:51.331132-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/662f7b1e-d12a-42b7-aa92-7526ef0a6ab3",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314836034,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 9,
+      "created_at": "2025-04-30T11:47:20.630681-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/2a1a5742-a6d9-4fb2-ae99-1a7a0f443826",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314835844,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 11,
+      "created_at": "2025-04-30T11:46:54.854798-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/98fe251b-5115-4744-9849-a369ebd43e1f",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314835554,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 13,
+      "created_at": "2025-04-30T11:46:21.145439-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/7b6977c7-88d7-4063-b254-1e0190f53d1f",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314835376,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 11,
+      "created_at": "2025-04-30T11:45:56.939145-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/865be806-1507-4586-a7c2-5fdd1a8dac4d",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314835099,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 7,
+      "created_at": "2025-04-30T11:45:23.275932-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/c6798c8d-0d87-4816-8f74-43993e516360",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314834970,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 19,
+      "created_at": "2025-04-30T11:45:03.629609-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/fdc7b655-a032-482a-888c-eb572ea0953e",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314814614,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 10,
+      "created_at": "2025-04-30T11:00:23.433567-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/05bd6912-b4f4-4c10-8b6a-eea28f37e3e3",
+      "recording_status": "completed"
+    },
+    {
+      "call_id": 314814455,
+      "user_guid": "70091417-92b0-47c9-84df-2ac10a1357a3",
+      "duration": 11,
+      "created_at": "2025-04-30T11:00:02.289267-04:00",
+      "recording_url": "https://recordings.salesloft.com/c/101314/36438209-7394-461e-bf32-b0f90550f93c",
+      "recording_status": "completed"
+    }
+  ]
+}

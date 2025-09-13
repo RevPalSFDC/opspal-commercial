@@ -1,0 +1,68 @@
+{
+  "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+  "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+      "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "end_time": 117.73,
+      "start_time": 95.38,
+      "recording_attendee_id": "8fa44f25-aeb0-416d-8954-702da129517b",
+      "text": "Yeah, I'm sure my number is four seven zero eight two eight. Five three eight three, um and the reason I was calling was to set a meeting I had Center a few emails."
+    },
+    {
+      "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+      "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "end_time": 128.75,
+      "start_time": 128.15,
+      "recording_attendee_id": "8fa44f25-aeb0-416d-8954-702da129517b",
+      "text": "Thanks."
+    },
+    {
+      "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+      "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "end_time": 55.91,
+      "start_time": 38.63,
+      "recording_attendee_id": "8fa44f25-aeb0-416d-8954-702da129517b",
+      "text": "Hi, my name is Mitch. I just was calling for Kathleen Williams, please. Yeah Mich that's my name for Kathleen Williams please. Yeah."
+    },
+    {
+      "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+      "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "end_time": 127.14,
+      "start_time": 123.05,
+      "recording_attendee_id": "c4b05757-c7ab-41ce-bcf1-f6e0d7d8154e",
+      "text": "I'll let her know you said, so set a meeting gotcha. Okay."
+    },
+    {
+      "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+      "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "end_time": 37.63,
+      "start_time": 1.71,
+      "recording_attendee_id": "c4b05757-c7ab-41ce-bcf1-f6e0d7d8154e",
+      "text": "Thank you for calling call, get management company corporate office our office hours are from nine AM to five PM Monday through Friday, if you were inquiring about an apartment rentals, please press one and you'll be directed to an onsite staff member who can assist you. If you would like to speak with someone here at the corporate office please press two. For mens company."
+    },
+    {
+      "id": "c69e875b-d8b7-47c7-aded-2f2ab90ad71b",
+      "recording_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "end_time": 101.48,
+      "start_time": 43.57,
+      "recording_attendee_id": "c4b05757-c7ab-41ce-bcf1-f6e0d7d8154e",
+      "text": "Yeah who's this. Okay, sorry and for for what exactly. What you said before you? Initially, so apparently she's unavailable if she's in her office. Right now, do you want to leave your number and a little quick message. I'll leave it on her desk for her."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ec4b8b76-1306-45e5-ad68-01383de6e4c4",
+      "title": "Call: Mitch  Scarski  and Kathleen Williams @ Culligan Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

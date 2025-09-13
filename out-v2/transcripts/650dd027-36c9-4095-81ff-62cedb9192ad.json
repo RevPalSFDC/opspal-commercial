@@ -1,0 +1,36 @@
+{
+  "id": "650dd027-36c9-4095-81ff-62cedb9192ad",
+  "recording_id": "6d2b9b20-01a9-44b5-8226-a74aabd97e1a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "650dd027-36c9-4095-81ff-62cedb9192ad",
+      "recording_id": "6d2b9b20-01a9-44b5-8226-a74aabd97e1a",
+      "end_time": 145.25,
+      "start_time": 1.85,
+      "recording_attendee_id": "4fd0f2b1-7a5c-4b9a-8c3f-dbf2e041c56b",
+      "text": "Thank you for calling cover group our office hours are Monday through Friday eight AM to six PM we are located at sixteen nineteen West Garvey Avenue North suite two. Oh one West Covina to inquire about rental availability or career opportunities please visit our website at Caldwell Group. Dot. Com. If you know, the extension you are dialing you may dial it at anytime for Spanish press one to search for a person by their name press two for a listing of our Services or career opportunities press three, you may press zero at any time for the operator or stay on the line for further assistance. Thank you. And have a nice day. Thank you for calling Caldwell group our office hours are Monday through Friday eight AM to six PM we are located at sixteen nineteen West Garvey Avenue North suite two. Oh one West Covina to inquire about rental availability or career opportunities please visit our website at Carla Group. Dot. Com. If you know, the extension you are dialing you may dial it at anytime for Spanish press one to search for a person by their name press two. Please enter the first three letters of the first name. I'm sorry, I could not find anyone please enter the first three letters of the first name. I'm sorry I can. One moment please. Hello, you've reached my time now. I'm not a fan of right now leave your name and phone number I call you back"
+    },
+    {
+      "id": "650dd027-36c9-4095-81ff-62cedb9192ad",
+      "recording_id": "6d2b9b20-01a9-44b5-8226-a74aabd97e1a",
+      "end_time": 146.93,
+      "start_time": 145.25,
+      "recording_attendee_id": "4fd0f2b1-7a5c-4b9a-8c3f-dbf2e041c56b",
+      "text": "as soon as possible. Thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6d2b9b20-01a9-44b5-8226-a74aabd97e1a",
+      "title": "Call: Dan Cellon and Alondra Pajar @ Calvo Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

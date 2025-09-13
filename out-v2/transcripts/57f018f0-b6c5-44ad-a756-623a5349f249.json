@@ -1,0 +1,38 @@
+{
+  "id": "57f018f0-b6c5-44ad-a756-623a5349f249",
+  "recording_id": "b3f8920e-d8aa-41f3-9d57-537b52a65401",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "57f018f0-b6c5-44ad-a756-623a5349f249",
+      "recording_id": "b3f8920e-d8aa-41f3-9d57-537b52a65401",
+      "end_time": 2.24,
+      "start_time": 0.65,
+      "recording_attendee_id": "e78577bf-10b8-4c8e-8909-6ab30b031e4b",
+      "order_number": 0,
+      "text": "There if I circled the loan how may I help you."
+    },
+    {
+      "id": "57f018f0-b6c5-44ad-a756-623a5349f249",
+      "recording_id": "b3f8920e-d8aa-41f3-9d57-537b52a65401",
+      "end_time": 8.1,
+      "start_time": 3.36,
+      "recording_attendee_id": "c3536390-88ee-438f-a170-e606dc6cfa0b",
+      "order_number": 1,
+      "text": "Yeah. Hi, um, I was trying to get connected with the individual that handles marketing."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "b3f8920e-d8aa-41f3-9d57-537b52a65401",
+      "title": "Call: Jordan Culp and Kat McLeod @ Independent",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

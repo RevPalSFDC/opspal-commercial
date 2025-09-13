@@ -1,0 +1,60 @@
+{
+  "id": "2b5cda8b-ad8a-41fb-81e7-c11520aaa455",
+  "recording_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2b5cda8b-ad8a-41fb-81e7-c11520aaa455",
+      "recording_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+      "end_time": 156.79,
+      "start_time": 73.28,
+      "recording_attendee_id": "f2594ba5-5249-4033-9f6d-014720b965f1",
+      "text": "Sure, hold on just second. Hi, this is Greg, I'm unavailable to come to the phone at this time. Please leave your name number and a brief message and I will get back with you as soon as possible. If you need immediate attention zero and go to the operator."
+    },
+    {
+      "id": "2b5cda8b-ad8a-41fb-81e7-c11520aaa455",
+      "recording_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+      "end_time": 174,
+      "start_time": 166.35,
+      "recording_attendee_id": "f4d11f39-e1db-4dcf-9e7b-6640fc35a154",
+      "text": "a call when you get back in the office. Please three one seven seven two zero three two six six and again. This is Jordan with the Moto thank."
+    },
+    {
+      "id": "2b5cda8b-ad8a-41fb-81e7-c11520aaa455",
+      "recording_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+      "end_time": 70.14,
+      "start_time": 0.78,
+      "recording_attendee_id": "f2594ba5-5249-4033-9f6d-014720b965f1",
+      "text": "Thank you for calling stallard and Associates located at twenty, four twenty, five North Meridian Street suite. C Indianapolis Indiana our regular business hours are Monday through Friday from eight thirty AM to five thirty PM to learn more about us and the properties we manage please visit our website at W W W dot stallard online dot. Com. Please choose from the following menu. If you know your party's four, digit extension please enter it now for leasing information please press one. If you are a current resident experiencing a maintenance emergency and are calling after normal business hours. Please press two. If you are a current resident and are calling regarding anything other than to report and after hours maintenance emergency please press three for all other inquiries, please press zero to reach the attendant or to leave a general message. Please wait a moment. Thank you for calling Stella and Associates. This is Philip how may I help you."
+    },
+    {
+      "id": "2b5cda8b-ad8a-41fb-81e7-c11520aaa455",
+      "recording_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+      "end_time": 166.35,
+      "start_time": 159,
+      "recording_attendee_id": "f4d11f39-e1db-4dcf-9e7b-6640fc35a154",
+      "text": "Greg, I didn't think I'd catch you the day before thanksgiving, but I figured I'd give you a ring anyways. This is Jordan cope with a photo. I guess give me"
+    },
+    {
+      "id": "2b5cda8b-ad8a-41fb-81e7-c11520aaa455",
+      "recording_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+      "end_time": 72.68,
+      "start_time": 70.82,
+      "recording_attendee_id": "f4d11f39-e1db-4dcf-9e7b-6640fc35a154",
+      "text": "Hey, I was wondering if Greg was available."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "20adb1b4-8f40-46e0-aace-2f85ed68b55d",
+      "title": "Call: Jordan Culp and Greg Stallard @ Stallard & Associates",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

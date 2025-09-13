@@ -1,0 +1,60 @@
+{
+  "id": "11e63508-9777-4b7a-804c-b8b44231673c",
+  "recording_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "11e63508-9777-4b7a-804c-b8b44231673c",
+      "recording_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+      "end_time": 129.69,
+      "start_time": 127.11,
+      "recording_attendee_id": "28314a04-f6c2-46c3-90b8-b62f1836809e",
+      "text": "pound for further options or simply hang up."
+    },
+    {
+      "id": "11e63508-9777-4b7a-804c-b8b44231673c",
+      "recording_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+      "end_time": 95.37,
+      "start_time": 84.74,
+      "recording_attendee_id": "08189771-c67c-44f2-a014-c34c876a745b",
+      "text": "My name is Mitch mocarski. I just was calling for Betty Morris please. Sure."
+    },
+    {
+      "id": "11e63508-9777-4b7a-804c-b8b44231673c",
+      "recording_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+      "end_time": 94.26,
+      "start_time": 2.11,
+      "recording_attendee_id": "28314a04-f6c2-46c3-90b8-b62f1836809e",
+      "text": "Thank you for calling Ellis Enterprises. If you know your party's extension you may enter it at any time, otherwise please select from one of the following options press one for assistance with a commercial property or rental house press two to be connected with an apartment team member regarding accounts payable press three to be connected with human resources press four for a list of extensions press five. For Chris a Strata press ten for Rosie one eight press twelve for Susan Archer press thirteen for Wendy Wendy press fourteen for Don Ernst press fifteen for Kaplan press sixteen press Star to return to the main menu or zero to reach an attendant. Thank you. Please hold while I transfer your call to that extension. Good morning Allison Enterprises. This is Chris. I'm I help you. Okay Mitch. She is out of the office, but I can go ahead and transfer you over to her voicemail."
+    },
+    {
+      "id": "11e63508-9777-4b7a-804c-b8b44231673c",
+      "recording_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+      "end_time": 157.16,
+      "start_time": 131.51,
+      "recording_attendee_id": "08189771-c67c-44f2-a014-c34c876a745b",
+      "text": "Hi, Betty, my name is Michelle I'm calling from all set, I mean. I ship with Facebook and Facebook marketplace want to run a few options and issues with you if you could please return my call again Mitch rentable four seven zero eight two eight five three eight three again four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "11e63508-9777-4b7a-804c-b8b44231673c",
+      "recording_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+      "end_time": 127.11,
+      "start_time": 95.99,
+      "recording_attendee_id": "28314a04-f6c2-46c3-90b8-b62f1836809e",
+      "text": "Okay. Alright. Thank you have a good day. Hello, you have reached the desk of Betty Morris area supervisor for Ellis Enterprises. I'm sorry, I'm away from my phone at this time or on another line can you please leave your name phone number and a brief message and I'll get back to you just as soon as I can thank you and have a great day. Please speak after the tone. When you are finished recording, you may press"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "8c015660-2ead-4096-b44e-afbd1dd608ea",
+      "title": "Call: Mitch  Scarski  and Betty Morris @ Ellis Enterprises",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

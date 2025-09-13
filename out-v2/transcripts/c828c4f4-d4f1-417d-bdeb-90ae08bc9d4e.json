@@ -1,0 +1,100 @@
+{
+  "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+  "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 14.58,
+      "start_time": 13.38,
+      "recording_attendee_id": "b200f806-eaed-471c-8ca0-1e689e1b4516",
+      "text": "Here name is Joanie."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 104.04,
+      "start_time": 102.48,
+      "recording_attendee_id": "b200f806-eaed-471c-8ca0-1e689e1b4516",
+      "text": "Two one six."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 89.32,
+      "start_time": 85.6,
+      "recording_attendee_id": "b200f806-eaed-471c-8ca0-1e689e1b4516",
+      "text": "Can I get your name and number and will call you back one of the managers."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 117.81,
+      "start_time": 111.05,
+      "recording_attendee_id": "b200f806-eaed-471c-8ca0-1e689e1b4516",
+      "text": "Okay. Okay, I have."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 1.97,
+      "start_time": 0.53,
+      "recording_attendee_id": "b200f806-eaed-471c-8ca0-1e689e1b4516",
+      "text": "The batteries to just carry."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 36.54,
+      "start_time": 15.06,
+      "recording_attendee_id": "7f1d091c-03a6-469c-b6b7-54ceb3b4b10e",
+      "text": "Uh-huh, so maybe I got some bad info um, but maybe you could help me my name is Alex and I'm with rentable just doing some market research and I'm just wanted to get some info regarding you know, how leasing is going from for you guys general occupancy in any kind of lead sources you guys are using at the moment."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 111.35,
+      "start_time": 105.17,
+      "recording_attendee_id": "7f1d091c-03a6-469c-b6b7-54ceb3b4b10e",
+      "text": "Eight five six two one four five nine four five."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 99.42,
+      "start_time": 89.96,
+      "recording_attendee_id": "7f1d091c-03a6-469c-b6b7-54ceb3b4b10e",
+      "text": "Yeah, sure my name is Alex. And my number is eight five six two one four five nine four five."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 121.45,
+      "start_time": 120.67,
+      "recording_attendee_id": "7f1d091c-03a6-469c-b6b7-54ceb3b4b10e",
+      "text": "Okay, thank you."
+    },
+    {
+      "id": "c828c4f4-d4f1-417d-bdeb-90ae08bc9d4e",
+      "recording_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "end_time": 7,
+      "start_time": 3.79,
+      "recording_attendee_id": "7f1d091c-03a6-469c-b6b7-54ceb3b4b10e",
+      "text": "I hear I was hoping to speak with Janice."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "2e5e7521-565b-42ec-b78e-a878ad8e620a",
+      "title": "Call: Alex Rodier and Jonas Augustine @ Trinity Property Consultants",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

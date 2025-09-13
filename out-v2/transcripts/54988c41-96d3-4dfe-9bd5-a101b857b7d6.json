@@ -1,0 +1,28 @@
+{
+  "id": "54988c41-96d3-4dfe-9bd5-a101b857b7d6",
+  "recording_id": "36e9c3aa-8c76-4302-a525-014c1f4ae2b8",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "54988c41-96d3-4dfe-9bd5-a101b857b7d6",
+      "recording_id": "36e9c3aa-8c76-4302-a525-014c1f4ae2b8",
+      "end_time": 122.95,
+      "start_time": 0.35,
+      "recording_attendee_id": "cf8c182a-bdca-4e07-bdd2-54bdf974e7cb",
+      "text": "Thank you for calling Pimco management at Panther properties. If you know your party's extension you may dial it now for a company directory, please dial four, one one or four. Please enter the first few letters of the first or last name of the person you wish to reach for Q you seven. I'm sorry, no names match your entry to cancel and reenter. The name press Star. Please enter the first few letters of the first or last name of. Michael advisor two one five to select is name press pound to hear the next name in the directory press one to cancel be. Two zero two to select this name press pound to hear the next name in the directory press one to get going to the first name Michael advisor, two one five to select is name press pound to hear the next name in the directory press one to cancel the Sentry and reenter a name press Star or press please enter the first few letters of the first or last name of the person you wish to reach for Q you seven for Z use nine to exit from the directory press Star. I'm sorry, no names match. I'm sorry. No names match your entry to cancel and I'm sorry. No names match your entry to cancel and reenter. The name press Star. Please enter the first few letters. I'm sorry, no names match your entry."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "36e9c3aa-8c76-4302-a525-014c1f4ae2b8",
+      "title": "Call: Alex Wodarczyk and Michele Curtis @ Panco Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

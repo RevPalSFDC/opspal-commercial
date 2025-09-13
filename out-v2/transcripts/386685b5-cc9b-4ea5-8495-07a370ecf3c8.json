@@ -1,0 +1,29 @@
+{
+  "id": "386685b5-cc9b-4ea5-8495-07a370ecf3c8",
+  "recording_id": "3ec9d95b-845f-4992-9b00-37e8d6c7bee3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "es-ES",
+  "created_at": "2024-05-03T14:17:43.347Z",
+  "updated_at": "2024-05-03T14:20:22.264Z",
+  "sentences": [
+    {
+      "id": "386685b5-cc9b-4ea5-8495-07a370ecf3c8",
+      "recording_id": "3ec9d95b-845f-4992-9b00-37e8d6c7bee3",
+      "end_time": 392.25,
+      "start_time": 390.93,
+      "recording_attendee_id": "9238734c-d0f1-480f-a69b-9d7e7fdf2887",
+      "order_number": 0,
+      "text": "exclamó La dulce y"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3ec9d95b-845f-4992-9b00-37e8d6c7bee3",
+      "title": "RMS <> ApartmentIQ: Sync",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-05-03T14:18:34Z",
+      "call_date": "2024-05-03"
+    }
+  }
+}

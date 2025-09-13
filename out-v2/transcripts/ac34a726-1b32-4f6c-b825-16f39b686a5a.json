@@ -1,0 +1,29 @@
+{
+  "id": "ac34a726-1b32-4f6c-b825-16f39b686a5a",
+  "recording_id": "186db57f-98ee-4928-b5d9-ebc9c75d2d7f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ac34a726-1b32-4f6c-b825-16f39b686a5a",
+      "recording_id": "186db57f-98ee-4928-b5d9-ebc9c75d2d7f",
+      "end_time": 213.24,
+      "start_time": 0.23,
+      "recording_attendee_id": "2bb1e333-abc7-4f12-b06b-42ebdfc984a8",
+      "order_number": 0,
+      "text": "Thank you for calling Addie real estate for calls regarding New York states emergency rental assistance program for residence with covered related renter rears, please press one to continue in Spanish please press nine for calls regarding maintenance, please press two for calls regarding leasing please press three for calls regarding accounting please press four for calls regarding legal please press five for all other inquiries, please press zero to repeat these menu. For lease renewal press one for our move out press two for at least any inquiries and the boroughs of Manhattan Brooklyn or the Bronx press three for at least an inquiry on the Borough of Queens press four to repeat these menu options press the star key. For a lease renewal press one for our move out press two for at least any inquiries and the boroughs of Manhattan Brooklyn or the Bronx press three for at least an inquiry. Please hold while your call is being connected. You have reached the voicemail system. Please leave a message after the tone. When you have finished please hang up or press the pound key for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "186db57f-98ee-4928-b5d9-ebc9c75d2d7f",
+      "title": "Call: Alex Wodarczyk and Maggie McCormick @ A&E Real Estate",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

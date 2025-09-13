@@ -1,0 +1,38 @@
+{
+  "id": "b1804d01-404f-4f71-8df9-a74e209131bf",
+  "recording_id": "6aa2aafe-ead2-43d4-9d33-9be5b00893d3",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-02-09T15:16:58.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "b1804d01-404f-4f71-8df9-a74e209131bf",
+      "recording_id": "6aa2aafe-ead2-43d4-9d33-9be5b00893d3",
+      "end_time": 20.75,
+      "start_time": 20.3,
+      "recording_attendee_id": "24ef5524-1ea6-49a7-b043-b0154167a40c",
+      "order_number": 0,
+      "text": "Okay."
+    },
+    {
+      "id": "b1804d01-404f-4f71-8df9-a74e209131bf",
+      "recording_id": "6aa2aafe-ead2-43d4-9d33-9be5b00893d3",
+      "end_time": 21.64,
+      "start_time": 21.2,
+      "recording_attendee_id": "24ef5524-1ea6-49a7-b043-b0154167a40c",
+      "order_number": 1,
+      "text": "Cool."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6aa2aafe-ead2-43d4-9d33-9be5b00893d3",
+      "title": "Willow Bridge - Apt IQ Check In",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-02-09T15:12:50Z",
+      "call_date": "2024-02-09"
+    }
+  }
+}

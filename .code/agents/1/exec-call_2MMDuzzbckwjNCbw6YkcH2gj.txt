@@ -1,0 +1,1481 @@
+total 1108
+drwxrwxr-x  52 chris chris  12288 Sep  9 20:38 .
+drwxrwxrwx  45 chris chris   4096 Sep  9 19:50 ..
+-rw-rw-r--   1 chris chris  13475 Sep  6 11:25 AGENT_CATALOG.md
+drwxrwxr-x  10 chris chris   4096 Sep  8 10:43 agents
+-rw-rw-r--   1 chris chris   2631 Sep  3 16:51 AGENTS.md
+-rw-rw-r--   1 chris chris  13094 Aug 24 15:18 agent-tool-analysis.json
+drwxrwxr-x   3 chris chris   4096 Aug 31 11:25 archive
+drwxrwxr-x   4 chris chris   4096 Aug 20 20:43 archives
+-rw-rw-r--   1 chris chris    471 Sep  9 20:06 assessment-error.log
+drwxrwxr-x   6 chris chris   4096 Aug 26 10:42 backup
+-rw-rw-r--   1 chris chris  10040 Sep  9 19:47 BUG_FIX_RELEASE_v2.7.0.md
+drwxrwxr-x   4 chris chris   4096 Aug 31 11:12 .cache
+-rw-rw-r--   1 chris chris   9975 Sep  9 19:48 CHANGELOG.md
+drwxrwxr-x   6 chris chris   4096 Aug 31 12:09 ci-cd
+drwxrwxr-x   6 chris chris   4096 Sep  9 19:58 .claude
+-rw-rw-r--   1 chris chris   9725 Sep  8 10:34 CLAUDE.md
+-rw-rw-r--   1 chris chris  42077 Sep  8 07:49 CLAUDE.md.backup-20250906-112417
+drwxrwxr-x   3 chris chris   4096 Sep  7 09:42 .code
+drwxrwxr-x   3 chris chris   4096 Sep  5 22:11 config
+drwxrwxr-x   3 chris chris   4096 Sep  6 11:08 .config-backups
+drwxrwxr-x   4 chris chris   4096 Aug 31 11:11 data
+drwxrwxr-x   7 chris chris   4096 Aug 20 17:29 data-generation
+-rw-rw-r--   1 chris chris   2294 Sep  6 10:17 docker-compose.yml
+-rw-rw-r--   1 chris chris   1314 Sep  6 10:16 Dockerfile
+drwxrwxr-x   6 chris chris   4096 Sep  9 19:39 docs
+-rw-rw-r--   1 chris chris   8997 Sep  5 21:00 ENHANCEMENT_SUMMARY.md
+-rw-rw-r--   1 chris chris   1401 Sep  5 22:35 .env
+-rw-rw-r--   1 chris chris   2842 Sep  5 22:19 .env.asana.template
+-rw-rw-r--   1 chris chris   1291 Sep  3 07:53 .env.example
+-rw-rw-r--   1 chris chris    531 Sep  4 07:58 .env.sample
+-rw-rw-r--   1 chris chris    923 Aug 29 20:40 .env.template
+drwxrwxr-x  20 chris chris   4096 Aug 24 14:44 error-logging
+drwxrwxr-x   2 chris chris   4096 Sep  6 09:23 examples
+-rw-rw-r--   1 chris chris    125 Sep  9 20:23 execute_assessment.sh
+-rw-rw-r--   1 chris chris   6294 Sep  9 20:29 execute_direct_queries.py
+-rw-rw-r--   1 chris chris  45309 Sep  9 20:16 execute_revops_assessment.py
+drwxrwxr-x   3 chris chris   4096 Aug 26 10:35 force-app
+drwxrwxr-x   9 chris chris   4096 Aug 21 21:23 frameworks
+drwxrwxr-x   9 chris chris   4096 Sep  9 19:44 .git
+drwxrwxr-x   8 chris chris   4096 Aug 29 18:05 .git.backup-20250829-180549
+drwxrwxr-x   3 chris chris   4096 Sep  3 07:50 .github
+-rw-rw-r--   1 chris chris   1938 Sep  5 21:25 .gitignore
+-rw-rw-r--   1 chris chris   8867 Sep  3 17:03 IMPLEMENTATION_SUMMARY.md
+drwxrwxr-x  11 chris chris   4096 Sep  9 16:58 instances
+drwxrwxr-x   2 chris chris   4096 Sep  5 22:28 integration
+drwxrwxr-x   5 chris chris   4096 Aug 24 14:11 knowledge-base
+drwxrwxr-x   2 chris chris   4096 Sep  6 10:11 lib
+-rw-rw-r--   1 chris chris   1075 Aug 19 21:26 LICENSE
+-rw-rw-r--   1 chris chris    510 Sep  9 20:14 list_orgs.sh
+-rwxrwxr-x   1 chris chris    923 Aug 23 16:20 load-env.sh
+drwxrwxr-x   8 chris chris   4096 Sep  7 11:37 logs
+drwxrwxr-x   2 chris chris   4096 Sep  8 09:16 manifest
+-rw-rw-r--   1 chris chris   2261 Aug 19 21:42 .mcp-enhanced.json
+drwxrwxr-x   4 chris chris   4096 Aug 19 22:10 mcp-extensions
+drwxrwxr-x   2 chris chris   4096 Sep  7 10:07 mcp-gpt5-adapter
+-rw-rw-r--   1 chris chris   1594 Sep  3 11:56 .mcp.json
+-rw-rw-r--   1 chris chris    572 Aug 20 14:57 .mcp.json.backup
+drwxrwxr-x   2 chris chris   4096 Aug 23 19:35 mcp-manager
+drwxrwxr-x   4 chris chris   4096 Aug 29 21:59 mcp-tools
+drwxrwxr-x   6 chris chris   4096 Sep  2 20:27 mdapi-convert
+drwxrwxr-x   5 chris chris   4096 Sep  7 11:35 migration-framework
+drwxrwxr-x   2 chris chris   4096 Sep  3 11:56 model-proxy
+drwxrwxr-x   2 chris chris   4096 Sep  5 20:59 monitoring
+-rw-rw-r--   1 chris chris  27860 Sep  9 20:35 neonone-evidence-assessment.txt
+-rw-rw-r--   1 chris chris   3586 Sep  9 20:17 neonone-executive-assessment.json
+-rw-rw-r--   1 chris chris   1446 Sep  9 20:16 neonone-executive-assessment.txt
+-rw-rw-r--   1 chris chris  12613 Sep  9 20:17 neonone_revops_assessment_20250909_201726.json
+-rw-rw-r--   1 chris chris  12241 Sep  9 20:15 neonone_revops_assessment_executive_template.json
+-rw-rw-r--   1 chris chris      0 Sep  9 20:06 neonone-revops-assessment.json
+drwxrwxr-x 252 chris chris  12288 Sep  6 10:01 node_modules
+drwxrwxr-x   5 chris chris   4096 Sep  3 17:55 output
+-rw-rw-r--   1 chris chris   2672 Sep  9 19:50 package.json
+-rw-rw-r--   1 chris chris 118851 Sep  6 10:01 package-lock.json
+-rw-rw-r--   1 chris chris  15189 Aug 31 11:56 README.md
+-rw-rw-r--   1 chris chris   4799 Sep  7 11:46 RELEASE_NOTES_v2.4.0.md
+-rw-rw-r--   1 chris chris   5157 Sep  5 21:05 RELEASE_NOTES_v2.5.0.md
+-rw-rw-r--   1 chris chris   4159 Sep  8 08:33 RELEASE_NOTES_v2.6.1.md
+-rw-rw-r--   1 chris chris   5183 Sep  8 11:42 RELEASE_NOTES_v2.6.2.md
+-rw-rw-r--   1 chris chris  11083 Sep  9 19:45 RELEASE_NOTES_v2.7.0.md
+-rw-rw-r--   1 chris chris   2610 Sep  9 19:56 RELEASE_STATUS_v2.7.0.md
+-rw-rw-r--   1 chris chris   4995 Sep  9 19:50 RELEASE_SUMMARY_v2.7.0.md
+-rw-rw-r--   1 chris chris   1023 Sep  4 07:36 report-diagnostic-2025-09-04.json
+drwxrwxr-x   6 chris chris   4096 Aug 31 11:19 reports
+-rw-rw-r--   1 chris chris    991 Sep  9 19:54 revops-assessment-20250909-195423.json
+-rw-rw-r--   1 chris chris  67410 Sep  9 20:28 revops_assessment_comprehensive.py
+-rw-rw-r--   1 chris chris  18101 Sep  9 20:31 REVOPS_ASSESSMENT_REPORT_NEONONE.md
+-rw-rw-r--   1 chris chris   1365 Sep  9 20:08 run-assessment.py
+-rw-rw-r--   1 chris chris    354 Sep  9 20:29 run_assessment.sh
+-rw-rw-r--   1 chris chris  19591 Sep  9 20:09 run_neonone_assessment.py
+-rw-rw-r--   1 chris chris    802 Sep  9 20:07 run-neonone-assessment.sh
+-rw-rw-r--   1 chris chris  34489 Sep  9 20:23 run_revops_assessment.py
+drwxrwxr-x  15 chris chris  12288 Sep  9 19:51 scripts
+drwxrwxr-x   3 chris chris   4096 Sep  9 19:46 .sf
+drwxrwxr-x   2 chris chris   4096 Aug 19 20:59 .sfdx
+-rw-rw-r--   1 chris chris    154 Aug 20 11:23 sfdx-project.json
+-rw-rw-r--   1 chris chris   2807 Sep  9 19:51 SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md
+-rw-rw-r--   1 chris chris   7550 Sep  9 20:38 SOQL_QUERY_FIXES_SUMMARY.md
+drwxrwxr-x   3 chris chris   4096 Aug 29 16:44 .state
+drwxrwxr-x   2 chris chris   4096 Aug 23 19:43 systemd
+drwxrwxr-x   4 chris chris   4096 Aug 20 20:44 temp
+drwxrwxr-x   6 chris chris   4096 Sep  3 07:31 templates
+drwxrwxr-x   2 chris chris   4096 Sep  2 19:54 test
+-rw-rw-r--   1 chris chris   1265 Sep  9 20:23 test_auth.py
+-rw-rw-r--   1 chris chris   3003 Sep  9 20:13 test_connection.py
+drwxrwxr-x   2 chris chris   4096 Aug 29 22:00 test-data
+-rw-rw-r--   1 chris chris  11157 Sep  2 16:13 test-flexipage-system.js
+-rw-rw-r--   1 chris chris   3812 Sep  2 16:01 test-flexipage-validator.js
+drwxrwxr-x   6 chris chris   4096 Aug 20 17:10 testing
+-rw-rw-r--   1 chris chris    609 Sep  9 20:10 test_neonone_connection.sh
+drwxrwxr-x   2 chris chris   4096 Sep  3 17:03 test-results
+drwxrwxr-x   3 chris chris   4096 Sep  6 09:22 tests
+-rw-rw-r--   1 chris chris 135819 Sep  3 17:03 tool-inventory.json
+-rw-rw-r--   1 chris chris  10598 Sep  8 10:24 TOOL_REFERENCE.md
+drwxrwxr-x   2 chris chris   4096 Sep  5 22:10 utils
+ClaudeSFDC/model-proxy/server.py:167:            if re.search(pattern, task_description, re.IGNORECASE):
+ClaudeSFDC/model-proxy/config.yaml:59:    # SOQL and data operations
+ClaudeSFDC/model-proxy/config.yaml:121:  max_size: "150mb"  # Larger cache for SOQL results
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:233:    async createValidationRule(params) {
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:238:<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:245:</ValidationRule>`;
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:251:            const command = `sf project deploy start --metadata ValidationRule:${params.objectName}.${params.ruleName} --manifest ${fileName}`;
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:271:            throw this.enhanceError(error, { operation: 'createValidationRule', params });
+ClaudeSFDC/mcp-extensions/tools/metadata-tools.js:408:                handler: (args) => this.createValidationRule(args)
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:426:          description: 'SOQL query to execute'
+ClaudeSFDC/mcp-extensions/tools/analytics-tools.js:494:          description: 'SOQL query to analyze'
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:73:    async analyzeValidationRules(params) {
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:94:                    analysis = this.parseValidationRuleOutput(stdout);
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:392:    parseValidationRuleOutput(output) {
+ClaudeSFDC/mcp-extensions/tools/validation-tools.js:431:            analyzeValidationRules: {
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:1:# Bug Fix Release v2.7.0 - Critical Data Integrity & SOQL Fixes
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:11:ClaudeSFDC v2.7.0 addresses critical bugs that were causing data integrity violations and systematic SOQL query failures. This release implements comprehensive safeguards to ensure all data is verified and traceable, while fixing all major query patterns that were failing in production.
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:38:### BUG-002: COUNT(DISTINCT) Query Failures
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:40:**Component**: SOQL Query Engine  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:41:**Root Cause**: SOQL doesn't support COUNT(DISTINCT) syntax  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:45:Error: MALFORMED_QUERY: COUNT(DISTINCT) not supported
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:49:- Query rewriter converts to GROUP BY pattern
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:56:  "SELECT COUNT(DISTINCT AccountId) FROM Opportunity"
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:60:### BUG-003: CASE Statements in Aggregations Failing
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:62:**Component**: SOQL Query Engine  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:63:**Root Cause**: SOQL doesn't support CASE within aggregate functions  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:67:Error: INVALID_FIELD: CASE not supported in aggregate functions
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:78:  "SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity"
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:84:**Component**: SOQL Query Engine  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:85:**Root Cause**: SOQL supports maximum 2 levels of nesting  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:106:**Component**: SOQL Query Engine  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:107:**Root Cause**: DATEADD/DATEDIFF not supported in SOQL  
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:115:- Automatic conversion to date literals
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:184:# Run SOQL validation tests
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:199:#### SOQL Fix Tests
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:200:- [x] COUNT(DISTINCT) queries rewritten successfully
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:201:- [x] CASE in aggregations detected and alternatives provided
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:204:- [x] All fixes produce working SOQL
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:228:# Keep SOQL fixes, revert data integrity
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:329:3. **Missing query validation**: Let invalid SOQL execute
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:382:| COUNT(DISTINCT) | Use GROUP BY |
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:383:| CASE in COUNT | Create formula field |
+ClaudeSFDC/BUG_FIX_RELEASE_v2.7.0.md:385:| DATEADD | Use date literals |
+ClaudeSFDC/RELEASE_STATUS_v2.7.0.md:14:- [x] SOQL Fixes Summary (`SOQL_QUERY_FIXES_SUMMARY.md`)
+ClaudeSFDC/RELEASE_STATUS_v2.7.0.md:16:- [x] SOQL Patterns Library
+ClaudeSFDC/RELEASE_STATUS_v2.7.0.md:26:- [x] SOQL Query Tools created
+ClaudeSFDC/RELEASE_STATUS_v2.7.0.md:75:2. **SOQL Queries**: All major patterns fixed
+ClaudeSFDC/RELEASE_STATUS_v2.7.0.md:97:All teams have been notified via Slack to upgrade immediately to v2.7.0 to resolve critical data integrity issues and SOQL query failures.
+ClaudeSFDC/mcp-extensions/tests/test-runner.js:115:      // Test basic SOQL query
+ClaudeSFDC/CLAUDE.md:211:- Use `WITH SECURITY_ENFORCED` in SOQL
+ClaudeSFDC/CLAUDE.md:261:#### SOQL Date Literals
+ClaudeSFDC/CLAUDE.md:297:- [SOQL/SOSL Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
+ClaudeSFDC/run_assessment.sh:4:echo "This will execute real SOQL queries to gather evidence-based data."
+ClaudeSFDC/mcp-tools/picklist-validator.js:26:     * Execute SOQL query
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:12:**⚠️ IMPORTANT**: This assessment requires live SOQL query execution against the neonone Salesforce instance. The queries below must be executed directly in your Salesforce environment to gather real data.
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:29:## REQUIRED SOQL QUERIES FOR EVIDENCE GATHERING
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:100:SELECT AccountId, Account.Name, COUNT(Id) OppCount, 
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:106:GROUP BY AccountId, Account.Name
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:156:FROM ValidationRule
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:197:       COUNT(Id) RecordCount
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:200:GROUP BY CreatedBy.Name, CreatedBy.Profile.Name, CreatedBy.UserRole.Name
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:201:HAVING COUNT(Id) > 0
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:202:ORDER BY COUNT(Id) DESC
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:207:       COUNT(Id) RecordCount, SUM(Amount) TotalAmount, AVG(Amount) AvgAmount
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:210:GROUP BY Owner.Name, Owner.Profile.Name, Owner.UserRole.Name
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:211:HAVING COUNT(Id) > 0
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:348:SELECT Name, Website, COUNT(Id) DupeCount
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:352:GROUP BY Name, Website
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:353:HAVING COUNT(Id) > 1
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:354:ORDER BY COUNT(Id) DESC
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:358:SELECT Email, COUNT(Id) DupeCount
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:362:GROUP BY Email
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:363:HAVING COUNT(Id) > 1
+ClaudeSFDC/REVOPS_ASSESSMENT_REPORT_NEONONE.md:364:ORDER BY COUNT(Id) DESC
+ClaudeSFDC/mcp-tools/test-mcp-connection.js:34:        // Test 3: Simple SOQL query
+ClaudeSFDC/mcp-tools/test-mcp-connection.js:35:        console.log('\n3. Testing SOQL query...');
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:619:- "Configure model settings for Salesforce" or "Optimize models for SOQL"
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:633:- `/optimize-soql` - Configure models for SOQL queries
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:644:- **SOQL Optimization**: "Use fast models for SOQL queries"
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:781:4. Use WITH SECURITY_ENFORCED in SOQL queries
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:1050:- [SOQL and SOSL Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
+ClaudeSFDC/test/agent-calibration-tests.js:218:            assert.ok(preservation.includes('existingValidationRules'), 'Validation rules must be preserved');
+ClaudeSFDC/migration-framework/docs/MIGRATION_STANDARDS.md:30:SELECT COUNT(Id) SourceCount FROM SourceObject__c
+ClaudeSFDC/migration-framework/docs/MIGRATION_STANDARDS.md:31:SELECT COUNT(Id) TargetCount FROM TargetObject__c WHERE MigrationId__c != null
+ClaudeSFDC/migration-framework/docs/MIGRATION_STANDARDS.md:69:-- Flow versions (Tooling): list active DeveloperNames via Definition relationship
+ClaudeSFDC/knowledge-base/README.md:274:SELECT agent_name, COUNT(*) as learnings, AVG(confidence_delta) as improvement
+ClaudeSFDC/knowledge-base/README.md:276:GROUP BY agent_name;
+ClaudeSFDC/mcp-tools/record-type-wrapper.js:177:            useToolingApi: true
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:39:| Records migrated | 60 | COUNT() comparison |
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:47:SELECT COUNT(*) FROM OldObject__c;  -- Returns: 100
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:50:SELECT COUNT(*) FROM NewObject__c 
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:297:    (SELECT COUNT(*) FROM NewObject__c WHERE MigrationId__c != null) as Migrated,
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:298:    (SELECT COUNT(*) FROM OldObject__c) as Total,
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:299:    ROUND(((SELECT COUNT(*) FROM NewObject__c WHERE MigrationId__c != null) * 100.0 / 
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:300:           (SELECT COUNT(*) FROM OldObject__c)), 2) as Score
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:305:Integer totalFlows = [SELECT COUNT() FROM Flow WHERE Status = 'Active' AND Definition LIKE '%OldObject%'];
+ClaudeSFDC/migration-framework/docs/MIGRATION_SCORING_SYSTEM.md:306:Integer updatedFlows = [SELECT COUNT() FROM Flow WHERE Status = 'Active' AND Definition LIKE '%NewObject%'];
+ClaudeSFDC/integration/create-business-unit-tasks.js:292:- **SOQL Queries**: 1 query to check existing Opportunity
+ClaudeSFDC/integration/create-business-unit-tasks.js:382:#### SOQL Considerations:
+ClaudeSFDC/integration/create-business-unit-tasks.js:430:- **Resource Usage**: Minimal SOQL/DML consumption
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:1:# SOQL Query Fixes Implementation Summary
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:3:## Complete SOQL Syntax Issues Inventory
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:7:#### 1. ValidationRule Object Query Issue
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:8:**Error**: `sObject type 'ValidationRule' is not supported`
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:9:**Root Cause**: ValidationRule is a Tooling API object, not available in standard SOQL
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:17:#### 3. CASE Statements in Aggregations
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:18:**Error**: CASE not supported in SOQL aggregations (4 failures)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:19:**Root Cause**: SOQL doesn't support CASE within COUNT/SUM
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:22:#### 4. COUNT(DISTINCT) Operations
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:23:**Error**: COUNT(DISTINCT field) not supported (3 failures)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:24:**Root Cause**: SOQL limitation on distinct counting
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:25:**Fix**: Use GROUP BY with post-processing or separate queries
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:29:**Root Cause**: SOQL has strict nesting limits
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:34:**Root Cause**: Can't do date math directly in SOQL
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:35:**Fix**: Use date literals (LAST_N_DAYS, THIS_MONTH, etc.)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:41:#### 1. **SOQL Query Rewriter** (`scripts/soql-query-rewriter.js`)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:42:- Automatically detects and rewrites problematic SOQL patterns
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:46:#### 2. **SOQL Validator** (`scripts/soql-validator.js`)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:51:#### 3. **SOQL Patterns Library** (`docs/SOQL_PATTERNS_LIBRARY.md`)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:56:#### 4. **Error Prevention Guide** (`docs/SOQL_ERROR_PREVENTION_GUIDE.md`)
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:63:### 1. CASE Statements in Aggregations
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:67:SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:73:- ✅ GROUP BY pattern: Group by Status and process results
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:77:### 2. COUNT(DISTINCT) Not Supported
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:81:SELECT COUNT(DISTINCT AccountId) FROM Opportunity
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:85:- ✅ GROUP BY alternative: `SELECT AccountId FROM Opportunity GROUP BY AccountId` then count results
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:121:# Test 1: CASE in aggregation - ✅ DETECTED
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:122:node soql-validator.js "SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity"
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:123:> Error: CASE in aggregation not supported
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:125:# Test 2: COUNT(DISTINCT) - ✅ DETECTED  
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:126:node soql-validator.js "SELECT COUNT(DISTINCT AccountId) FROM Opportunity"
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:127:> Error: COUNT(DISTINCT) not supported
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:142:# Working SOQL generated or clear instructions given
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:149:// Wrapper for safe SOQL execution
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:152:async function executeSafeSOQL(query) {
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:161:# Validate all SOQL queries in changed files
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:188:- 4+ CASE statement failures
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:189:- 3+ COUNT(DISTINCT) failures
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:201:- ✅ Zero tolerance for preventable SOQL errors
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:215:- `/ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md` - Pattern documentation
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:216:- `/ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md` - Complete guide
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:224:The SOQL query error prevention framework successfully addresses all identified failure patterns:
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:226:1. **CASE in aggregations** → Formula fields or multiple queries
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:227:2. **COUNT(DISTINCT)** → GROUP BY or Apex Sets
+ClaudeSFDC/SOQL_QUERY_FIXES_SUMMARY.md:231:All tools are tested, documented, and ready for immediate deployment. The framework provides both automated fixes and manual workarounds, ensuring zero preventable SOQL failures going forward.
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:48:sf data query --query "SELECT COUNT() FROM FieldHistory WHERE ParentId = 'Subscription__c'" --use-tooling-api
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:76:**Root Cause**: Incorrect Apex syntax and SOQL limitations
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:131:**Root Cause**: Incorrect field names for Tooling API objects
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:136:- ✅ **Gap in Sub-agents**: Should know Tooling API schema
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:168:    sf data query --query "SELECT COUNT() FROM FieldHistory WHERE ParentId = '$1'" --use-tooling-api
+ClaudeSFDC/migration-framework/docs/MIGRATION_RETROSPECTIVE.md:186:- Understand SOQL subquery limitations
+ClaudeSFDC/tool-inventory.json:593:        "SOQL queries",
+ClaudeSFDC/tool-inventory.json:2202:        "fixSOQLQuery"
+ClaudeSFDC/tool-inventory.json:2204:      "description": "Quick SOQL Query Fixer"
+ClaudeSFDC/tool-inventory.json:3060:      "description": "SOQL Query Builder for Salesforce MCP Tools"
+ClaudeSFDC/tool-inventory.json:3164:      "description": "Test script to demonstrate date formatting fix for SOQL queries"
+ClaudeSFDC/tool-inventory.json:3403:        "SOQL queries",
+ClaudeSFDC/tool-inventory.json:4499:      "capability": "SOQL queries",
+ClaudeSFDC/tool-inventory.json:5005:          "capability": "SOQL queries",
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:317:            // Check 2: SOQL queryable
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:318:            verification.checks.soqlQueryable = await this.checkSOQLQueryable();
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:349:     * Check if field is SOQL queryable
+ClaudeSFDC/frameworks/field-management/FieldCreator.js:351:    async checkSOQLQueryable() {
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:7:We've just released **ClaudeSFDC v2.7.0**, a critical bug fix release that addresses data integrity issues and SOQL query failures. **All teams should upgrade immediately.**
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:16:#### SOQL Query Failures ✅
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:17:- **FIXED**: COUNT(DISTINCT) errors - now automatically converted to GROUP BY
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:18:- **FIXED**: CASE statements in aggregations - suggests formula fields
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:20:- **FIXED**: Date calculation functions - converts to SOQL date literals
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:26:3. **Query Validation**: Pre-execution checks prevent SOQL errors
+ClaudeSFDC/SLACK_RELEASE_ANNOUNCEMENT_v2.7.0.md:72:- [SOQL Patterns Library](./docs/SOQL_PATTERNS_LIBRARY.md)
+ClaudeSFDC/knowledge-base/schemas/knowledge-database.sql:172:    COUNT(ut.id) as recent_usage_count,
+ClaudeSFDC/knowledge-base/schemas/knowledge-database.sql:178:GROUP BY ke.entry_id
+ClaudeSFDC/knowledge-base/schemas/knowledge-database.sql:195:    COUNT(*) as total_learnings,
+ClaudeSFDC/knowledge-base/schemas/knowledge-database.sql:200:GROUP BY agent_name;
+ClaudeSFDC/migration-framework/scripts/pre-migration-discovery.apex:23:    Integer recordCount = Database.countQuery('SELECT COUNT() FROM ' + SOURCE_OBJECT_API);
+ClaudeSFDC/migration-framework/scripts/pre-migration-discovery.apex:28:        Integer activeCount = Database.countQuery('SELECT COUNT() FROM ' + SOURCE_OBJECT_API + ' WHERE IsDeleted = false');
+ClaudeSFDC/migration-framework/scripts/pre-migration-discovery.apex:73:    // Note: This requires Tooling API access
+ClaudeSFDC/migration-framework/scripts/pre-migration-discovery.apex:166:    Integer reportCount = [SELECT COUNT() FROM Report LIMIT 1];  // Can't filter by object easily
+ClaudeSFDC/migration-framework/scripts/pre-migration-discovery.apex:201:System.debug('Record Count: Run SELECT COUNT() for exact number');
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:232:                       COUNT(ut.id) as usage_count_recent,
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:262:            sql += ` GROUP BY ke.entry_id ORDER BY ke.confidence_score DESC, usage_count_recent DESC LIMIT ?`;
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:625:                'SELECT COUNT(*) as count FROM knowledge_entries WHERE deprecated = FALSE'
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:630:                SELECT entry_type, COUNT(*) as count 
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:633:                GROUP BY entry_type
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:638:                SELECT COUNT(*) as count 
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:645:                SELECT ke.name, ke.entry_type, COUNT(ut.id) as usage_count
+ClaudeSFDC/knowledge-base/knowledge-base-manager.js:649:                GROUP BY ke.entry_id
+ClaudeSFDC/frameworks/revops-framework/metadata/fields.json:271:      "formula": "CASE(TEXT(Billing_Frequency__c), \"Monthly\", Unit_Price__c * Quantity__c * 12, \"Quarterly\", Unit_Price__c * Quantity__c * 4, Unit_Price__c * Quantity__c)",
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:5:This patch release resolves critical issues with Salesforce Tooling API queries and improves the robustness of metadata operations.
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:10:- **Flow (Tooling API)** - Use when TriggerType or Status required:
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:15:- **FlowDefinitionView (Tooling API)** - Use for ApiName/IsActive:
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:20:- Added/fixed `--use-tooling-api` flag wherever querying Tooling objects:
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:22:  - ValidationRule
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:42:  - Implemented proper Tooling API query
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:46:  - ValidationRule/Object/FieldDefinition queries now use --use-tooling-api
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:53:Updated the following scripts to use proper Tooling API for Layout queries:
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:69:  - Implemented safe Flow active count heuristic via Tooling API
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:78:  - Already properly configured for Tooling API
+ClaudeSFDC/RELEASE_NOTES_v2.6.1.md:100:- Incorrect Tooling API queries
+ClaudeSFDC/CHANGELOG.md:13:- **HIGH**: Fixed COUNT(DISTINCT) not supported in SOQL errors
+ClaudeSFDC/CHANGELOG.md:14:- **HIGH**: Fixed CASE statements in aggregation failures
+ClaudeSFDC/CHANGELOG.md:26:- **SOQL Query Tools**
+ClaudeSFDC/CHANGELOG.md:27:  - SOQL query rewriter (`scripts/soql-query-rewriter.js`)
+ClaudeSFDC/CHANGELOG.md:28:  - SOQL validator with pre-execution checks (`scripts/soql-validator.js`)
+ClaudeSFDC/CHANGELOG.md:29:  - SOQL patterns library (`docs/SOQL_PATTERNS_LIBRARY.md`)
+ClaudeSFDC/CHANGELOG.md:30:  - Error prevention guide (`docs/SOQL_ERROR_PREVENTION_GUIDE.md`)
+ClaudeSFDC/CHANGELOG.md:50:- Fixed CASE statements not working in COUNT, SUM aggregations
+ClaudeSFDC/CHANGELOG.md:51:- Fixed COUNT(DISTINCT) query failures with GROUP BY alternatives
+ClaudeSFDC/CHANGELOG.md:59:- Added comprehensive SOQL patterns library with working alternatives
+ClaudeSFDC/CHANGELOG.md:121:  - SOQL queries → Fast models (Claude Haiku)
+ClaudeSFDC/frameworks/revops-framework/config.json:77:      "createValidationRules",
+ClaudeSFDC/data/error-patterns.json:44:    "pattern": "Too many SOQL queries|CPU time limit exceeded|heap size",
+ClaudeSFDC/data-generation/utils/data-quality-checker.js:16:            customValidationRules: options.customValidationRules || [],
+ClaudeSFDC/error-logging/alerts/alert-system.js:264:                        COUNT(*) as total_ops,
+ClaudeSFDC/error-logging/alerts/alert-system.js:265:                        COUNT(CASE WHEN resolved = 0 THEN 1 END) as failed_ops,
+ClaudeSFDC/error-logging/alerts/alert-system.js:266:                        (CAST(COUNT(CASE WHEN resolved = 0 THEN 1 END) AS FLOAT) / COUNT(*)) as failure_rate
+ClaudeSFDC/error-logging/alerts/alert-system.js:269:                    GROUP BY agent_name
+ClaudeSFDC/error-logging/alerts/alert-system.js:270:                    HAVING COUNT(*) >= 5 AND failure_rate >= ?
+ClaudeSFDC/error-logging/core/error-logger.js:516:                    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/core/error-logger.js:517:                    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/core/error-logger.js:518:                    COUNT(CASE WHEN error_severity = 'HIGH' THEN 1 END) as high_errors,
+ClaudeSFDC/error-logging/core/error-logger.js:519:                    COUNT(CASE WHEN resolved = true THEN 1 END) as resolved_errors,
+ClaudeSFDC/error-logging/core/error-logger.js:520:                    COUNT(DISTINCT agent_name) as affected_agents
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:692:            console.warn(`SOQL query limit approaching: ${(soqlUsagePercent * 100).toFixed(2)}%`);
+ClaudeSFDC/frameworks/data-hygiene/BulkHygieneOperations.js:738:        // This would use SOQL to fetch actual records
+ClaudeSFDC/frameworks/data-hygiene/DeduplicationEngine.js:549:        if (/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/.test(str)) return 'TITLE_CASE';
+ClaudeSFDC/frameworks/data-hygiene/DeduplicationEngine.js:550:        if (/^[a-z]+(\s[a-z]+)*$/.test(str)) return 'LOWER_CASE';
+ClaudeSFDC/frameworks/data-hygiene/DeduplicationEngine.js:551:        if (/^[A-Z]+(\s[A-Z]+)*$/.test(str)) return 'UPPER_CASE';
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:9:ClaudeSFDC v2.7.0 is a critical bug fix release that addresses fundamental data integrity issues and SOQL query failures. This release introduces comprehensive safeguards to prevent simulated data generation, fixes all major SOQL query patterns that were failing, and establishes strict data source transparency across the entire system.
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:18:### 2. SOQL Query Failures
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:19:**Problem**: Multiple SOQL patterns consistently failing in production  
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:71:### SOQL Query Solutions
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:74:- **SOQL Query Rewriter** (`scripts/soql-query-rewriter.js`)
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:76:  - Handles CASE in aggregations, COUNT(DISTINCT), nested queries, date functions
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:79:- **SOQL Validator** (`scripts/soql-validator.js`)
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:86:- **SOQL Patterns Library** (`docs/SOQL_PATTERNS_LIBRARY.md`)
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:91:- **Error Prevention Guide** (`docs/SOQL_ERROR_PREVENTION_GUIDE.md`)
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:124:### CASE Statements in Aggregations
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:127:SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:133:SELECT COUNT(Id) FROM Opportunity WHERE Status = 'Won'
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:136:### COUNT(DISTINCT) Operations
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:139:SELECT COUNT(DISTINCT AccountId) FROM Opportunity
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:142:SELECT AccountId FROM Opportunity GROUP BY AccountId
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:182:      "query": "SELECT COUNT(Id) FROM Lead WHERE Status = 'Qualified'",
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:205:### 3. Test SOQL Fixes
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:229:4. **Query Validation Required**: Invalid SOQL will be rejected before execution
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:264:# Test SOQL validators
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:291:- `/ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md`
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:292:- `/ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md`
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:308:- ❌ 8+ recurring SOQL query failures
+ClaudeSFDC/RELEASE_NOTES_v2.7.0.md:314:- ✅ 95%+ SOQL query success rate
+ClaudeSFDC/error-logging/test-simple.js:47:const count = db.prepare('SELECT COUNT(*) as count FROM error_logs').get();
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:211:                        COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:212:                        COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:213:                        COUNT(CASE WHEN error_severity = 'HIGH' THEN 1 END) as high_errors,
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:214:                        COUNT(CASE WHEN resolved = 1 THEN 1 END) as resolved_errors
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:217:                    GROUP BY DATE(timestamp)
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:241:                        COUNT(*) as total_operations,
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:242:                        COUNT(CASE WHEN resolved = 1 THEN 1 END) as successful_operations,
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:243:                        COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:244:                        AVG(CASE WHEN resolved = 1 THEN 
+ClaudeSFDC/error-logging/dashboard/dashboard-server.js:249:                    GROUP BY agent_name
+ClaudeSFDC/error-logging/test-error-logging.js:139:  totalErrors: db.prepare('SELECT COUNT(*) as count FROM error_logs').get().count,
+ClaudeSFDC/error-logging/test-error-logging.js:141:    SELECT error_severity, COUNT(*) as count 
+ClaudeSFDC/error-logging/test-error-logging.js:143:    GROUP BY error_severity
+ClaudeSFDC/error-logging/test-error-logging.js:146:    SELECT agent_name, COUNT(*) as count 
+ClaudeSFDC/error-logging/test-error-logging.js:148:    GROUP BY agent_name
+ClaudeSFDC/error-logging/test-error-logging.js:150:  patterns: db.prepare('SELECT COUNT(*) as count FROM error_patterns').get().count,
+ClaudeSFDC/error-logging/test-error-logging.js:151:  metrics: db.prepare('SELECT COUNT(*) as count FROM agent_metrics').get().count
+ClaudeSFDC/TOOL_REFERENCE.md:5:Quick link: see Query Cookbook for copy/paste-safe SOQL patterns (Flow, Layouts, FlexiPages, FieldDefinition, ValidationRule):
+ClaudeSFDC/TOOL_REFERENCE.md:114:sf data query --query "SELECT Id, ValidationName, Active, ErrorMessage FROM ValidationRule WHERE EntityDefinitionId = 'Contact'" --target-org myorg --use-tooling-api
+ClaudeSFDC/error-logging/schema/error-database.sql:148:    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/schema/error-database.sql:149:    COUNT(CASE WHEN resolved = TRUE THEN 1 END) as resolved_errors,
+ClaudeSFDC/error-logging/schema/error-database.sql:150:    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/schema/error-database.sql:151:    AVG(CASE WHEN resolved = TRUE THEN 
+ClaudeSFDC/error-logging/schema/error-database.sql:156:GROUP BY agent_name;
+ClaudeSFDC/error-logging/schema/error-database.sql:161:    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/schema/error-database.sql:162:    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/schema/error-database.sql:163:    COUNT(CASE WHEN error_severity = 'HIGH' THEN 1 END) as high_errors,
+ClaudeSFDC/error-logging/schema/error-database.sql:164:    COUNT(CASE WHEN resolved = TRUE THEN 1 END) as resolved_errors
+ClaudeSFDC/error-logging/schema/error-database.sql:167:GROUP BY date(timestamp)
+ClaudeSFDC/mdapi-convert/package.xml:945:        <name>ValidationRule</name>
+ClaudeSFDC/mdapi-convert/objects/Quote.object:590:        <formula>CASESAFEID(Id)</formula>
+ClaudeSFDC/scripts/generate-safe-defaults.sh:243:        local rules=$(sf data query --query "SELECT COUNT() FROM ValidationRule WHERE EntityDefinition.QualifiedApiName='$object' AND Active=true" --use-tooling-api --json 2>/dev/null | jq -r '.result.totalSize')
+ClaudeSFDC/neonone-evidence-assessment.txt:35:2025-09-09 20:34:13,009 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000Qa5INYAZ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:39:2025-09-09 20:34:15,388 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000Qa5INYAZ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:43:2025-09-09 20:34:17,792 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000GQr5zYAD'...
+ClaudeSFDC/neonone-evidence-assessment.txt:47:2025-09-09 20:34:20,182 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000GQr5zYAD'...
+ClaudeSFDC/neonone-evidence-assessment.txt:51:2025-09-09 20:34:22,585 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000WaiL6YAJ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:55:2025-09-09 20:34:23,958 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000WaiL6YAJ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:59:2025-09-09 20:34:26,374 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000TyauOYAR'...
+ClaudeSFDC/neonone-evidence-assessment.txt:63:2025-09-09 20:34:27,736 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000TyauOYAR'...
+ClaudeSFDC/neonone-evidence-assessment.txt:67:2025-09-09 20:34:30,140 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000LXfmfYAD'...
+ClaudeSFDC/neonone-evidence-assessment.txt:71:2025-09-09 20:34:32,542 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000LXfmfYAD'...
+ClaudeSFDC/neonone-evidence-assessment.txt:75:2025-09-09 20:34:33,900 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000P7B5BYAV'...
+ClaudeSFDC/neonone-evidence-assessment.txt:79:2025-09-09 20:34:36,302 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000P7B5BYAV'...
+ClaudeSFDC/neonone-evidence-assessment.txt:83:2025-09-09 20:34:38,699 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000Wia3mYAB'...
+ClaudeSFDC/neonone-evidence-assessment.txt:87:2025-09-09 20:34:40,076 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000Wia3mYAB'...
+ClaudeSFDC/neonone-evidence-assessment.txt:91:2025-09-09 20:34:42,480 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000QFx43YAD'...
+ClaudeSFDC/neonone-evidence-assessment.txt:95:2025-09-09 20:34:44,863 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000QFx43YAD'...
+ClaudeSFDC/neonone-evidence-assessment.txt:99:2025-09-09 20:34:47,350 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000TuG7rYAF'...
+ClaudeSFDC/neonone-evidence-assessment.txt:103:2025-09-09 20:34:49,759 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000TuG7rYAF'...
+ClaudeSFDC/neonone-evidence-assessment.txt:107:2025-09-09 20:34:51,133 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000PwZJxYAN'...
+ClaudeSFDC/neonone-evidence-assessment.txt:111:2025-09-09 20:34:53,531 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000PwZJxYAN'...
+ClaudeSFDC/neonone-evidence-assessment.txt:115:2025-09-09 20:34:55,918 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000UUe0NYAT'...
+ClaudeSFDC/neonone-evidence-assessment.txt:119:2025-09-09 20:34:58,307 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000UUe0NYAT'...
+ClaudeSFDC/neonone-evidence-assessment.txt:123:2025-09-09 20:35:00,701 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000PwIcXYAV'...
+ClaudeSFDC/neonone-evidence-assessment.txt:127:2025-09-09 20:35:03,090 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000PwIcXYAV'...
+ClaudeSFDC/neonone-evidence-assessment.txt:131:2025-09-09 20:35:05,501 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000Mv3SkYAJ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:135:2025-09-09 20:35:07,921 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000Mv3SkYAJ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:139:2025-09-09 20:35:10,313 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000VJS0NYAX'...
+ClaudeSFDC/neonone-evidence-assessment.txt:143:2025-09-09 20:35:12,753 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000VJS0NYAX'...
+ClaudeSFDC/neonone-evidence-assessment.txt:147:2025-09-09 20:35:15,161 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000WX1VyYAL'...
+ClaudeSFDC/neonone-evidence-assessment.txt:151:2025-09-09 20:35:17,547 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000WX1VyYAL'...
+ClaudeSFDC/neonone-evidence-assessment.txt:155:2025-09-09 20:35:19,966 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000Ux5iNYAR'...
+ClaudeSFDC/neonone-evidence-assessment.txt:159:2025-09-09 20:35:22,380 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000Ux5iNYAR'...
+ClaudeSFDC/neonone-evidence-assessment.txt:163:2025-09-09 20:35:24,766 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000QjnX5YAJ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:167:2025-09-09 20:35:27,162 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000QjnX5YAJ'...
+ClaudeSFDC/neonone-evidence-assessment.txt:171:2025-09-09 20:35:29,548 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000TUJMHYA5'...
+ClaudeSFDC/neonone-evidence-assessment.txt:175:2025-09-09 20:35:31,975 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000TUJMHYA5'...
+ClaudeSFDC/neonone-evidence-assessment.txt:179:2025-09-09 20:35:34,365 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000UjLAIYA3'...
+ClaudeSFDC/neonone-evidence-assessment.txt:183:2025-09-09 20:35:36,780 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000UjLAIYA3'...
+ClaudeSFDC/neonone-evidence-assessment.txt:187:2025-09-09 20:35:38,156 - INFO -    Query: SELECT COUNT(Id) cnt FROM Opportunity WHERE AccountId = '001TO00000M27qMYAR'...
+ClaudeSFDC/neonone-evidence-assessment.txt:191:2025-09-09 20:35:40,549 - INFO -    Query: SELECT COUNT(Id) cnt FROM Contact WHERE AccountId = '001TO00000M27qMYAR'...
+ClaudeSFDC/neonone-evidence-assessment.txt:240:  "message": "\n            FROM ValidationRule\n                 ^\nERROR at Row:3:Column:18\nsObject type 'ValidationRule' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names.",
+ClaudeSFDC/neonone-evidence-assessment.txt:244:    "message": "\n            FROM ValidationRule\n                 ^\nERROR at Row:3:Column:18\nsObject type 'ValidationRule' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names.",
+ClaudeSFDC/neonone-evidence-assessment.txt:247:  "stack": "INVALID_TYPE: \n            FROM ValidationRule\n                 ^\nERROR at Row:3:Column:18\nsObject type 'ValidationRule' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names.\n    at SfCommandError.from (file:///home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@salesforce/sf-plugins-core/lib/SfCommandError.js:39:16)\n    at DataSoqlQueryCommand.catch (file:///home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@salesforce/sf-plugins-core/lib/sfCommand.js:323:47)\n    at DataSoqlQueryCommand._run (/home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@oclif/core/lib/command.js:185:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Config.runCommand (/home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@oclif/core/lib/config/config.js:456:25)\n    at async run (/home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@oclif/core/lib/main.js:97:16)\n    at async file:///home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/bin/run.js:15:1",
+ClaudeSFDC/neonone-evidence-assessment.txt:248:  "cause": "INVALID_TYPE: \n            FROM ValidationRule\n                 ^\nERROR at Row:3:Column:18\nsObject type 'ValidationRule' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names.\n    at HttpApi.getError (/home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@jsforce/jsforce-node/lib/http-api.js:298:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@jsforce/jsforce-node/lib/http-api.js:127:33\n    at async Query._execute (/home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@jsforce/jsforce-node/lib/query.js:373:22)\n    at async /home/chris/.nvm/versions/node/v22.15.1/lib/node_modules/@salesforce/cli/node_modules/@jsforce/jsforce-node/lib/query.js:305:17 {\n  data: {\n    message: '\\n' +\n      '            FROM ValidationRule\\n' +\n      '                 ^\\n' +\n      'ERROR at Row:3:Column:18\\n' +\n      \"sObject type 'ValidationRule' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names.\",\n    errorCode: 'INVALID_TYPE'\n  },\n  errorCode: 'INVALID_TYPE'\n}",
+ClaudeSFDC/neonone-evidence-assessment.txt:299:                   COUNT(Id...
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:173:    COUNT(DISTINCT ao.operation_id) as total_operations,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:174:    COUNT(DISTINCT CASE WHEN ao.status = 'SUCCESS' THEN ao.operation_id END) as successful_ops,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:175:    COUNT(DISTINCT CASE WHEN ao.status = 'FAILED' THEN ao.operation_id END) as failed_ops,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:176:    AVG(CASE WHEN ao.status = 'SUCCESS' THEN ao.duration_ms END) as avg_success_duration_ms,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:177:    COUNT(DISTINCT el.error_id) as total_errors,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:178:    COUNT(DISTINCT CASE WHEN el.error_severity = 'CRITICAL' THEN el.error_id END) as critical_errors,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:179:    COUNT(DISTINCT CASE WHEN el.resolved = TRUE THEN el.error_id END) as resolved_errors,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:180:    CASE 
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:181:        WHEN COUNT(DISTINCT ao.operation_id) > 0 
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:182:        THEN CAST(COUNT(DISTINCT CASE WHEN ao.status = 'SUCCESS' THEN ao.operation_id END) AS REAL) / COUNT(DISTINCT ao.operation_id) * 100
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:188:GROUP BY a.agent_name;
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:193:    COUNT(*) as occurrence_count,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:194:    COUNT(DISTINCT el.agent_name) as affected_agents,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:195:    COUNT(DISTINCT sed.object_type) as affected_objects,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:197:    AVG(CASE WHEN sed.is_retryable THEN 1 ELSE 0 END) * 100 as retryable_percentage,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:203:GROUP BY sed.error_code
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:209:    COUNT(*) as total_attempts,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:210:    SUM(CASE WHEN ra.success THEN 1 ELSE 0 END) as successful_recoveries,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:211:    CAST(SUM(CASE WHEN ra.success THEN 1 ELSE 0 END) AS REAL) / COUNT(*) * 100 as success_rate,
+ClaudeSFDC/error-logging/schema/agent-tracking-schema.sql:214:GROUP BY ra.recovery_strategy
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:104:                    COUNT(el.error_id) as recent_occurrences,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:105:                    AVG(CASE WHEN el.resolved = 1 THEN 
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:114:                GROUP BY ep.pattern_hash
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:156:                    COUNT(*) as error_count,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:157:                    COUNT(CASE WHEN resolved = 1 THEN 1 END) as resolved_count
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:160:                GROUP BY DATE(timestamp), agent_name, error_category, error_severity
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:217:                    COUNT(*) as daily_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:218:                    AVG(COUNT(*)) OVER (
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:225:                GROUP BY agent_name, DATE(timestamp)
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:485:                    COUNT(*) as daily_errors
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:488:                GROUP BY DATE(timestamp)
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:518:                    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:519:                    COUNT(CASE WHEN error_severity = 'HIGH' THEN 1 END) as high_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:520:                    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:521:                    COUNT(CASE WHEN resolved = 0 THEN 1 END) as unresolved_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:522:                    COUNT(DISTINCT agent_name) as affected_agents
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:710:                    COUNT(CASE WHEN error_severity = 'CRITICAL' AND timestamp >= datetime('now', '-7 days') THEN 1 END) as recent_critical,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:711:                    COUNT(CASE WHEN error_severity = 'CRITICAL' AND timestamp < datetime('now', '-7 days') AND timestamp >= datetime('now', '-14 days') THEN 1 END) as previous_critical
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:734:                    COUNT(*) as error_count
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:737:                GROUP BY strftime('%H', timestamp)
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:766:                    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:767:                    COUNT(CASE WHEN resolved = 0 THEN 1 END) as unresolved_errors,
+ClaudeSFDC/error-logging/analysis/pattern-analyzer.js:768:                    AVG(CASE WHEN resolved = 1 THEN 
+ClaudeSFDC/scripts/cli/fields-search.sh:36:# Fallback: Tooling API FieldDefinition
+ClaudeSFDC/error-logging/templates/response-templates.json:85:    "title": "SOQL Query Error",
+ClaudeSFDC/error-logging/templates/response-templates.json:95:    "message": "Malformed SOQL query detected. Query validation and fixes required.",
+ClaudeSFDC/error-logging/templates/response-templates.json:97:      "Review SOQL query syntax",
+ClaudeSFDC/mdapi-convert/objects/Account.object:599: AND(Includes(ALN_Portfolio_Type__c, &quot;Student&quot;), PICKLISTCOUNT(ALN_Portfolio_Type__c) = 1)
+ClaudeSFDC/mdapi-convert/objects/Account.object:5057:        <formula>CASE(
+ClaudeSFDC/mdapi-convert/objects/Account.object:5094:        <formula>Health_Score_Unscaled__c * CASE(
+ClaudeSFDC/mdapi-convert/objects/Account.object:5102:CASE(CS_Risk_Status__c ,
+ClaudeSFDC/mdapi-convert/objects/Account.object:6504:        <formula>CASESAFEID(Id)</formula>
+ClaudeSFDC/mdapi-convert/objects/Account.object:20391:        <url>https://app.gong.io/go/account?crm-id={!CASESAFEID(Account.Id)}&amp;crm-object-type=account</url>
+ClaudeSFDC/RELEASE_SUMMARY_v2.7.0.md:16:- **Query Failures**: 8+ recurring SOQL errors causing incomplete analysis
+ClaudeSFDC/neonone_revops_assessment_20250909_201726.json:16:        "query": "\n            SELECT OwnerId, Owner.Name, COUNT(Id) opp_count,\n                   SUM(CASE WHEN IsWon...",
+ClaudeSFDC/docs/guides/MCP_WORKFLOWS.md:326:    query: "SELECT COUNT() FROM Project__c"
+ClaudeSFDC/docs/guides/FLOW_CONSOLIDATION_BEST_PRACTICES.md:238:| SOQL Queries | 100 | 100 | Cache in variables |
+ClaudeSFDC/docs/guides/FLOW_CONSOLIDATION_BEST_PRACTICES.md:391:3. **Dynamic SOQL**: Runtime query generation
+ClaudeSFDC/AGENTS.md:23:- Naming: files/dirs use kebab‑case; constants `SCREAMING_SNAKE_CASE`.
+ClaudeSFDC/scripts/validation-rule-manager.sh:154:    # Query validation rules using Tooling API (without formula field which requires individual queries)
+ClaudeSFDC/scripts/validation-rule-manager.sh:155:    local query="SELECT Id, ValidationName, Active, Description, ErrorMessage FROM ValidationRule WHERE EntityDefinition.QualifiedApiName = '${object}'"
+ClaudeSFDC/scripts/validation-rule-manager.sh:199:    local query="SELECT Id, Metadata FROM ValidationRule WHERE Id='${rule_id}'"
+ClaudeSFDC/scripts/validation-rule-manager.sh:225:        <name>ValidationRule</name>
+ClaudeSFDC/scripts/validation-rule-manager.sh:290:    local active_rules=$(sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND active=1")
+ClaudeSFDC/scripts/validation-rule-manager.sh:291:    local total_rules=$(sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object'")
+ClaudeSFDC/scripts/validation-rule-manager.sh:351:        if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='Account' AND error_formula LIKE '%Website%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/validation-rule-manager.sh:357:    if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND error_formula LIKE '%Email%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/validation-rule-manager.sh:362:    if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND error_formula LIKE '%Phone%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/validation-rule-manager.sh:367:    if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND error_formula LIKE '%Date%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/validation-rule-manager.sh:398:SELECT org_alias, object_name, COUNT(*) as rule_count, 
+ClaudeSFDC/scripts/validation-rule-manager.sh:402:GROUP BY org_alias, object_name
+ClaudeSFDC/scripts/validation-rule-manager.sh:480:       CASE WHEN active=1 THEN 'Active' ELSE 'Inactive' END as status
+ClaudeSFDC/scripts/validation-rule-manager.sh:509:            local picklist_query="SELECT COUNT(*) FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName = '${object}' AND DataType IN ('Picklist', 'MultiselectPicklist')"
+ClaudeSFDC/docs/METADATA_CHANGE_CHECKLIST.md:41:sf data query --use-tooling-api --query "SELECT Id, ValidationName FROM ValidationRule WHERE EntityDefinition.QualifiedApiName = '[ObjectName]'" --target-org [org]
+ClaudeSFDC/scripts/unified-system-validator.sh:291:                log SUCCESS "Basic SOQL query test passed"
+ClaudeSFDC/scripts/unified-system-validator.sh:293:                log ERROR "Basic SOQL query test failed"
+ClaudeSFDC/docs/SCRIPT_CONSOLIDATION_MIGRATION_PLAN.md:31:- SOQL query validation and optimization
+ClaudeSFDC/docs/SCRIPT_CONSOLIDATION_MIGRATION_PLAN.md:39:- `validate-soql.sh` - SOQL validation
+ClaudeSFDC/docs/SCRIPT_CONSOLIDATION_MIGRATION_PLAN.md:236:- [ ] SOQL query validation
+ClaudeSFDC/output/gong-reports/gong-report-specs.json:51:          "formula": "IF(COUNT(Gong__Gong_Call__c.Id) > 3, 100, (COUNT(Gong__Gong_Call__c.Id) / 3) * 100)",
+ClaudeSFDC/output/gong-reports/gong-report-specs.json:61:      "manualInstructions": "### Creating \"Active Deal Gong Coverage\" Report\n\n**Step 1: Navigate to Reports**\n1. Go to Reports tab in Salesforce\n2. Click \"New Report\"\n3. Select report type: \"Gong__Opportunities_with_Gong_Conversations_and_contacts\"\n4. Click \"Continue\"\n\n**Step 2: Configure Filters**\n1. Add filter: Opportunity.StageName not equal to \"Closed Won,Closed Lost\"\n2. Add filter: Gong__Gong_Call__c.Gong__Call_Start__c equals \"LAST_N_DAYS:14\"\n\n**Step 3: Add Columns**\n1. Add column: Opportunity.Name\n2. Add column: Opportunity.StageName\n3. Add column: Opportunity.Amount\n4. Add column: Opportunity.CloseDate\n5. Add column: Gong__Gong_Call__c.Gong__Call_Start__c\n6. Add column: Gong__Gong_Call__c.Gong__Call_Duration__c\n7. Add column: Contact.Name\n8. Add column: Contact.Title\n\n**Step 4: Configure Groupings**\n1. Group by: Opportunity.Name\n\n**Step 5: Add Custom Summary Formulas**\n1. Create formula:\n   - Name: Days_Since_Last_Call\n   - Formula: TODAY() - MAX(Gong__Gong_Call__c.Gong__Call_Start__c)\n   - Data Type: Number\n   - Description: Number of days since last Gong call\n2. Create formula:\n   - Name: Coverage_Score\n   - Formula: IF(COUNT(Gong__Gong_Call__c.Id) > 3, 100, (COUNT(Gong__Gong_Call__c.Id) / 3) * 100)\n   - Data Type: Percent\n   - Description: Coverage score based on number of calls\n\n**Step 6: Add Chart**\n1. Click \"Add Chart\"\n2. Select chart type: donut\n3. Configure as: Deal Coverage Distribution\n\n**Step 7: Save Report**\n1. Click \"Save\"\n2. Name: Active Deal Gong Coverage\n3. Folder: Gong Reports\n4. Click \"Save and Run\""
+ClaudeSFDC/scripts/test-date-fix.js:4: * Test script to demonstrate date formatting fix for SOQL queries
+ClaudeSFDC/scripts/test-date-fix.js:7:const SOQLQueryBuilder = require('./soql-query-builder.js');
+ClaudeSFDC/scripts/test-date-fix.js:9:console.log('=== SOQL Date Formatting Fix Test ===\n');
+ClaudeSFDC/scripts/test-date-fix.js:13:const query1 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/test-date-fix.js:25:const query2 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/test-date-fix.js:36:const query3 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/test-date-fix.js:47:const query4 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/test-date-fix.js:59:const query5 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/test-date-fix.js:73:const query6 = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:1:# SOQL Query Error Prevention Guide
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:5:This guide addresses the common SOQL query failures identified in the ClaudeSFDC system, providing automated tools and manual workarounds to prevent these errors before they occur.
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:9:### 1. CASE Statements in Aggregations (4 failures)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:11:**Problem**: SOQL doesn't support CASE statements within COUNT, SUM, or other aggregate functions.
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:22:  "SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:27:### 2. COUNT(DISTINCT) Not Supported (3 failures)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:29:**Problem**: SOQL doesn't have COUNT(DISTINCT) functionality.
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:32:- ✅ **GROUP BY Alternative**: Documented in patterns library
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:40:  "SELECT COUNT(DISTINCT AccountId) FROM Opportunity"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:44:  "SELECT COUNT(DISTINCT AccountId) FROM Opportunity"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:49:**Problem**: SOQL supports maximum 2 levels of query nesting.
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:68:- ✅ **Date Literal Converter**: Automatic conversion to SOQL literals
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:83:### 1. **SOQL Query Rewriter** (`soql-query-rewriter.js`)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:98:### 2. **SOQL Validator** (`soql-validator.js`)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:113:### 3. **SOQL Query Fixer** (`fix-soql-query.js`)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:122:### 4. **Pattern Library** (`SOQL_PATTERNS_LIBRARY.md`)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:131:const SOQLValidator = require('./scripts/soql-validator');
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:132:const SOQLRewriter = require('./scripts/soql-query-rewriter');
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:134:async function safeExecuteSOQL(query) {
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:135:  const validator = new SOQLValidator();
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:140:    const rewriter = new SOQLRewriter();
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:145:      return executeSOQL(rewritten.rewritten);
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:147:      throw new Error(`Invalid SOQL: ${validation.errors[0].message}`);
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:151:  return executeSOQL(query);
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:159:| `INVALID_FIELD: CASE not supported` | `node soql-query-rewriter.js "QUERY"` |
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:160:| `MALFORMED_QUERY: COUNT(DISTINCT)` | `node soql-query-rewriter.js "QUERY"` |
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:162:| `DATEADD function not recognized` | Use date literals: `NEXT_N_DAYS:30` |
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:171:SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:172:SELECT COUNT(DISTINCT AccountId) FROM Opportunity
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:190:echo "Testing SOQL Error Prevention Tools"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:192:# Test 1: CASE in aggregation
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:193:echo "Test 1: CASE in COUNT"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:195:  "SELECT COUNT(CASE WHEN Status = 'Won' THEN 1 END) FROM Opportunity"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:197:# Test 2: COUNT(DISTINCT)
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:200:  "SELECT COUNT(DISTINCT AccountId) FROM Opportunity"
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:221:const query = buildSOQLQuery();
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:251:Prefer date literals over calculated dates:
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:256:-- ✅ Use date literals
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:301:2. Add pre-commit hooks for SOQL validation
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:313:The SOQL query error prevention framework provides:
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:319:This eliminates the 4 categories of SOQL failures:
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:320:- ✅ CASE in aggregations - Solved with formula fields
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:321:- ✅ COUNT(DISTINCT) - Solved with GROUP BY patterns
+ClaudeSFDC/docs/SOQL_ERROR_PREVENTION_GUIDE.md:323:- ✅ Date calculations - Solved with date literals
+ClaudeSFDC/output/gong-reports/GONG_REPORTS_MANUAL.md:27:- **Coverage_Score**: `IF(COUNT(Gong__Gong_Call__c.Id) > 3, 100, (COUNT(Gong__Gong_Call__c.Id) / 3) * 100)`
+ClaudeSFDC/output/gong-reports/GONG_REPORTS_MANUAL.md:64:   - Formula: IF(COUNT(Gong__Gong_Call__c.Id) > 3, 100, (COUNT(Gong__Gong_Call__c.Id) / 3) * 100)
+ClaudeSFDC/scripts/object-analysis-engine.js:24:            validationAnalysis: this.analyzeValidationRules(),
+ClaudeSFDC/scripts/object-analysis-engine.js:537:    analyzeValidationRules() {
+ClaudeSFDC/scripts/object-analysis-engine.js:785:        // Would need to analyze trigger body for SOQL/DML in loops
+ClaudeSFDC/docs/SALESFORCE_API_RESTRICTIONS.md:51:### Option 2: SOQL Instead of Reports API
+ClaudeSFDC/docs/SALESFORCE_API_RESTRICTIONS.md:83:**Fix**: Use Opportunity or SOQL
+ClaudeSFDC/docs/SALESFORCE_API_RESTRICTIONS.md:141:3. **Use SOQL for Data** - Bypass Reports API
+ClaudeSFDC/docs/SALESFORCE_API_RESTRICTIONS.md:148:3. **Build Custom Reporting** - Using SOQL + your own logic
+ClaudeSFDC/docs/SALESFORCE_API_RESTRICTIONS.md:210:3. **Use SOQL queries** for data extraction
+ClaudeSFDC/docs/SFDC_DATA_HYGIENE_SPECIALIST_GUIDE.md:349:  - Monitor SOQL, DML, and CPU time usage
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:57:      "purpose": "SOQL Query Validation and Optimization Script",
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:1:# Salesforce Query Cookbook (Tooling-Safe)
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:3:Use these copy/paste-ready queries to avoid common INVALID_FIELD/INVALID_TYPE errors. All Tooling entities require the `--use-tooling-api` flag.
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:8:# General form (Tooling API on):
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:9:sf data query --use-tooling-api --target-org <org> --query "<SOQL>" --json
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:61:FROM ValidationRule
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:67:SELECT COUNT(Id), Active, EntityDefinition.QualifiedApiName
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:68:FROM ValidationRule
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:69:GROUP BY Active, EntityDefinition.QualifiedApiName
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:75:FROM ValidationRule
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:113:> Note: `TriggerType` is not reliably queryable via SOQL in all orgs. Use the `Metadata` field (above) to inspect `start.triggerType` when needed.
+ClaudeSFDC/docs/QUERY_COOKBOOK.md:139:- Missing `--use-tooling-api` for Tooling objects (Flow*, FieldDefinition, ValidationRule, Layout, FlexiPage, EntityDefinition).
+ClaudeSFDC/templates/investigation-patterns.json:222:          "cause": "Inefficient SOQL queries",
+ClaudeSFDC/templates/investigation-patterns.json:225:          "solution": "Optimize SOQL queries and add selective filters"
+ClaudeSFDC/docs/MCP_INTEGRATION_ENHANCEMENTS.md:36:- `mcp_query()` - Execute SOQL queries via MCP
+ClaudeSFDC/scripts/soql-query-rewriter.js:4: * SOQL Query Rewriter
+ClaudeSFDC/scripts/soql-query-rewriter.js:6: * Purpose: Automatically rewrites SOQL queries to work around Salesforce limitations
+ClaudeSFDC/scripts/soql-query-rewriter.js:8: * - CASE statements in aggregations
+ClaudeSFDC/scripts/soql-query-rewriter.js:9: * - COUNT(DISTINCT) operations
+ClaudeSFDC/scripts/soql-query-rewriter.js:17:class SOQLQueryRewriter {
+ClaudeSFDC/scripts/soql-query-rewriter.js:26:    // Rule 1: CASE statements in aggregations
+ClaudeSFDC/scripts/soql-query-rewriter.js:28:      name: 'CASE_IN_AGGREGATION',
+ClaudeSFDC/scripts/soql-query-rewriter.js:29:      pattern: /COUNT\s*\(\s*CASE\s+WHEN.*?END\s*\)/gis,
+ClaudeSFDC/scripts/soql-query-rewriter.js:30:      description: 'CASE statements not supported in COUNT aggregations',
+ClaudeSFDC/scripts/soql-query-rewriter.js:34:    // Rule 2: COUNT(DISTINCT) operations
+ClaudeSFDC/scripts/soql-query-rewriter.js:38:      description: 'COUNT(DISTINCT) not supported in SOQL',
+ClaudeSFDC/scripts/soql-query-rewriter.js:98:   * Rewrite CASE statements in COUNT aggregations
+ClaudeSFDC/scripts/soql-query-rewriter.js:99:   * Example: COUNT(CASE WHEN Status = 'Closed' THEN 1 END)
+ClaudeSFDC/scripts/soql-query-rewriter.js:103:    // Pattern: COUNT(CASE WHEN condition THEN 1 END)
+ClaudeSFDC/scripts/soql-query-rewriter.js:104:    const casePattern = /COUNT\s*\(\s*CASE\s+WHEN\s+(.*?)\s+THEN\s+\d+(?:\s+ELSE\s+NULL)?\s+END\s*\)/gis;
+ClaudeSFDC/scripts/soql-query-rewriter.js:124:        example: `SELECT COUNT(Id) FROM Object WHERE ${condition}`
+ClaudeSFDC/scripts/soql-query-rewriter.js:128:      rewritten = rewritten.replace(match[0], `/* REWRITE NEEDED: ${match[0]} */ COUNT(Id)`);
+ClaudeSFDC/scripts/soql-query-rewriter.js:134:      warning: 'CASE in COUNT not supported. Consider using formula fields or multiple queries.',
+ClaudeSFDC/scripts/soql-query-rewriter.js:140:   * Rewrite COUNT(DISTINCT field) operations
+ClaudeSFDC/scripts/soql-query-rewriter.js:141:   * SOQL doesn't support COUNT(DISTINCT)
+ClaudeSFDC/scripts/soql-query-rewriter.js:152:        description: `Use GROUP BY ${field} and count results`,
+ClaudeSFDC/scripts/soql-query-rewriter.js:153:        example: `SELECT ${field}, COUNT(Id) FROM Object GROUP BY ${field}`
+ClaudeSFDC/scripts/soql-query-rewriter.js:170:        description: 'Use AggregateResult with GROUP BY',
+ClaudeSFDC/scripts/soql-query-rewriter.js:176:  GROUP BY ${field}
+ClaudeSFDC/scripts/soql-query-rewriter.js:181:      return `/* COUNT(DISTINCT ${field}) not supported - see alternatives */ COUNT(Id)`;
+ClaudeSFDC/scripts/soql-query-rewriter.js:187:      warning: 'COUNT(DISTINCT) not supported in SOQL. Use GROUP BY or Apex processing.',
+ClaudeSFDC/scripts/soql-query-rewriter.js:227:      const warningComment = '/* WARNING: Query nesting level ' + nestingLevel + ' exceeds SOQL limit of 2 */\n';
+ClaudeSFDC/scripts/soql-query-rewriter.js:274:          description: 'Use SOQL date literals',
+ClaudeSFDC/scripts/soql-query-rewriter.js:283:        // Convert to date literal if possible
+ClaudeSFDC/scripts/soql-query-rewriter.js:295:        return `/* DATEADD not supported - use date literals */ ${field}`;
+ClaudeSFDC/scripts/soql-query-rewriter.js:322:      warning: 'Date calculation functions not directly supported. Use date literals or formula fields.',
+ClaudeSFDC/scripts/soql-query-rewriter.js:335:      'CASE WHEN',
+ClaudeSFDC/scripts/soql-query-rewriter.js:336:      'COUNT(DISTINCT',
+ClaudeSFDC/scripts/soql-query-rewriter.js:359:      issues.push('Date values should not be quoted in SOQL');
+ClaudeSFDC/scripts/soql-query-rewriter.js:375:      case 'CASE_IN_AGGREGATION':
+ClaudeSFDC/scripts/soql-query-rewriter.js:381:            '2. Use SUM(FormulaField__c) instead of COUNT(CASE...)'
+ClaudeSFDC/scripts/soql-query-rewriter.js:388:          strategy: 'Use GROUP BY',
+ClaudeSFDC/scripts/soql-query-rewriter.js:391:            '1. SELECT field, COUNT(Id) FROM Object GROUP BY field',
+ClaudeSFDC/scripts/soql-query-rewriter.js:412:          description: 'SOQL provides built-in date literals',
+ClaudeSFDC/scripts/soql-query-rewriter.js:428:  const rewriter = new SOQLQueryRewriter();
+ClaudeSFDC/scripts/soql-query-rewriter.js:432:    console.log('SOQL Query Rewriter - Handles Common Query Failures');
+ClaudeSFDC/scripts/soql-query-rewriter.js:438:    console.log('  - CASE statements in aggregations');
+ClaudeSFDC/scripts/soql-query-rewriter.js:439:    console.log('  - COUNT(DISTINCT) operations');
+ClaudeSFDC/scripts/soql-query-rewriter.js:504:module.exports = SOQLQueryRewriter;
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:11:- **Access**: All sub-agents can call `getValidationRules(objectName)` for any object
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:43:const rules = await retriever.getValidationRules('Account');
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:114:    async analyzeValidationRules(objectName) {
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:116:        const rules = await this.retriever.getValidationRules(objectName);
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:250:const query = "SELECT ErrorConditionFormula FROM ValidationRule";
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_METADATA_SOLUTION.md:255:const rules = await retriever.getValidationRules('Opportunity');
+ClaudeSFDC/output/gong-listviews/noExecutiveEngagement.json:29:      "fallbackInstructions": "Use SOQL query for advanced filtering"
+ClaudeSFDC/output/gong-listviews/noExecutiveEngagement.json:50:  "manualInstructions": "### Creating \"No Executive Engagement\" List View\n\n**Object:** Opportunity\n**Description:** Large deals without executive-level engagement\n\n**Step 1: Navigate to List Views**\n1. Go to Opportunity tab\n2. Click the gear icon → \"New\"\n3. Name: No Executive Engagement\n4. API Name: Auto-populates\n5. Select \"All users can see this list view\"\n\n**Step 2: Set Filters**\n1. Filter:\n   - Field: Amount\n   - Operator: greater than\n   - Value: 100000\n2. Filter:\n   - Field: StageName\n   - Operator: in\n   - Value: Qualification,Needs Analysis,Value Proposition,Negotiation\n3. Filter:\n   - Field: Gong__Executive_Engaged__c\n   - Operator: equals\n   - Value: false\n   - Note: Use SOQL query for advanced filtering\n\n**Step 3: Select Columns to Display**\n1. Name\n2. Account.Name\n3. Amount\n4. StageName\n5. CloseDate\n6. Contact_Roles__c\n7. Owner.Name\n\n**Step 4: Set Sort Order**\n- Sort by: Amount\n- Order: DESC\n\n**Step 7: Save**\n1. Click \"Save\"\n2. The list view is now available"
+ClaudeSFDC/scripts/soql-query-builder.js:4: * SOQL Query Builder for Salesforce MCP Tools
+ClaudeSFDC/scripts/soql-query-builder.js:10:class SOQLQueryBuilder {
+ClaudeSFDC/scripts/soql-query-builder.js:12:        // Reserved SOQL keywords that need special handling
+ClaudeSFDC/scripts/soql-query-builder.js:234:     * Add GROUP BY field
+ClaudeSFDC/scripts/soql-query-builder.js:305:     * Format value for SOQL
+ClaudeSFDC/scripts/soql-query-builder.js:315:            // Date values should NOT be quoted in SOQL
+ClaudeSFDC/scripts/soql-query-builder.js:319:        // Check for date literals (TODAY, YESTERDAY, THIS_WEEK, etc.)
+ClaudeSFDC/scripts/soql-query-builder.js:378:            this.errors.push('Query with aggregates and non-aggregates requires GROUP BY');
+ClaudeSFDC/scripts/soql-query-builder.js:381:        // Check HAVING without GROUP BY
+ClaudeSFDC/scripts/soql-query-builder.js:383:            this.errors.push('HAVING clause requires GROUP BY');
+ClaudeSFDC/scripts/soql-query-builder.js:397:     * Build the SOQL query string
+ClaudeSFDC/scripts/soql-query-builder.js:429:        // GROUP BY clause
+ClaudeSFDC/scripts/soql-query-builder.js:431:            query += ' GROUP BY ' + this.groupByFields.join(', ');
+ClaudeSFDC/scripts/soql-query-builder.js:507:        const rangeQuery = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:510:            .select('COUNT(Id)', 'totalRecords')
+ClaudeSFDC/scripts/soql-query-builder.js:537:        const builder = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:549:        const builder = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:565:        return new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:576:    module.exports = SOQLQueryBuilder;
+ClaudeSFDC/scripts/soql-query-builder.js:584:        console.log('SOQL Query Builder - Usage Examples:\n');
+ClaudeSFDC/scripts/soql-query-builder.js:588:        const query1 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:598:        const query2 = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:606:            .having('COUNT(Id) > 5')
+ClaudeSFDC/scripts/soql-query-builder.js:613:        const builder = new SOQLQueryBuilder()
+ClaudeSFDC/scripts/soql-query-builder.js:635:        if (queryString.includes('COUNT(Id) count')) {
+ClaudeSFDC/scripts/soql-query-builder.js:636:            const fixed = queryString.replace('COUNT(Id) count', 'COUNT(Id) recordCount')
+ClaudeSFDC/scripts/fix-soql-query.js:4: * Quick SOQL Query Fixer
+ClaudeSFDC/scripts/fix-soql-query.js:5: * Fixes common SOQL syntax errors before execution
+ClaudeSFDC/scripts/fix-soql-query.js:8:function fixSOQLQuery(query) {
+ClaudeSFDC/scripts/fix-soql-query.js:25:    // 4. Fix null comparisons (should use IS NULL or IS NOT NULL in SOQL)
+ClaudeSFDC/scripts/fix-soql-query.js:33:        fixed = fixed.replace(regex, `COUNT($1) ${keyword}Count`);
+ClaudeSFDC/scripts/fix-soql-query.js:47:        console.log('Usage: fix-soql-query.js "YOUR SOQL QUERY"');
+ClaudeSFDC/scripts/fix-soql-query.js:53:    const fixed = fixSOQLQuery(query);
+ClaudeSFDC/scripts/fix-soql-query.js:64:module.exports = { fixSOQLQuery };
+ClaudeSFDC/scripts/lib/metadata-validator.js:134:            await this.validateValidationRule(parsed, fileName);
+ClaudeSFDC/scripts/lib/metadata-validator.js:398:    async validateValidationRule(parsed, fileName) {
+ClaudeSFDC/scripts/lib/metadata-validator.js:399:        if (!parsed.ValidationRule) {
+ClaudeSFDC/scripts/lib/metadata-validator.js:400:            this.errors.push(`${fileName}: Invalid ValidationRule structure`);
+ClaudeSFDC/scripts/lib/metadata-validator.js:404:        const rule = parsed.ValidationRule;
+ClaudeSFDC/scripts/lib/metadata-validator.js:407:        if (!rule.fullName) this.errors.push(`${fileName}: ValidationRule missing fullName`);
+ClaudeSFDC/scripts/lib/metadata-validator.js:408:        if (!rule.errorConditionFormula) this.errors.push(`${fileName}: ValidationRule missing errorConditionFormula`);
+ClaudeSFDC/scripts/lib/metadata-validator.js:409:        if (!rule.errorMessage) this.errors.push(`${fileName}: ValidationRule missing errorMessage`);
+ClaudeSFDC/templates/soql-templates.json:6:        "template": "SELECT COUNT(Id) recordCount FROM {{object}} {{#if where}}WHERE {{where}}{{/if}}",
+ClaudeSFDC/templates/soql-templates.json:33:        "template": "SELECT COUNT(Id) recordCount, SUM({{field}}) totalValue, AVG({{field}}) averageValue, MIN({{field}}) minValue, MAX({{field}}) maxValue FROM {{object}} {{#if where}}WHERE {{where}}{{/if}}",
+ClaudeSFDC/templates/soql-templates.json:38:        "template": "SELECT {{groupField}}, COUNT(Id) recordCount, SUM({{measureField}}) totalValue, AVG({{measureField}}) averageValue FROM {{object}} {{#if where}}WHERE {{where}}{{/if}} GROUP BY {{groupField}} ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:43:        "template": "SELECT {{datePeriod}}({{dateField}}) period, COUNT(Id) recordCount, SUM({{measureField}}) periodTotal FROM {{object}} WHERE {{dateField}} = {{dateRange}} GROUP BY {{datePeriod}}({{dateField}}) ORDER BY {{datePeriod}}({{dateField}})",
+ClaudeSFDC/templates/soql-templates.json:54:        "template": "SELECT StageName, COUNT(Id) opportunityCount, SUM(Amount) totalValue, AVG(Amount) averageDealSize, AVG(Probability) avgProbability FROM Opportunity WHERE IsClosed = false {{#if additionalWhere}}AND {{additionalWhere}}{{/if}} GROUP BY StageName ORDER BY SUM(Amount) DESC",
+ClaudeSFDC/templates/soql-templates.json:68:        "template": "SELECT CALENDAR_MONTH(CloseDate) closeMonth, COUNT(Id) dealCount, SUM(Amount) monthlyTotal, SUM(Amount * Probability / 100) weightedValue FROM Opportunity WHERE CloseDate = {{period}} AND IsClosed = false GROUP BY CALENDAR_MONTH(CloseDate) ORDER BY CALENDAR_MONTH(CloseDate)",
+ClaudeSFDC/templates/soql-templates.json:94:        "template": "SELECT Type, COUNT(Id) accountCount, SUM(AnnualRevenue) totalRevenue, AVG(NumberOfEmployees) avgEmployees FROM Account WHERE Type != null GROUP BY Type ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:106:        "template": "SELECT AccountId, Account.Name accountName, COUNT(Id) contactCount FROM Contact WHERE AccountId != null GROUP BY AccountId, Account.Name HAVING COUNT(Id) > {{minContacts}} ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:125:        "template": "SELECT OwnerId, Owner.Name ownerName, COUNT(Id) activityCount, MAX(LastModifiedDate) lastActivity FROM {{object}} WHERE {{#if status}}Status = '{{status}}' AND {{/if}}LastModifiedDate = {{period}} GROUP BY OwnerId, Owner.Name ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:150:        "template": "SELECT Status, COUNT(Id) leadCount, COUNT(ConvertedDate) convertedCount FROM Lead GROUP BY Status ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:155:        "template": "SELECT LeadSource, COUNT(Id) leadCount, SUM(CASE WHEN IsConverted = true THEN 1 ELSE 0 END) convertedCount FROM Lead WHERE CreatedDate = {{period}} GROUP BY LeadSource ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:173:        "template": "SELECT Status, Priority, COUNT(Id) caseCount FROM Case GROUP BY Status, Priority ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:186:        "template": "SELECT Status, COUNT(Id) caseCount, AVG(ClosedDate - CreatedDate) avgResolutionDays FROM Case WHERE ClosedDate != null AND CreatedDate = {{period}} GROUP BY Status",
+ClaudeSFDC/templates/soql-templates.json:204:        "template": "SELECT CampaignId, Campaign.Name campaignName, Status, COUNT(Id) memberCount FROM CampaignMember WHERE Campaign.IsActive = true GROUP BY CampaignId, Campaign.Name, Status ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:216:        "template": "SELECT UserId, User.Name userName, COUNT(Id) loginCount, MAX(LoginTime) lastLogin FROM LoginHistory WHERE LoginTime = {{period}} GROUP BY UserId, User.Name ORDER BY COUNT(Id) DESC",
+ClaudeSFDC/templates/soql-templates.json:226:        "template": "SELECT COUNT(Id) totalRecords, SUM(CASE WHEN {{field}} = null THEN 1 ELSE 0 END) nullCount, SUM(CASE WHEN {{field}} != null THEN 1 ELSE 0 END) populatedCount FROM {{object}}",
+ClaudeSFDC/templates/soql-templates.json:231:        "template": "SELECT {{field}}, COUNT(Id) recordCount FROM {{object}} GROUP BY {{field}} HAVING COUNT(Id) > 1 ORDER BY COUNT(Id) DESC LIMIT {{limit}}",
+ClaudeSFDC/templates/soql-templates.json:239:        "template": "SELECT CALENDAR_YEAR(CreatedDate) createdYear, COUNT(Id) recordCount FROM {{object}} GROUP BY CALENDAR_YEAR(CreatedDate) ORDER BY CALENDAR_YEAR(CreatedDate) DESC",
+ClaudeSFDC/templates/soql-templates.json:283:      "description": "Use these templates with the SOQL query builder to generate error-free queries",
+ClaudeSFDC/docs/REPORT_API_TOKEN_RESOLUTION.md:64:| CaseList | `CASE_OWNER` |
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:55:# Verify field exists in org via Tooling API
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:89:        log_success "Field exists in Tooling API"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:92:        log_warning "Field not found in Tooling API"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:97:# Verify field is accessible via SOQL
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:108:    log_info "Testing SOQL accessibility for ${object_name}.${field_name}..."
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:118:        log_warning "Field not accessible via SOQL"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:121:        log_success "Field is accessible via SOQL"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:124:        log_warning "Unable to determine SOQL accessibility"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:214:        # Step 4: Verify SOQL access
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:219:            log_warning "Field exists but not SOQL accessible, updating permissions..."
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:222:            # Retry SOQL access after permission update
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:355:    # Check 1: Tooling API
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:358:        echo "✅ Exists in Tooling API"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:361:        echo "❌ Not found in Tooling API"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:364:    # Check 2: SOQL Access
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:367:        echo "✅ SOQL accessible"
+ClaudeSFDC/scripts/lib/salesforce-deployment-utils.sh:370:        echo "❌ Not SOQL accessible"
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:41:IF(MAX(Gong__Gong_Call__c.Gong__Call_Start__c) >= TODAY() - 14, COUNT(Gong__Gong_Call__c.Id), 0)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:67:IF(COUNT(Gong__Gong_Call__c.Id) >= 5, 100, IF(COUNT(Gong__Gong_Call__c.Id) >= 3, 75, IF(COUNT(Gong__Gong_Call__c.Id) >= 1, 50, 0)))
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:80:COUNT(Gong__Gong_Call__c.Id) / ((TODAY() - MIN(Gong__Gong_Call__c.Gong__Call_Start__c)) / 7)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:147:COUNT_DISTINCT(Contact.Id) / COUNT(Contact.Id)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:188:SUM(Gong__Gong_Call__c.Gong__Questions_Asked__c) / COUNT(Gong__Gong_Call__c.Id)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:216:SUM(IF(Gong__Gong_Tracker__c.Gong__Tracker_Name__c = "Next Steps", Gong__Tracker_Occurrences__c, 0)) / COUNT(Gong__Gong_Call__c.Id)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:309:(COUNT(IF(Gong__Gong_Call__c.Gong__Call_Start__c >= TODAY() - 30, Gong__Gong_Call__c.Id, null)) / COUNT(IF(Gong__Gong_Call__c.Gong__Call_Start__c >= TODAY() - 60 AND Gong__Gong_Call__c.Gong__Call_Start__c < TODAY() - 30, Gong__Gong_Call__c.Id, null))) * 100
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:322:(IF(COUNT(Gong__Gong_Call__c.Id) > 3, 25, 0) + IF(COUNT_DISTINCT(Contact.Email) > 2, 25, 0) + IF(TODAY() - MAX(Gong__Gong_Call__c.Gong__Call_Start__c) < 14, 25, 0) + IF(AVG(Gong__Gong_Call__c.Gong__Call_Duration__c) > 1800, 25, 0))
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:335:IF(Opportunity.StageName = "Prospecting" AND COUNT(Gong__Gong_Call__c.Id) < 2, "Under-engaged", IF(Opportunity.StageName = "Negotiation" AND COUNT(Gong__Gong_Call__c.Id) < 5, "Under-engaged", "Aligned"))
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:350:COUNT(Gong__Gong_Call__c.Id) - PREVGROUPVAL(COUNT(Gong__Gong_Call__c.Id), 1)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:376:(MAX(Gong__Gong_Call__c.Gong__Call_Start__c) - MIN(Gong__Gong_Call__c.Gong__Call_Start__c)) / (COUNT(Gong__Gong_Call__c.Id) - 1)
+ClaudeSFDC/output/GONG_FORMULA_LIBRARY.md:389:COUNT(IF(Gong__Gong_Call__c.Gong__Call_Start__c >= QUARTER_START, Gong__Gong_Call__c.Id, null))
+ClaudeSFDC/scripts/validate-soql.sh:4:# validate-soql.sh - SOQL Query Validation and Optimization Script
+ClaudeSFDC/scripts/validate-soql.sh:6:# Validates SOQL queries before execution, checks for common errors,
+ClaudeSFDC/scripts/validate-soql.sh:31:Usage: $0 [OPTIONS] -q "SOQL_QUERY"
+ClaudeSFDC/scripts/validate-soql.sh:33:Validates and optimizes SOQL queries before execution.
+ClaudeSFDC/scripts/validate-soql.sh:36:    -q QUERY        SOQL query to validate
+ClaudeSFDC/scripts/validate-soql.sh:52:    $0 -q "SELECT COUNT(Id) count FROM Opportunity" -x y
+ClaudeSFDC/scripts/validate-soql.sh:127:    # Check for aggregate without GROUP BY
+ClaudeSFDC/scripts/validate-soql.sh:132:                errors+=("Query with aggregates and non-aggregates requires GROUP BY")
+ClaudeSFDC/scripts/validate-soql.sh:137:    # Check for HAVING without GROUP BY
+ClaudeSFDC/scripts/validate-soql.sh:140:            errors+=("HAVING clause requires GROUP BY")
+ClaudeSFDC/scripts/validate-soql.sh:255:    # Suggest using COUNT(Id) instead of COUNT(*)
+ClaudeSFDC/scripts/validate-soql.sh:257:        suggestions+=("Use COUNT(Id) instead of COUNT(*) for better performance")
+ClaudeSFDC/scripts/validate-soql.sh:260:    # Suggest date literal usage
+ClaudeSFDC/scripts/validate-soql.sh:262:        suggestions+=("Consider using date literals (THIS_YEAR, LAST_MONTH, etc.) for date filters")
+ClaudeSFDC/scripts/validate-soql.sh:304:    fixed_query=$(echo "$fixed_query" | sed -E 's/\bCOUNT\(([^)]+)\)\s+count\b/COUNT(\1) recordCount/gi')
+ClaudeSFDC/scripts/validate-soql.sh:311:    fixed_query=$(echo "$fixed_query" | sed -E 's/\bCOUNT\(([^)]+)\)(\s*,|\s+FROM)/COUNT(\1) recordCount\2/gi')
+ClaudeSFDC/scripts/validate-soql.sh:401:    echo -e "${MAGENTA}║         SOQL Query Validator v1.0        ║${NC}"
+ClaudeSFDC/templates/deployment/pre-deployment-checklist.md:67:- [ ] WITH SECURITY_ENFORCED used in custom SOQL queries
+ClaudeSFDC/scripts/lib/flow-validator.js:132:            await this.runValidationRules(flow, 'critical');
+ClaudeSFDC/scripts/lib/flow-validator.js:133:            await this.runValidationRules(flow, 'bestPractices');
+ClaudeSFDC/scripts/lib/flow-validator.js:134:            await this.runValidationRules(flow, 'performance');
+ClaudeSFDC/scripts/lib/flow-validator.js:175:    async runValidationRules(flow, category) {
+ClaudeSFDC/output/dashboards/dealActivity-dashboard.json:85:      "calculation": "PERCENT(COUNT(Executive_Engaged = \"Yes\") / COUNT(*))",
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:34:# Test field accessibility and SOQL queries
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:54:- [ ] All custom fields are accessible via SOQL
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:159:| SOQL Query Avg | `[BASELINE]ms` | `[CURRENT]ms` | `[DELTA]%` | `[PASS/WARN/FAIL]` |
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:204:**Edge Case 1: `[EDGE_CASE_NAME]`**
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:205:- **Scenario:** `[EDGE_CASE_DESCRIPTION]`
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:210:**Edge Case 2: `[EDGE_CASE_NAME]`**
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:211:- **Scenario:** `[EDGE_CASE_DESCRIPTION]`
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:245:sfdx force:data:soql:query -q "SELECT COUNT() FROM [OBJECT] WHERE [VALIDATION_CRITERIA]" -u [SFDX_ALIAS]
+ClaudeSFDC/templates/deployment/post-deployment-verification.md:288:- [ ] WITH SECURITY_ENFORCED in custom SOQL queries
+ClaudeSFDC/output/dashboards/engagementQuality-dashboard.json:34:      "calculation": "PERCENT(COUNT(Executive_Engaged = \"Yes\") / COUNT(*))",
+ClaudeSFDC/docs/guides/MCP_SETUP.md:171:- `mcp_salesforce_data_query` - Execute SOQL queries
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:154:                    COUNT(*) as count,
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:156:                    COUNT(CASE WHEN resolved = 1 THEN 1 END) as resolved_count
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:159:                GROUP BY error_type
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:190:                    COUNT(*) as total_operations,
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:191:                    COUNT(CASE WHEN resolved = 1 THEN 1 END) as successful_operations,
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:192:                    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:193:                    AVG(CASE WHEN resolved = 1 THEN 
+ClaudeSFDC/error-logging/scripts/analyze-errors.js:198:                GROUP BY agent_name
+ClaudeSFDC/templates/deployment/emergency-rollback-procedure.md:76:sfdx force:data:soql:query -q "SELECT COUNT(Id) FROM LoginHistory WHERE LoginTime >= [DEPLOYMENT_TIME]" -u [SFDX_ALIAS]
+ClaudeSFDC/scripts/lib/report-type-cache.js:181:            'LEAD_OWNER', 'CONTACT_OWNER', 'ACCOUNT_OWNER', 'CASE_OWNER'
+ClaudeSFDC/templates/deployment/deployment-runbook.md:258:   - Scenario: `[EDGE_CASE_DESCRIPTION]`
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:133:# Verify field exists in org via Tooling API
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:167:        log_success "Field exists in Tooling API"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:170:        log_warning "Field not found in Tooling API"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:175:# Verify field is accessible via SOQL
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:186:    log_info "Testing SOQL accessibility for ${object_name}.${field_name}..."
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:196:        log_warning "Field not accessible via SOQL"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:199:        log_success "Field is accessible via SOQL"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:202:        log_warning "Unable to determine SOQL accessibility"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:292:        # Step 4: Verify SOQL access
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:297:            log_warning "Field exists but not SOQL accessible, updating permissions..."
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:300:            # Retry SOQL access after permission update
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:434:    # Check 1: Tooling API
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:437:        echo "✅ Exists in Tooling API"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:440:        echo "❌ Not found in Tooling API"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:443:    # Check 2: SOQL Access
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:446:        echo "✅ SOQL accessible"
+ClaudeSFDC/scripts/fix-remaining-eval-usage.sh:449:        echo "❌ Not SOQL accessible"
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:83:                    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:84:                    COUNT(DISTINCT agent_name) as affected_agents,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:85:                    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:86:                    COUNT(CASE WHEN error_severity = 'HIGH' THEN 1 END) as high_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:87:                    COUNT(CASE WHEN error_severity = 'MEDIUM' THEN 1 END) as medium_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:88:                    COUNT(CASE WHEN error_severity = 'LOW' THEN 1 END) as low_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:89:                    COUNT(CASE WHEN resolved = 1 THEN 1 END) as resolved_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:90:                    COUNT(CASE WHEN resolved = 0 THEN 1 END) as unresolved_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:91:                    AVG(CASE WHEN resolved = 1 THEN 
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:113:                    COUNT(DISTINCT ao.operation_id) as total_operations,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:114:                    COUNT(DISTINCT CASE WHEN ao.status = 'SUCCESS' THEN ao.operation_id END) as successful_operations,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:115:                    COUNT(DISTINCT CASE WHEN ao.status = 'FAILED' THEN ao.operation_id END) as failed_operations,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:116:                    AVG(CASE WHEN ao.status = 'SUCCESS' THEN ao.duration_ms END) as avg_duration_ms,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:117:                    COUNT(DISTINCT el.error_id) as total_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:118:                    COUNT(DISTINCT CASE WHEN el.error_severity = 'CRITICAL' THEN el.error_id END) as critical_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:119:                    CASE 
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:120:                        WHEN COUNT(DISTINCT ao.operation_id) > 0 
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:121:                        THEN CAST(COUNT(DISTINCT CASE WHEN ao.status = 'SUCCESS' THEN ao.operation_id END) AS REAL) / COUNT(DISTINCT ao.operation_id) * 100
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:127:                GROUP BY ao.agent_name
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:147:                    COUNT(*) as occurrence_count,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:148:                    COUNT(DISTINCT agent_name) as affected_agents,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:151:                    AVG(CASE WHEN resolved = 1 THEN 1 ELSE 0 END) * 100 as resolution_rate
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:154:                GROUP BY error_type, error_category
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:229:                    COUNT(*) as occurrence_count,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:230:                    COUNT(DISTINCT el.agent_name) as affected_agents,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:231:                    COUNT(DISTINCT sed.object_type) as affected_objects,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:239:                GROUP BY sed.error_code
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:258:                    COUNT(*) as total_attempts,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:259:                    SUM(CASE WHEN success = 1 THEN 1 ELSE 0 END) as successful_recoveries,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:260:                    CAST(SUM(CASE WHEN success = 1 THEN 1 ELSE 0 END) AS REAL) / COUNT(*) * 100 as success_rate,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:265:                GROUP BY recovery_strategy
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:284:                    COUNT(*) as total_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:285:                    COUNT(CASE WHEN error_severity = 'CRITICAL' THEN 1 END) as critical_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:286:                    COUNT(CASE WHEN error_severity = 'HIGH' THEN 1 END) as high_errors,
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:287:                    COUNT(CASE WHEN resolved = 1 THEN 1 END) as resolved_errors
+ClaudeSFDC/error-logging/scripts/agent-error-reporter.js:290:                GROUP BY date(timestamp)
+ClaudeSFDC/scripts/lib/README.md:88:# Safe SOQL query
+ClaudeSFDC/scripts/lib/README.md:196:# Execute SOQL query
+ClaudeSFDC/templates/deployment/change-request-template.md:165:- [ ] WITH SECURITY_ENFORCED in all custom SOQL queries
+ClaudeSFDC/templates/deployment/change-request-template.md:260:- **Edge Case 1:** `[EDGE_CASE_DESCRIPTION]` - **Expected Behavior:** `[EXPECTED_BEHAVIOR]`
+ClaudeSFDC/templates/deployment/change-request-template.md:261:- **Edge Case 2:** `[EDGE_CASE_DESCRIPTION]` - **Expected Behavior:** `[EXPECTED_BEHAVIOR]`
+ClaudeSFDC/scripts/import-pipeline-test.sh:460:                    "SELECT COUNT() FROM $object" \
+ClaudeSFDC/docs/FLOW_ERROR_CATALOG.md:233:### 9. Too Many SOQL Queries
+ClaudeSFDC/docs/FLOW_ERROR_CATALOG.md:236:Too many SOQL queries: 101
+ClaudeSFDC/docs/FLOW_ERROR_CATALOG.md:359:   - Causes: SOQL limit errors
+ClaudeSFDC/tests/validation-scenarios.js:30:      this.testScenario2_ValidationRuleNavigation,
+ClaudeSFDC/tests/validation-scenarios.js:127:  async testScenario2_ValidationRuleNavigation() {
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:630:    "title": "SOQL Query Error",
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:640:    "message": "Malformed SOQL query detected. Query validation and fixes required.",
+ClaudeSFDC/error-logging/scripts/setup-error-logging.sh:642:      "Review SOQL query syntax",
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:115:    async analyzeValidationRules(objectName) {
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:116:        const rules = await this.retriever.getValidationRules(objectName);
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:249:        if (/[a-zA-Z0-9]{15,18}/.test(formula) && !formula.includes('CASESAFEID')) {
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:538:                validationRules: await this.analyzeValidationRules(objectName),
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:639:                    script: `sf project retrieve start --metadata "ValidationRule:${objectName}.${issue.ruleName}"`
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:710:        await this.generateValidationRulesCSV(report);
+ClaudeSFDC/scripts/lib/instance-agnostic-metadata-analyzer.js:727:    async generateValidationRulesCSV(report) {
+ClaudeSFDC/error-logging/scripts/init-database.js:183:                "SELECT COUNT(*) as count FROM sqlite_master WHERE type='table'",
+ClaudeSFDC/scripts/lib/error-recovery.js:189:            pattern: /Too many SOQL queries|CPU time limit exceeded|heap size/i,
+ClaudeSFDC/docs/implementation/AccountTriggerHandler_Coverage_Resolution.md:94:- **Governor Limit Compliance**: Optimized SOQL and DML operations
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:44:                SELECT COUNT(*) as count 
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:51:                SELECT COUNT(*) as count 
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:62:                SELECT COUNT(*) as count 
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:74:                    CASE 
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:83:                    COUNT(*) as count,
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:84:                    AVG(CASE WHEN error_message LIKE '%mcp%' THEN 1 ELSE 0 END) as mcp_percentage
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:87:                GROUP BY error_type
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:95:                    COUNT(*) as total_errors,
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:96:                    SUM(CASE WHEN error_message LIKE '%mcp%' THEN 1 ELSE 0 END) as mcp_errors,
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:97:                    SUM(CASE WHEN error_message LIKE '%sf %' OR error_message LIKE '%sfdx%' THEN 1 ELSE 0 END) as api_errors
+ClaudeSFDC/scripts/analysis/analyze-mcp-success.js:101:                GROUP BY agent_name
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:29:sf data query --query "SELECT Id, ValidationName, Active, Description, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = 'Contract__c'" --use-tooling-api --target-org myorg
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:32:# sf data query --query "SELECT Id, Metadata FROM ValidationRule WHERE Id='[RULE_ID]'" --use-tooling-api --target-org myorg
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:35:# sf project retrieve start --metadata "ValidationRule:Contract__c.*" --target-org myorg
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:80:sf data query --query "SELECT COUNT() FROM Subscription__c WHERE LegacyContractId__c != null" --target-org myorg
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:182:sf data query --query "SELECT Id, ValidationName, Active FROM ValidationRule" --use-tooling-api --target-org myorg
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:185:sf project retrieve start --metadata "ValidationRule" --target-org myorg
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:190:# sf data query --query "SELECT Id, Metadata FROM ValidationRule WHERE Id='[RULE_ID]'" --use-tooling-api --target-org myorg | jq '.result.records[0].Metadata.errorConditionFormula'
+ClaudeSFDC/docs/OPERATIONAL_RUNBOOK.md:322:sf data query --query "SELECT COUNT() FROM Account" --target-org myorg
+ClaudeSFDC/docs/GONG_REPORTS_MANUAL.md:67:   IF(COUNT(Gong__Gong_Call__c.Id) > 3, 100, (COUNT(Gong__Gong_Call__c.Id) / 3) * 100)
+ClaudeSFDC/docs/GONG_REPORTS_MANUAL.md:311:(IF(COUNT(Gong__Gong_Call__c.Id) > 3, 25, 0) + 
+ClaudeSFDC/docs/GONG_REPORTS_MANUAL.md:319:COUNT(Gong__Gong_Call__c.Id) / 
+ClaudeSFDC/docs/RENEWAL_AUTOMATION_TESTING_PLAN.md:135:3. **Governor Limits**: Monitor SOQL queries, DML operations
+ClaudeSFDC/docs/implementation/REPORT_CREATION_REMEDIATION_PLAN.md:434:| Field Not Deployed | Pre-deployment field verification | SOQL query for field existence | Deploy missing fields immediately |
+ClaudeSFDC/scripts/lib/change-validator.js:12:        this.validationRules = this.loadValidationRules();
+ClaudeSFDC/scripts/lib/change-validator.js:19:    loadValidationRules() {
+ClaudeSFDC/scripts/lib/change-validator.js:43:                'existingValidationRules',
+ClaudeSFDC/scripts/analysis/analyze-agent-tools.py:65:            if re.search(pattern, content, re.IGNORECASE):
+ClaudeSFDC/scripts/analysis/analyze-agent-tools.py:68:                api_matches = re.findall(r"(sf\s+\w+|sfdx\s+\w+)", content, re.IGNORECASE)
+ClaudeSFDC/ci-cd/TROUBLESHOOTING.md:115:Error: Invalid field reference in SOQL query
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:1:# SOQL Common Error Fixes
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:4:This document provides solutions for the most common SOQL errors encountered in Salesforce CLI operations.
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:12:./scripts/safe-soql-query.sh "YOUR SOQL QUERY"
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:50:const query = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:67:SELECT COUNT(Id) count FROM Account
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:73:SELECT COUNT(Id) recordCount FROM Account
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:104:-- For checking NULL values, both work in SOQL:
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:164:node scripts/fix-soql-query.js "SELECT COUNT(Id) count FROM Account" | \
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:184:const SOQLQueryBuilder = require('./scripts/soql-query-builder.js');
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:187:const query = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:200:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:204:fixed = SOQLHelper.fix_malformed_query(original)
+ClaudeSFDC/docs/SOQL_ERROR_FIXES.md:232:    A[SOQL Query] --> B{Execute}
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:1:# SOQL Query Builder & Optimization Guide
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:5:This comprehensive solution prevents SOQL syntax errors (like the MALFORMED_QUERY error with reserved keywords) and ensures queries scale efficiently with data volume. It integrates seamlessly with MCP tools and Salesforce agents.
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:11:The error `"missing value at 'count'"` occurs because `count` is a reserved SOQL keyword. Here's how to fix it:
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:15:SELECT COUNT(Id) count, SUM(Amount) total, AVG(Amount)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:18:SELECT COUNT(Id) recordCount, SUM(Amount) totalAmount, AVG(Amount) averageAmount
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:25:const SOQLQueryBuilder = require('./scripts/soql-query-builder.js');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:27:const query = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:35:// Output: SELECT COUNT(Id) recordCount, SUM(Amount) total_amount, AVG(Amount) average_amount FROM Opportunity
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:40:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:42:helper = SOQLHelper()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:51:# Output: SELECT COUNT(Id) recordCount, SUM(Amount) total_amount, AVG(Amount) average_amount FROM Opportunity
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:104:| COUNT(Id) | recordCount | `COUNT(Id) recordCount` |
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:116:const query1 = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:121:// SELECT COUNT(Id) recordCount FROM Account WHERE CreatedDate = THIS_YEAR
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:124:const query2 = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:136:const pipelineQuery = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:144:    .having('COUNT(Id) > 5')
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:154:const builder = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:173:./scripts/validate-soql.sh -q "SELECT COUNT(Id) count FROM Account"
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:176:./scripts/validate-soql.sh -q "SELECT COUNT(Id) count FROM Account" -x y
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:197:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:200:original = "SELECT COUNT(Id) count, SUM(Amount) total FROM Opportunity"
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:201:fixed = SOQLHelper.fix_malformed_query(original)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:203:# SELECT COUNT(Id) recordCount, SUM(Amount) total_amount FROM Opportunity
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:206:analysis = SOQLHelper.analyze_query_performance(query)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:270:const SOQLQueryBuilder = require('../../scripts/soql-query-builder.js');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:273:const query = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:345:const fixed = SOQLHelper.fix_malformed_query(originalQuery);
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:348:query.replace(/\bCOUNT\(([^)]+)\)\s+count\b/gi, 'COUNT($1) recordCount');
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:355:**Problem**: Date values in SOQL should NOT be quoted when using ISO format (YYYY-MM-DD).
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:365:-- ✅ CORRECT (date literals also no quotes)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:376:const query = new SOQLQueryBuilder()
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:388:from scripts.soql_helper import SOQLHelper
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:389:fixed = SOQLHelper.fix_malformed_query(your_query)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:395:### 2. GROUP BY Missing with Aggregates
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:399:**Solution**: Add GROUP BY for non-aggregate fields:
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:514:- [Salesforce SOQL Documentation](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:515:- [SOQL Best Practices](https://developer.salesforce.com/docs/atlas.en-us.salesforce_large_data_volumes_bp.meta/salesforce_large_data_volumes_bp/ldv_deployments_best_practices_soql.htm)
+ClaudeSFDC/docs/SOQL_QUERY_GUIDE.md:521:This solution ensures error-free SOQL queries that scale efficiently with your data volume while integrating seamlessly with your MCP tools and agents.
+ClaudeSFDC/docs/IMPLEMENTATION_FRAMEWORK.md:254:  --query "SELECT COUNT() FROM ValidationRule WHERE Active = true" \
+ClaudeSFDC/docs/REPORTS_API_UPGRADE.md:319:node scripts/monitoring/query-monitor.js explain "YOUR SOQL QUERY"
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:11: *   const validationRules = await retriever.getValidationRules('Opportunity');
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:38:    async getValidationRules(objectName, options = {}) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:50:            const bulkRules = await this.queryValidationRules(objectName);
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:53:            const rulesWithFormulas = await this.enrichValidationRulesWithFormulas(bulkRules, objectName);
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:60:            return await this.retrieveValidationRulesViaMetadata(objectName);
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:65:     * Query validation rules using Tooling API
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:67:    async queryValidationRules(objectName) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:69:                       FROM ValidationRule 
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:89:    async enrichValidationRulesWithFormulas(rules, objectName) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:95:                const formula = await this.getValidationRuleFormula(rule.Id);
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:119:    async getValidationRuleFormula(ruleId) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:120:        const query = `SELECT Id, Metadata FROM ValidationRule WHERE Id='${ruleId}'`;
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:138:    async retrieveValidationRulesViaMetadata(objectName) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:143:        const cmd = `sf project retrieve start --metadata "ValidationRule:${objectName}.*" --target-org ${this.orgAlias} --output-dir "${outputDir}" --wait 10`;
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:149:            const rules = await this.parseValidationRuleXML(outputDir, objectName);
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:161:    async parseValidationRuleXML(baseDir, objectName) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:173:                    if (parsed.ValidationRule) {
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:174:                        const rule = parsed.ValidationRule;
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:573:        complexity += (formula.match(/CASE\(/gi) || []).length * 4;
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:617:            validationRules: await this.getValidationRules(objectName),
+ClaudeSFDC/scripts/lib/metadata-retrieval-framework.js:699:                const rules = await retriever.getValidationRules(objectName);
+ClaudeSFDC/docs/REPORT_API_CORRECT_SOLUTION.md:85:| Cases | `CaseList` | `CASE_OWNER` |
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_TOOLS.md:43:4. **Instance-Agnostic SOQL**: Uses standard Salesforce objects available everywhere
+ClaudeSFDC/docs/INSTANCE_AGNOSTIC_TOOLS.md:293:node scripts/monitoring/query-monitor.js explain "YOUR SOQL" --org myorg
+ClaudeSFDC/ci-cd/README.md:27:- SOQL query optimization checks
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:1:# SOQL Patterns Library - Working Alternatives for Common Failures
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:5:This library provides working SOQL patterns to replace commonly failing queries. Each pattern includes the problematic query, why it fails, and multiple working alternatives.
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:8:1. [CASE Statements in Aggregations](#case-statements-in-aggregations)
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:9:2. [COUNT(DISTINCT) Operations](#countdistinct-operations)
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:16:## 1. CASE Statements in Aggregations
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:20:-- This FAILS in SOQL
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:22:  COUNT(CASE WHEN Status = 'Closed Won' THEN 1 END) as WonDeals,
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:23:  COUNT(CASE WHEN Status = 'Closed Lost' THEN 1 END) as LostDeals
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:27:**Error**: `INVALID_FIELD: CASE not supported in aggregate functions`
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:40:**Step 2**: Use SUM instead of COUNT with CASE
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:52:SELECT COUNT(Id) WonDeals
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:57:SELECT COUNT(Id) LostDeals
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:62:### ✅ Solution 3: GROUP BY Pattern
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:65:SELECT Status, COUNT(Id) DealCount
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:68:GROUP BY Status
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:81:## 2. COUNT(DISTINCT) Operations
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:85:-- This FAILS in SOQL
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:86:SELECT COUNT(DISTINCT AccountId) as UniqueAccounts
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:91:**Error**: `MALFORMED_QUERY: COUNT(DISTINCT) not supported`
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:93:### ✅ Solution 1: GROUP BY + Count Results
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:100:GROUP BY AccountId
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:116:  GROUP BY AccountId
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:142:  SELECT AccountId, COUNT(Id) oppCount
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:145:  GROUP BY AccountId
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:161:-- This FAILS in SOQL (3+ levels of nesting)
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:241:-- These FAIL in SOQL
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:260:-- Common date literals
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:302:-- Or use date literals
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:335:| `COUNT(CASE WHEN...)` | Formula field + `SUM()` | Create formula fields for conditions |
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:336:| `COUNT(DISTINCT field)` | `GROUP BY field` then count results | Use Set in Apex for uniqueness |
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:351:SELECT COUNT(Id) count FROM Account
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:354:SELECT COUNT(Id) recordCount FROM Account
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:371:-- ✅ CORRECT - For SOQL, both work but != null is preferred
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:379:-- SOQL limits fields per query
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:419:node ClaudeSFDC/scripts/soql-query-rewriter.js "SELECT COUNT(DISTINCT AccountId) FROM Opportunity"
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:436:The key to working with SOQL limitations is to:
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:437:1. **Understand the constraints** - SOQL is not SQL
+ClaudeSFDC/docs/SOQL_PATTERNS_LIBRARY.md:443:Remember: If a query seems too complex for SOQL, it probably is. Break it down into simpler parts and combine the results in your application code.
+ClaudeSFDC/docs/implementation/PHASE_4_AUTOMATION_DOCUMENTATION.md:276:- Efficient SOQL queries with proper filtering
+ClaudeSFDC/docs/RENEWAL_FIELD_TROUBLESHOOTING.md:7:- Field may not be queryable via SOQL
+ClaudeSFDC/docs/RENEWAL_FIELD_TROUBLESHOOTING.md:61:### Step 2: Test SOQL Access
+ClaudeSFDC/docs/RENEWAL_FIELD_TROUBLESHOOTING.md:164:- [ ] Field exists in Tooling API
+ClaudeSFDC/docs/RENEWAL_FIELD_TROUBLESHOOTING.md:165:- [ ] Field queryable via SOQL
+ClaudeSFDC/scripts/lib/sfdx-parser.js:149:     * Parse SOQL query results
+ClaudeSFDC/scripts/lib/sfdx-parser.js:278:                    console.error('Usage: sfdx-parser query <SOQL query>');
+ClaudeSFDC/scripts/lib/sfdx-parser.js:297:  sfdx-parser query <SOQL>                 Execute SOQL query
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:26:| `Too many SOQL queries` | Switch to Bulk API | 100% |
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:147:sf data query -q "SELECT FieldName, COUNT(Id) FROM Object GROUP BY FieldName HAVING COUNT(Id) > 1" \
+ClaudeSFDC/docs/RUNBOOK_ERROR_RECOVERY.md:195:**Error Message:** `Too many SOQL queries` or `CPU time limit exceeded`
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:4:Fixed Salesforce Tooling API query errors across multiple scripts and documentation files in the ClaudeSFDC project. The errors were caused by incorrect field names and API limitations that require specific approaches for retrieving certain metadata.
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:8:### 1. ValidationRule Queries
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:16:- Query `Metadata` field individually for each ValidationRule when formulas are needed
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:22:SELECT Id, ValidationName, Active, ErrorConditionFormula FROM ValidationRule
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:25:SELECT Id, ValidationName, Active, Description, ErrorMessage FROM ValidationRule
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:28:SELECT Id, Metadata FROM ValidationRule WHERE Id='[RULE_ID]'
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:31:sf project retrieve start --metadata "ValidationRule:Object.*"
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:36:#### Reality Check (Tooling API vs Views)
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:37:- `Flow` (Tooling API, flow versions): has `MasterLabel`, `Status`, `ProcessType`, `TriggerType`, `VersionNumber`, `Description`, and relationship `Definition.DeveloperName`.
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:38:- `FlowDefinitionView` (Tooling API view, definitions): has `ApiName`, `Label`, `ProcessType`, `IsActive`. Does NOT have `TriggerType`.
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:45:-- Active flow versions with trigger info (Tooling API)
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:51:-- Active flow definitions with ApiName (no TriggerType) (Tooling API)
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:102:const rules = await query("SELECT Id, ValidationName FROM ValidationRule");
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:106:    const detail = await query(`SELECT Id, Metadata FROM ValidationRule WHERE Id='${rule.Id}'`);
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:114:sf project retrieve start --metadata "ValidationRule" --target-org myorg
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:124:    metadata: 'ValidationRule:Opportunity.*',
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:131:- Tests basic ValidationRule queries
+ClaudeSFDC/docs/SALESFORCE_QUERY_FIXES_SUMMARY.md:140:2. **Use appropriate API**: Tooling API vs REST API vs Metadata API each have different capabilities
+ClaudeSFDC/scripts/validation/quick_security_check.py:96:            perm_success, perm_stdout, perm_stderr = run_cmd(f'sf data query --query "SELECT COUNT() FROM FieldPermissions WHERE SobjectType = \'{obj}\' AND Field = \'{obj}.{field}\'" --target-org wedgewood-sandbox --json')
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:11:  sf data query --use-tooling-api -q "SELECT Id, ValidationName, Active, EntityDefinition.QualifiedApiName, ErrorMessage FROM ValidationRule ORDER BY EntityDefinition.QualifiedApiName, ValidationName" --target-org {instance}
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:134:  sf data query --use-tooling-api -q "SELECT COUNT(Id), Active, EntityDefinition.QualifiedApiName FROM ValidationRule GROUP BY Active, EntityDefinition.QualifiedApiName" --target-org {instance}
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:244:FROM ValidationRule
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:253:    COUNT(Id) RuleCount
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:254:FROM ValidationRule
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:255:GROUP BY EntityDefinition.QualifiedApiName, Active
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:262:    ValidationRuleId,
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:263:    ValidationRule.ValidationName,
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:264:    COUNT(Id) TriggerCount
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:265:FROM ValidationRuleExecutionEvent
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:267:GROUP BY ValidationRuleId, ValidationRule.ValidationName
+ClaudeSFDC/docs/VALIDATION_RULES_QA_CHECKLIST.md:268:ORDER BY COUNT(Id) DESC
+ClaudeSFDC/scripts/lib/preflight-validator.js:55:            validation.checks.validationRules = await this.checkValidationRules(operation);
+ClaudeSFDC/scripts/lib/preflight-validator.js:265:    async checkValidationRules(operation) {
+ClaudeSFDC/scripts/lib/preflight-validator.js:272:                FROM ValidationRule
+ClaudeSFDC/scripts/lib/preflight-validator.js:278:                const result = await this.executeToolingQuery(query);
+ClaudeSFDC/scripts/lib/preflight-validator.js:457:                SELECT ${fieldName}, COUNT(Id) cnt
+ClaudeSFDC/scripts/lib/preflight-validator.js:460:                GROUP BY ${fieldName}
+ClaudeSFDC/scripts/lib/preflight-validator.js:461:                ORDER BY COUNT(Id) DESC
+ClaudeSFDC/scripts/lib/preflight-validator.js:695:     * Execute SOQL query
+ClaudeSFDC/scripts/lib/preflight-validator.js:697:    async executeQuery(query, useTooling = false) {
+ClaudeSFDC/scripts/lib/preflight-validator.js:698:        const cmd = `sf data query --query "${query.replace(/\n/g, ' ')}" --json --target-org ${this.orgAlias}${useTooling ? ' --use-tooling-api' : ''}`;
+ClaudeSFDC/scripts/lib/preflight-validator.js:704:     * Execute Tooling API query
+ClaudeSFDC/scripts/lib/preflight-validator.js:706:    async executeToolingQuery(query) {
+ClaudeSFDC/docs/MCP_SALESFORCE_TOOLS_CATALOG.md:11:- **Purpose**: Execute SOQL queries to retrieve data from Salesforce
+ClaudeSFDC/docs/MCP_SALESFORCE_TOOLS_CATALOG.md:345:- [SOQL Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
+ClaudeSFDC/scripts/report-migration-tool.sh:89:    # Build SOQL query
+ClaudeSFDC/scripts/report-migration-tool.sh:594:    local current_count=$(sf data query --query "SELECT COUNT() FROM Report" --target-org "$org" --json | jq '.result.records[0].expr0')
+ClaudeSFDC/scripts/report-migration-tool.sh:597:    local archived_count=$(sf data query --query "SELECT COUNT() FROM Report WHERE Name LIKE '[ARCHIVED]%'" --target-org "$org" --json | jq '.result.records[0].expr0')
+ClaudeSFDC/docs/RUNBOOK_ROLLBACK.md:275:CURRENT_COUNT=$(sf data query -q "SELECT COUNT() FROM YourObject" --org yourorg)
+ClaudeSFDC/ci-cd/SETUP_GUIDE.md:304:# SOQL accessibility testing
+ClaudeSFDC/docs/OPERATIONAL_INTELLIGENCE_TRAINING.md:221:await deactivateValidationRule('Account_Validation');
+ClaudeSFDC/docs/OPERATIONAL_INTELLIGENCE_TRAINING.md:227:await activateValidationRule('Account_Validation');
+ClaudeSFDC/docs/implementation/Field_Cleanup_Implementation_Plan.md:88:   SELECT COUNT(*) FROM Account 
+ClaudeSFDC/docs/implementation/ROLLUP_DEPLOYMENT_GUIDE.md:204:   // Look for CPU time consumption and SOQL query usage
+ClaudeSFDC/docs/implementation/ROLLUP_DEPLOYMENT_GUIDE.md:238:**Symptoms:** Trigger fails with SOQL/DML limit errors
+ClaudeSFDC/docs/implementation/ROLLUP_DEPLOYMENT_GUIDE.md:242:- Optimize SOQL queries in framework
+ClaudeSFDC/scripts/lib/report-upsert-manager.js:57:            // Use SOQL to find report
+ClaudeSFDC/scripts/test-agent-field-verification.sh:38:    echo -e "${GREEN}✅ Field exists in Tooling API${NC}"
+ClaudeSFDC/scripts/test-agent-field-verification.sh:45:    echo -e "${GREEN}✅ Field is SOQL accessible${NC}"
+ClaudeSFDC/scripts/test-agent-field-verification.sh:47:    echo -e "${YELLOW}⚠️  Field not SOQL accessible${NC}"
+ClaudeSFDC/docs/implementation/ROLLUP_SUMMARY_LIMITATIONS_AND_SOLUTIONS.md:130:- SOQL Queries: 100 (synchronous), 200 (asynchronous)
+ClaudeSFDC/docs/implementation/ROLLUP_SUMMARY_LIMITATIONS_AND_SOLUTIONS.md:137:- Implement efficient SOQL queries
+ClaudeSFDC/docs/implementation/FIELD_DEPLOYMENT_SOLUTION.md:28:  2. SOQL query accessibility test
+ClaudeSFDC/docs/implementation/FIELD_DEPLOYMENT_SOLUTION.md:102:1. **MANDATORY**: Verify field via SOQL query
+ClaudeSFDC/docs/implementation/FIELD_DEPLOYMENT_SOLUTION.md:133:3. **Verify through multiple channels** - SOQL, reports, and UI
+ClaudeSFDC/docs/implementation/FIELD_DEPLOYMENT_SOLUTION.md:157:3. Field in metadata but not SOQL → Wait for cache refresh
+ClaudeSFDC/scripts/lib/python_commons.py:352:        Execute a SOQL query.
+ClaudeSFDC/scripts/lib/python_commons.py:355:            soql: SOQL query string
+ClaudeSFDC/scripts/tool-inventory.js:108:        if (content.includes('force:data:soql:query')) tool.capabilities.push('SOQL queries');
+ClaudeSFDC/scripts/tool-inventory.js:222:            tool.capabilities.includes('Bulk operations') || tool.capabilities.includes('SOQL queries')) {
+ClaudeSFDC/scripts/error-prevention-guard.sh:192:    log_prevention "INFO" "Checking SOQL query"
+ClaudeSFDC/scripts/error-prevention-guard.sh:369:            # SOQL query operation
+ClaudeSFDC/scripts/error-prevention-guard.sh:438:    # Check SOQL query
+ClaudeSFDC/scripts/lib/package-xml-generator.js:11: *   const xml = generator.generateForObject('Opportunity', ['ValidationRule', 'Flow']);
+ClaudeSFDC/scripts/lib/package-xml-generator.js:63:            'ValidationRule': objectName ? `${objectName}.*` : '*',
+ClaudeSFDC/scripts/lib/package-xml-generator.js:86:            'ValidationRule',
+ClaudeSFDC/scripts/lib/package-xml-generator.js:99:    async generateValidationRulePackage(objectName) {
+ClaudeSFDC/scripts/lib/package-xml-generator.js:104:        <name>ValidationRule</name>
+ClaudeSFDC/scripts/lib/package-xml-generator.js:234:        <name>ValidationRule</name>
+ClaudeSFDC/scripts/lib/package-xml-generator.js:278:        const types = metadataTypes || ['Flow', 'ValidationRule', 'ApexClass', 'ApexTrigger'];
+ClaudeSFDC/scripts/lib/package-xml-generator.js:347:            const vrPackage = await this.generateValidationRulePackage(objectName);
+ClaudeSFDC/scripts/lib/package-xml-generator.js:349:            results.success.push({ type: 'ValidationRule', output: vrOutput });
+ClaudeSFDC/scripts/lib/package-xml-generator.js:351:            results.failed.push({ type: 'ValidationRule', error: error.message });
+ClaudeSFDC/scripts/lib/package-xml-generator.js:447:                const vrPath = await generator.generateValidationRulePackage(vrObject);
+ClaudeSFDC/scripts/update-subagents-metadata.sh:55:const validationRules = await retriever.getValidationRules('Opportunity');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:82:     * Execute SOQL query with performance monitoring
+ClaudeSFDC/scripts/monitoring/query-monitor.js:756:                    if (!soql) throw new Error('SOQL query required');
+ClaudeSFDC/scripts/monitoring/query-monitor.js:769:                    if (!soql) throw new Error('SOQL query required');
+ClaudeSFDC/scripts/lib/analytics-error-handler.js:160:                suggestion: 'Use standard date literals like LAST_30_DAYS, THIS_QUARTER',
+ClaudeSFDC/scripts/chunked-operations.py:212:            query: SOQL query
+ClaudeSFDC/scripts/chunked-operations.py:224:        base_query = re.sub(r'\s+LIMIT\s+\d+', '', query, flags=re.IGNORECASE)
+ClaudeSFDC/scripts/chunked-operations.py:225:        base_query = re.sub(r'\s+OFFSET\s+\d+', '', base_query, flags=re.IGNORECASE)
+ClaudeSFDC/scripts/chunked-operations.py:385:        """Execute a SOQL query"""
+ClaudeSFDC/scripts/chunked-operations.py:496:        help='SOQL query (for query operation)'
+ClaudeSFDC/scripts/monitoring/flow-complexity-audit.js:127:            // Use Tooling API to get flow definition with detailed metadata
+ClaudeSFDC/scripts/monitoring/README.md:393:# Check Tooling API access
+ClaudeSFDC/scripts/monitoring/README.md:394:sf data query --query "SELECT COUNT() FROM ValidationRule" --use-tooling-api --target-org production
+ClaudeSFDC/scripts/monitoring/README.md:396:# Verify SOQL query permissions
+ClaudeSFDC/scripts/monitoring/README.md:397:sf data query --use-tooling-api --query "SELECT COUNT() FROM FlowDefinition" --target-org production
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:26:class ValidationRuleMonitor {
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:134:    async retrieveValidationRules() {
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:156:            // Get all validation rules using Tooling API
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:162:                FROM ValidationRule
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:247:    async analyzeValidationRuleRisks(rule) {
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:422:            const riskAnalysis = await this.analyzeValidationRuleRisks(change.rule);
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:474:            generatedBy: 'ValidationRuleMonitor'
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:753:System: ValidationRuleMonitor
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:777:            const currentRules = await this.retrieveValidationRules();
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:860:    const monitor = new ValidationRuleMonitor(options.org, {
+ClaudeSFDC/scripts/monitoring/validation-rule-monitor.js:877:module.exports = ValidationRuleMonitor;
+ClaudeSFDC/scripts/audit-logger.py:333:                COUNT(*) as total_operations,
+ClaudeSFDC/scripts/audit-logger.py:334:                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as successful,
+ClaudeSFDC/scripts/audit-logger.py:335:                SUM(CASE WHEN status IN (?, ?, ?) THEN 1 ELSE 0 END) as failed,
+ClaudeSFDC/scripts/audit-logger.py:356:                COUNT(*) as count,
+ClaudeSFDC/scripts/audit-logger.py:358:                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as successful
+ClaudeSFDC/scripts/audit-logger.py:361:            GROUP BY operation_type
+ClaudeSFDC/scripts/audit-logger.py:374:                COUNT(*) as count,
+ClaudeSFDC/scripts/audit-logger.py:376:                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as successful
+ClaudeSFDC/scripts/audit-logger.py:379:            GROUP BY object_name
+ClaudeSFDC/scripts/audit-logger.py:510:                SELECT COUNT(*) as count FROM audit_log
+ClaudeSFDC/scripts/verify-implementation.sh:51:    local QUERY="SELECT EntityDefinition.QualifiedApiName, Active, COUNT(Id) cnt FROM ValidationRule GROUP BY EntityDefinition.QualifiedApiName, Active ORDER BY EntityDefinition.QualifiedApiName"
+ClaudeSFDC/scripts/lib/validation-commons.sh:62:# Execute SOQL query with caching
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:324:    async aggregateValidationRuleData() {
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:432:            const { stdout: flowStdout } = await execAsync(`sf data query --use-tooling-api --query "SELECT COUNT() totalFlows FROM FlowDefinition WHERE IsActive = true" --target-org ${this.orgAlias} --json`);
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:436:            const { stdout: validationStdout } = await execAsync(`sf data query --query "SELECT COUNT() totalRules FROM ValidationRule WHERE Active = true" --use-tooling-api --target-org ${this.orgAlias} --json`);
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:442:                totalActiveValidationRules: validationResult.result?.records?.[0]?.totalRules || 0,
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:450:                totalActiveValidationRules: 0,
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:663:                <div class="stat-value">${systemMetrics.totalActiveValidationRules}</div>
+ClaudeSFDC/scripts/monitoring/system-health-dashboard.js:930:                this.aggregateValidationRuleData(),
+ClaudeSFDC/scripts/gong-list-view-generator.js:456:        return `Use SOQL query for advanced filtering`;
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:154:    # Query validation rules using Tooling API
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:155:    local query="SELECT Id, ValidationName, Active, Description, ErrorConditionFormula, ErrorMessage FROM ValidationRule WHERE EntityDefinition.QualifiedApiName = '${object}'"
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:234:    local active_rules=$(sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND active=1")
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:235:    local total_rules=$(sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object'")
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:291:        if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='Account' AND error_formula LIKE '%Website%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:297:    if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND error_formula LIKE '%Email%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:302:    if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND error_formula LIKE '%Phone%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:307:    if sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND error_formula LIKE '%Date%'" | grep -q "^[1-9]"; then
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:338:SELECT org_alias, object_name, COUNT(*) as rule_count, 
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:342:GROUP BY org_alias, object_name
+ClaudeSFDC/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh:420:       CASE WHEN active=1 THEN 'Active' ELSE 'Inactive' END as status
+ClaudeSFDC/scripts/deploy-renewal-field-with-verification.sh:116:    // Test SOQL access
+ClaudeSFDC/scripts/deploy-renewal-field-with-verification.sh:119:    System.debug('SUCCESS: Field is accessible via SOQL');
+ClaudeSFDC/scripts/deploy-renewal-field-with-verification.sh:135:    echo -e "${GREEN}✓ Field is accessible via SOQL${NC}"
+ClaudeSFDC/scripts/lib/operation-verifier.js:591:     * Execute SOQL query
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:68:                    console.log('✅ Basic SOQL query successful');
+ClaudeSFDC/scripts/diagnostic-mcp-connectivity.js:71:                    throw new Error('SOQL query returned unexpected result');
+ClaudeSFDC/scripts/error-pattern-learner.sh:163:    COUNT(*) as pattern_count,
+ClaudeSFDC/scripts/error-pattern-learner.sh:167:GROUP BY object_name
+ClaudeSFDC/scripts/error-pattern-learner.sh:190:    COUNT(*) as patterns_fixed,
+ClaudeSFDC/scripts/error-pattern-learner.sh:196:GROUP BY f.fix_type
+ClaudeSFDC/scripts/error-pattern-learner.sh:581:    local total_patterns=$(sqlite3 "$ERROR_DB" "SELECT COUNT(*) FROM error_patterns")
+ClaudeSFDC/scripts/error-pattern-learner.sh:677:                echo "  Total patterns: $(sqlite3 "$ERROR_DB" 'SELECT COUNT(*) FROM error_patterns')"
+ClaudeSFDC/scripts/error-pattern-learner.sh:678:                echo "  Total instances: $(sqlite3 "$ERROR_DB" 'SELECT COUNT(*) FROM error_instances')"
+ClaudeSFDC/scripts/error-pattern-learner.sh:679:                echo "  Total fixes: $(sqlite3 "$ERROR_DB" 'SELECT COUNT(*) FROM error_fixes')"
+ClaudeSFDC/scripts/agent-auto-resolver.sh:281:    CASE 
+ClaudeSFDC/scripts/validate-duplicates.sh:263:    # Build SOQL query conditions
+ClaudeSFDC/scripts/lib/operation-sequencer.js:200:      const validationRules = await this.getValidationRules(operation.objects);
+ClaudeSFDC/scripts/lib/operation-sequencer.js:665:  async getValidationRules(objects) {
+ClaudeSFDC/scripts/investigation-engine.py:803:            description="Inefficient SOQL queries",
+ClaudeSFDC/scripts/safe-soql-query.sh:3:# Safe SOQL Query Executor
+ClaudeSFDC/scripts/safe-soql-query.sh:4:# Automatically fixes common SOQL errors before execution
+ClaudeSFDC/scripts/safe-soql-query.sh:36:    echo "Usage: safe-soql-query.sh \"YOUR SOQL QUERY\""
+ClaudeSFDC/scripts/update-agent-date-context.js:191:                `When querying data, use date literals relative to ${this.formatDate(date)}`,
+ClaudeSFDC/agents/sfdc-data-operations.yaml:10:    - "Use SOQL date literals for date-based queries (TODAY, LAST_MONTH, etc.)"
+ClaudeSFDC/agents/sfdc-data-operations.yaml:35:    - SOQL query execution
+ClaudeSFDC/scripts/record-type-picklist-validator.sh:427:       CASE WHEN is_active=1 THEN 'Active' ELSE 'Inactive' END as Status,
+ClaudeSFDC/scripts/record-type-picklist-validator.sh:428:       CASE WHEN is_default=1 THEN 'Yes' ELSE 'No' END as "Default"
+ClaudeSFDC/scripts/record-type-picklist-validator.sh:566:            echo "Cached objects: $(sqlite3 "$RT_DB" "SELECT COUNT(DISTINCT object_name) FROM record_types")"
+ClaudeSFDC/agents/sfdc-reports-dashboards.yaml:107:      CaseList: "CASE_OWNER"
+ClaudeSFDC/scripts/lib/conflict-detector.js:46:      await this.detectValidationRuleConflicts(orgState, plannedChanges.validationRules);
+ClaudeSFDC/scripts/lib/conflict-detector.js:84:      const validationRulesCmd = `sf data query --query "SELECT Id, Active, ErrorConditionFormula, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
+ClaudeSFDC/scripts/lib/conflict-detector.js:225:  async detectValidationRuleConflicts(orgState, plannedRules) {
+ClaudeSFDC/scripts/lib/conflict-detector.js:327:      const flowQuery = `sf data query --query "SELECT COUNT() FROM Flow WHERE Status = 'Active'" --target-org ${this.orgAlias} --use-tooling-api --json`;
+ClaudeSFDC/scripts/unified-data-validator.sh:12:# - SOQL query validation and optimization
+ClaudeSFDC/scripts/unified-data-validator.sh:62:    -t soql         Validate SOQL query syntax and performance
+ClaudeSFDC/scripts/unified-data-validator.sh:70:    -q QUERY        SOQL query to validate (for soql validation)
+ClaudeSFDC/scripts/unified-data-validator.sh:87:    # Validate SOQL query
+ClaudeSFDC/scripts/unified-data-validator.sh:215:    # Build SOQL query for validation rules (without ErrorConditionFormula which requires individual queries)
+ClaudeSFDC/scripts/unified-data-validator.sh:216:    local query="SELECT Id, ValidationName, Active, Description, ErrorMessage, ErrorDisplayField FROM ValidationRule WHERE EntityDefinition.QualifiedApiName = '$object' AND Active = true"
+ClaudeSFDC/scripts/unified-data-validator.sh:218:    # Execute query using Tooling API
+ClaudeSFDC/scripts/unified-data-validator.sh:440:# SOQL Query Validation
+ClaudeSFDC/scripts/unified-data-validator.sh:445:    log PROGRESS "Validating SOQL query..."
+ClaudeSFDC/scripts/unified-data-validator.sh:452:        log ERROR "SOQL query is empty"
+ClaudeSFDC/scripts/unified-data-validator.sh:511:    log RESULT "SOQL Query Validation Results:"
+ClaudeSFDC/scripts/unified-data-validator.sh:517:        log SUCCESS "SOQL query validation passed"
+ClaudeSFDC/scripts/unified-data-validator.sh:520:        log WARNING "SOQL query validation found $issues_found issues"
+ClaudeSFDC/scripts/unified-data-validator.sh:537:    local rules_count=$(sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM validation_rules WHERE org_alias='$org_alias' AND object_name='$object' AND active=1")
+ClaudeSFDC/scripts/unified-data-validator.sh:626:        local field_exists=$(sqlite3 "$RULES_DB" "SELECT COUNT(*) FROM field_requirements WHERE org_alias='$org_alias' AND object_name='$object' AND field_name='$csv_header'")
+ClaudeSFDC/scripts/unified-data-validator.sh:791:    [[ -n "$soql_query" ]] && echo -e "${BLUE}SOQL Query:${NC} $soql_query"
+ClaudeSFDC/scripts/unified-data-validator.sh:816:                log ERROR "SOQL query is required for soql validation type"
+ClaudeSFDC/scripts/unified-data-validator.sh:822:            validation_results="SOQL query validation completed"
+ClaudeSFDC/scripts/test-contract-creation-flow.sh:84:        log_both "${YELLOW}⚠️ Could not query flows directly. Checking via SOQL...${NC}"
+ClaudeSFDC/scripts/test-contract-creation-flow.sh:87:        sf data query --use-tooling-api --query "SELECT COUNT() FROM FlowDefinition" --target-org "$TARGET_ORG" &>/dev/null && {
+ClaudeSFDC/scripts/test-contract-creation-flow.sh:364:    log_both "${BLUE}🧩 STEP 9: EDGE CASE TESTING${NC}"
+ClaudeSFDC/scripts/test-contract-creation-flow.sh:378:        local contract_query="sf data query --query \"SELECT COUNT() FROM Contract WHERE AccountId = '$TEST_ACCOUNT_ID' AND CreatedDate >= ${today}T00:00:00Z\" --target-org $TARGET_ORG --json"
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:741:     * Convert SOQL to COUNT query
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:756:            return `SELECT COUNT() ${fromClause}`;
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:759:            const cleanFrom = fromClause.split(/ORDER BY|LIMIT|OFFSET|GROUP BY/i)[0];
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:760:            return `SELECT COUNT() ${cleanFrom}`;
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:1071:                    if (!soql) throw new Error('SOQL query required');
+ClaudeSFDC/scripts/lib/bulk-api-handler.js:1079:                    if (!soql) throw new Error('SOQL query required');
+ClaudeSFDC/scripts/diagnostic-toolkit.sh:489:    local query="SELECT $field_name, COUNT(Id) cnt 
+ClaudeSFDC/scripts/diagnostic-toolkit.sh:492:                GROUP BY $field_name 
+ClaudeSFDC/scripts/diagnostic-toolkit.sh:493:                HAVING COUNT(Id) > 1 
+ClaudeSFDC/scripts/diagnostic-toolkit.sh:574:    sf data query -q "SELECT COUNT() FROM $object_name" -o "$org_alias" &>/dev/null
+ClaudeSFDC/scripts/validation-rule-analyzer.sh:52:    local query="SELECT Id, ValidationName, Active, Description, ErrorMessage, ErrorDisplayField FROM ValidationRule WHERE EntityDefinition.QualifiedApiName='$object_name'"
+ClaudeSFDC/scripts/validation-rule-analyzer.sh:96:    local query="SELECT Id, Metadata FROM ValidationRule WHERE Id='$rule_id'"
+ClaudeSFDC/scripts/salesforce-id-verifier.js:32:            '02i': 'ValidationRule',
+ClaudeSFDC/scripts/templates/gong-report-templates.json:441:      "formula": "IF(COUNT(Gong__Gong_Call__c.Id) >= 5, 100, (COUNT(Gong__Gong_Call__c.Id) / 5) * 100)",
+ClaudeSFDC/scripts/templates/gong-report-templates.json:456:      "formula": "IF(COUNT(Gong__Gong_Call__c.Id) > PREVIOUS_COUNT(Gong__Gong_Call__c.Id), \"Increasing\", IF(COUNT(Gong__Gong_Call__c.Id) < PREVIOUS_COUNT(Gong__Gong_Call__c.Id), \"Decreasing\", \"Stable\"))",
+ClaudeSFDC/scripts/soql_helper.py:4:SOQL Helper for Salesforce MCP Tools
+ClaudeSFDC/scripts/soql_helper.py:5:Provides Python-based SOQL query building, validation, and optimization
+ClaudeSFDC/scripts/soql_helper.py:22:    """Supported SOQL aggregate functions"""
+ClaudeSFDC/scripts/soql_helper.py:38:    """SOQL date literals"""
+ClaudeSFDC/scripts/soql_helper.py:81:class SOQLHelper:
+ClaudeSFDC/scripts/soql_helper.py:82:    """Python SOQL query builder and helper"""
+ClaudeSFDC/scripts/soql_helper.py:84:    # Reserved SOQL keywords
+ClaudeSFDC/scripts/soql_helper.py:110:    def reset(self) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:144:    def select(self, fields: Union[str, List[str], Dict[str, str]]) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:160:                  alias: Optional[str] = None) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:197:    def count(self, field: str = "Id", alias: str = None) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:201:    def sum(self, field: str, alias: str = None) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:205:    def avg(self, field: str, alias: str = None) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:209:    def from_object(self, object_name: str) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:214:    def where(self, condition: str, operator: str = "AND") -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:222:    def where_equals(self, field: str, value: Any) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:227:    def where_in(self, field: str, values: List[Any]) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:232:    def where_like(self, field: str, pattern: str) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:236:    def where_date_range(self, field: str, start: Any, end: Any) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:242:    def where_date_literal(self, field: str, literal: DateLiteral) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:243:        """Add date literal condition"""
+ClaudeSFDC/scripts/soql_helper.py:246:    def group_by(self, fields: Union[str, List[str]]) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:247:        """Add GROUP BY fields"""
+ClaudeSFDC/scripts/soql_helper.py:254:    def having(self, condition: str) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:259:    def order_by(self, field: str, direction: Union[str, OrderDirection] = OrderDirection.ASC) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:271:    def limit(self, value: int) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:279:    def offset(self, value: int) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:287:    def with_security(self) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:292:    def for_update(self) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:297:    def for_view(self) -> 'SOQLHelper':
+ClaudeSFDC/scripts/soql_helper.py:303:        """Format value for SOQL"""
+ClaudeSFDC/scripts/soql_helper.py:310:            # Date values should NOT be quoted in SOQL
+ClaudeSFDC/scripts/soql_helper.py:313:        # Check for date literals
+ClaudeSFDC/scripts/soql_helper.py:349:        """Format date for SOQL (without quotes)"""
+ClaudeSFDC/scripts/soql_helper.py:360:        # Check for date literals
+ClaudeSFDC/scripts/soql_helper.py:392:            self.errors.append("Query with aggregates and non-aggregates requires GROUP BY")
+ClaudeSFDC/scripts/soql_helper.py:394:        # Check HAVING without GROUP BY
+ClaudeSFDC/scripts/soql_helper.py:396:            self.errors.append("HAVING clause requires GROUP BY")
+ClaudeSFDC/scripts/soql_helper.py:407:        """Build the SOQL query string"""
+ClaudeSFDC/scripts/soql_helper.py:435:        # GROUP BY clause
+ClaudeSFDC/scripts/soql_helper.py:437:            parts.append(f"GROUP BY {', '.join(self.group_by_fields)}")
+ClaudeSFDC/scripts/soql_helper.py:516:        range_query = (SOQLHelper()
+ClaudeSFDC/scripts/soql_helper.py:543:        """Attempt to fix a malformed SOQL query"""
+ClaudeSFDC/scripts/soql_helper.py:546:            (r'\bCOUNT\(([^)]+)\)\s+count\b', r'COUNT(\1) recordCount'),
+ClaudeSFDC/scripts/soql_helper.py:551:            (r'\bCOUNT\(([^)]+)\)\s+total\b', r'COUNT(\1) totalCount'),
+ClaudeSFDC/scripts/soql_helper.py:557:            fixed_query = re.sub(pattern, replacement, fixed_query, flags=re.IGNORECASE)
+ClaudeSFDC/scripts/soql_helper.py:570:        fixed_query = re.sub(date_field_pattern, fix_date, fixed_query, flags=re.IGNORECASE)
+ClaudeSFDC/scripts/soql_helper.py:572:        # Also fix date literals that might be incorrectly quoted
+ClaudeSFDC/scripts/soql_helper.py:579:            # Remove quotes from date literal
+ClaudeSFDC/scripts/soql_helper.py:582:        fixed_query = re.sub(date_literal_pattern, fix_date_literal, fixed_query, flags=re.IGNORECASE)
+ClaudeSFDC/scripts/soql_helper.py:597:        fixed_query = re.sub(pattern, add_alias, fixed_query, flags=re.IGNORECASE)
+ClaudeSFDC/scripts/soql_helper.py:608:        if re.search(r'SELECT\s+\*', query, re.IGNORECASE):
+ClaudeSFDC/scripts/soql_helper.py:613:        if not re.search(r'\bWHERE\b', query, re.IGNORECASE):
+ClaudeSFDC/scripts/soql_helper.py:618:        if re.search(r'\bNOT\s+IN\b|\!=', query, re.IGNORECASE):
+ClaudeSFDC/scripts/soql_helper.py:623:        if re.search(r"LIKE\s+'%[^']+", query, re.IGNORECASE):
+ClaudeSFDC/scripts/soql_helper.py:628:        or_count = len(re.findall(r'\bOR\b', query, re.IGNORECASE))
+ClaudeSFDC/scripts/soql_helper.py:634:        if not re.search(r'\bLIMIT\b', query, re.IGNORECASE):
+ClaudeSFDC/scripts/soql_helper.py:652:        query = SOQLHelper().count().from_object(object_name)
+ClaudeSFDC/scripts/soql_helper.py:660:        return (SOQLHelper()
+ClaudeSFDC/scripts/soql_helper.py:674:        return (SOQLHelper()
+ClaudeSFDC/scripts/soql_helper.py:682:            .having("COUNT(Id) > 5")
+ClaudeSFDC/scripts/soql_helper.py:689:        return (SOQLHelper()
+ClaudeSFDC/scripts/soql_helper.py:700:        return (SOQLHelper()
+ClaudeSFDC/scripts/soql_helper.py:708:            .order_by("COUNT(Id)", OrderDirection.DESC)
+ClaudeSFDC/scripts/soql_helper.py:718:        print("SOQL Helper - Python Query Builder\n")
+ClaudeSFDC/scripts/soql_helper.py:734:        fixed = SOQLHelper.fix_malformed_query(query)
+ClaudeSFDC/scripts/soql_helper.py:743:        analysis = SOQLHelper.analyze_query_performance(query)
+ClaudeSFDC/scripts/soql_helper.py:769:        helper = SOQLHelper()
+ClaudeSFDC/scripts/soql_helper.py:788:            .having("COUNT(Id) > 10")
+ClaudeSFDC/agents/utilities/verify-deployment.sh:187:    local query="SELECT Id, Active, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = '$object' AND ValidationName = '$rule_name' LIMIT 1"
+ClaudeSFDC/scripts/soql-validator.js:4: * SOQL Validation Pre-Processor
+ClaudeSFDC/scripts/soql-validator.js:6: * Purpose: Validates SOQL queries before execution to prevent common failures
+ClaudeSFDC/scripts/soql-validator.js:13:class SOQLValidator {
+ClaudeSFDC/scripts/soql-validator.js:24:      { pattern: /COUNT\s*\(\s*DISTINCT/gi, name: 'COUNT(DISTINCT)', severity: 'ERROR' },
+ClaudeSFDC/scripts/soql-validator.js:25:      { pattern: /\bCASE\s+WHEN.*?END\s*\)/gis, name: 'CASE in aggregation', severity: 'ERROR' },
+ClaudeSFDC/scripts/soql-validator.js:46:        message: 'Date values should not be quoted in SOQL'
+ClaudeSFDC/scripts/soql-validator.js:75:        message: 'Relationship traversal limited to 5 levels in SOQL'
+ClaudeSFDC/scripts/soql-validator.js:106:    // Check date literals
+ClaudeSFDC/scripts/soql-validator.js:133:          message: `${func.name} is not supported in SOQL`,
+ClaudeSFDC/scripts/soql-validator.js:222:   * Check date literal usage
+ClaudeSFDC/scripts/soql-validator.js:225:    // Check for proper date literal format
+ClaudeSFDC/scripts/soql-validator.js:232:        description: 'Query uses date literals correctly',
+ClaudeSFDC/scripts/soql-validator.js:243:        message: 'Consider using date literals instead of hardcoded dates',
+ClaudeSFDC/scripts/soql-validator.js:286:    // Suggestions for COUNT(DISTINCT)
+ClaudeSFDC/scripts/soql-validator.js:287:    if (this.errors.some(e => e.name === 'COUNT(DISTINCT)')) {
+ClaudeSFDC/scripts/soql-validator.js:290:        for: 'COUNT(DISTINCT)',
+ClaudeSFDC/scripts/soql-validator.js:292:          'Use GROUP BY and count results',
+ClaudeSFDC/scripts/soql-validator.js:299:    // Suggestions for CASE in aggregation
+ClaudeSFDC/scripts/soql-validator.js:300:    if (this.errors.some(e => e.name === 'CASE in aggregation')) {
+ClaudeSFDC/scripts/soql-validator.js:303:        for: 'CASE in aggregation',
+ClaudeSFDC/scripts/soql-validator.js:318:          'Use date literals (LAST_N_DAYS, NEXT_N_MONTHS)',
+ClaudeSFDC/scripts/soql-validator.js:357:    lines.push('=== SOQL VALIDATION REPORT ===\n');
+ClaudeSFDC/scripts/soql-validator.js:410:  const validator = new SOQLValidator();
+ClaudeSFDC/scripts/soql-validator.js:414:    console.log('SOQL Validator - Pre-execution Query Validation');
+ClaudeSFDC/scripts/soql-validator.js:421:    console.log('  - Unsupported functions (COUNT DISTINCT, CASE, etc.)');
+ClaudeSFDC/scripts/soql-validator.js:463:module.exports = SOQLValidator;
+ClaudeSFDC/scripts/lib/field-requirements.js:86:            const validationRules = await this.getValidationRules(objectName);
+ClaudeSFDC/scripts/lib/field-requirements.js:87:            requirements.validationRules = this.analyzeValidationRules(validationRules);
+ClaudeSFDC/scripts/lib/field-requirements.js:237:    async getValidationRules(objectName) {
+ClaudeSFDC/scripts/lib/field-requirements.js:240:                          FROM ValidationRule 
+ClaudeSFDC/scripts/lib/field-requirements.js:263:    analyzeValidationRules(rules) {
+ClaudeSFDC/error-logging/scripts/update-database-schema.sh:35:TABLE_COUNT=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM sqlite_master WHERE type='table';")
+ClaudeSFDC/error-logging/scripts/update-database-schema.sh:57:ERROR_COUNT=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM error_logs;" 2>/dev/null || echo "0")
+ClaudeSFDC/scripts/sfdc-activity-query.js:20:            // Construct base SOQL query with extended configurations
+ClaudeSFDC/scripts/sfdc-activity-query.js:21:            const baseQuery = constructSOQLQuery(reportConfig);
+ClaudeSFDC/scripts/sfdc-activity-query.js:62:function constructSOQLQuery(reportConfig) {
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:297:OPP_FIELD_COUNT=$(sf data query --query "SELECT COUNT() FROM CustomField WHERE TableEnumOrId = 'Opportunity' AND DeveloperName LIKE '%__c'" --target-org $TARGET_ORG --json 2>/dev/null | jq -r '.result.records[0].expr0' || echo "0")
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:301:CONTRACT_FIELD_COUNT=$(sf data query --query "SELECT COUNT() FROM CustomField WHERE TableEnumOrId = 'Contract' AND DeveloperName LIKE '%__c'" --target-org $TARGET_ORG --json 2>/dev/null | jq -r '.result.records[0].expr0' || echo "0")
+ClaudeSFDC/scripts/lib/test_python_commons.py:346:   # Execute SOQL query
+ClaudeSFDC/scripts/test-fixed-queries.sh:6:# Tests the fixed queries for ValidationRule and Flow objects to ensure
+ClaudeSFDC/scripts/test-fixed-queries.sh:7:# they work correctly with the Salesforce Tooling API
+ClaudeSFDC/scripts/test-fixed-queries.sh:57:echo -e "${BLUE}1. Testing ValidationRule Queries${NC}"
+ClaudeSFDC/scripts/test-fixed-queries.sh:61:# Test 1: Basic ValidationRule query (without ErrorConditionFormula)
+ClaudeSFDC/scripts/test-fixed-queries.sh:62:if test_query "Basic ValidationRule query" \
+ClaudeSFDC/scripts/test-fixed-queries.sh:63:    "SELECT Id, ValidationName, Active, Description, ErrorMessage FROM ValidationRule WHERE EntityDefinition.QualifiedApiName = 'Opportunity' LIMIT 5" \
+ClaudeSFDC/scripts/test-fixed-queries.sh:71:# Test 2: Individual ValidationRule with Metadata (for formula)
+ClaudeSFDC/scripts/test-fixed-queries.sh:72:echo -e "${YELLOW}Testing: ${NC}Individual ValidationRule Metadata query"
+ClaudeSFDC/scripts/test-fixed-queries.sh:73:echo -e "${BLUE}Note: ${NC}This requires a specific ValidationRule ID"
+ClaudeSFDC/scripts/test-fixed-queries.sh:75:# First get a ValidationRule ID
+ClaudeSFDC/scripts/test-fixed-queries.sh:76:RULE_ID=$(sf data query --query "SELECT Id FROM ValidationRule WHERE EntityDefinition.QualifiedApiName = 'Opportunity' LIMIT 1" --use-tooling-api --json --target-org $ORG_ALIAS 2>/dev/null | jq -r '.result.records[0].Id // ""')
+ClaudeSFDC/scripts/test-fixed-queries.sh:79:    if test_query "Individual ValidationRule with Metadata" \
+ClaudeSFDC/scripts/test-fixed-queries.sh:80:        "SELECT Id, Metadata FROM ValidationRule WHERE Id='$RULE_ID'" \
+ClaudeSFDC/scripts/test-fixed-queries.sh:88:    echo -e "${YELLOW}⚠ No ValidationRules found to test individual query${NC}"
+ClaudeSFDC/scripts/test-fixed-queries.sh:97:# Test 3: Flow query (Tooling API, correct fields)
+ClaudeSFDC/scripts/test-fixed-queries.sh:122:# Test 5: Metadata retrieve for ValidationRules
+ClaudeSFDC/scripts/test-fixed-queries.sh:123:echo -e "${YELLOW}Testing: ${NC}Metadata retrieve for ValidationRules"
+ClaudeSFDC/scripts/test-fixed-queries.sh:124:echo -e "${BLUE}Command: ${NC}sf project retrieve start --metadata \"ValidationRule:Opportunity.*\""
+ClaudeSFDC/scripts/test-fixed-queries.sh:127:if sf project retrieve start --metadata "ValidationRule:Opportunity.*" --target-org $ORG_ALIAS --output-dir "$TEMP_DIR" > /dev/null 2>&1; then
+ClaudeSFDC/scripts/test-fixed-queries.sh:132:        echo -e "${GREEN}✓ ValidationRule metadata files retrieved${NC}"
+ClaudeSFDC/scripts/lib/shell-commons.sh:214:        log_error "SOQL query failed: $query"
+ClaudeSFDC/scripts/gong-formula-library.js:26:            formula: 'IF(MAX(Gong__Gong_Call__c.Gong__Call_Start__c) >= TODAY() - 14, COUNT(Gong__Gong_Call__c.Id), 0)',
+ClaudeSFDC/scripts/gong-formula-library.js:42:            formula: 'IF(COUNT(Gong__Gong_Call__c.Id) >= 5, 100, IF(COUNT(Gong__Gong_Call__c.Id) >= 3, 75, IF(COUNT(Gong__Gong_Call__c.Id) >= 1, 50, 0)))',
+ClaudeSFDC/scripts/gong-formula-library.js:50:            formula: 'COUNT(Gong__Gong_Call__c.Id) / ((TODAY() - MIN(Gong__Gong_Call__c.Gong__Call_Start__c)) / 7)',
+ClaudeSFDC/scripts/gong-formula-library.js:93:            formula: 'COUNT_DISTINCT(Contact.Id) / COUNT(Contact.Id)',
+ClaudeSFDC/scripts/gong-formula-library.js:120:            formula: 'SUM(Gong__Gong_Call__c.Gong__Questions_Asked__c) / COUNT(Gong__Gong_Call__c.Id)',
+ClaudeSFDC/scripts/gong-formula-library.js:139:            formula: 'SUM(IF(Gong__Gong_Tracker__c.Gong__Tracker_Name__c = "Next Steps", Gong__Tracker_Occurrences__c, 0)) / COUNT(Gong__Gong_Call__c.Id)',
+ClaudeSFDC/scripts/gong-formula-library.js:198:            formula: '(COUNT(IF(Gong__Gong_Call__c.Gong__Call_Start__c >= TODAY() - 30, Gong__Gong_Call__c.Id, null)) / COUNT(IF(Gong__Gong_Call__c.Gong__Call_Start__c >= TODAY() - 60 AND Gong__Gong_Call__c.Gong__Call_Start__c < TODAY() - 30, Gong__Gong_Call__c.Id, null))) * 100',
+ClaudeSFDC/scripts/gong-formula-library.js:206:            formula: '(IF(COUNT(Gong__Gong_Call__c.Id) > 3, 25, 0) + IF(COUNT_DISTINCT(Contact.Email) > 2, 25, 0) + IF(TODAY() - MAX(Gong__Gong_Call__c.Gong__Call_Start__c) < 14, 25, 0) + IF(AVG(Gong__Gong_Call__c.Gong__Call_Duration__c) > 1800, 25, 0))',
+ClaudeSFDC/scripts/gong-formula-library.js:214:            formula: 'IF(Opportunity.StageName = "Prospecting" AND COUNT(Gong__Gong_Call__c.Id) < 2, "Under-engaged", IF(Opportunity.StageName = "Negotiation" AND COUNT(Gong__Gong_Call__c.Id) < 5, "Under-engaged", "Aligned"))',
+ClaudeSFDC/scripts/gong-formula-library.js:225:            formula: 'COUNT(Gong__Gong_Call__c.Id) - PREVGROUPVAL(COUNT(Gong__Gong_Call__c.Id), 1)',
+ClaudeSFDC/scripts/gong-formula-library.js:241:            formula: '(MAX(Gong__Gong_Call__c.Gong__Call_Start__c) - MIN(Gong__Gong_Call__c.Gong__Call_Start__c)) / (COUNT(Gong__Gong_Call__c.Id) - 1)',
+ClaudeSFDC/scripts/gong-formula-library.js:249:            formula: 'COUNT(IF(Gong__Gong_Call__c.Gong__Call_Start__c >= QUARTER_START, Gong__Gong_Call__c.Id, null))',
+ClaudeSFDC/scripts/auto-fix-engine.py:73:            if re.search(pattern, error_lower, re.IGNORECASE):
+ClaudeSFDC/scripts/advanced-field-deployer.js:179:                        console.log(`   ✅ Field is queryable via SOQL`);
+ClaudeSFDC/scripts/advanced-field-deployer.js:483:        report.recommendations.push('Test field accessibility in reports and SOQL queries');
+ClaudeSFDC/scripts/error-pattern-learner.py:168:            if re.search(pattern, error_message, re.IGNORECASE):
+ClaudeSFDC/scripts/error-pattern-learner.py:231:            SELECT error_category, COUNT(*) as count
+ClaudeSFDC/scripts/error-pattern-learner.py:234:            GROUP BY error_category
+ClaudeSFDC/scripts/error-pattern-learner.py:243:            SELECT object_name, COUNT(*) as count
+ClaudeSFDC/scripts/error-pattern-learner.py:246:            GROUP BY object_name
+ClaudeSFDC/scripts/error-pattern-learner.py:256:                   SUM(CASE WHEN was_successful THEN 1 ELSE 0 END) as successes,
+ClaudeSFDC/scripts/error-pattern-learner.py:257:                   COUNT(*) as total
+ClaudeSFDC/scripts/error-pattern-learner.py:260:            GROUP BY solution_applied
+ClaudeSFDC/scripts/error-pattern-learner.py:280:            SELECT error_category, COUNT(*) as count
+ClaudeSFDC/scripts/error-pattern-learner.py:283:            GROUP BY error_category
+ClaudeSFDC/scripts/pre-import-validator.sh:85:                 FROM ValidationRule 
+ClaudeSFDC/scripts/gong-dashboard-enhancer.js:104:        calculation: 'PERCENT(COUNT(Executive_Engaged = "Yes") / COUNT(*))',
+ClaudeSFDC/scripts/field-verification-service.js:56:        // Check 2: SOQL queryable
+ClaudeSFDC/scripts/field-verification-service.js:58:            const soqlCheck = await this.checkSOQLAccess(objectName, fieldApiName);
+ClaudeSFDC/scripts/field-verification-service.js:61:                results.issues.push('Field not queryable via SOQL');
+ClaudeSFDC/scripts/field-verification-service.js:65:            results.issues.push(`SOQL check failed: ${error.message}`);
+ClaudeSFDC/scripts/field-verification-service.js:141:     * Check if field is queryable via SOQL
+ClaudeSFDC/scripts/field-verification-service.js:143:    async checkSOQLAccess(objectName, fieldApiName) {
+ClaudeSFDC/scripts/field-verification-service.js:160:                return { success: false, message: 'Field does not exist in SOQL context' };
+ClaudeSFDC/scripts/field-verification-service.js:376:        if (verificationResult.issues.includes('Field not queryable via SOQL')) {
+ClaudeSFDC/scripts/lib/universal-report-creator.js:170:                'CASE_NUMBER',          // Standard field
+ClaudeSFDC/scripts/generate-script-inventory.py:75:                if re.search(r'\b(password|token|key|secret|credential)\b', content, re.IGNORECASE):
+ClaudeSFDC/scripts/generate-script-inventory.py:146:                    if re.match(r'^#\s*(Purpose|Description|Summary):', line, re.IGNORECASE):
+ClaudeSFDC/scripts/report-workarounds.js:20:     * Workaround 1: Use SOQL instead of Reports API
+ClaudeSFDC/scripts/report-workarounds.js:22:    async getTaskDataViaSOQL() {
+ClaudeSFDC/scripts/report-workarounds.js:23:        console.log('\n📊 Workaround 1: Using SOQL instead of Reports API\n');
+ClaudeSFDC/scripts/report-workarounds.js:28:                    COUNT(Id) callCount,
+ClaudeSFDC/scripts/report-workarounds.js:34:                GROUP BY Owner.Name, DAY_ONLY(CreatedDate)
+ClaudeSFDC/scripts/report-workarounds.js:41:                    COUNT(Id) totalCalls,
+ClaudeSFDC/scripts/report-workarounds.js:46:                GROUP BY Owner.Name
+ClaudeSFDC/scripts/report-workarounds.js:47:                ORDER BY COUNT(Id) DESC
+ClaudeSFDC/scripts/report-workarounds.js:345:    // 1. Use SOQL
+ClaudeSFDC/scripts/report-workarounds.js:346:    const soqlData = await workarounds.getTaskDataViaSOQL();
+ClaudeSFDC/scripts/report-workarounds.js:368:1. Use SOQL queries for task/activity data (Workaround 1)
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:437:<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:442:</ValidationRule>`;
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:502:          await this.deactivateValidationRules(strategy.rules);
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:544:          await this.reactivateValidationRules(this.activeBypass.reactivationPlan);
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:601:  async deactivateValidationRules(rules) {
+ClaudeSFDC/scripts/lib/validation-bypass-manager.js:612:  async reactivateValidationRules(rules) {
+ClaudeSFDC/scripts/object-audit.js:64:            await this.fetchValidationRules();
+ClaudeSFDC/scripts/object-audit.js:255:    async fetchValidationRules() {
+ClaudeSFDC/scripts/object-audit.js:259:                          FROM ValidationRule 
+ClaudeSFDC/scripts/object-audit.js:408:                    const query = `SELECT COUNT(Id) totalCount,
+ClaudeSFDC/scripts/object-audit.js:409:                                  COUNT(${field.name}) populatedCount
+ClaudeSFDC/scripts/object-audit.js:461:            const createdQuery = `SELECT COUNT(Id) recentCount
+ClaudeSFDC/scripts/object-audit.js:470:            const modifiedQuery = `SELECT COUNT(Id) recentCount
+ClaudeSFDC/scripts/object-audit.js:498:            const countQuery = `SELECT COUNT(Id) totalCount FROM ${this.objectName}`;
+ClaudeSFDC/agents/sfdc-security-admin.yaml:289:  - Can query ObjectPermissions directly via SOQL
+ClaudeSFDC/scripts/verify-field-accessibility.sh:75:# Check 2: Field in Tooling API
+ClaudeSFDC/scripts/verify-field-accessibility.sh:76:run_check "Field in Tooling API" \
+ClaudeSFDC/scripts/verify-field-accessibility.sh:87:# Check 4: SOQL Query Access
+ClaudeSFDC/scripts/verify-field-accessibility.sh:88:run_check "SOQL Query Access" \
+ClaudeSFDC/scripts/verify-field-accessibility.sh:151:TEST_QUERY="SELECT COUNT(Id) TotalContracts, COUNT($FIELD_NAME) WithRenewal FROM $OBJECT_NAME"
+ClaudeSFDC/scripts/verify-field-accessibility.sh:197:    if [[ " ${ISSUES[@]} " =~ "Field in Tooling API" ]]; then
+ClaudeSFDC/scripts/verify-field-accessibility.sh:201:    if [[ " ${ISSUES[@]} " =~ "SOQL Query Access" ]]; then
+ClaudeSFDC/scripts/gong-report-builder.js:42:                formula: 'IF(COUNT(Gong__Gong_Call__c.Id) > 3, 100, (COUNT(Gong__Gong_Call__c.Id) / 3) * 100)',
+ClaudeSFDC/agents/sfdc-field-analyzer.yaml:79:      sfdx force:source:retrieve -m "CustomField,ValidationRule,Flow" --json
+ClaudeSFDC/agents/sfdc-field-analyzer.yaml:85:      SELECT COUNT(Id), 
+ClaudeSFDC/agents/sfdc-field-analyzer.yaml:86:             COUNT(FieldName) as FilledCount
+ClaudeSFDC/agents/sfdc-field-analyzer.yaml:129:    - Optimize SOQL with proper fields
+ClaudeSFDC/scripts/qa/query-lint.js:3: * query-lint.js — Flags unsafe/invalid SOQL usage patterns in repo
+ClaudeSFDC/scripts/qa/query-lint.js:49:    desc: "Tooling object queried without --use-tooling-api",
+ClaudeSFDC/scripts/qa/query-lint.js:50:    // Heuristic: find a single-line command with sf data query and Tooling object without flag
+ClaudeSFDC/scripts/qa/query-lint.js:51:    regex: /sf\s+data\s+query[^\n]*\bFROM\s+(Flow\b|FlowDefinition\b|FlowDefinitionView\b|ValidationRule\b|Layout\b|FlexiPage\b|FieldDefinition\b)[^\n]*$/i,
+ClaudeSFDC/scripts/qa/query-lint.js:53:    fix: "Add --use-tooling-api for Tooling entities."
+ClaudeSFDC/agents/sfdc-automation-builder.yaml:133:    - Avoid SOQL in loops
+ClaudeSFDC/scripts/test-auto-fix.sh:194:    # Test SOQL query fixing
+ClaudeSFDC/scripts/test-auto-fix.sh:195:    run_test "SOQL query validation" \
+ClaudeSFDC/scripts/test-auto-fix.sh:292:            "sqlite3 ${SCRIPT_DIR}/.resolution_learning.db 'SELECT COUNT(*) FROM resolutions'"
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:4:# Critical Bug Fix Release - Data Integrity & SOQL Fixes
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:75:# Step 4: Test SOQL validators
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:76:echo -e "${YELLOW}Step 4: Testing SOQL validation tools...${NC}"
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:80:    echo "Testing SOQL validator..."
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:82:    check_status "SOQL validator test"
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:87:    echo "Testing SOQL rewriter..."
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:88:    node scripts/soql-query-rewriter.js "SELECT COUNT(DISTINCT Id) FROM Account" > /dev/null 2>&1
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:89:    check_status "SOQL rewriter test"
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:142:✓ SOQL Query Tools
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:151:✓ SOQL tools operational
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:172:echo "  • SOQL Query Tools - Operational"
+ClaudeSFDC/scripts/deploy-v2.7.0.sh:179:echo "  3. Use SOQL validator before executing complex queries"
+ClaudeSFDC/agents/sfdc-lightning-specialist.yaml:205:    - Optimize SOQL queries
+ClaudeSFDC/agents/shared/date-context.yaml:17:  - When querying data, use date literals relative to 2025-09-08
+ClaudeSFDC/scripts/create-renewal-contracts.sh:199:    --query "SELECT COUNT(Id) FROM Opportunity WHERE Type = 'Renewal' AND Parent_Contract__c = null" \
+ClaudeSFDC/scripts/create-renewal-contracts.sh:206:    --query "SELECT COUNT(Id) FROM Contract WHERE ContractNumber LIKE 'Renewal Contract -%'" \
+ClaudeSFDC/scripts/validate-lookups.sh:178:    # Build SOQL query to check if IDs exist
+ClaudeSFDC/agents/sfdc-orchestrator.yaml:11:    - "Reference SOQL date literals from date-context.yaml"
+ClaudeSFDC/scripts/update-verifier.py:164:        # Build SOQL query
+ClaudeSFDC/scripts/update-verifier.py:169:        # Chunk record IDs if needed (SOQL IN clause limit)
+ClaudeSFDC/scripts/update-verifier.py:405:        """Execute a SOQL query"""
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:74:        """Execute SOQL query with optional sampling and full telemetry.
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:120:            logger.error(f"SOQL query failed: {e}")
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:319:        # and other automation metadata. This requires additional SOQL queries.
+ClaudeSFDC/scripts/script-aliases.sh:106:    echo "  sfdc-query '<SOQL>'     - Run SOQL query"
+ClaudeSFDC/agents/sfdc-apex-developer.yaml:85:    - SOQL queries: 100
+ClaudeSFDC/scripts/utilities/flow-audit.js:109:                complexity.warnings.push('Multiple queries with loops - risk of SOQL limits');
+ClaudeSFDC/agents/execution/deployment-bridge.js:319:                        const dupQuery = `SELECT COUNT(Id) FROM Flow WHERE MasterLabel = '${name}'`;

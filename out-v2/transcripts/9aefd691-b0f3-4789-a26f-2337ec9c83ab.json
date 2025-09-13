@@ -1,0 +1,36 @@
+{
+  "id": "9aefd691-b0f3-4789-a26f-2337ec9c83ab",
+  "recording_id": "ef522ad4-b517-4eae-83fc-0bed3b389a64",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9aefd691-b0f3-4789-a26f-2337ec9c83ab",
+      "recording_id": "ef522ad4-b517-4eae-83fc-0bed3b389a64",
+      "end_time": "245.75",
+      "start_time": "245.54",
+      "recording_attendee_id": null,
+      "text": "Mhm."
+    },
+    {
+      "id": "9aefd691-b0f3-4789-a26f-2337ec9c83ab",
+      "recording_id": "ef522ad4-b517-4eae-83fc-0bed3b389a64",
+      "end_time": "210.62",
+      "start_time": "74.44",
+      "recording_attendee_id": "d752bd44-f554-40e2-8a53-ebb413052ec5",
+      "text": "Mm hmm. Yeah, Yeah, right. Yeah, yeah."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ef522ad4-b517-4eae-83fc-0bed3b389a64",
+      "title": "Rentable : PMI Central Kentucky",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-12-14T19:44:07.896000Z",
+      "call_date": "2021-12-14"
+    }
+  }
+}

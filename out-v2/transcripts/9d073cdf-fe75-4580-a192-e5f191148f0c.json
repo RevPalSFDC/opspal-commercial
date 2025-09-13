@@ -1,0 +1,56 @@
+{
+  "id": "9d073cdf-fe75-4580-a192-e5f191148f0c",
+  "recording_id": "7786c986-cd15-4f2a-8fb8-fa77017fb6fb",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9d073cdf-fe75-4580-a192-e5f191148f0c",
+      "recording_id": "7786c986-cd15-4f2a-8fb8-fa77017fb6fb",
+      "end_time": 1.48,
+      "start_time": 0.35,
+      "recording_attendee_id": "53534cdb-d2da-48cc-bb77-fb7f50789aac",
+      "order_number": 0,
+      "text": "Thank you for calling"
+    },
+    {
+      "id": "9d073cdf-fe75-4580-a192-e5f191148f0c",
+      "recording_id": "7786c986-cd15-4f2a-8fb8-fa77017fb6fb",
+      "end_time": 1.51,
+      "start_time": 1.12,
+      "recording_attendee_id": "f0f2da8a-4191-404d-aa5b-b0c885054681",
+      "order_number": 1,
+      "text": "No."
+    },
+    {
+      "id": "9d073cdf-fe75-4580-a192-e5f191148f0c",
+      "recording_id": "7786c986-cd15-4f2a-8fb8-fa77017fb6fb",
+      "end_time": 113.63,
+      "start_time": 1.48,
+      "recording_attendee_id": "53534cdb-d2da-48cc-bb77-fb7f50789aac",
+      "order_number": 2,
+      "text": "some Communities and Summer resort. Please listen to all options before making your selection as our menu has changed. If you know your desired party's extension, you may dial it at any time, Press one to make a reservation at a son RV resort, Press two. If you are a resident of a son community and have a question or concern Press three. To use our dial by name directory. If you are inquiring about a one thousand and ninety-nine you recently received, please hang up and send us an email. Our email address for inquiries is one thousand and ninety-nine at some communities.com. That's one thousand and ninety-nine at some communities.com. To hear these options again, Press zero. Thank you for calling and have a wonderful day. Thank you for calling communities and summer invalid entry. Please listen to all options before me. Thank you for calling the Resident relations team. If you know your agents 4-digit extension, please enter it now. Or please stand by for the next available agent to assist you. Thank you. We are connecting your call to the next available agent. Please note your call is being recorded for training purposes. All agents are currently busy. Please stay on the line"
+    },
+    {
+      "id": "9d073cdf-fe75-4580-a192-e5f191148f0c",
+      "recording_id": "7786c986-cd15-4f2a-8fb8-fa77017fb6fb",
+      "end_time": 231.17,
+      "start_time": 224.31,
+      "recording_attendee_id": "f0f2da8a-4191-404d-aa5b-b0c885054681",
+      "order_number": 3,
+      "text": "Okay. Okay."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7786c986-cd15-4f2a-8fb8-fa77017fb6fb",
+      "title": "Call: Brandon Winfield and +12482082500",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

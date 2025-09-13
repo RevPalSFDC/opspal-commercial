@@ -1,0 +1,52 @@
+{
+  "id": "eac7a632-f0d7-473d-8ff3-fd919071539b",
+  "recording_id": "a90fc76e-306d-47df-98c2-d30e8f514c0a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "eac7a632-f0d7-473d-8ff3-fd919071539b",
+      "recording_id": "a90fc76e-306d-47df-98c2-d30e8f514c0a",
+      "end_time": 2.03,
+      "start_time": 0.95,
+      "recording_attendee_id": "38ab7817-e004-4765-b538-2814df40958f",
+      "text": "This property management."
+    },
+    {
+      "id": "eac7a632-f0d7-473d-8ff3-fd919071539b",
+      "recording_id": "a90fc76e-306d-47df-98c2-d30e8f514c0a",
+      "end_time": 139.93,
+      "start_time": 132.78,
+      "recording_attendee_id": "38ab7817-e004-4765-b538-2814df40958f",
+      "text": "She is not in her. I can't locate her. I would try sending her an email and we'll see if I can call you back."
+    },
+    {
+      "id": "eac7a632-f0d7-473d-8ff3-fd919071539b",
+      "recording_id": "a90fc76e-306d-47df-98c2-d30e8f514c0a",
+      "end_time": 6.6,
+      "start_time": 3.24,
+      "recording_attendee_id": "b120c227-bcb8-4866-91c4-d494637e659f",
+      "text": "Hey, this is awesome rental just calling back to us and so's available."
+    },
+    {
+      "id": "eac7a632-f0d7-473d-8ff3-fd919071539b",
+      "recording_id": "a90fc76e-306d-47df-98c2-d30e8f514c0a",
+      "end_time": 143.2,
+      "start_time": 141.58,
+      "recording_attendee_id": "b120c227-bcb8-4866-91c4-d494637e659f",
+      "text": "Okay. Thank you very much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a90fc76e-306d-47df-98c2-d30e8f514c0a",
+      "title": "Call: Austin Schleisner and Estella Alvarez @ Atlas Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

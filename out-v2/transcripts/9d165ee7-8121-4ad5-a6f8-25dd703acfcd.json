@@ -1,0 +1,36 @@
+{
+  "id": "9d165ee7-8121-4ad5-a6f8-25dd703acfcd",
+  "recording_id": "54012b4d-5aac-4ef3-95c2-62a294fcbf5a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9d165ee7-8121-4ad5-a6f8-25dd703acfcd",
+      "recording_id": "54012b4d-5aac-4ef3-95c2-62a294fcbf5a",
+      "end_time": 90.56,
+      "start_time": 0.44,
+      "recording_attendee_id": "95c39e5e-6f25-4d4c-859e-e891f03ab69b",
+      "text": "Thank you for calling Tory Pines property management. Please be assured that we're still here for you during this time of caution. If you know your party's extension you may enter it at any time or press six for our spell by name directory. If you wish to speak to our front desk administrator for assistance or to leave a message press zero or please listen carefully to our menu of options. If at any point you wish to return to the main menu press nine for Legacy commercial management. Please call eight five eight three three three five two eight two again for the company directory press six, if you are resident experiencing a maintenance emergency. For hi, spell by name directory press six for our staff directory, including extension numbers will follow directly after these brief instructions if you are a resident calling about your rental payment. Please direct your call to your property manager. If you do not know the name of your property manager, please press zero for assistance. If you are an outside vendor and wish to be added to our preferred vendor list. Please direct your call to extension one. Two three or email your request to service at Torrey Pines P M dot. Com are leasing staff includes Taylor Crandall extension one. Two one, Jason Lopez extension one to to our property managers include Nicole sarber, extension one, zero. Three, Stephanie Hughes extension one zero four, John Silva extension one. One zero, Heather Lamb"
+    },
+    {
+      "id": "9d165ee7-8121-4ad5-a6f8-25dd703acfcd",
+      "recording_id": "54012b4d-5aac-4ef3-95c2-62a294fcbf5a",
+      "end_time": 146.48,
+      "start_time": 90.83,
+      "recording_attendee_id": "95c39e5e-6f25-4d4c-859e-e891f03ab69b",
+      "text": "extension one. One four one, Andy precious extension one. One one to Nora soriano extension one zero, five Julio choir extension one. One seven. Our bookkeeping staff includes a month, and food extension one zero six Tanya bond, Jack extension one. One eight Shannon Monroe extension one zero, eight, Emily melvie extension one, five, seven increase for accounts payable should be emailed to a P at Torrey Pines P M dot. Com increase for accounts receivable should be emailed to a R at Torrey Pines P M dot. Com. Our executive staff includes chip Crandall extension one zero. Two, Nick Randall extension one. Two zero, Victoria Crandall extension one one nine and."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "54012b4d-5aac-4ef3-95c2-62a294fcbf5a",
+      "title": "Call: Dan Cellon and Taylor",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

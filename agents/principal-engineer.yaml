@@ -72,16 +72,19 @@ specialized_agents:
       - hubspot-email-campaign-manager: Email campaigns
       
     salesforce:
-      - sfdc-orchestrator: Complex Salesforce operations
-      - sfdc-planner: Requirements analysis
-      - sfdc-metadata-manager: Objects and fields
-      - sfdc-security-admin: Profiles and permissions
-      - sfdc-automation-builder: Flows and process builders
-      - sfdc-data-operations: Data management
-      - sfdc-deployment-manager: Change sets and deployments
-      - sfdc-integration-specialist: APIs and integrations
+      - sfdc-orchestrator: Complex Salesforce operations (ACTIVE)
+      - sfdc-planner: Requirements analysis (ACTIVE)
+      - sfdc-metadata-manager: Objects and fields (ACTIVE)
+      - sfdc-security-admin: Profiles and permissions (ACTIVE)
+      - sfdc-automation-builder: Flows and process builders (ACTIVE)
+      - sfdc-data-operations: Data management (ACTIVE)
+      - sfdc-deployment-manager: Change sets and deployments (ACTIVE)
+      - sfdc-integration-specialist: APIs and integrations (ACTIVE)
       - sfdc-reports-dashboards: Reports and analytics
-      - sfdc-apex-developer: Apex code development
+      - sfdc-apex-developer: Apex code development (ACTIVE)
+      - sfdc-lightning-page-manager: Lightning page configuration (NEW)
+      - sfdc-permission-analyzer: Deep permission analysis (NEW)
+      - sfdc-data-validator: Data validation and quality (NEW)
 
 workflow_patterns:
   initial_assessment:

@@ -1,0 +1,44 @@
+{
+  "id": "9239b826-033e-4cd8-bf64-d1e5db55370e",
+  "recording_id": "f1ae878b-6dcf-4bda-a4b2-c985b9c4c2d0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "9239b826-033e-4cd8-bf64-d1e5db55370e",
+      "recording_id": "f1ae878b-6dcf-4bda-a4b2-c985b9c4c2d0",
+      "end_time": 91.57,
+      "start_time": 0.23,
+      "recording_attendee_id": "24c3fd81-fd2c-486c-a1a5-b3bc6419e9c3",
+      "text": "Thank you for calling magic whole property management. If you know your party's four, digit extension you may dial it at any time your call is very important to us please choose from the following options press nine, if this is an after hours maintenance emergency please be sure to call nine one one for any help or life safety issues press one. If you are a resident and wish to reach for resident Services press to to reach leasing Services press three for our new business division. Regarding the professional management of your property press four, if you are a vendor and wish to speak to someone in accounts payable press five to reach. The person you are trying to reach is unavailable leave your message at the tone press pound when finished."
+    },
+    {
+      "id": "9239b826-033e-4cd8-bf64-d1e5db55370e",
+      "recording_id": "f1ae878b-6dcf-4bda-a4b2-c985b9c4c2d0",
+      "end_time": 139.09,
+      "start_time": 130.48,
+      "recording_attendee_id": "fd5d6522-1f5a-4c63-8eee-996a35bbb4e2",
+      "text": "twenty, one to partner up so please. Let me know, I'll also shoot you an email um once again, my name is Dan, I'm with rentable and um. Yeah, thanks so much."
+    },
+    {
+      "id": "9239b826-033e-4cd8-bf64-d1e5db55370e",
+      "recording_id": "f1ae878b-6dcf-4bda-a4b2-c985b9c4c2d0",
+      "end_time": 130.48,
+      "start_time": 95.05,
+      "recording_attendee_id": "fd5d6522-1f5a-4c63-8eee-996a35bbb4e2",
+      "text": "Have Iris my name is Dana? I'm calling from rentable we used to be called a photo and I was told that you recently met with Matthew and Alex a couple of months back um wanted to see if maybe you'd be open to to reconnecting with the team here and December before the holidays um as we roll into twenty twenty, one, I guess, we'd love to kind of go over what's new obviously a lot has changed with us. We we haven't changed our name. So, yeah, just looking to catch back up with you guys kind of go over what's new and and see if it might be a good fit moving into twenty"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f1ae878b-6dcf-4bda-a4b2-c985b9c4c2d0",
+      "title": "Call: Dan Cellon and Mariella Thompson @ Mashcole Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

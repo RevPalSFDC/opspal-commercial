@@ -1,0 +1,47 @@
+{
+  "id": "73cc0476-58fc-404c-9acc-2378d8a6862c",
+  "recording_id": "35150d6c-f378-446f-837f-49af8119eac4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "73cc0476-58fc-404c-9acc-2378d8a6862c",
+      "recording_id": "35150d6c-f378-446f-837f-49af8119eac4",
+      "end_time": 40.42,
+      "start_time": 1.7,
+      "recording_attendee_id": "97721051-0075-4996-a1ad-43a27f49eccd",
+      "order_number": 0,
+      "text": "You took a pretty manage metric. Most innovative and transparent Property Manager. For assistance, please choose from the following menu options. Available Home in Greece and Rental Applications, Please Press one. Current tenants, please press two. Property owners, please press three city workers, please press four. And other subsidy programs, please press five attorneys. Insurance agent, please press six. Utility company agents please press seven. Please note you cannot press zero to skip this menu. And it will repeat until you make a selection"
+    },
+    {
+      "id": "73cc0476-58fc-404c-9acc-2378d8a6862c",
+      "recording_id": "35150d6c-f378-446f-837f-49af8119eac4",
+      "end_time": 41.54,
+      "start_time": 40.73,
+      "recording_attendee_id": "7ad33d7a-75bf-481a-b6ca-a351e21aad05",
+      "order_number": 1,
+      "text": "that stinks."
+    },
+    {
+      "id": "73cc0476-58fc-404c-9acc-2378d8a6862c",
+      "recording_id": "35150d6c-f378-446f-837f-49af8119eac4",
+      "end_time": 123.31,
+      "start_time": 54.32,
+      "recording_attendee_id": "97721051-0075-4996-a1ad-43a27f49eccd",
+      "order_number": 2,
+      "text": "you've reached Logical Property management. Metro Detroit's most innovative and transparent Property Manager. For assistance, please Thank you for your interest in renting from logical property management. Questions about your submitted rental application, please press one questions on starting a new rental application, please press two Questions about are available rental homes, please press three. Thank you for interest renting larger property management. Questions about your submit application, please press one questions on starting new rental application, please press two Questions About. Are available home, Please press three. Thank you. You're interested from logical party."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "35150d6c-f378-446f-837f-49af8119eac4",
+      "title": "Call: Brandon Winfield and +12482096824",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

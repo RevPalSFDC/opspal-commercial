@@ -1,0 +1,154 @@
+{
+  "recording_id": "ab90cfea-e555-497a-9412-3f4117949791",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "sentences": [
+    {
+      "start_time": 35.61,
+      "end_time": 35.91,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Hello",
+          "start_time": 35.61,
+          "end_time": 35.91,
+          "recording_attendee_id": "36a6e91e-ab30-4cd5-8eeb-e5ed1dbbdfdc"
+        },
+        {
+          "type": "punctuation",
+          "content": "!",
+          "start_time": 35.91,
+          "end_time": 36.2,
+          "recording_attendee_id": "36a6e91e-ab30-4cd5-8eeb-e5ed1dbbdfdc"
+        }
+      ],
+      "text": "Hello!",
+      "recording_attendee_id": "36a6e91e-ab30-4cd5-8eeb-e5ed1dbbdfdc"
+    },
+    {
+      "start_time": 36.2,
+      "end_time": 36.5,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "There",
+          "start_time": 36.2,
+          "end_time": 36.5,
+          "recording_attendee_id": "36a6e91e-ab30-4cd5-8eeb-e5ed1dbbdfdc"
+        },
+        {
+          "type": "punctuation",
+          "content": "!",
+          "start_time": 36.49,
+          "end_time": 36.79,
+          "recording_attendee_id": "36a6e91e-ab30-4cd5-8eeb-e5ed1dbbdfdc"
+        }
+      ],
+      "text": "There!",
+      "recording_attendee_id": "36a6e91e-ab30-4cd5-8eeb-e5ed1dbbdfdc"
+    },
+    {
+      "start_time": 36.79,
+      "end_time": 37.13,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "Hey",
+          "start_time": 36.79,
+          "end_time": 37.13,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "punctuation",
+          "content": "?",
+          "start_time": 37.13,
+          "end_time": 37.47,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        }
+      ],
+      "text": "Hey?",
+      "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+    },
+    {
+      "start_time": 37.47,
+      "end_time": 40.19,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "I",
+          "start_time": 37.47,
+          "end_time": 37.81,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "wanna",
+          "start_time": 37.81,
+          "end_time": 38.15,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "stop",
+          "start_time": 38.15,
+          "end_time": 38.49,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "the",
+          "start_time": 38.49,
+          "end_time": 38.83,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "recording",
+          "start_time": 38.83,
+          "end_time": 39.17,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "for",
+          "start_time": 39.17,
+          "end_time": 39.51,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "a",
+          "start_time": 39.51,
+          "end_time": 39.85,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "pronunciation",
+          "content": "second",
+          "start_time": 39.85,
+          "end_time": 40.19,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "start_time": 40.19,
+          "end_time": 40.53,
+          "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+        }
+      ],
+      "text": "I wanna stop the recording for a second.",
+      "recording_attendee_id": "0b5a969c-bd3a-40fd-a396-4f3981aaaf55"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ab90cfea-e555-497a-9412-3f4117949791",
+      "title": null,
+      "platform": null,
+      "media_type": null,
+      "started_recording_at": null,
+      "call_date": null
+    }
+  }
+}

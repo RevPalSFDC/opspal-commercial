@@ -1,0 +1,36 @@
+{
+  "id": "7f615cbb-b8bf-4b6f-9e32-8fa7839dcfa4",
+  "recording_id": "6618b8f3-a1eb-472b-bc4b-fd0290f7871f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "7f615cbb-b8bf-4b6f-9e32-8fa7839dcfa4",
+      "recording_id": "6618b8f3-a1eb-472b-bc4b-fd0290f7871f",
+      "end_time": 335.63,
+      "start_time": 331.88,
+      "recording_attendee_id": null,
+      "text": "I can just we're totally fine with a call. I guess are you good to talk for a couple of minutes."
+    },
+    {
+      "id": "7f615cbb-b8bf-4b6f-9e32-8fa7839dcfa4",
+      "recording_id": "6618b8f3-a1eb-472b-bc4b-fd0290f7871f",
+      "end_time": 331.61,
+      "start_time": 312.22,
+      "recording_attendee_id": "2a496b60-d1eb-419c-a2fa-26e98cfaabc8",
+      "text": "Hey, good morning Haley. This is Jordan over as rental how you doing today can't complain too awful much. It's a nice sunny day Wednesday to so, yeah, well. Hey, I just kinda wanted to follow up on some of those emails. We were talking about so last Friday, um, I send over an email with the zoom way."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "6618b8f3-a1eb-472b-bc4b-fd0290f7871f",
+      "title": "Haylee & Jordan <> Rentable",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-02-03T15:40:49.457000Z",
+      "call_date": "2021-02-03"
+    }
+  }
+}

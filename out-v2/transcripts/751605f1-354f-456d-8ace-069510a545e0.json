@@ -1,0 +1,76 @@
+{
+  "id": "751605f1-354f-456d-8ace-069510a545e0",
+  "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 103.27,
+      "start_time": 88.94,
+      "recording_attendee_id": "1174a991-dc06-4a60-8a5c-b8024cbea36c",
+      "text": "Yeah. No problem. No it's a different number. Let me give you my two zero three."
+    },
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 18.47,
+      "start_time": 8.48,
+      "recording_attendee_id": "1174a991-dc06-4a60-8a5c-b8024cbea36c",
+      "text": "Um, he he he hadn't he was having to call in between eleven thirty and twelve so I just I was giving him a call back at least."
+    },
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 111.34,
+      "start_time": 105.52,
+      "recording_attendee_id": "1174a991-dc06-4a60-8a5c-b8024cbea36c",
+      "text": "Four six four one three nine nine two zero three four six four one three nine."
+    },
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 8.27,
+      "start_time": 0.23,
+      "recording_attendee_id": "acef6b35-cfd7-403c-868f-d010820b4598",
+      "text": "Your payroll team. Yeah, you just sent another call. I can help you with her."
+    },
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 103.32,
+      "start_time": 101.97,
+      "recording_attendee_id": "acef6b35-cfd7-403c-868f-d010820b4598",
+      "text": "Zero sure."
+    },
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 98.6,
+      "start_time": 15.42,
+      "recording_attendee_id": "acef6b35-cfd7-403c-868f-d010820b4598",
+      "text": "Oh, okay, um, what's your name Alex Hogan. Hello, Elise, yes policy, you'll have to call you back um, let me just write your number. Just in case, yes, six one seven."
+    },
+    {
+      "id": "751605f1-354f-456d-8ace-069510a545e0",
+      "recording_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "end_time": 117.07,
+      "start_time": 112.75,
+      "recording_attendee_id": "acef6b35-cfd7-403c-868f-d010820b4598",
+      "text": "Good. Alright, you got it. I'll see you bye bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "eecc49c8-da0a-42a9-a663-ae3227120a94",
+      "title": "Call: Elyse Stachelek and Paul Gleason @ Fairfield Realty Boston",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

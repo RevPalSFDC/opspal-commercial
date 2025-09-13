@@ -1,0 +1,36 @@
+{
+  "id": "71043cbe-889a-4ecf-8523-2f2764ff4984",
+  "recording_id": "e44538e2-509d-4ac1-a58c-0a4723dc92fd",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "71043cbe-889a-4ecf-8523-2f2764ff4984",
+      "recording_id": "e44538e2-509d-4ac1-a58c-0a4723dc92fd",
+      "end_time": 131.89,
+      "start_time": 103.51,
+      "recording_attendee_id": "daf9bccc-b294-40ab-9504-658ce32d6cdc",
+      "text": "Hey, Randy, my name is Mitch Garcia. I'm calling from rental. I sent you a couple of emails from you got them and the reason for the call was to set a meeting with you I work a lot of other property management companies in terms of generating them more qualified leads and renters to their properties specifically through our partnership up with Facebook and Facebook marketplace want to run by a few options and ideas with you if you could please return my call again Mitch with renewal for seven zero eight two eight five three eight three ten four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "71043cbe-889a-4ecf-8523-2f2764ff4984",
+      "recording_id": "e44538e2-509d-4ac1-a58c-0a4723dc92fd",
+      "end_time": 101.23,
+      "start_time": 33.82,
+      "recording_attendee_id": "70dfa3d2-9c61-4edb-966f-13ddcad64177",
+      "text": "Thank you for calling Meridian management Group. If you know your party's extension please dial it now if not press two and for the staff directory antenna. Please dial the first few letters of the first or last name of the person you are trying to reach press pound when done. Randy Chapman press one Regina Scott. I mean they're on the phone or away from my desk. Leave a message just wait for the town."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e44538e2-509d-4ac1-a58c-0a4723dc92fd",
+      "title": "Call: Mitch  Scarski  and Randall Chapman @ Meridian Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

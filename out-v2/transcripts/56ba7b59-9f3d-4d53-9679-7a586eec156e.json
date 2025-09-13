@@ -1,0 +1,44 @@
+{
+  "id": "56ba7b59-9f3d-4d53-9679-7a586eec156e",
+  "recording_id": "602445d6-8c30-42a9-8e85-ca6b4d15ad7a",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "56ba7b59-9f3d-4d53-9679-7a586eec156e",
+      "recording_id": "602445d6-8c30-42a9-8e85-ca6b4d15ad7a",
+      "end_time": 129.65,
+      "start_time": 122.09,
+      "recording_attendee_id": "59f2e703-c310-4e66-9820-cd248ac66fe0",
+      "text": "my direct call back nine five six four seven two four two eight zero look forward to hearing from you."
+    },
+    {
+      "id": "56ba7b59-9f3d-4d53-9679-7a586eec156e",
+      "recording_id": "602445d6-8c30-42a9-8e85-ca6b4d15ad7a",
+      "end_time": 84.18,
+      "start_time": 0.56,
+      "recording_attendee_id": "559a8074-361c-4b84-ab16-4664649d2da0",
+      "text": "Hello. Thank you for calling our own grounds apartment management our normal business hours are eight thirty to five thirty Central standard time. If you know the three, digit extension of the person or we were trying to reach you may enter it at any time press two to dial by name press three to leave a message using the keys on your telephone. Please spell the first name of the person then press pound for the letter, Q press seven. For the letter Z press nine to exit the directory press Star. Becky Smith, if this is correct press pound for the previous name in the directory please hold while your call is being transferred to Becky Smith. Your call is being processed by my tail voicemail Becky Smith is not available. After the tone please record your message. When finished you may hang up to deliver the message or press pound for more options."
+    },
+    {
+      "id": "56ba7b59-9f3d-4d53-9679-7a586eec156e",
+      "recording_id": "602445d6-8c30-42a9-8e85-ca6b4d15ad7a",
+      "end_time": 121.94,
+      "start_time": 86.12,
+      "recording_attendee_id": "59f2e703-c310-4e66-9820-cd248ac66fe0",
+      "text": "Hi, Becky. Good afternoon. My name is Peter I'm calling with rentable. I was referred to you by your colleague Melissa confident. She mentioned you were the one who actually speak to about marketing across the across the on the ground portfolio. I sent you a couple of emails this week. I think one earlier today around to our scheduling with one site. I want to see if I can get fifteen twenty minutes of your time wanna show you what we're doing with partners with similar portfolios here in Texas again Dieter with rentable"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "602445d6-8c30-42a9-8e85-ca6b4d15ad7a",
+      "title": "Call: Dither  Castro  and Becky Smith @ Eureka Multifamily Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

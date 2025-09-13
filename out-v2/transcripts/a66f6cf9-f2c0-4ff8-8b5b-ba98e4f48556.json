@@ -1,0 +1,75 @@
+{
+  "recording_id": "9b9bbd5e-cf73-4ace-8f87-c8100712f3d2",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "sentences": [
+    {
+      "start_time": 3.67,
+      "end_time": 4.29,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "So",
+          "start_time": 3.67,
+          "end_time": 3.98,
+          "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+        },
+        {
+          "type": "pronunciation",
+          "content": "that",
+          "start_time": 3.98,
+          "end_time": 4.29,
+          "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+        }
+      ],
+      "text": "So that",
+      "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+    },
+    {
+      "start_time": 6.07,
+      "end_time": 7.46,
+      "items": [
+        {
+          "type": "pronunciation",
+          "content": "let's",
+          "start_time": 6.07,
+          "end_time": 6.54,
+          "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+        },
+        {
+          "type": "pronunciation",
+          "content": "take",
+          "start_time": 6.54,
+          "end_time": 7,
+          "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+        },
+        {
+          "type": "pronunciation",
+          "content": "their",
+          "start_time": 7,
+          "end_time": 7.46,
+          "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+        },
+        {
+          "type": "punctuation",
+          "content": ".",
+          "start_time": 7.46,
+          "end_time": 7.93,
+          "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+        }
+      ],
+      "text": "let's take their.",
+      "recording_attendee_id": "744313fb-5b03-4b7c-a19d-1db8779e0729"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "9b9bbd5e-cf73-4ace-8f87-c8100712f3d2",
+      "title": null,
+      "platform": null,
+      "media_type": null,
+      "started_recording_at": null,
+      "call_date": null
+    }
+  }
+}

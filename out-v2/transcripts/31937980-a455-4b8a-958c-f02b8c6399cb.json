@@ -1,0 +1,47 @@
+{
+  "id": "31937980-a455-4b8a-958c-f02b8c6399cb",
+  "recording_id": "4ce9b5e4-f869-482f-bee3-d0b290ffb579",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "31937980-a455-4b8a-958c-f02b8c6399cb",
+      "recording_id": "4ce9b5e4-f869-482f-bee3-d0b290ffb579",
+      "end_time": 1.46,
+      "start_time": 0.21,
+      "recording_attendee_id": "e37855be-7686-434e-bb30-4899ef322a79",
+      "order_number": 0,
+      "text": "Thank you for calling"
+    },
+    {
+      "id": "31937980-a455-4b8a-958c-f02b8c6399cb",
+      "recording_id": "4ce9b5e4-f869-482f-bee3-d0b290ffb579",
+      "end_time": 1.75,
+      "start_time": 1.23,
+      "recording_attendee_id": "51aa56d8-f383-4d8c-9fec-72038db23e12",
+      "order_number": 1,
+      "text": "coming."
+    },
+    {
+      "id": "31937980-a455-4b8a-958c-f02b8c6399cb",
+      "recording_id": "4ce9b5e4-f869-482f-bee3-d0b290ffb579",
+      "end_time": 119.01,
+      "start_time": 1.46,
+      "recording_attendee_id": "e37855be-7686-434e-bb30-4899ef322a79",
+      "order_number": 2,
+      "text": "Jacobs and Brothers and DHS management. If you know your party's extension, you may dial it at any time. If this is one of our residents calling for assistance, please press one. To reach a member of our customer service team. Speak with a member of our accounting department, please press two. For our address, hours of operation, fax number, email and website information, please press three. For dial by name directory, please press four. To leave a voicemail, please press five. Thank you for calling. Thank you for calling Jacobson Brothers and Dhs management. If you know your party's extension, you may dial it at any time. If this is one of our residents calling for assistance, please press one To reach a member of our customer service team. To speak with a member of our accounting department, please press two for our address, hours of operation. Fax number, email and website information, please press three. For dial by name directory, please press four. To leave a voicemail, please press five. Welcome to the company directory. Please dial the first three digits of the first name of the person you wish to reach the directory is empty. Welcome to the company directory. Please tell the first three digits of the first name of the person you wish to reach the directory is empty. Welcome to the company directory."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "4ce9b5e4-f869-482f-bee3-d0b290ffb579",
+      "title": "Call: Brandon Winfield and +12485400350",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

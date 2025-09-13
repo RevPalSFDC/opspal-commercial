@@ -1,0 +1,25 @@
+{
+    "label": "Gong Conversations with Trackers",
+    "name": "Gong_Conversations_with_Trackers",
+    "type": "Gong__Gong_Call__c",
+    "description": "Custom report type to show Gong Conversations with Trackers",
+    "sections": [
+        {
+            "columns": [
+                "Name",
+                "Gong__Call_Date_Time__c"
+            ]
+        }
+    ],
+    "relatedObjects": [
+        {
+            "relationshipName": "Trackers__r",
+            "type": "Gong__Tracker__c",
+            "columns": [
+                "Name",
+                "Gong__Tracker_Type__c",
+                "Gong__Description__c"
+            ]
+        }
+    ]
+}

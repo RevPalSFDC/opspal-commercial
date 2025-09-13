@@ -1,0 +1,83 @@
+{
+  "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+  "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 26.31,
+      "start_time": 23.73,
+      "recording_attendee_id": "76f3bf7a-41fc-43c8-bd72-dd15fb671f41",
+      "order_number": 0,
+      "text": "Hello, this is John how may I help him."
+    },
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 30.73,
+      "start_time": 26.89,
+      "recording_attendee_id": "a41d692e-d192-410d-9d84-46a2b4370a95",
+      "order_number": 1,
+      "text": "Hi, my name is Mitch. I just was calling for Jose."
+    },
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 160.26,
+      "start_time": 32.61,
+      "recording_attendee_id": "76f3bf7a-41fc-43c8-bd72-dd15fb671f41",
+      "order_number": 2,
+      "text": "Wanna thanks for holding still element. Thank you for holding I wasn't able to reach them. But I'd be happy to leave a message for you know I but I can definitely leave that message if you'd like."
+    },
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 174.99,
+      "start_time": 156.1,
+      "recording_attendee_id": "a41d692e-d192-410d-9d84-46a2b4370a95",
+      "order_number": 3,
+      "text": "Did you have a voicemail or? Sure, my name is Michael Starkey, I'm close with rental. So I exchanged emails with William Taylor as well as Joe. I had a note to follow up to setting call."
+    },
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 178.86,
+      "start_time": 176.19,
+      "recording_attendee_id": "76f3bf7a-41fc-43c8-bd72-dd15fb671f41",
+      "order_number": 4,
+      "text": "Okay, perfect and can I get the best phone number for you."
+    },
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 188.75,
+      "start_time": 179.5,
+      "recording_attendee_id": "a41d692e-d192-410d-9d84-46a2b4370a95",
+      "order_number": 5,
+      "text": "It's four seven zero. Eight two eight. Five three eight three."
+    },
+    {
+      "id": "92c922e5-c6a5-4dd5-a007-14b33cd5cc8e",
+      "recording_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "end_time": 190.76,
+      "start_time": 189.32,
+      "recording_attendee_id": "76f3bf7a-41fc-43c8-bd72-dd15fb671f41",
+      "order_number": 6,
+      "text": "Perfect, I'll get that to some other way."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "f80432a1-f609-4e73-b287-89d64dbd3513",
+      "title": "Call: Mitch  Scarski  and +18557356248",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

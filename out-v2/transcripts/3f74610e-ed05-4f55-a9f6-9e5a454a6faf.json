@@ -1,0 +1,108 @@
+{
+  "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+  "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 142.06,
+      "start_time": 141.4,
+      "recording_attendee_id": "8f823d1c-9911-4c9d-988f-b91e178375a6",
+      "text": "I'm getting a little"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 162.85,
+      "start_time": 157.81,
+      "recording_attendee_id": "0f1e4157-b37a-4b5a-98a1-9e8e2c32a09d",
+      "text": "if I'm wondering if I would it be better. If I just give you a call. I got a phone maybe."
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 182.45,
+      "start_time": 182.12,
+      "recording_attendee_id": null,
+      "text": "My"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 117.52,
+      "start_time": 116.83,
+      "recording_attendee_id": "8f823d1c-9911-4c9d-988f-b91e178375a6",
+      "text": "I can hear you"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 186.05,
+      "start_time": 185.27,
+      "recording_attendee_id": null,
+      "text": "I'll give you a call here"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 123.73,
+      "start_time": 117.52,
+      "recording_attendee_id": "0f1e4157-b37a-4b5a-98a1-9e8e2c32a09d",
+      "text": "how are you today. I'm sorry,"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 112.17,
+      "start_time": 111.15,
+      "recording_attendee_id": "0f1e4157-b37a-4b5a-98a1-9e8e2c32a09d",
+      "text": "Kelly are you there?"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 183.8,
+      "start_time": 183.26,
+      "recording_attendee_id": "8f823d1c-9911-4c9d-988f-b91e178375a6",
+      "text": "seven,"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 190.2,
+      "start_time": 186.05,
+      "recording_attendee_id": "0f1e4157-b37a-4b5a-98a1-9e8e2c32a09d",
+      "text": "just second."
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 145.42,
+      "start_time": 142.12,
+      "recording_attendee_id": "0f1e4157-b37a-4b5a-98a1-9e8e2c32a09d",
+      "text": "Eco from you um, let me see"
+    },
+    {
+      "id": "3f74610e-ed05-4f55-a9f6-9e5a454a6faf",
+      "recording_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "end_time": 157.81,
+      "start_time": 157.27,
+      "recording_attendee_id": "8f823d1c-9911-4c9d-988f-b91e178375a6",
+      "text": "I'm wondering"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "0be0cb06-68fe-432e-aa33-ecd67aa24e2f",
+      "title": "Grassano:Rentable - Kelli & Jamie/Matthew",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-01-19T15:10:41.407000Z",
+      "call_date": "2021-01-19"
+    }
+  }
+}

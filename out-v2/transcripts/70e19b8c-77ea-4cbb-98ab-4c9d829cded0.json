@@ -1,0 +1,28 @@
+{
+  "id": "70e19b8c-77ea-4cbb-98ab-4c9d829cded0",
+  "recording_id": "c1baed78-6246-4acb-b680-92cdd2f83af4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "70e19b8c-77ea-4cbb-98ab-4c9d829cded0",
+      "recording_id": "c1baed78-6246-4acb-b680-92cdd2f83af4",
+      "end_time": 61.26,
+      "start_time": 31.1,
+      "recording_attendee_id": "3ed2c212-94ab-4140-b3fd-466b5ff450c1",
+      "text": "Thank you for calling Columbia residential. If you know, your party's extension you may dial it at any time to dial by name, please dial one. Please spell the name of the person's last name first press seven for Z. Press one for extension one eight zero to cancel and enter a different name please hold while I transfer your call."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c1baed78-6246-4acb-b680-92cdd2f83af4",
+      "title": "Call: Mitch  Scarski  and Rebecca Lively @ Nurock Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

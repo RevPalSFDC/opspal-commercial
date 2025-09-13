@@ -1,0 +1,60 @@
+{
+  "id": "844b58e2-08a5-4b17-83f4-737d1f105ad1",
+  "recording_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "844b58e2-08a5-4b17-83f4-737d1f105ad1",
+      "recording_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+      "end_time": 1.64,
+      "start_time": 0.65,
+      "recording_attendee_id": "8c4541d0-f02b-4bb9-9845-d6dded22403f",
+      "text": "Deals properties."
+    },
+    {
+      "id": "844b58e2-08a5-4b17-83f4-737d1f105ad1",
+      "recording_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+      "end_time": 80.48,
+      "start_time": 20.73,
+      "recording_attendee_id": "8c4541d0-f02b-4bb9-9845-d6dded22403f",
+      "text": "The a hold of the second. Thanks for holding we appreciate your time and patience please stay on the line will be back in just a moment."
+    },
+    {
+      "id": "844b58e2-08a5-4b17-83f4-737d1f105ad1",
+      "recording_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+      "end_time": 9.25,
+      "start_time": 6.58,
+      "recording_attendee_id": "8c4541d0-f02b-4bb9-9845-d6dded22403f",
+      "text": "Case for thirty more what's listed about."
+    },
+    {
+      "id": "844b58e2-08a5-4b17-83f4-737d1f105ad1",
+      "recording_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+      "end_time": 16.85,
+      "start_time": 2.39,
+      "recording_attendee_id": "a2c2672d-802f-435b-84f9-e9c817984478",
+      "text": "Hey, I was trying to get a hold of Casey. Oh, no, I'm okay. Um. Yeah, I guess, I was eat and available."
+    },
+    {
+      "id": "844b58e2-08a5-4b17-83f4-737d1f105ad1",
+      "recording_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+      "end_time": 19.62,
+      "start_time": 18.9,
+      "recording_attendee_id": "a2c2672d-802f-435b-84f9-e9c817984478",
+      "text": "Be done, yeah."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "2d5cb3c1-58cb-4bab-aff6-8dedbb80ce54",
+      "title": "Call: Dan Cellon and Edan Evenhaim @ Deels Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

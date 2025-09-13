@@ -1,0 +1,47 @@
+{
+  "id": "05130d9f-1ad6-4858-bc1f-4df554824413",
+  "recording_id": "eb074d98-036e-41ce-92fc-df11c468dfda",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "05130d9f-1ad6-4858-bc1f-4df554824413",
+      "recording_id": "eb074d98-036e-41ce-92fc-df11c468dfda",
+      "end_time": 122.62,
+      "start_time": 0.74,
+      "recording_attendee_id": "afd6a3a1-df66-479f-acd0-dd4bae9565dc",
+      "order_number": 0,
+      "text": "Good afternoon. You have reached the community support office of Sunrise senior living located in the clean Virginia. If you know your party's five, digit extension you may dial it at any time for a dial by name directory press one to speak to a Sunrise to find your party's extension you may enter the first few letters of their first or last name for Q press seven. For Z press nine. Sorry, there are no matches to your entry. If you know your party's five, digit extension you may dial it at any time for a dial by name directory press one to speak to a Sunrise resource kasler about Sunrise senior living press two for accounts payable resident billing or corporate collections press three for the I T group press four for development and construction press five to share concern about resident care or Services received press six for job opportunities human resources or payroll press seven to repeat this menu press nine for all other calls. If you know your party's five, digit extension you may dial it at anytime for a dial by name directory press one to speak to a Sunrise resource counselor about Sunrise senior living press two for accounts payable resident billing or corporate collections press three to find your party's extension you may enter the first few letters of their first or last name for Q press seven. For Z press nine. At P C press three zero one nine five, if you"
+    },
+    {
+      "id": "05130d9f-1ad6-4858-bc1f-4df554824413",
+      "recording_id": "eb074d98-036e-41ce-92fc-df11c468dfda",
+      "end_time": 137.31,
+      "start_time": 122.62,
+      "recording_attendee_id": "afd6a3a1-df66-479f-acd0-dd4bae9565dc",
+      "order_number": 1,
+      "text": "know your party's five eight please hold while I transfer your call. Hi, you've reached Abby see senior director of marketing for Sunrise Senior living. Please leave me a message and I'll get back to you soon as possible thanks."
+    },
+    {
+      "id": "05130d9f-1ad6-4858-bc1f-4df554824413",
+      "recording_id": "eb074d98-036e-41ce-92fc-df11c468dfda",
+      "end_time": 169.18,
+      "start_time": 140.65,
+      "recording_attendee_id": "a2cb7e85-e136-49c1-91e4-b239b00738ba",
+      "order_number": 2,
+      "text": "Hi, Abby. Good afternoon. This is Jordan Cope over at or rentable. Sorry. I missed you here. I'm actually with the senior director of marketing for Sunrise senior living and thought it might be mutually beneficial for us to connect. I'm not sure if you're familiar with us, but we're a top ten internet listing service with a partnership with Facebook Facebook marketplace and instagram. I will follow up with an email if it's easier you can just respond there or shoot me a quick call. When you get a couple of minutes at three one seven seven two zero three two six six, thank you."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "eb074d98-036e-41ce-92fc-df11c468dfda",
+      "title": "Call: Jordan Culp and Abby See @ Sunrise Senior Living",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

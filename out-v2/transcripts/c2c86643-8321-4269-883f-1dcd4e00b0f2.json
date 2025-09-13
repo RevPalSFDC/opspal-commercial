@@ -1,0 +1,38 @@
+{
+  "id": "c2c86643-8321-4269-883f-1dcd4e00b0f2",
+  "recording_id": "3dbc7d88-ac57-4ffc-a23a-a1e8b9fd68b8",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c2c86643-8321-4269-883f-1dcd4e00b0f2",
+      "recording_id": "3dbc7d88-ac57-4ffc-a23a-a1e8b9fd68b8",
+      "end_time": 96.97,
+      "start_time": 29.85,
+      "recording_attendee_id": "fbd7f364-c3d4-40c5-bc54-595809f4afcd",
+      "order_number": 0,
+      "text": "Thank you for calling Columbia residential. If you know, your party's extension you may dial it at any time to dial by name, please dial one. Welcome to the company directory please dial the first three digits and the last name of the person you wish to reach. You sit down and his spouse dial one to enter another name down. Your call is now being forwarded please hold. Hello, Lisa Dennis phone is unavailable. Please leave a message to dial, another extension press one to leave a voicemail press two or simply stay on the line."
+    },
+    {
+      "id": "c2c86643-8321-4269-883f-1dcd4e00b0f2",
+      "recording_id": "3dbc7d88-ac57-4ffc-a23a-a1e8b9fd68b8",
+      "end_time": 128.36,
+      "start_time": 104,
+      "recording_attendee_id": "7a237d51-89b5-46df-bbb6-68d7817def42",
+      "order_number": 1,
+      "text": "Hi, Lisa. This is Fred calling from rentable again, just wanted to see if we could set up a meeting to discuss the marketing advertising listings of the vacancies in your court and folio was hoping to see if you'd be willing to test us before twenty twenty, two hundred discussions please give me a call back my number is six three one five two one one five four two. Thank you very much. Have a great day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3dbc7d88-ac57-4ffc-a23a-a1e8b9fd68b8",
+      "title": "Call: Fred Amenita and Lisa DelGuidice-Bove @ 80",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

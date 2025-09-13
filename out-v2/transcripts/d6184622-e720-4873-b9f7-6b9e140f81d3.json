@@ -1,0 +1,28 @@
+{
+  "id": "d6184622-e720-4873-b9f7-6b9e140f81d3",
+  "recording_id": "79257323-fd69-4b85-a3dd-e7d8b11596c8",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "d6184622-e720-4873-b9f7-6b9e140f81d3",
+      "recording_id": "79257323-fd69-4b85-a3dd-e7d8b11596c8",
+      "end_time": 104.56,
+      "start_time": 1.44,
+      "recording_attendee_id": "4d8b015c-7553-4cf6-9ebb-1fb427291868",
+      "text": "Thank you for calling human good a nonprofit organization offering senior housing. If you know your party's extension you may dial it at any time for directory by name please press one for directory by department please press one. To dial by first name press one to dial by last name press two press pound to return to the main menu. Thank you for calling human good. Thank you for calling human good. To dial by first name press one to dial by last name. Please spell the name of the person first name first press seven for Q and nine for Z to cancel the current operation press Star. Now name and the directory matches know name is. There are too many matches for the letters entered, please enter additional letters. Know name. Press one for extension two. Two zero five zero press two for community of cortes press three for Cammy bonavita. Press four please hold while I transfer your call."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "79257323-fd69-4b85-a3dd-e7d8b11596c8",
+      "title": "Call: Dan Cellon and Adrian Szabo @ MG Properties Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

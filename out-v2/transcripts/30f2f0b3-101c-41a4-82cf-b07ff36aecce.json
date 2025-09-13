@@ -1,0 +1,83 @@
+{
+  "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+  "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 62.19,
+      "start_time": 0.59,
+      "recording_attendee_id": "0b63bc32-ada5-449b-8354-c43f3eadc828",
+      "order_number": 0,
+      "text": "Thank you for calling Addie real estate for calls regarding New York states emergency rental assistance program for residence was covered related renter rears, please press one to continue in Spanish please press nine for calls regarding maintenance, please press two for calls regarding leasing please press three for calls regarding accounting please press four for calls regarding legal please press five for all other inquiries, please press zero to repeat these menu options press the star key. An email saying how many direct your call."
+    },
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 64.84,
+      "start_time": 63.31,
+      "recording_attendee_id": "fc125b4d-e4d6-459d-b877-fd3d4487d6aa",
+      "order_number": 1,
+      "text": "Is Maggie McCormick available?"
+    },
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 67.16,
+      "start_time": 66.35,
+      "recording_attendee_id": "0b63bc32-ada5-449b-8354-c43f3eadc828",
+      "order_number": 2,
+      "text": "What else do we got it?"
+    },
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 73.11,
+      "start_time": 68.1,
+      "recording_attendee_id": "fc125b4d-e4d6-459d-b877-fd3d4487d6aa",
+      "order_number": 3,
+      "text": "Yeah, just wanted to touch base. In regards to an email, we were touching base on."
+    },
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 138.35,
+      "start_time": 74.6,
+      "recording_attendee_id": "0b63bc32-ada5-449b-8354-c43f3eadc828",
+      "order_number": 4,
+      "text": "Sir my moment. Maggie McCormick is currently unavailable. Please leave a message after the tone. When you have finished please hang up or press the pound key for more options."
+    },
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 176.09,
+      "start_time": 142.79,
+      "recording_attendee_id": "fc125b4d-e4d6-459d-b877-fd3d4487d6aa",
+      "order_number": 5,
+      "text": "Hey Maggie, this is Alex with our tech giving you a call from rentable hope you're doing well. I just wanted to check and see if maybe now is a better time for us to reconnect touch base. We're in regards to your advertising and marketing of your portfolio of that way. I'm certainly would love to work with you and some capacity we've been making a bigger size even more so than we last talked in New York, um, and certainly think your portfolio would be and honestly a very good fit for us. If you could give me a call back my preferred number is my cell"
+    },
+    {
+      "id": "30f2f0b3-101c-41a4-82cf-b07ff36aecce",
+      "recording_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "end_time": 183.92,
+      "start_time": 176.09,
+      "recording_attendee_id": "fc125b4d-e4d6-459d-b877-fd3d4487d6aa",
+      "order_number": 6,
+      "text": "two six nine three one three one five one eight, otherwise you can feel free to shoot me an email too. If that's easier thanks so much bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "86ebc3a8-06ba-4a9a-b70f-43d4d15a8855",
+      "title": "Call: Alex Wodarczyk and Maggie McCormick @ A&E Real Estate",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

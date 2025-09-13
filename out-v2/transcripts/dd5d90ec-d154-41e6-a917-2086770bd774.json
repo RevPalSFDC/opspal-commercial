@@ -1,0 +1,28 @@
+{
+  "id": "dd5d90ec-d154-41e6-a917-2086770bd774",
+  "recording_id": "1c322f95-4c0a-4872-8b30-98de7af8062f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "dd5d90ec-d154-41e6-a917-2086770bd774",
+      "recording_id": "1c322f95-4c0a-4872-8b30-98de7af8062f",
+      "end_time": 206.75,
+      "start_time": 3.1,
+      "recording_attendee_id": "26e34098-7293-4ed4-85b1-16c11d54e3e6",
+      "text": "Thank you for calling Carlson senior living a specialist will be with you momentarily this call will be recorded for quality assurance purposes. Thank you for calling Carlson Senior living. Please leave your name your preferred contact information as well as the best time to reach you and we will be in touch within twenty, four hours. We appreciate your time and look forward to assisting you soon."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1c322f95-4c0a-4872-8b30-98de7af8062f",
+      "title": "Call: Mitch  Scarski  and Tom MacDonald @ Carlton Senior Living Communities",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

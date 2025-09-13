@@ -1,0 +1,47 @@
+{
+  "id": "fb00d43d-211b-4cde-b877-58f818d5c2e5",
+  "recording_id": "fc928215-2a5a-4137-9566-18e8787ad30f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:51:36.855Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "fb00d43d-211b-4cde-b877-58f818d5c2e5",
+      "recording_id": "fc928215-2a5a-4137-9566-18e8787ad30f",
+      "end_time": 82.92,
+      "start_time": 0.86,
+      "recording_attendee_id": "055b5e27-54a7-4371-8c87-d859ff09ce25",
+      "order_number": 0,
+      "text": "Thank you for calling Summit Senior Living. If you know your party's extension, you may dial it at any time. For a dial by name directory, please press one. Welcome to the directory. Please enter the first three or more letters of the parties first or last name? Using your touch tone keypad. Use the one key for punctuation, press zero to exit the directory and obtain further assistance. Jennifer Nelligan. Hi. You've reached Jens phone. Thanks for calling. Sorry, I can't pick up right now. But if you leave a message, I'll call you back soon. Thanks so much. And have a great day at the tone. Please record your message when you have finished recording. You may hang up or press one for more options."
+    },
+    {
+      "id": "fb00d43d-211b-4cde-b877-58f818d5c2e5",
+      "recording_id": "fc928215-2a5a-4137-9566-18e8787ad30f",
+      "end_time": 116.81,
+      "start_time": 84.71,
+      "recording_attendee_id": "e283f9cc-261c-4f70-bee7-718ea79af5dc",
+      "order_number": 1,
+      "text": "Hey there jenn it's uh Alex with giving you a call from uh rentable. Hope you had a uh wonderful thanksgiving holiday. Uh Just wanted to uh check in with you and kinda see the status on the proposal offer. Uh We discussed last week, I know you mentioned uh you wanted to kind of touch base with a few other colleagues out that way and um said you have maybe an answer here today or tomorrow uh to try to sneak in some of that discount pricing and give us a shot here uh before the end of the month. Feel free to give me a call back uh email calls, whatever's easiest for you and we can touch base here. Uh and"
+    },
+    {
+      "id": "fb00d43d-211b-4cde-b877-58f818d5c2e5",
+      "recording_id": "fc928215-2a5a-4137-9566-18e8787ad30f",
+      "end_time": 127.38,
+      "start_time": 116.81,
+      "recording_attendee_id": "e283f9cc-261c-4f70-bee7-718ea79af5dc",
+      "order_number": 2,
+      "text": "see if we can get things rolling. Certainly would love to partner with you here. And uh also wanted to make sure that uh Starbucks uh gift card came through too. Uh Thanks again. And I look forward to hearing back by now."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fc928215-2a5a-4137-9566-18e8787ad30f",
+      "title": "Call: Alex Wodarczyk and Jen Nelligan @ Summit Senior Living",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

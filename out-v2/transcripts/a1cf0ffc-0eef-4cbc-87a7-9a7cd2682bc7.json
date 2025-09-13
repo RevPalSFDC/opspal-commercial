@@ -1,0 +1,68 @@
+{
+  "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+  "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+      "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "end_time": 83.67,
+      "start_time": 82.71,
+      "recording_attendee_id": null,
+      "text": "oh, hi, posted."
+    },
+    {
+      "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+      "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "end_time": 4.52,
+      "start_time": 4.37,
+      "recording_attendee_id": "90fb6b86-af5a-4c6d-930c-3017c30798aa",
+      "text": "I"
+    },
+    {
+      "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+      "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "end_time": 1.7,
+      "start_time": 0,
+      "recording_attendee_id": null,
+      "text": "And how do you anticipate this call."
+    },
+    {
+      "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+      "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "end_time": 86.46,
+      "start_time": 85.29,
+      "recording_attendee_id": "2005289f-910f-48c7-8a7a-1b1f7c66b854",
+      "text": "Alright sounds good."
+    },
+    {
+      "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+      "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "end_time": 81.78,
+      "start_time": 80.28,
+      "recording_attendee_id": "90fb6b86-af5a-4c6d-930c-3017c30798aa",
+      "text": "Alright. Oh,"
+    },
+    {
+      "id": "a1cf0ffc-0eef-4cbc-87a7-9a7cd2682bc7",
+      "recording_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "end_time": 76.47,
+      "start_time": 4.52,
+      "recording_attendee_id": "2005289f-910f-48c7-8a7a-1b1f7c66b854",
+      "text": "don't think he's gonna be prepared you know when yesterday with with the contracts and let them know. Hey, this is all gonna look over tomorrow, but from the office and my cell please they just been super busy with transition. I'll probably if it goes well probably have to remain under for this property management instead of first communities management. It was declined of the meeting right."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d90c178b-90b8-45c3-a009-db684d1e5a81",
+      "title": "Rentable Contract Discussion ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-02-12T15:14:00.593000Z",
+      "call_date": "2021-02-12"
+    }
+  }
+}

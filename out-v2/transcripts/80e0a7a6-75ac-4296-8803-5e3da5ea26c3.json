@@ -1,0 +1,60 @@
+{
+  "id": "80e0a7a6-75ac-4296-8803-5e3da5ea26c3",
+  "recording_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "80e0a7a6-75ac-4296-8803-5e3da5ea26c3",
+      "recording_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+      "end_time": 68.35,
+      "start_time": 0.82,
+      "recording_attendee_id": "b0fbd541-b46d-4b44-9657-f2bd980844ca",
+      "text": "Thank you for calling W is our real estate please visit our website at W S R dot net for listing of our car rentals to access your owner or Kenna portal or to make an online payment escrow demands or inquiries can be emailed to escrow at W S R dot net, if you know your party's extension you can dial it at any time or you can choose from a list of the following options press one to dial by name press two for H away owner accounts. Our H away accounts payable press three for single family home accounting press four for rain cross Services press five for property management or real estate sales press six for maintenance problems press seven for the escrow department press nine to repeat this menu press zero for the receptionist press pound. Good morning W S R."
+    },
+    {
+      "id": "80e0a7a6-75ac-4296-8803-5e3da5ea26c3",
+      "recording_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+      "end_time": 122.79,
+      "start_time": 120.78,
+      "recording_attendee_id": "b0fbd541-b46d-4b44-9657-f2bd980844ca",
+      "text": "I'm not I'm not interested thank you."
+    },
+    {
+      "id": "80e0a7a6-75ac-4296-8803-5e3da5ea26c3",
+      "recording_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+      "end_time": 79.77,
+      "start_time": 74.76,
+      "recording_attendee_id": "b0fbd541-b46d-4b44-9657-f2bd980844ca",
+      "text": "Yes, one moment please. Your property."
+    },
+    {
+      "id": "80e0a7a6-75ac-4296-8803-5e3da5ea26c3",
+      "recording_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+      "end_time": 73.69,
+      "start_time": 67.48,
+      "recording_attendee_id": "2e023b06-380f-412c-a085-577bcf1db144",
+      "text": "Morning give you his son. Hi, I just was calling for Tyler Hatch please."
+    },
+    {
+      "id": "80e0a7a6-75ac-4296-8803-5e3da5ea26c3",
+      "recording_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+      "end_time": 120.44,
+      "start_time": 93.77,
+      "recording_attendee_id": "2e023b06-380f-412c-a085-577bcf1db144",
+      "text": "Hi, this is Tyler. Hey Tyler, my name is Mitch Garcia. I'm calling from rents pull. The reason I was giving you a call this morning was to set a meeting with you I actually spoke with Mike Hamilton last week. He referred me over to you as the right person. I worked with a lot of other property management companies in terms of generating them more qualified leads and renters to their problem."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c235cffb-74dc-4fea-b2d7-5d503ed850c9",
+      "title": "Call: Mitch  Scarski  and +19516821000",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

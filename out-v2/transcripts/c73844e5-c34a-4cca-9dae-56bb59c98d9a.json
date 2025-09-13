@@ -1,0 +1,76 @@
+{
+  "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+  "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:33:16.200Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 7.49,
+      "start_time": 4.01,
+      "recording_attendee_id": "907d3102-104a-4a8b-8dc9-fd6877706970",
+      "text": "Hi, Alicia, my name is Mitch. I'm just calling for sure if you simply."
+    },
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 74.94,
+      "start_time": 71.04,
+      "recording_attendee_id": "907d3102-104a-4a8b-8dc9-fd6877706970",
+      "text": "Sure, either that or I'll just yeah, I'll just call on Monday, no worries. Thank you, though."
+    },
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 21.68,
+      "start_time": 19.19,
+      "recording_attendee_id": "907d3102-104a-4a8b-8dc9-fd6877706970",
+      "text": "Okay, does she have a voicemail by chance know."
+    },
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 18.81,
+      "start_time": 8.31,
+      "recording_attendee_id": "db4b1136-e8ed-4c6e-b135-d6641526d4f2",
+      "text": "She is currently not in but if I could take a message down for you and have her get back to I don't know she's gonna be in today or Monday, um, but she'll get back to you as soon as she can is that okay."
+    },
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 80.72,
+      "start_time": 74.81,
+      "recording_attendee_id": "db4b1136-e8ed-4c6e-b135-d6641526d4f2",
+      "text": "Okay. Yeah, I'll also send you to the voicemail right. Now? I'll I'll work on that good. Okay. Okay."
+    },
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 70.58,
+      "start_time": 31.26,
+      "recording_attendee_id": "db4b1136-e8ed-4c6e-b135-d6641526d4f2",
+      "text": "Yeah, I'm I'm going to be transparent with you I'm covering today. So I'm just gonna figure out how to um transfer you to the voicemail. Okay, I'm gonna put you on a hold and transfer you over to the voicemail. If it does not work if you can give me a call back um and let me no that would be great."
+    },
+    {
+      "id": "c73844e5-c34a-4cca-9dae-56bb59c98d9a",
+      "recording_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "end_time": 2.96,
+      "start_time": 0.65,
+      "recording_attendee_id": "db4b1136-e8ed-4c6e-b135-d6641526d4f2",
+      "text": "Thank you for calling this is Alicia."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "ef941d20-82ad-4f9a-9ab5-3d69c3459c81",
+      "title": "Call: Mitch  Scarski  and +15307565075",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

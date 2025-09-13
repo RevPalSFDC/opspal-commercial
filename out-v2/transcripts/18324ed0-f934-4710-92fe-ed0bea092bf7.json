@@ -1,0 +1,60 @@
+{
+  "id": "18324ed0-f934-4710-92fe-ed0bea092bf7",
+  "recording_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "18324ed0-f934-4710-92fe-ed0bea092bf7",
+      "recording_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+      "end_time": 117.85,
+      "start_time": 107.92,
+      "recording_attendee_id": "6ed22226-4f45-49f4-b489-9bf7d040ab3c",
+      "text": "Um, I did you an email to respond yesterday and she can just make a note to respond to email that I sent that'd be great thanks."
+    },
+    {
+      "id": "18324ed0-f934-4710-92fe-ed0bea092bf7",
+      "recording_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+      "end_time": 9.17,
+      "start_time": 5.81,
+      "recording_attendee_id": "6ed22226-4f45-49f4-b489-9bf7d040ab3c",
+      "text": "My name is Mitch. I just was calling for is please."
+    },
+    {
+      "id": "18324ed0-f934-4710-92fe-ed0bea092bf7",
+      "recording_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+      "end_time": 120.5,
+      "start_time": 115.19,
+      "recording_attendee_id": "a1bf8b2b-4daf-4a11-ab25-b45ef6275e4e",
+      "text": "Yeah that, I'll go ahead and do that for you. Okay. Thank you. Bye bye."
+    },
+    {
+      "id": "18324ed0-f934-4710-92fe-ed0bea092bf7",
+      "recording_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+      "end_time": 4.79,
+      "start_time": 0.83,
+      "recording_attendee_id": "a1bf8b2b-4daf-4a11-ab25-b45ef6275e4e",
+      "text": "Morning. Thank you for calling Rio last call messages Daniella speaking, how may I help you."
+    },
+    {
+      "id": "18324ed0-f934-4710-92fe-ed0bea092bf7",
+      "recording_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+      "end_time": 107.29,
+      "start_time": 9.82,
+      "recording_attendee_id": "a1bf8b2b-4daf-4a11-ab25-b45ef6275e4e",
+      "text": "Okay, let me check if she's available. Okay. Thank you for holding Mitch. Okay. I do apologize, it looks like she stuck on the other line did you want to shoot her an email."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d5a2cc51-d1a5-4b25-b052-f7ee01776c83",
+      "title": "Call: Mitch  Scarski  and Lizeth Guerrero @ Five Star Senior Living",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

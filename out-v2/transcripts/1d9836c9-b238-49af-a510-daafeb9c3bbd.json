@@ -1,0 +1,60 @@
+{
+  "id": "1d9836c9-b238-49af-a510-daafeb9c3bbd",
+  "recording_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1d9836c9-b238-49af-a510-daafeb9c3bbd",
+      "recording_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+      "end_time": 75.92,
+      "start_time": 73.31,
+      "recording_attendee_id": "2ab459e6-34a6-4883-b205-19d7e7dc743b",
+      "text": "Hello, I was looking to speak with Amanda time simply."
+    },
+    {
+      "id": "1d9836c9-b238-49af-a510-daafeb9c3bbd",
+      "recording_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+      "end_time": 87.34,
+      "start_time": 84.64,
+      "recording_attendee_id": "2ab459e6-34a6-4883-b205-19d7e7dc743b",
+      "text": "Know this this is Austin with rentable calling."
+    },
+    {
+      "id": "1d9836c9-b238-49af-a510-daafeb9c3bbd",
+      "recording_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+      "end_time": 83.5,
+      "start_time": 76.9,
+      "recording_attendee_id": "027cf639-f8ab-46fb-b1ae-f80703e67ca5",
+      "text": "Yeah, absolutely give me just one second um, this is Cory from flag."
+    },
+    {
+      "id": "1d9836c9-b238-49af-a510-daafeb9c3bbd",
+      "recording_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+      "end_time": 132.27,
+      "start_time": 87.83,
+      "recording_attendee_id": "027cf639-f8ab-46fb-b1ae-f80703e67ca5",
+      "text": "Okay. Okay, not a problem. Okay. Thank you, give me just one. Second. Erica grooms is not available to take your call."
+    },
+    {
+      "id": "1d9836c9-b238-49af-a510-daafeb9c3bbd",
+      "recording_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+      "end_time": 72.12,
+      "start_time": 0.05,
+      "recording_attendee_id": "027cf639-f8ab-46fb-b1ae-f80703e67ca5",
+      "text": "Thank you for calling Gateway management company our business hours are Monday through Friday eight AM to five PM Central if you know your party's three, digit extension you may dial it at any time to dial by name press one for accounts payable press two for human resources press three for the I T department press four for all other call. Thank you for calling Gateway management company our business hours are Monday through Friday eight AM to five PM Central if you know your party's three, digit extension you may dial it. Please stay on the line. While your call is transferred to the operator. Thank you for calling Gateway management. This is Bailey. How can I help you?"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "e5d22774-e827-4130-bf19-1d81229d660b",
+      "title": "Call: Austin Schleisner and Amanda Thompson @ Gateway Management Company",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

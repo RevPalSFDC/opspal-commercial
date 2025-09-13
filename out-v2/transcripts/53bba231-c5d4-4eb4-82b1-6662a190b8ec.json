@@ -1,0 +1,101 @@
+{
+  "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+  "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 7.43,
+      "start_time": 4.49,
+      "recording_attendee_id": "0b42662f-8160-4cf0-b3f8-45e18e1c7b68",
+      "order_number": 0,
+      "text": "Thank you for calling mid, West house. This is the front desk, how may I help you."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 12.58,
+      "start_time": 8.8,
+      "recording_attendee_id": "daf87231-911c-4b63-8877-895b7404711f",
+      "order_number": 1,
+      "text": "I'm yes is Jim Glassman in this afternoon by chance."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 17.3,
+      "start_time": 14.33,
+      "recording_attendee_id": "0b42662f-8160-4cf0-b3f8-45e18e1c7b68",
+      "order_number": 2,
+      "text": "Um, I don't know but I can go ahead and transfer you to him."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 19.84,
+      "start_time": 18.55,
+      "recording_attendee_id": "daf87231-911c-4b63-8877-895b7404711f",
+      "order_number": 3,
+      "text": "That'd be great. Thank you maam."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 24.15,
+      "start_time": 20.22,
+      "recording_attendee_id": "0b42662f-8160-4cf0-b3f8-45e18e1c7b68",
+      "order_number": 4,
+      "text": "Oh, okay, no problem have a good day."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 25.18,
+      "start_time": 24.61,
+      "recording_attendee_id": "daf87231-911c-4b63-8877-895b7404711f",
+      "order_number": 5,
+      "text": "You too."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 64.45,
+      "start_time": 25.88,
+      "recording_attendee_id": "0b42662f-8160-4cf0-b3f8-45e18e1c7b68",
+      "order_number": 6,
+      "text": "Thank you. Your call is being forwarded to one my tell voicemail system. Jim Kaufman is not available. Please leave a message at the tone when finished you may hang up or press pound for additional options."
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 128.06,
+      "start_time": 66.26,
+      "recording_attendee_id": "daf87231-911c-4b63-8877-895b7404711f",
+      "order_number": 7,
+      "text": "Hey, Jim, John, Mike Curry calling from rentable. Hope you are enjoying your week apologize. I missed you here. It's about four o'clock on Wednesday afternoon, but Jim sent you an email earlier just wanted to follow up at your office came across that by chance, but was hoping to connect with you Jim are a member of your team um to learn a little bit more about your your facility your properties that at mid West Hill. I'm how occupancies going and I'm curious to to know I'm a little bit more about what marketing and advertising sources. You're currently using the remote your properties um, so would love to grab ten fifteen minutes of your time. If if possible at some point um, so if you can give me a call back or shoot me an email Jim um, when you have some time, I'd really appreciate it again, Jim John from rentable three one"
+    },
+    {
+      "id": "53bba231-c5d4-4eb4-82b1-6662a190b8ec",
+      "recording_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "end_time": 138.23,
+      "start_time": 128.06,
+      "recording_attendee_id": "daf87231-911c-4b63-8877-895b7404711f",
+      "order_number": 8,
+      "text": "seven four zero seven three five zero nine three one seven four zero seven three five zero nine. I hope hope to hear from you soon. Jim have a great day."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d6c4ed61-06d4-4748-ac25-365cddb844ef",
+      "title": "Call: John Loughery and Jim Klausman @ Midwest Health",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

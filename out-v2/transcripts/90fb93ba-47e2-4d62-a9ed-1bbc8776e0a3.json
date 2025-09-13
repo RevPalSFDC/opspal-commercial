@@ -1,0 +1,36 @@
+{
+  "id": "90fb93ba-47e2-4d62-a9ed-1bbc8776e0a3",
+  "recording_id": "d72a89bb-eb0f-4ea3-be8f-fd5cd55ce4ad",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:19:27.215Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "90fb93ba-47e2-4d62-a9ed-1bbc8776e0a3",
+      "recording_id": "d72a89bb-eb0f-4ea3-be8f-fd5cd55ce4ad",
+      "end_time": 93.4,
+      "start_time": 2.31,
+      "recording_attendee_id": "379d818e-cdc2-4786-8538-ff6018b700c1",
+      "text": "Thank you for calling formidable property management. Please note that our menu options have recently changed if you know your party's four, digit extension you may dial it at any time. You may also visit us on the web at W W W dot formidable dot. Com. Otherwise please choose from the following options for dial by name directory press one for accounts payable press two for application appeals press three for human Resources. Please enter the first three letters of the last name of the person you are trying to contact. Please hold while I transfer your call. Hi, you've reached John Elliot with for medical. I'm unable to come to the phone right now, but if you will leave and brief message along with your name and a call back number. I'll return your call as soon as I can thank you and have a great day."
+    },
+    {
+      "id": "90fb93ba-47e2-4d62-a9ed-1bbc8776e0a3",
+      "recording_id": "d72a89bb-eb0f-4ea3-be8f-fd5cd55ce4ad",
+      "end_time": 126.62,
+      "start_time": 97.04,
+      "recording_attendee_id": "889006cf-3848-4c15-80d3-bf33cc6eb8d5",
+      "text": "Hey, John, my name is Dan with a photo. I was referred to you in regards to Watson Glade and Gatlin Berg. I'm seeing if you guys needed any help with the lease up see if there's maybe an opportunity for us to help you get a little bit more traffic um to the site would love to chat with you wanna. Give me a call back at seven five seven six one eight five three eight four thanks so much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d72a89bb-eb0f-4ea3-be8f-fd5cd55ce4ad",
+      "title": "Call: Dan Cellon and John Elliott @ Fourmidable Real Estate Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

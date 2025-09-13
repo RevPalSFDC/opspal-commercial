@@ -1,0 +1,28 @@
+{
+  "id": "a6556d45-07ae-42b4-88f6-c16dd2176f67",
+  "recording_id": "7d5286f8-56d2-46ac-b860-57e33a94bacf",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a6556d45-07ae-42b4-88f6-c16dd2176f67",
+      "recording_id": "7d5286f8-56d2-46ac-b860-57e33a94bacf",
+      "end_time": 349.3,
+      "start_time": 168.43,
+      "recording_attendee_id": "e83ee28d-1350-429f-8cb5-979ff31031e9",
+      "text": "Oh my goodness. The other line or assisting another regarding leasing or a message for the property management team. Please leave your name phone number and your number and a brief message and the."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "7d5286f8-56d2-46ac-b860-57e33a94bacf",
+      "title": "Rentable Meeting ",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-01-08T20:11:00.582000Z",
+      "call_date": "2021-01-08"
+    }
+  }
+}

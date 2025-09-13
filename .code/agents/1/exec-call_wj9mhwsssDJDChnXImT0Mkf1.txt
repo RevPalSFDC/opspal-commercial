@@ -1,0 +1,637 @@
+DATA_INTEGRITY_PREVENTION_PLAN.md:5:A comprehensive framework has been implemented to prevent sub-agents from generating fake data instead of querying real environments. This addresses the critical issue discovered in ClaudeSFDC where the `sfdc-revops-auditor` agent generated simulated data with suspiciously round percentages (15%, 30%) instead of executing real Salesforce queries.
+DATA_INTEGRITY_PREVENTION_PLAN.md:34:- Updated `sfdc-revops-auditor` with strict data integrity rules
+DATA_INTEGRITY_PREVENTION_PLAN.md:128:node scripts/subagent-error-monitor.js start sfdc-revops-auditor
+Claude/agents.roster.json:66:      "sfdc-revops-auditor",
+docs/SUBAGENT_DATA_INTEGRITY.md:9:During the NeonOne RevOps assessment, the `sfdc-revops-auditor` agent generated simulated data (with suspiciously round percentages like 15%, 30%) instead of executing real queries against the Salesforce org. This occurred because:
+docs/SUBAGENT_DATA_INTEGRITY.md:83:const monitorId = await monitor.startMonitoring('sfdc-revops-auditor');
+docs/SUBAGENT_DATA_INTEGRITY.md:294:- ✅ Update sfdc-revops-auditor agent
+ClaudeHubSpot/integration/asana-field-audit-sync.js:27:      processingAgent: 'sfdc-revops-auditor',
+ClaudeHubSpot/integration/asana-field-audit-sync.js:30:      methodology: 'RevOps statistical analysis with field usage sampling using 95% confidence intervals',
+ClaudeHubSpot/crm-assessment-data.json:22210:            "label": "RevOps as a Service",
+ClaudeHubSpot/crm-assessment-data.json:22211:            "value": "RevOps as a Service",
+ClaudeHubSpot/crm-assessment-data.json:23787:                    "label": "RevOps as a Service",
+ClaudeHubSpot/crm-assessment-data.json:23788:                    "value": "RevOps as a Service",
+ClaudeHubSpot/Filmhub_HubSpot_RevOps_Assessment_2025-09-08.md:1:# Verbose Evidence-Based HubSpot RevOps Assessment
+ClaudeHubSpot/Filmhub_HubSpot_RevOps_Assessment_2025-09-08.md:184:**Why this pattern was flagged**: Modern RevOps requires 50+ active workflows minimum  
+ClaudeHubSpot/Filmhub_HubSpot_RevOps_Assessment_2025-09-08.md:493:- **Assessment Standard**: HubSpot RevOps Best Practices v2024
+opspal/tests_legacy/test_sow_to_asana_workflow.py:41:- Initial assessment of current RevOps processes
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:128:    def revops_manager_agent(self, segmentation_tool, threshold_tool):
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:129:        """Create RevOps manager agent"""
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:131:            role="RevOps Manager",
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:191:    async def test_segmentation_configuration_workflow(self, revops_manager_agent, segmentation_tool):
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:192:        """Test segmentation configuration with RevOps manager"""
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:204:            agent=revops_manager_agent,
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:208:        crew = Crew(agents=[revops_manager_agent], tasks=[task], process=Process.sequential)
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:218:    async def test_threshold_management_workflow(self, revops_manager_agent, threshold_tool):
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:219:        """Test threshold management with RevOps manager"""
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:229:            agent=revops_manager_agent,
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:233:        crew = Crew(agents=[revops_manager_agent], tasks=[task], process=Process.sequential)
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:314:    async def test_multi_agent_collaboration(self, platform_admin_agent, revops_manager_agent, mock_redis):
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:328:            description="Update the win_rate.target threshold to 0.30 for user 'revops_team'",
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:330:            agent=revops_manager_agent,
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:341:            agents=[platform_admin_agent, revops_manager_agent],
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:377:    async def test_bulk_operations_workflow(self, revops_manager_agent, segmentation_tool):
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:392:            agent=revops_manager_agent,
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:396:        crew = Crew(agents=[revops_manager_agent], tasks=[task], process=Process.sequential)
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:404:    async def test_configuration_validation_workflow(self, revops_manager_agent, threshold_tool):
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:415:            agent=revops_manager_agent,
+opspal/tests_legacy/integration/test_platform_utilities_integration.py:419:        crew = Crew(agents=[revops_manager_agent], tasks=[task], process=Process.sequential)
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:2:Integration tests for Phase 2 HubSpot RevOps tools
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:40:    def revops_analyst_agent(self, mock_llm):
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:41:        """Create a RevOps analyst agent with Phase 2 tools"""
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:43:            role="RevOps Analyst",
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:45:            backstory="""You are a senior RevOps analyst specializing in lead management,
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:69:    async def test_lead_scoring_workflow(self, revops_analyst_agent):
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:122:                agent=revops_analyst_agent,
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:126:            crew = Crew(agents=[revops_analyst_agent], tasks=[task], verbose=True)
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:194:    async def test_abm_list_building_workflow(self, revops_analyst_agent):
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:234:                agent=revops_analyst_agent,
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:238:            crew = Crew(agents=[revops_analyst_agent], tasks=[task], verbose=True)
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:248:    async def test_multi_tool_workflow(self, revops_analyst_agent, sales_ops_agent):
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:250:        # This tests a complete RevOps workflow:
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:293:                            agent=revops_analyst_agent,
+opspal/tests_legacy/integration/test_phase2_tools_integration.py:309:                            agents=[revops_analyst_agent, sales_ops_agent],
+ClaudeHubSpot/scripts/create-workflows.js:5: * Pre-built workflow templates for common RevOps scenarios
+ClaudeHubSpot/scripts/create-workflows.js:469:  console.log('🚀 Deploying RevOps Workflow Suite\n');
+ClaudeHubSpot/scripts/create-workflows.js:479:    name: 'RevOps Workflow Deployment',
+ClaudeHubSpot/scripts/create-workflows.js:480:    description: 'Deploy complete RevOps workflow automation suite',
+ClaudeHubSpot/scripts/create-workflows.js:555:    console.log('  deploy-all        Deploy all RevOps workflows');
+ClaudeHubSpot/scripts/run-hubspot-assessment.js:5: * Executes HubSpot RevOps assessments using the three configured prompts
+ClaudeHubSpot/scripts/run-hubspot-assessment.js:20:      prescriptive: 'Prescriptive RevOps Assessment',
+ClaudeHubSpot/scripts/run-hubspot-assessment.js:678:      prescriptive: '# Prescriptive HubSpot RevOps Assessment',
+ClaudeHubSpot/scripts/assessments/comprehensive-revops-assessment.js:3: * Comprehensive RevOps Assessment (Instance-agnostic)
+ClaudeHubSpot/scripts/assessments/comprehensive-revops-assessment.js:30:      assessmentType: 'Comprehensive RevOps Audit',
+ClaudeHubSpot/scripts/assessments/comprehensive-revops-assessment.js:152:  const md = `# ${portalName} HubSpot RevOps Assessment\nGenerated: ${date}\n\n- Contacts: ${assessment.statistics.totalContacts}\n- Companies: ${assessment.statistics.totalCompanies}\n- Deals: ${assessment.statistics.totalDeals}\n- Workflows: ${assessment.statistics.totalWorkflows} (active ${assessment.statistics.activeWorkflows})\n- Lists: ${assessment.statistics.totalLists}\n- Users: ${assessment.statistics.totalUsers}\n`;
+ClaudeHubSpot/scripts/revops-health.js:4: * RevOps Health Check for HubSpot
+ClaudeHubSpot/scripts/revops-health.js:14:const logger = new Logger('RevOpsHealth');
+ClaudeHubSpot/scripts/revops-health.js:16:class RevOpsHealthCheck {
+ClaudeHubSpot/scripts/revops-health.js:45:   * Run comprehensive RevOps health check
+ClaudeHubSpot/scripts/revops-health.js:48:    console.log('🏥 Starting RevOps Health Check...\n');
+ClaudeHubSpot/scripts/revops-health.js:670:    const filename = `revops-health-${timestamp}.json`;
+ClaudeHubSpot/scripts/revops-health.js:687:    console.log('🏥 REVOPS HEALTH CHECK SUMMARY');
+ClaudeHubSpot/scripts/revops-health.js:736:  const checker = new RevOpsHealthCheck({
+ClaudeHubSpot/scripts/revops-health.js:743:      console.log('\n✅ RevOps health check complete!');
+ClaudeHubSpot/scripts/revops-health.js:752:module.exports = { RevOpsHealthCheck };
+opspal/tests_legacy/unit/test_slack_agent.py:148:        assert result[0]["schedule"]["channel"] == "#revops-daily"
+ClaudeSFDC/integration/asana-field-audit-sync.js:37:      processingAgent: 'sfdc-revops-auditor',
+ClaudeSFDC/integration/asana-field-audit-sync.js:40:      methodology: 'RevOps statistical analysis with field usage sampling using 95% confidence intervals',
+ClaudeSFDC/integration/create-business-unit-tasks.js:81:- **Reporting Foundation**: Enable comprehensive RevOps reporting`,
+ClaudeSFDC/integration/update-asana-field-audit.js:24:      methodology: 'RevOps statistical analysis with field usage sampling',
+ClaudeSFDC/integration/update-asana-field-audit.js:144:            [timeData.processingAgentFieldId]: 'sfdc-revops-auditor',
+ClaudeSFDC/integration/update-asana-field-audit.js:169:- Automated analysis using sfdc-revops-auditor agent
+ClaudeSFDC/integration/update-asana-field-audit.js:187:*Updated by: sfdc-revops-auditor agent*
+ClaudeSFDC/integration/update-asana-field-audit.js:224:*Analysis Agent: sfdc-revops-auditor*
+ClaudeSFDC/integration/update-asana-field-audit.js:266:*Analysis Engine: sfdc-revops-auditor with statistical sampling*
+opspal/tests_legacy/root_level_tests/test_assessment_routing.py:76:            "revops assessment",
+ClaudeSFDC/agent-tool-analysis.json:108:      "name": "sfdc-revops-auditor",
+opspal/tests_legacy/root_level_tests/test_assessment_pdf_generation.py:49:            "assessment_type": "HubSpot RevOps Assessment",
+opspal/tests_legacy/root_level_tests/test_assessment_pdf_generation.py:62:            assessment_type="HubSpot RevOps Assessment",
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:63:16. **sfdc-revops-auditor** - Performs comprehensive RevOps assessments with statistical analysis
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:905:| "assess", "audit", "review" | sfdc-revops-auditor |
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:956:**Use sfdc-revops-auditor for:**
+ClaudeSFDC/CLAUDE.md.backup-20250906-112417:957:- Comprehensive RevOps assessments and audits
+ClaudeHubSpot/instances/filmhub/CORRECTED_Filmhub_Assessment_2025-09-06.md:1:# Filmhub HubSpot RevOps Assessment - CORRECTED REPORT
+ClaudeHubSpot/instances/filmhub/CORRECTED_Filmhub_Assessment_2025-09-06.md:24:**Corrected RevOps Score: 6.0/10** (up from 3.5/10)
+ClaudeHubSpot/instances/filmhub/CORRECTED_Filmhub_Assessment_2025-09-06.md:257:**Report Prepared By:** RevOps Assessment System  
+ClaudeSFDC/tool-inventory.json:2783:      "name": "run-revops-assessment",
+ClaudeSFDC/tool-inventory.json:2785:      "path": "scripts/run-revops-assessment.sh",
+ClaudeSFDC/tool-inventory.json:4065:      "run-revops-assessment",
+ClaudeSFDC/tool-inventory.json:4519:        "run-revops-assessment",
+ClaudeSFDC/tool-inventory.json:5025:            "run-revops-assessment",
+ClaudeSFDC/tool-inventory.json:5131:        "run-revops-assessment",
+ClaudeHubSpot/instances/filmhub/Filmhub_Evidence_Based_Assessment_2025-09-07.md:1:# Filmhub HubSpot RevOps Evidence-Based Assessment
+ClaudeHubSpot/instances/filmhub/Filmhub_Evidence_Based_Assessment_2025-09-07.md:319:- RevOps maturity model implemented
+ClaudeHubSpot/instances/filmhub/assessment-data-2025-09-08.json:5:    "assessmentType": "Comprehensive RevOps Audit",
+ClaudeSFDC/README.md:58:- **RevOps Framework** - Client-agnostic revenue operations
+ClaudeSFDC/README.md:65:- **Revenue Agents** - CPQ, RevOps, forecasting
+ClaudeHubSpot/instances/filmhub/assessment-data-2025-09-07.json:5:    "assessmentType": "Comprehensive RevOps Audit",
+ClaudeHubSpot/instances/filmhub/filmhub-assessment-data-2025-09-08.json:5:    "assessmentType": "Comprehensive RevOps Audit",
+ClaudeSFDC/frameworks/catalog.json:5:    "revops-framework": {
+ClaudeSFDC/frameworks/catalog.json:14:          "name": "RevOpsFramework",
+ClaudeSFDC/frameworks/catalog.json:16:          "file": "revops-framework/RevOpsFramework.js",
+ClaudeSFDC/frameworks/catalog.json:22:          "file": "revops-framework/metadata/fields.json",
+ClaudeSFDC/frameworks/catalog.json:28:          "file": "revops-framework/metadata/fields.json",
+ClaudeSFDC/frameworks/catalog.json:34:          "file": "revops-framework/automation/flows.json", 
+ClaudeSFDC/frameworks/catalog.json:40:          "file": "revops-framework/metadata/objects.json",
+ClaudeSFDC/frameworks/catalog.json:65:          "name": "Load RevOps Framework",
+ClaudeSFDC/frameworks/catalog.json:66:          "code": "const revops = await loader.loadFramework('revops-framework', {track: 'B', industry: 'saas'})"
+ClaudeSFDC/frameworks/catalog.json:70:          "code": "const acv = revops.calculateACV(1000, 1, 'monthly') // Returns 12000"
+ClaudeSFDC/frameworks/catalog.json:74:          "code": "const cycleId = revops.generateContractCycleID('Acme Corp', '2024-01-01', '2024-12-31')"
+ClaudeSFDC/frameworks/catalog.json:537:      "frameworks": ["revops-framework", "field-management", "automation"],
+ClaudeSFDC/frameworks/catalog.json:541:      "frameworks": ["revops-framework"],
+ClaudeSFDC/frameworks/revops-framework/metadata/objects.json:7:      "description": "Manages subscription-based revenue and billing cycles in the RevOps framework",
+ClaudeSFDC/frameworks/revops-framework/metadata/objects.json:105:      "fullName": "RevOpsFrameworkSettings__mdt",
+ClaudeSFDC/frameworks/revops-framework/metadata/objects.json:106:      "label": "RevOps Framework Settings",
+ClaudeSFDC/frameworks/revops-framework/metadata/objects.json:107:      "pluralLabel": "RevOps Framework Settings",
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_2025-09-06.md:1:# Filmhub HubSpot RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_2025-09-06.md:4:**Assessment Type:** Comprehensive RevOps Audit (Reconnaissance Only)
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_2025-09-06.md:11:**RevOps Readiness Score: 6.2/10**
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_2025-09-06.md:315:**Immediate action required** to prevent further ROI deterioration. The foundation exists for a world-class RevOps implementation, but without immediate activation of core automations and data flow, the investment will continue to depreciate.
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_2025-09-06.md:321:4. Establish weekly RevOps review cadence
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_2025-09-06.md:325:**Report Prepared By:** RevOps Assessment System  
+ClaudeSFDC/frameworks/revops-framework/README.md:1:# RevOps Framework - Client-Agnostic Revenue Operations
+ClaudeSFDC/frameworks/revops-framework/README.md:166:### Custom Metadata Settings (`RevOpsFrameworkSettings__mdt`)
+ClaudeSFDC/frameworks/revops-framework/README.md:280:// Load RevOps Framework in any sub-agent
+ClaudeSFDC/frameworks/revops-framework/README.md:284:// Load RevOps components
+ClaudeSFDC/frameworks/revops-framework/README.md:285:const revopsFramework = await loader.loadFramework('revops-framework', {
+ClaudeSFDC/frameworks/revops-framework/README.md:292:const contractData = revopsFramework.prepareContractCreation({
+ClaudeSFDC/frameworks/revops-framework/README.md:298:const acv = revopsFramework.calculateACV(
+ClaudeSFDC/frameworks/revops-framework/README.md:309:- **sfdc-reports-dashboards** - Use for standard RevOps reporting templates
+ClaudeSFDC/frameworks/revops-framework/README.md:340:*The RevOps Framework provides a solid foundation for revenue operations in Salesforce while maintaining flexibility for client-specific customizations and industry requirements.*
+ClaudeSFDC/frameworks/revops-framework/config.json:2:  "name": "revops-framework",
+ClaudeSFDC/frameworks/revops-framework/config.json:55:      "customMetadata": "RevOpsFrameworkSettings__mdt"
+ClaudeSFDC/frameworks/revops-framework/automation/flows.json:33:          "object": "RevOpsFrameworkSettings__mdt",
+ClaudeSFDC/frameworks/revops-framework/automation/flows.json:278:          "object": "RevOpsFrameworkSettings__mdt",
+ClaudeSFDC/frameworks/revops-framework/automation/flows.json:284:          "object": "RevOpsFrameworkSettings__mdt",
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:4: * RevOps Framework - Client-Agnostic Revenue Operations Framework
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:21:class RevOpsFramework {
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:75:            name: "RevOps Framework",
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:483:module.exports = { RevOpsFramework };
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:492:        console.log(`\n🏗️ RevOps Framework Generator`);
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:495:        const framework = new RevOpsFramework({
+ClaudeSFDC/frameworks/revops-framework/RevOpsFramework.js:546:        console.log(`\n✅ RevOps Framework ready for deployment!`);
+ClaudeHubSpot/instances/filmhub/scripts/comprehensive-assessment.js:279:  console.log('║   FILMHUB HUBSPOT REVOPS ASSESSMENT REPORT    ║');
+ClaudeHubSpot/instances/filmhub/scripts/comprehensive-oauth-assessment.js:4: * Comprehensive Evidence-Based HubSpot RevOps Assessment
+ClaudeHubSpot/instances/filmhub/scripts/comprehensive-oauth-assessment.js:35:        assessmentType: 'Comprehensive RevOps Audit',
+ClaudeHubSpot/instances/filmhub/scripts/comprehensive-oauth-assessment.js:433:    const reportContent = `# Filmhub HubSpot RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/scripts/comprehensive-oauth-assessment.js:548:- Full RevOps maturity model implementation
+ClaudeHubSpot/instances/filmhub/RevOps_Assessment_Report_2025-09-06.md:1:# Filmhub HubSpot RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/RevOps_Assessment_Report_2025-09-06.md:5:**Assessment Type:** Comprehensive RevOps Reconnaissance  
+ClaudeHubSpot/instances/filmhub/RevOps_Assessment_Report_2025-09-06.md:10:This comprehensive RevOps assessment analyzes the current state of the Filmhub HubSpot instance across seven critical domains. The assessment follows a structured reconnaissance approach, identifying strengths, gaps, and opportunities for optimization without making any changes to the existing environment.
+ClaudeHubSpot/instances/filmhub/Comprehensive_RevOps_Assessment_Filmhub_2025-09-07.md:1:# Filmhub HubSpot Portal - Comprehensive RevOps Assessment
+ClaudeHubSpot/instances/filmhub/ASSESSMENT_QUICKSTART.md:1:# Filmhub RevOps Assessment – QuickStart
+ClaudeHubSpot/examples/api-usage.js:5: * Practical examples for common RevOps operations
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_Final_2025-09-06.md:1:# Filmhub HubSpot RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_Final_2025-09-06.md:4:**Assessment Type:** Comprehensive RevOps Audit
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_Final_2025-09-06.md:11:**RevOps Readiness Score: 6.0/10**
+ClaudeHubSpot/instances/filmhub/Filmhub_HubSpot_RevOps_Assessment_Final_2025-09-06.md:318:**Assessment Prepared By:** HubSpot RevOps Assessment System  
+ClaudeHubSpot/instances/filmhub/Filmhub_OAuth_Assessment_2025-09-07.md:1:# Filmhub HubSpot RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/Filmhub_OAuth_Assessment_2025-09-07.md:118:- Full RevOps maturity model implementation
+ClaudeHubSpot/instances/filmhub/filmhub_HubSpot_Assessment_2025-09-08.md:1:# filmhub HubSpot RevOps Assessment
+ClaudeHubSpot/instances/filmhub/Filmhub_Evidence_Based_Assessment_2025-09-06.md:1:# Filmhub HubSpot Evidence-Based RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/Filmhub_Evidence_Based_Assessment_2025-09-06.md:386:**Assessment Prepared By:** Evidence-Based RevOps Analysis System  
+ClaudeHubSpot/instances/filmhub/Filmhub_OAuth_Assessment_2025-09-08.md:1:# Filmhub HubSpot RevOps Assessment Report
+ClaudeHubSpot/instances/filmhub/Filmhub_OAuth_Assessment_2025-09-08.md:116:- Full RevOps maturity model implementation
+ClaudeHubSpot/OPERATIONS.md:70:# Deploy all RevOps workflows
+ClaudeSFDC/agents/execution/sfdc-executor.md:236:Task: Deploy RevOps package to rentable-sandbox
+ClaudeSFDC/agents/execution/sfdc-executor.md:242:     --manifest manifest/revops-package.xml \
+ClaudeSFDC/agents/sfdc-revops-auditor/__init__.py:1:# RevOps Auditor Agent
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:3:Salesforce RevOps Auditor Agent
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:32:class SalesforceRevOpsAuditor:
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:34:    Comprehensive RevOps auditor for Salesforce environments with statistical analysis
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:575:        """Run the complete RevOps assessment"""
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:586:        logger.info(f"Starting comprehensive RevOps assessment for {self.org_alias}")
+ClaudeSFDC/agents/sfdc-revops-auditor/main.py:642:        auditor = SalesforceRevOpsAuditor(org_alias)
+ClaudeSFDC/AGENT_CATALOG.md:30:| | sfdc-revops-auditor | RevOps assessments |
+ClaudeSFDC/AGENT_CATALOG.md:176:#### sfdc-revops-auditor
+ClaudeSFDC/AGENT_CATALOG.md:177:- **Purpose**: Comprehensive RevOps assessments
+opspal/start_opspal_slack.py:96:                "👋 Hi! I'm OpsPal, your RevOps assistant. I can help with:\n"
+opspal/start_opspal_slack.py:100:                "• General RevOps questions\n\n"
+ClaudeSFDC/config/agent-model-assignments.json:8:        "sfdc-revops-auditor",
+ClaudeSFDC/docs/EXPANSION_PLAN_DATA_HYGIENE_HUBSPOT.md:20:- `sfdc-revops-auditor`: Statistical analysis and data assessment
+ClaudeSFDC/docs/AGENT_MODEL_RATIONALE.md:28:- **sfdc-revops-auditor**: Performs statistical analysis, generates insights from complex data
+ClaudeSFDC/docs/implementation/REVOPS_DEPLOYMENT_SUMMARY.md:1:# RevOps Framework Deployment Summary
+ClaudeSFDC/docs/implementation/REVOPS_DEPLOYMENT_SUMMARY.md:112:3. Create page layouts optimized for RevOps team
+ClaudeSFDC/docs/implementation/REVOPS_DEPLOYMENT_SUMMARY.md:132:See `RevOps_Flow_Testing_Guide.md` for comprehensive testing scenarios
+ClaudeSFDC/docs/implementation/REVOPS_DEPLOYMENT_SUMMARY.md:149:**Deployment completed successfully. The RevOps framework is now active in the Rentable sandbox.**
+ClaudeSFDC/docs/implementation/PHASE_4_AUTOMATION_DOCUMENTATION.md:1:# Phase 4: RevOps Contract Lifecycle Automation Implementation
+ClaudeSFDC/docs/implementation/PHASE_4_AUTOMATION_DOCUMENTATION.md:5:**Framework:** RevOps Contract Lifecycle Management  
+ClaudeSFDC/docs/implementation/PHASE_4_AUTOMATION_DOCUMENTATION.md:10:Phase 4 implements comprehensive automation flows that drive the contract lifecycle for the RevOps framework. These flows establish automated processes for contract creation, renewal opportunity generation, data validation, and subscription management.
+ClaudeSFDC/docs/implementation/PHASE_4_AUTOMATION_DOCUMENTATION.md:114:- Enables cohort-based RevOps reporting
+ClaudeSFDC/docs/implementation/PHASE_4_AUTOMATION_DOCUMENTATION.md:401:All flows are production-ready and include comprehensive error handling, debug logging, and performance optimizations for the RevOps contract lifecycle management framework.
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:1:# ✅ RevOps Framework Successfully Created and Integrated!
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:17:/frameworks/revops-framework/
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:19:├── RevOpsFramework.js             # Main framework class with full functionality
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:47:const revops = await loader.loadFramework('revops-framework', {
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:54:const monthlyACV = revops.calculateACV(1000, 1, 'monthly');  // Returns 12000
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:57:const cycleId = revops.generateContractCycleID('Acme Corp', '2024-01-01', '2024-12-31');
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:61:const validation = revops.validateOpportunityForContract(opportunityData);
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:74:All existing sub-agents can now leverage the RevOps framework:
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:78:const revops = await frameworkLoader.loadFramework('revops-framework');
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:79:const fieldScript = revops.generateFieldCreationScript('Opportunity');
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:82:const automationScript = revops.generateAutomationScript();
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:86:const testData = revops.generateTestingScenarios();
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:137:RevOpsFrameworkSettings__mdt:
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:156:Any sub-agent can now load and use the RevOps framework:
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:160:const revopsConfig = await frameworkLoader.loadFramework('revops-framework', {
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:166:const fieldDeployment = revopsConfig.generateFieldCreationScript('all');
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:170:const flowDeployment = revopsConfig.generateAutomationScript();
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:194:The RevOps Framework is now **fully integrated** into your framework library and ready for immediate use by all sub-agents. It provides:
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:203:- Use in sub-agents for consistent RevOps implementations
+ClaudeSFDC/docs/implementation/REVOPS_FRAMEWORK_CREATED.md:210:*🎉 The RevOps Framework represents a major capability enhancement to your Salesforce automation platform - providing enterprise-grade revenue operations in a reusable, client-agnostic package!*
+ClaudeSFDC/docs/implementation/AGENT_EXECUTION_GUIDE.md:77:claude --agent sfdc-executor "Deploy manifest/revops-package.xml to rentable-sandbox"
+ClaudeSFDC/docs/implementation/AGENT_EXECUTION_GUIDE.md:98:claude --agent sfdc-orchestrator "Create and deploy complete RevOps solution with fields, flows, and reports"
+ClaudeSFDC/docs/implementation/AGENT_EXECUTION_GUIDE.md:246:sf data query -q "SELECT Id FROM PermissionSet WHERE Name = 'RevOps_Manager'" -o wedgewood-sandbox
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:1:# RevOps Security Framework - Phase 5 Implementation Guide
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:5:This document provides comprehensive documentation for the RevOps Security Framework implemented in Phase 5 of the RevOps transformation project. The security model establishes proper access controls for all RevOps components while maintaining operational efficiency and data integrity.
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:12:3. **Data Segregation:** Finance, Sales, and RevOps teams have appropriate access levels
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:25:### 1. RevOps_Manager Permission Set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:27:**Purpose:** Full operational access for RevOps team leaders
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:46:**Use Case:** RevOps managers, automation administrators, senior analysts
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:48:### 2. Sales_User_RevOps Permission Set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:50:**Purpose:** Sales team access to RevOps functionality
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:68:### 3. Finance_User_RevOps Permission Set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:87:### 4. Automation_User_RevOps Permission Set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:114:| RevOps_Team_Full_Access | Edit | RevOps Manager Role | All records | Operational management |
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:122:| RevOps_Team_Contract_Management | Edit | RevOps Manager Role | All contracts | RevOps management |
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:131:**RevOps_Manager**
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:134:- Purpose: RevOps leadership with broad organizational access
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:136:**RevOps_Analyst**  
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:137:- Parent: RevOps_Manager
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:152:- Parent: RevOps_Manager
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:160:| Field | Sales User | RevOps Manager | Finance User | Automation |
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:171:| Field | Sales User | RevOps Manager | Finance User | Automation |
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:181:| Field | Sales User | RevOps Manager | Finance User | Automation |
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:271:3. Assign Sales_User_RevOps permission set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:275:**RevOps Users:**
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:277:2. Assign RevOps_Manager or RevOps_Analyst role
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:278:3. Assign RevOps_Manager permission set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:285:3. Assign Finance_User_RevOps permission set
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:433:**Primary:** RevOps Manager (permission issues)
+ClaudeSFDC/docs/implementation/RevOps_Security_Implementation_Guide.md:446:The RevOps Security Framework provides a comprehensive, scalable security model that balances operational efficiency with data protection. The implementation follows industry best practices while meeting specific business requirements for revenue operations management.
+ClaudeSFDC/docs/implementation/RevOps_Flow_Testing_Guide.md:1:# RevOps Automation Flows - Testing Guide
+ClaudeSFDC/docs/implementation/RevOps_Flow_Testing_Guide.md:4:This guide provides comprehensive testing scenarios for the RevOps automation flows deployed to the Rentable sandbox.
+ClaudeSFDC/docs/implementation/Field_Cleanup_Implementation_Plan.md:159:- [ ] RevOps Team Lead: _________________
+ClaudeSFDC/docs/implementation/PHASE2_CONTRACT_ENHANCEMENT_SUMMARY.md:4:Successfully implemented Phase 2 of the RevOps framework focusing on Contract Enhancement for the rentable-sandbox org. All required components have been created and are ready for deployment.
+ClaudeSFDC/docs/implementation/PHASE2_CONTRACT_ENHANCEMENT_SUMMARY.md:179:5. **Phase 3 Preparation**: Begin planning for next RevOps framework phase
+ClaudeSFDC/docs/MCP_SALESFORCE_TOOLS_CATALOG.md:14:- **Used by**: sfdc-data-operations, sfdc-revops-auditor, sfdc-object-auditor
+ClaudeSFDC/docs/MULTI_PROJECT_ARCHITECTURE_OVERVIEW.md:115:| **Rentable Sandbox** | rentable-sandbox | RevOps & subscription management | Subscription__c object, Contract renewals, Asana integration |
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:17:| Assess/audit RevOps | **sfdc-revops-auditor** | "RevOps audit", "assess CRM", "review setup" |
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:45:    F -->|Assessment| N[sfdc-revops-auditor]
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:127:#### sfdc-revops-auditor
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:128:- RevOps assessments (GTM, CRM, automation)
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:216:### Example 4: RevOps Assessment
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:218:User: "Audit our Salesforce RevOps setup"
+ClaudeSFDC/docs/guides/AGENT_SELECTION.md:219:Claude: Using sfdc-revops-auditor agent for comprehensive assessment...
+opspal/scripts/diagnose_agent.py:280:                    "query": "Find latest trends in RevOps technology",
+opspal/scripts/diagnose_agent.py:281:                    "validation": lambda r: any(word in str(r).lower() for word in ["revops", "revenue", "operations"]),
+opspal/scripts/test_agent_harness.py:142:        role="RevOps Analyst",
+opspal/tests/e2e/revops_test_utils.py:2:Utility functions and classes for RevOps end-to-end testing.
+opspal/tests/e2e/revops_test_utils.py:35:    def __init__(self, config_path: str = "tests/e2e/test_revops_config.yaml"):
+opspal/tests/e2e/revops_test_utils.py:80:    """Generates realistic mock data for RevOps testing"""
+opspal/tests/e2e/run_revops_tests.py:3:RevOps End-to-End Test Runner
+opspal/tests/e2e/run_revops_tests.py:5:Comprehensive test orchestration for RevOps workflows including:
+opspal/tests/e2e/run_revops_tests.py:15:    python run_revops_tests.py [options]
+opspal/tests/e2e/run_revops_tests.py:44:from tests.e2e.revops_test_utils import (
+opspal/tests/e2e/run_revops_tests.py:52:class RevOpsTestRunner:
+opspal/tests/e2e/run_revops_tests.py:53:    """Orchestrates comprehensive RevOps testing"""
+opspal/tests/e2e/run_revops_tests.py:80:        print(f"🚀 Starting RevOps {suite} test suite in {mode} mode")
+opspal/tests/e2e/run_revops_tests.py:209:        test_file = "tests/e2e/test_revops_workflows.py::TestMultiStepLeadFlow"
+opspal/tests/e2e/run_revops_tests.py:233:            test_file = "tests/e2e/test_revops_workflows.py::TestConcurrencyAndChaos"
+opspal/tests/e2e/run_revops_tests.py:251:        test_file = "tests/e2e/test_revops_workflows.py::TestSecurityAndRBAC"
+opspal/tests/e2e/run_revops_tests.py:267:        test_file = "tests/e2e/test_revops_kpi_validation.py"
+opspal/tests/e2e/run_revops_tests.py:287:        test_file = "tests/e2e/test_revops_workflows.py::TestGracefulDegradationAndResilience"
+opspal/tests/e2e/run_revops_tests.py:399:        print("📊 REVOPS TEST SUITE REPORT")
+opspal/tests/e2e/run_revops_tests.py:455:            print("🎉 ALL TESTS PASSED! RevOps system is healthy.")
+opspal/tests/e2e/run_revops_tests.py:463:        report_file = f"revops_test_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+opspal/tests/e2e/run_revops_tests.py:474:        report_file = f"revops_test_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+opspal/tests/e2e/run_revops_tests.py:480:            <title>RevOps Test Report</title>
+opspal/tests/e2e/run_revops_tests.py:493:                <h1>RevOps Test Suite Report</h1>
+opspal/tests/e2e/run_revops_tests.py:546:        description="RevOps End-to-End Test Runner",
+opspal/tests/e2e/run_revops_tests.py:591:    runner = RevOpsTestRunner(config_file=args.config)
+opspal/tests/e2e/test_revops_lead_flow.py:2:End-to-end test for multi-step RevOps lead flow.
+opspal/tests/e2e/test_revops_workflows.py:2:Comprehensive end-to-end tests for complex RevOps workflows.
+opspal/tests/e2e/test_revops_workflows.py:97:class RevOpsTestHarness:
+opspal/tests/e2e/test_revops_workflows.py:98:    """Test harness for RevOps workflow testing"""
+opspal/tests/e2e/test_revops_workflows.py:175:async def revops_harness():
+opspal/tests/e2e/test_revops_workflows.py:176:    """Fixture providing RevOps test harness"""
+opspal/tests/e2e/test_revops_workflows.py:177:    harness = RevOpsTestHarness()
+opspal/tests/e2e/test_revops_workflows.py:186:    async def test_complete_lead_to_opportunity_flow(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:188:        Test complete RevOps flow:
+opspal/tests/e2e/test_revops_workflows.py:197:        revops_harness.hubspot_tool._client.crm.contacts.basic_api.create.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:202:        revops_harness.hubspot_tool._client.crm.contacts.basic_api.get_by_id.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:214:        routing_result = await revops_harness.routing_tool.route_lead(routing_input)
+opspal/tests/e2e/test_revops_workflows.py:225:        revops_harness.hubspot_tool._client.crm.deals.basic_api.create.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:230:        task_result = await revops_harness.wrapped_asana._run(
+opspal/tests/e2e/test_revops_workflows.py:249:        slack_result = await revops_harness.wrapped_slack._run(
+opspal/tests/e2e/test_revops_workflows.py:255:        revops_harness.record_operation_time(duration, True)
+opspal/tests/e2e/test_revops_workflows.py:272:    async def test_lead_flow_with_failures_and_recovery(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:277:        revops_harness.routing_tool._client.crm.contacts.basic_api.get_by_id.side_effect = Exception(
+opspal/tests/e2e/test_revops_workflows.py:284:            await revops_harness.routing_tool.route_lead(routing_input)
+opspal/tests/e2e/test_revops_workflows.py:287:        revops_harness.routing_tool._client.crm.contacts.basic_api.get_by_id.side_effect = None
+opspal/tests/e2e/test_revops_workflows.py:288:        revops_harness.routing_tool._client.crm.contacts.basic_api.get_by_id.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:299:        routing_result = await revops_harness.routing_tool.route_lead(routing_input_fallback)
+opspal/tests/e2e/test_revops_workflows.py:303:        slack_result = await revops_harness.wrapped_slack._run(
+opspal/tests/e2e/test_revops_workflows.py:310:        revops_harness.record_operation_time(1.0, True)
+opspal/tests/e2e/test_revops_workflows.py:313:    async def test_lead_enrichment_pipeline(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:327:        revops_harness.hubspot_tool._client.crm.contacts.basic_api.get_by_id.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:332:        revops_harness.hubspot_tool._client.crm.companies.basic_api.create.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:337:        routing_result = await revops_harness.routing_tool.route_lead(
+opspal/tests/e2e/test_revops_workflows.py:356:    async def test_concurrent_lead_processing(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:364:            revops_harness.hubspot_tool._client.crm.contacts.basic_api.get_by_id.return_value = Mock(
+opspal/tests/e2e/test_revops_workflows.py:371:            routing_tasks.append(revops_harness.routing_tool.route_lead(routing_input))
+opspal/tests/e2e/test_revops_workflows.py:398:        revops_harness.record_operation_time(duration / len(leads), successful_routes > failed_routes)
+opspal/tests/e2e/test_revops_workflows.py:401:    async def test_rate_limit_handling(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:421:        revops_harness.hubspot_tool._client.crm.contacts.basic_api.get_by_id = rate_limited_call
+opspal/tests/e2e/test_revops_workflows.py:425:        routing_result = await revops_harness.routing_tool.route_lead(
+opspal/tests/e2e/test_revops_workflows.py:435:    def test_chaos_monkey_workflow_disruption(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:505:        harness = RevOpsTestHarness()
+opspal/tests/e2e/test_revops_workflows.py:558:        harness = RevOpsTestHarness()
+opspal/tests/e2e/test_revops_workflows.py:599:        harness = RevOpsTestHarness()
+opspal/tests/e2e/test_revops_workflows.py:625:    async def test_unauthorized_access_handling(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:635:        revops_harness.hubspot_tool._client.crm.contacts.basic_api.get_by_id.side_effect = unauthorized_error
+opspal/tests/e2e/test_revops_workflows.py:638:            await revops_harness.routing_tool.route_lead(
+opspal/tests/e2e/test_revops_workflows.py:645:    async def test_permission_scoped_operations(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:695:    async def test_data_access_isolation(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:745:    def test_input_sanitization(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:798:        """Mock historical RevOps data for baseline comparisons"""
+opspal/tests/e2e/test_revops_workflows.py:825:    async def test_conversion_rate_realism(self, revops_harness, historical_data):
+opspal/tests/e2e/test_revops_workflows.py:871:    async def test_velocity_metrics_accuracy(self, revops_harness, historical_data):
+opspal/tests/e2e/test_revops_workflows.py:922:    async def test_deal_value_distributions(self, revops_harness, historical_data):
+opspal/tests/e2e/test_revops_workflows.py:962:    async def test_activity_volume_realism(self, revops_harness, historical_data):
+opspal/tests/e2e/test_revops_workflows.py:1014:    async def test_degraded_mode_operation(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:1026:                revops_harness.hubspot_tool._client = None  # Simulate API unavailable
+opspal/tests/e2e/test_revops_workflows.py:1030:                    result = await revops_harness.wrapped_hubspot._run(operation="list_contacts", limit=10)
+opspal/tests/e2e/test_revops_workflows.py:1039:                revops_harness.asana_tool._client = None
+opspal/tests/e2e/test_revops_workflows.py:1042:                result = await revops_harness.wrapped_asana._run(operation="create_task", name="Test Task")
+opspal/tests/e2e/test_revops_workflows.py:1046:                revops_harness.slack_tool._client = None
+opspal/tests/e2e/test_revops_workflows.py:1049:                result = await revops_harness.wrapped_slack._run(
+opspal/tests/e2e/test_revops_workflows.py:1055:    async def test_circuit_breaker_pattern(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:1117:    def test_memory_pressure_handling(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:1150:    async def test_timeout_handling(self, revops_harness):
+opspal/tests/e2e/test_revops_workflows.py:1183:    Hypothesis state machine for testing RevOps system integration
+opspal/tests/e2e/test_revops_workflows.py:1193:        self.harness = RevOpsTestHarness()
+opspal/tests/e2e/test_revops_workflows.py:1265:TestRevOpsStateMachine = TestSystemIntegrationStateMachine.TestCase
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:87:      "file_name": "run-revops-assessment.sh",
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:88:      "relative_path": "run-revops-assessment.sh",
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:2523:      "file_name": "run_revops_deployment.py",
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:2524:      "relative_path": "deployment/run_revops_deployment.py",
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:2647:      "file_name": "deploy_revops_flows.py",
+ClaudeSFDC/scripts/script_inventory_20250829_194612.json:2648:      "relative_path": "deployment/deploy_revops_flows.py",
+opspal/tests/e2e/test_revops_config.yaml:2:# RevOps End-to-End Test Configuration
+ClaudeSFDC/scripts/run-revops-assessment.sh:3:# RevOps Assessment Runner
+ClaudeSFDC/scripts/run-revops-assessment.sh:4:# Usage: ./run-revops-assessment.sh <org_alias> [output_file]
+ClaudeSFDC/scripts/run-revops-assessment.sh:9:OUTPUT_FILE="${2:-revops-assessment-$(date +%Y%m%d-%H%M%S).json}"
+ClaudeSFDC/scripts/run-revops-assessment.sh:17:echo "🔍 Starting comprehensive RevOps assessment for: $ORG_ALIAS"
+ClaudeSFDC/scripts/run-revops-assessment.sh:34:AGENT_DIR="$SCRIPT_DIR/../agents/sfdc-revops-auditor"
+ClaudeSFDC/scripts/run-revops-assessment.sh:43:echo "🚀 Running comprehensive RevOps assessment..."
+opspal/tests/e2e/test_revops_kpi_validation.py:2:RevOps KPI Validation Tests
+opspal/tests/e2e/test_revops_kpi_validation.py:4:This module tests that RevOps KPIs and metrics align with realistic business benchmarks
+opspal/tests/e2e/test_revops_kpi_validation.py:18:from .revops_test_utils import (
+opspal/tests/e2e/test_revops_kpi_validation.py:26:class TestRevOpsKPIValidation:
+opspal/tests/e2e/test_revops_kpi_validation.py:27:    """Test RevOps KPIs against historical benchmarks and realistic patterns"""
+opspal/tests/e2e/README_REVOPS_TESTING.md:1:# RevOps End-to-End Testing Suite
+opspal/tests/e2e/README_REVOPS_TESTING.md:3:This directory contains comprehensive end-to-end tests for complex RevOps workflows, designed to validate the complete OpsPal RevOps system under realistic business conditions.
+opspal/tests/e2e/README_REVOPS_TESTING.md:7:The RevOps testing suite provides:
+opspal/tests/e2e/README_REVOPS_TESTING.md:21:├── README_REVOPS_TESTING.md           # This documentation
+opspal/tests/e2e/README_REVOPS_TESTING.md:22:├── test_revops_workflows.py           # Main workflow and chaos tests
+opspal/tests/e2e/README_REVOPS_TESTING.md:23:├── test_revops_kpi_validation.py      # KPI and metrics validation
+opspal/tests/e2e/README_REVOPS_TESTING.md:24:├── revops_test_utils.py               # Utilities and test helpers
+opspal/tests/e2e/README_REVOPS_TESTING.md:25:├── test_revops_config.yaml            # Test configuration
+opspal/tests/e2e/README_REVOPS_TESTING.md:26:└── run_revops_tests.py                # Test orchestration runner
+opspal/tests/e2e/README_REVOPS_TESTING.md:35:python tests/e2e/run_revops_tests.py --suite all --mode mock
+opspal/tests/e2e/README_REVOPS_TESTING.md:40:python tests/e2e/run_revops_tests.py --suite workflows --mode mock --report-format json
+opspal/tests/e2e/README_REVOPS_TESTING.md:45:python tests/e2e/run_revops_tests.py --suite all --mode sandbox --parallel
+opspal/tests/e2e/README_REVOPS_TESTING.md:52:| `workflows` | Multi-step RevOps workflows | Lead flow, enrichment, routing, notifications |
+opspal/tests/e2e/README_REVOPS_TESTING.md:71:Validates complete RevOps processes:
+opspal/tests/e2e/README_REVOPS_TESTING.md:151:`test_revops_config.yaml` contains:
+opspal/tests/e2e/README_REVOPS_TESTING.md:189:📊 REVOPS TEST SUITE REPORT
+opspal/tests/e2e/README_REVOPS_TESTING.md:222:🎉 ALL TESTS PASSED! RevOps system is healthy.
+opspal/tests/e2e/README_REVOPS_TESTING.md:233:    async def test_my_workflow(self, revops_harness):
+opspal/tests/e2e/README_REVOPS_TESTING.md:239:from .revops_test_utils import get_mock_data_generator, StrictToolResponseValidator
+opspal/tests/e2e/README_REVOPS_TESTING.md:278:from .revops_test_utils import get_performance_monitor
+opspal/tests/e2e/README_REVOPS_TESTING.md:299:from .revops_test_utils import get_chaos_engineering
+opspal/tests/e2e/README_REVOPS_TESTING.md:349:python tests/e2e/run_revops_tests.py --mode mock
+opspal/tests/e2e/README_REVOPS_TESTING.md:373:LOG_LEVEL=DEBUG python tests/e2e/run_revops_tests.py --suite workflows
+opspal/tests/e2e/README_REVOPS_TESTING.md:378:pytest tests/e2e/test_revops_workflows.py::TestMultiStepLeadFlow::test_complete_lead_to_opportunity_flow -v -s
+opspal/tests/e2e/README_REVOPS_TESTING.md:397:1. **Add tests** for new RevOps workflows
+opspal/tests/e2e/README_REVOPS_TESTING.md:405:For questions about the RevOps testing suite:
+opspal/tests/e2e/README_REVOPS_TESTING.md:413:**Remember**: These tests validate the complete RevOps system end-to-end. They're designed to catch integration issues, performance problems, and business logic errors that unit tests might miss.
+opspal/tests/e2e/test_kpi_validation.py:31:# Business KPI benchmarks based on RevOps standards
+ClaudeSFDC/scripts/inventory_summary_20250829_194612.md:89:- **run-revops-assessment.sh**: potential_credentials
+ClaudeSFDC/scripts/utilities/reorganize-instances.sh:72:echo "   - Generic RevOps components"
+ClaudeSFDC/scripts/utilities/update_asana_specific_findings.py:187:1. **REVIEW** this audit with RevOps team
+ClaudeSFDC/scripts/utilities/update_asana_audit_findings.py:76:- **Methodology:** RevOps statistical analysis with 95% confidence intervals
+opspal/manual_agent_fix.md:24:        "for sales and RevOps teams."
+ClaudeSFDC/scripts/deployment/deploy-flows.sh:3:# Deploy RevOps Automation Flows to Rentable Sandbox
+ClaudeSFDC/scripts/deployment/deploy-flows.sh:4:echo "🚀 Deploying RevOps Automation Flows to Rentable Sandbox"
+ClaudeSFDC/scripts/deployment/deploy-flows.sh:55:echo "🎉 RevOps Automation Flows deployment completed!"
+ClaudeSFDC/scripts/deployment/deploy_revops_flows.py:3:Deploy RevOps Automation Flows to Rentable Sandbox
+ClaudeSFDC/scripts/deployment/deploy_revops_flows.py:119:        print("🚀 RevOps Automation Flows Deployment")
+ClaudeSFDC/scripts/deployment/deploy_revops_flows.py:149:                print("\n🎉 All RevOps automation flows deployed successfully!")
+ClaudeSFDC/scripts/deployment/execute-reorganization.sh:66:# Move Contract fields (RevOps-related, likely Rentable)
+ClaudeSFDC/scripts/deployment/execute-reorganization.sh:80:# Move Opportunity fields (RevOps-related, likely Rentable)
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:4:# This script deploys all RevOps components to the target org
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:230:    "RevOps_Manager"
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:231:    "Sales_User_RevOps"
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:232:    "Finance_User_RevOps"
+ClaudeSFDC/scripts/deployment/deploy-all-components.sh:233:    "Automation_User_RevOps"
+ClaudeSFDC/scripts/deployment/run_revops_deployment.py:6:    """Execute the RevOps flows deployment"""
+ClaudeSFDC/scripts/deployment/run_revops_deployment.py:8:        print("Starting RevOps Flows Deployment...")
+ClaudeSFDC/scripts/deployment/run_revops_deployment.py:12:            '/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/deploy_revops_flows.py'
+ClaudeSFDC/scripts/deployment/run_revops_deployment.py:28:            print("\n✅ RevOps Flows deployment completed successfully!")
+ClaudeSFDC/scripts/deployment/run_revops_deployment.py:30:            print("\n❌ RevOps Flows deployment failed!")
+opspal/rollbacks/rollback_specialized_crews_20250726_130705.py:200:                context={"channel": "#revops-updates"},
+opspal/rollbacks/rollback_specialized_crews_20250726_130705.py:265:                role=new_hire.get("role", "RevOps Analyst"),
+opspal/rollbacks/rollback_specialized_crews_20250726_130705.py:266:                context={"team_channel": "#revops-team"},
+opspal/rollbacks/rollback_specialized_crews_20250726_130705.py:390:                context={"channels": ["#sales-alerts", "#revops"]},
+opspal/rollbacks/rollback_specialized_crews_20250726_130705.py:431:                context={"channels": ["#revops-alerts"]},
+ClaudeSFDC/scripts/deployment/execute-asana-sync.sh:65:    echo "📁 For detailed findings, refer to the field audit reports generated by sfdc-revops-auditor"
+opspal/rollbacks/rollback_hierarchical_v3_20250726_130632.py:29:        You have deep knowledge of RevOps processes and can quickly identify which agent and tools are best suited for each request.
+ClaudeSFDC/scripts/validate-phase4-automation.js:5: * Validates all 6 automation flows for the RevOps framework
+opspal/src/opspal.backup.20250811_102124/tools/implementations/utilities/supabase_mcp.py:523:            # RevOps roles
+opspal/src/opspal.backup.20250811_102124/tools/implementations/utilities/supabase_mcp.py:744:            return "Identified as RevOps based on operations-related title"
+ClaudeSFDC/scripts/analysis/check_sfdx.py:55:            print("\n🚀 Ready to run RevOps assessment!")
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py.import_cleanup_backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_win_loss_mcp.py.v2_migration_backup:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_win_loss_mcp.py:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py.v1.backup:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_risk_mcp.py.import_cleanup_backup:3:Helps RevOps teams proactively manage pipeline health and prevent deal slippage
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_win_loss.instructions.md:4:The Win/Loss Analyzer provides deep insights into deal outcomes, helping RevOps teams understand why deals are won or lost, identify success patterns, and gain competitive intelligence to improve win rates.
+opspal/src/opspal.backup.20250811_102124/agents/salesforce_analyst.py:38:                "and provide data-driven recommendations for sales and RevOps teams."
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py.v1.backup:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal.backup.20250811_102124/agents/assessment_analyst.py:214:            "- For Salesforce: Use the comprehensive RevOps assessment framework focusing on "
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py.v1.backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py.import_cleanup_backup:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_risk_mcp.py:3:Helps RevOps teams proactively manage pipeline health and prevent deal slippage
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py.v2_migration_backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal.backup.20250811_102124/agents/archive/hubspot_admin_v2.py:120:        return """You are an elite RevOps administrator specializing in GTM operations optimization.
+opspal/src/opspal.backup.20250811_102124/agents/archive/hubspot_admin_v2.py:163:        return """You're a RevOps veteran who has architected CRM systems for unicorn startups 
+opspal/src/opspal.backup.20250811_102124/agents/archive/hubspot_admin_v2.py:167:        - Implementing RevOps best practices that increased win rates by 25%
+opspal/src/opspal.backup.20250811_102124/agents/archive/hubspot_admin_v2.py:173:        You've learned that great RevOps is invisible - when you do your job well, 
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_win_loss_mcp.py.import_cleanup_backup:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal.backup.20250811_102124/agents/archive/asana_coordinator_migrated.py:199:        return """Expert project coordinator with over 10 years of experience in RevOps project 
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_velocity.instructions.md:4:The Deal Velocity Tracker analyzes how quickly deals move through your sales pipeline, identifies bottlenecks, and provides insights to optimize your sales process. It helps RevOps teams reduce cycle times and improve conversion rates.
+opspal/src/opspal/agents/salesforce_analyst.py:38:                "and provide data-driven recommendations for sales and RevOps teams."
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal.backup.20250811_102124/agents/slack_agent.py:164:            self._create_header_block(f"RevOps Executive Summary - {period}"),
+opspal/src/opspal.backup.20250811_102124/agents/slack_agent.py:203:            "daily_standup": {"time": "09:00", "template": "daily_metrics", "channel": "#revops-daily"},
+opspal/src/opspal/agents/assessment_analyst.py:214:            "- For Salesforce: Use the comprehensive RevOps assessment framework focusing on "
+opspal/src/opspal.backup.20250811_102124/agents/asana_coordinator.py:710:            "data_quality": ["data_analyst", "revops_manager"],
+opspal/src/opspal.backup.20250811_102124/agents/asana_coordinator.py:711:            "pipeline": ["sales_ops", "revops_analyst"],
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py.v2_migration_backup:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal/tools/implementations/utilities/supabase_mcp.py:523:            # RevOps roles
+opspal/src/opspal/tools/implementations/utilities/supabase_mcp.py:744:            return "Identified as RevOps based on operations-related title"
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal.backup.20250811_102124/agents/sow_analyst.py:131:        - Proven track record delivering successful RevOps transformations
+opspal/src/opspal/agents/archive/hubspot_admin_v2.py:120:        return """You are an elite RevOps administrator specializing in GTM operations optimization.
+opspal/src/opspal/agents/archive/hubspot_admin_v2.py:163:        return """You're a RevOps veteran who has architected CRM systems for unicorn startups 
+opspal/src/opspal/agents/archive/hubspot_admin_v2.py:167:        - Implementing RevOps best practices that increased win rates by 25%
+opspal/src/opspal/agents/archive/hubspot_admin_v2.py:173:        You've learned that great RevOps is invisible - when you do your job well, 
+opspal/src/opspal/agents/archive/asana_coordinator_migrated.py.validator_migration_backup:199:        return """Expert project coordinator with over 10 years of experience in RevOps project 
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_win_loss_mcp.py.v1.backup:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_pipeline_coverage.instructions.md:4:The Pipeline Coverage Calculator analyzes your sales pipeline health by calculating coverage ratios, identifying gaps, and tracking trends over time. It helps RevOps teams ensure adequate pipeline to meet revenue targets.
+opspal/src/opspal/agents/archive/asana_coordinator_migrated.py:199:        return """Expert project coordinator with over 10 years of experience in RevOps project 
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_risk_mcp.py.v1.backup:3:Helps RevOps teams proactively manage pipeline health and prevent deal slippage
+opspal/src/opspal/agents/slack_agent.py:164:            self._create_header_block(f"RevOps Executive Summary - {period}"),
+opspal/src/opspal/agents/slack_agent.py:203:            "daily_standup": {"time": "09:00", "template": "daily_metrics", "channel": "#revops-daily"},
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal/agents/asana_coordinator.py:710:            "data_quality": ["data_analyst", "revops_manager"],
+opspal/src/opspal/agents/asana_coordinator.py:711:            "pipeline": ["sales_ops", "revops_analyst"],
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal/agents/sow_analyst.py:131:        - Proven track record delivering successful RevOps transformations
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py.v1.backup:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_quota_tracker.instructions.md:4:The HubSpot Quota Tracker helps sales managers and RevOps teams monitor rep performance against quotas, identify at-risk reps, and forecast team capacity.
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py.import_cleanup_backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal/tools/implementations/hubspot/hubspot_win_loss_mcp.py.v2_migration_backup:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal/tools/implementations/hubspot/hubspot_win_loss_mcp.py:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py.v1.backup:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_risk_mcp.py.import_cleanup_backup:3:Helps RevOps teams proactively manage pipeline health and prevent deal slippage
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py.v2_migration_backup:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal/tools/implementations/hubspot/hubspot_win_loss.instructions.md:4:The Win/Loss Analyzer provides deep insights into deal outcomes, helping RevOps teams understand why deals are won or lost, identify success patterns, and gain competitive intelligence to improve win rates.
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py.v2_migration_backup:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py.v1.backup:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py.v1.backup:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py.v1.backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py.v2_migration_backup:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py.v1.backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py.v2_migration_backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py.import_cleanup_backup:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_assessment_mcp_canonical.py:1325:                        "title": "Opportunity for RevOps maturity improvement",
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_risk_mcp.py:3:Helps RevOps teams proactively manage pipeline health and prevent deal slippage
+opspal/src/opspal.backup.20250811_102124/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py.v2_migration_backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal/tools/implementations/hubspot/hubspot_win_loss_mcp.py.import_cleanup_backup:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_velocity.instructions.md:4:The Deal Velocity Tracker analyzes how quickly deals move through your sales pipeline, identifies bottlenecks, and provides insights to optimize your sales process. It helps RevOps teams reduce cycle times and improve conversion rates.
+opspal/src/opspal/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal.backup.20250811_102124/tools/implementations/archived/hubspot_activity_effectiveness_mcp.py.backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py.v2_migration_backup:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:4:Based on Salesforce RevOps assessment methodology adapted for HubSpot/CRM
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:19:    following the Salesforce RevOps assessment methodology
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:96:                "assessed_by": "OpsPal AI RevOps Assessment Engine",
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:97:                "methodology": "Evidence-based audit following RevOps best practices",
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:186:                        "current_state": self._assess_revops_effectiveness(score, findings),
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:1068:            f"The {self._get_platform_name()} RevOps assessment reveals a system operating at "
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer.py:1129:            "reporting_dashboards": ["Analytics Team", "Business Intelligence", "RevOps"],
+opspal/src/opspal/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal.backup.20250811_102124/tools/implementations/archived/hubspot_pipeline_coverage_mcp_original.py:3:Supports RevOps analysts in pipeline analysis and forecasting
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:4:Based on Salesforce RevOps assessment methodology adapted for HubSpot/CRM
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:19:    following the Salesforce RevOps assessment methodology
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:96:                "assessed_by": "OpsPal AI RevOps Assessment Engine",
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:97:                "methodology": "Evidence-based audit following RevOps best practices",
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:186:                        "current_state": self._assess_revops_effectiveness(score, findings),
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:1068:            f"The {self._get_platform_name()} RevOps assessment reveals a system operating at "
+opspal/src/opspal/utils/comprehensive_assessment_enhancer.py:1129:            "reporting_dashboards": ["Analytics Team", "Business Intelligence", "RevOps"],
+opspal/src/opspal/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal.backup.20250811_102124/tools/implementations/archived/hubspot_deal_velocity_mcp.py.backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal/utils/big4_pdf_generator.py:296:        elements.append(Paragraph("RevOps Maturity Analysis", self.styles["CoverSubtitle"]))
+opspal/src/opspal/utils/big4_pdf_generator.py:307:        elements.append(Paragraph("Prepared by: OpsPal AI RevOps Assessment Engine", self.styles["ProfessionalNormal"]))
+opspal/src/opspal/utils/big4_pdf_generator.py:381:        Our comprehensive assessment of your {data.get("platform", "CRM")} RevOps maturity reveals an 
+opspal/src/opspal/utils/big4_pdf_generator.py:436:        Our assessment employs industry-leading RevOps evaluation frameworks combined with 
+opspal/src/opspal/utils/big4_pdf_generator.py:452:                self._wrap_text("Evidence-based audit following RevOps best practices"),
+opspal/src/opspal/utils/big4_pdf_generator.py:722:                row = [self._wrap_text(task), self._wrap_text("RevOps Lead"), "██", "██", "", "", "", ""]
+opspal/src/opspal/utils/big4_pdf_generator.py:770:        The implementation plan requires dedicated resources across RevOps, IT, and business teams. 
+opspal/src/opspal/utils/big4_pdf_generator.py:772:        • RevOps Lead: 20-30% allocation for oversight and coordination
+opspal/src/opspal/utils/big4_pdf_generator.py:962:            return "RevOps Director"
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:296:        elements.append(Paragraph("RevOps Maturity Analysis", self.styles["CoverSubtitle"]))
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:307:        elements.append(Paragraph("Prepared by: OpsPal AI RevOps Assessment Engine", self.styles["ProfessionalNormal"]))
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:381:        Our comprehensive assessment of your {data.get("platform", "CRM")} RevOps maturity reveals an 
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:436:        Our assessment employs industry-leading RevOps evaluation frameworks combined with 
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:452:                self._wrap_text("Evidence-based audit following RevOps best practices"),
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:722:                row = [self._wrap_text(task), self._wrap_text("RevOps Lead"), "██", "██", "", "", "", ""]
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:770:        The implementation plan requires dedicated resources across RevOps, IT, and business teams. 
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:772:        • RevOps Lead: 20-30% allocation for oversight and coordination
+opspal/src/opspal.backup.20250811_102124/utils/big4_pdf_generator.py:962:            return "RevOps Director"
+opspal/src/opspal/tools/implementations/hubspot/hubspot_win_loss_mcp.py.v1.backup:3:Helps RevOps teams improve win rates and understand deal outcomes
+opspal/src/opspal/tools/implementations/hubspot/hubspot_pipeline_coverage.instructions.md:4:The Pipeline Coverage Calculator analyzes your sales pipeline health by calculating coverage ratios, identifying gaps, and tracking trends over time. It helps RevOps teams ensure adequate pipeline to meet revenue targets.
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_risk_mcp.py.v1.backup:3:Helps RevOps teams proactively manage pipeline health and prevent deal slippage
+opspal/src/opspal/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal/tools/implementations/hubspot/hubspot_rep_ramp_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in onboarding optimization and capacity planning
+opspal/src/opspal/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py.v1.backup:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal/utils/mcp_tool_adapter.py:2399:        # Initialize Phase 2 RevOps Tools
+opspal/src/opspal/tools/implementations/hubspot/hubspot_quota_tracker.instructions.md:4:The HubSpot Quota Tracker helps sales managers and RevOps teams monitor rep performance against quotas, identify at-risk reps, and forecast team capacity.
+opspal/src/opspal/utils/enhanced_pdf_adapter.py:448:                "expected_outcome": "Fully optimized RevOps machine",
+opspal/src/opspal/utils/enhanced_pdf_generator.py:209:        elements.append(Paragraph(f"RevOps Maturity Analysis - {date_str}", self.styles["Heading2"]))
+opspal/src/opspal.backup.20250811_102124/utils/mcp_tool_adapter.py:2399:        # Initialize Phase 2 RevOps Tools
+opspal/src/opspal.backup.20250811_102124/utils/enhanced_pdf_adapter.py:448:                "expected_outcome": "Fully optimized RevOps machine",
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal.backup.20250811_102124/utils/enhanced_pdf_generator.py:209:        elements.append(Paragraph(f"RevOps Maturity Analysis - {date_str}", self.styles["Heading2"]))
+opspal/src/opspal/tools/implementations/hubspot/hubspot_activity_effectiveness_mcp.py:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py.v2_migration_backup:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal/tools/implementations/hubspot/hubspot_pipeline_coverage_mcp.py.v2_migration_backup:3:Supports RevOps analysts in pipeline analysis and forecasting with full OpsPal compliance
+opspal/src/opspal/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py.v1.backup:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal/tools/implementations/hubspot/hubspot_coaching_insights_mcp.py.v2_migration_backup:3:Supports RevOps analysts and managers in improving rep performance through data-driven insights
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:254:            {"name": "John Smith", "role": "RevOps Manager", "reports_created": 45},
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:790:    def _assess_revops_effectiveness(self, score: int, findings: List[Any]) -> str:
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:791:        """Assess RevOps effectiveness for executive summary"""
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:793:            return "RevOps processes are well-optimized with minor improvement opportunities"
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:795:            return "RevOps foundation is solid but key gaps limit effectiveness"
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:797:            return "Significant RevOps improvements needed to support growth"
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:892:            return "Industry-leading RevOps capability"
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:923:                    "owner": "CMO/RevOps",
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:935:                    "owner": "RevOps/Marketing",
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:942:                    "owner": "CDO/RevOps",
+opspal/src/opspal/utils/comprehensive_assessment_enhancer_stubs.py:958:        return "1 RevOps Manager, 0.5 Developer, 0.5 Data Analyst"
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py.v1.backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal/tools/implementations/hubspot/hubspot_deal_velocity_mcp.py.v2_migration_backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal/utils/mcp_tool_adapter.py.v1.backup:2399:        # Initialize Phase 2 RevOps Tools
+opspal/src/opspal/tools/implementations/hubspot/hubspot_assessment_mcp_canonical.py:1325:                        "title": "Opportunity for RevOps maturity improvement",
+opspal/src/opspal/tools/implementations/hubspot/hubspot_quota_tracker_mcp.py.import_cleanup_backup:3:Supports RevOps analysts in monitoring performance and identifying at-risk reps
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:254:            {"name": "John Smith", "role": "RevOps Manager", "reports_created": 45},
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:790:    def _assess_revops_effectiveness(self, score: int, findings: List[Any]) -> str:
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:791:        """Assess RevOps effectiveness for executive summary"""
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:793:            return "RevOps processes are well-optimized with minor improvement opportunities"
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:795:            return "RevOps foundation is solid but key gaps limit effectiveness"
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:797:            return "Significant RevOps improvements needed to support growth"
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:892:            return "Industry-leading RevOps capability"
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:923:                    "owner": "CMO/RevOps",
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:935:                    "owner": "RevOps/Marketing",
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:942:                    "owner": "CDO/RevOps",
+opspal/src/opspal.backup.20250811_102124/utils/comprehensive_assessment_enhancer_stubs.py:958:        return "1 RevOps Manager, 0.5 Developer, 0.5 Data Analyst"
+opspal/src/opspal.backup.20250811_102124/utils/mcp_tool_adapter.py.v1.backup:2399:        # Initialize Phase 2 RevOps Tools
+opspal/src/opspal/tools/implementations/archived/hubspot_activity_effectiveness_mcp.py.backup:3:Supports RevOps analysts in optimizing activity mix and improving conversion rates
+opspal/src/opspal/tools/implementations/archived/hubspot_pipeline_coverage_mcp_original.py:3:Supports RevOps analysts in pipeline analysis and forecasting
+opspal/src/opspal/utils/assessment_root_cause_analyzer.py:455:                actions.append("Establish cross-functional RevOps committee for coordination")
+opspal/src/opspal/utils/assessment_root_cause_analyzer.py:525:            initiatives.append("Implement RevOps Center of Excellence")
+opspal/src/opspal/utils/assessment_root_cause_analyzer.py:529:            initiatives.append("RevOps maturity assessment and roadmap")
+opspal/src/opspal/utils/assessment_root_cause_analyzer.py:540:            changes.append("Appoint dedicated RevOps leader/team")
+opspal/src/opspal/utils/assessment_root_cause_analyzer.py:546:            changes.append("Increase RevOps team headcount or budget")
+opspal/src/opspal/utils/assessment_root_cause_analyzer.py:569:            "governance_gaps": "Establish RevOps governance framework",
+opspal/src/opspal/tools/implementations/archived/hubspot_deal_velocity_mcp.py.backup:3:Helps RevOps analysts optimize sales processes and forecast accurately
+opspal/src/opspal/crews/hierarchical_crew.py:886:                   - This tool provides detailed RevOps analysis with specific examples
+opspal/src/opspal/crews/hierarchical_crew.py:1253:                        "revops assessment",
+opspal/src/opspal/crews/hierarchical_v3.py:32:        I've learned the strengths and specialties of every team member on our RevOps crew:
+opspal/src/opspal/crews/specialized_crews.py:200:                context={"channel": "#revops-updates"},
+opspal/src/opspal/crews/specialized_crews.py:265:                role=new_hire.get("role", "RevOps Analyst"),
+opspal/src/opspal/crews/specialized_crews.py:266:                context={"team_channel": "#revops-team"},
+opspal/src/opspal/crews/specialized_crews.py:390:                context={"channels": ["#sales-alerts", "#revops"]},
+opspal/src/opspal/crews/specialized_crews.py:431:                context={"channels": ["#revops-alerts"]},
+opspal/src/opspal.backup.20250811_102124/utils/assessment_root_cause_analyzer.py:455:                actions.append("Establish cross-functional RevOps committee for coordination")
+opspal/src/opspal.backup.20250811_102124/utils/assessment_root_cause_analyzer.py:525:            initiatives.append("Implement RevOps Center of Excellence")
+opspal/src/opspal.backup.20250811_102124/utils/assessment_root_cause_analyzer.py:529:            initiatives.append("RevOps maturity assessment and roadmap")
+opspal/src/opspal.backup.20250811_102124/utils/assessment_root_cause_analyzer.py:540:            changes.append("Appoint dedicated RevOps leader/team")
+opspal/src/opspal.backup.20250811_102124/utils/assessment_root_cause_analyzer.py:546:            changes.append("Increase RevOps team headcount or budget")
+opspal/src/opspal.backup.20250811_102124/utils/assessment_root_cause_analyzer.py:569:            "governance_gaps": "Establish RevOps governance framework",
+opspal/src/opspal.backup.20250811_102124/crews/hierarchical_crew.py:886:                   - This tool provides detailed RevOps analysis with specific examples
+opspal/src/opspal.backup.20250811_102124/crews/hierarchical_crew.py:1253:                        "revops assessment",
+opspal/src/opspal.backup.20250811_102124/crews/specialized_crews.py:200:                context={"channel": "#revops-updates"},
+opspal/src/opspal.backup.20250811_102124/crews/specialized_crews.py:265:                role=new_hire.get("role", "RevOps Analyst"),
+opspal/src/opspal.backup.20250811_102124/crews/specialized_crews.py:266:                context={"team_channel": "#revops-team"},
+opspal/src/opspal.backup.20250811_102124/crews/specialized_crews.py:390:                context={"channels": ["#sales-alerts", "#revops"]},
+opspal/src/opspal.backup.20250811_102124/crews/specialized_crews.py:431:                context={"channels": ["#revops-alerts"]},
+opspal/src/opspal/config/agents/salesforce.yaml:10:      Salesforce and other tools in the RevOps stack.
+opspal/src/opspal/config/agents/core.yaml:12:      You have deep knowledge of RevOps processes and can quickly identify which agent
+opspal/src/opspal.backup.20250811_102124/crews/hierarchical_v3.py:32:        I've learned the strengths and specialties of every team member on our RevOps crew:
+opspal/src/opspal/config/agents.yaml:32:      You have deep knowledge of RevOps processes and can quickly identify which agent and tools
+opspal/src/opspal/config/agents.yaml:97:      Salesforce and other tools in the RevOps stack.
+opspal/src/opspal.backup.20250811_102124/config/agents.yaml:32:      You have deep knowledge of RevOps processes and can quickly identify which agent and tools
+opspal/src/opspal.backup.20250811_102124/config/agents.yaml:97:      Salesforce and other tools in the RevOps stack.
+opspal/src/opspal.backup.20250811_102124/config/agents/salesforce.yaml:10:      Salesforce and other tools in the RevOps stack.
+opspal/src/opspal.backup.20250811_102124/config/agents/core.yaml:12:      You have deep knowledge of RevOps processes and can quickly identify which agent

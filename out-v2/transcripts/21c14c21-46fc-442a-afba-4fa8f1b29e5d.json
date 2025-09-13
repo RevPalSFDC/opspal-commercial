@@ -1,0 +1,100 @@
+{
+  "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+  "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "165.65",
+      "start_time": "163.88",
+      "recording_attendee_id": "987bc0dc-8791-433d-9c6c-ab2d65d9e8c2",
+      "text": "nobody's asked you about that before."
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "160.56",
+      "start_time": "152.32",
+      "recording_attendee_id": "987bc0dc-8791-433d-9c6c-ab2d65d9e8c2",
+      "text": "Holy Crap. It's 11:32. I'm like, and I'm like, Hey, so I got a, I got a question for you. What's the story with this rentable thing at the bottom of the screen? Can"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "178.02",
+      "start_time": "174.44",
+      "recording_attendee_id": null,
+      "text": "always though. Like it's weird sometimes rented like I can knock,"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "163.87",
+      "start_time": "160.56",
+      "recording_attendee_id": "880327b0-24ae-4435-8462-7933524d3ef5",
+      "text": "you see that? Yeah, you can't. Yeah,"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "152.32",
+      "start_time": "151.94",
+      "recording_attendee_id": "880327b0-24ae-4435-8462-7933524d3ef5",
+      "text": "I was like,"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "180.99",
+      "start_time": "178.03",
+      "recording_attendee_id": "880327b0-24ae-4435-8462-7933524d3ef5",
+      "text": "I usually knock rentable out of here now"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "172.37",
+      "start_time": "165.82",
+      "recording_attendee_id": "880327b0-24ae-4435-8462-7933524d3ef5",
+      "text": "No, nobody ever asked about it. They record our calls so that like for coaching? Oh,"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "149.27",
+      "start_time": "144.74",
+      "recording_attendee_id": "987bc0dc-8791-433d-9c6c-ab2d65d9e8c2",
+      "text": "Yes. Mhm. Did you think I was blowing you off?"
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "181.38",
+      "start_time": "180.99",
+      "recording_attendee_id": null,
+      "text": "they're gone."
+    },
+    {
+      "id": "21c14c21-46fc-442a-afba-4fa8f1b29e5d",
+      "recording_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "end_time": "174.44",
+      "start_time": "172.38",
+      "recording_attendee_id": "987bc0dc-8791-433d-9c6c-ab2d65d9e8c2",
+      "text": "really? Yeah. Not"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "adf3882c-bcbb-4cd7-afa5-5030ae40191e",
+      "title": "Rentable//CJM",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2021-10-15T15:10:13.119000Z",
+      "call_date": "2021-10-15"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "id": "ad269bd1-b16b-4989-a8ba-0ccce88004e9",
+  "recording_id": "d085e8ee-a60e-43f1-af34-e51f8b3a26e4",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ad269bd1-b16b-4989-a8ba-0ccce88004e9",
+      "recording_id": "d085e8ee-a60e-43f1-af34-e51f8b3a26e4",
+      "end_time": 125.31,
+      "start_time": 0.35,
+      "recording_attendee_id": "b5c84334-c43e-4d3d-8272-03510e95e260",
+      "order_number": 0,
+      "text": "Hello. Thank you for calling please listen closely. As our menu items have changed. If you know your party's extension please dial it now for staff directory, please dial nine for C T L management, press one focus commercial press two Randall realty Corp. Pressing the accounting department press four for the I T department press five for the Randall charitable trust press six for human resources press seven for payroll press eight for all other calls, please press zero and an operator will be with you shortly to hear this list again press pound. Hello. Thank you for calling please listen closely. As our menu items have changed. If you know your party's extension please dial it now for staff directory, please dial nine for C T L management, press one focus commercial press two. For general C T L inquiries press one for collection press two to return to the main menu press pound. Hello. Thank you for calling please listen closely. As our menu items have changed. If you know your party's extension please dial it now for staff directory, please dial nine for C T L management, press one focus commercial press two Randall realty Corp. Press three for the accounting department press four for the I T department press five for the Randall charitable trust. For the help desk press one for all other. I T request press two or press pound to return to the main menu. I think for calling the I T help"
+    },
+    {
+      "id": "ad269bd1-b16b-4989-a8ba-0ccce88004e9",
+      "recording_id": "d085e8ee-a60e-43f1-af34-e51f8b3a26e4",
+      "end_time": 127.53,
+      "start_time": 125.31,
+      "recording_attendee_id": "b5c84334-c43e-4d3d-8272-03510e95e260",
+      "order_number": 1,
+      "text": "desk. Please leave a message and will return your call."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d085e8ee-a60e-43f1-af34-e51f8b3a26e4",
+      "title": "Call: Dan Cellon and Noah Holz @ CTL Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -17,11 +17,11 @@ if [[ ! -f "children.yaml" ]]; then
   cat > children.yaml << 'EOF'
 # Registry of child projects to audit
 projects:
-  - name: ClaudeSFDC
-    path: ../ClaudeSFDC
+  - name: platforms/SFDC
+    path: ../platforms/SFDC
     description: Salesforce automation project
-  - name: ClaudeHubSpot
-    path: ../ClaudeHubSpot
+  - name: platforms/HS
+    path: ../platforms/HS
     description: HubSpot integration project
   - name: Agents
     path: ../Agents

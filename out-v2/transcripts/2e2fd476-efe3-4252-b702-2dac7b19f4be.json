@@ -1,0 +1,28 @@
+{
+  "id": "2e2fd476-efe3-4252-b702-2dac7b19f4be",
+  "recording_id": "fea19fde-7c51-43b9-9fb3-83a8b8882943",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "2e2fd476-efe3-4252-b702-2dac7b19f4be",
+      "recording_id": "fea19fde-7c51-43b9-9fb3-83a8b8882943",
+      "end_time": 242.64,
+      "start_time": 219.06,
+      "recording_attendee_id": "751f123c-901a-4670-8e1a-29580bcece85",
+      "text": "Hey, Michelle, this is Josh over at a photo. We had a ten AM zero appointment. This morning. I'm on the June call right now. So if you can still join feel free phone call works better or reschedule give me a call back at six five one seven one seven five six three four again Joshua De Moto for our ten AM zoom meeting. This morning let me know, what works best thanks Michelle."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "fea19fde-7c51-43b9-9fb3-83a8b8882943",
+      "title": "ABODO - Reliant Property Management",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-10-27T16:40:46.063000Z",
+      "call_date": "2020-10-27"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+  "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:38:13.197Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 33.79,
+      "start_time": 32.98,
+      "recording_attendee_id": "b386505c-7dd8-43cb-8af1-b6f067358ad3",
+      "text": "Sending a meeting."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 21.36,
+      "start_time": 18.33,
+      "recording_attendee_id": "b386505c-7dd8-43cb-8af1-b6f067358ad3",
+      "text": "Hi, my name is Mitch. I just was calling for Keith Lynn."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 46.44,
+      "start_time": 45.66,
+      "recording_attendee_id": "b386505c-7dd8-43cb-8af1-b6f067358ad3",
+      "text": "Rentable."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 26.94,
+      "start_time": 25.77,
+      "recording_attendee_id": "b386505c-7dd8-43cb-8af1-b6f067358ad3",
+      "text": "My name is Minnie."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 44.86,
+      "start_time": 35.3,
+      "recording_attendee_id": "fb8c6dba-2e52-4cba-8cc8-900e07d115b9",
+      "text": "Okay meeting and what was the name of the company I work for I'm sorry, can you spell it hard to hear you know."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 25.43,
+      "start_time": 22.94,
+      "recording_attendee_id": "fb8c6dba-2e52-4cba-8cc8-900e07d115b9",
+      "text": "Okay, sure and then who should I tell him who's calling."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 17.34,
+      "start_time": 0,
+      "recording_attendee_id": "fb8c6dba-2e52-4cba-8cc8-900e07d115b9",
+      "text": "You for calling restaurant say realty this call may be recorded for quality purposes, you will not be transferred to the first available attendant and business opportunities. No matter your needs are agents can assist you and itchy. This is Sandy how can I help you."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 89.7,
+      "start_time": 48.83,
+      "recording_attendee_id": "fb8c6dba-2e52-4cba-8cc8-900e07d115b9",
+      "text": "Rentable. Okay sure hold on just a moment let me see if he's available at W W W dot West USA dot. Com or please hold for operator assistance. Thank you for your patience West USA realty. He's one of the largest real estate companies in the nation ranking in the top twenty, when it comes to overall agent production nationwide. You may wonder why so many agents."
+    },
+    {
+      "id": "40ebb8b5-2558-48b1-8133-0209541b2c1f",
+      "recording_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "end_time": 31.62,
+      "start_time": 28.5,
+      "recording_attendee_id": "fb8c6dba-2e52-4cba-8cc8-900e07d115b9",
+      "text": "Okay, yes, I'm sorry, just to say that what was this regarding."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "1a048114-891b-46de-b3ef-9edefdbc5a6f",
+      "title": "Call: Mitch  Scarski  and Keith Flynn @ West USA Realty",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,1132 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "Flow",
+          "url": "/services/data/v64.0/tooling/sobjects/Flow/301dx00000OEOT2AAP"
+        },
+        "Id": "301dx00000OEOT2AAP",
+        "Metadata": {
+          "actionCalls": [],
+          "apexPluginCalls": [],
+          "apiVersion": 61,
+          "areMetricsLoggedToDataCloud": false,
+          "assignments": [],
+          "choices": [],
+          "collectionProcessors": [],
+          "constants": [],
+          "customErrors": [],
+          "customProperties": [],
+          "decisions": [
+            {
+              "defaultConnector": null,
+              "defaultConnectorLabel": "Renewal Exists",
+              "description": null,
+              "elementSubtype": null,
+              "label": "Renewal Opportunity Exists?",
+              "locationX": 176,
+              "locationY": 638,
+              "name": "Decision_Renewal_Exists",
+              "processMetadataValues": [],
+              "rules": [
+                {
+                  "conditionLogic": "and",
+                  "conditions": [
+                    {
+                      "aggregationOperator": null,
+                      "conditionLogic": null,
+                      "conditionType": null,
+                      "conditions": [],
+                      "leftValueReference": "Check_Existing_Renewal",
+                      "operator": "IsNull",
+                      "processMetadataValues": [],
+                      "rightValue": {
+                        "apexValue": null,
+                        "booleanValue": true,
+                        "complexValue": null,
+                        "complexValueType": null,
+                        "dateTimeValue": null,
+                        "dateValue": null,
+                        "elementReference": null,
+                        "formulaDataType": null,
+                        "formulaExpression": null,
+                        "numberValue": null,
+                        "setupReference": null,
+                        "setupReferenceType": null,
+                        "sobjectValue": null,
+                        "stringValue": null,
+                        "timeValue": null,
+                        "transform": null,
+                        "transformValueReference": null
+                      }
+                    }
+                  ],
+                  "connector": {
+                    "isGoTo": null,
+                    "processMetadataValues": [],
+                    "targetReference": "Create_Renewal_Opportunity"
+                  },
+                  "description": null,
+                  "doesRequireRecordChangedToMeetCriteria": null,
+                  "label": "No Renewal Found",
+                  "name": "No_Renewal_Found",
+                  "processMetadataValues": []
+                }
+              ]
+            },
+            {
+              "defaultConnector": null,
+              "defaultConnectorLabel": "Skip Processing",
+              "description": null,
+              "elementSubtype": null,
+              "label": "Should Process Subscription?",
+              "locationX": 176,
+              "locationY": 158,
+              "name": "Decision_Should_Process",
+              "processMetadataValues": [],
+              "rules": [
+                {
+                  "conditionLogic": "and",
+                  "conditions": [
+                    {
+                      "aggregationOperator": null,
+                      "conditionLogic": null,
+                      "conditionType": null,
+                      "conditions": [],
+                      "leftValueReference": "$Record.EndDate__c",
+                      "operator": "GreaterThanOrEqualTo",
+                      "processMetadataValues": [],
+                      "rightValue": {
+                        "apexValue": null,
+                        "booleanValue": null,
+                        "complexValue": null,
+                        "complexValueType": null,
+                        "dateTimeValue": null,
+                        "dateValue": null,
+                        "elementReference": "$Flow.CurrentDate",
+                        "formulaDataType": null,
+                        "formulaExpression": null,
+                        "numberValue": null,
+                        "setupReference": null,
+                        "setupReferenceType": null,
+                        "sobjectValue": null,
+                        "stringValue": null,
+                        "timeValue": null,
+                        "transform": null,
+                        "transformValueReference": null
+                      }
+                    },
+                    {
+                      "aggregationOperator": null,
+                      "conditionLogic": null,
+                      "conditionType": null,
+                      "conditions": [],
+                      "leftValueReference": "$Record.EndDate__c",
+                      "operator": "LessThanOrEqualTo",
+                      "processMetadataValues": [],
+                      "rightValue": {
+                        "apexValue": null,
+                        "booleanValue": null,
+                        "complexValue": null,
+                        "complexValueType": null,
+                        "dateTimeValue": null,
+                        "dateValue": null,
+                        "elementReference": "Formula_EndDatePlus90",
+                        "formulaDataType": null,
+                        "formulaExpression": null,
+                        "numberValue": null,
+                        "setupReference": null,
+                        "setupReferenceType": null,
+                        "sobjectValue": null,
+                        "stringValue": null,
+                        "timeValue": null,
+                        "transform": null,
+                        "transformValueReference": null
+                      }
+                    }
+                  ],
+                  "connector": {
+                    "isGoTo": null,
+                    "processMetadataValues": [],
+                    "targetReference": "Get_Contract"
+                  },
+                  "description": null,
+                  "doesRequireRecordChangedToMeetCriteria": null,
+                  "label": "Process Subscription",
+                  "name": "Process_Subscription",
+                  "processMetadataValues": []
+                }
+              ]
+            }
+          ],
+          "description": "Scheduled flow to generate renewal opportunities for expiring subscriptions",
+          "dynamicChoiceSets": [],
+          "environments": [
+            "Default"
+          ],
+          "exitRules": [],
+          "experiments": [],
+          "formulas": [
+            {
+              "dataType": "Date",
+              "description": null,
+              "expression": "{!$Flow.CurrentDate} + 90",
+              "name": "Formula_EndDatePlus90",
+              "processMetadataValues": [],
+              "scale": null
+            },
+            {
+              "dataType": "String",
+              "description": null,
+              "expression": "{!Get_Account.Name} + \" - Renewal - \" + TEXT({!$Record.EndDate__c})",
+              "name": "Formula_OpportunityName",
+              "processMetadataValues": [],
+              "scale": null
+            },
+            {
+              "dataType": "Currency",
+              "description": null,
+              "expression": "IF(ISBLANK({!$Record.Quantity__c}), 0, {!$Record.Quantity__c}) * IF(ISBLANK({!$Record.UnitPrice__c}), 0, {!$Record.UnitPrice__c})",
+              "name": "Formula_RenewalAmount",
+              "processMetadataValues": [],
+              "scale": 0
+            },
+            {
+              "dataType": "Date",
+              "description": null,
+              "expression": "{!$Record.EndDate__c} - 30",
+              "name": "Formula_TaskDueDate",
+              "processMetadataValues": [],
+              "scale": null
+            }
+          ],
+          "interviewLabel": "FT Contract Renewal Generate {!$Flow.CurrentDateTime}",
+          "isAdditionalPermissionRequiredToRun": null,
+          "isOverridable": null,
+          "isTemplate": null,
+          "label": "FT Contract Renewal Generate",
+          "loops": [],
+          "migratedFromWorkflowRuleName": null,
+          "orchestratedStages": [],
+          "overriddenFlow": null,
+          "processMetadataValues": [
+            {
+              "name": "BuilderType",
+              "value": {
+                "apexValue": null,
+                "booleanValue": null,
+                "complexValue": null,
+                "complexValueType": null,
+                "dateTimeValue": null,
+                "dateValue": null,
+                "elementReference": null,
+                "formulaDataType": null,
+                "formulaExpression": null,
+                "numberValue": null,
+                "setupReference": null,
+                "setupReferenceType": null,
+                "sobjectValue": null,
+                "stringValue": "LightningFlowBuilder",
+                "timeValue": null,
+                "transform": null,
+                "transformValueReference": null
+              }
+            },
+            {
+              "name": "CanvasMode",
+              "value": {
+                "apexValue": null,
+                "booleanValue": null,
+                "complexValue": null,
+                "complexValueType": null,
+                "dateTimeValue": null,
+                "dateValue": null,
+                "elementReference": null,
+                "formulaDataType": null,
+                "formulaExpression": null,
+                "numberValue": null,
+                "setupReference": null,
+                "setupReferenceType": null,
+                "sobjectValue": null,
+                "stringValue": "AUTO_LAYOUT_CANVAS",
+                "timeValue": null,
+                "transform": null,
+                "transformValueReference": null
+              }
+            },
+            {
+              "name": "OriginBuilderType",
+              "value": {
+                "apexValue": null,
+                "booleanValue": null,
+                "complexValue": null,
+                "complexValueType": null,
+                "dateTimeValue": null,
+                "dateValue": null,
+                "elementReference": null,
+                "formulaDataType": null,
+                "formulaExpression": null,
+                "numberValue": null,
+                "setupReference": null,
+                "setupReferenceType": null,
+                "sobjectValue": null,
+                "stringValue": "LightningFlowBuilder",
+                "timeValue": null,
+                "transform": null,
+                "transformValueReference": null
+              }
+            }
+          ],
+          "processType": "AutoLaunchedFlow",
+          "recordCreates": [
+            {
+              "assignRecordIdToReference": null,
+              "connector": {
+                "isGoTo": null,
+                "processMetadataValues": [],
+                "targetReference": "Update_Contract_with_Renewal"
+              },
+              "description": null,
+              "doesUpsert": null,
+              "doesUpsertAllOrNone": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": null,
+              "filters": [],
+              "inputAssignments": [
+                {
+                  "field": "OpportunityId",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Create_Renewal_Opportunity",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Quantity",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.Quantity__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "UnitPrice",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.UnitPrice__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "inputReference": null,
+              "label": "Create Opportunity Product",
+              "locationX": 50,
+              "locationY": 878,
+              "name": "Create_Opportunity_Product",
+              "object": "OpportunityLineItem",
+              "operationMultMatchingRecords": null,
+              "operationOneMatchingRecord": null,
+              "operationZeroMatchingRecords": null,
+              "processMetadataValues": [],
+              "storeOutputAutomatically": true,
+              "upsertExternalIdField": null,
+              "upsertStandardIdField": null
+            },
+            {
+              "assignRecordIdToReference": null,
+              "connector": null,
+              "description": null,
+              "doesUpsert": null,
+              "doesUpsertAllOrNone": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": null,
+              "filters": [],
+              "inputAssignments": [
+                {
+                  "field": "ActivityDate",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Formula_TaskDueDate",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Description",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Please review the renewal opportunity for this subscription expiring on {!$Record.EndDate__c}. \n\nSubscription Details:\n- Account: {!Get_Account.Name}\n- Quantity: {!$Record.Quantity__c}\n- Unit Price: {!$Record.UnitPrice__c}\n- Renewal Amount: {!Formula_RenewalAmount}",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "OwnerId",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.OwnerId",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Priority",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Normal",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Status",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Not Started",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Subject",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Review Renewal Opportunity - {!Get_Account.Name}",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "WhatId",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Create_Renewal_Opportunity",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "inputReference": null,
+              "label": "Create Reminder Task",
+              "locationX": 50,
+              "locationY": 1118,
+              "name": "Create_Reminder_Task",
+              "object": "Task",
+              "operationMultMatchingRecords": null,
+              "operationOneMatchingRecord": null,
+              "operationZeroMatchingRecords": null,
+              "processMetadataValues": [],
+              "storeOutputAutomatically": true,
+              "upsertExternalIdField": null,
+              "upsertStandardIdField": null
+            },
+            {
+              "assignRecordIdToReference": null,
+              "connector": {
+                "isGoTo": null,
+                "processMetadataValues": [],
+                "targetReference": "Create_Opportunity_Product"
+              },
+              "description": null,
+              "doesUpsert": null,
+              "doesUpsertAllOrNone": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": null,
+              "filters": [],
+              "inputAssignments": [
+                {
+                  "field": "AccountId",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.Account__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Amount",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Formula_RenewalAmount",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "CloseDate",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.EndDate__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Name",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Formula_OpportunityName",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "StageName",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Qualification",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Type",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Renewal",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "inputReference": null,
+              "label": "Create Renewal Opportunity",
+              "locationX": 50,
+              "locationY": 758,
+              "name": "Create_Renewal_Opportunity",
+              "object": "Opportunity",
+              "operationMultMatchingRecords": null,
+              "operationOneMatchingRecord": null,
+              "operationZeroMatchingRecords": null,
+              "processMetadataValues": [],
+              "storeOutputAutomatically": true,
+              "upsertExternalIdField": null,
+              "upsertStandardIdField": null
+            }
+          ],
+          "recordDeletes": [],
+          "recordLookups": [
+            {
+              "assignNullValuesIfNoRecordsFound": true,
+              "connector": {
+                "isGoTo": null,
+                "processMetadataValues": [],
+                "targetReference": "Decision_Renewal_Exists"
+              },
+              "description": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": "1 AND 2 AND (3 OR 4 OR 5)",
+              "filters": [
+                {
+                  "field": "AccountId",
+                  "operator": "EqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.Account__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "Type",
+                  "operator": "EqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Renewal",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "StageName",
+                  "operator": "NotEqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Closed Won",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "StageName",
+                  "operator": "NotEqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": null,
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": "Closed Lost",
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                },
+                {
+                  "field": "CloseDate",
+                  "operator": "EqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.EndDate__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "getFirstRecordOnly": true,
+              "label": "Check for Existing Renewal",
+              "limit": null,
+              "locationX": 176,
+              "locationY": 518,
+              "name": "Check_Existing_Renewal",
+              "object": "Opportunity",
+              "outputAssignments": [],
+              "outputReference": null,
+              "processMetadataValues": [],
+              "queriedFields": null,
+              "relatedRecords": null,
+              "sortField": null,
+              "sortOrder": null,
+              "storeOutputAutomatically": true
+            },
+            {
+              "assignNullValuesIfNoRecordsFound": false,
+              "connector": {
+                "isGoTo": null,
+                "processMetadataValues": [],
+                "targetReference": "Check_Existing_Renewal"
+              },
+              "description": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": "and",
+              "filters": [
+                {
+                  "field": "Id",
+                  "operator": "EqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.Account__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "getFirstRecordOnly": true,
+              "label": "Get Account",
+              "limit": null,
+              "locationX": 176,
+              "locationY": 398,
+              "name": "Get_Account",
+              "object": "Account",
+              "outputAssignments": [],
+              "outputReference": null,
+              "processMetadataValues": [],
+              "queriedFields": null,
+              "relatedRecords": null,
+              "sortField": null,
+              "sortOrder": null,
+              "storeOutputAutomatically": true
+            },
+            {
+              "assignNullValuesIfNoRecordsFound": false,
+              "connector": {
+                "isGoTo": null,
+                "processMetadataValues": [],
+                "targetReference": "Get_Account"
+              },
+              "description": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": "and",
+              "filters": [
+                {
+                  "field": "Id",
+                  "operator": "EqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "$Record.Contract__c",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "getFirstRecordOnly": true,
+              "label": "Get Contract",
+              "limit": null,
+              "locationX": 176,
+              "locationY": 278,
+              "name": "Get_Contract",
+              "object": "Contract",
+              "outputAssignments": [],
+              "outputReference": null,
+              "processMetadataValues": [],
+              "queriedFields": null,
+              "relatedRecords": null,
+              "sortField": null,
+              "sortOrder": null,
+              "storeOutputAutomatically": true
+            }
+          ],
+          "recordRollbacks": [],
+          "recordUpdates": [
+            {
+              "connector": {
+                "isGoTo": null,
+                "processMetadataValues": [],
+                "targetReference": "Create_Reminder_Task"
+              },
+              "description": null,
+              "elementSubtype": null,
+              "faultConnector": null,
+              "filterLogic": "and",
+              "filters": [
+                {
+                  "field": "Id",
+                  "operator": "EqualTo",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Get_Contract.Id",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "inputAssignments": [
+                {
+                  "field": "RenewalOpportunity__c",
+                  "processMetadataValues": [],
+                  "value": {
+                    "apexValue": null,
+                    "booleanValue": null,
+                    "complexValue": null,
+                    "complexValueType": null,
+                    "dateTimeValue": null,
+                    "dateValue": null,
+                    "elementReference": "Create_Renewal_Opportunity",
+                    "formulaDataType": null,
+                    "formulaExpression": null,
+                    "numberValue": null,
+                    "setupReference": null,
+                    "setupReferenceType": null,
+                    "sobjectValue": null,
+                    "stringValue": null,
+                    "timeValue": null,
+                    "transform": null,
+                    "transformValueReference": null
+                  }
+                }
+              ],
+              "inputReference": null,
+              "label": "Update Contract with Renewal Opportunity",
+              "locationX": 50,
+              "locationY": 998,
+              "name": "Update_Contract_with_Renewal",
+              "object": "Contract",
+              "processMetadataValues": []
+            }
+          ],
+          "runInMode": null,
+          "screens": [],
+          "sourceTemplate": null,
+          "start": {
+            "activation": null,
+            "capabilityTypes": [],
+            "connector": {
+              "isGoTo": null,
+              "processMetadataValues": [],
+              "targetReference": "Decision_Should_Process"
+            },
+            "dataGraph": null,
+            "dataTypeMappings": [],
+            "description": null,
+            "doesRequireRecordChangedToMeetCriteria": null,
+            "elementSubtype": null,
+            "entryType": null,
+            "eventName": null,
+            "eventType": null,
+            "filterFormula": null,
+            "filterLogic": null,
+            "filters": [],
+            "flowRunAsUser": null,
+            "form": null,
+            "inputs": [],
+            "label": null,
+            "locationX": 56,
+            "locationY": 0,
+            "name": null,
+            "object": "Subscription__c",
+            "objectContainer": null,
+            "processMetadataValues": [],
+            "publishSegment": null,
+            "recordTriggerType": null,
+            "schedule": {
+              "frequency": "Daily",
+              "startDate": "2025-01-04",
+              "startTime": "06:00:00.000Z"
+            },
+            "scheduledPaths": [],
+            "segment": null,
+            "triggerType": "Scheduled",
+            "triggeringDataGraph": null,
+            "triggeringDataModelObjectPath": null
+          },
+          "startElementReference": null,
+          "status": "Active",
+          "steps": [],
+          "subflows": [],
+          "textTemplates": [],
+          "timeZoneSidKey": null,
+          "transforms": [],
+          "triggerOrder": null,
+          "urls": null,
+          "variables": [],
+          "waits": []
+        }
+      }
+    ],
+    "totalSize": 1,
+    "done": true
+  },
+  "warnings": []
+}

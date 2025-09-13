@@ -1,0 +1,36 @@
+{
+  "id": "a4fa2361-ac4d-4460-afb5-6d07a5bf5243",
+  "recording_id": "64cd2c43-2b72-4ba2-9875-efb02b94cbc0",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a4fa2361-ac4d-4460-afb5-6d07a5bf5243",
+      "recording_id": "64cd2c43-2b72-4ba2-9875-efb02b94cbc0",
+      "end_time": 130.08,
+      "start_time": 105.24,
+      "recording_attendee_id": "395d5b08-f4bd-42c5-b219-3a1474b6a97e",
+      "text": "Hi, Jane, my name is Mitch Garcia. I'm calling with rental sent you a couple of emails and the reason for the call was to send a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads and renters to the property specifically to our partnership with Facebook and Facebook marketplace. I want to run by a few options ideas with you if you could please return my call again this renewal for seven zero eight two eight five three eight three again four seven zero eight two eight five three three thanks bye."
+    },
+    {
+      "id": "a4fa2361-ac4d-4460-afb5-6d07a5bf5243",
+      "recording_id": "64cd2c43-2b72-4ba2-9875-efb02b94cbc0",
+      "end_time": 103.34,
+      "start_time": 33.78,
+      "recording_attendee_id": "55e28f13-2e8f-43e3-8591-4df5b32510e6",
+      "text": "Thank you for calling Meridian management Group. If you know your party's extension please dial it now if not press two and for the staff directory and case number. Please dial the first few letters of the first or last name of the person you are trying to reach press pound when. Jane lieberman press one, J shoe press to. Please leave a message after the tone. When you are finished recording you may hang up or press pound for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "64cd2c43-2b72-4ba2-9875-efb02b94cbc0",
+      "title": "Call: Mitch  Scarski  and Jay Lieberman @ Meridian Management Group",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "f6ebaf92-f1d2-47ce-ad3f-2e690dd2e494",
+  "recording_id": "c5aaef55-dd4a-4515-8813-1bdef1790b24",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "f6ebaf92-f1d2-47ce-ad3f-2e690dd2e494",
+      "recording_id": "c5aaef55-dd4a-4515-8813-1bdef1790b24",
+      "end_time": 93.76,
+      "start_time": 2.22,
+      "recording_attendee_id": "8758f840-8ec6-4bd6-bec3-da92bb3e137c",
+      "text": "Thank you for calling radio properties. If you know your party's extension you may enter it at any time during this message for a directory of extensions. Please press six. Now if you are trying to reach press the following extensions to be connected currently asians extension fifteen or extension eighteen. Accounts payable extension sixteen. Commercial manager, extension twenty, nine staff accounting extension seventeen controller, and human resources, extension nineteen, Vice President extension thirteen. Please hold a moment. You have reached the mailbox for Steve Fuller with Rainier properties. I'm either on the other line or away from my desk at this time. So please leave your name number and a brief message and I'll get back to you as soon as I can thank you."
+    },
+    {
+      "id": "f6ebaf92-f1d2-47ce-ad3f-2e690dd2e494",
+      "recording_id": "c5aaef55-dd4a-4515-8813-1bdef1790b24",
+      "end_time": 130.15,
+      "start_time": 98.41,
+      "recording_attendee_id": "36a54d46-1c5d-431c-b0e3-3630820c41e7",
+      "text": "Good afternoon. This is Peter with rentable. I was hoping to reach someone at raining of properties that responsible for marketing and advertising my direct call back number is nine five six four seven two four two eight zero again Dana with rentable looking for the individual within Rainier marketing and advertising for the properties and often nine five six four seven two four two eight zero is the best contact for me thanks so much."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c5aaef55-dd4a-4515-8813-1bdef1790b24",
+      "title": "Call: Dither  Castro  and Jannifer Quintero @ Rainier Properties",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

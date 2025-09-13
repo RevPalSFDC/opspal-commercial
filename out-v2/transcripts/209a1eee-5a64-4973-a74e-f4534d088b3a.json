@@ -1,0 +1,44 @@
+{
+  "id": "209a1eee-5a64-4973-a74e-f4534d088b3a",
+  "recording_id": "d9f308cb-c046-49b9-a75f-e9f7ebe93955",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:46:38.439Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "209a1eee-5a64-4973-a74e-f4534d088b3a",
+      "recording_id": "d9f308cb-c046-49b9-a75f-e9f7ebe93955",
+      "end_time": 6.68,
+      "start_time": 1.79,
+      "recording_attendee_id": "6448f1e3-7bf8-43a2-9ce2-e7cd68b1db64",
+      "text": "Hi, my name is Mitch mocarski. I just was calling for Ben Cisneros please."
+    },
+    {
+      "id": "209a1eee-5a64-4973-a74e-f4534d088b3a",
+      "recording_id": "d9f308cb-c046-49b9-a75f-e9f7ebe93955",
+      "end_time": 139.28,
+      "start_time": 109.13,
+      "recording_attendee_id": "6448f1e3-7bf8-43a2-9ce2-e7cd68b1db64",
+      "text": "Hi, Don, my name is Mitch Garcia. I'm calling from rental. I sent you an email earlier. This morning saw that you got on the reason for the call was to set a meeting with you I work with a lot of other property management companies in terms of generating them more qualified leads and renters to the property specifically through our partners fuck with Facebook Facebook marketplace wondering by two options and I guess with you if you could please return my call. Ken Mitchell total bill for seven zero eight two eight five three eight three again four seven zero eight two eight five three eight three thanks bye."
+    },
+    {
+      "id": "209a1eee-5a64-4973-a74e-f4534d088b3a",
+      "recording_id": "d9f308cb-c046-49b9-a75f-e9f7ebe93955",
+      "end_time": 107.87,
+      "start_time": 92,
+      "recording_attendee_id": "7ef14d14-53b2-4b92-9651-1d2f37166d5d",
+      "text": "Reach Ben property manager and without him back and clarify. That me a message and I'll return your call as soon as possible. Thank you. At the tone, please record your message. When you have finished recording you may hang up or press one for more options."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "d9f308cb-c046-49b9-a75f-e9f7ebe93955",
+      "title": "Call: Mitch  Scarski  and +15105620300",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

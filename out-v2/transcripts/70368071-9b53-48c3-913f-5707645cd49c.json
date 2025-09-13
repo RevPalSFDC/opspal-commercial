@@ -1,0 +1,68 @@
+{
+  "id": "70368071-9b53-48c3-913f-5707645cd49c",
+  "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "70368071-9b53-48c3-913f-5707645cd49c",
+      "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "end_time": 124.67,
+      "start_time": 122.99,
+      "recording_attendee_id": "f2844dc4-11dc-4695-890e-d614b961d597",
+      "text": "Okay thanks so much."
+    },
+    {
+      "id": "70368071-9b53-48c3-913f-5707645cd49c",
+      "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "end_time": 92.52,
+      "start_time": 88.2,
+      "recording_attendee_id": "f2844dc4-11dc-4695-890e-d614b961d597",
+      "text": "Good morning. This is trying to get in touch with Carrie. I'm a Visa."
+    },
+    {
+      "id": "70368071-9b53-48c3-913f-5707645cd49c",
+      "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "end_time": 127.15,
+      "start_time": 126.85,
+      "recording_attendee_id": "f2844dc4-11dc-4695-890e-d614b961d597",
+      "text": "You too."
+    },
+    {
+      "id": "70368071-9b53-48c3-913f-5707645cd49c",
+      "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "end_time": 85.38,
+      "start_time": 2.13,
+      "recording_attendee_id": "40ad6464-2020-4a52-82f8-ea690067bb5a",
+      "text": "Hello, and thank you for calling Bridge housing. If you know, your party's extension you may dial it at any time. If this is a service emergency regarding a Bridge property, please press one or you may call one eight eight eight three seven two three four nine zero that number once again one eight eight eight three seven two three four nine zero if you're seeking housing please press two or visit us on the web at W W W dot Bridge housing dot. Com or call four one five two six seven seven six seven three that number once again, four one five two six seven seven six seven three for a company dial by name directory, please press three. If you are current residence and need assistance, please contact your property management office or press zero for the receptionist. If you have questions regarding application. Accounting."
+    },
+    {
+      "id": "70368071-9b53-48c3-913f-5707645cd49c",
+      "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "end_time": 126.28,
+      "start_time": 125.29,
+      "recording_attendee_id": "40ad6464-2020-4a52-82f8-ea690067bb5a",
+      "text": "Problem have a good one."
+    },
+    {
+      "id": "70368071-9b53-48c3-913f-5707645cd49c",
+      "recording_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "end_time": 118.97,
+      "start_time": 94.59,
+      "recording_attendee_id": "40ad6464-2020-4a52-82f8-ea690067bb5a",
+      "text": "Um, okay. Okay, let me go ahead and give you the number. Okay, the number is one second it's loading. Okay, the number is six one nine four eight one three four seven three."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "59e2eec1-4b54-41f3-9577-b352c6a0ca97",
+      "title": "Call: Dan Cellon and Maiesha Anthony @ Bridge Housing Corporation",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

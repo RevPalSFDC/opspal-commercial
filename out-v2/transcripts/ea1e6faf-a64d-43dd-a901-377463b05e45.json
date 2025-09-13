@@ -1,0 +1,101 @@
+{
+  "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+  "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 6.48,
+      "start_time": 0.31,
+      "recording_attendee_id": "bafcdc82-cfc9-4bb1-9095-ba8c80496782",
+      "order_number": 0,
+      "text": "Thank you for calling. I'm DPM. Please have the address you are inquiring about ready so that we can assist you."
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 25.91,
+      "start_time": 17.77,
+      "recording_attendee_id": "d0c57f97-e709-4cb2-b141-181019424ca5",
+      "order_number": 1,
+      "text": "Thank you. Mm"
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 97.73,
+      "start_time": 69.48,
+      "recording_attendee_id": "bafcdc82-cfc9-4bb1-9095-ba8c80496782",
+      "order_number": 2,
+      "text": "Thank you for calling M. D. P. M. Our normal business hours are monday through friday nine a.m. To five p.m. And saturday from nine a.m. To one p.m. We are closed on major holidays. If you would like to send a fax, Our fax number is seven billion three hundred forty-four million six hundred ninety-four thousand six hundred and nine If you have a maintenance emergency, please call seven billion three hundred forty-seven million eight hundred sixty-two thousand six hundred and twenty If you know"
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 98.57,
+      "start_time": 97.63,
+      "recording_attendee_id": "d0c57f97-e709-4cb2-b141-181019424ca5",
+      "order_number": 3,
+      "text": "hm."
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 107.5,
+      "start_time": 97.73,
+      "recording_attendee_id": "bafcdc82-cfc9-4bb1-9095-ba8c80496782",
+      "order_number": 4,
+      "text": "the name of the person you would like to speak with, you may press the pound key at any time to use our dial by name directory. Or select from the following menu, Press one."
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 107.68,
+      "start_time": 107.31,
+      "recording_attendee_id": "d0c57f97-e709-4cb2-b141-181019424ca5",
+      "order_number": 5,
+      "text": "Yeah."
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 116.43,
+      "start_time": 107.51,
+      "recording_attendee_id": "bafcdc82-cfc9-4bb1-9095-ba8c80496782",
+      "order_number": 6,
+      "text": "If you would like to schedule a showing on one of our available properties. Two. If your property was recently transferred to M. V. P. M. Three."
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 116.38,
+      "start_time": 115.98,
+      "recording_attendee_id": "d0c57f97-e709-4cb2-b141-181019424ca5",
+      "order_number": 7,
+      "text": "Yes."
+    },
+    {
+      "id": "ea1e6faf-a64d-43dd-a901-377463b05e45",
+      "recording_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "end_time": 123.6,
+      "start_time": 116.44,
+      "recording_attendee_id": "bafcdc82-cfc9-4bb1-9095-ba8c80496782",
+      "order_number": 8,
+      "text": "If you are a new owner and would like information on our property management service for for the standard application"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "40b81051-e70c-44a7-9e40-6a883ed25cd6",
+      "title": "Call: Brandon Winfield and Lindsey Parker @ Metro Detroit Property Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+  "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:42:36.238Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 2.69,
+      "start_time": 0.35,
+      "recording_attendee_id": "65f0f844-d679-4395-b234-f492797d2cd5",
+      "order_number": 0,
+      "text": "Yep sure once this is Sandy can I help you."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 12.71,
+      "start_time": 3.68,
+      "recording_attendee_id": "cd7482dd-644a-4b28-9c53-e40c8a602a8d",
+      "order_number": 1,
+      "text": "Sandy, yes, it's Benjamin void available, yes. My name is Katie and I'm calling with rentable. Yeah."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 97.06,
+      "start_time": 6.6,
+      "recording_attendee_id": "65f0f844-d679-4395-b234-f492797d2cd5",
+      "order_number": 2,
+      "text": "Mask is calling. Rentable. Okay, let me see if he's available. Okay, alright, well then. Plus is Ben."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 110.66,
+      "start_time": 98.12,
+      "recording_attendee_id": "cd7482dd-644a-4b28-9c53-e40c8a602a8d",
+      "order_number": 3,
+      "text": "Ben this is Katie how are you doing today. Good. I wanted to follow up on some E mails to be sent over and I just hoping we can schedule a time to talk sometime in September."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 129.83,
+      "start_time": 99.88,
+      "recording_attendee_id": "65f0f844-d679-4395-b234-f492797d2cd5",
+      "order_number": 4,
+      "text": "I'm fine how are you. Um, yeah, we could talk I'm I'm actually it's a little hectic right now for like probably the next two weeks. I'm actually going out of town starting Tuesday and I'm trying to get caught up on things could we catch up maybe like the week of the twentieth just give me a call and we'll try to get a time set for the end of the month."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 132.96,
+      "start_time": 130.14,
+      "recording_attendee_id": "cd7482dd-644a-4b28-9c53-e40c8a602a8d",
+      "order_number": 5,
+      "text": "Yeah, of course, I'll can you probably going anywhere exciting."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 136.81,
+      "start_time": 133.93,
+      "recording_attendee_id": "65f0f844-d679-4395-b234-f492797d2cd5",
+      "order_number": 6,
+      "text": "We're going to block Island over in Rhode Island I'm."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 145.82,
+      "start_time": 136.46,
+      "recording_attendee_id": "cd7482dd-644a-4b28-9c53-e40c8a602a8d",
+      "order_number": 7,
+      "text": "Oh awesome well enjoy and I will let you know I will reach out to you on the twentieth um, so we can schedule a time to drop. Alright well good one."
+    },
+    {
+      "id": "a03c0cd4-86d5-48ca-8de7-2c6bc3239262",
+      "recording_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "end_time": 147.03,
+      "start_time": 143.85,
+      "recording_attendee_id": "65f0f844-d679-4395-b234-f492797d2cd5",
+      "order_number": 8,
+      "text": "Sounds good, thanks very much. Yep you too bye."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "aede7639-c7a1-4305-8aa9-91ad2e8f599f",
+      "title": "Call: Katee Hawkins and Benjamin Boyd @ Brookwood Management Company",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

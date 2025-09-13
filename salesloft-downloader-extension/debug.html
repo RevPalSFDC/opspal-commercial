@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Salesloft Extension Debug</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #console {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-size: 12px;
+    }
+    .log-entry {
+      margin: 2px 0;
+      padding: 2px;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+    .info {
+      color: blue;
+    }
+    h2 {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 Salesloft Extension Debugger</h1>
+  
+  <h2>Quick Tests</h2>
+  <div>
+    <button id="testMessage">Test Message</button>
+    <button id="testSingleTab">Open Single Recording</button>
+    <button id="testDownload">Test Download (1 URL)</button>
+    <button id="checkStatus">Check Status</button>
+    <button id="clearStorage">Clear Storage</button>
+    <button id="clearConsole">Clear Console</button>
+  </div>
+
+  <h2>Test URL</h2>
+  <input type="text" id="testUrl" style="width: 100%; padding: 5px;" 
+         value="https://recordings.salesloft.com/c/101314/f43567b7-a6f3-4f86-baf6-fcbbe6060e64">
+
+  <h2>Console Output</h2>
+  <div id="console"></div>
+
+  <script>
+    const consoleDiv = document.getElementById('console');
+    
+    function log(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      const timestamp = new Date().toLocaleTimeString();
+      entry.textContent = `[${timestamp}] ${message}`;
+      consoleDiv.appendChild(entry);
+      consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }
+
+    // Test basic message
+    document.getElementById('testMessage').addEventListener('click', () => {
+      log('Sending test message to background...');
+      chrome.runtime.sendMessage(
+        { action: 'test' },
+        response => {
+          if (chrome.runtime.lastError) {
+            log(`Error: ${chrome.runtime.lastError.message}`, 'error');
+          } else {
+            log(`Response: ${JSON.stringify(response)}`, 'success');
+          }
+        }
+      );
+    });
+
+    // Test opening single tab
+    document.getElementById('testSingleTab').addEventListener('click', () => {
+      const url = document.getElementById('testUrl').value;
+      log(`Opening single recording: ${url}`);
+      
+      chrome.runtime.sendMessage(
+        { action: 'testSingleDownload', url: url },
+        response => {
+          if (chrome.runtime.lastError) {
+            log(`Error: ${chrome.runtime.lastError.message}`, 'error');
+          } else {
+            log(`Tab created: ${JSON.stringify(response)}`, 'success');
+          }
+        }
+      );
+    });
+
+    // Test download with single URL
+    document.getElementById('testDownload').addEventListener('click', () => {
+      const url = document.getElementById('testUrl').value;
+      log(`Starting download test with URL: ${url}`);
+      
+      chrome.runtime.sendMessage(
+        { 
+          action: 'startDownload',
+          urls: [url]
+        },
+        response => {
+          if (chrome.runtime.lastError) {
+            log(`Error: ${chrome.runtime.lastError.message}`, 'error');
+          } else {
+            log(`Download started: ${JSON.stringify(response)}`, 'success');
+          }
+        }
+      );
+    });
+
+    // Check status
+    document.getElementById('checkStatus').addEventListener('click', () => {
+      log('Checking download status...');
+      
+      chrome.runtime.sendMessage(
+        { action: 'getStatus' },
+        response => {
+          if (chrome.runtime.lastError) {
+            log(`Error: ${chrome.runtime.lastError.message}`, 'error');
+          } else {
+            log(`Status:\n${JSON.stringify(response, null, 2)}`, 'info');
+          }
+        }
+      );
+    });
+
+    // Clear storage
+    document.getElementById('clearStorage').addEventListener('click', () => {
+      log('Clearing storage...');
+      chrome.storage.local.clear(() => {
+        log('Storage cleared', 'success');
+      });
+    });
+
+    // Clear console
+    document.getElementById('clearConsole').addEventListener('click', () => {
+      consoleDiv.innerHTML = '';
+      log('Console cleared', 'info');
+    });
+
+    // Listen for background messages
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      log(`Background message: ${JSON.stringify(request)}`, 'info');
+    });
+
+    // Check extension on load
+    log('Debug page loaded', 'success');
+    log('Extension ID: ' + chrome.runtime.id, 'info');
+    
+    // Try to get initial status
+    setTimeout(() => {
+      document.getElementById('checkStatus').click();
+    }, 500);
+  </script>
+</body>
+</html>

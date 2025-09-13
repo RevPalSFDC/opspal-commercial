@@ -1,0 +1,119 @@
+{
+  "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+  "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2024-02-28T21:25:13.679Z",
+  "updated_at": "2024-02-28T21:27:37.635Z",
+  "sentences": [
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 9.77,
+      "start_time": 9,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 0,
+      "text": "Oh, shoot."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 10.78,
+      "start_time": 9.78,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 1,
+      "text": "Did she leave?"
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 14.31,
+      "start_time": 12.37,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 2,
+      "text": "Uh, looks, yes."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 14.99,
+      "start_time": 14.32,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 3,
+      "text": "Looks like it,"
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 47.49,
+      "start_time": 46.79,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 4,
+      "text": "you know."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 50.44,
+      "start_time": 47.82,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 5,
+      "text": "Um, yeah, that was weird."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 50.96,
+      "start_time": 50.45,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 6,
+      "text": "Let me"
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 56.73,
+      "start_time": 55.45,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 7,
+      "text": "give her a call real quick."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 57.38,
+      "start_time": 57.16,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 8,
+      "text": "Yeah."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 60,
+      "start_time": 58.06,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 9,
+      "text": "So I'm wholly multitasking."
+    },
+    {
+      "id": "db0922dd-c7c7-41fa-8a5a-4cfa0707fa52",
+      "recording_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "end_time": 61.73,
+      "start_time": 61.2,
+      "recording_attendee_id": "6cedfaaa-b76c-4ade-a3d9-15bf56b34656",
+      "order_number": 10,
+      "text": "Very good."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "57a526c7-c93e-494d-9d41-700043aafe48",
+      "title": "Google Business Pro x R.W. Selby & Company",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2024-02-28T21:25:13Z",
+      "call_date": "2024-02-28"
+    }
+  }
+}

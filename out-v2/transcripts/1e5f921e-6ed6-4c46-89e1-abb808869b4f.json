@@ -1,0 +1,44 @@
+{
+  "id": "1e5f921e-6ed6-4c46-89e1-abb808869b4f",
+  "recording_id": "3e6eb075-9be5-4363-81a8-396298b8fa0d",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:25:46.800Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "1e5f921e-6ed6-4c46-89e1-abb808869b4f",
+      "recording_id": "3e6eb075-9be5-4363-81a8-396298b8fa0d",
+      "end_time": 150.89,
+      "start_time": 129.59,
+      "recording_attendee_id": "e7834fd8-d051-41cb-b109-96680b20eb71",
+      "text": "to consider you're moving forward in January and beyond I'll shoot you a follow, up email as well. If you have any questions or anything. We're we're happy to get on a call with you and kind of go over it more detail or answer any questions you might have. So I really think it could be beneficial for you guys that makes sense. So just let me know thanks so much."
+    },
+    {
+      "id": "1e5f921e-6ed6-4c46-89e1-abb808869b4f",
+      "recording_id": "3e6eb075-9be5-4363-81a8-396298b8fa0d",
+      "end_time": 110.88,
+      "start_time": 0.05,
+      "recording_attendee_id": "7d29490e-8537-4503-816a-d89ce27a216b",
+      "text": "For calling AT&T management you may press zero at any time to speak to an operator, otherwise for office manager press one for accounts payable press two for the retail accountant press three for the director of operations press four for the controller press five for the Regional residential manager press six for the Vice President press seven for a dial by name directory press the pound key or stay on the line and someone will be using the keypad on your phone. Please enter the first name of the party you wish to reach. Press the number one, when you hear the name of the party you wish to contact for alright is or not. The general manager mailbox eight hundred six press one now please hold while we transfer you to hurt is a month and Regional manager if you remain on hold we will try to connect you or you can press any key to leave a message. You have reached the office of Heidi Sam on Regional manager, she is either on the other line or have stepped away from the office. Please leave her a brief message with a phone number and I will return your call as soon as possible. Thank you for calling."
+    },
+    {
+      "id": "1e5f921e-6ed6-4c46-89e1-abb808869b4f",
+      "recording_id": "3e6eb075-9be5-4363-81a8-396298b8fa0d",
+      "end_time": 129.59,
+      "start_time": 113.63,
+      "recording_attendee_id": "e7834fd8-d051-41cb-b109-96680b20eb71",
+      "text": "Hey, hi, this is Dan from rentable. I know you met with my colleague Alex last month. I just wanted to circle back with you see if there's any feedback that you have from that meeting. Maybe if there's any potential"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "3e6eb075-9be5-4363-81a8-396298b8fa0d",
+      "title": "Call: Dan Cellon and Haidy Samaan @ ACP Management",
+      "platform": "salesloft",
+      "media_type": "audio",
+      "started_recording_at": "1970-01-01T00:00:00Z",
+      "call_date": "1970-01-01"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "6c1247da-b9d3-4169-bdf7-46f189520ed8",
+  "recording_id": "a3dfd02b-5748-4bdd-b177-89e8da7b4406",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T18:13:26.885Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "6c1247da-b9d3-4169-bdf7-46f189520ed8",
+      "recording_id": "a3dfd02b-5748-4bdd-b177-89e8da7b4406",
+      "end_time": 88.91,
+      "start_time": 20.93,
+      "recording_attendee_id": "c34429be-a884-48a6-829c-f5268a0a59df",
+      "text": "are you there? I'm getting this cleared up a little thing now on. Oh, that's probably feel at all and I was curious about what was going on. Okay. Yeah, I I jumped on my earlier cause I was. And it is an Eco now. She's on the other line. Hi, this is Alison our check with the boat. On so that the call whether you're okay on the doors."
+    },
+    {
+      "id": "6c1247da-b9d3-4169-bdf7-46f189520ed8",
+      "recording_id": "a3dfd02b-5748-4bdd-b177-89e8da7b4406",
+      "end_time": 20.93,
+      "start_time": 20.35,
+      "recording_attendee_id": null,
+      "text": "Monique"
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "a3dfd02b-5748-4bdd-b177-89e8da7b4406",
+      "title": "ABODO - Geller 1:30pm EST",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2019-12-12T18:15:01.538000Z",
+      "call_date": "2019-12-12"
+    }
+  }
+}

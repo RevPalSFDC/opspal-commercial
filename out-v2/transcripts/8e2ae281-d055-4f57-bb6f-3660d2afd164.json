@@ -1,0 +1,28 @@
+{
+  "id": "8e2ae281-d055-4f57-bb6f-3660d2afd164",
+  "recording_id": "c6b217ac-72a5-4520-8573-b7b62303a1b1",
+  "organization_id": "3d2c85f5-5f1c-44c5-af40-83cc04ee8ccc",
+  "language_code": "en-US",
+  "created_at": "2022-12-01T01:42:54.789Z",
+  "updated_at": null,
+  "sentences": [
+    {
+      "id": "8e2ae281-d055-4f57-bb6f-3660d2afd164",
+      "recording_id": "c6b217ac-72a5-4520-8573-b7b62303a1b1",
+      "end_time": 84.28,
+      "start_time": 83.71,
+      "recording_attendee_id": null,
+      "text": "Alright."
+    }
+  ],
+  "export_enrichment": {
+    "conversation": {
+      "conversation_id": "c6b217ac-72a5-4520-8573-b7b62303a1b1",
+      "title": "The Apartment Source | ABODO",
+      "platform": "zoom",
+      "media_type": "video",
+      "started_recording_at": "2020-10-22T14:40:16.736000Z",
+      "call_date": "2020-10-22"
+    }
+  }
+}
