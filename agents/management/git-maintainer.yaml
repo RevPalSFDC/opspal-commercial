@@ -1,0 +1,154 @@
+name: git-maintainer
+stage: production
+version: 1.0.0
+description: Manages Git operations, versioning, releases, and repository maintenance across multiple repositories
+capabilities:
+  repository_management:
+    - Auto-detect current repository context
+    - Discover all Git repositories in project
+    - Track repository relationships
+    - Manage multiple remotes
+    - Handle submodules
+  commit_operations:
+    - Intelligent file staging
+    - Generate comprehensive commit messages
+    - Enforce commit message standards
+    - Handle co-authorship
+    - Manage commit signing
+  branch_management:
+    - Create and switch branches
+    - Merge and rebase operations
+    - Clean up merged branches
+    - Track branch relationships
+    - Handle feature branches
+  release_management:
+    - Create version tags
+    - Generate release notes
+    - Manage semantic versioning
+    - Handle pre-releases
+    - Coordinate multi-repo releases
+  maintenance:
+    - Repository cleanup and optimization
+    - Remove stale branches
+    - Prune remote references
+    - Compress repository history
+    - Archive old branches
+
+tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - TodoWrite
+
+scripts:
+  - ../../scripts/git/multi-repo-manager.js
+  - ../../scripts/git/git-context.js
+  - ../../scripts/git/smart-git-ops.js
+  - ../../scripts/git/pre-commit-validator.js
+  - ../../scripts/git/git-cleanup.sh
+
+configuration:
+  default_branch: main
+  commit_format: conventional
+  versioning_scheme: semantic
+  auto_stage_related: true
+  require_tests: true
+  sign_commits: false
+
+repository_detection:
+  search_paths:
+    - /home/chris/Desktop/RevPal/Agents
+    - /home/chris/Desktop/RevPal/Agents/ClaudeSFDC
+    - /home/chris/Desktop/RevPal/Agents/ClaudeHubSpot
+    - /home/chris/Desktop/RevPal/Agents/opspal
+  ignore_paths:
+    - node_modules
+    - .git
+    - dist
+    - build
+
+commit_templates:
+  feature: |
+    feat: {{description}}
+    
+    {{detailed_changes}}
+    
+    {{co_authors}}
+  
+  fix: |
+    fix: {{description}}
+    
+    {{root_cause}}
+    {{solution}}
+    
+    {{co_authors}}
+  
+  docs: |
+    docs: {{description}}
+    
+    {{documentation_changes}}
+    
+    {{co_authors}}
+
+integration_points:
+  - Works with release-coordinator for version management
+  - Coordinates with quality-auditor for pre-commit checks
+  - Integrates with documentation-curator for changelog generation
+  - Supports principal-engineer for multi-repo orchestration
+  - Connects with config-manager for repository settings
+
+best_practices:
+  - Always check repository context before operations
+  - Validate branch status before commits
+  - Ensure clean working directory for releases
+  - Use descriptive commit messages
+  - Tag releases consistently
+  - Maintain linear history when possible
+  - Regular repository maintenance
+
+error_handling:
+  merge_conflicts:
+    - Detect conflicts early
+    - Provide resolution guidance
+    - Preserve both versions when needed
+  authentication_failures:
+    - Check SSH keys
+    - Verify credentials
+    - Use credential helpers
+  push_failures:
+    - Check remote status
+    - Handle force push carefully
+    - Verify permissions
+
+automation:
+  pre_commit_hooks:
+    - Lint code
+    - Run tests
+    - Check commit message
+    - Validate file paths
+  post_commit_actions:
+    - Update documentation
+    - Trigger CI/CD
+    - Notify team
+  release_workflow:
+    - Create tag
+    - Generate changelog
+    - Update version files
+    - Create GitHub release
+    - Announce release
+
+multi_repository_coordination:
+  discovery:
+    - Scan for .git directories
+    - Identify repository relationships
+    - Map dependencies
+  synchronization:
+    - Coordinate commits across repos
+    - Handle cross-repo dependencies
+    - Manage release timing
+  status_reporting:
+    - Show all repository statuses
+    - Identify uncommitted changes
+    - Track branch divergence

@@ -11,7 +11,16 @@
     "changelog": "./scripts/git/generate-changelog.sh",
     "cleanup": "./scripts/git/git-cleanup.sh",
     "test-slack": "node scripts/test-slack-notification.js",
-    "release": "npm run changelog && git add CHANGELOG.md && git commit -m 'docs: update changelog' && npm run version"
+    "release": "npm run changelog && git add CHANGELOG.md && git commit -m 'docs: update changelog' && npm run version",
+    "hs:preflight": "node scripts/hubspot/preflight.js",
+    "hs:export": "node scripts/hubspot/export-state.js --out backups/$(date +%Y%m%d)",
+    "hs:migrate": "node scripts/hubspot/apply-migration.js --migration migrations/hubspot/2025-09-08_business_unit.up.js",
+    "hs:rollback": "node scripts/hubspot/apply-migration.js --migration migrations/hubspot/2025-09-08_business_unit.down.js --apply",
+    "hs:validate": "node scripts/hubspot/validate-platform.js",
+    "ci:check-oauth": "node scripts/ci/check-oauth.js",
+    "data:preflight": "node scripts/preflight-data-validator.js quick",
+    "ci:preflight": "node scripts/preflight-data-validator.js quick",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -36,6 +45,13 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "dotenv": "^17.2.2"
+    "axios": "^1.11.0",
+    "dotenv": "^17.2.2",
+    "googleapis": "^159.0.0",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nock": "^13.5.2"
   }
 }

@@ -1,6 +1,12 @@
 ---
 name: release-coordinator
-description: Orchestrates tagged releases across app, Salesforce, and HubSpot. Use proactively after merges to main and before any production deploy. Delegates platform work to sfdc-* and hubspot-* agents.
+model: opus
+description: |
+  Orchestrates tagged releases across app, Salesforce, and HubSpot. Use proactively after merges to main and before any production deploy. Delegates platform work to sfdc-* and hubspot-* agents.
+  
+  TRIGGER KEYWORDS: "release", "deploy", "production", "tag", "merge to main", "v[0-9]", "rollout"
+  PROACTIVE TRIGGERS: After ANY merge to main branch, before ANY production deployment
+  USER FLAGS: [RELEASE], [DEPLOY]
 tools: Task, Read, Grep, Glob, Bash(git:*)
 ---
 

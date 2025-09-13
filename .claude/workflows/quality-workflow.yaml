@@ -1,0 +1,166 @@
+name: quality-workflow
+description: Quality improvement and friction reduction workflow
+version: 1.0.0
+trigger: 
+  - weekly_review
+  - sprint_completion
+  - manual_trigger
+
+stages:
+  - name: data-collection
+    description: Collect interaction and error data
+    parallel: true
+    agents:
+      - agent: quality-control-analyzer
+        role: collector
+        inputs:
+          - time_period: "${trigger.period || 'last_week'}"
+          - sources:
+            - claude_interactions
+            - error_logs
+            - git_commits
+            - deployment_logs
+        outputs:
+          - interaction_patterns
+          - error_patterns
+          - friction_points
+          
+      - agent: agent-auditor
+        role: auditor
+        inputs:
+          - audit_scope: all_agents
+        outputs:
+          - agent_usage_stats
+          - missed_opportunities
+          - performance_metrics
+
+  - name: pattern-analysis
+    description: Analyze patterns and identify improvements
+    agents:
+      - agent: quality-control-analyzer
+        role: analyzer
+        inputs:
+          - patterns: "${data-collection.quality-control-analyzer.interaction_patterns}"
+          - errors: "${data-collection.quality-control-analyzer.error_patterns}"
+          - usage: "${data-collection.agent-auditor.agent_usage_stats}"
+        outputs:
+          - top_10_friction_list
+          - recurring_issues
+          - improvement_opportunities
+          - qa_criteria
+
+  - name: planning
+    description: Plan improvements
+    agents:
+      - agent: sequential-planner
+        role: planner
+        condition: improvements_count > 5
+        inputs:
+          - friction_list: "${pattern-analysis.quality-control-analyzer.top_10_friction_list}"
+          - opportunities: "${pattern-analysis.quality-control-analyzer.improvement_opportunities}"
+        outputs:
+          - improvement_plan
+          - implementation_sequence
+          - success_metrics
+
+  - name: documentation-update
+    description: Update documentation with findings
+    agents:
+      - agent: docs-keeper
+        role: documenter
+        inputs:
+          - qa_criteria: "${pattern-analysis.quality-control-analyzer.qa_criteria}"
+          - friction_points: "${pattern-analysis.quality-control-analyzer.top_10_friction_list}"
+          - improvements: "${planning.sequential-planner.improvement_plan}"
+        outputs:
+          - updated_claude_md
+          - updated_examples
+          - new_qa_checklists
+
+  - name: compliance-check
+    description: Ensure changes meet standards
+    agents:
+      - agent: claude-compliance-enforcer
+        role: validator
+        inputs:
+          - proposed_changes: "${documentation-update.docs-keeper.updated_claude_md}"
+          - standards: CLAUDE.md
+        outputs:
+          - compliance_result
+          - required_adjustments
+
+  - name: implementation
+    description: Implement approved improvements
+    agents:
+      - agent: project-orchestrator
+        role: implementer
+        inputs:
+          - changes: "${compliance-check.claude-compliance-enforcer.compliance_result.approved}"
+          - repositories:
+            - current
+            - ClaudeSFDC
+            - ClaudeHubSpot
+        outputs:
+          - implementation_status
+          - updated_files
+
+  - name: monitoring-setup
+    description: Set up monitoring for improvements
+    agents:
+      - agent: quality-control-analyzer
+        role: monitor
+        inputs:
+          - metrics_to_track: "${planning.sequential-planner.success_metrics}"
+          - baseline: "${data-collection.quality-control-analyzer.friction_points}"
+        outputs:
+          - monitoring_config
+          - alert_thresholds
+          - success_criteria
+
+automation:
+  schedule:
+    weekly_review:
+      cron: "0 9 * * MON"
+      auto_approve: false
+      
+    sprint_completion:
+      trigger: git_tag_pattern
+      pattern: "sprint-*-complete"
+      auto_approve: false
+      
+  notifications:
+    - on: workflow_start
+      to: team_slack
+      message: "Quality review initiated"
+      
+    - on: friction_found
+      to: team_lead
+      severity: high
+      
+    - on: workflow_complete
+      to: team_slack
+      include: summary_report
+
+quality_metrics:
+  - metric: friction_reduction
+    baseline: "${data-collection.quality-control-analyzer.friction_points.count}"
+    target: -20%
+    
+  - metric: agent_utilization
+    baseline: "${data-collection.agent-auditor.agent_usage_stats}"
+    target: +30%
+    
+  - metric: error_rate
+    baseline: "${data-collection.quality-control-analyzer.error_patterns.rate}"
+    target: -50%
+    
+  - metric: missed_opportunities
+    baseline: "${data-collection.agent-auditor.missed_opportunities.count}"
+    target: -75%
+
+outputs:
+  - quality_report
+  - improvement_plan
+  - documentation_updates
+  - monitoring_configuration
+  - success_metrics

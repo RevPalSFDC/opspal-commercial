@@ -1,0 +1,38 @@
+name: Data Integrity Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'ClaudeSFDC/**'
+      - 'ClaudeHubSpot/**'
+      - 'scripts/**'
+      - '.mcp.json'
+      - 'package.json'
+  push:
+    branches: [ main ]
+    paths:
+      - 'ClaudeSFDC/**'
+      - 'ClaudeHubSpot/**'
+      - 'scripts/**'
+      - '.mcp.json'
+      - 'package.json'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install deps
+        run: npm ci --ignore-scripts
+
+      - name: Run data-access preflight
+        run: npm run ci:preflight
+
+      # Intentionally skip full unit tests here to keep preflight focused.

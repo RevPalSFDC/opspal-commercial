@@ -1,0 +1,161 @@
+name: merge-workflow
+description: Complex Salesforce object and field merging workflow
+version: 1.0.0
+trigger: merge_request
+
+stages:
+  - name: analysis
+    description: Analyze merge requirements and impact
+    agents:
+      - agent: sfdc-dependency-analyzer
+        role: analyzer
+        inputs:
+          - source_fields: "${merge_request.source_fields}"
+          - target_field: "${merge_request.target_field}"
+          - objects: "${merge_request.objects}"
+        outputs:
+          - dependency_map
+          - impact_analysis
+          - circular_dependencies
+
+  - name: planning
+    description: Create comprehensive merge plan
+    agents:
+      - agent: sequential-planner
+        role: planner
+        inputs:
+          - dependencies: "${analysis.sfdc-dependency-analyzer.dependency_map}"
+          - impact: "${analysis.sfdc-dependency-analyzer.impact_analysis}"
+          - constraints:
+            - zero_data_loss
+            - maintain_references
+            - preserve_history
+        outputs:
+          - merge_plan
+          - execution_sequence
+          - validation_checkpoints
+
+  - name: state-capture
+    description: Capture current state for rollback
+    agents:
+      - agent: sfdc-state-discovery
+        role: recorder
+        inputs:
+          - objects: "${merge_request.objects}"
+          - capture_data: true
+          - capture_metadata: true
+        outputs:
+          - pre_merge_state
+          - data_snapshot
+          - metadata_snapshot
+
+  - name: conflict-detection
+    description: Detect and resolve conflicts
+    agents:
+      - agent: sfdc-conflict-resolver
+        role: resolver
+        inputs:
+          - merge_plan: "${planning.sequential-planner.merge_plan}"
+          - current_state: "${state-capture.sfdc-state-discovery.pre_merge_state}"
+        outputs:
+          - conflicts
+          - resolution_strategy
+          - updated_merge_plan
+
+  - name: execution
+    description: Execute merge operation
+    agents:
+      - agent: sfdc-merge-orchestrator
+        role: executor
+        inputs:
+          - plan: "${conflict-detection.sfdc-conflict-resolver.updated_merge_plan}"
+          - sequence: "${planning.sequential-planner.execution_sequence}"
+          - checkpoints: "${planning.sequential-planner.validation_checkpoints}"
+        outputs:
+          - merge_status
+          - execution_log
+          - checkpoint_results
+        error_handler: rollback
+
+  - name: validation
+    description: Validate merge success
+    parallel: true
+    agents:
+      - agent: sfdc-state-discovery
+        role: validator
+        inputs:
+          - expected_state: "${planning.sequential-planner.merge_plan.expected_result}"
+          - actual_state: current
+        outputs:
+          - validation_result
+          - discrepancies
+          
+      - agent: quality-control-analyzer
+        role: quality_checker
+        inputs:
+          - merge_log: "${execution.sfdc-merge-orchestrator.execution_log}"
+          - validation_data: "${validation.sfdc-state-discovery.validation_result}"
+        outputs:
+          - quality_score
+          - issues_found
+
+  - name: cleanup
+    description: Clean up temporary artifacts
+    condition: merge_successful
+    agents:
+      - agent: sfdc-merge-orchestrator
+        role: cleaner
+        inputs:
+          - artifacts_to_remove:
+            - temporary_fields
+            - backup_objects
+            - staging_data
+        outputs:
+          - cleanup_status
+
+rollback:
+  trigger_conditions:
+    - execution_failure
+    - validation_failure
+    - data_loss_detected
+    
+  stages:
+    - name: restore
+      agent: sfdc-merge-orchestrator
+      inputs:
+        - backup_state: "${state-capture.sfdc-state-discovery.pre_merge_state}"
+        - data_snapshot: "${state-capture.sfdc-state-discovery.data_snapshot}"
+      
+    - name: verify_rollback
+      agent: sfdc-state-discovery
+      inputs:
+        - expected_state: "${state-capture.sfdc-state-discovery.pre_merge_state}"
+        
+    - name: notify
+      agent: docs-keeper
+      outputs:
+        - rollback_report
+
+validation_rules:
+  - rule: data_integrity
+    check: row_count_matches
+    tolerance: 0
+    
+  - rule: reference_integrity
+    check: all_lookups_valid
+    tolerance: 0
+    
+  - rule: field_mapping
+    check: all_values_migrated
+    tolerance: 0
+    
+  - rule: validation_rules
+    check: no_new_violations
+    tolerance: 0
+
+outputs:
+  - merge_result
+  - validation_report
+  - quality_metrics
+  - execution_time
+  - rollback_capability

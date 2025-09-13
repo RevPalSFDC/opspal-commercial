@@ -45,6 +45,13 @@ capabilities:
     - Build artifact management
     - Test suite orchestration
 
+scripts:
+  publish_release: ../scripts/publish-release.sh
+  send_notification: ../scripts/send-slack-notification.js
+
+environment:
+  SLACK_WEBHOOK_URL: "${SLACK_WEBHOOK_URL}"
+  
 workflow_patterns:
   release_preparation:
     steps:
@@ -143,6 +150,36 @@ monitoring_integration:
     - Response times
     - Resource utilization
     - User impact
+
+prompts:
+  release_execution: |
+    To publish a release, I will use the unified release management system:
+    1. Run: ./scripts/publish-release.sh --project=PROJECT --version=VERSION
+    2. This automatically handles:
+       - Git tag creation
+       - GitHub release publishing
+       - Slack notifications
+       - Changelog validation
+    
+  notification_handling: |
+    For release notifications:
+    - Slack webhook must be configured via SLACK_WEBHOOK_URL environment variable
+    - Use: node scripts/send-slack-notification.js VERSION PROJECT
+    - Notifications are sent automatically during release process
+    - Can be skipped with --skip-slack flag
+    
+  project_selection: |
+    Supported projects:
+    - ClaudeHubSpot (claude-hs repository)
+    - ClaudeSFDC (claude-sfdc repository)  
+    - main (RevPal Agents parent repository)
+
+notes:
+  - Slack webhook must be configured via SLACK_WEBHOOK_URL environment variable
+  - GitHub releases require gh CLI to be authenticated
+  - Tags should follow semantic versioning (vX.Y.Z)
+  - Run scripts from the scripts/ directory
+  - Test notifications with --skip-github flag first
     - Business metrics
     
   alerting:

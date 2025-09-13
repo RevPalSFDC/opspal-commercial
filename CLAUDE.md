@@ -5,7 +5,32 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 
 ## Critical Rules & Conventions
 
-### Routing & Delegation Rules
+### 🎯 AGENT DISCOVERY & ROUTING - ALWAYS CHECK FIRST
+
+**IMPORTANT**: Before attempting any task, ALWAYS check if a specialized agent exists for it:
+
+#### Quick Agent Reference Table
+| Task Pattern | Use Agent | Keywords/Triggers |
+|-------------|-----------|-------------------|
+| Release/Deploy | `release-coordinator` | "release", "deploy", "tag", "production", "merge to main" |
+| Multi-repo work | `project-orchestrator` | "across repos", "ClaudeSFDC and ClaudeHubSpot", "coordinate" |
+| SF conflicts | `sfdc-conflict-resolver` (in platforms/SFDC) | "deployment failed", "conflict", "field mismatch" |
+| SF merge | `sfdc-merge-orchestrator` (in platforms/SFDC) | "merge fields", "consolidate objects", "combine" |
+| Complex planning | `sequential-planner` | "complex", "unknown scope", "needs planning", [SEQUENTIAL] |
+| Quality review | `quality-control-analyzer` | "recurring issue", "Claude keeps", "friction" |
+| Google Drive | `gdrive-*` agents | "document", "template", "report export", "Google" |
+| Agent issues | `router-doctor`, `mcp-guardian` | "agent not found", "tool mismatch", "MCP error" |
+
+#### Proactive Agent Usage Rules
+**USE AGENTS PROACTIVELY** for these scenarios:
+1. **After git merge to main** → Immediately invoke `release-coordinator`
+2. **Before any production deploy** → Always use `release-coordinator`
+3. **When task spans multiple repos** → Start with `project-orchestrator`
+4. **After significant development** → Run `quality-control-analyzer`
+5. **When encountering repeated errors** → Use `quality-control-analyzer`
+6. **For complex unknown-scope tasks** → Engage `sequential-planner`
+
+### Original Routing & Delegation Rules
 
 - Use **release-coordinator** for any tagged release or cross-platform change; it delegates to others.
 - Use **hubspot-workflow** for workflow logic; **do not** modify data there.
@@ -19,35 +44,121 @@ General:
 - Reference shared standards via @imports to keep agent backstories short.
 - Prefer least-privilege tool sets; request escalation if needed.
 
+### 📋 Agent Discovery Prompt Template
+
+**USE THIS MENTAL CHECKLIST** before starting any task:
+
+```
+1. Does this task match any keyword in the Agent Reference Table? → Use that agent
+2. Is this a release/deployment task? → Use release-coordinator
+3. Does this involve multiple repositories? → Use project-orchestrator
+4. Is the task complexity unknown or very high? → Use sequential-planner
+5. Am I seeing repeated issues or patterns? → Use quality-control-analyzer
+6. Does this involve Salesforce metadata conflicts? → Use sfdc-conflict-resolver (in platforms/SFDC)
+7. Does this involve merging SF objects/fields? → Use sfdc-merge-orchestrator (in platforms/SFDC)
+8. Does this involve Google Drive operations? → Use gdrive-* agents
+9. Is there an agent configuration issue? → Use router-doctor or mcp-guardian
+```
+
+**Note**: Salesforce-specific agents (sfdc-*) are located in `platforms/SFDC/.claude/agents/`
+
+**If answering YES to any above → STOP and use the Task tool with that agent FIRST**
+
 ### 🧠 Complexity-Based Routing (Sequential Thinking MCP)
 
-The system now uses **automatic complexity assessment** to determine when to engage Sequential Thinking MCP:
+The system uses **automatic complexity assessment** to determine when to engage Sequential Thinking MCP:
 
 #### Always Use Sequential Thinking (HIGH Complexity > 0.7):
-- Cross-platform releases involving 3+ systems
-- Salesforce metadata deployments with 10+ objects
-- Circular dependency resolution
-- Production deployments with breaking changes
-- Multi-stage data migrations (>10,000 records)
-- Full org metadata comparisons
+**Automatic Triggers:**
+- Cross-platform releases involving 3+ systems → `sequential-planner`
+- Salesforce metadata deployments with 10+ objects → `sequential-planner` 
+- Circular dependency resolution → `sfdc-dependency-analyzer` → `sequential-planner`
+- Production deployments with breaking changes → `sequential-planner`
+- Multi-stage data migrations (>10,000 records) → `sequential-planner`
+- Full org metadata comparisons → `sfdc-state-discovery` → `sequential-planner`
+
+**Example**: "Migrate all customer data from legacy system to Salesforce and HubSpot"
+→ Automatically triggers sequential-planner due to multi-platform, high-volume migration
 
 #### Conditional Sequential Thinking (MEDIUM Complexity 0.3-0.7):
-- 3-10 object modifications
-- Workflow creation with 5+ steps
-- Permission restructuring
-- Integration setup
-- Uses Sequential if: unknown scope, production impact, or rollback needed
+**Evaluate These Factors:**
+- 3-10 object modifications → Check for dependencies first
+- Workflow creation with 5+ steps → Assess branching logic
+- Permission restructuring → Consider impact radius
+- Integration setup → Evaluate external systems
+
+**Decision Criteria for Sequential:**
+- ✅ Unknown full scope → Use sequential-planner
+- ✅ Production environment → Use sequential-planner
+- ✅ Needs rollback plan → Use sequential-planner
+- ❌ Well-defined scope → Direct execution
+- ❌ Sandbox only → Direct execution
+
+**Example**: "Create a new approval workflow with 7 steps"
+→ If production: use sequential-planner
+→ If sandbox with clear requirements: direct execution
 
 #### Direct Execution (SIMPLE Complexity < 0.3):
-- Single field creation
-- Basic SOQL queries
-- Documentation updates
-- Single record operations
-- Configuration changes
+**Skip Sequential for These:**
+- Single field creation → Direct SFDC agent
+- Basic SOQL queries → Direct query
+- Documentation updates → Direct edit
+- Single record operations → Direct operation
+- Configuration changes → Direct update
+- Simple picklist updates → Direct modification
+
+**Example**: "Add a new checkbox field to Account"
+→ Direct execution with sfdc-metadata agent
 
 #### User Control Flags:
-- `[PLAN_CAREFULLY]` or `[SEQUENTIAL]` - Force Sequential Thinking
-- `[QUICK_MODE]` or `[DIRECT]` - Skip Sequential Thinking
+- `[PLAN_CAREFULLY]` or `[SEQUENTIAL]` - **Force Sequential Thinking** regardless of complexity
+- `[QUICK_MODE]` or `[DIRECT]` - **Skip Sequential Thinking** (use with caution)
+- `[COMPLEX]` - Hint that task is more complex than it appears
+- `[SIMPLE]` - Hint that task is simpler than it appears
+
+**Flag Examples:**
+```
+User: "[SEQUENTIAL] Update the email field" 
+→ Forces sequential-planner even for simple task
+
+User: "[DIRECT] Deploy these 15 objects"
+→ Skips sequential-planner despite high count
+```
+
+### 🔗 Agent Chaining & Workflows
+
+#### Common Agent Workflows
+
+**Release Workflow Chain:**
+```
+1. release-coordinator (orchestrates) →
+   2a. sfdc-state-discovery (analyze current state) →
+   2b. sfdc-conflict-resolver (resolve conflicts) →
+   2c. sfdc-metadata deployment agents →
+   3. hubspot-* agents (platform updates) →
+   4. quality-control-analyzer (post-release review)
+```
+
+**Complex Merge Workflow:**
+```
+1. sfdc-dependency-analyzer (map dependencies) →
+   2. sequential-planner (create merge plan) →
+   3. sfdc-merge-orchestrator (execute merge) →
+   4. sfdc-state-discovery (verify results)
+```
+
+**Quality Improvement Workflow:**
+```
+1. quality-control-analyzer (identify patterns) →
+   2. docs-keeper (update documentation) →
+   3. claude-compliance-enforcer (validate changes)
+```
+
+#### Agent Handoff Patterns
+- **Orchestrator → Specialist**: project-orchestrator delegates to platform-specific agents
+- **Discovery → Action**: sfdc-state-discovery findings trigger sfdc-conflict-resolver
+- **Analysis → Planning**: sfdc-dependency-analyzer feeds into sequential-planner
+- **Action → Verification**: Any modification agent should trigger state-discovery
 
 ### Routing & Delegation (Coordinator)
 
@@ -97,7 +208,7 @@ The system now uses **automatic complexity assessment** to determine when to eng
 #### 🔴 MANDATORY Pre-Deployment Validation (Prevents 80% of Deployment Failures)
 ```bash
 # Run BEFORE every deployment - NO EXCEPTIONS
-node scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
+node platforms/SFDC/scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
 ```
 
 **Critical Validation Checks:**
@@ -334,11 +445,76 @@ npm run test:integration   # All integrations
 - Jira: Track all feature work
 - Confluence: Maintain runbooks
 
+## Data Integrity Protocol
+
+### 🚨 CRITICAL: Sub-Agent Data Integrity Requirements
+
+**MANDATORY**: All sub-agents MUST follow these data integrity rules to prevent fake data generation.
+
+#### Core Principles
+1. **NEVER generate synthetic data** without explicit "SIMULATED DATA" labeling
+2. **ALWAYS fail explicitly** when queries cannot be executed
+3. **MUST include query metadata** in all data outputs
+4. **REQUIRED data source transparency** - every data point must be labeled
+
+#### Pre-Execution Validation
+Before any data operation:
+```bash
+# Run preflight validation
+node scripts/preflight-data-validator.js salesforce
+
+# Quick CI/CD check
+node scripts/preflight-data-validator.js quick
+```
+
+#### Query Execution Requirements
+All queries must use the Safe Query Executor:
+```javascript
+const { SafeQueryExecutor } = require('./scripts/lib/safe-query-executor');
+const executor = new SafeQueryExecutor({ enforceRealData: true });
+// Will throw error if query fails - never returns fake data
+```
+
+#### Data Source Labels (MANDATORY)
+- ✅ **VERIFIED**: Live data from actual query
+- ⚠️ **SIMULATED**: Explicitly requested example data
+- ❌ **FAILED**: Query attempted but failed
+- ❓ **UNKNOWN**: Source cannot be determined
+
+#### Post-Execution Validation
+Automatic validation hook checks for:
+- Generic naming patterns (Lead 1, Opportunity 23)
+- Round percentages (15%, 30%, 45%)
+- Fake Salesforce IDs (00Q000000000000045)
+- Missing query execution evidence
+
+#### Monitoring & Detection
+```bash
+# Real-time monitoring
+node scripts/subagent-error-monitor.js start [agent-name]
+
+# Analyze output for fake data
+node scripts/subagent-query-verifier.js analyze [output-file]
+
+# Generate verification report
+node scripts/subagent-query-verifier.js report
+```
+
+#### Compliance Enforcement
+- First violation: Warning with education
+- Second violation: Agent disabled pending fix
+- Third violation: Complete rewrite required
+
+See `.claude/agents/DATA_SOURCE_REQUIREMENTS.md` for complete requirements.
+
 ## Import References
-- Salesforce Configuration: @import ClaudeSFDC/CLAUDE.md
-- HubSpot Configuration: @import ClaudeHubSpot/CLAUDE.md  
+- Salesforce Configuration: @import platforms/SFDC/CLAUDE.md
+- HubSpot Configuration: @import platforms/HS/CLAUDE.md
 - Release Workflow: @import documentation/RELEASE_WORKFLOW.md
 - Git Standards: @import documentation/GIT_WORKFLOW_OPTIMIZATION.md
+- **Agent Usage Examples**: @import .claude/AGENT_USAGE_EXAMPLES.md
+- **Agent Organization Pattern**: @import docs/AGENT_ORGANIZATION_PATTERN.md
+- **Data Integrity Requirements**: @import .claude/agents/DATA_SOURCE_REQUIREMENTS.md
 
 ## Maintenance Schedule
 

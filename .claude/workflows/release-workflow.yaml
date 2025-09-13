@@ -1,0 +1,166 @@
+name: release-workflow
+description: Comprehensive release workflow for multi-platform deployments
+version: 1.0.0
+trigger: merge_to_main
+
+stages:
+  - name: pre-release
+    description: Pre-release validation and preparation
+    agents:
+      - agent: release-coordinator
+        role: orchestrator
+        inputs:
+          - git_branch: main
+          - release_type: auto_detect
+        outputs:
+          - release_version
+          - change_summary
+    
+  - name: discovery
+    description: Analyze current state across platforms
+    parallel: true
+    agents:
+      - agent: sfdc-state-discovery
+        role: analyzer
+        inputs:
+          - org_alias: "${SALESFORCE_ORG_ALIAS}"
+        outputs:
+          - org_state
+          - drift_report
+        
+      - agent: project-orchestrator
+        role: coordinator
+        inputs:
+          - repositories:
+            - ClaudeSFDC
+            - ClaudeHubSpot
+        outputs:
+          - repo_states
+          - pending_changes
+
+  - name: conflict-resolution
+    description: Identify and resolve conflicts
+    condition: has_conflicts
+    agents:
+      - agent: sfdc-conflict-resolver
+        role: resolver
+        inputs:
+          - conflicts: "${discovery.sfdc-state-discovery.drift_report}"
+        outputs:
+          - resolution_plan
+          - fixed_metadata
+        
+      - agent: sfdc-dependency-analyzer
+        role: analyzer
+        condition: has_dependencies
+        inputs:
+          - objects: "${discovery.sfdc-state-discovery.org_state.objects}"
+        outputs:
+          - dependency_graph
+          - execution_order
+
+  - name: planning
+    description: Create deployment plan
+    agents:
+      - agent: sequential-planner
+        role: planner
+        condition: complexity > 0.7
+        inputs:
+          - scope: "${pre-release.release-coordinator.change_summary}"
+          - conflicts: "${conflict-resolution.sfdc-conflict-resolver.resolution_plan}"
+        outputs:
+          - deployment_plan
+          - rollback_strategy
+
+  - name: deployment
+    description: Execute deployment across platforms
+    agents:
+      - agent: release-coordinator
+        role: orchestrator
+        inputs:
+          - plan: "${planning.sequential-planner.deployment_plan}"
+          - version: "${pre-release.release-coordinator.release_version}"
+        delegates:
+          - sfdc-deployment-manager
+          - hubspot-deployment-manager
+        outputs:
+          - deployment_status
+          - deployment_logs
+
+  - name: verification
+    description: Verify deployment success
+    parallel: true
+    agents:
+      - agent: sfdc-state-discovery
+        role: verifier
+        inputs:
+          - expected_state: "${planning.sequential-planner.deployment_plan.salesforce}"
+        outputs:
+          - verification_result
+          
+      - agent: quality-control-analyzer
+        role: analyzer
+        inputs:
+          - deployment_logs: "${deployment.release-coordinator.deployment_logs}"
+        outputs:
+          - quality_report
+          - friction_points
+
+  - name: notification
+    description: Send notifications and create documentation
+    agents:
+      - agent: docs-keeper
+        role: documenter
+        inputs:
+          - release_notes: "${pre-release.release-coordinator.change_summary}"
+          - deployment_result: "${deployment.release-coordinator.deployment_status}"
+        outputs:
+          - updated_docs
+          - release_announcement
+
+hooks:
+  pre_workflow:
+    - validate_git_state
+    - check_ci_status
+    - backup_current_state
+    
+  post_workflow:
+    - send_slack_notification
+    - update_jira_tickets
+    - trigger_monitoring
+    
+  on_error:
+    - capture_error_context
+    - initiate_rollback
+    - alert_team
+    - create_incident_ticket
+
+error_handling:
+  retry_policy:
+    max_attempts: 3
+    backoff: exponential
+    initial_delay: 5000
+    
+  rollback_triggers:
+    - deployment_failure
+    - verification_failure
+    - critical_error
+    
+  escalation:
+    - level_1: automatic_retry
+    - level_2: team_notification
+    - level_3: manual_intervention
+
+outputs:
+  - release_version
+  - deployment_status
+  - verification_results
+  - quality_metrics
+  - documentation_updates
+
+metrics:
+  - total_duration
+  - stage_durations
+  - error_count
+  - retry_count
+  - success_rate

@@ -1,0 +1,170 @@
+# Environment files - NEVER commit these!
+.env
+.env.local
+.env.*.local
+
+# Google credentials
+*credentials*.json
+*client_secret*.json
+gdrive-auth.json
+
+# Logs
+*.log
+logs/
+.claude/logs/
+*.pid
+.last_pid
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+.cache/
+
+# Instance-specific data (contains org-specific information)
+instances/
+Instances/
+*/instances/*/
+platforms/*/instances/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+
+# Test artifacts
+*assessment*.json
+*assessment*.txt
+*neonone*
+*test_*.json
+automation-audit-*/
+*_count.txt
+*_rules.json
+*_analysis.json
+*_summary.txt
+
+# Temporary exports
+export.*.log
+lookups_*.log
+
+# Reports (may contain sensitive data)
+reports/*.csv
+reports/*.xlsx
+reports/patches/
+
+# Archive sensitive data
+Archives/
+archives/
+*/archive/
+*/archives/
+
+# Local backups  
+backups/
+*/backup/
+*.backup
+*.backup-*
+
+# HubSpot CLI configuration (contains credentials)
+ClaudeHubSpot/hubspot.config.yml
+hubspot.config.yml
+
+# Salesforce specific
+.sf/
+.sfdx/
+*/sfdx-project.json.backup
+*/temp/
+*/test-data/
+*/test-results/
+
+# Google Drive credentials and keys
+gcp-oauth.keys.json
+*oauth*.json
+*gdrive*.json
+
+# Staging and production environments
+Staging/
+RevPal/
+Salesforce/
+
+# Error logs and monitoring
+error-logging/logs/
+*/error-logging/logs/
+monitoring/
+
+# Migration and deployment artifacts
+migrations/
+*/migrations/
+sfdx-org-data/
+*/sfdx-org-data/
+mdapi-convert/
+
+# Output and generated files
+out/
+*/out/
+output/
+*/output/
+
+# Local environment configurations
+.env.template
+.env.*.template
+*.env.local
+
+# MCP and configuration backups
+.mcp.json.backup
+.config-backups/
+*.json.backup
+
+# Documentation builds and generated content
+docs/build/
+documentation/build/
+
+# Schema and template files (may contain sensitive structure info)
+schemas/
+*/schemas/
+templates/*.json
+
+# Scripts that may contain credentials or sensitive logic
+scripts/auth-*.js
+scripts/*-auth.js
+
+# Shared infrastructure configs
+shared-infrastructure/
+
+# SFDC specific folders
+sfdc-*/
+sfdx/
+
+# Test and development data
+*test_*.py
+*test_*.sh
+test_*.json
