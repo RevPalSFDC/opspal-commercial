@@ -188,9 +188,16 @@ opspal-release/
 *bluerabbit*
 *cushman*
 
-# Large scan reports
+# Large scan reports and files
 reports/path-scan-report.json
 reports/*-scan-*.json
+reports/SOQL_LINT_REPORT*.md
+reports/*LINT*.md
+*.sqlite
+*.db
+*.mp4
+*.mov
+*.avi
 
 # Backup directories
 .backups/
