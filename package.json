@@ -20,7 +20,12 @@
     "ci:check-oauth": "node scripts/ci/check-oauth.js",
     "data:preflight": "node scripts/preflight-data-validator.js quick",
     "ci:preflight": "node scripts/preflight-data-validator.js quick",
-    "test": "jest"
+    "test": "jest",
+    "scan-paths": "node scripts/path-scanner.js",
+    "refactor-paths": "node scripts/refactor-paths.js",
+    "check-paths": "node .githooks/pre-commit-path-check",
+    "setup-hooks": "bash scripts/setup-path-hooks.sh",
+    "test-config": "node config/paths.config.js"
   },
   "repository": {
     "type": "git",

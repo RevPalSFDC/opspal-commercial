@@ -15,48 +15,48 @@ After reorganizing the file structure to `platforms/SFDC/instances/`, multiple s
 
 #### Critical Path Updates Needed:
 1. **scripts/update-agents-mcp-priority.sh**
-   - Line 6: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/agents`
+   - Line 6: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/agents`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/agents`
 
 2. **scripts/setup-claude-tools.sh**
-   - Line 36: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/scripts`
+   - Line 36: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts`
 
 3. **scripts/update-opportunities-test.sh**
-   - Line 10: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/data/renewal-contracts/...`
+   - Line 10: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/data/renewal-contracts/...`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/data/renewal-contracts/...`
 
 4. **scripts/claude-performance-monitor.sh**
-   - Line 7: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/logs/claude-performance`
+   - Line 7: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/logs/claude-performance`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/logs/claude-performance`
 
 5. **scripts/update-opportunities-batch.sh**
-   - Line 10: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/data/renewal-contracts/...`
+   - Line 10: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/data/renewal-contracts/...`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/data/renewal-contracts/...`
 
 6. **scripts/deploy-revenue-fields-enhanced.sh**
-   - Line 59: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/scripts/advanced-field-deployer.js`
-   - Line 76: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/scripts/field-verification-service.js`
+   - Line 59: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts/advanced-field-deployer.js`
+   - Line 76: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts/field-verification-service.js`
    - Should use: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts/...`
 
 7. **scripts/claude-debug-setup.sh**
-   - Line 52: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/logs/claude-debug`
+   - Line 52: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/logs/claude-debug`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/logs/claude-debug`
 
 8. **scripts/safe-soql-query.sh**
-   - Line 42: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/scripts/fix-soql-query.js`
+   - Line 42: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts/fix-soql-query.js`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/scripts/fix-soql-query.js`
 
 9. **scripts/claude-optimize-config.sh**
-   - Line 6: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/.claude/settings.local.json`
+   - Line 6: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/.claude/settings.local.json`
    - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/.claude/settings.local.json`
 
 10. **scripts/claude-with-retry.sh**
-    - Line 9: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/logs/claude-wrapper`
+    - Line 9: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/logs/claude-wrapper`
     - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/logs/claude-wrapper`
 
 11. **integration/run-task-retrieval.sh**
-    - Line 4: `/home/chris/Desktop/RevPal/Agents/ClaudeSFDC/retrieve-rentable-tasks.js`
+    - Line 4: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/retrieve-rentable-tasks.js`
     - Should be: `/home/chris/Desktop/RevPal/Agents/platforms/SFDC/retrieve-rentable-tasks.js`
 
 ### 3. Instance Reference Updates
@@ -74,7 +74,7 @@ No hardcoded paths found in .claude/agents/*.md files - Good!
 ## Recommended Actions
 
 ### Immediate (High Priority)
-1. Update all ClaudeSFDC references to platforms/SFDC
+1. Update all platforms/SFDC references to platforms/SFDC
 2. Fix absolute paths in shell scripts
 3. Update instance validation logic
 
@@ -91,7 +91,7 @@ No hardcoded paths found in .claude/agents/*.md files - Good!
 ## Path Mapping Reference
 ```
 OLD PATH                              → NEW PATH
-/ClaudeSFDC/                         → /platforms/SFDC/
+/platforms/SFDC/                         → /platforms/SFDC/
 /instances/                          → /platforms/SFDC/instances/
 /sfdc-automation-builder/            → /platforms/SFDC/sfdc-automation-builder/
 /sfdc-metadata-manager/              → /platforms/SFDC/sfdc-metadata-manager/
@@ -102,7 +102,7 @@ OLD PATH                              → NEW PATH
 ## Validation Commands
 ```bash
 # Find remaining old paths
-grep -r "ClaudeSFDC" . --exclude-dir=node_modules --exclude-dir=.git
+grep -r "platforms/SFDC" . --exclude-dir=node_modules --exclude-dir=.git
 grep -r "/instances/" . --exclude-dir=node_modules --exclude-dir=.git
 grep -r "sfdc-metadata-manager" . --exclude-dir=node_modules --exclude-dir=.git
 

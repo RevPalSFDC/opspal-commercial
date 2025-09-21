@@ -1,0 +1,142 @@
+name: Path Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, master, develop]
+
+jobs:
+  validate-paths:
+    name: Check for Hard-coded Paths
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci --only=production
+          npm install dotenv
+
+      - name: Run path scanner
+        id: scan
+        run: |
+          echo "🔍 Scanning for hard-coded paths..."
+          node scripts/path-scanner.js || true
+
+          # Check if report exists and has findings
+          if [ -f "reports/path-scan-report.json" ]; then
+            TOTAL_PATHS=$(node -e "const r=require('./reports/path-scan-report.json'); console.log(r.metadata.statistics.totalPathsFound)")
+            UNIQUE_PATHS=$(node -e "const r=require('./reports/path-scan-report.json'); console.log(r.metadata.statistics.uniquePathsFound)")
+
+            echo "total_paths=$TOTAL_PATHS" >> $GITHUB_OUTPUT
+            echo "unique_paths=$UNIQUE_PATHS" >> $GITHUB_OUTPUT
+
+            if [ "$TOTAL_PATHS" -gt "0" ]; then
+              echo "⚠️ Found $TOTAL_PATHS hard-coded paths ($UNIQUE_PATHS unique)"
+
+              # Show top 10 most common paths
+              echo ""
+              echo "Top hard-coded paths found:"
+              node -e "
+                const report = require('./reports/path-scan-report.json');
+                const pathCounts = {};
+                report.findings.forEach(f => {
+                  pathCounts[f.path] = (pathCounts[f.path] || 0) + 1;
+                });
+                const sorted = Object.entries(pathCounts)
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 10);
+                sorted.forEach(([path, count]) => {
+                  console.log(\`  • \${path} (\${count} occurrences)\`);
+                });
+              "
+            else
+              echo "✅ No hard-coded paths found!"
+            fi
+          fi
+
+      - name: Check changed files
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "🔍 Checking changed files for hard-coded paths..."
+
+          # Get list of changed files
+          git fetch origin ${{ github.base_ref }}
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          # Check each changed file
+          VIOLATIONS=0
+          for file in $CHANGED_FILES; do
+            if [ -f "$file" ]; then
+              # Use our pre-commit check on individual files
+              if ! node -e "
+                const { checkFile } = require('./.githooks/pre-commit-path-check');
+                const result = checkFile('$file');
+                if (!result.pass) {
+                  console.log('❌ $file contains hard-coded paths:');
+                  result.violations.forEach(v => {
+                    console.log(\`  Line \${v.line}: \${v.path}\`);
+                  });
+                  process.exit(1);
+                }
+              " 2>/dev/null; then
+                VIOLATIONS=$((VIOLATIONS + 1))
+              fi
+            fi
+          done
+
+          if [ $VIOLATIONS -gt 0 ]; then
+            echo "❌ Found hard-coded paths in $VIOLATIONS changed files"
+            echo "💡 Run 'npm run refactor-paths' locally to fix"
+            exit 1
+          else
+            echo "✅ No hard-coded paths in changed files"
+          fi
+
+      - name: Upload scan report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: path-scan-report
+          path: reports/path-scan-report.json
+          retention-days: 30
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request' && steps.scan.outputs.total_paths > 0
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const totalPaths = ${{ steps.scan.outputs.total_paths || 0 }};
+            const uniquePaths = ${{ steps.scan.outputs.unique_paths || 0 }};
+
+            if (totalPaths > 0) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## ⚠️ Hard-coded Paths Detected
+
+Found **${totalPaths}** hard-coded paths (**${uniquePaths}** unique) in the codebase.
+
+### How to Fix:
+1. Run \`npm run refactor-paths\` locally
+2. Review and test the changes
+3. Commit the refactored code
+
+### Alternative:
+- Use environment variables: \`process.env.PROJECT_ROOT\`
+- Use path config: \`require('./config/paths.config')\`
+- Use OS utilities: \`os.homedir()\`, \`os.tmpdir()\`
+
+[View full report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+              });
+            }

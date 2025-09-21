@@ -1,0 +1,144 @@
+#!/usr/bin/env node
+/**
+ * Pre-commit hook to check for hard-coded absolute paths
+ * Prevents committing files with absolute file system paths
+ */
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+// Patterns to detect hard-coded paths
+const FORBIDDEN_PATTERNS = [
+    /\/home\/[a-zA-Z]+\/[^\s'"`;)}\]]+/g,  // Unix home paths
+    /\/Users\/[a-zA-Z]+\/[^\s'"`;)}\]]+/g, // macOS home paths
+    /[A-Z]:\\[^\\/:*?"<>|\r\n]+/g,         // Windows paths
+    /\/tmp\/[^\s'"`;)}\]]+/g,              // Temp paths (should use os.tmpdir())
+    /\/opt\/[^\s'"`;)}\]]+/g,              // Opt paths
+    /\/var\/[^\s'"`;)}\]]+/g               // Var paths
+];
+
+// Allowed exceptions (safe patterns)
+const ALLOWED_PATTERNS = [
+    /^#!\/usr\/bin\/env\s+(node|python[0-9]?|bash|sh)$/,
+    /^#!\/bin\/(sh|bash)$/,
+    /\/dev\/null/,
+    /\/etc\/passwd/,  // Common system file references in docs
+    /\/etc\/hosts/
+];
+
+// File extensions to check
+const CHECK_EXTENSIONS = [
+    '.js', '.ts', '.jsx', '.tsx',
+    '.py', '.sh', '.bash',
+    '.yaml', '.yml', '.json'
+];
+
+function checkFile(filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    if (!CHECK_EXTENSIONS.includes(ext)) {
+        return { pass: true };
+    }
+
+    try {
+        const content = fs.readFileSync(filePath, 'utf8');
+        const violations = [];
+
+        for (const pattern of FORBIDDEN_PATTERNS) {
+            const matches = content.match(pattern) || [];
+
+            for (const match of matches) {
+                // Check if this match is in the allowed list
+                const isAllowed = ALLOWED_PATTERNS.some(allowed =>
+                    allowed.test(match)
+                );
+
+                if (!isAllowed) {
+                    // Find line number
+                    const lines = content.split('\n');
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i].includes(match)) {
+                            violations.push({
+                                path: match,
+                                line: i + 1,
+                                snippet: lines[i].trim()
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return {
+            pass: violations.length === 0,
+            violations
+        };
+    } catch (error) {
+        // If we can't read the file, skip it
+        return { pass: true };
+    }
+}
+
+function main() {
+    console.log('🔍 Checking for hard-coded paths...\n');
+
+    try {
+        // Get list of staged files
+        const stagedFiles = execSync('git diff --cached --name-only', {
+            encoding: 'utf8'
+        }).trim().split('\n').filter(Boolean);
+
+        if (stagedFiles.length === 0) {
+            console.log('No staged files to check.');
+            process.exit(0);
+        }
+
+        const failures = [];
+
+        for (const file of stagedFiles) {
+            const result = checkFile(file);
+
+            if (!result.pass) {
+                failures.push({ file, violations: result.violations });
+            }
+        }
+
+        if (failures.length > 0) {
+            console.log('❌ Hard-coded paths detected!\n');
+            console.log('The following files contain absolute paths that should be replaced:\n');
+
+            for (const { file, violations } of failures) {
+                console.log(`📁 ${file}:`);
+                for (const violation of violations) {
+                    console.log(`  Line ${violation.line}: ${violation.path}`);
+                    console.log(`    ${violation.snippet}\n`);
+                }
+            }
+
+            console.log('💡 How to fix:');
+            console.log('  1. Use environment variables: process.env.PROJECT_ROOT');
+            console.log('  2. Use path config: require("./config/paths.config")');
+            console.log('  3. Use os utilities: os.homedir(), os.tmpdir()');
+            console.log('  4. Run: npm run refactor-paths\n');
+
+            console.log('To bypass this check (not recommended):');
+            console.log('  git commit --no-verify\n');
+
+            process.exit(1);
+        }
+
+        console.log('✅ No hard-coded paths found. Good job!');
+        process.exit(0);
+
+    } catch (error) {
+        console.error('Error running path check:', error.message);
+        // Don't block commit on hook errors
+        process.exit(0);
+    }
+}
+
+if (require.main === module) {
+    main();
+}
+
+module.exports = { checkFile };
