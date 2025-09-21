@@ -134,9 +134,13 @@ mdapi-convert/
 
 # Output and generated files
 out/
+out-v2/
 */out/
+*/out-v2/
 output/
 */output/
+recordings/
+iq_sdr_recordings/
 
 # Local environment configurations
 .env.template
@@ -172,3 +176,39 @@ sfdx/
 *test_*.py
 *test_*.sh
 test_*.json
+
+# Client-specific instances and data
+instances.old*/
+opspal-release/
+*rentable*
+*peregrine*
+*filmhub*
+*wedgewood*
+*neonone*
+*bluerabbit*
+*cushman*
+
+# Large scan reports
+reports/path-scan-report.json
+reports/*-scan-*.json
+
+# Backup directories
+.backups/
+*.bak
+
+# Client credentials and tokens
+*token*.json
+*secret*.json
+*apikey*
+*api-key*
+*api_key*
+
+# Salesforce org-specific
+*/instances/*/data/
+*/instances/*/temp/
+*/instances/*/logs/
+
+# HubSpot portal-specific
+*/instances/*/credentials/
+*/instances/*/auth/
+*/instances/*/tokens/
