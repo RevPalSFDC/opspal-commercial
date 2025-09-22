@@ -1,0 +1,176 @@
+name: Validate Agent Registry
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'platforms/.claude/agents.roster.json'
+      - 'platforms/**/.claude/agents/*.md'
+      - 'platforms/scripts/discover-agents.py'
+      - '.github/workflows/validate-agent-registry.yml'
+  pull_request:
+    branches: [main, master, develop]
+    paths:
+      - 'platforms/.claude/agents.roster.json'
+      - 'platforms/**/.claude/agents/*.md'
+  workflow_dispatch:
+  schedule:
+    # Run daily at 2 AM UTC to catch any drift
+    - cron: '0 2 * * *'
+
+jobs:
+  validate-registry:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: platforms
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install jq for JSON processing
+      run: sudo apt-get update && sudo apt-get install -y jq
+
+    - name: Validate agent registry exists
+      run: |
+        if [ ! -f ".claude/agents.roster.json" ]; then
+          echo "❌ Agent registry file not found!"
+          exit 1
+        fi
+        echo "✅ Agent registry file exists"
+
+    - name: Validate JSON syntax
+      run: |
+        jq empty .claude/agents.roster.json
+        echo "✅ Valid JSON syntax"
+
+    - name: Run discovery script validation
+      run: |
+        python3 scripts/discover-agents.py validate
+
+    - name: Check for significant discrepancies
+      run: |
+        # Run validation and capture output
+        output=$(python3 scripts/discover-agents.py validate 2>&1)
+
+        # Extract expected vs found from output
+        expected=$(echo "$output" | grep -oP 'Summary: \d+/\K\d+' || echo "0")
+        found=$(echo "$output" | grep -oP 'Summary: \K\d+' || echo "0")
+
+        if [ "$expected" -eq 0 ]; then
+          echo "❌ Could not parse validation output"
+          exit 1
+        fi
+
+        # Calculate difference percentage
+        diff=$((expected - found))
+        if [ "$diff" -lt 0 ]; then
+          diff=$((-diff))
+        fi
+
+        # Allow up to 10% discrepancy (for symlinks, etc.)
+        threshold=$((expected / 10))
+        if [ "$threshold" -eq 0 ]; then
+          threshold=5  # Minimum threshold of 5 agents
+        fi
+
+        echo "Expected: $expected agents"
+        echo "Found: $found agents"
+        echo "Difference: $diff agents"
+        echo "Threshold: $threshold agents"
+
+        if [ "$diff" -gt "$threshold" ]; then
+          echo "❌ Registry is significantly out of sync!"
+          echo "Run: ./scripts/update-agent-registry.sh"
+          exit 1
+        else
+          echo "✅ Registry is within acceptable range"
+        fi
+
+    - name: List discovered agents by category
+      run: |
+        echo "=== Agent Discovery Report ==="
+        python3 scripts/discover-agents.py list --verbose
+
+    - name: Check key agents exist
+      run: |
+        echo "=== Verifying Key Agents ==="
+
+        # Extract key agents from registry
+        key_agents=$(jq -r '.registry[].key_agents[]?' .claude/agents.roster.json | sort -u)
+
+        missing_agents=""
+        for agent in $key_agents; do
+          echo -n "Checking $agent... "
+          if python3 scripts/discover-agents.py find --name "$agent" | grep -q "✅ Found"; then
+            echo "✅"
+          else
+            echo "❌ NOT FOUND"
+            missing_agents="$missing_agents $agent"
+          fi
+        done
+
+        if [ -n "$missing_agents" ]; then
+          echo ""
+          echo "❌ Missing key agents:$missing_agents"
+          exit 1
+        else
+          echo ""
+          echo "✅ All key agents found"
+        fi
+
+    - name: Generate validation report
+      if: always()
+      run: |
+        echo "## Agent Registry Validation Report" > validation-report.md
+        echo "" >> validation-report.md
+        echo "**Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> validation-report.md
+        echo "" >> validation-report.md
+
+        echo "### Registry Statistics" >> validation-report.md
+        jq -r '.statistics | to_entries[] | "- **\(.key)**: \(.value)"' .claude/agents.roster.json >> validation-report.md
+
+        echo "" >> validation-report.md
+        echo "### Validation Results" >> validation-report.md
+        python3 scripts/discover-agents.py validate >> validation-report.md 2>&1
+
+        echo "" >> validation-report.md
+        echo "### Agent Categories" >> validation-report.md
+        python3 scripts/discover-agents.py list >> validation-report.md 2>&1
+
+    - name: Upload validation report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: agent-registry-validation-report
+        path: platforms/validation-report.md
+        retention-days: 30
+
+    - name: Comment on PR with validation results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('platforms/validation-report.md', 'utf8');
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: report
+          });
+
+    - name: Final status
+      run: |
+        echo "✅ Agent registry validation complete!"
+        echo ""
+        echo "Registry version: $(jq -r .version .claude/agents.roster.json)"
+        echo "Last updated: $(jq -r .updated .claude/agents.roster.json)"
+        echo "Total agents: $(jq -r .statistics.total_agents .claude/agents.roster.json)"

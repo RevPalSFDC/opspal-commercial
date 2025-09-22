@@ -1,0 +1,26 @@
+{
+  "runConfiguration": {
+    "orgAlias": "rentable-production",
+    "mode": "unprocessed",
+    "dryRun": true,
+    "batchSize": 10000,
+    "maxWaitSec": 180,
+    "outputDir": "./reports/contact-hygiene",
+    "queryLimit": 2000,
+    "verbose": true,
+    "runDir": "reports/contact-hygiene/run-2025-09-21T00-23-23-870Z"
+  },
+  "executionTime": 3728,
+  "totalContacts": 0,
+  "processedContacts": 0,
+  "skippedContacts": 0,
+  "classificationBreakdown": {},
+  "deleteReasons": {},
+  "duplicateStatistics": {
+    "totalComponents": 0,
+    "totalDuplicates": 0,
+    "sampleComponents": []
+  },
+  "batchResults": [],
+  "errors": []
+}

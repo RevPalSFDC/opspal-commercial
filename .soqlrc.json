@@ -1,0 +1,72 @@
+{
+  "description": "SOQL Query Pipeline Configuration",
+  "version": "1.0.0",
+
+  "fieldMappings": {
+    "rentable-production": {
+      "hubspot_contact_id__c": "Hubspot_ID__c",
+      "hubspot_id__c": "Hubspot_ID__c",
+      "hs_object_id__c": "Hubspot_ID__c",
+      "hubspot_object_id__c": "Hubspot_ID__c",
+      "hubspot_company_id__c": "HubSpot_Company_ID__c",
+      "hs_company_id__c": "HubSpot_Company_ID__c"
+    },
+    "rentable-sandbox": {
+      "hubspot_contact_id__c": "HubSpot_Contact_ID__c",
+      "hubspot_id__c": "HubSpot_ID__c",
+      "hs_object_id__c": "HS_Object_ID__c",
+      "hubspot_object_id__c": "HubSpot_Object_ID__c"
+    },
+    "default": {
+      "hubspot_contact_id__c": "Hubspot_ID__c",
+      "hubspot_id__c": "Hubspot_ID__c",
+      "hs_object_id__c": "Hubspot_ID__c"
+    }
+  },
+
+  "performance": {
+    "cacheEnabled": true,
+    "cacheTTL": 300000,
+    "batchSize": 100,
+    "connectionPoolSize": 5,
+    "precompileRegex": true
+  },
+
+  "security": {
+    "maxQueryLength": 10000,
+    "maxExecutionTime": 30000,
+    "maxRetries": 3,
+    "strictFieldValidation": false,
+    "strictDataValidation": true
+  },
+
+  "executionStrategies": {
+    "preferMCP": true,
+    "enableAPI": false,
+    "cliPath": "sf",
+    "fallbackChain": ["MCP", "CLI", "API"]
+  },
+
+  "monitoring": {
+    "logQueries": true,
+    "logDir": ".claude/logs/queries",
+    "metricsEnabled": true,
+    "alertThresholds": {
+      "errorRate": 0.05,
+      "averageExecutionTime": 5000,
+      "cacheHitRate": 0.3
+    }
+  },
+
+  "orgSpecific": {
+    "rentable-production": {
+      "maxExecutionTime": 60000,
+      "cacheEnabled": true
+    },
+    "rentable-sandbox": {
+      "maxExecutionTime": 30000,
+      "cacheEnabled": false,
+      "strictDataValidation": false
+    }
+  }
+}

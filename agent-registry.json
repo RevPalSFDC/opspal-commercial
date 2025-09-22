@@ -1,0 +1,271 @@
+{
+  "version": "1.0.0",
+  "updated": "2025-09-13",
+  "registry": {
+    "core": {
+      "location": ".claude/agents",
+      "agents": [
+        {
+          "name": "agent-auditor",
+          "model": "sonnet",
+          "description": "Reads .claude/agents/*.md and scores scope/overlap/permissions",
+          "category": "audit",
+          "tools": ["Read", "Grep", "Glob"],
+          "dependencies": []
+        },
+        {
+          "name": "claude-compliance-enforcer",
+          "model": "sonnet",
+          "description": "Ensures code changes comply with CLAUDE.md standards",
+          "category": "compliance",
+          "tools": ["*"],
+          "dependencies": ["CLAUDE.md"]
+        },
+        {
+          "name": "docs-keeper",
+          "model": "sonnet",
+          "description": "Proposes updates to CLAUDE.md and agent roster",
+          "category": "documentation",
+          "tools": ["Read", "Grep", "Glob"],
+          "dependencies": []
+        },
+        {
+          "name": "gdrive-document-manager",
+          "model": "sonnet",
+          "description": "Manages Google Drive document access and organization",
+          "category": "integration",
+          "tools": ["gdrive", "Read", "Grep", "Glob"],
+          "dependencies": ["gdrive MCP server"]
+        },
+        {
+          "name": "gdrive-report-exporter",
+          "model": "sonnet",
+          "description": "Exports reports to Google Sheets for analysis",
+          "category": "integration",
+          "tools": ["gdrive", "salesforce-dx", "hubspot", "Read", "Write", "Task"],
+          "dependencies": ["gdrive MCP server", "salesforce MCP", "hubspot MCP"]
+        },
+        {
+          "name": "gdrive-template-library",
+          "model": "sonnet",
+          "description": "Manages template library in Google Drive",
+          "category": "integration",
+          "tools": ["gdrive", "Read", "Write", "Glob"],
+          "dependencies": ["gdrive MCP server"]
+        },
+        {
+          "name": "mcp-guardian",
+          "model": "sonnet",
+          "description": "Validates agent tools match MCP server IDs",
+          "category": "validation",
+          "tools": ["Read", "Grep", "Glob"],
+          "dependencies": [".mcp.json"]
+        },
+        {
+          "name": "patch-smith",
+          "model": "sonnet",
+          "description": "Generates zip of proposed agent rewrites",
+          "category": "maintenance",
+          "tools": ["Read", "Grep", "Glob", "Bash"],
+          "dependencies": []
+        },
+        {
+          "name": "project-auditor",
+          "model": "sonnet",
+          "description": "Runs agent-auditor against target path",
+          "category": "audit",
+          "tools": ["Read", "Grep", "Glob", "Bash"],
+          "dependencies": ["agent-auditor"]
+        },
+        {
+          "name": "project-orchestrator",
+          "model": "sonnet",
+          "description": "Coordinates multi-repo work across platforms",
+          "category": "orchestration",
+          "tools": ["Task", "Read", "Grep", "Glob", "Bash"],
+          "dependencies": []
+        },
+        {
+          "name": "quality-control-analyzer",
+          "model": "sonnet",
+          "description": "Analyzes patterns and quality issues",
+          "category": "quality",
+          "tools": ["*"],
+          "dependencies": []
+        },
+        {
+          "name": "release-coordinator",
+          "model": "sonnet",
+          "description": "Orchestrates end-to-end release process",
+          "category": "release",
+          "tools": ["Task", "Read", "Grep", "Glob", "Bash"],
+          "dependencies": []
+        },
+        {
+          "name": "router-doctor",
+          "model": "sonnet",
+          "description": "Detects agent name collisions and overlap",
+          "category": "validation",
+          "tools": ["Read", "Grep", "Glob"],
+          "dependencies": []
+        },
+        {
+          "name": "sequential-planner",
+          "model": "sonnet",
+          "description": "Complex problem-solving using Sequential Thinking MCP",
+          "category": "planning",
+          "tools": ["sequential_thinking", "Read", "Write", "Grep", "Glob", "TodoWrite"],
+          "dependencies": ["sequential_thinking MCP server"]
+        }
+      ]
+    },
+    "salesforce": {
+      "location": "platforms/SFDC/.claude/agents",
+      "agents": [
+        {
+          "name": "sfdc-conflict-resolver",
+          "model": "sonnet",
+          "description": "Detects and resolves Salesforce metadata conflicts",
+          "category": "conflict-resolution",
+          "tools": ["mcp_salesforce", "mcp_salesforce_metadata_describe", "mcp_salesforce_field_describe", "Read", "Write", "Grep", "TodoWrite", "Bash"],
+          "dependencies": ["salesforce MCP server", "scripts/lib/conflict-detector.js", "scripts/lib/conflict-analyzer.js", "scripts/lib/conflict-resolver.js"]
+        },
+        {
+          "name": "sfdc-dependency-analyzer",
+          "model": "sonnet",
+          "description": "Analyzes dependencies between Salesforce objects",
+          "category": "analysis",
+          "tools": ["mcp_salesforce", "mcp_salesforce_metadata_describe", "mcp_salesforce_field_describe", "Read", "Write", "Grep", "TodoWrite", "Bash"],
+          "dependencies": ["salesforce MCP server"]
+        },
+        {
+          "name": "sfdc-merge-orchestrator",
+          "model": "sonnet",
+          "description": "Orchestrates Salesforce data and metadata merges",
+          "category": "data-management",
+          "tools": ["mcp_salesforce", "mcp_salesforce_metadata_deploy", "mcp_salesforce_data_query", "mcp_salesforce_data_update", "Read", "Write", "Grep", "TodoWrite", "Task", "Bash"],
+          "dependencies": ["salesforce MCP server", "sfdc-dependency-analyzer"]
+        },
+        {
+          "name": "sfdc-state-discovery",
+          "model": "sonnet",
+          "description": "Performs comprehensive Salesforce org state discovery",
+          "category": "discovery",
+          "tools": ["mcp_salesforce", "mcp_salesforce_metadata_describe", "mcp_salesforce_object_list", "mcp_salesforce_field_list", "Read", "Write", "Grep", "TodoWrite", "Bash"],
+          "dependencies": ["salesforce MCP server"]
+        }
+      ]
+    },
+    "hubspot": {
+      "location": "platforms/HS/.claude/agents",
+      "agents": []
+    }
+  },
+  "categories": {
+    "audit": {
+      "description": "Agents that perform auditing and analysis",
+      "color": "#4CAF50"
+    },
+    "compliance": {
+      "description": "Agents that enforce standards and compliance",
+      "color": "#FF9800"
+    },
+    "documentation": {
+      "description": "Agents that manage documentation",
+      "color": "#2196F3"
+    },
+    "integration": {
+      "description": "Agents that integrate with external services",
+      "color": "#9C27B0"
+    },
+    "validation": {
+      "description": "Agents that validate configurations and data",
+      "color": "#F44336"
+    },
+    "maintenance": {
+      "description": "Agents that perform maintenance tasks",
+      "color": "#795548"
+    },
+    "orchestration": {
+      "description": "Agents that coordinate other agents",
+      "color": "#00BCD4"
+    },
+    "quality": {
+      "description": "Agents that ensure quality",
+      "color": "#8BC34A"
+    },
+    "release": {
+      "description": "Agents that manage releases",
+      "color": "#FFC107"
+    },
+    "planning": {
+      "description": "Agents that plan complex operations",
+      "color": "#3F51B5"
+    },
+    "conflict-resolution": {
+      "description": "Agents that resolve conflicts",
+      "color": "#E91E63"
+    },
+    "analysis": {
+      "description": "Agents that analyze systems and data",
+      "color": "#009688"
+    },
+    "data-management": {
+      "description": "Agents that manage data operations",
+      "color": "#CDDC39"
+    },
+    "discovery": {
+      "description": "Agents that discover system state",
+      "color": "#607D8B"
+    }
+  },
+  "dependencies": {
+    "mcp_servers": [
+      "salesforce",
+      "hubspot",
+      "gdrive",
+      "sequential_thinking"
+    ],
+    "scripts": [
+      "scripts/lib/conflict-detector.js",
+      "scripts/lib/conflict-analyzer.js",
+      "scripts/lib/conflict-resolver.js",
+      "scripts/lib/field-conflict-scanner.js",
+      "scripts/lib/validation-rule-analyzer.js"
+    ],
+    "configurations": [
+      ".mcp.json",
+      "CLAUDE.md",
+      ".claude/settings.json"
+    ]
+  },
+  "statistics": {
+    "total_agents": 19,
+    "by_platform": {
+      "core": 15,
+      "salesforce": 4,
+      "hubspot": 0
+    },
+    "by_category": {
+      "audit": 2,
+      "compliance": 1,
+      "documentation": 1,
+      "integration": 3,
+      "validation": 2,
+      "maintenance": 1,
+      "orchestration": 1,
+      "quality": 1,
+      "release": 1,
+      "planning": 1,
+      "conflict-resolution": 1,
+      "analysis": 1,
+      "data-management": 1,
+      "discovery": 1
+    },
+    "by_model": {
+      "sonnet": 19,
+      "opus": 0,
+      "haiku": 0
+    }
+  }
+}

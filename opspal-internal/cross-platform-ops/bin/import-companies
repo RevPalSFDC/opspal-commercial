@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+/**
+ * HubSpot Bulk Company Import CLI
+ * Wrapper for import-contacts with company-specific defaults
+ */
+
+process.argv.splice(2, 0, '--object-type', 'companies');
+require('./import-contacts');

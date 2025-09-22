@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  hubspot-bulk:
+    build: .
+    image: hubspot-bulk-toolkit:latest
+    container_name: hubspot-bulk
+    environment:
+      - HUBSPOT_ACCESS_TOKEN=${HUBSPOT_ACCESS_TOKEN}
+      - HUBSPOT_PRIVATE_APP_KEY=${HUBSPOT_PRIVATE_APP_KEY}
+      - HS_LOG_LEVEL=${HS_LOG_LEVEL:-info}
+      - HS_MAX_CONCURRENT_IMPORTS=${HS_MAX_CONCURRENT_IMPORTS:-5}
+      - HS_MAX_ROWS_PER_FILE=${HS_MAX_ROWS_PER_FILE:-10000000}
+      - HS_DAILY_LIMIT=${HS_DAILY_LIMIT:-500000}
+    volumes:
+      - ./data:/app/data
+      - ./out:/app/out
+      - ./.jobs:/app/.jobs
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - hubspot-network
+
+  hubspot-worker:
+    build: .
+    image: hubspot-bulk-toolkit:latest
+    command: ["sh", "-c", "while true; do sleep 30; done"]
+    environment:
+      - HUBSPOT_ACCESS_TOKEN=${HUBSPOT_ACCESS_TOKEN}
+      - HUBSPOT_PRIVATE_APP_KEY=${HUBSPOT_PRIVATE_APP_KEY}
+    volumes:
+      - ./data:/app/data
+      - ./out:/app/out
+      - ./.jobs:/app/.jobs
+    deploy:
+      replicas: 3
+    networks:
+      - hubspot-network
+
+  hubspot-monitor:
+    build: .
+    image: hubspot-bulk-toolkit:latest
+    command: ["hubspot-monitor", "--follow"]
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./.jobs:/app/.jobs:ro
+      - ./out:/app/out:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - hubspot-network
+
+networks:
+  hubspot-network:
+    driver: bridge
+
+volumes:
+  hubspot-data:
+  hubspot-jobs:
+  hubspot-out:

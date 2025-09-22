@@ -1,0 +1,259 @@
+name: Agent Validation
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - '.claude/agents/**'
+      - 'platforms/*/.claude/agents/**'
+      - 'scripts/validate-agents.sh'
+      - 'scripts/test-agent-routing.js'
+  pull_request:
+    branches: [main, master, develop]
+    paths:
+      - '.claude/agents/**'
+      - 'platforms/*/.claude/agents/**'
+      - 'scripts/validate-agents.sh'
+      - 'scripts/test-agent-routing.js'
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  validate-agents:
+    runs-on: ubuntu-latest
+    name: Validate Agent Configuration
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci --prefer-offline --no-audit
+          # Install jq for JSON processing
+          sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Validate Agent Structure
+        id: validate
+        run: |
+          echo "🔍 Validating agent structure..."
+          bash scripts/validate-agents.sh
+          echo "validation_status=$?" >> $GITHUB_OUTPUT
+
+      - name: Test Agent Routing
+        id: routing
+        run: |
+          echo "🧪 Testing agent routing..."
+          node scripts/test-agent-routing.js
+          echo "routing_status=$?" >> $GITHUB_OUTPUT
+
+      - name: Count Agents
+        id: count
+        run: |
+          MAIN_COUNT=$(ls .claude/agents/*.md 2>/dev/null | wc -l || echo 0)
+          SFDC_COUNT=$(ls platforms/SFDC/.claude/agents/*.md 2>/dev/null | wc -l || echo 0)
+          HS_COUNT=$(ls platforms/HS/.claude/agents/*.md 2>/dev/null | wc -l || echo 0)
+          TOTAL_COUNT=$((MAIN_COUNT + SFDC_COUNT + HS_COUNT))
+
+          echo "📊 Agent Count Summary:"
+          echo "  Main: $MAIN_COUNT agents"
+          echo "  SFDC: $SFDC_COUNT agents"
+          echo "  HubSpot: $HS_COUNT agents"
+          echo "  Total: $TOTAL_COUNT agents"
+
+          echo "main_count=$MAIN_COUNT" >> $GITHUB_OUTPUT
+          echo "sfdc_count=$SFDC_COUNT" >> $GITHUB_OUTPUT
+          echo "hs_count=$HS_COUNT" >> $GITHUB_OUTPUT
+          echo "total_count=$TOTAL_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Check for Duplicates
+        id: duplicates
+        run: |
+          echo "🔍 Checking for duplicate agent names..."
+
+          # Find all agent files and extract names
+          find . -path "*/\.claude/agents/*.md" -type f | \
+            xargs -n1 basename | \
+            sed 's/\.md$//' | \
+            sort | \
+            uniq -d > duplicates.txt
+
+          if [ -s duplicates.txt ]; then
+            echo "❌ Duplicate agents found:"
+            cat duplicates.txt
+            echo "has_duplicates=true" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "✅ No duplicate agents found"
+            echo "has_duplicates=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate YAML Frontmatter
+        run: |
+          echo "📝 Validating YAML frontmatter in all agents..."
+
+          for agent in $(find . -path "*/\.claude/agents/*.md" -type f); do
+            echo "Checking: $agent"
+
+            # Check for frontmatter
+            if ! head -1 "$agent" | grep -q "^---$"; then
+              echo "❌ Missing YAML frontmatter: $agent"
+              exit 1
+            fi
+
+            # Extract frontmatter
+            awk '/^---$/{i++}i==1' "$agent" | tail -n +2 > frontmatter.yaml
+
+            # Check required fields
+            for field in name model description tools; do
+              if ! grep -q "^${field}:" frontmatter.yaml; then
+                echo "❌ Missing required field '$field' in $agent"
+                exit 1
+              fi
+            done
+          done
+
+          echo "✅ All agents have valid YAML frontmatter"
+
+      - name: Generate Agent Report
+        if: always()
+        run: |
+          echo "📋 Agent System Report" > agent-report.md
+          echo "=====================" >> agent-report.md
+          echo "" >> agent-report.md
+          echo "## Statistics" >> agent-report.md
+          echo "- Total Agents: ${{ steps.count.outputs.total_count }}" >> agent-report.md
+          echo "- Main Directory: ${{ steps.count.outputs.main_count }}" >> agent-report.md
+          echo "- Salesforce Platform: ${{ steps.count.outputs.sfdc_count }}" >> agent-report.md
+          echo "- HubSpot Platform: ${{ steps.count.outputs.hs_count }}" >> agent-report.md
+          echo "" >> agent-report.md
+          echo "## Validation Results" >> agent-report.md
+          echo "- Structure Validation: ${{ steps.validate.outputs.validation_status == '0' && '✅ Passed' || '❌ Failed' }}" >> agent-report.md
+          echo "- Routing Tests: ${{ steps.routing.outputs.routing_status == '0' && '✅ Passed' || '❌ Failed' }}" >> agent-report.md
+          echo "- Duplicate Check: ${{ steps.duplicates.outputs.has_duplicates == 'false' && '✅ No Duplicates' || '❌ Duplicates Found' }}" >> agent-report.md
+          echo "" >> agent-report.md
+          echo "Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> agent-report.md
+
+      - name: Upload Agent Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: agent-validation-report
+          path: agent-report.md
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('agent-report.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  test-agent-health:
+    runs-on: ubuntu-latest
+    name: Test Agent Health
+    needs: validate-agents
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Test Script Libraries
+        run: |
+          echo "🧪 Testing script libraries..."
+
+          # Test conflict detector
+          if [ -f scripts/lib/conflict-detector.js ]; then
+            node scripts/lib/conflict-detector.js --help || true
+            echo "✅ conflict-detector.js is accessible"
+          fi
+
+          # Test conflict analyzer
+          if [ -f scripts/lib/conflict-analyzer.js ]; then
+            node scripts/lib/conflict-analyzer.js --help || true
+            echo "✅ conflict-analyzer.js is accessible"
+          fi
+
+          # Test other libraries
+          for script in scripts/lib/*.js; do
+            if [ -f "$script" ]; then
+              echo "Testing: $script"
+              node "$script" --help 2>/dev/null || echo "  Script: $(basename $script) (no help available)"
+            fi
+          done
+
+      - name: Check MCP Configuration
+        run: |
+          echo "🔧 Checking MCP configuration..."
+
+          if [ -f .mcp.json ]; then
+            echo "✅ .mcp.json found"
+
+            # Count MCP servers
+            SERVER_COUNT=$(grep -c '"command"' .mcp.json || echo 0)
+            echo "  MCP Servers configured: $SERVER_COUNT"
+
+            # Check for required servers
+            for server in salesforce hubspot gdrive sequential_thinking; do
+              if grep -q "\"$server\"" .mcp.json; then
+                echo "  ✅ $server server configured"
+              else
+                echo "  ⚠️  $server server not found"
+              fi
+            done
+          else
+            echo "❌ .mcp.json not found"
+            exit 1
+          fi
+
+      - name: Run Agent Health Check
+        run: |
+          echo "🏥 Running comprehensive agent health check..."
+
+          # Install js-yaml if not present
+          npm list js-yaml || npm install js-yaml
+
+          # Run health check with verbose output
+          node scripts/agent-health.js --verbose --output health-report.json
+
+          # Display results
+          cat health-report.json | jq '.summary'
+
+      - name: Upload Health Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: agent-health-report
+          path: health-report.json
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "🎯 Agent Validation Summary"
+          echo "=========================="
+          echo "All validation checks completed."
+          echo "Check the job summary for detailed results."

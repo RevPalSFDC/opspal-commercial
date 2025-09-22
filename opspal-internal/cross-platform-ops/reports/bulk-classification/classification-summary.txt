@@ -1,0 +1,28 @@
+
+============================================================
+=== COMPLETE Contact Classification Summary (Bulk API 2.0) ===
+
+Total Records: 254176
+Total Processed: 31196
+Total Skipped: 222980 (already classified)
+
+Clean Status Distribution:
+  OK: 1350 (4%)
+  Duplicate: 4224 (14%)
+  Delete: 24767 (79%)
+  Archive: 76 (0%)
+  Review: 779 (2%)
+
+Delete Reasons:
+  No Email or Phone: 22106
+  Duplicate - Has Master: 4224
+  No Activity 3+ Years: 2202
+  Missing Critical Info: 779
+  Inactive 3+ Years: 459
+  Old Inactive Contact: 76
+
+Duplicate Statistics:
+  Total Duplicates: 4224
+  Duplicate Sets: 18681
+
+============================================================

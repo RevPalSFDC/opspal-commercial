@@ -1,0 +1,23 @@
+{
+  "processedAt": "2025-09-20T21:17:04.108Z",
+  "total": 34956,
+  "processed": 0,
+  "cleanStatusCounts": {
+    "OK": 0,
+    "Duplicate": 0,
+    "Delete": 0,
+    "Archive": 0,
+    "Review": 0
+  },
+  "deleteReasons": {},
+  "duplicateStats": {
+    "totalDuplicates": 0,
+    "duplicateSets": 0
+  },
+  "errors": [],
+  "recommendations": [
+    "Run duplicate merge process for identified duplicate sets",
+    "Export and archive records marked for deletion before removing",
+    "Review contacts missing critical fields for data enrichment"
+  ]
+}

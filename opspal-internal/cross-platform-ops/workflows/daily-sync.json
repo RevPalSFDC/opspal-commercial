@@ -1,0 +1,148 @@
+{
+  "name": "daily-salesforce-hubspot-sync",
+  "description": "Daily synchronization from Salesforce to HubSpot with quality checks",
+  "schedule": "0 2 * * *",
+  "notifications": {
+    "slack": {
+      "channel": "#data-ops",
+      "onSuccess": true,
+      "onFailure": true
+    }
+  },
+  "steps": [
+    {
+      "id": "export-salesforce",
+      "agent": "sfdc-export",
+      "type": "export",
+      "config": {
+        "object": "Contact",
+        "filter": "LastModifiedDate >= YESTERDAY",
+        "fields": ["Email", "FirstName", "LastName", "Phone", "AccountId", "OwnerId"],
+        "outputPath": "./exports/sf-daily-${date}.csv"
+      },
+      "timeout": 1800000,
+      "retryOnFailure": true
+    },
+    {
+      "id": "quality-check",
+      "agent": "data-quality-analyzer",
+      "type": "validation",
+      "dependsOn": ["export-salesforce"],
+      "config": {
+        "input": "${export-salesforce.output}",
+        "rules": {
+          "requiredFields": ["Email"],
+          "minQualityScore": 70,
+          "maxDuplicateRate": 10
+        }
+      },
+      "continueOnFailure": false
+    },
+    {
+      "id": "deduplicate",
+      "agent": "hubspot-deduplication-specialist",
+      "type": "deduplication",
+      "dependsOn": ["quality-check"],
+      "config": {
+        "input": "${quality-check.output}",
+        "strategy": "email,phone",
+        "existingDataCheck": true,
+        "outputPath": "./processed/deduped-${date}.csv"
+      }
+    },
+    {
+      "id": "field-mapping",
+      "agent": "field-mapping-specialist",
+      "type": "transformation",
+      "dependsOn": ["deduplicate"],
+      "config": {
+        "input": "${deduplicate.output}",
+        "mappingFile": "./mappings/sf-to-hs-contact.json",
+        "transformations": ["normalizePhone", "mapLifecycleStage"],
+        "outputPath": "./processed/mapped-${date}.csv"
+      }
+    },
+    {
+      "id": "import-hubspot",
+      "agent": "hubspot-bulk-import-specialist",
+      "type": "import",
+      "dependsOn": ["field-mapping"],
+      "config": {
+        "input": "${field-mapping.output}",
+        "object": "contacts",
+        "updateExisting": true,
+        "createNew": true,
+        "matchField": "email"
+      },
+      "monitoring": {
+        "agent": "performance-monitor",
+        "metrics": ["throughput", "errors", "apiUsage"]
+      }
+    },
+    {
+      "id": "error-recovery",
+      "agent": "error-recovery-specialist",
+      "type": "recovery",
+      "dependsOn": ["import-hubspot"],
+      "runCondition": "${import-hubspot.errors} > 0",
+      "config": {
+        "input": "${import-hubspot.errorFile}",
+        "autoFix": true,
+        "maxAttempts": 3,
+        "outputPath": "./recovery/fixed-${date}.csv"
+      }
+    },
+    {
+      "id": "generate-report",
+      "agent": "performance-monitor",
+      "type": "reporting",
+      "dependsOn": ["import-hubspot", "error-recovery"],
+      "alwaysRun": true,
+      "config": {
+        "metrics": {
+          "totalRecords": "${export-salesforce.count}",
+          "duplicatesRemoved": "${deduplicate.duplicateCount}",
+          "imported": "${import-hubspot.successCount}",
+          "failed": "${import-hubspot.errorCount}",
+          "recovered": "${error-recovery.fixedCount}"
+        },
+        "outputPath": "./reports/daily-sync-${date}.html"
+      }
+    }
+  ],
+  "onSuccess": {
+    "actions": [
+      {
+        "type": "slack",
+        "message": "✅ Daily sync completed: ${import-hubspot.successCount} records synced"
+      },
+      {
+        "type": "email",
+        "to": "data-team@company.com",
+        "subject": "Daily Sync Success",
+        "attachReport": true
+      }
+    ]
+  },
+  "onFailure": {
+    "actions": [
+      {
+        "type": "slack",
+        "message": "❌ Daily sync failed at step: ${failed.step}"
+      },
+      {
+        "type": "pagerduty",
+        "severity": "warning"
+      }
+    ],
+    "rollback": false
+  },
+  "performance": {
+    "expectedDuration": 3600000,
+    "alertThreshold": 7200000,
+    "resourceLimits": {
+      "memory": "2GB",
+      "cpu": "2 cores"
+    }
+  }
+}

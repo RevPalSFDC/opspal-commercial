@@ -1,0 +1,56 @@
+[
+  {
+    "source": 0,
+    "target": 10,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 22.5
+  },
+  {
+    "source": 2,
+    "target": 10,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 22.5
+  },
+  {
+    "source": 4,
+    "target": 1,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 22.5
+  },
+  {
+    "source": 11,
+    "target": 1,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 21
+  },
+  {
+    "source": 6,
+    "target": 3,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 20.96153846153846
+  },
+  {
+    "source": 8,
+    "target": 5,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 22.5
+  },
+  {
+    "source": 15,
+    "target": 7,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 21.73076923076923
+  },
+  {
+    "source": 16,
+    "target": 9,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 21.38888888888889
+  },
+  {
+    "source": 13,
+    "target": 12,
+    "matchType": "email,phone,nameCompany,fuzzyName",
+    "confidence": 22.5
+  }
+]

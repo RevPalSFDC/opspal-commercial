@@ -1,0 +1,74 @@
+{
+  "runConfiguration": {
+    "orgAlias": "rentable-production",
+    "mode": "unprocessed",
+    "dryRun": true,
+    "batchSize": 10000,
+    "maxWaitSec": 180,
+    "outputDir": "./reports/contact-hygiene",
+    "queryLimit": 2000,
+    "verbose": false,
+    "runDir": "reports/contact-hygiene/run-2025-09-21T00-26-14-558Z"
+  },
+  "executionTime": 10611,
+  "totalContacts": 4000,
+  "processedContacts": 4000,
+  "skippedContacts": 0,
+  "classificationBreakdown": {
+    "Delete": 732,
+    "Archive": 1,
+    "OK": 1649,
+    "Duplicate": 1618
+  },
+  "deleteReasons": {
+    "No Activity 3+ Years": 52,
+    "Old Inactive Contact": 1,
+    "No Email or Phone": 676,
+    "Duplicate": 1618,
+    "Inactive 3+ Years": 4
+  },
+  "duplicateStatistics": {
+    "totalComponents": 512,
+    "totalDuplicates": 1205,
+    "sampleComponents": [
+      {
+        "size": 7,
+        "master": "0032A00002az082QAA",
+        "edgeTypes": [
+          "phone"
+        ],
+        "sample": [
+          "0032A00002az082QAA",
+          "0033j00004B1pciAAB",
+          "0033j00004B1pckAAB"
+        ]
+      },
+      {
+        "size": 7,
+        "master": "0033j00003wOhe5AAC",
+        "edgeTypes": [
+          "phone"
+        ],
+        "sample": [
+          "0033j00003wOhe5AAC",
+          "0033j00004B1tPyAAJ",
+          "0033j00004B1tNzAAJ"
+        ]
+      },
+      {
+        "size": 9,
+        "master": "003Rh000000SBg2IAG",
+        "edgeTypes": [
+          "phone"
+        ],
+        "sample": [
+          "003Rh000000SBg2IAG",
+          "0033j00004B1wHFAAZ",
+          "0033j00004B1wJHAAZ"
+        ]
+      }
+    ]
+  },
+  "batchResults": [],
+  "errors": []
+}

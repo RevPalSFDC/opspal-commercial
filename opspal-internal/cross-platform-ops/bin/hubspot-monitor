@@ -1,0 +1,128 @@
+#!/usr/bin/env node
+
+/**
+ * HubSpot Bulk Operations Monitor
+ * Real-time dashboard for tracking bulk operations
+ */
+
+const { program } = require('commander');
+const chalk = require('chalk');
+const { getMonitor } = require('../lib/hubspot-bulk/monitoring');
+const fs = require('fs');
+const path = require('path');
+
+async function main() {
+    program
+        .name('hubspot-monitor')
+        .description('Monitor HubSpot bulk operations in real-time')
+        .option('-f, --follow', 'Follow operations in real-time')
+        .option('-j, --json', 'Output metrics as JSON')
+        .option('-o, --output <file>', 'Save metrics to file')
+        .option('-p, --port <port>', 'Start web dashboard on port', '3000')
+        .parse(process.argv);
+
+    const options = program.opts();
+    const monitor = getMonitor();
+
+    if (options.json) {
+        // Output current metrics as JSON
+        const metrics = monitor.exportMetrics();
+
+        if (options.output) {
+            await fs.promises.writeFile(options.output, JSON.stringify(metrics, null, 2));
+            console.log(chalk.green(`✓ Metrics saved to ${options.output}`));
+        } else {
+            console.log(JSON.stringify(metrics, null, 2));
+        }
+    } else if (options.follow) {
+        // Start real-time monitoring
+        console.log(chalk.cyan('Starting real-time monitor...'));
+        console.log(chalk.gray('Press Ctrl+C to exit\n'));
+
+        // Start auto-refresh
+        monitor.startAutoRefresh(5000);
+
+        // Load existing operations from state files
+        await loadExistingOperations(monitor);
+
+        // Handle graceful shutdown
+        process.on('SIGINT', () => {
+            monitor.stopAutoRefresh();
+            console.log(chalk.yellow('\n\nMonitor stopped.'));
+
+            // Export final metrics
+            const metrics = monitor.exportMetrics();
+            const metricsFile = `metrics-${Date.now()}.json`;
+            fs.writeFileSync(metricsFile, JSON.stringify(metrics, null, 2));
+            console.log(chalk.green(`Final metrics saved to ${metricsFile}`));
+
+            process.exit(0);
+        });
+    } else {
+        // Display current state
+        await loadExistingOperations(monitor);
+        console.log(monitor.getTextSummary());
+    }
+}
+
+/**
+ * Load existing operations from job state files
+ */
+async function loadExistingOperations(monitor) {
+    const jobDir = '.jobs/hubspot';
+
+    try {
+        const files = await fs.promises.readdir(jobDir);
+
+        for (const file of files) {
+            if (!file.endsWith('.json')) continue;
+
+            const filepath = path.join(jobDir, file);
+            const content = await fs.promises.readFile(filepath, 'utf8');
+            const state = JSON.parse(content);
+
+            // Track operation
+            const opId = state.name || state.importId || state.taskId || file.replace('.json', '');
+            const opType = file.includes('import') ? 'import' : 'export';
+
+            monitor.trackOperation(opId, opType, {
+                totalRows: state.summary?.totalRows || 0,
+                source: filepath
+            });
+
+            // Update progress
+            if (state.summary) {
+                monitor.updateProgress(opId, {
+                    processed: state.summary.successRows || 0,
+                    failed: state.summary.failedRows || 0,
+                    total: state.summary.totalRows || 0,
+                    status: state.status || 'PROCESSING'
+                });
+            }
+
+            // Complete if done
+            if (state.status === 'DONE' || state.completedAt) {
+                monitor.completeOperation(opId, {
+                    success: true,
+                    summary: state.summary
+                });
+            }
+        }
+    } catch (error) {
+        if (error.code !== 'ENOENT') {
+            console.error(chalk.yellow(`Warning: Could not load job states: ${error.message}`));
+        }
+    }
+}
+
+// Handle errors
+process.on('unhandledRejection', (error) => {
+    console.error(chalk.red('Error:'), error);
+    process.exit(1);
+});
+
+// Run
+main().catch(error => {
+    console.error(chalk.red('Fatal error:'), error);
+    process.exit(1);
+});

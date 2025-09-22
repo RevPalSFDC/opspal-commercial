@@ -1,0 +1,119 @@
+[
+  {
+    "Email": "john.doe@example.com",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Phone": "555-0100",
+    "Company": "Acme Corp",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 10,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  },
+  {
+    "Email": "john.doe@example.com",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Phone": "555-0100",
+    "Company": "Acme Corp",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 10,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  },
+  {
+    "Email": "jane.smith@example.com",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Phone": "(555) 010-1",
+    "Company": "Tech Solutions",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 1,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  },
+  {
+    "Email": "jane.smith@example.com",
+    "FirstName": "J.",
+    "LastName": "Smith",
+    "Phone": "555-0101",
+    "Company": "TechSolutions",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 1,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  },
+  {
+    "Email": "bob.wilson@demo.com",
+    "FirstName": "Robert",
+    "LastName": "Wilson",
+    "Phone": "5550102",
+    "Company": "Demo Inc",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 3,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 70
+    }
+  },
+  {
+    "Email": "alice.johnson@test.com",
+    "FirstName": "Alice",
+    "LastName": "Johnson",
+    "Phone": "555.0103",
+    "Company": "Test Company",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 5,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  },
+  {
+    "Email": "charlie.brown@example.com",
+    "FirstName": "Charles",
+    "LastName": "Brown",
+    "Phone": "(555)010-4",
+    "Company": "Example LLC",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 7,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  },
+  {
+    "Email": "david.lee@sample.com",
+    "FirstName": "Dave",
+    "LastName": "Lee",
+    "Phone": "555.0105",
+    "Company": "Sample Corp",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 9,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 70
+    }
+  },
+  {
+    "Email": "test@test.com",
+    "FirstName": "Test",
+    "LastName": "User",
+    "Phone": "5559999",
+    "Company": "Test Account",
+    "_dedup": {
+      "isMaster": false,
+      "masterId": 12,
+      "matchType": "email,phone,nameCompany,fuzzyName",
+      "score": 50
+    }
+  }
+]

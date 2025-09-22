@@ -1,0 +1,14 @@
+
+HubSpot-Salesforce Sync Verification Summary
+============================================
+Execution Time: 429s
+Salesforce Contacts: 254176
+HubSpot Contacts: 19628
+
+Sync Status Breakdown:
+  Synced: 0 (0.0%)
+  Exists Both Not Linked: 21 (0.0%)
+  In HS Not on Inclusion List: 0 (0.0%)
+  Not in HubSpot: 254155 (100.0%)
+
+Upload Errors: 0

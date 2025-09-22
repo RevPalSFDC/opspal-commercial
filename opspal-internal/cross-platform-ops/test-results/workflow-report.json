@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-09-21T20:31:54.973Z",
+  "workflow": "multi-agent-test",
+  "results": {
+    "quality": {
+      "records": 20,
+      "score": 83,
+      "issues": {
+        "missingEmail": 1,
+        "invalidPhone": 6
+      }
+    },
+    "deduplication": {
+      "duplicates": 9,
+      "groups": 7
+    },
+    "errorRecovery": {
+      "total": 2,
+      "fixed": 1,
+      "rate": 50
+    },
+    "performance": {
+      "duration": 150,
+      "operations": 4,
+      "recordsProcessed": 20,
+      "throughput": 133
+    }
+  },
+  "summary": {
+    "status": "success",
+    "totalOperations": 4,
+    "successfulOperations": 4,
+    "overallScore": 80
+  }
+}

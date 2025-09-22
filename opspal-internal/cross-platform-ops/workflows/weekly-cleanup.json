@@ -1,0 +1,133 @@
+{
+  "name": "weekly-data-cleanup",
+  "description": "Weekly data quality cleanup and maintenance",
+  "schedule": "0 3 * * 0",
+  "priority": "low",
+  "steps": [
+    {
+      "id": "export-all-contacts",
+      "agent": "hubspot-export-specialist",
+      "type": "export",
+      "config": {
+        "object": "contacts",
+        "allRecords": true,
+        "properties": ["email", "firstname", "lastname", "phone", "company", "lifecyclestage", "hs_lead_status"],
+        "format": "csv",
+        "streaming": true,
+        "outputPath": "./exports/weekly-all-contacts-${date}.csv"
+      },
+      "timeout": 14400000
+    },
+    {
+      "id": "quality-analysis",
+      "agent": "data-quality-analyzer",
+      "type": "analysis",
+      "dependsOn": ["export-all-contacts"],
+      "config": {
+        "input": "${export-all-contacts.output}",
+        "comprehensive": true,
+        "checks": [
+          "completeness",
+          "validity",
+          "consistency",
+          "duplicates",
+          "anomalies"
+        ],
+        "reportPath": "./reports/weekly-quality-${date}.json"
+      }
+    },
+    {
+      "id": "deep-deduplication",
+      "agent": "hubspot-deduplication-specialist",
+      "type": "deduplication",
+      "dependsOn": ["quality-analysis"],
+      "runCondition": "${quality-analysis.duplicateRate} > 2",
+      "config": {
+        "input": "${export-all-contacts.output}",
+        "strategy": "all",
+        "aggressive": true,
+        "fuzzyMatching": {
+          "enabled": true,
+          "threshold": 0.85
+        },
+        "outputPath": "./processed/weekly-deduped-${date}.csv"
+      }
+    },
+    {
+      "id": "fix-data-issues",
+      "agent": "error-recovery-specialist",
+      "type": "cleanup",
+      "dependsOn": ["quality-analysis"],
+      "config": {
+        "issues": "${quality-analysis.issues}",
+        "autoFix": [
+          "email_format",
+          "phone_normalization",
+          "date_standardization",
+          "case_consistency"
+        ],
+        "manualReviewPath": "./review/needs-attention-${date}.csv"
+      }
+    },
+    {
+      "id": "archive-old-data",
+      "agent": "job-orchestrator",
+      "type": "maintenance",
+      "dependsOn": ["deep-deduplication", "fix-data-issues"],
+      "config": {
+        "actions": [
+          {
+            "type": "archive",
+            "criteria": "lastActivityDate < 365 days ago",
+            "destination": "./archive/contacts-${year}.csv"
+          },
+          {
+            "type": "delete",
+            "criteria": "email IN ('test@test.com', 'demo@demo.com')",
+            "requireConfirmation": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "update-cleaned-data",
+      "agent": "hubspot-bulk-import-specialist",
+      "type": "import",
+      "dependsOn": ["fix-data-issues"],
+      "config": {
+        "input": "${fix-data-issues.output}",
+        "updateOnly": true,
+        "skipCreate": true,
+        "batchSize": 10000
+      }
+    },
+    {
+      "id": "generate-summary",
+      "agent": "performance-monitor",
+      "type": "reporting",
+      "alwaysRun": true,
+      "config": {
+        "reportType": "weekly-cleanup",
+        "metrics": {
+          "totalRecords": "${export-all-contacts.count}",
+          "qualityScore": "${quality-analysis.overallScore}",
+          "duplicatesFound": "${deep-deduplication.duplicateCount}",
+          "issuesFixed": "${fix-data-issues.fixedCount}",
+          "recordsArchived": "${archive-old-data.archivedCount}",
+          "recordsUpdated": "${update-cleaned-data.successCount}"
+        },
+        "sendTo": ["data-team@company.com", "ops-manager@company.com"]
+      }
+    }
+  ],
+  "notifications": {
+    "email": {
+      "recipients": ["data-team@company.com"],
+      "includeReport": true
+    },
+    "slack": {
+      "channel": "#data-quality",
+      "summary": true
+    }
+  }
+}

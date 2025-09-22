@@ -1,0 +1,30 @@
+{
+  "processedAt": "2025-09-20T17:30:21.902Z",
+  "totalAnalyzed": 1000,
+  "categories": {
+    "highQuality": 965,
+    "mediumQuality": 35,
+    "lowQuality": 0,
+    "duplicates": 1,
+    "inBothSystemsNotSynced": 3
+  },
+  "recommendations": {
+    "immediateAction": [
+      "Add 3 contacts to HubSpot Inclusion List",
+      "Review and merge 1 duplicate contact groups",
+      "Archive or delete 0 low-quality contacts"
+    ],
+    "fieldDeployment": "Custom fields deployed but not yet available in API - may need cache refresh or permission update",
+    "nextSteps": [
+      "Import contacts-in-both-not-synced.csv to HubSpot Inclusion List",
+      "Review duplicate-contacts.csv for merge candidates",
+      "Evaluate low-quality-contacts.csv for cleanup"
+    ]
+  },
+  "files": {
+    "contactsInBoth": "reports/contact-processing/contacts-in-both-not-synced.csv",
+    "duplicates": "reports/contact-processing/duplicate-contacts.csv",
+    "lowQuality": "reports/contact-processing/low-quality-contacts.csv",
+    "apexScript": "reports/contact-processing/update-contacts.apex"
+  }
+}

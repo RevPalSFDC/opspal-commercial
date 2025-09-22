@@ -1,0 +1,28 @@
+
+Contact Hygiene Pipeline - Execution Summary
+============================================
+Run Mode: unprocessed | Dry Run: true
+Execution Time: 11s
+Total Contacts: 4000
+Processed: 4000
+Skipped: 0
+
+Classification Breakdown:
+  Delete: 732
+  Archive: 1
+  OK: 1649
+  Duplicate: 1618
+
+Delete Reasons:
+  No Activity 3+ Years: 52
+  Old Inactive Contact: 1
+  No Email or Phone: 676
+  Duplicate: 1618
+  Inactive 3+ Years: 4
+
+Duplicate Detection:
+  Total Components: 512
+  Total Duplicates: 1205
+
+
+[DRY RUN MODE - No changes were made to Salesforce]

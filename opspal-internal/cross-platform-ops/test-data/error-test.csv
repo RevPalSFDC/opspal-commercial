@@ -1,0 +1,4 @@
+Email,FirstName,LastName,Phone,Company
+invalid-email,John,Doe,555-0100,Test
+test@,Jane,Smith,invalid-phone,Test
+valid@email.com,Bob,Wilson,555-0102,Test

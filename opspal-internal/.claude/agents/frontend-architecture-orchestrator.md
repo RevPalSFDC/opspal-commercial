@@ -1,0 +1,1 @@
+/home/chris/Desktop/RevPal/Agents/.claude/agents/frontend-architecture-orchestrator.md

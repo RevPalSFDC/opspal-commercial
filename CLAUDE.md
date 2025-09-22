@@ -14,8 +14,13 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 |-------------|-----------|-------------------|
 | Release/Deploy | `release-coordinator` | "release", "deploy", "tag", "production", "merge to main" |
 | Multi-repo work | `project-orchestrator` | "across repos", "ClaudeSFDC and ClaudeHubSpot", "coordinate" |
-| SF conflicts | `sfdc-conflict-resolver` (in platforms/SFDC) | "deployment failed", "conflict", "field mismatch" |
-| SF merge | `sfdc-merge-orchestrator` (in platforms/SFDC) | "merge fields", "consolidate objects", "combine" |
+| Cross-platform orchestration | `unified-orchestrator` (opspal-internal) | "both platforms", "coordinate SF and HS", "multi-platform" |
+| Cross-platform reporting | `unified-reporting-aggregator` (opspal-internal) | "unified dashboard", "combined metrics", "executive report" |
+| Cross-platform data quality | `unified-data-quality-validator` (opspal-internal) | "data consistency", "sync quality", "validation across platforms" |
+| Instance management | `platform-instance-manager` (opspal-internal) | "switch environment", "manage instances", "all platforms" |
+| SF/HS sync | `sfdc-hubspot-bridge` (opspal-internal) | "bidirectional sync", "data bridge", "SF to HS" |
+| SF conflicts | `sfdc-conflict-resolver` (in opspal-internal/SFDC) | "deployment failed", "conflict", "field mismatch" |
+| SF merge | `sfdc-merge-orchestrator` (in opspal-internal/SFDC) | "merge fields", "consolidate objects", "combine" |
 | Complex planning | `sequential-planner` | "complex", "unknown scope", "needs planning", [SEQUENTIAL] |
 | Quality review | `quality-control-analyzer` | "recurring issue", "Claude keeps", "friction" |
 | Google Drive | `gdrive-*` agents | "document", "template", "report export", "Google" |
@@ -54,13 +59,13 @@ General:
 3. Does this involve multiple repositories? → Use project-orchestrator
 4. Is the task complexity unknown or very high? → Use sequential-planner
 5. Am I seeing repeated issues or patterns? → Use quality-control-analyzer
-6. Does this involve Salesforce metadata conflicts? → Use sfdc-conflict-resolver (in platforms/SFDC)
-7. Does this involve merging SF objects/fields? → Use sfdc-merge-orchestrator (in platforms/SFDC)
+6. Does this involve Salesforce metadata conflicts? → Use sfdc-conflict-resolver (in opspal-internal/SFDC)
+7. Does this involve merging SF objects/fields? → Use sfdc-merge-orchestrator (in opspal-internal/SFDC)
 8. Does this involve Google Drive operations? → Use gdrive-* agents
 9. Is there an agent configuration issue? → Use router-doctor or mcp-guardian
 ```
 
-**Note**: Salesforce-specific agents (sfdc-*) are located in `platforms/SFDC/.claude/agents/`
+**Note**: Salesforce-specific agents (sfdc-*) are located in `opspal-internal/SFDC/.claude/agents/`
 
 **If answering YES to any above → STOP and use the Task tool with that agent FIRST**
 
@@ -170,10 +175,27 @@ User: "[DIRECT] Deploy these 15 objects"
 - Use **router-doctor** to find project vs user-scope agent collisions.
 - Use **docs-keeper** to propose documentation and roster updates (diffs only).
 
+### Agent Organization Structure
+
+#### Unified Cross-Platform Agents (NEW)
+Located in `opspal-internal/.claude/agents/`, these agents work across all platforms:
+- **unified-orchestrator** - Master orchestrator for cross-platform operations
+- **unified-reporting-aggregator** - Combines analytics from all platforms
+- **unified-data-quality-validator** - Validates data consistency across systems
+- **platform-instance-manager** - Manages instances/environments for all platforms
+- **sfdc-hubspot-bridge** - Bidirectional sync between Salesforce and HubSpot
+
+#### Platform-Specific Agents
+- **Salesforce**: `opspal-internal/SFDC/.claude/agents/` - SF-specific operations
+- **HubSpot**: `opspal-internal/HS/.claude/agents/` - HS-specific operations
+- **Cross-Platform Ops**: `opspal-internal/cross-platform-ops/.claude/agents/` - Bulk operations
+
 ### Agent Naming Convention
 - **Format**: lowercase-hyphen naming (e.g., `release-coordinator`, not `release_coordinator`)
-- **Location**: Project agents in `.claude/agents/`, user-wide in `~/.claude/agents/`
+- **Location**: Project agents in `.claude/agents/`, platform agents in `opspal-internal/*/`, user-wide in `~/.claude/agents/`
 - **Extension**: Always `.md` with YAML frontmatter
+- **Unified agents**: Prefix with `unified-` for cross-platform agents
+- **Platform agents**: Prefix with platform identifier (e.g., `sfdc-`, `hubspot-`)
 
 ### Configuration Hierarchy
 1. Project scope takes precedence over user scope
@@ -208,7 +230,7 @@ User: "[DIRECT] Deploy these 15 objects"
 #### 🔴 MANDATORY Pre-Deployment Validation (Prevents 80% of Deployment Failures)
 ```bash
 # Run BEFORE every deployment - NO EXCEPTIONS
-node platforms/SFDC/scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
+node opspal-internal/SFDC/scripts/sfdc-pre-deployment-validator.js [org-alias] [deployment-path]
 ```
 
 **Critical Validation Checks:**
@@ -508,10 +530,10 @@ node scripts/subagent-query-verifier.js report
 See `.claude/agents/DATA_SOURCE_REQUIREMENTS.md` for complete requirements.
 
 ## Import References
-- Salesforce Configuration: @import platforms/SFDC/CLAUDE.md
-- HubSpot Configuration: @import platforms/HS/CLAUDE.md
-- Release Workflow: @import documentation/RELEASE_WORKFLOW.md
-- Git Standards: @import documentation/GIT_WORKFLOW_OPTIMIZATION.md
+- Salesforce Configuration: @import opspal-internal/SFDC/CLAUDE.md
+- HubSpot Configuration: @import opspal-internal/HS/CLAUDE.md
+- Release Workflow: @import docs/RELEASE_WORKFLOW.md
+- Git Standards: @import docs/GIT_WORKFLOW_OPTIMIZATION.md
 - **Agent Usage Examples**: @import .claude/AGENT_USAGE_EXAMPLES.md
 - **Agent Organization Pattern**: @import docs/AGENT_ORGANIZATION_PATTERN.md
 - **Data Integrity Requirements**: @import .claude/agents/DATA_SOURCE_REQUIREMENTS.md

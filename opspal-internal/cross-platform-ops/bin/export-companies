@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+/**
+ * HubSpot Bulk Company Export CLI
+ * Wrapper for export-contacts with company-specific defaults
+ */
+
+// Inject default properties for companies
+const defaultProps = 'domain,name,industry,city,state,country';
+const propsIndex = process.argv.indexOf('--props');
+if (propsIndex === -1 && process.argv.indexOf('-p') === -1) {
+    process.argv.splice(2, 0, '--props', defaultProps);
+}
+
+process.argv.splice(2, 0, '--object-type', 'companies');
+require('./export-contacts');

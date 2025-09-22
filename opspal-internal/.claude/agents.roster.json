@@ -1,0 +1,188 @@
+{
+  "version": "2.0.0",
+  "description": "Comprehensive agent registry for multi-platform RevPal system",
+  "updated": "2025-09-22T12:40:33Z",
+  "discovery_mode": "registry",
+  "author": "Claude Code Agent Consolidation System",
+  "registry": {
+    "unified": {
+      "description": "Cross-platform unified agents for orchestration and coordination",
+      "path": "./.claude/agents/",
+      "count": 25,
+      "key_agents": [
+        "unified-orchestrator",
+        "unified-reporting-aggregator",
+        "unified-data-quality-validator",
+        "platform-instance-manager",
+        "sfdc-hubspot-bridge"
+      ],
+      "pattern": "*.md",
+      "priority": 1
+    },
+    "salesforce": {
+      "description": "Salesforce-specific agents for metadata, apex, and org management",
+      "path": "./SFDC/.claude/agents/",
+      "count": 56,
+      "note": "Includes 4 symlinks to unified agents",
+      "key_agents": [
+        "sfdc-orchestrator",
+        "sfdc-metadata-manager",
+        "sfdc-apex-developer",
+        "sfdc-conflict-resolver",
+        "sfdc-merge-orchestrator",
+        "sfdc-state-discovery",
+        "sfdc-dependency-analyzer",
+        "sfdc-deployment-manager",
+        "sfdc-security-admin",
+        "sfdc-reports-dashboards"
+      ],
+      "pattern": "sfdc-*.md",
+      "priority": 2
+    },
+    "hubspot": {
+      "description": "HubSpot-specific agents for workflows, data, and portal management",
+      "path": "./HS/.claude/agents/",
+      "count": 34,
+      "key_agents": [
+        "hubspot-orchestrator",
+        "hubspot-workflow-builder",
+        "hubspot-data-operations-manager",
+        "hubspot-contact-manager",
+        "hubspot-pipeline-manager",
+        "hubspot-analytics-reporter",
+        "hubspot-integration-specialist",
+        "hubspot-property-manager",
+        "hubspot-email-campaign-manager",
+        "hubspot-reporting-builder"
+      ],
+      "pattern": "hubspot-*.md",
+      "priority": 2
+    },
+    "cross_platform_ops": {
+      "description": "Operational agents for bulk operations and data synchronization",
+      "path": "./cross-platform-ops/.claude/agents/",
+      "count": 13,
+      "key_agents": [
+        "cross-platform-orchestrator",
+        "field-mapping-specialist",
+        "data-quality-analyzer",
+        "hubspot-bulk-import-specialist",
+        "hubspot-export-specialist",
+        "hubspot-deduplication-specialist",
+        "error-recovery-specialist",
+        "performance-monitor",
+        "job-orchestrator",
+        "capacity-planner"
+      ],
+      "pattern": "*.md",
+      "priority": 3
+    },
+    "parent_project": {
+      "description": "Core RevPal project agents accessible from all platforms",
+      "path": "../.claude/agents/",
+      "count": 15,
+      "key_agents": [
+        "release-coordinator",
+        "project-orchestrator",
+        "sequential-planner",
+        "quality-control-analyzer",
+        "claude-compliance-enforcer",
+        "router-doctor",
+        "mcp-guardian",
+        "agent-auditor",
+        "project-auditor",
+        "patch-smith",
+        "docs-keeper"
+      ],
+      "pattern": "*.md",
+      "priority": 0
+    }
+  },
+  "delegation_rules": {
+    "cross_platform": {
+      "keywords": [
+        "both platforms",
+        "coordinate",
+        "sync",
+        "unified",
+        "all platforms"
+      ],
+      "delegate_to": "unified-orchestrator"
+    },
+    "salesforce_specific": {
+      "keywords": [
+        "salesforce",
+        "sfdc",
+        "apex",
+        "metadata",
+        "soql",
+        "object",
+        "field"
+      ],
+      "delegate_to": "sfdc-orchestrator"
+    },
+    "hubspot_specific": {
+      "keywords": [
+        "hubspot",
+        "workflow",
+        "portal",
+        "marketing",
+        "email campaign"
+      ],
+      "delegate_to": "hubspot-orchestrator"
+    },
+    "data_operations": {
+      "keywords": [
+        "bulk",
+        "import",
+        "export",
+        "dedupe",
+        "migration"
+      ],
+      "delegate_to": "cross-platform-orchestrator"
+    },
+    "release_management": {
+      "keywords": [
+        "release",
+        "deploy",
+        "production",
+        "tag"
+      ],
+      "delegate_to": "release-coordinator"
+    }
+  },
+  "usage_instructions": {
+    "discovery": [
+      "1. Claude Code reads this registry file on startup",
+      "2. Agents are loaded based on priority order (0 = highest)",
+      "3. Key agents are cached for faster access",
+      "4. Pattern matching used for dynamic discovery"
+    ],
+    "invocation": [
+      "Use Task tool with agent name from any category",
+      "Example: Task: sfdc-metadata-manager 'Deploy Account fields'",
+      "Example: Task: unified-orchestrator 'Coordinate SF and HS sync'",
+      "Example: Task: hubspot-workflow-builder 'Create lead nurture workflow'"
+    ],
+    "maintenance": [
+      "Run scripts/update-agent-registry.sh to refresh counts",
+      "Verify with scripts/validate-agent-registry.py",
+      "Test discovery with scripts/test-agent-discovery.py"
+    ]
+  },
+  "statistics": {
+    "total_agents": 143,
+    "categories": 5,
+    "unified_agents": 5,
+    "platform_specific_agents": 86,
+    "operational_agents": 13,
+    "core_agents": 15,
+    "last_validated": "2025-09-22T12:40:33Z"
+  },
+  "compatibility": {
+    "claude_code_version": ">=1.0.0",
+    "requires_symlinks": false,
+    "supports_lazy_loading": true,
+    "supports_dynamic_discovery": true
+  }
+}

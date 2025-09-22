@@ -1,0 +1,143 @@
+{
+  "name": "emergency-data-recovery",
+  "description": "Emergency workflow for recovering from data corruption or import failures",
+  "priority": "critical",
+  "manualTrigger": true,
+  "steps": [
+    {
+      "id": "assess-damage",
+      "agent": "data-quality-analyzer",
+      "type": "assessment",
+      "config": {
+        "mode": "emergency",
+        "checks": [
+          "data_corruption",
+          "missing_records",
+          "field_integrity",
+          "relationship_breaks"
+        ],
+        "compareWith": "./backups/last-known-good.csv",
+        "generateDiff": true
+      },
+      "timeout": 300000
+    },
+    {
+      "id": "create-backup",
+      "agent": "hubspot-export-specialist",
+      "type": "backup",
+      "parallel": true,
+      "config": {
+        "urgent": true,
+        "objects": ["contacts", "companies", "deals"],
+        "includeDeleted": true,
+        "outputPath": "./emergency-backup/backup-${timestamp}/"
+      }
+    },
+    {
+      "id": "identify-issues",
+      "agent": "error-recovery-specialist",
+      "type": "diagnosis",
+      "dependsOn": ["assess-damage"],
+      "config": {
+        "damageReport": "${assess-damage.report}",
+        "categorize": true,
+        "prioritize": true,
+        "estimateRecoveryTime": true
+      }
+    },
+    {
+      "id": "recover-critical",
+      "agent": "error-recovery-specialist",
+      "type": "recovery",
+      "dependsOn": ["identify-issues", "create-backup"],
+      "config": {
+        "priority": "critical",
+        "issues": "${identify-issues.critical}",
+        "strategies": [
+          "restore_from_backup",
+          "reconstruct_from_logs",
+          "apply_fixes",
+          "manual_intervention"
+        ],
+        "validateEachStep": true
+      }
+    },
+    {
+      "id": "recover-standard",
+      "agent": "error-recovery-specialist",
+      "type": "recovery",
+      "dependsOn": ["recover-critical"],
+      "config": {
+        "priority": "standard",
+        "issues": "${identify-issues.standard}",
+        "autoFix": true,
+        "batchSize": 1000
+      }
+    },
+    {
+      "id": "reimport-fixed",
+      "agent": "hubspot-bulk-import-specialist",
+      "type": "import",
+      "dependsOn": ["recover-critical", "recover-standard"],
+      "config": {
+        "input": [
+          "${recover-critical.output}",
+          "${recover-standard.output}"
+        ],
+        "mode": "upsert",
+        "validateBeforeImport": true,
+        "rollbackOnError": true
+      }
+    },
+    {
+      "id": "verify-recovery",
+      "agent": "data-quality-analyzer",
+      "type": "verification",
+      "dependsOn": ["reimport-fixed"],
+      "config": {
+        "compareWith": "${assess-damage.baseline}",
+        "acceptableDataLoss": 0.1,
+        "criticalFieldsCheck": ["email", "id", "accountId"]
+      }
+    },
+    {
+      "id": "post-mortem",
+      "agent": "performance-monitor",
+      "type": "analysis",
+      "alwaysRun": true,
+      "config": {
+        "generateReport": true,
+        "includeTimeline": true,
+        "rootCauseAnalysis": true,
+        "recommendations": true,
+        "outputPath": "./reports/incident-${timestamp}.pdf"
+      }
+    }
+  ],
+  "rollback": {
+    "enabled": true,
+    "checkpoints": ["create-backup", "recover-critical", "reimport-fixed"],
+    "strategy": "restore-from-checkpoint"
+  },
+  "notifications": {
+    "immediate": {
+      "pagerduty": {
+        "severity": "critical",
+        "escalation": true
+      },
+      "slack": {
+        "channel": "#incidents",
+        "mentions": ["@data-team", "@ops-lead"]
+      }
+    },
+    "updates": {
+      "frequency": "every-step",
+      "channels": ["slack", "email"]
+    }
+  },
+  "resourceAllocation": {
+    "priority": "highest",
+    "dedicatedResources": true,
+    "pauseOtherWorkflows": true
+  }
+}

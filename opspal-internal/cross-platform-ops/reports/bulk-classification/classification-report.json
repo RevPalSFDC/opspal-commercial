@@ -1,0 +1,24 @@
+{
+  "total": 254176,
+  "processed": 31196,
+  "skipped": 222980,
+  "cleanStatusCounts": {
+    "OK": 1350,
+    "Duplicate": 4224,
+    "Delete": 24767,
+    "Archive": 76,
+    "Review": 779
+  },
+  "deleteReasons": {
+    "No Activity 3+ Years": 2202,
+    "No Email or Phone": 22106,
+    "Inactive 3+ Years": 459,
+    "Duplicate - Has Master": 4224,
+    "Old Inactive Contact": 76,
+    "Missing Critical Info": 779
+  },
+  "duplicateStats": {
+    "totalDuplicates": 4224,
+    "duplicateSets": 18681
+  }
+}

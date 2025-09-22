@@ -1,0 +1,246 @@
+{
+  "version": "1.0.0",
+  "updated": "2025-09-21",
+  "description": "Central registry for customer instance pairings across Salesforce and HubSpot",
+  "customers": {
+    "rentable": {
+      "name": "Rentable",
+      "status": "active",
+      "salesforce": {
+        "production": "rentable-production",
+        "sandbox": "rentable-sandbox"
+      },
+      "hubspot": {
+        "production": "rentable"
+      },
+      "pairings": {
+        "production": {
+          "sf": "rentable-production",
+          "hs": "rentable",
+          "primary": true,
+          "sync_enabled": true
+        },
+        "sandbox": {
+          "sf": "rentable-sandbox",
+          "hs": "rentable",
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": true,
+        "opportunity_sync": true,
+        "lead_routing": false
+      }
+    },
+    "wedgewood": {
+      "name": "Wedgewood",
+      "status": "active",
+      "salesforce": {
+        "production": "wedgewood-production",
+        "uat": "wedgewood-uat",
+        "sandbox": "wedgewood-sandbox"
+      },
+      "hubspot": null,
+      "pairings": {
+        "production": {
+          "sf": "wedgewood-production",
+          "primary": true,
+          "sync_enabled": false
+        },
+        "uat": {
+          "sf": "wedgewood-uat",
+          "sync_enabled": false
+        },
+        "sandbox": {
+          "sf": "wedgewood-sandbox",
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": false,
+        "opportunity_sync": false,
+        "lead_routing": true
+      }
+    },
+    "peregrine": {
+      "name": "Peregrine",
+      "status": "active",
+      "salesforce": {
+        "main": "peregrine-main",
+        "staging": "peregrine-staging"
+      },
+      "hubspot": null,
+      "pairings": {
+        "production": {
+          "sf": "peregrine-main",
+          "primary": true,
+          "sync_enabled": false
+        },
+        "staging": {
+          "sf": "peregrine-staging",
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": false,
+        "opportunity_sync": false,
+        "lead_routing": false
+      }
+    },
+    "filmhub": {
+      "name": "FilmHub",
+      "status": "active",
+      "salesforce": null,
+      "hubspot": {
+        "production": "filmhub"
+      },
+      "pairings": {
+        "production": {
+          "hs": "filmhub",
+          "primary": true,
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": true,
+        "opportunity_sync": false,
+        "lead_routing": false
+      }
+    },
+    "revpal": {
+      "name": "RevPal",
+      "status": "active",
+      "salesforce": {
+        "production": "revpal-production"
+      },
+      "hubspot": {
+        "production": "revpal-production"
+      },
+      "pairings": {
+        "production": {
+          "sf": "revpal-production",
+          "hs": "revpal-production",
+          "primary": true,
+          "sync_enabled": true
+        }
+      },
+      "configurations": {
+        "contact_hygiene": true,
+        "opportunity_sync": true,
+        "lead_routing": true
+      }
+    },
+    "neonone": {
+      "name": "NeonOne",
+      "status": "active",
+      "salesforce": {
+        "production": "neonone"
+      },
+      "hubspot": null,
+      "pairings": {
+        "production": {
+          "sf": "neonone",
+          "primary": true,
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": false,
+        "opportunity_sync": false,
+        "lead_routing": false
+      }
+    },
+    "bluerabbit": {
+      "name": "BlueRabbit",
+      "status": "active",
+      "salesforce": {
+        "production": "bluerabbit2021-revpal"
+      },
+      "hubspot": null,
+      "pairings": {
+        "production": {
+          "sf": "bluerabbit2021-revpal",
+          "primary": true,
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": false,
+        "opportunity_sync": false,
+        "lead_routing": false
+      }
+    },
+    "opspal": {
+      "name": "OpsPal",
+      "status": "maintenance",
+      "salesforce": {
+        "production": "opspal"
+      },
+      "hubspot": null,
+      "pairings": {
+        "production": {
+          "sf": "opspal",
+          "primary": true,
+          "sync_enabled": false
+        }
+      },
+      "configurations": {
+        "contact_hygiene": false,
+        "opportunity_sync": false,
+        "lead_routing": false
+      }
+    }
+  },
+  "environments": {
+    "production": {
+      "description": "Production environment - live customer data",
+      "restrictions": ["no_destructive_changes", "require_approval", "audit_all"],
+      "deployment_window": "SAT 02:00-04:00 UTC"
+    },
+    "uat": {
+      "description": "User Acceptance Testing environment",
+      "restrictions": ["audit_all"],
+      "deployment_window": "ANYTIME"
+    },
+    "sandbox": {
+      "description": "Sandbox environment for testing",
+      "restrictions": [],
+      "deployment_window": "ANYTIME"
+    },
+    "staging": {
+      "description": "Staging environment for pre-production validation",
+      "restrictions": ["audit_all"],
+      "deployment_window": "ANYTIME"
+    },
+    "main": {
+      "description": "Main branch environment",
+      "restrictions": ["require_approval", "audit_all"],
+      "deployment_window": "ANYTIME"
+    }
+  },
+  "operations": {
+    "contact_hygiene": {
+      "description": "Contact deduplication and cleanup",
+      "platforms": ["salesforce", "hubspot"],
+      "requires_sync": false
+    },
+    "opportunity_sync": {
+      "description": "Opportunity synchronization between platforms",
+      "platforms": ["salesforce", "hubspot"],
+      "requires_sync": true
+    },
+    "lead_routing": {
+      "description": "Lead routing and assignment",
+      "platforms": ["salesforce", "hubspot"],
+      "requires_sync": false
+    }
+  },
+  "statistics": {
+    "total_customers": 8,
+    "active_customers": 7,
+    "with_salesforce": 7,
+    "with_hubspot": 3,
+    "with_both": 2,
+    "sync_enabled": 2
+  }
+}

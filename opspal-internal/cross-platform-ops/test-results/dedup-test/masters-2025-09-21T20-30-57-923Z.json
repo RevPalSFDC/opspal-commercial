@@ -1,0 +1,86 @@
+[
+  {
+    "Email": "john.doe@gmail.com",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Phone": "555-0100",
+    "Company": "Acme Corporation",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 2,
+      "score": 70
+    }
+  },
+  {
+    "Email": "jane.smith@example.com",
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Phone": "555-0101",
+    "Company": "Tech Solutions",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 2,
+      "score": 50
+    }
+  },
+  {
+    "Email": "bob.wilson@demo.com",
+    "FirstName": "Bob",
+    "LastName": "Wilson",
+    "Phone": "555-0102",
+    "Company": "Demo Inc",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 1,
+      "score": 70
+    }
+  },
+  {
+    "Email": "alice.johnson@test.com",
+    "FirstName": "Alice",
+    "LastName": "Johnson",
+    "Phone": "555-0103",
+    "Company": "Test Company",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 1,
+      "score": 50
+    }
+  },
+  {
+    "Email": "charlie.brown@example.com",
+    "FirstName": "Charlie",
+    "LastName": "Brown",
+    "Phone": "555-0104",
+    "Company": "Example LLC",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 1,
+      "score": 50
+    }
+  },
+  {
+    "Email": "david.lee@sample.com",
+    "FirstName": "David",
+    "LastName": "Lee",
+    "Phone": "555-0105",
+    "Company": "Sample Corp",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 1,
+      "score": 70
+    }
+  },
+  {
+    "Email": "test@test.com",
+    "FirstName": "Test",
+    "LastName": "User",
+    "Phone": "555-9999",
+    "Company": "Test Account",
+    "_dedup": {
+      "isMaster": true,
+      "duplicateCount": 1,
+      "score": 50
+    }
+  }
+]

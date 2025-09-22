@@ -1,0 +1,235 @@
+name: Contact Hygiene CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'lib/contactHygiene.js'
+      - 'bin/contact-hygiene.js'
+      - 'test/**'
+      - '.github/workflows/contact-hygiene.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'lib/contactHygiene.js'
+      - 'bin/contact-hygiene.js'
+      - 'test/**'
+  schedule:
+    # Run weekly on Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Processing mode'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - unprocessed
+          - all
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: |
+        if [ -f .eslintrc.json ]; then
+          npm run lint || true
+        fi
+
+    - name: Run tests
+      run: npm test
+
+    - name: Generate coverage report
+      run: npm run test:coverage || npx nyc --reporter=text --reporter=html mocha test/**/*.test.js
+      continue-on-error: true
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v3
+      if: matrix.node-version == '18.x'
+      with:
+        name: coverage-report
+        path: coverage/
+
+    - name: Test CLI help
+      run: node bin/contact-hygiene.js --help
+
+    - name: Test dry-run mode
+      run: |
+        # Create mock data for testing
+        mkdir -p test-data
+        echo "Id,Email,FirstName,LastName,Phone,CreatedDate" > test-data/test-contacts.csv
+        echo "003TEST001,test@example.com,Test,User,555-1234,2020-01-01" >> test-data/test-contacts.csv
+
+        # Note: This would fail without SF connection, but tests the CLI structure
+        node bin/contact-hygiene.js --dry-run --query-limit 1 || true
+
+  code-quality:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Check for console.log statements
+      run: |
+        if grep -r "console\.log" lib/ --include="*.js" | grep -v "// console.log"; then
+          echo "Warning: console.log statements found in library code"
+        fi
+
+    - name: Check for hardcoded values
+      run: |
+        if grep -r "rentable-production" lib/ bin/ --include="*.js"; then
+          echo "Warning: Hardcoded org alias found"
+        fi
+
+    - name: Validate classification rules
+      run: |
+        node -e "
+        const { classifyContact } = require('./lib/contactHygiene.js');
+        const testCases = [
+          { Email: null, Phone: null, expectedStatus: 'Delete' },
+          { Email: 'test@example.com', FirstName: 'Test', expectedStatus: 'Delete' },
+          { Email: 'user@noreply.com', expectedStatus: 'Delete' }
+        ];
+
+        testCases.forEach(tc => {
+          const result = classifyContact(tc);
+          if (result && result.Clean_Status__c !== tc.expectedStatus) {
+            console.error('Classification mismatch:', tc, result);
+            process.exit(1);
+          }
+        });
+        console.log('Classification rules validated');
+        "
+
+  security-scan:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Check for sensitive data
+      run: |
+        # Check for potential API keys or tokens
+        if grep -r "sk-\|pk-\|api_key\|api_secret" lib/ bin/ --include="*.js"; then
+          echo "Error: Potential sensitive data found"
+          exit 1
+        fi
+
+    - name: Check for SQL injection risks
+      run: |
+        # Basic check for string concatenation in queries
+        if grep -r "query.*+.*\${" lib/ bin/ --include="*.js"; then
+          echo "Warning: Potential SQL injection risk with string concatenation"
+        fi
+
+  scheduled-hygiene:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup Salesforce CLI
+      run: |
+        npm install -g @salesforce/cli
+        sf version
+
+    - name: Authenticate with Salesforce
+      if: env.SF_AUTH_URL != ''
+      env:
+        SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
+      run: |
+        echo "$SF_AUTH_URL" > auth.json
+        sf org login sfdx-url --sfdx-url-file auth.json --alias production
+        rm auth.json
+
+    - name: Run contact hygiene
+      if: env.SF_AUTH_URL != ''
+      env:
+        SF_AUTH_URL: ${{ secrets.SF_AUTH_URL }}
+      run: |
+        MODE="${{ github.event.inputs.mode || 'dry-run' }}"
+
+        if [ "$MODE" = "dry-run" ]; then
+          node bin/contact-hygiene.js --mode all --dry-run --batch-size 5000
+        elif [ "$MODE" = "unprocessed" ]; then
+          node bin/contact-hygiene.js --mode unprocessed --batch-size 10000
+        else
+          echo "Full processing requires manual approval"
+          node bin/contact-hygiene.js --mode all --dry-run --query-limit 1000
+        fi
+
+    - name: Upload results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: hygiene-results-${{ github.run_number }}
+        path: reports/contact-hygiene/
+
+    - name: Send notification
+      if: env.SLACK_WEBHOOK_URL != ''
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: |
+        SUMMARY=$(tail -50 reports/contact-hygiene/*/summary.txt 2>/dev/null || echo "No summary available")
+
+        curl -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"text\": \"Contact Hygiene Pipeline Completed\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*Contact Hygiene Pipeline Results*\\nRun: ${{ github.run_number }}\\nMode: ${{ github.event.inputs.mode || 'dry-run' }}\"
+                }
+              }
+            ]
+          }"

@@ -1,0 +1,19 @@
+{
+  "platform": "hubspot",
+  "timestamp": "2025-09-20T16:22:32.250Z",
+  "metrics": {
+    "completeness": {
+      "average": 78.5,
+      "min": 45,
+      "max": 98
+    },
+    "quality": {
+      "score": 82.3,
+      "issues": 15
+    },
+    "duplicates": {
+      "found": 23,
+      "percentage": 2.3
+    }
+  }
+}

@@ -1,0 +1,31 @@
+
+Contact Hygiene Bulk Processing - Execution Summary
+====================================================
+Input File: /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/reports/all-contacts.csv
+Execution Time: 337s
+Total Contacts: 254176
+Processed: 33956
+Skipped: 220220
+Batches Uploaded: 4
+
+Classification Breakdown:
+  Delete: 26384
+  Duplicate: 5372
+  Archive: 77
+  OK: 2107
+  Review: 16
+
+Top Delete Reasons:
+  23674: No Email or Phone
+  2248: No Activity 3+ Years
+  937: Master: 003Rh000000fG5jIAE
+  462: Inactive 3+ Years
+  77: Old Inactive Contact
+  40: Master: 003Rh00000LaxQbIAJ
+  26: Master: 0032A00002azmgwQAA
+  21: Master: 0033j00003wPQISAA4
+  18: Master: 003Rh00000EquQQIAZ
+  18: Master: 0032A00002azp7VQAQ
+
+Duplicate Detection:
+  Total Components: 19102

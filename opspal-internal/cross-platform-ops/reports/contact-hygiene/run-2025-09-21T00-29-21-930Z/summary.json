@@ -1,0 +1,63 @@
+{
+  "runConfiguration": {
+    "orgAlias": "rentable-production",
+    "mode": "all",
+    "dryRun": false,
+    "batchSize": 10000,
+    "maxWaitSec": 180,
+    "outputDir": "./reports/contact-hygiene",
+    "queryLimit": 1000,
+    "verbose": false,
+    "runDir": "reports/contact-hygiene/run-2025-09-21T00-29-21-930Z"
+  },
+  "executionTime": 22397,
+  "totalContacts": 3000,
+  "processedContacts": 0,
+  "skippedContacts": 3000,
+  "classificationBreakdown": {},
+  "deleteReasons": {},
+  "duplicateStatistics": {
+    "totalComponents": 300,
+    "totalDuplicates": 431,
+    "sampleComponents": [
+      {
+        "size": 2,
+        "master": "0032A00002RES7UQAX",
+        "edgeTypes": [
+          "email"
+        ],
+        "sample": [
+          "0032A00002RES7UQAX",
+          "0032A00002ZJCq5QAH"
+        ]
+      },
+      {
+        "size": 3,
+        "master": "0032A00002REGDYQA5",
+        "edgeTypes": [
+          "email",
+          "name_company"
+        ],
+        "sample": [
+          "0032A00002REGDYQA5",
+          "0032A00002Zaw1jQAB",
+          "0032A00002RESHeQAP"
+        ]
+      },
+      {
+        "size": 2,
+        "master": "0032A00002X0lhWQAR",
+        "edgeTypes": [
+          "email",
+          "name_company"
+        ],
+        "sample": [
+          "0032A00002X0lhWQAR",
+          "0032A00002RESlsQAH"
+        ]
+      }
+    ]
+  },
+  "batchResults": [],
+  "errors": []
+}

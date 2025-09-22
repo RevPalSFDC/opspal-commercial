@@ -1,0 +1,37 @@
+{
+  "workflow": "daily-salesforce-hubspot-sync",
+  "status": "completed",
+  "duration": 1,
+  "startTime": "2025-09-21T20:34:31.952Z",
+  "endTime": "2025-09-21T20:34:31.953Z",
+  "steps": {
+    "total": 7,
+    "completed": 7,
+    "failed": 0,
+    "skipped": 0
+  },
+  "successRate": "100.0%",
+  "outputs": {
+    "export-salesforce": {
+      "status": "dry-run"
+    },
+    "quality-check": {
+      "status": "dry-run"
+    },
+    "deduplicate": {
+      "status": "dry-run"
+    },
+    "field-mapping": {
+      "status": "dry-run"
+    },
+    "import-hubspot": {
+      "status": "dry-run"
+    },
+    "error-recovery": {
+      "status": "dry-run"
+    },
+    "generate-report": {
+      "status": "dry-run"
+    }
+  }
+}

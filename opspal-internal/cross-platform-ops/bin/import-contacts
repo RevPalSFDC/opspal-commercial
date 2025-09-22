@@ -1,0 +1,289 @@
+#!/usr/bin/env node
+
+/**
+ * HubSpot Bulk Contact Import CLI
+ * Imports contacts from CSV with automatic chunking and resumability
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { program } = require('commander');
+const chalk = require('chalk');
+const ora = require('ora');
+const HubSpotBulk = require('../lib/hubspot-bulk');
+
+// Job state management
+const JOB_STATE_DIR = '.jobs/hubspot';
+
+async function loadJobState(jobName) {
+    const statePath = path.join(JOB_STATE_DIR, `${jobName}.json`);
+    try {
+        const state = await fs.promises.readFile(statePath, 'utf8');
+        return JSON.parse(state);
+    } catch {
+        return null;
+    }
+}
+
+async function saveJobState(jobName, state) {
+    await fs.promises.mkdir(JOB_STATE_DIR, { recursive: true });
+    const statePath = path.join(JOB_STATE_DIR, `${jobName}.json`);
+    await fs.promises.writeFile(statePath, JSON.stringify(state, null, 2));
+}
+
+async function deleteJobState(jobName) {
+    const statePath = path.join(JOB_STATE_DIR, `${jobName}.json`);
+    try {
+        await fs.promises.unlink(statePath);
+    } catch {
+        // Ignore if doesn't exist
+    }
+}
+
+async function main() {
+    program
+        .name('import-contacts')
+        .description('Import contacts to HubSpot from CSV files')
+        .argument('<files...>', 'Path(s) to CSV files')
+        .option('-n, --name <name>', 'Job name for tracking', `import-${Date.now()}`)
+        .option('-m, --mapping <file>', 'Column mapping JSON file')
+        .option('--dry-run', 'Validate without importing')
+        .option('--resume', 'Resume previous job if exists')
+        .option('--no-progress', 'Disable progress display')
+        .parse(process.argv);
+
+    const options = program.opts();
+    const files = program.args;
+
+    // Validate files exist
+    for (const file of files) {
+        if (!fs.existsSync(file)) {
+            console.error(chalk.red(`❌ File not found: ${file}`));
+            process.exit(1);
+        }
+    }
+
+    // Load mapping if provided
+    let mapping = null;
+    if (options.mapping) {
+        try {
+            const mappingContent = await fs.promises.readFile(options.mapping, 'utf8');
+            mapping = JSON.parse(mappingContent);
+        } catch (error) {
+            console.error(chalk.red(`❌ Failed to load mapping: ${error.message}`));
+            process.exit(1);
+        }
+    }
+
+    // Check for existing job
+    const existingJob = await loadJobState(options.name);
+    if (existingJob && !options.resume) {
+        console.log(chalk.yellow(`⚠️  Job '${options.name}' already exists.`));
+        console.log(chalk.yellow(`   Use --resume to continue or choose a different --name`));
+        process.exit(1);
+    }
+
+    // Initialize HubSpot client
+    const spinner = ora('Initializing HubSpot connection...').start();
+    const hubspot = new HubSpotBulk();
+
+    try {
+        await hubspot.initialize(['crm.objects.contacts.write']);
+        spinner.succeed('HubSpot connection initialized');
+    } catch (error) {
+        spinner.fail(`Authentication failed: ${error.message}`);
+        process.exit(1);
+    }
+
+    // Resume or start new job
+    let importState = existingJob || {
+        name: options.name,
+        files: files,
+        mapping: mapping,
+        startedAt: new Date().toISOString(),
+        imports: {},
+        summary: {
+            totalFiles: files.length,
+            processedFiles: 0,
+            totalRows: 0,
+            successRows: 0,
+            failedRows: 0,
+            errors: []
+        }
+    };
+
+    // Process each file
+    for (const file of files) {
+        const fileName = path.basename(file);
+
+        // Skip if already processed
+        if (importState.imports[file]?.status === 'DONE') {
+            console.log(chalk.green(`✓ ${fileName} already processed`));
+            continue;
+        }
+
+        // Check if import in progress
+        if (importState.imports[file]?.importId && options.resume) {
+            console.log(chalk.blue(`↻ Resuming ${fileName}...`));
+
+            const spinner = ora('Checking import status...').start();
+            try {
+                // Poll existing import
+                for await (const status of hubspot.imports.pollImport(importState.imports[file].importId)) {
+                    spinner.text = `Import ${status.state}: ${fileName}`;
+
+                    if (['DONE', 'FAILED', 'CANCELED'].includes(status.state)) {
+                        importState.imports[file].status = status.state;
+                        await saveJobState(options.name, importState);
+                        break;
+                    }
+                }
+
+                if (importState.imports[file].status === 'DONE') {
+                    spinner.succeed(`Import complete: ${fileName}`);
+
+                    // Get errors
+                    const errors = await hubspot.imports.getImportErrors(importState.imports[file].importId);
+                    if (errors.totalErrors > 0) {
+                        importState.summary.failedRows += errors.totalErrors;
+                        importState.summary.errors.push(...errors.errors);
+                        console.log(chalk.yellow(`  ⚠️  ${errors.totalErrors} errors found`));
+                    }
+                } else {
+                    spinner.fail(`Import failed: ${fileName}`);
+                }
+            } catch (error) {
+                spinner.fail(`Error resuming import: ${error.message}`);
+            }
+        } else {
+            // Start new import
+            console.log(chalk.blue(`📤 Importing ${fileName}...`));
+
+            if (options.dryRun) {
+                console.log(chalk.gray('  [DRY RUN] Would import file'));
+                continue;
+            }
+
+            const spinner = ora('Starting import...').start();
+            try {
+                const importJob = await hubspot.imports.startImport({
+                    files: file,
+                    objectType: 'contacts',
+                    name: `${options.name} - ${fileName}`,
+                    mapping: mapping
+                });
+
+                importState.imports[file] = {
+                    importId: importJob.importId,
+                    startedAt: importJob.createdAt,
+                    status: 'PROCESSING'
+                };
+                await saveJobState(options.name, importState);
+
+                // Poll for completion
+                for await (const status of hubspot.imports.pollImport(importJob.importId)) {
+                    spinner.text = `Import ${status.state}: ${fileName}`;
+
+                    if (['DONE', 'FAILED', 'CANCELED'].includes(status.state)) {
+                        importState.imports[file].status = status.state;
+                        importState.imports[file].completedAt = new Date().toISOString();
+                        await saveJobState(options.name, importState);
+                        break;
+                    }
+                }
+
+                if (importState.imports[file].status === 'DONE') {
+                    spinner.succeed(`Import complete: ${fileName}`);
+                    importState.summary.processedFiles++;
+
+                    // Get errors
+                    const errors = await hubspot.imports.getImportErrors(importJob.importId);
+                    if (errors.totalErrors > 0) {
+                        importState.summary.failedRows += errors.totalErrors;
+                        importState.summary.errors.push(...errors.errors);
+                        console.log(chalk.yellow(`  ⚠️  ${errors.totalErrors} errors found`));
+
+                        // Save error details
+                        const errorFile = path.join('out', `${options.name}_errors.csv`);
+                        await saveErrorsCsv(errorFile, errors.errors);
+                        console.log(chalk.gray(`  Errors saved to: ${errorFile}`));
+                    }
+                } else {
+                    spinner.fail(`Import failed: ${fileName}`);
+                    importState.summary.errors.push({
+                        file: fileName,
+                        error: importState.imports[file].status
+                    });
+                }
+            } catch (error) {
+                spinner.fail(`Import error: ${error.message}`);
+                importState.summary.errors.push({
+                    file: fileName,
+                    error: error.message
+                });
+                await saveJobState(options.name, importState);
+            }
+        }
+    }
+
+    // Generate summary
+    importState.summary.completedAt = new Date().toISOString();
+    const summaryPath = path.join('out', `${options.name}.summary.json`);
+    await fs.promises.mkdir('out', { recursive: true });
+    await fs.promises.writeFile(summaryPath, JSON.stringify(importState.summary, null, 2));
+
+    // Display summary
+    console.log(chalk.bold('\n📊 Import Summary:'));
+    console.log(`  Job Name: ${options.name}`);
+    console.log(`  Files Processed: ${importState.summary.processedFiles}/${importState.summary.totalFiles}`);
+    console.log(`  Failed Rows: ${importState.summary.failedRows}`);
+    console.log(`  Duration: ${getDuration(importState.summary.startedAt, importState.summary.completedAt)}`);
+    console.log(`  Summary: ${summaryPath}`);
+
+    // Clean up job state on success
+    if (importState.summary.processedFiles === importState.summary.totalFiles) {
+        await deleteJobState(options.name);
+    }
+}
+
+async function saveErrorsCsv(filepath, errors) {
+    await fs.promises.mkdir(path.dirname(filepath), { recursive: true });
+
+    const headers = ['row_number', 'error_type', 'message', 'invalid_value'];
+    const rows = errors.map(e => [
+        e.rowNumber,
+        e.errorType,
+        e.message,
+        e.invalidValue || ''
+    ]);
+
+    const csv = [
+        headers.join(','),
+        ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+
+    await fs.promises.writeFile(filepath, csv);
+}
+
+function getDuration(start, end) {
+    const ms = new Date(end) - new Date(start);
+    const seconds = Math.floor(ms / 1000) % 60;
+    const minutes = Math.floor(ms / 1000 / 60) % 60;
+    const hours = Math.floor(ms / 1000 / 60 / 60);
+
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    if (minutes > 0) return `${minutes}m ${seconds}s`;
+    return `${seconds}s`;
+}
+
+// Handle errors
+process.on('unhandledRejection', (error) => {
+    console.error(chalk.red('❌ Unhandled error:'), error);
+    process.exit(1);
+});
+
+// Run
+main().catch(error => {
+    console.error(chalk.red('❌ Fatal error:'), error);
+    process.exit(1);
+});

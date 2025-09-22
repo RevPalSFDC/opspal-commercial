@@ -1,0 +1,277 @@
+#!/usr/bin/env node
+
+/**
+ * HubSpot Bulk Contact Export CLI
+ * Exports contacts to CSV with associations and filters
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { program } = require('commander');
+const chalk = require('chalk');
+const ora = require('ora');
+const HubSpotBulk = require('../lib/hubspot-bulk');
+
+// Job state management
+const JOB_STATE_DIR = '.jobs/hubspot';
+
+async function loadJobState(jobName) {
+    const statePath = path.join(JOB_STATE_DIR, `export-${jobName}.json`);
+    try {
+        const state = await fs.promises.readFile(statePath, 'utf8');
+        return JSON.parse(state);
+    } catch {
+        return null;
+    }
+}
+
+async function saveJobState(jobName, state) {
+    await fs.promises.mkdir(JOB_STATE_DIR, { recursive: true });
+    const statePath = path.join(JOB_STATE_DIR, `export-${jobName}.json`);
+    await fs.promises.writeFile(statePath, JSON.stringify(state, null, 2));
+}
+
+async function deleteJobState(jobName) {
+    const statePath = path.join(JOB_STATE_DIR, `export-${jobName}.json`);
+    try {
+        await fs.promises.unlink(statePath);
+    } catch {
+        // Ignore if doesn't exist
+    }
+}
+
+async function main() {
+    program
+        .name('export-contacts')
+        .description('Export contacts from HubSpot to CSV')
+        .argument('<output>', 'Output directory')
+        .option('-p, --props <properties>', 'Comma-separated list of properties to export', 'email,firstname,lastname')
+        .option('-a, --assoc <type>', 'Include associations (company, deal, etc.)')
+        .option('-f, --filter <json>', 'Filter JSON or file path')
+        .option('-n, --name <name>', 'Export job name', `export-${Date.now()}`)
+        .option('--resume', 'Resume previous export if exists')
+        .option('--no-unzip', 'Keep downloaded file compressed')
+        .parse(process.argv);
+
+    const options = program.opts();
+    const outputDir = program.args[0];
+
+    // Parse properties
+    const properties = options.props.split(',').map(p => p.trim());
+
+    // Parse associations
+    let associations = null;
+    if (options.assoc) {
+        associations = {
+            type: options.assoc,
+            properties: ['id', 'name']
+        };
+    }
+
+    // Parse filters
+    let filters = null;
+    if (options.filter) {
+        try {
+            // Check if it's a file path
+            if (fs.existsSync(options.filter)) {
+                const filterContent = await fs.promises.readFile(options.filter, 'utf8');
+                filters = JSON.parse(filterContent);
+            } else {
+                // Try parsing as JSON
+                filters = JSON.parse(options.filter);
+            }
+        } catch (error) {
+            console.error(chalk.red(`❌ Invalid filter: ${error.message}`));
+            process.exit(1);
+        }
+    }
+
+    // Check for existing job
+    const existingJob = await loadJobState(options.name);
+    if (existingJob && !options.resume) {
+        console.log(chalk.yellow(`⚠️  Export '${options.name}' already exists.`));
+        console.log(chalk.yellow(`   Use --resume to continue or choose a different --name`));
+        process.exit(1);
+    }
+
+    // Initialize HubSpot client
+    const spinner = ora('Initializing HubSpot connection...').start();
+    const hubspot = new HubSpotBulk();
+
+    try {
+        await hubspot.initialize(['crm.objects.contacts.read']);
+        spinner.succeed('HubSpot connection initialized');
+    } catch (error) {
+        spinner.fail(`Authentication failed: ${error.message}`);
+        process.exit(1);
+    }
+
+    // Resume or start new export
+    let exportState = existingJob || {
+        name: options.name,
+        outputDir: outputDir,
+        properties: properties,
+        associations: associations,
+        filters: filters,
+        startedAt: new Date().toISOString()
+    };
+
+    // Check if already downloading
+    if (exportState.taskId && exportState.status !== 'COMPLETE' && options.resume) {
+        console.log(chalk.blue(`↻ Resuming export ${options.name}...`));
+
+        const spinner = ora('Checking export status...').start();
+        try {
+            // Poll existing export
+            for await (const status of hubspot.exports.pollExport(exportState.taskId)) {
+                spinner.text = `Export ${status.status}`;
+
+                if (status.downloadUrl) {
+                    exportState.status = 'COMPLETE';
+                    exportState.downloadUrl = status.downloadUrl;
+                    exportState.expiresAt = status.expiresAt;
+                    await saveJobState(options.name, exportState);
+                    spinner.succeed('Export ready for download');
+                    break;
+                }
+            }
+        } catch (error) {
+            spinner.fail(`Error checking export: ${error.message}`);
+            process.exit(1);
+        }
+    } else if (!exportState.taskId) {
+        // Start new export
+        console.log(chalk.blue('📥 Starting export...'));
+        console.log(chalk.gray(`  Properties: ${properties.join(', ')}`));
+        if (associations) {
+            console.log(chalk.gray(`  Associations: ${associations.type}`));
+        }
+        if (filters) {
+            console.log(chalk.gray(`  Filters: Applied`));
+        }
+
+        const spinner = ora('Creating export task...').start();
+        try {
+            const exportJob = await hubspot.exports.startExport({
+                objectType: 'contacts',
+                properties: properties,
+                filters: filters,
+                associations: associations,
+                exportName: options.name
+            });
+
+            exportState.taskId = exportJob.taskId;
+            exportState.status = 'PROCESSING';
+            await saveJobState(options.name, exportState);
+
+            spinner.text = 'Export processing...';
+
+            // Poll for completion
+            for await (const status of hubspot.exports.pollExport(exportJob.taskId)) {
+                spinner.text = `Export ${status.status}`;
+
+                if (status.downloadUrl) {
+                    exportState.status = 'COMPLETE';
+                    exportState.downloadUrl = status.downloadUrl;
+                    exportState.expiresAt = status.expiresAt;
+                    await saveJobState(options.name, exportState);
+                    spinner.succeed('Export ready for download');
+                    break;
+                }
+            }
+        } catch (error) {
+            spinner.fail(`Export failed: ${error.message}`);
+            process.exit(1);
+        }
+    }
+
+    // Download the export
+    if (exportState.downloadUrl) {
+        const fileName = `contacts_${options.name}_${Date.now()}.csv`;
+        const filePath = path.join(outputDir, fileName);
+
+        console.log(chalk.blue('📦 Downloading export...'));
+        const spinner = ora('Downloading...').start();
+
+        try {
+            await fs.promises.mkdir(outputDir, { recursive: true });
+
+            const result = await hubspot.exports.downloadExport(
+                exportState.downloadUrl,
+                filePath
+            );
+
+            spinner.succeed(`Downloaded to: ${result.path}`);
+            console.log(chalk.gray(`  Size: ${formatBytes(result.size)}`));
+            console.log(chalk.gray(`  Speed: ${formatBytes(result.bytesPerSecond)}/s`));
+
+            // Count rows
+            const rowCount = await countCsvRows(filePath);
+            console.log(chalk.gray(`  Rows: ${rowCount.toLocaleString()}`));
+
+            // Save summary
+            const summary = {
+                name: options.name,
+                outputFile: result.path,
+                properties: properties,
+                associations: associations,
+                filters: filters,
+                rows: rowCount,
+                size: result.size,
+                downloadDuration: result.duration,
+                startedAt: exportState.startedAt,
+                completedAt: new Date().toISOString()
+            };
+
+            const summaryPath = path.join(outputDir, `export.summary.json`);
+            await fs.promises.writeFile(summaryPath, JSON.stringify(summary, null, 2));
+
+            console.log(chalk.green('\n✅ Export complete!'));
+            console.log(`  Output: ${result.path}`);
+            console.log(`  Summary: ${summaryPath}`);
+
+            // Clean up job state
+            await deleteJobState(options.name);
+        } catch (error) {
+            spinner.fail(`Download failed: ${error.message}`);
+            process.exit(1);
+        }
+    }
+
+    // Show rate limit status
+    const rateLimits = hubspot.getRateLimitStatus();
+    console.log(chalk.dim('\nRate Limits:'));
+    console.log(chalk.dim(`  Daily: ${rateLimits.daily.used}/${rateLimits.daily.limit}`));
+}
+
+async function countCsvRows(filepath) {
+    const readline = require('readline');
+    const stream = fs.createReadStream(filepath);
+    const rl = readline.createInterface({ input: stream });
+
+    let count = 0;
+    for await (const line of rl) {
+        count++;
+    }
+
+    return count - 1; // Subtract header row
+}
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    return (bytes / 1024 / 1024 / 1024).toFixed(1) + ' GB';
+}
+
+// Handle errors
+process.on('unhandledRejection', (error) => {
+    console.error(chalk.red('❌ Unhandled error:'), error);
+    process.exit(1);
+});
+
+// Run
+main().catch(error => {
+    console.error(chalk.red('❌ Fatal error:'), error);
+    process.exit(1);
+});

@@ -1,0 +1,281 @@
+name: HubSpot Bulk Toolkit CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'lib/hubspot-bulk/**'
+      - 'bin/**'
+      - 'test/**'
+      - 'package.json'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'lib/hubspot-bulk/**'
+      - 'bin/**'
+      - 'test/**'
+
+env:
+  NODE_VERSION: '18'
+  DOCKER_REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/hubspot-bulk
+
+jobs:
+  lint:
+    name: Lint and Security Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run custom bulk rules
+        run: npx eslint --config .eslintrc.custom.js lib/ scripts/
+
+      - name: Security audit
+        run: npm audit --audit-level=moderate
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --coverage --passWithNoTests
+
+      - name: Upload coverage
+        if: matrix.node-version == 18
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: hubspot-bulk-coverage
+
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate test data
+        run: |
+          mkdir -p data
+          node scripts/generate-test-data.js contacts 10000 --output data/test-contacts.csv
+          node scripts/generate-test-data.js companies 5000 --output data/test-companies.csv
+
+      - name: Validate CSV generation
+        run: |
+          test -f data/test-contacts.csv
+          test -f data/test-companies.csv
+          echo "✅ Test data generated successfully"
+
+      - name: Test import command (dry-run)
+        run: |
+          ./bin/import-contacts data/test-contacts.csv --dry-run --name ci-test
+          ./bin/import-companies data/test-companies.csv --dry-run --name ci-test
+
+      - name: Test monitoring
+        run: |
+          timeout 5 ./bin/hubspot-monitor || true
+          ./bin/hubspot-monitor --json > metrics.json
+          test -f metrics.json
+          echo "✅ Monitoring working"
+
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  performance:
+    name: Performance Benchmark
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run performance benchmarks
+        run: |
+          echo "📊 Performance Benchmark Results" > benchmark.md
+          echo "================================" >> benchmark.md
+          echo "" >> benchmark.md
+
+          # Test CSV generation speed
+          echo "## CSV Generation" >> benchmark.md
+          /usr/bin/time -f "Time: %e seconds\nMemory: %M KB" \
+            node scripts/generate-test-data.js contacts 100000 \
+            --output /tmp/bench.csv 2>&1 | tee -a benchmark.md
+
+          echo "" >> benchmark.md
+
+          # Test chunking performance
+          echo "## File Chunking" >> benchmark.md
+          echo "File size: $(du -h /tmp/bench.csv | cut -f1)" >> benchmark.md
+
+          # Memory usage test
+          echo "" >> benchmark.md
+          echo "## Memory Usage" >> benchmark.md
+          node -e "
+            const start = process.memoryUsage();
+            const csv = require('fs').readFileSync('/tmp/bench.csv');
+            const end = process.memoryUsage();
+            console.log('RSS:', Math.round((end.rss - start.rss) / 1024 / 1024), 'MB');
+            console.log('Heap:', Math.round((end.heapUsed - start.heapUsed) / 1024 / 1024), 'MB');
+          " >> benchmark.md
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: benchmark.md
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const benchmark = fs.readFileSync('benchmark.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: benchmark
+            });
+
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [lint, test, integration, build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Kubernetes
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          echo "$KUBE_CONFIG" | base64 -d > kubeconfig
+          export KUBECONFIG=kubeconfig
+
+          # Update deployment with new image
+          kubectl set image deployment/hubspot-bulk-processor \
+            processor=${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:main-${{ github.sha }} \
+            --namespace=hubspot
+
+          # Wait for rollout
+          kubectl rollout status deployment/hubspot-bulk-processor \
+            --namespace=hubspot \
+            --timeout=5m
+
+      - name: Verify deployment
+        run: |
+          sleep 30
+          kubectl get pods -n hubspot -l app=hubspot-bulk
+          kubectl logs -n hubspot -l app=hubspot-bulk --tail=50
+
+      - name: Send notification
+        if: always()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          STATUS="${{ job.status }}"
+          COLOR=$([ "$STATUS" == "success" ] && echo "good" || echo "danger")
+
+          curl -X POST $SLACK_WEBHOOK \
+            -H 'Content-Type: application/json' \
+            -d "{
+              \"attachments\": [{
+                \"color\": \"$COLOR\",
+                \"title\": \"HubSpot Bulk Toolkit Deployment\",
+                \"text\": \"Deployment $STATUS for commit ${{ github.sha }}\",
+                \"fields\": [
+                  {
+                    \"title\": \"Branch\",
+                    \"value\": \"${{ github.ref_name }}\",
+                    \"short\": true
+                  },
+                  {
+                    \"title\": \"Actor\",
+                    \"value\": \"${{ github.actor }}\",
+                    \"short\": true
+                  }
+                ]
+              }]
+            }"

@@ -1,0 +1,20 @@
+{
+  "processedAt": "2025-09-20T20:59:57.327Z",
+  "total": 254176,
+  "processed": 4000,
+  "cleanStatusCounts": {
+    "OK": 0,
+    "Merge": 0,
+    "Delete": 0,
+    "Archive": 0,
+    "Review": 0,
+    "undefined": null
+  },
+  "deleteReasons": {},
+  "hubspotSync": {
+    "synced": 0,
+    "notSynced": 0,
+    "inHubSpotNotInclusion": 0
+  },
+  "recommendations": []
+}
