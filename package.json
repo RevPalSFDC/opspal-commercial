@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "RevPal Agents - Multi-platform automation and integration hub",
   "main": "index.js",
+  "config": {
+    "no-mocks": "enforced"
+  },
   "directories": {
     "doc": "documentation"
   },

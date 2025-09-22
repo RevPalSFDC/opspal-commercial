@@ -40,9 +40,15 @@ class RuntimeMockGuard {
 
     /**
      * Check if NO_MOCKS environment variable is set
+     * Default: ENABLED unless explicitly disabled with NO_MOCKS=0
      */
     isNoMocksEnabled() {
-        return process.env.NO_MOCKS === '1';
+        // Auto-enable by default for zero-config enforcement
+        if (process.env.NO_MOCKS === undefined) {
+            process.env.NO_MOCKS = '1';  // Auto-set for this process and children
+            return true;
+        }
+        return process.env.NO_MOCKS !== '0';  // Only disabled if explicitly set to '0'
     }
 
     /**

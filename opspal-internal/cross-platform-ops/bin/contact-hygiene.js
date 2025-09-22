@@ -5,6 +5,9 @@
  * Unified pipeline for Salesforce contact data quality operations
  */
 
+// Auto-enable NO_MOCKS policy (no user setup required)
+process.env.NO_MOCKS = process.env.NO_MOCKS || '1';
+
 // Install runtime mock guard FIRST
 const RuntimeMockGuard = require('../../../scripts/lib/runtime-mock-guard.js');
 const guard = new RuntimeMockGuard();
