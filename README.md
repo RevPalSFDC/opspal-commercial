@@ -6,6 +6,8 @@ A comprehensive Claude Code configuration for managing multi-platform releases a
 
 The RevPal Agent System uses specialized subagents for platform-specific operations and a principal engineer agent for orchestration. This system enables automated workflows, intelligent task routing, and cross-platform coordination.
 
+> **Note**: As of September 2025, the platform-specific code has been reorganized from `platforms/` to `opspal-internal/` to better reflect the internal operations nature of these components.
+
 ## Agent Organization
 
 Agents are organized by platform and scope to maintain clarity and ease of discovery:
@@ -20,7 +22,7 @@ Agents are organized by platform and scope to maintain clarity and ease of disco
 ├── gdrive-*                 # Google Drive operations
 └── ...                      # Other core agents
 
-platforms/
+opspal-internal/
 ├── SFDC/.claude/agents/     # Salesforce-specific agents (47 agents)
 │   ├── sfdc-conflict-resolver
 │   ├── sfdc-state-discovery
@@ -36,7 +38,7 @@ platforms/
 
 ### Organization Principles
 - **Core agents** (`.claude/agents/`): Cross-platform functionality and orchestration
-- **Platform agents** (`platforms/[PLATFORM]/.claude/agents/`): Platform-specific operations
+- **Platform agents** (`opspal-internal/[PLATFORM]/.claude/agents/`): Platform-specific operations
 - **User agents** (`~/.claude/agents/`): Personal customizations
 
 See [`docs/AGENT_ORGANIZATION_PATTERN.md`](docs/AGENT_ORGANIZATION_PATTERN.md) for detailed organization guidelines.
