@@ -50,7 +50,7 @@ Successfully deployed 7 custom fields to Salesforce production:
 
 ### 2. Export for Inclusion List
 Generated CSV file with 825 email addresses ready for import:
-- **File**: `/home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/reports/contacts-for-inclusion-list.csv`
+- **File**: `/home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/reports/contacts-for-inclusion-list.csv`
 - **Format**: Single column CSV with email addresses
 - **Ready for**: Direct import into HubSpot Inclusion List
 

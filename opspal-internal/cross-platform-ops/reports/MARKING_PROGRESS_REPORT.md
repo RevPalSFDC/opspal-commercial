@@ -38,22 +38,22 @@ Successfully processed contacts without CPU timeouts using the optimized batch a
 ### Option 1: Continue with Batch Script (Recommended)
 ```bash
 # Run the batch processor for 20 batches (2,000 contacts)
-/home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/scripts/batch-processor.sh
+/home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/scripts/batch-processor.sh
 
 # Or run a single batch (100 contacts)
-sf apex run --file /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/scripts/simple-execute.apex --target-org rentable-production
+sf apex run --file /home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/scripts/simple-execute.apex --target-org rentable-production
 ```
 
 ### Option 2: Create Scheduled Flow
 Follow the configuration in:
-`/home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/flow-configs/Contact_Marking_Scheduled_Flow.md`
+`/home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/flow-configs/Contact_Marking_Scheduled_Flow.md`
 
 This will automatically process 200 contacts every hour/day without any manual intervention.
 
 ### Option 3: Bulk API Export/Import (Fastest)
 ```bash
 # Process all remaining 213k contacts at once
-node /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/scripts/bulk-api-marking.js
+node /home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/scripts/bulk-api-marking.js
 ```
 
 ## 📈 Time Estimates
@@ -101,7 +101,7 @@ All processed contacts have been marked with:
 
 Run this to process the next 100 contacts:
 ```bash
-sf apex run --file /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/scripts/simple-execute.apex --target-org rentable-production
+sf apex run --file /home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/scripts/simple-execute.apex --target-org rentable-production
 ```
 
 Or run 50 batches (5,000 contacts):

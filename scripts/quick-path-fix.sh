@@ -5,39 +5,39 @@ echo "Fixing critical hardcoded paths..."
 
 # Fix ClaudeSFDC references in key scripts
 for file in \
-    "platforms/SFDC/scripts/update-agents-mcp-priority.sh" \
-    "platforms/SFDC/scripts/setup-claude-tools.sh" \
-    "platforms/SFDC/scripts/update-opportunities-test.sh" \
-    "platforms/SFDC/scripts/claude-performance-monitor.sh" \
-    "platforms/SFDC/scripts/update-opportunities-batch.sh" \
-    "platforms/SFDC/scripts/deploy-revenue-fields-enhanced.sh" \
-    "platforms/SFDC/scripts/claude-debug-setup.sh" \
-    "platforms/SFDC/scripts/safe-soql-query.sh" \
-    "platforms/SFDC/scripts/claude-optimize-config.sh" \
-    "platforms/SFDC/scripts/claude-with-retry.sh" \
-    "platforms/SFDC/integration/run-task-retrieval.sh" \
-    "platforms/SFDC/tests/test-flexipage-validator.js"
+    "opspal-internal/SFDC/scripts/update-agents-mcp-priority.sh" \
+    "opspal-internal/SFDC/scripts/setup-claude-tools.sh" \
+    "opspal-internal/SFDC/scripts/update-opportunities-test.sh" \
+    "opspal-internal/SFDC/scripts/claude-performance-monitor.sh" \
+    "opspal-internal/SFDC/scripts/update-opportunities-batch.sh" \
+    "opspal-internal/SFDC/scripts/deploy-revenue-fields-enhanced.sh" \
+    "opspal-internal/SFDC/scripts/claude-debug-setup.sh" \
+    "opspal-internal/SFDC/scripts/safe-soql-query.sh" \
+    "opspal-internal/SFDC/scripts/claude-optimize-config.sh" \
+    "opspal-internal/SFDC/scripts/claude-with-retry.sh" \
+    "opspal-internal/SFDC/integration/run-task-retrieval.sh" \
+    "opspal-internal/SFDC/tests/test-flexipage-validator.js"
 do
     if [ -f "$file" ]; then
         echo "Fixing: $file"
-        sed -i.bak 's|/ClaudeSFDC/|/platforms/SFDC/|g' "$file" 2>/dev/null || true
-        sed -i 's|ClaudeSFDC/|platforms/SFDC/|g' "$file" 2>/dev/null || true
-        sed -i 's|./instances/|./platforms/SFDC/instances/|g' "$file" 2>/dev/null || true
+        sed -i.bak 's|/ClaudeSFDC/|/opspal-internal/SFDC/|g' "$file" 2>/dev/null || true
+        sed -i 's|ClaudeSFDC/|opspal-internal/SFDC/|g' "$file" 2>/dev/null || true
+        sed -i 's|./instances/|./opspal-internal/SFDC/instances/|g' "$file" 2>/dev/null || true
     fi
 done
 
 # Create symlinks for backward compatibility
 if [ ! -L "ClaudeSFDC" ]; then
-    ln -s "platforms/SFDC" "ClaudeSFDC"
-    echo "Created symlink: ClaudeSFDC -> platforms/SFDC"
+    ln -s "opspal-internal/SFDC" "ClaudeSFDC"
+    echo "Created symlink: ClaudeSFDC -> opspal-internal/SFDC"
 fi
 
 if [ ! -L "instances" ] && [ ! -d "instances" ]; then
-    ln -s "platforms/SFDC/instances" "instances"
-    echo "Created symlink: instances -> platforms/SFDC/instances"
+    ln -s "opspal-internal/SFDC/instances" "instances"
+    echo "Created symlink: instances -> opspal-internal/SFDC/instances"
 fi
 
 echo "Quick fix completed!"
 echo ""
 echo "Backup files created with .bak extension"
-echo "To verify changes: grep -r 'ClaudeSFDC' platforms/SFDC/scripts/ --exclude='*.bak'"
+echo "To verify changes: grep -r 'ClaudeSFDC' opspal-internal/SFDC/scripts/ --exclude='*.bak'"

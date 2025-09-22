@@ -14,6 +14,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
+const { DataAccessError, requireRealData } = require('./data-access-error');
 
 class QueryExecutionError extends Error {
   constructor(execution) {
@@ -73,15 +74,26 @@ class SafeQueryExecutor {
 
       // If still no result and we're in strict mode
       if (!result && this.config.enforceRealData) {
-        throw new Error('Unable to execute query - no data source available');
+        throw new DataAccessError(
+          'Salesforce Query',
+          'Unable to execute query - no data source available',
+          { query: query.substring(0, 500), options }
+        );
       }
 
       // Process successful result
       if (result) {
+        // Validate the data is real
+        const validatedData = requireRealData(
+          result.source || 'UNKNOWN',
+          result.data,
+          { query: query.substring(0, 500) }
+        );
+
         execution.success = true;
         execution.dataSource = result.source || 'UNKNOWN';
-        execution.data = result.data;
-        execution.recordCount = Array.isArray(result.data) ? result.data.length : 1;
+        execution.data = validatedData;
+        execution.recordCount = Array.isArray(validatedData) ? validatedData.length : 1;
         execution.metadata = { ...execution.metadata, ...result.metadata };
       }
 

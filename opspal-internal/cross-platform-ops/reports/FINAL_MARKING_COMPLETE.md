@@ -77,7 +77,7 @@ Plus 8 additional contacts (13 total)
 ### 1. TODAY - Add to HubSpot Inclusion List
 ```bash
 # Export file ready:
-/home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/reports/contact-processing/contacts-in-both-not-synced.csv
+/home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/reports/contact-processing/contacts-in-both-not-synced.csv
 
 # HubSpot List ID: 26
 # Import these 13 contacts immediately to enable sync
@@ -93,7 +93,7 @@ Plus 8 additional contacts (13 total)
 ```apex
 // Run comprehensive marking for all 254,176 contacts
 // Use the script at:
-// /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/scripts/mark-contacts-comprehensive.apex
+// /home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/scripts/mark-contacts-comprehensive.apex
 ```
 
 ## 📊 Extrapolated Impact

@@ -109,7 +109,7 @@ done
 echo ""
 echo "🔍 Platform-Specific Agents:"
 echo "-------------------------------------"
-for platform_dir in platforms/*/.claude/agents; do
+for platform_dir in opspal-internal/*/.claude/agents; do
     if [ -d "$platform_dir" ]; then
         platform_name=$(basename $(dirname $(dirname "$platform_dir")))
         echo "Platform: $platform_name"
@@ -166,7 +166,7 @@ echo ""
 echo "🔍 Checking for naming conflicts:"
 echo "----------------------------------"
 # Collect all project agents (main + platform-specific)
-PROJECT_AGENTS=$(find .claude/agents platforms/*/.claude/agents -maxdepth 1 -name "*.md" 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/.md$//' | sort | uniq)
+PROJECT_AGENTS=$(find .claude/agents opspal-internal/*/.claude/agents -maxdepth 1 -name "*.md" 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/.md$//' | sort | uniq)
 USER_AGENTS=$(ls ~/.claude/agents/*.md 2>/dev/null | xargs -n1 basename | sed 's/.md$//' | sort)
 
 CONFLICTS=$(comm -12 <(echo "$PROJECT_AGENTS") <(echo "$USER_AGENTS") 2>/dev/null)

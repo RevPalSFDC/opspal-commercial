@@ -159,7 +159,7 @@ Using recommended approach:
 
 1. Run this now:
 ```bash
-sf apex run --file /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/scripts/simple-execute.apex --target-org rentable-production
+sf apex run --file /home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/scripts/simple-execute.apex --target-org rentable-production
 ```
 
 2. Check it worked:

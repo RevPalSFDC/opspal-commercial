@@ -53,7 +53,7 @@ const message = {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: "*🔧 Usage*\n```node platforms/SFDC/scripts/sfdc-pre-deployment-validator.js [org] [path]```"
+                text: "*🔧 Usage*\n```node opspal-internal/SFDC/scripts/sfdc-pre-deployment-validator.js [org] [path]```"
             }
         },
         {

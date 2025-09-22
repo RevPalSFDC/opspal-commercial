@@ -79,7 +79,7 @@ Successfully analyzed and categorized contacts for sync status and data quality.
 ### 1. Add Contacts to HubSpot Inclusion List
 ```bash
 # Use the generated CSV file:
-/home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/reports/contact-processing/contacts-in-both-not-synced.csv
+/home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/reports/contact-processing/contacts-in-both-not-synced.csv
 
 # Import to HubSpot List ID: 26
 ```
@@ -87,7 +87,7 @@ Successfully analyzed and categorized contacts for sync status and data quality.
 ### 2. Execute Field Updates (Once Available)
 ```bash
 # Run the Apex script:
-sf apex run --file /home/chris/Desktop/RevPal/Agents/platforms/cross-platform-ops/reports/contact-processing/update-contacts.apex --target-org rentable-production
+sf apex run --file /home/chris/Desktop/RevPal/Agents/opspal-internal/cross-platform-ops/reports/contact-processing/update-contacts.apex --target-org rentable-production
 ```
 
 ### 3. Process Remaining Contacts
