@@ -5,6 +5,11 @@
  * Unified pipeline for Salesforce contact data quality operations
  */
 
+// Install runtime mock guard FIRST
+const RuntimeMockGuard = require('../../../scripts/lib/runtime-mock-guard.js');
+const guard = new RuntimeMockGuard();
+guard.install();
+
 const { exec } = require('child_process');
 const util = require('util');
 const fs = require('fs').promises;

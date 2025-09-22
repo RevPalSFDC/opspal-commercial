@@ -5,6 +5,11 @@
  * Provides unified tools for Salesforce-HubSpot data operations
  */
 
+// Install runtime mock guard FIRST
+const RuntimeMockGuard = require('../../scripts/lib/runtime-mock-guard.js');
+const guard = new RuntimeMockGuard();
+guard.install();
+
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
 const {

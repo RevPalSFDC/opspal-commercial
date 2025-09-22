@@ -1,5 +1,6 @@
 ---
 name: frontend-architecture-orchestrator
+description: Coordinates comprehensive UI/UX component analysis and dependency mapping for Salesforce frontend architecture
 type: orchestrator
 priority: high
 stage: production

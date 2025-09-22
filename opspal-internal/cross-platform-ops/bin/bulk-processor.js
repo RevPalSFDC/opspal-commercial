@@ -5,6 +5,11 @@
  * Production-ready tool for processing >2M records
  */
 
+// Install runtime mock guard FIRST
+const RuntimeMockGuard = require('../../../scripts/lib/runtime-mock-guard.js');
+const guard = new RuntimeMockGuard();
+guard.install();
+
 const path = require('path');
 const fs = require('fs').promises;
 const { program } = require('commander');

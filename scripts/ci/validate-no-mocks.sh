@@ -147,8 +147,8 @@ fi
 echo ""
 echo "5️⃣  Running Node.js runtime validation..."
 
-cat > /tmp/test_no_mocks.js << 'EOF'
-const RuntimeMockGuard = require('./scripts/lib/runtime-mock-guard.js');
+cat > /tmp/test_no_mocks.js << EOF
+const RuntimeMockGuard = require('${PWD}/scripts/lib/runtime-mock-guard.js');
 
 // Quick check
 const result = RuntimeMockGuard.quickCheck();
