@@ -1,0 +1,124 @@
+name: No-Mocks Policy Enforcement
+
+on:
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.py'
+      - '**/*.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/no-mocks-enforcement.yml'
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+env:
+  NO_MOCKS: '1'  # Enforce no-mocks policy globally
+
+jobs:
+  validate-no-mocks:
+    runs-on: ubuntu-latest
+    name: Validate No-Mocks Policy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install ripgrep
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep jq
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run no-mocks validation
+        run: |
+          echo "🔍 Running No-Mocks Policy Validation..."
+          bash scripts/ci/validate-no-mocks.sh
+
+      - name: Test runtime guard installation
+        run: |
+          echo "🛡️ Testing runtime mock guard..."
+          NO_MOCKS=1 node -e "const RuntimeMockGuard = require('./scripts/lib/runtime-mock-guard.js'); const guard = new RuntimeMockGuard(); guard.install(); console.log('✅ Runtime guard installed successfully');"
+
+      - name: Run SafeQueryExecutor validation
+        run: |
+          echo "📊 Validating SafeQueryExecutor..."
+          NO_MOCKS=1 node -e "const SafeQueryExecutor = require('./scripts/lib/safe-query-executor.js'); const executor = new SafeQueryExecutor({ enforceRealData: true }); console.log('✅ SafeQueryExecutor validated');"
+
+      - name: Check for mock library usage
+        run: |
+          echo "🔎 Checking for mock library imports..."
+          # Check for banned imports in JavaScript/TypeScript files
+          if rg -i "from\s+['\"](@faker-js/faker|faker|chance|casual|msw|nock|sinon|testdouble)['\"]|require\s*\(\s*['\"](@faker-js/faker|faker|chance|casual|msw|nock|sinon|testdouble)['\"]" \
+             --glob '**/*.{js,ts,jsx,tsx}' \
+             --glob '!**/node_modules/**' \
+             --glob '!**/.git/**' \
+             --glob '!**/build/**' \
+             --glob '!**/dist/**'; then
+            echo "❌ Found mock library imports!"
+            exit 1
+          else
+            echo "✅ No mock library imports found"
+          fi
+
+      - name: Verify DataAccessError implementation
+        run: |
+          echo "🚨 Verifying DataAccessError class..."
+          NO_MOCKS=1 node -e "const { DataAccessError } = require('./scripts/lib/data-access-error.js'); const error = new DataAccessError('Test', 'Validation'); console.log('✅ DataAccessError class verified');"
+
+      - name: Test entry point guards
+        run: |
+          echo "🔐 Testing entry point guards..."
+          # Test that entry points have runtime guards
+          for entry in "opspal-internal/cross-platform-ops/mcp-server.js" \
+                      "opspal-internal/cross-platform-ops/bin/contact-hygiene.js" \
+                      "opspal-internal/cross-platform-ops/bin/bulk-processor.js"; do
+            if [ -f "$entry" ]; then
+              if grep -q "RuntimeMockGuard" "$entry"; then
+                echo "✅ $entry has runtime guard"
+              else
+                echo "❌ $entry missing runtime guard!"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          echo ""
+          echo "📋 No-Mocks Policy Enforcement Summary"
+          echo "======================================"
+          echo "Environment: NO_MOCKS=$NO_MOCKS"
+          echo "Policy Document: docs/NO_MOCKS_POLICY.md"
+          echo ""
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ All checks passed - No mock policy is enforced!"
+          else
+            echo "❌ Validation failed - See logs above for details"
+            echo ""
+            echo "To fix:"
+            echo "1. Remove mock libraries from dependencies"
+            echo "2. Replace mock data with real data sources"
+            echo "3. Use DataAccessError for failures"
+            echo "4. Add runtime guards to entry points"
+          fi
+
+      - name: Upload validation report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: no-mocks-violations-${{ github.run_number }}
+          path: mock_violations.log
+          retention-days: 7

@@ -7,6 +7,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const Module = require('module');
 
 class RuntimeMockGuard {
     constructor() {
@@ -112,7 +113,9 @@ class RuntimeMockGuard {
     /**
      * Install guard as early as possible in application lifecycle
      */
-    install() {
+    install(options = {}) {
+        const { skipInterval = false } = options;
+
         if (!this.isNoMocksEnabled()) {
             console.log('ℹ️  Runtime mock guard inactive (NO_MOCKS != 1)');
             return;
@@ -146,10 +149,12 @@ class RuntimeMockGuard {
             return originalRequire.apply(this, arguments);
         };
 
-        // Set up interval validation
-        setInterval(() => {
-            this.validateLoadedModules();
-        }, 30000); // Check every 30 seconds
+        // Set up interval validation (skip in test mode)
+        if (!skipInterval) {
+            setInterval(() => {
+                this.validateLoadedModules();
+            }, 30000); // Check every 30 seconds
+        }
     }
 
     /**

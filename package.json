@@ -21,6 +21,7 @@
     "data:preflight": "node scripts/preflight-data-validator.js quick",
     "ci:preflight": "node scripts/preflight-data-validator.js quick",
     "validate:no-mocks": "bash scripts/ci/validate-no-mocks.sh",
+    "test:mock-blocking": "node scripts/test-mock-blocking.js",
     "guard:install": "node scripts/lib/runtime-mock-guard.js",
     "ci:full": "npm run validate:no-mocks && npm run ci:preflight",
     "test": "jest",
@@ -59,7 +60,6 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "nock": "^13.5.2"
+    "jest": "^29.7.0"
   }
 }

@@ -33,6 +33,8 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Run data-access preflight
+        env:
+          NO_MOCKS: '1'
         run: npm run ci:preflight
 
       # Intentionally skip full unit tests here to keep preflight focused.

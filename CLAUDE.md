@@ -469,6 +469,57 @@ npm run test:integration   # All integrations
 
 ## Data Integrity Protocol
 
+### 🚨 CRITICAL: No-Mocks Policy Enforcement
+
+**ZERO TOLERANCE**: This repository enforces a strict NO-MOCKS policy. All data MUST come from real, authoritative sources.
+
+#### Environment Enforcement
+```bash
+export NO_MOCKS=1  # MANDATORY for all operations
+```
+
+#### Core Components
+- **DataAccessError**: Fail-fast on data unavailability (no fake fallbacks)
+- **RuntimeMockGuard**: Blocks mock libraries at runtime
+- **SafeQueryExecutor**: Validates all data is real
+- **CI/CD Validation**: Automated enforcement on every push/PR
+
+#### Prohibited (Will Cause Process Exit)
+- ❌ Mock libraries: faker, nock, sinon, testdouble, msw, chance, casual
+- ❌ Mock file paths: */mock/*, */fixture/*, */sample/*, */stub/*
+- ❌ Fake data patterns: "Example Corp", "John Doe", "Lead 123"
+- ❌ Empty fallbacks when data unavailable
+
+#### Required Pattern
+```javascript
+// ❌ BAD: Returning fake data on failure
+try {
+    data = await fetchData();
+} catch (e) {
+    data = { items: [] };  // PROHIBITED!
+}
+
+// ✅ GOOD: Fail fast with clear error
+const { DataAccessError } = require('./scripts/lib/data-access-error');
+try {
+    data = await fetchData();
+} catch (e) {
+    throw new DataAccessError('API', e.message, { endpoint });
+}
+```
+
+#### Testing & Validation
+```bash
+# Run validation
+npm run validate:no-mocks
+
+# Test mock blocking
+npm run test:mock-blocking
+
+# CI validation (runs automatically)
+npm run ci:full
+```
+
 ### 🚨 CRITICAL: Sub-Agent Data Integrity Requirements
 
 **MANDATORY**: All sub-agents MUST follow these data integrity rules to prevent fake data generation.

@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Pre-commit hook for No-Mocks Policy Enforcement
+# Install: ln -sf ../../.githooks/pre-commit-no-mocks .git/hooks/pre-commit
+
+set -e
+
+echo "🔍 Running No-Mocks Policy Pre-Commit Check..."
+
+# Set NO_MOCKS environment variable
+export NO_MOCKS=1
+
+# Check for staged files that might contain mock data
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|ts|py)$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "✅ No JavaScript/TypeScript/Python files to check"
+    exit 0
+fi
+
+# Check for banned patterns in staged files
+VIOLATIONS=""
+
+for file in $STAGED_FILES; do
+    # Check for mock library imports
+    if grep -qiE "import.*(faker|chance|casual|msw|nock|sinon|testdouble)|from\s+['\"](@faker-js/faker|faker|mock)" "$file"; then
+        VIOLATIONS="${VIOLATIONS}\n❌ $file: Contains mock library import"
+    fi
+
+    # Check for common mock patterns
+    if grep -qE "(Example Corp|John Doe|Lorem Ipsum|test@example\.com)" "$file"; then
+        VIOLATIONS="${VIOLATIONS}\n⚠️  $file: Contains potential mock data pattern"
+    fi
+
+    # Check for mock file paths
+    if grep -qE "(mock|fixture|sample|stub)/" "$file"; then
+        VIOLATIONS="${VIOLATIONS}\n⚠️  $file: References mock/fixture path"
+    fi
+done
+
+# Run quick validation if violations found
+if [ ! -z "$VIOLATIONS" ]; then
+    echo -e "\n🚨 Potential No-Mocks Policy Violations Found:"
+    echo -e "$VIOLATIONS"
+    echo ""
+    echo "Running full validation..."
+
+    # Run the validation script
+    if [ -f "scripts/ci/validate-no-mocks.sh" ]; then
+        # Run validation but don't block on warnings
+        bash scripts/ci/validate-no-mocks.sh 2>&1 | head -30 || true
+    fi
+
+    echo ""
+    echo "⚠️  Review the violations above. If these are legitimate test files or"
+    echo "    clearly marked test-only data, you may proceed with:"
+    echo "    git commit --no-verify"
+    echo ""
+    echo "Otherwise, please fix the violations before committing."
+
+    # Ask for confirmation
+    read -p "Do you want to proceed anyway? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
+
+# Run mock blocking test if available
+if [ -f "scripts/test-mock-blocking.js" ]; then
+    echo "🧪 Testing mock blocking enforcement..."
+    NO_MOCKS=1 node scripts/test-mock-blocking.js > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "✅ Mock blocking tests passed"
+    else
+        echo "❌ Mock blocking tests failed!"
+        echo "   Run: npm run test:mock-blocking for details"
+        exit 1
+    fi
+fi
+
+echo "✅ No-Mocks Policy Pre-Commit Check Passed"
+exit 0

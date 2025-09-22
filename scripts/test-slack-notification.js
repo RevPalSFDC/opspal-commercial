@@ -72,13 +72,17 @@ async function runTest() {
     
     // Use sample data if not using real release
     if (!testData) {
-        console.log('Using sample release data...');
+        // IMPORTANT: This is TEST-ONLY sample data for webhook verification
+        // Production code MUST use real data - enforced by NO_MOCKS policy
+        console.log('⚠️  WARNING: Using TEST-ONLY sample data for webhook verification...');
+        console.log('   For real notifications, use --real-release flag');
         testData = {
             version: 'v1.2.0-test',
-            title: '🧪 Test Release: Profile Management & Compliance Update',
-            body: `## Test Release Notification
+            title: '🧪 TEST WEBHOOK VERIFICATION: This is not real data',
+            body: `## ⚠️ TEST WEBHOOK VERIFICATION ONLY
 
-This is a test of the Slack release notification system for RevPal Agents.
+**THIS IS NOT REAL DATA** - This is a webhook configuration test.
+For actual release notifications, use: --real-release flag
 
 ### ✨ Features
 • Profile layout assignment solution
