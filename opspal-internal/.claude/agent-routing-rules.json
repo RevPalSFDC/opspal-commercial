@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Mandatory agent routing rules by task domain to prevent wrong agent selection",
+
+  "rules": [
+    {
+      "domain": "SFDC",
+      "description": "Salesforce-specific operations",
+      "keywords": [
+        "salesforce", "sfdc", "cpq", "revops", "org", "apex", "soql",
+        "sobject", "lightning", "visualforce", "trigger", "validation rule",
+        "flow", "process builder", "workflow", "field", "object",
+        "record type", "page layout", "permission set", "profile",
+        "sandbox", "production", "metadata", "deployment"
+      ],
+      "required_agent_patterns": [
+        "sfdc-*"
+      ],
+      "required_path_prefix": "SFDC/instances/",
+      "exceptions": [
+        {
+          "condition": "task contains 'plan' or 'planning' only",
+          "allowed_agents": ["sfdc-planner", "principal-engineer"],
+          "rationale": "Planning tasks don't require direct SFDC operations"
+        },
+        {
+          "condition": "task is cross-platform with SFDC + HubSpot",
+          "allowed_agents": ["unified-orchestrator", "sfdc-hubspot-bridge"],
+          "rationale": "Cross-platform tasks require orchestrator agents"
+        }
+      ],
+      "blocked_agents": [
+        "general-purpose"
+      ],
+      "blocked_reason": "SFDC tasks require specialized agents with SFDC tool access and context"
+    },
+
+    {
+      "domain": "HubSpot",
+      "description": "HubSpot-specific operations",
+      "keywords": [
+        "hubspot", "hs", "portal", "workflow", "contact property",
+        "deal", "company", "ticket", "automation", "email",
+        "landing page", "form", "list", "segment"
+      ],
+      "required_agent_patterns": [
+        "hubspot-*"
+      ],
+      "required_path_prefix": "HS/instances/",
+      "exceptions": [
+        {
+          "condition": "task is cross-platform with SFDC + HubSpot",
+          "allowed_agents": ["unified-orchestrator", "sfdc-hubspot-bridge"],
+          "rationale": "Cross-platform tasks require orchestrator agents"
+        }
+      ],
+      "blocked_agents": [
+        "general-purpose"
+      ],
+      "blocked_reason": "HubSpot tasks require specialized agents with HubSpot API access"
+    },
+
+    {
+      "domain": "CrossPlatform",
+      "description": "Multi-platform orchestration",
+      "keywords": [
+        "sync", "bidirectional", "cross-platform", "unified",
+        "both salesforce and hubspot", "sf and hs", "multi-platform",
+        "platform-agnostic", "all platforms"
+      ],
+      "required_agent_patterns": [
+        "unified-*", "sfdc-hubspot-bridge"
+      ],
+      "required_path_prefix": "opspal-internal/",
+      "exceptions": [],
+      "blocked_agents": [
+        "general-purpose"
+      ],
+      "blocked_reason": "Cross-platform tasks require orchestrator agents with multi-platform context"
+    },
+
+    {
+      "domain": "Assessment",
+      "description": "Comprehensive assessments and audits",
+      "keywords": [
+        "assessment", "audit", "comprehensive", "revops", "evaluation",
+        "health check", "analysis", "review", "score"
+      ],
+      "required_agent_patterns": [
+        "sfdc-revops-auditor", "sfdc-cpq-assessor", "quality-control-analyzer"
+      ],
+      "platform_specific": true,
+      "path_determination": "Based on platform being assessed (SFDC/instances/ or HS/instances/)",
+      "exceptions": [
+        {
+          "condition": "task is multi-platform assessment",
+          "allowed_agents": ["unified-orchestrator"],
+          "rationale": "Multi-platform assessments require unified orchestrator"
+        }
+      ],
+      "blocked_agents": [
+        "general-purpose"
+      ],
+      "blocked_reason": "Assessments require specialized agents with framework compliance and benchmark data"
+    }
+  ],
+
+  "enforcement": {
+    "enabled": true,
+    "strict_mode": true,
+    "auto_suggest": true,
+    "block_on_violation": true,
+    "user_override": false
+  },
+
+  "detection_algorithm": {
+    "description": "How to detect domain from task description",
+    "steps": [
+      "1. Convert task description to lowercase",
+      "2. Check for exact keyword matches in each domain",
+      "3. Score each domain by keyword match count",
+      "4. If top score >= 2 keywords, declare that domain",
+      "5. If tie or score < 2, check for platform mentions (Salesforce, HubSpot)",
+      "6. If still ambiguous, prompt user for clarification"
+    ],
+    "priority_order": [
+      "Assessment",
+      "CrossPlatform",
+      "SFDC",
+      "HubSpot"
+    ]
+  },
+
+  "validation": {
+    "agent_name_check": true,
+    "path_prefix_check": true,
+    "tool_availability_check": false,
+    "emit_warnings": true,
+    "emit_suggestions": true
+  },
+
+  "error_messages": {
+    "wrong_agent": "❌ AGENT ROUTING ERROR: Task domain '{domain}' requires agent matching pattern '{required_pattern}', but '{selected_agent}' was selected.\n\n💡 SUGGESTION: Use one of these agents instead:\n{suggested_agents}\n\n📚 REASON: {blocked_reason}",
+
+    "wrong_path": "❌ PATH VALIDATION ERROR: Task domain '{domain}' requires path prefix '{required_prefix}', but target path '{actual_path}' was provided.\n\n💡 SUGGESTION: Use this path instead:\n{suggested_path}\n\n📚 REASON: Consistency in project organization is critical for agent discovery and context loading.",
+
+    "ambiguous_domain": "⚠️ DOMAIN DETECTION UNCLEAR: Task description matches multiple domains or confidence is low.\n\nMatched domains:\n{matched_domains}\n\nPlease clarify which domain this task belongs to, or use more specific keywords."
+  },
+
+  "suggestions": {
+    "SFDC": [
+      "sfdc-revops-auditor (comprehensive assessments)",
+      "sfdc-cpq-assessor (CPQ-specific assessments)",
+      "sfdc-metadata-manager (objects, fields, validation rules)",
+      "sfdc-data-operations (data import/export/cleanup)",
+      "sfdc-planner (planning and analysis)"
+    ],
+    "HubSpot": [
+      "hubspot-workflow-specialist (workflow automation)",
+      "hubspot-data-operations (data management)",
+      "hubspot-integration-specialist (API integrations)"
+    ],
+    "CrossPlatform": [
+      "unified-orchestrator (multi-platform coordination)",
+      "sfdc-hubspot-bridge (bidirectional sync)"
+    ],
+    "Assessment": [
+      "sfdc-revops-auditor (Salesforce RevOps assessment)",
+      "sfdc-cpq-assessor (Salesforce CPQ assessment)"
+    ]
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Required path patterns for domain-specific projects to enforce consistency",
+
+  "domains": {
+    "SFDC": {
+      "name": "Salesforce",
+      "base_path": "SFDC/instances/{org}/",
+      "project_pattern": "{project-name}-{date}/",
+      "date_format": "YYYY-MM-DD",
+      "required_subdirs": [
+        "scripts/",
+        "data/",
+        "reports/",
+        "backups/"
+      ],
+      "optional_subdirs": [
+        "docs/",
+        "queries/",
+        "metadata/",
+        "bulk-operations/"
+      ],
+      "file_naming": {
+        "scripts": "{number}-{action}-{target}.js",
+        "data": "{content}-{date}-{status}.csv",
+        "reports": "{TYPE}_{SUBJECT}_{DATE}.md"
+      },
+      "examples": {
+        "valid_paths": [
+          "SFDC/instances/hivemq/cpq-assessment-2025-10-03/",
+          "SFDC/instances/neonone/contact-cleanup-2025-09-15/",
+          "SFDC/instances/wedgewood-sandbox/report-migration-2025-08-20/"
+        ],
+        "invalid_paths": [
+          "opspal-internal/instances/hivemq/",
+          "instances/hivemq/",
+          "SFDC/cpq-assessment/",
+          "hivemq/cpq-assessment-2025-10-03/"
+        ]
+      }
+    },
+
+    "HubSpot": {
+      "name": "HubSpot",
+      "base_path": "HS/instances/{portal}/",
+      "project_pattern": "{project-name}-{date}/",
+      "date_format": "YYYY-MM-DD",
+      "required_subdirs": [
+        "scripts/",
+        "data/",
+        "reports/",
+        "backups/"
+      ],
+      "optional_subdirs": [
+        "docs/",
+        "workflows/",
+        "templates/"
+      ],
+      "file_naming": {
+        "scripts": "{number}-{action}-{target}.js",
+        "data": "{content}-{date}-{status}.csv",
+        "reports": "{TYPE}_{SUBJECT}_{DATE}.md"
+      },
+      "examples": {
+        "valid_paths": [
+          "HS/instances/revpal-production/workflow-migration-2025-10-03/",
+          "HS/instances/test-portal/contact-sync-2025-09-15/"
+        ],
+        "invalid_paths": [
+          "opspal-internal/instances/revpal-production/",
+          "HubSpot/instances/revpal-production/",
+          "HS/workflow-migration/"
+        ]
+      }
+    },
+
+    "CrossPlatform": {
+      "name": "Cross-Platform Operations",
+      "base_path": "opspal-internal/",
+      "project_pattern": "{project-name}-{date}/",
+      "date_format": "YYYY-MM-DD",
+      "required_subdirs": [
+        "scripts/",
+        "data/",
+        "reports/"
+      ],
+      "optional_subdirs": [
+        "docs/",
+        "logs/",
+        "config/"
+      ],
+      "file_naming": {
+        "scripts": "{number}-{platform}-{action}.js",
+        "data": "{platform}-{content}-{date}.csv",
+        "reports": "{TYPE}_{PLATFORMS}_{DATE}.md"
+      },
+      "examples": {
+        "valid_paths": [
+          "opspal-internal/sfdc-hs-sync-2025-10-03/",
+          "opspal-internal/unified-reporting-2025-09-15/"
+        ],
+        "invalid_paths": [
+          "SFDC/instances/cross-platform/",
+          "HS/instances/sfdc-sync/",
+          "cross-platform-ops/"
+        ]
+      }
+    }
+  },
+
+  "path_detection": {
+    "description": "How to detect correct path from task description and domain",
+    "steps": [
+      "1. Detect domain using task-domain-detector.js",
+      "2. Extract org/portal name from task description or context",
+      "3. Use current date in YYYY-MM-DD format",
+      "4. Generate project name from task action (slugified)",
+      "5. Combine: {domain_base_path}/{org}/{project-name}-{date}/"
+    ]
+  },
+
+  "validation": {
+    "check_base_path": true,
+    "check_org_name": true,
+    "check_project_pattern": true,
+    "check_subdirs": "warn_only",
+    "suggest_correction": true,
+    "auto_create_subdirs": true
+  },
+
+  "error_messages": {
+    "wrong_base_path": "❌ PATH VALIDATION ERROR\n\n  Domain: {domain}\n  Expected Base Path: {expected_base}\n  Actual Path: {actual_path}\n\n💡 SUGGESTED PATH:\n  {suggested_path}\n\n📚 REASON:\n  {reason}",
+
+    "missing_org_name": "❌ PATH VALIDATION ERROR\n\n  Domain: {domain}\n  Expected Pattern: {pattern}\n  Actual Path: {actual_path}\n\n💡 SUGGESTION:\n  Include org/portal name in path: {example}",
+
+    "wrong_project_pattern": "⚠️  PATH FORMAT WARNING\n\n  Expected Pattern: {pattern}\n  Actual Path: {actual_path}\n\n💡 SUGGESTED FORMAT:\n  {suggested_path}\n\n  Note: Date-stamped project folders help with organization and history tracking."
+  },
+
+  "auto_correction": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "suggestions": {
+      "description": "Auto-suggest correct path when wrong path detected",
+      "algorithm": [
+        "Extract domain from task",
+        "Extract org name from task or context",
+        "Generate project name from task action",
+        "Combine with date to create suggested path"
+      ]
+    }
+  }
+}
