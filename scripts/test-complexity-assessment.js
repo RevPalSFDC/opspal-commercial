@@ -5,9 +5,9 @@
  * Tests complexity analysis and Sequential Thinking integration
  */
 
-const ComplexityAnalyzer = require('../shared-infrastructure/complexity-assessment/complexity-analyzer');
-const ComplexityAwareAgent = require('../shared-infrastructure/complexity-assessment/ComplexityAwareAgent');
-const profiles = require('../shared-infrastructure/complexity-assessment/complexity-profiles.json');
+const ComplexityAnalyzer = require('../opspal-internal/infrastructure/shared-infrastructure/complexity-assessment/complexity-analyzer');
+const ComplexityAwareAgent = require('../opspal-internal/infrastructure/shared-infrastructure/complexity-assessment/ComplexityAwareAgent');
+const profiles = require('../opspal-internal/infrastructure/shared-infrastructure/complexity-assessment/complexity-profiles.json');
 
 // Parse command line arguments
 const args = process.argv.slice(2);

@@ -14,7 +14,7 @@ class HubSpotEnvironmentManager {
         this.rootPath = path.join(__dirname, '..');
         this.mcpConfigPath = path.join(this.rootPath, '.mcp.json');
         this.envPath = path.join(this.rootPath, '.env');
-        this.portalsConfigPath = path.join(this.rootPath, 'ClaudeHubSpot', 'portals', 'config.json');
+        this.portalsConfigPath = path.join(this.rootPath, 'opspal-internal', 'HS', 'portals', 'config.json');
         
         this.loadConfigurations();
     }

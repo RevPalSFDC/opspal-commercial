@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Private Consulting Firm",
+    "input": {
+      "company": "Public Safety Solutions LLC",
+      "email": "consultant@pssolutions.com",
+      "name": "Mike Jones",
+      "title": "Public Safety Consultant"
+    },
+    "expected": {
+      "bucket": "Not Applicable",
+      "min_confidence": 0.80
+    }
+  },
+  {
+    "name": "Technology Vendor",
+    "input": {
+      "company": "GovTech Services Inc.",
+      "email": "sales@govtechservices.com",
+      "name": "Jennifer Smith",
+      "title": "Account Executive"
+    },
+    "expected": {
+      "bucket": "Not Applicable",
+      "min_confidence": 0.85
+    }
+  },
+  {
+    "name": "Private Security Company",
+    "input": {
+      "company": "Security Professionals LLC",
+      "email": "manager@securitypros.io",
+      "name": "David Brown",
+      "title": "Security Manager"
+    },
+    "expected": {
+      "bucket": "Not Applicable",
+      "min_confidence": 0.80
+    }
+  }
+]

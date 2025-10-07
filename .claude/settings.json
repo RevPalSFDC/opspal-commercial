@@ -31,9 +31,9 @@
       "Read(**/node_modules/**)"
     ],
     "additionalDirectories": [
-      "./ClaudeSFDC",
-      "./ClaudeHubSpot",
-      "./opspal"
+      "./opspal-internal/SFDC",
+      "./opspal-internal/HS",
+      "./opspal-internal"
     ]
   },
   "hooks": {

@@ -68,12 +68,12 @@ fi
 # Set project directory
 case $PROJECT in
   ClaudeHubSpot)
-    PROJECT_DIR="../ClaudeHubSpot"
+    PROJECT_DIR="../opspal-internal/HS"
     PROJECT_NAME="ClaudeHubSpot"
     REPO_NAME="claude-hs"
     ;;
   ClaudeSFDC)
-    PROJECT_DIR="../ClaudeSFDC"
+    PROJECT_DIR="../opspal-internal/SFDC"
     PROJECT_NAME="ClaudeSFDC"
     REPO_NAME="claude-sfdc"
     ;;

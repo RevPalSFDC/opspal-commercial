@@ -3,7 +3,7 @@
     "hubspot-v4": {
       "command": "node",
       "args": [
-        "./ClaudeHubSpot/scripts/enhanced-hubspot-mcp-v4.js"
+        "./opspal-internal/HS/scripts/enhanced-hubspot-mcp-v4.js"
       ],
       "env": {
         "HUBSPOT_ACCESS_TOKEN": "${HUBSPOT_ACCESS_TOKEN_FILMHUB:-${HUBSPOT_ACCESS_TOKEN:-${HUBSPOT_API_KEY_FILMHUB:-${HUBSPOT_API_KEY}}}}",

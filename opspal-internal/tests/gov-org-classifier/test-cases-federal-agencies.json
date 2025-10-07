@@ -1,0 +1,54 @@
+[
+  {
+    "name": "FEMA HQ",
+    "input": {
+      "company": "Federal Emergency Management Agency",
+      "email": "coordinator@fema.dhs.gov",
+      "name": "Sarah Martinez",
+      "title": "Emergency Management Coordinator"
+    },
+    "expected": {
+      "bucket": "FEMA",
+      "min_confidence": 0.90
+    }
+  },
+  {
+    "name": "FEMA Regional Office",
+    "input": {
+      "company": "FEMA Region X",
+      "email": "admin@fema.dhs.gov",
+      "name": "Robert Chen",
+      "title": "Regional Administrator"
+    },
+    "expected": {
+      "bucket": "FEMA Regional Office",
+      "min_confidence": 0.85
+    }
+  },
+  {
+    "name": "U.S. Marshals",
+    "input": {
+      "company": "United States Marshals Service",
+      "email": "deputy@usmarshals.gov",
+      "name": "James Wilson",
+      "title": "Deputy U.S. Marshal"
+    },
+    "expected": {
+      "bucket": "U.S. Marshals Service",
+      "min_confidence": 0.95
+    }
+  },
+  {
+    "name": "TSA Officer",
+    "input": {
+      "company": "Transportation Security Administration",
+      "email": "officer@tsa.dhs.gov",
+      "name": "Maria Garcia",
+      "title": "TSA Officer"
+    },
+    "expected": {
+      "bucket": "DHS Sub-Agency",
+      "min_confidence": 0.90
+    }
+  }
+]

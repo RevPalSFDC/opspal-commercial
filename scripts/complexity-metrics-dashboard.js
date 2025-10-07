@@ -11,8 +11,8 @@ const path = require('path');
 
 // Configuration
 const PORT = 3005;
-const METRICS_FILE = path.join(__dirname, '..', 'shared-infrastructure', 'complexity-assessment', 'metrics.json');
-const PROFILES_FILE = path.join(__dirname, '..', 'shared-infrastructure', 'complexity-assessment', 'complexity-profiles.json');
+const METRICS_FILE = path.join(__dirname, '..', 'opspal-internal', 'infrastructure', 'shared-infrastructure', 'complexity-assessment', 'metrics.json');
+const PROFILES_FILE = path.join(__dirname, '..', 'opspal-internal', 'infrastructure', 'shared-infrastructure', 'complexity-assessment', 'complexity-profiles.json');
 
 // Load agent profiles
 const agentProfiles = require(PROFILES_FILE);

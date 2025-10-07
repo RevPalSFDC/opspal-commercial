@@ -1,0 +1,20 @@
+{
+  "name": "forcepal",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Unified automation shell for RevPal Salesforce operations",
+  "packageManager": "npm@10.9.0",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "build": "npm run build -w apps/cli && npm run build -w apps/ui",
+    "dev": "npm run dev -w apps/ui",
+    "lint": "npm run lint -ws",
+    "test": "npm test -ws"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

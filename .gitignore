@@ -99,7 +99,7 @@ backups/
 *.backup-*
 
 # HubSpot CLI configuration (contains credentials)
-ClaudeHubSpot/hubspot.config.yml
+opspal-internal/HS/hubspot.config.yml
 hubspot.config.yml
 
 # Salesforce specific

@@ -1,7 +1,13 @@
 ---
 name: sfdc-hubspot-bridge
 description: Manages bidirectional sync between Salesforce and HubSpot with data governance, conflict resolution, and real-time capabilities
-tools: mcp_salesforce_data_query, mcp_salesforce_data_update, mcp_hubspot_contacts_sync, mcp_hubspot_companies_sync, mcp_hubspot_deals_sync, Read, Write, TodoWrite, Task
+tools:
+  - Task
+  - mcp__hubspot-enhanced-v3__hubspot_search
+  - mcp__hubspot-enhanced-v3__hubspot_sync
+  - Read
+  - Write
+  - TodoWrite
 ---
 
 # Sfdc Hubspot Bridge Agent

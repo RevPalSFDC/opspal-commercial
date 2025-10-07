@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-09-24T12:29:26.803916+00:00",
+  "passed": [],
+  "failed": [
+    {
+      "check": "API Authentication",
+      "message": "Invalid or expired API token",
+      "severity": "critical"
+    },
+    {
+      "check": "Salesforce Permissions",
+      "message": "Cannot access Salesforce: Parsing --target-org \n\tNo authorization information found for production.\nSee more help with --help",
+      "severity": "critical"
+    }
+  ],
+  "warnings": [],
+  "recommendations": [],
+  "score": 0.0,
+  "status": "critical"
+}

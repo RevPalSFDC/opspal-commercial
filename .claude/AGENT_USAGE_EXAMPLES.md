@@ -66,6 +66,75 @@ Task tool invocation:
 - prompt: "Create a comprehensive plan to refactor the entire permission system. Use sequential thinking with revision capability."
 ```
 
+## ⚡ Orchestrator Performance Optimization
+
+### Parallel Task Execution (NEW - v3.3.0)
+**When to use**: Any orchestrator coordinating multiple independent sub-agents
+
+**Purpose**: Reduce orchestration time by 40-70% by running independent tasks concurrently.
+
+**Key Principle**: When an orchestrator delegates to multiple sub-agents that don't depend on each other, invoke ALL Task calls in a SINGLE message to enable parallel execution.
+
+**Example 1 - RevOps Audit (56% faster)**:
+```
+User: "Run a comprehensive RevOps audit"
+Claude (sfdc-revops-coordinator): I'll run a parallel audit for maximum efficiency.
+
+❌ BAD (Sequential - 45 minutes):
+Message 1: Task(sfdc-revops-auditor, "audit reports") → 20 min
+Message 2: Task(sfdc-revops-auditor, "audit dashboards") → 15 min
+Message 3: Task(sfdc-revops-auditor, "audit fields") → 10 min
+
+✅ GOOD (Parallel - 20 minutes):
+Single Message with 3 concurrent Tasks:
+- All three audits run simultaneously
+- Total time: max(20, 15, 10) = 20 minutes
+- Speedup: 56% (25 minutes saved)
+```
+
+**Example 2 - Account Migration Analysis (59% faster)**:
+```
+User: "Analyze the Account object before migration"
+Claude (sfdc-orchestrator): Running parallel discovery for complete analysis.
+
+✅ Parallel approach:
+Single Message:
+├── Task(sfdc-field-analyzer, "analyze Account fields")
+├── Task(sfdc-dependency-analyzer, "map Account dependencies")
+└── Task(sfdc-state-discovery, "discover current config")
+
+Total time: max(12, 15, 10) = 15 minutes
+Sequential would be: 12 + 15 + 10 = 37 minutes
+Speedup: 59% (22 minutes saved)
+```
+
+**When to use parallel**:
+- ✅ Tasks are independent (no data dependencies)
+- ✅ All context available upfront
+- ✅ Order doesn't matter
+- ✅ Read-only operations
+
+**When to use sequential**:
+- ❌ Task B needs output from Task A
+- ❌ User approval needed between steps
+- ❌ Order matters for business logic
+- ❌ Risk mitigation requires staged execution
+
+**Recommended limits**: 3-5 concurrent agents maximum
+
+**📚 Complete Guide**: See `opspal-internal/SFDC/docs/ORCHESTRATOR_PARALLEL_EXECUTION_GUIDE.md` for:
+- 4 detailed real-world examples
+- Common patterns library
+- Anti-patterns to avoid
+- Performance metrics
+- Troubleshooting guide
+
+**Orchestrators with this capability**:
+- `sfdc-orchestrator` - Complex Salesforce operations
+- `sfdc-revops-coordinator` - RevOps audits
+- `gtm-planning-orchestrator` - GTM annual planning
+- `sfdc-merge-orchestrator` - Object/field merging
+
 ## 🔧 Salesforce Specialist Agents
 
 **Note**: Salesforce-specific agents are now located in `platforms/SFDC/.claude/agents/`

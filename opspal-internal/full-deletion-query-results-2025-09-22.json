@@ -1,0 +1,528 @@
+{
+  "queryDate": "2025-09-22T18:26:27.379Z",
+  "totalMatchingContacts": 7711,
+  "reportAPILimit": 2000,
+  "additionalRecordsBeyondReport": 5711,
+  "filters": {
+    "clean_status": "IN ('Delete', 'Archive', 'Review') AND != 'OK'",
+    "account_number_of_units": "null or 0",
+    "account_aln_of_units": "null or 0",
+    "account_rca_of_units": "null or 0"
+  },
+  "distribution": [
+    {
+      "status": "Delete",
+      "count": 6615
+    },
+    {
+      "status": "Archive",
+      "count": 884
+    },
+    {
+      "status": "Review",
+      "count": 13
+    }
+  ],
+  "sampleRecords": [
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002RECo2QAH"
+      },
+      "Id": "0032A00002RECo2QAH",
+      "Name": "Nancy Jorgenson",
+      "FirstName": "Nancy",
+      "LastName": "Jorgenson",
+      "Email": "nancy@mandmre.com",
+      "Clean_Status__c": "Archive",
+      "Delete_Reason__c": "Old Inactive Contact",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A0000219tevQAA"
+        },
+        "Name": "M&M Real Estate Investments, Inc",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2016-11-02T18:43:23.000+0000",
+      "LastActivityDate": "2023-05-18"
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002Sg9ASQAZ"
+      },
+      "Id": "0032A00002Sg9ASQAZ",
+      "Name": "Micheal Legget",
+      "FirstName": "Micheal",
+      "LastName": "Legget",
+      "Email": null,
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Email or Phone",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A000024JpqDQAS"
+        },
+        "Name": "Michael Legget",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2016-12-22T16:09:32.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002TAQeCQAX"
+      },
+      "Id": "0032A00002TAQeCQAX",
+      "Name": "Angela Potts",
+      "FirstName": "Angela",
+      "LastName": "Potts",
+      "Email": "osupropertiesbyar@gmail.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002AObCjQAL"
+        },
+        "Name": "Oswald and Joy Lee Properties",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-01-09T18:41:09.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002TrynRQAR"
+      },
+      "Id": "0032A00002TrynRQAR",
+      "Name": "Mary .",
+      "FirstName": "Mary",
+      "LastName": ".",
+      "Email": "marypierpont@bellsouth.net",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/001F000001XJFXLIA5"
+        },
+        "Name": "Imperial House Apartments",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-01-31T15:33:11.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002TuWoKQAV"
+      },
+      "Id": "0032A00002TuWoKQAV",
+      "Name": "Kris Mapes",
+      "FirstName": "Kris",
+      "LastName": "Mapes",
+      "Email": null,
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Email or Phone",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A0000280I7GQAU"
+        },
+        "Name": "BIS Properties / Easy Rentals",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-02-03T20:24:35.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002U4YcGQAV"
+      },
+      "Id": "0032A00002U4YcGQAV",
+      "Name": "Erin Bunbury-Novak",
+      "FirstName": "Erin",
+      "LastName": "Bunbury-Novak",
+      "Email": "shenandoahapartments@gmail.com",
+      "Clean_Status__c": "Archive",
+      "Delete_Reason__c": "Old Inactive Contact",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/001F000001GXHLdIAP"
+        },
+        "Name": "Shenandoah Apartments, LLC",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-02-13T22:01:15.000+0000",
+      "LastActivityDate": "2023-05-18"
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002X0kHpQAJ"
+      },
+      "Id": "0032A00002X0kHpQAJ",
+      "Name": "Kelly Williams",
+      "FirstName": "Kelly",
+      "LastName": "Williams",
+      "Email": null,
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Email or Phone",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/001F000001YYJG7IAP"
+        },
+        "Name": "Scion Group - Lark at Kohl/Lark at Randall",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-03-06T20:14:08.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002XNpf7QAD"
+      },
+      "Id": "0032A00002XNpf7QAD",
+      "Name": "Shayna Delaney",
+      "FirstName": "Shayna",
+      "LastName": "Delaney",
+      "Email": null,
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Email or Phone",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A000029wK84QAE"
+        },
+        "Name": "Asset Campus - Chicago",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-03-16T18:50:34.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002Y3V46QAF"
+      },
+      "Id": "0032A00002Y3V46QAF",
+      "Name": "Joy Lee",
+      "FirstName": "Joy",
+      "LastName": "Lee",
+      "Email": "joyclee1955@gmail.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002AObCjQAL"
+        },
+        "Name": "Oswald and Joy Lee Properties",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-04-04T14:01:33.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002YilJJQAZ"
+      },
+      "Id": "0032A00002YilJJQAZ",
+      "Name": "Peter Korotev",
+      "FirstName": "Peter",
+      "LastName": "Korotev",
+      "Email": "apartments@korotevgroup.com",
+      "Clean_Status__c": "Archive",
+      "Delete_Reason__c": "Old Inactive Contact",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/001F000001GXHLWIA5"
+        },
+        "Name": "The Korotev Group, Inc.",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-04-24T21:18:36.000+0000",
+      "LastActivityDate": "2023-07-13"
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002ZXyBNQA1"
+      },
+      "Id": "0032A00002ZXyBNQA1",
+      "Name": "Chris Koegel",
+      "FirstName": "Chris",
+      "LastName": "Koegel",
+      "Email": null,
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Email or Phone",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002BHkX1QAL"
+        },
+        "Name": "Place 10 Residential - San Antonio",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-05-11T19:01:04.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002ZpMjWQAV"
+      },
+      "Id": "0032A00002ZpMjWQAV",
+      "Name": "Melanie L",
+      "FirstName": "Melanie",
+      "LastName": "L",
+      "Email": null,
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Email or Phone",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002Bf2bhQAB"
+        },
+        "Name": "Rich Properties - Fort Myers",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-05-26T15:54:09.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2FQAW"
+      },
+      "Id": "0032A00002aOI2FQAW",
+      "Name": "Ryan Broshar",
+      "FirstName": "Ryan",
+      "LastName": "Broshar",
+      "Email": "ryan@confluencecapitalpartners.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsTTQA1"
+        },
+        "Name": "Confluence Capital",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2HQAW"
+      },
+      "Id": "0032A00002aOI2HQAW",
+      "Name": "Kevin Willer",
+      "FirstName": "Kevin",
+      "LastName": "Willer",
+      "Email": "kw@chicagoventures.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsTLQA1"
+        },
+        "Name": "Chicago Ventures",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2RQAW"
+      },
+      "Id": "0032A00002aOI2RQAW",
+      "Name": "Timothy Hoerr",
+      "FirstName": "Timothy",
+      "LastName": "Hoerr",
+      "Email": "tim@serraventures.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsX2QAL"
+        },
+        "Name": "Serra Ventures LLC",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2ZQAW"
+      },
+      "Id": "0032A00002aOI2ZQAW",
+      "Name": "Jason Lehtinen",
+      "FirstName": "Jason",
+      "LastName": "Lehtinen",
+      "Email": "jason.lehtinen@mariner-holdings.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsV7QAL"
+        },
+        "Name": "Mariner Holdings",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2aQAG"
+      },
+      "Id": "0032A00002aOI2aQAG",
+      "Name": "William Schmidt",
+      "FirstName": "William",
+      "LastName": "Schmidt",
+      "Email": "wschmidt@cultivationcapital.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsTbQAL"
+        },
+        "Name": "Cultivation Capital",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2bQAG"
+      },
+      "Id": "0032A00002aOI2bQAG",
+      "Name": "Kyle Welborn",
+      "FirstName": "Kyle",
+      "LastName": "Welborn",
+      "Email": "kwelborn@cultivationcapital.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsTbQAL"
+        },
+        "Name": "Cultivation Capital",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2dQAG"
+      },
+      "Id": "0032A00002aOI2dQAG",
+      "Name": "Troy Henikoff",
+      "FirstName": "Troy",
+      "LastName": "Henikoff",
+      "Email": "troy.henikoff@mathventurepartners.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsVBQA1"
+        },
+        "Name": "MATH Venture Partners",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    },
+    {
+      "attributes": {
+        "type": "Contact",
+        "url": "/services/data/v64.0/sobjects/Contact/0032A00002aOI2eQAG"
+      },
+      "Id": "0032A00002aOI2eQAG",
+      "Name": "Mark Achler",
+      "FirstName": "Mark",
+      "LastName": "Achler",
+      "Email": "mark.achler@mathventurepartners.com",
+      "Clean_Status__c": "Delete",
+      "Delete_Reason__c": "No Activity 3+ Years",
+      "Account": {
+        "attributes": {
+          "type": "Account",
+          "url": "/services/data/v64.0/sobjects/Account/0012A00002CUsVBQA1"
+        },
+        "Name": "MATH Venture Partners",
+        "Number_of_Units__c": null,
+        "ALN_of_Units__c": null,
+        "RCA_of_Units__c": null
+      },
+      "CreatedDate": "2017-06-18T16:05:24.000+0000",
+      "LastActivityDate": null
+    }
+  ]
+}

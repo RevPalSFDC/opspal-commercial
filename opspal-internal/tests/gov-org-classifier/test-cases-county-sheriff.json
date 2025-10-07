@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Tulsa County Sheriff Deputy",
+    "input": {
+      "company": "Tulsa County Sheriff's Office",
+      "email": "jane.doe@tcso.org",
+      "name": "Jane Doe",
+      "title": "Deputy Sheriff"
+    },
+    "expected": {
+      "bucket": "County Sheriff",
+      "min_confidence": 0.85
+    }
+  },
+  {
+    "name": "LA County Sheriff",
+    "input": {
+      "company": "Los Angeles County Sheriff",
+      "email": "john.smith@lasd.org",
+      "name": "John Smith",
+      "title": "Undersheriff"
+    },
+    "expected": {
+      "bucket": "County Sheriff",
+      "min_confidence": 0.85
+    }
+  },
+  {
+    "name": "Orange County Sheriff Detective",
+    "input": {
+      "company": "Orange County Sheriff's Department",
+      "email": "detective@ocsheriff.gov",
+      "name": "Mike Johnson",
+      "title": "Detective"
+    },
+    "expected": {
+      "bucket": "County Sheriff",
+      "min_confidence": 0.80
+    }
+  }
+]
