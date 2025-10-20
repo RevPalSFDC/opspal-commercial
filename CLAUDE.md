@@ -18,6 +18,7 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 | Cross-platform reporting | `unified-reporting-aggregator` (opspal-internal) | "unified dashboard", "combined metrics", "executive report" |
 | Cross-platform data quality | `unified-data-quality-validator` (opspal-internal) | "data consistency", "sync quality", "validation across platforms" |
 | Instance management | `platform-instance-manager` (opspal-internal) | "switch environment", "manage instances", "all platforms" |
+| **Diagrams & Visualization** | **`diagram-generator`** (cross-platform-plugin) | **"diagram", "flowchart", "ERD", "visualize", "sequence diagram", "state diagram", "show architecture"** |
 | SF/HS sync | `sfdc-hubspot-bridge` (opspal-internal) | "bidirectional sync", "data bridge", "SF to HS" |
 | SF conflicts | `sfdc-conflict-resolver` (in opspal-internal/SFDC) | "deployment failed", "conflict", "field mismatch" |
 | SF merge | `sfdc-merge-orchestrator` (in opspal-internal/SFDC) | "merge fields", "consolidate objects", "combine" |
@@ -34,6 +35,7 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 4. **After significant development** → Run `quality-control-analyzer`
 5. **When encountering repeated errors** → Use `quality-control-analyzer`
 6. **For complex unknown-scope tasks** → Engage `sequential-planner`
+7. **When documenting architecture/dependencies** → Use `diagram-generator` to create visualizations
 
 ### Original Routing & Delegation Rules
 
@@ -57,12 +59,13 @@ General:
 1. Does this task match any keyword in the Agent Reference Table? → Use that agent
 2. Is this a release/deployment task? → Use release-coordinator
 3. Does this involve multiple repositories? → Use project-orchestrator
-4. Is the task complexity unknown or very high? → Use sequential-planner
-5. Am I seeing repeated issues or patterns? → Use quality-control-analyzer
-6. Does this involve Salesforce metadata conflicts? → Use sfdc-conflict-resolver (in opspal-internal/SFDC)
-7. Does this involve merging SF objects/fields? → Use sfdc-merge-orchestrator (in opspal-internal/SFDC)
-8. Does this involve Google Drive operations? → Use gdrive-* agents
-9. Is there an agent configuration issue? → Use router-doctor or mcp-guardian
+4. Does the user want a diagram/flowchart/visualization? → Use diagram-generator (cross-platform-plugin)
+5. Is the task complexity unknown or very high? → Use sequential-planner
+6. Am I seeing repeated issues or patterns? → Use quality-control-analyzer
+7. Does this involve Salesforce metadata conflicts? → Use sfdc-conflict-resolver (in opspal-internal/SFDC)
+8. Does this involve merging SF objects/fields? → Use sfdc-merge-orchestrator (in opspal-internal/SFDC)
+9. Does this involve Google Drive operations? → Use gdrive-* agents
+10. Is there an agent configuration issue? → Use router-doctor or mcp-guardian
 ```
 
 **Note**: Salesforce-specific agents (sfdc-*) are located in `opspal-internal/SFDC/.claude/agents/`
