@@ -19,6 +19,7 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 | Cross-platform data quality | `unified-data-quality-validator` (opspal-internal) | "data consistency", "sync quality", "validation across platforms" |
 | Instance management | `platform-instance-manager` (opspal-internal) | "switch environment", "manage instances", "all platforms" |
 | **Diagrams & Visualization** | **`diagram-generator`** (cross-platform-plugin) | **"diagram", "flowchart", "ERD", "visualize", "sequence diagram", "state diagram", "show architecture"** |
+| **Sales Funnel Analysis** | **`sales-funnel-diagnostic`** (cross-platform-plugin) | **"funnel diagnostic", "TOFU analysis", "pipeline metrics", "conversion rates", "sales performance", "meeting to SQL", "lead conversion", "benchmark"** |
 | SF/HS sync | `sfdc-hubspot-bridge` (opspal-internal) | "bidirectional sync", "data bridge", "SF to HS" |
 | SF conflicts | `sfdc-conflict-resolver` (in opspal-internal/SFDC) | "deployment failed", "conflict", "field mismatch" |
 | SF merge | `sfdc-merge-orchestrator` (in opspal-internal/SFDC) | "merge fields", "consolidate objects", "combine" |
