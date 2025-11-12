@@ -37,6 +37,18 @@
     ]
   },
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/opspal-internal-plugins/.claude-plugins/salesforce-plugin/hooks/user-prompt-hybrid.sh",
+            "timeout": 5000,
+            "description": "Hybrid routing: pattern matching + complexity analysis for automatic agent suggestions"
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "hooks": [
