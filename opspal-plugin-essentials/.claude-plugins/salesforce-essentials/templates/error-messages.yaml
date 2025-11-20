@@ -1,0 +1,336 @@
+# Error Message Templates for Salesforce Essentials
+# Format: ERR-XXX where XXX is a 3-digit category code
+
+# Connection & Authentication Errors (ERR-100 - ERR-199)
+ERR-101:
+  title: "Salesforce Connection Failed"
+  message: "Unable to connect to Salesforce org '{org_alias}'"
+  causes:
+    - "Org alias doesn't exist"
+    - "OAuth token expired"
+    - "Network connectivity issue"
+  next_steps:
+    - "1. Verify org alias exists: `sf org list`"
+    - "2. Re-authenticate: `sf org login web --alias {org_alias}`"
+    - "3. Test connection: `sf org display --target-org {org_alias}`"
+  related_commands:
+    - "/getstarted - Set up Salesforce connection"
+  severity: "high"
+
+ERR-102:
+  title: "Invalid Org Alias"
+  message: "Org alias '{org_alias}' not found in your authenticated orgs"
+  causes:
+    - "Typo in org alias name"
+    - "Org not yet authenticated"
+  next_steps:
+    - "1. List available orgs: `sf org list`"
+    - "2. Authenticate new org: `sf org login web --alias {org_alias}`"
+  related_commands:
+    - "/getstarted"
+  severity: "medium"
+
+ERR-103:
+  title: "Insufficient Permissions"
+  message: "Your user doesn't have permission to perform this operation"
+  causes:
+    - "Missing object permissions (CRUD)"
+    - "Missing field-level security"
+    - "Profile restrictions"
+  next_steps:
+    - "1. Check your profile permissions in Salesforce Setup"
+    - "2. Ask your admin to grant necessary permissions"
+    - "3. Or use a different org/user with required access"
+  related_agents:
+    - "sfdc-security-admin - For permission analysis"
+  severity: "high"
+
+# Query Errors (ERR-200 - ERR-299)
+ERR-201:
+  title: "Invalid SOQL Query"
+  message: "SOQL query has syntax errors: {error_details}"
+  causes:
+    - "Field doesn't exist on object"
+    - "Object doesn't exist"
+    - "Invalid WHERE clause syntax"
+  next_steps:
+    - "1. Use sfdc-query-specialist agent for query building"
+    - "2. Verify field names: `sf sobject describe {object}`"
+    - "3. Check SOQL syntax: https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta"
+  related_agents:
+    - "sfdc-query-specialist - Build valid queries"
+    - "sfdc-discovery - Explore object schema"
+  severity: "medium"
+
+ERR-202:
+  title: "Query Timeout"
+  message: "Query execution exceeded time limit ({timeout}s)"
+  causes:
+    - "Query too complex"
+    - "Too many records to process"
+    - "Missing indexes on filter fields"
+  next_steps:
+    - "1. Add LIMIT clause to reduce result size"
+    - "2. Add WHERE filters to narrow results"
+    - "3. Break into smaller queries"
+    - "4. Use batch processing for large datasets"
+  related_agents:
+    - "sfdc-query-specialist - Optimize queries"
+  severity: "medium"
+
+ERR-203:
+  title: "No Records Found"
+  message: "Query returned 0 records for: {query_summary}"
+  causes:
+    - "No records match filter criteria"
+    - "Object is empty"
+    - "Incorrect filter values"
+  next_steps:
+    - "1. Remove some WHERE filters to broaden search"
+    - "2. Verify filter values are correct"
+    - "3. Check if object has any data: `sf data query --query 'SELECT COUNT() FROM {object}' --target-org {org_alias}`"
+  severity: "low"
+
+# Metadata Errors (ERR-300 - ERR-399)
+ERR-301:
+  title: "Metadata Deployment Failed"
+  message: "Deployment failed with {error_count} errors"
+  causes:
+    - "Validation rules blocking deployment"
+    - "Missing dependencies"
+    - "API version mismatch"
+  next_steps:
+    - "1. Review deployment errors in detail"
+    - "2. Use --dry-run flag to validate before deploying"
+    - "3. Deploy dependencies first"
+    - "4. Check API version compatibility"
+  related_agents:
+    - "sfdc-metadata-manager - Handle metadata operations"
+    - "sfdc-planner - Plan complex deployments"
+  severity: "high"
+
+ERR-302:
+  title: "Field Already Exists"
+  message: "Field '{field_name}' already exists on {object}"
+  causes:
+    - "Field created previously"
+    - "Name conflict with standard field"
+  next_steps:
+    - "1. Choose a different field name"
+    - "2. Or update existing field instead of creating new one"
+    - "3. Check existing fields: `sf sobject describe {object}`"
+  related_agents:
+    - "sfdc-field-analyzer - Analyze existing fields"
+  severity: "low"
+
+ERR-303:
+  title: "Object Not Found"
+  message: "Object '{object_name}' does not exist in org '{org_alias}'"
+  causes:
+    - "Typo in object name"
+    - "Object not deployed to this org"
+    - "Custom object deleted"
+  next_steps:
+    - "1. List all objects: `sf sobject list --sobject all --target-org {org_alias}`"
+    - "2. Verify object API name (include __c for custom objects)"
+    - "3. Check if object exists in source org"
+  related_agents:
+    - "sfdc-discovery - Explore org schema"
+  severity: "medium"
+
+# Data Operation Errors (ERR-400 - ERR-499)
+ERR-401:
+  title: "Data Import Failed"
+  message: "{failed_count} of {total_count} records failed to import"
+  causes:
+    - "Required fields missing"
+    - "Invalid picklist values"
+    - "Validation rule failures"
+    - "Duplicate values in unique fields"
+  next_steps:
+    - "1. Review error log for specific failures"
+    - "2. Fix data issues in CSV file"
+    - "3. Use dry-run mode to validate first"
+    - "4. Import in smaller batches"
+  related_agents:
+    - "sfdc-data-operations - Handle data imports"
+    - "sfdc-field-analyzer - Validate field requirements"
+  severity: "high"
+
+ERR-402:
+  title: "Duplicate Record Detected"
+  message: "Record with {field_name} = '{field_value}' already exists"
+  causes:
+    - "Unique field constraint violation"
+    - "Duplicate rule triggered"
+  next_steps:
+    - "1. Update existing record instead of creating new"
+    - "2. Use upsert operation with external ID"
+    - "3. Modify value to make it unique"
+  severity: "medium"
+
+ERR-403:
+  title: "Required Field Missing"
+  message: "Required field '{field_name}' is missing or empty"
+  causes:
+    - "Field marked as required"
+    - "Validation rule requires value"
+  next_steps:
+    - "1. Provide value for required field"
+    - "2. Check field metadata: `sf sobject describe {object}`"
+    - "3. Use sfdc-field-analyzer to see all required fields"
+  related_agents:
+    - "sfdc-field-analyzer - Identify required fields"
+  severity: "high"
+
+ERR-404:
+  title: "Invalid Field Value"
+  message: "Value '{value}' is invalid for field '{field_name}' (type: {field_type})"
+  causes:
+    - "Wrong data type (e.g., text in number field)"
+    - "Invalid picklist value"
+    - "Value exceeds field length"
+  next_steps:
+    - "1. Check field type and constraints"
+    - "2. For picklists, use valid picklist values only"
+    - "3. Ensure value matches field data type"
+  related_agents:
+    - "sfdc-field-analyzer - Check field constraints"
+  severity: "medium"
+
+# Report & Dashboard Errors (ERR-500 - ERR-599)
+ERR-501:
+  title: "Report Type Not Found"
+  message: "Report type '{report_type}' does not exist"
+  causes:
+    - "Invalid report type name"
+    - "Report type not deployed to this org"
+  next_steps:
+    - "1. List available report types: Use sfdc-reports-dashboards agent"
+    - "2. Verify report type API name"
+    - "3. Deploy report type if missing"
+  related_agents:
+    - "sfdc-reports-dashboards - Manage reports"
+  severity: "medium"
+
+ERR-502:
+  title: "Report Folder Access Denied"
+  message: "You don't have access to folder '{folder_name}'"
+  causes:
+    - "Folder is private"
+    - "Insufficient sharing permissions"
+  next_steps:
+    - "1. Ask folder owner to grant access"
+    - "2. Create report in Public folder"
+    - "3. Use a folder you have access to"
+  severity: "medium"
+
+# Flow & Automation Errors (ERR-600 - ERR-699)
+ERR-601:
+  title: "Flow Validation Failed"
+  message: "Flow '{flow_name}' has validation errors"
+  causes:
+    - "Referenced fields don't exist"
+    - "Invalid formula syntax"
+    - "Missing required elements"
+  next_steps:
+    - "1. Review flow errors in Flow Builder"
+    - "2. Verify all field references are valid"
+    - "3. Test flow logic before activation"
+  related_agents:
+    - "flow-template-specialist - Build valid flows"
+  severity: "high"
+
+ERR-602:
+  title: "Flow Already Active"
+  message: "Flow '{flow_name}' is already active, cannot modify"
+  causes:
+    - "Flow is currently active"
+  next_steps:
+    - "1. Deactivate flow first"
+    - "2. Make modifications"
+    - "3. Re-activate after testing"
+  severity: "low"
+
+# Agent Usage Errors (ERR-700 - ERR-799)
+ERR-701:
+  title: "Wrong Agent for Task"
+  message: "Agent '{agent_name}' is not suitable for this task"
+  causes:
+    - "Agent doesn't have required capabilities"
+    - "Task requires different specialized agent"
+  next_steps:
+    - "1. Use /agents-guide to find right agent"
+    - "2. Review agent examples for usage patterns"
+    - "3. Ask: 'Which agent should I use for [task]?'"
+  related_commands:
+    - "/agents-guide - Find the right agent"
+  severity: "low"
+
+ERR-702:
+  title: "Missing Required Parameters"
+  message: "Required parameter '{parameter_name}' is missing"
+  causes:
+    - "Incomplete request"
+    - "Missing information"
+  next_steps:
+    - "1. Provide the missing parameter: {parameter_name}"
+    - "2. Review agent examples for complete syntax"
+    - "3. Use copy-paste examples from agent documentation"
+  severity: "medium"
+
+# General Errors (ERR-900 - ERR-999)
+ERR-901:
+  title: "Operation Cancelled"
+  message: "Operation was cancelled by user or system"
+  causes:
+    - "User cancelled operation"
+    - "Pre-flight validation failed"
+  next_steps:
+    - "1. Review why operation was cancelled"
+    - "2. Fix validation issues if any"
+    - "3. Retry operation"
+  severity: "low"
+
+ERR-902:
+  title: "Rate Limit Exceeded"
+  message: "API rate limit exceeded for org '{org_alias}'"
+  causes:
+    - "Too many API calls in short time"
+    - "Concurrent operations"
+  next_steps:
+    - "1. Wait {wait_time} seconds before retrying"
+    - "2. Reduce batch size"
+    - "3. Spread operations over time"
+    - "4. Check API usage: `sf limits api display --target-org {org_alias}`"
+  severity: "medium"
+
+ERR-999:
+  title: "Unexpected Error"
+  message: "An unexpected error occurred: {error_details}"
+  causes:
+    - "System error"
+    - "Unknown issue"
+  next_steps:
+    - "1. Review error details above"
+    - "2. Try operation again"
+    - "3. If persists, report issue with error details"
+    - "4. Try a simpler approach or break into smaller steps"
+  severity: "high"
+
+# Error Message Display Format
+#
+# When displaying errors to users, use this format:
+#
+# ❌ {title} (ERR-{code})
+#
+# {message}
+#
+# **Possible Causes:**
+# {causes list}
+#
+# **Next Steps:**
+# {next_steps list}
+#
+# **Related Agents/Commands:**
+# {related_agents/commands list}

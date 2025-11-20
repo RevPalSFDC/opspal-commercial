@@ -1,0 +1,393 @@
+# Error Message Templates for Cross-Platform Essentials
+# Format: ERR-CP-XXX where XXX is a 3-digit category code
+
+# Diagram Generation Errors (ERR-CP-100 - ERR-CP-199)
+ERR-CP-101:
+  title: "Invalid Diagram Syntax"
+  message: "Mermaid diagram has syntax errors: {error_details}"
+  causes:
+    - "Invalid Mermaid syntax"
+    - "Unsupported diagram type"
+    - "Missing required diagram elements"
+  next_steps:
+    - "1. Use diagram-generator agent for valid syntax"
+    - "2. Check Mermaid documentation: https://mermaid.js.org"
+    - "3. Test diagram at https://mermaid.live"
+    - "4. Use provided diagram templates"
+  related_agents:
+    - "diagram-generator - Create valid diagrams"
+  severity: "medium"
+
+ERR-CP-102:
+  title: "Diagram Rendering Failed"
+  message: "Failed to render diagram to image: {error_details}"
+  causes:
+    - "Mermaid CLI not installed"
+    - "Chromium/Puppeteer not available"
+    - "Diagram too complex for rendering"
+  next_steps:
+    - "1. Install Mermaid CLI: `npm install -g @mermaid-js/mermaid-cli`"
+    - "2. Verify Chromium is installed"
+    - "3. Simplify diagram if too complex"
+    - "4. Use online rendering as alternative"
+  severity: "high"
+
+ERR-CP-103:
+  title: "Unsupported Diagram Type"
+  message: "Diagram type '{diagram_type}' is not supported"
+  causes:
+    - "Invalid diagram type specified"
+    - "Mermaid version doesn't support this type"
+  next_steps:
+    - "1. Supported types: flowchart, sequence, class, state, ER, gantt, pie, journey"
+    - "2. Use diagram-generator agent for guidance"
+    - "3. Update Mermaid CLI if using newer diagram types"
+  related_agents:
+    - "diagram-generator - See supported types"
+  severity: "low"
+
+# PDF Generation Errors (ERR-CP-200 - ERR-CP-299)
+ERR-CP-201:
+  title: "PDF Generation Failed"
+  message: "Failed to generate PDF: {error_details}"
+  causes:
+    - "Markdown file not found"
+    - "Invalid Markdown syntax"
+    - "Missing required dependencies (Puppeteer, markdown-pdf)"
+  next_steps:
+    - "1. Verify input file exists: `ls -la {file_path}`"
+    - "2. Install dependencies: `npm install puppeteer markdown-pdf`"
+    - "3. Check Markdown syntax is valid"
+    - "4. Ensure sufficient disk space"
+  related_agents:
+    - "pdf-generator - Generate PDFs from Markdown"
+  severity: "high"
+
+ERR-CP-202:
+  title: "Markdown File Not Found"
+  message: "Input file '{file_path}' does not exist"
+  causes:
+    - "File path is incorrect"
+    - "File was deleted"
+    - "Wrong directory"
+  next_steps:
+    - "1. Verify file path is correct"
+    - "2. List files in directory: `ls -la`"
+    - "3. Check if file was moved or deleted"
+  severity: "medium"
+
+ERR-CP-203:
+  title: "Multi-Document Collation Failed"
+  message: "Failed to collate {file_count} documents into single PDF"
+  causes:
+    - "One or more source files missing"
+    - "Inconsistent formatting"
+    - "Memory limit exceeded"
+  next_steps:
+    - "1. Verify all source files exist"
+    - "2. Process documents in smaller batches"
+    - "3. Check individual PDFs generate successfully first"
+    - "4. Reduce image sizes if memory issues"
+  related_agents:
+    - "pdf-generator - Multi-document PDF generation"
+  severity: "high"
+
+ERR-CP-204:
+  title: "Mermaid Diagram Not Rendered in PDF"
+  message: "Mermaid diagrams were not rendered in the PDF output"
+  causes:
+    - "Mermaid CLI not available"
+    - "Chromium browser not found"
+    - "PDF generator doesn't support Mermaid"
+  next_steps:
+    - "1. Install Mermaid CLI: `npm install -g @mermaid-js/mermaid-cli`"
+    - "2. Use pdf-generator agent (has built-in Mermaid support)"
+    - "3. Pre-render diagrams to images before PDF generation"
+  related_agents:
+    - "pdf-generator - Supports automatic Mermaid rendering"
+  severity: "medium"
+
+# Implementation Planning Errors (ERR-CP-300 - ERR-CP-399)
+ERR-CP-301:
+  title: "Requirement Parsing Failed"
+  message: "Could not parse requirements from: {source}"
+  causes:
+    - "Ambiguous or unclear requirements"
+    - "Missing critical information"
+    - "Unsupported input format"
+  next_steps:
+    - "1. Provide more specific requirements"
+    - "2. Include context about current state and desired outcome"
+    - "3. Use implementation-planner agent for guided requirements gathering"
+    - "4. Break complex requirements into smaller pieces"
+  related_agents:
+    - "implementation-planner - Parse and structure requirements"
+  severity: "medium"
+
+ERR-CP-302:
+  title: "Timeline Estimation Failed"
+  message: "Cannot estimate timeline without sufficient detail"
+  causes:
+    - "Requirements too vague"
+    - "Unknown dependencies"
+    - "Missing technical constraints"
+  next_steps:
+    - "1. Provide more implementation details"
+    - "2. Identify known dependencies"
+    - "3. Specify technical constraints (API limits, data volumes, etc.)"
+    - "4. Use implementation-planner for detailed breakdown"
+  related_agents:
+    - "implementation-planner - Create detailed timelines"
+  severity: "low"
+
+ERR-CP-303:
+  title: "Task Dependency Conflict"
+  message: "Circular dependency detected: {task_chain}"
+  causes:
+    - "Tasks depend on each other"
+    - "Incorrect dependency specification"
+    - "Missing prerequisite tasks"
+  next_steps:
+    - "1. Review dependency chain: {task_chain}"
+    - "2. Break circular dependency by reordering tasks"
+    - "3. Identify prerequisite tasks that can run first"
+    - "4. Use implementation-planner to resolve dependencies"
+  related_agents:
+    - "implementation-planner - Resolve task dependencies"
+  severity: "high"
+
+# Instance Management Errors (ERR-CP-400 - ERR-CP-499)
+ERR-CP-401:
+  title: "Instance Not Found"
+  message: "Platform instance '{instance_name}' not found"
+  causes:
+    - "Instance not configured"
+    - "Typo in instance name"
+    - "Instance was deleted"
+  next_steps:
+    - "1. List all instances: Use platform-instance-manager agent"
+    - "2. Verify instance name spelling"
+    - "3. Configure new instance if needed"
+  related_agents:
+    - "platform-instance-manager - Manage platform instances"
+  severity: "medium"
+
+ERR-CP-402:
+  title: "Multi-Platform Switch Failed"
+  message: "Failed to switch {platform} to instance '{instance_name}'"
+  causes:
+    - "Authentication failed"
+    - "Instance configuration invalid"
+    - "Platform-specific error"
+  next_steps:
+    - "1. Check authentication for {platform}"
+    - "2. Verify instance configuration"
+    - "3. Switch platforms individually to isolate issue"
+    - "4. Review platform-specific error logs"
+  related_agents:
+    - "platform-instance-manager - Troubleshoot instance switching"
+  severity: "high"
+
+ERR-CP-403:
+  title: "Environment Isolation Violation"
+  message: "Cannot perform operation: {environment} environment protection enabled"
+  causes:
+    - "Attempting destructive operation in production"
+    - "Insufficient permissions for this environment"
+    - "Environment policy violation"
+  next_steps:
+    - "1. Verify you're in the correct environment"
+    - "2. Use sandbox/development environment for testing"
+    - "3. Request approval for production changes"
+    - "4. Review environment policies"
+  severity: "high"
+
+# File & Data Errors (ERR-CP-500 - ERR-CP-599)
+ERR-CP-501:
+  title: "File Format Not Supported"
+  message: "File format '{format}' is not supported for this operation"
+  causes:
+    - "Invalid file format"
+    - "Missing file extension"
+    - "Corrupted file"
+  next_steps:
+    - "1. Supported formats: {supported_formats}"
+    - "2. Convert file to supported format"
+    - "3. Verify file is not corrupted"
+  severity: "medium"
+
+ERR-CP-502:
+  title: "Data Export Failed"
+  message: "Failed to export data to {destination}: {error_details}"
+  causes:
+    - "Insufficient permissions"
+    - "Destination path invalid"
+    - "Disk space full"
+    - "Data format conversion error"
+  next_steps:
+    - "1. Check write permissions: `ls -la {destination}`"
+    - "2. Verify sufficient disk space: `df -h`"
+    - "3. Use different output format if conversion failed"
+    - "4. Export to different location"
+  severity: "high"
+
+ERR-CP-503:
+  title: "CSV Parsing Error"
+  message: "Failed to parse CSV file: {error_details}"
+  causes:
+    - "Invalid CSV format"
+    - "Inconsistent column count"
+    - "Special characters not escaped"
+    - "Encoding issues"
+  next_steps:
+    - "1. Verify CSV has consistent columns in all rows"
+    - "2. Check for proper quote escaping"
+    - "3. Save file with UTF-8 encoding"
+    - "4. Remove special characters from headers"
+  severity: "medium"
+
+# Integration & Orchestration Errors (ERR-CP-600 - ERR-CP-699)
+ERR-CP-601:
+  title: "Cross-Platform Sync Failed"
+  message: "Failed to sync data between {source_platform} and {target_platform}"
+  causes:
+    - "Authentication failed on one or both platforms"
+    - "Data format incompatibility"
+    - "API rate limits exceeded"
+    - "Field mapping error"
+  next_steps:
+    - "1. Verify authentication for both platforms"
+    - "2. Check field mapping configuration"
+    - "3. Review API rate limit status"
+    - "4. Test sync with smaller dataset"
+  severity: "high"
+
+ERR-CP-602:
+  title: "Field Mapping Conflict"
+  message: "Field '{source_field}' cannot be mapped to '{target_field}': {reason}"
+  causes:
+    - "Incompatible data types"
+    - "Target field is read-only"
+    - "Value exceeds field length"
+    - "Required field missing in source"
+  next_steps:
+    - "1. Review field types: {source_type} → {target_type}"
+    - "2. Add data transformation if types differ"
+    - "3. Check target field permissions"
+    - "4. Map to different field if current is read-only"
+  severity: "medium"
+
+ERR-CP-603:
+  title: "Agent Handoff Failed"
+  message: "Failed to delegate task to agent '{agent_name}'"
+  causes:
+    - "Agent not available"
+    - "Invalid parameters passed"
+    - "Agent lacks required permissions"
+  next_steps:
+    - "1. Verify agent exists: /agents"
+    - "2. Check parameter format matches agent requirements"
+    - "3. Review agent prerequisites"
+    - "4. Use alternative agent if available"
+  severity: "medium"
+
+# Configuration & Setup Errors (ERR-CP-700 - ERR-CP-799)
+ERR-CP-701:
+  title: "Missing Environment Variable"
+  message: "Required environment variable '{variable_name}' is not set"
+  causes:
+    - "Variable not configured"
+    - ".env file not loaded"
+    - "Typo in variable name"
+  next_steps:
+    - "1. Set variable: `export {variable_name}=value`"
+    - "2. Or add to .env file"
+    - "3. Check .env is in correct directory"
+    - "4. Verify variable name spelling"
+  severity: "high"
+
+ERR-CP-702:
+  title: "Plugin Configuration Invalid"
+  message: "Plugin configuration has errors: {error_details}"
+  causes:
+    - "Invalid JSON/YAML syntax"
+    - "Missing required fields"
+    - "Incompatible plugin version"
+  next_steps:
+    - "1. Validate configuration file syntax"
+    - "2. Check all required fields are present"
+    - "3. Update plugin to latest version"
+    - "4. Review plugin documentation for configuration format"
+  severity: "high"
+
+ERR-CP-703:
+  title: "Dependency Missing"
+  message: "Required dependency '{dependency_name}' is not installed"
+  causes:
+    - "Package not installed"
+    - "Wrong package version"
+    - "Installation failed"
+  next_steps:
+    - "1. Install dependency: `npm install {dependency_name}`"
+    - "2. Or check system requirements for {dependency_name}"
+    - "3. Verify package.json includes dependency"
+    - "4. Run `npm install` to install all dependencies"
+  severity: "high"
+
+# General Cross-Platform Errors (ERR-CP-900 - ERR-CP-999)
+ERR-CP-901:
+  title: "Operation Not Supported"
+  message: "Operation '{operation}' is not supported in this context"
+  causes:
+    - "Feature not available in current version"
+    - "Platform limitation"
+    - "Requires additional configuration"
+  next_steps:
+    - "1. Check plugin version and update if needed"
+    - "2. Review platform capabilities"
+    - "3. Use alternative approach"
+    - "4. Contact support for feature request"
+  severity: "low"
+
+ERR-CP-902:
+  title: "Concurrent Operation Conflict"
+  message: "Cannot perform operation while {other_operation} is in progress"
+  causes:
+    - "Resource locked by another operation"
+    - "Conflicting state change"
+  next_steps:
+    - "1. Wait for current operation to complete"
+    - "2. Cancel conflicting operation if appropriate"
+    - "3. Retry after current operation finishes"
+  severity: "medium"
+
+ERR-CP-999:
+  title: "Unexpected Error"
+  message: "An unexpected error occurred: {error_details}"
+  causes:
+    - "System error"
+    - "Unknown issue"
+    - "Bug in plugin code"
+  next_steps:
+    - "1. Review error details above"
+    - "2. Try operation again"
+    - "3. Try simpler approach or break into smaller steps"
+    - "4. Report issue if persists with error details"
+  severity: "high"
+
+# Error Message Display Format
+#
+# When displaying errors to users, use this format:
+#
+# ❌ {title} (ERR-CP-{code})
+#
+# {message}
+#
+# **Possible Causes:**
+# {causes list}
+#
+# **Next Steps:**
+# {next_steps list}
+#
+# **Related Agents:**
+# {related_agents list}

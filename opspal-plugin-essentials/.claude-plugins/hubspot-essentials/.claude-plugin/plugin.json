@@ -1,0 +1,21 @@
+{
+  "name": "hubspot-essentials",
+  "description": "Essential HubSpot operations for RevOps practitioners - property management, contact/pipeline operations, basic workflows, analytics, and data hygiene. Perfect for individual admins and small teams getting started with HubSpot automation via Claude Code.",
+  "version": "1.0.0",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "hubspot",
+    "properties",
+    "contacts",
+    "workflows",
+    "analytics",
+    "data-hygiene",
+    "essentials",
+    "free"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-essentials",
+  "license": "MIT"
+}

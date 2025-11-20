@@ -1,0 +1,23 @@
+{
+  "name": "salesforce-essentials",
+  "description": "Essential Salesforce operations for RevOps practitioners - discovery, queries, basic metadata management, data operations, reports/dashboards, and permission basics. Perfect for individual admins and small teams getting started with Salesforce automation via Claude Code.",
+  "version": "1.0.0",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "salesforce",
+    "sfdc",
+    "discovery",
+    "queries",
+    "metadata",
+    "data-operations",
+    "reports",
+    "dashboards",
+    "essentials",
+    "free"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-essentials",
+  "license": "MIT"
+}

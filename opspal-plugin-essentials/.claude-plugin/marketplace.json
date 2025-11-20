@@ -1,0 +1,39 @@
+{
+  "name": "revpal-essentials",
+  "owner": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "plugins": [
+    {
+      "name": "salesforce-essentials",
+      "source": "./.claude-plugins/salesforce-essentials",
+      "description": "ESSENTIALS: Essential Salesforce operations for RevOps practitioners - 12 core agents including discovery, queries, basic metadata management, data operations, reports/dashboards, and permission basics. Perfect for individual admins and small teams.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "hubspot-essentials",
+      "source": "./.claude-plugins/hubspot-essentials",
+      "description": "ESSENTIALS: Essential HubSpot operations for RevOps practitioners - 10 core agents including property management, contact/pipeline operations, basic workflows, analytics, and data hygiene. Perfect for individual admins and small teams.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cross-platform-essentials",
+      "source": "./.claude-plugins/cross-platform-essentials",
+      "description": "ESSENTIALS: Essential cross-platform utilities - 4 core agents including basic diagram generation, single-document PDF creation, implementation planning, and instance management. Perfect for documentation and basic planning needs.",
+      "version": "1.0.0"
+    }
+  ],
+  "_upgrade_to_professional": {
+    "_comment": "Need advanced features? Upgrade to RevOps Professional",
+    "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+    "features": {
+      "assessments": "CPQ assessments, RevOps audits, automation conflict detection",
+      "orchestration": "Advanced multi-platform orchestration, merge capabilities, conflict resolution",
+      "advanced_automation": "Flow authoring toolkit, complex workflow builders, batch operations",
+      "analytics": "Sales funnel diagnostics, revenue intelligence, usage analytics",
+      "enterprise": "Living Runbooks, Order of Operations Library, deduplication workflows"
+    },
+    "consultation": "Need help with complex RevOps challenges? Contact us at engineering@gorevpal.com"
+  }
+}

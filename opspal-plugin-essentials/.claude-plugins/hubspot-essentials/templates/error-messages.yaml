@@ -1,0 +1,346 @@
+# Error Message Templates for HubSpot Essentials
+# Format: ERR-HUB-XXX where XXX is a 3-digit category code
+
+# Connection & Authentication Errors (ERR-HUB-100 - ERR-HUB-199)
+ERR-HUB-101:
+  title: "HubSpot API Connection Failed"
+  message: "Unable to connect to HubSpot portal ID '{portal_id}'"
+  causes:
+    - "Invalid API token"
+    - "API token expired or revoked"
+    - "Network connectivity issue"
+    - "Portal ID incorrect"
+  next_steps:
+    - "1. Verify API token in HubSpot Settings → Integrations → Private Apps"
+    - "2. Check token has required scopes"
+    - "3. Generate new access token if expired"
+    - "4. Test connection: Use hubspot-api agent to test connection"
+  related_commands:
+    - "/getstarted - Set up HubSpot connection"
+  related_agents:
+    - "hubspot-api - Test API connection"
+  severity: "high"
+
+ERR-HUB-102:
+  title: "Insufficient API Scopes"
+  message: "API token missing required scope: '{scope_name}'"
+  causes:
+    - "Private App not configured with necessary scopes"
+    - "Using wrong access token"
+  next_steps:
+    - "1. Go to HubSpot Settings → Integrations → Private Apps"
+    - "2. Edit app and add required scope: {scope_name}"
+    - "3. Generate new access token"
+    - "4. Update HUBSPOT_ACCESS_TOKEN environment variable"
+  severity: "high"
+
+ERR-HUB-103:
+  title: "Rate Limit Exceeded"
+  message: "HubSpot API rate limit exceeded ({rate_limit} requests/10 seconds)"
+  causes:
+    - "Too many API calls in short time"
+    - "Concurrent operations"
+    - "Large batch operations"
+  next_steps:
+    - "1. Wait {retry_after} seconds before retrying"
+    - "2. Reduce batch sizes (use batches of 100 instead of 1000)"
+    - "3. Add delays between operations"
+    - "4. Check rate limit status with hubspot-api agent"
+  severity: "medium"
+
+# Property & Schema Errors (ERR-HUB-200 - ERR-HUB-299)
+ERR-HUB-201:
+  title: "Property Not Found"
+  message: "Property '{property_name}' does not exist on {object_type}"
+  causes:
+    - "Typo in property name"
+    - "Property not created yet"
+    - "Using wrong object type"
+  next_steps:
+    - "1. List all properties: Use hubspot-property-manager agent"
+    - "2. Verify property internal name (not label)"
+    - "3. Check if property exists in this portal"
+  related_agents:
+    - "hubspot-property-manager - Manage properties"
+  severity: "medium"
+
+ERR-HUB-202:
+  title: "Invalid Property Value"
+  message: "Value '{value}' is invalid for property '{property_name}' (type: {property_type})"
+  causes:
+    - "Wrong data type"
+    - "Invalid enum/option value"
+    - "Value exceeds character limit"
+  next_steps:
+    - "1. Check property type and valid values"
+    - "2. For enum properties, use exact option values"
+    - "3. Ensure value matches property constraints"
+  related_agents:
+    - "hubspot-property-manager - Check property details"
+  severity: "medium"
+
+ERR-HUB-203:
+  title: "Property Already Exists"
+  message: "Property '{property_name}' already exists on {object_type}"
+  causes:
+    - "Property created previously"
+    - "Name conflict"
+  next_steps:
+    - "1. Use different property name"
+    - "2. Or update existing property instead"
+    - "3. Check existing properties with hubspot-property-manager"
+  severity: "low"
+
+# Data Operation Errors (ERR-HUB-300 - ERR-HUB-399)
+ERR-HUB-301:
+  title: "Record Not Found"
+  message: "{object_type} with ID '{record_id}' not found"
+  causes:
+    - "Record doesn't exist"
+    - "Record was deleted"
+    - "Wrong record ID"
+  next_steps:
+    - "1. Verify record ID is correct"
+    - "2. Search for record using other properties"
+    - "3. Check if record was deleted recently"
+  related_agents:
+    - "hubspot-contact-manager - Search contacts"
+    - "hubspot-data - Data operations"
+  severity: "medium"
+
+ERR-HUB-302:
+  title: "Duplicate Record"
+  message: "Record with email '{email}' already exists"
+  causes:
+    - "Email uniqueness constraint"
+    - "Duplicate detection rule triggered"
+  next_steps:
+    - "1. Update existing record instead of creating new"
+    - "2. Use different email address"
+    - "3. Merge duplicates using hubspot-data-hygiene-specialist"
+  related_agents:
+    - "hubspot-data-hygiene-specialist - Handle duplicates"
+  severity: "medium"
+
+ERR-HUB-303:
+  title: "Bulk Operation Partial Failure"
+  message: "{failed_count} of {total_count} records failed"
+  causes:
+    - "Invalid data in some records"
+    - "Rate limits hit during operation"
+    - "Validation failures"
+  next_steps:
+    - "1. Review error details for failed records"
+    - "2. Fix data issues"
+    - "3. Retry failed records only"
+    - "4. Use smaller batch sizes"
+  related_agents:
+    - "hubspot-data - Bulk operations"
+  severity: "high"
+
+# Workflow Errors (ERR-HUB-400 - ERR-HUB-499)
+ERR-HUB-401:
+  title: "Workflow Not Found"
+  message: "Workflow '{workflow_name}' or ID '{workflow_id}' not found"
+  causes:
+    - "Workflow doesn't exist"
+    - "Wrong workflow ID"
+    - "Workflow was deleted"
+  next_steps:
+    - "1. List all workflows with hubspot-workflow agent"
+    - "2. Verify workflow ID or name"
+    - "3. Check if workflow exists in this portal"
+  related_agents:
+    - "hubspot-workflow - Manage workflows"
+  severity: "medium"
+
+ERR-HUB-402:
+  title: "Workflow Validation Failed"
+  message: "Workflow has validation errors: {error_details}"
+  causes:
+    - "Missing required fields"
+    - "Invalid enrollment criteria"
+    - "Broken email templates"
+    - "Invalid property references"
+  next_steps:
+    - "1. Review validation errors in detail"
+    - "2. Fix enrollment criteria"
+    - "3. Verify all property references exist"
+    - "4. Test workflow before activating"
+  related_agents:
+    - "hubspot-workflow - Validate workflows"
+  severity: "high"
+
+ERR-HUB-403:
+  title: "Workflow Already Active"
+  message: "Workflow '{workflow_name}' is already active"
+  causes:
+    - "Workflow currently running"
+  next_steps:
+    - "1. Deactivate workflow first"
+    - "2. Make modifications"
+    - "3. Re-activate after testing"
+  severity: "low"
+
+# List Errors (ERR-HUB-500 - ERR-HUB-599)
+ERR-HUB-501:
+  title: "List Creation Failed"
+  message: "Failed to create list '{list_name}': {error_details}"
+  causes:
+    - "Invalid filter criteria"
+    - "Invalid association type"
+    - "Missing required fields"
+  next_steps:
+    - "1. Validate filter syntax"
+    - "2. Use hubspot-lists-api-validator.js to check request"
+    - "3. Verify association IDs are correct"
+    - "4. Check operator names (use IS_EQUAL_TO not =)"
+  related_agents:
+    - "hubspot-contact-manager - Manage lists"
+  severity: "medium"
+
+ERR-HUB-502:
+  title: "Invalid List Filter"
+  message: "List filter is invalid: {error_details}"
+  causes:
+    - "Wrong operator for property type"
+    - "Invalid property reference"
+    - "Missing operationType"
+  next_steps:
+    - "1. Use correct operator names (IS_EQUAL_TO, CONTAINS, etc.)"
+    - "2. Verify property exists and type matches"
+    - "3. Include operationType in filter definition"
+  severity: "medium"
+
+# Pipeline & Deal Errors (ERR-HUB-600 - ERR-HUB-699)
+ERR-HUB-601:
+  title: "Deal Stage Not Found"
+  message: "Stage '{stage_name}' not found in pipeline '{pipeline_name}'"
+  causes:
+    - "Invalid stage name"
+    - "Stage doesn't exist in this pipeline"
+    - "Wrong pipeline"
+  next_steps:
+    - "1. List pipeline stages with hubspot-pipeline-manager"
+    - "2. Verify stage ID or label"
+    - "3. Check if using correct pipeline"
+  related_agents:
+    - "hubspot-pipeline-manager - Manage pipelines"
+  severity: "medium"
+
+ERR-HUB-602:
+  title: "Pipeline Not Found"
+  message: "Pipeline '{pipeline_name}' not found"
+  causes:
+    - "Pipeline doesn't exist"
+    - "Wrong pipeline ID"
+  next_steps:
+    - "1. List all pipelines with hubspot-pipeline-manager"
+    - "2. Verify pipeline ID"
+  related_agents:
+    - "hubspot-pipeline-manager - View pipelines"
+  severity: "medium"
+
+# Integration & Webhook Errors (ERR-HUB-700 - ERR-HUB-799)
+ERR-HUB-701:
+  title: "Webhook Creation Failed"
+  message: "Failed to create webhook for event '{event_type}'"
+  causes:
+    - "Invalid target URL"
+    - "Subscription already exists"
+    - "Unsupported event type"
+  next_steps:
+    - "1. Verify target URL is accessible"
+    - "2. Check if webhook subscription already exists"
+    - "3. Use valid event type"
+  related_agents:
+    - "hubspot-api - Manage webhooks"
+  severity: "medium"
+
+ERR-HUB-702:
+  title: "Webhook Delivery Failed"
+  message: "Webhook failed to deliver to '{target_url}'"
+  causes:
+    - "Target URL unreachable"
+    - "Target returned error response"
+    - "Request timeout"
+  next_steps:
+    - "1. Verify target URL is accessible"
+    - "2. Check target server logs"
+    - "3. Implement retry logic"
+  severity: "medium"
+
+# Report & Analytics Errors (ERR-HUB-800 - ERR-HUB-899)
+ERR-HUB-801:
+  title: "Report Generation Failed"
+  message: "Failed to generate report: {error_details}"
+  causes:
+    - "Invalid date range"
+    - "Missing required properties"
+    - "Insufficient data"
+  next_steps:
+    - "1. Verify date range is valid"
+    - "2. Check all properties exist"
+    - "3. Ensure sufficient data for report"
+  related_agents:
+    - "hubspot-analytics-reporter - Generate reports"
+    - "hubspot-reporting-builder - Build custom reports"
+  severity: "medium"
+
+ERR-HUB-802:
+  title: "No Data Available"
+  message: "No data available for report criteria"
+  causes:
+    - "No records match filters"
+    - "Date range too narrow"
+    - "Object has no data"
+  next_steps:
+    - "1. Broaden filter criteria"
+    - "2. Expand date range"
+    - "3. Verify object has records"
+  severity: "low"
+
+# Agent Usage Errors (ERR-HUB-900 - ERR-HUB-999)
+ERR-HUB-901:
+  title: "Wrong Agent for Task"
+  message: "Agent '{agent_name}' is not suitable for this task"
+  causes:
+    - "Agent doesn't handle this operation type"
+    - "Task requires specialized agent"
+  next_steps:
+    - "1. Use /agents-guide to find right agent"
+    - "2. Review agent examples for usage"
+    - "3. hubspot-workflow for workflows, hubspot-data for data ops"
+  related_commands:
+    - "/agents-guide"
+  severity: "low"
+
+ERR-HUB-999:
+  title: "Unexpected Error"
+  message: "An unexpected error occurred: {error_details}"
+  causes:
+    - "System error"
+    - "Unknown issue"
+  next_steps:
+    - "1. Review error details above"
+    - "2. Retry operation"
+    - "3. Try simpler approach"
+    - "4. Report issue if persists"
+  severity: "high"
+
+# Error Message Display Format
+#
+# When displaying errors to users, use this format:
+#
+# ❌ {title} (ERR-HUB-{code})
+#
+# {message}
+#
+# **Possible Causes:**
+# {causes list}
+#
+# **Next Steps:**
+# {next_steps list}
+#
+# **Related Agents/Commands:**
+# {related_agents/commands list}
