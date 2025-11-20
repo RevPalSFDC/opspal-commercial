@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+error-logging/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Session context (local only)
+.session-context/
+.claude-session-*/
+
+# Instance data (don't commit customer data)
+instances/*/data/
+instances/*/backups/
+instances/*/*.csv
+instances/*/*.json
+!instances/*/README.md
+!instances/*/STATUS.json
+
+# Test outputs
+test-results/
+coverage/
+
+# Build outputs
+dist/
+build/
