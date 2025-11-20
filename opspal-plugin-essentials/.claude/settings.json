@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "description": "OpsPal Essentials - Project-level settings with proactive agent routing",
+
+  "companyAnnouncements": [
+    "═══════════════════════════════════════════════════════════════════════",
+    "RevOps Essentials - Free & Open-Source",
+    "26 specialized agents for Salesforce and HubSpot automation",
+    "AI-generated outputs may contain errors — please validate results.",
+    "═══════════════════════════════════════════════════════════════════════",
+    "",
+    "📦 Essentials Plugins | Last Updated: 2025-11-20",
+    "🚀 Salesforce Essentials (12 agents) | HubSpot Essentials (10 agents) | Cross-Platform (4 agents)",
+    "📋 Use /getstarted for interactive setup guides",
+    "🔍 Use /agents to see all available agents",
+    "",
+    "📚 Quick Reference:",
+    "  • README.md - Getting started guide",
+    "  • COMPARISON.md - Essentials vs Professional features",
+    "  • /getstarted - Interactive setup wizard"
+  ],
+
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude-plugins/cross-platform-essentials/hooks/subagent-utilization-booster.sh",
+            "timeout": 10000,
+            "description": "Sub-agent utilization booster - Prepends 'Using the appropriate sub-agents, runbooks, and tools' to encourage delegation to specialized agents"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude-plugins/salesforce-essentials/hooks/session-start-agent-reminder.sh && ${CLAUDE_PROJECT_DIR}/.claude-plugins/cross-platform-essentials/hooks/session-context-loader.sh",
+            "timeout": 5000,
+            "description": "Session initialization - creates temp directories, checks agent reminders, and loads cross-session context"
+          }
+        ]
+      }
+    ]
+  },
+
+  "comments": {
+    "hooks_info": "Hooks run automatically at specific lifecycle events. UserPromptSubmit runs before each user request, SessionStart runs once per session.",
+    "disable_hooks": "To temporarily disable hooks, add 'disableAllHooks': true to this file",
+    "hook_debugging": "Hook output appears in ~/.claude/logs/debug.log (run with --debug flag)",
+
+    "subagent_boost": "UserPromptSubmit hook prepends 'Using the appropriate sub-agents, runbooks, and tools' to every message, maximizing delegation to specialized agents",
+    "session_start": "SessionStart hook creates required temp directories and loads session context",
+
+    "essentials_edition": "This is the free/open-source Essentials edition with 26 core agents. For advanced features (CPQ assessments, RevOps audits, automation conflict detection), see COMPARISON.md"
+  }
+}
