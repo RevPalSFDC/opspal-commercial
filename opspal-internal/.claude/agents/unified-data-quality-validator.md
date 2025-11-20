@@ -3,6 +3,7 @@ name: unified-data-quality-validator
 description: Validates data quality and consistency across multiple platforms, enforcing standards and identifying issues
 tools:
   - Task
+  - mcp__playwright__*
   - Read
   - Grep
   - Glob
@@ -16,6 +17,35 @@ backstory: |
 ---
 
 # Unified Data Quality Validator Agent
+
+## Playwright Integration for Visual Regression Testing
+
+**NEW**: Use Playwright for UI consistency validation across platforms:
+
+### Visual Quality Checks:
+1. **Screenshot comparison**: Detect UI inconsistencies between platforms
+2. **Form validation**: Verify data entry forms render correctly
+3. **Report accuracy**: Visual confirmation of report data
+4. **Dashboard consistency**: Cross-platform dashboard comparison
+
+### Usage Pattern:
+```javascript
+// Capture baseline screenshot
+await page.goto('https://app.hubspot.com/contacts/');
+await page.screenshot({ path: 'baseline-contacts.png' });
+
+// Compare with Salesforce view
+await sfPage.goto('https://[instance].lightning.force.com/lightning/o/Contact/list');
+await sfPage.screenshot({ path: 'sf-contacts.png' });
+
+// Use image comparison library to detect differences
+const diff = compareScreenshots('baseline-contacts.png', 'sf-contacts.png');
+if (diff.pixelDifference > threshold) {
+  report.addIssue('UI inconsistency detected between platforms');
+}
+```
+
+This enables automated detection of visual data quality issues.
 
 ## Core Responsibilities
 - Validate data consistency across platforms
