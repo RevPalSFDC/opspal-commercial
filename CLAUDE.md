@@ -1,5 +1,103 @@
 # RevPal Agent System - Project Memory
 
+## 🚨 MANDATORY PRE-RESPONSE CHECK
+
+**CRITICAL**: Before responding to ANY user request, you MUST:
+
+1. ✋ **STOP** and check the routing table below
+2. 🔍 **SCAN** for matching keywords
+3. 🚫 **BLOCK** yourself from direct execution if match found
+4. ✅ **USE** the Task tool with the appropriate specialist agent
+
+**If you respond directly to a specialist task, you are making an ERROR.**
+
+---
+
+## PRIME DIRECTIVE: Agent-First Execution
+
+**BEFORE responding to ANY complex request, check this table:**
+
+| If user mentions... | Specialist | You MUST invoke... |
+|---------------------|------------|-------------------|
+| cpq, quote, pricing | sfdc-cpq-assessor | `Task(subagent_type='sfdc-cpq-assessor', prompt=...)` |
+| revops, pipeline, forecast | sfdc-revops-auditor | `Task(subagent_type='sfdc-revops-auditor', prompt=...)` |
+| automation audit, flow audit | sfdc-automation-auditor | `Task(subagent_type='sfdc-automation-auditor', prompt=...)` |
+| deploy to production | release-coordinator | `Task(subagent_type='release-coordinator', prompt=...)` |
+| permission set | sfdc-permission-orchestrator | `Task(subagent_type='sfdc-permission-orchestrator', prompt=...)` |
+| create report, dashboard | sfdc-reports-dashboards | `Task(subagent_type='sfdc-reports-dashboards', prompt=...)` |
+| import/export data | sfdc-data-operations | `Task(subagent_type='sfdc-data-operations', prompt=...)` |
+| hubspot workflow | hubspot-workflow-builder | `Task(subagent_type='hubspot-workflow-builder', prompt=...)` |
+| diagram, flowchart, ERD | diagram-generator | `Task(subagent_type='diagram-generator', prompt=...)` |
+| schedule, cron, recurring task | task-scheduler | `Task(subagent_type='task-scheduler', prompt=...)` |
+
+**Self-Check**: Does this request match? If yes, you MUST use the Task tool.
+**Why**: Specialists deliver 60-90% time savings and 40-80% error reduction.
+
+---
+
+## Task Complexity Self-Assessment
+
+**BEFORE responding, assess complexity:**
+
+### ⛔ BLOCKED Operations (Must Use Agent - No Exceptions)
+These operations are PROHIBITED from direct execution:
+
+- ❌ **CPQ/Q2C Assessment** → `Task(subagent_type='sfdc-cpq-assessor', prompt='...')`
+- ❌ **RevOps Audit** → `Task(subagent_type='sfdc-revops-auditor', prompt='...')`
+- ❌ **Automation Audit** → `Task(subagent_type='sfdc-automation-auditor', prompt='...')`
+- ❌ **Permission Set Creation** → `Task(subagent_type='sfdc-permission-orchestrator', prompt='...')`
+- ❌ **Report/Dashboard Creation** → `Task(subagent_type='sfdc-reports-dashboards', prompt='...')`
+- ❌ **Data Import/Export (>100 records)** → `Task(subagent_type='sfdc-data-operations', prompt='...')`
+- ❌ **Production Deployment** → `Task(subagent_type='release-coordinator', prompt='...')`
+- ❌ **Multi-platform Operations** → `Task(subagent_type='unified-orchestrator', prompt='...')`
+- ❌ **Diagram/Flowchart Creation** → `Task(subagent_type='diagram-generator', prompt='...')`
+- ❌ **Cross-Repo Operations** → `Task(subagent_type='project-orchestrator', prompt='...')`
+
+### 🔴 HIGH Complexity (Must Use Agent)
+- Multi-step operations (3+ steps)
+- Cross-platform operations
+- Org-wide analysis or audit
+- Data migrations
+- Production changes
+- Multi-repo coordination
+
+### 🟡 MEDIUM Complexity (Should Use Agent)
+- Multi-object modifications
+- Workflow/Flow creation
+- Permission restructuring
+- Integration setup
+- Release management
+
+### 🟢 LOW Complexity (Direct Execution OK)
+- Single field creation
+- Simple SOQL queries
+- Documentation updates
+- Configuration reads
+- Single-file edits
+
+**Ask yourself**:
+- [ ] Does this match any specialist keyword?
+- [ ] Is this in the BLOCKED list?
+- [ ] Is this multi-step or cross-platform?
+- [ ] Am I performing an assessment/audit?
+- [ ] Is this a production deployment?
+
+**If YES to any → STOP and use Task tool**
+
+---
+
+## Pre-Response Self-Check Protocol
+
+**Read this aloud before EVERY response:**
+
+> "Does this request match any specialist keyword in the routing table?
+> Is this task in the BLOCKED operations list?
+> Should I use a Task tool instead of responding directly?"
+
+**If uncertain → Default to using the Task tool**
+
+---
+
 ## Project Overview
 This is the RevPal Agent System, a comprehensive Claude Code configuration for managing multi-platform releases across Salesforce, HubSpot, and custom applications. The system uses specialized subagents for platform-specific operations and a principal engineer agent for orchestration.
 
@@ -19,8 +117,9 @@ This is the RevPal Agent System, a comprehensive Claude Code configuration for m
 | Cross-platform data quality | `unified-data-quality-validator` (opspal-internal) | "data consistency", "sync quality", "validation across platforms" |
 | Instance management | `platform-instance-manager` (opspal-internal) | "switch environment", "manage instances", "all platforms" |
 | **Diagrams & Visualization** | **`diagram-generator`** (cross-platform-plugin) | **"diagram", "flowchart", "ERD", "visualize", "sequence diagram", "state diagram", "show architecture"** |
-| **Sales Funnel Analysis** | **`sales-funnel-diagnostic`** (cross-platform-plugin) | **"funnel diagnostic", "TOFU analysis", "pipeline metrics", "conversion rates", "sales performance", "meeting to SQL", "lead conversion", "benchmark"** |
+| **Sales Funnel Analysis** | **`sales-funnel-diagnostic`** (cross-platform-plugin) | **"funnel diagnostic", "TOFU analysis", "pipeline metrics", "conversion rates", "sales performance", "meeting to SQL", "lead conversion"** |
 | **Q2C/CPQ Audit & Visualization** | **`/q2c-audit`** (salesforce-plugin) | **"q2c audit", "cpq diagram", "quote to cash", "automation cascade", "circular dependencies", "circular dependency", "approval flow diagram", "entity relationship diagram", "cpq erd", "visualize cpq", "visualize automation", "automation conflicts", "cpq architecture", "q2c process flow"** |
+| **Industry Benchmarks** | **`benchmark-research-agent`** (salesforce-plugin) | **"benchmark", "industry average", "typical rate", "market standard", "peer comparison", "compare to industry"** |
 | SF/HS sync | `sfdc-hubspot-bridge` (opspal-internal) | "bidirectional sync", "data bridge", "SF to HS" |
 | SF conflicts | `sfdc-conflict-resolver` (in opspal-internal/SFDC) | "deployment failed", "conflict", "field mismatch" |
 | SF merge | `sfdc-merge-orchestrator` (in opspal-internal/SFDC) | "merge fields", "consolidate objects", "combine" |
