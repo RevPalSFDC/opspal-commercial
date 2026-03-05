@@ -1,0 +1,34 @@
+{
+  "name": "development",
+  "extends": "default.json",
+  "description": "Development/sandbox environment - relaxed validation, quick deploys",
+  "type": "sandbox",
+
+  "credentials": {
+    "salesforce": {
+      "orgAlias": "{{env.SF_SANDBOX_ALIAS}}",
+      "loginUrl": "https://test.salesforce.com"
+    }
+  },
+
+  "defaults": {
+    "salesforce": {
+      "testLevel": "NoTestRun",
+      "checkOnly": false,
+      "waitTime": 15
+    },
+    "deployment": {
+      "activateFlows": true,
+      "runPostDeployTests": false,
+      "createCheckpoint": false
+    }
+  },
+
+  "featureFlags": {
+    "enableDebugMode": true
+  },
+
+  "restrictions": {
+    "requireApproval": false
+  }
+}

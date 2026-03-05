@@ -1,0 +1,199 @@
+{
+  "$schema": "keyword-mapping-schema-v1.0",
+  "version": "1.0.0",
+  "description": "Keyword mapping configuration for progressive disclosure context injection",
+  "agent": "sfdc-orchestrator",
+  "contexts": {
+    "bulk-operations-orchestration": {
+      "priority": "high",
+      "contextFile": "orchestrator/bulk-operations-orchestration.md",
+      "keywords": [
+        "bulk",
+        "batch",
+        "parallel",
+        "large dataset",
+        "thousands",
+        "coordinate multiple",
+        "6+ agents",
+        "multiple agents",
+        "parallelize",
+        "concurrent"
+      ],
+      "intentPatterns": [
+        "(coordinate|orchestrate).*(multiple|many|several).*agents?",
+        "delegate to.*(multiple|many|\\d+).*agents?",
+        "(bulk|batch|parallel).*(operation|execution|processing)",
+        "orchestrat(e|ing).*\\d+.*agents?"
+      ],
+      "description": "Comprehensive bulk operations and parallelization patterns for orchestration"
+    },
+    "investigation-tools-guide": {
+      "priority": "medium",
+      "contextFile": "orchestrator/investigation-tools-guide.md",
+      "keywords": [
+        "investigate",
+        "debug",
+        "troubleshoot",
+        "diagnose",
+        "root cause",
+        "find issue",
+        "what went wrong",
+        "why did",
+        "failure",
+        "error"
+      ],
+      "intentPatterns": [
+        "(investigate|debug|troubleshoot|diagnose).*",
+        "(root cause|why.*fail|what.*wrong)",
+        "find.*issue",
+        "discover.*problem"
+      ],
+      "description": "Investigation tools for debugging orchestration issues and discovering metadata"
+    },
+    "pre-flight-validation-detailed": {
+      "priority": "high",
+      "contextFile": "orchestrator/pre-flight-validation-detailed.md",
+      "keywords": [
+        "validate",
+        "pre-flight",
+        "check before",
+        "verify",
+        "validation",
+        "automation",
+        "flow",
+        "approval",
+        "pre-check",
+        "validate before"
+      ],
+      "intentPatterns": [
+        "(validate|verify|check).*(before|pre-flight|first)",
+        "create.*(flow|automation|approval|process)",
+        "build.*(flow|automation)",
+        "generate.*(flow|automation)"
+      ],
+      "description": "Pre-flight validation for automation generation to prevent metadata assumption failures"
+    },
+    "time-tracking-integration": {
+      "priority": "low",
+      "contextFile": "orchestrator/time-tracking-integration.md",
+      "keywords": [
+        "time estimate",
+        "duration",
+        "how long",
+        "tracking",
+        "performance",
+        "asana",
+        "track time",
+        "estimate",
+        "minutes",
+        "hours"
+      ],
+      "intentPatterns": [
+        "how long.*take",
+        "(time|duration).*estimate",
+        "track.*time",
+        "performance.*monitor(ing)?"
+      ],
+      "description": "Time tracking and Asana integration for orchestration performance monitoring"
+    },
+    "fls-bundling-enforcement": {
+      "priority": "high",
+      "contextFile": "orchestrator/fls-bundling-enforcement.md",
+      "keywords": [
+        "field deployment",
+        "custom field",
+        "create field",
+        "deploy field",
+        "FLS",
+        "field-level security",
+        "permission",
+        "fieldPermissions",
+        "fls-aware",
+        "field + permission"
+      ],
+      "intentPatterns": [
+        "(create|deploy|add).*(custom )?field",
+        "(field|FLS).*(deployment|bundling|permission)",
+        "permission.*field",
+        "field.*permission.*set"
+      ],
+      "description": "FLS bundling enforcement for field deployments to prevent 40% verification failure rate"
+    },
+    "error-recovery-validation-integration": {
+      "priority": "high",
+      "contextFile": "orchestrator/error-recovery-validation-integration.md",
+      "keywords": [
+        "error",
+        "failure",
+        "recovery",
+        "retry",
+        "fix",
+        "failed",
+        "resolve",
+        "troubleshoot"
+      ],
+      "intentPatterns": [
+        "(error|failure|failed).*recovery",
+        "recover.*from.*error",
+        "fix.*issue",
+        "troubleshoot.*problem"
+      ],
+      "description": "Advanced error recovery with 95%+ error prevention and validation-aware handling"
+    },
+    "validation-framework-deployment-flows": {
+      "priority": "high",
+      "contextFile": "orchestrator/validation-framework-deployment-flows.md",
+      "keywords": [
+        "validation",
+        "deploy",
+        "deployment",
+        "flow consolidation",
+        "flow creation",
+        "validate operation",
+        "comprehensive validation"
+      ],
+      "intentPatterns": [
+        "(validate|deploy).*operation",
+        "flow.*(consolidation|creation)",
+        "comprehensive.*validation",
+        "deployment.*verification"
+      ],
+      "description": "Validation framework for deployments and flow consolidation with automated gates"
+    },
+    "advanced-orchestration-patterns": {
+      "priority": "medium",
+      "contextFile": "orchestrator/advanced-orchestration-patterns.md",
+      "keywords": [
+        "sequential",
+        "step-by-step",
+        "orchestration pattern",
+        "validation pattern",
+        "complex orchestration",
+        "multi-step"
+      ],
+      "intentPatterns": [
+        "sequential.*orchestration",
+        "step-by-step.*execution",
+        "multi-step.*operation",
+        "complex.*orchestration"
+      ],
+      "description": "Advanced sequential orchestration patterns with step-by-step validation gates"
+    }
+  },
+  "rules": {
+    "maxContextsPerRequest": 8,
+    "minKeywordMatches": 1,
+    "priorityWeighting": {
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    },
+    "injectionOrder": "priority-desc",
+    "fallbackBehavior": "none"
+  },
+  "usage": {
+    "description": "This configuration is used by user-prompt-submit.sh hook to inject relevant contexts based on keyword detection",
+    "implementation": "hooks/user-prompt-submit.sh reads this file and injects matching contexts before Claude processes the message",
+    "example": "If user message contains 'debug' and 'bulk operation', both investigation-tools-guide and bulk-operations-orchestration contexts will be injected"
+  }
+}

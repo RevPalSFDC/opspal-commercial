@@ -1,0 +1,342 @@
+# Salesforce Metadata Deployment Playbook
+# Standard decomposition pattern for metadata deployments
+#
+# Triggers: deploy, metadata, package, push, release
+# Complexity: Medium (base 0.4, escalates with production or large packages)
+
+name: salesforce-metadata-deployment
+version: "1.0.0"
+description: Standard decomposition for Salesforce metadata deployments
+domain: salesforce-metadata
+base_complexity: 0.4
+
+# When to use this playbook
+triggers:
+  keywords:
+    - deploy
+    - metadata
+    - package
+    - push
+    - release
+    - retrieve
+    - manifest
+    - package.xml
+    - destructive changes
+  patterns:
+    - "deploy.*metadata"
+    - "push.*changes"
+    - "release.*to.*org"
+    - "deploy.*sandbox"
+    - "package.*deploy"
+
+# Default task graph for metadata deployment
+default_dag:
+  - id: T-01
+    title: Source Discovery
+    domain: salesforce-metadata
+    goal: Identify all metadata components to be deployed
+    inputs:
+      - source_paths
+      - org_alias
+      - manifest_path
+    outputs:
+      - component_inventory.json
+      - package.xml
+      - dependency_tree.json
+    acceptance_criteria:
+      - All source files identified
+      - Package.xml generated or validated
+      - Component dependencies mapped
+      - API versions consistent
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-02
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    assigned_agent: salesforce-plugin:sfdc-metadata-manager
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 10
+
+  - id: T-02
+    title: Target Org Analysis
+    domain: salesforce-metadata
+    goal: Analyze target org state and identify potential conflicts
+    inputs:
+      - org_alias
+      - component_inventory.json
+    outputs:
+      - org_state.json
+      - conflict_report.json
+      - api_limits_status.json
+    acceptance_criteria:
+      - Current org state captured
+      - Conflicts identified (if any)
+      - API limits verified sufficient
+      - Feature availability confirmed
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-01
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    assigned_agent: salesforce-plugin:sfdc-state-discovery
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 15
+
+  - id: T-03
+    title: Conflict Resolution
+    domain: salesforce-metadata
+    goal: Resolve any detected conflicts before deployment
+    inputs:
+      - conflict_report.json
+      - component_inventory.json
+      - org_state.json
+    outputs:
+      - resolution_plan.md
+      - modified_components/
+      - conflict_resolution_log.json
+    acceptance_criteria:
+      - All conflicts documented
+      - Resolution strategy for each conflict
+      - Modified components validated
+      - User approval for destructive resolutions
+    dependencies:
+      - T-01
+      - T-02
+    concurrency_group: metadata
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed_with_approval
+      destructive_ops: allowed_with_approval
+    stop_points:
+      - Before modifying source files
+      - Before accepting destructive changes
+    assigned_agent: salesforce-plugin:sfdc-conflict-resolver
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 20
+
+  - id: T-04
+    title: Validation Deploy
+    domain: salesforce-metadata
+    goal: Run check-only deployment to validate metadata
+    inputs:
+      - package.xml
+      - source_paths
+      - org_alias
+    outputs:
+      - validation_result.json
+      - component_status.json
+      - test_results.json
+    acceptance_criteria:
+      - Check-only deployment completes
+      - All components validated
+      - Required tests pass (if production)
+      - No blocking errors
+    dependencies:
+      - T-03
+    concurrency_group: metadata
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    verification_commands:
+      - "sf project deploy validate --source-dir {sourcePath} --target-org {orgAlias}"
+    assigned_agent: salesforce-plugin:sfdc-deployment-manager
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 25
+
+  - id: T-05
+    title: Execute Deployment
+    domain: salesforce-metadata
+    goal: Deploy validated metadata to target org
+    inputs:
+      - validation_result.json
+      - package.xml
+      - source_paths
+      - org_alias
+    outputs:
+      - deploy_result.json
+      - deployed_components.json
+      - deployment_log.txt
+    acceptance_criteria:
+      - Deployment completes successfully
+      - All components deployed
+      - No partial failures
+      - Deployment ID recorded
+    dependencies:
+      - T-04
+    concurrency_group: metadata
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: allowed_with_approval
+      production_ops: allowed_with_approval
+    stop_points:
+      - Before executing deployment
+    assigned_agent: salesforce-plugin:sfdc-deployment-manager
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-06
+    title: Post-Deployment Verification
+    domain: salesforce-metadata
+    goal: Verify deployment success and document changes
+    inputs:
+      - deploy_result.json
+      - deployed_components.json
+      - org_alias
+    outputs:
+      - verification_report.md
+      - post_deploy_state.json
+      - change_summary.md
+    acceptance_criteria:
+      - All deployed components accessible
+      - Functionality verified in org
+      - Change summary documented
+      - Rollback plan documented (if applicable)
+    dependencies:
+      - T-05
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: salesforce-plugin:sfdc-state-discovery
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 15
+
+# Rules for parallelization
+parallelization_rules:
+  - description: "Source discovery and org analysis can run in parallel"
+    tasks: [T-01, T-02]
+    reason: "Independent read-only operations"
+
+  - description: "Conflict resolution needs both discovery outputs"
+    tasks: [T-03]
+    requires: [T-01, T-02]
+    reason: "Needs component inventory and org state"
+
+  - description: "Validation must wait for conflict resolution"
+    tasks: [T-04]
+    requires: [T-03]
+    reason: "Resolved source needed for validation"
+
+  - description: "Deployment sequential to prevent partial states"
+    tasks: [T-04, T-05, T-06]
+    constraint: "strict_sequential"
+    reason: "Validation → Deploy → Verify must be in order"
+
+# Rules for sequential execution
+sequential_rules:
+  - "Validation must pass before deployment"
+  - "Never deploy without successful check-only first"
+  - "Post-deployment verification required before sign-off"
+
+# Verification gates
+verification_gates:
+  - name: metadata_validation
+    type: command
+    command: "sf project deploy validate --source-dir {sourcePath} --target-org {orgAlias} --json"
+    success_criteria:
+      status: Succeeded
+    required: true
+
+  - name: apex_tests
+    type: command
+    command: "sf apex test run --target-org {orgAlias} --code-coverage --result-format json"
+    success_criteria:
+      outcome: Passed
+      coverage_threshold: 75
+    required: true
+    condition: "isProduction"
+
+  - name: component_count_check
+    type: custom
+    checks:
+      - deployed_count_matches_expected
+      - no_partial_failures
+      - all_components_active
+    required: true
+
+# Escalation conditions
+escalation_triggers:
+  - condition: "production deployment"
+    escalate_to: production-change.yaml
+    reason: "Production deployments require additional gates"
+
+  - condition: "destructive changes"
+    add_tasks:
+      - backup_components
+      - destructive_manifest_review
+    escalate_complexity: 0.2
+    reason: "Destructive changes need explicit backup and approval"
+
+  - condition: "more than 50 components"
+    escalate_complexity: 0.15
+    reason: "Large deployments have higher failure risk"
+
+  - condition: "apex code included"
+    add_tasks:
+      - apex_test_execution
+      - code_coverage_verification
+    reason: "Apex requires test coverage verification"
+
+# Common variations
+variations:
+  quick_deploy:
+    description: "Deploy pre-validated components using deployment ID"
+    skip_tasks:
+      - T-04
+    additional_inputs:
+      - validation_deployment_id
+    add_acceptance_criteria:
+      - "Validation ID valid and recent"
+      - "Quick deploy completes successfully"
+
+  destructive_deploy:
+    description: "Deployment including component deletions"
+    additional_considerations:
+      - Pre-deployment backup required
+      - Dependent component analysis
+      - Explicit approval chain
+    add_acceptance_criteria:
+      - "All deletions reviewed and approved"
+      - "Backup available for rollback"
+      - "No orphaned references"
+
+  incremental_deploy:
+    description: "Deploy only changed components"
+    additional_inputs:
+      - baseline_commit
+      - change_set
+    additional_considerations:
+      - Component dependency validation
+      - Order of deployment
+    add_acceptance_criteria:
+      - "Only changed components deployed"
+      - "Dependencies satisfied"
+
+  sandbox_refresh_deploy:
+    description: "Deploy to newly refreshed sandbox"
+    additional_considerations:
+      - Org settings verification
+      - User setup requirements
+      - Data dependencies
+    add_acceptance_criteria:
+      - "Sandbox refresh complete"
+      - "Required users activated"
+      - "Test data available"

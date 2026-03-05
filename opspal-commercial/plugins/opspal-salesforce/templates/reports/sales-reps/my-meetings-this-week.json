@@ -1,0 +1,131 @@
+{
+  "templateMetadata": {
+    "templateName": "My Meetings This Week",
+    "templateVersion": "1.1",
+    "description": "Your scheduled and completed meetings this week",
+    "audience": "Sales Reps, Account Executives",
+    "useCase": "Meeting tracking, calendar efficiency, deal progression",
+    "customizationPoints": [
+      "Meeting type filter",
+      "Weekly target",
+      "Include past vs future"
+    ],
+    "prerequisites": [
+      "Event/Meeting tracking enabled"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "My Meetings This Week",
+    "description": "Meetings scheduled this week",
+    "reportType": "Event",
+    "reportFormat": "TABULAR",
+    "scope": "user",
+    "showDetails": true,
+    "reportFilters": [
+      {
+        "column": "START_DATE_TIME",
+        "operator": "equals",
+        "value": "THIS_WEEK",
+        "customizable": true
+      },
+      {
+        "column": "OWNER_ID",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "SUBJECT",
+      "RELATED_TO",
+      "START_DATE_TIME",
+      "END_DATE_TIME",
+      "Event.Type__c"
+    ],
+    "sortBy": [
+      {
+        "column": "START_DATE_TIME",
+        "order": "Ascending"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total meetings this week"
+      }
+    ],
+    "chart": null
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-activities"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

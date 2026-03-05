@@ -1,0 +1,63 @@
+{
+  "name": "opportunity-validation",
+  "description": "Validate opportunity data before it moves to specific stages",
+  "category": "core",
+  "type": "Record-Triggered Flow",
+  "parameters": {
+    "requiredStage": {
+      "type": "string",
+      "description": "Stage that triggers validation (e.g., Proposal, Negotiation)",
+      "required": true,
+      "example": "Proposal"
+    },
+    "requiredField": {
+      "type": "string",
+      "description": "Field that must be populated",
+      "required": true,
+      "example": "Budget_Amount__c"
+    },
+    "errorMessage": {
+      "type": "string",
+      "description": "Error message to display if validation fails",
+      "required": false,
+      "default": "Required field is missing"
+    }
+  },
+  "structure": {
+    "metadata": {
+      "apiVersion": "62.0",
+      "processType": "AutoLaunchedFlow",
+      "status": "Draft",
+      "triggerType": "RecordBeforeSave"
+    },
+    "elements": [
+      {
+        "instruction": "Add a decision called Check_Stage with rule At_Required_Stage if StageName equals {{requiredStage}} then Validate_Fields, otherwise End"
+      },
+      {
+        "instruction": "Add a decision called Validate_Fields with rule Field_Is_Blank if {{requiredField}} is null then Show_Error, otherwise End"
+      },
+      {
+        "instruction": "Add a screen called Show_Error displaying the message: {{errorMessage}}"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Budget Validation at Proposal",
+      "params": {
+        "requiredStage": "Proposal",
+        "requiredField": "Budget_Amount__c",
+        "errorMessage": "Budget amount is required before moving to Proposal stage"
+      }
+    },
+    {
+      "name": "Decision Maker Validation",
+      "params": {
+        "requiredStage": "Negotiation",
+        "requiredField": "Decision_Maker__c",
+        "errorMessage": "Decision maker must be identified before negotiation"
+      }
+    }
+  ]
+}

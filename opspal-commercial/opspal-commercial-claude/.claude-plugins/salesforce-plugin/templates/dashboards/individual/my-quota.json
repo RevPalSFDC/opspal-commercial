@@ -1,0 +1,298 @@
+{
+  "templateMetadata": {
+    "templateName": "My Quota Dashboard (Individual Rep)",
+    "templateVersion": "1.0",
+    "description": "Personal quota tracking: attainment, pacing, pipeline health, deals needed to close gap",
+    "audience": "Sales Reps, AEs, Account Executives",
+    "useCase": "Track personal quota progress, forecast personal performance, know where you stand",
+    "refreshFrequency": "Daily",
+    "componentCount": 6
+  },
+  "dashboardLayout": {
+    "components": [
+      {
+        "position": 1,
+        "size": "half-width",
+        "type": "Gauge",
+        "title": "My Quota Attainment (This Quarter)",
+        "sourceReport": "my-quota-attainment",
+        "metric": "My_Closed_Won_This_Quarter__c / My_Quarterly_Quota__c",
+        "target": "100%",
+        "greenZone": ">=100%",
+        "yellowZone": "85-100%",
+        "redZone": "<85%",
+        "showDollarAmount": true,
+        "showRemaining": true
+      },
+      {
+        "position": 2,
+        "size": "half-width",
+        "type": "Metric",
+        "title": "My Pacing (Am I On Track?)",
+        "sourceReport": "my-pacing",
+        "metric": "My_Attainment__c / Days_Elapsed_Pct__c",
+        "description": "On Pace = 100%, Behind = <100%, Ahead = >100%",
+        "colorCode": {">=100": "green", ">=85": "yellow", "<85": "red"},
+        "tooltip": "Compares your attainment % to % of quarter elapsed"
+      },
+      {
+        "position": 3,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "Remaining Quota",
+        "sourceReport": "my-remaining-quota",
+        "metric": "My_Quarterly_Quota__c - My_Closed_Won_This_Quarter__c",
+        "displayAs": "Currency",
+        "showComparison": "vs 30 days ago"
+      },
+      {
+        "position": 4,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "Deals Needed to Close Gap",
+        "sourceReport": "my-deals-needed",
+        "metric": "CEILING(Remaining_Quota__c / Average_Deal_Size__c)",
+        "tooltip": "Based on your average deal size"
+      },
+      {
+        "position": 5,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "My Coverage Ratio",
+        "sourceReport": "my-coverage",
+        "metric": "My_Open_Pipeline__c / Remaining_Quota__c",
+        "target": "3x",
+        "greenZone": ">=3x",
+        "yellowZone": "2-3x",
+        "redZone": "<2x"
+      },
+      {
+        "position": 6,
+        "size": "full-width",
+        "type": "Combo Chart",
+        "title": "My Quarterly Progress",
+        "sourceReport": "my-quarterly-progress",
+        "xAxis": "Month",
+        "yAxisLeft": "Cumulative Closed Won (Bar Chart)",
+        "yAxisRight": "Target Line (Linear Progression)",
+        "showDataLabels": true,
+        "projectionLine": "Estimated finish based on current pace"
+      },
+      {
+        "position": 7,
+        "size": "full-width",
+        "type": "Table",
+        "title": "My Path to Quota (Deals Closing This Quarter)",
+        "sourceReport": "my-path-to-quota",
+        "columns": [
+          "Opportunity Name",
+          "Account",
+          "Amount",
+          "Stage",
+          "Probability %",
+          "Weighted Amount",
+          "Close Date",
+          "Days to Close",
+          "Confidence"
+        ],
+        "sortBy": "Close Date ASC",
+        "rowLimit": 25,
+        "conditionalFormatting": {
+          "Probability": {">=70": "green", ">=50": "yellow", "<50": "gray"},
+          "Days_to_Close__c": {"<=14": "orange", "<=30": "yellow"}
+        },
+        "showSummaryRow": "Total Weighted Amount",
+        "clickthrough": "Open Opportunity Record"
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {"field": "Time Period", "type": "Date Range", "default": "THIS_FISCAL_QUARTER"}
+  ],
+  "sourceReportTemplates": [
+    "my-quota-attainment.json",
+    "my-pacing.json",
+    "my-remaining-quota.json",
+    "my-deals-needed.json",
+    "my-coverage.json",
+    "my-quarterly-progress.json",
+    "my-path-to-quota.json"
+  ],
+  "calculatedFieldsRequired": [
+    {
+      "fieldName": "My_Quarterly_Quota__c",
+      "fieldType": "Custom Field (Currency)",
+      "object": "User",
+      "description": "Rep's quarterly quota (set by manager or from Quota object)"
+    },
+    {
+      "fieldName": "My_Closed_Won_This_Quarter__c",
+      "fieldType": "Rollup Summary or Formula",
+      "formula": "SUM(Opportunity.Amount WHERE IsWon=TRUE AND CloseDate=THIS_QUARTER AND OwnerId=$User.Id)",
+      "object": "User",
+      "description": "Total revenue closed this quarter"
+    },
+    {
+      "fieldName": "My_Attainment__c",
+      "fieldType": "Formula (Percent)",
+      "formula": "My_Closed_Won_This_Quarter__c / My_Quarterly_Quota__c",
+      "object": "User",
+      "description": "Current quota attainment percentage"
+    },
+    {
+      "fieldName": "Remaining_Quota__c",
+      "fieldType": "Formula (Currency)",
+      "formula": "My_Quarterly_Quota__c - My_Closed_Won_This_Quarter__c",
+      "object": "User",
+      "description": "Dollar amount still needed to hit quota"
+    },
+    {
+      "fieldName": "My_Open_Pipeline__c",
+      "fieldType": "Rollup Summary or Formula",
+      "formula": "SUM(Opportunity.Amount WHERE IsClosed=FALSE AND OwnerId=$User.Id)",
+      "object": "User",
+      "description": "Total value of open opportunities"
+    },
+    {
+      "fieldName": "Average_Deal_Size__c",
+      "fieldType": "Formula (Currency)",
+      "formula": "My_Closed_Won_This_Quarter__c / COUNT(Closed_Won_Opps_This_Quarter__c)",
+      "object": "User",
+      "description": "Average size of closed won deals this quarter"
+    },
+    {
+      "fieldName": "Weighted_Amount__c",
+      "fieldType": "Formula (Currency)",
+      "formula": "Amount * (Probability / 100)",
+      "object": "Opportunity",
+      "description": "Opportunity amount weighted by probability"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Set up quota management (User field or Quota object)",
+      "2. Create rollup summaries or scheduled jobs to calculate quarterly metrics",
+      "3. Create calculated fields (My_Attainment__c, Remaining_Quota__c, etc.)",
+      "4. Create all 7 source reports using templates",
+      "5. Add report filter: OwnerId = $User.Id (shows only logged-in user's records)",
+      "6. Create dashboard in Dashboards folder (My Dashboards)",
+      "7. Add components in order specified",
+      "8. Configure filters (Time Period)",
+      "9. Set refresh schedule to daily at 6 AM",
+      "10. Make dashboard personal (not shared) or share with all reps",
+      "11. Pin dashboard to Home Page for easy access"
+    ],
+    "quotaManagement": {
+      "option1": "Standard Quota object (requires Sales Cloud)",
+      "option2": "Custom User field: My_Quarterly_Quota__c",
+      "option3": "Custom Quota__c object with User lookup"
+    }
+  },
+  "usageScenarios": {
+    "weeklyReview": {
+      "time": "Monday morning",
+      "focus": "Quota attainment gauge, pacing metric",
+      "questions": [
+        "Am I on track to hit quota this quarter?",
+        "How much do I have left to close?",
+        "How many deals do I need to close the gap?"
+      ],
+      "actions": [
+        "If behind pace, increase prospecting",
+        "Review path-to-quota table and prioritize high-probability deals",
+        "If coverage <2x, focus on pipeline generation"
+      ]
+    },
+    "midQuarter": {
+      "time": "Day 45 of 90",
+      "focus": "Quarterly progress chart, deals needed metric",
+      "questions": [
+        "Am I tracking to finish strong?",
+        "Do I need to pull deals forward from next quarter?",
+        "Should I ask for help from manager?"
+      ],
+      "actions": [
+        "If <50% attainment, escalate at-risk deals to manager",
+        "If >50% attainment but low coverage, double down on prospecting",
+        "Review path-to-quota and identify deals that might slip"
+      ]
+    },
+    "quarterEnd": {
+      "time": "Last 2 weeks of quarter",
+      "focus": "Remaining quota, path-to-quota table",
+      "questions": [
+        "Can I hit quota?",
+        "What deals are at risk of slipping?",
+        "Do I need discount approval or exec support?"
+      ],
+      "actions": [
+        "Focus 100% on deals closing this quarter",
+        "Escalate blockers immediately (legal, pricing, etc.)",
+        "Push low-probability deals to next quarter (realism)"
+      ]
+    }
+  },
+  "kpiDefinitions": {
+    "quotaAttainment": {
+      "formula": "Closed Won Revenue / Quota",
+      "benchmark": "100% = on target, 80-90% = needs attention, <70% = at risk",
+      "whyItMatters": "Primary measure of personal sales performance"
+    },
+    "pacing": {
+      "formula": "Quota Attainment % / % of Quarter Elapsed",
+      "benchmark": "100% = on pace, <100% = behind, >100% = ahead",
+      "whyItMatters": "Leading indicator of whether you'll hit quota by quarter end"
+    },
+    "coverageRatio": {
+      "formula": "Open Pipeline / Remaining Quota",
+      "benchmark": "3-4x for healthy coverage",
+      "whyItMatters": "Indicates likelihood of closing quota gap"
+    }
+  },
+  "motivationalElements": {
+    "celebrationTriggers": [
+      "50% attainment → \"Halfway there! Keep going!\"",
+      "75% attainment → \"You're in the home stretch!\"",
+      "100% attainment → \"Quota achieved! Now go for 120%!\"",
+      "120% attainment → \"Club achiever! Accelerators unlocked!\""
+    ],
+    "warningTriggers": [
+      "<50% attainment at mid-quarter → \"Talk to your manager\"",
+      "<70% attainment at day 60 → \"Action plan needed\"",
+      "Pacing <85% → \"Increase activity or ask for help\""
+    ]
+  },
+  "bestPractices": {
+    "quotaManagement": [
+      "Check dashboard weekly (every Monday morning)",
+      "Update deal stages and close dates religiously",
+      "Be realistic about close dates (don't sandbag or overcommit)",
+      "Focus on deals closing THIS quarter (don't get distracted)"
+    ],
+    "proactiveActions": [
+      "If behind pace at mid-quarter, escalate immediately",
+      "If ahead of pace, build next quarter's pipeline",
+      "If coverage low, dedicate time to prospecting",
+      "If high attainment but low pipeline, you're borrowing from future"
+    ],
+    "commonMistakes": [
+      "❌ Ignoring quota dashboard until quarter end (too late)",
+      "❌ Overoptimistic pipeline (counting deals that won't close)",
+      "❌ Not asking for help when falling behind",
+      "❌ Celebrating early (quota hit but pipeline empty)"
+    ]
+  },
+  "compensationTiers": {
+    "typical": {
+      "0-70%": "Base salary only",
+      "70-100%": "Ramped commission",
+      "100-120%": "Full commission + accelerators",
+      "120%+": "President's Club eligibility"
+    },
+    "note": "Check your comp plan for specific thresholds"
+  },
+  "relatedTemplates": [
+    "my-pipeline.json",
+    "my-activities.json"
+  ]
+}

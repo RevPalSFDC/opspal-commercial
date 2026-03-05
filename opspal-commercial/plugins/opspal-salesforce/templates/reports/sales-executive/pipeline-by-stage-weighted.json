@@ -1,0 +1,152 @@
+{
+  "templateMetadata": {
+    "templateName": "Pipeline by Stage (Weighted)",
+    "templateVersion": "1.1",
+    "description": "Open pipeline grouped by stage with probability-weighted values for forecast accuracy",
+    "audience": "CRO, VP Sales, Sales Directors, Finance",
+    "useCase": "Forecast building, pipeline health analysis, stage progression monitoring",
+    "customizationPoints": [
+      "Date range (close date filter)",
+      "Team/territory scope",
+      "Stage probability mappings"
+    ],
+    "prerequisites": [
+      "Opportunity object with Stage, Amount, Probability",
+      "Probability values aligned with stage (manual or automatic)"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Pipeline by Stage (Weighted)",
+    "description": "Open pipeline by stage with weighted forecast values",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "STAGE_NAME",
+        "sortOrder": "Asc",
+        "dateGranularity": null
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "AMOUNT",
+      "PROBABILITY",
+      "CLOSE_DATE"
+    ],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total pipeline per stage"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Deal count per stage"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Weighted_Pipeline",
+        "description": "Amount * Probability",
+        "formula": "SUM(AMOUNT * (PROBABILITY / 100))",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "Funnel",
+      "groupingColumn": "STAGE_NAME",
+      "aggregateColumn": "Weighted_Pipeline",
+      "showChartValues": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "pipeline-health"
+    ],
+    "componentType": "Funnel",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

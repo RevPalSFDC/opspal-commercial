@@ -1,0 +1,148 @@
+{
+  "templateMetadata": {
+    "templateName": "Quarterly Revenue vs Target",
+    "templateVersion": "1.1",
+    "description": "Compares closed won revenue against quarterly targets for executive reporting",
+    "audience": "CRO, VP Sales, CFO, Board",
+    "useCase": "Quarterly business reviews, board reporting, target tracking",
+    "customizationPoints": [
+      "Fiscal quarter selection",
+      "Target source (Forecasting, custom field, external)",
+      "Segment by region/product"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount and CloseDate",
+      "Quarterly targets defined"
+    ]
+  },
+  "metricDefinitionId": "bookings.tcv",
+  "reportMetadata": {
+    "name": "Q{Quarter} Revenue vs Target",
+    "description": "Closed won revenue compared to quarterly target",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total closed won revenue"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Target_Attainment",
+        "description": "Revenue / Target * 100",
+        "formula": "(SUM(AMOUNT) / Target) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      },
+      {
+        "name": "Gap_to_Target",
+        "description": "Target - Revenue",
+        "formula": "Target - SUM(AMOUNT)",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBarGrouped",
+      "aggregateColumns": [
+        "Target",
+        "ClosedWon"
+      ],
+      "showChartValues": true,
+      "chartColors": {
+        "Target": "#95a5a6",
+        "ClosedWon": "#27ae60"
+      }
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "revenue-performance"
+    ],
+    "componentType": "Bar Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

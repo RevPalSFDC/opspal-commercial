@@ -1,0 +1,210 @@
+{
+  "id": "territory-planning",
+  "name": "Territory Planning Dashboard",
+  "description": "Geographic coverage analysis, territory metrics, and workload balancing",
+  "version": "1.0.0",
+  "category": "sales",
+  "audience": ["sales-ops", "sales-manager", "executive"],
+  "platforms": ["salesforce"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "territory-model", "type": "select", "label": "Territory Model", "default": "active" },
+      { "id": "region", "type": "multi-select", "label": "Region", "default": "all" }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "total-territories",
+      "type": "kpi",
+      "title": "Total Territories",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "map"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "territory-count"
+      },
+      "demoData": "kpis.totalTerritories"
+    },
+    {
+      "id": "avg-accounts",
+      "type": "kpi",
+      "title": "Avg Accounts/Territory",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": true,
+        "icon": "building"
+      },
+      "demoData": "kpis.avgAccountsPerTerritory"
+    },
+    {
+      "id": "coverage-percent",
+      "type": "kpi",
+      "title": "Account Coverage",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": true,
+        "icon": "check-circle"
+      },
+      "demoData": "kpis.coveragePercent"
+    },
+    {
+      "id": "open-pipeline",
+      "type": "kpi",
+      "title": "Open Pipeline",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "showTrend": true,
+        "icon": "dollar"
+      },
+      "demoData": "kpis.openPipeline"
+    },
+    {
+      "id": "territory-map",
+      "type": "map",
+      "title": "Territory Coverage Map",
+      "position": { "row": 2, "col": 1, "colspan": 8, "rowspan": 2 },
+      "config": {
+        "mapType": "choropleth",
+        "region": "US",
+        "colorField": "territory",
+        "valueField": "pipeline",
+        "tooltipFields": ["territory", "accounts", "pipeline"],
+        "showLegend": true,
+        "zoom": 4,
+        "center": [39.8283, -98.5795]
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "accounts-by-state"
+      },
+      "demoData": "mapData.regions"
+    },
+    {
+      "id": "territory-metrics",
+      "type": "table",
+      "title": "Territory Metrics",
+      "position": { "row": 2, "col": 9, "colspan": 4, "rowspan": 2 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Territory", "width": "30%" },
+          { "field": "manager", "label": "Manager", "width": "25%" },
+          { "field": "accountCount", "label": "Accounts", "width": "20%", "align": "center" },
+          { "field": "pipeline", "label": "Pipeline", "format": "currency-compact", "width": "25%", "align": "right" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "compact": true
+      },
+      "demoData": "territories"
+    },
+    {
+      "id": "account-distribution",
+      "type": "chart",
+      "title": "Account Distribution",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": false,
+        "showValues": true
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "accounts-by-territory"
+      },
+      "demoData": "accountDistribution"
+    },
+    {
+      "id": "balance-analysis",
+      "type": "table",
+      "title": "Workload Balance Analysis",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "territory", "label": "Territory", "width": "20%" },
+          { "field": "manager", "label": "Manager", "width": "18%" },
+          { "field": "accounts", "label": "Accounts", "width": "12%", "align": "center" },
+          { "field": "accountsPerRep", "label": "Per Rep", "width": "12%", "align": "center" },
+          { "field": "pipelinePerRep", "label": "Pipeline/Rep", "format": "currency-compact", "width": "18%", "align": "right" },
+          { "field": "balanceScore", "label": "Score", "width": "10%", "align": "center" },
+          { "field": "status", "label": "Status", "width": "10%", "format": "badge" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "rowHighlight": {
+          "field": "status",
+          "values": {
+            "over-assigned": "#FEE2E2",
+            "under-assigned": "#FEF3C7",
+            "balanced": "#DCFCE7"
+          }
+        }
+      },
+      "demoData": "balanceAnalysis"
+    },
+    {
+      "id": "unassigned-accounts",
+      "type": "table",
+      "title": "Unassigned Accounts (Whitespace)",
+      "position": { "row": 5, "col": 1, "colspan": 12 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Account Name", "width": "30%" },
+          { "field": "state", "label": "State", "width": "15%" },
+          { "field": "revenue", "label": "Annual Revenue", "format": "currency", "width": "20%", "align": "right" },
+          { "field": "reason", "label": "Reason", "width": "20%" }
+        ],
+        "sortable": true,
+        "pagination": true,
+        "pageSize": 5,
+        "emptyMessage": "All accounts are assigned to territories"
+      },
+      "demoData": "unassignedAccounts"
+    }
+  ],
+
+  "dataBindings": {
+    "territory-count": {
+      "salesforce": {
+        "query": "SELECT COUNT(Id) total FROM Territory2"
+      }
+    },
+    "accounts-by-territory": {
+      "salesforce": {
+        "query": "SELECT Territory2.Name territoryName, COUNT(Id) accountCount FROM ObjectTerritory2Association WHERE ObjectId IN (SELECT Id FROM Account) GROUP BY Territory2.Name"
+      }
+    },
+    "accounts-by-state": {
+      "salesforce": {
+        "object": "Account",
+        "fields": ["BillingState", "COUNT(Id) count", "SUM(AnnualRevenue) revenue"],
+        "groupBy": ["BillingState"]
+      }
+    }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "territoryColors": ["#5F3B8C", "#818CF8", "#60A5FA", "#F59E0B", "#22C55E", "#EF4444"],
+    "statusColors": {
+      "balanced": "#22C55E",
+      "under-assigned": "#F59E0B",
+      "over-assigned": "#EF4444"
+    }
+  }
+}

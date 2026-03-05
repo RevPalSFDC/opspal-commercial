@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xml Inline Parse Guard"
+  short_description: "Help with Xml Inline Parse Guard tasks"
+  default_prompt: "Use $xml-inline-parse-guard to execute this workflow safely and produce the expected artifacts."

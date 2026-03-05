@@ -1,0 +1,165 @@
+{
+  "templateMetadata": {
+    "templateName": "Rep Performance Detail",
+    "templateVersion": "1.1",
+    "description": "Detailed performance metrics for each team member",
+    "audience": "Sales Managers",
+    "useCase": "1:1 meetings, performance reviews, coaching sessions",
+    "customizationPoints": [
+      "Metrics to include",
+      "Time period",
+      "Specific rep filter"
+    ],
+    "prerequisites": [
+      "Opportunity object",
+      "Activity data",
+      "Quota data"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "Rep Performance Detail",
+    "description": "Comprehensive performance by rep",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "team",
+    "showDetails": true,
+    "reportFilters": [
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.ManagerId.Team",
+        "customizable": true
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "OPPORTUNITY_OWNER",
+        "sortOrder": "Asc",
+        "dateGranularity": null
+      },
+      {
+        "field": "IS_WON",
+        "sortOrder": "Asc"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "AMOUNT",
+      "CLOSE_DATE",
+      "STAGE_NAME"
+    ],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Revenue per rep"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Deal count"
+      },
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Average",
+        "description": "Avg deal size"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Win_Rate",
+        "description": "Won / Total Closed",
+        "formula": "(WonCount / TotalClosedCount) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": null
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "quota-attainment"
+    ],
+    "componentType": "Table",
+    "refreshFrequency": "Weekly"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

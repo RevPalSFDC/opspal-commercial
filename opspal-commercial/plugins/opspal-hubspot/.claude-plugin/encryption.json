@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "plugin": "opspal-hubspot",
+  "encrypted_assets": [
+    {
+      "path": "skills/hubspot-assessment-methodology/scoring-criteria.md",
+      "encrypted_path": "skills/hubspot-assessment-methodology/scoring-criteria.md.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:42b740732f57ead18b829295dc41225dc67ba9d9b58ffcbaeee4279bc4dcd2b3"
+    }
+  ],
+  "cleanup_on_stop": true,
+  "allow_plaintext_fallback": false
+}

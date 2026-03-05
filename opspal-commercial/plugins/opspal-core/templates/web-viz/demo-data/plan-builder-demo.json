@@ -1,0 +1,109 @@
+{
+  "id": "fy26-ae-standard",
+  "name": "FY26 Account Executive Standard Plan",
+  "version": "1.0.0",
+  "status": "draft",
+  "effectivePeriod": {
+    "fiscalYear": 2026,
+    "startDate": "2026-02-01",
+    "endDate": "2027-01-31"
+  },
+  "tiers": [
+    {
+      "name": "Decelerator",
+      "minAttainment": 0,
+      "maxAttainment": 70,
+      "rate": 5,
+      "description": "Below threshold - reduced commission rate"
+    },
+    {
+      "name": "Standard",
+      "minAttainment": 70,
+      "maxAttainment": 100,
+      "rate": 10,
+      "description": "On target - standard commission rate"
+    },
+    {
+      "name": "Accelerator Tier 1",
+      "minAttainment": 100,
+      "maxAttainment": 125,
+      "rate": 15,
+      "description": "First accelerator tier - 1.5x multiplier"
+    },
+    {
+      "name": "Accelerator Tier 2",
+      "minAttainment": 125,
+      "maxAttainment": 999,
+      "rate": 20,
+      "description": "Top performer tier - 2x multiplier"
+    }
+  ],
+  "roles": [
+    {
+      "roleId": "ae-enterprise",
+      "roleName": "Enterprise AE",
+      "ote": 250000,
+      "baseSalary": 125000,
+      "targetCommission": 125000,
+      "quotaAmount": 1500000
+    },
+    {
+      "roleId": "ae-commercial",
+      "roleName": "Commercial AE",
+      "ote": 180000,
+      "baseSalary": 90000,
+      "targetCommission": 90000,
+      "quotaAmount": 1000000
+    },
+    {
+      "roleId": "ae-smb",
+      "roleName": "SMB AE",
+      "ote": 120000,
+      "baseSalary": 70000,
+      "targetCommission": 50000,
+      "quotaAmount": 600000
+    }
+  ],
+  "spifs": [
+    {
+      "name": "Q1 New Logo SPIF",
+      "bonusAmount": 2500,
+      "bonusPercent": null,
+      "startDate": "2026-02-01",
+      "endDate": "2026-04-30",
+      "eligibilityCriteria": "New customer acquisition"
+    },
+    {
+      "name": "Multi-Year Deal SPIF",
+      "bonusAmount": null,
+      "bonusPercent": 5,
+      "startDate": "2026-02-01",
+      "endDate": "2027-01-31",
+      "eligibilityCriteria": "3+ year contracts"
+    }
+  ],
+  "clawbacks": [
+    {
+      "name": "90-Day Churn Clawback",
+      "clawbackPeriodDays": 90,
+      "clawbackPercent": 100,
+      "triggerCondition": "Customer cancellation within 90 days"
+    },
+    {
+      "name": "180-Day Partial Clawback",
+      "clawbackPeriodDays": 180,
+      "clawbackPercent": 50,
+      "triggerCondition": "Customer cancellation 91-180 days"
+    }
+  ],
+  "cap": {
+    "enabled": true,
+    "maxMultiplierOfOTE": 2.5,
+    "absoluteMax": null
+  },
+  "metadata": {
+    "createdAt": "2026-01-05T00:00:00Z",
+    "createdBy": "admin",
+    "notes": "Standard plan for all AE roles in FY26"
+  }
+}

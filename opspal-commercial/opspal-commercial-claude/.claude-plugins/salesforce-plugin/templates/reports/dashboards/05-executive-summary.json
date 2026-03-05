@@ -1,0 +1,146 @@
+{
+  "templateMetadata": {
+    "templateName": "Executive Summary Report",
+    "templateVersion": "1.0",
+    "description": "High-level pipeline and revenue summary for executive dashboards.",
+    "audience": "Executives, CRO, CFO, Board",
+    "useCase": "Executive dashboards and monthly business reviews.",
+    "customizationPoints": [
+      "Stage and owner groupings",
+      "Date range (quarterly/monthly)",
+      "Weighted revenue formula"
+    ],
+    "prerequisites": [
+      "Opportunity report type access",
+      "Consistent stage definitions",
+      "Owner assignments for grouping"
+    ]
+  },
+  "reportMetadata": {
+    "reportName": "Executive Summary Report",
+    "reportDescription": "High-level executive metrics: pipeline health, revenue performance, and team productivity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "groupings": [
+      {
+        "field": "STAGE_NAME",
+        "sortOrder": "Asc",
+        "dateGranularity": "Day"
+      },
+      {
+        "field": "FULL_NAME",
+        "sortOrder": "Asc",
+        "dateGranularity": "Day"
+      }
+    ],
+    "columns": [
+      {
+        "field": "OPPORTUNITY_NAME",
+        "label": "Opportunity Name"
+      },
+      {
+        "field": "ACCOUNT_NAME",
+        "label": "Account Name"
+      },
+      {
+        "field": "AMOUNT",
+        "label": "Amount"
+      },
+      {
+        "field": "CLOSE_DATE",
+        "label": "Close Date"
+      },
+      {
+        "field": "PROBABILITY",
+        "label": "Probability (%)"
+      }
+    ],
+    "filters": [],
+    "aggregates": [
+      {
+        "field": "AMOUNT",
+        "aggregateType": "Sum",
+        "label": "Total Value"
+      },
+      {
+        "field": "OPPORTUNITY_NAME",
+        "aggregateType": "RowCount",
+        "label": "Count"
+      },
+      {
+        "field": "EXPECTED_REVENUE",
+        "aggregateType": "Sum",
+        "label": "Weighted Revenue"
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "STAGE_NAME",
+      "aggregateColumn": "s!AMOUNT",
+      "title": "Revenue by Stage",
+      "showPercentages": false,
+      "showValues": true
+    },
+    "reportType": "Opportunity"
+  },
+  "dashboardUsage": {
+    "createDashboard": true,
+    "dashboardName": "Executive Summary Dashboard",
+    "description": "Executive overview: key revenue metrics, pipeline health, and performance trends at a glance",
+    "components": [
+      {
+        "title": "Total Revenue (All Time)",
+        "componentType": "Metric",
+        "section": "left",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Closed Won + Pipeline"
+      },
+      {
+        "title": "Pipeline Health",
+        "componentType": "Metric",
+        "section": "left",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Open Opportunities"
+      },
+      {
+        "title": "Revenue by Stage",
+        "componentType": "Bar",
+        "section": "middle",
+        "sortBy": "RowValueDescending",
+        "legendPosition": "Bottom",
+        "chartAxisRange": "Auto"
+      },
+      {
+        "title": "Key Metrics Overview",
+        "componentType": "Table",
+        "section": "middle",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600"
+      },
+      {
+        "title": "Weighted Forecast",
+        "componentType": "Metric",
+        "section": "right",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Probability-Adjusted Revenue"
+      },
+      {
+        "title": "Total Opportunity Count",
+        "componentType": "Metric",
+        "section": "right",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "All Opportunities"
+      }
+    ]
+  }
+}

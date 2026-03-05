@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Hook Input Contracts"
+  short_description: "Help with Hubspot Hook Input Contracts tasks"
+  default_prompt: "Use $hubspot-hook-input-contracts to execute this workflow safely and produce the expected artifacts."

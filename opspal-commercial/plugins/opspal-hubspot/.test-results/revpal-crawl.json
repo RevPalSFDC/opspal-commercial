@@ -1,0 +1,69 @@
+[
+  {
+    "url": "https://gorevpal.com",
+    "timestamp": "2025-11-15T01:09:27.353Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 231,
+      "pageSize": 185627,
+      "pageSizeKB": "181.28",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": false,
+      "robotsContent": null,
+      "canonical": "https://gorevpal.com",
+      "hasSSL": true,
+      "estimatedLCP": "Good"
+    },
+    "content": {
+      "title": {
+        "text": "RevPal | Marketing, TechStack Elevation & Genius-Level Data Management",
+        "length": 70,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "With over 20 years of experience in RevOps, we're a SaaS-focused RevOps machine. We don't just react; we anticipate.",
+        "length": 117,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "hasOne": true
+        },
+        "h2": {
+          "count": 7
+        },
+        "h3": {
+          "count": 12
+        },
+        "hierarchy": {
+          "isValid": false,
+          "issues": ["Skipped heading level"]
+        }
+      },
+      "wordCount": 2210,
+      "isSubstantial": true
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": []
+    },
+    "images": {
+      "total": 41,
+      "missingAlt": 0,
+      "shortAlt": 5,
+      "altCoverage": "100.0%",
+      "lazyLoading": 28
+    },
+    "links": {
+      "total": 49,
+      "internal": 19,
+      "external": 20,
+      "ratio": "1.05"
+    }
+  }
+]

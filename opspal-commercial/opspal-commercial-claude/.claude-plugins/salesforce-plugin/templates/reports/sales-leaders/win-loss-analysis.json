@@ -1,0 +1,252 @@
+{
+  "templateMetadata": {
+    "templateName": "Win/Loss Analysis by Stage and Reason",
+    "templateVersion": "1.0",
+    "description": "Analyze closed opportunities to identify where deals are won or lost and why",
+    "audience": "Sales Managers, Sales Enablement, Revenue Operations",
+    "useCase": "Identify bottlenecks in sales process, improve win rates, refine sales strategy, train team",
+    "customizationPoints": [
+      "Closed date range",
+      "Grouping dimension (Stage, Close Reason, Competitor)",
+      "Team/region filters",
+      "Loss reason picklist values"
+    ],
+    "prerequisites": [
+      "Closed opportunities (IsWon, IsLost)",
+      "Loss_Reason__c or similar field (recommended)",
+      "Competitor__c field (optional)",
+      "Stage history tracking (for analyzing at which stage lost)"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Win/Loss Analysis - {Period}",
+    "description": "Closed opportunity analysis showing win/loss patterns by stage and reason",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "1",
+        "customizable": false,
+        "customizationNote": "Only include closed opportunities"
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_QUARTER",
+        "customizable": true,
+        "customizationNote": "Adjust to LAST_QUARTER, THIS_YEAR, etc."
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "IS_WON",
+        "sortOrder": "Desc",
+        "dateGranularity": null,
+        "customizable": false,
+        "customizationNote": "Primary grouping: Won (True) vs Lost (False)"
+      },
+      {
+        "field": "Opportunity.Loss_Reason__c",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": true,
+        "customizationNote": "Secondary grouping by loss reason (blank for won opps)"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "AMOUNT",
+      "STAGE_NAME",
+      "CLOSE_DATE",
+      "Opportunity.Loss_Reason__c",
+      "Opportunity.Competitor__c",
+      "Opportunity.Close_Notes__c"
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Count of opportunities (won or lost)"
+      },
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total value (won or lost)"
+      },
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Average",
+        "description": "Average deal size"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Win_Rate_Overall",
+        "description": "Overall win rate percentage",
+        "formula": "(COUNT_WON / (COUNT_WON + COUNT_LOST)) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      },
+      {
+        "name": "Value_Win_Rate",
+        "description": "Win rate by dollar value",
+        "formula": "(SUM_AMOUNT_WON / (SUM_AMOUNT_WON + SUM_AMOUNT_LOST)) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "May differ from count-based win rate if deal sizes vary"
+      },
+      {
+        "name": "Lost_Revenue",
+        "description": "Total value of lost opportunities",
+        "formula": "SUM(AMOUNT WHERE IS_WON = FALSE)",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "StackedBar",
+      "groupingColumn": "Loss_Reason__c",
+      "aggregateColumn": "RowCount",
+      "legendPosition": "Bottom",
+      "showChartValues": true,
+      "sortBy": "Value",
+      "sortOrder": "Descending",
+      "chartColorPalette": "custom",
+      "chartColors": {
+        "Won": "#27ae60",
+        "Lost": "#e74c3c"
+      },
+      "note": "Stacked bar showing count of won vs lost by reason"
+    }
+  },
+  "recommendedFields": [
+    {
+      "fieldName": "Loss_Reason__c",
+      "fieldType": "Picklist",
+      "picklistValues": [
+        "Price - Too Expensive",
+        "Lost to Competitor",
+        "Timing - Not Ready",
+        "No Budget",
+        "Product Fit - Missing Features",
+        "Champion Left",
+        "Unresponsive",
+        "Other"
+      ],
+      "description": "Why the opportunity was lost",
+      "object": "Opportunity",
+      "required": "Required if IS_WON = FALSE"
+    },
+    {
+      "fieldName": "Competitor__c",
+      "fieldType": "Picklist or Text",
+      "description": "Which competitor we lost to (if applicable)",
+      "object": "Opportunity"
+    },
+    {
+      "fieldName": "Close_Notes__c",
+      "fieldType": "Long Text Area",
+      "description": "Detailed notes on why won or lost",
+      "object": "Opportunity"
+    },
+    {
+      "fieldName": "Stage_at_Loss__c",
+      "fieldType": "Text or Formula",
+      "formula": "PRIORVALUE(StageName)",
+      "description": "Stage where opportunity was before being marked lost",
+      "object": "Opportunity",
+      "note": "Requires field history tracking or Flow to capture"
+    }
+  ],
+  "alternativeGroupings": [
+    {
+      "grouping": "By Stage Where Lost",
+      "groupingField": "Stage_at_Loss__c",
+      "useCase": "Identify which stages have highest loss rate",
+      "insight": "If most losses happen in Proposal stage, may need better proposal training"
+    },
+    {
+      "grouping": "By Competitor",
+      "groupingField": "Competitor__c",
+      "useCase": "Identify competitive threats",
+      "insight": "Focus competitive intelligence and battle cards on top competitors"
+    },
+    {
+      "grouping": "By Rep",
+      "groupingField": "OPPORTUNITY_OWNER",
+      "useCase": "Compare individual rep win/loss patterns",
+      "insight": "Reps with high 'Price' losses may need negotiation training"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Create Loss_Reason__c picklist on Opportunity (if not exists)",
+      "2. Make Loss_Reason__c required when IS_WON = FALSE (validation rule)",
+      "3. Create Competitor__c and Close_Notes__c fields (optional)",
+      "4. Update CLOSE_DATE filter to analysis period",
+      "5. Deploy report to Sales Reports folder",
+      "6. Train team to populate Loss_Reason__c consistently",
+      "7. Review quarterly to identify trends"
+    ],
+    "expectedResults": {
+      "winRateBenchmarks": {
+        "Excellent": ">30%",
+        "Good": "20-30%",
+        "Fair": "10-20%",
+        "Poor": "<10%"
+      },
+      "commonLossReasons": [
+        "Price (20-30% of losses)",
+        "Lost to competitor (15-25%)",
+        "Timing/not ready (15-20%)",
+        "No budget (10-15%)",
+        "Product fit (10-15%)"
+      ],
+      "actionItems": [
+        "If 'Price' is top reason: Review pricing strategy, improve value communication",
+        "If 'Competitor' is top: Strengthen competitive positioning, create battle cards",
+        "If 'Product Fit': Prioritize feature development or better qualification",
+        "If 'No Budget': Improve budget discovery in early stages"
+      ]
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "Sales Leadership - Win/Loss Insights Dashboard",
+      "Revenue Operations - Sales Effectiveness Dashboard"
+    ],
+    "dashboardComponents": [
+      {
+        "componentType": "Donut Chart",
+        "title": "Win vs Loss Distribution",
+        "size": "third-width",
+        "colors": {"Won": "green", "Lost": "red"}
+      },
+      {
+        "componentType": "Horizontal Bar Chart",
+        "title": "Top Loss Reasons",
+        "filter": "IS_WON = FALSE",
+        "size": "half-width"
+      },
+      {
+        "componentType": "Gauge",
+        "title": "Win Rate %",
+        "size": "third-width",
+        "greenZone": ">25%",
+        "yellowZone": "15-25%",
+        "redZone": "<15%"
+      }
+    ]
+  },
+  "relatedTemplates": [
+    "team-performance.json",
+    "forecast-accuracy.json"
+  ]
+}

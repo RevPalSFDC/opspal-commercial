@@ -1,0 +1,260 @@
+{
+  "id": "data-quality",
+  "name": "Data Quality Dashboard",
+  "description": "Data completeness, duplicates, and hygiene scoring across CRM objects",
+  "version": "1.0.0",
+  "category": "operations",
+  "audience": ["admin", "data-steward", "ops"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "object", "type": "multi-select", "label": "Object", "default": "all", "options": ["Account", "Contact", "Opportunity", "Lead"] },
+      { "id": "owner", "type": "user-lookup", "label": "Owner", "default": "all" }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "overall-score",
+      "type": "gauge",
+      "title": "Overall Data Quality Score",
+      "position": { "row": 1, "col": 1, "colspan": 6 },
+      "config": {
+        "min": 0,
+        "max": 100,
+        "valueFormat": "number",
+        "thresholds": [
+          { "value": 60, "color": "#EF4444", "label": "Poor" },
+          { "value": 80, "color": "#F59E0B", "label": "Fair" },
+          { "value": 100, "color": "#22C55E", "label": "Good" }
+        ],
+        "showValue": true,
+        "showLabel": true,
+        "showThresholdLabels": true,
+        "size": 220,
+        "animate": true
+      },
+      "demoData": "kpis.overallScore"
+    },
+    {
+      "id": "account-quality",
+      "type": "kpi",
+      "title": "Account Quality",
+      "position": { "row": 1, "col": 7, "colspan": 2 },
+      "config": {
+        "format": "percent",
+        "showTrend": false,
+        "icon": "building",
+        "thresholds": [
+          { "value": 60, "color": "#EF4444" },
+          { "value": 80, "color": "#F59E0B" },
+          { "value": 100, "color": "#22C55E" }
+        ]
+      },
+      "demoData": "kpis.accountQuality"
+    },
+    {
+      "id": "contact-quality",
+      "type": "kpi",
+      "title": "Contact Quality",
+      "position": { "row": 1, "col": 9, "colspan": 2 },
+      "config": {
+        "format": "percent",
+        "showTrend": false,
+        "icon": "user"
+      },
+      "demoData": "kpis.contactQuality"
+    },
+    {
+      "id": "opportunity-quality",
+      "type": "kpi",
+      "title": "Opportunity Quality",
+      "position": { "row": 1, "col": 11, "colspan": 2 },
+      "config": {
+        "format": "percent",
+        "showTrend": false,
+        "icon": "briefcase"
+      },
+      "demoData": "kpis.opportunityQuality"
+    },
+    {
+      "id": "lead-quality",
+      "type": "kpi",
+      "title": "Lead Quality",
+      "position": { "row": 2, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": false,
+        "icon": "user-plus"
+      },
+      "demoData": "kpis.leadQuality"
+    },
+    {
+      "id": "completeness-by-field",
+      "type": "chart",
+      "title": "Field Completeness by Object",
+      "position": { "row": 3, "col": 1, "colspan": 12, "rowspan": 2 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "percent",
+        "stacked": false
+      },
+      "demoData": "completenessChart"
+    },
+    {
+      "id": "quality-trend",
+      "type": "chart",
+      "title": "Quality Score Trend",
+      "position": { "row": 5, "col": 1, "colspan": 12, "rowspan": 2 },
+      "config": {
+        "chartType": "line",
+        "showLegend": false,
+        "fill": true,
+        "tension": 0.3,
+        "annotations": {
+          "target": { "value": 80, "label": "Target", "color": "#22C55E", "dash": [5, 5] }
+        }
+      },
+      "demoData": "qualityTrend"
+    },
+    {
+      "id": "duplicate-counts",
+      "type": "chart",
+      "title": "Duplicate Records",
+      "position": { "row": 7, "col": 1, "colspan": 4 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": false,
+        "showValues": true
+      },
+      "demoData": "duplicates.chart"
+    },
+    {
+      "id": "top-issues",
+      "type": "table",
+      "title": "Top Data Quality Issues",
+      "position": { "row": 7, "col": 5, "colspan": 8 },
+      "config": {
+        "columns": [
+          { "field": "priority", "label": "#", "width": "6%", "align": "center" },
+          { "field": "object", "label": "Object", "width": "12%" },
+          { "field": "field", "label": "Field", "width": "15%" },
+          { "field": "issue", "label": "Issue", "width": "18%" },
+          { "field": "percent", "label": "Complete", "format": "percent", "width": "12%", "align": "center" },
+          { "field": "recordsAffected", "label": "Records", "format": "number", "width": "12%", "align": "right" },
+          { "field": "impact", "label": "Impact", "width": "10%", "format": "badge" },
+          { "field": "recommendation", "label": "Fix", "width": "15%" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "rowHighlight": {
+          "field": "impact",
+          "values": {
+            "high": "#FEE2E2",
+            "medium": "#FEF3C7",
+            "low": "#DCFCE7"
+          }
+        }
+      },
+      "demoData": "topIssues"
+    },
+    {
+      "id": "account-fields",
+      "type": "table",
+      "title": "Account Field Completeness",
+      "position": { "row": 8, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Field", "width": "40%" },
+          { "field": "complete", "label": "Complete", "format": "number", "width": "20%", "align": "right" },
+          { "field": "percent", "label": "Percent", "format": "percent", "width": "20%", "align": "center" },
+          { "field": "status", "label": "Status", "width": "20%", "format": "badge" }
+        ],
+        "sortable": true,
+        "pagination": false
+      },
+      "demoData": "fieldCompleteness.Account.fields"
+    },
+    {
+      "id": "contact-fields",
+      "type": "table",
+      "title": "Contact Field Completeness",
+      "position": { "row": 8, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Field", "width": "40%" },
+          { "field": "complete", "label": "Complete", "format": "number", "width": "20%", "align": "right" },
+          { "field": "percent", "label": "Percent", "format": "percent", "width": "20%", "align": "center" },
+          { "field": "status", "label": "Status", "width": "20%", "format": "badge" }
+        ],
+        "sortable": true,
+        "pagination": false
+      },
+      "demoData": "fieldCompleteness.Contact.fields"
+    }
+  ],
+
+  "dataBindings": {
+    "account-completeness": {
+      "salesforce": {
+        "object": "Account",
+        "fields": ["COUNT(Id) total", "COUNT(Industry) hasIndustry", "COUNT(Website) hasWebsite", "COUNT(Phone) hasPhone", "COUNT(BillingCity) hasBillingCity"]
+      },
+      "hubspot": {
+        "object": "companies",
+        "properties": ["industry", "website", "phone", "city"]
+      }
+    },
+    "contact-completeness": {
+      "salesforce": {
+        "object": "Contact",
+        "fields": ["COUNT(Id) total", "COUNT(Email) hasEmail", "COUNT(Phone) hasPhone", "COUNT(Title) hasTitle", "COUNT(MailingCity) hasMailingCity"]
+      },
+      "hubspot": {
+        "object": "contacts",
+        "properties": ["email", "phone", "jobtitle", "city"]
+      }
+    }
+  },
+
+  "scoring": {
+    "weights": {
+      "Account": 0.3,
+      "Contact": 0.25,
+      "Opportunity": 0.25,
+      "Lead": 0.2
+    },
+    "fieldWeights": {
+      "Email": 1.5,
+      "Phone": 1.2,
+      "Industry": 1.0,
+      "Website": 0.8,
+      "Description": 0.5
+    }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "qualityColors": {
+      "good": "#22C55E",
+      "fair": "#F59E0B",
+      "poor": "#EF4444"
+    },
+    "objectColors": {
+      "Account": "#5F3B8C",
+      "Contact": "#818CF8",
+      "Opportunity": "#22C55E",
+      "Lead": "#EF4444"
+    }
+  }
+}

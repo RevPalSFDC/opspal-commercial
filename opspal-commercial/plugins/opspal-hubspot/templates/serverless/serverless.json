@@ -1,0 +1,24 @@
+{
+  "runtime": "nodejs18.x",
+  "version": "1.0",
+  "environment": {},
+  "secrets": [
+    "HUBSPOT_ACCESS_TOKEN",
+    "EXTERNAL_API_KEY",
+    "WEBHOOK_SECRET"
+  ],
+  "endpoints": {
+    "form-handler": {
+      "method": "POST",
+      "file": "form-handler.js"
+    },
+    "webhook": {
+      "method": ["GET", "POST"],
+      "file": "webhook-handler.js"
+    },
+    "api-proxy": {
+      "method": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "file": "api-proxy.js"
+    }
+  }
+}

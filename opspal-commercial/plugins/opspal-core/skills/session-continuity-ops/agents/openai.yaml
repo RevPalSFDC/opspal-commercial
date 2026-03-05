@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Continuity Ops"
+  short_description: "Help with Session Continuity Ops tasks"
+  default_prompt: "Use $session-continuity-ops to execute this workflow safely and produce the expected artifacts."

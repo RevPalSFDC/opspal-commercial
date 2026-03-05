@@ -1,0 +1,13 @@
+{
+  "id": "pricing_table",
+  "label": "Pricing Table",
+  "global": false,
+  "smart_type": null,
+  "css_assets": [],
+  "js_assets": [],
+  "extra_classes": "module-pricing-table",
+  "is_available_for_new_content": true,
+  "categories": ["pricing", "landing_page"],
+  "icon": "module",
+  "host_template_types": ["PAGE"]
+}

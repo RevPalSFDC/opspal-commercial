@@ -1,0 +1,391 @@
+{
+  "generatedAt": "2026-02-15T00:39:21.102Z",
+  "ruleSetVersion": "1.0.0",
+  "violations": [
+    {
+      "signature": "orphan-asset|plugins/opspal-core/runbooks/solution-templates/06-solution-catalog-distribution.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/runbooks/solution-templates/06-solution-catalog-distribution.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/scripts/lib/runbook-framework/templates/salesforce/cpq.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/scripts/lib/runbook-framework/templates/salesforce/cpq.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/scripts/lib/runbook-framework/templates/shared/footer.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/scripts/lib/runbook-framework/templates/shared/footer.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/scripts/lib/runbook-framework/templates/shared/header.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/scripts/lib/runbook-framework/templates/shared/header.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/agent-self-review-checklist.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/agent-self-review-checklist.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/asana-updates/checkpoint-update.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/asana-updates/checkpoint-update.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/asana-updates/handoff-update.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/asana-updates/handoff-update.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/asana-updates/pivot-update.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/asana-updates/pivot-update.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/assets/logos/revpal-favicon.png",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/assets/logos/revpal-favicon.png",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/assets/logos/revpal-icon.png",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/assets/logos/revpal-icon.png",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/ENV_CONFIG.template.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/ENV_CONFIG.template.json",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/pdf-styles/base-css-demo.html",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/pdf-styles/base-css-demo.html",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/playbooks/debugging/api-timeout-playbook.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/playbooks/debugging/api-timeout-playbook.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/playbooks/debugging/data-quality-playbook.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/playbooks/debugging/data-quality-playbook.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/playbooks/debugging/permission-denied-playbook.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/playbooks/debugging/permission-denied-playbook.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/specifications/cpq-lite-pricebook-pricing.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/specifications/cpq-lite-pricebook-pricing.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/specifications/example-salesforce-cleanup.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/specifications/example-salesforce-cleanup.md",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/Account-fields.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/Account-fields.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Former_Hubspot_IDs__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Former_Hubspot_IDs__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Former_SFDC_IDs__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Former_SFDC_IDs__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Hubspot_ID__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Hubspot_ID__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Last_Sync_Direction__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Last_Sync_Direction__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Last_Sync_Error__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Last_Sync_Error__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Last_Sync_Time__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Last_Sync_Time__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Manual_Sync__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Manual_Sync__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Wire_Test_2__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Wire_Test_2__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Wire_Test_Run_ID__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Wire_Test_Run_ID__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Wire_Test_Timestamp__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Account/fields/Wire_Test_Timestamp__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Former_Hubspot_IDs__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Former_Hubspot_IDs__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Former_SFDC_IDs__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Former_SFDC_IDs__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Hubspot_ID__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Hubspot_ID__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Last_Sync_Direction__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Last_Sync_Direction__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Last_Sync_Error__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Last_Sync_Error__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Last_Sync_Time__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Last_Sync_Time__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Manual_Sync__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Manual_Sync__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Wire_Test_2__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Wire_Test_2__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Wire_Test_Run_ID__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Wire_Test_Run_ID__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Wire_Test_Timestamp__c.field-meta.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-core",
+      "file": "plugins/opspal-core/templates/wire-test/force-app/main/default/objects/Contact/fields/Wire_Test_Timestamp__c.field-meta.xml",
+      "message": "Asset appears unused (no textual references found in opspal-core)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-hubspot/templates/automation-actions/action-definition.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-hubspot",
+      "file": "plugins/opspal-hubspot/templates/automation-actions/action-definition.json",
+      "message": "Asset appears unused (no textual references found in opspal-hubspot)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-marketo/skills/marketo-agentic-automation/examples/nurture-campaign-deployment.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-marketo",
+      "file": "plugins/opspal-marketo/skills/marketo-agentic-automation/examples/nurture-campaign-deployment.md",
+      "message": "Asset appears unused (no textual references found in opspal-marketo)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-marketo/skills/marketo-agentic-automation/examples/webinar-program-setup.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-marketo",
+      "file": "plugins/opspal-marketo/skills/marketo-agentic-automation/examples/webinar-program-setup.md",
+      "message": "Asset appears unused (no textual references found in opspal-marketo)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/scripts/templates/audit-template/README.template.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/scripts/templates/audit-template/README.template.md",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/agent-capability-boundaries-template.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/agent-capability-boundaries-template.md",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/dashboards/01-sales-overview.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/dashboards/01-sales-overview.json",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/lightning-page-csv-schema.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/lightning-page-csv-schema.md",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/permission-sets/basic/read-only-base-template.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/permission-sets/basic/read-only-base-template.xml",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/permission-sets/basic/standard-user-template.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/permission-sets/basic/standard-user-template.xml",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/permission-sets/role-based/sales-user-template.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/permission-sets/role-based/sales-user-template.xml",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/permission-sets/role-based/service-agent-template.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/permission-sets/role-based/service-agent-template.xml",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/permission-sets/specialized/api-integration-template.xml",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/permission-sets/specialized/api-integration-template.xml",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/dashboards/04-territory-performance.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/reports/dashboards/04-territory-performance.json",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/dashboards/05-executive-summary.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/reports/dashboards/05-executive-summary.json",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/dashboards/06-board-report.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/reports/dashboards/06-board-report.json",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/test-patch-filters.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/reports/test-patch-filters.json",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/triggers/trigger-template-registry.json",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/triggers/trigger-template-registry.json",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    }
+  ]
+}

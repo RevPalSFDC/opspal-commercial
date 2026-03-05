@@ -1,0 +1,204 @@
+{
+  "template_id": "bookings-to-revenue-conversion",
+  "report_name": "Bookings & Revenue Conversion Model",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "Finance",
+  "primary_decisions_supported": [
+    "Forecasting revenue from bookings backlog",
+    "Identifying implementation bottlenecks",
+    "Aligning sales targets with revenue timing"
+  ],
+  "executive_questions_answered": [
+    "How will signed bookings translate into recognized revenue over coming quarters?",
+    "Do we have a large backlog of booked deals not yet live (and why)?",
+    "Is revenue growth lagging sales bookings (indicating delays in implementation)?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Bookings (ARR)",
+      "definition": "Total annual recurring contract value signed in the period (bookings recorded when contract is signed).",
+      "formula": "Sum of ACV of all contracts signed in period",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Total Contract Value (TCV) Bookings",
+          "definition_delta": "Uses total value of contract over its term (including non-recurring elements) rather than annualized value",
+          "when_to_use": "Cash flow or billing planning when multi-year deals and one-time fees matter"
+        }
+      ],
+      "pitfalls": [
+        "Bookings include future revenue not yet delivered – they should not be confused with current period revenue",
+        "Renewal bookings can double-count revenue if not separated (focus new vs renewal bookings distinctly)",
+        "Cancellations or push-outs of start dates will reduce future revenue conversion – track changes to bookings"
+      ]
+    },
+    {
+      "metric_name": "Revenue Conversion %",
+      "definition": "Percentage of booked ARR that has turned into recognized revenue in a given period. Indicates how effectively bookings are converting (e.g., implementation speed).",
+      "formula": "Conversion % = (Revenue recognized from prior bookings / Total prior bookings) * 100",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Backlog (Deferred ARR)",
+          "definition_delta": "The absolute ARR value of signed deals that have not yet started billing (booked but not live)",
+          "when_to_use": "Understanding future revenue pipeline and implementation load"
+        }
+      ],
+      "pitfalls": [
+        "Requires mapping bookings cohorts to revenue recognition periods – inaccurate matching can misstate conversion",
+        "If many deals start much later, conversion rate will appear low (need to consider expected time lag)",
+        "Ignoring partial period revenue (pro-rated first/last month) can slightly understate conversion if not accounted"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Billing", "Finance"],
+    "required_entities": ["Opportunity/Order (bookings)", "Revenue Schedule/Invoice (revenue)"],
+    "required_fields": [
+      {
+        "field_name": "Contract Close Date",
+        "description": "When deal was signed",
+        "salesforce_field": "Opportunity.CloseDate",
+        "hubspot_field": "deal.closedate"
+      },
+      {
+        "field_name": "Contract Start Date",
+        "description": "When service begins",
+        "salesforce_field": "Contract.StartDate or Opportunity.Service_Start_Date__c",
+        "hubspot_field": "deal.contract_start_date"
+      },
+      {
+        "field_name": "Annual Contract Value (ARR/ACV)",
+        "description": "Recurring contract value",
+        "salesforce_field": "Opportunity.ARR__c or Amount",
+        "hubspot_field": "deal.amount"
+      },
+      {
+        "field_name": "Revenue Recognized",
+        "description": "In period",
+        "salesforce_field": "Revenue Schedule or custom Revenue__c object",
+        "type": "billing_integration"
+      }
+    ],
+    "required_timestamps": ["Close Date", "Service Start Date", "Revenue Recognition Date"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Opportunity",
+        "right_entity": "RevenueSchedule",
+        "join_key": "OpportunityId",
+        "join_type": "left",
+        "notes": "Link each booking to its revenue recognition schedule or invoice records"
+      }
+    ],
+    "transformation_rules": [
+      "Group bookings by their start date to compute backlog: if start > current quarter, it's backlog",
+      "Align recognized revenue to the originating booking (e.g., use Opportunity ID or Contract ID reference)",
+      "Exclude bookings that were canceled before start (they inflate bookings but will never convert to revenue)"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Revenue Booking Matching",
+        "logic": "Sum of revenue over time from each booking should equal that booking's value (within tolerance)",
+        "severity": "high"
+      },
+      {
+        "check_name": "Start Date vs Close Date",
+        "logic": "Identify deals with long gaps between close and start (long implementation backlog)",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Backlog_ARR = sum(ACV of deals signed but not started by period end)",
+      "Revenue_from_bookings = sum(revenue in period from deals closed previously)"
+    ],
+    "aggregation_rules": [
+      "Aggregate bookings by quarter of close, and actual revenue by quarter of recognition; then compute what % of each quarter's bookings have turned into revenue by now",
+      "Track backlog as cumulative or by aging buckets (e.g., deals booked >6 months ago not live)"
+    ],
+    "cohort_logic": "Use booking quarter as a cohort; monitor revenue realized from each booking cohort over subsequent quarters",
+    "attribution_logic": null,
+    "forecast_logic": "Predict future revenue by applying historical conversion rates or known schedules to current backlog of bookings"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Finance",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "Bookings vs Revenue Trend",
+        "purpose": "Show bookings signed vs revenue recognized each quarter to visualize lag",
+        "visual_type": "line",
+        "primary_metrics": ["Bookings (ARR)", "Revenue Recognized"],
+        "filters": [],
+        "drilldowns": ["by product line or region"],
+        "annotations_or_thresholds": ["Revenue plan line"]
+      },
+      {
+        "panel_title": "Backlog & Conversion",
+        "purpose": "Display current backlog (booked not live) and recent conversion rates of bookings to revenue",
+        "visual_type": "bar",
+        "primary_metrics": ["Backlog ARR", "Revenue Conversion %"],
+        "filters": [],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["Target conversion %"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Explain if revenue shortfall is due to insufficient bookings or slower conversion of bookings to revenue",
+      "Highlight any increase in backlog suggesting implementation delays"
+    ],
+    "diagnostic_questions": [
+      "Are delays in onboarding causing us to push revenue into future quarters?",
+      "Is current quarter revenue mostly coming from current quarter bookings or from backlog of prior deals?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Add implementation resources to reduce backlog",
+        "owner": "Services/Onboarding",
+        "trigger_condition": "Backlog ARR increasing QoQ or remains high relative to bookings"
+      },
+      {
+        "action": "Focus sales incentives on earlier start dates",
+        "owner": "SalesOps",
+        "trigger_condition": "Many deals closed with long lead times to start (low near-term conversion)"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Table of quarterly bookings vs revenue and simple backlog calc to eyeball conversion",
+    "advanced_version": "Automated model tying each deal to a revenue schedule, with dynamic forecasts of revenue timing and backlog burn-down charts",
+    "common_client_customizations": [
+      "Include billings or cash collections as an additional measure alongside revenue",
+      "Break out conversion by new vs renewal bookings (renewals often have immediate revenue vs new might have onboarding lag)"
+    ],
+    "privacy_and_access_notes": [
+      "Detailed contract-level revenue schedules are sensitive – restrict to Finance/RevOps; share summary conversion metrics more broadly",
+      "Ensure data aligns with official accounting schedules for external reporting"
+    ],
+    "success_criteria": [
+      "Accurate prediction of next quarter's revenue based on current bookings (small variance)",
+      "Reduction in backlog or improved conversion % over time if bottlenecks are addressed"
+    ]
+  },
+  "benchmarks": {
+    "typical_conversion_timeline": {
+      "enterprise": "2-4 months from close to live",
+      "mid_market": "1-2 months from close to live",
+      "smb": "Same quarter conversion typical"
+    },
+    "healthy_backlog_ratio": "Backlog should be 1-2x quarterly bookings"
+  },
+  "references": [
+    {
+      "title": "Bookings vs. Revenue: Top Mistakes Companies Make When Tracking These Metrics",
+      "publisher": "revVana",
+      "date": "Aug 8, 2025",
+      "url": "https://revvana.com/resources/blog/bookings-vs-revenue-top-mistakes-companies-make-when-tracking-these-metrics/"
+    }
+  ]
+}

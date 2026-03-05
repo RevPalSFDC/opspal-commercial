@@ -1,0 +1,312 @@
+{
+  "templateMetadata": {
+    "templateId": "support-performance",
+    "templateName": "Support Performance Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "Support manager view of case volume, resolution time, CSAT scores, and team performance",
+    "audience": "Support Managers, CS Managers, Service Desk Leads",
+    "function": "customer-success",
+    "level": "individual",
+    "useCase": "Daily support operations, SLA monitoring, team performance tracking",
+    "refreshFrequency": "Hourly",
+    "componentCount": 6,
+    "prerequisites": [
+      "Case object with standard fields",
+      "Case Status picklist (Open/In Progress/Closed)",
+      "Case Priority field",
+      "CSAT tracking (optional but recommended)"
+    ],
+    "tags": ["support", "cases", "csat", "resolution", "sla", "service"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "enterprise", "high-volume"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified view with 4 key support metrics",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["CSAT Trend", "Team Performance Table"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full support performance dashboard with all 6 components"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with stricter SLA targets",
+        "metricAdjustments": {
+          "resolutionTime": {
+            "target": "4",
+            "thresholds": { "green": "<=4", "yellow": "4-8", "red": ">8" }
+          }
+        }
+      },
+      "high-volume": {
+        "description": "High-volume support with relaxed thresholds",
+        "metricAdjustments": {
+          "resolutionTime": {
+            "target": "48",
+            "thresholds": { "green": "<=48", "yellow": "48-72", "red": ">72" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Case.Status", "Case.OwnerId", "Case.CreatedDate"],
+    "optionalFields": ["Case.Priority", "Case.Resolution_Time_Hours__c", "Case.CSAT_Score__c"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "ResolutionTime": {
+        "patterns": ["Resolution_Time_Hours__c", "Time_To_Resolution__c", "Business_Hours_to_Close__c"],
+        "labelHints": ["Resolution Time", "Time to Resolution", "Hours to Close"],
+        "dataType": "number"
+      },
+      "CSATScore": {
+        "patterns": ["CSAT_Score__c", "Satisfaction_Score__c", "Customer_Satisfaction__c"],
+        "labelHints": ["CSAT", "Satisfaction", "Customer Satisfaction"],
+        "dataType": "number"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Cases Opened vs Closed", "Average Resolution Time", "Open Cases by Priority", "Team Performance"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Cases Opened vs Closed", "Open Cases by Priority"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Bar Chart",
+        "title": "Cases Opened vs Closed (Last 30 Days)",
+        "sourceReport": "case-volume-trend",
+        "groupBy": "Week",
+        "metrics": [
+          { "field": "COUNT(Id WHERE CreatedDate IN week)", "label": "Opened", "color": "#E99560" },
+          { "field": "COUNT(Id WHERE ClosedDate IN week)", "label": "Closed", "color": "#6FBF73" }
+        ],
+        "showDataLabels": true,
+        "showNetLine": true,
+        "netLineLabel": "Backlog Change"
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Gauge",
+        "title": "Average Resolution Time",
+        "sourceReport": "resolution-time",
+        "metric": "AVG(Resolution_Time_Hours__c)",
+        "format": "hours",
+        "target": 24,
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 24 },
+        "yellowZone": { "min": 24, "max": 48 },
+        "redZone": { "min": 48, "max": 168 },
+        "benchmark": { "excellent": "<8h", "good": "<24h", "warning": ">48h" }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Gauge",
+        "title": "CSAT Score",
+        "sourceReport": "csat-score",
+        "metric": "AVG(CSAT__c)",
+        "format": "number",
+        "decimalPlaces": 1,
+        "scale": { "min": 1, "max": 5 },
+        "greenZone": { "min": 4.5, "max": 5 },
+        "yellowZone": { "min": 4.0, "max": 4.5 },
+        "redZone": { "min": 1, "max": 4.0 },
+        "benchmark": { "excellent": ">4.7", "good": ">4.5", "warning": "<4.0" }
+      },
+      {
+        "position": { "row": 1, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "Open Cases by Priority",
+        "sourceReport": "open-cases-by-priority",
+        "groupBy": "Priority",
+        "metric": "COUNT(Case.Id WHERE Status != 'Closed')",
+        "showPercentages": true,
+        "showLegend": true,
+        "colorMapping": {
+          "Critical": "#E74C3C",
+          "High": "#F39C12",
+          "Medium": "#F4C542",
+          "Low": "#6FBF73"
+        }
+      },
+      {
+        "position": { "row": 1, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Line Chart",
+        "title": "Resolution Time Trend",
+        "sourceReport": "resolution-time-trend",
+        "xAxis": "Week",
+        "yAxis": "AVG(Resolution_Time_Hours__c)",
+        "showTrendLine": true,
+        "targetLine": 24,
+        "targetLabel": "SLA Target"
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 3 },
+        "type": "Table",
+        "title": "Team Performance",
+        "sourceReport": "team-case-performance",
+        "columns": [
+          { "field": "Owner.Name", "header": "Agent", "width": "18%" },
+          { "field": "Open_Cases", "header": "Open", "format": "number", "width": "10%" },
+          { "field": "Closed_This_Week", "header": "Closed (7d)", "format": "number", "width": "12%" },
+          { "field": "Avg_Resolution_Hours", "header": "Avg Resolution", "format": "hours", "width": "14%" },
+          { "field": "SLA_Met_Percent", "header": "SLA Met %", "format": "percent", "width": "12%" },
+          { "field": "Avg_CSAT", "header": "CSAT", "format": "number", "width": "10%" },
+          { "field": "Escalations", "header": "Escalations", "format": "number", "width": "12%" },
+          { "field": "Reopen_Rate", "header": "Reopen %", "format": "percent", "width": "12%" }
+        ],
+        "sortBy": "SLA_Met_Percent DESC",
+        "rowLimit": 15,
+        "conditionalFormatting": {
+          "SLA_Met_Percent": {
+            "green": ">95",
+            "yellow": "85-95",
+            "red": "<85"
+          },
+          "Avg_CSAT": {
+            "green": ">4.5",
+            "yellow": "4.0-4.5",
+            "red": "<4.0"
+          }
+        }
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "CreatedDate",
+      "type": "dateRange",
+      "placeholder": "{{period}}",
+      "default": "LAST_30_DAYS",
+      "values": ["LAST_7_DAYS", "LAST_30_DAYS", "THIS_MONTH", "THIS_FISCAL_QUARTER"]
+    },
+    {
+      "field": "Priority",
+      "type": "picklist",
+      "placeholder": "{{priority}}",
+      "default": "All",
+      "values": ["All", "Critical", "High", "Medium", "Low"]
+    },
+    {
+      "field": "Type",
+      "type": "picklist",
+      "placeholder": "{{case_type}}",
+      "default": "All",
+      "values": ["All", "Bug", "Feature Request", "Question", "Technical Issue", "Billing"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "managerLevel": "Owner.ManagerId = $User.Id",
+    "individualLevel": "OwnerId = $User.Id",
+    "note": "Managers see team, individuals see own cases"
+  },
+  "sourceReportTemplates": [
+    "customer-success/support-trends"
+  ],
+  "orgAdaptation": {
+    "requiredFields": [],
+    "optionalFields": [
+      "Case.CSAT__c",
+      "Case.Resolution_Time_Hours__c",
+      "Case.SLA_Breached__c",
+      "Case.Escalated__c",
+      "Case.Reopened__c"
+    ],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.6,
+    "fieldFallbacks": {
+      "Resolution_Time_Hours__c": {
+        "patterns": ["Resolution_Time_Hours__c", "Time_to_Resolution__c", "Handle_Time__c"],
+        "fallbackFormula": "(ClosedDate - CreatedDate) * 24",
+        "fallbackBehavior": "Calculate from CreatedDate and ClosedDate"
+      },
+      "CSAT__c": {
+        "patterns": ["CSAT__c", "Satisfaction_Score__c", "CSAT_Rating__c", "Customer_Satisfaction__c"],
+        "fallbackBehavior": "Hide CSAT component if field missing"
+      },
+      "SLA_Breached__c": {
+        "patterns": ["SLA_Breached__c", "SLA_Violation__c", "Overdue__c"],
+        "fallbackFormula": "IF(Resolution_Time_Hours > SLA_Target_Hours, TRUE, FALSE)",
+        "fallbackBehavior": "Calculate based on resolution vs SLA"
+      },
+      "Escalated__c": {
+        "patterns": ["Escalated__c", "Is_Escalated__c"],
+        "fallbackField": "IsEscalated",
+        "fallbackBehavior": "Use standard IsEscalated field"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "first_response_time": {
+      "definition": "Time from case creation to first agent response",
+      "benchmark": { "excellent": "<1h", "good": "<4h", "warning": ">8h" }
+    },
+    "resolution_time": {
+      "definition": "Time from case creation to resolution",
+      "benchmark": { "excellent": "<8h", "good": "<24h", "warning": ">48h" }
+    },
+    "csat": {
+      "definition": "Customer Satisfaction Score (1-5 scale)",
+      "benchmark": { "excellent": ">4.7", "good": ">4.5", "warning": "<4.0" }
+    },
+    "sla_compliance": {
+      "definition": "Percentage of cases resolved within SLA",
+      "benchmark": { "excellent": ">98%", "good": ">95%", "warning": "<90%" }
+    },
+    "reopen_rate": {
+      "definition": "Percentage of cases reopened after closure",
+      "benchmark": { "excellent": "<2%", "good": "<5%", "warning": ">10%" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Case object has Priority picklist configured",
+      "Check if CSAT tracking is enabled",
+      "Create Resolution_Time_Hours__c formula field if needed",
+      "Create report folder: Support Operations"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Support Manager folder",
+      "Set hourly refresh",
+      "Add to Service Console home page"
+    ],
+    "prerequisiteFields": {
+      "Resolution_Time_Hours__c": {
+        "type": "Formula (Number)",
+        "formula": "IF(IsClosed, (ClosedDate - CreatedDate) * 24, NULL)",
+        "decimalPlaces": 1
+      }
+    }
+  },
+  "relatedTemplates": ["account-health", "my-accounts", "cs-overview"]
+}

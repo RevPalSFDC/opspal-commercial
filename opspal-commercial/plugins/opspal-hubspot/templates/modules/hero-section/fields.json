@@ -1,0 +1,147 @@
+[
+  {
+    "name": "background_image",
+    "label": "Background Image",
+    "type": "image",
+    "default": {
+      "src": "",
+      "alt": "Hero background"
+    },
+    "required": false
+  },
+  {
+    "name": "background_color",
+    "label": "Background Color",
+    "type": "color",
+    "default": {
+      "color": "#1a1a2e",
+      "opacity": 100
+    },
+    "required": false
+  },
+  {
+    "name": "headline",
+    "label": "Headline",
+    "type": "text",
+    "default": "Welcome to Our Website",
+    "required": true,
+    "allow_new_line": false
+  },
+  {
+    "name": "subheadline",
+    "label": "Subheadline",
+    "type": "richtext",
+    "default": "<p>Discover what makes us different</p>",
+    "required": false
+  },
+  {
+    "name": "primary_cta",
+    "label": "Primary CTA",
+    "type": "group",
+    "children": [
+      {
+        "name": "text",
+        "label": "Button Text",
+        "type": "text",
+        "default": "Get Started"
+      },
+      {
+        "name": "link",
+        "label": "Button Link",
+        "type": "link",
+        "default": {
+          "url": {
+            "href": "#",
+            "type": "EXTERNAL"
+          }
+        }
+      },
+      {
+        "name": "style",
+        "label": "Button Style",
+        "type": "choice",
+        "choices": [
+          ["primary", "Primary (Filled)"],
+          ["secondary", "Secondary (Outline)"],
+          ["ghost", "Ghost (Text Only)"]
+        ],
+        "default": "primary"
+      }
+    ]
+  },
+  {
+    "name": "secondary_cta",
+    "label": "Secondary CTA",
+    "type": "group",
+    "children": [
+      {
+        "name": "enabled",
+        "label": "Show Secondary CTA",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "text",
+        "label": "Button Text",
+        "type": "text",
+        "default": "Learn More"
+      },
+      {
+        "name": "link",
+        "label": "Button Link",
+        "type": "link",
+        "default": {
+          "url": {
+            "href": "#",
+            "type": "EXTERNAL"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "layout",
+    "label": "Layout Options",
+    "type": "group",
+    "children": [
+      {
+        "name": "text_alignment",
+        "label": "Text Alignment",
+        "type": "choice",
+        "choices": [
+          ["left", "Left"],
+          ["center", "Center"],
+          ["right", "Right"]
+        ],
+        "default": "center"
+      },
+      {
+        "name": "height",
+        "label": "Section Height",
+        "type": "choice",
+        "choices": [
+          ["auto", "Auto"],
+          ["50vh", "Half Screen"],
+          ["75vh", "Three-Quarter Screen"],
+          ["100vh", "Full Screen"]
+        ],
+        "default": "75vh"
+      },
+      {
+        "name": "overlay_enabled",
+        "label": "Enable Overlay",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "name": "overlay_opacity",
+        "label": "Overlay Opacity",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "default": 50,
+        "display": "slider"
+      }
+    ]
+  }
+]

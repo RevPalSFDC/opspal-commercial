@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operations Readiness Framework"
+  short_description: "Help with Operations Readiness Framework tasks"
+  default_prompt: "Use $operations-readiness-framework to execute this workflow safely and produce the expected artifacts."

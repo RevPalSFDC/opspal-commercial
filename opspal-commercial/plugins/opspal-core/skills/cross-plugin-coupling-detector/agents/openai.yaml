@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross Plugin Coupling Detector"
+  short_description: "Help with Cross Plugin Coupling Detector tasks"
+  default_prompt: "Use $cross-plugin-coupling-detector to execute this workflow safely and produce the expected artifacts."

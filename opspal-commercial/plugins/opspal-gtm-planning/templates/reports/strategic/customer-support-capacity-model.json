@@ -1,0 +1,216 @@
+{
+  "template_id": "customer-support-capacity-model",
+  "report_name": "CS/Support Capacity Model",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "CSOps",
+  "primary_decisions_supported": [
+    "Headcount planning for Customer Success and Support",
+    "Service level management (SLA vs staffing)",
+    "Resource allocation to segments for retention"
+  ],
+  "executive_questions_answered": [
+    "Given our customer count and usage, how many CSMs/Support agents do we need to maintain service levels?",
+    "Are our current CSMs managing too many accounts (risking churn) or do we have capacity to handle more growth?",
+    "How will expansions in customer base or usage translate to required increases in CS/support staffing?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Accounts per CSM",
+      "definition": "The average number of customer accounts managed per Customer Success Manager. Helps gauge workload and ability to provide adequate attention (e.g., high-touch vs tech-touch).",
+      "formula": "Accounts per CSM = Total number of active customer accounts / Total number of CSMs",
+      "grain": "point in time (month/quarter)",
+      "required_dimensions": ["customer segment (if varying ratios by segment)"],
+      "known_variants": [
+        {
+          "variant_name": "ARR per CSM",
+          "definition_delta": "Total ARR managed per CSM, which can normalize differing account sizes (one CSM might handle $5M ARR vs another $2M)",
+          "when_to_use": "When account sizes vary widely and workload correlates more with revenue than count"
+        }
+      ],
+      "pitfalls": [
+        "Doesn't reflect complexity differences (10 small customers might be easier than 2 huge ones even if count suggests otherwise)",
+        "If CSMs have support from other roles (technical account managers, etc.), pure count might mislead – consider whole team capacity",
+        "Ignoring growth in existing accounts: same account might require more effort as it grows or if it's in onboarding vs steady state"
+      ]
+    },
+    {
+      "metric_name": "Support Tickets per Agent",
+      "definition": "The volume of support tickets (or interactions) handled per support agent in a given period. Used to gauge support workload and whether staffing is sufficient to meet SLA/response times.",
+      "formula": "Tickets per Agent = Total support tickets in period / Number of support agents",
+      "grain": "month",
+      "required_dimensions": ["ticket severity or channel if relevant"],
+      "known_variants": [
+        {
+          "variant_name": "First Response Time (FRT)",
+          "definition_delta": "Not a capacity metric directly, but an outcome metric that ties to capacity – average time to first response. Indirectly indicates if capacity is sufficient.",
+          "when_to_use": "Tracking service level health in conjunction with capacity metrics"
+        }
+      ],
+      "pitfalls": [
+        "High tickets per agent could indicate overload, but also consider resolution complexity (not all tickets equal effort)",
+        "Seasonality in support volume could temporarily skew ratio – use proper period averages for planning",
+        "Automation and self-service can change this ratio without headcount changes (e.g., introducing a chatbot might lower tickets/agent by deflecting some issues)"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM or CS Platform", "Support Ticketing System"],
+    "required_entities": ["Customer Account", "CSM Roster", "Support Ticket"],
+    "required_fields": [
+      {
+        "field_name": "Account owner CSM",
+        "description": "CSM assigned to account",
+        "salesforce_field": "Account.CSM__c or Account.OwnerId (if CSM)",
+        "hubspot_field": "company.owner"
+      },
+      {
+        "field_name": "Account ARR or tier",
+        "description": "For weighting",
+        "salesforce_field": "Account.ARR__c, Account.Tier__c",
+        "hubspot_field": "company.annual_recurring_revenue, company.tier"
+      },
+      {
+        "field_name": "Active account count",
+        "description": "Total customers",
+        "salesforce_field": "Count of Account WHERE Status = 'Active'",
+        "hubspot_field": "Count of company WHERE lifecycle_stage = 'customer'"
+      },
+      {
+        "field_name": "Number of CSMs",
+        "description": "Team size",
+        "type": "HRIS or manual"
+      },
+      {
+        "field_name": "Support tickets count",
+        "description": "By time period",
+        "type": "support_system_integration"
+      },
+      {
+        "field_name": "Number of support agents",
+        "description": "Team size",
+        "type": "HRIS or manual"
+      }
+    ],
+    "required_timestamps": ["Snapshot date for account/CSM count", "Ticket create/close dates"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Account",
+        "right_entity": "CSM Roster",
+        "join_key": "CSM_ID",
+        "join_type": "inner",
+        "notes": "Assign each account to a CSM to count accounts per CSM"
+      },
+      {
+        "left_entity": "Support Ticket",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "left",
+        "notes": "Aggregate tickets by account or directly by support team load"
+      }
+    ],
+    "transformation_rules": [
+      "Filter to active paying customers for account counts (exclude churned or prospects)",
+      "If one account has multiple CSMs (unusual, but enterprise might), decide whether to split count or assign primary CSM only",
+      "Consider different weighting: e.g., count a large enterprise account as equivalent of 5 SMB accounts when calculating capacity"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Account Assignments",
+        "logic": "Every active account should have an assigned CSM in the data",
+        "severity": "high"
+      },
+      {
+        "check_name": "Ticket Volume Consistency",
+        "logic": "Check ticket counts over time for anomalies (if using for forecasting, sudden dips/spikes explained by data issues or real events)",
+        "severity": "low"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Accounts_per_CSM = Active Accounts / Count(CSMs)",
+      "Tickets_per_Agent = Tickets_resolved / Count(Agents)"
+    ],
+    "aggregation_rules": [
+      "Typically aggregated at team or segment level: e.g., Enterprise team accounts/CSM vs SMB team accounts/CSM",
+      "Use averages or medians as needed (if distribution is skewed, median accounts per CSM might be informative)"
+    ],
+    "cohort_logic": "Could cohort customers by onboarding date to anticipate support load (new customers create more tickets initially)",
+    "attribution_logic": null,
+    "forecast_logic": "Given projected customer growth (or usage), forecast needed CSMs or agents to maintain target ratio. E.g., if adding 100 accounts and target 20 accounts/CSM, need +5 CSMs."
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "GTM Leaders",
+    "recommended_refresh_cadence": "Annual",
+    "layout": [
+      {
+        "panel_title": "Accounts per CSM by Segment",
+        "purpose": "Show current workload per CSM in different customer segments vs targets",
+        "visual_type": "bar",
+        "primary_metrics": ["Accounts per CSM"],
+        "filters": ["segment or tier"],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["Max recommended per CSM (threshold)"]
+      },
+      {
+        "panel_title": "Support Tickets per Agent (Trend)",
+        "purpose": "Track how many tickets each support agent handles and if that's rising or falling",
+        "visual_type": "line",
+        "primary_metrics": ["Tickets per Agent"],
+        "filters": [],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["SLA thresholds (if any, e.g., 5 tickets/day per agent for complex issues)"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Identify if any team is over capacity (e.g., Enterprise CSMs each handle 30 accounts vs target 15) and potential impact on retention",
+      "Highlight whether support ticket load per agent is trending up, indicating need for more hires or process improvements"
+    ],
+    "diagnostic_questions": [
+      "Are high account-to-CSM ratios correlating with lower NRR or CSAT in those segments?",
+      "Is the support team maintaining response times given current tickets per agent, or are SLAs slipping?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Hire additional CSMs",
+        "owner": "CSOps",
+        "trigger_condition": "Accounts per CSM exceeds target (e.g., >X accounts) in high-touch segments, risking quality of engagement"
+      },
+      {
+        "action": "Improve support self-service/automation",
+        "owner": "Support Ops",
+        "trigger_condition": "Tickets per Agent climbing steadily, approaching a point where response SLAs are at risk or agent burnout likely"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Annual capacity review: static calculation of current accounts per CSM and tickets per agent, compared to last year",
+    "advanced_version": "Real-time capacity dashboard with predictive alerts (e.g., if sales closes Y new accounts, how CSM capacity will look in 3 months; if support volume trend continues, when agents will exceed threshold)",
+    "common_client_customizations": [
+      "Different targets for different tiers (e.g., 1 CSM per 2 enterprise accounts vs 1 per 50 SMB accounts) visualized separately",
+      "Include quality metrics like CSAT or renewal rates alongside to correlate capacity and outcomes"
+    ],
+    "privacy_and_access_notes": [
+      "Aggregate metrics; individual CSM or agent performance might be sensitive – keep focus on averages unless needed for managerial review",
+      "This data is internal. If shared externally (unlikely), ensure no sensitive internal thresholds are exposed"
+    ],
+    "success_criteria": [
+      "No surprise churn spikes or support escalations due to overworked teams – capacity model accurately predicted needs",
+      "Service levels (response times, CSAT) maintained as customer base grows"
+    ]
+  },
+  "benchmarks": {
+    "accounts_per_csm_by_segment": {
+      "enterprise_high_touch": { "target": 10, "max": 15 },
+      "mid_market": { "target": 30, "max": 50 },
+      "smb_tech_touch": { "target": 100, "max": 200 }
+    },
+    "tickets_per_agent_per_day": {
+      "complex_issues": { "target": 5, "max": 8 },
+      "standard_issues": { "target": 15, "max": 25 }
+    }
+  },
+  "references": []
+}

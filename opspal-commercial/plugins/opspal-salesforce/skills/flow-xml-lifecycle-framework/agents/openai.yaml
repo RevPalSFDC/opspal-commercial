@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flow Xml Lifecycle Framework"
+  short_description: "Help with Flow Xml Lifecycle Framework tasks"
+  default_prompt: "Use $flow-xml-lifecycle-framework to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Campaign Execution Operations"
+  short_description: "Help with Marketo Campaign Execution Operations tasks"
+  default_prompt: "Use $marketo-campaign-execution-operations to execute this workflow safely and produce the expected artifacts."

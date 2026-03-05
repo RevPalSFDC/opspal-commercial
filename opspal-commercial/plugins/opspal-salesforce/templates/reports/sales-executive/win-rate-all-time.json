@@ -1,0 +1,153 @@
+{
+  "templateMetadata": {
+    "templateName": "Win Rate (All Time)",
+    "templateVersion": "1.1",
+    "description": "Overall win rate for closed opportunities showing sales effectiveness",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Sales effectiveness measurement, benchmarking, coaching prioritization",
+    "customizationPoints": [
+      "Date range for analysis",
+      "Segment by stage entered, source, or rep",
+      "Exclude specific opportunity types"
+    ],
+    "prerequisites": [
+      "Opportunity object with IsWon and IsClosed fields",
+      "Historical closed opportunities"
+    ]
+  },
+  "metricDefinitionId": "win_rate.count",
+  "reportMetadata": {
+    "name": "Win Rate - All Time",
+    "description": "Percentage of closed opportunities that were won",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_YEAR",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "filterCriteria": "IS_WON = TRUE",
+        "description": "Won count"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total closed"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Win_Rate",
+        "description": "Won / Total Closed",
+        "formula": "(COUNT_WON / COUNT_TOTAL) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Gauge",
+      "aggregateColumn": "Win_Rate",
+      "thresholds": {
+        "green": {
+          "min": 25,
+          "max": 100
+        },
+        "yellow": {
+          "min": 15,
+          "max": 25
+        },
+        "red": {
+          "min": 0,
+          "max": 15
+        }
+      }
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "pipeline-health"
+    ],
+    "componentType": "Gauge",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

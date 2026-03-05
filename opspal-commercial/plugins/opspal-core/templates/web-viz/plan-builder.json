@@ -1,0 +1,64 @@
+{
+  "id": "plan-builder",
+  "name": "Compensation Plan Builder",
+  "description": "Interactive plan builder for creating and editing compensation plans with live preview",
+  "version": "1.0.0",
+  "category": "compensation",
+  "baseTheme": "revpal",
+  "layout": {
+    "columns": 12,
+    "gridGap": "20px",
+    "padding": "0px"
+  },
+  "components": [
+    {
+      "id": "plan-builder",
+      "type": "planBuilder",
+      "title": "Compensation Plan Builder",
+      "position": {
+        "row": 0,
+        "col": 0,
+        "colspan": 12,
+        "rowspan": 1
+      },
+      "config": {
+        "localStoragePrefix": "compPlan_",
+        "draftKey": "compPlanDraft",
+        "autoSave": true,
+        "autoSaveDebounce": 1000,
+        "showPreview": true,
+        "showImport": true,
+        "showExport": true,
+        "collapsibleSections": true,
+        "chartColors": {
+          "primary": "#5F3B8C",
+          "secondary": "#3E4A61",
+          "accent": "#E99560",
+          "background": "#EAE4DC"
+        }
+      }
+    }
+  ],
+  "dataSources": {
+    "localStorage": {
+      "prefix": "compPlan_",
+      "draftKey": "compPlanDraft"
+    }
+  },
+  "dependencies": {
+    "chartjs": "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js",
+    "sheetjs": "https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"
+  },
+  "features": {
+    "fileImport": ["json", "csv", "xlsx"],
+    "fileExport": ["json", "csv", "xlsx"],
+    "livePreview": true,
+    "autoSave": true,
+    "validation": true
+  },
+  "metadata": {
+    "author": "RevPal",
+    "created": "2026-01-05",
+    "targetUsers": ["admin", "revops", "finance"]
+  }
+}

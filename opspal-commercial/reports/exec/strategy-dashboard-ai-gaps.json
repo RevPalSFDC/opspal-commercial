@@ -1,0 +1,49 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-012",
+  "category": "ai_leverage",
+  "total_items": 5,
+  "top_items": [
+    {
+      "id": "OPP-003",
+      "title": "Copilot Approval Queue for Mandatory Route Outputs",
+      "overall_score": 4.4,
+      "ninety_day_fit": "yes",
+      "plugin_scope": "opspal-core; opspal-salesforce; opspal-marketo",
+      "owner_suggested": "revpal-platform"
+    },
+    {
+      "id": "OPP-009",
+      "title": "Unified RevOps Next-Best-Action Layer",
+      "overall_score": 4.2,
+      "ninety_day_fit": "yes",
+      "plugin_scope": "opspal-core; opspal-salesforce; opspal-hubspot; opspal-marketo",
+      "owner_suggested": "revpal-platform"
+    },
+    {
+      "id": "OPP-007",
+      "title": "Manual Review Load Reduction in Dedup and Routing",
+      "overall_score": 3.88,
+      "ninety_day_fit": "conditional",
+      "plugin_scope": "opspal-core; opspal-hubspot; opspal-salesforce",
+      "owner_suggested": "revpal-platform"
+    },
+    {
+      "id": "OPP-002",
+      "title": "AI Maturity Uplift for Lowest-Coverage Plugins",
+      "overall_score": 3.7,
+      "ninety_day_fit": "conditional",
+      "plugin_scope": "opspal-gtm-planning (0.0%); opspal-monday (0.0%); opspal-marketo (11.5%)",
+      "owner_suggested": "revpal-platform"
+    },
+    {
+      "id": "OPP-008",
+      "title": "Cross-Model Consultation Expansion",
+      "overall_score": 3.18,
+      "ninety_day_fit": "conditional",
+      "plugin_scope": "opspal-ai-consult; suite-wide consumers",
+      "owner_suggested": "revpal-ai"
+    }
+  ]
+}

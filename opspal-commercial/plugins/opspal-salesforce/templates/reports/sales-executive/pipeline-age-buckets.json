@@ -1,0 +1,166 @@
+{
+  "templateMetadata": {
+    "templateName": "Pipeline Age Distribution",
+    "templateVersion": "1.1",
+    "description": "Analyzes pipeline age to identify stalled deals and forecast risk",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Deal velocity analysis, stalled deal identification, pipeline quality assessment",
+    "customizationPoints": [
+      "Age bucket definitions (0-30, 31-60, 61-90, 90+)",
+      "Team/territory scope",
+      "Stage-specific age thresholds"
+    ],
+    "prerequisites": [
+      "Opportunity object with CreatedDate",
+      "AGE formula field or calculated at runtime"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Pipeline Age Distribution",
+    "description": "Open pipeline grouped by age buckets",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "AGE",
+        "sortOrder": "Asc",
+        "bucketType": "number",
+        "buckets": [
+          {
+            "label": "0-30 Days",
+            "min": 0,
+            "max": 30
+          },
+          {
+            "label": "31-60 Days",
+            "min": 31,
+            "max": 60
+          },
+          {
+            "label": "61-90 Days",
+            "min": 61,
+            "max": 90
+          },
+          {
+            "label": "90+ Days",
+            "min": 91,
+            "max": 9999
+          }
+        ]
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "STAGE_NAME",
+      "AMOUNT",
+      "AGE",
+      "LAST_ACTIVITY"
+    ],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Pipeline value per age bucket"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Deal count per age bucket"
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "AGE_BUCKET",
+      "aggregateColumn": "AMOUNT:SUM",
+      "showChartValues": true,
+      "chartColors": {
+        "0-30 Days": "#27ae60",
+        "31-60 Days": "#f1c40f",
+        "61-90 Days": "#e67e22",
+        "90+ Days": "#e74c3c"
+      }
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "pipeline-health"
+    ],
+    "componentType": "Bar Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

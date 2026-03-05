@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xml Roundtrip Fidelity Framework"
+  short_description: "Help with Xml Roundtrip Fidelity Framework tasks"
+  default_prompt: "Use $xml-roundtrip-fidelity-framework to execute this workflow safely and produce the expected artifacts."

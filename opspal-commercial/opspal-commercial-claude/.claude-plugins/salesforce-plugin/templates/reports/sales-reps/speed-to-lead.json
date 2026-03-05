@@ -1,0 +1,230 @@
+{
+  "templateMetadata": {
+    "templateName": "Speed to First Response (Contact-First)",
+    "templateVersion": "1.0",
+    "description": "Measure how quickly sales reps respond to new contacts/leads with first activity",
+    "audience": "BDRs, SDRs, Sales Reps, Sales Managers",
+    "useCase": "Track responsiveness, identify slow follow-ups, benchmark against SLA, improve conversion rates",
+    "customizationPoints": [
+      "Object type (Contact vs Lead - this template uses Contact)",
+      "Activity types included (Call, Email, Meeting)",
+      "Date range for contact creation",
+      "Response time benchmarks (1 hour, 24 hours, etc.)"
+    ],
+    "prerequisites": [
+      "Contacts with Activities report type (or custom report type)",
+      "Tasks/Events properly logged against Contacts",
+      "First_Activity_Date__c field (recommended) or ability to calculate"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Speed to First Response - {Period}",
+    "description": "Average time from contact creation to first activity, grouped by owner",
+    "reportType": "ContactList",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "CREATED_DATE",
+        "operator": "equals",
+        "value": "LAST_30_DAYS",
+        "customizable": true,
+        "customizationNote": "Adjust to LAST_90_DAYS, THIS_QUARTER, etc."
+      },
+      {
+        "column": "LEAD_SOURCE",
+        "operator": "notEqual",
+        "value": "",
+        "customizable": true,
+        "customizationNote": "Filter to specific lead sources if needed"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "OWNER",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": false,
+        "customizationNote": "Group by owner to compare rep performance"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "FULL_NAME",
+      "EMAIL",
+      "ACCOUNT_NAME",
+      "LEAD_SOURCE",
+      "CREATED_DATE",
+      "Contact.First_Activity_Date__c",
+      "Contact.Hours_to_First_Response__c"
+    ],
+    "aggregates": [
+      {
+        "name": "Contact.Hours_to_First_Response__c",
+        "aggregateType": "Average",
+        "description": "Average hours to first response"
+      },
+      {
+        "name": "Contact.Hours_to_First_Response__c",
+        "aggregateType": "Median",
+        "description": "Median hours to first response (more reliable than average)"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total contacts created"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Percent_Responded_1_Hour",
+        "description": "% of contacts responded to within 1 hour",
+        "formula": "COUNT(Hours_to_First_Response <= 1) / RowCount * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "Requires cross-filter or bucket field"
+      },
+      {
+        "name": "Percent_Responded_24_Hours",
+        "description": "% of contacts responded to within 24 hours",
+        "formula": "COUNT(Hours_to_First_Response <= 24) / RowCount * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "Requires cross-filter or bucket field"
+      },
+      {
+        "name": "SLA_Compliance_Rate",
+        "description": "% meeting response SLA (assuming 4-hour SLA)",
+        "formula": "COUNT(Hours_to_First_Response <= 4) / RowCount * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "Adjust SLA threshold as needed"
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "OWNER",
+      "aggregateColumn": "Hours_to_First_Response__c:MEDIAN",
+      "legendPosition": "Right",
+      "showChartValues": true,
+      "sortBy": "Value",
+      "sortOrder": "Ascending",
+      "chartColorPalette": "diverging",
+      "chartColors": {
+        "fast": "#27ae60",
+        "medium": "#f39c12",
+        "slow": "#e74c3c"
+      },
+      "note": "Bar chart showing median response time by rep, fastest to slowest"
+    }
+  },
+  "calculatedFieldsRequired": [
+    {
+      "fieldName": "First_Activity_Date__c",
+      "fieldType": "Formula (DateTime) or Rollup Summary",
+      "formula": "MIN(Task.CreatedDate) from related Tasks",
+      "description": "Date/time of first activity (call, email, or meeting)",
+      "object": "Contact",
+      "alternativeApproach": "Use Flow to stamp first activity date on Contact"
+    },
+    {
+      "fieldName": "Hours_to_First_Response__c",
+      "fieldType": "Formula (Number)",
+      "formula": "IF(NOT(ISBLANK(First_Activity_Date__c)), (First_Activity_Date__c - CreatedDate) * 24, NULL)",
+      "description": "Hours from contact creation to first activity",
+      "object": "Contact",
+      "decimalPlaces": 1
+    },
+    {
+      "fieldName": "Response_SLA_Met__c",
+      "fieldType": "Formula (Checkbox)",
+      "formula": "Hours_to_First_Response__c <= 4",
+      "description": "True if responded within 4 hours (adjust SLA as needed)",
+      "object": "Contact"
+    }
+  ],
+  "alternativeApproaches": [
+    {
+      "approach": "Lead-Based Report",
+      "when": "Using traditional Lead object instead of Contact-first model",
+      "reportType": "LeadList",
+      "adjustments": "Use Lead.CreatedDate and Lead.First_Activity_Date__c"
+    },
+    {
+      "approach": "Activity-Based Report",
+      "when": "Need to analyze specific activity types (calls vs emails)",
+      "reportType": "Activities (Tasks and Events)",
+      "adjustments": "Group by Activity Type, filter by WhoId (Contact) creation date"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Create First_Activity_Date__c field on Contact (rollup or formula)",
+      "2. Create Hours_to_First_Response__c formula field",
+      "3. Create Response_SLA_Met__c formula field (optional)",
+      "4. Update date range filter to target period",
+      "5. Deploy report to Sales Reports folder",
+      "6. Create bucket field for response time ranges (if using summary formulas)"
+    ],
+    "expectedResults": {
+      "responseBenchmarks": {
+        "Excellent": "<1 hour median",
+        "Good": "1-4 hours median",
+        "Fair": "4-24 hours median",
+        "Poor": ">24 hours median"
+      },
+      "industryStandards": {
+        "B2B Tech": "2-4 hours",
+        "B2B Services": "4-8 hours",
+        "B2C": "<30 minutes"
+      },
+      "actionItems": [
+        "Reps with >24 hour median need coaching",
+        "Track trend over time (improving or declining?)",
+        "Compare inbound vs outbound response times"
+      ]
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "Sales Activity Metrics Dashboard",
+      "Lead Response Dashboard"
+    ],
+    "dashboardComponents": [
+      {
+        "componentType": "Horizontal Bar Chart",
+        "title": "Median Response Time by Rep",
+        "size": "half-width",
+        "refreshFrequency": "Daily"
+      },
+      {
+        "componentType": "Gauge",
+        "title": "Team SLA Compliance %",
+        "size": "third-width",
+        "greenZone": ">90%",
+        "yellowZone": "70-90%",
+        "redZone": "<70%"
+      }
+    ]
+  },
+  "troubleshooting": [
+    {
+      "issue": "First_Activity_Date__c is blank for many contacts",
+      "solution": "Verify activities (Tasks/Events) are properly logged against Contacts, not just Accounts"
+    },
+    {
+      "issue": "Hours_to_First_Response showing negative values",
+      "solution": "Check formula - ensure First_Activity_Date > CreatedDate, handle null values"
+    },
+    {
+      "issue": "Report shows no data",
+      "solution": "Verify date range filter isn't too narrow, check that contacts have activities"
+    }
+  ],
+  "relatedTemplates": [
+    "my-pipeline-by-stage.json",
+    "../sales-leaders/team-performance.json"
+  ]
+}

@@ -1,0 +1,328 @@
+{
+  "templateMetadata": {
+    "templateId": "my-pipeline",
+    "templateName": "My Pipeline Dashboard (Individual Rep)",
+    "templateVersion": "1.1",
+    "description": "Personal pipeline view for sales reps: my deals, my targets, my priorities",
+    "audience": "Sales Reps, BDRs, AEs, Account Executives",
+    "function": "sales",
+    "level": "individual",
+    "useCase": "Daily deal management, prioritize activities, track personal performance",
+    "refreshFrequency": "Real-time or Hourly",
+    "componentCount": 6,
+    "tags": ["my-pipeline", "rep", "opportunities", "personal", "sales"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "cpq", "plg", "smb"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified view with 4 key components for new reps",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["Pipeline by Close Date", "My Coverage Ratio"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full personal pipeline dashboard with all 6 components"
+      },
+      "cpq": {
+        "description": "CPQ-optimized with SBQQ quote-linked pipeline",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote": "SBQQ__Quote__c",
+          "My_Pipeline__c": "SUM(SBQQ__NetAmount__c WHERE IsClosed=FALSE)"
+        }
+      },
+      "plg": {
+        "description": "Product-led growth with trial/freemium pipeline focus",
+        "filterOverrides": [
+          { "field": "Type", "default": "Upgrade", "values": ["Upgrade", "Conversion", "Expansion"] }
+        ],
+        "metricAdjustments": {
+          "coverageRatio": {
+            "target": "2x",
+            "thresholds": { "green": ">=2x", "yellow": "1.5-2x", "red": "<1.5x" }
+          }
+        }
+      },
+      "smb": {
+        "description": "SMB focus with faster deal cycles",
+        "metricAdjustments": {
+          "coverageRatio": {
+            "target": "2.5x",
+            "thresholds": { "green": ">=2.5x", "yellow": "2-2.5x", "red": "<2x" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Amount", "StageName", "CloseDate", "OwnerId", "IsClosed"],
+    "optionalFields": ["Close_Date_Bucket__c", "Days_to_Close__c", "Days_Since_Last_Activity__c", "NextStep"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": ["Amount", "Deal_Value__c", "Pipeline_Value__c"],
+        "cpqPatterns": ["SBQQ__NetAmount__c", "SBQQ__CustomerAmount__c"],
+        "namespaceAware": true,
+        "fallbackChain": [
+          { "namespace": "SBQQ", "field": "SBQQ__NetAmount__c" },
+          { "namespace": null, "field": "Amount" }
+        ],
+        "dataType": "currency"
+      },
+      "NextStep": {
+        "patterns": ["NextStep", "Next_Step__c", "Next_Steps__c"],
+        "labelHints": ["Next Step", "Next Steps", "Next Action"],
+        "dataType": "text"
+      },
+      "LastActivity": {
+        "patterns": ["LastActivityDate", "Last_Activity_Date__c"],
+        "labelHints": ["Last Activity", "Last Touch"],
+        "dataType": "date"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["My Open Pipeline", "My Coverage Ratio", "My Pipeline by Stage", "My Top Priorities"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["My Open Pipeline", "My Top Priorities"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "components": [
+      {
+        "position": 1,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "My Open Pipeline",
+        "sourceReport": "my-open-pipeline",
+        "metric": "SUM(Amount WHERE IsClosed=FALSE AND OwnerId=$User.Id)",
+        "showComparison": "vs Last Week",
+        "trendIndicator": true
+      },
+      {
+        "position": 2,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "My Coverage Ratio",
+        "sourceReport": "my-coverage-ratio",
+        "metric": "My_Pipeline__c / My_Quota__c",
+        "target": "3x",
+        "greenZone": ">=3x",
+        "yellowZone": "2-3x",
+        "redZone": "<2x"
+      },
+      {
+        "position": 3,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "Deals Closing This Month",
+        "sourceReport": "my-deals-closing-this-month",
+        "metric": "COUNT(Opportunity WHERE CloseDate=THIS_MONTH AND OwnerId=$User.Id)",
+        "showValue": "Count and Total Amount"
+      },
+      {
+        "position": 4,
+        "size": "half-width",
+        "type": "Funnel Chart",
+        "title": "My Pipeline by Stage",
+        "sourceReport": "my-pipeline-by-stage",
+        "groupBy": "Stage",
+        "metric": "SUM(Amount)",
+        "showConversionRates": true,
+        "showCounts": true
+      },
+      {
+        "position": 5,
+        "size": "half-width",
+        "type": "Donut Chart",
+        "title": "Pipeline by Close Date",
+        "sourceReport": "my-pipeline-by-close-date",
+        "groupBy": "Close_Date_Bucket__c",
+        "metric": "SUM(Amount)",
+        "segments": ["Overdue", "This Week", "This Month", "This Quarter", "Later"],
+        "colorCode": {
+          "Overdue": "red",
+          "This Week": "orange",
+          "This Month": "green",
+          "This Quarter": "blue",
+          "Later": "gray"
+        }
+      },
+      {
+        "position": 6,
+        "size": "full-width",
+        "type": "Table",
+        "title": "My Top Priorities (Next 30 Days)",
+        "sourceReport": "my-top-priorities",
+        "columns": [
+          "Opportunity Name",
+          "Account",
+          "Amount",
+          "Stage",
+          "Probability %",
+          "Close Date",
+          "Days to Close",
+          "Next Step",
+          "Last Activity"
+        ],
+        "sortBy": "Close Date ASC",
+        "rowLimit": 20,
+        "conditionalFormatting": {
+          "Days_to_Close__c": {"<=7": "red", "<=14": "orange", "<=30": "yellow"},
+          "Days_Since_Last_Activity__c": {">=7": "red", ">=3": "yellow"}
+        },
+        "clickthrough": "Open Opportunity Record"
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {"field": "Close Date", "type": "Date Range", "default": "NEXT_90_DAYS"},
+    {"field": "Stage", "type": "Picklist", "default": "All Open", "values": ["All Open", "Qualification", "Discovery", "Proposal", "Negotiation"]}
+  ],
+  "sourceReportTemplates": [
+    "sales-reps/my-open-pipeline",
+    "sales-reps/my-coverage-ratio",
+    "sales-reps/my-deals-closing-this-month",
+    "sales-reps/my-pipeline-by-stage",
+    "sales-reps/my-pipeline-by-close-date",
+    "sales-reps/my-top-priorities"
+  ],
+  "calculatedFieldsRequired": [
+    {
+      "fieldName": "Close_Date_Bucket__c",
+      "fieldType": "Formula (Text)",
+      "formula": "IF(CloseDate < TODAY(), 'Overdue', IF(CloseDate <= TODAY() + 7, 'This Week', IF(CloseDate <= TODAY() + 30, 'This Month', IF(CloseDate <= End_of_Quarter__c, 'This Quarter', 'Later'))))",
+      "description": "Categorize deals by close date proximity"
+    },
+    {
+      "fieldName": "Days_to_Close__c",
+      "fieldType": "Formula (Number)",
+      "formula": "CloseDate - TODAY()",
+      "description": "Days until expected close (negative = overdue)"
+    },
+    {
+      "fieldName": "Days_Since_Last_Activity__c",
+      "fieldType": "Formula (Number)",
+      "formula": "TODAY() - LastActivityDate",
+      "description": "Days since last logged activity"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Create calculated fields (Close_Date_Bucket__c, Days_to_Close__c, Days_Since_Last_Activity__c)",
+      "2. Create all 6 source reports using templates",
+      "3. Add report filter: OwnerId = $User.Id (shows only logged-in user's records)",
+      "4. Create dashboard in Dashboards folder (My Dashboards)",
+      "5. Add components in order specified",
+      "6. Configure filters (Close Date, Stage)",
+      "7. Set refresh to real-time (if available) or hourly",
+      "8. Make dashboard personal (not shared) or share with all reps",
+      "9. Pin dashboard to Home Page for easy access",
+      "10. Set as default dashboard for sales reps"
+    ],
+    "userExperienceTips": {
+      "homePageLayout": "Add this dashboard component to Sales App home page",
+      "mobileOptimization": "Ensure components are mobile-responsive for on-the-go access",
+      "notifications": "Enable Salesforce Mobile push notifications for overdue deals"
+    }
+  },
+  "usageScenarios": {
+    "morningRoutine": {
+      "time": "8:00 AM - Start of day",
+      "focus": "Top priorities table, deals closing this month",
+      "questions": [
+        "What deals am I working on today?",
+        "What's closing this week?",
+        "Are there any overdue follow-ups?"
+      ],
+      "actions": [
+        "Review next steps for top 5 deals",
+        "Schedule calls for deals closing this week",
+        "Follow up on stalled deals (no activity 3+ days)"
+      ]
+    },
+    "midDayCheckIn": {
+      "time": "12:00 PM - Mid-day",
+      "focus": "Pipeline by stage, coverage ratio",
+      "questions": [
+        "Am I on track to hit quota?",
+        "Do I need more pipeline?",
+        "Where are my deals getting stuck?"
+      ],
+      "actions": [
+        "If coverage <2x, increase prospecting",
+        "If too many early-stage deals, focus on moving deals forward",
+        "Update deal stages after customer calls"
+      ]
+    },
+    "endOfDayReview": {
+      "time": "5:00 PM - End of day",
+      "focus": "Last activity column, next steps",
+      "questions": [
+        "Did I follow up on all commitments?",
+        "What needs attention tomorrow?",
+        "Did I log all activities?"
+      ],
+      "actions": [
+        "Update opportunity records with latest info",
+        "Set next steps for tomorrow",
+        "Log all calls/emails/meetings"
+      ]
+    }
+  },
+  "kpiDefinitions": {
+    "coverageRatio": {
+      "formula": "My Open Pipeline / My Quota",
+      "benchmark": "3-4x for healthy coverage",
+      "whyItMatters": "Indicates whether you have enough pipeline to hit quota"
+    },
+    "daysToClose": {
+      "formula": "Close Date - Today",
+      "benchmark": "Focus on deals closing in next 30 days",
+      "whyItMatters": "Helps prioritize which deals need immediate attention"
+    }
+  },
+  "bestPractices": {
+    "dailyHabits": [
+      "Check dashboard first thing in morning",
+      "Update deal stages after every customer interaction",
+      "Log all activities (calls, emails, meetings) in real-time",
+      "Review top priorities at end of day"
+    ],
+    "pipelineHygiene": [
+      "Close out old/dead deals (don't let them linger)",
+      "Keep close dates realistic (update if pushed)",
+      "Use Next Step field religiously (always know what's next)",
+      "Activity on every deal at least once per week"
+    ],
+    "commonMistakes": [
+      "❌ Not updating deal stages regularly",
+      "❌ Letting deals sit idle for 7+ days",
+      "❌ Overoptimistic close dates",
+      "❌ Not logging activities (makes pipeline look stale)"
+    ]
+  },
+  "relatedTemplates": [
+    "my-activities.json",
+    "my-quota.json"
+  ]
+}

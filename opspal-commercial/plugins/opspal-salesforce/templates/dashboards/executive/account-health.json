@@ -1,0 +1,329 @@
+{
+  "templateMetadata": {
+    "templateId": "account-health",
+    "templateName": "Account Health Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "Customer health score distribution, NPS trends, support case volume, and engagement metrics",
+    "audience": "CS Leadership, CCO, VP Customer Success",
+    "function": "customer-success",
+    "level": "executive",
+    "useCase": "Customer health monitoring, proactive intervention planning, engagement analysis",
+    "refreshFrequency": "Daily",
+    "componentCount": 7,
+    "prerequisites": [
+      "Account.Health_Score__c field (or calculable)",
+      "Case object for support tracking",
+      "Account.NPS_Score__c (optional but recommended)",
+      "Activity tracking for engagement"
+    ],
+    "tags": ["health", "nps", "support", "engagement", "risk", "customer-success"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "enterprise", "high-touch"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified health view with 5 key metrics",
+        "componentOverrides": {
+          "maxComponents": 5,
+          "exclude": ["NPS Trend", "Engagement by Segment"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full account health dashboard with all 7 components"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with higher ARR account filtering",
+        "filterOverrides": [
+          { "field": "Account.ARR__c", "default": ">=100000", "label": "Enterprise ($100K+ ARR)" }
+        ],
+        "metricAdjustments": {
+          "npsTarget": {
+            "target": "50",
+            "thresholds": { "green": ">=50", "yellow": "30-50", "red": "<30" }
+          }
+        }
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement depth metrics",
+        "metricAdjustments": {
+          "engagementScore": {
+            "target": "80",
+            "thresholds": { "green": ">=80", "yellow": "60-80", "red": "<60" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Account.Name", "Account.OwnerId"],
+    "optionalFields": ["Account.Health_Score__c", "Account.NPS_Score__c", "Account.ARR__c", "Case.Status"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": ["Health_Score__c", "HealthScore__c", "Account_Health__c", "Customer_Health__c"],
+        "labelHints": ["Health Score", "Health", "Customer Health"],
+        "dataType": "picklist"
+      },
+      "NPSScore": {
+        "patterns": ["NPS_Score__c", "Net_Promoter_Score__c", "NPS__c"],
+        "labelHints": ["NPS", "Net Promoter Score"],
+        "dataType": "number"
+      },
+      "ARR": {
+        "patterns": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c"],
+        "labelHints": ["ARR", "Annual Revenue", "ACV"],
+        "dataType": "currency"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Health Score Distribution", "Average NPS Score", "At-Risk Accounts", "Support Case Volume"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Health Score Distribution", "At-Risk Accounts"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "Health Score Distribution",
+        "sourceReport": "customer-health-distribution",
+        "groupBy": "Account.Health_Score__c",
+        "metric": "COUNT(Account.Id)",
+        "showPercentages": true,
+        "showLegend": true,
+        "colorMapping": {
+          "Green": "#6FBF73",
+          "Yellow": "#F4C542",
+          "Red": "#E74C3C"
+        },
+        "showCounts": true
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Gauge",
+        "title": "Average NPS Score",
+        "sourceReport": "nps-score-average",
+        "metric": "AVG(Account.NPS_Score__c)",
+        "format": "number",
+        "decimalPlaces": 1,
+        "minValue": -100,
+        "maxValue": 100,
+        "greenZone": { "min": 50, "max": 100 },
+        "yellowZone": { "min": 0, "max": 50 },
+        "redZone": { "min": -100, "max": 0 },
+        "benchmark": { "excellent": ">70", "good": ">50", "warning": "<30" }
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Open Support Cases",
+        "sourceReport": "open-support-cases",
+        "metric": "COUNT(Case.Id WHERE Status != 'Closed')",
+        "format": "number",
+        "secondaryMetric": "COUNT WHERE Priority='High'",
+        "secondaryLabel": "high priority",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 50 },
+        "yellowZone": { "min": 50, "max": 100 },
+        "redZone": { "min": 100, "max": 1000 }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Line Chart",
+        "title": "NPS Trend (12 Months)",
+        "sourceReport": "nps-trend",
+        "xAxis": "Month",
+        "yAxis": "AVG(NPS_Score__c)",
+        "showTrendLine": true,
+        "showDataLabels": true,
+        "targetLine": 50,
+        "showBands": true,
+        "bands": [
+          { "label": "Promoters", "range": [50, 100], "color": "#6FBF73" },
+          { "label": "Passives", "range": [0, 50], "color": "#F4C542" },
+          { "label": "Detractors", "range": [-100, 0], "color": "#E74C3C" }
+        ]
+      },
+      {
+        "position": { "row": 1, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Bar Chart",
+        "title": "Case Volume (30 Days)",
+        "sourceReport": "case-volume-trend",
+        "groupBy": "Week",
+        "metric": "COUNT(Case.Id)",
+        "stackBy": "Priority",
+        "showDataLabels": true,
+        "colorMapping": {
+          "Critical": "#E74C3C",
+          "High": "#F39C12",
+          "Medium": "#F4C542",
+          "Low": "#6FBF73"
+        }
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Table",
+        "title": "Top At-Risk Accounts",
+        "sourceReport": "top-at-risk-accounts",
+        "columns": [
+          { "field": "Account.Name", "header": "Account", "width": "22%" },
+          { "field": "Account.Health_Score__c", "header": "Health", "width": "10%" },
+          { "field": "Account.ARR__c", "header": "ARR", "format": "currency", "width": "14%" },
+          { "field": "Account.Open_Cases__c", "header": "Open Cases", "format": "number", "width": "12%" },
+          { "field": "Account.NPS_Score__c", "header": "NPS", "format": "number", "width": "10%" },
+          { "field": "Account.Last_Touch_Date__c", "header": "Last Touch", "format": "date", "width": "14%" },
+          { "field": "Account.CSM_Owner__c", "header": "CSM", "width": "18%" }
+        ],
+        "sortBy": "Account.ARR__c DESC",
+        "rowLimit": 15,
+        "filterLogic": "Health_Score__c IN ('Red', 'Yellow')",
+        "conditionalFormatting": {
+          "Account.Health_Score__c": {
+            "Green": "green-text",
+            "Yellow": "yellow-text",
+            "Red": "red-text"
+          }
+        }
+      },
+      {
+        "position": { "row": 2, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Line Chart",
+        "title": "Health Score Trend",
+        "sourceReport": "health-score-trend",
+        "xAxis": "Month",
+        "yAxis": {
+          "Green_Count": { "label": "Green", "color": "#6FBF73" },
+          "Yellow_Count": { "label": "Yellow", "color": "#F4C542" },
+          "Red_Count": { "label": "Red", "color": "#E74C3C" }
+        },
+        "chartType": "Area",
+        "stacked": true
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "Account.Type",
+      "type": "picklist",
+      "placeholder": "{{account_type}}",
+      "default": "Customer",
+      "values": ["Customer", "All"]
+    },
+    {
+      "field": "Account.Segment__c",
+      "type": "picklist",
+      "placeholder": "{{segment}}",
+      "default": "All",
+      "values": ["All", "Enterprise", "Mid-Market", "SMB"]
+    },
+    {
+      "field": "Account.Health_Score__c",
+      "type": "picklist",
+      "placeholder": "{{health}}",
+      "default": "All",
+      "values": ["All", "Green", "Yellow", "Red"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "csmLevel": "Account.CSM_Owner__c = $User.Id",
+    "managerLevel": "Account.CSM_Owner__r.ManagerId = $User.Id"
+  },
+  "sourceReportTemplates": [
+    "customer-success/customer-health-distribution",
+    "customer-success/account-health",
+    "customer-success/support-trends"
+  ],
+  "orgAdaptation": {
+    "requiredFields": [],
+    "optionalFields": [
+      "Account.Health_Score__c",
+      "Account.NPS_Score__c",
+      "Account.CSM_Owner__c",
+      "Account.Last_Touch_Date__c",
+      "Account.Open_Cases__c"
+    ],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.6,
+    "fieldFallbacks": {
+      "Health_Score__c": {
+        "patterns": ["Health_Score__c", "Customer_Health__c", "Account_Health__c", "Health_Rating__c", "Risk_Level__c"],
+        "fallbackFormula": "IF(Days_Since_Last_Touch > 90, 'Red', IF(Open_Cases > 5, 'Red', IF(NPS_Score < 6, 'Yellow', 'Green')))",
+        "fallbackBehavior": "Calculate from activity, cases, and NPS"
+      },
+      "NPS_Score__c": {
+        "patterns": ["NPS_Score__c", "NPS__c", "Net_Promoter_Score__c"],
+        "fallbackBehavior": "Hide NPS components if field missing"
+      },
+      "Open_Cases__c": {
+        "patterns": ["Open_Cases__c", "Case_Count__c"],
+        "fallbackStrategy": "Count from Case object",
+        "fallbackQuery": "SELECT COUNT(Id) FROM Case WHERE AccountId = :accountId AND IsClosed = FALSE"
+      },
+      "Last_Touch_Date__c": {
+        "patterns": ["Last_Touch_Date__c", "Last_Activity_Date__c"],
+        "fallbackField": "LastActivityDate",
+        "fallbackBehavior": "Use standard LastActivityDate"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "health_distribution": {
+      "calculation": "Percentage of accounts in each health category",
+      "benchmark": {
+        "healthy_portfolio": "Green >70%, Yellow <20%, Red <10%",
+        "warning": "Red >15%"
+      }
+    },
+    "nps": {
+      "formula": "% Promoters (9-10) - % Detractors (0-6)",
+      "scale": "-100 to +100",
+      "benchmark": { "excellent": ">70", "good": ">50", "warning": "<30" }
+    },
+    "case_resolution_impact": {
+      "insight": "Accounts with >5 open cases are 3x more likely to churn",
+      "action": "Prioritize case resolution for high-ARR accounts"
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Account.Health_Score__c exists (or create formula)",
+      "Confirm Case object is being used for support",
+      "Check NPS tracking method (Account field or Survey object)",
+      "Create report folder: Customer Health"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Customer Success folder",
+      "Set daily refresh at 7 AM",
+      "Subscribe CS Directors to daily snapshot"
+    ]
+  },
+  "relatedTemplates": ["cs-overview", "renewal-pipeline", "my-accounts", "support-performance"]
+}

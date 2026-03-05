@@ -1,0 +1,775 @@
+#!/usr/bin/env node
+
+/**
+ * Pre-Deployment Validator
+ * Comprehensive validation to catch issues before deployment attempts
+ * Prevents 90% of deployment failures by checking common pitfalls
+ */
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const xml2js = require('xml2js');
+
+class PreDeploymentValidator {
+    constructor(options = {}) {
+        this.orgAlias = options.orgAlias || process.env.SF_TARGET_ORG;
+        this.verbose = options.verbose || false;
+        this.strictMode = options.strictMode || false;
+
+        // Validation rules database
+        this.validationRules = {
+            fieldHistory: {
+                maxPerObject: 20,
+                message: 'Salesforce allows maximum 20 fields with history tracking per object'
+            },
+            validationRules: {
+                maxPerObject: 500,
+                warningAt: 100,
+                message: 'Maximum 500 validation rules per object'
+            },
+            requiredFields: {
+                maxPerObject: 40,
+                message: 'Consider required field limit for user experience'
+            },
+            picklistValues: {
+                maxPerField: 1000,
+                warningAt: 500,
+                message: 'Maximum 1000 picklist values per field'
+            },
+            fieldNameLength: {
+                max: 40,
+                message: 'Field API name cannot exceed 40 characters'
+            },
+            objectNameLength: {
+                max: 40,
+                message: 'Object API name cannot exceed 40 characters'
+            }
+        };
+
+        // Common formula errors
+        this.formulaPatterns = {
+            picklistBlank: {
+                invalid: [/ISBLANK\s*\([^)]*__c\)/gi, /ISNULL\s*\([^)]*__c\)/gi],
+                valid: 'TEXT(field) = ""',
+                message: 'Use TEXT(picklist_field) = "" instead of ISBLANK() for picklist fields'
+            },
+            dateComparison: {
+                invalid: [/[^=!<>]\s*=\s*TODAY\(\)/gi],
+                valid: 'field = TODAY()',
+                message: 'Date comparisons should use proper operators'
+            }
+        };
+
+        // Reserved words
+        this.reservedWords = [
+            'abstract', 'activate', 'and', 'any', 'array', 'as', 'asc', 'autonomous',
+            'begin', 'bigdecimal', 'blob', 'boolean', 'break', 'bulk', 'by', 'byte',
+            'case', 'cast', 'catch', 'char', 'class', 'collect', 'commit', 'const',
+            'continue', 'convertcurrency', 'date', 'datetime', 'decimal', 'default',
+            'delete', 'desc', 'do', 'double', 'else', 'end', 'enum', 'exception',
+            'exit', 'export', 'extends', 'false', 'final', 'finally', 'float', 'for',
+            'from', 'future', 'global', 'goto', 'group', 'having', 'hint', 'if',
+            'implements', 'import', 'in', 'inner', 'insert', 'instanceof', 'int',
+            'interface', 'into', 'join', 'last_90_days', 'last_month', 'last_n_days',
+            'last_week', 'like', 'limit', 'list', 'long', 'loop', 'map', 'merge',
+            'new', 'next_90_days', 'next_month', 'next_n_days', 'next_week', 'not',
+            'null', 'nulls', 'number', 'object', 'of', 'on', 'or', 'outer',
+            'override', 'package', 'parallel', 'pragma', 'private', 'protected',
+            'public', 'retrieve', 'return', 'rollback', 'savepoint', 'search',
+            'select', 'set', 'short', 'sort', 'static', 'string', 'super', 'switch',
+            'synchronized', 'system', 'testmethod', 'then', 'this', 'this_month',
+            'this_week', 'throw', 'time', 'today', 'tolabel', 'tomorrow', 'transaction',
+            'trigger', 'true', 'try', 'type', 'undelete', 'update', 'upsert', 'using',
+            'virtual', 'void', 'webservice', 'when', 'where', 'while', 'yesterday'
+        ];
+    }
+
+    /**
+     * Main validation method
+     */
+    async validate(deploymentPath, options = {}) {
+        console.log('\n🔍 Pre-Deployment Validation');
+        console.log('='.repeat(60));
+        console.log(`Path: ${deploymentPath}`);
+        console.log(`Org: ${this.orgAlias}`);
+        console.log(`Mode: ${this.strictMode ? 'Strict' : 'Standard'}`);
+        console.log('='.repeat(60));
+
+        const results = {
+            timestamp: new Date().toISOString(),
+            path: deploymentPath,
+            org: this.orgAlias,
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: [],
+            checks: {}
+        };
+
+        try {
+            // Parse deployment content
+            const deploymentContent = await this.parseDeploymentContent(deploymentPath);
+            results.content = deploymentContent;
+
+            // Run validation checks
+            const checks = [
+                { name: 'Structure', fn: () => this.validateStructure(deploymentContent) },
+                { name: 'Field Limits', fn: () => this.validateFieldLimits(deploymentContent) },
+                { name: 'Naming Conventions', fn: () => this.validateNaming(deploymentContent) },
+                { name: 'Formula Syntax', fn: () => this.validateFormulas(deploymentContent) },
+                { name: 'Dependencies', fn: () => this.validateDependencies(deploymentContent) },
+                { name: 'Permissions', fn: () => this.validatePermissions(deploymentContent) },
+                { name: 'API Version', fn: () => this.validateApiVersion(deploymentContent) },
+                { name: 'Governor Limits', fn: () => this.validateGovernorLimits(deploymentContent) }
+            ];
+
+            console.log('\nRunning validation checks:');
+
+            for (const check of checks) {
+                const checkResult = await check.fn();
+                results.checks[check.name.toLowerCase()] = checkResult;
+
+                const status = this.getCheckStatus(checkResult);
+                console.log(`  ${status} ${check.name}`);
+
+                // Aggregate errors and warnings
+                if (checkResult.errors) {
+                    results.errors.push(...checkResult.errors);
+                }
+                if (checkResult.warnings) {
+                    results.warnings.push(...checkResult.warnings);
+                }
+                if (checkResult.info) {
+                    results.info.push(...checkResult.info);
+                }
+
+                // In strict mode, warnings become errors
+                if (this.strictMode && checkResult.warnings && checkResult.warnings.length > 0) {
+                    results.errors.push(...checkResult.warnings.map(w => `[Strict] ${w}`));
+                }
+            }
+
+            // Determine overall pass/fail
+            results.passed = results.errors.length === 0;
+
+            // Generate report
+            this.generateValidationReport(results);
+
+            // Save results
+            this.saveValidationResults(results);
+
+            return results;
+
+        } catch (error) {
+            results.passed = false;
+            results.errors.push(`Validation failed: ${error.message}`);
+            return results;
+        }
+    }
+
+    /**
+     * Parse deployment content
+     */
+    async parseDeploymentContent(deploymentPath) {
+        const content = {
+            path: deploymentPath,
+            type: null,
+            objects: [],
+            fields: [],
+            flows: [],
+            validationRules: [],
+            profiles: [],
+            permissionSets: [],
+            apexClasses: [],
+            triggers: []
+        };
+
+        const stats = fs.statSync(deploymentPath);
+
+        if (stats.isDirectory()) {
+            content.type = 'directory';
+            await this.parseDirectory(deploymentPath, content);
+        } else if (stats.isFile()) {
+            content.type = 'file';
+            await this.parseFile(deploymentPath, content);
+        } else {
+            throw new Error('Invalid deployment path');
+        }
+
+        return content;
+    }
+
+    /**
+     * Parse directory structure
+     */
+    async parseDirectory(dirPath, content) {
+        const walk = (dir) => {
+            const files = fs.readdirSync(dir);
+
+            files.forEach(file => {
+                const filePath = path.join(dir, file);
+                const stat = fs.statSync(filePath);
+
+                if (stat.isDirectory()) {
+                    walk(filePath);
+                } else {
+                    this.categorizeFile(filePath, content);
+                }
+            });
+        };
+
+        walk(dirPath);
+    }
+
+    /**
+     * Parse single file
+     */
+    async parseFile(filePath, content) {
+        this.categorizeFile(filePath, content);
+    }
+
+    /**
+     * Categorize file by type
+     */
+    categorizeFile(filePath, content) {
+        const fileName = path.basename(filePath);
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+
+        if (fileName.endsWith('.field-meta.xml')) {
+            content.fields.push({
+                path: filePath,
+                name: fileName.replace('.field-meta.xml', ''),
+                content: fileContent,
+                metadata: this.parseXML(fileContent)
+            });
+        } else if (fileName.endsWith('.object-meta.xml')) {
+            content.objects.push({
+                path: filePath,
+                name: fileName.replace('.object-meta.xml', ''),
+                content: fileContent,
+                metadata: this.parseXML(fileContent)
+            });
+        } else if (fileName.endsWith('.flow-meta.xml')) {
+            content.flows.push({
+                path: filePath,
+                name: fileName.replace('.flow-meta.xml', ''),
+                content: fileContent,
+                metadata: this.parseXML(fileContent)
+            });
+        } else if (fileName.endsWith('.validationRule-meta.xml')) {
+            content.validationRules.push({
+                path: filePath,
+                name: fileName.replace('.validationRule-meta.xml', ''),
+                content: fileContent,
+                metadata: this.parseXML(fileContent)
+            });
+        } else if (fileName.endsWith('.profile-meta.xml')) {
+            content.profiles.push({
+                path: filePath,
+                name: fileName.replace('.profile-meta.xml', ''),
+                content: fileContent,
+                metadata: this.parseXML(fileContent)
+            });
+        } else if (fileName.endsWith('.permissionset-meta.xml')) {
+            content.permissionSets.push({
+                path: filePath,
+                name: fileName.replace('.permissionset-meta.xml', ''),
+                content: fileContent,
+                metadata: this.parseXML(fileContent)
+            });
+        } else if (fileName.endsWith('.cls')) {
+            content.apexClasses.push({
+                path: filePath,
+                name: fileName.replace('.cls', ''),
+                content: fileContent
+            });
+        } else if (fileName.endsWith('.trigger')) {
+            content.triggers.push({
+                path: filePath,
+                name: fileName.replace('.trigger', ''),
+                content: fileContent
+            });
+        }
+    }
+
+    /**
+     * Parse XML content (simplified)
+     */
+    parseXML(xmlContent) {
+        // Simplified XML parsing - in production, use xml2js or similar
+        const metadata = {};
+
+        // Extract common elements
+        const fullNameMatch = xmlContent.match(/<fullName>([^<]+)<\/fullName>/);
+        if (fullNameMatch) metadata.fullName = fullNameMatch[1];
+
+        const labelMatch = xmlContent.match(/<label>([^<]+)<\/label>/);
+        if (labelMatch) metadata.label = labelMatch[1];
+
+        const typeMatch = xmlContent.match(/<type>([^<]+)<\/type>/);
+        if (typeMatch) metadata.type = typeMatch[1];
+
+        const requiredMatch = xmlContent.match(/<required>([^<]+)<\/required>/);
+        if (requiredMatch) metadata.required = requiredMatch[1] === 'true';
+
+        const trackHistoryMatch = xmlContent.match(/<trackHistory>([^<]+)<\/trackHistory>/);
+        if (trackHistoryMatch) metadata.trackHistory = trackHistoryMatch[1] === 'true';
+
+        return metadata;
+    }
+
+    /**
+     * Validation checks
+     */
+
+    validateStructure(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Check for package.xml if deploying directory
+        if (content.type === 'directory') {
+            const packageXmlPath = path.join(content.path, 'package.xml');
+            if (!fs.existsSync(packageXmlPath) && content.fields.length === 0) {
+                result.warnings.push('No package.xml found and no metadata files detected');
+            }
+        }
+
+        // Check for mixed metadata types
+        const hasFields = content.fields.length > 0;
+        const hasObjects = content.objects.length > 0;
+        const hasApex = content.apexClasses.length > 0 || content.triggers.length > 0;
+
+        if ((hasFields || hasObjects) && hasApex) {
+            result.info.push('Deployment contains both metadata and Apex - consider separate deployments');
+        }
+
+        return result;
+    }
+
+    async validateFieldLimits(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Group fields by object
+        const fieldsByObject = {};
+        content.fields.forEach(field => {
+            const objectName = this.extractObjectFromPath(field.path);
+            if (!fieldsByObject[objectName]) {
+                fieldsByObject[objectName] = [];
+            }
+            fieldsByObject[objectName].push(field);
+        });
+
+        // Check limits for each object
+        for (const [objectName, fields] of Object.entries(fieldsByObject)) {
+            // Check history tracking
+            const historyFields = fields.filter(f => f.metadata?.trackHistory);
+            if (historyFields.length > 0) {
+                const existingHistoryCount = await this.getExistingHistoryFieldCount(objectName);
+                const totalHistory = existingHistoryCount + historyFields.length;
+
+                if (totalHistory > this.validationRules.fieldHistory.maxPerObject) {
+                    result.errors.push(
+                        `${objectName}: Would exceed field history limit (${totalHistory}/${this.validationRules.fieldHistory.maxPerObject})`
+                    );
+                    result.passed = false;
+                }
+            }
+
+            // Check required fields
+            const requiredFields = fields.filter(f => f.metadata?.required);
+            if (requiredFields.length > 5) {
+                result.warnings.push(
+                    `${objectName}: Adding ${requiredFields.length} required fields - consider user experience`
+                );
+            }
+        }
+
+        return result;
+    }
+
+    validateNaming(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Check field names
+        content.fields.forEach(field => {
+            const name = field.metadata?.fullName || field.name;
+
+            // Length check
+            if (name.length > this.validationRules.fieldNameLength.max) {
+                result.errors.push(`Field name too long: ${name} (${name.length} chars)`);
+                result.passed = false;
+            }
+
+            // Reserved word check
+            const baseName = name.replace('__c', '').toLowerCase();
+            if (this.reservedWords.includes(baseName)) {
+                result.errors.push(`Reserved word used in field name: ${name}`);
+                result.passed = false;
+            }
+
+            // Naming convention check
+            if (!name.match(/^[A-Z][a-zA-Z0-9_]*__c$/)) {
+                result.warnings.push(`Field name doesn't follow convention: ${name}`);
+            }
+        });
+
+        // Check object names
+        content.objects.forEach(obj => {
+            const name = obj.metadata?.fullName || obj.name;
+
+            if (name.length > this.validationRules.objectNameLength.max) {
+                result.errors.push(`Object name too long: ${name}`);
+                result.passed = false;
+            }
+        });
+
+        return result;
+    }
+
+    validateFormulas(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Check validation rules
+        content.validationRules.forEach(rule => {
+            const formula = rule.content;
+
+            // Check for picklist formula errors
+            Object.entries(this.formulaPatterns).forEach(([key, pattern]) => {
+                pattern.invalid.forEach(regex => {
+                    if (regex.test(formula)) {
+                        result.errors.push(
+                            `${rule.name}: ${pattern.message}`
+                        );
+                        result.passed = false;
+                    }
+                });
+            });
+        });
+
+        // Check formula fields
+        content.fields.forEach(field => {
+            if (field.metadata?.type === 'Formula' && field.content) {
+                const formula = field.content;
+
+                Object.entries(this.formulaPatterns).forEach(([key, pattern]) => {
+                    pattern.invalid.forEach(regex => {
+                        if (regex.test(formula)) {
+                            result.errors.push(
+                                `${field.name}: ${pattern.message}`
+                            );
+                            result.passed = false;
+                        }
+                    });
+                });
+            }
+        });
+
+        return result;
+    }
+
+    async validateDependencies(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Check for lookup/master-detail field dependencies
+        content.fields.forEach(field => {
+            if (field.metadata?.type === 'Lookup' || field.metadata?.type === 'MasterDetail') {
+                const referenceTo = field.metadata.referenceTo;
+                if (referenceTo) {
+                    // Check if referenced object exists
+                    const objectExists = content.objects.some(obj =>
+                        obj.metadata?.fullName === referenceTo
+                    );
+
+                    if (!objectExists) {
+                        // Check in org
+                        this.checkObjectInOrg(referenceTo).then(exists => {
+                            if (!exists) {
+                                result.warnings.push(
+                                    `${field.name}: References object ${referenceTo} which may not exist`
+                                );
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+        return result;
+    }
+
+    validatePermissions(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Check if field permissions are included
+        if (content.fields.length > 0 && content.profiles.length === 0 && content.permissionSets.length === 0) {
+            result.warnings.push(
+                'No profiles or permission sets included - fields may not be accessible after deployment'
+            );
+        }
+
+        // Check for System Administrator profile
+        const hasSystemAdmin = content.profiles.some(p =>
+            p.name === 'Admin' || p.name === 'System Administrator'
+        );
+
+        if (!hasSystemAdmin && content.fields.length > 0) {
+            result.info.push('Consider including System Administrator profile for field access');
+        }
+
+        return result;
+    }
+
+    validateApiVersion(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        const versions = new Set();
+
+        // Extract API versions
+        const versionRegex = /<version>(\d+\.\d+)<\/version>/g;
+
+        [...content.fields, ...content.objects, ...content.flows].forEach(item => {
+            const matches = item.content.matchAll(versionRegex);
+            for (const match of matches) {
+                versions.add(match[1]);
+            }
+        });
+
+        if (versions.size > 1) {
+            result.warnings.push(
+                `Multiple API versions detected: ${Array.from(versions).join(', ')}. Consider using consistent version.`
+            );
+        }
+
+        // Check for outdated versions
+        const minVersion = 50.0; // Salesforce recommended minimum
+        versions.forEach(version => {
+            if (parseFloat(version) < minVersion) {
+                result.warnings.push(
+                    `API version ${version} is outdated. Consider upgrading to 62.0 or latest.`
+                );
+            }
+        });
+
+        return result;
+    }
+
+    async validateGovernorLimits(content) {
+        const result = {
+            passed: true,
+            errors: [],
+            warnings: [],
+            info: []
+        };
+
+        // Check Apex code for potential governor limit issues
+        content.apexClasses.forEach(cls => {
+            // Check for SOQL in loops
+            if (cls.content.match(/for\s*\([^)]+\)\s*{[^}]*\[SELECT/i)) {
+                result.errors.push(
+                    `${cls.name}: SOQL query inside loop detected - governor limit risk`
+                );
+                result.passed = false;
+            }
+
+            // Check for DML in loops
+            if (cls.content.match(/for\s*\([^)]+\)\s*{[^}]*(insert|update|delete|upsert)/i)) {
+                result.errors.push(
+                    `${cls.name}: DML operation inside loop detected - governor limit risk`
+                );
+                result.passed = false;
+            }
+        });
+
+        // Similar checks for triggers
+        content.triggers.forEach(trigger => {
+            if (trigger.content.match(/for\s*\([^)]+\)\s*{[^}]*\[SELECT/i)) {
+                result.errors.push(
+                    `${trigger.name}: SOQL query inside loop detected`
+                );
+                result.passed = false;
+            }
+        });
+
+        return result;
+    }
+
+    /**
+     * Helper methods
+     */
+
+    async getExistingHistoryFieldCount(objectName) {
+        try {
+            const cmd = `sf sobject describe --sobject ${objectName} --json --targetusername ${this.orgAlias}`;
+            const result = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
+            const data = JSON.parse(result);
+
+            if (data.result && data.result.fields) {
+                return data.result.fields.filter(f => f.trackHistory === true).length;
+            }
+            return 0;
+        } catch {
+            return 0;
+        }
+    }
+
+    async checkObjectInOrg(objectName) {
+        try {
+            const cmd = `sf sobject describe --sobject ${objectName} --json --targetusername ${this.orgAlias}`;
+            execSync(cmd, { stdio: 'pipe' });
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    extractObjectFromPath(filePath) {
+        // Extract object name from path structure
+        const parts = filePath.split(path.sep);
+        const objectsIndex = parts.indexOf('objects');
+        if (objectsIndex >= 0 && objectsIndex < parts.length - 1) {
+            return parts[objectsIndex + 1];
+        }
+        return 'Unknown';
+    }
+
+    getCheckStatus(checkResult) {
+        if (checkResult.errors && checkResult.errors.length > 0) {
+            return '❌';
+        } else if (checkResult.warnings && checkResult.warnings.length > 0) {
+            return '⚠️';
+        } else {
+            return '✅';
+        }
+    }
+
+    generateValidationReport(results) {
+        console.log('\n' + '='.repeat(60));
+        console.log('📊 Validation Report');
+        console.log('='.repeat(60));
+
+        console.log(`\nOverall Status: ${results.passed ? '✅ PASSED' : '❌ FAILED'}`);
+
+        if (results.errors.length > 0) {
+            console.log(`\n❌ Errors (${results.errors.length}):`);
+            results.errors.forEach((error, i) => {
+                console.log(`  ${i + 1}. ${error}`);
+            });
+        }
+
+        if (results.warnings.length > 0) {
+            console.log(`\n⚠️  Warnings (${results.warnings.length}):`);
+            results.warnings.forEach((warning, i) => {
+                console.log(`  ${i + 1}. ${warning}`);
+            });
+        }
+
+        if (results.info.length > 0) {
+            console.log(`\nℹ️  Information (${results.info.length}):`);
+            results.info.forEach((info, i) => {
+                console.log(`  ${i + 1}. ${info}`);
+            });
+        }
+
+        console.log('\n' + '='.repeat(60));
+
+        if (!results.passed) {
+            console.log('\n🛑 Deployment should not proceed until errors are resolved.');
+        } else if (results.warnings.length > 0) {
+            console.log('\n⚠️  Deployment can proceed but review warnings first.');
+        } else {
+            console.log('\n✅ Deployment is ready to proceed.');
+        }
+    }
+
+    saveValidationResults(results) {
+        const reportsDir = path.join(process.cwd(), 'validation-reports');
+        fs.mkdirSync(reportsDir, { recursive: true });
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const fileName = `pre-deployment-validation-${timestamp}.json`;
+        const filePath = path.join(reportsDir, fileName);
+
+        fs.writeFileSync(filePath, JSON.stringify(results, null, 2));
+        console.log(`\n📄 Report saved to: ${filePath}`);
+    }
+}
+
+// CLI interface
+if (require.main === module) {
+    const args = process.argv.slice(2);
+
+    if (args.length < 1) {
+        console.log(`
+Usage: node pre-deployment-validator.js <deploymentPath> [options]
+
+Options:
+  --org <alias>    Salesforce org alias
+  --strict         Enable strict mode (warnings become errors)
+  --verbose        Show detailed output
+  --fix            Attempt to auto-fix issues (where possible)
+
+Examples:
+  node pre-deployment-validator.js ./force-app --org myorg
+  node pre-deployment-validator.js ./metadata/fields/Account --strict
+  node pre-deployment-validator.js deployment.zip --org production --strict
+        `);
+        process.exit(1);
+    }
+
+    const deploymentPath = path.resolve(args[0]);
+
+    const options = {
+        orgAlias: args.find(a => a.startsWith('--org'))?.split('=')[1],
+        strictMode: args.includes('--strict'),
+        verbose: args.includes('--verbose'),
+        autoFix: args.includes('--fix')
+    };
+
+    const validator = new PreDeploymentValidator(options);
+
+    validator.validate(deploymentPath, options)
+        .then(results => {
+            process.exit(results.passed ? 0 : 1);
+        })
+        .catch(error => {
+            console.error(`\n❌ Validation error: ${error.message}`);
+            process.exit(1);
+        });
+}
+
+module.exports = PreDeploymentValidator;

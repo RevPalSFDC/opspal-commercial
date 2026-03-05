@@ -1,0 +1,78 @@
+{
+  "agentName": "sfdc-discovery",
+  "timeRange": "24h",
+  "profileCount": 1,
+  "statistics": {
+    "executions": 1,
+    "duration": {
+      "avg": 1405,
+      "min": 1405,
+      "max": 1405,
+      "p50": 1405,
+      "p95": 1405,
+      "p99": 1405
+    },
+    "memory": {
+      "avgDelta": 870056,
+      "maxDelta": 870056,
+      "minDelta": 870056
+    },
+    "performance": {
+      "avgScore": 70,
+      "minScore": 70,
+      "maxScore": 70
+    },
+    "bottleneckFrequency": {
+      "slow_segment": 2
+    },
+    "memoryIssueFrequency": {}
+  },
+  "regressions": [],
+  "comparative": null,
+  "topBottlenecks": [
+    {
+      "type": "slow_segment",
+      "label": "Step 1 complete → Step 2 complete",
+      "count": 1,
+      "totalDuration": 750,
+      "avgDuration": 750,
+      "severity": "critical"
+    },
+    {
+      "type": "slow_segment",
+      "label": "Step 2 complete → Step 3 complete",
+      "count": 1,
+      "totalDuration": 450,
+      "avgDuration": 450,
+      "severity": "warning"
+    }
+  ],
+  "topRecommendations": [
+    {
+      "type": "performance",
+      "priority": "high",
+      "title": "Optimize Step 1 complete → Step 2 complete",
+      "description": "This segment takes 53.4% of total execution time (750ms)",
+      "suggestions": [
+        "Profile this segment in detail to identify specific bottleneck",
+        "Consider caching if this involves repeated computations",
+        "Check for synchronous I/O operations that could be parallelized",
+        "Review database queries for optimization opportunities"
+      ],
+      "count": 1
+    },
+    {
+      "type": "performance",
+      "priority": "medium",
+      "title": "High CPU utilization detected",
+      "description": "CPU utilization is 102.8%, suggesting CPU-bound operations",
+      "suggestions": [
+        "Optimize algorithms for better time complexity",
+        "Consider caching expensive computations",
+        "Use worker threads for CPU-intensive tasks",
+        "Profile hot code paths for micro-optimizations"
+      ],
+      "count": 1
+    }
+  ]
+}

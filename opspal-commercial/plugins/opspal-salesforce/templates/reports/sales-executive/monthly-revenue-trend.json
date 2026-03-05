@@ -1,0 +1,138 @@
+{
+  "templateMetadata": {
+    "templateName": "Monthly Revenue Trend (12 Months)",
+    "templateVersion": "1.1",
+    "description": "Tracks monthly closed won revenue over the past 12 months for trend analysis",
+    "audience": "CRO, VP Sales, CFO, Board",
+    "useCase": "Revenue trend analysis, seasonality identification, growth tracking",
+    "customizationPoints": [
+      "Time period (12 months, 24 months, etc.)",
+      "Segment by product/region",
+      "Include targets for comparison"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount and CloseDate",
+      "12+ months of historical data"
+    ]
+  },
+  "metricDefinitionId": "revenue.recognized",
+  "reportMetadata": {
+    "name": "Monthly Revenue Trend (12 Months)",
+    "description": "Closed won revenue by month for the past 12 months",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "LAST_N_MONTHS:12",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "CLOSE_DATE",
+        "sortOrder": "Asc",
+        "dateGranularity": "Month"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Monthly revenue"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Deal count"
+      }
+    ],
+    "chart": {
+      "chartType": "Line",
+      "groupingColumn": "CLOSE_DATE",
+      "aggregateColumn": "AMOUNT:SUM",
+      "showChartValues": false,
+      "showTrendLine": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "revenue-performance"
+    ],
+    "componentType": "Line Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

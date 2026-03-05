@@ -1,0 +1,202 @@
+{
+  "template_id": "product-adoption-by-segment",
+  "report_name": "Product Adoption & Expansion by Segment",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "ProductOps",
+  "primary_decisions_supported": [
+    "Customer success focus areas by segment",
+    "Feature adoption improvement plans",
+    "Expansion opportunity identification"
+  ],
+  "executive_questions_answered": [
+    "How are product adoption rates differing across customer segments, and how does that correlate with upsell/expansion?",
+    "Which segments or cohorts have the fastest (or slowest) time-to-value and feature adoption?",
+    "Are segments with higher product adoption seeing higher expansion or retention?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Feature Adoption Rate",
+      "definition": "Percentage of customers (or users) who have adopted a key product feature or reached a defined engagement threshold, segmented by customer category.",
+      "formula": "Adoption% = (Number of accounts in segment using feature / total accounts in segment) * 100",
+      "grain": "segment-month",
+      "required_dimensions": ["segment"],
+      "known_variants": [
+        {
+          "variant_name": "Active User Rate",
+          "definition_delta": "Uses active users (e.g., % of licensed users logging in weekly) instead of accounts for adoption metric",
+          "when_to_use": "Tracking engagement in usage-heavy products at user level"
+        }
+      ],
+      "pitfalls": [
+        "Definition of 'adopted' must be clear (e.g., feature used at least once vs used regularly)",
+        "Segments with few customers can show volatile percentages – consider raw counts too",
+        "High adoption in a segment doesn't automatically cause expansion – ensure to correlate but not assume causation"
+      ]
+    },
+    {
+      "metric_name": "Expansion ARR per Customer",
+      "definition": "Average expansion (upsell/cross-sell) revenue per customer in a given segment or cohort, indicating propensity of that segment to grow after initial sale.",
+      "formula": "Expansion ARR per customer = Total expansion ARR from segment / # of customers in segment",
+      "grain": "segment-quarter",
+      "required_dimensions": ["segment"],
+      "known_variants": [
+        {
+          "variant_name": "Expansion Rate (%)",
+          "definition_delta": "Expansion ARR in period divided by starting ARR of segment * 100 (growth rate from existing customers)",
+          "when_to_use": "To normalize expansion performance by segment size"
+        }
+      ],
+      "pitfalls": [
+        "Averages can be skewed by one large customer expansion in a small segment – consider median or distribution as well",
+        "Segments with low initial ARR can have high % expansion that isn't large in absolute terms",
+        "Ensure to exclude brand-new customers in measuring expansion (since they couldn't expand yet)"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["Product Analytics", "CRM", "Billing"],
+    "required_entities": ["ProductUsageEvent or Summary", "Account", "Opportunity (for expansions)"],
+    "required_fields": [
+      {
+        "field_name": "Account segment",
+        "description": "Customer categorization",
+        "salesforce_field": "Account.Segment__c",
+        "hubspot_field": "company.type"
+      },
+      {
+        "field_name": "Feature usage flags or counts",
+        "description": "E.g., did account use Feature X?",
+        "type": "product_analytics_integration"
+      },
+      {
+        "field_name": "Expansion deal value",
+        "description": "For account",
+        "salesforce_field": "Opportunity.Amount WHERE Type = 'Expansion'",
+        "hubspot_field": "deal.amount WHERE dealtype = existingbusiness"
+      },
+      {
+        "field_name": "Customer count",
+        "description": "For segment denominator",
+        "salesforce_field": "Count of Account WHERE Segment__c = :segment",
+        "hubspot_field": "Count of company WHERE type = :segment"
+      }
+    ],
+    "required_timestamps": ["Usage date", "Expansion close date"],
+    "joins_and_keys": [
+      {
+        "left_entity": "ProductUsage",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Aggregate product usage metrics at account and segment level"
+      },
+      {
+        "left_entity": "Opportunity",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Link expansion opportunities to account to sum expansion ARR by segment"
+      }
+    ],
+    "transformation_rules": [
+      "Define 'adopted' threshold for feature usage (e.g., performed key action X times within first 30 days)",
+      "Calculate adoption for cohorts if needed (e.g., customers onboarded in last 6 months) and compare segments",
+      "Only consider expansion deals from existing customers (exclude new business in expansion metric)"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Usage Data Completeness",
+        "logic": "Ensure product usage logging covers >95% of active accounts (no large gaps in tracking)",
+        "severity": "high"
+      },
+      {
+        "check_name": "Segment Mapping Consistency",
+        "logic": "Accounts have a consistent segment classification between CRM and product analytics data",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Adopted_Flag_per_account (1 if usage exceeds threshold, else 0)",
+      "Expansion_ARR_per_account (sum of upsells for that account in period)"
+    ],
+    "aggregation_rules": [
+      "Calculate segment adoption% = avg(Adopted_Flag) for accounts in segment",
+      "Sum expansion ARR by segment and divide by # of customers for average (or by starting ARR for expansion rate)"
+    ],
+    "cohort_logic": "Optional: group customers by start date (cohort) and track adoption speed and expansion over time by cohort within each segment",
+    "attribution_logic": null,
+    "forecast_logic": "Use adoption trends and historical expansion correlations to predict future expansion bookings (e.g., if X% adopt feature, expect Y expansion $ in segment)"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "GTM Leaders",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "Feature Adoption by Segment",
+        "purpose": "Compare what percentage of customers in each segment have adopted key features",
+        "visual_type": "bar",
+        "primary_metrics": ["Adoption Rate%"],
+        "filters": ["feature or usage metric selection"],
+        "drilldowns": ["time since onboarding (to see speed of adoption)"],
+        "annotations_or_thresholds": ["Target adoption %"]
+      },
+      {
+        "panel_title": "Expansion vs Adoption",
+        "purpose": "Relate product adoption levels to expansion revenue for segments",
+        "visual_type": "scatter",
+        "primary_metrics": ["Adoption %", "Avg Expansion ARR per customer"],
+        "filters": ["segment filter"],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["Correlation trendline if any"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Highlight segments with high adoption but low expansion (untapped upsell opportunities) and vice versa",
+      "Identify whether faster product adoption correlates with higher expansion revenue"
+    ],
+    "diagnostic_questions": [
+      "Which segment struggles to adopt the product and might need better onboarding?",
+      "Are our enterprise clients expanding more (in $) than SMB, even if SMB show higher adoption % of features?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Improve onboarding/education for low-adoption segments",
+        "owner": "ProductOps",
+        "trigger_condition": "Adoption rate in a segment significantly lags others (indicating engagement issues)"
+      },
+      {
+        "action": "Launch expansion campaigns targeting high-adoption customers",
+        "owner": "CSOps",
+        "trigger_condition": "Segment shows strong adoption but modest expansion sales (indicating room to upsell more modules)"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Basic chart of percent of customers using key feature by segment, and maybe a manual correlation observation with expansion sales",
+    "advanced_version": "Automated linkage between usage data and revenue outcomes, possibly with predictive scoring for which accounts are likely expansion candidates based on adoption patterns",
+    "common_client_customizations": [
+      "Multiple adoption metrics (e.g., login frequency, feature X usage, license utilization) with ability to toggle",
+      "Include customer satisfaction or NPS by segment to add context to adoption and expansion willingness"
+    ],
+    "privacy_and_access_notes": [
+      "Usage data is fine for internal use; if shared externally (case studies), aggregate appropriately",
+      "Be mindful that low adoption segments might reflect product-market fit issues – sensitive in executive readouts"
+    ],
+    "success_criteria": [
+      "Segments with low adoption are targeted with specific initiatives and show subsequent adoption improvement",
+      "A measurable uptick in expansion sales in segments with previously untapped high adoption (closing the gap identified in this report)"
+    ]
+  },
+  "benchmarks": {
+    "healthy_feature_adoption": {
+      "core_features": ">80% of customers using",
+      "advanced_features": ">40% of customers using",
+      "new_features": ">20% within 90 days of launch"
+    }
+  },
+  "references": []
+}

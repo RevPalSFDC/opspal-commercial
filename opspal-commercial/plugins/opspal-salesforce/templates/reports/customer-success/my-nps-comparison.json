@@ -1,0 +1,110 @@
+{
+  "templateMetadata": {
+    "templateName": "My NPS vs Team Average",
+    "templateVersion": "1.1",
+    "description": "Compare NPS for my accounts against team average",
+    "audience": "CSMs, Account Managers",
+    "useCase": "NPS benchmarking"
+  },
+  "reportMetadata": {
+    "name": "My NPS vs Team Average",
+    "reportType": "Account",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "reportFilters": [
+      {
+        "column": "NPS_Score__c",
+        "operator": "notEqual",
+        "value": ""
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "CSM_Owner__c"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "AVG_NPS",
+        "column": "NPS_Score__c",
+        "aggregateType": "Average"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

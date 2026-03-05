@@ -1,0 +1,88 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-marketo.sh",
+            "timeout": 10000,
+            "description": "Load Marketo instance context and validate authentication"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__marketo__campaign_activate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-activation.sh",
+            "timeout": 30000,
+            "description": "Validate campaign before activation"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo__lead_create|mcp__marketo__lead_update|mcp__marketo__lead_delete",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bulk-operation.sh",
+            "timeout": 30000,
+            "description": "Validate bulk lead operations"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo__lead_merge",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-lead-merge.sh",
+            "timeout": 30000,
+            "description": "Validate lead merge operation"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__marketo__*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-instance-authentication.sh",
+            "timeout": 30000,
+            "description": "Auto-detect instance customizations after authentication"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-operation-verification.sh",
+            "timeout": 15000,
+            "description": "Verify operation success and capture metrics"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/api-limit-monitor.sh",
+            "timeout": 10000,
+            "description": "Track API usage and warn on thresholds"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo__sync_*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sync-error-monitor.sh",
+            "timeout": 15000,
+            "description": "Monitor Salesforce sync errors"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "overallScore": 55,
+  "rating": "Needs Improvement",
+  "breakdown": {
+    "technical": {
+      "score": 83,
+      "weight": 0.3,
+      "weightedScore": "24.9",
+      "details": {
+        "checks": {
+          "fastLoadTimes": 1,
+          "noErrors": 1,
+          "https": 1,
+          "hasViewport": 1,
+          "hasCanonical": 0,
+          "goodCoreWebVitals": 1
+        },
+        "percentages": {
+          "fastLoadTimes": 100,
+          "noErrors": 100,
+          "https": 100,
+          "hasViewport": 100,
+          "hasCanonical": 0,
+          "goodCoreWebVitals": 100
+        }
+      }
+    },
+    "content": {
+      "score": 29,
+      "weight": 0.25,
+      "weightedScore": "7.3",
+      "details": {
+        "checks": {
+          "hasOptimalTitle": 0,
+          "hasMetaDescription": 0,
+          "hasOptimalMetaDesc": 0,
+          "hasSingleH1": 1,
+          "hasValidHeadingHierarchy": 1,
+          "isSubstantial": 0,
+          "hasOpenGraph": 0
+        },
+        "percentages": {
+          "hasOptimalTitle": 0,
+          "hasMetaDescription": 0,
+          "hasOptimalMetaDesc": 0,
+          "hasSingleH1": 100,
+          "hasValidHeadingHierarchy": 100,
+          "isSubstantial": 0,
+          "hasOpenGraph": 0
+        }
+      }
+    },
+    "schema": {
+      "score": 0,
+      "weight": 0.15,
+      "weightedScore": "0.0",
+      "details": {
+        "checks": {
+          "hasSchema": 0,
+          "hasValidSchema": 0,
+          "hasArticleSchema": 0,
+          "hasOrganizationSchema": 0
+        },
+        "coverage": "0.0%",
+        "articlePages": 0,
+        "articleCoverage": "N/A"
+      }
+    },
+    "images": {
+      "score": 70,
+      "weight": 0.15,
+      "weightedScore": "10.5",
+      "details": {
+        "totalImages": 0,
+        "altCoverage": "100.0%",
+        "lazyLoadCoverage": "0.0%"
+      }
+    },
+    "links": {
+      "score": 80,
+      "weight": 0.15,
+      "weightedScore": "12.0",
+      "details": {
+        "avgInternalPerPage": "0.0",
+        "avgExternalPerPage": "1.0"
+      }
+    }
+  },
+  "issues": [
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 7,
+      "description": "Missing meta description: https://www.example.com",
+      "affectedPages": 1,
+      "pages": [
+        "https://www.example.com"
+      ],
+      "recommendation": "Add meta description (150-160 characters)"
+    },
+    {
+      "category": "schema",
+      "severity": "warning",
+      "impact": 7,
+      "description": "Only 0% of pages have schema markup",
+      "affectedPages": 1,
+      "pages": [],
+      "recommendation": "Add JSON-LD schema to important pages (Article, Organization, WebPage)"
+    },
+    {
+      "category": "content",
+      "severity": "info",
+      "impact": 5,
+      "description": "Thin content (17 words): https://www.example.com",
+      "affectedPages": 1,
+      "pages": [
+        "https://www.example.com"
+      ],
+      "recommendation": "Expand content to at least 300 words for better SEO"
+    },
+    {
+      "category": "links",
+      "severity": "info",
+      "impact": 4,
+      "description": "Weak internal linking (avg 0.0 links/page)",
+      "affectedPages": 1,
+      "pages": [],
+      "recommendation": "Add more contextual internal links between related pages"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://www.example.com",
+      "affectedPages": 1,
+      "pages": [
+        "https://www.example.com"
+      ],
+      "recommendation": "Consider adding schema markup"
+    }
+  ],
+  "summary": {
+    "totalIssues": 5,
+    "critical": 0,
+    "warning": 2,
+    "info": 3
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Fireflies Workflow Framework"
+  short_description: "Help with Core Fireflies Workflow Framework tasks"
+  default_prompt: "Use $core-fireflies-workflow-framework to execute this workflow safely and produce the expected artifacts."

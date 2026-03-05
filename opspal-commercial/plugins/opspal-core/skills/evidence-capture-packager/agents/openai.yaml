@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evidence Capture Packager"
+  short_description: "Help with Evidence Capture Packager tasks"
+  default_prompt: "Use $evidence-capture-packager to execute this workflow safely and produce the expected artifacts."

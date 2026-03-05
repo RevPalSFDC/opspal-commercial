@@ -1,0 +1,141 @@
+{
+  "templateMetadata": {
+    "templateName": "Activities by Rep This Week",
+    "templateVersion": "1.1",
+    "description": "Weekly activity breakdown by team member",
+    "audience": "Sales Managers",
+    "useCase": "Activity monitoring, coaching, productivity analysis",
+    "customizationPoints": [
+      "Activity types",
+      "Team scope",
+      "Time period"
+    ],
+    "prerequisites": [
+      "Activity tracking enabled",
+      "Team hierarchy configured"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "Activities by Rep - This Week",
+    "description": "Activity count by rep for the current week",
+    "reportType": "Activity",
+    "reportFormat": "SUMMARY",
+    "scope": "team",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "ACTIVITY_DATE",
+        "operator": "equals",
+        "value": "THIS_WEEK",
+        "customizable": true
+      },
+      {
+        "column": "OWNER_MANAGER_ID",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "OWNER_NAME",
+        "sortOrder": "Desc",
+        "sortColumn": "RowCount",
+        "dateGranularity": null
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Activities per rep"
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "OWNER_NAME",
+      "aggregateColumn": "RowCount",
+      "sortOrder": "Descending"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "activity-metrics"
+    ],
+    "componentType": "Bar Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

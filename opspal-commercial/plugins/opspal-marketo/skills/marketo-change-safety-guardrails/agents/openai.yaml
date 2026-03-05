@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Change Safety Guardrails"
+  short_description: "Help with Marketo Change Safety Guardrails tasks"
+  default_prompt: "Use $marketo-change-safety-guardrails to execute this workflow safely and produce the expected artifacts."

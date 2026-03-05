@@ -1,0 +1,216 @@
+{
+  "template_id": "revenue-mix-new-expansion-renewal",
+  "report_name": "Revenue Mix (New vs Expansion vs Renewals)",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "RevOps",
+  "primary_decisions_supported": [
+    "Setting sales focus (new vs upsell vs retention)",
+    "Evaluating growth strategy (land-and-expand vs new logos)",
+    "Benchmarking revenue composition against industry"
+  ],
+  "executive_questions_answered": [
+    "What portion of our revenue comes from new customers vs existing customers (expansion or renewals)?",
+    "Is our growth more driven by landing new clients or expanding existing ones?",
+    "Are renewals (existing recurring revenue) forming a healthy base of our revenue mix?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "New Business ARR",
+      "definition": "Annual recurring revenue from new customers (first-time bookings) in the period.",
+      "formula": "Sum of ARR from customers who signed in period (no prior ARR)",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "pitfalls": [
+        "Definition of 'new' should exclude existing customer expansions – ensure proper flagging",
+        "A large enterprise initial deal might skew 'new' vs expansions in early years",
+        "Comparisons over time should account for stage of company (early-stage naturally high new logo mix, which shifts later)"
+      ]
+    },
+    {
+      "metric_name": "Expansion ARR",
+      "definition": "ARR gained from existing customers expanding (upsells or cross-sells) during the period.",
+      "formula": "Sum of ARR increase for existing accounts (with prior ARR) in period",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "pitfalls": [
+        "If customers downgrade and upgrade in same period, netting might hide true expansion activity",
+        "Highly usage-based models may blur line between expansion and renewals",
+        "Expansion mix tends to grow as company matures (later stage SaaS often 50%+ from expansion vs new)"
+      ]
+    },
+    {
+      "metric_name": "Renewal ARR",
+      "definition": "ARR renewed from existing subscriptions (excluding any expansion portion) – essentially the retained recurring revenue.",
+      "formula": "Sum of ARR from contracts renewed in period (at same value as prior)",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Gross Renewals vs Net Renewals",
+          "definition_delta": "Gross renewal = total up for renewal that renewed (ignores value change), Net renewal = value renewed including upsells/downgrades",
+          "when_to_use": "Separating pure retention from expansion effects"
+        }
+      ],
+      "pitfalls": [
+        "Renewal ARR can double-count expansion if not separated (best to treat expansion separately as above)",
+        "Including contraction (negative expansion) in renewals can confuse interpretation – track churn separately",
+        "Renewal rates may naturally decline as customer base diversifies – segment by cohort to get clarity"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Billing"],
+    "required_entities": ["Opportunity (New/Expansion bookings)", "Subscription/Renewal records"],
+    "required_fields": [
+      {
+        "field_name": "Deal Type",
+        "description": "New vs Expansion vs Renewal",
+        "salesforce_field": "Opportunity.Type or RecordType",
+        "hubspot_field": "deal.dealtype"
+      },
+      {
+        "field_name": "ARR Booked",
+        "description": "Recurring value of deal",
+        "salesforce_field": "Opportunity.ARR__c",
+        "hubspot_field": "deal.amount"
+      },
+      {
+        "field_name": "Renewal Opportunity ID or Subscription ID",
+        "description": "For linking renewals",
+        "salesforce_field": "Opportunity.Related_Subscription__c",
+        "hubspot_field": "deal.subscription_id"
+      },
+      {
+        "field_name": "Customer ID",
+        "description": "Account identifier",
+        "salesforce_field": "Opportunity.AccountId",
+        "hubspot_field": "deal.company_id"
+      }
+    ],
+    "required_timestamps": ["Close Date", "Renewal Date"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Opportunity",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Identify opportunities as new vs expansion by checking existing account ARR"
+      },
+      {
+        "left_entity": "Subscription",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Gather renewal info for existing contracts"
+      }
+    ],
+    "transformation_rules": [
+      "Mark opps as New Business if Account had no prior ARR (use Account creation or first deal date)",
+      "Renewals are usually identified via renewal opp or subscription term; ensure expansions are not double-counted as renewals",
+      "If a renewal includes an upsell, split the value into renewal (previous ARR) and expansion (incremental ARR) for clarity"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Deal Classification",
+        "logic": "Every closed won deal is labeled correctly as New, Expansion, or Renewal (no undefined types)",
+        "severity": "high"
+      },
+      {
+        "check_name": "Renewal Identification",
+        "logic": "Ensure each renewing contract is captured (e.g., no missed renewal opp if auto-renew etc.)",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Total_New_ARR = sum(ARR of deals flagged New)",
+      "Total_Expansion_ARR = sum(ARR of deals flagged Expansion)",
+      "Total_Renewal_ARR = sum(prior ARR of renewed contracts)"
+    ],
+    "aggregation_rules": [
+      "Sum each category (New, Expansion, Renewal) for total company or by segment",
+      "Calculate percentages: New% = New_ARR / Total_ARR_in_period * 100, etc."
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": "Future mix can be projected by applying assumptions (e.g., expansion % increases as customer base grows) or using cohort trends"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Annual",
+    "layout": [
+      {
+        "panel_title": "Revenue Mix % (New vs Expansion vs Renewal)",
+        "purpose": "Show proportion of revenue coming from new business, upsells, and renewals",
+        "visual_type": "stacked bar",
+        "primary_metrics": ["New ARR", "Expansion ARR", "Renewal ARR"],
+        "filters": ["year"],
+        "drilldowns": ["by segment or region"],
+        "annotations_or_thresholds": ["Industry benchmark mix if available"]
+      },
+      {
+        "panel_title": "Revenue Mix Trend",
+        "purpose": "See how revenue composition is shifting over time (e.g., expansion share growing)",
+        "visual_type": "area",
+        "primary_metrics": ["% New", "% Expansion", "% Renewal"],
+        "filters": [],
+        "drilldowns": [],
+        "annotations_or_thresholds": []
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Describe the current revenue mix and how it changed from prior year(s)",
+      "Note if expansion revenue is becoming a larger driver of growth as expected for a scaling SaaS"
+    ],
+    "diagnostic_questions": [
+      "Is the reliance on new business increasing or decreasing, and what does that imply for our sales strategy?",
+      "Are we generating enough expansion revenue from our customer base relative to industry benchmarks?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Allocate more resources to upsell/cross-sell programs",
+        "owner": "MarketingOps",
+        "trigger_condition": "Expansion ARR % is significantly below target or peer benchmarks"
+      },
+      {
+        "action": "Analyze new logo pipeline if new ARR contribution is declining",
+        "owner": "SalesOps",
+        "trigger_condition": "New ARR % drops for multiple periods (potential new business slowdown)"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Basic split of total ARR this year into new vs existing customer sources",
+    "advanced_version": "Interactive mix analysis with toggle to include/exclude renewals vs expansion and scenario modeling for future mix (e.g., if retention improves)",
+    "common_client_customizations": [
+      "Additional categories (e.g., Upsell vs Cross-sell split within Expansion)",
+      "Gross vs Net renewals as separate visuals"
+    ],
+    "privacy_and_access_notes": [
+      "No customer-level data, aggregate by category – safe for broad distribution",
+      "Be cautious sharing benchmarks externally; internal use to calibrate targets"
+    ],
+    "success_criteria": [
+      "Clear understanding across leadership of where growth is coming from (new vs existing business)",
+      "Targets set (for new sales vs upsells) align with observed mix and strategic goals"
+    ]
+  },
+  "benchmarks": {
+    "mix_by_stage": {
+      "early_stage": { "new": 80, "expansion": 15, "renewal": 5 },
+      "growth_stage": { "new": 60, "expansion": 30, "renewal": 10 },
+      "mature": { "new": 40, "expansion": 45, "renewal": 15 }
+    }
+  },
+  "references": [
+    {
+      "title": "SaaS Waterfall Metrics (ARR mix insights)",
+      "publisher": "Financial Edge",
+      "date": "2025",
+      "url": "https://www.fe.training/knowledge/saas-waterfall-metrics/"
+    }
+  ]
+}

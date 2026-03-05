@@ -1,0 +1,194 @@
+{
+  "metadata": {
+    "template": "territory-planning",
+    "generated": "2025-01-04",
+    "description": "Demo data for Territory Planning Dashboard - 30 accounts, 6 territories, US states"
+  },
+  "kpis": {
+    "totalTerritories": {
+      "value": 6,
+      "description": "Active sales territories"
+    },
+    "avgAccountsPerTerritory": {
+      "value": 24,
+      "priorValue": 22,
+      "trend": 9.1,
+      "trendDirection": "up"
+    },
+    "coveragePercent": {
+      "value": 78,
+      "priorValue": 72,
+      "trend": 8.3,
+      "trendDirection": "up"
+    },
+    "openPipeline": {
+      "value": 8750000,
+      "priorValue": 7200000,
+      "trend": 21.5,
+      "trendDirection": "up"
+    }
+  },
+  "territories": [
+    {
+      "id": "T001",
+      "name": "Northeast",
+      "states": ["NY", "NJ", "PA", "CT", "MA", "NH", "VT", "ME", "RI"],
+      "manager": "Sarah Johnson",
+      "accountCount": 32,
+      "pipeline": 2150000,
+      "revenue": 4200000,
+      "color": "#5F3B8C"
+    },
+    {
+      "id": "T002",
+      "name": "Southeast",
+      "states": ["FL", "GA", "NC", "SC", "VA", "TN", "AL", "MS"],
+      "manager": "Michael Chen",
+      "accountCount": 28,
+      "pipeline": 1850000,
+      "revenue": 3600000,
+      "color": "#818CF8"
+    },
+    {
+      "id": "T003",
+      "name": "Midwest",
+      "states": ["IL", "OH", "MI", "IN", "WI", "MN", "MO", "IA"],
+      "manager": "Emily Rodriguez",
+      "accountCount": 25,
+      "pipeline": 1450000,
+      "revenue": 2800000,
+      "color": "#60A5FA"
+    },
+    {
+      "id": "T004",
+      "name": "Southwest",
+      "states": ["TX", "AZ", "NM", "OK", "AR", "LA"],
+      "manager": "David Park",
+      "accountCount": 22,
+      "pipeline": 1250000,
+      "revenue": 2400000,
+      "color": "#F59E0B"
+    },
+    {
+      "id": "T005",
+      "name": "West Coast",
+      "states": ["CA", "WA", "OR", "NV", "HI"],
+      "manager": "Alex Kim",
+      "accountCount": 30,
+      "pipeline": 1650000,
+      "revenue": 3200000,
+      "color": "#22C55E"
+    },
+    {
+      "id": "T006",
+      "name": "Mountain",
+      "states": ["CO", "UT", "ID", "MT", "WY", "AK"],
+      "manager": "Jordan Lee",
+      "accountCount": 12,
+      "pipeline": 400000,
+      "revenue": 950000,
+      "color": "#EF4444"
+    }
+  ],
+  "mapData": {
+    "type": "choropleth",
+    "regions": [
+      { "state": "NY", "territory": "Northeast", "accounts": 12, "pipeline": 850000, "fillColor": "#5F3B8C" },
+      { "state": "NJ", "territory": "Northeast", "accounts": 6, "pipeline": 420000, "fillColor": "#5F3B8C" },
+      { "state": "PA", "territory": "Northeast", "accounts": 5, "pipeline": 380000, "fillColor": "#5F3B8C" },
+      { "state": "MA", "territory": "Northeast", "accounts": 4, "pipeline": 300000, "fillColor": "#5F3B8C" },
+      { "state": "CT", "territory": "Northeast", "accounts": 3, "pipeline": 200000, "fillColor": "#5F3B8C" },
+      { "state": "FL", "territory": "Southeast", "accounts": 10, "pipeline": 720000, "fillColor": "#818CF8" },
+      { "state": "GA", "territory": "Southeast", "accounts": 6, "pipeline": 450000, "fillColor": "#818CF8" },
+      { "state": "NC", "territory": "Southeast", "accounts": 5, "pipeline": 380000, "fillColor": "#818CF8" },
+      { "state": "VA", "territory": "Southeast", "accounts": 4, "pipeline": 300000, "fillColor": "#818CF8" },
+      { "state": "IL", "territory": "Midwest", "accounts": 8, "pipeline": 520000, "fillColor": "#60A5FA" },
+      { "state": "OH", "territory": "Midwest", "accounts": 6, "pipeline": 380000, "fillColor": "#60A5FA" },
+      { "state": "MI", "territory": "Midwest", "accounts": 5, "pipeline": 300000, "fillColor": "#60A5FA" },
+      { "state": "TX", "territory": "Southwest", "accounts": 12, "pipeline": 780000, "fillColor": "#F59E0B" },
+      { "state": "AZ", "territory": "Southwest", "accounts": 5, "pipeline": 280000, "fillColor": "#F59E0B" },
+      { "state": "CA", "territory": "West Coast", "accounts": 18, "pipeline": 1100000, "fillColor": "#22C55E" },
+      { "state": "WA", "territory": "West Coast", "accounts": 6, "pipeline": 350000, "fillColor": "#22C55E" },
+      { "state": "OR", "territory": "West Coast", "accounts": 4, "pipeline": 200000, "fillColor": "#22C55E" },
+      { "state": "CO", "territory": "Mountain", "accounts": 6, "pipeline": 220000, "fillColor": "#EF4444" },
+      { "state": "UT", "territory": "Mountain", "accounts": 4, "pipeline": 120000, "fillColor": "#EF4444" }
+    ]
+  },
+  "accountDistribution": {
+    "labels": ["Northeast", "Southeast", "Midwest", "Southwest", "West Coast", "Mountain"],
+    "datasets": [{
+      "label": "Account Count",
+      "data": [32, 28, 25, 22, 30, 12],
+      "backgroundColor": ["#5F3B8C", "#818CF8", "#60A5FA", "#F59E0B", "#22C55E", "#EF4444"]
+    }]
+  },
+  "balanceAnalysis": [
+    {
+      "territory": "Northeast",
+      "manager": "Sarah Johnson",
+      "accounts": 32,
+      "accountsPerRep": 10.7,
+      "pipeline": 2150000,
+      "pipelinePerRep": 716667,
+      "balanceScore": 85,
+      "status": "balanced"
+    },
+    {
+      "territory": "Southeast",
+      "manager": "Michael Chen",
+      "accounts": 28,
+      "accountsPerRep": 9.3,
+      "pipeline": 1850000,
+      "pipelinePerRep": 616667,
+      "balanceScore": 82,
+      "status": "balanced"
+    },
+    {
+      "territory": "Midwest",
+      "manager": "Emily Rodriguez",
+      "accounts": 25,
+      "accountsPerRep": 8.3,
+      "pipeline": 1450000,
+      "pipelinePerRep": 483333,
+      "balanceScore": 78,
+      "status": "balanced"
+    },
+    {
+      "territory": "Southwest",
+      "manager": "David Park",
+      "accounts": 22,
+      "accountsPerRep": 7.3,
+      "pipeline": 1250000,
+      "pipelinePerRep": 416667,
+      "balanceScore": 72,
+      "status": "under-assigned"
+    },
+    {
+      "territory": "West Coast",
+      "manager": "Alex Kim",
+      "accounts": 30,
+      "accountsPerRep": 10.0,
+      "pipeline": 1650000,
+      "pipelinePerRep": 550000,
+      "balanceScore": 80,
+      "status": "balanced"
+    },
+    {
+      "territory": "Mountain",
+      "manager": "Jordan Lee",
+      "accounts": 12,
+      "accountsPerRep": 4.0,
+      "pipeline": 400000,
+      "pipelinePerRep": 133333,
+      "balanceScore": 45,
+      "status": "under-assigned"
+    }
+  ],
+  "unassignedAccounts": [
+    { "name": "TechCorp Idaho", "state": "ID", "revenue": 125000, "reason": "No coverage" },
+    { "name": "Prairie Solutions", "state": "NE", "revenue": 95000, "reason": "Territory gap" },
+    { "name": "Northern Lights LLC", "state": "ND", "revenue": 78000, "reason": "No coverage" },
+    { "name": "Big Sky Ventures", "state": "MT", "revenue": 85000, "reason": "Low priority" },
+    { "name": "Heartland Corp", "state": "KS", "revenue": 110000, "reason": "Territory gap" }
+  ]
+}

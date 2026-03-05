@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Portal Runtime Lifecycle"
+  short_description: "Help with Hubspot Portal Runtime Lifecycle tasks"
+  default_prompt: "Use $hubspot-portal-runtime-lifecycle to execute this workflow safely and produce the expected artifacts."

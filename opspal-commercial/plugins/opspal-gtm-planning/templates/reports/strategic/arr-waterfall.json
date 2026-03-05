@@ -1,0 +1,216 @@
+{
+  "template_id": "arr-waterfall",
+  "report_name": "ARR Waterfall (Starting → New → Expansion → Churn → End)",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "RevOps",
+  "primary_decisions_supported": [
+    "Diagnosing ARR growth/leakage drivers",
+    "Setting targets for new vs expansion sales",
+    "Churn mitigation focus"
+  ],
+  "executive_questions_answered": [
+    "How much ARR did we add this period from new customers vs existing (expansion)?",
+    "How much ARR was lost to churn or contraction?",
+    "What is our net ARR growth after accounting for churn and downgrades?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Net ARR Added",
+      "definition": "Net new recurring revenue added in the period: New logo ARR plus Expansion ARR minus ARR lost to churn and downgrades.",
+      "formula": "Net ARR Added = New_ARR + Expansion_ARR - Churned_ARR - Downgraded_ARR",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Gross New ARR",
+          "definition_delta": "Counts only ARR gained (new + expansion) without subtracting churn (for sales-only view)",
+          "when_to_use": "Assessing sales performance ignoring churn impact"
+        }
+      ],
+      "pitfalls": [
+        "Net ARR can mask churn issues if expansions from a few customers offset broad churn",
+        "Contraction (downgrades) should be included with churn for full loss picture",
+        "Ensure consistent period – include only churn that occurred in that period's starting ARR cohort"
+      ]
+    },
+    {
+      "metric_name": "ARR Component Breakdown",
+      "definition": "Breakout of Starting ARR, New ARR, Expansion ARR, Churned ARR, and Ending ARR to visualize how each component contributes to net ARR change (waterfall chart).",
+      "formula": "Ending ARR = Starting ARR + New ARR + Expansion ARR - Churned ARR",
+      "grain": "quarter",
+      "required_dimensions": ["ARR component"],
+      "known_variants": [
+        {
+          "variant_name": "MRR Waterfall",
+          "definition_delta": "Uses monthly recurring revenue components for finer granularity within quarter",
+          "when_to_use": "Monthly internal reviews or where ARR jumps mid-period need breakdown"
+        }
+      ],
+      "pitfalls": [
+        "Components must align to same timeframe (e.g., include only churn that belongs to starting ARR of period)",
+        "Excluding downgrades (contraction) will overstate retention component",
+        "Too many minor categories make the chart hard to read – stick to major buckets"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Billing", "Data Warehouse"],
+    "required_entities": ["Account", "Opportunity", "Subscription"],
+    "required_fields": [
+      {
+        "field_name": "Starting ARR",
+        "description": "ARR per account at period start",
+        "salesforce_field": "Account.ARR__c",
+        "hubspot_field": "company.annual_recurring_revenue"
+      },
+      {
+        "field_name": "New ARR",
+        "description": "ARR from new customers closed in period",
+        "salesforce_field": "Opportunity.ARR__c WHERE IsNew = true",
+        "hubspot_field": "deal.amount WHERE dealtype = newbusiness"
+      },
+      {
+        "field_name": "Expansion ARR",
+        "description": "ARR added via upsell/cross-sell in period",
+        "salesforce_field": "Opportunity.ARR__c WHERE Type = 'Expansion'",
+        "hubspot_field": "deal.amount WHERE dealtype = existingbusiness"
+      },
+      {
+        "field_name": "Churned ARR",
+        "description": "ARR lost from customer churn or downgrades in period",
+        "salesforce_field": "ChurnEvent__c.ARR_Lost__c",
+        "hubspot_field": "company.churned_arr"
+      }
+    ],
+    "required_timestamps": ["Period Start Date", "Period End Date", "Close Dates of deals", "Churn effective dates"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Opportunity",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Identify new vs expansion deals by account status"
+      },
+      {
+        "left_entity": "Subscription",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Link subscriptions to accounts to aggregate churn and expansions"
+      }
+    ],
+    "transformation_rules": [
+      "Annualize partial-period contributions if needed (e.g., if a deal starts halfway through period, count full ARR for ARR metrics but note for revenue)",
+      "Exclude one-time fees or services from ARR components",
+      "Represent churn and downgrades as negative values for clarity in calculations"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "ARR Reconciliation",
+        "logic": "Verify Starting ARR + New + Expansion - Churn = Ending ARR (consistency check across data sources)",
+        "severity": "high"
+      },
+      {
+        "check_name": "Deal Tagging Accuracy",
+        "logic": "Ensure every closed deal is tagged as New or Expansion (to correctly categorize New vs Expansion ARR)",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Total_New_ARR = sum(ARR of new-logo deals in period)",
+      "Total_Expansion_ARR = sum(ARR of upsell deals in period)",
+      "Total_Churned_ARR = sum(ARR of all lost subscriptions in period)"
+    ],
+    "aggregation_rules": [
+      "Aggregate ARR components across all customers for company-level waterfall",
+      "For segments, calculate component sums per segment then aggregate for total (ensuring no double count)"
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": null
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "ARR Waterfall Chart",
+        "purpose": "Visualize starting ARR to ending ARR with components of growth and churn",
+        "visual_type": "waterfall",
+        "primary_metrics": ["Starting ARR", "New ARR", "Expansion ARR", "Churned ARR", "Ending ARR"],
+        "filters": ["time period"],
+        "drilldowns": ["by region or product line to see component contributions"],
+        "annotations_or_thresholds": ["Net ARR added vs plan target"]
+      },
+      {
+        "panel_title": "ARR Movement Details",
+        "purpose": "Tabular view of ARR changes by account or segment for auditing",
+        "visual_type": "table",
+        "primary_metrics": ["Account", "Starting ARR", "New ARR", "Expansion ARR", "Churned ARR", "Ending ARR"],
+        "filters": ["segment, account owner"],
+        "drilldowns": [],
+        "annotations_or_thresholds": []
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Quantify net ARR added and identify whether growth was driven more by new business or expansion",
+      "Highlight the impact of churn – e.g., what percent of new ARR was eaten up by churn"
+    ],
+    "diagnostic_questions": [
+      "Which component (new vs expansion vs churn) had the largest impact on ARR this period?",
+      "Is expansion revenue sufficiently offsetting churn compared to last period?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Invest in retention programs if churn high",
+        "owner": "CSOps",
+        "trigger_condition": "Churned ARR exceeds X% of starting ARR (waterfall shows net negative or weak net growth)"
+      },
+      {
+        "action": "Accelerate upsell initiatives",
+        "owner": "SalesOps",
+        "trigger_condition": "Expansion ARR portion is below plan or below historical norm"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Single-period waterfall with total new, expansion, churn values",
+    "advanced_version": "Dynamic waterfall over multiple periods with drilldowns by segment/product and scenario overlays",
+    "common_client_customizations": [
+      "Separate churn into voluntary vs involuntary or by reason in the chart",
+      "Include reactivation ARR (if lost customers resubscribe) as a positive component"
+    ],
+    "privacy_and_access_notes": [
+      "Only share account-level breakdown internally; external reports (e.g., board) see aggregated components",
+      "Ensure all revenue figures align with official financials for external use"
+    ],
+    "success_criteria": [
+      "ARR waterfall ties exactly to known ARR values (reconcilable with CRM and Finance records)",
+      "Leaders can easily identify if growth is primarily new logo-driven or expansion-driven each period"
+    ]
+  },
+  "benchmarks": {
+    "healthy_net_arr_growth": {
+      "early_stage": "50-100%+ YoY",
+      "growth_stage": "30-50% YoY",
+      "mature": "15-25% YoY"
+    },
+    "new_vs_expansion_mix": {
+      "early_stage": "80% new / 20% expansion",
+      "growth_stage": "60% new / 40% expansion",
+      "mature": "40% new / 60% expansion"
+    }
+  },
+  "references": [
+    {
+      "title": "Net Annual Recurring Revenue Added (Net ARR Added)",
+      "publisher": "MetricHQ (Klipfolio)",
+      "date": "Dec 1, 2025",
+      "url": "https://www.metrichq.org/saas/net-annual-recurring-revenue-added/"
+    }
+  ]
+}

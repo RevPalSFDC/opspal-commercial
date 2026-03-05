@@ -1,0 +1,137 @@
+name: Plugin Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - 'scripts/**'
+      - '.github/workflows/plugin-validation.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - 'scripts/**'
+      - '.github/workflows/plugin-validation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-plugins:
+    name: Validate Plugin Structure & Metadata
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin:
+          - opspal-ai-consult
+          - opspal-core
+          - opspal-data-hygiene
+          - opspal-gtm-planning
+          - opspal-hubspot
+          - opspal-marketo
+          - opspal-monday
+          - opspal-salesforce
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate plugin structure
+        id: validate
+        run: |
+          set -euo pipefail
+
+          PLUGIN_DIR="plugins/${{ matrix.plugin }}"
+          MANIFEST="$PLUGIN_DIR/.claude-plugin/plugin.json"
+
+          if [ ! -d "$PLUGIN_DIR" ]; then
+            echo "::error::Plugin directory not found: $PLUGIN_DIR"
+            exit 1
+          fi
+
+          if [ ! -f "$MANIFEST" ]; then
+            echo "::error::Plugin manifest missing: $MANIFEST"
+            exit 1
+          fi
+
+          jq empty "$MANIFEST" || {
+            echo "::error::Invalid JSON in $MANIFEST"
+            exit 1
+          }
+
+          NAME=$(jq -r '.name // empty' "$MANIFEST")
+          VERSION=$(jq -r '.version // empty' "$MANIFEST")
+          DESCRIPTION=$(jq -r '.description // empty' "$MANIFEST")
+
+          if [ -z "$NAME" ] || [ -z "$VERSION" ] || [ -z "$DESCRIPTION" ]; then
+            echo "::error::Manifest requires non-empty name/version/description: $MANIFEST"
+            exit 1
+          fi
+
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          count_markdown_files() {
+            local dir="$1"
+            if [ -d "$dir" ]; then
+              find "$dir" -type f -name '*.md' | wc -l | tr -d ' '
+            else
+              echo 0
+            fi
+          }
+
+          count_shell_files() {
+            local dir="$1"
+            if [ -d "$dir" ]; then
+              find "$dir" -type f -name '*.sh' | wc -l | tr -d ' '
+            else
+              echo 0
+            fi
+          }
+
+          AGENT_COUNT=$(count_markdown_files "$PLUGIN_DIR/agents")
+          COMMAND_COUNT=$(count_markdown_files "$PLUGIN_DIR/commands")
+          SKILL_COUNT=$(count_markdown_files "$PLUGIN_DIR/skills")
+          HOOK_COUNT=$(count_shell_files "$PLUGIN_DIR/hooks")
+
+          {
+            echo "### ${{ matrix.plugin }}"
+            echo "- Manifest: $NAME v$VERSION"
+            echo "- Agents: $AGENT_COUNT"
+            echo "- Commands: $COMMAND_COUNT"
+            echo "- Skills: $SKILL_COUNT"
+            echo "- Hooks: $HOOK_COUNT"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload manifest snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-manifest-${{ matrix.plugin }}
+          path: plugins/${{ matrix.plugin }}/.claude-plugin/plugin.json
+          include-hidden-files: true
+          retention-days: 14
+
+  validate-catalog:
+    name: Validate Suite Catalog Artifacts
+    runs-on: ubuntu-latest
+    needs: validate-plugins
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify generated catalog files
+        run: |
+          set -euo pipefail
+
+          test -f docs/PLUGIN_SUITE_CATALOG.json
+          test -f docs/PLUGIN_SUITE_CATALOG.md
+          jq empty docs/PLUGIN_SUITE_CATALOG.json
+
+          echo "✓ docs/PLUGIN_SUITE_CATALOG.json is valid JSON"
+          echo "✓ docs/PLUGIN_SUITE_CATALOG.md exists"

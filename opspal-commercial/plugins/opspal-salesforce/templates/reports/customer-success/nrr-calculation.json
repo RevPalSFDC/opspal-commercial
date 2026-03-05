@@ -1,0 +1,278 @@
+{
+  "templateMetadata": {
+    "templateName": "Net Revenue Retention (NRR) Calculation Report",
+    "templateVersion": "1.1",
+    "description": "Calculate NRR/NDR with all components: starting ARR, expansion, contraction, and churn",
+    "audience": "CCO, CFO, VP CS, Revenue Operations, Board",
+    "useCase": "Monthly/quarterly NRR tracking, board reporting, investor updates",
+    "customizationPoints": [
+      "ARR field source (Account.ARR__c or Opportunity rollup)",
+      "Expansion type identification",
+      "Churn tracking method",
+      "Period boundaries"
+    ],
+    "prerequisites": [
+      "ARR tracking at Account level or via Opportunity",
+      "Opportunity.Type with Expansion and Renewal values",
+      "Churn tracking (Opportunity or Account status)",
+      "Contraction tracking (downgrades)"
+    ]
+  },
+  "reportMetadata": {
+    "name": "NRR Components - {Period}",
+    "description": "Net Revenue Retention calculation with all ARR movement components",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "note": "This report requires multiple sub-reports for complete NRR calculation",
+    "subReports": [
+      {
+        "name": "Beginning ARR",
+        "description": "ARR at start of period from existing customers",
+        "filter": "Account.Type = 'Customer' AND Account.Customer_Since__c < PERIOD_START"
+      },
+      {
+        "name": "Expansion",
+        "description": "New ARR from upsells and cross-sells",
+        "filter": "Type IN ('Expansion', 'Upsell', 'Cross-sell') AND IsWon = TRUE AND CloseDate IN PERIOD"
+      },
+      {
+        "name": "Contraction",
+        "description": "ARR reduction from downgrades",
+        "filter": "Type = 'Contraction' AND IsWon = TRUE AND CloseDate IN PERIOD"
+      },
+      {
+        "name": "Churn",
+        "description": "Lost ARR from churned customers",
+        "filter": "Type = 'Churn' OR (Type = 'Renewal' AND IsWon = FALSE AND CloseDate IN PERIOD)"
+      }
+    ],
+    "reportFilters": [
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true,
+        "customizationNote": "Adjust to match NRR calculation period"
+      },
+      {
+        "column": "Account.Type",
+        "operator": "equals",
+        "value": "Customer",
+        "customizable": true,
+        "customizationNote": "Ensure only existing customers included"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "TYPE",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": false
+      }
+    ],
+    "groupingsAcross": [
+      {
+        "field": "CLOSE_DATE",
+        "sortOrder": "Asc",
+        "dateGranularity": "Month",
+        "customizable": true
+      }
+    ],
+    "detailColumns": [
+      "ACCOUNT_NAME",
+      "OPPORTUNITY_NAME",
+      "TYPE",
+      "AMOUNT",
+      "CLOSE_DATE",
+      "Account.ARR__c",
+      "STAGE_NAME"
+    ],
+    "aggregates": [
+      {
+        "name": "Total_Amount",
+        "field": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total value by type"
+      },
+      {
+        "name": "Deal_Count",
+        "aggregateType": "RowCount",
+        "description": "Number of opportunities"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "NRR_Percentage",
+        "description": "Net Revenue Retention percentage",
+        "formula": "(Beginning_ARR + Expansion - Contraction - Churn) / Beginning_ARR * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "Beginning_ARR from separate calculation"
+      },
+      {
+        "name": "GRR_Percentage",
+        "description": "Gross Revenue Retention (no expansion)",
+        "formula": "(Beginning_ARR - Contraction - Churn) / Beginning_ARR * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Waterfall",
+      "components": [
+        {
+          "name": "Beginning ARR",
+          "type": "start",
+          "color": "#5F3B8C"
+        },
+        {
+          "name": "Expansion",
+          "type": "increase",
+          "color": "#6FBF73"
+        },
+        {
+          "name": "Contraction",
+          "type": "decrease",
+          "color": "#F4C542"
+        },
+        {
+          "name": "Churn",
+          "type": "decrease",
+          "color": "#E74C3C"
+        },
+        {
+          "name": "Ending ARR",
+          "type": "end",
+          "color": "#5F3B8C"
+        }
+      ],
+      "showPercentages": true
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "nrr": {
+      "formula": "(Beginning ARR + Expansion - Contraction - Churn) / Beginning ARR * 100",
+      "also_known_as": "NDR (Net Dollar Retention)",
+      "interpretation": {
+        ">100%": "Growing revenue from existing customers",
+        "100%": "Holding steady - expansion equals losses",
+        "<100%": "Net revenue decline from existing customers"
+      },
+      "benchmark": {
+        "excellent": ">120%",
+        "good": ">110%",
+        "acceptable": ">100%",
+        "warning": "<100%"
+      }
+    },
+    "grr": {
+      "formula": "(Beginning ARR - Contraction - Churn) / Beginning ARR * 100",
+      "also_known_as": "Gross Revenue Retention, Gross Dollar Retention",
+      "note": "Excludes expansion - measures pure retention",
+      "benchmark": {
+        "excellent": ">95%",
+        "good": ">90%",
+        "warning": "<85%"
+      }
+    }
+  },
+  "deploymentInstructions": {
+    "steps": [
+      "1. Identify Beginning ARR calculation method",
+      "2. Map Opportunity.Type values to NRR components",
+      "3. Verify churn tracking methodology",
+      "4. Create formula fields if needed for component tracking",
+      "5. Build 4 sub-reports (Beginning, Expansion, Contraction, Churn)",
+      "6. Create dashboard combining all components",
+      "7. Replace {Period} with actual period"
+    ],
+    "calculationApproach": {
+      "recommended": "Use cohort-based calculation tracking same customers",
+      "simpler": "Use Opportunity Type to categorize ARR movements"
+    }
+  },
+  "relatedTemplates": [
+    "expansion-revenue.json",
+    "cs-overview.json"
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "formulaComponents": {
+    "expansion_rate": "Expansion / Beginning ARR",
+    "contraction_rate": "Contraction / Beginning ARR",
+    "churn_rate": "Churn / Beginning ARR"
+  }
+}

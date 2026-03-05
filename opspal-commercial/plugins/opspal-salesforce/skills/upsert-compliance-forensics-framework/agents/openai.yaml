@@ -1,0 +1,4 @@
+interface:
+  display_name: "Upsert Compliance Forensics Framework"
+  short_description: "Help with Upsert Compliance Forensics Framework tasks"
+  default_prompt: "Use $upsert-compliance-forensics-framework to execute this workflow safely and produce the expected artifacts."

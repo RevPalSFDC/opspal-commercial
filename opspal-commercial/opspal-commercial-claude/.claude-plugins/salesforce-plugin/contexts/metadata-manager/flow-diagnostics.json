@@ -1,0 +1,347 @@
+{
+  "contextId": "flow-diagnostics",
+  "version": "3.43.0",
+  "description": "Context for Flow Testing & Diagnostic Framework (Runbook 7)",
+  "priority": 80,
+  "category": "flow-operations",
+  "keywords": {
+    "primary": [
+      "preflight",
+      "pre-flight",
+      "test flow",
+      "test flows",
+      "flow test",
+      "flow testing",
+      "diagnose",
+      "diagnostic",
+      "diagnostics",
+      "debug log",
+      "debug logs",
+      "parse log",
+      "parse logs",
+      "log analysis",
+      "log parsing",
+      "flow coverage",
+      "branch coverage",
+      "coverage analysis",
+      "test coverage",
+      "flow execution",
+      "execute flow",
+      "run flow",
+      "flow error",
+      "flow failure",
+      "flow debugging",
+      "troubleshoot flow",
+      "troubleshooting flow"
+    ],
+    "secondary": [
+      "competing automation",
+      "validation rules",
+      "trace flag",
+      "debug level",
+      "state snapshot",
+      "before after",
+      "diff analysis",
+      "flow logs",
+      "flow history",
+      "governor limits",
+      "execution history",
+      "test data",
+      "test case",
+      "test cases",
+      "test plan",
+      "branch analysis",
+      "decision coverage",
+      "flow monitoring",
+      "flow performance"
+    ],
+    "command": [
+      "flow preflight",
+      "flow test",
+      "flow logs",
+      "flow diagnose",
+      "runbook 7"
+    ],
+    "error": [
+      "flow not triggering",
+      "flow not firing",
+      "flow failed",
+      "flow error",
+      "FLOW_ERROR",
+      "FLOW_ELEMENT_ERROR",
+      "unexpected outcome",
+      "wrong branch",
+      "decision not working",
+      "element failed"
+    ]
+  },
+  "loadConditions": {
+    "automatic": [
+      {
+        "condition": "keyword_match",
+        "keywordGroups": ["primary"],
+        "minMatches": 1,
+        "confidence": 0.9
+      },
+      {
+        "condition": "keyword_match",
+        "keywordGroups": ["command"],
+        "minMatches": 1,
+        "confidence": 1.0
+      },
+      {
+        "condition": "keyword_match",
+        "keywordGroups": ["error"],
+        "minMatches": 1,
+        "confidence": 0.85
+      }
+    ],
+    "conditional": [
+      {
+        "condition": "keyword_match",
+        "keywordGroups": ["secondary"],
+        "minMatches": 2,
+        "confidence": 0.7
+      },
+      {
+        "condition": "and",
+        "conditions": [
+          {
+            "keyword_match": ["flow", "automation"],
+            "minMatches": 1
+          },
+          {
+            "keyword_match": ["secondary"],
+            "minMatches": 1
+          }
+        ],
+        "confidence": 0.75
+      }
+    ]
+  },
+  "contextSections": [
+    {
+      "sectionId": "runbook7-overview",
+      "title": "Runbook 7: Flow Testing & Diagnostics Overview",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "1-94",
+      "priority": 100,
+      "loadOn": ["primary", "command"],
+      "summary": "Overview of systematic testing, execution monitoring, and diagnostic workflows for Flows. Covers supported Flow types, key concepts, and when to use diagnostic tools."
+    },
+    {
+      "sectionId": "runbook7-preflight",
+      "title": "Runbook 7: Pre-Flight Checks",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "96-432",
+      "priority": 95,
+      "loadOn": ["preflight", "pre-flight", "before deployment", "validation"],
+      "summary": "Automated pre-flight checks: org connectivity, Flow metadata, competing automation detection, validation rules, and debug logging setup. Prevents common deployment failures."
+    },
+    {
+      "sectionId": "runbook7-execution",
+      "title": "Runbook 7: Execution Strategies",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "434-438",
+      "priority": 90,
+      "loadOn": ["execute", "test", "run flow", "trigger flow"],
+      "summary": "Methods for executing Flows in controlled environments (record-triggered, scheduled, screen flows). Includes test data setup and result capture."
+    },
+    {
+      "sectionId": "runbook7-result-capture",
+      "title": "Runbook 7: Result Capture & Analysis",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "440-444",
+      "priority": 85,
+      "loadOn": ["state snapshot", "diff", "before after", "log parsing"],
+      "summary": "Systematic review of execution outcomes: state snapshots, debug log analysis, failure type determination, and actionable recommendations."
+    },
+    {
+      "sectionId": "runbook7-failure-types",
+      "title": "Runbook 7: Failure Type Determination",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "446-450",
+      "priority": 95,
+      "loadOn": ["error", "failure", "flow failed", "troubleshoot"],
+      "summary": "Error classification: syntax errors, runtime errors, governor limits, permission issues. Decision trees for root cause analysis."
+    },
+    {
+      "sectionId": "runbook7-diagnostic-workflows",
+      "title": "Runbook 7: Diagnostic Workflows",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "452-456",
+      "priority": 90,
+      "loadOn": ["diagnose", "diagnostic", "troubleshoot"],
+      "summary": "Step-by-step procedures: 'Flow not triggering', 'Flow error/fault', 'Unexpected outcome', 'Governor limit exceeded'. Multi-agent coordination for complex diagnostics."
+    },
+    {
+      "sectionId": "runbook7-reusable-modules",
+      "title": "Runbook 7: Reusable Modules",
+      "source": "docs/runbooks/flow-xml-development/07-testing-and-diagnostics.md",
+      "lines": "458-462",
+      "priority": 80,
+      "loadOn": ["script", "module", "api"],
+      "summary": "Modular diagnostic components: FlowPreflightChecker, FlowExecutor, FlowLogParser, FlowStateSnapshot, FlowBranchAnalyzer, FlowDiagnosticOrchestrator."
+    },
+    {
+      "sectionId": "script-interfaces",
+      "title": "Flow Diagnostic Script Interfaces",
+      "source": "docs/FLOW_DIAGNOSTIC_SCRIPT_INTERFACES.md",
+      "lines": "1-100",
+      "priority": 75,
+      "loadOn": ["api", "interface", "script", "programmatic"],
+      "summary": "Complete interface specifications for 6 diagnostic modules. Constructor parameters, public methods, input/output formats, error handling patterns."
+    },
+    {
+      "sectionId": "cli-syntax",
+      "title": "Flow Diagnostic CLI Syntax",
+      "source": "docs/FLOW_DIAGNOSTIC_CLI_SYNTAX.md",
+      "lines": "1-100",
+      "priority": 85,
+      "loadOn": ["command", "cli", "flow preflight", "flow test", "flow logs", "flow diagnose"],
+      "summary": "CLI command syntax for diagnostic tools: flow preflight, flow test, flow logs, flow diagnose. Examples, options, output formats, exit codes."
+    },
+    {
+      "sectionId": "preflight-examples",
+      "title": "Pre-Flight Check Examples",
+      "source": "docs/FLOW_DIAGNOSTIC_CLI_SYNTAX.md",
+      "lines": "80-220",
+      "priority": 80,
+      "loadOn": ["preflight", "example", "how to"],
+      "summary": "Practical examples of pre-flight checks: basic usage, specific checks, JSON output, dry-run mode, CI/CD integration."
+    },
+    {
+      "sectionId": "test-examples",
+      "title": "Flow Test Examples",
+      "source": "docs/FLOW_DIAGNOSTIC_CLI_SYNTAX.md",
+      "lines": "300-480",
+      "priority": 80,
+      "loadOn": ["test", "execute", "example"],
+      "summary": "Practical examples of Flow testing: record-triggered, scheduled, screen flows. Test data files, JSON output, multiple test cases."
+    },
+    {
+      "sectionId": "log-parsing-examples",
+      "title": "Debug Log Parsing Examples",
+      "source": "docs/FLOW_DIAGNOSTIC_CLI_SYNTAX.md",
+      "lines": "550-720",
+      "priority": 80,
+      "loadOn": ["logs", "debug", "parse", "example"],
+      "summary": "Practical examples of log parsing: list logs, parse specific log, extract errors, latest log analysis, JSON output."
+    },
+    {
+      "sectionId": "diagnose-examples",
+      "title": "Diagnostic Workflow Examples",
+      "source": "docs/FLOW_DIAGNOSTIC_CLI_SYNTAX.md",
+      "lines": "800-1100",
+      "priority": 80,
+      "loadOn": ["diagnose", "diagnostic", "example"],
+      "summary": "Practical examples of diagnostic workflows: preflight, execution, coverage, full diagnostics. Consolidated reports, CI/CD integration."
+    }
+  ],
+  "relatedContexts": [
+    {
+      "contextId": "flow-authoring",
+      "relationship": "prerequisite",
+      "reason": "Must understand Flow creation before testing"
+    },
+    {
+      "contextId": "flow-validation",
+      "relationship": "complement",
+      "reason": "Static validation complements runtime diagnostics"
+    },
+    {
+      "contextId": "flow-deployment",
+      "relationship": "prerequisite",
+      "reason": "Diagnostics inform deployment strategies"
+    },
+    {
+      "contextId": "flow-monitoring",
+      "relationship": "follow-up",
+      "reason": "Post-deployment monitoring uses similar diagnostic tools"
+    }
+  ],
+  "agentRecommendations": [
+    {
+      "keywords": ["preflight", "pre-flight", "before deploy"],
+      "agents": ["flow-diagnostician", "sfdc-deployment-manager"],
+      "reason": "Specialized in pre-deployment validation"
+    },
+    {
+      "keywords": ["test", "execute", "run flow"],
+      "agents": ["flow-test-orchestrator", "sfdc-automation-builder"],
+      "reason": "Specialized in Flow execution and testing"
+    },
+    {
+      "keywords": ["logs", "debug", "parse log"],
+      "agents": ["flow-log-analyst", "flow-diagnostician"],
+      "reason": "Specialized in debug log analysis"
+    },
+    {
+      "keywords": ["diagnose", "troubleshoot", "flow error"],
+      "agents": ["flow-diagnostician", "flow-log-analyst"],
+      "reason": "Specialized in systematic troubleshooting"
+    },
+    {
+      "keywords": ["coverage", "branch", "test plan"],
+      "agents": ["flow-test-orchestrator", "flow-diagnostician"],
+      "reason": "Specialized in coverage analysis and test planning"
+    },
+    {
+      "keywords": ["competing automation", "conflict"],
+      "agents": ["sfdc-automation-auditor", "flow-diagnostician"],
+      "reason": "Specialized in automation conflict detection"
+    }
+  ],
+  "usageExamples": [
+    {
+      "userQuery": "Run pre-flight checks before deploying Account_Validation_Flow",
+      "contextLoaded": ["runbook7-overview", "runbook7-preflight", "preflight-examples", "cli-syntax"],
+      "agentRecommended": "flow-diagnostician",
+      "confidence": 1.0
+    },
+    {
+      "userQuery": "Test Flow with test data and see what fields changed",
+      "contextLoaded": ["runbook7-execution", "runbook7-result-capture", "test-examples", "cli-syntax"],
+      "agentRecommended": "flow-test-orchestrator",
+      "confidence": 0.95
+    },
+    {
+      "userQuery": "Parse debug logs to find Flow errors",
+      "contextLoaded": ["runbook7-result-capture", "log-parsing-examples", "cli-syntax"],
+      "agentRecommended": "flow-log-analyst",
+      "confidence": 1.0
+    },
+    {
+      "userQuery": "My Flow isn't triggering, help me troubleshoot",
+      "contextLoaded": ["runbook7-diagnostic-workflows", "runbook7-preflight", "diagnose-examples"],
+      "agentRecommended": "flow-diagnostician",
+      "confidence": 0.9
+    },
+    {
+      "userQuery": "Check branch coverage for my Flow tests",
+      "contextLoaded": ["runbook7-result-capture", "diagnose-examples", "script-interfaces"],
+      "agentRecommended": "flow-test-orchestrator",
+      "confidence": 0.95
+    },
+    {
+      "userQuery": "Detect competing automation on Account object",
+      "contextLoaded": ["runbook7-preflight", "preflight-examples"],
+      "agentRecommended": "sfdc-automation-auditor",
+      "confidence": 0.85
+    }
+  ],
+  "performanceMetrics": {
+    "targetLoadTime": "< 500ms",
+    "maxContextSize": "50KB per section",
+    "cacheExpiry": "1 hour",
+    "priorityThreshold": 70
+  },
+  "metadata": {
+    "created": "2025-11-12",
+    "author": "Runbook 7 Integration (Phase 1)",
+    "lastModified": "2025-11-12",
+    "version": "3.43.0",
+    "status": "specification",
+    "integratesWithRunbook": 7
+  }
+}

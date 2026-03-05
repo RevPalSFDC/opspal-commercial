@@ -1,0 +1,2384 @@
+{
+  "marketo-plugin": [
+    {
+      "name": "marketo-leads",
+      "description": "Query, create, update, or manage leads in Marketo",
+      "path": "marketo-plugin/commands/marketo-leads.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "leads",
+        "marketo",
+        "update"
+      ]
+    },
+    {
+      "name": "sync-program-to-sfdc",
+      "description": "Interactive wizard to configure Marketo program to Salesforce campaign sync",
+      "path": "marketo-plugin/commands/sync-program-to-sfdc.md",
+      "type": "command",
+      "keywords": [
+        "cpq",
+        "cross-platform",
+        "marketo",
+        "program",
+        "salesforce",
+        "sfdc",
+        "sync"
+      ]
+    },
+    {
+      "name": "lead-quality-report",
+      "description": "Generate a comprehensive lead quality report for your Marketo database",
+      "path": "marketo-plugin/commands/lead-quality-report.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "cross-platform",
+        "lead",
+        "marketo",
+        "quality",
+        "report",
+        "reporting"
+      ]
+    },
+    {
+      "name": "marketo-instance",
+      "description": "Switch or manage Marketo instances (production, sandbox, etc.)",
+      "path": "marketo-plugin/commands/marketo-instance.md",
+      "type": "command",
+      "keywords": [
+        "instance",
+        "marketo"
+      ]
+    },
+    {
+      "name": "create-smart-campaign",
+      "description": "Interactive wizard to create Marketo smart campaigns with best practices",
+      "path": "marketo-plugin/commands/create-smart-campaign.md",
+      "type": "command",
+      "keywords": [
+        "campaign",
+        "create",
+        "marketo",
+        "smart"
+      ]
+    },
+    {
+      "name": "launch-webinar",
+      "description": "Interactive wizard for end-to-end webinar campaign creation and launch",
+      "path": "marketo-plugin/commands/launch-webinar.md",
+      "type": "command",
+      "keywords": [
+        "launch",
+        "webinar"
+      ]
+    },
+    {
+      "name": "create-scoring-model",
+      "description": "Interactive wizard to design and implement lead scoring models in Marketo",
+      "path": "marketo-plugin/commands/create-scoring-model.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "marketo",
+        "model",
+        "scoring"
+      ]
+    },
+    {
+      "name": "marketo-preflight",
+      "description": "Run pre-flight validation checks before executing operations in Marketo",
+      "path": "marketo-plugin/commands/marketo-preflight.md",
+      "type": "command",
+      "keywords": [
+        "marketo",
+        "preflight"
+      ]
+    },
+    {
+      "name": "marketo-logs",
+      "description": "Retrieve and filter Marketo activity logs for debugging and analysis",
+      "path": "marketo-plugin/commands/marketo-logs.md",
+      "type": "command",
+      "keywords": [
+        "logs",
+        "marketo"
+      ]
+    },
+    {
+      "name": "create-nurture-program",
+      "description": "Interactive wizard to create Marketo engagement programs (nurture streams)",
+      "path": "marketo-plugin/commands/create-nurture-program.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "marketo",
+        "nurture",
+        "program"
+      ]
+    },
+    {
+      "name": "marketo-auth",
+      "description": "Configure or verify Marketo authentication and credentials",
+      "path": "marketo-plugin/commands/marketo-auth.md",
+      "type": "command",
+      "keywords": [
+        "auth",
+        "cpq",
+        "marketo"
+      ]
+    },
+    {
+      "name": "marketo-audit",
+      "description": "Run comprehensive audit of Marketo instance covering leads, programs, and sync",
+      "path": "marketo-plugin/commands/marketo-audit.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "cross-platform",
+        "marketo",
+        "sync"
+      ]
+    },
+    {
+      "name": "configure-mql-handoff",
+      "description": "Interactive wizard to set up MQL qualification and sales handoff workflows",
+      "path": "marketo-plugin/commands/configure-mql-handoff.md",
+      "type": "command",
+      "keywords": [
+        "configure",
+        "cpq",
+        "handoff",
+        "marketo"
+      ]
+    },
+    {
+      "name": "create-email-program",
+      "description": "Interactive wizard to create Marketo email programs with A/B testing",
+      "path": "marketo-plugin/commands/create-email-program.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "email",
+        "marketo",
+        "program"
+      ]
+    },
+    {
+      "name": "monitor-sync",
+      "description": "Real-time monitoring of Marketo-Salesforce synchronization status and errors",
+      "path": "marketo-plugin/commands/monitor-sync.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "marketo",
+        "monitor",
+        "salesforce",
+        "sync"
+      ]
+    },
+    {
+      "name": "api-usage",
+      "description": "Track Marketo API usage, rate limits, and quota consumption",
+      "path": "marketo-plugin/commands/api-usage.md",
+      "type": "command",
+      "keywords": [
+        "marketo",
+        "usage"
+      ]
+    },
+    {
+      "name": "marketo-mql-handoff-framework",
+      "description": "Marketo MQL qualification and sales handoff workflow patterns. Use when configuring MQL qualification triggers, setting up Salesforce lead sync, designing lead assignment rules, creating sales notifications, implementing SLA monitoring, or building MQL recycle workflows.",
+      "path": "marketo-plugin/skills/marketo-mql-handoff-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "cross-platform",
+        "framework",
+        "handoff",
+        "hubspot",
+        "marketo",
+        "salesforce",
+        "sync",
+        "territory",
+        "workflow"
+      ]
+    },
+    {
+      "name": "marketo-sfdc-integration-patterns",
+      "description": "Marketo-Salesforce synchronization patterns and best practices. Use when configuring sync settings, troubleshooting sync errors, validating field mappings, managing lead/contact conversion, resolving duplicate issues, or monitoring sync health.",
+      "path": "marketo-plugin/skills/marketo-sfdc-integration-patterns/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "cross-platform",
+        "data",
+        "integration",
+        "marketo",
+        "patterns",
+        "salesforce",
+        "sfdc",
+        "sync"
+      ]
+    },
+    {
+      "name": "marketo-lead-scoring-methodology",
+      "description": "Marketo lead scoring model design methodology with two-dimensional scoring (behavior + demographic). Use when designing scoring models, creating behavioral trigger campaigns, building demographic batch campaigns, implementing score decay, setting MQL thresholds, or auditing scoring effectiveness.",
+      "path": "marketo-plugin/skills/marketo-lead-scoring-methodology/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "lead",
+        "marketo",
+        "methodology",
+        "scoring"
+      ]
+    }
+  ],
+  "hubspot-plugin": [
+    {
+      "name": "hsdedup",
+      "description": "Automated duplicate detection and resolution for HubSpot companies sharing Salesforce Account IDs with lift-and-shift execution",
+      "path": "hubspot-plugin/commands/hsdedup.md",
+      "type": "command",
+      "keywords": [
+        "hsdedup",
+        "hubspot",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "optimize-content",
+      "description": "Focused content optimization for single pages or new content planning. Analyzes content quality, AEO opportunities, readability, and generates optimization recommendations.",
+      "path": "hubspot-plugin/commands/optimize-content.md",
+      "type": "command",
+      "keywords": [
+        "content",
+        "optimize"
+      ]
+    },
+    {
+      "name": "hsenrich",
+      "description": "Quick company/contact enrichment for missing fields using domain-based derivation or web scraping",
+      "path": "hubspot-plugin/commands/hsenrich.md",
+      "type": "command",
+      "keywords": [
+        "hsenrich"
+      ]
+    },
+    {
+      "name": "hssfdc-validate",
+      "description": "Validate existing SFDC sync field mapping CSVs",
+      "path": "hubspot-plugin/commands/hssfdc-validate.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "data",
+        "hssfdc",
+        "salesforce",
+        "sync",
+        "validate"
+      ]
+    },
+    {
+      "name": "hssfdc-analyze",
+      "description": "Analyze Salesforce sync field mappings for current HubSpot portal",
+      "path": "hubspot-plugin/commands/hssfdc-analyze.md",
+      "type": "command",
+      "keywords": [
+        "analyze",
+        "audit",
+        "cross-platform",
+        "data",
+        "hssfdc",
+        "hubspot",
+        "salesforce",
+        "sync"
+      ]
+    },
+    {
+      "name": "reflect",
+      "description": "Analyze session for errors, feedback, and generate improvement playbook",
+      "path": "hubspot-plugin/commands/reflect.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "create",
+        "reflect"
+      ]
+    },
+    {
+      "name": "cms-create-page",
+      "description": "Create a new HubSpot CMS page (website or landing page) with validation",
+      "path": "hubspot-plugin/commands/cms-create-page.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "hubspot",
+        "page"
+      ]
+    },
+    {
+      "name": "newhs",
+      "description": "Create new HubSpot portal configuration and project folder structure",
+      "path": "hubspot-plugin/commands/newhs.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "hubspot",
+        "newhs"
+      ]
+    },
+    {
+      "name": "hsmerge",
+      "description": "Interactive merge strategy selector for HubSpot companies - detects SF sync constraints and recommends lift-and-shift vs merge API",
+      "path": "hubspot-plugin/commands/hsmerge.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "hsmerge",
+        "hubspot",
+        "sync"
+      ]
+    },
+    {
+      "name": "seo-broken-links",
+      "description": "Quick broken link scan for websites - detects 404s, redirect chains, orphan pages, and external link issues",
+      "path": "hubspot-plugin/commands/seo-broken-links.md",
+      "type": "command",
+      "keywords": [
+        "broken",
+        "links"
+      ]
+    },
+    {
+      "name": "hssfdc-session-check",
+      "description": "Test HubSpot session health and integrations page access",
+      "path": "hubspot-plugin/commands/hssfdc-session-check.md",
+      "type": "command",
+      "keywords": [
+        "check",
+        "hssfdc",
+        "hubspot",
+        "security",
+        "session"
+      ]
+    },
+    {
+      "name": "checkdependencies",
+      "description": "Check and install missing plugin dependencies (npm packages, CLI tools, system utilities)",
+      "path": "hubspot-plugin/commands/checkdependencies.md",
+      "type": "command",
+      "keywords": [
+        "checkdependencies"
+      ]
+    },
+    {
+      "name": "initialize",
+      "description": "Initialize project structure with folders, CLAUDE.md, and .gitignore based on installed plugins",
+      "path": "hubspot-plugin/commands/initialize.md",
+      "type": "command",
+      "keywords": [
+        "initialize"
+      ]
+    },
+    {
+      "name": "cms-publish-page",
+      "description": "Publish a HubSpot CMS page (immediate or scheduled) with validation",
+      "path": "hubspot-plugin/commands/cms-publish-page.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "hubspot",
+        "page",
+        "publish"
+      ]
+    },
+    {
+      "name": "hssfdc-scrape",
+      "description": "Scrape HubSpot Salesforce connector settings (not available via API)",
+      "path": "hubspot-plugin/commands/hssfdc-scrape.md",
+      "type": "command",
+      "keywords": [
+        "hssfdc",
+        "hubspot",
+        "salesforce",
+        "scrape"
+      ]
+    },
+    {
+      "name": "seo-audit",
+      "description": "Comprehensive SEO audit with optional competitor analysis, content optimization, GEO validation, and AI search optimization",
+      "path": "hubspot-plugin/commands/seo-audit.md",
+      "type": "command",
+      "keywords": [
+        "audit"
+      ]
+    },
+    {
+      "name": "cms-audit-pages",
+      "description": "Comprehensive audit of all CMS pages with SEO analysis, publishing status, and PDF report generation",
+      "path": "hubspot-plugin/commands/cms-audit-pages.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "cross-platform",
+        "pages",
+        "reporting"
+      ]
+    },
+    {
+      "name": "ai-search-optimize",
+      "description": "Complete AI search optimization workflow - generate schema, optimize content, and deploy to HubSpot",
+      "path": "hubspot-plugin/commands/ai-search-optimize.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "deploy",
+        "hubspot",
+        "optimize",
+        "search",
+        "workflow"
+      ]
+    },
+    {
+      "name": "topic-cluster",
+      "description": "Generate SEO-optimized topic clusters with pillar page and supporting cluster pages for comprehensive content strategy",
+      "path": "hubspot-plugin/commands/topic-cluster.md",
+      "type": "command",
+      "keywords": [
+        "cluster",
+        "create",
+        "topic"
+      ]
+    },
+    {
+      "name": "deploy-ai-seo",
+      "description": "Deploy pre-generated AI search optimizations to HubSpot with backup and rollback capability",
+      "path": "hubspot-plugin/commands/deploy-ai-seo.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "export",
+        "hubspot"
+      ]
+    },
+    {
+      "name": "analyze-competitor",
+      "description": "Deep-dive competitive analysis for a single competitor with actionable recommendations",
+      "path": "hubspot-plugin/commands/analyze-competitor.md",
+      "type": "command",
+      "keywords": [
+        "analyze",
+        "audit",
+        "competitor"
+      ]
+    },
+    {
+      "name": "hubspot-workflow-patterns",
+      "description": "HubSpot workflow API limitations, branching patterns, and workarounds. Use when creating or modifying HubSpot workflows, implementing conditional branching, troubleshooting workflow API errors, or automating complex workflow operations. Provides API vs UI decision matrix, LIST_BRANCH workarounds, and validation patterns.",
+      "path": "hubspot-plugin/skills/hubspot-workflow-patterns/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "hubspot",
+        "patterns",
+        "workflow"
+      ]
+    },
+    {
+      "name": "hubspot-governance-patterns",
+      "description": "HubSpot portal governance and compliance enforcement patterns. Use when establishing naming conventions, managing user permissions, enforcing data governance policies, implementing change management workflows, or ensuring regulatory compliance (GDPR, CCPA). Provides governance rules, permission matrices, and compliance checklists.",
+      "path": "hubspot-plugin/skills/hubspot-governance-patterns/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "data",
+        "governance",
+        "hubspot",
+        "patterns",
+        "security",
+        "update"
+      ]
+    },
+    {
+      "name": "hubspot-agent-standards",
+      "description": "Mandatory standards for all HubSpot agents. Use when performing ANY HubSpot API operation, bulk data operation, workflow automation, or contact/deal management. Provides batch operation patterns, rate limit handling, pagination, error handling, and safety protocols.",
+      "path": "hubspot-plugin/skills/hubspot-agent-standards/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "agent",
+        "data",
+        "hubspot",
+        "standards",
+        "workflow"
+      ]
+    },
+    {
+      "name": "hubspot-data-validation",
+      "description": "HubSpot Lists API validation patterns and common error prevention. Use when creating or updating lists, filtering contacts, validating property rules, handling list membership criteria, or troubleshooting Lists API errors. Provides error taxonomy, filter syntax reference, and proven solutions.",
+      "path": "hubspot-plugin/skills/hubspot-data-validation/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "data",
+        "hubspot",
+        "validation"
+      ]
+    },
+    {
+      "name": "hubspot-assessment-methodology",
+      "description": "HubSpot assessment and audit methodology with statistical sampling and scoring frameworks. Use when conducting portal audits, analyzing GTM architecture, evaluating automation health, generating executive reports, or benchmarking against industry standards. Provides audit frameworks, sampling methodology, and report templates.",
+      "path": "hubspot-plugin/skills/hubspot-assessment-methodology/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "assessment",
+        "audit",
+        "cross-platform",
+        "hubspot",
+        "methodology",
+        "reporting",
+        "workflow"
+      ]
+    },
+    {
+      "name": "hubspot-seo-framework",
+      "description": "HubSpot SEO optimization methodology and content scoring framework. Use when conducting keyword research, optimizing content for search, analyzing SERP performance, implementing technical SEO, building topic clusters, or optimizing for AI engines (AEO). Provides optimization rules, scoring criteria, and best practices.",
+      "path": "hubspot-plugin/skills/hubspot-seo-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "framework",
+        "hubspot"
+      ]
+    }
+  ],
+  "salesforce-plugin": [
+    {
+      "name": "diff-runbook",
+      "description": "Show changes in runbook since last version or between dates",
+      "path": "salesforce-plugin/commands/diff-runbook.md",
+      "type": "command",
+      "keywords": [
+        "diff",
+        "runbook"
+      ]
+    },
+    {
+      "name": "flow-logs",
+      "description": "Retrieve and parse Salesforce debug logs for Flow execution analysis",
+      "path": "salesforce-plugin/commands/flow-logs.md",
+      "type": "command",
+      "keywords": [
+        "flow",
+        "logs",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "territory-discovery",
+      "description": "Discover and analyze current territory configuration with health metrics and hierarchy visualization",
+      "path": "salesforce-plugin/commands/territory-discovery.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "discovery",
+        "reporting",
+        "salesforce",
+        "territory"
+      ]
+    },
+    {
+      "name": "debug-cleanup",
+      "description": "Clean up expired trace flags and old debug logs from a Salesforce org",
+      "path": "salesforce-plugin/commands/debug-cleanup.md",
+      "type": "command",
+      "keywords": [
+        "cleanup",
+        "debug",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "audit-reports",
+      "description": "Comprehensive 6-month usage audit for Salesforce reports and dashboards",
+      "path": "salesforce-plugin/commands/audit-reports.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "reports",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "context7-status",
+      "description": "Check Context7 MCP server status and agent integration",
+      "path": "salesforce-plugin/commands/context7-status.md",
+      "type": "command",
+      "keywords": [
+        "context7",
+        "status"
+      ]
+    },
+    {
+      "name": "flow-interactive-build",
+      "description": "Interactive wizard for segment-by-segment Flow building with complexity tracking and templates",
+      "path": "salesforce-plugin/commands/flow-interactive-build.md",
+      "type": "command",
+      "keywords": [
+        "build",
+        "create",
+        "flow",
+        "interactive",
+        "workflow"
+      ]
+    },
+    {
+      "name": "deploy-layout",
+      "description": "Deploy Salesforce layouts (FlexiPages, Layouts, CompactLayouts) with validation, backup, and profile assignments",
+      "path": "salesforce-plugin/commands/deploy-layout.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "export",
+        "layout",
+        "salesforce",
+        "security"
+      ]
+    },
+    {
+      "name": "debug-stop",
+      "description": "Stop debug log capture and cleanup trace flags on a Salesforce org",
+      "path": "salesforce-plugin/commands/debug-stop.md",
+      "type": "command",
+      "keywords": [
+        "debug",
+        "salesforce",
+        "stop"
+      ]
+    },
+    {
+      "name": "flow-segment-start",
+      "description": "Start a new segment in a Salesforce Flow with complexity tracking and template guidance",
+      "path": "salesforce-plugin/commands/flow-segment-start.md",
+      "type": "command",
+      "keywords": [
+        "flow",
+        "salesforce",
+        "segment",
+        "start",
+        "workflow"
+      ]
+    },
+    {
+      "name": "view-runbook",
+      "description": "View operational runbook for a Salesforce instance",
+      "path": "salesforce-plugin/commands/view-runbook.md",
+      "type": "command",
+      "keywords": [
+        "runbook",
+        "salesforce",
+        "view"
+      ]
+    },
+    {
+      "name": "dedup",
+      "description": "Unified interface for Salesforce Account deduplication operations with Type 1/2 error prevention",
+      "path": "salesforce-plugin/commands/dedup.md",
+      "type": "command",
+      "keywords": [
+        "dedup",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "sfpageaudit",
+      "description": "Analyze Lightning Record Page field assignments for any Salesforce object",
+      "path": "salesforce-plugin/commands/sfpageaudit.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "data",
+        "salesforce",
+        "sfpageaudit"
+      ]
+    },
+    {
+      "name": "flow-segment-status",
+      "description": "Get status of current or all segments in a Salesforce Flow with complexity tracking",
+      "path": "salesforce-plugin/commands/flow-segment-status.md",
+      "type": "command",
+      "keywords": [
+        "flow",
+        "salesforce",
+        "segment",
+        "status",
+        "workflow"
+      ]
+    },
+    {
+      "name": "reflect",
+      "description": "Analyze session for errors, feedback, and generate improvement playbook",
+      "path": "salesforce-plugin/commands/reflect.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "create",
+        "reflect"
+      ]
+    },
+    {
+      "name": "deploy-report-template",
+      "description": "Deploy a report from template with automated field resolution",
+      "path": "salesforce-plugin/commands/deploy-report-template.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "data",
+        "deploy",
+        "report",
+        "reporting",
+        "template"
+      ]
+    },
+    {
+      "name": "cpq-preflight",
+      "description": "Run comprehensive pre-flight validation before CPQ assessments",
+      "path": "salesforce-plugin/commands/cpq-preflight.md",
+      "type": "command",
+      "keywords": [
+        "cpq",
+        "preflight",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "flow-versions",
+      "description": "Show all versions of a Salesforce Flow with status, activation info, and version comparison",
+      "path": "salesforce-plugin/commands/flow-versions.md",
+      "type": "command",
+      "keywords": [
+        "flow",
+        "salesforce",
+        "versions",
+        "workflow"
+      ]
+    },
+    {
+      "name": "design-layout",
+      "description": "Generate optimized Salesforce Lightning Page using proven fieldInstance pattern and AI-guided persona templates",
+      "path": "salesforce-plugin/commands/design-layout.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "design",
+        "layout",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "playwright-test",
+      "description": "Test Playwright browser automation setup and session status for Salesforce",
+      "path": "salesforce-plugin/commands/playwright-test.md",
+      "type": "command",
+      "keywords": [
+        "playwright",
+        "salesforce",
+        "test",
+        "workflow"
+      ]
+    },
+    {
+      "name": "analyze-layout",
+      "description": "Analyze Lightning Pages and Classic Layouts for quality, performance, and UX optimization opportunities",
+      "path": "salesforce-plugin/commands/analyze-layout.md",
+      "type": "command",
+      "keywords": [
+        "analyze",
+        "audit",
+        "layout"
+      ]
+    },
+    {
+      "name": "territory-validator",
+      "description": "Pre-validate territory operations before execution to prevent errors",
+      "path": "salesforce-plugin/commands/territory-validator.md",
+      "type": "command",
+      "keywords": [
+        "salesforce",
+        "territory",
+        "validator"
+      ]
+    },
+    {
+      "name": "apex-logs",
+      "description": "View and retrieve Salesforce debug logs with filtering and analysis options",
+      "path": "salesforce-plugin/commands/apex-logs.md",
+      "type": "command",
+      "keywords": [
+        "apex",
+        "logs",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "diagnose-report-access",
+      "description": "Diagnose and fix Salesforce report access issues by analyzing report type permission requirements",
+      "path": "salesforce-plugin/commands/diagnose-report-access.md",
+      "type": "command",
+      "keywords": [
+        "access",
+        "cross-platform",
+        "diagnose",
+        "report",
+        "reporting",
+        "salesforce",
+        "security"
+      ]
+    },
+    {
+      "name": "q2c-audit",
+      "description": "Generate comprehensive Q2C/CPQ configuration audit with automated diagram generation",
+      "path": "salesforce-plugin/commands/q2c-audit.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "cpq",
+        "create",
+        "cross-platform",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "assess-permissions",
+      "description": "Launch interactive permission set assessment wizard to discover fragmentation and plan consolidation",
+      "path": "salesforce-plugin/commands/assess-permissions.md",
+      "type": "command",
+      "keywords": [
+        "assess",
+        "audit",
+        "permissions",
+        "security"
+      ]
+    },
+    {
+      "name": "checkdependencies",
+      "description": "Check and install missing plugin dependencies (npm packages, CLI tools, system utilities)",
+      "path": "salesforce-plugin/commands/checkdependencies.md",
+      "type": "command",
+      "keywords": [
+        "checkdependencies"
+      ]
+    },
+    {
+      "name": "validate-approval-framework",
+      "description": "Run pre-deployment validation for Salesforce custom approval frameworks",
+      "path": "salesforce-plugin/commands/validate-approval-framework.md",
+      "type": "command",
+      "keywords": [
+        "approval",
+        "framework",
+        "salesforce",
+        "validate"
+      ]
+    },
+    {
+      "name": "validate-lwc",
+      "description": "Run pre-deployment validation for Lightning Web Components (LWC)",
+      "path": "salesforce-plugin/commands/validate-lwc.md",
+      "type": "command",
+      "keywords": [
+        "validate"
+      ]
+    },
+    {
+      "name": "audit-automation",
+      "description": "Run comprehensive Salesforce automation audit with conflict detection and remediation planning",
+      "path": "salesforce-plugin/commands/audit-automation.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "automation",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "flow-preflight",
+      "description": "Run pre-flight validation checks before Flow execution or deployment",
+      "path": "salesforce-plugin/commands/flow-preflight.md",
+      "type": "command",
+      "keywords": [
+        "flow",
+        "preflight",
+        "workflow"
+      ]
+    },
+    {
+      "name": "flow-segment-list",
+      "description": "List all segments in a Salesforce Flow with summary statistics and recommendations",
+      "path": "salesforce-plugin/commands/flow-segment-list.md",
+      "type": "command",
+      "keywords": [
+        "flow",
+        "list",
+        "salesforce",
+        "segment",
+        "workflow"
+      ]
+    },
+    {
+      "name": "initialize",
+      "description": "Initialize project structure with folders, CLAUDE.md, and .gitignore based on installed plugins",
+      "path": "salesforce-plugin/commands/initialize.md",
+      "type": "command",
+      "keywords": [
+        "initialize"
+      ]
+    },
+    {
+      "name": "flow-diagnose",
+      "description": "Run comprehensive Flow diagnostic workflows combining preflight, execution, and coverage analysis",
+      "path": "salesforce-plugin/commands/flow-diagnose.md",
+      "type": "command",
+      "keywords": [
+        "diagnose",
+        "flow",
+        "workflow"
+      ]
+    },
+    {
+      "name": "flow-test",
+      "description": "Execute Salesforce Flow with test data and capture execution results",
+      "path": "salesforce-plugin/commands/flow-test.md",
+      "type": "command",
+      "keywords": [
+        "data",
+        "flow",
+        "salesforce",
+        "test",
+        "workflow"
+      ]
+    },
+    {
+      "name": "territory-assignment-wizard",
+      "description": "Interactive wizard for assigning users and accounts to territories",
+      "path": "salesforce-plugin/commands/territory-assignment-wizard.md",
+      "type": "command",
+      "keywords": [
+        "assignment",
+        "salesforce",
+        "territory",
+        "wizard"
+      ]
+    },
+    {
+      "name": "create-permission-set",
+      "description": "Interactive wizard to create permission sets from templates with complexity tracking and segmentation support",
+      "path": "salesforce-plugin/commands/create-permission-set.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "permission",
+        "security"
+      ]
+    },
+    {
+      "name": "create-trigger",
+      "description": "Interactive wizard to create Apex triggers from templates with test classes",
+      "path": "salesforce-plugin/commands/create-trigger.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "salesforce",
+        "trigger"
+      ]
+    },
+    {
+      "name": "asana-update",
+      "description": "Update or create Asana tasks based on work completed in linked project",
+      "path": "salesforce-plugin/commands/asana-update.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "create",
+        "update"
+      ]
+    },
+    {
+      "name": "asana-link",
+      "description": "Link Asana project(s) to current working directory",
+      "path": "salesforce-plugin/commands/asana-link.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "link"
+      ]
+    },
+    {
+      "name": "qa-review",
+      "description": "Review and analyze existing QA test reports without executing new tests",
+      "path": "salesforce-plugin/commands/qa-review.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "review"
+      ]
+    },
+    {
+      "name": "monitor-logs",
+      "description": "Real-time debug log monitoring for a Salesforce org with filtering and alerting",
+      "path": "salesforce-plugin/commands/monitor-logs.md",
+      "type": "command",
+      "keywords": [
+        "logs",
+        "monitor",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "generate-runbook",
+      "description": "Generate or update operational runbook from observations and reflections",
+      "path": "salesforce-plugin/commands/generate-runbook.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "generate",
+        "runbook",
+        "update"
+      ]
+    },
+    {
+      "name": "create-validation-rule",
+      "description": "Interactive wizard for creating validation rules using templates or custom formulas",
+      "path": "salesforce-plugin/commands/create-validation-rule.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "rule",
+        "validation"
+      ]
+    },
+    {
+      "name": "suggest-agent",
+      "description": "Analyze task and suggest the most appropriate specialized agent",
+      "path": "salesforce-plugin/commands/suggest-agent.md",
+      "type": "command",
+      "keywords": [
+        "agent",
+        "audit",
+        "suggest"
+      ]
+    },
+    {
+      "name": "qa-execute",
+      "description": "Execute fresh QA tests against the current Salesforce org state",
+      "path": "salesforce-plugin/commands/qa-execute.md",
+      "type": "command",
+      "keywords": [
+        "execute",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "debug-start",
+      "description": "Start debug log capture for a Salesforce org with configurable presets",
+      "path": "salesforce-plugin/commands/debug-start.md",
+      "type": "command",
+      "keywords": [
+        "debug",
+        "salesforce",
+        "start"
+      ]
+    },
+    {
+      "name": "routing-help",
+      "description": "Display routing system rules, complexity scoring, and agent selection guide",
+      "path": "salesforce-plugin/commands/routing-help.md",
+      "type": "command",
+      "keywords": [
+        "help",
+        "routing",
+        "territory"
+      ]
+    },
+    {
+      "name": "activate-flows",
+      "description": "Interactive guide for Salesforce flow activation with comprehensive troubleshooting",
+      "path": "salesforce-plugin/commands/activate-flows.md",
+      "type": "command",
+      "keywords": [
+        "activate",
+        "deploy",
+        "flows",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "flow-add",
+      "description": "Add an element to a Salesforce Flow with natural language and real-time complexity tracking",
+      "path": "salesforce-plugin/commands/flow-add.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "flow",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "flow-segment-complete",
+      "description": "Complete the current segment in a Salesforce Flow with comprehensive validation",
+      "path": "salesforce-plugin/commands/flow-segment-complete.md",
+      "type": "command",
+      "keywords": [
+        "complete",
+        "flow",
+        "salesforce",
+        "segment",
+        "workflow"
+      ]
+    },
+    {
+      "name": "territory-management",
+      "description": "Salesforce Territory2 management methodology. Use when managing territory models, hierarchies, user assignments, account assignments, or territory planning.",
+      "path": "salesforce-plugin/skills/territory-management/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "management",
+        "salesforce",
+        "territory"
+      ]
+    },
+    {
+      "name": "layout-cli-api-reference",
+      "description": "Salesforce layout CLI and API operations. Use when creating, retrieving, modifying, or deploying page layouts, Lightning Record Pages, and Compact Layouts via command line or Metadata API.",
+      "path": "salesforce-plugin/skills/layout-cli-api-reference/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "data",
+        "layout",
+        "reference",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "automation-building-patterns",
+      "description": "Salesforce automation feasibility analysis and building patterns. Use when creating flows, process builders, workflow rules, approval processes, or analyzing automation feasibility. Provides capability matrix, feasibility scoring, template library, and CLI commands for automation development.",
+      "path": "salesforce-plugin/skills/automation-building-patterns/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "automation",
+        "building",
+        "hubspot",
+        "patterns",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "salesforce-metadata-standards",
+      "description": "Salesforce metadata best practices and naming conventions. Use when creating fields, objects, flows, validation rules, or reviewing metadata quality. Provides standards for API names, formulas, and deployment validation.",
+      "path": "salesforce-plugin/skills/salesforce-metadata-standards/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "metadata",
+        "salesforce",
+        "standards"
+      ]
+    },
+    {
+      "name": "cpq-assessment",
+      "description": "Salesforce CPQ assessment methodology. Use when evaluating CPQ configuration, pricing rules, product bundles, discount schedules, or quote templates. Provides structured audit framework with data quality protocols and error taxonomy for keep/optimize/remove recommendations.",
+      "path": "salesforce-plugin/skills/cpq-assessment/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "assessment",
+        "audit",
+        "cpq",
+        "data",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "assignment-rules-framework",
+      "description": "**Version**: 1.0.0",
+      "path": "salesforce-plugin/skills/assignment-rules-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "assignment",
+        "framework",
+        "rules",
+        "territory"
+      ]
+    },
+    {
+      "name": "deployment-validation-framework",
+      "description": "Salesforce deployment validation and error recovery methodology. Use when deploying metadata, validating deployments, recovering from deployment errors, managing rollbacks, or planning deployment sequences. Provides comprehensive pre-deployment validation, error recovery patterns, and dependency ordering.",
+      "path": "salesforce-plugin/skills/deployment-validation-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "deployment",
+        "framework",
+        "salesforce",
+        "validation"
+      ]
+    },
+    {
+      "name": "security-governance-framework",
+      "description": "Salesforce security administration governance and common mistake prevention. Use when managing profiles, permission sets, roles, sharing rules, field-level security, or user provisioning. Provides governance rules, LLM error prevention, permission patterns, and audit requirements.",
+      "path": "salesforce-plugin/skills/security-governance-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "audit",
+        "data",
+        "framework",
+        "governance",
+        "salesforce",
+        "security"
+      ]
+    },
+    {
+      "name": "metadata-dependency-patterns",
+      "description": "Salesforce metadata dependency analysis and safe deletion patterns. Use when deleting fields, analyzing metadata dependencies, managing circular references, or planning deployment order. Provides dependency analysis, safe deletion workflows, and ordering rules.",
+      "path": "salesforce-plugin/skills/metadata-dependency-patterns/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "dependency",
+        "metadata",
+        "patterns",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "compact-layout-guide",
+      "description": "Salesforce Compact Layout design and management. Use when selecting fields for the highlights panel, creating visual indicators, or deploying compact layouts via CLI/API. Covers mobile optimization and record type assignments.",
+      "path": "salesforce-plugin/skills/compact-layout-guide/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "compact",
+        "data",
+        "guide",
+        "layout",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "flow-scanner-integration",
+      "description": "Flow Scanner Integration - Auto-fix, SARIF output, configuration-driven validation",
+      "path": "salesforce-plugin/skills/flow-scanner-integration/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "flow",
+        "integration",
+        "scanner",
+        "workflow"
+      ]
+    },
+    {
+      "name": "revops-assessment-framework",
+      "description": "Revenue Operations assessment methodology for Salesforce. Use when evaluating GTM architecture, pipeline health, sales processes, forecast accuracy, or performing RevOps audits. Provides statistical analysis frameworks, health scoring, industry benchmarks, and data-driven recommendations.",
+      "path": "salesforce-plugin/skills/revops-assessment-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "assessment",
+        "data",
+        "framework",
+        "revops",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "layout-planning-guide",
+      "description": "Persona-based page layout planning for Salesforce. Use when designing layouts for different user roles, deciding field placement, or planning section organization. Provides decision frameworks for Classic Layouts, Lightning Record Pages, and Compact Layouts.",
+      "path": "salesforce-plugin/skills/layout-planning-guide/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "data",
+        "guide",
+        "layout",
+        "planning",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "automation-audit-framework",
+      "description": "Salesforce automation audit methodology. Use when auditing Flows, Process Builders, Workflow Rules, Apex Triggers, or automation conflicts. Provides namespace detection, business process classification, cascade mapping, migration rationale, and risk-based phasing.",
+      "path": "salesforce-plugin/skills/automation-audit-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "audit",
+        "automation",
+        "framework",
+        "hubspot",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "performance-optimization-guide",
+      "description": "Salesforce performance optimization methodology and investigation tools. Use when optimizing slow queries, managing governor limits, monitoring system health, or improving overall org performance. Provides investigation patterns, query optimization techniques, bulk operation patterns, and performance benchmarking.",
+      "path": "salesforce-plugin/skills/performance-optimization-guide/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "guide",
+        "optimization",
+        "performance",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "report-type-reference",
+      "description": "Salesforce report type discovery, field mapping, and format compatibility. Use when discovering report types, mapping UI names to API tokens, selecting report formats, or creating custom report types. Provides report type catalog, field discovery patterns, and format selection guidance.",
+      "path": "salesforce-plugin/skills/report-type-reference/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "cross-platform",
+        "data",
+        "reference",
+        "report",
+        "reporting",
+        "salesforce",
+        "type"
+      ]
+    },
+    {
+      "name": "lightning-page-design-guide",
+      "description": "Lightning Record Page design and deployment guidance. Use when building Lightning pages in App Builder, selecting page templates, adding components, configuring dynamic visibility, or deploying FlexiPages via CLI/API.",
+      "path": "salesforce-plugin/skills/lightning-page-design-guide/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "data",
+        "design",
+        "guide",
+        "lightning",
+        "page"
+      ]
+    }
+  ],
+  "monday-plugin": [
+    {
+      "name": "monday-files",
+      "description": "Extract file attachments from Monday.com items, updates, or entire boards",
+      "path": "monday-plugin/commands/monday-files.md",
+      "type": "command",
+      "keywords": [
+        "export",
+        "files",
+        "monday"
+      ]
+    }
+  ],
+  "data-hygiene-plugin": [
+    {
+      "name": "dedup-companies",
+      "description": "Execute complete Company/Account deduplication workflow between HubSpot and Salesforce",
+      "path": "data-hygiene-plugin/commands/dedup-companies.md",
+      "type": "command",
+      "keywords": [
+        "companies",
+        "dedup",
+        "hubspot",
+        "salesforce",
+        "workflow"
+      ]
+    },
+    {
+      "name": "cross-platform-deduplication",
+      "description": "Cross-platform deduplication methodology for HubSpot and Salesforce with 6-phase workflow. Use when deduplicating Company/Account records, clustering duplicates, selecting canonical records, executing merges with data preservation, repairing associations, or implementing guardrails to prevent recurrence.",
+      "path": "data-hygiene-plugin/skills/cross-platform-deduplication/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "cross",
+        "data",
+        "deduplication",
+        "hubspot",
+        "platform",
+        "salesforce",
+        "workflow"
+      ]
+    }
+  ],
+  "opspal-core": [
+    {
+      "name": "viz",
+      "description": "Generate interactive web dashboards with charts, tables, maps, and pre-built templates",
+      "path": "opspal-core/commands/viz.md",
+      "type": "command",
+      "keywords": [
+        "create"
+      ]
+    },
+    {
+      "name": "solution-list",
+      "description": "List available solution templates with metadata and status information",
+      "path": "opspal-core/commands/solution-list.md",
+      "type": "command",
+      "keywords": [
+        "list",
+        "solution"
+      ]
+    },
+    {
+      "name": "solution-catalog",
+      "description": "Browse and search the shared solution catalog to discover available templates",
+      "path": "opspal-core/commands/solution-catalog.md",
+      "type": "command",
+      "keywords": [
+        "catalog",
+        "solution"
+      ]
+    },
+    {
+      "name": "live-wire-sync-test",
+      "description": "Test bidirectional sync between Salesforce and HubSpot using probe fields",
+      "path": "opspal-core/commands/live-wire-sync-test.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "hubspot",
+        "live",
+        "salesforce",
+        "sync",
+        "test",
+        "wire"
+      ]
+    },
+    {
+      "name": "data-quality-audit",
+      "description": "Run comprehensive data quality audit on CRM data",
+      "path": "opspal-core/commands/data-quality-audit.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "data",
+        "quality"
+      ]
+    },
+    {
+      "name": "solution-deploy",
+      "description": "Deploy a solution template to a target environment with parameter resolution",
+      "path": "opspal-core/commands/solution-deploy.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "solution"
+      ]
+    },
+    {
+      "name": "n8n-status",
+      "description": "Check n8n connection status and display workflow summary",
+      "path": "opspal-core/commands/n8n-status.md",
+      "type": "command",
+      "keywords": [
+        "hubspot",
+        "status",
+        "workflow"
+      ]
+    },
+    {
+      "name": "strategy-dashboard",
+      "description": "View ACE Framework strategy registry overview with performance metrics",
+      "path": "opspal-core/commands/strategy-dashboard.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "dashboard",
+        "reporting",
+        "strategy"
+      ]
+    },
+    {
+      "name": "schedule-list",
+      "description": "List all scheduled tasks with their status and schedule",
+      "path": "opspal-core/commands/schedule-list.md",
+      "type": "command",
+      "keywords": [
+        "list",
+        "schedule"
+      ]
+    },
+    {
+      "name": "review-queue",
+      "description": "Process pending data quality actions from the review queue",
+      "path": "opspal-core/commands/review-queue.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "data",
+        "queue",
+        "review",
+        "workflow"
+      ]
+    },
+    {
+      "name": "plugindr",
+      "description": "Run comprehensive plugin system diagnostics and health checks",
+      "path": "opspal-core/commands/plugindr.md",
+      "type": "command",
+      "keywords": [
+        "plugindr"
+      ]
+    },
+    {
+      "name": "solution-info",
+      "description": "View detailed information about a solution including components and parameters",
+      "path": "opspal-core/commands/solution-info.md",
+      "type": "command",
+      "keywords": [
+        "info",
+        "solution"
+      ]
+    },
+    {
+      "name": "uat-build",
+      "description": "Interactively build UAT test cases through guided questions",
+      "path": "opspal-core/commands/uat-build.md",
+      "type": "command",
+      "keywords": [
+        "build",
+        "create"
+      ]
+    },
+    {
+      "name": "asana-checkpoint",
+      "description": "Post intermediate progress checkpoint to Asana task",
+      "path": "opspal-core/commands/asana-checkpoint.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "checkpoint"
+      ]
+    },
+    {
+      "name": "schedule-remove",
+      "description": "Remove a scheduled task by its ID",
+      "path": "opspal-core/commands/schedule-remove.md",
+      "type": "command",
+      "keywords": [
+        "remove",
+        "schedule"
+      ]
+    },
+    {
+      "name": "project-connect",
+      "description": "Set up or connect to customer project across GitHub, Google Drive, and Asana",
+      "path": "opspal-core/commands/project-connect.md",
+      "type": "command",
+      "keywords": [
+        "connect",
+        "project"
+      ]
+    },
+    {
+      "name": "solution-validate",
+      "description": "Validate solution template structure, parameters, and dependencies without deploying",
+      "path": "opspal-core/commands/solution-validate.md",
+      "type": "command",
+      "keywords": [
+        "solution",
+        "validate"
+      ]
+    },
+    {
+      "name": "diagnose-sales-funnel",
+      "description": "Run comprehensive top-of-funnel and mid-funnel sales performance diagnostic with industry-benchmarked analysis and actionable remediation plans",
+      "path": "opspal-core/commands/diagnose-sales-funnel.md",
+      "type": "command",
+      "keywords": [
+        "diagnose",
+        "funnel",
+        "sales"
+      ]
+    },
+    {
+      "name": "solution-rollback",
+      "description": "Rollback a solution deployment to a previous checkpoint state",
+      "path": "opspal-core/commands/solution-rollback.md",
+      "type": "command",
+      "keywords": [
+        "rollback",
+        "solution"
+      ]
+    },
+    {
+      "name": "n8n-optimize",
+      "description": "Analyze n8n workflow performance and generate optimization recommendations",
+      "path": "opspal-core/commands/n8n-optimize.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "create",
+        "hubspot",
+        "optimize",
+        "workflow"
+      ]
+    },
+    {
+      "name": "task-graph",
+      "description": "Decompose complex request into a Task Graph (DAG) with explicit dependencies, parallel execution, and verification gates",
+      "path": "opspal-core/commands/task-graph.md",
+      "type": "command",
+      "keywords": [
+        "graph",
+        "task"
+      ]
+    },
+    {
+      "name": "solution-install",
+      "description": "Install a solution from the shared catalog to your local plugin installation",
+      "path": "opspal-core/commands/solution-install.md",
+      "type": "command",
+      "keywords": [
+        "install",
+        "solution"
+      ]
+    },
+    {
+      "name": "generate-pdf",
+      "description": "Convert markdown documents to professional PDFs with diagram rendering, multi-document collation, and table of contents",
+      "path": "opspal-core/commands/generate-pdf.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "cross-platform",
+        "generate"
+      ]
+    },
+    {
+      "name": "intake-generate-form",
+      "description": "Generate an HTML intake form for project specifications",
+      "path": "opspal-core/commands/intake-generate-form.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "form",
+        "generate",
+        "intake"
+      ]
+    },
+    {
+      "name": "data-health",
+      "description": "Generate quick data quality health scorecard",
+      "path": "opspal-core/commands/data-health.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "data",
+        "health"
+      ]
+    },
+    {
+      "name": "schedule-logs",
+      "description": "View execution logs and history for a scheduled task",
+      "path": "opspal-core/commands/schedule-logs.md",
+      "type": "command",
+      "keywords": [
+        "logs",
+        "schedule"
+      ]
+    },
+    {
+      "name": "n8n-lifecycle",
+      "description": "Manage n8n workflow lifecycle (activate, deactivate, status, execute)",
+      "path": "opspal-core/commands/n8n-lifecycle.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "hubspot",
+        "lifecycle",
+        "workflow"
+      ]
+    },
+    {
+      "name": "strategy-transfer",
+      "description": "ACE Framework strategy transfer operations - candidates, transfer, validate, rollback",
+      "path": "opspal-core/commands/strategy-transfer.md",
+      "type": "command",
+      "keywords": [
+        "strategy",
+        "transfer"
+      ]
+    },
+    {
+      "name": "schedule-add",
+      "description": "Add a new scheduled task (Claude prompt or script) to run on a cron schedule",
+      "path": "opspal-core/commands/schedule-add.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "schedule"
+      ]
+    },
+    {
+      "name": "generate-plugin-runbook",
+      "description": "Generate comprehensive runbook documentation for a Claude Code plugin",
+      "path": "opspal-core/commands/generate-plugin-runbook.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "generate",
+        "plugin",
+        "runbook"
+      ]
+    },
+    {
+      "name": "generate-report",
+      "description": "Generate a professional PDF report from markdown content using the centralized ReportService",
+      "path": "opspal-core/commands/generate-report.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "cross-platform",
+        "generate",
+        "report",
+        "reporting"
+      ]
+    },
+    {
+      "name": "asana-update",
+      "description": "Update or create Asana tasks based on HubSpot work completed in linked project",
+      "path": "opspal-core/commands/asana-update.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "create",
+        "hubspot",
+        "update"
+      ]
+    },
+    {
+      "name": "routing-health",
+      "description": "Check the health and status of the automatic agent routing system",
+      "path": "opspal-core/commands/routing-health.md",
+      "type": "command",
+      "keywords": [
+        "health",
+        "routing",
+        "territory"
+      ]
+    },
+    {
+      "name": "asana-link",
+      "description": "Link Asana project(s) to current HubSpot working directory",
+      "path": "opspal-core/commands/asana-link.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "hubspot",
+        "link"
+      ]
+    },
+    {
+      "name": "schedule-enable",
+      "description": "Enable a disabled scheduled task",
+      "path": "opspal-core/commands/schedule-enable.md",
+      "type": "command",
+      "keywords": [
+        "enable",
+        "schedule"
+      ]
+    },
+    {
+      "name": "route",
+      "description": "Analyze task and recommend the optimal agent with confidence score and routing explanation",
+      "path": "opspal-core/commands/route.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "route",
+        "territory"
+      ]
+    },
+    {
+      "name": "solution-publish",
+      "description": "Publish a local solution template to the shared catalog for distribution",
+      "path": "opspal-core/commands/solution-publish.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "publish",
+        "solution"
+      ]
+    },
+    {
+      "name": "ace-maintenance",
+      "description": "Run ACE Framework maintenance tasks (health check, confidence decay, cache cleanup, metrics)",
+      "path": "opspal-core/commands/ace-maintenance.md",
+      "type": "command",
+      "keywords": [
+        "maintenance",
+        "reporting"
+      ]
+    },
+    {
+      "name": "pluginupdate",
+      "description": "Run post-installation and post-update tasks for all installed plugins",
+      "path": "opspal-core/commands/pluginupdate.md",
+      "type": "command",
+      "keywords": [
+        "pluginupdate",
+        "update"
+      ]
+    },
+    {
+      "name": "generate-pptx",
+      "description": "Generate an offline PPTX deck from markdown with RevPal branding and embedded fonts",
+      "path": "opspal-core/commands/generate-pptx.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "generate",
+        "pptx"
+      ]
+    },
+    {
+      "name": "asana-read",
+      "description": "Read and parse assigned Asana tasks into agent-friendly format",
+      "path": "opspal-core/commands/asana-read.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "read"
+      ]
+    },
+    {
+      "name": "intake",
+      "description": "Start project intake workflow - gather specifications, validate, and generate runbook + Asana project",
+      "path": "opspal-core/commands/intake.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "hubspot",
+        "intake",
+        "workflow"
+      ]
+    },
+    {
+      "name": "sync-claudemd",
+      "description": "Update local CLAUDE.md after plugin updates with latest versions, agents, and commands",
+      "path": "opspal-core/commands/sync-claudemd.md",
+      "type": "command",
+      "keywords": [
+        "claudemd",
+        "cross-platform",
+        "sync",
+        "update"
+      ]
+    },
+    {
+      "name": "schedule-run",
+      "description": "Manually run a scheduled task immediately for testing",
+      "path": "opspal-core/commands/schedule-run.md",
+      "type": "command",
+      "keywords": [
+        "schedule"
+      ]
+    },
+    {
+      "name": "deduplicate",
+      "description": "Run deduplication workflow to identify and merge duplicate records",
+      "path": "opspal-core/commands/deduplicate.md",
+      "type": "command",
+      "keywords": [
+        "deduplicate",
+        "hubspot",
+        "workflow"
+      ]
+    },
+    {
+      "name": "complexity",
+      "description": "Assess task complexity and get decomposition recommendation without full orchestration",
+      "path": "opspal-core/commands/complexity.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "complexity"
+      ]
+    },
+    {
+      "name": "uat-run",
+      "description": "Execute UAT tests from CSV workbooks against Salesforce or HubSpot, with automated step execution, context management, and report generation",
+      "path": "opspal-core/commands/uat-run.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "data",
+        "hubspot",
+        "reporting",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "plan-from-spec",
+      "description": "Parse specification document and generate executable Asana project plan",
+      "path": "opspal-core/commands/plan-from-spec.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "from",
+        "plan",
+        "spec"
+      ]
+    },
+    {
+      "name": "schedule-disable",
+      "description": "Disable a scheduled task without removing it",
+      "path": "opspal-core/commands/schedule-disable.md",
+      "type": "command",
+      "keywords": [
+        "disable",
+        "schedule"
+      ]
+    },
+    {
+      "name": "enrich-data",
+      "description": "Trigger multi-source enrichment pipeline to fill data gaps",
+      "path": "opspal-core/commands/enrich-data.md",
+      "type": "command",
+      "keywords": [
+        "data",
+        "enrich",
+        "revops",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "routing-compliance",
+      "description": "Display routing compliance statistics and analyze agent utilization patterns",
+      "path": "opspal-core/commands/routing-compliance.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "compliance",
+        "routing",
+        "territory"
+      ]
+    },
+    {
+      "name": "diagram",
+      "description": "Generate Mermaid diagrams from natural language, metadata, or structured data. Supports flowcharts, ERDs, sequence diagrams, and state diagrams.",
+      "path": "opspal-core/commands/diagram.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "cross-platform",
+        "data",
+        "diagram"
+      ]
+    },
+    {
+      "name": "diagram-to-asana",
+      "description": "**Purpose:** Convert Mermaid diagrams to editable Lucidchart diagrams and automatically embed them in Asana tasks or projects.",
+      "path": "opspal-core/.claude-plugins/opspal-core/commands/diagram-to-asana.md",
+      "type": "command",
+      "keywords": [
+        "asana",
+        "cross-platform",
+        "diagram"
+      ]
+    },
+    {
+      "name": "analyze",
+      "description": "Perform a non-destructive cross-artifact consistency and quality analysis across spec.md, plan.md, and tasks.md after task generation.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/analyze.md",
+      "type": "command",
+      "keywords": [
+        "analyze",
+        "audit"
+      ]
+    },
+    {
+      "name": "code-review",
+      "description": "*Performs focused multi-agent code review that surfaces only critical, high-impact findings for solo developers using AI tools.*",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/code-review.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "code",
+        "review"
+      ]
+    },
+    {
+      "name": "refactor",
+      "description": "You are working on the VR Language Learning App project. The user has requested to refactor specific files tagged with @ symbols in their arguments: \"$ARGUMENTS\"",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/refactor.md",
+      "type": "command",
+      "keywords": [
+        "refactor"
+      ]
+    },
+    {
+      "name": "specify",
+      "description": "Create or update the feature specification from a natural language feature description.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/specify.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "specify",
+        "update"
+      ]
+    },
+    {
+      "name": "update-docs",
+      "description": "You have just completed work on the VR Language Learning App project. Analyze changes based on the provided context and automatically update relevant documentation.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/update-docs.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "docs",
+        "update"
+      ]
+    },
+    {
+      "name": "create-docs",
+      "description": "You are working on the VR Language Learning App project. The user has requested to create or regenerate documentation with the arguments: \"$ARGUMENTS\"",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/create-docs.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "docs"
+      ]
+    },
+    {
+      "name": "tasks",
+      "description": "Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/tasks.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "tasks"
+      ]
+    },
+    {
+      "name": "plan",
+      "description": "Execute the implementation planning workflow using the plan template to generate design artifacts.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/plan.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "hubspot",
+        "plan",
+        "workflow"
+      ]
+    },
+    {
+      "name": "gemini-consult",
+      "description": "*Engages in deep, iterative conversations with Gemini MCP for complex problem-solving.*",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/gemini-consult.md",
+      "type": "command",
+      "keywords": [
+        "consult",
+        "gemini"
+      ]
+    },
+    {
+      "name": "constitution",
+      "description": "Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/constitution.md",
+      "type": "command",
+      "keywords": [
+        "constitution",
+        "create",
+        "cross-platform",
+        "sync",
+        "update"
+      ]
+    },
+    {
+      "name": "clarify",
+      "description": "Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions and encoding answers back into the spec.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/clarify.md",
+      "type": "command",
+      "keywords": [
+        "clarify"
+      ]
+    },
+    {
+      "name": "handoff",
+      "description": "You are concluding work on the VR Language Learning App project and need to create a comprehensive handoff for the next AI session. This command intelligently analyzes your current session achievements and updates the handoff document with both auto-detected progress and user-provided context.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/handoff.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "handoff"
+      ]
+    },
+    {
+      "name": "README",
+      "description": "Orchestration templates that enable Claude Code to coordinate multi-agent workflows for different development tasks.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/README.md",
+      "type": "command",
+      "keywords": [
+        "readme"
+      ]
+    },
+    {
+      "name": "full-context",
+      "description": "You are working on the VR Language Learning App project. Before proceeding with the user's request \"$ARGUMENTS\", you need to intelligently gather relevant project context using an adaptive sub-agent strategy.",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/full-context.md",
+      "type": "command",
+      "keywords": [
+        "context",
+        "full"
+      ]
+    },
+    {
+      "name": "implement",
+      "description": "Execute the implementation plan by processing and executing all tasks defined in tasks.md",
+      "path": "opspal-core/node_modules/@zenuml/core/.claude/commands/implement.md",
+      "type": "command",
+      "keywords": [
+        "implement"
+      ]
+    },
+    {
+      "name": "implementation-planning-framework",
+      "description": "Implementation planning methodology with specification parsing, agent selection, and effort estimation. Use when creating implementation plans from requirements, parsing specification documents, selecting appropriate agents for tasks, estimating effort, or creating project structures in Asana. Provides planning templates, estimation formulas, and agent mapping patterns.",
+      "path": "opspal-core/skills/implementation-planning-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "framework",
+        "implementation",
+        "planning"
+      ]
+    },
+    {
+      "name": "mermaid-diagram-reference",
+      "description": "Mermaid diagram syntax reference and templates for technical documentation. Use when creating flowcharts, ERD diagrams, sequence diagrams, state diagrams, or architecture visualizations. Provides syntax reference, templates for common use cases, and validation patterns.",
+      "path": "opspal-core/skills/mermaid-diagram-reference/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "cross-platform",
+        "diagram",
+        "mermaid",
+        "reference"
+      ]
+    },
+    {
+      "name": "sales-funnel-diagnostic",
+      "description": "Sales funnel diagnostic methodology with industry benchmarks and root cause analysis. Use when analyzing pipeline conversion rates, diagnosing funnel bottlenecks, benchmarking against industry standards, conducting TOFU/MOFU/BOFU analysis, or generating funnel optimization recommendations. Provides diagnostic workflows, benchmark data, and remediation patterns.",
+      "path": "opspal-core/skills/sales-funnel-diagnostic/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "data",
+        "diagnostic",
+        "funnel",
+        "revops",
+        "sales",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "plugin-scaffolding",
+      "description": "Templates for creating Claude Code plugin components. Use when creating new agents, hooks, commands, or scripts. Provides standardized file structures and required fields for consistent plugin development.",
+      "path": "opspal-core/skills/plugin-scaffolding/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "plugin",
+        "scaffolding"
+      ]
+    },
+    {
+      "name": "asana-integration-playbook",
+      "description": "Asana project management integration patterns and best practices. Use when creating Asana tasks, posting updates, reading task context, tracking project progress, or formatting task updates. Provides 40+ Asana API patterns, error handling, update templates, and brevity standards.",
+      "path": "opspal-core/skills/asana-integration-playbook/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "asana",
+        "integration",
+        "playbook",
+        "update"
+      ]
+    },
+    {
+      "name": "file-catalog-patterns",
+      "description": "Standard patterns for file catalog generation across source platforms (Monday.com, Airtable, Notion, etc.) for CRM ingestion. Use when transforming file exports into normalized catalogs, matching downloaded assets to source records, preparing file inventories for Salesforce/HubSpot import, or building cross-platform file migration workflows. Provides schema standards, matching strategies, and integration patterns.",
+      "path": "opspal-core/skills/file-catalog-patterns/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "catalog",
+        "file",
+        "hubspot",
+        "import",
+        "monday",
+        "patterns",
+        "salesforce"
+      ]
+    }
+  ],
+  "developer-tools-plugin": [
+    {
+      "name": "plugin-deps",
+      "description": "Analyze plugin dependencies, detect conflicts, check version compatibility, and generate dependency graphs",
+      "path": "developer-tools-plugin/commands/plugin-deps.md",
+      "type": "command",
+      "keywords": [
+        "audit",
+        "create",
+        "deps",
+        "plugin"
+      ]
+    },
+    {
+      "name": "plugin-release",
+      "description": "Release Plugin Version with Slack Notification",
+      "path": "developer-tools-plugin/commands/plugin-release.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "plugin",
+        "release"
+      ]
+    },
+    {
+      "name": "plugin-publish",
+      "description": "Manage plugin versioning, git tagging, and marketplace publishing",
+      "path": "developer-tools-plugin/commands/plugin-publish.md",
+      "type": "command",
+      "keywords": [
+        "deploy",
+        "plugin",
+        "publish"
+      ]
+    },
+    {
+      "name": "plugin-validate",
+      "description": "Validate plugin structure, naming, manifests, and quality standards",
+      "path": "developer-tools-plugin/commands/plugin-validate.md",
+      "type": "command",
+      "keywords": [
+        "plugin",
+        "validate"
+      ]
+    },
+    {
+      "name": "agent-quality",
+      "description": "Analyze agent quality with scoring across prompt engineering, tools, and docs",
+      "path": "developer-tools-plugin/commands/agent-quality.md",
+      "type": "command",
+      "keywords": [
+        "agent",
+        "audit",
+        "quality"
+      ]
+    },
+    {
+      "name": "plugin-catalog",
+      "description": "Generate comprehensive marketplace catalog with plugin and agent directories",
+      "path": "developer-tools-plugin/commands/plugin-catalog.md",
+      "type": "command",
+      "keywords": [
+        "catalog",
+        "create",
+        "plugin"
+      ]
+    },
+    {
+      "name": "otel-grafana",
+      "description": "Set up and manage Grafana dashboard for Claude Code metrics",
+      "path": "developer-tools-plugin/commands/otel-grafana.md",
+      "type": "command",
+      "keywords": [
+        "cross-platform",
+        "grafana",
+        "otel",
+        "reporting"
+      ]
+    },
+    {
+      "name": "plugin-test",
+      "description": "Run comprehensive integration tests for plugin installation and functionality",
+      "path": "developer-tools-plugin/commands/plugin-test.md",
+      "type": "command",
+      "keywords": [
+        "plugin",
+        "test"
+      ]
+    },
+    {
+      "name": "otel-analyze",
+      "description": "Analyze OpenTelemetry metrics and generate insights",
+      "path": "developer-tools-plugin/commands/otel-analyze.md",
+      "type": "command",
+      "keywords": [
+        "analyze",
+        "audit",
+        "create",
+        "otel",
+        "reporting"
+      ]
+    },
+    {
+      "name": "plugin-generate-tests",
+      "description": "Generate comprehensive test suites for plugins with auto-detection of testable functions and Jest scaffolding",
+      "path": "developer-tools-plugin/commands/plugin-generate-tests.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "generate",
+        "plugin",
+        "tests"
+      ]
+    },
+    {
+      "name": "plugin-scaffold",
+      "description": "Create a new plugin with proper structure, manifests, and boilerplate code",
+      "path": "developer-tools-plugin/commands/plugin-scaffold.md",
+      "type": "command",
+      "keywords": [
+        "create",
+        "plugin",
+        "scaffold"
+      ]
+    }
+  ],
+  "ai-consult-plugin": [
+    {
+      "name": "gemini-link",
+      "description": "Set up and verify Gemini CLI connection for cross-model consultation",
+      "path": "ai-consult-plugin/commands/gemini-link.md",
+      "type": "command",
+      "keywords": [
+        "gemini",
+        "link"
+      ]
+    },
+    {
+      "name": "gemini-consult",
+      "description": "Get a second opinion from Gemini on code, architecture, or decisions",
+      "path": "ai-consult-plugin/commands/gemini-consult.md",
+      "type": "command",
+      "keywords": [
+        "consult",
+        "gemini"
+      ]
+    }
+  ],
+  "gtm-planning-plugin": [
+    {
+      "name": "quota-capacity-modeling",
+      "description": "Quota and capacity modeling methodology with Monte Carlo simulations and P10/P50/P90 scenarios. Use when building quota models, running scenario analysis, calculating pipeline coverage, performing sensitivity analysis, back-testing against historical data, or validating hiring plans.",
+      "path": "gtm-planning-plugin/skills/quota-capacity-modeling/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "capacity",
+        "data",
+        "modeling",
+        "quota",
+        "revops",
+        "salesforce"
+      ]
+    },
+    {
+      "name": "gtm-annual-planning-framework",
+      "description": "GTM annual planning orchestration methodology with 7-phase workflow and approval gates. Use when initiating annual planning cycles, coordinating planning workstreams, managing approval checkpoints, executing multi-agent planning workflows, or packaging final GTM deliverables.",
+      "path": "gtm-planning-plugin/skills/gtm-annual-planning-framework/SKILL.md",
+      "type": "skill",
+      "keywords": [
+        "annual",
+        "framework",
+        "hubspot",
+        "planning",
+        "workflow"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "hubspot": {
+    "portalId": "REPLACE_WITH_PORTAL_ID",
+    "accessToken": "${HUBSPOT_PRIVATE_APP_TOKEN}",
+    "note": "Get private app token from HubSpot Settings > Integrations > Private Apps"
+  },
+  "salesforce": {
+    "instanceUrl": "${SALESFORCE_INSTANCE_URL}",
+    "accessToken": "${SALESFORCE_ACCESS_TOKEN}",
+    "orgAlias": "production",
+    "note": "Run 'sf org display --target-org <alias>' to get these values"
+  },
+  "execution": {
+    "dryRun": true,
+    "note_dryRun": "Set to false to execute. Always test in sandbox first!",
+    "autoAssociateOffDuringCleanup": true,
+    "note_autoAssociate": "CRITICAL: Must be OFF in HubSpot during cleanup",
+    "batchSize": 100,
+    "maxWritePerMin": 60,
+    "idempotencyPrefix": "dedupe-{{TIMESTAMP}}",
+    "note_idempotency": "Automatically replaced with timestamp on execution"
+  },
+  "canonicalWeights": {
+    "hasSalesforceAccountId": 100,
+    "syncHealth": 50,
+    "note_syncHealth": "NEW: Sync recency + object source validation (production-validated)",
+    "numContacts": 40,
+    "numDeals": 25,
+    "ownerPresent": 10,
+    "createdateOldest": 5,
+    "note": "Higher weight = higher priority. Total possible: 230 points (enhanced from 180)"
+  },
+  "output": {
+    "outputDir": "./dedup-reports",
+    "alertSlackWebhook": "${SLACK_WEBHOOK_URL}",
+    "generateCSV": true,
+    "generateJSON": true,
+    "generateMarkdown": true
+  },
+  "guardrails": {
+    "createExternalSFDCAccountIdProperty": true,
+    "enforceUniqueConstraint": true,
+    "keepAutoAssociateOff": true,
+    "note": "Prevents duplicate recurrence after cleanup"
+  },
+  "validation": {
+    "spotCheckPercentage": 5,
+    "requireZeroDuplicatesAfter7Days": true,
+    "validateAssociationPreservation": true,
+    "failOnDataLoss": true
+  }
+}

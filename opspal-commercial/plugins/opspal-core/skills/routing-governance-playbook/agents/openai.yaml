@@ -1,0 +1,4 @@
+interface:
+  display_name: "Routing Governance Playbook"
+  short_description: "Help with Routing Governance Playbook tasks"
+  default_prompt: "Use $routing-governance-playbook to execute this workflow safely and produce the expected artifacts."

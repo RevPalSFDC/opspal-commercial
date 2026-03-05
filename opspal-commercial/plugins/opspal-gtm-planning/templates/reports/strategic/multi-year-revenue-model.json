@@ -1,0 +1,207 @@
+{
+  "template_id": "multi-year-revenue-model",
+  "report_name": "Multi-Year Revenue Model (3-5 yr)",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "Finance",
+  "primary_decisions_supported": [
+    "Long-term revenue target setting",
+    "Resource allocation for growth vs retention",
+    "Investor guidance and scenario planning"
+  ],
+  "executive_questions_answered": [
+    "What is our projected ARR in 3-5 years under current assumptions?",
+    "How do different growth scenarios (upside/base/downside) impact cash flow and valuation?",
+    "Are our targets realistic given historical performance?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Annual Recurring Revenue (ARR) projection",
+      "definition": "Forecasted recurring revenue for future years, using current ARR plus new bookings minus churn for each year",
+      "formula": "ARR_year_n = ARR_(n-1) + New_ARR - Churned_ARR + Expansion_ARR",
+      "grain": "year",
+      "required_dimensions": ["scenario (upside/base/downside)", "year"],
+      "known_variants": [
+        {
+          "variant_name": "Bookings-driven ARR",
+          "definition_delta": "Projects ARR from bookings inputs (new & expansion) with assumed churn rates",
+          "when_to_use": "High-level planning when detailed retention data is unavailable"
+        }
+      ],
+      "pitfalls": [
+        "Overly optimistic assumptions lead to unrealistic projections",
+        "Ignoring ramp time or market saturation skews results",
+        "Mixing ARR with one-time revenue confuses recurring forecast"
+      ]
+    },
+    {
+      "metric_name": "Growth Rate",
+      "definition": "Year-over-year percentage growth in ARR",
+      "formula": "Growth% = (ARR_this_year - ARR_last_year) / ARR_last_year * 100",
+      "grain": "year",
+      "required_dimensions": ["scenario"],
+      "known_variants": [],
+      "pitfalls": [
+        "High growth rates are harder to sustain on a larger base",
+        "Growth% alone doesn't show quality (e.g., churn could be high but masked by new sales)",
+        "Changing fiscal year or period alignment can distort simple YoY calculations"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Billing", "Data Warehouse"],
+    "required_entities": ["Opportunity (bookings)", "Account", "Subscription/Contract", "PlanAssumptions"],
+    "required_fields": [
+      {
+        "field_name": "ARR (current)",
+        "description": "Current recurring revenue per account",
+        "salesforce_field": "Account.ARR__c",
+        "hubspot_field": "company.annual_recurring_revenue"
+      },
+      {
+        "field_name": "Booking Amount",
+        "description": "Value of new contract",
+        "salesforce_field": "Opportunity.Amount",
+        "hubspot_field": "deal.amount"
+      },
+      {
+        "field_name": "Close Date",
+        "description": "Deal signed date",
+        "salesforce_field": "Opportunity.CloseDate",
+        "hubspot_field": "deal.closedate"
+      },
+      {
+        "field_name": "Contract Start Date",
+        "description": "When service begins",
+        "salesforce_field": "Contract.StartDate",
+        "hubspot_field": "deal.contract_start_date"
+      }
+    ],
+    "required_timestamps": ["Close Date", "Contract Start Date", "Renewal Date"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Opportunity",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Link bookings to accounts for base ARR"
+      },
+      {
+        "left_entity": "Account",
+        "right_entity": "Subscription",
+        "join_key": "AccountId",
+        "join_type": "left",
+        "notes": "Bring in current ARR and renewal data"
+      }
+    ],
+    "transformation_rules": [
+      "Annualize contract values for ARR consistency (e.g., multi-year deals to annual ARR)",
+      "Exclude non-recurring revenue from ARR calculations",
+      "Convert all amounts to a single currency (e.g., USD) for consolidation"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "ARR Continuity",
+        "logic": "Verify Starting ARR + Net ARR Added = Ending ARR each year",
+        "severity": "high"
+      },
+      {
+        "check_name": "Assumption Range",
+        "logic": "Flag if scenario assumptions (growth%, churn%) exceed realistic bounds",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "New_ARR = sum(New logo bookings) * (portion starting in period)",
+      "Expansion_ARR = sum(Upsell bookings in period)",
+      "Churned_ARR = Starting_ARR * churn_rate_assumption"
+    ],
+    "aggregation_rules": [
+      "Aggregate ARR projections by scenario and year",
+      "Sum bookings across all accounts for total New/Expansion ARR"
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": "Driver-based assumptions (growth %, churn %, expansion %) applied to current ARR to forecast future ARR for each scenario"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "ARR Projection by Scenario",
+        "purpose": "Show projected ARR growth across scenarios to compare outcomes",
+        "visual_type": "line",
+        "primary_metrics": ["Projected ARR"],
+        "filters": ["scenario selection"],
+        "drilldowns": ["by segment or product line"],
+        "annotations_or_thresholds": ["plan target ARR"]
+      },
+      {
+        "panel_title": "Growth Waterfall",
+        "purpose": "Illustrate year-over-year ARR growth and its components",
+        "visual_type": "waterfall",
+        "primary_metrics": ["Starting ARR", "New ARR", "Expansion ARR", "Churned ARR", "Ending ARR"],
+        "filters": ["year"],
+        "drilldowns": ["segment contribution"],
+        "annotations_or_thresholds": ["target growth %"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Compare upside vs base vs downside outcomes and their implications",
+      "Highlight which assumptions (e.g., churn, new sales) most impact the projections"
+    ],
+    "diagnostic_questions": [
+      "Which scenario assumptions are driving the largest differences in ARR outcomes?",
+      "How does the projected ARR in each scenario compare to our plan and what gaps emerge?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Adjust hiring or spend in line with base case trajectory",
+        "owner": "Finance",
+        "trigger_condition": "Base-case forecast deviates >10% from plan"
+      },
+      {
+        "action": "Prepare contingency plans for downside scenario",
+        "owner": "RevOps",
+        "trigger_condition": "Leading indicators (pipeline, churn) trend toward downside case"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Basic model with total ARR and single growth/churn assumptions for all",
+    "advanced_version": "Granular model by segment/product with interactive scenario toggles and real-time actuals vs plan comparison",
+    "common_client_customizations": [
+      "Extended horizon (e.g., 10-year projections)",
+      "Additional scenarios (e.g., Target case beyond base)"
+    ],
+    "privacy_and_access_notes": [
+      "Limit detailed forecast access to Finance/Execs; share high-level figures more broadly",
+      "If using customer-level data for projections, aggregate or anonymize when presenting externally"
+    ],
+    "success_criteria": [
+      "Projection accuracy: first forecast year ARR within ~5% of actual",
+      "Model becomes source of truth for board planning sessions"
+    ]
+  },
+  "benchmarks": {
+    "growth_rates_by_stage": {
+      "seed_to_series_a": "100-200%",
+      "series_a_to_b": "75-150%",
+      "series_b_to_c": "50-100%",
+      "growth_stage": "30-50%",
+      "mature": "15-25%"
+    }
+  },
+  "references": [
+    {
+      "title": "Revenue forecasting in finance: A comprehensive guide for SaaS",
+      "publisher": "Drivetrain",
+      "date": "2025",
+      "url": "https://www.drivetrain.ai/blog/revenue-forecasting-in-finance-guide"
+    }
+  ]
+}

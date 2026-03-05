@@ -1,0 +1,208 @@
+{
+  "template_id": "new-hire-ramp-model",
+  "report_name": "New Hire Ramp Model",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "SalesOps",
+  "primary_decisions_supported": [
+    "Hiring plan and timing",
+    "Quota setting for new vs tenured reps",
+    "Training and onboarding investment"
+  ],
+  "executive_questions_answered": [
+    "How long does it take for a new sales hire to reach full productivity (quota capacity)?",
+    "What performance should we expect from new reps in their first, second, third quarter?",
+    "Are our ramp times improving with better onboarding or is it taking longer than industry benchmark (~3-6 months ramp)?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Ramp Quota Attainment",
+      "definition": "Quota attainment percentage for new hires over their ramp period (e.g., by month since hire). Shows typical progression (e.g., 0% in month 1, 50% by month 3, 100% by month 6).",
+      "formula": "Attainment% Month N = (Average bookings by rep in Nth month / Standard full quota) * 100",
+      "grain": "month of tenure",
+      "required_dimensions": ["months since hire"],
+      "known_variants": [
+        {
+          "variant_name": "Cumulative Quota Attainment",
+          "definition_delta": "Measures total attainment over entire ramp period vs cumulative prorated quota",
+          "when_to_use": "Ensuring over ramp duration, rep delivered expected total (even if monthly distribution varies)"
+        }
+      ],
+      "pitfalls": [
+        "Standard ramp curves vary by role/segment (enterprise sales might take longer than SMB) – don't use one-size-fits-all if roles differ",
+        "Outliers (exceptional or poor performers) can skew averages – consider median ramp or exclude top/bottom 5%",
+        "Seasonality can affect ramp if many hires start during a slow season (making ramp look worse than ability)"
+      ]
+    },
+    {
+      "metric_name": "Full Productivity Time",
+      "definition": "The number of months it takes for a new hire to become fully productive (consistently hitting 100% quota) on average.",
+      "formula": "Measured as the tenure (in months) when rep reaches 100% quota attainment for the first time and sustains it",
+      "grain": "per rep (then averaged)",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Ramp Index",
+          "definition_delta": "Alternate measure: cumulative % of quota attained in first 3 or 6 months as a proxy for ramp speed",
+          "when_to_use": "Comparing cohorts of hires or evaluating effectiveness of training classes"
+        }
+      ],
+      "pitfalls": [
+        "Defining 'fully ramped' can vary – some consider ramp complete at X% quota (less than 100%) if that's the plan for first year",
+        "New hires who leave or are terminated early will distort averages if included (consider excluding those who didn't complete ramp period)",
+        "External factors (territory potential, market conditions) can influence ramp success beyond individual ability"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "HRIS"],
+    "required_entities": ["Sales Rep (employee records)", "Opportunity or bookings data"],
+    "required_fields": [
+      {
+        "field_name": "Hire Date",
+        "description": "When rep started",
+        "salesforce_field": "User.HireDate__c",
+        "type": "HRIS integration"
+      },
+      {
+        "field_name": "Months on job",
+        "description": "Tenure in months",
+        "type": "calculated"
+      },
+      {
+        "field_name": "Deals Closed or Bookings",
+        "description": "By month per rep",
+        "salesforce_field": "Opportunity.Amount WHERE OwnerId = :repId AND IsClosed = true",
+        "hubspot_field": "deal.amount WHERE owner = :repId AND dealstage = closedwon"
+      },
+      {
+        "field_name": "Quota",
+        "description": "Ramp quota if applicable each month",
+        "salesforce_field": "QuotaForecast or User.Quota__c",
+        "type": "configuration"
+      }
+    ],
+    "required_timestamps": ["Hire Date", "Deal Close Dates"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Sales Rep",
+        "right_entity": "Opportunity",
+        "join_key": "RepID",
+        "join_type": "left",
+        "notes": "Associate bookings with the rep who closed them and the rep's hire date"
+      }
+    ],
+    "transformation_rules": [
+      "Align bookings to months since each rep's hire (e.g., bookings in rep's month 1, month 2, etc.)",
+      "If quota is ramped (e.g., 50% of full quota in first quarter), use prorated quota for attainment calculation",
+      "Group hires by cohort (hire quarter) if needed to observe improvements over time"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Hire/Booking Data Sync",
+        "logic": "Ensure every booking has an associated rep hire date to compute tenure at booking time",
+        "severity": "high"
+      },
+      {
+        "check_name": "Quota Assignment Check",
+        "logic": "Verify each new rep has a defined quota plan (ramp schedule) in data",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Tenure_Month = floor(months_between(HireDate, BookingDate)) + 1",
+      "Attainment_per_month = BookingAmount / Quota_for_that_month"
+    ],
+    "aggregation_rules": [
+      "Average attainment by tenure month across all reps in cohort (e.g., average % of quota achieved in Month 3 by new hires)",
+      "Calculate proportion of reps hitting full quota by certain month (e.g., 50% of new hires achieve 100% quota by month 6)"
+    ],
+    "cohort_logic": "Group reps by hire date (e.g., hires per quarter) to see if ramp is improving for newer cohorts vs older",
+    "attribution_logic": null,
+    "forecast_logic": "Use ramp curve to project bookings capacity from planned hires (e.g., a rep hired in Q1 will contribute X in Q2, Y in Q3, ... based on model)"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "GTM Leaders",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "Average Ramp Attainment Curve",
+        "purpose": "Shows the average % quota achieved by new reps in each month of tenure (ramp curve)",
+        "visual_type": "line",
+        "primary_metrics": ["Quota Attainment %"],
+        "filters": ["filter by role or region if different ramp profiles"],
+        "drilldowns": ["individual rep performance"],
+        "annotations_or_thresholds": ["Benchmark ramp (e.g., 50% by 3 mo, 100% by 6 mo)"]
+      },
+      {
+        "panel_title": "Ramp Cohort Comparison",
+        "purpose": "Compare ramp speed for different hire cohorts (e.g., hires in Q1 vs Q2) to see if training improvements are working",
+        "visual_type": "line",
+        "primary_metrics": ["Attainment % Month 3", "Attainment % Month 6", "Attainment % Month 9"],
+        "filters": ["cohort selection"],
+        "drilldowns": [],
+        "annotations_or_thresholds": []
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "State the typical time it takes for a rep to reach full productivity and how this compares to assumptions or industry benchmarks",
+      "Note if newer training or hiring profiles have improved the ramp speed in recent cohorts"
+    ],
+    "diagnostic_questions": [
+      "Are there particular stages or months where new reps struggle (e.g., stagnation around month 3)?",
+      "How does ramp time differ between segments (SMB reps ramp faster than enterprise)?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Refine onboarding program content around Month 2-3 topics",
+        "owner": "Enablement",
+        "trigger_condition": "Ramp curve shows a dip or plateau around that time for many reps"
+      },
+      {
+        "action": "Adjust hiring timeline relative to plan start",
+        "owner": "Finance",
+        "trigger_condition": "Ramp model indicates reps need 6 months to full quota, ensure hires are made at least 6 months before revenue peak expectations"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Basic ramp % table (e.g., average attainment in first quarter, second quarter for recent hires) possibly maintained manually",
+    "advanced_version": "Automated visualization that updates as new reps onboard, with machine learning predictions for ramp-outliers and alerts if someone is off-pace",
+    "common_client_customizations": [
+      "Include SDRs or other roles with different ramp expectations on separate curves",
+      "Incorporate attrition – e.g., what % of new hires quit or are let go before fully ramping"
+    ],
+    "privacy_and_access_notes": [
+      "Individual rep performance data should be accessible only to managers and leadership; others see aggregated trend",
+      "Be sensitive when sharing ramp comparisons – frame as learning/training insights, not naming poor performers publicly"
+    ],
+    "success_criteria": [
+      "Hiring plans align with ramp expectations (no unrealistic revenue from brand new reps in forecasts)",
+      "Onboarding changes (if any) correlate with improved ramp metrics in subsequent cohorts"
+    ]
+  },
+  "benchmarks": {
+    "ramp_time_by_role": {
+      "ae_enterprise": { "median": 6, "range": [4, 9] },
+      "ae_mid_market": { "median": 4.5, "range": [3, 6] },
+      "ae_smb": { "median": 3, "range": [2, 4] },
+      "sdr": { "median": 3, "range": [2, 4] }
+    },
+    "ramp_curve_milestones": {
+      "month_1": "0-10%",
+      "month_3": "40-60%",
+      "month_6": "80-100%"
+    }
+  },
+  "references": [
+    {
+      "title": "How to Determine the Right Sales Ramp up Time for Reps",
+      "publisher": "Everstage Blog",
+      "date": "June 13, 2025",
+      "url": "https://www.everstage.com/blog/how-to-determine-the-right-sales-ramp-up-time-for-reps"
+    }
+  ]
+}

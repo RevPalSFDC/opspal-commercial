@@ -1,0 +1,125 @@
+{
+  "templateMetadata": {
+    "templateName": "Renewal Pipeline by Stage",
+    "templateVersion": "1.1",
+    "description": "Renewal opportunities by pipeline stage",
+    "audience": "CS Leadership, RevOps",
+    "useCase": "Renewal pipeline visibility"
+  },
+  "reportMetadata": {
+    "name": "Renewal Pipeline by Stage",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "Type",
+        "operator": "equals",
+        "value": "Renewal"
+      },
+      {
+        "column": "IsClosed",
+        "operator": "equals",
+        "value": "false"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "StageName",
+        "sortOrder": "Asc"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Amount",
+        "column": "Amount",
+        "aggregateType": "Sum"
+      },
+      {
+        "name": "Count",
+        "aggregateType": "RowCount"
+      }
+    ],
+    "chart": {
+      "chartType": "Funnel",
+      "groupingColumn": "StageName",
+      "aggregateColumn": "Amount"
+    }
+  },
+  "dashboardUsage": {
+    "componentType": "Funnel Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

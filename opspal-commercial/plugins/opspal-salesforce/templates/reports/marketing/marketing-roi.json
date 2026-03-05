@@ -1,0 +1,228 @@
+{
+  "templateMetadata": {
+    "templateName": "Marketing ROI Report",
+    "templateVersion": "1.1",
+    "description": "Calculate marketing return on investment: revenue generated vs marketing spend",
+    "audience": "CMO, CFO, VP Marketing, Revenue Operations",
+    "useCase": "Budget justification, channel optimization, executive reporting",
+    "customizationPoints": [
+      "Revenue field (Amount, ARR__c, or customer-specific field)",
+      "Date range for revenue recognition",
+      "Marketing source attribution rules",
+      "Spend data integration method"
+    ],
+    "prerequisites": [
+      "Campaign.ActualCost populated (or external spend data)",
+      "Opportunity.Amount for revenue",
+      "Campaign influence tracking (recommended)",
+      "IsWon filter for closed deals"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Marketing ROI - {Period}",
+    "description": "Marketing revenue vs spend by channel",
+    "reportType": "CampaignWithInfluencedOpportunities",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "Opportunity.CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true,
+        "customizationNote": "Match to revenue recognition period"
+      },
+      {
+        "column": "Opportunity.WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false,
+        "customizationNote": "Only include closed won revenue"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "Campaign.Type",
+        "sortOrder": "Desc",
+        "dateGranularity": null,
+        "customizable": true,
+        "customizationNote": "Can also group by Campaign.Name or custom field"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "Campaign.Name",
+      "Campaign.ActualCost",
+      "Opportunity.OPPORTUNITY_NAME",
+      "Opportunity.AMOUNT",
+      "Opportunity.CLOSE_DATE",
+      "CampaignInfluence.Influence"
+    ],
+    "aggregates": [
+      {
+        "name": "Total_Revenue",
+        "field": "Opportunity.AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total influenced revenue"
+      },
+      {
+        "name": "Total_Spend",
+        "field": "Campaign.ActualCost",
+        "aggregateType": "Sum",
+        "description": "Total marketing spend"
+      },
+      {
+        "name": "Deal_Count",
+        "aggregateType": "RowCount",
+        "description": "Number of influenced deals"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "ROI_Percentage",
+        "description": "Return on Investment percentage",
+        "formula": "(Total_Revenue - Total_Spend) / Total_Spend * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "Standard ROI formula"
+      },
+      {
+        "name": "Cost_Per_Dollar_Revenue",
+        "description": "Marketing cost to generate $1 of revenue",
+        "formula": "Total_Spend / Total_Revenue",
+        "dataType": "currency",
+        "decimalPlaces": 2
+      },
+      {
+        "name": "Average_Deal_Size",
+        "description": "Average revenue per influenced deal",
+        "formula": "Total_Revenue / Deal_Count",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "GroupedBar",
+      "groupingColumn": "Campaign.Type",
+      "aggregateColumn": "Total_Revenue",
+      "secondaryAggregateColumn": "Total_Spend",
+      "legendPosition": "Right",
+      "showChartValues": true,
+      "chartColorPalette": "brand"
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "roi": {
+      "formula": "(Revenue - Spend) / Spend * 100",
+      "interpretation": "500% ROI = $5 revenue per $1 spent",
+      "benchmark": {
+        "excellent": ">800%",
+        "good": "500-800%",
+        "acceptable": "300-500%",
+        "warning": "<300%"
+      }
+    },
+    "cac": {
+      "formula": "Total Marketing Spend / New Customers",
+      "benchmark": {
+        "saas_smb": "<$500",
+        "saas_mid_market": "<$2,000",
+        "saas_enterprise": "<$10,000"
+      }
+    }
+  },
+  "deploymentInstructions": {
+    "steps": [
+      "1. Verify Campaign.ActualCost is being tracked",
+      "2. Confirm Campaign Influence is enabled (Setup > Campaign Influence)",
+      "3. Review attribution model (first-touch, last-touch, or weighted)",
+      "4. Replace {Period} with actual period",
+      "5. Deploy to Marketing Reports folder",
+      "6. Validate by comparing to finance revenue data"
+    ],
+    "expectedResults": {
+      "healthyMetrics": {
+        "ROI": ">500%",
+        "Cost per revenue dollar": "<$0.20",
+        "Average deal size": "Varies by segment"
+      }
+    }
+  },
+  "relatedTemplates": [
+    "marketing-sourced-pipeline.json",
+    "campaign-roi.json"
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+name: Plugin Version Enforcement
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**'
+      - 'scripts/lib/verify-plugin-version-bumps.js'
+      - 'package.json'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**'
+      - 'scripts/lib/verify-plugin-version-bumps.js'
+      - 'package.json'
+  workflow_dispatch:
+
+jobs:
+  enforce-version-bumps:
+    name: Enforce Plugin Version Bumps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run version bump gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ] && [ -n "$BASE_REF" ]; then
+            git fetch origin "$BASE_REF" --depth=1
+            node scripts/lib/verify-plugin-version-bumps.js --base "origin/$BASE_REF" --head "HEAD"
+          elif [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            node scripts/lib/verify-plugin-version-bumps.js --base "$BEFORE_SHA" --head "HEAD"
+          else
+            node scripts/lib/verify-plugin-version-bumps.js --base "HEAD~1" --head "HEAD"
+          fi

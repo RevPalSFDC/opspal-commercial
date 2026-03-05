@@ -1,0 +1,163 @@
+{
+  "version": "1.0.0",
+  "canonical_layout": "packages",
+  "core": {
+    "name": "opspal-core",
+    "path": ".claude-plugins/opspal-core-plugin/packages/opspal-core",
+    "description": "Authoritative shared core for orchestration, governance, routing, lifecycle, and intelligence.",
+    "asset_roots": [
+      "agents",
+      "scripts",
+      "commands",
+      "hooks",
+      "runbooks",
+      "docs",
+      "templates"
+    ],
+    "compat_roots": [
+      "cross-platform-plugin",
+      "developer-tools-plugin",
+      "shared-docs"
+    ],
+    "dependency_rules": [
+      "core must not depend on domains"
+    ]
+  },
+  "domains": [
+    {
+      "name": "salesforce",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/salesforce",
+      "source_plugin": "salesforce-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    },
+    {
+      "name": "hubspot",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/hubspot",
+      "source_plugin": "hubspot-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    },
+    {
+      "name": "marketo",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/marketo",
+      "source_plugin": "marketo-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    },
+    {
+      "name": "monday",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/monday",
+      "source_plugin": "monday-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    },
+    {
+      "name": "gtm-planning",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/gtm-planning",
+      "source_plugin": "gtm-planning-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    },
+    {
+      "name": "data-hygiene",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/data-hygiene",
+      "source_plugin": "data-hygiene-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    },
+    {
+      "name": "ai-consult",
+      "path": ".claude-plugins/opspal-core-plugin/packages/domains/ai-consult",
+      "source_plugin": "ai-consult-plugin",
+      "asset_roots": [
+        "agents",
+        "scripts",
+        "commands",
+        "hooks",
+        "runbooks",
+        "docs",
+        "templates",
+        "config"
+      ],
+      "depends_on": [
+        "opspal-core"
+      ]
+    }
+  ],
+  "dependency_rules": [
+    "domain -> core only",
+    "core must not depend on domains",
+    "domains must not depend on each other"
+  ],
+  "legacy_layout": {
+    "status": "compatibility-only",
+    "path_prefix": ".claude-plugins/opspal-core-plugin/<type>/<plugin>"
+  }
+}

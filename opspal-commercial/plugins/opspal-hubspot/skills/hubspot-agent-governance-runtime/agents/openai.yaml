@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Agent Governance Runtime"
+  short_description: "Help with Hubspot Agent Governance Runtime tasks"
+  default_prompt: "Use $hubspot-agent-governance-runtime to execute this workflow safely and produce the expected artifacts."

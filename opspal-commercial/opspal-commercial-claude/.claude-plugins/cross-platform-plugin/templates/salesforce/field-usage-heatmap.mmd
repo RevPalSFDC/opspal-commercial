@@ -1,0 +1,67 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+erDiagram
+    %% Field Usage Analysis by Object
+    %% Auto-generated from reports usage audit
+
+    Account {
+        string Name "Used in 124 reports"
+        string Industry "Used in 89 reports"
+        string Type "Used in 67 reports"
+        currency Annual_Revenue "Used in 45 reports"
+        string Phone "Used in 34 reports"
+        string Website "Used in 23 reports"
+        string Description "Used in 12 reports"
+        string Custom_Field_1__c "Used in 0 reports"
+        string Custom_Field_2__c "Used in 0 reports"
+    }
+
+    Contact {
+        string FirstName "Used in 98 reports"
+        string LastName "Used in 98 reports"
+        string Email "Used in 87 reports"
+        string Phone "Used in 56 reports"
+        string Title "Used in 34 reports"
+        boolean Email_Opt_Out "Used in 23 reports"
+        string Mobile_Phone "Used in 12 reports"
+        string Deprecated_Field__c "Used in 0 reports"
+    }
+
+    Opportunity {
+        string Name "Used in 156 reports"
+        string StageName "Used in 145 reports"
+        currency Amount "Used in 134 reports"
+        date CloseDate "Used in 123 reports"
+        string Type "Used in 89 reports"
+        percent Probability "Used in 67 reports"
+        string Lead_Source "Used in 45 reports"
+        string Old_Field__c "Used in 0 reports"
+    }
+
+    Lead {
+        string FirstName "Used in 67 reports"
+        string LastName "Used in 67 reports"
+        string Email "Used in 56 reports"
+        string Company "Used in 45 reports"
+        string Status "Used in 43 reports"
+        string Source "Used in 34 reports"
+        string Rating "Used in 23 reports"
+        string Unused_Field__c "Used in 0 reports"
+    }
+
+    %% Relationships
+    Account ||--o{ Contact : "AccountId"
+    Account ||--o{ Opportunity : "AccountId"
+    Contact ||--o{ Opportunity : "ContactId (via OpportunityContactRole)"
+    Lead }o--|| Account : "ConvertedAccountId"
+
+    %% Field Usage Color Key:
+    %% 🟢 Highly Used (>50 reports): Green highlight
+    %% 🟡 Moderately Used (10-50 reports): Yellow highlight
+    %% 🔴 Unused (0 reports): Red highlight - Cleanup candidates
+
+    %% Cleanup Recommendation:
+    %% - Account: Remove Custom_Field_1__c, Custom_Field_2__c (0 usage)
+    %% - Contact: Remove Deprecated_Field__c (0 usage)
+    %% - Opportunity: Remove Old_Field__c (0 usage)
+    %% - Lead: Remove Unused_Field__c (0 usage)
+    %% Total potential savings: 6 unused fields

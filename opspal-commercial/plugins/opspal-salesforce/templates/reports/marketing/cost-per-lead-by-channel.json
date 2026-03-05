@@ -1,0 +1,121 @@
+{
+  "templateMetadata": {
+    "templateName": "Cost Per Lead by Channel",
+    "templateVersion": "1.1",
+    "description": "Cost per lead by marketing channel",
+    "audience": "CMO, Marketing Ops",
+    "useCase": "Channel efficiency, budget allocation"
+  },
+  "reportMetadata": {
+    "name": "Cost Per Lead by Channel",
+    "reportType": "Campaign",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "groupingsDown": [
+      {
+        "field": "Campaign_Channel__c",
+        "sortOrder": "Desc",
+        "sortColumn": "NumberOfLeads"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Total_Cost",
+        "column": "ActualCost",
+        "aggregateType": "Sum"
+      },
+      {
+        "name": "Total_Leads",
+        "column": "NumberOfLeads",
+        "aggregateType": "Sum"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "CPL",
+        "formula": "ActualCost:SUM / NumberOfLeads:SUM",
+        "description": "Cost per lead"
+      }
+    ],
+    "chart": {
+      "chartType": "Bar",
+      "groupingColumn": "Campaign_Channel__c",
+      "aggregateColumn": "CPL"
+    }
+  },
+  "dashboardUsage": {
+    "componentType": "Bar Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

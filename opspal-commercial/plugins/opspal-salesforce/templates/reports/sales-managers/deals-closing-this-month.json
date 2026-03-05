@@ -1,0 +1,149 @@
+{
+  "templateMetadata": {
+    "templateName": "Deals Closing This Month",
+    "templateVersion": "1.1",
+    "description": "Team's opportunities expected to close this month",
+    "audience": "Sales Managers",
+    "useCase": "Monthly forecast, deal prioritization, commit tracking",
+    "customizationPoints": [
+      "Team scope",
+      "Stage filter (late stage only)",
+      "Minimum deal size"
+    ],
+    "prerequisites": [
+      "Opportunity object with CloseDate"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Deals Closing This Month",
+    "description": "Open opportunities closing this month",
+    "reportType": "Opportunity",
+    "reportFormat": "TABULAR",
+    "scope": "team",
+    "showDetails": true,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.ManagerId.Team",
+        "customizable": true
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_MONTH",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "OPPORTUNITY_OWNER",
+      "STAGE_NAME",
+      "AMOUNT",
+      "CLOSE_DATE",
+      "PROBABILITY",
+      "Opportunity.Next_Step__c"
+    ],
+    "sortBy": [
+      {
+        "column": "CLOSE_DATE",
+        "order": "Ascending"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total closing this month"
+      }
+    ],
+    "chart": null
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-pipeline"
+    ],
+    "componentType": "Table",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

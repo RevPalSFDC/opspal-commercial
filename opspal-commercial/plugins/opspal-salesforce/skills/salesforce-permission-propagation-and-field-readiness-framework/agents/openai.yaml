@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Permission Propagation and Field Readiness Framework"
+  short_description: "Salesforce Permission Propagation and Field Readiness Fra helper"
+  default_prompt: "Use $salesforce-permission-propagation-and-field-readiness-framework to execute this workflow safely and produce the expected artifacts."

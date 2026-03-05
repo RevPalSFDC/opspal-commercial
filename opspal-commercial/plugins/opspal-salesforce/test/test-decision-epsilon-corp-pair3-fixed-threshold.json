@@ -1,0 +1,88 @@
+{
+  "org": "epsilon-corp2021-revpal",
+  "timestamp": "2025-10-16T20:10:25.228Z",
+  "stats": {
+    "total": 1,
+    "approved": 0,
+    "review": 1,
+    "blocked": 0,
+    "type1Prevented": 0,
+    "type2Prevented": 0
+  },
+  "decisions": [
+    {
+      "pair_id": "001VG00000aGMpRYAW_001VG00000cBSxXYAW",
+      "recordA": {
+        "id": "001VG00000aGMpRYAW",
+        "name": "Sunshine Pet Care Center"
+      },
+      "recordB": {
+        "id": "001VG00000cBSxXYAW",
+        "name": "Premier Pet Care Center"
+      },
+      "decision": "REVIEW",
+      "recommended_survivor": "001VG00000aGMpRYAW",
+      "recommended_deleted": "001VG00000cBSxXYAW",
+      "scores": {
+        "recordA": {
+          "score": 449,
+          "breakdown": {
+            "relationshipScore": 200,
+            "contacts": 2,
+            "opportunities": 0,
+            "statusScore": 0,
+            "revenueScore": 0,
+            "integrationIdScore": 150,
+            "websiteScore": 50,
+            "nameBlankPenalty": 0,
+            "completeness": "60%",
+            "completenessScore": 30,
+            "recentActivity": 19.3,
+            "daysSinceModified": 57
+          }
+        },
+        "recordB": {
+          "score": 301,
+          "breakdown": {
+            "relationshipScore": 100,
+            "contacts": 1,
+            "opportunities": 0,
+            "statusScore": 0,
+            "revenueScore": 0,
+            "integrationIdScore": 150,
+            "websiteScore": 0,
+            "nameBlankPenalty": 0,
+            "completeness": "60%",
+            "completenessScore": 30,
+            "recentActivity": 21.4,
+            "daysSinceModified": 36
+          }
+        }
+      },
+      "guardrails_triggered": [
+        {
+          "type": "DATA_ASYMMETRY",
+          "severity": "REVIEW",
+          "reason": "Insufficient validation data to confirm sameness (60% vs 60% completeness, 71% name similarity)",
+          "details": {
+            "completenessA": 60,
+            "completenessB": 60,
+            "asymmetryRatio": 0,
+            "nameSimilarity": 71,
+            "hasDomainMatch": false,
+            "hasPhoneMatch": null,
+            "recommendation": "Manual review required - insufficient data to validate sameness"
+          }
+        }
+      ],
+      "conflicts": {
+        "hasConflicts": false,
+        "conflictCount": 0,
+        "conflicts": [],
+        "severity": "NONE",
+        "recommendation": "No conflicts detected - safe to merge"
+      },
+      "recovery_procedure": null
+    }
+  ]
+}

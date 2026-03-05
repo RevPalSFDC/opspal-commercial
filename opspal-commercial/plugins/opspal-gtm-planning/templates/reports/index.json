@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-01-13",
+  "templates": [
+    {
+      "template_id": "multi-year-revenue-model",
+      "report_name": "Multi-Year Revenue Model (3-5 yr)",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "Finance",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-revenue-modeler"
+    },
+    {
+      "template_id": "scenario-planning-model",
+      "report_name": "Upside / Base / Downside Scenario Model",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "Finance",
+      "refresh_cadence": "Ad Hoc",
+      "primary_agent": "gtm-revenue-modeler"
+    },
+    {
+      "template_id": "arr-waterfall",
+      "report_name": "ARR Waterfall (Starting → New → Expansion → Churn → End)",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "RevOps",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-revenue-modeler"
+    },
+    {
+      "template_id": "net-dollar-retention",
+      "report_name": "Net Dollar Retention (NDR) / Net Revenue Retention (NRR)",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "CSOps",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-retention-analyst"
+    },
+    {
+      "template_id": "bookings-to-revenue-conversion",
+      "report_name": "Bookings & Revenue Conversion Model",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "Finance",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-retention-analyst"
+    },
+    {
+      "template_id": "revenue-mix-new-expansion-renewal",
+      "report_name": "Revenue Mix (New vs Expansion vs Renewals)",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "RevOps",
+      "refresh_cadence": "Annual",
+      "primary_agent": "gtm-retention-analyst"
+    },
+    {
+      "template_id": "revenue-by-segment",
+      "report_name": "Revenue by Segment / Industry / Geo",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "Finance",
+      "refresh_cadence": "Annual",
+      "primary_agent": "gtm-market-intelligence"
+    },
+    {
+      "template_id": "tam-sam-som",
+      "report_name": "TAM / SAM / SOM by Segment",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "Finance",
+      "refresh_cadence": "Annual",
+      "primary_agent": "gtm-market-intelligence"
+    },
+    {
+      "template_id": "icp-performance-win-profile",
+      "report_name": "ICP Performance & Win Profile",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "MarketingOps",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-market-intelligence"
+    },
+    {
+      "template_id": "product-adoption-by-segment",
+      "report_name": "Product Adoption & Expansion by Segment",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "ProductOps",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-market-intelligence"
+    },
+    {
+      "template_id": "new-hire-ramp-model",
+      "report_name": "New Hire Ramp Model",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "SalesOps",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-quota-capacity"
+    },
+    {
+      "template_id": "sales-capacity-model",
+      "report_name": "Sales Capacity Model",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "SalesOps",
+      "refresh_cadence": "Quarterly",
+      "primary_agent": "gtm-quota-capacity"
+    },
+    {
+      "template_id": "customer-support-capacity-model",
+      "report_name": "CS/Support Capacity Model",
+      "category": "Strategic/Annual Planning",
+      "owner_function_default": "CSOps",
+      "refresh_cadence": "Annual",
+      "primary_agent": "gtm-quota-capacity"
+    }
+  ],
+  "categories": [
+    {
+      "name": "Revenue Modeling",
+      "templates": ["multi-year-revenue-model", "scenario-planning-model", "arr-waterfall"]
+    },
+    {
+      "name": "Retention & Growth",
+      "templates": ["net-dollar-retention", "bookings-to-revenue-conversion", "revenue-mix-new-expansion-renewal"]
+    },
+    {
+      "name": "Market Intelligence",
+      "templates": ["revenue-by-segment", "tam-sam-som", "icp-performance-win-profile", "product-adoption-by-segment"]
+    },
+    {
+      "name": "Capacity Planning",
+      "templates": ["new-hire-ramp-model", "sales-capacity-model", "customer-support-capacity-model"]
+    }
+  ]
+}

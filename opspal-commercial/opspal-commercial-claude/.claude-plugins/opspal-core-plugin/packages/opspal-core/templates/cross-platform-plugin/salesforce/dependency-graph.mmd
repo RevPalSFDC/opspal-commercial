@@ -1,0 +1,46 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+erDiagram
+    %% Object Dependency Graph
+    %% Auto-generated from sfdc-dependency-analyzer
+
+    Account ||--o{ Contact : "Lookup"
+    Account ||--o{ Opportunity : "Lookup"
+    Account ||--o{ Case : "Lookup"
+
+    Contact ||--o{ Opportunity : "Lookup (ContactRole)"
+    Contact ||--o{ Case : "Lookup"
+
+    Opportunity ||--|{ OpportunityLineItem : "MasterDetail"
+    Opportunity ||--o{ Quote : "Lookup"
+
+    Product2 ||--o{ OpportunityLineItem : "Lookup"
+    Product2 ||--o{ PricebookEntry : "MasterDetail"
+
+    Quote ||--|{ QuoteLineItem : "MasterDetail"
+
+    Account {
+        string Name
+        string Industry
+        number AnnualRevenue
+        number AutomationCount "15"
+        number RiskScore "65"
+    }
+
+    Contact {
+        string FirstName
+        string LastName
+        string Email
+        number AutomationCount "8"
+        number RiskScore "45"
+    }
+
+    Opportunity {
+        string Name
+        string StageName
+        currency Amount
+        number AutomationCount "22"
+        number RiskScore "78"
+    }
+
+    %% Circular dependencies highlighted with comments
+    %% Account -> Opportunity -> Account (via field references)

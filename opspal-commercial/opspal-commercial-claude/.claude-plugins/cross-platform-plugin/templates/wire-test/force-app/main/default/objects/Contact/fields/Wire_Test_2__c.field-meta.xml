@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Wire_Test_2__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Probe field for HS→SF sync testing. Toggled in HubSpot, polled in Salesforce to measure propagation lag.</description>
+    <externalId>false</externalId>
+    <label>Wire Test 2</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

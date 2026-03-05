@@ -1,0 +1,177 @@
+{
+    "templateMetadata": {
+        "templateName": "Summary Report Base Template",
+        "templateVersion": "1.0",
+        "description": "Base scaffold for SUMMARY reports with groupings and aggregates.",
+        "audience": "Salesforce Admins, RevOps Analysts",
+        "useCase": "Accelerate summary report creation with consistent structure.",
+        "customizationPoints": [
+            "Report type and folder",
+            "Primary grouping and aggregates",
+            "Date filters and scope"
+        ],
+        "prerequisites": [
+            "Valid report type access",
+            "Folder permissions",
+            "Field names aligned to org schema"
+        ]
+    },
+    "_meta": {
+        "template": "summary-base",
+        "version": "1.0.0",
+        "description": "Base template for SUMMARY format reports",
+        "documentation": "../../docs/runbooks/report-api-development/03-summary-reports.md",
+        "rowLimit": 2000,
+        "rowLimitWarning": "CRITICAL: 2,000-row HARD LIMIT via Analytics REST API - silent truncation!",
+        "supportsGroupings": true,
+        "maxGroupingsDown": 3,
+        "supportsAggregates": true,
+        "useCase": "Grouped reports with subtotals, summary statistics, management reports",
+        "variables": [
+            "{{REPORT_NAME}}",
+            "{{REPORT_TYPE}}",
+            "{{FOLDER_ID}}",
+            "{{SCOPE}}",
+            "{{PRIMARY_GROUPING}}",
+            "{{DATE_FILTER_COLUMN}}",
+            "{{DATE_FILTER_DURATION}}",
+            "{{AGGREGATE_FIELD}}"
+        ]
+    },
+    "reportMetadata": {
+        "name": "{{REPORT_NAME}}",
+        "description": "SUMMARY format report - grouped with subtotals",
+        "reportFormat": "SUMMARY",
+        "reportType": {
+            "type": "{{REPORT_TYPE}}"
+        },
+        "folderId": "{{FOLDER_ID}}",
+        "scope": "{{SCOPE}}",
+        "detailColumns": [
+            "ACCOUNT_NAME",
+            "OPPORTUNITY_NAME",
+            "AMOUNT",
+            "STAGE_NAME",
+            "CLOSE_DATE"
+        ],
+        "groupingsDown": [
+            {
+                "name": "{{PRIMARY_GROUPING}}",
+                "sortOrder": "Asc",
+                "dateGranularity": null
+            }
+        ],
+        "aggregates": [
+            {
+                "name": "s!AMOUNT",
+                "calculatedFormula": "SUM!AMOUNT"
+            },
+            {
+                "name": "a!AMOUNT",
+                "calculatedFormula": "AVG!AMOUNT"
+            },
+            {
+                "name": "RowCount",
+                "calculatedFormula": "RowCount"
+            }
+        ],
+        "reportFilters": [],
+        "standardDateFilter": {
+            "column": "{{DATE_FILTER_COLUMN}}",
+            "durationValue": "{{DATE_FILTER_DURATION}}",
+            "startDate": null,
+            "endDate": null
+        },
+        "showGrandTotal": true,
+        "showSubtotals": true
+    },
+    "_examples": {
+        "pipeline_by_stage": {
+            "name": "Pipeline by Stage",
+            "reportType": "Opportunity",
+            "groupingsDown": [
+                {"name": "STAGE_NAME", "sortOrder": "Asc"}
+            ],
+            "aggregates": [
+                {"name": "s!AMOUNT", "calculatedFormula": "SUM!AMOUNT"},
+                {"name": "RowCount", "calculatedFormula": "RowCount"}
+            ],
+            "filters": [
+                {"column": "STAGE_NAME", "operator": "notEqual", "value": "Closed Won"},
+                {"column": "STAGE_NAME", "operator": "notEqual", "value": "Closed Lost"}
+            ]
+        },
+        "revenue_by_industry": {
+            "name": "Revenue by Industry",
+            "reportType": "AccountOpportunity",
+            "groupingsDown": [
+                {"name": "INDUSTRY", "sortOrder": "Asc"},
+                {"name": "ACCOUNT_NAME", "sortOrder": "Asc"}
+            ],
+            "aggregates": [
+                {"name": "s!AMOUNT", "calculatedFormula": "SUM!AMOUNT"},
+                {"name": "a!AMOUNT", "calculatedFormula": "AVG!AMOUNT"}
+            ]
+        },
+        "monthly_closed_won": {
+            "name": "Closed Won by Month",
+            "reportType": "Opportunity",
+            "groupingsDown": [
+                {"name": "CLOSE_DATE", "sortOrder": "Desc", "dateGranularity": "MONTH"}
+            ],
+            "aggregates": [
+                {"name": "s!AMOUNT", "calculatedFormula": "SUM!AMOUNT"},
+                {"name": "RowCount", "calculatedFormula": "RowCount"}
+            ],
+            "filters": [
+                {"column": "STAGE_NAME", "operator": "equals", "value": "Closed Won"}
+            ]
+        }
+    },
+    "_criticalWarnings": [
+        "🔴 CRITICAL: 2,000-row HARD LIMIT via REST API - data is SILENTLY TRUNCATED!",
+        "🔴 NO ERROR IS RETURNED when truncation occurs!",
+        "🔴 ALWAYS estimate row count before using SUMMARY format!",
+        "🔴 If report returns exactly 2,000 rows, data is likely truncated!",
+        "🔴 Use TABULAR format (50K limit) if you need complete data!"
+    ],
+    "_rowCountMitigation": {
+        "detection": "If result.factMap rows === 2000 AND format === SUMMARY, assume truncation",
+        "prevention": [
+            "Add restrictive date filters (LAST_N_DAYS:30)",
+            "Add status filters (Active/Open only)",
+            "Reduce grouping cardinality",
+            "Split into multiple reports by region/product/etc."
+        ],
+        "alternatives": [
+            "Switch to TABULAR format (50K limit)",
+            "Use Metadata API for full data",
+            "Use async report execution"
+        ]
+    },
+    "_bestPractices": [
+        "ALWAYS add date filter to control row count",
+        "Monitor for exactly 2,000 rows - indicates truncation",
+        "Use at most 3 groupings (Salesforce limit)",
+        "Include RowCount aggregate to verify data completeness",
+        "Test with restrictive filters first, then widen",
+        "Consider MATRIX for cross-tabulation instead of multi-level groupings"
+    ],
+    "_dateGranularityOptions": [
+        "DAY",
+        "WEEK",
+        "MONTH",
+        "QUARTER",
+        "YEAR",
+        "FISCAL_QUARTER",
+        "FISCAL_YEAR"
+    ],
+    "_aggregateTypes": [
+        "SUM - Sum of numeric field values",
+        "AVG - Average of numeric field values",
+        "MIN - Minimum value",
+        "MAX - Maximum value",
+        "UNIQUE - Count of unique values (use for IDs)",
+        "RowCount - Count of all rows"
+    ]
+}

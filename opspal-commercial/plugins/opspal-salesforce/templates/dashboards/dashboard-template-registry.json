@@ -1,0 +1,380 @@
+{
+  "schemaVersion": "1.1.0",
+  "description": "Central registry for B2B Dashboard Templates supporting Sales, Marketing, and Customer Success functions with variation support",
+  "lastUpdated": "2026-01-25",
+  "variationSupport": {
+    "enabled": true,
+    "schemaVersion": "1.0",
+    "defaultVariation": "standard",
+    "variationResolutionOrder": ["explicit", "org-profile", "auto-detect"],
+    "availableDimensions": {
+      "complexity": ["simple", "standard", "advanced"],
+      "quotingSystem": ["native", "cpq", "hybrid"],
+      "gtmModel": ["field-sales", "inside-sales", "plg", "hybrid"],
+      "companySize": ["enterprise", "mid-market", "smb"]
+    }
+  },
+  "variationProfiles": {
+    "cpq-enterprise": {
+      "description": "Enterprise CPQ orgs with complex quoting",
+      "quotingSystem": "cpq",
+      "companySize": "enterprise",
+      "complexity": "advanced",
+      "applicableTemplates": ["revenue-performance", "pipeline-health", "quota-attainment"]
+    },
+    "smb-starter": {
+      "description": "Small business with native quoting",
+      "quotingSystem": "native",
+      "companySize": "smb",
+      "complexity": "simple",
+      "applicableTemplates": ["my-pipeline", "my-quota", "my-activities"]
+    },
+    "plg-standard": {
+      "description": "Product-led growth motion",
+      "gtmModel": "plg",
+      "complexity": "standard",
+      "applicableTemplates": ["revenue-performance", "lead-generation", "campaign-performance"]
+    },
+    "cpq-midmarket": {
+      "description": "Mid-market with Salesforce CPQ",
+      "quotingSystem": "cpq",
+      "companySize": "mid-market",
+      "complexity": "standard",
+      "applicableTemplates": ["revenue-performance", "pipeline-health", "team-pipeline"]
+    }
+  },
+  "statistics": {
+    "totalTemplates": 18,
+    "byFunction": {
+      "sales": 9,
+      "marketing": 4,
+      "customer-success": 5
+    },
+    "byLevel": {
+      "executive": 8,
+      "manager": 3,
+      "individual": 7
+    },
+    "byVariation": {
+      "simple": 18,
+      "standard": 18,
+      "enterprise": 10,
+      "cpq": 7,
+      "smb": 6,
+      "plg": 5,
+      "abm": 3,
+      "high-touch": 2,
+      "outbound": 2,
+      "demand-gen": 1,
+      "inbound": 1,
+      "bdr": 1,
+      "ae": 1,
+      "high-volume": 1
+    },
+    "variationCoverage": {
+      "totalVariations": 14,
+      "averageVariationsPerTemplate": 4.2
+    }
+  },
+  "categories": {
+    "sales": {
+      "description": "Sales performance, pipeline, and team productivity dashboards",
+      "executive": [
+        {
+          "templateId": "revenue-performance",
+          "templateName": "Executive Revenue Performance Dashboard",
+          "path": "executive/revenue-performance.json",
+          "description": "High-level revenue metrics for C-level executives: targets, trends, and key drivers",
+          "personas": ["cro", "cfo", "vp_sales"],
+          "componentCount": 6,
+          "keyMetrics": ["revenue", "pipeline", "bookings", "win_rate"],
+          "tags": ["revenue", "executive", "quarterly-review", "board"]
+        },
+        {
+          "templateId": "pipeline-health",
+          "templateName": "Pipeline Health Dashboard",
+          "path": "executive/pipeline-health.json",
+          "description": "Pipeline coverage, velocity, and stage progression for sales leadership",
+          "personas": ["cro", "vp_sales", "revops"],
+          "componentCount": 6,
+          "keyMetrics": ["pipeline", "stage_conversion", "sales_cycle_length"],
+          "tags": ["pipeline", "forecast", "velocity", "coverage"]
+        },
+        {
+          "templateId": "team-productivity",
+          "templateName": "Team Productivity Dashboard",
+          "path": "executive/team-productivity.json",
+          "description": "Team activity, quota attainment, and performance comparison",
+          "personas": ["vp_sales", "sales_manager"],
+          "componentCount": 6,
+          "keyMetrics": ["quota_attainment", "activity", "win_rate"],
+          "tags": ["productivity", "activity", "quota", "team"]
+        }
+      ],
+      "manager": [
+        {
+          "templateId": "team-pipeline",
+          "templateName": "Team Pipeline Dashboard",
+          "path": "manager/team-pipeline.json",
+          "description": "Manager view of team pipeline, deals at risk, and upcoming closes",
+          "personas": ["sales_manager"],
+          "componentCount": 5,
+          "keyMetrics": ["pipeline", "forecast", "activity"],
+          "tags": ["pipeline", "team", "manager", "forecast"]
+        },
+        {
+          "templateId": "quota-attainment",
+          "templateName": "Quota Attainment Dashboard",
+          "path": "manager/quota-attainment.json",
+          "description": "Track rep and team quota progress with pacing indicators",
+          "personas": ["sales_manager", "vp_sales"],
+          "componentCount": 5,
+          "keyMetrics": ["quota_attainment", "bookings", "pipeline"],
+          "tags": ["quota", "attainment", "pacing", "rep"]
+        },
+        {
+          "templateId": "activity-metrics",
+          "templateName": "Activity Metrics Dashboard",
+          "path": "manager/activity-metrics.json",
+          "description": "Team activity tracking including calls, emails, and meetings",
+          "personas": ["sales_manager"],
+          "componentCount": 5,
+          "keyMetrics": ["activity", "calls", "meetings"],
+          "tags": ["activity", "calls", "emails", "meetings", "productivity"]
+        }
+      ],
+      "individual": [
+        {
+          "templateId": "my-pipeline",
+          "templateName": "My Pipeline Dashboard",
+          "path": "individual/my-pipeline.json",
+          "description": "Individual rep view of personal pipeline and opportunities",
+          "personas": ["rep"],
+          "componentCount": 5,
+          "keyMetrics": ["pipeline", "next_steps", "close_dates"],
+          "tags": ["my-pipeline", "rep", "opportunities", "personal"]
+        },
+        {
+          "templateId": "my-quota",
+          "templateName": "My Quota Dashboard",
+          "path": "individual/my-quota.json",
+          "description": "Personal quota attainment and pacing to target",
+          "personas": ["rep"],
+          "componentCount": 4,
+          "keyMetrics": ["quota_attainment", "bookings"],
+          "tags": ["quota", "attainment", "personal", "target"]
+        },
+        {
+          "templateId": "my-activities",
+          "templateName": "My Activities Dashboard",
+          "path": "individual/my-activities.json",
+          "description": "Personal activity tracking and productivity metrics",
+          "personas": ["rep"],
+          "componentCount": 5,
+          "keyMetrics": ["activity", "tasks", "meetings"],
+          "tags": ["activity", "personal", "tasks", "productivity"]
+        }
+      ]
+    },
+    "marketing": {
+      "description": "Marketing performance, demand generation, and campaign dashboards",
+      "executive": [
+        {
+          "templateId": "marketing-performance",
+          "templateName": "Marketing Performance Dashboard",
+          "path": "executive/marketing-performance.json",
+          "description": "CMO-level view of marketing-sourced pipeline, MROI, CAC, and funnel velocity",
+          "personas": ["cmo"],
+          "componentCount": 7,
+          "keyMetrics": ["pipeline_sourced", "mql_volume", "campaign_roi", "funnel_velocity"],
+          "tags": ["marketing", "mroi", "cac", "pipeline-sourced", "executive"]
+        },
+        {
+          "templateId": "demand-gen-funnel",
+          "templateName": "Demand Generation Funnel Dashboard",
+          "path": "executive/demand-gen-funnel.json",
+          "description": "Full marketing funnel visualization with conversion rates and cost per lead",
+          "personas": ["cmo", "demand_gen", "marketing_ops"],
+          "componentCount": 6,
+          "keyMetrics": ["mql_volume", "mql_to_sql_conversion", "cost_per_lead", "pipeline_sourced"],
+          "tags": ["funnel", "demand-gen", "mql", "sql", "conversion"]
+        }
+      ],
+      "individual": [
+        {
+          "templateId": "campaign-performance",
+          "templateName": "Campaign Performance Dashboard",
+          "path": "individual/campaign-performance.json",
+          "description": "Campaign manager view of campaign ROI, lead generation, and engagement",
+          "personas": ["marketing_ops"],
+          "componentCount": 5,
+          "keyMetrics": ["campaign_roi", "mql_volume", "cost_per_lead"],
+          "tags": ["campaign", "roi", "leads", "engagement"]
+        },
+        {
+          "templateId": "lead-generation",
+          "templateName": "Lead Generation Dashboard",
+          "path": "individual/lead-generation.json",
+          "description": "SDR/BDR view of new leads, MQLs, and follow-up queue",
+          "personas": ["rep"],
+          "componentCount": 6,
+          "keyMetrics": ["mql_volume", "lead_source", "follow_up_queue"],
+          "tags": ["leads", "sdr", "bdr", "mql", "follow-up"]
+        }
+      ]
+    },
+    "customer-success": {
+      "description": "Customer retention, health, and renewal dashboards",
+      "executive": [
+        {
+          "templateId": "cs-overview",
+          "templateName": "Customer Success Overview Dashboard",
+          "path": "executive/cs-overview.json",
+          "description": "CCO-level view of NRR, churn, expansion revenue, and time-to-value",
+          "personas": ["cs_director"],
+          "componentCount": 6,
+          "keyMetrics": ["net_retention", "gross_churn", "expansion_revenue", "health_score"],
+          "tags": ["nrr", "churn", "retention", "expansion", "executive"]
+        },
+        {
+          "templateId": "renewal-pipeline",
+          "templateName": "Renewal Pipeline Dashboard",
+          "path": "executive/renewal-pipeline.json",
+          "description": "Renewal pipeline visibility with at-risk tracking and forecast",
+          "personas": ["cs_director"],
+          "componentCount": 5,
+          "keyMetrics": ["renewal_rate", "renewal_pipeline", "at_risk_renewals"],
+          "tags": ["renewals", "pipeline", "at-risk", "forecast"]
+        },
+        {
+          "templateId": "account-health",
+          "templateName": "Account Health Dashboard",
+          "path": "executive/account-health.json",
+          "description": "Customer health score distribution, NPS trends, and support case volume",
+          "personas": ["cs_director"],
+          "componentCount": 6,
+          "keyMetrics": ["health_score", "nps", "support_cases", "engagement"],
+          "tags": ["health", "nps", "support", "engagement", "risk"]
+        }
+      ],
+      "individual": [
+        {
+          "templateId": "my-accounts",
+          "templateName": "My Accounts Dashboard",
+          "path": "individual/my-accounts.json",
+          "description": "CSM view of assigned account health, open cases, and upcoming renewals",
+          "personas": ["csm"],
+          "componentCount": 6,
+          "keyMetrics": ["health_score", "support_cases", "renewal_rate"],
+          "tags": ["my-accounts", "csm", "health", "renewals", "cases"]
+        },
+        {
+          "templateId": "support-performance",
+          "templateName": "Support Performance Dashboard",
+          "path": "individual/support-performance.json",
+          "description": "Support manager view of case volume, resolution time, and CSAT",
+          "personas": ["csm"],
+          "componentCount": 5,
+          "keyMetrics": ["support_cases", "csat", "resolution_time"],
+          "tags": ["support", "cases", "csat", "resolution", "sla"]
+        }
+      ]
+    }
+  },
+  "searchIndex": {
+    "keywords": {
+      "revenue": ["revenue-performance"],
+      "pipeline": ["revenue-performance", "pipeline-health", "team-pipeline", "my-pipeline", "marketing-performance", "demand-gen-funnel"],
+      "quota": ["team-productivity", "quota-attainment", "my-quota"],
+      "activity": ["team-productivity", "activity-metrics", "my-activities"],
+      "marketing": ["marketing-performance", "demand-gen-funnel", "campaign-performance", "lead-generation"],
+      "mql": ["demand-gen-funnel", "campaign-performance", "lead-generation"],
+      "funnel": ["demand-gen-funnel", "marketing-performance"],
+      "campaign": ["campaign-performance", "marketing-performance"],
+      "leads": ["lead-generation", "demand-gen-funnel"],
+      "nrr": ["cs-overview"],
+      "churn": ["cs-overview", "renewal-pipeline"],
+      "retention": ["cs-overview", "renewal-pipeline", "account-health"],
+      "renewal": ["renewal-pipeline", "my-accounts"],
+      "health": ["account-health", "cs-overview", "my-accounts"],
+      "nps": ["account-health", "cs-overview"],
+      "support": ["support-performance", "account-health", "my-accounts"],
+      "csat": ["support-performance"],
+      "customer success": ["cs-overview", "renewal-pipeline", "account-health", "my-accounts", "support-performance"],
+      "csm": ["my-accounts", "support-performance"],
+      "executive": ["revenue-performance", "pipeline-health", "team-productivity", "marketing-performance", "demand-gen-funnel", "cs-overview", "renewal-pipeline", "account-health"],
+      "individual": ["my-pipeline", "my-quota", "my-activities", "campaign-performance", "lead-generation", "my-accounts", "support-performance"]
+    },
+    "variations": {
+      "simple": ["account-health", "cs-overview", "demand-gen-funnel", "marketing-performance", "pipeline-health", "renewal-pipeline", "revenue-performance", "team-productivity", "campaign-performance", "lead-generation", "my-accounts", "my-activities", "my-pipeline", "my-quota", "support-performance", "activity-metrics", "quota-attainment", "team-pipeline"],
+      "standard": ["account-health", "cs-overview", "demand-gen-funnel", "marketing-performance", "pipeline-health", "renewal-pipeline", "revenue-performance", "team-productivity", "campaign-performance", "lead-generation", "my-accounts", "my-activities", "my-pipeline", "my-quota", "support-performance", "activity-metrics", "quota-attainment", "team-pipeline"],
+      "cpq": ["pipeline-health", "renewal-pipeline", "revenue-performance", "my-pipeline", "my-quota", "quota-attainment", "team-pipeline"],
+      "enterprise": ["account-health", "cs-overview", "pipeline-health", "renewal-pipeline", "team-productivity", "my-accounts", "my-quota", "support-performance", "quota-attainment", "team-pipeline"],
+      "smb": ["team-productivity", "my-accounts", "my-pipeline", "my-quota", "quota-attainment", "team-pipeline"],
+      "plg": ["demand-gen-funnel", "marketing-performance", "revenue-performance", "lead-generation", "my-pipeline"],
+      "abm": ["demand-gen-funnel", "marketing-performance", "campaign-performance"],
+      "high-touch": ["account-health", "cs-overview"],
+      "demand-gen": ["campaign-performance"],
+      "outbound": ["lead-generation", "activity-metrics"],
+      "inbound": ["activity-metrics"],
+      "bdr": ["my-activities"],
+      "ae": ["my-activities"],
+      "high-volume": ["support-performance"]
+    },
+    "personas": {
+      "cro": ["revenue-performance", "pipeline-health"],
+      "cfo": ["revenue-performance"],
+      "vp_sales": ["revenue-performance", "pipeline-health", "team-productivity", "quota-attainment"],
+      "sales_manager": ["team-productivity", "team-pipeline", "quota-attainment", "activity-metrics"],
+      "revops": ["pipeline-health"],
+      "rep": ["my-pipeline", "my-quota", "my-activities", "lead-generation"],
+      "cmo": ["marketing-performance", "demand-gen-funnel"],
+      "demand_gen": ["demand-gen-funnel"],
+      "marketing_ops": ["demand-gen-funnel", "campaign-performance"],
+      "cs_director": ["cs-overview", "renewal-pipeline", "account-health"],
+      "csm": ["my-accounts", "support-performance"]
+    }
+  },
+  "templateSchema": {
+    "description": "Standard schema for dashboard templates",
+    "requiredFields": [
+      "templateMetadata.templateId",
+      "templateMetadata.templateName",
+      "templateMetadata.description",
+      "templateMetadata.audience",
+      "templateMetadata.function",
+      "templateMetadata.level",
+      "dashboardLayout.components",
+      "sourceReportTemplates"
+    ],
+    "optionalFields": [
+      "templateMetadata.templateVersion",
+      "templateMetadata.useCase",
+      "templateMetadata.refreshFrequency",
+      "templateMetadata.prerequisites",
+      "templateMetadata.tags",
+      "dashboardFilters",
+      "dynamicUserFilters",
+      "orgAdaptation",
+      "kpiDefinitions",
+      "deploymentInstructions",
+      "relatedTemplates"
+    ]
+  },
+  "deploymentGuide": {
+    "prerequisites": [
+      "Salesforce org with Reports & Dashboards enabled",
+      "Appropriate report types (Opportunities, Leads, Cases, Accounts)",
+      "Custom fields as specified in template prerequisites"
+    ],
+    "steps": [
+      "1. Select template from registry based on persona/function",
+      "2. Review template prerequisites and verify org compatibility",
+      "3. Deploy source report templates first",
+      "4. Deploy dashboard using sfdc-reports-dashboards agent",
+      "5. Configure filters and set refresh schedule",
+      "6. Assign to appropriate folder and share with users"
+    ],
+    "agentCommand": "Task(subagent_type='opspal-salesforce:sfdc-reports-dashboards', prompt='Deploy {templateId} dashboard from registry')"
+  }
+}

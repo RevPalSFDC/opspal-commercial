@@ -1,0 +1,189 @@
+# Phase 3 Validators Reference (Reflection-Based Infrastructure Improvements)
+# Import this file in agents that need access to Phase 2.1-3.3 validation infrastructure
+# @version 1.0.0
+# @date 2025-12-09
+
+## Phase 2.1: Unified Pre-Operation Validation Orchestrator
+
+### Overview
+Single entry point for ALL pre-operation validations. Automatically runs before deployments.
+
+### Location
+`../../../../opspal-core/cross-platform-plugin/scripts/lib/pre-operation-validation-orchestrator.js`
+
+### Usage
+```bash
+# CLI: Validate deployment
+node pre-operation-validation-orchestrator.js <org> deploy --deploy-dir ./force-app --json
+
+# CLI: Validate query
+node pre-operation-validation-orchestrator.js <org> query --object Account --json
+
+# CLI: Validate deletion
+node pre-operation-validation-orchestrator.js <org> delete --fields "Account.Custom__c" --json
+```
+
+### Programmatic Usage
+```javascript
+const PreOperationValidationOrchestrator = require('./pre-operation-validation-orchestrator');
+const orchestrator = new PreOperationValidationOrchestrator(orgAlias);
+
+const result = await orchestrator.validate('deploy', {
+  deployDir: './force-app',
+  metadata: ['Flow', 'ValidationRule']
+});
+
+if (!result.valid) {
+  console.log('Blockers:', result.blockers);
+  console.log('Errors:', result.errors);
+}
+```
+
+## Phase 2.2: Flow Field Reference Validator (Enhanced)
+
+### New Features
+- **Snapshot/Diff**: Track field usage changes between versions
+- **Duplicate Detection**: Find duplicate field assignments in Flows
+- **Population Validation**: Check field population rates before deployment
+
+### Location
+`scripts/lib/flow-field-reference-validator.js`
+
+### Usage
+```bash
+# Create snapshot before modifications
+node flow-field-reference-validator.js snapshot ./MyFlow.xml > snapshot.json
+
+# Compare current with snapshot
+node flow-field-reference-validator.js compare ./MyFlow.xml ./snapshot.json
+
+# Detect duplicate field assignments
+node flow-field-reference-validator.js duplicates ./MyFlow.xml
+
+# Check field population rates (Phase 3.3)
+node flow-field-reference-validator.js population <org> Account.Industry Account.Type
+```
+
+## Phase 3.1: Flow State Synchronizer
+
+### Overview
+Pre-operation state snapshot and post-operation verification for Flow deployments.
+Enables automatic rollback if deployment causes unexpected state changes.
+
+### Location
+`scripts/lib/flow-state-synchronizer.js`
+
+### Usage
+```bash
+# Create snapshot before deployment
+node flow-state-synchronizer.js <org> snapshot <FlowName> --json
+
+# Verify state after deployment
+node flow-state-synchronizer.js <org> verify <snapshotId> --json
+
+# Rollback if needed
+node flow-state-synchronizer.js <org> rollback <snapshotId>
+
+# Dry-run rollback
+node flow-state-synchronizer.js <org> rollback-dry <snapshotId>
+
+# View snapshot history
+node flow-state-synchronizer.js <org> history
+
+# Get statistics
+node flow-state-synchronizer.js <org> stats
+```
+
+### Automatic Integration
+- Pre-deployment: Creates snapshot automatically via `pre-flow-deployment.sh`
+- Post-deployment: Verifies state via `post-operation-observe.sh`
+- Environment: `ENABLE_FLOW_STATE_SNAPSHOT=1` (enabled by default)
+
+## Phase 3.2: Capability Assessment Protocol
+
+### Overview
+Pre-cleanup assessment for automation feasibility. Detects Screen Flows,
+API limitations, and generates disclosure for user expectations.
+
+### Location
+`../../../../opspal-core/cross-platform-plugin/scripts/lib/capability-assessment-protocol.js`
+
+### Usage
+```bash
+# Assess automation capabilities
+node capability-assessment-protocol.js <org> assess --operation flow_cleanup --json
+
+# Get API limitations
+node capability-assessment-protocol.js <org> limitations
+
+# Detect Screen Flows
+node capability-assessment-protocol.js <org> flows <FlowName1> <FlowName2>
+
+# Get statistics
+node capability-assessment-protocol.js <org> stats
+```
+
+### Key Limitations Detected
+| Limitation ID | Severity | Description |
+|---------------|----------|-------------|
+| screenFlowActivation | HIGH | Screen Flows require manual activation |
+| quickActionDeploy | HIGH | Quick Actions need UI configuration |
+| approvalProcessActivation | MEDIUM | Approval Processes need manual activation |
+| fieldDeletion | MEDIUM | Fields with dependencies block deletion |
+
+## Phase 3.3: Field Population Validation
+
+### Overview
+Analyzes field population rates to prevent automation failures on empty fields.
+
+### Thresholds
+- ERROR: < 1% population (critically low)
+- WARNING: < 10% population (low)
+- INFO: < 50% population (moderate)
+- HEALTHY: >= 50% population
+
+### Usage
+```bash
+# Generate population report
+node flow-field-reference-validator.js population <org> Object.Field1 Object.Field2 --json
+
+# Enable in pre-deploy hook
+export ENABLE_FLOW_POPULATION_CHECK=1
+```
+
+### Output Includes
+- Population rate per field
+- Alternative field suggestions for low-population fields
+- Pre-flight check pass/fail recommendation
+- Actionable recommendations
+
+## Integration Summary
+
+### Hooks That Use These Validators
+
+| Hook | Validators Used |
+|------|-----------------|
+| `pre-deployment-comprehensive-validation.sh` | Orchestrator (Step 8) |
+| `pre-flow-deployment.sh` | State Synchronizer (Check 4) |
+| `pre-deploy-flow-validation.sh` | Population Validation (Phase 3.3) |
+| `post-operation-observe.sh` | State Verification |
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ENABLE_FLOW_STATE_SNAPSHOT` | 1 | Enable state snapshot before flow deploy |
+| `ENABLE_FLOW_STATE_VERIFY` | 1 | Enable state verification after deploy |
+| `ENABLE_FLOW_POPULATION_CHECK` | 0 | Enable population validation (requires org) |
+| `SKIP_COMPREHENSIVE_VALIDATION` | 0 | Skip all comprehensive validation |
+
+## ROI Summary
+
+| Phase | Component | Annual ROI |
+|-------|-----------|------------|
+| 2.1 | Unified Orchestrator | $42K |
+| 2.2 | Duplicate Detection | $98K |
+| 3.1 | State Synchronization | $81K |
+| 3.2 | Capability Assessment | $105K |
+| 3.3 | Population Validation | Part of 2.2 |
+| **Total** | | **$140K+** |

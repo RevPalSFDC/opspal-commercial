@@ -1,0 +1,254 @@
+/* RevPal Brand Stylesheet */
+/* Clean over clever | Readability first | Consistent spacing | Subtle hierarchy | Minimal visual noise */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap');
+
+:root {
+  /* Brand Colors */
+  --brand-grape: #5F3B8C;
+  --brand-indigo: #3E4A61;
+  --brand-apricot: #E99560;
+  --brand-apricot-hover: #D88450;
+  --brand-sand: #EAE4DC;
+  --brand-green: #6FBF73;
+
+  /* Neutral Palette */
+  --neutral-100: #FFFFFF;
+  --neutral-90: #F6F5F3;
+  --neutral-80: #EAE4DC;
+  --neutral-60: #C6C3BD;
+  --neutral-20: #8A8A8A;
+  --neutral-0: #000000;
+
+  /* Typography */
+  --font-heading: "Montserrat", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, sans-serif;
+
+  /* Spacing */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 9pt;
+  line-height: 1.6;
+  color: var(--brand-indigo);
+  max-width: 100%;
+  background-color: var(--neutral-100);
+}
+
+/* Headings */
+h1 {
+  font-family: var(--font-heading);
+  color: var(--brand-grape);
+  font-size: 22pt;
+  font-weight: 800;
+  border-bottom: 3px solid var(--brand-apricot);
+  padding-bottom: 12px;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  page-break-after: avoid;
+}
+
+h2 {
+  font-family: var(--font-heading);
+  color: var(--brand-grape);
+  font-size: 16pt;
+  font-weight: 700;
+  border-bottom: 2px solid var(--brand-sand);
+  padding-bottom: 8px;
+  margin-top: 28px;
+  margin-bottom: 16px;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  color: var(--brand-indigo);
+  font-size: 12pt;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  page-break-after: avoid;
+}
+
+h4 {
+  font-family: var(--font-heading);
+  color: var(--brand-indigo);
+  font-size: 10pt;
+  font-weight: 500;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  page-break-after: avoid;
+}
+
+/* Body Text */
+p, li {
+  font-size: 9pt;
+  line-height: 1.6;
+  color: var(--brand-indigo);
+}
+
+strong {
+  color: var(--brand-grape);
+  font-weight: 600;
+}
+
+/* Code */
+code {
+  background-color: var(--neutral-90);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 8pt;
+  color: var(--brand-grape);
+}
+
+pre {
+  background-color: var(--neutral-90);
+  border: 1px solid var(--neutral-60);
+  border-left: 4px solid var(--brand-grape);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  page-break-inside: avoid;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+  color: var(--brand-indigo);
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  page-break-inside: avoid;
+  font-size: 8pt;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background-color: var(--brand-grape);
+  color: var(--neutral-100);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  padding: 12px 10px;
+  text-align: left;
+  border: 1px solid var(--brand-grape);
+}
+
+td {
+  border: 1px solid var(--neutral-60);
+  padding: 10px;
+  text-align: left;
+  color: var(--brand-indigo);
+}
+
+tr:nth-child(even) {
+  background-color: var(--neutral-90);
+}
+
+tr:nth-child(odd) {
+  background-color: var(--neutral-100);
+}
+
+/* Blockquotes - callout style */
+blockquote {
+  background-color: var(--brand-sand);
+  border-left: 4px solid var(--brand-apricot);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+  color: var(--brand-indigo);
+  font-style: normal;
+}
+
+blockquote strong {
+  color: var(--brand-grape);
+}
+
+/* Lists */
+ul, ol {
+  margin: 12px 0;
+  padding-left: 28px;
+}
+
+li {
+  margin: 6px 0;
+}
+
+/* Links */
+a {
+  color: var(--brand-apricot);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--brand-apricot-hover);
+  text-decoration: underline;
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 2px solid var(--brand-sand);
+  margin: 32px 0;
+}
+
+/* Status indicators */
+.status-pass { color: var(--brand-green); font-weight: 600; }
+.status-partial { color: var(--brand-apricot); font-weight: 600; }
+.status-fail { color: #D32F2F; font-weight: 600; }
+
+/* Cards / Callout boxes */
+.card {
+  background: var(--brand-sand);
+  border: 1px solid rgba(62, 74, 97, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
+}
+
+/* Print styles */
+@media print {
+  body {
+    font-size: 8pt;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  table, pre, blockquote {
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: var(--brand-grape);
+  }
+}
+
+/* Page footer */
+.footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 2px solid var(--brand-sand);
+  text-align: center;
+  font-size: 7pt;
+  color: var(--neutral-20);
+}
+
+.footer strong {
+  color: var(--brand-grape);
+}

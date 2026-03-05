@@ -1,0 +1,37 @@
+{
+  "name": "opspal-hubspot",
+  "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
+  "version": "3.7.15",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "hubspot",
+    "crm",
+    "workflows",
+    "contacts",
+    "deals",
+    "pipelines",
+    "marketing-automation",
+    "analytics",
+    "governance",
+    "integrations",
+    "commerce",
+    "service-hub",
+    "cms",
+    "hubdb",
+    "serverless",
+    "developer-platform",
+    "app-cards",
+    "ui-extensions",
+    "imports-v3",
+    "goals",
+    "quotas",
+    "automation-actions",
+    "custom-actions",
+    "callbacks"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+  "license": "Proprietary"
+}

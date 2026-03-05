@@ -1,0 +1,85 @@
+flowchart TB
+  %% Data Migration Flow Template
+  %% ETL process for large-scale data migration
+
+  Start((Migration Start)) --> PlanningPhase[Planning Phase]
+
+  PlanningPhase --> DataAssessment[Data Assessment & Profiling]
+  DataAssessment --> MappingDesign[Field Mapping Design]
+  MappingDesign --> ValidationRules[Validation Rules Definition]
+
+  ValidationRules --> PreMigrationReady{Ready for Migration?}
+
+  PreMigrationReady -->|No| RefinePlan[Refine Plan]
+  PreMigrationReady -->|Yes| BackupSource[Backup Source System]
+
+  RefinePlan --> DataAssessment
+
+  BackupSource --> ExtractPhase[Extract Phase]
+
+  subgraph Extraction["Data Extraction"]
+    ExtractPhase --> QuerySource[Query Source Data]
+    QuerySource --> DeduplicationCheck[Deduplication Check]
+    DeduplicationCheck --> ExportCSV[Export to Staging CSV]
+  end
+
+  ExportCSV --> TransformPhase[Transform Phase]
+
+  subgraph Transformation["Data Transformation"]
+    TransformPhase --> FieldMapping[Apply Field Mappings]
+    FieldMapping --> DataCleansing[Data Cleansing]
+    DataCleansing --> EnrichmentRules[Apply Enrichment Rules]
+    EnrichmentRules --> ValidationChecks[Validation Checks]
+  end
+
+  ValidationChecks --> ValidationResult{All Records Valid?}
+
+  ValidationResult -->|No| ErrorHandling[Error Handling]
+  ValidationResult -->|Yes| LoadPhase[Load Phase]
+
+  ErrorHandling --> ReviewErrors[Review Error Records]
+  ReviewErrors --> FixErrors{Fix and Retry?}
+  FixErrors -->|Yes| TransformPhase
+  FixErrors -->|No| QuarantineRecords[Quarantine Records]
+
+  subgraph Loading["Data Loading"]
+    LoadPhase --> BatchProcessing[Batch Processing]
+    BatchProcessing --> LoadToTarget[Load to Target System]
+    LoadToTarget --> CheckResults{Load Successful?}
+    CheckResults -->|Partial Success| RetryFailed[Retry Failed Records]
+    CheckResults -->|Full Failure| RollbackDecision{Rollback?}
+    RetryFailed --> CheckResults
+    RollbackDecision -->|Yes| ExecuteRollback[Execute Rollback]
+    RollbackDecision -->|No| DocumentFailure[Document Failure]
+  end
+
+  CheckResults -->|Full Success| PostMigrationValidation[Post-Migration Validation]
+
+  PostMigrationValidation --> ReconciliationCheck[Reconciliation Check]
+  ReconciliationCheck --> DataIntegrityTest[Data Integrity Tests]
+  DataIntegrityTest --> SmokeTests[Smoke Tests]
+
+  SmokeTests --> ValidationPassed{Validation Passed?}
+
+  ValidationPassed -->|No| InvestigateIssues[Investigate Issues]
+  ValidationPassed -->|Yes| EnableIntegrations[Enable Integrations]
+
+  InvestigateIssues --> FixIssues{Issues Resolved?}
+  FixIssues -->|No| RollbackDecision
+  FixIssues -->|Yes| PostMigrationValidation
+
+  EnableIntegrations --> CleanupStaging[Cleanup Staging Data]
+  CleanupStaging --> DocumentMigration[Document Migration Results]
+
+  DocumentMigration --> Complete((Migration Complete))
+  QuarantineRecords --> Complete
+  ExecuteRollback --> Complete
+  DocumentFailure --> Complete
+
+  %% Styling
+  style ExtractPhase fill:#4A90E2
+  style TransformPhase fill:#4A90E2
+  style LoadPhase fill:#4A90E2
+  style ErrorHandling fill:#F5A623
+  style ExecuteRollback fill:#D0021B
+  style Complete fill:#7ED321

@@ -1,0 +1,66 @@
+{
+  "name": "account-enrichment",
+  "description": "Enrich account data with additional information when created or updated",
+  "category": "core",
+  "type": "Record-Triggered Flow",
+  "parameters": {
+    "industryMapping": {
+      "type": "string",
+      "description": "Industry to detect (e.g., Technology, Healthcare)",
+      "required": true,
+      "example": "Technology"
+    },
+    "segmentValue": {
+      "type": "string",
+      "description": "Account segment to assign (e.g., Enterprise, SMB)",
+      "required": true,
+      "example": "Enterprise"
+    },
+    "revenueThreshold": {
+      "type": "number",
+      "description": "Annual revenue threshold for segmentation",
+      "required": false,
+      "default": 1000000
+    }
+  },
+  "structure": {
+    "metadata": {
+      "apiVersion": "62.0",
+      "processType": "AutoLaunchedFlow",
+      "status": "Draft",
+      "triggerType": "RecordAfterSave"
+    },
+    "elements": [
+      {
+        "instruction": "Add a decision called Check_Industry with rule Is_Target_Industry if Industry equals {{industryMapping}} then Set_Segment, otherwise End"
+      },
+      {
+        "instruction": "Add a decision called Check_Revenue with rule Above_Threshold if AnnualRevenue is greater than {{revenueThreshold}} then Set_Enterprise, otherwise Set_SMB"
+      },
+      {
+        "instruction": "Add a record update called Set_Enterprise to update the triggering record, setting Account_Segment__c to Enterprise"
+      },
+      {
+        "instruction": "Add a record update called Set_SMB to update the triggering record, setting Account_Segment__c to SMB"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "name": "Technology Account Segmentation",
+      "params": {
+        "industryMapping": "Technology",
+        "segmentValue": "Enterprise",
+        "revenueThreshold": 5000000
+      }
+    },
+    {
+      "name": "Healthcare Account Segmentation",
+      "params": {
+        "industryMapping": "Healthcare",
+        "segmentValue": "Enterprise",
+        "revenueThreshold": 10000000
+      }
+    }
+  ]
+}

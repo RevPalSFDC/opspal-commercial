@@ -1,0 +1,115 @@
+{
+  "templateMetadata": {
+    "templateName": "Lead Volume Trend (30 Days)",
+    "templateVersion": "1.1",
+    "description": "Daily lead volume trend over past 30 days",
+    "audience": "SDRs, BDRs, Marketing Ops",
+    "useCase": "Lead volume trend analysis"
+  },
+  "reportMetadata": {
+    "name": "Lead Volume Trend - 30 Days",
+    "reportType": "Lead",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "CreatedDate",
+        "operator": "equals",
+        "value": "LAST_30_DAYS"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "CreatedDate",
+        "sortOrder": "Asc",
+        "dateGranularity": "Day"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Count",
+        "aggregateType": "RowCount"
+      }
+    ],
+    "chart": {
+      "chartType": "Line",
+      "groupingColumn": "CreatedDate",
+      "aggregateColumn": "Count"
+    }
+  },
+  "dashboardUsage": {
+    "componentType": "Line Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

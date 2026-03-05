@@ -1,0 +1,4 @@
+interface:
+  display_name: "Monday Agent Operations Framework"
+  short_description: "Help with Monday Agent Operations Framework tasks"
+  default_prompt: "Use $monday-agent-operations-framework to execute this workflow safely and produce the expected artifacts."

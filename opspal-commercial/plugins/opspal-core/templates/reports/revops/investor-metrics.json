@@ -1,0 +1,604 @@
+{
+  "templateMetadata": {
+    "id": "investor-metrics",
+    "name": "Investor-Ready Metrics Package",
+    "version": "2.0.0",
+    "description": "Comprehensive investor metrics package including ARR, growth, efficiency, and unit economics with board-ready visualizations and benchmark comparisons",
+    "category": "executive",
+    "targetAudience": ["cfo", "board", "investors", "executive"],
+    "recommendedFrequency": "quarterly",
+    "estimatedGenerationTime": "8-12 minutes"
+  },
+  "reportMetadata": {
+    "defaultTitle": "Investor Metrics Package",
+    "defaultPeriod": "Q4 FY24",
+    "defaultFormat": "pdf",
+    "defaultSegmentation": [],
+    "supportedFormats": ["pdf", "excel", "sheets"],
+    "professionalFormatting": true
+  },
+  "kpis": [
+    {
+      "id": "arr",
+      "required": true,
+      "displayOrder": 1,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true,
+      "highlight": true
+    },
+    {
+      "id": "revenue_growth_rate",
+      "required": true,
+      "displayOrder": 2,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true,
+      "highlight": true
+    },
+    {
+      "id": "nrr",
+      "required": true,
+      "displayOrder": 3,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true,
+      "highlight": true
+    },
+    {
+      "id": "gross_margin",
+      "required": true,
+      "displayOrder": 4,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "magic_number",
+      "required": true,
+      "displayOrder": 5,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "burn_multiple",
+      "required": true,
+      "displayOrder": 6,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "rule_of_40",
+      "required": true,
+      "displayOrder": 7,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true,
+      "highlight": true
+    },
+    {
+      "id": "ltv_cac_ratio",
+      "required": true,
+      "displayOrder": 8,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "cac_payback",
+      "required": false,
+      "displayOrder": 9,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "arr_per_employee",
+      "required": false,
+      "displayOrder": 10,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true
+    }
+  ],
+  "dataSources": {
+    "salesforce": {
+      "objects": ["Opportunity", "Account"],
+      "requiredFields": ["Amount", "CloseDate", "Type", "IsWon", "AccountId"],
+      "optionalFields": ["Subscription_Type__c", "Contract_Term__c"],
+      "filters": {
+        "newBusiness": "IsWon = true AND Type = 'New Business'",
+        "renewal": "IsWon = true AND Type IN ('Renewal', 'Subscription')",
+        "expansion": "IsWon = true AND Type IN ('Expansion', 'Upsell')"
+      }
+    },
+    "hubspot": {
+      "objects": ["deals", "companies"],
+      "requiredProperties": ["amount", "closedate", "dealtype", "pipeline"],
+      "optionalProperties": ["subscription_type", "contract_length"],
+      "filters": {
+        "standard": "dealstage = 'closedwon'"
+      }
+    },
+    "financials": {
+      "required": true,
+      "description": "Financial data required for efficiency metrics",
+      "supportedSources": ["QuickBooks", "Xero", "NetSuite", "Manual"],
+      "metrics": [
+        "revenue",
+        "cogs",
+        "sales_marketing_spend",
+        "rd_spend",
+        "ga_spend",
+        "net_burn",
+        "ebitda"
+      ]
+    },
+    "manual": {
+      "required": [
+        {
+          "field": "arr",
+          "description": "Annual Recurring Revenue (verified)",
+          "type": "currency"
+        },
+        {
+          "field": "revenue",
+          "description": "Total revenue for the period",
+          "type": "currency"
+        },
+        {
+          "field": "cogs",
+          "description": "Cost of goods sold",
+          "type": "currency"
+        },
+        {
+          "field": "sales_marketing_spend",
+          "description": "Total S&M spend",
+          "type": "currency"
+        },
+        {
+          "field": "net_burn",
+          "description": "Net cash burn for the period",
+          "type": "currency"
+        },
+        {
+          "field": "employee_count",
+          "description": "Total FTE count",
+          "type": "number"
+        }
+      ],
+      "optional": [
+        {
+          "field": "ebitda_margin",
+          "description": "EBITDA margin as decimal",
+          "type": "percentage"
+        },
+        {
+          "field": "new_customer_count",
+          "description": "New customers acquired",
+          "type": "number"
+        },
+        {
+          "field": "total_customer_count",
+          "description": "Total active customers",
+          "type": "number"
+        },
+        {
+          "field": "cash_runway",
+          "description": "Months of cash remaining",
+          "type": "number"
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "cover-page",
+      "title": "Cover",
+      "type": "cover",
+      "order": 0,
+      "coverConfig": {
+        "template": "investor-deck",
+        "elements": ["company_logo", "report_title", "period", "confidentiality_notice"]
+      }
+    },
+    {
+      "id": "executive-summary",
+      "title": "Executive Summary",
+      "type": "summary",
+      "order": 1,
+      "content": {
+        "blufTemplate": "${company_name} ${period}: ARR at $${arr} (${arr_growth}% YoY), Rule of 40 at ${rule_of_40}%, NRR at ${nrr}%. ${headline_insight}.",
+        "keyMetrics": ["arr", "revenue_growth_rate", "rule_of_40", "nrr"],
+        "maxHighlights": 4,
+        "maxRecommendations": 0,
+        "format": "board_ready"
+      }
+    },
+    {
+      "id": "key-metrics-dashboard",
+      "title": "Key Performance Metrics",
+      "type": "dashboard",
+      "order": 2,
+      "kpis": ["arr", "revenue_growth_rate", "nrr", "rule_of_40"],
+      "layout": "2x2",
+      "showBenchmarkComparison": true,
+      "showQuartilePosition": true,
+      "styling": {
+        "highlightAboveBenchmark": true,
+        "colorCode": true
+      }
+    },
+    {
+      "id": "arr-progression",
+      "title": "ARR Progression",
+      "type": "chart",
+      "order": 3,
+      "chartConfig": {
+        "type": "area",
+        "kpi": "arr",
+        "groupBy": "CALENDAR_QUARTER",
+        "showYoY": true,
+        "showTarget": true,
+        "annotations": {
+          "milestones": true,
+          "fundraising": true
+        }
+      }
+    },
+    {
+      "id": "arr-breakdown",
+      "title": "ARR by Component",
+      "type": "chart",
+      "order": 4,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "metric": "arr_movement",
+        "groupBy": "CALENDAR_QUARTER",
+        "components": ["new_business", "expansion", "contraction", "churn"],
+        "showWaterfall": true
+      }
+    },
+    {
+      "id": "efficiency-scorecard",
+      "title": "Capital Efficiency Scorecard",
+      "type": "dashboard",
+      "order": 5,
+      "kpis": ["magic_number", "burn_multiple", "rule_of_40", "arr_per_employee"],
+      "layout": "2x2",
+      "showBenchmarkComparison": true,
+      "showInterpretation": true
+    },
+    {
+      "id": "unit-economics",
+      "title": "Unit Economics",
+      "type": "dashboard",
+      "order": 6,
+      "kpis": ["ltv_cac_ratio", "cac_payback", "gross_margin"],
+      "layout": "1x3",
+      "showBenchmarkComparison": true,
+      "showTrend": true
+    },
+    {
+      "id": "rule-of-40-breakdown",
+      "title": "Rule of 40 Analysis",
+      "type": "chart",
+      "order": 7,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "components": ["revenue_growth_rate", "ebitda_margin"],
+        "target": 40,
+        "showTargetLine": true,
+        "showHistorical": true,
+        "historicalPeriods": 8
+      }
+    },
+    {
+      "id": "retention-metrics",
+      "title": "Retention Performance",
+      "type": "detail",
+      "order": 8,
+      "breakdown": {
+        "metrics": ["nrr", "grr", "logo_retention"],
+        "comparison": "vs_benchmark",
+        "showCohortAnalysis": true,
+        "showTrend": true
+      }
+    },
+    {
+      "id": "benchmark-comparison",
+      "title": "Peer Benchmark Comparison",
+      "type": "comparison",
+      "order": 9,
+      "benchmarks": {
+        "metrics": ["arr_growth", "nrr", "gross_margin", "rule_of_40", "magic_number"],
+        "showPercentile": true,
+        "showTopQuartile": true,
+        "showMedian": true,
+        "segmentation": {
+          "byStage": true,
+          "byARRTier": true
+        },
+        "styling": {
+          "highlightOutperformance": true
+        }
+      }
+    },
+    {
+      "id": "operating-metrics",
+      "title": "Operating Metrics",
+      "type": "table",
+      "order": 10,
+      "tableConfig": {
+        "format": "quarterly_comparison",
+        "columns": ["metric", "q1", "q2", "q3", "q4", "yoy_change"],
+        "rows": [
+          { "metric": "ARR", "format": "currency", "highlight": true },
+          { "metric": "New ARR", "format": "currency" },
+          { "metric": "Expansion ARR", "format": "currency" },
+          { "metric": "Churned ARR", "format": "currency", "negative": true },
+          { "metric": "NRR", "format": "percentage" },
+          { "metric": "GRR", "format": "percentage" },
+          { "metric": "Customers", "format": "number" },
+          { "metric": "ACV", "format": "currency" },
+          { "metric": "Employees", "format": "number" },
+          { "metric": "ARR/Employee", "format": "currency" }
+        ]
+      }
+    },
+    {
+      "id": "guidance-vs-actual",
+      "title": "Guidance vs Actual",
+      "type": "chart",
+      "order": 11,
+      "chartConfig": {
+        "type": "grouped_bar",
+        "metrics": ["arr", "revenue", "new_customers"],
+        "comparison": ["guidance", "actual"],
+        "showVariance": true,
+        "conditional": {
+          "showIf": "guidance_provided == true"
+        }
+      }
+    },
+    {
+      "id": "runway-analysis",
+      "title": "Cash Runway Analysis",
+      "type": "detail",
+      "order": 12,
+      "breakdown": {
+        "metrics": ["cash_balance", "monthly_burn", "runway_months"],
+        "showProjection": true,
+        "projectionMonths": 18,
+        "conditional": {
+          "showIf": "cash_runway <= 24"
+        }
+      }
+    },
+    {
+      "id": "methodology",
+      "title": "Methodology & Definitions",
+      "type": "methodology",
+      "order": 99,
+      "include": ["dataSources", "formulas", "assumptions", "exclusions", "benchmarkSources"],
+      "format": "appendix"
+    }
+  ],
+  "calculations": {
+    "arr": {
+      "formula": "MRR × 12",
+      "notes": "Annualized recurring revenue",
+      "verification": "Cross-checked against subscription platform"
+    },
+    "revenue_growth_rate": {
+      "formula": "((ARR_current - ARR_previous) / ARR_previous) × 100",
+      "notes": "Year-over-year ARR growth",
+      "interpretation": {
+        "below10": "Sub-growth - below market expectations",
+        "10to25": "Average growth for mature SaaS",
+        "25to50": "Strong growth - growth stage",
+        "50to100": "Hyper-growth - early stage",
+        "above100": "Exceptional - T2D3 pace"
+      }
+    },
+    "nrr": {
+      "formula": "((Starting MRR + Expansion - Contraction - Churn) / Starting MRR) × 100",
+      "notes": "Net revenue retention from existing customers"
+    },
+    "gross_margin": {
+      "formula": "((Revenue - COGS) / Revenue) × 100",
+      "notes": "Gross profit as percentage of revenue"
+    },
+    "magic_number": {
+      "formula": "(Net New ARR × 4) / Prior Quarter S&M Spend",
+      "notes": "Sales efficiency metric"
+    },
+    "burn_multiple": {
+      "formula": "Net Burn / Net New ARR",
+      "notes": "Capital efficiency metric"
+    },
+    "rule_of_40": {
+      "formula": "Revenue Growth % + EBITDA Margin %",
+      "notes": "Balance of growth and profitability"
+    },
+    "ltv_cac_ratio": {
+      "formula": "LTV / CAC",
+      "notes": "Customer lifetime value vs acquisition cost"
+    },
+    "cac_payback": {
+      "formula": "CAC / (MRR per customer × Gross Margin)",
+      "notes": "Months to recover customer acquisition cost"
+    },
+    "arr_per_employee": {
+      "formula": "ARR / Employee Count",
+      "notes": "Productivity metric"
+    }
+  },
+  "benchmarks": {
+    "industry": "saas",
+    "sources": [
+      {
+        "name": "Bessemer State of the Cloud 2024",
+        "url": "https://www.bvp.com",
+        "metrics": ["arr_growth", "nrr", "gross_margin", "burn_multiple"]
+      },
+      {
+        "name": "KeyBanc SaaS Survey 2024",
+        "url": "https://keybanccm.com",
+        "metrics": ["rule_of_40", "magic_number", "ltv_cac_ratio"]
+      },
+      {
+        "name": "Battery Ventures Cloud Index",
+        "url": "https://battery.com",
+        "metrics": ["arr_growth", "rule_of_40"]
+      },
+      {
+        "name": "Meritech Capital SaaS Index",
+        "url": "https://meritech.com",
+        "metrics": ["arr_per_employee", "gross_margin", "opex_ratios"]
+      }
+    ],
+    "thresholds": {
+      "revenue_growth_rate": {
+        "excellent": 50,
+        "good": 30,
+        "average": 15,
+        "belowAverage": 10
+      },
+      "nrr": {
+        "excellent": 120,
+        "good": 110,
+        "average": 100,
+        "belowAverage": 90
+      },
+      "gross_margin": {
+        "excellent": 80,
+        "good": 75,
+        "average": 70,
+        "belowAverage": 60
+      },
+      "magic_number": {
+        "excellent": 1.0,
+        "good": 0.75,
+        "average": 0.5,
+        "belowAverage": 0.3
+      },
+      "burn_multiple": {
+        "excellent": 1.0,
+        "good": 1.5,
+        "average": 2.0,
+        "belowAverage": 3.0
+      },
+      "rule_of_40": {
+        "excellent": 50,
+        "good": 40,
+        "average": 30,
+        "belowAverage": 20
+      },
+      "ltv_cac_ratio": {
+        "excellent": 5.0,
+        "good": 4.0,
+        "average": 3.0,
+        "belowAverage": 2.0
+      },
+      "arr_per_employee": {
+        "excellent": 300000,
+        "good": 200000,
+        "average": 150000,
+        "belowAverage": 100000
+      }
+    },
+    "byARRTier": {
+      "tier_1m_5m": {
+        "growth_median": "60%",
+        "nrr_median": "100%",
+        "arr_per_employee_median": "$100K"
+      },
+      "tier_5m_20m": {
+        "growth_median": "50%",
+        "nrr_median": "105%",
+        "arr_per_employee_median": "$150K"
+      },
+      "tier_20m_50m": {
+        "growth_median": "40%",
+        "nrr_median": "110%",
+        "arr_per_employee_median": "$175K"
+      },
+      "tier_50m_100m": {
+        "growth_median": "30%",
+        "nrr_median": "112%",
+        "arr_per_employee_median": "$200K"
+      },
+      "tier_100m_plus": {
+        "growth_median": "25%",
+        "nrr_median": "115%",
+        "arr_per_employee_median": "$250K"
+      }
+    }
+  },
+  "defaults": {
+    "dateRange": {
+      "type": "relative",
+      "value": "LAST_QUARTER"
+    },
+    "comparison": {
+      "type": "year_over_year"
+    },
+    "currency": "USD",
+    "confidentialityLevel": "confidential"
+  },
+  "exportConfig": {
+    "pdf": {
+      "orientation": "landscape",
+      "pageSize": "letter",
+      "includeCharts": true,
+      "includeTables": true,
+      "pageBreaks": ["efficiency-scorecard", "benchmark-comparison", "operating-metrics", "methodology"],
+      "styling": {
+        "fontFamily": "Inter, Arial, sans-serif",
+        "headerColor": "#1a1a2e",
+        "accentColor": "#4361ee",
+        "chartPalette": ["#4361ee", "#3a0ca3", "#7209b7", "#f72585", "#4cc9f0"]
+      },
+      "watermark": "CONFIDENTIAL",
+      "footer": {
+        "left": "${company_name}",
+        "center": "Investor Metrics Package - ${period}",
+        "right": "Page {page} of {pages}"
+      }
+    },
+    "excel": {
+      "sheets": [
+        { "name": "Summary", "sections": ["executive-summary", "key-metrics-dashboard"] },
+        { "name": "ARR Analysis", "sections": ["arr-progression", "arr-breakdown"] },
+        { "name": "Efficiency", "sections": ["efficiency-scorecard", "rule-of-40-breakdown"] },
+        { "name": "Unit Economics", "sections": ["unit-economics"] },
+        { "name": "Retention", "sections": ["retention-metrics"] },
+        { "name": "Benchmarks", "sections": ["benchmark-comparison"] },
+        { "name": "Operating Metrics", "sections": ["operating-metrics", "guidance-vs-actual"] },
+        { "name": "Runway", "sections": ["runway-analysis"] },
+        { "name": "Methodology", "sections": ["methodology"] }
+      ],
+      "formatting": {
+        "freezePanes": true,
+        "autoFilter": true,
+        "conditionalFormatting": true
+      }
+    }
+  },
+  "validationRules": {
+    "required_for_investor": [
+      "arr",
+      "revenue_growth_rate",
+      "nrr",
+      "gross_margin",
+      "rule_of_40"
+    ],
+    "warnings": {
+      "missing_burn_data": "Burn multiple and runway cannot be calculated without net burn data",
+      "missing_cac_data": "Unit economics incomplete without CAC/LTV data"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Hook Shell Hardening"
+  short_description: "Help with Hubspot Hook Shell Hardening tasks"
+  default_prompt: "Use $hubspot-hook-shell-hardening to execute this workflow safely and produce the expected artifacts."

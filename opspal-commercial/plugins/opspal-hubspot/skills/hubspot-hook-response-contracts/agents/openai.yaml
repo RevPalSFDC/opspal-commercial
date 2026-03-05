@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Hook Response Contracts"
+  short_description: "Help with Hubspot Hook Response Contracts tasks"
+  default_prompt: "Use $hubspot-hook-response-contracts to execute this workflow safely and produce the expected artifacts."

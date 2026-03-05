@@ -1,0 +1,39 @@
+{
+  "name": "@revpal-internal/gtm-planning-plugin",
+  "version": "1.5.1",
+  "description": "GTM Annual Planning framework - territory design, quota modeling, compensation planning",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "gtm",
+    "go-to-market",
+    "territory",
+    "quota",
+    "compensation",
+    "planning",
+    "sales-operations"
+  ],
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "verbose": true
+  }
+}

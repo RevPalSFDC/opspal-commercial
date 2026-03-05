@@ -1,0 +1,484 @@
+# Salesforce Production Change Playbook
+# HIGH-RISK: Maximum safety gates for production deployments
+#
+# Triggers: production, prod, live, go-live, release to prod
+# Complexity: High (base 0.7, always uses full verification)
+
+name: salesforce-production-change
+version: "1.0.0"
+description: High-safety decomposition for production Salesforce changes
+domain: salesforce-metadata
+base_complexity: 0.7
+
+# When to use this playbook
+triggers:
+  keywords:
+    - production
+    - prod
+    - live
+    - go-live
+    - release
+    - hotfix
+    - emergency
+  patterns:
+    - "deploy.*production"
+    - "push.*to.*prod"
+    - "release.*live"
+    - "go.*live"
+    - "production.*deploy"
+
+# Default risk policy - ALWAYS HIGH
+default_risk_level: critical
+approval_required: true
+rollback_plan_required: true
+
+# Default task graph for production changes
+default_dag:
+  - id: T-01
+    title: Change Request Documentation
+    domain: process
+    goal: Document change request with business justification
+    inputs:
+      - change_description
+      - business_justification
+      - risk_assessment
+    outputs:
+      - change_request.md
+      - risk_matrix.json
+      - approval_chain.json
+    acceptance_criteria:
+      - Business justification documented
+      - Risk assessment completed
+      - Approval chain identified
+      - Change window confirmed
+    dependencies: []
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    assigned_agent: opspal-salesforce:sfdc-planner
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 15
+
+  - id: T-02
+    title: Pre-Production Validation
+    domain: salesforce-metadata
+    goal: Validate changes in sandbox mirror of production
+    inputs:
+      - source_paths
+      - sandbox_alias
+    outputs:
+      - sandbox_validation.json
+      - test_results.json
+      - regression_report.md
+    acceptance_criteria:
+      - All tests pass in sandbox
+      - Code coverage >= 75%
+      - No regression failures
+      - Performance acceptable
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-01
+    concurrency_group: metadata
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    verification_commands:
+      - "sf apex test run --target-org {sandboxAlias} --code-coverage --result-format json"
+    assigned_agent: opspal-salesforce:sfdc-deployment-manager
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 30
+
+  - id: T-03
+    title: Production State Snapshot
+    domain: salesforce-metadata
+    goal: Capture current production state for rollback
+    inputs:
+      - prod_org_alias
+      - component_inventory.json
+    outputs:
+      - prod_snapshot.zip
+      - rollback_manifest.xml
+      - current_state.json
+    acceptance_criteria:
+      - Full snapshot of affected components
+      - Rollback package ready
+      - State documented for comparison
+      - Snapshot verified restorable
+    dependencies:
+      - T-01
+    concurrency_group: prod
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: allowed
+    stop_points:
+      - Before accessing production
+    assigned_agent: opspal-salesforce:sfdc-state-discovery
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-04
+    title: Approval Gate
+    domain: process
+    goal: Obtain required approvals before production deployment
+    inputs:
+      - change_request.md
+      - sandbox_validation.json
+      - risk_matrix.json
+      - rollback_manifest.xml
+    outputs:
+      - approval_record.json
+      - approved_change_window.json
+    acceptance_criteria:
+      - All required approvers signed off
+      - Change window confirmed
+      - Rollback plan reviewed
+      - Communication plan confirmed
+    dependencies:
+      - T-01
+      - T-02
+      - T-03
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    stop_points:
+      - Await human approval
+    human_approval_required: true
+    assigned_agent: null  # Human task
+    estimated_complexity: 0.1
+    estimated_duration_minutes: 60
+
+  - id: T-05
+    title: Production Check-Only Deployment
+    domain: salesforce-metadata
+    goal: Validate deployment against production org
+    inputs:
+      - source_paths
+      - prod_org_alias
+      - approval_record.json
+    outputs:
+      - prod_validation.json
+      - validation_id.txt
+      - component_status.json
+    acceptance_criteria:
+      - Check-only deployment succeeds
+      - All tests pass in production
+      - Coverage threshold met
+      - Validation ID captured for quick deploy
+    dependencies:
+      - T-04
+    concurrency_group: prod
+    risk_level: high
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: allowed
+    stop_points:
+      - Before production validation
+    verification_commands:
+      - "sf project deploy validate --source-dir {sourcePath} --target-org {prodAlias} --test-level RunLocalTests --json"
+    assigned_agent: opspal-salesforce:sfdc-deployment-manager
+    estimated_complexity: 0.5
+    estimated_duration_minutes: 45
+
+  - id: T-06
+    title: Execute Production Deployment
+    domain: salesforce-metadata
+    goal: Deploy validated changes to production
+    inputs:
+      - validation_id.txt
+      - prod_org_alias
+      - approved_change_window.json
+    outputs:
+      - deploy_result.json
+      - deployment_log.txt
+      - deployed_components.json
+    acceptance_criteria:
+      - Deployment completes within change window
+      - All components deployed successfully
+      - No partial failures
+      - Deployment ID recorded
+    dependencies:
+      - T-05
+    concurrency_group: prod
+    risk_level: critical
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: allowed_with_approval
+      production_ops: allowed_with_approval
+    stop_points:
+      - Confirm ready to deploy
+      - Point of no return confirmation
+    human_approval_required: true
+    assigned_agent: opspal-salesforce:sfdc-deployment-manager
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 30
+
+  - id: T-07
+    title: Post-Deployment Verification
+    domain: salesforce-metadata
+    goal: Verify deployment success and system health
+    inputs:
+      - deploy_result.json
+      - prod_org_alias
+      - current_state.json
+    outputs:
+      - health_check.json
+      - verification_report.md
+      - post_deploy_state.json
+    acceptance_criteria:
+      - All deployed components functional
+      - System health checks pass
+      - No new errors in logs
+      - Performance within acceptable range
+    dependencies:
+      - T-06
+    concurrency_group: prod
+    risk_level: high
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: allowed
+    verification_commands:
+      - "sf apex test run --target-org {prodAlias} --suite SmokeTests --result-format json"
+    assigned_agent: opspal-salesforce:sfdc-state-discovery
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-08
+    title: Deployment Closure
+    domain: process
+    goal: Document deployment outcome and close change request
+    inputs:
+      - deploy_result.json
+      - verification_report.md
+      - approval_record.json
+    outputs:
+      - closure_report.md
+      - lessons_learned.md
+      - metrics_update.json
+    acceptance_criteria:
+      - Change request closed
+      - Stakeholders notified
+      - Documentation updated
+      - Metrics recorded
+    dependencies:
+      - T-07
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    assigned_agent: opspal-salesforce:sfdc-planner
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 15
+
+# Rollback task (conditional - only if deployment fails)
+rollback_task:
+  id: T-ROLLBACK
+  title: Emergency Rollback
+  domain: salesforce-metadata
+  goal: Restore production to pre-deployment state
+  inputs:
+    - rollback_manifest.xml
+    - prod_snapshot.zip
+    - prod_org_alias
+  outputs:
+    - rollback_result.json
+    - restored_state.json
+  acceptance_criteria:
+    - Production restored to snapshot state
+    - All rollback components deployed
+    - System health verified post-rollback
+    - Incident documented
+  trigger_conditions:
+    - deployment_failed
+    - health_check_failed
+    - user_initiated_rollback
+  concurrency_group: prod
+  risk_level: critical
+  tool_policy:
+    file_read: allowed
+    file_write: allowed
+    destructive_ops: allowed
+    production_ops: allowed
+  assigned_agent: opspal-salesforce:sfdc-deployment-manager
+  estimated_complexity: 0.5
+  estimated_duration_minutes: 30
+
+# Rules for parallelization
+parallelization_rules:
+  - description: "Documentation and sandbox validation can run in parallel"
+    tasks: [T-01, T-02]
+    reason: "Independent preparation activities"
+
+  - description: "Production access requires approval gate"
+    tasks: [T-03, T-04, T-05, T-06, T-07]
+    constraint: "strict_sequential"
+    reason: "Production changes must be strictly sequential"
+
+  - description: "Closure after all verification complete"
+    tasks: [T-08]
+    requires: [T-07]
+    reason: "Documentation requires complete verification"
+
+# Rules for sequential execution
+sequential_rules:
+  - "NEVER deploy to production without approval gate"
+  - "ALWAYS capture rollback snapshot before production changes"
+  - "ALWAYS run check-only before actual deployment"
+  - "NEVER skip post-deployment verification"
+  - "Rollback must be immediately available throughout deployment"
+
+# Verification gates - ALL REQUIRED
+verification_gates:
+  - name: sandbox_tests
+    type: command
+    command: "sf apex test run --target-org {sandboxAlias} --code-coverage --result-format json"
+    success_criteria:
+      outcome: Passed
+      coverage_threshold: 75
+    required: true
+    phase: pre_production
+
+  - name: prod_validation
+    type: command
+    command: "sf project deploy validate --source-dir {sourcePath} --target-org {prodAlias} --test-level RunLocalTests --json"
+    success_criteria:
+      status: Succeeded
+    required: true
+    phase: production_validation
+
+  - name: smoke_tests
+    type: command
+    command: "sf apex test run --target-org {prodAlias} --suite SmokeTests --result-format json"
+    success_criteria:
+      outcome: Passed
+    required: true
+    phase: post_deployment
+
+  - name: health_check
+    type: custom
+    checks:
+      - api_accessible
+      - no_new_errors
+      - performance_acceptable
+      - critical_workflows_functional
+    required: true
+    phase: post_deployment
+
+# Communication checkpoints
+communication_gates:
+  - phase: pre_deployment
+    notify:
+      - stakeholders
+      - support_team
+    message_template: "Production deployment starting: {change_summary}"
+
+  - phase: deployment_complete
+    notify:
+      - stakeholders
+      - support_team
+      - monitoring_team
+    message_template: "Production deployment complete: {result_summary}"
+
+  - phase: rollback_initiated
+    notify:
+      - all_stakeholders
+      - incident_team
+      - leadership
+    message_template: "ALERT: Rollback initiated for {change_id}: {reason}"
+    priority: high
+
+# Escalation conditions
+escalation_triggers:
+  - condition: "hotfix or emergency"
+    modify_tasks:
+      - reduce_approval_chain
+      - enable_expedited_review
+    add_tasks:
+      - incident_documentation
+    reason: "Emergency changes have expedited process"
+
+  - condition: "data-affecting changes"
+    add_tasks:
+      - data_backup
+      - data_validation
+    escalate_complexity: 0.2
+    reason: "Data changes require additional safeguards"
+
+  - condition: "security-related changes"
+    add_tasks:
+      - security_review
+      - penetration_test_verification
+    escalate_complexity: 0.3
+    reason: "Security changes require specialized review"
+
+# Mandatory requirements
+mandatory_requirements:
+  - rollback_plan: true
+  - approval_record: true
+  - change_window: true
+  - sandbox_validation: true
+  - production_snapshot: true
+  - post_deployment_verification: true
+  - stakeholder_communication: true
+
+# Timing constraints
+timing_constraints:
+  change_window_required: true
+  max_deployment_duration_minutes: 240
+  rollback_sla_minutes: 30
+  health_check_window_minutes: 60
+
+# Common variations
+variations:
+  hotfix:
+    description: "Emergency production fix"
+    modify_approval_chain:
+      - expedited_review
+      - single_approver_sufficient
+    skip_tasks: []
+    add_tasks:
+      - incident_linkage
+      - root_cause_placeholder
+    additional_constraints:
+      - Must link to incident ticket
+      - Post-mortem required within 48 hours
+
+  scheduled_release:
+    description: "Planned release during maintenance window"
+    additional_considerations:
+      - Multiple features bundled
+      - Extended testing period
+      - Full regression suite
+    add_tasks:
+      - release_notes_generation
+      - feature_flag_verification
+
+  security_patch:
+    description: "Security vulnerability remediation"
+    additional_requirements:
+      - Security team approval
+      - Vulnerability scan pre and post
+      - Audit trail complete
+    escalate_complexity: 0.3
+    priority: critical

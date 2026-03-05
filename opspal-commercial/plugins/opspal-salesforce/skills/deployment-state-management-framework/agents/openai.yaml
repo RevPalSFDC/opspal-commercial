@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deployment State Management Framework"
+  short_description: "Help with Deployment State Management Framework tasks"
+  default_prompt: "Use $deployment-state-management-framework to execute this workflow safely and produce the expected artifacts."

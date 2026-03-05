@@ -1,0 +1,39 @@
+flowchart TB
+  %% Salesforce Lead Assignment Template
+  %% Customize criteria and routing rules based on your org
+
+  Start((New Lead)) --> CheckSource{Lead Source?}
+
+  CheckSource -->|Website| WebLead[Web Lead]
+  CheckSource -->|Event| EventLead[Event Lead]
+  CheckSource -->|Referral| ReferralLead[Referral Lead]
+  CheckSource -->|Other| OtherLead[Other Source]
+
+  WebLead --> CheckScore{Lead Score?}
+  EventLead --> CheckScore
+  ReferralLead --> Priority[High Priority]
+  OtherLead --> CheckScore
+
+  CheckScore -->|Score >= 80| Hot[Hot Lead]
+  CheckScore -->|Score 50-79| Warm[Warm Lead]
+  CheckScore -->|Score < 50| Cold[Cold Lead]
+
+  Hot --> CheckTerritory{Territory?}
+  Warm --> CheckTerritory
+  Cold --> NurtureQueue[Nurture Queue]
+  Priority --> SeniorRep[Senior Sales Rep]
+
+  CheckTerritory -->|Enterprise| EnterpriseTeam[Enterprise Team]
+  CheckTerritory -->|Mid-Market| MidMarketTeam[Mid-Market Team]
+  CheckTerritory -->|SMB| SMBTeam[SMB Team]
+
+  EnterpriseTeam --> RoundRobin[Round Robin Assignment]
+  MidMarketTeam --> RoundRobin
+  SMBTeam --> RoundRobin
+
+  RoundRobin --> NotifyRep[Notify Assigned Rep]
+  SeniorRep --> NotifyRep
+  NurtureQueue --> AutomatedCampaign[Automated Email Campaign]
+
+  NotifyRep --> End((Lead Assigned))
+  AutomatedCampaign --> End

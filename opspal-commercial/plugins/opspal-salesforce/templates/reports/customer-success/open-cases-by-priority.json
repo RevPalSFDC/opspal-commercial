@@ -1,0 +1,116 @@
+{
+  "templateMetadata": {
+    "templateName": "Open Cases by Priority",
+    "templateVersion": "1.1",
+    "description": "Distribution of open cases by priority level",
+    "audience": "Support Managers, CS Leadership",
+    "useCase": "Case prioritization, workload management"
+  },
+  "reportMetadata": {
+    "name": "Open Cases by Priority",
+    "reportType": "Case",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "Status",
+        "operator": "notEqual",
+        "value": "Closed"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "Priority",
+        "sortOrder": "Desc",
+        "sortColumn": "RowCount"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Count",
+        "aggregateType": "RowCount"
+      }
+    ],
+    "chart": {
+      "chartType": "Donut",
+      "groupingColumn": "Priority",
+      "aggregateColumn": "Count"
+    }
+  },
+  "dashboardUsage": {
+    "componentType": "Donut Chart",
+    "refreshFrequency": "Hourly"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

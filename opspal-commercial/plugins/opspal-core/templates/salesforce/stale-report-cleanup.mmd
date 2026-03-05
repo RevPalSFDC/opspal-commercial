@@ -1,0 +1,63 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+flowchart TB
+    %% Stale Report Cleanup Strategy
+    %% Auto-generated from reports usage audit
+
+    START([147 Stale Reports<br/>>6 months unused])
+
+    %% Decision Nodes
+    ON_DASH{On Dashboard?}
+    HIGH_QUAL{High Quality<br/>Score?}
+
+    %% Recommendation Nodes
+    KEEP[Keep<br/>Dashboard dependency]
+    PROMOTE[Promote or Sunset<br/>High quality, not used]
+    DELETE[Delete Candidate<br/>Low quality, unused]
+
+    %% Example Reports - Keep Category
+    R1[Territory Analysis<br/>Last run: Never<br/>On 2 dashboards]
+    R2[Product Performance<br/>Last run: 8mo ago<br/>On 1 dashboard]
+
+    %% Example Reports - Promote Category
+    R3[Customer Lifetime Value<br/>Last run: 7mo ago<br/>Quality: 85/100]
+    R4[Win/Loss Analysis<br/>Last run: 9mo ago<br/>Quality: 92/100]
+
+    %% Example Reports - Delete Category
+    R5[Old Pipeline Report<br/>Last run: Never<br/>Quality: 23/100]
+    R6[Deprecated Forecast<br/>Last run: 2yr ago<br/>Quality: 15/100]
+    R7[Test Report 123<br/>Last run: Never<br/>Quality: 8/100]
+
+    %% Flow
+    START --> ON_DASH
+    ON_DASH -->|Yes| KEEP
+    ON_DASH -->|No| HIGH_QUAL
+    HIGH_QUAL -->|Yes| PROMOTE
+    HIGH_QUAL -->|No| DELETE
+
+    %% Connect examples to recommendations
+    KEEP --> R1
+    KEEP --> R2
+    PROMOTE --> R3
+    PROMOTE --> R4
+    DELETE --> R5
+    DELETE --> R6
+    DELETE --> R7
+
+    %% Styling
+    style KEEP fill:#4caf50
+    style PROMOTE fill:#ffd93d
+    style DELETE fill:#ff6b6b
+    style R1 fill:#e8f5e9
+    style R2 fill:#e8f5e9
+    style R3 fill:#fff9c4
+    style R4 fill:#fff9c4
+    style R5 fill:#ffcccc
+    style R6 fill:#ffcccc
+    style R7 fill:#ffcccc
+
+    %% Cleanup Summary:
+    %% ✅ Keep: 12 reports (dashboard dependencies)
+    %% ⚠️  Promote: 23 reports (communicate value, then sunset if still unused)
+    %% ❌ Delete: 112 reports (immediate cleanup candidates)
+    %% 💾 Estimated storage savings: 1.2 GB
+    %% ⚡ Estimated performance improvement: 15% faster search

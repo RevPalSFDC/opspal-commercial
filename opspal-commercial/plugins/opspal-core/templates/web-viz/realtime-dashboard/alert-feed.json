@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "templateId": "realtime-alert-feed",
+  "name": "Real-time Alert Feed",
+  "description": "Live alert dashboard showing critical notifications, acknowledgment status, and alert history with streaming updates",
+  "version": "1.0.0",
+  "category": "realtime",
+  "refreshMode": "websocket",
+  "topics": ["alerts.critical", "alerts.digest", "alerts.history"],
+
+  "layout": {
+    "type": "dashboard",
+    "theme": "revpal-dashboard",
+    "columns": 12,
+    "rows": "auto",
+    "gap": "16px"
+  },
+
+  "header": {
+    "title": "Alert Center",
+    "subtitle": "Real-time notifications and alert management",
+    "showConnectionStatus": true,
+    "showLastUpdate": true,
+    "actions": [
+      { "label": "Mark All Read", "action": "markAllRead", "icon": "check-all" },
+      { "label": "Settings", "action": "openSettings", "icon": "settings" }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "alert-stats-critical",
+      "type": "kpi",
+      "title": "Critical (P1)",
+      "topic": "alerts.digest",
+      "dataPath": "stats.bySeverity.P1",
+      "format": "number",
+      "variant": "danger",
+      "pulse": {
+        "enabled": true,
+        "condition": { "field": "value", "operator": "gt", "value": 0 }
+      },
+      "layout": { "col": 1, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "alert-stats-high",
+      "type": "kpi",
+      "title": "High (P2)",
+      "topic": "alerts.digest",
+      "dataPath": "stats.bySeverity.P2",
+      "format": "number",
+      "variant": "warning",
+      "layout": { "col": 4, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "alert-stats-medium",
+      "type": "kpi",
+      "title": "Medium (P3)",
+      "topic": "alerts.digest",
+      "dataPath": "stats.bySeverity.P3",
+      "format": "number",
+      "layout": { "col": 7, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "alert-stats-low",
+      "type": "kpi",
+      "title": "Low (P4)",
+      "topic": "alerts.digest",
+      "dataPath": "stats.bySeverity.P4",
+      "format": "number",
+      "variant": "info",
+      "layout": { "col": 10, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "critical-alerts",
+      "type": "alertList",
+      "title": "Critical Alerts",
+      "topic": "alerts.critical",
+      "dataPath": "alerts",
+      "filter": { "field": "severity", "operator": "eq", "value": "P1" },
+      "sort": { "field": "createdAt", "direction": "desc" },
+      "maxItems": 10,
+      "autoScroll": true,
+      "soundAlert": {
+        "enabled": true,
+        "onNew": true
+      },
+      "itemTemplate": {
+        "severity": "{{severity}}",
+        "title": "{{title}}",
+        "message": "{{message}}",
+        "timestamp": "{{createdAt | relativeTime}}",
+        "status": "{{status}}",
+        "fields": "{{fields}}",
+        "actions": [
+          { "label": "Acknowledge", "action": "acknowledge", "condition": "status !== 'acknowledged'" },
+          { "label": "View", "action": "navigate", "url": "{{link}}" },
+          { "label": "Dismiss", "action": "dismiss" }
+        ]
+      },
+      "emptyState": {
+        "icon": "check-circle",
+        "message": "No critical alerts",
+        "variant": "success"
+      },
+      "layout": { "col": 1, "row": 2, "width": 6, "height": 4 }
+    },
+    {
+      "id": "high-alerts",
+      "type": "alertList",
+      "title": "High Priority Alerts",
+      "topic": "alerts.critical",
+      "dataPath": "alerts",
+      "filter": { "field": "severity", "operator": "eq", "value": "P2" },
+      "sort": { "field": "createdAt", "direction": "desc" },
+      "maxItems": 10,
+      "itemTemplate": {
+        "severity": "{{severity}}",
+        "title": "{{title}}",
+        "message": "{{message}}",
+        "timestamp": "{{createdAt | relativeTime}}",
+        "status": "{{status}}",
+        "actions": [
+          { "label": "Acknowledge", "action": "acknowledge", "condition": "status !== 'acknowledged'" },
+          { "label": "View", "action": "navigate", "url": "{{link}}" }
+        ]
+      },
+      "emptyState": {
+        "icon": "check-circle",
+        "message": "No high priority alerts"
+      },
+      "layout": { "col": 7, "row": 2, "width": 6, "height": 4 }
+    },
+    {
+      "id": "alerts-by-category",
+      "type": "chart",
+      "chartType": "bar",
+      "title": "Alerts by Category (24h)",
+      "topic": "alerts.digest",
+      "dataPath": "stats.byCategory",
+      "options": {
+        "xAxis": { "field": "category", "label": "Category" },
+        "yAxis": { "field": "count", "label": "Count" },
+        "colorScheme": "category-colors",
+        "horizontal": true
+      },
+      "layout": { "col": 1, "row": 6, "width": 4, "height": 2 }
+    },
+    {
+      "id": "alerts-timeline",
+      "type": "chart",
+      "chartType": "line",
+      "title": "Alert Volume (24h)",
+      "topic": "alerts.digest",
+      "dataPath": "stats.hourlyVolume",
+      "options": {
+        "xAxis": { "field": "hour", "format": "HH:mm" },
+        "yAxis": { "field": "count", "label": "Alerts" },
+        "series": [
+          { "field": "critical", "label": "Critical", "color": "var(--status-red)" },
+          { "field": "high", "label": "High", "color": "var(--status-orange)" },
+          { "field": "other", "label": "Other", "color": "var(--brand-grape)" }
+        ],
+        "fill": false
+      },
+      "layout": { "col": 5, "row": 6, "width": 4, "height": 2 }
+    },
+    {
+      "id": "acknowledgment-stats",
+      "type": "chart",
+      "chartType": "doughnut",
+      "title": "Acknowledgment Status",
+      "topic": "alerts.digest",
+      "dataPath": "stats.byStatus",
+      "options": {
+        "segments": [
+          { "label": "Acknowledged", "field": "acknowledged", "color": "var(--brand-green)" },
+          { "label": "Pending", "field": "pending", "color": "var(--status-yellow)" },
+          { "label": "Escalated", "field": "escalated", "color": "var(--status-red)" }
+        ],
+        "centerLabel": {
+          "enabled": true,
+          "value": "{{total}}",
+          "label": "Total"
+        }
+      },
+      "layout": { "col": 9, "row": 6, "width": 4, "height": 2 }
+    },
+    {
+      "id": "recent-alerts",
+      "type": "table",
+      "title": "Recent Alert History",
+      "topic": "alerts.history",
+      "dataPath": "alerts",
+      "sortable": true,
+      "filterable": true,
+      "pagination": { "enabled": true, "pageSize": 15 },
+      "columns": [
+        {
+          "field": "severity",
+          "label": "Severity",
+          "width": "8%",
+          "badge": true,
+          "colorMap": {
+            "P1": "var(--status-red)",
+            "P2": "var(--status-orange)",
+            "P3": "var(--status-yellow)",
+            "P4": "var(--brand-indigo)"
+          }
+        },
+        { "field": "title", "label": "Alert", "width": "25%" },
+        { "field": "category", "label": "Category", "width": "12%" },
+        {
+          "field": "status",
+          "label": "Status",
+          "width": "10%",
+          "badge": true,
+          "colorMap": {
+            "acknowledged": "var(--brand-green)",
+            "pending": "var(--status-yellow)",
+            "escalated": "var(--status-red)",
+            "resolved": "var(--brand-indigo)"
+          }
+        },
+        { "field": "createdAt", "label": "Created", "width": "15%", "format": "datetime" },
+        { "field": "acknowledgedAt", "label": "Acknowledged", "width": "15%", "format": "datetime" },
+        { "field": "acknowledgedBy", "label": "By", "width": "15%" }
+      ],
+      "rowClick": {
+        "action": "showDetail",
+        "panel": "alertDetailPanel"
+      },
+      "layout": { "col": 1, "row": 8, "width": 12, "height": 3 }
+    }
+  ],
+
+  "panels": {
+    "alertDetailPanel": {
+      "title": "Alert Details",
+      "position": "right",
+      "width": "400px",
+      "sections": [
+        {
+          "title": "Alert Information",
+          "fields": [
+            { "label": "ID", "field": "id" },
+            { "label": "Type", "field": "type" },
+            { "label": "Severity", "field": "severity" },
+            { "label": "Category", "field": "category" },
+            { "label": "Created", "field": "createdAt", "format": "datetime" }
+          ]
+        },
+        {
+          "title": "Details",
+          "content": "{{message}}"
+        },
+        {
+          "title": "Context",
+          "fields": "{{fields}}"
+        },
+        {
+          "title": "Delivery",
+          "list": "{{deliveries}}",
+          "itemTemplate": "{{channel}}: {{recipient}} at {{sentAt | time}}"
+        }
+      ],
+      "actions": [
+        { "label": "Acknowledge", "action": "acknowledge", "primary": true },
+        { "label": "View in CRM", "action": "navigate", "url": "{{link}}" },
+        { "label": "Add Comment", "action": "addComment" }
+      ]
+    }
+  },
+
+  "websocket": {
+    "topics": ["alerts.critical", "alerts.digest", "alerts.history"],
+    "reconnectStrategy": {
+      "maxAttempts": 10,
+      "initialDelay": 1000,
+      "maxDelay": 30000
+    },
+    "deltaUpdates": true,
+    "soundNotifications": {
+      "enabled": true,
+      "P1": "critical.mp3",
+      "P2": "high.mp3"
+    }
+  },
+
+  "filters": {
+    "global": [
+      {
+        "id": "severity",
+        "type": "multiselect",
+        "label": "Severity",
+        "options": [
+          { "value": "P1", "label": "Critical (P1)" },
+          { "value": "P2", "label": "High (P2)" },
+          { "value": "P3", "label": "Medium (P3)" },
+          { "value": "P4", "label": "Low (P4)" }
+        ],
+        "default": ["P1", "P2"]
+      },
+      {
+        "id": "category",
+        "type": "multiselect",
+        "label": "Category",
+        "options": "dynamic:alertCategories",
+        "default": "all"
+      },
+      {
+        "id": "status",
+        "type": "select",
+        "label": "Status",
+        "options": [
+          { "value": "all", "label": "All" },
+          { "value": "pending", "label": "Pending" },
+          { "value": "acknowledged", "label": "Acknowledged" },
+          { "value": "escalated", "label": "Escalated" }
+        ],
+        "default": "all"
+      },
+      {
+        "id": "timeRange",
+        "type": "dateRange",
+        "label": "Time Range",
+        "default": "last24h"
+      }
+    ]
+  },
+
+  "styles": {
+    "customCSS": ".pulse { animation: pulse 2s infinite; } @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }"
+  }
+}

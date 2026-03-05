@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://revpal.dev/schemas/opspal-opportunity-scoring-contract.schema.json",
+  "title": "OpsPal Opportunity Scoring Contract",
+  "type": "object",
+  "required": [
+    "opportunity_id",
+    "category",
+    "impact_score",
+    "effort_score",
+    "confidence",
+    "ninety_day_fit",
+    "owner_team"
+  ],
+  "properties": {
+    "opportunity_id": {
+      "type": "string"
+    },
+    "category": {
+      "enum": [
+        "ai_leverage",
+        "feature_gap"
+      ]
+    },
+    "impact_score": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "effort_score": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "ninety_day_fit": {
+      "enum": [
+        "yes",
+        "conditional",
+        "no"
+      ]
+    },
+    "owner_team": {
+      "type": "string"
+    },
+    "rationale": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,253 @@
+{# Team Member Card Module Template #}
+{# HubSpot CMS Module - Accessible team member profile card #}
+
+<article
+  class="team-card team-card--{{ module.style_options.card_style }} team-card--{{ module.style_options.text_alignment }}{% if module.style_options.hover_effect %} team-card--hover{% endif %}"
+  itemscope
+  itemtype="https://schema.org/Person"
+>
+  {% if module.photo.src %}
+  <div class="team-card__photo-wrapper team-card__photo--{{ module.style_options.photo_shape }}">
+    <img
+      src="{{ module.photo.src }}"
+      alt="{{ module.photo.alt|default(module.name ~ ' photo') }}"
+      class="team-card__photo"
+      loading="lazy"
+      itemprop="image"
+    >
+  </div>
+  {% else %}
+  <div class="team-card__photo-wrapper team-card__photo--{{ module.style_options.photo_shape }} team-card__photo--placeholder">
+    <span class="team-card__initials" aria-hidden="true">
+      {{ module.name|first|upper }}{{ module.name|split(' ')|last|first|upper if module.name|split(' ')|length > 1 }}
+    </span>
+  </div>
+  {% endif %}
+
+  <div class="team-card__content">
+    <h3 class="team-card__name" itemprop="name">{{ module.name }}</h3>
+
+    {% if module.job_title %}
+    <p class="team-card__title" itemprop="jobTitle">{{ module.job_title }}</p>
+    {% endif %}
+
+    {% if module.department %}
+    <p class="team-card__department">
+      <span class="team-card__department-badge team-card__department--{{ module.department }}">
+        {{ module.department|replace('_', ' ')|title }}
+      </span>
+    </p>
+    {% endif %}
+
+    {% if module.bio %}
+    <div class="team-card__bio" itemprop="description">
+      {{ module.bio }}
+    </div>
+    {% endif %}
+
+    {% if module.social_links.linkedin or module.social_links.twitter or module.social_links.email %}
+    <div class="team-card__social">
+      {% if module.social_links.linkedin %}
+      <a
+        href="{{ module.social_links.linkedin }}"
+        class="team-card__social-link team-card__social-link--linkedin"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Connect with {{ module.name }} on LinkedIn"
+        itemprop="sameAs"
+      >
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>
+      </a>
+      {% endif %}
+
+      {% if module.social_links.twitter %}
+      <a
+        href="{{ module.social_links.twitter }}"
+        class="team-card__social-link team-card__social-link--twitter"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Follow {{ module.name }} on Twitter"
+        itemprop="sameAs"
+      >
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+      {% endif %}
+
+      {% if module.social_links.email %}
+      <a
+        href="mailto:{{ module.social_links.email }}"
+        class="team-card__social-link team-card__social-link--email"
+        aria-label="Email {{ module.name }}"
+        itemprop="email"
+      >
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</article>
+
+<style>
+  .team-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 350px;
+    transition: all 0.3s ease;
+  }
+
+  .team-card--standard {
+    background: #f8f9fa;
+  }
+
+  .team-card--bordered {
+    border: 1px solid #e0e0e0;
+  }
+
+  .team-card--shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .team-card--hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .team-card--center { text-align: center; }
+  .team-card--left { text-align: left; }
+
+  .team-card--center .team-card__photo-wrapper,
+  .team-card--center .team-card__social {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .team-card__photo-wrapper {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .team-card__photo--circle {
+    border-radius: 50%;
+  }
+
+  .team-card__photo--rounded {
+    border-radius: 12px;
+  }
+
+  .team-card__photo--square {
+    border-radius: 0;
+  }
+
+  .team-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .team-card__photo--placeholder {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .team-card__initials {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .team-card__name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+    color: #1a1a2e;
+  }
+
+  .team-card__title {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 0 0.75rem;
+  }
+
+  .team-card__department-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 100px;
+    background: #e0e0e0;
+    color: #333;
+  }
+
+  .team-card__department--leadership { background: #ffd700; color: #333; }
+  .team-card__department--engineering { background: #4caf50; color: #fff; }
+  .team-card__department--design { background: #e91e63; color: #fff; }
+  .team-card__department--marketing { background: #ff9800; color: #fff; }
+  .team-card__department--sales { background: #2196f3; color: #fff; }
+  .team-card__department--customer_success { background: #9c27b0; color: #fff; }
+
+  .team-card__bio {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+    margin-top: 1rem;
+  }
+
+  .team-card__bio p {
+    margin: 0;
+  }
+
+  .team-card__social {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .team-card--center .team-card__social {
+    justify-content: center;
+  }
+
+  .team-card__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #666;
+    transition: all 0.2s ease;
+  }
+
+  .team-card__social-link:hover {
+    transform: scale(1.1);
+  }
+
+  .team-card__social-link--linkedin:hover {
+    background: #0077b5;
+    color: #fff;
+  }
+
+  .team-card__social-link--twitter:hover {
+    background: #1da1f2;
+    color: #fff;
+  }
+
+  .team-card__social-link--email:hover {
+    background: #ea4335;
+    color: #fff;
+  }
+</style>

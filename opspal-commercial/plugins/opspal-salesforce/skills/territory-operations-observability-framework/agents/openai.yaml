@@ -1,0 +1,4 @@
+interface:
+  display_name: "Territory Operations Observability Framework"
+  short_description: "Help with Territory Operations Observability Framework tasks"
+  default_prompt: "Use $territory-operations-observability-framework to execute this workflow safely and produce the expected artifacts."

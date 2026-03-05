@@ -1,0 +1,35 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+sequenceDiagram
+    %% Multi-Touch Campaign Attribution Journey
+    %% Auto-generated from RevOps assessment data
+
+    autonumber
+
+    participant C as Contact
+    participant W as Webinar Campaign
+    participant E as Email Nurture
+    participant D as Demo Request
+    participant O as Opportunity
+
+    Note over C,O: Attribution Journey: First Touch to Closed Won
+
+    C->>W: First Touch: Webinar Registration
+    Note right of W: Day 1
+    W-->>C: Attended Webinar
+
+    E->>C: Nurture Email Sent
+    Note right of E: Day 7
+    C->>E: Email Opened (Click-through)
+
+    C->>D: Demo Requested
+    Note right of D: Day 14
+    D->>O: Opportunity Created
+    Note right of O: Last Touch
+
+    O-->>C: Closed Won (Deal: $45K)
+    Note over C,O: Total Journey: 21 days
+
+    %% Multi-Touch Attribution Model Notes:
+    %% - First Touch Credit: 40% to Webinar
+    %% - Mid-Touch Credit: 30% to Email Nurture
+    %% - Last Touch Credit: 30% to Demo Request

@@ -1,0 +1,13 @@
+{
+  "id": "team_member_card",
+  "label": "Team Member Card",
+  "global": false,
+  "smart_type": null,
+  "css_assets": [],
+  "js_assets": [],
+  "extra_classes": "module-team-member-card",
+  "is_available_for_new_content": true,
+  "categories": ["about", "team"],
+  "icon": "module",
+  "host_template_types": ["PAGE"]
+}

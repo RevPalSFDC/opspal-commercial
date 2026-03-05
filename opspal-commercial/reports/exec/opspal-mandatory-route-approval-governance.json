@@ -1,0 +1,204 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-003",
+  "title": "Copilot Approval Queue for Mandatory Route Outputs",
+  "mandatory_route_plugins": [
+    {
+      "plugin": "opspal-marketo",
+      "owner": "revpal-marketing-ops",
+      "status": "active",
+      "mandatory_agents": 25,
+      "commands": 30
+    },
+    {
+      "plugin": "opspal-salesforce",
+      "owner": "revpal-salesforce",
+      "status": "active",
+      "mandatory_agents": 20,
+      "commands": 60
+    },
+    {
+      "plugin": "opspal-core",
+      "owner": "revpal-platform",
+      "status": "active",
+      "mandatory_agents": 7,
+      "commands": 90
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "owner": "revpal-hubspot",
+      "status": "active",
+      "mandatory_agents": 6,
+      "commands": 34
+    },
+    {
+      "plugin": "opspal-gtm-planning",
+      "owner": "revpal-gtm",
+      "status": "active",
+      "mandatory_agents": 1,
+      "commands": 15
+    }
+  ],
+  "governed_opportunities": [
+    {
+      "opportunity_id": "OPP-003",
+      "title": "Copilot Approval Queue for Mandatory Route Outputs",
+      "plugin_scope": "opspal-core; opspal-salesforce; opspal-marketo",
+      "in_mandatory_scope": true,
+      "risk_class": "critical",
+      "required_approver_count": 3,
+      "required_roles": [
+        "domain-owner",
+        "platform-owner",
+        "security-owner"
+      ],
+      "approval_required": true
+    },
+    {
+      "opportunity_id": "OPP-004",
+      "title": "Cross-Plugin Command Telemetry Contract",
+      "plugin_scope": "suite-wide",
+      "in_mandatory_scope": true,
+      "risk_class": "high",
+      "required_approver_count": 2,
+      "required_roles": [
+        "domain-owner",
+        "platform-owner"
+      ],
+      "approval_required": true
+    },
+    {
+      "opportunity_id": "OPP-007",
+      "title": "Manual Review Load Reduction in Dedup and Routing",
+      "plugin_scope": "opspal-core; opspal-hubspot; opspal-salesforce",
+      "in_mandatory_scope": true,
+      "risk_class": "high",
+      "required_approver_count": 2,
+      "required_roles": [
+        "domain-owner",
+        "platform-owner"
+      ],
+      "approval_required": true
+    },
+    {
+      "opportunity_id": "OPP-009",
+      "title": "Unified RevOps Next-Best-Action Layer",
+      "plugin_scope": "opspal-core; opspal-salesforce; opspal-hubspot; opspal-marketo",
+      "in_mandatory_scope": true,
+      "risk_class": "high",
+      "required_approver_count": 2,
+      "required_roles": [
+        "domain-owner",
+        "platform-owner"
+      ],
+      "approval_required": true
+    },
+    {
+      "opportunity_id": "OPP-001",
+      "title": "Capability Narrative Drift Guardrail",
+      "plugin_scope": "suite-wide",
+      "in_mandatory_scope": true,
+      "risk_class": "medium",
+      "required_approver_count": 1,
+      "required_roles": [
+        "domain-owner"
+      ],
+      "approval_required": false
+    },
+    {
+      "opportunity_id": "OPP-010",
+      "title": "Forecast and Simulation Standardization",
+      "plugin_scope": "opspal-gtm-planning; opspal-hubspot; opspal-core",
+      "in_mandatory_scope": true,
+      "risk_class": "medium",
+      "required_approver_count": 1,
+      "required_roles": [
+        "domain-owner"
+      ],
+      "approval_required": false
+    },
+    {
+      "opportunity_id": "OPP-011",
+      "title": "Initiative ROI Instrumentation Layer",
+      "plugin_scope": "suite-wide",
+      "in_mandatory_scope": true,
+      "risk_class": "medium",
+      "required_approver_count": 1,
+      "required_roles": [
+        "domain-owner"
+      ],
+      "approval_required": false
+    },
+    {
+      "opportunity_id": "OPP-012",
+      "title": "Strategy Dashboard Gap Category Feeds",
+      "plugin_scope": "opspal-core",
+      "in_mandatory_scope": true,
+      "risk_class": "medium",
+      "required_approver_count": 1,
+      "required_roles": [
+        "domain-owner"
+      ],
+      "approval_required": false
+    }
+  ],
+  "approval_policy_matrix": [
+    {
+      "risk_class": "low",
+      "required_approver_count": 1,
+      "required_roles": [
+        "domain-owner"
+      ]
+    },
+    {
+      "risk_class": "medium",
+      "required_approver_count": 1,
+      "required_roles": [
+        "domain-owner"
+      ]
+    },
+    {
+      "risk_class": "high",
+      "required_approver_count": 2,
+      "required_roles": [
+        "domain-owner",
+        "platform-owner"
+      ]
+    },
+    {
+      "risk_class": "critical",
+      "required_approver_count": 3,
+      "required_roles": [
+        "domain-owner",
+        "platform-owner",
+        "security-owner"
+      ]
+    }
+  ],
+  "queue_snapshot": {
+    "queue_file_present": true,
+    "queue_file": "state/copilot-approval-queue.json",
+    "total_requests": 6,
+    "by_status": {
+      "pending": 0,
+      "approved": 6,
+      "rejected": 0
+    },
+    "high_or_critical_pending": 0
+  },
+  "release_gate": {
+    "gate_id": "mandatory-route-approval-governance",
+    "status": "active",
+    "criteria": [
+      "High/critical recommendations in mandatory-route scope require explicit approval.",
+      "Approval queue state remains append-only with auditable decision log.",
+      "Approved requests are promoted via runtime work-item exports."
+    ]
+  },
+  "controls": [
+    "Use risk-based approver role requirements before status transition to approved.",
+    "Keep queue state in `state/copilot-approval-queue.json` and decision log in append-only NDJSON.",
+    "Run `npm run next-actions:promote` after approval decisions to refresh runtime handoff exports."
+  ]
+}

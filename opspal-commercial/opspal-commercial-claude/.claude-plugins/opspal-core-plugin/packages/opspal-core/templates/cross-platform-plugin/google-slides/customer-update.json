@@ -1,0 +1,129 @@
+{
+  "templateId": "1iFug0S1BfOx9uW__McTPNFXOidg47wqgavhIWQltcNU",
+  "name": "Customer Update Template",
+  "version": "1.0.0",
+  "description": "Quarterly business review or progress update for customers/partners",
+  "deckType": "customer_update",
+  "targetAudience": ["customer", "partner", "stakeholder"],
+  "inheritsFrom": "revpal-master",
+  "recommendedStructure": [
+    {
+      "section": "Opening",
+      "slides": [
+        {
+          "layout": "TITLE",
+          "title": "{{customer_name}} - {{quarter}} Business Review",
+          "required": true
+        }
+      ]
+    },
+    {
+      "section": "Agenda",
+      "slides": [
+        {
+          "layout": "CONTENT",
+          "title": "Today's Agenda",
+          "description": "Meeting topics and timeline"
+        }
+      ]
+    },
+    {
+      "section": "Progress",
+      "slides": [
+        {
+          "layout": "SECTION_HEADER",
+          "title": "Progress Since Last Review"
+        },
+        {
+          "layout": "KPI",
+          "title": "Key Achievements",
+          "description": "Metrics and milestones"
+        },
+        {
+          "layout": "CONTENT",
+          "title": "Highlights",
+          "description": "Notable wins and successes"
+        },
+        {
+          "layout": "QUOTE",
+          "title": "Customer Success Story",
+          "description": "Impact or testimonial (if applicable)"
+        }
+      ]
+    },
+    {
+      "section": "Current State",
+      "slides": [
+        {
+          "layout": "SECTION_HEADER",
+          "title": "Where We Are Today"
+        },
+        {
+          "layout": "KPI",
+          "title": "Current Performance",
+          "description": "Usage metrics, adoption rates"
+        },
+        {
+          "layout": "TWO_COLUMN",
+          "title": "On Track vs At Risk",
+          "description": "Health assessment"
+        }
+      ]
+    },
+    {
+      "section": "Looking Ahead",
+      "slides": [
+        {
+          "layout": "SECTION_HEADER",
+          "title": "Next Quarter Focus"
+        },
+        {
+          "layout": "CONTENT",
+          "title": "Upcoming Initiatives",
+          "description": "What's planned"
+        },
+        {
+          "layout": "CONTENT",
+          "title": "Success Criteria",
+          "description": "How we'll measure progress"
+        }
+      ]
+    },
+    {
+      "section": "Actions",
+      "slides": [
+        {
+          "layout": "CONTENT",
+          "title": "Action Items",
+          "description": "Owners and timelines",
+          "required": true
+        }
+      ]
+    },
+    {
+      "section": "Closing",
+      "slides": [
+        {
+          "layout": "CLOSING",
+          "title": "Questions & Next Meeting",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "contentGuidelines": {
+    "maxSlides": 25,
+    "maxBulletsPerSlide": 5,
+    "maxWordsPerBullet": 15,
+    "tone": "collaborative, transparent, forward-looking",
+    "emphasizePartnerships": true,
+    "celebrateWins": true,
+    "addressChallengesHonestly": true,
+    "recommendedDuration": "30-45 minutes"
+  },
+  "styleOverrides": {
+    "includeBranding": "both_companies",
+    "visuallyEngaging": true,
+    "dataVisualization": "charts_preferred"
+  }
+}

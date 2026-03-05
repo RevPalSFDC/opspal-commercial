@@ -1,0 +1,27 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+flowchart LR
+    %% GTM Funnel: Lead to Closed Won
+    %% Auto-generated from RevOps assessment data
+
+    Lead[Lead<br/>12,450]
+    MQL[MQL<br/>3,580]
+    SQL[SQL<br/>1,240]
+    Opp[Opportunity<br/>890]
+    Won((Closed Won<br/>245))
+
+    Lead -->|28.7% convert<br/>avg 14 days| MQL
+    MQL -->|34.6% qualify<br/>avg 8 days| SQL
+    SQL -->|71.8% create opp<br/>avg 3 days| Opp
+    Opp -->|27.5% close<br/>avg 45 days| Won
+
+    %% Styling
+    style Lead fill:#e0e0e0
+    style MQL fill:#ffd93d
+    style SQL fill:#4caf50
+    style Opp fill:#2196f3
+    style Won fill:#4caf50
+
+    %% Annotations for bottlenecks
+    %% Red: <20% conversion (bottleneck)
+    %% Yellow: 20-40% conversion (warning)
+    %% Green: >40% conversion (healthy)

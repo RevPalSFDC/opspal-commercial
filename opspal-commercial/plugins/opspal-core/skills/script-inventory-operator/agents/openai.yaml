@@ -1,0 +1,4 @@
+interface:
+  display_name: "Script Inventory Operator"
+  short_description: "Help with Script Inventory Operator tasks"
+  default_prompt: "Use $script-inventory-operator to execute this workflow safely and produce the expected artifacts."

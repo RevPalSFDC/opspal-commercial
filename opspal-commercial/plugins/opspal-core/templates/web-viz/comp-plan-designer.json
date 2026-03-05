@@ -1,0 +1,528 @@
+{
+  "id": "comp-plan-designer",
+  "name": "Compensation Plan Designer",
+  "description": "Admin dashboard for designing, modeling, and analyzing compensation plans with Monte Carlo projections",
+  "version": "1.0.0",
+  "category": "compensation",
+  "audience": ["revops", "finance", "sales-ops", "executive"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "plan-id", "type": "select", "label": "Compensation Plan", "default": "current", "options": ["current", "draft", "fy25", "fy26"] },
+      { "id": "role-filter", "type": "multi-select", "label": "Roles", "default": "all", "options": ["ae", "sdr", "csm", "se"] },
+      { "id": "simulation-runs", "type": "select", "label": "Monte Carlo Runs", "default": "1000", "options": ["100", "1000", "5000", "10000"] }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "plan-selector",
+      "type": "dropdown",
+      "title": "Select Plan",
+      "position": { "row": 1, "col": 1, "colspan": 4 },
+      "config": {
+        "label": "Active Compensation Plan",
+        "searchable": true,
+        "clearable": false,
+        "options": [
+          { "value": "fy26-standard-plan", "label": "FY26 Standard Plan", "group": "Active" },
+          { "value": "fy26-enterprise-plan", "label": "FY26 Enterprise Plan", "group": "Active" },
+          { "value": "fy25-legacy", "label": "FY25 Legacy Plan", "group": "Archive" }
+        ],
+        "defaultValue": "fy26-standard-plan",
+        "onChange": "onPlanChange"
+      },
+      "demoData": "planSelector"
+    },
+    {
+      "id": "plan-status",
+      "type": "kpi",
+      "title": "Plan Status",
+      "position": { "row": 1, "col": 5, "colspan": 2 },
+      "config": {
+        "format": "text",
+        "showIcon": true,
+        "icon": "check-circle"
+      },
+      "dataBinding": {
+        "source": "local",
+        "field": "status"
+      },
+      "demoData": "kpis.planStatus"
+    },
+    {
+      "id": "total-reps",
+      "type": "kpi",
+      "title": "Total Reps",
+      "position": { "row": 1, "col": 7, "colspan": 2 },
+      "config": {
+        "format": "number",
+        "icon": "users"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "rep-count"
+      },
+      "demoData": "kpis.totalReps"
+    },
+    {
+      "id": "projected-liability",
+      "type": "kpi",
+      "title": "P50 Commission Liability",
+      "position": { "row": 1, "col": 9, "colspan": 4 },
+      "config": {
+        "format": "currency",
+        "showTrend": true,
+        "trendLabel": "vs last year",
+        "icon": "currency-dollar"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "monte-carlo-p50"
+      },
+      "demoData": "kpis.projectedLiability"
+    },
+
+    {
+      "id": "tier-builder",
+      "type": "table",
+      "title": "Commission Tiers",
+      "position": { "row": 2, "col": 1, "colspan": 8, "rowspan": 2 },
+      "config": {
+        "editable": true,
+        "columns": [
+          { "field": "name", "label": "Tier Name", "width": "20%", "editable": true },
+          { "field": "minAttainment", "label": "Min %", "format": "percent", "width": "12%", "align": "center", "editable": true },
+          { "field": "maxAttainment", "label": "Max %", "format": "percent", "width": "12%", "align": "center", "editable": true },
+          { "field": "rate", "label": "Rate", "format": "percent", "width": "12%", "align": "center", "editable": true },
+          { "field": "multiplier", "label": "Multiplier", "format": "number", "decimals": 2, "width": "12%", "align": "center", "editable": true },
+          { "field": "color", "label": "Color", "type": "color", "width": "10%", "align": "center", "editable": true },
+          { "field": "description", "label": "Description", "width": "22%", "editable": true }
+        ],
+        "sortable": false,
+        "addRow": true,
+        "deleteRow": true,
+        "onEdit": "onTierEdit",
+        "rowHighlight": {
+          "field": "multiplier",
+          "thresholds": [
+            { "value": 1.0, "color": "#FEF3C7" },
+            { "value": 1.25, "color": "#D1FAE5" },
+            { "value": 1.5, "color": "#DBEAFE" }
+          ]
+        }
+      },
+      "dataBinding": {
+        "source": "local",
+        "field": "tiers"
+      },
+      "demoData": "tiers"
+    },
+    {
+      "id": "tier-visualization",
+      "type": "chart",
+      "title": "Tier Structure Visualization",
+      "position": { "row": 2, "col": 9, "colspan": 4, "rowspan": 2 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "percent",
+        "colorByData": true
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "tier-visualization",
+        "labelField": "name",
+        "valueField": "rate",
+        "colorField": "color"
+      },
+      "demoData": "tierVisualization"
+    },
+
+    {
+      "id": "role-config",
+      "type": "table",
+      "title": "Role Configuration",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "editable": true,
+        "columns": [
+          { "field": "roleName", "label": "Role", "width": "20%" },
+          { "field": "ote", "label": "OTE", "format": "currency", "width": "16%", "align": "right", "editable": true },
+          { "field": "baseSalary", "label": "Base", "format": "currency", "width": "16%", "align": "right", "editable": true },
+          { "field": "targetCommission", "label": "Target Comm", "format": "currency", "width": "16%", "align": "right", "editable": true },
+          { "field": "payMixBase", "label": "Base %", "format": "percent", "width": "10%", "align": "center" },
+          { "field": "quotaAmount", "label": "Quota", "format": "currency", "width": "16%", "align": "right", "editable": true },
+          { "field": "quotaType", "label": "Type", "width": "10%" }
+        ],
+        "onEdit": "onRoleEdit"
+      },
+      "dataBinding": {
+        "source": "local",
+        "field": "roles"
+      },
+      "demoData": "roles"
+    },
+    {
+      "id": "pay-mix-chart",
+      "type": "chart",
+      "title": "Pay Mix by Role",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "stacked": true,
+        "showLegend": true,
+        "showValues": false
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "pay-mix-by-role"
+      },
+      "demoData": "payMixChart"
+    },
+
+    {
+      "id": "spif-manager",
+      "type": "table",
+      "title": "SPIF Programs",
+      "position": { "row": 5, "col": 1, "colspan": 6 },
+      "config": {
+        "editable": true,
+        "columns": [
+          { "field": "name", "label": "SPIF Name", "width": "25%", "editable": true },
+          { "field": "startDate", "label": "Start", "format": "date", "width": "15%", "editable": true },
+          { "field": "endDate", "label": "End", "format": "date", "width": "15%", "editable": true },
+          { "field": "bonusType", "label": "Type", "width": "12%", "editable": true },
+          { "field": "bonusAmount", "label": "Amount", "format": "currency", "width": "15%", "align": "right", "editable": true },
+          { "field": "maxPayout", "label": "Max Payout", "format": "currency", "width": "15%", "align": "right", "editable": true }
+        ],
+        "addRow": true,
+        "deleteRow": true,
+        "onEdit": "onSpifEdit"
+      },
+      "dataBinding": {
+        "source": "local",
+        "field": "spifs"
+      },
+      "demoData": "spifs"
+    },
+    {
+      "id": "clawback-rules",
+      "type": "table",
+      "title": "Clawback Rules",
+      "position": { "row": 5, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Rule Name", "width": "30%" },
+          { "field": "triggerCondition", "label": "Trigger", "width": "20%" },
+          { "field": "clawbackPeriodDays", "label": "Period (Days)", "width": "18%", "align": "center" },
+          { "field": "clawbackPercent", "label": "Clawback %", "format": "percent", "width": "15%", "align": "center" },
+          { "field": "prorated", "label": "Prorated", "type": "boolean", "width": "12%", "align": "center" }
+        ]
+      },
+      "dataBinding": {
+        "source": "local",
+        "field": "clawbacks"
+      },
+      "demoData": "clawbacks"
+    },
+
+    {
+      "id": "attainment-simulator",
+      "type": "calculator",
+      "title": "Commission Simulator",
+      "position": { "row": 6, "col": 1, "colspan": 6 },
+      "config": {
+        "layout": "vertical",
+        "theme": "card",
+        "inputs": [
+          { "id": "dealAmount", "type": "currency", "label": "Deal Amount", "defaultValue": 50000, "min": 0, "max": 1000000 },
+          { "id": "ytdBookings", "type": "currency", "label": "YTD Bookings", "defaultValue": 500000, "min": 0 },
+          { "id": "quota", "type": "currency", "label": "Annual Quota", "defaultValue": 750000, "min": 0 },
+          { "id": "role", "type": "dropdown", "label": "Role", "defaultValue": "ae", "options": [
+            { "value": "ae", "label": "Account Executive" },
+            { "value": "sdr", "label": "SDR" },
+            { "value": "csm", "label": "CSM" }
+          ]}
+        ],
+        "outputs": [
+          { "id": "commission", "label": "Commission", "format": "currency", "highlight": "primary", "size": "large" },
+          { "id": "effectiveRate", "label": "Effective Rate", "format": "percent", "decimals": 2 },
+          { "id": "tierApplied", "label": "Tier Applied", "format": "text" },
+          { "id": "newAttainment", "label": "New Attainment", "format": "percent", "decimals": 1 }
+        ],
+        "calculate": "calculateCommission",
+        "autoCalculate": true
+      },
+      "demoData": "simulatorDefaults"
+    },
+    {
+      "id": "monte-carlo-histogram",
+      "type": "chart",
+      "title": "Commission Liability Distribution (Monte Carlo)",
+      "position": { "row": 6, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": false,
+        "showValues": false,
+        "xAxisLabel": "Total Commission Liability ($M)",
+        "yAxisLabel": "Frequency",
+        "annotations": [
+          { "type": "line", "position": "p10", "label": "P10", "color": "#EF4444" },
+          { "type": "line", "position": "p50", "label": "P50 (Expected)", "color": "#3B82F6" },
+          { "type": "line", "position": "p90", "label": "P90", "color": "#22C55E" }
+        ]
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "monte-carlo-distribution"
+      },
+      "demoData": "monteCarloHistogram"
+    },
+
+    {
+      "id": "liability-p10",
+      "type": "kpi",
+      "title": "P10 (Conservative)",
+      "position": { "row": 7, "col": 1, "colspan": 2 },
+      "config": {
+        "format": "currency",
+        "subtitle": "10th percentile",
+        "color": "#22C55E"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "monte-carlo-p10"
+      },
+      "demoData": "kpis.liabilityP10"
+    },
+    {
+      "id": "liability-p50",
+      "type": "kpi",
+      "title": "P50 (Expected)",
+      "position": { "row": 7, "col": 3, "colspan": 2 },
+      "config": {
+        "format": "currency",
+        "subtitle": "Median projection",
+        "color": "#3B82F6"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "monte-carlo-p50"
+      },
+      "demoData": "kpis.liabilityP50"
+    },
+    {
+      "id": "liability-p90",
+      "type": "kpi",
+      "title": "P90 (Aggressive)",
+      "position": { "row": 7, "col": 5, "colspan": 2 },
+      "config": {
+        "format": "currency",
+        "subtitle": "90th percentile",
+        "color": "#EF4444"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "monte-carlo-p90"
+      },
+      "demoData": "kpis.liabilityP90"
+    },
+    {
+      "id": "scenario-comparison",
+      "type": "chart",
+      "title": "Scenario Comparison",
+      "position": { "row": 7, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "currency-compact",
+        "groupMode": "grouped"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "scenario-comparison"
+      },
+      "demoData": "scenarioComparison"
+    },
+
+    {
+      "id": "what-if-attainment",
+      "type": "slider",
+      "title": "What-If: Team Attainment",
+      "position": { "row": 8, "col": 1, "colspan": 4 },
+      "config": {
+        "label": "Average Team Attainment",
+        "min": 50,
+        "max": 150,
+        "step": 5,
+        "defaultValue": 100,
+        "format": "percent",
+        "showTicks": true,
+        "tickInterval": 25,
+        "onChange": "onAttainmentChange"
+      },
+      "demoData": "whatIfAttainment"
+    },
+    {
+      "id": "what-if-headcount",
+      "type": "slider",
+      "title": "What-If: Headcount",
+      "position": { "row": 8, "col": 5, "colspan": 4 },
+      "config": {
+        "label": "Sales Headcount",
+        "min": 10,
+        "max": 100,
+        "step": 5,
+        "defaultValue": 45,
+        "format": "number",
+        "showTicks": true,
+        "tickInterval": 20,
+        "onChange": "onHeadcountChange"
+      },
+      "demoData": "whatIfHeadcount"
+    },
+    {
+      "id": "what-if-result",
+      "type": "kpi",
+      "title": "Projected Total Liability",
+      "position": { "row": 8, "col": 9, "colspan": 4 },
+      "config": {
+        "format": "currency",
+        "showChange": true,
+        "changeLabel": "vs baseline",
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "what-if-liability"
+      },
+      "demoData": "kpis.whatIfResult"
+    }
+  ],
+
+  "dataBindings": {
+    "rep-count": {
+      "salesforce": {
+        "object": "User",
+        "fields": ["COUNT(Id) total"],
+        "filters": ["IsActive = true", "UserRole.Name LIKE '%Sales%'"]
+      },
+      "hubspot": {
+        "object": "owners",
+        "aggregation": "count"
+      }
+    },
+    "monte-carlo-p50": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "simulation": "monte-carlo",
+        "percentile": 50,
+        "runs": "{{filters.simulation-runs}}"
+      }
+    },
+    "monte-carlo-distribution": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "simulation": "monte-carlo",
+        "output": "histogram",
+        "bins": 20,
+        "runs": "{{filters.simulation-runs}}"
+      }
+    },
+    "tier-visualization": {
+      "local": {
+        "transform": "tiers.map(t => ({ name: t.name, rate: t.rate * 100, color: t.color }))"
+      }
+    },
+    "scenario-comparison": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "scenarios": ["baseline", "conservative", "aggressive"],
+        "metrics": ["totalLiability", "avgCommission", "acceleratorPayout"]
+      }
+    }
+  },
+
+  "actions": {
+    "save-plan": {
+      "label": "Save Plan",
+      "icon": "save",
+      "handler": "savePlan",
+      "position": "header"
+    },
+    "export-plan": {
+      "label": "Export",
+      "icon": "download",
+      "handler": "exportPlan",
+      "position": "header",
+      "formats": ["json", "xlsx", "pdf"]
+    },
+    "run-simulation": {
+      "label": "Run Simulation",
+      "icon": "play",
+      "handler": "runMonteCarlo",
+      "position": "header",
+      "primary": true
+    },
+    "compare-scenarios": {
+      "label": "Compare",
+      "icon": "chart-bar",
+      "handler": "compareScenarios",
+      "position": "header"
+    }
+  },
+
+  "callbacks": {
+    "onPlanChange": {
+      "type": "function",
+      "code": "function(planId) { window.loadPlan(planId); }"
+    },
+    "onTierEdit": {
+      "type": "function",
+      "code": "function(row, field, value) { window.updateTier(row, field, value); }"
+    },
+    "onRoleEdit": {
+      "type": "function",
+      "code": "function(row, field, value) { window.updateRole(row, field, value); }"
+    },
+    "onSpifEdit": {
+      "type": "function",
+      "code": "function(row, field, value) { window.updateSpif(row, field, value); }"
+    },
+    "onAttainmentChange": {
+      "type": "function",
+      "code": "function(value) { window.updateWhatIf('attainment', value); }"
+    },
+    "onHeadcountChange": {
+      "type": "function",
+      "code": "function(value) { window.updateWhatIf('headcount', value); }"
+    },
+    "calculateCommission": {
+      "type": "function",
+      "code": "function(inputs) { return window.calculateDealCommission(inputs); }"
+    }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "brandedHeader": true,
+    "primaryColor": "#5F3B8C",
+    "tierColors": {
+      "Decelerator": "#EF4444",
+      "Standard": "#F59E0B",
+      "Accelerator Tier 1": "#22C55E",
+      "Accelerator Tier 2": "#3B82F6",
+      "Accelerator Tier 3": "#5F3B8C"
+    }
+  }
+}

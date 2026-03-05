@@ -1,0 +1,57 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+erDiagram
+    %% Metadata Drift Analysis: Baseline vs Current
+    %% Auto-generated from quality audit data
+
+    %% BASELINE OBJECTS (Left side - what was)
+    Account_Baseline {
+        string Name
+        string Industry
+        string Type
+        string Phone
+        string Website
+    }
+
+    Contact_Baseline {
+        string FirstName
+        string LastName
+        string Email
+        string Phone
+    }
+
+    %% CURRENT OBJECTS (Right side - what is now)
+    Account_Current {
+        string Name
+        string Industry
+        string Type
+        string Phone
+        string Website
+        string Custom_Field__c "NEW"
+        decimal Annual_Revenue__c "NEW"
+    }
+
+    Contact_Current {
+        string FirstName
+        string LastName
+        string Email
+        string Phone
+        string Mobile_Phone__c "NEW"
+        boolean Email_Opt_Out__c "NEW"
+    }
+
+    Lead_Current {
+        string FirstName "NEW OBJECT"
+        string LastName "NEW OBJECT"
+        string Email "NEW OBJECT"
+        string Company "NEW OBJECT"
+    }
+
+    %% RELATIONSHIPS
+    Account_Current ||--o{ Contact_Current : "Lookup (unchanged)"
+    Account_Current ||--o{ Lead_Current : "Lookup (NEW)"
+
+    %% DRIFT SUMMARY:
+    %% 🟢 Added: 1 object (Lead), 4 fields
+    %% 🟡 Modified: 0 fields
+    %% 🔴 Removed: 0 objects, 0 fields
+    %% ⚠️  Total Drift Score: 15% (Low impact)

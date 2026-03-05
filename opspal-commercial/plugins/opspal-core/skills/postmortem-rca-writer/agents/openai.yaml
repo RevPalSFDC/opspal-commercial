@@ -1,0 +1,4 @@
+interface:
+  display_name: "Postmortem Rca Writer"
+  short_description: "Help with Postmortem Rca Writer tasks"
+  default_prompt: "Use $postmortem-rca-writer to execute this workflow safely and produce the expected artifacts."

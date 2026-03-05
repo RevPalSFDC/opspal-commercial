@@ -1,0 +1,198 @@
+{
+  "templateMetadata": {
+    "templateId": "revenue-performance",
+    "templateName": "Executive Revenue Performance Dashboard",
+    "templateVersion": "1.1",
+    "description": "High-level revenue metrics for C-level executives: targets, trends, and key drivers",
+    "audience": "Executive Leadership (CEO, CFO, CRO, Board of Directors)",
+    "function": "sales",
+    "level": "executive",
+    "useCase": "Monthly/quarterly reviews, board presentations, strategic planning",
+    "refreshFrequency": "Daily",
+    "componentCount": 6,
+    "tags": ["revenue", "executive", "quarterly-review", "board", "sales"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "cpq", "plg"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified dashboard with 4 key components for quick adoption",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["Revenue by Region", "Revenue by Product Line"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full template as designed with all components and standard metrics"
+      },
+      "cpq": {
+        "description": "CPQ-optimized with SBQQ namespace fields for quote-based revenue",
+        "fieldSubstitutions": {
+          "Quote": "SBQQ__Quote__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c",
+          "QuoteLineItem": "SBQQ__QuoteLine__c",
+          "Amount": "SBQQ__NetAmount__c"
+        },
+        "metricAdjustments": {
+          "quarterlyRevenue": {
+            "formula": "SUM(SBQQ__NetAmount__c WHERE IsWon=TRUE)"
+          }
+        }
+      },
+      "plg": {
+        "description": "Product-led growth focus with self-service metrics",
+        "filterOverrides": [
+          { "field": "Type", "default": "Self-Service", "values": ["Self-Service", "Assisted", "Enterprise"] }
+        ],
+        "metricAdjustments": {
+          "quarterlyRevenue": {
+            "target": "$2M",
+            "thresholds": { "green": ">90%", "yellow": "75-90%", "red": "<75%" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Amount", "CloseDate", "StageName", "IsWon"],
+    "optionalFields": ["ARR__c", "ACV__c", "Account.Region__c", "Product2.Family"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": ["Amount", "Total_Amount__c", "Deal_Value__c"],
+        "cpqPatterns": ["SBQQ__NetAmount__c", "SBQQ__CustomerAmount__c", "SBQQ__QuotedAmount__c"],
+        "namespaceAware": true,
+        "fallbackChain": [
+          { "namespace": "SBQQ", "field": "SBQQ__NetAmount__c" },
+          { "namespace": null, "field": "Amount" }
+        ],
+        "dataType": "currency"
+      },
+      "ARR": {
+        "patterns": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c"],
+        "cpqPatterns": ["SBQQ__ARR__c", "SBQQ__ACV__c"],
+        "namespaceAware": true,
+        "fallbackChain": [
+          { "namespace": "SBQQ", "field": "SBQQ__ARR__c" },
+          { "namespace": null, "field": "ARR__c" },
+          { "namespace": null, "field": "Amount" }
+        ],
+        "dataType": "currency"
+      },
+      "Region": {
+        "patterns": ["Account.Region__c", "Region__c", "Territory__c"],
+        "labelHints": ["Region", "Territory", "Area"],
+        "dataType": "picklist"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Quarterly Revenue vs Target", "Monthly Revenue Trend", "Pipeline Health by Stage", "Top 10 Deals"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Quarterly Revenue vs Target", "Monthly Revenue Trend"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "components": [
+      {
+        "position": 1,
+        "size": "full-width",
+        "type": "Gauge",
+        "title": "Quarterly Revenue vs Target",
+        "sourceReport": "quarterly-revenue-vs-target",
+        "metric": "SUM(Amount WHERE IsWon=TRUE)",
+        "target": "$5M",
+        "greenZone": ">95%",
+        "yellowZone": "85-95%",
+        "redZone": "<85%"
+      },
+      {
+        "position": 2,
+        "size": "half-width",
+        "type": "Line Chart",
+        "title": "Monthly Revenue Trend (12 Months)",
+        "sourceReport": "monthly-revenue-trend",
+        "xAxis": "CloseDate (Month)",
+        "yAxis": "SUM(Amount)",
+        "showComparison": "vs Last Year"
+      },
+      {
+        "position": 3,
+        "size": "half-width",
+        "type": "Funnel Chart",
+        "title": "Pipeline Health by Stage",
+        "sourceReport": "pipeline-by-stage-all",
+        "groupBy": "Stage",
+        "metric": "SUM(Amount WHERE IsClosed=FALSE)"
+      },
+      {
+        "position": 4,
+        "size": "third-width",
+        "type": "Bar Chart",
+        "title": "Revenue by Region",
+        "sourceReport": "revenue-by-region",
+        "groupBy": "Account.Region__c",
+        "metric": "SUM(Amount WHERE IsWon=TRUE)"
+      },
+      {
+        "position": 5,
+        "size": "third-width",
+        "type": "Donut Chart",
+        "title": "Revenue by Product Line",
+        "sourceReport": "revenue-by-product",
+        "groupBy": "Product2.Family",
+        "metric": "SUM(Amount WHERE IsWon=TRUE)"
+      },
+      {
+        "position": 6,
+        "size": "third-width",
+        "type": "Table",
+        "title": "Top 10 Deals (This Quarter)",
+        "sourceReport": "top-deals-this-quarter",
+        "columns": ["Account", "Amount", "Stage", "CloseDate"],
+        "sortBy": "Amount DESC",
+        "rowLimit": 10
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {"field": "Close Date", "type": "Date Range", "default": "THIS_FISCAL_QUARTER"},
+    {"field": "Region", "type": "Picklist", "default": "All", "values": ["North America", "EMEA", "APAC"]}
+  ],
+  "sourceReportTemplates": [
+    "sales-executive/quarterly-revenue-vs-target",
+    "sales-executive/monthly-revenue-trend",
+    "sales-executive/pipeline-by-stage-all",
+    "sales-executive/revenue-by-region",
+    "sales-executive/revenue-by-product",
+    "sales-executive/top-deals-this-quarter"
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Create all 6 source reports using templates",
+      "2. Create dashboard in Dashboards folder (Executive)",
+      "3. Add components in order specified",
+      "4. Configure filters (Date Range, Region)",
+      "5. Set refresh schedule to daily at 6 AM",
+      "6. Share with exec team (view-only)",
+      "7. Subscribe exec team to weekly email snapshot"
+    ]
+  }
+}

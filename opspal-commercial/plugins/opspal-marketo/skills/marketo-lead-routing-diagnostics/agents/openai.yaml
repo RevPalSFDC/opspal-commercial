@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Lead Routing Diagnostics"
+  short_description: "Help with Marketo Lead Routing Diagnostics tasks"
+  default_prompt: "Use $marketo-lead-routing-diagnostics to execute this workflow safely and produce the expected artifacts."

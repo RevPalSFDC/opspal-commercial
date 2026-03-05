@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Intake Form",
+  "description": "Comprehensive project intake form for RevOps and platform implementation projects",
+  "version": "1.0.0",
+  "sections": [
+    {
+      "id": "projectIdentity",
+      "title": "Project Identity",
+      "icon": "folder",
+      "order": 1
+    },
+    {
+      "id": "goalsObjectives",
+      "title": "Goals & Objectives",
+      "icon": "target",
+      "order": 2
+    },
+    {
+      "id": "scope",
+      "title": "Project Scope",
+      "icon": "list",
+      "order": 3
+    },
+    {
+      "id": "dataSources",
+      "title": "Data Sources",
+      "icon": "database",
+      "order": 4
+    },
+    {
+      "id": "timelineBudget",
+      "title": "Timeline & Budget",
+      "icon": "calendar",
+      "order": 5
+    },
+    {
+      "id": "dependenciesRisks",
+      "title": "Dependencies & Risks",
+      "icon": "alert",
+      "order": 6
+    },
+    {
+      "id": "technicalRequirements",
+      "title": "Technical Requirements",
+      "icon": "settings",
+      "order": 7
+    },
+    {
+      "id": "approvalSignoff",
+      "title": "Approval & Sign-off",
+      "icon": "check",
+      "order": 8
+    }
+  ],
+  "enums": {
+    "projectTypes": [
+      { "value": "salesforce-implementation", "label": "Salesforce Implementation" },
+      { "value": "hubspot-implementation", "label": "HubSpot Implementation" },
+      { "value": "cross-platform-integration", "label": "Cross-Platform Integration" },
+      { "value": "data-migration", "label": "Data Migration" },
+      { "value": "automation-build", "label": "Automation Build" },
+      { "value": "reporting-analytics", "label": "Reporting & Analytics" },
+      { "value": "cpq-configuration", "label": "CPQ Configuration" },
+      { "value": "custom-development", "label": "Custom Development" },
+      { "value": "process-optimization", "label": "Process Optimization" },
+      { "value": "security-audit", "label": "Security Audit" }
+    ],
+    "priorityLevels": [
+      { "value": "critical", "label": "Critical", "color": "#dc3545" },
+      { "value": "high", "label": "High", "color": "#fd7e14" },
+      { "value": "medium", "label": "Medium", "color": "#ffc107" },
+      { "value": "low", "label": "Low", "color": "#28a745" }
+    ],
+    "platforms": [
+      { "value": "salesforce", "label": "Salesforce" },
+      { "value": "hubspot", "label": "HubSpot" },
+      { "value": "both", "label": "Both" },
+      { "value": "other", "label": "Other" }
+    ],
+    "riskLevels": [
+      { "value": "high", "label": "High" },
+      { "value": "medium", "label": "Medium" },
+      { "value": "low", "label": "Low" }
+    ],
+    "dependencyTypes": [
+      { "value": "internal", "label": "Internal" },
+      { "value": "external", "label": "External" },
+      { "value": "technical", "label": "Technical" },
+      { "value": "resource", "label": "Resource" }
+    ],
+    "dependencyStatus": [
+      { "value": "confirmed", "label": "Confirmed", "color": "#28a745" },
+      { "value": "pending", "label": "Pending", "color": "#ffc107" },
+      { "value": "at-risk", "label": "At Risk", "color": "#dc3545" }
+    ],
+    "budgetRanges": [
+      { "value": "<$5k", "label": "Under $5,000" },
+      { "value": "$5k-$15k", "label": "$5,000 - $15,000" },
+      { "value": "$15k-$50k", "label": "$15,000 - $50,000" },
+      { "value": "$50k-$100k", "label": "$50,000 - $100,000" },
+      { "value": ">$100k", "label": "Over $100,000" },
+      { "value": "TBD", "label": "To Be Determined" }
+    ],
+    "budgetFlexibility": [
+      { "value": "fixed", "label": "Fixed Budget" },
+      { "value": "some-flexibility", "label": "Some Flexibility" },
+      { "value": "flexible", "label": "Flexible" }
+    ],
+    "complexityLevels": [
+      { "value": "simple", "label": "Simple" },
+      { "value": "moderate", "label": "Moderate" },
+      { "value": "complex", "label": "Complex" },
+      { "value": "enterprise", "label": "Enterprise" }
+    ],
+    "notificationLevels": [
+      { "value": "all-updates", "label": "All Updates" },
+      { "value": "milestones-only", "label": "Milestones Only" },
+      { "value": "completion-only", "label": "Completion Only" }
+    ],
+    "approvalTypes": [
+      { "value": "technical", "label": "Technical" },
+      { "value": "business", "label": "Business" },
+      { "value": "budget", "label": "Budget" },
+      { "value": "executive", "label": "Executive" }
+    ],
+    "communicationChannels": [
+      { "value": "slack", "label": "Slack" },
+      { "value": "email", "label": "Email" },
+      { "value": "asana", "label": "Asana" },
+      { "value": "teams", "label": "Microsoft Teams" }
+    ],
+    "updateFrequencies": [
+      { "value": "daily", "label": "Daily" },
+      { "value": "weekly", "label": "Weekly" },
+      { "value": "bi-weekly", "label": "Bi-Weekly" },
+      { "value": "milestone-only", "label": "Milestone Only" }
+    ],
+    "dataSourceTypes": [
+      { "value": "salesforce", "label": "Salesforce" },
+      { "value": "hubspot", "label": "HubSpot" },
+      { "value": "csv", "label": "CSV File" },
+      { "value": "api", "label": "API" },
+      { "value": "database", "label": "Database" },
+      { "value": "spreadsheet", "label": "Spreadsheet" },
+      { "value": "other", "label": "Other" }
+    ],
+    "dataFlowTypes": [
+      { "value": "unidirectional", "label": "One-Way" },
+      { "value": "bidirectional", "label": "Two-Way" }
+    ],
+    "sfOrgTypes": [
+      { "value": "production", "label": "Production" },
+      { "value": "sandbox", "label": "Sandbox" },
+      { "value": "developer", "label": "Developer Edition" },
+      { "value": "scratch", "label": "Scratch Org" }
+    ],
+    "hubspotTiers": [
+      { "value": "starter", "label": "Starter" },
+      { "value": "professional", "label": "Professional" },
+      { "value": "enterprise", "label": "Enterprise" }
+    ]
+  },
+  "conditionalRules": [
+    {
+      "condition": {
+        "field": "timelineBudget.hardDeadline",
+        "equals": true
+      },
+      "show": ["timelineBudget.deadlineReason"],
+      "require": ["timelineBudget.deadlineReason"]
+    },
+    {
+      "condition": {
+        "field": "technicalRequirements.platforms",
+        "contains": "salesforce"
+      },
+      "show": ["technicalRequirements.salesforceOrg"]
+    },
+    {
+      "condition": {
+        "field": "technicalRequirements.platforms",
+        "contains": "hubspot"
+      },
+      "show": ["technicalRequirements.hubspotPortal"]
+    },
+    {
+      "condition": {
+        "field": "projectIdentity.projectType",
+        "in": ["cpq-configuration", "salesforce-implementation"]
+      },
+      "show": ["technicalRequirements.salesforceOrg.hasCPQ"]
+    }
+  ],
+  "requiredSections": ["projectIdentity", "goalsObjectives", "scope", "timelineBudget"],
+  "requiredFields": {
+    "projectIdentity": ["projectName", "projectType", "projectOwner.name", "projectOwner.email"],
+    "goalsObjectives": ["businessObjective", "successMetrics"],
+    "scope": ["inScope"],
+    "timelineBudget": ["targetStartDate", "targetEndDate"]
+  },
+  "fieldHelp": {
+    "projectIdentity.projectName": "Choose a clear, descriptive name that identifies this project",
+    "projectIdentity.projectType": "Select the category that best describes this work",
+    "goalsObjectives.businessObjective": "Explain the business problem this project solves - be specific about why it's needed",
+    "goalsObjectives.successMetrics": "Define measurable outcomes so we know when the project has succeeded",
+    "scope.inScope": "List specific features and deliverables included in this project",
+    "scope.outOfScope": "Explicitly state what's NOT included to prevent scope creep",
+    "scope.assumptions": "Document things you're assuming to be true - these will be validated",
+    "timelineBudget.hardDeadline": "Check if this date cannot change (e.g., fiscal year end, product launch)",
+    "dependenciesRisks.dependencies": "List anything that must happen for this project to succeed",
+    "dependenciesRisks.risks": "Identify potential problems and how you'd address them"
+  }
+}

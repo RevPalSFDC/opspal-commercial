@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Diagnostic Report - {{flowName}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            border-bottom: 3px solid #0176D3;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #0176D3;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header .meta {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .status-badge.ready {
+            background: #04844B;
+            color: white;
+        }
+
+        .status-badge.can-deploy {
+            background: #FFB75D;
+            color: #333;
+        }
+
+        .status-badge.not-ready {
+            background: #EA001E;
+            color: white;
+        }
+
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 4px solid #0176D3;
+            border-radius: 4px;
+        }
+
+        .section h2 {
+            color: #0176D3;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .section h3 {
+            color: #333;
+            font-size: 18px;
+            margin: 15px 0 10px 0;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .metric-card .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #0176D3;
+            margin: 10px 0;
+        }
+
+        .metric-card .label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .issue-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .issue-list li {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: start;
+        }
+
+        .issue-list li.critical {
+            background: #FFEBE6;
+            border-left: 4px solid #EA001E;
+        }
+
+        .issue-list li.warning {
+            background: #FFF5E6;
+            border-left: 4px solid #FFB75D;
+        }
+
+        .issue-list li.info {
+            background: #E0F3FF;
+            border-left: 4px solid #0176D3;
+        }
+
+        .issue-icon {
+            margin-right: 10px;
+            font-weight: bold;
+            min-width: 60px;
+        }
+
+        .issue-list li.critical .issue-icon { color: #EA001E; }
+        .issue-list li.warning .issue-icon { color: #FFB75D; }
+        .issue-list li.info .issue-icon { color: #0176D3; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+
+        table th {
+            background: #0176D3;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #04844B, #06B05B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.low { background: linear-gradient(90deg, #EA001E, #FF4444); }
+        .progress-fill.medium { background: linear-gradient(90deg, #FFB75D, #FFC47D); }
+
+        .recommendation {
+            background: #E0F3FF;
+            border-left: 4px solid #0176D3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .recommendation strong {
+            color: #0176D3;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .test-case-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .test-case-result.passed {
+            background: #E7F7EB;
+            border-left: 4px solid #04844B;
+        }
+
+        .test-case-result.failed {
+            background: #FFEBE6;
+            border-left: 4px solid #EA001E;
+        }
+
+        .coverage-visual {
+            display: flex;
+            gap: 2px;
+            height: 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .coverage-segment {
+            flex: 1;
+        }
+
+        .coverage-segment.covered {
+            background: #04844B;
+        }
+
+        .coverage-segment.uncovered {
+            background: #EA001E;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Flow Diagnostic Report</h1>
+            <div class="meta">
+                <strong>Flow:</strong> {{flowName}} |
+                <strong>Org:</strong> {{orgAlias}} |
+                <strong>Generated:</strong> {{timestamp}} |
+                <strong>Version:</strong> {{apiVersion}}
+            </div>
+            <div class="status-badge {{readinessClass}}">
+                {{readinessStatus}}
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="section">
+            <h2>📊 Executive Summary</h2>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="label">Production Ready</div>
+                    <div class="value">{{readyForProduction}}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Coverage</div>
+                    <div class="value">{{coveragePercentage}}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Critical Issues</div>
+                    <div class="value">{{criticalIssues}}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Warnings</div>
+                    <div class="value">{{warnings}}</div>
+                </div>
+            </div>
+
+            <h3>Production Readiness Status</h3>
+            <p><strong>{{readinessDecision}}</strong></p>
+            <p>{{readinessExplanation}}</p>
+        </div>
+
+        <!-- Pre-flight Results -->
+        <div class="section">
+            <h2>🔍 Pre-flight Validation</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Check</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#preflightChecks}}
+                    <tr>
+                        <td>{{checkName}}</td>
+                        <td>{{status}}</td>
+                        <td>{{details}}</td>
+                    </tr>
+                    {{/preflightChecks}}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Execution Results -->
+        <div class="section">
+            <h2>▶️ Execution Testing</h2>
+            <h3>Test Cases</h3>
+            {{#testCases}}
+            <div class="test-case-result {{resultClass}}">
+                <strong>{{testCaseId}}: {{testCaseName}}</strong><br>
+                Status: {{status}} | Duration: {{duration}}ms<br>
+                {{#if error}}
+                Error: {{error}}
+                {{/if}}
+            </div>
+            {{/testCases}}
+
+            <h3>Execution Statistics</h3>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="label">Total Executions</div>
+                    <div class="value">{{totalExecutions}}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Successful</div>
+                    <div class="value">{{successfulExecutions}}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Failed</div>
+                    <div class="value">{{failedExecutions}}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Avg Duration</div>
+                    <div class="value">{{avgDuration}}ms</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coverage Analysis -->
+        <div class="section">
+            <h2>📈 Branch Coverage Analysis</h2>
+            <h3>Coverage Overview</h3>
+            <div class="progress-bar">
+                <div class="progress-fill {{coverageClass}}" style="width: {{coveragePercentage}}%;">
+                    {{coveragePercentage}}% Coverage
+                </div>
+            </div>
+
+            <div class="coverage-visual">
+                {{#coverageSegments}}
+                <div class="coverage-segment {{segmentClass}}" title="{{segmentLabel}}"></div>
+                {{/coverageSegments}}
+            </div>
+
+            <h3>Coverage Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Element Type</th>
+                        <th>Total</th>
+                        <th>Covered</th>
+                        <th>Uncovered</th>
+                        <th>Coverage %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#coverageByType}}
+                    <tr>
+                        <td>{{elementType}}</td>
+                        <td>{{total}}</td>
+                        <td>{{covered}}</td>
+                        <td>{{uncovered}}</td>
+                        <td>{{percentage}}%</td>
+                    </tr>
+                    {{/coverageByType}}
+                </tbody>
+            </table>
+
+            {{#if uncoveredBranches}}
+            <h3>Uncovered Branches</h3>
+            <ul class="issue-list">
+                {{#uncoveredBranches}}
+                <li class="warning">
+                    <span class="issue-icon">⚠️ BRANCH</span>
+                    <div>
+                        <strong>{{elementName}}</strong><br>
+                        Decision: {{decisionLabel}}<br>
+                        Condition: {{condition}}
+                    </div>
+                </li>
+                {{/uncoveredBranches}}
+            </ul>
+            {{/if}}
+        </div>
+
+        <!-- Issues and Recommendations -->
+        <div class="section">
+            <h2>⚠️ Issues and Recommendations</h2>
+
+            {{#if criticalIssuesList}}
+            <h3>Critical Issues ({{criticalIssuesCount}})</h3>
+            <ul class="issue-list">
+                {{#criticalIssuesList}}
+                <li class="critical">
+                    <span class="issue-icon">🔴 CRITICAL</span>
+                    <div>
+                        <strong>{{issue}}</strong><br>
+                        {{description}}<br>
+                        <strong>Fix:</strong> {{recommendation}}
+                    </div>
+                </li>
+                {{/criticalIssuesList}}
+            </ul>
+            {{/if}}
+
+            {{#if warningsList}}
+            <h3>Warnings ({{warningsCount}})</h3>
+            <ul class="issue-list">
+                {{#warningsList}}
+                <li class="warning">
+                    <span class="issue-icon">⚠️ WARNING</span>
+                    <div>
+                        <strong>{{issue}}</strong><br>
+                        {{description}}<br>
+                        <strong>Recommendation:</strong> {{recommendation}}
+                    </div>
+                </li>
+                {{/warningsList}}
+            </ul>
+            {{/if}}
+
+            {{#if infoList}}
+            <h3>Informational ({{infoCount}})</h3>
+            <ul class="issue-list">
+                {{#infoList}}
+                <li class="info">
+                    <span class="issue-icon">ℹ️ INFO</span>
+                    <div>
+                        <strong>{{issue}}</strong><br>
+                        {{description}}
+                    </div>
+                </li>
+                {{/infoList}}
+            </ul>
+            {{/if}}
+        </div>
+
+        <!-- Governor Limits -->
+        <div class="section">
+            <h2>📊 Governor Limits Usage</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Limit Type</th>
+                        <th>Used</th>
+                        <th>Available</th>
+                        <th>Percentage</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#governorLimits}}
+                    <tr>
+                        <td>{{limitType}}</td>
+                        <td>{{used}}</td>
+                        <td>{{available}}</td>
+                        <td>{{percentage}}%</td>
+                        <td>{{status}}</td>
+                    </tr>
+                    {{/governorLimits}}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="section">
+            <h2>💡 Next Steps</h2>
+            {{#recommendations}}
+            <div class="recommendation">
+                <strong>{{priority}}:</strong> {{recommendation}}
+            </div>
+            {{/recommendations}}
+        </div>
+
+        <div class="footer">
+            <p>Generated by FlowDiagnosticOrchestrator v3.43.0</p>
+            <p>Runbook 7: Flow Testing & Diagnostics</p>
+            <p>&copy; 2025 Salesforce Plugin - RevPal Internal</p>
+        </div>
+    </div>
+</body>
+</html>

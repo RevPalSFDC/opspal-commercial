@@ -1,0 +1,404 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-009",
+  "title": "Unified RevOps Next-Best-Action Layer",
+  "queue_items": [
+    {
+      "rank": 1,
+      "opportunity_id": "OPP-003",
+      "action_id": "nba-opp-003",
+      "title": "Copilot Approval Queue for Mandatory Route Outputs",
+      "category": "ai_leverage",
+      "owner_team": "revpal-platform",
+      "risk_class": "critical",
+      "overall_score": 4.4,
+      "ninety_day_fit": "yes",
+      "wave": "wave_1"
+    },
+    {
+      "rank": 2,
+      "opportunity_id": "OPP-009",
+      "action_id": "nba-opp-009",
+      "title": "Unified RevOps Next-Best-Action Layer",
+      "category": "ai_leverage",
+      "owner_team": "revpal-platform",
+      "risk_class": "high",
+      "overall_score": 4.2,
+      "ninety_day_fit": "yes",
+      "wave": "wave_1"
+    },
+    {
+      "rank": 3,
+      "opportunity_id": "OPP-005",
+      "action_id": "nba-opp-005",
+      "title": "Data Hygiene Sunset Completion",
+      "category": "feature_gap",
+      "owner_team": "revpal-platform",
+      "risk_class": "high",
+      "overall_score": 4.18,
+      "ninety_day_fit": "yes",
+      "wave": "wave_1"
+    },
+    {
+      "rank": 4,
+      "opportunity_id": "OPP-001",
+      "action_id": "nba-opp-001",
+      "title": "Capability Narrative Drift Guardrail",
+      "category": "feature_gap",
+      "owner_team": "revpal-platform",
+      "risk_class": "medium",
+      "overall_score": 4.06,
+      "ninety_day_fit": "yes",
+      "wave": "wave_2"
+    },
+    {
+      "rank": 5,
+      "opportunity_id": "OPP-004",
+      "action_id": "nba-opp-004",
+      "title": "Cross-Plugin Command Telemetry Contract",
+      "category": "feature_gap",
+      "owner_team": "revpal-platform",
+      "risk_class": "high",
+      "overall_score": 3.88,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_2"
+    },
+    {
+      "rank": 6,
+      "opportunity_id": "OPP-007",
+      "action_id": "nba-opp-007",
+      "title": "Manual Review Load Reduction in Dedup and Routing",
+      "category": "ai_leverage",
+      "owner_team": "revpal-platform",
+      "risk_class": "high",
+      "overall_score": 3.88,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_2"
+    },
+    {
+      "rank": 7,
+      "opportunity_id": "OPP-002",
+      "action_id": "nba-opp-002",
+      "title": "AI Maturity Uplift for Lowest-Coverage Plugins",
+      "category": "ai_leverage",
+      "owner_team": "revpal-platform",
+      "risk_class": "medium",
+      "overall_score": 3.7,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_2"
+    },
+    {
+      "rank": 8,
+      "opportunity_id": "OPP-011",
+      "action_id": "nba-opp-011",
+      "title": "Initiative ROI Instrumentation Layer",
+      "category": "feature_gap",
+      "owner_team": "revpal-platform",
+      "risk_class": "medium",
+      "overall_score": 3.68,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_3"
+    },
+    {
+      "rank": 9,
+      "opportunity_id": "OPP-012",
+      "action_id": "nba-opp-012",
+      "title": "Strategy Dashboard Gap Category Feeds",
+      "category": "feature_gap",
+      "owner_team": "revpal-platform",
+      "risk_class": "medium",
+      "overall_score": 3.66,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_3"
+    },
+    {
+      "rank": 10,
+      "opportunity_id": "OPP-006",
+      "action_id": "nba-opp-006",
+      "title": "Monday Plugin Graduation Readiness",
+      "category": "feature_gap",
+      "owner_team": "revpal-experimental",
+      "risk_class": "medium",
+      "overall_score": 3.18,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_3"
+    },
+    {
+      "rank": 11,
+      "opportunity_id": "OPP-008",
+      "action_id": "nba-opp-008",
+      "title": "Cross-Model Consultation Expansion",
+      "category": "ai_leverage",
+      "owner_team": "revpal-ai",
+      "risk_class": "medium",
+      "overall_score": 3.18,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_3"
+    },
+    {
+      "rank": 12,
+      "opportunity_id": "OPP-010",
+      "action_id": "nba-opp-010",
+      "title": "Forecast and Simulation Standardization",
+      "category": "feature_gap",
+      "owner_team": "revpal-gtm",
+      "risk_class": "medium",
+      "overall_score": 3.18,
+      "ninety_day_fit": "conditional",
+      "wave": "wave_3"
+    }
+  ],
+  "owner_rollup": [
+    {
+      "owner_team": "revpal-platform",
+      "item_count": 9
+    },
+    {
+      "owner_team": "revpal-ai",
+      "item_count": 1
+    },
+    {
+      "owner_team": "revpal-experimental",
+      "item_count": 1
+    },
+    {
+      "owner_team": "revpal-gtm",
+      "item_count": 1
+    }
+  ],
+  "risk_rollup": {
+    "low": 0,
+    "medium": 7,
+    "high": 4,
+    "critical": 1
+  },
+  "dependencies": [
+    {
+      "from_opportunity_id": "OPP-003",
+      "to_opportunity_id": "OPP-009",
+      "rationale": "Approval governance should be active before broad recommendation automation."
+    },
+    {
+      "from_opportunity_id": "OPP-004",
+      "to_opportunity_id": "OPP-009",
+      "rationale": "Telemetry contract should be in place for action outcome observability."
+    }
+  ],
+  "queue_execution_snapshot": {
+    "approval_queue_file": "state/copilot-approval-queue.json",
+    "approval_queue_present": true,
+    "approved_work_items_file": "reports/exec/runtime/opspal-approved-work-items.json",
+    "approved_work_items_present": true,
+    "runtime_checklist_files_detected": 22,
+    "queue_items_total": 12,
+    "queue_items_execution_ready_total": 12,
+    "approval_required_items_total": 5,
+    "approval_required_items_approved": 5,
+    "approval_required_items_ready_work_item": 5,
+    "approval_required_items_checklist_ready": 5,
+    "approval_required_items_execution_ready": 5,
+    "dependency_gates": [
+      {
+        "opportunity_id": "OPP-003",
+        "title": "Copilot Approval Queue for Mandatory Route Outputs",
+        "execution_ready": true,
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771122550654-9e9d45",
+        "runtime_checklist_detected": true
+      },
+      {
+        "opportunity_id": "OPP-004",
+        "title": "Cross-Plugin Command Telemetry Contract",
+        "execution_ready": true,
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771177002482-8c63aa",
+        "runtime_checklist_detected": true
+      }
+    ],
+    "focal_opportunity": {
+      "opportunity_id": "OPP-009",
+      "title": "Unified RevOps Next-Best-Action Layer",
+      "execution_ready": true,
+      "approval_status": "approved",
+      "ready_work_item_id": "wi-apr-1771176220727-50bc66",
+      "runtime_checklist_detected": true
+    },
+    "queue_item_execution": [
+      {
+        "rank": 1,
+        "opportunity_id": "OPP-003",
+        "title": "Copilot Approval Queue for Mandatory Route Outputs",
+        "risk_class": "critical",
+        "approval_required": true,
+        "approval_request_id": "apr-1771122550654-9e9d45",
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771122550654-9e9d45",
+        "ready_state": "ready",
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 2,
+        "opportunity_id": "OPP-009",
+        "title": "Unified RevOps Next-Best-Action Layer",
+        "risk_class": "high",
+        "approval_required": true,
+        "approval_request_id": "apr-1771176220727-50bc66",
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771176220727-50bc66",
+        "ready_state": "ready",
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 3,
+        "opportunity_id": "OPP-005",
+        "title": "Data Hygiene Sunset Completion",
+        "risk_class": "high",
+        "approval_required": true,
+        "approval_request_id": "apr-1771176698166-b40b32",
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771176698166-b40b32",
+        "ready_state": "ready",
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 4,
+        "opportunity_id": "OPP-001",
+        "title": "Capability Narrative Drift Guardrail",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 5,
+        "opportunity_id": "OPP-004",
+        "title": "Cross-Plugin Command Telemetry Contract",
+        "risk_class": "high",
+        "approval_required": true,
+        "approval_request_id": "apr-1771177002482-8c63aa",
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771177002482-8c63aa",
+        "ready_state": "ready",
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 6,
+        "opportunity_id": "OPP-007",
+        "title": "Manual Review Load Reduction in Dedup and Routing",
+        "risk_class": "high",
+        "approval_required": true,
+        "approval_request_id": "apr-1771177808006-ce2a52",
+        "approval_status": "approved",
+        "ready_work_item_id": "wi-apr-1771177808006-ce2a52",
+        "ready_state": "ready",
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 7,
+        "opportunity_id": "OPP-002",
+        "title": "AI Maturity Uplift for Lowest-Coverage Plugins",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 8,
+        "opportunity_id": "OPP-011",
+        "title": "Initiative ROI Instrumentation Layer",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 9,
+        "opportunity_id": "OPP-012",
+        "title": "Strategy Dashboard Gap Category Feeds",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 10,
+        "opportunity_id": "OPP-006",
+        "title": "Monday Plugin Graduation Readiness",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 11,
+        "opportunity_id": "OPP-008",
+        "title": "Cross-Model Consultation Expansion",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      },
+      {
+        "rank": 12,
+        "opportunity_id": "OPP-010",
+        "title": "Forecast and Simulation Standardization",
+        "risk_class": "medium",
+        "approval_required": false,
+        "approval_request_id": null,
+        "approval_status": "not_required",
+        "ready_work_item_id": null,
+        "ready_state": null,
+        "runtime_checklist_detected": true,
+        "execution_ready": true
+      }
+    ]
+  },
+  "sla_targets": [
+    {
+      "risk_class": "critical",
+      "approve_or_decide_within_hours": 24
+    },
+    {
+      "risk_class": "high",
+      "approve_or_decide_within_hours": 48
+    },
+    {
+      "risk_class": "medium",
+      "approve_or_decide_within_hours": 120
+    },
+    {
+      "risk_class": "low",
+      "approve_or_decide_within_hours": 168
+    }
+  ]
+}

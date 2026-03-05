@@ -1,0 +1,56 @@
+flowchart TB
+  %% Cross-Platform Sync Architecture Template
+  %% Bidirectional sync pattern between Salesforce and HubSpot
+
+  subgraph Salesforce["Salesforce"]
+    SFAccount[Account]
+    SFContact[Contact]
+    SFOpp[Opportunity]
+    SFLead[Lead]
+  end
+
+  subgraph SyncLayer["Sync Layer / Middleware"]
+    SyncEngine[Sync Engine]
+    MappingRules[Field Mapping Rules]
+    ConflictResolution[Conflict Resolution]
+    ErrorQueue[Error Queue]
+    AuditLog[Audit Log]
+  end
+
+  subgraph HubSpot["HubSpot"]
+    HSCompany[Company]
+    HSContact[Contact]
+    HSDeal[Deal]
+    HSLead[Lead/MQL]
+  end
+
+  %% Salesforce to HubSpot Flow
+  SFAccount -->|Create/Update| SyncEngine
+  SFContact -->|Create/Update| SyncEngine
+  SFOpp -->|Create/Update| SyncEngine
+  SFLead -->|Create/Update| SyncEngine
+
+  SyncEngine --> MappingRules
+  MappingRules -->|Transform| ConflictResolution
+
+  ConflictResolution -->|No Conflict| HSCompany
+  ConflictResolution -->|No Conflict| HSContact
+  ConflictResolution -->|No Conflict| HSDeal
+  ConflictResolution -->|No Conflict| HSLead
+
+  ConflictResolution -->|Conflict| ErrorQueue
+
+  %% HubSpot to Salesforce Flow
+  HSCompany -->|Create/Update| SyncEngine
+  HSContact -->|Create/Update| SyncEngine
+  HSDeal -->|Create/Update| SyncEngine
+  HSLead -->|Create/Update| SyncEngine
+
+  SyncEngine -->|Log All Operations| AuditLog
+  ErrorQueue -->|Alert/Retry| SyncEngine
+
+  %% Styling
+  style SyncEngine fill:#4A90E2
+  style ConflictResolution fill:#F5A623
+  style ErrorQueue fill:#D0021B
+  style AuditLog fill:#7ED321

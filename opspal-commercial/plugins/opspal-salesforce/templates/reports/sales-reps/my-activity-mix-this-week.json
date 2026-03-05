@@ -1,0 +1,131 @@
+{
+  "templateMetadata": {
+    "templateName": "My Activity Mix This Week",
+    "templateVersion": "1.1",
+    "description": "Breakdown of your activities by type this week",
+    "audience": "Sales Reps, BDRs, SDRs",
+    "useCase": "Activity balance, outreach mix analysis, time allocation",
+    "customizationPoints": [
+      "Time period",
+      "Activity type groupings",
+      "Ideal mix targets"
+    ],
+    "prerequisites": [
+      "Activity tracking enabled",
+      "Activity types configured"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "My Activity Mix - This Week",
+    "description": "Activity breakdown by type",
+    "reportType": "Activity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "ACTIVITY_DATE",
+        "operator": "equals",
+        "value": "THIS_WEEK",
+        "customizable": true
+      },
+      {
+        "column": "OWNER_ID",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "TASK_TYPE",
+        "sortOrder": "Desc",
+        "sortColumn": "RowCount"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Activities per type"
+      }
+    ],
+    "chart": {
+      "chartType": "Donut",
+      "groupingColumn": "TASK_TYPE",
+      "aggregateColumn": "RowCount",
+      "showPercentages": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-activities"
+    ],
+    "componentType": "Donut Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

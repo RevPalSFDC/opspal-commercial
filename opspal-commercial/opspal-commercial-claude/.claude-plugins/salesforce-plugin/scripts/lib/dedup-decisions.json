@@ -1,0 +1,88 @@
+{
+  "org": "bluerabbit2021-revpal",
+  "timestamp": "2025-10-16T11:42:10.658Z",
+  "stats": {
+    "total": 1,
+    "approved": 0,
+    "review": 0,
+    "blocked": 1,
+    "type1Prevented": 1,
+    "type2Prevented": 0
+  },
+  "decisions": [
+    {
+      "pair_id": "001VG00000aCytPYAS_001VG00000aGBpEYAW",
+      "recordA": {
+        "id": "001VG00000aCytPYAS",
+        "name": "Test Provider"
+      },
+      "recordB": {
+        "id": "001VG00000aGBpEYAW",
+        "name": "Downtown Veterinary Clinic"
+      },
+      "decision": "BLOCK",
+      "recommended_survivor": "001VG00000aCytPYAS",
+      "recommended_deleted": "001VG00000aGBpEYAW",
+      "scores": {
+        "recordA": {
+          "score": 894,
+          "breakdown": {
+            "relationshipScore": 400,
+            "contacts": 1,
+            "opportunities": 3,
+            "integrationIdScore": 300,
+            "importanceFieldScore": 150,
+            "completeness": "50%",
+            "completenessScore": 25,
+            "recentActivity": 19.4,
+            "daysSinceModified": 56
+          }
+        },
+        "recordB": {
+          "score": 794,
+          "breakdown": {
+            "relationshipScore": 300,
+            "contacts": 2,
+            "opportunities": 1,
+            "integrationIdScore": 300,
+            "importanceFieldScore": 150,
+            "completeness": "50%",
+            "completenessScore": 25,
+            "recentActivity": 19.4,
+            "daysSinceModified": 56
+          }
+        }
+      },
+      "guardrails_triggered": [
+        {
+          "type": "TYPE_1_INTEGRATION_ID_CONFLICT",
+          "severity": "BLOCK",
+          "reason": "3 integration ID conflict(s) detected",
+          "details": {
+            "conflicts": [
+              {
+                "field": "p_uuid__c",
+                "label": "p_uuid",
+                "valueA": "eebb6c22-d65b-cbc2-a490-ccbebbc86e73",
+                "valueB": "eb326553-9a9c-59c3-8a7a-7f52040d5122"
+              },
+              {
+                "field": "Salesforce_com_ID__c",
+                "label": "Salesforce.com ID",
+                "valueA": "001VG00000aCytP",
+                "valueB": "001VG00000aGBpE"
+              },
+              {
+                "field": "Full_Salesforce_Id__c",
+                "label": "Full Salesforce Id",
+                "valueA": "001VG00000aCytPYAS",
+                "valueB": "001VG00000aGBpEYAW"
+              }
+            ]
+          }
+        }
+      ],
+      "recovery_procedure": "B"
+    }
+  ]
+}

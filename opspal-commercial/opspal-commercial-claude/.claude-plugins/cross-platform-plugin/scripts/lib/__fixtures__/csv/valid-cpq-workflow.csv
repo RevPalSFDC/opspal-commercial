@@ -1,0 +1,4 @@
+Epic,User Story,Acceptance Criteria,Test Scenarios,Result,Pass/Fail,Test Record URL,Tester Comments
+Streamlined CPQ Workflow,"As a sales rep, I want to create quotes quickly",Given an Account exists When I create an Opportunity And add a Quote Then the Quote should be linked to the Opportunity,From Account → Create opp → Create quote → Verify quote linked to opp,,,,
+Multi-Quote Management,"As a sales rep, I want to manage multiple quotes",Given an Opportunity with quotes When I mark a quote as Primary Then rollups should update,From Account → Create opp → Create quote → Create second quote → Mark Primary on first → Verify rollups,,,,
+Approval Workflow,"As a manager, I need to approve discounts",Given a Quote with discount over 20% When submitted for approval Then it should require manager approval,From Account → Create opp → Create quote → Add 25% discount → Submit for approval → Verify pending approval,,,,

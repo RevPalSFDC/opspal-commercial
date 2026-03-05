@@ -1,0 +1,150 @@
+{
+  "templateMetadata": {
+    "templateName": "My Deals Needed",
+    "templateVersion": "1.1",
+    "description": "Estimated deals needed to hit quota based on average deal size",
+    "audience": "Sales Reps, Account Executives",
+    "useCase": "Pipeline building guidance, prospecting focus, goal setting",
+    "customizationPoints": [
+      "Use historical vs current avg deal size",
+      "Time period",
+      "Win rate adjustment"
+    ],
+    "prerequisites": [
+      "Opportunity object",
+      "Quota data",
+      "Historical deal data"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "My Deals Needed",
+    "description": "Number of average-sized deals to hit quota",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_YEAR",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total closed won"
+      },
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Average",
+        "description": "Average deal size"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Won deal count"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Deals_Needed",
+        "description": "Remaining Quota / Avg Deal Size",
+        "formula": "(Quota - SUM(AMOUNT)) / AVG(AMOUNT)",
+        "dataType": "number",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "Deals_Needed",
+      "format": "number"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-quota"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

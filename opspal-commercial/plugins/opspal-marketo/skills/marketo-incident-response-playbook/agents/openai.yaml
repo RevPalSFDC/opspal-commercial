@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Incident Response Playbook"
+  short_description: "Help with Marketo Incident Response Playbook tasks"
+  default_prompt: "Use $marketo-incident-response-playbook to execute this workflow safely and produce the expected artifacts."

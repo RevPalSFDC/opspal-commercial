@@ -1,0 +1,1302 @@
+{
+  "generatedAt": "2026-02-13T02:01:18.582Z",
+  "ruleSetVersion": "1.0.0",
+  "violations": [
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-ai-consult/scripts/lib/ace-integration.js|21|const CROSS_PLATFORM_ROOT = path.resolve(__dirname, '../../../opspal-core');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-ai-consult/scripts/lib/ace-integration.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-ai-consult.",
+      "snippet": "const CROSS_PLATFORM_ROOT = path.resolve(__dirname, '../../../opspal-core');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh|232|\"$PLUGIN_ROOT/../opspal-salesforce/scripts/lib/runbook-policy-retriever.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh",
+      "line": 232,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "\"$PLUGIN_ROOT/../opspal-salesforce/scripts/lib/runbook-policy-retriever.js\""
+    },
+    {
+      "signature": "claude-plugin-root-traversal|plugins/opspal-core/hooks/reflection/post-reflect.sh|154|\"${CLAUDE_PLUGIN_ROOT}/../opspal-salesforce/scripts/lib/submit-reflection.js\"",
+      "rule": "claude-plugin-root-traversal",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 154,
+      "message": "Detected `${CLAUDE_PLUGIN_ROOT}/../...` path traversal.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../opspal-salesforce/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/reflection/post-reflect.sh|154|\"${CLAUDE_PLUGIN_ROOT}/../opspal-salesforce/scripts/lib/submit-reflection.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 154,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../opspal-salesforce/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/reflection/post-reflect.sh|154|\"${CLAUDE_PLUGIN_ROOT}/../opspal-salesforce/scripts/lib/submit-reflection.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 154,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../opspal-salesforce/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "claude-plugin-root-traversal|plugins/opspal-core/hooks/reflection/post-reflect.sh|155|\"${CLAUDE_PLUGIN_ROOT}/../opspal-hubspot/scripts/lib/submit-reflection.js\"",
+      "rule": "claude-plugin-root-traversal",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 155,
+      "message": "Detected `${CLAUDE_PLUGIN_ROOT}/../...` path traversal.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../opspal-hubspot/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/reflection/post-reflect.sh|155|\"${CLAUDE_PLUGIN_ROOT}/../opspal-hubspot/scripts/lib/submit-reflection.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 155,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../opspal-hubspot/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/reflection/post-reflect.sh|155|\"${CLAUDE_PLUGIN_ROOT}/../opspal-hubspot/scripts/lib/submit-reflection.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 155,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../opspal-hubspot/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "claude-plugin-root-traversal|plugins/opspal-core/hooks/reflection/post-reflect.sh|157|\"${CLAUDE_PLUGIN_ROOT}/../salesforce-plugin/scripts/lib/submit-reflection.js\"",
+      "rule": "claude-plugin-root-traversal",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 157,
+      "message": "Detected `${CLAUDE_PLUGIN_ROOT}/../...` path traversal.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../salesforce-plugin/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "claude-plugin-root-traversal|plugins/opspal-core/hooks/reflection/post-reflect.sh|158|\"${CLAUDE_PLUGIN_ROOT}/../hubspot-plugin/scripts/lib/submit-reflection.js\"",
+      "rule": "claude-plugin-root-traversal",
+      "file": "plugins/opspal-core/hooks/reflection/post-reflect.sh",
+      "line": 158,
+      "message": "Detected `${CLAUDE_PLUGIN_ROOT}/../...` path traversal.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT}/../hubspot-plugin/scripts/lib/submit-reflection.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/reflection/pre-reflect.sh|55|\"${CLAUDE_PLUGIN_ROOT:-}/../opspal-salesforce/scripts/lib/batch-submit-reflections.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/reflection/pre-reflect.sh",
+      "line": 55,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT:-}/../opspal-salesforce/scripts/lib/batch-submit-reflections.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/reflection/pre-reflect.sh|56|\"${CLAUDE_PLUGIN_ROOT:-}/../opspal-hubspot/scripts/lib/batch-submit-reflections.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/hooks/reflection/pre-reflect.sh",
+      "line": 56,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "\"${CLAUDE_PLUGIN_ROOT:-}/../opspal-hubspot/scripts/lib/batch-submit-reflections.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|20|'plugins/opspal-salesforce/docs/runbooks/data-quality-operations/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/data-quality-operations/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|21|'plugins/opspal-hubspot/docs/runbooks/data-quality/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "'plugins/opspal-hubspot/docs/runbooks/data-quality/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|22|'plugins/opspal-marketo/docs/runbooks/lead-management/lead-quality-maintenance.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-marketo found in opspal-core.",
+      "snippet": "'plugins/opspal-marketo/docs/runbooks/lead-management/lead-quality-maintenance.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|25|'plugins/opspal-salesforce/docs/runbooks/environment-configuration/README.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 25,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/environment-configuration/README.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|28|'plugins/opspal-salesforce/contexts/metadata-manager/fls-field-deployment.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 28,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/contexts/metadata-manager/fls-field-deployment.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|29|'plugins/opspal-salesforce/docs/PERMISSION_SET_USER_GUIDE.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 29,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/PERMISSION_SET_USER_GUIDE.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|32|'plugins/opspal-salesforce/docs/runbooks/automation-feasibility/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 32,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/automation-feasibility/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|33|'plugins/opspal-salesforce/docs/AUTO_AGENT_ROUTING.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 33,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/AUTO_AGENT_ROUTING.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|37|'plugins/opspal-salesforce/docs/runbooks/territory-management/03-territory2-object-relationships.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 37,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/territory-management/03-territory2-object-relationships.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|38|'plugins/opspal-salesforce/docs/runbooks/territory-management/10-troubleshooting-guide.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 38,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/territory-management/10-troubleshooting-guide.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/cohort-runbook-guard.js|41|'plugins/opspal-salesforce/docs/CLI_COMMAND_VALIDATOR_USAGE.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/cohort-runbook-guard.js",
+      "line": 41,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/CLI_COMMAND_VALIDATOR_USAGE.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/field-dictionary-generator.js|47|const sfModule = require('../../../opspal-salesforce/scripts/lib/field-dictionary-generator');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/field-dictionary-generator.js",
+      "line": 47,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "const sfModule = require('../../../opspal-salesforce/scripts/lib/field-dictionary-generator');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/field-dictionary-generator.js|54|const hsModule = require('../../../opspal-hubspot/scripts/lib/field-dictionary-generator');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/field-dictionary-generator.js",
+      "line": 54,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "const hsModule = require('../../../opspal-hubspot/scripts/lib/field-dictionary-generator');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/hook-health-checker.js|1381|// Use the explicitly provided plugin root (e.g., plugins/opspal-hubspot)",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/hook-health-checker.js",
+      "line": 1381,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "// Use the explicitly provided plugin root (e.g., plugins/opspal-hubspot)"
+    },
+    {
+      "signature": "claude-plugin-root-traversal|plugins/opspal-core/scripts/lib/load-env.sh|84|[ -f \"${CLAUDE_PLUGIN_ROOT}/../.env\" ] && env_files+=(\"${CLAUDE_PLUGIN_ROOT}/../.env\")",
+      "rule": "claude-plugin-root-traversal",
+      "file": "plugins/opspal-core/scripts/lib/load-env.sh",
+      "line": 84,
+      "message": "Detected `${CLAUDE_PLUGIN_ROOT}/../...` path traversal.",
+      "snippet": "[ -f \"${CLAUDE_PLUGIN_ROOT}/../.env\" ] && env_files+=(\"${CLAUDE_PLUGIN_ROOT}/../.env\")"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|13|* opspal-internal/SFDC/... → plugins/opspal-salesforce/...",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 13,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "* opspal-internal/SFDC/... → plugins/opspal-salesforce/..."
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|14|* opspal-internal/HS/... → plugins/opspal-hubspot/...",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 14,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "* opspal-internal/HS/... → plugins/opspal-hubspot/..."
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|81|// Rule 4: opspal-internal/SFDC/scripts/... → plugins/opspal-salesforce/scripts/...",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 81,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "// Rule 4: opspal-internal/SFDC/scripts/... → plugins/opspal-salesforce/scripts/..."
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|88|return `plugins/opspal-salesforce/${subdir}${remainder}`;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 88,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "return `plugins/opspal-salesforce/${subdir}${remainder}`;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|103|// Rule 6: opspal-internal/HS/scripts/... → plugins/opspal-hubspot/scripts/...",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 103,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "// Rule 6: opspal-internal/HS/scripts/... → plugins/opspal-hubspot/scripts/..."
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|110|return `plugins/opspal-hubspot/${subdir}${remainder}`;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 110,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "return `plugins/opspal-hubspot/${subdir}${remainder}`;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|134|'SFDC': 'plugins/opspal-salesforce',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 134,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'SFDC': 'plugins/opspal-salesforce',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/path-normalizer.js|135|'HS': 'plugins/opspal-hubspot',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/path-normalizer.js",
+      "line": 135,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "'HS': 'plugins/opspal-hubspot',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-framework/plugin-runbook-generator.js|694|console.log(' node plugin-runbook-generator.js --plugin .claude-plugins/opspal-salesforce');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/runbook-framework/plugin-runbook-generator.js",
+      "line": 694,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "console.log(' node plugin-runbook-generator.js --plugin .claude-plugins/opspal-salesforce');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-framework/plugin-runbook-generator.js|694|console.log(' node plugin-runbook-generator.js --plugin .claude-plugins/opspal-salesforce');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/runbook-framework/plugin-runbook-generator.js",
+      "line": 694,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "console.log(' node plugin-runbook-generator.js --plugin .claude-plugins/opspal-salesforce');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-observer.js|162|// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/runbook-observer.js",
+      "line": 162,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-observer.js|162|// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/lib/runbook-observer.js",
+      "line": 162,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|60|'plugins/opspal-salesforce/docs/runbooks/data-quality-operations/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 60,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/data-quality-operations/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|61|'plugins/opspal-hubspot/docs/runbooks/data-quality/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 61,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
+      "snippet": "'plugins/opspal-hubspot/docs/runbooks/data-quality/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|62|'plugins/opspal-marketo/docs/runbooks/lead-management/lead-quality-maintenance.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 62,
+      "message": "Cross-plugin path reference to opspal-marketo found in opspal-core.",
+      "snippet": "'plugins/opspal-marketo/docs/runbooks/lead-management/lead-quality-maintenance.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|65|'plugins/opspal-salesforce/docs/runbooks/environment-configuration/README.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 65,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/environment-configuration/README.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|68|'plugins/opspal-salesforce/contexts/metadata-manager/fls-field-deployment.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 68,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/contexts/metadata-manager/fls-field-deployment.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|69|'plugins/opspal-salesforce/docs/PERMISSION_SET_USER_GUIDE.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 69,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/PERMISSION_SET_USER_GUIDE.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|72|'plugins/opspal-salesforce/docs/runbooks/automation-feasibility/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 72,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/automation-feasibility/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|73|'plugins/opspal-salesforce/docs/AUTO_AGENT_ROUTING.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 73,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/AUTO_AGENT_ROUTING.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|77|'plugins/opspal-salesforce/docs/runbooks/territory-management/03-territory2-object-relationships.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 77,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/territory-management/03-territory2-object-relationships.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|78|'plugins/opspal-salesforce/docs/runbooks/territory-management/10-troubleshooting-guide.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 78,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/runbooks/territory-management/10-troubleshooting-guide.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/process-reflections-phase1.js|81|'plugins/opspal-salesforce/docs/CLI_COMMAND_VALIDATOR_USAGE.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/process-reflections-phase1.js",
+      "line": 81,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "'plugins/opspal-salesforce/docs/CLI_COMMAND_VALIDATOR_USAGE.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/setup-prevention-system.sh|91|\"command\": \"bash -c '\"'\"'\\($root)/.claude-plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh && \\($root)/.claude-plugins/opspal-core/hooks/session-context-loader.sh'\"'\"'\",",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/setup-prevention-system.sh",
+      "line": 91,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "\"command\": \"bash -c '\"'\"'\\($root)/.claude-plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh && \\($root)/.claude-plugins/opspal-core/hooks/session-context-loader.sh'\"'\"'\","
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/setup-prevention-system.sh|91|\"command\": \"bash -c '\"'\"'\\($root)/.claude-plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh && \\($root)/.claude-plugins/opspal-core/hooks/session-context-loader.sh'\"'\"'\",",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/setup-prevention-system.sh",
+      "line": 91,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "\"command\": \"bash -c '\"'\"'\\($root)/.claude-plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh && \\($root)/.claude-plugins/opspal-core/hooks/session-context-loader.sh'\"'\"'\","
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/test-ace-integration.sh|155|local reflect_md=\"$REPO_ROOT/.claude-plugins/opspal-salesforce/commands/reflect.md\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/test-ace-integration.sh",
+      "line": 155,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "local reflect_md=\"$REPO_ROOT/.claude-plugins/opspal-salesforce/commands/reflect.md\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/test-ace-integration.sh|155|local reflect_md=\"$REPO_ROOT/.claude-plugins/opspal-salesforce/commands/reflect.md\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-core/scripts/test-ace-integration.sh",
+      "line": 155,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
+      "snippet": "local reflect_md=\"$REPO_ROOT/.claude-plugins/opspal-salesforce/commands/reflect.md\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/post-portal-authentication.sh|18|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/post-portal-authentication.sh",
+      "line": 18,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/post-portal-switch.sh|26|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/post-portal-switch.sh",
+      "line": 26,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-cms-publish-validation.sh|21|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-cms-publish-validation.sh",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-company-merge.sh|13|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-company-merge.sh",
+      "line": 13,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-hubspot-api-call.sh|33|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-hubspot-api-call.sh",
+      "line": 33,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-agent-validator.sh|18|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-task-agent-validator.sh",
+      "line": 18,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-context-loader.sh|18|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-task-context-loader.sh",
+      "line": 18,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-mandatory.sh|11|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-task-mandatory.sh",
+      "line": 11,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-write-path-validator.sh|18|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/hooks/pre-write-path-validator.sh",
+      "line": 18,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/hubspot-api-policy-adapter.js|11|const { ApiPolicyGateway } = require('../../../opspal-core/scripts/lib/api-policy-gateway');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/hubspot-api-policy-adapter.js",
+      "line": 11,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "const { ApiPolicyGateway } = require('../../../opspal-core/scripts/lib/api-policy-gateway');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/hubspot-api-policy-adapter.js|12|const { AutomationEventEmitter } = require('../../../opspal-core/scripts/lib/automation-event-emitter');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/hubspot-api-policy-adapter.js",
+      "line": 12,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "const { AutomationEventEmitter } = require('../../../opspal-core/scripts/lib/automation-event-emitter');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/initialize-project.js|278|merged += `@import .claude-plugins/opspal-salesforce/.claude-plugin/USAGE.md\\n\\n`;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/initialize-project.js",
+      "line": 278,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-hubspot.",
+      "snippet": "merged += `@import .claude-plugins/opspal-salesforce/.claude-plugin/USAGE.md\\n\\n`;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/initialize-project.js|278|merged += `@import .claude-plugins/opspal-salesforce/.claude-plugin/USAGE.md\\n\\n`;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/initialize-project.js",
+      "line": 278,
+      "message": "Cross-plugin path reference to opspal-salesforce found in opspal-hubspot.",
+      "snippet": "merged += `@import .claude-plugins/opspal-salesforce/.claude-plugin/USAGE.md\\n\\n`;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/portal-context-manager.js|34|PathResolver = require('../../../opspal-core/scripts/lib/path-resolver').PathResolver;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/portal-context-manager.js",
+      "line": 34,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "PathResolver = require('../../../opspal-core/scripts/lib/path-resolver').PathResolver;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/portal-context-manager.js|42|MetadataLoader = require('../../../opspal-core/scripts/lib/metadata-loader').MetadataLoader;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/portal-context-manager.js",
+      "line": 42,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "MetadataLoader = require('../../../opspal-core/scripts/lib/metadata-loader').MetadataLoader;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/portal-quirks-detector.js|20|const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/portal-quirks-detector.js",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/submit-reflection.js|10|* Canonical location: plugins/opspal-core/scripts/lib/submit-reflection.js",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/submit-reflection.js",
+      "line": 10,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "* Canonical location: plugins/opspal-core/scripts/lib/submit-reflection.js"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/submit-reflection.js|19|path.resolve(__dirname, '../../../opspal-core/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/submit-reflection.js",
+      "line": 19,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "path.resolve(__dirname, '../../../opspal-core/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/submit-reflection.js|21|path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/submit-reflection.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/submit-reflection.js|21|path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/submit-reflection.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/scripts/lib/submit-reflection.js|23|path.resolve(process.env.HOME || '', '.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-hubspot/scripts/lib/submit-reflection.js",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
+      "snippet": "path.resolve(process.env.HOME || '', '.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/api-limit-monitor.sh|20|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/api-limit-monitor.sh",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/api-limit-monitor.sh|21|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/api-limit-monitor.sh",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/post-bulk-import.sh|19|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/post-bulk-import.sh",
+      "line": 19,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/post-bulk-import.sh|20|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/post-bulk-import.sh",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/post-campaign-create.sh|19|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/post-campaign-create.sh",
+      "line": 19,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/post-campaign-create.sh|20|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/post-campaign-create.sh",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/post-operation-verification.sh|21|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/post-operation-verification.sh",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/post-operation-verification.sh|22|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/post-operation-verification.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-bulk-export.sh|21|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-bulk-export.sh",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-bulk-export.sh|22|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-bulk-export.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-bulk-operation.sh|22|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-bulk-operation.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-bulk-operation.sh|23|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-bulk-operation.sh",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-campaign-activation.sh|22|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-campaign-activation.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-campaign-activation.sh|23|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-campaign-activation.sh",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-campaign-clone.sh|22|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-campaign-clone.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-campaign-clone.sh|23|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-campaign-clone.sh",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-campaign-delete.sh|21|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-campaign-delete.sh",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-campaign-delete.sh|22|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-campaign-delete.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-lead-merge.sh|22|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-lead-merge.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-lead-merge.sh|23|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-lead-merge.sh",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-orchestration.sh|22|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-orchestration.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/pre-orchestration.sh|23|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/pre-orchestration.sh",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/sync-error-monitor.sh|20|if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/sync-error-monitor.sh",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "if [[ -f \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\" ]]; then"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/hooks/sync-error-monitor.sh|21|source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/hooks/sync-error-monitor.sh",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "source \"${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/scripts/lib/emit-automation-event.js|11|const { AutomationEventEmitter } = require('../../../opspal-core/scripts/lib/automation-event-emitter');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/scripts/lib/emit-automation-event.js",
+      "line": 11,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "const { AutomationEventEmitter } = require('../../../opspal-core/scripts/lib/automation-event-emitter');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-marketo/scripts/ui/smart-list-ui-automation.js|21|} = require('../../../opspal-core/scripts/lib/playwright-checkpoint-helper');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-marketo/scripts/ui/smart-list-ui-automation.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-marketo.",
+      "snippet": "} = require('../../../opspal-core/scripts/lib/playwright-checkpoint-helper');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/agent-usage-validator.sh|11|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/agent-usage-validator.sh",
+      "line": 11,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/hook-circuit-breaker.sh|41|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/hook-circuit-breaker.sh",
+      "line": 41,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh|31|OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh",
+      "line": 31,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|26|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
+      "line": 26,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-sf-command.sh|31|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-sf-command.sh",
+      "line": 31,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-sf-query-validation.sh|23|CROSS_PLATFORM_ROOT=\"${PLUGIN_ROOT}/../opspal-core\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-sf-query-validation.sh",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "CROSS_PLATFORM_ROOT=\"${PLUGIN_ROOT}/../opspal-core\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-batch-validation.sh|40|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-batch-validation.sh",
+      "line": 40,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deploy-flow-validation.sh|34|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deploy-flow-validation.sh",
+      "line": 34,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh|40|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh",
+      "line": 40,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh|47|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh",
+      "line": 47,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh|59|OUTPUT_FORMATTER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/output-formatter.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh",
+      "line": 59,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "OUTPUT_FORMATTER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/output-formatter.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh|60|HOOK_LOGGER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/hook-logger.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh",
+      "line": 60,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "HOOK_LOGGER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/hook-logger.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh|525|ENV_CONFIG_VALIDATOR=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/env-config-validator.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh",
+      "line": 525,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ENV_CONFIG_VALIDATOR=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/env-config-validator.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh|626|PRE_OP_ORCHESTRATOR=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/pre-operation-validation-orchestrator.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh",
+      "line": 626,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "PRE_OP_ORCHESTRATOR=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/pre-operation-validation-orchestrator.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-flow-deployment.sh|40|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-flow-deployment.sh",
+      "line": 40,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh|22|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-operation-org-validation.sh|27|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-operation-org-validation.sh",
+      "line": 27,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-context-loader.sh|58|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-task-context-loader.sh",
+      "line": 58,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-hook.sh|17|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-task-hook.sh",
+      "line": 17,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-mandatory.sh|11|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-task-mandatory.sh",
+      "line": 11,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-tool-use.sh|24|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-tool-use.sh",
+      "line": 24,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh|14|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh",
+      "line": 14,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/stop/release-coordination-trigger.json|7|\"evaluationPrompt\": \"Analyze the recent conversation and determine if release-coordinator should be triggered.\\n\\n**Trigger Conditions** (any ONE is sufficient):\\n1. **Git Merge to Main/Master**: User merged changes to main or master branch\\n - Evidence: `git merge`, `git push origin main`, merge commit message\\n - Context: After successful merge, deployment coordination needed\\n\\n2. **Production Deployment Intent**: User explicitly mentioned production deployment\\n - Keywords: \\\"deploy to production\\\", \\\"prod deployment\\\", \\\"release to prod\\\"\\n - Context: Production deployments require full release workflow\\n\\n3. **Tag Creation**: User created or mentioned creating a release tag\\n - Evidence: `git tag v*`, \\\"create release\\\", \\\"tag this version\\\"\\n - Context: Tags trigger release process\\n\\n4. **Multiple Platform Changes**: Changes affect 2+ platforms (Salesforce + HubSpot, etc.)\\n - Evidence: Modified both `.claude-plugins/opspal-salesforce/` and `.claude-plugins/opspal-hubspot/`\\n - Context: Cross-platform releases need orchestration\\n\\n5. **Breaking Changes**: User mentioned breaking changes or major version bump\\n - Keywords: \\\"breaking change\\\", \\\"major version\\\", \\\"v2.0.0\\\", \\\"BREAKING:\\\"\\n - Context: Breaking changes require coordinated release communication\\n\\n6. **Post-Merge Checklist Request**: User asked about release steps or checklist\\n - Keywords: \\\"what's next after merge\\\", \\\"release checklist\\\", \\\"deployment steps\\\"\\n - Context: User seeking release guidance\\n\\n**DO NOT Trigger For**:\\n- Feature branch merges (not to main/master)\\n- Development/sandbox deployments\\n- Local testing or validation\\n- Documentation-only changes\\n- Work-in-progress commits\\n- Merges to non-main branches\\n\\n**Response Format**:\\nRespond with ONLY one of these:\\n- \\\"TRIGGER: [reason]\\\" - If ANY trigger condition is met (provide brief reason)\\n- \\\"NO_TRIGGER: [reason]\\\" - If no conditions met (provide brief reason)\\n\\n**Examples**:\\n- TRIGGER: Merged feature branch to main with git push\\n- TRIGGER: User said \\\"deploy this to production now\\\"\\n- TRIGGER: Created tag v3.45.0 for release\\n- TRIGGER: Modified both salesforce-plugin and hubspot-plugin\\n- NO_TRIGGER: Merged to feature/dev branch, not main\\n- NO_TRIGGER: Sandbox deployment, not production\\n- NO_TRIGGER: Documentation update only, no code changes\",",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/stop/release-coordination-trigger.json",
+      "line": 7,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-salesforce.",
+      "snippet": "\"evaluationPrompt\": \"Analyze the recent conversation and determine if release-coordinator should be triggered.\\n\\n**Trigger Conditions** (any ONE is sufficient):\\n1. **Git Merge to Main/Master**: User merged changes to main or master branch\\n - Evidence: `git merge`, `git push origin main`, merge commit message\\n - Context: After successful merge, deployment coordination needed\\n\\n2. **Production Deployment Intent**: User explicitly mentioned production deployment\\n - Keywords: \\\"deploy to production\\\", \\\"prod deployment\\\", \\\"release to prod\\\"\\n - Context: Production deployments require full release workflow\\n\\n3. **Tag Creation**: User created or mentioned creating a release tag\\n - Evidence: `git tag v*`, \\\"create release\\\", \\\"tag this version\\\"\\n - Context: Tags trigger release process\\n\\n4. **Multiple Platform Changes**: Changes affect 2+ platforms (Salesforce + HubSpot, etc.)\\n - Evidence: Modified both `.claude-plugins/opspal-salesforce/` and `.claude-plugins/opspal-hubspot/`\\n - Context: Cross-platform releases need orchestration\\n\\n5. **Breaking Changes**: User mentioned breaking changes or major version bump\\n - Keywords: \\\"breaking change\\\", \\\"major version\\\", \\\"v2.0.0\\\", \\\"BREAKING:\\\"\\n - Context: Breaking changes require coordinated release communication\\n\\n6. **Post-Merge Checklist Request**: User asked about release steps or checklist\\n - Keywords: \\\"what's next after merge\\\", \\\"release checklist\\\", \\\"deployment steps\\\"\\n - Context: User seeking release guidance\\n\\n**DO NOT Trigger For**:\\n- Feature branch merges (not to main/master)\\n- Development/sandbox deployments\\n- Local testing or validation\\n- Documentation-only changes\\n- Work-in-progress commits\\n- Merges to non-main branches\\n\\n**Response Format**:\\nRespond with ONLY one of these:\\n- \\\"TRIGGER: [reason]\\\" - If ANY trigger condition is met (provide brief reason)\\n- \\\"NO_TRIGGER: [reason]\\\" - If no conditions met (provide brief reason)\\n\\n**Examples**:\\n- TRIGGER: Merged feature branch to main with git push\\n- TRIGGER: User said \\\"deploy this to production now\\\"\\n- TRIGGER: Created tag v3.45.0 for release\\n- TRIGGER: Modified both salesforce-plugin and hubspot-plugin\\n- NO_TRIGGER: Merged to feature/dev branch, not main\\n- NO_TRIGGER: Sandbox deployment, not production\\n- NO_TRIGGER: Documentation update only, no code changes\","
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/stop/release-coordination-trigger.json|7|\"evaluationPrompt\": \"Analyze the recent conversation and determine if release-coordinator should be triggered.\\n\\n**Trigger Conditions** (any ONE is sufficient):\\n1. **Git Merge to Main/Master**: User merged changes to main or master branch\\n - Evidence: `git merge`, `git push origin main`, merge commit message\\n - Context: After successful merge, deployment coordination needed\\n\\n2. **Production Deployment Intent**: User explicitly mentioned production deployment\\n - Keywords: \\\"deploy to production\\\", \\\"prod deployment\\\", \\\"release to prod\\\"\\n - Context: Production deployments require full release workflow\\n\\n3. **Tag Creation**: User created or mentioned creating a release tag\\n - Evidence: `git tag v*`, \\\"create release\\\", \\\"tag this version\\\"\\n - Context: Tags trigger release process\\n\\n4. **Multiple Platform Changes**: Changes affect 2+ platforms (Salesforce + HubSpot, etc.)\\n - Evidence: Modified both `.claude-plugins/opspal-salesforce/` and `.claude-plugins/opspal-hubspot/`\\n - Context: Cross-platform releases need orchestration\\n\\n5. **Breaking Changes**: User mentioned breaking changes or major version bump\\n - Keywords: \\\"breaking change\\\", \\\"major version\\\", \\\"v2.0.0\\\", \\\"BREAKING:\\\"\\n - Context: Breaking changes require coordinated release communication\\n\\n6. **Post-Merge Checklist Request**: User asked about release steps or checklist\\n - Keywords: \\\"what's next after merge\\\", \\\"release checklist\\\", \\\"deployment steps\\\"\\n - Context: User seeking release guidance\\n\\n**DO NOT Trigger For**:\\n- Feature branch merges (not to main/master)\\n- Development/sandbox deployments\\n- Local testing or validation\\n- Documentation-only changes\\n- Work-in-progress commits\\n- Merges to non-main branches\\n\\n**Response Format**:\\nRespond with ONLY one of these:\\n- \\\"TRIGGER: [reason]\\\" - If ANY trigger condition is met (provide brief reason)\\n- \\\"NO_TRIGGER: [reason]\\\" - If no conditions met (provide brief reason)\\n\\n**Examples**:\\n- TRIGGER: Merged feature branch to main with git push\\n- TRIGGER: User said \\\"deploy this to production now\\\"\\n- TRIGGER: Created tag v3.45.0 for release\\n- TRIGGER: Modified both salesforce-plugin and hubspot-plugin\\n- NO_TRIGGER: Merged to feature/dev branch, not main\\n- NO_TRIGGER: Sandbox deployment, not production\\n- NO_TRIGGER: Documentation update only, no code changes\",",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/stop/release-coordination-trigger.json",
+      "line": 7,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-salesforce.",
+      "snippet": "\"evaluationPrompt\": \"Analyze the recent conversation and determine if release-coordinator should be triggered.\\n\\n**Trigger Conditions** (any ONE is sufficient):\\n1. **Git Merge to Main/Master**: User merged changes to main or master branch\\n - Evidence: `git merge`, `git push origin main`, merge commit message\\n - Context: After successful merge, deployment coordination needed\\n\\n2. **Production Deployment Intent**: User explicitly mentioned production deployment\\n - Keywords: \\\"deploy to production\\\", \\\"prod deployment\\\", \\\"release to prod\\\"\\n - Context: Production deployments require full release workflow\\n\\n3. **Tag Creation**: User created or mentioned creating a release tag\\n - Evidence: `git tag v*`, \\\"create release\\\", \\\"tag this version\\\"\\n - Context: Tags trigger release process\\n\\n4. **Multiple Platform Changes**: Changes affect 2+ platforms (Salesforce + HubSpot, etc.)\\n - Evidence: Modified both `.claude-plugins/opspal-salesforce/` and `.claude-plugins/opspal-hubspot/`\\n - Context: Cross-platform releases need orchestration\\n\\n5. **Breaking Changes**: User mentioned breaking changes or major version bump\\n - Keywords: \\\"breaking change\\\", \\\"major version\\\", \\\"v2.0.0\\\", \\\"BREAKING:\\\"\\n - Context: Breaking changes require coordinated release communication\\n\\n6. **Post-Merge Checklist Request**: User asked about release steps or checklist\\n - Keywords: \\\"what's next after merge\\\", \\\"release checklist\\\", \\\"deployment steps\\\"\\n - Context: User seeking release guidance\\n\\n**DO NOT Trigger For**:\\n- Feature branch merges (not to main/master)\\n- Development/sandbox deployments\\n- Local testing or validation\\n- Documentation-only changes\\n- Work-in-progress commits\\n- Merges to non-main branches\\n\\n**Response Format**:\\nRespond with ONLY one of these:\\n- \\\"TRIGGER: [reason]\\\" - If ANY trigger condition is met (provide brief reason)\\n- \\\"NO_TRIGGER: [reason]\\\" - If no conditions met (provide brief reason)\\n\\n**Examples**:\\n- TRIGGER: Merged feature branch to main with git push\\n- TRIGGER: User said \\\"deploy this to production now\\\"\\n- TRIGGER: Created tag v3.45.0 for release\\n- TRIGGER: Modified both salesforce-plugin and hubspot-plugin\\n- NO_TRIGGER: Merged to feature/dev branch, not main\\n- NO_TRIGGER: Sandbox deployment, not production\\n- NO_TRIGGER: Documentation update only, no code changes\","
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/universal-agent-governance.sh|50|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/universal-agent-governance.sh",
+      "line": 50,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/universal-agent-governance.sh|63|OUTPUT_FORMATTER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/output-formatter.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/universal-agent-governance.sh",
+      "line": 63,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "OUTPUT_FORMATTER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/output-formatter.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/universal-agent-governance.sh|64|HOOK_LOGGER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/hook-logger.js\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/universal-agent-governance.sh",
+      "line": 64,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "HOOK_LOGGER=\"${SCRIPT_DIR}/../../opspal-core/scripts/lib/hook-logger.js\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/validate-sfdc-project-location.sh|24|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/validate-sfdc-project-location.sh",
+      "line": 24,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh|27|echo \" ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh",
+      "line": 27,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "echo \" ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh|27|echo \" ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh",
+      "line": 27,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "echo \" ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh|38|echo \" Run: ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh fix\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh",
+      "line": 38,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "echo \" Run: ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh fix\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh|38|echo \" Run: ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh fix\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/deployment/execute-asana-sync.sh",
+      "line": 38,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "echo \" Run: ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh fix\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/automation-audit-v2-orchestrator.js|3813|const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/automation-audit-v2-orchestrator.js",
+      "line": 3813,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/executive-reporter.js|601|const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/executive-reporter.js",
+      "line": 601,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/generate-pdf-enhanced.js|17|const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/generate-pdf-enhanced.js",
+      "line": 17,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/human-in-the-loop-controller.js|24|const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/human-in-the-loop-controller.js",
+      "line": 24,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/initialize-project.js|283|merged += `@import .claude-plugins/opspal-hubspot/USAGE.md\\n\\n`;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/initialize-project.js",
+      "line": 283,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-salesforce.",
+      "snippet": "merged += `@import .claude-plugins/opspal-hubspot/USAGE.md\\n\\n`;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/initialize-project.js|283|merged += `@import .claude-plugins/opspal-hubspot/USAGE.md\\n\\n`;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/initialize-project.js",
+      "line": 283,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-salesforce.",
+      "snippet": "merged += `@import .claude-plugins/opspal-hubspot/USAGE.md\\n\\n`;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/lifecycle-governance-loader.js|21|'../../../opspal-core/config/funnel-stage-definitions.json'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/lifecycle-governance-loader.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "'../../../opspal-core/config/funnel-stage-definitions.json'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/ooo-metadata-operations.js|29|const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/ooo-metadata-operations.js",
+      "line": 29,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/org-context-manager.js|42|PathResolver = require('../../../opspal-core/scripts/lib/path-resolver').PathResolver;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/org-context-manager.js",
+      "line": 42,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "PathResolver = require('../../../opspal-core/scripts/lib/path-resolver').PathResolver;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/org-context-manager.js|51|MetadataLoader = require('../../../opspal-core/scripts/lib/metadata-loader').MetadataLoader;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/org-context-manager.js",
+      "line": 51,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "MetadataLoader = require('../../../opspal-core/scripts/lib/metadata-loader').MetadataLoader;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/org-metadata-cache.js|31|PathResolver = require('../../../opspal-core/scripts/lib/path-resolver').PathResolver;",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/org-metadata-cache.js",
+      "line": 31,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "PathResolver = require('../../../opspal-core/scripts/lib/path-resolver').PathResolver;"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/permission-set-cli.js|44|const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/permission-set-cli.js",
+      "line": 44,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/reflection-skill-analyzer.js|22|const skillTrackerPath = path.join(__dirname, '../../../opspal-core/scripts/lib/skill-tracker.js');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/reflection-skill-analyzer.js",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const skillTrackerPath = path.join(__dirname, '../../../opspal-core/scripts/lib/skill-tracker.js');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/reflection-skill-analyzer.js|50|'../../../opspal-core/config/skill-registry.json'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/reflection-skill-analyzer.js",
+      "line": 50,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "'../../../opspal-core/config/skill-registry.json'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/report-pre-processor.js|20|const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/report-pre-processor.js",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const PDFGenerator = require('../../../opspal-core/scripts/lib/pdf-generator');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/salesforce-api-policy.js|11|const { ApiPolicyGateway } = require('../../../opspal-core/scripts/lib/api-policy-gateway');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/salesforce-api-policy.js",
+      "line": 11,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const { ApiPolicyGateway } = require('../../../opspal-core/scripts/lib/api-policy-gateway');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/salesforce-api-policy.js|12|const { AutomationEventEmitter } = require('../../../opspal-core/scripts/lib/automation-event-emitter');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/salesforce-api-policy.js",
+      "line": 12,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "const { AutomationEventEmitter } = require('../../../opspal-core/scripts/lib/automation-event-emitter');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/salesforce-native-merger.js|44|FieldConflictAnalyzer = require('../../plugins/opspal-core/scripts/lib/deduplication/field-conflict-analyzer');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/salesforce-native-merger.js",
+      "line": 44,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "FieldConflictAnalyzer = require('../../plugins/opspal-core/scripts/lib/deduplication/field-conflict-analyzer');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/salesforce-native-merger.js|48|FieldConflictAnalyzer = require('../../../opspal-core/scripts/lib/deduplication/field-conflict-analyzer');",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/salesforce-native-merger.js",
+      "line": 48,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "FieldConflictAnalyzer = require('../../../opspal-core/scripts/lib/deduplication/field-conflict-analyzer');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/submit-reflection.js|10|* Canonical location: plugins/opspal-core/scripts/lib/submit-reflection.js",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/submit-reflection.js",
+      "line": 10,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "* Canonical location: plugins/opspal-core/scripts/lib/submit-reflection.js"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/submit-reflection.js|19|path.resolve(__dirname, '../../../opspal-core/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/submit-reflection.js",
+      "line": 19,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "path.resolve(__dirname, '../../../opspal-core/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/submit-reflection.js|21|path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/submit-reflection.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/submit-reflection.js|21|path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/submit-reflection.js",
+      "line": 21,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/lib/submit-reflection.js|23|path.resolve(process.env.HOME || '', '.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/submit-reflection.js'),",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/lib/submit-reflection.js",
+      "line": 23,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "path.resolve(process.env.HOME || '', '.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/submit-reflection.js'),"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/run-revops-assessment.sh|66|CORE_PLUGIN=\"$PLUGIN_ROOT/../opspal-core\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/run-revops-assessment.sh",
+      "line": 66,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "CORE_PLUGIN=\"$PLUGIN_ROOT/../opspal-core\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/validate-playbook-usage.js|19|'plugins/opspal-hubspot/docs/runbooks/data-quality/README.md',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/validate-playbook-usage.js",
+      "line": 19,
+      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-salesforce.",
+      "snippet": "'plugins/opspal-hubspot/docs/runbooks/data-quality/README.md',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/validate-playbook-usage.js|20|'plugins/opspal-marketo/docs/runbooks/lead-management/lead-quality-maintenance.md'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/validate-playbook-usage.js",
+      "line": 20,
+      "message": "Cross-plugin path reference to opspal-marketo found in opspal-salesforce.",
+      "snippet": "'plugins/opspal-marketo/docs/runbooks/lead-management/lead-quality-maintenance.md'"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/validate-playbook-usage.js|40|'plugins/opspal-core/scripts/lib/tool-contract-validator.js',",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/validate-playbook-usage.js",
+      "line": 40,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "'plugins/opspal-core/scripts/lib/tool-contract-validator.js',"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/scripts/validate-playbook-usage.js|41|'plugins/opspal-core/scripts/lib/api-capability-checker.js'",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/scripts/validate-playbook-usage.js",
+      "line": 41,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "'plugins/opspal-core/scripts/lib/api-capability-checker.js'"
+    }
+  ]
+}

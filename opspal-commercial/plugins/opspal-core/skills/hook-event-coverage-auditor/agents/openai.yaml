@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Event Coverage Auditor"
+  short_description: "Help with Hook Event Coverage Auditor tasks"
+  default_prompt: "Use $hook-event-coverage-auditor to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Precommit Large File Gate"
+  short_description: "Help with Precommit Large File Gate tasks"
+  default_prompt: "Use $precommit-large-file-gate to execute this workflow safely and produce the expected artifacts."

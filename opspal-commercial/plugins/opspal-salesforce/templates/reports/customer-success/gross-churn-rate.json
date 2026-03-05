@@ -1,0 +1,110 @@
+{
+  "templateMetadata": {
+    "templateName": "Gross Churn Rate",
+    "templateVersion": "1.1",
+    "description": "Percentage of ARR lost to churn",
+    "audience": "CS Leadership, CCO, CFO",
+    "useCase": "Churn monitoring, retention analysis"
+  },
+  "reportMetadata": {
+    "name": "Gross Churn Rate",
+    "reportType": "Account",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "customSummaryFormulas": [
+      {
+        "name": "Churn_Rate",
+        "formula": "Churned_ARR__c:SUM / Beginning_ARR__c:SUM * 100",
+        "description": "Gross churn percentage"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Churned_ARR",
+        "column": "Churned_ARR__c",
+        "aggregateType": "Sum"
+      },
+      {
+        "name": "Beginning_ARR",
+        "column": "Beginning_ARR__c",
+        "aggregateType": "Sum"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

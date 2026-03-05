@@ -1,0 +1,42 @@
+{
+  "templateMetadata": {
+    "templateName": "Sales Overview Dashboard (Test)",
+    "templateVersion": "1.0",
+    "description": "Minimal dashboard template for validating Metadata API deployment flows.",
+    "audience": "RevOps Engineers, Salesforce Admins",
+    "useCase": "Sanity-check dashboard deployment, smoke-test report bindings.",
+    "customizationPoints": [
+      "Folder name and report references",
+      "Component layout and titles"
+    ],
+    "prerequisites": [
+      "Target dashboard folder exists",
+      "Referenced reports are accessible to the running user",
+      "Metadata API permissions enabled"
+    ]
+  },
+  "version": "1.0.0",
+  "metadata": {
+    "templateName": "Sales Overview Dashboard - TEST",
+    "description": "Minimal dashboard for testing deployment",
+    "author": "OpsPal Salesforce Plugin",
+    "category": "sales",
+    "difficulty": "basic"
+  },
+  "title": "TEST: Sales Overview",
+  "developerName": "TEST_Sales_Overview_Dashboard",
+  "description": "Test dashboard deployment via Metadata API",
+  "dashboardType": "LoggedInUser",
+  "folderName": "acme-corpDashboards",
+  "components": {
+    "left": [
+      {
+        "title": "Pipeline Report",
+        "report": "Public_Reports/Pipeline_Report_9MF",
+        "componentType": "Table"
+      }
+    ],
+    "middle": [],
+    "right": []
+  }
+}

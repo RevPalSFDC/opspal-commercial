@@ -1,0 +1,68 @@
+{
+  "object": "Account",
+  "template": "default",
+  "label": "Standard Account Layout",
+  "description": "Default Account layout for all personas",
+  "targetPersonas": ["sales-rep", "sales-manager", "executive", "support-agent"],
+  "sections": [
+    {
+      "label": "Account Information",
+      "order": 1,
+      "fields": [
+        "Name",
+        "ParentId",
+        "AccountNumber",
+        "Type",
+        "Industry",
+        "AnnualRevenue",
+        "NumberOfEmployees",
+        "OwnerId"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Contact Information",
+      "order": 2,
+      "fields": [
+        "Phone",
+        "Fax",
+        "Website",
+        "BillingAddress",
+        "ShippingAddress"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Additional Information",
+      "order": 3,
+      "fields": [
+        "AccountSource",
+        "SLA__c",
+        "Description"
+      ],
+      "columns": 2
+    }
+  ],
+  "compactLayoutFields": ["Name", "Phone", "Type", "Owner.Name"],
+  "components": {
+    "header": [
+      {"type": "force:highlightsPanelDesktop", "order": 1}
+    ],
+    "main": [
+      {"type": "force:recordFieldSection", "sections": ["Account Information", "Contact Information", "Additional Information"], "order": 1},
+      {"type": "force:activityComposer", "order": 2}
+    ],
+    "sidebar": [
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Contact", "order": 1},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Opportunity", "order": 2},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Case", "order": 3}
+    ]
+  },
+  "relatedLists": [
+    "Contacts",
+    "Opportunities",
+    "Cases",
+    "Open Activities",
+    "Activity History"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "org": "epsilon-corp2021-revpal",
+  "timestamp": "2025-10-16T19:45:11.269Z",
+  "stats": {
+    "total": 1,
+    "approved": 1,
+    "review": 0,
+    "blocked": 0,
+    "type1Prevented": 0,
+    "type2Prevented": 0
+  },
+  "decisions": [
+    {
+      "pair_id": "001VG00000aGMpRYAW_001VG00000cBSxXYAW",
+      "recordA": {
+        "id": "001VG00000aGMpRYAW",
+        "name": "Sunshine Pet Care Center"
+      },
+      "recordB": {
+        "id": "001VG00000cBSxXYAW",
+        "name": "Premier Pet Care Center"
+      },
+      "decision": "APPROVE",
+      "recommended_survivor": "001VG00000aGMpRYAW",
+      "recommended_deleted": "001VG00000cBSxXYAW",
+      "scores": {
+        "recordA": {
+          "score": 449,
+          "breakdown": {
+            "relationshipScore": 200,
+            "contacts": 2,
+            "opportunities": 0,
+            "statusScore": 0,
+            "revenueScore": 0,
+            "integrationIdScore": 150,
+            "websiteScore": 50,
+            "nameBlankPenalty": 0,
+            "completeness": "60%",
+            "completenessScore": 30,
+            "recentActivity": 19.3,
+            "daysSinceModified": 57
+          }
+        },
+        "recordB": {
+          "score": 302,
+          "breakdown": {
+            "relationshipScore": 100,
+            "contacts": 1,
+            "opportunities": 0,
+            "statusScore": 0,
+            "revenueScore": 0,
+            "integrationIdScore": 150,
+            "websiteScore": 0,
+            "nameBlankPenalty": 0,
+            "completeness": "60%",
+            "completenessScore": 30,
+            "recentActivity": 21.5,
+            "daysSinceModified": 35
+          }
+        }
+      },
+      "guardrails_triggered": [],
+      "conflicts": {
+        "hasConflicts": false,
+        "conflictCount": 0,
+        "conflicts": [],
+        "severity": "NONE",
+        "recommendation": "No conflicts detected - safe to merge"
+      },
+      "recovery_procedure": null
+    }
+  ]
+}

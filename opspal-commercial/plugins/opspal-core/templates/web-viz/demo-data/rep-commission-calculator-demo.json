@@ -1,0 +1,177 @@
+{
+  "ytdAttainment": {
+    "value": 85,
+    "target": 100,
+    "currentTier": "Standard",
+    "nextTier": "Accelerator Tier 1",
+    "toNextTier": 15
+  },
+
+  "kpis": {
+    "ytdEarnings": {
+      "value": 78500,
+      "breakdown": {
+        "baseSalary": 67500,
+        "commission": 8500,
+        "spifBonus": 2500
+      }
+    },
+    "projectedAnnual": {
+      "conservative": 142000,
+      "expected": 168000,
+      "optimistic": 195000
+    },
+    "remainingToQuota": {
+      "value": 112500
+    },
+    "dealsNeeded": {
+      "value": 3
+    },
+    "paceIndicator": {
+      "value": 102,
+      "trend": 5,
+      "trendDirection": "up"
+    },
+    "toAccelerator": {
+      "value": 112500
+    },
+    "toPresidentsClub": {
+      "value": 262500
+    },
+    "planDetails": {
+      "value": "Account Executive",
+      "subtitle": "FY26 Standard Plan"
+    }
+  },
+
+  "dealCalculator": {
+    "inputs": {
+      "dealAmount": 50000,
+      "dealType": "new-business",
+      "product": "platform",
+      "contractTerm": "12",
+      "closeDate": "this-quarter"
+    },
+    "outputs": {
+      "commission": 5000,
+      "effectiveRate": 10.0,
+      "tierApplied": "Standard",
+      "spifBonus": 0,
+      "newAttainment": 91.7
+    }
+  },
+
+  "tierProgress": {
+    "labels": ["Your Progress"],
+    "datasets": [
+      {
+        "label": "Current (85%)",
+        "data": [637500],
+        "backgroundColor": "#F59E0B"
+      },
+      {
+        "label": "To Quota (15%)",
+        "data": [112500],
+        "backgroundColor": "#E5E7EB"
+      }
+    ]
+  },
+
+  "earningsBreakdown": {
+    "labels": ["Base Salary", "Commission", "SPIF Bonus"],
+    "datasets": [{
+      "data": [67500, 8500, 2500],
+      "backgroundColor": ["#94A3B8", "#5F3B8C", "#22C55E"]
+    }]
+  },
+
+  "whatIfSimulator": {
+    "inputs": {
+      "additionalDeals": 3,
+      "avgDealSize": 50000
+    },
+    "outputs": {
+      "additionalCommission": 18750,
+      "projectedAttainment": 105,
+      "tierChange": "Standard → Accelerator Tier 1"
+    }
+  },
+
+  "recentDeals": [
+    {
+      "name": "Acme Corp - Platform License",
+      "amount": 125000,
+      "closeDate": "2026-01-15",
+      "commission": 12500,
+      "effectiveRate": 10.0,
+      "tier": "Standard",
+      "spifBonus": 0
+    },
+    {
+      "name": "TechStart Inc - Enterprise",
+      "amount": 85000,
+      "closeDate": "2026-01-08",
+      "commission": 8500,
+      "effectiveRate": 10.0,
+      "tier": "Standard",
+      "spifBonus": 0
+    },
+    {
+      "name": "Global Industries - Analytics",
+      "amount": 45000,
+      "closeDate": "2025-12-20",
+      "commission": 4500,
+      "effectiveRate": 10.0,
+      "tier": "Standard",
+      "spifBonus": 2000
+    },
+    {
+      "name": "StartupX - Platform",
+      "amount": 65000,
+      "closeDate": "2025-12-15",
+      "commission": 6500,
+      "effectiveRate": 10.0,
+      "tier": "Standard",
+      "spifBonus": 0
+    },
+    {
+      "name": "MegaCorp - Multi-Year",
+      "amount": 180000,
+      "closeDate": "2025-12-01",
+      "commission": 21600,
+      "effectiveRate": 12.0,
+      "tier": "Accelerator Tier 1",
+      "spifBonus": 500
+    }
+  ],
+
+  "monthlyTrend": {
+    "labels": ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
+    "datasets": [
+      {
+        "type": "bar",
+        "label": "Monthly Commission",
+        "data": [8500, 12000, 9500, 15000, 11000, 14000, 8500],
+        "backgroundColor": "#5F3B8C"
+      },
+      {
+        "type": "line",
+        "label": "Cumulative",
+        "data": [8500, 20500, 30000, 45000, 56000, 70000, 78500],
+        "borderColor": "#22C55E",
+        "fill": false
+      }
+    ]
+  },
+
+  "repContext": {
+    "userId": "005xx000001234ABC",
+    "userName": "Sarah Johnson",
+    "role": "Account Executive",
+    "quota": 750000,
+    "ytdBookings": 637500,
+    "planId": "fy26-standard-plan",
+    "startDate": "2025-05-01",
+    "rampMonth": 8
+  }
+}

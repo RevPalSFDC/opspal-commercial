@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Decision Contract Enforcer"
+  short_description: "Help with Hook Decision Contract Enforcer tasks"
+  default_prompt: "Use $hook-decision-contract-enforcer to execute this workflow safely and produce the expected artifacts."

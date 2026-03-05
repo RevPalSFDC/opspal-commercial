@@ -1,0 +1,144 @@
+{
+  "templateMetadata": {
+    "templateName": "Top Deals by Value",
+    "templateVersion": "1.1",
+    "description": "Team's largest open opportunities for deal inspection",
+    "audience": "Sales Managers",
+    "useCase": "Big deal tracking, deal strategy, win rate improvement",
+    "customizationPoints": [
+      "Number of deals to show",
+      "Team scope",
+      "Minimum deal size"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Top Deals by Value",
+    "description": "Largest open opportunities for the team",
+    "reportType": "Opportunity",
+    "reportFormat": "TABULAR",
+    "scope": "team",
+    "showDetails": true,
+    "rowLimit": 10,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.ManagerId.Team",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "OPPORTUNITY_OWNER",
+      "STAGE_NAME",
+      "AMOUNT",
+      "CLOSE_DATE",
+      "PROBABILITY",
+      "AGE"
+    ],
+    "sortBy": [
+      {
+        "column": "AMOUNT",
+        "order": "Descending"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total value of top deals"
+      }
+    ],
+    "chart": null
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-pipeline"
+    ],
+    "componentType": "Table",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

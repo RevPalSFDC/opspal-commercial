@@ -1,0 +1,17 @@
+<anonymous_script>:2
+   Progress: 1/1 (100.0%)[
+   ^
+
+SyntaxError: Unexpected token 'P', "   Progress: "... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at Object.<anonymous> (/home/chris/Desktop/RevPal/Agents/opspal-internal-plugins/.claude-plugins/hubspot-plugin/scripts/lib/seo-technical-health-scorer.js:820:29)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.15.1

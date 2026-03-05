@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "template": "data-quality",
+    "generated": "2025-01-04",
+    "description": "Demo data for Data Quality Dashboard - 4 objects with field completeness scores"
+  },
+  "kpis": {
+    "overallScore": {
+      "value": 72,
+      "priorValue": 68,
+      "trend": 5.9,
+      "trendDirection": "up",
+      "thresholds": [
+        { "value": 60, "color": "#EF4444", "label": "Poor" },
+        { "value": 80, "color": "#F59E0B", "label": "Fair" },
+        { "value": 100, "color": "#22C55E", "label": "Good" }
+      ]
+    },
+    "accountQuality": {
+      "value": 78,
+      "status": "fair"
+    },
+    "contactQuality": {
+      "value": 71,
+      "status": "fair"
+    },
+    "opportunityQuality": {
+      "value": 82,
+      "status": "good"
+    },
+    "leadQuality": {
+      "value": 58,
+      "status": "poor"
+    }
+  },
+  "objectScores": {
+    "labels": ["Account", "Contact", "Opportunity", "Lead"],
+    "datasets": [{
+      "label": "Quality Score",
+      "data": [78, 71, 82, 58],
+      "backgroundColor": ["#22C55E", "#F59E0B", "#22C55E", "#EF4444"]
+    }]
+  },
+  "fieldCompleteness": {
+    "Account": {
+      "totalRecords": 5420,
+      "fields": [
+        { "name": "Industry", "complete": 4850, "percent": 89.5, "status": "good" },
+        { "name": "Website", "complete": 4200, "percent": 77.5, "status": "fair" },
+        { "name": "Phone", "complete": 5100, "percent": 94.1, "status": "good" },
+        { "name": "BillingCity", "complete": 4650, "percent": 85.8, "status": "good" },
+        { "name": "BillingState", "complete": 4620, "percent": 85.2, "status": "good" },
+        { "name": "AnnualRevenue", "complete": 2850, "percent": 52.6, "status": "poor" },
+        { "name": "NumberOfEmployees", "complete": 3200, "percent": 59.0, "status": "poor" },
+        { "name": "Description", "complete": 2100, "percent": 38.7, "status": "poor" }
+      ]
+    },
+    "Contact": {
+      "totalRecords": 12850,
+      "fields": [
+        { "name": "Email", "complete": 11800, "percent": 91.8, "status": "good" },
+        { "name": "Phone", "complete": 8450, "percent": 65.8, "status": "fair" },
+        { "name": "Title", "complete": 9200, "percent": 71.6, "status": "fair" },
+        { "name": "MailingCity", "complete": 7800, "percent": 60.7, "status": "fair" },
+        { "name": "MailingState", "complete": 7750, "percent": 60.3, "status": "fair" },
+        { "name": "Department", "complete": 5400, "percent": 42.0, "status": "poor" },
+        { "name": "LeadSource", "complete": 10200, "percent": 79.4, "status": "fair" },
+        { "name": "Description", "complete": 1850, "percent": 14.4, "status": "poor" }
+      ]
+    },
+    "Opportunity": {
+      "totalRecords": 3250,
+      "fields": [
+        { "name": "Amount", "complete": 3100, "percent": 95.4, "status": "good" },
+        { "name": "CloseDate", "complete": 3250, "percent": 100.0, "status": "good" },
+        { "name": "StageName", "complete": 3250, "percent": 100.0, "status": "good" },
+        { "name": "Probability", "complete": 3180, "percent": 97.8, "status": "good" },
+        { "name": "LeadSource", "complete": 2450, "percent": 75.4, "status": "fair" },
+        { "name": "NextStep", "complete": 1850, "percent": 56.9, "status": "poor" },
+        { "name": "Description", "complete": 2100, "percent": 64.6, "status": "fair" },
+        { "name": "Type", "complete": 2800, "percent": 86.2, "status": "good" }
+      ]
+    },
+    "Lead": {
+      "totalRecords": 8500,
+      "fields": [
+        { "name": "Email", "complete": 7200, "percent": 84.7, "status": "good" },
+        { "name": "Company", "complete": 6800, "percent": 80.0, "status": "good" },
+        { "name": "Phone", "complete": 4500, "percent": 52.9, "status": "poor" },
+        { "name": "Title", "complete": 3200, "percent": 37.6, "status": "poor" },
+        { "name": "Industry", "complete": 4100, "percent": 48.2, "status": "poor" },
+        { "name": "LeadSource", "complete": 7800, "percent": 91.8, "status": "good" },
+        { "name": "State", "complete": 5200, "percent": 61.2, "status": "fair" },
+        { "name": "Website", "complete": 2800, "percent": 32.9, "status": "poor" }
+      ]
+    }
+  },
+  "completenessChart": {
+    "labels": ["Industry", "Website", "Phone", "Email", "Title", "Address", "Revenue", "Description"],
+    "datasets": [
+      {
+        "label": "Account",
+        "data": [89.5, 77.5, 94.1, null, null, 85.8, 52.6, 38.7],
+        "borderColor": "#5F3B8C",
+        "fill": false
+      },
+      {
+        "label": "Contact",
+        "data": [null, null, 65.8, 91.8, 71.6, 60.7, null, 14.4],
+        "borderColor": "#818CF8",
+        "fill": false
+      },
+      {
+        "label": "Opportunity",
+        "data": [null, null, null, null, null, null, 95.4, 64.6],
+        "borderColor": "#22C55E",
+        "fill": false
+      },
+      {
+        "label": "Lead",
+        "data": [48.2, 32.9, 52.9, 84.7, 37.6, 61.2, null, null],
+        "borderColor": "#EF4444",
+        "fill": false
+      }
+    ]
+  },
+  "qualityTrend": {
+    "labels": ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"],
+    "datasets": [{
+      "label": "Overall Score",
+      "data": [65, 66, 68, 68, 70, 70, 71, 72],
+      "borderColor": "#5F3B8C",
+      "backgroundColor": "rgba(95, 59, 140, 0.1)",
+      "fill": true
+    }]
+  },
+  "duplicates": {
+    "summary": {
+      "Account": { "count": 145, "estimatedMerges": 72 },
+      "Contact": { "count": 428, "estimatedMerges": 214 },
+      "Lead": { "count": 892, "estimatedMerges": 446 }
+    },
+    "chart": {
+      "labels": ["Account", "Contact", "Lead"],
+      "datasets": [{
+        "label": "Duplicate Records",
+        "data": [145, 428, 892],
+        "backgroundColor": ["#F59E0B", "#EF4444", "#DC2626"]
+      }]
+    }
+  },
+  "topIssues": [
+    {
+      "priority": 1,
+      "object": "Lead",
+      "field": "Phone",
+      "issue": "Low completeness",
+      "percent": 52.9,
+      "recordsAffected": 4000,
+      "impact": "high",
+      "recommendation": "Require phone on web-to-lead form"
+    },
+    {
+      "priority": 2,
+      "object": "Lead",
+      "field": "Title",
+      "issue": "Low completeness",
+      "percent": 37.6,
+      "recordsAffected": 5300,
+      "impact": "high",
+      "recommendation": "Add title enrichment workflow"
+    },
+    {
+      "priority": 3,
+      "object": "Account",
+      "field": "AnnualRevenue",
+      "issue": "Low completeness",
+      "percent": 52.6,
+      "recordsAffected": 2570,
+      "impact": "medium",
+      "recommendation": "Enable data enrichment integration"
+    },
+    {
+      "priority": 4,
+      "object": "Contact",
+      "field": "Phone",
+      "issue": "Low completeness",
+      "percent": 65.8,
+      "recordsAffected": 4400,
+      "impact": "medium",
+      "recommendation": "Add validation rule for primary contacts"
+    },
+    {
+      "priority": 5,
+      "object": "Lead",
+      "field": "Website",
+      "issue": "Low completeness",
+      "percent": 32.9,
+      "recordsAffected": 5700,
+      "impact": "low",
+      "recommendation": "Auto-derive from email domain"
+    }
+  ],
+  "stalenessAnalysis": {
+    "Account": {
+      "lastUpdated90Days": 4200,
+      "lastUpdated180Days": 850,
+      "lastUpdated365Days": 320,
+      "older": 50
+    },
+    "Contact": {
+      "lastUpdated90Days": 9800,
+      "lastUpdated180Days": 2100,
+      "lastUpdated365Days": 750,
+      "older": 200
+    },
+    "Opportunity": {
+      "lastUpdated90Days": 3100,
+      "lastUpdated180Days": 120,
+      "lastUpdated365Days": 25,
+      "older": 5
+    }
+  }
+}

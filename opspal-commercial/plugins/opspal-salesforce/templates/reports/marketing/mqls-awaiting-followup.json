@@ -1,0 +1,115 @@
+{
+  "templateMetadata": {
+    "templateName": "MQLs Awaiting Follow-up",
+    "templateVersion": "1.1",
+    "description": "MQLs not yet contacted requiring follow-up",
+    "audience": "SDRs, BDRs, Sales Development Managers",
+    "useCase": "Follow-up prioritization"
+  },
+  "reportMetadata": {
+    "name": "MQLs Awaiting Follow-up",
+    "reportType": "Lead",
+    "reportFormat": "TABULAR",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "Status",
+        "operator": "equals",
+        "value": "MQL"
+      },
+      {
+        "column": "Last_Activity_Date__c",
+        "operator": "equals",
+        "value": ""
+      }
+    ],
+    "detailColumns": [
+      "Name",
+      "Company",
+      "LeadSource",
+      "MQL_Date__c",
+      "Owner.Name"
+    ],
+    "sortBy": [
+      {
+        "column": "MQL_Date__c",
+        "order": "Ascending"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Table",
+    "refreshFrequency": "Hourly"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

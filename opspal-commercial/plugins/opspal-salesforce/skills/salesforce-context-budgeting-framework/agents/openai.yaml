@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Context Budgeting Framework"
+  short_description: "Help with Salesforce Context Budgeting Framework tasks"
+  default_prompt: "Use $salesforce-context-budgeting-framework to execute this workflow safely and produce the expected artifacts."

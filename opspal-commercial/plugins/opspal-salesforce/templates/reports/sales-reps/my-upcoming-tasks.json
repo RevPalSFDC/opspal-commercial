@@ -1,0 +1,143 @@
+{
+  "templateMetadata": {
+    "templateName": "My Upcoming Tasks",
+    "templateVersion": "1.1",
+    "description": "Your open tasks due soon requiring action",
+    "audience": "Sales Reps, BDRs, Account Executives",
+    "useCase": "Task management, follow-up tracking, daily planning",
+    "customizationPoints": [
+      "Due date range",
+      "Task priority filter",
+      "Related record types"
+    ],
+    "prerequisites": [
+      "Task tracking enabled",
+      "Tasks assigned to user"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "My Upcoming Tasks",
+    "description": "Open tasks due in next 7 days",
+    "reportType": "Task",
+    "reportFormat": "TABULAR",
+    "scope": "user",
+    "showDetails": true,
+    "reportFilters": [
+      {
+        "column": "STATUS",
+        "operator": "notEqual",
+        "value": "Completed",
+        "customizable": false
+      },
+      {
+        "column": "OWNER_ID",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      },
+      {
+        "column": "DUE_DATE",
+        "operator": "equals",
+        "value": "NEXT_N_DAYS:7",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "SUBJECT",
+      "RELATED_TO",
+      "RELATED_ACCOUNT",
+      "DUE_DATE",
+      "PRIORITY",
+      "STATUS"
+    ],
+    "sortBy": [
+      {
+        "column": "DUE_DATE",
+        "order": "Ascending"
+      },
+      {
+        "column": "PRIORITY",
+        "order": "Descending"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total open tasks"
+      }
+    ],
+    "chart": null
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-activities"
+    ],
+    "componentType": "Table",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

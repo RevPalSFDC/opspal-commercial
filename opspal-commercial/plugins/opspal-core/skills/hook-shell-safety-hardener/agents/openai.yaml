@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Shell Safety Hardener"
+  short_description: "Help with Hook Shell Safety Hardener tasks"
+  default_prompt: "Use $hook-shell-safety-hardener to execute this workflow safely and produce the expected artifacts."

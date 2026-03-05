@@ -1,0 +1,132 @@
+{
+  "templateMetadata": {
+    "templateName": "Team Activity Trend (Last 90 Days)",
+    "templateVersion": "1.1",
+    "description": "Weekly activity volume trend for the team over 90 days",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Activity trending, productivity monitoring, coaching prioritization",
+    "customizationPoints": [
+      "Time period (30, 60, 90 days)",
+      "Activity types",
+      "Team scope"
+    ],
+    "prerequisites": [
+      "Activity tracking enabled",
+      "90 days of activity history"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "Team Activity Trend - Last 90 Days",
+    "description": "Weekly activity volume for the sales team",
+    "reportType": "Activity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "ACTIVITY_DATE",
+        "operator": "equals",
+        "value": "LAST_N_DAYS:90",
+        "customizable": true
+      },
+      {
+        "column": "OWNER.USER_ROLE_NAME",
+        "operator": "contains",
+        "value": "Sales",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "ACTIVITY_DATE",
+        "sortOrder": "Asc",
+        "dateGranularity": "Week"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Weekly activity count"
+      }
+    ],
+    "chart": {
+      "chartType": "Line",
+      "groupingColumn": "ACTIVITY_DATE",
+      "aggregateColumn": "RowCount",
+      "showTrendLine": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-productivity"
+    ],
+    "componentType": "Line Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

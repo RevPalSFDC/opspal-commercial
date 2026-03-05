@@ -1,0 +1,24 @@
+{
+  "name": "opspal-gtm-planning",
+  "description": "GTM Annual Planning framework with strategic reporting templates. Includes territory design, quota modeling, compensation planning, revenue modeling, retention analysis, market intelligence, and 13 strategic report templates. 11 agents, 14 commands, 3 skill frameworks.",
+  "version": "2.1.4",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "gtm",
+    "planning",
+    "territory",
+    "quota",
+    "compensation",
+    "strategic-reports",
+    "arr-waterfall",
+    "nrr",
+    "tam-sam-som",
+    "revenue-modeling",
+    "retention"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+  "license": "Proprietary"
+}

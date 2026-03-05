@@ -1,0 +1,243 @@
+{
+  "description": "Sample Salesforce Opportunity records for RevOps testing",
+  "metadata": {
+    "recordCount": 50,
+    "dateRange": {
+      "start": "2024-01-01",
+      "end": "2024-12-31"
+    }
+  },
+  "records": [
+    {
+      "Id": "006000000000001AAA",
+      "Name": "Enterprise Deal - Acme Corp",
+      "Amount": 150000,
+      "StageName": "Closed Won",
+      "Type": "New Business",
+      "CloseDate": "2024-03-15",
+      "CreatedDate": "2024-01-10",
+      "IsClosed": true,
+      "IsWon": true,
+      "AccountId": "001000000000001AAA",
+      "OwnerId": "005000000000001AAA",
+      "Account": {
+        "Name": "Acme Corporation",
+        "Industry": "Technology",
+        "BillingCountry": "United States",
+        "Segment__c": "Enterprise"
+      },
+      "Owner": {
+        "Name": "John Smith"
+      }
+    },
+    {
+      "Id": "006000000000002AAA",
+      "Name": "Mid-Market Deal - Beta Inc",
+      "Amount": 45000,
+      "StageName": "Closed Won",
+      "Type": "New Business",
+      "CloseDate": "2024-02-28",
+      "CreatedDate": "2024-01-05",
+      "IsClosed": true,
+      "IsWon": true,
+      "AccountId": "001000000000002AAA",
+      "OwnerId": "005000000000002AAA",
+      "Account": {
+        "Name": "Beta Inc",
+        "Industry": "Healthcare",
+        "BillingCountry": "United States",
+        "Segment__c": "Mid-Market"
+      },
+      "Owner": {
+        "Name": "Jane Doe"
+      }
+    },
+    {
+      "Id": "006000000000003AAA",
+      "Name": "SMB Deal - Gamma LLC",
+      "Amount": 12000,
+      "StageName": "Closed Won",
+      "Type": "New Business",
+      "CloseDate": "2024-04-10",
+      "CreatedDate": "2024-03-01",
+      "IsClosed": true,
+      "IsWon": true,
+      "AccountId": "001000000000003AAA",
+      "OwnerId": "005000000000001AAA",
+      "Account": {
+        "Name": "Gamma LLC",
+        "Industry": "Retail",
+        "BillingCountry": "Canada",
+        "Segment__c": "SMB"
+      },
+      "Owner": {
+        "Name": "John Smith"
+      }
+    },
+    {
+      "Id": "006000000000004AAA",
+      "Name": "Renewal - Acme Corp",
+      "Amount": 150000,
+      "StageName": "Closed Won",
+      "Type": "Renewal",
+      "CloseDate": "2024-06-15",
+      "CreatedDate": "2024-05-01",
+      "IsClosed": true,
+      "IsWon": true,
+      "AccountId": "001000000000001AAA",
+      "OwnerId": "005000000000001AAA",
+      "Account": {
+        "Name": "Acme Corporation",
+        "Industry": "Technology",
+        "BillingCountry": "United States",
+        "Segment__c": "Enterprise"
+      },
+      "Owner": {
+        "Name": "John Smith"
+      }
+    },
+    {
+      "Id": "006000000000005AAA",
+      "Name": "Expansion - Acme Corp",
+      "Amount": 50000,
+      "StageName": "Closed Won",
+      "Type": "Expansion",
+      "CloseDate": "2024-07-20",
+      "CreatedDate": "2024-06-15",
+      "IsClosed": true,
+      "IsWon": true,
+      "AccountId": "001000000000001AAA",
+      "OwnerId": "005000000000001AAA",
+      "Account": {
+        "Name": "Acme Corporation",
+        "Industry": "Technology",
+        "BillingCountry": "United States",
+        "Segment__c": "Enterprise"
+      },
+      "Owner": {
+        "Name": "John Smith"
+      }
+    },
+    {
+      "Id": "006000000000006AAA",
+      "Name": "Lost Deal - Delta Corp",
+      "Amount": 75000,
+      "StageName": "Closed Lost",
+      "Type": "New Business",
+      "CloseDate": "2024-05-30",
+      "CreatedDate": "2024-03-15",
+      "IsClosed": true,
+      "IsWon": false,
+      "AccountId": "001000000000004AAA",
+      "OwnerId": "005000000000002AAA",
+      "Account": {
+        "Name": "Delta Corp",
+        "Industry": "Finance",
+        "BillingCountry": "United States",
+        "Segment__c": "Enterprise"
+      },
+      "Owner": {
+        "Name": "Jane Doe"
+      }
+    },
+    {
+      "Id": "006000000000007AAA",
+      "Name": "Open Pipeline - Epsilon",
+      "Amount": 200000,
+      "StageName": "Negotiation",
+      "Type": "New Business",
+      "CloseDate": "2024-12-15",
+      "CreatedDate": "2024-09-01",
+      "IsClosed": false,
+      "IsWon": false,
+      "AccountId": "001000000000005AAA",
+      "OwnerId": "005000000000001AAA",
+      "Account": {
+        "Name": "Epsilon Industries",
+        "Industry": "Manufacturing",
+        "BillingCountry": "Germany",
+        "Segment__c": "Enterprise"
+      },
+      "Owner": {
+        "Name": "John Smith"
+      }
+    },
+    {
+      "Id": "006000000000008AAA",
+      "Name": "Q4 Mid-Market - Zeta",
+      "Amount": 55000,
+      "StageName": "Proposal",
+      "Type": "New Business",
+      "CloseDate": "2024-11-30",
+      "CreatedDate": "2024-08-15",
+      "IsClosed": false,
+      "IsWon": false,
+      "AccountId": "001000000000006AAA",
+      "OwnerId": "005000000000002AAA",
+      "Account": {
+        "Name": "Zeta Systems",
+        "Industry": "Technology",
+        "BillingCountry": "United Kingdom",
+        "Segment__c": "Mid-Market"
+      },
+      "Owner": {
+        "Name": "Jane Doe"
+      }
+    },
+    {
+      "Id": "006000000000009AAA",
+      "Name": "Q1 Renewal - Beta Inc",
+      "Amount": 48000,
+      "StageName": "Closed Won",
+      "Type": "Renewal",
+      "CloseDate": "2024-01-28",
+      "CreatedDate": "2024-01-05",
+      "IsClosed": true,
+      "IsWon": true,
+      "AccountId": "001000000000002AAA",
+      "OwnerId": "005000000000002AAA",
+      "Account": {
+        "Name": "Beta Inc",
+        "Industry": "Healthcare",
+        "BillingCountry": "United States",
+        "Segment__c": "Mid-Market"
+      },
+      "Owner": {
+        "Name": "Jane Doe"
+      }
+    },
+    {
+      "Id": "006000000000010AAA",
+      "Name": "Churned - Omega Ltd",
+      "Amount": -35000,
+      "StageName": "Churned",
+      "Type": "Churn",
+      "CloseDate": "2024-04-30",
+      "CreatedDate": "2024-04-01",
+      "IsClosed": true,
+      "IsWon": false,
+      "AccountId": "001000000000007AAA",
+      "OwnerId": "005000000000001AAA",
+      "Account": {
+        "Name": "Omega Ltd",
+        "Industry": "Retail",
+        "BillingCountry": "Australia",
+        "Segment__c": "Mid-Market"
+      },
+      "Owner": {
+        "Name": "John Smith"
+      }
+    }
+  ],
+  "aggregates": {
+    "totalWonAmount": 460000,
+    "closedWonAmount": 455000,
+    "totalLostAmount": 75000,
+    "totalOpenPipeline": 255000,
+    "totalChurn": 35000,
+    "wonCount": 6,
+    "lostCount": 1,
+    "openCount": 2,
+    "churnCount": 1
+  }
+}

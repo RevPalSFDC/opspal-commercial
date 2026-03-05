@@ -1,0 +1,209 @@
+{
+  "template_id": "sales-capacity-model",
+  "report_name": "Sales Capacity Model",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "SalesOps",
+  "primary_decisions_supported": [
+    "Sales headcount planning",
+    "Quota allocation vs target revenue",
+    "Identifying hiring needs to hit targets"
+  ],
+  "executive_questions_answered": [
+    "Do we have enough sales capacity (fully ramped equivalent reps) to hit our revenue targets?",
+    "How many new reps (and by when) do we need to hire to achieve next year's bookings plan?",
+    "What is our current quota coverage ratio relative to the sales target (e.g., do we have 3x quota vs goal)?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Quota Capacity Coverage",
+      "definition": "The ratio of total available sales quota to the sales target for a period. Having 3-4x pipeline or quota coverage is often desired to hit goal (assuming ~25% win rate).",
+      "formula": "Coverage = Sum of quotas of all sales reps for period / Sales target for period",
+      "grain": "quarter or year",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Weighted Capacity",
+          "definition_delta": "Adjust quotas for ramp time or current fill (e.g., only count % of quota for unfilled or ramping positions)",
+          "when_to_use": "Mid-year assessments when not all headcount is fully ramped"
+        }
+      ],
+      "pitfalls": [
+        "If win rates differ from assumption, required coverage will differ (e.g., higher win rate means need less coverage and vice versa) – align coverage targets with actual win rate",
+        "Overhiring to get very high coverage can waste budget if not needed (diminishing returns beyond a point)",
+        "Do not double-count overlapping quotas (if two reps share a quota territory, capacity isn't additive unless both carry full quota separately)"
+      ]
+    },
+    {
+      "metric_name": "Fully Ramped Equivalent Reps (FRE)",
+      "definition": "The number of fully productive sales reps equivalent to the current team, accounting for ramp time and open positions. For example, 5 new hires at 50% productivity = 2.5 FRE.",
+      "formula": "FRE = Sum of (Quota capacity of rep / Full quota) across all reps",
+      "grain": "point in time (quarter)",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Sales Capacity FTE",
+          "definition_delta": "Similar concept, sometimes expressed in terms of full-time equivalents ready to sell at full capacity",
+          "when_to_use": "Communicating capacity to non-sales executives or finance"
+        }
+      ],
+      "pitfalls": [
+        "Assumes an average productivity normalization – individual variances not shown (some reps overperform, some underperform)",
+        "Open roles count as 0 until filled – could make capacity look low; optionally can include planned hires as partial FRE if certain",
+        "Rapid changes (many hires or attrition) can make FRE fluctuate – consider using averages or exit rate for smooth planning"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "HRIS"],
+    "required_entities": ["Sales Team Roster", "Quota Plan"],
+    "required_fields": [
+      {
+        "field_name": "Rep Name/ID",
+        "description": "Sales representative identifier",
+        "salesforce_field": "User.Id",
+        "hubspot_field": "owner.id"
+      },
+      {
+        "field_name": "Quota",
+        "description": "Annual or quarterly quota",
+        "salesforce_field": "User.Quota__c or QuotaForecast object",
+        "hubspot_field": "owner.quota"
+      },
+      {
+        "field_name": "Hire Date",
+        "description": "When rep joined",
+        "salesforce_field": "User.HireDate__c",
+        "type": "HRIS integration"
+      },
+      {
+        "field_name": "Termination Date",
+        "description": "If applicable",
+        "salesforce_field": "User.TerminationDate__c",
+        "type": "HRIS integration"
+      }
+    ],
+    "required_timestamps": ["as-of date for capacity (usually beginning of quarter)"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Sales Team Roster",
+        "right_entity": "Quota Plan",
+        "join_key": "RepID",
+        "join_type": "inner",
+        "notes": "Associate each rep with their assigned quota"
+      }
+    ],
+    "transformation_rules": [
+      "If using annual quotas but looking at quarterly targets, prorate quotas or ensure same period alignment",
+      "Apply ramp-up factors: e.g., if a rep is hired 3 months ago with a 6-month ramp, count only 50% of their quota toward capacity",
+      "Include planned hires: for forward-looking capacity, can model expected hire dates and ramp contributions"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Quota Sum vs Plan",
+        "logic": "Sum of all active quotas should be >= sales target * desired coverage (e.g., 3-4x) – flag if below",
+        "severity": "high"
+      },
+      {
+        "check_name": "Roster Completeness",
+        "logic": "All budgeted headcount positions have an entry (filled or open) with corresponding quota in model",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Rep_Ramp_Factor = function(months_since_hire) (e.g., 1.0 if > ramp period, else proportion of ramp completed)",
+      "Effective_Quota = Quota * Rep_Ramp_Factor"
+    ],
+    "aggregation_rules": [
+      "Sum Effective_Quota of all reps = Total capacity",
+      "Fully Ramped Equivalent = Total capacity / Full quota per rep (if quotas differ per rep, use average full quota or treat sum of quotas as already reflecting capacity)"
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": "Project revenue capacity by applying historical attainment rates to total capacity (e.g., if team historically achieves 80% of quota on average, factor that in)"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "Quota Coverage vs Target",
+        "purpose": "Show total sales quota capacity relative to sales target (coverage ratio)",
+        "visual_type": "gauge",
+        "primary_metrics": ["Coverage Ratio"],
+        "filters": [],
+        "drilldowns": ["by region or team"],
+        "annotations_or_thresholds": ["Ideal 3-4x coverage range"]
+      },
+      {
+        "panel_title": "Sales Capacity Breakdown",
+        "purpose": "Detail number of fully ramped equivalent reps and where capacity is coming from (e.g., # of ramping vs full reps)",
+        "visual_type": "bar",
+        "primary_metrics": ["Fully Ramped Reps", "Ramping Reps (FRE)"],
+        "filters": [],
+        "drilldowns": [],
+        "annotations_or_thresholds": []
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "State our current quota coverage ratio and interpret if it's sufficient given win rates (e.g., 'coverage is 3.5x, likely adequate')",
+      "Note if we have a capacity shortfall (e.g., coverage <3x) and need to hire or increase quotas"
+    ],
+    "diagnostic_questions": [
+      "Do we have enough reps to hit next quarter's target, assuming average productivity?",
+      "If we delay planned hires, how will that impact capacity in the second half of the year?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Accelerate hiring in specific regions/segments",
+        "owner": "SalesOps",
+        "trigger_condition": "Capacity coverage drops below threshold (e.g., <2.5x) for that segment's target"
+      },
+      {
+        "action": "Re-evaluate quota assignments",
+        "owner": "SalesOps",
+        "trigger_condition": "Total quota capacity far exceeds target (e.g., >5x), indicating potential to raise quotas or reduce cost"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Static model calculating current coverage and simple FRE count, updated in spreadsheets periodically",
+    "advanced_version": "Interactive capacity planning tool linking to live roster data, allowing scenario planning (e.g., what if we hire X more AEs by Q3) and auto-adjusting ramp contributions",
+    "common_client_customizations": [
+      "Incorporate different productivity assumptions by tenure (e.g., tenured reps exceed quota 110%, new at 50%) rather than uniform ramp factor",
+      "Account for attrition: assume some rep turnover in capacity forecast (reduce FRE accordingly over time)"
+    ],
+    "privacy_and_access_notes": [
+      "Share summary metrics widely, but keep individual quota data within leadership/ops (compensation sensitivity)",
+      "If discussing open headcount, be mindful of communication – internal use primarily"
+    ],
+    "success_criteria": [
+      "No mid-year surprises in needing extra hires – model accurately predicted needs and was followed",
+      "Sales targets are met or exceeded with adequate coverage, validating the capacity planning assumptions"
+    ]
+  },
+  "benchmarks": {
+    "quota_coverage_targets": {
+      "minimum": 2.5,
+      "healthy": 3.5,
+      "optimal": 4.0
+    },
+    "ramp_time_by_role": {
+      "ae_enterprise": "6 months",
+      "ae_mid_market": "4-5 months",
+      "ae_smb": "3 months",
+      "sdr": "2-3 months"
+    }
+  },
+  "references": [
+    {
+      "title": "Pipeline Coverage Best Practices",
+      "publisher": "Bigtincan",
+      "date": "2024",
+      "url": "https://www.bigtincan.com/resources/pipeline-coverage/"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "HubSpot Automation Actions V4 Action Definition Template",
+  "name": "Example Custom Action",
+  "description": "Template for creating custom workflow actions",
+
+  "actionUrl": "https://your-service.com/webhook",
+
+  "objectTypes": ["CONTACT"],
+
+  "inputFields": [
+    {
+      "typeDefinition": {
+        "name": "email_address",
+        "type": "string",
+        "fieldType": "text"
+      },
+      "isRequired": true,
+      "supportedValueTypes": ["STATIC_VALUE", "OBJECT_PROPERTY"]
+    },
+    {
+      "typeDefinition": {
+        "name": "priority",
+        "type": "enumeration",
+        "fieldType": "select",
+        "options": [
+          { "value": "low", "label": "Low", "displayOrder": 1 },
+          { "value": "medium", "label": "Medium", "displayOrder": 2 },
+          { "value": "high", "label": "High", "displayOrder": 3 }
+        ]
+      },
+      "isRequired": false,
+      "supportedValueTypes": ["STATIC_VALUE"]
+    },
+    {
+      "typeDefinition": {
+        "name": "message",
+        "type": "string",
+        "fieldType": "textarea"
+      },
+      "isRequired": false,
+      "supportedValueTypes": ["STATIC_VALUE", "OBJECT_PROPERTY"]
+    }
+  ],
+
+  "outputFields": [
+    {
+      "typeDefinition": {
+        "name": "status",
+        "type": "enumeration",
+        "options": [
+          { "value": "success", "label": "Success" },
+          { "value": "failed", "label": "Failed" },
+          { "value": "pending", "label": "Pending" }
+        ]
+      }
+    },
+    {
+      "typeDefinition": {
+        "name": "result_message",
+        "type": "string"
+      }
+    },
+    {
+      "typeDefinition": {
+        "name": "processed_at",
+        "type": "datetime"
+      }
+    }
+  ],
+
+  "labels": {
+    "en": {
+      "actionName": "Example Custom Action",
+      "actionDescription": "Performs a custom action via external service",
+      "actionCardContent": "Process {{inputFields.email_address}} with {{inputFields.priority}} priority",
+      "appDisplayName": "My Integration App",
+      "inputFieldLabels": {
+        "email_address": "Email Address",
+        "priority": "Priority Level",
+        "message": "Custom Message"
+      },
+      "outputFieldLabels": {
+        "status": "Processing Status",
+        "result_message": "Result Message",
+        "processed_at": "Processed At"
+      }
+    }
+  },
+
+  "executionRules": [
+    {
+      "conditions": [
+        {
+          "propertyName": "status",
+          "operator": "EQ",
+          "value": "failed"
+        }
+      ],
+      "effect": {
+        "type": "ERROR",
+        "message": "The action failed to complete. Please check the input data and try again."
+      }
+    }
+  ],
+
+  "published": false,
+
+  "_documentation": {
+    "actionUrl": "HTTPS endpoint that receives workflow execution requests",
+    "objectTypes": "Array of: CONTACT, COMPANY, DEAL, TICKET, QUOTE, LINE_ITEM, or custom object IDs",
+    "inputFields": "Fields configurable by workflow users",
+    "outputFields": "Fields returned by your action for workflow branching",
+    "labels": "Multi-language labels (en, fr, de, es, pt-br, ja, nl, it, pl, fi, sv, zh-cn, zh-tw, ko)",
+    "executionRules": "Custom error messages based on output field values",
+    "published": "Set to true to make action available in workflow editor",
+
+    "fieldTypes": {
+      "string": "Text field",
+      "number": "Numeric field",
+      "bool": "Boolean checkbox",
+      "date": "Date picker",
+      "datetime": "Date and time picker",
+      "enumeration": "Dropdown select",
+      "phone_number": "Phone number field",
+      "object_coordinates": "HubSpot object reference"
+    },
+
+    "fieldFormats": {
+      "text": "Single line text",
+      "textarea": "Multi-line text",
+      "richtext": "Rich text editor",
+      "currency": "Currency format",
+      "percent": "Percentage format",
+      "duration": "Time duration"
+    },
+
+    "webhookRequest": {
+      "format": "Your action URL will receive POST requests with: callbackId, origin (portalId, actionDefinitionId), object (objectType, objectId, properties), inputFields",
+      "example": "{ callbackId: 'abc123', object: { objectType: 'CONTACT', objectId: '456' }, inputFields: { email_address: 'user@example.com' } }"
+    },
+
+    "webhookResponse": {
+      "synchronous": "Return { outputFields: { status: 'success', ... } }",
+      "asynchronous": "Return { hs_execution_state: 'BLOCK', hs_expiration_duration: 'P1D' }, then call /callbacks/{callbackId}/complete"
+    }
+  }
+}

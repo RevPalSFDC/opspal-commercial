@@ -1,0 +1,109 @@
+{
+  "templateMetadata": {
+    "templateName": "Marketing Funnel Velocity",
+    "templateVersion": "1.1",
+    "description": "Average time between funnel stages",
+    "audience": "CMO, Marketing Ops",
+    "useCase": "Funnel velocity optimization"
+  },
+  "reportMetadata": {
+    "name": "Marketing Funnel Velocity",
+    "reportType": "Lead",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "IsConverted",
+        "operator": "equals",
+        "value": "true"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "AVG_MQL_to_SQL",
+        "column": "Days_MQL_to_SQL__c",
+        "aggregateType": "Average"
+      },
+      {
+        "name": "AVG_SQL_to_Opp",
+        "column": "Days_SQL_to_Opp__c",
+        "aggregateType": "Average"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Table",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

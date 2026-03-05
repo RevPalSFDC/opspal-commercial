@@ -1,0 +1,206 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-004",
+  "title": "Cross-Plugin Command Telemetry Contract",
+  "telemetry_contract_fields": [
+    "timestamp",
+    "command",
+    "agent",
+    "outcome",
+    "time_saved_estimate_minutes",
+    "human_override",
+    "rework_required",
+    "risk_class",
+    "source_plugin"
+  ],
+  "pilot_scope_plugins": [
+    {
+      "plugin": "opspal-core",
+      "owner": "revpal-platform",
+      "commands": 90
+    },
+    {
+      "plugin": "opspal-salesforce",
+      "owner": "revpal-salesforce",
+      "commands": 60
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "owner": "revpal-hubspot",
+      "commands": 34
+    },
+    {
+      "plugin": "opspal-marketo",
+      "owner": "revpal-marketing-ops",
+      "commands": 30
+    },
+    {
+      "plugin": "opspal-gtm-planning",
+      "owner": "revpal-gtm",
+      "commands": 15
+    }
+  ],
+  "pilot_instrumentation_markers": {
+    "telemetry_contract": "opspal-command-telemetry-v1",
+    "telemetry_enabled_values": [
+      "true",
+      "1",
+      "yes",
+      "on"
+    ]
+  },
+  "pilot_command_samples": [
+    {
+      "plugin": "opspal-core",
+      "command": "account-expansion",
+      "source_path": "plugins/opspal-core/commands/account-expansion.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-core",
+      "command": "ace-maintenance",
+      "source_path": "plugins/opspal-core/commands/ace-maintenance.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-core",
+      "command": "asana-checkpoint",
+      "source_path": "plugins/opspal-core/commands/asana-checkpoint.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-salesforce",
+      "command": "activate-flows",
+      "source_path": "plugins/opspal-salesforce/commands/activate-flows.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-salesforce",
+      "command": "analyze-decay-risk",
+      "source_path": "plugins/opspal-salesforce/commands/analyze-decay-risk.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-salesforce",
+      "command": "analyze-layout",
+      "source_path": "plugins/opspal-salesforce/commands/analyze-layout.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "command": "ai-search-optimize",
+      "source_path": "plugins/opspal-hubspot/commands/ai-search-optimize.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "command": "analyze-competitor",
+      "source_path": "plugins/opspal-hubspot/commands/analyze-competitor.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "command": "checkdependencies",
+      "source_path": "plugins/opspal-hubspot/commands/checkdependencies.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-marketo",
+      "command": "activity-report",
+      "source_path": "plugins/opspal-marketo/commands/activity-report.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-marketo",
+      "command": "analyze-performance",
+      "source_path": "plugins/opspal-marketo/commands/analyze-performance.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-marketo",
+      "command": "api-usage",
+      "source_path": "plugins/opspal-marketo/commands/api-usage.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-gtm-planning",
+      "command": "forecast",
+      "source_path": "plugins/opspal-gtm-planning/commands/forecast.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-gtm-planning",
+      "command": "gtm-arr-waterfall",
+      "source_path": "plugins/opspal-gtm-planning/commands/gtm-arr-waterfall.md",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "plugin": "opspal-gtm-planning",
+      "command": "gtm-comp",
+      "source_path": "plugins/opspal-gtm-planning/commands/gtm-comp.md",
+      "telemetry_status": "instrumented"
+    }
+  ],
+  "adoption_baseline": {
+    "telemetry_enabled_commands": 15,
+    "pilot_commands_total": 15,
+    "adoption_ratio": 1,
+    "target_ratio": 0.8
+  },
+  "control_plane_command_samples": [
+    {
+      "command": "copilot:approval",
+      "source_path": "scripts/copilot-approval-queue.js",
+      "source_plugin": "opspal-core",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "command": "next-actions:generate",
+      "source_path": "scripts/generate-next-best-actions.js",
+      "source_plugin": "opspal-core",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "command": "next-actions:promote",
+      "source_path": "scripts/promote-approved-actions.js",
+      "source_plugin": "opspal-core",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "command": "exec:generate",
+      "source_path": "scripts/generate-exec-gap-analysis.js",
+      "source_plugin": "opspal-core",
+      "telemetry_status": "instrumented"
+    },
+    {
+      "command": "exec:validate",
+      "source_path": "scripts/validate-exec-gap-analysis.js",
+      "source_plugin": "opspal-core",
+      "telemetry_status": "instrumented"
+    }
+  ],
+  "control_plane_adoption_baseline": {
+    "telemetry_enabled_commands": 5,
+    "pilot_commands_total": 5,
+    "adoption_ratio": 1,
+    "target_ratio": 1
+  },
+  "rollout_phases": [
+    {
+      "phase": "phase_1",
+      "scope": "Top-volume pilot commands",
+      "target_ratio": 0.4
+    },
+    {
+      "phase": "phase_2",
+      "scope": "All pilot commands",
+      "target_ratio": 0.8
+    },
+    {
+      "phase": "phase_3",
+      "scope": "Suite-wide command coverage",
+      "target_ratio": 0.9
+    }
+  ]
+}

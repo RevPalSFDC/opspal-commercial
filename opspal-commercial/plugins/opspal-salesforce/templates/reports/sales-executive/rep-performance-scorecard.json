@@ -1,0 +1,155 @@
+{
+  "templateMetadata": {
+    "templateName": "Rep Performance Scorecard",
+    "templateVersion": "1.1",
+    "description": "Comprehensive rep performance with multiple KPIs for executive review",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Quarterly reviews, performance management, talent assessment",
+    "customizationPoints": [
+      "KPIs to include",
+      "Weighting factors",
+      "Date range"
+    ],
+    "prerequisites": [
+      "Opportunity data",
+      "Activity data",
+      "Quota data"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "Rep Performance Scorecard",
+    "description": "Multi-dimensional rep performance view",
+    "reportType": "Opportunity",
+    "reportFormat": "MATRIX",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "OPPORTUNITY_OWNER",
+        "sortOrder": "Asc",
+        "dateGranularity": null
+      }
+    ],
+    "groupingsAcross": [
+      {
+        "field": "IS_WON",
+        "sortOrder": "Asc"
+      }
+    ],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Revenue per rep"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Deal count"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Win_Rate",
+        "description": "Won / Total Closed",
+        "formula": "(WonCount / TotalCount) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      },
+      {
+        "name": "Avg_Deal_Size",
+        "description": "Revenue / Won Count",
+        "formula": "WonAmount / WonCount",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      },
+      {
+        "name": "Quota_Attainment",
+        "description": "Revenue / Quota",
+        "formula": "(WonAmount / Quota) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": null
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-productivity"
+    ],
+    "componentType": "Table",
+    "refreshFrequency": "Weekly"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

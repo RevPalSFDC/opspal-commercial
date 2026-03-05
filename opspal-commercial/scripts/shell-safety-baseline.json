@@ -1,0 +1,545 @@
+{
+  "generatedAt": "2026-02-11T21:45:22.903Z",
+  "ruleSetVersion": "1.0.0",
+  "violations": [
+    {
+      "signature": "curl-timeout-required|.claude/hooks/post-commit-reflection-closer.sh|RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X PATCH \\ \"$SUPABASE_URL/rest/v1/reflections?id=eq.$CLEAN_ID\" \\ -H \"apikey: $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Content-Type: application/json\" \\ -H \"Prefer: return=minimal\" \\ -d \"{",
+      "rule": "curl-timeout-required",
+      "file": ".claude/hooks/post-commit-reflection-closer.sh",
+      "line": 63,
+      "snippet": "RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X PATCH \\ \"$SUPABASE_URL/rest/v1/reflections?id=eq.$CLEAN_ID\" \\ -H \"apikey: $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Content-Type: application/json\" \\ -H \"Prefer: return=minimal\" \\ -d \"{"
+    },
+    {
+      "signature": "curl-timeout-required|.claude/hooks/post-git-push-slack-notifier.sh|RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$PAYLOAD\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": ".claude/hooks/post-git-push-slack-notifier.sh",
+      "line": 389,
+      "snippet": "RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$PAYLOAD\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|.claude/hooks/post-processreflections.sh|HTTP_CODE=$(curl -s -o /dev/null -w \"%{http_code}\" -X POST \"$SLACK_WEBHOOK_URL\" \\ -H 'Content-Type: application/json' \\ -d \"$SLACK_MESSAGE\")",
+      "rule": "curl-timeout-required",
+      "file": ".claude/hooks/post-processreflections.sh",
+      "line": 110,
+      "snippet": "HTTP_CODE=$(curl -s -o /dev/null -w \"%{http_code}\" -X POST \"$SLACK_WEBHOOK_URL\" \\ -H 'Content-Type: application/json' \\ -d \"$SLACK_MESSAGE\")"
+    },
+    {
+      "signature": "curl-timeout-required|.claude/scripts/daily-asana-health-check.sh|curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H 'Content-Type: application/json' \\ -d '{\"text\":\"🚨 Asana connection health check FAILED - token may be invalid\"}'",
+      "rule": "curl-timeout-required",
+      "file": ".claude/scripts/daily-asana-health-check.sh",
+      "line": 14,
+      "snippet": "curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H 'Content-Type: application/json' \\ -d '{\"text\":\"🚨 Asana connection health check FAILED - token may be invalid\"}'"
+    },
+    {
+      "signature": "curl-timeout-required|.claude/scripts/lib/safe-curl.sh|local http_code=$(curl -s -o /dev/null -w \"%{http_code}\" \"$url\")",
+      "rule": "curl-timeout-required",
+      "file": ".claude/scripts/lib/safe-curl.sh",
+      "line": 203,
+      "snippet": "local http_code=$(curl -s -o /dev/null -w \"%{http_code}\" \"$url\")"
+    },
+    {
+      "signature": "curl-timeout-required|.claude/scripts/lib/safe-curl.sh|local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" \\ -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$payload\" \\ $extra_opts \\ \"$url\")",
+      "rule": "curl-timeout-required",
+      "file": ".claude/scripts/lib/safe-curl.sh",
+      "line": 113,
+      "snippet": "local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" \\ -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$payload\" \\ $extra_opts \\ \"$url\")"
+    },
+    {
+      "signature": "curl-timeout-required|.claude/scripts/lib/safe-curl.sh|local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" $extra_opts \"$url\")",
+      "rule": "curl-timeout-required",
+      "file": ".claude/scripts/lib/safe-curl.sh",
+      "line": 50,
+      "snippet": "local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" $extra_opts \"$url\")"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/diagnose-reflect-remote.sh|echo -e \" ${YELLOW}⚠${NC} curl not available, skipping connectivity test\"",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/diagnose-reflect-remote.sh",
+      "line": 268,
+      "snippet": "echo -e \" ${YELLOW}⚠${NC} curl not available, skipping connectivity test\""
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/diagnose-reflect-remote.sh|if command -v curl &> /dev/null",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/diagnose-reflect-remote.sh",
+      "line": 252,
+      "snippet": "if command -v curl &> /dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|\\ curl -s http://localhost:8889/metrics > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 195,
+      "snippet": "\\ curl -s http://localhost:8889/metrics > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|\\ curl -s http://localhost:9090/-/healthy > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 195,
+      "snippet": "\\ curl -s http://localhost:9090/-/healthy > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|echo \" curl http://localhost:8889/metrics",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 120,
+      "snippet": "echo \" curl http://localhost:8889/metrics"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|echo \" curl http://localhost:9090/api/v1/targets\"",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 117,
+      "snippet": "echo \" curl http://localhost:9090/api/v1/targets\""
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|if curl -s http://localhost:3333/api/health > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 184,
+      "snippet": "if curl -s http://localhost:3333/api/health > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|if curl -s http://localhost:3333/api/health > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 195,
+      "snippet": "if curl -s http://localhost:3333/api/health > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|if curl -s http://localhost:8889/metrics > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 155,
+      "snippet": "if curl -s http://localhost:8889/metrics > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|if curl -s http://localhost:9090/-/healthy > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 167,
+      "snippet": "if curl -s http://localhost:9090/-/healthy > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|METRIC_COUNT=$(curl -s http://localhost:8889/metrics",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 157,
+      "snippet": "METRIC_COUNT=$(curl -s http://localhost:8889/metrics"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh|TARGET_STATUS=$(curl -s http://localhost:9090/api/v1/targets",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-grafana-setup.sh",
+      "line": 171,
+      "snippet": "TARGET_STATUS=$(curl -s http://localhost:9090/api/v1/targets"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/otel-quickstart.sh|curl -L https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.91.0/otelcol_0.91.0_linux_amd64.tar.gz \\",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/otel-quickstart.sh",
+      "line": 19,
+      "snippet": "curl -L https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.91.0/otelcol_0.91.0_linux_amd64.tar.gz \\"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|echo -e \"${GREEN}✅ [safe-curl]${NC} $1\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 30,
+      "snippet": "echo -e \"${GREEN}✅ [safe-curl]${NC} $1\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|echo -e \"${RED}❌ [safe-curl]${NC} $1\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 22,
+      "snippet": "echo -e \"${RED}❌ [safe-curl]${NC} $1\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|echo -e \"${YELLOW}⚠️ [safe-curl]${NC} $1\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 26,
+      "snippet": "echo -e \"${YELLOW}⚠️ [safe-curl]${NC} $1\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|HTTP_STATUS=$(curl -s -S -w \"%{http_code}\" -D \"$TEMP_HEADERS\" -o \"$TEMP_RESPONSE\" \"$@\" 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 61,
+      "snippet": "HTTP_STATUS=$(curl -s -S -w \"%{http_code}\" -D \"$TEMP_HEADERS\" -o \"$TEMP_RESPONSE\" \"$@\" 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|log_error \"curl command failed with exit code $CURL_EXIT_CODE\"",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 66,
+      "snippet": "log_error \"curl command failed with exit code $CURL_EXIT_CODE\""
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|log_error \"Example: safe-curl -X GET \\\"https://api.example.com/data\\\" -H \\\"Authorization: Bearer \\$TOKEN\\\"\"",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 42,
+      "snippet": "log_error \"Example: safe-curl -X GET \\\"https://api.example.com/data\\\" -H \\\"Authorization: Bearer \\$TOKEN\\\"\""
+    },
+    {
+      "signature": "curl-timeout-required|dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh|log_error \"Usage: safe-curl <curl_args...>\"",
+      "rule": "curl-timeout-required",
+      "file": "dev-tools/developer-tools-plugin/scripts/lib/safe-curl.sh",
+      "line": 41,
+      "snippet": "log_error \"Usage: safe-curl <curl_args...>\""
+    },
+    {
+      "signature": "curl-timeout-required|diagnose-plugin-errors.sh|if curl -s --head \"$MARKETPLACE_URL\"",
+      "rule": "curl-timeout-required",
+      "file": "diagnose-plugin-errors.sh",
+      "line": 65,
+      "snippet": "if curl -s --head \"$MARKETPLACE_URL\""
+    },
+    {
+      "signature": "curl-timeout-required|diagnose-plugin-errors.sh|if curl -s -f \"$MANIFEST_URL\" > /tmp/test-manifest.json 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "diagnose-plugin-errors.sh",
+      "line": 102,
+      "snippet": "if curl -s -f \"$MANIFEST_URL\" > /tmp/test-manifest.json 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/hooks/post-reflect-alerter.sh|if ! command -v curl &> /dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/hooks/post-reflect-alerter.sh",
+      "line": 72,
+      "snippet": "if ! command -v curl &> /dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/hooks/post-reflect-alerter.sh|log_verbose \"curl not found - skipping alert\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/hooks/post-reflect-alerter.sh",
+      "line": 73,
+      "snippet": "log_verbose \"curl not found - skipping alert\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/hooks/post-reflect-alerter.sh|response=$(curl -s -o /dev/null -w \"%{http_code}\" \\ -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$payload\" \\ \"$webhook_url\" 2>/dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/hooks/post-reflect-alerter.sh",
+      "line": 229,
+      "snippet": "response=$(curl -s -o /dev/null -w \"%{http_code}\" \\ -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$payload\" \\ \"$webhook_url\" 2>/dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/hooks/weekly-strategy-transfer.sh|curl -s -X POST -H 'Content-type: application/json' \\ --data \"$payload\" \\ \"$SLACK_WEBHOOK_URL\" > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/hooks/weekly-strategy-transfer.sh",
+      "line": 239,
+      "snippet": "curl -s -X POST -H 'Content-type: application/json' \\ --data \"$payload\" \\ \"$SLACK_WEBHOOK_URL\" > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/asana-connection-manager.sh|curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H 'Content-Type: application/json' \\ -d '{\"text\":\"🚨 Asana connection health check FAILED - token may be invalid\"}'",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/asana-connection-manager.sh",
+      "line": 377,
+      "snippet": "curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H 'Content-Type: application/json' \\ -d '{\"text\":\"🚨 Asana connection health check FAILED - token may be invalid\"}'"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/asana-connection-manager.sh|local response=$(curl -s -w \"\\n%{http_code}\" \\ -H \"Authorization: Bearer $token\" \\ \"https://app.asana.com/api/1.0/workspaces\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/asana-connection-manager.sh",
+      "line": 67,
+      "snippet": "local response=$(curl -s -w \"\\n%{http_code}\" \\ -H \"Authorization: Bearer $token\" \\ \"https://app.asana.com/api/1.0/workspaces\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/asana-connection-manager.sh|local response=$(curl -s -w \"\\n%{http_code}\" \\ -H \"Authorization: Bearer $token\" \\ \"https://app.asana.com/api/1.0/workspaces\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/asana-connection-manager.sh",
+      "line": 99,
+      "snippet": "local response=$(curl -s -w \"\\n%{http_code}\" \\ -H \"Authorization: Bearer $token\" \\ \"https://app.asana.com/api/1.0/workspaces\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|_curl_log debug \"HTTP $http_code, curl exit: $curl_exit\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 292,
+      "snippet": "_curl_log debug \"HTTP $http_code, curl exit: $curl_exit\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|_curl_log warn \"curl failed with exit code $curl_exit\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 296,
+      "snippet": "_curl_log warn \"curl failed with exit code $curl_exit\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|_SAFE_CURL_LAST_ERROR=\"curl failed: exit code $curl_exit\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 302,
+      "snippet": "_SAFE_CURL_LAST_ERROR=\"curl failed: exit code $curl_exit\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|echo \"[curl:debug] $*\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 64,
+      "snippet": "echo \"[curl:debug] $*\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|echo \"[curl:error] $*\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 73,
+      "snippet": "echo \"[curl:error] $*\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|echo \"[curl:warn] $*\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 70,
+      "snippet": "echo \"[curl:warn] $*\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|echo \"[curl] $*\" >&2",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/safe-curl.sh",
+      "line": 67,
+      "snippet": "echo \"[curl] $*\" >&2"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/setup-notebooklm-auth.sh|echo -e \"${YELLOW} Install uv: curl -LsSf https://astral.sh/uv/install.sh",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/setup-notebooklm-auth.sh",
+      "line": 67,
+      "snippet": "echo -e \"${YELLOW} Install uv: curl -LsSf https://astral.sh/uv/install.sh"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/test-ace-integration.sh|assert_command_exists \"curl\" \"curl is installed\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/test-ace-integration.sh",
+      "line": 265,
+      "snippet": "assert_command_exists \"curl\" \"curl is installed\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/.claude-plugin/hooks/post-install.sh|echo \" ⚠ curl: Not found (required for HubSpot API)\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/.claude-plugin/hooks/post-install.sh",
+      "line": 33,
+      "snippet": "echo \" ⚠ curl: Not found (required for HubSpot API)\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/.claude-plugin/hooks/post-install.sh|echo \" ✓ curl: $(curl --version",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/.claude-plugin/hooks/post-install.sh",
+      "line": 31,
+      "snippet": "echo \" ✓ curl: $(curl --version"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/.claude-plugin/hooks/post-install.sh|if command -v curl &> /dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/.claude-plugin/hooks/post-install.sh",
+      "line": 30,
+      "snippet": "if command -v curl &> /dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh|SLACK_RESPONSE=$(curl -s -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$SLACK_MESSAGE\" 2>&1)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh",
+      "line": 153,
+      "snippet": "SLACK_RESPONSE=$(curl -s -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$SLACK_MESSAGE\" 2>&1)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/analytics-automation.sh|response=$(curl -s -X POST \\ \"${instance_url}/services/data/v64.0/analytics/reports\" \\ -H \"Authorization: Bearer ${access_token}\" \\ -H \"Content-Type: application/json\" \\ -d @\"$metadata_file\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/analytics-automation.sh",
+      "line": 186,
+      "snippet": "response=$(curl -s -X POST \\ \"${instance_url}/services/data/v64.0/analytics/reports\" \\ -H \"Authorization: Bearer ${access_token}\" \\ -H \"Content-Type: application/json\" \\ -d @\"$metadata_file\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/assign-tasks.sh|RESULT=$(curl -s -X PUT \"https://app.asana.com/api/1.0/tasks/${TASK_GID}\" \\ -H \"Authorization: Bearer ${ASANA_TOKEN}\" \\ -H \"Content-Type: application/json\" \\ -d \"{\\\"data\\\": {\\\"assignee\\\": \\\"${USER_GID}\\\"}}\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/assign-tasks.sh",
+      "line": 38,
+      "snippet": "RESULT=$(curl -s -X PUT \"https://app.asana.com/api/1.0/tasks/${TASK_GID}\" \\ -H \"Authorization: Bearer ${ASANA_TOKEN}\" \\ -H \"Content-Type: application/json\" \\ -d \"{\\\"data\\\": {\\\"assignee\\\": \\\"${USER_GID}\\\"}}\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/assign-tasks.sh|USER_DATA=$(curl -s \"https://app.asana.com/api/1.0/workspaces/${WORKSPACE_ID}/users\" \\ -H \"Authorization: Bearer ${ASANA_TOKEN}\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/assign-tasks.sh",
+      "line": 21,
+      "snippet": "USER_DATA=$(curl -s \"https://app.asana.com/api/1.0/workspaces/${WORKSPACE_ID}/users\" \\ -H \"Authorization: Bearer ${ASANA_TOKEN}\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/auth/jwt-bearer-auth.sh|local response=$(curl -s -X GET \"${instance_url}/services/data/v64.0/limits\" \\ -H \"Authorization: Bearer $access_token\" \\ -H \"Accept: application/json\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/auth/jwt-bearer-auth.sh",
+      "line": 308,
+      "snippet": "local response=$(curl -s -X GET \"${instance_url}/services/data/v64.0/limits\" \\ -H \"Authorization: Bearer $access_token\" \\ -H \"Accept: application/json\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/auth/jwt-bearer-auth.sh|local response=$(curl -s -X POST \"$token_endpoint\" \\ -H \"Content-Type: application/x-www-form-urlencoded\" \\ -d \"grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer\" \\ -d \"assertion=$jwt_assertion\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/auth/jwt-bearer-auth.sh",
+      "line": 227,
+      "snippet": "local response=$(curl -s -X POST \"$token_endpoint\" \\ -H \"Content-Type: application/x-www-form-urlencoded\" \\ -d \"grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer\" \\ -d \"assertion=$jwt_assertion\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/complete-voicemode-setup.sh|curl -O https://getvoicemode.com/install.sh -o ${TEMP_DIR:-/tmp}",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/complete-voicemode-setup.sh",
+      "line": 77,
+      "snippet": "curl -O https://getvoicemode.com/install.sh -o ${TEMP_DIR:-/tmp}"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/deploy-reports-production.sh|curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$message\" 2>/dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/deploy-reports-production.sh",
+      "line": 543,
+      "snippet": "curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$message\" 2>/dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/gpt5-cli.sh|curl \"${curl_args[@]}\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/gpt5-cli.sh",
+      "line": 23,
+      "snippet": "curl \"${curl_args[@]}\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/lib/supabase-common-operations.sh|❌ curl -X GET \"\\$SUPABASE_URL/rest/v1/reflections?...\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/lib/supabase-common-operations.sh",
+      "line": 59,
+      "snippet": "❌ curl -X GET \"\\$SUPABASE_URL/rest/v1/reflections?...\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-health-monitor.sh|curl -s -H \"Content-Type: application/json\" \\ -d \"{\\\"content\\\":\\\"**MCP Health Alert**\\\\n$subject\\\\n$body\\\"}\" \\ \"$DISCORD_WEBHOOK\" 2>/dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-health-monitor.sh",
+      "line": 76,
+      "snippet": "curl -s -H \"Content-Type: application/json\" \\ -d \"{\\\"content\\\":\\\"**MCP Health Alert**\\\\n$subject\\\\n$body\\\"}\" \\ \"$DISCORD_WEBHOOK\" 2>/dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-health-monitor.sh|curl -s -H \"Content-Type: application/json\" \\ -d \"{\\\"text\\\":\\\"*MCP Health Alert*\\\\n$subject\\\\n$body\\\"}\" \\ \"$SLACK_WEBHOOK\" 2>/dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-health-monitor.sh",
+      "line": 83,
+      "snippet": "curl -s -H \"Content-Type: application/json\" \\ -d \"{\\\"text\\\":\\\"*MCP Health Alert*\\\\n$subject\\\\n$body\\\"}\" \\ \"$SLACK_WEBHOOK\" 2>/dev/null"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-health-monitor.sh|curl -s -X POST \"${MANAGER_URL}/start/${server}\" > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-health-monitor.sh",
+      "line": 329,
+      "snippet": "curl -s -X POST \"${MANAGER_URL}/start/${server}\" > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-health-monitor.sh|if curl -s \"${MANAGER_URL}/health\" > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-health-monitor.sh",
+      "line": 91,
+      "snippet": "if curl -s \"${MANAGER_URL}/health\" > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-health-monitor.sh|local response=$(curl -s -X POST \"${MANAGER_URL}/restart/${server_name}\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-health-monitor.sh",
+      "line": 201,
+      "snippet": "local response=$(curl -s -X POST \"${MANAGER_URL}/restart/${server_name}\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-health-monitor.sh|local response=$(curl -s \"${MANAGER_URL}/health\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-health-monitor.sh",
+      "line": 123,
+      "snippet": "local response=$(curl -s \"${MANAGER_URL}/health\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-wrapper.sh|if curl -s \"${MANAGER_URL}/health\" > /dev/null 2>&1",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-wrapper.sh",
+      "line": 45,
+      "snippet": "if curl -s \"${MANAGER_URL}/health\" > /dev/null 2>&1"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-wrapper.sh|local response=$(curl -s -X POST \"${MANAGER_URL}/restart/${SERVER_NAME}\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-wrapper.sh",
+      "line": 151,
+      "snippet": "local response=$(curl -s -X POST \"${MANAGER_URL}/restart/${SERVER_NAME}\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-wrapper.sh|local response=$(curl -s -X POST \"${MANAGER_URL}/stop/${SERVER_NAME}\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-wrapper.sh",
+      "line": 137,
+      "snippet": "local response=$(curl -s -X POST \"${MANAGER_URL}/stop/${SERVER_NAME}\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-wrapper.sh|local response=$(curl -s -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$config\" \\ \"${MANAGER_URL}/start/${SERVER_NAME}\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-wrapper.sh",
+      "line": 114,
+      "snippet": "local response=$(curl -s -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$config\" \\ \"${MANAGER_URL}/start/${SERVER_NAME}\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-wrapper.sh|local response=$(curl -s \"${MANAGER_URL}/health\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-wrapper.sh",
+      "line": 165,
+      "snippet": "local response=$(curl -s \"${MANAGER_URL}/health\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/mcp-wrapper.sh|local status=$(curl -s \"${MANAGER_URL}/status/${SERVER_NAME}\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/mcp-wrapper.sh",
+      "line": 80,
+      "snippet": "local status=$(curl -s \"${MANAGER_URL}/status/${SERVER_NAME}\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/picklist-validator.sh|local api_result=$(curl -s -H \"Authorization: Bearer $access_token\" \\ \"${result}/services/data/v60.0/ui-api/object-info/${object_name}/picklist-values/${rt_id}/${field_name}\" 2>/dev/null)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/picklist-validator.sh",
+      "line": 120,
+      "snippet": "local api_result=$(curl -s -H \"Authorization: Bearer $access_token\" \\ \"${result}/services/data/v60.0/ui-api/object-info/${object_name}/picklist-values/${rt_id}/${field_name}\" 2>/dev/null)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/security-audit-report.sh|\"\\$\\(.*curl.*\\)\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/security-audit-report.sh",
+      "line": 177,
+      "snippet": "\"\\$\\(.*curl.*\\)\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/setup-asana-integration.sh|PROJECTS_RESPONSE=$(curl -s -H \"Authorization: Bearer $ASANA_TOKEN\" \"https://app.asana.com/api/1.0/projects?workspace=$WORKSPACE_ID&limit=100\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/setup-asana-integration.sh",
+      "line": 138,
+      "snippet": "PROJECTS_RESPONSE=$(curl -s -H \"Authorization: Bearer $ASANA_TOKEN\" \"https://app.asana.com/api/1.0/projects?workspace=$WORKSPACE_ID&limit=100\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/setup-asana-integration.sh|WORKSPACE_RESPONSE=$(curl -s -H \"Authorization: Bearer $ASANA_TOKEN\" https://app.asana.com/api/1.0/workspaces)",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/setup-asana-integration.sh",
+      "line": 88,
+      "snippet": "WORKSPACE_RESPONSE=$(curl -s -H \"Authorization: Bearer $ASANA_TOKEN\" https://app.asana.com/api/1.0/workspaces)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/smart-import-orchestrator.sh|response=$(curl -s -X POST \\ -H \"Authorization: Bearer $access_token\" \\ -H \"Content-Type: application/json\" \\ -d \"$record\" \\ \"${instance_url}/services/data/v59.0/sobjects/${object}/\")",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/smart-import-orchestrator.sh",
+      "line": 266,
+      "snippet": "response=$(curl -s -X POST \\ -H \"Authorization: Bearer $access_token\" \\ -H \"Content-Type: application/json\" \\ -d \"$record\" \\ \"${instance_url}/services/data/v59.0/sobjects/${object}/\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/validation/test_asana_connection.sh|curl -s -H \"Authorization: Bearer $ASANA_ACCESS_TOKEN\" \\ -H \"Content-Type: application/json\" \\ \"https://app.asana.com/api/1.0/workspaces\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-salesforce/scripts/validation/test_asana_connection.sh",
+      "line": 17,
+      "snippet": "curl -s -H \"Authorization: Bearer $ASANA_ACCESS_TOKEN\" \\ -H \"Content-Type: application/json\" \\ \"https://app.asana.com/api/1.0/workspaces\""
+    },
+    {
+      "signature": "curl-timeout-required|scripts/test-mcp-connections.sh|log_error \" 4. Check network connectivity: curl -I $SUPABASE_URL\"",
+      "rule": "curl-timeout-required",
+      "file": "scripts/test-mcp-connections.sh",
+      "line": 211,
+      "snippet": "log_error \" 4. Check network connectivity: curl -I $SUPABASE_URL\""
+    }
+  ]
+}

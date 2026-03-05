@@ -1,0 +1,405 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-23",
+  "totalTemplates": 30,
+  "categories": [
+    {
+      "id": "required-field",
+      "name": "Required Field Validation",
+      "description": "Make fields conditionally required based on various criteria",
+      "templateCount": 5
+    },
+    {
+      "id": "data-format",
+      "name": "Data Format Validation",
+      "description": "Validate data formats and patterns",
+      "templateCount": 5
+    },
+    {
+      "id": "business-logic",
+      "name": "Business Logic Validation",
+      "description": "Enforce business rules and thresholds",
+      "templateCount": 5
+    },
+    {
+      "id": "cross-object",
+      "name": "Cross-Object Validation",
+      "description": "Validate against parent/related records",
+      "templateCount": 5
+    },
+    {
+      "id": "date-time",
+      "name": "Date/Time Validation",
+      "description": "Date and time validation rules",
+      "templateCount": 5
+    },
+    {
+      "id": "security-compliance",
+      "name": "Security/Compliance Validation",
+      "description": "Security and compliance requirements",
+      "templateCount": 5
+    }
+  ],
+  "templates": [
+    {
+      "id": "conditional-required",
+      "name": "Conditional Required Field",
+      "category": "required-field",
+      "complexity": 20,
+      "file": "required-field/conditional-required.json",
+      "description": "Require field when another field has specific value",
+      "keywords": ["required", "conditional", "stage", "picklist"],
+      "commonUses": ["Close Date when Closed Won", "fields at stage gates"],
+      "popularityScore": 95
+    },
+    {
+      "id": "stage-specific-required",
+      "name": "Stage-Specific Required Fields",
+      "category": "required-field",
+      "complexity": 25,
+      "file": "required-field/stage-specific-required.json",
+      "description": "Require multiple fields at specific stages",
+      "keywords": ["required", "stage", "multiple fields", "gate"],
+      "commonUses": ["Stage gate validation", "process enforcement"],
+      "popularityScore": 85
+    },
+    {
+      "id": "record-type-required",
+      "name": "Record Type Required Fields",
+      "category": "required-field",
+      "complexity": 22,
+      "file": "required-field/record-type-required.json",
+      "description": "Require fields for specific record types",
+      "keywords": ["required", "record type", "conditional"],
+      "commonUses": ["Enterprise vs SMB requirements", "type-specific validation"],
+      "popularityScore": 75
+    },
+    {
+      "id": "role-based-required",
+      "name": "Role-Based Required Fields",
+      "category": "required-field",
+      "complexity": 28,
+      "file": "required-field/role-based-required.json",
+      "description": "Require fields based on user role or profile",
+      "keywords": ["required", "profile", "role", "user"],
+      "commonUses": ["Sales rep vs manager requirements", "role-specific data"],
+      "popularityScore": 60
+    },
+    {
+      "id": "threshold-based-required",
+      "name": "Threshold-Based Required Fields",
+      "category": "required-field",
+      "complexity": 24,
+      "file": "required-field/threshold-based-required.json",
+      "description": "Require fields when value exceeds threshold",
+      "keywords": ["required", "threshold", "amount", "conditional"],
+      "commonUses": ["Approval for deals >$100K", "executive sponsor requirements"],
+      "popularityScore": 80
+    },
+    {
+      "id": "email-format",
+      "name": "Email Format Validation",
+      "category": "data-format",
+      "complexity": 18,
+      "file": "data-format/email-format.json",
+      "description": "Validate email address format",
+      "keywords": ["email", "format", "validation", "regex"],
+      "commonUses": ["Email must contain @", "valid email structure"],
+      "popularityScore": 90
+    },
+    {
+      "id": "phone-format",
+      "name": "Phone Format Validation",
+      "category": "data-format",
+      "complexity": 20,
+      "file": "data-format/phone-format.json",
+      "description": "Validate phone number format",
+      "keywords": ["phone", "format", "validation", "digits"],
+      "commonUses": ["10-digit phone", "international format"],
+      "popularityScore": 85
+    },
+    {
+      "id": "url-format",
+      "name": "URL Format Validation",
+      "category": "data-format",
+      "complexity": 22,
+      "file": "data-format/url-format.json",
+      "description": "Validate URL format",
+      "keywords": ["url", "website", "format", "validation"],
+      "commonUses": ["Website URL validation", "http/https check"],
+      "popularityScore": 65
+    },
+    {
+      "id": "date-format",
+      "name": "Date Format Validation",
+      "category": "data-format",
+      "complexity": 19,
+      "file": "data-format/date-format.json",
+      "description": "Validate date ranges and formats",
+      "keywords": ["date", "format", "range", "validation"],
+      "commonUses": ["Date within range", "valid date check"],
+      "popularityScore": 70
+    },
+    {
+      "id": "numeric-format",
+      "name": "Numeric Format Validation",
+      "category": "data-format",
+      "complexity": 21,
+      "file": "data-format/numeric-format.json",
+      "description": "Validate numeric ranges and precision",
+      "keywords": ["number", "numeric", "range", "validation"],
+      "commonUses": ["Percentage 0-100", "positive numbers only"],
+      "popularityScore": 75
+    },
+    {
+      "id": "discount-threshold",
+      "name": "Discount Threshold Validation",
+      "category": "business-logic",
+      "complexity": 16,
+      "file": "business-logic/discount-threshold.json",
+      "description": "Enforce maximum discount percentage",
+      "keywords": ["discount", "threshold", "percentage", "limit"],
+      "commonUses": ["Max discount 15%", "approval for high discounts"],
+      "popularityScore": 88
+    },
+    {
+      "id": "approval-required",
+      "name": "Approval Required Validation",
+      "category": "business-logic",
+      "complexity": 26,
+      "file": "business-logic/approval-required.json",
+      "description": "Require approval for specific scenarios",
+      "keywords": ["approval", "required", "conditional", "threshold"],
+      "commonUses": ["Approval for high-value deals", "manager approval"],
+      "popularityScore": 82
+    },
+    {
+      "id": "date-range-validation",
+      "name": "Date Range Validation",
+      "category": "business-logic",
+      "complexity": 24,
+      "file": "business-logic/date-range-validation.json",
+      "description": "Validate date ranges (start < end)",
+      "keywords": ["date", "range", "start", "end", "comparison"],
+      "commonUses": ["Start before End", "contract dates"],
+      "popularityScore": 80
+    },
+    {
+      "id": "calculated-field-validation",
+      "name": "Calculated Field Validation",
+      "category": "business-logic",
+      "complexity": 22,
+      "file": "business-logic/calculated-field-validation.json",
+      "description": "Validate calculated fields match formula",
+      "keywords": ["calculated", "formula", "validation", "match"],
+      "commonUses": ["Total = Quantity × Price", "formula field accuracy"],
+      "popularityScore": 70
+    },
+    {
+      "id": "conditional-logic",
+      "name": "Conditional Business Logic",
+      "category": "business-logic",
+      "complexity": 45,
+      "file": "business-logic/conditional-logic.json",
+      "description": "Complex conditional business logic",
+      "keywords": ["conditional", "logic", "complex", "rules"],
+      "commonUses": ["Multi-condition validation", "complex business rules"],
+      "popularityScore": 55
+    },
+    {
+      "id": "parent-industry-check",
+      "name": "Parent Industry Validation",
+      "category": "cross-object",
+      "complexity": 27,
+      "file": "cross-object/parent-industry-check.json",
+      "description": "Validate based on parent record industry",
+      "keywords": ["parent", "industry", "account", "cross-object"],
+      "commonUses": ["Account industry check", "parent validation"],
+      "popularityScore": 72
+    },
+    {
+      "id": "parent-revenue-check",
+      "name": "Parent Revenue Validation",
+      "category": "cross-object",
+      "complexity": 30,
+      "file": "cross-object/parent-revenue-check.json",
+      "description": "Validate based on parent record revenue",
+      "keywords": ["parent", "revenue", "amount", "cross-object"],
+      "commonUses": ["Opportunity limited by Account revenue", "financial validation"],
+      "popularityScore": 68
+    },
+    {
+      "id": "parent-status-check",
+      "name": "Parent Status Validation",
+      "category": "cross-object",
+      "complexity": 26,
+      "file": "cross-object/parent-status-check.json",
+      "description": "Validate based on parent record status",
+      "keywords": ["parent", "status", "type", "cross-object"],
+      "commonUses": ["Account must be Customer", "parent type check"],
+      "popularityScore": 75
+    },
+    {
+      "id": "child-record-count",
+      "name": "Child Record Count Validation",
+      "category": "cross-object",
+      "complexity": 32,
+      "file": "cross-object/child-record-count.json",
+      "description": "Validate based on number of child records",
+      "keywords": ["child", "count", "related", "cross-object"],
+      "commonUses": ["Require at least 1 contact", "child record minimum"],
+      "popularityScore": 60
+    },
+    {
+      "id": "multi-level-relationship",
+      "name": "Multi-Level Relationship Validation",
+      "category": "cross-object",
+      "complexity": 38,
+      "file": "cross-object/multi-level-relationship.json",
+      "description": "Validate across multiple relationship levels",
+      "keywords": ["parent", "grandparent", "multi-level", "relationship"],
+      "commonUses": ["Account.Parent validation", "hierarchical checks"],
+      "popularityScore": 50
+    },
+    {
+      "id": "date-in-past",
+      "name": "Date in Past Validation",
+      "category": "date-time",
+      "complexity": 15,
+      "file": "date-time/date-in-past.json",
+      "description": "Prevent dates in the past",
+      "keywords": ["date", "past", "validation", "future"],
+      "commonUses": ["Prevent backdating", "future dates only"],
+      "popularityScore": 78
+    },
+    {
+      "id": "date-in-future",
+      "name": "Date in Future Validation",
+      "category": "date-time",
+      "complexity": 15,
+      "file": "date-time/date-in-future.json",
+      "description": "Prevent dates in the future",
+      "keywords": ["date", "future", "validation", "past"],
+      "commonUses": ["Close Date not in future", "historical dates only"],
+      "popularityScore": 80
+    },
+    {
+      "id": "date-range",
+      "name": "Date Range Validation",
+      "category": "date-time",
+      "complexity": 20,
+      "file": "date-time/date-range.json",
+      "description": "Validate date falls within range",
+      "keywords": ["date", "range", "between", "validation"],
+      "commonUses": ["Date within fiscal year", "valid date range"],
+      "popularityScore": 65
+    },
+    {
+      "id": "date-comparison",
+      "name": "Date Comparison Validation",
+      "category": "date-time",
+      "complexity": 22,
+      "file": "date-time/date-comparison.json",
+      "description": "Compare two date fields",
+      "keywords": ["date", "comparison", "start", "end"],
+      "commonUses": ["End after Start", "date ordering"],
+      "popularityScore": 85
+    },
+    {
+      "id": "business-hours",
+      "name": "Business Hours Validation",
+      "category": "date-time",
+      "complexity": 35,
+      "file": "date-time/business-hours.json",
+      "description": "Validate within business hours",
+      "keywords": ["date", "time", "business hours", "working hours"],
+      "commonUses": ["Created during business hours", "time restrictions"],
+      "popularityScore": 45
+    },
+    {
+      "id": "profile-based-restriction",
+      "name": "Profile-Based Restriction",
+      "category": "security-compliance",
+      "complexity": 18,
+      "file": "security-compliance/profile-based-restriction.json",
+      "description": "Restrict operations by profile",
+      "keywords": ["profile", "restriction", "bypass", "security"],
+      "commonUses": ["Admin bypass", "profile-specific validation"],
+      "popularityScore": 88
+    },
+    {
+      "id": "pii-protection",
+      "name": "PII Protection Validation",
+      "category": "security-compliance",
+      "complexity": 25,
+      "file": "security-compliance/pii-protection.json",
+      "description": "Protect personally identifiable information",
+      "keywords": ["pii", "security", "protection", "compliance"],
+      "commonUses": ["Require encryption flag", "PII handling"],
+      "popularityScore": 65
+    },
+    {
+      "id": "audit-trail-required",
+      "name": "Audit Trail Required",
+      "category": "security-compliance",
+      "complexity": 24,
+      "file": "security-compliance/audit-trail-required.json",
+      "description": "Require audit fields for compliance",
+      "keywords": ["audit", "trail", "compliance", "reason"],
+      "commonUses": ["Cancellation reason required", "change justification"],
+      "popularityScore": 70
+    },
+    {
+      "id": "data-classification",
+      "name": "Data Classification Validation",
+      "category": "security-compliance",
+      "complexity": 28,
+      "file": "security-compliance/data-classification.json",
+      "description": "Enforce data classification rules",
+      "keywords": ["classification", "security", "confidential", "compliance"],
+      "commonUses": ["Confidential data handling", "classification enforcement"],
+      "popularityScore": 58
+    },
+    {
+      "id": "permission-based-bypass",
+      "name": "Permission-Based Bypass",
+      "category": "security-compliance",
+      "complexity": 20,
+      "file": "security-compliance/permission-based-bypass.json",
+      "description": "Allow bypass with custom permission",
+      "keywords": ["permission", "bypass", "custom", "security"],
+      "commonUses": ["Custom permission bypass", "controlled exceptions"],
+      "popularityScore": 72
+    }
+  ],
+  "searchIndex": {
+    "byKeyword": {
+      "required": ["conditional-required", "stage-specific-required", "record-type-required", "role-based-required", "threshold-based-required", "approval-required", "audit-trail-required"],
+      "date": ["date-format", "date-range-validation", "date-in-past", "date-in-future", "date-range", "date-comparison", "business-hours"],
+      "parent": ["parent-industry-check", "parent-revenue-check", "parent-status-check", "multi-level-relationship"],
+      "discount": ["discount-threshold"],
+      "email": ["email-format"],
+      "phone": ["phone-format"],
+      "profile": ["role-based-required", "profile-based-restriction"],
+      "approval": ["approval-required"],
+      "security": ["profile-based-restriction", "pii-protection", "data-classification", "permission-based-bypass"],
+      "compliance": ["pii-protection", "audit-trail-required", "data-classification"]
+    },
+    "byComplexity": {
+      "simple": ["discount-threshold", "date-in-past", "date-in-future", "email-format", "date-format", "profile-based-restriction", "permission-based-bypass"],
+      "medium": ["conditional-required", "phone-format", "url-format", "numeric-format", "stage-specific-required", "record-type-required", "threshold-based-required", "approval-required", "date-range-validation", "calculated-field-validation", "parent-industry-check", "parent-status-check", "date-range", "date-comparison", "pii-protection", "audit-trail-required", "data-classification"],
+      "complex": ["role-based-required", "child-record-count", "multi-level-relationship", "business-hours", "conditional-logic"]
+    },
+    "byPopularity": {
+      "veryHigh": ["conditional-required", "email-format", "discount-threshold"],
+      "high": ["stage-specific-required", "phone-format", "threshold-based-required", "date-range-validation", "date-comparison", "date-in-future", "profile-based-restriction"],
+      "medium": ["record-type-required", "url-format", "numeric-format", "approval-required", "parent-industry-check", "parent-status-check", "date-in-past", "permission-based-bypass", "audit-trail-required"],
+      "low": ["role-based-required", "date-format", "calculated-field-validation", "parent-revenue-check", "child-record-count", "date-range", "pii-protection", "data-classification"]
+    }
+  },
+  "usageStats": {
+    "mostPopular": ["conditional-required", "email-format", "discount-threshold", "phone-format", "stage-specific-required"],
+    "trending": ["profile-based-restriction", "audit-trail-required", "parent-status-check"],
+    "underutilized": ["business-hours", "multi-level-relationship", "conditional-logic"]
+  }
+}

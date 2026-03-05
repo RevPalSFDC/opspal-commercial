@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Payload Budget Guard"
+  short_description: "Help with Hook Payload Budget Guard tasks"
+  default_prompt: "Use $hook-payload-budget-guard to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,189 @@
+{
+  "template_id": "net-dollar-retention",
+  "report_name": "Net Dollar Retention (NDR) / Net Revenue Retention (NRR)",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "CSOps",
+  "primary_decisions_supported": [
+    "Customer success investment levels",
+    "Expansion sales goals",
+    "Overall recurring revenue health assessment"
+  ],
+  "executive_questions_answered": [
+    "What percentage of starting revenue did we retain after upsells and churn?",
+    "Is our net retention improving or declining over time?",
+    "Are expansions making up for losses from churn?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Net Revenue Retention (NRR)",
+      "definition": "Percentage of starting ARR retained after adding expansion (upsells/cross-sells) and subtracting churn and downgrades.",
+      "formula": "NRR = ((Starting ARR + Expansion ARR - Churned ARR) / Starting ARR) * 100",
+      "grain": "quarter",
+      "required_dimensions": [],
+      "known_variants": [
+        {
+          "variant_name": "Gross Retention Rate (GRR)",
+          "definition_delta": "Measures retention excluding expansions – i.e., revenue retained from existing customers without upsell",
+          "when_to_use": "Assessing base stability (pure churn rate) without growth effects"
+        }
+      ],
+      "pitfalls": [
+        "High NRR can mask churn if expansions from a few big customers offset many losses",
+        "Focusing only on NRR might overlook logo churn – use GRR to ensure broad retention, not just upsell-driven",
+        "Be clear on currency and timeframe (monthly vs annual NRR can differ if seasonality or upgrades mid-period)"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["Billing", "CRM", "Data Warehouse"],
+    "required_entities": ["Account or Subscription records"],
+    "required_fields": [
+      {
+        "field_name": "Starting ARR per account",
+        "description": "ARR at the beginning of the measurement period",
+        "salesforce_field": "Account.ARR__c (at period start)",
+        "hubspot_field": "company.annual_recurring_revenue (at period start)"
+      },
+      {
+        "field_name": "Ending ARR per account",
+        "description": "ARR at the end of the measurement period",
+        "salesforce_field": "Account.ARR__c (at period end)",
+        "hubspot_field": "company.annual_recurring_revenue (at period end)"
+      },
+      {
+        "field_name": "Churned ARR",
+        "description": "Lost recurring revenue",
+        "salesforce_field": "ChurnEvent__c.ARR_Lost__c",
+        "hubspot_field": "company.churned_arr"
+      },
+      {
+        "field_name": "Expansion ARR",
+        "description": "Upsell revenue gained",
+        "salesforce_field": "Opportunity.ARR__c WHERE Type = 'Expansion'",
+        "hubspot_field": "deal.amount WHERE dealtype = existingbusiness"
+      }
+    ],
+    "required_timestamps": ["Period start", "Period end", "Churn effective date"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Subscription",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Link subscriptions to account to aggregate ARR per customer"
+      }
+    ],
+    "transformation_rules": [
+      "Exclude new customers added during the period from the calculation (since NRR looks at starting cohort)",
+      "Use constant currency or FX-neutral values if international (so currency fluctuations don't skew retention)",
+      "If a customer expands and later churns in same period, count both expansion and churn appropriately in numerator"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Exclude New Logo Check",
+        "logic": "Verify accounts with 0 ARR at start of period are excluded from NRR calculation",
+        "severity": "high"
+      },
+      {
+        "check_name": "NRR Above 100% Validity",
+        "logic": "If NRR >> 100% (e.g., 150%+), confirm large expansions are real and not data errors",
+        "severity": "low"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Expansion_ARR_per_account = max(0, Ending_ARR - Starting_ARR, 0)",
+      "Churned_ARR_per_account = max(0, Starting_ARR - Ending_ARR, 0)"
+    ],
+    "aggregation_rules": [
+      "Compute NRR at account level then weighted average by Starting ARR, or equivalently sum expansion and churn across all accounts and plug into formula",
+      "Segment NRR by customer cohort or segment for deeper insight (optional)"
+    ],
+    "cohort_logic": "Optionally track NRR for cohorts (e.g., customers by initial signup year) to see retention by vintage",
+    "attribution_logic": null,
+    "forecast_logic": null
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "NRR vs GRR Trend",
+        "purpose": "Trend lines of net and gross retention rates over time",
+        "visual_type": "line",
+        "primary_metrics": ["NRR%", "GRR%"],
+        "filters": ["customer segment"],
+        "drilldowns": ["account-level retention list"],
+        "annotations_or_thresholds": ["Target NRR (e.g., 110%)"]
+      },
+      {
+        "panel_title": "Expansion vs Churn Components",
+        "purpose": "Show expansion added and churn lost in dollar terms for the period",
+        "visual_type": "bar",
+        "primary_metrics": ["Expansion ARR", "Churned ARR"],
+        "filters": ["quarter"],
+        "drilldowns": ["by product or region"],
+        "annotations_or_thresholds": ["Net ARR change labeled"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Explain whether expansions outweighed churn or vice versa in contributing to NRR",
+      "Identify any segments with notably higher or lower NRR and possible reasons"
+    ],
+    "diagnostic_questions": [
+      "Which customer tier has the weakest GRR, and is upsell in that tier masking churn?",
+      "Are we relying on a few big expansions to prop up NRR, and what is underlying churn if those are excluded?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Initiate churn reduction initiative for at-risk segment",
+        "owner": "CSOps",
+        "trigger_condition": "GRR drops below threshold (e.g., <90%) even if overall NRR is high"
+      },
+      {
+        "action": "Expand customer success reach for growth opportunities",
+        "owner": "CSOps",
+        "trigger_condition": "NRR growth is plateauing (expansion slowing relative to prior periods)"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Simple calculation of NRR and GRR for total company on a quarterly basis",
+    "advanced_version": "NRR broken out by segment and product, with predictive churn flags and LTV impact analysis",
+    "common_client_customizations": [
+      "Logo retention (customer count retention) shown alongside dollar retention",
+      "Exclude churn from specific low-end customer tiers in one view to understand core-market retention"
+    ],
+    "privacy_and_access_notes": [
+      "Detailed account-level retention data should be restricted to CS team; executives see aggregated rates",
+      "When presenting externally, ensure calculations match any public definitions used in investor reporting"
+    ],
+    "success_criteria": [
+      "Internal NRR calculations match those used in official financial reporting (no discrepancies)",
+      "Improvement in NRR/GRR after targeted actions confirms report insights drove effective strategies"
+    ]
+  },
+  "benchmarks": {
+    "nrr_by_segment": {
+      "enterprise": { "median": 115, "top_quartile": 130 },
+      "mid_market": { "median": 108, "top_quartile": 118 },
+      "smb": { "median": 95, "top_quartile": 105 }
+    },
+    "grr_healthy": {
+      "minimum": 85,
+      "good": 90,
+      "excellent": 95
+    }
+  },
+  "references": [
+    {
+      "title": "Net Revenue Retention vs. Gross Revenue Retention: Explained",
+      "publisher": "ChurnZero",
+      "date": "Dec 17, 2025",
+      "url": "https://churnzero.com/blog/net-revenue-retention-vs-gross-revenue-retention-explained/"
+    }
+  ]
+}

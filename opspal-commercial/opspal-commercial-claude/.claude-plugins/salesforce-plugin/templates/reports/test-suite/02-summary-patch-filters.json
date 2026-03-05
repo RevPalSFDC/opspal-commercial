@@ -1,0 +1,51 @@
+{
+  "templateMetadata": {
+    "name": "Test Suite: SUMMARY with PATCH Filters",
+    "version": "1.0.0",
+    "description": "Tests PATCH filter application for non-date filters"
+  },
+  "reportMetadata": {
+    "name": "High-Value Opportunities by Owner",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "AMOUNT",
+      "STAGE_NAME",
+      "PROBABILITY"
+    ],
+    "groupingsDown": [
+      {
+        "field": "OPPORTUNITY_OWNER"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount"
+      }
+    ],
+    "reportFilters": [
+      {
+        "column": "AMOUNT",
+        "operator": "greaterThan",
+        "value": "50000"
+      },
+      {
+        "column": "STAGE_NAME",
+        "operator": "notEqual",
+        "value": "Closed Lost"
+      },
+      {
+        "column": "PROBABILITY",
+        "operator": "greaterThan",
+        "value": "50"
+      }
+    ]
+  },
+  "fieldHints": {
+    "OPPORTUNITY_OWNER": {
+      "patterns": ["FULL_NAME", "OWNER_NAME"],
+      "fallback": "FULL_NAME"
+    }
+  }
+}

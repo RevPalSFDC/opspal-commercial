@@ -1,0 +1,134 @@
+{
+  "templateMetadata": {
+    "templateName": "Renewal Pipeline by Quarter",
+    "templateVersion": "1.1",
+    "description": "Track upcoming contract renewals with risk assessment and value projection",
+    "audience": "Customer Success, Sales Leadership, Finance",
+    "useCase": "Forecast renewal revenue, identify at-risk renewals, plan CS team capacity",
+    "prerequisites": [
+      "Renewal opportunities OR Account.Contract_End_Date__c",
+      "ARR/MRR fields"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Renewal Pipeline - {Period}",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "reportFilters": [
+      {
+        "column": "TYPE",
+        "operator": "equals",
+        "value": "Renewal"
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "NEXT_2_QUARTERS"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "CLOSE_DATE",
+        "dateGranularity": "QUARTER"
+      },
+      {
+        "field": "Opportunity.Renewal_Risk__c"
+      }
+    ],
+    "detailColumns": [
+      "ACCOUNT_NAME",
+      "AMOUNT",
+      "STAGE_NAME",
+      "Opportunity.Contract_Value__c",
+      "Account.Health_Score__c"
+    ],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum"
+      }
+    ],
+    "chart": {
+      "chartType": "StackedBar",
+      "groupingColumn": "CLOSE_DATE",
+      "aggregateColumn": "AMOUNT"
+    }
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

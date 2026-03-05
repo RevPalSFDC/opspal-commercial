@@ -1,0 +1,67 @@
+{
+  "originalTask": "--analyze Analyze CPQ configuration",
+  "timestamp": "2025-11-10T15:51:30.296Z",
+  "facets": [
+    {
+      "type": "analysis",
+      "matchedKeywords": [
+        "analyze"
+      ],
+      "priority": "low",
+      "agentCategories": [
+        "discovery",
+        "auditor",
+        "analyzer",
+        "assessor"
+      ]
+    }
+  ],
+  "recommendedAgents": [
+    {
+      "agent": "sfdc-state-discovery",
+      "facet": "analysis",
+      "matchScore": 20,
+      "capabilities": [
+        "metadata analysis",
+        "org state",
+        "object discovery"
+      ],
+      "complexity": "low"
+    },
+    {
+      "agent": "unified-data-quality-validator",
+      "facet": "analysis",
+      "matchScore": 10,
+      "capabilities": [
+        "data validation",
+        "quality checks",
+        "sync validation"
+      ],
+      "complexity": "medium"
+    }
+  ],
+  "executionPlan": [
+    {
+      "step": 1,
+      "phase": "analysis",
+      "agent": "sfdc-state-discovery",
+      "facet": "analysis",
+      "description": "Analyze current state using sfdc-state-discovery"
+    },
+    {
+      "step": 2,
+      "phase": "analysis",
+      "agent": "unified-data-quality-validator",
+      "facet": "analysis",
+      "description": "Analyze current state using unified-data-quality-validator"
+    }
+  ],
+  "complexity": 0,
+  "requiresOrchestration": true,
+  "reasoning": [
+    "Task complexity: 0% (simple)",
+    "Identified 1 task facet(s): analysis",
+    "Recommended 2 agent(s) for execution",
+    "Orchestration recommended due to multiple agents"
+  ]
+}

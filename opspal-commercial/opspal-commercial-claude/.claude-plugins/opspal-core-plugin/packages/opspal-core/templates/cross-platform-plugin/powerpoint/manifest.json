@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "defaultTemplateId": "solutions-proposal",
+  "templates": [
+    {
+      "id": "solutions-proposal",
+      "name": "Solutions Proposal",
+      "description": "Stylized RevPal solutions proposal template with embedded Montserrat/Figtree fonts.",
+      "path": "templates/powerpoint/solutions-proposal/solutions-proposal-template.pptx",
+      "status": "active"
+    }
+  ]
+}
