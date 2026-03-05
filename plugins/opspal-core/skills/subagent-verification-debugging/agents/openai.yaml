@@ -1,0 +1,4 @@
+interface:
+  display_name: "Subagent Verification Debugging"
+  short_description: "Help with Subagent Verification Debugging tasks"
+  default_prompt: "Use $subagent-verification-debugging to execute this workflow safely and produce the expected artifacts."

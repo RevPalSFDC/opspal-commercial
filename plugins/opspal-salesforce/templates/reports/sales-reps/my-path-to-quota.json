@@ -1,0 +1,154 @@
+{
+  "templateMetadata": {
+    "templateName": "My Path to Quota",
+    "templateVersion": "1.1",
+    "description": "Visual breakdown of closed won plus pipeline to show path to quota",
+    "audience": "Sales Reps, Account Executives",
+    "useCase": "Goal visualization, confidence building, planning",
+    "customizationPoints": [
+      "Time period",
+      "Stage groupings",
+      "Probability weighting"
+    ],
+    "prerequisites": [
+      "Opportunity object",
+      "Quota data"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "My Path to Quota",
+    "description": "Closed won + weighted pipeline vs quota",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "IS_CLOSED",
+        "sortOrder": "Desc"
+      },
+      {
+        "field": "IS_WON",
+        "sortOrder": "Desc"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Amount per category"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Weighted_Forecast",
+        "description": "Closed Won + (Open * Probability)",
+        "formula": "ClosedWon + SUM(OpenAmount * Probability)",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      },
+      {
+        "name": "Path_Percentage",
+        "description": "Weighted Forecast / Quota",
+        "formula": "(Weighted_Forecast / Quota) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "Stacked Bar",
+      "categories": [
+        "Closed Won",
+        "Commit",
+        "Best Case",
+        "Pipeline"
+      ],
+      "targetLine": "Quota"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-quota"
+    ],
+    "componentType": "Table",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

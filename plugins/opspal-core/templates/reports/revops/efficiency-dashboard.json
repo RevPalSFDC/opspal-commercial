@@ -1,0 +1,347 @@
+{
+  "templateMetadata": {
+    "id": "efficiency-dashboard",
+    "name": "SaaS Efficiency Dashboard",
+    "version": "2.0.0",
+    "description": "Track capital efficiency metrics including Magic Number, Burn Multiple, Rule of 40, and operational efficiency ratios",
+    "category": "efficiency",
+    "targetAudience": ["executive", "board", "investors"],
+    "recommendedFrequency": "monthly",
+    "estimatedGenerationTime": "5-8 minutes"
+  },
+  "reportMetadata": {
+    "defaultTitle": "SaaS Efficiency Report",
+    "defaultPeriod": "Q4",
+    "defaultFormat": "pdf",
+    "defaultSegmentation": [],
+    "supportedFormats": ["pdf", "excel", "sheets", "csv"]
+  },
+  "kpis": [
+    {
+      "id": "magic_number",
+      "required": true,
+      "displayOrder": 1,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "burn_multiple",
+      "required": true,
+      "displayOrder": 2,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "rule_of_40",
+      "required": true,
+      "displayOrder": 3,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "arr_per_employee",
+      "required": true,
+      "displayOrder": 4,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "gross_margin",
+      "required": true,
+      "displayOrder": 5,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "opex_ratios",
+      "required": false,
+      "displayOrder": 6,
+      "chartType": "stacked_bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "bes",
+      "required": false,
+      "displayOrder": 7,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    }
+  ],
+  "dataSources": {
+    "salesforce": {
+      "objects": ["Opportunity", "Account"],
+      "requiredFields": ["Amount", "CloseDate", "Type", "IsWon"],
+      "optionalFields": [],
+      "filters": {
+        "standard": "IsWon = true"
+      }
+    },
+    "hubspot": {
+      "objects": ["deals"],
+      "requiredProperties": ["amount", "closedate", "dealstage"],
+      "optionalProperties": [],
+      "filters": {
+        "standard": "dealstage = 'closedwon'"
+      }
+    },
+    "manual": {
+      "required": [
+        {
+          "field": "sales_marketing_spend",
+          "description": "Total S&M spend for prior quarter",
+          "type": "currency"
+        },
+        {
+          "field": "net_burn",
+          "description": "Net cash burn for the period",
+          "type": "currency"
+        },
+        {
+          "field": "employee_count",
+          "description": "Total FTE count",
+          "type": "number"
+        }
+      ],
+      "optional": [
+        {
+          "field": "revenue",
+          "description": "Total revenue for gross margin calculation",
+          "type": "currency"
+        },
+        {
+          "field": "cogs",
+          "description": "Cost of goods sold",
+          "type": "currency"
+        },
+        {
+          "field": "ebitda_margin",
+          "description": "EBITDA margin as decimal (e.g., 0.15)",
+          "type": "percentage"
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "executive-summary",
+      "title": "Executive Summary",
+      "type": "summary",
+      "order": 1,
+      "content": {
+        "blufTemplate": "Efficiency score: Rule of 40 at ${rule_of_40}%. Magic Number ${magic_number} indicates ${magic_interpretation}. ${key_insight}.",
+        "keyMetrics": ["rule_of_40", "magic_number", "burn_multiple"],
+        "maxHighlights": 3,
+        "maxRecommendations": 2
+      }
+    },
+    {
+      "id": "efficiency-scorecard",
+      "title": "Capital Efficiency Scorecard",
+      "type": "dashboard",
+      "order": 2,
+      "kpis": ["magic_number", "burn_multiple", "rule_of_40", "bes"],
+      "layout": "2x2",
+      "showBenchmarkComparison": true,
+      "showInterpretation": true
+    },
+    {
+      "id": "efficiency-trend",
+      "title": "Efficiency Metrics Trend",
+      "type": "chart",
+      "order": 3,
+      "chartConfig": {
+        "type": "line",
+        "kpis": ["magic_number", "burn_multiple"],
+        "groupBy": "CALENDAR_MONTH",
+        "showTarget": true,
+        "showPreviousPeriod": true
+      }
+    },
+    {
+      "id": "rule-of-40-breakdown",
+      "title": "Rule of 40 Breakdown",
+      "type": "chart",
+      "order": 4,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "components": ["revenue_growth_rate", "ebitda_margin"],
+        "target": 40,
+        "showTargetLine": true
+      }
+    },
+    {
+      "id": "operational-efficiency",
+      "title": "Operational Efficiency",
+      "type": "detail",
+      "order": 5,
+      "breakdown": {
+        "metrics": ["arr_per_employee", "gross_margin"],
+        "comparison": "vs_benchmark",
+        "showTrend": true
+      }
+    },
+    {
+      "id": "opex-breakdown",
+      "title": "Operating Expense Breakdown",
+      "type": "chart",
+      "order": 6,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "metric": "opex_ratios",
+        "groupBy": "CALENDAR_QUARTER",
+        "categories": ["sm_ratio", "rd_ratio", "ga_ratio"],
+        "showTotalLine": true
+      }
+    },
+    {
+      "id": "benchmark-comparison",
+      "title": "Industry Benchmark Comparison",
+      "type": "comparison",
+      "order": 7,
+      "benchmarks": {
+        "metrics": ["magic_number", "burn_multiple", "rule_of_40", "arr_per_employee", "gross_margin"],
+        "showPercentile": true,
+        "showIndustryAvg": true,
+        "showTopQuartile": true,
+        "segmentation": {
+          "byStage": true,
+          "byACV": false
+        }
+      }
+    },
+    {
+      "id": "methodology",
+      "title": "Methodology",
+      "type": "methodology",
+      "order": 99,
+      "include": ["dataSources", "formulas", "assumptions", "exclusions", "benchmarkSources"]
+    }
+  ],
+  "calculations": {
+    "magic_number": {
+      "formula": "(Net New ARR * 4) / Prior Quarter S&M Spend",
+      "notes": "Measures sales efficiency - how much ARR generated per dollar spent on S&M",
+      "interpretation": {
+        "lessThan0_5": "Inefficient - re-evaluate GTM strategy",
+        "0_5to0_75": "Acceptable - room for improvement",
+        "0_75to1": "Good - efficient sales motion",
+        "greaterThan1": "Excellent - consider investing more in growth"
+      }
+    },
+    "burn_multiple": {
+      "formula": "Net Burn / Net New ARR",
+      "notes": "Capital efficiency metric from David Sacks",
+      "interpretation": {
+        "lessThan1": "Amazing - generating more ARR than burning",
+        "1to1_5": "Great - efficient growth",
+        "1_5to2": "Good - sustainable",
+        "2to3": "Suspect - needs attention",
+        "greaterThan3": "Bad - unsustainable"
+      }
+    },
+    "rule_of_40": {
+      "formula": "Revenue Growth Rate % + EBITDA Margin %",
+      "notes": "Classic SaaS efficiency metric",
+      "interpretation": {
+        "below30": "Needs significant improvement",
+        "30to40": "Approaching healthy balance",
+        "40to50": "Healthy SaaS business",
+        "above50": "Excellent - premium valuation territory"
+      }
+    },
+    "arr_per_employee": {
+      "formula": "ARR / Employee Count",
+      "notes": "Productivity metric - higher is more efficient"
+    },
+    "gross_margin": {
+      "formula": "(Revenue - COGS) / Revenue * 100",
+      "notes": "Core SaaS profitability metric"
+    }
+  },
+  "benchmarks": {
+    "industry": "saas",
+    "sources": [
+      {
+        "name": "Bessemer Venture Partners Efficiency Benchmarks 2024",
+        "url": "https://www.bvp.com",
+        "metrics": ["burn_multiple", "bes", "arr_per_employee"]
+      },
+      {
+        "name": "Scale Venture Partners Magic Number Analysis 2024",
+        "url": "https://www.scalevp.com",
+        "metrics": ["magic_number"]
+      },
+      {
+        "name": "KeyBanc SaaS Survey 2024",
+        "url": "https://keybanccm.com/saas-survey",
+        "metrics": ["rule_of_40", "gross_margin", "opex_ratios"]
+      }
+    ],
+    "thresholds": {
+      "magic_number": {
+        "excellent": 1.0,
+        "good": 0.75,
+        "average": 0.5,
+        "belowAverage": 0.3
+      },
+      "burn_multiple": {
+        "excellent": 1.0,
+        "good": 1.5,
+        "average": 2.0,
+        "belowAverage": 3.0
+      },
+      "rule_of_40": {
+        "excellent": 50,
+        "good": 40,
+        "average": 30,
+        "belowAverage": 20
+      },
+      "arr_per_employee": {
+        "excellent": 300000,
+        "good": 200000,
+        "average": 150000,
+        "belowAverage": 100000
+      },
+      "gross_margin": {
+        "excellent": 80,
+        "good": 75,
+        "average": 70,
+        "belowAverage": 60
+      }
+    }
+  },
+  "defaults": {
+    "dateRange": {
+      "type": "relative",
+      "value": "LAST_QUARTER"
+    },
+    "comparison": {
+      "type": "quarter_over_quarter"
+    },
+    "currency": "USD"
+  },
+  "exportConfig": {
+    "pdf": {
+      "orientation": "landscape",
+      "includeCharts": true,
+      "includeTables": true,
+      "pageBreaks": ["operational-efficiency", "methodology"]
+    },
+    "excel": {
+      "sheets": [
+        { "name": "Summary", "sections": ["executive-summary", "efficiency-scorecard"] },
+        { "name": "Efficiency Trends", "sections": ["efficiency-trend", "rule-of-40-breakdown"] },
+        { "name": "Operations", "sections": ["operational-efficiency", "opex-breakdown"] },
+        { "name": "Benchmarks", "sections": ["benchmark-comparison"] },
+        { "name": "Methodology", "sections": ["methodology"] }
+      ]
+    }
+  }
+}

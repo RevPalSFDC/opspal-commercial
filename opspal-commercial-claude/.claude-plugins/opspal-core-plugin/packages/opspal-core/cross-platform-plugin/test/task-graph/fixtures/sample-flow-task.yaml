@@ -1,0 +1,137 @@
+# Sample Flow Task Fixture
+# Used for testing Task Graph operations with Salesforce Flow domain
+
+---
+# Single flow modification task (low complexity)
+simple_flow_task:
+  id: T-01
+  title: Update Lead Routing Flow Entry Criteria
+  domain: salesforce-flow
+  goal: Modify the entry criteria on the Lead Routing flow to include new lead source
+  inputs:
+    - org_alias: test-sandbox
+    - flow_name: Lead_Routing_Flow
+    - new_criteria: "Lead.LeadSource = 'Partner Referral'"
+  outputs:
+    - updated_flow.xml
+    - change_diff.txt
+  acceptance_criteria:
+    - Flow XML is well-formed
+    - Entry criteria includes new condition
+    - Flow validates without errors
+  dependencies: []
+  can_run_in_parallel_with: []
+  concurrency_group: flow-xml
+  risk_level: medium
+  tool_policy:
+    file_read: allowed
+    file_write: allowed_with_approval
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points:
+    - Before writing flow XML
+  assigned_agent: salesforce-plugin:flow-segmentation-specialist
+  estimated_complexity: 0.3
+
+---
+# Multi-step flow work (medium complexity)
+multi_step_flow_task:
+  id: T-02
+  title: Add Fallback Owner Logic to Lead Routing
+  domain: salesforce-flow
+  goal: Add decision node and assignment element for fallback owner when no matching territory
+  inputs:
+    - org_alias: test-sandbox
+    - flow_name: Lead_Routing_Flow
+    - fallback_owner_id: "005xxxxxxxxxxxxx"
+    - fallback_criteria: "Territory_Match__c = false"
+  outputs:
+    - updated_flow.xml
+    - decision_node_spec.json
+    - assignment_element_spec.json
+  acceptance_criteria:
+    - Decision node correctly evaluates territory match
+    - Fallback assignment uses correct owner ID
+    - All existing paths preserved
+    - Flow activates without error
+  dependencies:
+    - T-01
+  can_run_in_parallel_with: []
+  concurrency_group: flow-xml
+  risk_level: medium
+  tool_policy:
+    file_read: allowed
+    file_write: allowed_with_approval
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points:
+    - Before modifying decision nodes
+    - Before activation
+  assigned_agent: salesforce-plugin:flow-segmentation-specialist
+  estimated_complexity: 0.5
+
+---
+# Flow discovery task (read-only)
+flow_discovery_task:
+  id: T-03
+  title: Discover All Lead-Related Flows
+  domain: salesforce-flow
+  goal: Inventory all flows that trigger on or modify Lead records
+  inputs:
+    - org_alias: test-sandbox
+    - object_filter: Lead
+  outputs:
+    - flow_inventory.json
+    - decision_node_map.json
+    - entry_criteria_summary.md
+  acceptance_criteria:
+    - All Lead-triggered flows identified
+    - Entry criteria documented for each
+    - Decision logic mapped
+  dependencies: []
+  can_run_in_parallel_with:
+    - T-04
+    - T-05
+  concurrency_group: none
+  risk_level: low
+  tool_policy:
+    file_read: allowed
+    file_write: allowed
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points: []
+  assigned_agent: salesforce-plugin:sfdc-discovery
+  estimated_complexity: 0.2
+
+---
+# Expected complexity calculation results
+expected_results:
+  simple_flow_task:
+    complexity_score: 2
+    factors:
+      - multi_artifact: false
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: false
+      - long_horizon: false
+    recommendation: direct_execution
+
+  multi_step_flow_task:
+    complexity_score: 3
+    factors:
+      - multi_artifact: false
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: false
+      - long_horizon: true
+    recommendation: direct_execution
+
+  flow_discovery_task:
+    complexity_score: 0
+    factors:
+      - multi_artifact: false
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: false
+      - long_horizon: false
+    recommendation: direct_execution

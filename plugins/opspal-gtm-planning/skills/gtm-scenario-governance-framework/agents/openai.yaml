@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gtm Scenario Governance Framework"
+  short_description: "Help with Gtm Scenario Governance Framework tasks"
+  default_prompt: "Use $gtm-scenario-governance-framework to execute this workflow safely and produce the expected artifacts."

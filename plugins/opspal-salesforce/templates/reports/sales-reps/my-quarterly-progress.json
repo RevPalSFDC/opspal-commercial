@@ -1,0 +1,141 @@
+{
+  "templateMetadata": {
+    "templateName": "My Quarterly Progress",
+    "templateVersion": "1.1",
+    "description": "Your closed won revenue by month this quarter",
+    "audience": "Sales Reps, Account Executives",
+    "useCase": "Progress visualization, momentum tracking, pattern recognition",
+    "customizationPoints": [
+      "Time period",
+      "Include pipeline forecast",
+      "Show cumulative"
+    ],
+    "prerequisites": [
+      "Opportunity object with CloseDate"
+    ]
+  },
+  "metricDefinitionId": "bookings.tcv",
+  "reportMetadata": {
+    "name": "My Quarterly Progress",
+    "description": "Monthly closed won this quarter",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "CLOSE_DATE",
+        "sortOrder": "Asc",
+        "dateGranularity": "Month"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Monthly closed won"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Monthly deal count"
+      }
+    ],
+    "chart": {
+      "chartType": "VerticalBar",
+      "groupingColumn": "CLOSE_DATE",
+      "aggregateColumn": "AMOUNT:SUM",
+      "showCumulativeLine": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-quota"
+    ],
+    "componentType": "Bar Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

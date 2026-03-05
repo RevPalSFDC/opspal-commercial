@@ -1,0 +1,116 @@
+{
+  "templateMetadata": {
+    "templateName": "My Recent Activity",
+    "templateVersion": "1.1",
+    "description": "Recent activities on my accounts",
+    "audience": "CSMs, Account Managers",
+    "useCase": "Activity tracking and review"
+  },
+  "reportMetadata": {
+    "name": "My Recent Activity",
+    "reportType": "Activity",
+    "reportFormat": "TABULAR",
+    "scope": "user",
+    "reportFilters": [
+      {
+        "column": "OwnerId",
+        "operator": "equals",
+        "value": "$User.Id"
+      },
+      {
+        "column": "ActivityDate",
+        "operator": "equals",
+        "value": "LAST_7_DAYS"
+      }
+    ],
+    "detailColumns": [
+      "Subject",
+      "What.Name",
+      "ActivityDate",
+      "Type",
+      "Status"
+    ],
+    "sortBy": [
+      {
+        "column": "ActivityDate",
+        "order": "Descending"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Table",
+    "refreshFrequency": "Hourly"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Runbook Policy Operations"
+  short_description: "Help with Runbook Policy Operations tasks"
+  default_prompt: "Use $runbook-policy-operations to execute this workflow safely and produce the expected artifacts."

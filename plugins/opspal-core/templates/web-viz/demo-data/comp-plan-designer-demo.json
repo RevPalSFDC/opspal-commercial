@@ -1,0 +1,244 @@
+{
+  "planSelector": {
+    "selected": "fy26-standard-plan",
+    "options": [
+      { "value": "fy26-standard-plan", "label": "FY26 Standard Plan", "group": "Active" },
+      { "value": "fy26-enterprise-plan", "label": "FY26 Enterprise Plan", "group": "Active" },
+      { "value": "fy25-legacy", "label": "FY25 Legacy Plan", "group": "Archive" }
+    ]
+  },
+
+  "kpis": {
+    "planStatus": {
+      "value": "Active",
+      "icon": "check-circle",
+      "color": "#22C55E"
+    },
+    "totalReps": {
+      "value": 45,
+      "trend": 5,
+      "trendDirection": "up"
+    },
+    "projectedLiability": {
+      "value": 4250000,
+      "trend": 8.5,
+      "trendDirection": "up"
+    },
+    "liabilityP10": {
+      "value": 3100000
+    },
+    "liabilityP50": {
+      "value": 4250000
+    },
+    "liabilityP90": {
+      "value": 5800000
+    },
+    "whatIfResult": {
+      "value": 4250000,
+      "baseline": 4250000
+    }
+  },
+
+  "tiers": [
+    {
+      "name": "Decelerator",
+      "minAttainment": 0,
+      "maxAttainment": 70,
+      "rate": 5,
+      "multiplier": 0.5,
+      "color": "#EF4444",
+      "description": "Below 70%: Reduced commission rate"
+    },
+    {
+      "name": "Standard",
+      "minAttainment": 70,
+      "maxAttainment": 100,
+      "rate": 10,
+      "multiplier": 1.0,
+      "color": "#F59E0B",
+      "description": "70-100%: Standard commission rate"
+    },
+    {
+      "name": "Accelerator Tier 1",
+      "minAttainment": 100,
+      "maxAttainment": 110,
+      "rate": 12.5,
+      "multiplier": 1.25,
+      "color": "#22C55E",
+      "description": "100-110%: 1.25x accelerator"
+    },
+    {
+      "name": "Accelerator Tier 2",
+      "minAttainment": 110,
+      "maxAttainment": 120,
+      "rate": 15,
+      "multiplier": 1.5,
+      "color": "#3B82F6",
+      "description": "110-120%: 1.5x accelerator"
+    },
+    {
+      "name": "Accelerator Tier 3",
+      "minAttainment": 120,
+      "maxAttainment": 999,
+      "rate": 20,
+      "multiplier": 2.0,
+      "color": "#5F3B8C",
+      "description": "Above 120%: 2x accelerator"
+    }
+  ],
+
+  "tierVisualization": {
+    "labels": ["Decelerator", "Standard", "Accel T1", "Accel T2", "Accel T3"],
+    "datasets": [{
+      "data": [5, 10, 12.5, 15, 20],
+      "backgroundColor": ["#EF4444", "#F59E0B", "#22C55E", "#3B82F6", "#5F3B8C"]
+    }]
+  },
+
+  "roles": [
+    {
+      "roleId": "ae",
+      "roleName": "Account Executive",
+      "ote": 150000,
+      "baseSalary": 90000,
+      "targetCommission": 60000,
+      "payMixBase": 60,
+      "quotaAmount": 750000,
+      "quotaType": "bookings"
+    },
+    {
+      "roleId": "sdr",
+      "roleName": "SDR",
+      "ote": 75000,
+      "baseSalary": 52500,
+      "targetCommission": 22500,
+      "payMixBase": 70,
+      "quotaAmount": 120,
+      "quotaType": "sqls"
+    },
+    {
+      "roleId": "csm",
+      "roleName": "Customer Success Manager",
+      "ote": 100000,
+      "baseSalary": 75000,
+      "targetCommission": 25000,
+      "payMixBase": 75,
+      "quotaAmount": 500000,
+      "quotaType": "arr"
+    }
+  ],
+
+  "payMixChart": {
+    "labels": ["Account Executive", "SDR", "CSM"],
+    "datasets": [
+      {
+        "label": "Base Salary",
+        "data": [90000, 52500, 75000],
+        "backgroundColor": "#94A3B8"
+      },
+      {
+        "label": "Target Commission",
+        "data": [60000, 22500, 25000],
+        "backgroundColor": "#5F3B8C"
+      }
+    ]
+  },
+
+  "spifs": [
+    {
+      "id": "q1-product-launch",
+      "name": "Q1 New Product Launch SPIF",
+      "startDate": "2026-01-01",
+      "endDate": "2026-03-31",
+      "bonusType": "flat",
+      "bonusAmount": 2000,
+      "maxPayout": 10000
+    },
+    {
+      "id": "multi-year-bonus",
+      "name": "Multi-Year Deal Bonus",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "bonusType": "percentage",
+      "bonusAmount": 2,
+      "maxPayout": null
+    }
+  ],
+
+  "clawbacks": [
+    {
+      "name": "90-Day Churn Clawback",
+      "triggerCondition": "churn",
+      "clawbackPeriodDays": 90,
+      "clawbackPercent": 100,
+      "prorated": false
+    },
+    {
+      "name": "Payment Default Clawback",
+      "triggerCondition": "payment-default",
+      "clawbackPeriodDays": 120,
+      "clawbackPercent": 100,
+      "prorated": false
+    },
+    {
+      "name": "Year 1 Downgrade",
+      "triggerCondition": "downgrade",
+      "clawbackPeriodDays": 365,
+      "clawbackPercent": 50,
+      "prorated": true
+    }
+  ],
+
+  "simulatorDefaults": {
+    "dealAmount": 50000,
+    "ytdBookings": 500000,
+    "quota": 750000,
+    "role": "ae"
+  },
+
+  "monteCarloHistogram": {
+    "labels": ["2.8M", "3.0M", "3.2M", "3.4M", "3.6M", "3.8M", "4.0M", "4.2M", "4.4M", "4.6M", "4.8M", "5.0M", "5.2M", "5.4M", "5.6M", "5.8M", "6.0M", "6.2M", "6.4M", "6.6M"],
+    "datasets": [{
+      "data": [5, 12, 28, 45, 72, 98, 125, 148, 165, 172, 168, 142, 118, 85, 62, 38, 22, 12, 6, 2],
+      "backgroundColor": "#5F3B8C"
+    }],
+    "annotations": {
+      "p10": 3100000,
+      "p50": 4250000,
+      "p90": 5800000
+    }
+  },
+
+  "scenarioComparison": {
+    "labels": ["Total Liability", "Avg Commission", "Accelerator Payout"],
+    "datasets": [
+      {
+        "label": "Conservative (P10)",
+        "data": [3100000, 68889, 450000],
+        "backgroundColor": "#22C55E"
+      },
+      {
+        "label": "Expected (P50)",
+        "data": [4250000, 94444, 850000],
+        "backgroundColor": "#3B82F6"
+      },
+      {
+        "label": "Aggressive (P90)",
+        "data": [5800000, 128889, 1400000],
+        "backgroundColor": "#EF4444"
+      }
+    ]
+  },
+
+  "whatIfAttainment": {
+    "value": 100,
+    "min": 50,
+    "max": 150
+  },
+
+  "whatIfHeadcount": {
+    "value": 45,
+    "min": 10,
+    "max": 100
+  }
+}

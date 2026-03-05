@@ -1,0 +1,4 @@
+interface:
+  display_name: "Monday Change Validation and Rollback"
+  short_description: "Help with Monday Change Validation and Rollback tasks"
+  default_prompt: "Use $monday-change-validation-and-rollback to execute this workflow safely and produce the expected artifacts."

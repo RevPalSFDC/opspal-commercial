@@ -1,0 +1,90 @@
+# Live Validation Enforcement - Shared Agent Snippet
+# Import this in any agent that provides org-state information
+#
+# Usage in agent: @import agents/shared/live-validation-enforcement.yaml
+#
+# Version: 1.0.0
+# Date: 2026-01-09
+
+live_validation:
+  title: "🚨 MANDATORY: Live Query Before Response"
+  enforcement_level: "STRICT (blocks response if claims lack evidence)"
+
+  critical_rule: |
+    Before providing ANY information about org configuration state, you MUST:
+
+    1. ✅ Execute a LIVE QUERY against the target system
+    2. ✅ Include query evidence in your response (timestamp, record count)
+    3. ✅ Reference the specific query that produced the data
+    4. ❌ NEVER cite local files as source for current org state
+    5. ❌ NEVER say "based on documentation" for org-specific questions
+    6. ❌ NEVER assume org state from previous sessions without re-querying
+
+  automated_enforcement: |
+    A post-response hook will VERIFY query evidence before your response is delivered.
+
+    If you provide org-state claims (e.g., "Account has 150 fields", "There are 3 active flows")
+    without corresponding query evidence in the session, your response will be BLOCKED.
+
+    The user will see:
+    ⛔ RESPONSE BLOCKED: ORG-STATE CLAIMS WITHOUT QUERY EVIDENCE
+
+  required_patterns:
+    salesforce:
+      object_fields: "sf sobject describe <Object> --target-org <org>"
+      active_flows: "sf data query --query \"SELECT ApiName FROM FlowDefinitionView WHERE IsActive=true\" --use-tooling-api"
+      validation_rules: "sf data query --query \"SELECT Id FROM ValidationRule WHERE Active=true\" --use-tooling-api"
+      permission_sets: "sf data query --query \"SELECT Name FROM PermissionSet\" --use-tooling-api"
+      page_layouts: "sf data query --query \"SELECT Name FROM Layout\" --use-tooling-api"
+      record_types: "sf data query --query \"SELECT DeveloperName FROM RecordType\""
+
+    hubspot:
+      properties: "GET /crm/v3/properties/<object>"
+      workflows: "GET /automation/v4/flows"
+      objects: "GET /crm/v3/schemas"
+      pipelines: "GET /crm/v3/pipelines/<object>"
+
+    marketo:
+      lead_fields: "GET /rest/v1/leads/describe.json"
+      programs: "GET /rest/asset/v1/programs.json"
+      campaigns: "GET /rest/asset/v1/smartCampaigns.json"
+
+  example_correct_response: |
+    **Example of CORRECT response pattern:**
+
+    "I queried Account object metadata in your org:
+
+    ```
+    sf sobject describe Account --target-org production
+    ```
+
+    Results: Account has **142 fields** (queried at 2026-01-09T14:32:00Z).
+
+    Key findings:
+    - 89 custom fields (ending in __c)
+    - 53 standard fields
+    - 12 required fields
+    - 3 unique fields"
+
+  example_incorrect_response: |
+    **Example of INCORRECT response pattern (will be BLOCKED):**
+
+    "Account typically has around 150 fields in most Salesforce orgs."
+    ❌ No query evidence - uses general knowledge
+
+    "Based on the local documentation, Account has 142 fields."
+    ❌ Uses local files instead of live query
+
+    "From our previous analysis, the Account object has..."
+    ❌ Relies on stale information without re-verification
+
+  disable_instructions: |
+    To disable enforcement (NOT recommended):
+    export REQUIRE_ORG_VERIFICATION=0
+
+    To skip for specific platforms:
+    export SKIP_SF_ORG_VERIFICATION=1
+    export SKIP_HS_ORG_VERIFICATION=1
+    export SKIP_MARKETO_ORG_VERIFICATION=1
+
+  query_evidence_ttl: "5 minutes (queries remain valid evidence for 5 min)"

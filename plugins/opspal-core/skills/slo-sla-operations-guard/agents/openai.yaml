@@ -1,0 +1,4 @@
+interface:
+  display_name: "Slo Sla Operations Guard"
+  short_description: "Help with Slo Sla Operations Guard tasks"
+  default_prompt: "Use $slo-sla-operations-guard to execute this workflow safely and produce the expected artifacts."

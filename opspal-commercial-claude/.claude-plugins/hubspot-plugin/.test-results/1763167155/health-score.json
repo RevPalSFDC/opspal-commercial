@@ -1,0 +1,366 @@
+{
+  "overallScore": 70,
+  "rating": "Good",
+  "breakdown": {
+    "technical": {
+      "score": 97,
+      "weight": 0.3,
+      "weightedScore": "29.1",
+      "details": {
+        "checks": {
+          "fastLoadTimes": 10,
+          "noErrors": 10,
+          "https": 10,
+          "hasViewport": 9,
+          "hasCanonical": 9,
+          "goodCoreWebVitals": 10
+        },
+        "percentages": {
+          "fastLoadTimes": 100,
+          "noErrors": 100,
+          "https": 100,
+          "hasViewport": 90,
+          "hasCanonical": 90,
+          "goodCoreWebVitals": 100
+        }
+      }
+    },
+    "content": {
+      "score": 60,
+      "weight": 0.25,
+      "weightedScore": "15.0",
+      "details": {
+        "checks": {
+          "hasOptimalTitle": 0,
+          "hasMetaDescription": 9,
+          "hasOptimalMetaDesc": 0,
+          "hasSingleH1": 9,
+          "hasValidHeadingHierarchy": 9,
+          "isSubstantial": 9,
+          "hasOpenGraph": 6
+        },
+        "percentages": {
+          "hasOptimalTitle": 0,
+          "hasMetaDescription": 90,
+          "hasOptimalMetaDesc": 0,
+          "hasSingleH1": 90,
+          "hasValidHeadingHierarchy": 90,
+          "isSubstantial": 90,
+          "hasOpenGraph": 60
+        }
+      }
+    },
+    "schema": {
+      "score": 14,
+      "weight": 0.15,
+      "weightedScore": "2.1",
+      "details": {
+        "checks": {
+          "hasSchema": 2,
+          "hasValidSchema": 0,
+          "hasArticleSchema": 0,
+          "hasOrganizationSchema": 0
+        },
+        "coverage": "20.0%",
+        "articlePages": 0,
+        "articleCoverage": "N/A"
+      }
+    },
+    "images": {
+      "score": 57,
+      "weight": 0.15,
+      "weightedScore": "8.5",
+      "details": {
+        "totalImages": 27,
+        "altCoverage": "81.5%",
+        "lazyLoadCoverage": "0.0%"
+      }
+    },
+    "links": {
+      "score": 100,
+      "weight": 0.15,
+      "weightedScore": "15.0",
+      "details": {
+        "avgInternalPerPage": "790.4",
+        "avgExternalPerPage": "29.3"
+      }
+    }
+  },
+  "issues": [
+    {
+      "category": "content",
+      "severity": "critical",
+      "impact": 10,
+      "description": "Missing title tag: https://wordpress.org/sitemap.xml",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/sitemap.xml"
+      ],
+      "recommendation": "Add descriptive title tag (50-60 characters)"
+    },
+    {
+      "category": "images",
+      "severity": "warning",
+      "impact": 8,
+      "description": "19% of images missing alt text across site",
+      "affectedPages": 5,
+      "pages": [],
+      "recommendation": "Add descriptive alt text to all images site-wide"
+    },
+    {
+      "category": "technical",
+      "severity": "warning",
+      "impact": 7,
+      "description": "10% of pages missing viewport meta tag",
+      "affectedPages": 1,
+      "pages": [],
+      "recommendation": "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> to all pages"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 7,
+      "description": "Missing meta description: https://wordpress.org/sitemap.xml",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/sitemap.xml"
+      ],
+      "recommendation": "Add meta description (150-160 characters)"
+    },
+    {
+      "category": "schema",
+      "severity": "warning",
+      "impact": 7,
+      "description": "Only 20% of pages have schema markup",
+      "affectedPages": 8,
+      "pages": [],
+      "recommendation": "Add JSON-LD schema to important pages (Article, Organization, WebPage)"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Missing H1: https://wordpress.org/sitemap.xml",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/sitemap.xml"
+      ],
+      "recommendation": "Add exactly one H1 heading per page"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (68 chars): https://wordpress.org/about/privacy/cookies/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/cookies/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (74 chars): https://wordpress.org/about/privacy/data-export-request/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/data-export-request/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (75 chars): https://wordpress.org/about/privacy/data-erasure-request/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/data-erasure-request/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (63 chars): https://wordpress.org/download/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (83 chars): https://wordpress.org/download/releases/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/releases/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (80 chars): https://wordpress.org/download/beta-nightly/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/beta-nightly/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (79 chars): https://wordpress.org/download/source/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/source/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (75 chars): https://wordpress.org/download/counter/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/counter/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "warning",
+      "impact": 6,
+      "description": "Title too long (94 chars): https://wordpress.org/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/"
+      ],
+      "recommendation": "Shorten title to 50-60 characters"
+    },
+    {
+      "category": "content",
+      "severity": "info",
+      "impact": 5,
+      "description": "Thin content (6 words): https://wordpress.org/sitemap.xml",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/sitemap.xml"
+      ],
+      "recommendation": "Expand content to at least 300 words for better SEO"
+    },
+    {
+      "category": "content",
+      "severity": "info",
+      "impact": 3,
+      "description": "Heading hierarchy issues: https://wordpress.org/about/privacy/data-erasure-request/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/data-erasure-request/"
+      ],
+      "recommendation": "Fix heading hierarchy (don't skip levels: H2 → H4)"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/sitemap.xml",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/sitemap.xml"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/about/privacy/cookies/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/cookies/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/about/privacy/data-export-request/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/data-export-request/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/about/privacy/data-erasure-request/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/about/privacy/data-erasure-request/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/download/releases/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/releases/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/download/beta-nightly/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/beta-nightly/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/download/source/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/source/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    },
+    {
+      "category": "schema",
+      "severity": "info",
+      "impact": 3,
+      "description": "Missing schema markup: https://wordpress.org/download/counter/",
+      "affectedPages": 1,
+      "pages": [
+        "https://wordpress.org/download/counter/"
+      ],
+      "recommendation": "Consider adding schema markup"
+    }
+  ],
+  "summary": {
+    "totalIssues": 25,
+    "critical": 1,
+    "warning": 14,
+    "info": 10
+  }
+}

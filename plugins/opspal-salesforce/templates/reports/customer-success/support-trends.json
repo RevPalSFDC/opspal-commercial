@@ -1,0 +1,132 @@
+{
+  "templateMetadata": {
+    "templateName": "Support Case Volume & Resolution Time",
+    "templateVersion": "1.1",
+    "description": "Monitor support case trends, resolution times, and workload distribution",
+    "audience": "Support Managers, Customer Success Directors",
+    "useCase": "Track support performance, identify bottlenecks, optimize team workload",
+    "prerequisites": [
+      "Case object with Priority and Status fields",
+      "Case age/resolution time tracking"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Support Case Trends - {Period}",
+    "reportType": "CaseList",
+    "reportFormat": "MATRIX",
+    "reportFilters": [
+      {
+        "column": "CREATED_DATE",
+        "operator": "equals",
+        "value": "LAST_90_DAYS"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "PRIORITY",
+        "sortOrder": "Asc"
+      }
+    ],
+    "groupingsAcross": [
+      {
+        "field": "STATUS",
+        "sortOrder": "Asc"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum"
+      },
+      {
+        "name": "Case.Resolution_Time_Hours__c",
+        "aggregateType": "Average"
+      }
+    ],
+    "chart": {
+      "chartType": "Line",
+      "groupingColumn": "CREATED_DATE",
+      "aggregateColumn": "RowCount",
+      "dateGranularity": "WEEK"
+    }
+  },
+  "calculatedFieldsRequired": [
+    {
+      "fieldName": "Resolution_Time_Hours__c",
+      "fieldType": "Formula (Number)",
+      "formula": "IF(IsClosed, (ClosedDate - CreatedDate) * 24, NULL)"
+    }
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

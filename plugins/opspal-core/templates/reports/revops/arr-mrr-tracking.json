@@ -1,0 +1,221 @@
+{
+  "templateMetadata": {
+    "id": "arr-mrr-tracking",
+    "name": "ARR/MRR Revenue Tracking",
+    "version": "1.0.0",
+    "description": "Track Annual and Monthly Recurring Revenue trends with growth analysis and segment breakdown",
+    "category": "revenue",
+    "targetAudience": ["executive", "finance", "board"],
+    "recommendedFrequency": "monthly",
+    "estimatedGenerationTime": "3-5 minutes"
+  },
+  "reportMetadata": {
+    "defaultTitle": "Revenue Performance Report",
+    "defaultPeriod": "Q4",
+    "defaultFormat": "pdf",
+    "defaultSegmentation": ["segment"],
+    "supportedFormats": ["pdf", "excel", "sheets", "csv"]
+  },
+  "kpis": [
+    {
+      "id": "ARR",
+      "required": true,
+      "displayOrder": 1,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "MRR",
+      "required": true,
+      "displayOrder": 2,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": false
+    },
+    {
+      "id": "REVENUE_GROWTH",
+      "required": true,
+      "displayOrder": 3,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "ARPU",
+      "required": false,
+      "displayOrder": 4,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true
+    }
+  ],
+  "dataSources": {
+    "salesforce": {
+      "objects": ["Opportunity", "Account"],
+      "requiredFields": ["Amount", "CloseDate", "Type", "IsWon", "StageName"],
+      "optionalFields": ["Product_Line__c", "Segment__c", "Region__c"],
+      "filters": {
+        "standard": "IsWon = true AND Type IN ('New Business', 'Renewal', 'Expansion')",
+        "recurring": "Type IN ('Renewal', 'Subscription')"
+      }
+    },
+    "hubspot": {
+      "objects": ["deals"],
+      "requiredProperties": ["amount", "closedate", "pipeline", "dealstage"],
+      "optionalProperties": ["product_line", "customer_segment"],
+      "filters": {
+        "standard": "dealstage = 'closedwon'",
+        "recurring": "pipeline = 'recurring-revenue'"
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "executive-summary",
+      "title": "Executive Summary",
+      "type": "summary",
+      "order": 1,
+      "content": {
+        "blufTemplate": "ARR is ${arr_value} (${arr_change} YoY), ${benchmark_assessment}. ${key_insight}.",
+        "keyMetrics": ["ARR", "REVENUE_GROWTH"],
+        "maxHighlights": 3,
+        "maxRecommendations": 2
+      }
+    },
+    {
+      "id": "revenue-dashboard",
+      "title": "Revenue Overview",
+      "type": "dashboard",
+      "order": 2,
+      "kpis": ["ARR", "MRR", "REVENUE_GROWTH", "ARPU"],
+      "layout": "2x2",
+      "showBenchmarkComparison": true
+    },
+    {
+      "id": "arr-trend",
+      "title": "ARR Trend",
+      "type": "chart",
+      "order": 3,
+      "chartConfig": {
+        "type": "line",
+        "kpi": "ARR",
+        "groupBy": "CALENDAR_MONTH",
+        "showTarget": true,
+        "showPreviousPeriod": true
+      }
+    },
+    {
+      "id": "revenue-by-segment",
+      "title": "Revenue by Segment",
+      "type": "detail",
+      "order": 4,
+      "breakdown": {
+        "dimension": "segment",
+        "metrics": ["ARR", "REVENUE_GROWTH", "customer_count"],
+        "sortBy": "ARR",
+        "sortOrder": "desc"
+      }
+    },
+    {
+      "id": "revenue-composition",
+      "title": "Revenue Composition",
+      "type": "chart",
+      "order": 5,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "kpi": "MRR",
+        "groupBy": "CALENDAR_MONTH",
+        "stackBy": "revenue_type",
+        "categories": ["new_business", "expansion", "renewal"]
+      }
+    },
+    {
+      "id": "benchmark-comparison",
+      "title": "Industry Benchmark Comparison",
+      "type": "comparison",
+      "order": 6,
+      "benchmarks": {
+        "metrics": ["ARR_GROWTH", "ARPU"],
+        "showPercentile": true,
+        "showIndustryAvg": true,
+        "showTopQuartile": true
+      }
+    },
+    {
+      "id": "methodology",
+      "title": "Methodology",
+      "type": "methodology",
+      "order": 99,
+      "include": ["dataSources", "formulas", "assumptions", "exclusions", "queries", "benchmarkSources"]
+    }
+  ],
+  "calculations": {
+    "arr": {
+      "formula": "SUM(recurring_revenue) * 12",
+      "notes": "Annualized monthly recurring revenue"
+    },
+    "mrr": {
+      "formula": "SUM(recurring_revenue)",
+      "notes": "Sum of all recurring revenue in period"
+    },
+    "revenue_growth": {
+      "formula": "(current_arr - previous_arr) / previous_arr * 100",
+      "notes": "Year-over-year growth rate"
+    },
+    "arpu": {
+      "formula": "arr / active_customers",
+      "notes": "Average revenue per customer"
+    }
+  },
+  "benchmarks": {
+    "industry": "saas",
+    "sources": [
+      {
+        "name": "KeyBanc SaaS Benchmarks 2024",
+        "url": "https://keybanccm.com/saas-survey",
+        "metrics": ["ARR_GROWTH"]
+      },
+      {
+        "name": "OpenView Expansion SaaS Benchmarks",
+        "url": "https://openviewpartners.com/benchmarks",
+        "metrics": ["ARPU"]
+      }
+    ],
+    "thresholds": {
+      "ARR_GROWTH": {
+        "excellent": 0.25,
+        "good": 0.15,
+        "average": 0.10,
+        "belowAverage": 0.05
+      }
+    }
+  },
+  "defaults": {
+    "dateRange": {
+      "type": "relative",
+      "value": "LAST_QUARTER"
+    },
+    "comparison": {
+      "type": "year_over_year"
+    },
+    "currency": "USD"
+  },
+  "exportConfig": {
+    "pdf": {
+      "orientation": "portrait",
+      "includeCharts": true,
+      "includeTables": true,
+      "pageBreaks": ["revenue-by-segment", "methodology"]
+    },
+    "excel": {
+      "sheets": [
+        { "name": "Summary", "sections": ["executive-summary", "revenue-dashboard"] },
+        { "name": "ARR Trend", "sections": ["arr-trend"] },
+        { "name": "Segment Detail", "sections": ["revenue-by-segment"] },
+        { "name": "Benchmarks", "sections": ["benchmark-comparison"] },
+        { "name": "Methodology", "sections": ["methodology"] }
+      ]
+    }
+  }
+}

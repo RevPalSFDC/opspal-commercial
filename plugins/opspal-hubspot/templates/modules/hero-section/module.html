@@ -1,0 +1,168 @@
+{# Hero Section Module Template #}
+{# HubSpot CMS Module - Accessible, responsive hero section #}
+
+{% set bg_style = "" %}
+{% if module.background_image.src %}
+  {% set bg_style = "background-image: url('" ~ module.background_image.src ~ "');" %}
+{% endif %}
+{% if module.background_color.color %}
+  {% set bg_style = bg_style ~ " background-color: " ~ module.background_color.color ~ ";" %}
+{% endif %}
+
+<section
+  class="hero-section hero--{{ module.layout.text_alignment }} hero--{{ module.layout.height|replace('vh', '') }}"
+  style="{{ bg_style }} min-height: {{ module.layout.height }};"
+  role="banner"
+  aria-label="Hero section"
+>
+  {% if module.layout.overlay_enabled and module.background_image.src %}
+  <div class="hero__overlay" style="opacity: {{ module.layout.overlay_opacity / 100 }};"></div>
+  {% endif %}
+
+  <div class="hero__content">
+    <h1 class="hero__headline">{{ module.headline }}</h1>
+
+    {% if module.subheadline %}
+    <div class="hero__subheadline">
+      {{ module.subheadline }}
+    </div>
+    {% endif %}
+
+    <div class="hero__cta-group">
+      {% if module.primary_cta.text and module.primary_cta.link.url.href %}
+      <a
+        href="{{ module.primary_cta.link.url.href }}"
+        class="hero__cta hero__cta--{{ module.primary_cta.style }}"
+        {% if module.primary_cta.link.url.type == "EXTERNAL" %}
+        target="_blank"
+        rel="noopener noreferrer"
+        {% endif %}
+      >
+        {{ module.primary_cta.text }}
+      </a>
+      {% endif %}
+
+      {% if module.secondary_cta.enabled and module.secondary_cta.text %}
+      <a
+        href="{{ module.secondary_cta.link.url.href }}"
+        class="hero__cta hero__cta--secondary"
+        {% if module.secondary_cta.link.url.type == "EXTERNAL" %}
+        target="_blank"
+        rel="noopener noreferrer"
+        {% endif %}
+      >
+        {{ module.secondary_cta.text }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    padding: 4rem 2rem;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    pointer-events: none;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .hero--left .hero__content { text-align: left; }
+  .hero--center .hero__content { text-align: center; }
+  .hero--right .hero__content { text-align: right; }
+
+  .hero__headline {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    margin: 0 0 1rem;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .hero__subheadline {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .hero__subheadline p {
+    margin: 0;
+  }
+
+  .hero__cta-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero--center .hero__cta-group { justify-content: center; }
+  .hero--right .hero__cta-group { justify-content: flex-end; }
+
+  .hero__cta {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .hero__cta--primary {
+    background-color: #ff7a59;
+    color: #fff;
+    border: 2px solid #ff7a59;
+  }
+
+  .hero__cta--primary:hover {
+    background-color: #ff5c35;
+    border-color: #ff5c35;
+  }
+
+  .hero__cta--secondary,
+  .hero__cta--ghost {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+  }
+
+  .hero__cta--secondary:hover,
+  .hero__cta--ghost:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 1.5rem;
+    }
+
+    .hero__cta-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .hero__cta {
+      text-align: center;
+    }
+  }
+</style>

@@ -1,0 +1,138 @@
+{
+  "templateMetadata": {
+    "templateName": "Revenue by Product Line",
+    "templateVersion": "1.1",
+    "description": "Closed won revenue broken down by product or product family",
+    "audience": "CRO, VP Sales, Product Management",
+    "useCase": "Product mix analysis, cross-sell identification, pricing strategy",
+    "customizationPoints": [
+      "Date range",
+      "Product field (Product Family, Product Name, custom)",
+      "Include new vs renewal breakdown"
+    ],
+    "prerequisites": [
+      "Opportunity Products or Product field on Opportunity",
+      "Product Family configured"
+    ]
+  },
+  "metricDefinitionId": "bookings.tcv",
+  "reportMetadata": {
+    "name": "Revenue by Product Line",
+    "description": "Closed won revenue grouped by product family",
+    "reportType": "OpportunityProduct",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "Opportunity.IsWon",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "Opportunity.CloseDate",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "PRODUCT_FAMILY",
+        "sortOrder": "Asc",
+        "dateGranularity": null
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "TOTAL_PRICE",
+        "aggregateType": "Sum",
+        "description": "Revenue per product line"
+      },
+      {
+        "name": "QUANTITY",
+        "aggregateType": "Sum",
+        "description": "Units sold per product line"
+      }
+    ],
+    "chart": {
+      "chartType": "Donut",
+      "groupingColumn": "PRODUCT_FAMILY",
+      "aggregateColumn": "TOTAL_PRICE:SUM",
+      "showChartValues": true,
+      "showPercentages": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "revenue-performance"
+    ],
+    "componentType": "Donut Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

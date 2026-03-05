@@ -1,0 +1,135 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-006",
+  "title": "Monday Plugin Graduation Readiness",
+  "focus_plugin": "opspal-monday",
+  "plugin_detected": true,
+  "readiness_status": "needs_remediation",
+  "readiness_score": 0.57,
+  "experimental_plugins_in_suite": [
+    "opspal-monday"
+  ],
+  "plugin_snapshot": {
+    "status": "experimental",
+    "owner": "revpal-experimental",
+    "stability": "experimental",
+    "version": "1.4.4",
+    "last_reviewed_at": "2026-02-15",
+    "agents": 6,
+    "commands": 1,
+    "skills": 1,
+    "hooks": 0,
+    "scripts": 3,
+    "mandatory_agents": 0
+  },
+  "workflow_stage_coverage": {
+    "detect": 1,
+    "diagnose": 4,
+    "recommend": 0,
+    "simulate": 0,
+    "execute": 4,
+    "verify": 0,
+    "learn": 1
+  },
+  "maturity_profile": {
+    "rules_based": 8,
+    "llm_assisted": 0,
+    "closed_loop_learning": 0,
+    "autonomous_execution": 0,
+    "ai_enabled_ratio": 0
+  },
+  "graduation_gates": [
+    {
+      "gate_id": "lifecycle_metadata_complete",
+      "description": "Status, owner, stability, and last reviewed fields are populated.",
+      "threshold": "all_present",
+      "current_value": "complete",
+      "result": "pass"
+    },
+    {
+      "gate_id": "owner_assigned",
+      "description": "Plugin owner is explicitly assigned for graduation accountability.",
+      "threshold": "owner_not_unset",
+      "current_value": "revpal-experimental",
+      "result": "pass"
+    },
+    {
+      "gate_id": "command_surface_minimum",
+      "description": "Plugin has at least 2 user-facing commands before graduation.",
+      "threshold": ">=2",
+      "current_value": 1,
+      "result": "fail"
+    },
+    {
+      "gate_id": "ai_enabled_ratio_minimum",
+      "description": "AI-enabled maturity ratio (llm_assisted + closed_loop_learning + autonomous_execution) meets minimum threshold.",
+      "threshold": ">=0.15",
+      "current_value": 0,
+      "result": "fail"
+    },
+    {
+      "gate_id": "execute_stage_coverage",
+      "description": "Workflow execute-stage coverage exists in plugin assets.",
+      "threshold": ">=1",
+      "current_value": 4,
+      "result": "pass"
+    },
+    {
+      "gate_id": "verify_stage_coverage",
+      "description": "Workflow verify-stage coverage exists in plugin assets.",
+      "threshold": ">=1",
+      "current_value": 0,
+      "result": "fail"
+    },
+    {
+      "gate_id": "review_recency",
+      "description": "Lifecycle review is fresh within 45 days of plan baseline.",
+      "threshold": "<=45_days",
+      "current_value": "0_days",
+      "result": "pass"
+    }
+  ],
+  "blocking_gates": [
+    {
+      "gate_id": "command_surface_minimum",
+      "description": "Plugin has at least 2 user-facing commands before graduation.",
+      "threshold": ">=2",
+      "current_value": 1
+    },
+    {
+      "gate_id": "ai_enabled_ratio_minimum",
+      "description": "AI-enabled maturity ratio (llm_assisted + closed_loop_learning + autonomous_execution) meets minimum threshold.",
+      "threshold": ">=0.15",
+      "current_value": 0
+    },
+    {
+      "gate_id": "verify_stage_coverage",
+      "description": "Workflow verify-stage coverage exists in plugin assets.",
+      "threshold": ">=1",
+      "current_value": 0
+    }
+  ],
+  "execution_snapshot": {
+    "gate_progress": {
+      "total_gates": 7,
+      "passing_gates": 4,
+      "failing_gates": 3
+    },
+    "runtime_handoff": {
+      "execution_checklist_detected": true,
+      "execution_checklist_path": "reports/exec/runtime/wi-nba-opp-006-execution-checklist.md"
+    },
+    "completion_gate": {
+      "readiness_contract_ready": true,
+      "blocker_reporting_ready": true,
+      "runtime_handoff_ready": true,
+      "ready_for_phase2_execution": true
+    }
+  },
+  "recommended_next_actions": [
+    "Add at least one additional monday command with docs/validation to expand routable user-facing surface.",
+    "Introduce at least one LLM-assisted or closed-loop capability in monday workflows to raise AI-enabled ratio above 0.15.",
+    "Add verify-stage checks (preflight/validation/test guardrails) for monday operations before graduation request."
+  ]
+}

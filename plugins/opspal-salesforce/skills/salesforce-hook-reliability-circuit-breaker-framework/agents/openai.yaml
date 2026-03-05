@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Hook Reliability Circuit Breaker Framework"
+  short_description: "Help with Salesforce Hook Reliability Circuit Breaker Framework"
+  default_prompt: "Use $salesforce-hook-reliability-circuit-breaker-framework to execute this workflow safely and produce the expected artifacts."

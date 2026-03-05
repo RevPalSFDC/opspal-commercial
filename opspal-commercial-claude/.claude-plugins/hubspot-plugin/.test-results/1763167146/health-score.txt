@@ -1,0 +1,51 @@
+🧮 Calculating health score for 1 pages...
+✅ Overall Health Score: 55/100 (Needs Improvement)
+
+============================================================
+SEO TECHNICAL HEALTH REPORT
+============================================================
+
+Overall Score: 55/100 (Needs Improvement)
+
+Dimension Breakdown:
+────────────────────────────────────────────────────────────
+Technical        [█████████████████   ] 83/100 (weight: 30%)
+Content          [██████              ] 29/100 (weight: 25%)
+Schema           [                    ] 0/100 (weight: 15%)
+Images           [██████████████      ] 70/100 (weight: 15%)
+Links            [████████████████    ] 80/100 (weight: 15%)
+
+────────────────────────────────────────────────────────────
+Issue Summary:
+  Critical: 0
+  Warning:  2
+  Info:     3
+
+────────────────────────────────────────────────────────────
+Top 10 Issues (by impact):
+────────────────────────────────────────────────────────────
+
+1. ⚠️  [CONTENT] Missing meta description: https://www.example.com
+   Impact: 7/10 | Affected: 1 page(s)
+   Fix: Add meta description (150-160 characters)
+
+2. ⚠️  [SCHEMA] Only 0% of pages have schema markup
+   Impact: 7/10 | Affected: 1 page(s)
+   Fix: Add JSON-LD schema to important pages (Article, Organization, WebPage)
+
+3. ℹ️  [CONTENT] Thin content (17 words): https://www.example.com
+   Impact: 5/10 | Affected: 1 page(s)
+   Fix: Expand content to at least 300 words for better SEO
+
+4. ℹ️  [LINKS] Weak internal linking (avg 0.0 links/page)
+   Impact: 4/10 | Affected: 1 page(s)
+   Fix: Add more contextual internal links between related pages
+
+5. ℹ️  [SCHEMA] Missing schema markup: https://www.example.com
+   Impact: 3/10 | Affected: 1 page(s)
+   Fix: Consider adding schema markup
+
+============================================================
+
+
+📄 Full results saved to: ./health-score.json

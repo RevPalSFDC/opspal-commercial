@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Assessment to Execution Automation Framework"
+  short_description: "Salesforce Assessment to Execution Automation Framework helper"
+  default_prompt: "Use $salesforce-assessment-to-execution-automation-framework to execute this workflow safely and produce the expected artifacts."

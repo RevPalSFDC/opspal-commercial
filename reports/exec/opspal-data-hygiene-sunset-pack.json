@@ -1,0 +1,144 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-005",
+  "title": "Data Hygiene Sunset Completion",
+  "deprecated_plugins": [
+    {
+      "plugin": "opspal-data-hygiene",
+      "owner": "revpal-platform",
+      "deprecation_date": "2026-02-15",
+      "replaced_by": "opspal-core",
+      "replacement_detected": true,
+      "mapping_coverage": {
+        "mapped_assets": 3,
+        "total_assets": 3,
+        "unmapped_assets": 0,
+        "coverage_ratio": 1,
+        "scope_asset_types": [
+          "command",
+          "agent"
+        ]
+      },
+      "replacement_mappings": [
+        {
+          "deprecated_plugin": "opspal-data-hygiene",
+          "deprecated_asset_id": "opspal-data-hygiene:dedup-companies",
+          "deprecated_asset_name": "dedup-companies",
+          "deprecated_source_path": "plugins/opspal-data-hygiene/commands/dedup-companies.md",
+          "asset_type": "command",
+          "replacement_plugin": "opspal-core",
+          "replacement_asset_id": "opspal-core:dedup-companies",
+          "replacement_asset_name": "dedup-companies",
+          "replacement_source_path": "plugins/opspal-core/commands/dedup-companies.md",
+          "mapping_status": "mapped",
+          "mapping_rule": "same_name_in_replacement_plugin"
+        },
+        {
+          "deprecated_plugin": "opspal-data-hygiene",
+          "deprecated_asset_id": "opspal-data-hygiene:contact-dedup-orchestrator",
+          "deprecated_asset_name": "contact-dedup-orchestrator",
+          "deprecated_source_path": "plugins/opspal-data-hygiene/agents/contact-dedup-orchestrator.md",
+          "asset_type": "agent",
+          "replacement_plugin": "opspal-core",
+          "replacement_asset_id": "opspal-core:contact-dedup-orchestrator",
+          "replacement_asset_name": "contact-dedup-orchestrator",
+          "replacement_source_path": "plugins/opspal-core/agents/contact-dedup-orchestrator.md",
+          "mapping_status": "mapped",
+          "mapping_rule": "same_name_in_replacement_plugin"
+        },
+        {
+          "deprecated_plugin": "opspal-data-hygiene",
+          "deprecated_asset_id": "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
+          "deprecated_asset_name": "sfdc-hubspot-dedup-orchestrator",
+          "deprecated_source_path": "plugins/opspal-data-hygiene/agents/sfdc-hubspot-dedup-orchestrator.md",
+          "asset_type": "agent",
+          "replacement_plugin": "opspal-core",
+          "replacement_asset_id": "opspal-core:sfdc-hubspot-dedup-orchestrator",
+          "replacement_asset_name": "sfdc-hubspot-dedup-orchestrator",
+          "replacement_source_path": "plugins/opspal-core/agents/sfdc-hubspot-dedup-orchestrator.md",
+          "mapping_status": "mapped",
+          "mapping_rule": "same_name_in_replacement_plugin"
+        }
+      ],
+      "assets": {
+        "agents": 2,
+        "commands": 1,
+        "skills": 1,
+        "hooks": 0,
+        "scripts": 13
+      }
+    }
+  ],
+  "replacement_mappings": [
+    {
+      "deprecated_plugin": "opspal-data-hygiene",
+      "deprecated_asset_id": "opspal-data-hygiene:dedup-companies",
+      "deprecated_asset_name": "dedup-companies",
+      "deprecated_source_path": "plugins/opspal-data-hygiene/commands/dedup-companies.md",
+      "asset_type": "command",
+      "replacement_plugin": "opspal-core",
+      "replacement_asset_id": "opspal-core:dedup-companies",
+      "replacement_asset_name": "dedup-companies",
+      "replacement_source_path": "plugins/opspal-core/commands/dedup-companies.md",
+      "mapping_status": "mapped",
+      "mapping_rule": "same_name_in_replacement_plugin"
+    },
+    {
+      "deprecated_plugin": "opspal-data-hygiene",
+      "deprecated_asset_id": "opspal-data-hygiene:contact-dedup-orchestrator",
+      "deprecated_asset_name": "contact-dedup-orchestrator",
+      "deprecated_source_path": "plugins/opspal-data-hygiene/agents/contact-dedup-orchestrator.md",
+      "asset_type": "agent",
+      "replacement_plugin": "opspal-core",
+      "replacement_asset_id": "opspal-core:contact-dedup-orchestrator",
+      "replacement_asset_name": "contact-dedup-orchestrator",
+      "replacement_source_path": "plugins/opspal-core/agents/contact-dedup-orchestrator.md",
+      "mapping_status": "mapped",
+      "mapping_rule": "same_name_in_replacement_plugin"
+    },
+    {
+      "deprecated_plugin": "opspal-data-hygiene",
+      "deprecated_asset_id": "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
+      "deprecated_asset_name": "sfdc-hubspot-dedup-orchestrator",
+      "deprecated_source_path": "plugins/opspal-data-hygiene/agents/sfdc-hubspot-dedup-orchestrator.md",
+      "asset_type": "agent",
+      "replacement_plugin": "opspal-core",
+      "replacement_asset_id": "opspal-core:sfdc-hubspot-dedup-orchestrator",
+      "replacement_asset_name": "sfdc-hubspot-dedup-orchestrator",
+      "replacement_source_path": "plugins/opspal-core/agents/sfdc-hubspot-dedup-orchestrator.md",
+      "mapping_status": "mapped",
+      "mapping_rule": "same_name_in_replacement_plugin"
+    }
+  ],
+  "mapping_coverage": {
+    "mapped_assets": 3,
+    "total_assets": 3,
+    "unmapped_assets": 0,
+    "coverage_ratio": 1,
+    "scope_asset_types": [
+      "command",
+      "agent"
+    ]
+  },
+  "readiness_status": "sunset_ready",
+  "blocking_gaps": [],
+  "execution_snapshot": {
+    "approved_work_items_total": 1,
+    "ready_work_item_id": "wi-apr-1771176698166-b40b32",
+    "ready_state": "ready",
+    "runtime_checklist_detected": true,
+    "runtime_checklist_path": "reports/exec/runtime/wi-apr-1771176698166-b40b32-execution-checklist.md",
+    "completion_gate": {
+      "mapping_ready": true,
+      "runtime_handoff_ready": true,
+      "ready_for_sunset_completion": true
+    }
+  },
+  "migration_checklist": [
+    "Confirm all deprecated plugin commands/agents have mapped replacements.",
+    "Remove deprecated plugin from active routing recommendations.",
+    "Publish migration note and rollback plan for remaining consumers.",
+    "Track sunset completion in runtime work-item exports."
+  ]
+}

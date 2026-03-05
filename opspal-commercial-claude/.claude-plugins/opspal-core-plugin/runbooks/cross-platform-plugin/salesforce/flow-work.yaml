@@ -1,0 +1,315 @@
+# Salesforce Flow Work Playbook
+# Standard decomposition pattern for Flow modifications
+#
+# Triggers: flow, process builder, automation, screen flow, record-triggered
+# Complexity: Medium (base 0.3, escalates with multi-flow or production)
+
+name: salesforce-flow-work
+version: "1.0.0"
+description: Standard decomposition for Salesforce Flow modifications
+domain: salesforce-flow
+base_complexity: 0.3
+
+# When to use this playbook
+triggers:
+  keywords:
+    - flow
+    - process builder
+    - workflow rule
+    - screen flow
+    - record-triggered
+    - autolaunched
+    - scheduled flow
+    - automation
+  patterns:
+    - "update.*flow"
+    - "create.*flow"
+    - "modify.*automation"
+    - "add.*decision"
+    - "change.*routing"
+
+# Default task graph for flow work
+default_dag:
+  - id: T-01
+    title: Flow Discovery
+    domain: salesforce-flow
+    goal: Locate and analyze current flow(s), decision nodes, and entry criteria
+    inputs:
+      - org_alias
+      - flow_names_or_patterns
+    outputs:
+      - flow_inventory.json
+      - decision_node_map.json
+      - entry_criteria_doc.md
+    acceptance_criteria:
+      - All flows matching pattern identified
+      - Entry criteria documented for each flow
+      - Current version numbers and status recorded
+      - Decision node logic mapped
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-02
+      - T-03
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: forbidden
+      destructive_ops: forbidden
+      production_ops: forbidden
+    assigned_agent: salesforce-plugin:sfdc-flow-diagnostician
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 15
+
+  - id: T-02
+    title: Change Specification
+    domain: salesforce-flow
+    goal: Document precise routing rules, criteria changes, and edge cases
+    inputs:
+      - requirements_doc
+      - flow_inventory.json
+    outputs:
+      - change_spec.md
+      - criteria_table.json
+      - edge_cases.md
+    acceptance_criteria:
+      - All routing changes documented with before/after states
+      - Edge cases identified and handled
+      - Rollback criteria defined
+      - Impact on existing records assessed
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-01
+      - T-03
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: salesforce-plugin:sfdc-planner
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-03
+    title: Impact Analysis
+    domain: salesforce-flow
+    goal: Identify downstream automations affected by the proposed changes
+    inputs:
+      - flow_inventory.json
+      - org_alias
+    outputs:
+      - impact_report.md
+      - affected_automations.json
+      - cascade_diagram.md
+    acceptance_criteria:
+      - All triggers/flows touching same objects identified
+      - Cascade effects documented
+      - Order of execution verified
+      - Potential conflicts flagged
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-01
+      - T-02
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: salesforce-plugin:sfdc-automation-auditor
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-04
+    title: Flow XML Update
+    domain: salesforce-flow
+    goal: Modify Flow metadata XML with specified changes
+    inputs:
+      - change_spec.md
+      - flow_inventory.json
+      - T-01:decision_node_map.json
+    outputs:
+      - updated_flow.xml
+      - change_diff.txt
+      - modification_notes.md
+    acceptance_criteria:
+      - Flow XML well-formed and valid
+      - All criteria changes applied per spec
+      - No removed paths without explicit approval
+      - API version consistent with org standard
+    dependencies:
+      - T-01
+      - T-02
+    concurrency_group: flow-xml
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed_with_approval
+      destructive_ops: forbidden
+    stop_points:
+      - Before first write to flow XML
+    assigned_agent: salesforce-plugin:flow-segmentation-specialist
+    estimated_complexity: 0.5
+    estimated_duration_minutes: 30
+
+  - id: T-05
+    title: Sandbox Validation
+    domain: salesforce-metadata
+    goal: Deploy and validate flow in sandbox environment
+    inputs:
+      - updated_flow.xml
+      - org_alias
+    outputs:
+      - validation_report.md
+      - deploy_log.txt
+      - activation_status.json
+    acceptance_criteria:
+      - Metadata validation passes without errors
+      - Flow activates without runtime errors
+      - No governor limit warnings
+      - Test execution with sample data succeeds
+    dependencies:
+      - T-04
+    concurrency_group: metadata
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+      production_ops: forbidden
+    stop_points:
+      - Before deployment to sandbox
+    assigned_agent: salesforce-plugin:sfdc-deployment-manager
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 20
+
+  - id: T-06
+    title: Code Review
+    domain: review
+    goal: Independent review of changes and risk assessment
+    inputs:
+      - change_diff.txt
+      - impact_report.md
+      - change_spec.md
+    outputs:
+      - review_notes.md
+      - risk_flags.json
+      - approval_status.md
+    acceptance_criteria:
+      - Changes reviewed against original requirements
+      - Risks documented with severity levels
+      - Best practices compliance verified
+      - Approval or rejection recorded with rationale
+    dependencies:
+      - T-04
+      - T-05
+    can_run_in_parallel_with: []
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: feature-dev:code-reviewer
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 15
+
+# Rules for parallelization
+parallelization_rules:
+  - description: "Discovery tasks can run in parallel"
+    tasks: [T-01, T-02, T-03]
+    reason: "Independent read-only operations with no shared state"
+
+  - description: "XML Update must wait for Discovery + Spec"
+    tasks: [T-04]
+    requires: [T-01, T-02]
+    reason: "Needs complete understanding before modification"
+
+  - description: "Same Flow XML edits must be sequential"
+    constraint: "concurrency_group: flow-xml"
+    reason: "Prevents merge conflicts and ensures consistency"
+
+  - description: "Review runs after validation"
+    tasks: [T-06]
+    requires: [T-04, T-05]
+    reason: "Review should include deployment validation results"
+
+# Rules for sequential execution
+sequential_rules:
+  - "Requirements → Design → Implementation → Validation → Review"
+  - "Sandbox validation must complete before production consideration"
+  - "All stop points require explicit approval before proceeding"
+
+# Verification gates for this playbook
+verification_gates:
+  - name: xml_validation
+    type: command
+    command: "sf project deploy validate --source-dir force-app/main/default/flows --dry-run"
+    success_criteria:
+      exit_code: 0
+    required: true
+
+  - name: flow_lint
+    type: command
+    command: "node scripts/lib/flow-validator.js --path {flowPath} --sarif"
+    success_criteria:
+      errors: 0
+    required: true
+
+  - name: best_practices
+    type: custom
+    checks:
+      - no_hardcoded_ids
+      - has_fault_paths
+      - documented_decisions
+      - api_version_current
+    required: false
+
+# Escalation conditions
+escalation_triggers:
+  - condition: "production deployment requested"
+    escalate_to: production-change.yaml
+    reason: "Production changes require additional gates"
+
+  - condition: "more than 3 flows affected"
+    escalate_complexity: 0.2
+    reason: "Multi-flow changes increase risk"
+
+  - condition: "process builder to flow migration"
+    add_tasks:
+      - legacy_automation_deactivation
+      - migration_validation
+    reason: "Migration requires additional cleanup steps"
+
+# Common variations
+variations:
+  screen_flow:
+    description: "Screen flow with user interaction"
+    additional_considerations:
+      - User experience validation
+      - Input validation rules
+      - Error message handling
+    add_acceptance_criteria:
+      - "Screen navigation logic tested"
+      - "Input validation prevents bad data"
+
+  scheduled_flow:
+    description: "Scheduled or batch flow"
+    additional_considerations:
+      - Batch size limits
+      - Governor limit monitoring
+      - Failure notification setup
+    add_acceptance_criteria:
+      - "Batch size within governor limits"
+      - "Failure handling configured"
+
+  record_triggered:
+    description: "Record-triggered flow"
+    additional_considerations:
+      - Order of execution with other automations
+      - Recursion prevention
+      - Entry criteria optimization
+    add_acceptance_criteria:
+      - "Entry criteria selective enough"
+      - "No recursion issues"

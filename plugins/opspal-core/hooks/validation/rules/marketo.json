@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "platform": "marketo",
+  "description": "Marketo-specific validation rules for tool inputs and outputs",
+
+  "rules": [
+    {
+      "id": "mkto-api-limits",
+      "description": "Marketo has daily API limits",
+      "tools": ["mcp__marketo*"],
+      "action": "warn",
+      "message": "Monitor daily API quota - Marketo has strict limits"
+    },
+    {
+      "id": "mkto-batch-size",
+      "description": "Marketo batch operations have size limits",
+      "tools": ["mcp__marketo*__batch*", "mcp__marketo*__bulk*"],
+      "condition": {
+        "batchSize": ">300"
+      },
+      "action": "block",
+      "message": "Marketo batch operations limited to 300 records per call"
+    },
+    {
+      "id": "mkto-smart-campaign-safety",
+      "description": "Smart campaign activation requires review",
+      "tools": ["mcp__marketo*__campaign_activate", "mcp__marketo*__smart_campaign*"],
+      "action": "warn",
+      "message": "Smart campaign activation should be reviewed before execution"
+    },
+    {
+      "id": "mkto-sfdc-sync-field",
+      "description": "Fields synced from Salesforce are read-only in Marketo",
+      "tools": ["mcp__marketo*__lead_update", "mcp__marketo*__lead_create"],
+      "sfdcSyncFields": [
+        "sfdc_type",
+        "sfdc_id",
+        "sfdc_owner_id",
+        "sfdc_campaign_id"
+      ],
+      "action": "block",
+      "message": "This field is synced from Salesforce and cannot be modified in Marketo"
+    },
+    {
+      "id": "mkto-email-validation",
+      "description": "Email must be valid format",
+      "tools": ["mcp__marketo*__lead_*", "mcp__marketo*__email_*"],
+      "condition": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "field": "email",
+        "negate": true
+      },
+      "action": "block",
+      "message": "Invalid email format"
+    }
+  ],
+
+  "outputRules": [
+    {
+      "id": "mkto-error-detection",
+      "description": "Detect common Marketo API errors",
+      "patterns": [
+        "606",
+        "607",
+        "608",
+        "611",
+        "RATE_LIMIT",
+        "AUTHENTICATION_ERROR",
+        "LEAD_NOT_FOUND"
+      ],
+      "errorCodes": {
+        "606": "Max rate limit exceeded",
+        "607": "Daily quota reached",
+        "608": "API temporarily unavailable",
+        "611": "System error"
+      },
+      "action": "error",
+      "message": "Marketo API returned an error"
+    },
+    {
+      "id": "mkto-sync-lag-detection",
+      "description": "Detect Salesforce sync lag indicators",
+      "patterns": [
+        "sync pending",
+        "sfdc_sync_date",
+        "last_sync_error"
+      ],
+      "action": "warn",
+      "message": "Salesforce sync may be lagging - verify data freshness"
+    }
+  ]
+}

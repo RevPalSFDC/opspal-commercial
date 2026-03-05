@@ -1,0 +1,140 @@
+{
+  "templateMetadata": {
+    "templateName": "My Coverage",
+    "templateVersion": "1.1",
+    "description": "Your pipeline multiple against quota",
+    "audience": "Sales Reps, Account Executives",
+    "useCase": "Pipeline sufficiency check, prospecting prioritization",
+    "customizationPoints": [
+      "Target coverage multiple",
+      "Time period",
+      "Stage weights"
+    ],
+    "prerequisites": [
+      "Opportunity object",
+      "Quota data"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "My Coverage",
+    "description": "Pipeline multiple vs quota",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total pipeline"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Coverage_Multiple",
+        "description": "Pipeline / Quota",
+        "formula": "SUM(AMOUNT) / Quota",
+        "dataType": "number",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "Coverage_Multiple",
+      "format": "number",
+      "suffix": "x"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-quota"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

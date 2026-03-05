@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Query Safety Framework"
+  short_description: "Help with Salesforce Query Safety Framework tasks"
+  default_prompt: "Use $salesforce-query-safety-framework to execute this workflow safely and produce the expected artifacts."

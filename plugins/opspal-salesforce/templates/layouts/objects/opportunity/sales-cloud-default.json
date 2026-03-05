@@ -1,0 +1,72 @@
+{
+  "object": "Opportunity",
+  "template": "sales-cloud-default",
+  "label": "Sales Cloud - Standard Opportunity",
+  "description": "Default Opportunity layout for Sales Cloud orgs without CPQ",
+  "targetPersonas": ["sales-rep", "sales-manager"],
+  "sections": [
+    {
+      "label": "Opportunity Information",
+      "order": 1,
+      "fields": [
+        "Name",
+        "AccountId",
+        "Amount",
+        "CloseDate",
+        "StageName",
+        "Probability",
+        "Type",
+        "LeadSource",
+        "OwnerId"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Additional Details",
+      "order": 2,
+      "fields": [
+        "NextStep",
+        "Description",
+        "ExpectedRevenue",
+        "ForecastCategory",
+        "CampaignId"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "System Information",
+      "order": 3,
+      "fields": [
+        "CreatedById",
+        "CreatedDate",
+        "LastModifiedById",
+        "LastModifiedDate"
+      ],
+      "columns": 2
+    }
+  ],
+  "compactLayoutFields": ["Amount", "CloseDate", "StageName", "Owner.Name"],
+  "components": {
+    "header": [
+      {"type": "force:highlightsPanelDesktop", "order": 1},
+      {"type": "runtime_sales_pathassistant:pathAssistant", "order": 2}
+    ],
+    "main": [
+      {"type": "force:recordFieldSection", "sections": ["Opportunity Information", "Additional Details"], "order": 1},
+      {"type": "force:activityComposer", "order": 2}
+    ],
+    "sidebar": [
+      {"type": "force:relatedListSingleContainer", "relatedObject": "OpportunityContactRole", "order": 1},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Quote", "order": 2},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Task", "order": 3}
+    ]
+  },
+  "relatedLists": [
+    "Contact Roles",
+    "Quotes",
+    "Open Activities",
+    "Activity History",
+    "Notes & Attachments"
+  ],
+  "conditionalVisibility": []
+}

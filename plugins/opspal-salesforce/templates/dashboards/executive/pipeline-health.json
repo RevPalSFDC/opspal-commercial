@@ -1,0 +1,277 @@
+{
+  "templateMetadata": {
+    "templateId": "pipeline-health",
+    "templateName": "Executive Pipeline Health Dashboard",
+    "templateVersion": "1.1",
+    "description": "High-level pipeline health metrics: coverage, velocity, win rates, and bottlenecks",
+    "audience": "CEO, CRO, VP Sales, Board of Directors",
+    "function": "sales",
+    "level": "executive",
+    "useCase": "Weekly/monthly pipeline reviews, forecast confidence assessment, strategic planning",
+    "refreshFrequency": "Daily",
+    "componentCount": 6,
+    "tags": ["pipeline", "forecast", "velocity", "coverage", "sales"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "cpq", "enterprise"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified pipeline view with 4 key metrics",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["Pipeline Age Distribution", "Stalled Opportunities"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full template with all pipeline health components"
+      },
+      "cpq": {
+        "description": "CPQ-optimized with SBQQ quote-based pipeline metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote": "SBQQ__Quote__c",
+          "QuoteAmount": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        },
+        "metricAdjustments": {
+          "pipelineCoverage": {
+            "formula": "SUM(SBQQ__NetAmount__c WHERE IsClosed=FALSE) / Quota"
+          },
+          "averageDealSize": {
+            "formula": "AVG(SBQQ__NetAmount__c WHERE IsClosed=FALSE)"
+          }
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise-focused with higher thresholds",
+        "metricAdjustments": {
+          "pipelineCoverage": {
+            "target": "4x",
+            "thresholds": { "green": ">4x", "yellow": "3-4x", "red": "<3x" }
+          },
+          "averageDealSize": {
+            "target": "$250K"
+          },
+          "winRate": {
+            "target": "30%",
+            "thresholds": { "green": ">30%", "yellow": "20-30%", "red": "<20%" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Amount", "StageName", "IsClosed", "IsWon", "CloseDate"],
+    "optionalFields": ["Age__c", "Days_Since_Last_Activity__c", "Probability", "Quota__c"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": ["Amount", "Pipeline_Value__c", "Deal_Value__c"],
+        "cpqPatterns": ["SBQQ__NetAmount__c", "SBQQ__CustomerAmount__c"],
+        "namespaceAware": true,
+        "fallbackChain": [
+          { "namespace": "SBQQ", "field": "SBQQ__NetAmount__c" },
+          { "namespace": null, "field": "Amount" }
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": ["Quota__c", "Quota_Amount__c", "Target__c"],
+        "labelHints": ["Quota", "Target", "Goal"],
+        "dataType": "currency"
+      },
+      "Age": {
+        "patterns": ["Age__c", "Deal_Age__c", "Days_Open__c"],
+        "labelHints": ["Age", "Days Open", "Deal Age"],
+        "dataType": "number"
+      },
+      "DaysSinceLastActivity": {
+        "patterns": ["Days_Since_Last_Activity__c", "Last_Activity_Age__c"],
+        "labelHints": ["Days Since Activity", "Stale Days"],
+        "dataType": "number"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Pipeline Coverage", "Average Deal Size", "Win Rate", "Pipeline by Stage"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Pipeline Coverage", "Win Rate"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "components": [
+      {
+        "position": 1,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "Pipeline Coverage",
+        "sourceReport": "pipeline-coverage-ratio",
+        "metric": "SUM(Pipeline) / Quota",
+        "target": "3x",
+        "greenZone": ">3x",
+        "yellowZone": "2-3x",
+        "redZone": "<2x",
+        "tooltip": "Total pipeline divided by quota (healthy = 3-4x)"
+      },
+      {
+        "position": 2,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "Average Deal Size",
+        "sourceReport": "average-deal-size",
+        "metric": "AVG(Amount WHERE IsClosed=FALSE)",
+        "showComparison": "vs Last Quarter",
+        "trendIndicator": true
+      },
+      {
+        "position": 3,
+        "size": "third-width",
+        "type": "Metric",
+        "title": "Win Rate",
+        "sourceReport": "win-rate-all-time",
+        "metric": "(Closed Won Count / Total Closed Count) * 100",
+        "target": "25%",
+        "greenZone": ">25%",
+        "yellowZone": "15-25%",
+        "redZone": "<15%"
+      },
+      {
+        "position": 4,
+        "size": "half-width",
+        "type": "Funnel Chart",
+        "title": "Pipeline by Stage (This Quarter)",
+        "sourceReport": "pipeline-by-stage-weighted",
+        "groupBy": "Stage",
+        "metric": "SUM(Amount * Probability)",
+        "showConversionRates": true,
+        "colorCode": "by conversion rate"
+      },
+      {
+        "position": 5,
+        "size": "half-width",
+        "type": "Bar Chart",
+        "title": "Pipeline Age Distribution",
+        "sourceReport": "pipeline-age-buckets",
+        "groupBy": "Age_Bucket__c",
+        "metric": "SUM(Amount)",
+        "xAxis": "Age Bucket (0-30, 31-60, 61-90, 90+ days)",
+        "colorCode": {"0-30": "green", "31-60": "yellow", "61-90": "orange", "90+": "red"}
+      },
+      {
+        "position": 6,
+        "size": "full-width",
+        "type": "Table",
+        "title": "Stalled Opportunities (No Activity >14 Days)",
+        "sourceReport": "stalled-opportunities",
+        "columns": ["Account", "Amount", "Stage", "Owner", "Days Since Last Activity", "Close Date"],
+        "sortBy": "Days Since Last Activity DESC",
+        "rowLimit": 15,
+        "conditionalFormatting": {
+          "Days_Since_Last_Activity__c": {">=30": "red", ">=14": "yellow"}
+        }
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {"field": "Close Date", "type": "Date Range", "default": "THIS_FISCAL_QUARTER"},
+    {"field": "Stage", "type": "Picklist", "default": "All Open", "values": ["All Open", "Qualification", "Discovery", "Proposal", "Negotiation"]},
+    {"field": "Region", "type": "Picklist", "default": "All", "values": ["North America", "EMEA", "APAC"]}
+  ],
+  "sourceReportTemplates": [
+    "sales-executive/pipeline-coverage-ratio",
+    "sales-executive/average-deal-size",
+    "sales-executive/win-rate-all-time",
+    "sales-executive/pipeline-by-stage-weighted",
+    "sales-executive/pipeline-age-buckets",
+    "sales-executive/stalled-opportunities"
+  ],
+  "calculatedFieldsRequired": [
+    {
+      "fieldName": "Age_Bucket__c",
+      "fieldType": "Formula (Text)",
+      "formula": "IF(Age__c <= 30, '0-30 days', IF(Age__c <= 60, '31-60 days', IF(Age__c <= 90, '61-90 days', '90+ days')))",
+      "description": "Group opportunities by age for distribution analysis"
+    },
+    {
+      "fieldName": "Days_Since_Last_Activity__c",
+      "fieldType": "Formula (Number)",
+      "formula": "TODAY() - LastActivityDate",
+      "description": "Track stale opportunities"
+    },
+    {
+      "fieldName": "Pipeline_Coverage_Ratio__c",
+      "fieldType": "Rollup Summary or Formula",
+      "formula": "SUM(Open_Pipeline__c) / SUM(Quota__c)",
+      "object": "User",
+      "description": "Rep-level pipeline coverage"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Create all 6 source reports using templates",
+      "2. Create calculated fields (Age_Bucket__c, Days_Since_Last_Activity__c)",
+      "3. Create dashboard in Dashboards folder (Executive)",
+      "4. Add components in order specified",
+      "5. Configure filters (Date Range, Stage, Region)",
+      "6. Set refresh schedule to daily at 6 AM",
+      "7. Share with exec team (view-only)",
+      "8. Create alerts: Coverage <2x, Stalled Opps >20"
+    ],
+    "expectedBehavior": {
+      "pipelineCoverageHealthy": "3-4x quota",
+      "pipelineCoverageWarning": "2-3x quota (insufficient buffer)",
+      "pipelineCoverageCritical": "<2x quota (insufficient pipeline)",
+      "averageAgeHealthy": "<45 days",
+      "stalledOppsAcceptable": "<10% of open pipeline"
+    }
+  },
+  "kpiDefinitions": {
+    "pipelineCoverage": {
+      "formula": "Total Open Pipeline / Quota",
+      "benchmark": "3-4x for healthy forecasting",
+      "whyItMatters": "Indicates whether you have enough pipeline to hit quota, accounting for typical win rates"
+    },
+    "winRate": {
+      "formula": "(Closed Won Count / Total Closed Count) * 100",
+      "benchmark": "20-30% typical for B2B SaaS",
+      "whyItMatters": "Key input for pipeline coverage calculations and sales efficiency"
+    },
+    "pipelineAge": {
+      "formula": "TODAY() - CreatedDate (grouped into buckets)",
+      "benchmark": "Most opps should close within 60-90 days",
+      "whyItMatters": "Old opportunities indicate stalled deals, poor qualification, or pipeline inflation"
+    }
+  },
+  "dashboardUsageNotes": {
+    "weeklyReview": "Check pipeline coverage and stalled opportunities",
+    "monthlyReview": "Analyze win rate trends and average deal size changes",
+    "quarterlyReview": "Assess pipeline health trends and adjust quota/hiring plans",
+    "redFlags": [
+      "Pipeline coverage <2x",
+      "Win rate declining >5% quarter-over-quarter",
+      "Average age increasing (indicates longer sales cycles)",
+      "High concentration of pipeline in early stages",
+      ">20% of pipeline stalled (no activity >14 days)"
+    ]
+  },
+  "relatedTemplates": [
+    "revenue-performance.json",
+    "team-productivity.json"
+  ]
+}

@@ -1,0 +1,543 @@
+# n8n Node Reference
+# Quick reference for n8n node types, parameters, and best practices
+# Used by n8n agents for workflow generation
+
+version: "1.0.0"
+lastUpdated: "2025-12-03"
+
+# =============================================================================
+# TRIGGER NODES
+# =============================================================================
+
+triggers:
+  salesforce:
+    type: "n8n-nodes-base.salesforceTrigger"
+    typeVersion: 1
+    description: "Triggers on Salesforce record events"
+    parameters:
+      triggerOn:
+        required: true
+        options:
+          - recordCreated
+          - recordUpdated
+          - recordDeleted
+        description: "Event type to trigger on"
+      sobject:
+        required: true
+        type: string
+        description: "Salesforce object API name (e.g., Lead, Contact, Account)"
+      conditions:
+        required: false
+        type: array
+        description: "Filter conditions for the trigger"
+    credentials:
+      type: salesforceOAuth2Api
+    output:
+      - Full record data as JSON
+      - Id, Name, and all standard/custom fields
+    example:
+      triggerOn: recordCreated
+      sobject: Lead
+      conditions: []
+
+  hubspot:
+    type: "n8n-nodes-base.hubspotTrigger"
+    typeVersion: 1
+    description: "Triggers on HubSpot events via webhooks"
+    parameters:
+      eventsUi:
+        required: true
+        description: "Event types to listen for"
+    events:
+      contacts:
+        - contact.creation
+        - contact.deletion
+        - contact.propertyChange
+      companies:
+        - company.creation
+        - company.deletion
+        - company.propertyChange
+      deals:
+        - deal.creation
+        - deal.deletion
+        - deal.propertyChange
+    credentials:
+      type: hubspotApi
+    output:
+      - Webhook payload with event details
+      - Object ID and changed properties
+
+  webhook:
+    type: "n8n-nodes-base.webhook"
+    typeVersion: 1
+    description: "Receives HTTP requests"
+    parameters:
+      path:
+        required: true
+        type: string
+        description: "URL path for the webhook"
+      httpMethod:
+        required: true
+        options:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+        default: POST
+      authentication:
+        options:
+          - none
+          - basicAuth
+          - headerAuth
+    output:
+      - Request body, headers, query parameters
+
+  schedule:
+    type: "n8n-nodes-base.scheduleTrigger"
+    typeVersion: 1
+    description: "Triggers on a schedule"
+    scheduleTypes:
+      - hours: Hourly intervals
+      - days: Daily at specific time
+      - weeks: Weekly on specific days
+      - months: Monthly on specific date
+      - cron: Custom cron expression
+    example:
+      rule:
+        interval:
+          - field: days
+            daysInterval: 1
+            triggerAtHour: 9
+
+  manual:
+    type: "n8n-nodes-base.manualTrigger"
+    typeVersion: 1
+    description: "Manual trigger for testing"
+    parameters: {}
+
+  error:
+    type: "n8n-nodes-base.errorTrigger"
+    typeVersion: 1
+    description: "Triggers when a workflow error occurs"
+    parameters: {}
+    output:
+      - Error message
+      - Stack trace
+      - Execution ID
+      - Failed node name
+
+# =============================================================================
+# ACTION NODES
+# =============================================================================
+
+actions:
+  salesforce:
+    type: "n8n-nodes-base.salesforce"
+    typeVersion: 1
+    description: "CRUD operations on Salesforce records"
+    operations:
+      get:
+        description: "Retrieve a single record"
+        requiredParams:
+          - resource (object name)
+          - recordId
+      getAll:
+        description: "Retrieve multiple records"
+        requiredParams:
+          - resource
+        optionalParams:
+          - limit
+          - returnAll
+      create:
+        description: "Create a new record"
+        requiredParams:
+          - resource
+          - additionalFields (field values)
+      update:
+        description: "Update an existing record"
+        requiredParams:
+          - resource
+          - recordId
+          - updateFields
+      delete:
+        description: "Delete a record"
+        requiredParams:
+          - resource
+          - recordId
+      query:
+        description: "Execute SOQL query"
+        requiredParams:
+          - query (SOQL string)
+    credentials:
+      type: salesforceOAuth2Api
+    bestPractices:
+      - Use batch operations for >1 record (governor limits)
+      - Max 200 records per DML operation
+      - Use external IDs for upsert operations
+      - Always handle query results pagination
+
+  hubspot:
+    type: "n8n-nodes-base.hubspot"
+    typeVersion: 1
+    description: "CRUD operations on HubSpot objects"
+    resources:
+      - contact
+      - company
+      - deal
+      - ticket
+      - product
+    operations:
+      create:
+        description: "Create a new record"
+        requiredByResource:
+          contact: email
+          company: name
+          deal: dealname, pipeline, dealStage
+      update:
+        description: "Update an existing record"
+        requiredParams:
+          - Record ID or identifying field
+      get:
+        description: "Retrieve a record"
+        requiredParams:
+          - Record ID
+      getAll:
+        description: "List records"
+        optionalParams:
+          - limit
+          - filters
+      delete:
+        description: "Delete a record"
+        requiredParams:
+          - Record ID
+    credentials:
+      type: hubspotApi
+    bestPractices:
+      - Rate limit: 100 requests per 10 seconds
+      - Use batch API for bulk operations
+      - Contacts identified by email, companies by domain
+      - Property names use snake_case
+
+  httpRequest:
+    type: "n8n-nodes-base.httpRequest"
+    typeVersion: 4
+    description: "Make HTTP requests to external APIs"
+    parameters:
+      method:
+        required: true
+        options: [GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS]
+      url:
+        required: true
+        type: string
+      authentication:
+        options:
+          - none
+          - predefinedCredentialType
+          - genericCredentialType
+      sendBody:
+        type: boolean
+        description: "Include request body"
+      bodyParameters:
+        type: array
+        description: "Body parameters for form data"
+      jsonBody:
+        type: string
+        description: "JSON body for raw JSON"
+    bestPractices:
+      - Use predefined credentials when available
+      - Set appropriate timeout for slow APIs
+      - Handle pagination for list endpoints
+      - Include error handling for non-2xx responses
+
+# =============================================================================
+# LOGIC NODES
+# =============================================================================
+
+logic:
+  if:
+    type: "n8n-nodes-base.if"
+    typeVersion: 1
+    description: "Conditional branching"
+    parameters:
+      conditions:
+        boolean:
+          - value1: "={{ $json.field }}"
+            operation: equal | notEqual | contains | etc.
+            value2: "comparison value"
+    outputs:
+      0: True branch
+      1: False branch
+    operators:
+      string:
+        - equal
+        - notEqual
+        - contains
+        - notContains
+        - startsWith
+        - endsWith
+        - regex
+        - isEmpty
+        - isNotEmpty
+      number:
+        - equal
+        - notEqual
+        - larger
+        - smaller
+        - largerEqual
+        - smallerEqual
+      boolean:
+        - equal
+        - notEqual
+
+  switch:
+    type: "n8n-nodes-base.switch"
+    typeVersion: 2
+    description: "Multi-path routing based on value"
+    parameters:
+      dataType: string | number
+      value1: "={{ $json.field }}"
+      rules:
+        rules:
+          - output: 0
+            value: "value1"
+          - output: 1
+            value: "value2"
+    bestPractices:
+      - Use for 3+ branches (IF for 2 branches)
+      - Include a fallback/default output
+      - Keep branch count manageable (<10)
+
+  merge:
+    type: "n8n-nodes-base.merge"
+    typeVersion: 2
+    description: "Combine multiple data streams"
+    modes:
+      append:
+        description: "Stack items from both inputs"
+      combineBySamePosition:
+        description: "Merge items at same index"
+      combineByKey:
+        description: "Merge items by matching key"
+      combineAll:
+        description: "Cross-join all combinations"
+    parameters:
+      mode: append | combineBySamePosition | combineByKey | combineAll
+      propertyName1: "={{ $json.id }}"
+      propertyName2: "={{ $json.id }}"
+
+  splitInBatches:
+    type: "n8n-nodes-base.splitInBatches"
+    typeVersion: 2
+    description: "Process items in batches (loop)"
+    parameters:
+      batchSize:
+        type: number
+        default: 10
+        description: "Items per batch"
+      options:
+        reset:
+          type: boolean
+          description: "Reset after completion"
+    outputs:
+      0: Loop iteration (connect to processing nodes, then back to split)
+      1: Done (all batches processed)
+    bestPractices:
+      - Use batchSize 200 for Salesforce operations
+      - Add Wait node between batches for rate limiting
+      - Connect output 0 back to splitInBatches for loop
+
+  wait:
+    type: "n8n-nodes-base.wait"
+    typeVersion: 1
+    description: "Pause execution"
+    parameters:
+      amount:
+        type: number
+        required: true
+      unit:
+        options: [seconds, minutes, hours, days]
+        required: true
+    useCases:
+      - Rate limit compliance
+      - Scheduled delays
+      - Webhook response time
+
+  set:
+    type: "n8n-nodes-base.set"
+    typeVersion: 2
+    description: "Set/transform data fields"
+    modes:
+      manual:
+        description: "Define field assignments"
+        parameters:
+          assignments:
+            assignments:
+              - name: "newField"
+                value: "={{ $json.oldField }}"
+                type: "string"
+      raw:
+        description: "Raw JSON output"
+        parameters:
+          jsonOutput: "={{ $json }}"
+    bestPractices:
+      - Use for field mapping between platforms
+      - Transform data types as needed
+      - Clean up unnecessary fields
+
+  code:
+    type: "n8n-nodes-base.code"
+    typeVersion: 1
+    description: "Custom JavaScript/Python code"
+    modes:
+      runOnceForAllItems:
+        description: "Process all items at once"
+        input: "items array"
+        output: "return items;"
+      runOnceForEachItem:
+        description: "Process one item at a time"
+        input: "single item"
+        output: "return item;"
+    languages:
+      - JavaScript (default)
+      - Python (requires Python environment)
+    variables:
+      - $input: Input data
+      - $json: Current item data
+      - $items(): Access items from specific node
+      - $node: Current node reference
+
+# =============================================================================
+# ERROR HANDLING
+# =============================================================================
+
+errorHandling:
+  patterns:
+    tryAndCatch:
+      description: "Wrap risky operations with error handling"
+      structure:
+        - Main workflow path
+        - Error Trigger node catches failures
+        - Error handling actions (log, notify, retry)
+
+    retryOnFail:
+      description: "Retry failed operations"
+      implementation:
+        - Use node settings: retryOnFail
+        - Configure maxTries and waitBetweenTries
+
+    fallback:
+      description: "Provide fallback behavior"
+      implementation:
+        - Use IF node to check for errors
+        - Route to alternative processing
+
+  nodes:
+    errorTrigger:
+      type: "n8n-nodes-base.errorTrigger"
+      description: "Catches workflow errors"
+      output:
+        - error.message
+        - error.description
+        - execution.id
+        - workflow.name
+
+    stopAndError:
+      type: "n8n-nodes-base.stopAndError"
+      description: "Explicitly fail workflow"
+      parameters:
+        errorMessage: "={{ $json.reason }}"
+
+    noOp:
+      type: "n8n-nodes-base.noOp"
+      description: "Placeholder/pass-through"
+
+# =============================================================================
+# WORKFLOW NODES
+# =============================================================================
+
+workflow:
+  executeWorkflow:
+    type: "n8n-nodes-base.executeWorkflow"
+    typeVersion: 1
+    description: "Call another workflow as sub-workflow"
+    parameters:
+      source:
+        options:
+          - database: Reference by workflow ID
+          - parameter: Reference by workflow JSON
+      workflowId:
+        type: string
+        description: "ID of workflow to execute"
+      options:
+        waitForSubWorkflow:
+          type: boolean
+          description: "Wait for completion before continuing"
+    output:
+      - Data returned by sub-workflow
+    useCases:
+      - Reusable workflow components
+      - Modular design
+      - Error isolation
+
+# =============================================================================
+# EXPRESSIONS
+# =============================================================================
+
+expressions:
+  basics:
+    accessField: "={{ $json.fieldName }}"
+    accessNested: "={{ $json.parent.child }}"
+    accessArray: "={{ $json.items[0] }}"
+
+  functions:
+    dateNow: "={{ $now }}"
+    dateFormat: "={{ $json.date.format('YYYY-MM-DD') }}"
+    stringConcat: "={{ $json.first + ' ' + $json.last }}"
+    conditional: "={{ $json.value > 100 ? 'high' : 'low' }}"
+    nullCheck: "={{ $json.field || 'default' }}"
+
+  nodeReferences:
+    previousNode: "={{ $json }}"
+    specificNode: "={{ $('Node Name').item.json }}"
+    allItemsFromNode: "={{ $items('Node Name') }}"
+
+  specialVariables:
+    executionId: "={{ $execution.id }}"
+    workflowId: "={{ $workflow.id }}"
+    workflowName: "={{ $workflow.name }}"
+    timezone: "={{ $timezone }}"
+
+# =============================================================================
+# BEST PRACTICES
+# =============================================================================
+
+bestPractices:
+  naming:
+    - Use descriptive node names (not "IF", but "Check Lead Status")
+    - Use kebab-case for node IDs
+    - Include action in name (Create Contact, Update Deal)
+
+  structure:
+    - Keep workflows under 50 nodes
+    - Use sub-workflows for reusable logic
+    - Group related nodes visually
+    - Always include error handling for production
+
+  performance:
+    - Use batch operations for multiple records
+    - Add rate limit delays for external APIs
+    - Paginate large result sets
+    - Minimize unnecessary data transformation
+
+  security:
+    - Never embed credentials in workflow JSON
+    - Use credential references by name
+    - Validate input data
+    - Log sensitive operations
+
+  testing:
+    - Use Manual Trigger for testing
+    - Test with sample data first
+    - Verify error handling paths
+    - Test with edge cases (empty data, large batches)

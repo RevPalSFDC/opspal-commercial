@@ -1,0 +1,26 @@
+{
+  "templateMetadata": {
+    "templateName": "Support Case Volume & Resolution Time",
+    "templateVersion": "1.0",
+    "description": "Monitor support case trends, resolution times, and workload distribution",
+    "audience": "Support Managers, Customer Success Directors",
+    "useCase": "Track support performance, identify bottlenecks, optimize team workload",
+    "prerequisites": ["Case object with Priority and Status fields", "Case age/resolution time tracking"]
+  },
+  "reportMetadata": {
+    "name": "Support Case Trends - {Period}",
+    "reportType": "CaseList",
+    "reportFormat": "MATRIX",
+    "reportFilters": [{"column": "CREATED_DATE", "operator": "equals", "value": "LAST_90_DAYS"}],
+    "groupingsDown": [{"field": "PRIORITY", "sortOrder": "Asc"}],
+    "groupingsAcross": [{"field": "STATUS", "sortOrder": "Asc"}],
+    "aggregates": [
+      {"name": "RowCount", "aggregateType": "Sum"},
+      {"name": "Case.Resolution_Time_Hours__c", "aggregateType": "Average"}
+    ],
+    "chart": {"chartType": "Line", "groupingColumn": "CREATED_DATE", "aggregateColumn": "RowCount", "dateGranularity": "WEEK"}
+  },
+  "calculatedFieldsRequired": [
+    {"fieldName": "Resolution_Time_Hours__c", "fieldType": "Formula (Number)", "formula": "IF(IsClosed, (ClosedDate - CreatedDate) * 24, NULL)"}
+  ]
+}

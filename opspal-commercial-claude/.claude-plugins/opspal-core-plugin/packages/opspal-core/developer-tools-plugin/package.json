@@ -1,0 +1,42 @@
+{
+  "name": "developer-tools-plugin",
+  "version": "2.0.0",
+  "description": "Complete plugin lifecycle management - scaffolding, validation, quality analysis, documentation generation, testing, and publishing tools for OpsPal Plugin Marketplace",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace"
+  },
+  "keywords": [
+    "developer",
+    "tools",
+    "testing",
+    "maintenance",
+    "scaffolding",
+    "validation",
+    "quality",
+    "lifecycle"
+  ],
+  "dependencies": {
+    "glob": "^10.3.10"
+  },
+  "scripts": {
+    "validate": "node scripts/validate-plugin.js",
+    "test": "node scripts/test-plugin-installation.js",
+    "build-catalog": "node scripts/build-marketplace-catalog.js",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@supabase/supabase-js": "^2.38.0"
+  }
+}

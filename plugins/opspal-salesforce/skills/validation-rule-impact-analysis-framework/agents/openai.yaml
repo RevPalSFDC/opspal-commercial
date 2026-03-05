@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validation Rule Impact Analysis Framework"
+  short_description: "Help with Validation Rule Impact Analysis Framework tasks"
+  default_prompt: "Use $validation-rule-impact-analysis-framework to execute this workflow safely and produce the expected artifacts."

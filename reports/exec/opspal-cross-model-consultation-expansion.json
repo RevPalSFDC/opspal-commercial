@@ -1,0 +1,185 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-008",
+  "title": "Cross-Model Consultation Expansion",
+  "focus_plugin": "opspal-ai-consult",
+  "consult_plugin_detected": true,
+  "consult_plugin_snapshot": {
+    "owner": "revpal-ai",
+    "status": "active",
+    "commands": 3,
+    "agents": 2,
+    "recommend_stage_assets": 0
+  },
+  "model_provider_baseline": [
+    {
+      "provider": "anthropic",
+      "role": "primary_consultation_provider",
+      "mode": "llm_assisted"
+    },
+    {
+      "provider": "google",
+      "role": "secondary_consultation_provider",
+      "mode": "llm_assisted"
+    }
+  ],
+  "consumer_targets": [
+    {
+      "plugin": "opspal-core",
+      "owner": "revpal-platform",
+      "status": "active",
+      "agents": 65,
+      "commands": 90,
+      "llm_assisted_assets": 33,
+      "recommend_stage_assets": 29,
+      "diagnose_stage_assets": 41,
+      "integration_score": 44.4,
+      "integration_priority": "high",
+      "launch_wave": "wave_1",
+      "route_contracts": [
+        "diagnostic-second-opinion",
+        "recommendation-reconciliation",
+        "approval-gated-consultation"
+      ]
+    },
+    {
+      "plugin": "opspal-salesforce",
+      "owner": "revpal-salesforce",
+      "status": "active",
+      "agents": 94,
+      "commands": 60,
+      "llm_assisted_assets": 26,
+      "recommend_stage_assets": 22,
+      "diagnose_stage_assets": 61,
+      "integration_score": 38.2,
+      "integration_priority": "high",
+      "launch_wave": "wave_1",
+      "route_contracts": [
+        "diagnostic-second-opinion",
+        "recommendation-reconciliation",
+        "approval-gated-consultation"
+      ]
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "owner": "revpal-hubspot",
+      "status": "active",
+      "agents": 59,
+      "commands": 34,
+      "llm_assisted_assets": 14,
+      "recommend_stage_assets": 7,
+      "diagnose_stage_assets": 24,
+      "integration_score": 17.2,
+      "integration_priority": "high",
+      "launch_wave": "wave_1",
+      "route_contracts": [
+        "diagnostic-second-opinion",
+        "recommendation-reconciliation",
+        "approval-gated-consultation"
+      ]
+    },
+    {
+      "plugin": "opspal-marketo",
+      "owner": "revpal-marketing-ops",
+      "status": "active",
+      "agents": 30,
+      "commands": 30,
+      "llm_assisted_assets": 10,
+      "recommend_stage_assets": 2,
+      "diagnose_stage_assets": 23,
+      "integration_score": 13.4,
+      "integration_priority": "medium",
+      "launch_wave": "wave_2",
+      "route_contracts": [
+        "diagnostic-second-opinion",
+        "recommendation-reconciliation",
+        "approval-gated-consultation"
+      ]
+    },
+    {
+      "plugin": "opspal-gtm-planning",
+      "owner": "revpal-gtm",
+      "status": "active",
+      "agents": 12,
+      "commands": 15,
+      "llm_assisted_assets": 0,
+      "recommend_stage_assets": 13,
+      "diagnose_stage_assets": 17,
+      "integration_score": 11.6,
+      "integration_priority": "medium",
+      "launch_wave": "wave_2",
+      "route_contracts": [
+        "diagnostic-second-opinion",
+        "recommendation-reconciliation",
+        "approval-gated-consultation"
+      ]
+    }
+  ],
+  "rollout_plan": [
+    {
+      "phase": "phase_1",
+      "scope": "wave_1 consumer plugins",
+      "objective": "Attach cross-model consultation to diagnosis/recommendation outputs in highest-value routes.",
+      "success_gate": ">=80% of wave_1 recommendations include consult summary with confidence."
+    },
+    {
+      "phase": "phase_2",
+      "scope": "wave_2 consumer plugins",
+      "objective": "Extend consultation contracts to medium-priority workflows with deterministic fallback.",
+      "success_gate": ">=60% of wave_2 recommendation routes are consultation-enabled."
+    },
+    {
+      "phase": "phase_3",
+      "scope": "suite-wide governance",
+      "objective": "Standardize consultation telemetry fields for executive rollups.",
+      "success_gate": "Consultation override + acceptance metrics available in dashboard portfolio feed."
+    }
+  ],
+  "guardrails": [
+    "Consultation output must include confidence and fallback rationale before promotion.",
+    "Production-impacting recommendations remain approval-gated by risk class.",
+    "Consultation telemetry should capture acceptance, override, and rework indicators."
+  ],
+  "success_kpis": [
+    {
+      "metric_id": "consultation_coverage_wave_1",
+      "baseline_value": 0,
+      "target_value": 0.8,
+      "unit": "ratio"
+    },
+    {
+      "metric_id": "consultation_coverage_wave_2",
+      "baseline_value": 0,
+      "target_value": 0.6,
+      "unit": "ratio"
+    },
+    {
+      "metric_id": "consultation_acceptance_rate",
+      "baseline_value": 0,
+      "target_value": 0.7,
+      "unit": "ratio"
+    }
+  ],
+  "execution_snapshot": {
+    "adoption_baseline": {
+      "model_providers_total": 2,
+      "consumer_targets_total": 5,
+      "high_priority_targets": 3
+    },
+    "rollout_readiness": {
+      "rollout_phases_total": 3,
+      "guardrails_total": 3,
+      "success_kpis_total": 3
+    },
+    "runtime_handoff": {
+      "execution_checklist_detected": true,
+      "execution_checklist_path": "reports/exec/runtime/wi-nba-opp-008-execution-checklist.md"
+    },
+    "completion_gate": {
+      "package_contract_ready": true,
+      "runtime_handoff_ready": true,
+      "ready_for_phase2_execution": true
+    }
+  }
+}

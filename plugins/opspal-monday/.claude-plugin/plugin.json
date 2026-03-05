@@ -1,0 +1,34 @@
+{
+  "name": "opspal-monday",
+  "version": "1.4.5",
+  "experimental": true,
+  "description": "[EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export, and cross-board operations.",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "monday",
+    "monday.com",
+    "project-management",
+    "file-extraction",
+    "attachments",
+    "graphql",
+    "downloads",
+    "board-management",
+    "item-management",
+    "batch-operations",
+    "import-export",
+    "bulk-operations",
+    "file-catalog",
+    "catalog-generation",
+    "board-analyzer",
+    "asset-lookup",
+    "crm-import",
+    "resource-id",
+    "data-patterns",
+    "excel-export"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+  "license": "Proprietary"
+}

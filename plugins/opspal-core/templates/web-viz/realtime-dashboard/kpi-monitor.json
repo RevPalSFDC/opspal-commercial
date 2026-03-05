@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "templateId": "realtime-kpi-monitor",
+  "name": "Real-time KPI Monitor",
+  "description": "Live KPI dashboard showing revenue, funnel, and operational metrics with WebSocket updates",
+  "version": "1.0.0",
+  "category": "realtime",
+  "refreshMode": "websocket",
+  "topics": ["kpi.revenue", "kpi.funnel", "health.accounts", "pipeline.summary"],
+
+  "layout": {
+    "type": "dashboard",
+    "theme": "revpal-dashboard",
+    "columns": 12,
+    "rows": "auto",
+    "gap": "16px"
+  },
+
+  "header": {
+    "title": "KPI Monitor",
+    "subtitle": "Real-time business metrics and health indicators",
+    "showConnectionStatus": true,
+    "showLastUpdate": true,
+    "periodSelector": {
+      "options": ["Today", "This Week", "This Month", "This Quarter"],
+      "default": "This Month"
+    }
+  },
+
+  "components": [
+    {
+      "id": "section-revenue",
+      "type": "section",
+      "title": "Revenue Metrics",
+      "layout": { "col": 1, "row": 1, "width": 12, "height": "auto" }
+    },
+    {
+      "id": "arr",
+      "type": "kpi",
+      "title": "ARR",
+      "topic": "kpi.revenue",
+      "dataPath": "arr",
+      "format": "currency",
+      "trend": {
+        "enabled": true,
+        "compareField": "arrPreviousPeriod",
+        "format": "percentage",
+        "positiveColor": "var(--brand-green)",
+        "negativeColor": "var(--status-red)"
+      },
+      "sparkline": {
+        "enabled": true,
+        "dataPath": "arrHistory",
+        "color": "var(--brand-grape)"
+      },
+      "layout": { "col": 1, "row": 2, "width": 3, "height": 1 }
+    },
+    {
+      "id": "mrr",
+      "type": "kpi",
+      "title": "MRR",
+      "topic": "kpi.revenue",
+      "dataPath": "mrr",
+      "format": "currency",
+      "trend": {
+        "enabled": true,
+        "compareField": "mrrPreviousPeriod",
+        "format": "percentage"
+      },
+      "layout": { "col": 4, "row": 2, "width": 3, "height": 1 }
+    },
+    {
+      "id": "nrr",
+      "type": "kpi",
+      "title": "Net Revenue Retention",
+      "topic": "kpi.revenue",
+      "dataPath": "nrr",
+      "format": "percentage",
+      "thresholds": {
+        "excellent": { "min": 120, "color": "var(--brand-green)" },
+        "good": { "min": 100, "color": "var(--brand-apricot)" },
+        "warning": { "min": 0, "color": "var(--status-red)" }
+      },
+      "target": {
+        "value": 110,
+        "label": "Target: 110%"
+      },
+      "layout": { "col": 7, "row": 2, "width": 3, "height": 1 }
+    },
+    {
+      "id": "grr",
+      "type": "kpi",
+      "title": "Gross Revenue Retention",
+      "topic": "kpi.revenue",
+      "dataPath": "grr",
+      "format": "percentage",
+      "thresholds": {
+        "excellent": { "min": 95, "color": "var(--brand-green)" },
+        "good": { "min": 90, "color": "var(--brand-apricot)" },
+        "warning": { "min": 0, "color": "var(--status-red)" }
+      },
+      "layout": { "col": 10, "row": 2, "width": 3, "height": 1 }
+    },
+    {
+      "id": "section-funnel",
+      "type": "section",
+      "title": "Funnel Metrics",
+      "layout": { "col": 1, "row": 3, "width": 12, "height": "auto" }
+    },
+    {
+      "id": "leads",
+      "type": "kpi",
+      "title": "New Leads",
+      "topic": "kpi.funnel",
+      "dataPath": "newLeads",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "newLeadsPrevious",
+        "format": "delta"
+      },
+      "layout": { "col": 1, "row": 4, "width": 2, "height": 1 }
+    },
+    {
+      "id": "mqls",
+      "type": "kpi",
+      "title": "MQLs",
+      "topic": "kpi.funnel",
+      "dataPath": "mqls",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "mqlsPrevious",
+        "format": "delta"
+      },
+      "layout": { "col": 3, "row": 4, "width": 2, "height": 1 }
+    },
+    {
+      "id": "sqls",
+      "type": "kpi",
+      "title": "SQLs",
+      "topic": "kpi.funnel",
+      "dataPath": "sqls",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "sqlsPrevious",
+        "format": "delta"
+      },
+      "layout": { "col": 5, "row": 4, "width": 2, "height": 1 }
+    },
+    {
+      "id": "opportunities",
+      "type": "kpi",
+      "title": "New Opps",
+      "topic": "kpi.funnel",
+      "dataPath": "newOpportunities",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "newOpportunitiesPrevious",
+        "format": "delta"
+      },
+      "layout": { "col": 7, "row": 4, "width": 2, "height": 1 }
+    },
+    {
+      "id": "closed-won",
+      "type": "kpi",
+      "title": "Closed Won",
+      "topic": "kpi.funnel",
+      "dataPath": "closedWon",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "closedWonPrevious",
+        "format": "delta"
+      },
+      "layout": { "col": 9, "row": 4, "width": 2, "height": 1 }
+    },
+    {
+      "id": "win-rate",
+      "type": "kpi",
+      "title": "Win Rate",
+      "topic": "kpi.funnel",
+      "dataPath": "winRate",
+      "format": "percentage",
+      "thresholds": {
+        "excellent": { "min": 30, "color": "var(--brand-green)" },
+        "good": { "min": 20, "color": "var(--brand-apricot)" },
+        "warning": { "min": 0, "color": "var(--status-red)" }
+      },
+      "layout": { "col": 11, "row": 4, "width": 2, "height": 1 }
+    },
+    {
+      "id": "funnel-chart",
+      "type": "chart",
+      "chartType": "funnel",
+      "title": "Conversion Funnel",
+      "topic": "kpi.funnel",
+      "dataPath": "funnelData",
+      "options": {
+        "stages": ["Leads", "MQLs", "SQLs", "Opportunities", "Closed Won"],
+        "showConversionRates": true,
+        "colorScheme": "funnel-gradient",
+        "animation": { "duration": 500 }
+      },
+      "layout": { "col": 1, "row": 5, "width": 6, "height": 2 }
+    },
+    {
+      "id": "conversion-trends",
+      "type": "chart",
+      "chartType": "line",
+      "title": "Conversion Trends",
+      "topic": "kpi.funnel",
+      "dataPath": "conversionHistory",
+      "options": {
+        "xAxis": { "field": "date", "format": "MMM DD" },
+        "yAxis": { "label": "Conversion Rate", "format": "percentage" },
+        "series": [
+          { "field": "leadToMql", "label": "Lead → MQL", "color": "var(--brand-grape)" },
+          { "field": "mqlToSql", "label": "MQL → SQL", "color": "var(--brand-indigo)" },
+          { "field": "sqlToOpp", "label": "SQL → Opp", "color": "var(--brand-apricot)" }
+        ],
+        "legend": { "position": "bottom" }
+      },
+      "layout": { "col": 7, "row": 5, "width": 6, "height": 2 }
+    },
+    {
+      "id": "section-health",
+      "type": "section",
+      "title": "Customer Health",
+      "layout": { "col": 1, "row": 7, "width": 12, "height": "auto" }
+    },
+    {
+      "id": "health-distribution",
+      "type": "chart",
+      "chartType": "doughnut",
+      "title": "Health Distribution",
+      "topic": "health.accounts",
+      "dataPath": "distribution",
+      "options": {
+        "segments": [
+          { "label": "Green", "field": "green", "color": "var(--brand-green)" },
+          { "label": "Yellow", "field": "yellow", "color": "var(--status-yellow)" },
+          { "label": "Red", "field": "red", "color": "var(--status-red)" }
+        ],
+        "centerLabel": {
+          "enabled": true,
+          "value": "{{totalAccounts}}",
+          "label": "Accounts"
+        }
+      },
+      "layout": { "col": 1, "row": 8, "width": 4, "height": 2 }
+    },
+    {
+      "id": "avg-health-score",
+      "type": "gauge",
+      "title": "Average Health Score",
+      "topic": "health.accounts",
+      "dataPath": "avgScore",
+      "options": {
+        "min": 0,
+        "max": 100,
+        "zones": [
+          { "min": 0, "max": 40, "color": "var(--status-red)" },
+          { "min": 40, "max": 70, "color": "var(--status-yellow)" },
+          { "min": 70, "max": 100, "color": "var(--brand-green)" }
+        ]
+      },
+      "layout": { "col": 5, "row": 8, "width": 4, "height": 2 }
+    },
+    {
+      "id": "health-trend",
+      "type": "chart",
+      "chartType": "area",
+      "title": "Health Trend",
+      "topic": "health.accounts",
+      "dataPath": "trend",
+      "options": {
+        "xAxis": { "field": "date", "format": "MMM DD" },
+        "yAxis": { "label": "Avg Score", "min": 0, "max": 100 },
+        "fill": true,
+        "color": "var(--brand-grape)",
+        "gradient": true
+      },
+      "layout": { "col": 9, "row": 8, "width": 4, "height": 2 }
+    },
+    {
+      "id": "at-risk-arr",
+      "type": "kpi",
+      "title": "ARR at Risk",
+      "topic": "health.accounts",
+      "dataPath": "arrAtRisk",
+      "format": "currency",
+      "variant": "danger",
+      "description": "ARR in Yellow/Red accounts",
+      "layout": { "col": 1, "row": 10, "width": 3, "height": 1 }
+    },
+    {
+      "id": "churn-risk-count",
+      "type": "kpi",
+      "title": "High Churn Risk",
+      "topic": "health.accounts",
+      "dataPath": "highChurnRiskCount",
+      "format": "number",
+      "variant": "danger",
+      "link": "/reports/churn-risk",
+      "layout": { "col": 4, "row": 10, "width": 3, "height": 1 }
+    },
+    {
+      "id": "expansion-ready",
+      "type": "kpi",
+      "title": "Expansion Ready",
+      "topic": "health.accounts",
+      "dataPath": "expansionReadyCount",
+      "format": "number",
+      "variant": "success",
+      "link": "/reports/expansion",
+      "layout": { "col": 7, "row": 10, "width": 3, "height": 1 }
+    },
+    {
+      "id": "renewals-upcoming",
+      "type": "kpi",
+      "title": "Renewals (90 days)",
+      "topic": "health.accounts",
+      "dataPath": "upcomingRenewals",
+      "format": "number",
+      "link": "/reports/renewals",
+      "layout": { "col": 10, "row": 10, "width": 3, "height": 1 }
+    }
+  ],
+
+  "websocket": {
+    "topics": ["kpi.revenue", "kpi.funnel", "health.accounts", "pipeline.summary"],
+    "reconnectStrategy": {
+      "maxAttempts": 10,
+      "initialDelay": 1000,
+      "maxDelay": 30000
+    },
+    "deltaUpdates": true
+  },
+
+  "alerts": {
+    "enabled": true,
+    "topic": "alerts.critical",
+    "position": "top-right",
+    "maxVisible": 3,
+    "autoDismiss": 10000
+  }
+}

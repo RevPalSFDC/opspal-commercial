@@ -1,0 +1,164 @@
+{
+  "template_id": "revenue-by-segment",
+  "report_name": "Revenue by Segment / Industry / Geo",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "Finance",
+  "primary_decisions_supported": [
+    "Market segmentation strategy",
+    "Geo-specific investment or divestment",
+    "Industry-focused sales plays"
+  ],
+  "executive_questions_answered": [
+    "Which customer segments or industries contribute most to our revenue?",
+    "Are certain regions growing faster than others in revenue?",
+    "Do we have over-reliance on any segment/geo and should we diversify?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "ARR by Segment",
+      "definition": "Annual recurring revenue broken down by a chosen segment (e.g., customer segment, industry vertical, or geography).",
+      "formula": "Segment ARR = sum of ARR for all accounts in that segment",
+      "grain": "account (aggregated to segment)",
+      "required_dimensions": ["segment or category"],
+      "known_variants": [
+        {
+          "variant_name": "Revenue Growth by Segment",
+          "definition_delta": "Year-over-year growth rate of revenue within each segment",
+          "when_to_use": "Prioritizing segments by growth momentum, not just size"
+        }
+      ],
+      "pitfalls": [
+        "Segments must be well-defined (e.g., consistent industry classification) to avoid misattribution",
+        "Large deals can skew a segment's contribution – consider median metrics too",
+        "If accounts span multiple segments (e.g., multi-region usage), decide on attribution logic (usually primary HQ or sales territory)"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Data Warehouse"],
+    "required_entities": ["Account", "Opportunity"],
+    "required_fields": [
+      {
+        "field_name": "Segment/Industry/Geo classification",
+        "description": "For account categorization",
+        "salesforce_field": "Account.Industry, Account.Segment__c, Account.BillingCountry",
+        "hubspot_field": "company.industry, company.type, company.country"
+      },
+      {
+        "field_name": "ARR or bookings",
+        "description": "Revenue associated with account",
+        "salesforce_field": "Account.ARR__c or sum(Opportunity.Amount)",
+        "hubspot_field": "company.annual_recurring_revenue"
+      }
+    ],
+    "required_timestamps": ["As-of date for ARR (typically quarter-end)"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Account",
+        "right_entity": "Opportunity",
+        "join_key": "AccountId",
+        "join_type": "left",
+        "notes": "Associate bookings and revenue to the account's segment for time-series if needed"
+      }
+    ],
+    "transformation_rules": [
+      "Use consistent segment definitions (e.g., if segment = SMB/Mid/Enterprise, define by standardized criteria like employee count or revenue)",
+      "If one account belongs to multiple categories (rare), pick one primary or split logically",
+      "Convert revenue to base currency if comparing across regions"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Category Completeness",
+        "logic": "All accounts should have a segment/industry/geo value assigned (no 'unknown')",
+        "severity": "high"
+      },
+      {
+        "check_name": "Sum Reconciliation",
+        "logic": "Sum of segment revenues equals total revenue (no double-counting between segments)",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Segment_Revenue_Share = Segment ARR / Total ARR * 100"
+    ],
+    "aggregation_rules": [
+      "Aggregate account ARR to segment level totals",
+      "Compute percentage share and growth for each segment"
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": "Forecast each segment's revenue by applying growth assumptions specific to segment historical trends or market TAM growth"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "GTM Leaders",
+    "recommended_refresh_cadence": "Annual",
+    "layout": [
+      {
+        "panel_title": "Revenue by Segment",
+        "purpose": "Show current revenue contribution of each segment/industry/region",
+        "visual_type": "pie",
+        "primary_metrics": ["ARR by Segment"],
+        "filters": ["year or quarter"],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["Highlight top 1-2 segments"]
+      },
+      {
+        "panel_title": "Segment Revenue Trends",
+        "purpose": "Illustrate growth trend for key segments over time",
+        "visual_type": "line",
+        "primary_metrics": ["Segment ARR"],
+        "filters": ["select segment(s)"],
+        "drilldowns": [],
+        "annotations_or_thresholds": []
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Identify which segment has the largest revenue and which has the fastest growth",
+      "Note if any segment's revenue share is significantly changing (rising or falling)"
+    ],
+    "diagnostic_questions": [
+      "Are we over-exposed to one industry or region (e.g., >50% revenue in one segment)?",
+      "Which segments should we invest more in based on high growth or untapped TAM?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Reallocate sales resources to high-growth segments",
+        "owner": "SalesOps",
+        "trigger_condition": "One segment shows significantly higher YoY growth than others consistently"
+      },
+      {
+        "action": "Develop diversification strategy",
+        "owner": "Exec",
+        "trigger_condition": "One segment >40% of revenue and slowing, raising concentration risk"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Simple table or bar chart of current ARR by segment for a snapshot view",
+    "advanced_version": "Dynamic dashboard allowing selection of different segmentations (industry, geo, size) and showing trends and shares with benchmarks",
+    "common_client_customizations": [
+      "Filtering or grouping segments (e.g., combine small industries into 'Other')",
+      "Using customer count or logos by segment in addition to revenue for context"
+    ],
+    "privacy_and_access_notes": [
+      "Usually fine to share broadly internally; if segments correspond to individual customers in small cases, be mindful externally",
+      "Ensure definitions are clearly documented to avoid confusion (e.g., what qualifies as Enterprise vs Mid-Market)"
+    ],
+    "success_criteria": [
+      "Leadership aligns resource plans (marketing spend, headcount) with segments based on this analysis",
+      "No significant revenue surprises by segment – this report uncovers growth or decline early"
+    ]
+  },
+  "benchmarks": {
+    "concentration_risk_thresholds": {
+      "healthy": "No segment >30% of total ARR",
+      "moderate_risk": "One segment 30-50% of ARR",
+      "high_risk": "One segment >50% of ARR"
+    }
+  },
+  "references": []
+}

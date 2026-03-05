@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Notification and Stop Automation Framework"
+  short_description: "Help with Salesforce Notification and Stop Automation Framework"
+  default_prompt: "Use $salesforce-notification-and-stop-automation-framework to execute this workflow safely and produce the expected artifacts."

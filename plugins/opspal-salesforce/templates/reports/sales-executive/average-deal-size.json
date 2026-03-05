@@ -1,0 +1,136 @@
+{
+  "templateMetadata": {
+    "templateName": "Average Deal Size",
+    "templateVersion": "1.1",
+    "description": "Tracks average closed won deal size to monitor deal quality and pricing trends",
+    "audience": "CRO, VP Sales, Finance",
+    "useCase": "Deal quality monitoring, pricing strategy evaluation, forecast accuracy",
+    "customizationPoints": [
+      "Date range for closed deals",
+      "Segment by product/region/rep",
+      "Include/exclude specific deal types"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount field",
+      "Closed Won opportunities available"
+    ]
+  },
+  "metricDefinitionId": "bookings.acv",
+  "reportMetadata": {
+    "name": "Average Deal Size",
+    "description": "Average value of closed won opportunities",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Average",
+        "description": "Average deal size"
+      },
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total bookings"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Number of deals"
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "AMOUNT:AVG",
+      "format": "currency"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "pipeline-health",
+      "revenue-performance"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

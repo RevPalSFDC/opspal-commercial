@@ -1,0 +1,88 @@
+{
+  "object": "Case",
+  "template": "service-cloud-default",
+  "label": "Service Cloud - Standard Case",
+  "description": "Default Case layout for Service Cloud with SLA management",
+  "targetPersonas": ["support-agent", "support-manager"],
+  "sections": [
+    {
+      "label": "Case Information",
+      "order": 1,
+      "fields": [
+        "CaseNumber",
+        "Subject",
+        "Status",
+        "Priority",
+        "Type",
+        "Reason",
+        "Origin",
+        "OwnerId"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Customer Information",
+      "order": 2,
+      "fields": [
+        "AccountId",
+        "ContactId",
+        "SuppliedEmail",
+        "SuppliedName",
+        "SuppliedPhone"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Description & Resolution",
+      "order": 3,
+      "fields": [
+        "Description",
+        "Comments",
+        "InternalComments"
+      ],
+      "columns": 1
+    },
+    {
+      "label": "SLA Information",
+      "order": 4,
+      "fields": [
+        "SlaStartDate",
+        "SlaExitDate",
+        "IsStopped",
+        "IsEscalated"
+      ],
+      "columns": 2,
+      "conditional": "Show only when SLA is active"
+    }
+  ],
+  "compactLayoutFields": ["CaseNumber", "Status", "Priority", "ContactId"],
+  "components": {
+    "header": [
+      {"type": "force:highlightsPanelDesktop", "order": 1}
+    ],
+    "main": [
+      {"type": "force:recordFieldSection", "sections": ["Case Information", "Customer Information", "Description & Resolution"], "order": 1},
+      {"type": "knowledgeapp:articleRecommendation", "order": 2},
+      {"type": "force:activityComposer", "order": 3}
+    ],
+    "sidebar": [
+      {"type": "force:relatedListSingleContainer", "relatedObject": "EmailMessage", "order": 1},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "CaseComment", "order": 2},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Attachment", "order": 3}
+    ]
+  },
+  "relatedLists": [
+    "Emails",
+    "Case Comments",
+    "Related Cases",
+    "Attachments",
+    "Articles"
+  ],
+  "conditionalVisibility": [
+    {
+      "section": "SLA Information",
+      "condition": "SlaStartDate != null",
+      "description": "Show SLA fields only when case is under SLA"
+    }
+  ]
+}

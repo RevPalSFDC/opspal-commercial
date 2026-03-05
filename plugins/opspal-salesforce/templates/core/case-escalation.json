@@ -1,0 +1,77 @@
+{
+  "name": "case-escalation",
+  "description": "Automatically escalate cases based on priority and age",
+  "category": "core",
+  "type": "Schedule-Triggered Flow",
+  "parameters": {
+    "priorityLevel": {
+      "type": "string",
+      "description": "Case priority that triggers escalation (e.g., High, Critical)",
+      "required": true,
+      "example": "High"
+    },
+    "ageThresholdHours": {
+      "type": "number",
+      "description": "Hours before escalation is triggered",
+      "required": true,
+      "example": 24
+    },
+    "escalationQueueId": {
+      "type": "string",
+      "description": "Queue ID to escalate cases to",
+      "required": true,
+      "example": "00Gxx000000XXXX"
+    },
+    "notifyManager": {
+      "type": "boolean",
+      "description": "Whether to notify the manager on escalation",
+      "required": false,
+      "default": true
+    }
+  },
+  "structure": {
+    "metadata": {
+      "apiVersion": "62.0",
+      "processType": "AutoLaunchedFlow",
+      "status": "Draft",
+      "scheduleFrequency": "Hourly"
+    },
+    "elements": [
+      {
+        "instruction": "Add a Get Records called Find_Cases to get Case records where Priority equals {{priorityLevel}} and Status not equals Closed and CreatedDate is less than NOW() - {{ageThresholdHours}} hours"
+      },
+      {
+        "instruction": "Add a decision called Check_Cases with rule Has_Cases if Find_Cases has records then Escalate_Cases, otherwise End"
+      },
+      {
+        "instruction": "Add a loop called Loop_Cases to loop through Find_Cases"
+      },
+      {
+        "instruction": "Add a record update called Escalate_Case to update current item from loop, setting OwnerId to {{escalationQueueId}} and IsEscalated to true"
+      },
+      {
+        "instruction": "Add an action called Send_Email to send email notification about escalated case"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "name": "High Priority Case Escalation",
+      "params": {
+        "priorityLevel": "High",
+        "ageThresholdHours": 24,
+        "escalationQueueId": "00Gxx000000XXXX",
+        "notifyManager": true
+      }
+    },
+    {
+      "name": "Critical Case Immediate Escalation",
+      "params": {
+        "priorityLevel": "Critical",
+        "ageThresholdHours": 4,
+        "escalationQueueId": "00Gxx000000YYYY",
+        "notifyManager": true
+      }
+    }
+  ]
+}

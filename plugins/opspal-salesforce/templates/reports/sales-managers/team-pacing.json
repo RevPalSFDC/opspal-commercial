@@ -1,0 +1,158 @@
+{
+  "templateMetadata": {
+    "templateName": "Team Pacing",
+    "templateVersion": "1.1",
+    "description": "Team's current progress vs where they should be to hit quota",
+    "audience": "Sales Managers",
+    "useCase": "Pace tracking, early warning, intervention planning",
+    "customizationPoints": [
+      "Team scope",
+      "Quota source",
+      "Time period"
+    ],
+    "prerequisites": [
+      "Opportunity object",
+      "Team quota data"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "Team Pacing",
+    "description": "Current attainment vs expected pace",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "team",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.ManagerId.Team",
+        "customizable": true
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Closed won to date"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Expected_Pace",
+        "description": "Quota * (Days Elapsed / Total Days)",
+        "formula": "Team_Quota * (DaysElapsed / TotalQuarterDays)",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      },
+      {
+        "name": "Pace_Variance",
+        "description": "Actual - Expected",
+        "formula": "SUM(AMOUNT) - Expected_Pace",
+        "dataType": "currency",
+        "decimalPlaces": 0
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "Pace_Variance",
+      "conditionalFormatting": {
+        "positive": "#27ae60",
+        "negative": "#e74c3c"
+      }
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "quota-attainment"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

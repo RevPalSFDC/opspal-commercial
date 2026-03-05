@@ -1,0 +1,347 @@
+# HubSpot Data Operations Playbook
+# Standard decomposition pattern for bulk data operations
+#
+# Triggers: import, export, bulk, records, properties, contacts
+# Complexity: Medium (base 0.4, escalates with large volumes)
+
+name: hubspot-data-operations
+version: "1.0.0"
+description: Standard decomposition for HubSpot bulk data operations
+domain: hubspot-data
+base_complexity: 0.4
+
+# When to use this playbook
+triggers:
+  keywords:
+    - import
+    - export
+    - bulk
+    - records
+    - contacts
+    - companies
+    - deals
+    - properties
+    - backfill
+    - data load
+  patterns:
+    - "import.*data"
+    - "export.*contacts"
+    - "bulk.*update"
+    - "backfill.*property"
+    - "load.*records"
+
+# Default task graph for data operations
+default_dag:
+  - id: T-01
+    title: Data Assessment
+    domain: hubspot-data
+    goal: Analyze source data and target schema
+    inputs:
+      - source_file_path
+      - target_object_type
+      - portal_id
+    outputs:
+      - data_profile.json
+      - schema_mapping.json
+      - quality_report.md
+    acceptance_criteria:
+      - Source data profiled
+      - Schema mapping defined
+      - Data quality issues identified
+      - Volume estimates calculated
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-02
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: hubspot-data-analyzer
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-02
+    title: Target Schema Validation
+    domain: hubspot-data
+    goal: Verify target properties exist and are correctly configured
+    inputs:
+      - target_object_type
+      - portal_id
+    outputs:
+      - property_inventory.json
+      - missing_properties.json
+      - property_recommendations.md
+    acceptance_criteria:
+      - All target properties exist
+      - Property types appropriate
+      - Required properties identified
+      - No conflicting mappings
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-01
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: hubspot-schema-manager
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 15
+
+  - id: T-03
+    title: Data Transformation
+    domain: data-transform
+    goal: Transform source data to match target schema
+    inputs:
+      - source_file_path
+      - schema_mapping.json
+      - quality_report.md
+    outputs:
+      - transformed_data.csv
+      - transformation_log.json
+      - error_records.csv
+    acceptance_criteria:
+      - All records transformed
+      - Data types correct
+      - Validation rules applied
+      - Error records documented
+    dependencies:
+      - T-01
+      - T-02
+    concurrency_group: data
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: data-transform-engineer
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 25
+
+  - id: T-04
+    title: Sample Load Test
+    domain: hubspot-data
+    goal: Test with small sample before full load
+    inputs:
+      - transformed_data.csv
+      - portal_id
+      - target_object_type
+    outputs:
+      - sample_result.json
+      - api_response_log.json
+      - sample_records.json
+    acceptance_criteria:
+      - Sample records loaded successfully
+      - Data appears correctly in HubSpot
+      - No API errors
+      - Performance acceptable
+    dependencies:
+      - T-03
+    concurrency_group: hubspot-data
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    verification_commands:
+      - "node scripts/lib/hubspot-data-loader.js --file {sampleFile} --mode test --limit 10"
+    assigned_agent: hubspot-data-loader
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-05
+    title: Full Data Load
+    domain: hubspot-data
+    goal: Execute full data import/update
+    inputs:
+      - transformed_data.csv
+      - portal_id
+      - target_object_type
+      - sample_result.json
+    outputs:
+      - load_result.json
+      - success_records.csv
+      - failed_records.csv
+      - load_metrics.json
+    acceptance_criteria:
+      - All records processed
+      - Success rate >= 95%
+      - Failed records documented
+      - Rate limits respected
+    dependencies:
+      - T-04
+    concurrency_group: hubspot-data
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: allowed_with_approval
+    stop_points:
+      - Before full load execution
+    assigned_agent: hubspot-data-loader
+    estimated_complexity: 0.5
+    estimated_duration_minutes: 45
+
+  - id: T-06
+    title: Post-Load Verification
+    domain: hubspot-data
+    goal: Verify data integrity after load
+    inputs:
+      - load_result.json
+      - portal_id
+      - target_object_type
+    outputs:
+      - verification_report.md
+      - record_counts.json
+      - data_quality_post.json
+    acceptance_criteria:
+      - Record counts match expected
+      - Data integrity verified
+      - No orphaned associations
+      - Search index updated
+    dependencies:
+      - T-05
+    concurrency_group: hubspot-data
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    verification_commands:
+      - "node scripts/lib/hubspot-data-verifier.js --object {objectType} --since {loadStartTime}"
+    assigned_agent: hubspot-data-verifier
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+# Rules for parallelization
+parallelization_rules:
+  - description: "Assessment and schema validation can run in parallel"
+    tasks: [T-01, T-02]
+    reason: "Independent analysis of source and target"
+
+  - description: "Transformation needs both assessment outputs"
+    tasks: [T-03]
+    requires: [T-01, T-02]
+    reason: "Need complete mapping before transformation"
+
+  - description: "Load operations are strictly sequential"
+    tasks: [T-04, T-05, T-06]
+    constraint: "strict_sequential"
+    reason: "Must verify each step before proceeding"
+
+# Rules for sequential execution
+sequential_rules:
+  - "Never run full load without sample test"
+  - "Transform data before loading"
+  - "Verify data after every load operation"
+
+# Verification gates
+verification_gates:
+  - name: data_quality
+    type: custom
+    checks:
+      - no_null_required_fields
+      - valid_email_format
+      - valid_phone_format
+      - unique_identifier_check
+    required: true
+
+  - name: schema_compatibility
+    type: custom
+    checks:
+      - all_fields_mappable
+      - type_compatibility
+      - no_truncation_risk
+    required: true
+
+  - name: sample_load_success
+    type: custom
+    checks:
+      - success_rate_100
+      - no_api_errors
+      - data_renders_correctly
+    required: true
+
+  - name: post_load_integrity
+    type: custom
+    checks:
+      - record_count_matches
+      - association_integrity
+      - no_data_corruption
+    required: true
+
+# Escalation conditions
+escalation_triggers:
+  - condition: "volume > 10000 records"
+    add_tasks:
+      - batch_planning
+      - rate_limit_monitoring
+    escalate_complexity: 0.2
+    reason: "Large volumes require batch processing"
+
+  - condition: "update existing records"
+    add_tasks:
+      - backup_existing_data
+      - change_tracking_setup
+    escalate_complexity: 0.15
+    reason: "Updates can overwrite existing data"
+
+  - condition: "associations included"
+    add_tasks:
+      - association_validation
+      - dependency_order_planning
+    escalate_complexity: 0.15
+    reason: "Associations require specific load order"
+
+# Common variations
+variations:
+  contact_import:
+    description: "Import new contacts"
+    additional_considerations:
+      - Email deduplication
+      - Marketing consent
+      - List enrollment
+    add_acceptance_criteria:
+      - "Duplicates handled per policy"
+      - "Consent status set correctly"
+      - "List membership updated"
+
+  deal_pipeline_load:
+    description: "Load deals with pipeline stages"
+    additional_considerations:
+      - Stage validation
+      - Amount/probability alignment
+      - Close date logic
+    add_acceptance_criteria:
+      - "All deals in valid stages"
+      - "Amounts and probabilities correct"
+      - "Historical stages preserved"
+
+  property_backfill:
+    description: "Backfill values for existing property"
+    additional_considerations:
+      - Existing value preservation
+      - Calculation dependencies
+      - Workflow triggers
+    add_acceptance_criteria:
+      - "Only empty values filled (unless override)"
+      - "Dependent calculations updated"
+      - "Workflow triggers expected"
+
+  export_operation:
+    description: "Export data from HubSpot"
+    skip_tasks:
+      - T-03
+      - T-04
+      - T-05
+    add_tasks:
+      - query_construction
+      - pagination_handling
+      - export_formatting
+    additional_considerations:
+      - API rate limits
+      - Large dataset pagination
+      - Output format requirements

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Routes leads based on score and assigns to appropriate owners. Threshold: {{scoringThreshold}}, High Priority: {{highPriorityThreshold}}</description>
+    <label>Lead Routing</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <status>Draft</status>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Score_Threshold</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsConverted</field>
+            <operator>EqualTo</operator>
+            <value><booleanValue>false</booleanValue></value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+
+    <!-- Decision: Check if score meets threshold -->
+    <decisions>
+        <name>Check_Score_Threshold</name>
+        <label>Check Score Threshold</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Default_Owner</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Below Threshold</defaultConnectorLabel>
+        <rules>
+            <name>High_Priority</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>{{sf:$Record.Score__c}}</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue><numberValue>{{highPriorityThreshold}}</numberValue></rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_High_Priority</targetReference>
+            </connector>
+            <label>High Priority</label>
+        </rules>
+        <rules>
+            <name>Meets_Threshold</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>{{sf:$Record.Score__c}}</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue><numberValue>{{scoringThreshold}}</numberValue></rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_To_Queue</targetReference>
+            </connector>
+            <label>Meets Threshold</label>
+        </rules>
+    </decisions>
+
+    <!-- Assignment: High Priority Lead -->
+    <recordUpdates>
+        <name>Set_High_Priority</name>
+        <label>Set High Priority</label>
+        <locationX>50</locationX>
+        <locationY>266</locationY>
+        <connector>
+            {{#if enableNotifications}}
+            <targetReference>Send_High_Priority_Notification</targetReference>
+            {{else}}
+            <targetReference>End_Flow</targetReference>
+            {{/if}}
+        </connector>
+        <inputAssignments>
+            <field>Priority__c</field>
+            <value><stringValue>High</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value><stringValue>{{defaultOwnerId}}</stringValue></value>
+        </inputAssignments>
+        <inputReference>{{sf:$Record}}</inputReference>
+    </recordUpdates>
+
+    <!-- Assignment: Route to Queue -->
+    <recordUpdates>
+        <name>Assign_To_Queue</name>
+        <label>Assign to Queue</label>
+        <locationX>176</locationX>
+        <locationY>266</locationY>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Priority__c</field>
+            <value><stringValue>Medium</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value><stringValue>{{routingQueueId}}</stringValue></value>
+        </inputAssignments>
+        <inputReference>{{sf:$Record}}</inputReference>
+    </recordUpdates>
+
+    <!-- Assignment: Default Owner -->
+    <recordUpdates>
+        <name>Assign_Default_Owner</name>
+        <label>Assign Default Owner</label>
+        <locationX>302</locationX>
+        <locationY>266</locationY>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Priority__c</field>
+            <value><stringValue>Low</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value><stringValue>{{defaultOwnerId}}</stringValue></value>
+        </inputAssignments>
+        <inputReference>{{sf:$Record}}</inputReference>
+    </recordUpdates>
+
+    {{#if enableNotifications}}
+    <!-- Action: Send Notification -->
+    <actionCalls>
+        <name>Send_High_Priority_Notification</name>
+        <label>Send High Priority Notification</label>
+        <locationX>50</locationX>
+        <locationY>398</locationY>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value><elementReference>NotificationRecipientEmail</elementReference></value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value><stringValue>High Priority Lead: {!$Record.Name}</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value><stringValue>A high priority lead has been assigned. Score: {!$Record.Score__c}</stringValue></value>
+        </inputParameters>
+    </actionCalls>
+
+    <!-- Formula: Get Recipient Email -->
+    <formulas>
+        <name>NotificationRecipientEmail</name>
+        <dataType>String</dataType>
+        <expression>{{notificationRecipient}}</expression>
+    </formulas>
+    {{/if}}
+
+    <!-- End -->
+    <assignments>
+        <name>End_Flow</name>
+        <label>End Flow</label>
+        <locationX>176</locationX>
+        <locationY>530</locationY>
+    </assignments>
+</Flow>

@@ -1,0 +1,376 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "templateId": "realtime-team-activity",
+  "name": "Real-time Team Activity",
+  "description": "Live team activity dashboard showing engagement, performance, and collaboration metrics with streaming updates",
+  "version": "1.0.0",
+  "category": "realtime",
+  "refreshMode": "websocket",
+  "topics": ["activity.team", "activity.recent", "kpi.team"],
+
+  "layout": {
+    "type": "dashboard",
+    "theme": "revpal-dashboard",
+    "columns": 12,
+    "rows": "auto",
+    "gap": "16px"
+  },
+
+  "header": {
+    "title": "Team Activity",
+    "subtitle": "Real-time team engagement and performance",
+    "showConnectionStatus": true,
+    "showLastUpdate": true,
+    "teamSelector": {
+      "enabled": true,
+      "options": "dynamic:teams",
+      "default": "all"
+    }
+  },
+
+  "components": [
+    {
+      "id": "activities-today",
+      "type": "kpi",
+      "title": "Activities Today",
+      "topic": "activity.team",
+      "dataPath": "summary.totalToday",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "summary.totalYesterday",
+        "format": "delta"
+      },
+      "layout": { "col": 1, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "meetings-today",
+      "type": "kpi",
+      "title": "Meetings Today",
+      "topic": "activity.team",
+      "dataPath": "summary.meetingsToday",
+      "format": "number",
+      "icon": "calendar",
+      "layout": { "col": 4, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "emails-today",
+      "type": "kpi",
+      "title": "Emails Sent",
+      "topic": "activity.team",
+      "dataPath": "summary.emailsToday",
+      "format": "number",
+      "icon": "mail",
+      "layout": { "col": 7, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "calls-today",
+      "type": "kpi",
+      "title": "Calls Made",
+      "topic": "activity.team",
+      "dataPath": "summary.callsToday",
+      "format": "number",
+      "icon": "phone",
+      "layout": { "col": 10, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "activity-feed",
+      "type": "feed",
+      "title": "Live Activity Feed",
+      "topic": "activity.recent",
+      "dataPath": "activities",
+      "maxItems": 20,
+      "autoScroll": true,
+      "groupByTime": {
+        "enabled": true,
+        "intervals": ["Just now", "5 minutes ago", "15 minutes ago", "1 hour ago", "Earlier today"]
+      },
+      "itemTemplate": {
+        "avatar": "{{user.avatar}}",
+        "user": "{{user.name}}",
+        "action": "{{actionText}}",
+        "target": "{{targetName}}",
+        "targetLink": "{{targetLink}}",
+        "timestamp": "{{timestamp | relativeTime}}",
+        "icon": "{{activityIcon}}",
+        "meta": "{{metadata}}"
+      },
+      "activityIcons": {
+        "email": "mail",
+        "call": "phone",
+        "meeting": "calendar",
+        "task": "check-square",
+        "note": "file-text",
+        "deal_update": "briefcase",
+        "stage_change": "git-branch"
+      },
+      "layout": { "col": 1, "row": 2, "width": 5, "height": 4 }
+    },
+    {
+      "id": "team-leaderboard",
+      "type": "leaderboard",
+      "title": "Team Leaderboard (Today)",
+      "topic": "activity.team",
+      "dataPath": "leaderboard",
+      "sort": { "field": "activityScore", "direction": "desc" },
+      "maxItems": 10,
+      "itemTemplate": {
+        "rank": "{{rank}}",
+        "avatar": "{{avatar}}",
+        "name": "{{name}}",
+        "score": "{{activityScore}}",
+        "breakdown": {
+          "emails": "{{emailCount}}",
+          "calls": "{{callCount}}",
+          "meetings": "{{meetingCount}}"
+        },
+        "trend": "{{trend}}"
+      },
+      "highlight": {
+        "top3": true,
+        "colors": ["gold", "silver", "#cd7f32"]
+      },
+      "layout": { "col": 6, "row": 2, "width": 4, "height": 4 }
+    },
+    {
+      "id": "active-now",
+      "type": "presenceList",
+      "title": "Active Now",
+      "topic": "activity.team",
+      "dataPath": "activeUsers",
+      "maxItems": 8,
+      "itemTemplate": {
+        "avatar": "{{avatar}}",
+        "name": "{{name}}",
+        "status": "{{status}}",
+        "activity": "{{currentActivity}}",
+        "lastSeen": "{{lastSeen | relativeTime}}"
+      },
+      "statusColors": {
+        "active": "var(--brand-green)",
+        "busy": "var(--status-red)",
+        "away": "var(--status-yellow)"
+      },
+      "layout": { "col": 10, "row": 2, "width": 3, "height": 4 }
+    },
+    {
+      "id": "activity-by-type",
+      "type": "chart",
+      "chartType": "bar",
+      "title": "Activity by Type (Today)",
+      "topic": "activity.team",
+      "dataPath": "byType",
+      "options": {
+        "xAxis": { "field": "type", "label": "Activity Type" },
+        "yAxis": { "field": "count", "label": "Count" },
+        "colorField": "type",
+        "colorScheme": "activity-types",
+        "showLabels": true
+      },
+      "layout": { "col": 1, "row": 6, "width": 4, "height": 2 }
+    },
+    {
+      "id": "activity-timeline",
+      "type": "chart",
+      "chartType": "area",
+      "title": "Activity Volume (Hourly)",
+      "topic": "activity.team",
+      "dataPath": "hourlyVolume",
+      "options": {
+        "xAxis": { "field": "hour", "format": "HH:mm" },
+        "yAxis": { "field": "count", "label": "Activities" },
+        "fill": true,
+        "gradient": true,
+        "color": "var(--brand-grape)",
+        "nowLine": {
+          "enabled": true,
+          "color": "var(--brand-apricot)"
+        }
+      },
+      "layout": { "col": 5, "row": 6, "width": 4, "height": 2 }
+    },
+    {
+      "id": "engagement-heatmap",
+      "type": "heatmap",
+      "title": "Weekly Engagement Pattern",
+      "topic": "activity.team",
+      "dataPath": "weeklyPattern",
+      "options": {
+        "xAxis": { "field": "hour", "label": "Hour" },
+        "yAxis": { "field": "day", "label": "Day", "values": ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+        "valueField": "count",
+        "colorScale": {
+          "min": "var(--brand-sand)",
+          "max": "var(--brand-grape)"
+        },
+        "tooltip": "{{day}} {{hour}}:00 - {{count}} activities"
+      },
+      "layout": { "col": 9, "row": 6, "width": 4, "height": 2 }
+    },
+    {
+      "id": "team-performance",
+      "type": "table",
+      "title": "Team Performance Summary",
+      "topic": "kpi.team",
+      "dataPath": "members",
+      "sortable": true,
+      "columns": [
+        { "field": "name", "label": "Team Member", "width": "18%" },
+        { "field": "activitiesToday", "label": "Today", "width": "8%", "align": "center" },
+        { "field": "activitiesWeek", "label": "This Week", "width": "10%", "align": "center" },
+        { "field": "meetings", "label": "Meetings", "width": "10%", "align": "center" },
+        { "field": "emails", "label": "Emails", "width": "10%", "align": "center" },
+        { "field": "calls", "label": "Calls", "width": "10%", "align": "center" },
+        { "field": "responseTime", "label": "Avg Response", "width": "12%", "format": "duration" },
+        {
+          "field": "trend",
+          "label": "Trend",
+          "width": "10%",
+          "type": "sparkline",
+          "sparklineConfig": {
+            "data": "weeklyTrend",
+            "color": "var(--brand-grape)"
+          }
+        },
+        {
+          "field": "score",
+          "label": "Score",
+          "width": "12%",
+          "type": "progress",
+          "progressConfig": {
+            "max": 100,
+            "colorScale": true
+          }
+        }
+      ],
+      "layout": { "col": 1, "row": 8, "width": 12, "height": 3 }
+    },
+    {
+      "id": "recent-wins",
+      "type": "list",
+      "title": "Recent Wins",
+      "topic": "activity.team",
+      "dataPath": "recentWins",
+      "maxItems": 5,
+      "itemTemplate": {
+        "icon": "trophy",
+        "title": "{{dealName}}",
+        "subtitle": "Closed by {{ownerName}}",
+        "value": "{{amount | currency}}",
+        "timestamp": "{{closedDate | relativeTime}}"
+      },
+      "emptyState": {
+        "icon": "target",
+        "message": "No recent wins today"
+      },
+      "layout": { "col": 1, "row": 11, "width": 4, "height": 2 }
+    },
+    {
+      "id": "upcoming-meetings",
+      "type": "list",
+      "title": "Upcoming Meetings",
+      "topic": "activity.team",
+      "dataPath": "upcomingMeetings",
+      "maxItems": 5,
+      "itemTemplate": {
+        "icon": "calendar",
+        "title": "{{subject}}",
+        "subtitle": "{{attendees | join:', '}}",
+        "meta": "{{startTime | time}}",
+        "badge": {
+          "text": "{{timeUntil | relativeTime}}",
+          "variant": "info"
+        }
+      },
+      "layout": { "col": 5, "row": 11, "width": 4, "height": 2 }
+    },
+    {
+      "id": "overdue-tasks",
+      "type": "list",
+      "title": "Overdue Tasks",
+      "topic": "activity.team",
+      "dataPath": "overdueTasks",
+      "maxItems": 5,
+      "itemTemplate": {
+        "icon": "alert-circle",
+        "title": "{{subject}}",
+        "subtitle": "Assigned to {{ownerName}}",
+        "meta": "{{dueDate | relativeTime}}",
+        "variant": "warning"
+      },
+      "emptyState": {
+        "icon": "check-circle",
+        "message": "No overdue tasks",
+        "variant": "success"
+      },
+      "layout": { "col": 9, "row": 11, "width": 4, "height": 2 }
+    }
+  ],
+
+  "websocket": {
+    "topics": ["activity.team", "activity.recent", "kpi.team"],
+    "reconnectStrategy": {
+      "maxAttempts": 10,
+      "initialDelay": 1000,
+      "maxDelay": 30000
+    },
+    "deltaUpdates": true,
+    "batchUpdates": {
+      "enabled": true,
+      "intervalMs": 2000
+    }
+  },
+
+  "filters": {
+    "global": [
+      {
+        "id": "team",
+        "type": "select",
+        "label": "Team",
+        "options": "dynamic:teams",
+        "default": "all"
+      },
+      {
+        "id": "activityType",
+        "type": "multiselect",
+        "label": "Activity Type",
+        "options": [
+          { "value": "email", "label": "Emails" },
+          { "value": "call", "label": "Calls" },
+          { "value": "meeting", "label": "Meetings" },
+          { "value": "task", "label": "Tasks" },
+          { "value": "note", "label": "Notes" }
+        ],
+        "default": "all"
+      },
+      {
+        "id": "timeRange",
+        "type": "select",
+        "label": "Time Range",
+        "options": [
+          { "value": "today", "label": "Today" },
+          { "value": "yesterday", "label": "Yesterday" },
+          { "value": "thisWeek", "label": "This Week" },
+          { "value": "lastWeek", "label": "Last Week" }
+        ],
+        "default": "today"
+      }
+    ]
+  },
+
+  "notifications": {
+    "enabled": true,
+    "events": {
+      "deal_closed": {
+        "title": "Deal Won! 🎉",
+        "message": "{{ownerName}} closed {{dealName}} for {{amount | currency}}",
+        "sound": true
+      },
+      "meeting_starting": {
+        "title": "Meeting Starting",
+        "message": "{{subject}} starts in 5 minutes",
+        "beforeMinutes": 5
+      }
+    }
+  }
+}

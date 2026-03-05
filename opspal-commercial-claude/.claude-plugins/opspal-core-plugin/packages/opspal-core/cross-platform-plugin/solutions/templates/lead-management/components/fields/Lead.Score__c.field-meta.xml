@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Score__c</fullName>
+    <label>Lead Score</label>
+    <description>Calculated lead score based on engagement and qualification criteria. Scores range from 0-100.</description>
+    <type>Number</type>
+    <precision>3</precision>
+    <scale>0</scale>
+    <required>false</required>
+    <defaultValue>0</defaultValue>
+    <externalId>false</externalId>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>{{#if enableScoring}}true{{else}}false{{/if}}</trackHistory>
+    <inlineHelpText>Score from 0-100 indicating lead quality. High score ({{highPriorityThreshold}}+) = High Priority.</inlineHelpText>
+</CustomField>

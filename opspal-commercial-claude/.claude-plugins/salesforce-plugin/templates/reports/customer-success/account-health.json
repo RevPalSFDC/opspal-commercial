@@ -1,0 +1,27 @@
+{
+  "templateMetadata": {
+    "templateName": "At-Risk Accounts - Health Score Monitoring",
+    "templateVersion": "1.0",
+    "description": "Identify at-risk customer accounts based on health score, activity, and engagement metrics",
+    "audience": "Customer Success Managers, Customer Success Directors",
+    "useCase": "Proactive churn prevention, prioritize outreach, track customer health trends",
+    "customizationPoints": ["Health_Score__c field name", "Risk threshold values", "Date range filters"],
+    "prerequisites": ["Account.Health_Score__c field", "Account.Type = Customer filter", "Last activity tracking"]
+  },
+  "reportMetadata": {
+    "name": "At-Risk Accounts - {Period}",
+    "reportType": "AccountList",
+    "reportFormat": "SUMMARY",
+    "reportFilters": [
+      {"column": "TYPE", "operator": "equals", "value": "Customer"},
+      {"column": "Account.Health_Score__c", "operator": "equals", "value": "Red,Yellow"}
+    ],
+    "groupingsDown": [{"field": "Account.Health_Score__c", "sortOrder": "Desc"}],
+    "detailColumns": ["ACCOUNT_NAME", "Account.CSM_Owner__c", "LAST_ACTIVITY", "Account.Next_Renewal_Date__c", "Account.Open_Cases__c"],
+    "aggregates": [{"name": "RowCount", "aggregateType": "Sum"}],
+    "chart": {"chartType": "Donut", "groupingColumn": "Health_Score__c"}
+  },
+  "calculatedFieldsRequired": [
+    {"fieldName": "Health_Score__c", "fieldType": "Formula (Text)", "formula": "IF(Days_Since_Last_Touch__c > 90, 'Red', IF(Open_Critical_Cases__c > 0, 'Red', IF(NPS_Score__c < 6, 'Yellow', 'Green')))"}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "hero_section",
+  "label": "Hero Section",
+  "global": false,
+  "smart_type": null,
+  "css_assets": [],
+  "js_assets": [],
+  "extra_classes": "module-hero-section",
+  "is_available_for_new_content": true,
+  "categories": ["landing_page", "homepage"],
+  "icon": "module",
+  "host_template_types": ["PAGE", "BLOG_POST"]
+}

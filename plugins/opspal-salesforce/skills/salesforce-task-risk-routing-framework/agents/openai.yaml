@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Task Risk Routing Framework"
+  short_description: "Help with Salesforce Task Risk Routing Framework tasks"
+  default_prompt: "Use $salesforce-task-risk-routing-framework to execute this workflow safely and produce the expected artifacts."

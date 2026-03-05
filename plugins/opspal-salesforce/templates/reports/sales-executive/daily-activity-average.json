@@ -1,0 +1,140 @@
+{
+  "templateMetadata": {
+    "templateName": "Average Activities per Rep per Day",
+    "templateVersion": "1.1",
+    "description": "Measures team's average daily activity volume for productivity analysis",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Activity benchmarking, productivity analysis, coaching",
+    "customizationPoints": [
+      "Activity types to include",
+      "Date range",
+      "Team scope"
+    ],
+    "prerequisites": [
+      "Activity/Task tracking enabled",
+      "Activities logged by sales team"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "Avg Activities per Rep per Day",
+    "description": "Average daily activity count across the team",
+    "reportType": "Activity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "ACTIVITY_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      },
+      {
+        "column": "OWNER.USER_ROLE_NAME",
+        "operator": "contains",
+        "value": "Sales",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "OWNER_NAME",
+        "sortOrder": "Asc",
+        "dateGranularity": null
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total activities per rep"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Daily_Average",
+        "description": "Activities / Working Days",
+        "formula": "COUNT() / WorkingDays",
+        "dataType": "number",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "Daily_Average",
+      "format": "number"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-productivity"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

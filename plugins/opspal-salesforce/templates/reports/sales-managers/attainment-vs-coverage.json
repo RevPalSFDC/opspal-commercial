@@ -1,0 +1,161 @@
+{
+  "templateMetadata": {
+    "templateName": "Attainment vs Coverage",
+    "templateVersion": "1.1",
+    "description": "Compares quota attainment against pipeline coverage by rep",
+    "audience": "Sales Managers",
+    "useCase": "Risk identification, coaching prioritization, resource allocation",
+    "customizationPoints": [
+      "Team scope",
+      "Threshold values",
+      "Date range"
+    ],
+    "prerequisites": [
+      "Opportunity object",
+      "Quota data per rep"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "Attainment vs Coverage",
+    "description": "Rep attainment compared to pipeline coverage",
+    "reportType": "Opportunity",
+    "reportFormat": "MATRIX",
+    "scope": "team",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.ManagerId.Team",
+        "customizable": true
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "OPPORTUNITY_OWNER",
+        "sortOrder": "Asc",
+        "dateGranularity": null
+      }
+    ],
+    "groupingsAcross": [
+      {
+        "field": "IS_CLOSED",
+        "sortOrder": "Asc"
+      }
+    ],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Amount per rep and status"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Attainment",
+        "description": "Closed Won / Quota",
+        "formula": "(ClosedWon / Quota) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 0
+      },
+      {
+        "name": "Coverage",
+        "description": "Open Pipeline / Remaining Quota",
+        "formula": "OpenPipeline / (Quota - ClosedWon)",
+        "dataType": "number",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Scatter",
+      "xAxis": "Attainment",
+      "yAxis": "Coverage",
+      "groupingColumn": "OPPORTUNITY_OWNER"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "quota-attainment"
+    ],
+    "componentType": "Scatter Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

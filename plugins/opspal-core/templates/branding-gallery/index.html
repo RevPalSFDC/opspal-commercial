@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RevPal Branding Gallery</title>
+    <link rel="stylesheet" href="gallery.css" />
+  </head>
+  <body>
+    <div class="bg-shape shape-one" aria-hidden="true"></div>
+    <div class="bg-shape shape-two" aria-hidden="true"></div>
+    <div class="bg-shape shape-three" aria-hidden="true"></div>
+
+    <header class="hero">
+      <nav class="hero-nav">
+        <div class="brand-lockup">
+          <img
+            class="brand-logo"
+            src="./assets/revpal-brand-mark.png"
+            alt="RevPal icon"
+          />
+          <span>RevPal Branding</span>
+        </div>
+        <div class="nav-links">
+          <a href="#quick-ref">Quick Ref</a>
+          <a href="#branding">Branding</a>
+          <a href="#palette">Palette</a>
+          <a href="#typography">Typography</a>
+          <a href="#templates">Templates</a>
+          <a href="#previews">Previews</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="badge">Branding + Template Gallery</div>
+          <h1>RevPal Branding Library</h1>
+          <p>
+            Official brand assets, color palette, typography, and template reference
+            for all OpsPal plugin outputs.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#quick-ref">Claude Code Quick Ref</a>
+            <a class="button ghost" href="#templates">View Templates</a>
+          </div>
+          <div class="meta-row">
+            <div class="meta-card">Theme: RevPal Brand</div>
+            <div class="meta-card">Plugin: opspal-core</div>
+            <div class="meta-card">Path: templates/branding-gallery/</div>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <h2>Quick assets</h2>
+          <div class="asset-list">
+            <a
+              class="asset-item"
+              href="./assets/revpal-logo-primary.png"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Primary logo</span>
+              <code>templates/branding-gallery/assets/revpal-logo-primary.png</code>
+            </a>
+            <a
+              class="asset-item"
+              href="./assets/revpal-brand-mark.png"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Icon mark</span>
+              <code>templates/branding-gallery/assets/revpal-brand-mark.png</code>
+            </a>
+            <a
+              class="asset-item"
+              href="./assets/revpal-logo-favicon.png"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Favicon</span>
+              <code>templates/branding-gallery/assets/revpal-logo-favicon.png</code>
+            </a>
+            <a class="asset-item" href="./assets/revpal-logo-export.png" target="_blank" rel="noreferrer">
+              <span>Report export logo</span>
+              <code>templates/branding-gallery/assets/revpal-logo-export.png</code>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section id="quick-ref">
+        <h2>Claude Code Quick Reference</h2>
+        <p class="lead">
+          Copy these labels directly into prompts when Claude Code needs branding guidance.
+          Each label includes the exact value to use.
+        </p>
+
+        <h3 style="font-family: var(--font-heading); color: var(--brand-indigo); margin: 24px 0 12px;">Color Labels</h3>
+        <div class="grid cols-3 stagger">
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">REVPAL_GRAPE</strong>
+            <div style="margin-top: 8px; padding: 8px; background: #5f3b8c; color: white; border-radius: 4px;">#5F3B8C</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Primary brand color. Use for headings, buttons, links.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-apricot);">REVPAL_APRICOT</strong>
+            <div style="margin-top: 8px; padding: 8px; background: #e99560; color: white; border-radius: 4px;">#E99560</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Accent color. Use for CTAs, hover states, highlights.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-indigo);">REVPAL_INDIGO</strong>
+            <div style="margin-top: 8px; padding: 8px; background: #3e4a61; color: white; border-radius: 4px;">#3E4A61</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Secondary color. Use for subheadings, body text emphasis.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--ink-muted);">REVPAL_SAND</strong>
+            <div style="margin-top: 8px; padding: 8px; background: #eae4dc; border: 1px solid var(--border-soft); border-radius: 4px;">#EAE4DC</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Background color. Use for page backgrounds, cards.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-green);">REVPAL_GREEN</strong>
+            <div style="margin-top: 8px; padding: 8px; background: #6fbf73; color: white; border-radius: 4px;">#6FBF73</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Success/positive status. Use for checkmarks, success states.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--ink-muted);">REVPAL_SURFACE</strong>
+            <div style="margin-top: 8px; padding: 8px; background: #f7f4ef; border: 1px solid var(--border-soft); border-radius: 4px;">#F7F4EF</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Light surface. Use for content areas, table backgrounds.</p>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-heading); color: var(--brand-indigo); margin: 24px 0 12px;">Typography Labels</h3>
+        <div class="grid cols-3 stagger">
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">REVPAL_HEADING_FONT</strong>
+            <div style="margin-top: 8px; font-family: Montserrat, 'Trebuchet MS', sans-serif; font-size: 1.2rem; font-weight: 700;">Montserrat</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Weights: 600, 700, 800. For H1-H4, titles.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">REVPAL_BODY_FONT</strong>
+            <div style="margin-top: 8px; font-family: Figtree, Verdana, sans-serif; font-size: 1rem;">Figtree</div>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Weights: 400, 500, 600, 700. For body, lists, tables.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">REVPAL_FONT_IMPORT</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.75rem; word-break: break-all;">@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap");</code>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-heading); color: var(--brand-indigo); margin: 24px 0 12px;">Template Labels</h3>
+        <div class="grid cols-3 stagger">
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_COVER_SALESFORCE</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">salesforce-audit.md</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">SF automation, metadata, RevOps, CPQ audits.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_COVER_HUBSPOT</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">hubspot-assessment.md</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">HubSpot portal assessments, workflow audits.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_COVER_EXECUTIVE</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">executive-report.md</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Executive summaries, benchmarks, KPIs.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_COVER_SECURITY</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">security-audit.md</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Permission audits, compliance reviews.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_COVER_DATA</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">data-quality.md</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Data quality assessments, dedup reports.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_COVER_GTM</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">gtm-planning.md</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">GTM planning, revenue modeling, forecasts.</p>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-heading); color: var(--brand-indigo); margin: 24px 0 12px;">CSS Theme Labels</h3>
+        <div class="grid cols-3 stagger">
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">PDF_THEME_BRAND</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">revpal-brand.css</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Full brand theme with all components.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">WEB_THEME_DASHBOARD</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">revpal-dashboard.css</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Web dashboard theme for HTML reports.</p>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">CSS_BASE</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.8rem;">base.css</code>
+            <p style="margin: 8px 0 0; color: var(--ink-muted); font-size: 0.85rem;">Base styles, typography scale, resets.</p>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-heading); color: var(--brand-indigo); margin: 24px 0 12px;">Asset Path Labels</h3>
+        <div class="grid cols-3 stagger">
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">LOGO_PRIMARY</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.75rem; word-break: break-all;">templates/branding-gallery/assets/revpal-logo-primary.png</code>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">LOGO_ICON</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.75rem; word-break: break-all;">templates/branding-gallery/assets/revpal-brand-mark.png</code>
+          </div>
+          <div class="card" style="font-family: monospace; font-size: 0.9rem;">
+            <strong style="color: var(--brand-grape);">LOGO_EXPORT</strong>
+            <code style="display: block; margin-top: 8px; font-size: 0.75rem; word-break: break-all;">templates/branding-gallery/assets/revpal-logo-export.png</code>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px; background: rgba(95, 59, 140, 0.08); border-color: var(--brand-grape);">
+          <h3 style="font-family: var(--font-heading); color: var(--brand-grape); margin: 0 0 8px;">Usage Example</h3>
+          <p style="margin: 0; color: var(--ink-muted); font-size: 0.9rem;">
+            When prompting Claude Code, use labels like: <em>"Use REVPAL_GRAPE (#5F3B8C) for headings and REVPAL_BODY_FONT (Figtree) for body text. Apply PDF_THEME_BRAND for styling."</em>
+          </p>
+        </div>
+      </section>
+
+      <section id="branding">
+        <h2>Brand assets</h2>
+        <p class="lead">
+          Core RevPal logos and icons used across covers and footers. These map directly
+          to the assets the PDF generator injects when `logoPath` is provided.
+        </p>
+        <div class="grid cols-3 stagger">
+          <div class="card logo-card">
+            <img
+              src="./assets/revpal-logo-primary.png"
+              alt="RevPal primary logo"
+            />
+            <p>Primary logo for cover pages and headers.</p>
+          </div>
+          <div class="card logo-card">
+            <img
+              src="./assets/revpal-brand-mark.png"
+              alt="RevPal icon mark"
+            />
+            <p>Icon mark for badges and compact layouts.</p>
+          </div>
+          <div class="card logo-card">
+            <img
+              src="./assets/revpal-logo-favicon.png"
+              alt="RevPal favicon"
+            />
+            <p>Favicon used for smaller UI and system tags.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="palette">
+        <h2>Color palette</h2>
+        <p class="lead">
+          Palette derived from the RevPal brand theme. Grape and apricot lead, with sand
+          and indigo anchoring body content.
+        </p>
+        <div class="grid cols-3 stagger">
+          <div class="swatch" style="--swatch: #5f3b8c">
+            <div class="swatch-color"></div>
+            <span>Brand grape</span>
+            <code>#5F3B8C</code>
+          </div>
+          <div class="swatch" style="--swatch: #3e4a61">
+            <div class="swatch-color"></div>
+            <span>Brand indigo</span>
+            <code>#3E4A61</code>
+          </div>
+          <div class="swatch" style="--swatch: #e99560">
+            <div class="swatch-color"></div>
+            <span>Brand apricot</span>
+            <code>#E99560</code>
+          </div>
+          <div class="swatch" style="--swatch: #eae4dc">
+            <div class="swatch-color"></div>
+            <span>Brand sand</span>
+            <code>#EAE4DC</code>
+          </div>
+          <div class="swatch" style="--swatch: #6fbf73">
+            <div class="swatch-color"></div>
+            <span>Status green</span>
+            <code>#6FBF73</code>
+          </div>
+          <div class="swatch" style="--swatch: #f6f5f3">
+            <div class="swatch-color"></div>
+            <span>Neutral 90</span>
+            <code>#F6F5F3</code>
+          </div>
+        </div>
+      </section>
+
+      <section id="typography">
+        <h2>Typography</h2>
+        <p class="lead">
+          Headings use Montserrat for confident display weight. Body copy uses Figtree
+          for readable, modern reporting tone.
+        </p>
+        <div class="type-grid stagger">
+          <div class="card type-card">
+            <h3>Montserrat</h3>
+            <p class="type-sample">Executive Summary Heading</p>
+            <p class="type-meta">Weight range 600-800 for H1-H4.</p>
+          </div>
+          <div class="card type-card">
+            <h3>Figtree</h3>
+            <p class="type-sample body">
+              This body text sample mirrors our report paragraphs and callouts.
+            </p>
+            <p class="type-meta">Weight range 400-600 for body, tables, and lists.</p>
+          </div>
+        </div>
+        <div class="scale">
+          <div class="scale-row h1">Heading 1 - Report Title</div>
+          <div class="scale-row h2">Heading 2 - Section Title</div>
+          <div class="scale-row body">Body - Paragraph copy and table content.</div>
+        </div>
+      </section>
+
+      <section id="templates">
+        <h2>Cover templates</h2>
+        <p class="lead">
+          Each cover template is a markdown file with HTML layout blocks and shared
+          metadata fields. Open the source to review layout and variable usage.
+        </p>
+        <div class="template-grid stagger">
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Salesforce Audit</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Automation audit cover with scope, sandbox, and classification fields.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/salesforce-audit.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Security Audit</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Security and compliance reporting cover with classification emphasis.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/security-audit.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Executive Report</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Leadership-ready cover with reporting period and high-level branding.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/executive-report.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>HubSpot Assessment</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Portal assessment cover with assessment type and org metadata.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/hubspot-assessment.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Marketo Assessment</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Marketing automation assessment cover for program and campaign reviews.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/marketo-assessment.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Data Quality</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Data quality and governance cover with emphasis on remediation.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/data-quality.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>GTM Planning</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Go-to-market planning cover for launch strategy deliverables.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/gtm-planning.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Cross-Platform Integration</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Multi-platform integration cover for implementation and rollout work.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/cross-platform-integration.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+          <article class="card template-card">
+            <div class="template-header">
+              <h3>Default</h3>
+              <span class="tag">cover</span>
+            </div>
+            <p>Generic professional cover with standard metadata placeholders.</p>
+            <div class="template-actions">
+              <a href="../pdf-covers/default.md" target="_blank" rel="noreferrer">Source</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="metadata">
+        <h2>Template metadata keys</h2>
+        <p class="lead">
+          Shared metadata fields supported across cover templates. Unused fields are
+          ignored by each template.
+        </p>
+        <div class="chip-grid stagger">
+          <span class="chip">title</span>
+          <span class="chip">org</span>
+          <span class="chip">date</span>
+          <span class="chip">version</span>
+          <span class="chip">author</span>
+          <span class="chip">subtitle</span>
+          <span class="chip">reportType</span>
+          <span class="chip">period</span>
+          <span class="chip">assessmentType</span>
+          <span class="chip">sandboxName</span>
+          <span class="chip">scope</span>
+          <span class="chip">classification</span>
+          <span class="chip">logoPath</span>
+        </div>
+      </section>
+
+      <section id="previews">
+        <h2>PDF previews</h2>
+        <p class="lead">
+          Visual snapshots pulled from recent RevPal PDF output. Use these to spot-check
+          cover styling, TOC layout, and typography.
+        </p>
+        <div class="preview-grid stagger">
+          <figure class="preview-card">
+            <img src="./assets/revpal-preview-cover.png" alt="Cover page preview" />
+            <figcaption>Cover page</figcaption>
+          </figure>
+          <figure class="preview-card">
+            <img src="./assets/revpal-preview-toc.png" alt="Table of contents preview" />
+            <figcaption>Table of contents</figcaption>
+          </figure>
+          <figure class="preview-card">
+            <img src="./assets/revpal-preview-exec-summary.png" alt="Executive summary preview" />
+            <figcaption>Executive summary</figcaption>
+          </figure>
+          <figure class="preview-card">
+            <img src="./assets/revpal-preview-table.png" alt="Table styling preview" />
+            <figcaption>Table styling</figcaption>
+          </figure>
+          <figure class="preview-card">
+            <img src="./assets/revpal-preview-callout.png" alt="Callout styling preview" />
+            <figcaption>Callouts and lists</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="sources">
+        <h2>Style sources</h2>
+        <p class="lead">
+          Core CSS and component styles used in PDF generation.
+        </p>
+        <div class="source-list">
+          <a href="../pdf-styles/themes/revpal-brand.css" target="_blank" rel="noreferrer">
+            revpal-brand.css
+          </a>
+          <a href="../pdf-styles/themes/revpal.css" target="_blank" rel="noreferrer">
+            revpal.css
+          </a>
+          <a href="../pdf-styles/base.css" target="_blank" rel="noreferrer">
+            base.css
+          </a>
+          <a href="../pdf-styles/components/cover.css" target="_blank" rel="noreferrer">
+            cover.css
+          </a>
+          <a href="../pdf-styles/components/toc.css" target="_blank" rel="noreferrer">
+            toc.css
+          </a>
+          <a href="../pdf-styles/components/tables.css" target="_blank" rel="noreferrer">
+            tables.css
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      RevPal Branding Gallery - Part of OpsPal Core Plugin
+    </footer>
+  </body>
+</html>

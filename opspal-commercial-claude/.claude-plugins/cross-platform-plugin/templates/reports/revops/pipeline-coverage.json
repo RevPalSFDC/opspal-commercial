@@ -1,0 +1,321 @@
+{
+  "templateMetadata": {
+    "id": "pipeline-coverage",
+    "name": "Pipeline Health Assessment",
+    "version": "1.0.0",
+    "description": "Analyze pipeline coverage, stage distribution, aging, and forecast accuracy",
+    "category": "pipeline",
+    "targetAudience": ["sales-leadership", "executive", "finance"],
+    "recommendedFrequency": "weekly",
+    "estimatedGenerationTime": "3-5 minutes"
+  },
+  "reportMetadata": {
+    "defaultTitle": "Pipeline Health Report",
+    "defaultPeriod": "current_quarter",
+    "defaultFormat": "pdf",
+    "defaultSegmentation": ["rep", "segment"],
+    "supportedFormats": ["pdf", "excel", "sheets", "csv"]
+  },
+  "kpis": [
+    {
+      "id": "PIPELINE_COVERAGE",
+      "required": true,
+      "displayOrder": 1,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true,
+      "thresholds": {
+        "excellent": 4.0,
+        "good": 3.0,
+        "warning": 2.0
+      }
+    },
+    {
+      "id": "WIN_RATE",
+      "required": true,
+      "displayOrder": 2,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true,
+      "thresholds": {
+        "excellent": 30,
+        "good": 22,
+        "warning": 15
+      }
+    },
+    {
+      "id": "WEIGHTED_PIPELINE",
+      "required": true,
+      "displayOrder": 3,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": false
+    },
+    {
+      "id": "AVERAGE_DEAL_SIZE",
+      "required": true,
+      "displayOrder": 4,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": false
+    },
+    {
+      "id": "PIPELINE_VELOCITY",
+      "required": false,
+      "displayOrder": 5,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": false
+    }
+  ],
+  "dataSources": {
+    "salesforce": {
+      "objects": ["Opportunity", "OpportunityHistory", "User"],
+      "requiredFields": ["Amount", "CloseDate", "StageName", "OwnerId", "Probability", "IsClosed", "IsWon"],
+      "optionalFields": ["ForecastCategory", "NextStep", "LastActivityDate"],
+      "filters": {
+        "openPipeline": "IsClosed = false AND CloseDate >= TODAY",
+        "currentQuarter": "CloseDate = THIS_QUARTER",
+        "closedWon": "IsWon = true"
+      }
+    },
+    "hubspot": {
+      "objects": ["deals", "dealstages", "pipelines"],
+      "requiredProperties": ["amount", "closedate", "dealstage", "hubspot_owner_id", "hs_deal_stage_probability"],
+      "optionalProperties": ["hs_forecast_amount", "hs_next_step"],
+      "filters": {
+        "openPipeline": "dealstage != 'closedlost' AND dealstage != 'closedwon'"
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "executive-summary",
+      "title": "Executive Summary",
+      "type": "summary",
+      "order": 1,
+      "content": {
+        "blufTemplate": "Pipeline coverage is ${coverage}x against ${quota} quota (${coverage_assessment}). ${pipeline_insight}.",
+        "keyMetrics": ["PIPELINE_COVERAGE", "WIN_RATE", "WEIGHTED_PIPELINE"],
+        "maxHighlights": 3,
+        "maxRecommendations": 2
+      }
+    },
+    {
+      "id": "pipeline-dashboard",
+      "title": "Pipeline Overview",
+      "type": "dashboard",
+      "order": 2,
+      "kpis": ["PIPELINE_COVERAGE", "WIN_RATE", "WEIGHTED_PIPELINE", "AVERAGE_DEAL_SIZE"],
+      "layout": "2x2",
+      "showBenchmarkComparison": true
+    },
+    {
+      "id": "pipeline-funnel",
+      "title": "Pipeline by Stage",
+      "type": "chart",
+      "order": 3,
+      "chartConfig": {
+        "type": "funnel",
+        "groupBy": "StageName",
+        "metric": "Amount",
+        "showCount": true,
+        "showConversionRates": true
+      }
+    },
+    {
+      "id": "coverage-trend",
+      "title": "Coverage Trend",
+      "type": "chart",
+      "order": 4,
+      "chartConfig": {
+        "type": "line",
+        "metric": "PIPELINE_COVERAGE",
+        "groupBy": "CALENDAR_WEEK",
+        "showTarget": true,
+        "targetValue": 3.0,
+        "lookback": 12
+      }
+    },
+    {
+      "id": "stage-distribution",
+      "title": "Pipeline Stage Distribution",
+      "type": "detail",
+      "order": 5,
+      "breakdown": {
+        "dimension": "stage",
+        "metrics": ["deal_count", "total_value", "weighted_value", "avg_age_days"],
+        "sortBy": "stage_order",
+        "sortOrder": "asc"
+      }
+    },
+    {
+      "id": "pipeline-by-rep",
+      "title": "Pipeline by Rep",
+      "type": "detail",
+      "order": 6,
+      "breakdown": {
+        "dimension": "owner",
+        "metrics": ["total_pipeline", "weighted_pipeline", "deal_count", "coverage", "win_rate"],
+        "sortBy": "coverage",
+        "sortOrder": "desc"
+      }
+    },
+    {
+      "id": "pipeline-aging",
+      "title": "Pipeline Aging Analysis",
+      "type": "chart",
+      "order": 7,
+      "chartConfig": {
+        "type": "heatmap",
+        "xAxis": "stage",
+        "yAxis": "age_bucket",
+        "metric": "deal_count",
+        "ageBuckets": ["0-30 days", "31-60 days", "61-90 days", "90+ days"],
+        "colorScale": ["#70AD47", "#FFC000", "#FF9900", "#FF6B6B"]
+      }
+    },
+    {
+      "id": "close-date-distribution",
+      "title": "Close Date Distribution",
+      "type": "chart",
+      "order": 8,
+      "chartConfig": {
+        "type": "bar",
+        "groupBy": "close_month",
+        "metric": "Amount",
+        "showWeighted": true,
+        "stackBy": "stage"
+      }
+    },
+    {
+      "id": "forecast-accuracy",
+      "title": "Forecast Accuracy",
+      "type": "detail",
+      "order": 9,
+      "metrics": [
+        { "name": "Forecast Accuracy", "formula": "actual / forecasted * 100", "target": 90 },
+        { "name": "Commit Accuracy", "formula": "commit_actual / commit_forecast * 100", "target": 95 },
+        { "name": "Best Case Hit Rate", "formula": "actual / best_case * 100", "target": 70 }
+      ],
+      "historicalPeriods": 4
+    },
+    {
+      "id": "at-risk-deals",
+      "title": "At-Risk Deals",
+      "type": "detail",
+      "order": 10,
+      "filters": {
+        "criteria": [
+          { "field": "age_in_stage", "operator": ">", "value": 30 },
+          { "field": "last_activity", "operator": ">", "value": "14_days_ago" },
+          { "field": "next_step", "operator": "is_blank" }
+        ]
+      },
+      "columns": ["opportunity_name", "amount", "stage", "age_in_stage", "last_activity", "owner"]
+    },
+    {
+      "id": "methodology",
+      "title": "Methodology",
+      "type": "methodology",
+      "order": 99,
+      "include": ["dataSources", "formulas", "assumptions", "exclusions", "queries"]
+    }
+  ],
+  "calculations": {
+    "pipeline_coverage": {
+      "formula": "total_pipeline / quota",
+      "notes": "Open pipeline divided by quota; target 3-4x based on win rate"
+    },
+    "weighted_pipeline": {
+      "formula": "SUM(amount * stage_probability)",
+      "notes": "Pipeline value weighted by stage probability"
+    },
+    "win_rate": {
+      "formula": "won_opportunities / (won_opportunities + lost_opportunities) * 100",
+      "notes": "Percentage of opportunities won vs total closed"
+    },
+    "average_deal_size": {
+      "formula": "total_won_value / won_opportunities",
+      "notes": "Average value of closed-won opportunities"
+    },
+    "coverage_required": {
+      "formula": "1 / win_rate",
+      "notes": "Minimum coverage needed based on current win rate"
+    }
+  },
+  "benchmarks": {
+    "industry": "saas",
+    "sources": [
+      {
+        "name": "InsightSquared Pipeline Benchmarks",
+        "url": "https://www.insightsquared.com",
+        "metrics": ["PIPELINE_COVERAGE", "WIN_RATE"]
+      },
+      {
+        "name": "Gartner Sales Metrics",
+        "url": "https://www.gartner.com",
+        "metrics": ["WIN_RATE"]
+      }
+    ],
+    "thresholds": {
+      "PIPELINE_COVERAGE": {
+        "excellent": 4.0,
+        "good": 3.0,
+        "average": 2.5,
+        "belowAverage": 2.0
+      },
+      "WIN_RATE": {
+        "excellent": 0.30,
+        "good": 0.22,
+        "average": 0.18,
+        "belowAverage": 0.15
+      }
+    },
+    "dynamicCoverage": {
+      "description": "Recommended coverage based on win rate",
+      "formula": "1 / win_rate * 1.1",
+      "notes": "Add 10% buffer above minimum required"
+    }
+  },
+  "defaults": {
+    "dateRange": {
+      "type": "fixed",
+      "value": "CURRENT_QUARTER"
+    },
+    "comparison": {
+      "type": "previous_quarter"
+    },
+    "currency": "USD"
+  },
+  "exportConfig": {
+    "pdf": {
+      "orientation": "landscape",
+      "includeCharts": true,
+      "includeTables": true,
+      "pageBreaks": ["pipeline-by-rep", "at-risk-deals", "methodology"]
+    },
+    "excel": {
+      "sheets": [
+        { "name": "Summary", "sections": ["executive-summary", "pipeline-dashboard"] },
+        { "name": "Pipeline Funnel", "sections": ["pipeline-funnel", "stage-distribution"] },
+        { "name": "By Rep", "sections": ["pipeline-by-rep"] },
+        { "name": "Aging", "sections": ["pipeline-aging", "close-date-distribution"] },
+        { "name": "Forecast", "sections": ["forecast-accuracy"] },
+        { "name": "At Risk", "sections": ["at-risk-deals"] },
+        { "name": "Methodology", "sections": ["methodology"] }
+      ]
+    }
+  },
+  "inputRequirements": {
+    "manualInputs": [
+      {
+        "id": "quota",
+        "label": "Quota / Target",
+        "type": "currency",
+        "required": true,
+        "helpText": "Sales quota or target for the period"
+      }
+    ]
+  }
+}

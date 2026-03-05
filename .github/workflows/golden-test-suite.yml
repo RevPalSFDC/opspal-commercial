@@ -1,0 +1,158 @@
+name: Golden Test Suite (DISABLED)
+
+# DISABLED: Workflow disabled to remove Slack notifications
+# To re-enable, uncomment the 'on:' section below
+# on:
+#   push:
+#     branches: [ main, develop ]
+#     paths:
+#       - 'plugins/opspal-salesforce/scripts/lib/**'
+#       - 'plugins/opspal-salesforce/test/**'
+#       - '.github/workflows/golden-test-suite.yml'
+#   pull_request:
+#     branches: [ main ]
+#     paths:
+#       - 'plugins/opspal-salesforce/scripts/lib/**'
+#       - 'plugins/opspal-salesforce/test/**'
+#   workflow_dispatch: # Allow manual triggering
+
+on:
+  workflow_dispatch: # Manual triggering only
+
+jobs:
+  test:
+    name: Run Golden Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd plugins/opspal-salesforce
+          npm ci --production
+
+      - name: Run unit tests
+        run: |
+          cd plugins/opspal-salesforce
+          node test/golden-test-suite.js --suite=unit --ci
+
+      - name: Run API tests
+        run: |
+          cd plugins/opspal-salesforce
+          node test/golden-test-suite.js --suite=api --ci
+
+      - name: Run generator tests
+        run: |
+          cd plugins/opspal-salesforce
+          node test/golden-test-suite.js --suite=generators --ci
+
+      - name: Run all tests with coverage
+        run: |
+          cd plugins/opspal-salesforce
+          node test/golden-test-suite.js --coverage --ci
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.node-version }}
+          path: plugins/opspal-salesforce/test/test-output/
+          retention-days: 7
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Golden test suite failed. Please review the test results in the Actions tab.'
+            })
+
+  # Additional job to check for regressions
+  regression-check:
+    name: Regression Detection
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for comparison
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Install dependencies
+        run: |
+          cd plugins/opspal-salesforce
+          npm ci --production
+
+      - name: Run regression comparison
+        run: |
+          cd plugins/opspal-salesforce
+          node test/regression-detector.js --baseline main --current HEAD
+
+      - name: Upload regression report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-report
+          path: plugins/opspal-salesforce/test/test-output/regression-report.md
+          retention-days: 30
+
+  # Job to validate hook health
+  hook-health-check:
+    name: Hook Health Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Check hook circuit breaker status
+        run: |
+          cd plugins/opspal-salesforce
+          node scripts/lib/hook-monitor.js alert
+
+      - name: Validate routing patterns
+        run: |
+          cd plugins/opspal-salesforce
+          node scripts/lib/routing-toolkit.js validate --ci
+
+      - name: Generate health report
+        if: always()
+        run: |
+          cd plugins/opspal-salesforce
+          node scripts/lib/hook-monitor.js analyze > test/test-output/hook-health.txt
+
+      - name: Upload health report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hook-health-report
+          path: plugins/opspal-salesforce/test/test-output/hook-health.txt
+          retention-days: 7

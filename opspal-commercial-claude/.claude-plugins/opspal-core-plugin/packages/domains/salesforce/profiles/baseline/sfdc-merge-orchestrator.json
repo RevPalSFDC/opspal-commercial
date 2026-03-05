@@ -1,0 +1,70 @@
+{
+  "agentName": "sfdc-merge-orchestrator",
+  "timeRange": "24h",
+  "profileCount": 2,
+  "statistics": {
+    "executions": 2,
+    "duration": {
+      "avg": 6746,
+      "min": 6647,
+      "max": 6845,
+      "p50": 6647,
+      "p95": 6845,
+      "p99": 6845
+    },
+    "memory": {
+      "avgDelta": 435780,
+      "maxDelta": 442072,
+      "minDelta": 429488
+    },
+    "performance": {
+      "avgScore": 80,
+      "minScore": 80,
+      "maxScore": 80
+    },
+    "bottleneckFrequency": {
+      "slow_segment": 2
+    },
+    "memoryIssueFrequency": {}
+  },
+  "regressions": [],
+  "comparative": null,
+  "topBottlenecks": [
+    {
+      "type": "slow_segment",
+      "label": "Duplicate detection complete → Conflict detection complete",
+      "count": 2,
+      "totalDuration": 9000,
+      "avgDuration": 4500,
+      "severity": "critical"
+    }
+  ],
+  "topRecommendations": [
+    {
+      "type": "performance",
+      "priority": "high",
+      "title": "Optimize Duplicate detection complete → Conflict detection complete",
+      "description": "This segment takes 67.7% of total execution time (4500ms)",
+      "suggestions": [
+        "Profile this segment in detail to identify specific bottleneck",
+        "Consider caching if this involves repeated computations",
+        "Check for synchronous I/O operations that could be parallelized",
+        "Review database queries for optimization opportunities"
+      ],
+      "count": 2
+    },
+    {
+      "type": "performance",
+      "priority": "medium",
+      "title": "High CPU utilization detected",
+      "description": "CPU utilization is 101.4%, suggesting CPU-bound operations",
+      "suggestions": [
+        "Optimize algorithms for better time complexity",
+        "Consider caching expensive computations",
+        "Use worker threads for CPU-intensive tasks",
+        "Profile hot code paths for micro-optimizations"
+      ],
+      "count": 2
+    }
+  ]
+}

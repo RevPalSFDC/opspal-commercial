@@ -1,0 +1,196 @@
+{
+  "template_id": "icp-performance-win-profile",
+  "report_name": "ICP Performance & Win Profile",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "MarketingOps",
+  "primary_decisions_supported": [
+    "Ideal customer profile refinement",
+    "Targeting and qualification criteria for sales",
+    "Resource allocation toward high-converting profiles"
+  ],
+  "executive_questions_answered": [
+    "Do deals that fit our Ideal Customer Profile (ICP) close at higher rates or generate more value than non-ICP deals?",
+    "What characteristics do our won deals consistently share (win profile)?",
+    "Should we adjust our ICP definition based on conversion and retention data?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "ICP Win Rate",
+      "definition": "The percentage of opportunities that are closed-won for those deals meeting Ideal Customer Profile criteria, compared to non-ICP deals.",
+      "formula": "ICP Win% = (# of ICP opportunities won / total ICP opportunities) * 100",
+      "grain": "opportunity",
+      "required_dimensions": ["ICP vs Non-ICP"],
+      "known_variants": [
+        {
+          "variant_name": "ICP Conversion Rate",
+          "definition_delta": "Could also be measured from lead to closed-won (pipeline conversion) for ICP leads vs others",
+          "when_to_use": "If analyzing at earlier funnel stages including marketing leads"
+        }
+      ],
+      "pitfalls": [
+        "Requires a clear, consistent ICP definition applied to each deal (e.g., flag in CRM)",
+        "Sample sizes: if ICP is narrow, win rate differences may not be statistically significant without enough data",
+        "Correlation vs causation: higher ICP win rate could be because sales focuses more on those deals; still a useful indicator"
+      ]
+    },
+    {
+      "metric_name": "Deal Win Profile Traits",
+      "definition": "Common characteristics among won deals (e.g., company size, use-case, champion persona). Not a single metric but a set of profile attributes with above-average win rates.",
+      "formula": "n/a (analytical output: top attributes frequency in wins vs losses)",
+      "grain": "n/a",
+      "required_dimensions": ["attribute (industry, size, use case, etc.)"],
+      "pitfalls": [
+        "This is more qualitative/analytical – avoid drawing false conclusions (some traits might correlate with wins accidentally)",
+        "Ensure data on deal attributes (industry, persona, etc.) is well-captured in CRM; missing data can mislead patterns",
+        "Traits can evolve as product or market changes – today's win profile might shift tomorrow"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Marketing Automation"],
+    "required_entities": ["Opportunity", "Account", "Lead/Contact"],
+    "required_fields": [
+      {
+        "field_name": "ICP Flag or Score",
+        "description": "Yes/no if opp meets ICP criteria",
+        "salesforce_field": "Account.ICP_Score__c or Opportunity.ICP_Fit__c",
+        "hubspot_field": "company.icp_score or deal.icp_fit"
+      },
+      {
+        "field_name": "Opportunity Outcome",
+        "description": "Won/Lost",
+        "salesforce_field": "Opportunity.StageName or IsWon",
+        "hubspot_field": "deal.dealstage"
+      },
+      {
+        "field_name": "Key attributes",
+        "description": "Industry, Employee Count, Use Case, Competitor, etc.",
+        "salesforce_field": "Account.Industry, Account.NumberOfEmployees, Opportunity.Use_Case__c",
+        "hubspot_field": "company.industry, company.numberofemployees, deal.use_case"
+      },
+      {
+        "field_name": "Deal size, Sales cycle length",
+        "description": "For additional analysis",
+        "salesforce_field": "Opportunity.Amount, calculated from dates",
+        "hubspot_field": "deal.amount, calculated from dates"
+      }
+    ],
+    "required_timestamps": ["Opportunity Created Date", "Closed Date"],
+    "joins_and_keys": [
+      {
+        "left_entity": "Opportunity",
+        "right_entity": "Account",
+        "join_key": "AccountId",
+        "join_type": "inner",
+        "notes": "Bring account attributes (industry, size) to opp"
+      },
+      {
+        "left_entity": "Lead/Contact",
+        "right_entity": "Opportunity",
+        "join_key": "PrimaryContactId",
+        "join_type": "left",
+        "notes": "Map persona info (role/title) of champion to opportunity"
+      }
+    ],
+    "transformation_rules": [
+      "Define ICP criteria clearly (e.g., specific industries, company size range, use-case fit) and ensure each opp is tagged ICP or not",
+      "Group attributes into meaningful buckets (e.g., industries by vertical, employee count into tiers) for analysis",
+      "Calculate win rates per attribute: e.g., win rate in Manufacturing industry vs Tech"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "ICP Tag Completeness",
+        "logic": "Every opportunity above a certain stage has ICP field filled (no null)",
+        "severity": "high"
+      },
+      {
+        "check_name": "Outcome Bias Check",
+        "logic": "Ensure ICP was defined prior to outcome (to prevent only successful deals being tagged ICP retrospectively)",
+        "severity": "medium"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Win_Flag (1 for won, 0 for lost per opp)",
+      "ICP_Flag (1 if opp meets ICP, 0 if not)"
+    ],
+    "aggregation_rules": [
+      "Calculate win rate = avg(Win_Flag) for ICP=1 vs ICP=0 groups",
+      "Count wins by attribute (e.g., industry) and divide by total opps of that attribute to get attribute win rates"
+    ],
+    "cohort_logic": "Optionally analyze win rates by cohort (e.g., by quarter the opp was created) to ensure trends hold over time",
+    "attribution_logic": null,
+    "forecast_logic": null
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "GTM Leaders",
+    "recommended_refresh_cadence": "Quarterly",
+    "layout": [
+      {
+        "panel_title": "Win Rate: ICP vs Non-ICP",
+        "purpose": "Compare close rates for opportunities inside vs outside ideal profile",
+        "visual_type": "bar",
+        "primary_metrics": ["Win Rate %"],
+        "filters": ["quarter or date range"],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["Overall average win rate"]
+      },
+      {
+        "panel_title": "Win Profile Attributes",
+        "purpose": "Top attributes of won deals (e.g., break down win rates by industry or size)",
+        "visual_type": "table",
+        "primary_metrics": ["Attribute", "Win Rate (attribute)", "Share of Wins with attribute"],
+        "filters": [],
+        "drilldowns": [],
+        "annotations_or_thresholds": []
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Highlight how much higher the win rate is for ICP deals and what that implies",
+      "Describe common traits among won deals (e.g., 'our wins are mostly in X industry with Y size')"
+    ],
+    "diagnostic_questions": [
+      "Are there segments outside our defined ICP that actually have good win rates, indicating a potential new ICP expansion?",
+      "Which customer attributes correlate with faster sales cycles or larger deal sizes in wins (part of win profile)?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Refine targeting criteria to focus on high-win segments",
+        "owner": "MarketingOps",
+        "trigger_condition": "ICP win rate significantly exceeds non-ICP, indicating strong payoff in focusing on ICP"
+      },
+      {
+        "action": "Adjust ICP definition if needed",
+        "owner": "SalesOps",
+        "trigger_condition": "Some non-ICP segments show unexpectedly high win rates (consider including them as ICP or creating separate focus)"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Static analysis of win rates by a couple of key dimensions (industry, size) to evaluate ICP assumptions",
+    "advanced_version": "Dashboard with filters for any attribute and ML-derived 'win likelihood' scoring highlighting top profile combinations",
+    "common_client_customizations": [
+      "Include retention or NRR of ICP vs non-ICP customers to see if ICP not only easier to close but also retain",
+      "Visualize win rates across lead sources for ICP leads (blending with marketing data)"
+    ],
+    "privacy_and_access_notes": [
+      "Deal attributes and ICP flags are internal – safe for internal sharing",
+      "Be careful in external comms: ICP definition and performance might be competitively sensitive"
+    ],
+    "success_criteria": [
+      "Sales team adopts ICP-based qualification with confidence (because data shows it matters)",
+      "Resource allocation (marketing budget, SDR focus) aligns to the identified high-win-profile segments"
+    ]
+  },
+  "benchmarks": {
+    "icp_win_rate_lift": {
+      "significant": "ICP win rate 1.5x+ higher than non-ICP",
+      "marginal": "ICP win rate 1.2-1.5x higher",
+      "not_significant": "ICP win rate <1.2x higher (re-evaluate ICP definition)"
+    }
+  },
+  "references": []
+}

@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "bluf4-executive-summary",
+  "title": "BLUF+4 Executive Summary Input Schema",
+  "description": "Schema for validating input to the BLUF+4 Executive Summary Generator",
+  "type": "object",
+  "required": ["headline", "keyFindings", "nextSteps"],
+  "properties": {
+    "headline": {
+      "type": "string",
+      "description": "Bottom Line Up Front - the key conclusion or recommendation",
+      "maxLength": 150,
+      "minLength": 10,
+      "examples": [
+        "CPQ pricing accuracy at 67% is impacting quote margins and extending sales cycles by 3.2 days"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "description": "Severity level indicator",
+      "enum": ["CRITICAL", "ACTION REQUIRED", "ATTENTION", "OPPORTUNITY", "ON TRACK"],
+      "default": "ATTENTION"
+    },
+    "recommendation": {
+      "type": "string",
+      "description": "Primary recommendation for stakeholders",
+      "maxLength": 200,
+      "examples": [
+        "Prioritize pricing rule cleanup and approval workflow optimization within 30 days"
+      ]
+    },
+    "roi": {
+      "type": "string",
+      "description": "Projected return on investment or business impact",
+      "maxLength": 100,
+      "examples": [
+        "$127K annual savings, 15% faster quote turnaround"
+      ]
+    },
+    "healthScore": {
+      "type": "integer",
+      "description": "Overall health score from 0-100",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "keyFindings": {
+      "type": "array",
+      "description": "Key findings from the analysis (max 5)",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["text"],
+        "properties": {
+          "icon": {
+            "type": "string",
+            "description": "Emoji icon for visual indication",
+            "maxLength": 4,
+            "examples": ["🔴", "🟡", "🟢", "⚠️"]
+          },
+          "text": {
+            "type": "string",
+            "description": "Finding description",
+            "maxLength": 100
+          },
+          "metric": {
+            "type": "string",
+            "description": "Quantitative metric supporting the finding",
+            "maxLength": 50,
+            "examples": ["127 of 283", "72-hour delays", "95% accurate"]
+          }
+        }
+      }
+    },
+    "comparison": {
+      "type": "string",
+      "description": "Benchmark comparison statement",
+      "maxLength": 80,
+      "examples": [
+        "18 points below industry average"
+      ]
+    },
+    "nextSteps": {
+      "type": "array",
+      "description": "Prioritized action items (max 5)",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Action to be taken",
+            "maxLength": 80
+          },
+          "owner": {
+            "type": "string",
+            "description": "Person or team responsible",
+            "maxLength": 50,
+            "examples": ["sales-ops", "cpq-admin", "pricing-team"]
+          },
+          "timeline": {
+            "type": "string",
+            "description": "Expected timeline for completion",
+            "maxLength": 30,
+            "examples": ["Week 1-2", "30 days", "Q1 2026"]
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority ranking (1 = highest)",
+            "minimum": 1,
+            "maximum": 5
+          }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "description": "Risks and blockers (max 4)",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "icon": {
+            "type": "string",
+            "description": "Risk severity icon",
+            "enum": ["🔴", "🟡", "⚠️", "🚨"]
+          },
+          "type": {
+            "type": "string",
+            "description": "Risk severity type",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Risk description",
+            "maxLength": 100
+          },
+          "mitigation": {
+            "type": "string",
+            "description": "Mitigation strategy if available",
+            "maxLength": 80
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "description": "Decisions required from stakeholders (max 3)",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["decision"],
+        "properties": {
+          "decision": {
+            "type": "string",
+            "description": "Decision to be made",
+            "maxLength": 100
+          },
+          "owner": {
+            "type": "string",
+            "description": "Decision maker",
+            "maxLength": 50
+          },
+          "deadline": {
+            "type": "string",
+            "description": "Decision deadline",
+            "maxLength": 30
+          }
+        }
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "description": "Approvals needed (max 3)",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["item"],
+        "properties": {
+          "item": {
+            "type": "string",
+            "description": "Item requiring approval",
+            "maxLength": 100
+          },
+          "approver": {
+            "type": "string",
+            "description": "Approver or approval body",
+            "maxLength": 50
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "description": "Resources required (max 3)",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["resource"],
+        "properties": {
+          "resource": {
+            "type": "string",
+            "description": "Resource needed",
+            "maxLength": 100
+          },
+          "justification": {
+            "type": "string",
+            "description": "Justification for the resource",
+            "maxLength": 80
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Report metadata",
+      "properties": {
+        "reportType": {
+          "type": "string",
+          "description": "Type of report",
+          "examples": ["CPQ Assessment", "RevOps Audit", "Automation Audit"]
+        },
+        "org": {
+          "type": "string",
+          "description": "Organization name or alias"
+        },
+        "orgAlias": {
+          "type": "string",
+          "description": "Organization alias (alternative to org)"
+        },
+        "date": {
+          "type": "string",
+          "description": "Report date",
+          "format": "date"
+        },
+        "author": {
+          "type": "string",
+          "description": "Report author or agent"
+        },
+        "version": {
+          "type": "string",
+          "description": "Report version"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

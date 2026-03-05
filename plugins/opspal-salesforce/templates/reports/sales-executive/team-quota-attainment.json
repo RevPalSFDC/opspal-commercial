@@ -1,0 +1,147 @@
+{
+  "templateMetadata": {
+    "templateName": "Team Quota Attainment",
+    "templateVersion": "1.1",
+    "description": "Aggregate quota attainment across the sales team for executive reporting",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Team performance tracking, resource planning, compensation planning",
+    "customizationPoints": [
+      "Date range (quarter/year)",
+      "Team scope",
+      "Quota source"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount",
+      "Quota data available"
+    ]
+  },
+  "metricDefinitionId": "quota_attainment",
+  "reportMetadata": {
+    "name": "Team Quota Attainment",
+    "description": "Aggregate closed won vs quota for the team",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_WON",
+        "operator": "equals",
+        "value": "true",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total closed won"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Attainment_Percent",
+        "description": "Revenue / Quota",
+        "formula": "(SUM(AMOUNT) / Team_Quota) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Gauge",
+      "aggregateColumn": "Attainment_Percent",
+      "thresholds": {
+        "green": {
+          "min": 100,
+          "max": 200
+        },
+        "yellow": {
+          "min": 70,
+          "max": 100
+        },
+        "red": {
+          "min": 0,
+          "max": 70
+        }
+      }
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-productivity"
+    ],
+    "componentType": "Gauge",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

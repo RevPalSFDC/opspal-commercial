@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core N8n Deployment Lifecycle Skill"
+  short_description: "Help with Core N8n Deployment Lifecycle Skill tasks"
+  default_prompt: "Use $core-n8n-deployment-lifecycle-skill to execute this workflow safely and produce the expected artifacts."

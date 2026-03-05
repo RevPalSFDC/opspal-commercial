@@ -1,0 +1,131 @@
+{
+  "templateMetadata": {
+    "templateName": "My Activity Trend (30 Days)",
+    "templateVersion": "1.1",
+    "description": "Your daily activity trend over the past 30 days",
+    "audience": "Sales Reps, BDRs, SDRs",
+    "useCase": "Activity trending, consistency tracking, self-assessment",
+    "customizationPoints": [
+      "Time period",
+      "Activity types",
+      "Show average line"
+    ],
+    "prerequisites": [
+      "Activity tracking enabled",
+      "30 days of activity history"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "My Activity Trend - 30 Days",
+    "description": "Daily activity trend",
+    "reportType": "Activity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "ACTIVITY_DATE",
+        "operator": "equals",
+        "value": "LAST_N_DAYS:30",
+        "customizable": true
+      },
+      {
+        "column": "OWNER_ID",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "ACTIVITY_DATE",
+        "sortOrder": "Asc",
+        "dateGranularity": "Day"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Daily activity count"
+      }
+    ],
+    "chart": {
+      "chartType": "Line",
+      "groupingColumn": "ACTIVITY_DATE",
+      "aggregateColumn": "RowCount",
+      "showAverageLine": true
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-activities"
+    ],
+    "componentType": "Line Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

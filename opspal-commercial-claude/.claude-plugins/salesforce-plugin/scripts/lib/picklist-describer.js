@@ -1,0 +1,669 @@
+#!/usr/bin/env node
+
+/**
+ * Picklist Describer Tool
+ * 
+ * Discovers and analyzes picklist values including standard value sets
+ * like ContractStatus to understand allowed values and transitions
+ * 
+ * Created to address Contract status validation issues
+ */
+
+const { exec } = require('child_process');
+const { promisify } = require('util');
+const fs = require('fs').promises;
+const path = require('path');
+
+const execAsync = promisify(exec);
+
+class PicklistDescriber {
+    constructor(options = {}) {
+        this.orgAlias = options.orgAlias || process.env.SF_TARGET_ORG || process.env.SF_TARGET_ORG;
+        this.cacheDir = options.cacheDir || path.join(process.cwd(), '.cache', 'picklists');
+        this.cacheTimeout = options.cacheTimeout || 3600000; // 1 hour
+        this.verbose = options.verbose || false;
+    }
+
+    /**
+     * Initialize cache directory
+     */
+    async initCache() {
+        try {
+            await fs.mkdir(this.cacheDir, { recursive: true });
+        } catch (error) {
+            console.error(`Failed to create cache directory: ${error.message}`);
+        }
+    }
+
+    /**
+     * Get cache file path
+     */
+    getCacheFile(objectName, fieldName) {
+        return path.join(this.cacheDir, `${objectName}_${fieldName}_picklist.json`);
+    }
+
+    /**
+     * Check if cache is valid
+     */
+    async isCacheValid(filePath) {
+        try {
+            const stats = await fs.stat(filePath);
+            const age = Date.now() - stats.mtimeMs;
+            return age < this.cacheTimeout;
+        } catch {
+            return false;
+        }
+    }
+
+    /**
+     * Describe all picklist fields for an object
+     */
+    async describeObjectPicklists(objectName) {
+        console.log(`\n🔍 Describing picklist fields for ${objectName}...`);
+        
+        try {
+            // Get object describe
+            let stdout;
+            try {
+                ({ stdout } = await execAsync(`sf sobject describe --sobject ${objectName} --target-org ${this.orgAlias} --json`));
+            } catch (e) {
+                ({ stdout } = await execAsync(`sf sobject describe --sobject ${objectName} --targetusername ${this.orgAlias} --json`));
+            }
+            const result = JSON.parse(stdout);
+            
+            if (result.status !== 0) {
+                throw new Error(result.message || 'Failed to describe object');
+            }
+            
+            const fields = result.result.fields || [];
+            const picklistFields = fields.filter(field => 
+                field.type === 'picklist' || 
+                field.type === 'multipicklist'
+            );
+            
+            console.log(`Found ${picklistFields.length} picklist fields`);
+            
+            const picklistData = {
+                object: objectName,
+                timestamp: new Date().toISOString(),
+                fields: {}
+            };
+            
+            for (const field of picklistFields) {
+                const fieldData = {
+                    name: field.name,
+                    label: field.label,
+                    type: field.type,
+                    required: !field.nillable,
+                    restricted: field.restrictedPicklist || false,
+                    dependent: field.dependentPicklist || false,
+                    controlling: field.controllerName || null,
+                    defaultValue: field.defaultValue,
+                    values: []
+                };
+                
+                // Extract picklist values
+                if (field.picklistValues && field.picklistValues.length > 0) {
+                    fieldData.values = field.picklistValues.map(value => ({
+                        value: value.value,
+                        label: value.label,
+                        active: value.active,
+                        defaultValue: value.defaultValue || false,
+                        // For dependent picklists, validFor contains controlling values
+                        validFor: value.validFor || null
+                    }));
+                    
+                    // Count active values
+                    fieldData.activeCount = fieldData.values.filter(v => v.active).length;
+                    fieldData.totalCount = fieldData.values.length;
+                }
+                
+                picklistData.fields[field.name] = fieldData;
+                
+                if (this.verbose) {
+                    console.log(`  ✓ ${field.name}: ${fieldData.activeCount} active values`);
+                }
+            }
+            
+            // Cache the results
+            const cacheFile = this.getCacheFile(objectName, 'all');
+            await this.initCache();
+            await fs.writeFile(cacheFile, JSON.stringify(picklistData, null, 2));
+            
+            return picklistData;
+            
+        } catch (error) {
+            console.error(`❌ Error describing ${objectName}: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Get specific picklist field values
+     */
+    async getPicklistValues(objectName, fieldName) {
+        console.log(`\n🔍 Getting picklist values for ${objectName}.${fieldName}...`);
+        
+        // Check cache first
+        const cacheFile = this.getCacheFile(objectName, fieldName);
+        if (await this.isCacheValid(cacheFile)) {
+            console.log('  ↺ Using cached data');
+            const cached = await fs.readFile(cacheFile, 'utf8');
+            return JSON.parse(cached);
+        }
+        
+        try {
+            // Get field describe
+            const describeCmd = `sf sobject describe --sobject ${objectName} --target-org ${this.orgAlias} --json`;
+            const { stdout } = await execAsync(describeCmd);
+            const result = JSON.parse(stdout);
+            
+            if (result.status !== 0) {
+                throw new Error(result.message || 'Failed to describe object');
+            }
+            
+            const field = result.result.fields.find(f => f.name === fieldName);
+            
+            if (!field) {
+                throw new Error(`Field ${fieldName} not found on ${objectName}`);
+            }
+            
+            if (field.type !== 'picklist' && field.type !== 'multipicklist') {
+                throw new Error(`Field ${fieldName} is not a picklist field (type: ${field.type})`);
+            }
+            
+            const picklistData = {
+                object: objectName,
+                field: fieldName,
+                label: field.label,
+                type: field.type,
+                required: !field.nillable,
+                restricted: field.restrictedPicklist || false,
+                dependent: field.dependentPicklist || false,
+                controlling: field.controllerName || null,
+                timestamp: new Date().toISOString(),
+                values: []
+            };
+            
+            if (field.picklistValues && field.picklistValues.length > 0) {
+                picklistData.values = field.picklistValues.map(value => ({
+                    value: value.value,
+                    label: value.label,
+                    active: value.active,
+                    defaultValue: value.defaultValue || false,
+                    validFor: value.validFor || null
+                }));
+            }
+            
+            // Cache the results
+            await this.initCache();
+            await fs.writeFile(cacheFile, JSON.stringify(picklistData, null, 2));
+            
+            return picklistData;
+            
+        } catch (error) {
+            console.error(`❌ Error getting picklist values: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Get standard value set (like ContractStatus)
+     */
+    async getStandardValueSet(valueSetName) {
+        console.log(`\n🔍 Getting standard value set: ${valueSetName}...`);
+        
+        try {
+            // Retrieve standard value set metadata
+            const retrieveCmd = `sf project retrieve start --metadata StandardValueSet:${valueSetName} --target-org ${this.orgAlias} --json`;
+            const { stdout } = await execAsync(retrieveCmd);
+            const result = JSON.parse(stdout);
+            
+            if (result.status !== 0) {
+                // Try alternative approach using REST API
+                return await this.getStandardValueSetViaAPI(valueSetName);
+            }
+            
+            // Parse the retrieved metadata file
+            const metadataPath = path.join(
+                'force-app', 'main', 'default', 'standardValueSets', 
+                `${valueSetName}.standardValueSet-meta.xml`
+            );
+            
+            try {
+                const metadata = await fs.readFile(metadataPath, 'utf8');
+                return this.parseStandardValueSetXML(metadata, valueSetName);
+            } catch (error) {
+                console.log('  ⚠️  Could not read metadata file, trying API approach');
+                return await this.getStandardValueSetViaAPI(valueSetName);
+            }
+            
+        } catch (error) {
+            console.error(`❌ Error getting standard value set: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Get standard value set via REST API
+     */
+    async getStandardValueSetViaAPI(valueSetName) {
+        try {
+            // Map common standard value sets to their object/field combinations
+            const standardValueSetMap = {
+                'ContractStatus': { object: 'Contract', field: 'Status' },
+                'OpportunityStage': { object: 'Opportunity', field: 'StageName' },
+                'CaseStatus': { object: 'Case', field: 'Status' },
+                'LeadStatus': { object: 'Lead', field: 'Status' },
+                'AccountType': { object: 'Account', field: 'Type' },
+                'AccountIndustry': { object: 'Account', field: 'Industry' }
+            };
+            
+            const mapping = standardValueSetMap[valueSetName];
+            if (!mapping) {
+                throw new Error(`Unknown standard value set: ${valueSetName}`);
+            }
+            
+            // Get the picklist values through object describe
+            return await this.getPicklistValues(mapping.object, mapping.field);
+            
+        } catch (error) {
+            console.error(`❌ Error getting standard value set via API: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Parse standard value set XML
+     */
+    parseStandardValueSetXML(xml, valueSetName) {
+        // Simple XML parsing (in production, use proper XML parser)
+        const values = [];
+        const valueMatches = xml.matchAll(/<standardValue>([\s\S]*?)<\/standardValue>/g);
+        
+        for (const match of valueMatches) {
+            const valueBlock = match[1];
+            const fullName = (valueBlock.match(/<fullName>(.*?)<\/fullName>/) || [])[1];
+            const defaultValue = valueBlock.includes('<default>true</default>');
+            const label = (valueBlock.match(/<label>(.*?)<\/label>/) || [])[1] || fullName;
+            
+            if (fullName) {
+                values.push({
+                    value: fullName,
+                    label: label,
+                    active: true, // Standard values are always active
+                    defaultValue: defaultValue
+                });
+            }
+        }
+        
+        return {
+            name: valueSetName,
+            type: 'StandardValueSet',
+            timestamp: new Date().toISOString(),
+            values: values
+        };
+    }
+
+    /**
+     * Analyze picklist dependencies
+     */
+    async analyzePicklistDependencies(objectName, dependentField, controllingField) {
+        console.log(`\n🔍 Analyzing picklist dependency: ${objectName}.${dependentField} → ${controllingField}`);
+        
+        try {
+            const objectData = await this.describeObjectPicklists(objectName);
+            
+            const dependent = objectData.fields[dependentField];
+            const controlling = objectData.fields[controllingField];
+            
+            if (!dependent || !controlling) {
+                throw new Error('Fields not found');
+            }
+            
+            if (!dependent.dependent) {
+                throw new Error(`${dependentField} is not a dependent picklist`);
+            }
+            
+            // Build dependency matrix
+            const dependencyMatrix = {
+                object: objectName,
+                dependent: dependentField,
+                controlling: controllingField,
+                matrix: {}
+            };
+            
+            // Initialize matrix with controlling values
+            for (const controlValue of controlling.values) {
+                if (controlValue.active) {
+                    dependencyMatrix.matrix[controlValue.value] = [];
+                }
+            }
+            
+            // Map dependent values to controlling values
+            for (const depValue of dependent.values) {
+                if (depValue.active && depValue.validFor) {
+                    // Decode validFor bitmap (this is simplified - real implementation needs base64 decoding)
+                    // For now, we'll just note that the dependency exists
+                    console.log(`  ${depValue.value} depends on controlling field value(s)`);
+                }
+            }
+            
+            return dependencyMatrix;
+            
+        } catch (error) {
+            console.error(`❌ Error analyzing dependencies: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Check if a value is valid for a picklist
+     */
+    async isValidPicklistValue(objectName, fieldName, value) {
+        try {
+            const picklistData = await this.getPicklistValues(objectName, fieldName);
+            const validValue = picklistData.values.find(v => 
+                v.active && v.value === value
+            );
+            
+            return {
+                valid: !!validValue,
+                field: fieldName,
+                value: value,
+                restricted: picklistData.restricted,
+                activeValues: picklistData.values
+                    .filter(v => v.active)
+                    .map(v => v.value)
+            };
+            
+        } catch (error) {
+            return {
+                valid: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Generate picklist value report
+     */
+    async generateReport(objectName, outputFormat = 'console') {
+        const data = await this.describeObjectPicklists(objectName);
+        
+        switch (outputFormat) {
+            case 'json':
+                return JSON.stringify(data, null, 2);
+                
+            case 'csv':
+                return this.generateCSV(data);
+                
+            case 'html':
+                return this.generateHTML(data);
+                
+            default:
+                return this.generateConsoleReport(data);
+        }
+    }
+
+    /**
+     * Generate console report
+     */
+    generateConsoleReport(data) {
+        const lines = [];
+        lines.push('\n╔════════════════════════════════════════════════════════╗');
+        lines.push(`║     Picklist Analysis Report: ${data.object.padEnd(24)} ║`);
+        lines.push('╚════════════════════════════════════════════════════════╝\n');
+        
+        const fieldNames = Object.keys(data.fields);
+        lines.push(`Total Picklist Fields: ${fieldNames.length}\n`);
+        
+        for (const fieldName of fieldNames) {
+            const field = data.fields[fieldName];
+            lines.push(`┌─ ${fieldName} ${field.required ? '(Required)' : ''}`);
+            lines.push(`│  Label: ${field.label}`);
+            lines.push(`│  Type: ${field.type}`);
+            lines.push(`│  Restricted: ${field.restricted ? 'Yes' : 'No'}`);
+            
+            if (field.dependent) {
+                lines.push(`│  Dependent on: ${field.controlling}`);
+            }
+            
+            lines.push(`│  Values: ${field.activeCount} active / ${field.totalCount} total`);
+            
+            if (field.values.length > 0 && field.values.length <= 10) {
+                lines.push('│  Options:');
+                for (const value of field.values) {
+                    if (value.active) {
+                        const marker = value.defaultValue ? ' (default)' : '';
+                        lines.push(`│    • ${value.value}${marker}`);
+                    }
+                }
+            } else if (field.values.length > 10) {
+                lines.push(`│  Top values: ${field.values.slice(0, 5).map(v => v.value).join(', ')}...`);
+            }
+            
+            lines.push('└────────────────────────────────────\n');
+        }
+        
+        return lines.join('\n');
+    }
+
+    /**
+     * Generate CSV report
+     */
+    generateCSV(data) {
+        const rows = [];
+        rows.push(['Object', 'Field', 'Label', 'Type', 'Required', 'Restricted', 'Dependent', 'Active Values', 'Total Values']);
+        
+        for (const [fieldName, field] of Object.entries(data.fields)) {
+            rows.push([
+                data.object,
+                fieldName,
+                field.label,
+                field.type,
+                field.required ? 'Yes' : 'No',
+                field.restricted ? 'Yes' : 'No',
+                field.dependent ? 'Yes' : 'No',
+                field.activeCount || 0,
+                field.totalCount || 0
+            ]);
+        }
+        
+        return rows.map(row => row.join(',')).join('\n');
+    }
+
+    /**
+     * Generate HTML report
+     */
+    generateHTML(data) {
+        const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Picklist Report - ${data.object}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #0066cc; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th { background: #0066cc; color: white; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f5f5f5; }
+        .required { color: red; }
+        .restricted { background: #fff3cd; }
+        .dependent { background: #e7f3ff; }
+    </style>
+</head>
+<body>
+    <h1>Picklist Analysis Report: ${data.object}</h1>
+    <p>Generated: ${data.timestamp}</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Field Name</th>
+                <th>Label</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Restricted</th>
+                <th>Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${Object.entries(data.fields).map(([name, field]) => `
+                <tr class="${field.restricted ? 'restricted' : ''} ${field.dependent ? 'dependent' : ''}">
+                    <td>${name}</td>
+                    <td>${field.label}</td>
+                    <td>${field.type}</td>
+                    <td>${field.required ? '<span class="required">Yes</span>' : 'No'}</td>
+                    <td>${field.restricted ? 'Yes' : 'No'}</td>
+                    <td>${field.activeCount} / ${field.totalCount}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+</body>
+</html>`;
+        
+        return html;
+    }
+}
+
+// CLI interface
+if (require.main === module) {
+    const args = process.argv.slice(2);
+    
+    if (args.length === 0 || args.includes('--help')) {
+        console.log(`
+Picklist Describer Tool
+
+Usage: picklist-describer.js <command> [options]
+
+Commands:
+  describe <object>              Describe all picklist fields for an object
+  get <object> <field>           Get specific picklist values
+  standard <valueSet>            Get standard value set (e.g., ContractStatus)
+  validate <object> <field> <value>  Check if value is valid
+  dependency <object> <dependent> <controlling>  Analyze picklist dependencies
+
+Options:
+  --org <alias>                  Salesforce org alias
+  --format <type>                Output format (console, json, csv, html)
+  --verbose                      Verbose output
+  --no-cache                     Skip cache
+  --help                         Show this help
+
+Examples:
+  # Describe all picklists on Contract
+  node picklist-describer.js describe Contract
+
+  # Get Contract Status values
+  node picklist-describer.js get Contract Status
+
+  # Get standard ContractStatus value set
+  node picklist-describer.js standard ContractStatus
+
+  # Validate a picklist value
+  node picklist-describer.js validate Opportunity StageName "Closed Won"
+
+  # Analyze dependency
+  node picklist-describer.js dependency Account SubType Type
+        `);
+        process.exit(0);
+    }
+    
+    const command = args[0];
+    const options = {
+        orgAlias: args.includes('--org') ? args[args.indexOf('--org') + 1] : undefined,
+        verbose: args.includes('--verbose'),
+        noCache: args.includes('--no-cache')
+    };
+    
+    const describer = new PicklistDescriber(options);
+    
+    async function run() {
+        try {
+            switch (command) {
+                case 'describe': {
+                    const object = args[1];
+                    if (!object) {
+                        console.error('Object name required');
+                        process.exit(1);
+                    }
+                    const format = args.includes('--format') ? 
+                        args[args.indexOf('--format') + 1] : 'console';
+                    const report = await describer.generateReport(object, format);
+                    console.log(report);
+                    break;
+                }
+                
+                case 'get': {
+                    const object = args[1];
+                    const field = args[2];
+                    if (!object || !field) {
+                        console.error('Object and field names required');
+                        process.exit(1);
+                    }
+                    const data = await describer.getPicklistValues(object, field);
+                    console.log(JSON.stringify(data, null, 2));
+                    break;
+                }
+                
+                case 'standard': {
+                    const valueSet = args[1];
+                    if (!valueSet) {
+                        console.error('Value set name required');
+                        process.exit(1);
+                    }
+                    const data = await describer.getStandardValueSet(valueSet);
+                    console.log(JSON.stringify(data, null, 2));
+                    break;
+                }
+                
+                case 'validate': {
+                    const object = args[1];
+                    const field = args[2];
+                    const value = args[3];
+                    if (!object || !field || !value) {
+                        console.error('Object, field, and value required');
+                        process.exit(1);
+                    }
+                    const result = await describer.isValidPicklistValue(object, field, value);
+                    if (result.valid) {
+                        console.log(`✅ "${value}" is a valid value for ${object}.${field}`);
+                    } else {
+                        console.log(`❌ "${value}" is NOT valid for ${object}.${field}`);
+                        if (result.activeValues) {
+                            console.log(`\nValid values: ${result.activeValues.join(', ')}`);
+                        }
+                    }
+                    break;
+                }
+                
+                case 'dependency': {
+                    const object = args[1];
+                    const dependent = args[2];
+                    const controlling = args[3];
+                    if (!object || !dependent || !controlling) {
+                        console.error('Object, dependent field, and controlling field required');
+                        process.exit(1);
+                    }
+                    const data = await describer.analyzePicklistDependencies(object, dependent, controlling);
+                    console.log(JSON.stringify(data, null, 2));
+                    break;
+                }
+                
+                default:
+                    console.error(`Unknown command: ${command}`);
+                    process.exit(1);
+            }
+        } catch (error) {
+            console.error(`Error: ${error.message}`);
+            process.exit(1);
+        }
+    }
+    
+    run();
+}
+
+module.exports = PicklistDescriber;

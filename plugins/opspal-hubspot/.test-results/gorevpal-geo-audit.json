@@ -1,0 +1,196 @@
+{
+  "url": "https://gorevpal.com",
+  "analyzedAt": "2025-11-15T14:11:25.402Z",
+  "geoScore": 25,
+  "grade": "F",
+  "dimensions": {
+    "aiCrawlerAccess": {
+      "score": 0,
+      "status": "poor",
+      "allowed": [],
+      "disallowed": [],
+      "unknown": [
+        "GPTBot",
+        "Google-Extended",
+        "Claude-Web",
+        "PerplexityBot",
+        "Anthropic-AI",
+        "ChatGPT-User",
+        "Bytespider",
+        "CCBot",
+        "Applebot-Extended"
+      ],
+      "details": [
+        {
+          "userAgent": "*",
+          "directive": "disallow",
+          "path": "/_hcms/preview/"
+        },
+        {
+          "userAgent": "*",
+          "directive": "disallow",
+          "path": "/hs/manage-preferences/"
+        },
+        {
+          "userAgent": "*",
+          "directive": "disallow",
+          "path": "/hs/preferences-center/"
+        },
+        {
+          "userAgent": "*",
+          "directive": "disallow",
+          "path": "/*?*hs_preview=*"
+        },
+        {
+          "userAgent": "*",
+          "directive": "disallow",
+          "path": "/*?*hsCacheBuster=*"
+        }
+      ]
+    },
+    "entityMarkup": {
+      "score": 0,
+      "status": "poor",
+      "checks": {
+        "hasOrganization": false,
+        "organizationComplete": false,
+        "hasWebSite": false,
+        "hasPerson": false,
+        "hasSameAs": false,
+        "hasLogo": false,
+        "hasContactPoint": false,
+        "hasAddress": false
+      },
+      "issues": [
+        {
+          "severity": "high",
+          "issue": "Missing Organization schema"
+        },
+        {
+          "severity": "high",
+          "issue": "Organization missing sameAs links"
+        },
+        {
+          "severity": "medium",
+          "issue": "Organization missing logo"
+        },
+        {
+          "severity": "low",
+          "issue": "Missing WebSite schema"
+        },
+        {
+          "severity": "low",
+          "issue": "Organization missing contactPoint"
+        }
+      ]
+    },
+    "structuredContent": {
+      "score": 60,
+      "status": "fair",
+      "checks": {
+        "hasTLDR": true,
+        "hasLists": true,
+        "hasTables": true,
+        "hasDefinitions": false,
+        "hasSteps": false,
+        "hasQA": false
+      },
+      "issues": [
+        {
+          "severity": "medium",
+          "issue": "No Q&A format sections"
+        },
+        {
+          "severity": "low",
+          "issue": "No step-by-step instructions"
+        }
+      ]
+    },
+    "answerBlocks": {
+      "score": 30,
+      "status": "poor",
+      "checks": {
+        "hasShortAnswers": false,
+        "answerWordCount": 0,
+        "hasConciseParagraphs": false,
+        "hasDirectAnswers": true
+      },
+      "issues": [
+        {
+          "severity": "high",
+          "issue": "No 40-60 word answer blocks"
+        },
+        {
+          "severity": "medium",
+          "issue": "Paragraphs too long (>100 words)"
+        }
+      ]
+    },
+    "citationReadiness": {
+      "score": 65,
+      "status": "fair",
+      "checks": {
+        "hasExternalLinks": true,
+        "hasAuthorInfo": true,
+        "hasPublishDate": false,
+        "hasUpdateDate": true,
+        "hasSources": false
+      },
+      "issues": [
+        {
+          "severity": "high",
+          "issue": "Missing publish date"
+        },
+        {
+          "severity": "low",
+          "issue": "No explicit sources section"
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "high",
+      "category": "Entity Markup",
+      "issue": "Missing Organization schema",
+      "solution": "Add complete Organization schema with sameAs and logo",
+      "impact": 8
+    },
+    {
+      "priority": "high",
+      "category": "Entity Markup",
+      "issue": "Organization missing sameAs links",
+      "solution": "Add complete Organization schema with sameAs and logo",
+      "impact": 8
+    },
+    {
+      "priority": "high",
+      "category": "Answer Blocks",
+      "issue": "No concise answer blocks for AI extraction",
+      "solution": "Add 40-60 word paragraphs that directly answer key questions",
+      "impact": 8
+    },
+    {
+      "priority": "medium",
+      "category": "Citation",
+      "issue": "Missing publish/update dates",
+      "solution": "Add datePublished and dateModified in schema",
+      "impact": 6
+    }
+  ],
+  "summary": {
+    "overallScore": 25,
+    "grade": "F",
+    "totalRecommendations": 4,
+    "highPriority": 3,
+    "mediumPriority": 1,
+    "lowPriority": 0,
+    "topIssue": {
+      "priority": "high",
+      "category": "Entity Markup",
+      "issue": "Missing Organization schema",
+      "solution": "Add complete Organization schema with sameAs and logo",
+      "impact": 8
+    }
+  }
+}

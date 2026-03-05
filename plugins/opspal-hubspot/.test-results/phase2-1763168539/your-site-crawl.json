@@ -1,0 +1,32 @@
+{
+  "domain": "example.com",
+  "pages": [
+    {
+      "url": "https://example.com/",
+      "title": "Example Domain",
+      "content": {
+        "wordCount": 17,
+        "headings": [
+          {"level": "h1", "text": "Example Domain"}
+        ]
+      },
+      "schema": [],
+      "images": {"total": 0},
+      "links": {"internal": 0, "external": 1}
+    },
+    {
+      "url": "https://example.com/about",
+      "title": "About Us",
+      "content": {
+        "wordCount": 500,
+        "headings": [
+          {"level": "h1", "text": "About Our Company"},
+          {"level": "h2", "text": "Our Mission"}
+        ]
+      },
+      "schema": ["Organization"],
+      "images": {"total": 3},
+      "links": {"internal": 5, "external": 2}
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Instance Lifecycle Operations"
+  short_description: "Help with Marketo Instance Lifecycle Operations tasks"
+  default_prompt: "Use $marketo-instance-lifecycle-operations to execute this workflow safely and produce the expected artifacts."

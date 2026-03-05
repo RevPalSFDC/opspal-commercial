@@ -1,0 +1,145 @@
+{
+  "generated_at": "305808dbe315d5f1",
+  "source_fingerprint": "305808dbe315d5f1",
+  "source_opportunity_id": "OPP-010",
+  "title": "Forecast and Simulation Standardization",
+  "scope_plugins": [
+    {
+      "plugin": "opspal-gtm-planning",
+      "detected": true,
+      "owner": "revpal-gtm",
+      "status": "active",
+      "commands": 15,
+      "agents": 12,
+      "simulate_assets": 12,
+      "recommend_assets": 13,
+      "execute_assets": 13,
+      "verify_assets": 10
+    },
+    {
+      "plugin": "opspal-hubspot",
+      "detected": true,
+      "owner": "revpal-hubspot",
+      "status": "active",
+      "commands": 34,
+      "agents": 59,
+      "simulate_assets": 5,
+      "recommend_assets": 7,
+      "execute_assets": 77,
+      "verify_assets": 29
+    },
+    {
+      "plugin": "opspal-core",
+      "detected": true,
+      "owner": "revpal-platform",
+      "status": "active",
+      "commands": 90,
+      "agents": 65,
+      "simulate_assets": 4,
+      "recommend_assets": 29,
+      "execute_assets": 125,
+      "verify_assets": 102
+    }
+  ],
+  "readiness_status": "standardization_ready",
+  "simulation_coverage_ratio": 1,
+  "plugins_with_simulation": 3,
+  "plugins_with_verify": 3,
+  "plugins_detected": 3,
+  "plugins_in_scope": 3,
+  "standard_contract": {
+    "contract_id": "opspal-forecast-simulation-v1",
+    "required_fields": [
+      {
+        "name": "scenario_id",
+        "type": "string",
+        "required": true,
+        "description": "Stable unique identifier for each scenario run."
+      },
+      {
+        "name": "scenario_horizon_days",
+        "type": "number",
+        "required": true,
+        "description": "Forecast horizon in days."
+      },
+      {
+        "name": "assumptions",
+        "type": "array<string>",
+        "required": true,
+        "description": "Explicit scenario assumptions used by model/rules engine."
+      },
+      {
+        "name": "confidence",
+        "type": "number",
+        "required": true,
+        "description": "Normalized confidence score in [0,1]."
+      },
+      {
+        "name": "projected_delta",
+        "type": "number",
+        "required": true,
+        "description": "Expected positive/negative delta against baseline metric."
+      },
+      {
+        "name": "recommended_actions",
+        "type": "array<object>",
+        "required": true,
+        "description": "Ranked follow-up actions linked to scenario outcomes."
+      }
+    ],
+    "confidence_bands": [
+      {
+        "band": "high",
+        "min": 0.8,
+        "max": 1,
+        "action": "allow direct recommendation packaging"
+      },
+      {
+        "band": "medium",
+        "min": 0.6,
+        "max": 0.79,
+        "action": "require consultation + reviewer confirmation"
+      },
+      {
+        "band": "low",
+        "min": 0,
+        "max": 0.59,
+        "action": "fallback to deterministic baseline guidance"
+      }
+    ],
+    "output_artifacts": [
+      "reports/exec/opspal-next-best-actions.json",
+      "reports/exec/strategy-dashboard-portfolio.json"
+    ]
+  },
+  "blocking_gaps": [],
+  "recommended_next_actions": [
+    "Adopt the shared forecast/simulation contract fields in dashboard and next-best-action outputs."
+  ],
+  "execution_snapshot": {
+    "contract_snapshot": {
+      "required_fields_total": 6,
+      "confidence_bands_total": 3,
+      "output_artifacts_total": 2,
+      "output_artifacts": [
+        "reports/exec/opspal-next-best-actions.json",
+        "reports/exec/strategy-dashboard-portfolio.json"
+      ]
+    },
+    "scope_readiness": {
+      "plugins_in_scope": 3,
+      "plugins_detected": 3,
+      "plugins_with_simulation": 3,
+      "plugins_with_verify": 3
+    },
+    "runtime_handoff": {
+      "execution_checklist_detected": true,
+      "execution_checklist_path": "reports/exec/runtime/wi-nba-opp-010-execution-checklist.md"
+    },
+    "completion_gate": {
+      "package_contract_ready": true,
+      "runtime_handoff_ready": true,
+      "ready_for_phase2_execution": true
+    }
+  }
+}

@@ -1,0 +1,1296 @@
+/**
+ * RevPal Brand Theme Stylesheet
+ *
+ * Official RevPal branding implementing the complete brand guide:
+ * - Color System: Grape, Indigo, Apricot, Sand, Green
+ * - Typography: Montserrat (headings) + Figtree (body)
+ * - Spacing System: 2-64px scale
+ * - Modern, structured, calm, professional design
+ *
+ * Design Principles:
+ * - Clean over clever
+ * - Readability first
+ * - Consistent spacing
+ * - Subtle hierarchy
+ * - Minimal visual noise
+ *
+ * @version 2.0.0
+ * @date 2025-12-25
+ */
+
+/* =============================================================================
+   Google Fonts Import - Montserrat & Figtree
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap');
+
+/* =============================================================================
+   RevPal Brand Color System
+   ============================================================================= */
+
+:root {
+  /* Primary Brand Colors */
+  --brand-grape: #5F3B8C;
+  --brand-indigo: #3E4A61;
+  --brand-apricot: #E99560;
+  --brand-apricot-hover: #D88450;
+  --brand-sand: #EAE4DC;
+  --brand-green: #6FBF73;
+
+  /* Neutral Palette */
+  --neutral-100: #FFFFFF;
+  --neutral-90: #F6F5F3;
+  --neutral-80: #EAE4DC;
+  --neutral-60: #C6C3BD;
+  --neutral-20: #8A8A8A;
+  --neutral-0: #000000;
+
+  /* Semantic Color Mapping */
+  --color-primary: var(--brand-grape);
+  --color-primary-light: #7B5BA8;
+  --color-primary-dark: #4A2D6E;
+
+  --color-secondary: var(--brand-indigo);
+  --color-secondary-light: #5A6A82;
+  --color-secondary-dark: #2D3847;
+
+  --color-accent: var(--brand-apricot);
+  --color-accent-light: #F0A87A;
+  --color-accent-dark: var(--brand-apricot-hover);
+
+  --color-success: var(--brand-green);
+  --color-success-dark: #5A9F5E;
+  --color-warning: #E99560;
+  --color-danger: #D35649;
+  --color-info: var(--brand-indigo);
+
+  /* Text Colors */
+  --color-text: var(--neutral-0);
+  --color-text-secondary: var(--brand-indigo);
+  --color-text-muted: var(--neutral-20);
+
+  /* Background Colors */
+  --color-background: var(--neutral-100);
+  --color-surface: var(--neutral-90);
+  --color-surface-dark: var(--brand-sand);
+
+  /* Border Colors */
+  --color-border: rgba(62, 74, 97, 0.2);
+  --color-border-light: var(--neutral-80);
+  --color-border-dark: var(--neutral-60);
+}
+
+/* =============================================================================
+   RevPal Typography System
+   ============================================================================= */
+
+:root {
+  /* Font Stacks */
+  --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-body: 'Figtree', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+
+  /* Legacy aliases for compatibility */
+  --font-primary: var(--font-body);
+  --font-secondary: var(--font-heading);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =============================================================================
+   RevPal Spacing System
+   ============================================================================= */
+
+:root {
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+}
+
+/* =============================================================================
+   RevPal Heading Styles
+   ============================================================================= */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--brand-indigo);
+  margin-top: var(--space-32);
+  margin-bottom: var(--space-16);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--brand-grape);
+  border-bottom: none;
+  padding-bottom: var(--space-8);
+  margin-top: 0;
+  position: relative;
+}
+
+/* Partial underline accent for H1 */
+h1::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background-color: var(--brand-apricot);
+  margin-top: var(--space-8);
+  border-radius: 2px;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: var(--space-4);
+  position: relative;
+}
+
+/* Partial underline for H2 */
+h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background-color: var(--brand-sand);
+  margin-top: var(--space-8);
+  border-radius: 1px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+h6 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* =============================================================================
+   RevPal Paragraph & List Styles
+   ============================================================================= */
+
+p, li {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 75ch; /* Optimal reading length */
+}
+
+p {
+  margin-bottom: var(--space-24);  /* Increased for better readability */
+}
+
+/* Reduce spacing for paragraphs in lists */
+li p {
+  margin-bottom: var(--space-8);
+}
+
+ul, ol {
+  padding-left: var(--space-24);
+  margin-bottom: var(--space-16);
+}
+
+li {
+  margin-bottom: var(--space-8);
+}
+
+li::marker {
+  color: var(--brand-apricot);
+}
+
+/* =============================================================================
+   RevPal Links
+   ============================================================================= */
+
+a {
+  color: var(--brand-grape);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 150ms ease;
+}
+
+a:hover {
+  color: var(--brand-apricot);
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--brand-apricot);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* =============================================================================
+   RevPal Buttons
+   ============================================================================= */
+
+.btn,
+button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: var(--space-12) 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.btn-primary {
+  background: var(--brand-apricot);
+  color: var(--brand-indigo);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--brand-apricot-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:focus {
+  outline: 2px solid var(--brand-grape);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--brand-grape);
+  color: var(--brand-grape);
+}
+
+.btn-secondary:hover {
+  background: var(--brand-grape);
+  color: var(--neutral-100);
+}
+
+/* =============================================================================
+   RevPal Cards
+   ============================================================================= */
+
+.card {
+  background: var(--brand-sand);
+  border: 1px solid rgba(62, 74, 97, 0.2);
+  border-radius: 12px;
+  padding: var(--space-24);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(62, 74, 97, 0.15);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--brand-indigo);
+  margin-bottom: var(--space-16);
+  padding-bottom: var(--space-12);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* KPI/Stat Card Variation */
+.card-stat {
+  text-align: center;
+  padding: var(--space-32);
+}
+
+.card-stat .stat-value {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--brand-grape);
+  line-height: 1;
+}
+
+.card-stat .stat-label {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   RevPal Code Blocks
+   ============================================================================= */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--brand-sand);
+  color: var(--brand-grape);
+  padding: var(--space-2) var(--space-8);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background-color: var(--brand-indigo);
+  color: var(--neutral-90);
+  border: none;
+  border-radius: 8px;
+  padding: var(--space-24);
+  overflow-x: auto;
+  line-height: 1.6;
+  position: relative;
+  counter-reset: line;
+}
+
+pre code {
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  border: none;
+  display: block;
+}
+
+/* Line numbers option (add .line-numbers class to pre) */
+pre.line-numbers {
+  padding-left: calc(var(--space-24) + 40px);
+}
+
+pre.line-numbers code::before {
+  content: counter(line);
+  counter-increment: line;
+  position: absolute;
+  left: var(--space-16);
+  width: 24px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+}
+
+/* Code block language badge */
+pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: var(--space-8);
+  right: var(--space-12);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--brand-apricot);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   RevPal Tables
+   ============================================================================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-32) 0;
+  font-size: 0.9375rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table th {
+  background-color: var(--brand-grape);
+  color: var(--neutral-100);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  padding: var(--space-16) var(--space-16);  /* Increased padding */
+  text-align: left;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);  /* Subtle vertical dividers */
+}
+
+table th:last-child {
+  border-right: none;
+}
+
+table th:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+table th:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+table td {
+  padding: var(--space-12) var(--space-16);
+  border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border-light);  /* Subtle vertical dividers */
+}
+
+table td:last-child {
+  border-right: none;
+}
+
+/* Bold first column for labels/keys */
+table td:first-child {
+  font-weight: 600;
+  color: var(--brand-indigo);
+}
+
+table tr:nth-child(even) {
+  background-color: var(--neutral-90);
+}
+
+table tr:hover {
+  background-color: var(--brand-sand);
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr:last-child td:first-child {
+  border-radius: 0 0 0 8px;
+}
+
+table tr:last-child td:last-child {
+  border-radius: 0 0 8px 0;
+}
+
+/* Numeric columns - right-align */
+table td.numeric,
+table th.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =============================================================================
+   RevPal Blockquotes & Callouts
+   ============================================================================= */
+
+blockquote {
+  border-left: 4px solid var(--brand-apricot);
+  background-color: var(--neutral-90);
+  margin: var(--space-24) 0;
+  padding: var(--space-16) var(--space-24);
+  padding-left: calc(var(--space-24) + 32px);  /* Room for icon */
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+  position: relative;
+}
+
+/* Default blockquote icon */
+blockquote::before {
+  content: '"';
+  position: absolute;
+  left: var(--space-12);
+  top: var(--space-8);
+  font-size: 2rem;
+  font-family: Georgia, serif;
+  color: var(--brand-apricot);
+  opacity: 0.5;
+  line-height: 1;
+}
+
+blockquote p {
+  margin: 0;
+  color: var(--brand-indigo);
+}
+
+blockquote p:not(:last-child) {
+  margin-bottom: var(--space-12);
+}
+
+blockquote strong {
+  color: var(--brand-grape);
+}
+
+/* Note/Info callout */
+.callout-info,
+blockquote.note {
+  border-left-color: var(--brand-indigo);
+  background-color: rgba(62, 74, 97, 0.08);
+}
+
+.callout-info::before,
+blockquote.note::before {
+  content: 'ℹ️';
+  font-size: 1.25rem;
+  opacity: 1;
+}
+
+/* Tip callout */
+.callout-tip,
+blockquote.tip {
+  border-left-color: var(--brand-grape);
+  background-color: rgba(95, 59, 140, 0.08);
+}
+
+.callout-tip::before,
+blockquote.tip::before {
+  content: '💡';
+  font-size: 1.25rem;
+  opacity: 1;
+}
+
+/* Warning callout */
+.callout-warning,
+blockquote.warning {
+  border-left-color: var(--brand-apricot);
+  background-color: rgba(233, 149, 96, 0.1);
+}
+
+.callout-warning::before,
+blockquote.warning::before {
+  content: '⚠️';
+  font-size: 1.25rem;
+  opacity: 1;
+}
+
+/* Success callout */
+.callout-success,
+blockquote.success {
+  border-left-color: var(--brand-green);
+  background-color: rgba(111, 191, 115, 0.1);
+}
+
+.callout-success::before,
+blockquote.success::before {
+  content: '✅';
+  font-size: 1.25rem;
+  opacity: 1;
+}
+
+/* Danger/Error callout */
+.callout-danger,
+blockquote.danger,
+blockquote.error {
+  border-left-color: var(--color-danger);
+  background-color: rgba(211, 86, 73, 0.08);
+}
+
+.callout-danger::before,
+blockquote.danger::before,
+blockquote.error::before {
+  content: '❌';
+  font-size: 1.25rem;
+  opacity: 1;
+}
+
+/* Important callout */
+.callout-important,
+blockquote.important {
+  border-left-color: var(--brand-grape);
+  background-color: rgba(95, 59, 140, 0.12);
+  border-left-width: 6px;
+}
+
+.callout-important::before,
+blockquote.important::before {
+  content: '📌';
+  font-size: 1.25rem;
+  opacity: 1;
+}
+
+/* =============================================================================
+   RevPal Cover Page
+   ============================================================================= */
+
+.cover-page {
+  padding: var(--space-32) var(--space-48);
+  min-height: calc(100vh - 20mm);
+  display: flex;
+  flex-direction: column;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  page-break-after: always;
+  break-after: page;
+}
+
+.cover-page h1,
+.cover-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--brand-grape);
+  border-bottom: none;
+  margin-bottom: var(--space-16);
+  line-height: 1.15;
+}
+
+/* Remove underline from cover page H1 */
+.cover-page h1::after {
+  display: none;
+}
+
+.cover-logo {
+  margin-bottom: var(--space-16);
+}
+
+.cover-logo img {
+  max-width: 150px;
+  height: auto;
+}
+
+.cover-report-type {
+  display: inline-block;
+  background-color: var(--brand-grape);
+  color: var(--neutral-100);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: var(--space-8) var(--space-16);
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-24);
+}
+
+.cover-subtitle {
+  font-size: 1.125rem;
+  color: var(--brand-indigo);
+  max-width: 50ch;
+  line-height: 1.6;
+}
+
+.cover-divider {
+  width: 80px;
+  height: 4px;
+  background-color: var(--brand-apricot);
+  margin: var(--space-16) 0;
+  border-radius: 2px;
+}
+
+.cover-metadata {
+  background: var(--neutral-90);
+  padding: var(--space-24);
+  border-radius: 12px;
+  margin: var(--space-16) 0;
+  border: 1px solid var(--color-border-light);
+}
+
+/* 2-column metadata grid */
+.cover-metadata-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16) var(--space-32);
+}
+
+.cover-metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cover-metadata-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.cover-metadata-value {
+  font-size: 1rem;
+  color: var(--brand-indigo);
+  font-weight: 500;
+}
+
+/* Legacy metadata support */
+.cover-metadata p,
+.cover-metadata strong {
+  margin: var(--space-8) 0;
+}
+
+.cover-metadata strong {
+  color: var(--brand-indigo);
+}
+
+.cover-focus-areas {
+  margin: var(--space-24) 0;
+}
+
+.cover-focus-areas ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cover-focus-areas li {
+  position: relative;
+  padding-left: var(--space-24);
+  margin-bottom: var(--space-8);
+}
+
+.cover-focus-areas li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--brand-apricot);
+  font-weight: 600;
+}
+
+.cover-footer {
+  margin-top: auto;
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-border);
+}
+
+.cover-branding {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+}
+
+.cover-branding strong {
+  color: var(--brand-grape);
+}
+
+.cover-disclaimer {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  max-width: 80ch;
+}
+
+/* =============================================================================
+   RevPal TOC (Table of Contents)
+   ============================================================================= */
+
+.toc {
+  background-color: var(--neutral-90);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--brand-grape);
+  border-radius: 0 12px 12px 0;
+  padding: var(--space-32);
+  margin: var(--space-32) 0;
+  counter-reset: toc-section;  /* Enable numbering by default */
+}
+
+.toc h2 {
+  font-size: 1.125rem;
+  color: var(--brand-grape);
+  border-bottom: none;
+  margin-top: 0;
+  margin-bottom: var(--space-24);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Remove H2 underline in TOC */
+.toc h2::after {
+  display: none;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc > ul > li {
+  counter-increment: toc-section;
+  counter-reset: toc-subsection;
+  margin-bottom: var(--space-12);
+}
+
+.toc > ul > li > ul > li {
+  counter-increment: toc-subsection;
+  counter-reset: toc-subsubsection;
+}
+
+.toc > ul > li > ul > li > ul > li {
+  counter-increment: toc-subsubsection;
+}
+
+.toc li {
+  margin-bottom: var(--space-8);
+}
+
+/* TOC links with leader dots */
+.toc a {
+  color: var(--brand-indigo);
+  font-weight: 400;
+  display: flex;
+  align-items: baseline;
+  text-decoration: none;
+}
+
+/* Section number */
+.toc > ul > li > a::before {
+  content: counter(toc-section) ".";
+  font-weight: 600;
+  color: var(--brand-grape);
+  min-width: 24px;
+  margin-right: var(--space-8);
+}
+
+.toc > ul > li > ul > li > a::before {
+  content: counter(toc-section) "." counter(toc-subsection);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  min-width: 32px;
+  margin-right: var(--space-8);
+}
+
+.toc > ul > li > ul > li > ul > li > a::before {
+  content: counter(toc-section) "." counter(toc-subsection) "." counter(toc-subsubsection);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  min-width: 40px;
+  margin-right: var(--space-8);
+}
+
+/* Leader dots */
+.toc a .toc-text {
+  flex: 0 0 auto;
+}
+
+.toc a::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dotted var(--color-border-dark);
+  margin: 0 var(--space-8);
+  min-width: 20px;
+}
+
+/* Page number */
+.toc .toc-page {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.toc a:hover {
+  color: var(--brand-grape);
+}
+
+.toc a:hover::after {
+  border-bottom-color: var(--brand-apricot);
+}
+
+/* Nested lists indentation */
+.toc ul ul {
+  padding-left: var(--space-24);
+  margin-top: var(--space-4);
+}
+
+/* Level styling */
+.toc > ul > li > a {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.toc > ul > li > ul > li > a {
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.toc > ul > li > ul > li > ul > li > a {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* =============================================================================
+   RevPal Status Badges
+   ============================================================================= */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-12);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.status-success {
+  background-color: rgba(111, 191, 115, 0.2);
+  color: var(--color-success-dark);
+}
+
+.status-warning {
+  background-color: rgba(233, 149, 96, 0.2);
+  color: var(--brand-apricot-hover);
+}
+
+.status-danger {
+  background-color: rgba(211, 86, 73, 0.15);
+  color: var(--color-danger);
+}
+
+.status-info {
+  background-color: rgba(62, 74, 97, 0.15);
+  color: var(--brand-indigo);
+}
+
+/* =============================================================================
+   RevPal Section Breaks
+   ============================================================================= */
+
+hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, var(--brand-grape) 0%, var(--brand-apricot) 100%);
+  margin: var(--space-48) 0;
+  border-radius: 1px;
+}
+
+.section-break {
+  page-break-before: always;
+  border-top: 3px solid var(--brand-grape);
+  padding-top: var(--space-32);
+  margin-top: var(--space-48);
+}
+
+/* =============================================================================
+   RevPal Forms (for embedded forms in PDFs)
+   ============================================================================= */
+
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--neutral-100);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brand-grape);
+  box-shadow: 0 0 0 3px rgba(95, 59, 140, 0.15);
+}
+
+label {
+  font-weight: 500;
+  color: var(--brand-indigo);
+  margin-bottom: var(--space-8);
+  display: block;
+}
+
+/* =============================================================================
+   RevPal Motion & Interaction (for HTML output)
+   ============================================================================= */
+
+* {
+  transition-timing-function: ease;
+}
+
+/* Subtle transitions: 150-250ms */
+a,
+button,
+.btn,
+.card,
+input,
+textarea {
+  transition-duration: 150ms;
+}
+
+/* =============================================================================
+   RevPal Diagrams & Figures
+   ============================================================================= */
+
+/* Diagram card container */
+.diagram,
+.mermaid-diagram,
+figure.diagram {
+  background: var(--neutral-100);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--space-24);
+  margin: var(--space-32) 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  page-break-inside: avoid;
+}
+
+/* Diagram image */
+.diagram img,
+.mermaid-diagram img,
+figure.diagram img {
+  display: block;
+  max-width: 100%;
+  max-height: 500px;  /* Constrain tall diagrams */
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Diagram caption */
+.diagram figcaption,
+.mermaid-diagram figcaption,
+figure.diagram figcaption,
+.diagram-caption {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-top: var(--space-16);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-border-light);
+  font-style: italic;
+}
+
+/* Auto-numbered figure captions */
+.diagram-numbered {
+  counter-increment: figure;
+}
+
+.diagram-numbered figcaption::before {
+  content: "Figure " counter(figure) ": ";
+  font-weight: 600;
+  font-style: normal;
+  color: var(--brand-grape);
+}
+
+/* Diagram title (above image) */
+.diagram-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brand-indigo);
+  text-align: center;
+  margin-bottom: var(--space-16);
+}
+
+/* Wide/landscape diagrams */
+.diagram.diagram-wide,
+figure.diagram-wide {
+  max-width: 100%;
+  page: landscape;
+}
+
+.diagram.diagram-wide img {
+  max-height: 400px;
+}
+
+/* Reset figure counter at document start */
+body {
+  counter-reset: figure;
+}
+
+/* =============================================================================
+   RevPal Headers & Footers (Puppeteer PDF)
+   ============================================================================= */
+
+/* These styles are for the headerTemplate and footerTemplate in Puppeteer */
+.pdf-header {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 9px;
+  color: var(--color-text-muted);
+  padding: 0 20mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pdf-header-title {
+  font-weight: 500;
+  color: var(--brand-indigo);
+}
+
+.pdf-header-date {
+  color: var(--color-text-muted);
+}
+
+.pdf-footer {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 9px;
+  color: var(--color-text-muted);
+  padding: 0 20mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 8px;
+}
+
+.pdf-footer-brand {
+  color: var(--brand-grape);
+  font-weight: 500;
+}
+
+.pdf-footer-brand span {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.pdf-footer-page {
+  font-variant-numeric: tabular-nums;
+}
+
+.pdf-footer-page .page-current {
+  font-weight: 600;
+  color: var(--brand-indigo);
+}
+
+/* =============================================================================
+   RevPal Print Optimizations
+   ============================================================================= */
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Ensure brand colors print accurately */
+  h1, h2, h3, h4, h5, h6,
+  table th,
+  .cover-report-type,
+  .cover-divider,
+  .status,
+  blockquote,
+  .toc,
+  .diagram,
+  code,
+  pre {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Aggressive page-break avoidance for key elements */
+  .card,
+  table,
+  blockquote,
+  pre,
+  .diagram,
+  figure,
+  .mermaid-diagram,
+  .toc,
+  .callout-info,
+  .callout-warning,
+  .callout-success,
+  .callout-danger,
+  .callout-important {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Never break inside table rows */
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Keep table headers with body */
+  thead {
+    display: table-header-group;
+  }
+
+  /* Never split code blocks */
+  pre {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    overflow: hidden;  /* Prevent code from bleeding across pages */
+  }
+
+  /* Keep headings with following content */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Prevent orphaned headings */
+  h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+    page-break-before: avoid;
+    break-before: avoid;
+  }
+
+  /* Prevent widows and orphans in paragraphs */
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Cover page takes full page */
+  .cover-page {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* TOC takes full page */
+  .toc {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* Section breaks */
+  .section-break,
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Keep lists together when possible */
+  ul, ol {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* But allow breaking in long lists */
+  ul.allow-break,
+  ol.allow-break {
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+}
+
+/* =============================================================================
+   RevPal Accessibility
+   ============================================================================= */
+
+/* Ensure sufficient contrast for text */
+.low-contrast-warning {
+  /* Note: All brand colors tested for WCAG AA compliance */
+  /* --brand-grape on white: 7.1:1 (AAA) */
+  /* --brand-indigo on white: 8.5:1 (AAA) */
+  /* --brand-apricot on --brand-indigo: 4.8:1 (AA) */
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--brand-apricot);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

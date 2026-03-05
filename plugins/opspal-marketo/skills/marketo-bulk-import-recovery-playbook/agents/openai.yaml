@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Bulk Import Recovery Playbook"
+  short_description: "Help with Marketo Bulk Import Recovery Playbook tasks"
+  default_prompt: "Use $marketo-bulk-import-recovery-playbook to execute this workflow safely and produce the expected artifacts."

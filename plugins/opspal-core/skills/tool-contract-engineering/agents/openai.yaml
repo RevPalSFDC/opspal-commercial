@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tool Contract Engineering"
+  short_description: "Help with Tool Contract Engineering tasks"
+  default_prompt: "Use $tool-contract-engineering to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,65 @@
+{
+  "object": "Contact",
+  "template": "default",
+  "label": "Standard Contact Layout",
+  "description": "Default Contact layout for relationship management",
+  "targetPersonas": ["sales-rep", "sales-manager", "support-agent"],
+  "sections": [
+    {
+      "label": "Contact Information",
+      "order": 1,
+      "fields": [
+        "Name",
+        "AccountId",
+        "Title",
+        "Department",
+        "Email",
+        "Phone",
+        "MobilePhone",
+        "ReportsToId",
+        "OwnerId"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Address Information",
+      "order": 2,
+      "fields": [
+        "MailingAddress",
+        "OtherAddress"
+      ],
+      "columns": 2
+    },
+    {
+      "label": "Additional Information",
+      "order": 3,
+      "fields": [
+        "Birthdate",
+        "LeadSource",
+        "Description"
+      ],
+      "columns": 2
+    }
+  ],
+  "compactLayoutFields": ["Name", "AccountId", "Email", "Phone"],
+  "components": {
+    "header": [
+      {"type": "force:highlightsPanelDesktop", "order": 1}
+    ],
+    "main": [
+      {"type": "force:recordFieldSection", "sections": ["Contact Information", "Additional Information"], "order": 1},
+      {"type": "force:activityComposer", "order": 2}
+    ],
+    "sidebar": [
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Opportunity", "order": 1},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Case", "order": 2},
+      {"type": "force:relatedListSingleContainer", "relatedObject": "Task", "order": 3}
+    ]
+  },
+  "relatedLists": [
+    "Opportunities",
+    "Cases",
+    "Open Activities",
+    "Activity History"
+  ]
+}

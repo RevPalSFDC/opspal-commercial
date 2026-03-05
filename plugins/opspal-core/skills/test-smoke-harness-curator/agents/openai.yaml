@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Smoke Harness Curator"
+  short_description: "Help with Test Smoke Harness Curator tasks"
+  default_prompt: "Use $test-smoke-harness-curator to execute this workflow safely and produce the expected artifacts."

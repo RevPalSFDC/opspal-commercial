@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Org Context Detection Framework"
+  short_description: "Help with Salesforce Org Context Detection Framework tasks"
+  default_prompt: "Use $salesforce-org-context-detection-framework to execute this workflow safely and produce the expected artifacts."

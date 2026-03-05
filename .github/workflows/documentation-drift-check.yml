@@ -1,0 +1,68 @@
+name: Documentation Drift Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - 'plugins/**/agents/**/*.md'
+      - 'plugins/**/commands/**/*.md'
+      - 'plugins/**/skills/**/*.md'
+      - 'plugins/**/hooks/**/*.sh'
+      - 'plugins/**/scripts/**'
+      - 'scripts/generate-plugin-suite-docs.js'
+      - 'scripts/lib/**'
+      - 'AGENTS.md'
+      - 'README.md'
+      - 'CLAUDE.md'
+      - 'docs/PLUGIN_SUITE_CATALOG.md'
+      - 'docs/PLUGIN_SUITE_CATALOG.json'
+      - 'docs/PLUGIN_OWNERSHIP_AND_LIFECYCLE.md'
+      - 'docs/PLUGIN_DEPRECATION_POLICY.md'
+      - 'docs/PLUGIN_DOCUMENTATION_MAINTENANCE.md'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - 'plugins/**/agents/**/*.md'
+      - 'plugins/**/commands/**/*.md'
+      - 'plugins/**/skills/**/*.md'
+      - 'plugins/**/hooks/**/*.sh'
+      - 'plugins/**/scripts/**'
+      - 'scripts/generate-plugin-suite-docs.js'
+      - 'scripts/lib/**'
+      - 'AGENTS.md'
+      - 'README.md'
+      - 'CLAUDE.md'
+      - 'docs/PLUGIN_SUITE_CATALOG.md'
+      - 'docs/PLUGIN_SUITE_CATALOG.json'
+      - 'docs/PLUGIN_OWNERSHIP_AND_LIFECYCLE.md'
+      - 'docs/PLUGIN_DEPRECATION_POLICY.md'
+      - 'docs/PLUGIN_DOCUMENTATION_MAINTENANCE.md'
+  workflow_dispatch:
+
+jobs:
+  docs-drift:
+    name: Verify Generated Docs Are Up To Date
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run docs validation gates
+        run: npm run docs:ci
+
+      - name: Guidance on failure
+        if: failure()
+        run: |
+          echo "::error::Documentation validation failed."
+          echo "Run the local docs CI workflow and commit resulting changes:"
+          echo "  npm run docs:ci"

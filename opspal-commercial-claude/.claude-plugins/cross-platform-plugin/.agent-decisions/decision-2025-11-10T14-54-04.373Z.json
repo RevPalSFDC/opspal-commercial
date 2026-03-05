@@ -1,0 +1,184 @@
+{
+  "originalTask": "Analyze all Salesforce metadata and migrate Account data to HubSpot",
+  "timestamp": "2025-11-10T14:54:04.371Z",
+  "facets": [
+    {
+      "type": "analysis",
+      "matchedKeywords": [
+        "analyze"
+      ],
+      "priority": "high",
+      "agentCategories": [
+        "discovery",
+        "auditor",
+        "analyzer",
+        "assessor"
+      ]
+    },
+    {
+      "type": "migration",
+      "matchedKeywords": [
+        "migrate"
+      ],
+      "priority": "high",
+      "agentCategories": [
+        "orchestrator",
+        "data-operations",
+        "bridge"
+      ]
+    }
+  ],
+  "recommendedAgents": [
+    {
+      "agent": "sfdc-state-discovery",
+      "facet": "analysis",
+      "matchScore": 25,
+      "capabilities": [
+        "metadata analysis",
+        "org state",
+        "object discovery"
+      ],
+      "complexity": "low"
+    },
+    {
+      "agent": "sfdc-merge-orchestrator",
+      "facet": "migration",
+      "matchScore": 25,
+      "capabilities": [
+        "record merging",
+        "object consolidation"
+      ],
+      "complexity": "high"
+    },
+    {
+      "agent": "unified-data-quality-validator",
+      "facet": "analysis",
+      "matchScore": 15,
+      "capabilities": [
+        "data validation",
+        "quality checks",
+        "sync validation"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "agent": "sfdc-metadata-manager",
+      "facet": "migration",
+      "matchScore": 15,
+      "capabilities": [
+        "metadata deployment",
+        "object creation",
+        "field management"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "agent": "sfdc-data-operations",
+      "facet": "migration",
+      "matchScore": 15,
+      "capabilities": [
+        "data import",
+        "data export",
+        "bulk operations"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "agent": "hubspot-workflow-orchestrator",
+      "facet": "migration",
+      "matchScore": 15,
+      "capabilities": [
+        "workflow creation",
+        "automation"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "agent": "hubspot-data-operations",
+      "facet": "migration",
+      "matchScore": 15,
+      "capabilities": [
+        "property creation",
+        "data import",
+        "bulk updates"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "agent": "unified-orchestrator",
+      "facet": "migration",
+      "matchScore": 15,
+      "capabilities": [
+        "multi-platform coordination",
+        "complex workflows"
+      ],
+      "complexity": "high"
+    }
+  ],
+  "executionPlan": [
+    {
+      "step": 1,
+      "phase": "analysis",
+      "agent": "sfdc-state-discovery",
+      "facet": "analysis",
+      "description": "Analyze current state using sfdc-state-discovery"
+    },
+    {
+      "step": 2,
+      "phase": "analysis",
+      "agent": "unified-data-quality-validator",
+      "facet": "analysis",
+      "description": "Analyze current state using unified-data-quality-validator"
+    },
+    {
+      "step": 3,
+      "phase": "execution",
+      "agent": "sfdc-merge-orchestrator",
+      "facet": "migration",
+      "description": "Execute migration using sfdc-merge-orchestrator"
+    },
+    {
+      "step": 4,
+      "phase": "execution",
+      "agent": "sfdc-metadata-manager",
+      "facet": "migration",
+      "description": "Execute migration using sfdc-metadata-manager"
+    },
+    {
+      "step": 5,
+      "phase": "execution",
+      "agent": "sfdc-data-operations",
+      "facet": "migration",
+      "description": "Execute migration using sfdc-data-operations"
+    },
+    {
+      "step": 6,
+      "phase": "execution",
+      "agent": "hubspot-workflow-orchestrator",
+      "facet": "migration",
+      "description": "Execute migration using hubspot-workflow-orchestrator"
+    },
+    {
+      "step": 7,
+      "phase": "execution",
+      "agent": "hubspot-data-operations",
+      "facet": "migration",
+      "description": "Execute migration using hubspot-data-operations"
+    },
+    {
+      "step": 8,
+      "phase": "execution",
+      "agent": "unified-orchestrator",
+      "facet": "migration",
+      "description": "Execute migration using unified-orchestrator"
+    }
+  ],
+  "complexity": 0.5,
+  "requiresOrchestration": true,
+  "reasoning": [
+    "Task complexity: 50% (moderate)",
+    "Identified 2 task facet(s): analysis, migration",
+    "Recommended 8 agent(s) for execution",
+    "Orchestration recommended due to multiple agents"
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "templateMetadata": {
+    "templateName": "Team Pipeline Total",
+    "templateVersion": "1.1",
+    "description": "Total open pipeline value for the manager's team",
+    "audience": "Sales Managers, Sales Directors",
+    "useCase": "Pipeline health monitoring, forecast building, team reviews",
+    "customizationPoints": [
+      "Team scope (My Team, specific users)",
+      "Date range",
+      "Include/exclude specific stages"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount",
+      "Team hierarchy configured"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Team Pipeline Total",
+    "description": "Total open pipeline for my team",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "team",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      },
+      {
+        "column": "OPPORTUNITY_OWNER",
+        "operator": "equals",
+        "value": "$User.ManagerId.Team",
+        "customizable": true
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total team pipeline"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total deals"
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "AMOUNT:SUM",
+      "format": "currency"
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "team-pipeline"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise",
+      "smb"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified team report",
+        "reportOverrides": {
+          "maxColumns": 6
+        }
+      },
+      "standard": {
+        "description": "Full team management report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled team metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise team focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "smb": {
+        "description": "SMB team with higher volume targets",
+        "metricAdjustments": {
+          "activityTarget": {
+            "target": 30
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "TeamPipeline": {
+        "patterns": [
+          "Team_Pipeline__c",
+          "Pipeline__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "QuotaAttainment": {
+        "patterns": [
+          "Quota_Attainment__c",
+          "Attainment__c",
+          "Quota_Pct__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

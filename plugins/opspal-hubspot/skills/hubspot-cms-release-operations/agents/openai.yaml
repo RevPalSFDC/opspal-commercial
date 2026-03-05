@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Cms Release Operations"
+  short_description: "Help with Hubspot Cms Release Operations tasks"
+  default_prompt: "Use $hubspot-cms-release-operations to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,183 @@
+{
+  "template_id": "scenario-planning-model",
+  "report_name": "Upside / Base / Downside Scenario Model",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "Finance",
+  "primary_decisions_supported": [
+    "Risk-adjusted planning",
+    "Contingency resource plans",
+    "Investor expectation management"
+  ],
+  "executive_questions_answered": [
+    "How far off plan could we be in a downside scenario, and do we have a plan for it?",
+    "What upside could we capture if things go better than expected?",
+    "How does our base case compare to best- and worst-case outcomes?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Scenario ARR Delta",
+      "definition": "Difference between ARR in a given scenario (upside or downside) and the base case ARR. Quantifies revenue gap under alternate assumptions.",
+      "formula": "Scenario_ARR - Base_Case_ARR",
+      "grain": "year",
+      "required_dimensions": ["scenario"],
+      "known_variants": [
+        {
+          "variant_name": "% Difference vs Base",
+          "definition_delta": "Expresses scenario ARR delta as a percentage of base case ARR",
+          "when_to_use": "Communicating magnitude of upside/downside in relative terms"
+        }
+      ],
+      "pitfalls": [
+        "Not all scenarios are equally likely; avoid treating upside/downside as forecasts",
+        "Single-factor sensitivity may overlook combined effects of multiple variables",
+        "Scenarios rely on assumption quality – unrealistic inputs yield useless scenarios"
+      ]
+    },
+    {
+      "metric_name": "Key Assumption Sensitivity",
+      "definition": "Revenue impact of a small change (e.g., ±1%) in a key assumption (churn rate, sales productivity, etc.), identifying which inputs most influence outcomes.",
+      "formula": "Sensitivity = ΔARR / ΔAssumption",
+      "grain": "n/a",
+      "required_dimensions": ["assumption_name"],
+      "known_variants": [
+        {
+          "variant_name": "Elasticity Coefficient",
+          "definition_delta": "Measures % change in ARR for 1% change in input (normalized sensitivity)",
+          "when_to_use": "Comparing sensitivity across metrics or businesses"
+        }
+      ],
+      "pitfalls": [
+        "Assumes linear response – real systems may have nonlinear thresholds",
+        "Interdependencies: Changing one assumption can affect others, not isolated",
+        "Over-focusing on one sensitive assumption might neglect other risks"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["CRM", "Data Warehouse"],
+    "required_entities": ["ScenarioAssumptions (inputs table)", "Account/Opportunity (for baseline)"],
+    "required_fields": [
+      {
+        "field_name": "Assumption values",
+        "description": "Base/upside/downside values for each driver",
+        "type": "configuration"
+      },
+      {
+        "field_name": "Historical actuals",
+        "description": "Past performance for baseline calibration",
+        "salesforce_field": "Various metrics",
+        "hubspot_field": "Various metrics"
+      }
+    ],
+    "required_timestamps": [],
+    "joins_and_keys": [
+      {
+        "left_entity": "ScenarioAssumptions",
+        "right_entity": null,
+        "join_key": null,
+        "join_type": null,
+        "notes": "Assumptions applied in model; not joined to transactional data directly"
+      }
+    ],
+    "transformation_rules": [
+      "Ensure scenario inputs are internally consistent (e.g., if churn increases in downside, NRR should drop accordingly)",
+      "Use baseline actual metrics as starting point for scenarios",
+      "Exclude extraordinary one-off events from baseline to avoid skewing scenario projections"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Scenario Order",
+        "logic": "Verify Upside >= Base >= Downside for all key metrics (monotonic scenario outcomes)",
+        "severity": "medium"
+      },
+      {
+        "check_name": "Outcome Realism",
+        "logic": "Flag if downside scenario yields negative or near-zero ARR (overly pessimistic assumptions)",
+        "severity": "high"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "ARR_base_case (from latest forecast)",
+      "ARR_upside = f(ARR_base, optimistic assumptions)",
+      "ARR_downside = f(ARR_base, pessimistic assumptions)"
+    ],
+    "aggregation_rules": [
+      "Each scenario is calculated independently; no aggregation except to portfolio-level totals",
+      "If segmented (e.g., by region), sum scenario outputs for company-wide view"
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": "Base case aligns with official forecast. Upside/downside adjust key drivers (growth rates, churn, costs) to model best/worst outcomes."
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Ad Hoc",
+    "layout": [
+      {
+        "panel_title": "Scenario Outcomes",
+        "purpose": "Compare revenue and growth outcomes under base, upside, and downside scenarios",
+        "visual_type": "bar",
+        "primary_metrics": ["Base Case ARR", "Upside ARR", "Downside ARR"],
+        "filters": [],
+        "drilldowns": ["by segment if applicable"],
+        "annotations_or_thresholds": ["Base case = Plan"]
+      },
+      {
+        "panel_title": "Assumption Sensitivities",
+        "purpose": "Show which assumptions have the largest impact on outcomes",
+        "visual_type": "table",
+        "primary_metrics": ["Assumption", "Base Value", "ARR Impact of ±1% change"],
+        "filters": [],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["Highlight assumptions with outsized impact"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Identify which variables drive the biggest upside vs downside differences",
+      "Indicate whether the base case skews conservative or aggressive relative to scenarios"
+    ],
+    "diagnostic_questions": [
+      "What assumptions would need to come true to achieve the upside scenario?",
+      "If trends start matching downside scenario assumptions, how much would our plan miss by?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Set trigger conditions to implement cost controls (downside preparedness)",
+        "owner": "Finance",
+        "trigger_condition": "KPIs begin tracking closer to downside scenario values"
+      },
+      {
+        "action": "Outline investment opportunities (hiring, marketing) to seize upside",
+        "owner": "Exec",
+        "trigger_condition": "Early performance exceeds base and aligns with upside scenario"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Simple scenario toggle changing a few high-level metrics (e.g., ±X% sales, ±Y% churn)",
+    "advanced_version": "Comprehensive scenario planning tool linking all key inputs (sales capacity, marketing spend, churn drivers) with probabilistic outcomes",
+    "common_client_customizations": [
+      "More granular scenario tiers (e.g., mild vs severe downside)",
+      "Integrated scenario into financial statements for P&L impact"
+    ],
+    "privacy_and_access_notes": [
+      "Scenarios are exploratory – label clearly to avoid confusion with committed forecasts",
+      "Limit detailed assumption access to planning teams; share summarized impacts more broadly"
+    ],
+    "success_criteria": [
+      "Organization agrees on clear action plans tied to each scenario",
+      "No major surprise outside of scenario ranges (actual performance falls within modeled bounds)"
+    ]
+  },
+  "benchmarks": {
+    "typical_scenario_ranges": {
+      "upside_vs_base": "+15-25%",
+      "downside_vs_base": "-15-30%"
+    }
+  },
+  "references": []
+}

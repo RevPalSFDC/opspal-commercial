@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Org Alias and Path Compliance Framework"
+  short_description: "Help with Salesforce Org Alias and Path Compliance Framework"
+  default_prompt: "Use $salesforce-org-alias-and-path-compliance-framework to execute this workflow safely and produce the expected artifacts."

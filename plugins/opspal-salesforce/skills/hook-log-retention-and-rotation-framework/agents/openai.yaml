@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Log Retention and Rotation Framework"
+  short_description: "Help with Hook Log Retention and Rotation Framework tasks"
+  default_prompt: "Use $hook-log-retention-and-rotation-framework to execute this workflow safely and produce the expected artifacts."

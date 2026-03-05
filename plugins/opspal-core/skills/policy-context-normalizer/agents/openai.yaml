@@ -1,0 +1,4 @@
+interface:
+  display_name: "Policy Context Normalizer"
+  short_description: "Help with Policy Context Normalizer tasks"
+  default_prompt: "Use $policy-context-normalizer to execute this workflow safely and produce the expected artifacts."

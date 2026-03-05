@@ -1,0 +1,41 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__opspal__score_customer_health|mcp__opspal__score_churn_risk|mcp__opspal__score_deal_win_probability|mcp__opspal__score_lead_quality|mcp__opspal__run_smart_scorer",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-opspal-scoring.sh",
+            "timeout": 5000,
+            "description": "Validate scoring tool inputs have required signal data before API call"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__opspal__compute_revenue_model|mcp__opspal__run_scenario_planning|mcp__opspal__compute_market_sizing",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-opspal-compute.sh",
+            "timeout": 5000,
+            "description": "Validate compute-heavy tool inputs before API call"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__opspal__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-opspal-usage.sh",
+            "timeout": 5000,
+            "description": "Track OpsPal MCP usage and warn when approaching daily limits"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "response_validation": {
+    "enabled": true,
+    "mode": "block_and_retry",
+    "smart_detection": true,
+    "max_retries": 1,
+    "timeout_ms": 30000,
+    "thresholds": {
+      "percentage_bounds": [5, 95],
+      "record_count_deviation": 0.5,
+      "cross_reference_tolerance": 0.1,
+      "auto_retry_confidence": 0.8,
+      "warn_confidence": 0.5,
+      "round_number_suspicion": 0.7,
+      "zero_count_suspicion": 0.9
+    },
+    "domains": {
+      "salesforce": {
+        "validate_soql": true,
+        "org_profiles": "cached",
+        "field_limits": {
+          "Account": {
+            "min": 100,
+            "max": 1000000,
+            "typical_orphan_rate": 0.15
+          },
+          "Contact": {
+            "min": 200,
+            "max": 2000000,
+            "typical_orphan_rate": 0.10
+          },
+          "Lead": {
+            "min": 50,
+            "max": 500000,
+            "typical_orphan_rate": 0.20
+          },
+          "Opportunity": {
+            "min": 100,
+            "max": 500000,
+            "typical_orphan_rate": 0.05
+          }
+        }
+      },
+      "hubspot": {
+        "validate_filters": true,
+        "property_limits": {
+          "contacts": {
+            "min": 500,
+            "max": 500000
+          },
+          "companies": {
+            "min": 100,
+            "max": 100000
+          },
+          "deals": {
+            "min": 50,
+            "max": 50000
+          }
+        }
+      }
+    },
+    "detection_rules": {
+      "production": {
+        "weight": 1.0,
+        "enabled": true
+      },
+      "bulk": {
+        "weight": 0.9,
+        "threshold": 100,
+        "enabled": true
+      },
+      "statistical": {
+        "weight": 0.8,
+        "enabled": true
+      },
+      "destructive": {
+        "weight": 1.0,
+        "enabled": true
+      },
+      "field_analysis": {
+        "weight": 0.7,
+        "enabled": true
+      },
+      "extreme_percentages": {
+        "weight": 0.9,
+        "enabled": true
+      },
+      "zero_counts": {
+        "weight": 0.8,
+        "enabled": true
+      }
+    },
+    "skip_patterns": {
+      "read_only": true,
+      "documentation": true,
+      "sandbox": true,
+      "single_record": true
+    },
+    "logging": {
+      "enabled": true,
+      "log_file": ".cache/validation-log.jsonl",
+      "log_level": "info"
+    },
+    "performance": {
+      "cache_org_profiles": true,
+      "cache_ttl_hours": 24,
+      "parallel_validation": false,
+      "timeout_per_check_ms": 5000
+    },
+    "integration": {
+      "reflection_system": {
+        "enabled": true,
+        "log_catches": true,
+        "log_false_positives": true
+      },
+      "metrics": {
+        "enabled": true,
+        "track_catch_rate": true,
+        "track_false_positives": true,
+        "track_performance": true
+      }
+    }
+  }
+}

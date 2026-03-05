@@ -1,0 +1,4 @@
+interface:
+  display_name: "Routing Noise Recovery Playbook"
+  short_description: "Help with Routing Noise Recovery Playbook tasks"
+  default_prompt: "Use $routing-noise-recovery-playbook to execute this workflow safely and produce the expected artifacts."

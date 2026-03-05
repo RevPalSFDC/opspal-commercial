@@ -1,0 +1,279 @@
+{
+  "templateMetadata": {
+    "templateId": "demand-gen-funnel",
+    "templateName": "Demand Generation Funnel Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "Full marketing funnel visualization with conversion rates, cost per lead, and pipeline attribution",
+    "audience": "Marketing Operations, Demand Generation, CMO",
+    "function": "marketing",
+    "level": "executive",
+    "useCase": "Funnel optimization, campaign planning, conversion analysis",
+    "refreshFrequency": "Daily",
+    "componentCount": 6,
+    "prerequisites": [
+      "Lead status field with MQL/SQL stages",
+      "Campaign Member tracking enabled",
+      "Lead-to-Opportunity conversion configured",
+      "Cost tracking on Campaigns"
+    ],
+    "tags": ["funnel", "demand-gen", "mql", "sql", "conversion", "marketing"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "plg", "abm"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified funnel with 4 key conversion stages",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["Cost per MQL Trend", "Channel Attribution"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full demand generation funnel with all 6 components"
+      },
+      "plg": {
+        "description": "Product-led growth funnel with trial/freemium stages",
+        "filterOverrides": [
+          { "field": "LeadSource", "default": "Product", "values": ["Product Trial", "Freemium", "In-App Signup"] }
+        ],
+        "metricAdjustments": {
+          "leadToMQL": {
+            "target": "40%",
+            "thresholds": { "green": ">=40%", "yellow": "25-40%", "red": "<25%" }
+          }
+        }
+      },
+      "abm": {
+        "description": "Account-based marketing funnel with account engagement focus",
+        "filterOverrides": [
+          { "field": "Campaign.Type", "default": "ABM", "values": ["ABM", "Target Account"] }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Lead.Status", "Lead.CreatedDate", "Opportunity.StageName"],
+    "optionalFields": ["Lead.MQL_Date__c", "Lead.SQL_Date__c", "Campaign.ActualCost"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": ["MQL_Date__c", "Qualified_Date__c", "Status_Change_Date__c"],
+        "labelHints": ["MQL Date", "Qualified Date"],
+        "dataType": "date"
+      },
+      "CampaignCost": {
+        "patterns": ["ActualCost", "BudgetedCost", "Campaign_Spend__c"],
+        "labelHints": ["Actual Cost", "Cost", "Spend"],
+        "dataType": "currency"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Full Demand Gen Funnel", "MQL Volume", "Lead-to-Opp Conversion", "Cost per MQL"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Full Demand Gen Funnel", "MQL Volume"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 2, "colSpan": 1 },
+        "type": "Funnel Chart",
+        "title": "Full Demand Gen Funnel",
+        "sourceReport": "demand-gen-funnel-stages",
+        "stages": [
+          { "name": "Leads", "field": "COUNT(Lead.Id)", "color": "#5F3B8C" },
+          { "name": "MQL", "field": "COUNT(Lead.Id WHERE Status='MQL')", "color": "#7B4FAB" },
+          { "name": "SQL", "field": "COUNT(Lead.Id WHERE Status='SQL')", "color": "#9763CA" },
+          { "name": "Opportunity", "field": "COUNT(Opportunity.Id)", "color": "#B377E9" },
+          { "name": "Closed Won", "field": "COUNT(Opportunity.Id WHERE IsWon=TRUE)", "color": "#6FBF73" }
+        ],
+        "showConversionRates": true,
+        "showCounts": true
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "MQL Volume",
+        "sourceReport": "mql-volume-trend",
+        "metric": "COUNT(Lead.Id WHERE Status='MQL')",
+        "format": "number",
+        "comparisonPeriod": "LAST_MONTH",
+        "greenZone": { "changePercent": { "min": 10, "max": 100 } },
+        "yellowZone": { "changePercent": { "min": -5, "max": 10 } },
+        "redZone": { "changePercent": { "min": -100, "max": -5 } }
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "MQL to SQL Conversion",
+        "sourceReport": "mql-to-sql-conversion",
+        "metric": "COUNT(SQL) / COUNT(MQL) * 100",
+        "format": "percent",
+        "benchmark": { "good": ">30%", "excellent": ">50%", "warning": "<20%" },
+        "greenZone": { "min": 30, "max": 100 },
+        "yellowZone": { "min": 20, "max": 30 },
+        "redZone": { "min": 0, "max": 20 }
+      },
+      {
+        "position": { "row": 1, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Table",
+        "title": "Stage Conversion Rates",
+        "sourceReport": "funnel-conversion-rates",
+        "columns": [
+          { "field": "Stage_Transition", "header": "Stage" },
+          { "field": "Count_Start", "header": "Started" },
+          { "field": "Count_End", "header": "Converted" },
+          { "field": "Conversion_Rate", "header": "Rate", "format": "percent" },
+          { "field": "Avg_Days", "header": "Avg Days" }
+        ],
+        "rows": [
+          { "Stage_Transition": "Lead → MQL", "benchmark": "20-30%" },
+          { "Stage_Transition": "MQL → SQL", "benchmark": "30-50%" },
+          { "Stage_Transition": "SQL → Opportunity", "benchmark": "40-60%" },
+          { "Stage_Transition": "Opportunity → Won", "benchmark": "20-30%" }
+        ],
+        "conditionalFormatting": {
+          "Conversion_Rate": {
+            "green": ">benchmark",
+            "yellow": "within 10% of benchmark",
+            "red": "<benchmark - 10%"
+          }
+        }
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Line Chart",
+        "title": "MQL Trend (12 Months)",
+        "sourceReport": "mql-volume-trend",
+        "xAxis": "CreatedDate (Month)",
+        "yAxis": "COUNT(Lead.Id WHERE Status='MQL')",
+        "showTrendLine": true,
+        "showDataLabels": true,
+        "targetLine": "{{monthly_mql_target}}"
+      },
+      {
+        "position": { "row": 2, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Bar Chart",
+        "title": "Cost Per Lead by Source",
+        "sourceReport": "cost-per-lead-by-source",
+        "groupBy": "LeadSource",
+        "metric": "Campaign.ActualCost / COUNT(Lead.Id)",
+        "format": "currency",
+        "sortBy": "metric ASC",
+        "showBenchmarkLine": true,
+        "benchmarkValue": 50
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "CreatedDate",
+      "type": "dateRange",
+      "placeholder": "{{period}}",
+      "default": "THIS_FISCAL_QUARTER",
+      "values": ["THIS_MONTH", "LAST_MONTH", "THIS_FISCAL_QUARTER", "THIS_FISCAL_YEAR"]
+    },
+    {
+      "field": "LeadSource",
+      "type": "picklist",
+      "placeholder": "{{lead_source}}",
+      "default": "All",
+      "values": ["All", "Inbound", "Outbound", "Events", "Content", "Partner"]
+    },
+    {
+      "field": "Campaign.Type",
+      "type": "picklist",
+      "placeholder": "{{campaign_type}}",
+      "default": "All",
+      "values": ["All", "Digital", "Events", "Content", "Webinar", "Partner"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "note": "Marketing dashboards typically do not filter by user"
+  },
+  "sourceReportTemplates": [
+    "marketing/lifecycle-funnel",
+    "marketing/mql-to-sql-conversion",
+    "marketing/campaign-roi"
+  ],
+  "orgAdaptation": {
+    "requiredFields": [],
+    "optionalFields": [
+      "Lead.MQL_Date__c",
+      "Lead.SQL_Date__c",
+      "Lead.Marketing_Channel__c"
+    ],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQL_Status": {
+        "patterns": ["MQL", "Marketing Qualified", "Qualified"],
+        "fallbackStrategy": "Check Lead.Status picklist values",
+        "fallbackBehavior": "Map to first status after 'New'"
+      },
+      "SQL_Status": {
+        "patterns": ["SQL", "Sales Qualified", "Sales Accepted", "Working"],
+        "fallbackStrategy": "Check Lead.Status picklist values",
+        "fallbackBehavior": "Use IsConverted as proxy"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "mql_volume": {
+      "formula": "COUNT(Lead) WHERE Status = 'MQL' AND CreatedDate IN period",
+      "benchmark": { "good": "On target", "warning": "<80% of target" }
+    },
+    "mql_to_sql_conversion": {
+      "formula": "COUNT(SQL) / COUNT(MQL) * 100",
+      "benchmark": { "good": ">30%", "excellent": ">50%", "warning": "<20%" }
+    },
+    "cost_per_lead": {
+      "formula": "SUM(Campaign.ActualCost) / COUNT(Lead)",
+      "benchmark": { "good": "<$50", "warning": ">$100" }
+    },
+    "funnel_velocity": {
+      "formula": "AVG(SQL_Date - MQL_Date)",
+      "benchmark": { "good": "<14 days", "warning": ">30 days" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Lead.Status includes MQL and SQL values",
+      "Confirm Campaign tracking is enabled",
+      "Check Lead conversion settings",
+      "Create report folder: Demand Generation"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Marketing folder",
+      "Set daily refresh",
+      "Subscribe demand gen team to daily snapshot"
+    ]
+  },
+  "relatedTemplates": ["marketing-performance", "campaign-performance", "lead-generation"]
+}

@@ -1,0 +1,252 @@
+{
+  "id": "automation-audit",
+  "name": "Automation Audit Dashboard",
+  "description": "Inventory and health assessment of automated processes (Flows, Triggers, Workflows)",
+  "version": "1.0.0",
+  "category": "operations",
+  "audience": ["admin", "developer", "architect"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "object", "type": "select", "label": "Object", "default": "all" },
+      { "id": "type", "type": "multi-select", "label": "Automation Type", "default": "all", "options": ["Record-Triggered Flow", "Screen Flow", "Apex Trigger", "Process Builder", "Workflow Rule"] },
+      { "id": "status", "type": "select", "label": "Status", "default": "active", "options": ["active", "inactive", "all"] }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "total-automations",
+      "type": "kpi",
+      "title": "Total Automations",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "cog"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "automation-count"
+      },
+      "demoData": "kpis.totalAutomations"
+    },
+    {
+      "id": "active-flows",
+      "type": "kpi",
+      "title": "Active Flows",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "flow"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "flow-count"
+      },
+      "demoData": "kpis.activeFlows"
+    },
+    {
+      "id": "high-risk",
+      "type": "kpi",
+      "title": "High Risk",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "warning",
+        "valueColor": "#F59E0B"
+      },
+      "demoData": "kpis.highRiskCount"
+    },
+    {
+      "id": "circular-deps",
+      "type": "kpi",
+      "title": "Circular Dependencies",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "exclamation-circle",
+        "valueColor": "#EF4444"
+      },
+      "demoData": "kpis.circularDeps"
+    },
+    {
+      "id": "dependency-graph",
+      "type": "flowDiagram",
+      "title": "Automation Dependency Graph",
+      "position": { "row": 2, "col": 1, "colspan": 8, "rowspan": 2 },
+      "config": {
+        "diagramType": "flowchart",
+        "direction": "TD",
+        "theme": "default",
+        "height": 400,
+        "interactive": true,
+        "showLegend": true
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "field": "mermaid"
+      },
+      "demoData": "dependencyGraph.mermaid"
+    },
+    {
+      "id": "automations-by-type",
+      "type": "chart",
+      "title": "Automations by Type",
+      "position": { "row": 2, "col": 9, "colspan": 4, "rowspan": 2 },
+      "config": {
+        "chartType": "doughnut",
+        "showLegend": true,
+        "showValues": true,
+        "cutout": "60%"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "flows-by-type"
+      },
+      "demoData": "automationsByType"
+    },
+    {
+      "id": "overlap-warnings",
+      "type": "table",
+      "title": "Overlap Warnings",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "object", "label": "Object", "width": "15%" },
+          { "field": "event", "label": "Event", "width": "15%" },
+          { "field": "automations", "label": "Automations", "width": "35%", "format": "list" },
+          { "field": "severity", "label": "Severity", "width": "15%", "format": "badge" },
+          { "field": "recommendation", "label": "Recommendation", "width": "20%" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "rowHighlight": {
+          "field": "severity",
+          "values": {
+            "high": "#FEE2E2",
+            "medium": "#FEF3C7",
+            "low": "#DCFCE7"
+          }
+        }
+      },
+      "demoData": "overlapWarnings"
+    },
+    {
+      "id": "automation-inventory",
+      "type": "table",
+      "title": "Automation Inventory",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Name", "width": "25%" },
+          { "field": "type", "label": "Type", "width": "20%" },
+          { "field": "object", "label": "Object", "width": "15%" },
+          { "field": "event", "label": "Event", "width": "15%" },
+          { "field": "status", "label": "Status", "width": "10%", "format": "badge" },
+          { "field": "riskLevel", "label": "Risk", "width": "15%", "format": "badge" }
+        ],
+        "sortable": true,
+        "filterable": true,
+        "pagination": true,
+        "pageSize": 10,
+        "rowActions": [
+          { "id": "view", "label": "View Details", "icon": "eye" }
+        ]
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "automation-inventory"
+      },
+      "demoData": "automationInventory"
+    },
+    {
+      "id": "circular-dependencies-detail",
+      "type": "table",
+      "title": "Circular Dependency Details",
+      "position": { "row": 5, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "cycle", "label": "Cycle Path", "width": "40%", "format": "list" },
+          { "field": "objects", "label": "Objects", "width": "25%", "format": "list" },
+          { "field": "severity", "label": "Severity", "width": "15%", "format": "badge" },
+          { "field": "recommendation", "label": "Fix", "width": "20%" }
+        ],
+        "emptyMessage": "No circular dependencies detected"
+      },
+      "demoData": "circularDependencies"
+    },
+    {
+      "id": "recommendations",
+      "type": "table",
+      "title": "Recommendations",
+      "position": { "row": 5, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "priority", "label": "#", "width": "8%", "align": "center" },
+          { "field": "type", "label": "Type", "width": "12%", "format": "badge" },
+          { "field": "title", "label": "Recommendation", "width": "35%" },
+          { "field": "effort", "label": "Effort", "width": "15%" },
+          { "field": "impact", "label": "Impact", "width": "15%" }
+        ],
+        "sortable": true,
+        "pagination": false
+      },
+      "demoData": "recommendations"
+    }
+  ],
+
+  "dataBindings": {
+    "automation-count": {
+      "salesforce": {
+        "tooling": true,
+        "query": "SELECT COUNT(Id) total FROM Flow WHERE Status = 'Active' OR ProcessType != null"
+      }
+    },
+    "flow-count": {
+      "salesforce": {
+        "tooling": true,
+        "query": "SELECT COUNT(Id) total FROM Flow WHERE Status = 'Active'"
+      }
+    },
+    "flows-by-type": {
+      "salesforce": {
+        "tooling": true,
+        "query": "SELECT ProcessType, COUNT(Id) count FROM Flow WHERE Status = 'Active' GROUP BY ProcessType"
+      }
+    },
+    "automation-inventory": {
+      "salesforce": {
+        "tooling": true,
+        "query": "SELECT DeveloperName, ProcessType, TriggerType, Status, LastModifiedDate, LastModifiedBy.Name FROM Flow WHERE Status = 'Active' ORDER BY LastModifiedDate DESC"
+      }
+    }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "riskColors": {
+      "low": "#22C55E",
+      "medium": "#F59E0B",
+      "high": "#EF4444",
+      "critical": "#DC2626"
+    },
+    "automationTypeColors": {
+      "Record-Triggered Flow": "#5F3B8C",
+      "Screen Flow": "#818CF8",
+      "Apex Trigger": "#60A5FA",
+      "Process Builder": "#F59E0B",
+      "Workflow Rule": "#EF4444"
+    }
+  }
+}

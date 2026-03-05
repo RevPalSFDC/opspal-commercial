@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "platform": "generic",
+  "description": "Generic validation rules applicable to all platforms",
+
+  "rules": [
+    {
+      "id": "file-path-safety",
+      "description": "Prevent writes to sensitive directories",
+      "tools": ["Write", "Edit"],
+      "blockedPatterns": [
+        "^/etc/",
+        "^/usr/",
+        "^/var/",
+        "^\\.env$",
+        "credentials\\.json",
+        "\\.pem$",
+        "\\.key$"
+      ],
+      "action": "block",
+      "message": "Cannot write to sensitive paths or credential files"
+    },
+    {
+      "id": "bash-dangerous-commands",
+      "description": "Block potentially dangerous bash commands",
+      "tools": ["Bash"],
+      "blockedPatterns": [
+        "rm\\s+-rf\\s+/",
+        "rm\\s+-rf\\s+\\*",
+        ":(){ :|:& };:",
+        "mkfs\\.",
+        "dd\\s+if=/dev/zero",
+        "chmod\\s+-R\\s+777"
+      ],
+      "action": "block",
+      "message": "Potentially dangerous command blocked"
+    },
+    {
+      "id": "json-validity",
+      "description": "Validate JSON payloads",
+      "tools": ["*"],
+      "condition": {
+        "field": "body",
+        "type": "json"
+      },
+      "action": "validate",
+      "message": "Request body must be valid JSON"
+    },
+    {
+      "id": "large-file-warning",
+      "description": "Warn on large file operations",
+      "tools": ["Read", "Write"],
+      "condition": {
+        "sizeBytes": ">1000000"
+      },
+      "action": "warn",
+      "message": "Large file operation may impact performance"
+    },
+    {
+      "id": "api-key-exposure",
+      "description": "Detect potential API key exposure",
+      "tools": ["Write", "Edit", "Bash"],
+      "patterns": [
+        "sk-[a-zA-Z0-9]{48}",
+        "xoxb-[0-9]{11}-[0-9]{11}-[a-zA-Z0-9]{24}",
+        "AKIA[0-9A-Z]{16}",
+        "ghp_[a-zA-Z0-9]{36}"
+      ],
+      "action": "block",
+      "message": "Potential API key detected - do not commit secrets"
+    }
+  ],
+
+  "outputRules": [
+    {
+      "id": "error-response-detection",
+      "description": "Detect error responses",
+      "patterns": [
+        "\"error\":",
+        "\"errorCode\":",
+        "\"message\":.*error",
+        "status.*[45][0-9][0-9]"
+      ],
+      "action": "warn",
+      "message": "Response contains error indicators"
+    },
+    {
+      "id": "empty-result-warning",
+      "description": "Warn on empty results",
+      "patterns": [
+        "\"records\":[]",
+        "\"results\":[]",
+        "\"data\":[]",
+        "\"items\":[]"
+      ],
+      "action": "info",
+      "message": "Query returned empty results"
+    }
+  ]
+}

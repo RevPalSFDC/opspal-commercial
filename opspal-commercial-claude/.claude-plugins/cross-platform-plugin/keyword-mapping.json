@@ -1,0 +1,1792 @@
+{
+  "asana-task-manager": {
+    "keywords": [
+      "manage",
+      "integration",
+      "salesforce",
+      "both",
+      "asana",
+      "task",
+      "sync",
+      "sf"
+    ],
+    "description": "Manages integration between Salesforce and Asana, syncing tasks bidirectionally and coordinating project work across both platforms with comprehensive time tracking",
+    "file": "asana-task-manager.md"
+  },
+  "diagram-generator": {
+    "keywords": [
+      "diagram",
+      "generator",
+      "flow",
+      "data",
+      "metadata",
+      "flowchart",
+      "erd",
+      "chart"
+    ],
+    "description": "Generates Mermaid diagrams from natural language, metadata, or structured data. Supports flowcharts, ERDs, sequence diagrams, and state diagrams.",
+    "file": "diagram-generator.md"
+  },
+  "implementation-planner": {
+    "keywords": [
+      "plan",
+      "implementation",
+      "planner",
+      "orchestrate",
+      "document",
+      "doc"
+    ],
+    "description": "Parses build specifications and requirements documents to generate executable Asana project plans with task breakdown, agent assignments, estimates, and dependencies. Orchestrates implementation by delegating to specialized agents.",
+    "file": "implementation-planner.md"
+  },
+  "instance-backup": {
+    "keywords": [
+      "salesforce",
+      "instance",
+      "backup",
+      "manage",
+      "data",
+      "metadata",
+      "sf"
+    ],
+    "description": "Manages automated backups of Salesforce instances including metadata, data, and configurations with versioning and restore capabilities",
+    "file": "instance-backup.md"
+  },
+  "instance-deployer": {
+    "keywords": [
+      "deploy",
+      "instance",
+      "metadata",
+      "salesforce",
+      "sandbox",
+      "deployer",
+      "deployment",
+      "coordinate",
+      "manage",
+      "data"
+    ],
+    "description": "Manages deployments between Salesforce instances, handles promotion from sandbox to production, and coordinates cross-instance metadata migrations",
+    "file": "instance-deployer.md"
+  },
+  "instance-manager": {
+    "keywords": [
+      "manage",
+      "instance",
+      "salesforce",
+      "multiple",
+      "sf"
+    ],
+    "description": "Manages multiple Salesforce instance projects, handles switching between instances, and maintains instance configurations",
+    "file": "instance-manager.md"
+  },
+  "instance-sync": {
+    "keywords": [
+      "sync",
+      "data",
+      "salesforce",
+      "instance",
+      "metadata",
+      "sf"
+    ],
+    "description": "Synchronizes configurations, metadata, and data between Salesforce instances, maintains consistency across environments",
+    "file": "instance-sync.md"
+  },
+  "live-wire-sync-test-orchestrator": {
+    "keywords": [
+      "sync",
+      "live",
+      "test",
+      "wire",
+      "workflow",
+      "salesforce",
+      "orchestrator",
+      "orchestrate",
+      "flow",
+      "sf"
+    ],
+    "description": "Orchestrates complete Live Wire Sync Test workflow for validating bidirectional sync between Salesforce and HubSpot",
+    "file": "live-wire-sync-test-orchestrator.md"
+  },
+  "pdf-generator": {
+    "keywords": [
+      "diagram",
+      "document",
+      "generator",
+      "doc"
+    ],
+    "description": "Converts markdown documents to professional PDFs with Mermaid diagram rendering, multi-document collation, TOC generation, and custom cover pages.",
+    "file": "pdf-generator.md"
+  },
+  "pptx-generator": {
+    "keywords": [
+      "pptx",
+      "powerpoint",
+      "deck",
+      "slides",
+      "presentation",
+      "offline",
+      "ppt"
+    ],
+    "description": "Converts markdown to offline PPTX decks with embedded fonts, Mermaid diagrams, and shared slide spec layouts.",
+    "file": "pptx-generator.md"
+  },
+  "platform-instance-manager": {
+    "keywords": [
+      "manage",
+      "platform",
+      "multiple",
+      "instance",
+      "salesforce",
+      "sf",
+      "hubspot"
+    ],
+    "description": "Manages multiple platform instances (Salesforce, HubSpot, etc.), handles switching between environments, and maintains platform-agnostic configurations",
+    "file": "platform-instance-manager.md"
+  },
+  "project-connect": {
+    "keywords": [
+      "connect",
+      "project",
+      "strategy",
+      "orchestrate"
+    ],
+    "description": "Autonomous customer onboarding agent that orchestrates project setup across Supabase, GitHub, Google Drive, and Asana with connect-first strategy and comprehensive logging",
+    "file": "project-connect.md"
+  },
+  "sales-funnel-diagnostic": {
+    "keywords": [
+      "funnel",
+      "sales",
+      "diagnostic",
+      "analyze",
+      "analysis",
+      "plan",
+      "cross-platform"
+    ],
+    "description": "Comprehensive cross-platform sales funnel diagnostic agent that analyzes full pipeline (lead/contact → opportunity → close) with industry-benchmarked analysis, root cause diagnostics, and actionable remediation plans for B2B sales teams",
+    "file": "sales-funnel-diagnostic.md"
+  },
+  "sfdc-hubspot-dedup-orchestrator": {
+    "keywords": [
+      "sf",
+      "hubspot",
+      "sfdc",
+      "salesforce",
+      "dedup",
+      "orchestrator",
+      "orchestrate",
+      "cross-platform"
+    ],
+    "description": "Orchestrates cross-platform Company/Account deduplication between HubSpot and Salesforce with comprehensive safety guardrails",
+    "file": "sfdc-hubspot-dedup-orchestrator.md"
+  },
+  "agent-developer": {
+    "keywords": [
+      "dev",
+      "salesforce",
+      "developer",
+      "sf"
+    ],
+    "description": "Creates new specialized sub-agents, extends existing agent capabilities, and develops agent interaction patterns for the Salesforce project",
+    "file": "agent-developer.md"
+  },
+  "agent-quality-analyzer": {
+    "keywords": [
+      "quality",
+      "analyze",
+      "analyzer",
+      "document",
+      "doc",
+      "documentation"
+    ],
+    "description": "Analyzes agent quality including prompt engineering, tool usage, documentation, and best practices compliance with detailed scoring and improvement recommendations",
+    "file": "agent-quality-analyzer.md"
+  },
+  "agent-tester": {
+    "keywords": [
+      "test",
+      "validation",
+      "analysis",
+      "error",
+      "process",
+      "integration",
+      "tester"
+    ],
+    "description": "Comprehensive testing and validation system for sub-agents with advanced process validation, end-to-end testing, automated test generation, and error pattern analysis integration",
+    "file": "agent-tester.md"
+  },
+  "executive-reports-agent": {
+    "keywords": [
+      "report",
+      "executive",
+      "reports"
+    ],
+    "description": "Specialized agent for generating executive-level reports and summaries by audience with zero hallucinations",
+    "file": "executive-reports-agent.md"
+  },
+  "mcp-config-cli": {
+    "keywords": [
+      "config"
+    ],
+    "description": "MCP server configuration specialist for Claude Code CLI users",
+    "file": "mcp-config-cli.md"
+  },
+  "mcp-config-desktop": {
+    "keywords": [
+      "desktop",
+      "config"
+    ],
+    "description": "MCP server configuration specialist for Claude Desktop users",
+    "file": "mcp-config-desktop.md"
+  },
+  "plugin-catalog-manager": {
+    "keywords": [
+      "manage",
+      "plugin",
+      "catalog",
+      "analysis"
+    ],
+    "description": "Generates comprehensive marketplace catalogs with searchable plugin and agent directories, capability matrices, coverage analysis, and statistics",
+    "file": "plugin-catalog-manager.md"
+  },
+  "plugin-dependency-tracker": {
+    "keywords": [
+      "plugin",
+      "dependency",
+      "tracker",
+      "analyze",
+      "check",
+      "dependencies,"
+    ],
+    "description": "Tracks and validates cross-plugin dependencies, detects circular dependencies, checks version compatibility, and analyzes breaking change impact",
+    "file": "plugin-dependency-tracker.md"
+  },
+  "plugin-documenter": {
+    "keywords": [
+      "document",
+      "doc",
+      "metadata",
+      "documentation",
+      "plugin",
+      "documenter",
+      "data"
+    ],
+    "description": "Automatically generates comprehensive README files and documentation for plugins by extracting metadata from plugin.json, agents, scripts, and commands",
+    "file": "plugin-documenter.md"
+  },
+  "plugin-integration-tester": {
+    "keywords": [
+      "integration",
+      "test",
+      "validation",
+      "plugin",
+      "tester",
+      "report",
+      "check"
+    ],
+    "description": "Runs comprehensive integration tests for plugin installation, agent discovery, functionality validation, and dependency checking with automated test reporting",
+    "file": "plugin-integration-tester.md"
+  },
+  "plugin-publisher": {
+    "keywords": [
+      "publish",
+      "validation",
+      "release",
+      "plugin",
+      "publisher",
+      "manage"
+    ],
+    "description": "Manages plugin versioning, release preparation, git tagging, and marketplace publishing with automated changelog generation and pre-release validation",
+    "file": "plugin-publisher.md"
+  },
+  "plugin-release-manager": {
+    "keywords": [
+      "release",
+      "manage",
+      "plugin",
+      "updates,"
+    ],
+    "description": "Manages plugin releases with version updates, git tagging, GitHub releases, CHANGELOG updates, and Slack notifications for the OpsPal Plugin Marketplace",
+    "file": "plugin-release-manager.md"
+  },
+  "plugin-scaffolder": {
+    "keywords": [
+      "plugin",
+      "scaffolder",
+      "api",
+      "dev"
+    ],
+    "description": "Automates creation of new plugins with proper structure, manifests, templates, and boilerplate code for rapid plugin development",
+    "file": "plugin-scaffolder.md"
+  },
+  "plugin-test-generator": {
+    "keywords": [
+      "test",
+      "plugin",
+      "generator",
+      "report"
+    ],
+    "description": "Generates comprehensive test suites for plugins by auto-detecting testable functions, creating test scaffolding, and setting up test infrastructure with coverage reporting",
+    "file": "plugin-test-generator.md"
+  },
+  "plugin-validator": {
+    "keywords": [
+      "validation",
+      "plugin",
+      "validator",
+      "report"
+    ],
+    "description": "Comprehensive validation of plugin structure, naming conventions, manifests, and marketplace standards with detailed compliance reporting",
+    "file": "plugin-validator.md"
+  },
+  "project-maintainer": {
+    "keywords": [
+      "project",
+      "salesforce",
+      "maintainer",
+      "manage",
+      "sf",
+      "document",
+      "doc",
+      "documentation"
+    ],
+    "description": "Maintains and manages the Salesforce sub-agent project itself, including agent updates, documentation, configuration management, and project health monitoring",
+    "file": "project-maintainer.md"
+  },
+  "response-validator": {
+    "keywords": [
+      "response",
+      "validator"
+    ],
+    "description": "Validates agent responses for plausibility, statistical accuracy, and cross-reference consistency before presenting to users. Automatically retries suspicious responses.",
+    "file": "response-validator.md"
+  },
+  "supervisor-auditor": {
+    "keywords": [
+      "audit",
+      "supervisor",
+      "auditor",
+      "orchestrate",
+      "workflow",
+      "flow"
+    ],
+    "description": "Orchestrates complex multi-agent workflows with intelligent task decomposition, parallel execution, sub-agent enforcement, and execution compliance auditing",
+    "file": "supervisor-auditor.md"
+  },
+  "gtm-attribution-governance": {
+    "keywords": [
+      "validation",
+      "attribution",
+      "strategy",
+      "governance",
+      "plan",
+      "data",
+      "test"
+    ],
+    "description": "Attribution model selection and validation for GTM planning - compares first-touch/last-touch/position-based/data-driven models, back-tests on prior FY, and recommends optimal attribution strategy",
+    "file": "gtm-attribution-governance.md"
+  },
+  "gtm-comp-planner": {
+    "keywords": [
+      "plan",
+      "error",
+      "design",
+      "test",
+      "comp",
+      "planner",
+      "with",
+      "payout"
+    ],
+    "description": "Compensation plan design with payout modeling - designs OTE structures, commission rates, accelerators/decelerators, runs Monte Carlo payout simulations, and generates UAT test plans with <1% error tolerance",
+    "file": "gtm-comp-planner.md"
+  },
+  "gtm-data-insights": {
+    "keywords": [
+      "data",
+      "validation",
+      "analysis",
+      "field",
+      "quality",
+      "insights",
+      "plan",
+      "hs"
+    ],
+    "description": "Historical performance analysis and data quality validation for GTM planning - extracts 24 months of data, builds cohorts, validates field completeness, and generates Data Dictionary",
+    "file": "gtm-data-insights.md"
+  },
+  "gtm-planning-orchestrator": {
+    "keywords": [
+      "plan",
+      "planning",
+      "orchestrator",
+      "strategy",
+      "workflow",
+      "flow",
+      "data"
+    ],
+    "description": "Master orchestrator for GTM Annual Planning workflow with approval gates, scenario modeling coordination, and multi-agent coordination across data, territory, comp, and strategy domains",
+    "file": "gtm-planning-orchestrator.md"
+  },
+  "gtm-quota-capacity": {
+    "keywords": [
+      "quota",
+      "capacity",
+      "analysis",
+      "plan",
+      "test"
+    ],
+    "description": "Quota and capacity modeling with Monte Carlo simulations - builds P10/P50/P90 scenarios, sensitivity analysis, pipeline coverage guidance, and back-tests vs prior FY for GTM planning",
+    "file": "gtm-quota-capacity.md"
+  },
+  "gtm-strategy-planner": {
+    "keywords": [
+      "strategy",
+      "plan",
+      "planner",
+      "credit"
+    ],
+    "description": "GTM motion playbook and credit rule definition - defines new logo vs expansion motions, PLG→SLG transitions, partner strategies, and sourced/influenced credit rules aligned with attribution policy",
+    "file": "gtm-strategy-planner.md"
+  },
+  "gtm-territory-designer": {
+    "keywords": [
+      "design",
+      "territory",
+      "designer",
+      "plan"
+    ],
+    "description": "Territory design and ROE rule definition for GTM planning - creates balanced territory carves, validates fairness (Gini ≤0.3), generates account assignments, and defines rules of engagement",
+    "file": "gtm-territory-designer.md"
+  },
+  "HubSpot Adoption Tracker": {
+    "keywords": [
+      "hubspot",
+      "adoption",
+      "tracker",
+      "metrics"
+    ],
+    "description": "Platform adoption specialist for user activity monitoring, feature adoption metrics, training effectiveness, and ROI measurement",
+    "file": "hubspot-adoption-tracker.md"
+  },
+  "hubspot-analytics-reporter": {
+    "keywords": [
+      "analytics",
+      "report",
+      "hubspot",
+      "analysis",
+      "reporter"
+    ],
+    "description": "Generates comprehensive analytics, reports, and insights across all HubSpot hubs with AI-powered analysis",
+    "file": "hubspot-analytics-reporter.md"
+  },
+  "hubspot-assessment-analyzer": {
+    "keywords": [
+      "assessment",
+      "assess",
+      "hubspot",
+      "analyze",
+      "automation",
+      "integration",
+      "revops",
+      "analyzer",
+      "issue"
+    ],
+    "description": "Performs comprehensive HubSpot RevOps assessments using statistically-driven methodologies to identify automation gaps, attribution issues, adoption patterns, and integration health.",
+    "file": "hubspot-assessment-analyzer.md"
+  },
+  "hubspot-attribution-analyst": {
+    "keywords": [
+      "hubspot",
+      "attribution",
+      "analyst",
+      "analysis"
+    ],
+    "description": "A specialized HubSpot agent focused on attribution modeling, multi-touch attribution analysis,",
+    "file": "hubspot-attribution-analyst.md"
+  },
+  "hubspot-data-hygiene-specialist": {
+    "keywords": [
+      "data",
+      "hubspot",
+      "hygiene",
+      "specialist",
+      "merge",
+      "duplicate",
+      "sync",
+      "quality",
+      "salesforce",
+      "operations"
+    ],
+    "description": "Advanced data cleansing, standardization, and quality enforcement specialist for HubSpot data. Focuses on comprehensive data hygiene operations including duplicate detection, format standardization, data enrichment, automated cleanup workflows, and Salesforce sync-aware merge operations.",
+    "file": "hubspot-data-hygiene-specialist.md"
+  },
+  "HubSpot Governance Enforcer": {
+    "keywords": [
+      "hubspot",
+      "governance",
+      "audit",
+      "data",
+      "enforcer",
+      "manage",
+      "permission",
+      "quality"
+    ],
+    "description": "Enterprise governance specialist for data quality, compliance, permissions, audit trails, and change management",
+    "file": "hubspot-governance-enforcer.md"
+  },
+  "hubspot-reporting-builder": {
+    "keywords": [
+      "report",
+      "hubspot",
+      "reporting",
+      "builder",
+      "dashboard"
+    ],
+    "description": "A specialized HubSpot agent focused on creating custom reports, dashboards,",
+    "file": "hubspot-reporting-builder.md"
+  },
+  "hubspot-web-enricher": {
+    "keywords": [
+      "hubspot",
+      "analysis",
+      "data",
+      "enricher",
+      "api"
+    ],
+    "description": "Enriches HubSpot company data using web search and intelligent website analysis without requiring API keys",
+    "file": "hubspot-web-enricher.md"
+  },
+  "hubspot-admin-specialist": {
+    "keywords": [
+      "hubspot",
+      "portal",
+      "admin",
+      "specialist",
+      "manage"
+    ],
+    "description": "A specialized HubSpot agent focused on portal administration, user management,",
+    "file": "hubspot-admin-specialist.md"
+  },
+  "hubspot-api": {
+    "keywords": [
+      "api",
+      "hubspot",
+      "integration",
+      "webhook"
+    ],
+    "description": "HubSpot integrations, webhooks, and API keys/secrets plumbing. Use for inbound/outbound events and Slack integration touchpoints.",
+    "file": "hubspot-api.md"
+  },
+  "HubSpot Autonomous Operations": {
+    "keywords": [
+      "operations",
+      "hubspot",
+      "workflow",
+      "process",
+      "autonomous",
+      "flow"
+    ],
+    "description": "Self-operating system for automated decision-making, process optimization, and intelligent workflow orchestration",
+    "file": "hubspot-autonomous-operations.md"
+  },
+  "hubspot-contact-manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "contact",
+      "data",
+      "quality",
+      "operations"
+    ],
+    "description": "Manages HubSpot contacts, lists, contact properties, and segmentation with comprehensive CRUD operations and data quality enforcement",
+    "file": "hubspot-contact-manager.md"
+  },
+  "hubspot-data-operations-manager": {
+    "keywords": [
+      "data",
+      "operations",
+      "manage",
+      "hubspot",
+      "object",
+      "quality",
+      "bulk",
+      "import",
+      "export",
+      "migration"
+    ],
+    "description": "Enterprise-grade data operations specialist for HubSpot handling bulk imports, exports, transformations, migrations, data quality management, and cross-object synchronization with advanced ETL capabilities",
+    "file": "hubspot-data-operations-manager.md"
+  },
+  "hubspot-data": {
+    "keywords": [
+      "data",
+      "hubspot",
+      "operations",
+      "workflow",
+      "flow",
+      "integration"
+    ],
+    "description": "Contact/company property and data hygiene operations in HubSpot. Not for workflows or external integrations.",
+    "file": "hubspot-data.md"
+  },
+  "hubspot-integration-specialist": {
+    "keywords": [
+      "integration",
+      "hubspot",
+      "specialist",
+      "manage",
+      "api",
+      "webhook",
+      "connect"
+    ],
+    "description": "Manages webhooks, API integrations, custom apps, and third-party connections for HubSpot ecosystem",
+    "file": "hubspot-integration-specialist.md"
+  },
+  "hubspot-orchestrator": {
+    "keywords": [
+      "hubspot",
+      "operations",
+      "orchestrator",
+      "orchestrate",
+      "coordinate",
+      "manage"
+    ],
+    "description": "Coordinates complex multi-step HubSpot operations across different domains, manages dependencies, and orchestrates other specialized HubSpot agents",
+    "file": "hubspot-orchestrator.md"
+  },
+  "hubspot-pipeline-manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "revenue",
+      "operations",
+      "pipeline",
+      "process"
+    ],
+    "description": "Manages HubSpot deal pipelines, sales processes, forecasting, and revenue operations",
+    "file": "hubspot-pipeline-manager.md"
+  },
+  "hubspot-property-manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "property",
+      "data",
+      "object",
+      "plan",
+      "architect"
+    ],
+    "description": "Comprehensive HubSpot property management specialist handling custom object creation, calculated properties, property dependencies, rollup configurations, and advanced data model visualization with enterprise-scale architecture planning.",
+    "file": "hubspot-property-manager.md"
+  },
+  "hubspot-seo-optimizer": {
+    "keywords": [
+      "hubspot",
+      "optimizer",
+      "audit",
+      "analysis",
+      "content"
+    ],
+    "description": "Comprehensive SEO content optimization agent for HubSpot CMS. Provides keyword research, content optimization, technical SEO audits, competitive SERP analysis, and topic cluster generation using Claude AI and free web research tools.",
+    "file": "hubspot-seo-optimizer.md"
+  },
+  "hubspot-workflow-auditor": {
+    "keywords": [
+      "workflow",
+      "flow",
+      "audit",
+      "hubspot",
+      "validation",
+      "operations",
+      "auditor",
+      "api"
+    ],
+    "description": "Verifies workflow API operations succeeded correctly with evidence-based validation, detecting silent failures and providing actionable remediation",
+    "file": "hubspot-workflow-auditor.md"
+  },
+  "hubspot-workflow-builder": {
+    "keywords": [
+      "workflow",
+      "flow",
+      "hubspot",
+      "builder",
+      "manage",
+      "automation"
+    ],
+    "description": "Creates and manages complex HubSpot workflows with AI-powered automation, cross-hub orchestration, and advanced branching logic",
+    "file": "hubspot-workflow-builder.md"
+  },
+  "hubspot-workflow": {
+    "keywords": [
+      "workflow",
+      "flow",
+      "hubspot",
+      "automation",
+      "data",
+      "webhook"
+    ],
+    "description": "Create, change, and validate HubSpot workflows only. Use for automation and enrollment logic; not for data fixes or webhooks.",
+    "file": "hubspot-workflow.md"
+  },
+  "hubspot-cms-content-manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "content",
+      "pages,"
+    ],
+    "description": "Comprehensive HubSpot CMS Hub management specialist handling website pages, blog posts, landing pages, templates, modules, and content optimization with SEO, personalization, and multi-language support",
+    "file": "hubspot-cms-content-manager.md"
+  },
+  "hubspot-cms-page-publisher": {
+    "keywords": [
+      "publish",
+      "hubspot",
+      "page",
+      "publisher",
+      "manage",
+      "workflow",
+      "flow",
+      "live"
+    ],
+    "description": "Specialized agent for HubSpot CMS page lifecycle management including creation, updating, cloning, deletion, and publishing workflows (draft vs. live, scheduled vs. immediate)",
+    "file": "hubspot-cms-page-publisher.md"
+  },
+  "hubspot-commerce-manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "commerce",
+      "pricing",
+      "operations",
+      "quote",
+      "prod"
+    ],
+    "description": "Comprehensive HubSpot Commerce Hub management specialist handling product catalogs, pricing strategies, quotes, payments, invoicing, and e-commerce operations with full commerce lifecycle support",
+    "file": "hubspot-commerce-manager.md"
+  },
+  "HubSpot Service Hub Manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "service",
+      "operations"
+    ],
+    "description": "Comprehensive Service Hub management specialist for tickets, SLAs, customer health, and support operations",
+    "file": "hubspot-service-hub-manager.md"
+  },
+  "hubspot-sfdc-sync-scraper": {
+    "keywords": [
+      "sync",
+      "sf",
+      "hubspot",
+      "sfdc",
+      "automation",
+      "salesforce",
+      "scraper",
+      "api",
+      "connect"
+    ],
+    "description": "Scrapes HubSpot Salesforce connector settings via browser automation (settings not available via API)",
+    "file": "hubspot-sfdc-sync-scraper.md"
+  },
+  "HubSpot Stripe Connector": {
+    "keywords": [
+      "hubspot",
+      "connect",
+      "stripe",
+      "sync",
+      "revenue",
+      "connector",
+      "manage",
+      "data"
+    ],
+    "description": "Manages bidirectional sync between Stripe and HubSpot for subscription data, payments, and revenue tracking",
+    "file": "hubspot-stripe-connector.md"
+  },
+  "HubSpot AI Revenue Intelligence": {
+    "keywords": [
+      "revenue",
+      "hubspot",
+      "intelligence",
+      "analytics"
+    ],
+    "description": "AI-powered revenue forecasting, deal intelligence, predictive analytics, and autonomous optimization",
+    "file": "hubspot-ai-revenue-intelligence.md"
+  },
+  "HubSpot Conversation Intelligence": {
+    "keywords": [
+      "hubspot",
+      "conversation",
+      "analysis",
+      "intelligence"
+    ],
+    "description": "AI-powered conversation analysis for calls, emails, and meetings with insights extraction and coaching",
+    "file": "hubspot-conversation-intelligence.md"
+  },
+  "hubspot-email-campaign-manager": {
+    "keywords": [
+      "manage",
+      "hubspot",
+      "email",
+      "campaign"
+    ],
+    "description": "Manages email campaigns, templates, sequences, and marketing communications with advanced personalization and optimization",
+    "file": "hubspot-email-campaign-manager.md"
+  },
+  "hubspot-lead-scoring-specialist": {
+    "keywords": [
+      "hubspot",
+      "lead",
+      "scoring",
+      "specialist",
+      "dev"
+    ],
+    "description": "A specialized HubSpot agent focused on developing, implementing, and optimizing",
+    "file": "hubspot-lead-scoring-specialist.md"
+  },
+  "hubspot-marketing-automation": {
+    "keywords": [
+      "automation",
+      "hubspot",
+      "marketing",
+      "manage",
+      "workflow",
+      "flow"
+    ],
+    "description": "Creates and manages HubSpot workflows, email automation, lead scoring, and behavioral triggers for sophisticated marketing automation",
+    "file": "hubspot-marketing-automation.md"
+  },
+  "HubSpot PLG Foundation": {
+    "keywords": [
+      "hubspot",
+      "foundation",
+      "prod"
+    ],
+    "description": "Product-led growth specialist for PQL scoring, usage-based triggers, freemium conversion, and self-serve optimization",
+    "file": "hubspot-plg-foundation.md"
+  },
+  "HubSpot Renewals Specialist": {
+    "keywords": [
+      "hubspot",
+      "renewals",
+      "specialist",
+      "renewal"
+    ],
+    "description": "Specialized agent for managing renewal pipelines, churn prevention, contract tracking, and renewal forecasting",
+    "file": "hubspot-renewals-specialist.md"
+  },
+  "hubspot-revenue-intelligence": {
+    "keywords": [
+      "revenue",
+      "hubspot",
+      "intelligence",
+      "operations",
+      "assess",
+      "assessment",
+      "analysis",
+      "analytics"
+    ],
+    "description": "Advanced revenue operations intelligence specialist providing deal health scoring, predictive forecasting, pipeline velocity analysis, risk assessment, win/loss analytics, and comprehensive sales cycle optimization with machine learning-powered insights.",
+    "file": "hubspot-revenue-intelligence.md"
+  },
+  "HubSpot SDR Operations": {
+    "keywords": [
+      "operations",
+      "hubspot",
+      "manage"
+    ],
+    "description": "Advanced SDR operations specialist for outbound sequences, territory management, lead routing, and cadence optimization",
+    "file": "hubspot-sdr-operations.md"
+  },
+  "hubspot-territory-manager": {
+    "keywords": [
+      "hubspot",
+      "manage",
+      "territory",
+      "plan"
+    ],
+    "description": "A specialized HubSpot agent focused on territory planning, account segmentation,",
+    "file": "hubspot-territory-manager.md"
+  },
+  "flow-batch-operator": {
+    "keywords": [
+      "batch",
+      "flow",
+      "error",
+      "salesforce",
+      "operations",
+      "multiple",
+      "operator",
+      "sf"
+    ],
+    "description": "Specializes in parallel batch operations on multiple Salesforce Flows with performance optimization and error aggregation",
+    "file": "flow-batch-operator.md"
+  },
+  "flow-template-specialist": {
+    "keywords": [
+      "flow",
+      "automation",
+      "salesforce",
+      "template",
+      "specialist",
+      "sf"
+    ],
+    "description": "Expert in applying and customizing Salesforce Flow templates for common automation patterns",
+    "file": "flow-template-specialist.md"
+  },
+  "sfdc-advocate-assignment": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "advocate",
+      "deployment",
+      "assignment",
+      "deploy",
+      "manage",
+      "process"
+    ],
+    "description": "Manages Customer Advocate provisioning, agency-to-account matching, and deployment directory processing with intelligent fuzzy matching",
+    "file": "sfdc-advocate-assignment.md"
+  },
+  "sfdc-agent-governance": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "audit",
+      "permission",
+      "salesforce",
+      "governance",
+      "assess",
+      "assessment",
+      "manage",
+      "workflow"
+    ],
+    "description": "Manages agent governance, risk assessment, approval workflows, and audit trails for autonomous Salesforce operations. Enforces permission matrix, calculates risk scores, routes approvals, and ensures compliance.",
+    "file": "sfdc-agent-governance.md"
+  },
+  "sfdc-apex-developer": {
+    "keywords": [
+      "apex",
+      "dev",
+      "sf",
+      "sfdc",
+      "test",
+      "batch",
+      "developer",
+      "manage",
+      "classes,"
+    ],
+    "description": "Develops and manages Apex code including triggers, classes, batch jobs, test classes, and custom REST/SOAP services",
+    "file": "sfdc-apex-developer.md"
+  },
+  "sfdc-apex": {
+    "keywords": [
+      "apex",
+      "sf",
+      "sfdc",
+      "deploy",
+      "metadata",
+      "review",
+      "data",
+      "test",
+      "dev"
+    ],
+    "description": "APEX development, tests, and code review. Not for metadata deploy packaging.",
+    "file": "sfdc-apex.md"
+  },
+  "sfdc-api-monitor": {
+    "keywords": [
+      "api",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "monitor",
+      "report"
+    ],
+    "description": "Monitors Salesforce API usage, generates usage reports, and provides optimization recommendations to prevent quota overages",
+    "file": "sfdc-api-monitor.md"
+  },
+  "sfdc-architecture-auditor": {
+    "keywords": [
+      "audit",
+      "architect",
+      "sf",
+      "sfdc",
+      "architecture",
+      "salesforce",
+      "auditor",
+      "document",
+      "doc",
+      "documentation"
+    ],
+    "description": "Validates architectural decisions, enforces ADR documentation, audits standard vs. custom feature usage, and generates architecture health scores. Ensures adherence to Salesforce best practices and enterprise architecture guidelines.",
+    "file": "sfdc-architecture-auditor.md"
+  },
+  "sfdc-automation-auditor": {
+    "keywords": [
+      "automation",
+      "audit",
+      "sf",
+      "validation",
+      "sfdc",
+      "process",
+      "conflict",
+      "workflow",
+      "migration",
+      "salesforce"
+    ],
+    "description": "**v3.32.0 Enhanced** Comprehensive Salesforce automation audit with namespace detection, business process classification, cascade mapping, migration recommendations, and risk-based implementation planning. Audits Apex Triggers, Classes (with Handler pattern detection), Flows, Process Builder, Workflow Rules, and Validation Rules with 8 conflict detection rules, handler inventory, and detailed remediation roadmaps. Supports optional managed package filtering and unlimited class retrieval via pagination.",
+    "file": "sfdc-automation-auditor.md"
+  },
+  "sfdc-automation-builder": {
+    "keywords": [
+      "automation",
+      "sf",
+      "validation",
+      "sfdc",
+      "workflow",
+      "process",
+      "salesforce",
+      "builder",
+      "manage",
+      "flow"
+    ],
+    "description": "Creates and manages Salesforce automation including flows, process builders, workflow rules, and approval processes with proactive validation",
+    "file": "sfdc-automation-builder.md"
+  },
+  "sfdc-cli-executor": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "data",
+      "metadata",
+      "salesforce",
+      "apex",
+      "executor",
+      "manage",
+      "operations"
+    ],
+    "description": "Executes Salesforce CLI commands using OAuth authentication for metadata operations, data queries, apex execution, and org management",
+    "file": "sfdc-cli-executor.md"
+  },
+  "sfdc-communication-manager": {
+    "keywords": [
+      "manage",
+      "sf",
+      "sfdc",
+      "communication",
+      "salesforce",
+      "mass",
+      "live",
+      "email"
+    ],
+    "description": "Manages Salesforce communication features including email templates, letterheads, mass email, email deliverability, and communication preferences",
+    "file": "sfdc-communication-manager.md"
+  },
+  "sfdc-compliance-officer": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "compliance",
+      "audit",
+      "data",
+      "salesforce",
+      "officer",
+      "manage"
+    ],
+    "description": "Manages Salesforce compliance including GDPR, HIPAA, SOC, data privacy, audit trails, and regulatory requirements",
+    "file": "sfdc-compliance-officer.md"
+  },
+  "sfdc-conflict-resolver": {
+    "keywords": [
+      "conflict",
+      "sf",
+      "sfdc",
+      "deployment",
+      "metadata",
+      "field",
+      "salesforce",
+      "resolver",
+      "deploy",
+      "data"
+    ],
+    "description": "Specialized agent for detecting and resolving Salesforce metadata conflicts, field type incompatibilities, and deployment blockers before they cause failures",
+    "file": "sfdc-conflict-resolver.md"
+  },
+  "sfdc-cpq-assessor": {
+    "keywords": [
+      "assess",
+      "sf",
+      "cpq",
+      "sfdc",
+      "analysis",
+      "data",
+      "quality",
+      "salesforce",
+      "assessor",
+      "assessment"
+    ],
+    "description": "Specialized agent for comprehensive Salesforce CPQ assessments with mandatory data quality checkpoints and time-series analysis",
+    "file": "sfdc-cpq-assessor.md"
+  },
+  "sfdc-cpq-specialist": {
+    "keywords": [
+      "sf",
+      "cpq",
+      "sfdc",
+      "salesforce",
+      "revenue",
+      "specialist",
+      "pricing",
+      "quote",
+      "prod"
+    ],
+    "description": "Configures Salesforce CPQ including pricing, quotes, product bundles, discount schedules, and revenue optimization",
+    "file": "sfdc-cpq-specialist.md"
+  },
+  "sfdc-csv-enrichment": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "validation",
+      "error",
+      "data",
+      "salesforce",
+      "enrichment"
+    ],
+    "description": "Specialized agent for enriching CSV data with Salesforce IDs through intelligent fuzzy matching, validation, and error correction",
+    "file": "sfdc-csv-enrichment.md"
+  },
+  "sfdc-dashboard-analyzer": {
+    "keywords": [
+      "dashboard",
+      "analyze",
+      "sf",
+      "sfdc",
+      "process",
+      "migration",
+      "object",
+      "salesforce",
+      "analyzer",
+      "report"
+    ],
+    "description": "Analyzes Salesforce dashboards and reports to extract business process definitions, enabling intelligent object migration while preserving dashboard functionality",
+    "file": "sfdc-dashboard-analyzer.md"
+  },
+  "sfdc-dashboard-designer": {
+    "keywords": [
+      "dashboard",
+      "design",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "chart",
+      "designer"
+    ],
+    "description": "Enterprise Salesforce dashboard design specialist focused on audience-specific KPIs, visual hierarchy, chart optimization, and performance best practices",
+    "file": "sfdc-dashboard-designer.md"
+  },
+  "sfdc-dashboard-migrator": {
+    "keywords": [
+      "dashboard",
+      "sf",
+      "sfdc",
+      "report",
+      "migration",
+      "object",
+      "salesforce",
+      "migrator",
+      "orchestrate",
+      "one"
+    ],
+    "description": "Orchestrates complete dashboard and report migration from one Salesforce object to another, preserving business logic and visualizations",
+    "file": "sfdc-dashboard-migrator.md"
+  },
+  "sfdc-dashboard-optimizer": {
+    "keywords": [
+      "dashboard",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "optimizer",
+      "layout",
+      "one"
+    ],
+    "description": "Optimizes Salesforce dashboard layouts for performance and visual appeal, validates component compatibility, and ensures 12-column grid compliance",
+    "file": "sfdc-dashboard-optimizer.md"
+  },
+  "sfdc-data-generator": {
+    "keywords": [
+      "data",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "generator",
+      "object"
+    ],
+    "description": "Generates intelligent mock data for Salesforce objects with business context, maintains referential integrity, and supports volume scaling for demonstrations",
+    "file": "sfdc-data-generator.md"
+  },
+  "sfdc-data-operations": {
+    "keywords": [
+      "operations",
+      "data",
+      "sf",
+      "sfdc",
+      "quality",
+      "salesforce",
+      "bulk",
+      "analysis",
+      "manage",
+      "import"
+    ],
+    "description": "Manages Salesforce data operations including imports, exports, transformations, quality analysis, and bulk operations with advanced API capabilities",
+    "file": "sfdc-data-operations.md"
+  },
+  "sfdc-dedup-safety-copilot": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "safety",
+      "copilot",
+      "error",
+      "data",
+      "salesforce",
+      "dedup"
+    ],
+    "description": "Instance-agnostic Salesforce Account deduplication safety copilot with Type 1/2 error detection and data-first survivor selection (Spec-Compliant v2)",
+    "file": "sfdc-dedup-safety-copilot.md"
+  },
+  "sfdc-dependency-analyzer": {
+    "keywords": [
+      "analyze",
+      "sf",
+      "sfdc",
+      "plan",
+      "data",
+      "salesforce",
+      "operations",
+      "dependency",
+      "analyzer",
+      "field"
+    ],
+    "description": "Analyzes dependencies between Salesforce objects, fields, and data to determine optimal execution order, identify circular dependencies, and plan sequential operations",
+    "file": "sfdc-dependency-analyzer.md"
+  },
+  "sfdc-deployment-manager": {
+    "keywords": [
+      "deployment",
+      "deploy",
+      "manage",
+      "sf",
+      "validation",
+      "sfdc",
+      "error",
+      "salesforce"
+    ],
+    "description": "Manages Salesforce deployments with comprehensive validation pipeline, automated error recovery, and robust verification",
+    "file": "sfdc-deployment-manager.md"
+  },
+  "sfdc-discovery": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "analysis",
+      "integration",
+      "salesforce",
+      "discovery",
+      "flow",
+      "permission",
+      "object",
+      "prod"
+    ],
+    "description": "Read-only Salesforce org analysis for objects, flows, permissions, and integration points. Produces findings and recommendations only.",
+    "file": "sfdc-discovery.md"
+  },
+  "sfdc-einstein-admin": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "einstein",
+      "salesforce",
+      "admin",
+      "analytics"
+    ],
+    "description": "Configures Einstein Analytics, AI predictions, recommendation strategies, and machine learning models in Salesforce",
+    "file": "sfdc-einstein-admin.md"
+  },
+  "sfdc-field-analyzer": {
+    "keywords": [
+      "field",
+      "sf",
+      "validation",
+      "analyze",
+      "sfdc",
+      "metadata",
+      "salesforce",
+      "analyzer",
+      "analysis",
+      "error"
+    ],
+    "description": "Specialized agent for comprehensive Salesforce field metadata analysis, providing intelligent field discovery, validation rule analysis, and pre-operation validation to prevent field-related errors",
+    "file": "sfdc-field-analyzer.md"
+  },
+  "sfdc-integration-specialist": {
+    "keywords": [
+      "integration",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "specialist",
+      "manage",
+      "api",
+      "connect"
+    ],
+    "description": "Manages Salesforce integrations including APIs, connected apps, external services, middleware, and real-time event streaming",
+    "file": "sfdc-integration-specialist.md"
+  },
+  "sfdc-layout-analyzer": {
+    "keywords": [
+      "layout",
+      "analyze",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "lightning",
+      "analyzer",
+      "quality"
+    ],
+    "description": "Analyze Salesforce Lightning Pages and Classic Layouts for quality, performance, and UX optimization opportunities",
+    "file": "sfdc-layout-analyzer.md"
+  },
+  "sfdc-layout-generator": {
+    "keywords": [
+      "layout",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "lightning",
+      "generator",
+      "field",
+      "guide"
+    ],
+    "description": "Generate optimized Salesforce Lightning Pages using proven fieldInstance pattern and AI-guided persona templates",
+    "file": "sfdc-layout-generator.md"
+  },
+  "sfdc-lightning-developer": {
+    "keywords": [
+      "lightning",
+      "sf",
+      "dev",
+      "sfdc",
+      "salesforce",
+      "developer",
+      "one"
+    ],
+    "description": "Develops Lightning Web Components (LWC), Aura components, and custom UI experiences for Salesforce applications",
+    "file": "sfdc-lightning-developer.md"
+  },
+  "sfdc-lucid-diagrams": {
+    "keywords": [
+      "sf",
+      "diagram",
+      "sfdc",
+      "lucid",
+      "diagrams",
+      "analysis",
+      "salesforce",
+      "manage",
+      "architect"
+    ],
+    "description": "Creates and manages Lucid diagrams for Salesforce architectures with multi-tenant isolation and vision analysis",
+    "file": "sfdc-lucid-diagrams.md"
+  },
+  "sfdc-merge-orchestrator": {
+    "keywords": [
+      "merge",
+      "sf",
+      "sfdc",
+      "orchestrator"
+    ],
+    "description": "|",
+    "file": "sfdc-merge-orchestrator.md"
+  },
+  "sfdc-metadata-analyzer": {
+    "keywords": [
+      "metadata",
+      "data",
+      "sf",
+      "validation",
+      "analyze",
+      "sfdc",
+      "analysis",
+      "salesforce",
+      "analyzer",
+      "flow"
+    ],
+    "description": "Comprehensive Salesforce metadata analysis without hardcoded values - extracts validation rules, flows, layouts, and profiles dynamically",
+    "file": "sfdc-metadata-analyzer.md"
+  },
+  "sfdc-metadata-manager": {
+    "keywords": [
+      "metadata",
+      "manage",
+      "data",
+      "sf",
+      "sfdc",
+      "validation",
+      "error",
+      "salesforce"
+    ],
+    "description": "Manages Salesforce metadata with comprehensive validation, automated error recovery, and proactive metadata integrity monitoring",
+    "file": "sfdc-metadata-manager_backup_20251030_143945.md"
+  },
+  "sfdc-metadata": {
+    "keywords": [
+      "metadata",
+      "data",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "apex",
+      "deploy",
+      "manage",
+      "flow",
+      "permission"
+    ],
+    "description": "Salesforce metadata deploys (flows, layouts, permissions) and package.xml management. Not for APEX authoring.",
+    "file": "sfdc-metadata.md"
+  },
+  "sfdc-object-auditor": {
+    "keywords": [
+      "object",
+      "audit",
+      "sf",
+      "sfdc",
+      "analysis",
+      "metadata",
+      "salesforce",
+      "auditor",
+      "data"
+    ],
+    "description": "Performs comprehensive metadata analysis and auditing of Salesforce objects, providing detailed insights, usage statistics, and optimization recommendations",
+    "file": "sfdc-object-auditor.md"
+  },
+  "sfdc-orchestrator": {
+    "keywords": [
+      "sf",
+      "validation",
+      "sfdc",
+      "error",
+      "salesforce",
+      "operations",
+      "orchestrator",
+      "coordinate",
+      "api"
+    ],
+    "description": "Coordinates complex multi-step Salesforce operations with mandatory validation framework, advanced API tools, automated error recovery, and comprehensive performance monitoring",
+    "file": "sfdc-orchestrator.md"
+  },
+  "sfdc-performance-optimizer": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "performance",
+      "salesforce",
+      "optimizer",
+      "manage",
+      "monitoring"
+    ],
+    "description": "Optimizes Salesforce performance with advanced monitoring tools including query optimization, indexing, governor limits, storage management, and real-time system health monitoring",
+    "file": "sfdc-performance-optimizer.md"
+  },
+  "sfdc-permission-assessor": {
+    "keywords": [
+      "permission",
+      "assess",
+      "sf",
+      "sfdc",
+      "assessment",
+      "migration",
+      "assessor",
+      "analyze",
+      "plan",
+      "guide"
+    ],
+    "description": "Interactive permission set assessment wizard - discovers fragmentation, analyzes overlap, generates migration plans, and guides consolidation",
+    "file": "sfdc-permission-assessor.md"
+  },
+  "sfdc-permission-orchestrator": {
+    "keywords": [
+      "permission",
+      "sf",
+      "sfdc",
+      "merge",
+      "orchestrator",
+      "deploy",
+      "deployment",
+      "manage",
+      "architect",
+      "operations"
+    ],
+    "description": "Centralized permission set management with two-tier architecture, merge-safe operations, and idempotent deployments",
+    "file": "sfdc-permission-orchestrator.md"
+  },
+  "sfdc-planner": {
+    "keywords": [
+      "plan",
+      "sf",
+      "sfdc",
+      "salesforce",
+      "planner",
+      "analyze",
+      "analysis"
+    ],
+    "description": "Analyzes Salesforce requirements, creates detailed implementation plans with comprehensive time estimates, performs impact analysis, and presents changes for approval before execution",
+    "file": "sfdc-planner.md"
+  },
+  "sfdc-quality-auditor": {
+    "keywords": [
+      "quality",
+      "audit",
+      "sf",
+      "validation",
+      "sfdc",
+      "metadata",
+      "salesforce",
+      "auditor",
+      "data",
+      "check"
+    ],
+    "description": "Continuous quality auditing of Salesforce metadata with health checks, drift detection, and compliance validation",
+    "file": "sfdc-quality-auditor.md"
+  },
+  "sfdc-query-specialist": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "error",
+      "query",
+      "specialist"
+    ],
+    "description": "Specialized agent for building, optimizing, and executing complex SOQL queries with advanced performance monitoring, error prevention, and real-time optimization capabilities",
+    "file": "sfdc-query-specialist.md"
+  },
+  "sfdc-remediation-executor": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "remediation",
+      "analysis",
+      "metadata",
+      "executor",
+      "plan",
+      "data"
+    ],
+    "description": "Executes remediation plans from metadata analysis with phased fixes, rollback capability, and change verification",
+    "file": "sfdc-remediation-executor.md"
+  },
+  "sfdc-renewal-import": {
+    "keywords": [
+      "import",
+      "sf",
+      "sfdc",
+      "validation",
+      "renewal",
+      "field",
+      "integration",
+      "bulk"
+    ],
+    "description": "Specialized agent for contract renewal opportunity bulk imports with automatic validation, field mapping, and advocate integration",
+    "file": "sfdc-renewal-import.md"
+  },
+  "sfdc-report-designer": {
+    "keywords": [
+      "report",
+      "design",
+      "sf",
+      "sfdc",
+      "field",
+      "salesforce",
+      "designer"
+    ],
+    "description": "Enterprise Salesforce report design specialist focused on format selection, field organization, grouping strategies, and performance optimization following industry best practices",
+    "file": "sfdc-report-designer.md"
+  },
+  "sfdc-report-template-deployer": {
+    "keywords": [
+      "report",
+      "deploy",
+      "sf",
+      "sfdc",
+      "deployment",
+      "field",
+      "salesforce",
+      "template",
+      "deployer"
+    ],
+    "description": "Automated Salesforce report deployment from templates with 95%+ field resolution rate across different orgs",
+    "file": "sfdc-report-template-deployer.md"
+  },
+  "sfdc-report-type-manager": {
+    "keywords": [
+      "report",
+      "manage",
+      "sf",
+      "validation",
+      "sfdc",
+      "salesforce",
+      "type",
+      "field",
+      "api",
+      "types,"
+    ],
+    "description": "Discovers and manages Salesforce report types, maps UI names to API tokens, handles restricted types, and surfaces available fields for validation",
+    "file": "sfdc-report-type-manager.md"
+  },
+  "sfdc-report-validator": {
+    "keywords": [
+      "report",
+      "sf",
+      "sfdc",
+      "deployment",
+      "data",
+      "quality",
+      "salesforce",
+      "validator",
+      "deploy"
+    ],
+    "description": "Pre-validates all Salesforce report configurations before creation to prevent deployment failures, enforce best practices, and ensure data quality",
+    "file": "sfdc-report-validator.md"
+  },
+  "sfdc-reports-dashboards": {
+    "keywords": [
+      "report",
+      "dashboard",
+      "sf",
+      "sfdc",
+      "validation",
+      "analytics",
+      "salesforce",
+      "reports",
+      "dashboards",
+      "manage"
+    ],
+    "description": "Creates and manages Salesforce reports, dashboards, analytics with advanced API capabilities, leadless/hybrid support, comprehensive validation, and intelligent org mode detection",
+    "file": "sfdc-reports-dashboards.md"
+  },
+  "sfdc-reports-usage-auditor": {
+    "keywords": [
+      "audit",
+      "report",
+      "sf",
+      "sfdc",
+      "reports",
+      "usage",
+      "analyze",
+      "quality",
+      "salesforce",
+      "auditor"
+    ],
+    "description": "Audits Salesforce reports and dashboards over a rolling 6-month window to analyze usage patterns, classify by department, identify gaps, and generate actionable insights with integrated quality scoring",
+    "file": "sfdc-reports-usage-auditor.md"
+  },
+  "sfdc-revops-auditor": {
+    "keywords": [
+      "revops",
+      "audit",
+      "sf",
+      "sfdc",
+      "process",
+      "data",
+      "salesforce",
+      "auditor",
+      "assess",
+      "assessment"
+    ],
+    "description": "Performs comprehensive RevOps assessments and audits of Salesforce environments with statistical analysis, business process evaluation, and data-driven recommendations",
+    "file": "sfdc-revops-auditor.md"
+  },
+  "sfdc-revops-coordinator": {
+    "keywords": [
+      "revops",
+      "sf",
+      "sfdc",
+      "coordinator",
+      "audit",
+      "orchestrate"
+    ],
+    "description": "Orchestrates RevOps audits, optimizations, and monitoring - acts as the conductor for all RevOps tasks",
+    "file": "sfdc-revops-coordinator.md"
+  },
+  "sfdc-sales-operations": {
+    "keywords": [
+      "sf",
+      "operations",
+      "sfdc",
+      "sales",
+      "salesforce",
+      "manage",
+      "process"
+    ],
+    "description": "Manages sales-specific Salesforce configurations including lead routing, assignment rules, sales processes, territory management, and opportunity teams",
+    "file": "sfdc-sales-operations.md"
+  },
+  "sfdc-security-admin": {
+    "keywords": [
+      "security",
+      "sf",
+      "sfdc",
+      "permission",
+      "field",
+      "salesforce",
+      "admin",
+      "manage",
+      "profile",
+      "role"
+    ],
+    "description": "Manages Salesforce security including profiles, permission sets, roles, sharing rules, and user provisioning with automated field permission verification",
+    "file": "sfdc-security-admin.md"
+  },
+  "sfdc-service-cloud-admin": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "service",
+      "cloud",
+      "operations",
+      "admin",
+      "manage"
+    ],
+    "description": "Manages Service Cloud features including Cases, Knowledge Articles, Service Console, Omni-Channel routing, and customer support operations",
+    "file": "sfdc-service-cloud-admin.md"
+  },
+  "sfdc-state-discovery": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "state",
+      "metadata",
+      "salesforce",
+      "discovery",
+      "data"
+    ],
+    "description": "Performs comprehensive Salesforce org state discovery, metadata comparison, and drift detection between local files and actual org configuration",
+    "file": "sfdc-state-discovery.md"
+  },
+  "sfdc-ui-customizer": {
+    "keywords": [
+      "sf",
+      "sfdc",
+      "salesforce",
+      "lightning",
+      "customizer",
+      "manage",
+      "layout",
+      "one"
+    ],
+    "description": "Manages Salesforce UI customization including page layouts, Lightning pages, record types, list views, and user interface components",
+    "file": "sfdc-ui-customizer.md"
+  }
+}

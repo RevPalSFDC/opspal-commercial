@@ -1,0 +1,149 @@
+{
+  "templateMetadata": {
+    "templateName": "Pipeline Coverage Ratio",
+    "templateVersion": "1.1",
+    "description": "Measures pipeline coverage against quota to ensure sufficient deal flow for target achievement",
+    "audience": "CRO, VP Sales, Sales Directors",
+    "useCase": "Forecast confidence assessment, pipeline health monitoring, resource allocation",
+    "customizationPoints": [
+      "Date range (fiscal quarter/year)",
+      "Team/territory scope",
+      "Coverage ratio thresholds"
+    ],
+    "prerequisites": [
+      "Opportunity object with Amount and CloseDate",
+      "Quota data available (Forecasting or custom field)"
+    ]
+  },
+  "metricDefinitionId": "pipeline.arr",
+  "reportMetadata": {
+    "name": "Pipeline Coverage Ratio",
+    "description": "Open pipeline value compared to remaining quota target",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "IS_CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total open pipeline value"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Coverage_Ratio",
+        "description": "Pipeline divided by remaining quota",
+        "formula": "SUM(AMOUNT) / (Quota - ClosedWon)",
+        "dataType": "number",
+        "decimalPlaces": 1,
+        "note": "Healthy ratio is 3-5x"
+      }
+    ],
+    "chart": {
+      "chartType": "Gauge",
+      "aggregateColumn": "Coverage_Ratio",
+      "thresholds": {
+        "green": {
+          "min": 3,
+          "max": 10
+        },
+        "yellow": {
+          "min": 2,
+          "max": 3
+        },
+        "red": {
+          "min": 0,
+          "max": 2
+        }
+      }
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "pipeline-health",
+      "revenue-performance"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Executive summary report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full executive report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled executive metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Quote.TotalPrice": "SBQQ__Quote__c.SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise executive focus with higher thresholds",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "250000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Revenue": {
+        "patterns": [
+          "Amount",
+          "Revenue__c",
+          "Total_Revenue__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "WinRate": {
+        "patterns": [
+          "Win_Rate__c",
+          "Conversion_Rate__c"
+        ],
+        "dataType": "percent"
+      }
+    }
+  }
+}

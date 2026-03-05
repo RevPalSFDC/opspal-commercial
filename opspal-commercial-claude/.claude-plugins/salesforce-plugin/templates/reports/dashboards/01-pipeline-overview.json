@@ -1,0 +1,142 @@
+{
+  "templateMetadata": {
+    "templateName": "Pipeline Overview Report",
+    "templateVersion": "1.0",
+    "description": "Pipeline summary report for dashboard components (stage mix, totals, averages).",
+    "audience": "Sales Leaders, RevOps, Sales Managers",
+    "useCase": "Pipeline health dashboards, stage distribution, and deal sizing analysis.",
+    "customizationPoints": [
+      "Stage filters and closed status rules",
+      "Date range (current quarter/month)",
+      "Owner/team filters"
+    ],
+    "prerequisites": [
+      "Opportunity report type access",
+      "Standard Opportunity fields (Stage, Amount, Close Date)",
+      "Consistent stage definitions"
+    ]
+  },
+  "reportMetadata": {
+    "reportName": "Pipeline Overview Report",
+    "reportDescription": "Comprehensive pipeline metrics for dashboard: total value, count, average size, and stage breakdown",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "groupings": [
+      {
+        "field": "STAGE_NAME",
+        "sortOrder": "Asc",
+        "dateGranularity": "Day"
+      }
+    ],
+    "columns": [
+      {
+        "field": "FULL_NAME",
+        "label": "Opportunity Owner"
+      },
+      {
+        "field": "OPPORTUNITY_NAME",
+        "label": "Opportunity Name"
+      },
+      {
+        "field": "AMOUNT",
+        "label": "Amount"
+      },
+      {
+        "field": "CLOSE_DATE",
+        "label": "Close Date"
+      },
+      {
+        "field": "PROBABILITY",
+        "label": "Probability (%)"
+      },
+      {
+        "field": "EXPECTED_REVENUE",
+        "label": "Expected Revenue"
+      }
+    ],
+    "filters": [
+      {
+        "column": "CLOSED",
+        "operator": "equals",
+        "value": "0"
+      }
+    ],
+    "aggregates": [
+      {
+        "field": "AMOUNT",
+        "aggregateType": "Sum",
+        "label": "Total Pipeline"
+      },
+      {
+        "field": "OPPORTUNITY_NAME",
+        "aggregateType": "RowCount",
+        "label": "Opportunity Count"
+      },
+      {
+        "field": "AMOUNT",
+        "aggregateType": "Average",
+        "label": "Average Deal Size"
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "STAGE_NAME",
+      "aggregateColumn": "s!AMOUNT",
+      "title": "Pipeline by Stage",
+      "showPercentages": false,
+      "showValues": true
+    },
+    "reportType": "Opportunity"
+  },
+  "dashboardUsage": {
+    "createDashboard": true,
+    "dashboardName": "Pipeline Overview Dashboard",
+    "description": "Real-time pipeline health metrics: total value, opportunity count, average deal size, and stage distribution",
+    "components": [
+      {
+        "title": "Total Pipeline Value",
+        "componentType": "Metric",
+        "section": "left",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Open Opportunities"
+      },
+      {
+        "title": "Opportunity Count",
+        "componentType": "Metric",
+        "section": "left",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Total Open Opps"
+      },
+      {
+        "title": "Average Deal Size",
+        "componentType": "Metric",
+        "section": "middle",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Avg Opportunity Value"
+      },
+      {
+        "title": "Pipeline by Stage",
+        "componentType": "Bar",
+        "section": "middle",
+        "sortBy": "RowValueDescending",
+        "legendPosition": "Bottom",
+        "chartAxisRange": "Auto"
+      },
+      {
+        "title": "Top 10 Opportunities",
+        "componentType": "Table",
+        "section": "right",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600"
+      }
+    ]
+  }
+}

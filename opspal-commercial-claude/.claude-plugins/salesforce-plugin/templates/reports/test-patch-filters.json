@@ -1,0 +1,38 @@
+{
+  "templateMetadata": {
+    "name": "Test PATCH Filters",
+    "version": "1.0.0",
+    "description": "Test template for validating PATCH filter support"
+  },
+  "reportMetadata": {
+    "name": "Test PATCH Filter Support",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "AMOUNT"
+    ],
+    "groupingsDown": [
+      {
+        "field": "STAGE_NAME"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount"
+      }
+    ],
+    "reportFilters": [
+      {
+        "column": "AMOUNT",
+        "operator": "greaterThan",
+        "value": "10000"
+      },
+      {
+        "column": "STAGE_NAME",
+        "operator": "notEqual",
+        "value": "Closed Lost"
+      }
+    ]
+  }
+}

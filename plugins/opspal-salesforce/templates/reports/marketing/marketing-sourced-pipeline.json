@@ -1,0 +1,195 @@
+{
+  "templateMetadata": {
+    "templateName": "Marketing-Sourced Pipeline",
+    "templateVersion": "1.1",
+    "description": "Pipeline value attributed to marketing activities, grouped by source and stage",
+    "audience": "CMO, VP Marketing, Demand Generation",
+    "useCase": "Track marketing contribution to pipeline, justify marketing spend, identify high-performing channels",
+    "customizationPoints": [
+      "LeadSource values to include as 'marketing'",
+      "Date range filter",
+      "Amount field (Amount, ARR__c, or ACV__c)",
+      "Additional filters for segment or region"
+    ],
+    "prerequisites": [
+      "LeadSource field populated on Opportunities",
+      "Marketing-specific LeadSource values defined",
+      "Opportunity Amount field populated"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Marketing-Sourced Pipeline - {Period}",
+    "description": "Open pipeline attributed to marketing lead sources",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER",
+        "customizable": true,
+        "customizationNote": "Change to match reporting period"
+      },
+      {
+        "column": "LEAD_SOURCE",
+        "operator": "equals",
+        "value": "Content,Events,Paid Search,Paid Social,Organic,Webinar,Partner Referral",
+        "customizable": true,
+        "customizationNote": "Update to match your marketing lead source values"
+      },
+      {
+        "column": "CLOSED",
+        "operator": "equals",
+        "value": "false",
+        "customizable": false,
+        "customizationNote": "Pipeline = open opportunities only"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "LEAD_SOURCE",
+        "sortOrder": "Desc",
+        "dateGranularity": null,
+        "customizable": false
+      },
+      {
+        "field": "STAGE_NAME",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": false
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "AMOUNT",
+      "CLOSE_DATE",
+      "STAGE_NAME",
+      "PROBABILITY"
+    ],
+    "aggregates": [
+      {
+        "name": "Sum_Amount",
+        "field": "AMOUNT",
+        "aggregateType": "Sum",
+        "description": "Total pipeline value"
+      },
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Count of opportunities"
+      },
+      {
+        "name": "Avg_Amount",
+        "field": "AMOUNT",
+        "aggregateType": "Average",
+        "description": "Average deal size"
+      }
+    ],
+    "chart": {
+      "chartType": "StackedBar",
+      "groupingColumn": "LEAD_SOURCE",
+      "aggregateColumn": "Sum_Amount",
+      "legendPosition": "Bottom",
+      "showChartValues": true,
+      "chartColorPalette": "brand"
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  },
+  "deploymentInstructions": {
+    "steps": [
+      "1. Query LeadSource values: SELECT LeadSource, COUNT(Id) FROM Opportunity GROUP BY LeadSource",
+      "2. Update reportFilters.LEAD_SOURCE with your marketing source values",
+      "3. Replace {Period} in report name with actual period (e.g., 'Q1 2026')",
+      "4. Deploy report to Marketing Reports folder",
+      "5. Verify data by comparing to manual calculation"
+    ],
+    "expectedResults": {
+      "typicalDistribution": {
+        "Content": "25-35%",
+        "Events": "20-30%",
+        "Paid Search": "15-25%",
+        "Organic": "10-20%",
+        "Partner": "5-15%"
+      }
+    }
+  },
+  "relatedTemplates": [
+    "marketing-roi.json",
+    "campaign-roi.json"
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  }
+}

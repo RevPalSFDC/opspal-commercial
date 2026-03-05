@@ -1,0 +1,70 @@
+{
+  "name": "revpal-internal-plugins",
+  "owner": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "plugins": [
+    {
+      "name": "opspal-salesforce",
+      "source": "./plugins/opspal-salesforce",
+      "description": "Comprehensive Salesforce operations with 84 agents, 470 scripts, 44 commands. Features: CPQ/Q2C assessments, RevOps auditing, Flow management with Flow Scanner integration, permission orchestration, report/dashboard creation, territory management, deployment automation, Living Runbook System, hallucination prevention.",
+      "version": "3.67.0"
+    },
+    {
+      "name": "opspal-hubspot",
+      "source": "./plugins/opspal-hubspot",
+      "description": "Full HubSpot CRM operations with 44 agents, 84 scripts, 21 commands. Features: workflow automation, contact/deal management, marketing campaigns, analytics & reporting, Salesforce sync, integrations (Stripe, Commerce, CMS), Service Hub, PLG foundation, revenue intelligence.",
+      "version": "3.1.0"
+    },
+    {
+      "name": "opspal-core",
+      "source": "./plugins/opspal-core",
+      "description": "OpsPal Core - Cross-platform orchestration with 43 agents. Features: Asana integration, diagram generation (Mermaid/Lucid), PDF/PPTX generation, RevOps reporting, data quality orchestration, task graph management, sales funnel diagnostics, instance management.",
+      "version": "2.1.0"
+    },
+    {
+      "name": "opspal-marketo",
+      "source": "./plugins/opspal-marketo",
+      "description": "Marketo marketing automation with 23 agents and MCP server with 35+ native tools. Features: lead management, smart campaigns, email marketing, landing pages, forms, program architecture, comprehensive analytics with attribution and ROI, lead scoring, MQL handoff automation, email deliverability auditing.",
+      "version": "2.5.1"
+    },
+    {
+      "name": "opspal-gtm-planning",
+      "source": "./plugins/opspal-gtm-planning",
+      "description": "GTM Annual Planning framework with 7 agents. Features: territory design with fairness validation, quota modeling with Monte Carlo simulations, compensation planning, attribution governance, strategy planning, strategic reporting templates.",
+      "version": "2.0.0"
+    },
+    {
+      "name": "opspal-monday",
+      "source": "./plugins/opspal-monday",
+      "description": "Monday.com integration with 6 agents. Features: file extraction with GraphQL API client, rate limiting, exponential backoff, board management, task synchronization.",
+      "version": "1.4.1"
+    },
+    {
+      "name": "opspal-data-hygiene",
+      "source": "./plugins/opspal-data-hygiene",
+      "description": "Cross-platform data deduplication and hygiene with 2 agents. Features: deduplication workflows for HubSpot and Salesforce, data quality validation, cross-platform consistency.",
+      "version": "1.1.2"
+    },
+    {
+      "name": "opspal-ai-consult",
+      "source": "./plugins/opspal-ai-consult",
+      "description": "Cross-model AI consultation with 1 agent. Features: multi-model consultation, AI-assisted analysis.",
+      "version": "1.3.0"
+    },
+    {
+      "name": "opspal-mcp-client",
+      "source": "./plugins/opspal-mcp-client",
+      "description": "OpsPal MCP Client - Thin client plugin with 3 validation hooks and 1 resolver script for the OpsPal proprietary IP server. Ships no IP - only wiring.",
+      "version": "1.0.2"
+    }
+  ],
+  "_stats": {
+    "total_plugins": 9,
+    "total_agents": 221,
+    "total_commands": 154,
+    "total_hooks": 89,
+    "last_updated": "2026-03-02"
+  }
+}

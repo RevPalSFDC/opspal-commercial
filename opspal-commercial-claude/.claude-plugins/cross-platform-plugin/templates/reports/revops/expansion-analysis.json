@@ -1,0 +1,435 @@
+{
+  "templateMetadata": {
+    "id": "expansion-analysis",
+    "name": "Customer Expansion Analysis",
+    "version": "2.0.0",
+    "description": "Track expansion revenue, upsell/cross-sell performance, NRR drivers, and identify expansion opportunities within existing customer base",
+    "category": "expansion",
+    "targetAudience": ["customer-success", "revops", "sales-leadership"],
+    "recommendedFrequency": "monthly",
+    "estimatedGenerationTime": "5-7 minutes"
+  },
+  "reportMetadata": {
+    "defaultTitle": "Customer Expansion Report",
+    "defaultPeriod": "Q4",
+    "defaultFormat": "pdf",
+    "defaultSegmentation": ["segment", "product_line", "customer_tenure"],
+    "supportedFormats": ["pdf", "excel", "sheets", "csv"]
+  },
+  "kpis": [
+    {
+      "id": "nrr",
+      "required": true,
+      "displayOrder": 1,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "expansion_revenue_rate",
+      "required": true,
+      "displayOrder": 2,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "acv_growth",
+      "required": true,
+      "displayOrder": 3,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "retention_expansion_mix",
+      "required": true,
+      "displayOrder": 4,
+      "chartType": "stacked_bar",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "grr",
+      "required": true,
+      "displayOrder": 5,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "arpu",
+      "required": false,
+      "displayOrder": 6,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true
+    },
+    {
+      "id": "upsell_rate",
+      "required": false,
+      "displayOrder": 7,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": false
+    },
+    {
+      "id": "cross_sell_rate",
+      "required": false,
+      "displayOrder": 8,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": false
+    }
+  ],
+  "dataSources": {
+    "salesforce": {
+      "objects": ["Opportunity", "Account", "Contract", "OpportunityLineItem"],
+      "requiredFields": ["Amount", "Type", "CloseDate", "AccountId", "IsWon"],
+      "optionalFields": ["Product2Id", "Subscription_Start_Date__c", "Expansion_Type__c"],
+      "filters": {
+        "expansion": "IsWon = true AND Type IN ('Expansion', 'Upsell', 'Cross-Sell', 'Add-On')",
+        "renewal": "IsWon = true AND Type IN ('Renewal', 'Subscription Renewal')"
+      }
+    },
+    "hubspot": {
+      "objects": ["deals", "companies"],
+      "requiredProperties": ["amount", "closedate", "dealtype", "associatedcompanyid"],
+      "optionalProperties": ["expansion_type", "product_line", "renewal_date"],
+      "filters": {
+        "expansion": "dealtype IN ('expansion', 'upsell', 'crosssell')",
+        "renewal": "dealtype = 'renewal'"
+      }
+    },
+    "subscription_platform": {
+      "recommended": true,
+      "description": "For accurate MRR and subscription data",
+      "supportedPlatforms": ["Chargebee", "Stripe", "Recurly", "Zuora", "Maxio"],
+      "metrics": ["mrr_movements", "subscription_changes", "seat_count"]
+    },
+    "manual": {
+      "required": [
+        {
+          "field": "starting_mrr",
+          "description": "MRR at period start",
+          "type": "currency"
+        },
+        {
+          "field": "expansion_mrr",
+          "description": "MRR from expansions (upsells, cross-sells, add-ons)",
+          "type": "currency"
+        },
+        {
+          "field": "contraction_mrr",
+          "description": "MRR lost from downgrades",
+          "type": "currency"
+        },
+        {
+          "field": "churned_mrr",
+          "description": "MRR lost from cancellations",
+          "type": "currency"
+        }
+      ],
+      "optional": [
+        {
+          "field": "reactivation_mrr",
+          "description": "MRR from returning customers",
+          "type": "currency"
+        },
+        {
+          "field": "customer_count",
+          "description": "Total active customers",
+          "type": "number"
+        },
+        {
+          "field": "expansion_qualified_accounts",
+          "description": "Accounts flagged for expansion opportunity",
+          "type": "number"
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "executive-summary",
+      "title": "Executive Summary",
+      "type": "summary",
+      "order": 1,
+      "content": {
+        "blufTemplate": "Expansion revenue: ${expansion_revenue_rate}% of cohort MRR, driving NRR to ${nrr}%. ${expansion_trend} trend. ${key_opportunity}.",
+        "keyMetrics": ["nrr", "expansion_revenue_rate", "grr"],
+        "maxHighlights": 3,
+        "maxRecommendations": 2
+      }
+    },
+    {
+      "id": "nrr-scorecard",
+      "title": "Net Revenue Retention Scorecard",
+      "type": "dashboard",
+      "order": 2,
+      "kpis": ["nrr", "grr", "expansion_revenue_rate"],
+      "layout": "1x3",
+      "showBenchmarkComparison": true,
+      "showInterpretation": true
+    },
+    {
+      "id": "mrr-waterfall",
+      "title": "MRR Movement Waterfall",
+      "type": "chart",
+      "order": 3,
+      "chartConfig": {
+        "type": "waterfall",
+        "components": [
+          { "id": "starting_mrr", "label": "Starting MRR", "color": "#2196f3" },
+          { "id": "new_mrr", "label": "New Business", "color": "#4caf50" },
+          { "id": "expansion_mrr", "label": "Expansion", "color": "#8bc34a" },
+          { "id": "reactivation_mrr", "label": "Reactivation", "color": "#cddc39" },
+          { "id": "contraction_mrr", "label": "Contraction", "color": "#ff9800", "negative": true },
+          { "id": "churned_mrr", "label": "Churn", "color": "#f44336", "negative": true },
+          { "id": "ending_mrr", "label": "Ending MRR", "color": "#2196f3" }
+        ],
+        "showPercentages": true
+      }
+    },
+    {
+      "id": "expansion-trend",
+      "title": "Expansion Revenue Trend",
+      "type": "chart",
+      "order": 4,
+      "chartConfig": {
+        "type": "line",
+        "kpis": ["expansion_revenue_rate", "acv_growth"],
+        "groupBy": "CALENDAR_MONTH",
+        "showTarget": true,
+        "showPreviousPeriod": true
+      }
+    },
+    {
+      "id": "expansion-type-breakdown",
+      "title": "Expansion by Type",
+      "type": "chart",
+      "order": 5,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "metric": "expansion_revenue",
+        "groupBy": "CALENDAR_MONTH",
+        "categories": ["upsell", "cross_sell", "add_on", "seat_expansion"],
+        "showPercentages": true
+      }
+    },
+    {
+      "id": "segment-analysis",
+      "title": "Expansion by Customer Segment",
+      "type": "comparison",
+      "order": 6,
+      "comparisonConfig": {
+        "dimension": "segment",
+        "metrics": ["nrr", "expansion_revenue_rate", "arpu"],
+        "segments": [
+          { "id": "enterprise", "filter": "ARR >= 100000" },
+          { "id": "mid_market", "filter": "ARR >= 25000 AND ARR < 100000" },
+          { "id": "smb", "filter": "ARR < 25000" }
+        ],
+        "showBenchmarks": true
+      }
+    },
+    {
+      "id": "retention-expansion-mix",
+      "title": "Retention vs Expansion Mix",
+      "type": "detail",
+      "order": 7,
+      "breakdown": {
+        "metrics": ["retention_expansion_mix", "nrr", "grr"],
+        "analysis": {
+          "healthy": "30-50% from expansion indicates balanced growth",
+          "retentionHeavy": "<30% expansion - optimize upsell motion",
+          "expansionHeavy": ">50% expansion - ensure retention fundamentals"
+        },
+        "showTrend": true
+      }
+    },
+    {
+      "id": "expansion-opportunities",
+      "title": "Expansion Opportunity Pipeline",
+      "type": "table",
+      "order": 8,
+      "tableConfig": {
+        "columns": [
+          { "field": "account_name", "label": "Account", "sortable": true },
+          { "field": "current_arr", "label": "Current ARR", "format": "currency" },
+          { "field": "expansion_signal", "label": "Signal", "sortable": true },
+          { "field": "estimated_expansion", "label": "Est. Expansion", "format": "currency" },
+          { "field": "health_score", "label": "Health", "format": "score" }
+        ],
+        "filters": {
+          "health_score": ">= 70",
+          "expansion_signal": "IN ('usage_growth', 'seat_limit', 'feature_request')"
+        },
+        "sortBy": "estimated_expansion",
+        "sortOrder": "desc",
+        "limit": 25
+      }
+    },
+    {
+      "id": "cohort-retention",
+      "title": "Cohort Retention Analysis",
+      "type": "heatmap",
+      "order": 9,
+      "heatmapConfig": {
+        "xAxis": "months_since_signup",
+        "yAxis": "signup_cohort",
+        "metric": "retention_rate",
+        "colorScale": ["#f44336", "#ff9800", "#ffeb3b", "#8bc34a", "#4caf50"],
+        "showValues": true
+      }
+    },
+    {
+      "id": "methodology",
+      "title": "Methodology",
+      "type": "methodology",
+      "order": 99,
+      "include": ["dataSources", "formulas", "assumptions", "expansionDefinitions", "cohortLogic"]
+    }
+  ],
+  "calculations": {
+    "nrr": {
+      "formula": "((Starting MRR + Expansion - Contraction - Churn) / Starting MRR) × 100",
+      "notes": "Net revenue retention including all movements",
+      "interpretation": {
+        "below90": "Critical - significant net contraction",
+        "90to100": "Net contraction - fix churn first",
+        "100to110": "Healthy - sustainable growth",
+        "110to120": "Strong - effective expansion",
+        "above120": "Excellent - premium territory"
+      }
+    },
+    "expansion_revenue_rate": {
+      "formula": "(Expansion MRR / Starting MRR) × 100",
+      "notes": "Percentage of MRR growth from existing customers",
+      "interpretation": {
+        "below5": "Low - expansion motion needs work",
+        "5to10": "Average expansion performance",
+        "10to15": "Good - healthy upsell activity",
+        "15to25": "Strong - effective expansion playbook",
+        "above25": "Excellent - world-class expansion"
+      }
+    },
+    "acv_growth": {
+      "formula": "((ACV_current - ACV_previous) / ACV_previous) × 100",
+      "notes": "Year-over-year growth in average contract value",
+      "interpretation": {
+        "negative": "ACV declining - review pricing/packaging",
+        "0to5": "Flat - normal for mature segments",
+        "5to15": "Healthy growth",
+        "above15": "Strong - successful upsell motion"
+      }
+    },
+    "retention_expansion_mix": {
+      "formula": "Expansion Revenue / (Retention Revenue + Expansion Revenue)",
+      "notes": "Balance between retention and expansion activities",
+      "interpretation": {
+        "below30": "Retention-heavy - focus on upsell opportunities",
+        "30to50": "Balanced - healthy growth engine",
+        "above50": "Expansion-heavy - ensure retention fundamentals"
+      }
+    },
+    "grr": {
+      "formula": "((Starting MRR - Contraction - Churn) / Starting MRR) × 100",
+      "notes": "Gross revenue retention excluding expansion",
+      "interpretation": {
+        "below85": "High contraction - product/fit issues",
+        "85to90": "Below average retention",
+        "90to95": "Good retention",
+        "above95": "Excellent - strong customer value"
+      }
+    }
+  },
+  "benchmarks": {
+    "industry": "saas",
+    "sources": [
+      {
+        "name": "OpenView Expansion SaaS Benchmarks 2024",
+        "url": "https://openviewpartners.com",
+        "metrics": ["expansion_revenue_rate", "nrr"]
+      },
+      {
+        "name": "Bessemer Cloud Index 2024",
+        "url": "https://www.bvp.com/atlas/cloud-index",
+        "metrics": ["nrr", "grr"]
+      },
+      {
+        "name": "KeyBanc SaaS Survey 2024",
+        "url": "https://keybanccm.com",
+        "metrics": ["nrr", "grr", "acv_growth"]
+      },
+      {
+        "name": "ChartMogul SaaS Benchmarks 2024",
+        "url": "https://chartmogul.com",
+        "metrics": ["expansion_revenue_rate", "retention_expansion_mix"]
+      }
+    ],
+    "thresholds": {
+      "nrr": {
+        "excellent": 120,
+        "good": 110,
+        "average": 100,
+        "belowAverage": 90
+      },
+      "expansion_revenue_rate": {
+        "excellent": 20,
+        "good": 15,
+        "average": 10,
+        "belowAverage": 5
+      },
+      "grr": {
+        "excellent": 95,
+        "good": 90,
+        "average": 85,
+        "belowAverage": 80
+      },
+      "acv_growth": {
+        "excellent": 15,
+        "good": 10,
+        "average": 5,
+        "belowAverage": 0
+      }
+    },
+    "byStage": {
+      "seed": { "nrr_median": "95%", "expansion_median": "5%" },
+      "seriesA": { "nrr_median": "100%", "expansion_median": "8%" },
+      "seriesB": { "nrr_median": "105%", "expansion_median": "12%" },
+      "seriesC": { "nrr_median": "110%", "expansion_median": "15%" },
+      "growth": { "nrr_median": "115%", "expansion_median": "18%" }
+    }
+  },
+  "defaults": {
+    "dateRange": {
+      "type": "relative",
+      "value": "LAST_QUARTER"
+    },
+    "comparison": {
+      "type": "quarter_over_quarter"
+    },
+    "currency": "USD",
+    "cohortPeriod": "monthly"
+  },
+  "exportConfig": {
+    "pdf": {
+      "orientation": "landscape",
+      "includeCharts": true,
+      "includeTables": true,
+      "pageBreaks": ["segment-analysis", "expansion-opportunities", "methodology"]
+    },
+    "excel": {
+      "sheets": [
+        { "name": "Summary", "sections": ["executive-summary", "nrr-scorecard"] },
+        { "name": "MRR Analysis", "sections": ["mrr-waterfall", "expansion-trend"] },
+        { "name": "Expansion Detail", "sections": ["expansion-type-breakdown", "retention-expansion-mix"] },
+        { "name": "Segment Analysis", "sections": ["segment-analysis"] },
+        { "name": "Opportunities", "sections": ["expansion-opportunities"] },
+        { "name": "Cohort Analysis", "sections": ["cohort-retention"] },
+        { "name": "Methodology", "sections": ["methodology"] }
+      ]
+    }
+  }
+}

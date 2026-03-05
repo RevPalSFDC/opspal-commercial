@@ -1,0 +1,23 @@
+{
+  "name": "opspal-mcp-client",
+  "description": "OpsPal MCP Client - Thin client plugin with 3 hooks, 1 script for OpsPal proprietary IP server connectivity, client-side validation, and usage tracking. Ships no IP - only wiring.",
+  "version": "1.0.2",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "opspal-mcp",
+    "mcp-client",
+    "scoring",
+    "benchmarks",
+    "assessment",
+    "gtm-planning",
+    "reporting",
+    "ip-protection",
+    "hooks",
+    "rate-limiting"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+  "license": "Proprietary"
+}

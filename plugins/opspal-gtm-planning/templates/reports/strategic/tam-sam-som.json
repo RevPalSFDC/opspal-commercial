@@ -1,0 +1,207 @@
+{
+  "template_id": "tam-sam-som",
+  "report_name": "TAM / SAM / SOM by Segment",
+  "category": "Strategic/Annual Planning",
+  "owner_function_default": "Finance",
+  "primary_decisions_supported": [
+    "Market sizing and goal setting",
+    "Investor communications on market opportunity",
+    "Prioritizing target segments"
+  ],
+  "executive_questions_answered": [
+    "How large is our total addressable market, and what portion can we realistically target and capture?",
+    "What is the revenue potential in our serviceable market vs what we've obtained so far?",
+    "Are we focusing on the most valuable market segments given our TAM/SAM/SOM?"
+  ],
+  "metric_definitions": [
+    {
+      "metric_name": "Total Addressable Market (TAM)",
+      "definition": "The maximum potential market demand for our product/service – the total revenue opportunity if we achieved 100% market share in our broad market.",
+      "formula": "TAM = (Number of potential customers in broad market) * (Avg revenue per customer if fully served)",
+      "grain": "market (annual)",
+      "required_dimensions": ["market segment (if TAM split by segment)"],
+      "known_variants": [
+        {
+          "variant_name": "Bottom-up TAM",
+          "definition_delta": "Calculated by summing individual segment opportunities from ground-up data rather than using top-down broad market figures",
+          "when_to_use": "When detailed data per segment is available for more accuracy"
+        }
+      ],
+      "pitfalls": [
+        "Often overestimated – be realistic about who truly could use the product",
+        "Market definitions can be too broad or narrow; clearly define inclusion criteria",
+        "TAM is not static – as product lines expand or new use-cases emerge TAM can grow (or shrink with competition)"
+      ]
+    },
+    {
+      "metric_name": "Serviceable Addressable Market (SAM)",
+      "definition": "The portion of TAM that applies to our target market or current business model – the segment of TAM we can reach given our product and business scope.",
+      "formula": "SAM = TAM * (percentage of TAM that fits our ideal customer profile, geography, or product scope)",
+      "grain": "market (annual)",
+      "required_dimensions": ["market segment"],
+      "known_variants": [],
+      "pitfalls": [
+        "Requires realistic gating factors – e.g., if we only sell to certain industries or regions, exclude others from SAM",
+        "SAM may change as go-to-market expands (e.g., move upmarket increases SAM)",
+        "Keep SAM assumptions (like % of TAM reachable) grounded in data or proxies, not wishful thinking"
+      ]
+    },
+    {
+      "metric_name": "Serviceable Obtainable Market (SOM)",
+      "definition": "The portion of SAM that we can realistically capture in the near-term, considering competition and our capacity – essentially our attainable market share.",
+      "formula": "SOM = (realistic market share %) * SAM",
+      "grain": "market (annual)",
+      "required_dimensions": ["market segment"],
+      "known_variants": [],
+      "pitfalls": [
+        "Often misestimated by ignoring competitor traction – need honest assessment of our likely share",
+        "SOM should tie to bottom-up sales capacity and marketing reach; ensure alignment with operational plans",
+        "Over time SOM can expand if company grows capabilities – revisit periodically"
+      ]
+    }
+  ],
+  "required_data_contract": {
+    "source_systems": ["Market Research", "CRM"],
+    "required_entities": ["Market Sizing Data", "Internal Customer Data"],
+    "required_fields": [
+      {
+        "field_name": "Total potential customers count",
+        "description": "Number of potential customers by segment",
+        "type": "external_research"
+      },
+      {
+        "field_name": "Estimated spend per customer",
+        "description": "For TAM calculation",
+        "type": "external_research"
+      },
+      {
+        "field_name": "Filter criteria for SAM",
+        "description": "Industry, size, geo that define target market",
+        "type": "configuration"
+      },
+      {
+        "field_name": "Current customer count or revenue",
+        "description": "For penetration calculation",
+        "salesforce_field": "Account (count, sum of ARR)",
+        "hubspot_field": "company (count, sum of ARR)"
+      }
+    ],
+    "required_timestamps": ["As-of date of market study data"],
+    "joins_and_keys": [
+      {
+        "left_entity": "MarketData",
+        "right_entity": "InternalData",
+        "join_key": "Segment",
+        "join_type": "left",
+        "notes": "Compare external market size with internal revenue by segment for penetration"
+      }
+    ],
+    "transformation_rules": [
+      "If TAM given in broad terms (population, GDP etc.), convert to relevant revenue potential using assumptions",
+      "Use conservative filters to move from TAM to SAM (exclude segments we cannot serve yet)",
+      "Express SOM in both absolute terms and percentage of SAM for clarity"
+    ],
+    "data_quality_checks": [
+      {
+        "check_name": "Data Freshness",
+        "logic": "Ensure TAM/SAM figures are from a recent study or updated for latest year (markets can grow or shrink)",
+        "severity": "medium"
+      },
+      {
+        "check_name": "Internal Consistency",
+        "logic": "Our current revenue should not exceed SOM (if it does, SOM calc is outdated or too low)",
+        "severity": "high"
+      }
+    ]
+  },
+  "calculations_and_models": {
+    "derived_fields": [
+      "Market_Penetration_% = (Current Revenue / TAM) * 100",
+      "Share_of_SAM_% = (Current Revenue / SAM) * 100"
+    ],
+    "aggregation_rules": [
+      "If TAM/SAM split by segments, sum segments to verify totals (but be cautious of overlaps/double counts between segments)",
+      "Aggregate current revenue of segments to compare against SOM overall"
+    ],
+    "cohort_logic": null,
+    "attribution_logic": null,
+    "forecast_logic": "Use SOM and planned share growth to set long-term revenue targets; e.g., if SOM is $500M and plan to capture 10% in 5 years, target ~$50M revenue"
+  },
+  "dashboard_blueprint": {
+    "intended_audience": "Exec",
+    "recommended_refresh_cadence": "Annual",
+    "layout": [
+      {
+        "panel_title": "Market Size Overview",
+        "purpose": "Display TAM, SAM, and SOM figures (with definitions) for context of opportunity",
+        "visual_type": "scorecard",
+        "primary_metrics": ["TAM", "SAM", "SOM"],
+        "filters": [],
+        "drilldowns": ["by segment or region if applicable"],
+        "annotations_or_thresholds": []
+      },
+      {
+        "panel_title": "Market Penetration by Segment",
+        "purpose": "Show how much of each segment's SAM we have captured (current revenue vs SAM)",
+        "visual_type": "bar",
+        "primary_metrics": ["SAM", "Current Revenue"],
+        "filters": ["segment"],
+        "drilldowns": [],
+        "annotations_or_thresholds": ["SOM or target line if set"]
+      }
+    ]
+  },
+  "insight_prompts_for_agent": {
+    "narrative_insights_to_generate": [
+      "Summarize how our current revenue compares to the total market opportunity (TAM/SAM)",
+      "Identify which segments offer the largest remaining opportunity (biggest gap between SAM and current revenue)"
+    ],
+    "diagnostic_questions": [
+      "Is our growth potential constrained by a small SAM or is the market wide open relative to our size?",
+      "Do our targets for the next few years correspond to achieving a reasonable share of the SOM?"
+    ],
+    "recommended_actions": [
+      {
+        "action": "Adjust long-term targets or market strategy if SOM is limited",
+        "owner": "Exec",
+        "trigger_condition": "Current strategic plan revenue in 5 years approaches or exceeds SOM (suggesting need to expand TAM/SAM via new markets or products)"
+      },
+      {
+        "action": "Present TAM/SAM/SOM figures in investor communications to highlight growth runway",
+        "owner": "Finance",
+        "trigger_condition": "TAM is significantly larger than current revenue, underscoring big opportunity"
+      }
+    ]
+  },
+  "implementation_notes": {
+    "minimum_viable_version": "Static figures for TAM, SAM, SOM based on latest market research and a simple penetration calculation",
+    "advanced_version": "Interactive model where adjusting assumptions (e.g., expanding SAM criteria) updates SOM and penetration instantly",
+    "common_client_customizations": [
+      "Using multiple TAM methodologies (top-down and bottom-up) for sanity check",
+      "Incorporating competitor market share data as part of SOM estimation"
+    ],
+    "privacy_and_access_notes": [
+      "Market sizing data might come from third-party reports – ensure license allows internal sharing",
+      "These figures often shared externally (with investors); double-check definitions and sources are consistent"
+    ],
+    "success_criteria": [
+      "Unified understanding of our market size across teams (no conflicting TAM numbers floating around)",
+      "Strategic decisions (like product development or new geographies) are made with reference to TAM/SAM/SOM data"
+    ]
+  },
+  "benchmarks": {
+    "typical_penetration_by_stage": {
+      "early_stage": "<1% of TAM",
+      "growth_stage": "1-5% of TAM",
+      "mature": "5-15% of TAM"
+    }
+  },
+  "references": [
+    {
+      "title": "TAM, SAM, SOM: What Do They Mean & How Do You Calculate Them?",
+      "publisher": "HubSpot Blog",
+      "date": "Feb 27, 2025",
+      "url": "https://blog.hubspot.com/marketing/tam-sam-som"
+    }
+  ]
+}

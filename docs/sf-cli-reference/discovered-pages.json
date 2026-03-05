@@ -1,0 +1,914 @@
+[
+  {
+    "title": "Salesforce CLI Command Reference",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_top.htm"
+  },
+  {
+    "title": "Release Notes",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_release_notes.htm"
+  },
+  {
+    "title": "sf",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_unified.htm"
+  },
+  {
+    "title": "agent Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_commands_unified"
+  },
+  {
+    "title": "agent activate",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_activate_unified"
+  },
+  {
+    "title": "agent create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_create_unified"
+  },
+  {
+    "title": "agent deactivate",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_deactivate_unified"
+  },
+  {
+    "title": "agent generate agent-spec",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_generate_agent-spec_unified"
+  },
+  {
+    "title": "agent generate authoring-bundle (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_generate_authoring-bundle_unified"
+  },
+  {
+    "title": "agent generate template",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_generate_template_unified"
+  },
+  {
+    "title": "agent generate test-spec",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_generate_test-spec_unified"
+  },
+  {
+    "title": "agent preview (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_preview_unified"
+  },
+  {
+    "title": "agent publish authoring-bundle (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_publish_authoring-bundle_unified"
+  },
+  {
+    "title": "agent test create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_test_create_unified"
+  },
+  {
+    "title": "agent test list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_test_list_unified"
+  },
+  {
+    "title": "agent test results",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_test_results_unified"
+  },
+  {
+    "title": "agent test resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_test_resume_unified"
+  },
+  {
+    "title": "agent test run",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_test_run_unified"
+  },
+  {
+    "title": "agent validate authoring-bundle (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_agent_commands_unified.htm#cli_reference_agent_validate_authoring-bundle_unified"
+  },
+  {
+    "title": "alias Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_alias_commands_unified.htm#cli_reference_alias_commands_unified"
+  },
+  {
+    "title": "alias list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_alias_commands_unified.htm#cli_reference_alias_list_unified"
+  },
+  {
+    "title": "alias set",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_alias_commands_unified.htm#cli_reference_alias_set_unified"
+  },
+  {
+    "title": "alias unset",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_alias_commands_unified.htm#cli_reference_alias_unset_unified"
+  },
+  {
+    "title": "analytics Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_analytics_commands_unified.htm#cli_reference_analytics_commands_unified"
+  },
+  {
+    "title": "analytics generate template",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_analytics_commands_unified.htm#cli_reference_analytics_generate_template_unified"
+  },
+  {
+    "title": "apex Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_commands_unified"
+  },
+  {
+    "title": "apex generate class",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_generate_class_unified"
+  },
+  {
+    "title": "apex generate trigger",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_generate_trigger_unified"
+  },
+  {
+    "title": "apex get log",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_get_log_unified"
+  },
+  {
+    "title": "apex get test",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_get_test_unified"
+  },
+  {
+    "title": "apex list log",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_list_log_unified"
+  },
+  {
+    "title": "apex run",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_run_unified"
+  },
+  {
+    "title": "apex run test",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_run_test_unified"
+  },
+  {
+    "title": "apex tail log",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm#cli_reference_apex_tail_log_unified"
+  },
+  {
+    "title": "api Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_api_commands_unified.htm#cli_reference_api_commands_unified"
+  },
+  {
+    "title": "api request graphql (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_api_commands_unified.htm#cli_reference_api_request_graphql_unified"
+  },
+  {
+    "title": "api request rest (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_api_commands_unified.htm#cli_reference_api_request_rest_unified"
+  },
+  {
+    "title": "cmdt Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_cmdt_commands_unified.htm#cli_reference_cmdt_commands_unified"
+  },
+  {
+    "title": "cmdt generate field",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_cmdt_commands_unified.htm#cli_reference_cmdt_generate_field_unified"
+  },
+  {
+    "title": "cmdt generate fromorg",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_cmdt_commands_unified.htm#cli_reference_cmdt_generate_fromorg_unified"
+  },
+  {
+    "title": "cmdt generate object",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_cmdt_commands_unified.htm#cli_reference_cmdt_generate_object_unified"
+  },
+  {
+    "title": "cmdt generate record",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_cmdt_commands_unified.htm#cli_reference_cmdt_generate_record_unified"
+  },
+  {
+    "title": "cmdt generate records",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_cmdt_commands_unified.htm#cli_reference_cmdt_generate_records_unified"
+  },
+  {
+    "title": "code-analyzer Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_code-analyzer_commands_unified.htm#cli_reference_code-analyzer_commands_unified"
+  },
+  {
+    "title": "code-analyzer config",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_code-analyzer_commands_unified.htm#cli_reference_code-analyzer_config_unified"
+  },
+  {
+    "title": "code-analyzer rules",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_code-analyzer_commands_unified.htm#cli_reference_code-analyzer_rules_unified"
+  },
+  {
+    "title": "code-analyzer run",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_code-analyzer_commands_unified.htm#cli_reference_code-analyzer_run_unified"
+  },
+  {
+    "title": "community Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_community_commands_unified.htm#cli_reference_community_commands_unified"
+  },
+  {
+    "title": "community create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_community_commands_unified.htm#cli_reference_community_create_unified"
+  },
+  {
+    "title": "community list template",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_community_commands_unified.htm#cli_reference_community_list_template_unified"
+  },
+  {
+    "title": "community publish",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_community_commands_unified.htm#cli_reference_community_publish_unified"
+  },
+  {
+    "title": "config Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_config_commands_unified.htm#cli_reference_config_commands_unified"
+  },
+  {
+    "title": "config get",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_config_commands_unified.htm#cli_reference_config_get_unified"
+  },
+  {
+    "title": "config list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_config_commands_unified.htm#cli_reference_config_list_unified"
+  },
+  {
+    "title": "config set",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_config_commands_unified.htm#cli_reference_config_set_unified"
+  },
+  {
+    "title": "config unset",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_config_commands_unified.htm#cli_reference_config_unset_unified"
+  },
+  {
+    "title": "data Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_commands_unified"
+  },
+  {
+    "title": "data bulk results",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_bulk_results_unified"
+  },
+  {
+    "title": "data create file",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_create_file_unified"
+  },
+  {
+    "title": "data create record",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_create_record_unified"
+  },
+  {
+    "title": "data delete bulk",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_delete_bulk_unified"
+  },
+  {
+    "title": "data delete record",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_delete_record_unified"
+  },
+  {
+    "title": "data delete resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_delete_resume_unified"
+  },
+  {
+    "title": "data export bulk",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_export_bulk_unified"
+  },
+  {
+    "title": "data export resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_export_resume_unified"
+  },
+  {
+    "title": "data export tree",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_export_tree_unified"
+  },
+  {
+    "title": "data get record",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_get_record_unified"
+  },
+  {
+    "title": "data import bulk",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_import_bulk_unified"
+  },
+  {
+    "title": "data import resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_import_resume_unified"
+  },
+  {
+    "title": "data import tree",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_import_tree_unified"
+  },
+  {
+    "title": "data query",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_query_unified"
+  },
+  {
+    "title": "data resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_resume_unified"
+  },
+  {
+    "title": "data search",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_search_unified"
+  },
+  {
+    "title": "data update bulk",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_update_bulk_unified"
+  },
+  {
+    "title": "data update record",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_update_record_unified"
+  },
+  {
+    "title": "data update resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_update_resume_unified"
+  },
+  {
+    "title": "data upsert bulk",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_upsert_bulk_unified"
+  },
+  {
+    "title": "data upsert resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_data_commands_unified.htm#cli_reference_data_upsert_resume_unified"
+  },
+  {
+    "title": "dev Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_commands_unified"
+  },
+  {
+    "title": "dev audit messages",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_audit_messages_unified"
+  },
+  {
+    "title": "dev convert messages",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_convert_messages_unified"
+  },
+  {
+    "title": "dev convert script",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_convert_script_unified"
+  },
+  {
+    "title": "dev generate command",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_generate_command_unified"
+  },
+  {
+    "title": "dev generate flag",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_generate_flag_unified"
+  },
+  {
+    "title": "dev generate plugin",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_dev_commands_unified.htm#cli_reference_dev_generate_plugin_unified"
+  },
+  {
+    "title": "doctor Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_doctor_commands_unified.htm#cli_reference_doctor_commands_unified"
+  },
+  {
+    "title": "doctor",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_doctor_commands_unified.htm#cli_reference_doctor_unified"
+  },
+  {
+    "title": "flow Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_flow_commands_unified.htm#cli_reference_flow_commands_unified"
+  },
+  {
+    "title": "flow get test",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_flow_commands_unified.htm#cli_reference_flow_get_test_unified"
+  },
+  {
+    "title": "flow run test",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_flow_commands_unified.htm#cli_reference_flow_run_test_unified"
+  },
+  {
+    "title": "force Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_commands_unified"
+  },
+  {
+    "title": "force data bulk delete",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_data_bulk_delete_unified"
+  },
+  {
+    "title": "force data bulk status",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_data_bulk_status_unified"
+  },
+  {
+    "title": "force data bulk upsert",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_data_bulk_upsert_unified"
+  },
+  {
+    "title": "force lightning lwc test create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_lightning_lwc_test_create_unified"
+  },
+  {
+    "title": "force lightning lwc test run",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_lightning_lwc_test_run_unified"
+  },
+  {
+    "title": "force lightning lwc test setup",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_commands_unified.htm#cli_reference_force_lightning_lwc_test_setup_unified"
+  },
+  {
+    "title": "info Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_info_commands_unified.htm#cli_reference_info_commands_unified"
+  },
+  {
+    "title": "info releasenotes display",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_info_commands_unified.htm#cli_reference_info_releasenotes_display_unified"
+  },
+  {
+    "title": "lightning Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_lightning_commands_unified.htm#cli_reference_lightning_commands_unified"
+  },
+  {
+    "title": "lightning generate app",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_lightning_commands_unified.htm#cli_reference_lightning_generate_app_unified"
+  },
+  {
+    "title": "lightning generate component",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_lightning_commands_unified.htm#cli_reference_lightning_generate_component_unified"
+  },
+  {
+    "title": "lightning generate event",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_lightning_commands_unified.htm#cli_reference_lightning_generate_event_unified"
+  },
+  {
+    "title": "lightning generate interface",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_lightning_commands_unified.htm#cli_reference_lightning_generate_interface_unified"
+  },
+  {
+    "title": "lightning generate test",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_lightning_commands_unified.htm#cli_reference_lightning_generate_test_unified"
+  },
+  {
+    "title": "logic Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_logic_commands_unified.htm#cli_reference_logic_commands_unified"
+  },
+  {
+    "title": "logic get test (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_logic_commands_unified.htm#cli_reference_logic_get_test_unified"
+  },
+  {
+    "title": "logic run test (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_logic_commands_unified.htm#cli_reference_logic_run_test_unified"
+  },
+  {
+    "title": "org Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_commands_unified"
+  },
+  {
+    "title": "org assign permset",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_assign_permset_unified"
+  },
+  {
+    "title": "org assign permsetlicense",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_assign_permsetlicense_unified"
+  },
+  {
+    "title": "org create sandbox",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_create_sandbox_unified"
+  },
+  {
+    "title": "org create scratch",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_create_scratch_unified"
+  },
+  {
+    "title": "org create shape",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_create_shape_unified"
+  },
+  {
+    "title": "org create snapshot",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_create_snapshot_unified"
+  },
+  {
+    "title": "org create user",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_create_user_unified"
+  },
+  {
+    "title": "org delete sandbox",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_delete_sandbox_unified"
+  },
+  {
+    "title": "org delete scratch",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_delete_scratch_unified"
+  },
+  {
+    "title": "org delete shape",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_delete_shape_unified"
+  },
+  {
+    "title": "org delete snapshot",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_delete_snapshot_unified"
+  },
+  {
+    "title": "org disable tracking",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_disable_tracking_unified"
+  },
+  {
+    "title": "org display",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_display_unified"
+  },
+  {
+    "title": "org display user",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_display_user_unified"
+  },
+  {
+    "title": "org enable tracking",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_enable_tracking_unified"
+  },
+  {
+    "title": "org generate password",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_generate_password_unified"
+  },
+  {
+    "title": "org get snapshot",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_get_snapshot_unified"
+  },
+  {
+    "title": "org list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_unified"
+  },
+  {
+    "title": "org list auth",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_auth_unified"
+  },
+  {
+    "title": "org list limits",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_limits_unified"
+  },
+  {
+    "title": "org list metadata",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_metadata_unified"
+  },
+  {
+    "title": "org list metadata-types",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_metadata-types_unified"
+  },
+  {
+    "title": "org list shape",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_shape_unified"
+  },
+  {
+    "title": "org list snapshot",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_snapshot_unified"
+  },
+  {
+    "title": "org list sobject record-counts",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_sobject_record-counts_unified"
+  },
+  {
+    "title": "org list users",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_list_users_unified"
+  },
+  {
+    "title": "org login access-token",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_access-token_unified"
+  },
+  {
+    "title": "org login jwt",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_jwt_unified"
+  },
+  {
+    "title": "org login sfdx-url",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_sfdx-url_unified"
+  },
+  {
+    "title": "org login web",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_login_web_unified"
+  },
+  {
+    "title": "org logout",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_logout_unified"
+  },
+  {
+    "title": "org open",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_open_unified"
+  },
+  {
+    "title": "org open agent",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_open_agent_unified"
+  },
+  {
+    "title": "org refresh sandbox",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_refresh_sandbox_unified"
+  },
+  {
+    "title": "org resume sandbox",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_resume_sandbox_unified"
+  },
+  {
+    "title": "org resume scratch",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_org_commands_unified.htm#cli_reference_org_resume_scratch_unified"
+  },
+  {
+    "title": "package Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_commands_unified"
+  },
+  {
+    "title": "package convert",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_convert_unified"
+  },
+  {
+    "title": "package create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_create_unified"
+  },
+  {
+    "title": "package delete",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_delete_unified"
+  },
+  {
+    "title": "package install",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_install_unified"
+  },
+  {
+    "title": "package install report",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_install_report_unified"
+  },
+  {
+    "title": "package installed list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_installed_list_unified"
+  },
+  {
+    "title": "package list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_list_unified"
+  },
+  {
+    "title": "package push-upgrade abort",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_push-upgrade_abort_unified"
+  },
+  {
+    "title": "package push-upgrade list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_push-upgrade_list_unified"
+  },
+  {
+    "title": "package push-upgrade report",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_push-upgrade_report_unified"
+  },
+  {
+    "title": "package push-upgrade schedule",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_push-upgrade_schedule_unified"
+  },
+  {
+    "title": "package uninstall",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_uninstall_unified"
+  },
+  {
+    "title": "package uninstall report",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_uninstall_report_unified"
+  },
+  {
+    "title": "package update",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_update_unified"
+  },
+  {
+    "title": "package version create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_create_unified"
+  },
+  {
+    "title": "package version create list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_create_list_unified"
+  },
+  {
+    "title": "package version create report",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_create_report_unified"
+  },
+  {
+    "title": "package version delete",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_delete_unified"
+  },
+  {
+    "title": "package version displayancestry",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_displayancestry_unified"
+  },
+  {
+    "title": "package version displaydependencies",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_displaydependencies_unified"
+  },
+  {
+    "title": "package version list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_list_unified"
+  },
+  {
+    "title": "package version promote",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_promote_unified"
+  },
+  {
+    "title": "package version report",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_report_unified"
+  },
+  {
+    "title": "package version retrieve",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_retrieve_unified"
+  },
+  {
+    "title": "package version update",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package_commands_unified.htm#cli_reference_package_version_update_unified"
+  },
+  {
+    "title": "package1 Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package1_commands_unified.htm#cli_reference_package1_commands_unified"
+  },
+  {
+    "title": "package1 version create",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package1_commands_unified.htm#cli_reference_package1_version_create_unified"
+  },
+  {
+    "title": "package1 version create get",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package1_commands_unified.htm#cli_reference_package1_version_create_get_unified"
+  },
+  {
+    "title": "package1 version display",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package1_commands_unified.htm#cli_reference_package1_version_display_unified"
+  },
+  {
+    "title": "package1 version list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_package1_commands_unified.htm#cli_reference_package1_version_list_unified"
+  },
+  {
+    "title": "plugins Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_plugins_commands_unified.htm#cli_reference_plugins_commands_unified"
+  },
+  {
+    "title": "plugins discover",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_plugins_commands_unified.htm#cli_reference_plugins_discover_unified"
+  },
+  {
+    "title": "project Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_commands_unified"
+  },
+  {
+    "title": "project convert mdapi",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_convert_mdapi_unified"
+  },
+  {
+    "title": "project convert source",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_convert_source_unified"
+  },
+  {
+    "title": "project convert source-behavior (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_convert_source-behavior_unified"
+  },
+  {
+    "title": "project delete source",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_delete_source_unified"
+  },
+  {
+    "title": "project delete tracking",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_delete_tracking_unified"
+  },
+  {
+    "title": "project deploy cancel",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_cancel_unified"
+  },
+  {
+    "title": "project deploy pipeline quick (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_pipeline_quick_unified"
+  },
+  {
+    "title": "project deploy pipeline report (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_pipeline_report_unified"
+  },
+  {
+    "title": "project deploy pipeline resume (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_pipeline_resume_unified"
+  },
+  {
+    "title": "project deploy pipeline start (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_pipeline_start_unified"
+  },
+  {
+    "title": "project deploy pipeline validate (Beta)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_pipeline_validate_unified"
+  },
+  {
+    "title": "project deploy preview",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_preview_unified"
+  },
+  {
+    "title": "project deploy quick",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_quick_unified"
+  },
+  {
+    "title": "project deploy report",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_report_unified"
+  },
+  {
+    "title": "project deploy resume",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_resume_unified"
+  },
+  {
+    "title": "project deploy start",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_start_unified"
+  },
+  {
+    "title": "project deploy validate",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_validate_unified"
+  },
+  {
+    "title": "project generate",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_generate_unified"
+  },
+  {
+    "title": "project generate manifest",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_generate_manifest_unified"
+  },
+  {
+    "title": "project list ignored",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_list_ignored_unified"
+  },
+  {
+    "title": "project reset tracking",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_reset_tracking_unified"
+  },
+  {
+    "title": "project retrieve preview",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_retrieve_preview_unified"
+  },
+  {
+    "title": "project retrieve start",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_retrieve_start_unified"
+  },
+  {
+    "title": "schema Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_schema_commands_unified.htm#cli_reference_schema_commands_unified"
+  },
+  {
+    "title": "schema generate field",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_schema_commands_unified.htm#cli_reference_schema_generate_field_unified"
+  },
+  {
+    "title": "schema generate platformevent",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_schema_commands_unified.htm#cli_reference_schema_generate_platformevent_unified"
+  },
+  {
+    "title": "schema generate sobject",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_schema_commands_unified.htm#cli_reference_schema_generate_sobject_unified"
+  },
+  {
+    "title": "schema generate tab",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_schema_commands_unified.htm#cli_reference_schema_generate_tab_unified"
+  },
+  {
+    "title": "sobject Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_sobject_commands_unified.htm#cli_reference_sobject_commands_unified"
+  },
+  {
+    "title": "sobject describe",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_sobject_commands_unified.htm#cli_reference_sobject_describe_unified"
+  },
+  {
+    "title": "sobject list",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_sobject_commands_unified.htm#cli_reference_sobject_list_unified"
+  },
+  {
+    "title": "static-resource Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_static-resource_commands_unified.htm#cli_reference_static-resource_commands_unified"
+  },
+  {
+    "title": "static-resource generate",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_static-resource_commands_unified.htm#cli_reference_static-resource_generate_unified"
+  },
+  {
+    "title": "visualforce Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_visualforce_commands_unified.htm#cli_reference_visualforce_commands_unified"
+  },
+  {
+    "title": "visualforce generate component",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_visualforce_commands_unified.htm#cli_reference_visualforce_generate_component_unified"
+  },
+  {
+    "title": "visualforce generate page",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_visualforce_commands_unified.htm#cli_reference_visualforce_generate_page_unified"
+  },
+  {
+    "title": "Help for sf Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_help_unified.htm"
+  },
+  {
+    "title": "Salesforce Functions (Retired)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_functions_commands_unified.htm"
+  },
+  {
+    "title": "sfdx (Deprecated)",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm"
+  },
+  {
+    "title": "Migrate sfdx-Style Commands to Their sf-Style Equivalents",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_migrate.htm"
+  },
+  {
+    "title": "force:source:* and force:mdapi:* Commands Migration",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_mig_deploy_retrieve.htm"
+  },
+  {
+    "title": "force:org:* Commands Migration",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_mig_org.htm"
+  },
+  {
+    "title": "force:data:bulk:* Commands Migration",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_mig_bulk_data.htm"
+  },
+  {
+    "title": "Configuration and Environment Variable Names Migration",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_mig_env_config.htm"
+  },
+  {
+    "title": "Source Tracking in New sf-Style Commands",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_mig_source_tracking.htm"
+  },
+  {
+    "title": "Mapping sfdx Commands to Their sf Equivalents",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_old_new_command_mapping.htm"
+  },
+  {
+    "title": "Mapping sf Commands to Their sfdx Equivalents",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_new_old_command_mapping.htm"
+  },
+  {
+    "title": "CLI Deprecation Policy",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/sfdx_dev_cli_deprecation.htm"
+  },
+  {
+    "title": "Discover Salesforce Plugins",
+    "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/sfdx_setup_other_plugins.htm"
+  }
+]

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://revpal.dev/schemas/opspal-capability-contract.schema.json",
+  "title": "OpsPal Capability Contract",
+  "type": "object",
+  "required": [
+    "capability_id",
+    "plugin",
+    "workflow_stage",
+    "ai_maturity_level",
+    "risk_class",
+    "human_approval_required"
+  ],
+  "properties": {
+    "capability_id": {
+      "type": "string"
+    },
+    "plugin": {
+      "type": "string"
+    },
+    "workflow_stage": {
+      "enum": [
+        "detect",
+        "diagnose",
+        "recommend",
+        "simulate",
+        "execute",
+        "verify",
+        "learn"
+      ]
+    },
+    "ai_maturity_level": {
+      "enum": [
+        "rules_based",
+        "llm_assisted",
+        "closed_loop_learning",
+        "autonomous_execution"
+      ]
+    },
+    "risk_class": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "human_approval_required": {
+      "type": "boolean"
+    },
+    "source_artifact": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

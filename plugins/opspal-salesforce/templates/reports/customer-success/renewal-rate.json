@@ -1,0 +1,128 @@
+{
+  "templateMetadata": {
+    "templateName": "Renewal Rate (YTD)",
+    "templateVersion": "1.1",
+    "description": "Year-to-date renewal rate percentage",
+    "audience": "CS Leadership, CCO, CFO",
+    "useCase": "Renewal performance tracking"
+  },
+  "reportMetadata": {
+    "name": "Renewal Rate - YTD",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "Type",
+        "operator": "equals",
+        "value": "Renewal"
+      },
+      {
+        "column": "CloseDate",
+        "operator": "equals",
+        "value": "THIS_FISCAL_YEAR"
+      },
+      {
+        "column": "IsClosed",
+        "operator": "equals",
+        "value": "true"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Renewal_Rate",
+        "formula": "Amount:SUM(Won) / Amount:SUM * 100",
+        "description": "Renewal rate percentage"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "Won_Amount",
+        "column": "Amount",
+        "aggregateType": "Sum",
+        "filter": "IsWon = true"
+      },
+      {
+        "name": "Total_Amount",
+        "column": "Amount",
+        "aggregateType": "Sum"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Gauge",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

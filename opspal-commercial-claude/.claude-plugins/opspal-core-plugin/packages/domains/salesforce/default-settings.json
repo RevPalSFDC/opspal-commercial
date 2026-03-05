@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "description": "Default settings for Salesforce Plugin with company announcements",
+  "companyAnnouncements": [
+    "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550",
+    "OpsPal is for internal RevPal use only.",
+    "Unauthorized use outside of RevPal projects is prohibited.",
+    "AI-generated outputs may contain errors \u2014 please validate results and provide clear directions.",
+    "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550",
+    "",
+    "\ud83d\udce6 Salesforce Plugin v3.42.0 | Last Updated: 2025-11-04",
+    "\ud83d\udee1\ufe0f Safety Guardrails Active - 5-tier agent permission system enforced",
+    "\ud83d\udccb Reflection System - Use /reflect after sessions for continuous improvement",
+    "\ud83d\udea8 Pre-Deployment - Always run sfdc-pre-deployment-validator.js before deployments",
+    "\ud83d\udd0d Agent Discovery - Run /suggest-agent or check /agents for 156+ specialized agents",
+    "\u2699\ufe0f Monthly Maintenance - node .claude-plugins/opspal-core-plugin/packages/domains/salesforce/scripts/sync-disallowed-tools.js --dry-run --verbose"
+  ]
+}

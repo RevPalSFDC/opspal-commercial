@@ -1,0 +1,2148 @@
+[
+  {
+    "url": "https://wordpress.org/sitemap.xml",
+    "timestamp": "2025-11-15T00:39:18.280Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 206,
+      "pageSize": 641,
+      "pageSizeKB": "0.63",
+      "isHTTPS": true,
+      "hasViewport": false,
+      "hasRobotsMeta": false,
+      "robotsContent": null,
+      "canonical": null,
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/xml; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "",
+        "length": 0,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "",
+        "length": 0,
+        "isOptimal": false,
+        "exists": false
+      },
+      "headings": {
+        "h1": {
+          "count": 0,
+          "text": [],
+          "hasOne": false
+        },
+        "h2": {
+          "count": 0,
+          "text": []
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 6,
+      "isSubstantial": false,
+      "openGraphTags": {
+        "title": null,
+        "description": null,
+        "image": null,
+        "url": null,
+        "type": null
+      },
+      "twitterCardTags": {
+        "card": null,
+        "title": null,
+        "description": null,
+        "image": null
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 0,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "N/A",
+      "lazyLoading": 0,
+      "images": []
+    },
+    "links": {
+      "total": 0,
+      "internal": 0,
+      "external": 0,
+      "anchors": 0,
+      "ratio": "N/A",
+      "externalLinks": []
+    }
+  },
+  {
+    "url": "https://wordpress.org/about/privacy/cookies/",
+    "timestamp": "2025-11-15T00:39:19.451Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 349,
+      "pageSize": 132097,
+      "pageSizeKB": "129.00",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/about/privacy/cookies/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Cookie Policy | WordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 68,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Cookie Policy Cookies Our Privacy Policy explains our principles when it comes to the collection, processing, and storage of your information. The Cookie Policy specifically explains how we, our partners, and users of our services deploy cookies, as well as the options you have to control them. What are cookies? Cookies are small pieces of…",
+        "length": 342,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Cookie Policy"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 10,
+          "text": [
+            "Cookies",
+            "What are cookies?",
+            "Cookies set by WordPress.org",
+            "wordpress.org",
+            "make.wordpress.org"
+          ]
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 1521,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": null,
+        "description": null,
+        "image": null,
+        "url": null,
+        "type": null
+      },
+      "twitterCardTags": {
+        "card": null,
+        "title": null,
+        "description": null,
+        "image": null
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 2,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://s.w.org/images/home/ccbysa40.png",
+          "alt": "Creative Commons License",
+          "hasAlt": true,
+          "isDescriptive": true
+        },
+        {
+          "src": "https://s.w.org/style/images/code-is-poetry-for-dark-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 81,
+      "internal": 35,
+      "external": 46,
+      "anchors": 0,
+      "ratio": "1.31",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage#gtagjs_google_analytics_4_-_cookie_usage",
+          "text": "Google Analytics",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage#gtagjs_google_analytics_4_-_cookie_usage",
+          "text": "Google Analytics",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/about/privacy/data-export-request/",
+    "timestamp": "2025-11-15T00:39:19.641Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 557,
+      "pageSize": 120843,
+      "pageSizeKB": "118.01",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/about/privacy/data-export-request/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "cacheControl": "no-cache, must-revalidate, max-age=0, no-store, private",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Data Export Request | WordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 74,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Blog Tool and Publishing Platform",
+        "length": 33,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Data Export Request"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 0,
+          "text": []
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 470,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": null,
+        "description": null,
+        "image": null,
+        "url": null,
+        "type": null
+      },
+      "twitterCardTags": {
+        "card": null,
+        "title": null,
+        "description": null,
+        "image": null
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 1,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://s.w.org/style/images/code-is-poetry-for-dark-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 62,
+      "internal": 34,
+      "external": 28,
+      "anchors": 0,
+      "ratio": "0.82",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/about/privacy/data-erasure-request/",
+    "timestamp": "2025-11-15T00:39:19.402Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 318,
+      "pageSize": 121857,
+      "pageSizeKB": "119.00",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/about/privacy/data-erasure-request/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "cacheControl": "no-cache, must-revalidate, max-age=0, no-store, private",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Data Erasure Request | WordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 75,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Blog Tool and Publishing Platform",
+        "length": 33,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Data Erasure Request"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 0,
+          "text": []
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": false,
+          "issues": [
+            "Skipped heading level: 1 → 5 (\"Important!\")"
+          ]
+        }
+      },
+      "wordCount": 541,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": null,
+        "description": null,
+        "image": null,
+        "url": null,
+        "type": null
+      },
+      "twitterCardTags": {
+        "card": null,
+        "title": null,
+        "description": null,
+        "image": null
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 1,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://s.w.org/style/images/code-is-poetry-for-dark-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 63,
+      "internal": 35,
+      "external": 28,
+      "anchors": 0,
+      "ratio": "0.80",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/download/",
+    "timestamp": "2025-11-15T00:39:19.346Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 257,
+      "pageSize": 155750,
+      "pageSizeKB": "152.10",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/download/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Download – WordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 63,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Download WordPress today, and get started on creating your website with one of the most powerful, popular, and customizable platforms in the world.",
+        "length": 147,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Get WordPress"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 6,
+          "text": [
+            "Download and install it yourself",
+            "Howdy!",
+            "Set up with a hosting provider",
+            "Powerful right out of the box",
+            "You've got WordPress. What's next?"
+          ]
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 616,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": "Download",
+        "description": "Download WordPress today, and get started on creating your website with one of the most powerful, popular, and customizable platforms in the world.",
+        "image": "https://s.w.org/images/home/wordpress-default-ogimage.png",
+        "url": "https://wordpress.org/download/",
+        "type": "article"
+      },
+      "twitterCardTags": {
+        "card": "summary",
+        "title": null,
+        "description": "Download WordPress today, and get started on creating your website with one of the most powerful, popular, and customizable platforms in the world.",
+        "image": "https://s.w.org/images/home/wordpress-default-image-square.png"
+      }
+    },
+    "schema": {
+      "hasSchema": true,
+      "count": 1,
+      "schemas": [
+        {
+          "type": "Unknown",
+          "format": "JSON-LD",
+          "hasRequiredFields": false
+        }
+      ],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 3,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://wordpress.org/wp-content/themes/pub/wporg-main/images/badge-apple.png",
+          "alt": "Download on the Apple App Store",
+          "hasAlt": true,
+          "isDescriptive": true
+        },
+        {
+          "src": "https://wordpress.org/wp-content/themes/pub/wporg-main/images/badge-google-play.png",
+          "alt": "Get it on Google Play",
+          "hasAlt": true,
+          "isDescriptive": true
+        },
+        {
+          "src": "https://wordpress.org/wp-content/mu-plugins/pub-sync/blocks/global-header-footer/images/code-is-poetry-for-light-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 76,
+      "internal": 39,
+      "external": 37,
+      "anchors": 0,
+      "ratio": "0.95",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Get involved in WordPress ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://www.meetup.com/pro/wordpress/",
+          "text": "Join a local WordPress meetup ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/download/releases/",
+    "timestamp": "2025-11-15T00:39:21.067Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 1859,
+      "pageSize": 1131894,
+      "pageSizeKB": "1105.37",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/download/releases/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Release Archive – WordPress.orgWordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 83,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Releases This is an archive of every recorded release that’s been made available for WordPress. Only the most recent in the series is safe to use and actively maintained. Curious about which jazzers were highlighted for each release? Check them out on the History page.",
+        "length": 269,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Releases"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 4,
+          "text": [
+            "Latest release",
+            "6.8 Branch",
+            "6.7 Branch",
+            "Past releases"
+          ]
+        },
+        "h3": {
+          "count": 52,
+          "text": [
+            "6.6 Branch",
+            "6.5 Branch",
+            "6.4 Branch",
+            "6.3 Branch",
+            "6.2 Branch"
+          ]
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 8182,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": "Release Archive",
+        "description": "Releases This is an archive of every recorded release that’s been made available for WordPress. Only the most recent in the series is safe to use and actively maintained. Curious about which jazzers were highlighted for each release? Check them out on the History page.",
+        "image": "https://s.w.org/images/home/wordpress-default-ogimage.png",
+        "url": "https://wordpress.org/download/releases/",
+        "type": "article"
+      },
+      "twitterCardTags": {
+        "card": "summary",
+        "title": null,
+        "description": "Releases This is an archive of every recorded release that’s been made available for WordPress. Only the most recent in the series is safe to use and actively maintained. Curious about which jazzers were highlighted for each release? Check them out on the History page.",
+        "image": "https://s.w.org/images/home/wordpress-default-image-square.png"
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 1,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://wordpress.org/wp-content/mu-plugins/pub-sync/blocks/global-header-footer/images/code-is-poetry-for-light-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 7674,
+      "internal": 7594,
+      "external": 28,
+      "anchors": 52,
+      "ratio": "0.00",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/download/beta-nightly/",
+    "timestamp": "2025-11-15T00:39:19.474Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 394,
+      "pageSize": 152612,
+      "pageSizeKB": "149.04",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/download/beta-nightly/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Beta/Nightly – WordPress.orgWordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 80,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Beta/Nightly Unstable Beta Versions If you are comfortable with PHP and would like to participate in the testing portion of our development cycle and report bugs you find, beta releases might be for you. By their nature these releases are unstable and should not be used any place where your data is important. Please backup […]",
+        "length": 328,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Beta/Nightly"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 2,
+          "text": [
+            "Unstable Beta Versions",
+            "Nightly Builds"
+          ]
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 487,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": "Beta/Nightly",
+        "description": "Beta/Nightly Unstable Beta Versions If you are comfortable with PHP and would like to participate in the testing portion of our development cycle and report bugs you find, beta releases might be for you. By their nature these releases are unstable and should not be used any place where your data is important. Please backup […]",
+        "image": "https://s.w.org/images/home/wordpress-default-ogimage.png",
+        "url": "https://wordpress.org/download/beta-nightly/",
+        "type": "article"
+      },
+      "twitterCardTags": {
+        "card": "summary",
+        "title": null,
+        "description": "Beta/Nightly Unstable Beta Versions If you are comfortable with PHP and would like to participate in the testing portion of our development cycle and report bugs you find, beta releases might be for you. By their nature these releases are unstable and should not be used any place where your data is important. Please backup […]",
+        "image": "https://s.w.org/images/home/wordpress-default-image-square.png"
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 1,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://wordpress.org/wp-content/mu-plugins/pub-sync/blocks/global-header-footer/images/code-is-poetry-for-light-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 74,
+      "internal": 43,
+      "external": 31,
+      "anchors": 0,
+      "ratio": "0.72",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://core.trac.wordpress.org/newticket",
+          "text": "report bugs you find",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/core/",
+          "text": "the development blog",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/download/source/",
+    "timestamp": "2025-11-15T00:39:19.515Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 437,
+      "pageSize": 147181,
+      "pageSizeKB": "143.73",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/download/source/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Source Code – WordPress.orgWordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 79,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Source Code If you’d like to browse the WordPress source and inline documentation, there’s a convenient developer reference and a code browser. You can also find guides for contributing with Subversion and contributing with Git. The built WordPress source, licensed under the GNU General Public License version 2 (or later), can be browsed online or […]",
+        "length": 353,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Source Code"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 0,
+          "text": []
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 472,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": "Source Code",
+        "description": "Source Code If you’d like to browse the WordPress source and inline documentation, there’s a convenient developer reference and a code browser. You can also find guides for contributing with Subversion and contributing with Git. The built WordPress source, licensed under the GNU General Public License version 2 (or later), can be browsed online or […]",
+        "image": "https://s.w.org/images/home/wordpress-default-ogimage.png",
+        "url": "https://wordpress.org/download/source/",
+        "type": "article"
+      },
+      "twitterCardTags": {
+        "card": "summary",
+        "title": null,
+        "description": "Source Code If you’d like to browse the WordPress source and inline documentation, there’s a convenient developer reference and a code browser. You can also find guides for contributing with Subversion and contributing with Git. The built WordPress source, licensed under the GNU General Public License version 2 (or later), can be browsed online or […]",
+        "image": "https://s.w.org/images/home/wordpress-default-image-square.png"
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 1,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://wordpress.org/wp-content/mu-plugins/pub-sync/blocks/global-header-footer/images/code-is-poetry-for-light-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 76,
+      "internal": 40,
+      "external": 36,
+      "anchors": 0,
+      "ratio": "0.90",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/reference/",
+          "text": "convenient developer reference",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://core.trac.wordpress.org/browser/",
+          "text": "code browser",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/download/counter/",
+    "timestamp": "2025-11-15T00:39:19.304Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 190,
+      "pageSize": 143780,
+      "pageSizeKB": "140.41",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/download/counter/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Counter – WordPress.orgWordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 75,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Number of WordPress downloads",
+        "length": 29,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Number of WordPress 6.8 downloads"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 0,
+          "text": []
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 358,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": "Counter",
+        "description": null,
+        "image": "https://s.w.org/images/home/wordpress-default-ogimage.png",
+        "url": "https://wordpress.org/download/counter/",
+        "type": "article"
+      },
+      "twitterCardTags": {
+        "card": "summary",
+        "title": null,
+        "description": null,
+        "image": "https://s.w.org/images/home/wordpress-default-image-square.png"
+      }
+    },
+    "schema": {
+      "hasSchema": false,
+      "count": 0,
+      "schemas": [],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 1,
+      "missingAlt": 0,
+      "shortAlt": 0,
+      "altCoverage": "100.0%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://s.w.org/style/images/code-is-poetry-for-dark-bg.svg",
+          "alt": "Code is Poetry",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "188",
+          "height": "13"
+        }
+      ]
+    },
+    "links": {
+      "total": 67,
+      "internal": 39,
+      "external": 28,
+      "anchors": 0,
+      "ratio": "0.72",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://wordpress.org/",
+    "timestamp": "2025-11-15T00:39:19.373Z",
+    "status": "success",
+    "technical": {
+      "statusCode": 200,
+      "loadTime": 281,
+      "pageSize": 167234,
+      "pageSizeKB": "163.31",
+      "isHTTPS": true,
+      "hasViewport": true,
+      "hasRobotsMeta": true,
+      "robotsContent": "max-image-preview:large",
+      "canonical": "https://wordpress.org/",
+      "hasSSL": true,
+      "estimatedLCP": "Good",
+      "responseHeaders": {
+        "contentType": "text/html; charset=UTF-8",
+        "server": "nginx"
+      }
+    },
+    "content": {
+      "title": {
+        "text": "Blog Tool, Publishing Platform, and CMS – WordPress.orgWordPress.orgWordPress.orgWordPress.org",
+        "length": 94,
+        "isOptimal": false
+      },
+      "metaDescription": {
+        "text": "Open source software which you can use to easily create a beautiful website, blog, or app.",
+        "length": 90,
+        "isOptimal": false,
+        "exists": true
+      },
+      "headings": {
+        "h1": {
+          "count": 1,
+          "text": [
+            "Meet WordPress"
+          ],
+          "hasOne": true
+        },
+        "h2": {
+          "count": 9,
+          "text": [
+            "Design",
+            "Build",
+            "Extend",
+            "See what's new",
+            "One platform, a universe of possibilities"
+          ]
+        },
+        "h3": {
+          "count": 0,
+          "text": []
+        },
+        "hierarchy": {
+          "isValid": true,
+          "issues": []
+        }
+      },
+      "wordCount": 743,
+      "isSubstantial": true,
+      "openGraphTags": {
+        "title": "Blog Tool, Publishing Platform, and CMS - WordPress.org",
+        "description": "Open source software which you can use to easily create a beautiful website, blog, or app.",
+        "image": "https://wordpress.org/files/2024/04/wordpress-homepage-ogimage-202404.png",
+        "url": "https://wordpress.org/",
+        "type": "website"
+      },
+      "twitterCardTags": {
+        "card": "summary_large_image",
+        "title": null,
+        "description": null,
+        "image": null
+      }
+    },
+    "schema": {
+      "hasSchema": true,
+      "count": 1,
+      "schemas": [
+        {
+          "type": "Unknown",
+          "format": "JSON-LD",
+          "hasRequiredFields": false
+        }
+      ],
+      "hasMicrodata": false
+    },
+    "images": {
+      "total": 16,
+      "missingAlt": 5,
+      "shortAlt": 0,
+      "altCoverage": "68.8%",
+      "lazyLoading": 0,
+      "images": [
+        {
+          "src": "https://wordpress.org/files/2024/04/brush.png",
+          "alt": "",
+          "hasAlt": false,
+          "isDescriptive": false,
+          "width": "1198",
+          "height": "323"
+        },
+        {
+          "src": "https://wordpress.org/files/2024/10/design-visual-6-7.png",
+          "alt": "Illustration of various blocks, Paragraph and Cover.",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "720",
+          "height": "460"
+        },
+        {
+          "src": "https://wordpress.org/files/2024/10/build-visual-6-7.png",
+          "alt": "Illustration of an Image block with a block toolbar.",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "720",
+          "height": "460"
+        },
+        {
+          "src": "https://wordpress.org/files/2024/10/extend-visual-6-7.png",
+          "alt": "Screenshot of the Twenty Twenty-Five theme.",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "720",
+          "height": "460"
+        },
+        {
+          "src": "https://wordpress.org/files/2024/10/whats-new-visual-6-7.png",
+          "alt": "",
+          "hasAlt": false,
+          "isDescriptive": false,
+          "width": "1080",
+          "height": "760"
+        },
+        {
+          "src": "https://wordpress.org/files/2023/12/rolling-stone.png",
+          "alt": "Rolling Stone logo",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "521",
+          "height": "94"
+        },
+        {
+          "src": "https://wordpress.org/files/2022/08/Time-Magazine.png",
+          "alt": "Time Magazine logo",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "158",
+          "height": "66"
+        },
+        {
+          "src": "https://wordpress.org/files/2023/10/NASA-1.png",
+          "alt": "NASA logo",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "192",
+          "height": "160"
+        },
+        {
+          "src": "https://wordpress.org/files/2023/10/Microsoft.png",
+          "alt": "Microsoft logo",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "302",
+          "height": "64"
+        },
+        {
+          "src": "https://wordpress.org/files/2023/10/tech-crunch.png",
+          "alt": "TechCrunch logo",
+          "hasAlt": true,
+          "isDescriptive": true,
+          "width": "129",
+          "height": "64"
+        }
+      ]
+    },
+    "links": {
+      "total": 76,
+      "internal": 45,
+      "external": 31,
+      "anchors": 0,
+      "ratio": "0.69",
+      "externalLinks": [
+        {
+          "href": "https://openverse.org/",
+          "text": "Openverse ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://developer.wordpress.org/",
+          "text": "Developers",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://wordpress.tv/",
+          "text": "WordPress.tv ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://make.wordpress.org/",
+          "text": "Make WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Events",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://jobs.wordpress.net/",
+          "text": "Job Board ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://mercantile.wordpress.org/",
+          "text": "Swag Store ↗︎",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://events.wordpress.org/",
+          "text": "Find an event near you",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        },
+        {
+          "href": "https://learn.wordpress.org/",
+          "text": "Learn how to use WordPress",
+          "isInternal": false,
+          "isExternal": true,
+          "isAnchor": false,
+          "isMailto": false,
+          "isTel": false,
+          "rel": null,
+          "nofollow": false
+        }
+      ]
+    }
+  }
+]

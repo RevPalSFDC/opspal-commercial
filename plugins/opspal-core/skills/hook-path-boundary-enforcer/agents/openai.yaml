@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Path Boundary Enforcer"
+  short_description: "Help with Hook Path Boundary Enforcer tasks"
+  default_prompt: "Use $hook-path-boundary-enforcer to execute this workflow safely and produce the expected artifacts."

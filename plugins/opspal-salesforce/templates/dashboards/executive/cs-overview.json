@@ -1,0 +1,304 @@
+{
+  "templateMetadata": {
+    "templateId": "cs-overview",
+    "templateName": "Customer Success Overview Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "CCO-level view of NRR, churn, expansion revenue, time-to-value, and customer health distribution",
+    "audience": "Customer Success Executives (CCO, VP CS, Head of Customer Success)",
+    "function": "customer-success",
+    "level": "executive",
+    "useCase": "Monthly CS reviews, board reporting, retention strategy planning",
+    "refreshFrequency": "Daily",
+    "componentCount": 8,
+    "prerequisites": [
+      "Account.Health_Score__c field (or equivalent)",
+      "Opportunity.Type with Renewal and Expansion values",
+      "Account.Contract_End_Date__c or subscription tracking",
+      "ARR tracking on Account or Opportunity"
+    ],
+    "tags": ["nrr", "churn", "retention", "expansion", "executive", "saas", "cco"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "enterprise", "high-touch"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified CS overview with 5 key metrics",
+        "componentOverrides": {
+          "maxComponents": 5,
+          "exclude": ["Avg Time to Value", "Churn by Reason", "At-Risk Accounts"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full CS overview dashboard with all 8 components"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with higher ARR thresholds and stricter NRR targets",
+        "filterOverrides": [
+          { "field": "Account.ARR__c", "default": ">=100000", "label": "Enterprise ($100K+ ARR)" }
+        ],
+        "metricAdjustments": {
+          "nrrTarget": {
+            "target": 115,
+            "thresholds": { "green": ">=115%", "yellow": "105-115%", "red": "<105%" }
+          },
+          "churnTarget": {
+            "target": 3,
+            "thresholds": { "green": "<=3%", "yellow": "3-7%", "red": ">7%" }
+          }
+        }
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement depth metrics",
+        "metricAdjustments": {
+          "timeToValueTarget": {
+            "target": 21,
+            "thresholds": { "green": "<=21", "yellow": "21-45", "red": ">45" }
+          },
+          "atRiskThreshold": {
+            "greenZone": { "min": 0, "max": 5 },
+            "yellowZone": { "min": 5, "max": 10 },
+            "redZone": { "min": 10, "max": 100 }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Account.Name", "Account.OwnerId"],
+    "optionalFields": ["Account.Health_Score__c", "Account.NPS_Score__c", "Account.ARR__c", "Account.Contract_End_Date__c"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.6,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": ["Health_Score__c", "Customer_Health__c", "Account_Health__c", "Risk_Level__c"],
+        "labelHints": ["Health Score", "Health", "Customer Health", "Risk Level"],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": ["ARR__c", "Annual_Recurring_Revenue__c", "MRR__c", "Contract_Value__c"],
+        "cpqPatterns": ["SBQQ__RenewedAmount__c", "SBQQ__NetAmount__c"],
+        "labelHints": ["ARR", "Annual Revenue", "Contract Value", "MRR"],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": ["NPS_Score__c", "NPS__c", "Net_Promoter_Score__c"],
+        "labelHints": ["NPS", "Net Promoter Score", "NPS Score"],
+        "dataType": "number"
+      },
+      "ContractEndDate": {
+        "patterns": ["Contract_End_Date__c", "Renewal_Date__c", "Subscription_End_Date__c"],
+        "labelHints": ["Contract End", "Renewal Date", "Subscription End"],
+        "dataType": "date"
+      },
+      "ChurnReason": {
+        "patterns": ["Churn_Reason__c", "Lost_Reason__c", "Cancellation_Reason__c"],
+        "labelHints": ["Churn Reason", "Lost Reason", "Cancellation Reason"],
+        "dataType": "picklist"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.6,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Net Revenue Retention (NRR)", "Gross Churn Rate", "Account Health Distribution", "NRR Trend", "At-Risk Accounts"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.4,
+        "components": "essential only",
+        "enabledComponents": ["Net Revenue Retention (NRR)", "Gross Churn Rate", "Account Health Distribution"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Gauge",
+        "title": "Net Revenue Retention (NRR)",
+        "sourceReport": "nrr-calculation",
+        "metric": "(Starting_ARR + Expansion - Contraction - Churn) / Starting_ARR * 100",
+        "format": "percent",
+        "target": 110,
+        "greenZone": { "min": 110, "max": 150 },
+        "yellowZone": { "min": 100, "max": 110 },
+        "redZone": { "min": 0, "max": 100 },
+        "benchmark": { "excellent": ">120%", "good": ">110%", "warning": "<100%" }
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Gross Churn Rate",
+        "sourceReport": "gross-churn-rate",
+        "metric": "Churned_ARR / Beginning_ARR * 100",
+        "format": "percent",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 5 },
+        "yellowZone": { "min": 5, "max": 10 },
+        "redZone": { "min": 10, "max": 100 },
+        "benchmark": { "excellent": "<3%", "good": "<5%", "warning": ">10%" }
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Expansion Revenue (YTD)",
+        "sourceReport": "expansion-revenue",
+        "metric": "SUM(Amount WHERE Type CONTAINS 'Expansion' AND IsWon=TRUE)",
+        "format": "currency",
+        "comparisonPeriod": "LAST_FISCAL_YEAR_YTD",
+        "greenZone": { "changePercent": { "min": 10, "max": 100 } },
+        "yellowZone": { "changePercent": { "min": 0, "max": 10 } },
+        "redZone": { "changePercent": { "min": -100, "max": 0 } }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "Account Health Distribution",
+        "sourceReport": "customer-health-distribution",
+        "groupBy": "Account.Health_Score__c",
+        "metric": "COUNT(Account.Id)",
+        "showPercentages": true,
+        "showLegend": true,
+        "colorMapping": {
+          "Green": "#6FBF73",
+          "Yellow": "#F4C542",
+          "Red": "#E74C3C"
+        }
+      },
+      {
+        "position": { "row": 1, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Line Chart",
+        "title": "NRR Trend (12 Months)",
+        "sourceReport": "nrr-trend",
+        "xAxis": "Month",
+        "yAxis": "NRR_Percentage",
+        "showTrendLine": true,
+        "showDataLabels": true,
+        "targetLine": 110,
+        "showComparison": "vs Last Year"
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "At-Risk Accounts",
+        "sourceReport": "at-risk-accounts",
+        "metric": "COUNT(Account.Id WHERE Health_Score__c IN ('Red', 'Yellow'))",
+        "format": "number",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 10 },
+        "yellowZone": { "min": 10, "max": 25 },
+        "redZone": { "min": 25, "max": 1000 }
+      },
+      {
+        "position": { "row": 2, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Avg Time to Value",
+        "sourceReport": "time-to-value",
+        "metric": "AVG(First_Value_Date__c - Contract_Start_Date__c)",
+        "format": "days",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 30 },
+        "yellowZone": { "min": 30, "max": 60 },
+        "redZone": { "min": 60, "max": 180 },
+        "benchmark": { "excellent": "<21 days", "good": "<30 days", "warning": ">60 days" }
+      },
+      {
+        "position": { "row": 2, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Bar Chart",
+        "title": "Churn by Reason",
+        "sourceReport": "churn-by-reason",
+        "groupBy": "Churn_Reason__c",
+        "metric": "COUNT OR SUM(Churned_ARR)",
+        "sortBy": "metric DESC",
+        "rowLimit": 5
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "CloseDate",
+      "type": "dateRange",
+      "placeholder": "{{fiscal_period}}",
+      "default": "THIS_FISCAL_YEAR",
+      "values": ["THIS_FISCAL_QUARTER", "THIS_FISCAL_YEAR", "LAST_FISCAL_YEAR"]
+    },
+    {
+      "field": "Account.Segment__c",
+      "type": "picklist",
+      "placeholder": "{{customer_segment}}",
+      "default": "All",
+      "values": ["All", "Enterprise", "Mid-Market", "SMB"]
+    },
+    {
+      "field": "Account.Industry",
+      "type": "picklist",
+      "placeholder": "{{industry}}",
+      "default": "All",
+      "values": ["All", "Technology", "Financial Services", "Healthcare", "Manufacturing", "Other"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "note": "Executive dashboards typically show org-wide data without user filtering"
+  },
+  "sourceReportTemplates": [
+    "customer-success/nrr-calculation",
+    "customer-success/expansion-revenue",
+    "customer-success/customer-health-distribution",
+    "customer-success/account-health"
+  ],
+  "kpiDefinitions": {
+    "nrr": {
+      "formula": "(Starting ARR + Expansion - Contraction - Churn) / Starting ARR * 100",
+      "components": {
+        "starting_arr": "ARR at beginning of period from existing customers",
+        "expansion": "Upsells + cross-sells closed in period",
+        "contraction": "Downgrades in period",
+        "churn": "Lost customers in period"
+      },
+      "benchmark": { "excellent": ">120%", "good": ">110%", "saas_median": "100-110%", "warning": "<100%" }
+    },
+    "gross_churn": {
+      "formula": "Churned ARR / Beginning ARR * 100",
+      "excludes": "Does NOT include contractions - that's net churn",
+      "benchmark": { "excellent": "<3%", "good": "<5%", "warning": ">10%" }
+    },
+    "time_to_value": {
+      "formula": "AVG(First_Value_Date - Contract_Start_Date)",
+      "definition": "Days from contract signature to first meaningful value milestone",
+      "benchmark": { "excellent": "<21 days", "good": "<30 days", "warning": ">60 days" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Health_Score__c field exists (or create formula)",
+      "Confirm ARR tracking method (Account field or Opportunity rollup)",
+      "Check Opportunity.Type includes 'Expansion' and 'Renewal'",
+      "Create report folder: Customer Success Executive"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Customer Success folder",
+      "Set daily refresh at 6 AM",
+      "Subscribe CCO and CS Directors to weekly snapshot"
+    ]
+  },
+  "relatedTemplates": ["renewal-pipeline", "account-health", "my-accounts"]
+}

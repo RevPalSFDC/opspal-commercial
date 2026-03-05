@@ -1,0 +1,62 @@
+{
+  "name": "production",
+  "extends": "default.json",
+  "description": "Production environment - strict validation, full testing required",
+  "type": "production",
+
+  "credentials": {
+    "salesforce": {
+      "orgAlias": "{{env.SF_PROD_ALIAS}}",
+      "loginUrl": "https://login.salesforce.com"
+    }
+  },
+
+  "defaults": {
+    "salesforce": {
+      "testLevel": "RunLocalTests",
+      "checkOnly": false,
+      "waitTime": 60,
+      "ignoreWarnings": false
+    },
+    "hubspot": {
+      "validateBeforeActivate": true
+    },
+    "n8n": {
+      "activateOnDeploy": false
+    },
+    "deployment": {
+      "dryRun": false,
+      "validateOnly": false,
+      "activateFlows": false,
+      "runPostDeployTests": true,
+      "createCheckpoint": true,
+      "notifyOnComplete": true
+    }
+  },
+
+  "featureFlags": {
+    "enableDebugMode": false
+  },
+
+  "restrictions": {
+    "requireApproval": true,
+    "allowedDeployers": [],
+    "deploymentWindows": [
+      {
+        "dayOfWeek": ["tuesday", "wednesday", "thursday"],
+        "startTime": "06:00",
+        "endTime": "18:00",
+        "timezone": "America/New_York"
+      }
+    ],
+    "blockedComponents": []
+  },
+
+  "notifications": {
+    "slack": {
+      "webhookUrl": "{{env.SLACK_WEBHOOK_URL}}",
+      "channel": "#deployments",
+      "notifyOn": ["success", "failure"]
+    }
+  }
+}

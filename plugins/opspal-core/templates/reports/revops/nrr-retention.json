@@ -1,0 +1,311 @@
+{
+  "templateMetadata": {
+    "id": "nrr-retention",
+    "name": "Net Revenue Retention Analysis",
+    "version": "1.0.0",
+    "description": "Analyze retention metrics including NRR, GRR, churn, expansion, and contraction with cohort analysis",
+    "category": "retention",
+    "targetAudience": ["executive", "customer-success", "finance"],
+    "recommendedFrequency": "monthly",
+    "estimatedGenerationTime": "4-6 minutes"
+  },
+  "reportMetadata": {
+    "defaultTitle": "Retention Performance Report",
+    "defaultPeriod": "Q4",
+    "defaultFormat": "pdf",
+    "defaultSegmentation": ["segment", "cohort"],
+    "supportedFormats": ["pdf", "excel", "sheets", "csv"]
+  },
+  "kpis": [
+    {
+      "id": "NRR",
+      "required": true,
+      "displayOrder": 1,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true,
+      "thresholds": {
+        "excellent": 110,
+        "good": 100,
+        "warning": 90
+      }
+    },
+    {
+      "id": "GRR",
+      "required": true,
+      "displayOrder": 2,
+      "chartType": "gauge",
+      "showTrend": true,
+      "showBenchmark": true,
+      "thresholds": {
+        "excellent": 95,
+        "good": 90,
+        "warning": 85
+      }
+    },
+    {
+      "id": "CUSTOMER_CHURN",
+      "required": true,
+      "displayOrder": 3,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true,
+      "invertColors": true
+    },
+    {
+      "id": "REVENUE_CHURN",
+      "required": true,
+      "displayOrder": 4,
+      "chartType": "line",
+      "showTrend": true,
+      "showBenchmark": true,
+      "invertColors": true
+    },
+    {
+      "id": "EXPANSION_RATE",
+      "required": false,
+      "displayOrder": 5,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": false
+    },
+    {
+      "id": "CONTRACTION_RATE",
+      "required": false,
+      "displayOrder": 6,
+      "chartType": "bar",
+      "showTrend": true,
+      "showBenchmark": false,
+      "invertColors": true
+    }
+  ],
+  "dataSources": {
+    "salesforce": {
+      "objects": ["Opportunity", "Account", "Contract"],
+      "requiredFields": ["Amount", "CloseDate", "Type", "AccountId", "IsWon"],
+      "optionalFields": ["Renewal_Date__c", "Churn_Reason__c", "Expansion_Amount__c"],
+      "filters": {
+        "renewals": "Type = 'Renewal' AND IsWon = true",
+        "expansions": "Type = 'Expansion' AND IsWon = true",
+        "churned": "Type = 'Renewal' AND IsWon = false"
+      }
+    },
+    "hubspot": {
+      "objects": ["deals", "companies"],
+      "requiredProperties": ["amount", "closedate", "dealtype", "associatedcompanyid"],
+      "optionalProperties": ["renewal_date", "churn_reason"],
+      "filters": {
+        "renewals": "dealtype = 'renewal'",
+        "expansions": "dealtype = 'expansion'"
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "executive-summary",
+      "title": "Executive Summary",
+      "type": "summary",
+      "order": 1,
+      "content": {
+        "blufTemplate": "NRR is ${nrr_value}% (${nrr_assessment}). ${expansion_insight}. ${churn_insight}.",
+        "keyMetrics": ["NRR", "GRR", "CUSTOMER_CHURN"],
+        "maxHighlights": 3,
+        "maxRecommendations": 3
+      }
+    },
+    {
+      "id": "retention-dashboard",
+      "title": "Retention Overview",
+      "type": "dashboard",
+      "order": 2,
+      "kpis": ["NRR", "GRR", "CUSTOMER_CHURN", "REVENUE_CHURN"],
+      "layout": "2x2",
+      "showBenchmarkComparison": true
+    },
+    {
+      "id": "nrr-waterfall",
+      "title": "NRR Waterfall",
+      "type": "chart",
+      "order": 3,
+      "chartConfig": {
+        "type": "waterfall",
+        "components": [
+          { "name": "Starting MRR", "color": "#2E5A88" },
+          { "name": "Expansion", "color": "#70AD47" },
+          { "name": "Contraction", "color": "#FFC000" },
+          { "name": "Churn", "color": "#FF6B6B" },
+          { "name": "Ending MRR", "color": "#2E5A88" }
+        ]
+      }
+    },
+    {
+      "id": "retention-trend",
+      "title": "Retention Trends",
+      "type": "chart",
+      "order": 4,
+      "chartConfig": {
+        "type": "line",
+        "metrics": ["NRR", "GRR"],
+        "groupBy": "CALENDAR_MONTH",
+        "showTarget": true,
+        "targetNRR": 110,
+        "targetGRR": 90
+      }
+    },
+    {
+      "id": "cohort-analysis",
+      "title": "Cohort Retention Analysis",
+      "type": "detail",
+      "order": 5,
+      "cohortConfig": {
+        "cohortBy": "signup_quarter",
+        "metric": "retention_rate",
+        "periods": 8,
+        "periodType": "quarter"
+      }
+    },
+    {
+      "id": "retention-by-segment",
+      "title": "Retention by Segment",
+      "type": "detail",
+      "order": 6,
+      "breakdown": {
+        "dimension": "segment",
+        "metrics": ["NRR", "GRR", "CUSTOMER_CHURN", "customer_count"],
+        "sortBy": "NRR",
+        "sortOrder": "desc"
+      }
+    },
+    {
+      "id": "churn-analysis",
+      "title": "Churn Analysis",
+      "type": "detail",
+      "order": 7,
+      "breakdown": {
+        "dimension": "churn_reason",
+        "metrics": ["churned_customers", "churned_arr", "percentage"],
+        "sortBy": "churned_arr",
+        "sortOrder": "desc"
+      }
+    },
+    {
+      "id": "expansion-contraction",
+      "title": "Expansion & Contraction",
+      "type": "chart",
+      "order": 8,
+      "chartConfig": {
+        "type": "stacked_bar",
+        "groupBy": "CALENDAR_MONTH",
+        "series": [
+          { "name": "Expansion", "color": "#70AD47" },
+          { "name": "Contraction", "color": "#FF6B6B" }
+        ]
+      }
+    },
+    {
+      "id": "benchmark-comparison",
+      "title": "Industry Benchmarks",
+      "type": "comparison",
+      "order": 9,
+      "benchmarks": {
+        "metrics": ["NRR", "GRR", "CUSTOMER_CHURN"],
+        "showPercentile": true,
+        "showIndustryAvg": true,
+        "showTopQuartile": true
+      }
+    },
+    {
+      "id": "methodology",
+      "title": "Methodology",
+      "type": "methodology",
+      "order": 99,
+      "include": ["dataSources", "formulas", "assumptions", "exclusions", "queries", "benchmarkSources"]
+    }
+  ],
+  "calculations": {
+    "nrr": {
+      "formula": "(starting_mrr + expansion - contraction - churn) / starting_mrr * 100",
+      "notes": "Net Revenue Retention including expansion, contraction, and churn"
+    },
+    "grr": {
+      "formula": "(starting_mrr - contraction - churn) / starting_mrr * 100",
+      "notes": "Gross Revenue Retention excluding expansion"
+    },
+    "customer_churn": {
+      "formula": "churned_customers / starting_customers * 100",
+      "notes": "Percentage of customers churned in period"
+    },
+    "revenue_churn": {
+      "formula": "churned_mrr / starting_mrr * 100",
+      "notes": "Percentage of MRR churned in period"
+    },
+    "expansion_rate": {
+      "formula": "expansion_mrr / starting_mrr * 100",
+      "notes": "Expansion revenue as percentage of starting MRR"
+    }
+  },
+  "benchmarks": {
+    "industry": "saas",
+    "sources": [
+      {
+        "name": "KeyBanc SaaS Benchmarks 2024",
+        "url": "https://keybanccm.com/saas-survey",
+        "metrics": ["NRR", "GRR"]
+      },
+      {
+        "name": "ChartMogul SaaS Retention Data",
+        "url": "https://chartmogul.com/resources",
+        "metrics": ["CUSTOMER_CHURN"]
+      }
+    ],
+    "thresholds": {
+      "NRR": {
+        "excellent": 1.15,
+        "good": 1.10,
+        "average": 1.02,
+        "belowAverage": 0.95
+      },
+      "GRR": {
+        "excellent": 0.95,
+        "good": 0.90,
+        "average": 0.85,
+        "belowAverage": 0.80
+      },
+      "CUSTOMER_CHURN": {
+        "excellent": 0.03,
+        "good": 0.05,
+        "average": 0.08,
+        "belowAverage": 0.12
+      }
+    }
+  },
+  "defaults": {
+    "dateRange": {
+      "type": "relative",
+      "value": "LAST_QUARTER"
+    },
+    "comparison": {
+      "type": "quarter_over_quarter"
+    },
+    "currency": "USD"
+  },
+  "exportConfig": {
+    "pdf": {
+      "orientation": "portrait",
+      "includeCharts": true,
+      "includeTables": true,
+      "pageBreaks": ["cohort-analysis", "churn-analysis", "methodology"]
+    },
+    "excel": {
+      "sheets": [
+        { "name": "Summary", "sections": ["executive-summary", "retention-dashboard"] },
+        { "name": "NRR Waterfall", "sections": ["nrr-waterfall"] },
+        { "name": "Trends", "sections": ["retention-trend", "expansion-contraction"] },
+        { "name": "Cohort Analysis", "sections": ["cohort-analysis"] },
+        { "name": "Segment Detail", "sections": ["retention-by-segment"] },
+        { "name": "Churn Analysis", "sections": ["churn-analysis"] },
+        { "name": "Methodology", "sections": ["methodology"] }
+      ]
+    }
+  }
+}

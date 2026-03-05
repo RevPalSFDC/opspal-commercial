@@ -1,0 +1,131 @@
+{
+  "templateMetadata": {
+    "templateName": "My Emails Today",
+    "templateVersion": "1.1",
+    "description": "Your email activities logged today",
+    "audience": "Sales Reps, BDRs, SDRs",
+    "useCase": "Email tracking, outreach monitoring, sequence progress",
+    "customizationPoints": [
+      "Email type filter",
+      "Daily target",
+      "Include open/reply tracking"
+    ],
+    "prerequisites": [
+      "Email logging enabled",
+      "Task type = 'Email'"
+    ]
+  },
+  "metricDefinitionId": "activity_volume",
+  "reportMetadata": {
+    "name": "My Emails Today",
+    "description": "Emails logged today",
+    "reportType": "Activity",
+    "reportFormat": "SUMMARY",
+    "scope": "user",
+    "showDetails": false,
+    "reportFilters": [
+      {
+        "column": "ACTIVITY_DATE",
+        "operator": "equals",
+        "value": "TODAY",
+        "customizable": false
+      },
+      {
+        "column": "OWNER_ID",
+        "operator": "equals",
+        "value": "$User.Id",
+        "customizable": false
+      },
+      {
+        "column": "TASK_TYPE",
+        "operator": "equals",
+        "value": "Email",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [],
+    "groupingsAcross": [],
+    "detailColumns": [],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total emails today"
+      }
+    ],
+    "chart": {
+      "chartType": "Metric",
+      "aggregateColumn": "RowCount",
+      "format": "number",
+      "targetValue": 25
+    }
+  },
+  "dashboardUsage": {
+    "recommendedDashboards": [
+      "my-activities"
+    ],
+    "componentType": "Metric",
+    "refreshFrequency": "Realtime"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "cpq",
+      "enterprise"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified individual rep report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full individual rep report"
+      },
+      "cpq": {
+        "description": "CPQ-enabled with quote metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c"
+        }
+      },
+      "enterprise": {
+        "description": "Enterprise deal focus",
+        "filterOverrides": [
+          {
+            "column": "Amount",
+            "operator": "greaterOrEqual",
+            "value": "50000"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "Amount": {
+        "patterns": [
+          "Amount",
+          "Total_Amount__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__NetAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "Quota": {
+        "patterns": [
+          "Quota__c",
+          "Quarterly_Quota__c",
+          "Target__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

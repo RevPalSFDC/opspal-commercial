@@ -1,0 +1,101 @@
+{
+  "domain": "example.com",
+  "crawledAt": "2025-11-14T12:00:00Z",
+  "pages": [
+    {
+      "url": "https://example.com/",
+      "title": "Revenue Operations Platform - Example.com",
+      "content": {
+        "wordCount": 800,
+        "headings": {
+          "h1": ["Revenue Operations Platform"],
+          "h2": ["Features", "Benefits", "Pricing"],
+          "h3": []
+        },
+        "images": [
+          {"src": "hero.png", "alt": "RevOps Dashboard"}
+        ]
+      },
+      "links": {
+        "internal": [
+          {"href": "https://example.com/features", "text": "Learn More"}
+        ]
+      }
+    },
+    {
+      "url": "https://example.com/features",
+      "title": "Features - Revenue Operations Tools",
+      "content": {
+        "wordCount": 1500,
+        "headings": {
+          "h1": ["Features"],
+          "h2": ["Data Analytics", "Team Alignment", "Automation"],
+          "h3": ["Real-time Dashboards", "Custom Reports"]
+        },
+        "images": [
+          {"src": "features.png", "alt": "Feature Overview"}
+        ]
+      },
+      "links": {
+        "internal": [
+          {"href": "https://example.com/", "text": "Home"},
+          {"href": "https://example.com/pricing", "text": "See Pricing"}
+        ]
+      }
+    },
+    {
+      "url": "https://example.com/blog/what-is-revops",
+      "title": "What is Revenue Operations? Complete Guide",
+      "content": {
+        "wordCount": 2500,
+        "headings": {
+          "h1": ["What is Revenue Operations?"],
+          "h2": ["Definition", "Key Components", "Benefits", "How to Get Started"],
+          "h3": ["Sales Operations", "Marketing Operations", "Customer Success Operations"]
+        },
+        "images": [
+          {"src": "revops-diagram.png", "alt": "RevOps Organizational Structure"}
+        ]
+      },
+      "links": {
+        "internal": [
+          {"href": "https://example.com/", "text": "Home"}
+        ]
+      }
+    },
+    {
+      "url": "https://example.com/blog/revops-best-practices",
+      "title": "Revenue Operations Best Practices for 2025",
+      "content": {
+        "wordCount": 1800,
+        "headings": {
+          "h1": ["Revenue Operations Best Practices"],
+          "h2": ["Data Management", "Process Optimization", "Technology Stack"],
+          "h3": []
+        },
+        "images": []
+      },
+      "links": {
+        "internal": [
+          {"href": "https://example.com/blog/what-is-revops", "text": "Learn about RevOps"}
+        ]
+      }
+    },
+    {
+      "url": "https://example.com/resources/guide",
+      "title": "Free RevOps Implementation Guide",
+      "content": {
+        "wordCount": 500,
+        "headings": {
+          "h1": ["Free Implementation Guide"],
+          "h2": ["Download Now"],
+          "h3": []
+        },
+        "images": []
+      },
+      "links": {
+        "internal": []
+      }
+    }
+  ]
+}

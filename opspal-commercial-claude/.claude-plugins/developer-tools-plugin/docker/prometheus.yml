@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'revpal-agent-system'
+
+scrape_configs:
+  # Scrape OTel Collector Prometheus endpoint
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['host.docker.internal:8889']
+        labels:
+          service: 'claude-code'
+          environment: 'production'
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

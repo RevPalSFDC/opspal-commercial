@@ -1,0 +1,505 @@
+{
+  "yourSite": "example.com",
+  "competitors": [
+    "competitor.com"
+  ],
+  "analyzedAt": "2025-11-15T01:02:19.891Z",
+  "topicGaps": [
+    {
+      "topic": "marketing automation",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "automation guide",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "marketing automation guide",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "complete marketing automation guide",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "email marketing automation",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "lead scoring",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "email marketing best",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "marketing best practices",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "email marketing best practices",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 6,
+      "priority": "low"
+    },
+    {
+      "topic": "leading marketing automation platform",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/",
+          "title": "Competitor Home",
+          "wordCount": 1200
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 5,
+      "priority": "low"
+    },
+    {
+      "topic": "email marketing",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 5,
+      "priority": "low"
+    },
+    {
+      "topic": "marketing best",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 5,
+      "priority": "low"
+    },
+    {
+      "topic": "best practices",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 5,
+      "priority": "low"
+    },
+    {
+      "topic": "competitor home",
+      "competitor": "competitor.com",
+      "competitorPages": 1,
+      "competitorUrls": [
+        {
+          "url": "https://competitor.com/",
+          "title": "Competitor Home",
+          "wordCount": 1200
+        }
+      ],
+      "yourCoverage": 0,
+      "opportunity": 4,
+      "priority": "low"
+    }
+  ],
+  "keywordGaps": [],
+  "serpFeatureGaps": [],
+  "contentDepthGaps": [
+    {
+      "competitor": "competitor.com",
+      "dimension": "Image Usage",
+      "yourValue": 2,
+      "competitorValue": 9,
+      "difference": 7,
+      "unit": "images/page",
+      "opportunity": 10,
+      "priority": "high"
+    },
+    {
+      "competitor": "competitor.com",
+      "dimension": "Internal Linking",
+      "yourValue": 3,
+      "competitorValue": 16,
+      "difference": 13,
+      "unit": "links/page",
+      "opportunity": 10,
+      "priority": "high"
+    },
+    {
+      "competitor": "competitor.com",
+      "dimension": "Average Word Count",
+      "yourValue": 259,
+      "competitorValue": 1833,
+      "difference": 1575,
+      "unit": "words",
+      "opportunity": 9,
+      "priority": "high"
+    },
+    {
+      "competitor": "competitor.com",
+      "dimension": "Schema Markup Coverage",
+      "yourValue": 50,
+      "competitorValue": 100,
+      "difference": 50,
+      "unit": "%",
+      "opportunity": 8,
+      "priority": "high"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "content_depth",
+      "priority": "high",
+      "title": "Improve internal linking",
+      "description": "competitor.com averages 16 links/page vs your 3 links/page.",
+      "impact": 10,
+      "effort": 2,
+      "action": "Add ~13 more internal links per page. Create topic clusters and hub pages.",
+      "examples": []
+    },
+    {
+      "type": "content_depth",
+      "priority": "high",
+      "title": "Improve image usage",
+      "description": "competitor.com averages 9 images/page vs your 2 images/page.",
+      "impact": 10,
+      "effort": 3,
+      "action": "Add ~7 more images per page. Use relevant screenshots, diagrams, and infographics.",
+      "examples": []
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"marketing automation\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"automation guide\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"marketing automation guide\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"complete marketing automation guide\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"email marketing automation\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"lead scoring\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/marketing-automation",
+          "title": "Marketing Automation Guide",
+          "wordCount": 2500
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"email marketing best\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"marketing best practices\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ]
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"email marketing best practices\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 6,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/email-marketing",
+          "title": "Email Marketing Best Practices",
+          "wordCount": 1800
+        }
+      ]
+    },
+    {
+      "type": "content_depth",
+      "priority": "high",
+      "title": "Improve schema markup coverage",
+      "description": "competitor.com averages 100 % vs your 50 %.",
+      "impact": 8,
+      "effort": 4,
+      "action": "Add structured data markup to pages. Start with Article, Organization, and BreadcrumbList schemas.",
+      "examples": []
+    },
+    {
+      "type": "topic_gap",
+      "priority": "low",
+      "title": "Create content about \"leading marketing automation platform\"",
+      "description": "competitor.com has 1 pages on this topic. This represents a significant content opportunity.",
+      "impact": 5,
+      "effort": 3,
+      "action": "Create 1 comprehensive pieces of content covering this topic",
+      "examples": [
+        {
+          "url": "https://competitor.com/",
+          "title": "Competitor Home",
+          "wordCount": 1200
+        }
+      ]
+    },
+    {
+      "type": "content_depth",
+      "priority": "high",
+      "title": "Improve average word count",
+      "description": "competitor.com averages 1833 words vs your 259 words.",
+      "impact": 9,
+      "effort": 6,
+      "action": "Expand content by ~1575 words per page. Add depth, examples, and comprehensive coverage.",
+      "examples": []
+    }
+  ],
+  "summary": {
+    "totalTopicGaps": 14,
+    "totalKeywordGaps": 0,
+    "totalSERPFeatureGaps": 0,
+    "totalContentDepthGaps": 4,
+    "totalRecommendations": 14,
+    "highPriorityRecommendations": 4,
+    "topOpportunities": [
+      {
+        "type": "content_depth",
+        "title": "Improve internal linking",
+        "impact": 10,
+        "effort": 2
+      },
+      {
+        "type": "content_depth",
+        "title": "Improve image usage",
+        "impact": 10,
+        "effort": 3
+      },
+      {
+        "type": "topic_gap",
+        "title": "Create content about \"marketing automation\"",
+        "impact": 6,
+        "effort": 3
+      },
+      {
+        "type": "topic_gap",
+        "title": "Create content about \"automation guide\"",
+        "impact": 6,
+        "effort": 3
+      },
+      {
+        "type": "topic_gap",
+        "title": "Create content about \"marketing automation guide\"",
+        "impact": 6,
+        "effort": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,489 @@
+{
+  "id": "rep-commission-calculator",
+  "name": "Commission Calculator",
+  "description": "Sales rep dashboard for calculating commissions, tracking YTD earnings, and simulating what-if scenarios",
+  "version": "1.0.0",
+  "category": "compensation",
+  "audience": ["sales-rep", "sales-manager"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "time-period", "type": "select", "label": "Period", "default": "this-quarter", "options": ["this-month", "this-quarter", "this-year", "ytd"] }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "ytd-attainment",
+      "type": "gauge",
+      "title": "Quota Attainment",
+      "position": { "row": 1, "col": 1, "colspan": 4 },
+      "config": {
+        "min": 0,
+        "max": 150,
+        "format": "percent",
+        "thresholds": [
+          { "value": 70, "color": "#EF4444", "label": "Below Target" },
+          { "value": 100, "color": "#F59E0B", "label": "On Track" },
+          { "value": 110, "color": "#22C55E", "label": "Accelerator 1" },
+          { "value": 120, "color": "#3B82F6", "label": "Accelerator 2" },
+          { "value": 150, "color": "#5F3B8C", "label": "President's Club" }
+        ],
+        "showTarget": true,
+        "targetValue": 100,
+        "showCurrentTier": true,
+        "size": 160
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "ytd-attainment"
+      },
+      "demoData": "ytdAttainment"
+    },
+    {
+      "id": "ytd-earnings",
+      "type": "kpi",
+      "title": "YTD Earnings",
+      "position": { "row": 1, "col": 5, "colspan": 4 },
+      "config": {
+        "format": "currency",
+        "noAbbreviate": true,
+        "breakdown": true,
+        "showIcon": true,
+        "icon": "currency-dollar",
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "ytd-earnings"
+      },
+      "demoData": "kpis.ytdEarnings"
+    },
+    {
+      "id": "projected-annual",
+      "type": "kpi",
+      "title": "Projected Annual",
+      "position": { "row": 1, "col": 9, "colspan": 4 },
+      "config": {
+        "format": "currency",
+        "noAbbreviate": true,
+        "showRange": true,
+        "rangeLabels": ["Conservative", "Expected", "Optimistic"],
+        "icon": "trending-up"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "projected-annual"
+      },
+      "demoData": "kpis.projectedAnnual"
+    },
+
+    {
+      "id": "deal-calculator",
+      "type": "calculator",
+      "title": "Deal Commission Calculator",
+      "position": { "row": 2, "col": 1, "colspan": 6, "rowspan": 2 },
+      "config": {
+        "layout": "vertical",
+        "theme": "card",
+        "showHeader": true,
+        "inputs": [
+          {
+            "id": "dealAmount",
+            "type": "currency",
+            "label": "Deal Amount",
+            "defaultValue": 50000,
+            "min": 0,
+            "max": 5000000,
+            "placeholder": "Enter deal value",
+            "helpText": "Total contract value"
+          },
+          {
+            "id": "dealType",
+            "type": "dropdown",
+            "label": "Deal Type",
+            "defaultValue": "new-business",
+            "options": [
+              { "value": "new-business", "label": "New Business" },
+              { "value": "expansion", "label": "Expansion" },
+              { "value": "renewal", "label": "Renewal" },
+              { "value": "upsell", "label": "Upsell" }
+            ]
+          },
+          {
+            "id": "product",
+            "type": "dropdown",
+            "label": "Product",
+            "defaultValue": "platform",
+            "options": [
+              { "value": "platform", "label": "Platform License" },
+              { "value": "enterprise-analytics", "label": "Enterprise Analytics" },
+              { "value": "analytics-pro", "label": "Analytics Pro" },
+              { "value": "add-on", "label": "Add-On Module" }
+            ],
+            "helpText": "Some products may qualify for SPIFs"
+          },
+          {
+            "id": "contractTerm",
+            "type": "dropdown",
+            "label": "Contract Term",
+            "defaultValue": "12",
+            "options": [
+              { "value": "12", "label": "1 Year" },
+              { "value": "24", "label": "2 Years" },
+              { "value": "36", "label": "3 Years" }
+            ],
+            "helpText": "Multi-year deals may earn bonus commission"
+          },
+          {
+            "id": "closeDate",
+            "type": "dropdown",
+            "label": "Expected Close",
+            "defaultValue": "this-quarter",
+            "options": [
+              { "value": "this-month", "label": "This Month" },
+              { "value": "this-quarter", "label": "This Quarter" },
+              { "value": "next-quarter", "label": "Next Quarter" }
+            ]
+          }
+        ],
+        "outputs": [
+          { "id": "commission", "label": "Your Commission", "format": "currency", "highlight": "primary", "size": "large" },
+          { "id": "effectiveRate", "label": "Effective Rate", "format": "percent", "decimals": 2 },
+          { "id": "tierApplied", "label": "Tier", "format": "text" },
+          { "id": "spifBonus", "label": "SPIF Bonus", "format": "currency", "sublabel": "If eligible" },
+          { "id": "newAttainment", "label": "New Attainment", "format": "percent", "decimals": 1, "sublabel": "After this deal" }
+        ],
+        "calculate": "calculateDealCommission",
+        "autoCalculate": true
+      },
+      "demoData": "dealCalculator"
+    },
+    {
+      "id": "tier-progress",
+      "type": "chart",
+      "title": "Your Tier Progress",
+      "position": { "row": 2, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "currency-compact",
+        "stacked": true,
+        "annotations": [
+          { "type": "line", "value": 100, "label": "Quota", "color": "#94A3B8", "style": "dashed" }
+        ]
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "tier-progress"
+      },
+      "demoData": "tierProgress"
+    },
+    {
+      "id": "earnings-breakdown",
+      "type": "chart",
+      "title": "Earnings Breakdown",
+      "position": { "row": 3, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "doughnut",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "currency",
+        "cutout": "60%"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "earnings-breakdown"
+      },
+      "demoData": "earningsBreakdown"
+    },
+
+    {
+      "id": "what-if-simulator",
+      "type": "calculator",
+      "title": "What-If Simulator",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "layout": "horizontal",
+        "theme": "compact",
+        "inputs": [
+          {
+            "id": "additionalDeals",
+            "type": "slider",
+            "label": "Additional Deals",
+            "defaultValue": 3,
+            "min": 0,
+            "max": 10,
+            "step": 1
+          },
+          {
+            "id": "avgDealSize",
+            "type": "currency",
+            "label": "Avg Deal Size",
+            "defaultValue": 50000,
+            "min": 10000,
+            "max": 500000
+          }
+        ],
+        "outputs": [
+          { "id": "additionalCommission", "label": "Additional Commission", "format": "currency", "highlight": "success" },
+          { "id": "projectedAttainment", "label": "Projected Attainment", "format": "percent", "decimals": 1 },
+          { "id": "tierChange", "label": "Tier Change", "format": "text" }
+        ],
+        "calculate": "simulateWhatIf",
+        "autoCalculate": true
+      },
+      "demoData": "whatIfSimulator"
+    },
+    {
+      "id": "remaining-to-goals",
+      "type": "kpi",
+      "title": "To Reach 100%",
+      "position": { "row": 4, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "noAbbreviate": true,
+        "subtitle": "Remaining bookings",
+        "icon": "flag"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "remaining-to-quota"
+      },
+      "demoData": "kpis.remainingToQuota"
+    },
+    {
+      "id": "deals-needed",
+      "type": "kpi",
+      "title": "Deals Needed",
+      "position": { "row": 4, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "subtitle": "At avg deal size",
+        "icon": "briefcase"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "deals-needed"
+      },
+      "demoData": "kpis.dealsNeeded"
+    },
+
+    {
+      "id": "recent-deals",
+      "type": "table",
+      "title": "Recent Closed Deals",
+      "position": { "row": 5, "col": 1, "colspan": 8 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Deal Name", "width": "25%" },
+          { "field": "amount", "label": "Amount", "format": "currency", "width": "15%", "align": "right" },
+          { "field": "closeDate", "label": "Close Date", "format": "date", "width": "12%" },
+          { "field": "commission", "label": "Commission", "format": "currency", "width": "15%", "align": "right" },
+          { "field": "effectiveRate", "label": "Rate", "format": "percent", "width": "10%", "align": "center" },
+          { "field": "tier", "label": "Tier", "width": "13%" },
+          { "field": "spifBonus", "label": "SPIF", "format": "currency", "width": "10%", "align": "right" }
+        ],
+        "sortable": true,
+        "pagination": true,
+        "pageSize": 5,
+        "rowHighlight": {
+          "field": "tier",
+          "values": {
+            "Accelerator Tier 1": "#D1FAE5",
+            "Accelerator Tier 2": "#DBEAFE",
+            "Accelerator Tier 3": "#EDE9FE"
+          }
+        }
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "recent-deals"
+      },
+      "demoData": "recentDeals"
+    },
+    {
+      "id": "monthly-trend",
+      "type": "chart",
+      "title": "Monthly Earnings Trend",
+      "position": { "row": 5, "col": 9, "colspan": 4 },
+      "config": {
+        "chartType": "combo",
+        "datasets": [
+          { "type": "bar", "label": "Commission", "yAxisID": "y" },
+          { "type": "line", "label": "Cumulative", "yAxisID": "y1" }
+        ],
+        "showLegend": true,
+        "valueFormat": "currency-compact"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "monthly-trend"
+      },
+      "demoData": "monthlyTrend"
+    },
+
+    {
+      "id": "pace-indicator",
+      "type": "kpi",
+      "title": "On Pace For",
+      "position": { "row": 6, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "suffix": "% attainment",
+        "showTrend": true,
+        "trendLabel": "vs plan"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "pace-indicator"
+      },
+      "demoData": "kpis.paceIndicator"
+    },
+    {
+      "id": "accelerator-opportunity",
+      "type": "kpi",
+      "title": "To Accelerator",
+      "position": { "row": 6, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "noAbbreviate": true,
+        "subtitle": "Bookings to next tier",
+        "color": "#22C55E"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "to-accelerator"
+      },
+      "demoData": "kpis.toAccelerator"
+    },
+    {
+      "id": "presidents-club",
+      "type": "kpi",
+      "title": "To President's Club",
+      "position": { "row": 6, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "noAbbreviate": true,
+        "subtitle": "120%+ attainment",
+        "color": "#5F3B8C"
+      },
+      "dataBinding": {
+        "source": "calculated",
+        "query": "to-presidents-club"
+      },
+      "demoData": "kpis.toPresidentsClub"
+    },
+    {
+      "id": "plan-details",
+      "type": "kpi",
+      "title": "Your Plan",
+      "position": { "row": 6, "col": 10, "colspan": 3 },
+      "config": {
+        "icon": "document"
+      },
+      "dataBinding": {
+        "source": "local",
+        "field": "planName"
+      },
+      "demoData": "kpis.planDetails"
+    }
+  ],
+
+  "dataBindings": {
+    "ytd-attainment": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["SUM(Amount) totalBookings"],
+        "filters": ["IsWon = true", "OwnerId = ':currentUser'"],
+        "dateField": "CloseDate",
+        "dateRange": "this-year"
+      },
+      "transform": "(totalBookings / quota) * 100"
+    },
+    "ytd-earnings": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "method": "calculateYTDEarnings",
+        "params": { "userId": ":currentUser" }
+      }
+    },
+    "projected-annual": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "method": "projectAnnualEarnings",
+        "params": { "userId": ":currentUser", "percentiles": [10, 50, 90] }
+      }
+    },
+    "recent-deals": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["Name", "Amount", "CloseDate", "StageName"],
+        "filters": ["IsWon = true", "OwnerId = ':currentUser'"],
+        "orderBy": "CloseDate DESC",
+        "limit": 10,
+        "dateField": "CloseDate",
+        "dateRange": "this-year"
+      },
+      "hubspot": {
+        "object": "deals",
+        "properties": ["dealname", "amount", "closedate"],
+        "filters": { "dealstage": "closedwon", "hubspot_owner_id": ":currentUser" },
+        "limit": 10
+      }
+    },
+    "tier-progress": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "method": "getTierProgress",
+        "params": { "userId": ":currentUser" }
+      }
+    },
+    "earnings-breakdown": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "method": "getEarningsBreakdown",
+        "params": { "userId": ":currentUser" }
+      }
+    },
+    "monthly-trend": {
+      "calculated": {
+        "engine": "commission-formula-engine",
+        "method": "getMonthlyTrend",
+        "params": { "userId": ":currentUser" }
+      }
+    }
+  },
+
+  "callbacks": {
+    "calculateDealCommission": {
+      "type": "function",
+      "code": "function(inputs) { return window.CommissionEngine.calculateDeal(inputs); }"
+    },
+    "simulateWhatIf": {
+      "type": "function",
+      "code": "function(inputs) { return window.CommissionEngine.simulateWhatIf(inputs); }"
+    }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "brandedHeader": false,
+    "primaryColor": "#5F3B8C",
+    "tierColors": {
+      "Decelerator": "#EF4444",
+      "Standard": "#F59E0B",
+      "Accelerator Tier 1": "#22C55E",
+      "Accelerator Tier 2": "#3B82F6",
+      "Accelerator Tier 3": "#5F3B8C"
+    }
+  }
+}

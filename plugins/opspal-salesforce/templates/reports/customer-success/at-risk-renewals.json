@@ -1,0 +1,122 @@
+{
+  "templateMetadata": {
+    "templateName": "At-Risk Renewals",
+    "templateVersion": "1.1",
+    "description": "Renewal opportunities at risk of loss",
+    "audience": "CS Leadership, CSMs",
+    "useCase": "Renewal risk management"
+  },
+  "reportMetadata": {
+    "name": "At-Risk Renewals",
+    "reportType": "Opportunity",
+    "reportFormat": "TABULAR",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "Type",
+        "operator": "equals",
+        "value": "Renewal"
+      },
+      {
+        "column": "IsClosed",
+        "operator": "equals",
+        "value": "false"
+      },
+      {
+        "column": "Probability",
+        "operator": "lessThan",
+        "value": "70"
+      }
+    ],
+    "detailColumns": [
+      "Name",
+      "Account.Name",
+      "Amount",
+      "CloseDate",
+      "Probability",
+      "Owner.Name"
+    ],
+    "sortBy": [
+      {
+        "column": "Amount",
+        "order": "Descending"
+      }
+    ]
+  },
+  "dashboardUsage": {
+    "componentType": "Table",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

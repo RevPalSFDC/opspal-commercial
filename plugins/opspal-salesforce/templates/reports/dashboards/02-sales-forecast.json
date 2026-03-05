@@ -1,0 +1,147 @@
+{
+  "templateMetadata": {
+    "templateName": "Sales Forecast Report",
+    "templateVersion": "1.0",
+    "description": "Forecast category breakdown for dashboard visuals (commit, best case, pipeline).",
+    "audience": "Sales Leaders, Forecast Managers, RevOps",
+    "useCase": "Quarterly forecast dashboards and commit tracking.",
+    "customizationPoints": [
+      "Forecast categories in use",
+      "Fiscal period filters",
+      "Owner/team filters"
+    ],
+    "prerequisites": [
+      "Opportunity report type access",
+      "Forecast categories configured",
+      "Fiscal calendar aligned with reporting"
+    ]
+  },
+  "reportMetadata": {
+    "reportName": "Sales Forecast Report",
+    "reportDescription": "Quarterly forecast analysis by forecast category, showing commit vs best case vs pipeline",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "groupings": [
+      {
+        "field": "FORECAST_CATEGORY",
+        "sortOrder": "Asc",
+        "dateGranularity": "Day"
+      }
+    ],
+    "columns": [
+      {
+        "field": "FULL_NAME",
+        "label": "Opportunity Owner"
+      },
+      {
+        "field": "OPPORTUNITY_NAME",
+        "label": "Opportunity Name"
+      },
+      {
+        "field": "AMOUNT",
+        "label": "Amount"
+      },
+      {
+        "field": "CLOSE_DATE",
+        "label": "Close Date"
+      },
+      {
+        "field": "STAGE_NAME",
+        "label": "Stage"
+      },
+      {
+        "field": "PROBABILITY",
+        "label": "Probability (%)"
+      }
+    ],
+    "filters": [
+      {
+        "column": "CLOSED",
+        "operator": "equals",
+        "value": "0"
+      },
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER"
+      }
+    ],
+    "aggregates": [
+      {
+        "field": "AMOUNT",
+        "aggregateType": "Sum",
+        "label": "Total Forecast"
+      },
+      {
+        "field": "OPPORTUNITY_NAME",
+        "aggregateType": "RowCount",
+        "label": "Opportunity Count"
+      },
+      {
+        "field": "EXPECTED_REVENUE",
+        "aggregateType": "Sum",
+        "label": "Weighted Forecast"
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "FORECAST_CATEGORY",
+      "aggregateColumn": "s!AMOUNT",
+      "title": "Forecast by Category",
+      "showPercentages": false,
+      "showValues": true
+    },
+    "reportType": "Opportunity"
+  },
+  "dashboardUsage": {
+    "createDashboard": true,
+    "dashboardName": "Sales Forecast Dashboard",
+    "description": "Quarterly forecast breakdown by category with commit, best case, and pipeline visibility",
+    "components": [
+      {
+        "title": "Commit Forecast",
+        "componentType": "Metric",
+        "section": "left",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "High Confidence Deals"
+      },
+      {
+        "title": "Best Case Forecast",
+        "componentType": "Metric",
+        "section": "left",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Upside Potential"
+      },
+      {
+        "title": "Forecast by Category",
+        "componentType": "Bar",
+        "section": "middle",
+        "sortBy": "RowLabelAscending",
+        "legendPosition": "Bottom",
+        "chartAxisRange": "Auto"
+      },
+      {
+        "title": "This Quarter Opportunities",
+        "componentType": "Table",
+        "section": "middle",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600"
+      },
+      {
+        "title": "Weighted Forecast",
+        "componentType": "Metric",
+        "section": "right",
+        "indicatorHighColor": "#00C853",
+        "indicatorLowColor": "#D50000",
+        "indicatorMiddleColor": "#FFD600",
+        "footer": "Probability-Adjusted"
+      }
+    ]
+  }
+}

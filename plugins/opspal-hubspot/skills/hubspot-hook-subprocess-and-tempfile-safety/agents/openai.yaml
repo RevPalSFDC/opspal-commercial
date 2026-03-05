@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Hook Subprocess and Tempfile Safety"
+  short_description: "Help with Hubspot Hook Subprocess and Tempfile Safety tasks"
+  default_prompt: "Use $hubspot-hook-subprocess-and-tempfile-safety to execute this workflow safely and produce the expected artifacts."

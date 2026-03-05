@@ -1,0 +1,42 @@
+{
+  "originalRequest": "Update the Status field on Closed Won Opportunities to reflect the new naming convention, where Status equals 'Won' should be changed to 'Closed-Won'",
+  "timestamp": "2025-11-10T14:53:58.162Z",
+  "explicitRequirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update the Status field on Closed Won Opportunities to reflect the new naming convention, where Status equals 'Won' should be changed to 'Closed-Won'",
+      "priority": "medium",
+      "type": "other"
+    }
+  ],
+  "implicitAssumptions": [],
+  "scopeBoundaries": {
+    "bounded": true,
+    "risks": []
+  },
+  "clarificationNeeded": [
+    {
+      "priority": "low",
+      "question": "What is the expected timeline for this work?",
+      "context": "Helps prioritize and plan implementation"
+    },
+    {
+      "priority": "high",
+      "question": "How will we know when this is complete? What are the success criteria?",
+      "context": "Defines done state and prevents scope creep"
+    }
+  ],
+  "entities": {
+    "objects": [],
+    "fields": [],
+    "workflows": [],
+    "users": [],
+    "records": []
+  },
+  "constraints": {
+    "timeframe": null,
+    "scope": null,
+    "conditions": []
+  },
+  "successCriteria": []
+}

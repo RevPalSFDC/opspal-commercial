@@ -1,0 +1,236 @@
+{
+  "id": "process-documentation",
+  "name": "Process Documentation Dashboard",
+  "description": "Visual process flows, system interactions, and step-by-step documentation",
+  "version": "1.0.0",
+  "category": "documentation",
+  "audience": ["all"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": []
+  },
+
+  "components": [
+    {
+      "id": "process-title",
+      "type": "kpi",
+      "title": "Process",
+      "position": { "row": 1, "col": 1, "colspan": 6 },
+      "config": {
+        "format": "text",
+        "showTrend": false,
+        "size": "large",
+        "subtitle": true
+      },
+      "dataBinding": {
+        "valueField": "title",
+        "subtitleField": "version"
+      },
+      "demoData": "processInfo"
+    },
+    {
+      "id": "avg-cycle-time",
+      "type": "kpi",
+      "title": "Avg Cycle Time",
+      "position": { "row": 1, "col": 7, "colspan": 2 },
+      "config": {
+        "format": "number",
+        "suffix": " days",
+        "showTarget": true,
+        "icon": "clock"
+      },
+      "demoData": "processMetrics.avgCycleTime"
+    },
+    {
+      "id": "conversion-rate",
+      "type": "kpi",
+      "title": "Conversion Rate",
+      "position": { "row": 1, "col": 9, "colspan": 2 },
+      "config": {
+        "format": "percent",
+        "showTarget": true,
+        "icon": "trending-up"
+      },
+      "demoData": "processMetrics.conversionRate"
+    },
+    {
+      "id": "automation-coverage",
+      "type": "kpi",
+      "title": "Automation",
+      "position": { "row": 1, "col": 11, "colspan": 2 },
+      "config": {
+        "format": "percent",
+        "showTrend": false,
+        "icon": "cog"
+      },
+      "demoData": "processMetrics.automationCoverage"
+    },
+    {
+      "id": "main-process-flow",
+      "type": "flowDiagram",
+      "title": "Process Flow",
+      "position": { "row": 2, "col": 1, "colspan": 12, "rowspan": 3 },
+      "config": {
+        "diagramType": "flowchart",
+        "direction": "TD",
+        "theme": "default",
+        "height": 500,
+        "interactive": true,
+        "showLegend": true,
+        "nodeClickable": true
+      },
+      "dataBinding": {
+        "source": "static",
+        "field": "mermaid"
+      },
+      "demoData": "mainProcessFlow.mermaid"
+    },
+    {
+      "id": "process-kpis",
+      "type": "table",
+      "title": "Process KPIs",
+      "position": { "row": 5, "col": 1, "colspan": 4 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Metric", "width": "40%" },
+          { "field": "target", "label": "Target", "width": "20%", "align": "center" },
+          { "field": "current", "label": "Current", "width": "20%", "align": "center" },
+          { "field": "status", "label": "Status", "width": "20%", "format": "badge" }
+        ],
+        "sortable": false,
+        "pagination": false,
+        "rowHighlight": {
+          "field": "status",
+          "values": {
+            "exceeding": "#DCFCE7",
+            "meeting": "#DBEAFE",
+            "below": "#FEE2E2"
+          }
+        }
+      },
+      "demoData": "kpis"
+    },
+    {
+      "id": "role-matrix",
+      "type": "table",
+      "title": "Role Responsibilities",
+      "position": { "row": 5, "col": 5, "colspan": 4 },
+      "config": {
+        "columns": [
+          { "field": "role", "label": "Role", "width": "25%" },
+          { "field": "steps", "label": "Steps", "width": "25%", "format": "list" },
+          { "field": "responsibilities", "label": "Responsibilities", "width": "50%" }
+        ],
+        "sortable": false,
+        "pagination": false
+      },
+      "demoData": "roleMatrix"
+    },
+    {
+      "id": "process-info-panel",
+      "type": "table",
+      "title": "Process Information",
+      "position": { "row": 5, "col": 9, "colspan": 4 },
+      "config": {
+        "columns": [
+          { "field": "label", "label": "Property", "width": "40%" },
+          { "field": "value", "label": "Value", "width": "60%" }
+        ],
+        "sortable": false,
+        "pagination": false,
+        "layout": "key-value"
+      },
+      "staticData": [
+        { "label": "Version", "value": "{{processInfo.version}}" },
+        { "label": "Owner", "value": "{{processInfo.owner}}" },
+        { "label": "Last Reviewed", "value": "{{processInfo.lastReviewed}}" },
+        { "label": "Stakeholders", "value": "{{processInfo.stakeholders}}" }
+      ]
+    },
+    {
+      "id": "step-details",
+      "type": "table",
+      "title": "Process Steps",
+      "position": { "row": 6, "col": 1, "colspan": 12 },
+      "config": {
+        "columns": [
+          { "field": "step", "label": "#", "width": "5%", "align": "center" },
+          { "field": "name", "label": "Step", "width": "15%" },
+          { "field": "description", "label": "Description", "width": "25%" },
+          { "field": "owner", "label": "Owner", "width": "10%" },
+          { "field": "system", "label": "System", "width": "12%" },
+          { "field": "sla", "label": "SLA", "width": "10%", "align": "center" },
+          { "field": "automation", "label": "Automation", "width": "10%", "format": "badge" },
+          { "field": "inputs", "label": "Inputs", "width": "13%", "format": "list" }
+        ],
+        "sortable": false,
+        "pagination": false,
+        "expandable": true,
+        "expandField": "outputs"
+      },
+      "demoData": "processSteps"
+    },
+    {
+      "id": "system-interactions",
+      "type": "flowDiagram",
+      "title": "System Interactions",
+      "position": { "row": 7, "col": 1, "colspan": 8 },
+      "config": {
+        "diagramType": "sequence",
+        "theme": "default",
+        "height": 350,
+        "interactive": false
+      },
+      "dataBinding": {
+        "source": "static",
+        "field": "mermaid"
+      },
+      "demoData": "systemInteractions.mermaid"
+    },
+    {
+      "id": "integration-map",
+      "type": "flowDiagram",
+      "title": "Data Model",
+      "position": { "row": 7, "col": 9, "colspan": 4 },
+      "config": {
+        "diagramType": "er",
+        "theme": "default",
+        "height": 350,
+        "interactive": false
+      },
+      "dataBinding": {
+        "source": "static",
+        "field": "mermaid"
+      },
+      "demoData": "integrationMap.mermaid"
+    }
+  ],
+
+  "dataBindings": {},
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "stepColors": {
+      "automated": "#22C55E",
+      "manual": "#94A3B8",
+      "hybrid": "#F59E0B"
+    },
+    "statusColors": {
+      "exceeding": "#22C55E",
+      "meeting": "#3B82F6",
+      "below": "#EF4444"
+    }
+  },
+
+  "export": {
+    "formats": ["pdf", "html", "markdown"],
+    "includeMetadata": true
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "platform": "salesforce",
+  "description": "Salesforce-specific validation rules for tool inputs and outputs",
+
+  "rules": [
+    {
+      "id": "sf-query-tooling-api",
+      "description": "FlowDefinitionView and FlowVersionView require --use-tooling-api",
+      "tools": ["Bash", "mcp__salesforce__data_query"],
+      "condition": {
+        "pattern": "FlowDefinitionView|FlowVersionView|ApexClass|ApexTrigger|ValidationRule",
+        "field": "command"
+      },
+      "action": "warn",
+      "message": "This query should use --use-tooling-api flag",
+      "autoFix": {
+        "append": " --use-tooling-api"
+      }
+    },
+    {
+      "id": "sf-picklist-formula",
+      "description": "Picklist fields require TEXT() wrapper, not ISBLANK/ISNULL",
+      "tools": ["Write", "Edit"],
+      "condition": {
+        "pattern": "(ISBLANK|ISNULL)\\s*\\([^)]*__c\\)",
+        "fileTypes": [".xml", ".json"]
+      },
+      "action": "block",
+      "message": "Use TEXT(picklist__c) = '' instead of ISBLANK(picklist__c) for picklist fields"
+    },
+    {
+      "id": "sf-field-history-limit",
+      "description": "Objects have max 20 tracked fields",
+      "tools": ["mcp__salesforce__field_create", "mcp__salesforce__metadata_deploy"],
+      "condition": {
+        "field": "trackHistory",
+        "value": true
+      },
+      "action": "warn",
+      "message": "Verify object has fewer than 20 tracked fields before enabling history tracking"
+    },
+    {
+      "id": "sf-mixed-operators",
+      "description": "OR conditions require matching operators",
+      "tools": ["Bash", "mcp__salesforce__data_query"],
+      "condition": {
+        "pattern": "WHERE.*OR.*=.*LIKE|WHERE.*LIKE.*OR.*=",
+        "field": "command"
+      },
+      "action": "warn",
+      "message": "Mixed operators in OR conditions may cause unexpected results. Use IN() for equality checks."
+    },
+    {
+      "id": "sf-api-name-correction",
+      "description": "FlowVersionView uses DeveloperName not ApiName",
+      "tools": ["Bash", "mcp__salesforce__data_query"],
+      "condition": {
+        "pattern": "FlowVersionView.*ApiName",
+        "field": "command"
+      },
+      "action": "autofix",
+      "message": "FlowVersionView uses DeveloperName, not ApiName",
+      "autoFix": {
+        "replace": {
+          "from": "ApiName",
+          "to": "DeveloperName"
+        }
+      }
+    },
+    {
+      "id": "sf-bulk-delete-protection",
+      "description": "Bulk delete requires explicit confirmation",
+      "tools": ["mcp__salesforce__data_delete", "Bash"],
+      "condition": {
+        "pattern": "DELETE.*FROM|sf data delete.*--where",
+        "field": "command"
+      },
+      "action": "block",
+      "message": "Bulk delete operations require the sfdc-data-operations agent"
+    }
+  ],
+
+  "outputRules": [
+    {
+      "id": "sf-synthetic-data-detection",
+      "description": "Detect potentially synthetic/fake data in query results",
+      "patterns": [
+        "Lead 1", "Lead 2", "Lead 3",
+        "Test Account", "Test Contact",
+        "Example Corp", "Acme Inc",
+        "00Q000000000000",
+        "john@example.com", "test@test.com"
+      ],
+      "action": "warn",
+      "message": "Query results may contain synthetic/test data"
+    },
+    {
+      "id": "sf-round-percentage-detection",
+      "description": "Suspiciously round percentages in metrics",
+      "patterns": ["15%", "30%", "45%", "60%", "75%", "90%"],
+      "action": "warn",
+      "message": "Metrics contain suspiciously round percentages - verify data source"
+    }
+  ]
+}

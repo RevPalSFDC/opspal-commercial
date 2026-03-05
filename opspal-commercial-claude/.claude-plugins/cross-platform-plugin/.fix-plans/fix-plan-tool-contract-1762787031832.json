@@ -1,0 +1,189 @@
+{
+  "cohortType": "tool-contract",
+  "cohortName": "Tool Contract & Routing Issues",
+  "timestamp": "2025-11-10T15:03:51.830Z",
+  "reflections": {
+    "count": 2,
+    "totalROI": 10000,
+    "frequency": 5
+  },
+  "rootCauseAnalysis": {
+    "symptom": "Sample root cause",
+    "why1": "Specific validation missing for this operation type",
+    "why2": "No defensive validation framework",
+    "why3": "No preventive quality gates",
+    "why4": "Quality gates not built into standard workflow",
+    "why5": "Move fast culture prioritized over defensive checks",
+    "ultimateRootCause": "Move fast culture prioritized over defensive checks",
+    "preventionLayer": "Process - Add validation step"
+  },
+  "solutionApproach": {
+    "name": "Enhanced Routing Clarity",
+    "components": [
+      "routing-clarity-enhancer.js",
+      "semantic-router.js"
+    ],
+    "steps": [
+      "Add human-readable routing explanations",
+      "Implement confidence level reporting",
+      "Generate alternative agent suggestions",
+      "Log routing decisions for analysis"
+    ],
+    "successCriteria": [
+      "Routing decisions include clear explanations",
+      "Confidence levels accurately reflect match quality",
+      "Alternative agents provided for low-confidence matches",
+      "Decision logs created for every routing"
+    ]
+  },
+  "implementationPlan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Core Implementation",
+        "steps": [
+          {
+            "stepNumber": 1,
+            "description": "Add human-readable routing explanations",
+            "estimatedHours": 2,
+            "deliverable": "Implementation artifact",
+            "dependencies": []
+          },
+          {
+            "stepNumber": 2,
+            "description": "Implement confidence level reporting",
+            "estimatedHours": 2,
+            "deliverable": "Implementation artifact",
+            "dependencies": [
+              1
+            ]
+          },
+          {
+            "stepNumber": 3,
+            "description": "Generate alternative agent suggestions",
+            "estimatedHours": 2,
+            "deliverable": "Implementation artifact",
+            "dependencies": [
+              2
+            ]
+          },
+          {
+            "stepNumber": 4,
+            "description": "Log routing decisions for analysis",
+            "estimatedHours": 2,
+            "deliverable": "Implementation artifact",
+            "dependencies": [
+              3
+            ]
+          }
+        ],
+        "estimatedHours": 8
+      },
+      {
+        "phase": 2,
+        "name": "Hook Integration",
+        "steps": [
+          {
+            "stepNumber": 5,
+            "description": "Create pre/post operation hooks",
+            "estimatedHours": 1,
+            "deliverable": "Executable hook scripts",
+            "dependencies": [
+              4
+            ]
+          },
+          {
+            "stepNumber": 6,
+            "description": "Configure environment variables",
+            "estimatedHours": 0.5,
+            "deliverable": ".env.example with defaults",
+            "dependencies": [
+              5
+            ]
+          }
+        ],
+        "estimatedHours": 1.5
+      },
+      {
+        "phase": 3,
+        "name": "Testing & Validation",
+        "steps": [
+          {
+            "stepNumber": 7,
+            "description": "Write unit tests for all components",
+            "estimatedHours": 2,
+            "deliverable": "Test suite with >80% coverage",
+            "dependencies": [
+              6
+            ]
+          },
+          {
+            "stepNumber": 8,
+            "description": "Integration testing with real scenarios",
+            "estimatedHours": 1,
+            "deliverable": "Integration test results",
+            "dependencies": [
+              7
+            ]
+          },
+          {
+            "stepNumber": 9,
+            "description": "Generate test report",
+            "estimatedHours": 0.5,
+            "deliverable": "Test results markdown",
+            "dependencies": [
+              8
+            ]
+          }
+        ],
+        "estimatedHours": 3.5
+      }
+    ],
+    "totalSteps": 10,
+    "estimatedHours": 13
+  },
+  "alternatives": [
+    {
+      "name": "Agent Capability Matrix",
+      "components": [
+        "agent-decision-matrix.js"
+      ],
+      "tradeoffs": {
+        "pros": [
+          "Addresses root cause directly",
+          "Prevents future occurrences",
+          "Automated validation"
+        ],
+        "cons": [
+          "Implementation effort required",
+          "Slight performance overhead",
+          "Maintenance ongoing"
+        ]
+      },
+      "whenToUse": "Use when agent capability matrix is the primary concern"
+    }
+  ],
+  "successCriteria": [
+    "Routing decisions include clear explanations",
+    "Confidence levels accurately reflect match quality",
+    "Alternative agents provided for low-confidence matches",
+    "Decision logs created for every routing"
+  ],
+  "estimatedEffort": {
+    "implementation": 13,
+    "testing": 3.5,
+    "documentation": 1,
+    "total": 17.5
+  },
+  "preventionRate": {
+    "estimated": 0.85,
+    "reasoning": "Based on coverage of 85% of reflection scenarios",
+    "assumptions": [
+      "Hooks integrated into workflow",
+      "Users follow recommendations",
+      "Environment variables configured"
+    ]
+  },
+  "actionable": true,
+  "actionabilityIssues": []
+}

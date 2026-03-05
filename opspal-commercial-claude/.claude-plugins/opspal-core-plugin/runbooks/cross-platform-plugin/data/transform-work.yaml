@@ -1,0 +1,337 @@
+# Data Transform Work Playbook
+# Standard decomposition pattern for ETL/data transformation
+#
+# Triggers: transform, etl, convert, map, normalize
+# Complexity: Medium (base 0.4, escalates with complex logic)
+
+name: data-transform-work
+version: "1.0.0"
+description: Standard decomposition for data transformation operations
+domain: data-transform
+base_complexity: 0.4
+
+# When to use this playbook
+triggers:
+  keywords:
+    - transform
+    - etl
+    - convert
+    - map
+    - normalize
+    - denormalize
+    - reshape
+    - pivot
+    - aggregate
+    - cleanse
+  patterns:
+    - "transform.*data"
+    - "convert.*format"
+    - "map.*fields"
+    - "etl.*pipeline"
+    - "clean.*data"
+
+# Default task graph for transform work
+default_dag:
+  - id: T-01
+    title: Source Data Analysis
+    domain: data-transform
+    goal: Profile and understand source data structure
+    inputs:
+      - source_file_path
+      - source_format
+    outputs:
+      - data_profile.json
+      - schema_analysis.json
+      - quality_metrics.json
+    acceptance_criteria:
+      - All columns profiled
+      - Data types identified
+      - Null patterns documented
+      - Cardinality analyzed
+      - Anomalies flagged
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-02
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: data-profiler
+    estimated_complexity: 0.2
+    estimated_duration_minutes: 15
+
+  - id: T-02
+    title: Target Schema Definition
+    domain: data-transform
+    goal: Define target schema and mapping rules
+    inputs:
+      - target_spec
+      - data_profile.json
+    outputs:
+      - target_schema.json
+      - mapping_rules.json
+      - transformation_spec.md
+    acceptance_criteria:
+      - Target schema documented
+      - All fields mapped
+      - Transformation logic defined
+      - Default values specified
+    dependencies: []
+    can_run_in_parallel_with:
+      - T-01
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: schema-designer
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-03
+    title: Transformation Rule Development
+    domain: data-transform
+    goal: Implement transformation rules and functions
+    inputs:
+      - mapping_rules.json
+      - data_profile.json
+      - transformation_spec.md
+    outputs:
+      - transform_config.json
+      - custom_functions.js
+      - lookup_tables/
+    acceptance_criteria:
+      - All transformations implemented
+      - Lookup tables loaded
+      - Custom functions tested
+      - Edge cases handled
+    dependencies:
+      - T-01
+      - T-02
+    concurrency_group: data
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    assigned_agent: data-transform-engineer
+    estimated_complexity: 0.5
+    estimated_duration_minutes: 35
+
+  - id: T-04
+    title: Sample Transformation
+    domain: data-transform
+    goal: Test transformation with sample data
+    inputs:
+      - source_file_path
+      - transform_config.json
+    outputs:
+      - sample_output.csv
+      - transformation_log.json
+      - validation_results.json
+    acceptance_criteria:
+      - Sample transforms successfully
+      - Output matches expected format
+      - No data loss or corruption
+      - Performance acceptable
+    dependencies:
+      - T-03
+    concurrency_group: data
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    verification_commands:
+      - "node scripts/lib/data-transformer.js --config {configPath} --sample 100 --validate"
+    assigned_agent: data-transform-engineer
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+  - id: T-05
+    title: Full Transformation
+    domain: data-transform
+    goal: Execute full data transformation
+    inputs:
+      - source_file_path
+      - transform_config.json
+      - validation_results.json
+    outputs:
+      - transformed_data.csv
+      - transform_metrics.json
+      - error_records.csv
+    acceptance_criteria:
+      - All records processed
+      - Success rate >= 99%
+      - Error records documented
+      - Output format correct
+    dependencies:
+      - T-04
+    concurrency_group: data
+    risk_level: medium
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    stop_points:
+      - Before full transformation
+    assigned_agent: data-transform-engineer
+    estimated_complexity: 0.4
+    estimated_duration_minutes: 30
+
+  - id: T-06
+    title: Output Validation
+    domain: data-transform
+    goal: Validate transformed data quality
+    inputs:
+      - transformed_data.csv
+      - target_schema.json
+      - source_file_path
+    outputs:
+      - validation_report.md
+      - reconciliation.json
+      - quality_score.json
+    acceptance_criteria:
+      - Row counts reconcile
+      - Key values preserved
+      - Data types correct
+      - No orphaned relationships
+    dependencies:
+      - T-05
+    concurrency_group: none
+    risk_level: low
+    tool_policy:
+      file_read: allowed
+      file_write: allowed
+      destructive_ops: forbidden
+    verification_commands:
+      - "node scripts/lib/data-reconciliation.js --source {sourcePath} --target {targetPath} --mode full"
+    assigned_agent: data-validator
+    estimated_complexity: 0.3
+    estimated_duration_minutes: 20
+
+# Rules for parallelization
+parallelization_rules:
+  - description: "Source analysis and target definition can run in parallel"
+    tasks: [T-01, T-02]
+    reason: "Independent analysis activities"
+
+  - description: "Rule development needs both inputs"
+    tasks: [T-03]
+    requires: [T-01, T-02]
+    reason: "Need source profile and target schema"
+
+  - description: "Transformation and validation are sequential"
+    tasks: [T-04, T-05, T-06]
+    constraint: "strict_sequential"
+    reason: "Each step validates the previous"
+
+# Rules for sequential execution
+sequential_rules:
+  - "Profile data before designing transformations"
+  - "Test with sample before full transformation"
+  - "Validate output before marking complete"
+
+# Verification gates
+verification_gates:
+  - name: schema_compliance
+    type: custom
+    checks:
+      - all_required_fields_present
+      - data_types_match
+      - no_schema_violations
+    required: true
+
+  - name: row_count_reconciliation
+    type: command
+    command: "node scripts/lib/data-reconciliation.js --mode count --source {source} --target {target}"
+    success_criteria:
+      match_percentage: 100
+    required: true
+
+  - name: key_value_integrity
+    type: custom
+    checks:
+      - primary_keys_preserved
+      - foreign_keys_valid
+      - no_duplicate_keys
+    required: true
+
+  - name: data_quality
+    type: custom
+    checks:
+      - no_truncation
+      - encoding_correct
+      - special_chars_handled
+    required: true
+
+# Escalation conditions
+escalation_triggers:
+  - condition: "complex transformations (10+ rules)"
+    add_tasks:
+      - transformation_review
+      - unit_testing
+    escalate_complexity: 0.2
+    reason: "Complex logic requires review"
+
+  - condition: "large dataset (1M+ records)"
+    add_tasks:
+      - chunking_strategy
+      - performance_optimization
+    escalate_complexity: 0.2
+    reason: "Large datasets need optimization"
+
+  - condition: "multiple source formats"
+    add_tasks:
+      - format_normalization
+      - source_alignment
+    escalate_complexity: 0.15
+    reason: "Multiple formats increase complexity"
+
+# Common variations
+variations:
+  csv_to_json:
+    description: "Convert CSV to JSON format"
+    additional_considerations:
+      - Array handling
+      - Nested structure generation
+      - Type coercion
+    add_acceptance_criteria:
+      - "Valid JSON output"
+      - "Nested structures correct"
+
+  data_cleansing:
+    description: "Clean and standardize data"
+    additional_considerations:
+      - Deduplication rules
+      - Standardization patterns
+      - Enrichment sources
+    add_acceptance_criteria:
+      - "Duplicates removed per rules"
+      - "Values standardized"
+      - "Enrichment applied"
+
+  aggregation:
+    description: "Aggregate data to summary level"
+    additional_considerations:
+      - Group by logic
+      - Aggregation functions
+      - Detail preservation
+    add_acceptance_criteria:
+      - "Aggregations mathematically correct"
+      - "Grouping logic verified"
+      - "Detail audit trail available"
+
+  denormalization:
+    description: "Flatten normalized data"
+    additional_considerations:
+      - Join logic
+      - Null handling
+      - Duplication management
+    add_acceptance_criteria:
+      - "All joins successful"
+      - "Nulls handled appropriately"
+      - "Row expansion expected"

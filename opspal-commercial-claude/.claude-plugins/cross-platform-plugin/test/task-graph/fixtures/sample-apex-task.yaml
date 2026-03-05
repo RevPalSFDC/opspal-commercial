@@ -1,0 +1,189 @@
+# Sample Apex Task Fixture
+# Used for testing Task Graph operations with Salesforce Apex domain
+
+---
+# Simple trigger modification (low complexity)
+simple_trigger_task:
+  id: T-01
+  title: Add Field Update to Lead Trigger
+  domain: salesforce-apex
+  goal: Update LeadTrigger to set Lead_Score__c based on LeadSource
+  inputs:
+    - org_alias: test-sandbox
+    - trigger_name: LeadTrigger
+    - handler_class: LeadTriggerHandler
+    - field_to_update: Lead_Score__c
+    - logic: "if (LeadSource == 'Web') score = 10; else if (LeadSource == 'Referral') score = 20;"
+  outputs:
+    - updated_trigger.cls
+    - updated_handler.cls
+    - test_class.cls
+  acceptance_criteria:
+    - Trigger compiles without errors
+    - Handler follows bulkification pattern
+    - Test class achieves 75%+ coverage
+  dependencies: []
+  can_run_in_parallel_with: []
+  concurrency_group: apex
+  risk_level: medium
+  tool_policy:
+    file_read: allowed
+    file_write: allowed_with_approval
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points:
+    - Before first write
+  assigned_agent: salesforce-plugin:sfdc-apex-developer
+  estimated_complexity: 0.4
+
+---
+# Apex test development (medium complexity)
+apex_test_task:
+  id: T-02
+  title: Create Comprehensive Test Class for LeadTriggerHandler
+  domain: salesforce-apex
+  goal: Develop test class with positive, negative, bulk, and edge case scenarios
+  inputs:
+    - org_alias: test-sandbox
+    - class_under_test: LeadTriggerHandler
+    - required_coverage: 85
+  outputs:
+    - LeadTriggerHandlerTest.cls
+    - test_data_factory.cls
+    - coverage_report.json
+  acceptance_criteria:
+    - Test class compiles
+    - All test methods pass
+    - Coverage >= 85%
+    - Bulk scenarios included (200+ records)
+  dependencies:
+    - T-01
+  can_run_in_parallel_with: []
+  concurrency_group: apex
+  risk_level: low
+  tool_policy:
+    file_read: allowed
+    file_write: allowed
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points: []
+  assigned_agent: salesforce-plugin:sfdc-apex-developer
+  estimated_complexity: 0.5
+
+---
+# Apex batch job (higher complexity)
+apex_batch_task:
+  id: T-03
+  title: Create Lead Scoring Batch Job
+  domain: salesforce-apex
+  goal: Implement batch Apex to recalculate Lead scores for all existing records
+  inputs:
+    - org_alias: test-sandbox
+    - batch_size: 200
+    - scoring_logic_class: LeadScoringService
+    - scope_query: "SELECT Id, LeadSource, Company, Email FROM Lead WHERE IsConverted = false"
+  outputs:
+    - LeadScoringBatch.cls
+    - LeadScoringBatchTest.cls
+    - scheduler_class.cls
+  acceptance_criteria:
+    - Batch compiles and executes without error
+    - Handles 10,000+ records efficiently
+    - Governor limits respected
+    - Test coverage >= 75%
+  dependencies: []
+  can_run_in_parallel_with:
+    - T-04
+  concurrency_group: apex
+  risk_level: medium
+  tool_policy:
+    file_read: allowed
+    file_write: allowed_with_approval
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points:
+    - Before deployment
+  assigned_agent: salesforce-plugin:sfdc-apex-developer
+  estimated_complexity: 0.6
+
+---
+# Complex service class (higher complexity)
+apex_service_task:
+  id: T-04
+  title: Create Lead Enrichment Service with External Callout
+  domain: salesforce-apex
+  goal: Build service class that enriches Lead data via external API callout
+  inputs:
+    - org_alias: test-sandbox
+    - api_endpoint: https://api.enrichment.example.com/v1/company
+    - named_credential: Enrichment_API
+    - fields_to_enrich:
+      - Company_Size__c
+      - Industry_Classification__c
+      - Annual_Revenue__c
+  outputs:
+    - LeadEnrichmentService.cls
+    - LeadEnrichmentServiceTest.cls
+    - EnrichmentMock.cls
+  acceptance_criteria:
+    - Callout compiles and returns valid response
+    - Error handling for API failures
+    - Mock class for test isolation
+    - Test coverage >= 80%
+  dependencies: []
+  can_run_in_parallel_with:
+    - T-03
+  concurrency_group: apex
+  risk_level: medium
+  tool_policy:
+    file_read: allowed
+    file_write: allowed_with_approval
+    destructive_ops: forbidden
+    production_ops: forbidden
+  stop_points:
+    - Before external callout configuration
+  assigned_agent: salesforce-plugin:sfdc-apex-developer
+  estimated_complexity: 0.65
+
+---
+# Expected complexity calculation results
+expected_results:
+  simple_trigger_task:
+    complexity_score: 2
+    factors:
+      - multi_artifact: false
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: false
+      - long_horizon: false
+    recommendation: direct_execution
+
+  apex_test_task:
+    complexity_score: 1
+    factors:
+      - multi_artifact: false
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: false
+      - long_horizon: false
+    recommendation: direct_execution
+
+  apex_batch_task:
+    complexity_score: 3
+    factors:
+      - multi_artifact: true
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: false
+      - long_horizon: true
+    recommendation: direct_execution
+
+  apex_service_task:
+    complexity_score: 4
+    factors:
+      - multi_artifact: true
+      - multi_domain: false
+      - high_risk: false
+      - high_ambiguity: true
+      - long_horizon: false
+    recommendation: task_graph_recommended

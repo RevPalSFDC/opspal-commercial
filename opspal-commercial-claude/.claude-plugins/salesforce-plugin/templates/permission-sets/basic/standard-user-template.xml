@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!--
+    TEMPLATE: Standard User Permission Set
+    CATEGORY: Basic
+    DESCRIPTION: Provides standard CRED (Create, Read, Edit, Delete) access to core objects
+    TIER: 1 (Foundational)
+
+    USE CASES:
+    - Typical users who need to create and edit records
+    - Front-line employees (sales reps, support agents)
+    - Standard contributors without administrative needs
+    - Users who need full CRUD on assigned records
+
+    OBJECTS INCLUDED:
+    - Account (CRED)
+    - Contact (CRED)
+    - Opportunity (CRED)
+    - Lead (CRED)
+    - Task (CRED)
+    - Event (CRED)
+
+    FIELD ACCESS:
+    - Standard fields: Read and Edit
+    - Custom fields: Add as needed (read and edit)
+
+    SYSTEM PERMISSIONS:
+    - API Enabled: true
+    - View All Data: false (respects sharing rules)
+    - Modify All Data: false (respects sharing rules)
+
+    CUSTOMIZATION CHECKLIST:
+    □ 1. Replace {{PERMISSION_SET_NAME}} with your naming convention
+    □ 2. Update {{LABEL}} with human-readable name
+    □ 3. Update {{DESCRIPTION}} with specific use case
+    □ 4. Add/remove objects as needed
+    □ 5. Add field permissions for custom fields
+    □ 6. Review and adjust CRUD permissions
+    □ 7. Set app visibility
+    □ 8. Configure tab settings
+    □ 9. Test thoroughly before production
+
+    NAMING CONVENTION:
+    Standard_<Object>_Edit (e.g., Standard_Account_Edit)
+
+    TWO-TIER ARCHITECTURE:
+    This is a Tier 1 foundational set. Can be composed into Tier 2 role-based sets:
+    - Sales_Representative (composes Account_Edit, Opportunity_Edit, Lead_Edit)
+    - Support_Agent (composes Case_Edit, Contact_Edit, Account_Edit)
+    - Marketing_User (composes Lead_Edit, Campaign_Edit)
+    -->
+
+    <description>{{DESCRIPTION}}</description>
+    <label>{{LABEL}}</label>
+
+    <!-- OBJECT PERMISSIONS -->
+    <!-- Pattern: Full CRUD access (respects sharing rules) -->
+
+    <!-- Account: Full CRUD -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Account</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- Contact: Full CRUD -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Contact</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- Opportunity: Full CRUD -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Opportunity</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- Lead: Full CRUD -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Lead</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- Task: Full CRUD -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Task</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- Event: Full CRUD -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Event</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+
+    <!-- ADD MORE OBJECTS AS NEEDED -->
+
+    <!-- FIELD PERMISSIONS -->
+    <!-- Pattern: Read and edit access (readable=true, editable=true) -->
+    <!-- Add field permissions for custom fields -->
+
+    <!-- Example: Account custom fields -->
+    <!--
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Account.AccountSource__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Account.CustomerPriority__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    -->
+
+    <!-- Example: Opportunity custom fields -->
+    <!--
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.CurrentGenerators__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.MainCompetitors__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    -->
+
+    <!-- SYSTEM PERMISSIONS -->
+    <!-- Standard user system permissions -->
+
+    <!-- API Enabled: Allow API access -->
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ApiEnabled</name>
+    </userPermissions>
+
+    <!-- Run Reports: Allow running reports -->
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>RunReports</name>
+    </userPermissions>
+
+    <!-- Create Reports: Allow creating personal reports -->
+    <userPermissions>
+        <enabled>false</enabled>
+        <name>CreateCustomizeReports</name>
+    </userPermissions>
+
+    <!-- View Setup: View setup pages (but not modify) -->
+    <userPermissions>
+        <enabled>false</enabled>
+        <name>ViewSetup</name>
+    </userPermissions>
+
+    <!-- View All Data: Bypass sharing rules (typically false) -->
+    <userPermissions>
+        <enabled>false</enabled>
+        <name>ViewAllData</name>
+    </userPermissions>
+
+    <!-- Modify All Data: Modify all records (typically false) -->
+    <userPermissions>
+        <enabled>false</enabled>
+        <name>ModifyAllData</name>
+    </userPermissions>
+
+    <!-- Edit Read Only Fields: Edit readonly fields (typically false) -->
+    <userPermissions>
+        <enabled>false</enabled>
+        <name>EditReadOnlyFields</name>
+    </userPermissions>
+
+    <!-- APPLICATION VISIBILITY -->
+    <!-- Grant access to relevant apps -->
+    <!--
+    <applicationVisibilities>
+        <application>standard__Sales</application>
+        <default>true</default>
+        <visible>true</visible>
+    </applicationVisibilities>
+    -->
+
+    <!-- TAB SETTINGS -->
+    <!-- Control which tabs are visible -->
+    <!--
+    <tabSettings>
+        <tab>standard-Account</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-Contact</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-Opportunity</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-Lead</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    -->
+
+    <!--
+    TESTING CHECKLIST:
+    □ 1. Deploy to sandbox
+    □ 2. Create test user
+    □ 3. Assign permission set
+    □ 4. Verify can create records
+    □ 5. Verify can read owned records
+    □ 6. Verify can edit owned records
+    □ 7. Verify can delete owned records (if applicable)
+    □ 8. Verify respects sharing rules (cannot modify others' records)
+    □ 9. Verify field permissions work correctly
+    □ 10. Verify tab/app visibility
+    □ 11. Test reports and API access
+    □ 12. Document any issues
+
+    SECURITY CONSIDERATIONS:
+    - ViewAllRecords=false ensures users only see records they own or are shared with
+    - ModifyAllRecords=false ensures users cannot modify all records
+    - ViewAllData=false ensures sharing rules are respected
+    - ModifyAllData=false prevents unrestricted data modification
+    - EditReadOnlyFields=false prevents editing system/readonly fields
+
+    SHARING RULES:
+    This permission set respects org-wide defaults and sharing rules:
+    - Users can only access records they own or are shared with
+    - Consider pairing with role hierarchy or sharing rules for broader access
+    - If territory management is enabled, consider ViewAllData for territory-based access
+
+    BEST PRACTICES:
+    - Start restrictive, expand as needed
+    - Document business justification for permissions
+    - Review quarterly for unused permissions
+    - Test with actual users before production
+    - Combine with profile permissions (additive model)
+
+    MAINTENANCE:
+    - Review new custom fields quarterly
+    - Audit usage vs granted permissions
+    - Remove unused objects to reduce complexity
+    - Update documentation for any changes
+    - Track permission set assignments
+    -->
+</PermissionSet>

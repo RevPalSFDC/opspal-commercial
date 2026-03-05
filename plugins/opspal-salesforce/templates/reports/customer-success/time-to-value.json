@@ -1,0 +1,245 @@
+{
+  "templateMetadata": {
+    "templateName": "Time to Value Report",
+    "templateVersion": "1.1",
+    "description": "Track days from contract close to first value milestone for customer onboarding",
+    "audience": "CS Directors, Onboarding Managers, CCO",
+    "useCase": "Measure onboarding efficiency, identify bottlenecks, improve customer experience",
+    "customizationPoints": [
+      "Contract_Start_Date__c field name",
+      "First_Value_Date__c field name (activation, go-live, etc.)",
+      "Value milestone definition",
+      "Segment grouping"
+    ],
+    "prerequisites": [
+      "Account.Contract_Start_Date__c or equivalent",
+      "Account.First_Value_Date__c or activation milestone tracking",
+      "New customer identification"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Time to Value Analysis - {Period}",
+    "description": "Days from contract to first value milestone by segment and cohort",
+    "reportType": "AccountList",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "Account.Contract_Start_Date__c",
+        "operator": "greaterOrEqual",
+        "value": "LAST_FISCAL_YEAR",
+        "customizable": true,
+        "customizationNote": "Filter to recent customers for meaningful TTV"
+      },
+      {
+        "column": "Account.First_Value_Date__c",
+        "operator": "notEqual",
+        "value": "",
+        "customizable": true,
+        "customizationNote": "Only include customers who reached value milestone"
+      },
+      {
+        "column": "TYPE",
+        "operator": "equals",
+        "value": "Customer",
+        "customizable": true
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "Account.Segment__c",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": true,
+        "customizationNote": "Can also group by Product, Region, or CSM"
+      },
+      {
+        "field": "Account.Contract_Start_Date__c",
+        "sortOrder": "Desc",
+        "dateGranularity": "Month",
+        "customizable": true,
+        "customizationNote": "Cohort analysis by start month"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "ACCOUNT_NAME",
+      "Account.Contract_Start_Date__c",
+      "Account.First_Value_Date__c",
+      "Account.Time_to_Value_Days__c",
+      "Account.Segment__c",
+      "Account.CSM_Owner__c"
+    ],
+    "aggregates": [
+      {
+        "name": "Avg_TTV",
+        "field": "Account.Time_to_Value_Days__c",
+        "aggregateType": "Average",
+        "description": "Average days to value"
+      },
+      {
+        "name": "Median_TTV",
+        "field": "Account.Time_to_Value_Days__c",
+        "aggregateType": "Median",
+        "description": "Median days to value (if supported)"
+      },
+      {
+        "name": "Customer_Count",
+        "aggregateType": "RowCount",
+        "description": "Number of customers in cohort"
+      },
+      {
+        "name": "Max_TTV",
+        "field": "Account.Time_to_Value_Days__c",
+        "aggregateType": "Max",
+        "description": "Maximum days to value (outliers)"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "TTV_Days",
+        "description": "Calculate TTV if no formula field exists",
+        "formula": "First_Value_Date__c - Contract_Start_Date__c",
+        "dataType": "number",
+        "decimalPlaces": 0,
+        "note": "Use this if Time_to_Value_Days__c doesn't exist"
+      },
+      {
+        "name": "Percent_Under_30_Days",
+        "description": "Percentage meeting 30-day target",
+        "formula": "COUNT(WHERE TTV <= 30) / RowCount * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Bar",
+      "groupingColumn": "Account.Segment__c",
+      "aggregateColumn": "Avg_TTV",
+      "legendPosition": "None",
+      "showChartValues": true,
+      "showBenchmarkLine": true,
+      "benchmarkValue": 30,
+      "benchmarkLabel": "Target: 30 days"
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "time_to_value": {
+      "definition": "Days from contract signature to first meaningful value milestone",
+      "milestones": [
+        "First login",
+        "Onboarding complete",
+        "First data import",
+        "First workflow created",
+        "First report generated"
+      ],
+      "benchmark": {
+        "excellent": "<21 days",
+        "good": "<30 days",
+        "acceptable": "<45 days",
+        "warning": ">60 days"
+      }
+    },
+    "ttv_by_segment": {
+      "expectedVariation": {
+        "SMB": "14-21 days",
+        "Mid-Market": "21-30 days",
+        "Enterprise": "30-60 days"
+      }
+    }
+  },
+  "deploymentInstructions": {
+    "steps": [
+      "1. Identify your contract start date field",
+      "2. Define and identify your 'first value' milestone field",
+      "3. Create Time_to_Value_Days__c formula field if needed",
+      "4. Update field references in template",
+      "5. Replace {Period} with actual period",
+      "6. Deploy to Customer Success Reports folder"
+    ],
+    "prerequisiteFields": {
+      "Time_to_Value_Days__c": {
+        "type": "Formula (Number)",
+        "formula": "IF(ISBLANK(First_Value_Date__c), NULL, First_Value_Date__c - Contract_Start_Date__c)"
+      }
+    }
+  },
+  "relatedTemplates": [
+    "cs-overview.json",
+    "account-health.json"
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,779 @@
+{
+  "version": "3.0.0",
+  "lastUpdated": "2025-12-28",
+  "description": "Salesforce CLI command reference for validation (Expanded with 40+ commands)",
+  "commands": {
+    "sf data query": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--query",
+          "-q",
+          "--use-tooling-api",
+          "--target-org",
+          "-o",
+          "--api-version",
+          "--json",
+          "--result-format"
+        ]
+      },
+      "description": "Query data using SOQL",
+      "examples": [
+        "sf data query --query \"SELECT Id FROM Account\" --target-org myorg",
+        "sf data query -q \"SELECT Id FROM Contact\" -o myorg --use-tooling-api"
+      ]
+    },
+    "sf data export": {
+      "valid": false,
+      "reason": "Invalid command. Use 'sf data query' instead.",
+      "replacement": "sf data query",
+      "description": "This command does not exist in SF CLI v2.x"
+    },
+    "sf data import": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject"],
+        "optional": [
+          "--file",
+          "-f",
+          "--target-org",
+          "-o",
+          "--json",
+          "--wait"
+        ]
+      },
+      "description": "Import data from CSV file",
+      "examples": [
+        "sf data import tree --plan plan.json --target-org myorg",
+        "sf data import bulk --sobject Account --file accounts.csv -o myorg"
+      ]
+    },
+    "sf data upsert": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject", "--external-id"],
+        "optional": [
+          "--file",
+          "-f",
+          "--target-org",
+          "-o",
+          "--json",
+          "--wait"
+        ]
+      },
+      "description": "Upsert data using external ID",
+      "examples": [
+        "sf data upsert bulk --sobject Account --external-id External_Id__c --file accounts.csv -o myorg"
+      ]
+    },
+    "sf project deploy": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--source-dir",
+          "-d",
+          "--metadata",
+          "-m",
+          "--manifest",
+          "-x",
+          "--target-org",
+          "-o",
+          "--test-level",
+          "-l",
+          "--tests",
+          "-t",
+          "--wait",
+          "-w",
+          "--ignore-conflicts",
+          "--dry-run",
+          "--json"
+        ]
+      },
+      "description": "Deploy metadata to an org",
+      "examples": [
+        "sf project deploy start -d force-app -o myorg",
+        "sf project deploy start -x manifest/package.xml -o myorg",
+        "sf project deploy start -m ApexClass:MyClass -o myorg"
+      ]
+    },
+    "sf project deploy start": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--source-dir",
+          "-d",
+          "--source-path",
+          "--metadata",
+          "-m",
+          "--manifest",
+          "-x",
+          "--target-org",
+          "-o",
+          "--test-level",
+          "-l",
+          "--tests",
+          "-t",
+          "--wait",
+          "-w",
+          "--ignore-conflicts",
+          "--dry-run",
+          "--json"
+        ]
+      },
+      "flagDeprecations": {
+        "--source-path": {
+          "deprecated": true,
+          "replacement": "--source-dir or -d",
+          "reason": "Flag renamed in SF CLI v2.x for consistency"
+        }
+      },
+      "description": "Deploy metadata to an org",
+      "notes": "Use -d or --source-dir (not --source-path)"
+    },
+    "sf project retrieve": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--source-dir",
+          "-d",
+          "--metadata",
+          "-m",
+          "--manifest",
+          "-x",
+          "--target-org",
+          "-o",
+          "--wait",
+          "-w",
+          "--json"
+        ]
+      },
+      "description": "Retrieve metadata from an org"
+    },
+    "sf org list": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--all",
+          "--clean",
+          "--json"
+        ]
+      },
+      "description": "List all orgs you've authenticated to"
+    },
+    "sf org display": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--json",
+          "--verbose"
+        ]
+      },
+      "description": "Display information about an org"
+    },
+    "sf sobject describe": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject"],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--use-tooling-api",
+          "--json"
+        ]
+      },
+      "description": "Describe a Salesforce object",
+      "examples": [
+        "sf sobject describe --sobject Account --target-org myorg",
+        "sf sobject describe --sobject ValidationRule --use-tooling-api -o myorg"
+      ]
+    },
+    "sf apex run": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--file",
+          "-f",
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "Execute anonymous Apex code"
+    },
+    "sf apex test run": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--class-names",
+          "-n",
+          "--suite-names",
+          "-s",
+          "--tests",
+          "-t",
+          "--target-org",
+          "-o",
+          "--code-coverage",
+          "--result-format",
+          "--output-dir",
+          "-d",
+          "--wait",
+          "-w",
+          "--json"
+        ]
+      },
+      "description": "Run Apex tests"
+    },
+    "sf data create record": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject", "--values"],
+        "optional": [
+          "-s",
+          "-v",
+          "--target-org",
+          "-o",
+          "--json",
+          "--use-tooling-api"
+        ]
+      },
+      "description": "Create a single record",
+      "examples": [
+        "sf data create record -s Account -v \"Name='Acme' Industry='Technology'\" -o myorg",
+        "sf data create record --sobject Contact --values \"FirstName='John' LastName='Doe'\" -o myorg"
+      ]
+    },
+    "sf data update record": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject", "--record-id", "--values"],
+        "optional": [
+          "-s",
+          "-i",
+          "-v",
+          "--target-org",
+          "-o",
+          "--json",
+          "--use-tooling-api"
+        ]
+      },
+      "description": "Update a single record",
+      "examples": [
+        "sf data update record -s Account -i 001xx000003DHPh -v \"Name='Updated Name'\" -o myorg"
+      ]
+    },
+    "sf data delete record": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject", "--record-id"],
+        "optional": [
+          "-s",
+          "-i",
+          "--target-org",
+          "-o",
+          "--json",
+          "--use-tooling-api"
+        ]
+      },
+      "description": "Delete a single record",
+      "examples": [
+        "sf data delete record -s Account -i 001xx000003DHPh -o myorg"
+      ]
+    },
+    "sf data get record": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject", "--record-id"],
+        "optional": [
+          "-s",
+          "-i",
+          "--target-org",
+          "-o",
+          "--json",
+          "--use-tooling-api"
+        ]
+      },
+      "description": "Get a single record by ID",
+      "examples": [
+        "sf data get record -s Account -i 001xx000003DHPh -o myorg"
+      ]
+    },
+    "sf data resume": {
+      "valid": true,
+      "flags": {
+        "required": ["--job-id"],
+        "optional": [
+          "-i",
+          "--target-org",
+          "-o",
+          "--json",
+          "--wait",
+          "-w"
+        ]
+      },
+      "description": "Resume an async bulk operation",
+      "examples": [
+        "sf data resume -i 750xx00000000001 -o myorg"
+      ]
+    },
+    "sf data export tree": {
+      "valid": true,
+      "flags": {
+        "required": ["--query"],
+        "optional": [
+          "-q",
+          "--output-dir",
+          "-d",
+          "--plan",
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "Export data tree (related records)",
+      "examples": [
+        "sf data export tree -q \"SELECT Id, Name FROM Account\" -d ./data -o myorg"
+      ]
+    },
+    "sf data import tree": {
+      "valid": true,
+      "flags": {
+        "required": ["--plan"],
+        "optional": [
+          "-p",
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "Import data tree from plan",
+      "examples": [
+        "sf data import tree -p data/Account-plan.json -o myorg"
+      ]
+    },
+    "sf org create scratch": {
+      "valid": true,
+      "flags": {
+        "required": ["--definition-file"],
+        "optional": [
+          "-f",
+          "--alias",
+          "-a",
+          "--duration-days",
+          "-d",
+          "--set-default",
+          "--json",
+          "--no-namespace"
+        ]
+      },
+      "description": "Create a scratch org",
+      "examples": [
+        "sf org create scratch -f config/project-scratch-def.json -a my-scratch -d 30"
+      ]
+    },
+    "sf org delete scratch": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--no-prompt",
+          "-p",
+          "--json"
+        ]
+      },
+      "description": "Delete a scratch org"
+    },
+    "sf org login web": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--alias",
+          "-a",
+          "--instance-url",
+          "-r",
+          "--set-default",
+          "-s",
+          "--json"
+        ]
+      },
+      "description": "Login to org via web browser",
+      "examples": [
+        "sf org login web --alias myorg --instance-url https://login.salesforce.com"
+      ]
+    },
+    "sf org login jwt": {
+      "valid": true,
+      "flags": {
+        "required": ["--client-id", "--jwt-key-file", "--username"],
+        "optional": [
+          "-i",
+          "-f",
+          "-u",
+          "--alias",
+          "-a",
+          "--instance-url",
+          "-r",
+          "--set-default",
+          "-s",
+          "--json"
+        ]
+      },
+      "description": "Login to org using JWT",
+      "examples": [
+        "sf org login jwt --client-id xxx --jwt-key-file server.key --username user@org.com -a myorg"
+      ]
+    },
+    "sf org open": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--path",
+          "-p",
+          "--url-only",
+          "-r",
+          "--json"
+        ]
+      },
+      "description": "Open org in browser",
+      "examples": [
+        "sf org open -o myorg",
+        "sf org open -o myorg -p /lightning/setup/SetupOneHome/home"
+      ]
+    },
+    "sf org list metadata": {
+      "valid": true,
+      "flags": {
+        "required": ["--metadata-type"],
+        "optional": [
+          "-m",
+          "--target-org",
+          "-o",
+          "--folder",
+          "--output-file",
+          "--json"
+        ]
+      },
+      "description": "List metadata of a specific type",
+      "examples": [
+        "sf org list metadata --metadata-type ApexClass -o myorg",
+        "sf org list metadata -m ReportType -o myorg"
+      ]
+    },
+    "sf org list metadata-types": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "List all metadata types available in org"
+    },
+    "sf limits api display": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "Display API usage limits for org",
+      "examples": [
+        "sf limits api display -o myorg"
+      ]
+    },
+    "sf package install": {
+      "valid": true,
+      "flags": {
+        "required": ["--package"],
+        "optional": [
+          "-p",
+          "--wait",
+          "-w",
+          "--target-org",
+          "-o",
+          "--no-prompt",
+          "--apex-compile",
+          "--security-type",
+          "--upgrade-type",
+          "--json"
+        ]
+      },
+      "description": "Install a package",
+      "examples": [
+        "sf package install -p 04t000000000001AAA -w 10 -o myorg"
+      ]
+    },
+    "sf package installed list": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "List installed packages"
+    },
+    "sf apex get test": {
+      "valid": true,
+      "flags": {
+        "required": ["--test-run-id"],
+        "optional": [
+          "-i",
+          "--target-org",
+          "-o",
+          "--code-coverage",
+          "-c",
+          "--result-format",
+          "-r",
+          "--output-dir",
+          "-d",
+          "--json"
+        ]
+      },
+      "description": "Get Apex test results",
+      "examples": [
+        "sf apex get test -i 707xx00000000001 -c -o myorg"
+      ]
+    },
+    "sf apex list log": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--json"
+        ]
+      },
+      "description": "List debug logs"
+    },
+    "sf apex get log": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--log-id",
+          "-i",
+          "--number",
+          "-n",
+          "--target-org",
+          "-o",
+          "--output-dir",
+          "-d",
+          "--json"
+        ]
+      },
+      "description": "Get debug log by ID or get most recent"
+    },
+    "sf apex tail log": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--color",
+          "-c",
+          "--debug-level",
+          "-d",
+          "--skip-trace-flag",
+          "-s"
+        ]
+      },
+      "description": "Tail debug logs in real-time"
+    },
+    "sf schema generate sobject": {
+      "valid": true,
+      "flags": {
+        "required": ["--sobject"],
+        "optional": [
+          "-s",
+          "--target-org",
+          "-o",
+          "--output-dir",
+          "-d",
+          "--json"
+        ]
+      },
+      "description": "Generate schema for an sObject"
+    },
+    "sf cmdt generate records": {
+      "valid": true,
+      "flags": {
+        "required": ["--type-name"],
+        "optional": [
+          "-t",
+          "--input-directory",
+          "-i",
+          "--output-directory",
+          "-d",
+          "--json"
+        ]
+      },
+      "description": "Generate custom metadata type records from CSV"
+    },
+    "sf project deploy report": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--job-id",
+          "-i",
+          "--target-org",
+          "-o",
+          "--wait",
+          "-w",
+          "--coverage-formatters",
+          "--junit",
+          "--results-dir",
+          "--json"
+        ]
+      },
+      "description": "Check deployment status"
+    },
+    "sf project deploy preview": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--source-dir",
+          "-d",
+          "--manifest",
+          "-x",
+          "--metadata",
+          "-m",
+          "--target-org",
+          "-o",
+          "--ignore-conflicts",
+          "-c",
+          "--json"
+        ]
+      },
+      "description": "Preview deployment changes"
+    },
+    "sf project convert source": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--root-dir",
+          "-r",
+          "--output-dir",
+          "-d",
+          "--package-name",
+          "-n",
+          "--manifest",
+          "-x",
+          "--metadata",
+          "-m",
+          "--json"
+        ]
+      },
+      "description": "Convert source format to metadata format"
+    },
+    "sf project reset tracking": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--revision",
+          "-r",
+          "--no-prompt",
+          "-p",
+          "--json"
+        ]
+      },
+      "description": "Reset source tracking (scratch orgs only)"
+    },
+    "sf sobject list": {
+      "valid": true,
+      "flags": {
+        "required": [],
+        "optional": [
+          "--target-org",
+          "-o",
+          "--sobject-type-category",
+          "-t",
+          "--json"
+        ]
+      },
+      "description": "List all sObjects in org"
+    },
+    "sf sobject create field": {
+      "valid": false,
+      "reason": "Invalid command. SF CLI has no 'sf sobject create field'. Use metadata deploy with CustomField XML.",
+      "replacement": "sf project deploy start",
+      "description": "This command does not exist in SF CLI v2.x. Create CustomField metadata XML and deploy with 'sf project deploy start'."
+    },
+    "sf sobject create": {
+      "valid": false,
+      "reason": "Invalid command. SF CLI has no 'sf sobject create'. Use metadata deploy with CustomObject XML.",
+      "replacement": "sf project deploy start",
+      "description": "This command does not exist in SF CLI v2.x. Create CustomObject metadata XML and deploy with 'sf project deploy start'."
+    },
+    "sf sobject create record": {
+      "valid": false,
+      "reason": "Invalid command. The correct command for creating records is 'sf data create record'.",
+      "replacement": "sf data create record",
+      "description": "Common confusion between sobject (metadata) and data (records) namespaces."
+    },
+    "sf sobject update": {
+      "valid": false,
+      "reason": "Invalid command. To update records use 'sf data update record'. To update metadata use 'sf project deploy start'.",
+      "replacement": "sf data update record",
+      "description": "Common confusion between sobject (metadata) and data (records) namespaces."
+    },
+    "sf sobject delete": {
+      "valid": false,
+      "reason": "Invalid command. To delete records use 'sf data delete record'. To remove metadata use 'sf project deploy start' with destructiveChanges.",
+      "replacement": "sf data delete record",
+      "description": "Common confusion between sobject (metadata) and data (records) namespaces."
+    }
+  },
+  "commonErrors": [
+    {
+      "error": "sf data export",
+      "correction": "sf data query",
+      "explanation": "'sf data export' is not a valid command. Use 'sf data query' to query data."
+    },
+    {
+      "error": "--source-path",
+      "correction": "--source-dir or -d",
+      "explanation": "Flag --source-path was renamed to --source-dir in SF CLI v2.x"
+    },
+    {
+      "error": "sf sobject create field",
+      "correction": "sf project deploy start",
+      "explanation": "'sf sobject create field' does not exist. Create CustomField metadata XML and deploy with 'sf project deploy start -d <source-dir>'."
+    },
+    {
+      "error": "sf sobject create",
+      "correction": "sf project deploy start",
+      "explanation": "'sf sobject create' does not exist for metadata. Use 'sf data create record' for records, or deploy CustomObject XML with 'sf project deploy start'."
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Matcher Regex Migrator"
+  short_description: "Help with Hook Matcher Regex Migrator tasks"
+  default_prompt: "Use $hook-matcher-regex-migrator to execute this workflow safely and produce the expected artifacts."

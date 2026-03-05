@@ -1,0 +1,60 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#0176d3'}}}%%
+flowchart TB
+    %% Dashboard Component Dependencies
+    %% Auto-generated from reports usage audit
+
+    %% Dashboards
+    subgraph Sales["Sales Department"]
+        D1[📊 Sales Performance<br/>6 components]
+        D2[📊 Pipeline Overview<br/>4 components]
+    end
+
+    subgraph Marketing["Marketing Department"]
+        D3[📊 Campaign ROI<br/>5 components]
+        D4[📊 Lead Generation<br/>3 components]
+    end
+
+    %% High Usage Reports (>100 runs)
+    R1[📄 Opportunities by Stage<br/>Run 245 times]
+    R2[📄 Closed Won This Quarter<br/>Run 156 times]
+    R3[📄 Campaign Performance<br/>Run 189 times]
+
+    %% Medium Usage Reports (10-100 runs)
+    R4[📄 Pipeline Forecast<br/>Run 67 times]
+    R5[📄 Lead Source Analysis<br/>Run 45 times]
+    R6[📄 Conversion Rates<br/>Run 34 times]
+
+    %% Low/No Usage Reports (<10 runs)
+    R7[📄 Territory Summary<br/>Run 3 times]
+    R8[📄 Product Mix<br/>Run 0 times]
+
+    %% Dependencies
+    D1 --> R1
+    D1 --> R2
+    D1 --> R4
+    D1 --> R7
+
+    D2 --> R1
+    D2 --> R4
+
+    D3 --> R3
+    D3 --> R5
+    D3 --> R6
+
+    D4 --> R5
+    D4 --> R8
+
+    %% Styling
+    style R1 fill:#ccffcc
+    style R2 fill:#ccffcc
+    style R3 fill:#ccffcc
+    style R4 fill:#ffffcc
+    style R5 fill:#ffffcc
+    style R6 fill:#ffffcc
+    style R7 fill:#ffcccc
+    style R8 fill:#ffcccc
+
+    %% Legend:
+    %% 🟢 High Usage (>100 runs)
+    %% 🟡 Medium Usage (10-100 runs)
+    %% 🔴 Low/No Usage or Stale

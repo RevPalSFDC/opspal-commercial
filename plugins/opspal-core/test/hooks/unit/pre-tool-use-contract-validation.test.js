@@ -1,0 +1,495 @@
+#!/usr/bin/env node
+
+/**
+ * Unit Tests for pre-tool-use-contract-validation.sh
+ *
+ * Validates tool input contract checks and safe defaults.
+ *
+ * @copyright 2024-2026 RevPal Partners, LLC
+ */
+
+const path = require('path');
+const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+
+const { HookTester } = require('../runner');
+
+// =============================================================================
+// Test Configuration
+// =============================================================================
+
+const HOOK_PATH = 'plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh';
+const PROJECT_ROOT = path.resolve(__dirname, '../../../../..');
+const PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-core');
+
+// =============================================================================
+// Test Helpers
+// =============================================================================
+
+function createTester() {
+  return new HookTester(HOOK_PATH, {
+    timeout: 15000,
+    verbose: process.env.VERBOSE === '1'
+  });
+}
+
+function createTempHome() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+}
+
+async function runTest(name, testFn) {
+  process.stdout.write(`  ${name}... `);
+  try {
+    await testFn();
+    console.log('OK');
+    return { passed: true, name };
+  } catch (e) {
+    console.log('FAIL');
+    console.log(`    Error: ${e.message}`);
+    return { passed: false, name, error: e.message };
+  }
+}
+
+// =============================================================================
+// Tests
+// =============================================================================
+
+async function runAllTests() {
+  console.log('\n[Tests] pre-tool-use-contract-validation.sh Tests\n');
+
+  const tester = createTester();
+  const results = [];
+  const tempHome = createTempHome();
+  const tempLogRoot = path.join(tempHome, '.claude/logs');
+
+  // Test 1: Hook validation
+  results.push(await runTest('Hook exists and is valid', async () => {
+    const validation = tester.validate();
+    assert(validation.exists, 'Hook file should exist');
+    assert(validation.executable, 'Hook should be executable');
+    assert(validation.syntaxValid, 'Hook should have valid bash syntax');
+  }));
+
+  // Test 2: Handles missing tool name gracefully
+  results.push(await runTest('Handles missing tool name gracefully', async () => {
+    const result = await tester.run({
+      input: {},
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert(
+      result.stderr.includes('Could not determine tool name'),
+      'Should warn about missing tool name'
+    );
+  }));
+
+  // Test 3: Basic tool input does not block
+  results.push(await runTest('Allows basic tool input without blocking', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: { command: 'echo "hello"' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        TOOL_CONTRACT_BLOCK_ON_VIOLATION: 'false'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+  }));
+
+  results.push(await runTest('Continues when preferred log root is not writable', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: { command: 'echo "fallback-log-test"' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: '/proc/1/forbidden-log-root'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should continue when falling back to /tmp logs');
+  }));
+
+  // Test 4: Blocks direct permission/security write workflows
+  results.push(await runTest('Blocks direct Salesforce permission writes', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data create record --sobject PermissionSetAssignment --values "AssigneeId=005xx PermissionSetId=0PSxx"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block direct permission writes');
+    assert(
+      result.stderr.includes('[ROUTING BLOCKED]'),
+      'Should emit explicit routing block warning'
+    );
+    assert(
+      result.stderr.includes('sfdc-security-admin'),
+      'Should recommend the mandatory permission/security agent'
+    );
+  }));
+
+  // Test 5: Allows permission writes when already inside approved agent
+  results.push(await runTest('Allows permission writes for approved permission agents', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data update record --sobject PermissionSetAssignment --values "Id=0PaXX PermissionSetId=0PSxx"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-security-admin'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should allow execution for approved agents');
+  }));
+
+  // Test 6: Blocks direct Lead/Contact/Account upsert-import workflows
+  results.push(await runTest('Blocks direct core object upsert workflows', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data upsert bulk --sobject Account --file ./accounts.csv'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block direct Account/Contact/Lead upsert workflows');
+    assert(
+      result.stderr.includes('sfdc-upsert-orchestrator'),
+      'Should recommend the upsert orchestrator'
+    );
+  }));
+
+  // Test 7: Blocks direct core object query workflows
+  results.push(await runTest('Blocks direct core object data queries', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data query --query "SELECT Id FROM Account WHERE OwnerId != null LIMIT 10" --target-org prod'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block direct core object data queries');
+    assert(
+      result.stderr.includes('sfdc-data-operations'),
+      'Should recommend data-operations/query specialist agents'
+    );
+  }));
+
+  // Test 8: Allows core object queries for approved data/query agents
+  results.push(await runTest('Allows core object data queries for approved agents', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data query --query "SELECT Id FROM Account WHERE OwnerId != null LIMIT 10" --target-org prod'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-data-operations'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should allow query execution for approved agents');
+  }));
+
+  // Test 9: Blocks direct territory write workflows
+  results.push(await runTest('Blocks oversized SOQL query commands that risk HTTP 431', async () => {
+    const idList = Array.from({ length: 260 }, (_, i) => `'001000000000${String(i).padStart(3, '0')}'`).join(',');
+    const command = `sf data query --query "SELECT Id FROM Opportunity WHERE AccountId IN (${idList})" --target-org prod`;
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: { command }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block risky oversized SOQL query');
+    assert(
+      result.stderr.includes('sfdc-bulkops-orchestrator'),
+      'Should route oversized query workflows to bulkops/query specialist'
+    );
+  }));
+
+  results.push(await runTest('Allows oversized SOQL query for approved bulk/query agents', async () => {
+    const idList = Array.from({ length: 260 }, (_, i) => `'001000000000${String(i).padStart(3, '0')}'`).join(',');
+    const command = `sf data query --query "SELECT Id FROM Opportunity WHERE AccountId IN (${idList})" --target-org prod`;
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: { command }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-bulkops-orchestrator'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Approved bulk/query agents should bypass oversized query block');
+  }));
+
+  // Test 11: Blocks direct territory write workflows
+  results.push(await runTest('Blocks direct territory model write workflows', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data update record --sobject Territory2Model --values "Id=0M0xx State=Active"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block direct territory model write workflows');
+    assert(
+      result.stderr.includes('sfdc-territory-orchestrator'),
+      'Should recommend the territory orchestrator'
+    );
+  }));
+
+  // Test 12: Blocks direct validation rule write workflows
+  results.push(await runTest('Blocks direct validation rule write workflows', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data update record --sobject ValidationRule --values "Id=01Qxx Active=true"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block direct validation rule write workflows');
+    assert(
+      result.stderr.includes('validation-rule-orchestrator'),
+      'Should recommend the validation-rule orchestrator'
+    );
+  }));
+
+  // Test 13: Writes reflection candidate log for blocked routing attempts
+  results.push(await runTest('Captures routing reflection candidates on block', async () => {
+    const reflectionLog = path.join(tempHome, '.claude/logs/routing-reflection-candidates.jsonl');
+
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data create record --sobject PermissionSetAssignment --values "AssigneeId=005xx PermissionSetId=0PSxx"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        ROUTING_REFLECTION_ON_BLOCK: '1'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Expected block to generate reflection candidate');
+    assert(fs.existsSync(reflectionLog), 'Routing reflection candidate log should exist');
+
+    const lines = fs.readFileSync(reflectionLog, 'utf8')
+      .split('\n')
+      .filter(Boolean);
+    assert(lines.length > 0, 'Routing reflection candidate log should contain events');
+
+    const lastEvent = JSON.parse(lines[lines.length - 1]);
+    assert.strictEqual(lastEvent.decision, 'block', 'Last routing event should be a block');
+    assert.strictEqual(lastEvent.rule_id, 'sf_permission_security_write', 'Should classify block under permission/security rule');
+  }));
+
+  // Test 14: Blocks inline secret literals in Bash commands
+  results.push(await runTest('Blocks inline secret literals', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'ASANA_TOKEN=2/1234567890123456:supersecret curl -s https://app.asana.com/api/1.0/users/me'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block inline secret literals');
+    assert(
+      result.stderr.includes('Inline secret literal detected'),
+      'Should emit inline secret guardrail message'
+    );
+  }));
+
+  // Test 15: Blocks broad filesystem credential discovery patterns
+  results.push(await runTest('Blocks broad credential discovery scans', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'find /home/chris -name "*.env" 2>/dev/null | xargs grep -l "ASANA"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block broad credential discovery');
+    assert(
+      result.stderr.includes('Broad credential discovery pattern detected'),
+      'Should emit broad scan guardrail message'
+    );
+  }));
+
+  // Test 16: Enforces loop budget across repeated commands in same session
+  results.push(await runTest('Blocks repeated command loops by budget', async () => {
+    const env = {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        OPSPAL_BASH_BUDGET_MAX_REPEATS: '1',
+        OPSPAL_BASH_BUDGET_MAX_COMMANDS: '10',
+        OPSPAL_BASH_BUDGET_WINDOW_SECONDS: '600'
+      };
+
+    const first = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-loop-test',
+        input: { command: 'echo "loop-check"' }
+      },
+      env
+    });
+    assert.strictEqual(first.exitCode, 0, 'First command should pass');
+
+    const second = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-loop-test',
+        input: { command: 'echo "loop-check"' }
+      },
+      env
+    });
+    assert.strictEqual(second.exitCode, 2, 'Second repeated command should be blocked');
+    assert(
+      second.stderr.includes('Repeated command pattern detected'),
+      'Should emit repeated command guardrail message'
+    );
+  }));
+
+  // Test 17: Redacts secrets from routing logs
+  results.push(await runTest('Redacts secret literals in routing logs', async () => {
+    const routingLog = path.join(tempHome, '.claude/logs/routing-enforcement.jsonl');
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data create record --sobject PermissionSetAssignment --values "AssigneeId=005xx PermissionSetId=0PSxx" && curl -H "Authorization: Bearer $ASANA_TOKEN" https://example.com'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 2, 'Should block and write routing event');
+    assert(fs.existsSync(routingLog), 'Routing enforcement log should exist');
+
+    const lines = fs.readFileSync(routingLog, 'utf8').split('\n').filter(Boolean);
+    const lastEvent = JSON.parse(lines[lines.length - 1]);
+    assert(
+      typeof lastEvent.command === 'string' && lastEvent.command.includes('[REDACTED]'),
+      'Routing log command should be redacted'
+    );
+    assert(
+      !lastEvent.command.includes('Bearer $ASANA_TOKEN'),
+      'Routing log should not contain raw bearer value reference'
+    );
+  }));
+
+  // Cleanup
+  fs.rmSync(tempHome, { recursive: true, force: true });
+
+  // Summary
+  const passed = results.filter(r => r.passed).length;
+  const failed = results.filter(r => !r.passed).length;
+
+  console.log(`\nResults: ${passed} passed, ${failed} failed\n`);
+
+  if (failed > 0) {
+    console.log('Failed tests:');
+    for (const r of results.filter(r => !r.passed)) {
+      console.log(`  - ${r.name}: ${r.error}`);
+    }
+    process.exit(1);
+  }
+}
+
+runAllTests().catch(err => {
+  console.error('Test runner error:', err);
+  process.exit(1);
+});

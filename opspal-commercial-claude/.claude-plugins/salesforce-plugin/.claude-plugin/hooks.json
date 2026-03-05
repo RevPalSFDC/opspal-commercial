@@ -1,0 +1,47 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-agent-reminder.sh",
+            "timeout": 5000,
+            "description": "Initialize session with temp directories and agent reminders"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load org context from working directory, config files, and environment"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(sf project deploy*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-field-deployment.sh",
+            "timeout": 30000,
+            "description": "Verify field accessibility after deployment before proceeding"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(sf data query*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-sf-query-validation.sh",
+            "timeout": 5000,
+            "description": "Validate query results for data quality issues"
+          }
+        ]
+      }
+    ]
+  }
+}

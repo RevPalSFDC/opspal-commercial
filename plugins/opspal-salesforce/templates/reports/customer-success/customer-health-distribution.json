@@ -1,0 +1,204 @@
+{
+  "templateMetadata": {
+    "templateName": "Customer Health Distribution Report",
+    "templateVersion": "1.1",
+    "description": "Distribution of customer accounts by health score category (Green/Yellow/Red)",
+    "audience": "CS Directors, CCO, Revenue Operations",
+    "useCase": "Track portfolio health trends, identify at-risk segments, resource planning",
+    "customizationPoints": [
+      "Health_Score__c field name",
+      "Account Type filter for customers only",
+      "Segment grouping (optional)",
+      "ARR weighting (optional)"
+    ],
+    "prerequisites": [
+      "Account.Health_Score__c field (picklist: Green, Yellow, Red)",
+      "Account.Type = 'Customer' to filter active customers",
+      "Account.ARR__c for weighted analysis (optional)"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Customer Health Distribution - {Period}",
+    "description": "Distribution of customer accounts by health score with ARR weighting",
+    "reportType": "AccountList",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "TYPE",
+        "operator": "equals",
+        "value": "Customer",
+        "customizable": true,
+        "customizationNote": "Filter to active customers only"
+      },
+      {
+        "column": "Account.Health_Score__c",
+        "operator": "notEqual",
+        "value": "",
+        "customizable": false,
+        "customizationNote": "Exclude accounts without health score"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "Account.Health_Score__c",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": true,
+        "customizationNote": "Replace with your org's health score field"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "ACCOUNT_NAME",
+      "Account.Health_Score__c",
+      "Account.ARR__c",
+      "Account.Segment__c",
+      "LAST_ACTIVITY",
+      "Account.Open_Cases__c",
+      "Account.CSM_Owner__c"
+    ],
+    "aggregates": [
+      {
+        "name": "Account_Count",
+        "aggregateType": "RowCount",
+        "description": "Number of accounts per health category"
+      },
+      {
+        "name": "Total_ARR",
+        "field": "Account.ARR__c",
+        "aggregateType": "Sum",
+        "description": "Total ARR per health category"
+      },
+      {
+        "name": "Avg_ARR",
+        "field": "Account.ARR__c",
+        "aggregateType": "Average",
+        "description": "Average ARR per health category"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "Percentage_of_Total",
+        "description": "Percentage of total customer base",
+        "formula": "RowCount / PARENTGROUPVAL(RowCount, GRAND_SUMMARY) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      },
+      {
+        "name": "ARR_Percentage",
+        "description": "Percentage of total ARR",
+        "formula": "Total_ARR / PARENTGROUPVAL(Total_ARR, GRAND_SUMMARY) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1
+      }
+    ],
+    "chart": {
+      "chartType": "Donut",
+      "groupingColumn": "Account.Health_Score__c",
+      "aggregateColumn": "Account_Count",
+      "legendPosition": "Right",
+      "showChartValues": true,
+      "chartColorPalette": "custom",
+      "customColors": {
+        "Green": "#6FBF73",
+        "Yellow": "#F4C542",
+        "Red": "#E74C3C"
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  },
+  "deploymentInstructions": {
+    "steps": [
+      "1. Verify Health_Score__c field exists with Green/Yellow/Red values",
+      "2. Confirm Account.Type includes 'Customer' value",
+      "3. Update field references if using different field names",
+      "4. Replace {Period} with actual period",
+      "5. Deploy to Customer Success Reports folder"
+    ],
+    "expectedResults": {
+      "healthyDistribution": {
+        "Green": ">70%",
+        "Yellow": "<20%",
+        "Red": "<10%"
+      }
+    }
+  },
+  "relatedTemplates": [
+    "account-health.json",
+    "nrr-calculation.json"
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  }
+}

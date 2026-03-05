@@ -1,0 +1,457 @@
+/**
+ * PDF Base Stylesheet - RevPal Brand
+ *
+ * Core typography, layout, and print rules for PDF generation.
+ * This file provides the foundation styles with RevPal branding defaults.
+ * Components and themes layer on top.
+ *
+ * Brand Reference: templates/branding-gallery/index.html
+ *
+ * @version 2.0.0
+ * @date 2026-01-31
+ */
+
+/* =============================================================================
+   Google Fonts Import (Montserrat + Figtree)
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap');
+
+/* =============================================================================
+   CSS Variables - RevPal Brand Defaults
+   ============================================================================= */
+
+:root {
+  /* RevPal Brand Colors */
+  --brand-grape: #5F3B8C;
+  --brand-indigo: #3E4A61;
+  --brand-apricot: #E99560;
+  --brand-apricot-hover: #D88450;
+  --brand-sand: #EAE4DC;
+  --brand-green: #6FBF73;
+
+  /* Neutral Palette */
+  --neutral-100: #FFFFFF;
+  --neutral-90: #F7F4EF;
+  --neutral-80: #EAE4DC;
+  --neutral-60: #C6C3BD;
+  --neutral-40: #A8A5A0;
+  --neutral-20: #8A8A8A;
+  --neutral-0: #000000;
+
+  /* Typography - RevPal Fonts */
+  --font-primary: "Figtree", system-ui, -apple-system, sans-serif;
+  --font-heading: "Montserrat", system-ui, sans-serif;
+  --font-secondary: "Figtree", system-ui, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Font Sizes */
+  --font-size-base: 10pt;
+  --font-size-small: 8pt;
+  --font-size-large: 12pt;
+  --font-size-h1: 24pt;
+  --font-size-h2: 18pt;
+  --font-size-h3: 14pt;
+  --font-size-h4: 12pt;
+  --font-size-h5: 11pt;
+  --font-size-h6: 10pt;
+
+  /* Semantic Color Mapping (use these in styles) */
+  --color-text: var(--brand-indigo);
+  --color-text-secondary: var(--neutral-40);
+  --color-text-muted: var(--neutral-20);
+  --color-background: var(--neutral-100);
+  --color-surface: var(--neutral-90);
+  --color-border: var(--neutral-60);
+  --color-border-light: var(--neutral-80);
+  --color-primary: var(--brand-grape);
+  --color-accent: var(--brand-apricot);
+  --color-success: var(--brand-green);
+  --color-warning: #F5A623;
+  --color-danger: #D32F2F;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Layout */
+  --content-max-width: 650px;
+  --line-height: 1.6;
+}
+
+html {
+  font-size: 14px;
+}
+
+/* =============================================================================
+   Base Typography
+   ============================================================================= */
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings - Montserrat font family */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.25;
+  page-break-after: avoid;
+  break-after: avoid-page;
+  break-inside: avoid;
+}
+
+h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+  page-break-before: avoid;
+  break-before: avoid-page;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 800;
+  color: var(--brand-grape);
+  border-bottom: 3px solid var(--brand-apricot);
+  padding-bottom: 12px;
+  margin-top: var(--spacing-xl);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 700;
+  color: var(--brand-grape);
+  border-bottom: 2px solid var(--brand-sand);
+  padding-bottom: 8px;
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  color: var(--brand-indigo);
+}
+
+h4 {
+  font-size: var(--font-size-h4);
+  font-weight: 500;
+  color: var(--brand-indigo);
+}
+
+h5 {
+  font-size: var(--font-size-h5);
+  font-weight: 500;
+  color: var(--brand-indigo);
+}
+
+h6 {
+  font-size: var(--font-size-h6);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* Paragraphs and Links */
+p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--brand-indigo);
+}
+
+a {
+  color: var(--brand-apricot);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--brand-apricot-hover);
+  text-decoration: underline;
+}
+
+/* Strong/Bold text */
+strong, b {
+  color: var(--brand-grape);
+  font-weight: 600;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0 0 var(--spacing-md) 0;
+  padding-left: 2em;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+li {
+  margin-bottom: var(--spacing-xs);
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+li > ul, li > ol {
+  margin-top: var(--spacing-xs);
+  margin-bottom: 0;
+}
+
+/* =============================================================================
+   Code and Preformatted Text
+   ============================================================================= */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 90%;
+  background-color: var(--neutral-90);
+  color: var(--brand-grape);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre {
+  background-color: var(--neutral-90);
+  border: 1px solid var(--neutral-60);
+  border-left: 4px solid var(--brand-grape);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 90%;
+  line-height: 1.45;
+  page-break-inside: avoid;
+  max-width: 100%;
+  white-space: pre-wrap;       /* Wrap long lines instead of horizontal scroll */
+  word-wrap: break-word;       /* Break words if needed */
+  overflow-wrap: break-word;   /* Modern property for word breaking */
+}
+
+pre code {
+  background-color: transparent;
+  color: var(--brand-indigo);
+  padding: 0;
+  font-size: 100%;
+  border-radius: 0;
+  white-space: pre-wrap;       /* Inherit wrapping behavior */
+  word-break: break-all;       /* Break very long strings (like URLs, IDs) */
+}
+
+/* Code blocks that must preserve formatting (explicit class) */
+pre.nowrap,
+pre.preserve-formatting {
+  white-space: pre;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+
+/* =============================================================================
+   Blockquotes - Callout Style
+   ============================================================================= */
+
+blockquote {
+  background-color: var(--brand-sand);
+  border-left: 4px solid var(--brand-apricot);
+  border-radius: 0 8px 8px 0;
+  padding: var(--spacing-md) 20px;
+  margin: var(--spacing-md) 0;
+  color: var(--brand-indigo);
+  font-style: normal;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+blockquote strong {
+  color: var(--brand-grape);
+}
+
+/* =============================================================================
+   Horizontal Rules
+   ============================================================================= */
+
+hr {
+  height: 0;
+  padding: 0;
+  margin: var(--spacing-xl) 0;
+  border: none;
+  border-top: 2px solid var(--brand-sand);
+}
+
+/* =============================================================================
+   Images and Media
+   ============================================================================= */
+
+img {
+  max-width: 100%;
+  height: auto;
+  page-break-inside: avoid;
+  display: block;
+  margin: var(--spacing-md) auto;
+}
+
+figure {
+  margin: var(--spacing-md) 0;
+  text-align: center;
+}
+
+figcaption {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-sm);
+  font-style: italic;
+}
+
+/* =============================================================================
+   Page Layout and Print Rules
+   ============================================================================= */
+
+/* Default page setup */
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+/* Landscape page for wide content */
+@page landscape {
+  size: A4 landscape;
+  margin: 15mm;
+}
+
+.landscape-section {
+  page: landscape;
+}
+
+/* Page break utilities */
+.page-break {
+  page-break-after: always;
+}
+
+.page-break-before {
+  page-break-before: always;
+}
+
+.no-break {
+  page-break-inside: avoid;
+}
+
+/* Section breaks between documents */
+.section-break {
+  page-break-before: always;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 3px solid var(--brand-apricot);
+}
+
+/* =============================================================================
+   Print-Specific Styles
+   ============================================================================= */
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    font-size: 10pt;
+  }
+
+  /* Use grape for links in print */
+  a {
+    text-decoration: none;
+    color: var(--brand-grape);
+  }
+
+  /* Ensure brand colors print correctly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Prevent widows and orphans */
+  p, li, blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Keep headings with following content */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  /* Avoid breaking inside important elements */
+  pre, blockquote, table, figure, img {
+    page-break-inside: avoid;
+  }
+}
+
+/* =============================================================================
+   Utility Classes
+   ============================================================================= */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-muted { color: var(--neutral-20); }
+.text-secondary { color: var(--neutral-40); }
+.text-primary { color: var(--brand-grape); }
+.text-accent { color: var(--brand-apricot); }
+.text-success { color: var(--brand-green); }
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-danger); }
+
+.font-heading { font-family: var(--font-heading); }
+.font-body { font-family: var(--font-primary); }
+.font-mono { font-family: var(--font-mono); }
+.font-small { font-size: var(--font-size-small); }
+.font-large { font-size: var(--font-size-large); }
+
+.bg-sand { background-color: var(--brand-sand); }
+.bg-surface { background-color: var(--neutral-90); }
+
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.mt-md { margin-top: var(--spacing-md); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+/* Status indicators */
+.status-pass { color: var(--brand-green); font-weight: 600; }
+.status-partial { color: var(--brand-apricot); font-weight: 600; }
+.status-fail { color: var(--color-danger); font-weight: 600; }
+
+/* Cards / Callout boxes */
+.card {
+  background: var(--brand-sand);
+  border: 1px solid rgba(62, 74, 97, 0.2);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+}
+
+/* Content footer - for in-body footer elements (NOT Playwright displayHeaderFooter) */
+.content-footer {
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-md);
+  border-top: 2px solid var(--brand-sand);
+  text-align: center;
+  font-size: var(--font-size-small);
+  color: var(--neutral-20);
+}
+
+.content-footer strong {
+  color: var(--brand-grape);
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Rollout Gates Framework"
+  short_description: "Help with Marketo Rollout Gates Framework tasks"
+  default_prompt: "Use $marketo-rollout-gates-framework to execute this workflow safely and produce the expected artifacts."

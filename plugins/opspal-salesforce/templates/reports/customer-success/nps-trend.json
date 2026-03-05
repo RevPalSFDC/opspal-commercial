@@ -1,0 +1,117 @@
+{
+  "templateMetadata": {
+    "templateName": "NPS Trend (12 Months)",
+    "templateVersion": "1.1",
+    "description": "Monthly NPS score trend over the past 12 months",
+    "audience": "CS Leadership, CCO",
+    "useCase": "NPS trend analysis, customer satisfaction tracking"
+  },
+  "reportMetadata": {
+    "name": "NPS Trend - 12 Months",
+    "reportType": "Account",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "reportFilters": [
+      {
+        "column": "NPS_Survey_Date__c",
+        "operator": "equals",
+        "value": "LAST_N_MONTHS:12"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "NPS_Survey_Date__c",
+        "sortOrder": "Asc",
+        "dateGranularity": "Month"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "AVG_NPS",
+        "column": "NPS_Score__c",
+        "aggregateType": "Average"
+      }
+    ],
+    "chart": {
+      "chartType": "Line",
+      "groupingColumn": "NPS_Survey_Date__c",
+      "aggregateColumn": "AVG_NPS"
+    }
+  },
+  "dashboardUsage": {
+    "componentType": "Line Chart",
+    "refreshFrequency": "Daily"
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "enterprise",
+      "high-touch"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified report with essential columns only",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full report with all standard columns"
+      },
+      "enterprise": {
+        "description": "Enterprise focus with ARR-weighted metrics",
+        "filterOverrides": [
+          {
+            "column": "Account.ARR__c",
+            "operator": "greaterOrEqual",
+            "value": "100000"
+          }
+        ]
+      },
+      "high-touch": {
+        "description": "High-touch CS model with engagement metrics",
+        "additionalColumns": [
+          "Last_Touch_Date__c",
+          "Engagement_Score__c"
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": [
+          "Health_Score__c",
+          "Customer_Health__c",
+          "Account_Health__c",
+          "Risk_Level__c"
+        ],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": [
+          "ARR__c",
+          "Annual_Recurring_Revenue__c",
+          "MRR__c"
+        ],
+        "cpqPatterns": [
+          "SBQQ__RenewedAmount__c"
+        ],
+        "dataType": "currency"
+      },
+      "NPS": {
+        "patterns": [
+          "NPS_Score__c",
+          "NPS__c",
+          "Net_Promoter_Score__c"
+        ],
+        "dataType": "number"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+stateDiagram-v2
+  %% HubSpot Contact Lifecycle Template
+  %% Standard lifecycle stages - customize based on your portal
+
+  direction LR
+
+  [*] --> Subscriber
+
+  Subscriber : Newsletter/Content subscriber
+  Subscriber --> Lead : Conversion event
+
+  Lead : Engaged with content
+  Lead --> MQL : Marketing qualified
+  Lead --> Subscriber : Lost interest
+
+  MQL : Marketing Qualified Lead
+  MQL --> SQL : Sales qualified
+  MQL --> Lead : Not ready
+
+  SQL : Sales Qualified Lead
+  SQL --> Opportunity : In active deal
+  SQL --> Lead : Disqualified
+
+  Opportunity : Active sales process
+  Opportunity --> Customer : Deal closed-won
+  Opportunity --> SQL : Deal stalled
+  Opportunity --> Evangelist : Deal closed-lost but engaged
+
+  Customer : Active customer
+  Customer --> Evangelist : High engagement
+  Customer --> Other : Churned
+
+  Evangelist : Promoter/referrer
+  Evangelist --> [*]
+
+  Other : No longer a customer
+  Other --> Lead : Re-engaged
+  Other --> [*]

@@ -1,0 +1,356 @@
+#!/usr/bin/env node
+
+/**
+ * Batch Gate Integration Script
+ * ==============================
+ * Updates all SFDC agents to use the gate validation system
+ */
+
+const fs = require('fs');
+const path = require('path');
+const yaml = require('js-yaml');
+
+class AgentGateIntegrator {
+    constructor() {
+        this.agentsDir = path.join(__dirname, '../agents');
+        this.sharedConfigPath = path.join(this.agentsDir, 'shared/gate-config.yaml');
+        this.updatedAgents = [];
+        this.skippedAgents = [];
+        this.failedAgents = [];
+    }
+
+    /**
+     * Run the integration process
+     */
+    async run() {
+        console.log('🚀 Starting Gate Integration for All SFDC Agents\n');
+
+        // Load shared gate config
+        const sharedConfig = this.loadSharedConfig();
+        
+        // Get all agent files
+        const agentFiles = this.getAgentFiles();
+        
+        console.log(`Found ${agentFiles.length} agent files to process\n`);
+
+        // Process each agent
+        for (const agentFile of agentFiles) {
+            await this.processAgent(agentFile, sharedConfig);
+        }
+
+        // Report results
+        this.reportResults();
+    }
+
+    /**
+     * Load shared gate configuration
+     */
+    loadSharedConfig() {
+        try {
+            const content = fs.readFileSync(this.sharedConfigPath, 'utf8');
+            return yaml.load(content);
+        } catch (error) {
+            console.error('❌ Failed to load shared gate config:', error.message);
+            process.exit(1);
+        }
+    }
+
+    /**
+     * Get all agent YAML files
+     */
+    getAgentFiles() {
+        const files = fs.readdirSync(this.agentsDir);
+        return files
+            .filter(file => file.endsWith('.yaml') && file.startsWith('sfdc-'))
+            .map(file => path.join(this.agentsDir, file));
+    }
+
+    /**
+     * Process a single agent file
+     */
+    async processAgent(agentFile, sharedConfig) {
+        const agentName = path.basename(agentFile, '.yaml');
+        
+        try {
+            console.log(`\n📝 Processing: ${agentName}`);
+
+            // Read agent file
+            let content = fs.readFileSync(agentFile, 'utf8');
+            const agent = yaml.load(content);
+
+            // Check if already integrated
+            if (agent.gate_integration && agent.gate_integration.enabled) {
+                console.log(`  ⏭️  Already integrated, skipping`);
+                this.skippedAgents.push(agentName);
+                return;
+            }
+
+            // Get agent-specific settings from shared config
+            const agentOverrides = sharedConfig.agent_overrides[agentName] || {};
+
+            // Add gate integration section
+            const gateIntegration = this.buildGateIntegration(agentName, agentOverrides);
+            
+            // Update the agent configuration
+            content = this.updateAgentContent(content, agent, gateIntegration, agentName);
+
+            // Write updated file
+            fs.writeFileSync(agentFile, content, 'utf8');
+            
+            console.log(`  ✅ Successfully integrated gates`);
+            this.updatedAgents.push(agentName);
+
+        } catch (error) {
+            console.error(`  ❌ Failed to process: ${error.message}`);
+            this.failedAgents.push({ agent: agentName, error: error.message });
+        }
+    }
+
+    /**
+     * Build gate integration configuration for agent
+     */
+    buildGateIntegration(agentName, overrides) {
+        const baseConfig = {
+            enabled: true,
+            config_import: '@/agents/shared/gate-config.yaml',
+            enforcement_level: overrides.enforcement_level || 'strict'
+        };
+
+        // Add agent-specific settings
+        if (overrides.auto_fallback !== undefined) {
+            baseConfig.auto_fallback = overrides.auto_fallback;
+        }
+        if (overrides.require_approval_for_production) {
+            baseConfig.require_approval_for_production = true;
+        }
+        if (overrides.validate_all_changes) {
+            baseConfig.validate_all_changes = true;
+        }
+        if (overrides.block_mass_deletes) {
+            baseConfig.block_mass_deletes = true;
+        }
+        if (overrides.require_test_coverage) {
+            baseConfig.require_test_coverage = true;
+            baseConfig.min_coverage = overrides.min_coverage || 75;
+        }
+
+        return baseConfig;
+    }
+
+    /**
+     * Update agent content with gate integration
+     */
+    updateAgentContent(content, agent, gateIntegration, agentName) {
+        // Convert gate integration to YAML
+        const gateYaml = yaml.dump({ gate_integration: gateIntegration }, {
+            indent: 2,
+            lineWidth: 120
+        });
+
+        // Find where to insert gate integration (after tools section)
+        const toolsMatch = content.match(/tools:[\s\S]*?(?=\n[a-z_]+:|$)/);
+        if (toolsMatch) {
+            const insertPoint = toolsMatch.index + toolsMatch[0].length;
+            content = content.slice(0, insertPoint) + '\n' + gateYaml + content.slice(insertPoint);
+        }
+
+        // Update execution_priority section if it exists
+        if (content.includes('execution_priority:')) {
+            content = this.updateExecutionPriority(content, agentName);
+        }
+
+        // Update deployment commands if they exist
+        if (content.includes('deployment_commands:') || content.includes('commands:')) {
+            content = this.updateCommands(content, agentName);
+        }
+
+        // Update prompts to mention gate validation
+        if (content.includes('prompts:')) {
+            content = this.updatePrompts(content);
+        }
+
+        return content;
+    }
+
+    /**
+     * Update execution priority section
+     */
+    updateExecutionPriority(content, agentName) {
+        // Add gate protocol to execution priority
+        const gateProtocol = `
+  gate_protocol:
+    - All operations MUST go through gate validation
+    - Use: node agents/execution/agent-executor.js
+    - Never bypass gates without emergency override`;
+
+        // Insert after fallback_method if it exists
+        const fallbackMatch = content.match(/fallback_method:[\s\S]*?(?=\n[a-z_]+:|$)/);
+        if (fallbackMatch && !content.includes('gate_protocol:')) {
+            const insertPoint = fallbackMatch.index + fallbackMatch[0].length;
+            content = content.slice(0, insertPoint) + gateProtocol + content.slice(insertPoint);
+        }
+
+        // Add route through agent-executor
+        content = content.replace(
+            /- ALWAYS attempt MCP salesforce-dx tools first/,
+            '- ALWAYS attempt MCP salesforce-dx tools first\n    - Route all operations through agent-executor.js'
+        );
+
+        return content;
+    }
+
+    /**
+     * Update command sections to use gate system
+     */
+    updateCommands(content, agentName) {
+        // Common command patterns to update
+        const commandReplacements = [
+            {
+                pattern: /sf project deploy start/g,
+                replacement: `node agents/execution/agent-executor.js deploy ${agentName} --command "sf project deploy start"`
+            },
+            {
+                pattern: /sf project deploy start/g,
+                replacement: `node agents/execution/agent-executor.js deploy ${agentName} --command "sf project deploy start"`
+            },
+            {
+                pattern: /sf data query/g,
+                replacement: `node agents/execution/agent-executor.js query ${agentName} --command "sf data query"`
+            }
+        ];
+
+        // Apply replacements selectively (only in command sections)
+        const commandSectionMatch = content.match(/(deployment_commands:|commands:)[\s\S]*?(?=\n[a-z_]+:|$)/);
+        if (commandSectionMatch) {
+            let commandSection = commandSectionMatch[0];
+            
+            // Add comment about gate routing
+            if (!commandSection.includes('ROUTED THROUGH GATE')) {
+                commandSection = commandSection.replace(
+                    /(deployment_commands:|commands:)/,
+                    '$1\n  # ALL COMMANDS NOW ROUTED THROUGH GATE SYSTEM'
+                );
+            }
+
+            // Apply command replacements
+            for (const { pattern, replacement } of commandReplacements) {
+                if (commandSection.match(pattern)) {
+                    commandSection = commandSection.replace(pattern, replacement);
+                }
+            }
+
+            content = content.replace(commandSectionMatch[0], commandSection);
+        }
+
+        return content;
+    }
+
+    /**
+     * Update prompts to mention gate validation
+     */
+    updatePrompts(content) {
+        // Add gate validation step to prompts
+        const promptPatterns = [
+            {
+                pattern: /When (planning|executing|deploying)/g,
+                replacement: 'When $1'
+            }
+        ];
+
+        // Check if prompts mention MCP/gates
+        const promptMatch = content.match(/prompts:[\s\S]*?(?=\n[a-z_]+:|$)/);
+        if (promptMatch && !promptMatch[0].includes('gate')) {
+            // Add gate validation mention
+            const updatedPrompt = promptMatch[0].replace(
+                /1\. /,
+                '1. Verify MCP tools are available (primary method)\n    2. '
+            ).replace(/(\d)\. /g, (match, num) => {
+                if (num !== '1') {
+                    return `${parseInt(num) + 1}. `;
+                }
+                return match;
+            });
+
+            content = content.replace(promptMatch[0], updatedPrompt);
+        }
+
+        return content;
+    }
+
+    /**
+     * Report integration results
+     */
+    reportResults() {
+        console.log('\n' + '='.repeat(60));
+        console.log('GATE INTEGRATION RESULTS');
+        console.log('='.repeat(60));
+
+        console.log(`\n✅ Successfully Updated: ${this.updatedAgents.length} agents`);
+        if (this.updatedAgents.length > 0) {
+            this.updatedAgents.forEach(agent => console.log(`   - ${agent}`));
+        }
+
+        console.log(`\n⏭️  Already Integrated: ${this.skippedAgents.length} agents`);
+        if (this.skippedAgents.length > 0) {
+            this.skippedAgents.forEach(agent => console.log(`   - ${agent}`));
+        }
+
+        if (this.failedAgents.length > 0) {
+            console.log(`\n❌ Failed: ${this.failedAgents.length} agents`);
+            this.failedAgents.forEach(({ agent, error }) => {
+                console.log(`   - ${agent}: ${error}`);
+            });
+        }
+
+        console.log('\n' + '='.repeat(60));
+        console.log('\nNEXT STEPS:');
+        console.log('1. Review updated agent files for accuracy');
+        console.log('2. Test gate integration with: npm test');
+        console.log('3. Deploy to sandbox for validation');
+        console.log('4. Monitor gate decisions in deployment-logs/');
+    }
+}
+
+// Run if executed directly
+if (require.main === module) {
+    const integrator = new AgentGateIntegrator();
+    
+    // Check for command line options
+    const args = process.argv.slice(2);
+    
+    if (args.includes('--help') || args.includes('-h')) {
+        console.log(`
+Gate Integration Script
+=======================
+
+This script updates all SFDC agents to use the gate validation system.
+
+Usage:
+  node integrate-gates-to-agents.js [options]
+
+Options:
+  --dry-run    Show what would be changed without modifying files
+  --force      Re-integrate even if already integrated
+  --agent      Update specific agent only
+  --help       Show this help message
+
+Examples:
+  # Update all agents
+  node integrate-gates-to-agents.js
+  
+  # Update specific agent
+  node integrate-gates-to-agents.js --agent sfdc-apex-developer
+  
+  # Dry run to preview changes
+  node integrate-gates-to-agents.js --dry-run
+`);
+        process.exit(0);
+    }
+
+    integrator.run().catch(error => {
+        console.error('Fatal error:', error);
+        process.exit(1);
+    });
+}
+
+module.exports = AgentGateIntegrator;

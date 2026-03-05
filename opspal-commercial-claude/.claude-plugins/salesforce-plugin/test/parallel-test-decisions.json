@@ -1,0 +1,52 @@
+{
+  "decisions": [
+    {
+      "pair_id": "001TI00000UMd1gYAD_001TI00000SWBeXYAX",
+      "recommended_survivor": "001TI00000UMd1gYAD",
+      "recommended_deleted": "001TI00000SWBeXYAX",
+      "decision": "APPROVE",
+      "confidence_score": 0.95,
+      "reason": "Test pair 1"
+    },
+    {
+      "pair_id": "001TI00000SVw7tYAD_001TI00000SW5NrYAL",
+      "recommended_survivor": "001TI00000SVw7tYAD",
+      "recommended_deleted": "001TI00000SW5NrYAL",
+      "decision": "APPROVE",
+      "confidence_score": 0.92,
+      "reason": "Test pair 2"
+    },
+    {
+      "pair_id": "001TI00000UMd1gYAD_001TI00000SVw7tYAD",
+      "recommended_survivor": "001TI00000UMd1gYAD",
+      "recommended_deleted": "001TI00000SVw7tYAD",
+      "decision": "APPROVE",
+      "confidence_score": 0.88,
+      "reason": "Test pair 3"
+    },
+    {
+      "pair_id": "001TI00000SWBeXYAX_001TI00000SW6onYAD",
+      "recommended_survivor": "001TI00000SWBeXYAX",
+      "recommended_deleted": "001TI00000SW6onYAD",
+      "decision": "APPROVE",
+      "confidence_score": 0.91,
+      "reason": "Test pair 4"
+    },
+    {
+      "pair_id": "001TI00000SW5NrYAL_001TI00000SW6onYAD",
+      "recommended_survivor": "001TI00000SW5NrYAL",
+      "recommended_deleted": "001TI00000SW6onYAD",
+      "decision": "APPROVE",
+      "confidence_score": 0.89,
+      "reason": "Test pair 5"
+    }
+  ],
+  "summary": {
+    "total_pairs": 5,
+    "approved": 5,
+    "rejected": 0,
+    "review_required": 0
+  },
+  "test_mode": true,
+  "created_at": "2025-10-16T00:00:00Z"
+}

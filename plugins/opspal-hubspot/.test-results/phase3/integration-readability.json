@@ -1,0 +1,233 @@
+{
+  "url": ".test-results/phase3/mock-content.html",
+  "overallGrade": 18.2,
+  "gradeDescription": "Professional (College) - Technical/professional content",
+  "assessment": "Very Difficult - College+ level content",
+  "readabilityScores": {
+    "fleschReadingEase": {
+      "score": 16.3,
+      "interpretation": "Very Difficult (College graduate)"
+    },
+    "fleschKincaidGrade": {
+      "grade": 15.9,
+      "description": "Professional (College) - Technical/professional content"
+    },
+    "gunningFog": {
+      "score": 19.8,
+      "description": "Professional (College) - Technical/professional content"
+    },
+    "smogIndex": {
+      "score": null,
+      "description": "Requires at least 30 sentences for accurate calculation",
+      "note": "Using simplified calculation for shorter content"
+    },
+    "colemanLiau": {
+      "grade": 19.2,
+      "description": "Professional (College) - Technical/professional content"
+    },
+    "automatedReadabilityIndex": {
+      "grade": 17.7,
+      "description": "Professional (College) - Technical/professional content"
+    }
+  },
+  "sentenceAnalysis": {
+    "totalSentences": 13,
+    "avgSentenceLength": 19.7,
+    "shortSentences": 2,
+    "longSentences": 3,
+    "veryLongSentences": 1,
+    "complexSentences": 9,
+    "longestSentence": {
+      "text": "Here are the key steps: Assess your current state and identify gaps Define clear objectives and key results Hire the right talent with cross-functional experience Implement the right technology stack ...",
+      "wordCount": 56
+    },
+    "examples": {
+      "long": [
+        "Complete Guide to Revenue Operations Complete Guide to Revenue Operations Revenue operations (RevOps) is a strategic approach to aligning sales, marke...",
+        "Key Components of RevOps Data management and analytics Technology stack optimization Process standardization Performance metrics Cross-functional alig...",
+        "Here are the key steps: Assess your current state and identify gaps Define clear objectives and key results Hire the right talent with cross-functiona..."
+      ],
+      "veryLong": [
+        "Here are the key steps: Assess your current state and identify gaps Define clear objectives and key results Hire the right talent with cross-functiona..."
+      ]
+    }
+  },
+  "paragraphAnalysis": {
+    "totalParagraphs": 1,
+    "avgSentencesPerParagraph": 13,
+    "shortParagraphs": 0,
+    "longParagraphs": 1,
+    "veryLongParagraphs": 1,
+    "longestParagraph": {
+      "sentenceCount": 13,
+      "preview": "Complete Guide to Revenue Operations Complete Guide to Revenue Operations Revenue operations (RevOps) is a strategic approach to aligning sales, marketing, and customer success teams around a unified ..."
+    },
+    "examples": {
+      "long": [
+        "Complete Guide to Revenue Operations Complete Guide to Revenue Operations Revenue operations (RevOps) is a strategic approach to aligning sales, marke..."
+      ]
+    }
+  },
+  "passiveVoice": {
+    "percentage": 0,
+    "count": 0,
+    "totalSentences": 13,
+    "examples": [],
+    "assessment": "Excellent - No passive voice detected"
+  },
+  "transitionWords": {
+    "percentage": 54,
+    "count": 7,
+    "totalSentences": 13,
+    "needsMore": false,
+    "byCategory": {
+      "addition": 0,
+      "comparison": 0,
+      "contrast": 1,
+      "example": 1,
+      "result": 2,
+      "time": 3,
+      "emphasis": 0,
+      "conclusion": 0
+    },
+    "examples": [
+      {
+        "category": "contrast",
+        "word": "however",
+        "sentence": "However, these challenges can be overcome with proper planning and communication"
+      },
+      {
+        "category": "example",
+        "word": "including",
+        "sentence": "Common Challenges Organizations often face challenges when implementing revenue operations, including data silos, resistance to change, and lack of ex..."
+      },
+      {
+        "category": "result",
+        "word": "so",
+        "sentence": "Here are the key steps: Assess your current state and identify gaps Define clear objectives and key results Hire the right talent with cross-functiona..."
+      },
+      {
+        "category": "result",
+        "word": "so",
+        "sentence": "Common Challenges Organizations often face challenges when implementing revenue operations, including data silos, resistance to change, and lack of ex..."
+      },
+      {
+        "category": "time",
+        "word": "first",
+        "sentence": "Here are the key steps: Assess your current state and identify gaps Define clear objectives and key results Hire the right talent with cross-functiona..."
+      }
+    ],
+    "assessment": "Excellent - Strong use of transitions"
+  },
+  "vocabulary": {
+    "totalWords": 256,
+    "uniqueWords": 152,
+    "avgWordLength": 6.1,
+    "avgSyllablesPerWord": 2,
+    "complexWords": {
+      "count": 76,
+      "percentage": 30,
+      "examples": [
+        "revenue",
+        "operations",
+        "strategic",
+        "aligning",
+        "marketing",
+        "unified",
+        "comprehensive",
+        "successful",
+        "alignment",
+        "lifecycle"
+      ]
+    },
+    "veryComplexWords": {
+      "count": 36,
+      "examples": [
+        "operations",
+        "comprehensive",
+        "everything",
+        "lifecycle",
+        "operational"
+      ]
+    },
+    "longWords": {
+      "count": 44,
+      "examples": [
+        "operations",
+        "comprehensive",
+        "everything",
+        "successful",
+        "operational"
+      ]
+    },
+    "assessment": "Very Complex - May be difficult for readers"
+  },
+  "recommendations": [
+    {
+      "type": "readability",
+      "severity": "high",
+      "title": "Content is too complex",
+      "issue": "Average grade level: 18.2 (College+)",
+      "action": "Simplify language to reach 9th-10th grade level for general audience",
+      "impact": 9
+    },
+    {
+      "type": "sentence_complexity",
+      "severity": "high",
+      "title": "Very long sentences detected",
+      "issue": "1 sentences with 35+ words",
+      "action": "Break long sentences into shorter ones (target: 15-20 words)",
+      "impact": 8,
+      "examples": [
+        "Here are the key steps: Assess your current state and identify gaps Define clear objectives and key results Hire the right talent with cross-functiona..."
+      ]
+    },
+    {
+      "type": "paragraph_structure",
+      "severity": "high",
+      "title": "Very long paragraphs detected",
+      "issue": "1 paragraphs with 10+ sentences",
+      "action": "Break paragraphs into smaller chunks (target: 3-5 sentences)",
+      "impact": 7,
+      "examples": [
+        "Complete Guide to Revenue Operations Complete Guide to Revenue Operations Revenue operations (RevOps) is a strategic approach to aligning sales, marke..."
+      ]
+    },
+    {
+      "type": "vocabulary",
+      "severity": "high",
+      "title": "Very complex vocabulary",
+      "issue": "30% complex words (3+ syllables)",
+      "action": "Replace complex words with simpler alternatives",
+      "impact": 7,
+      "examples": [
+        "revenue",
+        "operations",
+        "strategic",
+        "aligning",
+        "marketing"
+      ]
+    }
+  ],
+  "summary": {
+    "gradeLevel": 18.2,
+    "assessment": "Very Difficult - College+ level content",
+    "readingTime": "2 minutes",
+    "keyMetrics": {
+      "avgSentenceLength": 19.7,
+      "avgParagraphLength": 13,
+      "passiveVoicePercent": 0,
+      "transitionWordPercent": 54
+    },
+    "issues": {
+      "critical": 4,
+      "warnings": 0,
+      "total": 4
+    },
+    "topIssues": [
+      "Content is too complex",
+      "Very long sentences detected",
+      "Very long paragraphs detected"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketo Governance Audit Framework"
+  short_description: "Help with Marketo Governance Audit Framework tasks"
+  default_prompt: "Use $marketo-governance-audit-framework to execute this workflow safely and produce the expected artifacts."

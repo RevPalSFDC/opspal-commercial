@@ -1,0 +1,238 @@
+{
+  "templateMetadata": {
+    "templateName": "MQL to SQL Conversion Rate",
+    "templateVersion": "1.1",
+    "description": "Measure lead quality by tracking conversion from Marketing Qualified Lead (MQL) to Sales Qualified Lead (SQL)",
+    "audience": "Marketing Operations, Demand Generation, Sales Enablement",
+    "useCase": "Track lead quality, identify high-performing campaigns, optimize MQL criteria",
+    "customizationPoints": [
+      "MQL_Date__c field name",
+      "SQL_Date__c field name",
+      "Campaign grouping (optional)",
+      "Date range filter",
+      "Lead source or segment filters"
+    ],
+    "prerequisites": [
+      "MQL_Date__c field on Contact object (Date field)",
+      "SQL_Date__c field on Contact object (Date field)",
+      "Is_MQL__c and Is_SQL__c formula fields (recommended)"
+    ]
+  },
+  "reportMetadata": {
+    "name": "MQL to SQL Conversion - {Period}",
+    "description": "MQL to SQL conversion rate with days-to-convert metrics",
+    "reportType": "ContactList",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "Contact.MQL_Date__c",
+        "operator": "equals",
+        "value": "THIS_QUARTER",
+        "customizable": true,
+        "customizationNote": "Filter to MQLs created in target period"
+      },
+      {
+        "column": "Contact.MQL_Date__c",
+        "operator": "notEqual",
+        "value": "",
+        "customizable": false,
+        "customizationNote": "Only include contacts that reached MQL stage"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "LEAD_SOURCE",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": true,
+        "customizationNote": "Can group by Campaign, Campaign Type, or other segment"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "FULL_NAME",
+      "EMAIL",
+      "ACCOUNT_NAME",
+      "LEAD_SOURCE",
+      "Contact.MQL_Date__c",
+      "Contact.SQL_Date__c",
+      "Contact.Days_to_SQL__c"
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount",
+        "aggregateType": "Sum",
+        "description": "Total MQLs"
+      },
+      {
+        "name": "Contact.SQL_Date__c",
+        "aggregateType": "Sum",
+        "description": "Total SQLs (count of non-null SQL dates)",
+        "note": "This counts contacts with SQL_Date populated"
+      },
+      {
+        "name": "Contact.Days_to_SQL__c",
+        "aggregateType": "Average",
+        "description": "Average days from MQL to SQL"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "MQL_to_SQL_Conversion_Rate",
+        "description": "Percentage of MQLs that became SQLs",
+        "formula": "(COUNT_SQL_Date / RowCount) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "Create as custom summary formula in report builder"
+      },
+      {
+        "name": "Median_Days_to_SQL",
+        "description": "Median time to convert MQL to SQL",
+        "formula": "MEDIAN(Days_to_SQL__c)",
+        "dataType": "number",
+        "decimalPlaces": 1,
+        "note": "Requires calculating in report or using Einstein Analytics"
+      }
+    ],
+    "chart": {
+      "chartType": "VerticalColumnGrouped",
+      "groupingColumn": "LEAD_SOURCE",
+      "aggregateColumns": [
+        "RowCount:MQL",
+        "RowCount:SQL"
+      ],
+      "legendPosition": "Bottom",
+      "showChartValues": true,
+      "chartColorPalette": "custom",
+      "chartColors": {
+        "MQL": "#3498db",
+        "SQL": "#27ae60"
+      }
+    }
+  },
+  "calculatedFieldsRequired": [
+    {
+      "fieldName": "Days_to_SQL__c",
+      "fieldType": "Formula (Number)",
+      "formula": "IF(NOT(ISBLANK(SQL_Date__c)), SQL_Date__c - MQL_Date__c, NULL)",
+      "description": "Number of days from MQL to SQL",
+      "object": "Contact"
+    },
+    {
+      "fieldName": "Is_MQL__c",
+      "fieldType": "Formula (Checkbox)",
+      "formula": "NOT(ISBLANK(MQL_Date__c))",
+      "description": "True if contact reached MQL stage",
+      "object": "Contact"
+    },
+    {
+      "fieldName": "Is_SQL__c",
+      "fieldType": "Formula (Checkbox)",
+      "formula": "NOT(ISBLANK(SQL_Date__c))",
+      "description": "True if contact reached SQL stage",
+      "object": "Contact"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Create MQL_Date__c and SQL_Date__c date fields on Contact (if not exists)",
+      "2. Create Days_to_SQL__c formula field (see calculatedFieldsRequired)",
+      "3. Verify Lead Source picklist has values populated",
+      "4. Update date range filter to target period",
+      "5. Deploy report to Marketing Reports folder",
+      "6. Create custom summary formula for conversion rate in report builder"
+    ],
+    "expectedResults": {
+      "benchmarkConversionRates": {
+        "Excellent": ">50%",
+        "Good": "30-50%",
+        "Fair": "15-30%",
+        "Poor": "<15%"
+      },
+      "benchmarkTimeToSQL": {
+        "Fast": "<7 days",
+        "Medium": "7-14 days",
+        "Slow": "14-30 days",
+        "VeryS low": ">30 days"
+      }
+    }
+  },
+  "relatedTemplates": [
+    "lifecycle-funnel.json",
+    "campaign-roi.json"
+  ],
+  "variations": {
+    "schemaVersion": "1.0",
+    "availableVariations": [
+      "simple",
+      "standard",
+      "plg",
+      "abm"
+    ],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing report",
+        "reportOverrides": {
+          "maxColumns": 5
+        }
+      },
+      "standard": {
+        "description": "Full marketing report"
+      },
+      "plg": {
+        "description": "Product-led growth focus",
+        "filterOverrides": [
+          {
+            "column": "LeadSource",
+            "operator": "contains",
+            "value": "Product"
+          }
+        ]
+      },
+      "abm": {
+        "description": "Account-based marketing focus",
+        "filterOverrides": [
+          {
+            "column": "Campaign.Type",
+            "operator": "equals",
+            "value": "ABM"
+          }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQLDate": {
+        "patterns": [
+          "MQL_Date__c",
+          "Marketing_Qualified_Date__c",
+          "Qualified_Date__c"
+        ],
+        "dataType": "date"
+      },
+      "LeadScore": {
+        "patterns": [
+          "Lead_Score__c",
+          "Score__c",
+          "Marketing_Score__c"
+        ],
+        "dataType": "number"
+      },
+      "CampaignCost": {
+        "patterns": [
+          "ActualCost",
+          "BudgetedCost",
+          "Campaign_Spend__c"
+        ],
+        "dataType": "currency"
+      }
+    }
+  }
+}

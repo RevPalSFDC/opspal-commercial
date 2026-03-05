@@ -1,0 +1,264 @@
+{
+  "id": "sales-pipeline",
+  "name": "Sales Pipeline Dashboard",
+  "description": "Pipeline health, stage distribution, and opportunity tracking for sales teams",
+  "version": "1.0.0",
+  "category": "sales",
+  "audience": ["sales-manager", "sales-rep", "executive"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "time-period", "type": "select", "label": "Time Period", "default": "this-quarter", "options": ["this-quarter", "last-quarter", "this-month", "last-30-days", "last-90-days"] },
+      { "id": "owner", "type": "user-lookup", "label": "Sales Rep", "default": "all" },
+      { "id": "stage", "type": "multi-select", "label": "Stage", "default": "all" }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "total-pipeline",
+      "type": "kpi",
+      "title": "Total Pipeline",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "icon": "dollar"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "pipeline-total",
+        "valueField": "totalAmount",
+        "trendField": "priorValue"
+      },
+      "demoData": "kpis.totalPipeline"
+    },
+    {
+      "id": "open-opportunities",
+      "type": "kpi",
+      "title": "Open Opportunities",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "icon": "briefcase"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "pipeline-count",
+        "valueField": "total"
+      },
+      "demoData": "kpis.openOpportunities"
+    },
+    {
+      "id": "win-rate",
+      "type": "kpi",
+      "title": "Win Rate",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "icon": "trophy"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "win-rate",
+        "valueField": "rate"
+      },
+      "demoData": "kpis.winRate"
+    },
+    {
+      "id": "avg-deal-size",
+      "type": "kpi",
+      "title": "Avg Deal Size",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "icon": "chart-bar"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "avg-deal-size"
+      },
+      "demoData": "kpis.avgDealSize"
+    },
+    {
+      "id": "pipeline-by-stage",
+      "type": "chart",
+      "title": "Pipeline by Stage",
+      "position": { "row": 2, "col": 1, "colspan": 6, "rowspan": 2 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "currency-compact"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "pipeline-by-stage",
+        "labelField": "StageName",
+        "valueField": "amount"
+      },
+      "demoData": "pipelineByStage"
+    },
+    {
+      "id": "pipeline-trend",
+      "type": "chart",
+      "title": "Pipeline Trend",
+      "position": { "row": 2, "col": 7, "colspan": 6, "rowspan": 2 },
+      "config": {
+        "chartType": "line",
+        "showLegend": true,
+        "fill": true,
+        "tension": 0.3
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "pipeline-trend"
+      },
+      "demoData": "pipelineTrend"
+    },
+    {
+      "id": "top-opportunities",
+      "type": "table",
+      "title": "Top Opportunities",
+      "position": { "row": 4, "col": 1, "colspan": 12 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Opportunity", "width": "25%" },
+          { "field": "ownerName", "label": "Owner", "width": "15%" },
+          { "field": "amount", "label": "Amount", "format": "currency", "width": "15%", "align": "right" },
+          { "field": "stageName", "label": "Stage", "width": "15%" },
+          { "field": "closeDate", "label": "Close Date", "format": "date", "width": "12%" },
+          { "field": "daysInStage", "label": "Days in Stage", "width": "10%", "align": "center" },
+          { "field": "probability", "label": "Prob", "format": "percent", "width": "8%", "align": "center" }
+        ],
+        "sortable": true,
+        "pagination": true,
+        "pageSize": 10,
+        "rowHighlight": {
+          "field": "daysInStage",
+          "thresholds": [
+            { "value": 30, "color": "#FEF3C7" },
+            { "value": 60, "color": "#FEE2E2" }
+          ]
+        }
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "top-opportunities"
+      },
+      "demoData": "topOpportunities"
+    },
+    {
+      "id": "conversion-funnel",
+      "type": "chart",
+      "title": "Conversion Funnel",
+      "position": { "row": 5, "col": 1, "colspan": 6 },
+      "config": {
+        "chartType": "funnel",
+        "showConversionRates": true,
+        "showCounts": true
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "conversion-funnel"
+      },
+      "demoData": "conversionFunnel"
+    },
+    {
+      "id": "sales-by-rep",
+      "type": "chart",
+      "title": "Pipeline by Rep",
+      "position": { "row": 5, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "currency-compact"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "pipeline-by-rep"
+      },
+      "demoData": "salesByRep"
+    }
+  ],
+
+  "dataBindings": {
+    "pipeline-total": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["SUM(Amount) totalAmount"],
+        "filters": ["IsClosed = false"],
+        "dateField": "CloseDate"
+      },
+      "hubspot": {
+        "object": "deals",
+        "aggregation": "sum",
+        "property": "amount",
+        "filters": { "dealstage": { "notIn": ["closedwon", "closedlost"] } }
+      }
+    },
+    "pipeline-count": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["COUNT(Id) total"],
+        "filters": ["IsClosed = false"],
+        "dateField": "CloseDate"
+      }
+    },
+    "win-rate": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["COUNT(Id) total", "SUM(CASE WHEN IsWon = true THEN 1 ELSE 0 END) won"],
+        "filters": ["IsClosed = true"],
+        "dateField": "CloseDate",
+        "transform": "(won / total) * 100"
+      }
+    },
+    "pipeline-by-stage": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["StageName", "COUNT(Id) count", "SUM(Amount) amount"],
+        "filters": ["IsClosed = false"],
+        "groupBy": ["StageName"],
+        "orderBy": "StageName"
+      }
+    },
+    "top-opportunities": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["Name", "Owner.Name ownerName", "Amount", "StageName", "CloseDate", "Probability"],
+        "filters": ["IsClosed = false"],
+        "orderBy": "Amount DESC",
+        "limit": 20
+      }
+    }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "stageColors": {
+      "Prospecting": "#94A3B8",
+      "Qualification": "#60A5FA",
+      "Proposal": "#818CF8",
+      "Negotiation": "#F59E0B",
+      "Closed Won": "#22C55E",
+      "Closed Lost": "#EF4444"
+    }
+  }
+}

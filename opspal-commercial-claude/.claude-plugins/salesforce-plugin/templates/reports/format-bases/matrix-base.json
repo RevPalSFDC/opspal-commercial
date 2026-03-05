@@ -1,0 +1,201 @@
+{
+    "templateMetadata": {
+        "templateName": "Matrix Report Base Template",
+        "templateVersion": "1.0",
+        "description": "Base scaffold for MATRIX reports with row and column groupings.",
+        "audience": "Salesforce Admins, RevOps Analysts",
+        "useCase": "Create cross-tab reports for multi-dimensional analysis.",
+        "customizationPoints": [
+            "Row and column groupings",
+            "Aggregate fields",
+            "Date filters and scope"
+        ],
+        "prerequisites": [
+            "Valid report type access",
+            "Folder permissions",
+            "Field names aligned to org schema"
+        ]
+    },
+    "_meta": {
+        "template": "matrix-base",
+        "version": "1.0.0",
+        "description": "Base template for MATRIX format reports",
+        "documentation": "../../docs/runbooks/report-api-development/04-matrix-reports.md",
+        "rowLimit": 2000,
+        "rowLimitWarning": "MATRIX format shares SUMMARY's 2,000-row limit via REST API",
+        "supportsGroupings": true,
+        "maxGroupingsDown": 3,
+        "maxGroupingsAcross": 2,
+        "supportsAggregates": true,
+        "useCase": "Cross-tabulation, pivot tables, two-dimensional analysis",
+        "variables": [
+            "{{REPORT_NAME}}",
+            "{{REPORT_TYPE}}",
+            "{{FOLDER_ID}}",
+            "{{SCOPE}}",
+            "{{ROW_GROUPING}}",
+            "{{COLUMN_GROUPING}}",
+            "{{DATE_FILTER_COLUMN}}",
+            "{{DATE_FILTER_DURATION}}",
+            "{{AGGREGATE_FIELD}}"
+        ]
+    },
+    "reportMetadata": {
+        "name": "{{REPORT_NAME}}",
+        "description": "MATRIX format report - cross-tabulation with row and column groupings",
+        "reportFormat": "MATRIX",
+        "reportType": {
+            "type": "{{REPORT_TYPE}}"
+        },
+        "folderId": "{{FOLDER_ID}}",
+        "scope": "{{SCOPE}}",
+        "detailColumns": [],
+        "groupingsDown": [
+            {
+                "name": "{{ROW_GROUPING}}",
+                "sortOrder": "Asc",
+                "dateGranularity": null
+            }
+        ],
+        "groupingsAcross": [
+            {
+                "name": "{{COLUMN_GROUPING}}",
+                "sortOrder": "Asc",
+                "dateGranularity": null
+            }
+        ],
+        "aggregates": [
+            {
+                "name": "s!AMOUNT",
+                "calculatedFormula": "SUM!AMOUNT"
+            },
+            {
+                "name": "RowCount",
+                "calculatedFormula": "RowCount"
+            }
+        ],
+        "reportFilters": [],
+        "standardDateFilter": {
+            "column": "{{DATE_FILTER_COLUMN}}",
+            "durationValue": "{{DATE_FILTER_DURATION}}",
+            "startDate": null,
+            "endDate": null
+        },
+        "showGrandTotal": true,
+        "showSubtotals": true
+    },
+    "_examples": {
+        "revenue_by_stage_and_quarter": {
+            "name": "Revenue by Stage and Quarter",
+            "reportType": "Opportunity",
+            "groupingsDown": [
+                {"name": "STAGE_NAME", "sortOrder": "Asc"}
+            ],
+            "groupingsAcross": [
+                {"name": "CLOSE_DATE", "sortOrder": "Asc", "dateGranularity": "QUARTER"}
+            ],
+            "aggregates": [
+                {"name": "s!AMOUNT", "calculatedFormula": "SUM!AMOUNT"},
+                {"name": "RowCount", "calculatedFormula": "RowCount"}
+            ]
+        },
+        "pipeline_by_owner_and_stage": {
+            "name": "Pipeline by Owner and Stage",
+            "reportType": "Opportunity",
+            "groupingsDown": [
+                {"name": "FULL_NAME", "sortOrder": "Asc"}
+            ],
+            "groupingsAcross": [
+                {"name": "STAGE_NAME", "sortOrder": "Asc"}
+            ],
+            "aggregates": [
+                {"name": "s!AMOUNT", "calculatedFormula": "SUM!AMOUNT"},
+                {"name": "a!PROBABILITY", "calculatedFormula": "AVG!PROBABILITY"}
+            ],
+            "filters": [
+                {"column": "IsClosed", "operator": "equals", "value": "false"}
+            ]
+        },
+        "accounts_by_industry_and_type": {
+            "name": "Accounts by Industry and Type",
+            "reportType": "AccountList",
+            "groupingsDown": [
+                {"name": "INDUSTRY", "sortOrder": "Asc"}
+            ],
+            "groupingsAcross": [
+                {"name": "TYPE", "sortOrder": "Asc"}
+            ],
+            "aggregates": [
+                {"name": "RowCount", "calculatedFormula": "RowCount"},
+                {"name": "s!ANNUAL_REVENUE", "calculatedFormula": "SUM!ANNUAL_REVENUE"}
+            ]
+        },
+        "monthly_revenue_by_product": {
+            "name": "Monthly Revenue by Product Family",
+            "reportType": "Opportunity",
+            "groupingsDown": [
+                {"name": "Product2.Family", "sortOrder": "Asc"}
+            ],
+            "groupingsAcross": [
+                {"name": "CLOSE_DATE", "sortOrder": "Asc", "dateGranularity": "MONTH"}
+            ],
+            "aggregates": [
+                {"name": "s!AMOUNT", "calculatedFormula": "SUM!AMOUNT"}
+            ],
+            "filters": [
+                {"column": "STAGE_NAME", "operator": "equals", "value": "Closed Won"}
+            ]
+        }
+    },
+    "_factMapKeys": {
+        "description": "MATRIX reports use complex factMap keys combining row and column indices",
+        "format": "{rowIndex}!{columnIndex}",
+        "examples": [
+            "0!0 - First row, first column intersection",
+            "0!T - First row, column grand total",
+            "T!0 - Row grand total, first column",
+            "T!T - Grand total (overall)"
+        ],
+        "nestedGroupings": {
+            "format": "{level1Index}_{level2Index}!{colIndex}",
+            "example": "0_1!2 - Row group 0, subgroup 1, column 2"
+        }
+    },
+    "_sparseGridHandling": {
+        "description": "MATRIX reports may have empty cells (sparse grid)",
+        "detection": "Check if factMap key exists before accessing",
+        "handling": "Use default value (0, null, 'N/A') for missing cells"
+    },
+    "_warnings": [
+        "Row groupings (groupingsDown) are limited to 3 maximum",
+        "Column groupings (groupingsAcross) are limited to 2 maximum",
+        "Large grids (high cardinality groupings) can be slow",
+        "Empty cells in sparse data can be confusing",
+        "Same 2,000-row limit applies as SUMMARY format"
+    ],
+    "_bestPractices": [
+        "Keep row and column groupings to minimal cardinality",
+        "Use date granularity (MONTH, QUARTER) instead of DAY for date columns",
+        "Always test with filters to ensure grid is manageable",
+        "Consider SUMMARY format if you don't need column groupings",
+        "Use detailColumns sparingly - MATRIX is for aggregates",
+        "Handle sparse grids gracefully in code"
+    ],
+    "_dateGranularityOptions": [
+        "DAY",
+        "WEEK",
+        "MONTH",
+        "QUARTER",
+        "YEAR",
+        "FISCAL_QUARTER",
+        "FISCAL_YEAR"
+    ],
+    "_aggregateTypes": [
+        "SUM - Sum of numeric field values",
+        "AVG - Average of numeric field values",
+        "MIN - Minimum value",
+        "MAX - Maximum value",
+        "UNIQUE - Count of unique values",
+        "RowCount - Count of all rows"
+    ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Context Pruning Patterns"
+  short_description: "Help with Hook Context Pruning Patterns tasks"
+  default_prompt: "Use $hook-context-pruning-patterns to execute this workflow safely and produce the expected artifacts."

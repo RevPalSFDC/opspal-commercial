@@ -1,0 +1,108 @@
+{
+    "templateMetadata": {
+        "templateName": "Tabular Report Base Template",
+        "templateVersion": "1.0",
+        "description": "Base scaffold for TABULAR reports focused on detail rows and exports.",
+        "audience": "Salesforce Admins, RevOps Analysts",
+        "useCase": "Build list-style reports for exports and detailed review.",
+        "customizationPoints": [
+            "Detail columns and sorting",
+            "Date filters and scope",
+            "Folder placement"
+        ],
+        "prerequisites": [
+            "Valid report type access",
+            "Folder permissions",
+            "Field names aligned to org schema"
+        ]
+    },
+    "_meta": {
+        "template": "tabular-base",
+        "version": "1.0.0",
+        "description": "Base template for TABULAR format reports",
+        "documentation": "../../docs/runbooks/report-api-development/02-tabular-reports.md",
+        "rowLimit": 50000,
+        "supportsGroupings": false,
+        "supportsAggregates": false,
+        "useCase": "Simple list reports, data exports, detail records",
+        "variables": [
+            "{{REPORT_NAME}}",
+            "{{REPORT_TYPE}}",
+            "{{FOLDER_ID}}",
+            "{{SCOPE}}",
+            "{{DATE_FILTER_COLUMN}}",
+            "{{DATE_FILTER_DURATION}}"
+        ]
+    },
+    "reportMetadata": {
+        "name": "{{REPORT_NAME}}",
+        "description": "TABULAR format report - simple list without groupings",
+        "reportFormat": "TABULAR",
+        "reportType": {
+            "type": "{{REPORT_TYPE}}"
+        },
+        "folderId": "{{FOLDER_ID}}",
+        "scope": "{{SCOPE}}",
+        "detailColumns": [
+            "ACCOUNT_ID",
+            "ACCOUNT_NAME",
+            "CREATED_DATE"
+        ],
+        "reportFilters": [],
+        "standardDateFilter": {
+            "column": "{{DATE_FILTER_COLUMN}}",
+            "durationValue": "{{DATE_FILTER_DURATION}}",
+            "startDate": null,
+            "endDate": null
+        },
+        "sortBy": [
+            {
+                "sortColumn": "CREATED_DATE",
+                "sortOrder": "Desc"
+            }
+        ],
+        "showGrandTotal": false,
+        "showSubtotals": false
+    },
+    "_examples": {
+        "simple_account_list": {
+            "name": "All Accounts List",
+            "reportType": "AccountList",
+            "detailColumns": ["ACCOUNT_ID", "ACCOUNT_NAME", "TYPE", "INDUSTRY", "ANNUAL_REVENUE"],
+            "scope": "organization"
+        },
+        "my_opportunities": {
+            "name": "My Open Opportunities",
+            "reportType": "Opportunity",
+            "detailColumns": ["OPPORTUNITY_NAME", "ACCOUNT_NAME", "AMOUNT", "STAGE_NAME", "CLOSE_DATE"],
+            "scope": "user",
+            "filters": [
+                {"column": "STAGE_NAME", "operator": "notEqual", "value": "Closed Won"},
+                {"column": "STAGE_NAME", "operator": "notEqual", "value": "Closed Lost"}
+            ]
+        },
+        "contact_export": {
+            "name": "Contact Export",
+            "reportType": "ContactList",
+            "detailColumns": ["CONTACT_ID", "CONTACT_NAME", "EMAIL", "PHONE", "TITLE", "ACCOUNT_NAME"],
+            "scope": "organization",
+            "dateFilter": {
+                "column": "CREATED_DATE",
+                "duration": "LAST_N_DAYS:90"
+            }
+        }
+    },
+    "_warnings": [
+        "TABULAR format does NOT support groupings - use SUMMARY if you need subtotals",
+        "TABULAR format does NOT support aggregates - only shows detail rows",
+        "Max 50,000 rows returned - add filters if data exceeds this",
+        "No Grand Total or Subtotal calculations available"
+    ],
+    "_bestPractices": [
+        "Always include a date filter for large datasets",
+        "Limit columns to essential fields only (performance)",
+        "Use TABULAR for data exports and simple lists",
+        "Add sorting for consistent results",
+        "Consider user scope to limit data appropriately"
+    ]
+}

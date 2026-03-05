@@ -1,0 +1,192 @@
+{
+  "templateMetadata": {
+    "templateName": "Campaign ROI Analysis",
+    "templateVersion": "1.0",
+    "description": "Calculate campaign return on investment by comparing influenced revenue to campaign costs",
+    "audience": "Marketing Directors, CMOs, Demand Generation",
+    "useCase": "Measure campaign effectiveness, optimize budget allocation, identify high-ROI channels",
+    "customizationPoints": [
+      "Campaign cost field (ActualCost vs custom field)",
+      "Influenced revenue calculation method",
+      "Campaign type or status filters",
+      "Time period filter"
+    ],
+    "prerequisites": [
+      "Campaign Influence enabled (for multi-touch attribution)",
+      "Campaign costs populated (ActualCost field)",
+      "Opportunities linked to campaigns via Campaign Influence or Primary Campaign Source"
+    ]
+  },
+  "reportMetadata": {
+    "name": "Campaign ROI Analysis - {Period}",
+    "description": "Campaign performance ranked by ROI and influenced revenue",
+    "reportType": "CampaignList",
+    "reportFormat": "SUMMARY",
+    "scope": "organization",
+    "showDetails": true,
+    "reportBooleanFilter": null,
+    "reportFilters": [
+      {
+        "column": "CAMPAIGN.START_DATE",
+        "operator": "equals",
+        "value": "THIS_YEAR",
+        "customizable": true,
+        "customizationNote": "Filter to campaigns started in target period"
+      },
+      {
+        "column": "CAMPAIGN.ACTIVE",
+        "operator": "equals",
+        "value": "1",
+        "customizable": true,
+        "customizationNote": "Set to 0 for inactive, or remove to show all"
+      },
+      {
+        "column": "CAMPAIGN.ACTUAL_COST",
+        "operator": "greaterThan",
+        "value": "0",
+        "customizable": false,
+        "customizationNote": "Only include campaigns with cost data"
+      }
+    ],
+    "groupingsDown": [
+      {
+        "field": "CAMPAIGN.TYPE",
+        "sortOrder": "Asc",
+        "dateGranularity": null,
+        "customizable": true,
+        "customizationNote": "Can group by Campaign Name for individual campaign analysis"
+      }
+    ],
+    "groupingsAcross": [],
+    "detailColumns": [
+      "CAMPAIGN_NAME",
+      "CAMPAIGN.TYPE",
+      "CAMPAIGN.STATUS",
+      "CAMPAIGN.ACTUAL_COST",
+      "CAMPAIGN.NUM_RESPONSES",
+      "CAMPAIGN.NUM_WON_OPPORTUNITIES",
+      "CAMPAIGN.AMOUNT_WON_OPPORTUNITIES"
+    ],
+    "aggregates": [
+      {
+        "name": "CAMPAIGN.ACTUAL_COST",
+        "aggregateType": "Sum",
+        "description": "Total campaign investment"
+      },
+      {
+        "name": "CAMPAIGN.NUM_RESPONSES",
+        "aggregateType": "Sum",
+        "description": "Total responses across campaigns"
+      },
+      {
+        "name": "CAMPAIGN.NUM_WON_OPPORTUNITIES",
+        "aggregateType": "Sum",
+        "description": "Total won opportunities influenced"
+      },
+      {
+        "name": "CAMPAIGN.AMOUNT_WON_OPPORTUNITIES",
+        "aggregateType": "Sum",
+        "description": "Total influenced revenue"
+      }
+    ],
+    "customSummaryFormulas": [
+      {
+        "name": "ROI_Percentage",
+        "description": "Return on Investment as percentage",
+        "formula": "((AMOUNT_WON_OPPORTUNITIES - ACTUAL_COST) / ACTUAL_COST) * 100",
+        "dataType": "percent",
+        "decimalPlaces": 1,
+        "note": "ROI = (Revenue - Cost) / Cost * 100"
+      },
+      {
+        "name": "Cost_Per_Response",
+        "description": "Average cost to generate one response",
+        "formula": "ACTUAL_COST / NUM_RESPONSES",
+        "dataType": "currency",
+        "decimalPlaces": 2
+      },
+      {
+        "name": "Cost_Per_Won_Opportunity",
+        "description": "Average cost to generate one won opportunity",
+        "formula": "ACTUAL_COST / NUM_WON_OPPORTUNITIES",
+        "dataType": "currency",
+        "decimalPlaces": 2
+      },
+      {
+        "name": "Revenue_Per_Dollar_Spent",
+        "description": "Revenue generated per dollar invested",
+        "formula": "AMOUNT_WON_OPPORTUNITIES / ACTUAL_COST",
+        "dataType": "number",
+        "decimalPlaces": 2
+      }
+    ],
+    "chart": {
+      "chartType": "HorizontalBar",
+      "groupingColumn": "CAMPAIGN.TYPE",
+      "aggregateColumn": "ROI_Percentage",
+      "legendPosition": "Right",
+      "showChartValues": true,
+      "sortBy": "Value",
+      "sortOrder": "Descending",
+      "chartColorPalette": "diverging",
+      "chartColors": {
+        "positive": "#27ae60",
+        "negative": "#e74c3c"
+      },
+      "note": "Bar chart showing ROI % by campaign type, sorted highest to lowest"
+    }
+  },
+  "alternativeReportTypes": [
+    {
+      "reportType": "Campaigns with Influenced Opportunities",
+      "when": "Using Campaign Influence for multi-touch attribution",
+      "benefits": "More accurate revenue attribution across multiple touchpoints"
+    },
+    {
+      "reportType": "Campaigns with Opportunities",
+      "when": "Using Primary Campaign Source only",
+      "benefits": "Simpler single-touch attribution"
+    }
+  ],
+  "deploymentInstructions": {
+    "steps": [
+      "1. Verify Campaign Influence is enabled (Setup → Marketing → Campaign Influence)",
+      "2. Ensure ActualCost field is populated on Campaign object",
+      "3. Verify opportunities are linked to campaigns (Campaign Influence or Primary Campaign Source)",
+      "4. Update date range filter to target period",
+      "5. Deploy report to Marketing Reports folder",
+      "6. Create custom summary formulas for ROI, Cost Per Response, etc."
+    ],
+    "expectedResults": {
+      "benchmarkROI": {
+        "Excellent": ">300% (3x return)",
+        "Good": "200-300% (2-3x return)",
+        "Fair": "100-200% (1-2x return)",
+        "Poor": "<100% (negative or break-even)"
+      },
+      "typicalCostPerLead": {
+        "B2B Enterprise": "$100-$500",
+        "B2B SMB": "$50-$150",
+        "B2C": "$10-$50"
+      }
+    }
+  },
+  "troubleshooting": [
+    {
+      "issue": "Zero influenced revenue shown",
+      "solution": "Check Campaign Influence setup, verify opportunities are linked to campaigns"
+    },
+    {
+      "issue": "Cost data missing",
+      "solution": "Populate ActualCost field on Campaign object"
+    },
+    {
+      "issue": "ROI looks unrealistic (too high or too low)",
+      "solution": "Verify attribution model (first-touch, last-touch, or multi-touch)"
+    }
+  ],
+  "relatedTemplates": [
+    "lifecycle-funnel.json",
+    "mql-to-sql-conversion.json"
+  ]
+}

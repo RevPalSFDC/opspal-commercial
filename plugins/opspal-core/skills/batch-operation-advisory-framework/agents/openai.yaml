@@ -1,0 +1,4 @@
+interface:
+  display_name: "Batch Operation Advisory Framework"
+  short_description: "Help with Batch Operation Advisory Framework tasks"
+  default_prompt: "Use $batch-operation-advisory-framework to execute this workflow safely and produce the expected artifacts."

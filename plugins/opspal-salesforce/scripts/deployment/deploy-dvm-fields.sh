@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# DVM Fields Deployment Script
+# Deploys Contact.Is_DVM__c checkbox field and Account.Count_of_DVMs__c rollup summary field
+# to the sample-org-sandbox org
+
+set -e
+
+echo "Starting DVM fields deployment to sample-org-sandbox..."
+
+# Check if SF CLI is available
+if ! command -v sf &> /dev/null; then
+    echo "Error: Salesforce CLI (sf) not found. Please install it first."
+    echo "Run: npm install -g @salesforce/cli"
+    exit 1
+fi
+
+# Set the target org
+TARGET_ORG="sample-org-sandbox"
+
+echo "Target org: $TARGET_ORG"
+
+# Check org authentication
+echo "Checking org authentication..."
+sf org display --target-org "$TARGET_ORG" || {
+    echo "Error: Cannot connect to $TARGET_ORG. Please authenticate first:"
+    echo "sf org login web --alias $TARGET_ORG --instance-url https://test.salesforce.com"
+    exit 1
+}
+
+# Deploy the Contact checkbox field first (required for the rollup summary)
+echo "Deploying Contact.Is_DVM__c checkbox field..."
+sf project deploy start --source-dir "force-app/main/default/objects/Contact/fields/Is_DVM__c.field-meta.xml" --target-org "$TARGET_ORG" --wait 10
+
+if [ $? -eq 0 ]; then
+    echo "✓ Contact.Is_DVM__c field deployed successfully"
+else
+    echo "✗ Failed to deploy Contact.Is_DVM__c field"
+    exit 1
+fi
+
+# Wait a moment for the field to be available
+echo "Waiting for Contact field to be available..."
+sleep 5
+
+# Deploy the Account rollup summary field
+echo "Deploying Account.Count_of_DVMs__c rollup summary field..."
+sf project deploy start --source-dir "force-app/main/default/objects/Account/fields/Count_of_DVMs__c.field-meta.xml" --target-org "$TARGET_ORG" --wait 10
+
+if [ $? -eq 0 ]; then
+    echo "✓ Account.Count_of_DVMs__c field deployed successfully"
+else
+    echo "✗ Failed to deploy Account.Count_of_DVMs__c field"
+    exit 1
+fi
+
+echo ""
+echo "🎉 DVM fields deployment completed successfully!"
+echo ""
+echo "Fields created:"
+echo "  • Contact.Is_DVM__c - Checkbox field to identify DVMs"
+echo "  • Account.Count_of_DVMs__c - Rollup summary field counting DVMs per account"
+echo ""
+echo "Next steps:"
+echo "1. Add the fields to appropriate page layouts"
+echo "2. Configure field-level security as needed"
+echo "3. Update any relevant validation rules or automation"
+echo "4. Test the rollup summary calculation with sample data"

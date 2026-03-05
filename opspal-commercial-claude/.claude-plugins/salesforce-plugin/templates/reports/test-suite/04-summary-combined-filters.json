@@ -1,0 +1,39 @@
+{
+  "templateMetadata": {
+    "name": "Test Suite: SUMMARY with Combined Filters",
+    "version": "1.0.0",
+    "description": "Tests both standardDateFilter and PATCH filters together"
+  },
+  "reportMetadata": {
+    "name": "Opportunities by Type (Current Quarter)",
+    "reportType": "Opportunity",
+    "reportFormat": "SUMMARY",
+    "detailColumns": [
+      "OPPORTUNITY_NAME",
+      "ACCOUNT_NAME",
+      "AMOUNT"
+    ],
+    "groupingsDown": [
+      {
+        "field": "TYPE"
+      }
+    ],
+    "aggregates": [
+      {
+        "name": "RowCount"
+      }
+    ],
+    "reportFilters": [
+      {
+        "column": "CLOSE_DATE",
+        "operator": "equals",
+        "value": "THIS_FISCAL_QUARTER"
+      },
+      {
+        "column": "AMOUNT",
+        "operator": "greaterThan",
+        "value": "0"
+      }
+    ]
+  }
+}
