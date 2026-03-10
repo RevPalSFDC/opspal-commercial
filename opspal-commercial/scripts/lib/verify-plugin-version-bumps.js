@@ -6,11 +6,13 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const REPO_ROOT = path.resolve(__dirname, '../..');
+const PACKAGE_ROOT = path.resolve(__dirname, '../..');
+const GIT_ROOT = runSafe('git rev-parse --show-toplevel', { cwd: PACKAGE_ROOT }) || PACKAGE_ROOT;
+const REPO_SUBDIR = path.relative(GIT_ROOT, PACKAGE_ROOT).split(path.sep).join('/');
 
 function run(command, options = {}) {
   return execSync(command, {
-    cwd: options.cwd || REPO_ROOT,
+    cwd: options.cwd || PACKAGE_ROOT,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe']
   }).trim();
@@ -104,7 +106,7 @@ function getChangedFiles(refs) {
   if (refs.mode === 'local-worktree') {
     const trackedDiff = splitLines(runSafe('git diff --name-only --diff-filter=ACMR HEAD') || '');
     const untracked = splitLines(runSafe('git ls-files --others --exclude-standard') || '');
-    return uniq([...trackedDiff, ...untracked]);
+    return uniq([...trackedDiff, ...untracked]).map(normalizeRepoRelativePath);
   }
 
   const startRef = getMergeBase(refs.baseRef, refs.headRef);
@@ -116,7 +118,17 @@ function getChangedFiles(refs) {
     );
   }
 
-  return splitLines(diff);
+  return splitLines(diff).map(normalizeRepoRelativePath);
+}
+
+function normalizeRepoRelativePath(filePath) {
+  const normalized = String(filePath || '').split(path.sep).join('/');
+  if (!REPO_SUBDIR) {
+    return normalized;
+  }
+
+  const prefix = `${REPO_SUBDIR}/`;
+  return normalized.startsWith(prefix) ? normalized.slice(prefix.length) : normalized;
 }
 
 function parsePluginName(filePath) {
@@ -155,7 +167,8 @@ function collectPluginChanges(changedFiles) {
 }
 
 function readManifestVersionFromGit(ref, manifestPath) {
-  const raw = runSafe(`git show ${ref}:${manifestPath}`);
+  const gitPath = REPO_SUBDIR ? `${REPO_SUBDIR}/${manifestPath}` : manifestPath;
+  const raw = runSafe(`git show ${ref}:${gitPath}`);
   if (!raw) return null;
 
   try {
@@ -166,7 +179,7 @@ function readManifestVersionFromGit(ref, manifestPath) {
 }
 
 function readManifestVersionFromWorkingTree(manifestPath) {
-  const fullPath = path.join(REPO_ROOT, manifestPath);
+  const fullPath = path.join(PACKAGE_ROOT, manifestPath);
   if (!fs.existsSync(fullPath)) return null;
 
   try {

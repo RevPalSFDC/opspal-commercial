@@ -6,9 +6,9 @@
  * CLI wrapper over asset-encryption-engine.js for managing encrypted plugin assets.
  *
  * Subcommands:
- *   key-setup                       Generate master key
+ *   key-setup                       Generate tier keys
  *   init      --plugin <name>       Create skeleton encryption.json
- *   encrypt   --plugin <name> --file <path> [--dir <path>]
+ *   encrypt   --plugin <name> --file <path> [--dir <path>] [--tier <tier1|tier2|tier3>]
  *   decrypt   --plugin <name> --file <path> --output-dir <dir>
  *   verify    --plugin <name>       Verify all .enc files
  *   re-encrypt --plugin <name> [--rotate-key]
@@ -21,8 +21,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
-const { execSync, spawnSync } = require('child_process');
+const { spawnSync } = require('child_process');
 const engine = require('./asset-encryption-engine');
 
 // Try to load plugin-path-resolver for plugin root discovery
@@ -43,6 +42,37 @@ function die(msg) {
 
 function info(msg) {
   console.log(msg);
+}
+
+function resolveRequiredTier(rawTier) {
+  const tier = rawTier || engine.DEFAULT_REQUIRED_TIER;
+  if (!engine.KEY_SLOT_BY_TIER[tier]) {
+    die(`Unsupported tier "${tier}". Use one of: ${Object.keys(engine.KEY_SLOT_BY_TIER).join(', ')}`);
+  }
+  return tier;
+}
+
+function resolveKeyMaterial(pluginName) {
+  const keyMaterial = engine.resolveKeyMaterial(pluginName);
+  if (!keyMaterial) {
+    die('No scoped decryption key material found. Run: node plugin-asset-encryptor.js key-setup');
+  }
+  return keyMaterial;
+}
+
+function hasTierKeyFiles() {
+  return Object.values(engine.TIER_KEY_FILES).some((filePath) => fs.existsSync(filePath));
+}
+
+function describeKeySources(pluginName) {
+  if (process.env[engine.KEYRING_ENV_VAR]) {
+    return `${engine.KEYRING_ENV_VAR} env var`;
+  }
+  if (hasTierKeyFiles()) {
+    return 'tier key files';
+  }
+
+  return 'NOT CONFIGURED';
 }
 
 /**
@@ -94,19 +124,22 @@ function parseArgs(argv) {
 
 // ─── Subcommands ────────────────────────────────────────────────────────────
 
-function cmdKeySetup() {
-  if (fs.existsSync(engine.MASTER_KEY_FILE)) {
-    die(`Key file already exists at ${engine.MASTER_KEY_FILE}\nTo rotate, back up the old key first, then delete it.`);
+function cmdKeySetup(flags = {}) {
+  if (hasTierKeyFiles()) {
+    die(`Key material already exists in ${engine.KEY_DIR}\nBack up the old keys before creating new ones.`);
   }
 
-  const key = engine.generateKey();
-  engine.writeKeyFile(key);
+  const tierKeyring = engine.generateTierKeyring();
+  engine.writeTierKeyFiles(tierKeyring);
 
-  info(`Master key generated and saved to ${engine.MASTER_KEY_FILE}`);
-  info(`Permissions set to 600 (owner read/write only).`);
+  info(`Tier keys generated and saved to ${engine.KEY_DIR}`);
+  for (const [tier, filePath] of Object.entries(engine.TIER_KEY_FILES)) {
+    info(`  ${tier}: ${filePath}`);
+  }
+  info('Permissions set to 600 (owner read/write only).');
   info('');
-  info('Alternatively, set the OPSPAL_PLUGIN_MASTER_KEY environment variable:');
-  info(`  export OPSPAL_PLUGIN_MASTER_KEY="${key}"`);
+  info('Alternatively, set the scoped keyring environment variable:');
+  info(`  export ${engine.KEYRING_ENV_VAR}='${JSON.stringify(tierKeyring)}'`);
 }
 
 function cmdInit(flags) {
@@ -121,7 +154,7 @@ function cmdInit(flags) {
   }
 
   const manifest = {
-    version: 1,
+    version: 2,
     plugin: pluginName,
     encrypted_assets: [],
     cleanup_on_stop: true,
@@ -141,8 +174,8 @@ function cmdEncrypt(flags) {
   if (!filePath) die('--file <path> or --dir <path> is required');
 
   const pluginRoot = findPluginRoot(pluginName);
-  const masterKey = engine.resolveMasterKey(pluginName);
-  if (!masterKey) die('No master key found. Run: node plugin-asset-encryptor.js key-setup');
+  const keyMaterial = resolveKeyMaterial(pluginName);
+  const requiredTier = resolveRequiredTier(flags.tier || flags['required-tier']);
 
   // Fix M1: Guard statSync against missing paths
   let isDir = false;
@@ -177,7 +210,9 @@ function cmdEncrypt(flags) {
   }
 
   const outputFullPath = path.resolve(pluginRoot, encryptedPath);
-  const result = engine.encryptFile(inputPath, outputFullPath, pluginName, assetPath, masterKey);
+  const result = engine.encryptFile(inputPath, outputFullPath, pluginName, assetPath, keyMaterial, {
+    requiredTier
+  });
 
   // Clean up temp tar
   if (isDir) {
@@ -188,13 +223,15 @@ function cmdEncrypt(flags) {
   let manifest = engine.loadManifest(pluginRoot);
   if (!manifest) {
     manifest = {
-      version: 1,
+      version: 2,
       plugin: pluginName,
       encrypted_assets: [],
       cleanup_on_stop: true,
       allow_plaintext_fallback: false
     };
   }
+
+  manifest.version = 2;
 
   // Remove existing entry for this path if present
   manifest.encrypted_assets = manifest.encrypted_assets.filter(a => a.path !== assetPath);
@@ -205,7 +242,8 @@ function cmdEncrypt(flags) {
     asset_type: isDir ? 'directory' : 'script',
     sensitivity: 'high',
     decrypt_on: ['SessionStart'],
-    checksum_plaintext: result.checksum
+    checksum_plaintext: result.checksum,
+    required_tier: requiredTier
   });
 
   engine.writeManifest(pluginRoot, manifest);
@@ -225,6 +263,8 @@ function cmdEncrypt(flags) {
   info(`  Output:    ${encryptedPath}`);
   info(`  Size:      ${result.size} -> ${result.encryptedSize} bytes`);
   info(`  Checksum:  ${result.checksum}`);
+  info(`  Format:    v${result.formatVersion}`);
+  info(`  Tier:      ${requiredTier}`);
   info(`  Manifest:  updated`);
   info(`  .gitignore: ${gitignoreLine} added`);
 }
@@ -239,8 +279,7 @@ function cmdDecrypt(flags) {
   const outputDir = flags['output-dir'] || flags.outputDir || require('os').tmpdir();
 
   const pluginRoot = findPluginRoot(pluginName);
-  const masterKey = engine.resolveMasterKey(pluginName);
-  if (!masterKey) die('No master key found. Run: node plugin-asset-encryptor.js key-setup');
+  const keyMaterial = resolveKeyMaterial(pluginName);
 
   // Find the asset entry in manifest
   const manifest = engine.loadManifest(pluginRoot);
@@ -257,7 +296,7 @@ function cmdDecrypt(flags) {
 
   const outputPath = path.join(outputDir, path.basename(assetPath));
 
-  const result = engine.decryptFile(encPath, outputPath, pluginName, assetPath, masterKey, {
+  const result = engine.decryptFile(encPath, outputPath, pluginName, assetPath, keyMaterial, {
     expectedChecksum
   });
 
@@ -285,8 +324,7 @@ function cmdVerify(flags) {
   if (!pluginName) die('--plugin <name> is required');
 
   const pluginRoot = findPluginRoot(pluginName);
-  const masterKey = engine.resolveMasterKey(pluginName);
-  if (!masterKey) die('No master key found.');
+  const keyMaterial = resolveKeyMaterial(pluginName);
 
   const manifest = engine.loadManifest(pluginRoot);
   if (!manifest || !manifest.encrypted_assets.length) {
@@ -306,7 +344,7 @@ function cmdVerify(flags) {
       continue;
     }
 
-    const result = engine.verifyFile(encPath, pluginName, asset.path, masterKey, asset.checksum_plaintext);
+    const result = engine.verifyFile(encPath, pluginName, asset.path, keyMaterial, asset.checksum_plaintext);
 
     if (result.valid) {
       info(`  OK: ${asset.encrypted_path}`);
@@ -327,15 +365,15 @@ function cmdReEncrypt(flags) {
   if (!pluginName) die('--plugin <name> is required');
 
   const pluginRoot = findPluginRoot(pluginName);
-  const oldKey = engine.resolveMasterKey(pluginName);
-  if (!oldKey) die('No master key found for decryption.');
+  const oldKeyMaterial = resolveKeyMaterial(pluginName);
+  const requiredDefaultTier = resolveRequiredTier(flags.tier || flags['required-tier']);
 
-  let newKey = oldKey;
+  let newKeyMaterial = oldKeyMaterial;
+  let rotatedTierKeyring = null;
   if (flags['rotate-key'] || flags.rotateKey) {
-    const newKeyB64 = engine.generateKey();
-    newKey = Buffer.from(newKeyB64, 'base64');
-    info(`New key generated. Save this to ${engine.MASTER_KEY_FILE}:`);
-    info(`  ${newKeyB64}`);
+    rotatedTierKeyring = engine.generateTierKeyring();
+    newKeyMaterial = rotatedTierKeyring;
+    info(`New scoped tier keys generated. They will be saved to ${engine.KEY_DIR}`);
     info('');
   }
 
@@ -356,26 +394,33 @@ function cmdReEncrypt(flags) {
     }
 
     const encBlob = fs.readFileSync(encPath);
-    const plaintext = engine.decryptAsset(encBlob, pluginName, asset.path, oldKey);
+    const plaintext = engine.decryptAsset(encBlob, pluginName, asset.path, oldKeyMaterial);
     decryptedAssets.push({ asset, plaintext });
   }
 
   // Phase 2: Re-encrypt all with new key
   for (const { asset, plaintext } of decryptedAssets) {
     const encPath = path.resolve(pluginRoot, asset.encrypted_path);
-    const newEnc = engine.encryptAsset(plaintext, pluginName, asset.path, newKey);
+    const requiredTier = resolveRequiredTier(asset.required_tier || requiredDefaultTier);
+    const newEnc = engine.encryptAsset(plaintext, pluginName, asset.path, newKeyMaterial, {
+      requiredTier
+    });
     fs.writeFileSync(encPath, newEnc);
     asset.checksum_plaintext = engine.computeChecksum(plaintext);
+    asset.required_tier = requiredTier;
     info(`  Re-encrypted: ${asset.encrypted_path}`);
   }
 
   // Phase 3: Atomically write manifest + key
+  manifest.version = 2;
   engine.writeManifest(pluginRoot, manifest);
 
   if (flags['rotate-key'] || flags.rotateKey) {
-    engine.writeKeyFile(newKey.toString('base64'));
+    if (rotatedTierKeyring) {
+      engine.writeTierKeyFiles(rotatedTierKeyring);
+    }
     info('');
-    info(`Key rotated and saved to ${engine.MASTER_KEY_FILE}`);
+    info(`Key material rotated and saved to ${engine.KEY_DIR}`);
   }
 
   info('Re-encryption complete.');
@@ -386,27 +431,15 @@ function cmdStatus(flags) {
   if (!pluginName) die('--plugin <name> is required');
 
   const pluginRoot = findPluginRoot(pluginName);
-  const masterKey = engine.resolveMasterKey(pluginName);
+  const keyMaterial = engine.resolveKeyMaterial(pluginName);
   const manifest = engine.loadManifest(pluginRoot);
 
   info(`Plugin: ${pluginName}`);
   info(`Root:   ${pluginRoot}`);
   info('');
 
-  // Key source
-  if (process.env[engine.KEY_ENV_VAR]) {
-    info(`Key source: ${engine.KEY_ENV_VAR} env var`);
-  } else if (fs.existsSync(engine.MASTER_KEY_FILE)) {
-    info(`Key source: ${engine.MASTER_KEY_FILE}`);
-  } else {
-    const perPluginKey = path.join(engine.KEY_DIR, `${pluginName}.key`);
-    if (fs.existsSync(perPluginKey)) {
-      info(`Key source: ${perPluginKey} (per-plugin)`);
-    } else {
-      info('Key source: NOT CONFIGURED');
-    }
-  }
-  info(`Key available: ${masterKey ? 'yes' : 'NO'}`);
+  info(`Key source: ${describeKeySources(pluginName)}`);
+  info(`Scoped keys available: ${keyMaterial && keyMaterial.keyring ? Object.keys(keyMaterial.keyring).join(', ') : 'none'}`);
   info('');
 
   if (!manifest) {
@@ -415,6 +448,7 @@ function cmdStatus(flags) {
   }
 
   info(`Encrypted assets: ${manifest.encrypted_assets.length}`);
+  info(`Manifest version: ${manifest.version || 2}`);
   info(`Cleanup on stop: ${manifest.cleanup_on_stop}`);
   info(`Plaintext fallback: ${manifest.allow_plaintext_fallback}`);
   info('');
@@ -425,7 +459,7 @@ function cmdStatus(flags) {
       const encPath = path.resolve(pluginRoot, asset.encrypted_path);
       const exists = fs.existsSync(encPath);
       const status = exists ? 'present' : 'MISSING';
-      info(`  ${asset.path} -> ${asset.encrypted_path} [${status}] (${asset.sensitivity}, ${asset.decrypt_on.join('+')})`);
+      info(`  ${asset.path} -> ${asset.encrypted_path} [${status}] (${asset.sensitivity}, ${asset.decrypt_on.join('+')}, ${asset.required_tier || engine.DEFAULT_REQUIRED_TIER})`);
     }
   }
 }
@@ -436,7 +470,7 @@ function main() {
   const { command, flags } = parseArgs(process.argv);
 
   const commands = {
-    'key-setup': () => cmdKeySetup(),
+    'key-setup': () => cmdKeySetup(flags),
     'init': () => cmdInit(flags),
     'encrypt': () => cmdEncrypt(flags),
     'decrypt': () => cmdDecrypt(flags),
@@ -449,13 +483,13 @@ function main() {
     info('Usage: node plugin-asset-encryptor.js <command> [options]');
     info('');
     info('Commands:');
-    info('  key-setup                          Generate master encryption key');
+    info('  key-setup                          Generate scoped tier keys');
     info('  init      --plugin <name>          Create encryption.json manifest');
-    info('  encrypt   --plugin <name> --file <path>    Encrypt a file');
-    info('  encrypt   --plugin <name> --dir <path>     Tar+encrypt a directory');
+    info('  encrypt   --plugin <name> --file <path> [--tier <tier1|tier2|tier3>]    Encrypt a file');
+    info('  encrypt   --plugin <name> --dir <path> [--tier <tier1|tier2|tier3>]     Tar+encrypt a directory');
     info('  decrypt   --plugin <name> --file <path> [--output-dir <dir>]');
     info('  verify    --plugin <name>          Verify all encrypted assets');
-    info('  re-encrypt --plugin <name> [--rotate-key]  Re-encrypt all assets');
+    info('  re-encrypt --plugin <name> [--rotate-key] [--tier <tier1|tier2|tier3>]  Re-encrypt all assets');
     info('  status    --plugin <name>          Show encryption status');
     process.exit(0);
   }

@@ -16,7 +16,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { sessionToken, verifyToken, status: clientStatus } = require('./license-auth-client');
+const { getServerUrl, sessionToken, status: clientStatus } = require('./license-auth-client');
 
 const OPSPAL_DIR = path.join(process.env.HOME, '.opspal');
 const LICENSE_KEY_FILE = path.join(OPSPAL_DIR, 'license.key');
@@ -119,6 +119,8 @@ async function activate(licenseKey) {
 
     if (result.error === 'server_unreachable') {
       console.error(`\n${YELLOW}The license server could not be reached.${RESET}`);
+      console.error(`Current server: ${getServerUrl()}`);
+      console.error(`Override with OPSPAL_LICENSE_SERVER only for staging or local testing.`);
       console.error(`Check your network connection and try again.`);
     }
     return false;
@@ -133,6 +135,7 @@ async function activate(licenseKey) {
   console.log(`${GREEN}${BOLD}License Activated Successfully${RESET}\n`);
   console.log(`  ${BOLD}Tier:${RESET}         ${info.color}${info.label}${RESET}`);
   console.log(`  ${BOLD}Organization:${RESET} ${result.organization || 'N/A'}`);
+  console.log(`  ${BOLD}Server:${RESET}       ${getServerUrl()}`);
   console.log(`  ${BOLD}Assets:${RESET}       ${count}/${total} encrypted assets unlocked (${info.assets})`);
 
   if (result.grace_until) {
@@ -149,6 +152,7 @@ async function activate(licenseKey) {
   console.log(`\n${BOLD}Next steps:${RESET}`);
   console.log(`  - Start a new Claude Code session to decrypt assets`);
   console.log(`  - Run ${BOLD}/license-status${RESET} to check license anytime`);
+  console.log(`  - Run ${BOLD}/license-canary --expect-tier ${tier}${RESET} to validate the scoped bundle handshake`);
   console.log(`  - Run ${BOLD}/deactivate-license${RESET} to remove from this machine`);
 
   return true;
@@ -157,6 +161,7 @@ async function activate(licenseKey) {
 async function showStatus() {
   const hasKey = !!getStoredKey();
   const cache = loadCache();
+  const localStatus = clientStatus();
 
   console.log(`${BOLD}OpsPal License Status${RESET}\n`);
 
@@ -176,6 +181,7 @@ async function showStatus() {
     const mid = fs.readFileSync(MACHINE_ID_FILE, 'utf8').trim();
     console.log(`  ${BOLD}Machine ID:${RESET}   ${mid.substring(0, 8)}...`);
   }
+  console.log(`  ${BOLD}Server:${RESET}       ${localStatus.server_url || getServerUrl()}`);
 
   // Cache status
   if (!cache) {
@@ -192,6 +198,10 @@ async function showStatus() {
   console.log(`  ${BOLD}Tier:${RESET}         ${info.color}${info.label}${RESET}`);
   console.log(`  ${BOLD}Organization:${RESET} ${cache.organization || 'N/A'}`);
   console.log(`  ${BOLD}Assets:${RESET}       ${count}/${total} encrypted assets unlocked`);
+  if (localStatus.key_bundle_version) {
+    const bundleState = localStatus.has_scoped_key_bundle ? `${GREEN}scoped${RESET}` : `${YELLOW}missing scoped bundle${RESET}`;
+    console.log(`  ${BOLD}Key Bundle:${RESET}   v${localStatus.key_bundle_version} (${bundleState})`);
+  }
 
   // Cache freshness
   if (cache.cached_at) {
@@ -218,6 +228,7 @@ async function showStatus() {
   }
 
   console.log(`\n  ${GREEN}License is active.${RESET}`);
+  console.log(`  ${DIM}Run /license-canary --expect-tier ${tier} for a live rollout check.${RESET}`);
 
   // Show what's unlocked vs locked
   const allowed = cache.allowed_asset_tiers || [];
@@ -245,7 +256,7 @@ async function deactivate() {
   // Try to notify the server
   if (fs.existsSync(MACHINE_ID_FILE)) {
     const machineId = fs.readFileSync(MACHINE_ID_FILE, 'utf8').trim();
-    const serverUrl = (process.env.OPSPAL_LICENSE_SERVER || 'https://license.gorevpal.com').replace(/\/$/, '');
+    const serverUrl = getServerUrl();
 
     try {
       const https = require('https');
@@ -292,16 +303,19 @@ async function deactivate() {
 function checkGuidance() {
   // Called by SessionStart hook to determine if first-run guidance should be shown
   const hasLicenseKey = !!getStoredKey();
-  const hasLocalMasterKey = fs.existsSync(path.join(process.env.HOME, '.claude', 'opspal-enc', 'master.key'));
+  const hasTierKeys = ['tier1.key', 'tier2.key', 'tier3.key'].some((fileName) =>
+    fs.existsSync(path.join(process.env.HOME, '.claude', 'opspal-enc', fileName))
+  );
+  const hasScopedKeyring = !!process.env.OPSPAL_PLUGIN_KEYRING_JSON;
   const hasCache = fs.existsSync(CACHE_FILE);
 
-  if (hasLicenseKey || hasLocalMasterKey) {
+  if (hasLicenseKey || hasTierKeys || hasScopedKeyring || hasCache) {
     // User has a way to decrypt — no guidance needed
     console.log(JSON.stringify({ show_guidance: false }));
     return;
   }
 
-  // No license key and no local master key — show guidance
+  // No license key and no local key material — show guidance
   console.log(JSON.stringify({
     show_guidance: true,
     message: [
@@ -318,6 +332,8 @@ function checkGuidance() {
       '',
       '  \x1b[1mTo check current status:\x1b[0m',
       '    /license-status',
+      '',
+      `  \x1b[2mDefault license server: ${getServerUrl()}\x1b[0m`,
       '',
       '  \x1b[2mPurchase a license at https://gorevpal.com/pricing\x1b[0m',
       ''

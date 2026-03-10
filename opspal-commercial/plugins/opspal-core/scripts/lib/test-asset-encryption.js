@@ -98,75 +98,76 @@ try {
 
 console.log('\n=== Section A: Engine Unit Tests ===\n');
 
-const masterKey = Buffer.from(engine.generateKey(), 'base64');
+const tierKeyring = engine.generateTierKeyring();
+const scopedKeyMaterial = { keyring: tierKeyring };
 const PLUGIN = 'test-plugin';
 const ASSET = 'scripts/lib/secret.js';
 
 test('A1', 'Round-trip encrypt/decrypt', () => {
   const plain = Buffer.from('console.log("proprietary logic");');
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, scopedKeyMaterial);
   assert(dec.equals(plain), 'Decrypted does not match original');
 });
 
 test('A2', 'Empty file round-trip', () => {
   const plain = Buffer.alloc(0);
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, scopedKeyMaterial);
   assert(dec.equals(plain), 'Empty buffer round-trip failed');
 });
 
 test('A3', 'Binary file (random bytes) round-trip', () => {
   const plain = crypto.randomBytes(4096);
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, scopedKeyMaterial);
   assert(dec.equals(plain), 'Binary round-trip failed');
 });
 
 test('A4', 'Tamper detection (flip ciphertext byte)', () => {
   const plain = Buffer.from('secret data');
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
   const tampered = Buffer.from(enc);
   tampered[engine.HEADER_SIZE + 2] ^= 0xFF;
-  const result = engine.verifyAsset(tampered, PLUGIN, ASSET, masterKey);
+  const result = engine.verifyAsset(tampered, PLUGIN, ASSET, scopedKeyMaterial);
   assert(!result.valid, 'Tampered data should not verify');
 });
 
 test('A5', 'AAD binding — wrong plugin name fails', () => {
   const plain = Buffer.from('test');
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const result = engine.verifyAsset(enc, 'wrong-plugin', ASSET, masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const result = engine.verifyAsset(enc, 'wrong-plugin', ASSET, scopedKeyMaterial);
   assert(!result.valid, 'Wrong plugin name should fail verification');
 });
 
 test('A6', 'AAD binding — wrong asset path fails', () => {
   const plain = Buffer.from('test');
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const result = engine.verifyAsset(enc, PLUGIN, 'wrong/path.js', masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const result = engine.verifyAsset(enc, PLUGIN, 'wrong/path.js', scopedKeyMaterial);
   assert(!result.valid, 'Wrong asset path should fail verification');
 });
 
 test('A7', 'Wrong key fails decryption', () => {
   const plain = Buffer.from('test');
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const wrongKey = Buffer.from(engine.generateKey(), 'base64');
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const wrongKey = { keyring: engine.generateTierKeyring() };
   const result = engine.verifyAsset(enc, PLUGIN, ASSET, wrongKey);
   assert(!result.valid, 'Wrong key should fail verification');
 });
 
 test('A8', 'Wire format — valid magic bytes', () => {
-  const enc = engine.encryptAsset(Buffer.from('x'), PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(Buffer.from('x'), PLUGIN, ASSET, scopedKeyMaterial);
   const magic = enc.subarray(0, 4);
   assert(magic.equals(engine.MAGIC), `Expected magic OENC, got ${magic.toString('hex')}`);
 });
 
-test('A9', 'Wire format — version byte = 0x01', () => {
-  const enc = engine.encryptAsset(Buffer.from('x'), PLUGIN, ASSET, masterKey);
+test('A9', 'Wire format — version byte = 0x02', () => {
+  const enc = engine.encryptAsset(Buffer.from('x'), PLUGIN, ASSET, scopedKeyMaterial);
   assertEqual(enc.readUInt8(4), engine.FORMAT_VERSION, 'Version byte mismatch');
 });
 
 test('A10', 'Wire format — minimum size >= HEADER_SIZE', () => {
-  const enc = engine.encryptAsset(Buffer.from(''), PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(Buffer.from(''), PLUGIN, ASSET, scopedKeyMaterial);
   assert(enc.length >= engine.HEADER_SIZE, `Enc too short: ${enc.length}`);
 });
 
@@ -196,16 +197,16 @@ test('A13', 'computeChecksum returns sha256:<64 hex>', () => {
 test('A14', 'verifyAsset passes with correct checksum', () => {
   const plain = Buffer.from('verifiable content');
   const cksum = engine.computeChecksum(plain);
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
-  const result = engine.verifyAsset(enc, PLUGIN, ASSET, masterKey, cksum);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
+  const result = engine.verifyAsset(enc, PLUGIN, ASSET, scopedKeyMaterial, cksum);
   assert(result.valid, `verifyAsset should pass: ${result.error}`);
 });
 
 test('A15', 'verifyAsset fails with wrong checksum', () => {
   const plain = Buffer.from('verifiable content');
-  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, masterKey);
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial);
   const badCksum = 'sha256:' + '0'.repeat(64);
-  const result = engine.verifyAsset(enc, PLUGIN, ASSET, masterKey, badCksum);
+  const result = engine.verifyAsset(enc, PLUGIN, ASSET, scopedKeyMaterial, badCksum);
   assert(!result.valid, 'Wrong checksum should fail');
 });
 
@@ -218,11 +219,11 @@ test('A16', 'encryptFile/decryptFile round-trip with checksum', () => {
     const content = 'File-level round-trip test content\n';
     fs.writeFileSync(plainPath, content);
 
-    const encResult = engine.encryptFile(plainPath, encPath, PLUGIN, 'input.txt', masterKey);
+    const encResult = engine.encryptFile(plainPath, encPath, PLUGIN, 'input.txt', scopedKeyMaterial);
     assert(fs.existsSync(encPath), '.enc file not created');
     assert(encResult.checksum.startsWith('sha256:'), 'checksum missing');
 
-    const decResult = engine.decryptFile(encPath, outPath, PLUGIN, 'input.txt', masterKey, {
+    const decResult = engine.decryptFile(encPath, outPath, PLUGIN, 'input.txt', scopedKeyMaterial, {
       expectedChecksum: encResult.checksum
     });
     const recovered = fs.readFileSync(outPath, 'utf8');
@@ -245,19 +246,19 @@ test('A18', 'generateKey unique per call', () => {
   assert(k1 !== k2, 'Two generated keys should differ');
 });
 
-test('A19', 'resolveMasterKey reads env var first', () => {
-  const testKey = engine.generateKey();
-  const origEnv = process.env[engine.KEY_ENV_VAR];
+test('A19', 'resolveKeyMaterial reads keyring env first', () => {
+  const testKeyring = engine.generateTierKeyring();
+  const origEnv = process.env[engine.KEYRING_ENV_VAR];
   try {
-    process.env[engine.KEY_ENV_VAR] = testKey;
-    const resolved = engine.resolveMasterKey('any-plugin');
+    process.env[engine.KEYRING_ENV_VAR] = JSON.stringify(testKeyring);
+    const resolved = engine.resolveKeyMaterial('any-plugin');
     assert(resolved !== null, 'Should resolve from env');
-    assert(resolved.equals(Buffer.from(testKey, 'base64')), 'Key from env mismatch');
+    assert(resolved.keyring.tier1.equals(Buffer.from(testKeyring.tier1, 'base64')), 'tier1 key from env mismatch');
   } finally {
     if (origEnv !== undefined) {
-      process.env[engine.KEY_ENV_VAR] = origEnv;
+      process.env[engine.KEYRING_ENV_VAR] = origEnv;
     } else {
-      delete process.env[engine.KEY_ENV_VAR];
+      delete process.env[engine.KEYRING_ENV_VAR];
     }
   }
 });
@@ -272,6 +273,44 @@ test('A20', 'Node version check (engine loads on supported versions)', () => {
   } else {
     // If we got here, engine loaded successfully — version is fine.
     assert(major >= 15, `Unexpected Node version: ${process.versions.node}`);
+  }
+});
+
+test('A21', 'Scoped v2 round-trip decrypts with tier keyring', () => {
+  const plain = Buffer.from('console.log("tier 2 protected");');
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial, {
+    requiredTier: 'tier2'
+  });
+  const parsed = engine.parseWireFormat(enc);
+  const dec = engine.decryptAsset(enc, PLUGIN, ASSET, scopedKeyMaterial);
+
+  assertEqual(parsed.version, engine.FORMAT_VERSION, 'Expected v2 format');
+  assertEqual(parsed.keySlot, engine.KEY_SLOT_BY_TIER.tier2, 'Expected tier2 key slot');
+  assert(dec.equals(plain), 'Scoped decryption does not match original');
+});
+
+test('A22', 'Scoped v2 asset fails without the required tier key', () => {
+  const plain = Buffer.from('tier1 secret');
+  const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial, {
+    requiredTier: 'tier1'
+  });
+  const result = engine.verifyAsset(enc, PLUGIN, ASSET, { keyring: { tier2: tierKeyring.tier2 } });
+  assert(!result.valid, 'Verification should fail without the required scoped key');
+});
+
+test('A23', 'resolveKeyring reads OPSPAL_PLUGIN_KEYRING_JSON', () => {
+  const original = process.env[engine.KEYRING_ENV_VAR];
+  try {
+    process.env[engine.KEYRING_ENV_VAR] = JSON.stringify({ version: 2, keys: tierKeyring });
+    const resolved = engine.resolveKeyring();
+    assert(resolved !== null, 'Keyring should resolve from env');
+    assert(resolved.tier3.equals(Buffer.from(tierKeyring.tier3, 'base64')), 'tier3 key mismatch');
+  } finally {
+    if (original !== undefined) {
+      process.env[engine.KEYRING_ENV_VAR] = original;
+    } else {
+      delete process.env[engine.KEYRING_ENV_VAR];
+    }
   }
 });
 
@@ -294,33 +333,21 @@ function runCLI(args, env = {}) {
   };
 }
 
-test('B1', 'key-setup creates key with mode 600', () => {
+test('B1', 'key-setup writes scoped tier keys with mode 600', () => {
   const dir = tmpDir('b1');
   const keyDir = path.join(dir, 'enc');
-  const keyFile = path.join(keyDir, 'master.key');
+  const tier1File = path.join(keyDir, 'tier1.key');
   try {
-    // Temporarily override key paths via env
-    const result = spawnSync(process.execPath, ['-e', `
-      const engine = require(${JSON.stringify(ENGINE_PATH)});
-      const path = require('path');
-      const fs = require('fs');
-      const keyDir = ${JSON.stringify(keyDir)};
-      const keyFile = ${JSON.stringify(keyFile)};
-      fs.mkdirSync(keyDir, { recursive: true, mode: 0o700 });
-      const key = engine.generateKey();
-      fs.writeFileSync(keyFile, key + '\\n', { mode: 0o600 });
-      const stat = fs.statSync(keyFile);
-      console.log(JSON.stringify({
-        exists: true,
-        mode: (stat.mode & 0o777).toString(8),
-        keyLen: Buffer.from(key, 'base64').length
-      }));
-    `], { stdio: ['pipe', 'pipe', 'pipe'], timeout: 10000 });
+    const keyring = engine.generateTierKeyring();
+    fs.mkdirSync(keyDir, { recursive: true, mode: 0o700 });
+    for (const [tier, value] of Object.entries(keyring)) {
+      fs.writeFileSync(path.join(keyDir, `${tier}.key`), value + '\n', { mode: 0o600 });
+    }
 
-    const info = JSON.parse(result.stdout.toString());
-    assert(info.exists, 'Key file not created');
-    assertEqual(info.mode, '600', `Key file mode should be 600, got ${info.mode}`);
-    assertEqual(info.keyLen, 32, `Key should be 32 bytes, got ${info.keyLen}`);
+    const stat = fs.statSync(tier1File);
+    assert(fs.existsSync(tier1File), 'Key file not created');
+    assertEqual((stat.mode & 0o777).toString(8), '600', `Key file mode should be 600, got ${(stat.mode & 0o777).toString(8)}`);
+    assertEqual(Buffer.from(keyring.tier1, 'base64').length, 32, `Key should be 32 bytes, got ${Buffer.from(keyring.tier1, 'base64').length}`);
   } finally {
     cleanup(dir);
   }
@@ -340,7 +367,7 @@ test('B2', 'init creates encryption.json skeleton', () => {
 
     // Use engine directly since CLI resolution may not find our temp plugin
     engine.writeManifest(pluginDir, {
-      version: 1,
+      version: 2,
       plugin: 'test-enc-plugin',
       encrypted_assets: [],
       cleanup_on_stop: true,
@@ -349,7 +376,7 @@ test('B2', 'init creates encryption.json skeleton', () => {
 
     const manifest = engine.loadManifest(pluginDir);
     assert(manifest !== null, 'Manifest not created');
-    assertEqual(manifest.version, 1, 'Wrong version');
+    assertEqual(manifest.version, 2, 'Wrong version');
     assertEqual(manifest.plugin, 'test-enc-plugin', 'Wrong plugin name');
     assert(Array.isArray(manifest.encrypted_assets), 'encrypted_assets not array');
     assertEqual(manifest.encrypted_assets.length, 0, 'Should start empty');
@@ -372,7 +399,7 @@ test('B3', 'encrypt creates .enc, updates manifest + .gitignore', () => {
 
     // Create initial manifest
     engine.writeManifest(pluginDir, {
-      version: 1,
+      version: 2,
       plugin: 'test-plugin',
       encrypted_assets: [],
       cleanup_on_stop: true,
@@ -384,7 +411,9 @@ test('B3', 'encrypt creates .enc, updates manifest + .gitignore', () => {
     const encPath = assetPath + '.enc';
     const encFullPath = path.join(pluginDir, encPath);
 
-    const encResult = engine.encryptFile(srcFile, encFullPath, 'test-plugin', assetPath, masterKey);
+    const encResult = engine.encryptFile(srcFile, encFullPath, 'test-plugin', assetPath, scopedKeyMaterial, {
+      requiredTier: 'tier2'
+    });
 
     // Update manifest
     const manifest = engine.loadManifest(pluginDir);
@@ -394,7 +423,8 @@ test('B3', 'encrypt creates .enc, updates manifest + .gitignore', () => {
       asset_type: 'script',
       sensitivity: 'high',
       decrypt_on: ['SessionStart'],
-      checksum_plaintext: encResult.checksum
+      checksum_plaintext: encResult.checksum,
+      required_tier: 'tier2'
     });
     engine.writeManifest(pluginDir, manifest);
 
@@ -407,6 +437,7 @@ test('B3', 'encrypt creates .enc, updates manifest + .gitignore', () => {
     const updatedManifest = engine.loadManifest(pluginDir);
     assertEqual(updatedManifest.encrypted_assets.length, 1, 'Should have 1 asset');
     assertEqual(updatedManifest.encrypted_assets[0].path, assetPath, 'Wrong asset path');
+    assertEqual(updatedManifest.encrypted_assets[0].required_tier, 'tier2', 'Missing required_tier');
 
     const gitignore = fs.readFileSync(gitignorePath, 'utf8');
     assert(gitignore.includes(`/${assetPath}`), '.gitignore not updated');
@@ -427,9 +458,11 @@ test('B4', 'verify passes for valid .enc', () => {
 
     const assetPath = 'scripts/lib/data.js';
     const encFullPath = path.join(pluginDir, assetPath + '.enc');
-    const encResult = engine.encryptFile(srcFile, encFullPath, 'test-plugin', assetPath, masterKey);
+    const encResult = engine.encryptFile(srcFile, encFullPath, 'test-plugin', assetPath, scopedKeyMaterial, {
+      requiredTier: 'tier3'
+    });
 
-    const result = engine.verifyFile(encFullPath, 'test-plugin', assetPath, masterKey, encResult.checksum);
+    const result = engine.verifyFile(encFullPath, 'test-plugin', assetPath, scopedKeyMaterial, encResult.checksum);
     assert(result.valid, `Verify should pass: ${result.error}`);
   } finally {
     cleanup(dir);
@@ -448,14 +481,16 @@ test('B5', 'verify fails for tampered .enc', () => {
 
     const assetPath = 'scripts/lib/data.js';
     const encFullPath = path.join(pluginDir, assetPath + '.enc');
-    engine.encryptFile(srcFile, encFullPath, 'test-plugin', assetPath, masterKey);
+    engine.encryptFile(srcFile, encFullPath, 'test-plugin', assetPath, scopedKeyMaterial, {
+      requiredTier: 'tier3'
+    });
 
     // Tamper
     const buf = fs.readFileSync(encFullPath);
     buf[engine.HEADER_SIZE + 3] ^= 0xFF;
     fs.writeFileSync(encFullPath, buf);
 
-    const result = engine.verifyFile(encFullPath, 'test-plugin', assetPath, masterKey);
+    const result = engine.verifyFile(encFullPath, 'test-plugin', assetPath, scopedKeyMaterial);
     assert(!result.valid, 'Tampered file should fail verification');
   } finally {
     cleanup(dir);
@@ -472,8 +507,10 @@ test('B6', 'decrypt recovers original content', () => {
     const encPath = path.join(dir, 'src.js.enc');
     const outPath = path.join(dir, 'recovered.js');
 
-    const encResult = engine.encryptFile(srcFile, encPath, PLUGIN, 'src.js', masterKey);
-    engine.decryptFile(encPath, outPath, PLUGIN, 'src.js', masterKey, {
+    const encResult = engine.encryptFile(srcFile, encPath, PLUGIN, 'src.js', scopedKeyMaterial, {
+      requiredTier: 'tier2'
+    });
+    engine.decryptFile(encPath, outPath, PLUGIN, 'src.js', scopedKeyMaterial, {
       expectedChecksum: encResult.checksum
     });
 
@@ -485,18 +522,18 @@ test('B6', 'decrypt recovers original content', () => {
 });
 
 test('B7', 'status shows correct info', () => {
-  // Test that loadManifest + resolveMasterKey work together
+  // Test that loadManifest and manifest metadata remain readable together
   const dir = tmpDir('b7');
   try {
     const pluginDir = path.join(dir, 'test-plugin');
     fs.mkdirSync(path.join(pluginDir, '.claude-plugin'), { recursive: true });
 
     engine.writeManifest(pluginDir, {
-      version: 1,
+      version: 2,
       plugin: 'test-plugin',
       encrypted_assets: [
         { path: 'a.js', encrypted_path: 'a.js.enc', asset_type: 'script',
-          sensitivity: 'high', decrypt_on: ['SessionStart'] }
+          sensitivity: 'high', decrypt_on: ['SessionStart'], required_tier: 'tier3' }
       ],
       cleanup_on_stop: true,
       allow_plaintext_fallback: false

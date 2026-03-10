@@ -252,6 +252,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-stall-check.sh",
             "timeout": 5000,
             "description": "Check for stalls during multi-agent operations"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-license-poll.sh",
+            "timeout": 3000,
+            "description": "Periodic license status poll — detects tier changes, expirations, and revocations mid-session"
           }
         ]
       },

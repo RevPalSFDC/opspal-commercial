@@ -75,14 +75,14 @@ The local maintainer plugin is optional and not part of the runtime plugin suite
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.4 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.28.0 | active | 73 | 7 | 98 | 49 | 76 | 507 |
+| `opspal-core` | 2.32.1 | active | 73 | 7 | 103 | 49 | 80 | 511 |
 | `opspal-data-hygiene` | 1.1.5 | deprecated | 2 | 2 | 1 | 1 | 0 | 13 |
 | `opspal-gtm-planning` | 2.1.4 | active | 12 | 1 | 15 | 4 | 0 | 2 |
 | `opspal-hubspot` | 3.7.15 | active | 59 | 6 | 33 | 23 | 11 | 109 |
-| `opspal-marketo` | 2.6.11 | active | 30 | 25 | 30 | 17 | 20 | 36 |
+| `opspal-marketo` | 2.6.11 | active | 30 | 25 | 30 | 17 | 20 | 35 |
 | `opspal-mcp-client` | 1.0.2 | active | 0 | 0 | 0 | 2 | 3 | 1 |
 | `opspal-monday` | 1.4.5 | experimental | 6 | 0 | 1 | 3 | 0 | 3 |
-| `opspal-salesforce` | 3.79.0 | active | 94 | 20 | 59 | 54 | 40 | 1087 |
+| `opspal-salesforce` | 3.79.0 | active | 94 | 20 | 59 | 54 | 40 | 1086 |
 <!-- AUTO_GENERATED_END:plugin-matrix -->
 
 ## Runtime Registry
