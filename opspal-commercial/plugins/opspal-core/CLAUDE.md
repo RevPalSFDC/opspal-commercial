@@ -37,6 +37,19 @@ Key operational commands:
 /deactivate-license
 ```
 
+### Tier-Blocked Assets (Subscription Boundary)
+
+When a tool call is blocked with a reason containing "SUBSCRIPTION UPGRADE REQUIRED", this means the requested operation depends on an encrypted proprietary asset that the user's subscription does not cover. Do not attempt workarounds — acknowledge the limitation, explain which domain is needed, and suggest `/license-status` to review the current plan.
+
+| Domain | Plugin | Example Assets |
+|--------|--------|---------------|
+| `core` | opspal-core | Scoring engines, KPI definitions, benchmarks |
+| `salesforce` | opspal-salesforce | Risk models, CPQ optimization, audit frameworks |
+| `hubspot` | opspal-hubspot | Assessment analyzer, governance classifier |
+| `marketo` | opspal-marketo | Lead quality scorer, intelligence aggregator |
+| `gtm` | opspal-gtm-planning | Benchmark baselines, capacity models |
+| `data-hygiene` | opspal-data-hygiene | Dedup clustering, canonical selection |
+
 ## Key Features
 
 ### Validation Framework (NEW)
@@ -1120,8 +1133,8 @@ Plugin Author                    Git Repo                      Runtime Session
 
 ### Key Sources (checked in order)
 
-1. `OPSPAL_PLUGIN_KEYRING_JSON` env var (JSON map of `tier1` / `tier2` / `tier3`)
-2. `~/.claude/opspal-enc/tier1.key`, `tier2.key`, `tier3.key`
+1. `OPSPAL_PLUGIN_KEYRING_JSON` env var (JSON map of domain keys: `core`, `salesforce`, `hubspot`, `marketo`, `gtm`, `data-hygiene`)
+2. `~/.claude/opspal-enc/core.key`, `salesforce.key`, `hubspot.key`, `marketo.key`, `gtm.key`, `data-hygiene.key`
 
 ### Plugin Manifest
 

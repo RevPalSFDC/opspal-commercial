@@ -104,8 +104,41 @@ REWRITTEN=$(ENC_MANIFEST_PATH="$MANIFEST_PATH" \
     }
 ' 2>/dev/null || echo "")
 
+# If rewrite matched a decrypted asset, emit it and exit
 if [[ -n "$REWRITTEN" ]] && [[ "$REWRITTEN" != "undefined" ]]; then
     echo "$REWRITTEN"
-else
     exit 0
 fi
+
+# Check for blocked asset access (tier-gated assets the subscription doesn't cover)
+BLOCKED_CHECK=$(ENC_MANIFEST_PATH="$MANIFEST_PATH" \
+    printf '%s' "$INPUT" | node -e '
+    const fs = require("fs");
+    const manifestPath = process.env.ENC_MANIFEST_PATH;
+    if (!manifestPath || !fs.existsSync(manifestPath)) process.exit(0);
+
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    const input = JSON.parse(fs.readFileSync("/dev/stdin", "utf8"));
+    const command = input.tool_input?.command || "";
+    if (!command) process.exit(0);
+
+    for (const asset of (manifest.blocked_assets || [])) {
+        const patterns = [asset.encrypted_path, asset.logical_path].filter(Boolean);
+        for (const pattern of patterns) {
+            const escaped = pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const regex = new RegExp("(^|/|\\s|[\"'"'"'])" + escaped + "($|/|\\s|[\"'"'"'])", "g");
+            if (regex.test(command)) {
+                const msg = "SUBSCRIPTION UPGRADE REQUIRED: The file '"'"'" + asset.logical_path + "'"'"' (plugin: " + asset.plugin + ") requires the '"'"'" + asset.required_tier + "'"'"' subscription domain. Your current plan does not include this domain. Run /license-status to see your current plan, or visit https://gorevpal.com/pricing to upgrade.";
+                console.log(JSON.stringify({ decision: "block", reason: msg }));
+                process.exit(0);
+            }
+        }
+    }
+' 2>/dev/null || echo "")
+
+if [[ -n "$BLOCKED_CHECK" ]] && [[ "$BLOCKED_CHECK" != "undefined" ]]; then
+    echo "$BLOCKED_CHECK"
+    exit 0
+fi
+
+exit 0
