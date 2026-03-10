@@ -362,6 +362,8 @@ echo "$SESSION_DIR" > "$RUNTIME_BASE/.current-session" 2>/dev/null || true
 
 # Track results for session manifest
 ALL_RESULTS="[]"
+ALL_BLOCKED="[]"
+ASSETS_BLOCKED=0
 MESSAGES=()
 
 while IFS= read -r plugin_dir; do
@@ -391,13 +393,20 @@ while IFS= read -r plugin_dir; do
         console.log(failed.length);
     ' 2>/dev/null || echo "0")
 
+    blocked_count=$(printf '%s' "$result_json" | node -e '
+        const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+        console.log((d.results||[]).filter(r=>r.status==="tier_blocked").length);
+    ' 2>/dev/null || echo "0")
+
     ASSETS_DECRYPTED=$((ASSETS_DECRYPTED + ok_count))
     ASSETS_FAILED=$((ASSETS_FAILED + fail_count))
+    ASSETS_BLOCKED=$((ASSETS_BLOCKED + blocked_count))
 
     # Merge into session manifest data — pass both via stdin + env (Fix C1/C2)
-    ALL_RESULTS=$(printf '%s' "$result_json" | ENC_PREV_RESULTS="$ALL_RESULTS" node -e '
+    MERGE_OUTPUT=$(printf '%s' "$result_json" | ENC_PREV_RESULTS="$ALL_RESULTS" ENC_PREV_BLOCKED="$ALL_BLOCKED" node -e '
         const fs = require("fs");
         const prev = JSON.parse(process.env.ENC_PREV_RESULTS);
+        const prevBlocked = JSON.parse(process.env.ENC_PREV_BLOCKED || "[]");
         const curr = JSON.parse(fs.readFileSync("/dev/stdin","utf8"));
         const merged = prev.concat((curr.results||[]).filter(r=>r.status==="ok").map(r=>({
             plugin: curr.plugin,
@@ -405,8 +414,25 @@ while IFS= read -r plugin_dir; do
             decrypted_path: r.decrypted_path,
             encrypted_path: r.encrypted_path
         })));
-        console.log(JSON.stringify(merged));
-    ' 2>/dev/null || echo "$ALL_RESULTS")
+        const mergedBlocked = prevBlocked.concat((curr.results||[]).filter(r=>r.status==="tier_blocked").map(r=>({
+            plugin: curr.plugin,
+            logical_path: r.path,
+            encrypted_path: r.encrypted_path || r.path.replace(/\.([^.]+)$/, ".$1.enc"),
+            required_tier: r.required_tier
+        })));
+        console.log(JSON.stringify({ assets: merged, blocked: mergedBlocked }));
+    ' 2>/dev/null || echo "")
+
+    if [[ -n "$MERGE_OUTPUT" ]]; then
+        ALL_RESULTS=$(printf '%s' "$MERGE_OUTPUT" | node -e '
+            const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+            console.log(JSON.stringify(d.assets));
+        ' 2>/dev/null || echo "$ALL_RESULTS")
+        ALL_BLOCKED=$(printf '%s' "$MERGE_OUTPUT" | node -e '
+            const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+            console.log(JSON.stringify(d.blocked));
+        ' 2>/dev/null || echo "$ALL_BLOCKED")
+    fi
 
 done <<< "$PLUGIN_DIRS"
 
@@ -414,12 +440,14 @@ done <<< "$PLUGIN_DIRS"
 # 5. Write session manifest — all values via env vars (Fix C1/C2)
 # =============================================================================
 
-if [[ "$ASSETS_DECRYPTED" -gt 0 ]] || [[ "$ASSETS_FAILED" -gt 0 ]]; then
+if [[ "$ASSETS_DECRYPTED" -gt 0 ]] || [[ "$ASSETS_FAILED" -gt 0 ]] || [[ "$ASSETS_BLOCKED" -gt 0 ]]; then
     ENC_SESSION_ID="$SESSION_ID" \
     ENC_SESSION_DIR="$SESSION_DIR" \
     ENC_ALL_RESULTS="$ALL_RESULTS" \
+    ENC_ALL_BLOCKED="$ALL_BLOCKED" \
     ENC_DECRYPTED="$ASSETS_DECRYPTED" \
     ENC_FAILED="$ASSETS_FAILED" \
+    ENC_BLOCKED="$ASSETS_BLOCKED" \
     ENC_PLUGINS="$PLUGINS_FOUND" \
     node -e '
         const fs = require("fs");
@@ -428,9 +456,11 @@ if [[ "$ASSETS_DECRYPTED" -gt 0 ]] || [[ "$ASSETS_FAILED" -gt 0 ]]; then
             created_at: new Date().toISOString(),
             session_dir: process.env.ENC_SESSION_DIR,
             assets: JSON.parse(process.env.ENC_ALL_RESULTS),
+            blocked_assets: JSON.parse(process.env.ENC_ALL_BLOCKED || "[]"),
             stats: {
                 decrypted: parseInt(process.env.ENC_DECRYPTED, 10),
                 failed: parseInt(process.env.ENC_FAILED, 10),
+                blocked: parseInt(process.env.ENC_BLOCKED, 10),
                 plugins: parseInt(process.env.ENC_PLUGINS, 10)
             }
         };
@@ -452,6 +482,15 @@ fi
 
 if [[ "$ASSETS_FAILED" -gt 0 ]]; then
     MESSAGES+=("WARNING: $ASSETS_FAILED encrypted asset(s) failed decryption. Check logs.")
+fi
+
+if [[ "$ASSETS_BLOCKED" -gt 0 ]]; then
+    BLOCKED_DOMAINS=$(printf '%s' "$ALL_BLOCKED" | node -e '
+        const b = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+        const domains = [...new Set(b.map(a=>a.required_tier))].sort();
+        console.log(domains.join(", "));
+    ' 2>/dev/null || echo "unknown")
+    MESSAGES+=("Subscription boundary: $ASSETS_BLOCKED asset(s) require a higher plan ($BLOCKED_DOMAINS). Run /license-status for details.")
 fi
 
 if [[ ${#MESSAGES[@]} -gt 0 ]]; then
