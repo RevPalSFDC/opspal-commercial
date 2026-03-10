@@ -1,43 +1,10 @@
 {
-  "name": "opspal-internal-plugins",
+  "name": "opspal-commercial-plugins",
   "version": "1.0.0",
-  "description": "This is the **official plugin marketplace** for the RevPal Agent System. We've successfully migrated **100 agents, 512+ scripts, 21+ commands, and 12+ hooks** from the legacy monolithic structure to a modular plugin architecture.",
-  "main": "fetch-new-reflections.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "description": "OpsPal commercial plugin marketplace for Claude Code — Salesforce, HubSpot, Marketo, and cross-platform RevOps plugins.",
+  "type": "commonjs",
   "scripts": {
-    "docs:generate": "node scripts/generate-plugin-suite-docs.js",
-    "docs:check": "node scripts/generate-plugin-suite-docs.js --check",
-    "docs:lint": "node scripts/lib/docs-lint.js",
-    "docs:lint:baseline": "node scripts/lib/docs-lint.js --update-baseline",
-    "docs:verify-hook-path-isolation": "node scripts/lib/verify-hook-path-isolation.js",
-    "docs:verify-routing": "node scripts/lib/verify-routing.js",
-    "docs:verify-route-coverage": "node scripts/lib/verify-route-coverage.js",
-    "docs:verify-route-coverage:baseline": "node scripts/lib/verify-route-coverage.js --update-baseline",
-    "docs:verify-commands": "node scripts/lib/verify-commands.js",
-    "docs:verify-unused-assets": "node scripts/lib/verify-unused-assets.js",
-    "docs:verify-unused-assets:baseline": "node scripts/lib/verify-unused-assets.js --update-baseline",
-    "docs:verify-version-bumps": "node scripts/lib/verify-plugin-version-bumps.js",
-    "docs:verify-lifecycle-metadata": "node scripts/lib/verify-lifecycle-metadata.js",
-    "docs:verify-lifecycle-metadata:baseline": "node scripts/lib/verify-lifecycle-metadata.js --update-baseline",
-    "docs:verify-architecture-boundaries": "node scripts/lib/verify-architecture-boundaries.js",
-    "docs:verify-architecture-boundaries:baseline": "node scripts/lib/verify-architecture-boundaries.js --update-baseline",
-    "docs:verify-shell-safety": "node scripts/lib/verify-shell-safety.js",
-    "docs:verify-shell-safety:baseline": "node scripts/lib/verify-shell-safety.js --update-baseline",
-    "docs:ci": "npm run docs:check && npm run docs:lint && npm run docs:verify-hook-path-isolation && npm run docs:verify-routing && npm run docs:verify-route-coverage && npm run docs:verify-commands && npm run docs:verify-unused-assets && npm run docs:verify-version-bumps && npm run docs:verify-lifecycle-metadata && npm run docs:verify-architecture-boundaries && npm run docs:verify-shell-safety",
-    "exec:generate": "node scripts/generate-exec-gap-analysis.js && node scripts/generate-next-best-actions.js",
-    "exec:validate": "node scripts/validate-exec-gap-analysis.js",
-    "exec:ci": "npm run exec:generate && npm run exec:validate",
-    "copilot:approval": "node scripts/copilot-approval-queue.js",
-    "next-actions:generate": "node scripts/generate-next-best-actions.js",
-    "next-actions:promote": "node scripts/promote-approved-actions.js",
-    "hooks:audit": "node scripts/lib/audit-hooks-config.js",
-    "hooks:audit:check": "node scripts/lib/audit-hooks-config.js --check",
     "test": "jest",
-    "test:unit": "node --test \"test/**/*.test.js\"",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch",
     "test:ci": "jest --coverage --coverageReporters=text-summary --maxWorkers=2",
     "test:salesforce": "jest --testPathPatterns=\".claude-plugins/opspal-salesforce\"",
     "test:hubspot": "jest --testPathPatterns=\".claude-plugins/opspal-hubspot\"",
@@ -45,29 +12,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace.git"
+    "url": "git+https://github.com/RevPalSFDC/opspal-commercial-plugins.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "UNLICENSED",
-  "type": "commonjs",
+  "author": "RevPal Engineering <engineering@gorevpal.com>",
+  "license": "Proprietary",
   "bugs": {
-    "url": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace/issues"
+    "url": "https://github.com/RevPalSFDC/opspal-commercial-plugins/issues"
   },
-  "homepage": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace#readme",
+  "homepage": "https://github.com/RevPalSFDC/opspal-commercial-plugins#readme",
   "dependencies": {
-    "@anthropic-ai/sdk": "0.71.2",
-    "@google-cloud/local-auth": "~3.0.1",
-    "@supabase/supabase-js": "~2.78.0",
-    "cheerio": "~1.1.2",
-    "compromise": "~14.14.4",
     "dotenv": "~17.2.3",
-    "googleapis": "~164.1.0",
     "playwright": "~1.57.0"
   },
   "devDependencies": {
-    "@types/jest": "~30.0.0",
-    "@upstash/context7-mcp": "^2.1.1",
     "jest": "~30.2.0"
   }
 }
