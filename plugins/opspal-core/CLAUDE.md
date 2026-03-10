@@ -19,6 +19,24 @@ The **OpsPal Core** provides utilities and orchestration across Salesforce, HubS
 /agents  # Should show cross-platform agents
 ```
 
+## Licensing And Encrypted Assets
+
+The current licensing model is v2-only and uses tier-scoped key bundles from the OpsPal license server.
+
+- Backend, activation, and admin operations are documented in the sibling `opspal-license-server/docs/` directory.
+- Operator/runtime guide: `docs/LICENSING_RUNTIME_GUIDE.md`
+- Machine-level rollout check: `commands/license-canary.md`
+- Cached-state inspection: `commands/license-status.md`
+
+Key operational commands:
+
+```bash
+/activate-license <license-key>
+/license-status
+/license-canary --expect-tier <starter|professional|enterprise|trial>
+/deactivate-license
+```
+
 ## Key Features
 
 ### Validation Framework (NEW)
@@ -1076,14 +1094,14 @@ Plugin Author                    Git Repo                      Runtime Session
 ### Quick Start
 
 ```bash
-# 1. Generate master key
+# 1. Generate scoped tier keys
 /encrypt-assets key-setup
 
 # 2. Initialize plugin manifest
 /encrypt-assets init --plugin opspal-salesforce
 
 # 3. Encrypt a file
-/encrypt-assets encrypt --plugin opspal-salesforce --file scripts/lib/scoring-algorithm.js
+/encrypt-assets encrypt --plugin opspal-salesforce --file scripts/lib/scoring-algorithm.js --tier tier2
 
 # 4. Verify encryption
 /encrypt-assets verify --plugin opspal-salesforce
@@ -1096,15 +1114,14 @@ Plugin Author                    Git Repo                      Runtime Session
 
 - **Algorithm**: AES-256-GCM (authenticated encryption)
 - **Key Derivation**: HKDF (RFC 5869) with HMAC-SHA256
-- **AAD Binding**: `"opspal-enc:v1:{plugin}:{path}"` prevents cross-plugin replay
-- **Wire Format**: 52-byte header (magic `OENC` + salt + nonce + auth tag) + ciphertext
+- **AAD Binding**: `"opspal-enc:v2:{plugin}:{path}"` for scoped tier assets
+- **Wire Format**: 52-byte header (magic `OENC` + version + key slot + salt + nonce + auth tag) + ciphertext
 - **Dependencies**: Zero — uses only Node.js built-in `crypto`
 
 ### Key Sources (checked in order)
 
-1. `OPSPAL_PLUGIN_MASTER_KEY` env var (base64-encoded 32 bytes)
-2. `~/.claude/opspal-enc/master.key` file (base64, chmod 600)
-3. `~/.claude/opspal-enc/{plugin-name}.key` (per-plugin override)
+1. `OPSPAL_PLUGIN_KEYRING_JSON` env var (JSON map of `tier1` / `tier2` / `tier3`)
+2. `~/.claude/opspal-enc/tier1.key`, `tier2.key`, `tier3.key`
 
 ### Plugin Manifest
 
@@ -1112,7 +1129,7 @@ Each plugin opting in adds `.claude-plugin/encryption.json`:
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "plugin": "opspal-salesforce",
   "encrypted_assets": [
     {
@@ -1121,7 +1138,8 @@ Each plugin opting in adds `.claude-plugin/encryption.json`:
       "asset_type": "script",
       "sensitivity": "high",
       "decrypt_on": ["SessionStart"],
-      "checksum_plaintext": "sha256:e3b0c44..."
+      "checksum_plaintext": "sha256:e3b0c44...",
+      "required_tier": "tier2"
     }
   ],
   "cleanup_on_stop": true,
@@ -1146,20 +1164,20 @@ Each session uses `~/.claude/opspal-enc/runtime/{CLAUDE_SESSION_ID}/` — concur
 
 | Command | Purpose |
 |---------|---------|
-| `key-setup` | Generate 32-byte master key |
+| `key-setup` | Generate tier-scoped keys |
 | `init --plugin <name>` | Create skeleton `encryption.json` |
-| `encrypt --plugin <name> --file <path>` | Encrypt file, update manifest, gitignore original |
-| `encrypt --plugin <name> --dir <path>` | Tar + encrypt directory |
+| `encrypt --plugin <name> --file <path> --tier <tier>` | Encrypt file with a scoped tier key, update manifest, gitignore original |
+| `encrypt --plugin <name> --dir <path> --tier <tier>` | Tar + encrypt directory with a scoped tier key |
 | `decrypt --plugin <name> --file <path>` | Decrypt to output dir (dev workflow) |
 | `verify --plugin <name>` | Verify all `.enc` files (magic, decryption, checksum) |
-| `re-encrypt --plugin <name> [--rotate-key]` | Re-encrypt all assets (key rotation) |
+| `re-encrypt --plugin <name> [--rotate-key]` | Re-encrypt all assets with scoped keys |
 | `status --plugin <name>` | Show encryption status and key source |
 
 ### Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPSPAL_PLUGIN_MASTER_KEY` | - | Base64-encoded 32-byte master key |
+| `OPSPAL_PLUGIN_KEYRING_JSON` | - | JSON key ring used for scoped v2 assets |
 | `OPSPAL_ENC_DEV_MODE` | `0` | Skip path rewriting (use plaintext directly) |
 | `OPSPAL_ENC_SESSION_DIR` | auto | Override session runtime directory |
 | `ASSET_CLEANUP_VERBOSE` | `0` | Verbose cleanup logging |

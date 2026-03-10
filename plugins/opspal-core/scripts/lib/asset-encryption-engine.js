@@ -4,13 +4,14 @@
  * Asset Encryption Engine
  *
  * Core encrypt/decrypt/verify library for selective encryption of plugin assets.
- * Uses AES-256-GCM with HKDF key derivation.  Zero external dependencies.
+ * Uses AES-256-GCM with HKDF key derivation. Zero external dependencies.
  *
  * Wire format (.enc files):
  *   Offset  Size  Content
  *   0-3     4B    Magic  "OENC" (0x4F454E43)
- *   4       1B    Version (0x01)
- *   5-7     3B    Reserved flags
+ *   4       1B    Version (0x02 tier-scoped)
+ *   5       1B    Key slot (1=tier1, 2=tier2, 3=tier3)
+ *   6-7     2B    Reserved flags
  *   8-23    16B   HKDF salt
  *   24-35   12B   GCM nonce
  *   36-51   16B   GCM auth tag
@@ -21,12 +22,11 @@
 
 'use strict';
 
-// Node.js version check — crypto.hkdfSync requires Node >= 15
-const [_nodeMajor] = process.versions.node.split('.').map(Number);
-if (_nodeMajor < 15) {
+const [nodeMajor] = process.versions.node.split('.').map(Number);
+if (nodeMajor < 15) {
   throw new Error(
     `asset-encryption-engine requires Node.js >= 15 (found ${process.versions.node}). ` +
-    `crypto.hkdfSync is not available in earlier versions.`
+    'crypto.hkdfSync is not available in earlier versions.'
   );
 }
 
@@ -35,184 +35,209 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-// ─── Constants ──────────────────────────────────────────────────────────────
-
-const MAGIC = Buffer.from('OENC');          // 0x4F454E43
-const FORMAT_VERSION = 0x01;
-const HEADER_SIZE = 52;                     // 4+1+3+16+12+16
+const MAGIC = Buffer.from('OENC');
+const FORMAT_VERSION = 0x02;
+const HEADER_SIZE = 52;
 const SALT_SIZE = 16;
 const NONCE_SIZE = 12;
 const TAG_SIZE = 16;
-const KEY_SIZE = 32;                        // AES-256
+const KEY_SIZE = 32;
 const ALGORITHM = 'aes-256-gcm';
+const DEFAULT_REQUIRED_TIER = 'tier3';
+const HKDF_INFO_PREFIX = 'opspal-enc:v2';
+const AAD_PREFIX = 'opspal-enc:v2';
 
-// HKDF info prefix
-const HKDF_INFO_PREFIX = 'opspal-enc:v1';
-
-// Key source locations (checked in order)
-const KEY_ENV_VAR = 'OPSPAL_PLUGIN_MASTER_KEY';
+const KEYRING_ENV_VAR = 'OPSPAL_PLUGIN_KEYRING_JSON';
 const KEY_DIR = path.join(os.homedir(), '.claude', 'opspal-enc');
-const MASTER_KEY_FILE = path.join(KEY_DIR, 'master.key');
+const TIER_KEY_FILES = {
+  tier1: path.join(KEY_DIR, 'tier1.key'),
+  tier2: path.join(KEY_DIR, 'tier2.key'),
+  tier3: path.join(KEY_DIR, 'tier3.key')
+};
 
-// ─── Key Management ─────────────────────────────────────────────────────────
+const KEY_SLOT_BY_TIER = {
+  tier1: 1,
+  tier2: 2,
+  tier3: 3
+};
 
-/**
- * Generate a new 32-byte master key, returned as base64.
- * @returns {string} Base64-encoded 32-byte key
- */
+const TIER_BY_KEY_SLOT = {
+  1: 'tier1',
+  2: 'tier2',
+  3: 'tier3'
+};
+
 function generateKey() {
   return crypto.randomBytes(KEY_SIZE).toString('base64');
 }
 
-/**
- * Write a master key to the default key file with restricted permissions.
- * @param {string} base64Key - Base64-encoded key
- */
-function writeKeyFile(base64Key) {
-  fs.mkdirSync(KEY_DIR, { recursive: true, mode: 0o700 });
-  fs.writeFileSync(MASTER_KEY_FILE, base64Key + '\n', { mode: 0o600 });
+function generateTierKeyring() {
+  return {
+    tier1: generateKey(),
+    tier2: generateKey(),
+    tier3: generateKey()
+  };
 }
 
-/**
- * Resolve the master key for a given plugin.
- *
- * Check order:
- *   1. OPSPAL_PLUGIN_MASTER_KEY env var
- *   2. ~/.claude/opspal-enc/master.key
- *   3. ~/.claude/opspal-enc/{pluginName}.key  (per-plugin override)
- *
- * @param {string} [pluginName] - Plugin name for per-plugin key lookup
- * @returns {Buffer|null} 32-byte key buffer or null if not found
- */
-function resolveMasterKey(pluginName) {
-  // 1. Environment variable
-  const envKey = process.env[KEY_ENV_VAR];
-  if (envKey) {
-    const buf = Buffer.from(envKey, 'base64');
-    if (buf.length === KEY_SIZE) return buf;
+function writeTierKeyFiles(keyring) {
+  fs.mkdirSync(KEY_DIR, { recursive: true, mode: 0o700 });
+
+  for (const [tier, filePath] of Object.entries(TIER_KEY_FILES)) {
+    if (!keyring[tier]) continue;
+    fs.writeFileSync(filePath, keyring[tier] + '\n', { mode: 0o600 });
+  }
+}
+
+function resolveKeyring() {
+  const envKeyring = parseKeyringJson(process.env[KEYRING_ENV_VAR]);
+  if (envKeyring) {
+    return envKeyring;
   }
 
-  // 2. Master key file
-  if (fs.existsSync(MASTER_KEY_FILE)) {
+  const keyring = {};
+  for (const [tier, filePath] of Object.entries(TIER_KEY_FILES)) {
+    if (!fs.existsSync(filePath)) continue;
     try {
-      const content = fs.readFileSync(MASTER_KEY_FILE, 'utf8').trim();
-      const buf = Buffer.from(content, 'base64');
-      if (buf.length === KEY_SIZE) return buf;
-    } catch { /* fall through */ }
+      const decoded = decodeBase64Key(fs.readFileSync(filePath, 'utf8').trim());
+      if (decoded) {
+        keyring[tier] = decoded;
+      }
+    } catch {
+      // Ignore malformed key files and continue scanning others.
+    }
   }
 
-  // 3. Per-plugin key file
-  if (pluginName) {
-    const pluginKeyFile = path.join(KEY_DIR, `${pluginName}.key`);
-    if (fs.existsSync(pluginKeyFile)) {
-      try {
-        const content = fs.readFileSync(pluginKeyFile, 'utf8').trim();
-        const buf = Buffer.from(content, 'base64');
-        if (buf.length === KEY_SIZE) return buf;
-      } catch { /* fall through */ }
-    }
+  return Object.keys(keyring).length > 0 ? keyring : null;
+}
+
+function resolveKeyMaterial(_pluginName) {
+  const keyring = resolveKeyring();
+  if (!keyring) {
+    return null;
+  }
+  return { keyring };
+}
+
+function normalizeKeyMaterial(keyMaterial) {
+  if (!keyMaterial) return null;
+
+  if (keyMaterial.keyring) {
+    return { keyring: normalizeKeyringBuffers(keyMaterial.keyring) };
+  }
+
+  if (keyMaterial.tier1 || keyMaterial.tier2 || keyMaterial.tier3) {
+    return { keyring: normalizeKeyringBuffers(keyMaterial) };
   }
 
   return null;
 }
 
-// ─── HKDF Key Derivation ───────────────────────────────────────────────────
+function normalizeKeyringBuffers(candidate) {
+  if (!candidate || typeof candidate !== 'object') return null;
 
-/**
- * Derive a per-asset key using HKDF-SHA256.
- *
- * @param {Buffer} masterKey  - 32-byte master key
- * @param {string} pluginName - Plugin name
- * @param {Buffer} salt       - 16-byte random salt (stored in .enc header)
- * @returns {Buffer} 32-byte derived key
- */
-function deriveKey(masterKey, pluginName, salt) {
+  const keyring = {};
+  for (const tier of Object.keys(KEY_SLOT_BY_TIER)) {
+    const value = candidate[tier];
+    if (!value) continue;
+
+    const decoded = Buffer.isBuffer(value) ? value : decodeBase64Key(value);
+    if (decoded) {
+      keyring[tier] = decoded;
+    }
+  }
+
+  return Object.keys(keyring).length > 0 ? keyring : null;
+}
+
+function decodeBase64Key(value) {
+  if (!value || typeof value !== 'string') return null;
+  const buf = Buffer.from(value, 'base64');
+  return buf.length === KEY_SIZE ? buf : null;
+}
+
+function parseKeyringJson(value) {
+  if (!value || typeof value !== 'string') return null;
+
+  try {
+    const parsed = JSON.parse(value);
+    if (parsed && parsed.version === FORMAT_VERSION && parsed.keys) {
+      return normalizeKeyringBuffers(parsed.keys);
+    }
+    return normalizeKeyringBuffers(parsed);
+  } catch {
+    return null;
+  }
+}
+
+function deriveKey(baseKey, pluginName, salt, formatVersion = FORMAT_VERSION) {
+  if (formatVersion !== FORMAT_VERSION) {
+    throw new Error(`Unsupported .enc version: ${formatVersion}`);
+  }
+
   const info = Buffer.from(`${HKDF_INFO_PREFIX}:${pluginName}`);
-  return crypto.hkdfSync('sha256', masterKey, salt, info, KEY_SIZE);
+  return crypto.hkdfSync('sha256', baseKey, salt, info, KEY_SIZE);
 }
 
-// ─── AAD Construction ───────────────────────────────────────────────────────
+function buildAAD(pluginName, assetPath, formatVersion = FORMAT_VERSION) {
+  if (formatVersion !== FORMAT_VERSION) {
+    throw new Error(`Unsupported .enc version: ${formatVersion}`);
+  }
 
-/**
- * Build AAD that binds ciphertext to a specific plugin + path.
- * Prevents cross-plugin or cross-path replay attacks.
- *
- * @param {string} pluginName - Plugin name
- * @param {string} assetPath  - Relative path inside the plugin
- * @returns {Buffer}
- */
-function buildAAD(pluginName, assetPath) {
-  return Buffer.from(`opspal-enc:v1:${pluginName}:${assetPath}`);
+  return Buffer.from(`${AAD_PREFIX}:${pluginName}:${assetPath}`);
 }
 
-// ─── Wire Format Helpers ────────────────────────────────────────────────────
+function assembleWireFormat({ version = FORMAT_VERSION, keySlot, salt, nonce, tag, ciphertext }) {
+  if (version !== FORMAT_VERSION) {
+    throw new Error(`Unsupported .enc version: ${version}`);
+  }
+  if (!TIER_BY_KEY_SLOT[keySlot]) {
+    throw new Error(`Invalid key slot for .enc v2: ${keySlot}`);
+  }
 
-/**
- * Assemble the .enc binary wire format.
- *
- * @param {Object} parts
- * @param {Buffer} parts.salt       - 16B HKDF salt
- * @param {Buffer} parts.nonce      - 12B GCM nonce
- * @param {Buffer} parts.tag        - 16B GCM auth tag
- * @param {Buffer} parts.ciphertext - Variable-length ciphertext
- * @returns {Buffer} Complete .enc blob
- */
-function assembleWireFormat({ salt, nonce, tag, ciphertext }) {
   const header = Buffer.alloc(HEADER_SIZE);
   let offset = 0;
 
-  // Magic
   MAGIC.copy(header, offset);
   offset += 4;
 
-  // Version
-  header.writeUInt8(FORMAT_VERSION, offset);
+  header.writeUInt8(version, offset);
   offset += 1;
 
-  // Reserved flags (3 bytes, zeroed)
+  header.writeUInt8(keySlot, offset);
   offset += 3;
 
-  // Salt
   salt.copy(header, offset);
   offset += SALT_SIZE;
 
-  // Nonce
   nonce.copy(header, offset);
   offset += NONCE_SIZE;
 
-  // Auth tag
   tag.copy(header, offset);
 
   return Buffer.concat([header, ciphertext]);
 }
 
-/**
- * Parse a .enc blob into its component parts.
- *
- * @param {Buffer} encBuffer - Complete .enc blob
- * @returns {Object} { salt, nonce, tag, ciphertext }
- * @throws {Error} If magic bytes or version mismatch
- */
 function parseWireFormat(encBuffer) {
   if (!Buffer.isBuffer(encBuffer) || encBuffer.length < HEADER_SIZE) {
     throw new Error(`Invalid .enc file: too short (${encBuffer ? encBuffer.length : 0} bytes, need ${HEADER_SIZE})`);
   }
 
-  // Validate magic
   const magic = encBuffer.subarray(0, 4);
   if (!magic.equals(MAGIC)) {
     throw new Error(`Invalid .enc file: bad magic bytes (got ${magic.toString('hex')}, expected ${MAGIC.toString('hex')})`);
   }
 
-  // Validate version
   const version = encBuffer.readUInt8(4);
   if (version !== FORMAT_VERSION) {
-    throw new Error(`Unsupported .enc version: ${version} (expected ${FORMAT_VERSION})`);
+    throw new Error(`Unsupported .enc version: ${version}`);
   }
 
-  // Extract parts
-  let offset = 8; // skip magic(4) + version(1) + reserved(3)
+  const keySlot = encBuffer.readUInt8(5);
+  if (!TIER_BY_KEY_SLOT[keySlot]) {
+    throw new Error(`Invalid key slot for .enc v2: ${keySlot}`);
+  }
 
+  let offset = 8;
   const salt = encBuffer.subarray(offset, offset + SALT_SIZE);
   offset += SALT_SIZE;
 
@@ -224,27 +249,29 @@ function parseWireFormat(encBuffer) {
 
   const ciphertext = encBuffer.subarray(offset);
 
-  return { salt, nonce, tag, ciphertext };
+  return {
+    version,
+    keySlot,
+    requiredTier: TIER_BY_KEY_SLOT[keySlot],
+    salt,
+    nonce,
+    tag,
+    ciphertext
+  };
 }
 
-// ─── Encrypt / Decrypt / Verify ─────────────────────────────────────────────
-
-/**
- * Encrypt plaintext into the .enc wire format.
- *
- * @param {Buffer|string} plaintext  - Content to encrypt
- * @param {string}        pluginName - Plugin name (used in AAD + HKDF info)
- * @param {string}        assetPath  - Relative asset path (used in AAD)
- * @param {Buffer}        masterKey  - 32-byte master key
- * @returns {Buffer} .enc wire-format blob
- */
-function encryptAsset(plaintext, pluginName, assetPath, masterKey) {
+function encryptAsset(plaintext, pluginName, assetPath, keyMaterial, options = {}) {
   const plaintextBuf = Buffer.isBuffer(plaintext) ? plaintext : Buffer.from(plaintext);
+  const resolvedKey = selectEncryptionKey(keyMaterial, options.requiredTier);
+
+  if (!resolvedKey) {
+    throw new Error('No suitable encryption key available');
+  }
 
   const salt = crypto.randomBytes(SALT_SIZE);
   const nonce = crypto.randomBytes(NONCE_SIZE);
-  const derivedKey = deriveKey(masterKey, pluginName, salt);
-  const aad = buildAAD(pluginName, assetPath);
+  const derivedKey = deriveKey(resolvedKey.key, pluginName, salt, resolvedKey.formatVersion);
+  const aad = buildAAD(pluginName, assetPath, resolvedKey.formatVersion);
 
   const cipher = crypto.createCipheriv(ALGORITHM, derivedKey, nonce, { authTagLength: TAG_SIZE });
   cipher.setAAD(aad);
@@ -252,52 +279,39 @@ function encryptAsset(plaintext, pluginName, assetPath, masterKey) {
   const ciphertext = Buffer.concat([cipher.update(plaintextBuf), cipher.final()]);
   const tag = cipher.getAuthTag();
 
-  return assembleWireFormat({ salt, nonce, tag, ciphertext });
+  return assembleWireFormat({
+    version: resolvedKey.formatVersion,
+    keySlot: resolvedKey.keySlot,
+    salt,
+    nonce,
+    tag,
+    ciphertext
+  });
 }
 
-/**
- * Decrypt a .enc blob back to plaintext.
- *
- * @param {Buffer} encBuffer  - .enc wire-format blob
- * @param {string} pluginName - Plugin name (must match what was used during encryption)
- * @param {string} assetPath  - Relative asset path (must match encryption AAD)
- * @param {Buffer} masterKey  - 32-byte master key
- * @returns {Buffer} Decrypted plaintext
- * @throws {Error} On authentication failure (tampered data or wrong key/AAD)
- */
-function decryptAsset(encBuffer, pluginName, assetPath, masterKey) {
-  const { salt, nonce, tag, ciphertext } = parseWireFormat(encBuffer);
+function decryptAsset(encBuffer, pluginName, assetPath, keyMaterial) {
+  const parsed = parseWireFormat(encBuffer);
+  const decryptionKey = selectDecryptionKey(keyMaterial, parsed);
+  const derivedKey = deriveKey(decryptionKey, pluginName, parsed.salt, parsed.version);
+  const aad = buildAAD(pluginName, assetPath, parsed.version);
 
-  const derivedKey = deriveKey(masterKey, pluginName, salt);
-  const aad = buildAAD(pluginName, assetPath);
-
-  const decipher = crypto.createDecipheriv(ALGORITHM, derivedKey, nonce, { authTagLength: TAG_SIZE });
-  decipher.setAuthTag(tag);
+  const decipher = crypto.createDecipheriv(ALGORITHM, derivedKey, parsed.nonce, { authTagLength: TAG_SIZE });
+  decipher.setAuthTag(parsed.tag);
   decipher.setAAD(aad);
 
-  const plaintext = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
-  return plaintext;
+  return Buffer.concat([decipher.update(parsed.ciphertext), decipher.final()]);
 }
 
-/**
- * Verify a .enc blob: decrypt + optional checksum comparison.
- *
- * @param {Buffer}  encBuffer        - .enc wire-format blob
- * @param {string}  pluginName       - Plugin name
- * @param {string}  assetPath        - Relative asset path
- * @param {Buffer}  masterKey        - 32-byte master key
- * @param {string}  [expectedChecksum] - "sha256:<hex>" to verify against
- * @returns {{ valid: boolean, error?: string }}
- */
-function verifyAsset(encBuffer, pluginName, assetPath, masterKey, expectedChecksum) {
+function verifyAsset(encBuffer, pluginName, assetPath, keyMaterial, expectedChecksum) {
   try {
-    const plaintext = decryptAsset(encBuffer, pluginName, assetPath, masterKey);
+    const plaintext = decryptAsset(encBuffer, pluginName, assetPath, keyMaterial);
 
     if (expectedChecksum) {
       const [algo, expectedHash] = expectedChecksum.split(':');
       if (algo !== 'sha256') {
         return { valid: false, error: `Unsupported checksum algorithm: ${algo}` };
       }
+
       const actualHash = crypto.createHash('sha256').update(plaintext).digest('hex');
       if (actualHash !== expectedHash) {
         return {
@@ -313,34 +327,55 @@ function verifyAsset(encBuffer, pluginName, assetPath, masterKey, expectedChecks
   }
 }
 
-/**
- * Compute the SHA-256 checksum of content in manifest format.
- *
- * @param {Buffer|string} content
- * @returns {string} "sha256:<hex>"
- */
+function selectEncryptionKey(keyMaterial, requiredTier = DEFAULT_REQUIRED_TIER) {
+  const normalized = normalizeKeyMaterial(keyMaterial);
+  if (!normalized || !normalized.keyring) return null;
+
+  const tier = normalizeTier(requiredTier || DEFAULT_REQUIRED_TIER);
+  if (!normalized.keyring[tier]) {
+    return null;
+  }
+
+  return {
+    key: normalized.keyring[tier],
+    formatVersion: FORMAT_VERSION,
+    keySlot: KEY_SLOT_BY_TIER[tier],
+    requiredTier: tier
+  };
+}
+
+function selectDecryptionKey(keyMaterial, parsed) {
+  const normalized = normalizeKeyMaterial(keyMaterial);
+  if (!normalized || !normalized.keyring) {
+    throw new Error('No decryption key material available');
+  }
+
+  const tierKey = normalized.keyring[parsed.requiredTier];
+  if (!tierKey) {
+    throw new Error(`No scoped key available for ${parsed.requiredTier}`);
+  }
+
+  return tierKey;
+}
+
+function normalizeTier(tier) {
+  if (!KEY_SLOT_BY_TIER[tier]) {
+    throw new Error(`Unsupported required tier: ${tier}`);
+  }
+  return tier;
+}
+
 function computeChecksum(content) {
   const buf = Buffer.isBuffer(content) ? content : Buffer.from(content);
   const hash = crypto.createHash('sha256').update(buf).digest('hex');
   return `sha256:${hash}`;
 }
 
-// ─── File-Level Operations ──────────────────────────────────────────────────
-
-/**
- * Encrypt a file and write the .enc output.
- *
- * @param {string} inputPath   - Path to plaintext file
- * @param {string} outputPath  - Path for .enc output
- * @param {string} pluginName  - Plugin name
- * @param {string} assetPath   - Relative path within plugin (for AAD)
- * @param {Buffer} masterKey   - 32-byte master key
- * @returns {{ checksum: string, size: number, encryptedSize: number }}
- */
-function encryptFile(inputPath, outputPath, pluginName, assetPath, masterKey) {
+function encryptFile(inputPath, outputPath, pluginName, assetPath, keyMaterial, options = {}) {
   const plaintext = fs.readFileSync(inputPath);
   const checksum = computeChecksum(plaintext);
-  const encBlob = encryptAsset(plaintext, pluginName, assetPath, masterKey);
+  const encBlob = encryptAsset(plaintext, pluginName, assetPath, keyMaterial, options);
+  const parsed = parseWireFormat(encBlob);
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.writeFileSync(outputPath, encBlob);
@@ -348,32 +383,20 @@ function encryptFile(inputPath, outputPath, pluginName, assetPath, masterKey) {
   return {
     checksum,
     size: plaintext.length,
-    encryptedSize: encBlob.length
+    encryptedSize: encBlob.length,
+    formatVersion: parsed.version
   };
 }
 
-/**
- * Decrypt a .enc file and write plaintext output.
- *
- * @param {string} encPath     - Path to .enc file
- * @param {string} outputPath  - Path for plaintext output
- * @param {string} pluginName  - Plugin name
- * @param {string} assetPath   - Relative asset path (for AAD)
- * @param {Buffer} masterKey   - 32-byte master key
- * @param {Object} [options]
- * @param {string} [options.expectedChecksum] - Checksum to verify
- * @param {number} [options.fileMode=0o600]   - File permissions
- * @returns {{ size: number, checksumValid: boolean|null }}
- */
-function decryptFile(encPath, outputPath, pluginName, assetPath, masterKey, options = {}) {
+function decryptFile(encPath, outputPath, pluginName, assetPath, keyMaterial, options = {}) {
   const { expectedChecksum, fileMode = 0o600 } = options;
   const encBlob = fs.readFileSync(encPath);
-  const plaintext = decryptAsset(encBlob, pluginName, assetPath, masterKey);
+  const plaintext = decryptAsset(encBlob, pluginName, assetPath, keyMaterial);
 
   let checksumValid = null;
   if (expectedChecksum) {
     const actual = computeChecksum(plaintext);
-    checksumValid = (actual === expectedChecksum);
+    checksumValid = actual === expectedChecksum;
     if (!checksumValid) {
       throw new Error(`Post-decryption checksum mismatch for ${assetPath}`);
     }
@@ -385,33 +408,15 @@ function decryptFile(encPath, outputPath, pluginName, assetPath, masterKey, opti
   return { size: plaintext.length, checksumValid };
 }
 
-/**
- * Verify a .enc file on disk.
- *
- * @param {string} encPath     - Path to .enc file
- * @param {string} pluginName  - Plugin name
- * @param {string} assetPath   - Relative asset path
- * @param {Buffer} masterKey   - Master key
- * @param {string} [expectedChecksum] - Checksum to verify
- * @returns {{ valid: boolean, error?: string }}
- */
-function verifyFile(encPath, pluginName, assetPath, masterKey, expectedChecksum) {
+function verifyFile(encPath, pluginName, assetPath, keyMaterial, expectedChecksum) {
   try {
     const encBlob = fs.readFileSync(encPath);
-    return verifyAsset(encBlob, pluginName, assetPath, masterKey, expectedChecksum);
+    return verifyAsset(encBlob, pluginName, assetPath, keyMaterial, expectedChecksum);
   } catch (err) {
     return { valid: false, error: err.message };
   }
 }
 
-// ─── Manifest Helpers ───────────────────────────────────────────────────────
-
-/**
- * Load a plugin's encryption.json manifest.
- *
- * @param {string} pluginDir - Root directory of the plugin
- * @returns {Object|null} Parsed manifest or null if not found
- */
 function loadManifest(pluginDir) {
   const manifestPath = path.join(pluginDir, '.claude-plugin', 'encryption.json');
   if (!fs.existsSync(manifestPath)) return null;
@@ -422,12 +427,6 @@ function loadManifest(pluginDir) {
   }
 }
 
-/**
- * Write a plugin's encryption.json manifest.
- *
- * @param {string} pluginDir - Root directory of the plugin
- * @param {Object} manifest  - Manifest object
- */
 function writeManifest(pluginDir, manifest) {
   const manifestDir = path.join(pluginDir, '.claude-plugin');
   fs.mkdirSync(manifestDir, { recursive: true });
@@ -437,72 +436,59 @@ function writeManifest(pluginDir, manifest) {
   );
 }
 
-// ─── Exports ────────────────────────────────────────────────────────────────
-
 module.exports = {
-  // Constants
   MAGIC,
   FORMAT_VERSION,
   HEADER_SIZE,
   KEY_SIZE,
   KEY_DIR,
-  MASTER_KEY_FILE,
-  KEY_ENV_VAR,
-
-  // Key management
+  KEYRING_ENV_VAR,
+  TIER_KEY_FILES,
+  KEY_SLOT_BY_TIER,
+  TIER_BY_KEY_SLOT,
+  DEFAULT_REQUIRED_TIER,
   generateKey,
-  writeKeyFile,
-  resolveMasterKey,
+  generateTierKeyring,
+  writeTierKeyFiles,
+  resolveKeyring,
+  resolveKeyMaterial,
   deriveKey,
-
-  // Low-level crypto
   encryptAsset,
   decryptAsset,
   verifyAsset,
   computeChecksum,
-
-  // Wire format
+  selectEncryptionKey,
   assembleWireFormat,
   parseWireFormat,
-
-  // File operations
   encryptFile,
   decryptFile,
   verifyFile,
-
-  // Manifest
   loadManifest,
   writeManifest
 };
 
-// ─── CLI self-test (node asset-encryption-engine.js --self-test) ────────────
-
 if (require.main === module && process.argv.includes('--self-test')) {
   console.log('Running self-test...');
 
-  const key = Buffer.from(generateKey(), 'base64');
+  const keyring = normalizeKeyMaterial(generateTierKeyring());
   const plugin = 'test-plugin';
   const assetPath = 'scripts/lib/secret.js';
   const plaintext = Buffer.from('console.log("proprietary logic");');
 
-  // Round-trip
-  const enc = encryptAsset(plaintext, plugin, assetPath, key);
-  const dec = decryptAsset(enc, plugin, assetPath, key);
-  console.assert(dec.equals(plaintext), 'Round-trip failed');
+  const scopedEnc = encryptAsset(plaintext, plugin, assetPath, keyring, { requiredTier: 'tier2' });
+  const scopedDec = decryptAsset(scopedEnc, plugin, assetPath, keyring);
+  console.assert(scopedDec.equals(plaintext), 'Scoped round-trip failed');
 
-  // Verify with checksum
   const checksum = computeChecksum(plaintext);
-  const result = verifyAsset(enc, plugin, assetPath, key, checksum);
-  console.assert(result.valid, `Verify failed: ${result.error}`);
+  const verifyResult = verifyAsset(scopedEnc, plugin, assetPath, keyring, checksum);
+  console.assert(verifyResult.valid, `Verify failed: ${verifyResult.error}`);
 
-  // Tamper detection
-  const tampered = Buffer.from(enc);
-  tampered[HEADER_SIZE + 5] ^= 0xFF; // flip a ciphertext byte
-  const tamperResult = verifyAsset(tampered, plugin, assetPath, key);
+  const tampered = Buffer.from(scopedEnc);
+  tampered[HEADER_SIZE + 5] ^= 0xFF;
+  const tamperResult = verifyAsset(tampered, plugin, assetPath, keyring);
   console.assert(!tamperResult.valid, 'Tamper detection failed');
 
-  // AAD binding
-  const wrongPluginResult = verifyAsset(enc, 'wrong-plugin', assetPath, key);
+  const wrongPluginResult = verifyAsset(scopedEnc, 'wrong-plugin', assetPath, keyring);
   console.assert(!wrongPluginResult.valid, 'AAD binding failed');
 
   console.log('All self-tests passed.');

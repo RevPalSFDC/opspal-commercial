@@ -180,21 +180,25 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]] && [[ -n "${OPSPAL_LICENSE_KEY:-}" || -f "$HO
             const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
             process.exit(d.valid !== false ? 0 : 1);
         ' 2>/dev/null; then
-            # Valid license — extract allowed tiers and server-delivered key
+            # Valid license — extract allowed tiers and server-delivered key material
             ALLOWED_TIERS=$(echo "$LICENSE_RESULT" | node -e '
                 const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
                 console.log((d.allowed_asset_tiers || []).join(","));
             ' 2>/dev/null || echo "")
 
-            # If server delivered a key bundle, use that key instead of local
-            SERVER_KEY=$(echo "$LICENSE_RESULT" | node -e '
+            # Use the scoped keyring delivered by the license server when available.
+            SERVER_KEYRING=$(echo "$LICENSE_RESULT" | node -e '
                 const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
-                if (d.key_bundle && d.key_bundle.master_key) console.log(d.key_bundle.master_key);
+                if (d.key_bundle && d.key_bundle.version === 2 && d.key_bundle.keys) {
+                    process.stdout.write(JSON.stringify(d.key_bundle.keys));
+                }
             ' 2>/dev/null || echo "")
 
-            if [[ -n "$SERVER_KEY" ]]; then
-                export OPSPAL_PLUGIN_MASTER_KEY="$SERVER_KEY"
-                log_verbose "Using server-delivered master key (tier: $(echo "$LICENSE_RESULT" | node -e 'const d=JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));console.log(d.tier||"unknown")' 2>/dev/null))"
+            if [[ -n "$SERVER_KEYRING" ]]; then
+                export OPSPAL_PLUGIN_KEYRING_JSON="$SERVER_KEYRING"
+                log_verbose "Using server-delivered scoped keyring (tier: $(echo "$LICENSE_RESULT" | node -e 'const d=JSON.parse(require(\"fs\").readFileSync(\"/dev/stdin\",\"utf8\"));console.log(d.tier||\"unknown\")' 2>/dev/null))"
+            else
+                log_verbose "License is valid but no scoped keyring was delivered; falling back to local tier key sources if available"
             fi
         fi
     fi
@@ -253,9 +257,9 @@ decrypt_plugin_assets() {
         const pluginName = manifest.plugin;
         const pluginDir = process.env.ENC_PLUGIN_DIR;
         const sessionDir = process.env.ENC_SESSION_DIR;
-        const masterKey = engine.resolveMasterKey(pluginName);
+        const keyMaterial = engine.resolveKeyMaterial(pluginName);
 
-        if (!masterKey) {
+        if (!keyMaterial) {
             console.log(JSON.stringify({ type: "no-key", plugin: pluginName }));
             process.exit(0);
         }
@@ -295,7 +299,7 @@ decrypt_plugin_assets() {
             const outputPath = path.join(sessionDir, pluginName, asset.path);
 
             try {
-                engine.decryptFile(encPath, outputPath, pluginName, asset.path, masterKey, {
+                engine.decryptFile(encPath, outputPath, pluginName, asset.path, keyMaterial, {
                     expectedChecksum: asset.checksum_plaintext,
                     fileMode: 0o600
                 });
@@ -343,6 +347,8 @@ if [[ -f "$LICENSE_GUIDANCE_SCRIPT" ]]; then
         ' 2>/dev/null || echo "")
         if [[ -n "$SHOW_GUIDANCE" ]]; then
             echo "$SHOW_GUIDANCE" >&2
+            echo "  For a guided activation walkthrough, run: /opspalfirst" >&2
+            echo "" >&2
         fi
     fi
 fi
@@ -368,7 +374,7 @@ while IFS= read -r plugin_dir; do
             const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
             console.log(d.plugin || "unknown");
         ' 2>/dev/null || echo "unknown")
-        MESSAGES+=("Encrypted assets skipped for $plugin_name: no master key configured. Run /encrypt-assets key-setup")
+        MESSAGES+=("Encrypted assets skipped for $plugin_name: no decrypt key material configured. Run /encrypt-assets key-setup")
         continue
     fi
 

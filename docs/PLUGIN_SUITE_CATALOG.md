@@ -9,10 +9,10 @@
 |--------|-------|
 | Plugins | 9 |
 | Agents | 278 |
-| Commands | 240 |
+| Commands | 245 |
 | Skills | 154 |
-| Hooks | 151 |
-| Scripts | 1764 |
+| Hooks | 155 |
+| Scripts | 1766 |
 
 ## Regeneration
 
@@ -30,14 +30,14 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.4 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.28.0 | active | 73 | 7 | 98 | 49 | 76 | 507 |
+| `opspal-core` | 2.32.1 | active | 73 | 7 | 103 | 49 | 80 | 511 |
 | `opspal-data-hygiene` | 1.1.5 | deprecated | 2 | 2 | 1 | 1 | 0 | 13 |
 | `opspal-gtm-planning` | 2.1.4 | active | 12 | 1 | 15 | 4 | 0 | 2 |
 | `opspal-hubspot` | 3.7.15 | active | 59 | 6 | 33 | 23 | 11 | 109 |
-| `opspal-marketo` | 2.6.11 | active | 30 | 25 | 30 | 17 | 20 | 36 |
+| `opspal-marketo` | 2.6.11 | active | 30 | 25 | 30 | 17 | 20 | 35 |
 | `opspal-mcp-client` | 1.0.2 | active | 0 | 0 | 0 | 2 | 3 | 1 |
 | `opspal-monday` | 1.4.5 | experimental | 6 | 0 | 1 | 3 | 0 | 3 |
-| `opspal-salesforce` | 3.79.0 | active | 94 | 20 | 59 | 54 | 40 | 1087 |
+| `opspal-salesforce` | 3.79.0 | active | 94 | 20 | 59 | 54 | 40 | 1086 |
 
 ## Registry
 
@@ -78,7 +78,7 @@
 
 ### opspal-core
 
-- Version: `2.28.0`
+- Version: `2.32.1`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -168,6 +168,7 @@
 |---------|------|-------------|------|
 | `/account-expansion` | `[--segment <name>] [--account <account-id>] [--top <n>]` | Identify and score cross-sell/upsell opportunities for existing customers | `account-expansion.md` |
 | `/ace-maintenance` | `[--task health|decay|cleanup|report]` | Run ACE Framework maintenance tasks (health check, confidence decay, cache cleanup, metrics) | `ace-maintenance.md` |
+| `/activate-license` | `<license-key>` | Activate an OpsPal license key on this machine to unlock encrypted premium assets | `activate-license.md` |
 | `/asana-checkpoint` | `[options]` | Post intermediate progress checkpoint to Asana task | `asana-checkpoint.md` |
 | `/asana-link` | `[options]` | Link Asana project(s) to current working directory (platform-agnostic) | `asana-link.md` |
 | `/asana-read` | `[project-gid] [--project <name>]` | Read and parse assigned Asana tasks into agent-friendly format | `asana-read.md` |
@@ -183,12 +184,14 @@
 | `/data-health` | `[--object Account|Contact|all] [--format markdown|json|csv]` | Generate quick data quality health scorecard | `data-health.md` |
 | `/data-migrate` | `plan --source hubspot --target salesforce` | Orchestrate data migrations between platforms with field mapping, validation, and rollback | `data-migrate.md` |
 | `/data-quality-audit` | `[--object Account|Contact|Lead] [--scope full|quick] [--output report|actions]` | Run comprehensive data quality audit on CRM data | `data-quality-audit.md` |
+| `/deactivate-license` | `[options]` | Remove OpsPal license from this machine and notify the server | `deactivate-license.md` |
 | `/dedup-companies` | `[--config <path>] [--output-dir <path>] [--resume <session>]` | Execute complete Company/Account deduplication workflow between HubSpot and Salesforce | `dedup-companies.md` |
 | `/deduplicate` | `[--object Account|Contact|Lead] [--mode detect|merge|both] [--threshold 80-100]` | Run deduplication workflow to identify and merge duplicate records | `deduplicate.md` |
 | `/diagnose-sales-funnel` | `[options]` | Run comprehensive top-of-funnel and mid-funnel sales performance diagnostic with industry-benchmarked analysis and ac... | `diagnose-sales-funnel.md` |
 | `/diagram` | `[type] [subject] [options]` | Generate Mermaid diagrams from natural language, metadata, or structured data. Supports flowcharts, ERDs, sequence di... | `diagram.md` |
 | `/diff-runbook` | `baseline` | Show changes in runbook since last version or between dates | `diff-runbook.md` |
 | `/enablement` | `<assess|training|content|onboard> [--rep <id>] [--segment <name>]` | Sales enablement coordination including training paths, skill gap analysis, and content recommendations | `enablement.md` |
+| `/encrypt-assets` | `<subcommand> [--plugin <name>] [--file <path>]` | Manage encrypted plugin assets (key setup, encrypt, decrypt, verify, status) | `encrypt-assets.md` |
 | `/enrich-data` | `[--object Account|Contact] [--fields email,title,industry] [--source auto|web...` | Trigger multi-source enrichment pipeline to fill data gaps | `enrich-data.md` |
 | `/enrich-field-dictionary` | `acme-corp` | Interactive workflow to add business context to field dictionary entries | `enrich-field-dictionary.md` |
 | `/envcheck` | `[--fix] [--platform <sf|hs|mk|asana|gh>] [--quick] [--json]` | Run environment health checks across all platforms with optional auto-fix | `envcheck.md` |
@@ -212,6 +215,8 @@
 | `/initialize` | `[--project-dir=<path>] [--force]` | Initialize project structure with folders, CLAUDE.md, and .gitignore based on installed plugins | `initialize.md` |
 | `/intake` | `[request description] [--json] [--plan-only] [--project-gid <gid>] [--workspa...` | Classify a request, generate an implementation plan, and create Asana tasks from natural language | `intake.md` |
 | `/intake-generate-form` | `[--output <path>] [--project-type <type>]` | Generate an HTML intake form for project specifications | `intake-generate-form.md` |
+| `/license-canary` | `[--expect-tier <starter|professional|enterprise|trial>] [--license-key <key>]...` | Validate the live license handshake and scoped key bundle on this machine | `license-canary.md` |
+| `/license-status` | `[options]` | Show current OpsPal license status, tier, and asset access breakdown | `license-status.md` |
 | `/live-wire-sync-test` | `--account-selectors \"001XXXXX,domain:acme.com\" --sla-seconds 300 --dry-run` | Test bidirectional sync between Salesforce and HubSpot using probe fields | `live-wire-sync-test.md` |
 | `/match-domain` | `[options]` | Match data with domain-aware abbreviation expansion | `match-domain.md` |
 | `/migrate-schema` | `[--find-stragglers] [--dry-run] [--only-org <slug>]` | Migrate instance data from system-centric to client-centric folder structure | `migrate-schema.md` |
@@ -372,6 +377,8 @@
 - `pre-task-template-injector` (`pre-task-template-injector.sh`): Pre-Task Template Injector Hook
 - `pre-task-work-context` (`pre-task-work-context.sh`): Pre-Task Work Context Hook
 - `pre-tool-execution` (`pre-tool-execution.sh`): # Pre-Tool Execution Validation Hook
+- `pre-tool-use-asset-resolver` (`pre-tool-use-asset-resolver.sh`): Pre-Tool-Use Asset Resolver (Bash)
+- `pre-tool-use-asset-resolver-read` (`pre-tool-use-asset-resolver-read.sh`): Pre-Tool-Use Asset Resolver (Read)
 - `pre-tool-use-contract-validation` (`pre-tool-use-contract-validation.sh`): Pre-Tool Use Contract Validation Hook
 - `pre-tool-validator` (`validation/pre-tool-validator.sh`): Pre-Tool Validator (Unified)
 - `prevention-system-orchestrator` (`prevention-system-orchestrator.sh`): Prevention System Orchestrator
@@ -382,11 +389,13 @@
 - `session-end-reliability` (`session-end-reliability.sh`): Session End Reliability Hook
 - `session-end-scratchpad` (`session-end-scratchpad.sh`): Session End Scratchpad Hook
 - `session-init` (`session-init.sh`): Session Init Hook (Unified)
+- `session-start-asset-decryptor` (`session-start-asset-decryptor.sh`): Session Start Asset Decryptor
 - `session-start-env-config` (`session-start-env-config.sh`): Session Start Environment Configuration Hook (v2.0.0)
 - `session-start-envcheck` (`session-start-envcheck.sh`): Session Start Environment Check Hook
 - `session-start-repo-sync` (`session-start-repo-sync.sh`): Session Start Repository Sync Hook
 - `session-start-scratchpad` (`session-start-scratchpad.sh`): Session Start Scratchpad Hook
 - `session-start-version-check` (`session-start-version-check.sh`): Session Start Version Check Hook
+- `session-stop-asset-cleanup` (`session-stop-asset-cleanup.sh`): Session Stop Asset Cleanup
 - `setup-maintenance` (`setup-maintenance.sh`): Setup Hook - Environment Maintenance & Onboarding
 - `stop-session-silent-failure-summary` (`stop-session-silent-failure-summary.sh`): Stop Session Silent Failure Summary Hook
 - `subagent-capability-gate-openclaw` (`subagent-capability-gate-openclaw.sh`)

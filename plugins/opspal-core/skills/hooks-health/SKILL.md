@@ -60,5 +60,17 @@ Detects hooks that:
 Run the health checker:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT:-$(dirname $(dirname $(dirname $0)))}/scripts/lib/hook-health-checker.js" "$@"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname $(dirname $(dirname $0)))}"
+CHECKER="$PLUGIN_ROOT/scripts/lib/hook-health-checker.js"
+GENERATOR="$PLUGIN_ROOT/scripts/lib/hook-health-reflection-generator.js"
+
+node "$CHECKER" "$@"
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ] && [ -f "$GENERATOR" ]; then
+  node "$CHECKER" --format json --quick 2>/dev/null | node "$GENERATOR" --stdin >/dev/null 2>&1 &
+  disown
+fi
+
+exit $EXIT_CODE
 ```

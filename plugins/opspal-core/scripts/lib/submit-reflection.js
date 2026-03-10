@@ -603,7 +603,10 @@ const TAXONOMY_NORMALIZATION = new Map([
   ['idempotency-state', 'idempotency/state'],
   ['idempotency state', 'idempotency/state'],
   ['idempotencystate', 'idempotency/state'],
-  ['external-api drift', 'external-api']
+  ['external-api drift', 'external-api'],
+  ['hook-health', 'hook-health'],
+  ['hookhealth', 'hook-health'],
+  ['hook health', 'hook-health']
 ]);
 
 const PRIORITY_NORMALIZATION = new Map([

@@ -6,10 +6,10 @@
 |--------|-------|
 | Plugins | 9 |
 | Agents | 278 |
-| Commands | 240 |
+| Commands | 245 |
 | Skills | 154 |
-| Hooks | 151 |
-| Scripts | 1764 |
+| Hooks | 155 |
+| Scripts | 1766 |
 
 
 ## Quick Stats
@@ -18,10 +18,10 @@
 |--------|-------|
 | Plugins | 9 |
 | Agents | 278 |
-| Commands | 240 |
+| Commands | 245 |
 | Skills | 154 |
-| Hooks | 151 |
-| Scripts | 1764 |
+| Hooks | 155 |
+| Scripts | 1766 |
 
 
 ## Documentation System

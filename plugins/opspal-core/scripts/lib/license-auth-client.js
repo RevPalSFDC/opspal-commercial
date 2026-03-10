@@ -36,6 +36,7 @@ const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
 
 const CACHE_VALIDITY_HOURS = 24;
 const GRACE_DAYS = 7;
+const KEY_BUNDLE_VERSION = 2;
 
 const DEFAULT_SERVER = 'https://license.gorevpal.com';
 
@@ -204,7 +205,7 @@ async function sessionToken() {
 
   // Check fresh cache first
   const cache = loadCache();
-  if (cache && cache.valid && isCacheFresh(cache)) {
+  if (cache && cache.valid && isCacheFresh(cache) && hasRequestedBundle(cache)) {
     return cache;
   }
 
@@ -214,7 +215,8 @@ async function sessionToken() {
   try {
     const { body } = await postJson(`${serverUrl}/api/v1/session-token`, {
       license_key: licenseKey,
-      machine_id: machineId
+      machine_id: machineId,
+      key_bundle_version: KEY_BUNDLE_VERSION
     });
 
     // Handle termination signal
@@ -224,6 +226,13 @@ async function sessionToken() {
     }
 
     if (body.valid) {
+      if (body.key_bundle && resolveCachedBundleVersion(body) !== KEY_BUNDLE_VERSION) {
+        return {
+          valid: false,
+          error: 'unsupported_key_bundle_version',
+          message: 'License server returned an unsupported key bundle'
+        };
+      }
       saveCache(body);
       return body;
     }
@@ -231,7 +240,7 @@ async function sessionToken() {
     return { valid: false, error: body.error, message: body.message };
   } catch (err) {
     // Server unreachable — use grace period
-    if (cache && isCacheInGrace(cache)) {
+    if (cache && hasRequestedBundle(cache) && isCacheInGrace(cache)) {
       return { ...cache, offline: true, offline_reason: err.message };
     }
 
@@ -258,7 +267,7 @@ async function verifyToken() {
     return body;
   } catch (err) {
     // Can't verify — check grace
-    if (isCacheInGrace(cache)) {
+    if (hasRequestedBundle(cache) && isCacheInGrace(cache)) {
       return { valid: true, offline: true, tier: cache.tier };
     }
     return { valid: false, error: 'verification_failed', message: err.message };
@@ -268,8 +277,15 @@ async function verifyToken() {
 function status() {
   const cache = loadCache();
   if (!cache) {
-    return { status: 'no_cache', license_key_present: !!getLicenseKey() };
+    return {
+      status: 'no_cache',
+      license_key_present: !!getLicenseKey(),
+      server_url: getServerUrl()
+    };
   }
+
+  const bundleVersion = resolveCachedBundleVersion(cache);
+  const hasScopedKeyBundle = Boolean(cache.key_bundle && cache.key_bundle.version === 2 && cache.key_bundle.keys);
 
   return {
     status: cache.valid ? 'valid' : 'invalid',
@@ -278,9 +294,51 @@ function status() {
     cached_at: cache.cached_at ? new Date(cache.cached_at).toISOString() : null,
     cache_fresh: isCacheFresh(cache),
     in_grace_period: isCacheInGrace(cache),
+    server_url: getServerUrl(),
     allowed_asset_tiers: cache.allowed_asset_tiers,
-    has_key_bundle: !!(cache.key_bundle && cache.key_bundle.master_key)
+    key_bundle_version: bundleVersion,
+    has_key_bundle: hasScopedKeyBundle,
+    has_scoped_key_bundle: hasScopedKeyBundle
   };
+}
+
+function hasRequestedBundle(cache) {
+  return resolveCachedBundleVersion(cache) === KEY_BUNDLE_VERSION;
+}
+
+function resolveCachedBundleVersion(cache) {
+  if (!cache || !cache.key_bundle) return null;
+  if (cache.key_bundle.version === 2 && cache.key_bundle.keys) {
+    return 2;
+  }
+  return null;
+}
+
+// ─── Poll ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Lightweight status poll — calls POST /api/v1/poll.
+ * No JWT, no key bundle — just returns current license validity and tier.
+ * Uses a shorter timeout (2.5s) than session-token (10s).
+ */
+async function pollStatus() {
+  const licenseKey = getLicenseKey();
+  if (!licenseKey) {
+    return { valid: false, error: 'no_license_key' };
+  }
+
+  const machineId = getMachineId();
+  const serverUrl = getServerUrl();
+
+  try {
+    const { body } = await postJson(`${serverUrl}/api/v1/poll`, {
+      license_key: licenseKey,
+      machine_id: machineId
+    });
+    return body;
+  } catch (err) {
+    return { valid: false, error: 'poll_failed', message: err.message };
+  }
 }
 
 // ─── CLI ─────────────────────────────────────────────────────────────────────
@@ -299,8 +357,11 @@ async function main() {
     case 'status':
       result = status();
       break;
+    case 'poll':
+      result = await pollStatus();
+      break;
     default:
-      console.error('Usage: license-auth-client.js <session-token|verify|status>');
+      console.error('Usage: license-auth-client.js <session-token|verify|status|poll>');
       process.exit(1);
   }
 
@@ -308,7 +369,7 @@ async function main() {
   process.exit(result.valid !== false ? 0 : 1);
 }
 
-module.exports = { sessionToken, verifyToken, status };
+module.exports = { DEFAULT_SERVER, getServerUrl, sessionToken, verifyToken, status, pollStatus };
 
 if (require.main === module) {
   main().catch(err => {

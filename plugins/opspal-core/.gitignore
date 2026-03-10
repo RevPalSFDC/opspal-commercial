@@ -1,1 +1,13 @@
 data/
+
+# Encrypted assets (plaintext excluded from distribution)
+/config/complexity-rubric.json
+/config/intelligent-intake-rubric.json
+/config/sales-benchmarks.json
+/config/scoring-weights.json
+/scripts/lib/benchmark-retriever.js
+/scripts/lib/complexity-scorer.js
+/scripts/lib/expansion-opportunity-scorer.js
+/scripts/lib/methodology-generator.js
+/scripts/lib/sales-benchmark-engine.js
+/scripts/lib/scoring/smart-scorer.js

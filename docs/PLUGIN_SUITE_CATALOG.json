@@ -171,7 +171,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 69 agents.",
-      "version": "2.28.0",
+      "version": "2.32.1",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -2587,6 +2587,33 @@
           "sourcePath": "plugins/opspal-core/commands/ace-maintenance.md"
         },
         {
+          "name": "activate-license",
+          "description": "Activate an OpsPal license key on this machine to unlock encrypted premium assets",
+          "file": "activate-license.md",
+          "frontmatter": {
+            "name": "activate-license",
+            "description": "Activate an OpsPal license key on this machine to unlock encrypted premium assets",
+            "argument-hint": "<license-key>",
+            "intent": "activate a machine-local license session and unlock tier-gated assets",
+            "dependencies": [
+              "OpsPal license server",
+              "~/.opspal/license.key"
+            ],
+            "failure_modes": [
+              "invalid or revoked license key",
+              "license server unreachable",
+              "machine activation limit reached"
+            ],
+            "visibility": "user-invocable",
+            "tags": [
+              "licensing",
+              "activation",
+              "setup"
+            ]
+          },
+          "sourcePath": "plugins/opspal-core/commands/activate-license.md"
+        },
+        {
           "name": "asana-checkpoint",
           "description": "Post intermediate progress checkpoint to Asana task",
           "file": "asana-checkpoint.md",
@@ -2845,6 +2872,33 @@
           "sourcePath": "plugins/opspal-core/commands/data-quality-audit.md"
         },
         {
+          "name": "deactivate-license",
+          "description": "Remove OpsPal license from this machine and notify the server",
+          "file": "deactivate-license.md",
+          "frontmatter": {
+            "name": "deactivate-license",
+            "description": "Remove OpsPal license from this machine and notify the server",
+            "argument-hint": "[options]",
+            "intent": "remove the machine-local license session and free its activation slot",
+            "dependencies": [
+              "OpsPal license server",
+              "~/.opspal/license.key",
+              "~/.opspal/license-cache.json"
+            ],
+            "failure_modes": [
+              "license server unreachable",
+              "activation already removed",
+              "missing local license state"
+            ],
+            "visibility": "user-invocable",
+            "tags": [
+              "licensing",
+              "deactivation"
+            ]
+          },
+          "sourcePath": "plugins/opspal-core/commands/deactivate-license.md"
+        },
+        {
           "name": "dedup-companies",
           "description": "Execute complete Company/Account deduplication workflow between HubSpot and Salesforce",
           "file": "dedup-companies.md",
@@ -2928,6 +2982,34 @@
             ]
           },
           "sourcePath": "plugins/opspal-core/commands/enablement.md"
+        },
+        {
+          "name": "encrypt-assets",
+          "description": "Manage encrypted plugin assets (key setup, encrypt, decrypt, verify, status)",
+          "file": "encrypt-assets.md",
+          "frontmatter": {
+            "name": "encrypt-assets",
+            "description": "Manage encrypted plugin assets (key setup, encrypt, decrypt, verify, status)",
+            "argument-hint": "<subcommand> [--plugin <name>] [--file <path>]",
+            "intent": "manage tier-scoped encryption material and encrypted plugin asset bundles",
+            "dependencies": [
+              "Node.js",
+              "plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js",
+              "~/.claude/opspal-enc/"
+            ],
+            "failure_modes": [
+              "missing key material",
+              "invalid plugin path",
+              "checksum or decryption failure"
+            ],
+            "visibility": "user-invocable",
+            "tags": [
+              "security",
+              "encryption",
+              "plugin-management"
+            ]
+          },
+          "sourcePath": "plugins/opspal-core/commands/encrypt-assets.md"
         },
         {
           "name": "enrich-data",
@@ -3263,6 +3345,61 @@
             "stage": "ready"
           },
           "sourcePath": "plugins/opspal-core/commands/intake-generate-form.md"
+        },
+        {
+          "name": "license-canary",
+          "description": "Validate the live license handshake and scoped key bundle on this machine",
+          "file": "license-canary.md",
+          "frontmatter": {
+            "name": "license-canary",
+            "description": "Validate the live license handshake and scoped key bundle on this machine",
+            "argument-hint": "[--expect-tier <starter|professional|enterprise|trial>] [--license-key <key>] [--server <url>]",
+            "intent": "verify that this machine receives and verifies the expected v2 tier-scoped key bundle",
+            "dependencies": [
+              "OpsPal license server",
+              "~/.opspal/license.key",
+              "~/.opspal/license-cache.json"
+            ],
+            "failure_modes": [
+              "no local or provided license key",
+              "wrong tier or tier-scoped bundle contents",
+              "verification endpoint unreachable"
+            ],
+            "visibility": "user-invocable",
+            "tags": [
+              "licensing",
+              "canary",
+              "rollout"
+            ]
+          },
+          "sourcePath": "plugins/opspal-core/commands/license-canary.md"
+        },
+        {
+          "name": "license-status",
+          "description": "Show current OpsPal license status, tier, and asset access breakdown",
+          "file": "license-status.md",
+          "frontmatter": {
+            "name": "license-status",
+            "description": "Show current OpsPal license status, tier, and asset access breakdown",
+            "argument-hint": "[options]",
+            "intent": "inspect the cached machine license session and unlocked asset tiers",
+            "dependencies": [
+              "~/.opspal/license-cache.json",
+              "~/.opspal/license.key",
+              "OpsPal license server"
+            ],
+            "failure_modes": [
+              "no local license activation",
+              "stale or expired cache",
+              "verification endpoint unreachable"
+            ],
+            "visibility": "user-invocable",
+            "tags": [
+              "licensing",
+              "status"
+            ]
+          },
+          "sourcePath": "plugins/opspal-core/commands/license-status.md"
         },
         {
           "name": "live-wire-sync-test",
@@ -5065,6 +5202,18 @@
           "sourcePath": "plugins/opspal-core/hooks/pre-tool-execution.sh"
         },
         {
+          "name": "pre-tool-use-asset-resolver",
+          "file": "pre-tool-use-asset-resolver.sh",
+          "description": "Pre-Tool-Use Asset Resolver (Bash)",
+          "sourcePath": "plugins/opspal-core/hooks/pre-tool-use-asset-resolver.sh"
+        },
+        {
+          "name": "pre-tool-use-asset-resolver-read",
+          "file": "pre-tool-use-asset-resolver-read.sh",
+          "description": "Pre-Tool-Use Asset Resolver (Read)",
+          "sourcePath": "plugins/opspal-core/hooks/pre-tool-use-asset-resolver-read.sh"
+        },
+        {
           "name": "pre-tool-use-contract-validation",
           "file": "pre-tool-use-contract-validation.sh",
           "description": "Pre-Tool Use Contract Validation Hook",
@@ -5125,6 +5274,12 @@
           "sourcePath": "plugins/opspal-core/hooks/session-init.sh"
         },
         {
+          "name": "session-start-asset-decryptor",
+          "file": "session-start-asset-decryptor.sh",
+          "description": "Session Start Asset Decryptor",
+          "sourcePath": "plugins/opspal-core/hooks/session-start-asset-decryptor.sh"
+        },
+        {
           "name": "session-start-env-config",
           "file": "session-start-env-config.sh",
           "description": "Session Start Environment Configuration Hook (v2.0.0)",
@@ -5153,6 +5308,12 @@
           "file": "session-start-version-check.sh",
           "description": "Session Start Version Check Hook",
           "sourcePath": "plugins/opspal-core/hooks/session-start-version-check.sh"
+        },
+        {
+          "name": "session-stop-asset-cleanup",
+          "file": "session-stop-asset-cleanup.sh",
+          "description": "Session Stop Asset Cleanup",
+          "sourcePath": "plugins/opspal-core/hooks/session-stop-asset-cleanup.sh"
         },
         {
           "name": "setup-maintenance",
@@ -5481,6 +5642,12 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/asana-user-manager.js"
         },
         {
+          "name": "asset-encryption-engine",
+          "file": "lib/asset-encryption-engine.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/asset-encryption-engine.js"
+        },
+        {
           "name": "audit-log",
           "file": "lib/audit-log.js",
           "extension": ".js",
@@ -5533,12 +5700,6 @@
           "file": "lib/batch/index.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/batch/index.js"
-        },
-        {
-          "name": "benchmark-retriever",
-          "file": "lib/benchmark-retriever.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/benchmark-retriever.js"
         },
         {
           "name": "bluf-data-extractor",
@@ -5641,12 +5802,6 @@
           "file": "lib/compensation/index.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/compensation/index.js"
-        },
-        {
-          "name": "complexity-scorer",
-          "file": "lib/complexity-scorer.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/complexity-scorer.js"
         },
         {
           "name": "compliance-tracker",
@@ -6045,12 +6200,6 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/existing-report-analyzer.js"
         },
         {
-          "name": "expansion-opportunity-scorer",
-          "file": "lib/expansion-opportunity-scorer.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/expansion-opportunity-scorer.js"
-        },
-        {
           "name": "field-dictionary-generator",
           "file": "lib/field-dictionary-generator.js",
           "extension": ".js",
@@ -6315,6 +6464,12 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/hook-health-checker.js"
         },
         {
+          "name": "hook-health-reflection-generator",
+          "file": "lib/hook-health-reflection-generator.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/hook-health-reflection-generator.js"
+        },
+        {
           "name": "hook-logger",
           "file": "lib/hook-logger.js",
           "extension": ".js",
@@ -6441,6 +6596,36 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/learning/threshold-optimizer.js"
         },
         {
+          "name": "license-activation-manager",
+          "file": "lib/license-activation-manager.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/license-activation-manager.js"
+        },
+        {
+          "name": "license-auth-client",
+          "file": "lib/license-auth-client.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/license-auth-client.js"
+        },
+        {
+          "name": "license-auth-client.test",
+          "file": "lib/license-auth-client.test.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/license-auth-client.test.js"
+        },
+        {
+          "name": "license-canary",
+          "file": "lib/license-canary.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/license-canary.js"
+        },
+        {
+          "name": "license-canary.test",
+          "file": "lib/license-canary.test.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/license-canary.test.js"
+        },
+        {
           "name": "load-env",
           "file": "lib/load-env.sh",
           "extension": ".sh",
@@ -6517,12 +6702,6 @@
           "file": "lib/metadata-loader.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/metadata-loader.js"
-        },
-        {
-          "name": "methodology-generator",
-          "file": "lib/methodology-generator.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/methodology-generator.js"
         },
         {
           "name": "metric-semantic-log",
@@ -6763,6 +6942,12 @@
           "file": "lib/playwright-mcp-helper.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/playwright-mcp-helper.js"
+        },
+        {
+          "name": "plugin-asset-encryptor",
+          "file": "lib/plugin-asset-encryptor.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js"
         },
         {
           "name": "plugin-health-checker",
@@ -7161,12 +7346,6 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/sales-activity-analyzer.js"
         },
         {
-          "name": "sales-benchmark-engine",
-          "file": "lib/sales-benchmark-engine.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/sales-benchmark-engine.js"
-        },
-        {
           "name": "sales-funnel-metrics-collector",
           "file": "lib/sales-funnel-metrics-collector.js",
           "extension": ".js",
@@ -7201,12 +7380,6 @@
           "file": "lib/scoring/signal-correlation-matrix.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/scoring/signal-correlation-matrix.js"
-        },
-        {
-          "name": "smart-scorer",
-          "file": "lib/scoring/smart-scorer.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/scoring/smart-scorer.js"
         },
         {
           "name": "scratchpad-manager",
@@ -7615,6 +7788,18 @@
           "file": "lib/template-ingestion-engine.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/template-ingestion-engine.js"
+        },
+        {
+          "name": "test-asset-encryption",
+          "file": "lib/test-asset-encryption.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/test-asset-encryption.js"
+        },
+        {
+          "name": "test-secret",
+          "file": "lib/test-secret.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/test-secret.js"
         },
         {
           "name": "test-version-checker",
@@ -14701,12 +14886,6 @@
           "file": "lib/rate-limit-manager.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-marketo/scripts/lib/rate-limit-manager.js"
-        },
-        {
-          "name": "scoring-rule-generator",
-          "file": "lib/scoring-rule-generator.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-marketo/scripts/lib/scoring-rule-generator.js"
         },
         {
           "name": "smart-campaign-batch-executor",
@@ -22173,12 +22352,6 @@
           "sourcePath": "plugins/opspal-salesforce/scripts/lib/batch-submit-reflections.js"
         },
         {
-          "name": "benchmark-retriever",
-          "file": "lib/benchmark-retriever.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-salesforce/scripts/lib/benchmark-retriever.js"
-        },
-        {
           "name": "best-of-n-verifier",
           "file": "lib/best-of-n-verifier.js",
           "extension": ".js",
@@ -27134,9 +27307,9 @@
   "totals": {
     "plugins": 9,
     "agents": 278,
-    "commands": 240,
+    "commands": 245,
     "skills": 154,
-    "hooks": 151,
-    "scripts": 1764
+    "hooks": 155,
+    "scripts": 1766
   }
 }

@@ -2,6 +2,14 @@
 name: activate-license
 description: Activate an OpsPal license key on this machine to unlock encrypted premium assets
 argument-hint: "<license-key>"
+intent: activate a machine-local license session and unlock tier-gated assets
+dependencies:
+  - OpsPal license server
+  - ~/.opspal/license.key
+failure_modes:
+  - invalid or revoked license key
+  - license server unreachable
+  - machine activation limit reached
 visibility: user-invocable
 tags:
   - licensing
@@ -12,6 +20,8 @@ tags:
 # /activate-license Command
 
 Activate an OpsPal license key to unlock tier-gated encrypted assets on this machine.
+
+For backend, activation, and admin operations, use the runbooks in the sibling `opspal-license-server/docs/` directory.
 
 ## Usage
 
@@ -30,6 +40,7 @@ Activate an OpsPal license key to unlock tier-gated encrypted assets on this mac
 
 - Start a new session to decrypt assets (SessionStart hook runs automatically)
 - Run `/license-status` to check your license anytime
+- Run `/license-canary --expect-tier <starter|professional|enterprise|trial>` to validate the live scoped-bundle handshake on this machine
 - Run `/deactivate-license` to remove the license from this machine
 
 ## Tier Access
