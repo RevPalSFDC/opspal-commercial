@@ -1,347 +1,221 @@
-# OpsPal Plugin Marketplace
+# OpsPal by RevPal
 
-## Repository Stats
+RevOps tooling for Claude Code. Audits, automation, and executive-ready outputs across Salesforce, HubSpot, Marketo, and more.
 
-| Metric | Count |
-|--------|-------|
-| Plugins | 9 |
-| Agents | 278 |
-| Commands | 245 |
-| Skills | 154 |
-| Hooks | 155 |
-| Scripts | 1766 |
-
-
-## Quick Stats
-
-| Metric | Count |
-|--------|-------|
-| Plugins | 9 |
-| Agents | 278 |
-| Commands | 245 |
-| Skills | 154 |
-| Hooks | 155 |
-| Scripts | 1766 |
-
-
-## Documentation System
-
-Comprehensive plugin suite docs are generated and versioned in-repo:
-
-- `AGENTS.md` - Authoritative maintainer + developer guide with runtime plugin registry
-- `docs/PLUGIN_SUITE_CATALOG.md` - Suite-level maintenance/development catalog
-- `docs/PLUGIN_SUITE_CATALOG.json` - Machine-readable inventory for automation
-- `docs/PLUGIN_DOCUMENTATION_MAINTENANCE.md` - Maintenance process and CI policy
-
-```bash
-# Refresh generated docs
-npm run docs:generate
-
-# Fail if generated docs are stale
-npm run docs:check
-
-# Optional: enforce docs check at commit time
-git config core.hooksPath .githooks
-```
-
-## ⚠️ Migration Notice: Plugin Naming Standardization
-
-**As of v3.68.0 (January 2026)**, all plugins have been renamed to use the `opspal-` prefix for consistent branding:
-
-| Old Name | New Name |
-|----------|----------|
-| `salesforce-plugin` | `opspal-salesforce` |
-| `hubspot-plugin` | `opspal-hubspot` |
-| `marketo-plugin` | `opspal-marketo` |
-| `gtm-planning-plugin` | `opspal-gtm-planning` |
-| `monday-plugin` | `opspal-monday` |
-| `data-hygiene-plugin` | `opspal-data-hygiene` |
-| `ai-consult-plugin` | `opspal-ai-consult` |
-| `opspal-core` | *(unchanged)* |
-
-**Update your references:**
-- Task routing: `salesforce-plugin:agent-name` → `opspal-salesforce:agent-name`
-- Imports: `@import salesforce-plugin/...` → `@import opspal-salesforce/...`
+Built by [RevPal](https://gorevpal.com), the RevOps consultancy. OpsPal bundles 292 specialist agents, 255 commands, and 144 safety hooks into Claude Code plugins that run real work — not demos.
 
 ---
 
-## Plugins
+## What OpsPal does
 
-### OpsPal Salesforce (94 agents)
-Comprehensive Salesforce automation including CPQ/Q2C assessments, RevOps auditing, Flow management, permission orchestration, report/dashboard creation, territory management, and data operations.
+| Without OpsPal | With OpsPal |
+|----------------|-------------|
+| RevOps audit takes 8-12 hours | 2-3 hours, automated |
+| CPQ assessment takes 6-10 hours | 1.5-3 hours with live data |
+| 40% of deploys fail from known issues | Safety hooks catch errors before they ship |
+| 6-month consulting engagements | 6-8 weeks with the same depth |
 
-**Key Capabilities:**
-- Metadata management (objects, fields, validation rules)
-- Security & compliance (profiles, permission sets, FLS)
-- Data operations (imports, exports, bulk operations)
-- CPQ & RevOps assessments
-- Deployment automation with conflict resolution
-- Apex development & testing
-- Flow automation & activation
-- Report & dashboard creation
-
-### OpsPal HubSpot (59 agents)
-Full HubSpot CRM capabilities: workflow automation, property management, analytics, reporting, and CRM operations.
-
-**Key Capabilities:**
-- Workflow automation and orchestration
-- Contact, company, and deal management
-- Pipeline and sales operations
-- Marketing automation
-- Analytics and reporting
-- Portal administration
-
-### OpsPal Marketo (30 agents)
-Marketing automation: campaign management, lead scoring, email automation, and marketing analytics.
-
-**Key Capabilities:**
-- Campaign management and execution
-- Lead scoring and nurturing
-- Email automation and deliverability
-- Marketing analytics and reporting
-- Program performance analysis
-
-### OpsPal Core (65 agents)
-Unified operations: diagram generation (Mermaid, ERD), PDF/PPTX report generation, data quality validation, and task graph management.
-
-**Key Capabilities:**
-- Diagram generation (Mermaid, ERD, flowcharts)
-- PDF and PPTX report generation
-- Data quality validation
-- Task graph management
-- Unified orchestration across platforms
-
-### OpsPal GTM Planning (12 agents)
-Go-to-market planning: market analysis, launch planning, and competitive intelligence.
-
-**Key Capabilities:**
-- Territory design with fairness validation
-- Quota modeling with Monte Carlo simulations
-- Compensation planning
-- Attribution governance
-- Strategy planning
-
-### OpsPal Monday (6 agents)
-Monday.com integration: project management, board synchronization, and task automation.
-
-**Key Capabilities:**
-- Board management
-- Task synchronization
-- Project tracking
-- Automation workflows
-
-### OpsPal Data Hygiene (2 agents)
-Data quality: deduplication workflows and cross-platform data validation.
-
-**Key Capabilities:**
-- Deduplication workflows
-- Data quality validation
-- Cross-platform consistency
-
-### OpsPal AI Consult (2 agents)
-Cross-model AI consultation and analysis.
-
-**Key Capabilities:**
-- Multi-model consultation
-- AI-assisted analysis
-
-## Getting Started
+## Quick start
 
 ### Prerequisites
-- Claude Code CLI (latest version via [native installer](https://docs.anthropic.com/en/docs/claude-code/getting-started) - npm install is deprecated)
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/getting-started) (latest version)
 - Node.js 18+
-- npm 9+
 
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/RevPalSFDC/opspal-internal-plugins.git
-   cd opspal-internal-plugins
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Configure environment:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your credentials
-   ```
-
-### Preflight Checks
-
-Run these before using MCP-backed features:
+### Install
 
 ```bash
-# 1. Load environment variables
-set -a && source .env && set +a
+# Add the OpsPal marketplace
+/plugin marketplace add RevPalSFDC/opspal-commercial
 
-# 2. Test MCP connections
-./scripts/test-mcp-connections.sh
-
-# 3. Verify MCP servers
-claude mcp list
+# Install the plugins you need
+/plugin install opspal-core           # Foundation (required)
+/plugin install opspal-salesforce     # Salesforce operations
+/plugin install opspal-hubspot        # HubSpot CRM
+/plugin install opspal-marketo        # Marketo automation
+/plugin install opspal-gtm-planning   # GTM annual planning
+/plugin install opspal-okrs           # OKR lifecycle management
 ```
 
-### Plugin Activation
-
-Plugins are automatically loaded by Claude Code. Each plugin's agents become available based on the `CLAUDE.md` configuration.
+### Configure
 
 ```bash
-# List installed plugins
-/plugin list
-
-# List all available agents
-/agents
-
-# Check dependencies
-/checkdependencies
+cp .env.example .env
+# Add your platform credentials (Salesforce org, HubSpot portal, etc.)
 ```
 
-## Updating Plugins
-
-### Enable Auto-Updates (Recommended)
-
-Set up automatic updates to stay current with the latest agents and features:
+### Verify
 
 ```bash
-# Navigate to your plugin installation
-cd ~/.claude/plugins/marketplaces/revpal-internal-plugins
+/agents              # List available agents
+/checkdependencies   # Verify npm packages
+```
 
-# Pull latest changes
+---
+
+## Modules
+
+### Salesforce
+
+94 agents for RevOps audits, CPQ/Q2C assessments, automation forensics, Flow management, permission orchestration, territory planning, metadata deployment, and report/dashboard creation.
+
+**Start here:**
+```
+Run a RevOps audit on my Salesforce org
+Assess our CPQ configuration
+Map all automation dependencies on the Opportunity object
+```
+
+### HubSpot
+
+59 agents for portal assessments, workflow automation, contact/deal management, marketing campaigns, CMS content, SEO optimization, and revenue intelligence.
+
+**Start here:**
+```
+Assess our HubSpot portal health
+Build a lead scoring workflow
+Audit our email deliverability
+```
+
+### Marketo
+
+30 agents for campaign diagnostics, lead scoring, email deliverability, program architecture, MQL handoff, and Salesforce sync management.
+
+**Start here:**
+```
+Discover our Marketo instance configuration
+Diagnose why leads aren't routing correctly
+Build a lead scoring model
+```
+
+### GTM Planning
+
+12 agents for territory design, quota modeling with Monte Carlo simulations, compensation planning, attribution governance, revenue modeling, and scenario analysis.
+
+**Start here:**
+```
+Build a revenue model with 3-year projections
+Design balanced sales territories
+Model quota capacity with P10/P50/P90 scenarios
+```
+
+### OKR Strategy
+
+14 agents for data-driven objective generation, initiative scoring, executive reporting, cadence management, and Bayesian confidence learning.
+
+**Start here:**
+```
+Generate OKRs from our pipeline data
+Score and prioritize our strategic initiatives
+Create a quarterly OKR review dashboard
+```
+
+### Core Platform
+
+73 agents providing cross-platform orchestration, diagram generation (Mermaid, ERD, flowcharts), branded PDF/PPTX reports, interactive web dashboards, Asana integration, and adaptive agent routing.
+
+---
+
+## How it works
+
+1. **Install** OpsPal plugins into Claude Code
+2. **Connect** your platforms (Salesforce, HubSpot, Marketo, etc.)
+3. **Ask** in plain language — OpsPal routes to the right specialist agent automatically
+4. **Deliver** executive-ready outputs: branded PDFs, dashboards, and action plans
+
+Sub-agents run concurrently for speed. 144 hooks intercept errors before they happen. Session reflections feed back into the system so it improves with every engagement.
+
+---
+
+## Who OpsPal serves
+
+**RevOps consultants** — Org assessments, CPQ reviews, automation audits, and territory planning delivered in days, not weeks.
+
+**Marketing operations** — Portal health checks, lead scoring models, SEO audits, and campaign attribution from live data.
+
+**Revenue leadership** — ARR waterfall, pipeline intelligence, NRR analysis, and GTM scenario modeling with outputs your board can read.
+
+**Platform administrators** — Metadata deployment, data import/export, permission management, reports, and dashboards at scale.
+
+---
+
+## Privacy and security
+
+- All processing happens locally on your machine
+- No customer data is sent to third parties
+- No SaaS login or cloud dependency
+- Proprietary algorithms are encrypted (`.enc` files) and decrypted at runtime with a valid license
+- Environment files and runtime data are gitignored
+
+---
+
+## Encrypted assets
+
+Some plugins include `.enc` files containing proprietary scoring engines, benchmark data, and assessment methodologies.
+
+**Without a license:** All open-source agents, commands, hooks, and skills work normally. Encrypted assets gracefully degrade with informational messages.
+
+**With a license:** Full access to proprietary scoring, benchmarks, and advanced assessment frameworks.
+
+```bash
+/activate-license <license-key>
+/license-status
+```
+
+---
+
+## Updating
+
+```bash
+# Pull latest from marketplace
+cd ~/.claude/plugins/marketplaces/opspal-commercial
 git pull origin main
 
-# Or set up a cron job for automatic daily updates (optional)
-# Add to crontab: 0 6 * * * cd ~/.claude/plugins/marketplaces/revpal-internal-plugins && git pull origin main
-```
-
-### Post-Update Commands
-
-After updating, run these commands to ensure everything is configured correctly:
-
-```bash
-# 1. Sync your CLAUDE.md with latest plugin versions and agent counts
-/sync-claudemd
-
-# 2. Run comprehensive post-update validation and auto-fix issues
+# Validate and fix
 /pluginupdate --fix
-
-# 3. Check and install any new dependencies
-/checkdependencies --install
+/checkdependencies --fix
 ```
 
-### What Each Command Does
+---
 
-| Command | Purpose |
-|---------|---------|
-| `/sync-claudemd` | Updates CLAUDE.md with latest plugin versions, agent counts, and command references |
-| `/pluginupdate --fix` | Validates dependencies, MCP servers, hooks, cache dirs, and auto-fixes issues |
-| `/checkdependencies --install` | Checks npm packages, CLI tools, system utilities and installs missing ones |
+## Plugin reference
 
-### Troubleshooting Updates
+| Plugin | Version | Agents | Description |
+|--------|---------|--------|-------------|
+| opspal-core | 2.35.0 | 73 | Cross-platform orchestration, diagrams, PDFs, dashboards, routing |
+| opspal-salesforce | 3.79.1 | 94 | CPQ, RevOps, automation, territory, metadata, deployment |
+| opspal-hubspot | 3.7.16 | 59 | Workflows, CMS, SEO, contacts, deals, revenue intelligence |
+| opspal-marketo | 2.6.11 | 30 | Campaigns, lead scoring, email, programs, sync management |
+| opspal-gtm-planning | 2.1.4 | 12 | Territory, quota, compensation, attribution, revenue modeling |
+| opspal-okrs | 3.0.2 | 14 | OKR lifecycle, initiative scoring, executive reporting |
+| opspal-monday | 1.4.5 | 6 | Monday.com file extraction and board management |
+| opspal-ai-consult | 1.4.4 | 2 | Multi-model AI consultation (Gemini) |
+| opspal-mcp-client | 1.0.2 | — | Thin client for OpsPal MCP server |
 
-If you encounter issues after an update:
-
-```bash
-# Run validation without making changes first
-/pluginupdate --check-only
-
-# Run with verbose output for debugging
-/pluginupdate --verbose
-
-# Check specific plugin
-/pluginupdate --plugin salesforce-plugin --verbose
-```
-
-### Version Pinning (Enterprise)
-
-For enterprise deployments requiring exact version reproducibility, Claude Code v2.1.14+ supports pinning plugins to specific git commit SHAs:
-
-```json
-// In your marketplace configuration or plugin install command
-{
-  "name": "salesforce-plugin",
-  "source": "RevPalSFDC/opspal-plugin-internal-marketplace#a1b2c3d4e5f6",
-  "version": "3.67.0"
-}
-```
-
-**Use cases:**
-- Compliance requirements for reproducible builds
-- Staged rollouts across multiple environments
-- Rollback capability to known-good versions
-
-**Getting the current SHA:**
-```bash
-cd ~/.claude/plugins/marketplaces/revpal-internal-plugins
-git rev-parse HEAD  # Returns current commit SHA
-```
+---
 
 ## Documentation
 
-- [Routing Guide](docs/routing-help.md) - Agent routing and task delegation
-- [Plugin Development Standards](docs/PLUGIN_DEVELOPMENT_STANDARDS.md) - Creating new plugins
-- [MCP Usage Guide](docs/MCP_USAGE_GUIDE.md) - MCP server configuration
-- [Troubleshooting](docs/TROUBLESHOOTING_PLUGIN_LOADING.md) - Common issues and solutions
+Each plugin includes detailed usage docs:
 
-## Architecture
+- `plugins/opspal-core/USAGE.md`
+- `plugins/opspal-salesforce/USAGE.md`
+- `plugins/opspal-hubspot/USAGE.md`
+- `plugins/opspal-marketo/USAGE.md`
+- `plugins/opspal-gtm-planning/USAGE.md`
 
-The marketplace uses a modular plugin architecture where each plugin contains:
-
-```
-plugins/<plugin-name>/        # Distributable plugins
-├── .claude-plugin/
-│   └── plugin.json          # Plugin manifest
-├── agents/                   # Specialized AI agents
-├── commands/                 # Slash commands
-├── hooks/                    # Claude Code hooks
-├── scripts/                  # Utility scripts
-├── config/                   # Configuration files
-└── CLAUDE.md                 # Plugin configuration
-
-.claude-plugins -> plugins/   # Symlink for Claude Code discovery
-```
-
-See the main [CLAUDE.md](CLAUDE.md) for routing rules and agent delegation.
-
-## Session Reflection
-
-Both Salesforce and HubSpot plugins include the `/reflect` command for continuous improvement:
-
-```bash
-# Run at end of session
-/reflect
-
-# Benefits:
-# - Analyzes session for errors and patterns
-# - Generates improvement playbooks
-# - Submits to centralized database for trend analysis
-# - Enables collective intelligence across users
-```
-
-## Contributing
-
-1. Follow the [Plugin Development Standards](docs/PLUGIN_DEVELOPMENT_STANDARDS.md)
-2. Ensure all agents include proper routing keywords
-3. Validate plugin manifest:
-   ```bash
-   claude plugin validate plugins/<plugin>/.claude-plugin/plugin.json
-   ```
-4. Submit PR with clear description of changes
-
-## Support
-
-- **Issues**: https://github.com/RevPalSFDC/opspal-internal-plugins/issues
-- **Documentation**: See `docs/` directory
-
-## License
-
-Proprietary - Internal Use Only
+Additional references:
+- [Plugin development guide](docs/PLUGIN_DEVELOPMENT_GUIDE.md)
+- [Routing reference](docs/routing-help.md)
+- [Troubleshooting](docs/TROUBLESHOOTING_PLUGIN_LOADING.md)
 
 ---
 
-**Author**: RevPal Engineering
-**Repository**: https://github.com/RevPalSFDC/opspal-internal-plugins
+## Support
+
+- Website: [opspal.gorevpal.com](https://opspal.gorevpal.com)
+- Issues: [GitHub Issues](https://github.com/RevPalSFDC/opspal-commercial/issues)
+
+---
+
+**Built by [RevPal](https://gorevpal.com)** — founded by RevOps practitioners, not agency salespeople.
