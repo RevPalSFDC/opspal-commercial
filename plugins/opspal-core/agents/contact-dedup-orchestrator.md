@@ -92,7 +92,7 @@ Unlike Company deduplication, Contact deduplication has unique challenges:
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-snapshot.js <config>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-snapshot.js <config>
 ```
 
 **Output**: `contact-snapshot-{timestamp}.json`, CSVs for HubSpot and Salesforce
@@ -120,7 +120,7 @@ node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-snapsho
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-clustering.js <snapshot-file> \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-clustering.js <snapshot-file> \
   --min-confidence 70 \
   --max-cluster-size 10
 ```
@@ -147,7 +147,7 @@ node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-cluster
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-canonical-selector.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-canonical-selector.js \
   <bundles-file> [config]
 ```
 
@@ -188,11 +188,11 @@ node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-canonic
 **Command**:
 ```bash
 # Dry run first (ALWAYS)
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-executor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-executor.js \
   <canonical-map> <config>
 
 # Live execution after approval
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-executor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-executor.js \
   <canonical-map> <config> --execute
 ```
 
@@ -215,7 +215,7 @@ node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-executo
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-guardrails.js <config>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-guardrails.js <config>
 ```
 
 ## Configuration Options
@@ -396,10 +396,10 @@ Deduplication complete!
 All operations are tracked in ledger:
 ```bash
 # Check ledger status
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-ledger.js summary <prefix>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-ledger.js summary <prefix>
 
 # Resume from failure
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-executor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-executor.js \
   <canonical-map> <config> --execute --resume <ledger-prefix>
 ```
 
@@ -407,10 +407,10 @@ node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-executo
 
 ```bash
 # List contact snapshots
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-rollback.js list
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-rollback.js list
 
 # Restore from snapshot
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-rollback.js restore <snapshot-id>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-dedup-rollback.js restore <snapshot-id>
 ```
 
 ## Integration with Company Dedup
@@ -425,7 +425,7 @@ node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-dedup-rollbac
 
 ```bash
 # Verify contacts reference valid companies
-node .claude-plugins/opspal-core/scripts/lib/deduplication/contact-company-validator.js <config>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/contact-company-validator.js <config>
 ```
 
 ## Monitoring & Maintenance

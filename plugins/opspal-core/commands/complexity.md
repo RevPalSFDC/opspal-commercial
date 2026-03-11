@@ -121,7 +121,7 @@ export TASK_GRAPH_VERBOSE=1
 You can also run the complexity calculator directly:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/task-graph/complexity-calculator.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/task-graph/complexity-calculator.js \
   "Update lead routing flow to add fallback owner"
 ```
 

@@ -40,7 +40,7 @@ Extract and download file attachments from Monday.com boards, items, or updates.
 
 ```bash
 # Using custom GraphQL client (fallback)
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js item-assets <id>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js item-assets <id>
 ```
 
 ### 3. Download Files
@@ -50,7 +50,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js item-assets 
 
 ```bash
 # Full extraction workflow
-node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js --item <id> --output ./downloads
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-file-extractor.js --item <id> --output ./downloads
 ```
 
 ### 4. Generate Manifest

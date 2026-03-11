@@ -30,7 +30,7 @@ Post an intermediate progress checkpoint to an Asana task, updating stakeholders
 ### 1. Validate Asana Connection
 
 ```bash
-./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate
+${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh validate
 ```
 
 ### 2. Get Task Details (Optional)

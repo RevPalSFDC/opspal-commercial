@@ -15,7 +15,7 @@ Based on the arguments provided, perform the appropriate action:
 Run a comprehensive prerequisites check:
 
 ```bash
-bash .claude-plugins/opspal-ai-consult/scripts/lib/prereq-check.sh
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/lib/prereq-check.sh
 ```
 
 Report the results and guide the user through any missing prerequisites.
@@ -58,19 +58,19 @@ Guide the user through complete Gemini setup:
 
 5. **Verify Complete Setup**:
    ```bash
-   bash .claude-plugins/opspal-ai-consult/scripts/lib/prereq-check.sh
+   bash ${CLAUDE_PLUGIN_ROOT}/scripts/lib/prereq-check.sh
    ```
 
 ### `--test "prompt"` or `--test`
 Test the Gemini connection with a simple query:
 
 ```bash
-node .claude-plugins/opspal-ai-consult/scripts/lib/gemini-cli-invoker.js --check
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/gemini-cli-invoker.js --check
 ```
 
 If `--check` passes, run a test prompt:
 ```bash
-node .claude-plugins/opspal-ai-consult/scripts/lib/gemini-cli-invoker.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/gemini-cli-invoker.js \
   --prompt "Hello! Please respond with a brief greeting to confirm the connection is working."
 ```
 

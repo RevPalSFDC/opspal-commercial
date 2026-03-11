@@ -69,7 +69,7 @@ Determine what the user wants to extract:
 ### Step 2: Verify API Access
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js test
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js test
 ```
 
 If this fails, help user configure `MONDAY_API_TOKEN`.
@@ -78,21 +78,21 @@ If this fails, help user configure `MONDAY_API_TOKEN`.
 
 **For single item:**
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-file-extractor.js \
   --item <id> \
   --output ./monday-downloads
 ```
 
 **For update/comment:**
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-file-extractor.js \
   --update <id> \
   --output ./monday-downloads
 ```
 
 **For entire board:**
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-file-extractor.js \
   --board <id> \
   --include-updates \
   --output ./monday-downloads
@@ -176,7 +176,7 @@ The file extractor now supports simultaneous catalog generation during extractio
 Add `--catalog` flag to any extraction command:
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-file-extractor.js \
   --board <id> \
   --output ./monday-downloads \
   --catalog ./file_catalog.csv
@@ -195,7 +195,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js \
 
 ```bash
 # Download board files with full catalog generation
-node .claude-plugins/opspal-monday/scripts/lib/monday-file-extractor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-file-extractor.js \
   --board 1234567890 \
   --output ./monday-downloads \
   --catalog ./catalogs/board_files.csv \
@@ -216,7 +216,7 @@ If you already have downloaded files, use the asset lookup builder:
 
 ```bash
 # Build lookup from existing downloads
-node .claude-plugins/opspal-monday/scripts/lib/monday-asset-lookup-builder.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-asset-lookup-builder.js \
   build ./monday-downloads --json ./lookup.json
 
 # Then use monday-file-catalog-generator agent with board export
@@ -256,7 +256,7 @@ After extraction with catalog:
 
 ```bash
 # Check match rate
-node .claude-plugins/opspal-monday/scripts/lib/monday-asset-lookup-builder.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-asset-lookup-builder.js \
   stats ./monday-downloads
 
 # Verify catalog entries

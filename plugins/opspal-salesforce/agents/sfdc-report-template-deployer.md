@@ -217,7 +217,7 @@ Ask the user for:
 Execute the deployment with dry-run mode:
 
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/report-template-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/report-template-deployer.js \
   --template {template-name} \
   --org {org-alias} \
   --dry-run
@@ -265,7 +265,7 @@ If the user approves, deploy for real:
 export ENABLE_WRITE=1
 
 # Deploy
-node .claude-plugins/opspal-salesforce/scripts/lib/report-template-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/report-template-deployer.js \
   --template {template-name} \
   --org {org-alias} \
   --folder "{folder-name}"
@@ -860,10 +860,10 @@ Show available templates when user asks:
 
 ```bash
 # List all templates
-find .claude-plugins/opspal-salesforce/templates/reports -name "*.json" -exec basename {} \;
+find ${CLAUDE_PLUGIN_ROOT}/templates/reports -name "*.json" -exec basename {} \;
 
 # Show template details
-cat .claude-plugins/opspal-salesforce/templates/reports/sales-leaders/team-performance.json | jq '.templateMetadata'
+cat ${CLAUDE_PLUGIN_ROOT}/templates/reports/sales-leaders/team-performance.json | jq '.templateMetadata'
 ```
 
 **Popular Templates**:
@@ -899,7 +899,7 @@ cat .claude-plugins/opspal-salesforce/templates/reports/sales-leaders/team-perfo
 
 ```bash
 # Find template
-find .claude-plugins/opspal-salesforce/templates -name "*team-performance*"
+find ${CLAUDE_PLUGIN_ROOT}/templates -name "*team-performance*"
 ```
 
 ### "Org not authenticated"

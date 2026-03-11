@@ -22,18 +22,16 @@ Sets up a standardized project structure based on which plugins are installed (S
 The initialization script is part of platform-specific plugins (salesforce, hubspot):
 
 ```bash
-# Find initialization script (checks multiple locations)
+# Resolve initialization script through the shared plugin resolver
 find_init_script() {
-  local search_paths=(
-    "plugins/opspal-salesforce/scripts/lib/initialize-project.js"
-    "plugins/opspal-hubspot/scripts/lib/initialize-project.js"
-    ".claude-plugins/opspal-salesforce/scripts/lib/initialize-project.js"
-    ".claude-plugins/opspal-hubspot/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-salesforce@revpal-internal-plugins/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-hubspot@revpal-internal-plugins/scripts/lib/initialize-project.js"
-  )
-  for path in "${search_paths[@]}"; do
-    [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0
+  local resolver="${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js"
+  local plugin path
+  for plugin in opspal-salesforce opspal-hubspot; do
+    path="$(node "$resolver" resolve-script "$plugin" scripts/lib/initialize-project.js 2>/dev/null || true)"
+    if [ -n "$path" ] && [ -f "$path" ]; then
+      echo "$path"
+      return 0
+    fi
   done
   echo "Error: initialize-project.js not found. Install opspal-salesforce or opspal-hubspot plugin." >&2
   return 1
@@ -260,17 +258,13 @@ mkdir -p orgs/acme/platforms/hubspot/production
 The initialization script is located in platform-specific plugins, not opspal-core:
 
 ```bash
-SCRIPT_PATHS=(
-    "plugins/opspal-salesforce/scripts/lib/initialize-project.js"
-    "plugins/opspal-hubspot/scripts/lib/initialize-project.js"
-    ".claude-plugins/opspal-salesforce/scripts/lib/initialize-project.js"
-    ".claude-plugins/opspal-hubspot/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-salesforce@revpal-internal-plugins/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-hubspot@revpal-internal-plugins/scripts/lib/initialize-project.js"
-)
-
-for path in "${SCRIPT_PATHS[@]}"; do
-    [ -n "$path" ] && [ -f "$path" ] && INIT_SCRIPT="$path" && break
+INIT_SCRIPT=""
+for plugin in opspal-salesforce opspal-hubspot; do
+    path="$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script "$plugin" scripts/lib/initialize-project.js 2>/dev/null || true)"
+    if [ -n "$path" ] && [ -f "$path" ]; then
+        INIT_SCRIPT="$path"
+        break
+    fi
 done
 ```
 

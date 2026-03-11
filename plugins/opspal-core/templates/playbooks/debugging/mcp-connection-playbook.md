@@ -57,7 +57,7 @@ claude mcp config show
 sf org list
 
 # Test HubSpot MCP
-node .claude-plugins/opspal-hubspot/scripts/test-mcp-connection.js
+node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/test-mcp-connection.js)"
 
 # Test generic MCP server
 claude mcp test salesforce-dx

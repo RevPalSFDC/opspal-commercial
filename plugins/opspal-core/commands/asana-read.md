@@ -27,12 +27,12 @@ Read Asana tasks assigned to the current user and parse them into an agent-frien
 
 ```bash
 # Validate connection before reading tasks
-./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate
+${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh validate
 ```
 
 If validation fails, run:
 ```bash
-./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh fix
+${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh fix
 ```
 
 ### 2. Get Assigned Tasks
@@ -222,7 +222,7 @@ Fix with:
   set -a && source .env && set +a
 
 Or validate connection:
-  ./.claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate
+  ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh validate
 ```
 
 ### No Tasks Found
@@ -331,7 +331,7 @@ URL: https://app.asana.com/...
 
 ```bash
 # Parse specific task
-node ./.claude-plugins/opspal-core/scripts/lib/asana-task-reader.js 1211748609238981
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-task-reader.js 1211748609238981
 
 # Output: JSON with full context
 ```

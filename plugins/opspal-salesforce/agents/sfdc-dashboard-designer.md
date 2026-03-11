@@ -696,7 +696,7 @@ Low Impact (Cut):
 **Example** (Using Executive Revenue Performance Template):
 ```bash
 # Load template
-template=$(cat .claude-plugins/opspal-salesforce/templates/dashboards/executive/revenue-performance.json)
+template=$(cat ${CLAUDE_PLUGIN_ROOT}/templates/dashboards/executive/revenue-performance.json)
 
 # Customize for org (replace field tokens)
 # Deploy source reports

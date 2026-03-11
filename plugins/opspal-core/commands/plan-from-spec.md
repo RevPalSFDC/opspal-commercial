@@ -252,13 +252,13 @@ Use pre-built templates for common project types:
 
 ```bash
 # Salesforce implementation
-cp .claude-plugins/opspal-core/templates/specifications/salesforce-implementation.md ./specs/my-project.md
+cp ${CLAUDE_PLUGIN_ROOT}/templates/specifications/salesforce-implementation.md ./specs/my-project.md
 
 # HubSpot workflow
-cp .claude-plugins/opspal-core/templates/specifications/hubspot-workflow.md ./specs/my-workflow.md
+cp ${CLAUDE_PLUGIN_ROOT}/templates/specifications/hubspot-workflow.md ./specs/my-workflow.md
 
 # Integration project
-cp .claude-plugins/opspal-core/templates/specifications/integration-project.md ./specs/my-integration.md
+cp ${CLAUDE_PLUGIN_ROOT}/templates/specifications/integration-project.md ./specs/my-integration.md
 ```
 
 ## Error Handling

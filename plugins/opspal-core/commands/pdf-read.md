@@ -50,11 +50,11 @@ When this command is invoked:
 1. **Check if PDF exists** at the specified path
 2. **Run PDF Context Optimizer** to analyze structure:
    ```bash
-   node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js analyze <path>
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js analyze <path>
    ```
 3. **If query provided**, get relevant pages:
    ```bash
-   node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js pages <path> "<query>"
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js pages <path> "<query>"
    ```
 4. **Read the recommended pages** using Claude Code's Read tool with `pages` parameter
 5. **Summarize findings** based on the query
@@ -81,5 +81,5 @@ Auto-detected from filename/path:
 - Section boundaries are estimated - actual content may vary
 - For very large PDFs (100+ pages), consider using chunking:
   ```bash
-  node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js chunks <path>
+  node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js chunks <path>
   ```

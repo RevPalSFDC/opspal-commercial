@@ -279,13 +279,13 @@ Location: `.claude/settings.json`
   "hooks": {
     "UserPromptSubmit": {
       "type": "command",
-      "command": "bash ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/master-prompt-handler.sh",
+      "command": "bash ${OPSPAL_CORE_ROOT}/hooks/master-prompt-handler.sh",
       "timeout": 10000,
       "description": "Master prompt handler - chains Prevention System with Sub-Agent Utilization Booster"
     },
     "SessionStart": {
       "type": "command",
-      "command": "bash -c '${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh && ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/session-context-loader.sh'",
+      "command": "bash -c '${OPSPAL_SALESFORCE_ROOT}/hooks/session-start-agent-reminder.sh && ${OPSPAL_CORE_ROOT}/hooks/session-context-loader.sh'",
       "timeout": 5000,
       "description": "Session initialization - creates temp directories, checks agent reminders, and loads cross-session context"
     }
@@ -303,7 +303,8 @@ Location: `.claude/settings.json`
 #### Environment Variables
 
 Hooks can access:
-- `CLAUDE_PLUGIN_ROOT` - Project root path (set by Claude Code)
+- `CLAUDE_PLUGIN_ROOT` - Current plugin root path for the executing command or hook
+- `OPSPAL_CORE_ROOT` / `OPSPAL_SALESFORCE_ROOT` - Cross-plugin roots exported by the unified path resolver
 - `USER_PROMPT` - User's message (UserPromptSubmit only)
 - `PWD` - Current working directory
 - `HOME` - User home directory
@@ -315,7 +316,7 @@ Hooks can access:
 ### CLAUDE_PLUGIN_ROOT
 
 **Status**: Set by Claude Code during hook execution
-**Expected**: `/home/chris/Desktop/RevPal/Agents/opspal-internal-plugins`
+**Expected**: Absolute path to the active plugin root, such as `/home/user/.claude/plugins/cache/revpal-internal-plugins/opspal-core/2.34.0`
 
 **Fallback Logic** (if not set):
 ```bash
@@ -362,7 +363,7 @@ HOOK_DEBUG=true
 cat .claude/settings.json | jq '.hooks'
 
 # Test hook manually
-echo '{"message":"test"}' | bash .claude-plugins/opspal-core/hooks/master-prompt-handler.sh
+echo '{"message":"test"}' | bash "${OPSPAL_CORE_ROOT}/hooks/master-prompt-handler.sh"
 ```
 
 **Solutions**:
@@ -402,7 +403,7 @@ which jq
 **Diagnosis**:
 ```bash
 # Time hook execution
-time echo '{"message":"test"}' | bash .claude-plugins/opspal-core/hooks/master-prompt-handler.sh
+time echo '{"message":"test"}' | bash "${OPSPAL_CORE_ROOT}/hooks/master-prompt-handler.sh"
 ```
 
 **Solutions**:

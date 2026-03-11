@@ -74,7 +74,7 @@ arguments:
 
 **Verify dictionary exists:**
 ```bash
-node plugins/opspal-core/scripts/lib/field-dictionary-loader.js stats "${ORG_SLUG}"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js stats "${ORG_SLUG}"
 ```
 
 ### 2) Execute Query
@@ -82,13 +82,13 @@ node plugins/opspal-core/scripts/lib/field-dictionary-loader.js stats "${ORG_SLU
 **Search fields:**
 ```bash
 # By name/text
-node plugins/opspal-core/scripts/lib/field-dictionary-loader.js search "${ORG_SLUG}" "${QUERY}"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js search "${ORG_SLUG}" "${QUERY}"
 
 # By tag
-node plugins/opspal-core/scripts/lib/field-dictionary-loader.js tags "${ORG_SLUG}" "${TAG}"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js tags "${ORG_SLUG}" "${TAG}"
 
 # Generate context
-node plugins/opspal-core/scripts/lib/field-dictionary-loader.js context "${ORG_SLUG}" \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js context "${ORG_SLUG}" \
   ${AUDIENCE:+--audience "$AUDIENCE"} \
   ${TAGS:+--tags "$TAGS"}
 ```

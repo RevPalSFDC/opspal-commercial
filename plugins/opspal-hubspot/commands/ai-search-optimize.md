@@ -520,7 +520,7 @@ if (deployFlag) {
 
 ```bash
 # If deployment causes issues
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --rollback dep-1699123456-abc123
 ```

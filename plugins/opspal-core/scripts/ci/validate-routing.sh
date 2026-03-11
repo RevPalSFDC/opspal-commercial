@@ -168,6 +168,12 @@ check_scripts() {
     ((TOTAL_CHECKS+=1))
     log_section "3. Routing Scripts"
 
+    # Source encrypted asset resolver for runtime path resolution
+    ENC_RESOLVER="$PLUGIN_ROOT/hooks/lib/resolve-encrypted-asset.sh"
+    if [[ -f "$ENC_RESOLVER" ]]; then
+        source "$ENC_RESOLVER"
+    fi
+
     local scripts=(
         "scripts/lib/task-router.js"
         "scripts/lib/complexity-scorer.js"
@@ -182,11 +188,29 @@ check_scripts() {
 
     for script in "${scripts[@]}"; do
         local script_path="$PLUGIN_ROOT/$script"
+        local found=false
 
-        if [ ! -f "$script_path" ]; then
+        # Check plaintext first
+        if [ -f "$script_path" ]; then
+            found=true
+        # Check encrypted runtime path
+        elif type resolve_enc_asset &>/dev/null; then
+            local resolved
+            resolved=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-core" "$script") || true
+            if [[ -n "$resolved" && -f "$resolved" ]]; then
+                found=true
+            fi
+        fi
+        # Check if .enc version exists (asset is encrypted but not yet decrypted)
+        if [ "$found" = false ] && [ -f "${script_path}.enc" ]; then
+            found=true
+            log_info "Encrypted (runtime decryption): $script"
+        fi
+
+        if [ "$found" = false ]; then
             log_error "Missing: $script"
             ((missing+=1))
-        elif [ ! -x "$script_path" ]; then
+        elif [ "$found" = true ] && [ -f "$script_path" ] && [ ! -x "$script_path" ]; then
             log_warning "Not executable: $script"
             log_info "Run: chmod +x $script_path"
         fi
@@ -230,7 +254,19 @@ check_complexity_scorer() {
 
     local scorer="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
 
+    # Resolve through encrypted asset runtime if plaintext missing
     if [ ! -f "$scorer" ]; then
+        if type resolve_enc_asset &>/dev/null; then
+            scorer=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-core" "scripts/lib/complexity-scorer.js") || true
+        fi
+    fi
+
+    if [ -z "$scorer" ] || [ ! -f "$scorer" ]; then
+        # Check if .enc exists (encrypted but no key available)
+        if [ -f "$PLUGIN_ROOT/scripts/lib/complexity-scorer.js.enc" ]; then
+            log_warning "Complexity scorer is encrypted and not yet decrypted (requires license key)"
+            return 0
+        fi
         log_error "Complexity scorer not found"
         return 1
     fi

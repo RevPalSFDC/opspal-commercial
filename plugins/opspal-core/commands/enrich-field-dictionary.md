@@ -75,14 +75,14 @@ fi
 
 **Load and analyze:**
 ```bash
-node plugins/opspal-core/scripts/lib/field-dictionary-loader.js stats "${ORG_SLUG}"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js stats "${ORG_SLUG}"
 ```
 
 ### 2) Identify Fields Needing Enrichment
 
 **Get unenriched fields:**
 ```bash
-node plugins/opspal-core/scripts/lib/field-dictionary-loader.js unenriched "${ORG_SLUG}"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js unenriched "${ORG_SLUG}"
 ```
 
 **Prioritize by importance:**

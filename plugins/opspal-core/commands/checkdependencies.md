@@ -98,20 +98,20 @@ Run `/checkdependencies` after:
 
 ```bash
 # Diagnose
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js --plugin opspal-core
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --plugin opspal-core
 
 # Fix
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js --fix
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --fix
 ```
 
 ### "Cannot find module 'fast-xml-parser'"
 
 ```bash
 # Diagnose
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js --plugin salesforce-plugin
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --plugin salesforce-plugin
 
 # Fix
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js --fix
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --fix
 ```
 
 ## Integration with /pluginupdate

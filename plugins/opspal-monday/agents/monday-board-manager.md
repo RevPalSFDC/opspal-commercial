@@ -60,7 +60,7 @@ mcp__monday__create_board({
 
 Or via GraphQL:
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js create-board \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js create-board \
   --name "Project X" \
   --kind public \
   --workspace 12345
@@ -126,7 +126,7 @@ mcp__monday__create_group({
 ### Apply Template
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-board-manager.js apply-template \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-board-manager.js apply-template \
   --board <id> \
   --template project-management
 ```
@@ -144,7 +144,7 @@ mcp__monday__archive_board({
 ### Restore Archived Board
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js restore-board --id <board_id>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js restore-board --id <board_id>
 ```
 
 ## PERMISSION MANAGEMENT
@@ -162,7 +162,7 @@ mcp__monday__add_subscribers({
 ### Remove Subscriber
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js remove-subscriber \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js remove-subscriber \
   --board <board_id> \
   --user <user_id>
 ```

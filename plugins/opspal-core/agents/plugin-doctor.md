@@ -229,7 +229,7 @@ RECENT ERRORS (Last 24 hours)
 1. Agent Discovery Failure (5 occurrences)
    Error: "Agent 'hubspot-workflow-orchestrator' failed to load"
    Cause: Invalid YAML frontmatter (missing 'name' field)
-   Location: .claude-plugins/opspal-hubspot/agents/hubspot-workflow-orchestrator.md:1-5
+   Location: <hubspot-plugin-root>/agents/hubspot-workflow-orchestrator.md:1-5
    Fix: Add 'name: hubspot-workflow-orchestrator' to frontmatter
 
 2. MCP Connection Timeout (12 occurrences)
@@ -265,12 +265,12 @@ AGENT DISCOVERY
 ✗ 6 agents failed to load:
 
 1. hubspot-workflow-orchestrator
-   Location: .claude-plugins/opspal-hubspot/agents/hubspot-workflow-orchestrator.md
+   Location: <hubspot-plugin-root>/agents/hubspot-workflow-orchestrator.md
    Issue: Missing required field 'name' in YAML frontmatter
    Fix: Add 'name: hubspot-workflow-orchestrator' to frontmatter
 
 2. sfdc-custom-validator (DUPLICATE NAME)
-   Location 1: .claude-plugins/opspal-salesforce/agents/sfdc-custom-validator.md
+   Location 1: <salesforce-plugin-root>/agents/sfdc-custom-validator.md
    Location 2: ~/.claude/agents/sfdc-custom-validator.md
    Issue: Duplicate agent name
    Fix: Rename one agent or remove from user scope

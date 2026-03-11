@@ -108,7 +108,7 @@ Checking 3 staged files...
 [1/5] Checking for cross-boundary imports...
 ❌ BLOCKED: Found cross-boundary imports (gitignored .claude/ from plugins)
 
-  • .claude-plugins/opspal-hubspot/agents/example.md
+  • ${CLAUDE_PLUGIN_ROOT}/agents/example.md
     31:You MUST follow ALL standards defined in [cross-boundary-import]
 
 Fix: Replace cross-boundary imports with plugin-local paths
@@ -117,7 +117,7 @@ Example: Use @import ../docs/shared/STANDARDS.md instead
 [5/5] Checking for hardcoded credentials...
 ❌ BLOCKED: Found potential hardcoded credentials
 
-  • .claude-plugins/opspal-salesforce/hooks/post-reflect.sh:133
+  • ${CLAUDE_PLUGIN_ROOT}/hooks/post-reflect.sh:133
     export SUPABASE_URL="[hardcoded-url-example]"
 
 Fix: Use environment variables instead
@@ -154,7 +154,7 @@ Correct pattern:
 [3/5] Checking for silent error handling...
 ⚠️  WARNING: Found potential silent error handling
 
-  • .claude-plugins/opspal-hubspot/scripts/lib/example.js
+  • ${CLAUDE_PLUGIN_ROOT}/scripts/lib/example.js
     42:    } catch (error) {
     43:      return null;
 

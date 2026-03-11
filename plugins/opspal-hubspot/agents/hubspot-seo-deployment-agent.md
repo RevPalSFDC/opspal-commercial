@@ -48,7 +48,7 @@ Deploy all AI search optimizations to HubSpot:
 
 ```bash
 # Deploy schema + content + robots.txt
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --deploy-schema schema.json \
   --deploy-content content.json \
@@ -59,7 +59,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
 
 ```bash
 # Deploy only schema markup
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --deploy-schema schema.json
 ```
@@ -68,7 +68,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
 
 ```bash
 # Update robots.txt with AI crawler rules
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --update-robots
 ```
@@ -77,7 +77,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
 
 ```bash
 # Deploy to 10% of pages first, then 100%
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --deploy-all \
   --staged
@@ -87,7 +87,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
 
 ```bash
 # Preview what would be deployed without making changes
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --deploy-all \
   --dry-run
@@ -97,7 +97,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
 
 ```bash
 # Rollback a previous deployment
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-hubspot-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-hubspot-deployer.js \
   --portal-id 12345 \
   --rollback dep-1699123456-abc123
 ```

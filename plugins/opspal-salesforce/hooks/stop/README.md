@@ -76,11 +76,11 @@ Add to `.claude/settings.json` or `settings.local.json`:
         "hooks": [
           {
             "type": "prompt-based",
-            "configPath": "${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-salesforce/hooks/stop/quality-analysis-trigger.json"
+            "configPath": "${CLAUDE_PLUGIN_ROOT}/hooks/stop/quality-analysis-trigger.json"
           },
           {
             "type": "prompt-based",
-            "configPath": "${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-salesforce/hooks/stop/release-coordination-trigger.json"
+            "configPath": "${CLAUDE_PLUGIN_ROOT}/hooks/stop/release-coordination-trigger.json"
           }
         ]
       }

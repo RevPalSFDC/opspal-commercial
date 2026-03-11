@@ -239,15 +239,15 @@ All review decisions are logged:
 
 ```bash
 # List reviews via script
-node .claude-plugins/opspal-core/scripts/lib/governance/review-queue.js list
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/review-queue.js list
 
 # Approve via script
-node .claude-plugins/opspal-core/scripts/lib/governance/review-queue.js approve \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/review-queue.js approve \
   --id rev_abc123 \
   --user $(whoami)
 
 # Export pending to JSON
-node .claude-plugins/opspal-core/scripts/lib/governance/review-queue.js export \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/review-queue.js export \
   --format json \
   --output ./pending-reviews.json
 ```

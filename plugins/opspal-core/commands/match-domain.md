@@ -43,36 +43,36 @@ Match data using industry-specific abbreviation dictionaries. The system automat
 
 ### List available domains
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/domain-aware-matcher.js domains
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js domains
 ```
 
 ### Match with explicit domain
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/domain-aware-matcher.js match "ABC HOA" \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js match "ABC HOA" \
   --domain property-management \
   --targets ./accounts.json
 ```
 
 ### Match with auto-detection
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/domain-aware-matcher.js match "San Diego PD" \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js match "San Diego PD" \
   --targets ./agencies.json
 ```
 
 ### Expand abbreviations
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/domain-aware-matcher.js expand "FQHC of LA" \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js expand "FQHC of LA" \
   --domain healthcare
 ```
 
 ### Detect domain from text
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/domain-aware-matcher.js detect "FDIC insured credit union"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js detect "FDIC insured credit union"
 ```
 
 ### Detect domain from CSV headers
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/domain-detector.js headers "TenantName,UnitNumber,RentAmount"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-detector.js headers "TenantName,UnitNumber,RentAmount"
 ```
 
 ## Target File Format
@@ -93,12 +93,12 @@ Create custom abbreviations for specific organizations:
 
 ```bash
 # Create override
-node .claude-plugins/opspal-core/scripts/lib/domain-dictionary-loader.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-dictionary-loader.js \
   create-override property-management acme-properties \
   --abbreviations '{"ACME": "Acme Property Management"}'
 
 # Use override
-node .claude-plugins/opspal-core/scripts/lib/domain-aware-matcher.js match "ACME HOA" \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js match "ACME HOA" \
   --domain property-management \
   --org acme-properties
 ```

@@ -48,14 +48,14 @@ Generate complete, validated JSON-LD schema markup for:
 
 ```bash
 # Generate all appropriate schemas for a URL
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://example.com
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js https://example.com
 ```
 
 ### Specific Schema Types
 
 ```bash
 # Generate only Organization and WebSite schemas
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://example.com \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js https://example.com \
   --types Organization,WebSite
 ```
 
@@ -63,7 +63,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://
 
 ```bash
 # Generate schema and save as JSON for deployment
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://example.com \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js https://example.com \
   --format json \
   --output schema.json
 ```
@@ -72,7 +72,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://
 
 ```bash
 # Process multiple pages from crawl data
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js crawl-results.json \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js crawl-results.json \
   --format json \
   --output all-schemas.json
 ```
@@ -83,7 +83,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js crawl-re
 
 ```bash
 # Run schema generator
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js [URL]
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js [URL]
 ```
 
 **The script automatically:**
@@ -203,7 +203,7 @@ Schemas Generated: 2
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://gorevpal.com \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js https://gorevpal.com \
   --types Organization,WebSite \
   --format json \
   --output gorevpal-schema.json
@@ -222,7 +222,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js https://
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js \
   https://gorevpal.com/blog/what-is-revops \
   --types Article \
   --format json \
@@ -244,7 +244,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js \
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js \
   https://gorevpal.com/faq \
   --types FAQPage
 ```
@@ -263,7 +263,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js \
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-schema-generator.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-schema-generator.js \
   https://gorevpal.com/team/john-doe \
   --types Person
 ```

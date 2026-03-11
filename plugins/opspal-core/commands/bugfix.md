@@ -48,7 +48,7 @@ Parse the user's bug description from `$ARGUMENTS`. Extract:
 
 If `--resume` is set, run:
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/hypothesis-result-ledger.js resumable
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/hypothesis-result-ledger.js resumable
 ```
 Read the latest resumable run's ledger file, then skip to Step 4.
 
@@ -87,7 +87,7 @@ Parse the JSON response to extract the hypotheses array.
 Run the parallel hypothesis executor:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/parallel-hypothesis-executor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/parallel-hypothesis-executor.js \
   --run-id=<run-id> \
   --hypotheses='<json-array-from-step-3>' \
   --test-cmd='<test-command>' \

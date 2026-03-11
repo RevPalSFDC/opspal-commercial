@@ -155,7 +155,7 @@ Or manually:
 
 - Run pre-deployment validator:
   ```bash
-  node .claude-plugins/opspal-salesforce/scripts/lib/deployment-source-validator.js validate-source ./force-app
+  node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/deployment-source-validator.js)" validate-source ./force-app
   ```
 
 ## Files

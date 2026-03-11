@@ -20,7 +20,7 @@ Interactive first-run walkthrough for new OpsPal users. Checks current license s
 Run the first-run detection script:
 
 ```bash
-node plugins/opspal-core/scripts/lib/license-first-run.js
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/license-first-run.js
 ```
 
 Parse the JSON output and follow the flow below.
@@ -66,7 +66,7 @@ If the user types "skip" or "no" or similar:
 Run the activation script with the user's key:
 
 ```bash
-node plugins/opspal-core/scripts/lib/license-activation-manager.js activate <KEY>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/license-activation-manager.js activate <KEY>
 ```
 
 Show the output to the user.

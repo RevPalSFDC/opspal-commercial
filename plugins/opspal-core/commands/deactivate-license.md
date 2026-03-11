@@ -45,5 +45,5 @@ For backend, activation, and admin operations, use the runbooks in the sibling `
 ## Implementation
 
 ```bash
-node plugins/opspal-core/scripts/lib/license-activation-manager.js deactivate
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/license-activation-manager.js deactivate
 ```

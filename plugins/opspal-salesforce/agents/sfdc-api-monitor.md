@@ -76,7 +76,7 @@ triggerKeywords:
 ### Check Current Usage Status
 
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/api-usage-monitor.js status <org-alias>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/api-usage-monitor.js status <org-alias>
 ```
 
 **Output:**
@@ -105,7 +105,7 @@ node .claude-plugins/opspal-salesforce/scripts/lib/api-usage-monitor.js status <
 ### Generate Weekly Report
 
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/api-usage-monitor.js report <org-alias> --save
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/api-usage-monitor.js report <org-alias> --save
 ```
 
 **Output:**
@@ -161,13 +161,13 @@ node .claude-plugins/opspal-salesforce/scripts/lib/api-usage-monitor.js report <
 ### Pre-Operation Quota Check
 
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/api-usage-monitor.js check <org-alias> <operation-size>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/api-usage-monitor.js check <org-alias> <operation-size>
 ```
 
 **Examples:**
 ```bash
 # Check if there's quota for a 500-record operation
-node .claude-plugins/opspal-salesforce/scripts/lib/api-usage-monitor.js check production 500
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/api-usage-monitor.js check production 500
 
 # Output if OK:
 # OK: Sufficient quota. 4500 calls remaining.
@@ -308,7 +308,7 @@ Actual API usage should be verified in Salesforce Setup → System Overview → 
 **Solutions:**
 ```bash
 # Verify hook is executable
-chmod +x .claude-plugins/opspal-salesforce/hooks/post-sf-command.sh
+chmod +x ${CLAUDE_PLUGIN_ROOT}/hooks/post-sf-command.sh
 
 # Enable monitoring
 export API_MONITORING_ENABLED=true

@@ -67,7 +67,7 @@ mcp__monday__create_item({
 
 Or via GraphQL:
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js create-item \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js create-item \
   --board 12345 \
   --name "New Task" \
   --group topics \
@@ -281,7 +281,7 @@ mcp__monday__create_subitem({
 ### List Subitems
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-api-client.js list-subitems \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-api-client.js list-subitems \
   --item <parent_item_id>
 ```
 
@@ -308,7 +308,7 @@ mcp__monday__delete_item({
 ### Create Multiple Items
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js create-items \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js create-items \
   --board 12345 \
   --file items.json
 ```
@@ -337,7 +337,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js create-it
 ### Update Multiple Items
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update-items \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js update-items \
   --board 12345 \
   --file updates.json
 ```
@@ -345,7 +345,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update-it
 ### Delete Multiple Items
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js delete-items \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js delete-items \
   --items "item1_id,item2_id,item3_id"
 ```
 

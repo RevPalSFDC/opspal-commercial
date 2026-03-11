@@ -29,7 +29,14 @@ PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 ENABLED="${ENABLE_INTAKE_SUGGESTION:-1}"
 THRESHOLD="${INTAKE_SUGGEST_THRESHOLD:-0.5}"
 VERBOSE="${ROUTING_VERBOSE:-0}"
-COMPLEXITY_SCORER="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
+# Resolve complexity-scorer through encrypted asset runtime (may be .enc)
+ENC_RESOLVER="$PLUGIN_ROOT/hooks/lib/resolve-encrypted-asset.sh"
+if [[ -f "$ENC_RESOLVER" ]]; then
+    source "$ENC_RESOLVER"
+    COMPLEXITY_SCORER=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-core" "scripts/lib/complexity-scorer.js")
+else
+    COMPLEXITY_SCORER="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
+fi
 
 # Exit early if disabled
 if [[ "$ENABLED" != "1" ]]; then

@@ -53,5 +53,5 @@ See `docs/LICENSING_RUNTIME_GUIDE.md` for the full runtime, cache, and troublesh
 ## Implementation
 
 ```bash
-node plugins/opspal-core/scripts/lib/license-activation-manager.js status
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/license-activation-manager.js status
 ```

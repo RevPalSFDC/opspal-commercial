@@ -88,9 +88,9 @@ error_prevention_system:
 
     ### Documentation
 
-    - Complete User Guide: `.claude-plugins/opspal-salesforce/docs/ERROR_PREVENTION_SYSTEM.md`
-    - SOQL Best Practices: `.claude-plugins/opspal-salesforce/docs/SOQL_BEST_PRACTICES.md`
-    - Tooling API Reference: `.claude-plugins/opspal-salesforce/docs/SALESFORCE_TOOLING_API_FLOW_OBJECTS.md`
+    - Complete User Guide: `${CLAUDE_PLUGIN_ROOT}/docs/ERROR_PREVENTION_SYSTEM.md`
+    - SOQL Best Practices: `${CLAUDE_PLUGIN_ROOT}/docs/SOQL_BEST_PRACTICES.md`
+    - Tooling API Reference: `${CLAUDE_PLUGIN_ROOT}/docs/SALESFORCE_TOOLING_API_FLOW_OBJECTS.md`
 
     ### Trust the System
 

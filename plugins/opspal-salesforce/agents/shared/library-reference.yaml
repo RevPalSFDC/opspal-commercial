@@ -3,7 +3,7 @@
 # Last Updated: 2025-10-22
 #
 # This file documents commonly used scripts available to all agents.
-# All paths relative to: .claude-plugins/opspal-salesforce/scripts/lib/
+# All paths relative to: ${CLAUDE_PLUGIN_ROOT}/scripts/lib/
 
 ---
 
@@ -300,7 +300,7 @@ analytics:
       - RevOps, CPQ, security, and compliance agents
     validation: |
       # Validate PDF integration compliance:
-      node .claude-plugins/opspal-core/scripts/validate-pdf-integration.js --all
+      /pdf-health
     added: v3.41.0 (Mandatory PDF deliverables standard)
 
 # State Discovery
@@ -943,7 +943,7 @@ monitoring:
 # Notes for Agents
 
 # Script Locations:
-# - All scripts: .claude-plugins/opspal-salesforce/scripts/lib/
+# - All scripts: ${CLAUDE_PLUGIN_ROOT}/scripts/lib/
 # - Run from plugin root: node scripts/lib/<script-name>
 # - Run from lib directory: node <script-name>
 

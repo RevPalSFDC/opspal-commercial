@@ -12,7 +12,7 @@
 Run the setup script to automatically register hooks:
 
 ```bash
-bash .claude-plugins/opspal-core/scripts/setup-prevention-system.sh
+bash "${OPSPAL_CORE_ROOT}/scripts/setup-prevention-system.sh"
 ```
 
 This script will:
@@ -56,12 +56,12 @@ Add to `.claude/settings.json`:
 {
   "hooks": {
     "UserPromptSubmit": {
-      "command": "bash ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/master-prompt-handler.sh",
+      "command": "bash ${OPSPAL_CORE_ROOT}/hooks/master-prompt-handler.sh",
       "timeout": 10000,
       "description": "Master prompt handler - chains Prevention System (Phases 1-3) with Sub-Agent Utilization Booster"
     },
     "SessionStart": {
-      "command": "bash -c '${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh && ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/session-context-loader.sh'",
+      "command": "bash -c '${OPSPAL_SALESFORCE_ROOT}/hooks/session-start-agent-reminder.sh && ${OPSPAL_CORE_ROOT}/hooks/session-context-loader.sh'",
       "timeout": 5000,
       "description": "Session initialization - loads cross-session context (Phase 3.3)"
     }
@@ -96,7 +96,7 @@ cat .claude/settings.json | jq '.hooks | keys'
 
 ```bash
 echo '{"message":"Update all Opportunity fields"}' | \
-  bash .claude-plugins/opspal-core/hooks/master-prompt-handler.sh
+  bash "${OPSPAL_CORE_ROOT}/hooks/master-prompt-handler.sh"
 # Should output JSON with systemMessage
 ```
 
@@ -230,10 +230,10 @@ DEBUG_IDEMPOTENCY=1
 cat .claude/settings.json | jq '.hooks | keys'
 
 # Verify hooks executable
-ls -la .claude-plugins/opspal-core/hooks/*.sh
+ls -la "${OPSPAL_CORE_ROOT}"/hooks/*.sh
 
 # Check master hook exists
-test -f .claude-plugins/opspal-core/hooks/master-prompt-handler.sh && echo "Found"
+test -f "${OPSPAL_CORE_ROOT}/hooks/master-prompt-handler.sh" && echo "Found"
 ```
 
 ### jq Not Installed

@@ -307,12 +307,12 @@ When `ORG_SLUG` is set, the pre-task hook automatically displays:
 
 ```bash
 # Run directly via Node
-node .claude-plugins/opspal-core/scripts/lib/work-index-manager.js list acme-corp
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-manager.js list acme-corp
 
 # Schema utilities
-node .claude-plugins/opspal-core/scripts/lib/work-index-schema.js classifications
-node .claude-plugins/opspal-core/scripts/lib/work-index-schema.js statuses
-node .claude-plugins/opspal-core/scripts/lib/work-index-schema.js generate-id 2026-01-29 1
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-schema.js classifications
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-schema.js statuses
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-schema.js generate-id 2026-01-29 1
 ```
 
 ## Environment Variables

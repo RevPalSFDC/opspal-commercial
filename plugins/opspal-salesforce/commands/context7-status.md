@@ -15,17 +15,14 @@ Commands to run:
 # Check Context7 MCP configuration in Claude CLI
 timeout 10s claude mcp get context7 || true
 
-# Run repo MCP readiness test for Context7
-node plugins/opspal-core/scripts/lib/mcp-connectivity-tester.js --server context7 --json
-
 # Verify Context7 package is installed locally
 npm ls @upstash/context7-mcp --depth=0
 
 # List agents with Context7
-rg -l "mcp__context7__" plugins/opspal-salesforce/agents/*.md
+rg -l "mcp__context7__" ${CLAUDE_PLUGIN_ROOT}/agents/*.md
 
 # Show agent tools
-for file in plugins/opspal-salesforce/agents/*.md; do
+for file in ${CLAUDE_PLUGIN_ROOT}/agents/*.md; do
   agent=$(basename "$file" .md)
   if grep -q "mcp__context7__" "$file"; then
     echo "✅ $agent"

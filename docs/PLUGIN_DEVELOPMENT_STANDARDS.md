@@ -381,7 +381,7 @@ node .claude-plugins/developer-tools-plugin/scripts/lib/quality-analyzer.js \
 
 ```bash
 # Lint SOQL queries
-node .claude-plugins/opspal-salesforce/scripts/qa/query-lint.js
+node "${OPSPAL_SALESFORCE_ROOT}/scripts/qa/query-lint.js"
 ```
 
 ### 6.4 Agent Discovery Test

@@ -159,7 +159,7 @@ This command respects governance policies:
 You can also run the audit directly via script:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/governance/run-audit.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/run-audit.js \
   --object Account \
   --scope full \
   --org production \

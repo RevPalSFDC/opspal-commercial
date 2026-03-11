@@ -14,7 +14,7 @@ Default behavior is `--resolution-mode deterministic-first`: local redirect reso
 1. Verify Gemini is configured:
 
 ```bash
-node .claude-plugins/opspal-ai-consult/scripts/lib/gemini-cli-invoker.js --check
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/gemini-cli-invoker.js --check
 ```
 
 If not configured, direct the user to run `/gemini-link --setup` first.

@@ -33,13 +33,14 @@ grep '"name":"agent-invocation"' ~/.claude/logs/traces.jsonl | tail -10
 
 ```bash
 # List available agents in current context
-ls -la .claude-plugins/*/agents/*.md 2>/dev/null | head -20
+find . -path "*/agents/*.md" 2>/dev/null | head -20
 
 # Check specific plugin's agents
-ls .claude-plugins/opspal-salesforce/agents/ | head -20
+SF_PLUGIN_ROOT="$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-root opspal-salesforce 2>/dev/null || true)"
+ls "${SF_PLUGIN_ROOT}/agents" | head -20
 
 # Verify agent manifest
-cat .claude-plugins/opspal-salesforce/.claude-plugin/plugin.json | jq '.agents'
+cat "${SF_PLUGIN_ROOT}/.claude-plugin/plugin.json" | jq '.agents'
 ```
 
 ### Step 3: Check Routing Rules
@@ -110,17 +111,19 @@ tail -50 ~/.claude/logs/agent-execution.jsonl 2>/dev/null
 
 ```bash
 # Search for agent by name
-find .claude-plugins -name "*revops*.md" -o -name "*cpq*.md" 2>/dev/null
+find . -path "*/agents/*revops*.md" -o -path "*/agents/*cpq*.md" 2>/dev/null
 
 # Verify agent frontmatter
-head -50 .claude-plugins/opspal-salesforce/agents/sfdc-revops-auditor.md
+SF_PLUGIN_ROOT="$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-root opspal-salesforce 2>/dev/null || true)"
+head -50 "${SF_PLUGIN_ROOT}/agents/sfdc-revops-auditor.md"
 ```
 
 ### Verify Agent Tools
 
 ```bash
 # Check agent's allowed-tools section
-grep -A 20 "allowed-tools:" .claude-plugins/opspal-salesforce/agents/sfdc-revops-auditor.md
+SF_PLUGIN_ROOT="$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-root opspal-salesforce 2>/dev/null || true)"
+grep -A 20 "allowed-tools:" "${SF_PLUGIN_ROOT}/agents/sfdc-revops-auditor.md"
 ```
 
 ### Test Agent Routing

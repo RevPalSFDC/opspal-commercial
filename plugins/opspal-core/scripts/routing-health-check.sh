@@ -204,16 +204,29 @@ check_filesystem() {
         echo "  Fix: node scripts/lib/routing-index-builder.js"
     fi
 
-    # Check required scripts
+    # Check required scripts (resolve encrypted assets through runtime dir)
     local scripts_ok=true
+    ENC_RESOLVER="$PLUGIN_ROOT/hooks/lib/resolve-encrypted-asset.sh"
+    if [[ -f "$ENC_RESOLVER" ]]; then
+        source "$ENC_RESOLVER"
+    fi
+
     local required_scripts=(
         "$TASK_ROUTER"
-        "$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
-        "$PLUGIN_ROOT/scripts/lib/semantic-router.js"
+        "scripts/lib/complexity-scorer.js"
+        "scripts/lib/semantic-router.js"
     )
 
-    for script in "${required_scripts[@]}"; do
-        if [ ! -f "$script" ]; then
+    for rel_script in "${required_scripts[@]}"; do
+        local resolved=""
+        if [[ "$rel_script" == /* ]]; then
+            resolved="$rel_script"
+        elif type resolve_enc_asset &>/dev/null; then
+            resolved=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-core" "$rel_script")
+        else
+            resolved="$PLUGIN_ROOT/$rel_script"
+        fi
+        if [[ -z "$resolved" || ! -f "$resolved" ]]; then
             scripts_ok=false
             break
         fi

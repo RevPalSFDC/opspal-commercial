@@ -39,9 +39,9 @@ find_plugin_script() {
   local script_name="$1"
   local search_paths=(
     "${CLAUDE_PLUGIN_ROOT:-}/scripts/lib/$script_name"
-    "plugins/opspal-core/scripts/lib/$script_name"
-    ".claude-plugins/opspal-core/scripts/lib/$script_name"
-    "$HOME/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
+    "$HOME/.claude/${CLAUDE_PLUGIN_ROOT}@revpal-internal-plugins/scripts/lib/$script_name"
   )
   for path in "${search_paths[@]}"; do
     [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0

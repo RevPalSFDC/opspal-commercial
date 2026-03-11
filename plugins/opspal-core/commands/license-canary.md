@@ -52,5 +52,5 @@ Optionally override the local key or server:
 ## Implementation
 
 ```bash
-node plugins/opspal-core/scripts/lib/license-canary.js --expect-tier <tier>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/license-canary.js --expect-tier <tier>
 ```
