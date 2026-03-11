@@ -1,7 +1,63 @@
 {
-  "version": 1,
+  "version": 2,
   "plugin": "opspal-salesforce",
+  "required_domain": "salesforce",
   "encrypted_assets": [
+    {
+      "path": "config/decision-kpi-matrix.json",
+      "encrypted_path": "config/decision-kpi-matrix.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "config/metric_registry.json",
+      "encrypted_path": "config/metric_registry.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "config/persona-kpi-contracts.json",
+      "encrypted_path": "config/persona-kpi-contracts.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "scripts/lib/agent-risk-scorer.js",
+      "encrypted_path": "scripts/lib/agent-risk-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "scripts/lib/automation-risk-scorer.js",
+      "encrypted_path": "scripts/lib/automation-risk-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
     {
       "path": "scripts/lib/benchmark-retriever.js",
       "encrypted_path": "scripts/lib/benchmark-retriever.js.enc",
@@ -10,27 +66,121 @@
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce",
       "checksum_plaintext": "sha256:ac7943ddba38c8a9d3dc451fbc524261f77fe5bda936d1302962fe3fb122d157"
+    },
+    {
+      "path": "scripts/lib/cpq-assessor-optimizer.js",
+      "encrypted_path": "scripts/lib/cpq-assessor-optimizer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "scripts/lib/cpq-scorecard-generator.js",
+      "encrypted_path": "scripts/lib/cpq-scorecard-generator.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "scripts/lib/decay-risk-model.js",
+      "encrypted_path": "scripts/lib/decay-risk-model.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "scripts/lib/revops-auditor-optimizer.js",
+      "encrypted_path": "scripts/lib/revops-auditor-optimizer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "skills/cpq-assessment/data-quality-protocol.md",
+      "encrypted_path": "skills/cpq-assessment/data-quality-protocol.md.enc",
+      "asset_type": "skill",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
+    },
+    {
+      "path": "skills/cpq-assessment/methodology.md",
+      "encrypted_path": "skills/cpq-assessment/methodology.md.enc",
+      "asset_type": "skill",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
     },
     {
       "path": "skills/revops-assessment-framework/benchmark-standards.md",
       "encrypted_path": "skills/revops-assessment-framework/benchmark-standards.md.enc",
-      "asset_type": "config",
+      "asset_type": "skill",
       "sensitivity": "high",
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce",
       "checksum_plaintext": "sha256:4c0a9e623227383868b161e718392b64730d15ef87bf31b946982e71e2648ca1"
+    },
+    {
+      "path": "skills/revops-assessment-framework/report-templates.md",
+      "encrypted_path": "skills/revops-assessment-framework/report-templates.md.enc",
+      "asset_type": "skill",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
     },
     {
       "path": "skills/revops-assessment-framework/scoring-frameworks.md",
       "encrypted_path": "skills/revops-assessment-framework/scoring-frameworks.md.enc",
-      "asset_type": "config",
+      "asset_type": "skill",
       "sensitivity": "high",
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce",
       "checksum_plaintext": "sha256:7b95e0a9fa53a7660061bf0d4188accd4143d3983fe966f8e7f84d72804b2d73"
+    },
+    {
+      "path": "skills/revops-assessment-framework/statistical-methods.md",
+      "encrypted_path": "skills/revops-assessment-framework/statistical-methods.md.enc",
+      "asset_type": "skill",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "salesforce",
+      "required_tier": "salesforce"
     }
   ],
   "cleanup_on_stop": true,

@@ -23,44 +23,53 @@ const LICENSE_KEY_FILE = path.join(OPSPAL_DIR, 'license.key');
 const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
 const MACHINE_ID_FILE = path.join(OPSPAL_DIR, 'machine.id');
 
-// ─── Tier display info ──────────────────────────────────────────────────────
+// ─── Tier display info (domain-scoped encryption model) ─────────────────────
 
 const TIER_INFO = {
   starter: {
     label: 'Starter',
-    assets: 'tier3 (methodology)',
+    assets: 'core domain',
+    domains: ['core'],
     color: '\x1b[33m', // yellow
-    description: 'Quality gate rules, funnel definitions, persona configs, assessment prefills, benchmark retriever, persona KPI contracts, SEO content gap analyzer'
+    description: 'Core methodology: quality gate rules, funnel definitions, persona configs, scoring weights, benchmarks'
   },
   professional: {
     label: 'Professional',
-    assets: 'tier2 + tier3 (algorithms + methodology)',
+    assets: 'core + salesforce + hubspot domains',
+    domains: ['core', 'salesforce', 'hubspot'],
     color: '\x1b[36m', // cyan
-    description: 'All Starter assets plus scoring engines, risk analyzers, health scorers, CPQ generators, data quality frameworks, SEO scorers, Marketo lead quality, and more'
+    description: 'Core + Salesforce + HubSpot: risk scorers, CPQ optimization, automation auditors, assessment analyzers, governance classifiers'
   },
   enterprise: {
     label: 'Enterprise',
-    assets: 'tier1 + tier2 + tier3 (all assets)',
+    assets: 'all 6 domains',
+    domains: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene'],
     color: '\x1b[35m', // magenta
-    description: 'Full access: scoring weights, benchmarks, intake rubrics, permission matrices, CPQ field mappings, dedup clustering, canonical selectors, GTM baselines, and all Professional assets'
+    description: 'Full access: all domains including Marketo lead quality, GTM benchmarks, dedup clustering, and canonical selectors'
   },
   trial: {
     label: 'Trial',
-    assets: 'tier3 (methodology)',
+    assets: 'core domain',
+    domains: ['core'],
     color: '\x1b[33m',
     description: 'Same access as Starter for the trial period'
   }
 };
 
-const ASSET_COUNTS = { tier1: 13, tier2: 17, tier3: 7 };
+// Actual .enc file counts per domain
+const DOMAIN_ASSET_COUNTS = {
+  core: 27,
+  salesforce: 16,
+  hubspot: 4,
+  marketo: 4,
+  gtm: 1,
+  'data-hygiene': 5
+};
 
 function tierAssetCount(tier) {
-  switch (tier) {
-    case 'starter': case 'trial': return ASSET_COUNTS.tier3;
-    case 'professional': return ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
-    case 'enterprise': return ASSET_COUNTS.tier1 + ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
-    default: return 0;
-  }
+  const info = TIER_INFO[tier];
+  if (!info || !info.domains) return 0;
+  return info.domains.reduce((sum, d) => sum + (DOMAIN_ASSET_COUNTS[d] || 0), 0);
 }
 
 const RESET = '\x1b[0m';
@@ -128,9 +137,9 @@ async function activate(licenseKey) {
 
   // Success
   const tier = result.tier || 'unknown';
-  const info = TIER_INFO[tier] || { label: tier, color: '', assets: 'unknown' };
+  const info = TIER_INFO[tier] || { label: tier, color: '', assets: 'unknown', domains: [] };
   const count = tierAssetCount(tier);
-  const total = ASSET_COUNTS.tier1 + ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
+  const total = Object.values(DOMAIN_ASSET_COUNTS).reduce((a, b) => a + b, 0);
 
   console.log(`${GREEN}${BOLD}License Activated Successfully${RESET}\n`);
   console.log(`  ${BOLD}Tier:${RESET}         ${info.color}${info.label}${RESET}`);
@@ -193,11 +202,11 @@ async function showStatus() {
   const tier = cache.tier || 'unknown';
   const info = TIER_INFO[tier] || { label: tier, color: '', assets: 'unknown' };
   const count = tierAssetCount(tier);
-  const total = ASSET_COUNTS.tier1 + ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
+  const total = Object.values(DOMAIN_ASSET_COUNTS).reduce((a, b) => a + b, 0);
 
   console.log(`  ${BOLD}Tier:${RESET}         ${info.color}${info.label}${RESET}`);
   console.log(`  ${BOLD}Organization:${RESET} ${cache.organization || 'N/A'}`);
-  console.log(`  ${BOLD}Assets:${RESET}       ${count}/${total} encrypted assets unlocked`);
+  console.log(`  ${BOLD}Assets:${RESET}       ${count}/${total} encrypted assets unlocked (${info.assets})`);
   if (localStatus.key_bundle_version) {
     const bundleState = localStatus.has_scoped_key_bundle ? `${GREEN}scoped${RESET}` : `${YELLOW}missing scoped bundle${RESET}`;
     console.log(`  ${BOLD}Key Bundle:${RESET}   v${localStatus.key_bundle_version} (${bundleState})`);
@@ -230,12 +239,14 @@ async function showStatus() {
   console.log(`\n  ${GREEN}License is active.${RESET}`);
   console.log(`  ${DIM}Run /license-canary --expect-tier ${tier} for a live rollout check.${RESET}`);
 
-  // Show what's unlocked vs locked
-  const allowed = cache.allowed_asset_tiers || [];
-  console.log(`\n  ${BOLD}Access Breakdown:${RESET}`);
-  console.log(`    Tier 1 (Critical IP):    ${allowed.includes('tier1') ? GREEN + 'Unlocked' : DIM + 'Locked'}${RESET} (${ASSET_COUNTS.tier1} assets)`);
-  console.log(`    Tier 2 (Algorithms):     ${allowed.includes('tier2') ? GREEN + 'Unlocked' : DIM + 'Locked'}${RESET} (${ASSET_COUNTS.tier2} assets)`);
-  console.log(`    Tier 3 (Methodology):    ${allowed.includes('tier3') ? GREEN + 'Unlocked' : DIM + 'Locked'}${RESET} (${ASSET_COUNTS.tier3} assets)`);
+  // Show domain-scoped access breakdown
+  const allowedDomains = info.domains || [];
+  console.log(`\n  ${BOLD}Domain Access:${RESET}`);
+  for (const [domain, assetCount] of Object.entries(DOMAIN_ASSET_COUNTS)) {
+    const unlocked = allowedDomains.includes(domain);
+    const label = domain.charAt(0).toUpperCase() + domain.slice(1);
+    console.log(`    ${label.padEnd(16)} ${unlocked ? GREEN + 'Unlocked' : DIM + 'Locked'}${RESET} (${assetCount} assets)`);
+  }
 
   return true;
 }
@@ -303,13 +314,13 @@ async function deactivate() {
 function checkGuidance() {
   // Called by SessionStart hook to determine if first-run guidance should be shown
   const hasLicenseKey = !!getStoredKey();
-  const hasTierKeys = ['tier1.key', 'tier2.key', 'tier3.key'].some((fileName) =>
+  const hasDomainKeys = ['core.key', 'salesforce.key', 'hubspot.key', 'marketo.key', 'gtm.key', 'data-hygiene.key'].some((fileName) =>
     fs.existsSync(path.join(process.env.HOME, '.claude', 'opspal-enc', fileName))
   );
   const hasScopedKeyring = !!process.env.OPSPAL_PLUGIN_KEYRING_JSON;
   const hasCache = fs.existsSync(CACHE_FILE);
 
-  if (hasLicenseKey || hasTierKeys || hasScopedKeyring || hasCache) {
+  if (hasLicenseKey || hasDomainKeys || hasScopedKeyring || hasCache) {
     // User has a way to decrypt — no guidance needed
     console.log(JSON.stringify({ show_guidance: false }));
     return;

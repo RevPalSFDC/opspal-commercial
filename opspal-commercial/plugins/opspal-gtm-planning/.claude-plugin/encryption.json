@@ -1,6 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "plugin": "opspal-gtm-planning",
+  "required_domain": "gtm",
   "encrypted_assets": [
     {
       "path": "config/benchmark-baseline.json",
@@ -10,6 +11,8 @@
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "gtm",
+      "required_tier": "gtm",
       "checksum_plaintext": "sha256:ccc1e470f1eba28bf952b803b2740e4c02710a62587e1d270503caa7b83eeff4"
     }
   ],

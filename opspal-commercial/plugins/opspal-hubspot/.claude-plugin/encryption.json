@@ -1,15 +1,51 @@
 {
-  "version": 1,
+  "version": 2,
   "plugin": "opspal-hubspot",
+  "required_domain": "hubspot",
   "encrypted_assets": [
     {
-      "path": "skills/hubspot-assessment-methodology/scoring-criteria.md",
-      "encrypted_path": "skills/hubspot-assessment-methodology/scoring-criteria.md.enc",
-      "asset_type": "config",
+      "path": "scripts/lib/enhanced-gov-classifier.js",
+      "encrypted_path": "scripts/lib/enhanced-gov-classifier.js.enc",
+      "asset_type": "script",
       "sensitivity": "high",
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "hubspot",
+      "required_tier": "hubspot"
+    },
+    {
+      "path": "scripts/lib/hubspot-assessment-analyzer-optimizer.js",
+      "encrypted_path": "scripts/lib/hubspot-assessment-analyzer-optimizer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "hubspot",
+      "required_tier": "hubspot"
+    },
+    {
+      "path": "scripts/lib/seo-content-scorer.js",
+      "encrypted_path": "scripts/lib/seo-content-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "hubspot",
+      "required_tier": "hubspot"
+    },
+    {
+      "path": "skills/hubspot-assessment-methodology/scoring-criteria.md",
+      "encrypted_path": "skills/hubspot-assessment-methodology/scoring-criteria.md.enc",
+      "asset_type": "skill",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "hubspot",
+      "required_tier": "hubspot",
       "checksum_plaintext": "sha256:42b740732f57ead18b829295dc41225dc67ba9d9b58ffcbaeee4279bc4dcd2b3"
     }
   ],

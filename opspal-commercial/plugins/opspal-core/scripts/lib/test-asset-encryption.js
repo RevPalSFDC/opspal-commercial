@@ -98,8 +98,8 @@ try {
 
 console.log('\n=== Section A: Engine Unit Tests ===\n');
 
-const tierKeyring = engine.generateTierKeyring();
-const scopedKeyMaterial = { keyring: tierKeyring };
+const domainKeyring = engine.generateDomainKeyring();
+const scopedKeyMaterial = { keyring: domainKeyring };
 const PLUGIN = 'test-plugin';
 const ASSET = 'scripts/lib/secret.js';
 
@@ -247,13 +247,13 @@ test('A18', 'generateKey unique per call', () => {
 });
 
 test('A19', 'resolveKeyMaterial reads keyring env first', () => {
-  const testKeyring = engine.generateTierKeyring();
+  const testKeyring = engine.generateDomainKeyring();
   const origEnv = process.env[engine.KEYRING_ENV_VAR];
   try {
     process.env[engine.KEYRING_ENV_VAR] = JSON.stringify(testKeyring);
     const resolved = engine.resolveKeyMaterial('any-plugin');
     assert(resolved !== null, 'Should resolve from env');
-    assert(resolved.keyring.tier1.equals(Buffer.from(testKeyring.tier1, 'base64')), 'tier1 key from env mismatch');
+    assert(resolved.keyring.core.equals(Buffer.from(testKeyring.core, 'base64')), 'core key from env mismatch');
   } finally {
     if (origEnv !== undefined) {
       process.env[engine.KEYRING_ENV_VAR] = origEnv;
@@ -276,35 +276,36 @@ test('A20', 'Node version check (engine loads on supported versions)', () => {
   }
 });
 
-test('A21', 'Scoped v2 round-trip decrypts with tier keyring', () => {
-  const plain = Buffer.from('console.log("tier 2 protected");');
+test('A21', 'Scoped v2 round-trip decrypts with domain keyring', () => {
+  const plain = Buffer.from('console.log("salesforce domain protected");');
   const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial, {
-    requiredTier: 'tier2'
+    requiredDomain: 'salesforce'
   });
   const parsed = engine.parseWireFormat(enc);
   const dec = engine.decryptAsset(enc, PLUGIN, ASSET, scopedKeyMaterial);
 
   assertEqual(parsed.version, engine.FORMAT_VERSION, 'Expected v2 format');
-  assertEqual(parsed.keySlot, engine.KEY_SLOT_BY_TIER.tier2, 'Expected tier2 key slot');
+  assertEqual(parsed.keySlot, engine.KEY_SLOT_BY_DOMAIN.salesforce, 'Expected salesforce key slot');
+  assertEqual(parsed.requiredDomain, 'salesforce', 'Expected salesforce domain');
   assert(dec.equals(plain), 'Scoped decryption does not match original');
 });
 
-test('A22', 'Scoped v2 asset fails without the required tier key', () => {
-  const plain = Buffer.from('tier1 secret');
+test('A22', 'Scoped v2 asset fails without the required domain key', () => {
+  const plain = Buffer.from('core domain secret');
   const enc = engine.encryptAsset(plain, PLUGIN, ASSET, scopedKeyMaterial, {
-    requiredTier: 'tier1'
+    requiredDomain: 'core'
   });
-  const result = engine.verifyAsset(enc, PLUGIN, ASSET, { keyring: { tier2: tierKeyring.tier2 } });
-  assert(!result.valid, 'Verification should fail without the required scoped key');
+  const result = engine.verifyAsset(enc, PLUGIN, ASSET, { keyring: { salesforce: domainKeyring.salesforce } });
+  assert(!result.valid, 'Verification should fail without the required domain key');
 });
 
 test('A23', 'resolveKeyring reads OPSPAL_PLUGIN_KEYRING_JSON', () => {
   const original = process.env[engine.KEYRING_ENV_VAR];
   try {
-    process.env[engine.KEYRING_ENV_VAR] = JSON.stringify({ version: 2, keys: tierKeyring });
+    process.env[engine.KEYRING_ENV_VAR] = JSON.stringify({ version: 2, keys: domainKeyring });
     const resolved = engine.resolveKeyring();
     assert(resolved !== null, 'Keyring should resolve from env');
-    assert(resolved.tier3.equals(Buffer.from(tierKeyring.tier3, 'base64')), 'tier3 key mismatch');
+    assert(resolved.hubspot.equals(Buffer.from(domainKeyring.hubspot, 'base64')), 'hubspot key mismatch');
   } finally {
     if (original !== undefined) {
       process.env[engine.KEYRING_ENV_VAR] = original;
@@ -333,21 +334,25 @@ function runCLI(args, env = {}) {
   };
 }
 
-test('B1', 'key-setup writes scoped tier keys with mode 600', () => {
+test('B1', 'key-setup writes domain-scoped keys with mode 600', () => {
   const dir = tmpDir('b1');
   const keyDir = path.join(dir, 'enc');
-  const tier1File = path.join(keyDir, 'tier1.key');
+  const coreKeyFile = path.join(keyDir, 'core.key');
   try {
-    const keyring = engine.generateTierKeyring();
+    const keyring = engine.generateDomainKeyring();
     fs.mkdirSync(keyDir, { recursive: true, mode: 0o700 });
-    for (const [tier, value] of Object.entries(keyring)) {
-      fs.writeFileSync(path.join(keyDir, `${tier}.key`), value + '\n', { mode: 0o600 });
+    for (const [domain, value] of Object.entries(keyring)) {
+      fs.writeFileSync(path.join(keyDir, `${domain}.key`), value + '\n', { mode: 0o600 });
     }
 
-    const stat = fs.statSync(tier1File);
-    assert(fs.existsSync(tier1File), 'Key file not created');
+    const stat = fs.statSync(coreKeyFile);
+    assert(fs.existsSync(coreKeyFile), 'Key file not created');
     assertEqual((stat.mode & 0o777).toString(8), '600', `Key file mode should be 600, got ${(stat.mode & 0o777).toString(8)}`);
-    assertEqual(Buffer.from(keyring.tier1, 'base64').length, 32, `Key should be 32 bytes, got ${Buffer.from(keyring.tier1, 'base64').length}`);
+    assertEqual(Buffer.from(keyring.core, 'base64').length, 32, `Key should be 32 bytes, got ${Buffer.from(keyring.core, 'base64').length}`);
+    // Verify all 6 domain keys were created
+    for (const domain of Object.keys(engine.KEY_SLOT_BY_DOMAIN)) {
+      assert(fs.existsSync(path.join(keyDir, `${domain}.key`)), `Missing key for domain: ${domain}`);
+    }
   } finally {
     cleanup(dir);
   }
@@ -663,7 +668,7 @@ test('C3', 'Resolver hook produces valid updatedInput JSON for matching path', (
         plugin: 'test-plugin',
         logical_path: 'scripts/lib/scoring.js',
         encrypted_path: 'scripts/lib/scoring.js.enc',
-        decrypted_path: '/tmp/decrypted/scoring.js'
+        decrypted_path: path.join(os.tmpdir(), 'decrypted', 'scoring.js')
       }],
       stats: { decrypted: 1, failed: 0, plugins: 1 }
     }));
@@ -723,7 +728,7 @@ test('C4', 'Resolver hook passes through for non-matching path', () => {
         plugin: 'test-plugin',
         logical_path: 'scripts/lib/scoring.js',
         encrypted_path: 'scripts/lib/scoring.js.enc',
-        decrypted_path: '/tmp/decrypted/scoring.js'
+        decrypted_path: path.join(os.tmpdir(), 'decrypted', 'scoring.js')
       }],
       stats: { decrypted: 1, failed: 0, plugins: 1 }
     }));
@@ -765,7 +770,7 @@ test('C5', 'Resolver handles paths with special characters safely', () => {
         plugin: 'test-plugin',
         logical_path: "scripts/lib/my file's data.js",
         encrypted_path: "scripts/lib/my file's data.js.enc",
-        decrypted_path: '/tmp/decrypted/my-file.js'
+        decrypted_path: path.join(os.tmpdir(), 'decrypted', 'my-file.js')
       }],
       stats: { decrypted: 1, failed: 0, plugins: 1 }
     }));

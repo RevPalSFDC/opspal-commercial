@@ -1,18 +1,8 @@
 {
   "version": 2,
   "plugin": "opspal-data-hygiene",
+  "required_domain": "data-hygiene",
   "encrypted_assets": [
-    {
-      "path": "scripts/lib/dedup-clustering-engine.js",
-      "encrypted_path": "scripts/lib/dedup-clustering-engine.js.enc",
-      "asset_type": "script",
-      "sensitivity": "high",
-      "decrypt_on": [
-        "SessionStart"
-      ],
-      "required_tier": "data-hygiene",
-      "checksum_plaintext": "sha256:279c85a9e33656067340f9c3743b094c5f4e59d015554e9ab128c34afe06e68c"
-    },
     {
       "path": "scripts/lib/dedup-canonical-selector.js",
       "encrypted_path": "scripts/lib/dedup-canonical-selector.js.enc",
@@ -21,8 +11,21 @@
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "data-hygiene",
       "required_tier": "data-hygiene",
       "checksum_plaintext": "sha256:23e3d6b3d4ed29719da4038bc7aed37e833d528758f165951b43ef21b922372d"
+    },
+    {
+      "path": "scripts/lib/dedup-clustering-engine.js",
+      "encrypted_path": "scripts/lib/dedup-clustering-engine.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "data-hygiene",
+      "required_tier": "data-hygiene",
+      "checksum_plaintext": "sha256:279c85a9e33656067340f9c3743b094c5f4e59d015554e9ab128c34afe06e68c"
     },
     {
       "path": "scripts/lib/record-match-merge-service.js",
@@ -32,28 +35,31 @@
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "data-hygiene",
       "required_tier": "data-hygiene",
       "checksum_plaintext": "sha256:7d5888124b82237dd606ff70e9c20e8a38b4f09d4af231483b2975ccaf887818"
     },
     {
       "path": "skills/cross-platform-deduplication/matching-algorithms.md",
       "encrypted_path": "skills/cross-platform-deduplication/matching-algorithms.md.enc",
-      "asset_type": "config",
+      "asset_type": "skill",
       "sensitivity": "high",
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "data-hygiene",
       "required_tier": "data-hygiene",
       "checksum_plaintext": "sha256:d7a9621638ec2fddace43335f0702f7c731e112c46fc1b425aa5ec0654a711a1"
     },
     {
       "path": "skills/cross-platform-deduplication/quality-scoring.md",
       "encrypted_path": "skills/cross-platform-deduplication/quality-scoring.md.enc",
-      "asset_type": "config",
+      "asset_type": "skill",
       "sensitivity": "high",
       "decrypt_on": [
         "SessionStart"
       ],
+      "required_domain": "data-hygiene",
       "required_tier": "data-hygiene",
       "checksum_plaintext": "sha256:bd764b10c5f2e4151af68c4846804ec22daeb8a48138bfb59b3d2cd6b1659a48"
     }

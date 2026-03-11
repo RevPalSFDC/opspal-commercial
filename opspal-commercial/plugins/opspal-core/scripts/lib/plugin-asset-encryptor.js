@@ -6,9 +6,9 @@
  * CLI wrapper over asset-encryption-engine.js for managing encrypted plugin assets.
  *
  * Subcommands:
- *   key-setup                       Generate tier keys
+ *   key-setup                       Generate domain-scoped keys
  *   init      --plugin <name>       Create skeleton encryption.json
- *   encrypt   --plugin <name> --file <path> [--dir <path>] [--tier <tier1|tier2|tier3>]
+ *   encrypt   --plugin <name> --file <path> [--dir <path>] [--domain <core|salesforce|hubspot|marketo|gtm|data-hygiene>]
  *   decrypt   --plugin <name> --file <path> --output-dir <dir>
  *   verify    --plugin <name>       Verify all .enc files
  *   re-encrypt --plugin <name> [--rotate-key]
@@ -44,13 +44,20 @@ function info(msg) {
   console.log(msg);
 }
 
-function resolveRequiredTier(rawTier) {
-  const tier = rawTier || engine.DEFAULT_REQUIRED_TIER;
-  if (!engine.KEY_SLOT_BY_TIER[tier]) {
-    die(`Unsupported tier "${tier}". Use one of: ${Object.keys(engine.KEY_SLOT_BY_TIER).join(', ')}`);
+function resolveRequiredDomain(rawDomain) {
+  let domain = rawDomain || engine.DEFAULT_REQUIRED_DOMAIN;
+  // Accept old tier names
+  if (engine.TIER_TO_DOMAIN && engine.TIER_TO_DOMAIN[domain]) {
+    domain = engine.TIER_TO_DOMAIN[domain];
   }
-  return tier;
+  if (!engine.KEY_SLOT_BY_DOMAIN[domain]) {
+    die(`Unsupported domain "${domain}". Use one of: ${Object.keys(engine.KEY_SLOT_BY_DOMAIN).join(', ')}`);
+  }
+  return domain;
 }
+
+// Backward-compat alias
+const resolveRequiredTier = resolveRequiredDomain;
 
 function resolveKeyMaterial(pluginName) {
   const keyMaterial = engine.resolveKeyMaterial(pluginName);
@@ -60,16 +67,19 @@ function resolveKeyMaterial(pluginName) {
   return keyMaterial;
 }
 
-function hasTierKeyFiles() {
-  return Object.values(engine.TIER_KEY_FILES).some((filePath) => fs.existsSync(filePath));
+function hasDomainKeyFiles() {
+  return Object.values(engine.DOMAIN_KEY_FILES).some((filePath) => fs.existsSync(filePath));
 }
+
+// Backward-compat alias
+const hasTierKeyFiles = hasDomainKeyFiles;
 
 function describeKeySources(pluginName) {
   if (process.env[engine.KEYRING_ENV_VAR]) {
     return `${engine.KEYRING_ENV_VAR} env var`;
   }
-  if (hasTierKeyFiles()) {
-    return 'tier key files';
+  if (hasDomainKeyFiles()) {
+    return 'domain key files';
   }
 
   return 'NOT CONFIGURED';
@@ -125,21 +135,21 @@ function parseArgs(argv) {
 // ─── Subcommands ────────────────────────────────────────────────────────────
 
 function cmdKeySetup(flags = {}) {
-  if (hasTierKeyFiles()) {
+  if (hasDomainKeyFiles()) {
     die(`Key material already exists in ${engine.KEY_DIR}\nBack up the old keys before creating new ones.`);
   }
 
-  const tierKeyring = engine.generateTierKeyring();
-  engine.writeTierKeyFiles(tierKeyring);
+  const domainKeyring = engine.generateDomainKeyring();
+  engine.writeDomainKeyFiles(domainKeyring);
 
-  info(`Tier keys generated and saved to ${engine.KEY_DIR}`);
-  for (const [tier, filePath] of Object.entries(engine.TIER_KEY_FILES)) {
-    info(`  ${tier}: ${filePath}`);
+  info(`Domain keys generated and saved to ${engine.KEY_DIR}`);
+  for (const [domain, filePath] of Object.entries(engine.DOMAIN_KEY_FILES)) {
+    info(`  ${domain}: ${filePath}`);
   }
   info('Permissions set to 600 (owner read/write only).');
   info('');
   info('Alternatively, set the scoped keyring environment variable:');
-  info(`  export ${engine.KEYRING_ENV_VAR}='${JSON.stringify(tierKeyring)}'`);
+  info(`  export ${engine.KEYRING_ENV_VAR}='${JSON.stringify(domainKeyring)}'`);
 }
 
 function cmdInit(flags) {
@@ -175,7 +185,7 @@ function cmdEncrypt(flags) {
 
   const pluginRoot = findPluginRoot(pluginName);
   const keyMaterial = resolveKeyMaterial(pluginName);
-  const requiredTier = resolveRequiredTier(flags.tier || flags['required-tier']);
+  const requiredDomain = resolveRequiredDomain(flags.domain || flags.tier || flags['required-tier'] || flags['required-domain']);
 
   // Fix M1: Guard statSync against missing paths
   let isDir = false;
@@ -211,7 +221,7 @@ function cmdEncrypt(flags) {
 
   const outputFullPath = path.resolve(pluginRoot, encryptedPath);
   const result = engine.encryptFile(inputPath, outputFullPath, pluginName, assetPath, keyMaterial, {
-    requiredTier
+    requiredDomain
   });
 
   // Clean up temp tar
@@ -243,7 +253,8 @@ function cmdEncrypt(flags) {
     sensitivity: 'high',
     decrypt_on: ['SessionStart'],
     checksum_plaintext: result.checksum,
-    required_tier: requiredTier
+    required_domain: requiredDomain,
+    required_tier: requiredDomain  // backward compat
   });
 
   engine.writeManifest(pluginRoot, manifest);
@@ -264,7 +275,7 @@ function cmdEncrypt(flags) {
   info(`  Size:      ${result.size} -> ${result.encryptedSize} bytes`);
   info(`  Checksum:  ${result.checksum}`);
   info(`  Format:    v${result.formatVersion}`);
-  info(`  Tier:      ${requiredTier}`);
+  info(`  Domain:    ${requiredDomain}`);
   info(`  Manifest:  updated`);
   info(`  .gitignore: ${gitignoreLine} added`);
 }
@@ -366,14 +377,14 @@ function cmdReEncrypt(flags) {
 
   const pluginRoot = findPluginRoot(pluginName);
   const oldKeyMaterial = resolveKeyMaterial(pluginName);
-  const requiredDefaultTier = resolveRequiredTier(flags.tier || flags['required-tier']);
+  const requiredDefaultDomain = resolveRequiredDomain(flags.domain || flags.tier || flags['required-tier'] || flags['required-domain']);
 
   let newKeyMaterial = oldKeyMaterial;
-  let rotatedTierKeyring = null;
+  let rotatedDomainKeyring = null;
   if (flags['rotate-key'] || flags.rotateKey) {
-    rotatedTierKeyring = engine.generateTierKeyring();
-    newKeyMaterial = rotatedTierKeyring;
-    info(`New scoped tier keys generated. They will be saved to ${engine.KEY_DIR}`);
+    rotatedDomainKeyring = engine.generateDomainKeyring();
+    newKeyMaterial = rotatedDomainKeyring;
+    info(`New domain-scoped keys generated. They will be saved to ${engine.KEY_DIR}`);
     info('');
   }
 
@@ -401,13 +412,14 @@ function cmdReEncrypt(flags) {
   // Phase 2: Re-encrypt all with new key
   for (const { asset, plaintext } of decryptedAssets) {
     const encPath = path.resolve(pluginRoot, asset.encrypted_path);
-    const requiredTier = resolveRequiredTier(asset.required_tier || requiredDefaultTier);
+    const requiredDomain = resolveRequiredDomain(asset.required_domain || asset.required_tier || requiredDefaultDomain);
     const newEnc = engine.encryptAsset(plaintext, pluginName, asset.path, newKeyMaterial, {
-      requiredTier
+      requiredDomain
     });
     fs.writeFileSync(encPath, newEnc);
     asset.checksum_plaintext = engine.computeChecksum(plaintext);
-    asset.required_tier = requiredTier;
+    asset.required_domain = requiredDomain;
+    asset.required_tier = requiredDomain;
     info(`  Re-encrypted: ${asset.encrypted_path}`);
   }
 
@@ -416,8 +428,8 @@ function cmdReEncrypt(flags) {
   engine.writeManifest(pluginRoot, manifest);
 
   if (flags['rotate-key'] || flags.rotateKey) {
-    if (rotatedTierKeyring) {
-      engine.writeTierKeyFiles(rotatedTierKeyring);
+    if (rotatedDomainKeyring) {
+      engine.writeDomainKeyFiles(rotatedDomainKeyring);
     }
     info('');
     info(`Key material rotated and saved to ${engine.KEY_DIR}`);
@@ -459,7 +471,8 @@ function cmdStatus(flags) {
       const encPath = path.resolve(pluginRoot, asset.encrypted_path);
       const exists = fs.existsSync(encPath);
       const status = exists ? 'present' : 'MISSING';
-      info(`  ${asset.path} -> ${asset.encrypted_path} [${status}] (${asset.sensitivity}, ${asset.decrypt_on.join('+')}, ${asset.required_tier || engine.DEFAULT_REQUIRED_TIER})`);
+      const domain = asset.required_domain || asset.required_tier || engine.DEFAULT_REQUIRED_DOMAIN;
+      info(`  ${asset.path} -> ${asset.encrypted_path} [${status}] (${asset.sensitivity}, ${asset.decrypt_on.join('+')}, domain:${domain})`);
     }
   }
 }
@@ -483,14 +496,17 @@ function main() {
     info('Usage: node plugin-asset-encryptor.js <command> [options]');
     info('');
     info('Commands:');
-    info('  key-setup                          Generate scoped tier keys');
+    info('  key-setup                          Generate domain-scoped keys (6 domains)');
     info('  init      --plugin <name>          Create encryption.json manifest');
-    info('  encrypt   --plugin <name> --file <path> [--tier <tier1|tier2|tier3>]    Encrypt a file');
-    info('  encrypt   --plugin <name> --dir <path> [--tier <tier1|tier2|tier3>]     Tar+encrypt a directory');
+    info('  encrypt   --plugin <name> --file <path> [--domain <core|salesforce|hubspot|marketo|gtm|data-hygiene>]');
+    info('  encrypt   --plugin <name> --dir <path> [--domain <core|salesforce|hubspot|marketo|gtm|data-hygiene>]');
     info('  decrypt   --plugin <name> --file <path> [--output-dir <dir>]');
     info('  verify    --plugin <name>          Verify all encrypted assets');
-    info('  re-encrypt --plugin <name> [--rotate-key] [--tier <tier1|tier2|tier3>]  Re-encrypt all assets');
+    info('  re-encrypt --plugin <name> [--rotate-key] [--domain <domain>]  Re-encrypt all assets');
     info('  status    --plugin <name>          Show encryption status');
+    info('');
+    info('Domains: core, salesforce, hubspot, marketo, gtm, data-hygiene');
+    info('(Legacy --tier flags are accepted and mapped to domains)');
     process.exit(0);
   }
 
