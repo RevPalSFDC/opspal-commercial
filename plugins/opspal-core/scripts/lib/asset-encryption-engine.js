@@ -10,7 +10,7 @@
  *   Offset  Size  Content
  *   0-3     4B    Magic  "OENC" (0x4F454E43)
  *   4       1B    Version (0x02 tier-scoped)
- *   5       1B    Key slot (1=tier1, 2=tier2, 3=tier3)
+ *   5       1B    Key slot (1=core, 2=salesforce, 3=hubspot, 4=marketo, 5=gtm, 6=data-hygiene; 0=legacy v1)
  *   6-7     2B    Reserved flags
  *   8-23    16B   HKDF salt
  *   24-35   12B   GCM nonce
@@ -43,50 +43,83 @@ const NONCE_SIZE = 12;
 const TAG_SIZE = 16;
 const KEY_SIZE = 32;
 const ALGORITHM = 'aes-256-gcm';
-const DEFAULT_REQUIRED_TIER = 'tier3';
+const DEFAULT_REQUIRED_DOMAIN = 'core';
 const HKDF_INFO_PREFIX = 'opspal-enc:v2';
 const AAD_PREFIX = 'opspal-enc:v2';
 
 const KEYRING_ENV_VAR = 'OPSPAL_PLUGIN_KEYRING_JSON';
 const KEY_DIR = path.join(os.homedir(), '.claude', 'opspal-enc');
-const TIER_KEY_FILES = {
-  tier1: path.join(KEY_DIR, 'tier1.key'),
-  tier2: path.join(KEY_DIR, 'tier2.key'),
-  tier3: path.join(KEY_DIR, 'tier3.key')
+
+// Domain-scoped key files (one per plugin domain)
+const DOMAIN_KEY_FILES = {
+  core: path.join(KEY_DIR, 'core.key'),
+  salesforce: path.join(KEY_DIR, 'salesforce.key'),
+  hubspot: path.join(KEY_DIR, 'hubspot.key'),
+  marketo: path.join(KEY_DIR, 'marketo.key'),
+  gtm: path.join(KEY_DIR, 'gtm.key'),
+  'data-hygiene': path.join(KEY_DIR, 'data-hygiene.key')
 };
 
-const KEY_SLOT_BY_TIER = {
-  tier1: 1,
-  tier2: 2,
-  tier3: 3
+// Wire format key slot mapping (domain → slot byte)
+const KEY_SLOT_BY_DOMAIN = {
+  core: 1,
+  salesforce: 2,
+  hubspot: 3,
+  marketo: 4,
+  gtm: 5,
+  'data-hygiene': 6
 };
 
-const TIER_BY_KEY_SLOT = {
-  1: 'tier1',
-  2: 'tier2',
-  3: 'tier3'
+// Reverse mapping (slot byte → domain)
+const DOMAIN_BY_KEY_SLOT = {
+  0: 'legacy',  // v1 backward compat (single-key)
+  1: 'core',
+  2: 'salesforce',
+  3: 'hubspot',
+  4: 'marketo',
+  5: 'gtm',
+  6: 'data-hygiene'
 };
+
+// Backward-compat aliases (old tier names → domain names)
+const TIER_TO_DOMAIN = {
+  tier1: 'core',
+  tier2: 'salesforce',
+  tier3: 'hubspot'
+};
+
+// Legacy exports for backward compatibility
+const TIER_KEY_FILES = DOMAIN_KEY_FILES;
+const KEY_SLOT_BY_TIER = KEY_SLOT_BY_DOMAIN;
+const TIER_BY_KEY_SLOT = DOMAIN_BY_KEY_SLOT;
+const DEFAULT_REQUIRED_TIER = DEFAULT_REQUIRED_DOMAIN;
 
 function generateKey() {
   return crypto.randomBytes(KEY_SIZE).toString('base64');
 }
 
-function generateTierKeyring() {
-  return {
-    tier1: generateKey(),
-    tier2: generateKey(),
-    tier3: generateKey()
-  };
+function generateDomainKeyring() {
+  const keyring = {};
+  for (const domain of Object.keys(KEY_SLOT_BY_DOMAIN)) {
+    keyring[domain] = generateKey();
+  }
+  return keyring;
 }
 
-function writeTierKeyFiles(keyring) {
+// Backward-compat alias
+const generateTierKeyring = generateDomainKeyring;
+
+function writeDomainKeyFiles(keyring) {
   fs.mkdirSync(KEY_DIR, { recursive: true, mode: 0o700 });
 
-  for (const [tier, filePath] of Object.entries(TIER_KEY_FILES)) {
-    if (!keyring[tier]) continue;
-    fs.writeFileSync(filePath, keyring[tier] + '\n', { mode: 0o600 });
+  for (const [domain, filePath] of Object.entries(DOMAIN_KEY_FILES)) {
+    if (!keyring[domain]) continue;
+    fs.writeFileSync(filePath, keyring[domain] + '\n', { mode: 0o600 });
   }
 }
+
+// Backward-compat alias
+const writeTierKeyFiles = writeDomainKeyFiles;
 
 function resolveKeyring() {
   const envKeyring = parseKeyringJson(process.env[KEYRING_ENV_VAR]);
@@ -95,12 +128,12 @@ function resolveKeyring() {
   }
 
   const keyring = {};
-  for (const [tier, filePath] of Object.entries(TIER_KEY_FILES)) {
+  for (const [domain, filePath] of Object.entries(DOMAIN_KEY_FILES)) {
     if (!fs.existsSync(filePath)) continue;
     try {
       const decoded = decodeBase64Key(fs.readFileSync(filePath, 'utf8').trim());
       if (decoded) {
-        keyring[tier] = decoded;
+        keyring[domain] = decoded;
       }
     } catch {
       // Ignore malformed key files and continue scanning others.
@@ -125,8 +158,20 @@ function normalizeKeyMaterial(keyMaterial) {
     return { keyring: normalizeKeyringBuffers(keyMaterial.keyring) };
   }
 
-  if (keyMaterial.tier1 || keyMaterial.tier2 || keyMaterial.tier3) {
+  // Accept domain-keyed objects directly
+  const domainKeys = Object.keys(KEY_SLOT_BY_DOMAIN);
+  const hasDomainKey = domainKeys.some(d => keyMaterial[d]);
+  if (hasDomainKey) {
     return { keyring: normalizeKeyringBuffers(keyMaterial) };
+  }
+
+  // Backward compat: accept old tier1/tier2/tier3 keys, remap to domains
+  if (keyMaterial.tier1 || keyMaterial.tier2 || keyMaterial.tier3) {
+    const remapped = {};
+    for (const [oldTier, domain] of Object.entries(TIER_TO_DOMAIN)) {
+      if (keyMaterial[oldTier]) remapped[domain] = keyMaterial[oldTier];
+    }
+    return { keyring: normalizeKeyringBuffers(remapped) };
   }
 
   return null;
@@ -136,13 +181,13 @@ function normalizeKeyringBuffers(candidate) {
   if (!candidate || typeof candidate !== 'object') return null;
 
   const keyring = {};
-  for (const tier of Object.keys(KEY_SLOT_BY_TIER)) {
-    const value = candidate[tier];
+  for (const domain of Object.keys(KEY_SLOT_BY_DOMAIN)) {
+    const value = candidate[domain];
     if (!value) continue;
 
     const decoded = Buffer.isBuffer(value) ? value : decodeBase64Key(value);
     if (decoded) {
-      keyring[tier] = decoded;
+      keyring[domain] = decoded;
     }
   }
 
@@ -170,7 +215,7 @@ function parseKeyringJson(value) {
 }
 
 function deriveKey(baseKey, pluginName, salt, formatVersion = FORMAT_VERSION) {
-  if (formatVersion !== FORMAT_VERSION) {
+  if (formatVersion !== FORMAT_VERSION && formatVersion !== 0x01) {
     throw new Error(`Unsupported .enc version: ${formatVersion}`);
   }
 
@@ -179,7 +224,7 @@ function deriveKey(baseKey, pluginName, salt, formatVersion = FORMAT_VERSION) {
 }
 
 function buildAAD(pluginName, assetPath, formatVersion = FORMAT_VERSION) {
-  if (formatVersion !== FORMAT_VERSION) {
+  if (formatVersion !== FORMAT_VERSION && formatVersion !== 0x01) {
     throw new Error(`Unsupported .enc version: ${formatVersion}`);
   }
 
@@ -190,8 +235,8 @@ function assembleWireFormat({ version = FORMAT_VERSION, keySlot, salt, nonce, ta
   if (version !== FORMAT_VERSION) {
     throw new Error(`Unsupported .enc version: ${version}`);
   }
-  if (!TIER_BY_KEY_SLOT[keySlot]) {
-    throw new Error(`Invalid key slot for .enc v2: ${keySlot}`);
+  if (!DOMAIN_BY_KEY_SLOT[keySlot]) {
+    throw new Error(`Invalid key slot for .enc v2: ${keySlot}. Valid slots: ${Object.keys(DOMAIN_BY_KEY_SLOT).join(', ')}`);
   }
 
   const header = Buffer.alloc(HEADER_SIZE);
@@ -228,13 +273,14 @@ function parseWireFormat(encBuffer) {
   }
 
   const version = encBuffer.readUInt8(4);
-  if (version !== FORMAT_VERSION) {
+  // Support both v1 (legacy) and v2 (domain-scoped)
+  if (version !== FORMAT_VERSION && version !== 0x01) {
     throw new Error(`Unsupported .enc version: ${version}`);
   }
 
   const keySlot = encBuffer.readUInt8(5);
-  if (!TIER_BY_KEY_SLOT[keySlot]) {
-    throw new Error(`Invalid key slot for .enc v2: ${keySlot}`);
+  if (version === FORMAT_VERSION && !DOMAIN_BY_KEY_SLOT[keySlot]) {
+    throw new Error(`Invalid key slot for .enc v2: ${keySlot}. Valid slots: ${Object.keys(DOMAIN_BY_KEY_SLOT).join(', ')}`);
   }
 
   let offset = 8;
@@ -249,10 +295,13 @@ function parseWireFormat(encBuffer) {
 
   const ciphertext = encBuffer.subarray(offset);
 
+  const domain = DOMAIN_BY_KEY_SLOT[keySlot] || 'legacy';
+
   return {
     version,
     keySlot,
-    requiredTier: TIER_BY_KEY_SLOT[keySlot],
+    requiredDomain: domain,
+    requiredTier: domain, // backward compat alias
     salt,
     nonce,
     tag,
@@ -262,7 +311,7 @@ function parseWireFormat(encBuffer) {
 
 function encryptAsset(plaintext, pluginName, assetPath, keyMaterial, options = {}) {
   const plaintextBuf = Buffer.isBuffer(plaintext) ? plaintext : Buffer.from(plaintext);
-  const resolvedKey = selectEncryptionKey(keyMaterial, options.requiredTier);
+  const resolvedKey = selectEncryptionKey(keyMaterial, options.requiredDomain || options.requiredTier);
 
   if (!resolvedKey) {
     throw new Error('No suitable encryption key available');
@@ -327,20 +376,21 @@ function verifyAsset(encBuffer, pluginName, assetPath, keyMaterial, expectedChec
   }
 }
 
-function selectEncryptionKey(keyMaterial, requiredTier = DEFAULT_REQUIRED_TIER) {
+function selectEncryptionKey(keyMaterial, requiredDomain = DEFAULT_REQUIRED_DOMAIN) {
   const normalized = normalizeKeyMaterial(keyMaterial);
   if (!normalized || !normalized.keyring) return null;
 
-  const tier = normalizeTier(requiredTier || DEFAULT_REQUIRED_TIER);
-  if (!normalized.keyring[tier]) {
+  const domain = normalizeDomain(requiredDomain || DEFAULT_REQUIRED_DOMAIN);
+  if (!normalized.keyring[domain]) {
     return null;
   }
 
   return {
-    key: normalized.keyring[tier],
+    key: normalized.keyring[domain],
     formatVersion: FORMAT_VERSION,
-    keySlot: KEY_SLOT_BY_TIER[tier],
-    requiredTier: tier
+    keySlot: KEY_SLOT_BY_DOMAIN[domain],
+    requiredDomain: domain,
+    requiredTier: domain // backward compat
   };
 }
 
@@ -350,20 +400,28 @@ function selectDecryptionKey(keyMaterial, parsed) {
     throw new Error('No decryption key material available');
   }
 
-  const tierKey = normalized.keyring[parsed.requiredTier];
-  if (!tierKey) {
-    throw new Error(`No scoped key available for ${parsed.requiredTier}`);
+  const domain = parsed.requiredDomain || parsed.requiredTier;
+  const domainKey = normalized.keyring[domain];
+  if (!domainKey) {
+    throw new Error(`No scoped key available for domain "${domain}"`);
   }
 
-  return tierKey;
+  return domainKey;
 }
 
-function normalizeTier(tier) {
-  if (!KEY_SLOT_BY_TIER[tier]) {
-    throw new Error(`Unsupported required tier: ${tier}`);
+function normalizeDomain(domain) {
+  // Accept old tier names and map to domains
+  if (TIER_TO_DOMAIN[domain]) {
+    domain = TIER_TO_DOMAIN[domain];
   }
-  return tier;
+  if (!KEY_SLOT_BY_DOMAIN[domain]) {
+    throw new Error(`Unsupported domain: ${domain}. Valid domains: ${Object.keys(KEY_SLOT_BY_DOMAIN).join(', ')}`);
+  }
+  return domain;
 }
+
+// Backward-compat alias
+const normalizeTier = normalizeDomain;
 
 function computeChecksum(content) {
   const buf = Buffer.isBuffer(content) ? content : Buffer.from(content);
@@ -443,13 +501,23 @@ module.exports = {
   KEY_SIZE,
   KEY_DIR,
   KEYRING_ENV_VAR,
+  // Domain-scoped (primary)
+  DOMAIN_KEY_FILES,
+  KEY_SLOT_BY_DOMAIN,
+  DOMAIN_BY_KEY_SLOT,
+  DEFAULT_REQUIRED_DOMAIN,
+  generateDomainKeyring,
+  writeDomainKeyFiles,
+  // Backward-compat aliases
   TIER_KEY_FILES,
   KEY_SLOT_BY_TIER,
   TIER_BY_KEY_SLOT,
   DEFAULT_REQUIRED_TIER,
-  generateKey,
+  TIER_TO_DOMAIN,
   generateTierKeyring,
   writeTierKeyFiles,
+  // Core functions
+  generateKey,
   resolveKeyring,
   resolveKeyMaterial,
   deriveKey,
@@ -458,6 +526,8 @@ module.exports = {
   verifyAsset,
   computeChecksum,
   selectEncryptionKey,
+  normalizeDomain,
+  normalizeTier,
   assembleWireFormat,
   parseWireFormat,
   encryptFile,
@@ -470,14 +540,21 @@ module.exports = {
 if (require.main === module && process.argv.includes('--self-test')) {
   console.log('Running self-test...');
 
-  const keyring = normalizeKeyMaterial(generateTierKeyring());
+  const keyring = normalizeKeyMaterial(generateDomainKeyring());
   const plugin = 'test-plugin';
   const assetPath = 'scripts/lib/secret.js';
   const plaintext = Buffer.from('console.log("proprietary logic");');
 
-  const scopedEnc = encryptAsset(plaintext, plugin, assetPath, keyring, { requiredTier: 'tier2' });
-  const scopedDec = decryptAsset(scopedEnc, plugin, assetPath, keyring);
-  console.assert(scopedDec.equals(plaintext), 'Scoped round-trip failed');
+  // Test each domain
+  for (const domain of Object.keys(KEY_SLOT_BY_DOMAIN)) {
+    const enc = encryptAsset(plaintext, plugin, assetPath, keyring, { requiredDomain: domain });
+    const dec = decryptAsset(enc, plugin, assetPath, keyring);
+    console.assert(dec.equals(plaintext), `Round-trip failed for domain: ${domain}`);
+    const parsed = parseWireFormat(enc);
+    console.assert(parsed.requiredDomain === domain, `Domain mismatch: expected ${domain}, got ${parsed.requiredDomain}`);
+  }
+
+  const scopedEnc = encryptAsset(plaintext, plugin, assetPath, keyring, { requiredDomain: 'salesforce' });
 
   const checksum = computeChecksum(plaintext);
   const verifyResult = verifyAsset(scopedEnc, plugin, assetPath, keyring, checksum);
@@ -491,6 +568,6 @@ if (require.main === module && process.argv.includes('--self-test')) {
   const wrongPluginResult = verifyAsset(scopedEnc, 'wrong-plugin', assetPath, keyring);
   console.assert(!wrongPluginResult.valid, 'AAD binding failed');
 
-  console.log('All self-tests passed.');
+  console.log('All self-tests passed (6 domains verified).');
   process.exit(0);
 }

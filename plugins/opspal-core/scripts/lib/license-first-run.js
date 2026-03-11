@@ -21,37 +21,46 @@ const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
 
 const DEFAULT_SERVER = 'https://license.gorevpal.com';
 
-// ─── Tier info (mirrors license-activation-manager.js) ─────────────────────
+// ─── Tier info (domain-scoped encryption model) ────────────────────────────
 
 const TIER_INFO = {
   starter: {
     label: 'Starter',
-    description: 'Quality gate rules, funnel definitions, persona configs, assessment prefills, benchmark retriever, persona KPI contracts, SEO content gap analyzer'
+    domains: ['core'],
+    description: 'Core methodology: quality gate rules, funnel definitions, persona configs, assessment prefills, scoring weights, benchmarks'
   },
   professional: {
     label: 'Professional',
-    description: 'All Starter assets plus scoring engines, risk analyzers, health scorers, CPQ generators, data quality frameworks, SEO scorers, Marketo lead quality, and more'
+    domains: ['core', 'salesforce', 'hubspot'],
+    description: 'Core + Salesforce + HubSpot: risk scorers, CPQ optimization, automation auditors, assessment analyzers, governance classifiers'
   },
   enterprise: {
     label: 'Enterprise',
-    description: 'Full access: scoring weights, benchmarks, intake rubrics, permission matrices, CPQ field mappings, dedup clustering, canonical selectors, GTM baselines, and all Professional assets'
+    domains: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene'],
+    description: 'Full access: all domains including Marketo lead quality, GTM benchmarks, dedup clustering, and canonical selectors'
   },
   trial: {
     label: 'Trial',
+    domains: ['core'],
     description: 'Same access as Starter for the trial period'
   }
 };
 
-const ASSET_COUNTS = { tier1: 13, tier2: 17, tier3: 7 };
-const TOTAL_ASSETS = ASSET_COUNTS.tier1 + ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
+// Actual .enc file counts per domain
+const DOMAIN_ASSET_COUNTS = {
+  core: 27,
+  salesforce: 16,
+  hubspot: 4,
+  marketo: 4,
+  gtm: 1,
+  'data-hygiene': 5
+};
+const TOTAL_ASSETS = Object.values(DOMAIN_ASSET_COUNTS).reduce((a, b) => a + b, 0);
 
 function tierAssetCount(tier) {
-  switch (tier) {
-    case 'starter': case 'trial': return ASSET_COUNTS.tier3;
-    case 'professional': return ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
-    case 'enterprise': return ASSET_COUNTS.tier1 + ASSET_COUNTS.tier2 + ASSET_COUNTS.tier3;
-    default: return 0;
-  }
+  const info = TIER_INFO[tier];
+  if (!info || !info.domains) return 0;
+  return info.domains.reduce((sum, d) => sum + (DOMAIN_ASSET_COUNTS[d] || 0), 0);
 }
 
 // ─── Detection ──────────────────────────────────────────────────────────────
@@ -124,13 +133,13 @@ function main() {
     'benchmark data, assessment frameworks) that unlock with a license.',
     '',
     'Tier Comparison:',
-    '┌──────────────┬──────────┬──────────────────────────────────────┐',
-    '│ Tier         │ Assets   │ What You Get                         │',
-    '├──────────────┼──────────┼──────────────────────────────────────┤',
-    `│ Starter      │  ${tierAssetCount('starter').toString().padStart(2)}/${TOTAL_ASSETS}   │ Methodology configs                  │`,
-    `│ Professional │  ${tierAssetCount('professional').toString().padStart(2)}/${TOTAL_ASSETS}   │ Algorithms + methodology             │`,
-    `│ Enterprise   │  ${tierAssetCount('enterprise').toString().padStart(2)}/${TOTAL_ASSETS}   │ Full access — all IP                 │`,
-    '└──────────────┴──────────┴──────────────────────────────────────┘',
+    '┌──────────────┬──────────┬──────────────────────────────────────────┐',
+    '│ Tier         │ Assets   │ Domains                                  │',
+    '├──────────────┼──────────┼──────────────────────────────────────────┤',
+    `│ Starter      │  ${tierAssetCount('starter').toString().padStart(2)}/${TOTAL_ASSETS}   │ Core methodology                         │`,
+    `│ Professional │  ${tierAssetCount('professional').toString().padStart(2)}/${TOTAL_ASSETS}   │ Core + Salesforce + HubSpot              │`,
+    `│ Enterprise   │  ${tierAssetCount('enterprise').toString().padStart(2)}/${TOTAL_ASSETS}   │ All domains (incl. Marketo, GTM, Dedup)  │`,
+    '└──────────────┴──────────┴──────────────────────────────────────────┘',
     '',
     'To activate, provide your license key below.',
     `Purchase at: ${getServerUrl().replace('license.', 'www.').replace(/license.*/, 'gorevpal.com/pricing')}`,
