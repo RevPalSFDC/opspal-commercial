@@ -885,7 +885,7 @@ Templates include portability scores based on standard vs custom field ratio:
 **Template Usage**:
 ```bash
 # Read a template
-cat .claude-plugins/opspal-salesforce/templates/dashboards/executive/marketing-performance.json
+cat ${CLAUDE_PLUGIN_ROOT}/templates/dashboards/executive/marketing-performance.json
 
 # Deploy dashboard using template
 node scripts/lib/dashboard-metadata-deployer.js --template marketing-performance --org [org-alias]
@@ -898,7 +898,7 @@ node scripts/lib/dashboard-metadata-deployer.js --template marketing-performance
 node scripts/lib/dashboard-metadata-deployer.js --template my-accounts --org [org-alias]
 
 # Search dashboard registry by function
-cat .claude-plugins/opspal-salesforce/templates/dashboards/dashboard-template-registry.json | jq '.categories["customer-success"]'
+cat ${CLAUDE_PLUGIN_ROOT}/templates/dashboards/dashboard-template-registry.json | jq '.categories["customer-success"]'
 ```
 
 **Template Documentation**:

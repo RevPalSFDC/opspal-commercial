@@ -43,16 +43,16 @@ The opspal-core version provides:
 
 ```bash
 # Initialize current directory
-node .claude-plugins/opspal-core/scripts/lib/initialize-project.js
+/opspal-core:initialize
 
 # Initialize specific directory
-node .claude-plugins/opspal-core/scripts/lib/initialize-project.js --project-dir=/path/to/project
+/opspal-core:initialize --project-dir=/path/to/project
 
 # Force overwrite existing
-node .claude-plugins/opspal-core/scripts/lib/initialize-project.js --force
+/opspal-core:initialize --force
 
 # Use org-centric structure
-node .claude-plugins/opspal-core/scripts/lib/initialize-project.js --org-centric
+/opspal-core:initialize --org-centric
 ```
 
 ## Full Documentation
@@ -62,33 +62,6 @@ See the full `/initialize` documentation in:
 
 ---
 
-## Legacy Behavior (For Backwards Compatibility)
+## Legacy Behavior
 
-If opspal-core is not available, this command will still function. The agent should:
-
-1. Check for installed plugins (salesforce-plugin, hubspot-plugin)
-2. Create appropriate folder structure
-3. Generate CLAUDE.md from templates
-4. Create .gitignore with platform rules
-
-### Script Location (Multi-Path Discovery)
-
-```bash
-# Check multiple possible locations
-SCRIPT_PATHS=(
-    "${CLAUDE_PLUGIN_ROOT:-}"
-    "${HOME}/.claude/plugins/opspal-core@revpal-internal-plugins"
-    "./plugins/opspal-core"
-    "./.claude-plugins/opspal-core"
-    "${HOME}/.claude/plugins/opspal-hubspot@revpal-internal-plugins"
-    "./plugins/opspal-hubspot"
-    "./.claude-plugins/opspal-hubspot"
-)
-
-for p in "${SCRIPT_PATHS[@]}"; do
-    if [ -n "$p" ] && [ -f "$p/scripts/lib/initialize-project.js" ]; then
-        INIT_SCRIPT="$p/scripts/lib/initialize-project.js"
-        break
-    fi
-done
-```
+If `opspal-core` is unavailable, install or update `opspal-core` and rerun `/initialize`. This redirect exists so project initialization uses one resolver-backed implementation.

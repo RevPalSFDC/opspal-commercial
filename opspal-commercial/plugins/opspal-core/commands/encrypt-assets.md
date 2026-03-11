@@ -110,5 +110,5 @@ Show encryption configuration and asset inventory:
 Run the underlying script directly:
 
 ```bash
-node plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js <subcommand> [options]
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-asset-encryptor.js <subcommand> [options]
 ```

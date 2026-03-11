@@ -44,13 +44,13 @@ The opspal-core version provides:
 
 ```bash
 # Check all plugins (centralized)
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js
+/opspal-core:checkdependencies
 
 # Auto-install missing
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js --fix
+/opspal-core:checkdependencies --fix
 
 # Check specific plugin
-node .claude-plugins/opspal-core/scripts/lib/check-all-plugin-dependencies.js --plugin hubspot-plugin
+/opspal-core:checkdependencies --plugin hubspot-plugin
 ```
 
 ## Full Documentation
@@ -60,34 +60,6 @@ See the full `/checkdependencies` documentation in:
 
 ---
 
-## Legacy Behavior (For Backwards Compatibility)
+## Legacy Behavior
 
-If opspal-core is not available, the agent should:
-
-1. Check for the centralized script first
-2. Fall back to plugin-specific script if needed
-
-### Script Location (Multi-Path Discovery)
-
-```bash
-# Check multiple possible locations
-SCRIPT_PATHS=(
-    "${CLAUDE_PLUGIN_ROOT:-}"
-    "${HOME}/.claude/plugins/opspal-core@revpal-internal-plugins"
-    "./plugins/opspal-core"
-    "./.claude-plugins/opspal-core"
-    "${HOME}/.claude/plugins/opspal-hubspot@revpal-internal-plugins"
-    "./plugins/opspal-hubspot"
-    "./.claude-plugins/opspal-hubspot"
-)
-
-for p in "${SCRIPT_PATHS[@]}"; do
-    if [ -n "$p" ] && [ -f "$p/scripts/lib/check-all-plugin-dependencies.js" ]; then
-        CHECK_SCRIPT="$p/scripts/lib/check-all-plugin-dependencies.js"
-        break
-    elif [ -n "$p" ] && [ -f "$p/scripts/lib/check-dependencies.js" ]; then
-        CHECK_SCRIPT="$p/scripts/lib/check-dependencies.js"
-        break
-    fi
-done
-```
+If `opspal-core` is unavailable, stop and install or update `opspal-core` rather than hardcoding plugin paths. The redirect is intentional so dependency checks stay centralized.

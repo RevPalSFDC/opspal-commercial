@@ -11,7 +11,7 @@ You are invoking the `gemini-consult` agent to get a second opinion from Google'
 
 1. **First, verify Gemini is configured**:
    ```bash
-   node .claude-plugins/opspal-ai-consult/scripts/lib/gemini-cli-invoker.js --check
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/gemini-cli-invoker.js --check
    ```
 
    If not configured, inform the user:

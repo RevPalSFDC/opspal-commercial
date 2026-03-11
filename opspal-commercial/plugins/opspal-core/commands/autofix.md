@@ -46,7 +46,7 @@ Execute the following steps:
 Build the command from `$ARGUMENTS`:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/autonomous-fix-executor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/autonomous-fix-executor.js \
   [--max-fixes N] \
   [--dry-run] \
   [--skip-merge] \

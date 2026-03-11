@@ -16,7 +16,7 @@ tags:
 Run this command now (pass any user arguments like --dry-run):
 
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/sync-claudemd.js $ARGUMENTS
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/sync-claudemd.js $ARGUMENTS
 ```
 
 After execution, report the results to the user.
@@ -80,7 +80,7 @@ Shows detailed information about detected plugins and changes.
 ### Specific Directory
 
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/sync-claudemd.js --project-dir=/path/to/project
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/sync-claudemd.js --project-dir=/path/to/project
 ```
 
 ## What Gets Updated
@@ -138,7 +138,7 @@ This command can be added to post-plugin-update hooks:
 
 ```bash
 # In .claude/hooks/post-plugin-update.sh
-node .claude-plugins/opspal-core/scripts/lib/sync-claudemd.js
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/sync-claudemd.js
 ```
 
 ## Example Output

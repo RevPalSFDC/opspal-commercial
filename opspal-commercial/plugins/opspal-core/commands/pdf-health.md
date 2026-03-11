@@ -30,7 +30,7 @@ Run comprehensive diagnostics on the PDF generation pipeline.
 When the user runs `/pdf-health`, execute:
 
 ```bash
-node plugins/opspal-core/scripts/test-pdf-pipeline.js --verbose
+node ${CLAUDE_PLUGIN_ROOT}/scripts/test-pdf-pipeline.js --verbose
 ```
 
 If issues are found, provide specific remediation steps:

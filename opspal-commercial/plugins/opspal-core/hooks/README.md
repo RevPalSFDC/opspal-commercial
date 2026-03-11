@@ -68,10 +68,10 @@ Hooks are registered in `.claude/settings.json`:
 {
   "hooks": {
     "UserPromptSubmit": {
-      "command": "bash ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/master-prompt-handler.sh"
+      "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/master-prompt-handler.sh"
     },
     "SessionStart": {
-      "command": "bash -c '... && ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/session-context-loader.sh'"
+      "command": "bash -c '... && ${CLAUDE_PLUGIN_ROOT}/hooks/session-context-loader.sh'"
     }
   }
 }

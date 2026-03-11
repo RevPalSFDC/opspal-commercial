@@ -150,10 +150,10 @@ Browse customer repos on GitHub and clone them locally — useful when setting u
 
 ```bash
 # Human-friendly output
-node .claude-plugins/opspal-core/scripts/project-connect.js --list-repos
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --list-repos
 
 # Structured JSON (for agent consumption)
-node .claude-plugins/opspal-core/scripts/project-connect.js --list-repos --json
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --list-repos --json
 ```
 
 Output shows sync status:
@@ -172,13 +172,13 @@ Found 5 customer repo(s):
 
 ```bash
 # Clone a specific customer repo
-node .claude-plugins/opspal-core/scripts/project-connect.js --sync-down "RP-ACM123456"
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --sync-down "RP-ACM123456"
 
 # Preview what would happen
-node .claude-plugins/opspal-core/scripts/project-connect.js --sync-down "RP-ACM123456" --dry-run true
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --sync-down "RP-ACM123456" --dry-run true
 
 # Clone all uncloned repos
-node .claude-plugins/opspal-core/scripts/project-connect.js --sync-down --all
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --sync-down --all
 ```
 
 Repos are cloned to `orgs/{customer-slug}/repo/` — the `orgs/` directory is gitignored so clones stay local per-machine. The registry tracks `localClonePath` for fast status checks.
@@ -192,7 +192,7 @@ When the agent runs `/project-connect --list-repos`, it presents an interactive 
 For direct script invocation with more control:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/project-connect.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js \
   --customer "Acme Robotics" \
   --aliases "Acme Robo,ACME-R" \
   --created-by "cnacevedo@gmail.com" \
@@ -219,7 +219,7 @@ node .claude-plugins/opspal-core/scripts/project-connect.js \
 Check whether a project repo is synced using the local project-connect registry:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/project-connect.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js \
   --check-repo-sync \
   --customer-id "RP-ACM123456"
 ```
@@ -227,7 +227,7 @@ node .claude-plugins/opspal-core/scripts/project-connect.js \
 Or use the dedicated checker:
 
 ```bash
-node .claude-plugins/opspal-core/scripts/project-connect-check.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-check.js \
   --customer-id "RP-ACM123456"
 ```
 
@@ -324,7 +324,7 @@ See: [Google Drive Authentication Guide](../docs/GOOGLE_DRIVE_PER_USER_AUTHENTIC
 
 **Manual Dependency Check:**
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/dependency-checker.js
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dependency-checker.js
 ```
 
 ## When to Use

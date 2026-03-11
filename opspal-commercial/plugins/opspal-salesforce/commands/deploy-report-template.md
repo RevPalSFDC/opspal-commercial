@@ -44,7 +44,7 @@ Ask the user for these details if not provided:
 sf org display --target-org {org}
 
 # List available templates
-ls -1 .claude-plugins/opspal-salesforce/templates/reports/*/*.json
+ls -1 ${CLAUDE_PLUGIN_ROOT}/templates/reports/*/*.json
 ```
 
 ### Step 1.5: Select Variation (Optional)
@@ -53,10 +53,10 @@ Check available variations for the template and auto-detect the best one:
 
 ```bash
 # Check what variation will be auto-detected for the org
-node .claude-plugins/opspal-salesforce/scripts/lib/variation-resolver.js {org-alias} --detect
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/variation-resolver.js {org-alias} --detect
 
 # List variations available for a template
-cat .claude-plugins/opspal-salesforce/templates/reports/*/template.json | jq '.variations.availableVariations'
+cat ${CLAUDE_PLUGIN_ROOT}/templates/reports/*/template.json | jq '.variations.availableVariations'
 ```
 
 **Available Variations:**
@@ -73,13 +73,13 @@ cat .claude-plugins/opspal-salesforce/templates/reports/*/template.json | jq '.v
 
 ```bash
 # Dry-run to validate (auto-detects variation)
-node .claude-plugins/opspal-salesforce/scripts/lib/report-template-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/report-template-deployer.js \
   --template {template-name} \
   --org {org-alias} \
   --dry-run
 
 # Dry-run with specific variation
-node .claude-plugins/opspal-salesforce/scripts/lib/report-template-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/report-template-deployer.js \
   --template {template-name} \
   --org {org-alias} \
   --variation cpq \
@@ -119,7 +119,7 @@ If dry-run successful and user confirms, proceed with live deployment:
 export ENABLE_WRITE=1
 
 # Deploy for real
-node .claude-plugins/opspal-salesforce/scripts/lib/report-template-deployer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/report-template-deployer.js \
   --template {template-name} \
   --org {org-alias} \
   --folder "{folder-name}"
@@ -288,10 +288,10 @@ Show available templates with descriptions:
 
 ```bash
 # List all templates
-find .claude-plugins/opspal-salesforce/templates/reports -name "*.json" -exec basename {} \;
+find ${CLAUDE_PLUGIN_ROOT}/templates/reports -name "*.json" -exec basename {} \;
 
 # Show template details
-cat .claude-plugins/opspal-salesforce/templates/reports/sales-leaders/team-performance.json | jq '.templateMetadata'
+cat ${CLAUDE_PLUGIN_ROOT}/templates/reports/sales-leaders/team-performance.json | jq '.templateMetadata'
 ```
 
 Common templates:

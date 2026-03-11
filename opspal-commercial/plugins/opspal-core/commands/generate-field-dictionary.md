@@ -81,7 +81,7 @@ if [ -n "$SF_ALIAS" ]; then
 
   if [ "$CACHE_FOUND" = false ]; then
     echo "❌ Salesforce metadata cache not found for ${SF_ALIAS}"
-    echo "   Run: node plugins/opspal-salesforce/scripts/lib/org-metadata-cache.js init ${SF_ALIAS}"
+    echo "   Run: node $(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/org-metadata-cache.js) init ${SF_ALIAS}"
     exit 1
   fi
 fi
@@ -90,10 +90,11 @@ fi
 **Check metadata cache exists for HubSpot:**
 ```bash
 if [ -n "$HS_PORTAL" ]; then
-  HS_CACHE_PATH="plugins/opspal-hubspot/.cache/metadata/${HS_PORTAL}.json"
-  if [ ! -f "$HS_CACHE_PATH" ]; then
+  HS_PLUGIN_ROOT="$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-root opspal-hubspot 2>/dev/null || true)"
+  HS_CACHE_PATH="${HS_PLUGIN_ROOT}/.cache/metadata/${HS_PORTAL}.json"
+  if [ -z "$HS_PLUGIN_ROOT" ] || [ ! -f "$HS_CACHE_PATH" ]; then
     echo "❌ HubSpot metadata cache not found for ${HS_PORTAL}"
-    echo "   Run: node plugins/opspal-hubspot/scripts/lib/hubspot-metadata-cache.js init ${HS_PORTAL} --token <token>"
+    echo "   Run: node $(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/lib/hubspot-metadata-cache.js) init ${HS_PORTAL} --token <token>"
     exit 1
   fi
 fi
@@ -120,7 +121,7 @@ fi
 
 **Run unified generator:**
 ```bash
-node plugins/opspal-core/scripts/lib/field-dictionary-generator.js generate "${ORG_SLUG}" \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-generator.js generate "${ORG_SLUG}" \
   ${SF_ALIAS:+--sf-alias "$SF_ALIAS"} \
   ${HS_PORTAL:+--hs-portal "$HS_PORTAL"} \
   ${OBJECTS:+--sf-objects "$OBJECTS" --hs-objects "$OBJECTS"} \

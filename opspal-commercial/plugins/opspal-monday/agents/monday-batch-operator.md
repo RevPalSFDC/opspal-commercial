@@ -112,7 +112,7 @@ Task 2,Done,2024-01-10,jane@example.com,Medium
 ### Step 2: Validate Data
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js validate \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js validate \
   --file data.csv \
   --board 12345
 ```
@@ -127,7 +127,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js validate 
 ### Step 3: Preview Import
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js preview \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js preview \
   --file data.csv \
   --board 12345 \
   --limit 5
@@ -136,7 +136,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js preview \
 ### Step 4: Execute Import
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js import \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js import \
   --file data.csv \
   --board 12345 \
   --group new_group \
@@ -150,13 +150,13 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js import \
 
 ```bash
 # Update all items in a group
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js update \
   --board 12345 \
   --filter "group=topics" \
   --set "status=Done"
 
 # Update items matching criteria
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js update \
   --board 12345 \
   --filter "status=Stuck" \
   --set "priority=Critical"
@@ -165,7 +165,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update \
 ### Update from File
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update-file \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js update-file \
   --board 12345 \
   --file updates.json
 ```
@@ -183,7 +183,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js update-fi
 ### Export to CSV
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js export \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js export \
   --board 12345 \
   --format csv \
   --output board_export.csv
@@ -192,7 +192,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js export \
 ### Export to JSON
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js export \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js export \
   --board 12345 \
   --format json \
   --include-subitems \
@@ -202,7 +202,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js export \
 ### Export with Filters
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js export \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js export \
   --board 12345 \
   --filter "status=Done" \
   --columns "name,status,date4,person" \
@@ -215,7 +215,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js export \
 ### Copy Items to Another Board
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js copy \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js copy \
   --source-board 12345 \
   --target-board 67890 \
   --filter "status=Done" \
@@ -234,7 +234,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js copy \
 ### Move Items Between Boards
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js move \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js move \
   --source-board 12345 \
   --target-board 67890 \
   --items "item1,item2,item3"
@@ -244,7 +244,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js move \
 
 ```bash
 # One-way sync from source to target
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js sync \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js sync \
   --source-board 12345 \
   --target-board 67890 \
   --match-field "external_id" \
@@ -256,13 +256,13 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js sync \
 ### Archive by Filter
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js archive \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js archive \
   --board 12345 \
   --filter "status=Done,date4<2024-01-01" \
   --dry-run
 
 # Execute if dry-run looks good
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js archive \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js archive \
   --board 12345 \
   --filter "status=Done,date4<2024-01-01"
 ```
@@ -270,7 +270,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js archive \
 ### Delete by Item IDs
 
 ```bash
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js delete \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js delete \
   --items "123,456,789" \
   --confirm
 ```
@@ -289,7 +289,7 @@ The batch manager automatically:
 
 ```bash
 # Conservative mode (slower, safer)
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js import \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js import \
   --file data.csv \
   --board 12345 \
   --batch-size 25 \
@@ -297,7 +297,7 @@ node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js import \
   --rate-limit 100
 
 # Aggressive mode (faster, uses more quota)
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js import \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js import \
   --file data.csv \
   --board 12345 \
   --batch-size 100 \
@@ -312,13 +312,13 @@ Large operations create checkpoints for recovery:
 
 ```bash
 # Start operation (creates checkpoint)
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js import \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js import \
   --file large_data.csv \
   --board 12345 \
   --checkpoint-dir ./checkpoints
 
 # Resume from checkpoint after failure
-node .claude-plugins/opspal-monday/scripts/lib/monday-batch-manager.js resume \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/monday-batch-manager.js resume \
   --checkpoint ./checkpoints/import_20240115_123456.json
 ```
 

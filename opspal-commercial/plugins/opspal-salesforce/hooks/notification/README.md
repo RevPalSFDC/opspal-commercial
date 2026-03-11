@@ -80,7 +80,7 @@ Add to `.claude/settings.json` or `settings.local.json`:
         "hooks": [
           {
             "type": "notification-matcher",
-            "configPath": "${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-salesforce/hooks/notification/deployment-completion-notifier.json"
+            "configPath": "${CLAUDE_PLUGIN_ROOT}/hooks/notification/deployment-completion-notifier.json"
           }
         ]
       }

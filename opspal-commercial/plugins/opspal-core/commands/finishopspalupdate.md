@@ -68,16 +68,16 @@ find_latest_cache_script() {
 find_script() {
   local script_name="$1"
   local paths=(
-    "$PWD/plugins/opspal-core/scripts/lib/$script_name"
-    "$PWD/.claude-plugins/opspal-core/scripts/lib/$script_name"
-    "./plugins/opspal-core/scripts/lib/$script_name"
-    "./.claude-plugins/opspal-core/scripts/lib/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
   )
 
   local root mp_dir cache_hit found
   for root in "${CLAUDE_ROOTS[@]}"; do
-    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/lib/$script_name")
-    for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core/scripts/lib; do
+    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name")
+    for mp_dir in "$root/plugins/marketplaces"/*/${CLAUDE_PLUGIN_ROOT}/scripts/lib; do
       [ -d "$mp_dir" ] && paths+=("$mp_dir/$script_name")
     done
     cache_hit="$(find_latest_cache_script "$root" "*/opspal-core/*/scripts/lib/$script_name" || true)"
@@ -102,16 +102,16 @@ find_script() {
 find_ci_script() {
   local script_name="$1"
   local paths=(
-    "$PWD/plugins/opspal-core/scripts/ci/$script_name"
-    "$PWD/.claude-plugins/opspal-core/scripts/ci/$script_name"
-    "./plugins/opspal-core/scripts/ci/$script_name"
-    "./.claude-plugins/opspal-core/scripts/ci/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
+    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
   )
 
   local root mp_dir cache_hit found
   for root in "${CLAUDE_ROOTS[@]}"; do
-    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/ci/$script_name")
-    for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core/scripts/ci; do
+    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name")
+    for mp_dir in "$root/plugins/marketplaces"/*/${CLAUDE_PLUGIN_ROOT}/scripts/ci; do
       [ -d "$mp_dir" ] && paths+=("$mp_dir/$script_name")
     done
     cache_hit="$(find_latest_cache_script "$root" "*/opspal-core/*/scripts/ci/$script_name" || true)"
@@ -306,10 +306,10 @@ echo ""
 MIGRATE_SCRIPT=""
 # Find migration script via same resolution as find_script but for top-level scripts
 for candidate in \
-  "$PWD/plugins/opspal-core/scripts/project-connect-schema-migrate.js" \
-  "$PWD/.claude-plugins/opspal-core/scripts/project-connect-schema-migrate.js" \
-  "./plugins/opspal-core/scripts/project-connect-schema-migrate.js" \
-  "./.claude-plugins/opspal-core/scripts/project-connect-schema-migrate.js"; do
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js" \
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js" \
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js" \
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js"; do
   [ -f "$candidate" ] && MIGRATE_SCRIPT="$candidate" && break
 done
 if [ -z "$MIGRATE_SCRIPT" ]; then
@@ -373,10 +373,10 @@ echo ""
 # Find sync-all script
 REPO_SYNC_SCRIPT=""
 for candidate in \
-  "$PWD/plugins/opspal-core/scripts/project-connect-sync-all.sh" \
-  "$PWD/.claude-plugins/opspal-core/scripts/project-connect-sync-all.sh" \
-  "./plugins/opspal-core/scripts/project-connect-sync-all.sh" \
-  "./.claude-plugins/opspal-core/scripts/project-connect-sync-all.sh"; do
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh" \
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh" \
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh" \
+  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh"; do
   [ -f "$candidate" ] && REPO_SYNC_SCRIPT="$candidate" && break
 done
 if [ -z "$REPO_SYNC_SCRIPT" ]; then
@@ -389,10 +389,10 @@ fi
 # Find scheduler manager
 SCHEDULER_SCRIPT=""
 for candidate in \
-  "$PWD/plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js" \
-  "$PWD/.claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js" \
-  "./plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js" \
-  "./.claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js"; do
+  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js" \
+  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js" \
+  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js" \
+  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js"; do
   [ -f "$candidate" ] && SCHEDULER_SCRIPT="$candidate" && break
 done
 if [ -z "$SCHEDULER_SCRIPT" ]; then
@@ -795,8 +795,8 @@ Overall: READY (0 warnings)
 The script searches multiple locations. Ensure opspal-core is properly installed:
 
 ```bash
-ls plugins/opspal-core/scripts/lib/plugin-update-manager.js
-ls .claude-plugins/opspal-core/scripts/lib/plugin-update-manager.js
+ls ${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-update-manager.js
+ls ${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-update-manager.js
 ```
 
 ### "CLAUDE.md sync failed"

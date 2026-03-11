@@ -58,7 +58,7 @@ View structured execution history:
 
 ```bash
 # Via scheduler manager directly
-node .claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js history daily-cpq-check-a1b2c3d4
+node ${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js history daily-cpq-check-a1b2c3d4
 ```
 
 Output:
@@ -74,7 +74,7 @@ Execution History for daily-cpq-check-a1b2c3d4 (20 entries):
 
 Logs are stored in:
 ```
-.claude-plugins/opspal-core/scheduler/logs/
+${CLAUDE_PLUGIN_ROOT}/scheduler/logs/
 ├── <task-id>_<timestamp>.log    # Individual execution logs
 ├── execution-history.jsonl       # Structured execution history
 └── cron.log                      # Cron stderr output
@@ -89,12 +89,12 @@ Logs are stored in:
 
 2. **Check full log content**:
    ```bash
-   cat .claude-plugins/opspal-core/scheduler/logs/<task-id>_*.log | tail -100
+   cat ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/<task-id>_*.log | tail -100
    ```
 
 3. **Look for timeout issues**:
    ```bash
-   grep "TIMED OUT" .claude-plugins/opspal-core/scheduler/logs/<task-id>_*.log
+   grep "TIMED OUT" ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/<task-id>_*.log
    ```
 
 4. **Run manually to debug**:
@@ -107,7 +107,7 @@ Logs are stored in:
 Logs are retained for 30 days by default. Older logs can be cleaned up:
 
 ```bash
-find .claude-plugins/opspal-core/scheduler/logs -name "*.log" -mtime +30 -delete
+find ${CLAUDE_PLUGIN_ROOT}/scheduler/logs -name "*.log" -mtime +30 -delete
 ```
 
 ## See Also

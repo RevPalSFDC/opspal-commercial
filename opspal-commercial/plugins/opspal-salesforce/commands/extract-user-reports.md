@@ -62,7 +62,7 @@ sf data query --query "SELECT Id, Name FROM User WHERE Name = '{{user}}'" --targ
 Execute the user reports extractor:
 
 ```bash
-node plugins/opspal-salesforce/scripts/lib/user-reports-extractor.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/user-reports-extractor.js \
   --org {{org}} \
   --user "{{user}}" \
   {{#if output}}--output {{output}}{{/if}}
@@ -82,14 +82,14 @@ The extraction will:
 
 ```bash
 # Check for any personal/company names in generated templates
-grep -r "{{user}}" plugins/opspal-salesforce/templates/reports/best-practices/ || echo "✅ No personal names found"
-grep -r "{{org}}" plugins/opspal-salesforce/templates/reports/best-practices/ || echo "✅ No org references found"
+grep -r "{{user}}" ${CLAUDE_PLUGIN_ROOT}/templates/reports/best-practices/ || echo "✅ No personal names found"
+grep -r "{{org}}" ${CLAUDE_PLUGIN_ROOT}/templates/reports/best-practices/ || echo "✅ No org references found"
 ```
 
 ## Output Structure
 
 ```
-plugins/opspal-salesforce/templates/reports/best-practices/
+${CLAUDE_PLUGIN_ROOT}/templates/reports/best-practices/
 ├── README.md
 ├── EXTRACTION_SUMMARY.md
 ├── sales/
@@ -119,7 +119,7 @@ After extraction, you can:
 
 1. **Deploy a template**:
    ```bash
-   node plugins/opspal-salesforce/scripts/lib/report-template-deployer.js \
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/report-template-deployer.js \
      --template best-practices/sales/executive/bp-sales-pipeline-coverage.json \
      --org target-org \
      --variation standard

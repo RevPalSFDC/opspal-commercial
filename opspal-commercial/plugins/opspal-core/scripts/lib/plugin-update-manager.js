@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const os = require('os');
+const { validateRuntimePathReferences } = require('./runtime-path-reference-validator');
 
 // Import post-plugin-update fixes module
 let PostPluginUpdateFixes;
@@ -139,7 +140,8 @@ class PluginUpdateManager {
       pdfPipeline: { passed: [], failed: [], warnings: [] },
       securityVulnerabilities: { passed: [], failed: [], warnings: [] },
       routingRegistry: { passed: [], failed: [], warnings: [] },
-      hookRegistration: { passed: [], failed: [], warnings: [] }
+      hookRegistration: { passed: [], failed: [], warnings: [] },
+      runtimePathReferences: { passed: [], failed: [], warnings: [] }
     };
 
     this.fixesApplied = [];
@@ -165,10 +167,62 @@ class PluginUpdateManager {
     await this.checkPDFPipeline();
     await this.checkRoutingRegistry();
     await this.checkHookRegistration();
+    await this.checkRuntimePathReferences();
 
     this.generateReport();
 
     return this.getExitCode();
+  }
+
+  // ==========================================================================
+  // Check 14: Runtime Path References
+  // ==========================================================================
+
+  async checkRuntimePathReferences() {
+    if (this.verbose) {
+      console.log(`\n${colors.blue}## Runtime Path References${colors.reset}`);
+    }
+
+    const result = validateRuntimePathReferences({
+      rootDir: path.resolve(CONFIG.pluginsDir, '..', '..')
+    });
+
+    if (result.violationCount === 0) {
+      this.results.runtimePathReferences.passed.push({
+        name: 'runtime path references',
+        detail: `${result.filesScanned} files scanned`
+      });
+      if (this.verbose) {
+        console.log(`${icons.pass} runtime path references: clean (${result.filesScanned} files scanned)`);
+      }
+      return;
+    }
+
+    const previewViolations = result.violations.slice(0, 25);
+    for (const violation of previewViolations) {
+      this.results.runtimePathReferences.failed.push({
+        name: path.relative(result.rootDir, violation.filePath),
+        reason: `line ${violation.line}: ${violation.message}`
+      });
+    }
+
+    if (result.violationCount > previewViolations.length) {
+      this.results.runtimePathReferences.warnings.push({
+        name: 'runtime path references',
+        reason: `${result.violationCount - previewViolations.length} additional violations omitted from summary`
+      });
+    }
+
+    if (this.verbose) {
+      console.log(`${icons.fail} runtime path references: ${result.violationCount} violation(s)`);
+      for (const violation of previewViolations) {
+        console.log(`  ${colors.gray}- ${path.relative(result.rootDir, violation.filePath)}:${violation.line} [${violation.rule}]${colors.reset}`);
+      }
+      if (result.violationCount > previewViolations.length) {
+        console.log(`  ${colors.gray}- ... ${result.violationCount - previewViolations.length} more${colors.reset}`);
+      }
+      console.log(`  ${colors.gray}Run: node ${path.join(CONFIG.pluginsDir, 'opspal-core', 'scripts', 'lib', 'runtime-path-reference-validator.js')} --json${colors.reset}`);
+    }
   }
 
   /**
@@ -1578,7 +1632,8 @@ class PluginUpdateManager {
       { key: 'officialPluginFixes', label: 'Official Plugin Fixes' },
       { key: 'pdfPipeline', label: 'PDF Pipeline' },
       { key: 'routingRegistry', label: 'Routing Registry' },
-      { key: 'hookRegistration', label: 'Hook Registration' }
+      { key: 'hookRegistration', label: 'Hook Registration' },
+      { key: 'runtimePathReferences', label: 'Runtime Path References' }
     ];
 
     let totalPassed = 0;

@@ -111,7 +111,7 @@ hooks:
 
 **Memory Check Command:**
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js load {org-alias}
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/org-context-manager.js load {org-alias}
 ```
 
 ## DURING Assessment
@@ -124,7 +124,7 @@ node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js load {
 
 1. **Update Org Context** with assessment summary:
    ```bash
-   node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js update {org-alias} --assessment {path}
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/org-context-manager.js update {org-alias} --assessment {path}
    ```
 
 2. **Cross-reference** with other assessments for this org

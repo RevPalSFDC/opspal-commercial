@@ -56,5 +56,5 @@ For backend, activation, and admin operations, use the runbooks in the sibling `
 Run the script directly:
 
 ```bash
-node plugins/opspal-core/scripts/lib/license-activation-manager.js activate <license-key>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/license-activation-manager.js activate <license-key>
 ```

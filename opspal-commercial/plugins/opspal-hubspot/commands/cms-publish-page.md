@@ -304,7 +304,7 @@ If publishing fails after snapshot creation, the command will automatically offe
 Manual rollback:
 ```bash
 # Rollback using snapshot ID
-node .claude-plugins/opspal-hubspot/scripts/lib/hubspot-cms-publishing-controller.js rollback <page-id> <snapshot-id>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/hubspot-cms-publishing-controller.js rollback <page-id> <snapshot-id>
 ```
 
 ## Behind the Scenes

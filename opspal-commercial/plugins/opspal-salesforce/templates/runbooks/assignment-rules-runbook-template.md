@@ -635,17 +635,17 @@ ORDER BY CreatedDate DESC
 
 **Run Pre-Deployment Validation**:
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/validators/assignment-rule-validator.js {org-alias} {rule-xml}
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/validators/assignment-rule-validator.js {org-alias} {rule-xml}
 ```
 
 **Detect Overlapping Rules**:
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/assignment-rule-overlap-detector.js {org-alias} {rule-xml}
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/assignment-rule-overlap-detector.js {org-alias} {rule-xml}
 ```
 
 **Validate Assignee Access**:
 ```bash
-node .claude-plugins/opspal-salesforce/scripts/lib/validators/assignee-access-validator.js {org-alias} {rule-xml}
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/validators/assignee-access-validator.js {org-alias} {rule-xml}
 ```
 
 **Comprehensive Audit**:

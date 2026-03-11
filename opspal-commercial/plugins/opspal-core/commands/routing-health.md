@@ -96,7 +96,7 @@ Top agent: sfdc-revops-auditor (12 uses)
 **Solution**:
 ```bash
 # Run setup script
-.claude-plugins/opspal-core/scripts/setup-auto-routing.sh
+${CLAUDE_PLUGIN_ROOT}/scripts/setup-auto-routing.sh
 ```
 
 ### Hook Not Executable
@@ -104,7 +104,7 @@ Top agent: sfdc-revops-auditor (12 uses)
 
 **Solution**:
 ```bash
-chmod +x .claude-plugins/opspal-core/hooks/user-prompt-router.sh
+chmod +x ${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-router.sh
 ```
 
 ### Routing Index Missing
@@ -112,7 +112,7 @@ chmod +x .claude-plugins/opspal-core/hooks/user-prompt-router.sh
 
 **Solution**:
 ```bash
-node .claude-plugins/opspal-core/scripts/lib/routing-index-builder.js
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/routing-index-builder.js
 ```
 
 ### Test Routing Failed
@@ -137,5 +137,5 @@ node .claude-plugins/opspal-core/scripts/lib/routing-index-builder.js
 
 This command runs the health check script:
 ```bash
-.claude-plugins/opspal-core/scripts/routing-health-check.sh
+${CLAUDE_PLUGIN_ROOT}/scripts/routing-health-check.sh
 ```

@@ -180,7 +180,7 @@ These fields are NEVER auto-enriched:
 
 ```bash
 # Run enrichment via script
-node .claude-plugins/opspal-core/scripts/lib/enrichment/run-enrichment.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/enrichment/run-enrichment.js \
   --object Account \
   --fields industry,employee_count \
   --source auto \
@@ -188,7 +188,7 @@ node .claude-plugins/opspal-core/scripts/lib/enrichment/run-enrichment.js \
   --input ./reports/account-export.json
 
 # Check enrichment status
-node .claude-plugins/opspal-core/scripts/lib/enrichment/status.js
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/enrichment/status.js
 ```
 
 ## Configuration

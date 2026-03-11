@@ -37,7 +37,7 @@ Add to task scheduler for weekly maintenance:
 /schedule-add --name="ACE Weekly Maintenance" \
   --type=script \
   --schedule="0 3 * * 0" \
-  --command="node .claude-plugins/opspal-core/scripts/lib/ace-maintenance-runner.js"
+  --command="node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/ace-maintenance-runner.js"
 ```
 
 ## Output

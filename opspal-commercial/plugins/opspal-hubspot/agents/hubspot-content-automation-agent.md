@@ -48,7 +48,7 @@ Generate AI-optimized content automatically:
 
 ```bash
 # Generate all optimization types for a URL
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://example.com \
   --generate-all
 ```
@@ -57,7 +57,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 
 ```bash
 # Generate only TL;DR and FAQ
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://example.com \
   --focus tldr,faq
 ```
@@ -66,7 +66,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 
 ```bash
 # Generate optimizations and save as JSON
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://example.com \
   --generate-all \
   --format json \
@@ -77,7 +77,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 
 ```bash
 # Process multiple pages from crawl data
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   crawl-results.json \
   --generate-all \
   --format json \
@@ -201,7 +201,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://gorevpal.com \
   --focus tldr,answerBlocks \
   --format json \
@@ -222,7 +222,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://gorevpal.com/blog/what-is-revops \
   --focus faq,citations \
   --format json \
@@ -244,12 +244,12 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 **Action:**
 ```bash
 # Option 1: Process individually
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://gorevpal.com/services/revops \
   --focus tldr,answerBlocks
 
 # Option 2: Batch process from crawl
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   service-pages-crawl.json \
   --focus tldr,answerBlocks \
   --format json \
@@ -269,7 +269,7 @@ node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
 
 **Action:**
 ```bash
-node .claude-plugins/opspal-hubspot/scripts/lib/seo-content-optimizer.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/seo-content-optimizer.js \
   https://gorevpal.com \
   --focus voiceSearch,qa \
   --format json \

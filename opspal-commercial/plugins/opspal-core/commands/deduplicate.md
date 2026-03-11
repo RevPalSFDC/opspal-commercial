@@ -160,14 +160,14 @@ node scripts/lib/governance/rollback.js --snapshot-id snap_xxx123
 
 ```bash
 # Run detection via script
-node .claude-plugins/opspal-core/scripts/lib/deduplication/run-dedup.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/run-dedup.js \
   --object Account \
   --mode detect \
   --org production \
   --input ./reports/account-export.json
 
 # Export clusters for review
-node .claude-plugins/opspal-core/scripts/lib/deduplication/export-clusters.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/export-clusters.js \
   --output ./clusters.json \
   --input ./reports/account-export.json
 ```

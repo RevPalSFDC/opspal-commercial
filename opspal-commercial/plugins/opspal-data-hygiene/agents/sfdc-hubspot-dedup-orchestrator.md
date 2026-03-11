@@ -67,7 +67,7 @@ Eliminate duplicate Companies/Accounts between HubSpot and Salesforce, prevent t
 
 ```bash
 # Step 1: Run merge strategy selector
-node .claude-plugins/opspal-data-hygiene/scripts/lib/hubspot-merge-strategy-selector.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/hubspot-merge-strategy-selector.js \
   --canonical-id <canonical_company_id> \
   --duplicate-id <duplicate_company_id>
 ```
@@ -95,7 +95,7 @@ await hubspotClient.crm.companies.mergeApi.merge({
 **For Lift-and-Shift (Complex cases)**:
 ```bash
 # Use the lift-and-shift script - handles associations properly
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-lift-and-shift.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-lift-and-shift.js \
   --canonical <canonical_id> \
   --duplicate <duplicate_id> \
   --dry-run  # ALWAYS dry-run first!
@@ -134,7 +134,7 @@ await hubspotClient.crm.companies.basicApi.archive(companyId);
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-snapshot-generator.js <config>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-snapshot-generator.js <config>
 ```
 
 **Output**: `snapshot-{timestamp}.json`, CSVs for HubSpot and Salesforce
@@ -152,7 +152,7 @@ node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-snapshot-generator.js
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-clustering-engine.js <snapshot-file>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-clustering-engine.js <snapshot-file>
 ```
 
 **Output**: `bundles-{timestamp}.json`, Bundle A/B CSVs
@@ -171,7 +171,7 @@ node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-clustering-engine.js 
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-canonical-selector.js <bundles-file> [config]
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-canonical-selector.js <bundles-file> [config]
 ```
 
 **Output**: `canonical-map-{timestamp}.json`, actions CSV, summary report
@@ -198,10 +198,10 @@ node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-canonical-selector.js
 **Command**:
 ```bash
 # Dry run first (ALWAYS)
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-executor.js <canonical-map> <config>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-executor.js <canonical-map> <config>
 
 # Live execution after approval
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-executor.js <canonical-map> <config> --execute
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-executor.js <canonical-map> <config> --execute
 ```
 
 **Output**: Execution report, updated ledger
@@ -230,15 +230,15 @@ node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-executor.js <canonica
 **Command**:
 ```bash
 # Dry run first (ALWAYS)
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-association-repair.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-association-repair.js \
   <canonical-map-file> <config-file>
 
 # Live execution after approval
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-association-repair.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-association-repair.js \
   <canonical-map-file> <config-file> --execute
 
 # With execution report context
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-association-repair.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-association-repair.js \
   <canonical-map-file> <config-file> \
   --execution-report <execution-report-file> \
   --execute
@@ -275,7 +275,7 @@ Phase 3 executor now includes **automatic PRIMARY verification** after reparenti
 
 **Command**:
 ```bash
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-guardrail-manager.js <config> --execute
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-guardrail-manager.js <config> --execute
 ```
 
 **Output**: Guardrails report, exception queries, documentation
@@ -390,7 +390,7 @@ DEDUP_MAX_WRITE_PER_MIN="60"
 All operations are idempotent via ledger:
 ```bash
 # Check ledger status
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-ledger.js summary <prefix>
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-ledger.js summary <prefix>
 
 # Resume execution (skips completed operations)
 node dedup-executor.js <canonical-map> <config> --execute

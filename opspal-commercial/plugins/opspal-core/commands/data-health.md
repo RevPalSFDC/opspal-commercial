@@ -165,7 +165,7 @@ consistency,62,fair,5,15%
 
 ```bash
 # Run health check via script
-node .claude-plugins/opspal-core/scripts/lib/governance/health-check.js \
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/health-check.js \
   --object Account \
   --format json \
   --input ./reports/account-export.json

@@ -128,7 +128,7 @@ export SALESFORCE_ORG_ALIAS="production"
 OR create a configuration file:
 ```bash
 # Generate template
-node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-config-loader.js template > dedup-config.json
+node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-config-loader.js template > dedup-config.json
 
 # Edit with your values
 vim dedup-config.json
@@ -247,7 +247,7 @@ Don't panic! The system is designed for this:
 
 1. **Check the ledger**:
    ```bash
-   node .claude-plugins/opspal-data-hygiene/scripts/lib/dedup-ledger.js summary <prefix>
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dedup-ledger.js summary <prefix>
    ```
 
 2. **Review what completed**:
