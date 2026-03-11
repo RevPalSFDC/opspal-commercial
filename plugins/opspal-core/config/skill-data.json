@@ -1,0 +1,4550 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-01-22T20:09:34.470Z",
+  "analysis_window_days": 180,
+  "total_reflections_analyzed": 587,
+  "reflections_with_skill_data": 580,
+  "session_outcomes": {
+    "success": 192,
+    "partial": 59,
+    "failure": 1,
+    "blocked": 4,
+    "unknown": 331
+  },
+  "skill_confidence": {
+    "bulk-account-import": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-contact-update": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python-csv-processing": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-aggregate-queries": {
+      "success_rate": "83.3%",
+      "total_uses": 6,
+      "confidence_score": "0.500",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "schema/parse",
+          "count": 1
+        }
+      ]
+    },
+    "csv-data-transformation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "dependent-picklist-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hook-development": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "registry-building": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "agent-routing-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "health-check-improvement": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "pdf-table-optimization": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "weighted-quality-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "multi-format-report-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-api-retrieve-deploy": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "report-cloning-analytics-api": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "dashboard-metadata-deployment": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "schema/parse",
+          "count": 1
+        }
+      ]
+    },
+    "data-quality-assessment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "lead-intent-signal-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-query-iterative-refinement": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "runbook-exploration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "project-folder-setup": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-org-connection": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "tooling-api-metadata-queries": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "automation-audit-comprehensive": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "incomplete-execution",
+          "count": 2
+        }
+      ]
+    },
+    "routing-gap-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "runbook-improvement-planning": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-diagnostic-query-design": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "flow-metadata-retrieval": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-flow-version-query": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "flow-metadata-deployment": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "tooling-api-flow-activation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "contract-date-calculation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "contract-opportunity-linkage": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "pdf-generation": {
+      "success_rate": "94.6%",
+      "total_uses": 37,
+      "confidence_score": "0.946",
+      "confidence_level": "high",
+      "common_errors": [
+        {
+          "type": "rendering",
+          "count": 2
+        }
+      ]
+    },
+    "audit-correction": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "plan-implementation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "multi-file-documentation-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "agent-routing": {
+      "success_rate": "100.0%",
+      "total_uses": 6,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "marketo-instance-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "asana-api-direct": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "env-file-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "iterative-verification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "renewal-gap-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "pdf-generation-branded": {
+      "success_rate": "85.7%",
+      "total_uses": 14,
+      "confidence_score": "0.857",
+      "confidence_level": "high",
+      "common_errors": [
+        {
+          "type": "config",
+          "count": 2
+        }
+      ]
+    },
+    "contract-lifecycle-modeling": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "runbook-maintenance": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-field-remediation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "user-approval-workflow": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "evidence-based-dedup-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "duplicate-detection": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "pdf-report-generation": {
+      "success_rate": "66.7%",
+      "total_uses": 6,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 2
+        }
+      ]
+    },
+    "data-remediation-with-backup": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "manual-verification-workflow": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "contract-reconciliation-audit": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "fuzzy-matching": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-reconciliation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "api-migration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python-integration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "shell-script-automation": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "batch-apex-execution": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "incremental-code-fix": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-data-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "user-provisioning": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "license-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-matching": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "inactive-user-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "process-mapping": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-data-model-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-automation-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "mermaid-diagram-generation": {
+      "success_rate": "50.0%",
+      "total_uses": 4,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "encoding",
+          "count": 2
+        }
+      ]
+    },
+    "deal-investigation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "agent-routing-fallback": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-api-property-history": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-soql-semi-join": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "plan-mode-exploration": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "agent-delegation-pattern": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "flow-xml-editing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "dry-run-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "field-discovery-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "incremental-metadata-deployment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "automation-audit": {
+      "success_rate": "56.7%",
+      "total_uses": 67,
+      "confidence_score": "0.567",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 18
+        },
+        {
+          "type": "unknown",
+          "count": 5
+        },
+        {
+          "type": "api-failure",
+          "count": 1
+        }
+      ]
+    },
+    "phased-data-backfill": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "contract-lifecycle-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "gap-classification-taxonomy": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "post-operation-verification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-comparison": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "batch-permission-assignment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "documentation-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 6,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "data-architecture-simplification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-discovery-metadata-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-report-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python-data-extraction": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-soql-complex-joins": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "batch-query-optimization": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-history-object-querying": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "role-hierarchy-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-set-assignment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "comparative-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-lead-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-api-authentication": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-campaign-discovery": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-completeness",
+          "count": 2
+        }
+      ]
+    },
+    "cross-platform-lead-tracing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "org-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "branded-reporting": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "config",
+          "count": 2
+        }
+      ]
+    },
+    "soql-data-extraction": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "plan-mode-workflow": {
+      "success_rate": "100.0%",
+      "total_uses": 6,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "clarifying-questions": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "comprehensive-audit-report": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "agent-delegation-sfdc-automation-auditor": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-mapping": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "batch-apex-creation": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "trigger-handler-debugging": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "test-coverage-optimization": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-parsing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-export": {
+      "success_rate": "18.0%",
+      "total_uses": 133,
+      "confidence_score": "0.180",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 101
+        },
+        {
+          "type": "unknown",
+          "count": 3
+        }
+      ]
+    },
+    "field-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-chunked-queries": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "task-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "pdf-generation-batch": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "session-continuation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-querying": {
+      "success_rate": "100.0%",
+      "total_uses": 7,
+      "confidence_score": "0.700",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "data-validation": {
+      "success_rate": "8.7%",
+      "total_uses": 115,
+      "confidence_score": "0.087",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 104
+        },
+        {
+          "type": "validation-failure",
+          "count": 1
+        }
+      ]
+    },
+    "iterative-refinement": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "fuzzy-string-matching": {
+      "success_rate": "80.0%",
+      "total_uses": 5,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 1
+        }
+      ]
+    },
+    "stakeholder-requirement-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "root-cause-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-enrichment": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "excel-data-processing": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "iterative-algorithm-refinement": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-account-querying": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "web-scraping-with-webfetch": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "parallel-state-data-collection": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python-scripting": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-account-query": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-data-enrichment": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-record-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-troubleshooting": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-set-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sequential-deployment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "test-class-enhancement": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-field-creation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "apex-handler-modification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "entity-matching": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-quality-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 6,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "record-type-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "base64-bitmap-decoding": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "live-org-metadata-query": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "batch-file-editing": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "markdown-report-formatting": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-parity-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "pdf-generation-scripting": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "regression",
+          "count": 1
+        }
+      ]
+    },
+    "soql-aggregation-queries": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "excel-serial-date-conversion": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "css-override-injection": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "plugin-script-direct-execution": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "xml-transformation": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "structural",
+          "count": 1
+        }
+      ]
+    },
+    "dependency-analysis": {
+      "success_rate": "66.7%",
+      "total_uses": 3,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "incomplete",
+          "count": 1
+        }
+      ]
+    },
+    "flexipage-retrieval": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-deployment": {
+      "success_rate": "100.0%",
+      "total_uses": 11,
+      "confidence_score": "1.000",
+      "confidence_level": "high",
+      "common_errors": []
+    },
+    "soql-task-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "executive-report-writing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "state-county-criteria-evaluation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "flow-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "oauth-troubleshooting": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "tooling-api-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "destructive-metadata-deployment": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "dependency_block",
+          "count": 2
+        }
+      ]
+    },
+    "territory-reporting": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-soql-queries": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-aggregate-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-task-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "markdown-report-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-discovery": {
+      "success_rate": "0.0%",
+      "total_uses": 6,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 6
+        }
+      ]
+    },
+    "bulk-data-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 7,
+      "confidence_score": "0.700",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "territory-restructure": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-api-deployment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-querying": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "boolean-filter-manipulation": {
+      "success_rate": "50.0%",
+      "total_uses": 4,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "logic",
+          "count": 2
+        }
+      ]
+    },
+    "territory-rule-item-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "county-based-assignment-pattern": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-set-creation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-permission-assignment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:bulk-data-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:soql-aggregate-queries": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-plugin:retrospective-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:duplicate-detection-patterns": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-update-workflow": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "account-classification": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-orchestration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "dependent-picklist-handling": {
+      "success_rate": "100.0%",
+      "total_uses": 5,
+      "confidence_score": "0.500",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "apex-development": {
+      "success_rate": "100.0%",
+      "total_uses": 6,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "flow-diagnostics": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "deployment-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "test-class-development": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-query-execution": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "field-mapping": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-transformation": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-lead-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-user-audit": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-api-validation": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "auth/permissions",
+          "count": 2
+        }
+      ]
+    },
+    "sfdc-flow-status-check": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-flow-creation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-metadata-deployment": {
+      "success_rate": "33.3%",
+      "total_uses": 3,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-limitation",
+          "count": 2
+        }
+      ]
+    },
+    "sfdc-slack-integration-pattern": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "validation-rule-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "tooling-api-investigation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "generate-pdf": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "resource-discovery",
+          "count": 2
+        }
+      ]
+    },
+    "flow-consolidation-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sales-engagement-assessment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "org-connection": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "discovery-audit": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "license-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "package-inventory": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "admin-identification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "org-state-comparison": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-deployment-manager": {
+      "success_rate": "50.0%",
+      "total_uses": 4,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        }
+      ]
+    },
+    "flow-segmentation-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "css-debugging": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cli-argument-parsing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "plan-mode": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "org-state-verification": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-automation-builder": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "error-diagnosis": {
+      "success_rate": "41.2%",
+      "total_uses": 119,
+      "confidence_score": "0.412",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 29
+        },
+        {
+          "type": "validation-failure",
+          "count": 18
+        },
+        {
+          "type": "tool-contract",
+          "count": 10
+        }
+      ]
+    },
+    "documentation-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "css-customization": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-data-update": {
+      "success_rate": "100.0%",
+      "total_uses": 15,
+      "confidence_score": "1.000",
+      "confidence_level": "high",
+      "common_errors": []
+    },
+    "segment-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-quality-audit": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "soql-query-building": {
+      "success_rate": "100.0%",
+      "total_uses": 5,
+      "confidence_score": "0.500",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "hierarchy-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-account-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-data-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-query-specialist": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "acr-relationship-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "picklist-dependency-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sf-field-describe": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-lead-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "smart-list-configuration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "browser-automation-marketo": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "claude-code-guide-lookup": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "settings-json-configuration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "file-management": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "test-plan-creation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "validation-rule-deployment": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "marketo-connection": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-documentation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "css-styling": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "matplotlib-charting": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-data-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sobject-field-describe": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "campaign-influence-import": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-oauth-refresh": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-list-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-contact-analysis": {
+      "success_rate": "50.0%",
+      "total_uses": 2,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 1
+        }
+      ]
+    },
+    "pdf-generation-md-to-pdf": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-validation-methodology": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "contact-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "engagement-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-mapping": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-data-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-opportunity-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "field-level-security": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "permission-set-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "observation-capture": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "segment-classification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-management": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-enrichment-bulk-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "css-page-break-control": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 1
+        }
+      ]
+    },
+    "table-overflow-handling": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-contact-matching": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-campaign-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "campaign-influence-modeling": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-import-file-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-form-submissions-query": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "flow-metadata-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "stakeholder-documentation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-comparison": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bash-scripting-for-xml-parsing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "automation-building-patterns": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "security-governance-framework": {
+      "success_rate": "60.0%",
+      "total_uses": 5,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        }
+      ]
+    },
+    "deployment-validation-framework": {
+      "success_rate": "75.0%",
+      "total_uses": 16,
+      "confidence_score": "0.750",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        },
+        {
+          "type": "config/env",
+          "count": 2
+        }
+      ]
+    },
+    "salesforce-metadata-standards": {
+      "success_rate": "89.5%",
+      "total_uses": 19,
+      "confidence_score": "0.895",
+      "confidence_level": "high",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        }
+      ]
+    },
+    "flow-metadata-extraction": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "mermaid-diagram-rendering": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "rendering",
+          "count": 1
+        }
+      ]
+    },
+    "documentation-consolidation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "rolling-window-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-data-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "scheduled-report-execution": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "slack-notification-delivery": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "document-formatting": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "project-history-aggregation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-api-update": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 2
+        }
+      ]
+    },
+    "territory2-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "apex-batch-execution": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "backup-before-modify": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sf-data-query": {
+      "success_rate": "100.0%",
+      "total_uses": 6,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "sf-data-update-record": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-record-processing": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        }
+      ]
+    },
+    "web-research-enrichment": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "xml-parsing-modification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-metadata-retrieval": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:automation-building-patterns": {
+      "success_rate": "69.2%",
+      "total_uses": 13,
+      "confidence_score": "0.692",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        },
+        {
+          "type": "incomplete-guidance",
+          "count": 2
+        }
+      ]
+    },
+    "opspal-salesforce:deployment-validation-framework": {
+      "success_rate": "76.0%",
+      "total_uses": 25,
+      "confidence_score": "0.760",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        },
+        {
+          "type": "schema/parse",
+          "count": 2
+        },
+        {
+          "type": "tool-limitation",
+          "count": 2
+        }
+      ]
+    },
+    "soql-export": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-pattern-matching": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "booleanfilter-recovery": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-deployment": {
+      "success_rate": "66.7%",
+      "total_uses": 3,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "incomplete-execution",
+          "count": 1
+        }
+      ]
+    },
+    "bulk-data-backup": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "runbook-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-quality-remediation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-data-processing": {
+      "success_rate": "80.0%",
+      "total_uses": 5,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 1
+        }
+      ]
+    },
+    "keyword-pattern-matching": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "impact-assessment": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-data-forensics": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "account-history-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-direct-update": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "apex-anonymous-execution": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "validation-rule-bypass": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "metadata-picklist-value-add": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "excel_report_generation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "coaching_tip_logic_design": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "error_diagnosis_merged_cells": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python_openpyxl_cell_merging": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "threshold_tuning_for_coverage": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-territory-orchestrator": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "verification",
+          "count": 2
+        }
+      ]
+    },
+    "salesforce-soql-query": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python-script-enhancement": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "excel-openpyxl-manipulation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "scheduled-report-development": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sf-sobject-describe": {
+      "success_rate": "100.0%",
+      "total_uses": 4,
+      "confidence_score": "0.400",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "markdown-documentation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "gap-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "data-update-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-analysis": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-management": {
+      "success_rate": "100.0%",
+      "total_uses": 12,
+      "confidence_score": "1.000",
+      "confidence_level": "high",
+      "common_errors": []
+    },
+    "opspal-salesforce:territory-management": {
+      "success_rate": "77.8%",
+      "total_uses": 9,
+      "confidence_score": "0.700",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "incomplete_coverage",
+          "count": 2
+        }
+      ]
+    },
+    "opspal-salesforce:salesforce-metadata-standards": {
+      "success_rate": "100.0%",
+      "total_uses": 15,
+      "confidence_score": "1.000",
+      "confidence_level": "high",
+      "common_errors": []
+    },
+    "sf-data-update-bulk": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sf-data-create-record": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-plugin:mermaid-diagram-reference": {
+      "success_rate": "70.0%",
+      "total_uses": 10,
+      "confidence_score": "0.700",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 3
+        }
+      ]
+    },
+    "troubleshooting": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "rest-api-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "deployment-validation": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 2
+        }
+      ]
+    },
+    "opspal-salesforce:security-governance-framework": {
+      "success_rate": "75.0%",
+      "total_uses": 8,
+      "confidence_score": "0.600",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        }
+      ]
+    },
+    "hubspot-contact-search": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "hubspot-bulk-data-update": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-data-linking": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 1
+        }
+      ]
+    },
+    "soql-build": {
+      "success_rate": "13.9%",
+      "total_uses": 79,
+      "confidence_score": "0.139",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 16
+        },
+        {
+          "type": "unknown",
+          "count": 16
+        },
+        {
+          "type": "validation-failure",
+          "count": 16
+        }
+      ]
+    },
+    "object-audit": {
+      "success_rate": "14.3%",
+      "total_uses": 84,
+      "confidence_score": "0.143",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 32
+        },
+        {
+          "type": "unknown",
+          "count": 20
+        },
+        {
+          "type": "tool-contract",
+          "count": 11
+        }
+      ]
+    },
+    "object-create": {
+      "success_rate": "20.0%",
+      "total_uses": 5,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 2
+        },
+        {
+          "type": "validation-failure",
+          "count": 1
+        }
+      ]
+    },
+    "trigger-create": {
+      "success_rate": "31.8%",
+      "total_uses": 44,
+      "confidence_score": "0.318",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 13
+        },
+        {
+          "type": "api-failure",
+          "count": 4
+        },
+        {
+          "type": "data-quality",
+          "count": 4
+        }
+      ]
+    },
+    "metadata-deploy": {
+      "success_rate": "22.8%",
+      "total_uses": 145,
+      "confidence_score": "0.228",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 49
+        },
+        {
+          "type": "validation-failure",
+          "count": 22
+        },
+        {
+          "type": "unknown",
+          "count": 18
+        }
+      ]
+    },
+    "pre-deploy-check": {
+      "success_rate": "11.0%",
+      "total_uses": 127,
+      "confidence_score": "0.110",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 97
+        },
+        {
+          "type": "unknown",
+          "count": 3
+        },
+        {
+          "type": "validation-failure",
+          "count": 2
+        }
+      ]
+    },
+    "performance-optimize": {
+      "success_rate": "58.1%",
+      "total_uses": 43,
+      "confidence_score": "0.581",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 10
+        },
+        {
+          "type": "data-quality",
+          "count": 2
+        },
+        {
+          "type": "api-failure",
+          "count": 1
+        }
+      ]
+    },
+    "python-script-debugging": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "documentation-maintenance": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-query-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "scheduled-automation-management": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "bulk-api-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "contract-object-management": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "schema/parse",
+          "count": 1
+        }
+      ]
+    },
+    "data-import": {
+      "success_rate": "29.4%",
+      "total_uses": 17,
+      "confidence_score": "0.294",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 4
+        },
+        {
+          "type": "unknown",
+          "count": 3
+        },
+        {
+          "type": "validation-failure",
+          "count": 2
+        }
+      ]
+    },
+    "flow-create": {
+      "success_rate": "33.3%",
+      "total_uses": 3,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 2
+        }
+      ]
+    },
+    "flow-deploy": {
+      "success_rate": "6.7%",
+      "total_uses": 60,
+      "confidence_score": "0.067",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 56
+        }
+      ]
+    },
+    "field-create": {
+      "success_rate": "38.1%",
+      "total_uses": 21,
+      "confidence_score": "0.381",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 4
+        },
+        {
+          "type": "data-quality",
+          "count": 3
+        },
+        {
+          "type": "validation-failure",
+          "count": 3
+        }
+      ]
+    },
+    "permission-review": {
+      "success_rate": "30.0%",
+      "total_uses": 50,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 12
+        },
+        {
+          "type": "unknown",
+          "count": 10
+        },
+        {
+          "type": "tool-contract",
+          "count": 8
+        }
+      ]
+    },
+    "rest-api-4-step-pattern": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-rule-modification": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-data-manipulation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "state-country-picklist-handling": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation",
+          "count": 2
+        }
+      ]
+    },
+    "metadata-dependency-patterns": {
+      "success_rate": "100.0%",
+      "total_uses": 5,
+      "confidence_score": "0.500",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "sfdc-validation-testing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-data-api-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-troubleshooting-api-errors": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "field-validation": {
+      "success_rate": "0.0%",
+      "total_uses": 161,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 87
+        },
+        {
+          "type": "tool-contract",
+          "count": 72
+        },
+        {
+          "type": "data-quality",
+          "count": 2
+        }
+      ]
+    },
+    "pre-update-backup": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "territory-deployment": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "platform-constraint",
+          "count": 2
+        }
+      ]
+    },
+    "data-api-orchestration": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "platform-constraint-discovery": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-plugin:batch-processing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:documentation-extraction": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cross-platform-plugin:playwright-automation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "mermaid-diagram-reference": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "python-data-transformation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "census-gazetteer-integration": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 1
+        }
+      ]
+    },
+    "sfdc-data-operations-bulk-export": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "sfdc-data-operations-bulk-update": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:metadata-dependency-patterns": {
+      "success_rate": "100.0%",
+      "total_uses": 5,
+      "confidence_score": "0.500",
+      "confidence_level": "medium",
+      "common_errors": []
+    },
+    "opspal-salesforce:sfdc-data-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cron-scheduling": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "slack-api-integration": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:api-discovery-techniques": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:address-parsing": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:bulk-data-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:data-quality-validation": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-data-hygiene:cross-platform-deduplication": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "url-parsing": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "excel-parsing": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "file-catalog-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-bulk-data-operations": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "taxonomy-classification-patterns": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "csv-generation-with-proper-line-endings": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "salesforce-taxonomy-mapping": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "opspal-salesforce:reflection-workflow": {
+      "success_rate": "0.0%",
+      "total_uses": 2,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "incomplete-implementation",
+          "count": 2
+        }
+      ]
+    },
+    "proposal-generation": {
+      "success_rate": "100.0%",
+      "total_uses": 3,
+      "confidence_score": "0.300",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "implementation-scoping": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "report-create": {
+      "success_rate": "34.8%",
+      "total_uses": 89,
+      "confidence_score": "0.348",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 28
+        },
+        {
+          "type": "data-quality",
+          "count": 11
+        },
+        {
+          "type": "validation-failure",
+          "count": 8
+        }
+      ]
+    },
+    "permission-set-create": {
+      "success_rate": "61.5%",
+      "total_uses": 13,
+      "confidence_score": "0.615",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 4
+        },
+        {
+          "type": "tool-contract",
+          "count": 1
+        }
+      ]
+    },
+    "python-api-client": {
+      "success_rate": "100.0%",
+      "total_uses": 1,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "report-type-reference": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "syntax-validation": {
+      "success_rate": "0.0%",
+      "total_uses": 117,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 111
+        },
+        {
+          "type": "tool-contract",
+          "count": 4
+        },
+        {
+          "type": "unknown",
+          "count": 2
+        }
+      ]
+    },
+    "configuration": {
+      "success_rate": "0.0%",
+      "total_uses": 35,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 35
+        }
+      ]
+    },
+    "validation-rule-create": {
+      "success_rate": "14.7%",
+      "total_uses": 34,
+      "confidence_score": "0.147",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 11
+        },
+        {
+          "type": "unknown",
+          "count": 7
+        },
+        {
+          "type": "data-quality",
+          "count": 7
+        }
+      ]
+    },
+    "prompt-tuning": {
+      "success_rate": "0.0%",
+      "total_uses": 75,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 75
+        }
+      ]
+    },
+    "dashboard-create": {
+      "success_rate": "42.1%",
+      "total_uses": 19,
+      "confidence_score": "0.421",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 5
+        },
+        {
+          "type": "tool-contract",
+          "count": 4
+        }
+      ]
+    },
+    "cpq-assessment": {
+      "success_rate": "22.2%",
+      "total_uses": 36,
+      "confidence_score": "0.222",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 15
+        },
+        {
+          "type": "unknown",
+          "count": 8
+        },
+        {
+          "type": "data-quality",
+          "count": 4
+        }
+      ]
+    },
+    "flow-debug": {
+      "success_rate": "83.3%",
+      "total_uses": 6,
+      "confidence_score": "0.500",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 1
+        }
+      ]
+    },
+    "workflow-build": {
+      "success_rate": "40.9%",
+      "total_uses": 22,
+      "confidence_score": "0.409",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 9
+        },
+        {
+          "type": "unknown",
+          "count": 3
+        },
+        {
+          "type": "api-failure",
+          "count": 1
+        }
+      ]
+    },
+    "revops-audit": {
+      "success_rate": "36.4%",
+      "total_uses": 11,
+      "confidence_score": "0.364",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "data-quality",
+          "count": 3
+        },
+        {
+          "type": "api-failure",
+          "count": 3
+        }
+      ]
+    },
+    "api-integration": {
+      "success_rate": "0.0%",
+      "total_uses": 28,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "api-failure",
+          "count": 28
+        }
+      ]
+    },
+    "layout-modify": {
+      "success_rate": "11.1%",
+      "total_uses": 9,
+      "confidence_score": "0.100",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 3
+        },
+        {
+          "type": "unknown",
+          "count": 3
+        },
+        {
+          "type": "tool-contract",
+          "count": 2
+        }
+      ]
+    },
+    "dependency-check": {
+      "success_rate": "21.4%",
+      "total_uses": 14,
+      "confidence_score": "0.214",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 6
+        },
+        {
+          "type": "unknown",
+          "count": 2
+        },
+        {
+          "type": "dependency-missing",
+          "count": 1
+        }
+      ]
+    },
+    "record-type-config": {
+      "success_rate": "28.6%",
+      "total_uses": 14,
+      "confidence_score": "0.286",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "validation-failure",
+          "count": 4
+        },
+        {
+          "type": "unknown",
+          "count": 2
+        },
+        {
+          "type": "data-quality",
+          "count": 2
+        }
+      ]
+    },
+    "conflict-resolution": {
+      "success_rate": "65.0%",
+      "total_uses": 20,
+      "confidence_score": "0.650",
+      "confidence_level": "medium",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 6
+        },
+        {
+          "type": "tool-contract",
+          "count": 1
+        }
+      ]
+    },
+    "approval-process": {
+      "success_rate": "100.0%",
+      "total_uses": 2,
+      "confidence_score": "0.200",
+      "confidence_level": "low",
+      "common_errors": []
+    },
+    "cli-execution": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "tool-contract",
+          "count": 1
+        }
+      ]
+    },
+    "documentation": {
+      "success_rate": "0.0%",
+      "total_uses": 1,
+      "confidence_score": "0.000",
+      "confidence_level": "low",
+      "common_errors": [
+        {
+          "type": "unknown",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "top_skills": [
+    {
+      "skill": "field-validation",
+      "usage_count": 161,
+      "confidence": "low"
+    },
+    {
+      "skill": "metadata-deploy",
+      "usage_count": 145,
+      "confidence": "low"
+    },
+    {
+      "skill": "data-export",
+      "usage_count": 133,
+      "confidence": "low"
+    },
+    {
+      "skill": "pre-deploy-check",
+      "usage_count": 127,
+      "confidence": "low"
+    },
+    {
+      "skill": "error-diagnosis",
+      "usage_count": 119,
+      "confidence": "low"
+    },
+    {
+      "skill": "syntax-validation",
+      "usage_count": 117,
+      "confidence": "low"
+    },
+    {
+      "skill": "data-validation",
+      "usage_count": 115,
+      "confidence": "low"
+    },
+    {
+      "skill": "report-create",
+      "usage_count": 89,
+      "confidence": "low"
+    },
+    {
+      "skill": "object-audit",
+      "usage_count": 84,
+      "confidence": "low"
+    },
+    {
+      "skill": "soql-build",
+      "usage_count": 79,
+      "confidence": "low"
+    },
+    {
+      "skill": "prompt-tuning",
+      "usage_count": 75,
+      "confidence": "low"
+    },
+    {
+      "skill": "automation-audit",
+      "usage_count": 67,
+      "confidence": "medium"
+    },
+    {
+      "skill": "flow-deploy",
+      "usage_count": 60,
+      "confidence": "low"
+    },
+    {
+      "skill": "permission-review",
+      "usage_count": 50,
+      "confidence": "low"
+    },
+    {
+      "skill": "trigger-create",
+      "usage_count": 44,
+      "confidence": "low"
+    },
+    {
+      "skill": "performance-optimize",
+      "usage_count": 43,
+      "confidence": "medium"
+    },
+    {
+      "skill": "pdf-generation",
+      "usage_count": 37,
+      "confidence": "high"
+    },
+    {
+      "skill": "cpq-assessment",
+      "usage_count": 36,
+      "confidence": "low"
+    },
+    {
+      "skill": "configuration",
+      "usage_count": 35,
+      "confidence": "low"
+    },
+    {
+      "skill": "validation-rule-create",
+      "usage_count": 34,
+      "confidence": "low"
+    }
+  ],
+  "error_patterns": [
+    {
+      "taxonomy": "schema/parse",
+      "occurrence_count": 347,
+      "examples": [
+        {
+          "root_cause": "Target org has strict dependent picklist hierarchy (Market → Segment → Sub_Segment → Sub_Type) that rejects invalid combinations",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Default PDF margins and column widths cause text wrapping and column truncation",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Dependent picklist hierarchy restricts Sub_Type__c values based on Sub_Segment__c; 'Corrections Facility' is not valid for 'State Corrections' sub-segment",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "data-quality",
+      "occurrence_count": 320,
+      "examples": [
+        {
+          "root_cause": "Org has duplicate detection rules that block Account creation for similar names",
+          "priority": "P3"
+        },
+        {
+          "root_cause": "ACE skill data was 39.8 days stale (last updated 2025-12-13) with no visibility into freshness",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Org has duplicate detection rules that block Account creation when similar names exist",
+          "priority": "P3"
+        }
+      ]
+    },
+    {
+      "taxonomy": "tool-contract",
+      "occurrence_count": 229,
+      "examples": [
+        {
+          "root_cause": "Short agent names were not being auto-resolved to fully-qualified names (plugin:agent-name) before Task tool lookup",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "SOQL doesn't support division operations in SELECT clause with aggregate functions",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Salesforce Tooling API requires Metadata field wrapper for FlowDefinition updates, sf CLI data update doesn't support this",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "config/env",
+      "occurrence_count": 153,
+      "examples": [
+        {
+          "root_cause": "ACE health check was looking for deprecated subagent-utilization-booster.sh instead of recognizing unified-router.sh consolidation",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "No proactive monitoring of routing-critical field population rates",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "No proactive monitoring of routing-critical field population rates",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "prompt-mismatch",
+      "occurrence_count": 146,
+      "examples": [
+        {
+          "root_cause": "Commands (in commands/ directory) were being invoked as agents (via Task tool) instead of using Skill tool or slash command",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Initial sfdc-automation-auditor agent run did not properly utilize the available programmatic extractors (process-builder-extractor.js, workflow-rule-extractor.js, validation-rule-auditor.js) and instead defaulted to claiming manual UI verification was required",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Initial sfdc-automation-auditor agent run did not properly utilize the available programmatic extractors (process-builder-extractor.js, workflow-rule-extractor.js, validation-rule-auditor.js) and instead defaulted to claiming manual UI verification was required",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "idempotency/state",
+      "occurrence_count": 116,
+      "examples": [
+        {
+          "root_cause": "pursuit_id__c field has unique constraint - same Pursuit ID cannot exist on multiple Contacts",
+          "priority": "P3"
+        },
+        {
+          "root_cause": "Contract activation step is being skipped in the contract creation workflow",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Contract activation step is being skipped in the contract creation workflow",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "tool-contract mismatch",
+      "occurrence_count": 80,
+      "examples": [
+        {
+          "root_cause": "Trigger_Amendment_Contract_Processing attempted to invoke Process_Amendment_Contract_V6_FIXED as subflow, but V6_FIXED is a record-triggered flow which cannot be called as subflow",
+          "priority": "P0"
+        },
+        {
+          "root_cause": "Trigger_Amendment_Contract_Processing attempted to invoke Process_Amendment_Contract_V6_FIXED as subflow, but V6_FIXED is a record-triggered flow which cannot be called as subflow",
+          "priority": "P0"
+        },
+        {
+          "root_cause": "Agent names require full plugin prefix for Task tool routing",
+          "priority": "P3"
+        }
+      ]
+    },
+    {
+      "taxonomy": "external-api",
+      "occurrence_count": 78,
+      "examples": [
+        {
+          "root_cause": "Slack deprecated files.upload in favor of new 3-step upload flow (getUploadURLExternal, upload to URL, completeUploadExternal)",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Slack deprecated files.upload in favor of new 3-step upload flow (getUploadURLExternal, upload to URL, completeUploadExternal)",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Salesforce password reset emails may be delayed or filtered by email providers; System.resetPassword() API call succeeded but email delivery is external dependency",
+          "priority": "P3"
+        }
+      ]
+    },
+    {
+      "taxonomy": "prompt/LLM mismatch",
+      "occurrence_count": 43,
+      "examples": [
+        {
+          "root_cause": "PDF generator defaults to including cover page, user expected content-first layout",
+          "priority": "P3"
+        },
+        {
+          "root_cause": "Agent created custom inline CSS instead of discovering and using existing RevPal brand CSS at templates/pdf-styles/themes/revpal-brand.css",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Agent created custom inline CSS instead of discovering and using existing RevPal brand CSS at templates/pdf-styles/themes/revpal-brand.css",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "auth/permissions",
+      "occurrence_count": 32,
+      "examples": [
+        {
+          "root_cause": "Asana Personal Access Token stored in .env had expired or been revoked",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Asana Personal Access Token stored in .env had expired or been revoked",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Curl-based implementation not properly handling JSON payload for completeUploadExternal - Python requests handles Content-Type and JSON serialization correctly",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "concurrency/order",
+      "occurrence_count": 28,
+      "examples": [
+        {
+          "root_cause": "Formula fields create hard dependencies on other fields; Salesforce prevents deletion of fields used in formula calculations",
+          "priority": "P0"
+        },
+        {
+          "root_cause": "PrimaryTerritorySyncHandler.syncPrimaryTerritories() [SFDC_ID] enqueued jobs without checking if already in queueable/batch/future context where limit is 1",
+          "priority": "P0"
+        },
+        {
+          "root_cause": "PrimaryTerritorySyncHandler.syncPrimaryTerritories() [SFDC_ID] enqueued jobs without checking if already in queueable/batch/future context where limit is 1",
+          "priority": "P0"
+        }
+      ]
+    },
+    {
+      "taxonomy": "prompt/LLM-mismatch",
+      "occurrence_count": 15,
+      "examples": [
+        {
+          "root_cause": "Ambiguous request could mean either (1) use agent to deploy report OR (2) manually build report metadata - requires clarification of proper approach",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Abbreviated notation could mean cumulative (month-to-date) or period-specific - required clarification",
+          "priority": "P3"
+        },
+        {
+          "root_cause": "Ambiguous request could mean either (1) use agent to deploy report OR (2) manually build report metadata - requires clarification of proper approach",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "rate-limit",
+      "occurrence_count": 8,
+      "examples": [
+        {
+          "root_cause": "HubSpot CRM API limits property history requests to 50 records per batch, but standard batch/read supports 100",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Salesforce enforces a hard limit of 10 rule items per assignment rule (MAX_TM_RULE_ITEMS_EXCEEDED error)",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Salesforce enforces a hard limit of 10 rule items per assignment rule (MAX_TM_RULE_ITEMS_EXCEEDED error)",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "tool-contract-mismatch",
+      "occurrence_count": 4,
+      "examples": [
+        {
+          "root_cause": "Bash tool parses complex shell constructs incorrectly; nested $() and multi-line loops break",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Bash tool parses complex shell constructs incorrectly; nested $() and multi-line loops break",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "runbook-observer.js script path resolution issue - PLUGIN_ROOT variable points to plugin root but script is in /scripts/lib/ subdirectory",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "schema-parse",
+      "occurrence_count": 4,
+      "examples": [
+        {
+          "root_cause": "Flow XML loop variable syntax requires '.CurrentItem' accessor for record fields, but XML generation used incorrect '.null__NotFound' pattern",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Flow XML loop variable syntax requires '.CurrentItem' accessor for record fields, but XML generation used incorrect '.null__NotFound' pattern",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Reflection generation created 'issues' as object instead of array, breaking schema contract for Supabase submission.",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "rate-limit/timeouts",
+      "occurrence_count": 3,
+      "examples": [
+        {
+          "root_cause": "HubSpot API rate limits (100 req/10sec for search) combined with long connection timeouts cause ECONNRESET errors after ~40K records",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "HubSpot API rate limits (100 req/10sec for search) combined with long connection timeouts cause ECONNRESET errors after ~40K records",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "HubSpot API rate limits (100 req/10sec for search) combined with long connection timeouts cause ECONNRESET errors after ~40K records",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "documentation",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Current runbook documents WHAT campaigns exist but not HOW to diagnose when they fail",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Current runbook documents WHAT campaigns exist but not HOW to diagnose when they fail",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "success-pattern",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Successful pattern: Immediate pivot from WebFetch to Playwright browser automation for comprehensive documentation extraction",
+          "priority": "P3"
+        },
+        {
+          "root_cause": "Successful pattern: Immediate pivot from WebFetch to Playwright browser automation for comprehensive documentation extraction",
+          "priority": "P3"
+        }
+      ]
+    },
+    {
+      "taxonomy": "prompt/LLM",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Initial interpretation used simple 1:1 mapping (Opportunity Stage → BU Funnel Stage) without considering aggregation logic for multi-opportunity scenarios",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Initial interpretation used simple 1:1 mapping (Opportunity Stage → BU Funnel Stage) without considering aggregation logic for multi-opportunity scenarios",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "concurrency",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Background Bash processes lack progress reporting, making it impossible to estimate completion time or detect stalls",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Background Bash processes lack progress reporting, making it impossible to estimate completion time or detect stalls",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "external-api/state",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Salesforce requires 10-15 minutes to propagate new custom report types through its backend systems before they can be referenced in report metadata",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Salesforce requires 10-15 minutes to propagate new custom report types through its backend systems before they can be referenced in report metadata",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "idempotency-state",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Multiple deploy-fix-redeploy cycles without testing in UI between attempts led to confusion about what was actually deployed and what state the org was in",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Multiple deploy-fix-redeploy cycles without testing in UI between attempts led to confusion about what was actually deployed and what state the org was in",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "external-api drift",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Salesforce Metadata API doesn't support inputVariableAssignments element for Flow Quick Actions - input variable mapping must be done via UI after deployment",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Salesforce Metadata API doesn't support inputVariableAssignments element for Flow Quick Actions - input variable mapping must be done via UI after deployment",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "schema/validation",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Validation rules require Who_Set_Meeting__c and Contract_Type__c to be populated when updating Opportunity records, even when only changing AccountId",
+          "priority": "P1"
+        },
+        {
+          "root_cause": "Validation rules require Who_Set_Meeting__c and Contract_Type__c to be populated when updating Opportunity records, even when only changing AccountId",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "test/validation",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Testing validation logic"
+        },
+        {
+          "root_cause": "Testing validation logic"
+        }
+      ]
+    },
+    {
+      "taxonomy": "command-execution",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Bash tool's command parameter doesn't reliably handle complex multiline syntax with loops and conditionals when passed as single string",
+          "priority": "P2"
+        },
+        {
+          "root_cause": "Curl returns error HTML or empty response when API call fails, but exit code is 0. jq tries to parse non-JSON content. Also happens when environment variables are empty strings.",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "documentation-gap",
+      "occurrence_count": 2,
+      "examples": [
+        {
+          "root_cause": "Disconnect between user expectation (full automation) and Claude's capability limitations (requires manual SQL execution). Additionally, when manual steps ARE needed, output doesn't prioritize copy-paste convenience.",
+          "priority": "P0"
+        },
+        {
+          "root_cause": "SessionStart hooks only trigger when plugins are installed via /plugin install, not when working in the source repository. This is correct behavior but undocumented and non-obvious.",
+          "priority": "P2"
+        }
+      ]
+    },
+    {
+      "taxonomy": "positive-pattern",
+      "occurrence_count": 1,
+      "examples": [
+        {
+          "root_cause": "Renewal opportunity values were static snapshots at creation time, not synchronized with contract value changes",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "analysis-completeness",
+      "occurrence_count": 1,
+      "examples": [
+        {
+          "root_cause": "Missed scheduled paths in flow impact analysis",
+          "priority": "P0"
+        }
+      ]
+    },
+    {
+      "taxonomy": "agent-routing",
+      "occurrence_count": 1,
+      "examples": [
+        {
+          "root_cause": "Attempted direct execution instead of using specialized agents",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "supabase-schema",
+      "occurrence_count": 1,
+      "examples": [
+        {
+          "root_cause": "Supabase MCP server lacks direct SQL execution capability for DDL operations, requiring manual intervention via SQL Editor",
+          "priority": "P1"
+        }
+      ]
+    },
+    {
+      "taxonomy": "script-dependencies",
+      "occurrence_count": 1,
+      "examples": [
+        {
+          "root_cause": "Bash tool spawns new shell session that doesn't automatically source .env file or inherit environment from parent process",
+          "priority": "P1"
+        }
+      ]
+    }
+  ],
+  "new_skills_discovered": [
+    {
+      "name": "Pursuit Contact Matching CSV Processing",
+      "pattern": "Extract specific columns from multi-column enrichment CSVs using Python csv module for proper quote handling",
+      "category": "configuration",
+      "source_agent": "manual Python processing",
+      "discovered_in": "e45bfa78-42af-4ed3-bb9b-0711b958ce90",
+      "discovered_at": "2026-01-22T20:07:29.621+00:00"
+    },
+    {
+      "name": "Command vs Agent Detection",
+      "pattern": "Scan commands/ directories to build registry, check against registry before Task tool invocation, return helpful error with correct invocation method",
+      "category": "validation",
+      "source_agent": "pre-task-agent-validator.sh",
+      "discovered_in": "70d7ef68-226e-4959-a78c-6d2436b3e8da",
+      "discovered_at": "2026-01-22T19:51:04.175+00:00"
+    },
+    {
+      "name": "Skill Data Freshness Monitoring",
+      "pattern": "Check skill-data.json mtime, calculate days since last update, warn if >14 days stale, suggest /reflect to refresh",
+      "category": "[SFDC_ID]",
+      "source_agent": "ace-health-check.js",
+      "discovered_in": "70d7ef68-226e-4959-a78c-6d2436b3e8da",
+      "discovered_at": "2026-01-22T19:51:04.175+00:00"
+    },
+    {
+      "name": "Adaptive Table Orientation Selection",
+      "pattern": "Detect column count and automatically recommend portrait vs landscape",
+      "category": "configuration",
+      "source_agent": "manual_implementation",
+      "discovered_in": "694bdf06-90b8-4320-89cc-821599f3441d",
+      "discovered_at": "2026-01-22T18:58:45.312+00:00"
+    },
+    {
+      "name": "Picklist Hierarchy Navigation",
+      "pattern": "Query existing records grouped by dependent picklist fields to discover valid combinations when picklist metadata is complex",
+      "category": "configuration",
+      "source_agent": "manual SOQL queries",
+      "discovered_in": "276005a1-26d6-4ad6-a4a4-3e15e39404da",
+      "discovered_at": "2026-01-22T18:47:25.425+00:00"
+    },
+    {
+      "name": "Inline Dashboard Chart Configuration",
+      "pattern": "When creating dashboard chart components, use useReportChart=false with inline <chartSummary> (aggregate, axisBinding, column) and explicit <groupingColumn> elements to avoid dependency on report chart definitions",
+      "category": "configuration",
+      "source_agent": "sfdc-metadata",
+      "discovered_in": "13c9b2ca-2b30-4703-bc49-b13a57b5fab1",
+      "discovered_at": "2026-01-21T22:40:37.251+00:00"
+    },
+    {
+      "name": "Disqualification Reason Pattern Analysis",
+      "pattern": "Analyze disqualification reasons against actual lead data to identify systematic mis-qualification patterns (e.g., 'International' leads with US market presence)",
+      "category": "assessment",
+      "source_agent": "sfdc-query-specialist",
+      "discovered_in": "5b18b888-41af-475c-aed5-60375ea28a8c",
+      "discovered_at": "2026-01-21T22:39:43.909+00:00"
+    },
+    {
+      "name": "Field Population Pre-Flight Check",
+      "pattern": "Before executing queries with filters, check population rates for filter fields and warn if below threshold",
+      "category": "validation",
+      "source_agent": "sfdc-query-specialist",
+      "discovered_in": "5b18b888-41af-475c-aed5-60375ea28a8c",
+      "discovered_at": "2026-01-21T22:39:43.909+00:00"
+    },
+    {
+      "name": "Automation Audit Self-Verification",
+      "pattern": "When audit claims 'API limitations', challenge by exploring runbooks/scripts for existing extractors before accepting the limitation",
+      "category": "validation",
+      "source_agent": "Explore",
+      "discovered_in": "b0763322-0e02-49fd-8f71-6d671a1775c7",
+      "discovered_at": "2026-01-21T19:32:53.943+00:00"
+    },
+    {
+      "name": "Marketo Smart List Documentation Pattern",
+      "pattern": "Since Marketo API cannot query smart list criteria, document manually: 1) Screenshot smart list tab, 2) Store in runbook with date, 3) Maintain change log for modifications, 4) Include expected filter checklist",
+      "category": "documentation",
+      "source_agent": "manual analysis",
+      "discovered_in": "ffda8081-6c9b-41f4-8585-6d17842a4456",
+      "discovered_at": "2026-01-21T17:42:56.703+00:00"
+    },
+    {
+      "name": "Field Population Health Monitoring",
+      "pattern": "For routing-critical fields, establish target population % thresholds and check frequency: Company (>95%), LeadSource (>90%), Annual Revenue (>60%), MQL_Date (>40%)",
+      "category": "monitoring",
+      "source_agent": "manual analysis",
+      "discovered_in": "ffda8081-6c9b-41f4-8585-6d17842a4456",
+      "discovered_at": "2026-01-21T17:42:56.703+00:00"
+    },
+    {
+      "name": "Flow Entry Criteria Analysis",
+      "pattern": "Analyze flow <start> element for missing filterLogic/filters that could cause cascade failures on unrelated records",
+      "category": "validation",
+      "source_agent": "manual implementation",
+      "discovered_in": "1b6ea1b0-ccd1-4efd-b33b-5d5b03b9cf1e",
+      "discovered_at": "2026-01-21T16:56:53.778+00:00"
+    },
+    {
+      "name": "Flow Version Activation via Tooling API",
+      "pattern": "Use REST PATCH to /tooling/sobjects/FlowDefinition/{id} with {Metadata:{activeVersionNumber:N}} to activate deployed flow versions",
+      "category": "deployment",
+      "source_agent": "manual implementation",
+      "discovered_in": "1b6ea1b0-ccd1-4efd-b33b-5d5b03b9cf1e",
+      "discovered_at": "2026-01-21T16:56:53.778+00:00"
+    },
+    {
+      "name": "Contract EndDate Adjustment via StartDate",
+      "pattern": "To change Contract EndDate, modify StartDate (EndDate = StartDate + ContractTerm - 1 day)",
+      "category": "configuration",
+      "source_agent": "manual",
+      "discovered_in": "54eaa168-3544-4b82-9e2e-59c1f8aa67de",
+      "discovered_at": "2026-01-21T15:47:15.193+00:00"
+    },
+    {
+      "name": "Originating Opportunity Linkage Verification",
+      "pattern": "Query all Closed Won opportunities and verify ContractId is populated",
+      "category": "validation",
+      "source_agent": "manual",
+      "discovered_in": "54eaa168-3544-4b82-9e2e-59c1f8aa67de",
+      "discovered_at": "2026-01-21T15:47:15.193+00:00"
+    },
+    {
+      "name": "Audit Correction with Evidence Preservation",
+      "pattern": "When correcting audit findings: 1) Add correction notice at top of document, 2) Preserve original findings as 'legacy/superseded', 3) Add new section with corrected findings, 4) Include evidence trail",
+      "category": "documentation",
+      "source_agent": "manual implementation",
+      "discovered_in": "1a72c77a-da3b-413f-b619-78760fedaf9e",
+      "discovered_at": "2026-01-20T21:15:42.48+00:00"
+    },
+    {
+      "name": "Marketo Campaign Classification",
+      "pattern": "Classify Marketo campaigns by type (SFDC sync, funnel stage, object creation) and status (active/inactive) with last active date tracking",
+      "category": "assessment",
+      "source_agent": "opspal-marketo:marketo-instance-discovery",
+      "discovered_in": "9bb88f4c-9ca2-4cc8-a617-e72b0f759924",
+      "discovered_at": "2026-01-20T21:14:22.977+00:00"
+    },
+    {
+      "name": "Stuck Lead Detection",
+      "pattern": "Identify leads stuck in Marketo without SFDC sync by analyzing campaign status and lead metadata",
+      "category": "[SFDC_ID]",
+      "source_agent": "opspal-marketo:marketo-instance-discovery",
+      "discovered_in": "9bb88f4c-9ca2-4cc8-a617-e72b0f759924",
+      "discovered_at": "2026-01-20T21:14:22.977+00:00"
+    },
+    {
+      "name": "Asana Historical Task Backfill",
+      "pattern": "Create tasks with completed=true, due_on=historical_date, proper section membership, and assignee in single API call",
+      "category": "configuration",
+      "source_agent": "direct-execution",
+      "discovered_in": "46933fe1-8276-4c02-8ba0-61582ccaa8b0",
+      "discovered_at": "2026-01-20T21:14:22.493+00:00"
+    },
+    {
+      "name": "Asana UI [SFDC_ID]",
+      "pattern": "When user reports missing tasks, verify via API search first; common causes are completed task filters and collapsed sections",
+      "category": "[SFDC_ID]",
+      "source_agent": "direct-execution",
+      "discovered_in": "46933fe1-8276-4c02-8ba0-61582ccaa8b0",
+      "discovered_at": "2026-01-20T21:14:22.493+00:00"
+    }
+  ],
+  "pending_improvements": [
+    {
+      "reason": "149 records were blocked by duplicate rules, could be identified upfront",
+      "skill_id": "bulk-account-import",
+      "suggestion": "Add pre-import duplicate detection query as standard step",
+      "suggested_in": "e45bfa78-42af-4ed3-bb9b-0711b958ce90",
+      "suggested_at": "2026-01-22T20:07:29.621+00:00"
+    },
+    {
+      "reason": "37 Contacts failed due to pursuit_id__c uniqueness - discoverable before execution",
+      "skill_id": "bulk-contact-update",
+      "suggestion": "Add unique constraint pre-check for UPDATE operations",
+      "suggested_in": "e45bfa78-42af-4ed3-bb9b-0711b958ce90",
+      "suggested_at": "2026-01-22T20:07:29.621+00:00"
+    },
+    {
+      "reason": "Performance optimization for high-frequency Task tool usage",
+      "skill_id": "agent-alias-resolution",
+      "suggestion": "Add caching for resolved names to avoid repeated lookups",
+      "suggested_in": "70d7ef68-226e-4959-a78c-6d2436b3e8da",
+      "suggested_at": "2026-01-22T19:51:04.175+00:00"
+    },
+    {
+      "reason": "Prevent formatting issues before PDF generation",
+      "skill_id": "pdf-generation",
+      "suggestion": "Add pre-flight validation for table dimensions",
+      "suggested_in": "694bdf06-90b8-4320-89cc-821599f3441d",
+      "suggested_at": "2026-01-22T18:58:45.312+00:00"
+    },
+    {
+      "reason": "Deployed chart components that failed silently in UI due to missing report charts",
+      "skill_id": "dashboard-metadata-deployment",
+      "suggestion": "Add pre-validation step to check useReportChart setting against report chart existence",
+      "suggested_in": "13c9b2ca-2b30-4703-bc49-b13a57b5fab1",
+      "suggested_at": "2026-01-21T22:40:37.251+00:00"
+    },
+    {
+      "reason": "Would have caught AnnualRevenue issue upfront instead of requiring query iteration",
+      "skill_id": "sfdc-query-specialist-default",
+      "suggestion": "Add automatic field population check before applying filters on non-standard fields",
+      "suggested_in": "5b18b888-41af-475c-aed5-60375ea28a8c",
+      "suggested_at": "2026-01-21T22:39:43.909+00:00"
+    },
+    {
+      "reason": "Initial audit incorrectly claimed API limitations when extractors existed",
+      "skill_id": "automation-audit-comprehensive",
+      "suggestion": "Always execute Tooling API queries and include query evidence in reports; never claim 'manual verification required' without first attempting programmatic retrieval",
+      "suggested_in": "b0763322-0e02-49fd-8f71-6d671a1775c7",
+      "suggested_at": "2026-01-21T19:32:53.943+00:00"
+    },
+    {
+      "reason": "Field gaps are primary cause of routing failures but not currently checked in standard audit",
+      "skill_id": "marketo-automation-audit",
+      "suggestion": "Include routing-critical field population analysis as standard audit component",
+      "suggested_in": "ffda8081-6c9b-41f4-8585-6d17842a4456",
+      "suggested_at": "2026-01-21T17:42:56.703+00:00"
+    },
+    {
+      "reason": "Current runbooks document what exists but not how to diagnose failures",
+      "skill_id": "marketo-runbook-generation",
+      "suggestion": "Add Routing Diagnostics Playbook template as standard runbook section",
+      "suggested_in": "ffda8081-6c9b-41f4-8585-6d17842a4456",
+      "suggested_at": "2026-01-21T17:42:56.703+00:00"
+    },
+    {
+      "reason": "Deployed flows default to Draft status, causing confusion when changes don't take effect",
+      "skill_id": "flow-metadata-deployment",
+      "suggestion": "Add automatic post-deploy activation check and prompt",
+      "suggested_in": "1b6ea1b0-ccd1-4efd-b33b-5d5b03b9cf1e",
+      "suggested_at": "2026-01-21T16:56:53.778+00:00"
+    },
+    {
+      "reason": "Current agent doesn't handle backfill scenarios well - required manual API calls",
+      "skill_id": "asana-task-manager",
+      "suggestion": "Add batch task creation with historical dates support",
+      "suggested_in": "46933fe1-8276-4c02-8ba0-61582ccaa8b0",
+      "suggested_at": "2026-01-20T21:14:22.493+00:00"
+    },
+    {
+      "reason": "Agent used wrong purple (#6B2D5C vs #5F3B8C) causing user [SFDC_ID]",
+      "skill_id": "pdf-generation-branded",
+      "suggestion": "Auto-read CSS variables from revpal-brand.css instead of relying on prompt-specified hex codes",
+      "suggested_in": "f849f93d-1c1f-4f2a-b3e6-7ddcd6905001",
+      "suggested_at": "2026-01-20T19:38:12.311+00:00"
+    },
+    {
+      "reason": "User had to catch the Closed Won issue manually",
+      "skill_id": "evidence-based-dedup-analysis",
+      "suggestion": "Add automatic stage check as first step - reject Closed Won/Lost before gathering other evidence",
+      "suggested_in": "02493b5c-11dc-43d7-9125-a2db68e7da19",
+      "suggested_at": "2026-01-20T17:44:18.357+00:00"
+    },
+    {
+      "reason": "User had to manually check after duplicates were identified; should be built-in",
+      "skill_id": "duplicate-detection",
+      "suggestion": "Add automatic financial value comparison to duplicate detection output",
+      "suggested_in": "6ae3aab6-44ca-4577-9997-0d01ad516dd7",
+      "suggested_at": "2026-01-20T17:44:17.937+00:00"
+    },
+    {
+      "reason": "BDU Checkin constraint was discovered mid-execution; should be automatic",
+      "skill_id": "data-remediation-with-backup",
+      "suggestion": "Add child-record dependency check as standard pre-flight validation",
+      "suggested_in": "6ae3aab6-44ca-4577-9997-0d01ad516dd7",
+      "suggested_at": "2026-01-20T17:44:17.937+00:00"
+    },
+    {
+      "reason": "Standard fuzzy matching scores poorly on abbreviated vs full names (65% for 'PD' vs 'Police Department')",
+      "skill_id": "fuzzy-matching",
+      "suggestion": "Add abbreviation normalization as built-in pre-processing step",
+      "suggested_in": "9b6f8a0d-2a64-4a1f-aa96-2851ea8b2754",
+      "suggested_at": "2026-01-20T17:44:17.444+00:00"
+    },
+    {
+      "reason": "files.upload is deprecated and returns method_deprecated error",
+      "skill_id": "slack-integration",
+      "suggestion": "Update all Slack upload scripts to use new API pattern",
+      "suggested_in": "e4c6d7e0-22cb-4377-b9e5-984b6ae943b4",
+      "suggested_at": "2026-01-20T17:44:16.932+00:00"
+    },
+    {
+      "reason": "User needed this info to make informed deactivation decision",
+      "skill_id": "inactive-user-analysis",
+      "suggestion": "Include CreatedDate and CreatedBy fields by default in inactive user reports",
+      "suggested_in": "0587fa2f-d7ca-4f51-aa12-fcb86041652c",
+      "suggested_at": "2026-01-19T18:37:29.15+00:00"
+    },
+    {
+      "reason": "md-to-pdf has fundamental limitations with image embedding that cannot be reliably worked around",
+      "skill_id": "pdf-report-generation",
+      "suggestion": "Add Playwright-based rendering as primary method for documents with diagrams",
+      "suggested_in": "ce6329f3-1395-472b-a597-b32b6465dd60",
+      "suggested_at": "2026-01-19T18:37:28.416+00:00"
+    },
+    {
+      "reason": "WSL2 Chrome sessions frequently conflict with Playwright persistent context",
+      "skill_id": "browser-automation-resilience",
+      "suggestion": "Add automatic API fallback when Playwright browser fails to launch",
+      "suggested_in": "40d7fc0f-fd75-44cd-af72-534d71221a33",
+      "suggested_at": "2026-01-16T21:17:46.149+00:00"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "skill_improvement",
+      "priority": "high",
+      "message": "398 skills have low confidence and need improvement",
+      "skills": [
+        "bulk-account-import",
+        "bulk-contact-update",
+        "python-csv-processing",
+        "csv-data-transformation",
+        "dependent-picklist-analysis"
+      ]
+    },
+    {
+      "type": "error_pattern",
+      "priority": "high",
+      "message": "Recurring error patterns detected that should be addressed",
+      "patterns": [
+        {
+          "taxonomy": "schema/parse",
+          "occurrences": 347
+        },
+        {
+          "taxonomy": "data-quality",
+          "occurrences": 320
+        },
+        {
+          "taxonomy": "tool-contract",
+          "occurrences": 229
+        }
+      ]
+    },
+    {
+      "type": "skill_formalization",
+      "priority": "medium",
+      "message": "476 new skill patterns discovered - consider adding to skill registry",
+      "count": 476
+    }
+  ]
+}

@@ -131,6 +131,29 @@ const REPORT_TYPES = {
     coverTemplate: 'default',
     category: 'test',
     description: 'UAT Test Results'
+  },
+
+  // OKR Reports (landscape by default for table-heavy content)
+  'okr-executive': {
+    platform: 'cross-platform',
+    coverTemplate: 'okr-executive-report',
+    category: 'report',
+    description: 'OKR Executive Report',
+    landscape: true
+  },
+  'okr-status': {
+    platform: 'cross-platform',
+    coverTemplate: 'okr-executive-report',
+    category: 'report',
+    description: 'OKR Status Report',
+    landscape: true
+  },
+  'okr-retrospective': {
+    platform: 'cross-platform',
+    coverTemplate: 'okr-executive-report',
+    category: 'report',
+    description: 'OKR Retrospective Report',
+    landscape: true
   }
 };
 
@@ -294,7 +317,8 @@ class ReportService {
       renderMermaid = true,
       outputDir,
       profile,
-      theme
+      theme,
+      landscape
     } = options;
 
     // Validate inputs
@@ -352,11 +376,15 @@ class ReportService {
         verbose: this.verbose
       });
 
+      // Resolve landscape: explicit option > type config default > false
+      const resolvedLandscape = landscape !== undefined ? landscape : (typeConfig.landscape || false);
+
       await generator.convertMarkdown(mdPath, pdfPath, {
         profile: resolvedProfile,
         coverTemplate: typeConfig.coverTemplate,
         renderMermaid,
         metadata: fullMetadata,
+        landscape: resolvedLandscape,
       });
 
       // Generate BLUF summary if requested
@@ -453,7 +481,8 @@ class ReportService {
       profile,
       theme,
       toc,
-      bookmarks
+      bookmarks,
+      landscape
     } = options;
 
     const resolvedProfile = resolveStyleProfile(profile || DEFAULT_STYLE_PROFILE);
@@ -487,12 +516,15 @@ class ReportService {
       verbose: this.verbose
     });
 
+    const resolvedLandscape = landscape !== undefined ? landscape : (typeConfig.landscape || false);
+
     await generator.collate(documents, pdfPath, {
       profile: resolvedProfile,
       coverTemplate: typeConfig.coverTemplate,
       renderMermaid,
       bookmarks: bookmarks,
-      metadata: fullMetadata
+      metadata: fullMetadata,
+      landscape: resolvedLandscape,
     });
 
     const registryEntry = this.registry.add({

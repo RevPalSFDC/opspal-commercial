@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "description": "OpsPal commercial plugin marketplace for Claude Code — Salesforce, HubSpot, Marketo, and cross-platform RevOps plugins.",
   "type": "commonjs",
-  "scripts": {
-    "test": "jest",
-    "test:ci": "jest --coverage --coverageReporters=text-summary --maxWorkers=2",
-    "test:salesforce": "jest --testPathPatterns=\".claude-plugins/opspal-salesforce\"",
-    "test:hubspot": "jest --testPathPatterns=\".claude-plugins/opspal-hubspot\"",
-    "test:cross-platform": "jest --testPathPatterns=\".claude-plugins/opspal-core\""
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RevPalSFDC/opspal-commercial-plugins.git"
@@ -23,8 +17,5 @@
   "dependencies": {
     "dotenv": "~17.2.3",
     "playwright": "~1.57.0"
-  },
-  "devDependencies": {
-    "jest": "~30.2.0"
   }
 }

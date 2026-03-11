@@ -22,7 +22,8 @@ const result = await ReportService.generate({
   title: 'RevOps Assessment',
   content: markdownContent,  // OR: markdownPath: './report.md'
   includeBLUF: true,         // Generate executive summary
-  renderMermaid: true        // Render diagrams (default: true)
+  renderMermaid: true,       // Render diagrams (default: true)
+  landscape: false           // Landscape orientation (default: false, OKR types default to true)
 });
 
 // Result contains:
@@ -54,6 +55,9 @@ const result = await ReportService.generate({
 | `integration-review` | cross-platform | cross-platform-integration | review |
 | `gtm-planning` | cross-platform | gtm-planning | planning |
 | `uat-results` | cross-platform | default | test |
+| `okr-executive` | cross-platform | okr-executive-report | report (landscape) |
+| `okr-status` | cross-platform | okr-executive-report | report (landscape) |
+| `okr-retrospective` | cross-platform | okr-executive-report | report (landscape) |
 
 ### Multi-Document Collation
 
@@ -158,3 +162,4 @@ const result = await ReportService.generate({
 - ✅ Print-optimized styling
 - ✅ Report registry tracking
 - ✅ BLUF+4 executive summary (optional)
+- ✅ Landscape orientation (per-type default or explicit override)

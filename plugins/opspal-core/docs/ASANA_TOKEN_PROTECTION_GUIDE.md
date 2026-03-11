@@ -167,7 +167,7 @@ cd /home/chris/Desktop/RevPal/Agents/opspal-internal-plugins
 ./claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh \
   update \
   "2/1206945125479946/1211748909548947:4ea720672c43ff4f79742d90a61f5afa" \
-  "REDACTED_WORKSPACE_ID"
+  "<your-workspace-id>"
 
 # 2. Validate connection
 ./claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate

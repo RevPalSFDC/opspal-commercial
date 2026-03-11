@@ -1,0 +1,15 @@
+{
+  "version": "3.0.0",
+  "description": "Learning store for OKR cycle outcomes and calibration state. Records target vs actual for closed KRs to calibrate future target-setting.",
+  "_instructions": "This store is populated automatically by the okr-learning-engine agent when a cycle is closed via /okr-retrospective. Each outcome entry records the cycle, KR metric_id, planned target, actual value, and classification (hit/partial/miss). The metric_priors object accumulates Bayesian priors per metric for target calibration. Do not edit manually unless correcting a known data error.",
+  "settings": {
+    "smoothing_alpha": 0.3,
+    "minimum_cycles_for_calibration": 4,
+    "beta_prior_defaults": {
+      "alpha": 2,
+      "beta": 2
+    }
+  },
+  "metric_priors": {},
+  "outcomes": []
+}

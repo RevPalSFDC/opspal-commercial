@@ -155,6 +155,37 @@ Based on current agent configurations:
 2. Verify `resolve-hubspot-mcp.js` exists
 3. Check logs: `claude mcp logs hubspot-v4`
 
+## Known Limitations
+
+### `get_total_count` — Enumeration Property Filters Return 0
+
+**Affected Properties:** `lifecyclestage`, `hs_lead_status`, `hs_analytics_source`, and other enumeration-type properties.
+
+**Symptom:** `get_total_count` returns `0` when filtered by these properties, even when records exist.
+
+**Root Cause:** The HubSpot count endpoint does not support enumeration-type property filters; it silently returns 0 instead of an error.
+
+**Workaround — Use `hubspot_search` with `limit: 1` instead:**
+
+```
+// ❌ BROKEN — returns 0 for lifecyclestage / hs_lead_status
+get_total_count({ objectType: 'contacts', filterProperty: 'lifecyclestage', filterValue: 'lead' })
+
+// ✅ CORRECT — use hubspot-enhanced-v3 search; read total from response
+hubspot_search({
+  objectType: 'contacts',
+  filterGroups: [{
+    filters: [{ propertyName: 'lifecyclestage', operator: 'EQ', value: 'lead' }]
+  }],
+  limit: 1,
+  properties: ['lifecyclestage']
+})
+```
+
+**Safe use cases for `get_total_count`:** Unfiltered total record counts, or filters on non-enumeration properties (e.g., `createdate`, `email`, text fields).
+
+**Do NOT use `get_total_count` for:** `lifecyclestage`, `hs_lead_status`, `hs_analytics_source`, or any other HubSpot enumeration property.
+
 ## Migration Notes
 
 If you're updating an agent from a single-server pattern:

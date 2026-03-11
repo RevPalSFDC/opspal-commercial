@@ -523,7 +523,7 @@ echo $SUPABASE_ANON_KEY
 /plugindr --mcp
 
 # Check network
-curl -I https://REDACTED_SUPABASE_PROJECT.supabase.co
+curl -I $SUPABASE_URL
 ```
 
 ## FAQ

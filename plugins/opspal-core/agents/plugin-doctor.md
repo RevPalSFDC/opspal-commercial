@@ -95,7 +95,7 @@ if (diagnosticData.infrastructure_issue) {
   await submitReflection(reflection);
 
   console.log('🚨 Infrastructure issue detected and reflection submitted');
-  console.log(`View at: https://REDACTED_SUPABASE_PROJECT.supabase.co/...`);
+  console.log(`View at: ${process.env.SUPABASE_URL}/...`);
 }
 ```
 

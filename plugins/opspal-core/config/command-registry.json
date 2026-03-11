@@ -1,0 +1,2290 @@
+{
+  "commands": {
+    "gemini-consult": {
+      "plugin": "opspal-ai-consult",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-ai-consult:gemini-consult')",
+      "slashCommand": "/gemini-consult"
+    },
+    "gemini-domain-resolve": {
+      "plugin": "opspal-ai-consult",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-ai-consult:gemini-domain-resolve')",
+      "slashCommand": "/gemini-domain-resolve"
+    },
+    "gemini-link": {
+      "plugin": "opspal-ai-consult",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-ai-consult:gemini-link')",
+      "slashCommand": "/gemini-link"
+    },
+    "account-expansion": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:account-expansion')",
+      "slashCommand": "/account-expansion"
+    },
+    "ace-maintenance": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:ace-maintenance')",
+      "slashCommand": "/ace-maintenance"
+    },
+    "asana-checkpoint": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:asana-checkpoint')",
+      "slashCommand": "/asana-checkpoint"
+    },
+    "asana-link": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:asana-link')",
+      "slashCommand": "/asana-link"
+    },
+    "asana-read": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:asana-read')",
+      "slashCommand": "/asana-read"
+    },
+    "asana-update": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:asana-update')",
+      "slashCommand": "/asana-update"
+    },
+    "autofix": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:autofix')",
+      "slashCommand": "/autofix"
+    },
+    "automation-health": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:automation-health')",
+      "slashCommand": "/automation-health"
+    },
+    "automation-preflight": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:automation-preflight')",
+      "slashCommand": "/automation-preflight"
+    },
+    "bugfix": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:bugfix')",
+      "slashCommand": "/bugfix"
+    },
+    "campaign-orchestrate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:campaign-orchestrate')",
+      "slashCommand": "/campaign-orchestrate"
+    },
+    "checkdependencies": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:checkdependencies')",
+      "slashCommand": "/checkdependencies"
+    },
+    "complexity": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:complexity')",
+      "slashCommand": "/complexity"
+    },
+    "cs-ops": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:cs-ops')",
+      "slashCommand": "/cs-ops"
+    },
+    "data-health": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:data-health')",
+      "slashCommand": "/data-health"
+    },
+    "data-migrate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:data-migrate')",
+      "slashCommand": "/data-migrate"
+    },
+    "data-quality-audit": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:data-quality-audit')",
+      "slashCommand": "/data-quality-audit"
+    },
+    "dedup-companies": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:dedup-companies')",
+      "slashCommand": "/dedup-companies"
+    },
+    "deduplicate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:deduplicate')",
+      "slashCommand": "/deduplicate"
+    },
+    "diagnose-sales-funnel": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:diagnose-sales-funnel')",
+      "slashCommand": "/diagnose-sales-funnel"
+    },
+    "diagram": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:diagram')",
+      "slashCommand": "/diagram"
+    },
+    "diff-runbook": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:diff-runbook')",
+      "slashCommand": "/diff-runbook"
+    },
+    "enablement": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:enablement')",
+      "slashCommand": "/enablement"
+    },
+    "enrich-data": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:enrich-data')",
+      "slashCommand": "/enrich-data"
+    },
+    "enrich-field-dictionary": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:enrich-field-dictionary')",
+      "slashCommand": "/enrich-field-dictionary"
+    },
+    "envcheck": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:envcheck')",
+      "slashCommand": "/envcheck"
+    },
+    "exec-dashboard": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:exec-dashboard')",
+      "slashCommand": "/exec-dashboard"
+    },
+    "finishopspalupdate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:finishopspalupdate')",
+      "slashCommand": "/finishopspalupdate"
+    },
+    "fireflies-action-items": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:fireflies-action-items')",
+      "slashCommand": "/fireflies-action-items"
+    },
+    "fireflies-auth": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:fireflies-auth')",
+      "slashCommand": "/fireflies-auth"
+    },
+    "fireflies-insights": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:fireflies-insights')",
+      "slashCommand": "/fireflies-insights"
+    },
+    "fireflies-sync": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:fireflies-sync')",
+      "slashCommand": "/fireflies-sync"
+    },
+    "generate-client-briefing": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:generate-client-briefing')",
+      "slashCommand": "/generate-client-briefing"
+    },
+    "generate-field-dictionary": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:generate-field-dictionary')",
+      "slashCommand": "/generate-field-dictionary"
+    },
+    "generate-pdf": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:generate-pdf')",
+      "slashCommand": "/generate-pdf"
+    },
+    "generate-pptx": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:generate-pptx')",
+      "slashCommand": "/generate-pptx"
+    },
+    "generate-report": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:generate-report')",
+      "slashCommand": "/generate-report"
+    },
+    "generate-runbook": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:generate-runbook')",
+      "slashCommand": "/generate-runbook"
+    },
+    "gong-auth": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:gong-auth')",
+      "slashCommand": "/gong-auth"
+    },
+    "gong-competitive-intel": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:gong-competitive-intel')",
+      "slashCommand": "/gong-competitive-intel"
+    },
+    "gong-risk-report": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:gong-risk-report')",
+      "slashCommand": "/gong-risk-report"
+    },
+    "gong-sync": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:gong-sync')",
+      "slashCommand": "/gong-sync"
+    },
+    "healthcheck-hooks": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:healthcheck-hooks')",
+      "slashCommand": "/healthcheck-hooks"
+    },
+    "initialize": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:initialize')",
+      "slashCommand": "/initialize"
+    },
+    "intake-generate-form": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:intake-generate-form')",
+      "slashCommand": "/intake-generate-form"
+    },
+    "intake": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:intake')",
+      "slashCommand": "/intake"
+    },
+    "live-wire-sync-test": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:live-wire-sync-test')",
+      "slashCommand": "/live-wire-sync-test"
+    },
+    "match-domain": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:match-domain')",
+      "slashCommand": "/match-domain"
+    },
+    "migrate-schema": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:migrate-schema')",
+      "slashCommand": "/migrate-schema"
+    },
+    "n8n-lifecycle": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:n8n-lifecycle')",
+      "slashCommand": "/n8n-lifecycle"
+    },
+    "n8n-optimize": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:n8n-optimize')",
+      "slashCommand": "/n8n-optimize"
+    },
+    "n8n-status": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:n8n-status')",
+      "slashCommand": "/n8n-status"
+    },
+    "notebook-init": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:notebook-init')",
+      "slashCommand": "/notebook-init"
+    },
+    "notebook-query": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:notebook-query')",
+      "slashCommand": "/notebook-query"
+    },
+    "notebook-sync": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:notebook-sync')",
+      "slashCommand": "/notebook-sync"
+    },
+    "pdf-health": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:pdf-health')",
+      "slashCommand": "/pdf-health"
+    },
+    "pdf-read": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:pdf-read')",
+      "slashCommand": "/pdf-read"
+    },
+    "pipeline-health": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:pipeline-health')",
+      "slashCommand": "/pipeline-health"
+    },
+    "pipeline": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:pipeline')",
+      "slashCommand": "/pipeline"
+    },
+    "plan-from-spec": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:plan-from-spec')",
+      "slashCommand": "/plan-from-spec"
+    },
+    "plugindr": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:plugindr')",
+      "slashCommand": "/plugindr"
+    },
+    "pluginupdate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:pluginupdate')",
+      "slashCommand": "/pluginupdate"
+    },
+    "project-connect": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:project-connect')",
+      "slashCommand": "/project-connect"
+    },
+    "query-field-dictionary": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:query-field-dictionary')",
+      "slashCommand": "/query-field-dictionary"
+    },
+    "reflect": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:reflect')",
+      "slashCommand": "/reflect"
+    },
+    "review-queue": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:review-queue')",
+      "slashCommand": "/review-queue"
+    },
+    "route": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:route')",
+      "slashCommand": "/route"
+    },
+    "routing-compliance": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:routing-compliance')",
+      "slashCommand": "/routing-compliance"
+    },
+    "routing-health": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:routing-health')",
+      "slashCommand": "/routing-health"
+    },
+    "sales-playbook": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:sales-playbook')",
+      "slashCommand": "/sales-playbook"
+    },
+    "schedule-add": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-add')",
+      "slashCommand": "/schedule-add"
+    },
+    "schedule-disable": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-disable')",
+      "slashCommand": "/schedule-disable"
+    },
+    "schedule-enable": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-enable')",
+      "slashCommand": "/schedule-enable"
+    },
+    "schedule-list": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-list')",
+      "slashCommand": "/schedule-list"
+    },
+    "schedule-logs": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-logs')",
+      "slashCommand": "/schedule-logs"
+    },
+    "schedule-remove": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-remove')",
+      "slashCommand": "/schedule-remove"
+    },
+    "schedule-run": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-run')",
+      "slashCommand": "/schedule-run"
+    },
+    "setup-notebooklm": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:setup-notebooklm')",
+      "slashCommand": "/setup-notebooklm"
+    },
+    "silent-failure-check": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:silent-failure-check')",
+      "slashCommand": "/silent-failure-check"
+    },
+    "solution-catalog": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-catalog')",
+      "slashCommand": "/solution-catalog"
+    },
+    "solution-deploy": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-deploy')",
+      "slashCommand": "/solution-deploy"
+    },
+    "solution-info": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-info')",
+      "slashCommand": "/solution-info"
+    },
+    "solution-install": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-install')",
+      "slashCommand": "/solution-install"
+    },
+    "solution-list": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-list')",
+      "slashCommand": "/solution-list"
+    },
+    "solution-publish": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-publish')",
+      "slashCommand": "/solution-publish"
+    },
+    "solution-rollback": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-rollback')",
+      "slashCommand": "/solution-rollback"
+    },
+    "solution-validate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:solution-validate')",
+      "slashCommand": "/solution-validate"
+    },
+    "startopspalupdate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:startopspalupdate')",
+      "slashCommand": "/startopspalupdate"
+    },
+    "strategy-dashboard": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:strategy-dashboard')",
+      "slashCommand": "/strategy-dashboard"
+    },
+    "strategy-transfer": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:strategy-transfer')",
+      "slashCommand": "/strategy-transfer"
+    },
+    "sync-claudemd": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:sync-claudemd')",
+      "slashCommand": "/sync-claudemd"
+    },
+    "task-graph": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:task-graph')",
+      "slashCommand": "/task-graph"
+    },
+    "uat-build": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:uat-build')",
+      "slashCommand": "/uat-build"
+    },
+    "uat-run": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:uat-run')",
+      "slashCommand": "/uat-run"
+    },
+    "view-runbook": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:view-runbook')",
+      "slashCommand": "/view-runbook"
+    },
+    "viz": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:viz')",
+      "slashCommand": "/viz"
+    },
+    "work-index": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:work-index')",
+      "slashCommand": "/work-index"
+    },
+    "workflow-orchestrate": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:workflow-orchestrate')",
+      "slashCommand": "/workflow-orchestrate"
+    },
+    "forecast": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:forecast')",
+      "slashCommand": "/forecast"
+    },
+    "gtm-arr-waterfall": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-arr-waterfall')",
+      "slashCommand": "/gtm-arr-waterfall"
+    },
+    "gtm-comp": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-comp')",
+      "slashCommand": "/gtm-comp"
+    },
+    "gtm-data-quality": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-data-quality')",
+      "slashCommand": "/gtm-data-quality"
+    },
+    "gtm-icp-analysis": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-icp-analysis')",
+      "slashCommand": "/gtm-icp-analysis"
+    },
+    "gtm-market-size": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-market-size')",
+      "slashCommand": "/gtm-market-size"
+    },
+    "gtm-plan": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-plan')",
+      "slashCommand": "/gtm-plan"
+    },
+    "gtm-quota": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-quota')",
+      "slashCommand": "/gtm-quota"
+    },
+    "gtm-report": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-report')",
+      "slashCommand": "/gtm-report"
+    },
+    "gtm-retention": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-retention')",
+      "slashCommand": "/gtm-retention"
+    },
+    "gtm-revenue-mix": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-revenue-mix')",
+      "slashCommand": "/gtm-revenue-mix"
+    },
+    "gtm-revenue-model": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-revenue-model')",
+      "slashCommand": "/gtm-revenue-model"
+    },
+    "gtm-scenario": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-scenario')",
+      "slashCommand": "/gtm-scenario"
+    },
+    "gtm-strategy": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-strategy')",
+      "slashCommand": "/gtm-strategy"
+    },
+    "gtm-territory": {
+      "plugin": "opspal-gtm-planning",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-gtm-planning:gtm-territory')",
+      "slashCommand": "/gtm-territory"
+    },
+    "ai-search-optimize": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:ai-search-optimize')",
+      "slashCommand": "/ai-search-optimize"
+    },
+    "analyze-competitor": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:analyze-competitor')",
+      "slashCommand": "/analyze-competitor"
+    },
+    "cms-audit-pages": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:cms-audit-pages')",
+      "slashCommand": "/cms-audit-pages"
+    },
+    "cms-build-site": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:cms-build-site')",
+      "slashCommand": "/cms-build-site"
+    },
+    "cms-create-page": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:cms-create-page')",
+      "slashCommand": "/cms-create-page"
+    },
+    "cms-launch-site": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:cms-launch-site')",
+      "slashCommand": "/cms-launch-site"
+    },
+    "cms-publish-page": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:cms-publish-page')",
+      "slashCommand": "/cms-publish-page"
+    },
+    "deploy-ai-seo": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:deploy-ai-seo')",
+      "slashCommand": "/deploy-ai-seo"
+    },
+    "hs-action-add-function": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-action-add-function')",
+      "slashCommand": "/hs-action-add-function"
+    },
+    "hs-action-create": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-action-create')",
+      "slashCommand": "/hs-action-create"
+    },
+    "hs-action-list": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-action-list')",
+      "slashCommand": "/hs-action-list"
+    },
+    "hs-app-card-add": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-app-card-add')",
+      "slashCommand": "/hs-app-card-add"
+    },
+    "hs-app-create": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-app-create')",
+      "slashCommand": "/hs-app-create"
+    },
+    "hs-app-deploy": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-app-deploy')",
+      "slashCommand": "/hs-app-deploy"
+    },
+    "hs-app-validate": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-app-validate')",
+      "slashCommand": "/hs-app-validate"
+    },
+    "hs-callback-complete": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-callback-complete')",
+      "slashCommand": "/hs-callback-complete"
+    },
+    "hs-goals": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-goals')",
+      "slashCommand": "/hs-goals"
+    },
+    "hs-import-advanced": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-import-advanced')",
+      "slashCommand": "/hs-import-advanced"
+    },
+    "hs-settings-add": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hs-settings-add')",
+      "slashCommand": "/hs-settings-add"
+    },
+    "hsdedup": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hsdedup')",
+      "slashCommand": "/hsdedup"
+    },
+    "hsenrich": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hsenrich')",
+      "slashCommand": "/hsenrich"
+    },
+    "hsmerge": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hsmerge')",
+      "slashCommand": "/hsmerge"
+    },
+    "hssfdc-analyze": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hssfdc-analyze')",
+      "slashCommand": "/hssfdc-analyze"
+    },
+    "hssfdc-scrape": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hssfdc-scrape')",
+      "slashCommand": "/hssfdc-scrape"
+    },
+    "hssfdc-session-check": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hssfdc-session-check')",
+      "slashCommand": "/hssfdc-session-check"
+    },
+    "hssfdc-validate": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:hssfdc-validate')",
+      "slashCommand": "/hssfdc-validate"
+    },
+    "newhs": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:newhs')",
+      "slashCommand": "/newhs"
+    },
+    "optimize-content": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:optimize-content')",
+      "slashCommand": "/optimize-content"
+    },
+    "seo-audit": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:seo-audit')",
+      "slashCommand": "/seo-audit"
+    },
+    "seo-broken-links": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:seo-broken-links')",
+      "slashCommand": "/seo-broken-links"
+    },
+    "topic-cluster": {
+      "plugin": "opspal-hubspot",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-hubspot:topic-cluster')",
+      "slashCommand": "/topic-cluster"
+    },
+    "activity-report": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:activity-report')",
+      "slashCommand": "/activity-report"
+    },
+    "analyze-performance": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:analyze-performance')",
+      "slashCommand": "/analyze-performance"
+    },
+    "api-usage": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:api-usage')",
+      "slashCommand": "/api-usage"
+    },
+    "bulk-export-wizard": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:bulk-export-wizard')",
+      "slashCommand": "/bulk-export-wizard"
+    },
+    "clone-campaign-wizard": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:clone-campaign-wizard')",
+      "slashCommand": "/clone-campaign-wizard"
+    },
+    "configure-mql-handoff": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:configure-mql-handoff')",
+      "slashCommand": "/configure-mql-handoff"
+    },
+    "create-email-program": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:create-email-program')",
+      "slashCommand": "/create-email-program"
+    },
+    "create-nurture-program": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:create-nurture-program')",
+      "slashCommand": "/create-nurture-program"
+    },
+    "create-scoring-model": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:create-scoring-model')",
+      "slashCommand": "/create-scoring-model"
+    },
+    "create-smart-campaign": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:create-smart-campaign')",
+      "slashCommand": "/create-smart-campaign"
+    },
+    "diagnose-campaign": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:diagnose-campaign')",
+      "slashCommand": "/diagnose-campaign"
+    },
+    "diagnose-lead-routing": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:diagnose-lead-routing')",
+      "slashCommand": "/diagnose-lead-routing"
+    },
+    "extract-wizard": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:extract-wizard')",
+      "slashCommand": "/extract-wizard"
+    },
+    "launch-webinar": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:launch-webinar')",
+      "slashCommand": "/launch-webinar"
+    },
+    "lead-quality-report": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:lead-quality-report')",
+      "slashCommand": "/lead-quality-report"
+    },
+    "marketo-audit": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-audit')",
+      "slashCommand": "/marketo-audit"
+    },
+    "marketo-auth": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-auth')",
+      "slashCommand": "/marketo-auth"
+    },
+    "marketo-governance-audit": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-governance-audit')",
+      "slashCommand": "/marketo-governance-audit"
+    },
+    "marketo-instance": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-instance')",
+      "slashCommand": "/marketo-instance"
+    },
+    "marketo-leads": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-leads')",
+      "slashCommand": "/marketo-leads"
+    },
+    "marketo-logs": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-logs')",
+      "slashCommand": "/marketo-logs"
+    },
+    "marketo-preflight": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:marketo-preflight')",
+      "slashCommand": "/marketo-preflight"
+    },
+    "monitor-sync": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:monitor-sync')",
+      "slashCommand": "/monitor-sync"
+    },
+    "observability-dashboard": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:observability-dashboard')",
+      "slashCommand": "/observability-dashboard"
+    },
+    "observability-setup": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:observability-setup')",
+      "slashCommand": "/observability-setup"
+    },
+    "orchestrate-program": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:orchestrate-program')",
+      "slashCommand": "/orchestrate-program"
+    },
+    "remediate-lead-routing": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:remediate-lead-routing')",
+      "slashCommand": "/remediate-lead-routing"
+    },
+    "smart-campaign-api": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:smart-campaign-api')",
+      "slashCommand": "/smart-campaign-api"
+    },
+    "smart-list-snapshot": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:smart-list-snapshot')",
+      "slashCommand": "/smart-list-snapshot"
+    },
+    "sync-program-to-sfdc": {
+      "plugin": "opspal-marketo",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-marketo:sync-program-to-sfdc')",
+      "slashCommand": "/sync-program-to-sfdc"
+    },
+    "monday-files": {
+      "plugin": "opspal-monday",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-monday:monday-files')",
+      "slashCommand": "/monday-files"
+    },
+    "okr-align-check": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-align-check')",
+      "slashCommand": "/okr-align-check"
+    },
+    "okr-approve": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-approve')",
+      "slashCommand": "/okr-approve"
+    },
+    "okr-benchmark": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-benchmark')",
+      "slashCommand": "/okr-benchmark"
+    },
+    "okr-cadence": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-cadence')",
+      "slashCommand": "/okr-cadence"
+    },
+    "okr-dashboard": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-dashboard')",
+      "slashCommand": "/okr-dashboard"
+    },
+    "okr-generate": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-generate')",
+      "slashCommand": "/okr-generate"
+    },
+    "okr-history": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-history')",
+      "slashCommand": "/okr-history"
+    },
+    "okr-plg-signals": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-plg-signals')",
+      "slashCommand": "/okr-plg-signals"
+    },
+    "okr-prioritize": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-prioritize')",
+      "slashCommand": "/okr-prioritize"
+    },
+    "okr-report": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-report')",
+      "slashCommand": "/okr-report"
+    },
+    "okr-retrospective": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-retrospective')",
+      "slashCommand": "/okr-retrospective"
+    },
+    "okr-score-initiative": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-score-initiative')",
+      "slashCommand": "/okr-score-initiative"
+    },
+    "okr-snapshot": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-snapshot')",
+      "slashCommand": "/okr-snapshot"
+    },
+    "okr-status": {
+      "plugin": "opspal-okrs",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-okrs:okr-status')",
+      "slashCommand": "/okr-status"
+    },
+    "activate-flows": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:activate-flows')",
+      "slashCommand": "/activate-flows"
+    },
+    "analyze-decay-risk": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:analyze-decay-risk')",
+      "slashCommand": "/analyze-decay-risk"
+    },
+    "analyze-layout": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:analyze-layout')",
+      "slashCommand": "/analyze-layout"
+    },
+    "apex-logs": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:apex-logs')",
+      "slashCommand": "/apex-logs"
+    },
+    "assess-permissions": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:assess-permissions')",
+      "slashCommand": "/assess-permissions"
+    },
+    "audit-automation": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:audit-automation')",
+      "slashCommand": "/audit-automation"
+    },
+    "audit-reports": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:audit-reports')",
+      "slashCommand": "/audit-reports"
+    },
+    "bulkops": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:bulkops')",
+      "slashCommand": "/bulkops"
+    },
+    "check-trust-erosion": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:check-trust-erosion')",
+      "slashCommand": "/check-trust-erosion"
+    },
+    "compliance-report": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:compliance-report')",
+      "slashCommand": "/compliance-report"
+    },
+    "context7-status": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:context7-status')",
+      "slashCommand": "/context7-status"
+    },
+    "cpq-preflight": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:cpq-preflight')",
+      "slashCommand": "/cpq-preflight"
+    },
+    "create-permission-set": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:create-permission-set')",
+      "slashCommand": "/create-permission-set"
+    },
+    "create-trigger": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:create-trigger')",
+      "slashCommand": "/create-trigger"
+    },
+    "create-validation-rule": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:create-validation-rule')",
+      "slashCommand": "/create-validation-rule"
+    },
+    "debug-cleanup": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:debug-cleanup')",
+      "slashCommand": "/debug-cleanup"
+    },
+    "debug-start": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:debug-start')",
+      "slashCommand": "/debug-start"
+    },
+    "debug-stop": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:debug-stop')",
+      "slashCommand": "/debug-stop"
+    },
+    "dedup": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:dedup')",
+      "slashCommand": "/dedup"
+    },
+    "deploy-layout": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:deploy-layout')",
+      "slashCommand": "/deploy-layout"
+    },
+    "deploy-report-template": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:deploy-report-template')",
+      "slashCommand": "/deploy-report-template"
+    },
+    "design-layout": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:design-layout')",
+      "slashCommand": "/design-layout"
+    },
+    "diagnose-report-access": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:diagnose-report-access')",
+      "slashCommand": "/diagnose-report-access"
+    },
+    "extract-user-reports": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:extract-user-reports')",
+      "slashCommand": "/extract-user-reports"
+    },
+    "flow-add": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-add')",
+      "slashCommand": "/flow-add"
+    },
+    "flow-analyze-segments": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-analyze-segments')",
+      "slashCommand": "/flow-analyze-segments"
+    },
+    "flow-diagnose": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-diagnose')",
+      "slashCommand": "/flow-diagnose"
+    },
+    "flow-edit": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-edit')",
+      "slashCommand": "/flow-edit"
+    },
+    "flow-extract-subflow": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-extract-subflow')",
+      "slashCommand": "/flow-extract-subflow"
+    },
+    "flow-interactive-build": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-interactive-build')",
+      "slashCommand": "/flow-interactive-build"
+    },
+    "flow-logs": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-logs')",
+      "slashCommand": "/flow-logs"
+    },
+    "flow-preflight": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-preflight')",
+      "slashCommand": "/flow-preflight"
+    },
+    "flow-segment-complete": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-segment-complete')",
+      "slashCommand": "/flow-segment-complete"
+    },
+    "flow-segment-list": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-segment-list')",
+      "slashCommand": "/flow-segment-list"
+    },
+    "flow-segment-start": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-segment-start')",
+      "slashCommand": "/flow-segment-start"
+    },
+    "flow-segment-status": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-segment-status')",
+      "slashCommand": "/flow-segment-status"
+    },
+    "flow-test": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-test')",
+      "slashCommand": "/flow-test"
+    },
+    "flow-versions": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:flow-versions')",
+      "slashCommand": "/flow-versions"
+    },
+    "lead-convert": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:lead-convert')",
+      "slashCommand": "/lead-convert"
+    },
+    "monitor-logs": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:monitor-logs')",
+      "slashCommand": "/monitor-logs"
+    },
+    "playwright-test": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:playwright-test')",
+      "slashCommand": "/playwright-test"
+    },
+    "q2c-audit": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:q2c-audit')",
+      "slashCommand": "/q2c-audit"
+    },
+    "qa-execute": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:qa-execute')",
+      "slashCommand": "/qa-execute"
+    },
+    "qa-review": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:qa-review')",
+      "slashCommand": "/qa-review"
+    },
+    "routing-help": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:routing-help')",
+      "slashCommand": "/routing-help"
+    },
+    "score-actionability": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:score-actionability')",
+      "slashCommand": "/score-actionability"
+    },
+    "sfpageaudit": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:sfpageaudit')",
+      "slashCommand": "/sfpageaudit"
+    },
+    "suggest-agent": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:suggest-agent')",
+      "slashCommand": "/suggest-agent"
+    },
+    "territory-assignment-wizard": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:territory-assignment-wizard')",
+      "slashCommand": "/territory-assignment-wizard"
+    },
+    "territory-discovery": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:territory-discovery')",
+      "slashCommand": "/territory-discovery"
+    },
+    "territory-validator": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:territory-validator')",
+      "slashCommand": "/territory-validator"
+    },
+    "upsert": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:upsert')",
+      "slashCommand": "/upsert"
+    },
+    "validate-approval-framework": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:validate-approval-framework')",
+      "slashCommand": "/validate-approval-framework"
+    },
+    "validate-lwc": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:validate-lwc')",
+      "slashCommand": "/validate-lwc"
+    },
+    "win-loss": {
+      "plugin": "opspal-salesforce",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-salesforce:win-loss')",
+      "slashCommand": "/win-loss"
+    }
+  },
+  "shortToFull": {
+    "gemini-consult": "opspal-ai-consult:gemini-consult",
+    "gemini-domain-resolve": "opspal-ai-consult:gemini-domain-resolve",
+    "gemini-link": "opspal-ai-consult:gemini-link",
+    "account-expansion": "opspal-core:account-expansion",
+    "ace-maintenance": "opspal-core:ace-maintenance",
+    "asana-checkpoint": "opspal-core:asana-checkpoint",
+    "asana-link": "opspal-core:asana-link",
+    "asana-read": "opspal-core:asana-read",
+    "asana-update": "opspal-core:asana-update",
+    "autofix": "opspal-core:autofix",
+    "automation-health": "opspal-core:automation-health",
+    "automation-preflight": "opspal-core:automation-preflight",
+    "bugfix": "opspal-core:bugfix",
+    "campaign-orchestrate": "opspal-core:campaign-orchestrate",
+    "checkdependencies": "opspal-core:checkdependencies",
+    "complexity": "opspal-core:complexity",
+    "cs-ops": "opspal-core:cs-ops",
+    "data-health": "opspal-core:data-health",
+    "data-migrate": "opspal-core:data-migrate",
+    "data-quality-audit": "opspal-core:data-quality-audit",
+    "dedup-companies": "opspal-core:dedup-companies",
+    "deduplicate": "opspal-core:deduplicate",
+    "diagnose-sales-funnel": "opspal-core:diagnose-sales-funnel",
+    "diagram": "opspal-core:diagram",
+    "diff-runbook": "opspal-core:diff-runbook",
+    "enablement": "opspal-core:enablement",
+    "enrich-data": "opspal-core:enrich-data",
+    "enrich-field-dictionary": "opspal-core:enrich-field-dictionary",
+    "envcheck": "opspal-core:envcheck",
+    "exec-dashboard": "opspal-core:exec-dashboard",
+    "finishopspalupdate": "opspal-core:finishopspalupdate",
+    "fireflies-action-items": "opspal-core:fireflies-action-items",
+    "fireflies-auth": "opspal-core:fireflies-auth",
+    "fireflies-insights": "opspal-core:fireflies-insights",
+    "fireflies-sync": "opspal-core:fireflies-sync",
+    "generate-client-briefing": "opspal-core:generate-client-briefing",
+    "generate-field-dictionary": "opspal-core:generate-field-dictionary",
+    "generate-pdf": "opspal-core:generate-pdf",
+    "generate-pptx": "opspal-core:generate-pptx",
+    "generate-report": "opspal-core:generate-report",
+    "generate-runbook": "opspal-core:generate-runbook",
+    "gong-auth": "opspal-core:gong-auth",
+    "gong-competitive-intel": "opspal-core:gong-competitive-intel",
+    "gong-risk-report": "opspal-core:gong-risk-report",
+    "gong-sync": "opspal-core:gong-sync",
+    "healthcheck-hooks": "opspal-core:healthcheck-hooks",
+    "initialize": "opspal-core:initialize",
+    "intake-generate-form": "opspal-core:intake-generate-form",
+    "intake": "opspal-core:intake",
+    "live-wire-sync-test": "opspal-core:live-wire-sync-test",
+    "match-domain": "opspal-core:match-domain",
+    "migrate-schema": "opspal-core:migrate-schema",
+    "n8n-lifecycle": "opspal-core:n8n-lifecycle",
+    "n8n-optimize": "opspal-core:n8n-optimize",
+    "n8n-status": "opspal-core:n8n-status",
+    "notebook-init": "opspal-core:notebook-init",
+    "notebook-query": "opspal-core:notebook-query",
+    "notebook-sync": "opspal-core:notebook-sync",
+    "pdf-health": "opspal-core:pdf-health",
+    "pdf-read": "opspal-core:pdf-read",
+    "pipeline-health": "opspal-core:pipeline-health",
+    "pipeline": "opspal-core:pipeline",
+    "plan-from-spec": "opspal-core:plan-from-spec",
+    "plugindr": "opspal-core:plugindr",
+    "pluginupdate": "opspal-core:pluginupdate",
+    "project-connect": "opspal-core:project-connect",
+    "query-field-dictionary": "opspal-core:query-field-dictionary",
+    "reflect": "opspal-core:reflect",
+    "review-queue": "opspal-core:review-queue",
+    "route": "opspal-core:route",
+    "routing-compliance": "opspal-core:routing-compliance",
+    "routing-health": "opspal-core:routing-health",
+    "sales-playbook": "opspal-core:sales-playbook",
+    "schedule-add": "opspal-core:schedule-add",
+    "schedule-disable": "opspal-core:schedule-disable",
+    "schedule-enable": "opspal-core:schedule-enable",
+    "schedule-list": "opspal-core:schedule-list",
+    "schedule-logs": "opspal-core:schedule-logs",
+    "schedule-remove": "opspal-core:schedule-remove",
+    "schedule-run": "opspal-core:schedule-run",
+    "setup-notebooklm": "opspal-core:setup-notebooklm",
+    "silent-failure-check": "opspal-core:silent-failure-check",
+    "solution-catalog": "opspal-core:solution-catalog",
+    "solution-deploy": "opspal-core:solution-deploy",
+    "solution-info": "opspal-core:solution-info",
+    "solution-install": "opspal-core:solution-install",
+    "solution-list": "opspal-core:solution-list",
+    "solution-publish": "opspal-core:solution-publish",
+    "solution-rollback": "opspal-core:solution-rollback",
+    "solution-validate": "opspal-core:solution-validate",
+    "startopspalupdate": "opspal-core:startopspalupdate",
+    "strategy-dashboard": "opspal-core:strategy-dashboard",
+    "strategy-transfer": "opspal-core:strategy-transfer",
+    "sync-claudemd": "opspal-core:sync-claudemd",
+    "task-graph": "opspal-core:task-graph",
+    "uat-build": "opspal-core:uat-build",
+    "uat-run": "opspal-core:uat-run",
+    "view-runbook": "opspal-core:view-runbook",
+    "viz": "opspal-core:viz",
+    "work-index": "opspal-core:work-index",
+    "workflow-orchestrate": "opspal-core:workflow-orchestrate",
+    "forecast": "opspal-gtm-planning:forecast",
+    "gtm-arr-waterfall": "opspal-gtm-planning:gtm-arr-waterfall",
+    "gtm-comp": "opspal-gtm-planning:gtm-comp",
+    "gtm-data-quality": "opspal-gtm-planning:gtm-data-quality",
+    "gtm-icp-analysis": "opspal-gtm-planning:gtm-icp-analysis",
+    "gtm-market-size": "opspal-gtm-planning:gtm-market-size",
+    "gtm-plan": "opspal-gtm-planning:gtm-plan",
+    "gtm-quota": "opspal-gtm-planning:gtm-quota",
+    "gtm-report": "opspal-gtm-planning:gtm-report",
+    "gtm-retention": "opspal-gtm-planning:gtm-retention",
+    "gtm-revenue-mix": "opspal-gtm-planning:gtm-revenue-mix",
+    "gtm-revenue-model": "opspal-gtm-planning:gtm-revenue-model",
+    "gtm-scenario": "opspal-gtm-planning:gtm-scenario",
+    "gtm-strategy": "opspal-gtm-planning:gtm-strategy",
+    "gtm-territory": "opspal-gtm-planning:gtm-territory",
+    "ai-search-optimize": "opspal-hubspot:ai-search-optimize",
+    "analyze-competitor": "opspal-hubspot:analyze-competitor",
+    "cms-audit-pages": "opspal-hubspot:cms-audit-pages",
+    "cms-build-site": "opspal-hubspot:cms-build-site",
+    "cms-create-page": "opspal-hubspot:cms-create-page",
+    "cms-launch-site": "opspal-hubspot:cms-launch-site",
+    "cms-publish-page": "opspal-hubspot:cms-publish-page",
+    "deploy-ai-seo": "opspal-hubspot:deploy-ai-seo",
+    "hs-action-add-function": "opspal-hubspot:hs-action-add-function",
+    "hs-action-create": "opspal-hubspot:hs-action-create",
+    "hs-action-list": "opspal-hubspot:hs-action-list",
+    "hs-app-card-add": "opspal-hubspot:hs-app-card-add",
+    "hs-app-create": "opspal-hubspot:hs-app-create",
+    "hs-app-deploy": "opspal-hubspot:hs-app-deploy",
+    "hs-app-validate": "opspal-hubspot:hs-app-validate",
+    "hs-callback-complete": "opspal-hubspot:hs-callback-complete",
+    "hs-goals": "opspal-hubspot:hs-goals",
+    "hs-import-advanced": "opspal-hubspot:hs-import-advanced",
+    "hs-settings-add": "opspal-hubspot:hs-settings-add",
+    "hsdedup": "opspal-hubspot:hsdedup",
+    "hsenrich": "opspal-hubspot:hsenrich",
+    "hsmerge": "opspal-hubspot:hsmerge",
+    "hssfdc-analyze": "opspal-hubspot:hssfdc-analyze",
+    "hssfdc-scrape": "opspal-hubspot:hssfdc-scrape",
+    "hssfdc-session-check": "opspal-hubspot:hssfdc-session-check",
+    "hssfdc-validate": "opspal-hubspot:hssfdc-validate",
+    "newhs": "opspal-hubspot:newhs",
+    "optimize-content": "opspal-hubspot:optimize-content",
+    "seo-audit": "opspal-hubspot:seo-audit",
+    "seo-broken-links": "opspal-hubspot:seo-broken-links",
+    "topic-cluster": "opspal-hubspot:topic-cluster",
+    "activity-report": "opspal-marketo:activity-report",
+    "analyze-performance": "opspal-marketo:analyze-performance",
+    "api-usage": "opspal-marketo:api-usage",
+    "bulk-export-wizard": "opspal-marketo:bulk-export-wizard",
+    "clone-campaign-wizard": "opspal-marketo:clone-campaign-wizard",
+    "configure-mql-handoff": "opspal-marketo:configure-mql-handoff",
+    "create-email-program": "opspal-marketo:create-email-program",
+    "create-nurture-program": "opspal-marketo:create-nurture-program",
+    "create-scoring-model": "opspal-marketo:create-scoring-model",
+    "create-smart-campaign": "opspal-marketo:create-smart-campaign",
+    "diagnose-campaign": "opspal-marketo:diagnose-campaign",
+    "diagnose-lead-routing": "opspal-marketo:diagnose-lead-routing",
+    "extract-wizard": "opspal-marketo:extract-wizard",
+    "launch-webinar": "opspal-marketo:launch-webinar",
+    "lead-quality-report": "opspal-marketo:lead-quality-report",
+    "marketo-audit": "opspal-marketo:marketo-audit",
+    "marketo-auth": "opspal-marketo:marketo-auth",
+    "marketo-governance-audit": "opspal-marketo:marketo-governance-audit",
+    "marketo-instance": "opspal-marketo:marketo-instance",
+    "marketo-leads": "opspal-marketo:marketo-leads",
+    "marketo-logs": "opspal-marketo:marketo-logs",
+    "marketo-preflight": "opspal-marketo:marketo-preflight",
+    "monitor-sync": "opspal-marketo:monitor-sync",
+    "observability-dashboard": "opspal-marketo:observability-dashboard",
+    "observability-setup": "opspal-marketo:observability-setup",
+    "orchestrate-program": "opspal-marketo:orchestrate-program",
+    "remediate-lead-routing": "opspal-marketo:remediate-lead-routing",
+    "smart-campaign-api": "opspal-marketo:smart-campaign-api",
+    "smart-list-snapshot": "opspal-marketo:smart-list-snapshot",
+    "sync-program-to-sfdc": "opspal-marketo:sync-program-to-sfdc",
+    "monday-files": "opspal-monday:monday-files",
+    "okr-align-check": "opspal-okrs:okr-align-check",
+    "okr-approve": "opspal-okrs:okr-approve",
+    "okr-benchmark": "opspal-okrs:okr-benchmark",
+    "okr-cadence": "opspal-okrs:okr-cadence",
+    "okr-dashboard": "opspal-okrs:okr-dashboard",
+    "okr-generate": "opspal-okrs:okr-generate",
+    "okr-history": "opspal-okrs:okr-history",
+    "okr-plg-signals": "opspal-okrs:okr-plg-signals",
+    "okr-prioritize": "opspal-okrs:okr-prioritize",
+    "okr-report": "opspal-okrs:okr-report",
+    "okr-retrospective": "opspal-okrs:okr-retrospective",
+    "okr-score-initiative": "opspal-okrs:okr-score-initiative",
+    "okr-snapshot": "opspal-okrs:okr-snapshot",
+    "okr-status": "opspal-okrs:okr-status",
+    "activate-flows": "opspal-salesforce:activate-flows",
+    "analyze-decay-risk": "opspal-salesforce:analyze-decay-risk",
+    "analyze-layout": "opspal-salesforce:analyze-layout",
+    "apex-logs": "opspal-salesforce:apex-logs",
+    "assess-permissions": "opspal-salesforce:assess-permissions",
+    "audit-automation": "opspal-salesforce:audit-automation",
+    "audit-reports": "opspal-salesforce:audit-reports",
+    "bulkops": "opspal-salesforce:bulkops",
+    "check-trust-erosion": "opspal-salesforce:check-trust-erosion",
+    "compliance-report": "opspal-salesforce:compliance-report",
+    "context7-status": "opspal-salesforce:context7-status",
+    "cpq-preflight": "opspal-salesforce:cpq-preflight",
+    "create-permission-set": "opspal-salesforce:create-permission-set",
+    "create-trigger": "opspal-salesforce:create-trigger",
+    "create-validation-rule": "opspal-salesforce:create-validation-rule",
+    "debug-cleanup": "opspal-salesforce:debug-cleanup",
+    "debug-start": "opspal-salesforce:debug-start",
+    "debug-stop": "opspal-salesforce:debug-stop",
+    "dedup": "opspal-salesforce:dedup",
+    "deploy-layout": "opspal-salesforce:deploy-layout",
+    "deploy-report-template": "opspal-salesforce:deploy-report-template",
+    "design-layout": "opspal-salesforce:design-layout",
+    "diagnose-report-access": "opspal-salesforce:diagnose-report-access",
+    "extract-user-reports": "opspal-salesforce:extract-user-reports",
+    "flow-add": "opspal-salesforce:flow-add",
+    "flow-analyze-segments": "opspal-salesforce:flow-analyze-segments",
+    "flow-diagnose": "opspal-salesforce:flow-diagnose",
+    "flow-edit": "opspal-salesforce:flow-edit",
+    "flow-extract-subflow": "opspal-salesforce:flow-extract-subflow",
+    "flow-interactive-build": "opspal-salesforce:flow-interactive-build",
+    "flow-logs": "opspal-salesforce:flow-logs",
+    "flow-preflight": "opspal-salesforce:flow-preflight",
+    "flow-segment-complete": "opspal-salesforce:flow-segment-complete",
+    "flow-segment-list": "opspal-salesforce:flow-segment-list",
+    "flow-segment-start": "opspal-salesforce:flow-segment-start",
+    "flow-segment-status": "opspal-salesforce:flow-segment-status",
+    "flow-test": "opspal-salesforce:flow-test",
+    "flow-versions": "opspal-salesforce:flow-versions",
+    "lead-convert": "opspal-salesforce:lead-convert",
+    "monitor-logs": "opspal-salesforce:monitor-logs",
+    "playwright-test": "opspal-salesforce:playwright-test",
+    "q2c-audit": "opspal-salesforce:q2c-audit",
+    "qa-execute": "opspal-salesforce:qa-execute",
+    "qa-review": "opspal-salesforce:qa-review",
+    "routing-help": "opspal-salesforce:routing-help",
+    "score-actionability": "opspal-salesforce:score-actionability",
+    "sfpageaudit": "opspal-salesforce:sfpageaudit",
+    "suggest-agent": "opspal-salesforce:suggest-agent",
+    "territory-assignment-wizard": "opspal-salesforce:territory-assignment-wizard",
+    "territory-discovery": "opspal-salesforce:territory-discovery",
+    "territory-validator": "opspal-salesforce:territory-validator",
+    "upsert": "opspal-salesforce:upsert",
+    "validate-approval-framework": "opspal-salesforce:validate-approval-framework",
+    "validate-lwc": "opspal-salesforce:validate-lwc",
+    "win-loss": "opspal-salesforce:win-loss"
+  },
+  "fullToShort": {
+    "opspal-ai-consult:gemini-consult": "gemini-consult",
+    "opspal-ai-consult:gemini-domain-resolve": "gemini-domain-resolve",
+    "opspal-ai-consult:gemini-link": "gemini-link",
+    "opspal-core:account-expansion": "account-expansion",
+    "opspal-core:ace-maintenance": "ace-maintenance",
+    "opspal-core:asana-checkpoint": "asana-checkpoint",
+    "opspal-core:asana-link": "asana-link",
+    "opspal-core:asana-read": "asana-read",
+    "opspal-core:asana-update": "asana-update",
+    "opspal-core:autofix": "autofix",
+    "opspal-core:automation-health": "automation-health",
+    "opspal-core:automation-preflight": "automation-preflight",
+    "opspal-core:bugfix": "bugfix",
+    "opspal-core:campaign-orchestrate": "campaign-orchestrate",
+    "opspal-core:checkdependencies": "checkdependencies",
+    "opspal-core:complexity": "complexity",
+    "opspal-core:cs-ops": "cs-ops",
+    "opspal-core:data-health": "data-health",
+    "opspal-core:data-migrate": "data-migrate",
+    "opspal-core:data-quality-audit": "data-quality-audit",
+    "opspal-core:dedup-companies": "dedup-companies",
+    "opspal-core:deduplicate": "deduplicate",
+    "opspal-core:diagnose-sales-funnel": "diagnose-sales-funnel",
+    "opspal-core:diagram": "diagram",
+    "opspal-core:diff-runbook": "diff-runbook",
+    "opspal-core:enablement": "enablement",
+    "opspal-core:enrich-data": "enrich-data",
+    "opspal-core:enrich-field-dictionary": "enrich-field-dictionary",
+    "opspal-core:envcheck": "envcheck",
+    "opspal-core:exec-dashboard": "exec-dashboard",
+    "opspal-core:finishopspalupdate": "finishopspalupdate",
+    "opspal-core:fireflies-action-items": "fireflies-action-items",
+    "opspal-core:fireflies-auth": "fireflies-auth",
+    "opspal-core:fireflies-insights": "fireflies-insights",
+    "opspal-core:fireflies-sync": "fireflies-sync",
+    "opspal-core:generate-client-briefing": "generate-client-briefing",
+    "opspal-core:generate-field-dictionary": "generate-field-dictionary",
+    "opspal-core:generate-pdf": "generate-pdf",
+    "opspal-core:generate-pptx": "generate-pptx",
+    "opspal-core:generate-report": "generate-report",
+    "opspal-core:generate-runbook": "generate-runbook",
+    "opspal-core:gong-auth": "gong-auth",
+    "opspal-core:gong-competitive-intel": "gong-competitive-intel",
+    "opspal-core:gong-risk-report": "gong-risk-report",
+    "opspal-core:gong-sync": "gong-sync",
+    "opspal-core:healthcheck-hooks": "healthcheck-hooks",
+    "opspal-core:initialize": "initialize",
+    "opspal-core:intake-generate-form": "intake-generate-form",
+    "opspal-core:intake": "intake",
+    "opspal-core:live-wire-sync-test": "live-wire-sync-test",
+    "opspal-core:match-domain": "match-domain",
+    "opspal-core:migrate-schema": "migrate-schema",
+    "opspal-core:n8n-lifecycle": "n8n-lifecycle",
+    "opspal-core:n8n-optimize": "n8n-optimize",
+    "opspal-core:n8n-status": "n8n-status",
+    "opspal-core:notebook-init": "notebook-init",
+    "opspal-core:notebook-query": "notebook-query",
+    "opspal-core:notebook-sync": "notebook-sync",
+    "opspal-core:pdf-health": "pdf-health",
+    "opspal-core:pdf-read": "pdf-read",
+    "opspal-core:pipeline-health": "pipeline-health",
+    "opspal-core:pipeline": "pipeline",
+    "opspal-core:plan-from-spec": "plan-from-spec",
+    "opspal-core:plugindr": "plugindr",
+    "opspal-core:pluginupdate": "pluginupdate",
+    "opspal-core:project-connect": "project-connect",
+    "opspal-core:query-field-dictionary": "query-field-dictionary",
+    "opspal-core:reflect": "reflect",
+    "opspal-core:review-queue": "review-queue",
+    "opspal-core:route": "route",
+    "opspal-core:routing-compliance": "routing-compliance",
+    "opspal-core:routing-health": "routing-health",
+    "opspal-core:sales-playbook": "sales-playbook",
+    "opspal-core:schedule-add": "schedule-add",
+    "opspal-core:schedule-disable": "schedule-disable",
+    "opspal-core:schedule-enable": "schedule-enable",
+    "opspal-core:schedule-list": "schedule-list",
+    "opspal-core:schedule-logs": "schedule-logs",
+    "opspal-core:schedule-remove": "schedule-remove",
+    "opspal-core:schedule-run": "schedule-run",
+    "opspal-core:setup-notebooklm": "setup-notebooklm",
+    "opspal-core:silent-failure-check": "silent-failure-check",
+    "opspal-core:solution-catalog": "solution-catalog",
+    "opspal-core:solution-deploy": "solution-deploy",
+    "opspal-core:solution-info": "solution-info",
+    "opspal-core:solution-install": "solution-install",
+    "opspal-core:solution-list": "solution-list",
+    "opspal-core:solution-publish": "solution-publish",
+    "opspal-core:solution-rollback": "solution-rollback",
+    "opspal-core:solution-validate": "solution-validate",
+    "opspal-core:startopspalupdate": "startopspalupdate",
+    "opspal-core:strategy-dashboard": "strategy-dashboard",
+    "opspal-core:strategy-transfer": "strategy-transfer",
+    "opspal-core:sync-claudemd": "sync-claudemd",
+    "opspal-core:task-graph": "task-graph",
+    "opspal-core:uat-build": "uat-build",
+    "opspal-core:uat-run": "uat-run",
+    "opspal-core:view-runbook": "view-runbook",
+    "opspal-core:viz": "viz",
+    "opspal-core:work-index": "work-index",
+    "opspal-core:workflow-orchestrate": "workflow-orchestrate",
+    "opspal-data-hygiene:dedup-companies": "dedup-companies",
+    "opspal-gtm-planning:forecast": "forecast",
+    "opspal-gtm-planning:gtm-arr-waterfall": "gtm-arr-waterfall",
+    "opspal-gtm-planning:gtm-comp": "gtm-comp",
+    "opspal-gtm-planning:gtm-data-quality": "gtm-data-quality",
+    "opspal-gtm-planning:gtm-icp-analysis": "gtm-icp-analysis",
+    "opspal-gtm-planning:gtm-market-size": "gtm-market-size",
+    "opspal-gtm-planning:gtm-plan": "gtm-plan",
+    "opspal-gtm-planning:gtm-quota": "gtm-quota",
+    "opspal-gtm-planning:gtm-report": "gtm-report",
+    "opspal-gtm-planning:gtm-retention": "gtm-retention",
+    "opspal-gtm-planning:gtm-revenue-mix": "gtm-revenue-mix",
+    "opspal-gtm-planning:gtm-revenue-model": "gtm-revenue-model",
+    "opspal-gtm-planning:gtm-scenario": "gtm-scenario",
+    "opspal-gtm-planning:gtm-strategy": "gtm-strategy",
+    "opspal-gtm-planning:gtm-territory": "gtm-territory",
+    "opspal-hubspot:ai-search-optimize": "ai-search-optimize",
+    "opspal-hubspot:analyze-competitor": "analyze-competitor",
+    "opspal-hubspot:checkdependencies": "checkdependencies",
+    "opspal-hubspot:cms-audit-pages": "cms-audit-pages",
+    "opspal-hubspot:cms-build-site": "cms-build-site",
+    "opspal-hubspot:cms-create-page": "cms-create-page",
+    "opspal-hubspot:cms-launch-site": "cms-launch-site",
+    "opspal-hubspot:cms-publish-page": "cms-publish-page",
+    "opspal-hubspot:deploy-ai-seo": "deploy-ai-seo",
+    "opspal-hubspot:hs-action-add-function": "hs-action-add-function",
+    "opspal-hubspot:hs-action-create": "hs-action-create",
+    "opspal-hubspot:hs-action-list": "hs-action-list",
+    "opspal-hubspot:hs-app-card-add": "hs-app-card-add",
+    "opspal-hubspot:hs-app-create": "hs-app-create",
+    "opspal-hubspot:hs-app-deploy": "hs-app-deploy",
+    "opspal-hubspot:hs-app-validate": "hs-app-validate",
+    "opspal-hubspot:hs-callback-complete": "hs-callback-complete",
+    "opspal-hubspot:hs-goals": "hs-goals",
+    "opspal-hubspot:hs-import-advanced": "hs-import-advanced",
+    "opspal-hubspot:hs-settings-add": "hs-settings-add",
+    "opspal-hubspot:hsdedup": "hsdedup",
+    "opspal-hubspot:hsenrich": "hsenrich",
+    "opspal-hubspot:hsmerge": "hsmerge",
+    "opspal-hubspot:hssfdc-analyze": "hssfdc-analyze",
+    "opspal-hubspot:hssfdc-scrape": "hssfdc-scrape",
+    "opspal-hubspot:hssfdc-session-check": "hssfdc-session-check",
+    "opspal-hubspot:hssfdc-validate": "hssfdc-validate",
+    "opspal-hubspot:initialize": "initialize",
+    "opspal-hubspot:newhs": "newhs",
+    "opspal-hubspot:optimize-content": "optimize-content",
+    "opspal-hubspot:seo-audit": "seo-audit",
+    "opspal-hubspot:seo-broken-links": "seo-broken-links",
+    "opspal-hubspot:topic-cluster": "topic-cluster",
+    "opspal-marketo:activity-report": "activity-report",
+    "opspal-marketo:analyze-performance": "analyze-performance",
+    "opspal-marketo:api-usage": "api-usage",
+    "opspal-marketo:bulk-export-wizard": "bulk-export-wizard",
+    "opspal-marketo:clone-campaign-wizard": "clone-campaign-wizard",
+    "opspal-marketo:configure-mql-handoff": "configure-mql-handoff",
+    "opspal-marketo:create-email-program": "create-email-program",
+    "opspal-marketo:create-nurture-program": "create-nurture-program",
+    "opspal-marketo:create-scoring-model": "create-scoring-model",
+    "opspal-marketo:create-smart-campaign": "create-smart-campaign",
+    "opspal-marketo:diagnose-campaign": "diagnose-campaign",
+    "opspal-marketo:diagnose-lead-routing": "diagnose-lead-routing",
+    "opspal-marketo:extract-wizard": "extract-wizard",
+    "opspal-marketo:launch-webinar": "launch-webinar",
+    "opspal-marketo:lead-quality-report": "lead-quality-report",
+    "opspal-marketo:marketo-audit": "marketo-audit",
+    "opspal-marketo:marketo-auth": "marketo-auth",
+    "opspal-marketo:marketo-governance-audit": "marketo-governance-audit",
+    "opspal-marketo:marketo-instance": "marketo-instance",
+    "opspal-marketo:marketo-leads": "marketo-leads",
+    "opspal-marketo:marketo-logs": "marketo-logs",
+    "opspal-marketo:marketo-preflight": "marketo-preflight",
+    "opspal-marketo:monitor-sync": "monitor-sync",
+    "opspal-marketo:observability-dashboard": "observability-dashboard",
+    "opspal-marketo:observability-setup": "observability-setup",
+    "opspal-marketo:orchestrate-program": "orchestrate-program",
+    "opspal-marketo:remediate-lead-routing": "remediate-lead-routing",
+    "opspal-marketo:smart-campaign-api": "smart-campaign-api",
+    "opspal-marketo:smart-list-snapshot": "smart-list-snapshot",
+    "opspal-marketo:sync-program-to-sfdc": "sync-program-to-sfdc",
+    "opspal-monday:monday-files": "monday-files",
+    "opspal-okrs:okr-align-check": "okr-align-check",
+    "opspal-okrs:okr-approve": "okr-approve",
+    "opspal-okrs:okr-benchmark": "okr-benchmark",
+    "opspal-okrs:okr-cadence": "okr-cadence",
+    "opspal-okrs:okr-dashboard": "okr-dashboard",
+    "opspal-okrs:okr-generate": "okr-generate",
+    "opspal-okrs:okr-history": "okr-history",
+    "opspal-okrs:okr-plg-signals": "okr-plg-signals",
+    "opspal-okrs:okr-prioritize": "okr-prioritize",
+    "opspal-okrs:okr-report": "okr-report",
+    "opspal-okrs:okr-retrospective": "okr-retrospective",
+    "opspal-okrs:okr-score-initiative": "okr-score-initiative",
+    "opspal-okrs:okr-snapshot": "okr-snapshot",
+    "opspal-okrs:okr-status": "okr-status",
+    "opspal-salesforce:activate-flows": "activate-flows",
+    "opspal-salesforce:analyze-decay-risk": "analyze-decay-risk",
+    "opspal-salesforce:analyze-layout": "analyze-layout",
+    "opspal-salesforce:apex-logs": "apex-logs",
+    "opspal-salesforce:asana-link": "asana-link",
+    "opspal-salesforce:asana-update": "asana-update",
+    "opspal-salesforce:assess-permissions": "assess-permissions",
+    "opspal-salesforce:audit-automation": "audit-automation",
+    "opspal-salesforce:audit-reports": "audit-reports",
+    "opspal-salesforce:bulkops": "bulkops",
+    "opspal-salesforce:check-trust-erosion": "check-trust-erosion",
+    "opspal-salesforce:checkdependencies": "checkdependencies",
+    "opspal-salesforce:compliance-report": "compliance-report",
+    "opspal-salesforce:context7-status": "context7-status",
+    "opspal-salesforce:cpq-preflight": "cpq-preflight",
+    "opspal-salesforce:create-permission-set": "create-permission-set",
+    "opspal-salesforce:create-trigger": "create-trigger",
+    "opspal-salesforce:create-validation-rule": "create-validation-rule",
+    "opspal-salesforce:debug-cleanup": "debug-cleanup",
+    "opspal-salesforce:debug-start": "debug-start",
+    "opspal-salesforce:debug-stop": "debug-stop",
+    "opspal-salesforce:dedup": "dedup",
+    "opspal-salesforce:deploy-layout": "deploy-layout",
+    "opspal-salesforce:deploy-report-template": "deploy-report-template",
+    "opspal-salesforce:design-layout": "design-layout",
+    "opspal-salesforce:diagnose-report-access": "diagnose-report-access",
+    "opspal-salesforce:extract-user-reports": "extract-user-reports",
+    "opspal-salesforce:flow-add": "flow-add",
+    "opspal-salesforce:flow-analyze-segments": "flow-analyze-segments",
+    "opspal-salesforce:flow-diagnose": "flow-diagnose",
+    "opspal-salesforce:flow-edit": "flow-edit",
+    "opspal-salesforce:flow-extract-subflow": "flow-extract-subflow",
+    "opspal-salesforce:flow-interactive-build": "flow-interactive-build",
+    "opspal-salesforce:flow-logs": "flow-logs",
+    "opspal-salesforce:flow-preflight": "flow-preflight",
+    "opspal-salesforce:flow-segment-complete": "flow-segment-complete",
+    "opspal-salesforce:flow-segment-list": "flow-segment-list",
+    "opspal-salesforce:flow-segment-start": "flow-segment-start",
+    "opspal-salesforce:flow-segment-status": "flow-segment-status",
+    "opspal-salesforce:flow-test": "flow-test",
+    "opspal-salesforce:flow-versions": "flow-versions",
+    "opspal-salesforce:initialize": "initialize",
+    "opspal-salesforce:lead-convert": "lead-convert",
+    "opspal-salesforce:monitor-logs": "monitor-logs",
+    "opspal-salesforce:playwright-test": "playwright-test",
+    "opspal-salesforce:q2c-audit": "q2c-audit",
+    "opspal-salesforce:qa-execute": "qa-execute",
+    "opspal-salesforce:qa-review": "qa-review",
+    "opspal-salesforce:routing-help": "routing-help",
+    "opspal-salesforce:score-actionability": "score-actionability",
+    "opspal-salesforce:sfpageaudit": "sfpageaudit",
+    "opspal-salesforce:suggest-agent": "suggest-agent",
+    "opspal-salesforce:territory-assignment-wizard": "territory-assignment-wizard",
+    "opspal-salesforce:territory-discovery": "territory-discovery",
+    "opspal-salesforce:territory-validator": "territory-validator",
+    "opspal-salesforce:upsert": "upsert",
+    "opspal-salesforce:validate-approval-framework": "validate-approval-framework",
+    "opspal-salesforce:validate-lwc": "validate-lwc",
+    "opspal-salesforce:win-loss": "win-loss"
+  },
+  "conflicts": {
+    "dedup-companies": [
+      "opspal-core:dedup-companies",
+      "opspal-data-hygiene:dedup-companies"
+    ],
+    "checkdependencies": [
+      "opspal-core:checkdependencies",
+      "opspal-hubspot:checkdependencies",
+      "opspal-salesforce:checkdependencies"
+    ],
+    "initialize": [
+      "opspal-core:initialize",
+      "opspal-hubspot:initialize",
+      "opspal-salesforce:initialize"
+    ],
+    "asana-link": [
+      "opspal-core:asana-link",
+      "opspal-salesforce:asana-link"
+    ],
+    "asana-update": [
+      "opspal-core:asana-update",
+      "opspal-salesforce:asana-update"
+    ]
+  },
+  "plugins": {
+    "opspal-ai-consult": [
+      "gemini-consult",
+      "gemini-domain-resolve",
+      "gemini-link"
+    ],
+    "opspal-core": [
+      "account-expansion",
+      "ace-maintenance",
+      "asana-checkpoint",
+      "asana-link",
+      "asana-read",
+      "asana-update",
+      "autofix",
+      "automation-health",
+      "automation-preflight",
+      "bugfix",
+      "campaign-orchestrate",
+      "checkdependencies",
+      "complexity",
+      "cs-ops",
+      "data-health",
+      "data-migrate",
+      "data-quality-audit",
+      "dedup-companies",
+      "deduplicate",
+      "diagnose-sales-funnel",
+      "diagram",
+      "diff-runbook",
+      "enablement",
+      "enrich-data",
+      "enrich-field-dictionary",
+      "envcheck",
+      "exec-dashboard",
+      "finishopspalupdate",
+      "fireflies-action-items",
+      "fireflies-auth",
+      "fireflies-insights",
+      "fireflies-sync",
+      "generate-client-briefing",
+      "generate-field-dictionary",
+      "generate-pdf",
+      "generate-pptx",
+      "generate-report",
+      "generate-runbook",
+      "gong-auth",
+      "gong-competitive-intel",
+      "gong-risk-report",
+      "gong-sync",
+      "healthcheck-hooks",
+      "initialize",
+      "intake-generate-form",
+      "intake",
+      "live-wire-sync-test",
+      "match-domain",
+      "migrate-schema",
+      "n8n-lifecycle",
+      "n8n-optimize",
+      "n8n-status",
+      "notebook-init",
+      "notebook-query",
+      "notebook-sync",
+      "pdf-health",
+      "pdf-read",
+      "pipeline-health",
+      "pipeline",
+      "plan-from-spec",
+      "plugindr",
+      "pluginupdate",
+      "project-connect",
+      "query-field-dictionary",
+      "reflect",
+      "review-queue",
+      "route",
+      "routing-compliance",
+      "routing-health",
+      "sales-playbook",
+      "schedule-add",
+      "schedule-disable",
+      "schedule-enable",
+      "schedule-list",
+      "schedule-logs",
+      "schedule-remove",
+      "schedule-run",
+      "setup-notebooklm",
+      "silent-failure-check",
+      "solution-catalog",
+      "solution-deploy",
+      "solution-info",
+      "solution-install",
+      "solution-list",
+      "solution-publish",
+      "solution-rollback",
+      "solution-validate",
+      "startopspalupdate",
+      "strategy-dashboard",
+      "strategy-transfer",
+      "sync-claudemd",
+      "task-graph",
+      "uat-build",
+      "uat-run",
+      "view-runbook",
+      "viz",
+      "work-index",
+      "workflow-orchestrate"
+    ],
+    "opspal-data-hygiene": [
+      "dedup-companies"
+    ],
+    "opspal-gtm-planning": [
+      "forecast",
+      "gtm-arr-waterfall",
+      "gtm-comp",
+      "gtm-data-quality",
+      "gtm-icp-analysis",
+      "gtm-market-size",
+      "gtm-plan",
+      "gtm-quota",
+      "gtm-report",
+      "gtm-retention",
+      "gtm-revenue-mix",
+      "gtm-revenue-model",
+      "gtm-scenario",
+      "gtm-strategy",
+      "gtm-territory"
+    ],
+    "opspal-hubspot": [
+      "ai-search-optimize",
+      "analyze-competitor",
+      "checkdependencies",
+      "cms-audit-pages",
+      "cms-build-site",
+      "cms-create-page",
+      "cms-launch-site",
+      "cms-publish-page",
+      "deploy-ai-seo",
+      "hs-action-add-function",
+      "hs-action-create",
+      "hs-action-list",
+      "hs-app-card-add",
+      "hs-app-create",
+      "hs-app-deploy",
+      "hs-app-validate",
+      "hs-callback-complete",
+      "hs-goals",
+      "hs-import-advanced",
+      "hs-settings-add",
+      "hsdedup",
+      "hsenrich",
+      "hsmerge",
+      "hssfdc-analyze",
+      "hssfdc-scrape",
+      "hssfdc-session-check",
+      "hssfdc-validate",
+      "initialize",
+      "newhs",
+      "optimize-content",
+      "seo-audit",
+      "seo-broken-links",
+      "topic-cluster"
+    ],
+    "opspal-marketo": [
+      "activity-report",
+      "analyze-performance",
+      "api-usage",
+      "bulk-export-wizard",
+      "clone-campaign-wizard",
+      "configure-mql-handoff",
+      "create-email-program",
+      "create-nurture-program",
+      "create-scoring-model",
+      "create-smart-campaign",
+      "diagnose-campaign",
+      "diagnose-lead-routing",
+      "extract-wizard",
+      "launch-webinar",
+      "lead-quality-report",
+      "marketo-audit",
+      "marketo-auth",
+      "marketo-governance-audit",
+      "marketo-instance",
+      "marketo-leads",
+      "marketo-logs",
+      "marketo-preflight",
+      "monitor-sync",
+      "observability-dashboard",
+      "observability-setup",
+      "orchestrate-program",
+      "remediate-lead-routing",
+      "smart-campaign-api",
+      "smart-list-snapshot",
+      "sync-program-to-sfdc"
+    ],
+    "opspal-monday": [
+      "monday-files"
+    ],
+    "opspal-okrs": [
+      "okr-align-check",
+      "okr-approve",
+      "okr-benchmark",
+      "okr-cadence",
+      "okr-dashboard",
+      "okr-generate",
+      "okr-history",
+      "okr-plg-signals",
+      "okr-prioritize",
+      "okr-report",
+      "okr-retrospective",
+      "okr-score-initiative",
+      "okr-snapshot",
+      "okr-status"
+    ],
+    "opspal-salesforce": [
+      "activate-flows",
+      "analyze-decay-risk",
+      "analyze-layout",
+      "apex-logs",
+      "asana-link",
+      "asana-update",
+      "assess-permissions",
+      "audit-automation",
+      "audit-reports",
+      "bulkops",
+      "check-trust-erosion",
+      "checkdependencies",
+      "compliance-report",
+      "context7-status",
+      "cpq-preflight",
+      "create-permission-set",
+      "create-trigger",
+      "create-validation-rule",
+      "debug-cleanup",
+      "debug-start",
+      "debug-stop",
+      "dedup",
+      "deploy-layout",
+      "deploy-report-template",
+      "design-layout",
+      "diagnose-report-access",
+      "extract-user-reports",
+      "flow-add",
+      "flow-analyze-segments",
+      "flow-diagnose",
+      "flow-edit",
+      "flow-extract-subflow",
+      "flow-interactive-build",
+      "flow-logs",
+      "flow-preflight",
+      "flow-segment-complete",
+      "flow-segment-list",
+      "flow-segment-start",
+      "flow-segment-status",
+      "flow-test",
+      "flow-versions",
+      "initialize",
+      "lead-convert",
+      "monitor-logs",
+      "playwright-test",
+      "q2c-audit",
+      "qa-execute",
+      "qa-review",
+      "routing-help",
+      "score-actionability",
+      "sfpageaudit",
+      "suggest-agent",
+      "territory-assignment-wizard",
+      "territory-discovery",
+      "territory-validator",
+      "upsert",
+      "validate-approval-framework",
+      "validate-lwc",
+      "win-loss"
+    ]
+  },
+  "buildTime": "2026-03-02T01:28:35.091Z"
+}

@@ -281,7 +281,7 @@ node .claude-plugins/opspal-core/scripts/lib/asana-user-manager.js validate
 # 🔍 Validating Asana user mapping configuration...
 #
 # 📊 Validation Results:
-# Workspace ID: REDACTED_WORKSPACE_ID
+# Workspace ID: <your-workspace-id>
 # Agent Mappings: 8/10 configured
 # Stakeholder Roles: 5/6 configured
 #
@@ -466,7 +466,7 @@ const results = await manager.batchAddComments([
 {
   "version": "1.0.0",
   "lastUpdated": "2025-10-26",
-  "workspaceId": "REDACTED_WORKSPACE_ID",
+  "workspaceId": "<your-workspace-id>",
   "defaultAssigneeGid": null,
 
   "agentToUserMapping": {

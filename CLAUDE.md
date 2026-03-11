@@ -18,21 +18,23 @@ This repository is the **commercial distribution** of the OpsPal plugin ecosyste
 /plugin install opspal-data-hygiene  # Cross-platform dedup
 /plugin install opspal-ai-consult    # Multi-model consultation
 /plugin install opspal-mcp-client    # OpsPal MCP server client
+/plugin install opspal-okrs          # OKR lifecycle management
 ```
 
 ## Plugins
 
 | Plugin | Version | Description |
 |--------|---------|-------------|
-| **opspal-core** | 2.34.0 | Cross-platform orchestration, diagram generation, PDF/PPTX output, RevOps reporting, sales funnel diagnostics |
-| **opspal-salesforce** | 3.79.0 | CPQ/Q2C assessments, RevOps auditing, Flow management, permission orchestration, territory management, deployment automation |
-| **opspal-hubspot** | 3.7.15 | Workflow automation, contact/deal management, marketing campaigns, CMS, SEO, Service Hub, revenue intelligence |
+| **opspal-core** | 2.35.0 | Cross-platform orchestration, diagram generation, PDF/PPTX output, RevOps reporting, sales funnel diagnostics |
+| **opspal-salesforce** | 3.79.1 | CPQ/Q2C assessments, RevOps auditing, Flow management, permission orchestration, territory management, deployment automation |
+| **opspal-hubspot** | 3.7.16 | Workflow automation, contact/deal management, marketing campaigns, CMS, SEO, Service Hub, revenue intelligence |
 | **opspal-marketo** | 2.6.11 | Lead management, smart campaigns, email marketing, program architecture, analytics, lead scoring, MQL handoff |
 | **opspal-gtm-planning** | 2.1.4 | Territory design, quota modeling (Monte Carlo), compensation planning, attribution governance, strategic reporting |
 | **opspal-monday** | 1.4.5 | Monday.com file extraction, board management, task synchronization |
 | **opspal-data-hygiene** | 1.1.5 | Cross-platform deduplication for HubSpot and Salesforce, data quality validation |
 | **opspal-ai-consult** | 1.4.4 | Multi-model AI consultation (Gemini integration) |
 | **opspal-mcp-client** | 1.0.2 | Thin client for OpsPal proprietary MCP server |
+| **opspal-okrs** | 3.0.2 | OKR lifecycle management — strategy orchestration, data-driven objectives, initiative scoring, executive reporting |
 
 ## Encrypted Assets
 

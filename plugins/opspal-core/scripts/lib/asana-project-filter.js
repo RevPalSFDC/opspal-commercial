@@ -43,7 +43,7 @@ const https = require('https');
 
 class AsanaProjectFilter {
   constructor(workspaceId = null) {
-    this.workspaceId = workspaceId || process.env.ASANA_WORKSPACE_ID || 'REDACTED_WORKSPACE_ID';
+    this.workspaceId = workspaceId || process.env.ASANA_WORKSPACE_ID;
     this.token = process.env.ASANA_ACCESS_TOKEN;
 
     if (!this.token) {

@@ -143,7 +143,7 @@ Options:
       "latency": 300,
       "details": {
         "authenticated": true,
-        "endpoint": "https://REDACTED_SUPABASE_PROJECT.supabase.co"
+        "endpoint": "${SUPABASE_URL}"
       }
     },
     {

@@ -1,0 +1,43 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-okr-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load active OKR cycle context from org directory"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-okr-path-validator.sh",
+            "timeout": 5000,
+            "description": "Validate OKR output paths follow orgs/*/platforms/okr/*/ convention"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-okr-telemetry.sh",
+            "timeout": 5000,
+            "description": "Capture OKR agent telemetry to okr-telemetry.jsonl"
+          }
+        ]
+      }
+    ]
+  }
+}

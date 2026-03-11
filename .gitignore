@@ -74,7 +74,6 @@ opspal-commercial-*/
 /*.js
 /*.sh
 /*.sql
-!jest.config.js
 
 # Root-level internal docs
 /AGENTS.md
@@ -165,3 +164,36 @@ project-connect/
 dev-tools/
 dev-internal/
 commercialization/
+
+# =========================================================
+# Anti-re-accumulation: test & internal content in plugins
+# =========================================================
+
+# Test directories in plugins
+plugins/*/test/
+plugins/*/tests/
+plugins/**/__tests__/
+plugins/**/__mocks__/
+plugins/**/__fixtures__/
+plugins/*/jest.config.js
+
+# Internal ops scripts patterns
+plugins/*/scripts/*.sql
+plugins/*/scripts/*.profile
+plugins/*/scripts/PHASE*.md
+plugins/*/scripts/SECURITY_*.md
+
+# Runtime artifacts
+plugins/*/scheduler/logs/
+plugins/*/health-score.json
+plugins/*/test-*.sh
+plugins/*/test-*.js
+
+# MCP server node_modules
+plugins/*/scripts/mcp/*/node_modules/
+
+# Deprecated plugin
+plugins/opspal-data-hygiene/
+
+# Solutions templates (internal)
+solutions/
