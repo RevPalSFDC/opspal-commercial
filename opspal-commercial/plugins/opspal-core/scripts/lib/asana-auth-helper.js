@@ -13,7 +13,7 @@
 class AsanaAuthHelper {
   constructor(options = {}) {
     this.verbose = options.verbose || false;
-    this.workspaceId = options.workspaceId || process.env.ASANA_WORKSPACE_ID || 'REDACTED_WORKSPACE_ID';
+    this.workspaceId = options.workspaceId || process.env.ASANA_WORKSPACE_ID;
   }
 
   /**

@@ -1,5 +1,5 @@
 {
-  "name": "revpal-internal-plugins",
+  "name": "opspal-commercial",
   "owner": {
     "name": "RevPal Engineering",
     "email": "engineering@gorevpal.com"
@@ -9,19 +9,19 @@
       "name": "opspal-salesforce",
       "source": "./plugins/opspal-salesforce",
       "description": "Comprehensive Salesforce operations — CPQ/Q2C assessments, RevOps auditing, Flow management, permission orchestration, territory management, deployment automation.",
-      "version": "3.79.0"
+      "version": "3.79.1"
     },
     {
       "name": "opspal-hubspot",
       "source": "./plugins/opspal-hubspot",
       "description": "Full HubSpot CRM operations — workflow automation, contact/deal management, marketing campaigns, CMS, SEO, Service Hub, revenue intelligence.",
-      "version": "3.7.15"
+      "version": "3.7.16"
     },
     {
       "name": "opspal-core",
       "source": "./plugins/opspal-core",
       "description": "Cross-platform orchestration — diagram generation, PDF/PPTX output, RevOps reporting, sales funnel diagnostics, data quality, Asana integration.",
-      "version": "2.34.0"
+      "version": "2.35.0"
     },
     {
       "name": "opspal-marketo",
@@ -42,12 +42,6 @@
       "version": "1.4.5"
     },
     {
-      "name": "opspal-data-hygiene",
-      "source": "./plugins/opspal-data-hygiene",
-      "description": "Cross-platform data deduplication and hygiene for HubSpot and Salesforce.",
-      "version": "1.1.5"
-    },
-    {
       "name": "opspal-ai-consult",
       "source": "./plugins/opspal-ai-consult",
       "description": "Multi-model AI consultation with Gemini integration.",
@@ -58,10 +52,16 @@
       "source": "./plugins/opspal-mcp-client",
       "description": "Thin client for OpsPal proprietary MCP server — validation hooks and resolver only, ships no IP.",
       "version": "1.0.2"
+    },
+    {
+      "name": "opspal-okrs",
+      "source": "./plugins/opspal-okrs",
+      "description": "OKR lifecycle management — strategy orchestration, data-driven objective generation, initiative scoring, executive reporting, PLG signals, cadence management.",
+      "version": "3.0.2"
     }
   ],
   "_stats": {
     "total_plugins": 9,
-    "last_updated": "2026-03-10"
+    "last_updated": "2026-03-11"
   }
 }

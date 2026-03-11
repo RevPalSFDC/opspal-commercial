@@ -1,0 +1,55 @@
+# OKR Confidence Rating Reference — Shared Agent Fragment
+# @import this file in any agent that needs RAG status definitions or confidence bands.
+
+version: "3.0.0"
+
+rag_status:
+  green:
+    label: "On Track"
+    code: "on_track"
+    numeric_range: [0.70, 1.00]
+    description: "KR completion ≥70% of plan at this point in the cycle."
+    css_class: ".status-green"
+    color_hex: "#22C55E"
+  yellow:
+    label: "At Risk"
+    code: "at_risk"
+    numeric_range: [0.40, 0.69]
+    description: "KR completion 40-69% of plan — intervention recommended."
+    css_class: ".status-yellow"
+    color_hex: "#F59E0B"
+  red:
+    label: "Off Track"
+    code: "off_track"
+    numeric_range: [0.00, 0.39]
+    description: "KR completion <40% of plan — escalation required."
+    css_class: ".status-red"
+    color_hex: "#EF4444"
+
+confidence_bands:
+  description: "P10/P50/P90 represent the 10th, 50th, and 90th percentile outcomes."
+  display_rules:
+    - "Always show P50 as the primary value."
+    - "Show P10 and P90 as the band range in parentheses or as error bars."
+    - "When P10-to-P90 spread exceeds 40% of P50, flag as 'high uncertainty'."
+  mapping:
+    p10: "Conservative (10th percentile — 90% chance of exceeding)"
+    p50: "Expected (50th percentile — median outcome)"
+    p90: "Aggressive (90th percentile — 10% chance of exceeding)"
+
+executive_severity_states:
+  - state: "Exceeding"
+    kr_completion: ">110%"
+    action: "Celebrate, document playbook, raise next-cycle targets."
+  - state: "On Track"
+    kr_completion: "90-110%"
+    action: "Maintain cadence, no intervention needed."
+  - state: "Needs Attention"
+    kr_completion: "70-89%"
+    action: "Owner provides root-cause analysis by next check-in."
+  - state: "At Risk"
+    kr_completion: "40-69%"
+    action: "Escalate to leadership, allocate additional resources."
+  - state: "Off Track"
+    kr_completion: "<40%"
+    action: "Executive review, consider KR reset or initiative pivot."

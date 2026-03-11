@@ -124,8 +124,8 @@ Plugin Update Check - 2026-01-31
 
 ## MCP Servers
 ✅ playwright: connected (browsers installed)
-✅ supabase: connected (project: REDACTED_SUPABASE_PROJECT)
-✅ asana: connected (workspace: REDACTED_WORKSPACE_ID)
+✅ supabase: connected (project: <your-project-id>)
+✅ asana: connected (workspace: <your-workspace-id>)
 
 ## Cache Directories
 ✅ /tmp/salesforce-reports: exists

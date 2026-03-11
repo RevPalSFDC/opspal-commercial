@@ -82,21 +82,22 @@ const {
 
 const resolveChromePath = () => {
     // Cross-platform Chrome path resolution
+    const path = require('path');
     const candidates = [
         process.env.PUPPETEER_EXECUTABLE_PATH,
         process.env.CHROME_PATH,
         // macOS paths
-        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-        '/Applications/Chromium.app/Contents/MacOS/Chromium',
+        path.join('/Applications', 'Google Chrome.app', 'Contents', 'MacOS', 'Google Chrome'),
+        path.join('/Applications', 'Chromium.app', 'Contents', 'MacOS', 'Chromium'),
         // Linux paths
-        '/opt/google/chrome/chrome',
-        '/usr/bin/google-chrome',
-        '/usr/bin/google-chrome-stable',
-        '/usr/bin/chromium',
-        '/usr/bin/chromium-browser',
+        path.join('/opt', 'google', 'chrome', 'chrome'),
+        path.join('/usr', 'bin', 'google-chrome'),
+        path.join('/usr', 'bin', 'google-chrome-stable'),
+        path.join('/usr', 'bin', 'chromium'),
+        path.join('/usr', 'bin', 'chromium-browser'),
         // Windows paths (via WSL or native Node)
-        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+        path.join('C:', 'Program Files', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+        path.join('C:', 'Program Files (x86)', 'Google', 'Chrome', 'Application', 'chrome.exe')
     ].filter(Boolean);
 
     return candidates.find(candidate => fsSync.existsSync(candidate)) || null;
@@ -345,6 +346,7 @@ class PDFGenerator {
                 marked_options: markedOptions,
                 pdf_options: {
                     format: resolvedOptions.format || 'A4',
+                    landscape: resolvedOptions.landscape || false,
                     margin: margins,
                     printBackground,
                     preferCSSPageSize: true,

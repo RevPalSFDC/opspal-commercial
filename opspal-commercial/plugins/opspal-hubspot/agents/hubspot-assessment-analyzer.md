@@ -797,6 +797,10 @@ const seoFindings = {
 - False positive rate: <5%
 - Stakeholder satisfaction: >4.5/5
 
+## Known Tool Limitations
+
+- **`get_total_count` returns 0 for `lifecyclestage` and `hs_lead_status`**: Do NOT use `get_total_count` filtered on enumeration properties. Use `mcp__hubspot-enhanced-v3__hubspot_search` with `limit: 1` and read the `total` field from the response. This affects lifecycle stage breakdowns in assessment sections.
+
 ## Notes
 
 - Always maintain objectivity and evidence-based approach

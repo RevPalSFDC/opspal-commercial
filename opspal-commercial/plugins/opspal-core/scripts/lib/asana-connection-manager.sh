@@ -538,7 +538,7 @@ case "${1:-help}" in
         echo ""
         echo "Examples:"
         echo "  $0 validate"
-        echo "  $0 update 2/xxx/xxx:hash REDACTED_WORKSPACE_ID"
+        echo "  $0 update 2/xxx/xxx:hash <your-workspace-id>"
         echo "  $0 fix"
         echo "  $0 protect"
         echo ""

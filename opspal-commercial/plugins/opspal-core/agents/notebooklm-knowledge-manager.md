@@ -138,7 +138,10 @@ Steps:
 ```
 Steps:
 1. Call refresh_auth MCP tool
-2. If successful: log refresh, continue operation
+2. If refresh_auth succeeds:
+   a. Call notebook_list as a probe (lightweight auth validation)
+   b. If notebook_list succeeds: log refresh confirmed, continue operation
+   c. If notebook_list fails with auth error: treat as refresh failure (go to step 3)
 3. If failed:
    - Notify user
    - Provide instructions for notebooklm-mcp-auth re-run

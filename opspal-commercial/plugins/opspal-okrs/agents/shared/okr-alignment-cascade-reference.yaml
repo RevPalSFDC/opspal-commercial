@@ -1,0 +1,70 @@
+# OKR Alignment Cascade Reference — Shared Agent Fragment
+# @import this file in any agent that validates OKR cascade integrity.
+
+version: "3.0.0"
+
+cascade_levels:
+  - level: 1
+    name: "Company"
+    description: "Top-level strategic objectives set by the executive team."
+    max_objectives: 5
+    requires_parent: false
+  - level: 2
+    name: "Department"
+    description: "Department objectives that support company objectives."
+    max_objectives: 5
+    requires_parent: true
+    parent_level: "Company"
+  - level: 3
+    name: "Team"
+    description: "Team objectives that support department objectives."
+    max_objectives: 4
+    requires_parent: true
+    parent_level: "Department"
+  - level: 4
+    name: "Individual"
+    description: "Individual contributor objectives (optional, not scored in alignment audit)."
+    max_objectives: 3
+    requires_parent: false
+
+alignment_rules:
+  - rule: "Every department objective MUST link to exactly one company objective."
+    severity: "critical"
+    violation_code: "ORPHAN_DEPT"
+  - rule: "Every team objective MUST link to exactly one department objective."
+    severity: "critical"
+    violation_code: "ORPHAN_TEAM"
+  - rule: "Maximum cascade depth is 3 (Company → Department → Team)."
+    severity: "warning"
+    violation_code: "DEEP_CASCADE"
+  - rule: "No circular dependencies between objectives at any level."
+    severity: "critical"
+    violation_code: "CIRCULAR_DEP"
+  - rule: "Every objective MUST have a designated DRI (Directly Responsible Individual)."
+    severity: "high"
+    violation_code: "MISSING_DRI"
+  - rule: "A company objective should be supported by at least 1 department objective."
+    severity: "warning"
+    violation_code: "UNSUPPORTED_COMPANY_OBJ"
+  - rule: "Cross-functional dependencies must be explicitly declared."
+    severity: "medium"
+    violation_code: "UNDECLARED_XFUNC"
+
+orphan_detection:
+  conditions:
+    - "Objective has no parent_objective_id and is not at Company level."
+    - "Objective references a parent_objective_id that does not exist."
+    - "Objective's parent is in a different cycle."
+
+circular_dependency_blocking:
+  algorithm: "Depth-first traversal of parent_objective_id links."
+  max_traversal_depth: 10
+  action_on_detection: "HALT audit, report cycle path, mark all involved objectives as CIRCULAR_DEP."
+
+scoring:
+  total_points: 100
+  breakdown:
+    cascade_link_completeness: 40
+    dri_coverage: 25
+    no_orphans: 20
+    no_circular_dependencies: 15
