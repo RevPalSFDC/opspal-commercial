@@ -1,5 +1,8 @@
 
 # Encrypted assets (plaintext excluded from distribution)
+/config/decision-kpi-matrix.json
+/config/metric_registry.json
+/config/persona-kpi-contracts.json
 /scripts/lib/benchmark-retriever.js
 /skills/revops-assessment-framework/benchmark-standards.md
 /skills/revops-assessment-framework/scoring-frameworks.md

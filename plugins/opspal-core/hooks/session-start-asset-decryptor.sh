@@ -264,7 +264,7 @@ decrypt_plugin_assets() {
             process.exit(0);
         }
 
-        // Tier filtering: if ALLOWED_TIERS is set, only decrypt matching assets
+        // Domain filtering: if ALLOWED_TIERS is set, only decrypt matching assets
         const allowedTiersStr = process.env.ENC_ALLOWED_TIERS || "";
         const allowedTiers = allowedTiersStr ? allowedTiersStr.split(",").filter(Boolean) : null;
 
@@ -276,14 +276,15 @@ decrypt_plugin_assets() {
                 continue;
             }
 
-            // Tier gate: if license-based filtering is active, check required_tier
+            // License gate: allowed_asset_tiers now carries domain names.
             if (allowedTiers) {
-                const requiredTier = asset.required_tier || "tier3"; // default to tier3 if unset
+                const requiredTier = asset.required_domain || asset.required_tier || "core";
                 if (!allowedTiers.includes(requiredTier)) {
                     results.push({
                         path: asset.path,
                         status: "tier_blocked",
                         required_tier: requiredTier,
+                        required_domain: requiredTier,
                         allowed_tiers: allowedTiers
                     });
                     continue;

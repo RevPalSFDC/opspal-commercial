@@ -12,7 +12,8 @@
         "SessionStart"
       ],
       "required_domain": "salesforce",
-      "required_tier": "salesforce"
+      "required_tier": "salesforce",
+      "checksum_plaintext": "sha256:f7ea721790d320f6598c22a73537f089cc4eb2206146a7a29f40433a92116011"
     },
     {
       "path": "config/metric_registry.json",
@@ -23,7 +24,8 @@
         "SessionStart"
       ],
       "required_domain": "salesforce",
-      "required_tier": "salesforce"
+      "required_tier": "salesforce",
+      "checksum_plaintext": "sha256:5160ad7b988592e83047d568dbe433895f9952daa88a491ee96a9246b7166143"
     },
     {
       "path": "config/persona-kpi-contracts.json",
@@ -34,7 +36,8 @@
         "SessionStart"
       ],
       "required_domain": "salesforce",
-      "required_tier": "salesforce"
+      "required_tier": "salesforce",
+      "checksum_plaintext": "sha256:33786372d73f779e73d142b7cdfcbc4b3b332fcd19399c04dca00eec15b56f3a"
     },
     {
       "path": "scripts/lib/agent-risk-scorer.js",
