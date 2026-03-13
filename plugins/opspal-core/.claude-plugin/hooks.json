@@ -21,6 +21,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/intake-suggestion.sh",
             "timeout": 5000,
             "description": "Suggest /intake for project-level requests using complexity scoring and language detection"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/routing-context-refresher.sh",
+            "timeout": 3000,
+            "description": "Inject condensed routing reminder after context compaction or periodically"
           }
         ]
       }
@@ -78,12 +84,6 @@
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
-            "timeout": 5000,
-            "description": "Validate tool inputs against contracts before execution"
-          },
-          {
-            "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
             "timeout": 8000,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
@@ -112,12 +112,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
-            "timeout": 5000,
-            "description": "Validate tool inputs against contracts before execution"
-          },
-          {
-            "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
             "timeout": 8000,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
@@ -127,12 +121,6 @@
       {
         "matcher": "mcp__salesforce*",
         "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
-            "timeout": 5000,
-            "description": "Validate tool inputs against contracts before execution"
-          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
@@ -146,12 +134,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
-            "timeout": 5000,
-            "description": "Validate tool inputs against contracts before execution"
-          },
-          {
-            "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
             "timeout": 8000,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
@@ -163,15 +145,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
-            "timeout": 5000,
-            "description": "Validate tool inputs against contracts before execution"
-          },
-          {
-            "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
             "timeout": 8000,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool inputs against contracts before execution"
           }
         ]
       },

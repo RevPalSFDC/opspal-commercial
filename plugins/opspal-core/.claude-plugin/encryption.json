@@ -12,7 +12,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:e5217d87373f8b330b3c07b3a6a4c825c2d3091b2059a1517ffec81441cdb59d"
     },
     {
       "path": "config/complexity-rubric.json",
@@ -35,7 +36,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:246912eb478069a44fb3b6fabc0d048e962552ce2e36e8cf4f6e4a3282e4ea37"
     },
     {
       "path": "config/intelligent-intake-rubric.json",
@@ -58,7 +60,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:5d35069599a9a4c3d7f99562bf1487408b308fa1187d910e482e6e5579911472"
     },
     {
       "path": "config/persona-definitions.json",
@@ -69,7 +72,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:f9faac6e219d3f231bb8ace0231faccf193b0bb446256f7b54ceb58238b7f45b"
     },
     {
       "path": "config/revops-kpi-definitions.json",
@@ -80,7 +84,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:ceffcfa19b628981c51f53e6a4bf4bc1244f7967bd125a150e42947efa541358"
     },
     {
       "path": "config/sales-benchmarks.json",
@@ -107,6 +112,78 @@
       "checksum_plaintext": "sha256:11812eb615229f6e6c2282410adf91a53a488448e8f6bdb7238674fb69458b89"
     },
     {
+      "path": "config/default-comp-plan.json",
+      "encrypted_path": "config/default-comp-plan.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "core",
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:5bc5c39ce186cab8ab024f36dc54833e408b7f5ba6510d092abd94dbb9b5ba9b"
+    },
+    {
+      "path": "config/diagnostic-capability-registry.json",
+      "encrypted_path": "config/diagnostic-capability-registry.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "core",
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:db12fe417a3038d48d05235979106f7c8866cc80e402eaf77318376a397fed88"
+    },
+    {
+      "path": "config/master-template-registry.json",
+      "encrypted_path": "config/master-template-registry.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "core",
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:c2f80fa9c684119d213e417c812b82d4a3e5ea9827cca65449e492deceda3bf1"
+    },
+    {
+      "path": "config/routing-patterns.json",
+      "encrypted_path": "config/routing-patterns.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "core",
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:1c828e882be8ddd53fc5af6abbe5793ef9829d9173b71dd89ba34ac492840467"
+    },
+    {
+      "path": "config/skill-data.json",
+      "encrypted_path": "config/skill-data.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "core",
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:8bbb2b4ba7cdeb51d0d89fbfc034760321fbdae9b33adcd56b4111455dec6e93"
+    },
+    {
+      "path": "config/slide-selection-rules.json",
+      "encrypted_path": "config/slide-selection-rules.json.enc",
+      "asset_type": "config",
+      "sensitivity": "high",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "required_domain": "core",
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:8d5d4a489709bdaa896157e85b1eafed4c01afcf2394a7144ae21b35e18409c0"
+    },
+    {
       "path": "scripts/lib/benchmark-retriever.js",
       "encrypted_path": "scripts/lib/benchmark-retriever.js.enc",
       "asset_type": "script",
@@ -127,7 +204,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:d1d15df1e5a7dc251ff8e51ee49f7da7404fcb66324a9e39bc8ba4d9dae141d2"
     },
     {
       "path": "scripts/lib/complexity-scorer.js",
@@ -162,7 +240,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:283e0c60e580cd6333d1dce5748f0c16760e60df64ce6ee429c4bafef107c8c3"
     },
     {
       "path": "scripts/lib/gong-risk-analyzer.js",
@@ -173,7 +252,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:27cbe92926fa62bcae9e612d30864fa71dd7b075ef7cc86924966f8b2710b8a6"
     },
     {
       "path": "scripts/lib/methodology-generator.js",
@@ -196,7 +276,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:989439eff21a1a8c278a0da0d01ea03f23adb6083277dcfaab0ee78c4c4b7e05"
     },
     {
       "path": "scripts/lib/revops-kpi-knowledge-base.js",
@@ -207,7 +288,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:06d64e96cb400baf42e6ec0a522e2e16a2acf83c6e82d056b9af0bd7d509af07"
     },
     {
       "path": "scripts/lib/sales-benchmark-engine.js",
@@ -230,7 +312,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:dd39eb60e1066dd4028214f5a089314ad695adb46d76503f74fda79df877bbc2"
     },
     {
       "path": "scripts/lib/scoring/bayesian-confidence.js",
@@ -241,7 +324,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:e35559599dd19c64a57ec94865e41bea940b37c474db89e5748af561d75be354"
     },
     {
       "path": "scripts/lib/scoring/contextual-weighter.js",
@@ -252,7 +336,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:e8a660411089a3a1ff77be54ad8737c53fa181ba052470a6812e66a933a7d5f1"
     },
     {
       "path": "scripts/lib/scoring/signal-correlation-matrix.js",
@@ -263,7 +348,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:3e1e68f89fe1072a096d347d68a90638cd937857ed5298bb4a0f56cbebd0a0b6"
     },
     {
       "path": "scripts/lib/scoring/smart-scorer.js",
@@ -286,7 +372,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:b87720e1ec369ec57470cf14b6edb5f720868dab03663318e8645338a3fd8dc7"
     },
     {
       "path": "skills/sales-funnel-diagnostic/benchmark-data.md",
@@ -297,7 +384,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:e8c53d2386c9eac2085aa20ba082a5b6883e7426af59ced332c1cdc8dd1c2661"
     },
     {
       "path": "skills/sales-funnel-diagnostic/remediation-guide.md",
@@ -308,7 +396,8 @@
         "SessionStart"
       ],
       "required_domain": "core",
-      "required_tier": "core"
+      "required_tier": "core",
+      "checksum_plaintext": "sha256:a3b0b5750005d109588b9102ec2a269c7751c6a0d4e94073a61d5ef87c39bdcf"
     }
   ],
   "cleanup_on_stop": true,

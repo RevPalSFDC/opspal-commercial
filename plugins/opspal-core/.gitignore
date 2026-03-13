@@ -1,13 +1,36 @@
 data/
 
 # Encrypted assets (plaintext excluded from distribution)
+/config/anomaly-patterns.json
+/config/default-comp-plan.json
+/config/diagnostic-capability-registry.json
 /config/complexity-rubric.json
+/config/funnel-stage-definitions.json
 /config/intelligent-intake-rubric.json
+/config/market-matching-rules.json
+/config/master-template-registry.json
+/config/persona-definitions.json
+/config/revops-kpi-definitions.json
+/config/routing-patterns.json
 /config/sales-benchmarks.json
 /config/scoring-weights.json
+/config/skill-data.json
+/config/slide-selection-rules.json
 /scripts/lib/benchmark-retriever.js
+/scripts/lib/cohort-analysis-engine.js
 /scripts/lib/complexity-scorer.js
 /scripts/lib/expansion-opportunity-scorer.js
+/scripts/lib/funnel-diagnostics-engine.js
+/scripts/lib/gong-risk-analyzer.js
 /scripts/lib/methodology-generator.js
+/scripts/lib/proposal-persona-engine.js
+/scripts/lib/revops-kpi-knowledge-base.js
 /scripts/lib/sales-benchmark-engine.js
+/scripts/lib/sales-funnel-metrics-collector.js
+/scripts/lib/scoring/bayesian-confidence.js
+/scripts/lib/scoring/contextual-weighter.js
+/scripts/lib/scoring/signal-correlation-matrix.js
 /scripts/lib/scoring/smart-scorer.js
+/skills/sales-funnel-diagnostic/analysis-patterns.md
+/skills/sales-funnel-diagnostic/benchmark-data.md
+/skills/sales-funnel-diagnostic/remediation-guide.md
