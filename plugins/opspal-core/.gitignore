@@ -1,4 +1,5 @@
 data/
+.audit-logs/
 
 # Encrypted assets (plaintext excluded from distribution)
 /config/anomaly-patterns.json
