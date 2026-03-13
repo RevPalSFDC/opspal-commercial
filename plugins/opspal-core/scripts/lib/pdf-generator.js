@@ -16,16 +16,55 @@
  * @date 2025-12-25
  */
 
-// Dependency check with helpful error messages
-const requiredModules = ['md-to-pdf', 'pdf-lib'];
-for (const mod of requiredModules) {
-  try {
-    require.resolve(mod);
-  } catch (e) {
-    const pluginRoot = require('path').resolve(__dirname, '../..');
-    const wrapperScript = require('path').join(__dirname, '..', 'generate-pdf.sh');
+const fs = require('fs').promises;
+const fsSync = require('fs');
+const path = require('path');
+const { verifyBranding, logVerification } = require('./pdf-branding-verifier');
+const { parseCliArgs, printCliUsage } = require('./pdf-cli-parser');
+const {
+    STYLE_PROFILES,
+    DEFAULT_STYLE_PROFILE,
+    CANONICAL_THEME,
+    resolveStyleProfile,
+    getProfileConfig,
+    assertNoLegacyStyleOverrides
+} = require('./pdf-style-policy');
 
-    // Use colors if terminal supports it
+const REQUIRED_PDF_MODULES = ['md-to-pdf', 'pdf-lib'];
+let cachedPdfDependencies = null;
+let StyleManager = null;
+let TemplateEngine = null;
+
+function getStyleManagerClass() {
+    if (!StyleManager) {
+        StyleManager = require('./style-manager');
+    }
+    return StyleManager;
+}
+
+function getTemplateEngineClass() {
+    if (!TemplateEngine) {
+        TemplateEngine = require('./template-engine');
+    }
+    return TemplateEngine;
+}
+
+function buildMissingDependencyError(mod, cause) {
+    const pluginRoot = path.resolve(__dirname, '../..');
+    const wrapperScript = path.join(__dirname, '..', 'generate-pdf.sh');
+    const error = new Error(
+        `Missing dependency "${mod}". Use ${wrapperScript} or install dependencies in ${pluginRoot}.`
+    );
+    error.code = 'PDF_DEPENDENCY_MISSING';
+    error.missingDependency = mod;
+    error.pluginRoot = pluginRoot;
+    error.wrapperScript = wrapperScript;
+    error.cause = cause;
+    return error;
+}
+
+function printMissingDependencyHelp(error) {
+    const { missingDependency: mod, pluginRoot, wrapperScript } = error;
     const isTerminal = process.stderr.isTTY;
     const RED = isTerminal ? '\x1b[1;31m' : '';
     const YELLOW = isTerminal ? '\x1b[1;33m' : '';
@@ -58,27 +97,33 @@ for (const mod of requiredModules) {
     console.error('');
     console.error(`${RED}Do NOT invoke directly with: node ${__filename}${RESET}`);
     console.error('');
-    process.exit(1);
-  }
 }
 
-const fs = require('fs').promises;
-const fsSync = require('fs');
-const path = require('path');
-const { mdToPdf } = require('md-to-pdf');
-const { PDFDocument } = require('pdf-lib');
-const StyleManager = require('./style-manager');
-const TemplateEngine = require('./template-engine');
-const { verifyBranding, logVerification } = require('./pdf-branding-verifier');
-const { parseCliArgs, printCliUsage } = require('./pdf-cli-parser');
-const {
-    STYLE_PROFILES,
-    DEFAULT_STYLE_PROFILE,
-    CANONICAL_THEME,
-    resolveStyleProfile,
-    getProfileConfig,
-    assertNoLegacyStyleOverrides
-} = require('./pdf-style-policy');
+function loadPdfDependencies(options = {}) {
+    if (cachedPdfDependencies) {
+        return cachedPdfDependencies;
+    }
+
+    for (const mod of REQUIRED_PDF_MODULES) {
+        try {
+            require.resolve(mod);
+        } catch (error) {
+            const missingDependencyError = buildMissingDependencyError(mod, error);
+            if (options.exitOnMissing) {
+                printMissingDependencyHelp(missingDependencyError);
+                process.exit(1);
+            }
+            throw missingDependencyError;
+        }
+    }
+
+    cachedPdfDependencies = {
+        mdToPdf: require('md-to-pdf').mdToPdf,
+        PDFDocument: require('pdf-lib').PDFDocument
+    };
+
+    return cachedPdfDependencies;
+}
 
 const resolveChromePath = () => {
     // Cross-platform Chrome path resolution
@@ -118,23 +163,16 @@ class PDFGenerator {
     constructor(options = {}) {
         this.verbose = options.verbose || false;
         this.tempDir = options.tempDir || path.join(__dirname, '../../.temp/pdf-generation');
+        this.brandingOptions = options.branding || {};
         if (options.theme && options.theme !== CANONICAL_THEME) {
             throw new Error(
                 `Theme overrides are disabled. Use the canonical PDF theme "${CANONICAL_THEME}".`
             );
         }
 
-        // Initialize style manager with RevPal brand theme and default branding
-        this.styleManager = new StyleManager({
-            verbose: this.verbose,
-            theme: CANONICAL_THEME,
-            branding: { ...StyleManager.getDefaultBranding(), ...(options.branding || {}) }
-        });
-
-        // Initialize template engine
-        this.templateEngine = new TemplateEngine({
-            verbose: this.verbose
-        });
+        // PDF helper classes pull in optional dependencies, so initialize lazily.
+        this.styleManager = null;
+        this.templateEngine = null;
 
         // Default feature flags
         this.defaultFeatures = {
@@ -158,6 +196,33 @@ class PDFGenerator {
             [STYLE_PROFILES.COVER_TOC]: getProfileConfig(STYLE_PROFILES.COVER_TOC),
             [STYLE_PROFILES.SIMPLE]: getProfileConfig(STYLE_PROFILES.SIMPLE)
         };
+    }
+
+    _getStyleManager() {
+        if (!this.styleManager) {
+            const StyleManagerClass = getStyleManagerClass();
+            this.styleManager = new StyleManagerClass({
+                verbose: this.verbose,
+                theme: CANONICAL_THEME,
+                branding: {
+                    ...StyleManagerClass.getDefaultBranding(),
+                    ...this.brandingOptions
+                }
+            });
+        }
+
+        return this.styleManager;
+    }
+
+    _getTemplateEngine() {
+        if (!this.templateEngine) {
+            const TemplateEngineClass = getTemplateEngineClass();
+            this.templateEngine = new TemplateEngineClass({
+                verbose: this.verbose
+            });
+        }
+
+        return this.templateEngine;
     }
 
     /**
@@ -226,6 +291,8 @@ class PDFGenerator {
      */
     async convertMarkdown(inputPath, outputPath, options = {}) {
         try {
+            const { mdToPdf } = loadPdfDependencies();
+
             if (this.verbose) {
                 console.log(`📄 Converting ${path.basename(inputPath)} to PDF...`);
             }
@@ -629,7 +696,8 @@ class PDFGenerator {
         const templatePath = path.join(__dirname, `../../templates/pdf-covers/${coverTemplate}.md`);
 
         // Get default branding for logo
-        const defaultBranding = StyleManager.getDefaultBranding();
+        const StyleManagerClass = getStyleManagerClass();
+        const defaultBranding = StyleManagerClass.getDefaultBranding();
         const logoPath = options.branding?.logo?.path || defaultBranding.logo.path;
 
         // Convert logo to base64 data URI for reliable PDF rendering
@@ -663,7 +731,7 @@ class PDFGenerator {
         try {
             // Try to use template file
             const templateContent = await fs.readFile(templatePath, 'utf8');
-            return await this.templateEngine.render(templateContent, data);
+            return await this._getTemplateEngine().render(templateContent, data);
         } catch (e) {
             // Fallback to basic cover
             if (this.verbose) {
@@ -743,7 +811,7 @@ ${data.subtitle ? `<p class="cover-subtitle">${data.subtitle}</p>` : ''}
 
         // Generate CSS content from StyleManager
         // Default to 'revpal-brand' theme for consistent branding
-        const cssContent = await this.styleManager.getStylesheet({
+        const cssContent = await this._getStyleManager().getStylesheet({
             theme: options.style?.theme || options.theme || 'revpal-brand',
             branding: options.branding || options.style,
             components: options.components || ['tables', 'toc', 'cover'],
@@ -791,14 +859,15 @@ ${data.subtitle ? `<p class="cover-subtitle">${data.subtitle}</p>` : ''}
             };
         }
 
-        const theme = options.theme || this.styleManager.theme;
+        const styleManager = this._getStyleManager();
+        const theme = options.theme || styleManager.theme;
         const coverPageEnabled = features.coverPage || options.addCoverPage || options.coverPage;
         const explicitShowHeader = options.hideHeader === false || options.header === true;
         const explicitHideHeader = options.hideHeader === true || options.header === false;
         const hideHeader = explicitHideHeader
             || (!explicitShowHeader && (theme === 'revpal-brand' || coverPageEnabled));
 
-        return this.styleManager.getHeaderFooterTemplates({
+        return styleManager.getHeaderFooterTemplates({
             branding: options.branding,
             metadata: options.metadata,
             hideHeader
@@ -1101,6 +1170,7 @@ ${htmlBody}
      */
     async _addBookmarks(inputPath, outline, outputPath) {
         try {
+            const { PDFDocument } = loadPdfDependencies();
             const existingPdfBytes = await fs.readFile(inputPath);
             const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
@@ -1188,6 +1258,8 @@ if (require.main === module) {
         printCliUsage();
         process.exit(parsedArgs.help ? 0 : 1);
     }
+
+    loadPdfDependencies({ exitOnMissing: true });
 
     const { mode, input, output, options } = parsedArgs;
     const generator = new PDFGenerator({
