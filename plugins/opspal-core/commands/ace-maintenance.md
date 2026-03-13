@@ -37,7 +37,7 @@ Add to task scheduler for weekly maintenance:
 /schedule-add --name="ACE Weekly Maintenance" \
   --type=script \
   --schedule="0 3 * * 0" \
-  --command="node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/ace-maintenance-runner.js"
+  --command="$(find_script ace-maintenance-runner.js) && node \"\$SCRIPT\""
 ```
 
 ## Output
@@ -64,8 +64,8 @@ The command outputs:
 Run ACE Framework maintenance to check health, apply confidence decay to stale skills, clean up expired caches, and generate a performance summary.
 
 Steps:
-1. Run ACE health check using `node .claude-plugins/opspal-core/scripts/lib/ace-health-check.js`
-2. If Supabase is configured, run confidence decay: `node .claude-plugins/opspal-core/scripts/lib/strategy-confidence-decay.js`
+1. Run ACE health check using `find_script("ace-health-check.js")` then `node "$SCRIPT"`
+2. If Supabase is configured, run confidence decay: `find_script("strategy-confidence-decay.js")` then `node "$SCRIPT"`
 3. Clean expired cache files in `~/.claude/cache/ace-routing/` older than 24 hours
-4. Generate performance summary using `node .claude-plugins/opspal-core/scripts/lib/ace-execution-recorder.js health`
+4. Generate performance summary using `find_script("ace-execution-recorder.js")` then `node "$SCRIPT" health`
 5. Output summary report

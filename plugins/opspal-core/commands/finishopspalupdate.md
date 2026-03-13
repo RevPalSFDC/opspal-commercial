@@ -68,16 +68,16 @@ find_latest_cache_script() {
 find_script() {
   local script_name="$1"
   local paths=(
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
+    "$PWD/plugins/opspal-core/scripts/lib/$script_name"
+    "$PWD/.claude-plugins/opspal-core/scripts/lib/$script_name"
+    "./plugins/opspal-core/scripts/lib/$script_name"
+    "./.claude-plugins/opspal-core/scripts/lib/$script_name"
   )
 
   local root mp_dir cache_hit found
   for root in "${CLAUDE_ROOTS[@]}"; do
-    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name")
-    for mp_dir in "$root/plugins/marketplaces"/*/${CLAUDE_PLUGIN_ROOT}/scripts/lib; do
+    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/lib/$script_name")
+    for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core/scripts/lib; do
       [ -d "$mp_dir" ] && paths+=("$mp_dir/$script_name")
     done
     cache_hit="$(find_latest_cache_script "$root" "*/opspal-core/*/scripts/lib/$script_name" || true)"
@@ -102,16 +102,16 @@ find_script() {
 find_ci_script() {
   local script_name="$1"
   local paths=(
-    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name"
+    "$PWD/plugins/opspal-core/scripts/ci/$script_name"
+    "$PWD/.claude-plugins/opspal-core/scripts/ci/$script_name"
+    "./plugins/opspal-core/scripts/ci/$script_name"
+    "./.claude-plugins/opspal-core/scripts/ci/$script_name"
   )
 
   local root mp_dir cache_hit found
   for root in "${CLAUDE_ROOTS[@]}"; do
-    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/${CLAUDE_PLUGIN_ROOT}/scripts/ci/$script_name")
-    for mp_dir in "$root/plugins/marketplaces"/*/${CLAUDE_PLUGIN_ROOT}/scripts/ci; do
+    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/ci/$script_name")
+    for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core/scripts/ci; do
       [ -d "$mp_dir" ] && paths+=("$mp_dir/$script_name")
     done
     cache_hit="$(find_latest_cache_script "$root" "*/opspal-core/*/scripts/ci/$script_name" || true)"
@@ -306,10 +306,10 @@ echo ""
 MIGRATE_SCRIPT=""
 # Find migration script via same resolution as find_script but for top-level scripts
 for candidate in \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js" \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js" \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js" \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-schema-migrate.js"; do
+  "$PWD/plugins/opspal-core/scripts/project-connect-schema-migrate.js" \
+  "$PWD/.claude-plugins/opspal-core/scripts/project-connect-schema-migrate.js" \
+  "./plugins/opspal-core/scripts/project-connect-schema-migrate.js" \
+  "./.claude-plugins/opspal-core/scripts/project-connect-schema-migrate.js"; do
   [ -f "$candidate" ] && MIGRATE_SCRIPT="$candidate" && break
 done
 if [ -z "$MIGRATE_SCRIPT" ]; then
@@ -373,10 +373,10 @@ echo ""
 # Find sync-all script
 REPO_SYNC_SCRIPT=""
 for candidate in \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh" \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh" \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh" \
-  "${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-sync-all.sh"; do
+  "$PWD/plugins/opspal-core/scripts/project-connect-sync-all.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/project-connect-sync-all.sh" \
+  "./plugins/opspal-core/scripts/project-connect-sync-all.sh" \
+  "./.claude-plugins/opspal-core/scripts/project-connect-sync-all.sh"; do
   [ -f "$candidate" ] && REPO_SYNC_SCRIPT="$candidate" && break
 done
 if [ -z "$REPO_SYNC_SCRIPT" ]; then
@@ -389,10 +389,10 @@ fi
 # Find scheduler manager
 SCHEDULER_SCRIPT=""
 for candidate in \
-  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js" \
-  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js" \
-  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js" \
-  "${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js"; do
+  "$PWD/plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js" \
+  "$PWD/.claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js" \
+  "./plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js" \
+  "./.claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js"; do
   [ -f "$candidate" ] && SCHEDULER_SCRIPT="$candidate" && break
 done
 if [ -z "$SCHEDULER_SCRIPT" ]; then
@@ -524,6 +524,78 @@ fi
 
 echo ""
 
+# Step 7: Routing Promotion Verification
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🚦 Step 7: Routing promotion verification & condensed routing pre-gen..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# 7a: Check CLAUDE.md has the critical routing preamble
+CLAUDEMD_PATH="$PWD/CLAUDE.md"
+PREAMBLE_OK=false
+if [ -f "$CLAUDEMD_PATH" ]; then
+  if grep -q "CRITICAL: Agent Routing Rules" "$CLAUDEMD_PATH" 2>/dev/null; then
+    PREAMBLE_OK=true
+    echo "✅ CLAUDE.md contains critical routing preamble"
+  else
+    echo "⚠️  CLAUDE.md missing critical routing preamble (re-run /sync-claudemd)"
+  fi
+else
+  echo "⚠️  CLAUDE.md not found at $CLAUDEMD_PATH"
+fi
+
+# 7b: Count mandatory vs recommended routes in routing index
+ROUTING_INDEX=""
+for candidate in \
+  "$PWD/plugins/opspal-core/routing-index.json" \
+  "$PWD/.claude-plugins/opspal-core/routing-index.json"; do
+  [ -f "$candidate" ] && ROUTING_INDEX="$candidate" && break
+done
+
+if [ -n "$ROUTING_INDEX" ] && command -v node >/dev/null 2>&1; then
+  ROUTE_STATS=$(node -e "
+    const idx = JSON.parse(require('fs').readFileSync('$ROUTING_INDEX', 'utf8'));
+    const agents = idx.agents || {};
+    let mandatory = 0, recommended = 0, total = 0;
+    for (const [k, a] of Object.entries(agents)) {
+      if (!a.triggerKeywords || a.triggerKeywords.length === 0) continue;
+      total++;
+      const desc = (a.description || '').toLowerCase();
+      if (/must be used|mandatory|blocked operation/i.test(desc)) mandatory++;
+      else if (/proactively|recommended/i.test(desc)) recommended++;
+    }
+    console.log(mandatory + '|' + recommended + '|' + total);
+  " 2>/dev/null || echo "0|0|0")
+
+  MAND_COUNT="${ROUTE_STATS%%|*}"
+  REST="${ROUTE_STATS#*|}"
+  REC_COUNT="${REST%%|*}"
+  TOTAL_COUNT="${REST#*|}"
+  echo "  Routing index: $MAND_COUNT mandatory, $REC_COUNT recommended, $TOTAL_COUNT total routable agents"
+else
+  echo "  ⚠️  Routing index not found - routing stats unavailable"
+fi
+
+# 7c: Pre-generate condensed routing for post-compaction hook
+REFRESHER_SCRIPT=$(find_script "routing-context-refresher.js")
+CONDENSED_DIR="$HOME/.claude/session-context"
+CONDENSED_FILE="$CONDENSED_DIR/condensed-routing.txt"
+
+if [ -n "$REFRESHER_SCRIPT" ]; then
+  mkdir -p "$CONDENSED_DIR" 2>/dev/null || true
+  node "$REFRESHER_SCRIPT" --format=compact --output="$CONDENSED_FILE" >/dev/null 2>&1
+  if [ -f "$CONDENSED_FILE" ]; then
+    CONDENSED_SIZE=$(wc -c < "$CONDENSED_FILE" 2>/dev/null | tr -d ' ')
+    echo "✅ Condensed routing pre-generated ($CONDENSED_SIZE bytes → $CONDENSED_FILE)"
+  else
+    echo "⚠️  Failed to pre-generate condensed routing (non-blocking)"
+  fi
+else
+  echo "⚠️  routing-context-refresher.js not found - skipping condensed routing pre-gen"
+fi
+
+echo ""
+
 # Summary
 echo "╔════════════════════════════════════════════════════════════════╗"
 echo "║    Update Complete                                             ║"
@@ -596,9 +668,14 @@ After execution, summarize the results to the user.
 
 6. **Runs `/sync-claudemd`** - Updates CLAUDE.md with latest plugin info:
    - Plugin versions and feature counts
-   - Agent routing tables
+   - Agent routing tables (with Task() invocation examples)
    - Command references
    - Trigger keywords
+
+7. **Routing promotion verification** - Validates routing visibility:
+   - Checks CLAUDE.md contains the critical routing preamble
+   - Counts mandatory vs recommended routes from routing-index.json
+   - Pre-generates condensed routing text for post-compaction hook refresh
 
 ## Options
 
@@ -795,8 +872,8 @@ Overall: READY (0 warnings)
 The script searches multiple locations. Ensure opspal-core is properly installed:
 
 ```bash
-ls ${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-update-manager.js
-ls ${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-update-manager.js
+ls plugins/opspal-core/scripts/lib/plugin-update-manager.js
+ls .claude-plugins/opspal-core/scripts/lib/plugin-update-manager.js
 ```
 
 ### "CLAUDE.md sync failed"
@@ -827,6 +904,10 @@ Run with verbose to see details:
 
 ## Version History
 
+- **v1.5.0** (2026-03-09) - Added routing promotion verification (Step 7)
+  - Validates CLAUDE.md contains critical routing preamble
+  - Counts mandatory/recommended routes from routing-index.json
+  - Pre-generates condensed routing for post-compaction hook refresh
 - **v1.4.0** (2026-02-17) - Added project-connect auto-sync enablement (Step 5)
   - Detects orgs with `.sync-manifest.json` and runs initial pull sync
   - Installs scheduler cron for periodic 30-min sync

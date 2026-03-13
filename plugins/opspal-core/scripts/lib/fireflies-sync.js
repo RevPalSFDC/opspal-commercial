@@ -73,6 +73,13 @@ class FirefliesSyncEngine {
 
         // Build CRM record mapping
         const crmRecord = this._mapTranscriptToSFEvent(transcript);
+        if (!this.report.pendingWrites) this.report.pendingWrites = [];
+        this.report.pendingWrites.push({
+          type: 'salesforce_event',
+          externalId: 'Fireflies_Transcript_ID__c',
+          externalIdValue: transcript.id,
+          record: crmRecord
+        });
         this._log(`Synced transcript: ${transcript.title || transcriptId} -> ${this.target}`);
         results.synced++;
       } catch (err) {
@@ -120,6 +127,12 @@ class FirefliesSyncEngine {
         }
 
         const engagement = this._mapTranscriptToHubSpotEngagement(transcript);
+        if (!this.report.pendingWrites) this.report.pendingWrites = [];
+        this.report.pendingWrites.push({
+          type: 'hubspot_engagement',
+          externalId: transcript.id,
+          record: engagement
+        });
 
         if (this.dryRun) {
           this._log(`[DRY RUN] Would create HubSpot engagement: ${transcript.title || transcriptId}`);

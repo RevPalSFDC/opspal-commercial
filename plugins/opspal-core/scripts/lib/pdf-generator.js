@@ -82,22 +82,21 @@ const {
 
 const resolveChromePath = () => {
     // Cross-platform Chrome path resolution
-    const path = require('path');
     const candidates = [
         process.env.PUPPETEER_EXECUTABLE_PATH,
         process.env.CHROME_PATH,
         // macOS paths
-        path.join('/Applications', 'Google Chrome.app', 'Contents', 'MacOS', 'Google Chrome'),
-        path.join('/Applications', 'Chromium.app', 'Contents', 'MacOS', 'Chromium'),
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/Applications/Chromium.app/Contents/MacOS/Chromium',
         // Linux paths
-        path.join('/opt', 'google', 'chrome', 'chrome'),
-        path.join('/usr', 'bin', 'google-chrome'),
-        path.join('/usr', 'bin', 'google-chrome-stable'),
-        path.join('/usr', 'bin', 'chromium'),
-        path.join('/usr', 'bin', 'chromium-browser'),
+        '/opt/google/chrome/chrome',
+        '/usr/bin/google-chrome',
+        '/usr/bin/google-chrome-stable',
+        '/usr/bin/chromium',
+        '/usr/bin/chromium-browser',
         // Windows paths (via WSL or native Node)
-        path.join('C:', 'Program Files', 'Google', 'Chrome', 'Application', 'chrome.exe'),
-        path.join('C:', 'Program Files (x86)', 'Google', 'Chrome', 'Application', 'chrome.exe')
+        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
     ].filter(Boolean);
 
     return candidates.find(candidate => fsSync.existsSync(candidate)) || null;

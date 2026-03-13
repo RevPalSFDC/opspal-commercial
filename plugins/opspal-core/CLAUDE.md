@@ -19,37 +19,6 @@ The **OpsPal Core** provides utilities and orchestration across Salesforce, HubS
 /agents  # Should show cross-platform agents
 ```
 
-## Licensing And Encrypted Assets
-
-The current licensing model is v2-only and uses tier-scoped key bundles from the OpsPal license server.
-
-- Backend, activation, and admin operations are documented in the sibling `opspal-license-server/docs/` directory.
-- Operator/runtime guide: `docs/LICENSING_RUNTIME_GUIDE.md`
-- Machine-level rollout check: `commands/license-canary.md`
-- Cached-state inspection: `commands/license-status.md`
-
-Key operational commands:
-
-```bash
-/activate-license <license-key>
-/license-status
-/license-canary --expect-tier <starter|professional|enterprise|trial>
-/deactivate-license
-```
-
-### Tier-Blocked Assets (Subscription Boundary)
-
-When a tool call is blocked with a reason containing "SUBSCRIPTION UPGRADE REQUIRED", this means the requested operation depends on an encrypted proprietary asset that the user's subscription does not cover. Do not attempt workarounds — acknowledge the limitation, explain which domain is needed, and suggest `/license-status` to review the current plan.
-
-| Domain | Plugin | Example Assets |
-|--------|--------|---------------|
-| `core` | opspal-core | Scoring engines, KPI definitions, benchmarks |
-| `salesforce` | opspal-salesforce | Risk models, CPQ optimization, audit frameworks |
-| `hubspot` | opspal-hubspot | Assessment analyzer, governance classifier |
-| `marketo` | opspal-marketo | Lead quality scorer, intelligence aggregator |
-| `gtm` | opspal-gtm-planning | Benchmark baselines, capacity models |
-| `data-hygiene` | opspal-data-hygiene | Dedup clustering, canonical selection |
-
 ## Key Features
 
 ### Validation Framework (NEW)
@@ -1078,129 +1047,12 @@ node scripts/lib/metadata-loader.js load-org acme
 ## Hook Health Check
 
 ```bash
-bash scripts/diagnose-hook-health.sh
+/hooks-health
 ```
 
-Checks: executability, syntax, dependencies (jq, node, bc).
+Runs the comprehensive hook health checker across all plugins.
 
 **Fix permissions**: `chmod +x ~/.claude/plugins/opspal-core@revpal-internal-plugins/hooks/*.sh`
-
-## Asset Encryption
-
-**Selectively encrypt sensitive plugin assets** (scoring algorithms, pricing rules, assessment frameworks) so they are committed as `.enc` blobs and transparently decrypted at runtime.
-
-### How It Works
-
-```
-Plugin Author                    Git Repo                      Runtime Session
-┌──────────────┐   encrypt    ┌────────────────┐  SessionStart  ┌─────────────────┐
-│ scoring.js   │ ──────────▶ │ scoring.js.enc │ ─────────────▶ │ ~/.claude/       │
-│ (plaintext)  │             │ (AES-256-GCM)  │   decrypt      │ opspal-enc/      │
-└──────────────┘             └────────────────┘                │ runtime/{sid}/   │
-      │                             │                          │ scoring.js       │
-      │ .gitignore'd                │ committed                └─────────────────┘
-      └─────────────────────────────┘                                  │
-                                                                       │ PreToolUse hooks
-                                                               rewrite paths transparently
-```
-
-### Quick Start
-
-```bash
-# 1. Generate scoped tier keys
-/encrypt-assets key-setup
-
-# 2. Initialize plugin manifest
-/encrypt-assets init --plugin opspal-salesforce
-
-# 3. Encrypt a file
-/encrypt-assets encrypt --plugin opspal-salesforce --file scripts/lib/scoring-algorithm.js --tier tier2
-
-# 4. Verify encryption
-/encrypt-assets verify --plugin opspal-salesforce
-
-# 5. Check status
-/encrypt-assets status --plugin opspal-salesforce
-```
-
-### Encryption Details
-
-- **Algorithm**: AES-256-GCM (authenticated encryption)
-- **Key Derivation**: HKDF (RFC 5869) with HMAC-SHA256
-- **AAD Binding**: `"opspal-enc:v2:{plugin}:{path}"` for scoped tier assets
-- **Wire Format**: 52-byte header (magic `OENC` + version + key slot + salt + nonce + auth tag) + ciphertext
-- **Dependencies**: Zero — uses only Node.js built-in `crypto`
-
-### Key Sources (checked in order)
-
-1. `OPSPAL_PLUGIN_KEYRING_JSON` env var (JSON map of domain keys: `core`, `salesforce`, `hubspot`, `marketo`, `gtm`, `data-hygiene`)
-2. `~/.claude/opspal-enc/core.key`, `salesforce.key`, `hubspot.key`, `marketo.key`, `gtm.key`, `data-hygiene.key`
-
-### Plugin Manifest
-
-Each plugin opting in adds `.claude-plugin/encryption.json`:
-
-```json
-{
-  "version": 2,
-  "plugin": "opspal-salesforce",
-  "encrypted_assets": [
-    {
-      "path": "scripts/lib/scoring-algorithm.js",
-      "encrypted_path": "scripts/lib/scoring-algorithm.js.enc",
-      "asset_type": "script",
-      "sensitivity": "high",
-      "decrypt_on": ["SessionStart"],
-      "checksum_plaintext": "sha256:e3b0c44...",
-      "required_tier": "tier2"
-    }
-  ],
-  "cleanup_on_stop": true,
-  "allow_plaintext_fallback": false
-}
-```
-
-### Hook Chain
-
-| Hook | Event | Purpose |
-|------|-------|---------|
-| `session-start-asset-decryptor.sh` | SessionStart | Batch-decrypt all `decrypt_on: ["SessionStart"]` assets |
-| `pre-tool-use-asset-resolver.sh` | PreToolUse (Bash) | Rewrite encrypted paths in Bash commands |
-| `pre-tool-use-asset-resolver-read.sh` | PreToolUse (Read) | Rewrite encrypted paths in Read file_path |
-| `session-stop-asset-cleanup.sh` | Stop | Secure-wipe decrypted files (`shred` or `dd` fallback) |
-
-### Session Isolation
-
-Each session uses `~/.claude/opspal-enc/runtime/{CLAUDE_SESSION_ID}/` — concurrent sessions don't interfere. Stale sessions (>24h) are auto-cleaned.
-
-### CLI Subcommands
-
-| Command | Purpose |
-|---------|---------|
-| `key-setup` | Generate tier-scoped keys |
-| `init --plugin <name>` | Create skeleton `encryption.json` |
-| `encrypt --plugin <name> --file <path> --tier <tier>` | Encrypt file with a scoped tier key, update manifest, gitignore original |
-| `encrypt --plugin <name> --dir <path> --tier <tier>` | Tar + encrypt directory with a scoped tier key |
-| `decrypt --plugin <name> --file <path>` | Decrypt to output dir (dev workflow) |
-| `verify --plugin <name>` | Verify all `.enc` files (magic, decryption, checksum) |
-| `re-encrypt --plugin <name> [--rotate-key]` | Re-encrypt all assets with scoped keys |
-| `status --plugin <name>` | Show encryption status and key source |
-
-### Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `OPSPAL_PLUGIN_KEYRING_JSON` | - | JSON key ring used for scoped v2 assets |
-| `OPSPAL_ENC_DEV_MODE` | `0` | Skip path rewriting (use plaintext directly) |
-| `OPSPAL_ENC_SESSION_DIR` | auto | Override session runtime directory |
-| `ASSET_CLEANUP_VERBOSE` | `0` | Verbose cleanup logging |
-
-### Files
-
-- **Engine**: `scripts/lib/asset-encryption-engine.js` — Core encrypt/decrypt/verify library
-- **CLI**: `scripts/lib/plugin-asset-encryptor.js` — CLI wrapper with all subcommands
-- **Command**: `commands/encrypt-assets.md` — `/encrypt-assets` slash command
-- **Hooks**: `hooks/session-start-asset-decryptor.sh`, `hooks/pre-tool-use-asset-resolver.sh`, `hooks/pre-tool-use-asset-resolver-read.sh`, `hooks/session-stop-asset-cleanup.sh`
 
 ## Documentation
 

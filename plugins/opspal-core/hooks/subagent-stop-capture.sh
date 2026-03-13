@@ -52,15 +52,14 @@ ERROR_MSG=""
 DURATION_MS="0"
 
 if command -v jq &>/dev/null && [[ -n "$HOOK_INPUT" ]] && echo "$HOOK_INPUT" | jq -e . >/dev/null 2>&1; then
-    # v2.1.69+: agent_type and agent_id are standardized fields
-    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent_type // .subagent_type // empty' 2>/dev/null || true)
-    AGENT_UUID=$(echo "$HOOK_INPUT" | jq -r '.agent_id // empty' 2>/dev/null || true)
-    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '.success // empty' 2>/dev/null || true)
-    ERROR_MSG=$(echo "$HOOK_INPUT" | jq -r '.error // .stop_reason // empty' 2>/dev/null || true)
-    DURATION_MS=$(echo "$HOOK_INPUT" | jq -r '.duration_ms // 0' 2>/dev/null || echo "0")
+    # v2.1.69+: agent_type and agent_id are now standardized fields
+    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent_type // .subagent_type // .agent_name // empty' 2>/dev/null || true)
+    AGENT_ID=$(echo "$HOOK_INPUT" | jq -r '.agent_id // empty' 2>/dev/null || true)
+    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '.success // .task_success // .result.success // empty' 2>/dev/null || true)
+    ERROR_MSG=$(echo "$HOOK_INPUT" | jq -r '.error // .error_message // .reason // .stop_reason // empty' 2>/dev/null || true)
+    DURATION_MS=$(echo "$HOOK_INPUT" | jq -r '.duration_ms // .task_duration_ms // 0' 2>/dev/null || echo "0")
 fi
 
-AGENT_UUID="${AGENT_UUID:-}"
 AGENT_NAME="${AGENT_NAME:-${CLAUDE_TASK_SUBAGENT_TYPE:-${CLAUDE_AGENT_NAME:-unknown}}}"
 SUCCESS="${SUCCESS:-${CLAUDE_TASK_SUCCESS:-true}}"
 ERROR_MSG="${ERROR_MSG:-${CLAUDE_TASK_ERROR:-}}"
@@ -75,14 +74,14 @@ TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
 # Log failed agent stop
 if ! cat >> "$LOG_FILE" <<EOF
-{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_UUID}","success":false,"error":"${ERROR_MSG:0:500}"}
+{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_ID:-}","success":false,"error":"${ERROR_MSG:0:500}"}
 EOF
 then
     FALLBACK_LOG_DIR="${TMPDIR:-/tmp}/.claude/logs"
     FALLBACK_LOG_FILE="${FALLBACK_LOG_DIR}/subagent-stops.jsonl"
     mkdir -p "$FALLBACK_LOG_DIR" 2>/dev/null || true
     cat >> "$FALLBACK_LOG_FILE" <<EOF || true
-{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_UUID}","success":false,"error":"${ERROR_MSG:0:500}"}
+{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_ID:-}","success":false,"error":"${ERROR_MSG:0:500}"}
 EOF
 fi
 
@@ -119,7 +118,7 @@ if command -v jq &> /dev/null && [[ -f "$LOG_FILE" ]]; then
             'select(.agent == $agent and .timestamp >= $since)' 2>/dev/null | wc -l | tr -d ' ')
 
         if [[ "$RECENT_FAILURES" -ge 3 ]]; then
-            echo "WARNING: Agent '$AGENT_NAME' has failed $RECENT_FAILURES times in the last hour. Consider investigating."
+            echo "WARNING: Agent '$AGENT_NAME' has failed $RECENT_FAILURES times in the last hour. Consider investigating." >&2
         fi
     fi
 fi

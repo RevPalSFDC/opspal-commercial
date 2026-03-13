@@ -56,17 +56,16 @@ TOOL_USES=""
 SUCCESS=""
 
 if command -v jq &>/dev/null && [[ -n "$HOOK_INPUT" ]] && echo "$HOOK_INPUT" | jq -e . >/dev/null 2>&1; then
-    # v2.1.69+: agent_type and agent_id are standardized fields
-    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent_type // .subagent_type // empty' 2>/dev/null || true)
-    AGENT_UUID=$(echo "$HOOK_INPUT" | jq -r '.agent_id // empty' 2>/dev/null || true)
-    DURATION=$(echo "$HOOK_INPUT" | jq -r '.duration_ms // 0' 2>/dev/null || echo "0")
-    TOKENS=$(echo "$HOOK_INPUT" | jq -r '.token_count // 0' 2>/dev/null || echo "0")
-    TOOL_USES=$(echo "$HOOK_INPUT" | jq -r '.tool_uses // 0' 2>/dev/null || echo "0")
-    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '.success // true' 2>/dev/null || echo "true")
+    # v2.1.69+: agent_type and agent_id are now standardized fields
+    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent_type // .subagent_type // .agent_name // empty' 2>/dev/null || true)
+    AGENT_ID=$(echo "$HOOK_INPUT" | jq -r '.agent_id // empty' 2>/dev/null || true)
+    DURATION=$(echo "$HOOK_INPUT" | jq -r '.duration_ms // .task_duration_ms // 0' 2>/dev/null || echo "0")
+    TOKENS=$(echo "$HOOK_INPUT" | jq -r '.token_count // .task_token_count // 0' 2>/dev/null || echo "0")
+    TOOL_USES=$(echo "$HOOK_INPUT" | jq -r '.tool_uses // .task_tool_uses // 0' 2>/dev/null || echo "0")
+    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '.success // .task_success // true' 2>/dev/null || echo "true")
 fi
 
 # Extract metrics from environment as fallback
-AGENT_UUID="${AGENT_UUID:-}"
 AGENT_NAME="${AGENT_NAME:-${CLAUDE_TASK_SUBAGENT_TYPE:-${CLAUDE_AGENT_NAME:-unknown}}}"
 DURATION="${DURATION:-${CLAUDE_TASK_DURATION_MS:-0}}"
 TOKENS="${TOKENS:-${CLAUDE_TASK_TOKEN_COUNT:-0}}"
@@ -81,14 +80,14 @@ fi
 # Log completion to JSONL
 TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 if ! cat >> "$LOG_FILE" <<EOF
-{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_UUID}","duration_ms":${DURATION},"token_count":${TOKENS},"tool_uses":${TOOL_USES},"success":${SUCCESS}}
+{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_ID:-}","duration_ms":${DURATION},"token_count":${TOKENS},"tool_uses":${TOOL_USES},"success":${SUCCESS}}
 EOF
 then
     FALLBACK_LOG_DIR="${TMPDIR:-/tmp}/.claude/logs"
     FALLBACK_LOG_FILE="${FALLBACK_LOG_DIR}/task-completions.jsonl"
     mkdir -p "$FALLBACK_LOG_DIR" 2>/dev/null || true
     cat >> "$FALLBACK_LOG_FILE" <<EOF || true
-{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_UUID}","duration_ms":${DURATION},"token_count":${TOKENS},"tool_uses":${TOOL_USES},"success":${SUCCESS}}
+{"timestamp":"${TIMESTAMP}","agent":"${AGENT_NAME}","agent_id":"${AGENT_ID:-}","duration_ms":${DURATION},"token_count":${TOKENS},"tool_uses":${TOOL_USES},"success":${SUCCESS}}
 EOF
 fi
 

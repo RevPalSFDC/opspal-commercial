@@ -35,7 +35,7 @@ You manage the Task Scheduler system located in `.claude-plugins/opspal-core/sch
 
 ### Direct CLI Access
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js <command> [options]
+node .claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js <command> [options]
 ```
 
 ## Workflow
@@ -145,10 +145,10 @@ User: "Run my backup script every night"
 ### Crontab Issues
 ```bash
 # Reinstall crontab entries
-node ${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js install
+node .claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js install
 
 # Remove all scheduler entries
-node ${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js uninstall
+node .claude-plugins/opspal-core/scheduler/scripts/lib/scheduler-manager.js uninstall
 ```
 
 ### Test Before Scheduling

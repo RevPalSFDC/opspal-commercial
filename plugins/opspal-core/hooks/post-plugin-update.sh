@@ -45,11 +45,23 @@ PROJECT_ROOT="$(cd "$PLUGIN_ROOT/.." && pwd)"
 
 # Path to plugin-health-checker script
 HEALTH_CHECKER="$PLUGIN_ROOT/opspal-core/scripts/lib/plugin-health-checker.js"
+HOOK_RECONCILER="$PLUGIN_ROOT/opspal-core/scripts/lib/reconcile-hook-registration.js"
 
 # Check if plugin-health-checker exists
 if [ ! -f "$HEALTH_CHECKER" ]; then
   # Silent failure - plugin-doctor not installed yet
   exit 0
+fi
+
+if [ -f "$HOOK_RECONCILER" ] && command -v node >/dev/null 2>&1; then
+  echo ""
+  echo "🪝 Reconciling active Claude hook registration..."
+  if node "$HOOK_RECONCILER" --project-root "$PROJECT_ROOT" --core-plugin-root "$PLUGIN_ROOT/opspal-core" >/dev/null 2>&1; then
+    echo "✅ Hook registration reconciled"
+  else
+    echo "⚠️  Hook registration reconciliation failed"
+    echo "   Run: node \"$HOOK_RECONCILER\" --project-root \"$PROJECT_ROOT\" --core-plugin-root \"$PLUGIN_ROOT/opspal-core\""
+  fi
 fi
 
 # Determine which plugin was updated

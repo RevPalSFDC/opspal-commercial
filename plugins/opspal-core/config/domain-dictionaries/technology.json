@@ -1,0 +1,177 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "technology",
+  "version": "1.0.0",
+  "description": "Technology companies, software vendors, IT services, and tech industry operations",
+
+  "detectionPatterns": {
+    "keywords": [
+      "software", "technology", "tech", "IT", "cloud", "SaaS", "platform",
+      "application", "developer", "engineering", "data", "analytics", "AI",
+      "digital", "cyber", "network", "infrastructure", "startup", "vendor"
+    ],
+    "entityTypes": ["Vendor", "Partner", "Technology", "Software", "Platform"],
+    "fieldPatterns": [
+      "TechStack", "Integration", "APIKey", "Subscription", "License",
+      "ContractValue", "ARR", "MRR", "Seats", "Users"
+    ]
+  },
+
+  "abbreviations": {
+    "businessModels": {
+      "SaaS": "Software as a Service",
+      "IaaS": "Infrastructure as a Service",
+      "PaaS": "Platform as a Service",
+      "DaaS": "Data as a Service",
+      "BaaS": "Backend as a Service",
+      "FaaS": "Function as a Service",
+      "UCaaS": "Unified Communications as a Service",
+      "CCaaS": "Contact Center as a Service",
+      "SECaaS": "Security as a Service",
+      "XaaS": "Anything as a Service",
+      "B2B": "Business to Business",
+      "B2C": "Business to Consumer",
+      "B2B2C": "Business to Business to Consumer",
+      "D2C": "Direct to Consumer"
+    },
+    "companyTypes": {
+      "MSP": "Managed Service Provider",
+      "MSSP": "Managed Security Service Provider",
+      "ISV": "Independent Software Vendor",
+      "VAR": "Value Added Reseller",
+      "SI": "Systems Integrator",
+      "GSI": "Global Systems Integrator",
+      "OEM": "Original Equipment Manufacturer",
+      "ODM": "Original Design Manufacturer",
+      "ISP": "Internet Service Provider",
+      "CSP": "Cloud Service Provider",
+      "ASP": "Application Service Provider",
+      "ESP": "Email Service Provider",
+      "CDP": "Customer Data Platform"
+    },
+    "metrics": {
+      "ARR": "Annual Recurring Revenue",
+      "MRR": "Monthly Recurring Revenue",
+      "ACV": "Annual Contract Value",
+      "TCV": "Total Contract Value",
+      "LTV": "Lifetime Value",
+      "CAC": "Customer Acquisition Cost",
+      "ARPU": "Average Revenue Per User",
+      "ARPA": "Average Revenue Per Account",
+      "NRR": "Net Revenue Retention",
+      "GRR": "Gross Revenue Retention",
+      "NDR": "Net Dollar Retention",
+      "DAU": "Daily Active Users",
+      "MAU": "Monthly Active Users",
+      "WAU": "Weekly Active Users",
+      "NPS": "Net Promoter Score",
+      "CSAT": "Customer Satisfaction",
+      "CES": "Customer Effort Score"
+    },
+    "technical": {
+      "API": "Application Programming Interface",
+      "SDK": "Software Development Kit",
+      "CLI": "Command Line Interface",
+      "GUI": "Graphical User Interface",
+      "UI": "User Interface",
+      "UX": "User Experience",
+      "MVP": "Minimum Viable Product",
+      "POC": "Proof of Concept",
+      "UAT": "User Acceptance Testing",
+      "QA": "Quality Assurance",
+      "CI": "Continuous Integration",
+      "CD": "Continuous Deployment",
+      "DevOps": "Development Operations",
+      "MLOps": "Machine Learning Operations",
+      "DataOps": "Data Operations",
+      "AIOps": "AI Operations",
+      "FinOps": "Financial Operations"
+    },
+    "infrastructure": {
+      "VM": "Virtual Machine",
+      "VPC": "Virtual Private Cloud",
+      "VPN": "Virtual Private Network",
+      "CDN": "Content Delivery Network",
+      "DNS": "Domain Name System",
+      "SSL": "Secure Sockets Layer",
+      "TLS": "Transport Layer Security",
+      "LB": "Load Balancer",
+      "WAF": "Web Application Firewall",
+      "DDoS": "Distributed Denial of Service",
+      "DR": "Disaster Recovery",
+      "HA": "High Availability",
+      "SLA": "Service Level Agreement",
+      "SLO": "Service Level Objective",
+      "SLI": "Service Level Indicator",
+      "RPO": "Recovery Point Objective",
+      "RTO": "Recovery Time Objective"
+    },
+    "data": {
+      "DB": "Database",
+      "SQL": "Structured Query Language",
+      "NoSQL": "Not Only SQL",
+      "ETL": "Extract Transform Load",
+      "ELT": "Extract Load Transform",
+      "DW": "Data Warehouse",
+      "DL": "Data Lake",
+      "BI": "Business Intelligence",
+      "ML": "Machine Learning",
+      "AI": "Artificial Intelligence",
+      "NLP": "Natural Language Processing",
+      "LLM": "Large Language Model",
+      "RAG": "Retrieval Augmented Generation"
+    },
+    "security": {
+      "IAM": "Identity and Access Management",
+      "SSO": "Single Sign On",
+      "MFA": "Multi-Factor Authentication",
+      "2FA": "Two-Factor Authentication",
+      "RBAC": "Role-Based Access Control",
+      "ABAC": "Attribute-Based Access Control",
+      "SOC": "Security Operations Center",
+      "SIEM": "Security Information and Event Management",
+      "SOAR": "Security Orchestration Automation and Response",
+      "EDR": "Endpoint Detection and Response",
+      "XDR": "Extended Detection and Response",
+      "MDR": "Managed Detection and Response",
+      "CASB": "Cloud Access Security Broker",
+      "ZTNA": "Zero Trust Network Access",
+      "PAM": "Privileged Access Management"
+    },
+    "compliance": {
+      "SOC2": "Service Organization Control 2",
+      "ISO": "International Organization for Standardization",
+      "GDPR": "General Data Protection Regulation",
+      "CCPA": "California Consumer Privacy Act",
+      "HIPAA": "Health Insurance Portability and Accountability Act",
+      "PCI": "Payment Card Industry",
+      "FedRAMP": "Federal Risk and Authorization Management Program"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "Inc.", "LLC", "Corp", "Corporation", "Ltd", "Limited"],
+    "preserve": [
+      "Technologies", "Technology", "Tech", "Software", "Systems",
+      "Solutions", "Labs", "Digital", "Cloud", "Data", "AI", "IO"
+    ]
+  },
+
+  "synonyms": {
+    "Software": ["SW", "Application", "App", "Platform"],
+    "Technology": ["Tech", "Technologies"],
+    "Services": ["Svcs", "Solutions"],
+    "Systems": ["Sys"],
+    "Development": ["Dev"],
+    "Operations": ["Ops"],
+    "Integration": ["Integrations", "Int"],
+    "Analytics": ["Analysis", "Insights"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.80,
+    "minimumConfidence": 70
+  }
+}

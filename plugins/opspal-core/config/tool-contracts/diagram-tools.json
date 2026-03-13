@@ -1,0 +1,219 @@
+{
+  "diagram_generate_mermaid": {
+    "description": "Mermaid diagram generation tool contract",
+    "required": ["diagram_type", "content"],
+    "optional": ["output_format", "output_path", "theme"],
+    "types": {
+      "diagram_type": "string",
+      "content": "string",
+      "output_format": "string",
+      "output_path": "string",
+      "theme": "string"
+    },
+    "enums": {
+      "diagram_type": ["flowchart", "sequence", "class", "state", "er", "journey", "gantt", "pie", "mindmap", "timeline", "quadrantChart", "gitGraph"],
+      "output_format": ["svg", "png", "pdf"],
+      "theme": ["default", "forest", "dark", "neutral", "base"]
+    },
+    "rules": [
+      {
+        "name": "flowchart_syntax",
+        "description": "Flowchart must start with valid direction",
+        "condition": {
+          "param": "diagram_type",
+          "value": "flowchart"
+        },
+        "validate_content": {
+          "pattern": "^(flowchart|graph)\\s+(TB|TD|BT|RL|LR)",
+          "message": "Flowchart must start with direction: TB (top-bottom), TD (top-down), BT (bottom-top), RL (right-left), LR (left-right)"
+        },
+        "severity": "CRITICAL",
+        "remediation": "Start flowchart with 'flowchart TD' or similar direction declaration"
+      },
+      {
+        "name": "sequence_participant_declaration",
+        "description": "Sequence diagrams should declare participants",
+        "condition": {
+          "param": "diagram_type",
+          "value": "sequence"
+        },
+        "severity": "WARNING",
+        "warning": "Sequence diagrams should declare participants for proper ordering",
+        "remediation": "Add 'participant Name' declarations at start of sequence diagram"
+      },
+      {
+        "name": "er_relationship_syntax",
+        "description": "ER diagrams require proper relationship syntax",
+        "condition": {
+          "param": "diagram_type",
+          "value": "er"
+        },
+        "validate_content": {
+          "pattern": "\\|\\||--o\\{|\\}o--|\\|\\{|\\}\\|",
+          "message": "ER relationships must use valid cardinality: ||--o{, }o--, |{, }|"
+        },
+        "severity": "INFO",
+        "warning": "Ensure ER relationships use valid Mermaid cardinality notation",
+        "remediation": "Use ||--o{ for one-to-many, }o--|| for many-to-one, etc."
+      },
+      {
+        "name": "mermaid_v11_syntax",
+        "description": "Mermaid v11+ changed some CLI flags",
+        "condition": {
+          "param": "output_format",
+          "pattern": "(png|pdf)"
+        },
+        "severity": "INFO",
+        "warning": "Mermaid CLI v11+ uses -o for output instead of -O",
+        "remediation": "Use 'mmdc -i input.mmd -o output.png' syntax for Mermaid v11+"
+      },
+      {
+        "name": "special_characters_escape",
+        "description": "Special characters in labels need escaping",
+        "condition": {
+          "param": "content",
+          "pattern": "[\\[\\]\\(\\)\\{\\}]"
+        },
+        "severity": "WARNING",
+        "warning": "Special characters in node labels may need quoting",
+        "remediation": "Wrap labels containing special characters in quotes: A[\"Label with (parens)\"]"
+      }
+    ]
+  },
+  "diagram_generate_lucid": {
+    "description": "Lucidchart diagram generation tool contract",
+    "required": ["diagram_type", "elements"],
+    "optional": ["template", "output_path", "share_settings"],
+    "types": {
+      "diagram_type": "string",
+      "elements": "array",
+      "template": "string",
+      "output_path": "string",
+      "share_settings": "object"
+    },
+    "enums": {
+      "diagram_type": ["flowchart", "org_chart", "erd", "network", "architecture", "process_flow", "uml"]
+    },
+    "rules": [
+      {
+        "name": "elements_required",
+        "description": "Lucid diagrams require elements array",
+        "condition": {
+          "param": "elements",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "elements array is required for Lucid diagram generation",
+        "remediation": "Provide elements array with shape, connection, and text elements"
+      },
+      {
+        "name": "multi_tenant_isolation",
+        "description": "Lucid diagrams should specify tenant context",
+        "condition": {
+          "param": "share_settings",
+          "missing": true
+        },
+        "severity": "WARNING",
+        "warning": "Lucid diagrams without share_settings may not have proper access controls",
+        "remediation": "Specify share_settings for multi-tenant isolation"
+      }
+    ]
+  },
+  "diagram_export": {
+    "description": "Diagram export tool contract",
+    "required": ["source_path", "output_format"],
+    "optional": ["output_path", "width", "height", "scale", "background"],
+    "types": {
+      "source_path": "string",
+      "output_format": "string",
+      "output_path": "string",
+      "width": "number",
+      "height": "number",
+      "scale": "number",
+      "background": "string"
+    },
+    "enums": {
+      "output_format": ["png", "svg", "pdf", "jpg"]
+    },
+    "ranges": {
+      "scale": {
+        "min": 0.5,
+        "max": 4
+      },
+      "width": {
+        "min": 100,
+        "max": 4096
+      },
+      "height": {
+        "min": 100,
+        "max": 4096
+      }
+    },
+    "rules": [
+      {
+        "name": "source_file_exists",
+        "description": "Source file must exist for export",
+        "condition": {
+          "param": "source_path",
+          "pattern": ".*"
+        },
+        "severity": "CRITICAL",
+        "message": "Source file must exist before export",
+        "remediation": "Verify source file path exists before calling export"
+      },
+      {
+        "name": "pdf_requires_puppeteer",
+        "description": "PDF export requires puppeteer/chrome",
+        "condition": {
+          "param": "output_format",
+          "value": "pdf"
+        },
+        "severity": "WARNING",
+        "warning": "PDF export requires puppeteer and Chrome/Chromium to be installed",
+        "remediation": "Install puppeteer: npm install puppeteer"
+      }
+    ]
+  },
+  "diagram_render_to_image": {
+    "description": "Render diagram to image file",
+    "required": ["diagram_content", "output_path"],
+    "optional": ["format", "width", "height", "theme", "backgroundColor"],
+    "types": {
+      "diagram_content": "string",
+      "output_path": "string",
+      "format": "string",
+      "width": "number",
+      "height": "number",
+      "theme": "string",
+      "backgroundColor": "string"
+    },
+    "enums": {
+      "format": ["png", "svg"],
+      "theme": ["default", "forest", "dark", "neutral"]
+    },
+    "rules": [
+      {
+        "name": "output_directory_exists",
+        "description": "Output directory must exist",
+        "condition": {
+          "param": "output_path",
+          "pattern": ".*"
+        },
+        "severity": "CRITICAL",
+        "message": "Output directory must exist before rendering",
+        "remediation": "Create output directory or use existing path"
+      },
+      {
+        "name": "mermaid_in_pdf_warning",
+        "description": "Mermaid diagrams in PDF need pre-rendering",
+        "condition": {
+          "param": "format",
+          "pattern": ".*"
+        },
+        "severity": "INFO",
+        "warning": "When including Mermaid diagrams in PDF documents, pre-render to PNG first",
+        "remediation": "Use diagram_render_to_image to create PNG, then include in PDF"
+      }
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "generated_at": "2025-12-21T02:23:06.927Z",
+  "description": "Singletons awaiting recurrence for cohort grouping",
+  "total_singletons": 12,
+  "by_taxonomy": {
+    "unknown": 11,
+    "prompt-mismatch": 1
+  },
+  "watchlist": [
+    {
+      "id": "11c59478-f6c6-48f2-8a4f-808e6e365694",
+      "created_at": "2025-12-20T00:57:56.894+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "acme-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "3fae6ab4-04f3-4eea-b5a1-364499f4db68",
+      "created_at": "2025-12-20T00:57:52.399+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "acme-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "5d1c7b2f-dcbd-4b1b-b0ef-0e3c0f9fe7a3",
+      "created_at": "2025-12-20T00:50:55.534+00:00",
+      "taxonomy": "prompt-mismatch",
+      "root_cause_summary": "Original coaching tips were generic platitudes ('Consistency will move you higher', 'Study top performers') that provided no actionable guidance",
+      "priority": "P1",
+      "org": "beta-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "248f08e2-cfab-4fe9-8d7d-de136db38ee0",
+      "created_at": "2025-12-19T19:12:57.047+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "acme-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "1ab97c99-86b3-49a6-abe3-dc458d6dea00",
+      "created_at": "2025-12-19T12:42:12.203+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "salesforce",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "30c841b5-0a4f-476e-af2c-98b5afdbc9e9",
+      "created_at": "2025-12-18T18:48:53.12+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "acme-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "dd9bf0c5-6fce-4864-bfc4-2ee69df42941",
+      "created_at": "2025-12-17T23:39:12.788+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "acme-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "8f4c0d91-9742-4ef3-a73e-e45be8d597ec",
+      "created_at": "2025-12-17T19:58:30.78+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "acme-production",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "69d1439f-8a0a-409a-a4d1-fdc68008810b",
+      "created_at": "2025-12-17T19:57:33.153+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "workspace",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "dfe46ff8-92d5-4fde-968a-ecfaa8578186",
+      "created_at": "2025-12-17T13:36:21.399+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "salesforce",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "79af828d-4230-4240-84e7-7663c48176e6",
+      "created_at": "2025-12-17T00:39:07.843+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "workspace",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    },
+    {
+      "id": "0d464c61-20d5-4478-8ff3-cf41a3ada47e",
+      "created_at": "2025-12-16T23:00:40.965+00:00",
+      "taxonomy": "unknown",
+      "root_cause_summary": "",
+      "priority": "P3",
+      "org": "opspal-internal-plugins",
+      "watching_since": "2025-12-21T02:23:06.926Z",
+      "recurrence_count": 0
+    }
+  ]
+}

@@ -30,7 +30,20 @@ Post an intermediate progress checkpoint to an Asana task, updating stakeholders
 ### 1. Validate Asana Connection
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh validate
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+ASANA_CONN=$(find_script "asana-connection-manager.sh") && bash "$ASANA_CONN" validate
 ```
 
 ### 2. Get Task Details (Optional)
@@ -72,7 +85,8 @@ Ask user (or infer from git/file changes):
 Use standard template:
 
 ```javascript
-const { AsanaUpdateFormatter } = require('./.claude-plugins/opspal-core/scripts/lib/asana-update-formatter');
+// Path resolved dynamically at runtime via find_script / ASANA_FORMATTER_PATH
+const { AsanaUpdateFormatter } = require(process.env.ASANA_FORMATTER_PATH || './.claude-plugins/opspal-core/scripts/lib/asana-update-formatter');
 
 const formatter = new AsanaUpdateFormatter();
 

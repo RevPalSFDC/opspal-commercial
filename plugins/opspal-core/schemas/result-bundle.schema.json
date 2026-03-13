@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.io/schemas/result-bundle.schema.json",
+  "title": "ResultBundle",
+  "description": "Standard output format for completed task execution",
+  "type": "object",
+  "required": ["task_id", "status", "summary"],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^T-[0-9]{2,4}$",
+      "description": "ID of the completed task"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "partial", "failed", "blocked", "skipped"],
+      "description": "Execution outcome status"
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Human-readable summary of what was accomplished"
+    },
+    "files_changed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "action": {
+            "type": "string",
+            "enum": ["created", "modified", "deleted", "renamed"]
+          },
+          "lines_added": { "type": "integer", "minimum": 0 },
+          "lines_removed": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["path", "action"]
+      },
+      "default": [],
+      "description": "List of files modified during task execution"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["command_output", "test_result", "validation", "screenshot", "log", "diff", "query_result"]
+          },
+          "description": { "type": "string" },
+          "content": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        },
+        "required": ["type", "content"]
+      },
+      "default": [],
+      "description": "Proof of correctness - test outputs, validation results, etc."
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "The factual claim being made"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "ID linking to evidence item (e.g., query_001, tool_output_002)"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": ["query_result", "tool_output", "document", "calculation", "user_input"],
+            "description": "Type of source backing this claim"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the source data was retrieved"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence level in claim accuracy (0-1)"
+          }
+        },
+        "required": ["statement", "source_id", "source_type"]
+      },
+      "default": [],
+      "description": "P0 Hallucination Prevention: Claims backed by verifiable source data"
+    },
+    "unsupported_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "The claim that could not be verified"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["missing_data", "query_failed", "conflicting_sources", "insufficient_evidence", "out_of_scope"],
+            "description": "Why the claim is unsupported"
+          },
+          "attempted_sources": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Source IDs that were attempted but did not support claim"
+          },
+          "mitigation": {
+            "type": "string",
+            "description": "Suggested action to verify the claim"
+          }
+        },
+        "required": ["statement", "reason"]
+      },
+      "default": [],
+      "description": "P0 Hallucination Prevention: Claims that could NOT be verified - agent declined to guess"
+    },
+    "hallucination_validation": {
+      "type": "object",
+      "properties": {
+        "fabrication_check_passed": {
+          "type": "boolean",
+          "description": "Whether response passed fabrication detection"
+        },
+        "fabricated_ids_detected": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Salesforce IDs in response not found in query results"
+        },
+        "citation_coverage_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Percentage of claims with source_id references"
+        },
+        "validation_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "P0 Hallucination Prevention: Results of fabrication detection validation"
+    },
+    "verification_results": {
+      "type": "object",
+      "properties": {
+        "tests_passed": { "type": "boolean" },
+        "tests_total": { "type": "integer", "minimum": 0 },
+        "tests_failed": { "type": "integer", "minimum": 0 },
+        "lint_passed": { "type": "boolean" },
+        "lint_errors": { "type": "integer", "minimum": 0 },
+        "lint_warnings": { "type": "integer", "minimum": 0 },
+        "validation_passed": { "type": "boolean" },
+        "coverage_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "verification_commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "command": { "type": "string" },
+              "exit_code": { "type": "integer" },
+              "output_summary": { "type": "string" }
+            },
+            "required": ["command", "exit_code"]
+          }
+        }
+      },
+      "description": "Results from verification gate execution"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "description": { "type": "string" },
+          "mitigation": { "type": "string" }
+        },
+        "required": ["severity", "description"]
+      },
+      "default": [],
+      "description": "Identified risks and concerns"
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Unresolved questions requiring human input"
+    },
+    "next_steps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Recommended follow-up actions"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["report", "diff", "log", "config", "script", "data", "documentation"]
+          },
+          "description": { "type": "string" }
+        },
+        "required": ["name", "path", "type"]
+      },
+      "default": [],
+      "description": "Generated artifacts (reports, diffs, scripts, etc.)"
+    },
+    "dependencies_satisfied": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^T-[0-9]{2,4}$" },
+      "default": [],
+      "description": "Task IDs that were satisfied as dependencies"
+    },
+    "blocking_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": { "type": "string" },
+          "blocker_type": {
+            "type": "string",
+            "enum": ["permission", "dependency", "resource", "validation", "external", "unknown"]
+          },
+          "resolution_hint": { "type": "string" }
+        },
+        "required": ["issue", "blocker_type"]
+      },
+      "default": [],
+      "description": "Issues that blocked task completion (if status is blocked)"
+    },
+    "execution_metadata": {
+      "type": "object",
+      "properties": {
+        "started_at": { "type": "string", "format": "date-time" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "duration_seconds": { "type": "number", "minimum": 0 },
+        "agent_used": { "type": "string" },
+        "retry_count": { "type": "integer", "minimum": 0, "default": 0 },
+        "tool_calls_count": { "type": "integer", "minimum": 0 },
+        "approvals_requested": { "type": "integer", "minimum": 0, "default": 0 },
+        "approvals_granted": { "type": "integer", "minimum": 0, "default": 0 }
+      },
+      "description": "Execution timing and metadata"
+    },
+    "rollback_info": {
+      "type": "object",
+      "properties": {
+        "can_rollback": { "type": "boolean", "default": true },
+        "rollback_commands": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rollback_notes": { "type": "string" }
+      },
+      "description": "Information for reverting changes if needed"
+    }
+  },
+  "additionalProperties": false
+}

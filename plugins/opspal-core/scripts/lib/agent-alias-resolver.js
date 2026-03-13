@@ -16,11 +16,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const {
-    SEMVER_DIR_PATTERN,
-    isVersionLikeName,
-    pickLatestVersion
-} = require('./semver-directory-utils');
 
 // =============================================================================
 // Configuration
@@ -30,6 +25,8 @@ const DEFAULT_PLUGINS_DIR = path.resolve(__dirname, '../../../');
 const CACHE_FILE = path.resolve(__dirname, '../../config/agent-alias-cache.json');
 const COMMAND_CACHE_FILE = path.resolve(__dirname, '../../config/command-registry.json');
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const SEMVER_DIR_PATTERN = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+
 function isDirectory(dirPath) {
     try {
         return fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory();
@@ -48,6 +45,36 @@ function hasMarkdownChildren(dirPath) {
     } catch (error) {
         return false;
     }
+}
+
+function isVersionLikeName(name) {
+    return SEMVER_DIR_PATTERN.test(name);
+}
+
+function parseSemver(version) {
+    const match = String(version).match(/^(\d+)\.(\d+)\.(\d+)/);
+    if (!match) return null;
+    return [Number.parseInt(match[1], 10), Number.parseInt(match[2], 10), Number.parseInt(match[3], 10)];
+}
+
+function pickLatestVersion(versions) {
+    if (!Array.isArray(versions) || versions.length === 0) {
+        return null;
+    }
+
+    return [...versions].sort((a, b) => {
+        const av = parseSemver(a);
+        const bv = parseSemver(b);
+
+        if (!av && !bv) return String(a).localeCompare(String(b));
+        if (!av) return 1;
+        if (!bv) return -1;
+
+        if (av[0] !== bv[0]) return bv[0] - av[0];
+        if (av[1] !== bv[1]) return bv[1] - av[1];
+        if (av[2] !== bv[2]) return bv[2] - av[2];
+        return String(b).localeCompare(String(a));
+    })[0];
 }
 
 function looksLikePluginName(name) {

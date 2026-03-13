@@ -1,0 +1,254 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "RevOps Data Quality System - Title to Seniority Level Mappings",
+
+  "seniority_levels": {
+    "executive": {
+      "level": 7,
+      "description": "C-Suite and equivalent executives with organization-wide authority",
+      "indicators": {
+        "title_keywords": [
+          "ceo", "cfo", "coo", "cto", "cio", "ciso", "cmo", "cro", "cpo", "cdo", "clo",
+          "chief executive", "chief financial", "chief operating", "chief technology",
+          "chief information", "chief marketing", "chief revenue", "chief product",
+          "president", "owner", "founder", "co-founder",
+          "managing partner", "senior partner", "general partner",
+          "chairman", "chairwoman", "chairperson"
+        ],
+        "title_patterns": [
+          "^chief\\s+",
+          "^c[a-z]{1,2}o$",
+          "\\bpresident\\b",
+          "\\bowner\\b",
+          "\\bfounder\\b"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["secretary", "administrator", "director (agency head)"],
+        "state": ["governor", "secretary of state", "attorney general", "state treasurer"],
+        "local": ["mayor", "city manager", "county administrator", "county executive", "sheriff"]
+      }
+    },
+    "vp": {
+      "level": 6,
+      "description": "Vice President level with division or department-wide authority",
+      "indicators": {
+        "title_keywords": [
+          "vp", "vice president", "svp", "senior vice president",
+          "evp", "executive vice president", "avp", "associate vice president",
+          "gvp", "group vice president",
+          "general manager", "managing director",
+          "general counsel", "controller", "treasurer"
+        ],
+        "title_patterns": [
+          "^vp\\s+",
+          "^vice\\s+president",
+          "^svp\\s+",
+          "^evp\\s+",
+          "\\bgeneral\\s+manager\\b"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["deputy secretary", "under secretary", "assistant secretary"],
+        "state": ["deputy governor", "assistant attorney general"],
+        "local": ["deputy mayor", "assistant city manager", "undersheriff", "deputy chief"]
+      }
+    },
+    "director": {
+      "level": 5,
+      "description": "Director level with significant team or program authority",
+      "indicators": {
+        "title_keywords": [
+          "director", "senior director", "associate director", "assistant director",
+          "executive director", "regional director", "divisional director",
+          "head of", "department head", "division head", "group head",
+          "principal"
+        ],
+        "title_patterns": [
+          "\\bdirector\\b",
+          "^head\\s+of",
+          "\\bdepartment\\s+head\\b",
+          "\\bprincipal\\b"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["director", "bureau chief", "division director"],
+        "state": ["director", "bureau chief", "division administrator"],
+        "local": ["department director", "division chief", "bureau commander", "assistant chief"]
+      }
+    },
+    "manager": {
+      "level": 4,
+      "description": "Manager level with direct team management responsibility",
+      "indicators": {
+        "title_keywords": [
+          "manager", "senior manager", "associate manager", "assistant manager",
+          "group manager", "team manager", "project manager", "program manager",
+          "supervisor", "superintendent", "foreman",
+          "team lead", "team leader"
+        ],
+        "title_patterns": [
+          "\\bmanager\\b",
+          "\\bsupervisor\\b",
+          "\\bteam\\s+lead\\b"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["branch chief", "section chief", "program manager"],
+        "state": ["section manager", "unit supervisor", "program coordinator"],
+        "local": ["captain", "lieutenant", "battalion chief", "unit supervisor"]
+      }
+    },
+    "senior_ic": {
+      "level": 3,
+      "description": "Senior Individual Contributor with expertise but no direct reports",
+      "indicators": {
+        "title_keywords": [
+          "senior", "sr.", "lead", "staff", "principal",
+          "senior specialist", "senior analyst", "senior engineer",
+          "senior consultant", "senior advisor", "senior associate",
+          "architect", "fellow"
+        ],
+        "title_patterns": [
+          "^senior\\s+",
+          "^sr\\.?\\s+",
+          "^lead\\s+",
+          "^staff\\s+",
+          "\\barchitect\\b"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["senior analyst", "senior specialist", "senior examiner"],
+        "state": ["senior analyst", "senior specialist", "lead investigator"],
+        "local": ["sergeant", "detective", "senior inspector", "senior planner"]
+      }
+    },
+    "individual_contributor": {
+      "level": 2,
+      "description": "Standard Individual Contributor role",
+      "indicators": {
+        "title_keywords": [
+          "specialist", "analyst", "associate", "coordinator", "administrator",
+          "engineer", "developer", "designer", "consultant",
+          "representative", "agent", "officer", "examiner",
+          "accountant", "recruiter", "buyer"
+        ],
+        "title_patterns": [
+          "\\bspecialist\\b",
+          "\\banalyst\\b",
+          "\\bassociate\\b",
+          "\\bcoordinator\\b",
+          "\\bengineer\\b"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["analyst", "specialist", "examiner", "agent"],
+        "state": ["analyst", "specialist", "examiner", "investigator"],
+        "local": ["officer", "firefighter", "paramedic", "inspector", "planner"]
+      }
+    },
+    "entry": {
+      "level": 1,
+      "description": "Entry-level position with limited experience",
+      "indicators": {
+        "title_keywords": [
+          "intern", "trainee", "apprentice",
+          "assistant", "aide", "clerk",
+          "junior", "jr.", "entry", "associate"
+        ],
+        "title_patterns": [
+          "^intern\\b",
+          "^junior\\s+",
+          "^jr\\.?\\s+",
+          "\\btrainee\\b",
+          "\\bapprentice\\b"
+        ],
+        "exclusions": [
+          "executive assistant",
+          "administrative assistant to",
+          "assistant director",
+          "assistant manager"
+        ]
+      },
+      "government_equivalents": {
+        "federal": ["intern", "trainee", "clerk"],
+        "state": ["intern", "trainee", "clerk"],
+        "local": ["intern", "trainee", "cadet", "recruit"]
+      }
+    }
+  },
+
+  "title_modifiers": {
+    "increase_seniority": {
+      "senior": 1,
+      "sr.": 1,
+      "lead": 1,
+      "principal": 1,
+      "chief": 2,
+      "head": 1,
+      "executive": 2
+    },
+    "decrease_seniority": {
+      "junior": -1,
+      "jr.": -1,
+      "associate": -1,
+      "assistant": -1,
+      "intern": -2,
+      "trainee": -2
+    },
+    "neutral_modifiers": [
+      "regional", "global", "corporate", "enterprise",
+      "national", "international", "worldwide"
+    ]
+  },
+
+  "ambiguous_titles": {
+    "director": {
+      "corporate_context": "director",
+      "government_context": "executive",
+      "default": "director",
+      "notes": "In government, 'Director' often means agency head (executive level)"
+    },
+    "officer": {
+      "corporate_context": "individual_contributor",
+      "government_context": "individual_contributor",
+      "c_suite_context": "executive",
+      "default": "individual_contributor",
+      "notes": "Chief X Officer = executive; Police Officer = IC"
+    },
+    "associate": {
+      "law_firm_context": "vp",
+      "consulting_context": "individual_contributor",
+      "retail_context": "entry",
+      "default": "individual_contributor",
+      "notes": "In law firms, Associate is mid-level attorney (VP equivalent)"
+    },
+    "partner": {
+      "law_firm_context": "executive",
+      "consulting_context": "executive",
+      "default": "executive",
+      "notes": "Partner typically indicates ownership/executive stake"
+    },
+    "counsel": {
+      "general_counsel": "vp",
+      "associate_counsel": "manager",
+      "default": "manager"
+    }
+  },
+
+  "scoring_rules": {
+    "title_keyword_exact": 100,
+    "title_keyword_contains": 80,
+    "title_pattern_match": 90,
+    "modifier_bonus": 20,
+    "context_alignment": 30,
+    "minimum_confidence_threshold": 60
+  },
+
+  "fallback_rules": {
+    "unknown_title": "individual_contributor",
+    "ambiguous_title": "manager",
+    "empty_title": "individual_contributor"
+  }
+}

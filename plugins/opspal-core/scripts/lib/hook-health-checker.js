@@ -55,7 +55,11 @@ const HOOK_TYPES = [
   'PreCommit',
   'PostCommit',
   'PreCompact',
-  'Stop'
+  'Stop',
+  'SubagentStart',
+  'SubagentStop',
+  'TaskCompleted',
+  'Setup'
 ];
 
 // Hooks that should return JSON with systemMessage
@@ -63,6 +67,37 @@ const HOOKS_EXPECTING_OUTPUT = ['UserPromptSubmit'];
 
 // Hooks that may return JSON with decision field
 const HOOKS_WITH_DECISION = ['PreToolUse', 'PermissionRequest'];
+
+// Hook type classification for context injection analysis
+const CONTEXT_INJECTING_HOOKS = ['UserPromptSubmit', 'SessionStart', 'SubagentStart', 'PreCompact'];
+const DECISION_HOOKS = ['PreToolUse', 'PermissionRequest'];
+const SIDE_EFFECT_HOOKS = ['PostToolUse', 'Stop', 'SubagentStop', 'TaskCompleted', 'PreCommit', 'PostCommit', 'Setup'];
+
+const VALID_CONTEXT_KEYS = {
+  UserPromptSubmit: ['systemMessage', 'hookSpecificOutput', 'suppressOutput', 'decision', 'hookEventName'],
+  SessionStart: ['systemMessage', 'hookSpecificOutput', 'suppressOutput', 'hookEventName'],
+  SubagentStart: ['systemMessage', 'hookSpecificOutput', 'suppressOutput', 'hookEventName'],
+  PreCompact: ['systemMessage', 'hookSpecificOutput', 'suppressOutput', 'hookEventName']
+};
+
+const STDOUT_CONTAMINATION_PATTERNS = [
+  /^(debug|log|info|warn|error|trace):/i,
+  /^processing/i,
+  /^\[.*\]/,
+  /^#/,
+  /^echo /,
+  /^set -/
+];
+
+const STATIC_CONTEXT_PATTERNS = {
+  systemMessage: /["']systemMessage["']\s*:/,
+  additionalContext: /additionalContext/,
+  hookSpecificOutput: /hookSpecificOutput/,
+  suppressOutput: /suppressOutput/,
+  permissionDecision: /permissionDecision/,
+  emptyJson: /echo\s+['"]?\{\}['"]?\s*$/m,
+  echoEmpty: /echo\s*$/m
+};
 
 // Test inputs for each hook type
 const TEST_INPUTS = {
@@ -148,11 +183,16 @@ const TEST_INPUTS = {
     token_count: 456,
     tool_uses: 3,
     _test: true
+  },
+  Setup: {
+    hook_event_name: 'Setup',
+    cwd: process.cwd(),
+    _test: true
   }
 };
 
 // Common dependencies to check for
-const COMMON_DEPENDENCIES = ['jq', 'node', 'bash', 'bc', 'curl', 'grep', 'sed', 'awk'];
+const COMMON_DEPENDENCIES = ['jq', 'node', 'bash', 'bc', 'curl', 'grep', 'sed', 'awk', 'sf', 'sfdx'];
 
 // Colors for terminal output
 const COLORS = {
@@ -255,7 +295,8 @@ class HookHealthChecker {
     this.results = [];
     this.recommendations = [];
 
-    this.logDir = path.join(os.homedir(), '.claude', 'logs', 'hooks');
+    this.logDir = path.join(os.homedir(), '.claude', 'logs');
+    this.hookLogSubdir = path.join(this.logDir, 'hooks');
     this.circuitStateFile = path.join(this.projectRoot, '.claude', 'hook-circuit-state.json');
   }
 
@@ -297,7 +338,10 @@ class HookHealthChecker {
     // Stage 9: Cross-Reference Validation
     await this.crossReferenceConfigs();
 
-    // Stage 10: Generate Summary
+    // Stage 10: Context Injection Diagnostic
+    await this.checkContextInjection();
+
+    // Generate Summary
     const summary = this.generateSummary(Date.now() - startTime);
 
     return summary;
@@ -343,6 +387,72 @@ class HookHealthChecker {
           fix: `Create ${projectHooksPath} with hook configurations`
         }
       ));
+    }
+
+    // Check project-level settings.json for hooks
+    const settingsPath = path.join(this.projectRoot, '.claude', 'settings.json');
+    if (fs.existsSync(settingsPath)) {
+      try {
+        const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+        if (settings.hooks && Object.keys(settings.hooks).length > 0) {
+          let totalHooks = 0;
+          for (const eventType of Object.keys(settings.hooks)) {
+            for (const group of settings.hooks[eventType]) {
+              totalHooks += (group.hooks || []).length;
+            }
+          }
+          this.hookConfigs.push({
+            source: 'settings.json',
+            path: settingsPath,
+            pluginRoot: this.projectRoot,
+            config: { hooks: settings.hooks }
+          });
+          this.results.push(new CheckResult(
+            stage, stageName, HEALTH_STATUS.HEALTHY,
+            `settings.json: ${Object.keys(settings.hooks).length} event types, ${totalHooks} hooks`,
+            { path: settingsPath, eventTypes: Object.keys(settings.hooks), totalHooks }
+          ));
+        }
+      } catch (e) {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.DEGRADED,
+          `settings.json parse error`,
+          { path: settingsPath, error: e.message }
+        ));
+      }
+    }
+
+    // Check global settings.json for hooks
+    const globalSettingsPath = path.join(os.homedir(), '.claude', 'settings.json');
+    if (fs.existsSync(globalSettingsPath) && globalSettingsPath !== settingsPath) {
+      try {
+        const globalSettings = JSON.parse(fs.readFileSync(globalSettingsPath, 'utf8'));
+        if (globalSettings.hooks && Object.keys(globalSettings.hooks).length > 0) {
+          let totalHooks = 0;
+          for (const eventType of Object.keys(globalSettings.hooks)) {
+            for (const group of globalSettings.hooks[eventType]) {
+              totalHooks += (group.hooks || []).length;
+            }
+          }
+          this.hookConfigs.push({
+            source: 'global-settings.json',
+            path: globalSettingsPath,
+            pluginRoot: os.homedir(),
+            config: { hooks: globalSettings.hooks }
+          });
+          this.results.push(new CheckResult(
+            stage, stageName, HEALTH_STATUS.HEALTHY,
+            `global settings.json: ${Object.keys(globalSettings.hooks).length} event types, ${totalHooks} hooks`,
+            { path: globalSettingsPath, eventTypes: Object.keys(globalSettings.hooks), totalHooks }
+          ));
+        }
+      } catch (e) {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.DEGRADED,
+          `global settings.json parse error`,
+          { path: globalSettingsPath, error: e.message }
+        ));
+      }
     }
 
     // Discover plugin directories
@@ -443,7 +553,7 @@ class HookHealthChecker {
       this.results.push(new CheckResult(
         stage, stageName, HEALTH_STATUS.UNHEALTHY,
         `No hook configurations found`,
-        { fix: 'Create .claude/hooks/hooks.json with hook definitions' }
+        { fix: 'Add hooks to .claude/settings.json under the "hooks" key, or create .claude/hooks/hooks.json with hook definitions' }
       ));
     } else {
       this.results.push(new CheckResult(
@@ -1038,33 +1148,49 @@ class HookHealthChecker {
     const stage = 8;
     const stageName = 'Log Analysis';
 
-    if (!fs.existsSync(this.logDir)) {
+    // Collect log files from both the hooks subdirectory and parent logs directory
+    const logFilePaths = [];
+
+    // Scan hooks subdirectory for all .jsonl files
+    if (fs.existsSync(this.hookLogSubdir)) {
+      try {
+        const subFiles = fs.readdirSync(this.hookLogSubdir).filter(f => f.endsWith('.jsonl'));
+        for (const f of subFiles) {
+          logFilePaths.push(path.join(this.hookLogSubdir, f));
+        }
+      } catch { /* skip if unreadable */ }
+    }
+
+    // Scan parent logs directory for hook-related .jsonl files
+    if (fs.existsSync(this.logDir)) {
+      try {
+        const parentFiles = fs.readdirSync(this.logDir).filter(f =>
+          f.endsWith('.jsonl') && f.toLowerCase().includes('hook')
+        );
+        for (const f of parentFiles) {
+          const fullPath = path.join(this.logDir, f);
+          if (!logFilePaths.includes(fullPath)) {
+            logFilePaths.push(fullPath);
+          }
+        }
+      } catch { /* skip if unreadable */ }
+    }
+
+    if (logFilePaths.length === 0) {
       this.results.push(new CheckResult(
         stage, stageName, HEALTH_STATUS.HEALTHY,
-        'No hook logs directory (hooks may not be logging)',
-        { path: this.logDir }
+        'No hook log files found',
+        { searchedPaths: [this.hookLogSubdir, this.logDir] }
       ));
       return;
     }
 
     try {
-      const logFiles = fs.readdirSync(this.logDir).filter(f => f.endsWith('.jsonl'));
-
-      if (logFiles.length === 0) {
-        this.results.push(new CheckResult(
-          stage, stageName, HEALTH_STATUS.HEALTHY,
-          'No hook log files found',
-          {}
-        ));
-        return;
-      }
-
       const recentErrors = [];
       const errorPatterns = {};
       const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
 
-      for (const logFile of logFiles) {
-        const logPath = path.join(this.logDir, logFile);
+      for (const logPath of logFilePaths) {
         const content = fs.readFileSync(logPath, 'utf8');
         const lines = content.trim().split('\n').filter(l => l);
 
@@ -1092,7 +1218,7 @@ class HookHealthChecker {
         this.results.push(new CheckResult(
           stage, stageName, HEALTH_STATUS.HEALTHY,
           'No errors in hook logs (last 24 hours)',
-          { logsAnalyzed: logFiles.length }
+          { logsAnalyzed: logFilePaths.length }
         ));
       } else {
         this.results.push(new CheckResult(
@@ -1108,6 +1234,27 @@ class HookHealthChecker {
             }))
           }
         ));
+      }
+
+      // Stage 8b: Wire in hook-execution-analyzer if available
+      try {
+        const { HookExecutionAnalyzer } = require('./hook-execution-analyzer');
+        const analyzer = new HookExecutionAnalyzer({ hours: 24, verbose: false });
+        const execResults = await analyzer.analyze();
+        if (execResults.failed > 0) {
+          this.results.push(new CheckResult(stage, stageName, HEALTH_STATUS.DEGRADED,
+            `${execResults.failed} hook execution failures in last 24h`,
+            { failures: execResults.failures?.slice(0, 5) }
+          ));
+        }
+        if (execResults.slow > 0) {
+          this.results.push(new CheckResult(stage, stageName, HEALTH_STATUS.DEGRADED,
+            `${execResults.slow} slow hooks detected (>100ms)`,
+            { details: 'Run hook-execution-analyzer.js --verbose for details' }
+          ));
+        }
+      } catch {
+        // Non-fatal: analyzer not available or failed
       }
     } catch (e) {
       this.results.push(new CheckResult(
@@ -1246,7 +1393,465 @@ class HookHealthChecker {
   }
 
   // ---------------------------------------------------------------------------
-  // Stage 10: Generate Summary
+  // Stage 10: Context Injection Diagnostic
+  // ---------------------------------------------------------------------------
+
+  _classifyHookRole(hookType) {
+    if (CONTEXT_INJECTING_HOOKS.includes(hookType)) return 'context-injecting';
+    if (DECISION_HOOKS.includes(hookType)) return 'decision-making';
+    if (SIDE_EFFECT_HOOKS.includes(hookType)) return 'side-effect';
+    return 'unknown';
+  }
+
+  _analyzeOutputForContextInjection(output, hookType, hookName) {
+    const role = this._classifyHookRole(hookType);
+    const result = { verdict: 'UNKNOWN', details: '', recommendation: null };
+
+    // Side-effect hooks should not produce stdout
+    if (role === 'side-effect') {
+      if (output && output.trim()) {
+        result.verdict = 'SIDE_EFFECT_STDOUT';
+        result.details = `Side-effect hook produced stdout (${output.trim().length} chars)`;
+        result.recommendation = 'Remove stdout output — side-effect hooks should only use stderr or file I/O';
+      } else {
+        result.verdict = 'NOOP';
+        result.details = 'Side-effect hook correctly produces no stdout';
+      }
+      return result;
+    }
+
+    // Empty output from context-injecting or decision hooks
+    if (!output || !output.trim()) {
+      if (role === 'context-injecting') {
+        result.verdict = 'NOOP';
+        result.details = 'Empty output — hook chose not to inject (valid no-op)';
+      } else {
+        result.verdict = 'NOOP';
+        result.details = 'Empty output';
+      }
+      return result;
+    }
+
+    const trimmed = output.trim();
+
+    // UserPromptSubmit hooks can legitimately return plain text (added as systemMessage)
+    // Only JSON output needs envelope validation; plain text is always valid for context injection
+    if (hookType === 'UserPromptSubmit' && !trimmed.startsWith('{')) {
+      result.verdict = 'WILL_INJECT';
+      result.details = `Plain text context injection (${trimmed.length} chars)`;
+      return result;
+    }
+
+    // Check for stdout contamination (non-JSON before JSON)
+    const lines = trimmed.split('\n');
+    const firstLine = lines[0].trim();
+    if (lines.length > 1 || !firstLine.startsWith('{')) {
+      for (const pattern of STDOUT_CONTAMINATION_PATTERNS) {
+        if (pattern.test(firstLine)) {
+          result.verdict = 'CONTAMINATED';
+          result.details = `stdout contamination detected: "${firstLine.substring(0, 80)}"`;
+          result.recommendation = 'Redirect debug output to stderr (>&2) or remove it';
+          return result;
+        }
+      }
+    }
+
+    // Try to parse as JSON
+    let parsed;
+    try {
+      // Find the last JSON object in output (skip contamination prefix)
+      const jsonMatch = trimmed.match(/\{[\s\S]*\}$/);
+      if (!jsonMatch) {
+        // For context-injecting hooks other than UserPromptSubmit, non-JSON is invalid
+        if (role === 'context-injecting') {
+          result.verdict = 'INVALID';
+          result.details = 'Output is not valid JSON (non-UserPromptSubmit context hooks must use JSON)';
+          result.recommendation = 'Wrap context in {"systemMessage": "..."} envelope';
+          return result;
+        }
+        result.verdict = 'INVALID';
+        result.details = 'Output is not valid JSON';
+        result.recommendation = 'Hook must output valid JSON or nothing';
+        return result;
+      }
+      parsed = JSON.parse(jsonMatch[0]);
+      if (jsonMatch[0] !== trimmed) {
+        result.verdict = 'CONTAMINATED';
+        result.details = 'stdout has non-JSON prefix before JSON payload';
+        result.recommendation = 'Remove all stdout before JSON — Claude Code reads the full stdout buffer';
+        return result;
+      }
+    } catch (e) {
+      result.verdict = 'INVALID';
+      result.details = `JSON parse error: ${e.message}`;
+      result.recommendation = 'Fix JSON syntax in hook output';
+      return result;
+    }
+
+    // Empty JSON object
+    if (Object.keys(parsed).length === 0) {
+      result.verdict = 'NOOP';
+      result.details = 'Returns empty JSON {} — valid no-op';
+      return result;
+    }
+
+    // Validate envelope keys for context-injecting hooks
+    if (role === 'context-injecting') {
+      const validKeys = VALID_CONTEXT_KEYS[hookType] || [];
+      const hasContextKey = parsed.systemMessage ||
+        (parsed.hookSpecificOutput && parsed.hookSpecificOutput.additionalContext);
+
+      if (hasContextKey) {
+        result.verdict = 'WILL_INJECT';
+        const injectionPaths = [];
+        if (parsed.systemMessage) injectionPaths.push('systemMessage');
+        if (parsed.hookSpecificOutput?.additionalContext) injectionPaths.push('hookSpecificOutput.additionalContext');
+        result.details = `Context injection via: ${injectionPaths.join(', ')}`;
+      } else {
+        // Has keys but none that inject context
+        const keys = Object.keys(parsed);
+        const unknownKeys = keys.filter(k => !validKeys.includes(k));
+        if (unknownKeys.length > 0) {
+          result.verdict = 'INVALID';
+          result.details = `Unknown envelope keys: ${unknownKeys.join(', ')}`;
+          result.recommendation = `Valid keys for ${hookType}: ${validKeys.join(', ')}`;
+        } else {
+          result.verdict = 'NOOP';
+          result.details = 'Valid JSON but no context injection keys present';
+        }
+      }
+      return result;
+    }
+
+    // Decision hooks
+    if (role === 'decision-making') {
+      if (parsed.permissionDecision) {
+        result.verdict = 'WILL_INJECT';
+        result.details = `Decision hook with permissionDecision: ${parsed.permissionDecision}`;
+      } else {
+        result.verdict = 'NOOP';
+        result.details = 'Decision hook without permissionDecision — passes through';
+      }
+      return result;
+    }
+
+    result.verdict = 'UNKNOWN';
+    result.details = `Unclassified hook type: ${hookType}`;
+    return result;
+  }
+
+  _staticAnalyzeHookScript(scriptPath, hookType) {
+    const role = this._classifyHookRole(hookType);
+    const result = { verdict: 'UNKNOWN', details: '', recommendation: null, static: true };
+
+    try {
+      const content = fs.readFileSync(scriptPath, 'utf8');
+
+      // B5: Check HEALTHCHECK_REQUIRES annotation — skip if required env vars missing
+      const requiresMatch = content.match(/^#\s*HEALTHCHECK_REQUIRES:\s*(.+)$/m);
+      if (requiresMatch) {
+        const requiredVars = requiresMatch[1].split(',').map(v => v.trim());
+        const missing = requiredVars.filter(v => !process.env[v]);
+        if (missing.length > 0) {
+          result.verdict = 'SKIPPED';
+          result.details = `Requires env: ${missing.join(', ')} (not set)`;
+          return result;
+        }
+      }
+
+      if (role === 'side-effect') {
+        // Check if script globally redirects stdout→stderr via exec
+        const hasGlobalRedirect = /exec\s+(\d+>&1\s+)?1>&2/.test(content);
+        if (hasGlobalRedirect) {
+          result.verdict = 'NOOP';
+          result.details = 'Static: global exec redirect to stderr detected (stdout silenced)';
+          return result;
+        }
+
+        // B1: Line-by-line analysis — only flag bare echo/printf that write to stdout
+        const SAFE_ECHO_PATTERNS = [
+          />>/,           // append redirect
+          />\s*[/$"]/,    // redirect to file/var
+          />\s*&/,        // fd redirect (>&2, >&3, etc.)
+          /\|/,           // piped
+          /\$\(/,         // command substitution
+          /`/,            // backtick substitution
+          />&2/,          // explicit stderr
+          />&3/,          // explicit fd3
+          /^echo\s+['"]?\{/,  // JSON object output (intentional hook response)
+          /^echo\s+['"]\s*['"]\s*$/,  // echo "" (empty string)
+          /^echo\s*$/,        // bare echo (newline only)
+          /^printf\s+['"]?\{/, // printf JSON output
+        ];
+
+        const lines = content.split('\n');
+        const unsafeLines = [];
+        // Track function boundaries — echo inside a function is often captured by $(funcname)
+        let inFunction = false;
+        let functionBraceDepth = 0;
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          // Skip comments and blank lines
+          if (!line || /^\s*#/.test(line)) continue;
+
+          // Track function definitions: funcname() { or function funcname {
+          if (/^\w+\s*\(\)\s*\{/.test(line) || /^function\s+\w+/.test(line)) {
+            inFunction = true;
+            functionBraceDepth = 1;
+            continue;
+          }
+          if (inFunction) {
+            // Count braces to track nesting
+            for (const ch of line) {
+              if (ch === '{') functionBraceDepth++;
+              else if (ch === '}') functionBraceDepth--;
+            }
+            if (functionBraceDepth <= 0) {
+              inFunction = false;
+              functionBraceDepth = 0;
+            }
+            // Skip echo/printf inside function bodies — output is typically captured by callers
+            continue;
+          }
+
+          // Only check lines with echo or printf
+          if (!/\b(echo|printf)\b/.test(line)) continue;
+
+          // Handle multiline echo: if line has unmatched quote, check closing line for redirect
+          const quoteCount = (line.match(/"/g) || []).length;
+          if (quoteCount % 2 !== 0) {
+            // Unmatched quote — scan ahead for closing quote line
+            let multilineSafe = false;
+            for (let j = i + 1; j < lines.length; j++) {
+              const closingLine = lines[j];
+              const closingQuotes = (closingLine.match(/"/g) || []).length;
+              if (closingQuotes % 2 !== 0) {
+                // Found closing line — check if it has a redirect
+                if (/>&2|>&3|>>|>\s*[/$"]/.test(closingLine)) {
+                  multilineSafe = true;
+                }
+                i = j; // Skip past multiline string
+                break;
+              }
+            }
+            if (multilineSafe) continue;
+          }
+
+          // Check if any safe pattern matches
+          const isSafe = SAFE_ECHO_PATTERNS.some(pat => pat.test(line));
+          if (!isSafe) {
+            unsafeLines.push({ lineNum: i + 1, line: line.substring(0, 120) });
+          }
+        }
+
+        if (unsafeLines.length > 0) {
+          result.verdict = 'SIDE_EFFECT_STDOUT';
+          result.details = `Static: ${unsafeLines.length} line(s) may write to stdout: ${unsafeLines.map(l => `L${l.lineNum}`).join(', ')}`;
+          result.recommendation = 'Redirect output to stderr (>&2) or to a file';
+        } else {
+          result.verdict = 'NOOP';
+          result.details = 'Static: no bare stdout output detected';
+        }
+        return result;
+      }
+
+      if (role === 'context-injecting') {
+        const hasSystemMessage = STATIC_CONTEXT_PATTERNS.systemMessage.test(content);
+        const hasAdditionalContext = STATIC_CONTEXT_PATTERNS.additionalContext.test(content);
+        const hasEmptyJson = STATIC_CONTEXT_PATTERNS.emptyJson.test(content);
+
+        if (hasSystemMessage || hasAdditionalContext) {
+          result.verdict = 'WILL_INJECT';
+          const paths = [];
+          if (hasSystemMessage) paths.push('systemMessage');
+          if (hasAdditionalContext) paths.push('additionalContext');
+          result.details = `Static: found context keys: ${paths.join(', ')}`;
+          if (hasEmptyJson) {
+            result.details += ' (also has empty JSON no-op path)';
+          }
+        } else if (hasEmptyJson) {
+          result.verdict = 'NOOP';
+          result.details = 'Static: only outputs empty JSON {}';
+        } else {
+          result.verdict = 'UNKNOWN';
+          result.details = 'Static: could not determine context injection behavior';
+        }
+        return result;
+      }
+
+      if (role === 'decision-making') {
+        const hasDecision = STATIC_CONTEXT_PATTERNS.permissionDecision.test(content);
+        result.verdict = hasDecision ? 'WILL_INJECT' : 'UNKNOWN';
+        result.details = hasDecision
+          ? 'Static: found permissionDecision key'
+          : 'Static: could not find permissionDecision pattern';
+        return result;
+      }
+    } catch (e) {
+      result.verdict = 'UNKNOWN';
+      result.details = `Static analysis failed: ${e.message}`;
+    }
+
+    return result;
+  }
+
+  async checkContextInjection() {
+    const stage = 10;
+    const stageName = 'Context Injection Diagnostic';
+
+    const counters = {
+      total: 0,
+      contextInjecting: 0,
+      decisionMaking: 0,
+      sideEffect: 0,
+      confirmed: 0,
+      noop: 0,
+      contaminated: 0,
+      sideEffectStdout: 0,
+      invalid: 0,
+      unknown: 0
+    };
+
+    const issues = [];
+
+    for (const configEntry of this.hookConfigs) {
+      const hooks = configEntry.config.hooks || {};
+
+      for (const [eventType, hookArray] of Object.entries(hooks)) {
+        const hooksList = Array.isArray(hookArray) ? hookArray : [hookArray];
+
+        for (const hookDef of hooksList) {
+          const hooksToCheck = hookDef.hooks || [hookDef];
+
+          for (const hook of hooksToCheck) {
+            counters.total++;
+            const role = this._classifyHookRole(eventType);
+
+            if (role === 'context-injecting') counters.contextInjecting++;
+            else if (role === 'decision-making') counters.decisionMaking++;
+            else if (role === 'side-effect') counters.sideEffect++;
+
+            let analysis;
+
+            if (hook._testOutput !== undefined) {
+              // Use execution output from Stage 5
+              analysis = this._analyzeOutputForContextInjection(
+                hook._testOutput, eventType, hook.command
+              );
+            } else if (!this.quick) {
+              // No execution data and not quick mode — skip
+              continue;
+            } else {
+              // Quick mode: static analysis
+              const scriptPath = this._extractScriptPath(hook.command, configEntry.path, configEntry.pluginRoot);
+              if (scriptPath) {
+                const fullPath = path.isAbsolute(scriptPath)
+                  ? scriptPath
+                  : path.join(configEntry.pluginRoot || this.projectRoot, scriptPath);
+                if (fs.existsSync(fullPath)) {
+                  analysis = this._staticAnalyzeHookScript(fullPath, eventType);
+                } else {
+                  continue; // Script not found — already reported in Stage 2
+                }
+              } else {
+                continue; // Can't analyze inline hooks statically
+              }
+            }
+
+            if (!analysis) continue;
+
+            switch (analysis.verdict) {
+              case 'WILL_INJECT':
+                counters.confirmed++;
+                break;
+              case 'NOOP':
+                counters.noop++;
+                break;
+              case 'CONTAMINATED':
+                counters.contaminated++;
+                issues.push({
+                  hook: hook.command?.substring(0, 100),
+                  eventType,
+                  verdict: analysis.verdict,
+                  details: analysis.details,
+                  recommendation: analysis.recommendation
+                });
+                break;
+              case 'SIDE_EFFECT_STDOUT':
+                counters.sideEffectStdout++;
+                issues.push({
+                  hook: hook.command?.substring(0, 100),
+                  eventType,
+                  verdict: analysis.verdict,
+                  details: analysis.details,
+                  recommendation: analysis.recommendation
+                });
+                break;
+              case 'INVALID':
+                counters.invalid++;
+                issues.push({
+                  hook: hook.command?.substring(0, 100),
+                  eventType,
+                  verdict: analysis.verdict,
+                  details: analysis.details,
+                  recommendation: analysis.recommendation
+                });
+                break;
+              default:
+                counters.unknown++;
+            }
+          }
+        }
+      }
+    }
+
+    // Emit results
+    const totalIssues = counters.contaminated + counters.sideEffectStdout + counters.invalid;
+
+    if (totalIssues === 0) {
+      this.results.push(new CheckResult(
+        stage, stageName, HEALTH_STATUS.HEALTHY,
+        `${counters.total} hooks analyzed: ${counters.confirmed} inject context, ${counters.noop} no-op, ${counters.sideEffect} side-effect`,
+        { counters }
+      ));
+    } else {
+      if (counters.contaminated > 0) {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.DEGRADED,
+          `${counters.contaminated} hook(s) have stdout contamination — JSON may not reach context`,
+          { issues: issues.filter(i => i.verdict === 'CONTAMINATED'), counters }
+        ));
+      }
+      if (counters.sideEffectStdout > 0) {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.DEGRADED,
+          `${counters.sideEffectStdout} side-effect hook(s) produce stdout — should be silent`,
+          { issues: issues.filter(i => i.verdict === 'SIDE_EFFECT_STDOUT'), counters }
+        ));
+      }
+      if (counters.invalid > 0) {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.UNHEALTHY,
+          `${counters.invalid} hook(s) produce invalid output — context injection will fail`,
+          { issues: issues.filter(i => i.verdict === 'INVALID'), counters }
+        ));
+      }
+    }
+
+    if (this.verbose && issues.length > 0) {
+      for (const issue of issues) {
+        this.results.push(new CheckResult(
+          stage, stageName,
+          issue.verdict === 'INVALID' ? HEALTH_STATUS.UNHEALTHY : HEALTH_STATUS.DEGRADED,
+          `[${issue.eventType}] ${issue.verdict}: ${issue.details}`,
+          { hook: issue.hook, recommendation: issue.recommendation }
+        ));
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Summary
   // ---------------------------------------------------------------------------
 
   generateSummary(durationMs) {
@@ -1329,7 +1934,14 @@ class HookHealthChecker {
       results: this.results,
       recommendations: this.recommendations,
       hookConfigs: this.hookConfigs.length,
-      pluginsScanned: this.pluginDirs.length
+      pluginsScanned: this.pluginDirs.length,
+      contextInjection: (() => {
+        const results10 = this.results.filter(r => r.stage === 10);
+        return {
+          analyzed: results10.length > 0,
+          issues: results10.filter(r => r.status !== HEALTH_STATUS.HEALTHY).length
+        };
+      })()
     };
   }
 
@@ -1357,6 +1969,12 @@ class HookHealthChecker {
     const match = command.match(/(?:bash|sh|node)\s+"?([^"\s]+\.(?:sh|js))"?/);
     if (match) {
       return this._expandEnvVars(match[1], pluginRoot);
+    }
+
+    // Handle "env VAR=val [VAR2=val2...] script.sh" pattern
+    const envMatch = command.match(/^env\s+(?:\S+=\S+\s+)*([^\s]+\.(?:sh|js))/);
+    if (envMatch) {
+      return this._expandEnvVars(envMatch[1], pluginRoot);
     }
 
     // Handle direct script path
@@ -1596,7 +2214,8 @@ class HookHealthChecker {
       6: 'Output Validation (Silent Failures)',
       7: 'Circuit Breaker State',
       8: 'Log Analysis',
-      9: 'Cross-Reference Validation'
+      9: 'Cross-Reference Validation',
+      10: 'Context Injection Diagnostic'
     };
 
     // Output each stage
@@ -1705,7 +2324,8 @@ class HookHealthChecker {
       6: 'Output Validation (Silent Failures)',
       7: 'Circuit Breaker State',
       8: 'Log Analysis',
-      9: 'Cross-Reference Validation'
+      9: 'Cross-Reference Validation',
+      10: 'Context Injection Diagnostic'
     };
 
     md += '## Detailed Results\n\n';
@@ -1769,6 +2389,12 @@ async function main() {
     options.format = args[formatIdx + 1];
   }
 
+  // Parse project root override
+  const rootIdx = args.indexOf('--project-root');
+  if (rootIdx !== -1 && args[rootIdx + 1]) {
+    options.projectRoot = path.resolve(args[rootIdx + 1]);
+  }
+
   // Help
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
@@ -1778,12 +2404,13 @@ Usage:
   node hook-health-checker.js [options]
 
 Options:
-  --quick, -q       Skip execution tests (faster)
-  --verbose, -v     Include all details
-  --format <type>   Output format: terminal, json, markdown
-  --save            Save report to file
-  --watch [ms]      Real-time monitoring (default: 30000ms)
-  --help, -h        Show this help
+  --quick, -q             Skip execution tests (faster)
+  --verbose, -v           Include all details
+  --format <type>         Output format: terminal, json, markdown
+  --project-root <dir>    Override project root (default: cwd)
+  --save                  Save report to file
+  --watch [ms]            Real-time monitoring (default: 30000ms)
+  --help, -h              Show this help
 
 Examples:
   node hook-health-checker.js                    # Full diagnostic

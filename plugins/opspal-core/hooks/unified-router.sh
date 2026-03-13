@@ -23,8 +23,8 @@
 #   ENABLE_UNIFIED_ROUTING=1     # Enable routing (default)
 #   ENABLE_AGENT_BLOCKING=1      # Block high-complexity tasks (default)
 #   ENABLE_HARD_BLOCKING=1       # Exit code 1 for destructive ops (default)
-#   USER_PROMPT_MANDATORY_HARD_BLOCKING=0 # Emit decision=block for mandatory UserPromptSubmit routes (default disabled)
-#   ENABLE_COMPLEXITY_HARD_BLOCKING=0  # Emit routing instruction only for ACTION_TYPE=BLOCKED (default)
+#   USER_PROMPT_MANDATORY_HARD_BLOCKING=1 # Emit decision=block for mandatory UserPromptSubmit routes (default enabled)
+#   ENABLE_COMPLEXITY_HARD_BLOCKING=1  # Emit decision=block for ACTION_TYPE=BLOCKED (default enabled)
 #   ACTIVE_INTAKE_MODE=recommend # Intake gate mode: suggest|recommend|require (default recommend)
 #   ACTIVE_INTAKE_PROJECT_SIGNAL_MIN=3  # Min project signal to evaluate intake completeness
 #   ACTIVE_INTAKE_COMPLETENESS_MAX=0.5  # Max completeness score treated as vague
@@ -63,8 +63,8 @@ fi
 ENABLE_ROUTING="${ENABLE_UNIFIED_ROUTING:-1}"
 ENABLE_BLOCKING="${ENABLE_AGENT_BLOCKING:-1}"
 ENABLE_HARD_BLOCKING="${ENABLE_HARD_BLOCKING:-1}"
-USER_PROMPT_MANDATORY_HARD_BLOCKING="${USER_PROMPT_MANDATORY_HARD_BLOCKING:-0}"
-ENABLE_COMPLEXITY_HARD_BLOCKING="${ENABLE_COMPLEXITY_HARD_BLOCKING:-0}"
+USER_PROMPT_MANDATORY_HARD_BLOCKING="${USER_PROMPT_MANDATORY_HARD_BLOCKING:-1}"
+ENABLE_COMPLEXITY_HARD_BLOCKING="${ENABLE_COMPLEXITY_HARD_BLOCKING:-1}"
 ROUTING_ADAPTIVE_CONTINUE="${ROUTING_ADAPTIVE_CONTINUE:-0}"
 ROUTING_CONTINUE_LOW_SIGNAL_THRESHOLD="${ROUTING_CONTINUE_LOW_SIGNAL_THRESHOLD:-0.65}"
 ROUTING_TRANSCRIPT_NOISE_THRESHOLD="${ROUTING_TRANSCRIPT_NOISE_THRESHOLD:-0.35}"
@@ -79,6 +79,7 @@ FALLBACK_MIN_CONFIDENCE="${ROUTING_FALLBACK_MIN_CONFIDENCE:-0.55}"
 PATTERNS_FILE="$PLUGIN_ROOT/config/routing-patterns.json"
 TASK_ROUTER_SCRIPT="$PLUGIN_ROOT/scripts/lib/task-router.js"
 ROUTING_METRICS_SCRIPT="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
+ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 INTAKE_COMPLETENESS_SCORER="$PLUGIN_ROOT/scripts/lib/intake/intake-completeness-scorer.js"
 START_TIME_MS=$(date +%s%3N 2>/dev/null || echo "0")
 
@@ -267,8 +268,38 @@ detect_continue_intent() {
     fi
 }
 
+extract_routing_session_key() {
+    local hook_payload="$1"
+    local session_key=""
+
+    session_key=$(echo "$hook_payload" | jq -r '
+        .session_key
+        // .sessionKey
+        // .session_id
+        // .sessionId
+        // .context.session_key
+        // .context.sessionKey
+        // .context.session_id
+        // .context.sessionId
+        // ""
+    ' 2>/dev/null || echo "")
+
+    if [[ -n "${session_key// }" ]] && [[ "$session_key" != "null" ]]; then
+        printf '%s' "$session_key"
+        return 0
+    fi
+
+    if [[ -n "${CLAUDE_SESSION_ID:-}" ]]; then
+        printf '%s' "$CLAUDE_SESSION_ID"
+        return 0
+    fi
+
+    printf '%s' "default-session"
+}
+
 # Read hook input
 HOOK_INPUT=$(cat)
+ROUTING_SESSION_KEY=$(extract_routing_session_key "$HOOK_INPUT")
 RAW_USER_MESSAGE=$(extract_primary_user_message "$HOOK_INPUT")
 NORMALIZED_MESSAGE=$(normalize_user_message "$RAW_USER_MESSAGE")
 
@@ -334,11 +365,25 @@ check_mandatory_patterns() {
     # If patterns file exists, use it
     if [[ -f "$PATTERNS_FILE" ]]; then
         local mandatory_patterns
-        mandatory_patterns=$(jq -r '.mandatoryPatterns.patterns[]? | "\(.keywords | join("|"))\t\(.agent)"' "$PATTERNS_FILE" 2>/dev/null || echo "")
+        mandatory_patterns=$(jq -c '.mandatoryPatterns.patterns[]?' "$PATTERNS_FILE" 2>/dev/null || echo "")
 
-        while IFS=$'\t' read -r keywords agent; do
+        while IFS= read -r pattern_json; do
+            local keywords
+            local agent
+            local route_id
+            local clearance_agents
+
+            keywords=$(echo "$pattern_json" | jq -r '.keywords | join("|")' 2>/dev/null || echo "")
+            agent=$(echo "$pattern_json" | jq -r '.agent // ""' 2>/dev/null || echo "")
+            route_id=$(echo "$pattern_json" | jq -r '.id // ""' 2>/dev/null || echo "")
+            clearance_agents=$(echo "$pattern_json" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
+
             if [[ -n "$keywords" ]] && echo "$msg_lower" | grep -qE "$keywords"; then
-                echo "$agent"
+                jq -nc \
+                  --arg route_id "$route_id" \
+                  --arg agent "$agent" \
+                  --argjson clearance_agents "$clearance_agents" \
+                  '{routeId: $route_id, agent: $agent, clearanceAgents: $clearance_agents}'
                 return 0
             fi
         done <<< "$mandatory_patterns"
@@ -346,26 +391,55 @@ check_mandatory_patterns() {
 
     # Fallback: built-in patterns
     if echo "$msg_lower" | grep -qE "(deploy.*prod|production.*deploy|push.*production)"; then
-        echo "release-coordinator"
+        jq -nc \
+          --arg route_id "prod-deploy" \
+          --arg agent "opspal-core:release-coordinator" \
+          '{
+            routeId: $route_id,
+            agent: $agent,
+            clearanceAgents: [
+              "opspal-core:release-coordinator",
+              "opspal-salesforce:sfdc-deployment-manager"
+            ]
+          }'
         return 0
     fi
 
     if echo "$msg_lower" | grep -qE "(delete.*bulk|bulk.*delete|mass.*delete|delete.*all)"; then
-        echo "sfdc-data-operations"
+        jq -nc \
+          --arg route_id "bulk-delete" \
+          --arg agent "opspal-salesforce:sfdc-data-operations" \
+          '{
+            routeId: $route_id,
+            agent: $agent,
+            clearanceAgents: [
+              "opspal-salesforce:sfdc-data-operations",
+              "opspal-salesforce:sfdc-query-specialist",
+              "opspal-salesforce:sfdc-bulkops-orchestrator",
+              "opspal-salesforce:sfdc-upsert-orchestrator",
+              "opspal-salesforce:sfdc-data-export-manager"
+            ]
+          }'
         return 0
     fi
 
     if echo "$msg_lower" | grep -qE "(drop.*field|remove.*object|delete.*object|truncate)"; then
-        echo "sfdc-metadata-manager"
+        jq -nc \
+          --arg route_id "destructive-metadata" \
+          --arg agent "opspal-salesforce:sfdc-metadata-manager" \
+          '{routeId: $route_id, agent: $agent, clearanceAgents: [$agent]}'
         return 0
     fi
 
     if echo "$msg_lower" | grep -qE "(merge.*duplicate.*(account|contact|lead)|dedup(e|lication)?.*(account|contact|lead)|consolidate.*(account|contact|lead))"; then
-        echo "opspal-salesforce:sfdc-merge-orchestrator"
+        jq -nc \
+          --arg route_id "record-dedup-merge" \
+          --arg agent "opspal-salesforce:sfdc-merge-orchestrator" \
+          '{routeId: $route_id, agent: $agent, clearanceAgents: [$agent]}'
         return 0
     fi
 
-    echo ""
+    echo '{}'
     return 1
 }
 
@@ -577,19 +651,37 @@ match_platform_pattern() {
     local suggested_agent=""
     local complexity="0"
     local blocking="false"
+    local route_id=""
+    local clearance_agents="[]"
 
     # If patterns file exists, use it
     if [[ -f "$PATTERNS_FILE" ]]; then
         # Check all platform patterns using tab delimiter to avoid colon issues in agent names
-        for platform in salesforce hubspot marketo crossPlatform; do
+        for platform in salesforce hubspot marketo okrs crossPlatform gtmPlanning; do
             local patterns
-            patterns=$(jq -r ".platformPatterns.${platform}.patterns[]? | \"\(.keywords | join(\"|\"))\t\(.agent)\t\(.complexity)\t\(.blocking)\"" "$PATTERNS_FILE" 2>/dev/null || echo "")
+            patterns=$(jq -c ".platformPatterns.${platform}.patterns[]?" "$PATTERNS_FILE" 2>/dev/null || echo "")
 
-            while IFS=$'\t' read -r keywords agent comp block; do
+            while IFS= read -r pattern_json; do
+                local keywords
+                local agent
+                local comp
+                local block
+                local matched_route_id
+                local matched_clearance_agents
+
+                keywords=$(echo "$pattern_json" | jq -r '.keywords | join("|")' 2>/dev/null || echo "")
+                agent=$(echo "$pattern_json" | jq -r '.agent // ""' 2>/dev/null || echo "")
+                comp=$(echo "$pattern_json" | jq -r '.complexity // 0' 2>/dev/null || echo "0")
+                block=$(echo "$pattern_json" | jq -r '.blocking // false' 2>/dev/null || echo "false")
+                matched_route_id=$(echo "$pattern_json" | jq -r '.id // ""' 2>/dev/null || echo "")
+                matched_clearance_agents=$(echo "$pattern_json" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
+
                 if [[ -n "$keywords" ]] && echo "$msg_lower" | grep -qE "$keywords"; then
                     suggested_agent="$agent"
                     complexity="${comp:-0.5}"
                     blocking="${block:-false}"
+                    route_id="$matched_route_id"
+                    clearance_agents="$matched_clearance_agents"
                     break 2
                 fi
             done <<< "$patterns"
@@ -610,7 +702,89 @@ match_platform_pattern() {
         fi
     fi
 
-    echo "${suggested_agent:-}|${complexity:-0}|${blocking:-false}"
+    jq -nc \
+      --arg route_id "$route_id" \
+      --arg agent "${suggested_agent:-}" \
+      --argjson complexity "${complexity:-0}" \
+      --argjson blocking "${blocking:-false}" \
+      --argjson clearance_agents "$clearance_agents" \
+      '{
+        routeId: $route_id,
+        agent: $agent,
+        complexity: $complexity,
+        blocking: $blocking,
+        clearanceAgents: $clearance_agents
+      }'
+}
+
+persist_routing_state() {
+    local status="$1"
+    local reason="$2"
+
+    if [[ -z "${ROUTING_SESSION_KEY:-}" ]] || [[ ! -f "$ROUTING_STATE_MANAGER" ]]; then
+        return 0
+    fi
+
+    if ! command -v node &>/dev/null; then
+        return 0
+    fi
+
+    local payload
+    payload=$(jq -nc \
+      --arg session_key "$ROUTING_SESSION_KEY" \
+      --arg route_id "${ROUTE_ID:-}" \
+      --arg action "${ACTION_TYPE:-}" \
+      --arg reason "$reason" \
+      --arg agent "${SUGGESTED_AGENT:-}" \
+      --argjson clearance_agents "${CLEARANCE_AGENTS_JSON:-[]}" \
+      --arg status "$status" \
+      --arg user_message_preview "${USER_MESSAGE:0:200}" \
+      --argjson blocked "${SHOULD_BLOCK:-false}" \
+      --argjson enforced_block "${ENFORCED_BLOCK:-false}" \
+      --argjson mandatory "${IS_MANDATORY:-false}" \
+      --argjson override_applied "${OVERRIDE_APPLIED:-false}" \
+      '{
+        session_key: $session_key,
+        route_id: (if $route_id != "" then $route_id else null end),
+        action: (if $action != "" then $action else null end),
+        reason: (if $reason != "" then $reason else null end),
+        recommended_agent: (if $agent != "" then $agent else null end),
+        clearance_agents: $clearance_agents,
+        blocked: $blocked,
+        enforced_block: $enforced_block,
+        mandatory: $mandatory,
+        override_applied: $override_applied,
+        status: $status,
+        user_message_preview: $user_message_preview
+      }' 2>/dev/null || echo "")
+
+    if [[ -n "$payload" ]]; then
+        printf '%s' "$payload" | node "$ROUTING_STATE_MANAGER" save "$ROUTING_SESSION_KEY" >/dev/null 2>&1 || true
+    fi
+}
+
+routing_state_has_pending_requirement() {
+    if [[ -z "${ROUTING_SESSION_KEY:-}" ]] || [[ ! -f "$ROUTING_STATE_MANAGER" ]]; then
+        return 1
+    fi
+
+    if ! command -v node &>/dev/null; then
+        return 1
+    fi
+
+    node "$ROUTING_STATE_MANAGER" check "$ROUTING_SESSION_KEY" 2>/dev/null | jq -e '.pending == true and .enforce == true' >/dev/null 2>&1
+}
+
+mark_routing_state_bypassed() {
+    if [[ -z "${ROUTING_SESSION_KEY:-}" ]] || [[ ! -f "$ROUTING_STATE_MANAGER" ]]; then
+        return 0
+    fi
+
+    if ! command -v node &>/dev/null; then
+        return 0
+    fi
+
+    node "$ROUTING_STATE_MANAGER" mark-bypassed "$ROUTING_SESSION_KEY" "${SUGGESTED_AGENT:-}" >/dev/null 2>&1 || true
 }
 
 # =============================================================================
@@ -618,7 +792,10 @@ match_platform_pattern() {
 # =============================================================================
 
 # Check for mandatory blocking first
-MANDATORY_AGENT=$(check_mandatory_patterns "$USER_MESSAGE")
+MANDATORY_MATCH=$(check_mandatory_patterns "$USER_MESSAGE")
+MANDATORY_AGENT=$(echo "$MANDATORY_MATCH" | jq -r '.agent // ""' 2>/dev/null || echo "")
+MANDATORY_ROUTE_ID=$(echo "$MANDATORY_MATCH" | jq -r '.routeId // ""' 2>/dev/null || echo "")
+MANDATORY_CLEARANCE_AGENTS=$(echo "$MANDATORY_MATCH" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
 IS_MANDATORY="false"
 PATTERN_BLOCKING="false"
 ROUTING_SOURCE="pattern"
@@ -631,11 +808,15 @@ INTAKE_REASON="not_evaluated"
 INTAKE_PROJECT_SIGNAL="0"
 INTAKE_COMPLETENESS_SCORE="1"
 INTAKE_GATE_COMPLEXITY="0.6"
+ROUTE_ID=""
+CLEARANCE_AGENTS_JSON="[]"
 
 if [[ -n "$MANDATORY_AGENT" ]]; then
     IS_MANDATORY="true"
     SUGGESTED_AGENT="$MANDATORY_AGENT"
     COMPLEXITY="1.0"
+    ROUTE_ID="$MANDATORY_ROUTE_ID"
+    CLEARANCE_AGENTS_JSON="$MANDATORY_CLEARANCE_AGENTS"
     [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Mandatory pattern matched: $MANDATORY_AGENT" >&2
 else
     INTAKE_GATE_RESULT=$(evaluate_active_intake_gate "$USER_MESSAGE" "$ACTIVE_INTAKE_MODE" "$ACTIVE_INTAKE_PROJECT_SIGNAL_MIN" "$ACTIVE_INTAKE_COMPLETENESS_MAX")
@@ -654,6 +835,8 @@ else
         COMPLEXITY="$INTAKE_GATE_COMPLEXITY"
         ROUTING_SOURCE="intake-gate"
         INTAKE_GATE_APPLIED="true"
+        ROUTE_ID="intake-required"
+        CLEARANCE_AGENTS_JSON='["opspal-core:intelligent-intake-orchestrator"]'
 
         if [[ "$ACTIVE_INTAKE_MODE" == "require" ]]; then
             INTAKE_REQUIRED="true"
@@ -661,9 +844,11 @@ else
     else
         # Match platform patterns
         MATCH_RESULT=$(match_platform_pattern "$USER_MESSAGE")
-        SUGGESTED_AGENT=$(echo "$MATCH_RESULT" | cut -d'|' -f1)
-        COMPLEXITY=$(echo "$MATCH_RESULT" | cut -d'|' -f2)
-        PATTERN_BLOCKING=$(echo "$MATCH_RESULT" | cut -d'|' -f3)
+        SUGGESTED_AGENT=$(echo "$MATCH_RESULT" | jq -r '.agent // ""' 2>/dev/null || echo "")
+        COMPLEXITY=$(echo "$MATCH_RESULT" | jq -r '.complexity // 0' 2>/dev/null || echo "0")
+        PATTERN_BLOCKING=$(echo "$MATCH_RESULT" | jq -r '.blocking // false' 2>/dev/null || echo "false")
+        ROUTE_ID=$(echo "$MATCH_RESULT" | jq -r '.routeId // ""' 2>/dev/null || echo "")
+        CLEARANCE_AGENTS_JSON=$(echo "$MATCH_RESULT" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
     fi
 fi
 
@@ -737,6 +922,8 @@ try_task_router_fallback() {
     ROUTING_CONFIDENCE="$fallback_confidence"
     ROUTING_SOURCE="task-router-fallback"
     FALLBACK_USED="true"
+    ROUTE_ID="task-router-fallback"
+    CLEARANCE_AGENTS_JSON=$(jq -nc --arg agent "$fallback_agent" '[$agent]' 2>/dev/null || echo "[]")
 
     if [[ "$fallback_recommendation" == "REQUIRED" ]]; then
         PATTERN_BLOCKING="true"
@@ -746,6 +933,10 @@ try_task_router_fallback() {
 }
 
 try_task_router_fallback
+
+if [[ "$CLEARANCE_AGENTS_JSON" == "[]" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    CLEARANCE_AGENTS_JSON=$(jq -nc --arg agent "$SUGGESTED_AGENT" '[$agent]' 2>/dev/null || echo "[]")
+fi
 
 [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Agent: $SUGGESTED_AGENT, Complexity: $COMPLEXITY" >&2
 
@@ -864,6 +1055,18 @@ fi
 
 [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, Block: $SHOULD_BLOCK, Enforced: $ENFORCED_BLOCK, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED" >&2
 
+if [[ "$SHOULD_BLOCK" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
+        persist_routing_state "bypassed" "${BLOCK_OVERRIDE_REASON:-prompt_override_token}"
+    else
+        persist_routing_state "pending" "${BLOCK_REASON:-routing_required}"
+    fi
+elif [[ "$HAS_OVERRIDE" == "true" ]] && routing_state_has_pending_requirement; then
+    OVERRIDE_APPLIED="true"
+    BLOCK_OVERRIDE_REASON="${BLOCK_OVERRIDE_REASON:-prompt_override_token}"
+    mark_routing_state_bypassed
+fi
+
 # =============================================================================
 # OUTPUT ROUTING BANNER (to stderr for user visibility)
 # =============================================================================
@@ -895,6 +1098,7 @@ mkdir -p "$LOG_DIR" 2>/dev/null || true
 
 LOG_ENTRY=$(jq -n \
     --arg ts "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
+    --arg route_id "${ROUTE_ID:-}" \
     --arg agent "${SUGGESTED_AGENT:-}" \
     --arg leaked_agent "${GUARDRAIL_LEAKED_AGENT:-}" \
     --arg guardrail_alert "${GUARDRAIL_ALERT:-}" \
@@ -925,6 +1129,7 @@ LOG_ENTRY=$(jq -n \
     --arg msg_preview "${USER_MESSAGE:0:100}" \
     '{
         timestamp: $ts,
+        route_id: (if $route_id != "" then $route_id else null end),
         agent: (if $agent != "" then $agent else null end),
         guardrail_leaked_agent: (if $leaked_agent != "" then $leaked_agent else null end),
         guardrail_alert: (if $guardrail_alert != "" then $guardrail_alert else null end),
@@ -979,6 +1184,7 @@ if [[ "$SHOULD_BLOCK" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]] || [[ 
     ENFORCEMENT_FILE="$LOG_DIR/routing-enforcement.jsonl"
     ENFORCEMENT_ENTRY=$(jq -n \
         --arg ts "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
+        --arg route_id "${ROUTE_ID:-}" \
         --arg agent "${SUGGESTED_AGENT:-}" \
         --arg action "$ACTION_TYPE" \
         --arg block_reason "${BLOCK_REASON:-}" \
@@ -1002,6 +1208,7 @@ if [[ "$SHOULD_BLOCK" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]] || [[ 
         '{
             timestamp: $ts,
             source: "unified-router",
+            route_id: (if $route_id != "" then $route_id else null end),
             agent: (if $agent != "" then $agent else null end),
             action: $action,
             block_reason: (if $block_reason != "" then $block_reason else null end),
@@ -1032,6 +1239,7 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
     [[ "$DURATION_MS" -lt 0 ]] && DURATION_MS=0
 
     METRICS_EVENT=$(jq -n \
+        --arg route_id "${ROUTE_ID:-}" \
         --arg agent "${SUGGESTED_AGENT:-}" \
         --arg action "$ACTION_TYPE" \
         --arg block_reason "${BLOCK_REASON:-}" \
@@ -1073,6 +1281,7 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
                 durationMs: $duration_ms
             },
             routingSource: $routing_source,
+            routeId: (if $route_id != "" then $route_id else null end),
             fallbackUsed: $fallback_used,
             continueIntent: $continue_intent,
             adaptiveFallbackApplied: $adaptive_fallback_applied,
@@ -1121,8 +1330,9 @@ CRITICAL: Use the EXACT agent name shown above. Short names will fail.
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
 
 elif [[ "$IS_MANDATORY" == "true" ]]; then
-    CONTEXT_MESSAGE="MANDATORY ROUTING: Destructive operation signal detected.
-Recommended specialist: Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+    CONTEXT_MESSAGE="MANDATORY ROUTING: This operation MUST use a specialist agent.
+You MUST use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) to handle this.
+Do NOT execute this directly. Route through the specialist agent above.
 CRITICAL: Use the EXACT fully-qualified agent name shown above. Short names will fail."
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
@@ -1147,7 +1357,8 @@ Recommended specialist: Task(subagent_type='$SUGGESTED_AGENT', prompt=<original 
 Proceed only if this bypass is intentional."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]]; then
-    CONTEXT_MESSAGE="INSTRUCTION: High complexity (${COMPLEXITY_PCT}%). Use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+    CONTEXT_MESSAGE="MANDATORY ROUTING: High complexity (${COMPLEXITY_PCT}%). You MUST use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Do NOT execute this directly - route through the specialist agent.
 CRITICAL: Use the EXACT agent name shown above (fully-qualified with plugin prefix).
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
 
@@ -1157,7 +1368,7 @@ elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]]; then
 Start with Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to run intake questions and generate a structured plan.
 Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE."
     else
-        CONTEXT_MESSAGE="Consider Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>). Complexity: ${COMPLEXITY_PCT}%.
+        CONTEXT_MESSAGE="ROUTING: Use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task. Complexity: ${COMPLEXITY_PCT}%.
 REMINDER: Use the EXACT fully-qualified agent name shown above."
     fi
 fi
@@ -1185,6 +1396,7 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
         --arg context "$CONTEXT_MESSAGE" \
         --arg agent "${SUGGESTED_AGENT:-}" \
         --arg guardrail_alert "${GUARDRAIL_ALERT:-}" \
+        --arg route_id "${ROUTE_ID:-}" \
         --arg block_reason "${BLOCK_REASON:-}" \
         --arg block_override_reason "${BLOCK_OVERRIDE_REASON:-}" \
         --arg intake_mode "$ACTIVE_INTAKE_MODE" \
@@ -1217,6 +1429,7 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
             },
             metadata: {
                 agent: $agent,
+                routeId: (if $route_id != "" then $route_id else null end),
                 guardrailAlert: (if $guardrail_alert != "" then $guardrail_alert else null end),
                 blockReason: (if $block_reason != "" then $block_reason else null end),
                 blockOverrideReason: (if $block_override_reason != "" then $block_override_reason else null end),

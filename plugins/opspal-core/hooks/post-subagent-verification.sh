@@ -136,7 +136,7 @@ runbook_evidence_check() {
     missing_evidence=$(echo "$analysis" | jq -r '.missing_evidence_cohorts | join(", ")' 2>/dev/null || echo "")
     missing_artifacts=$(echo "$analysis" | jq -r '.missing_artifacts[].path' 2>/dev/null | paste -sd '; ' -)
 
-    cat << EOF
+    cat >&2 << EOF
 
 ⚠️  RUNBOOK EVIDENCE WARNING
 ═══════════════════════════════════════════════════════════
@@ -199,7 +199,7 @@ main() {
                 done
 
                 # Output structured warning (not blocking, just informational)
-                cat << EOF
+                cat >&2 << EOF
 
 ⚠️  SUB-AGENT VERIFICATION WARNING
 ═══════════════════════════════════

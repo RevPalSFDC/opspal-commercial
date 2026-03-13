@@ -142,6 +142,27 @@ Resources:
 - **Links**: All resource URLs stored centrally
 - **Audit**: Created by, accessed by, timestamps
 
+## Path Resolution
+
+```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+PROJECT_CONNECT=$(find_script "project-connect.js")
+PROJECT_CHECK=$(find_script "project-connect-check.js")
+DEP_CHECKER=$(find_script "dependency-checker.js")
+```
+
 ## Remote Discovery & Sync-Down
 
 Browse customer repos on GitHub and clone them locally — useful when setting up a new machine or joining an existing project.
@@ -150,10 +171,10 @@ Browse customer repos on GitHub and clone them locally — useful when setting u
 
 ```bash
 # Human-friendly output
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --list-repos
+node "$PROJECT_CONNECT" --list-repos
 
 # Structured JSON (for agent consumption)
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --list-repos --json
+node "$PROJECT_CONNECT" --list-repos --json
 ```
 
 Output shows sync status:
@@ -172,13 +193,13 @@ Found 5 customer repo(s):
 
 ```bash
 # Clone a specific customer repo
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --sync-down "RP-ACM123456"
+node "$PROJECT_CONNECT" --sync-down "RP-ACM123456"
 
 # Preview what would happen
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --sync-down "RP-ACM123456" --dry-run true
+node "$PROJECT_CONNECT" --sync-down "RP-ACM123456" --dry-run true
 
 # Clone all uncloned repos
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js --sync-down --all
+node "$PROJECT_CONNECT" --sync-down --all
 ```
 
 Repos are cloned to `orgs/{customer-slug}/repo/` — the `orgs/` directory is gitignored so clones stay local per-machine. The registry tracks `localClonePath` for fast status checks.
@@ -192,7 +213,7 @@ When the agent runs `/project-connect --list-repos`, it presents an interactive 
 For direct script invocation with more control:
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js \
+node "$PROJECT_CONNECT" \
   --customer "Acme Robotics" \
   --aliases "Acme Robo,ACME-R" \
   --created-by "cnacevedo@gmail.com" \
@@ -219,7 +240,7 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js \
 Check whether a project repo is synced using the local project-connect registry:
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js \
+node "$PROJECT_CONNECT" \
   --check-repo-sync \
   --customer-id "RP-ACM123456"
 ```
@@ -227,7 +248,7 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect.js \
 Or use the dedicated checker:
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/project-connect-check.js \
+node "$PROJECT_CHECK" \
   --customer-id "RP-ACM123456"
 ```
 
@@ -324,7 +345,7 @@ See: [Google Drive Authentication Guide](../docs/GOOGLE_DRIVE_PER_USER_AUTHENTIC
 
 **Manual Dependency Check:**
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/dependency-checker.js
+node "$DEP_CHECKER"
 ```
 
 ## When to Use

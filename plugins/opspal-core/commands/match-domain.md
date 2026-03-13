@@ -41,38 +41,58 @@ Match data using industry-specific abbreviation dictionaries. The system automat
 
 ## Usage Examples
 
+### Path Resolution (required before running scripts)
+```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+DOMAIN_MATCHER=$(find_script "domain-aware-matcher.js")
+DOMAIN_DICT_LOADER=$(find_script "domain-dictionary-loader.js")
+DOMAIN_DETECTOR=$(find_script "domain-detector.js")
+```
+
 ### List available domains
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js domains
+node "$DOMAIN_MATCHER" domains
 ```
 
 ### Match with explicit domain
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js match "ABC HOA" \
+node "$DOMAIN_MATCHER" match "ABC HOA" \
   --domain property-management \
   --targets ./accounts.json
 ```
 
 ### Match with auto-detection
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js match "San Diego PD" \
+node "$DOMAIN_MATCHER" match "San Diego PD" \
   --targets ./agencies.json
 ```
 
 ### Expand abbreviations
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js expand "FQHC of LA" \
+node "$DOMAIN_MATCHER" expand "FQHC of LA" \
   --domain healthcare
 ```
 
 ### Detect domain from text
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js detect "FDIC insured credit union"
+node "$DOMAIN_MATCHER" detect "FDIC insured credit union"
 ```
 
 ### Detect domain from CSV headers
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-detector.js headers "TenantName,UnitNumber,RentAmount"
+node "$DOMAIN_DETECTOR" headers "TenantName,UnitNumber,RentAmount"
 ```
 
 ## Target File Format
@@ -93,12 +113,12 @@ Create custom abbreviations for specific organizations:
 
 ```bash
 # Create override
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-dictionary-loader.js \
+node "$DOMAIN_DICT_LOADER" \
   create-override property-management acme-properties \
   --abbreviations '{"ACME": "Acme Property Management"}'
 
 # Use override
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/domain-aware-matcher.js match "ACME HOA" \
+node "$DOMAIN_MATCHER" match "ACME HOA" \
   --domain property-management \
   --org acme-properties
 ```

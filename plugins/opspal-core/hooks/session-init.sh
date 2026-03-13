@@ -82,6 +82,8 @@ load_scratchpad() {
 # 2. Environment Config Detection
 # =============================================================================
 
+ENV_CONFIG_TMPFILE="${TMPDIR:-/tmp}/session-init-envconfig-$$.txt"
+
 check_env_config() {
     if [[ "$SKIP_ENV_CHECK" = "1" ]]; then
         return
@@ -93,7 +95,8 @@ check_env_config() {
         local result
         result=$(bash "$env_checker" 2>&1 || echo "")
         if echo "$result" | grep -qi "warning\|missing\|error"; then
-            add_message "$result"
+            # Write to temp file so parent can collect after wait
+            echo "$result" > "$ENV_CONFIG_TMPFILE"
         fi
     fi
 }
@@ -167,7 +170,8 @@ load_context() {
     local context_loader="$PLUGIN_ROOT/hooks/context-loader/base-context-loader.sh"
     if [[ -f "$context_loader" ]] && [[ -x "$context_loader" ]]; then
         log_verbose "Loading platform context..."
-        bash "$context_loader" >/dev/null 2>&1 || true
+        # Use cache during session start — 5-min TTL is fine for init
+        CONTEXT_LIVE_FIRST=false bash "$context_loader" >/dev/null 2>&1 || true
     fi
 }
 
@@ -232,12 +236,21 @@ check_agent_teams_flag() {
 
 log_verbose "Session initialization starting..."
 
-# Run all initialization steps
-load_scratchpad
-check_env_config
-check_version_compatibility
-initialize_platform
-load_context
+# Run heavy subprocesses in parallel (writes to temp files, not arrays)
+load_scratchpad &
+check_version_compatibility &
+initialize_platform &
+load_context &
+check_env_config &
+wait
+
+# Collect env config warnings from temp file (backgrounded check_env_config writes here)
+if [[ -f "$ENV_CONFIG_TMPFILE" ]]; then
+    add_message "$(cat "$ENV_CONFIG_TMPFILE")"
+    rm -f "$ENV_CONFIG_TMPFILE"
+fi
+
+# Run lightweight steps that use add_message sequentially
 check_org_skills
 check_auto_memory_precedence
 check_agent_teams_flag

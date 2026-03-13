@@ -1,0 +1,143 @@
+{
+  "version": "1.0.0",
+  "description": "Configuration for Silent Failure Detection System",
+
+  "preSession": {
+    "enabled": true,
+    "validators": [
+      "env-bypass",
+      "circuit-breaker",
+      "cache-staleness",
+      "package-audit",
+      "env-isolation"
+    ],
+    "failOnCritical": false,
+    "warnOnly": ["cache-staleness", "package-audit"]
+  },
+
+  "runtime": {
+    "enabled": true,
+    "monitors": ["validation-skip", "cache-monitor", "hook-failure"],
+    "thresholds": {
+      "validationSkips": 5,
+      "cacheStaleHits": 10,
+      "hookFailures": 3,
+      "cacheFallbacks": 3
+    }
+  },
+
+  "postSession": {
+    "enabled": true,
+    "analyzers": ["pattern-detector"],
+    "autoReflection": true,
+    "reflectionThreshold": "HIGH"
+  },
+
+  "alerting": {
+    "terminal": true,
+    "log": true,
+    "slack": false,
+    "reflections": true,
+    "logPath": "~/.claude/logs/silent-failures.jsonl"
+  },
+
+  "verification": {
+    "period": 7,
+    "minimumSamples": 20,
+    "effectivenessThreshold": 0.3
+  },
+
+  "dangerousEnvVars": [
+    {
+      "name": "SKIP_VALIDATION",
+      "severity": "CRITICAL",
+      "risk": "ALL safety checks disabled"
+    },
+    {
+      "name": "SKIP_TOOL_VALIDATION",
+      "severity": "HIGH",
+      "risk": "Tool contract checks disabled"
+    },
+    {
+      "name": "SKIP_MOCKS_CHECK",
+      "severity": "HIGH",
+      "risk": "No-mocks policy bypassed"
+    },
+    {
+      "name": "SKIP_PRE_COMMIT",
+      "severity": "MEDIUM",
+      "risk": "Pre-commit hooks skipped"
+    },
+    {
+      "name": "FORCE_CACHE",
+      "severity": "MEDIUM",
+      "risk": "Live-first mode disabled"
+    },
+    {
+      "name": "GLOBAL_LIVE_FIRST",
+      "severity": "MEDIUM",
+      "risk": "Cache fallback to stale data enabled",
+      "triggerValue": "false"
+    }
+  ],
+
+  "isolatedEnvVars": [
+    "ORG_SLUG",
+    "SF_TARGET_ORG",
+    "HUBSPOT_PORTAL_ID",
+    "MARKETO_INSTANCE_ID"
+  ],
+
+  "cacheThresholds": {
+    "field-dictionary": 86400000,
+    "org-context": 604800000,
+    "api-cache": 3600000,
+    "metadata-cache": 86400000
+  },
+
+  "criticalPackages": [
+    {
+      "name": "jq",
+      "checkCmd": "jq --version",
+      "impact": "Hook JSON processing"
+    },
+    {
+      "name": "node",
+      "checkCmd": "node --version",
+      "impact": "Script execution"
+    }
+  ],
+
+  "silentFailurePatterns": {
+    "repeated_cache_fallback": {
+      "threshold": 3,
+      "severity": "HIGH",
+      "taxonomy": "external-api",
+      "suggestion": "Check external API health and network connectivity"
+    },
+    "validation_bypass_cascade": {
+      "threshold": 5,
+      "severity": "CRITICAL",
+      "taxonomy": "config-env",
+      "suggestion": "Remove SKIP_VALIDATION environment variable"
+    },
+    "hook_silent_failures": {
+      "threshold": 2,
+      "severity": "HIGH",
+      "taxonomy": "tool-contract",
+      "suggestion": "Review hooks that exit 0 but produce invalid output"
+    },
+    "idempotency_collisions": {
+      "threshold": 1,
+      "severity": "MEDIUM",
+      "taxonomy": "idempotency-state",
+      "suggestion": "Verify idempotency key generation logic"
+    },
+    "env_leakage": {
+      "threshold": 1,
+      "severity": "HIGH",
+      "taxonomy": "config-env",
+      "suggestion": "Ensure ORG_SLUG matches current client context"
+    }
+  }
+}

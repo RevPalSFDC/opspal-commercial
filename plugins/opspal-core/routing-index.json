@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-02-12T02:18:43.859Z",
-  "totalAgents": 267,
-  "totalAgentsFull": 270,
-  "totalCommands": 230,
-  "totalHooks": 182,
+  "buildDate": "2026-03-06T01:00:00.523Z",
+  "totalAgents": 275,
+  "totalAgentsFull": 278,
+  "totalCommands": 241,
+  "totalHooks": 194,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -127,13 +127,21 @@
       "client-notebook-orchestrator",
       "compensation-calculator",
       "contact-dedup-orchestrator",
+      "conversation-intelligence-aggregator",
       "cross-platform-pipeline-orchestrator",
       "cs-operations-orchestrator",
       "data-migration-orchestrator",
       "diagram-generator",
       "environment-profile-manager",
       "field-dictionary-manager",
+      "fireflies-action-tracker-agent",
+      "fireflies-integration-agent",
+      "fireflies-meeting-intelligence-agent",
+      "fireflies-sync-orchestrator",
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
       "gong-integration-agent",
+      "gong-sync-orchestrator",
       "google-slides-generator",
       "implementation-planner",
       "instance-backup",
@@ -291,6 +299,7 @@
     ],
     "integration": [
       "asana-task-manager",
+      "fireflies-integration-agent",
       "gong-integration-agent",
       "n8n-integration-orchestrator",
       "n8n-workflow-builder",
@@ -423,6 +432,8 @@
     ],
     "sync": [
       "asana-task-manager",
+      "fireflies-sync-orchestrator",
+      "gong-sync-orchestrator",
       "instance-sync",
       "live-wire-sync-test-orchestrator",
       "n8n-integration-orchestrator",
@@ -461,6 +472,7 @@
       "sfdc-csv-enrichment",
       "sfdc-dashboard-analyzer",
       "sfdc-dashboard-designer",
+      "sfdc-dashboard-migrator",
       "sfdc-dashboard-optimizer",
       "sfdc-data-generator",
       "sfdc-data-operations",
@@ -763,6 +775,74 @@
     "core contact dedup": [
       "contact-dedup-orchestrator"
     ],
+    "conversation intelligence": [
+      "conversation-intelligence-aggregator",
+      "gong-integration-agent",
+      "hubspot-conversation-intelligence"
+    ],
+    "combined call data": [
+      "conversation-intelligence-aggregator"
+    ],
+    "gong and fireflies": [
+      "conversation-intelligence-aggregator"
+    ],
+    "unified meeting analysis": [
+      "conversation-intelligence-aggregator"
+    ],
+    "cross-platform calls": [
+      "conversation-intelligence-aggregator"
+    ],
+    "meeting coverage": [
+      "conversation-intelligence-aggregator"
+    ],
+    "deal conversation health": [
+      "conversation-intelligence-aggregator"
+    ],
+    "conversation intelligence aggregator": [
+      "conversation-intelligence-aggregator"
+    ],
+    "intelligence aggregator": [
+      "conversation-intelligence-aggregator"
+    ],
+    "conversation": [
+      "conversation-intelligence-aggregator",
+      "hubspot-conversation-intelligence"
+    ],
+    "intelligence": [
+      "conversation-intelligence-aggregator",
+      "fireflies-meeting-intelligence-agent",
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
+      "pipeline-intelligence-agent",
+      "gtm-market-intelligence",
+      "hubspot-ai-revenue-intelligence",
+      "hubspot-conversation-intelligence",
+      "hubspot-revenue-intelligence",
+      "marketo-intelligence-analyst"
+    ],
+    "aggregator": [
+      "conversation-intelligence-aggregator"
+    ],
+    "core conversation": [
+      "conversation-intelligence-aggregator"
+    ],
+    "conversation core": [
+      "conversation-intelligence-aggregator"
+    ],
+    "core intelligence": [
+      "conversation-intelligence-aggregator",
+      "fireflies-meeting-intelligence-agent",
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
+      "pipeline-intelligence-agent"
+    ],
+    "intelligence core": [
+      "conversation-intelligence-aggregator",
+      "pipeline-intelligence-agent"
+    ],
+    "core aggregator": [
+      "conversation-intelligence-aggregator"
+    ],
     "pipeline": [
       "cross-platform-pipeline-orchestrator",
       "pipeline-intelligence-agent",
@@ -903,6 +983,8 @@
     ],
     "core workflow": [
       "cs-operations-orchestrator",
+      "fireflies-sync-orchestrator",
+      "gong-sync-orchestrator",
       "intelligent-intake-orchestrator",
       "multi-platform-workflow-orchestrator",
       "n8n-execution-monitor",
@@ -988,6 +1070,7 @@
       "hubspot-data-operations-manager",
       "sfdc-automation-auditor",
       "sfdc-dashboard-analyzer",
+      "sfdc-dashboard-migrator",
       "sfdc-permission-assessor"
     ],
     "migrate": [
@@ -1181,15 +1264,265 @@
     "core field dictionary": [
       "field-dictionary-manager"
     ],
+    "fireflies action items": [
+      "fireflies-action-tracker-agent"
+    ],
+    "meeting follow-ups": [
+      "fireflies-action-tracker-agent"
+    ],
+    "action item report": [
+      "fireflies-action-tracker-agent"
+    ],
+    "meeting tasks": [
+      "fireflies-action-tracker-agent"
+    ],
+    "fireflies follow-up": [
+      "fireflies-action-tracker-agent"
+    ],
+    "fireflies action": [
+      "fireflies-action-tracker-agent"
+    ],
+    "fireflies action tracker": [
+      "fireflies-action-tracker-agent"
+    ],
+    "action tracker": [
+      "fireflies-action-tracker-agent"
+    ],
+    "fireflies": [
+      "fireflies-action-tracker-agent",
+      "fireflies-integration-agent",
+      "fireflies-meeting-intelligence-agent",
+      "fireflies-sync-orchestrator"
+    ],
+    "action": [
+      "fireflies-action-tracker-agent",
+      "hubspot-custom-action-builder"
+    ],
+    "tracker": [
+      "fireflies-action-tracker-agent",
+      "hubspot-adoption-tracker"
+    ],
+    "tracke": [
+      "fireflies-action-tracker-agent",
+      "hubspot-adoption-tracker"
+    ],
+    "core fireflies": [
+      "fireflies-action-tracker-agent",
+      "fireflies-integration-agent",
+      "fireflies-meeting-intelligence-agent",
+      "fireflies-sync-orchestrator"
+    ],
+    "fireflies core": [
+      "fireflies-action-tracker-agent",
+      "fireflies-integration-agent",
+      "fireflies-meeting-intelligence-agent",
+      "fireflies-sync-orchestrator"
+    ],
+    "core action": [
+      "fireflies-action-tracker-agent"
+    ],
+    "action core": [
+      "fireflies-action-tracker-agent"
+    ],
+    "fireflies auth": [
+      "fireflies-integration-agent"
+    ],
+    "fireflies credentials": [
+      "fireflies-integration-agent"
+    ],
+    "fireflies api key": [
+      "fireflies-integration-agent"
+    ],
+    "configure fireflies": [
+      "fireflies-integration-agent"
+    ],
+    "fireflies setup": [
+      "fireflies-integration-agent"
+    ],
+    "fireflies integration": [
+      "fireflies-integration-agent"
+    ],
+    "core integration": [
+      "fireflies-integration-agent",
+      "gong-integration-agent",
+      "n8n-integration-orchestrator",
+      "outreach-integration-agent"
+    ],
+    "integration core": [
+      "fireflies-integration-agent",
+      "gong-integration-agent",
+      "n8n-integration-orchestrator",
+      "outreach-integration-agent"
+    ],
+    "core fireflies integration": [
+      "fireflies-integration-agent"
+    ],
+    "fireflies insights": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "meeting health": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies analysis": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "transcript analysis": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "meeting intelligence": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies meeting": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies meeting intelligence": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "meeting": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "core meeting": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "meeting core": [
+      "fireflies-meeting-intelligence-agent"
+    ],
+    "sync fireflies": [
+      "fireflies-sync-orchestrator"
+    ],
+    "import fireflies": [
+      "fireflies-sync-orchestrator"
+    ],
+    "fireflies batch sync": [
+      "fireflies-sync-orchestrator"
+    ],
+    "fireflies to salesforce": [
+      "fireflies-sync-orchestrator"
+    ],
+    "fireflies to hubspot": [
+      "fireflies-sync-orchestrator"
+    ],
+    "fireflies sync": [
+      "fireflies-sync-orchestrator"
+    ],
+    "core sync": [
+      "fireflies-sync-orchestrator",
+      "gong-sync-orchestrator",
+      "instance-sync"
+    ],
+    "sync core": [
+      "fireflies-sync-orchestrator",
+      "gong-sync-orchestrator",
+      "instance-sync"
+    ],
+    "core fireflies sync": [
+      "fireflies-sync-orchestrator"
+    ],
+    "competitor mentioned": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "competitive intelligence": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "gong trackers": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "battlecard": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "competitor analysis": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "competitive mentions": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "who are they comparing us to": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "competitive landscape": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "gong competitive": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "gong competitive intelligence": [
+      "gong-competitive-intelligence-agent"
+    ],
     "gong": [
-      "gong-integration-agent"
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
+      "gong-integration-agent",
+      "gong-sync-orchestrator"
+    ],
+    "competitive": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "core gong": [
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
+      "gong-integration-agent",
+      "gong-sync-orchestrator"
+    ],
+    "gong core": [
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
+      "gong-integration-agent",
+      "gong-sync-orchestrator"
+    ],
+    "core competitive": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "competitive core": [
+      "gong-competitive-intelligence-agent"
+    ],
+    "deal risk": [
+      "gong-deal-intelligence-agent",
+      "pipeline-intelligence-agent"
+    ],
+    "call coverage": [
+      "gong-deal-intelligence-agent"
+    ],
+    "gong analysis": [
+      "gong-deal-intelligence-agent"
+    ],
+    "conversation health": [
+      "gong-deal-intelligence-agent"
+    ],
+    "going dark": [
+      "gong-deal-intelligence-agent"
+    ],
+    "stakeholder engagement": [
+      "gong-deal-intelligence-agent"
+    ],
+    "deal momentum": [
+      "gong-deal-intelligence-agent"
+    ],
+    "call insights": [
+      "gong-deal-intelligence-agent"
+    ],
+    "gong deal": [
+      "gong-deal-intelligence-agent"
+    ],
+    "gong deal intelligence": [
+      "gong-deal-intelligence-agent"
+    ],
+    "deal intelligence": [
+      "gong-deal-intelligence-agent"
+    ],
+    "deal": [
+      "gong-deal-intelligence-agent",
+      "revops-deal-scorer"
+    ],
+    "core deal": [
+      "gong-deal-intelligence-agent",
+      "revops-deal-scorer"
+    ],
+    "deal core": [
+      "gong-deal-intelligence-agent",
+      "revops-deal-scorer"
     ],
     "chorus": [
       "gong-integration-agent"
-    ],
-    "conversation intelligence": [
-      "gong-integration-agent",
-      "hubspot-conversation-intelligence"
     ],
     "call recording": [
       "gong-integration-agent"
@@ -1209,24 +1542,35 @@
     "gong integration": [
       "gong-integration-agent"
     ],
-    "core gong": [
-      "gong-integration-agent"
-    ],
-    "gong core": [
-      "gong-integration-agent"
-    ],
-    "core integration": [
-      "gong-integration-agent",
-      "n8n-integration-orchestrator",
-      "outreach-integration-agent"
-    ],
-    "integration core": [
-      "gong-integration-agent",
-      "n8n-integration-orchestrator",
-      "outreach-integration-agent"
-    ],
     "core gong integration": [
       "gong-integration-agent"
+    ],
+    "sync gong": [
+      "gong-sync-orchestrator"
+    ],
+    "import gong calls": [
+      "gong-sync-orchestrator"
+    ],
+    "gong batch sync": [
+      "gong-sync-orchestrator"
+    ],
+    "gong to salesforce": [
+      "gong-sync-orchestrator"
+    ],
+    "gong to hubspot": [
+      "gong-sync-orchestrator"
+    ],
+    "sync calls": [
+      "gong-sync-orchestrator"
+    ],
+    "gong import": [
+      "gong-sync-orchestrator"
+    ],
+    "gong sync": [
+      "gong-sync-orchestrator"
+    ],
+    "core gong sync": [
+      "gong-sync-orchestrator"
     ],
     "slides": [
       "google-slides-generator",
@@ -1312,6 +1656,7 @@
       "task-graph-orchestrator",
       "hubspot-orchestrator",
       "marketo-orchestrator",
+      "sfdc-dashboard-migrator",
       "sfdc-revops-coordinator"
     ],
     "document": [
@@ -1430,12 +1775,6 @@
       "flow-batch-operator"
     ],
     "instance sync": [
-      "instance-sync"
-    ],
-    "core sync": [
-      "instance-sync"
-    ],
-    "sync core": [
       "instance-sync"
     ],
     "core instance sync": [
@@ -1979,9 +2318,6 @@
     "pipeline health": [
       "pipeline-intelligence-agent"
     ],
-    "deal risk": [
-      "pipeline-intelligence-agent"
-    ],
     "bottleneck": [
       "pipeline-intelligence-agent"
     ],
@@ -2001,21 +2337,7 @@
     "pipeline intelligence": [
       "pipeline-intelligence-agent"
     ],
-    "intelligence": [
-      "pipeline-intelligence-agent",
-      "gtm-market-intelligence",
-      "hubspot-ai-revenue-intelligence",
-      "hubspot-conversation-intelligence",
-      "hubspot-revenue-intelligence",
-      "marketo-intelligence-analyst"
-    ],
     "pipeline core": [
-      "pipeline-intelligence-agent"
-    ],
-    "core intelligence": [
-      "pipeline-intelligence-agent"
-    ],
-    "intelligence core": [
       "pipeline-intelligence-agent"
     ],
     "core pipeline intelligence": [
@@ -2543,15 +2865,6 @@
       "revops-deal-scorer"
     ],
     "deal scorer": [
-      "revops-deal-scorer"
-    ],
-    "deal": [
-      "revops-deal-scorer"
-    ],
-    "core deal": [
-      "revops-deal-scorer"
-    ],
-    "deal core": [
       "revops-deal-scorer"
     ],
     "revops dedup": [
@@ -4067,9 +4380,6 @@
     "hubspot hubspot admin": [
       "hubspot-admin-specialist"
     ],
-    "tracker": [
-      "hubspot-adoption-tracker"
-    ],
     "metrics": [
       "hubspot-adoption-tracker",
       "marketo-analytics-assessor"
@@ -4081,9 +4391,6 @@
       "hubspot-adoption-tracker"
     ],
     "adoption tracker": [
-      "hubspot-adoption-tracker"
-    ],
-    "tracke": [
       "hubspot-adoption-tracker"
     ],
     "adoption hubspot": [
@@ -4131,6 +4438,7 @@
       "compliance-report-generator",
       "sfdc-api-monitor",
       "sfdc-dashboard-analyzer",
+      "sfdc-dashboard-migrator",
       "sfdc-report-designer",
       "sfdc-report-template-deployer",
       "sfdc-report-type-manager",
@@ -4878,9 +5186,6 @@
     "hubspot hubspot content": [
       "hubspot-content-automation-agent"
     ],
-    "conversation": [
-      "hubspot-conversation-intelligence"
-    ],
     "hubspot conversation": [
       "hubspot-conversation-intelligence"
     ],
@@ -4934,9 +5239,6 @@
     "custom": [
       "hubspot-custom-action-builder"
     ],
-    "action": [
-      "hubspot-custom-action-builder"
-    ],
     "custom hubspot": [
       "hubspot-custom-action-builder"
     ],
@@ -4980,6 +5282,7 @@
       "hubspot-data-operations-manager",
       "hubspot-property-manager",
       "sfdc-dashboard-analyzer",
+      "sfdc-dashboard-migrator",
       "sfdc-data-generator",
       "sfdc-discovery",
       "sfdc-object-auditor"
@@ -8091,22 +8394,23 @@
     "dashboard designer": [
       "sfdc-dashboard-designer"
     ],
+    "migrator": [
+      "sfdc-dashboard-migrator"
+    ],
+    "one": [
+      "sfdc-dashboard-migrator",
+      "sfdc-dashboard-optimizer",
+      "sfdc-lightning-developer",
+      "sfdc-ui-customizer"
+    ],
     "sfdc dashboard migrator": [
       "sfdc-dashboard-migrator"
     ],
     "dashboard migrator": [
       "sfdc-dashboard-migrator"
     ],
-    "migrator": [
-      "sfdc-dashboard-migrator"
-    ],
     "salesforce migrator": [
       "sfdc-dashboard-migrator"
-    ],
-    "one": [
-      "sfdc-dashboard-optimizer",
-      "sfdc-lightning-developer",
-      "sfdc-ui-customizer"
     ],
     "sfdc dashboard optimizer": [
       "sfdc-dashboard-optimizer"
@@ -9338,13 +9642,21 @@
       "opspal-core:client-notebook-orchestrator",
       "opspal-core:compensation-calculator",
       "opspal-core:contact-dedup-orchestrator",
+      "opspal-core:conversation-intelligence-aggregator",
       "opspal-core:cross-platform-pipeline-orchestrator",
       "opspal-core:cs-operations-orchestrator",
       "opspal-core:data-migration-orchestrator",
       "opspal-core:diagram-generator",
       "opspal-core:environment-profile-manager",
       "opspal-core:field-dictionary-manager",
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
       "opspal-core:gong-integration-agent",
+      "opspal-core:gong-sync-orchestrator",
       "opspal-core:google-slides-generator",
       "opspal-core:implementation-planner",
       "opspal-core:instance-backup",
@@ -9502,6 +9814,7 @@
     ],
     "integration": [
       "opspal-core:asana-task-manager",
+      "opspal-core:fireflies-integration-agent",
       "opspal-core:gong-integration-agent",
       "opspal-core:n8n-integration-orchestrator",
       "opspal-core:n8n-workflow-builder",
@@ -9635,6 +9948,8 @@
     ],
     "sync": [
       "opspal-core:asana-task-manager",
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-sync-orchestrator",
       "opspal-core:instance-sync",
       "opspal-core:live-wire-sync-test-orchestrator",
       "opspal-core:n8n-integration-orchestrator",
@@ -9674,6 +9989,7 @@
       "opspal-salesforce:sfdc-csv-enrichment",
       "opspal-salesforce:sfdc-dashboard-analyzer",
       "opspal-salesforce:sfdc-dashboard-designer",
+      "opspal-salesforce:sfdc-dashboard-migrator",
       "opspal-salesforce:sfdc-dashboard-optimizer",
       "opspal-salesforce:sfdc-data-generator",
       "opspal-salesforce:sfdc-data-operations",
@@ -9994,6 +10310,74 @@
     "core contact dedup": [
       "opspal-core:contact-dedup-orchestrator"
     ],
+    "conversation intelligence": [
+      "opspal-core:conversation-intelligence-aggregator",
+      "opspal-core:gong-integration-agent",
+      "opspal-hubspot:hubspot-conversation-intelligence"
+    ],
+    "combined call data": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "gong and fireflies": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "unified meeting analysis": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "cross-platform calls": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "meeting coverage": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "deal conversation health": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "conversation intelligence aggregator": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "intelligence aggregator": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "conversation": [
+      "opspal-core:conversation-intelligence-aggregator",
+      "opspal-hubspot:hubspot-conversation-intelligence"
+    ],
+    "intelligence": [
+      "opspal-core:conversation-intelligence-aggregator",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:pipeline-intelligence-agent",
+      "opspal-gtm-planning:gtm-market-intelligence",
+      "opspal-hubspot:hubspot-ai-revenue-intelligence",
+      "opspal-hubspot:hubspot-conversation-intelligence",
+      "opspal-hubspot:hubspot-revenue-intelligence",
+      "opspal-marketo:marketo-intelligence-analyst"
+    ],
+    "aggregator": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "core conversation": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "conversation core": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
+    "core intelligence": [
+      "opspal-core:conversation-intelligence-aggregator",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:pipeline-intelligence-agent"
+    ],
+    "intelligence core": [
+      "opspal-core:conversation-intelligence-aggregator",
+      "opspal-core:pipeline-intelligence-agent"
+    ],
+    "core aggregator": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
     "pipeline": [
       "opspal-core:cross-platform-pipeline-orchestrator",
       "opspal-core:pipeline-intelligence-agent",
@@ -10135,6 +10519,8 @@
     ],
     "core workflow": [
       "opspal-core:cs-operations-orchestrator",
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-sync-orchestrator",
       "opspal-core:intelligent-intake-orchestrator",
       "opspal-core:multi-platform-workflow-orchestrator",
       "opspal-core:n8n-execution-monitor",
@@ -10220,6 +10606,7 @@
       "opspal-hubspot:hubspot-data-operations-manager",
       "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-dashboard-analyzer",
+      "opspal-salesforce:sfdc-dashboard-migrator",
       "opspal-salesforce:sfdc-permission-assessor"
     ],
     "migrate": [
@@ -10413,15 +10800,265 @@
     "core field dictionary": [
       "opspal-core:field-dictionary-manager"
     ],
+    "fireflies action items": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "meeting follow-ups": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "action item report": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "meeting tasks": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "fireflies follow-up": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "fireflies action": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "fireflies action tracker": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "action tracker": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "fireflies": [
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "action": [
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-hubspot:hubspot-custom-action-builder"
+    ],
+    "tracker": [
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-hubspot:hubspot-adoption-tracker"
+    ],
+    "tracke": [
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-hubspot:hubspot-adoption-tracker"
+    ],
+    "core fireflies": [
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "fireflies core": [
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "core action": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "action core": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "fireflies auth": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "fireflies credentials": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "fireflies api key": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "configure fireflies": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "fireflies setup": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "fireflies integration": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "core integration": [
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:gong-integration-agent",
+      "opspal-core:n8n-integration-orchestrator",
+      "opspal-core:outreach-integration-agent"
+    ],
+    "integration core": [
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:gong-integration-agent",
+      "opspal-core:n8n-integration-orchestrator",
+      "opspal-core:outreach-integration-agent"
+    ],
+    "core fireflies integration": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "fireflies insights": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "meeting health": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies analysis": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "transcript analysis": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "meeting intelligence": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies meeting": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies meeting intelligence": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "meeting": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "core meeting": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "meeting core": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "sync fireflies": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "import fireflies": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "fireflies batch sync": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "fireflies to salesforce": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "fireflies to hubspot": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "fireflies sync": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "core sync": [
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-sync-orchestrator",
+      "opspal-core:instance-sync"
+    ],
+    "sync core": [
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-sync-orchestrator",
+      "opspal-core:instance-sync"
+    ],
+    "core fireflies sync": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "competitor mentioned": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "competitive intelligence": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "gong trackers": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "battlecard": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "competitor analysis": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "competitive mentions": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "who are they comparing us to": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "competitive landscape": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "gong competitive": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "gong competitive intelligence": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
     "gong": [
-      "opspal-core:gong-integration-agent"
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:gong-integration-agent",
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "competitive": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "core gong": [
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:gong-integration-agent",
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "gong core": [
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:gong-integration-agent",
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "core competitive": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "competitive core": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "deal risk": [
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:pipeline-intelligence-agent"
+    ],
+    "call coverage": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "gong analysis": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "conversation health": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "going dark": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "stakeholder engagement": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "deal momentum": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "call insights": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "gong deal": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "gong deal intelligence": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "deal intelligence": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
+    "deal": [
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:revops-deal-scorer"
+    ],
+    "core deal": [
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:revops-deal-scorer"
+    ],
+    "deal core": [
+      "opspal-core:gong-deal-intelligence-agent",
+      "opspal-core:revops-deal-scorer"
     ],
     "chorus": [
       "opspal-core:gong-integration-agent"
-    ],
-    "conversation intelligence": [
-      "opspal-core:gong-integration-agent",
-      "opspal-hubspot:hubspot-conversation-intelligence"
     ],
     "call recording": [
       "opspal-core:gong-integration-agent"
@@ -10441,24 +11078,35 @@
     "gong integration": [
       "opspal-core:gong-integration-agent"
     ],
-    "core gong": [
-      "opspal-core:gong-integration-agent"
-    ],
-    "gong core": [
-      "opspal-core:gong-integration-agent"
-    ],
-    "core integration": [
-      "opspal-core:gong-integration-agent",
-      "opspal-core:n8n-integration-orchestrator",
-      "opspal-core:outreach-integration-agent"
-    ],
-    "integration core": [
-      "opspal-core:gong-integration-agent",
-      "opspal-core:n8n-integration-orchestrator",
-      "opspal-core:outreach-integration-agent"
-    ],
     "core gong integration": [
       "opspal-core:gong-integration-agent"
+    ],
+    "sync gong": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "import gong calls": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "gong batch sync": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "gong to salesforce": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "gong to hubspot": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "sync calls": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "gong import": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "gong sync": [
+      "opspal-core:gong-sync-orchestrator"
+    ],
+    "core gong sync": [
+      "opspal-core:gong-sync-orchestrator"
     ],
     "slides": [
       "opspal-core:google-slides-generator",
@@ -10545,6 +11193,7 @@
       "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-orchestrator",
       "opspal-marketo:marketo-orchestrator",
+      "opspal-salesforce:sfdc-dashboard-migrator",
       "opspal-salesforce:sfdc-revops-coordinator"
     ],
     "document": [
@@ -10663,12 +11312,6 @@
       "opspal-salesforce:flow-batch-operator"
     ],
     "instance sync": [
-      "opspal-core:instance-sync"
-    ],
-    "core sync": [
-      "opspal-core:instance-sync"
-    ],
-    "sync core": [
       "opspal-core:instance-sync"
     ],
     "core instance sync": [
@@ -11213,9 +11856,6 @@
     "pipeline health": [
       "opspal-core:pipeline-intelligence-agent"
     ],
-    "deal risk": [
-      "opspal-core:pipeline-intelligence-agent"
-    ],
     "bottleneck": [
       "opspal-core:pipeline-intelligence-agent"
     ],
@@ -11235,21 +11875,7 @@
     "pipeline intelligence": [
       "opspal-core:pipeline-intelligence-agent"
     ],
-    "intelligence": [
-      "opspal-core:pipeline-intelligence-agent",
-      "opspal-gtm-planning:gtm-market-intelligence",
-      "opspal-hubspot:hubspot-ai-revenue-intelligence",
-      "opspal-hubspot:hubspot-conversation-intelligence",
-      "opspal-hubspot:hubspot-revenue-intelligence",
-      "opspal-marketo:marketo-intelligence-analyst"
-    ],
     "pipeline core": [
-      "opspal-core:pipeline-intelligence-agent"
-    ],
-    "core intelligence": [
-      "opspal-core:pipeline-intelligence-agent"
-    ],
-    "intelligence core": [
       "opspal-core:pipeline-intelligence-agent"
     ],
     "core pipeline intelligence": [
@@ -11778,15 +12404,6 @@
       "opspal-core:revops-deal-scorer"
     ],
     "deal scorer": [
-      "opspal-core:revops-deal-scorer"
-    ],
-    "deal": [
-      "opspal-core:revops-deal-scorer"
-    ],
-    "core deal": [
-      "opspal-core:revops-deal-scorer"
-    ],
-    "deal core": [
       "opspal-core:revops-deal-scorer"
     ],
     "revops dedup": [
@@ -13306,9 +13923,6 @@
     "hubspot hubspot admin": [
       "opspal-hubspot:hubspot-admin-specialist"
     ],
-    "tracker": [
-      "opspal-hubspot:hubspot-adoption-tracker"
-    ],
     "metrics": [
       "opspal-hubspot:hubspot-adoption-tracker",
       "opspal-marketo:marketo-analytics-assessor"
@@ -13320,9 +13934,6 @@
       "opspal-hubspot:hubspot-adoption-tracker"
     ],
     "adoption tracker": [
-      "opspal-hubspot:hubspot-adoption-tracker"
-    ],
-    "tracke": [
       "opspal-hubspot:hubspot-adoption-tracker"
     ],
     "adoption hubspot": [
@@ -13370,6 +13981,7 @@
       "opspal-salesforce:compliance-report-generator",
       "opspal-salesforce:sfdc-api-monitor",
       "opspal-salesforce:sfdc-dashboard-analyzer",
+      "opspal-salesforce:sfdc-dashboard-migrator",
       "opspal-salesforce:sfdc-report-designer",
       "opspal-salesforce:sfdc-report-template-deployer",
       "opspal-salesforce:sfdc-report-type-manager",
@@ -14117,9 +14729,6 @@
     "hubspot hubspot content": [
       "opspal-hubspot:hubspot-content-automation-agent"
     ],
-    "conversation": [
-      "opspal-hubspot:hubspot-conversation-intelligence"
-    ],
     "hubspot conversation": [
       "opspal-hubspot:hubspot-conversation-intelligence"
     ],
@@ -14173,9 +14782,6 @@
     "custom": [
       "opspal-hubspot:hubspot-custom-action-builder"
     ],
-    "action": [
-      "opspal-hubspot:hubspot-custom-action-builder"
-    ],
     "custom hubspot": [
       "opspal-hubspot:hubspot-custom-action-builder"
     ],
@@ -14219,6 +14825,7 @@
       "opspal-hubspot:hubspot-data-operations-manager",
       "opspal-hubspot:hubspot-property-manager",
       "opspal-salesforce:sfdc-dashboard-analyzer",
+      "opspal-salesforce:sfdc-dashboard-migrator",
       "opspal-salesforce:sfdc-data-generator",
       "opspal-salesforce:sfdc-discovery",
       "opspal-salesforce:sfdc-object-auditor"
@@ -17330,22 +17937,23 @@
     "dashboard designer": [
       "opspal-salesforce:sfdc-dashboard-designer"
     ],
+    "migrator": [
+      "opspal-salesforce:sfdc-dashboard-migrator"
+    ],
+    "one": [
+      "opspal-salesforce:sfdc-dashboard-migrator",
+      "opspal-salesforce:sfdc-dashboard-optimizer",
+      "opspal-salesforce:sfdc-lightning-developer",
+      "opspal-salesforce:sfdc-ui-customizer"
+    ],
     "sfdc dashboard migrator": [
       "opspal-salesforce:sfdc-dashboard-migrator"
     ],
     "dashboard migrator": [
       "opspal-salesforce:sfdc-dashboard-migrator"
     ],
-    "migrator": [
-      "opspal-salesforce:sfdc-dashboard-migrator"
-    ],
     "salesforce migrator": [
       "opspal-salesforce:sfdc-dashboard-migrator"
-    ],
-    "one": [
-      "opspal-salesforce:sfdc-dashboard-optimizer",
-      "opspal-salesforce:sfdc-lightning-developer",
-      "opspal-salesforce:sfdc-ui-customizer"
     ],
     "sfdc dashboard optimizer": [
       "opspal-salesforce:sfdc-dashboard-optimizer"
@@ -18470,13 +19078,21 @@
       "client-notebook-orchestrator",
       "compensation-calculator",
       "contact-dedup-orchestrator",
+      "conversation-intelligence-aggregator",
       "cross-platform-pipeline-orchestrator",
       "cs-operations-orchestrator",
       "data-migration-orchestrator",
       "diagram-generator",
       "environment-profile-manager",
       "field-dictionary-manager",
+      "fireflies-action-tracker-agent",
+      "fireflies-integration-agent",
+      "fireflies-meeting-intelligence-agent",
+      "fireflies-sync-orchestrator",
+      "gong-competitive-intelligence-agent",
+      "gong-deal-intelligence-agent",
       "gong-integration-agent",
+      "gong-sync-orchestrator",
       "google-slides-generator",
       "implementation-planner",
       "instance-backup",
@@ -18758,13 +19374,21 @@
       "opspal-core:client-notebook-orchestrator",
       "opspal-core:compensation-calculator",
       "opspal-core:contact-dedup-orchestrator",
+      "opspal-core:conversation-intelligence-aggregator",
       "opspal-core:cross-platform-pipeline-orchestrator",
       "opspal-core:cs-operations-orchestrator",
       "opspal-core:data-migration-orchestrator",
       "opspal-core:diagram-generator",
       "opspal-core:environment-profile-manager",
       "opspal-core:field-dictionary-manager",
+      "opspal-core:fireflies-action-tracker-agent",
+      "opspal-core:fireflies-integration-agent",
+      "opspal-core:fireflies-meeting-intelligence-agent",
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-competitive-intelligence-agent",
+      "opspal-core:gong-deal-intelligence-agent",
       "opspal-core:gong-integration-agent",
+      "opspal-core:gong-sync-orchestrator",
       "opspal-core:google-slides-generator",
       "opspal-core:implementation-planner",
       "opspal-core:instance-backup",
@@ -19504,6 +20128,55 @@
       "shortName": "contact-dedup-orchestrator",
       "fullName": "opspal-core:contact-dedup-orchestrator"
     },
+    "conversation-intelligence-aggregator": {
+      "plugin": "opspal-core",
+      "file": "conversation-intelligence-aggregator.md",
+      "path": "opspal-core/agents/conversation-intelligence-aggregator.md",
+      "name": "conversation-intelligence-aggregator",
+      "description": "Unified conversation intelligence across Gong and Fireflies.ai. Merges call and meeting data from both platforms, deduplicates meetings shared between systems, and produces combined deal risk scores, engagement metrics, competitive signals, and action item summaries with source attribution.",
+      "model": "sonnet",
+      "color": "violet",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "Task",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__run_risk_analysis",
+        "mcp__gong__competitor_report",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__run_meeting_analysis",
+        "mcp__fireflies__extract_action_items",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "conversation intelligence",
+        "combined call data",
+        "gong and fireflies",
+        "unified meeting analysis",
+        "cross-platform calls",
+        "meeting coverage",
+        "deal conversation health",
+        "conversation intelligence aggregator",
+        "intelligence aggregator",
+        "conversation",
+        "intelligence",
+        "aggregator",
+        "core",
+        "core conversation",
+        "conversation core",
+        "core intelligence",
+        "intelligence core",
+        "core aggregator"
+      ],
+      "shortName": "conversation-intelligence-aggregator",
+      "fullName": "opspal-core:conversation-intelligence-aggregator"
+    },
     "cross-platform-pipeline-orchestrator": {
       "plugin": "opspal-core",
       "file": "cross-platform-pipeline-orchestrator.md",
@@ -19744,6 +20417,282 @@
       "shortName": "field-dictionary-manager",
       "fullName": "opspal-core:field-dictionary-manager"
     },
+    "fireflies-action-tracker-agent": {
+      "plugin": "opspal-core",
+      "file": "fireflies-action-tracker-agent.md",
+      "path": "opspal-core/agents/fireflies-action-tracker-agent.md",
+      "name": "fireflies-action-tracker-agent",
+      "description": "Read-only extraction and tracking of action items from Fireflies.ai transcripts. Surfaces meeting follow-ups, attributes tasks to owners, cross-references against CRM tasks, and generates overdue action item reports.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__extract_action_items",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "fireflies action items",
+        "meeting follow-ups",
+        "action item report",
+        "meeting tasks",
+        "fireflies follow-up",
+        "fireflies action",
+        "fireflies action tracker",
+        "action tracker",
+        "fireflies",
+        "action",
+        "tracker",
+        "tracke",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core action",
+        "action core"
+      ],
+      "shortName": "fireflies-action-tracker-agent",
+      "fullName": "opspal-core:fireflies-action-tracker-agent"
+    },
+    "fireflies-integration-agent": {
+      "plugin": "opspal-core",
+      "file": "fireflies-integration-agent.md",
+      "path": "opspal-core/agents/fireflies-integration-agent.md",
+      "name": "fireflies-integration-agent",
+      "description": "Integrates Fireflies.ai meeting intelligence with Salesforce and HubSpot. Manages API authentication, configuration, transcript sync, action item extraction, and meeting analysis to enrich opportunity and contact records.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "WebFetch",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__transcript_search",
+        "mcp__fireflies__users_list",
+        "mcp__fireflies__sync_transcripts_to_crm",
+        "mcp__fireflies__run_meeting_analysis",
+        "mcp__fireflies__extract_action_items",
+        "mcp__fireflies__download_recording",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update",
+        "mcp__hubspot-enhanced-v3__hubspot_search",
+        "mcp__hubspot-enhanced-v3__hubspot_create",
+        "mcp__hubspot-enhanced-v3__hubspot_update"
+      ],
+      "triggerKeywords": [
+        "fireflies auth",
+        "fireflies credentials",
+        "fireflies api key",
+        "configure fireflies",
+        "fireflies setup",
+        "fireflies integration",
+        "fireflies",
+        "integration",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core integration",
+        "integration core",
+        "core fireflies integration"
+      ],
+      "shortName": "fireflies-integration-agent",
+      "fullName": "opspal-core:fireflies-integration-agent"
+    },
+    "fireflies-meeting-intelligence-agent": {
+      "plugin": "opspal-core",
+      "file": "fireflies-meeting-intelligence-agent.md",
+      "path": "opspal-core/agents/fireflies-meeting-intelligence-agent.md",
+      "name": "fireflies-meeting-intelligence-agent",
+      "description": "Read-only analysis of meeting conversation health using Fireflies.ai transcript data. Surfaces engagement metrics, talk distribution, risk signals, topic trends, and deal momentum indicators — without modifying any CRM records.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__transcript_search",
+        "mcp__fireflies__run_meeting_analysis",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "fireflies insights",
+        "meeting health",
+        "fireflies analysis",
+        "transcript analysis",
+        "meeting intelligence",
+        "fireflies meeting",
+        "fireflies meeting intelligence",
+        "fireflies",
+        "meeting",
+        "intelligence",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core meeting",
+        "meeting core",
+        "core intelligence"
+      ],
+      "shortName": "fireflies-meeting-intelligence-agent",
+      "fullName": "opspal-core:fireflies-meeting-intelligence-agent"
+    },
+    "fireflies-sync-orchestrator": {
+      "plugin": "opspal-core",
+      "file": "fireflies-sync-orchestrator.md",
+      "path": "opspal-core/agents/fireflies-sync-orchestrator.md",
+      "name": "fireflies-sync-orchestrator",
+      "description": "Orchestrates Fireflies.ai-to-CRM data synchronization workflows. Handles batch transcript sync, meeting insights aggregation, error recovery, and dry-run previews for Salesforce and HubSpot targets.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__sync_transcripts_to_crm",
+        "mcp__fireflies__download_recording",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update",
+        "mcp__hubspot-enhanced-v3__hubspot_search",
+        "mcp__hubspot-enhanced-v3__hubspot_create",
+        "mcp__hubspot-enhanced-v3__hubspot_update"
+      ],
+      "triggerKeywords": [
+        "sync fireflies",
+        "import fireflies",
+        "fireflies batch sync",
+        "fireflies to salesforce",
+        "fireflies to hubspot",
+        "fireflies sync",
+        "fireflies",
+        "sync",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core sync",
+        "sync core",
+        "core fireflies sync",
+        "core workflow"
+      ],
+      "shortName": "fireflies-sync-orchestrator",
+      "fullName": "opspal-core:fireflies-sync-orchestrator"
+    },
+    "gong-competitive-intelligence-agent": {
+      "plugin": "opspal-core",
+      "file": "gong-competitive-intelligence-agent.md",
+      "path": "opspal-core/agents/gong-competitive-intelligence-agent.md",
+      "name": "gong-competitive-intelligence-agent",
+      "description": "Analyzes Gong tracker data for competitive intelligence. Identifies competitor mentions, tracks trends, groups by deal stage and outcome, and generates battlecard-ready insights.",
+      "model": "sonnet",
+      "color": "orange",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__trackers_list",
+        "mcp__gong__competitor_report",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "competitor mentioned",
+        "competitive intelligence",
+        "gong trackers",
+        "battlecard",
+        "competitor analysis",
+        "competitive mentions",
+        "who are they comparing us to",
+        "competitive landscape",
+        "gong competitive",
+        "gong competitive intelligence",
+        "gong",
+        "competitive",
+        "intelligence",
+        "core",
+        "core gong",
+        "gong core",
+        "core competitive",
+        "competitive core",
+        "core intelligence"
+      ],
+      "shortName": "gong-competitive-intelligence-agent",
+      "fullName": "opspal-core:gong-competitive-intelligence-agent"
+    },
+    "gong-deal-intelligence-agent": {
+      "plugin": "opspal-core",
+      "file": "gong-deal-intelligence-agent.md",
+      "path": "opspal-core/agents/gong-deal-intelligence-agent.md",
+      "name": "gong-deal-intelligence-agent",
+      "description": "Read-only analysis of deal conversation health using Gong data. Surfaces risk signals, stakeholder engagement gaps, call coverage issues, and deal momentum indicators.",
+      "model": "sonnet",
+      "color": "indigo",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "WebFetch",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__calls_transcript",
+        "mcp__gong__trackers_list",
+        "mcp__gong__run_risk_analysis",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "deal risk",
+        "call coverage",
+        "gong analysis",
+        "conversation health",
+        "going dark",
+        "stakeholder engagement",
+        "deal momentum",
+        "call insights",
+        "gong deal",
+        "gong deal intelligence",
+        "deal intelligence",
+        "gong",
+        "deal",
+        "intelligence",
+        "core",
+        "core gong",
+        "gong core",
+        "core deal",
+        "deal core",
+        "core intelligence"
+      ],
+      "shortName": "gong-deal-intelligence-agent",
+      "fullName": "opspal-core:gong-deal-intelligence-agent"
+    },
     "gong-integration-agent": {
       "plugin": "opspal-core",
       "file": "gong-integration-agent.md",
@@ -19762,6 +20711,14 @@
         "Task",
         "TodoWrite",
         "WebFetch",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__calls_transcript",
+        "mcp__gong__users_list",
+        "mcp__gong__trackers_list",
+        "mcp__gong__sync_calls_to_crm",
+        "mcp__gong__run_risk_analysis",
+        "mcp__gong__competitor_report",
         "mcp_salesforce_data_query",
         "mcp_salesforce_data_create",
         "mcp_salesforce_data_update",
@@ -19787,6 +20744,56 @@
       ],
       "shortName": "gong-integration-agent",
       "fullName": "opspal-core:gong-integration-agent"
+    },
+    "gong-sync-orchestrator": {
+      "plugin": "opspal-core",
+      "file": "gong-sync-orchestrator.md",
+      "path": "opspal-core/agents/gong-sync-orchestrator.md",
+      "name": "gong-sync-orchestrator",
+      "description": "Orchestrates Gong-to-CRM data synchronization workflows. Handles batch call sync, insights aggregation, error recovery, and dry-run previews for Salesforce and HubSpot targets.",
+      "model": "sonnet",
+      "color": "green",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__sync_calls_to_crm",
+        "mcp__gong__run_risk_analysis",
+        "mcp__gong__users_list",
+        "mcp__gong__competitor_report",
+        "mcp__gong__trackers_list",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update"
+      ],
+      "triggerKeywords": [
+        "sync gong",
+        "import gong calls",
+        "gong batch sync",
+        "gong to salesforce",
+        "gong to hubspot",
+        "sync calls",
+        "gong import",
+        "gong sync",
+        "gong",
+        "sync",
+        "core",
+        "core gong",
+        "gong core",
+        "core sync",
+        "sync core",
+        "core gong sync",
+        "core workflow"
+      ],
+      "shortName": "gong-sync-orchestrator",
+      "fullName": "opspal-core:gong-sync-orchestrator"
     },
     "google-slides-generator": {
       "plugin": "opspal-core",
@@ -27558,14 +28565,34 @@
       "file": "sfdc-dashboard-migrator.md",
       "path": "opspal-salesforce/agents/sfdc-dashboard-migrator.md",
       "name": "sfdc-dashboard-migrator",
+      "description": "Automatically routes for dashboard migration. Migrates dashboards and reports between objects preserving business logic.",
+      "model": "sonnet",
+      "color": "blue",
+      "stage": "production",
+      "tools": [
+        "mcp_salesforce",
+        "mcp_salesforce_metadata_describe",
+        "mcp_salesforce_object_list",
+        "mcp_salesforce_field_list",
+        "Read",
+        "Write",
+        "Bash",
+        "Task"
+      ],
       "triggerKeywords": [
+        "dashboard",
+        "sf",
+        "sfdc",
+        "report",
+        "migration",
+        "object",
+        "salesforce",
+        "migrator",
+        "orchestrate",
+        "one",
         "sfdc dashboard",
         "sfdc dashboard migrator",
         "dashboard migrator",
-        "sfdc",
-        "dashboard",
-        "migrator",
-        "salesforce",
         "salesforce sfdc",
         "sfdc salesforce",
         "salesforce dashboard",
@@ -30359,6 +31386,55 @@
       "shortName": "contact-dedup-orchestrator",
       "fullName": "opspal-core:contact-dedup-orchestrator"
     },
+    "opspal-core:conversation-intelligence-aggregator": {
+      "plugin": "opspal-core",
+      "file": "conversation-intelligence-aggregator.md",
+      "path": "opspal-core/agents/conversation-intelligence-aggregator.md",
+      "name": "conversation-intelligence-aggregator",
+      "description": "Unified conversation intelligence across Gong and Fireflies.ai. Merges call and meeting data from both platforms, deduplicates meetings shared between systems, and produces combined deal risk scores, engagement metrics, competitive signals, and action item summaries with source attribution.",
+      "model": "sonnet",
+      "color": "violet",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "Task",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__run_risk_analysis",
+        "mcp__gong__competitor_report",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__run_meeting_analysis",
+        "mcp__fireflies__extract_action_items",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "conversation intelligence",
+        "combined call data",
+        "gong and fireflies",
+        "unified meeting analysis",
+        "cross-platform calls",
+        "meeting coverage",
+        "deal conversation health",
+        "conversation intelligence aggregator",
+        "intelligence aggregator",
+        "conversation",
+        "intelligence",
+        "aggregator",
+        "core",
+        "core conversation",
+        "conversation core",
+        "core intelligence",
+        "intelligence core",
+        "core aggregator"
+      ],
+      "shortName": "conversation-intelligence-aggregator",
+      "fullName": "opspal-core:conversation-intelligence-aggregator"
+    },
     "opspal-core:cross-platform-pipeline-orchestrator": {
       "plugin": "opspal-core",
       "file": "cross-platform-pipeline-orchestrator.md",
@@ -30599,6 +31675,282 @@
       "shortName": "field-dictionary-manager",
       "fullName": "opspal-core:field-dictionary-manager"
     },
+    "opspal-core:fireflies-action-tracker-agent": {
+      "plugin": "opspal-core",
+      "file": "fireflies-action-tracker-agent.md",
+      "path": "opspal-core/agents/fireflies-action-tracker-agent.md",
+      "name": "fireflies-action-tracker-agent",
+      "description": "Read-only extraction and tracking of action items from Fireflies.ai transcripts. Surfaces meeting follow-ups, attributes tasks to owners, cross-references against CRM tasks, and generates overdue action item reports.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__extract_action_items",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "fireflies action items",
+        "meeting follow-ups",
+        "action item report",
+        "meeting tasks",
+        "fireflies follow-up",
+        "fireflies action",
+        "fireflies action tracker",
+        "action tracker",
+        "fireflies",
+        "action",
+        "tracker",
+        "tracke",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core action",
+        "action core"
+      ],
+      "shortName": "fireflies-action-tracker-agent",
+      "fullName": "opspal-core:fireflies-action-tracker-agent"
+    },
+    "opspal-core:fireflies-integration-agent": {
+      "plugin": "opspal-core",
+      "file": "fireflies-integration-agent.md",
+      "path": "opspal-core/agents/fireflies-integration-agent.md",
+      "name": "fireflies-integration-agent",
+      "description": "Integrates Fireflies.ai meeting intelligence with Salesforce and HubSpot. Manages API authentication, configuration, transcript sync, action item extraction, and meeting analysis to enrich opportunity and contact records.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "WebFetch",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__transcript_search",
+        "mcp__fireflies__users_list",
+        "mcp__fireflies__sync_transcripts_to_crm",
+        "mcp__fireflies__run_meeting_analysis",
+        "mcp__fireflies__extract_action_items",
+        "mcp__fireflies__download_recording",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update",
+        "mcp__hubspot-enhanced-v3__hubspot_search",
+        "mcp__hubspot-enhanced-v3__hubspot_create",
+        "mcp__hubspot-enhanced-v3__hubspot_update"
+      ],
+      "triggerKeywords": [
+        "fireflies auth",
+        "fireflies credentials",
+        "fireflies api key",
+        "configure fireflies",
+        "fireflies setup",
+        "fireflies integration",
+        "fireflies",
+        "integration",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core integration",
+        "integration core",
+        "core fireflies integration"
+      ],
+      "shortName": "fireflies-integration-agent",
+      "fullName": "opspal-core:fireflies-integration-agent"
+    },
+    "opspal-core:fireflies-meeting-intelligence-agent": {
+      "plugin": "opspal-core",
+      "file": "fireflies-meeting-intelligence-agent.md",
+      "path": "opspal-core/agents/fireflies-meeting-intelligence-agent.md",
+      "name": "fireflies-meeting-intelligence-agent",
+      "description": "Read-only analysis of meeting conversation health using Fireflies.ai transcript data. Surfaces engagement metrics, talk distribution, risk signals, topic trends, and deal momentum indicators — without modifying any CRM records.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__transcript_search",
+        "mcp__fireflies__run_meeting_analysis",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "fireflies insights",
+        "meeting health",
+        "fireflies analysis",
+        "transcript analysis",
+        "meeting intelligence",
+        "fireflies meeting",
+        "fireflies meeting intelligence",
+        "fireflies",
+        "meeting",
+        "intelligence",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core meeting",
+        "meeting core",
+        "core intelligence"
+      ],
+      "shortName": "fireflies-meeting-intelligence-agent",
+      "fullName": "opspal-core:fireflies-meeting-intelligence-agent"
+    },
+    "opspal-core:fireflies-sync-orchestrator": {
+      "plugin": "opspal-core",
+      "file": "fireflies-sync-orchestrator.md",
+      "path": "opspal-core/agents/fireflies-sync-orchestrator.md",
+      "name": "fireflies-sync-orchestrator",
+      "description": "Orchestrates Fireflies.ai-to-CRM data synchronization workflows. Handles batch transcript sync, meeting insights aggregation, error recovery, and dry-run previews for Salesforce and HubSpot targets.",
+      "model": "sonnet",
+      "color": "teal",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "mcp__fireflies__transcripts_list",
+        "mcp__fireflies__transcript_get",
+        "mcp__fireflies__sync_transcripts_to_crm",
+        "mcp__fireflies__download_recording",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update",
+        "mcp__hubspot-enhanced-v3__hubspot_search",
+        "mcp__hubspot-enhanced-v3__hubspot_create",
+        "mcp__hubspot-enhanced-v3__hubspot_update"
+      ],
+      "triggerKeywords": [
+        "sync fireflies",
+        "import fireflies",
+        "fireflies batch sync",
+        "fireflies to salesforce",
+        "fireflies to hubspot",
+        "fireflies sync",
+        "fireflies",
+        "sync",
+        "core",
+        "core fireflies",
+        "fireflies core",
+        "core sync",
+        "sync core",
+        "core fireflies sync",
+        "core workflow"
+      ],
+      "shortName": "fireflies-sync-orchestrator",
+      "fullName": "opspal-core:fireflies-sync-orchestrator"
+    },
+    "opspal-core:gong-competitive-intelligence-agent": {
+      "plugin": "opspal-core",
+      "file": "gong-competitive-intelligence-agent.md",
+      "path": "opspal-core/agents/gong-competitive-intelligence-agent.md",
+      "name": "gong-competitive-intelligence-agent",
+      "description": "Analyzes Gong tracker data for competitive intelligence. Identifies competitor mentions, tracks trends, groups by deal stage and outcome, and generates battlecard-ready insights.",
+      "model": "sonnet",
+      "color": "orange",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__trackers_list",
+        "mcp__gong__competitor_report",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "competitor mentioned",
+        "competitive intelligence",
+        "gong trackers",
+        "battlecard",
+        "competitor analysis",
+        "competitive mentions",
+        "who are they comparing us to",
+        "competitive landscape",
+        "gong competitive",
+        "gong competitive intelligence",
+        "gong",
+        "competitive",
+        "intelligence",
+        "core",
+        "core gong",
+        "gong core",
+        "core competitive",
+        "competitive core",
+        "core intelligence"
+      ],
+      "shortName": "gong-competitive-intelligence-agent",
+      "fullName": "opspal-core:gong-competitive-intelligence-agent"
+    },
+    "opspal-core:gong-deal-intelligence-agent": {
+      "plugin": "opspal-core",
+      "file": "gong-deal-intelligence-agent.md",
+      "path": "opspal-core/agents/gong-deal-intelligence-agent.md",
+      "name": "gong-deal-intelligence-agent",
+      "description": "Read-only analysis of deal conversation health using Gong data. Surfaces risk signals, stakeholder engagement gaps, call coverage issues, and deal momentum indicators.",
+      "model": "sonnet",
+      "color": "indigo",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "TodoWrite",
+        "WebFetch",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__calls_transcript",
+        "mcp__gong__trackers_list",
+        "mcp__gong__run_risk_analysis",
+        "mcp_salesforce_data_query"
+      ],
+      "triggerKeywords": [
+        "deal risk",
+        "call coverage",
+        "gong analysis",
+        "conversation health",
+        "going dark",
+        "stakeholder engagement",
+        "deal momentum",
+        "call insights",
+        "gong deal",
+        "gong deal intelligence",
+        "deal intelligence",
+        "gong",
+        "deal",
+        "intelligence",
+        "core",
+        "core gong",
+        "gong core",
+        "core deal",
+        "deal core",
+        "core intelligence"
+      ],
+      "shortName": "gong-deal-intelligence-agent",
+      "fullName": "opspal-core:gong-deal-intelligence-agent"
+    },
     "opspal-core:gong-integration-agent": {
       "plugin": "opspal-core",
       "file": "gong-integration-agent.md",
@@ -30617,6 +31969,14 @@
         "Task",
         "TodoWrite",
         "WebFetch",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__calls_transcript",
+        "mcp__gong__users_list",
+        "mcp__gong__trackers_list",
+        "mcp__gong__sync_calls_to_crm",
+        "mcp__gong__run_risk_analysis",
+        "mcp__gong__competitor_report",
         "mcp_salesforce_data_query",
         "mcp_salesforce_data_create",
         "mcp_salesforce_data_update",
@@ -30642,6 +32002,56 @@
       ],
       "shortName": "gong-integration-agent",
       "fullName": "opspal-core:gong-integration-agent"
+    },
+    "opspal-core:gong-sync-orchestrator": {
+      "plugin": "opspal-core",
+      "file": "gong-sync-orchestrator.md",
+      "path": "opspal-core/agents/gong-sync-orchestrator.md",
+      "name": "gong-sync-orchestrator",
+      "description": "Orchestrates Gong-to-CRM data synchronization workflows. Handles batch call sync, insights aggregation, error recovery, and dry-run previews for Salesforce and HubSpot targets.",
+      "model": "sonnet",
+      "color": "green",
+      "version": "1.0.0",
+      "tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "mcp__gong__calls_list",
+        "mcp__gong__calls_extensive",
+        "mcp__gong__sync_calls_to_crm",
+        "mcp__gong__run_risk_analysis",
+        "mcp__gong__users_list",
+        "mcp__gong__competitor_report",
+        "mcp__gong__trackers_list",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update"
+      ],
+      "triggerKeywords": [
+        "sync gong",
+        "import gong calls",
+        "gong batch sync",
+        "gong to salesforce",
+        "gong to hubspot",
+        "sync calls",
+        "gong import",
+        "gong sync",
+        "gong",
+        "sync",
+        "core",
+        "core gong",
+        "gong core",
+        "core sync",
+        "sync core",
+        "core gong sync",
+        "core workflow"
+      ],
+      "shortName": "gong-sync-orchestrator",
+      "fullName": "opspal-core:gong-sync-orchestrator"
     },
     "opspal-core:google-slides-generator": {
       "plugin": "opspal-core",
@@ -38522,14 +39932,34 @@
       "file": "sfdc-dashboard-migrator.md",
       "path": "opspal-salesforce/agents/sfdc-dashboard-migrator.md",
       "name": "sfdc-dashboard-migrator",
+      "description": "Automatically routes for dashboard migration. Migrates dashboards and reports between objects preserving business logic.",
+      "model": "sonnet",
+      "color": "blue",
+      "stage": "production",
+      "tools": [
+        "mcp_salesforce",
+        "mcp_salesforce_metadata_describe",
+        "mcp_salesforce_object_list",
+        "mcp_salesforce_field_list",
+        "Read",
+        "Write",
+        "Bash",
+        "Task"
+      ],
       "triggerKeywords": [
+        "dashboard",
+        "sf",
+        "sfdc",
+        "report",
+        "migration",
+        "object",
+        "salesforce",
+        "migrator",
+        "orchestrate",
+        "one",
         "sfdc dashboard",
         "sfdc dashboard migrator",
         "dashboard migrator",
-        "sfdc",
-        "dashboard",
-        "migrator",
-        "salesforce",
         "salesforce sfdc",
         "sfdc salesforce",
         "salesforce dashboard",
@@ -40944,6 +42374,9 @@
       "opspal-core:contact-dedup-orchestrator",
       "opspal-data-hygiene:contact-dedup-orchestrator"
     ],
+    "conversation-intelligence-aggregator": [
+      "opspal-core:conversation-intelligence-aggregator"
+    ],
     "cross-platform-pipeline-orchestrator": [
       "opspal-core:cross-platform-pipeline-orchestrator"
     ],
@@ -40962,8 +42395,29 @@
     "field-dictionary-manager": [
       "opspal-core:field-dictionary-manager"
     ],
+    "fireflies-action-tracker-agent": [
+      "opspal-core:fireflies-action-tracker-agent"
+    ],
+    "fireflies-integration-agent": [
+      "opspal-core:fireflies-integration-agent"
+    ],
+    "fireflies-meeting-intelligence-agent": [
+      "opspal-core:fireflies-meeting-intelligence-agent"
+    ],
+    "fireflies-sync-orchestrator": [
+      "opspal-core:fireflies-sync-orchestrator"
+    ],
+    "gong-competitive-intelligence-agent": [
+      "opspal-core:gong-competitive-intelligence-agent"
+    ],
+    "gong-deal-intelligence-agent": [
+      "opspal-core:gong-deal-intelligence-agent"
+    ],
     "gong-integration-agent": [
       "opspal-core:gong-integration-agent"
+    ],
+    "gong-sync-orchestrator": [
+      "opspal-core:gong-sync-orchestrator"
     ],
     "google-slides-generator": [
       "opspal-core:google-slides-generator"
@@ -41799,6 +43253,20 @@
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/autofix.md"
     },
+    "opspal-core:automation-health": {
+      "plugin": "opspal-core",
+      "name": "automation-health",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/automation-health.md"
+    },
+    "opspal-core:automation-preflight": {
+      "plugin": "opspal-core",
+      "name": "automation-preflight",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/automation-preflight.md"
+    },
     "opspal-core:bugfix": {
       "plugin": "opspal-core",
       "name": "bugfix",
@@ -41869,6 +43337,13 @@
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/deduplicate.md"
     },
+    "opspal-core:deploy-to-commercial": {
+      "plugin": "opspal-core",
+      "name": "deploy-to-commercial",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/deploy-to-commercial.md"
+    },
     "opspal-core:diagnose-sales-funnel": {
       "plugin": "opspal-core",
       "name": "diagnose-sales-funnel",
@@ -41932,6 +43407,34 @@
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/finishopspalupdate.md"
     },
+    "opspal-core:fireflies-action-items": {
+      "plugin": "opspal-core",
+      "name": "fireflies-action-items",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/fireflies-action-items.md"
+    },
+    "opspal-core:fireflies-auth": {
+      "plugin": "opspal-core",
+      "name": "fireflies-auth",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/fireflies-auth.md"
+    },
+    "opspal-core:fireflies-insights": {
+      "plugin": "opspal-core",
+      "name": "fireflies-insights",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/fireflies-insights.md"
+    },
+    "opspal-core:fireflies-sync": {
+      "plugin": "opspal-core",
+      "name": "fireflies-sync",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/fireflies-sync.md"
+    },
     "opspal-core:generate-client-briefing": {
       "plugin": "opspal-core",
       "name": "generate-client-briefing",
@@ -41973,6 +43476,34 @@
       "description": "",
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/generate-runbook.md"
+    },
+    "opspal-core:gong-auth": {
+      "plugin": "opspal-core",
+      "name": "gong-auth",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/gong-auth.md"
+    },
+    "opspal-core:gong-competitive-intel": {
+      "plugin": "opspal-core",
+      "name": "gong-competitive-intel",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/gong-competitive-intel.md"
+    },
+    "opspal-core:gong-risk-report": {
+      "plugin": "opspal-core",
+      "name": "gong-risk-report",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/gong-risk-report.md"
+    },
+    "opspal-core:gong-sync": {
+      "plugin": "opspal-core",
+      "name": "gong-sync",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/gong-sync.md"
     },
     "opspal-core:healthcheck-hooks": {
       "plugin": "opspal-core",
@@ -43417,6 +44948,13 @@
         "name": "unknown",
         "description": "",
         "file": null,
+        "matcher": "mcp__gong*"
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
         "matcher": "Write(*SESSION_REFLECTION*)"
       },
       {
@@ -43532,13 +45070,6 @@
         "description": "",
         "file": null,
         "matcher": "*"
-      },
-      {
-        "plugin": "opspal-hubspot",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "*"
       }
     ],
     "PreToolUse": [
@@ -43583,6 +45114,13 @@
         "description": "",
         "file": null,
         "matcher": "mcp__marketo*"
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "mcp__gong*"
       },
       {
         "plugin": "opspal-core",
@@ -43683,6 +45221,15 @@
         "matcher": null
       }
     ],
+    "PermissionRequest": [
+      {
+        "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "*"
+      }
+    ],
     "PreCompact": [
       {
         "plugin": "opspal-core",
@@ -43720,6 +45267,33 @@
         "description": "",
         "file": null,
         "matcher": "*"
+      }
+    ],
+    "SubagentStart": [
+      {
+        "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": null
+      }
+    ],
+    "SubagentStop": [
+      {
+        "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": null
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": null
       }
     ],
     "Stop": [
@@ -43832,6 +45406,20 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "post-fireflies-sync",
+        "description": "",
+        "file": "opspal-core/hooks/post-fireflies-sync.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "post-gong-sync",
+        "description": "",
+        "file": "opspal-core/hooks/post-gong-sync.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "post-pdf-verification",
         "description": "",
         "file": "opspal-core/hooks/post-pdf-verification.sh",
@@ -43884,6 +45472,20 @@
         "name": "pre-dependency-check",
         "description": "",
         "file": "opspal-core/hooks/pre-dependency-check.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "pre-fireflies-api-call",
+        "description": "",
+        "file": "opspal-core/hooks/pre-fireflies-api-call.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "pre-gong-api-call",
+        "description": "",
+        "file": "opspal-core/hooks/pre-gong-api-call.sh",
         "matcher": null
       },
       {
@@ -44007,6 +45609,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "session-start-repo-sync",
+        "description": "",
+        "file": "opspal-core/hooks/session-start-repo-sync.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "session-start-scratchpad",
         "description": "",
         "file": "opspal-core/hooks/session-start-scratchpad.sh",
@@ -44024,6 +45633,13 @@
         "name": "setup-maintenance",
         "description": "",
         "file": "opspal-core/hooks/setup-maintenance.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "subagent-capability-gate-openclaw",
+        "description": "",
+        "file": "opspal-core/hooks/subagent-capability-gate-openclaw.sh",
         "matcher": null
       },
       {
@@ -44371,6 +45987,13 @@
       },
       {
         "plugin": "opspal-salesforce",
+        "name": "pre-deploy-agent-context-check",
+        "description": "",
+        "file": "opspal-salesforce/hooks/pre-deploy-agent-context-check.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-salesforce",
         "name": "pre-deploy-flow-validation",
         "description": "",
         "file": "opspal-salesforce/hooks/pre-deploy-flow-validation.sh",
@@ -44640,28 +46263,32 @@
   },
   "routingRules": [],
   "stats": {
-    "totalAgents": 267,
-    "totalAgentsFull": 270,
-    "totalCommands": 230,
-    "totalHooks": 182,
+    "totalAgents": 275,
+    "totalAgentsFull": 278,
+    "totalCommands": 241,
+    "totalHooks": 194,
     "totalRoutingRules": 0,
-    "totalKeywords": 2457,
-    "totalKeywordsFull": 2457,
+    "totalKeywords": 2538,
+    "totalKeywordsFull": 2538,
     "totalPlugins": 8,
     "duplicateShortNames": 3,
-    "agentsWithKeywords": 267,
-    "agentsWithKeywordsFull": 270,
-    "agentsWithTools": 266,
-    "agentsWithToolsFull": 269,
-    "avgKeywordsPerAgent": "16.01",
+    "agentsWithKeywords": 275,
+    "agentsWithKeywordsFull": 278,
+    "agentsWithTools": 275,
+    "agentsWithToolsFull": 278,
+    "avgKeywordsPerAgent": "16.06",
     "hooksByEvent": {
-      "PostToolUse": 26,
-      "UserPromptSubmit": 2,
-      "PreToolUse": 20,
+      "PostToolUse": 27,
+      "UserPromptSubmit": 1,
+      "PreToolUse": 21,
+      "PermissionRequest": 1,
       "PreCompact": 1,
       "SessionStart": 4,
+      "SubagentStart": 1,
+      "SubagentStop": 1,
+      "TaskCompleted": 1,
       "Stop": 9,
-      "Unknown": 100,
+      "Unknown": 107,
       "PostTask": 3,
       "PreCommit": 1,
       "PreTask": 15,

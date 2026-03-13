@@ -84,7 +84,7 @@ if (!result.success) {
 ```bash
 # Pre-render each diagram (with puppeteer config for sandbox workaround)
 mmdc -i diagram.mmd -o diagram.png -b white -w 1200 \
-  --puppeteerConfigFile ${CLAUDE_PLUGIN_ROOT}/config/puppeteer.config.json
+  --puppeteerConfigFile plugins/opspal-core/config/puppeteer.config.json
 
 # MANDATORY: Verify it exists
 ls -la diagram.png || echo "❌ RENDER FAILED"

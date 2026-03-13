@@ -1,0 +1,281 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "financial",
+  "version": "1.0.0",
+  "description": "Financial services, banking, credit unions, investment firms, and regulatory compliance",
+
+  "detectionPatterns": {
+    "keywords": [
+      "bank", "credit", "loan", "investment", "financial", "finance",
+      "wealth", "asset", "fund", "capital", "mortgage", "insurance",
+      "broker", "advisor", "portfolio", "securities", "trading"
+    ],
+    "entityTypes": ["Bank", "CreditUnion", "Investment", "InsuranceCompany", "Broker"],
+    "fieldPatterns": [
+      "AccountNumber", "RoutingNumber", "CUSIP", "ISIN", "AUM",
+      "NAV", "InterestRate", "APY", "APR", "CreditScore"
+    ]
+  },
+
+  "abbreviations": {
+    "institutionTypes": {
+      "FCU": "Federal Credit Union",
+      "CU": "Credit Union",
+      "FSB": "Federal Savings Bank",
+      "SSB": "State Savings Bank",
+      "NA": "National Association",
+      "FA": "Federal Association",
+      "FSA": "Federal Savings Association",
+      "BHC": "Bank Holding Company",
+      "FHC": "Financial Holding Company",
+      "SLHC": "Savings and Loan Holding Company",
+      "S&L": "Savings and Loan",
+      "RIA": "Registered Investment Advisor",
+      "IAR": "Investment Advisor Representative",
+      "BD": "Broker Dealer",
+      "FCM": "Futures Commission Merchant",
+      "IB": "Introducing Broker",
+      "CPO": "Commodity Pool Operator",
+      "CTA": "Commodity Trading Advisor"
+    },
+    "regulatory": {
+      "FDIC": "Federal Deposit Insurance Corporation",
+      "NCUA": "National Credit Union Administration",
+      "OCC": "Office of the Comptroller of the Currency",
+      "FRB": "Federal Reserve Board",
+      "CFPB": "Consumer Financial Protection Bureau",
+      "SEC": "Securities and Exchange Commission",
+      "FINRA": "Financial Industry Regulatory Authority",
+      "CFTC": "Commodity Futures Trading Commission",
+      "NFA": "National Futures Association",
+      "SIPC": "Securities Investor Protection Corporation",
+      "MSRB": "Municipal Securities Rulemaking Board",
+      "FINCEN": "Financial Crimes Enforcement Network",
+      "OFAC": "Office of Foreign Assets Control",
+      "OFR": "Office of Financial Research",
+      "FSOC": "Financial Stability Oversight Council"
+    },
+    "compliance": {
+      "AML": "Anti-Money Laundering",
+      "BSA": "Bank Secrecy Act",
+      "KYC": "Know Your Customer",
+      "KYB": "Know Your Business",
+      "CDD": "Customer Due Diligence",
+      "EDD": "Enhanced Due Diligence",
+      "SAR": "Suspicious Activity Report",
+      "CTR": "Currency Transaction Report",
+      "PEP": "Politically Exposed Person",
+      "OFAC": "Office of Foreign Assets Control",
+      "CIP": "Customer Identification Program",
+      "SOX": "Sarbanes-Oxley Act",
+      "MiFID": "Markets in Financial Instruments Directive",
+      "GDPR": "General Data Protection Regulation",
+      "PCI": "Payment Card Industry",
+      "GLBA": "Gramm-Leach-Bliley Act",
+      "FCRA": "Fair Credit Reporting Act",
+      "TILA": "Truth in Lending Act",
+      "RESPA": "Real Estate Settlement Procedures Act",
+      "ECOA": "Equal Credit Opportunity Act"
+    },
+    "financial_metrics": {
+      "AUM": "Assets Under Management",
+      "NAV": "Net Asset Value",
+      "ROA": "Return on Assets",
+      "ROE": "Return on Equity",
+      "ROI": "Return on Investment",
+      "ROIC": "Return on Invested Capital",
+      "NIM": "Net Interest Margin",
+      "NII": "Net Interest Income",
+      "NPL": "Non-Performing Loan",
+      "LTV": "Loan to Value",
+      "DTI": "Debt to Income",
+      "DSCR": "Debt Service Coverage Ratio",
+      "CAR": "Capital Adequacy Ratio",
+      "CET1": "Common Equity Tier 1",
+      "RWA": "Risk Weighted Assets",
+      "VaR": "Value at Risk",
+      "EPS": "Earnings Per Share",
+      "P/E": "Price to Earnings",
+      "P/B": "Price to Book",
+      "EBITDA": "Earnings Before Interest Taxes Depreciation and Amortization"
+    },
+    "products": {
+      "CD": "Certificate of Deposit",
+      "MMA": "Money Market Account",
+      "IRA": "Individual Retirement Account",
+      "HSA": "Health Savings Account",
+      "FSA": "Flexible Spending Account",
+      "401k": "401k Retirement Plan",
+      "403b": "403b Retirement Plan",
+      "529": "529 Education Savings Plan",
+      "HELOC": "Home Equity Line of Credit",
+      "LOC": "Line of Credit",
+      "ARM": "Adjustable Rate Mortgage",
+      "FRM": "Fixed Rate Mortgage",
+      "PLOC": "Personal Line of Credit",
+      "ETF": "Exchange Traded Fund",
+      "REIT": "Real Estate Investment Trust",
+      "MBS": "Mortgage Backed Security",
+      "ABS": "Asset Backed Security",
+      "CLO": "Collateralized Loan Obligation",
+      "CDO": "Collateralized Debt Obligation"
+    },
+    "trading": {
+      "NYSE": "New York Stock Exchange",
+      "NASDAQ": "National Association of Securities Dealers Automated Quotations",
+      "CME": "Chicago Mercantile Exchange",
+      "CBOT": "Chicago Board of Trade",
+      "ICE": "Intercontinental Exchange",
+      "OTC": "Over the Counter",
+      "ECN": "Electronic Communication Network",
+      "HFT": "High Frequency Trading",
+      "DMA": "Direct Market Access",
+      "STP": "Straight Through Processing",
+      "T+1": "Trade Plus One Day Settlement",
+      "T+2": "Trade Plus Two Day Settlement",
+      "IPO": "Initial Public Offering",
+      "SPO": "Secondary Public Offering",
+      "M&A": "Mergers and Acquisitions"
+    },
+    "identifiers": {
+      "CUSIP": "Committee on Uniform Securities Identification Procedures",
+      "ISIN": "International Securities Identification Number",
+      "SEDOL": "Stock Exchange Daily Official List",
+      "LEI": "Legal Entity Identifier",
+      "GIIN": "Global Intermediary Identification Number",
+      "EIN": "Employer Identification Number",
+      "TIN": "Tax Identification Number",
+      "ABA": "American Bankers Association",
+      "BIC": "Bank Identifier Code",
+      "SWIFT": "Society for Worldwide Interbank Financial Telecommunication",
+      "IBAN": "International Bank Account Number",
+      "ACH": "Automated Clearing House"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "Inc.", "LLC", "Corp", "Corporation", "Ltd", "Co"],
+    "preserve": [
+      "Bank", "Credit Union", "Federal Credit Union", "Savings Bank",
+      "Trust", "Trust Company", "Financial", "Capital", "Investments",
+      "Asset Management", "Wealth Management", "Securities", "Insurance",
+      "NA", "N.A.", "FSB", "F.S.B."
+    ]
+  },
+
+  "synonyms": {
+    "Federal Credit Union": ["FCU", "Fed Credit Union"],
+    "Credit Union": ["CU"],
+    "Bank": ["Banking", "Bancorp", "Banc"],
+    "National Association": ["NA", "N.A."],
+    "Federal Savings Bank": ["FSB", "F.S.B."],
+    "Trust Company": ["Trust Co", "Trust"],
+    "Insurance Company": ["Insurance Co", "Ins Co", "Ins"],
+    "Financial Services": ["Financial Svcs", "Fin Svcs"],
+    "Asset Management": ["Asset Mgmt", "AM"],
+    "Wealth Management": ["Wealth Mgmt", "WM"],
+    "Investment": ["Investments", "Inv"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 80,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -30
+  },
+
+  "genericEntityPatterns": [
+    "* Federal Credit Union",
+    "* Credit Union",
+    "* Employees Credit Union",
+    "* Teachers Credit Union",
+    "* Community Credit Union",
+    "* Community Bank",
+    "* Savings Bank",
+    "First * Bank",
+    "Community Bank of *",
+    "* Insurance Agency",
+    "* Insurance Group",
+    "* Mutual Insurance Company",
+    "Farm Bureau of *"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["routing_number_match", "domain_match", "charter_number_match"],
+    "blockers": ["different_charter"]
+  },
+
+  "knownEntities": [
+    "JPMorgan Chase",
+    "Bank of America",
+    "Wells Fargo",
+    "Citigroup",
+    "Citibank",
+    "U.S. Bank",
+    "US Bank",
+    "PNC Bank",
+    "Truist",
+    "Goldman Sachs",
+    "Capital One",
+    "TD Bank",
+    "Bank of New York Mellon",
+    "BNY Mellon",
+    "State Street",
+    "BMO",
+    "Citizens Bank",
+    "First Citizens Bank",
+    "M&T Bank",
+    "Fifth Third Bank",
+    "KeyBank",
+    "Huntington Bank",
+    "Regions Bank",
+    "USAA",
+    "Charles Schwab",
+    "Fidelity Investments",
+    "Vanguard",
+    "Morgan Stanley",
+    "State Farm",
+    "Progressive",
+    "Allstate",
+    "Liberty Mutual",
+    "Travelers",
+    "Chubb",
+    "Farmers Insurance",
+    "Nationwide",
+    "American Family Insurance",
+    "The Hartford",
+    "Auto-Owners Insurance",
+    "Erie Insurance",
+    "UnitedHealth Group",
+    "Elevance Health",
+    "Anthem",
+    "Aetna",
+    "Cigna",
+    "Humana",
+    "Centene",
+    "Molina Healthcare",
+    "Blue Cross Blue Shield"
+  ],
+
+  "knownEntityAliases": {
+    "JPMorgan Chase": ["Chase", "JP Morgan", "JPMC"],
+    "Bank of America": ["BofA", "BoA"],
+    "Citigroup": ["Citi", "Citibank"],
+    "U.S. Bank": ["US Bank", "USB"],
+    "Bank of New York Mellon": ["BNY Mellon", "BNYM"],
+    "Fifth Third Bank": ["5/3 Bank", "Fifth Third"],
+    "Blue Cross Blue Shield": ["BCBS", "Blue Cross"]
+  }
+}

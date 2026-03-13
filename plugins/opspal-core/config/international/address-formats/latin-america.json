@@ -1,0 +1,173 @@
+{
+  "description": "Address format configurations for Latin America",
+  "version": "1.0.0",
+  "BR": {
+    "name": "Brazil",
+    "format": {
+      "order": ["street", "number", "complement", "neighborhood", "city", "state", "postalCode"],
+      "template": "{street}, {number}\n{complement}\n{neighborhood}\n{city} - {state}\n{postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "CEP",
+      "format": "#####-###",
+      "regex": "^\\d{5}-?\\d{3}$",
+      "examples": ["01310-100", "22041-080"]
+    },
+    "streetTypes": {
+      "Rua": "R.",
+      "Avenida": "Av.",
+      "Alameda": "Al.",
+      "Praça": "Pça.",
+      "Travessa": "Tv.",
+      "Rodovia": "Rod.",
+      "Estrada": "Estr.",
+      "Largo": "Lgo.",
+      "Viela": "Vla.",
+      "Beco": "Bc.",
+      "Ladeira": "Lad.",
+      "Parque": "Pq.",
+      "Jardim": "Jd.",
+      "Vila": "Vl."
+    },
+    "units": {
+      "Apartamento": "Apto.",
+      "Sala": "Sl.",
+      "Conjunto": "Cj.",
+      "Bloco": "Bl.",
+      "Andar": "And.",
+      "Casa": "Cs.",
+      "Loja": "Lj.",
+      "Sobreloja": "Slj.",
+      "Cobertura": "Cob."
+    }
+  },
+  "AR": {
+    "name": "Argentina",
+    "format": {
+      "order": ["street", "number", "floor", "city", "postalCode", "state"],
+      "template": "{street} {number}, {floor}\n{postalCode} {city}\n{state}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Código Postal",
+      "format": "A#### AAA (CPA) or #### (old)",
+      "regex": "^[A-Z]\\d{4}[A-Z]{3}$|^\\d{4}$",
+      "examples": ["C1425ABC", "1425"]
+    },
+    "streetTypes": {
+      "Calle": "C.",
+      "Avenida": "Av.",
+      "Boulevard": "Blvd.",
+      "Pasaje": "Pje.",
+      "Paseo": "Pso.",
+      "Diagonal": "Diag.",
+      "Autopista": "Aut.",
+      "Ruta": "Rta."
+    },
+    "units": {
+      "Piso": "P.",
+      "Departamento": "Dpto.",
+      "Oficina": "Of.",
+      "Local": "Loc.",
+      "Unidad Funcional": "UF"
+    }
+  },
+  "CL": {
+    "name": "Chile",
+    "format": {
+      "order": ["street", "number", "complement", "city", "region", "postalCode"],
+      "template": "{street} {number}\n{complement}\n{city}\n{region}\n{postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Código Postal",
+      "format": "#######",
+      "regex": "^\\d{7}$",
+      "examples": ["8320000", "7500000"]
+    },
+    "streetTypes": {
+      "Calle": "C.",
+      "Avenida": "Av.",
+      "Pasaje": "Pje.",
+      "Paseo": "Pso.",
+      "Camino": "Cno.",
+      "Autopista": "Aut.",
+      "Costanera": "Cost."
+    },
+    "units": {
+      "Departamento": "Depto.",
+      "Oficina": "Of.",
+      "Piso": "P.",
+      "Local": "Loc.",
+      "Casa": "Casa"
+    }
+  },
+  "CO": {
+    "name": "Colombia",
+    "format": {
+      "order": ["street", "city", "state", "postalCode"],
+      "template": "{street}\n{city}, {state}\n{postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Código Postal",
+      "format": "######",
+      "regex": "^\\d{6}$",
+      "examples": ["110111", "050001"]
+    },
+    "streetTypes": {
+      "Calle": "Cl.",
+      "Carrera": "Cra.",
+      "Avenida": "Av.",
+      "Diagonal": "Dg.",
+      "Transversal": "Tv.",
+      "Circular": "Cir.",
+      "Autopista": "Aut."
+    },
+    "directions": {
+      "Norte": "N",
+      "Sur": "S",
+      "Este": "E",
+      "Oeste": "O"
+    },
+    "units": {
+      "Apartamento": "Apto.",
+      "Oficina": "Of.",
+      "Piso": "P.",
+      "Local": "Loc.",
+      "Interior": "Int.",
+      "Torre": "Tr."
+    }
+  },
+  "PE": {
+    "name": "Peru",
+    "format": {
+      "order": ["street", "number", "urbanization", "district", "city", "postalCode"],
+      "template": "{street} {number}\n{urbanization}\n{district}\n{city} {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Código Postal",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["15001", "15074"]
+    },
+    "streetTypes": {
+      "Jirón": "Jr.",
+      "Avenida": "Av.",
+      "Calle": "Ca.",
+      "Pasaje": "Psje.",
+      "Malecón": "Mal.",
+      "Alameda": "Alda.",
+      "Prolongación": "Prol."
+    },
+    "units": {
+      "Departamento": "Dpto.",
+      "Oficina": "Of.",
+      "Piso": "P.",
+      "Interior": "Int.",
+      "Urbanización": "Urb."
+    }
+  }
+}

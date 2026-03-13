@@ -48,7 +48,20 @@ Parse the user's bug description from `$ARGUMENTS`. Extract:
 
 If `--resume` is set, run:
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/hypothesis-result-ledger.js resumable
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+LEDGER=$(find_script "hypothesis-result-ledger.js") && node "$LEDGER" resumable
 ```
 Read the latest resumable run's ledger file, then skip to Step 4.
 
@@ -87,7 +100,7 @@ Parse the JSON response to extract the hypotheses array.
 Run the parallel hypothesis executor:
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/parallel-hypothesis-executor.js \
+EXECUTOR=$(find_script "parallel-hypothesis-executor.js") && node "$EXECUTOR" \
   --run-id=<run-id> \
   --hypotheses='<json-array-from-step-3>' \
   --test-cmd='<test-command>' \

@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "assessment-output.schema.json",
+  "title": "Assessment Output Schema",
+  "description": "Defines the required JSON structure for all assessment agent outputs (RevOps, CPQ, Funnel Diagnostic). Based on Anthropic consistency guidelines.",
+  "type": "object",
+  "required": ["executive_summary", "metrics", "findings", "recommendations"],
+  "properties": {
+    "assessment_type": {
+      "type": "string",
+      "enum": ["revops_audit", "cpq_assessment", "funnel_diagnostic"],
+      "description": "Type of assessment performed"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Schema version (e.g., '2.0')"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when assessment was generated"
+    },
+    "executive_summary": {
+      "type": "object",
+      "required": ["bottom_line", "health_score", "critical_issues"],
+      "properties": {
+        "bottom_line": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "One-sentence summary of the most important finding"
+        },
+        "health_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Overall health score (0-100)"
+        },
+        "critical_issues": {
+          "type": "array",
+          "maxItems": 5,
+          "items": { "type": "string" },
+          "description": "Top 3-5 critical issues that need immediate attention"
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "description": "All calculated metrics with source citations",
+      "items": {
+        "type": "object",
+        "required": ["name", "value", "source_id"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the metric (e.g., 'Win Rate', 'Pipeline Velocity')"
+          },
+          "value": {
+            "type": ["number", "string"],
+            "description": "Calculated value (can be number or formatted string like '$847,500')"
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^[a-z_]+_[0-9]+$",
+            "description": "Reference to the query that provided the data (e.g., 'sf_query_001')"
+          },
+          "benchmark": {
+            "type": "object",
+            "description": "Industry benchmark comparison (if available)",
+            "properties": {
+              "value": {
+                "type": ["number", "string"],
+                "description": "Benchmark value"
+              },
+              "source": {
+                "type": "string",
+                "description": "Source of benchmark (e.g., 'Bridge Group 2024')"
+              },
+              "gap": {
+                "type": "string",
+                "description": "Gap from benchmark (e.g., '-23%', '+15%')"
+              }
+            }
+          },
+          "reasoning": {
+            "type": "string",
+            "description": "Step-by-step calculation showing how value was derived"
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "Key findings from the assessment",
+      "items": {
+        "type": "object",
+        "required": ["title", "severity", "description", "source_ids"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short title for the finding"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"],
+            "description": "Severity level of the finding"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the finding"
+          },
+          "source_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "References to queries/data that support this finding"
+          },
+          "impact": {
+            "type": "string",
+            "description": "Business impact of this issue"
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Actionable recommendations based on findings",
+      "items": {
+        "type": "object",
+        "required": ["title", "priority", "rationale"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Short title for the recommendation"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["immediate", "short-term", "long-term"],
+            "description": "Priority level for implementation"
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Why this recommendation addresses the identified issues"
+          },
+          "related_findings": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Titles of findings this recommendation addresses"
+          },
+          "implementation_notes": {
+            "type": "string",
+            "description": "Notes on how to implement the recommendation"
+          }
+        }
+      }
+    },
+    "data_sources": {
+      "type": "object",
+      "description": "Summary of all data sources used",
+      "properties": {
+        "queries_executed": {
+          "type": "integer",
+          "description": "Total number of queries executed"
+        },
+        "source_systems": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of source systems queried (e.g., 'Salesforce', 'HubSpot')"
+        },
+        "data_freshness": {
+          "type": "string",
+          "description": "Date range of data analyzed"
+        }
+      }
+    },
+    "self_review": {
+      "type": "object",
+      "description": "Results of self-correction review (if performed)",
+      "properties": {
+        "accuracy_grade": {
+          "type": "string",
+          "enum": ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"]
+        },
+        "clarity_grade": {
+          "type": "string",
+          "enum": ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"]
+        },
+        "completeness_grade": {
+          "type": "string",
+          "enum": ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"]
+        },
+        "citation_coverage_grade": {
+          "type": "string",
+          "enum": ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"]
+        },
+        "refinements_made": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of refinements made based on self-review"
+        }
+      }
+    }
+  }
+}

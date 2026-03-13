@@ -1,0 +1,266 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "franchise",
+  "version": "1.0.0",
+  "description": "Franchises, hotels, restaurants, and multi-location branded businesses where same name in different states typically represents the same corporate entity",
+
+  "detectionPatterns": {
+    "keywords": [
+      "franchise", "franchisee", "store", "location", "branch", "outlet",
+      "restaurant", "hotel", "motel", "inn", "lodge", "resort",
+      "fast food", "quick service", "drive-thru", "chain"
+    ],
+    "entityTypes": ["Franchise", "Store", "Branch", "Location", "Outlet", "Hotel", "Restaurant"],
+    "fieldPatterns": [
+      "StoreNumber", "FranchiseId", "LocationCode", "UnitNumber",
+      "BrandId", "ChainCode", "PropertyCode"
+    ]
+  },
+
+  "abbreviations": {
+    "operations": {
+      "HQ": "Headquarters",
+      "DC": "Distribution Center",
+      "RO": "Regional Office",
+      "CO": "Corporate Office",
+      "FC": "Franchise Center"
+    },
+    "hospitality": {
+      "H&S": "Hotel and Suites",
+      "B&B": "Bed and Breakfast",
+      "EI": "Extended Stay",
+      "ES": "Executive Suites"
+    },
+    "foodService": {
+      "QSR": "Quick Service Restaurant",
+      "FSR": "Full Service Restaurant",
+      "FC": "Food Court",
+      "DT": "Drive-Thru"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "Franchising"],
+    "preserve": [
+      "Hotel", "Inn", "Suites", "Resort", "Lodge",
+      "Restaurant", "Cafe", "Grill", "Kitchen",
+      "Express", "Plus", "Select"
+    ]
+  },
+
+  "synonyms": {
+    "Hotel": ["Hotels"],
+    "Inn": ["Inns"],
+    "Restaurant": ["Restaurants", "Grill"],
+    "Store": ["Stores", "Shop", "Outlet"],
+    "Domino's": ["Domino's Pizza", "Dominos", "Dominos Pizza"],
+    "Chipotle": ["Chipotle Mexican Grill"],
+    "Dunkin'": ["Dunkin Donuts", "Dunkin' Donuts"],
+    "KFC": ["Kentucky Fried Chicken"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.90,
+    "minimumConfidence": 60
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "ALLOW_WITH_PATTERN",
+    "uniquenessLevel": "LOW",
+    "confidenceThresholds": {
+      "autoMerge": 85,
+      "review": 75,
+      "tag": 50
+    },
+    "stateMismatchPenalty": -10
+  },
+
+  "genericEntityPatterns": [],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["known_franchise", "parent_pattern", "store_number_pattern", "domain_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "McDonald's",
+    "Starbucks",
+    "Subway",
+    "Dunkin'",
+    "Chick-fil-A",
+    "Taco Bell",
+    "Wendy's",
+    "Burger King",
+    "KFC",
+    "Pizza Hut",
+    "Domino's",
+    "Papa John's",
+    "Chipotle",
+    "Panera Bread",
+    "Five Guys",
+    "In-N-Out Burger",
+    "Whataburger",
+    "Sonic Drive-In",
+    "Arby's",
+    "Jack in the Box",
+    "Carl's Jr",
+    "Hardee's",
+    "Popeyes",
+    "Chili's",
+    "Applebee's",
+    "Olive Garden",
+    "Red Lobster",
+    "Outback Steakhouse",
+    "Texas Roadhouse",
+    "Cracker Barrel",
+    "IHOP",
+    "Denny's",
+    "Waffle House",
+    "Marriott",
+    "Hilton",
+    "Hyatt",
+    "Holiday Inn",
+    "Hampton Inn",
+    "Best Western",
+    "La Quinta",
+    "Comfort Inn",
+    "Quality Inn",
+    "Days Inn",
+    "Super 8",
+    "Motel 6",
+    "Red Roof Inn",
+    "Courtyard by Marriott",
+    "Residence Inn",
+    "SpringHill Suites",
+    "Fairfield Inn",
+    "Embassy Suites",
+    "DoubleTree",
+    "Homewood Suites",
+    "Hertz",
+    "Enterprise",
+    "Avis",
+    "Budget",
+    "National",
+    "Alamo",
+    "7-Eleven",
+    "Circle K",
+    "Wawa",
+    "Sheetz",
+    "QuikTrip",
+    "Pilot Flying J",
+    "Love's Travel Stops",
+    "TA Travel Centers",
+    "UPS Store",
+    "FedEx Office",
+    "The UPS Store",
+    "H&R Block",
+    "Jackson Hewitt",
+    "Liberty Tax",
+    "RE/MAX",
+    "Century 21",
+    "Coldwell Banker",
+    "Keller Williams",
+    "ERA Real Estate",
+    "Jiffy Lube",
+    "Midas",
+    "Meineke",
+    "Firestone",
+    "Goodyear",
+    "Tire Discounters",
+    "Great Clips",
+    "Sport Clips",
+    "Supercuts",
+    "Cost Cutters",
+    "Fantastic Sams",
+    "Hunt Brothers Pizza",
+    "Ritz-Carlton",
+    "St. Regis",
+    "JW Marriott",
+    "W Hotels",
+    "Sheraton",
+    "Westin",
+    "Renaissance Hotels",
+    "TownePlace Suites",
+    "Aloft Hotels",
+    "Moxy Hotels",
+    "Waldorf Astoria",
+    "Conrad Hotels",
+    "Hilton Garden Inn",
+    "Home2 Suites",
+    "Tru by Hilton",
+    "Curio Collection",
+    "Park Hyatt",
+    "Grand Hyatt",
+    "Andaz",
+    "Hyatt Regency",
+    "Hyatt Place",
+    "Hyatt House",
+    "Thompson Hotels",
+    "Miraval",
+    "InterContinental",
+    "Kimpton Hotels",
+    "Crowne Plaza",
+    "Holiday Inn Express",
+    "Staybridge Suites",
+    "Candlewood Suites",
+    "Hotel Indigo",
+    "UPS",
+    "FedEx",
+    "DHL",
+    "XPO Logistics",
+    "J.B. Hunt",
+    "C.H. Robinson",
+    "Ryder",
+    "Old Dominion Freight Line",
+    "Estes Express Lines",
+    "Schneider National",
+    "Landstar",
+    "Banfield Pet Hospital",
+    "VCA Animal Hospitals",
+    "BluePearl",
+    "PetVet Care Centers",
+    "Thrive Pet Healthcare"
+  ],
+
+  "locationPatterns": [
+    {
+      "pattern": "^(.+?)\\s*[-–—]\\s*([A-Za-z][A-Za-z\\s]+)$",
+      "description": "Dash separator: 'Marriott - Dallas'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s*#(\\d+)$",
+      "description": "Store number with hash: 'McDonald's #1234'",
+      "baseGroup": 1,
+      "storeNumberGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s*\\(([A-Z]{2})\\)$",
+      "description": "State code in parentheses: 'Hilton (TX)'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+(?:Store|Location|Branch|Unit)\\s*#?(\\d+)$",
+      "description": "Store keyword: 'Target Store 1234'",
+      "baseGroup": 1,
+      "storeNumberGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+(North|South|East|West|Central|Downtown|Uptown|Midtown|Northwest|Northeast|Southwest|Southeast)$",
+      "description": "Regional suffix: 'Starbucks Downtown'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+at\\s+(.+)$",
+      "description": "At location: 'Starbucks at Main Street'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    }
+  ]
+}

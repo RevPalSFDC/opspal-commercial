@@ -36,7 +36,7 @@ await generator.convertMarkdown('report.md', 'report.pdf', {
 
 ```bash
 # Via Command
-/generate-pdf "instances/acme/*.md" acme-complete.pdf --toc --cover salesforce-audit
+/generate-pdf "instances/acme/*.md" acme-complete.pdf --profile cover-toc --report-type salesforce-audit
 
 # Via Agent
 "Generate a complete PDF for the ACME audit with all reports and diagrams"
@@ -287,7 +287,8 @@ await generator.fromGlob(
 - `--toc-depth N` - TOC depth (default: 3)
 - `--bookmarks` - Add PDF bookmarks (best-effort; requires pdftk/qpdf)
 - `--no-mermaid` - Skip Mermaid rendering
-- `--cover TEMPLATE` - Cover page template
+- `--profile PROFILE` - PDF profile (`cover-toc` or `simple`)
+- `--report-type TYPE` - Report type metadata (salesforce-audit, executive-report, etc.)
 - `--title "TEXT"` - PDF title
 - `--org "NAME"` - Organization name
 - `--version "VER"` - Document version
@@ -299,7 +300,7 @@ await generator.fromGlob(
 /generate-pdf report.md report.pdf
 
 # Multiple files with full features
-/generate-pdf "audit/*.md" audit-complete.pdf --toc --cover salesforce-audit --org "ACME"
+/generate-pdf "audit/*.md" audit-complete.pdf --profile cover-toc --report-type salesforce-audit --org "ACME"
 
 # Custom metadata
 /generate-pdf "reports/*.md" quarterly.pdf --title "Q4 2025 Report" --version "2.1"

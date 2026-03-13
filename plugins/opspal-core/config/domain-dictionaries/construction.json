@@ -1,0 +1,167 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "construction",
+  "version": "1.0.0",
+  "description": "Construction companies, general contractors, and specialty trades. Major national contractors operate across states, while most contractors are local with generic names.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "construction", "contractor", "builder", "building", "general contractor",
+      "excavating", "paving", "concrete", "electrical", "plumbing", "mechanical",
+      "roofing", "hvac", "demolition", "renovation", "remodeling"
+    ],
+    "entityTypes": ["GeneralContractor", "Subcontractor", "Builder", "TradeContractor"],
+    "fieldPatterns": [
+      "ContractorLicense", "BondNumber", "DUNS", "NAICS", "SIC"
+    ]
+  },
+
+  "abbreviations": {
+    "trades": {
+      "GC": "General Contractor",
+      "HVAC": "Heating Ventilation and Air Conditioning",
+      "MEP": "Mechanical Electrical Plumbing",
+      "CM": "Construction Manager",
+      "DB": "Design-Build",
+      "EPC": "Engineering Procurement Construction"
+    },
+    "certifications": {
+      "OSHA": "Occupational Safety and Health Administration",
+      "LEED": "Leadership in Energy and Environmental Design",
+      "MBE": "Minority Business Enterprise",
+      "WBE": "Women Business Enterprise",
+      "DBE": "Disadvantaged Business Enterprise",
+      "SBE": "Small Business Enterprise",
+      "SDVOB": "Service-Disabled Veteran-Owned Business"
+    },
+    "organizations": {
+      "AGC": "Associated General Contractors",
+      "ABC": "Associated Builders and Contractors",
+      "NAHB": "National Association of Home Builders",
+      "NECA": "National Electrical Contractors Association"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "Co", "Company"],
+    "preserve": [
+      "Construction", "Builders", "Contracting", "Contractor",
+      "Electric", "Electrical", "Plumbing", "Mechanical",
+      "Roofing", "HVAC", "Excavating", "Paving"
+    ]
+  },
+
+  "synonyms": {
+    "Construction": ["Const", "Constr"],
+    "Electrical": ["Electric", "Elec"],
+    "Mechanical": ["Mech"],
+    "Plumbing": ["Plbg"],
+    "General Contractor": ["GC", "Gen Contractor"],
+    "& Sons": ["and Sons"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.80,
+    "minimumConfidence": 70
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 78,
+      "tag": 60
+    },
+    "stateMismatchPenalty": -25
+  },
+
+  "genericEntityPatterns": [
+    "* Construction",
+    "* Builders",
+    "* Contracting",
+    "* General Contractor",
+    "* Excavating",
+    "* Paving",
+    "* Electric",
+    "* Electrical",
+    "* Electrical Services",
+    "* Plumbing",
+    "* Mechanical",
+    "* Roofing",
+    "* HVAC",
+    "* Heating & Cooling",
+    "* & Sons Construction",
+    "* Brothers Construction",
+    "* Development",
+    "* Concrete",
+    "* Masonry",
+    "* Painting",
+    "* Drywall",
+    "* Landscaping"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["contractor_license_match", "domain_match", "duns_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "Turner Construction",
+    "Bechtel",
+    "Kiewit Corporation",
+    "The Whiting-Turner Contracting Co.",
+    "MasTec",
+    "Fluor Corporation",
+    "DPR Construction",
+    "Skanska USA",
+    "Clark Construction Group",
+    "Gilbane Building Company",
+    "AECOM",
+    "Mortenson",
+    "Hensel Phelps",
+    "McCarthy Building Companies",
+    "Balfour Beatty US",
+    "Jacobs Engineering",
+    "PCL Construction",
+    "Swinerton",
+    "JE Dunn Construction",
+    "Granite Construction",
+    "Quanta Services",
+    "EMCOR Group",
+    "Tutor Perini",
+    "Structure Tone",
+    "Walsh Group",
+    "Holder Construction",
+    "Brasfield & Gorrie",
+    "Webcor Builders",
+    "Robins & Morton",
+    "Barton Malow"
+  ],
+
+  "knownEntityAliases": {
+    "The Whiting-Turner Contracting Co.": ["Whiting-Turner", "Whiting Turner"],
+    "Gilbane Building Company": ["Gilbane"],
+    "McCarthy Building Companies": ["McCarthy"],
+    "JE Dunn Construction": ["JE Dunn"],
+    "Brasfield & Gorrie": ["Brasfield and Gorrie"]
+  },
+
+  "contractorTiers": {
+    "enr400": {
+      "description": "ENR Top 400 Contractors with multi-state operations",
+      "matchingHint": "Same name different state may be same entity"
+    },
+    "regional": {
+      "description": "Regional contractors with multi-state presence",
+      "matchingHint": "Review cross-state matches"
+    },
+    "local": {
+      "description": "Local contractors typically single-state licensed",
+      "matchingHint": "Same name different state is likely different entity"
+    }
+  }
+}

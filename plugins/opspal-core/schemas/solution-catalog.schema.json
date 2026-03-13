@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace/schemas/solution-catalog.schema.json",
+  "title": "Solution Catalog",
+  "description": "Schema for the shared solution catalog registry",
+  "type": "object",
+  "required": ["version", "solutions"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Catalog schema version (semver)"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp (ISO 8601)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Catalog description"
+    },
+    "repository": {
+      "type": "string",
+      "format": "uri",
+      "description": "Repository URL for the catalog"
+    },
+    "solutions": {
+      "type": "array",
+      "description": "Array of published solutions",
+      "items": {
+        "$ref": "#/definitions/solutionEntry"
+      }
+    }
+  },
+  "definitions": {
+    "solutionEntry": {
+      "type": "object",
+      "required": ["name", "version", "description", "path", "platforms"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Solution name (lowercase-hyphenated)"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Solution version (semver)"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 500,
+          "description": "Brief description of what the solution does"
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative path to solution directory from repo root"
+        },
+        "platforms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["salesforce", "hubspot", "n8n"]
+          },
+          "minItems": 1,
+          "description": "Target platforms for this solution"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "description": "Searchable tags for categorization"
+        },
+        "complexity": {
+          "type": "string",
+          "enum": ["simple", "moderate", "complex"],
+          "description": "Solution complexity level"
+        },
+        "author": {
+          "type": "string",
+          "description": "Solution author or team"
+        },
+        "published": {
+          "type": "string",
+          "format": "date",
+          "description": "Publication date (YYYY-MM-DD)"
+        },
+        "downloads": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of times solution has been installed"
+        },
+        "componentCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of components in the solution"
+        },
+        "parameterCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of configurable parameters"
+        },
+        "requiredFeatures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Platform features required by this solution"
+        },
+        "minApiVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$",
+          "description": "Minimum API version required (for Salesforce)"
+        }
+      }
+    }
+  }
+}

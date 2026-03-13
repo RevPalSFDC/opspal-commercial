@@ -1,0 +1,316 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "HubSpot Validation Rules",
+  "version": "1.0.0",
+  "description": "Platform-specific schema validation rules for HubSpot operations",
+  "created": "2026-01-15",
+  "roiImpact": "$16,000/year",
+  "addressesCohort": "HubSpot API errors",
+
+  "apiLimits": {
+    "searchApiLimit": {
+      "limit": 10000,
+      "errorCode": "SEARCH_API_LIMIT",
+      "severity": "CRITICAL",
+      "message": "HubSpot Search API returns max 10,000 results. Total matching: {total}",
+      "remediation": "Add date filters or other criteria to reduce result set below 10,000",
+      "detectionPattern": "after.*search.*>\\s*10000|total.*10000",
+      "workarounds": [
+        "Use date-based pagination (createdate ranges)",
+        "Add additional filter criteria",
+        "Use CRM export for full datasets"
+      ]
+    },
+    "rateLimits": {
+      "standard": {
+        "limit": 100,
+        "window": 10,
+        "unit": "requests/10sec",
+        "errorCode": "RATE_LIMIT_STANDARD"
+      },
+      "search": {
+        "limit": 4,
+        "window": 1,
+        "unit": "requests/sec",
+        "errorCode": "RATE_LIMIT_SEARCH"
+      },
+      "oauth": {
+        "limit": 160,
+        "window": 10,
+        "unit": "requests/10sec",
+        "errorCode": "RATE_LIMIT_OAUTH"
+      }
+    },
+    "batchLimits": {
+      "create": {
+        "maxRecords": 100,
+        "errorCode": "BATCH_CREATE_LIMIT"
+      },
+      "update": {
+        "maxRecords": 100,
+        "errorCode": "BATCH_UPDATE_LIMIT"
+      },
+      "archive": {
+        "maxRecords": 100,
+        "errorCode": "BATCH_ARCHIVE_LIMIT"
+      },
+      "associations": {
+        "maxPerRequest": 100,
+        "errorCode": "BATCH_ASSOCIATION_LIMIT"
+      }
+    }
+  },
+
+  "propertyValidation": {
+    "namingConventions": {
+      "severity": "WARNING",
+      "description": "HubSpot property naming requirements",
+      "rules": [
+        {
+          "rule": "lowercase",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "errorCode": "PROPERTY_NAME_CASE",
+          "message": "Property name '{name}' should be lowercase",
+          "remediation": "Use lowercase property names with underscores"
+        },
+        {
+          "rule": "noSpecialChars",
+          "pattern": "^[a-z0-9_]+$",
+          "errorCode": "PROPERTY_SPECIAL_CHARS",
+          "message": "Property name '{name}' contains invalid characters",
+          "remediation": "Only use lowercase letters, numbers, and underscores"
+        },
+        {
+          "rule": "maxLength",
+          "maxLength": 100,
+          "errorCode": "PROPERTY_NAME_TOO_LONG"
+        }
+      ],
+      "salesforceMapping": {
+        "description": "Salesforce __c suffix handling for sync",
+        "rules": [
+          {
+            "sfPattern": "(.+)__c",
+            "hsPattern": "$1",
+            "note": "Remove __c suffix when syncing to HubSpot"
+          },
+          {
+            "sfPattern": "(.+)__r",
+            "note": "Relationship fields need special handling"
+          }
+        ]
+      }
+    },
+    "typeCompatibility": {
+      "severity": "HIGH",
+      "description": "Property type validation",
+      "validTypes": [
+        "string",
+        "number",
+        "date",
+        "datetime",
+        "enumeration",
+        "bool"
+      ],
+      "typeConversions": {
+        "salesforceToHubspot": {
+          "Text": "string",
+          "TextArea": "string",
+          "LongTextArea": "string",
+          "Number": "number",
+          "Currency": "number",
+          "Percent": "number",
+          "Date": "date",
+          "DateTime": "datetime",
+          "Checkbox": "bool",
+          "Picklist": "enumeration",
+          "MultiselectPicklist": "enumeration",
+          "Email": "string",
+          "Phone": "string",
+          "URL": "string"
+        }
+      }
+    },
+    "requiredProperties": {
+      "contact": ["email", "firstname", "lastname"],
+      "company": ["name", "domain"],
+      "deal": ["dealname", "pipeline", "dealstage"],
+      "ticket": ["subject", "hs_pipeline", "hs_pipeline_stage"]
+    }
+  },
+
+  "workflowValidation": {
+    "enrollmentCriteria": {
+      "severity": "HIGH",
+      "description": "Workflow enrollment validation",
+      "checks": [
+        {
+          "check": "propertyExists",
+          "errorCode": "WORKFLOW_PROPERTY_NOT_FOUND",
+          "message": "Workflow references non-existent property '{property}'"
+        },
+        {
+          "check": "filterOperatorValid",
+          "errorCode": "INVALID_FILTER_OPERATOR",
+          "validOperators": ["eq", "neq", "contains", "not_contains", "lt", "lte", "gt", "gte", "is_known", "is_unknown"]
+        }
+      ]
+    },
+    "actionValidation": {
+      "severity": "HIGH",
+      "checks": [
+        {
+          "check": "emailTemplateExists",
+          "errorCode": "EMAIL_TEMPLATE_NOT_FOUND"
+        },
+        {
+          "check": "propertyValueValid",
+          "errorCode": "INVALID_PROPERTY_VALUE"
+        }
+      ]
+    },
+    "branchingLimits": {
+      "maxBranches": 20,
+      "maxActions": 256,
+      "maxDelayDays": 365
+    }
+  },
+
+  "associationValidation": {
+    "severity": "HIGH",
+    "description": "HubSpot association validation rules",
+    "standardAssociations": {
+      "contact": ["company", "deal", "ticket"],
+      "company": ["contact", "deal", "ticket"],
+      "deal": ["contact", "company", "ticket", "line_item", "quote"],
+      "ticket": ["contact", "company", "deal"]
+    },
+    "associationTypes": {
+      "primaryCompany": {
+        "typeId": 1,
+        "description": "Primary company association for contacts"
+      },
+      "primaryContact": {
+        "typeId": 2,
+        "description": "Primary contact association for companies"
+      }
+    },
+    "errors": {
+      "invalidAssociation": {
+        "errorCode": "INVALID_ASSOCIATION_TYPE",
+        "message": "Cannot associate {fromObject} with {toObject}"
+      },
+      "duplicateAssociation": {
+        "errorCode": "DUPLICATE_ASSOCIATION",
+        "message": "Association already exists between {fromId} and {toId}"
+      }
+    }
+  },
+
+  "importValidation": {
+    "fileFormats": {
+      "supported": ["csv", "xlsx"],
+      "maxFileSize": "512MB",
+      "maxRows": 1000000,
+      "encoding": "UTF-8"
+    },
+    "csvRequirements": {
+      "severity": "CRITICAL",
+      "description": "CSV format requirements for HubSpot imports",
+      "rules": [
+        {
+          "rule": "lineEndings",
+          "required": "LF",
+          "errorCode": "INVALID_LINE_ENDINGS",
+          "message": "CSV file has Windows line endings (CRLF). HubSpot requires Unix line endings (LF).",
+          "remediation": "Convert line endings: tr -d '\\r' < input.csv > output.csv"
+        },
+        {
+          "rule": "encoding",
+          "required": "UTF-8",
+          "errorCode": "INVALID_ENCODING",
+          "message": "CSV file is not UTF-8 encoded"
+        },
+        {
+          "rule": "headerRow",
+          "required": true,
+          "errorCode": "MISSING_HEADER_ROW"
+        }
+      ]
+    },
+    "columnMapping": {
+      "severity": "HIGH",
+      "requiredColumns": {
+        "contact": ["Email"],
+        "company": ["Company name", "Company domain name"],
+        "deal": ["Deal Name", "Pipeline", "Deal Stage"]
+      }
+    }
+  },
+
+  "searchValidation": {
+    "severity": "HIGH",
+    "description": "Search API validation",
+    "filterGroups": {
+      "maxFilters": 5,
+      "maxFilterGroups": 5,
+      "errorCode": "TOO_MANY_FILTERS"
+    },
+    "sortingLimits": {
+      "maxSorts": 3,
+      "errorCode": "TOO_MANY_SORTS"
+    },
+    "propertyLimits": {
+      "maxProperties": 20,
+      "errorCode": "TOO_MANY_PROPERTIES"
+    },
+    "dateFiltering": {
+      "description": "Date filter format requirements",
+      "format": "YYYY-MM-DD",
+      "timestampFormat": "Unix timestamp (milliseconds)",
+      "errorCode": "INVALID_DATE_FORMAT"
+    }
+  },
+
+  "deduplicationRules": {
+    "contact": {
+      "primaryKey": "email",
+      "secondaryKeys": ["phone", "mobilephone"],
+      "matchingStrategy": "exact"
+    },
+    "company": {
+      "primaryKey": "domain",
+      "secondaryKeys": ["name"],
+      "matchingStrategy": "fuzzy"
+    },
+    "deal": {
+      "noDuplication": true,
+      "note": "Deals are unique by ID only"
+    }
+  },
+
+  "syncValidation": {
+    "salesforceHubspotSync": {
+      "severity": "HIGH",
+      "description": "Salesforce-HubSpot sync validation",
+      "checks": [
+        {
+          "check": "fieldMappingExists",
+          "errorCode": "MISSING_FIELD_MAPPING"
+        },
+        {
+          "check": "dataTypeCompatible",
+          "errorCode": "INCOMPATIBLE_DATA_TYPE"
+        },
+        {
+          "check": "requiredFieldsMapped",
+          "errorCode": "REQUIRED_FIELD_NOT_MAPPED"
+        }
+      ],
+      "conflictResolution": {
+        "options": ["hubspot_wins", "salesforce_wins", "most_recent"],
+        "default": "most_recent"
+      }
+    }
+  }
+}

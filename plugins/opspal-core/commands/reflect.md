@@ -139,7 +139,7 @@ Submitting to Supabase...
 Submission successful
 
 Query your reflections:
-   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/query-reflections.js recent
+   node .claude-plugins/opspal-core/scripts/lib/query-reflections.js recent
 ```
 
 ### Example 2: Successful Session with Feedback
@@ -199,7 +199,7 @@ Attempting submission...
 Supabase not configured (missing SUPABASE_URL or credentials)
 
 Manual submission (auto-loads .env/.env.local):
-   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/submit-reflection.js \
+   node .claude-plugins/opspal-core/scripts/lib/submit-reflection.js \
      .claude/SESSION_REFLECTION_20251013_150145.json
 ```
 
@@ -628,8 +628,8 @@ SCRIPT_PATHS=()
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
     SCRIPT_PATHS+=(
         "${CLAUDE_PLUGIN_ROOT}"                                    # Direct plugin path
-        "${CLAUDE_PLUGIN_ROOT}"        # Workspace root → installed
-        "${CLAUDE_PLUGIN_ROOT}"                # Workspace root → source
+        "${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core"        # Workspace root → installed
+        "${CLAUDE_PLUGIN_ROOT}/plugins/opspal-core"                # Workspace root → source
     )
 fi
 

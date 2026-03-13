@@ -28,10 +28,6 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const {
-  isVersionLikeName,
-  pickLatestVersion
-} = require('./semver-directory-utils');
 
 /**
  * Known plugin names and their common aliases
@@ -72,81 +68,6 @@ const PLUGIN_DIR_NAMES = {
  */
 const pluginRootCache = new Map();
 
-function isDirectory(dirPath) {
-  try {
-    return fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory();
-  } catch (error) {
-    return false;
-  }
-}
-
-function looksLikePluginRoot(dirPath) {
-  if (!isDirectory(dirPath)) {
-    return false;
-  }
-
-  return fs.existsSync(path.join(dirPath, 'scripts')) ||
-    fs.existsSync(path.join(dirPath, 'agents')) ||
-    fs.existsSync(path.join(dirPath, '.claude-plugin'));
-}
-
-function getCandidatePluginDirs(pluginName) {
-  const canonicalName = normalizePluginName(pluginName);
-  const dirNames = PLUGIN_DIR_NAMES[canonicalName] || [canonicalName];
-  return [...new Set([canonicalName, ...dirNames])];
-}
-
-function normalizeResolvedPluginRoot(pluginName, candidatePath) {
-  if (!candidatePath) {
-    return null;
-  }
-
-  const canonicalName = normalizePluginName(pluginName);
-  const candidateNames = getCandidatePluginDirs(pluginName);
-  const resolvedCandidate = path.resolve(candidatePath);
-
-  if (looksLikePluginRoot(resolvedCandidate)) {
-    const basename = path.basename(resolvedCandidate);
-    const parentBasename = path.basename(path.dirname(resolvedCandidate));
-    if (
-      candidateNames.includes(basename) ||
-      basename === canonicalName ||
-      candidateNames.includes(parentBasename) ||
-      parentBasename === canonicalName
-    ) {
-      return resolvedCandidate;
-    }
-  }
-
-  for (const dirName of candidateNames) {
-    const directCandidates = [
-      path.join(resolvedCandidate, dirName),
-      path.join(resolvedCandidate, 'plugins', dirName),
-      path.join(resolvedCandidate, '.claude-plugins', dirName)
-    ];
-
-    for (const directCandidate of directCandidates) {
-      if (looksLikePluginRoot(directCandidate)) {
-        return path.resolve(directCandidate);
-      }
-    }
-  }
-
-  return null;
-}
-
-function findLatestVersionDir(baseDir) {
-  if (!isDirectory(baseDir)) {
-    return null;
-  }
-
-  const versions = fs.readdirSync(baseDir)
-    .filter(entry => isDirectory(path.join(baseDir, entry)) && isVersionLikeName(entry));
-  const latest = pickLatestVersion(versions);
-
-  return latest ? path.join(baseDir, latest) : null;
-}
-
 /**
  * Normalize plugin name to canonical form
  *
@@ -176,7 +97,7 @@ function findHomePluginDir(pluginName) {
   }
 
   // All directory names to search for this plugin
-  const dirNames = getCandidatePluginDirs(pluginName);
+  const dirNames = PLUGIN_DIR_NAMES[pluginName] || [pluginName];
 
   try {
     // Strategy 1: Direct top-level match (opspal-salesforce or opspal-salesforce@version)
@@ -185,9 +106,8 @@ function findHomePluginDir(pluginName) {
       for (const entry of topEntries) {
         if (entry === dirName || entry.startsWith(`${dirName}@`)) {
           const fullPath = path.join(homePluginsDir, entry);
-          const normalized = normalizeResolvedPluginRoot(pluginName, fullPath);
-          if (normalized) {
-            return normalized;
+          if (fs.statSync(fullPath).isDirectory()) {
+            return fullPath;
           }
         }
       }
@@ -202,9 +122,8 @@ function findHomePluginDir(pluginName) {
         if (fs.existsSync(pluginsSubdir)) {
           for (const dirName of dirNames) {
             const candidate = path.join(pluginsSubdir, dirName);
-            const normalized = normalizeResolvedPluginRoot(pluginName, candidate);
-            if (normalized) {
-              return normalized;
+            if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) {
+              return candidate;
             }
           }
         }
@@ -213,9 +132,8 @@ function findHomePluginDir(pluginName) {
         if (fs.existsSync(pluginsDirect)) {
           for (const dirName of dirNames) {
             const candidate = path.join(pluginsDirect, dirName);
-            const normalized = normalizeResolvedPluginRoot(pluginName, candidate);
-            if (normalized) {
-              return normalized;
+            if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) {
+              return candidate;
             }
           }
         }
@@ -230,10 +148,11 @@ function findHomePluginDir(pluginName) {
         for (const dirName of dirNames) {
           const pluginCacheDir = path.join(cacheDir, marketplace, dirName);
           if (fs.existsSync(pluginCacheDir)) {
-            const latestVersionDir = findLatestVersionDir(pluginCacheDir);
-            const normalized = normalizeResolvedPluginRoot(pluginName, latestVersionDir);
-            if (normalized) {
-              return normalized;
+            // Get latest version (most recent directory)
+            const versions = fs.readdirSync(pluginCacheDir)
+              .filter(v => fs.statSync(path.join(pluginCacheDir, v)).isDirectory());
+            if (versions.length > 0) {
+              return path.join(pluginCacheDir, versions[versions.length - 1]);
             }
           }
         }
@@ -257,30 +176,28 @@ function findPluginDir(pluginName, basePath) {
   const searchBase = basePath || process.cwd();
 
   // Common plugin directory patterns
-  const candidateNames = getCandidatePluginDirs(pluginName);
-  const patterns = [];
-
-  for (const candidateName of candidateNames) {
-    patterns.push(
-      path.join(searchBase, candidateName),
-      path.join(searchBase, 'plugins', candidateName),
-      path.join(searchBase, '.claude-plugins', candidateName),
-      path.join(searchBase, '..', candidateName),
-      path.join(searchBase, '..', 'plugins', candidateName),
-      path.join(searchBase, '..', '.claude-plugins', candidateName),
-      path.join(searchBase, '..', '..', candidateName),
-      path.join(searchBase, '..', '..', 'plugins', candidateName),
-      path.join(searchBase, '..', '..', '.claude-plugins', candidateName),
-      path.join(searchBase, '..', '..', '..', candidateName),
-      path.join(searchBase, '..', '..', '..', 'plugins', candidateName),
-      path.join(searchBase, '..', '..', '..', '.claude-plugins', candidateName)
-    );
-  }
+  const patterns = [
+    // Direct plugins directory
+    path.join(searchBase, 'plugins', pluginName),
+    // .claude-plugins symlink/directory
+    path.join(searchBase, '.claude-plugins', pluginName),
+    // Parent plugins directory (if running from within a plugin)
+    path.join(searchBase, '..', pluginName),
+    // Grandparent (if in scripts/lib/)
+    path.join(searchBase, '..', '..', pluginName),
+    // Three levels up (if in scripts/lib/subdir/)
+    path.join(searchBase, '..', '..', '..', pluginName)
+  ];
 
   for (const pattern of patterns) {
-    const normalized = normalizeResolvedPluginRoot(pluginName, pattern);
-    if (normalized) {
-      return normalized;
+    const resolved = path.resolve(pattern);
+    if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
+      // Verify it's actually a plugin directory (has scripts/ or agents/)
+      if (fs.existsSync(path.join(resolved, 'scripts')) ||
+          fs.existsSync(path.join(resolved, 'agents')) ||
+          fs.existsSync(path.join(resolved, '.claude-plugin'))) {
+        return resolved;
+      }
     }
   }
 
@@ -317,7 +234,15 @@ function resolvePluginRoot(pluginName, options = {}) {
   // Strategy 1: CLAUDE_PLUGIN_ROOT env var
   const envRoot = process.env.CLAUDE_PLUGIN_ROOT;
   if (envRoot && fs.existsSync(envRoot)) {
-    resolved = normalizeResolvedPluginRoot(canonicalName, envRoot);
+    // Check if this root contains our plugin
+    const pluginInRoot = path.join(envRoot, 'plugins', canonicalName);
+    if (fs.existsSync(pluginInRoot)) {
+      resolved = pluginInRoot;
+    } else if (path.basename(envRoot) === canonicalName ||
+               envRoot.includes(canonicalName)) {
+      // The env var points directly to the plugin
+      resolved = envRoot;
+    }
   }
 
   // Strategy 2: Plugin-specific env var
@@ -325,7 +250,7 @@ function resolvePluginRoot(pluginName, options = {}) {
     const envVarName = canonicalName.toUpperCase().replace(/-/g, '_') + '_ROOT';
     const specificRoot = process.env[envVarName];
     if (specificRoot && fs.existsSync(specificRoot)) {
-      resolved = normalizeResolvedPluginRoot(canonicalName, specificRoot);
+      resolved = specificRoot;
     }
   }
 
@@ -348,13 +273,13 @@ function resolvePluginRoot(pluginName, options = {}) {
 
     while (dir !== path.dirname(dir) && depth < maxDepth) {
       if (path.basename(dir) === canonicalName) {
-        resolved = normalizeResolvedPluginRoot(canonicalName, dir);
+        resolved = dir;
         break;
       }
       // Check if we're in a plugins directory
       const parentName = path.basename(path.dirname(dir));
       if (parentName === 'plugins' && path.basename(dir) === canonicalName) {
-        resolved = normalizeResolvedPluginRoot(canonicalName, dir);
+        resolved = dir;
         break;
       }
       dir = path.dirname(dir);

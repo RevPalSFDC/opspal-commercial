@@ -30,7 +30,20 @@ Run comprehensive diagnostics on the PDF generation pipeline.
 When the user runs `/pdf-health`, execute:
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/test-pdf-pipeline.js --verbose
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+node "$(find_script "test-pdf-pipeline.js")" --verbose
 ```
 
 If issues are found, provide specific remediation steps:

@@ -1,0 +1,129 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "veterinary",
+  "version": "1.0.0",
+  "description": "Veterinary clinics, animal hospitals, pet care networks, and animal welfare organizations",
+
+  "detectionPatterns": {
+    "keywords": [
+      "veterinary", "vet", "animal", "pet", "clinic", "hospital",
+      "canine", "feline", "equine", "livestock", "shelter", "rescue",
+      "spay", "neuter", "vaccination", "grooming", "boarding"
+    ],
+    "entityTypes": ["Clinic", "Hospital", "Practice", "Shelter", "Rescue"],
+    "fieldPatterns": [
+      "LicenseNumber", "DEANumber", "ClinicId", "VetId"
+    ]
+  },
+
+  "abbreviations": {
+    "credentials": {
+      "DVM": "Doctor of Veterinary Medicine",
+      "VMD": "Veterinariae Medicinae Doctoris",
+      "CVT": "Certified Veterinary Technician",
+      "LVT": "Licensed Veterinary Technician",
+      "RVT": "Registered Veterinary Technician",
+      "DACVS": "Diplomate American College of Veterinary Surgeons",
+      "DACVIM": "Diplomate American College of Veterinary Internal Medicine"
+    },
+    "services": {
+      "ER": "Emergency Room",
+      "ICU": "Intensive Care Unit",
+      "S/N": "Spay and Neuter",
+      "TPLO": "Tibial Plateau Leveling Osteotomy",
+      "OFA": "Orthopedic Foundation for Animals"
+    },
+    "organizations": {
+      "AVMA": "American Veterinary Medical Association",
+      "AAHA": "American Animal Hospital Association",
+      "ASPCA": "American Society for the Prevention of Cruelty to Animals",
+      "HSUS": "Humane Society of the United States"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "PC", "PLLC"],
+    "preserve": [
+      "Animal Hospital", "Veterinary Clinic", "Pet Hospital",
+      "Veterinary Center", "Animal Clinic", "Pet Care",
+      "Veterinary Hospital", "Animal Care"
+    ]
+  },
+
+  "synonyms": {
+    "Animal Hospital": ["Pet Hospital", "Veterinary Hospital"],
+    "Veterinary Clinic": ["Vet Clinic", "Animal Clinic"],
+    "Veterinary": ["Vet"],
+    "Emergency": ["ER", "24-Hour", "24 Hour"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 70
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "ALLOW_WITH_PATTERN",
+    "uniquenessLevel": "LOW",
+    "confidenceThresholds": {
+      "autoMerge": 88,
+      "review": 78,
+      "tag": 60
+    },
+    "stateMismatchPenalty": -15
+  },
+
+  "genericEntityPatterns": [
+    "* Animal Hospital",
+    "* Veterinary Clinic",
+    "* Pet Hospital",
+    "* Veterinary Center",
+    "* Animal Clinic",
+    "* Cat Clinic",
+    "* Dog and Cat Hospital",
+    "All Creatures *",
+    "Paws and Claws *",
+    "Happy Tails *",
+    "City of * Animal Shelter",
+    "* County Animal Shelter",
+    "Humane Society of *",
+    "* Humane Society",
+    "* SPCA",
+    "SPCA of *"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["known_network", "parent_pattern", "domain_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "Banfield Pet Hospital",
+    "VCA Animal Hospitals",
+    "BluePearl Specialty + Emergency Pet Hospital",
+    "BluePearl",
+    "National Veterinary Associates",
+    "NVA",
+    "VetCor",
+    "PetVet Care Centers",
+    "Thrive Pet Healthcare",
+    "Southern Veterinary Partners",
+    "Mission Veterinary Partners",
+    "Bond Vet",
+    "Petco Veterinary Services",
+    "PetSmart Veterinary Services"
+  ],
+
+  "knownEntityAliases": {
+    "Banfield Pet Hospital": ["Banfield"],
+    "VCA Animal Hospitals": ["VCA"],
+    "BluePearl Specialty + Emergency Pet Hospital": ["BluePearl"],
+    "National Veterinary Associates": ["NVA"],
+    "PetVet Care Centers": ["PetVet"],
+    "Southern Veterinary Partners": ["SVP"],
+    "Mission Veterinary Partners": ["MVP"]
+  }
+}

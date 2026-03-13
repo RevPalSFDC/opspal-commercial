@@ -132,6 +132,12 @@
       "invocation": "Skill(skill: 'opspal-core:deduplicate')",
       "slashCommand": "/deduplicate"
     },
+    "deploy-to-commercial": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:deploy-to-commercial')",
+      "slashCommand": "/deploy-to-commercial"
+    },
     "diagnose-sales-funnel": {
       "plugin": "opspal-core",
       "type": "skill",
@@ -269,6 +275,12 @@
       "type": "skill",
       "invocation": "Skill(skill: 'opspal-core:gong-sync')",
       "slashCommand": "/gong-sync"
+    },
+    "googlelogin": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:googlelogin')",
+      "slashCommand": "/googlelogin"
     },
     "healthcheck-hooks": {
       "plugin": "opspal-core",
@@ -467,6 +479,12 @@
       "type": "skill",
       "invocation": "Skill(skill: 'opspal-core:schedule-logs')",
       "slashCommand": "/schedule-logs"
+    },
+    "schedule-preset": {
+      "plugin": "opspal-core",
+      "type": "skill",
+      "invocation": "Skill(skill: 'opspal-core:schedule-preset')",
+      "slashCommand": "/schedule-preset"
     },
     "schedule-remove": {
       "plugin": "opspal-core",
@@ -1506,6 +1524,7 @@
     "data-quality-audit": "opspal-core:data-quality-audit",
     "dedup-companies": "opspal-core:dedup-companies",
     "deduplicate": "opspal-core:deduplicate",
+    "deploy-to-commercial": "opspal-core:deploy-to-commercial",
     "diagnose-sales-funnel": "opspal-core:diagnose-sales-funnel",
     "diagram": "opspal-core:diagram",
     "diff-runbook": "opspal-core:diff-runbook",
@@ -1529,6 +1548,7 @@
     "gong-competitive-intel": "opspal-core:gong-competitive-intel",
     "gong-risk-report": "opspal-core:gong-risk-report",
     "gong-sync": "opspal-core:gong-sync",
+    "googlelogin": "opspal-core:googlelogin",
     "healthcheck-hooks": "opspal-core:healthcheck-hooks",
     "initialize": "opspal-core:initialize",
     "intake-generate-form": "opspal-core:intake-generate-form",
@@ -1562,6 +1582,7 @@
     "schedule-enable": "opspal-core:schedule-enable",
     "schedule-list": "opspal-core:schedule-list",
     "schedule-logs": "opspal-core:schedule-logs",
+    "schedule-preset": "opspal-core:schedule-preset",
     "schedule-remove": "opspal-core:schedule-remove",
     "schedule-run": "opspal-core:schedule-run",
     "setup-notebooklm": "opspal-core:setup-notebooklm",
@@ -1755,6 +1776,7 @@
     "opspal-core:data-quality-audit": "data-quality-audit",
     "opspal-core:dedup-companies": "dedup-companies",
     "opspal-core:deduplicate": "deduplicate",
+    "opspal-core:deploy-to-commercial": "deploy-to-commercial",
     "opspal-core:diagnose-sales-funnel": "diagnose-sales-funnel",
     "opspal-core:diagram": "diagram",
     "opspal-core:diff-runbook": "diff-runbook",
@@ -1778,6 +1800,7 @@
     "opspal-core:gong-competitive-intel": "gong-competitive-intel",
     "opspal-core:gong-risk-report": "gong-risk-report",
     "opspal-core:gong-sync": "gong-sync",
+    "opspal-core:googlelogin": "googlelogin",
     "opspal-core:healthcheck-hooks": "healthcheck-hooks",
     "opspal-core:initialize": "initialize",
     "opspal-core:intake-generate-form": "intake-generate-form",
@@ -1811,6 +1834,7 @@
     "opspal-core:schedule-enable": "schedule-enable",
     "opspal-core:schedule-list": "schedule-list",
     "opspal-core:schedule-logs": "schedule-logs",
+    "opspal-core:schedule-preset": "schedule-preset",
     "opspal-core:schedule-remove": "schedule-remove",
     "opspal-core:schedule-run": "schedule-run",
     "opspal-core:setup-notebooklm": "setup-notebooklm",
@@ -2038,6 +2062,7 @@
       "data-quality-audit",
       "dedup-companies",
       "deduplicate",
+      "deploy-to-commercial",
       "diagnose-sales-funnel",
       "diagram",
       "diff-runbook",
@@ -2061,6 +2086,7 @@
       "gong-competitive-intel",
       "gong-risk-report",
       "gong-sync",
+      "googlelogin",
       "healthcheck-hooks",
       "initialize",
       "intake-generate-form",
@@ -2094,6 +2120,7 @@
       "schedule-enable",
       "schedule-list",
       "schedule-logs",
+      "schedule-preset",
       "schedule-remove",
       "schedule-run",
       "setup-notebooklm",
@@ -2286,5 +2313,5 @@
       "win-loss"
     ]
   },
-  "buildTime": "2026-03-02T01:28:35.091Z"
+  "buildTime": "2026-03-10T23:21:10.248Z"
 }

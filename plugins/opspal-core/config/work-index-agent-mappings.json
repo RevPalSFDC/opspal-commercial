@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Maps agent names to work-index classifications for auto-capture",
+  "lastUpdated": "2026-02-01",
+
+  "catchAllSettings": {
+    "enabled": false,
+    "defaultClassification": "support",
+    "defaultSubType": "general-request",
+    "note": "Set WORK_INDEX_CATCH_ALL=1 to enable catch-all mode"
+  },
+
+  "classificationTaxonomy": {
+    "audit": ["cpq-assessment", "revops-audit", "automation-audit", "architecture-audit", "security-audit", "object-audit", "quality-audit", "permission-assessment", "reports-usage-audit", "hubspot-assessment", "marketo-assessment", "campaign-audit", "deliverability-audit", "data-quality-audit", "workflow-audit", "integration-audit", "deal-risk-analysis"],
+    "report": ["executive-report", "pipeline-report", "custom-dashboard", "report-design", "dashboard-design", "strategic-report", "revenue-model", "retention-analysis", "market-intelligence", "forecast-report", "unified-report", "cs-operations", "expansion-analysis", "sales-playbook", "hubspot-report", "compliance-report", "executive-dashboard", "competitive-intelligence"],
+    "build": ["apex-development", "lightning-development", "flow-development", "permission-set", "validation-rule", "trigger-development", "workflow-development", "automation-development", "form-development", "campaign-development", "program-development", "smart-campaign", "campaign-orchestration", "workflow-orchestration"],
+    "migration": ["data-import", "data-export", "data-operations", "data-generation", "csv-enrichment", "contact-import", "deal-import", "platform-migration", "gong-sync"],
+    "configuration": ["territory-management", "layout-config", "layout-deployment", "metadata-config", "deployment", "gong-integration"],
+    "consultation": ["architecture-review", "process-design", "enablement"],
+    "support": ["conflict-resolution", "remediation", "bug-fix", "troubleshooting", "training", "general-request"]
+  },
+
+  "mappings": {
+    "_comment": "Format: agent-name -> classification:sub-type",
+
+    "sfdc-cpq-assessor": "audit:cpq-assessment",
+    "sfdc-revops-auditor": "audit:revops-audit",
+    "sfdc-automation-auditor": "audit:automation-audit",
+    "sfdc-architecture-auditor": "audit:architecture-audit",
+    "sfdc-security-admin": "audit:security-audit",
+    "sfdc-object-auditor": "audit:object-audit",
+    "sfdc-quality-auditor": "audit:quality-audit",
+    "sfdc-permission-assessor": "audit:permission-assessment",
+    "sfdc-reports-usage-auditor": "audit:reports-usage-audit",
+
+    "sfdc-apex-developer": "build:apex-development",
+    "sfdc-lightning-developer": "build:lightning-development",
+    "sfdc-automation-builder": "build:flow-development",
+    "sfdc-permission-orchestrator": "build:permission-set",
+    "sfdc-validation-rule-orchestrator": "build:validation-rule",
+    "sfdc-trigger-orchestrator": "build:trigger-development",
+
+    "diagram-generator": "report:executive-report",
+    "pipeline-intelligence-agent": "report:pipeline-report",
+    "sfdc-reports-dashboards": "report:custom-dashboard",
+    "sfdc-report-designer": "report:report-design",
+    "sfdc-dashboard-designer": "report:dashboard-design",
+    "unified-exec-dashboard-agent": "report:executive-dashboard",
+
+    "sfdc-data-import-manager": "migration:data-import",
+    "sfdc-data-export-manager": "migration:data-export",
+    "sfdc-data-operations": "migration:data-operations",
+    "sfdc-data-generator": "migration:data-generation",
+    "sfdc-csv-enrichment": "migration:csv-enrichment",
+
+    "sfdc-territory-orchestrator": "configuration:territory-management",
+    "sfdc-layout-generator": "configuration:layout-config",
+    "sfdc-layout-deployer": "configuration:layout-deployment",
+    "sfdc-metadata-manager": "configuration:metadata-config",
+    "sfdc-deployment-manager": "configuration:deployment",
+
+    "hubspot-assessment-analyzer": "audit:hubspot-assessment",
+    "hubspot-data-hygiene-specialist": "audit:data-quality-audit",
+    "hubspot-workflow-auditor": "audit:workflow-audit",
+    "hubspot-integration-auditor": "audit:integration-audit",
+
+    "hubspot-workflow-builder": "build:workflow-development",
+    "hubspot-automation-builder": "build:automation-development",
+    "hubspot-form-builder": "build:form-development",
+    "hubspot-report-builder": "report:hubspot-report",
+
+    "hubspot-data-operations-manager": "migration:data-import",
+    "hubspot-contact-importer": "migration:contact-import",
+    "hubspot-deal-importer": "migration:deal-import",
+
+    "marketo-assessment-analyzer": "audit:marketo-assessment",
+    "marketo-campaign-auditor": "audit:campaign-audit",
+    "marketo-deliverability-auditor": "audit:deliverability-audit",
+
+    "marketo-campaign-manager": "build:campaign-development",
+    "marketo-program-builder": "build:program-development",
+    "marketo-smart-campaign-builder": "build:smart-campaign",
+
+    "gtm-strategic-reports-orchestrator": "report:strategic-report",
+    "gtm-revenue-modeler": "report:revenue-model",
+    "gtm-retention-analyst": "report:retention-analysis",
+    "gtm-market-intelligence": "report:market-intelligence",
+    "gtm-forecast-orchestrator": "report:forecast-report",
+
+    "multi-platform-campaign-orchestrator": "build:campaign-orchestration",
+    "multi-platform-workflow-orchestrator": "build:workflow-orchestration",
+    "data-migration-orchestrator": "migration:platform-migration",
+    "unified-reporting-aggregator": "report:unified-report",
+    "unified-data-quality-validator": "audit:data-quality-audit",
+
+    "cs-operations-orchestrator": "report:cs-operations",
+    "account-expansion-orchestrator": "report:expansion-analysis",
+    "sales-playbook-orchestrator": "report:sales-playbook",
+    "sales-enablement-coordinator": "consultation:enablement",
+
+    "sfdc-conflict-resolver": "support:conflict-resolution",
+    "sfdc-remediation-executor": "support:remediation",
+    "compliance-report-generator": "report:compliance-report",
+
+    "win-loss-analyzer": "report:win-loss-analysis",
+    "benchmark-research-agent": "report:benchmark-research",
+    "forecast-orchestrator": "report:forecast-analysis",
+    "churn-predictor": "report:churn-analysis",
+    "customer-health-scorer": "report:health-scoring",
+
+    "intelligent-intake-orchestrator": "consultation:project-intake",
+    "notebooklm-knowledge-manager": "report:knowledge-base",
+    "client-notebook-orchestrator": "report:client-briefing",
+    "field-dictionary-manager": "configuration:field-dictionary",
+
+    "gong-integration-agent": "configuration:gong-integration",
+    "gong-deal-intelligence-agent": "audit:deal-risk-analysis",
+    "gong-sync-orchestrator": "migration:gong-sync",
+    "gong-competitive-intelligence-agent": "report:competitive-intelligence"
+  },
+
+  "titleOverrides": {
+    "_comment": "Custom titles for specific agents (optional)",
+    "sfdc-cpq-assessor": "CPQ Assessment",
+    "sfdc-revops-auditor": "RevOps Audit",
+    "sfdc-automation-auditor": "Automation Audit",
+    "sfdc-architecture-auditor": "Architecture Audit",
+    "hubspot-assessment-analyzer": "HubSpot Assessment",
+    "marketo-assessment-analyzer": "Marketo Assessment",
+    "gtm-strategic-reports-orchestrator": "Strategic Report",
+    "data-migration-orchestrator": "Data Migration",
+    "gong-deal-intelligence-agent": "Deal Risk Analysis (Gong)",
+    "gong-sync-orchestrator": "Gong CRM Sync",
+    "gong-competitive-intelligence-agent": "Competitive Intelligence (Gong)"
+  },
+
+  "usage": {
+    "hookPath": "plugins/opspal-core/hooks/post-assessment-work-index.sh",
+    "environment": {
+      "WORK_INDEX_AUTO_CAPTURE": "1 (default) - Enable auto-capture",
+      "WORK_INDEX_CATCH_ALL": "0 (default) - Capture only whitelisted agents",
+      "WORK_INDEX_VERBOSE": "0 (default) - Show detailed logging",
+      "ORG_SLUG": "Required - Client organization identifier"
+    },
+    "addingNewAgents": "Add to mappings object with format: \"agent-name\": \"classification:sub-type\""
+  }
+}

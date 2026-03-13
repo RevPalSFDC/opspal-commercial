@@ -238,16 +238,31 @@ All review decisions are logged:
 ## CLI Usage
 
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+REVIEW_Q=$(find_script "governance/review-queue.js")
+
 # List reviews via script
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/review-queue.js list
+node "$REVIEW_Q" list
 
 # Approve via script
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/review-queue.js approve \
+node "$REVIEW_Q" approve \
   --id rev_abc123 \
   --user $(whoami)
 
 # Export pending to JSON
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/governance/review-queue.js export \
+node "$REVIEW_Q" export \
   --format json \
   --output ./pending-reviews.json
 ```

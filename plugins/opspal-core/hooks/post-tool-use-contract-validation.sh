@@ -15,6 +15,12 @@
 
 set -euo pipefail
 
+# Fast-exit for read-only tools that never produce actionable contract violations
+TOOL_NAME_QUICK="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-${TOOL_NAME:-}}}"
+case "$TOOL_NAME_QUICK" in
+  Read|Glob|Grep|LS|ToolSearch) exit 0 ;;
+esac
+
 is_json() {
     echo "$1" | jq -e . >/dev/null 2>&1
 }

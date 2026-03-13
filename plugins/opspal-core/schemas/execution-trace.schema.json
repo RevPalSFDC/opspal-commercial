@@ -1,0 +1,323 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/execution-trace.schema.json",
+  "title": "Execution Trace Schema",
+  "description": "Schema for execution traces that capture decision rationale, field selections, and policy application during operational agent execution",
+  "type": "object",
+  "required": ["trace_id", "timestamp", "agent_id", "operation_type"],
+  "properties": {
+    "trace_id": {
+      "type": "string",
+      "description": "Unique trace identifier",
+      "pattern": "^trace-[0-9]+-[a-z0-9]+$"
+    },
+    "parent_trace_id": {
+      "type": "string",
+      "description": "Parent trace ID for distributed tracing"
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Request correlation ID"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Trace creation timestamp"
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Agent that executed the operation"
+    },
+    "org": {
+      "type": "string",
+      "description": "Salesforce org alias"
+    },
+    "object": {
+      "type": "string",
+      "description": "Primary Salesforce object involved"
+    },
+    "operation_type": {
+      "type": "string",
+      "description": "Type of operation performed",
+      "enum": [
+        "data_export",
+        "data_import",
+        "data_backup",
+        "data_migration",
+        "data_enrichment",
+        "data_sync",
+        "report_creation",
+        "query_execution",
+        "assessment",
+        "audit",
+        "other"
+      ]
+    },
+    "operation_outcome": {
+      "type": "string",
+      "description": "Outcome of the operation",
+      "enum": ["success", "partial_success", "failure", "aborted", "pending"]
+    },
+    "duration_ms": {
+      "type": "integer",
+      "description": "Total operation duration in milliseconds",
+      "minimum": 0
+    },
+    "runbook_reference": {
+      "type": "object",
+      "description": "Reference to runbook used for this operation",
+      "properties": {
+        "runbook_version_used": {
+          "type": "string",
+          "description": "Version of the runbook consulted"
+        },
+        "runbook_path": {
+          "type": "string",
+          "description": "Path to the runbook file"
+        },
+        "sections_retrieved": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section_id": { "type": "string" },
+              "section_name": { "type": "string" },
+              "relevance_score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "description": "Runbook sections that were retrieved and used"
+        },
+        "context_injected": {
+          "type": "boolean",
+          "description": "Whether runbook context was injected into agent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "field_decisions": {
+      "type": "object",
+      "description": "Detailed field selection decisions",
+      "properties": {
+        "fields_auto_selected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "source": {
+                "type": "string",
+                "enum": ["field_policy", "task_variant", "default", "object_override"]
+              },
+              "rationale": { "type": "string" }
+            }
+          },
+          "description": "Fields selected by policy"
+        },
+        "fields_excluded": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "explicit_exclusion",
+                  "pattern_exclusion",
+                  "classification_exclusion",
+                  "compliance_rule",
+                  "max_fields_exceeded",
+                  "formula_field_excluded",
+                  "system_field_excluded",
+                  "user_request"
+                ]
+              },
+              "rule_reference": { "type": "string" }
+            }
+          },
+          "description": "Fields excluded with reasons"
+        },
+        "user_overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "action": {
+                "type": "string",
+                "enum": ["include", "exclude"]
+              },
+              "original_policy_action": {
+                "type": "string",
+                "enum": ["include", "exclude", "not_specified"]
+              },
+              "user_justification": { "type": "string" }
+            }
+          },
+          "description": "User overrides of policy decisions"
+        },
+        "total_fields_selected": {
+          "type": "integer",
+          "description": "Total count of fields selected"
+        },
+        "total_fields_available": {
+          "type": "integer",
+          "description": "Total count of fields available on object"
+        },
+        "selection_ratio": {
+          "type": "number",
+          "description": "Ratio of selected/available fields",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "policy_application": {
+      "type": "object",
+      "description": "Details of policy application",
+      "properties": {
+        "field_policy_version": {
+          "type": "string",
+          "description": "Version of field policy used"
+        },
+        "field_policy_path": {
+          "type": "string",
+          "description": "Path to field policy file"
+        },
+        "task_variant_used": {
+          "type": "string",
+          "description": "Task variant ID used"
+        },
+        "task_variant_name": {
+          "type": "string",
+          "description": "Human-readable variant name"
+        },
+        "object_override_applied": {
+          "type": "boolean",
+          "description": "Whether object-specific override was applied"
+        },
+        "compliance_rules_applied": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Compliance rules that were applied"
+        },
+        "quality_gates_evaluated": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gate_id": { "type": "string" },
+              "gate_name": { "type": "string" },
+              "passed": { "type": "boolean" },
+              "actual_value": { "type": "string" },
+              "expected_condition": { "type": "string" }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "workflow_execution": {
+      "type": "object",
+      "description": "Workflow step execution details",
+      "properties": {
+        "steps_executed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step_id": { "type": "string" },
+              "step_name": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["success", "failed", "skipped", "retried"]
+              },
+              "duration_ms": { "type": "integer" },
+              "error_message": { "type": "string" },
+              "retry_count": { "type": "integer" }
+            }
+          }
+        },
+        "total_steps": { "type": "integer" },
+        "successful_steps": { "type": "integer" },
+        "failed_steps": { "type": "integer" },
+        "skipped_steps": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "data_metrics": {
+      "type": "object",
+      "description": "Metrics about data processed",
+      "properties": {
+        "records_queried": { "type": "integer" },
+        "records_processed": { "type": "integer" },
+        "records_succeeded": { "type": "integer" },
+        "records_failed": { "type": "integer" },
+        "error_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "batch_count": { "type": "integer" },
+        "api_calls_made": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "errors": {
+      "type": "array",
+      "description": "Errors encountered during execution",
+      "items": {
+        "type": "object",
+        "properties": {
+          "error_code": { "type": "string" },
+          "error_message": { "type": "string" },
+          "error_category": {
+            "type": "string",
+            "enum": ["validation", "api", "permission", "data", "policy", "system"]
+          },
+          "field_affected": { "type": "string" },
+          "recoverable": { "type": "boolean" },
+          "recovery_action": { "type": "string" }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "description": "Warnings generated during execution",
+      "items": {
+        "type": "object",
+        "properties": {
+          "warning_code": { "type": "string" },
+          "warning_message": { "type": "string" },
+          "field_affected": { "type": "string" }
+        }
+      }
+    },
+    "user_context": {
+      "type": "object",
+      "description": "User context for the operation",
+      "properties": {
+        "user_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "request_source": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "description": "Environment context",
+      "properties": {
+        "plugin_version": { "type": "string" },
+        "node_version": { "type": "string" },
+        "platform": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

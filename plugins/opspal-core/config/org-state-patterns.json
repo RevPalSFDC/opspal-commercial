@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Patterns for detecting org-state claims in agent responses",
+  "lastUpdated": "2026-01-09",
+
+  "platforms": {
+    "salesforce": {
+      "objectPatterns": [
+        {
+          "pattern": "(?:Account|Contact|Lead|Opportunity|Case|Quote|Order|Contract|Campaign|Task|Event|[A-Z][a-z]+__c)\\s+(?:has|contains|includes)\\s+(\\d+)\\s+(?:fields?|custom fields?)",
+          "claimType": "field_count",
+          "requiredQuery": "sobject-describe",
+          "description": "Claims about number of fields on an object"
+        },
+        {
+          "pattern": "(?:there (?:are|is)|found|discovered|has)\\s+(\\d+)\\s+(?:active\\s+)?(?:flows?|automation|workflows?)\\s+(?:on|for|associated with)\\s+([A-Za-z_]+)",
+          "claimType": "flow_count",
+          "requiredQuery": "tooling-query:FlowDefinitionView",
+          "description": "Claims about active flows on an object"
+        },
+        {
+          "pattern": "(?:validation rules?|VR)\\s+(?:on|for)\\s+([A-Za-z_]+)\\s+(?:check|validate|require|enforce)",
+          "claimType": "validation_rule",
+          "requiredQuery": "tooling-query:ValidationRule",
+          "description": "Claims about validation rule behavior"
+        },
+        {
+          "pattern": "([A-Za-z_]+)\\s+(?:is configured|is set up|has)\\s+(?:with|to)\\s+(?:record types?|page layouts?|sharing rules?)",
+          "claimType": "metadata_config",
+          "requiredQuery": "metadata-describe",
+          "description": "Claims about object configuration"
+        },
+        {
+          "pattern": "(?:the field|field)\\s+([A-Za-z_]+(?:\\.[A-Za-z_]+)?)\\s+(?:is|has)\\s+(?:type|picklist|formula|required|unique)",
+          "claimType": "field_property",
+          "requiredQuery": "sobject-describe",
+          "description": "Claims about specific field properties"
+        },
+        {
+          "pattern": "(?:permission set|profile)\\s+['\"]?([A-Za-z_\\s]+)['\"]?\\s+(?:has|grants|provides|includes)",
+          "claimType": "permission",
+          "requiredQuery": "tooling-query:PermissionSet",
+          "description": "Claims about permission set contents"
+        },
+        {
+          "pattern": "(?:SBQQ__|CPQ).*(?:is configured|has|includes|contains)\\s+",
+          "claimType": "cpq_config",
+          "requiredQuery": "sobject-describe:SBQQ__",
+          "description": "Claims about CPQ configuration"
+        },
+        {
+          "pattern": "(?:trigger|apex trigger)\\s+(?:on|for)\\s+([A-Za-z_]+)\\s+(?:fires|executes|runs|handles)",
+          "claimType": "trigger",
+          "requiredQuery": "tooling-query:ApexTrigger",
+          "description": "Claims about trigger behavior"
+        }
+      ],
+
+      "valuePatterns": [
+        {
+          "pattern": "(?:currently|as of|right now).*(?:has|contains|shows|displays)\\s+(\\d+)",
+          "claimType": "current_value",
+          "requiresEvidence": true,
+          "description": "Claims about current numeric values"
+        },
+        {
+          "pattern": "(?:the org|your org|this org|production|sandbox)\\s+(?:has|contains|includes|shows)",
+          "claimType": "org_state",
+          "requiresEvidence": true,
+          "description": "General claims about org state"
+        }
+      ],
+
+      "exemptPatterns": [
+        "(?:typically|usually|by default|standard|out of the box|best practice)",
+        "(?:documentation says|according to|Salesforce recommends)",
+        "(?:if you|when you|you can|you should|consider)",
+        "(?:would be|could be|might be|may have)"
+      ]
+    },
+
+    "hubspot": {
+      "objectPatterns": [
+        {
+          "pattern": "(?:Contact|Company|Deal|Ticket|[A-Za-z]+)\\s+(?:object\\s+)?(?:has|contains|includes)\\s+(\\d+)\\s+(?:properties?|custom properties?)",
+          "claimType": "property_count",
+          "requiredQuery": "property-list",
+          "description": "Claims about number of properties on an object"
+        },
+        {
+          "pattern": "(?:there (?:are|is)|found|discovered|portal has)\\s+(\\d+)\\s+(?:active\\s+)?workflows?",
+          "claimType": "workflow_count",
+          "requiredQuery": "workflow-list",
+          "description": "Claims about workflow count"
+        },
+        {
+          "pattern": "(?:property|field)\\s+['\"]?([a-z_]+)['\"]?\\s+(?:is|has)\\s+(?:type|options|required|unique)",
+          "claimType": "property_config",
+          "requiredQuery": "property-list",
+          "description": "Claims about specific property configuration"
+        },
+        {
+          "pattern": "(?:form|landing page|email)\\s+['\"]?([A-Za-z\\s]+)['\"]?\\s+(?:has|uses|includes|contains)",
+          "claimType": "asset_config",
+          "requiredQuery": "mcp-objects",
+          "description": "Claims about HubSpot asset configuration"
+        },
+        {
+          "pattern": "(?:pipeline|stage)\\s+['\"]?([A-Za-z\\s]+)['\"]?\\s+(?:has|contains|includes)",
+          "claimType": "pipeline_config",
+          "requiredQuery": "object-schema",
+          "description": "Claims about pipeline configuration"
+        }
+      ],
+
+      "valuePatterns": [
+        {
+          "pattern": "(?:portal|account|your HubSpot)\\s+(?:has|shows|contains|includes)",
+          "claimType": "portal_state",
+          "requiresEvidence": true,
+          "description": "Claims about portal state"
+        }
+      ],
+
+      "exemptPatterns": [
+        "(?:typically|usually|by default|HubSpot recommends)",
+        "(?:documentation says|according to|best practice)",
+        "(?:if you|when you|you can|you should)"
+      ]
+    },
+
+    "marketo": {
+      "objectPatterns": [
+        {
+          "pattern": "(?:Lead|Person)\\s+(?:has|contains|includes)\\s+(\\d+)\\s+(?:fields?|custom fields?)",
+          "claimType": "field_count",
+          "requiredQuery": "describe-lead",
+          "description": "Claims about lead field count"
+        },
+        {
+          "pattern": "(?:there (?:are|is)|found|instance has)\\s+(\\d+)\\s+(?:programs?|smart campaigns?|email programs?)",
+          "claimType": "program_count",
+          "requiredQuery": "list-programs",
+          "description": "Claims about program count"
+        },
+        {
+          "pattern": "(?:program|campaign)\\s+['\"]?([A-Za-z\\s]+)['\"]?\\s+(?:has|uses|includes|contains)",
+          "claimType": "program_config",
+          "requiredQuery": "list-campaigns",
+          "description": "Claims about program configuration"
+        },
+        {
+          "pattern": "(?:scoring model|lead score)\\s+(?:is configured|has|uses)",
+          "claimType": "scoring_config",
+          "requiredQuery": "describe-activity",
+          "description": "Claims about scoring configuration"
+        }
+      ],
+
+      "valuePatterns": [
+        {
+          "pattern": "(?:instance|your Marketo|this Marketo)\\s+(?:has|shows|contains|includes)",
+          "claimType": "instance_state",
+          "requiresEvidence": true,
+          "description": "Claims about instance state"
+        }
+      ],
+
+      "exemptPatterns": [
+        "(?:typically|usually|by default|Marketo recommends)",
+        "(?:documentation says|according to|best practice)",
+        "(?:if you|when you|you can|you should)"
+      ]
+    }
+  },
+
+  "globalExemptPatterns": [
+    "(?:example|for instance|such as|e\\.g\\.|i\\.e\\.)",
+    "(?:would|could|might|may|should)\\s+(?:have|be|contain)",
+    "(?:let me|I'll|I will)\\s+(?:check|query|look up|verify)",
+    "(?:based on the query|from the query results|the query shows)",
+    "(?:\\[query_|source:|evidence:|verified:)"
+  ],
+
+  "sensitivity": {
+    "low": {
+      "minPatternMatches": 3,
+      "requireExactObjectMatch": false,
+      "allowPartialEvidence": true
+    },
+    "medium": {
+      "minPatternMatches": 2,
+      "requireExactObjectMatch": true,
+      "allowPartialEvidence": true
+    },
+    "high": {
+      "minPatternMatches": 1,
+      "requireExactObjectMatch": true,
+      "allowPartialEvidence": false
+    }
+  }
+}

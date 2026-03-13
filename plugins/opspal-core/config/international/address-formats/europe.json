@@ -1,0 +1,285 @@
+{
+  "description": "Address format configurations for Europe",
+  "version": "1.0.0",
+  "DE": {
+    "name": "Germany",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{street} {number}\n{street2}\n{postalCode} {city}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Postleitzahl (PLZ)",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["10115", "80331"]
+    },
+    "streetTypes": {
+      "Straße": "Str.",
+      "Strasse": "Str.",
+      "Platz": "Pl.",
+      "Allee": "Al.",
+      "Weg": "Wg.",
+      "Gasse": "G.",
+      "Ring": "Ring",
+      "Damm": "Damm",
+      "Ufer": "Ufer",
+      "Chaussee": "Ch.",
+      "Promenade": "Prom."
+    },
+    "units": {
+      "Wohnung": "Whg.",
+      "Etage": "Et.",
+      "Stock": "St.",
+      "Gebäude": "Geb.",
+      "Haus": "Hs."
+    }
+  },
+  "FR": {
+    "name": "France",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{number} {street}\n{street2}\n{postalCode} {city}",
+      "uppercase": true
+    },
+    "postalCode": {
+      "name": "Code Postal",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["75001", "69001"]
+    },
+    "streetTypes": {
+      "Rue": "R.",
+      "Avenue": "Av.",
+      "Boulevard": "Bd.",
+      "Place": "Pl.",
+      "Allée": "All.",
+      "Impasse": "Imp.",
+      "Passage": "Pass.",
+      "Chemin": "Ch.",
+      "Route": "Rte.",
+      "Quai": "Q.",
+      "Square": "Sq.",
+      "Cours": "Crs."
+    },
+    "units": {
+      "Appartement": "App.",
+      "Étage": "Ét.",
+      "Bâtiment": "Bât.",
+      "Résidence": "Rés.",
+      "Porte": "Pte."
+    }
+  },
+  "ES": {
+    "name": "Spain",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city", "state"],
+      "template": "{street}, {number}\n{street2}\n{postalCode} {city} ({state})",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Código Postal",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["28001", "08001"]
+    },
+    "streetTypes": {
+      "Calle": "C/",
+      "Avenida": "Avda.",
+      "Plaza": "Pza.",
+      "Paseo": "P.",
+      "Carretera": "Ctra.",
+      "Ronda": "Rda.",
+      "Travesía": "Trav.",
+      "Camino": "Cno.",
+      "Pasaje": "Psje.",
+      "Glorieta": "Gta."
+    },
+    "units": {
+      "Piso": "Piso",
+      "Puerta": "Pta.",
+      "Escalera": "Esc.",
+      "Bloque": "Bl.",
+      "Portal": "Ptl.",
+      "Oficina": "Of.",
+      "Local": "Lcl."
+    }
+  },
+  "IT": {
+    "name": "Italy",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city", "state"],
+      "template": "{street}, {number}\n{street2}\n{postalCode} {city} {state}",
+      "uppercase": true
+    },
+    "postalCode": {
+      "name": "CAP",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["00100", "20121"]
+    },
+    "streetTypes": {
+      "Via": "V.",
+      "Viale": "V.le",
+      "Piazza": "P.za",
+      "Corso": "C.so",
+      "Largo": "L.go",
+      "Vicolo": "Vic.",
+      "Strada": "Str.",
+      "Piazzale": "P.le",
+      "Lungotevere": "L.tevere",
+      "Lungarno": "L.arno"
+    },
+    "units": {
+      "Interno": "Int.",
+      "Piano": "P.",
+      "Scala": "Sc.",
+      "Edificio": "Ed.",
+      "Palazzina": "Pal."
+    }
+  },
+  "NL": {
+    "name": "Netherlands",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{street} {number}\n{street2}\n{postalCode}  {city}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Postcode",
+      "format": "#### AA",
+      "regex": "^\\d{4}\\s?[A-Z]{2}$",
+      "examples": ["1012 AB", "3011CD"]
+    },
+    "streetTypes": {
+      "Straat": "str.",
+      "Laan": "ln.",
+      "Weg": "wg.",
+      "Plein": "pln.",
+      "Gracht": "gr.",
+      "Kade": "kd.",
+      "Singel": "sngl.",
+      "Steeg": "stg.",
+      "Hof": "hf."
+    },
+    "units": {
+      "Appartement": "app.",
+      "Verdieping": "verd.",
+      "Kamer": "kmr.",
+      "Gebouw": "geb."
+    }
+  },
+  "BE": {
+    "name": "Belgium",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{street} {number}\n{street2}\n{postalCode} {city}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Postcode/Code Postal",
+      "format": "####",
+      "regex": "^\\d{4}$",
+      "examples": ["1000", "2000"]
+    },
+    "streetTypes": {
+      "Rue": "R.",
+      "Avenue": "Av.",
+      "Boulevard": "Bd.",
+      "Place": "Pl.",
+      "Straat": "str.",
+      "Laan": "ln.",
+      "Plein": "pln."
+    },
+    "units": {
+      "Appartement": "app.",
+      "Étage": "ét.",
+      "Boîte": "bte."
+    }
+  },
+  "CH": {
+    "name": "Switzerland",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{street} {number}\n{street2}\n{postalCode} {city}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "PLZ/NPA",
+      "format": "####",
+      "regex": "^\\d{4}$",
+      "examples": ["8001", "1201"]
+    },
+    "streetTypes": {
+      "Strasse": "Str.",
+      "Weg": "Wg.",
+      "Platz": "Pl.",
+      "Gasse": "G.",
+      "Rue": "r.",
+      "Avenue": "av.",
+      "Place": "pl.",
+      "Via": "v."
+    },
+    "units": {
+      "Wohnung": "Whg.",
+      "Stock": "St.",
+      "Appartement": "app."
+    }
+  },
+  "AT": {
+    "name": "Austria",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{street} {number}\n{street2}\n{postalCode} {city}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "PLZ",
+      "format": "####",
+      "regex": "^\\d{4}$",
+      "examples": ["1010", "5020"]
+    },
+    "streetTypes": {
+      "Straße": "Str.",
+      "Gasse": "G.",
+      "Platz": "Pl.",
+      "Weg": "Wg.",
+      "Ring": "Ring",
+      "Allee": "Al."
+    },
+    "units": {
+      "Wohnung": "Whg.",
+      "Stiege": "Stg.",
+      "Stock": "St.",
+      "Tür": "Tür"
+    }
+  },
+  "PL": {
+    "name": "Poland",
+    "format": {
+      "order": ["street", "street2", "postalCode", "city"],
+      "template": "{street} {number}\n{street2}\n{postalCode} {city}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Kod pocztowy",
+      "format": "##-###",
+      "regex": "^\\d{2}-\\d{3}$",
+      "examples": ["00-001", "30-001"]
+    },
+    "streetTypes": {
+      "Ulica": "ul.",
+      "Aleja": "al.",
+      "Plac": "pl.",
+      "Osiedle": "os.",
+      "Rondo": "rondo",
+      "Skwer": "skwer"
+    },
+    "units": {
+      "Mieszkanie": "m.",
+      "Lokal": "lok.",
+      "Piętro": "p.",
+      "Klatka": "kl."
+    }
+  }
+}

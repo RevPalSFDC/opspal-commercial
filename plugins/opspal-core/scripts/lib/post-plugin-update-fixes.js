@@ -116,6 +116,7 @@ class PostPluginUpdateFixes {
     this.verbose = options.verbose || false;
     this.dryRun = options.dryRun || false;
     this.projectRoot = options.projectRoot || process.cwd();
+    this.corePluginRoot = options.corePluginRoot || process.env.CLAUDE_PLUGIN_ROOT || null;
 
     this.results = {
       userLevelHooks: { checks: [], fixes: [], errors: [] },
@@ -219,6 +220,16 @@ class PostPluginUpdateFixes {
   }
 
   findCorePluginRoot() {
+    if (this.corePluginRoot && fs.existsSync(this.corePluginRoot)) {
+      const requiredHookPath = (root, file) => path.join(root, 'hooks', file);
+      const hasAllHooks = MANAGED_USER_PROMPT_HOOKS.every((hookDef) =>
+        fs.existsSync(requiredHookPath(this.corePluginRoot, hookDef.file))
+      );
+      if (hasAllHooks) {
+        return this.corePluginRoot;
+      }
+    }
+
     const candidateRoots = [
       path.join(this.projectRoot, 'plugins', 'opspal-core'),
       path.join(this.projectRoot, '.claude-plugins', 'opspal-core')

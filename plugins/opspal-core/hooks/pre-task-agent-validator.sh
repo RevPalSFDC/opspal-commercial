@@ -26,6 +26,7 @@ AGENT_RESOLVER="$PLUGIN_ROOT/scripts/lib/agent-alias-resolver.js"
 CROSS_PLUGIN_COORDINATOR="$PLUGIN_ROOT/scripts/lib/cross-plugin-coordinator.js"
 ROUTING_METRICS="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
+ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 
 # Log file for debugging
 LOG_FILE="${TASK_VALIDATOR_LOG:-/tmp/task-validator-hook.log}"
@@ -167,6 +168,70 @@ log_routing_metric() {
 
     # Log asynchronously to avoid slowing down the hook
     (node "$ROUTING_METRICS" log "$event_json" 2>/dev/null &)
+}
+
+extract_session_key() {
+    local input_json="$1"
+    local session_key=""
+
+    session_key=$(echo "$input_json" | jq -r '
+      .session_key
+      // .sessionKey
+      // .session_id
+      // .sessionId
+      // .context.session_key
+      // .context.sessionKey
+      // .context.session_id
+      // .context.sessionId
+      // ""
+    ' 2>/dev/null || echo "")
+
+    if [[ -n "${session_key// }" ]] && [[ "$session_key" != "null" ]]; then
+        printf '%s' "$session_key"
+        return 0
+    fi
+
+    if [[ -n "${CLAUDE_SESSION_ID:-}" ]]; then
+        printf '%s' "$CLAUDE_SESSION_ID"
+        return 0
+    fi
+
+    printf '%s' "default-session"
+}
+
+check_routing_requirement() {
+    local session_key="$1"
+
+    if [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &> /dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo '{}'
+}
+
+mark_routing_requirement_cleared() {
+    local session_key="$1"
+    local resolved_agent="$2"
+
+    if [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &> /dev/null; then
+        return 0
+    fi
+
+    node "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
+}
+
+agent_clears_requirement() {
+    local resolved_agent="$1"
+    local clearance_agents_json="$2"
+
+    echo "$clearance_agents_json" | jq -e --arg agent "$resolved_agent" '
+      if type != "array" then
+        false
+      else
+        any(.[]; . == $agent)
+      end
+    ' >/dev/null 2>&1
 }
 
 apply_runbook_cohort_requirements() {
@@ -323,6 +388,7 @@ main() {
     fi
 
     ADDITIONAL_CONTEXT=""
+    SESSION_KEY=$(extract_session_key "$HOOK_INPUT")
 
     log "Validating agent: $AGENT_NAME"
 
@@ -461,6 +527,38 @@ main() {
             ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ${PERMISSION_FALLBACK_GUIDANCE}"
         else
             ADDITIONAL_CONTEXT="$PERMISSION_FALLBACK_GUIDANCE"
+        fi
+    fi
+
+    # Step 6: Clear or enforce pending routing requirements for this session.
+    ROUTING_STATE=$(check_routing_requirement "$SESSION_KEY")
+    ROUTING_PENDING=$(echo "$ROUTING_STATE" | jq -r '.pending // false' 2>/dev/null || echo "false")
+    ROUTING_ENFORCE=$(echo "$ROUTING_STATE" | jq -r '.enforce // false' 2>/dev/null || echo "false")
+
+    if [[ "$ROUTING_PENDING" == "true" ]] && [[ "$ROUTING_ENFORCE" == "true" ]]; then
+        REQUIRED_AGENT=$(echo "$ROUTING_STATE" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
+        CLEARANCE_AGENTS=$(echo "$ROUTING_STATE" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
+        ROUTE_ACTION=$(echo "$ROUTING_STATE" | jq -r '.action // ""' 2>/dev/null || echo "")
+
+        if agent_clears_requirement "$RESOLVED" "$CLEARANCE_AGENTS"; then
+            mark_routing_requirement_cleared "$SESSION_KEY" "$RESOLVED"
+            if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_REQUIREMENT_CLEARED: '$RESOLVED' satisfied pending route '${REQUIRED_AGENT:-unknown}'."
+            else
+                ADDITIONAL_CONTEXT="ROUTING_REQUIREMENT_CLEARED: '$RESOLVED' satisfied pending route '${REQUIRED_AGENT:-unknown}'."
+            fi
+        else
+            local allowed_agents
+            allowed_agents=$(echo "$CLEARANCE_AGENTS" | jq -r 'join(", ")' 2>/dev/null || echo "")
+            log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_requirement_mismatch" "Pending route requires approved agent family"
+            emit_pretool_response \
+              "deny" \
+              "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use Task(subagent_type='${REQUIRED_AGENT:-unknown}', prompt=<original request>) or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}." \
+              "" \
+              "" \
+              "ROUTING_REQUIRED_AGENT_MISMATCH" \
+              "ERROR"
+            exit 0
         fi
     fi
 

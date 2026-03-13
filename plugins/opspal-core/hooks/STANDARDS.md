@@ -1,7 +1,8 @@
 # Hook Development Standards
 
-**Version**: 1.0.0
+**Version**: 2.0.0
 **Created**: 2025-11-24
+**Updated**: 2026-03-08
 **Applies to**: All plugins in opspal-internal-plugins
 
 This document defines the standards for developing, maintaining, and testing hooks across all plugins.
@@ -373,6 +374,121 @@ fi
 
 ---
 
+---
+
+## Structured Log Format (v2.0.0)
+
+All hooks MUST log in JSON Lines format to enable automated analysis:
+
+```json
+{"timestamp":"2026-03-08T12:00:00Z","hook":"hook-name","event":"type","tool":"ToolName","session_id":"$CLAUDE_SESSION_ID"}
+```
+
+Use `append_jsonl_with_fallback` from `lib/error-handler.sh` for safe writes with automatic fallback paths when the primary log directory is unavailable.
+
+---
+
+## Output Channels (v2.0.0)
+
+| Channel | Purpose | When to use |
+|---------|---------|-------------|
+| **stdout** | `additionalContext` injected into Claude's context window | Actionable feedback Claude should act on (exit code 2 warnings, remediation hints) |
+| **stderr** | Terminal-only diagnostic output | Logging, progress, non-actionable info |
+
+**Rule:** Never write debug or diagnostic output to stdout — it wastes Claude's context tokens.
+
+---
+
+## Claude Code Exit Code Semantics (v2.0.0)
+
+In addition to the internal exit codes above, Claude Code interprets hook exit codes as:
+
+| Code | Claude Code Behavior |
+|------|---------------------|
+| 0 | PreToolUse: allow. PostToolUse: no feedback. |
+| 1 | PreToolUse: **block** tool call. PostToolUse: signals critical failure. |
+| 2 | stdout content becomes `additionalContext` for Claude (warning/feedback). |
+
+---
+
+## Fast-Exit Guards (v2.0.0)
+
+Hooks that fire on broad matchers (`*`) MUST include a fast-exit guard for read-only tools:
+
+```bash
+TOOL_NAME_QUICK="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-${TOOL_NAME:-}}}"
+case "$TOOL_NAME_QUICK" in
+  Read|Glob|Grep|LS|ToolSearch) exit 0 ;;
+esac
+```
+
+This eliminates ~30-40% of invocations for heavy PostToolUse scripts.
+
+---
+
+## Matcher Guidelines (v2.0.0)
+
+- Prefer **narrow matchers** (`Bash(*awk*)`) over broad ones (`Bash`) when the hook only applies to a subset of invocations.
+- If a script self-filters by tool name internally, use a **single `*` matcher** instead of registering duplicate entries per tool. Claude Code deduplicates identical `(matcher, command)` pairs, but different wrapper commands bypass dedup.
+- When consolidating, verify the script handles all previously-matched tools.
+
+---
+
+## Async Hooks (v2.0.0)
+
+Mark hooks as `"async": true` in `settings.json` when they are:
+- **Logging/metrics only** — no blocking feedback needed
+- **Background analysis** — reflections, routing weight updates
+- **Non-critical tracking** — work index, state updates
+
+**Never make async:**
+- Pre-tool validation hooks (must block before execution)
+- Error detection hooks that use exit code 2 for feedback
+
+---
+
+## Lockfiles for Background Hooks (v2.0.0)
+
+Stop hooks that fork background processes MUST use a lockfile to prevent concurrent runs:
+
+```bash
+LOCKFILE="/tmp/my-hook-name.lock"
+if [ -f "$LOCKFILE" ]; then
+    LOCK_PID=$(cat "$LOCKFILE" 2>/dev/null || echo "")
+    if [ -n "$LOCK_PID" ] && kill -0 "$LOCK_PID" 2>/dev/null; then
+        exit 0  # Already running
+    fi
+    rm -f "$LOCKFILE"  # Stale lockfile
+fi
+
+# In background block:
+{
+    echo $$ > "$LOCKFILE"
+    trap 'rm -f "$LOCKFILE"' EXIT
+    # ... work ...
+} &
+```
+
+---
+
+## Portability (v2.0.0)
+
+- Use `date -u +"%Y-%m-%dT%H:%M:%SZ"` for timestamps (universal).
+- For date parsing, provide fallback chain: `date -d` (GNU) → `date -jf` (macOS) → `node -e` → `echo 0`.
+- Use `while IFS='=' read -r key value` for `.env` loading. **Never** `export $(grep | xargs)`.
+- Do not use PCRE features (`(?!...)`, `\d`, `\w`) with `grep -E` (ERE only).
+- Use `${BASH_SOURCE[0]}` for path resolution, never hardcoded absolute paths.
+
+---
+
+## Error Handler Deduplication (v2.0.0)
+
+The **authoritative** error handler is `plugins/opspal-core/hooks/lib/error-handler.sh` (v2.0.0).
+
+Other plugins MUST NOT maintain separate copies. Instead, create a **shim** that sources the core version and adds plugin-specific extensions. See `plugins/opspal-marketo/hooks/lib/error-handler.sh` for the reference pattern.
+
+---
+
 ## Related Documentation
 
 - **Error Handler Source**: `lib/error-handler.sh`
@@ -383,4 +499,4 @@ fi
 ---
 
 **Maintained by**: RevPal Engineering
-**Last Updated**: 2025-11-24
+**Last Updated**: 2026-03-08

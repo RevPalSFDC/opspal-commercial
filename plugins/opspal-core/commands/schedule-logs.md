@@ -57,8 +57,21 @@ Status: success
 View structured execution history:
 
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
 # Via scheduler manager directly
-node ${CLAUDE_PLUGIN_ROOT}/scheduler/scripts/lib/scheduler-manager.js history daily-cpq-check-a1b2c3d4
+node "$(find_script "scheduler-manager.js")" history daily-cpq-check-a1b2c3d4
 ```
 
 Output:
@@ -74,7 +87,7 @@ Execution History for daily-cpq-check-a1b2c3d4 (20 entries):
 
 Logs are stored in:
 ```
-${CLAUDE_PLUGIN_ROOT}/scheduler/logs/
+.claude-plugins/opspal-core/scheduler/logs/
 ├── <task-id>_<timestamp>.log    # Individual execution logs
 ├── execution-history.jsonl       # Structured execution history
 └── cron.log                      # Cron stderr output
@@ -89,12 +102,12 @@ ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/
 
 2. **Check full log content**:
    ```bash
-   cat ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/<task-id>_*.log | tail -100
+   cat .claude-plugins/opspal-core/scheduler/logs/<task-id>_*.log | tail -100
    ```
 
 3. **Look for timeout issues**:
    ```bash
-   grep "TIMED OUT" ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/<task-id>_*.log
+   grep "TIMED OUT" .claude-plugins/opspal-core/scheduler/logs/<task-id>_*.log
    ```
 
 4. **Run manually to debug**:
@@ -107,7 +120,7 @@ ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/
 Logs are retained for 30 days by default. Older logs can be cleaned up:
 
 ```bash
-find ${CLAUDE_PLUGIN_ROOT}/scheduler/logs -name "*.log" -mtime +30 -delete
+find .claude-plugins/opspal-core/scheduler/logs -name "*.log" -mtime +30 -delete
 ```
 
 ## See Also

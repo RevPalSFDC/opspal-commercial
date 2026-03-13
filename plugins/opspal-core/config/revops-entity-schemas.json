@@ -1,0 +1,399 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "RevOps Data Quality System - Entity Schema Definitions",
+
+  "firmographic": {
+    "description": "Account/Organization entity schema",
+    "canonical_fields": {
+      "account_name": {
+        "type": "string",
+        "required": true,
+        "description": "Primary company/organization name",
+        "normalization": "company_name",
+        "confidence_tracked": true
+      },
+      "website_domain": {
+        "type": "string",
+        "required": false,
+        "description": "Primary website domain (normalized, no protocol)",
+        "normalization": "domain",
+        "match_key": "deterministic",
+        "confidence_tracked": true
+      },
+      "industry": {
+        "type": "string",
+        "required": false,
+        "description": "Primary industry classification",
+        "normalization": "picklist",
+        "enrichable": true,
+        "confidence_tracked": true
+      },
+      "sub_industry": {
+        "type": "string",
+        "required": false,
+        "description": "Sub-industry or vertical",
+        "enrichable": true
+      },
+      "naics_code": {
+        "type": "string",
+        "required": false,
+        "description": "NAICS industry classification code",
+        "pattern": "^[0-9]{2,6}$",
+        "enrichable": true
+      },
+      "sic_code": {
+        "type": "string",
+        "required": false,
+        "description": "SIC industry classification code",
+        "pattern": "^[0-9]{4}$",
+        "enrichable": true
+      },
+      "annual_revenue": {
+        "type": "number",
+        "required": false,
+        "description": "Annual revenue in USD",
+        "enrichable": true,
+        "confidence_tracked": true
+      },
+      "employee_count": {
+        "type": "integer",
+        "required": false,
+        "description": "Number of employees",
+        "enrichable": true,
+        "confidence_tracked": true
+      },
+      "founded_year": {
+        "type": "integer",
+        "required": false,
+        "description": "Year company was founded",
+        "min": 1800,
+        "max": 2030,
+        "enrichable": true
+      },
+      "headquarters_address": {
+        "type": "object",
+        "required": false,
+        "description": "Primary headquarters address",
+        "normalization": "address",
+        "properties": {
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "postal_code": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "phone": {
+        "type": "string",
+        "required": false,
+        "description": "Primary phone number",
+        "normalization": "phone"
+      }
+    },
+    "alias_fields": {
+      "dba_names": {
+        "type": "array",
+        "description": "Doing Business As names",
+        "items": { "type": "string" }
+      },
+      "former_names": {
+        "type": "array",
+        "description": "Previous company names",
+        "items": { "type": "string" }
+      },
+      "alternate_domains": {
+        "type": "array",
+        "description": "Secondary website domains",
+        "items": { "type": "string" }
+      }
+    },
+    "government_fields": {
+      "is_government": {
+        "type": "boolean",
+        "required": false,
+        "description": "Flag indicating government entity"
+      },
+      "government_type": {
+        "type": "string",
+        "required": false,
+        "description": "Type of government entity",
+        "enum": ["federal", "state", "county", "city", "township", "special_district", "tribal"]
+      },
+      "jurisdiction": {
+        "type": "string",
+        "required": false,
+        "description": "Geographic jurisdiction served"
+      },
+      "parent_agency": {
+        "type": "string",
+        "required": false,
+        "description": "Parent government agency/entity"
+      },
+      "department_type": {
+        "type": "string",
+        "required": false,
+        "description": "Department classification",
+        "enum": ["police", "fire", "public_works", "parks", "finance", "hr", "it", "legal", "health", "education", "transportation", "utilities", "other"]
+      },
+      "population_served": {
+        "type": "integer",
+        "required": false,
+        "description": "Population in jurisdiction"
+      },
+      "census_id": {
+        "type": "string",
+        "required": false,
+        "description": "US Census geographic identifier"
+      }
+    },
+    "external_ids": {
+      "salesforce_id": {
+        "type": "string",
+        "description": "Salesforce Account ID",
+        "pattern": "^[a-zA-Z0-9]{15,18}$"
+      },
+      "hubspot_id": {
+        "type": "string",
+        "description": "HubSpot Company ID"
+      },
+      "duns_number": {
+        "type": "string",
+        "description": "D&B DUNS number",
+        "pattern": "^[0-9]{9}$"
+      },
+      "sam_uei": {
+        "type": "string",
+        "description": "SAM.gov Unique Entity ID (for government contractors)"
+      },
+      "linkedin_company_id": {
+        "type": "string",
+        "description": "LinkedIn Company page ID"
+      }
+    },
+    "decay_settings": {
+      "default_decay_rate_monthly": 0.02,
+      "field_decay_rates": {
+        "phone": 0.03,
+        "employee_count": 0.02,
+        "annual_revenue": 0.01
+      }
+    }
+  },
+
+  "biographic": {
+    "description": "Contact/Person entity schema",
+    "canonical_fields": {
+      "first_name": {
+        "type": "string",
+        "required": true,
+        "description": "First/given name",
+        "normalization": "person_name",
+        "confidence_tracked": true
+      },
+      "last_name": {
+        "type": "string",
+        "required": true,
+        "description": "Last/family name",
+        "normalization": "person_name",
+        "confidence_tracked": true
+      },
+      "email": {
+        "type": "string",
+        "required": false,
+        "description": "Primary email address",
+        "normalization": "email",
+        "match_key": "deterministic",
+        "confidence_tracked": true,
+        "validation": "email_format"
+      },
+      "phone": {
+        "type": "string",
+        "required": false,
+        "description": "Primary phone number",
+        "normalization": "phone",
+        "confidence_tracked": true
+      },
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "Job title (original)",
+        "normalization": "title"
+      },
+      "canonical_title": {
+        "type": "string",
+        "required": false,
+        "description": "Normalized job title",
+        "derived_from": "title"
+      },
+      "seniority": {
+        "type": "string",
+        "required": false,
+        "description": "Seniority level",
+        "enum": ["executive", "vp", "director", "manager", "senior_ic", "individual_contributor", "entry"],
+        "derived_from": "title"
+      },
+      "role": {
+        "type": "string",
+        "required": false,
+        "description": "Buyer role classification",
+        "enum": ["decision_maker", "influencer", "user", "gatekeeper", "champion", "blocker"],
+        "derived_from": "title"
+      },
+      "department": {
+        "type": "string",
+        "required": false,
+        "description": "Department/function",
+        "enum": ["executive", "sales", "marketing", "finance", "hr", "it", "operations", "legal", "engineering", "product", "customer_success", "support", "other"],
+        "derived_from": "title"
+      },
+      "linkedin_url": {
+        "type": "string",
+        "required": false,
+        "description": "LinkedIn profile URL",
+        "enrichable": true
+      }
+    },
+    "alias_fields": {
+      "alternate_emails": {
+        "type": "array",
+        "description": "Secondary email addresses",
+        "items": { "type": "string" }
+      },
+      "previous_titles": {
+        "type": "array",
+        "description": "Previous job titles at current company",
+        "items": { "type": "string" }
+      },
+      "nicknames": {
+        "type": "array",
+        "description": "Known nicknames or name variations",
+        "items": { "type": "string" }
+      }
+    },
+    "employment_fields": {
+      "employment_status": {
+        "type": "string",
+        "required": false,
+        "description": "Current employment status",
+        "enum": ["active", "inactive", "left_company", "retired", "unknown"]
+      },
+      "employment_confidence": {
+        "type": "number",
+        "required": false,
+        "description": "Confidence that contact is still at this company (0-1)",
+        "min": 0,
+        "max": 1
+      },
+      "last_verified_date": {
+        "type": "string",
+        "format": "date",
+        "required": false,
+        "description": "Date contact info was last verified"
+      },
+      "last_activity_date": {
+        "type": "string",
+        "format": "date",
+        "required": false,
+        "description": "Date of last engagement/activity"
+      }
+    },
+    "external_ids": {
+      "salesforce_id": {
+        "type": "string",
+        "description": "Salesforce Contact/Lead ID",
+        "pattern": "^[a-zA-Z0-9]{15,18}$"
+      },
+      "hubspot_id": {
+        "type": "string",
+        "description": "HubSpot Contact ID"
+      },
+      "linkedin_member_id": {
+        "type": "string",
+        "description": "LinkedIn member ID"
+      }
+    },
+    "decay_settings": {
+      "default_decay_rate_monthly": 0.034,
+      "field_decay_rates": {
+        "email": 0.025,
+        "phone": 0.04,
+        "title": 0.03
+      },
+      "notes": "Public sector contacts decay ~40% annually per Power Almanac research"
+    }
+  },
+
+  "relationship_fields": {
+    "account_contact": {
+      "description": "Relationship between contact and account",
+      "fields": {
+        "is_primary": {
+          "type": "boolean",
+          "description": "Primary contact for the account"
+        },
+        "relationship_type": {
+          "type": "string",
+          "description": "Type of relationship",
+          "enum": ["employee", "consultant", "partner", "vendor", "other"]
+        }
+      }
+    },
+    "account_hierarchy": {
+      "description": "Parent-child relationship between accounts",
+      "fields": {
+        "parent_account_id": {
+          "type": "string",
+          "description": "ID of parent account"
+        },
+        "hierarchy_level": {
+          "type": "integer",
+          "description": "Level in hierarchy (0 = ultimate parent)"
+        },
+        "relationship_type": {
+          "type": "string",
+          "description": "Type of parent-child relationship",
+          "enum": ["subsidiary", "division", "department", "branch", "franchise", "affiliate"]
+        }
+      }
+    }
+  },
+
+  "metadata_fields": {
+    "data_source": {
+      "type": "string",
+      "description": "Original source of the record",
+      "enum": ["salesforce", "hubspot", "csv_import", "enrichment", "manual", "api"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Record creation timestamp"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "data_quality_score": {
+      "type": "number",
+      "description": "Overall data quality score (0-100)",
+      "min": 0,
+      "max": 100
+    },
+    "confidence_scores": {
+      "type": "object",
+      "description": "Per-field confidence scores",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "score": { "type": "integer", "min": 1, "max": 5 },
+          "level": { "type": "string", "enum": ["VERIFIED", "HIGH", "MEDIUM", "LOW", "INFERRED"] },
+          "source": { "type": "string" },
+          "source_url": { "type": "string" },
+          "collected_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

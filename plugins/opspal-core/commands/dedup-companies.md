@@ -127,8 +127,21 @@ export SALESFORCE_ORG_ALIAS="production"
 
 OR create a configuration file:
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
 # Generate template
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-config-loader.js template > dedup-config.json
+CONFIG_LOADER=$(find_script "deduplication/dedup-config-loader.js") && node "$CONFIG_LOADER" template > dedup-config.json
 
 # Edit with your values
 vim dedup-config.json
@@ -247,7 +260,7 @@ Don't panic! The system is designed for this:
 
 1. **Check the ledger**:
    ```bash
-   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-ledger.js summary <prefix>
+   LEDGER=$(find_script "deduplication/dedup-ledger.js") && node "$LEDGER" summary <prefix>
    ```
 
 2. **Review what completed**:

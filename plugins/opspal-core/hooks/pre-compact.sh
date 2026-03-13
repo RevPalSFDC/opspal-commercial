@@ -47,6 +47,10 @@ log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$level] $*" >> "$LOG_FILE" 2>/dev/null || true
 }
 
+# Write routing refresh sentinel (always, even if backup disabled)
+mkdir -p "$HOME/.claude/session-context" 2>/dev/null || true
+echo "$(date -Iseconds)" > "$HOME/.claude/session-context/.needs-routing-refresh" 2>/dev/null || true
+
 # If disabled, pass through
 if [ "$ENABLE_BACKUP" != "1" ]; then
   echo '{}'

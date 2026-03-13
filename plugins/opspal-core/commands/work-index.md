@@ -306,13 +306,28 @@ When `ORG_SLUG` is set, the pre-task hook automatically displays:
 ## CLI Usage
 
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
 # Run directly via Node
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-manager.js list acme-corp
+WI_MANAGER=$(find_script "work-index-manager.js")
+node "$WI_MANAGER" list acme-corp
 
 # Schema utilities
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-schema.js classifications
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-schema.js statuses
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-schema.js generate-id 2026-01-29 1
+WI_SCHEMA=$(find_script "work-index-schema.js")
+node "$WI_SCHEMA" classifications
+node "$WI_SCHEMA" statuses
+node "$WI_SCHEMA" generate-id 2026-01-29 1
 ```
 
 ## Environment Variables

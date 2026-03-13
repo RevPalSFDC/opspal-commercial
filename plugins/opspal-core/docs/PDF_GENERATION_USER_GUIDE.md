@@ -143,7 +143,7 @@ Use profiles to guarantee branded output across machines:
 
 2. Create PDF with cover:
    ```
-   /generate-pdf "instances/acme/*.md" acme-audit.pdf --toc --cover salesforce-audit --org "ACME Corporation"
+   /generate-pdf "instances/acme/*.md" acme-audit.pdf --profile cover-toc --report-typesalesforce-audit --org "ACME Corporation"
    ```
 
 3. Review cover page shows:
@@ -203,13 +203,13 @@ Use profiles to guarantee branded output across machines:
 
 **Basic usage:**
 ```
-/generate-pdf reports.md output.pdf --cover salesforce-audit --org "Client Name"
+/generate-pdf reports.md output.pdf --report-typesalesforce-audit --org "Client Name"
 ```
 
 **With additional metadata:**
 ```
 /generate-pdf reports.md output.pdf \
-  --cover executive-report \
+  --report-typeexecutive-report \
   --org "ACME Corp" \
   --title "Q3 Performance Review" \
   --period "Q3 2025"
@@ -436,7 +436,7 @@ Always keep markdown files:
 
 **With cover:**
 ```bash
-/generate-pdf "path/*.md" output.pdf --toc --cover salesforce-audit --org "Client"
+/generate-pdf "path/*.md" output.pdf --profile cover-toc --report-typesalesforce-audit --org "Client"
 ```
 
 **Natural language:**
@@ -497,7 +497,7 @@ Before considering PDF generation "working":
 
 **Command:**
 ```
-/generate-pdf "Q3-*.md" Q3-Executive-Report.pdf --toc --cover executive-report --org "ACME Corp" --title "Q3 2025 Performance Review"
+/generate-pdf "Q3-*.md" Q3-Executive-Report.pdf --profile cover-toc --report-typeexecutive-report --org "ACME Corp" --title "Q3 2025 Performance Review"
 ```
 
 **Output:**
@@ -536,7 +536,7 @@ node scripts/lib/automation-audit-v2-orchestrator.js acme ./audit-output
 
 **Command:**
 ```
-/generate-pdf "*.md" ACME-Data-Quality-Assessment.pdf --toc --cover data-quality --org "ACME Corporation"
+/generate-pdf "*.md" ACME-Data-Quality-Assessment.pdf --profile cover-toc --report-typedata-quality --org "ACME Corporation"
 ```
 
 **Output:**
@@ -552,7 +552,7 @@ node scripts/lib/automation-audit-v2-orchestrator.js acme ./audit-output
 1. Type `/generate` → Tab to autocomplete `/generate-pdf`
 2. Type glob pattern → `"instances/*/report.md"`
 3. Type output name → `report.pdf`
-4. Add flags → `--toc --cover salesforce-audit`
+4. Add flags → `--profile cover-toc --report-typesalesforce-audit`
 
 **Natural Language Shortcut:**
 ```

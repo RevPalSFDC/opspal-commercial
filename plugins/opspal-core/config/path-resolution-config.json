@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "2.0.0",
+  "description": "Path resolution configuration for instance directories and configs",
+  "lastUpdated": "2026-01-22",
+
+  "explanation": {
+    "purpose": "Defines canonical path patterns for locating instance directories across different workspace layouts. Addresses config/env cohort issues where 5+ path patterns are tried without clear precedence.",
+    "recommendation": "Use 'orgs-platform' pattern for new projects (client-centric). Legacy 'project-platform' still supported for backward compatibility.",
+    "examples": {
+      "orgs-platform": "orgs/acme/platforms/salesforce/production/",
+      "project-platform": "instances/salesforce/eta-corp/",
+      "project-simple": "instances/eta-corp/",
+      "plugin-instances": ".claude-plugins/opspal-salesforce/instances/eta-corp/"
+    }
+  },
+
+  "patterns": [
+    {
+      "name": "orgs-platform",
+      "description": "Client-centric path with org as primary boundary (RECOMMENDED)",
+      "template": "orgs/{org}/platforms/{platform}/{instance}",
+      "priority": 1,
+      "recommended": true,
+      "example": "orgs/acme/platforms/salesforce/production",
+      "when_to_use": "Client-centric multi-platform projects where org is the primary boundary"
+    },
+    {
+      "name": "project-platform",
+      "description": "Project-level path with platform prefix (LEGACY)",
+      "template": "instances/{platform}/{instance}",
+      "priority": 2,
+      "recommended": false,
+      "example": "instances/salesforce/eta-corp",
+      "when_to_use": "Legacy single-platform projects or backward compatibility"
+    },
+    {
+      "name": "project-simple",
+      "description": "Project-level path without platform prefix",
+      "template": "instances/{instance}",
+      "priority": 3,
+      "recommended": false,
+      "example": "instances/eta-corp",
+      "when_to_use": "Single-platform projects or legacy layouts"
+    },
+    {
+      "name": "plugin-instances",
+      "description": "Plugin-relative instances directory",
+      "template": ".claude-plugins/{plugin}/instances/{instance}",
+      "priority": 4,
+      "recommended": false,
+      "example": ".claude-plugins/opspal-salesforce/instances/eta-corp",
+      "when_to_use": "Plugin-isolated instances (rare)"
+    },
+    {
+      "name": "env-override",
+      "description": "Environment variable override",
+      "template": "{INSTANCE_PATH}",
+      "priority": 0,
+      "recommended": false,
+      "example": "/custom/path/to/eta-corp",
+      "when_to_use": "Custom deployments or CI/CD environments",
+      "requires_env": "INSTANCE_PATH"
+    }
+  ],
+
+  "resolution_order": [
+    "env-override",
+    "orgs-platform",
+    "project-platform",
+    "project-simple",
+    "plugin-instances"
+  ],
+
+  "org_metadata_files": {
+    "org_config": "_meta/org.yaml",
+    "instance_config": "_meta/instance.yaml",
+    "description": "YAML metadata files created in the orgs-platform structure"
+  },
+
+  "org_structure": {
+    "description": "Standard subdirectories within an org",
+    "subdirs": {
+      "_meta": "Org-level metadata (org.yaml)",
+      "analysis": "Cross-platform analysis outputs",
+      "analysis/discovery": "Org-wide discovery results",
+      "analysis/audits": "Cross-platform audits",
+      "analysis/reporting": "Combined reports",
+      "planning": "Strategic planning documents",
+      "planning/roadmaps": "Roadmap documents",
+      "planning/architecture": "Architecture decisions",
+      "planning/proposals": "Change proposals",
+      "delivery": "Delivery artifacts",
+      "delivery/cross-platform": "Multi-platform deliverables",
+      "platforms": "Platform-specific instances"
+    }
+  },
+
+  "instance_structure": {
+    "description": "Standard subdirectories within an instance",
+    "subdirs": {
+      "_meta": "Instance-level metadata (instance.yaml)",
+      "projects": "Assessment and project work",
+      "configs": "Configuration files (ENV_CONFIG.json, RUNBOOK.md)",
+      "data": "Operational data (observations, reflections)",
+      "reports": "Generated reports"
+    }
+  },
+
+  "excluded_directories": [
+    "lib",
+    "scripts",
+    "agents",
+    "hooks",
+    "config",
+    "docs",
+    "templates",
+    "test",
+    "tests",
+    ".claude",
+    ".claude-plugins",
+    "node_modules",
+    ".git"
+  ],
+
+  "required_files": {
+    "instance_config": "ENV_CONFIG.json",
+    "alternative_configs": [
+      "config.json",
+      "instance.json",
+      "org-config.json"
+    ]
+  },
+
+  "platforms": {
+    "salesforce": {
+      "aliases": ["sfdc", "sf", "salesforce"],
+      "required_files": ["sfdx-project.json"],
+      "optional_files": ["ORG_QUIRKS.json", "OBJECT_MAPPINGS.txt"]
+    },
+    "hubspot": {
+      "aliases": ["hs", "hubspot"],
+      "required_files": [],
+      "optional_files": ["hubspot-config.json"]
+    }
+  },
+
+  "error_messages": {
+    "not_found": "Instance directory not found. Create it at: instances/{platform}/{instance}/",
+    "missing_config": "Instance directory exists but ENV_CONFIG.json is missing. Create it manually or run: node scripts/ensure-instance-ready.js {platform} {instance}",
+    "ambiguous": "Multiple instance directories found. Use INSTANCE_PATH env var to specify: export INSTANCE_PATH=/path/to/instance"
+  }
+}

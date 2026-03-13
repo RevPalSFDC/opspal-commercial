@@ -27,22 +27,22 @@ Run the update manager script with any provided arguments:
 # Find update manager script in multiple locations
 # Priority: 1. Local dev paths, 2. Claude CLI marketplace, 3. Cache fallback, 4. User plugins
 SCRIPT_PATHS=(
-  "${CLAUDE_PLUGIN_ROOT}/scripts/opspal-update-manager.sh"
-  "${CLAUDE_PLUGIN_ROOT}/scripts/opspal-update-manager.sh"
-  "$HOME/.claude/${CLAUDE_PLUGIN_ROOT}/scripts/opspal-update-manager.sh"
-  "$HOME/.claude/plugins/marketplaces/revpal-internal-plugins/${CLAUDE_PLUGIN_ROOT}/scripts/opspal-update-manager.sh"
+  "./plugins/opspal-core/scripts/opspal-update-manager.sh"
+  "./.claude-plugins/opspal-core/scripts/opspal-update-manager.sh"
+  "$HOME/.claude/plugins/opspal-core/scripts/opspal-update-manager.sh"
+  "$HOME/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/opspal-update-manager.sh"
 )
 
 # WSL-aware: add Windows profile .claude path if available
 if [ -n "${WSL_DISTRO_NAME:-}" ] || [ -n "${WSL_INTEROP:-}" ]; then
   if [ -n "${USERPROFILE:-}" ] && command -v wslpath >/dev/null 2>&1; then
     WIN_PROFILE="$(wslpath -u "$USERPROFILE" 2>/dev/null || true)"
-    [ -n "$WIN_PROFILE" ] && SCRIPT_PATHS+=("$WIN_PROFILE/.claude/plugins/marketplaces/revpal-internal-plugins/${CLAUDE_PLUGIN_ROOT}/scripts/opspal-update-manager.sh")
+    [ -n "$WIN_PROFILE" ] && SCRIPT_PATHS+=("$WIN_PROFILE/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/opspal-update-manager.sh")
   fi
 fi
 
 # Also check for alternative marketplace names and cache versions
-for mp_dir in "$HOME/.claude/plugins/marketplaces"/*/${CLAUDE_PLUGIN_ROOT}/scripts; do
+for mp_dir in "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts; do
   [ -f "$mp_dir/opspal-update-manager.sh" ] && SCRIPT_PATHS+=("$mp_dir/opspal-update-manager.sh")
 done
 
@@ -110,7 +110,7 @@ The following plugins are detected for update:
 | `opspal-*` | opspal-core, opspal-salesforce, opspal-hubspot, etc. |
 | `*-plugin` | salesforce-plugin, hubspot-plugin, marketo-plugin |
 | Developer tools | developer-tools-plugin, gtm-planning-plugin |
-| Data tools | data-hygiene-plugin, cross-platform-plugin |
+| Data tools | cross-platform-plugin |
 
 ## Options
 
@@ -334,7 +334,7 @@ The script needs execute permission:
 # Find and fix permissions
 find ~/.claude/plugins -name "opspal-update-manager.sh" -exec chmod +x {} \;
 # Or for local dev:
-chmod +x ${CLAUDE_PLUGIN_ROOT}/scripts/opspal-update-manager.sh
+chmod +x plugins/opspal-core/scripts/opspal-update-manager.sh
 ```
 
 ### "jq not found"

@@ -108,7 +108,7 @@ Steps:
    - If not: proceed with generation
 
 3. Run generator:
-   node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-generator.js generate {org} \
+   node plugins/opspal-core/scripts/lib/field-dictionary-generator.js generate {org} \
      --sf-alias {alias} --hs-portal {portal}
 
 4. Preview statistics:
@@ -211,18 +211,18 @@ Steps:
 
 ```bash
 # Generate dictionary
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-generator.js generate {org} \
+node plugins/opspal-core/scripts/lib/field-dictionary-generator.js generate {org} \
   --sf-alias {alias} --hs-portal {portal}
 
 # Load and query
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js stats {org}
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js search {org} "{query}"
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js tags {org} Revenue
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/field-dictionary-loader.js context {org} --audience Executive
+node plugins/opspal-core/scripts/lib/field-dictionary-loader.js stats {org}
+node plugins/opspal-core/scripts/lib/field-dictionary-loader.js search {org} "{query}"
+node plugins/opspal-core/scripts/lib/field-dictionary-loader.js tags {org} Revenue
+node plugins/opspal-core/scripts/lib/field-dictionary-loader.js context {org} --audience Executive
 
 # Platform-specific generators
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/field-dictionary-generator.js)" preview {org-alias}
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/lib/field-dictionary-generator.js)" preview {portal}
+node plugins/opspal-salesforce/scripts/lib/field-dictionary-generator.js preview {org-alias}
+node plugins/opspal-hubspot/scripts/lib/field-dictionary-generator.js preview {portal}
 ```
 
 ## Integration with Reporting Agents

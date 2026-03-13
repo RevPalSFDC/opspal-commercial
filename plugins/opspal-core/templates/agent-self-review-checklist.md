@@ -60,10 +60,10 @@ If ANY of these are true, DO NOT mark task complete:
 
 ```bash
 # Check deliverables exist and are valid
-node ~/.claude/${CLAUDE_PLUGIN_ROOT}@revpal-internal-plugins/scripts/lib/agent-deliverable-validator.js <config.json>
+node ~/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/agent-deliverable-validator.js <config.json>
 
 # Validate completion
-node ~/.claude/${CLAUDE_PLUGIN_ROOT}@revpal-internal-plugins/scripts/lib/agent-completion-validator.js <config.json>
+node ~/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/agent-completion-validator.js <config.json>
 ```
 
 ---

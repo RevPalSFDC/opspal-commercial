@@ -1,0 +1,589 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-03",
+  "description": "Pre-built n8n node templates for common integration patterns",
+
+  "triggers": {
+    "salesforce": {
+      "recordCreated": {
+        "type": "n8n-nodes-base.salesforceTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "triggerOn": "recordCreated",
+          "sobject": "{{OBJECT}}",
+          "conditions": []
+        },
+        "credentialType": "salesforceOAuth2Api"
+      },
+      "recordUpdated": {
+        "type": "n8n-nodes-base.salesforceTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "triggerOn": "recordUpdated",
+          "sobject": "{{OBJECT}}",
+          "conditions": []
+        },
+        "credentialType": "salesforceOAuth2Api"
+      },
+      "recordDeleted": {
+        "type": "n8n-nodes-base.salesforceTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "triggerOn": "recordDeleted",
+          "sobject": "{{OBJECT}}",
+          "conditions": []
+        },
+        "credentialType": "salesforceOAuth2Api"
+      }
+    },
+    "hubspot": {
+      "contactCreated": {
+        "type": "n8n-nodes-base.hubspotTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "eventsUi": {
+            "eventValues": [
+              { "name": "contact.creation" }
+            ]
+          }
+        },
+        "credentialType": "hubspotApi"
+      },
+      "contactUpdated": {
+        "type": "n8n-nodes-base.hubspotTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "eventsUi": {
+            "eventValues": [
+              { "name": "contact.propertyChange" }
+            ]
+          }
+        },
+        "credentialType": "hubspotApi"
+      },
+      "dealCreated": {
+        "type": "n8n-nodes-base.hubspotTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "eventsUi": {
+            "eventValues": [
+              { "name": "deal.creation" }
+            ]
+          }
+        },
+        "credentialType": "hubspotApi"
+      }
+    },
+    "webhook": {
+      "generic": {
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "parameters": {
+          "path": "{{PATH}}",
+          "httpMethod": "POST",
+          "authentication": "none",
+          "options": {}
+        },
+        "webhookId": "{{WEBHOOK_ID}}"
+      },
+      "authenticated": {
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "parameters": {
+          "path": "{{PATH}}",
+          "httpMethod": "POST",
+          "authentication": "headerAuth",
+          "options": {}
+        },
+        "webhookId": "{{WEBHOOK_ID}}"
+      }
+    },
+    "schedule": {
+      "hourly": {
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "rule": {
+            "interval": [
+              { "field": "hours", "hoursInterval": 1 }
+            ]
+          }
+        }
+      },
+      "daily": {
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "rule": {
+            "interval": [
+              { "field": "days", "daysInterval": 1 }
+            ]
+          }
+        }
+      },
+      "cron": {
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1,
+        "parameters": {
+          "rule": {
+            "interval": [
+              { "field": "cronExpression", "expression": "{{CRON}}" }
+            ]
+          }
+        }
+      }
+    },
+    "manual": {
+      "simple": {
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "parameters": {}
+      }
+    }
+  },
+
+  "actions": {
+    "salesforce": {
+      "createRecord": {
+        "type": "n8n-nodes-base.salesforce",
+        "typeVersion": 1,
+        "parameters": {
+          "operation": "create",
+          "resource": "{{OBJECT}}",
+          "additionalFields": {}
+        },
+        "credentialType": "salesforceOAuth2Api"
+      },
+      "updateRecord": {
+        "type": "n8n-nodes-base.salesforce",
+        "typeVersion": 1,
+        "parameters": {
+          "operation": "update",
+          "resource": "{{OBJECT}}",
+          "recordId": "={{$json.Id}}",
+          "updateFields": {}
+        },
+        "credentialType": "salesforceOAuth2Api"
+      },
+      "getRecord": {
+        "type": "n8n-nodes-base.salesforce",
+        "typeVersion": 1,
+        "parameters": {
+          "operation": "get",
+          "resource": "{{OBJECT}}",
+          "recordId": "={{$json.Id}}"
+        },
+        "credentialType": "salesforceOAuth2Api"
+      },
+      "query": {
+        "type": "n8n-nodes-base.salesforce",
+        "typeVersion": 1,
+        "parameters": {
+          "operation": "query",
+          "query": "{{SOQL}}"
+        },
+        "credentialType": "salesforceOAuth2Api"
+      },
+      "deleteRecord": {
+        "type": "n8n-nodes-base.salesforce",
+        "typeVersion": 1,
+        "parameters": {
+          "operation": "delete",
+          "resource": "{{OBJECT}}",
+          "recordId": "={{$json.Id}}"
+        },
+        "credentialType": "salesforceOAuth2Api"
+      }
+    },
+    "hubspot": {
+      "createContact": {
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 1,
+        "parameters": {
+          "resource": "contact",
+          "operation": "create",
+          "email": "={{$json.Email}}",
+          "additionalFields": {
+            "firstname": "={{$json.FirstName}}",
+            "lastname": "={{$json.LastName}}"
+          }
+        },
+        "credentialType": "hubspotApi"
+      },
+      "updateContact": {
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 1,
+        "parameters": {
+          "resource": "contact",
+          "operation": "update",
+          "contactId": "={{$json.hs_object_id}}",
+          "updateFields": {}
+        },
+        "credentialType": "hubspotApi"
+      },
+      "createDeal": {
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 1,
+        "parameters": {
+          "resource": "deal",
+          "operation": "create",
+          "dealName": "={{$json.Name}}",
+          "pipeline": "default",
+          "dealStage": "{{STAGE}}",
+          "additionalFields": {}
+        },
+        "credentialType": "hubspotApi"
+      },
+      "updateDeal": {
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 1,
+        "parameters": {
+          "resource": "deal",
+          "operation": "update",
+          "dealId": "={{$json.hs_object_id}}",
+          "updateFields": {}
+        },
+        "credentialType": "hubspotApi"
+      },
+      "createCompany": {
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 1,
+        "parameters": {
+          "resource": "company",
+          "operation": "create",
+          "name": "={{$json.Name}}",
+          "additionalFields": {}
+        },
+        "credentialType": "hubspotApi"
+      }
+    },
+    "http": {
+      "get": {
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "parameters": {
+          "method": "GET",
+          "url": "={{$json.url}}",
+          "authentication": "none",
+          "options": {}
+        }
+      },
+      "post": {
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "parameters": {
+          "method": "POST",
+          "url": "={{$json.url}}",
+          "authentication": "none",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": []
+          },
+          "options": {}
+        }
+      },
+      "postJson": {
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "parameters": {
+          "method": "POST",
+          "url": "={{$json.url}}",
+          "authentication": "none",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{$json.body}}",
+          "options": {}
+        }
+      }
+    },
+    "slack": {
+      "sendMessage": {
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2,
+        "parameters": {
+          "resource": "message",
+          "operation": "post",
+          "channel": "={{$json.channel}}",
+          "text": "={{$json.message}}",
+          "otherOptions": {}
+        },
+        "credentialType": "slackApi"
+      },
+      "sendNotification": {
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2,
+        "parameters": {
+          "resource": "message",
+          "operation": "post",
+          "channel": "#notifications",
+          "text": "={{$json.message}}",
+          "otherOptions": {}
+        },
+        "credentialType": "slackApi"
+      }
+    }
+  },
+
+  "logic": {
+    "if": {
+      "simple": {
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "parameters": {
+          "conditions": {
+            "boolean": [
+              {
+                "value1": "={{$json.{{FIELD}}}}",
+                "operation": "{{OPERATOR}}",
+                "value2": "{{VALUE}}"
+              }
+            ]
+          }
+        }
+      },
+      "exists": {
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "parameters": {
+          "conditions": {
+            "boolean": [
+              {
+                "value1": "={{$json.{{FIELD}}}}",
+                "operation": "isNotEmpty"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "switch": {
+      "byField": {
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 2,
+        "parameters": {
+          "dataType": "string",
+          "value1": "={{$json.{{FIELD}}}}",
+          "rules": {
+            "rules": []
+          }
+        }
+      }
+    },
+    "merge": {
+      "append": {
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 2,
+        "parameters": {
+          "mode": "append"
+        }
+      },
+      "combineBySamePosition": {
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 2,
+        "parameters": {
+          "mode": "combineBySamePosition"
+        }
+      },
+      "combineByKey": {
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 2,
+        "parameters": {
+          "mode": "combineByKey",
+          "propertyName1": "={{$json.id}}",
+          "propertyName2": "={{$json.id}}"
+        }
+      }
+    },
+    "splitInBatches": {
+      "default": {
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 2,
+        "parameters": {
+          "batchSize": 10,
+          "options": {}
+        }
+      },
+      "salesforceOptimized": {
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 2,
+        "parameters": {
+          "batchSize": 200,
+          "options": {
+            "reset": false
+          }
+        },
+        "notes": "Optimized for Salesforce governor limits (200 records per transaction)"
+      }
+    },
+    "wait": {
+      "seconds": {
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1,
+        "parameters": {
+          "amount": "{{SECONDS}}",
+          "unit": "seconds"
+        }
+      },
+      "rateLimitPause": {
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1,
+        "parameters": {
+          "amount": 1,
+          "unit": "seconds"
+        },
+        "notes": "HubSpot rate limit pause (100 requests/10s)"
+      }
+    },
+    "set": {
+      "mapFields": {
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 2,
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": []
+          },
+          "options": {}
+        }
+      },
+      "rawJson": {
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 2,
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={{$json}}"
+        }
+      }
+    },
+    "code": {
+      "javascript": {
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 1,
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "jsCode": "// Process items\nreturn items;"
+        }
+      },
+      "python": {
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 1,
+        "parameters": {
+          "mode": "runOnceForAllItems",
+          "language": "python",
+          "pythonCode": "# Process items\nreturn items"
+        }
+      }
+    }
+  },
+
+  "errorHandling": {
+    "errorTrigger": {
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "parameters": {}
+    },
+    "stopAndError": {
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "parameters": {
+        "errorMessage": "={{$json.errorMessage}}"
+      }
+    },
+    "noOp": {
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "parameters": {}
+    }
+  },
+
+  "workflows": {
+    "sfLeadToHsContact": {
+      "name": "SF Lead to HubSpot Contact Sync",
+      "description": "Sync new Salesforce Leads to HubSpot Contacts",
+      "tags": ["salesforce", "hubspot", "sync", "lead"],
+      "template": {
+        "trigger": "triggers.salesforce.recordCreated",
+        "triggerParams": { "OBJECT": "Lead" },
+        "actions": [
+          { "template": "actions.hubspot.createContact" }
+        ]
+      }
+    },
+    "hsContactToSfLead": {
+      "name": "HubSpot Contact to SF Lead Sync",
+      "description": "Sync new HubSpot Contacts to Salesforce Leads",
+      "tags": ["hubspot", "salesforce", "sync", "lead"],
+      "template": {
+        "trigger": "triggers.hubspot.contactCreated",
+        "actions": [
+          { "template": "actions.salesforce.createRecord", "params": { "OBJECT": "Lead" } }
+        ]
+      }
+    },
+    "sfOppToHsDeal": {
+      "name": "SF Opportunity to HubSpot Deal Sync",
+      "description": "Sync Salesforce Opportunities to HubSpot Deals",
+      "tags": ["salesforce", "hubspot", "sync", "opportunity", "deal"],
+      "template": {
+        "trigger": "triggers.salesforce.recordCreated",
+        "triggerParams": { "OBJECT": "Opportunity" },
+        "actions": [
+          { "template": "actions.hubspot.createDeal", "params": { "STAGE": "appointmentscheduled" } }
+        ]
+      }
+    },
+    "errorNotification": {
+      "name": "Error Notification Workflow",
+      "description": "Send Slack notification on workflow errors",
+      "tags": ["error", "notification", "slack"],
+      "template": {
+        "trigger": "errorHandling.errorTrigger",
+        "actions": [
+          { "template": "actions.slack.sendNotification" }
+        ]
+      }
+    }
+  },
+
+  "fieldMappings": {
+    "leadToContact": {
+      "salesforceToHubspot": {
+        "FirstName": "firstname",
+        "LastName": "lastname",
+        "Email": "email",
+        "Phone": "phone",
+        "Company": "company",
+        "Title": "jobtitle",
+        "LeadSource": "leadsource",
+        "Industry": "industry",
+        "Website": "website"
+      }
+    },
+    "opportunityToDeal": {
+      "salesforceToHubspot": {
+        "Name": "dealname",
+        "Amount": "amount",
+        "CloseDate": "closedate",
+        "StageName": "dealstage",
+        "Type": "dealtype",
+        "Description": "description"
+      }
+    },
+    "accountToCompany": {
+      "salesforceToHubspot": {
+        "Name": "name",
+        "Phone": "phone",
+        "Website": "website",
+        "Industry": "industry",
+        "BillingStreet": "address",
+        "BillingCity": "city",
+        "BillingState": "state",
+        "BillingPostalCode": "zip",
+        "BillingCountry": "country",
+        "NumberOfEmployees": "numberofemployees",
+        "AnnualRevenue": "annualrevenue"
+      }
+    }
+  }
+}

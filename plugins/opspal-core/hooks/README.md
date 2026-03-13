@@ -68,10 +68,10 @@ Hooks are registered in `.claude/settings.json`:
 {
   "hooks": {
     "UserPromptSubmit": {
-      "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/master-prompt-handler.sh"
+      "command": "bash ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/master-prompt-handler.sh"
     },
     "SessionStart": {
-      "command": "bash -c '... && ${CLAUDE_PLUGIN_ROOT}/hooks/session-context-loader.sh'"
+      "command": "bash -c '... && ${CLAUDE_PLUGIN_ROOT}/.claude-plugins/opspal-core/hooks/session-context-loader.sh'"
     }
   }
 }
@@ -91,6 +91,17 @@ or continuation-style prompts that can otherwise trigger false-positive complexi
   recommendation-only at `UserPromptSubmit`.
 - `USER_PROMPT_MANDATORY_HARD_BLOCKING=1`: Re-enable legacy mandatory hard-blocking at
   `UserPromptSubmit` (still requires `ENABLE_HARD_BLOCKING=1`).
+
+### Routing Execution Gate
+
+OpsPal now enforces blocking routes with a two-step model:
+
+- `UserPromptSubmit` writes session-scoped routing state for blocking and mandatory routes, but does not block prompt submission by default.
+- `PreToolUse` denies operational execution until the correct `Task(subagent_type='plugin:agent', ...)` specialist clears that session state.
+- Read-only tools stay allowed while a route is pending.
+- Mutating MCP tools are classified via `config/mcp-tool-policies.json`.
+- Unknown MCP tools default to deny while a pending route is active and are logged for follow-up classification.
+- `[ROUTING_OVERRIDE]` marks the route as bypassed for that request and is logged as an audited exception.
 
 ## Dependencies
 

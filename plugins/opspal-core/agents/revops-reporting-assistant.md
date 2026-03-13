@@ -70,10 +70,10 @@ triggerKeywords:
 **Memory Check Commands:**
 ```bash
 # Salesforce
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/org-context-manager.js)" load {org-alias}
+node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js load {org-alias}
 
 # HubSpot
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/lib/portal-context-manager.js)" load {portal-name}
+node .claude-plugins/opspal-hubspot/scripts/lib/portal-context-manager.js load {portal-name}
 ```
 
 ## DURING Report Generation

@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.io/schemas/domain-dictionary.schema.json",
+  "title": "Domain Dictionary Schema",
+  "description": "Schema for industry-specific abbreviation and matching dictionaries with geographic entity resolution support",
+  "type": "object",
+  "required": ["domain", "version", "abbreviations"],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "description": "Unique identifier for this domain",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "examples": ["property-management", "government", "healthcare", "financial", "franchise", "retail"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of this dictionary",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this domain"
+    },
+    "detectionPatterns": {
+      "type": "object",
+      "description": "Patterns used to auto-detect this domain from data",
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "description": "Keywords that suggest this domain",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "entityTypes": {
+          "type": "array",
+          "description": "Salesforce/HubSpot object types associated with this domain",
+          "items": { "type": "string" }
+        },
+        "fieldPatterns": {
+          "type": "array",
+          "description": "Field name patterns that suggest this domain",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["keywords"]
+    },
+    "abbreviations": {
+      "type": "object",
+      "description": "Categorized abbreviation mappings",
+      "additionalProperties": {
+        "type": "object",
+        "description": "Category of abbreviations (e.g., organizations, roles, regulatory)",
+        "additionalProperties": {
+          "type": "string",
+          "description": "Full expansion of the abbreviation"
+        }
+      }
+    },
+    "suffixes": {
+      "type": "object",
+      "description": "Suffix handling rules",
+      "properties": {
+        "strip": {
+          "type": "array",
+          "description": "Suffixes to remove during normalization",
+          "items": { "type": "string" }
+        },
+        "preserve": {
+          "type": "array",
+          "description": "Suffixes to keep (domain-specific identifiers)",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "synonyms": {
+      "type": "object",
+      "description": "Term equivalences for matching",
+      "additionalProperties": {
+        "type": "array",
+        "description": "List of synonymous terms",
+        "items": { "type": "string" }
+      }
+    },
+    "matchingRules": {
+      "type": "object",
+      "description": "Domain-specific matching behavior",
+      "properties": {
+        "ignoreCase": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to ignore case during matching"
+        },
+        "expandBeforeMatch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to expand abbreviations before fuzzy matching"
+        },
+        "synonymWeight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.85,
+          "description": "Confidence multiplier for synonym matches"
+        },
+        "minimumConfidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 70,
+          "description": "Minimum confidence score to consider a match"
+        }
+      }
+    },
+    "matchingPolicy": {
+      "type": "object",
+      "description": "Market-specific policies for geographic entity resolution",
+      "properties": {
+        "sameNameDifferentStatePolicy": {
+          "type": "string",
+          "enum": ["BLOCK", "REVIEW", "ALLOW", "ALLOW_WITH_PATTERN"],
+          "default": "REVIEW",
+          "description": "How to handle entities with same name but different states. BLOCK=reject, REVIEW=manual, ALLOW=auto-merge, ALLOW_WITH_PATTERN=merge if location pattern detected"
+        },
+        "uniquenessLevel": {
+          "type": "string",
+          "enum": ["HIGH", "MEDIUM", "LOW"],
+          "default": "MEDIUM",
+          "description": "How unique entity names typically are in this market. HIGH=names usually distinct (government), LOW=names often shared (franchises)"
+        },
+        "confidenceThresholds": {
+          "type": "object",
+          "description": "Confidence score thresholds for tiered decisions",
+          "properties": {
+            "autoMerge": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "default": 95,
+              "description": "Minimum score for automatic merge"
+            },
+            "review": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "default": 80,
+              "description": "Minimum score for review queue"
+            },
+            "tag": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "default": 65,
+              "description": "Minimum score for tagging as potential match"
+            }
+          }
+        },
+        "stateMismatchPenalty": {
+          "type": "number",
+          "minimum": -100,
+          "maximum": 0,
+          "default": -30,
+          "description": "Score penalty when states don't match (market-dependent)"
+        }
+      }
+    },
+    "genericEntityPatterns": {
+      "type": "array",
+      "description": "Glob patterns for generic entity names that require location disambiguation (e.g., 'City of *', '* Hospital')",
+      "items": { "type": "string" }
+    },
+    "sameEntitySignals": {
+      "type": "object",
+      "description": "Signals used to determine if two records represent the same entity",
+      "properties": {
+        "required": {
+          "type": "array",
+          "description": "Signals that MUST match for same-entity determination (e.g., 'state_match' for government)",
+          "items": { "type": "string" }
+        },
+        "boosts": {
+          "type": "array",
+          "description": "Signals that increase confidence when present (e.g., 'domain_match', 'phone_area_match')",
+          "items": { "type": "string" }
+        },
+        "blockers": {
+          "type": "array",
+          "description": "Signals that BLOCK same-entity determination (e.g., 'different_domain')",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "knownEntities": {
+      "type": "array",
+      "description": "List of known multi-location entities (franchises, chains) where same name in different states IS the same entity",
+      "items": { "type": "string" }
+    },
+    "locationPatterns": {
+      "type": "array",
+      "description": "Regex patterns to detect location suffixes in entity names",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "description": "Regex pattern to match (e.g., '^(.+)\\s*[-–]\\s*(.+)$')"
+          },
+          "baseGroup": {
+            "type": "integer",
+            "description": "Capture group index for the base entity name",
+            "default": 1
+          },
+          "locationGroup": {
+            "type": "integer",
+            "description": "Capture group index for the location identifier"
+          },
+          "storeNumberGroup": {
+            "type": "integer",
+            "description": "Capture group index for store/location number (if applicable)"
+          }
+        },
+        "required": ["pattern", "baseGroup"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

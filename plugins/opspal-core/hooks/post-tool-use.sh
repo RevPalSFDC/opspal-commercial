@@ -36,7 +36,8 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
-set -euo pipefail
+# NOTE: Do NOT set -euo pipefail here — lenient mode is intentional
+# to prevent internal hook errors from blocking tool execution
 
 is_json() {
   echo "$1" | jq -e . >/dev/null 2>&1
@@ -70,9 +71,15 @@ HOOK_NAME="post-tool-use"
 
 # If disabled, pass through
 if [ "$ENABLED" != "1" ]; then
-  echo '{}'
+  echo '{}' >&2
   exit 0
 fi
+
+# Fast-exit for read-only tools that never produce actionable errors
+TOOL_NAME_QUICK="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-${TOOL_NAME:-}}}"
+case "$TOOL_NAME_QUICK" in
+  Read|Glob|Grep|LS|ToolSearch) exit 0 ;;
+esac
 
 # Read hook input (JSON from Claude Code, if provided)
 HOOK_INPUT=$(read_stdin_json)
@@ -154,6 +161,7 @@ log_validation() {
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
 VALIDATOR_DIR="$PLUGIN_ROOT/scripts/lib/tool-validators"
 QUERY_EVIDENCE_TRACKER="$PLUGIN_ROOT/scripts/lib/query-evidence-tracker.js"
+ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 
 # Ensure validator directory exists
 mkdir -p "$VALIDATOR_DIR" 2>/dev/null || true
@@ -686,82 +694,65 @@ validate_edit_tool() {
 
 check_routing_compliance() {
   local tool_name="$1"
+  local session_key=""
+  local routing_state="{}"
+  local pending="false"
+  local recommended_agent=""
+  local action_type=""
 
-  # Routing state file created by UserPromptSubmit hook
-  local state_file="$HOME/.claude/routing-state.json"
-
-  # Skip if no routing state exists
-  if [ ! -f "$state_file" ]; then
+  if [ ! -f "$ROUTING_STATE_MANAGER" ] || ! command -v node &>/dev/null; then
     return 0
   fi
 
-  # Read routing state
-  local state=$(cat "$state_file" 2>/dev/null || echo '{}')
-  local was_blocked=$(echo "$state" | jq -r '.blocked // false')
-  local recommended_agent=$(echo "$state" | jq -r '.agent // ""')
-  local action_type=$(echo "$state" | jq -r '.action // ""')
-  local state_timestamp=$(echo "$state" | jq -r '.timestamp // 0')
+  session_key=$(echo "$HOOK_INPUT" | jq -r '
+    .session_key
+    // .sessionKey
+    // .session_id
+    // .sessionId
+    // .context.session_key
+    // .context.sessionKey
+    // .context.session_id
+    // .context.sessionId
+    // ""
+  ' 2>/dev/null || echo "")
 
-  # State expires after 60 seconds
-  local now=$(date +%s)
-  local age=$((now - state_timestamp))
-  if [ "$age" -gt 60 ]; then
-    rm -f "$state_file" 2>/dev/null || true
+  if [ -z "${session_key// }" ] || [ "$session_key" = "null" ]; then
+    session_key="${CLAUDE_SESSION_ID:-default-session}"
+  fi
+
+  routing_state=$(node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo "{}")
+  pending=$(echo "$routing_state" | jq -r '.pending // false' 2>/dev/null || echo "false")
+  recommended_agent=$(echo "$routing_state" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
+  action_type=$(echo "$routing_state" | jq -r '.action // ""' 2>/dev/null || echo "")
+
+  if [ "$pending" != "true" ]; then
     return 0
   fi
 
-  # Check if Claude ignored a blocking recommendation
-  if [ "$was_blocked" = "true" ] && [ "$tool_name" != "Task" ]; then
-    # COMPLIANCE VIOLATION: Task tool was required but not used
-
-    # Log to compliance file
+  if [ "$tool_name" != "Task" ]; then
     local compliance_log="$HOME/.claude/logs/compliance.jsonl"
     mkdir -p "$(dirname "$compliance_log")" 2>/dev/null || true
 
     local violation_entry=$(jq -n \
       --arg timestamp "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
+      --arg session_key "$session_key" \
       --arg recommended "$recommended_agent" \
       --arg actual "$tool_name" \
       --arg action "$action_type" \
-      --argjson violation true \
+      --arg status "pending_after_tool" \
       '{
         timestamp: $timestamp,
-        type: "routing_ignored",
+        session_key: $session_key,
+        type: "routing_pending_after_tool",
         recommended_agent: $recommended,
         actual_tool: $actual,
         action_type: $action,
-        violation: $violation
+        status: $status
       }')
 
     echo "$violation_entry" >> "$compliance_log" 2>/dev/null || true
 
-    # Log validation event
-    log_validation "$tool_name" "compliance_violation" "Routing recommendation ignored: $recommended_agent" "warning"
-
-    # Output warning to Claude via exit code 2
-    if [ -f "$OUTPUT_FORMATTER" ]; then
-      node "$OUTPUT_FORMATTER" warning \
-        "Routing Compliance Violation" \
-        "An agent was recommended but not used. This may produce suboptimal results." \
-        "Recommended Agent:$recommended_agent,Actual Tool:$tool_name,Action:$action_type" \
-        "Consider using Task tool with the recommended agent,Review routing recommendations before execution,Check if direct execution was intentional" \
-        ""
-    else
-      echo "⚠️  [Compliance] Routing recommendation ignored" >&2
-      echo "   Recommended: Task tool with $recommended_agent" >&2
-      echo "   Used: $tool_name" >&2
-    fi
-
-    # Clear state after checking (one-time check per prompt)
-    rm -f "$state_file" 2>/dev/null || true
-
-    # Exit code 2: Warning feedback to Claude
-    exit 2
-  fi
-
-  # If Task tool was used, clear the state (compliance satisfied)
-  if [ "$tool_name" = "Task" ]; then
-    rm -f "$state_file" 2>/dev/null || true
+    log_validation "$tool_name" "routing_pending" "Routing requirement still pending after tool execution: $recommended_agent" "warning"
   fi
 
   return 0
@@ -794,7 +785,6 @@ case "$TOOL_NAME" in
     ;;
 
   Task)
-    # Task tool usage - compliance satisfied, state already cleared
     log_validation "Task" "agent_used" "Agent delegation detected" "info"
 
     # =========================================================================
@@ -902,5 +892,5 @@ esac
 
 # If we reach here, validation passed
 log_validation "$TOOL_NAME" "passed" "Validation successful" "info"
-echo '{}'
+echo '{}' >&2
 exit 0

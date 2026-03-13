@@ -26,6 +26,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 // ANSI colors
 const colors = {
@@ -72,6 +73,11 @@ class HookMerger {
     this.dryRun = options.dryRun || false;
     this.verbose = options.verbose || false;
     this.write = options.write || false;
+    this.config = {
+      pluginsDir: options.pluginsDir || CONFIG.pluginsDir,
+      projectSettingsPath: options.projectSettingsPath || CONFIG.projectSettingsPath,
+      backupSuffix: options.backupSuffix || CONFIG.backupSuffix
+    };
 
     this.stats = {
       pluginsScanned: 0,
@@ -122,18 +128,44 @@ class HookMerger {
    */
   discoverPluginHooks() {
     const pluginHooks = [];
-    const pluginsDir = CONFIG.pluginsDir;
+    const pluginsDir = this.config.pluginsDir;
+    const seenPlugins = new Set();
+
+    // Scan directories: local plugins/ and installed marketplace plugins
+    const scanDirs = [pluginsDir];
+    const marketplacePath = path.join(os.homedir(), '.claude', 'plugins', 'marketplaces');
+    if (fs.existsSync(marketplacePath)) {
+      scanDirs.push(marketplacePath);
+    }
 
     if (this.verbose) {
       console.log(`\n${colors.blue}## Discovering Plugin Hooks${colors.reset}`);
-      console.log(`  Scanning: ${pluginsDir}`);
+      for (const dir of scanDirs) {
+        console.log(`  Scanning: ${dir}`);
+      }
     }
 
-    // Find all plugin directories
-    const entries = fs.readdirSync(pluginsDir);
+    // Find all plugin directories across all scan paths
+    const entries = [];
+    for (const dir of scanDirs) {
+      try {
+        for (const entry of fs.readdirSync(dir)) {
+          entries.push({ entry, dir });
+        }
+      } catch (e) {
+        if (this.verbose) {
+          console.log(`  ${icons.warn} Could not read ${dir}: ${e.message}`);
+        }
+      }
+    }
 
-    for (const entry of entries) {
-      const pluginPath = path.join(pluginsDir, entry);
+    for (const { entry, dir } of entries) {
+      // Deduplicate by plugin basename (local plugins/ takes precedence)
+      const pluginBaseName = entry.replace(/@.*$/, '');
+      if (seenPlugins.has(pluginBaseName)) continue;
+      seenPlugins.add(pluginBaseName);
+
+      const pluginPath = path.join(dir, entry);
       const hooksPath = path.join(pluginPath, '.claude-plugin', 'hooks.json');
 
       // Check if it's a plugin directory
@@ -208,7 +240,7 @@ class HookMerger {
    * Load project settings.json
    */
   loadProjectSettings() {
-    const settingsPath = CONFIG.projectSettingsPath;
+    const settingsPath = this.config.projectSettingsPath;
 
     if (this.verbose) {
       console.log(`\n${colors.blue}## Loading Project Settings${colors.reset}`);
@@ -284,17 +316,37 @@ class HookMerger {
   }
 
   /**
-   * Generate a unique key for a hook (for deduplication)
+   * Generate a unique key for a hook (for deduplication).
+   * Normalizes ${CLAUDE_PLUGIN_ROOT} and absolute paths to the same canonical
+   * form so that duplicates are detected regardless of path style.
    */
   getHookKey(hook, matcher, eventType = '*') {
     const command = typeof hook.command === 'string' ? hook.command.trim() : '';
     const scriptPath = this.extractScriptPath(command);
 
-    if (scriptPath && path.isAbsolute(scriptPath)) {
-      return `${eventType}:${matcher}:script:${path.resolve(scriptPath)}`;
+    if (scriptPath) {
+      // Extract plugin name + script basename to produce a stable key that
+      // matches regardless of whether the path uses ${CLAUDE_PLUGIN_ROOT}
+      // or an absolute path. Both forms resolve to the same "pluginName/foo.sh" key.
+      const basename = path.basename(scriptPath);
+      const pluginName = this.extractPluginName(scriptPath);
+      const scriptKey = pluginName ? `${pluginName}/${basename}` : basename;
+      return `${eventType}:${matcher}:script:${scriptKey}`;
     }
 
     return `${eventType}:${matcher}:command:${command}`;
+  }
+
+  /**
+   * Extract plugin name from a script path (absolute or variable-based).
+   * Looks for "plugins/<name>/" directory patterns in the path.
+   */
+  extractPluginName(scriptPath) {
+    // Match plugins/<plugin-name>/ in the path
+    const match = scriptPath.match(/plugins\/([^/]+)\//);
+    if (match) return match[1];
+
+    return null;
   }
 
   /**
@@ -384,9 +436,8 @@ class HookMerger {
                 plugin: plugin.name,
                 error: `Hook script not found: ${scriptPath}`
               });
-              if (this.verbose) {
-                console.log(`    ${icons.warn} ${eventType}/${matcher}: script not found`);
-              }
+              // Always warn about missing scripts (not just verbose) — silent skips cause confusion
+              console.log(`    ${icons.warn} ${plugin.name}: ${eventType}/${matcher} skipped — script not found: ${path.basename(scriptPath)}`);
               continue;
             }
 
@@ -485,13 +536,13 @@ class HookMerger {
    * Write merged settings to file
    */
   writeSettings(settings) {
-    const settingsPath = CONFIG.projectSettingsPath;
+    const settingsPath = this.config.projectSettingsPath;
 
     console.log(`\n${colors.blue}## Writing Settings${colors.reset}`);
 
     // Create backup
     if (fs.existsSync(settingsPath)) {
-      const backupPath = settingsPath + CONFIG.backupSuffix;
+      const backupPath = settingsPath + this.config.backupSuffix;
       fs.copyFileSync(settingsPath, backupPath);
       console.log(`  ${icons.pass} Backup created: ${path.basename(backupPath)}`);
     }
@@ -518,12 +569,17 @@ class HookMerger {
     console.log(`${colors.bold}Summary${colors.reset}`);
     console.log('='.repeat(50));
 
+    const missingScriptCount = this.stats.errors.filter(e => e.error.includes('not found')).length;
+
     console.log(`\n  Plugins scanned:     ${this.stats.pluginsScanned}`);
     console.log(`  Plugins with hooks:  ${this.stats.pluginsWithHooks}`);
     console.log(`  Hooks discovered:    ${this.stats.hooksDiscovered}`);
     console.log(`  Hooks merged:        ${this.stats.hooksMerged}`);
     console.log(`  Hooks skipped:       ${this.stats.hooksSkipped} (duplicates)`);
     console.log(`  Hooks rejected:      ${this.stats.hooksRejected} (policy violations)`);
+    if (missingScriptCount > 0) {
+      console.log(`  ${colors.yellow}Hooks not found:     ${missingScriptCount} (missing scripts)${colors.reset}`);
+    }
 
     if (this.stats.errors.length > 0) {
       console.log(`\n${colors.red}Errors (${this.stats.errors.length}):${colors.reset}`);

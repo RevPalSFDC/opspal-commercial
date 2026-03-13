@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "assessment-prefills.json",
+  "title": "Assessment Output Prefills",
+  "description": "Prefill templates for structured assessment outputs. Per Anthropic consistency guidelines, prefills force JSON output starting with the expected structure.",
+  "version": "1.0.0",
+  "prefills": {
+    "revops_audit": {
+      "prefill": "{\"assessment_type\":\"revops_audit\",\"version\":\"2.0\",\"generated_at\":\"",
+      "description": "Forces JSON output starting with RevOps audit metadata. Agent must continue with timestamp and remaining structure.",
+      "usage": "Begin your response with exactly this prefill, then continue with the ISO 8601 timestamp and remaining JSON structure.",
+      "expected_continuation": "2025-12-26T14:30:00Z\",\"executive_summary\":{..."
+    },
+    "cpq_assessment": {
+      "prefill": "{\"assessment_type\":\"cpq_assessment\",\"version\":\"2.0\",\"generated_at\":\"",
+      "description": "Forces JSON output starting with CPQ assessment metadata. Agent must continue with timestamp and remaining structure.",
+      "usage": "Begin your response with exactly this prefill, then continue with the ISO 8601 timestamp and remaining JSON structure.",
+      "expected_continuation": "2025-12-26T14:30:00Z\",\"executive_summary\":{..."
+    },
+    "funnel_diagnostic": {
+      "prefill": "{\"assessment_type\":\"funnel_diagnostic\",\"version\":\"2.0\",\"generated_at\":\"",
+      "description": "Forces JSON output starting with funnel diagnostic metadata. Agent must continue with timestamp and remaining structure.",
+      "usage": "Begin your response with exactly this prefill, then continue with the ISO 8601 timestamp and remaining JSON structure.",
+      "expected_continuation": "2025-12-26T14:30:00Z\",\"executive_summary\":{..."
+    },
+    "automation_audit": {
+      "prefill": "{\"assessment_type\":\"automation_audit\",\"version\":\"2.0\",\"generated_at\":\"",
+      "description": "Forces JSON output starting with automation audit metadata. Agent must continue with timestamp and remaining structure.",
+      "usage": "Begin your response with exactly this prefill, then continue with the ISO 8601 timestamp and remaining JSON structure.",
+      "expected_continuation": "2025-12-26T14:30:00Z\",\"executive_summary\":{..."
+    }
+  },
+  "integration_notes": {
+    "api_usage": "Prefills work best with direct API calls where assistant turn can be pre-populated. For agent prompts, include instruction: 'Begin your response with exactly: {prefill}'",
+    "agent_prompt_pattern": "When using prefills in agent prompts, add this instruction at the end of output requirements: 'Begin your JSON output with: {prefill_string}'",
+    "validation": "Response should be parseable as JSON after removing any XML wrapper tags from self-correction protocol"
+  },
+  "required_structure": {
+    "after_prefill": [
+      "generated_at (ISO 8601 timestamp)",
+      "executive_summary.bottom_line (string, max 200 chars)",
+      "executive_summary.health_score (number, 0-100)",
+      "executive_summary.critical_issues (array, max 5 items)",
+      "metrics (array with source_id pattern)",
+      "findings (array with severity enum)",
+      "recommendations (array with priority enum)",
+      "data_sources (optional object)",
+      "self_review (optional object with grades)"
+    ]
+  }
+}

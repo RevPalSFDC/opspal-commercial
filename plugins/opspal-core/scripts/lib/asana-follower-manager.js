@@ -31,7 +31,7 @@ const AsanaUserManager = require('./asana-user-manager');
 
 class AsanaFollowerManager {
   constructor(workspaceId = null) {
-    this.workspaceId = workspaceId || process.env.ASANA_WORKSPACE_ID;
+    this.workspaceId = workspaceId || process.env.ASANA_WORKSPACE_ID || '1206944680490015';
     this.token = process.env.ASANA_ACCESS_TOKEN;
 
     if (!this.token) {

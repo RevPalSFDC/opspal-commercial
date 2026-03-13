@@ -96,7 +96,7 @@ Top agent: sfdc-revops-auditor (12 uses)
 **Solution**:
 ```bash
 # Run setup script
-${CLAUDE_PLUGIN_ROOT}/scripts/setup-auto-routing.sh
+.claude-plugins/opspal-core/scripts/setup-auto-routing.sh
 ```
 
 ### Hook Not Executable
@@ -104,7 +104,7 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/setup-auto-routing.sh
 
 **Solution**:
 ```bash
-chmod +x ${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-router.sh
+chmod +x .claude-plugins/opspal-core/hooks/user-prompt-router.sh
 ```
 
 ### Routing Index Missing
@@ -112,7 +112,20 @@ chmod +x ${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-router.sh
 
 **Solution**:
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/routing-index-builder.js
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+node "$(find_script "routing-index-builder.js")"
 ```
 
 ### Test Routing Failed
@@ -137,5 +150,5 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/routing-index-builder.js
 
 This command runs the health check script:
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/routing-health-check.sh
+.claude-plugins/opspal-core/scripts/routing-health-check.sh
 ```

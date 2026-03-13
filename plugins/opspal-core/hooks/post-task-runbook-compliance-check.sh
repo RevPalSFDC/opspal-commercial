@@ -52,7 +52,6 @@ fi
 
 # Early exit if disabled
 if [ "$ENABLED" = "0" ]; then
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
     exit 0
 fi
 
@@ -220,8 +219,5 @@ fi
 
 # Run compliance check
 check_compliance "$HOOK_INPUT"
-
-# Pass through input unchanged
-echo "$HOOK_INPUT"
 
 exit 0

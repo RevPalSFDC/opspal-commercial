@@ -19,8 +19,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_URL = 'https://kjgsodyuzjgbebfnbruz.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_-_VJIjhOxqZCEMN1xyWPdg_TioDXc0a';
 
 // Resolve plugin root - prefer __dirname resolution for accuracy
 // CLAUDE_PLUGIN_ROOT may point to parent repo, not specific plugin

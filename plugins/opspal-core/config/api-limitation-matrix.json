@@ -1,0 +1,533 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "created": "2026-01-10",
+  "description": "Known API limitations across platforms that prevent automation or require workarounds",
+
+  "salesforce": {
+    "metadata_cache": {
+      "description": "Metadata describe cache has 2-5 minute delay after field/object creation",
+      "category": "timing",
+      "severity": "medium",
+      "affected_operations": [
+        "sf sobject describe",
+        "sf data query (new fields)",
+        "metadata retrieve (new components)"
+      ],
+      "symptoms": [
+        "Field not found errors immediately after creation",
+        "Describe returns stale field list",
+        "Formula fields not visible in describe"
+      ],
+      "workarounds": [
+        {
+          "method": "wait",
+          "description": "Wait 2-5 minutes after field creation before querying",
+          "reliability": "high"
+        },
+        {
+          "method": "tooling_api",
+          "description": "Use Tooling API which has lower cache TTL",
+          "reliability": "medium",
+          "command": "sf data query --use-tooling-api"
+        },
+        {
+          "method": "force_refresh",
+          "description": "Clear cache via Setup > Schema Settings (manual)",
+          "reliability": "high"
+        }
+      ],
+      "prevention": "Add 3-minute delay after field creation operations before dependent queries",
+      "detection_pattern": "Field .* not found|INVALID_FIELD|Could not resolve field"
+    },
+
+    "system_managed_fields": {
+      "description": "Certain fields are system-managed and cannot be set via API",
+      "category": "permission",
+      "severity": "high",
+      "affected_operations": [
+        "sf data create record",
+        "sf data update record",
+        "sf data upsert",
+        "Data Import"
+      ],
+      "known_fields": {
+        "CampaignMember": {
+          "FirstRespondedDate": {
+            "reason": "Set automatically when HasResponded becomes true",
+            "createable": false,
+            "updateable": false,
+            "workaround": "Create custom field Event_Attendance_Date__c for manual date tracking"
+          }
+        },
+        "Opportunity": {
+          "LastActivityDate": {
+            "reason": "Calculated from related activities",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None - system calculated"
+          },
+          "LastStageChangeDate": {
+            "reason": "Set when StageName changes",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None - system calculated"
+          }
+        },
+        "Lead": {
+          "LastActivityDate": {
+            "reason": "Calculated from related activities",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None - system calculated"
+          },
+          "ConvertedDate": {
+            "reason": "Set when lead is converted",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None - system calculated"
+          }
+        },
+        "Task": {
+          "CompletedDateTime": {
+            "reason": "Set when Status is Completed",
+            "createable": false,
+            "updateable": false,
+            "workaround": "Use custom Actual_Completion_Date__c field"
+          }
+        },
+        "Event": {
+          "EndDateTime": {
+            "reason": "Calculated from StartDateTime and DurationInMinutes",
+            "createable": true,
+            "updateable": true,
+            "note": "Either set EndDateTime OR DurationInMinutes, not both"
+          }
+        },
+        "Case": {
+          "ClosedDate": {
+            "reason": "Set when Status is Closed",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None - system calculated"
+          }
+        },
+        "Contract": {
+          "StatusCode": {
+            "reason": "Controlled by Status workflow",
+            "createable": false,
+            "updateable": false,
+            "workaround": "Update Status field instead"
+          }
+        },
+        "ANY_OBJECT": {
+          "CreatedDate": {
+            "reason": "Set at record creation",
+            "createable": false,
+            "updateable": false,
+            "workaround": "Use custom Original_Create_Date__c for migrations"
+          },
+          "CreatedById": {
+            "reason": "Set to running user at creation",
+            "createable": false,
+            "updateable": false,
+            "workaround": "Use custom Original_Creator__c for migrations"
+          },
+          "LastModifiedDate": {
+            "reason": "Updated on every change",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None - system calculated"
+          },
+          "SystemModstamp": {
+            "reason": "Internal system timestamp",
+            "createable": false,
+            "updateable": false,
+            "workaround": "None"
+          }
+        }
+      },
+      "detection_pattern": "FIELD_INTEGRITY_EXCEPTION|field is not writeable|Cannot update|createable: false"
+    },
+
+    "quick_action_deployment": {
+      "description": "Quick Actions cannot be fully deployed via Metadata API",
+      "category": "api_limitation",
+      "severity": "high",
+      "affected_operations": [
+        "sf project deploy (QuickAction metadata)",
+        "Package deployment with Quick Actions"
+      ],
+      "symptoms": [
+        "Quick Action deploys but not visible on page layout",
+        "Quick Action exists but not assigned to any layout"
+      ],
+      "workarounds": [
+        {
+          "method": "manual_layout_assignment",
+          "description": "After deploy, manually add Quick Action to page layouts in Setup",
+          "reliability": "high"
+        },
+        {
+          "method": "layout_metadata",
+          "description": "Include Layout metadata with quickActionListItems in deployment",
+          "reliability": "medium"
+        }
+      ],
+      "prevention": "Document manual steps in deployment runbook",
+      "detection_pattern": null
+    },
+
+    "flow_activation": {
+      "description": "Flows can be deployed but may need separate activation",
+      "category": "timing",
+      "severity": "medium",
+      "affected_operations": [
+        "sf project deploy (Flow metadata)"
+      ],
+      "symptoms": [
+        "Flow deploys as Inactive",
+        "Flow version created but not active"
+      ],
+      "workarounds": [
+        {
+          "method": "active_version_number",
+          "description": "Set activeVersionNumber in FlowDefinition metadata",
+          "reliability": "high"
+        },
+        {
+          "method": "post_deploy_activation",
+          "description": "Use sf flow activate command after deployment",
+          "reliability": "high",
+          "command": "sf flow activate --flow-definition-name MyFlow"
+        }
+      ],
+      "prevention": "Include FlowDefinition metadata with activeVersionNumber",
+      "detection_pattern": null
+    },
+
+    "permission_set_group_assignment": {
+      "description": "Permission Set Group assignments may have propagation delay",
+      "category": "timing",
+      "severity": "low",
+      "affected_operations": [
+        "Permission Set Group assignment to users"
+      ],
+      "symptoms": [
+        "User doesn't have expected permissions immediately after assignment",
+        "Permission changes not reflected in session"
+      ],
+      "workarounds": [
+        {
+          "method": "wait",
+          "description": "Wait up to 20 minutes for propagation",
+          "reliability": "high"
+        },
+        {
+          "method": "relogin",
+          "description": "Have user log out and back in",
+          "reliability": "high"
+        }
+      ],
+      "prevention": "Document expected propagation time in deployment plan",
+      "detection_pattern": null
+    },
+
+    "bulk_api_limits": {
+      "description": "Bulk API has specific limits on batches and records",
+      "category": "limit",
+      "severity": "medium",
+      "limits": {
+        "records_per_batch": 10000,
+        "batches_per_job": 10000,
+        "concurrent_batches_per_job": 5000,
+        "job_timeout_hours": 168
+      },
+      "workarounds": [
+        {
+          "method": "chunking",
+          "description": "Split large operations into smaller batches",
+          "reliability": "high"
+        }
+      ],
+      "detection_pattern": "BATCH_LIMIT_EXCEEDED|TOO_MANY_RECORDS"
+    },
+
+    "composite_api_limits": {
+      "description": "Composite API has limits on subrequests",
+      "category": "limit",
+      "severity": "medium",
+      "limits": {
+        "subrequests_per_call": 25,
+        "soql_queries_per_subrequest": 5,
+        "allOrNone_behavior": "All subrequests succeed or all fail"
+      },
+      "workarounds": [
+        {
+          "method": "batch_calls",
+          "description": "Split into multiple Composite API calls",
+          "reliability": "high"
+        }
+      ],
+      "detection_pattern": "COMPOSITE_LIMIT_EXCEEDED"
+    },
+
+    "territory2_object_naming": {
+      "description": "Territory2 objects have confusing naming - Territory2Rule does NOT exist, use ObjectTerritory2AssignmentRule instead",
+      "category": "naming_confusion",
+      "severity": "high",
+      "affected_operations": [
+        "Territory rule queries",
+        "Territory assignment automation",
+        "Territory rule metadata"
+      ],
+      "object_mapping": {
+        "WRONG_ASSUMPTION": {
+          "Territory2Rule": "Does NOT exist as queryable object",
+          "TerritoryRule": "Does NOT exist as queryable object"
+        },
+        "CORRECT_OBJECTS": {
+          "ObjectTerritory2AssignmentRule": {
+            "description": "Assignment rules that assign records to territories",
+            "api_accessible": true,
+            "queryable": true,
+            "fields": ["Id", "DeveloperName", "MasterLabel", "IsActive", "ObjectType", "Territory2ModelId"]
+          },
+          "ObjectTerritory2AssignmentRuleItem": {
+            "description": "Individual criteria items within assignment rules",
+            "api_accessible": true,
+            "queryable": true,
+            "fields": ["Id", "RuleId", "SortOrder", "Field", "Operation", "Value"]
+          },
+          "Territory2": {
+            "description": "Territory records in a territory model",
+            "api_accessible": true,
+            "queryable": true,
+            "fields": ["Id", "Name", "DeveloperName", "Territory2ModelId", "ParentTerritory2Id"]
+          },
+          "Territory2Model": {
+            "description": "Container for territory hierarchy",
+            "api_accessible": true,
+            "queryable": true,
+            "fields": ["Id", "Name", "DeveloperName", "State", "ActivatedDate"]
+          },
+          "UserTerritory2Association": {
+            "description": "User assignments to territories",
+            "api_accessible": true,
+            "queryable": true,
+            "fields": ["Id", "UserId", "Territory2Id", "RoleInTerritory2"]
+          },
+          "ObjectTerritory2Association": {
+            "description": "Record assignments to territories (e.g., Account)",
+            "api_accessible": true,
+            "queryable": true,
+            "fields": ["Id", "ObjectId", "Territory2Id", "AssociationCause"]
+          }
+        }
+      },
+      "common_queries": {
+        "list_assignment_rules": "SELECT Id, DeveloperName, MasterLabel, IsActive, ObjectType FROM ObjectTerritory2AssignmentRule",
+        "get_rule_criteria": "SELECT Id, Field, Operation, Value FROM ObjectTerritory2AssignmentRuleItem WHERE RuleId = ':ruleId'",
+        "list_territories": "SELECT Id, Name, DeveloperName, ParentTerritory2Id FROM Territory2 WHERE Territory2ModelId = ':modelId'",
+        "list_user_assignments": "SELECT Id, UserId, Territory2Id, RoleInTerritory2 FROM UserTerritory2Association",
+        "list_account_assignments": "SELECT Id, ObjectId, Territory2Id, AssociationCause FROM ObjectTerritory2Association WHERE SobjectType = 'Account'"
+      },
+      "prevention": "Always use ObjectTerritory2AssignmentRule (not Territory2Rule) when working with territory assignment rules",
+      "detection_pattern": "Territory2Rule|TerritoryRule|sObject type 'Territory2Rule' is not supported"
+    },
+
+    "territory2_operations": {
+      "description": "Territory2 rule operations have specific ordering and dependency requirements",
+      "category": "api_limitation",
+      "severity": "high",
+      "known_issues": {
+        "sortorder_duplicate_value": {
+          "description": "Renumbering SortOrder in ascending order causes DUPLICATE_VALUE errors",
+          "workaround": "Renumber in descending order (highest first) or use temporary values",
+          "example": "To reorder items 1,2,3 to 3,1,2: First set to 103,101,102, then normalize"
+        },
+        "boolean_filter_clearing": {
+          "description": "BooleanFilter must be cleared before modifying rule items",
+          "workaround": "Set BooleanFilter to null, modify items, then restore filter",
+          "api_sequence": ["PATCH rule with booleanFilter: null", "DELETE/CREATE items", "PATCH rule with new booleanFilter"]
+        },
+        "rule_deletion_dependency": {
+          "description": "Cannot delete rules that have territory associations",
+          "workaround": "First remove all ObjectTerritory2Association records, then delete rule"
+        },
+        "territory_name_not_updateable": {
+          "description": "Territory2.Name field is not updateable via Data API",
+          "workaround": "Use DeveloperName for programmatic identification"
+        },
+        "rule_toggling_stale_assignments": {
+          "description": "Disabling/enabling rules doesn't clear stale account assignments",
+          "workaround": "Manually run territory rules or delete stale ObjectTerritory2Association records"
+        }
+      },
+      "detection_pattern": "DUPLICATE_VALUE|BooleanFilter|Cannot delete.*territory"
+    },
+
+    "csv_bulk_api": {
+      "description": "CSV format requirements for Salesforce Bulk API operations",
+      "category": "data_format",
+      "severity": "high",
+      "known_issues": {
+        "crlf_line_endings": {
+          "description": "Windows CRLF (\\r\\n) line endings cause Bulk API failures",
+          "workaround": "Convert to Unix LF (\\n) before upload: sed -i 's/\\r$//' file.csv",
+          "detection": "File shows ^M characters or Bulk API returns parsing errors"
+        },
+        "empty_values_clear_fields": {
+          "description": "Empty CSV values clear existing field values instead of skipping",
+          "workaround": "Use #N/A or remove column entirely to skip field updates",
+          "note": "This is intentional Salesforce behavior for data imports"
+        },
+        "state_country_picklist": {
+          "description": "State values require matching country for State/Country picklist fields",
+          "workaround": "Always include both State and Country columns with valid ISO codes",
+          "example": "BillingState: CA requires BillingCountry: US"
+        },
+        "international_state_validation": {
+          "description": "International state values may be rejected by US-configured picklist",
+          "workaround": "Check picklist configuration or use free-text address fields",
+          "common_failures": ["Canadian provinces", "UK counties", "Australian states"]
+        },
+        "field_length_limits": {
+          "description": "CSV values exceeding field length cause silent truncation or failure",
+          "workaround": "Pre-validate CSV against field describe metadata",
+          "common_fields": {"Department": 80, "Title": 128, "Description": 32000}
+        }
+      },
+      "detection_pattern": "INVALID_FIELD_FOR_INSERT_UPDATE|FIELD_INTEGRITY_EXCEPTION|Invalid.*state"
+    },
+
+    "sf_cli_deprecations": {
+      "description": "Salesforce CLI deprecated flags and changed behaviors",
+      "category": "cli",
+      "severity": "medium",
+      "deprecated_flags": {
+        "--sobject-type": {
+          "deprecated_in": "v2.x",
+          "replacement": "--sobject",
+          "example": "sf data query --sobject Account (not --sobject-type Account)"
+        },
+        "--targetusername": {
+          "deprecated_in": "v2.x",
+          "replacement": "--target-org",
+          "example": "sf org display --target-org my-org"
+        },
+        "--json": {
+          "note": "Still supported but output format changed in v2",
+          "workaround": "Update parsing logic for new JSON structure"
+        }
+      },
+      "oauth_changes": {
+        "device_flow_sso": {
+          "description": "Device OAuth flow disabled for SSO-enabled orgs",
+          "workaround": "Use web-based OAuth or JWT flow for SSO orgs",
+          "detection": "INVALID_GRANT or OAuth flow fails for SSO users"
+        }
+      },
+      "detection_pattern": "Unknown flag|deprecated|INVALID_GRANT"
+    },
+
+    "file_operations": {
+      "description": "File system operations that commonly fail in automation",
+      "category": "infrastructure",
+      "severity": "medium",
+      "known_issues": {
+        "excel_file_lock": {
+          "description": "Excel holds exclusive lock on open files, preventing script writes",
+          "workaround": "Close Excel before running scripts, or write to temp file and copy",
+          "detection": "EBUSY or EACCES errors on .xlsx/.csv files"
+        },
+        "pdf_brand_css_path": {
+          "description": "PDF generator requires explicit path to brand CSS files",
+          "workaround": "Always specify full path: templates/pdf-styles/revpal-brand.css",
+          "detection": "PDF generated with default styles instead of brand styles"
+        },
+        "silent_write_failures": {
+          "description": "Some file write operations fail silently without error",
+          "workaround": "Always verify file exists and has expected content after write",
+          "detection": "File missing or has zero bytes after 'successful' write"
+        }
+      },
+      "detection_pattern": "EBUSY|EACCES|ENOENT"
+    },
+
+    "data_format_requirements": {
+      "description": "Data format requirements that commonly cause failures",
+      "category": "data_format",
+      "severity": "medium",
+      "known_issues": {
+        "user_id_vs_username": {
+          "description": "Assignment rules require User ID (005xx), not username (user@email.com)",
+          "workaround": "Always resolve username to User ID before creating assignments",
+          "query": "SELECT Id FROM User WHERE Username = 'user@email.com'"
+        },
+        "case_sensitivity": {
+          "description": "SOQL is case-insensitive but some string comparisons are case-sensitive",
+          "workaround": "Use LOWER() or UPPER() for consistent comparisons",
+          "affected": ["Picklist values", "Record type names", "Formula field text"]
+        },
+        "validation_rule_blocking": {
+          "description": "Validation rules can block API operations unexpectedly",
+          "workaround": "Query validation rules before bulk operations to understand requirements",
+          "common_rules": ["Amount > 0 for stage changes", "Required fields by record type"]
+        },
+        "relationship_field_group_by": {
+          "description": "SOQL GROUP BY with relationship fields (e.g., Account.Name) returns null",
+          "workaround": "Use subquery or join results in code",
+          "example": "SELECT Account.Name, COUNT(Id) won't work - use apex/code to aggregate"
+        }
+      },
+      "detection_pattern": "FIELD_CUSTOM_VALIDATION_EXCEPTION|INVALID_ID_FIELD"
+    }
+  },
+
+  "hubspot": {
+    "api_rate_limits": {
+      "description": "HubSpot API has daily and per-second rate limits",
+      "category": "limit",
+      "severity": "medium",
+      "limits": {
+        "requests_per_second": 10,
+        "requests_per_day_starter": 250000,
+        "requests_per_day_pro": 500000,
+        "requests_per_day_enterprise": 1000000
+      },
+      "detection_pattern": "429|RATE_LIMIT"
+    },
+
+    "association_limits": {
+      "description": "Associations between records have limits",
+      "category": "limit",
+      "severity": "medium",
+      "limits": {
+        "associations_per_record": 10000
+      },
+      "detection_pattern": "ASSOCIATION_LIMIT"
+    }
+  },
+
+  "general": {
+    "network_timeout": {
+      "description": "Network timeouts can cause partial operation failures",
+      "category": "infrastructure",
+      "severity": "medium",
+      "workarounds": [
+        {
+          "method": "retry",
+          "description": "Implement exponential backoff retry logic",
+          "reliability": "high"
+        },
+        {
+          "method": "idempotency",
+          "description": "Design operations to be idempotent for safe retries",
+          "reliability": "high"
+        }
+      ],
+      "detection_pattern": "ETIMEDOUT|ECONNRESET|ENOTFOUND"
+    }
+  }
+}

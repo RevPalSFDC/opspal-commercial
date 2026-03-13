@@ -1,0 +1,3469 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-31T22:32:09.868Z",
+  "agents": {
+    "opspal-ai-consult:gemini-consult": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-ai-consult",
+      "shortName": "gemini-consult",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:account-expansion-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "account-expansion-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:alert-streaming-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "alert-streaming-manager",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:asana-task-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "asana-task-manager",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:benchmark-research-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "benchmark-research-agent",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:client-notebook-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "client-notebook-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:compensation-calculator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "compensation-calculator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:contact-dedup-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "contact-dedup-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:cs-operations-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "cs-operations-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:data-migration-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "data-migration-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:diagram-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "diagram-generator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:environment-profile-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "environment-profile-manager",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:field-dictionary-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "field-dictionary-manager",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:gong-competitive-intelligence-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "gong-competitive-intelligence-agent",
+      "firstTracked": "2026-02-18T00:00:00.000Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-02-18T00:00:00.000Z",
+          "description": "Initial: Competitive intelligence from Gong trackers"
+        }
+      ]
+    },
+    "opspal-core:gong-deal-intelligence-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "gong-deal-intelligence-agent",
+      "firstTracked": "2026-02-18T00:00:00.000Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-02-18T00:00:00.000Z",
+          "description": "Initial: Deal risk analysis from Gong conversation data"
+        }
+      ]
+    },
+    "opspal-core:gong-integration-agent": {
+      "currentVersion": "2.0.0",
+      "plugin": "opspal-core",
+      "shortName": "gong-integration-agent",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        },
+        {
+          "version": "2.0.0",
+          "date": "2026-02-18T00:00:00.000Z",
+          "description": "Added mcp__gong__* tools, backed by real scripts and MCP server"
+        }
+      ]
+    },
+    "opspal-core:gong-sync-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "gong-sync-orchestrator",
+      "firstTracked": "2026-02-18T00:00:00.000Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-02-18T00:00:00.000Z",
+          "description": "Initial: Gong-to-CRM sync orchestration"
+        }
+      ]
+    },
+    "opspal-core:google-slides-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "google-slides-generator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:implementation-planner": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "implementation-planner",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:instance-backup": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "instance-backup",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:instance-deployer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "instance-deployer",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:instance-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "instance-manager",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:instance-sync": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "instance-sync",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:live-wire-sync-test-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "live-wire-sync-test-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.867Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.867Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:multi-platform-campaign-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "multi-platform-campaign-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:multi-platform-workflow-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "multi-platform-workflow-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:n8n-execution-monitor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "n8n-execution-monitor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:n8n-integration-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "n8n-integration-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:n8n-lifecycle-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "n8n-lifecycle-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:n8n-optimizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "n8n-optimizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:n8n-workflow-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "n8n-workflow-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:notebooklm-knowledge-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "notebooklm-knowledge-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:outreach-integration-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "outreach-integration-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:pdf-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "pdf-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:pipeline-intelligence-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "pipeline-intelligence-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:platform-instance-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "platform-instance-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:playwright-browser-controller": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "playwright-browser-controller",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:plugin-doctor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "plugin-doctor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:pptx-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "pptx-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:product-analytics-bridge": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "product-analytics-bridge",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:project-connect": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "project-connect",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:intelligent-intake-orchestrator": {
+      "currentVersion": "2.0.0",
+      "plugin": "opspal-core",
+      "shortName": "intelligent-intake-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:realtime-dashboard-coordinator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "realtime-dashboard-coordinator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-churn-risk-scorer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-churn-risk-scorer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-customer-health-scorer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-customer-health-scorer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-data-quality-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-data-quality-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-deal-scorer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-deal-scorer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-dedup-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-dedup-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-lead-scorer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-lead-scorer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:revops-reporting-assistant": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "revops-reporting-assistant",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:sales-enablement-coordinator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "sales-enablement-coordinator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:sales-funnel-diagnostic": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "sales-funnel-diagnostic",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:sales-playbook-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "sales-playbook-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:sfdc-hubspot-dedup-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "sfdc-hubspot-dedup-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:solution-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "solution-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:solution-catalog-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "solution-catalog-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:solution-deployment-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "solution-deployment-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:solution-runbook-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "solution-runbook-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:solution-template-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "solution-template-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:task-graph-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "task-graph-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:task-scheduler": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "task-scheduler",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:uat-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "uat-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:ui-documentation-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "ui-documentation-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:unified-exec-dashboard-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "unified-exec-dashboard-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:visual-regression-tester": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "visual-regression-tester",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-core:web-viz-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-core",
+      "shortName": "web-viz-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-data-hygiene:contact-dedup-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-data-hygiene",
+      "shortName": "contact-dedup-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-data-hygiene",
+      "shortName": "sfdc-hubspot-dedup-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:forecast-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "forecast-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-attribution-governance": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-attribution-governance",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-comp-planner": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-comp-planner",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-data-insights": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-data-insights",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-market-intelligence": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-market-intelligence",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-planning-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-planning-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-quota-capacity": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-quota-capacity",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-retention-analyst": {
+      "currentVersion": "Backlog and conversion tracking",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-retention-analyst",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "Backlog and conversion tracking",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-revenue-modeler": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-revenue-modeler",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-strategic-reports-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-strategic-reports-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-strategy-planner": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-strategy-planner",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-gtm-planning:gtm-territory-designer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-gtm-planning",
+      "shortName": "gtm-territory-designer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-admin-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-admin-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-adoption-tracker": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-adoption-tracker",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-ai-revenue-intelligence": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-ai-revenue-intelligence",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-analytics-reporter": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-analytics-reporter",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-api": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-api",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-app-card-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-app-card-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-app-developer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-app-developer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-assessment-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-assessment-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-attribution-analyst": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-attribution-analyst",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-autonomous-operations": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-autonomous-operations",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-callback-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-callback-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-blog-author-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-blog-author-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-blog-post-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-blog-post-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-content-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-content-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-cta-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-cta-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-domain-monitor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-domain-monitor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-files-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-files-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-form-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-form-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-hubdb-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-hubdb-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-page-publisher": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-page-publisher",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-redirect-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-redirect-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-cms-theme-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-cms-theme-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-commerce-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-commerce-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-contact-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-contact-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-content-automation-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-content-automation-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-conversation-intelligence": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-conversation-intelligence",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-custom-action-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-custom-action-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-data-hygiene-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-data-hygiene-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-data-operations-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-data-operations-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-data": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-data",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-email-campaign-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-email-campaign-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-goals-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-goals-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-governance-enforcer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-governance-enforcer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-integration-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-integration-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-lead-scoring-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-lead-scoring-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-marketing-automation": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-marketing-automation",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-pipeline-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-pipeline-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-plg-foundation": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-plg-foundation",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-property-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-property-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-renewals-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-renewals-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-reporting-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-reporting-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-revenue-intelligence": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-revenue-intelligence",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-schema-automation-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-schema-automation-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-sdr-operations": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-sdr-operations",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-seo-competitor-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-seo-competitor-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-seo-content-optimizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-seo-content-optimizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-seo-deployment-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-seo-deployment-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-seo-optimizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-seo-optimizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-seo-site-crawler": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-seo-site-crawler",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-service-hub-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-service-hub-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-settings-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-settings-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-sfdc-sync-scraper": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-sfdc-sync-scraper",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-stripe-connector": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-stripe-connector",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-territory-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-territory-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-web-enricher": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-web-enricher",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-workflow-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-workflow-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-workflow-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-workflow-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-hubspot:hubspot-workflow": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-hubspot",
+      "shortName": "hubspot-workflow",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-analytics-assessor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-analytics-assessor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-automation-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-automation-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-automation-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-automation-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-campaign-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-campaign-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-campaign-diagnostician": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-campaign-diagnostician",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-data-normalizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-data-normalizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-data-operations": {
+      "currentVersion": "2.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-data-operations",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "2.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-email-deliverability-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-email-deliverability-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-email-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-email-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-form-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-form-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-governance-enforcer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-governance-enforcer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-hubspot-bridge": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-hubspot-bridge",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-instance-discovery": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-instance-discovery",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-integration-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-integration-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-intelligence-analyst": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-intelligence-analyst",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-landing-page-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-landing-page-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-lead-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-lead-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-lead-quality-assessor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-lead-quality-assessor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-lead-scoring-architect": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-lead-scoring-architect",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-mql-handoff-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-mql-handoff-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-observability-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-observability-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-performance-optimizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-performance-optimizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-program-architect": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-program-architect",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-program-roi-assessor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-program-roi-assessor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-revenue-cycle-analyst": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-revenue-cycle-analyst",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-sfdc-sync-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-sfdc-sync-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-smart-campaign-api-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-smart-campaign-api-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-marketo:marketo-webinar-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-marketo",
+      "shortName": "marketo-webinar-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-monday:monday-batch-operator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-monday",
+      "shortName": "monday-batch-operator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-monday:monday-board-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-monday",
+      "shortName": "monday-board-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-monday:monday-board-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-monday",
+      "shortName": "monday-board-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-monday:monday-file-catalog-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-monday",
+      "shortName": "monday-file-catalog-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-monday:monday-file-extractor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-monday",
+      "shortName": "monday-file-extractor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-monday:monday-item-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-monday",
+      "shortName": "monday-item-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:apex-debug-analyst": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "apex-debug-analyst",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:benchmark-research-agent": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "benchmark-research-agent",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:compliance-report-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "compliance-report-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:flow-batch-operator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "flow-batch-operator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:flow-diagnostician": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "flow-diagnostician",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:flow-log-analyst": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "flow-log-analyst",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:flow-segmentation-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "flow-segmentation-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:flow-template-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "flow-template-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:flow-test-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "flow-test-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:permission-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "permission-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:permission-segmentation-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "permission-segmentation-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:response-validator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "response-validator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-advocate-assignment": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-advocate-assignment",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-agent-governance": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-agent-governance",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-apex-developer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-apex-developer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-apex": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-apex",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-api-monitor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-api-monitor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-architecture-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-architecture-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-assignment-rules-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-assignment-rules-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-automation-auditor": {
+      "currentVersion": "3.66.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-automation-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "3.66.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-automation-builder": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-automation-builder",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-cli-executor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-cli-executor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-communication-manager": {
+      "currentVersion": "- mcp_salesforce_data_query",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-communication-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "- mcp_salesforce_data_query",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-compliance-officer": {
+      "currentVersion": "2.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-compliance-officer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "2.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-conflict-resolver": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-conflict-resolver",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-cpq-assessor": {
+      "currentVersion": "2.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-cpq-assessor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "2.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-cpq-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-cpq-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-csv-enrichment": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-csv-enrichment",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-dashboard-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-dashboard-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-dashboard-designer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-dashboard-designer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-dashboard-migrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-dashboard-migrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-dashboard-optimizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-dashboard-optimizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-data-export-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-data-export-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-data-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-data-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-data-import-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-data-import-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-data-operations": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-data-operations",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-dedup-safety-copilot": {
+      "currentVersion": "3.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-dedup-safety-copilot",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "3.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-dependency-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-dependency-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-deployment-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-deployment-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-discovery": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-discovery",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-einstein-admin": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-einstein-admin",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-enrichment-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-enrichment-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-field-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-field-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-integration-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-integration-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-layout-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-layout-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-layout-deployer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-layout-deployer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-layout-generator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-layout-generator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-lead-auto-converter": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-lead-auto-converter",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-lightning-developer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-lightning-developer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-lucid-diagrams": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-lucid-diagrams",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-merge-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-merge-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-metadata-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-metadata-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-metadata-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-metadata-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-metadata": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-metadata",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-object-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-object-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-ownership-router": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-ownership-router",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-performance-optimizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-performance-optimizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-permission-assessor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-permission-assessor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-permission-orchestrator": {
+      "currentVersion": "2.1.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-permission-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "2.1.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-planner": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-planner",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-quality-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-quality-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-query-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-query-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-remediation-executor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-remediation-executor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-renewal-import": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-renewal-import",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-report-designer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-report-designer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-report-template-deployer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-report-template-deployer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-report-type-manager": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-report-type-manager",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-report-validator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-report-validator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-reports-dashboards": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-reports-dashboards",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-reports-usage-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-reports-usage-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-revops-auditor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-revops-auditor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-revops-coordinator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-revops-coordinator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-sales-operations": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-sales-operations",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-security-admin": {
+      "currentVersion": "2.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-security-admin",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "2.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-service-cloud-admin": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-service-cloud-admin",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-state-discovery": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-state-discovery",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-territory-assignment": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-territory-assignment",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-territory-deployment": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-territory-deployment",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-territory-discovery": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-territory-discovery",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-territory-monitor": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-territory-monitor",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-territory-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-territory-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-territory-planner": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-territory-planner",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-ui-customizer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-ui-customizer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-upsert-error-handler": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-upsert-error-handler",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-upsert-matcher": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-upsert-matcher",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:sfdc-upsert-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "sfdc-upsert-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:trigger-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "trigger-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:trigger-segmentation-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "trigger-segmentation-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:validation-rule-orchestrator": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "validation-rule-orchestrator",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:validation-rule-segmentation-specialist": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "validation-rule-segmentation-specialist",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    },
+    "opspal-salesforce:win-loss-analyzer": {
+      "currentVersion": "1.0.0",
+      "plugin": "opspal-salesforce",
+      "shortName": "win-loss-analyzer",
+      "firstTracked": "2026-01-31T22:32:09.868Z",
+      "history": [
+        {
+          "version": "1.0.0",
+          "date": "2026-01-31T22:32:09.868Z",
+          "description": "Initial tracking"
+        }
+      ]
+    }
+  }
+}

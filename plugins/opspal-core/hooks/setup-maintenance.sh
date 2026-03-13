@@ -15,6 +15,9 @@
 
 set -euo pipefail
 
+# Side-effect hook — redirect all stdout to stderr to avoid context contamination
+exec 3>&1 1>&2
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"

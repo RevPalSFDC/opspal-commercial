@@ -17,11 +17,11 @@ find_plugin_script() {
   local script_name="$1"
   local search_paths=(
     "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name}"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name"
-    "$HOME/.claude/${CLAUDE_PLUGIN_ROOT}@revpal-internal-plugins/scripts/lib/$script_name"
+    "$PWD/plugins/opspal-core/scripts/lib/$script_name"
+    "$PWD/.claude-plugins/opspal-core/scripts/lib/$script_name"
+    "./plugins/opspal-core/scripts/lib/$script_name"
+    "./.claude-plugins/opspal-core/scripts/lib/$script_name"
+    "$HOME/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/$script_name"
   )
   for path in "${search_paths[@]}"; do
     [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0
@@ -124,8 +124,8 @@ Plugin Update Check - 2026-01-31
 
 ## MCP Servers
 ✅ playwright: connected (browsers installed)
-✅ supabase: connected (project: <your-project-id>)
-✅ asana: connected (workspace: <your-workspace-id>)
+✅ supabase: connected (project: kjgsodyuzjgbebfnbruz)
+✅ asana: connected (workspace: 1206944680490015)
 
 ## Cache Directories
 ✅ /tmp/salesforce-reports: exists

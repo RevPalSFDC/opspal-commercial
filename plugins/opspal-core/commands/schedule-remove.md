@@ -44,7 +44,7 @@ Crontab updated.
 Even after removing a task, you can still access its historical logs:
 
 ```bash
-ls ${CLAUDE_PLUGIN_ROOT}/scheduler/logs/ | grep daily-cpq-check
+ls .claude-plugins/opspal-core/scheduler/logs/ | grep daily-cpq-check
 ```
 
 ## Alternative: Disable Instead

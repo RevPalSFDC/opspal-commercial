@@ -1,0 +1,209 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "retail",
+  "version": "1.0.0",
+  "description": "Retail chains, big box stores, supermarkets, and multi-location retailers where same name in different states typically represents the same corporate entity",
+
+  "detectionPatterns": {
+    "keywords": [
+      "retail", "store", "shop", "mart", "warehouse", "supermarket",
+      "grocery", "department", "outlet", "discount", "wholesale",
+      "pharmacy", "drugstore", "hardware", "electronics", "apparel"
+    ],
+    "entityTypes": ["Retailer", "Store", "Chain", "Supermarket", "Warehouse"],
+    "fieldPatterns": [
+      "StoreNumber", "LocationCode", "RetailerId", "ChainId",
+      "DistrictCode", "RegionCode", "MarketCode"
+    ]
+  },
+
+  "abbreviations": {
+    "storeTypes": {
+      "DC": "Distribution Center",
+      "FC": "Fulfillment Center",
+      "SC": "Service Center",
+      "CC": "Call Center",
+      "RC": "Return Center",
+      "HQ": "Headquarters"
+    },
+    "retail": {
+      "B&M": "Brick and Mortar",
+      "E-COM": "E-Commerce",
+      "BOPIS": "Buy Online Pick Up In Store",
+      "SKU": "Stock Keeping Unit"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "Co", "Company", "Stores Inc"],
+    "preserve": [
+      "Store", "Stores", "Mart", "Market", "Warehouse", "Club",
+      "Depot", "Center", "Shop", "Outlet", "Express"
+    ]
+  },
+
+  "synonyms": {
+    "Store": ["Stores", "Shop", "Outlet"],
+    "Market": ["Markets", "Mart"],
+    "Warehouse": ["Club", "Wholesale"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.90,
+    "minimumConfidence": 60
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "ALLOW_WITH_PATTERN",
+    "uniquenessLevel": "LOW",
+    "confidenceThresholds": {
+      "autoMerge": 88,
+      "review": 78,
+      "tag": 55
+    },
+    "stateMismatchPenalty": -10
+  },
+
+  "genericEntityPatterns": [],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["known_chain", "parent_pattern", "store_number_pattern", "domain_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "Walmart",
+    "Target",
+    "Costco",
+    "Sam's Club",
+    "BJ's Wholesale Club",
+    "Home Depot",
+    "Lowe's",
+    "Menards",
+    "Ace Hardware",
+    "True Value",
+    "Best Buy",
+    "Walgreens",
+    "CVS",
+    "Rite Aid",
+    "Kroger",
+    "Safeway",
+    "Albertsons",
+    "Publix",
+    "H-E-B",
+    "Meijer",
+    "Hy-Vee",
+    "Food Lion",
+    "Giant Eagle",
+    "Stop & Shop",
+    "Shaw's",
+    "Wegmans",
+    "Trader Joe's",
+    "Whole Foods",
+    "Sprouts",
+    "Aldi",
+    "Lidl",
+    "Dollar General",
+    "Dollar Tree",
+    "Family Dollar",
+    "Five Below",
+    "Big Lots",
+    "Ross",
+    "TJ Maxx",
+    "Marshalls",
+    "HomeGoods",
+    "Burlington",
+    "Nordstrom",
+    "Macy's",
+    "Kohl's",
+    "JCPenney",
+    "Dillard's",
+    "Belk",
+    "Neiman Marcus",
+    "Saks Fifth Avenue",
+    "Bloomingdale's",
+    "Dick's Sporting Goods",
+    "Academy Sports",
+    "REI",
+    "Bass Pro Shops",
+    "Cabela's",
+    "Scheels",
+    "PetSmart",
+    "Petco",
+    "Pet Supplies Plus",
+    "Office Depot",
+    "Staples",
+    "Office Max",
+    "Michaels",
+    "Hobby Lobby",
+    "JOANN",
+    "Party City",
+    "AutoZone",
+    "O'Reilly Auto Parts",
+    "Advance Auto Parts",
+    "NAPA Auto Parts",
+    "Pep Boys",
+    "Sephora",
+    "Ulta Beauty",
+    "Bath & Body Works",
+    "Victoria's Secret",
+    "Gap",
+    "Old Navy",
+    "Banana Republic",
+    "American Eagle",
+    "Abercrombie & Fitch",
+    "Hollister",
+    "Express",
+    "Forever 21",
+    "H&M",
+    "Zara",
+    "Uniqlo",
+    "GameStop",
+    "Barnes & Noble",
+    "Books-A-Million",
+    "Guitar Center",
+    "IKEA",
+    "Bed Bath & Beyond",
+    "Williams-Sonoma",
+    "Pottery Barn",
+    "Crate & Barrel",
+    "Pier 1",
+    "At Home"
+  ],
+
+  "locationPatterns": [
+    {
+      "pattern": "^(.+?)\\s*#(\\d+)$",
+      "description": "Store number: 'Target #1234'",
+      "baseGroup": 1,
+      "storeNumberGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s*[-–—]\\s*([A-Za-z][A-Za-z\\s]+)$",
+      "description": "Dash separator: 'Walmart - Austin'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+\\(([^)]+)\\)$",
+      "description": "Parenthetical: 'Best Buy (Downtown Austin)'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+(?:Store|Location)\\s*#?(\\d+)$",
+      "description": "Store keyword: 'Kroger Store 1234'",
+      "baseGroup": 1,
+      "storeNumberGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+(Supercenter|Neighborhood Market|Express)$",
+      "description": "Format suffix: 'Walmart Supercenter'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    }
+  ]
+}

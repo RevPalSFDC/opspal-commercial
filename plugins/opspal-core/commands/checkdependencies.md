@@ -97,21 +97,34 @@ Run `/checkdependencies` after:
 ### "Cannot find module 'md-to-pdf'"
 
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
 # Diagnose
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --plugin opspal-core
+CHECKER=$(find_script "check-all-plugin-dependencies.js") && node "$CHECKER" --plugin opspal-core
 
 # Fix
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --fix
+CHECKER=$(find_script "check-all-plugin-dependencies.js") && node "$CHECKER" --fix
 ```
 
 ### "Cannot find module 'fast-xml-parser'"
 
 ```bash
 # Diagnose
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --plugin salesforce-plugin
+CHECKER=$(find_script "check-all-plugin-dependencies.js") && node "$CHECKER" --plugin salesforce-plugin
 
 # Fix
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/check-all-plugin-dependencies.js --fix
+CHECKER=$(find_script "check-all-plugin-dependencies.js") && node "$CHECKER" --fix
 ```
 
 ## Integration with /pluginupdate

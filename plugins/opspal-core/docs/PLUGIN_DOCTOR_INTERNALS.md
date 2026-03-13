@@ -143,7 +143,7 @@ Options:
       "latency": 300,
       "details": {
         "authenticated": true,
-        "endpoint": "${SUPABASE_URL}"
+        "endpoint": "https://kjgsodyuzjgbebfnbruz.supabase.co"
       }
     },
     {

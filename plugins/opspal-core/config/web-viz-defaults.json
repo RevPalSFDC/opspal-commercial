@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WebVizDefaults",
+  "description": "Default configuration for web visualization generator",
+
+  "server": {
+    "port": 3847,
+    "host": "localhost",
+    "openBrowser": true
+  },
+
+  "theme": {
+    "name": "revpal",
+    "colors": {
+      "primary": "#5F3B8C",
+      "secondary": "#3E4A61",
+      "accent": "#E99560",
+      "success": "#22C55E",
+      "warning": "#F59E0B",
+      "danger": "#EF4444",
+      "background": "#FFFFFF",
+      "surface": "#F8FAFC",
+      "text": "#1E293B",
+      "textMuted": "#64748B"
+    },
+    "chartColors": [
+      "#5F3B8C",
+      "#3E4A61",
+      "#E99560",
+      "#22C55E",
+      "#3B82F6",
+      "#F59E0B",
+      "#EC4899",
+      "#8B5CF6"
+    ],
+    "fonts": {
+      "heading": "Inter, system-ui, sans-serif",
+      "body": "Inter, system-ui, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    }
+  },
+
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "gap": "16px",
+    "padding": "24px",
+    "maxWidth": "1400px"
+  },
+
+  "chart": {
+    "responsive": true,
+    "maintainAspectRatio": true,
+    "animation": {
+      "duration": 400
+    },
+    "plugins": {
+      "legend": {
+        "position": "top"
+      },
+      "tooltip": {
+        "enabled": true
+      }
+    },
+    "defaults": {
+      "bar": {
+        "borderRadius": 4
+      },
+      "line": {
+        "tension": 0.3,
+        "fill": false
+      },
+      "pie": {
+        "cutout": "0%"
+      },
+      "doughnut": {
+        "cutout": "60%"
+      }
+    }
+  },
+
+  "table": {
+    "pageSize": 25,
+    "pageSizeOptions": [10, 25, 50, 100],
+    "sortable": true,
+    "filterable": true,
+    "striped": true,
+    "hover": true,
+    "compact": false
+  },
+
+  "map": {
+    "center": [39.8283, -98.5795],
+    "zoom": 4,
+    "tileProvider": "openstreetmap",
+    "tileUrls": {
+      "openstreetmap": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "cartodb-light": "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      "cartodb-dark": "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    },
+    "attribution": "&copy; OpenStreetMap contributors"
+  },
+
+  "kpi": {
+    "showTrend": true,
+    "trendPeriod": "vs_prior_period",
+    "formatters": {
+      "currency": {
+        "style": "currency",
+        "currency": "USD",
+        "minimumFractionDigits": 0,
+        "maximumFractionDigits": 0
+      },
+      "percent": {
+        "style": "percent",
+        "minimumFractionDigits": 1,
+        "maximumFractionDigits": 1
+      },
+      "number": {
+        "minimumFractionDigits": 0,
+        "maximumFractionDigits": 2
+      }
+    }
+  },
+
+  "cdn": {
+    "chartjs": "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js",
+    "chartjsAnnotation": "https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js",
+    "chartjsDataLabels": "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js",
+    "mermaid": "https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js",
+    "sheetjs": "https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js",
+    "leaflet": {
+      "js": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+      "css": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    },
+    "leafletHeat": "https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"
+  },
+
+  "output": {
+    "defaultFormat": "html",
+    "defaultDir": "./dashboards",
+    "embedData": true,
+    "embedLibraries": false,
+    "minify": false
+  }
+}

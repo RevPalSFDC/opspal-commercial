@@ -43,6 +43,10 @@ fi
 # Configuration
 # =============================================================================
 
+# Redirect stdout→stderr so status messages don't pollute Claude's context.
+# Use fd 3 for structured JSON output back to Claude Code.
+exec 3>&1 1>&2
+
 ENABLE_AUTO_BLUF="${ENABLE_AUTO_BLUF:-1}"
 BLUF_OUTPUT_FORMAT="${BLUF_OUTPUT_FORMAT:-terminal}"
 BLUF_SAVE_TO_FILE="${BLUF_SAVE_TO_FILE:-0}"
@@ -217,7 +221,7 @@ async function main() {
 }
 
 main();
-" 2>&1
+"
 }
 
 # Save BLUF summary to file if enabled
@@ -297,10 +301,16 @@ main() {
         exit 0
     fi
 
-    # Display summary
-    echo ""
-    echo "$summary"
-    echo ""
+    # Display summary via structured JSON envelope (hook protocol)
+    # Escape for JSON: replace newlines, backslashes, quotes
+    local escaped_summary
+    escaped_summary=$(printf '%s' "$summary" | jq -Rs '.')
+    echo "{\"systemMessage\": ${escaped_summary}}" >&3
+
+    # Also display to stderr for terminal visibility
+    echo "" >&2
+    echo "$summary" >&2
+    echo "" >&2
 
     # Save to file if enabled
     if [[ "${BLUF_SAVE_TO_FILE}" == "1" ]]; then

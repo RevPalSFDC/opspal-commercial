@@ -16,7 +16,23 @@ tags:
 Run this command now (pass any user arguments like --dry-run):
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/sync-claudemd.js $ARGUMENTS
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
+SYNC_SCRIPT=$(find_script "sync-claudemd.js")
+if [ -z "$SYNC_SCRIPT" ]; then echo "ERROR: sync-claudemd.js not found"; exit 1; fi
+
+node "$SYNC_SCRIPT" $ARGUMENTS
 ```
 
 After execution, report the results to the user.
@@ -80,7 +96,9 @@ Shows detailed information about detected plugins and changes.
 ### Specific Directory
 
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/sync-claudemd.js --project-dir=/path/to/project
+# Use find_script() to locate sync-claudemd.js (see bootstrap above)
+SYNC_SCRIPT=$(find_script "sync-claudemd.js")
+node "$SYNC_SCRIPT" --project-dir=/path/to/project
 ```
 
 ## What Gets Updated
@@ -138,7 +156,8 @@ This command can be added to post-plugin-update hooks:
 
 ```bash
 # In .claude/hooks/post-plugin-update.sh
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/sync-claudemd.js
+# Use find_script() pattern from resolve-script.sh to locate sync-claudemd.js
+SYNC_SCRIPT=$(find_script "sync-claudemd.js") && node "$SYNC_SCRIPT"
 ```
 
 ## Example Output

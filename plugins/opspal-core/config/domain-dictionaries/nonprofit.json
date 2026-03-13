@@ -1,0 +1,157 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "nonprofit",
+  "version": "1.0.0",
+  "description": "Nonprofit organizations, charities, foundations, and community organizations. Each chapter/affiliate is typically a separate legal entity with its own EIN, even when sharing a national brand name.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "nonprofit", "non-profit", "charity", "foundation", "charitable",
+      "501c3", "donation", "volunteer", "community", "philanthropy",
+      "grant", "endowment", "mission", "cause", "advocacy"
+    ],
+    "entityTypes": ["Nonprofit", "Charity", "Foundation", "Association", "Chapter"],
+    "fieldPatterns": [
+      "EIN", "TaxExemptStatus", "Form990", "GuideStar", "CharityNavigator"
+    ]
+  },
+
+  "abbreviations": {
+    "taxStatus": {
+      "501(c)(3)": "Tax-exempt charitable organization",
+      "501(c)(4)": "Social welfare organization",
+      "501(c)(6)": "Business league",
+      "509(a)(1)": "Public charity",
+      "509(a)(2)": "Public charity - gross receipts test",
+      "PF": "Private Foundation"
+    },
+    "organizations": {
+      "YMCA": "Young Men's Christian Association",
+      "YWCA": "Young Women's Christian Association",
+      "ASPCA": "American Society for the Prevention of Cruelty to Animals",
+      "SPCA": "Society for the Prevention of Cruelty to Animals",
+      "BGCA": "Boys & Girls Clubs of America",
+      "ARC": "American Red Cross"
+    },
+    "ratings": {
+      "BBB": "Better Business Bureau",
+      "CN": "Charity Navigator"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "Corp"],
+    "preserve": [
+      "Foundation", "Trust", "Fund", "Charitable Trust",
+      "Association", "Society", "Institute", "Alliance",
+      "Chapter", "Affiliate", "of America"
+    ]
+  },
+
+  "synonyms": {
+    "Nonprofit": ["Non-profit", "Non profit", "Not-for-profit"],
+    "Foundation": ["Fdn", "Fdtn"],
+    "Association": ["Assn", "Assoc"],
+    "Society": ["Soc"],
+    "of America": ["USA", "US", "National"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.80,
+    "minimumConfidence": 80
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 95,
+      "review": 85,
+      "tag": 70
+    },
+    "stateMismatchPenalty": -40
+  },
+
+  "genericEntityPatterns": [
+    "Community Foundation of *",
+    "* Community Foundation",
+    "United Way of *",
+    "Boys & Girls Club of *",
+    "Boys and Girls Club of *",
+    "Habitat for Humanity *",
+    "Habitat for Humanity of *",
+    "Humane Society of *",
+    "* Humane Society",
+    "Goodwill Industries of *",
+    "Goodwill of *",
+    "YMCA of *",
+    "* YMCA",
+    "YWCA of *",
+    "* YWCA",
+    "Big Brothers Big Sisters of *",
+    "Meals on Wheels *",
+    "* Meals on Wheels",
+    "Food Bank of *",
+    "* Food Bank",
+    "Hospice of *",
+    "* Hospice",
+    "* Historical Society",
+    "* Arts Council",
+    "Friends of the * Library",
+    "* Community Center",
+    "Junior League of *",
+    "Rotary Club of *",
+    "Lions Club of *",
+    "Kiwanis Club of *",
+    "* Area United Way"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["ein_match OR domain_match"],
+    "boosts": ["guidestar_match", "form990_match"],
+    "blockers": ["different_ein"]
+  },
+
+  "knownEntities": [
+    "American Red Cross",
+    "United Way Worldwide",
+    "Salvation Army",
+    "Feeding America",
+    "Habitat for Humanity International",
+    "Boys & Girls Clubs of America",
+    "Goodwill Industries International",
+    "YMCA of the USA",
+    "American Cancer Society",
+    "American Heart Association",
+    "St. Jude Children's Research Hospital",
+    "Make-A-Wish Foundation",
+    "Susan G. Komen",
+    "March of Dimes",
+    "Special Olympics",
+    "Doctors Without Borders",
+    "World Wildlife Fund",
+    "The Nature Conservancy",
+    "Sierra Club Foundation",
+    "UNICEF USA",
+    "Save the Children",
+    "CARE",
+    "Oxfam America",
+    "Catholic Charities USA",
+    "Lutheran Services in America",
+    "Jewish Federations of North America"
+  ],
+
+  "knownEntityAliases": {
+    "American Red Cross": ["Red Cross", "ARC"],
+    "Salvation Army": ["The Salvation Army", "TSA"],
+    "Boys & Girls Clubs of America": ["BGCA", "Boys and Girls Clubs"],
+    "YMCA of the USA": ["YMCA", "The Y"],
+    "Susan G. Komen": ["Komen", "Susan G. Komen for the Cure"],
+    "Doctors Without Borders": ["MSF", "Médecins Sans Frontières"],
+    "World Wildlife Fund": ["WWF"]
+  },
+
+  "chapterAffiliateNote": "Most national nonprofits have local chapters/affiliates that are separate 501(c)(3) organizations with their own EINs. 'United Way of Austin' and 'United Way of Dallas' are distinct legal entities, not locations of the same organization."
+}

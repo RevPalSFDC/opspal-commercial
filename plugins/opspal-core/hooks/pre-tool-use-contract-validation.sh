@@ -38,12 +38,16 @@ fi
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." 2>/dev/null && pwd || pwd)"
 CONTRACTS_FILE="${PLUGIN_ROOT}/config/tool-contracts.json"
 VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/tool-contract-validator.js"
+ROUTING_STATE_MANAGER="${PLUGIN_ROOT}/scripts/lib/routing-state-manager.js"
+MCP_TOOL_POLICY_CONFIG="${PLUGIN_ROOT}/config/mcp-tool-policies.json"
+MCP_TOOL_POLICY_RESOLVER="${PLUGIN_ROOT}/scripts/lib/mcp-tool-policy-resolver.js"
 DEFAULT_LOG_ROOT="${PROJECT_ROOT}/.claude/logs"
 LOG_ROOT="${CLAUDE_HOOK_LOG_ROOT:-$DEFAULT_LOG_ROOT}"
 FALLBACK_LOG_ROOT="/tmp/.claude/logs"
 LOG_FILE="${LOG_ROOT}/tool-contract-validation.jsonl"
 ROUTING_ENFORCEMENT_LOG="${LOG_ROOT}/routing-enforcement.jsonl"
 ROUTING_REFLECTION_LOG="${LOG_ROOT}/routing-reflection-candidates.jsonl"
+MCP_TOOL_POLICY_LOG="${LOG_ROOT}/mcp-tool-policy.jsonl"
 # PreToolUse block semantics: exit 2 blocks tool execution.
 HOOK_BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 DEFAULT_HARDENED_CHANNEL_ID="${OPSPAL_HARDENED_ENFORCED_CHANNEL_ID:-C0AGVQFDB18}"
@@ -52,6 +56,11 @@ BASH_BUDGET_WINDOW_SECONDS="${OPSPAL_BASH_BUDGET_WINDOW_SECONDS:-180}"
 BASH_BUDGET_MAX_COMMANDS="${OPSPAL_BASH_BUDGET_MAX_COMMANDS:-24}"
 BASH_BUDGET_MAX_REPEATS="${OPSPAL_BASH_BUDGET_MAX_REPEATS:-5}"
 BUDGET_STATE_DIR="${LOG_ROOT}/hook-state"
+PENDING_ROUTE_MCP_POLICY='{}'
+PENDING_ROUTE_MCP_POLICY_PENDING_ACTION=""
+PENDING_ROUTE_MCP_POLICY_MUTABILITY=""
+PENDING_ROUTE_MCP_POLICY_MATCHED=""
+PENDING_ROUTE_MCP_POLICY_NOTE=""
 
 # Parse tool name and input from stdin (or env fallback)
 # Claude passes: {"tool": "toolName", "input": {...}}
@@ -203,6 +212,164 @@ extract_session_key() {
     echo "unknown-session"
 }
 
+emit_pretool_decision() {
+    local permission_decision="$1"
+    local permission_reason="$2"
+    local additional_context="${3:-}"
+
+    jq -nc \
+      --arg decision "$permission_decision" \
+      --arg reason "$permission_reason" \
+      --arg context "$additional_context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: (
+          { hookEventName: "PreToolUse" }
+          + (if $decision != "" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "" then { additionalContext: $context } else {} end)
+        )
+      }'
+}
+
+get_routing_state_check() {
+    local session_key="$1"
+
+    if [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &>/dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo '{}'
+}
+
+classify_mcp_tool_policy() {
+    local tool_name="$1"
+    local policy_json=""
+
+    if [[ -f "$MCP_TOOL_POLICY_RESOLVER" ]] && [[ -f "$MCP_TOOL_POLICY_CONFIG" ]] && command -v node &>/dev/null; then
+        policy_json=$(MCP_TOOL_POLICY_CONFIG="$MCP_TOOL_POLICY_CONFIG" node "$MCP_TOOL_POLICY_RESOLVER" classify "$tool_name" 2>/dev/null || echo "")
+    fi
+
+    if [[ -z "$policy_json" ]] || ! echo "$policy_json" | jq -e . >/dev/null 2>&1; then
+        policy_json=$(jq -nc \
+          --arg tool "$tool_name" \
+          '{
+            tool: $tool,
+            matched: false,
+            policyId: null,
+            namespace: "unknown",
+            mutability: "unknown",
+            pendingRouteAction: "deny",
+            matchedPattern: null,
+            notes: "Policy resolver unavailable; defaulting to deny while pending route is active."
+          }')
+    fi
+
+    PENDING_ROUTE_MCP_POLICY="$policy_json"
+    PENDING_ROUTE_MCP_POLICY_PENDING_ACTION=$(echo "$policy_json" | jq -r '.pendingRouteAction // "deny"' 2>/dev/null || echo "deny")
+    PENDING_ROUTE_MCP_POLICY_MUTABILITY=$(echo "$policy_json" | jq -r '.mutability // "unknown"' 2>/dev/null || echo "unknown")
+    PENDING_ROUTE_MCP_POLICY_MATCHED=$(echo "$policy_json" | jq -r '.matched // false' 2>/dev/null || echo "false")
+    PENDING_ROUTE_MCP_POLICY_NOTE=$(echo "$policy_json" | jq -r '.notes // ""' 2>/dev/null || echo "")
+
+    if [[ "$PENDING_ROUTE_MCP_POLICY_MATCHED" != "true" ]]; then
+        local log_entry
+        log_entry=$(echo "$policy_json" | jq -c --arg timestamp "$(date -Iseconds)" '
+          . + {
+            timestamp: $timestamp,
+            eventType: "unknown_mcp_policy_fallback"
+          }
+        ' 2>/dev/null || echo "")
+        if [[ -n "$log_entry" ]]; then
+            safe_append_jsonl "$log_entry" "$MCP_TOOL_POLICY_LOG"
+        fi
+    fi
+}
+
+tool_requires_pending_route_clearance() {
+    local tool_name="$1"
+
+    case "$tool_name" in
+        Task|Read|Glob|Grep|LS|WebSearch|WebFetch|TaskList|TaskGet|TodoWrite|Skill)
+            return 1
+            ;;
+        Bash|Write|Edit|MultiEdit)
+            return 0
+            ;;
+        mcp__*|mcp_*)
+            classify_mcp_tool_policy "$tool_name"
+            if [[ "$PENDING_ROUTE_MCP_POLICY_PENDING_ACTION" == "allow" ]]; then
+                return 1
+            fi
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+enforce_pending_route_gate() {
+    local tool_name="$1"
+    local session_key="$2"
+
+    local routing_state
+    routing_state=$(get_routing_state_check "$session_key")
+
+    local pending enforce required_agent route_id action
+    local clearance_agents command_summary additional_context
+    pending=$(echo "$routing_state" | jq -r '.pending // false' 2>/dev/null || echo "false")
+    enforce=$(echo "$routing_state" | jq -r '.enforce // false' 2>/dev/null || echo "false")
+
+    if [[ "$pending" != "true" ]] || [[ "$enforce" != "true" ]]; then
+        return 0
+    fi
+
+    if ! tool_requires_pending_route_clearance "$tool_name"; then
+        return 0
+    fi
+
+    required_agent=$(echo "$routing_state" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
+    clearance_agents=$(echo "$routing_state" | jq -r '.clearanceAgents // [] | join(", ")' 2>/dev/null || echo "")
+    route_id=$(echo "$routing_state" | jq -r '.routeId // ""' 2>/dev/null || echo "")
+    action=$(echo "$routing_state" | jq -r '.action // ""' 2>/dev/null || echo "")
+
+    case "$tool_name" in
+        Bash)
+            command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
+            ;;
+        Write|Edit|MultiEdit)
+            command_summary=$(echo "$INPUT_DATA" | jq -r '.input.file_path // .input.path // .tool_input.file_path // .tool_input.path // ""' 2>/dev/null || echo "")
+            ;;
+        *)
+            command_summary="$tool_name"
+            ;;
+    esac
+
+    emit_routing_event \
+      "block" \
+      "${route_id:-pending-routing-required}" \
+      "${required_agent:-unknown}" \
+      "Pending routing requirement not cleared before operational tool execution." \
+      "${command_summary:-$tool_name}" \
+      "${CLAUDE_AGENT_NAME:-unknown}" \
+      "$tool_name"
+
+    additional_context="Routing requirement is still pending for this session."
+    if [[ "$tool_name" == mcp__* || "$tool_name" == mcp_* ]]; then
+        if [[ "$PENDING_ROUTE_MCP_POLICY_MATCHED" == "true" ]]; then
+            additional_context="${additional_context} MCP policy: ${PENDING_ROUTE_MCP_POLICY_MUTABILITY:-unknown} via ${PENDING_ROUTE_MCP_POLICY_NOTE:-configured rule}."
+        else
+            additional_context="${additional_context} MCP tool mutability is not yet explicitly classified; defaulting to deny until this tool is added to the registry."
+        fi
+    fi
+
+    emit_pretool_decision \
+      "deny" \
+      "ROUTING_REQUIRED_BEFORE_OPERATION: Use Task(subagent_type='${required_agent:-unknown}', prompt=<original request>) before direct execution. Approved family: ${clearance_agents:-none}. Current action=${action:-unknown}." \
+      "$additional_context"
+    return 1
+}
+
 normalize_command_fingerprint() {
     printf '%s' "${1:-}" \
         | tr '\n' ' ' \
@@ -331,9 +498,19 @@ enforce_bash_loop_budget() {
 
 caller_matches_allowed_agents() {
     local caller_agent="$1"
-    local allowed_regex="$2"
+    local approved_agents_json="$2"
 
-    [ -n "$caller_agent" ] && echo "$caller_agent" | grep -qiE "$allowed_regex"
+    if [ -z "$caller_agent" ] || [ -z "$approved_agents_json" ]; then
+        return 1
+    fi
+
+    echo "$approved_agents_json" | jq -e --arg agent "$caller_agent" '
+      if type != "array" then
+        false
+      else
+        any(.[]; . == $agent)
+      end
+    ' >/dev/null 2>&1
 }
 
 extract_bash_command() {
@@ -415,6 +592,11 @@ map_tool_to_contract() {
 }
 
 CONTRACT_NAME=$(map_tool_to_contract "$TOOL_NAME")
+SESSION_KEY="$(extract_session_key)"
+
+if ! enforce_pending_route_gate "$TOOL_NAME" "$SESSION_KEY"; then
+    exit 0
+fi
 
 # ============================================================================
 # MANDATORY ROUTING ENFORCEMENT
@@ -427,10 +609,10 @@ enforce_mandatory_routing() {
     local command=""
     local command_lower=""
     local required_agent=""
-    local allowed_agents=""
+    local approved_agents_json="[]"
+    local approved_agents_display=""
     local reason=""
     local rule_id=""
-    local block_message=""
 
     if [ "${ROUTING_ENFORCEMENT_ENABLED:-1}" = "0" ]; then
         return 0
@@ -444,14 +626,14 @@ enforce_mandatory_routing() {
             # Rule 1: Permission/security write operations -> dedicated permission/security agents
             if echo "$command_lower" | grep -qE 'sf[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)'; then
                 rule_id="sf_permission_security_write"
-                required_agent="opspal-salesforce:sfdc-security-admin (preferred) or opspal-salesforce:sfdc-permission-orchestrator"
-                allowed_agents='sfdc-security-admin|sfdc-permission-orchestrator|sfdc-permission-assessor'
+                required_agent="opspal-salesforce:sfdc-security-admin"
+                approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor"]'
                 reason="Direct Salesforce permission/security write detected."
             elif echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete)'; then
                 if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
                     rule_id="sf_permission_security_write"
-                    required_agent="opspal-salesforce:sfdc-security-admin (preferred) or opspal-salesforce:sfdc-permission-orchestrator"
-                    allowed_agents='sfdc-security-admin|sfdc-permission-orchestrator|sfdc-permission-assessor'
+                    required_agent="opspal-salesforce:sfdc-security-admin"
+                    approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor"]'
                     reason="Direct Salesforce permission/security write detected."
                 fi
             fi
@@ -461,7 +643,7 @@ enforce_mandatory_routing() {
                 if echo "$command" | grep -qiE '(^|[[:space:]])(Lead|Contact|Account)([[:space:]]|$)|--sobject[[:space:]]+(Lead|Contact|Account)'; then
                     rule_id="sf_core_object_upsert"
                     required_agent="opspal-salesforce:sfdc-upsert-orchestrator"
-                    allowed_agents='sfdc-upsert-orchestrator'
+                    approved_agents_json='["opspal-salesforce:sfdc-upsert-orchestrator"]'
                     reason="Direct lead/contact/account upsert-import workflow detected."
                 fi
             fi
@@ -488,8 +670,8 @@ enforce_mandatory_routing() {
                 # Rule 2b1: Query length / IN-clause size likely to exceed URL limits (HTTP 431)
                 if [ "$query_length" -gt "$safe_url_threshold" ] || [ "$command_length" -gt "$safe_url_threshold" ] || [ "$in_clause_count" -gt "$in_clause_threshold" ]; then
                     rule_id="sf_query_url_length_risk"
-                    required_agent="opspal-salesforce:sfdc-bulkops-orchestrator (or opspal-salesforce:sfdc-query-specialist)"
-                    allowed_agents='sfdc-bulkops-orchestrator|sfdc-query-specialist|sfdc-data-operations|sfdc-data-export-manager'
+                    required_agent="opspal-salesforce:sfdc-bulkops-orchestrator"
+                    approved_agents_json='["opspal-salesforce:sfdc-bulkops-orchestrator","opspal-salesforce:sfdc-query-specialist","opspal-salesforce:sfdc-data-operations","opspal-salesforce:sfdc-data-export-manager"]'
                     reason="SOQL query likely exceeds safe URL limits (command_len=$command_length query_len=$query_length in_items=$in_clause_count). Use chunked/bulk extraction workflow."
                 fi
             fi
@@ -497,8 +679,8 @@ enforce_mandatory_routing() {
             if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+query'; then
                 if echo "$command" | grep -qiE 'from[[:space:]]+(Lead|Contact|Account|Opportunity|Case)\b'; then
                     rule_id="sf_core_object_query"
-                    required_agent="opspal-salesforce:sfdc-data-operations (or opspal-salesforce:sfdc-query-specialist)"
-                    allowed_agents='sfdc-data-operations|sfdc-query-specialist|sfdc-upsert-orchestrator|sfdc-bulkops-orchestrator'
+                    required_agent="opspal-salesforce:sfdc-data-operations"
+                    approved_agents_json='["opspal-salesforce:sfdc-data-operations","opspal-salesforce:sfdc-query-specialist","opspal-salesforce:sfdc-upsert-orchestrator","opspal-salesforce:sfdc-bulkops-orchestrator"]'
                     reason="Direct Salesforce core-object data query detected."
                 fi
             fi
@@ -508,7 +690,7 @@ enforce_mandatory_routing() {
                 if echo "$command" | grep -qiE 'Territory2|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association'; then
                     rule_id="sf_territory_write"
                     required_agent="opspal-salesforce:sfdc-territory-orchestrator"
-                    allowed_agents='sfdc-territory-orchestrator|sfdc-territory-deployment|sfdc-territory-monitor'
+                    approved_agents_json='["opspal-salesforce:sfdc-territory-orchestrator","opspal-salesforce:sfdc-territory-deployment","opspal-salesforce:sfdc-territory-monitor"]'
                     reason="Direct Salesforce territory write workflow detected."
                 fi
             fi
@@ -518,7 +700,7 @@ enforce_mandatory_routing() {
                 if echo "$command" | grep -qiE 'ValidationRule|validation[._ -]?rule'; then
                     rule_id="sf_validation_rule_write"
                     required_agent="opspal-salesforce:validation-rule-orchestrator"
-                    allowed_agents='validation-rule-orchestrator'
+                    approved_agents_json='["opspal-salesforce:validation-rule-orchestrator"]'
                     reason="Direct Salesforce validation rule write workflow detected."
                 fi
             fi
@@ -536,14 +718,18 @@ enforce_mandatory_routing() {
 
     # Enforce blocking when a mandatory rule matched and caller is not approved
     if [ -n "$rule_id" ]; then
-        if caller_matches_allowed_agents "$caller_agent" "$allowed_agents"; then
+        approved_agents_display=$(echo "$approved_agents_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
+
+        if caller_matches_allowed_agents "$caller_agent" "$approved_agents_json"; then
             emit_routing_event "allow" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
             return 0
         fi
 
-        block_message="[ROUTING BLOCKED] $reason Use Task with $required_agent."
         emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
-        echo "$block_message" >&2
+        emit_pretool_decision \
+          "deny" \
+          "ROUTING_SPECIALIST_REQUIRED: $reason Use Task(subagent_type='${required_agent}', prompt=<original request>) before direct execution. Approved family: ${approved_agents_display:-$required_agent}." \
+          "Direct operational workflow blocked until an approved specialist agent is used."
         return 1
     fi
 
@@ -654,7 +840,7 @@ fi
 
 # Run API routing check for applicable tools
 if ! enforce_mandatory_routing "$TOOL_NAME"; then
-    exit "$HOOK_BLOCK_EXIT_CODE"
+    exit 0
 fi
 
 # Run API routing check for applicable tools

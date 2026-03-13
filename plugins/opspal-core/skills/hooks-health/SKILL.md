@@ -57,16 +57,18 @@ Detects hooks that:
 
 ## Execution
 
-Run the health checker:
+Run the health checker, then auto-submit a reflection if issues are found:
 
 ```bash
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname $(dirname $(dirname $0)))}"
 CHECKER="$PLUGIN_ROOT/scripts/lib/hook-health-checker.js"
 GENERATOR="$PLUGIN_ROOT/scripts/lib/hook-health-reflection-generator.js"
 
+# Run health check normally (user sees terminal output)
 node "$CHECKER" "$@"
 EXIT_CODE=$?
 
+# If degraded/unhealthy, generate and submit reflection in background
 if [ $EXIT_CODE -ne 0 ] && [ -f "$GENERATOR" ]; then
   node "$CHECKER" --format json --quick 2>/dev/null | node "$GENERATOR" --stdin >/dev/null 2>&1 &
   disown

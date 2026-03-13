@@ -33,14 +33,7 @@ VERBOSE="${ROUTING_VERBOSE:-0}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 TASK_ROUTER="$PLUGIN_ROOT/scripts/lib/task-router.js"
-# Resolve complexity-scorer through encrypted asset runtime (may be .enc)
-ENC_RESOLVER="$PLUGIN_ROOT/hooks/lib/resolve-encrypted-asset.sh"
-if [[ -f "$ENC_RESOLVER" ]]; then
-    source "$ENC_RESOLVER"
-    COMPLEXITY_SCORER=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-core" "scripts/lib/complexity-scorer.js")
-else
-    COMPLEXITY_SCORER="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
-fi
+COMPLEXITY_SCORER="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
 ROUTING_INDEX="$PLUGIN_ROOT/routing-index.json"
 AGENT_RESOLVER="$PLUGIN_ROOT/scripts/lib/agent-alias-resolver.js"
 
@@ -50,7 +43,7 @@ HOOK_LOGGER="$PLUGIN_ROOT/scripts/lib/hook-logger.js"
 HOOK_NAME="user-prompt-router"
 
 # Log file
-LOG_FILE="${ROUTING_LOG_FILE:-${TMPDIR:-/tmp}/routing-hook.log}"
+LOG_FILE="${ROUTING_LOG_FILE:-/tmp/routing-hook.log}"
 
 # Function to log messages
 log() {

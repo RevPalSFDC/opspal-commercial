@@ -1,0 +1,164 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "religious",
+  "version": "1.0.0",
+  "description": "Religious organizations, churches, temples, mosques, and faith-based institutions. EXTREMELY high false positive risk - names like 'First Baptist Church' exist in hundreds of cities and are almost never the same entity.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "church", "temple", "mosque", "synagogue", "cathedral", "chapel",
+      "parish", "congregation", "ministry", "diocese", "archdiocese",
+      "baptist", "methodist", "catholic", "lutheran", "presbyterian",
+      "episcopal", "pentecostal", "evangelical", "orthodox"
+    ],
+    "entityTypes": ["Church", "Temple", "Mosque", "Synagogue", "Ministry", "Parish"],
+    "fieldPatterns": [
+      "ParishCode", "DioceseID", "DenominationCode", "WorshipLocation"
+    ]
+  },
+
+  "abbreviations": {
+    "denominations": {
+      "SBC": "Southern Baptist Convention",
+      "UMC": "United Methodist Church",
+      "ELCA": "Evangelical Lutheran Church in America",
+      "LCMS": "Lutheran Church - Missouri Synod",
+      "PCUSA": "Presbyterian Church (USA)",
+      "PCA": "Presbyterian Church in America",
+      "ECUSA": "Episcopal Church USA",
+      "AOG": "Assemblies of God",
+      "COG": "Church of God",
+      "COGIC": "Church of God in Christ"
+    },
+    "titles": {
+      "Rev": "Reverend",
+      "Fr": "Father",
+      "Msgr": "Monsignor",
+      "Bp": "Bishop",
+      "Abp": "Archbishop"
+    },
+    "organization": {
+      "UU": "Unitarian Universalist",
+      "AME": "African Methodist Episcopal",
+      "AMEZ": "African Methodist Episcopal Zion"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "Corp"],
+    "preserve": [
+      "Church", "Temple", "Mosque", "Synagogue", "Chapel",
+      "Cathedral", "Parish", "Ministry", "Ministries",
+      "Fellowship", "Assembly", "Congregation"
+    ]
+  },
+
+  "synonyms": {
+    "Church": ["Chr", "Ch"],
+    "Baptist": ["Bapt"],
+    "Methodist": ["Meth"],
+    "Presbyterian": ["Presb", "Presby"],
+    "Lutheran": ["Luth"],
+    "Catholic": ["Cath"],
+    "Episcopal": ["Episc"],
+    "Saint": ["St", "St."],
+    "Kingdom Hall": ["KH"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.75,
+    "minimumConfidence": 90
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 98,
+      "review": 92,
+      "tag": 80
+    },
+    "stateMismatchPenalty": -50
+  },
+
+  "genericEntityPatterns": [
+    "First * Church",
+    "Second * Church",
+    "Third * Church",
+    "St. * Catholic Church",
+    "St. * Episcopal Church",
+    "St. * Lutheran Church",
+    "Saint * Church",
+    "Grace * Church",
+    "Trinity * Church",
+    "Faith * Church",
+    "Hope * Church",
+    "New Life *",
+    "New Hope *",
+    "Calvary * Church",
+    "Bethel * Church",
+    "Zion * Church",
+    "Mount * Church",
+    "Community Church of *",
+    "* Community Church",
+    "* Baptist Church",
+    "* Methodist Church",
+    "* Presbyterian Church",
+    "* Lutheran Church",
+    "* Catholic Church",
+    "* Episcopal Church",
+    "* Pentecostal Church",
+    "* Assembly of God",
+    "* Church of Christ",
+    "* Church of God",
+    "Temple *",
+    "Congregation *",
+    "Islamic Center of *",
+    "* Islamic Center",
+    "* Mosque",
+    "Masjid *",
+    "* Synagogue",
+    "Temple Beth *",
+    "Congregation Beth *",
+    "Kingdom Hall of Jehovah's Witnesses",
+    "The Church of Jesus Christ of Latter-day Saints *"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["address_match OR diocese_match"],
+    "boosts": ["domain_match", "denomination_registry_match"],
+    "blockers": ["different_city", "different_state"]
+  },
+
+  "knownEntities": [
+    "The Church of Jesus Christ of Latter-day Saints",
+    "Saddleback Church",
+    "Lakewood Church",
+    "Willow Creek Community Church",
+    "Life.Church",
+    "North Point Community Church",
+    "Gateway Church",
+    "Elevation Church",
+    "Hillsong Church",
+    "Calvary Chapel Costa Mesa",
+    "McLean Bible Church",
+    "Fellowship Church",
+    "Christ's Church of the Valley",
+    "Prestonwood Baptist Church",
+    "Second Baptist Church Houston",
+    "National Cathedral",
+    "St. Patrick's Cathedral",
+    "Crystal Cathedral"
+  ],
+
+  "knownEntityAliases": {
+    "The Church of Jesus Christ of Latter-day Saints": ["LDS Church", "Mormon Church"],
+    "Lakewood Church": ["Lakewood"],
+    "Life.Church": ["LifeChurch", "Life Church"],
+    "Hillsong Church": ["Hillsong"]
+  },
+
+  "warningNote": "CRITICAL: Religious organization names are extremely generic. 'First Baptist Church' appears in virtually every city in America as completely separate, unrelated organizations. The default assumption should be that identically-named churches in different locations are DIFFERENT entities unless there is strong evidence (shared domain, explicit multi-campus relationship) proving otherwise."
+}

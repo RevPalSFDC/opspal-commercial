@@ -1,0 +1,132 @@
+{
+  "sf_data_query": {
+    "description": "Salesforce data query tool contract",
+    "required": ["query"],
+    "optional": ["target-org", "use-tooling-api", "result-format"],
+    "types": {
+      "query": "string",
+      "target-org": "string",
+      "use-tooling-api": "boolean",
+      "result-format": "string"
+    },
+    "enums": {
+      "result-format": ["json", "csv", "human"]
+    },
+    "rules": [
+      {
+        "name": "tooling_api_required_for_metadata",
+        "description": "Metadata objects require --use-tooling-api flag",
+        "condition": {
+          "param": "query",
+          "pattern": "(FlowDefinitionView|FlexiPage|Layout|Profile|PermissionSet|ApexClass|ApexTrigger)"
+        },
+        "requires": ["use-tooling-api"],
+        "severity": "CRITICAL",
+        "message": "Metadata objects (FlowDefinitionView, FlexiPage, Layout, etc.) require --use-tooling-api flag",
+        "remediation": "Add --use-tooling-api to query metadata objects"
+      },
+      {
+        "name": "api_name_not_developer_name",
+        "description": "Use DeveloperName for FlowDefinitionView, not ApiName",
+        "condition": {
+          "param": "query",
+          "pattern": "FlowDefinitionView.*ApiName"
+        },
+        "severity": "CRITICAL",
+        "message": "FlowDefinitionView uses DeveloperName, not ApiName",
+        "remediation": "Replace ApiName with DeveloperName in query"
+      },
+      {
+        "name": "limit_clause_recommended",
+        "description": "Large queries should include LIMIT clause",
+        "condition": {
+          "param": "query",
+          "pattern": "^((?!LIMIT).)*$"
+        },
+        "severity": "WARNING",
+        "warning": "Query does not include LIMIT clause - may return large result set",
+        "remediation": "Add LIMIT clause to prevent timeout or memory issues"
+      }
+    ]
+  },
+  "sf_project_deploy": {
+    "description": "Salesforce metadata deployment tool contract",
+    "required": ["source-dir"],
+    "optional": ["target-org", "test-level", "tests", "ignore-warnings", "dry-run"],
+    "types": {
+      "source-dir": "string",
+      "target-org": "string",
+      "test-level": "string",
+      "tests": "array",
+      "ignore-warnings": "boolean",
+      "dry-run": "boolean"
+    },
+    "enums": {
+      "test-level": ["NoTestRun", "RunSpecifiedTests", "RunLocalTests", "RunAllTestsInOrg"]
+    },
+    "rules": [
+      {
+        "name": "production_requires_tests",
+        "description": "Production deployments require test execution",
+        "condition": {
+          "param": "target-org",
+          "pattern": "(production|prod)"
+        },
+        "forbids": ["test-level=NoTestRun"],
+        "severity": "CRITICAL",
+        "message": "Production deployments must run tests",
+        "remediation": "Set --test-level to RunLocalTests or RunAllTestsInOrg for production"
+      },
+      {
+        "name": "specified_tests_requires_tests_param",
+        "description": "RunSpecifiedTests requires --tests parameter",
+        "condition": {
+          "param": "test-level",
+          "value": "RunSpecifiedTests",
+          "operator": "="
+        },
+        "requires": ["tests"],
+        "severity": "CRITICAL",
+        "message": "test-level=RunSpecifiedTests requires --tests parameter",
+        "remediation": "Add --tests parameter with comma-separated test class names"
+      }
+    ]
+  },
+  "sf_data_upsert": {
+    "description": "Salesforce bulk data upsert tool contract",
+    "required": ["sobject", "file"],
+    "optional": ["target-org", "external-id", "wait"],
+    "types": {
+      "sobject": "string",
+      "file": "string",
+      "target-org": "string",
+      "external-id": "string",
+      "wait": "number"
+    },
+    "patterns": {
+      "file": {
+        "pattern": "\\.csv$",
+        "description": "File must be CSV format"
+      }
+    },
+    "ranges": {
+      "wait": {
+        "min": 0,
+        "max": 33
+      }
+    },
+    "rules": [
+      {
+        "name": "update_requires_external_id",
+        "description": "Update operations require external-id field",
+        "condition": {
+          "param": "sobject",
+          "pattern": ".*"
+        },
+        "severity": "WARNING",
+        "warning": "Upsert operations should specify --external-id for matching records",
+        "remediation": "Add --external-id parameter to specify matching field (default: Id)"
+      }
+    ]
+  }
+}

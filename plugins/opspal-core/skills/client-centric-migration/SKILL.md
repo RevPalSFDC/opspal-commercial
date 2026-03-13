@@ -100,19 +100,19 @@ Both old and new paths are supported via dual-path resolution:
 ### Salesforce
 ```bash
 # Resolve path for an org
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/org-context-manager.js)" resolve <org-alias>
+node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js resolve <org-alias>
 
 # Migrate context to org-centric
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/org-context-manager.js)" migrate <org-alias> --org <org-slug>
+node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js migrate <org-alias> --org <org-slug>
 ```
 
 ### HubSpot
 ```bash
 # Resolve path for a portal
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/lib/portal-context-manager.js)" resolve <portal-name>
+node .claude-plugins/opspal-hubspot/scripts/lib/portal-context-manager.js resolve <portal-name>
 
 # Migrate context to org-centric
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/lib/portal-context-manager.js)" migrate <portal-name> --org <org-slug>
+node .claude-plugins/opspal-hubspot/scripts/lib/portal-context-manager.js migrate <portal-name> --org <org-slug>
 ```
 
 ## Utility Scripts
@@ -120,25 +120,25 @@ node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve
 ### Path Resolver
 ```bash
 # Resolve instance path
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/path-resolver.js resolve <platform> <instance> [org]
+node .claude-plugins/opspal-core/scripts/lib/path-resolver.js resolve <platform> <instance> [org]
 
 # List discovered orgs
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/path-resolver.js list-orgs
+node .claude-plugins/opspal-core/scripts/lib/path-resolver.js list-orgs
 
 # Extract org info from path
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/path-resolver.js extract "orgs/acme/platforms/salesforce/prod"
+node .claude-plugins/opspal-core/scripts/lib/path-resolver.js extract "orgs/acme/platforms/salesforce/prod"
 ```
 
 ### Metadata Loader
 ```bash
 # Load org metadata
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/metadata-loader.js load-org <org-slug>
+node .claude-plugins/opspal-core/scripts/lib/metadata-loader.js load-org <org-slug>
 
 # Load instance metadata
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/metadata-loader.js load-instance <org> <platform> <instance>
+node .claude-plugins/opspal-core/scripts/lib/metadata-loader.js load-instance <org> <platform> <instance>
 
 # List all orgs with metadata
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/metadata-loader.js list-orgs
+node .claude-plugins/opspal-core/scripts/lib/metadata-loader.js list-orgs
 ```
 
 ## Mapping Configuration
@@ -166,7 +166,7 @@ orgs:
           main:
             environment_type: production
             source_paths:
-              - portals/acme-portal
+              - .claude-plugins/opspal-hubspot/portals/acme-portal
 ```
 
 ## Migration Safety
@@ -183,10 +183,10 @@ orgs:
 ls -la orgs/
 
 # Test path resolution still works
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/org-context-manager.js)" resolve <org>
+node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js resolve <org>
 
 # Check context loading
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-salesforce scripts/lib/org-context-manager.js)" load <org>
+node .claude-plugins/opspal-salesforce/scripts/lib/org-context-manager.js load <org>
 ```
 
 ## Benefits

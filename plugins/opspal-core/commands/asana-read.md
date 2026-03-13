@@ -26,13 +26,27 @@ Read Asana tasks assigned to the current user and parse them into an agent-frien
 ### 1. Validate Asana Connection
 
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
 # Validate connection before reading tasks
-${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh validate
+ASANA_CONN=$(find_script "asana-connection-manager.sh")
+bash "$ASANA_CONN" validate
 ```
 
 If validation fails, run:
 ```bash
-${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh fix
+bash "$ASANA_CONN" fix
 ```
 
 ### 2. Get Assigned Tasks
@@ -40,7 +54,7 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh fix
 Use Asana MCP or task reader utility:
 
 ```javascript
-const { AsanaTaskReader } = require('./.claude-plugins/opspal-core/scripts/lib/asana-task-reader');
+const { AsanaTaskReader } = require(process.env.ASANA_TASK_READER_PATH || './scripts/lib/asana-task-reader');
 
 const reader = new AsanaTaskReader(process.env.ASANA_ACCESS_TOKEN);
 
@@ -222,7 +236,7 @@ Fix with:
   set -a && source .env && set +a
 
 Or validate connection:
-  ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-connection-manager.sh validate
+  $(find_script "asana-connection-manager.sh") validate
 ```
 
 ### No Tasks Found
@@ -330,8 +344,9 @@ URL: https://app.asana.com/...
 ### Using Utility Script
 
 ```bash
-# Parse specific task
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-task-reader.js 1211748609238981
+# Parse specific task (use find_script from resolve-script.sh)
+ASANA_READER=$(find_script "asana-task-reader.js")
+node "$ASANA_READER" 1211748609238981
 
 # Output: JSON with full context
 ```
@@ -343,7 +358,7 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-task-reader.js 1211748609238981
 const task = await asana.get_task(taskId);
 
 // Parse with utility
-const { AsanaTaskReader } = require('./.claude-plugins/opspal-core/scripts/lib/asana-task-reader');
+const { AsanaTaskReader } = require(process.env.ASANA_TASK_READER_PATH || './scripts/lib/asana-task-reader');
 const reader = new AsanaTaskReader(process.env.ASANA_ACCESS_TOKEN);
 const context = await reader.parseTask(taskId, { includeComments: true });
 ```

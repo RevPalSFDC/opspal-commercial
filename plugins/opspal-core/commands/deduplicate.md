@@ -159,15 +159,30 @@ node scripts/lib/governance/rollback.js --snapshot-id snap_xxx123
 ## CLI Usage
 
 ```bash
+# Source shared path resolver
+RESOLVE_SCRIPT=""
+for _candidate in \
+  "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
+  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
+  "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
+  "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
+  [ -n "$_candidate" ] && [ -f "$_candidate" ] && RESOLVE_SCRIPT="$_candidate" && break
+done
+if [ -z "$RESOLVE_SCRIPT" ]; then echo "ERROR: Cannot locate opspal-core resolve-script.sh"; exit 1; fi
+source "$RESOLVE_SCRIPT"
+
 # Run detection via script
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/run-dedup.js \
+DEDUP_SCRIPT=$(find_script "deduplication/run-dedup.js")
+node "$DEDUP_SCRIPT" \
   --object Account \
   --mode detect \
   --org production \
   --input ./reports/account-export.json
 
 # Export clusters for review
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/export-clusters.js \
+EXPORT_SCRIPT=$(find_script "deduplication/export-clusters.js")
+node "$EXPORT_SCRIPT" \
   --output ./clusters.json \
   --input ./reports/account-export.json
 ```

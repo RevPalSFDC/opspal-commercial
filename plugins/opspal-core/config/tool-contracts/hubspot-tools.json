@@ -1,0 +1,211 @@
+{
+  "hubspot_create_contact": {
+    "description": "HubSpot contact creation tool contract",
+    "required": ["properties"],
+    "optional": ["associations"],
+    "types": {
+      "properties": "object",
+      "associations": "array"
+    },
+    "rules": [
+      {
+        "name": "email_required",
+        "description": "Contacts should have email for deduplication",
+        "condition": {
+          "param": "properties",
+          "missing": ["email"]
+        },
+        "severity": "WARNING",
+        "warning": "Contact creation without email may create duplicates",
+        "remediation": "Include email property for proper deduplication"
+      }
+    ]
+  },
+  "hubspot_create_company": {
+    "description": "HubSpot company creation tool contract",
+    "required": ["properties"],
+    "optional": ["associations"],
+    "types": {
+      "properties": "object",
+      "associations": "array"
+    },
+    "rules": [
+      {
+        "name": "domain_recommended",
+        "description": "Companies should have domain for matching",
+        "condition": {
+          "param": "properties",
+          "missing": ["domain"]
+        },
+        "severity": "WARNING",
+        "warning": "Company without domain cannot be matched to contacts automatically",
+        "remediation": "Include domain property for automatic contact association"
+      }
+    ]
+  },
+  "hubspot_search": {
+    "description": "HubSpot CRM search tool contract",
+    "required": ["object_type", "filterGroups"],
+    "optional": ["properties", "limit", "after", "sorts"],
+    "types": {
+      "object_type": "string",
+      "filterGroups": "array",
+      "properties": "array",
+      "limit": "number",
+      "after": "string",
+      "sorts": "array"
+    },
+    "enums": {
+      "object_type": ["contacts", "companies", "deals", "tickets", "products", "line_items", "quotes"]
+    },
+    "ranges": {
+      "limit": {
+        "min": 1,
+        "max": 100
+      }
+    },
+    "rules": [
+      {
+        "name": "filter_operator_format",
+        "description": "HubSpot requires verbose operator names",
+        "condition": {
+          "param": "filterGroups",
+          "pattern": "\"operator\":\\s*\"(=|!=|<|>|<=|>=)\""
+        },
+        "severity": "CRITICAL",
+        "message": "HubSpot requires verbose operator names (EQ, NEQ, LT, GT, LTE, GTE), not symbols",
+        "remediation": "Replace '=' with 'EQ', '!=' with 'NEQ', '<' with 'LT', '>' with 'GT', '<=' with 'LTE', '>=' with 'GTE'"
+      },
+      {
+        "name": "between_operator_format",
+        "description": "BETWEEN requires two values in propertyValue array",
+        "condition": {
+          "param": "filterGroups",
+          "pattern": "\"operator\":\\s*\"BETWEEN\""
+        },
+        "severity": "WARNING",
+        "warning": "BETWEEN operator requires propertyValue to be array of [min, max]",
+        "remediation": "Ensure propertyValue is an array with exactly 2 elements"
+      },
+      {
+        "name": "results_limit",
+        "description": "HubSpot search returns max 10000 results",
+        "condition": {
+          "param": "limit",
+          "pattern": ".*"
+        },
+        "severity": "INFO",
+        "warning": "HubSpot search API returns maximum 10,000 results. Use pagination for larger datasets.",
+        "remediation": "Implement pagination using 'after' cursor for complete data retrieval"
+      }
+    ]
+  },
+  "hubspot_update_property": {
+    "description": "HubSpot property update tool contract",
+    "required": ["object_type", "property_name", "properties"],
+    "optional": [],
+    "types": {
+      "object_type": "string",
+      "property_name": "string",
+      "properties": "object"
+    },
+    "rules": [
+      {
+        "name": "internal_property_immutable",
+        "description": "Internal properties cannot be modified",
+        "condition": {
+          "param": "property_name",
+          "pattern": "^(hs_|hubspot_)"
+        },
+        "severity": "CRITICAL",
+        "message": "Internal HubSpot properties (hs_*, hubspot_*) cannot be modified via API",
+        "remediation": "Only modify custom properties. Internal properties are managed by HubSpot."
+      }
+    ]
+  },
+  "hubspot_batch_create": {
+    "description": "HubSpot batch creation tool contract",
+    "required": ["object_type", "inputs"],
+    "optional": [],
+    "types": {
+      "object_type": "string",
+      "inputs": "array"
+    },
+    "ranges": {
+      "inputs": {
+        "maxItems": 100
+      }
+    },
+    "rules": [
+      {
+        "name": "batch_size_limit",
+        "description": "HubSpot batch operations limited to 100 records",
+        "condition": {
+          "param": "inputs",
+          "arrayLength": { "gt": 100 }
+        },
+        "severity": "CRITICAL",
+        "message": "HubSpot batch operations support maximum 100 records per request",
+        "remediation": "Split batch into chunks of 100 or fewer records"
+      }
+    ]
+  },
+  "hubspot_workflow_create": {
+    "description": "HubSpot workflow creation tool contract",
+    "required": ["name", "type", "enrollmentCriteria"],
+    "optional": ["actions", "enabled"],
+    "types": {
+      "name": "string",
+      "type": "string",
+      "enrollmentCriteria": "object",
+      "actions": "array",
+      "enabled": "boolean"
+    },
+    "enums": {
+      "type": ["CONTACT", "COMPANY", "DEAL", "TICKET", "QUOTE"]
+    },
+    "rules": [
+      {
+        "name": "test_before_enable",
+        "description": "Workflows should be tested before enabling",
+        "condition": {
+          "param": "enabled",
+          "value": true
+        },
+        "severity": "WARNING",
+        "warning": "Creating workflow in enabled state - ensure logic is tested",
+        "remediation": "Create workflow disabled first, test enrollment criteria, then enable"
+      }
+    ]
+  },
+  "hubspot_property_history": {
+    "description": "HubSpot property history retrieval tool contract",
+    "required": ["object_type", "object_id", "property_name"],
+    "optional": ["limit"],
+    "types": {
+      "object_type": "string",
+      "object_id": "string",
+      "property_name": "string",
+      "limit": "number"
+    },
+    "ranges": {
+      "limit": {
+        "min": 1,
+        "max": 100
+      }
+    },
+    "rules": [
+      {
+        "name": "history_batch_limit",
+        "description": "Property history API has rate limits",
+        "condition": {
+          "param": "limit",
+          "pattern": ".*"
+        },
+        "severity": "INFO",
+        "warning": "Property history requests are rate limited. Batch queries may hit limits.",
+        "remediation": "Implement delays between batch history queries"
+      }
+    ]
+  }
+}

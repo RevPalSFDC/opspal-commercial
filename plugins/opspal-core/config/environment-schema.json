@@ -1,0 +1,583 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Environment requirements schema for all plugins",
+  "lastUpdated": "2025-12-19",
+
+  "global": {
+    "description": "Global environment requirements for all plugins",
+    "required": [],
+    "optional": [
+      {
+        "name": "CLAUDE_PLUGIN_ROOT",
+        "description": "Root directory of the active plugin",
+        "detection": "auto-calculated from plugin.json location"
+      },
+      {
+        "name": "NODE_ENV",
+        "description": "Environment mode",
+        "default": "production",
+        "enum": ["development", "production", "test"]
+      }
+    ],
+    "dependencies": {
+      "required": [
+        {
+          "name": "node",
+          "minVersion": "18.0.0",
+          "check": "node --version",
+          "installCommand": "brew install node || apt-get install nodejs"
+        },
+        {
+          "name": "jq",
+          "minVersion": "1.6",
+          "check": "jq --version",
+          "installCommand": "brew install jq || apt-get install jq"
+        }
+      ],
+      "optional": [
+        {
+          "name": "bc",
+          "description": "Calculator for shell scripts",
+          "check": "which bc",
+          "installCommand": "brew install bc || apt-get install bc"
+        }
+      ]
+    }
+  },
+
+  "plugins": {
+    "salesforce-plugin": {
+      "description": "Salesforce operations plugin",
+      "required": [
+        {
+          "name": "SALESFORCE_ORG_ALIAS",
+          "description": "Default Salesforce org alias",
+          "alternatives": ["SF_TARGET_ORG", "SFDX_DEFAULTUSERNAME"],
+          "example": "production",
+          "validation": {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$",
+            "minLength": 2,
+            "maxLength": 40
+          }
+        }
+      ],
+      "optional": [
+        {
+          "name": "SF_TARGET_ORG",
+          "description": "Target org for CLI commands",
+          "inheritsFrom": "SALESFORCE_ORG_ALIAS"
+        },
+        {
+          "name": "SFDX_DEFAULTUSERNAME",
+          "description": "Legacy default username",
+          "deprecated": true,
+          "useInstead": "SF_TARGET_ORG"
+        },
+        {
+          "name": "SALESFORCE_INSTANCE_URL",
+          "description": "Salesforce instance URL",
+          "example": "https://yourorg.my.salesforce.com",
+          "validation": {
+            "pattern": "^https://[a-zA-Z0-9-]+\\.(my\\.)?salesforce\\.com$"
+          }
+        },
+        {
+          "name": "SF_API_VERSION",
+          "description": "Salesforce API version",
+          "default": "62.0",
+          "validation": {
+            "pattern": "^\\d+\\.0$"
+          }
+        }
+      ],
+      "auth": {
+        "description": "Authentication options (one required)",
+        "oneOf": [
+          {
+            "name": "SALESFORCE_ACCESS_TOKEN",
+            "description": "OAuth access token"
+          },
+          {
+            "name": "SF_CLI_AUTH",
+            "description": "Use sf CLI authentication",
+            "check": "sf org display --target-org ${SALESFORCE_ORG_ALIAS} --json"
+          }
+        ]
+      },
+      "dependencies": {
+        "required": [
+          {
+            "name": "sf",
+            "description": "Salesforce CLI",
+            "minVersion": "2.0.0",
+            "check": "sf --version",
+            "installCommand": "npm install -g @salesforce/cli"
+          }
+        ],
+        "optional": [
+          {
+            "name": "sfdx",
+            "description": "Legacy Salesforce CLI (deprecated)",
+            "deprecated": true,
+            "useInstead": "sf"
+          }
+        ]
+      },
+      "commands": {
+        "sf-data-query": {
+          "required": ["SALESFORCE_ORG_ALIAS"],
+          "optional": ["SF_API_VERSION"]
+        },
+        "sf-project-deploy": {
+          "required": ["SALESFORCE_ORG_ALIAS"],
+          "optional": ["SF_API_VERSION", "SALESFORCE_INSTANCE_URL"]
+        }
+      }
+    },
+
+    "hubspot-plugin": {
+      "description": "HubSpot operations plugin",
+      "required": [
+        {
+          "name": "HUBSPOT_PRIVATE_APP_TOKEN",
+          "description": "HubSpot Private App access token",
+          "alternatives": ["HUBSPOT_ACCESS_TOKEN"],
+          "validation": {
+            "pattern": "^pat-[a-zA-Z0-9-]+$",
+            "sensitive": true
+          }
+        }
+      ],
+      "optional": [
+        {
+          "name": "HUBSPOT_ACCESS_TOKEN",
+          "description": "Alternative to Private App token",
+          "deprecated": true,
+          "useInstead": "HUBSPOT_PRIVATE_APP_TOKEN"
+        },
+        {
+          "name": "HUBSPOT_PORTAL_ID",
+          "description": "HubSpot portal/account ID",
+          "example": "12345678",
+          "validation": {
+            "pattern": "^\\d+$"
+          }
+        }
+      ],
+      "dependencies": {
+        "required": [],
+        "optional": []
+      }
+    },
+
+    "marketo-plugin": {
+      "description": "Marketo operations plugin",
+      "required": [
+        {
+          "name": "MARKETO_CLIENT_ID",
+          "description": "Marketo API Client ID",
+          "validation": {
+            "pattern": "^[a-f0-9-]{36}$"
+          }
+        },
+        {
+          "name": "MARKETO_CLIENT_SECRET",
+          "description": "Marketo API Client Secret",
+          "validation": {
+            "sensitive": true
+          }
+        },
+        {
+          "name": "MARKETO_BASE_URL",
+          "description": "Marketo REST API base URL",
+          "example": "https://123-ABC-456.mktorest.com",
+          "validation": {
+            "pattern": "^https://[0-9A-Z-]+\\.mktorest\\.com$"
+          }
+        }
+      ],
+      "optional": [
+        {
+          "name": "MARKETO_IDENTITY_URL",
+          "description": "Marketo identity endpoint",
+          "derivedFrom": "MARKETO_BASE_URL",
+          "pattern": "${MARKETO_BASE_URL}/identity"
+        }
+      ],
+      "dependencies": {
+        "required": [],
+        "optional": []
+      }
+    },
+
+    "opspal-core": {
+      "description": "Cross-platform utilities plugin",
+      "required": [],
+      "optional": [
+        {
+          "name": "ENABLE_SUBAGENT_BOOST",
+          "description": "Enable sub-agent utilization boosting",
+          "default": "1",
+          "enum": ["0", "1"]
+        },
+        {
+          "name": "ENABLE_AGENT_BLOCKING",
+          "description": "Block high-complexity tasks without agent",
+          "default": "1",
+          "enum": ["0", "1"]
+        },
+        {
+          "name": "ROUTING_VERBOSE",
+          "description": "Enable verbose routing logs",
+          "default": "0",
+          "enum": ["0", "1"]
+        },
+        {
+          "name": "ENABLE_AUTO_ROUTING",
+          "description": "Enable automatic agent routing",
+          "default": "1",
+          "enum": ["0", "1"]
+        },
+        {
+          "name": "ROUTING_CONFIDENCE_THRESHOLD",
+          "description": "Confidence threshold for auto-routing",
+          "default": "0.7",
+          "validation": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        {
+          "name": "COMPLEXITY_THRESHOLD",
+          "description": "Complexity threshold for requiring agent",
+          "default": "0.7",
+          "validation": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        {
+          "name": "TOOL_CONTRACT_BLOCK_ON_VIOLATION",
+          "description": "Block tool execution on contract violation",
+          "default": "false",
+          "enum": ["true", "false"]
+        }
+      ],
+      "dependencies": {
+        "required": [
+          {
+            "name": "jq",
+            "description": "JSON processor for routing",
+            "check": "jq --version"
+          }
+        ],
+        "optional": [
+          {
+            "name": "bc",
+            "description": "Calculator for complexity scoring",
+            "check": "which bc"
+          }
+        ]
+      }
+    },
+
+    "developer-tools-plugin": {
+      "description": "Developer tools for plugin development",
+      "required": [],
+      "optional": [
+        {
+          "name": "PLUGIN_DEV_MODE",
+          "description": "Enable development mode features",
+          "default": "0",
+          "enum": ["0", "1"]
+        }
+      ],
+      "dependencies": {
+        "required": [
+          {
+            "name": "npm",
+            "description": "Node package manager",
+            "check": "npm --version"
+          }
+        ]
+      }
+    }
+  },
+
+  "integrations": {
+    "asana": {
+      "description": "Asana task management integration",
+      "required": [
+        {
+          "name": "ASANA_ACCESS_TOKEN",
+          "description": "Asana Personal Access Token",
+          "validation": {
+            "pattern": "^[0-9]/[0-9]+/[0-9]+:[a-f0-9]+$",
+            "sensitive": true
+          }
+        },
+        {
+          "name": "ASANA_WORKSPACE_ID",
+          "description": "Asana Workspace GID",
+          "alternatives": ["ASANA_WORKSPACE_GID"],
+          "validation": {
+            "pattern": "^\\d+$"
+          }
+        }
+      ],
+      "optional": [
+        {
+          "name": "ASANA_PROJECT_GID",
+          "description": "Default Asana Project GID"
+        },
+        {
+          "name": "ASANA_READ_ONLY_MODE",
+          "description": "Prevent write operations",
+          "default": "false",
+          "enum": ["true", "false"]
+        }
+      ]
+    },
+
+    "supabase": {
+      "description": "Supabase database integration",
+      "required": [
+        {
+          "name": "SUPABASE_URL",
+          "description": "Supabase project URL",
+          "example": "https://xxxxx.supabase.co",
+          "validation": {
+            "pattern": "^https://[a-z0-9-]+\\.supabase\\.co$",
+            "minLength": 25,
+            "maxLength": 60
+          }
+        },
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KEY",
+          "description": "Service role key for admin operations (JWT format). Required for write operations due to RLS policies.",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "validation": {
+            "pattern": "^eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+            "minLength": 100,
+            "sensitive": true
+          },
+          "criticalNote": "Using SUPABASE_ANON_KEY instead will cause silent update failures due to RLS policies. Always use SERVICE_ROLE_KEY for write operations."
+        }
+      ],
+      "optional": [
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "description": "Anonymous/public key (read-only operations only)",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "validation": {
+            "pattern": "^eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+            "minLength": 100,
+            "sensitive": true
+          },
+          "warning": "Anon key cannot bypass RLS - use SERVICE_ROLE_KEY for updates"
+        }
+      ],
+      "commonErrors": [
+        {
+          "symptom": "Updates return HTTP 200 but don't persist",
+          "cause": "Using SUPABASE_ANON_KEY instead of SERVICE_ROLE_KEY",
+          "solution": "Set SUPABASE_SERVICE_ROLE_KEY for write operations"
+        },
+        {
+          "symptom": "401 Unauthorized errors",
+          "cause": "Invalid or expired JWT token",
+          "solution": "Regenerate key from Supabase dashboard > Settings > API"
+        }
+      ]
+    },
+
+    "mcp_servers": {
+      "description": "MCP server connection configurations",
+      "required": [],
+      "optional": [
+        {
+          "name": "MCP_SALESFORCE_ORG",
+          "description": "Salesforce org alias for MCP Salesforce server",
+          "inheritsFrom": "SALESFORCE_ORG_ALIAS"
+        },
+        {
+          "name": "MCP_ASANA_TOKEN",
+          "description": "Asana token for MCP Asana server",
+          "inheritsFrom": "ASANA_ACCESS_TOKEN",
+          "validation": {
+            "sensitive": true
+          }
+        },
+        {
+          "name": "MCP_SUPABASE_URL",
+          "description": "Supabase URL for MCP Supabase server",
+          "inheritsFrom": "SUPABASE_URL"
+        },
+        {
+          "name": "MCP_SUPABASE_KEY",
+          "description": "Supabase key for MCP Supabase server",
+          "inheritsFrom": "SUPABASE_SERVICE_ROLE_KEY",
+          "validation": {
+            "sensitive": true
+          }
+        },
+        {
+          "name": "MCP_PLAYWRIGHT_HEADLESS",
+          "description": "Run Playwright in headless mode",
+          "default": "true",
+          "enum": ["true", "false"]
+        }
+      ],
+      "serverDefinitions": {
+        "salesforce-dx": {
+          "requiredEnv": ["SALESFORCE_ORG_ALIAS"],
+          "optionalEnv": ["SF_API_VERSION"]
+        },
+        "asana": {
+          "requiredEnv": ["ASANA_ACCESS_TOKEN"]
+        },
+        "supabase": {
+          "requiredEnv": ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"]
+        },
+        "playwright": {
+          "requiredEnv": [],
+          "optionalEnv": ["MCP_PLAYWRIGHT_HEADLESS"]
+        },
+        "sequential-thinking": {
+          "requiredEnv": []
+        },
+        "notebooklm": {
+          "requiredEnv": [],
+          "optionalEnv": ["NOTEBOOKLM_QUERY_TIMEOUT", "NOTEBOOKLM_DEBUG"],
+          "authMethod": "cookie-based",
+          "setup": "bash .claude-plugins/opspal-core/scripts/setup-notebooklm-auth.sh"
+        }
+      }
+    },
+
+    "slack": {
+      "description": "Slack notifications integration",
+      "required": [],
+      "optional": [
+        {
+          "name": "SLACK_WEBHOOK_URL",
+          "description": "Slack incoming webhook URL",
+          "validation": {
+            "pattern": "^https://hooks\\.slack\\.com/services/",
+            "sensitive": true
+          }
+        }
+      ]
+    },
+
+    "notebooklm": {
+      "description": "NotebookLM MCP integration for client knowledge bases",
+      "required": [],
+      "optional": [
+        {
+          "name": "NOTEBOOKLM_QUERY_TIMEOUT",
+          "description": "Timeout in seconds for NotebookLM queries",
+          "default": "120",
+          "validation": {
+            "type": "number",
+            "minimum": 30,
+            "maximum": 300
+          }
+        },
+        {
+          "name": "NOTEBOOKLM_DEBUG",
+          "description": "Enable verbose debug logging for NotebookLM MCP",
+          "default": "false",
+          "enum": ["true", "false"]
+        },
+        {
+          "name": "NOTEBOOKLM_DAILY_QUERY_BUDGET",
+          "description": "Daily query budget allocation (free tier ~50/day)",
+          "default": "50",
+          "validation": {
+            "type": "number",
+            "minimum": 10,
+            "maximum": 1000
+          }
+        },
+        {
+          "name": "NOTEBOOKLM_AUTO_SYNC",
+          "description": "Enable automatic source sync after assessments",
+          "default": "true",
+          "enum": ["true", "false"]
+        },
+        {
+          "name": "NOTEBOOKLM_DRIVE_RESEARCH",
+          "description": "Enable Google Drive research for auto-discovery",
+          "default": "true",
+          "enum": ["true", "false"]
+        },
+        {
+          "name": "NOTEBOOKLM_CACHE_TTL",
+          "description": "Cache TTL in seconds for query responses",
+          "default": "3600",
+          "validation": {
+            "type": "number",
+            "minimum": 300,
+            "maximum": 86400
+          }
+        }
+      ],
+      "auth": {
+        "description": "Authentication via browser-based Google login",
+        "method": "cookie-based",
+        "setup": "notebooklm-mcp-auth",
+        "expiration": "2-4 weeks",
+        "autoRefresh": true,
+        "notes": [
+          "Run 'notebooklm-mcp-auth' for initial setup",
+          "Cookies stored in ~/.notebooklm-mcp/",
+          "Auto-refreshes using saved Chrome profile"
+        ]
+      },
+      "dependencies": {
+        "required": [
+          {
+            "name": "notebooklm-mcp",
+            "description": "NotebookLM MCP server",
+            "check": "notebooklm-mcp --help",
+            "installCommand": "uv tool install notebooklm-mcp-server"
+          }
+        ],
+        "optional": [
+          {
+            "name": "uv",
+            "description": "Fast Python package installer (recommended)",
+            "check": "uv --version",
+            "installCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh"
+          }
+        ]
+      },
+      "rateLimits": {
+        "queriesPerDay": 50,
+        "note": "Free tier limit; batch queries for optimization"
+      },
+      "budgetAllocation": {
+        "P0_assessment_context": 15,
+        "P1_cross_assessment": 10,
+        "P2_on_demand": 15,
+        "P3_briefings": 5,
+        "reserve": 5
+      }
+    }
+  },
+
+  "validation": {
+    "strictMode": false,
+    "failOnMissing": {
+      "required": true,
+      "optional": false
+    },
+    "failOnInvalidPattern": true,
+    "warnOnDeprecated": true,
+    "checkDependencies": true
+  }
+}

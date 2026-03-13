@@ -2,7 +2,7 @@
   "$schema": "./asana-user-mapping.schema.json",
   "version": "1.0.0",
   "lastUpdated": "2025-10-26",
-  "workspaceId": "${ASANA_WORKSPACE_ID}",
+  "workspaceId": "1206944680490015",
   "defaultAssigneeGid": null,
   "agentToUserMapping": {
     "sfdc-metadata-manager": {

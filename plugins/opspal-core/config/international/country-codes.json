@@ -1,0 +1,311 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "ISO 3166-1 alpha-2 country codes with dial codes and metadata",
+  "version": "1.0.0",
+  "countries": {
+    "US": {
+      "name": "United States",
+      "dialCode": "1",
+      "region": "NA",
+      "languages": ["en"],
+      "currency": "USD"
+    },
+    "CA": {
+      "name": "Canada",
+      "dialCode": "1",
+      "region": "NA",
+      "languages": ["en", "fr"],
+      "currency": "CAD"
+    },
+    "MX": {
+      "name": "Mexico",
+      "dialCode": "52",
+      "region": "LATAM",
+      "languages": ["es"],
+      "currency": "MXN"
+    },
+    "BR": {
+      "name": "Brazil",
+      "dialCode": "55",
+      "region": "LATAM",
+      "languages": ["pt"],
+      "currency": "BRL"
+    },
+    "AR": {
+      "name": "Argentina",
+      "dialCode": "54",
+      "region": "LATAM",
+      "languages": ["es"],
+      "currency": "ARS"
+    },
+    "CL": {
+      "name": "Chile",
+      "dialCode": "56",
+      "region": "LATAM",
+      "languages": ["es"],
+      "currency": "CLP"
+    },
+    "CO": {
+      "name": "Colombia",
+      "dialCode": "57",
+      "region": "LATAM",
+      "languages": ["es"],
+      "currency": "COP"
+    },
+    "PE": {
+      "name": "Peru",
+      "dialCode": "51",
+      "region": "LATAM",
+      "languages": ["es"],
+      "currency": "PEN"
+    },
+    "GB": {
+      "name": "United Kingdom",
+      "dialCode": "44",
+      "region": "UK",
+      "languages": ["en"],
+      "currency": "GBP",
+      "aliases": ["UK"]
+    },
+    "IE": {
+      "name": "Ireland",
+      "dialCode": "353",
+      "region": "UK",
+      "languages": ["en", "ga"],
+      "currency": "EUR"
+    },
+    "DE": {
+      "name": "Germany",
+      "dialCode": "49",
+      "region": "EU",
+      "languages": ["de"],
+      "currency": "EUR"
+    },
+    "FR": {
+      "name": "France",
+      "dialCode": "33",
+      "region": "EU",
+      "languages": ["fr"],
+      "currency": "EUR"
+    },
+    "ES": {
+      "name": "Spain",
+      "dialCode": "34",
+      "region": "EU",
+      "languages": ["es"],
+      "currency": "EUR"
+    },
+    "IT": {
+      "name": "Italy",
+      "dialCode": "39",
+      "region": "EU",
+      "languages": ["it"],
+      "currency": "EUR"
+    },
+    "NL": {
+      "name": "Netherlands",
+      "dialCode": "31",
+      "region": "EU",
+      "languages": ["nl"],
+      "currency": "EUR"
+    },
+    "BE": {
+      "name": "Belgium",
+      "dialCode": "32",
+      "region": "EU",
+      "languages": ["nl", "fr", "de"],
+      "currency": "EUR"
+    },
+    "CH": {
+      "name": "Switzerland",
+      "dialCode": "41",
+      "region": "EU",
+      "languages": ["de", "fr", "it"],
+      "currency": "CHF"
+    },
+    "AT": {
+      "name": "Austria",
+      "dialCode": "43",
+      "region": "EU",
+      "languages": ["de"],
+      "currency": "EUR"
+    },
+    "PL": {
+      "name": "Poland",
+      "dialCode": "48",
+      "region": "EU",
+      "languages": ["pl"],
+      "currency": "PLN"
+    },
+    "PT": {
+      "name": "Portugal",
+      "dialCode": "351",
+      "region": "EU",
+      "languages": ["pt"],
+      "currency": "EUR"
+    },
+    "SE": {
+      "name": "Sweden",
+      "dialCode": "46",
+      "region": "EU",
+      "languages": ["sv"],
+      "currency": "SEK"
+    },
+    "NO": {
+      "name": "Norway",
+      "dialCode": "47",
+      "region": "EU",
+      "languages": ["no"],
+      "currency": "NOK"
+    },
+    "DK": {
+      "name": "Denmark",
+      "dialCode": "45",
+      "region": "EU",
+      "languages": ["da"],
+      "currency": "DKK"
+    },
+    "FI": {
+      "name": "Finland",
+      "dialCode": "358",
+      "region": "EU",
+      "languages": ["fi", "sv"],
+      "currency": "EUR"
+    },
+    "AU": {
+      "name": "Australia",
+      "dialCode": "61",
+      "region": "APAC",
+      "languages": ["en"],
+      "currency": "AUD"
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "dialCode": "64",
+      "region": "APAC",
+      "languages": ["en", "mi"],
+      "currency": "NZD"
+    },
+    "JP": {
+      "name": "Japan",
+      "dialCode": "81",
+      "region": "APAC",
+      "languages": ["ja"],
+      "currency": "JPY"
+    },
+    "KR": {
+      "name": "South Korea",
+      "dialCode": "82",
+      "region": "APAC",
+      "languages": ["ko"],
+      "currency": "KRW"
+    },
+    "SG": {
+      "name": "Singapore",
+      "dialCode": "65",
+      "region": "APAC",
+      "languages": ["en", "zh", "ms", "ta"],
+      "currency": "SGD"
+    },
+    "HK": {
+      "name": "Hong Kong",
+      "dialCode": "852",
+      "region": "APAC",
+      "languages": ["zh", "en"],
+      "currency": "HKD"
+    },
+    "IN": {
+      "name": "India",
+      "dialCode": "91",
+      "region": "APAC",
+      "languages": ["hi", "en"],
+      "currency": "INR"
+    },
+    "CN": {
+      "name": "China",
+      "dialCode": "86",
+      "region": "APAC",
+      "languages": ["zh"],
+      "currency": "CNY"
+    },
+    "TW": {
+      "name": "Taiwan",
+      "dialCode": "886",
+      "region": "APAC",
+      "languages": ["zh"],
+      "currency": "TWD"
+    },
+    "MY": {
+      "name": "Malaysia",
+      "dialCode": "60",
+      "region": "APAC",
+      "languages": ["ms", "en"],
+      "currency": "MYR"
+    },
+    "TH": {
+      "name": "Thailand",
+      "dialCode": "66",
+      "region": "APAC",
+      "languages": ["th"],
+      "currency": "THB"
+    },
+    "PH": {
+      "name": "Philippines",
+      "dialCode": "63",
+      "region": "APAC",
+      "languages": ["en", "tl"],
+      "currency": "PHP"
+    },
+    "ID": {
+      "name": "Indonesia",
+      "dialCode": "62",
+      "region": "APAC",
+      "languages": ["id"],
+      "currency": "IDR"
+    },
+    "VN": {
+      "name": "Vietnam",
+      "dialCode": "84",
+      "region": "APAC",
+      "languages": ["vi"],
+      "currency": "VND"
+    }
+  },
+  "regions": {
+    "NA": {
+      "name": "North America",
+      "countries": ["US", "CA", "MX"]
+    },
+    "LATAM": {
+      "name": "Latin America",
+      "countries": ["MX", "BR", "AR", "CL", "CO", "PE"]
+    },
+    "EU": {
+      "name": "Europe",
+      "countries": ["DE", "FR", "ES", "IT", "NL", "BE", "CH", "AT", "PL", "PT", "SE", "NO", "DK", "FI"]
+    },
+    "UK": {
+      "name": "United Kingdom & Ireland",
+      "countries": ["GB", "IE"]
+    },
+    "APAC": {
+      "name": "Asia-Pacific",
+      "countries": ["AU", "NZ", "JP", "KR", "SG", "HK", "IN", "CN", "TW", "MY", "TH", "PH", "ID", "VN"]
+    }
+  },
+  "aliases": {
+    "UK": "GB",
+    "USA": "US",
+    "UNITED STATES": "US",
+    "UNITED STATES OF AMERICA": "US",
+    "GREAT BRITAIN": "GB",
+    "ENGLAND": "GB",
+    "SCOTLAND": "GB",
+    "WALES": "GB",
+    "NORTHERN IRELAND": "GB",
+    "DEUTSCHLAND": "DE",
+    "BRASIL": "BR",
+    "ESPANA": "ES",
+    "ITALIA": "IT"
+  }
+}

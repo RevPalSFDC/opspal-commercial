@@ -19,7 +19,7 @@ Project Connect uses **individual user authentication** for Asana operations rat
 
 ## Workspace Configuration
 
-**Default Workspace**: `<your-workspace-id>`
+**Default Workspace**: `1206944680490015`
 
 All Asana projects created by Project Connect will be in this workspace. Users must have project creation permissions in this workspace.
 
@@ -133,7 +133,7 @@ node .claude-plugins/opspal-core/scripts/lib/asana-auth-helper.js check
 {
   "authenticated": true,
   "token": "2/1234567890abcdef...",
-  "workspaceId": "<your-workspace-id>"
+  "workspaceId": "1206944680490015"
 }
 ```
 
@@ -164,7 +164,7 @@ node .claude-plugins/opspal-core/scripts/lib/asana-auth-helper.js test
   "message": "Token validated successfully",
   "workspaces": [
     {
-      "gid": "<your-workspace-id>",
+      "gid": "1206944680490015",
       "name": "RevPal Workspace"
     }
   ]
@@ -271,7 +271,7 @@ source ~/.bashrc
 
 ### Wrong Workspace
 
-**Problem**: `Token works but you don't have access to workspace <your-workspace-id>`
+**Problem**: `Token works but you don't have access to workspace 1206944680490015`
 
 **Solution**:
 1. Verify you're a member of the RevPal workspace
@@ -284,7 +284,7 @@ source ~/.bashrc
 
 **Solution**:
 1. Verify you have project creation permissions
-2. Check workspace settings: https://app.asana.com/0/<your-workspace-id>/settings
+2. Check workspace settings: https://app.asana.com/0/1206944680490015/settings
 3. Contact workspace admin to grant permissions
 
 ---
@@ -293,7 +293,7 @@ source ~/.bashrc
 
 ### Adding New Users
 
-1. Invite user to workspace `<your-workspace-id>`
+1. Invite user to workspace `1206944680490015`
 2. Grant "Member" level access (minimum)
 3. Enable "Can create projects" permission
 4. User follows setup instructions above

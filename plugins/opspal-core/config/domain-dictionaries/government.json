@@ -1,0 +1,223 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "government",
+  "version": "1.0.0",
+  "description": "Government agencies, law enforcement, public sector, and municipal operations",
+
+  "detectionPatterns": {
+    "keywords": [
+      "police", "sheriff", "department", "agency", "county", "city", "state",
+      "federal", "municipal", "district", "bureau", "office", "court",
+      "prosecutor", "attorney", "public safety", "corrections", "probation"
+    ],
+    "entityTypes": ["Agency", "Department", "Municipality", "Jurisdiction"],
+    "fieldPatterns": [
+      "AgencyCode", "JurisdictionId", "BadgeNumber", "CaseNumber",
+      "DocketNumber", "ORICode", "FEIN", "DUNS"
+    ]
+  },
+
+  "abbreviations": {
+    "lawEnforcement": {
+      "PD": "Police Department",
+      "SO": "Sheriff Office",
+      "SD": "Sheriff Department",
+      "PCSO": "County Sheriff Office",
+      "MCSO": "County Sheriff Office",
+      "CHP": "California Highway Patrol",
+      "HP": "Highway Patrol",
+      "SP": "State Police",
+      "TP": "Township Police",
+      "UC": "University Campus Police",
+      "SWAT": "Special Weapons and Tactics",
+      "SRT": "Special Response Team",
+      "K9": "Canine Unit"
+    },
+    "prosecution": {
+      "DA": "District Attorney",
+      "ADA": "Assistant District Attorney",
+      "SA": "State Attorney",
+      "ASA": "Assistant State Attorney",
+      "PA": "Prosecuting Attorney",
+      "CA": "County Attorney",
+      "AG": "Attorney General",
+      "AGO": "Attorney General Office",
+      "AAG": "Assistant Attorney General",
+      "AUSA": "Assistant United States Attorney",
+      "USA": "United States Attorney",
+      "PD": "Public Defender"
+    },
+    "corrections": {
+      "DOC": "Department of Corrections",
+      "BOP": "Bureau of Prisons",
+      "CC": "Correctional Center",
+      "CF": "Correctional Facility",
+      "CI": "Correctional Institution",
+      "DC": "Detention Center",
+      "JDC": "Juvenile Detention Center",
+      "ADC": "Adult Detention Center"
+    },
+    "courts": {
+      "SC": "Superior Court",
+      "DC": "District Court",
+      "CC": "Circuit Court",
+      "MC": "Municipal Court",
+      "JC": "Justice Court",
+      "FC": "Family Court",
+      "PC": "Probate Court",
+      "TC": "Traffic Court",
+      "COA": "Court of Appeals",
+      "SCOTUS": "Supreme Court of the United States"
+    },
+    "federalAgencies": {
+      "FBI": "Federal Bureau of Investigation",
+      "DEA": "Drug Enforcement Administration",
+      "ATF": "Bureau of Alcohol Tobacco Firearms and Explosives",
+      "USMS": "United States Marshals Service",
+      "ICE": "Immigration and Customs Enforcement",
+      "CBP": "Customs and Border Protection",
+      "TSA": "Transportation Security Administration",
+      "USSS": "United States Secret Service",
+      "DHS": "Department of Homeland Security",
+      "DOJ": "Department of Justice",
+      "DOD": "Department of Defense",
+      "VA": "Veterans Affairs",
+      "HHS": "Health and Human Services",
+      "HUD": "Housing and Urban Development",
+      "DOT": "Department of Transportation",
+      "DOE": "Department of Energy",
+      "EPA": "Environmental Protection Agency",
+      "FEMA": "Federal Emergency Management Agency",
+      "IRS": "Internal Revenue Service",
+      "SSA": "Social Security Administration"
+    },
+    "stateAgencies": {
+      "DMV": "Department of Motor Vehicles",
+      "BMV": "Bureau of Motor Vehicles",
+      "MVD": "Motor Vehicle Division",
+      "RMV": "Registry of Motor Vehicles",
+      "MVC": "Motor Vehicle Commission",
+      "DPS": "Department of Public Safety",
+      "DFS": "Department of Family Services",
+      "DCS": "Department of Child Services",
+      "CPS": "Child Protective Services",
+      "APS": "Adult Protective Services",
+      "DCF": "Department of Children and Families",
+      "DHHS": "Department of Health and Human Services",
+      "DPH": "Department of Public Health",
+      "DEQ": "Department of Environmental Quality",
+      "DNR": "Department of Natural Resources",
+      "DWR": "Department of Water Resources"
+    },
+    "localGovernment": {
+      "BOC": "Board of Commissioners",
+      "BOS": "Board of Supervisors",
+      "BOE": "Board of Education",
+      "CC": "City Council",
+      "TC": "Town Council",
+      "PW": "Public Works",
+      "DPW": "Department of Public Works",
+      "FD": "Fire Department",
+      "EMS": "Emergency Medical Services",
+      "EOC": "Emergency Operations Center",
+      "911": "Emergency Services",
+      "PIO": "Public Information Office",
+      "HR": "Human Resources",
+      "IT": "Information Technology",
+      "GIS": "Geographic Information Systems"
+    },
+    "military": {
+      "DOD": "Department of Defense",
+      "USA": "United States Army",
+      "USAF": "United States Air Force",
+      "USN": "United States Navy",
+      "USMC": "United States Marine Corps",
+      "USCG": "United States Coast Guard",
+      "USSF": "United States Space Force",
+      "NG": "National Guard",
+      "ANG": "Air National Guard",
+      "ARNG": "Army National Guard",
+      "MP": "Military Police",
+      "CID": "Criminal Investigation Division"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC"],
+    "preserve": [
+      "Police Department", "Sheriff Office", "Sheriff Department",
+      "District Attorney", "Attorney General", "Department of",
+      "Bureau of", "Office of", "Agency", "Administration",
+      "City of", "Town of", "County of", "State of", "Village of"
+    ]
+  },
+
+  "synonyms": {
+    "Police Department": ["PD", "Police Dept", "Police Dept.", "City Police"],
+    "Sheriff Office": ["SO", "Sheriff's Office", "Sheriffs Office", "County Sheriff"],
+    "Sheriff Department": ["SD", "Sheriff's Department", "Sheriffs Department"],
+    "District Attorney": ["DA", "DA's Office", "District Attorney's Office"],
+    "Attorney General": ["AG", "AGO", "Attorney General's Office"],
+    "Fire Department": ["FD", "Fire Dept", "Fire Dept."],
+    "Department of": ["Dept of", "Dept. of"],
+    "Department of Motor Vehicles": ["DMV", "BMV", "MVD", "RMV", "MVC"],
+    "Circuit Court": ["Cir. Ct.", "Cir Ct"],
+    "District Court": ["Dist. Ct.", "Dist Ct"],
+    "Superior Court": ["Super. Ct.", "Sup. Ct."],
+    "Municipal Court": ["Mun. Ct.", "Mun Ct"],
+    "Family Court": ["Fam. Ct.", "Fam Ct"],
+    "Juvenile Court": ["Juv. Ct.", "Juv Ct"],
+    "County": ["Co", "Co."],
+    "City": ["Cy"],
+    "Township": ["Twp", "Twp."]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.90,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 98,
+      "review": 90,
+      "tag": 75
+    },
+    "stateMismatchPenalty": -50
+  },
+
+  "genericEntityPatterns": [
+    "City of *",
+    "County of *",
+    "Town of *",
+    "Village of *",
+    "Borough of *",
+    "State of *",
+    "* County",
+    "* Police Department",
+    "* Sheriff Office",
+    "* Sheriff Department",
+    "* Sheriff's Office",
+    "* Housing Authority",
+    "Housing Authority of the City of *",
+    "* District Attorney",
+    "* Fire Department",
+    "* School District",
+    "* Public Schools",
+    "* Community School Corporation",
+    "* Public Library",
+    "* Water District",
+    "* Public Works",
+    "Department of *"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["state_match"],
+    "boosts": ["domain_match", "phone_area_match"],
+    "blockers": ["different_state_generic_name"]
+  }
+}

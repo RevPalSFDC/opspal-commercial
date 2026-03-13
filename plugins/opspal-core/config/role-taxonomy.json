@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "RevOps Data Quality System - Title to Role Taxonomy Mappings",
+
+  "roles": {
+    "decision_maker": {
+      "description": "Has final authority to approve purchases and sign contracts",
+      "weight": 100,
+      "indicators": {
+        "title_keywords": [
+          "ceo", "cfo", "coo", "cto", "cio", "ciso", "cmo", "cro", "cpo",
+          "chief", "president", "owner", "founder", "partner",
+          "general manager", "managing director", "executive director",
+          "mayor", "city manager", "county administrator", "sheriff",
+          "superintendent", "commissioner", "secretary"
+        ],
+        "title_patterns": [
+          "^chief\\s+",
+          "^c[a-z]o$",
+          "\\bowner\\b",
+          "\\bfounder\\b",
+          "\\bpresident\\b"
+        ],
+        "seniority_levels": ["executive"]
+      }
+    },
+    "influencer": {
+      "description": "Significantly influences the buying decision but doesn't have final authority",
+      "weight": 75,
+      "indicators": {
+        "title_keywords": [
+          "vp", "vice president", "svp", "evp", "avp",
+          "director", "senior director", "associate director",
+          "head of", "department head", "division head",
+          "general counsel", "controller", "treasurer",
+          "deputy", "assistant chief", "assistant director",
+          "captain", "lieutenant", "battalion chief"
+        ],
+        "title_patterns": [
+          "^vp\\s+",
+          "^vice\\s+president",
+          "^director\\s+of",
+          "^head\\s+of",
+          "\\bsenior\\s+director\\b"
+        ],
+        "seniority_levels": ["vp", "director"]
+      }
+    },
+    "champion": {
+      "description": "Internal advocate who actively promotes the solution",
+      "weight": 80,
+      "indicators": {
+        "title_keywords": [
+          "innovation", "transformation", "strategy",
+          "business development", "partnerships"
+        ],
+        "behavioral_signals": [
+          "high_engagement",
+          "multiple_touchpoints",
+          "internal_referrals"
+        ],
+        "notes": "Often identified through behavior rather than title alone"
+      }
+    },
+    "user": {
+      "description": "Will use the product/service day-to-day",
+      "weight": 50,
+      "indicators": {
+        "title_keywords": [
+          "manager", "senior manager", "specialist", "analyst",
+          "coordinator", "administrator", "associate",
+          "engineer", "developer", "architect",
+          "representative", "agent", "officer",
+          "sergeant", "detective", "firefighter", "paramedic"
+        ],
+        "title_patterns": [
+          "\\bmanager\\b",
+          "\\bspecialist\\b",
+          "\\banalyst\\b",
+          "\\bengineer\\b"
+        ],
+        "seniority_levels": ["manager", "senior_ic", "individual_contributor"]
+      }
+    },
+    "gatekeeper": {
+      "description": "Controls access to decision-makers or information flow",
+      "weight": 40,
+      "indicators": {
+        "title_keywords": [
+          "executive assistant", "administrative assistant",
+          "office manager", "receptionist",
+          "procurement", "purchasing", "buyer",
+          "vendor management", "supplier relations",
+          "contracts", "legal assistant", "paralegal",
+          "clerk", "secretary"
+        ],
+        "title_patterns": [
+          "\\bassistant\\s+to\\b",
+          "\\bprocurement\\b",
+          "\\bpurchasing\\b"
+        ],
+        "department_hints": ["procurement", "legal", "administration"]
+      }
+    },
+    "blocker": {
+      "description": "May oppose or slow down the buying process",
+      "weight": 30,
+      "indicators": {
+        "title_keywords": [
+          "compliance", "risk", "audit", "security",
+          "legal", "counsel", "attorney"
+        ],
+        "behavioral_signals": [
+          "low_engagement",
+          "negative_sentiment",
+          "competitor_preference"
+        ],
+        "notes": "Often identified through behavior and past interactions"
+      }
+    }
+  },
+
+  "department_mappings": {
+    "executive": {
+      "keywords": ["ceo", "cfo", "coo", "cto", "cio", "chief", "president", "owner", "founder"],
+      "patterns": ["^c[a-z]o$", "\\bchief\\b", "\\bpresident\\b"]
+    },
+    "sales": {
+      "keywords": ["sales", "account executive", "account manager", "business development", "bd", "sdr", "bdr", "ae"],
+      "patterns": ["\\bsales\\b", "\\baccount\\b", "\\bbusiness\\s+development\\b"]
+    },
+    "marketing": {
+      "keywords": ["marketing", "brand", "content", "demand gen", "growth", "communications", "pr", "public relations"],
+      "patterns": ["\\bmarketing\\b", "\\bbrand\\b", "\\bcontent\\b"]
+    },
+    "finance": {
+      "keywords": ["finance", "accounting", "controller", "treasurer", "budget", "revenue", "billing", "collections"],
+      "patterns": ["\\bfinance\\b", "\\baccounting\\b", "\\btreasur"]
+    },
+    "hr": {
+      "keywords": ["hr", "human resources", "people", "talent", "recruiting", "compensation", "benefits", "learning"],
+      "patterns": ["\\bhuman\\s+resources\\b", "\\bpeople\\b", "\\btalent\\b"]
+    },
+    "it": {
+      "keywords": ["it", "information technology", "infrastructure", "network", "systems", "helpdesk", "support"],
+      "patterns": ["\\bit\\b", "\\binformation\\s+technology\\b", "\\binfrastructure\\b"]
+    },
+    "engineering": {
+      "keywords": ["engineering", "developer", "programmer", "software", "architect", "devops", "qa", "testing"],
+      "patterns": ["\\bengineering\\b", "\\bdeveloper\\b", "\\bsoftware\\b"]
+    },
+    "product": {
+      "keywords": ["product", "pm", "product manager", "product owner", "ux", "ui", "design"],
+      "patterns": ["\\bproduct\\b", "\\bux\\b", "\\bui\\b"]
+    },
+    "operations": {
+      "keywords": ["operations", "ops", "facilities", "supply chain", "logistics", "warehouse"],
+      "patterns": ["\\boperations\\b", "\\bops\\b", "\\blogistics\\b"]
+    },
+    "customer_success": {
+      "keywords": ["customer success", "cs", "client success", "customer experience", "cx"],
+      "patterns": ["\\bcustomer\\s+success\\b", "\\bclient\\s+success\\b"]
+    },
+    "support": {
+      "keywords": ["support", "service", "help desk", "technical support", "customer service"],
+      "patterns": ["\\bsupport\\b", "\\bservice\\b", "\\bhelp\\s+desk\\b"]
+    },
+    "legal": {
+      "keywords": ["legal", "counsel", "attorney", "lawyer", "compliance", "contracts", "paralegal"],
+      "patterns": ["\\blegal\\b", "\\bcounsel\\b", "\\battorney\\b"]
+    }
+  },
+
+  "government_role_mappings": {
+    "decision_maker": {
+      "title_keywords": [
+        "mayor", "city manager", "county administrator", "county manager",
+        "town manager", "borough manager", "village administrator",
+        "sheriff", "police chief", "fire chief",
+        "superintendent", "commissioner", "secretary",
+        "director", "executive director", "agency head"
+      ]
+    },
+    "influencer": {
+      "title_keywords": [
+        "deputy mayor", "assistant city manager", "deputy administrator",
+        "undersheriff", "deputy chief", "assistant chief",
+        "assistant superintendent", "deputy commissioner",
+        "division director", "bureau chief", "department head"
+      ]
+    },
+    "user": {
+      "title_keywords": [
+        "captain", "lieutenant", "sergeant", "detective", "officer",
+        "battalion chief", "firefighter", "paramedic", "emt",
+        "inspector", "analyst", "specialist", "coordinator",
+        "planner", "engineer", "technician"
+      ]
+    },
+    "gatekeeper": {
+      "title_keywords": [
+        "clerk", "recorder", "registrar",
+        "procurement officer", "purchasing agent", "buyer",
+        "contracts administrator", "administrative assistant"
+      ]
+    }
+  },
+
+  "scoring_rules": {
+    "title_keyword_match": {
+      "exact": 100,
+      "contains": 80,
+      "fuzzy": 60
+    },
+    "pattern_match": 90,
+    "seniority_alignment": 50,
+    "department_alignment": 30,
+    "minimum_confidence_threshold": 60
+  },
+
+  "fallback_rules": {
+    "unknown_title": "user",
+    "ambiguous_title": "influencer",
+    "empty_title": "user"
+  }
+}

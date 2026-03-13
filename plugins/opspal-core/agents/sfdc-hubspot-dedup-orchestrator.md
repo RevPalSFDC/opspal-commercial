@@ -69,7 +69,7 @@ Eliminate duplicate Companies/Accounts between HubSpot and Salesforce, prevent t
 
 ```bash
 # Step 1: Run merge strategy selector
-node "$(node "${CLAUDE_PLUGIN_ROOT}/scripts/lib/plugin-path-resolver.js" resolve-script opspal-hubspot scripts/lib/hubspot-merge-strategy-selector.js)" \
+node .claude-plugins/opspal-hubspot/scripts/lib/hubspot-merge-strategy-selector.js \
   --canonical-id <canonical_company_id> \
   --duplicate-id <duplicate_company_id>
 ```
@@ -137,7 +137,7 @@ await hubspotClient.crm.companies.basicApi.archive(companyId);
 
 **Command**:
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-snapshot-generator.js <config>
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-snapshot-generator.js <config>
 ```
 
 **Output**: `snapshot-{timestamp}.json`, CSVs for HubSpot and Salesforce
@@ -155,7 +155,7 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-snapshot-generator.js
 
 **Command**:
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-clustering-engine.js <snapshot-file>
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-clustering-engine.js <snapshot-file>
 ```
 
 **Output**: `bundles-{timestamp}.json`, Bundle A/B CSVs
@@ -174,7 +174,7 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-clustering-engine.js 
 
 **Command**:
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-canonical-selector.js <bundles-file> [config]
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-canonical-selector.js <bundles-file> [config]
 ```
 
 **Output**: `canonical-map-{timestamp}.json`, actions CSV, summary report
@@ -201,10 +201,10 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-canonical-selector.js
 **Command**:
 ```bash
 # Dry run first (ALWAYS)
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-executor.js <canonical-map> <config>
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-executor.js <canonical-map> <config>
 
 # Live execution after approval
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-executor.js <canonical-map> <config> --execute
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-executor.js <canonical-map> <config> --execute
 ```
 
 **Output**: Execution report, updated ledger
@@ -233,15 +233,15 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-executor.js <canonica
 **Command**:
 ```bash
 # Dry run first (ALWAYS)
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-association-repair.js \
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-association-repair.js \
   <canonical-map-file> <config-file>
 
 # Live execution after approval
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-association-repair.js \
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-association-repair.js \
   <canonical-map-file> <config-file> --execute
 
 # With execution report context
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-association-repair.js \
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-association-repair.js \
   <canonical-map-file> <config-file> \
   --execution-report <execution-report-file> \
   --execute
@@ -278,7 +278,7 @@ Phase 3 executor now includes **automatic PRIMARY verification** after reparenti
 
 **Command**:
 ```bash
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-guardrail-manager.js <config> --execute
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-guardrail-manager.js <config> --execute
 ```
 
 **Output**: Guardrails report, exception queries, documentation
@@ -393,7 +393,7 @@ DEDUP_MAX_WRITE_PER_MIN="60"
 All operations are idempotent via ledger:
 ```bash
 # Check ledger status
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/deduplication/dedup-ledger.js summary <prefix>
+node .claude-plugins/opspal-core/scripts/lib/deduplication/dedup-ledger.js summary <prefix>
 
 # Resume execution (skips completed operations)
 node dedup-executor.js <canonical-map> <config> --execute

@@ -1,0 +1,176 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-10",
+  "defaults": {
+    "unknownPendingRouteAction": "deny",
+    "unknownMutability": "unknown"
+  },
+  "policies": [
+    {
+      "id": "salesforce-legacy-generic",
+      "patterns": ["^mcp_salesforce$"],
+      "namespace": "salesforce",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Generic Salesforce MCP wrapper is treated as operational until classified more narrowly."
+    },
+    {
+      "id": "salesforce-legacy-read-only",
+      "patterns": [
+        "^mcp_salesforce_(data_query|metadata_describe|metadata_retrieve|field_describe|object_list|field_list|report_type_list|report_type_describe|report_folder_list|report_run|analytics_dataset_query|apex_test|apex_coverage|apex_debug_log)$"
+      ],
+      "namespace": "salesforce",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Read-only Salesforce data, metadata, analytics, and validation surfaces."
+    },
+    {
+      "id": "salesforce-legacy-mutating",
+      "patterns": [
+        "^mcp_salesforce_(data_create|data_update|data_delete|permission_assign|sharing_rule_create|user_create|metadata_deploy|field_create|object_create|flow_create|report_create|report_clone|report_deploy|report_folder_create|apex_execute|apex_deploy|apex_create_class|apex_create_trigger|profile_layout_assign|profile_layout_assign_all|profile_permission_set_create|profile_clone|profile_field_permissions|profile_object_permissions)$"
+      ],
+      "namespace": "salesforce",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Salesforce create/update/deploy/admin surfaces."
+    },
+    {
+      "id": "salesforce-namespaced-read-only",
+      "patterns": [
+        "^mcp__salesforce__.*(_get|_list|_search|_describe|_query|_retrieve|_run|_status|_report|_coverage|_debug_log)$"
+      ],
+      "namespace": "salesforce",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Namespaced Salesforce read/reporting surfaces."
+    },
+    {
+      "id": "salesforce-namespaced-mutating",
+      "patterns": [
+        "^mcp__salesforce__.*(_create|_update|_delete|_upsert|_deploy|_assign|_execute|_activate|_deactivate|_clone|_merge|_convert)$"
+      ],
+      "namespace": "salesforce",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Namespaced Salesforce mutation/admin surfaces."
+    },
+    {
+      "id": "hubspot-generic",
+      "patterns": ["^mcp_hubspot$", "^mcp__hubspot__$"],
+      "namespace": "hubspot",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Generic HubSpot MCP surfaces are treated as operational until explicitly classified."
+    },
+    {
+      "id": "hubspot-read-only",
+      "patterns": [
+        "^mcp_hubspot_.*(_get|_list|_search|_retrieve|_describe|_read|_fetch)(_|$)",
+        "^mcp__hubspot__.*(_get|_list|_search|_retrieve|_describe|_read|_fetch)(_|$)"
+      ],
+      "namespace": "hubspot",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "HubSpot retrieval and search surfaces."
+    },
+    {
+      "id": "hubspot-mutating",
+      "patterns": [
+        "^mcp_hubspot_.*(_create|_update|_delete|_archive|_restore|_publish|_associate|_merge|_pin|_unpin|_upsert)(_|$)",
+        "^mcp__hubspot__.*(_create|_update|_delete|_archive|_restore|_publish|_associate|_merge|_pin|_unpin|_upsert)(_|$)"
+      ],
+      "namespace": "hubspot",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "HubSpot write and publishing surfaces."
+    },
+    {
+      "id": "marketo-read-only",
+      "patterns": [
+        "^mcp__marketo__.*(_list|_get|_describe|_query|_activities|_membership|_status|_errors|_field_mappings|_types|_report|_file|_warnings|_failures|_trace|_detector|_paging_token)$"
+      ],
+      "namespace": "marketo",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Marketo query, diagnostics, and bulk-download surfaces."
+    },
+    {
+      "id": "marketo-mutating",
+      "patterns": [
+        "^mcp__marketo__.*(_create|_update|_merge|_clone|_delete|_activate|_deactivate|_schedule|_request|_approve|_add_field|_add_leads|_remove_leads|_enqueue|_cancel|_sync_lead|_retry_errors|_tokens_update|_set_cadence|_transition_rules)$"
+      ],
+      "namespace": "marketo",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Marketo asset changes, campaign execution, sync retries, and queue mutations."
+    },
+    {
+      "id": "asana-read-only",
+      "patterns": ["^mcp__asana__asana_(list|get|search|find|lookup|read).*"],
+      "namespace": "asana",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Asana lookups and search."
+    },
+    {
+      "id": "asana-mutating",
+      "patterns": ["^mcp__asana__asana_(create|update|add|attach|delete).*"],
+      "namespace": "asana",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Asana task/project mutations."
+    },
+    {
+      "id": "gong-read-only",
+      "patterns": [
+        "^mcp__gong__(calls_list|calls_extensive|calls_transcript|users_list|trackers_list|run_risk_analysis|competitor_report)$"
+      ],
+      "namespace": "gong",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Gong analytics and retrieval surfaces."
+    },
+    {
+      "id": "gong-mutating",
+      "patterns": ["^mcp__gong__sync_calls_to_crm$"],
+      "namespace": "gong",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Gong-to-CRM synchronization writes."
+    },
+    {
+      "id": "fireflies-read-only",
+      "patterns": [
+        "^mcp__fireflies__(transcripts_list|transcript_get|transcript_search|users_list|run_meeting_analysis|extract_action_items|download_recording)$"
+      ],
+      "namespace": "fireflies",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Fireflies retrieval and analysis surfaces."
+    },
+    {
+      "id": "fireflies-mutating",
+      "patterns": ["^mcp__fireflies__sync_transcripts_to_crm$"],
+      "namespace": "fireflies",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Fireflies CRM synchronization writes."
+    },
+    {
+      "id": "monday-read-only",
+      "patterns": ["^mcp__monday__(get_|list_|search_).*"],
+      "namespace": "monday",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Monday read and search operations."
+    },
+    {
+      "id": "monday-mutating",
+      "patterns": ["^mcp__monday__(create_|change_|move_|archive_|delete_|add_).*"],
+      "namespace": "monday",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Monday board/item mutations."
+    }
+  ]
+}

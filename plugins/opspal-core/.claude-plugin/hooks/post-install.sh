@@ -19,6 +19,8 @@ fi
 
 USAGE_FILE="$PLUGIN_ROOT/.claude-plugin/USAGE.md"
 CHANGELOG_FILE="$PLUGIN_ROOT/CHANGELOG.md"
+PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
+HOOK_RECONCILER="$PLUGIN_ROOT/scripts/lib/reconcile-hook-registration.js"
 
 # Create doc version directory
 mkdir -p "$(dirname "$DOC_VERSION_FILE")"
@@ -72,25 +74,15 @@ else
     echo "  ✓ Fixed permissions on $HOOKS_FIXED hook(s)"
 fi
 
-# ============================================================================
-# Set Up Asset Encryption Runtime Directory
-# ============================================================================
-ENC_RUNTIME_DIR="$HOME/.claude/opspal-enc/runtime"
-if [ ! -d "$ENC_RUNTIME_DIR" ]; then
-    mkdir -p "$ENC_RUNTIME_DIR"
-    chmod 700 "$HOME/.claude/opspal-enc"
-    chmod 700 "$ENC_RUNTIME_DIR"
-    echo "  ✓ Created asset encryption runtime directory"
-fi
-
-# Print key setup hint if no key exists
-ENC_KEY_FILE="$HOME/.claude/opspal-enc/master.key"
-if [ ! -f "$ENC_KEY_FILE" ] && [ -z "${OPSPAL_PLUGIN_MASTER_KEY:-}" ]; then
+if [ -f "$HOOK_RECONCILER" ] && command -v node >/dev/null 2>&1; then
     echo ""
-    echo "🔐 Asset encryption available. To encrypt sensitive plugin files:"
-    echo "   /encrypt-assets key-setup          # Generate master key"
-    echo "   /encrypt-assets init --plugin <n>   # Initialize plugin manifest"
-    echo "   /encrypt-assets encrypt --plugin <n> --file <path>"
+    echo "Reconciling active Claude hook registration..."
+    if node "$HOOK_RECONCILER" --project-root "$PROJECT_ROOT" --core-plugin-root "$PLUGIN_ROOT" >/dev/null 2>&1; then
+        echo "  ✓ Routing gate registration reconciled"
+    else
+        echo "  ⚠ Failed to reconcile active hook registration"
+        echo "    Run: node \"$HOOK_RECONCILER\" --project-root \"$PROJECT_ROOT\" --core-plugin-root \"$PLUGIN_ROOT\""
+    fi
 fi
 
 echo ""

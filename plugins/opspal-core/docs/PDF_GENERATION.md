@@ -510,7 +510,8 @@ node scripts/lib/pdf-generator.js --collate "docs/*.md" output.pdf --toc --cover
 --render-mermaid    Render Mermaid diagrams
 --toc               Add table of contents
 --bookmarks         Add PDF bookmarks (best-effort; requires pdftk/qpdf)
---cover             Add cover page
+--profile PROFILE   PDF profile (cover-toc or simple)
+--report-type TYPE  Report type metadata
 --verbose           Verbose output
 ```
 

@@ -59,16 +59,16 @@ The optimizer auto-detects document types from filename/path:
 
 ```bash
 # Analyze PDF structure
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js analyze ./report.pdf
+node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js analyze ./report.pdf
 
 # Get relevant pages for a query
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js pages ./audit.pdf "validation rules"
+node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js pages ./audit.pdf "validation rules"
 
 # Get chunking strategy for large PDFs
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js chunks ./large-doc.pdf
+node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js chunks ./large-doc.pdf
 
 # Clear PDF structure cache
-node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/pdf-context-optimizer.js clear-cache
+node plugins/opspal-core/scripts/lib/pdf-context-optimizer.js clear-cache
 ```
 
 ## Example Workflow
