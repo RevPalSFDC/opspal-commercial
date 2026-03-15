@@ -32,6 +32,67 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+const PLACEHOLDER_PATTERNS = [/\btbd\b/i, /to be determined/i, /\bplaceholder\b/i, /^unknown$/i];
+const OWNER_SUGGESTIONS = {
+  'tool-contract': 'Platform engineering',
+  'schema/parse': 'Platform engineering',
+  'schema-parse': 'Platform engineering',
+  'config/env': 'OpsPal maintainers',
+  'config-env': 'OpsPal maintainers',
+  'data-quality': 'Data operations and platform engineering',
+  'planning-scope': 'Program management',
+  'agent-selection': 'OpsPal maintainers',
+  'operation-idempotency': 'Platform engineering',
+  'auth/permissions': 'Salesforce platform engineering',
+  'prompt-mismatch': 'OpsPal maintainers'
+};
+const PRIORITY_TO_PLAN_PRIORITY = {
+  CRITICAL: 'P0',
+  HIGH: 'P1',
+  MEDIUM: 'P2',
+  LOW: 'P3'
+};
+
+function normalizePlanText(value) {
+  if (typeof value !== 'string') return '';
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function isPlaceholderValue(value) {
+  const normalized = normalizePlanText(value);
+  if (!normalized) return true;
+  return PLACEHOLDER_PATTERNS.some(pattern => pattern.test(normalized));
+}
+
+function uniquePlanStrings(values) {
+  const seen = new Set();
+  const results = [];
+  for (const value of values || []) {
+    const normalized = normalizePlanText(value);
+    if (!normalized || isPlaceholderValue(normalized) || seen.has(normalized)) {
+      continue;
+    }
+    seen.add(normalized);
+    results.push(normalized);
+  }
+  return results;
+}
+
+function slugifyPlan(value) {
+  return normalizePlanText(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'plan-item';
+}
+
+function truncatePlanText(value, maxLength = 120) {
+  const normalized = normalizePlanText(value);
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+  return `${normalized.slice(0, maxLength - 3).trim()}...`;
+}
+
 class CohortFixPlanner {
   constructor(options = {}) {
     this.outputDir = options.outputDir || './.fix-plans';
@@ -1011,6 +1072,104 @@ class CohortFixPlanner {
       actionable: issues.length === 0,
       issues
     };
+  }
+
+  async generateImprovementPlanItem(cohortData = {}) {
+    const reflections = Array.isArray(cohortData.reflections) ? cohortData.reflections : [];
+    const taxonomy = normalizePlanText(cohortData.taxonomy || cohortData.cohortType || 'unknown');
+    const sourceCohortId = normalizePlanText(cohortData.id || cohortData.cohort_id || taxonomy);
+    const rootCauseCandidates = uniquePlanStrings([
+      ...(Array.isArray(cohortData.root_causes) ? cohortData.root_causes : []),
+      cohortData.root_cause,
+      cohortData.rootCause,
+      cohortData.root_cause_summary
+    ]);
+
+    const fixPlan = await this.generateFixPlan({
+      cohortType: cohortData.cohortType || taxonomy.replace(/\//g, '-'),
+      taxonomy,
+      reflections,
+      rootCause: rootCauseCandidates[0] || taxonomy,
+      impact: {
+        roiAnnualValue: cohortData.total_roi || cohortData.totalROI || 0,
+        frequency: cohortData.frequency || reflections.length
+      }
+    });
+
+    const reflectionIds = uniquePlanStrings(reflections.map(reflection => reflection && reflection.id).filter(Boolean));
+    const affectedOrgs = uniquePlanStrings(reflections.map(reflection => reflection && (reflection.org || reflection.instance || reflection.client_name)).filter(Boolean));
+    const components = uniquePlanStrings([
+      ...(Array.isArray(cohortData.affected_components) ? cohortData.affected_components : []),
+      ...(Array.isArray(fixPlan.solutionApproach.components) ? fixPlan.solutionApproach.components : [])
+    ]);
+    const implementationSteps = this._extractImplementationSteps(fixPlan);
+    const successCriteria = uniquePlanStrings(fixPlan.successCriteria).slice(0, 5);
+    const primaryRootCause = rootCauseCandidates[0]
+      || normalizePlanText(fixPlan.rootCauseAnalysis.symptom)
+      || normalizePlanText(fixPlan.rootCauseAnalysis.why1)
+      || 'The cohort lacks the preventive validation needed for its dominant failure mode.';
+
+    return {
+      id: `plan-${slugifyPlan(sourceCohortId)}`,
+      source_cohort_ids: [sourceCohortId],
+      taxonomy,
+      issue_summary: this._buildIssueSummary(cohortData, primaryRootCause, fixPlan),
+      evidence: {
+        pattern: this._buildEvidencePattern(cohortData, primaryRootCause, reflectionIds.length),
+        reflection_count: reflectionIds.length || 1,
+        reflection_ids: reflectionIds.length > 0 ? reflectionIds : [sourceCohortId],
+        affected_orgs: affectedOrgs,
+        recurrence_count: Math.max(cohortData.frequency || reflectionIds.length || 1, 1)
+      },
+      likely_root_cause: primaryRootCause,
+      recommended_fix: this._buildRecommendedFix(fixPlan, components, implementationSteps),
+      prevention_safeguard: this._buildPreventionSafeguard(fixPlan, successCriteria),
+      implementation_steps: implementationSteps,
+      owner_suggestion: this._suggestOwner(taxonomy),
+      priority: PRIORITY_TO_PLAN_PRIORITY[cohortData.priority] || 'P2',
+      success_criteria: successCriteria.length > 0 ? successCriteria : ['The recurring failure mode no longer reproduces in the target workflow.'],
+      estimated_effort_hours: fixPlan.estimatedEffort.total || fixPlan.estimatedEffort.implementation || 1,
+      expected_roi_annual: fixPlan.reflections.totalROI || cohortData.total_roi || 0,
+      affected_components: components
+    };
+  }
+
+  _buildIssueSummary(cohortData, primaryRootCause, fixPlan) {
+    const taxonomy = normalizePlanText(cohortData.taxonomy || cohortData.cohortType || fixPlan.cohortType || 'unknown');
+    return `Resolve repeated ${taxonomy} failures linked to ${truncatePlanText(primaryRootCause, 90)}`;
+  }
+
+  _buildEvidencePattern(cohortData, primaryRootCause, reflectionCount) {
+    const taxonomy = normalizePlanText(cohortData.taxonomy || cohortData.cohortType || 'unknown');
+    return `Reflection evidence shows ${truncatePlanText(primaryRootCause, 120)} across ${reflectionCount || 1} ${taxonomy} reflections.`;
+  }
+
+  _extractImplementationSteps(fixPlan) {
+    const steps = [];
+    for (const phase of fixPlan.implementationPlan?.phases || []) {
+      for (const step of phase.steps || []) {
+        steps.push(normalizePlanText(step.description));
+      }
+    }
+    return uniquePlanStrings(steps).slice(0, 6);
+  }
+
+  _buildRecommendedFix(fixPlan, components, implementationSteps) {
+    const componentText = components.length > 0
+      ? ` in ${components.slice(0, 2).join(', ')}`
+      : '';
+    const stepText = implementationSteps.slice(0, 2).join('; ');
+    return `Implement ${fixPlan.solutionApproach.name}${componentText} by ${stepText}.`;
+  }
+
+  _buildPreventionSafeguard(fixPlan, successCriteria) {
+    const preventionLayer = normalizePlanText(fixPlan.rootCauseAnalysis.preventionLayer).replace(/^[A-Za-z]+\s*-\s*/, '');
+    const firstCriterion = successCriteria[0] || 'the recurring failure mode stays blocked by regression coverage';
+    return `Add ${preventionLayer.toLowerCase() || 'preventive validation'} and regression checks so ${firstCriterion.charAt(0).toLowerCase()}${firstCriterion.slice(1)}.`;
+  }
+
+  _suggestOwner(taxonomy) {
+    return OWNER_SUGGESTIONS[taxonomy] || 'Platform engineering';
   }
 
   /**

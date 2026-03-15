@@ -5,20 +5,23 @@
  *
  * Process Reflections - Phase 1: Analysis & Plan Generation
  *
- * Fetches reflections with status='new', detects cohorts, invokes fix planner,
- * and generates improvement plan for user approval.
+ * Fetches reflections with status='new', detects cohorts, generates
+ * implementation-ready plan items, and saves a validated improvement plan.
  *
- * DOES NOT create Asana tasks or update reflection statuses - analysis only.
+ * Phase 1 does not create downstream tasks or update reflection statuses.
  */
 
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
+const { CohortFixPlanner } = require('./lib/cohort-fix-planner');
+const {
+  buildImprovementPlanBundle,
+  buildTriageItems
+} = require('./lib/improvement-plan-builder');
 
-// Load environment configuration
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-// Supabase client setup - MUST use service role key for updates
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
 
@@ -31,9 +34,6 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-/**
- * Cohort detection configuration
- */
 const COHORT_CONFIG = {
   minSize: 2,
   taxonomyWeight: 0.4,
@@ -42,19 +42,12 @@ const COHORT_CONFIG = {
   roiWeight: 0.1
 };
 
-/**
- * Priority thresholds
- */
 const PRIORITY_THRESHOLDS = {
-  CRITICAL: 3,  // 3+ occurrences
-  HIGH: 2,      // 2 occurrences
-  MEDIUM: 1     // Single occurrence but high ROI
+  CRITICAL: 3,
+  HIGH: 2,
+  MEDIUM: 1
 };
 
-/**
- * Cohort taxonomy -> runbook artifact references.
- * Used to enforce runbook-first remediation planning.
- */
 const COHORT_RUNBOOK_REFERENCES = {
   'data-quality': [
     'plugins/opspal-salesforce/docs/runbooks/data-quality-operations/README.md',
@@ -106,14 +99,10 @@ function getRunbookReferences(taxonomy) {
   return COHORT_RUNBOOK_REFERENCES[normalized] || [];
 }
 
-/**
- * Main Phase 1 execution
- */
 async function executePhase1() {
   console.log('🔍 Phase 1: Reflection Analysis & Planning\n');
 
   try {
-    // Step 1: Fetch reflections with status='new'
     console.log('📥 Step 1: Fetching reflections with status="new"...');
     const reflections = await fetchNewReflections();
     console.log(`   Found ${reflections.length} reflections to analyze\n`);
@@ -128,86 +117,98 @@ async function executePhase1() {
       };
     }
 
-    // Step 2: Detect recurring issues
     console.log('🔁 Step 2: Detecting recurring issues...');
     const recurringIssues = detectRecurringIssues(reflections);
     console.log(`   Identified ${recurringIssues.length} recurring issue patterns\n`);
 
-    // Step 3: Detect cohorts
     console.log('🎯 Step 3: Detecting cohorts via pattern matching...');
     const cohorts = detectCohorts(reflections);
     console.log(`   Detected ${cohorts.length} cohorts (min size: ${COHORT_CONFIG.minSize})\n`);
 
-    if (cohorts.length === 0) {
-      console.log('⚠️  No cohorts detected - all reflections are unique');
-      console.log('   Consider processing individually or adjusting cohort thresholds\n');
-    }
-
-    // Step 4: Calculate cohort scores and priorities
     console.log('📊 Step 4: Calculating cohort scores and priorities...');
-    const scoredCohorts = calculateCohortScores(cohorts, reflections);
-    scoredCohorts.sort((a, b) => b.score - a.score);
+    const scoredCohorts = calculateCohortScores(cohorts, reflections)
+      .sort((a, b) => b.score - a.score);
     console.log(`   Prioritized ${scoredCohorts.length} cohorts\n`);
 
-    // Step 5: Generate improvement plan
-    console.log('📝 Step 5: Generating improvement plan document...');
-    const improvementPlan = generateImprovementPlan(
+    console.log('🧠 Step 5: Generating implementation-ready plan items...');
+    const planner = new CohortFixPlanner();
+    const planItems = [];
+
+    for (const cohort of scoredCohorts) {
+      const cohortReflections = reflections.filter(reflection => cohort.reflections.includes(reflection.id));
+      const planItem = await planner.generateImprovementPlanItem({
+        ...cohort,
+        reflections: cohortReflections,
+        total_roi: cohort.total_roi,
+        frequency: cohort.frequency
+      });
+      planItems.push(planItem);
+    }
+    console.log(`   Generated ${planItems.length} implementation-ready plan items\n`);
+
+    console.log('🧾 Step 6: Building triage follow-up items...');
+    const triageItems = buildTriageItems(reflections, planItems);
+    console.log(`   Created ${triageItems.length} triage follow-up items\n`);
+
+    console.log('📝 Step 7: Building validated improvement plan...');
+    const planBundle = buildImprovementPlanBundle({
       reflections,
       recurringIssues,
-      scoredCohorts
-    );
+      cohorts: scoredCohorts,
+      planItems,
+      triageItems,
+      title: 'Reflection Improvement Plan',
+      downstreamTaskSystem: 'asana'
+    });
 
-    // Step 6: Save outputs
-    console.log('💾 Step 6: Saving outputs...');
+    console.log('💾 Step 8: Saving outputs...');
     const outputDir = path.join(__dirname, '../output/reflection-processing');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    const timestamp = new Date().toISOString().split('T')[0];
-    const planPath = path.join(outputDir, `improvement-plan-${timestamp}.md`);
-    const dataPath = path.join(outputDir, `phase1-data-${timestamp}.json`);
+    const stamp = new Date().toISOString().split('T')[0];
+    const planPath = path.join(outputDir, `improvement-plan-${stamp}.md`);
+    const jsonPath = path.join(outputDir, `improvement-plan-${stamp}.json`);
+    const dataPath = path.join(outputDir, `phase1-data-${stamp}.json`);
 
-    fs.writeFileSync(planPath, improvementPlan);
+    fs.writeFileSync(planPath, planBundle.markdown);
+    fs.writeFileSync(jsonPath, JSON.stringify(planBundle.data, null, 2));
     fs.writeFileSync(dataPath, JSON.stringify({
       timestamp: new Date().toISOString(),
-      reflections: reflections.map(r => ({
-        id: r.id,
-        taxonomy: r.taxonomy,
-        root_cause: r.root_cause,
-        affected_components: r.affected_components,
-        roi_annual_value: r.roi_annual_value
-      })),
       recurringIssues,
-      cohorts: scoredCohorts
+      cohorts: scoredCohorts,
+      planItems,
+      triageItems
     }, null, 2));
 
-    console.log(`\n✅ Phase 1 Complete!\n`);
+    console.log('\n✅ Phase 1 Complete!\n');
     console.log(`📄 Improvement Plan: ${planPath}`);
+    console.log(`🧱 Structured Plan: ${jsonPath}`);
     console.log(`📊 Execution Data: ${dataPath}\n`);
 
-    // Summary
     console.log('📈 Summary:');
     console.log(`   Total Reflections: ${reflections.length}`);
-    console.log(`   Recurring Issues: ${recurringIssues.length}`);
-    console.log(`   Cohorts Detected: ${scoredCohorts.length}`);
-    console.log(`   Critical Priority: ${scoredCohorts.filter(c => c.priority === 'CRITICAL').length}`);
-    console.log(`   High Priority: ${scoredCohorts.filter(c => c.priority === 'HIGH').length}`);
-    console.log(`   Total ROI: $${scoredCohorts.reduce((sum, c) => sum + c.total_roi, 0).toLocaleString()}\n`);
+    console.log(`   Implementation-Ready Issues: ${planItems.length}`);
+    console.log(`   Triage Follow-Ups: ${triageItems.length}`);
+    console.log(`   Total ROI: $${planBundle.data.summary.aggregate_roi_annual.toLocaleString()}`);
+    console.log(`   Estimated Effort: ${planBundle.data.summary.estimated_effort_hours}h\n`);
 
     console.log('🔜 Next Steps:');
-    console.log('   1. Review improvement plan document');
-    console.log('   2. Approve or modify recommendations');
-    console.log('   3. Run Phase 2 to create Asana tasks and update statuses\n');
+    console.log('   1. Review the improvement plan');
+    console.log('   2. Approve or refine the implementation-ready items');
+    console.log('   3. Feed approved plan items into downstream execution tooling\n');
 
     return {
       success: true,
       reflections: reflections.length,
       cohorts: scoredCohorts.length,
+      planItems: planItems.length,
+      triageItems: triageItems.length,
       improvementPlanPath: planPath,
+      structuredPlanPath: jsonPath,
       executionDataPath: dataPath
     };
-
   } catch (error) {
     console.error('❌ Phase 1 failed:', error.message);
     console.error(error.stack);
@@ -215,10 +216,6 @@ async function executePhase1() {
   }
 }
 
-/**
- * Fetch reflections with status='new' from Supabase
- * and normalize the data structure to extract issues
- */
 async function fetchNewReflections() {
   const { data, error } = await supabase
     .from('reflections')
@@ -230,210 +227,190 @@ async function fetchNewReflections() {
     throw new Error(`Failed to fetch reflections: ${error.message}`);
   }
 
-  // Normalize reflections to extract issues from nested data structure
-  return (data || []).map(r => {
-    // Extract issues from data.issues_identified or data.issues
-    const issues = r.data?.issues_identified || r.data?.issues || [];
+  return (data || []).map(reflection => {
+    const issues = reflection.data?.issues_identified || reflection.data?.issues || [];
+    const taxonomies = [...new Set(issues.map(issue => normalizeTaxonomy(issue.taxonomy)).filter(Boolean))];
+    const rootCauses = [...new Set(issues.map(issue => issue.root_cause).filter(Boolean))];
 
-    // Get primary taxonomy and root_cause from first issue, or aggregate
-    const taxonomies = [...new Set(issues.map(i => i.taxonomy).filter(Boolean))];
-    const rootCauses = [...new Set(issues.map(i => i.root_cause).filter(Boolean))];
-
-    // Extract affected components from wiring
     const affectedComponents = [];
-    if (r.data?.wiring?.agents) {
-      affectedComponents.push(...r.data.wiring.agents.map(a => a.agent));
+    if (reflection.data?.wiring?.agents) {
+      affectedComponents.push(...reflection.data.wiring.agents.map(agent => agent.agent));
     }
-    if (r.data?.wiring?.scripts) {
-      affectedComponents.push(...r.data.wiring.scripts.map(s => s.file));
+    if (reflection.data?.wiring?.scripts) {
+      affectedComponents.push(...reflection.data.wiring.scripts.map(script => script.file));
     }
 
     return {
-      ...r,
-      // Normalized fields for cohort detection
-      taxonomy: taxonomies[0] || r.focus_area || 'unknown',
-      taxonomies: taxonomies,
-      root_cause: rootCauses[0] || 'unknown',
+      ...reflection,
+      taxonomy: taxonomies[0] || normalizeTaxonomy(reflection.focus_area) || 'unknown',
+      taxonomies,
+      root_cause: rootCauses[0] || reflection.focus_area || '',
       root_causes: rootCauses,
-      affected_components: affectedComponents,
-      issues: issues,
+      affected_components: [...new Set(affectedComponents.filter(Boolean))],
+      issues,
       issue_count: issues.length
     };
   });
 }
 
-/**
- * Detect recurring issues (3+ occurrences)
- * Expands multiple issues per reflection into individual entries
- */
 function detectRecurringIssues(reflections) {
   const issueMap = new Map();
 
-  reflections.forEach(r => {
-    // Process each issue within the reflection
-    const issues = r.issues || [];
+  reflections.forEach(reflection => {
+    const issues = reflection.issues || [];
 
     if (issues.length === 0) {
-      // Fallback to normalized taxonomy/root_cause if no issues array
-      const key = `${r.taxonomy}::${r.root_cause}`;
+      const taxonomy = normalizeTaxonomy(reflection.taxonomy);
+      const rootCause = reflection.root_cause || 'unclassified failure signature';
+      const key = `${taxonomy}::${rootCause}`;
+
       if (!issueMap.has(key)) {
         issueMap.set(key, {
-          taxonomy: r.taxonomy,
-          root_cause: r.root_cause,
+          taxonomy,
+          root_cause: rootCause,
           occurrences: 0,
           reflections: []
         });
       }
+
       const issue = issueMap.get(key);
       issue.occurrences++;
-      if (!issue.reflections.includes(r.id)) {
-        issue.reflections.push(r.id);
+      if (!issue.reflections.includes(reflection.id)) {
+        issue.reflections.push(reflection.id);
       }
-    } else {
-      // Process each individual issue
-      issues.forEach(issueData => {
-        const taxonomy = issueData.taxonomy || 'unknown';
-        const rootCause = issueData.root_cause || 'unknown';
-        const key = `${taxonomy}::${rootCause}`;
-
-        if (!issueMap.has(key)) {
-          issueMap.set(key, {
-            taxonomy: taxonomy,
-            root_cause: rootCause,
-            priority: issueData.priority || 'P3',
-            agnostic_fix: issueData.agnostic_fix,
-            minimal_patch: issueData.minimal_patch,
-            occurrences: 0,
-            reflections: []
-          });
-        }
-        const issue = issueMap.get(key);
-        issue.occurrences++;
-        if (!issue.reflections.includes(r.id)) {
-          issue.reflections.push(r.id);
-        }
-      });
+      return;
     }
+
+    issues.forEach(issueData => {
+      const taxonomy = normalizeTaxonomy(issueData.taxonomy);
+      const rootCause = issueData.root_cause || 'unclassified failure signature';
+      const key = `${taxonomy}::${rootCause}`;
+
+      if (!issueMap.has(key)) {
+        issueMap.set(key, {
+          taxonomy,
+          root_cause: rootCause,
+          priority: issueData.priority || 'P3',
+          agnostic_fix: issueData.agnostic_fix,
+          minimal_patch: issueData.minimal_patch,
+          occurrences: 0,
+          reflections: []
+        });
+      }
+
+      const issue = issueMap.get(key);
+      issue.occurrences++;
+      if (!issue.reflections.includes(reflection.id)) {
+        issue.reflections.push(reflection.id);
+      }
+    });
   });
 
-  // Filter to recurring (3+)
   return Array.from(issueMap.values())
     .filter(issue => issue.occurrences >= PRIORITY_THRESHOLDS.CRITICAL)
     .sort((a, b) => b.occurrences - a.occurrences);
 }
 
-/**
- * Detect cohorts using pattern matching
- * Groups by taxonomy (from issues) to find patterns across reflections
- */
 function detectCohorts(reflections) {
   const cohortMap = new Map();
 
-  reflections.forEach(r => {
-    const issues = r.issues || [];
+  reflections.forEach(reflection => {
+    const issues = reflection.issues || [];
+    const orgName = reflection.org || reflection.instance || reflection.client_name;
 
     if (issues.length === 0) {
-      // Fallback: use reflection-level taxonomy/focus_area
-      const taxonomy = r.taxonomy || r.focus_area || 'unknown';
-      const cohortKey = taxonomy;
+      const taxonomy = normalizeTaxonomy(reflection.taxonomy || reflection.focus_area || 'unknown');
 
-      if (!cohortMap.has(cohortKey)) {
-        cohortMap.set(cohortKey, {
-          id: cohortKey,
+      if (!cohortMap.has(taxonomy)) {
+        cohortMap.set(taxonomy, {
+          id: taxonomy,
+          cohort_id: taxonomy,
           taxonomy,
           root_causes: [],
           affected_components: [],
+          affected_orgs: [],
           reflections: [],
           issues: []
         });
       }
 
-      const cohort = cohortMap.get(cohortKey);
-      if (!cohort.reflections.includes(r.id)) {
-        cohort.reflections.push(r.id);
+      const cohort = cohortMap.get(taxonomy);
+      if (!cohort.reflections.includes(reflection.id)) {
+        cohort.reflections.push(reflection.id);
       }
-      if (r.root_cause && !cohort.root_causes.includes(r.root_cause)) {
-        cohort.root_causes.push(r.root_cause);
+      if (reflection.root_cause && !cohort.root_causes.includes(reflection.root_cause)) {
+        cohort.root_causes.push(reflection.root_cause);
       }
-      (r.affected_components || []).forEach(comp => {
-        if (!cohort.affected_components.includes(comp)) {
-          cohort.affected_components.push(comp);
+      if (orgName && !cohort.affected_orgs.includes(orgName)) {
+        cohort.affected_orgs.push(orgName);
+      }
+      (reflection.affected_components || []).forEach(component => {
+        if (!cohort.affected_components.includes(component)) {
+          cohort.affected_components.push(component);
         }
       });
-    } else {
-      // Group by taxonomy from each issue
-      issues.forEach(issueData => {
-        const taxonomy = issueData.taxonomy || 'unknown';
-        const cohortKey = taxonomy;
-
-        if (!cohortMap.has(cohortKey)) {
-          cohortMap.set(cohortKey, {
-            id: cohortKey,
-            taxonomy,
-            root_causes: [],
-            affected_components: [],
-            reflections: [],
-            issues: []
-          });
-        }
-
-        const cohort = cohortMap.get(cohortKey);
-        if (!cohort.reflections.includes(r.id)) {
-          cohort.reflections.push(r.id);
-        }
-        if (issueData.root_cause && !cohort.root_causes.includes(issueData.root_cause)) {
-          cohort.root_causes.push(issueData.root_cause);
-        }
-        cohort.issues.push({
-          reflection_id: r.id,
-          ...issueData
-        });
-
-        // Add affected components from wiring
-        (r.affected_components || []).forEach(comp => {
-          if (!cohort.affected_components.includes(comp)) {
-            cohort.affected_components.push(comp);
-          }
-        });
-      });
+      return;
     }
+
+    issues.forEach(issueData => {
+      const taxonomy = normalizeTaxonomy(issueData.taxonomy || 'unknown');
+
+      if (!cohortMap.has(taxonomy)) {
+        cohortMap.set(taxonomy, {
+          id: taxonomy,
+          cohort_id: taxonomy,
+          taxonomy,
+          root_causes: [],
+          affected_components: [],
+          affected_orgs: [],
+          reflections: [],
+          issues: []
+        });
+      }
+
+      const cohort = cohortMap.get(taxonomy);
+      if (!cohort.reflections.includes(reflection.id)) {
+        cohort.reflections.push(reflection.id);
+      }
+      if (issueData.root_cause && !cohort.root_causes.includes(issueData.root_cause)) {
+        cohort.root_causes.push(issueData.root_cause);
+      }
+      if (orgName && !cohort.affected_orgs.includes(orgName)) {
+        cohort.affected_orgs.push(orgName);
+      }
+      cohort.issues.push({
+        reflection_id: reflection.id,
+        ...issueData
+      });
+      (reflection.affected_components || []).forEach(component => {
+        if (!cohort.affected_components.includes(component)) {
+          cohort.affected_components.push(component);
+        }
+      });
+    });
   });
 
-  // Filter to minimum cohort size
   return Array.from(cohortMap.values())
     .filter(cohort => cohort.reflections.length >= COHORT_CONFIG.minSize);
 }
 
-/**
- * Calculate cohort scores and priorities
- */
 function calculateCohortScores(cohorts, reflections) {
   return cohorts.map(cohort => {
-    const cohortReflections = reflections.filter(r =>
-      cohort.reflections.includes(r.id)
-    );
-
-    // Calculate score components
+    const cohortReflections = reflections.filter(reflection => cohort.reflections.includes(reflection.id));
     const frequency = cohortReflections.length;
-    const totalROI = cohortReflections.reduce((sum, r) =>
-      sum + (r.roi_annual_value || 0), 0
-    );
-    const avgRecency = cohortReflections.reduce((sum, r) =>
-      sum + (Date.now() - new Date(r.created_at).getTime()), 0
-    ) / frequency;
-    const breadth = new Set(
-      cohortReflections.flatMap(r => r.affected_components || [])
-    ).size;
+    const totalROI = cohortReflections.reduce((sum, reflection) => sum + (reflection.roi_annual_value || 0), 0);
+    const avgRecency = cohortReflections.reduce((sum, reflection) => {
+      return sum + (Date.now() - new Date(reflection.created_at).getTime());
+    }, 0) / Math.max(frequency, 1);
+    const breadth = new Set(cohortReflections.flatMap(reflection => reflection.affected_components || [])).size;
 
-    // Weighted score
     const score = (
       (frequency * COHORT_CONFIG.taxonomyWeight * 100) +
       (Math.log10(totalROI + 1) * COHORT_CONFIG.roiWeight * 100) +
-      (1 / (avgRecency / (1000 * 60 * 60 * 24)) * COHORT_CONFIG.rootCauseWeight * 100) +
+      (1 / Math.max(avgRecency / (1000 * 60 * 60 * 24), 1) * COHORT_CONFIG.rootCauseWeight * 100) +
       (breadth * COHORT_CONFIG.componentWeight * 100)
     );
 
-    // Determine priority
     let priority = 'MEDIUM';
     if (frequency >= PRIORITY_THRESHOLDS.CRITICAL) {
       priority = 'CRITICAL';
@@ -449,137 +426,12 @@ function calculateCohortScores(cohorts, reflections) {
       breadth,
       score: Math.round(score),
       priority,
+      root_cause_summary: cohort.root_causes[0] || '',
       runbook_references: getRunbookReferences(cohort.taxonomy)
     };
   });
 }
 
-/**
- * Generate improvement plan document
- */
-function generateImprovementPlan(reflections, recurringIssues, cohorts) {
-  const timestamp = new Date().toISOString();
-
-  let markdown = `# Reflection Processing - Improvement Plan\n\n`;
-  markdown += `**Generated**: ${timestamp}\n`;
-  markdown += `**Total Reflections Analyzed**: ${reflections.length}\n`;
-  markdown += `**Cohorts Detected**: ${cohorts.length}\n`;
-  markdown += `**Recurring Issues**: ${recurringIssues.length}\n\n`;
-
-  markdown += `---\n\n`;
-  markdown += `## Executive Summary\n\n`;
-
-  const criticalCount = cohorts.filter(c => c.priority === 'CRITICAL').length;
-  const highCount = cohorts.filter(c => c.priority === 'HIGH').length;
-  const totalROI = cohorts.reduce((sum, c) => sum + c.total_roi, 0);
-
-  markdown += `This analysis identified **${cohorts.length} cohorts** from ${reflections.length} reflections:\n\n`;
-  markdown += `- **${criticalCount} CRITICAL** priority cohorts (3+ occurrences)\n`;
-  markdown += `- **${highCount} HIGH** priority cohorts (2 occurrences)\n`;
-  markdown += `- **Total Annual ROI**: $${totalROI.toLocaleString()}\n\n`;
-
-  if (criticalCount > 0) {
-    markdown += `⚠️  **Action Required**: ${criticalCount} recurring issues require immediate attention.\n\n`;
-  }
-
-  markdown += `---\n\n`;
-  markdown += `## Recurring Issues (3+ Occurrences)\n\n`;
-
-  if (recurringIssues.length === 0) {
-    markdown += `*No recurring issues detected.*\n\n`;
-  } else {
-    recurringIssues.forEach((issue, idx) => {
-      markdown += `### ${idx + 1}. ${issue.taxonomy}\n\n`;
-      markdown += `**Root Cause**: ${issue.root_cause}\n\n`;
-      markdown += `- **Occurrences**: ${issue.occurrences}\n`;
-      markdown += `- **Priority**: ${issue.priority || 'CRITICAL'}\n`;
-      if (issue.agnostic_fix) {
-        markdown += `- **Suggested Fix**: ${issue.agnostic_fix}\n`;
-      }
-      if (issue.minimal_patch) {
-        markdown += `- **Minimal Patch**: ${issue.minimal_patch}\n`;
-      }
-      // Show sample reflection IDs
-      if (issue.reflections.length <= 5) {
-        markdown += `- **Reflection IDs**: ${issue.reflections.join(', ')}\n\n`;
-      } else {
-        markdown += `- **Reflection IDs** (${issue.reflections.length} total): ${issue.reflections.slice(0, 5).join(', ')}...\n\n`;
-      }
-    });
-  }
-
-  markdown += `---\n\n`;
-  markdown += `## Detected Cohorts (Sorted by Priority)\n\n`;
-
-  if (cohorts.length === 0) {
-    markdown += `*No cohorts detected - all reflections are unique.*\n\n`;
-  } else {
-    cohorts.forEach((cohort, idx) => {
-      markdown += `### Cohort ${idx + 1}: ${cohort.taxonomy}\n\n`;
-      markdown += `**Priority**: ${cohort.priority} | **Score**: ${cohort.score}\n\n`;
-
-      // Show root causes (may be multiple)
-      const rootCauses = cohort.root_causes || [cohort.root_cause];
-      if (rootCauses.length === 1) {
-        markdown += `- **Root Cause**: ${rootCauses[0]}\n`;
-      } else {
-        markdown += `- **Root Causes** (${rootCauses.length}):\n`;
-        rootCauses.slice(0, 5).forEach(rc => {
-          markdown += `  - ${rc}\n`;
-        });
-        if (rootCauses.length > 5) {
-          markdown += `  - ... and ${rootCauses.length - 5} more\n`;
-        }
-      }
-
-      markdown += `- **Frequency**: ${cohort.frequency} reflections\n`;
-      markdown += `- **Total ROI**: $${cohort.total_roi.toLocaleString()}\n`;
-      markdown += `- **Affected Components**: ${cohort.affected_components.slice(0, 10).join(', ') || 'N/A'}`;
-      if (cohort.affected_components.length > 10) {
-        markdown += ` ... and ${cohort.affected_components.length - 10} more`;
-      }
-      markdown += `\n`;
-      markdown += `- **Avg Recency**: ${Math.round(cohort.avg_recency_days)} days\n`;
-      markdown += `- **Breadth**: ${cohort.breadth} unique components\n\n`;
-
-      if (cohort.runbook_references && cohort.runbook_references.length > 0) {
-        markdown += `**Runbook References**:\n`;
-        cohort.runbook_references.forEach(ref => {
-          markdown += `- \`${ref}\`\n`;
-        });
-        markdown += `\n`;
-      }
-
-      // Show sample reflection IDs (not all if too many)
-      if (cohort.reflections.length <= 10) {
-        markdown += `**Reflection IDs**: ${cohort.reflections.join(', ')}\n\n`;
-      } else {
-        markdown += `**Reflection IDs** (showing 10 of ${cohort.reflections.length}):\n`;
-        markdown += `${cohort.reflections.slice(0, 10).join(', ')}\n\n`;
-      }
-
-      markdown += `#### Recommended Actions\n\n`;
-      markdown += `*To be generated by supabase-fix-planner agent in Phase 2*\n\n`;
-      markdown += `---\n\n`;
-    });
-  }
-
-  markdown += `## Next Steps\n\n`;
-  markdown += `1. **Review** this improvement plan\n`;
-  markdown += `2. **Approve** recommended cohorts for processing\n`;
-  markdown += `3. **Run Phase 2** to:\n`;
-  markdown += `   - Invoke supabase-fix-planner for each cohort\n`;
-  markdown += `   - Create Asana tasks\n`;
-  markdown += `   - Update reflection statuses to 'under_review'\n\n`;
-  markdown += `## Phase 2 Command\n\n`;
-  markdown += `\`\`\`bash\n`;
-  markdown += `node scripts/process-reflections-phase2.js\n`;
-  markdown += `\`\`\`\n\n`;
-
-  return markdown;
-}
-
-// Execute if run directly
 if (require.main === module) {
   executePhase1()
     .then(result => {
@@ -591,4 +443,10 @@ if (require.main === module) {
     });
 }
 
-module.exports = { executePhase1, detectCohorts, calculateCohortScores };
+module.exports = {
+  executePhase1,
+  fetchNewReflections,
+  detectRecurringIssues,
+  detectCohorts,
+  calculateCohortScores
+};
