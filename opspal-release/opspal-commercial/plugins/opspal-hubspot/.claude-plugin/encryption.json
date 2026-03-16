@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "plugin": "opspal-hubspot",
+  "encrypted_assets": [
+    {
+      "path": "scripts/lib/seo-content-scorer.js",
+      "encrypted_path": "scripts/lib/seo-content-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:883da97e1a149d1a7330cd7e89007ae1b79fe55a80e50e9d6fb5b58bf47ad3bf",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "scripts/lib/seo-technical-health-scorer.js",
+      "encrypted_path": "scripts/lib/seo-technical-health-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:277f39d0de0d26404f513cc48db08d71974594ba6cdac70f2f3d6f7246fb9b8d",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "scripts/lib/seo-content-gap-analyzer.js",
+      "encrypted_path": "scripts/lib/seo-content-gap-analyzer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d6e3eb217dd235090519a5aa058bb92cee742814c2583da91a1bd4ad83f64efd",
+      "required_domain": "hubspot"
+    }
+  ],
+  "cleanup_on_stop": true,
+  "allow_plaintext_fallback": false
+}
