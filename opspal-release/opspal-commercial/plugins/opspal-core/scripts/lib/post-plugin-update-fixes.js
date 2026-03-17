@@ -97,6 +97,7 @@ const USER_LEVEL_PROJECT_HOOK_PATTERNS = [
   'session-start-repo-sync.sh',
   'post-git-push-slack-notifier.sh'
 ];
+const INTERNAL_PLUGIN_KEY = 'opspal-core@revpal-internal-plugins';
 
 // ============================================================================
 // ANSI Colors
@@ -133,6 +134,7 @@ class PostPluginUpdateFixes {
     this.corePluginRoot = options.corePluginRoot || process.env.CLAUDE_PLUGIN_ROOT || null;
 
     this.results = {
+      installedRuntime: { checks: [], fixes: [], errors: [] },
       userLevelHooks: { checks: [], fixes: [], errors: [] },
       pluginCacheAssets: { checks: [], fixes: [], errors: [] },
       pythonPluginFixes: { checks: [], fixes: [], errors: [] },
@@ -407,10 +409,32 @@ class PostPluginUpdateFixes {
     }
   }
 
-  getCachePluginBase() {
+  getClaudeRoots() {
+    const roots = [
+      path.join(os.homedir(), '.claude')
+    ];
+
+    if (process.env.CLAUDE_HOME) {
+      roots.push(process.env.CLAUDE_HOME);
+    }
+    if (process.env.CLAUDE_CONFIG_DIR) {
+      roots.push(process.env.CLAUDE_CONFIG_DIR);
+    }
+
+    return [...new Set(
+      roots
+        .filter(Boolean)
+        .map((root) => path.resolve(root))
+    )];
+  }
+
+  getInstalledPluginsPath(claudeRoot = this.getClaudeRoots()[0]) {
+    return path.join(claudeRoot, 'plugins', 'installed_plugins.json');
+  }
+
+  getCachePluginBase(claudeRoot = this.getClaudeRoots()[0]) {
     return path.join(
-      os.homedir(),
-      '.claude',
+      claudeRoot,
       'plugins',
       'cache',
       'revpal-internal-plugins',
@@ -418,10 +442,9 @@ class PostPluginUpdateFixes {
     );
   }
 
-  getMarketplacePluginRoot() {
+  getMarketplacePluginRoot(claudeRoot = this.getClaudeRoots()[0]) {
     const directPath = path.join(
-      os.homedir(),
-      '.claude',
+      claudeRoot,
       'plugins',
       'marketplaces',
       'revpal-internal-plugins',
@@ -441,7 +464,7 @@ class PostPluginUpdateFixes {
       this.corePluginRoot,
       path.join(this.projectRoot, 'plugins', 'opspal-core'),
       path.join(this.projectRoot, '.claude-plugins', 'opspal-core'),
-      this.getMarketplacePluginRoot()
+      ...this.getClaudeRoots().map((root) => this.getMarketplacePluginRoot(root))
     ];
 
     for (const candidate of candidates) {
@@ -463,6 +486,38 @@ class PostPluginUpdateFixes {
     return null;
   }
 
+  readJsonFile(filePath) {
+    try {
+      return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  replaceDirectory(sourcePath, targetPath) {
+    const sourceRealPath = fs.realpathSync(sourcePath);
+    const parentDir = path.dirname(targetPath);
+    const tempDir = path.join(
+      parentDir,
+      `.${path.basename(targetPath)}.tmp-${process.pid}-${Date.now()}`
+    );
+
+    fs.mkdirSync(parentDir, { recursive: true });
+
+    if (fs.existsSync(targetPath)) {
+      const targetRealPath = fs.realpathSync(targetPath);
+      if (targetRealPath === sourceRealPath) {
+        return false;
+      }
+      fs.rmSync(targetPath, { recursive: true, force: true });
+    }
+
+    fs.rmSync(tempDir, { recursive: true, force: true });
+    fs.cpSync(sourcePath, tempDir, { recursive: true, force: true, dereference: true });
+    fs.renameSync(tempDir, targetPath);
+    return true;
+  }
+
   copyCacheAsset(sourcePath, targetPath) {
     fs.mkdirSync(path.dirname(targetPath), { recursive: true });
     fs.copyFileSync(sourcePath, targetPath);
@@ -480,6 +535,331 @@ class PostPluginUpdateFixes {
       .map(([key, value]) => `${key}=${value}`);
 
     return `env ${envParts.join(' ')} ${scriptPath}`;
+  }
+
+  verifyCacheHooksConfig(hooksJsonPath) {
+    const hooksConfig = this.readJsonFile(hooksJsonPath);
+    if (!hooksConfig) {
+      return {
+        ok: false,
+        issues: [`Invalid JSON: ${hooksJsonPath}`]
+      };
+    }
+
+    const issues = [];
+    const userPromptGroups = Array.isArray(hooksConfig?.hooks?.UserPromptSubmit)
+      ? hooksConfig.hooks.UserPromptSubmit
+      : [];
+    const preToolGroups = Array.isArray(hooksConfig?.hooks?.PreToolUse)
+      ? hooksConfig.hooks.PreToolUse
+      : [];
+
+    const unifiedRouterHook = userPromptGroups
+      .flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : [])
+      .find((hook) => typeof hook?.command === 'string' && hook.command.includes('unified-router.sh'));
+
+    if (!unifiedRouterHook) {
+      issues.push('UserPromptSubmit missing unified-router hook');
+    } else {
+      const command = unifiedRouterHook.command;
+      const requiredEnv = [
+        'ROUTING_ADAPTIVE_CONTINUE=1',
+        'ENABLE_HARD_BLOCKING=0',
+        'ENABLE_COMPLEXITY_HARD_BLOCKING=0',
+        'USER_PROMPT_MANDATORY_HARD_BLOCKING=0'
+      ];
+      for (const envKey of requiredEnv) {
+        if (!command.includes(envKey)) {
+          issues.push(`unified-router missing ${envKey}`);
+        }
+      }
+    }
+
+    const wildcardGatePresent = preToolGroups.some((group) => (
+      group?.matcher === '*' &&
+      Array.isArray(group?.hooks) &&
+      group.hooks.some((hook) => typeof hook?.command === 'string' && hook.command.includes('pre-tool-use-contract-validation.sh'))
+    ));
+
+    if (!wildcardGatePresent) {
+      issues.push('PreToolUse missing wildcard routing gate');
+    }
+
+    return {
+      ok: issues.length === 0,
+      issues
+    };
+  }
+
+  inspectInstalledRuntimePath(installPath, targetVersion) {
+    const issues = [];
+    if (!installPath || !fs.existsSync(installPath)) {
+      return {
+        ok: false,
+        issues: [`Missing install path: ${installPath || '(empty)'}`]
+      };
+    }
+
+    const pluginJsonPath = path.join(installPath, '.claude-plugin', 'plugin.json');
+    const hooksJsonPath = path.join(installPath, '.claude-plugin', 'hooks.json');
+    const requiredFiles = [
+      'hooks/unified-router.sh',
+      'hooks/pre-tool-use-contract-validation.sh',
+      'hooks/pre-task-agent-validator.sh',
+      'hooks/post-tool-use.sh',
+      'scripts/lib/routing-state-manager.js',
+      'config/mcp-tool-policies.json'
+    ];
+
+    const pluginJson = this.readJsonFile(pluginJsonPath);
+    if (!pluginJson) {
+      issues.push(`Missing or invalid plugin.json: ${pluginJsonPath}`);
+    } else if (pluginJson.version !== targetVersion) {
+      issues.push(`plugin.json version ${pluginJson.version || 'missing'} != ${targetVersion}`);
+    }
+
+    const hooksCheck = this.verifyCacheHooksConfig(hooksJsonPath);
+    if (!hooksCheck.ok) {
+      issues.push(...hooksCheck.issues);
+    }
+
+    for (const relativePath of requiredFiles) {
+      const absolutePath = path.join(installPath, relativePath);
+      if (!fs.existsSync(absolutePath)) {
+        issues.push(`Missing runtime asset: ${relativePath}`);
+      }
+    }
+
+    return {
+      ok: issues.length === 0,
+      issues
+    };
+  }
+
+  checkInstalledRuntime() {
+    this.log(`\n${colors.bold}## Installed Runtime${colors.reset}`);
+
+    const syncSource = this.resolveCacheAssetSyncSource();
+    if (!syncSource) {
+      const message = 'Unable to resolve opspal-core source root for runtime verification';
+      this.results.installedRuntime.errors.push({
+        name: 'runtime-source',
+        message
+      });
+      this.log(`${icons.fail} ${message}`);
+      return { needsFix: true, reason: 'no-source' };
+    }
+
+    const roots = this.getClaudeRoots();
+    let checkedEntries = 0;
+    const issues = [];
+
+    for (const claudeRoot of roots) {
+      const installedPluginsPath = this.getInstalledPluginsPath(claudeRoot);
+      if (!fs.existsSync(installedPluginsPath)) {
+        continue;
+      }
+
+      const installedPlugins = this.readJsonFile(installedPluginsPath);
+      if (!installedPlugins) {
+        issues.push(`Invalid JSON: ${installedPluginsPath}`);
+        this.results.installedRuntime.errors.push({
+          name: path.basename(installedPluginsPath),
+          message: `Failed to parse ${installedPluginsPath}`
+        });
+        continue;
+      }
+
+      const entries = installedPlugins?.plugins?.[INTERNAL_PLUGIN_KEY];
+      if (!Array.isArray(entries) || entries.length === 0) {
+        this.results.installedRuntime.checks.push({
+          name: `installed-runtime:${claudeRoot}`,
+          status: 'skipped',
+          message: `${INTERNAL_PLUGIN_KEY} not installed under ${claudeRoot}`
+        });
+        continue;
+      }
+
+      const expectedInstallPath = path.join(
+        this.getCachePluginBase(claudeRoot),
+        syncSource.version
+      );
+
+      for (const entry of entries) {
+        checkedEntries += 1;
+        const entryIssues = [];
+        const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
+          ? entry.installPath
+          : expectedInstallPath;
+
+        if (entry?.version !== syncSource.version) {
+          entryIssues.push(`installed version ${entry?.version || 'missing'} != ${syncSource.version}`);
+        }
+        if (path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath)) {
+          entryIssues.push('installPath does not point at expected cache version');
+        }
+
+        const runtimeInspection = this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version);
+        if (!runtimeInspection.ok) {
+          entryIssues.push(...runtimeInspection.issues);
+        }
+
+        if (entryIssues.length === 0) {
+          this.results.installedRuntime.checks.push({
+            name: `installed-runtime:${claudeRoot}`,
+            status: 'valid',
+            message: `${currentInstallPath} matches source version ${syncSource.version}`
+          });
+        } else {
+          issues.push(...entryIssues.map((issue) => `${claudeRoot}: ${issue}`));
+          this.results.installedRuntime.checks.push({
+            name: `installed-runtime:${claudeRoot}`,
+            status: 'drifted',
+            message: entryIssues.join('; ')
+          });
+        }
+      }
+    }
+
+    if (checkedEntries === 0) {
+      const message = `No installed ${INTERNAL_PLUGIN_KEY} entries found in configured Claude roots`;
+      this.log(`${icons.info} ${message}`);
+      this.results.installedRuntime.checks.push({
+        name: 'installed-runtime',
+        status: 'skipped',
+        message
+      });
+      return { needsFix: false, reason: 'not-installed' };
+    }
+
+    if (issues.length === 0) {
+      this.log(`${icons.pass} Installed runtime matches source version ${syncSource.version}`);
+      return {
+        needsFix: false,
+        sourceVersion: syncSource.version,
+        checkedEntries
+      };
+    }
+
+    this.log(`${icons.fail} Installed runtime drift detected for ${checkedEntries} entry(s)`);
+    return {
+      needsFix: true,
+      sourceVersion: syncSource.version,
+      checkedEntries,
+      issues
+    };
+  }
+
+  reconcileInstalledRuntime() {
+    this.log(`\n${colors.bold}## Installed Runtime${colors.reset}`);
+
+    const syncSource = this.resolveCacheAssetSyncSource();
+    if (!syncSource) {
+      const message = 'Unable to resolve opspal-core source root for runtime reconciliation';
+      this.results.installedRuntime.errors.push({
+        name: 'runtime-source',
+        message
+      });
+      this.log(`${icons.fail} ${message}`);
+      return { fixed: false, reason: 'no-source' };
+    }
+
+    const roots = this.getClaudeRoots();
+    const timestamp = new Date().toISOString();
+    let repairedRoots = 0;
+    let repairedEntries = 0;
+    let installedEntriesFound = 0;
+
+    for (const claudeRoot of roots) {
+      const installedPluginsPath = this.getInstalledPluginsPath(claudeRoot);
+      if (!fs.existsSync(installedPluginsPath)) {
+        continue;
+      }
+
+      const installedPlugins = this.readJsonFile(installedPluginsPath);
+      if (!installedPlugins) {
+        this.results.installedRuntime.errors.push({
+          name: path.basename(installedPluginsPath),
+          message: `Failed to parse ${installedPluginsPath}`
+        });
+        continue;
+      }
+
+      const entries = installedPlugins?.plugins?.[INTERNAL_PLUGIN_KEY];
+      if (!Array.isArray(entries) || entries.length === 0) {
+        continue;
+      }
+
+      installedEntriesFound += entries.length;
+      const expectedInstallPath = path.join(
+        this.getCachePluginBase(claudeRoot),
+        syncSource.version
+      );
+
+      const needsRepair = entries.some((entry) => {
+        const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
+          ? entry.installPath
+          : expectedInstallPath;
+        return (
+          entry?.version !== syncSource.version ||
+          path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath) ||
+          !this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version).ok
+        );
+      }) || !fs.existsSync(expectedInstallPath);
+
+      if (!needsRepair) {
+        this.results.installedRuntime.checks.push({
+          name: `installed-runtime:${claudeRoot}`,
+          status: 'valid',
+          message: `${expectedInstallPath} already matches source version ${syncSource.version}`
+        });
+        continue;
+      }
+
+      if (this.dryRun) {
+        this.log(`${icons.info} [DRY RUN] Would sync ${syncSource.root} -> ${expectedInstallPath}`);
+        repairedRoots += 1;
+        repairedEntries += entries.length;
+        continue;
+      }
+
+      this.replaceDirectory(syncSource.root, expectedInstallPath);
+      repairedRoots += 1;
+
+      for (const entry of entries) {
+        if (entry.version !== syncSource.version || entry.installPath !== expectedInstallPath) {
+          repairedEntries += 1;
+        }
+        entry.version = syncSource.version;
+        entry.installPath = expectedInstallPath;
+        entry.lastUpdated = timestamp;
+      }
+
+      fs.writeFileSync(installedPluginsPath, JSON.stringify(installedPlugins, null, 2) + '\n');
+      this.results.installedRuntime.fixes.push({
+        name: `installed-runtime:${claudeRoot}`,
+        message: `Synced cache bundle and install record to ${expectedInstallPath}`
+      });
+      this.log(`${icons.fix} Reconciled installed runtime under ${claudeRoot}`);
+    }
+
+    if (installedEntriesFound === 0) {
+      const message = `No installed ${INTERNAL_PLUGIN_KEY} entries found in configured Claude roots`;
+      this.log(`${icons.info} ${message}`);
+      this.results.installedRuntime.checks.push({
+        name: 'installed-runtime',
+        status: 'skipped',
+        message
+      });
+      return { fixed: false, reason: 'not-installed' };
+    }
+
+    return {
+      fixed: repairedRoots > 0,
+      roots: repairedRoots,
+      entries: repairedEntries,
+      sourceVersion: syncSource.version
+    };
   }
 
   resolveManagedUserPromptHooks(existingGroups) {
@@ -1003,66 +1383,64 @@ class PostPluginUpdateFixes {
   fixPluginCacheHooksJson() {
     this.log(`\n${colors.bold}## Plugin Cache hooks.json${colors.reset}`);
 
-    const cacheBase = this.getCachePluginBase();
-
-    if (!fs.existsSync(cacheBase)) {
-      this.log(`${icons.info} No cached opspal-core found, skipping`);
-      return { fixed: false, reason: 'no-cache' };
-    }
-
     const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ';
     const bareCommand = '${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh';
     let totalFixed = 0;
 
-    for (const entry of fs.readdirSync(cacheBase)) {
-      const hooksJsonPath = path.join(cacheBase, entry, '.claude-plugin', 'hooks.json');
-      if (!fs.existsSync(hooksJsonPath)) continue;
+    for (const claudeRoot of this.getClaudeRoots()) {
+      const cacheBase = this.getCachePluginBase(claudeRoot);
+      if (!fs.existsSync(cacheBase)) {
+        continue;
+      }
 
-      try {
-        const content = fs.readFileSync(hooksJsonPath, 'utf8');
-        const hooksConfig = JSON.parse(content);
-        let modified = false;
+      for (const entry of fs.readdirSync(cacheBase)) {
+        const hooksJsonPath = path.join(cacheBase, entry, '.claude-plugin', 'hooks.json');
+        if (!fs.existsSync(hooksJsonPath)) continue;
 
-        const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
-        if (!Array.isArray(upsGroups)) continue;
+        try {
+          const content = fs.readFileSync(hooksJsonPath, 'utf8');
+          const hooksConfig = JSON.parse(content);
+          let modified = false;
 
-        for (const group of upsGroups) {
-          const hooks = Array.isArray(group.hooks) ? group.hooks : [];
-          for (const hook of hooks) {
-            if (typeof hook.command !== 'string') continue;
-            if (!hook.command.includes('unified-router.sh')) continue;
+          const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
+          if (!Array.isArray(upsGroups)) continue;
 
-            // Check if it already has all required env vars
-            if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
-                hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
-                hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
-                hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
-              this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
-              continue;
-            }
+          for (const group of upsGroups) {
+            const hooks = Array.isArray(group.hooks) ? group.hooks : [];
+            for (const hook of hooks) {
+              if (typeof hook.command !== 'string') continue;
+              if (!hook.command.includes('unified-router.sh')) continue;
 
-            // Replace command with env-prefixed version
-            const newCommand = requiredEnvPrefix + bareCommand;
-            if (this.dryRun) {
-              this.log(`${icons.info} [DRY RUN] Would patch ${entry} hooks.json`);
-            } else {
-              hook.command = newCommand;
-              modified = true;
+              if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
+                  hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
+                  hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
+                  hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
+                this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
+                continue;
+              }
+
+              const newCommand = requiredEnvPrefix + bareCommand;
+              if (this.dryRun) {
+                this.log(`${icons.info} [DRY RUN] Would patch ${entry} hooks.json`);
+              } else {
+                hook.command = newCommand;
+                modified = true;
+              }
             }
           }
-        }
 
-        if (modified) {
-          fs.writeFileSync(hooksJsonPath, JSON.stringify(hooksConfig, null, 2));
-          this.log(`${icons.fix} Patched cache ${entry}/.claude-plugin/hooks.json with env overrides`);
-          totalFixed++;
+          if (modified) {
+            fs.writeFileSync(hooksJsonPath, JSON.stringify(hooksConfig, null, 2));
+            this.log(`${icons.fix} Patched cache ${entry}/.claude-plugin/hooks.json with env overrides`);
+            totalFixed++;
+          }
+        } catch (err) {
+          this.log(`${icons.fail} Failed to patch ${entry}: ${err.message}`);
+          this.results.pluginCacheAssets.errors.push({
+            name: `cache-hooks-${entry}`,
+            message: err.message
+          });
         }
-      } catch (err) {
-        this.log(`${icons.fail} Failed to patch ${entry}: ${err.message}`);
-        this.results.pluginCacheAssets.errors.push({
-          name: `cache-hooks-${entry}`,
-          message: err.message
-        });
       }
     }
 
@@ -1072,23 +1450,66 @@ class PostPluginUpdateFixes {
   syncPluginCacheRoutingAssets() {
     this.log(`\n${colors.bold}## Plugin Cache Routing Assets${colors.reset}`);
 
-    const cacheBase = this.getCachePluginBase();
-    if (!fs.existsSync(cacheBase)) {
-      this.log(`${icons.info} No cached opspal-core found, skipping`);
-      return { fixed: false, reason: 'no-cache' };
-    }
-
     const syncSource = this.resolveCacheAssetSyncSource();
     if (!syncSource) {
       this.log(`${icons.info} No routing asset source found, skipping`);
       return { fixed: false, reason: 'no-source' };
     }
 
-    const matchingEntries = fs.readdirSync(cacheBase)
-      .filter((entry) => entry === syncSource.version)
-      .map((entry) => path.join(cacheBase, entry));
+    const assets = [
+      '.claude-plugin/hooks.json',
+      'hooks/unified-router.sh',
+      'hooks/pre-tool-use-contract-validation.sh',
+      'hooks/pre-task-agent-validator.sh',
+      'hooks/post-tool-use.sh',
+      'scripts/lib/routing-state-manager.js',
+      'config/mcp-tool-policies.json'
+    ];
 
-    if (matchingEntries.length === 0) {
+    let copied = 0;
+    let matchingCacheRoots = 0;
+
+    for (const claudeRoot of this.getClaudeRoots()) {
+      const cacheBase = this.getCachePluginBase(claudeRoot);
+      if (!fs.existsSync(cacheBase)) {
+        continue;
+      }
+
+      const matchingEntries = fs.readdirSync(cacheBase)
+        .filter((entry) => entry === syncSource.version)
+        .map((entry) => path.join(cacheBase, entry));
+
+      if (matchingEntries.length === 0) {
+        continue;
+      }
+
+      matchingCacheRoots += matchingEntries.length;
+
+      for (const cacheRoot of matchingEntries) {
+        for (const relativePath of assets) {
+          const sourcePath = path.join(syncSource.root, relativePath);
+          if (!fs.existsSync(sourcePath)) {
+            this.results.pluginCacheAssets.errors.push({
+              name: `missing-source-${relativePath}`,
+              message: `Missing source asset: ${sourcePath}`
+            });
+            continue;
+          }
+
+          const targetPath = path.join(cacheRoot, relativePath);
+          if (this.dryRun) {
+            this.log(`${icons.info} [DRY RUN] Would sync ${relativePath} into ${cacheRoot}`);
+            copied += 1;
+            continue;
+          }
+
+          this.copyCacheAsset(sourcePath, targetPath);
+          copied += 1;
+        }
+      }
+    }
+
+    if (matchingCacheRoots === 0) {
       const message = `No cache entry matches source version ${syncSource.version}; skipping asset sync to avoid version drift`;
       this.log(`${icons.info} ${message}`);
       this.results.pluginCacheAssets.checks.push({
@@ -1099,41 +1520,8 @@ class PostPluginUpdateFixes {
       return { fixed: false, reason: 'no-matching-cache-version', sourceVersion: syncSource.version };
     }
 
-    const assets = [
-      'hooks/unified-router.sh',
-      'hooks/pre-tool-use-contract-validation.sh',
-      'hooks/pre-task-agent-validator.sh',
-      'scripts/lib/routing-state-manager.js',
-      'config/mcp-tool-policies.json'
-    ];
-
-    let copied = 0;
-    for (const cacheRoot of matchingEntries) {
-      for (const relativePath of assets) {
-        const sourcePath = path.join(syncSource.root, relativePath);
-        if (!fs.existsSync(sourcePath)) {
-          this.results.pluginCacheAssets.errors.push({
-            name: `missing-source-${relativePath}`,
-            message: `Missing source asset: ${sourcePath}`
-          });
-          continue;
-        }
-
-        const targetPath = path.join(cacheRoot, relativePath);
-        if (this.dryRun) {
-          this.log(`${icons.info} [DRY RUN] Would sync ${relativePath} into ${cacheRoot}`);
-          copied += 1;
-          continue;
-        }
-
-        this.copyCacheAsset(sourcePath, targetPath);
-        copied += 1;
-      }
-    }
-
     if (copied > 0) {
-      const versionList = matchingEntries.map((entry) => path.basename(entry)).join(', ');
-      this.log(`${icons.fix} Synced routing assets into cache version(s): ${versionList}`);
+      this.log(`${icons.fix} Synced routing assets into cache version ${syncSource.version}`);
       this.results.pluginCacheAssets.fixes.push({
         name: 'routing-cache-assets',
         message: `Synced ${copied} asset copies from ${syncSource.root}`
@@ -1156,6 +1544,7 @@ class PostPluginUpdateFixes {
     this.log(`${colors.gray}${'='.repeat(50)}${colors.reset}`);
 
     const results = {
+      installedRuntime: this.reconcileInstalledRuntime(),
       userLevelHooks: this.fixUserLevelHooks(),
       pluginCacheHooks: this.fixPluginCacheHooksJson(),
       pluginCacheAssets: this.syncPluginCacheRoutingAssets(),
@@ -1167,6 +1556,7 @@ class PostPluginUpdateFixes {
     this.log(`\n${colors.bold}## Summary${colors.reset}`);
 
     const totalFixes =
+      (results.installedRuntime?.fixed ? (results.installedRuntime.entries || results.installedRuntime.roots || 1) : 0) +
       (results.userLevelHooks.fixed ? 1 : 0) +
       (results.pluginCacheHooks?.fixed ? results.pluginCacheHooks.count || 1 : 0) +
       (results.pluginCacheAssets?.fixed ? results.pluginCacheAssets.count || 1 : 0) +
@@ -1194,6 +1584,7 @@ class PostPluginUpdateFixes {
     this.log(`${colors.gray}${'='.repeat(50)}${colors.reset}`);
 
     const results = {
+      installedRuntime: this.checkInstalledRuntime(),
       userLevelHooks: this.checkUserLevelHooks(),
       pluginCacheHooks: this.fixPluginCacheHooksJson(),  // Always fix cache — it's idempotent
       pluginCacheAssets: this.syncPluginCacheRoutingAssets(),
@@ -1217,8 +1608,9 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const options = {
     verbose: args.includes('--verbose') || args.includes('-v'),
-    dryRun: args.includes('--dry-run'),
+    dryRun: args.includes('--dry-run') || !args.includes('--fix'),
     fix: args.includes('--fix'),
+    verifyRuntime: args.includes('--verify-runtime') || args.includes('--check-runtime'),
     projectRoot: process.cwd()
   };
 
@@ -1234,7 +1626,10 @@ if (require.main === module) {
 
   const fixer = new PostPluginUpdateFixes(options);
 
-  if (options.fix) {
+  if (options.verifyRuntime) {
+    const result = fixer.checkInstalledRuntime();
+    process.exit(result.needsFix ? 1 : 0);
+  } else if (options.fix) {
     fixer.runAllFixes();
   } else {
     fixer.runAllChecks();
