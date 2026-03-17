@@ -669,6 +669,34 @@ evaluate_active_intake_gate() {
 # PLATFORM PATTERN MATCHING
 # =============================================================================
 
+message_matches_keyword() {
+    local msg="$1"
+    local keyword="$2"
+
+    [[ -z "$keyword" ]] && return 1
+
+    if [[ "$keyword" =~ ^[[:alnum:]]{2,4}$ ]]; then
+        printf '%s' "$msg" | grep -qE "(^|[^[:alnum:]_])${keyword}([^[:alnum:]_]|$)"
+    else
+        printf '%s' "$msg" | grep -qE "$keyword"
+    fi
+}
+
+pattern_json_matches_message() {
+    local msg="$1"
+    local pattern_json="$2"
+    local keyword=""
+
+    while IFS= read -r keyword; do
+        [[ -z "$keyword" ]] && continue
+        if message_matches_keyword "$msg" "$keyword"; then
+            return 0
+        fi
+    done < <(echo "$pattern_json" | jq -r '.keywords[]?' 2>/dev/null)
+
+    return 1
+}
+
 match_platform_pattern() {
     local msg="$1"
     local msg_without_paths
@@ -693,21 +721,19 @@ match_platform_pattern() {
             patterns=$(jq -c ".platformPatterns.${platform}.patterns[]?" "$PATTERNS_FILE" 2>/dev/null || echo "")
 
             while IFS= read -r pattern_json; do
-                local keywords
                 local agent
                 local comp
                 local block
                 local matched_route_id
                 local matched_clearance_agents
 
-                keywords=$(echo "$pattern_json" | jq -r '.keywords | join("|")' 2>/dev/null || echo "")
                 agent=$(echo "$pattern_json" | jq -r '.agent // ""' 2>/dev/null || echo "")
                 comp=$(echo "$pattern_json" | jq -r '.complexity // 0' 2>/dev/null || echo "0")
                 block=$(echo "$pattern_json" | jq -r '.blocking // false' 2>/dev/null || echo "false")
                 matched_route_id=$(echo "$pattern_json" | jq -r '.id // ""' 2>/dev/null || echo "")
                 matched_clearance_agents=$(echo "$pattern_json" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
 
-                if [[ -n "$keywords" ]] && echo "$msg_lower" | grep -qE "$keywords"; then
+                if pattern_json_matches_message "$msg_lower" "$pattern_json"; then
                     suggested_agent="$agent"
                     complexity="${comp:-0.5}"
                     blocking="${block:-false}"
@@ -992,6 +1018,7 @@ fi
 
 ACTION_TYPE="DIRECT_OK"
 SHOULD_BLOCK="false"
+SHOULD_PERSIST_ROUTE="false"
 
 if [[ -n "$GUARDRAIL_ALERT" ]] && [[ "$IS_MANDATORY" == "true" ]]; then
     ACTION_TYPE="MANDATORY_ALERT"
@@ -1028,6 +1055,25 @@ elif [[ -n "$SUGGESTED_AGENT" ]]; then
             ACTION_TYPE="RECOMMENDED"
         fi
     fi
+fi
+
+if [[ "$PROCEDURAL_REQUEST" == "true" ]] &&
+   [[ "$IS_MANDATORY" != "true" ]] &&
+   [[ "$ACTION_TYPE" == "BLOCKED" ]]; then
+    ACTION_TYPE="RECOMMENDED"
+    SHOULD_BLOCK="false"
+fi
+
+# Persist medium-complexity specialist recommendations for the PreToolUse gate
+# without turning them into prompt-time hard blocks.
+SHOULD_PERSIST_ROUTE="$SHOULD_BLOCK"
+if [[ "$SHOULD_PERSIST_ROUTE" != "true" ]] &&
+   [[ "$ACTION_TYPE" == "RECOMMENDED" ]] &&
+   [[ -n "$SUGGESTED_AGENT" ]] &&
+   [[ "$PROCEDURAL_REQUEST" != "true" ]] &&
+   float_ge "${COMPLEXITY:-0}" "0.5" &&
+   ! float_ge "${COMPLEXITY:-0}" "0.7"; then
+    SHOULD_PERSIST_ROUTE="true"
 fi
 
 BLOCK_REASON=""
@@ -1089,18 +1135,9 @@ if [[ "$ROUTING_ADAPTIVE_CONTINUE" == "1" ]] &&
     fi
 fi
 
-if [[ "$PROCEDURAL_REQUEST" == "true" ]] &&
-   [[ "$IS_MANDATORY" != "true" ]] &&
-   [[ "$ACTION_TYPE" == "BLOCKED" ]]; then
-    ACTION_TYPE="RECOMMENDED"
-    SHOULD_BLOCK="false"
-    ENFORCED_BLOCK="false"
-    [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Procedural request detected — downgraded BLOCKED to RECOMMENDED" >&2
-fi
+[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, Block: $SHOULD_BLOCK, Persist: $SHOULD_PERSIST_ROUTE, Enforced: $ENFORCED_BLOCK, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED" >&2
 
-[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, Block: $SHOULD_BLOCK, Enforced: $ENFORCED_BLOCK, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED" >&2
-
-if [[ "$SHOULD_BLOCK" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
     if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
         persist_routing_state "bypassed" "${BLOCK_OVERRIDE_REASON:-prompt_override_token}"
     else
@@ -1225,7 +1262,7 @@ if [[ -n "$GUARDRAIL_ALERT" ]]; then
     append_log_with_fallback "$ALERT_ENTRY" "$ALERT_FILE"
 fi
 
-if [[ "$SHOULD_BLOCK" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]] || [[ "$ENFORCED_BLOCK" == "true" ]]; then
+if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]] || [[ "$ENFORCED_BLOCK" == "true" ]]; then
     ENFORCEMENT_FILE="$LOG_DIR/routing-enforcement.jsonl"
     ENFORCEMENT_ENTRY=$(jq -n \
         --arg ts "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
@@ -1411,10 +1448,12 @@ elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]]; then
     if [[ "$SUGGESTED_AGENT" == "opspal-core:intelligent-intake-orchestrator" ]] && [[ "$INTAKE_GATE_APPLIED" == "true" ]]; then
         CONTEXT_MESSAGE="This looks like a project-level request with missing implementation specifics.
 Start with Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to run intake questions and generate a structured plan.
-Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE."
+Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE.
+Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked."
     else
         CONTEXT_MESSAGE="ROUTING: Use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task. Complexity: ${COMPLEXITY_PCT}%.
-REMINDER: Use the EXACT fully-qualified agent name shown above."
+REMINDER: Use the EXACT fully-qualified agent name shown above.
+Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked."
     fi
 fi
 
@@ -1489,6 +1528,7 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
                 adaptiveFallbackApplied: $adaptive_fallback_applied,
                 fallbackUsed: $fallback_used,
                 mandatory: $mandatory,
+                proceduralRequest: $procedural_request,
                 intakeMode: $intake_mode,
                 intakeReason: (if $intake_reason != "" then $intake_reason else null end),
                 intakeEligible: $intake_eligible,
