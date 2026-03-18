@@ -1,0 +1,62 @@
+{
+  "hubspot": {
+    "portalId": "12345678",
+    "syncProperties": {
+      "salesforceId": "hs_salesforce_id",
+      "accountId": "hs_salesforce_account_id",
+      "contactId": "hs_salesforce_contact_id",
+      "dealId": "hs_salesforce_opportunity_id"
+    },
+    "customObjectTypes": {
+      "deals": "0-1",
+      "companies": "0-2",
+      "contacts": "0-3",
+      "tickets": "0-5"
+    },
+    "workflowNaming": {
+      "prefix": "automated",
+      "separator": "_"
+    },
+    "notes": "Generated from HubSpot portal. Update property names to match your portal's actual configuration."
+  },
+  "salesforce": {
+    "orgId": "00Dxx0000000000",
+    "deploymentOrder": {
+      "customSettings": "before_all",
+      "customMetadata": "before_flows",
+      "reportFolders": "before_reports",
+      "flows": "after_layouts",
+      "profiles": "after_objects",
+      "permissionSets": "after_objects",
+      "reports": "after_reportFolders",
+      "dashboards": "after_reports"
+    },
+    "labelCustomizations": {
+      "SBQQ__Quote__c": "Quote",
+      "SBQQ__QuoteLine__c": "Quote Line",
+      "SBQQ__Subscription__c": "Subscription",
+      "Account": "Account",
+      "Opportunity": "Opportunity"
+    },
+    "packageNamespaces": {
+      "SBQQ": "Salesforce CPQ",
+      "FSL": "Field Service Lightning"
+    },
+    "notes": "Generated from Salesforce org. Run 'node env-config-validator.js generate salesforce <org-alias>' to auto-detect customizations."
+  },
+  "_instructions": {
+    "purpose": "This file prevents hardcoded assumptions about property names, deployment order, and object labels",
+    "usage": [
+      "Place in instances/{platform}/{instance}/ENV_CONFIG.json",
+      "Update property names to match your actual configuration",
+      "Run 'node env-config-validator.js generate' to auto-detect settings",
+      "Validator will check operations against this configuration"
+    ],
+    "benefits": [
+      "Prevents 'property not found' errors",
+      "Ensures correct deployment order",
+      "Handles org-specific label customizations",
+      "Self-documenting environment quirks"
+    ]
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "media-broadcasting",
+  "version": "1.0.0",
+  "description": "Television stations, radio stations, newspapers, and media companies. Broadcast stations have unique FCC call signs (K/W prefixes). Publications are typically city-specific despite similar naming patterns.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "television", "tv", "radio", "broadcast", "broadcasting", "station",
+      "news", "newspaper", "media", "press", "publishing", "journal",
+      "affiliate", "network", "channel", "fm", "am"
+    ],
+    "entityTypes": ["TVStation", "RadioStation", "Newspaper", "MediaCompany", "Publisher"],
+    "fieldPatterns": [
+      "FCCCallSign", "FacilityID", "ChannelNumber", "Frequency", "ISSNNumber"
+    ]
+  },
+
+  "abbreviations": {
+    "broadcast": {
+      "TV": "Television",
+      "FM": "Frequency Modulation",
+      "AM": "Amplitude Modulation",
+      "HD": "High Definition",
+      "UHF": "Ultra High Frequency",
+      "VHF": "Very High Frequency",
+      "PBS": "Public Broadcasting Service",
+      "NPR": "National Public Radio",
+      "CPB": "Corporation for Public Broadcasting"
+    },
+    "networks": {
+      "ABC": "American Broadcasting Company",
+      "CBS": "Columbia Broadcasting System",
+      "NBC": "National Broadcasting Company",
+      "FOX": "Fox Broadcasting Company",
+      "CW": "The CW Television Network",
+      "PBS": "Public Broadcasting Service"
+    },
+    "publishing": {
+      "AP": "Associated Press",
+      "UPI": "United Press International",
+      "AFP": "Agence France-Presse"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp"],
+    "preserve": [
+      "TV", "Television", "Radio", "Broadcasting",
+      "News", "Media", "Tribune", "Times", "Herald",
+      "Chronicle", "Gazette", "Journal", "Post"
+    ]
+  },
+
+  "synonyms": {
+    "Television": ["TV"],
+    "Broadcasting": ["Broadcast"],
+    "News": ["Newsroom"],
+    "Journal": ["Jrnl"],
+    "Tribune": ["Trib"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 85
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 95,
+      "review": 87,
+      "tag": 72
+    },
+    "stateMismatchPenalty": -40
+  },
+
+  "genericEntityPatterns": [
+    "K***",
+    "W***",
+    "K***-TV",
+    "W***-TV",
+    "K***-FM",
+    "W***-FM",
+    "K***-AM",
+    "W***-AM",
+    "* Tribune",
+    "* Times",
+    "* Gazette",
+    "* Herald",
+    "* Chronicle",
+    "* Daily News",
+    "* Post",
+    "* Journal",
+    "* Sun",
+    "* Star",
+    "* Observer",
+    "* Public Radio",
+    "* Public Media",
+    "* Public Television"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["fcc_callsign_match OR facility_id_match"],
+    "boosts": ["domain_match", "owner_group_match"],
+    "blockers": ["different_callsign", "different_city"]
+  },
+
+  "knownEntities": [
+    "The Walt Disney Company",
+    "Comcast",
+    "NBCUniversal",
+    "Warner Bros. Discovery",
+    "Paramount Global",
+    "Fox Corporation",
+    "Netflix",
+    "iHeartMedia",
+    "Cumulus Media",
+    "Audacy",
+    "Townsquare Media",
+    "Beasley Broadcast Group",
+    "Entercom",
+    "Nexstar Media Group",
+    "Sinclair Broadcast Group",
+    "Gray Television",
+    "TEGNA",
+    "The E.W. Scripps Company",
+    "Hearst Television",
+    "Cox Media Group",
+    "Tribune Publishing",
+    "Gannett",
+    "McClatchy",
+    "Lee Enterprises",
+    "MediaNews Group",
+    "The New York Times Company",
+    "The Washington Post",
+    "News Corp",
+    "Thomson Reuters",
+    "Associated Press"
+  ],
+
+  "knownEntityAliases": {
+    "Comcast": ["NBCUniversal", "NBCU"],
+    "The Walt Disney Company": ["Disney", "ABC"],
+    "Warner Bros. Discovery": ["WBD", "WarnerMedia"],
+    "Paramount Global": ["ViacomCBS", "CBS"],
+    "iHeartMedia": ["iHeart", "Clear Channel"],
+    "Gannett": ["USA Today Network"],
+    "McClatchy": ["The McClatchy Company"]
+  },
+
+  "callSignRules": {
+    "description": "US broadcast stations have unique FCC-assigned call signs",
+    "patterns": {
+      "west_of_mississippi": "K prefix (KABC, KXYZ)",
+      "east_of_mississippi": "W prefix (WABC, WXYZ)"
+    },
+    "note": "Call signs are definitive identifiers. KABC-TV in Los Angeles is a completely different station than WABC-TV in New York."
+  }
+}

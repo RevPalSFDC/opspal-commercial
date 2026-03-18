@@ -1,0 +1,527 @@
+{
+  "mcp__asana__asana_create_task": {
+    "description": "Asana task creation via MCP",
+    "required": ["project_id", "name"],
+    "optional": ["notes", "html_notes", "due_on", "assignee", "followers", "custom_fields"],
+    "types": {
+      "project_id": "string",
+      "name": "string",
+      "notes": "string",
+      "html_notes": "string",
+      "due_on": "string",
+      "assignee": "string",
+      "followers": "array",
+      "custom_fields": "object"
+    },
+    "patterns": {
+      "project_id": {
+        "pattern": "^\\d{13,}$",
+        "description": "Asana project GID (13+ digit numeric ID)"
+      },
+      "due_on": {
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+        "description": "Date in YYYY-MM-DD format"
+      }
+    },
+    "rules": [
+      {
+        "name": "project_id_format",
+        "description": "Project ID must be valid Asana GID",
+        "condition": {
+          "param": "project_id",
+          "not_pattern": "^\\d{13,}$"
+        },
+        "severity": "CRITICAL",
+        "message": "Invalid Asana project GID format. Must be 13+ digit numeric ID.",
+        "remediation": "Use asana_search_projects to find valid project GID"
+      },
+      {
+        "name": "html_notes_tags",
+        "description": "Only specific HTML tags allowed in Asana",
+        "condition": {
+          "param": "html_notes",
+          "pattern": "<(?!(body|h1|h2|ol|ul|li|strong|em|u|s|code|pre|blockquote|a|hr|img|table|tr|td))"
+        },
+        "severity": "CRITICAL",
+        "message": "Asana only supports specific HTML tags: body, h1, h2, ol, ul, li, strong, em, u, s, code, pre, blockquote, a, hr, img, table, tr, td",
+        "remediation": "Remove unsupported HTML tags or use plain text notes"
+      }
+    ]
+  },
+  "mcp__asana__asana_update_task": {
+    "description": "Asana task update via MCP",
+    "required": ["task_id"],
+    "optional": ["name", "notes", "due_on", "assignee", "completed", "custom_fields"],
+    "types": {
+      "task_id": "string",
+      "name": "string",
+      "notes": "string",
+      "due_on": "string",
+      "assignee": "string",
+      "completed": "boolean",
+      "custom_fields": "object"
+    },
+    "patterns": {
+      "task_id": {
+        "pattern": "^\\d{13,}$",
+        "description": "Asana task GID (13+ digit numeric ID)"
+      }
+    },
+    "rules": [
+      {
+        "name": "task_id_required",
+        "description": "Task ID must be provided for updates",
+        "condition": {
+          "param": "task_id",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "task_id is required for task updates",
+        "remediation": "Provide valid task_id from task creation or search"
+      }
+    ]
+  },
+  "mcp__asana__asana_search_tasks": {
+    "description": "Asana task search via MCP",
+    "required": ["workspace"],
+    "optional": ["text", "projects_any", "sections_any", "assignee_any", "completed", "due_on_after", "due_on_before", "sort_by"],
+    "types": {
+      "workspace": "string",
+      "text": "string",
+      "projects_any": "string",
+      "sections_any": "string",
+      "assignee_any": "string",
+      "completed": "boolean",
+      "due_on_after": "string",
+      "due_on_before": "string",
+      "sort_by": "string"
+    },
+    "enums": {
+      "sort_by": ["due_date", "created_at", "completed_at", "likes", "modified_at"]
+    },
+    "rules": [
+      {
+        "name": "workspace_required",
+        "description": "Workspace is required for task search",
+        "condition": {
+          "param": "workspace",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "workspace parameter is required for task search",
+        "remediation": "Use asana_list_workspaces to get workspace GID"
+      },
+      {
+        "name": "sections_any_requires_project_filter",
+        "description": "sections_any is workspace-scoped, not project-scoped",
+        "condition": {
+          "param": "sections_any",
+          "present": true,
+          "and": { "param": "projects_any", "missing": true }
+        },
+        "severity": "WARNING",
+        "message": "GOTCHA: sections_any returns tasks from ALL projects in the workspace, not just the intended project. Add projects_any or post-filter with AsanaProjectFilter.",
+        "remediation": "Add projects_any parameter or use AsanaProjectFilter.filterByProject()"
+      }
+    ]
+  },
+  "mcp__supabase__query": {
+    "description": "Supabase database query via MCP",
+    "required": ["table"],
+    "optional": ["select", "filter", "limit", "order"],
+    "types": {
+      "table": "string",
+      "select": "string",
+      "filter": "object",
+      "limit": "number",
+      "order": "object"
+    },
+    "ranges": {
+      "limit": {
+        "min": 1,
+        "max": 1000
+      }
+    },
+    "rules": [
+      {
+        "name": "limit_recommended",
+        "description": "Queries should include limit to prevent large result sets",
+        "condition": {
+          "param": "limit",
+          "missing": true
+        },
+        "severity": "WARNING",
+        "warning": "Query without limit may return large result set",
+        "remediation": "Add limit parameter to control result size"
+      }
+    ]
+  },
+  "mcp__supabase__insert": {
+    "description": "Supabase database insert via MCP",
+    "required": ["table", "values"],
+    "optional": ["returning"],
+    "types": {
+      "table": "string",
+      "values": "object",
+      "returning": "string"
+    },
+    "rules": [
+      {
+        "name": "values_required",
+        "description": "Insert requires values object",
+        "condition": {
+          "param": "values",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "values parameter is required for insert operations",
+        "remediation": "Provide values object with column:value pairs"
+      }
+    ]
+  },
+  "mcp__supabase__update": {
+    "description": "Supabase database update via MCP",
+    "required": ["table", "values", "filter"],
+    "optional": ["returning"],
+    "types": {
+      "table": "string",
+      "values": "object",
+      "filter": "object",
+      "returning": "string"
+    },
+    "rules": [
+      {
+        "name": "filter_required_for_update",
+        "description": "Updates require filter to prevent accidental full-table update",
+        "condition": {
+          "param": "filter",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "filter parameter is required for update operations to prevent full-table updates",
+        "remediation": "Add filter parameter to specify which rows to update"
+      },
+      {
+        "name": "service_role_for_rls",
+        "description": "Updates may require service role key for RLS bypass",
+        "condition": {
+          "param": "table",
+          "pattern": "reflections|sessions|audit_log"
+        },
+        "severity": "WARNING",
+        "warning": "This table has RLS policies. Updates may fail with anon key.",
+        "remediation": "Ensure SUPABASE_SERVICE_ROLE_KEY is configured for write operations"
+      }
+    ]
+  },
+  "mcp__playwright__browser_navigate": {
+    "description": "Playwright browser navigation via MCP",
+    "required": ["url"],
+    "optional": ["wait_for"],
+    "types": {
+      "url": "string",
+      "wait_for": "string"
+    },
+    "patterns": {
+      "url": {
+        "pattern": "^https?://",
+        "description": "URL must start with http:// or https://"
+      }
+    },
+    "rules": [
+      {
+        "name": "valid_url_required",
+        "description": "URL must be valid HTTP/HTTPS URL",
+        "condition": {
+          "param": "url",
+          "not_pattern": "^https?://"
+        },
+        "severity": "CRITICAL",
+        "message": "Invalid URL format. Must start with http:// or https://",
+        "remediation": "Provide valid URL with protocol"
+      },
+      {
+        "name": "salesforce_login_detection",
+        "description": "Salesforce URLs may require authentication",
+        "condition": {
+          "param": "url",
+          "pattern": "\\.salesforce\\.com|\\.force\\.com"
+        },
+        "severity": "INFO",
+        "warning": "Salesforce navigation may require prior authentication via sf CLI",
+        "remediation": "Ensure org is authenticated with 'sf org login' before browser navigation"
+      }
+    ]
+  },
+  "mcp__sequential_thinking__think": {
+    "description": "Sequential thinking MCP for complex reasoning",
+    "required": ["thought"],
+    "optional": ["thought_number", "total_thoughts", "next_thought_needed"],
+    "types": {
+      "thought": "string",
+      "thought_number": "number",
+      "total_thoughts": "number",
+      "next_thought_needed": "boolean"
+    },
+    "rules": [
+      {
+        "name": "thought_required",
+        "description": "Thought content is required",
+        "condition": {
+          "param": "thought",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "thought parameter is required",
+        "remediation": "Provide thought content for sequential reasoning"
+      }
+    ]
+  },
+  "mcp__asana__asana_get_task": {
+    "description": "Get detailed task information from Asana",
+    "required": ["task_id"],
+    "optional": ["opt_fields"],
+    "types": {
+      "task_id": "string",
+      "opt_fields": "string"
+    },
+    "patterns": {
+      "task_id": {
+        "pattern": "^\\d{13,}$",
+        "description": "Asana task GID (13+ digit numeric ID)"
+      }
+    },
+    "rules": []
+  },
+  "mcp__asana__asana_create_subtask": {
+    "description": "Create a subtask under an existing task",
+    "required": ["parent_task_id", "name"],
+    "optional": ["notes", "due_on", "assignee"],
+    "types": {
+      "parent_task_id": "string",
+      "name": "string",
+      "notes": "string",
+      "due_on": "string",
+      "assignee": "string"
+    },
+    "patterns": {
+      "parent_task_id": {
+        "pattern": "^\\d{13,}$",
+        "description": "Asana parent task GID"
+      }
+    },
+    "rules": []
+  },
+  "mcp__asana__asana_get_project": {
+    "description": "Get detailed project information from Asana",
+    "required": ["project_id"],
+    "optional": ["opt_fields"],
+    "types": {
+      "project_id": "string",
+      "opt_fields": "string"
+    },
+    "rules": []
+  },
+  "mcp__asana__asana_list_workspaces": {
+    "description": "List all accessible Asana workspaces",
+    "required": [],
+    "optional": ["opt_fields"],
+    "types": {
+      "opt_fields": "string"
+    },
+    "rules": []
+  },
+  "mcp__asana__asana_create_task_story": {
+    "description": "Add a comment/story to an Asana task",
+    "required": ["task_id", "text"],
+    "optional": ["opt_fields"],
+    "types": {
+      "task_id": "string",
+      "text": "string",
+      "opt_fields": "string"
+    },
+    "rules": [
+      {
+        "name": "text_not_empty",
+        "description": "Comment text must not be empty",
+        "condition": {
+          "param": "text",
+          "pattern": "^\\s*$"
+        },
+        "severity": "CRITICAL",
+        "message": "Comment text cannot be empty",
+        "remediation": "Provide meaningful comment text"
+      }
+    ]
+  },
+  "mcp__supabase__delete": {
+    "description": "Supabase database delete via MCP",
+    "required": ["table", "filter"],
+    "optional": ["returning"],
+    "types": {
+      "table": "string",
+      "filter": "object",
+      "returning": "string"
+    },
+    "rules": [
+      {
+        "name": "filter_required_for_delete",
+        "description": "Deletes MUST have filter to prevent accidental full-table deletion",
+        "condition": {
+          "param": "filter",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "DANGEROUS: filter parameter is REQUIRED for delete operations. Deletes without filter will remove ALL rows!",
+        "remediation": "Always provide filter parameter to specify which rows to delete"
+      },
+      {
+        "name": "service_role_for_delete",
+        "description": "Deletes typically require service role key",
+        "condition": {
+          "param": "table"
+        },
+        "severity": "WARNING",
+        "warning": "Delete operations may require SUPABASE_SERVICE_ROLE_KEY due to RLS policies",
+        "remediation": "Ensure service role key is configured for delete operations"
+      }
+    ]
+  },
+  "mcp__supabase__upsert": {
+    "description": "Supabase database upsert (insert or update) via MCP",
+    "required": ["table", "values"],
+    "optional": ["on_conflict", "returning"],
+    "types": {
+      "table": "string",
+      "values": "object",
+      "on_conflict": "string",
+      "returning": "string"
+    },
+    "rules": [
+      {
+        "name": "on_conflict_recommended",
+        "description": "Upserts should specify conflict resolution",
+        "condition": {
+          "param": "on_conflict",
+          "missing": true
+        },
+        "severity": "WARNING",
+        "warning": "Upsert without on_conflict will use default primary key for conflict detection",
+        "remediation": "Specify on_conflict parameter for explicit conflict handling"
+      }
+    ]
+  },
+  "mcp__supabase__rpc": {
+    "description": "Call Supabase stored procedure/function",
+    "required": ["fn", "params"],
+    "optional": [],
+    "types": {
+      "fn": "string",
+      "params": "object"
+    },
+    "rules": [
+      {
+        "name": "function_name_required",
+        "description": "Function name must be provided",
+        "condition": {
+          "param": "fn",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "Function name (fn) is required for RPC calls",
+        "remediation": "Provide the name of the Supabase function to call"
+      }
+    ]
+  },
+  "mcp__playwright__browser_click": {
+    "description": "Click an element on the page",
+    "required": ["element"],
+    "optional": ["ref"],
+    "types": {
+      "element": "string",
+      "ref": "string"
+    },
+    "rules": [
+      {
+        "name": "element_selector_required",
+        "description": "Element selector or ref must be provided",
+        "condition": {
+          "param": "element",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "Element selector is required for click operations",
+        "remediation": "Provide element selector (CSS, text, or accessibility selector)"
+      }
+    ]
+  },
+  "mcp__playwright__browser_snapshot": {
+    "description": "Capture accessibility snapshot of current page",
+    "required": [],
+    "optional": [],
+    "types": {},
+    "rules": []
+  },
+  "mcp__playwright__browser_take_screenshot": {
+    "description": "Capture screenshot of current page",
+    "required": [],
+    "optional": ["path", "fullPage"],
+    "types": {
+      "path": "string",
+      "fullPage": "boolean"
+    },
+    "rules": []
+  },
+  "mcp__playwright__browser_type": {
+    "description": "Type text into a focused element",
+    "required": ["text"],
+    "optional": ["element", "ref"],
+    "types": {
+      "text": "string",
+      "element": "string",
+      "ref": "string"
+    },
+    "rules": [
+      {
+        "name": "text_required",
+        "description": "Text to type must be provided",
+        "condition": {
+          "param": "text",
+          "missing": true
+        },
+        "severity": "CRITICAL",
+        "message": "text parameter is required for type operations",
+        "remediation": "Provide the text to type"
+      }
+    ]
+  },
+  "mcp__playwright__browser_wait": {
+    "description": "Wait for specified duration or condition",
+    "required": [],
+    "optional": ["time", "selector"],
+    "types": {
+      "time": "number",
+      "selector": "string"
+    },
+    "ranges": {
+      "time": {
+        "min": 0,
+        "max": 30000,
+        "description": "Wait time in milliseconds (max 30 seconds)"
+      }
+    },
+    "rules": [
+      {
+        "name": "reasonable_wait_time",
+        "description": "Wait time should be reasonable",
+        "condition": {
+          "param": "time",
+          "pattern": "^(?!.)[3-9][0-9]{4}|[1-9][0-9]{5,}$"
+        },
+        "severity": "WARNING",
+        "warning": "Wait time exceeds 30 seconds. Consider using selector-based waiting instead.",
+        "remediation": "Use selector parameter to wait for specific element instead of fixed time"
+      }
+    ]
+  }
+}

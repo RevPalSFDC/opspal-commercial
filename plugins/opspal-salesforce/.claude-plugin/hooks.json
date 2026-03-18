@@ -1,0 +1,185 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
+            "timeout": 10000,
+            "description": "Universal agent governance — 5-tier risk scoring, approval gates, and audit trail for all Salesforce agent operations"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(sf project deploy*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-agent-context-check.sh",
+            "timeout": 5000,
+            "description": "Block direct sf project deploy outside approved agent context - steers to sfdc-deployment-manager"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'PRETOOLUSE_MODE=1 \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-deployment-comprehensive-validation.sh\"'",
+            "timeout": 30000,
+            "description": "Run source-first comprehensive deployment preflight before Salesforce deploys"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-flow-validation.sh",
+            "timeout": 60000,
+            "description": "Validate all flows before deployment"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-report-quality-gate.sh",
+            "timeout": 60000,
+            "description": "Validate report and dashboard quality before deployment"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(sf data query*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-soql-validator.sh",
+            "timeout": 10000,
+            "description": "Validate SOQL field names before query execution to prevent INVALID_FIELD errors"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(*jq*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-jq-validator.sh",
+            "timeout": 5000,
+            "description": "Validate jq expressions for syntax errors and incomplete pipes (prevents exit code 5)"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-agent-reminder.sh",
+            "timeout": 5000,
+            "description": "Initialize session with temp directories and agent reminders"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load org context from working directory, config files, and environment"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(sf project deploy*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-field-deployment.sh",
+            "timeout": 30000,
+            "description": "Verify field accessibility after deployment before proceeding"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(sf data query*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-sf-query-validation.sh",
+            "timeout": 5000,
+            "description": "Validate query results for data quality issues"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
+            "timeout": 5000,
+            "description": "Provide recovery guidance for INVALID_FIELD and other SOQL errors"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(sf sobject describe*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
+            "timeout": 5000,
+            "description": "Provide recovery guidance for describe failures"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "sfdc-discovery",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
+            "timeout": 120000,
+            "description": "Generate field dictionary after org discovery completes"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-state-discovery",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
+            "timeout": 120000,
+            "description": "Generate field dictionary after state discovery completes"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-revops-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30000,
+            "description": "QA-005: Trigger implementation planning after RevOps assessment"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-cpq-assessor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30000,
+            "description": "QA-005: Trigger implementation planning after CPQ assessment"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-automation-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30000,
+            "description": "QA-005: Trigger implementation planning after automation audit"
+          }
+        ]
+      }
+    ]
+  }
+}

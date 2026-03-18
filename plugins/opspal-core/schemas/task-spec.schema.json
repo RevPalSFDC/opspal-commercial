@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.io/schemas/task-spec.schema.json",
+  "title": "TaskSpec",
+  "description": "Contract for a single unit of work in a Task Graph",
+  "type": "object",
+  "required": ["id", "title", "domain", "goal", "inputs", "outputs", "acceptance_criteria"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^T-[0-9]{2,4}$",
+      "description": "Unique task identifier (e.g., T-01, T-123)"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Clear action statement describing the task"
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "salesforce-apex",
+        "salesforce-flow",
+        "salesforce-metadata",
+        "salesforce-data",
+        "salesforce-permission",
+        "salesforce-report",
+        "hubspot-workflow",
+        "hubspot-data",
+        "hubspot-property",
+        "hubspot-integration",
+        "data-transform",
+        "data-migration",
+        "data-validation",
+        "integration",
+        "cross-platform",
+        "documentation",
+        "review"
+      ],
+      "description": "Primary domain this task operates in"
+    },
+    "goal": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Single sentence describing what 'done' looks like"
+    },
+    "inputs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 0,
+      "description": "Specific files, objects, or links required to start this task"
+    },
+    "outputs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Artifacts that must be produced by this task"
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Conditions that must be true for the task to be considered complete"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^T-[0-9]{2,4}$" },
+      "default": [],
+      "description": "Task IDs that must complete before this task can start"
+    },
+    "can_run_in_parallel_with": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^T-[0-9]{2,4}$" },
+      "default": [],
+      "description": "Task IDs that can safely execute concurrently with this task"
+    },
+    "concurrency_group": {
+      "type": "string",
+      "enum": [
+        "apex",
+        "flow-xml",
+        "metadata",
+        "data",
+        "hubspot-workflow",
+        "hubspot-data",
+        "prod",
+        "none"
+      ],
+      "default": "none",
+      "description": "Mutex group - only one task per group can execute at a time"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "medium",
+      "description": "Risk classification affecting tool permissions and approval requirements"
+    },
+    "tool_policy": {
+      "type": "object",
+      "properties": {
+        "file_read": {
+          "type": "string",
+          "enum": ["allowed", "forbidden"],
+          "default": "allowed"
+        },
+        "file_write": {
+          "type": "string",
+          "enum": ["allowed", "allowed_with_approval", "forbidden"],
+          "default": "allowed_with_approval"
+        },
+        "destructive_ops": {
+          "type": "string",
+          "enum": ["allowed", "allowed_with_approval", "forbidden"],
+          "default": "forbidden"
+        },
+        "production_ops": {
+          "type": "string",
+          "enum": ["allowed", "allowed_with_approval", "forbidden"],
+          "default": "forbidden"
+        },
+        "data_modification": {
+          "type": "string",
+          "enum": ["allowed", "allowed_with_approval", "forbidden"],
+          "default": "allowed_with_approval"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Tool permission policies for this task"
+    },
+    "stop_points": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Checkpoints requiring explicit approval before continuing"
+    },
+    "estimated_complexity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Complexity score from 0 (trivial) to 1 (highly complex)"
+    },
+    "estimated_duration_minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Expected time to complete in minutes"
+    },
+    "assigned_agent": {
+      "type": "string",
+      "description": "Specialist agent assigned to execute this task"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "created_by": { "type": "string" },
+        "playbook_source": { "type": "string" },
+        "version": { "type": "string" }
+      },
+      "additionalProperties": true,
+      "description": "Additional task metadata"
+    }
+  },
+  "additionalProperties": false
+}

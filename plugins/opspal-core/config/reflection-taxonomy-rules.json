@@ -1,0 +1,572 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Reflection taxonomy rules for cohort classification",
+  "lastUpdated": "2026-01-15",
+
+  "categories": {
+    "picklist-dependency": {
+      "description": "Dependent picklist and controlling field validation failures",
+      "severity": "high",
+      "keywords": [
+        "dependent picklist", "controlling field", "Segment2__c", "Sub_Segment__c",
+        "Market__c", "picklist value", "valid values", "dependent field",
+        "controlling relationship", "picklist dependency", "invalid picklist",
+        "restricted picklist", "global picklist", "field dependencies"
+      ],
+      "patterns": [
+        "dependent.*picklist",
+        "controlling.*field",
+        "picklist.*value.*not.*valid",
+        "only.*valid.*for",
+        "depends.*on.*controlling",
+        "Segment2__c.*invalid",
+        "Sub_Segment__c.*not.*valid",
+        "controlling.*value.*required",
+        "dependent.*not.*available"
+      ],
+      "preventionStrategies": [
+        "Query controlling field values before updating dependent fields",
+        "Use dependent-picklist-validator.js before picklist updates",
+        "Validate picklist dependency chain before DML operations",
+        "Check DescribeLayoutResult for valid dependent values"
+      ]
+    },
+
+    "territory-api": {
+      "description": "Salesforce Territory2 API and metadata-specific issues",
+      "severity": "high",
+      "keywords": [
+        "Territory2", "MasterLabel", "BooleanFilter", "RuleTerritory2Association",
+        "ObjectTerritory2AssignmentRule", "territory rule", "AssignmentRuleItem",
+        "Territory2Model", "Territory2Type", "territory deployment",
+        "territory activation", "UserTerritory2Association", "territory hierarchy"
+      ],
+      "patterns": [
+        "MasterLabel.*instead",
+        "BooleanFilter.*exists",
+        "territory.*deployment",
+        "rule.*item.*position",
+        "Territory2.*not.*found",
+        "cannot.*modify.*BooleanFilter",
+        "AssignmentRule.*failed",
+        "territory.*activation.*error",
+        "RuleTerritory2Association.*not.*created"
+      ],
+      "preventionStrategies": [
+        "Use territory-rule-validator.js before rule modifications",
+        "Clear BooleanFilter before item modifications, restore after",
+        "Use MasterLabel field instead of Name for Territory2 objects",
+        "Verify RuleTerritory2Association exists before activation"
+      ]
+    },
+
+    "csv-format": {
+      "description": "CSV parsing, line ending, and bulk API format issues",
+      "severity": "medium",
+      "keywords": [
+        "CRLF", "line ending", "CSV", "bulk API", "Windows", "Unix LF",
+        "carriage return", "newline", "file format", "delimiter",
+        "encoding", "BOM", "byte order mark", "Excel format"
+      ],
+      "patterns": [
+        "CRLF.*line.*ending",
+        "CSV.*reject",
+        "bulk.*API.*rejects",
+        "invalid.*line.*ending",
+        "Windows.*format",
+        "carriage.*return",
+        "encoding.*error",
+        "BOM.*detected",
+        "delimiter.*mismatch"
+      ],
+      "preventionStrategies": [
+        "Normalize line endings to Unix LF before Bulk API calls",
+        "Use csv-utils.js normalizeCsvLineEndings() function",
+        "Strip BOM from UTF-8 files before processing",
+        "Validate CSV format before bulk operations"
+      ]
+    },
+
+    "metadata-propagation": {
+      "description": "Salesforce metadata cache and propagation delay issues",
+      "severity": "medium",
+      "keywords": [
+        "metadata cache", "propagation", "describe cache", "field not accessible",
+        "API delay", "cache invalidation", "not yet available", "recently created",
+        "metadata refresh", "describe stale", "field not found", "object not visible"
+      ],
+      "patterns": [
+        "metadata.*propagation",
+        "describe.*cache",
+        "delay.*after.*creation",
+        "not.*accessible.*yet",
+        "field.*not.*found.*recently.*created",
+        "cache.*stale",
+        "refresh.*metadata",
+        "wait.*after.*deployment",
+        "object.*not.*visible"
+      ],
+      "preventionStrategies": [
+        "Add 2-5 minute wait after field/object creation before referencing",
+        "Force describe cache refresh after metadata deployments",
+        "Use retryWithBackoff when accessing recently created metadata",
+        "Verify field accessibility before referencing in formulas"
+      ]
+    },
+
+    "schema/parse": {
+      "description": "Schema changes, parsing errors, field type issues",
+      "severity": "high",
+      "keywords": [
+        "field type", "formula", "validation rule", "picklist", "data type",
+        "conversion", "schema", "metadata", "parse", "parsing", "JSON",
+        "XML", "deploy", "deployment", "destructive", "dependency",
+        "incompatible", "migrate", "migration", "cannot convert", "schema-parse",
+        "schema parse",
+        "field history", "tracking", "relationship", "lookup", "master-detail"
+      ],
+      "patterns": [
+        "cannot.*convert",
+        "field.*type.*mismatch",
+        "invalid.*schema",
+        "deployment.*failed",
+        "missing.*dependency",
+        "destructive.*change",
+        "formula.*error",
+        "validation.*rule"
+      ],
+      "preventionStrategies": [
+        "Use field-type-conversion-validator.js before changes",
+        "Run dependency analysis before destructive changes",
+        "Validate deployment manifest completeness"
+      ]
+    },
+
+    "config/env": {
+      "description": "Configuration and environment variable issues",
+      "severity": "high",
+      "keywords": [
+        "environment", "env", "config", "configuration", "variable",
+        "undefined", "not found", "missing", "path", "directory",
+        "permission", "access", "credential", "authentication",
+        "bash", "expansion", "shell", "export", "source"
+      ],
+      "patterns": [
+        "undefined.*variable",
+        "not.*found",
+        "missing.*config",
+        "path.*not.*exist",
+        "permission.*denied",
+        "authentication.*failed",
+        "env.*not.*set",
+        "expansion.*failed"
+      ],
+      "preventionStrategies": [
+        "Use environment-schema.json for validation",
+        "Run session-start-env-config.sh at startup",
+        "Use bash-expansion-validator.js before command execution"
+      ]
+    },
+
+    "tool-contract": {
+      "description": "Tool input/output contract violations",
+      "severity": "high",
+      "keywords": [
+        "contract", "schema", "input", "output", "validation",
+        "mismatch", "expected", "actual", "type", "format",
+        "required", "missing", "field", "parameter",
+        "tool-contract mismatch", "tool contract mismatch"
+      ],
+      "patterns": [
+        "expected.*got",
+        "required.*field.*missing",
+        "invalid.*input",
+        "output.*validation.*failed",
+        "contract.*violation"
+      ],
+      "preventionStrategies": [
+        "Use tool-contracts.json for validation",
+        "Enable pre-tool-use-contract-validation.sh hook",
+        "Check tool output with post-tool validation"
+      ]
+    },
+
+    "idempotency/state": {
+      "description": "Idempotency and state management issues",
+      "severity": "high",
+      "keywords": [
+        "idempotency", "idempotent", "duplicate", "replay", "double submit",
+        "state", "state drift", "state mismatch", "stale state", "race",
+        "idempotency-state", "idempotency state"
+      ],
+      "patterns": [
+        "duplicate.*submission",
+        "already.*processed",
+        "state.*mismatch",
+        "idempotenc(y|e).*fail",
+        "replay.*request"
+      ],
+      "preventionStrategies": [
+        "Use idempotency keys for retryable operations",
+        "Add state pre/post checks around mutating actions",
+        "Guard updates with optimistic locking or version checks"
+      ]
+    },
+
+    "data-quality": {
+      "description": "Data quality and validation issues",
+      "severity": "medium",
+      "keywords": [
+        "null", "empty", "invalid", "corrupt", "inconsistent",
+        "duplicate", "orphan", "missing", "required", "quality",
+        "validation", "improbable", "outlier", "anomaly", "zero"
+      ],
+      "patterns": [
+        "null.*value",
+        "empty.*result",
+        "invalid.*data",
+        "data.*quality",
+        "unexpected.*null",
+        "zero.*records",
+        "improbable.*result",
+        "orphan.*rate"
+      ],
+      "preventionStrategies": [
+        "Use data-quality-gate.js for result validation",
+        "Enable improbability detection",
+        "Validate NULL handling rules"
+      ]
+    },
+
+    "external-api": {
+      "description": "External API and integration issues",
+      "severity": "medium",
+      "keywords": [
+        "API", "rate limit", "timeout", "429", "503", "quota",
+        "throttle", "cache", "stale", "expired", "token",
+        "connection", "network", "endpoint", "request", "response"
+      ],
+      "patterns": [
+        "rate.*limit",
+        "api.*error",
+        "timeout",
+        "quota.*exceeded",
+        "connection.*failed",
+        "429",
+        "503",
+        "service.*unavailable"
+      ],
+      "preventionStrategies": [
+        "Use api-limit-tracker.js to monitor limits",
+        "Implement retry with exponential backoff",
+        "Use api-cache-manager.js for caching"
+      ]
+    },
+
+    "auth/permissions": {
+      "description": "Authentication and permission issues",
+      "severity": "high",
+      "keywords": [
+        "permission", "access", "denied", "unauthorized", "forbidden",
+        "auth", "authentication", "authorization", "token", "credential",
+        "profile", "permission set", "role", "sharing"
+      ],
+      "patterns": [
+        "permission.*denied",
+        "unauthorized",
+        "forbidden",
+        "access.*denied",
+        "insufficient.*privilege",
+        "token.*expired",
+        "authentication.*failed"
+      ],
+      "preventionStrategies": [
+        "Validate permissions before operations",
+        "Check token expiration proactively",
+        "Use unified-auth-manager.js for auth management"
+      ]
+    },
+
+    "prompt-mismatch": {
+      "description": "User expectation vs actual behavior mismatch",
+      "severity": "low",
+      "keywords": [
+        "expectation", "expected", "wanted", "should", "wrong",
+        "incorrect", "misunderstood", "not what", "different",
+        "user", "request", "requirement", "prompt/llm mismatch", "prompt/llm-mismatch"
+      ],
+      "patterns": [
+        "expected.*different",
+        "not.*what.*wanted",
+        "should.*have",
+        "misunderstood",
+        "wrong.*result"
+      ],
+      "preventionStrategies": [
+        "Clarify requirements before implementation",
+        "Use AskUserQuestion tool for ambiguity",
+        "Track user corrections with user-expectation-tracker.js"
+      ]
+    },
+
+    "api-deprecation": {
+      "description": "Deprecated API usage issues",
+      "severity": "medium",
+      "keywords": [
+        "deprecated", "obsolete", "legacy", "sunset", "retired",
+        "version", "upgrade", "migrate", "old", "outdated"
+      ],
+      "patterns": [
+        "deprecated",
+        "api.*version.*obsolete",
+        "use.*instead",
+        "sunset",
+        "no.*longer.*supported"
+      ],
+      "preventionStrategies": [
+        "Check API version compatibility",
+        "Monitor deprecation notices",
+        "Plan migration proactively"
+      ]
+    },
+
+    "timing/race": {
+      "description": "Timing and race condition issues",
+      "severity": "high",
+      "keywords": [
+        "race", "timing", "concurrent", "async", "parallel",
+        "order", "sequence", "before", "after", "wait",
+        "timeout", "deadlock", "lock"
+      ],
+      "patterns": [
+        "race.*condition",
+        "timing.*issue",
+        "concurrent.*access",
+        "async.*error",
+        "execution.*order"
+      ],
+      "preventionStrategies": [
+        "Use proper async/await patterns",
+        "Implement locking where needed",
+        "Add appropriate waits and retries"
+      ]
+    },
+
+    "resource-limit": {
+      "description": "Resource, governor limit, and JS runtime limit issues",
+      "severity": "high",
+      "keywords": [
+        "limit", "governor", "quota", "exceeded", "maximum",
+        "memory", "CPU", "storage", "heap", "SOQL", "DML",
+        "callout", "batch", "bulk", "string length", "memory limit",
+        "out of memory", "buffer", "stack overflow", "recursion limit"
+      ],
+      "patterns": [
+        "limit.*exceeded",
+        "governor.*limit",
+        "quota.*reached",
+        "too.*many",
+        "maximum.*exceeded",
+        "heap.*size"
+      ],
+      "preventionStrategies": [
+        "Monitor org limits before operations",
+        "Implement batch processing for large operations",
+        "Use bulkified patterns"
+      ]
+    },
+
+    "integration-sync": {
+      "description": "Cross-system synchronization issues",
+      "severity": "medium",
+      "keywords": [
+        "sync", "synchronization", "integration", "cross-system",
+        "out of sync", "mismatch", "inconsistent", "bridge",
+        "connector", "mapping"
+      ],
+      "patterns": [
+        "sync.*failed",
+        "out.*of.*sync",
+        "integration.*error",
+        "data.*mismatch",
+        "mapping.*error"
+      ],
+      "preventionStrategies": [
+        "Use unified-data-quality-validator.js",
+        "Implement sync verification",
+        "Add conflict resolution"
+      ]
+    },
+
+    "user-input": {
+      "description": "User input validation and handling issues",
+      "severity": "low",
+      "keywords": [
+        "input", "user", "invalid", "format", "validation",
+        "sanitize", "escape", "injection", "malformed"
+      ],
+      "patterns": [
+        "invalid.*input",
+        "malformed",
+        "input.*validation",
+        "user.*error",
+        "format.*error"
+      ],
+      "preventionStrategies": [
+        "Validate all user inputs",
+        "Sanitize before processing",
+        "Provide clear error messages"
+      ]
+    },
+
+    "assertion-failure": {
+      "description": "False success reporting and premature completion assertions",
+      "severity": "high",
+      "keywords": [
+        "marked complete", "false positive", "claimed success",
+        "reported done", "assertion", "verification failed",
+        "actually failed", "not really", "incomplete", "premature"
+      ],
+      "patterns": [
+        "marked.*complete.*but",
+        "false.*positive",
+        "claimed.*success",
+        "reported.*done.*not",
+        "verification.*failed",
+        "actually.*failed"
+      ],
+      "preventionStrategies": [
+        "Add verification step after completion claims",
+        "Use post-tool-use-result-validator.sh hook",
+        "Implement explicit success criteria checks"
+      ]
+    },
+
+    "format-conversion": {
+      "description": "Data format conversion and serialization issues",
+      "severity": "medium",
+      "keywords": [
+        "compound field", "serialization", "deserialization",
+        "JSON parse", "XML parse", "CSV", "format",
+        "encoding", "decoding", "transform", "convert"
+      ],
+      "patterns": [
+        "compound.*field",
+        "serialization.*error",
+        "parse.*error",
+        "format.*conversion",
+        "encoding.*issue",
+        "cannot.*serialize"
+      ],
+      "preventionStrategies": [
+        "Handle compound fields with explicit parsing",
+        "Use safe-json-parser.js for JSON operations",
+        "Validate data format before conversion"
+      ]
+    },
+
+    "process-methodology": {
+      "description": "Process shortcuts, skipped steps, and methodology violations",
+      "severity": "medium",
+      "keywords": [
+        "test coverage", "skipped", "bypassed", "shortcut",
+        "not tested", "manual override", "process violation",
+        "incomplete", "missing step", "methodology"
+      ],
+      "patterns": [
+        "skipped.*step",
+        "not.*tested",
+        "bypassed.*validation",
+        "incomplete.*process",
+        "missing.*verification",
+        "methodology.*violation"
+      ],
+      "preventionStrategies": [
+        "Enforce mandatory process checkpoints",
+        "Use TodoWrite for step tracking",
+        "Add pre-completion validation hooks"
+      ]
+    }
+  },
+
+  "classification": {
+    "rules": [
+      {
+        "priority": 1,
+        "condition": "keywords_match >= 3",
+        "action": "classify_as_top_match"
+      },
+      {
+        "priority": 2,
+        "condition": "pattern_match",
+        "action": "classify_with_high_confidence"
+      },
+      {
+        "priority": 3,
+        "condition": "keywords_match >= 1",
+        "action": "classify_with_medium_confidence"
+      },
+      {
+        "priority": 4,
+        "condition": "no_match",
+        "action": "classify_as_unknown"
+      }
+    ],
+    "confidenceThresholds": {
+      "high": 0.8,
+      "medium": 0.5,
+      "low": 0.3
+    },
+    "maxCategories": 2
+  },
+
+  "autoTagging": {
+    "enabled": true,
+    "rules": [
+      {
+        "pattern": "SOQL|SOSL|query",
+        "tags": ["salesforce", "query"]
+      },
+      {
+        "pattern": "HubSpot|hubspot|hs_",
+        "tags": ["hubspot"]
+      },
+      {
+        "pattern": "Flow|Process Builder|workflow",
+        "tags": ["automation"]
+      },
+      {
+        "pattern": "Apex|trigger|class",
+        "tags": ["apex", "code"]
+      },
+      {
+        "pattern": "deploy|deployment|package",
+        "tags": ["deployment"]
+      },
+      {
+        "pattern": "permission|profile|sharing",
+        "tags": ["security"]
+      }
+    ]
+  },
+
+  "severityIndicators": {
+    "critical": [
+      "data loss", "production", "security", "breach",
+      "outage", "system down", "corrupt"
+    ],
+    "high": [
+      "failed", "error", "blocked", "cannot",
+      "deployment failed", "authentication"
+    ],
+    "medium": [
+      "warning", "deprecated", "slow", "timeout",
+      "retry", "inconsistent"
+    ],
+    "low": [
+      "suggestion", "improvement", "minor", "cosmetic",
+      "expected different"
+    ]
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "insurance-agencies",
+  "version": "1.0.0",
+  "description": "Insurance agencies and brokerages, both independent and carrier-affiliated. Local agents represent national carriers but are typically independent businesses. 'State Farm - John Smith Agency' is different from 'State Farm - Jane Doe Agency'.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "insurance", "agency", "broker", "brokerage", "agent",
+      "underwriting", "claims", "policy", "coverage", "premium",
+      "life insurance", "auto insurance", "home insurance", "commercial insurance"
+    ],
+    "entityTypes": ["InsuranceAgency", "Broker", "Agent", "MGA", "Wholesaler"],
+    "fieldPatterns": [
+      "NPN", "ProducerLicense", "AgencyCode", "CarrierCode", "NAICCode"
+    ]
+  },
+
+  "abbreviations": {
+    "agencyTypes": {
+      "MGA": "Managing General Agent",
+      "MGU": "Managing General Underwriter",
+      "GA": "General Agent",
+      "IA": "Independent Agent",
+      "EA": "Exclusive Agent",
+      "PA": "Personal Lines Agent",
+      "CA": "Commercial Lines Agent"
+    },
+    "carriers": {
+      "SF": "State Farm",
+      "GEICO": "Government Employees Insurance Company",
+      "USAA": "United Services Automobile Association",
+      "P&C": "Property and Casualty",
+      "L&H": "Life and Health"
+    },
+    "designations": {
+      "CIC": "Certified Insurance Counselor",
+      "CPCU": "Chartered Property Casualty Underwriter",
+      "CLU": "Chartered Life Underwriter",
+      "ChFC": "Chartered Financial Consultant",
+      "AAI": "Accredited Adviser in Insurance"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp"],
+    "preserve": [
+      "Insurance", "Insurance Agency", "Insurance Group",
+      "Insurance Services", "Agency", "Brokerage"
+    ]
+  },
+
+  "synonyms": {
+    "Insurance Agency": ["Insurance Agcy", "Ins Agency"],
+    "Insurance": ["Ins", "Insur"],
+    "& Associates": ["and Associates"],
+    "Financial Services": ["Financial Svcs"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.80,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 92,
+      "review": 82,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -25
+  },
+
+  "genericEntityPatterns": [
+    "* Insurance Agency",
+    "* Insurance Group",
+    "* Insurance Services",
+    "* Insurance Brokers",
+    "State Farm - *",
+    "Allstate - *",
+    "Farmers Insurance - *",
+    "American Family Insurance - *",
+    "Nationwide - *",
+    "Liberty Mutual - *",
+    "* Financial & Insurance",
+    "* Financial Services",
+    "* & Associates Insurance"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["npn_match", "agency_code_match", "domain_match"],
+    "blockers": ["different_npn", "different_agent_name"]
+  },
+
+  "knownEntities": [
+    "Marsh McLennan",
+    "Aon",
+    "Willis Towers Watson",
+    "Arthur J. Gallagher",
+    "Brown & Brown",
+    "Hub International",
+    "Lockton Companies",
+    "USI Insurance Services",
+    "Acrisure",
+    "AssuredPartners",
+    "NFP",
+    "Risk Strategies",
+    "Alliant Insurance Services",
+    "CBIZ",
+    "BroadStreet Partners",
+    "PCF Insurance Services",
+    "World Insurance Associates",
+    "Baldwin Risk Partners",
+    "Higginbotham",
+    "IMA Financial Group"
+  ],
+
+  "knownEntityAliases": {
+    "Marsh McLennan": ["Marsh", "MMC"],
+    "Willis Towers Watson": ["WTW", "Willis"],
+    "Arthur J. Gallagher": ["Gallagher", "AJG"],
+    "Brown & Brown": ["B&B"],
+    "Hub International": ["Hub"],
+    "USI Insurance Services": ["USI"]
+  },
+
+  "carrierAgentPatterns": [
+    {
+      "pattern": "^(State Farm|Allstate|Farmers|American Family|Nationwide|Liberty Mutual)\\s*[-–]\\s*(.+)$",
+      "description": "Carrier - Agent Name pattern",
+      "carrierGroup": 1,
+      "agentGroup": 2
+    },
+    {
+      "pattern": "^(.+?)\\s+(State Farm|Allstate|Farmers)\\s+Agent$",
+      "description": "Agent Name Carrier Agent pattern",
+      "agentGroup": 1,
+      "carrierGroup": 2
+    }
+  ],
+
+  "agencyNote": "Insurance agencies present a unique challenge: local agents representing the same national carrier (e.g., 'State Farm') are independent businesses with different ownership. Two 'State Farm' agencies in different cities are NOT the same entity. Always check for agent name, NPN (National Producer Number), or specific agency identifier."
+}

@@ -1,0 +1,174 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "legal",
+  "version": "1.0.0",
+  "description": "Law firms, legal services, and attorneys. BigLaw firms have national offices (same entity), while small firms are typically jurisdiction-specific.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "law", "legal", "attorney", "lawyer", "counsel", "litigation",
+      "partner", "associate", "paralegal", "barrister", "solicitor",
+      "court", "trial", "arbitration", "mediation", "estate planning"
+    ],
+    "entityTypes": ["LawFirm", "LegalServices", "Attorney", "Counsel"],
+    "fieldPatterns": [
+      "BarNumber", "JurisdictionCode", "PracticeArea", "CaseNumber"
+    ]
+  },
+
+  "abbreviations": {
+    "firmTypes": {
+      "LLP": "Limited Liability Partnership",
+      "PC": "Professional Corporation",
+      "PLLC": "Professional Limited Liability Company",
+      "PA": "Professional Association",
+      "SC": "Service Corporation"
+    },
+    "practiceAreas": {
+      "IP": "Intellectual Property",
+      "M&A": "Mergers and Acquisitions",
+      "PI": "Personal Injury",
+      "RE": "Real Estate",
+      "BK": "Bankruptcy",
+      "SEC": "Securities",
+      "T&E": "Trusts and Estates",
+      "WC": "Workers Compensation",
+      "ERISA": "Employee Retirement Income Security Act"
+    },
+    "titles": {
+      "Esq": "Esquire",
+      "JD": "Juris Doctor",
+      "LLM": "Master of Laws",
+      "LLB": "Bachelor of Laws"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp"],
+    "preserve": [
+      "LLP", "PC", "PLLC", "PA", "SC",
+      "Law Firm", "Law Group", "Law Offices",
+      "& Associates", "& Partners"
+    ]
+  },
+
+  "synonyms": {
+    "Law Offices": ["Law Office"],
+    "& Associates": ["and Associates"],
+    "& Partners": ["and Partners"],
+    "Attorney at Law": ["Attorneys at Law", "Attorney-at-Law"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 92,
+      "review": 82,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -25
+  },
+
+  "genericEntityPatterns": [
+    "Law Offices of *",
+    "Law Office of *",
+    "* & Associates",
+    "* Law Group",
+    "* Legal Services",
+    "* Legal Group",
+    "* Partners",
+    "The * Firm",
+    "* P.C.",
+    "* LLP",
+    "* PLLC",
+    "* Law Firm",
+    "* Attorney at Law",
+    "* Attorneys"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["bar_number_match", "domain_match", "multi_state_licensed"],
+    "blockers": ["different_jurisdiction_small_firm"]
+  },
+
+  "knownEntities": [
+    "Kirkland & Ellis",
+    "Latham & Watkins",
+    "DLA Piper",
+    "Baker McKenzie",
+    "Skadden, Arps, Slate, Meagher & Flom",
+    "Jones Day",
+    "Sidley Austin",
+    "Paul, Weiss, Rifkind, Wharton & Garrison",
+    "Sullivan & Cromwell",
+    "Wachtell, Lipton, Rosen & Katz",
+    "Cravath, Swaine & Moore",
+    "WilmerHale",
+    "Debevoise & Plimpton",
+    "Dentons",
+    "White & Case",
+    "Gibson, Dunn & Crutcher",
+    "Weil, Gotshal & Manges",
+    "Davis Polk & Wardwell",
+    "Norton Rose Fulbright",
+    "Quinn Emanuel Urquhart & Sullivan",
+    "Morgan, Lewis & Bockius",
+    "Greenberg Traurig",
+    "Holland & Knight",
+    "Hogan Lovells",
+    "Ropes & Gray",
+    "Simpson Thacher & Bartlett",
+    "Cleary Gottlieb",
+    "Milbank",
+    "Freshfields Bruckhaus Deringer",
+    "Clifford Chance",
+    "Allen & Overy",
+    "Linklaters",
+    "Cooley",
+    "Goodwin Procter",
+    "O'Melveny & Myers",
+    "Willkie Farr & Gallagher",
+    "Proskauer Rose",
+    "Akin Gump Strauss Hauer & Feld",
+    "King & Spalding",
+    "McDermott Will & Emery"
+  ],
+
+  "knownEntityAliases": {
+    "Skadden, Arps, Slate, Meagher & Flom": ["Skadden", "Skadden Arps"],
+    "Paul, Weiss, Rifkind, Wharton & Garrison": ["Paul Weiss"],
+    "Wachtell, Lipton, Rosen & Katz": ["Wachtell", "Wachtell Lipton"],
+    "Cravath, Swaine & Moore": ["Cravath"],
+    "Wilmer Cutler Pickering Hale and Dorr": ["WilmerHale"],
+    "Quinn Emanuel Urquhart & Sullivan": ["Quinn Emanuel"],
+    "Gibson, Dunn & Crutcher": ["Gibson Dunn"],
+    "Weil, Gotshal & Manges": ["Weil Gotshal", "Weil"],
+    "Akin Gump Strauss Hauer & Feld": ["Akin Gump"],
+    "Freshfields Bruckhaus Deringer": ["Freshfields"],
+    "Cleary Gottlieb Steen & Hamilton": ["Cleary Gottlieb", "Cleary"]
+  },
+
+  "firmTiers": {
+    "biglaw": {
+      "description": "AmLaw 100 firms with national/international presence",
+      "matchingHint": "Same name in different states is likely same entity"
+    },
+    "regional": {
+      "description": "Mid-sized firms with multi-state presence",
+      "matchingHint": "Review required for cross-state matches"
+    },
+    "local": {
+      "description": "Small firms typically single-jurisdiction",
+      "matchingHint": "Same name in different states is likely different entity"
+    }
+  }
+}

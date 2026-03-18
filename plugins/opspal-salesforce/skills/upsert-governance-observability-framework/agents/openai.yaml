@@ -1,0 +1,4 @@
+interface:
+  display_name: "Upsert Governance Observability Framework"
+  short_description: "Help with Upsert Governance Observability Framework tasks"
+  default_prompt: "Use $upsert-governance-observability-framework to execute this workflow safely and produce the expected artifacts."

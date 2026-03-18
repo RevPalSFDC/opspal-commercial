@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Gong Intelligence Operations"
+  short_description: "Help with Core Gong Intelligence Operations tasks"
+  default_prompt: "Use $core-gong-intelligence-operations to execute this workflow safely and produce the expected artifacts."

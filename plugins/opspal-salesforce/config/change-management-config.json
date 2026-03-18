@@ -1,0 +1,105 @@
+{
+  "description": "Change Management System Integration Configuration",
+  "version": "2.0.0",
+  "asana": {
+    "enabled": true,
+    "accessToken": "${ASANA_ACCESS_TOKEN}",
+    "workspaceId": "${ASANA_WORKSPACE_ID}",
+    "projectId": "${ASANA_PROJECT_ID}",
+    "defaultAssigneeGid": "${ASANA_DEFAULT_ASSIGNEE_GID}",
+    "defaultSectionId": "${ASANA_DEFAULT_SECTION_ID}",
+    "defaultTagIds": []
+  },
+  "jira": {
+    "enabled": false,
+    "url": "${JIRA_URL}",
+    "email": "${JIRA_EMAIL}",
+    "apiToken": "${JIRA_API_TOKEN}",
+    "projectKey": "${JIRA_PROJECT_KEY:-SFDC}",
+    "issueType": "Change Request",
+    "customFields": {
+      "riskScore": "customfield_10001",
+      "agentName": "customfield_10002",
+      "environment": "customfield_10003",
+      "approvalDeadline": "customfield_10004",
+      "rollbackPlan": "customfield_10005",
+      "comment": "Update these field IDs to match your Jira custom fields"
+    },
+    "labels": {
+      "governance": "agent-governance",
+      "automated": "automated-change",
+      "salesforce": "salesforce"
+    },
+    "workflows": {
+      "defaultTransitions": {
+        "approve": "Approved",
+        "reject": "Rejected",
+        "complete": "Done",
+        "cancel": "Cancelled"
+      }
+    }
+  },
+  "serviceNow": {
+    "enabled": false,
+    "instanceUrl": "${SERVICENOW_URL}",
+    "username": "${SERVICENOW_USER}",
+    "password": "${SERVICENOW_PASS}",
+    "clientId": "${SERVICENOW_CLIENT_ID}",
+    "clientSecret": "${SERVICENOW_CLIENT_SECRET}",
+    "changeType": "Standard",
+    "category": "Salesforce",
+    "assignmentGroup": "Salesforce Operations",
+    "table": "change_request"
+  },
+  "routing": {
+    "LOW": null,
+    "MEDIUM": null,
+    "HIGH": "asana",
+    "CRITICAL": "asana",
+    "comment": "Use asana|jira|serviceNow|null per risk level"
+  },
+  "approval": {
+    "requireTicket": {
+      "production": true,
+      "sandbox": false,
+      "development": false
+    },
+    "autoTransition": {
+      "enabled": true,
+      "onApproval": "Approved",
+      "onRejection": "Rejected",
+      "onCompletion": "Done"
+    },
+    "notifications": {
+      "onCreate": {
+        "slack": true,
+        "email": false
+      },
+      "onApproval": {
+        "slack": true,
+        "email": false
+      },
+      "onCompletion": {
+        "slack": true,
+        "email": false
+      }
+    }
+  },
+  "evidence": {
+    "requireVerification": true,
+    "attachLogs": true,
+    "includeAuditTrail": true,
+    "retentionDays": 2555
+  },
+  "integration": {
+    "createOnApprovalRequest": true,
+    "updateOnApprovalDecision": true,
+    "closeOnOperationComplete": true,
+    "linkToAuditLog": true
+  },
+  "testing": {
+    "testMode": false,
+    "testProjectKey": "TEST",
+    "testAssignee": "test-user"
+  }
+}

@@ -1,0 +1,90 @@
+name: Validate Plugin Manifests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - '.github/workflows/validate-plugins.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - '.github/workflows/validate-plugins.yml'
+
+jobs:
+  validate:
+    name: Validate All Plugin Manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate manifest schema basics
+        run: |
+          set -euo pipefail
+
+          MANIFESTS=$(find plugins -type f -path '*/.claude-plugin/plugin.json' | sort)
+
+          if [ -z "$MANIFESTS" ]; then
+            echo "::error::No plugin manifests found under plugins/*/.claude-plugin/plugin.json"
+            exit 1
+          fi
+
+          failures=0
+
+          while IFS= read -r manifest; do
+            echo "Validating $manifest"
+
+            if ! jq empty "$manifest" >/dev/null 2>&1; then
+              echo "::error file=$manifest::Invalid JSON"
+              failures=$((failures + 1))
+              continue
+            fi
+
+            name=$(jq -r '.name // empty' "$manifest")
+            version=$(jq -r '.version // empty' "$manifest")
+            description=$(jq -r '.description // empty' "$manifest")
+
+            if [ -z "$name" ]; then
+              echo "::error file=$manifest::Missing required field: name"
+              failures=$((failures + 1))
+            fi
+
+            if [ -z "$version" ]; then
+              echo "::error file=$manifest::Missing required field: version"
+              failures=$((failures + 1))
+            elif ! echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
+              echo "::error file=$manifest::Version must follow semver-like format (x.y.z), got: $version"
+              failures=$((failures + 1))
+            fi
+
+            if [ -z "$description" ]; then
+              echo "::error file=$manifest::Missing required field: description"
+              failures=$((failures + 1))
+            fi
+          done <<< "$MANIFESTS"
+
+          if [ "$failures" -gt 0 ]; then
+            echo "::error::$failures manifest validation issue(s) detected"
+            exit 1
+          fi
+
+      - name: Upload manifest list
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-manifests
+          path: |
+            plugins/*/.claude-plugin/plugin.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Success message
+        if: success()
+        run: |
+          COUNT=$(find plugins -type f -path '*/.claude-plugin/plugin.json' | wc -l | tr -d ' ')
+          echo "✅ All plugin manifests validated successfully!"
+          echo "Validated $COUNT plugin manifest(s)."

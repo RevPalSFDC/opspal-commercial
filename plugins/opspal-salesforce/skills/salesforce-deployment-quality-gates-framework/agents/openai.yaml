@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Deployment Quality Gates Framework"
+  short_description: "Help with Salesforce Deployment Quality Gates Framework tasks"
+  default_prompt: "Use $salesforce-deployment-quality-gates-framework to execute this workflow safely and produce the expected artifacts."

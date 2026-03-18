@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "template": "process-documentation",
+    "generated": "2025-01-04",
+    "description": "Demo data for Process Documentation Dashboard - Lead-to-Cash process"
+  },
+  "processInfo": {
+    "title": "Lead-to-Cash Process",
+    "version": "2.1",
+    "lastReviewed": "2024-12-15",
+    "owner": "Revenue Operations",
+    "stakeholders": ["Sales", "Finance", "Customer Success"]
+  },
+  "processMetrics": {
+    "avgCycleTime": {
+      "value": 45,
+      "unit": "days",
+      "target": 35,
+      "status": "above-target"
+    },
+    "conversionRate": {
+      "value": 18,
+      "unit": "percent",
+      "target": 20,
+      "status": "below-target"
+    },
+    "processSteps": {
+      "value": 12,
+      "description": "Total process steps"
+    },
+    "automationCoverage": {
+      "value": 75,
+      "unit": "percent",
+      "description": "Steps with automation"
+    }
+  },
+  "mainProcessFlow": {
+    "type": "flowchart",
+    "mermaid": "flowchart TD\n    subgraph Lead_Gen[Lead Generation]\n        A[Marketing Campaign] --> B[Web Form / Event]\n        B --> C{Lead Created}\n    end\n    \n    subgraph Lead_Qual[Lead Qualification]\n        C --> D[Auto-Assignment]\n        D --> E[SDR Outreach]\n        E --> F{Qualified?}\n        F -->|No| G[Nurture Campaign]\n        G --> E\n        F -->|Yes| H[Convert to Opportunity]\n    end\n    \n    subgraph Sales_Process[Sales Process]\n        H --> I[Discovery Call]\n        I --> J[Demo / POC]\n        J --> K{Decision?}\n        K -->|No| L[Follow-up]\n        L --> J\n        K -->|Yes| M[Proposal]\n    end\n    \n    subgraph Closing[Deal Closing]\n        M --> N[Negotiation]\n        N --> O{Approved?}\n        O -->|No| P[Revise Terms]\n        P --> N\n        O -->|Yes| Q[Contract Signed]\n    end\n    \n    subgraph Fulfillment[Order Fulfillment]\n        Q --> R[Create Order]\n        R --> S[Provision Services]\n        S --> T[Customer Onboarding]\n        T --> U[Go Live]\n    end\n    \n    style A fill:#5F3B8C,color:#fff\n    style H fill:#22C55E,color:#fff\n    style Q fill:#22C55E,color:#fff\n    style U fill:#22C55E,color:#fff\n    style F fill:#F59E0B\n    style K fill:#F59E0B\n    style O fill:#F59E0B"
+  },
+  "systemInteractions": {
+    "type": "sequence",
+    "mermaid": "sequenceDiagram\n    participant W as Website\n    participant SF as Salesforce\n    participant MK as Marketing Automation\n    participant FI as Finance System\n    participant CS as CS Platform\n    \n    W->>SF: Lead Created\n    SF->>MK: Trigger Nurture\n    MK-->>SF: Update Lead Score\n    SF->>SF: Auto-Assignment\n    Note over SF: SDR Qualification\n    SF->>SF: Convert to Opportunity\n    Note over SF: Sales Process\n    SF->>FI: Create Quote\n    FI-->>SF: Quote Approved\n    SF->>FI: Create Order\n    FI->>CS: Provision Account\n    CS-->>SF: Update Account Status\n    CS->>CS: Onboarding Workflow"
+  },
+  "processSteps": [
+    {
+      "step": 1,
+      "name": "Lead Capture",
+      "description": "Marketing generates leads through campaigns, events, and web forms",
+      "owner": "Marketing",
+      "system": "Marketing Automation",
+      "sla": "< 5 minutes",
+      "automation": "Full",
+      "inputs": ["Form submission", "Event registration", "Partner referral"],
+      "outputs": ["Lead record in CRM"]
+    },
+    {
+      "step": 2,
+      "name": "Lead Routing",
+      "description": "Automatic assignment based on territory, product interest, and round-robin",
+      "owner": "Revenue Operations",
+      "system": "Salesforce",
+      "sla": "< 1 minute",
+      "automation": "Full",
+      "inputs": ["Lead record"],
+      "outputs": ["Assigned lead", "Assignment notification"]
+    },
+    {
+      "step": 3,
+      "name": "SDR Outreach",
+      "description": "Sales Development Rep qualifies lead through discovery calls",
+      "owner": "SDR Team",
+      "system": "Salesforce + Outreach",
+      "sla": "< 4 hours (business)",
+      "automation": "Partial",
+      "inputs": ["Assigned lead"],
+      "outputs": ["Qualified lead", "Meeting booked"]
+    },
+    {
+      "step": 4,
+      "name": "Lead Qualification",
+      "description": "BANT criteria verified and documented",
+      "owner": "SDR Team",
+      "system": "Salesforce",
+      "sla": "< 2 weeks",
+      "automation": "None",
+      "inputs": ["Discovery notes"],
+      "outputs": ["Qualified opportunity or nurture"]
+    },
+    {
+      "step": 5,
+      "name": "Opportunity Creation",
+      "description": "Convert qualified lead to opportunity with account and contact",
+      "owner": "SDR Team",
+      "system": "Salesforce",
+      "sla": "Same day",
+      "automation": "Partial",
+      "inputs": ["Qualified lead"],
+      "outputs": ["Opportunity", "Account", "Contact"]
+    },
+    {
+      "step": 6,
+      "name": "Discovery & Demo",
+      "description": "AE conducts deep discovery and product demonstration",
+      "owner": "Account Executive",
+      "system": "Salesforce + Demo Environment",
+      "sla": "< 1 week",
+      "automation": "None",
+      "inputs": ["Opportunity", "Qualification notes"],
+      "outputs": ["Requirements doc", "Demo recording"]
+    },
+    {
+      "step": 7,
+      "name": "Proposal Generation",
+      "description": "Create quote/proposal based on requirements",
+      "owner": "Account Executive",
+      "system": "Salesforce CPQ",
+      "sla": "< 2 days",
+      "automation": "Partial",
+      "inputs": ["Requirements", "Pricing rules"],
+      "outputs": ["Quote document", "Pricing summary"]
+    },
+    {
+      "step": 8,
+      "name": "Negotiation",
+      "description": "Terms negotiation and discount approval if needed",
+      "owner": "Account Executive + Management",
+      "system": "Salesforce",
+      "sla": "Varies",
+      "automation": "Partial",
+      "inputs": ["Quote", "Customer feedback"],
+      "outputs": ["Final terms", "Approval"]
+    },
+    {
+      "step": 9,
+      "name": "Contract Execution",
+      "description": "Legal review and signature collection",
+      "owner": "Legal + Account Executive",
+      "system": "DocuSign",
+      "sla": "< 1 week",
+      "automation": "Partial",
+      "inputs": ["Approved quote", "MSA template"],
+      "outputs": ["Signed contract"]
+    },
+    {
+      "step": 10,
+      "name": "Order Creation",
+      "description": "Create order record and trigger fulfillment",
+      "owner": "Deal Desk",
+      "system": "Salesforce + ERP",
+      "sla": "< 1 day",
+      "automation": "Full",
+      "inputs": ["Signed contract"],
+      "outputs": ["Order record", "Invoice"]
+    },
+    {
+      "step": 11,
+      "name": "Service Provisioning",
+      "description": "Provision customer environment and access",
+      "owner": "Customer Success",
+      "system": "Provisioning System",
+      "sla": "< 3 days",
+      "automation": "Full",
+      "inputs": ["Order details"],
+      "outputs": ["Customer environment", "Credentials"]
+    },
+    {
+      "step": 12,
+      "name": "Customer Onboarding",
+      "description": "Training, configuration, and go-live support",
+      "owner": "Customer Success",
+      "system": "CS Platform",
+      "sla": "< 30 days",
+      "automation": "Partial",
+      "inputs": ["Customer environment", "Onboarding plan"],
+      "outputs": ["Trained users", "Go-live confirmation"]
+    }
+  ],
+  "integrationMap": {
+    "type": "entityRelationship",
+    "mermaid": "erDiagram\n    MARKETING_AUTOMATION ||--o{ LEAD : generates\n    LEAD ||--|| SALESFORCE : stored_in\n    SALESFORCE ||--o{ OPPORTUNITY : converts_to\n    OPPORTUNITY ||--|| QUOTE : creates\n    QUOTE }|--|| CPQ : configured_by\n    QUOTE ||--|| CONTRACT : becomes\n    CONTRACT ||--|| DOCUSIGN : signed_via\n    CONTRACT ||--|| ORDER : triggers\n    ORDER ||--|| ERP : synced_to\n    ERP ||--|| BILLING : invoices\n    ORDER ||--|| PROVISIONING : triggers\n    PROVISIONING ||--|| CS_PLATFORM : notifies"
+  },
+  "kpis": [
+    {
+      "name": "Lead Response Time",
+      "target": "< 5 minutes",
+      "current": "3.2 minutes",
+      "status": "meeting"
+    },
+    {
+      "name": "Lead to Opportunity Conversion",
+      "target": "25%",
+      "current": "22%",
+      "status": "below"
+    },
+    {
+      "name": "Sales Cycle Length",
+      "target": "35 days",
+      "current": "45 days",
+      "status": "below"
+    },
+    {
+      "name": "Win Rate",
+      "target": "30%",
+      "current": "32%",
+      "status": "exceeding"
+    },
+    {
+      "name": "Time to First Value",
+      "target": "45 days",
+      "current": "52 days",
+      "status": "below"
+    }
+  ],
+  "roleMatrix": [
+    {
+      "role": "Marketing",
+      "steps": [1],
+      "responsibilities": "Lead generation and nurture campaigns"
+    },
+    {
+      "role": "SDR",
+      "steps": [3, 4, 5],
+      "responsibilities": "Lead qualification and opportunity creation"
+    },
+    {
+      "role": "Account Executive",
+      "steps": [6, 7, 8, 9],
+      "responsibilities": "Sales process and deal closing"
+    },
+    {
+      "role": "Deal Desk",
+      "steps": [10],
+      "responsibilities": "Order processing and revenue recognition"
+    },
+    {
+      "role": "Customer Success",
+      "steps": [11, 12],
+      "responsibilities": "Implementation and customer value realization"
+    },
+    {
+      "role": "Revenue Operations",
+      "steps": [2],
+      "responsibilities": "Process optimization and system administration"
+    }
+  ]
+}

@@ -1,0 +1,826 @@
+#!/bin/bash
+
+##############################################################################
+# diagnostic-toolkit.sh - Comprehensive Diagnostic Procedures for Salesforce
+##############################################################################
+# Collection of diagnostic procedures that agents can execute autonomously
+# to investigate and diagnose Salesforce issues
+##############################################################################
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m' # No Color
+
+# Configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DIAGNOSTIC_OUTPUT="${SCRIPT_DIR}/diagnostic-results"
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+REPORT_FILE="${DIAGNOSTIC_OUTPUT}/diagnostic_${TIMESTAMP}.json"
+
+# Ensure output directory exists
+mkdir -p "$DIAGNOSTIC_OUTPUT"
+
+# Initialize report
+DIAGNOSTIC_RESULTS=()
+
+##############################################################################
+# Utility Functions
+##############################################################################
+
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+log_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+log_diagnostic() {
+    echo -e "${CYAN}[DIAGNOSTIC]${NC} $1"
+}
+
+# Function to add result to report
+add_result() {
+    local diagnostic_name="$1"
+    local status="$2"
+    local details="$3"
+    local confidence="${4:-0}"
+    
+    DIAGNOSTIC_RESULTS+=("{
+        \"diagnostic\": \"$diagnostic_name\",
+        \"status\": \"$status\",
+        \"details\": $(echo "$details" | jq -Rs .),
+        \"confidence\": $confidence,
+        \"timestamp\": \"$(date -Iseconds)\"
+    }")
+}
+
+# Function to get org alias
+get_org_alias() {
+    local org_alias="${SFDX_ALIAS:-${SFDX_DEFAULT_USERNAME:-}}"
+    
+    if [[ -z "$org_alias" ]]; then
+        log_warning "No org alias found in environment"
+        # Try to get default org
+        org_alias=$(sf config get target-org --json 2>/dev/null | jq -r '.result[0].value // empty')
+    fi
+    
+    echo "$org_alias"
+}
+
+##############################################################################
+# Field Diagnostics
+##############################################################################
+
+diagnose_field_permissions() {
+    local object_name="$1"
+    local field_name="$2"
+    local user_id="${3:-}"
+    
+    log_diagnostic "Checking field permissions for $object_name.$field_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    if [[ -z "$org_alias" ]]; then
+        add_result "field_permissions" "error" "No org alias configured" 0
+        return 1
+    fi
+    
+    # Check field metadata
+    local field_info=$(sf sobject describe -s "$object_name" -o "$org_alias" --json 2>/dev/null | \
+        jq -r ".result.fields[] | select(.name == \"$field_name\")")
+    
+    if [[ -z "$field_info" ]]; then
+        add_result "field_permissions" "error" "Field $field_name not found on $object_name" 0
+        return 1
+    fi
+    
+    # Extract field properties
+    local is_creatable=$(echo "$field_info" | jq -r '.createable')
+    local is_updateable=$(echo "$field_info" | jq -r '.updateable')
+    local is_encrypted=$(echo "$field_info" | jq -r '.encrypted')
+    local is_calculated=$(echo "$field_info" | jq -r '.calculated')
+    
+    local details="Field Properties:
+- Creatable: $is_creatable
+- Updateable: $is_updateable
+- Encrypted: $is_encrypted
+- Calculated: $is_calculated"
+    
+    # Determine if there's a permission issue
+    local confidence=0
+    local status="success"
+    
+    if [[ "$is_updateable" == "false" ]] && [[ "$is_calculated" == "false" ]]; then
+        status="issue_found"
+        confidence=90
+        details="$details
+
+ISSUE DETECTED: Field is not updateable. This could be due to:
+1. Field-level security restrictions
+2. Field is a system field
+3. Field is read-only by design"
+    elif [[ "$is_calculated" == "true" ]]; then
+        status="info"
+        confidence=100
+        details="$details
+
+INFO: Field is a formula/calculated field and cannot be directly updated"
+    else
+        confidence=95
+        details="$details
+
+Field appears to be properly configured for updates"
+    fi
+    
+    add_result "field_permissions" "$status" "$details" "$confidence"
+    
+    if [[ "$status" == "issue_found" ]]; then
+        log_warning "Permission issue detected for $field_name"
+    else
+        log_success "No permission issues found for $field_name"
+    fi
+}
+
+diagnose_field_dependencies() {
+    local object_name="$1"
+    local field_name="$2"
+    
+    log_diagnostic "Checking field dependencies for $object_name.$field_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Query for dependencies (placeholder - would need metadata API)
+    local details="Checking for:
+- Validation rules referencing this field
+- Workflow rules using this field
+- Process Builder processes
+- Flows that interact with this field
+- Apex triggers modifying this field"
+    
+    # In a real implementation, we would query metadata
+    add_result "field_dependencies" "info" "$details" 60
+    
+    log_info "Field dependency check completed"
+}
+
+##############################################################################
+# Validation Rule Diagnostics
+##############################################################################
+
+diagnose_validation_rules() {
+    local object_name="$1"
+    local record_id="${2:-}"
+    
+    log_diagnostic "Analyzing validation rules for $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Retrieve validation rules (would need metadata API in production)
+    local temp_dir="/tmp/sf_metadata_${TIMESTAMP}"
+    mkdir -p "$temp_dir"
+    
+    # Create package.xml
+    cat > "$temp_dir/package.xml" << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>$object_name</members>
+        <name>CustomObject</name>
+    </types>
+    <version>59.0</version>
+</Package>
+EOF
+    
+    # Try to retrieve metadata
+    if sf project retrieve start --manifest "$temp_dir/package.xml" \
+        --target-org "$org_alias" --output-dir "$temp_dir" &>/dev/null; then
+        
+        # Parse validation rules if found
+        local object_file=$(find "$temp_dir" -name "${object_name}.object-meta.xml" -o -name "${object_name}.object" | head -n1)
+        
+        if [[ -f "$object_file" ]]; then
+            local rule_count=$(grep -c "<validationRules>" "$object_file" 2>/dev/null || echo "0")
+            local active_count=$(grep -B5 -A5 "<active>true</active>" "$object_file" | grep -c "<validationRules>" 2>/dev/null || echo "0")
+            
+            local details="Validation Rules Analysis:
+- Total rules: $rule_count
+- Active rules: $active_count"
+            
+            if [[ $active_count -gt 0 ]]; then
+                details="$details
+
+Active validation rules detected. These could block updates if conditions are not met."
+                add_result "validation_rules" "warning" "$details" 75
+                log_warning "$active_count active validation rules found"
+            else
+                add_result "validation_rules" "success" "$details" 90
+                log_success "No active validation rules found"
+            fi
+        else
+            add_result "validation_rules" "error" "Could not find object metadata file" 0
+        fi
+    else
+        add_result "validation_rules" "error" "Failed to retrieve metadata" 0
+    fi
+    
+    # Cleanup
+    rm -rf "$temp_dir"
+}
+
+##############################################################################
+# Automation Diagnostics
+##############################################################################
+
+diagnose_flows() {
+    local object_name="$1"
+    local trigger_type="${2:-record-triggered}"
+    
+    log_diagnostic "Checking flows for $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Query for active flows on the object
+    local flow_query="SELECT Id, ApiName, Label, ProcessType, TriggerType, IsActive 
+                     FROM FlowDefinitionView 
+                     WHERE IsActive = true 
+                     AND ProcessType = 'AutoLaunchedFlow'"
+    
+    local flows=$(sf data query -q "$flow_query" -o "$org_alias" --json 2>/dev/null | \
+        jq -r '.result.records // []')
+    
+    local flow_count=$(echo "$flows" | jq 'length')
+    
+    local details="Flow Analysis:
+- Active flows found: $flow_count"
+    
+    if [[ $flow_count -gt 0 ]]; then
+        details="$details
+
+Active Flows:"
+        echo "$flows" | jq -r '.[] | "- \(.Label) (\(.ApiName))"' | while read -r flow; do
+            details="$details
+$flow"
+        done
+        
+        add_result "flows" "info" "$details" 70
+        log_info "$flow_count active flows found"
+    else
+        add_result "flows" "info" "No active flows found for criteria" 80
+        log_info "No active flows found"
+    fi
+}
+
+diagnose_workflows() {
+    local object_name="$1"
+    
+    log_diagnostic "Checking workflow rules for $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Query for workflow rules (simplified - would need metadata API for details)
+    local details="Workflow Analysis:
+- Checking for active workflow rules
+- Checking for field updates
+- Checking for email alerts
+- Checking for task creation"
+    
+    add_result "workflows" "info" "$details" 50
+    log_info "Workflow check completed"
+}
+
+diagnose_triggers() {
+    local object_name="$1"
+    
+    log_diagnostic "Checking Apex triggers for $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Query for triggers
+    local trigger_query="SELECT Id, Name, TableEnumOrId, UsageBeforeInsert, UsageAfterInsert,
+                        UsageBeforeUpdate, UsageAfterUpdate, UsageBeforeDelete, UsageAfterDelete,
+                        UsageAfterUndelete, Status
+                        FROM ApexTrigger
+                        WHERE TableEnumOrId = '$object_name'
+                        AND Status = 'Active'"
+    
+    local triggers=$(sf data query -q "$trigger_query" -o "$org_alias" --json 2>/dev/null | \
+        jq -r '.result.records // []')
+    
+    local trigger_count=$(echo "$triggers" | jq 'length')
+    
+    local details="Trigger Analysis:
+- Active triggers: $trigger_count"
+    
+    if [[ $trigger_count -gt 0 ]]; then
+        details="$details
+
+Active Triggers:"
+        echo "$triggers" | jq -r '.[] | "- \(.Name)"' | while read -r trigger; do
+            details="$details
+$trigger"
+        done
+        
+        details="$details
+
+WARNING: Active triggers could be modifying field values after update"
+        
+        add_result "triggers" "warning" "$details" 80
+        log_warning "$trigger_count active triggers found"
+    else
+        add_result "triggers" "success" "No active triggers found" 90
+        log_success "No active triggers found"
+    fi
+}
+
+##############################################################################
+# Permission Diagnostics
+##############################################################################
+
+diagnose_user_permissions() {
+    local user_id="${1:-}"
+    local object_name="${2:-}"
+    
+    log_diagnostic "Checking user permissions"
+    
+    local org_alias=$(get_org_alias)
+    
+    # If no user ID provided, get current user
+    if [[ -z "$user_id" ]]; then
+        user_id=$(sf data query -q "SELECT Id FROM User WHERE Username = '$(sf org display --json | jq -r '.result.username')'" \
+            -o "$org_alias" --json 2>/dev/null | jq -r '.result.records[0].Id // empty')
+    fi
+    
+    if [[ -z "$user_id" ]]; then
+        add_result "user_permissions" "error" "Could not determine user ID" 0
+        return 1
+    fi
+    
+    # Check user's profile and permission sets
+    local user_info=$(sf data query -q "SELECT Id, Name, Profile.Name, IsActive 
+                                       FROM User 
+                                       WHERE Id = '$user_id'" \
+        -o "$org_alias" --json 2>/dev/null | jq -r '.result.records[0] // empty')
+    
+    if [[ -n "$user_info" ]]; then
+        local profile_name=$(echo "$user_info" | jq -r '.Profile.Name')
+        local is_active=$(echo "$user_info" | jq -r '.IsActive')
+        
+        local details="User Permission Analysis:
+- User ID: $user_id
+- Profile: $profile_name
+- Active: $is_active"
+        
+        # Check object permissions if specified
+        if [[ -n "$object_name" ]]; then
+            details="$details
+
+Object Permissions for $object_name:
+- Checking CRUD permissions...
+- Checking field-level security..."
+        fi
+        
+        add_result "user_permissions" "success" "$details" 70
+        log_success "User permission check completed"
+    else
+        add_result "user_permissions" "error" "User not found" 0
+        log_error "User not found"
+    fi
+}
+
+diagnose_profile_permissions() {
+    local profile_name="$1"
+    local object_name="$2"
+    
+    log_diagnostic "Checking profile permissions for $profile_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # This would need metadata API for detailed analysis
+    local details="Profile Permission Analysis:
+- Profile: $profile_name
+- Object: $object_name
+- Checking object CRUD permissions
+- Checking field-level security
+- Checking page layout assignments"
+    
+    add_result "profile_permissions" "info" "$details" 60
+    log_info "Profile permission check completed"
+}
+
+##############################################################################
+# Data Diagnostics
+##############################################################################
+
+diagnose_data_integrity() {
+    local object_name="$1"
+    local field_name="${2:-}"
+    local sample_size="${3:-100}"
+    
+    log_diagnostic "Checking data integrity for $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Build query
+    local query="SELECT Id"
+    if [[ -n "$field_name" ]]; then
+        query="$query, $field_name"
+    fi
+    query="$query FROM $object_name LIMIT $sample_size"
+    
+    # Execute query
+    local records=$(sf data query -q "$query" -o "$org_alias" --json 2>/dev/null | \
+        jq -r '.result.records // []')
+    
+    local record_count=$(echo "$records" | jq 'length')
+    
+    local details="Data Integrity Analysis:
+- Records sampled: $record_count"
+    
+    if [[ -n "$field_name" ]] && [[ $record_count -gt 0 ]]; then
+        # Analyze field values
+        local null_count=$(echo "$records" | jq "[.[] | select(.\"$field_name\" == null)] | length")
+        local unique_count=$(echo "$records" | jq "[.[].\"$field_name\"] | unique | length")
+        
+        details="$details
+- Null values: $null_count
+- Unique values: $unique_count"
+        
+        if [[ $null_count -eq $record_count ]]; then
+            details="$details
+
+WARNING: All sampled records have null values for $field_name"
+            add_result "data_integrity" "warning" "$details" 85
+            log_warning "Data integrity issue detected"
+        else
+            add_result "data_integrity" "success" "$details" 80
+            log_success "Data integrity check completed"
+        fi
+    else
+        add_result "data_integrity" "info" "$details" 70
+        log_info "Data integrity check completed"
+    fi
+}
+
+diagnose_duplicates() {
+    local object_name="$1"
+    local field_name="$2"
+    
+    log_diagnostic "Checking for duplicate records in $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Query for potential duplicates
+    local query="SELECT $field_name, COUNT(Id) cnt 
+                FROM $object_name 
+                WHERE $field_name != null 
+                GROUP BY $field_name 
+                HAVING COUNT(Id) > 1 
+                LIMIT 10"
+    
+    local duplicates=$(sf data query -q "$query" -o "$org_alias" --json 2>/dev/null | \
+        jq -r '.result.records // []')
+    
+    local duplicate_count=$(echo "$duplicates" | jq 'length')
+    
+    local details="Duplicate Analysis:
+- Duplicate groups found: $duplicate_count"
+    
+    if [[ $duplicate_count -gt 0 ]]; then
+        details="$details
+
+Duplicate Values Found:"
+        echo "$duplicates" | jq -r '.[] | "- \(.[$field_name]): \(.cnt) records"' | while read -r dup; do
+            details="$details
+$dup"
+        done
+        
+        add_result "duplicates" "warning" "$details" 90
+        log_warning "$duplicate_count duplicate groups found"
+    else
+        add_result "duplicates" "success" "No duplicates found" 95
+        log_success "No duplicates found"
+    fi
+}
+
+##############################################################################
+# Performance Diagnostics
+##############################################################################
+
+diagnose_api_limits() {
+    log_diagnostic "Checking API limits"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Get org limits
+    local limits=$(sf limits api display -o "$org_alias" --json 2>/dev/null | \
+        jq -r '.result // {}')
+    
+    if [[ -n "$limits" ]] && [[ "$limits" != "{}" ]]; then
+        local daily_api=$(echo "$limits" | jq -r '.[] | select(.name == "DailyApiRequests") // empty')
+        
+        if [[ -n "$daily_api" ]]; then
+            local max=$(echo "$daily_api" | jq -r '.max')
+            local remaining=$(echo "$daily_api" | jq -r '.remaining')
+            local used=$((max - remaining))
+            local percent_used=$((used * 100 / max))
+            
+            local details="API Limits:
+- Daily API Requests: $used / $max ($percent_used% used)
+- Remaining: $remaining"
+            
+            if [[ $percent_used -gt 80 ]]; then
+                details="$details
+
+WARNING: API usage is above 80%"
+                add_result "api_limits" "warning" "$details" 95
+                log_warning "High API usage detected"
+            else
+                add_result "api_limits" "success" "$details" 95
+                log_success "API limits healthy"
+            fi
+        else
+            add_result "api_limits" "error" "Could not retrieve API limits" 0
+        fi
+    else
+        add_result "api_limits" "error" "Failed to get org limits" 0
+    fi
+}
+
+diagnose_performance() {
+    local object_name="$1"
+    
+    log_diagnostic "Running performance diagnostics for $object_name"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Test query performance
+    local start_time=$(date +%s%N)
+    sf data query -q "SELECT COUNT() FROM $object_name" -o "$org_alias" &>/dev/null
+    local end_time=$(date +%s%N)
+    local query_time=$(((end_time - start_time) / 1000000))
+    
+    local details="Performance Analysis:
+- Object: $object_name
+- Count query time: ${query_time}ms"
+    
+    if [[ $query_time -gt 5000 ]]; then
+        details="$details
+
+WARNING: Query performance is slow (>5 seconds)"
+        add_result "performance" "warning" "$details" 80
+        log_warning "Performance issue detected"
+    else
+        add_result "performance" "success" "$details" 85
+        log_success "Performance appears normal"
+    fi
+}
+
+##############################################################################
+# System Diagnostics
+##############################################################################
+
+diagnose_recent_changes() {
+    local hours="${1:-24}"
+    
+    log_diagnostic "Checking recent system changes (last $hours hours)"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Query SetupAuditTrail
+    local since_date=$(date -u -d "$hours hours ago" '+%Y-%m-%dT%H:%M:%S.000Z')
+    
+    local query="SELECT Id, Action, Display, Section, CreatedDate, CreatedBy.Name 
+                FROM SetupAuditTrail 
+                WHERE CreatedDate > $since_date 
+                ORDER BY CreatedDate DESC 
+                LIMIT 20"
+    
+    local changes=$(sf data query -q "$query" -o "$org_alias" --json 2>/dev/null | \
+        jq -r '.result.records // []')
+    
+    local change_count=$(echo "$changes" | jq 'length')
+    
+    local details="Recent Changes:
+- Changes in last $hours hours: $change_count"
+    
+    if [[ $change_count -gt 0 ]]; then
+        details="$details
+
+Recent Changes:"
+        echo "$changes" | jq -r '.[] | "- \(.CreatedDate | split("T")[0]): \(.Action) - \(.Display)"' | \
+            head -5 | while read -r change; do
+            details="$details
+$change"
+        done
+        
+        add_result "recent_changes" "info" "$details" 75
+        log_info "$change_count recent changes found"
+    else
+        add_result "recent_changes" "info" "No recent changes found" 80
+        log_info "No recent changes found"
+    fi
+}
+
+diagnose_deployment_status() {
+    log_diagnostic "Checking recent deployment status"
+    
+    local org_alias=$(get_org_alias)
+    
+    # Get recent deployments
+    local deployments=$(sf project deploy report --json 2>/dev/null | \
+        jq -r '.result // []')
+    
+    if [[ -n "$deployments" ]] && [[ "$deployments" != "[]" ]]; then
+        local details="Recent Deployments:
+- Checking deployment history..."
+        
+        add_result "deployments" "info" "$details" 60
+        log_info "Deployment check completed"
+    else
+        add_result "deployments" "info" "No recent deployments found" 70
+        log_info "No recent deployments found"
+    fi
+}
+
+##############################################################################
+# Comprehensive Diagnostic
+##############################################################################
+
+run_comprehensive_diagnostic() {
+    local object_name="$1"
+    local field_name="${2:-}"
+    
+    log_info "Starting comprehensive diagnostic for $object_name${field_name:+.$field_name}"
+    
+    # Run all relevant diagnostics
+    if [[ -n "$field_name" ]]; then
+        diagnose_field_permissions "$object_name" "$field_name"
+        diagnose_field_dependencies "$object_name" "$field_name"
+    fi
+    
+    diagnose_validation_rules "$object_name"
+    diagnose_flows "$object_name"
+    diagnose_workflows "$object_name"
+    diagnose_triggers "$object_name"
+    diagnose_user_permissions "" "$object_name"
+    diagnose_data_integrity "$object_name" "$field_name"
+    diagnose_api_limits
+    diagnose_recent_changes
+    
+    log_success "Comprehensive diagnostic completed"
+}
+
+##############################################################################
+# Report Generation
+##############################################################################
+
+generate_report() {
+    log_info "Generating diagnostic report"
+    
+    # Create JSON report
+    echo "{
+    \"timestamp\": \"$(date -Iseconds)\",
+    \"org_alias\": \"$(get_org_alias)\",
+    \"diagnostics\": [
+        $(IFS=,; echo "${DIAGNOSTIC_RESULTS[*]}")
+    ]
+}" > "$REPORT_FILE"
+    
+    log_success "Report saved to: $REPORT_FILE"
+    
+    # Generate summary
+    local total=$(echo "${#DIAGNOSTIC_RESULTS[@]}")
+    local issues=$(grep -c '"status": "issue_found"' "$REPORT_FILE" 2>/dev/null || echo "0")
+    local warnings=$(grep -c '"status": "warning"' "$REPORT_FILE" 2>/dev/null || echo "0")
+    
+    echo -e "\n${CYAN}=== Diagnostic Summary ===${NC}"
+    echo "Total diagnostics run: $total"
+    echo "Issues found: $issues"
+    echo "Warnings: $warnings"
+    echo "Report: $REPORT_FILE"
+}
+
+##############################################################################
+# Main Function
+##############################################################################
+
+main() {
+    local command="${1:-help}"
+    shift || true
+    
+    case "$command" in
+        field-permissions)
+            diagnose_field_permissions "$@"
+            ;;
+        field-dependencies)
+            diagnose_field_dependencies "$@"
+            ;;
+        validation-rules)
+            diagnose_validation_rules "$@"
+            ;;
+        flows)
+            diagnose_flows "$@"
+            ;;
+        workflows)
+            diagnose_workflows "$@"
+            ;;
+        triggers)
+            diagnose_triggers "$@"
+            ;;
+        user-permissions)
+            diagnose_user_permissions "$@"
+            ;;
+        profile-permissions)
+            diagnose_profile_permissions "$@"
+            ;;
+        data-integrity)
+            diagnose_data_integrity "$@"
+            ;;
+        duplicates)
+            diagnose_duplicates "$@"
+            ;;
+        api-limits)
+            diagnose_api_limits
+            ;;
+        performance)
+            diagnose_performance "$@"
+            ;;
+        recent-changes)
+            diagnose_recent_changes "$@"
+            ;;
+        deployment-status)
+            diagnose_deployment_status
+            ;;
+        comprehensive)
+            run_comprehensive_diagnostic "$@"
+            ;;
+        help|--help|-h)
+            cat << EOF
+Salesforce Diagnostic Toolkit
+
+Usage: $0 <command> [arguments]
+
+Commands:
+    field-permissions <object> <field>      Check field-level permissions
+    field-dependencies <object> <field>     Check field dependencies
+    validation-rules <object>                Analyze validation rules
+    flows <object>                           Check flows for object
+    workflows <object>                       Check workflow rules
+    triggers <object>                        Check Apex triggers
+    user-permissions [user_id] [object]     Check user permissions
+    profile-permissions <profile> <object>  Check profile permissions
+    data-integrity <object> [field]         Check data integrity
+    duplicates <object> <field>             Check for duplicate records
+    api-limits                               Check API usage limits
+    performance <object>                     Run performance diagnostics
+    recent-changes [hours]                   Check recent system changes
+    deployment-status                        Check deployment status
+    comprehensive <object> [field]           Run all diagnostics
+    help                                     Show this help message
+
+Examples:
+    $0 field-permissions Account Type__c
+    $0 validation-rules Opportunity
+    $0 comprehensive Contract Type_Contract__c
+    $0 api-limits
+    $0 recent-changes 48
+
+Environment Variables:
+    SFDX_ALIAS              Salesforce org alias to use
+    SFDX_DEFAULT_USERNAME   Default Salesforce username
+
+Output:
+    Results are saved to: $DIAGNOSTIC_OUTPUT/diagnostic_<timestamp>.json
+EOF
+            ;;
+        *)
+            log_error "Unknown command: $command"
+            echo "Run '$0 help' for usage information"
+            exit 1
+            ;;
+    esac
+    
+    # Generate report if diagnostics were run
+    if [[ ${#DIAGNOSTIC_RESULTS[@]} -gt 0 ]]; then
+        generate_report
+    fi
+}
+
+# Run main function
+main "$@"

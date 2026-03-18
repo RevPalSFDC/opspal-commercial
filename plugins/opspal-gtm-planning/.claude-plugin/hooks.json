@@ -1,0 +1,54 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-gtm-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load active GTM planning cycle context from org directory"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-gtm-approval-gate.sh",
+            "timeout": 8000,
+            "description": "Enforce 7-phase GTM planning methodology — check prerequisite phase completion before allowing agent execution"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-gtm-path-validator.sh",
+            "timeout": 5000,
+            "description": "Validate GTM output paths follow orgs/*/platforms/gtm-planning/*/ convention"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-gtm-telemetry.sh",
+            "timeout": 5000,
+            "description": "Capture GTM planning agent telemetry to gtm-telemetry.jsonl"
+          }
+        ]
+      }
+    ]
+  }
+}

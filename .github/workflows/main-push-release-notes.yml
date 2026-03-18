@@ -1,0 +1,35 @@
+name: Main Push Release Notes
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  send-release-notes:
+    name: Send Main Push Release Notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Validate Slack webhook secret
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "::error::Missing SLACK_WEBHOOK_URL secret. Configure it to enable release note notifications."
+            exit 1
+          fi
+
+      - name: Send release notes notification
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: node scripts/lib/send-main-push-release-notification.js

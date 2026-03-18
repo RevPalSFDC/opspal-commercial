@@ -1,0 +1,42 @@
+{
+  "_label": "SIMULATED",
+  "_description": "Demo data for the OKR Cycle Dashboard template. All values are illustrative.",
+
+  "kpis": {
+    "arrGrowth": { "value": 28.5, "trend": 3.2, "trendDirection": "up" },
+    "nrr": { "value": 112, "trend": 2.0, "trendDirection": "up" },
+    "pipelineCoverage": { "value": 3.4, "trend": 0.3, "trendDirection": "up" },
+    "krCompletion": { "value": 68, "trend": 5.0, "trendDirection": "up" }
+  },
+
+  "objectiveHealth": [
+    { "objective": "Accelerate ARR growth to $12M", "owner": "VP Sales", "kr1": "on_track", "kr2": "at_risk", "kr3": "on_track", "overall": "on_track", "trend": "stable" },
+    { "objective": "Improve net retention to 115%", "owner": "VP CS", "kr1": "on_track", "kr2": "on_track", "kr3": "on_track", "overall": "on_track", "trend": "improving" },
+    { "objective": "Scale pipeline coverage to 4x", "owner": "VP Marketing", "kr1": "at_risk", "kr2": "off_track", "kr3": "at_risk", "overall": "at_risk", "trend": "declining" },
+    { "objective": "Launch PLG self-serve motion", "owner": "VP Product", "kr1": "on_track", "kr2": "at_risk", "kr3": "on_track", "overall": "on_track", "trend": "improving" },
+    { "objective": "Reduce sales cycle by 20%", "owner": "CRO", "kr1": "off_track", "kr2": "at_risk", "kr3": "on_track", "overall": "at_risk", "trend": "stable" }
+  ],
+
+  "krConfidence": [
+    { "kr": "New ACV bookings", "p10": 65, "p50": 82, "p90": 105 },
+    { "kr": "NRR", "p10": 108, "p50": 112, "p90": 118 },
+    { "kr": "Pipeline created", "p10": 55, "p50": 72, "p90": 91 },
+    { "kr": "MQL to SQL rate", "p10": 40, "p50": 58, "p90": 75 },
+    { "kr": "Sales cycle days", "p10": 80, "p50": 90, "p90": 100 },
+    { "kr": "PQL activation", "p10": 50, "p50": 68, "p90": 85 }
+  ],
+
+  "initiativeWatchlist": [
+    { "name": "Enterprise outbound playbook", "owner": "Sales Ops", "status": "on_track", "priority_score": 92, "linked_kr": "New ACV bookings" },
+    { "name": "Churn early-warning system", "owner": "CS Ops", "status": "on_track", "priority_score": 88, "linked_kr": "NRR" },
+    { "name": "Content-led MQL engine", "owner": "Demand Gen", "status": "at_risk", "priority_score": 85, "linked_kr": "Pipeline created" },
+    { "name": "PLG onboarding redesign", "owner": "Product", "status": "on_track", "priority_score": 80, "linked_kr": "PQL activation" },
+    { "name": "Sales enablement refresh", "owner": "Rev Enablement", "status": "blocked", "priority_score": 76, "linked_kr": "Sales cycle days" },
+    { "name": "ABM tier-1 expansion", "owner": "Marketing", "status": "at_risk", "priority_score": 74, "linked_kr": "New ACV bookings" }
+  ],
+
+  "healthTrend": {
+    "labels": ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"],
+    "data": [45, 52, 58, 55, 60, 63, 65, 68]
+  }
+}

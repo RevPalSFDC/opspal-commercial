@@ -1,0 +1,277 @@
+{
+  "schemaVersion": "1.0",
+  "lastUpdated": "2026-02-02T00:00:00Z",
+  "globalDefaults": {
+    "alwaysExclude": [
+      "*Password*",
+      "*SSN*",
+      "*Token*",
+      "*Secret*",
+      "*Key*",
+      "*Credential*",
+      "*EncryptedField*"
+    ],
+    "alwaysInclude": [
+      "Id",
+      "Name",
+      "CreatedDate",
+      "LastModifiedDate",
+      "CreatedById",
+      "LastModifiedById"
+    ],
+    "piiDetectionEnabled": true,
+    "maxFieldsDefault": 100,
+    "excludeFormulaFields": false,
+    "excludeSystemFields": false
+  },
+  "policies": {
+    "Account": {
+      "required_fields": {
+        "fields": ["Id", "Name", "OwnerId"],
+        "source": "manual",
+        "rationale": "Core account identification and ownership"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Name", "Type", "Industry", "BillingCity", "BillingState",
+          "BillingCountry", "Website", "Phone", "OwnerId", "ParentId",
+          "CreatedDate", "LastModifiedDate", "AnnualRevenue", "NumberOfEmployees"
+        ],
+        "source": "manual",
+        "rationale": "Standard account fields for most operations"
+      },
+      "recommended_fields": {
+        "fields": [
+          "Description", "Rating", "Ownership", "TickerSymbol", "Fax",
+          "AccountSource", "SicDesc", "Sic"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": ["Internal_Notes__c", "Confidential_Notes__c"],
+        "patterns": ["*Confidential*", "*Internal_Only*"],
+        "classifications": ["FINANCIAL"],
+        "complianceReason": "SOX compliance - restrict financial data export"
+      }
+    },
+    "Contact": {
+      "required_fields": {
+        "fields": ["Id", "LastName", "AccountId"],
+        "source": "manual",
+        "rationale": "Minimum contact identification"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "FirstName", "LastName", "Email", "Phone", "Title",
+          "AccountId", "OwnerId", "MailingCity", "MailingState",
+          "MailingCountry", "CreatedDate", "LastModifiedDate"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": ["Birthdate", "HomePhone", "MobilePhone"],
+        "patterns": ["*SSN*", "*Social_Security*"],
+        "classifications": ["DIRECT_IDENTIFIER", "CONTACT_INFO"],
+        "complianceReason": "GDPR Article 9 - Personal data protection",
+        "excludeFromTaskTypes": ["export", "audit"]
+      }
+    },
+    "Lead": {
+      "required_fields": {
+        "fields": ["Id", "LastName", "Company", "Status"],
+        "source": "manual",
+        "rationale": "Core lead identification and status"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "FirstName", "LastName", "Email", "Phone", "Company",
+          "Status", "LeadSource", "OwnerId", "Industry", "Title",
+          "CreatedDate", "LastModifiedDate", "ConvertedDate",
+          "ConvertedAccountId", "ConvertedContactId", "ConvertedOpportunityId"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "classifications": ["DIRECT_IDENTIFIER"],
+        "complianceReason": "GDPR - Protect direct identifiers"
+      }
+    },
+    "Opportunity": {
+      "required_fields": {
+        "fields": ["Id", "Name", "StageName", "CloseDate", "AccountId"],
+        "source": "manual",
+        "rationale": "Core opportunity identification and pipeline data"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Name", "StageName", "CloseDate", "Amount", "Probability",
+          "AccountId", "OwnerId", "Type", "LeadSource", "ForecastCategory",
+          "ForecastCategoryName", "IsClosed", "IsWon", "CreatedDate",
+          "LastModifiedDate", "ExpectedRevenue", "NextStep"
+        ],
+        "source": "manual",
+        "rationale": "Standard opportunity fields for pipeline analysis"
+      },
+      "recommended_fields": {
+        "fields": [
+          "Description", "CampaignId", "ContactId", "Pricebook2Id",
+          "HasOpenActivity", "HasOverdueTask", "LastActivityDate"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": ["Internal_Notes__c", "Competitor_Intel__c"],
+        "patterns": ["*Confidential*", "*Pricing_Override*"],
+        "classifications": ["FINANCIAL"],
+        "complianceReason": "Protect competitive and pricing intelligence"
+      }
+    },
+    "Case": {
+      "required_fields": {
+        "fields": ["Id", "CaseNumber", "Status", "AccountId"],
+        "source": "manual"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "CaseNumber", "Subject", "Status", "Priority", "Origin",
+          "Type", "AccountId", "ContactId", "OwnerId", "IsClosed",
+          "CreatedDate", "LastModifiedDate", "ClosedDate"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": ["Description"],
+        "patterns": ["*Customer_SSN*", "*PHI*"],
+        "classifications": ["HEALTH", "DIRECT_IDENTIFIER"],
+        "complianceReason": "HIPAA - Protect PHI in case descriptions"
+      }
+    },
+    "SBQQ__Quote__c": {
+      "required_fields": {
+        "fields": ["Id", "Name", "SBQQ__Account__c", "SBQQ__Opportunity2__c"],
+        "source": "manual",
+        "rationale": "Core CPQ quote identification"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Name", "SBQQ__Account__c", "SBQQ__Opportunity2__c",
+          "SBQQ__Status__c", "SBQQ__Type__c", "SBQQ__Primary__c",
+          "SBQQ__ListAmount__c", "SBQQ__NetAmount__c", "SBQQ__CustomerDiscount__c",
+          "SBQQ__StartDate__c", "SBQQ__EndDate__c", "SBQQ__SubscriptionTerm__c",
+          "SBQQ__PaymentTerms__c", "CreatedDate", "LastModifiedDate"
+        ],
+        "source": "manual",
+        "rationale": "Standard CPQ quote fields"
+      },
+      "field_aliases": {
+        "Order Form": "SBQQ__Quote__c",
+        "Quote Amount": "SBQQ__NetAmount__c",
+        "Start Date": "SBQQ__StartDate__c",
+        "End Date": "SBQQ__EndDate__c"
+      },
+      "sensitive_field_exclusions": {
+        "fields": ["SBQQ__Notes__c"],
+        "patterns": ["*Override*", "*Discount_Reason*"],
+        "classifications": ["FINANCIAL"],
+        "complianceReason": "SOX - Protect pricing override justifications"
+      }
+    },
+    "SBQQ__QuoteLine__c": {
+      "required_fields": {
+        "fields": ["Id", "SBQQ__Quote__c", "SBQQ__Product__c"],
+        "source": "manual"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Name", "SBQQ__Quote__c", "SBQQ__Product__c",
+          "SBQQ__Quantity__c", "SBQQ__ListPrice__c", "SBQQ__NetPrice__c",
+          "SBQQ__Discount__c", "SBQQ__NetTotal__c", "SBQQ__StartDate__c",
+          "SBQQ__EndDate__c", "SBQQ__SubscriptionTerm__c"
+        ],
+        "source": "manual"
+      },
+      "field_aliases": {
+        "Order Line": "SBQQ__QuoteLine__c",
+        "Unit Price": "SBQQ__NetPrice__c"
+      }
+    },
+    "User": {
+      "required_fields": {
+        "fields": ["Id", "Username", "IsActive"],
+        "source": "manual"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Username", "Name", "FirstName", "LastName", "Email",
+          "IsActive", "ProfileId", "UserRoleId", "Department", "Title",
+          "CreatedDate", "LastModifiedDate", "LastLoginDate"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": ["Password", "FederationIdentifier"],
+        "patterns": ["*Token*", "*Session*", "*Auth*"],
+        "classifications": ["DIRECT_IDENTIFIER"],
+        "complianceReason": "Security - Protect authentication data"
+      }
+    },
+    "Task": {
+      "required_fields": {
+        "fields": ["Id", "Subject", "OwnerId"],
+        "source": "manual"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Subject", "Status", "Priority", "OwnerId", "WhoId",
+          "WhatId", "ActivityDate", "IsClosed", "CreatedDate",
+          "LastModifiedDate", "Description"
+        ],
+        "source": "manual"
+      }
+    },
+    "Event": {
+      "required_fields": {
+        "fields": ["Id", "Subject", "OwnerId", "StartDateTime", "EndDateTime"],
+        "source": "manual"
+      },
+      "default_fields": {
+        "fields": [
+          "Id", "Subject", "OwnerId", "WhoId", "WhatId", "StartDateTime",
+          "EndDateTime", "IsAllDayEvent", "Location", "CreatedDate",
+          "LastModifiedDate"
+        ],
+        "source": "manual"
+      }
+    }
+  },
+  "taskVariantOverrides": {
+    "backup": {
+      "includeSystemFields": true,
+      "includeFormulaFields": false,
+      "additionalRequired": ["SystemModstamp", "IsDeleted"],
+      "maxFields": 150
+    },
+    "migration": {
+      "includeSystemFields": true,
+      "includeFormulaFields": false,
+      "additionalRequired": ["ExternalId__c"],
+      "maxFields": 200
+    },
+    "enrichment": {
+      "includeSystemFields": false,
+      "includeFormulaFields": false,
+      "maxFields": 50
+    },
+    "export": {
+      "includeSystemFields": false,
+      "includeFormulaFields": true,
+      "additionalExcluded": ["Description", "Internal_Notes__c"],
+      "maxFields": 100
+    },
+    "audit": {
+      "includeSystemFields": true,
+      "includeFormulaFields": true,
+      "maxFields": 200
+    }
+  }
+}

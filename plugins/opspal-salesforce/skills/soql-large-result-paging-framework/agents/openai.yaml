@@ -1,0 +1,4 @@
+interface:
+  display_name: "Soql Large Result Paging Framework"
+  short_description: "Help with Soql Large Result Paging Framework tasks"
+  default_prompt: "Use $soql-large-result-paging-framework to execute this workflow safely and produce the expected artifacts."

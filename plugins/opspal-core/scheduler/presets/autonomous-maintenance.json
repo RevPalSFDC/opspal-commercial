@@ -1,0 +1,107 @@
+{
+  "name": "Autonomous Maintenance",
+  "description": "Daily, weekly, and monthly maintenance tasks for the OpsPal self-improvement pipeline",
+  "version": "1.0.0",
+  "tasks": [
+    {
+      "name": "Debug Log Analysis",
+      "type": "script",
+      "schedule": "0 5 * * *",
+      "command": "node ${REPO_ROOT}/.claude/scripts/lib/debug-log-analyzer.js analyze",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 300,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "Self-Improvement Pipeline",
+      "type": "script",
+      "schedule": "0 6 * * *",
+      "command": "node ${REPO_ROOT}/.claude/scripts/self-improvement-pipeline.js run",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "Hook Health Check",
+      "type": "script",
+      "schedule": "0 7 * * *",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/hook-health-checker.js --quick --format json --project-root ${REPO_ROOT}",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 120,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "Asana Health Check",
+      "type": "script",
+      "schedule": "5 7 * * *",
+      "command": "bash ${REPO_ROOT}/.claude/scripts/daily-asana-health-check.sh",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 120,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "ACE Maintenance",
+      "type": "script",
+      "schedule": "0 3 * * 0",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/ace-maintenance-runner.js",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "Routing Engine Report",
+      "type": "script",
+      "schedule": "0 8 * * 1",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/adaptive-routing-engine.js report",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 300,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "ROI Pending Review",
+      "type": "script",
+      "schedule": "30 8 * * 1",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/roi-tracker.js pending",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 300,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "Prevention Hook Generator",
+      "type": "script",
+      "schedule": "0 9 * * 1",
+      "command": "node ${REPO_ROOT}/.claude-plugins/developer-tools-plugin/scripts/lib/reflection-to-prevention-generator.js generate-all",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifyOn": ["failure"]
+    },
+    {
+      "name": "Monthly ROI Report",
+      "type": "script",
+      "schedule": "0 9 1 * *",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/roi-tracker.js report",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifyOn": ["failure", "completion"]
+    },
+    {
+      "name": "Monthly Prevention Verifier",
+      "type": "script",
+      "schedule": "0 10 1 * *",
+      "command": "node ${REPO_ROOT}/.claude-plugins/developer-tools-plugin/scripts/lib/prevention-verifier.js report",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifyOn": ["failure", "completion"]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+[
+  {
+    "name": "plan_name",
+    "label": "Plan Name",
+    "type": "text",
+    "default": "Professional",
+    "required": true
+  },
+  {
+    "name": "plan_description",
+    "label": "Plan Description",
+    "type": "text",
+    "default": "Best for growing teams",
+    "required": false
+  },
+  {
+    "name": "pricing",
+    "label": "Pricing",
+    "type": "group",
+    "children": [
+      {
+        "name": "currency_symbol",
+        "label": "Currency Symbol",
+        "type": "text",
+        "default": "$"
+      },
+      {
+        "name": "price",
+        "label": "Price",
+        "type": "text",
+        "default": "49"
+      },
+      {
+        "name": "billing_period",
+        "label": "Billing Period",
+        "type": "choice",
+        "choices": [
+          ["monthly", "/month"],
+          ["yearly", "/year"],
+          ["one_time", "one-time"],
+          ["custom", "custom"]
+        ],
+        "default": "monthly"
+      },
+      {
+        "name": "custom_period",
+        "label": "Custom Period Text",
+        "type": "text",
+        "default": "/user/month"
+      },
+      {
+        "name": "original_price",
+        "label": "Original Price (for discounts)",
+        "type": "text",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "name": "features",
+    "label": "Features",
+    "type": "group",
+    "children": [
+      {
+        "name": "list",
+        "label": "Feature List",
+        "type": "text",
+        "default": "10 users included\n100 GB storage\nEmail support\nAPI access\nCustom integrations",
+        "allow_new_line": true
+      },
+      {
+        "name": "highlight_count",
+        "label": "Number of Features to Highlight",
+        "type": "number",
+        "min": 0,
+        "max": 10,
+        "default": 2
+      }
+    ]
+  },
+  {
+    "name": "cta",
+    "label": "Call to Action",
+    "type": "group",
+    "children": [
+      {
+        "name": "text",
+        "label": "Button Text",
+        "type": "text",
+        "default": "Get Started"
+      },
+      {
+        "name": "link",
+        "label": "Button Link",
+        "type": "link",
+        "default": {
+          "url": {
+            "href": "#",
+            "type": "EXTERNAL"
+          }
+        }
+      },
+      {
+        "name": "style",
+        "label": "Button Style",
+        "type": "choice",
+        "choices": [
+          ["primary", "Primary (Filled)"],
+          ["secondary", "Secondary (Outline)"]
+        ],
+        "default": "primary"
+      }
+    ]
+  },
+  {
+    "name": "style_options",
+    "label": "Style Options",
+    "type": "group",
+    "children": [
+      {
+        "name": "is_featured",
+        "label": "Featured/Recommended",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "featured_label",
+        "label": "Featured Label",
+        "type": "text",
+        "default": "Most Popular"
+      },
+      {
+        "name": "accent_color",
+        "label": "Accent Color",
+        "type": "color",
+        "default": {
+          "color": "#ff7a59",
+          "opacity": 100
+        }
+      },
+      {
+        "name": "card_style",
+        "label": "Card Style",
+        "type": "choice",
+        "choices": [
+          ["standard", "Standard"],
+          ["bordered", "Bordered"],
+          ["shadow", "Shadow"],
+          ["gradient", "Gradient Header"]
+        ],
+        "default": "shadow"
+      }
+    ]
+  }
+]

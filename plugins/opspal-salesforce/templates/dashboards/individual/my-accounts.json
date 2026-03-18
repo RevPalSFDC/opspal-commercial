@@ -1,0 +1,310 @@
+{
+  "templateMetadata": {
+    "templateId": "my-accounts",
+    "templateName": "My Accounts Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "CSM view of assigned account health, open support cases, upcoming renewals, and engagement metrics",
+    "audience": "Customer Success Managers, Account Managers, Client Success",
+    "function": "customer-success",
+    "level": "individual",
+    "useCase": "Daily account management, prioritization, proactive outreach planning",
+    "refreshFrequency": "Hourly",
+    "componentCount": 7,
+    "prerequisites": [
+      "Account.CSM_Owner__c or Account.OwnerId for assignment",
+      "Account.Health_Score__c (recommended)",
+      "Case object for support tracking",
+      "Renewal opportunities"
+    ],
+    "tags": ["my-accounts", "csm", "health", "renewals", "cases", "engagement"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "enterprise", "smb"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified view with 5 key account components",
+        "componentOverrides": {
+          "maxComponents": 5,
+          "exclude": ["At-Risk Accounts", "Engagement Trends"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full CSM account dashboard with all 7 components"
+      },
+      "enterprise": {
+        "description": "Enterprise accounts with higher ARR thresholds",
+        "filterOverrides": [
+          { "field": "Account.ARR__c", "default": ">=100000", "label": "Enterprise ($100K+ ARR)" }
+        ]
+      },
+      "smb": {
+        "description": "SMB focus with volume-based account management",
+        "filterOverrides": [
+          { "field": "Account.ARR__c", "default": "<50000", "label": "SMB (<$50K ARR)" }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Account.OwnerId", "Account.Name"],
+    "optionalFields": ["Account.Health_Score__c", "Account.ARR__c", "Case.Status", "Opportunity.Type"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "HealthScore": {
+        "patterns": ["Health_Score__c", "HealthScore__c", "Account_Health__c"],
+        "labelHints": ["Health Score", "Health", "Account Health"],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c"],
+        "labelHints": ["ARR", "Annual Revenue", "ACV"],
+        "dataType": "currency"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["My Accounts Health", "My Open Cases", "My Upcoming Renewals", "My At-Risk Accounts"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["My Accounts Health", "My Upcoming Renewals"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "My Accounts Health",
+        "sourceReport": "my-accounts-health",
+        "groupBy": "Account.Health_Score__c",
+        "metric": "COUNT(Account.Id)",
+        "showPercentages": true,
+        "showLegend": true,
+        "colorMapping": {
+          "Green": "#6FBF73",
+          "Yellow": "#F4C542",
+          "Red": "#E74C3C"
+        },
+        "dynamicFilter": "CSM_Owner__c = $User.Id"
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "My Open Cases",
+        "sourceReport": "my-open-cases",
+        "metric": "COUNT(Case.Id WHERE Status != 'Closed')",
+        "format": "number",
+        "secondaryMetric": "COUNT WHERE Priority IN ('High', 'Critical')",
+        "secondaryLabel": "urgent",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 5 },
+        "yellowZone": { "min": 5, "max": 15 },
+        "redZone": { "min": 15, "max": 100 },
+        "dynamicFilter": "Account.CSM_Owner__c = $User.Id"
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Renewals Next 90 Days",
+        "sourceReport": "my-upcoming-renewals",
+        "metric": "SUM(Amount) WHERE Type='Renewal' AND CloseDate <= TODAY+90",
+        "format": "currency",
+        "secondaryMetric": "COUNT",
+        "secondaryLabel": "accounts",
+        "dynamicFilter": "OwnerId = $User.Id"
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Table",
+        "title": "At-Risk Accounts - Action Required",
+        "sourceReport": "my-at-risk-accounts",
+        "columns": [
+          { "field": "Account.Name", "header": "Account", "width": "22%" },
+          { "field": "Account.Health_Score__c", "header": "Health", "width": "10%" },
+          { "field": "Account.ARR__c", "header": "ARR", "format": "currency", "width": "14%" },
+          { "field": "Account.Open_Cases__c", "header": "Cases", "format": "number", "width": "10%" },
+          { "field": "LastActivityDate", "header": "Last Touch", "format": "date", "width": "14%" },
+          { "field": "Risk_Reason__c", "header": "Risk Reason", "width": "18%" },
+          { "field": "Next_Action__c", "header": "Next Step", "width": "12%" }
+        ],
+        "sortBy": "Account.ARR__c DESC",
+        "rowLimit": 10,
+        "filterLogic": "Health_Score__c IN ('Red', 'Yellow') AND CSM_Owner__c = $User.Id",
+        "conditionalFormatting": {
+          "Account.Health_Score__c": {
+            "Green": "green-text",
+            "Yellow": "yellow-text",
+            "Red": "red-text"
+          }
+        }
+      },
+      {
+        "position": { "row": 1, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "My NPS vs Team Avg",
+        "sourceReport": "my-nps-comparison",
+        "metric": "AVG(Account.NPS_Score__c) WHERE CSM_Owner__c = $User.Id",
+        "format": "number",
+        "comparisonMetric": "AVG(Account.NPS_Score__c)",
+        "comparisonLabel": "Team Avg",
+        "greenZone": { "comparisonDiff": { "min": 0, "max": 100 } },
+        "yellowZone": { "comparisonDiff": { "min": -10, "max": 0 } },
+        "redZone": { "comparisonDiff": { "min": -100, "max": -10 } }
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Table",
+        "title": "Upcoming Renewals",
+        "sourceReport": "my-renewal-pipeline",
+        "columns": [
+          { "field": "Account.Name", "header": "Account", "width": "25%" },
+          { "field": "Amount", "header": "ARR", "format": "currency", "width": "15%" },
+          { "field": "CloseDate", "header": "Renewal Date", "format": "date", "width": "15%" },
+          { "field": "Account.Health_Score__c", "header": "Health", "width": "10%" },
+          { "field": "StageName", "header": "Stage", "width": "15%" },
+          { "field": "NextStep", "header": "Next Step", "width": "20%" }
+        ],
+        "sortBy": "CloseDate ASC",
+        "rowLimit": 10,
+        "filterLogic": "Type = 'Renewal' AND IsClosed = FALSE AND OwnerId = $User.Id",
+        "conditionalFormatting": {
+          "CloseDate": {
+            "overdue": "red-background",
+            "within7days": "yellow-background"
+          }
+        }
+      },
+      {
+        "position": { "row": 2, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Table",
+        "title": "Recent Activity",
+        "sourceReport": "my-recent-activity",
+        "columns": [
+          { "field": "Account.Name", "header": "Account", "width": "40%" },
+          { "field": "ActivityDate", "header": "Date", "format": "date", "width": "30%" },
+          { "field": "Subject", "header": "Type", "width": "30%" }
+        ],
+        "sortBy": "ActivityDate DESC",
+        "rowLimit": 8,
+        "filterLogic": "OwnerId = $User.Id AND ActivityDate >= TODAY-7"
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "Account.Health_Score__c",
+      "type": "picklist",
+      "placeholder": "{{health}}",
+      "default": "All",
+      "values": ["All", "Green", "Yellow", "Red", "At Risk (Yellow + Red)"]
+    },
+    {
+      "field": "Account.Segment__c",
+      "type": "picklist",
+      "placeholder": "{{segment}}",
+      "default": "All",
+      "values": ["All", "Enterprise", "Mid-Market", "SMB"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "individualLevel": "Account.CSM_Owner__c = $User.Id OR OwnerId = $User.Id",
+    "note": "Automatically filters to assigned accounts"
+  },
+  "sourceReportTemplates": [
+    "customer-success/account-health",
+    "customer-success/renewal-pipeline",
+    "customer-success/support-trends"
+  ],
+  "orgAdaptation": {
+    "requiredFields": [],
+    "optionalFields": [
+      "Account.CSM_Owner__c",
+      "Account.Health_Score__c",
+      "Account.NPS_Score__c",
+      "Account.ARR__c",
+      "Account.Open_Cases__c",
+      "Account.Risk_Reason__c"
+    ],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.6,
+    "fieldFallbacks": {
+      "CSM_Owner__c": {
+        "patterns": ["CSM_Owner__c", "Customer_Success_Manager__c", "Account_Manager__c"],
+        "fallbackField": "OwnerId",
+        "fallbackBehavior": "Use standard Account Owner"
+      },
+      "Health_Score__c": {
+        "patterns": ["Health_Score__c", "Customer_Health__c", "Account_Health__c"],
+        "fallbackFormula": "IF(Days_Since_Last_Touch > 90, 'Red', IF(Open_Cases > 5, 'Yellow', 'Green'))",
+        "fallbackBehavior": "Calculate from activity if field missing"
+      },
+      "Open_Cases__c": {
+        "patterns": ["Open_Cases__c", "Case_Count__c"],
+        "fallbackQuery": "SELECT COUNT(Id) FROM Case WHERE AccountId = :accountId AND IsClosed = FALSE",
+        "fallbackBehavior": "Count from Case object"
+      },
+      "NPS_Score__c": {
+        "patterns": ["NPS_Score__c", "NPS__c"],
+        "fallbackBehavior": "Hide NPS component if missing"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "portfolio_health": {
+      "calculation": "Distribution of accounts by health category",
+      "target": {
+        "Green": ">70%",
+        "Yellow": "<20%",
+        "Red": "<10%"
+      }
+    },
+    "case_load": {
+      "target": "<10 open cases per CSM",
+      "urgent_threshold": 3,
+      "benchmark": { "good": "<5", "warning": ">15" }
+    },
+    "renewal_coverage": {
+      "definition": "Renewals with engagement in last 30 days",
+      "target": ">90%"
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify CSM assignment field (CSM_Owner__c or OwnerId)",
+      "Confirm Health_Score__c field exists",
+      "Check renewal opportunity tracking",
+      "Create report folder: My CS Dashboard"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to CS user's personal folder",
+      "Set hourly refresh during business hours",
+      "Add to CS app home page"
+    ]
+  },
+  "relatedTemplates": ["cs-overview", "account-health", "renewal-pipeline", "support-performance"]
+}

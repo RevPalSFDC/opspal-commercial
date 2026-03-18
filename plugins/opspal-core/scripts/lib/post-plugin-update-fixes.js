@@ -1,0 +1,1873 @@
+#!/usr/bin/env node
+
+/**
+ * Post-Plugin-Update Fixes
+ *
+ * Applies fixes discovered through testing that can't be done via normal plugin installation.
+ *
+ * Fixes Applied:
+ * 1. User-Level Hook Configuration - Reconciles ~/.claude/settings.json UserPromptSubmit hooks safely
+ * 2. Official Plugin Python Fixes - Creates symlinks/init files for Python-based plugins
+ * 3. Routing Reminder Validation - Ensures reminder file exists
+ * 4. Plugin Cache Routing Asset Sync - Keeps critical routing scripts aligned with matching cache versions
+ *
+ * Background:
+ * - Project-level hooks don't inject output (Claude Code bug)
+ * - User-level ~/.claude/settings.json works for hook output injection
+ * - User-level hooks may include custom groups that must be preserved
+ *
+ * @version 1.0.0
+ * @date 2025-12-15
+ */
+
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+// ============================================================================
+// Configuration
+// ============================================================================
+
+const CONFIG = {
+  userSettingsPath: path.join(os.homedir(), '.claude', 'settings.json'),
+  officialPluginsCache: path.join(os.homedir(), '.claude', 'plugins', 'cache', 'claude-plugins-official'),
+
+  // Plugins that need Python import fixes
+  pythonPluginFixes: [
+    {
+      name: 'hookify',
+      symlink: 'hookify',  // Create symlink with this name pointing to .
+      initFile: true       // Create __init__.py
+    }
+  ],
+
+  // Reminder file locations to search (in priority order)
+  reminderFileLocations: [
+    // Local development - project root docs
+    (projectRoot) => path.join(projectRoot, 'docs', 'reminder.md'),
+    // Local development - inside plugin directory
+    (projectRoot) => path.join(projectRoot, '.claude-plugins', 'opspal-core', 'docs', 'reminder.md'),
+    // Installed from marketplace (revpal-internal-plugins)
+    () => {
+      const cacheBase = path.join(os.homedir(), '.claude', 'plugins', 'cache', 'revpal-internal-plugins', 'opspal-core');
+      if (fs.existsSync(cacheBase)) {
+        const entries = fs.readdirSync(cacheBase);
+        for (const entry of entries) {
+          const reminderPath = path.join(cacheBase, entry, 'docs', 'reminder.md');
+          if (fs.existsSync(reminderPath)) {
+            return reminderPath;
+          }
+        }
+      }
+      return null;
+    }
+  ]
+};
+
+const MANAGED_USER_PROMPT_HOOKS = [
+  {
+    key: 'unified-router',
+    file: 'unified-router.sh',
+    timeout: 10000,
+    description: 'Unified agent routing with complexity analysis (replaces 5-script chain)',
+    env: {
+      ROUTING_ADAPTIVE_CONTINUE: '1',
+      ENABLE_HARD_BLOCKING: '0',
+      ENABLE_COMPLEXITY_HARD_BLOCKING: '0',
+      USER_PROMPT_MANDATORY_HARD_BLOCKING: '0',
+      ENABLE_INTAKE_HARD_BLOCKING: '0'
+    }
+  },
+  {
+    key: 'pre-task-graph-trigger',
+    file: 'pre-task-graph-trigger.sh',
+    timeout: 5000,
+    description: 'Detect when Task Graph orchestration is needed based on complexity'
+  },
+  {
+    key: 'intake-suggestion',
+    file: 'intake-suggestion.sh',
+    timeout: 5000,
+    description: 'Suggest /intake for project-level requests using complexity scoring and language detection'
+  }
+];
+const USER_LEVEL_PROJECT_OWNED_EVENTS = new Set(['SessionStart', 'PreToolUse', 'PostToolUse']);
+const USER_LEVEL_PROJECT_HOOK_PATTERNS = [
+  'opspal-internal-plugins',
+  `.claude-plugins/${['opspal', 'salesforce'].join('-')}`,
+  'session-start-repo-sync.sh',
+  'post-git-push-slack-notifier.sh'
+];
+const INTERNAL_PLUGIN_KEY = 'opspal-core@revpal-internal-plugins';
+
+// ============================================================================
+// ANSI Colors
+// ============================================================================
+
+const colors = {
+  reset: '\x1b[0m',
+  green: '\x1b[32m',
+  red: '\x1b[31m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  cyan: '\x1b[36m',
+  gray: '\x1b[90m',
+  bold: '\x1b[1m'
+};
+
+const icons = {
+  pass: `${colors.green}✅${colors.reset}`,
+  fail: `${colors.red}❌${colors.reset}`,
+  warn: `${colors.yellow}⚠️${colors.reset}`,
+  fix: `${colors.blue}🔧${colors.reset}`,
+  info: `${colors.cyan}ℹ️${colors.reset}`
+};
+
+// ============================================================================
+// Post-Plugin-Update Fixes Class
+// ============================================================================
+
+class PostPluginUpdateFixes {
+  constructor(options = {}) {
+    this.verbose = options.verbose || false;
+    this.dryRun = options.dryRun || false;
+    this.strict = options.strict || false;
+    this.projectRoot = options.projectRoot || process.cwd();
+    this.corePluginRoot = options.corePluginRoot || process.env.CLAUDE_PLUGIN_ROOT || null;
+
+    this.results = {
+      installedRuntime: { checks: [], fixes: [], errors: [] },
+      userLevelHooks: { checks: [], fixes: [], errors: [] },
+      pluginCacheAssets: { checks: [], fixes: [], errors: [] },
+      pythonPluginFixes: { checks: [], fixes: [], errors: [] },
+      reminderFile: { checks: [], fixes: [], errors: [] }
+    };
+  }
+
+  log(message, level = 'info') {
+    if (level === 'verbose' && !this.verbose) return;
+    console.log(message);
+  }
+
+  /**
+   * Find the reminder.md file in various locations
+   * @returns {string|null} Absolute path to reminder.md or null if not found
+   */
+  findReminderFile() {
+    const preferredRoots = [
+      this.findCorePluginRoot(),
+      this.resolveCacheAssetSyncSource()?.root
+    ].filter(Boolean);
+
+    for (const preferredRoot of [...new Set(preferredRoots.map((root) => path.resolve(root)))]) {
+      const preferredReminderPath = path.join(preferredRoot, 'docs', 'reminder.md');
+      if (fs.existsSync(preferredReminderPath)) {
+        return preferredReminderPath;
+      }
+    }
+
+    for (const locationFn of CONFIG.reminderFileLocations) {
+      try {
+        const result = locationFn(this.projectRoot);
+        if (result && fs.existsSync(result)) {
+          return result;
+        }
+      } catch (e) {
+        // Skip this location on error
+      }
+    }
+    return null;
+  }
+
+  normalizeGroupMatcher(matcher) {
+    if (typeof matcher !== 'string') return undefined;
+    return matcher.trim() === '' ? undefined : matcher;
+  }
+
+  extractReminderPath(command) {
+    if (typeof command !== 'string') return null;
+
+    const quotedMatch = command.match(/cat\s+["']([^"']+\.md)["']/);
+    if (quotedMatch) return quotedMatch[1];
+
+    const plainMatch = command.match(/cat\s+([^\s"'`]+\.md)/);
+    if (plainMatch) return plainMatch[1];
+
+    return null;
+  }
+
+  isProjectOwnedNonUserPromptHook(eventName, hook) {
+    if (!USER_LEVEL_PROJECT_OWNED_EVENTS.has(eventName)) {
+      return false;
+    }
+    if (!hook || typeof hook.command !== 'string') {
+      return false;
+    }
+
+    return USER_LEVEL_PROJECT_HOOK_PATTERNS.some((pattern) => hook.command.includes(pattern));
+  }
+
+  evaluateProjectOwnedHookDrift(settings) {
+    const issues = [];
+    let projectOwnedHooks = 0;
+    let emptyMatchers = 0;
+
+    for (const [eventName, groups] of Object.entries(settings?.hooks || {})) {
+      if (!Array.isArray(groups)) continue;
+
+      for (const group of groups) {
+        if (typeof group?.matcher === 'string' && group.matcher.trim() === '') {
+          emptyMatchers += 1;
+        }
+
+        for (const hook of this.getGroupHooks(group)) {
+          if (this.isProjectOwnedNonUserPromptHook(eventName, hook)) {
+            projectOwnedHooks += 1;
+          }
+        }
+      }
+    }
+
+    if (projectOwnedHooks > 0) {
+      issues.push('project-owned-event-hooks');
+    }
+
+    if (emptyMatchers > 0) {
+      issues.push('empty-matchers');
+    }
+
+    return {
+      issues,
+      projectOwnedHooks,
+      emptyMatchers
+    };
+  }
+
+  reconcileNonUserPromptHooks(settings) {
+    for (const [eventName, groups] of Object.entries(settings?.hooks || {})) {
+      if (!Array.isArray(groups)) continue;
+
+      const nextGroups = [];
+
+      for (const group of groups) {
+        const retainedHooks = this.getGroupHooks(group)
+          .filter((hook) => !this.isProjectOwnedNonUserPromptHook(eventName, hook))
+          .map((hook) => ({ ...hook }));
+
+        if (retainedHooks.length === 0) {
+          continue;
+        }
+
+        const nextGroup = {
+          hooks: retainedHooks
+        };
+        const matcher = this.normalizeGroupMatcher(group?.matcher);
+        if (matcher !== undefined) {
+          nextGroup.matcher = matcher;
+        }
+        nextGroups.push(nextGroup);
+      }
+
+      if (nextGroups.length > 0) {
+        settings.hooks[eventName] = nextGroups;
+      } else {
+        delete settings.hooks[eventName];
+      }
+    }
+  }
+
+  // ==========================================================================
+  // User-Level Hook Configuration
+  // ==========================================================================
+
+  getUserPromptSubmitGroups(settings) {
+    if (!settings || typeof settings !== 'object') return [];
+    if (!settings.hooks || typeof settings.hooks !== 'object') return [];
+    return Array.isArray(settings.hooks.UserPromptSubmit) ? settings.hooks.UserPromptSubmit : [];
+  }
+
+  getGroupHooks(group) {
+    if (!group || typeof group !== 'object') return [];
+    if (Array.isArray(group.hooks)) return group.hooks;
+    if (group.type || group.command) return [group];
+    return [];
+  }
+
+  getManagedHookKey(command) {
+    if (typeof command !== 'string' || command.trim() === '') return null;
+    for (const hookDef of MANAGED_USER_PROMPT_HOOKS) {
+      if (command.includes(hookDef.file)) {
+        return hookDef.key;
+      }
+    }
+    return null;
+  }
+
+  isManagedUserPromptHook(hook) {
+    if (!hook || typeof hook !== 'object') return false;
+    return this.getManagedHookKey(hook.command) !== null;
+  }
+
+  isReminderHook(hook) {
+    if (!hook || typeof hook !== 'object') return false;
+    return typeof hook.command === 'string' && hook.command.includes('reminder.md');
+  }
+
+  extractScriptPath(command) {
+    if (typeof command !== 'string') return null;
+
+    const envMatch = command.match(
+      /(?:^|\s)env(?:\s+[A-Z_][A-Z0-9_]*=[^\s]+)+\s+(?:"([^"]+\.(?:sh|js))"|'([^']+\.(?:sh|js))'|([^"'`\s;]+\.(?:sh|js)))/
+    );
+    if (envMatch) return envMatch[1] || envMatch[2] || envMatch[3];
+
+    const bashMatch = command.match(/bash\s+(?:-c\s+)?["']?([^"'\s;]+\.sh)/);
+    if (bashMatch) return bashMatch[1];
+
+    const nodeMatch = command.match(/node\s+["']?([^"'\s;]+\.js)/);
+    if (nodeMatch) return nodeMatch[1];
+
+    if (command.endsWith('.sh') || command.endsWith('.js')) {
+      return command.split(' ')[0];
+    }
+
+    const quotedScriptMatch = command.match(/["']([^"']+\.(?:sh|js))["']/);
+    if (quotedScriptMatch) return quotedScriptMatch[1];
+
+    return null;
+  }
+
+  toCanonicalScriptPath(command) {
+    const scriptPath = this.extractScriptPath(command);
+    if (!scriptPath) return null;
+
+    const expanded = scriptPath.startsWith('~/')
+      ? path.join(os.homedir(), scriptPath.slice(2))
+      : scriptPath;
+
+    if (path.isAbsolute(expanded)) {
+      return path.resolve(expanded);
+    }
+
+    return path.resolve(this.projectRoot, expanded);
+  }
+
+  findCorePluginRoot() {
+    const requiredHookPath = (root, file) => path.join(root, 'hooks', file);
+
+    for (const candidate of this.getCorePluginCandidates()) {
+      const hasAllHooks = MANAGED_USER_PROMPT_HOOKS.every((hookDef) =>
+        fs.existsSync(requiredHookPath(candidate.root, hookDef.file))
+      );
+      if (hasAllHooks) {
+        return candidate.root;
+      }
+    }
+
+    return null;
+  }
+
+  getPluginVersion(pluginRoot) {
+    if (!pluginRoot) return null;
+
+    const pluginJsonPath = path.join(pluginRoot, '.claude-plugin', 'plugin.json');
+    if (!fs.existsSync(pluginJsonPath)) {
+      return null;
+    }
+
+    try {
+      const pluginJson = JSON.parse(fs.readFileSync(pluginJsonPath, 'utf8'));
+      return typeof pluginJson.version === 'string' ? pluginJson.version.trim() : null;
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  isSemverLike(version) {
+    return typeof version === 'string' && /^[0-9]+\.[0-9]+\.[0-9]+(?:[-.][0-9A-Za-z.-]+)?$/.test(version.trim());
+  }
+
+  compareVersions(leftVersion, rightVersion) {
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+    const parse = (version) => {
+      if (!this.isSemverLike(version)) {
+        return null;
+      }
+
+      const match = version.trim().match(/^([0-9]+)\.([0-9]+)\.([0-9]+)(?:[-.]?(.+))?$/);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        major: Number(match[1]),
+        minor: Number(match[2]),
+        patch: Number(match[3]),
+        prerelease: match[4] ? match[4].split(/[.-]/).filter(Boolean) : []
+      };
+    };
+
+    const left = parse(leftVersion);
+    const right = parse(rightVersion);
+
+    if (!left || !right) {
+      return collator.compare(leftVersion || '', rightVersion || '');
+    }
+
+    for (const key of ['major', 'minor', 'patch']) {
+      if (left[key] !== right[key]) {
+        return left[key] - right[key];
+      }
+    }
+
+    if (left.prerelease.length === 0 && right.prerelease.length > 0) return 1;
+    if (left.prerelease.length > 0 && right.prerelease.length === 0) return -1;
+
+    const length = Math.max(left.prerelease.length, right.prerelease.length);
+    for (let index = 0; index < length; index += 1) {
+      const leftToken = left.prerelease[index];
+      const rightToken = right.prerelease[index];
+      if (leftToken === undefined) return -1;
+      if (rightToken === undefined) return 1;
+
+      const leftNumeric = /^[0-9]+$/.test(leftToken);
+      const rightNumeric = /^[0-9]+$/.test(rightToken);
+      if (leftNumeric && rightNumeric) {
+        const difference = Number(leftToken) - Number(rightToken);
+        if (difference !== 0) {
+          return difference;
+        }
+        continue;
+      }
+      if (leftNumeric) return -1;
+      if (rightNumeric) return 1;
+
+      const difference = collator.compare(leftToken, rightToken);
+      if (difference !== 0) {
+        return difference;
+      }
+    }
+
+    return 0;
+  }
+
+  getClaudeRoots() {
+    const roots = [
+      path.join(os.homedir(), '.claude')
+    ];
+
+    if (process.env.CLAUDE_HOME) {
+      roots.push(process.env.CLAUDE_HOME);
+    }
+    if (process.env.CLAUDE_CONFIG_DIR) {
+      roots.push(process.env.CLAUDE_CONFIG_DIR);
+    }
+
+    return [...new Set(
+      roots
+        .filter(Boolean)
+        .map((root) => path.resolve(root))
+    )];
+  }
+
+  getUserSettingsPath(claudeRoot = this.getClaudeRoots()[0]) {
+    return path.join(claudeRoot, 'settings.json');
+  }
+
+  getUserSettingsTargets() {
+    return this.getClaudeRoots().map((claudeRoot) => ({
+      claudeRoot,
+      settingsPath: this.getUserSettingsPath(claudeRoot)
+    }));
+  }
+
+  getInstalledPluginsPath(claudeRoot = this.getClaudeRoots()[0]) {
+    return path.join(claudeRoot, 'plugins', 'installed_plugins.json');
+  }
+
+  getCachePluginBase(claudeRoot = this.getClaudeRoots()[0]) {
+    return path.join(
+      claudeRoot,
+      'plugins',
+      'cache',
+      'revpal-internal-plugins',
+      'opspal-core'
+    );
+  }
+
+  getMarketplacePluginRoot(claudeRoot = this.getClaudeRoots()[0]) {
+    return this.getMarketplacePluginRoots(claudeRoot)[0] || null;
+  }
+
+  getMarketplacePluginRoots(claudeRoot = this.getClaudeRoots()[0]) {
+    const roots = [];
+    const directPath = path.join(
+      claudeRoot,
+      'plugins',
+      'marketplaces',
+      'revpal-internal-plugins',
+      'plugins',
+      'opspal-core'
+    );
+
+    if (fs.existsSync(directPath)) {
+      roots.push(path.resolve(directPath));
+    }
+
+    const marketplaceBase = path.join(claudeRoot, 'plugins', 'marketplaces');
+    if (fs.existsSync(marketplaceBase)) {
+      for (const entry of fs.readdirSync(marketplaceBase)) {
+        const candidate = path.join(marketplaceBase, entry, 'plugins', 'opspal-core');
+        if (fs.existsSync(candidate)) {
+          roots.push(path.resolve(candidate));
+        }
+      }
+    }
+
+    return [...new Set(roots)];
+  }
+
+  getCachePluginRoots(claudeRoot = this.getClaudeRoots()[0]) {
+    const cacheBase = this.getCachePluginBase(claudeRoot);
+    if (!fs.existsSync(cacheBase)) {
+      return [];
+    }
+
+    return fs.readdirSync(cacheBase)
+      .map((entry) => path.join(cacheBase, entry))
+      .filter((candidate) => {
+        try {
+          return fs.statSync(candidate).isDirectory();
+        } catch (_error) {
+          return false;
+        }
+      })
+      .map((candidate) => path.resolve(candidate));
+  }
+
+  getCorePluginCandidates() {
+    const candidates = [];
+    const seen = new Set();
+    const addCandidate = (candidate, priority) => {
+      if (!candidate || !fs.existsSync(candidate)) {
+        return;
+      }
+
+      const resolvedRoot = path.resolve(candidate);
+      if (seen.has(resolvedRoot)) {
+        return;
+      }
+
+      const version = this.getPluginVersion(resolvedRoot);
+      if (!version) {
+        return;
+      }
+
+      seen.add(resolvedRoot);
+      candidates.push({
+        root: resolvedRoot,
+        version,
+        priority
+      });
+    };
+
+    addCandidate(this.corePluginRoot, 0);
+    addCandidate(path.join(this.projectRoot, 'plugins', 'opspal-core'), 1);
+    addCandidate(path.join(this.projectRoot, '.claude-plugins', 'opspal-core'), 2);
+
+    for (const claudeRoot of this.getClaudeRoots()) {
+      for (const marketplaceRoot of this.getMarketplacePluginRoots(claudeRoot)) {
+        addCandidate(marketplaceRoot, 10);
+      }
+      for (const cacheRoot of this.getCachePluginRoots(claudeRoot)) {
+        addCandidate(cacheRoot, 20);
+      }
+    }
+
+    return candidates.sort((left, right) => {
+      const versionDifference = this.compareVersions(right.version, left.version);
+      if (versionDifference !== 0) {
+        return versionDifference;
+      }
+      return left.priority - right.priority;
+    });
+  }
+
+  resolveCacheAssetSyncSource() {
+    const [candidate] = this.getCorePluginCandidates();
+    return candidate || null;
+  }
+
+  listStaleVersionDirectories(pluginRoot, keepVersion) {
+    if (!pluginRoot || !fs.existsSync(pluginRoot)) {
+      return [];
+    }
+
+    return fs.readdirSync(pluginRoot)
+      .map((entry) => path.join(pluginRoot, entry))
+      .filter((candidate) => {
+        try {
+          return fs.statSync(candidate).isDirectory();
+        } catch (_error) {
+          return false;
+        }
+      })
+      .filter((candidate) => {
+        const version = path.basename(candidate);
+        return this.isSemverLike(version) && version !== keepVersion;
+      });
+  }
+
+  pruneVersionDirectories(pluginRoot, keepVersion) {
+    const staleDirectories = this.listStaleVersionDirectories(pluginRoot, keepVersion);
+    for (const staleDirectory of staleDirectories) {
+      if (this.dryRun) {
+        this.log(`${icons.info} [DRY RUN] Would remove stale cache version ${staleDirectory}`);
+        continue;
+      }
+      fs.rmSync(staleDirectory, { recursive: true, force: true });
+    }
+    return staleDirectories;
+  }
+
+  readJsonFile(filePath) {
+    try {
+      return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  replaceDirectory(sourcePath, targetPath) {
+    const sourceRealPath = fs.realpathSync(sourcePath);
+    const parentDir = path.dirname(targetPath);
+    const tempDir = path.join(
+      parentDir,
+      `.${path.basename(targetPath)}.tmp-${process.pid}-${Date.now()}`
+    );
+
+    fs.mkdirSync(parentDir, { recursive: true });
+
+    if (fs.existsSync(targetPath)) {
+      const targetRealPath = fs.realpathSync(targetPath);
+      if (targetRealPath === sourceRealPath) {
+        return false;
+      }
+      fs.rmSync(targetPath, { recursive: true, force: true });
+    }
+
+    fs.rmSync(tempDir, { recursive: true, force: true });
+    fs.cpSync(sourcePath, tempDir, { recursive: true, force: true, dereference: true });
+    fs.renameSync(tempDir, targetPath);
+    return true;
+  }
+
+  copyCacheAsset(sourcePath, targetPath) {
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    fs.copyFileSync(sourcePath, targetPath);
+
+    const sourceStat = fs.statSync(sourcePath);
+    fs.chmodSync(targetPath, sourceStat.mode);
+  }
+
+  buildManagedHookCommand(scriptPath, hookDef) {
+    if (!hookDef?.env || Object.keys(hookDef.env).length === 0) {
+      return scriptPath;
+    }
+
+    const envParts = Object.entries(hookDef.env)
+      .map(([key, value]) => `${key}=${value}`);
+
+    return `env ${envParts.join(' ')} ${scriptPath}`;
+  }
+
+  verifyCacheHooksConfig(hooksJsonPath) {
+    const hooksConfig = this.readJsonFile(hooksJsonPath);
+    if (!hooksConfig) {
+      return {
+        ok: false,
+        issues: [`Invalid JSON: ${hooksJsonPath}`]
+      };
+    }
+
+    const issues = [];
+    const userPromptGroups = Array.isArray(hooksConfig?.hooks?.UserPromptSubmit)
+      ? hooksConfig.hooks.UserPromptSubmit
+      : [];
+    const preToolGroups = Array.isArray(hooksConfig?.hooks?.PreToolUse)
+      ? hooksConfig.hooks.PreToolUse
+      : [];
+
+    const unifiedRouterHook = userPromptGroups
+      .flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : [])
+      .find((hook) => typeof hook?.command === 'string' && hook.command.includes('unified-router.sh'));
+
+    if (!unifiedRouterHook) {
+      issues.push('UserPromptSubmit missing unified-router hook');
+    } else {
+      const command = unifiedRouterHook.command;
+      const requiredEnv = [
+        'ROUTING_ADAPTIVE_CONTINUE=1',
+        'ENABLE_HARD_BLOCKING=0',
+        'ENABLE_COMPLEXITY_HARD_BLOCKING=0',
+        'USER_PROMPT_MANDATORY_HARD_BLOCKING=0',
+        'ENABLE_INTAKE_HARD_BLOCKING=0'
+      ];
+      for (const envKey of requiredEnv) {
+        if (!command.includes(envKey)) {
+          issues.push(`unified-router missing ${envKey}`);
+        }
+      }
+    }
+
+    const wildcardGatePresent = preToolGroups.some((group) => (
+      group?.matcher === '*' &&
+      Array.isArray(group?.hooks) &&
+      group.hooks.some((hook) => typeof hook?.command === 'string' && hook.command.includes('pre-tool-use-contract-validation.sh'))
+    ));
+
+    if (!wildcardGatePresent) {
+      issues.push('PreToolUse missing wildcard routing gate');
+    }
+
+    return {
+      ok: issues.length === 0,
+      issues
+    };
+  }
+
+  inspectInstalledRuntimePath(installPath, targetVersion) {
+    const issues = [];
+    if (!installPath || !fs.existsSync(installPath)) {
+      return {
+        ok: false,
+        issues: [`Missing install path: ${installPath || '(empty)'}`]
+      };
+    }
+
+    const pluginJsonPath = path.join(installPath, '.claude-plugin', 'plugin.json');
+    const hooksJsonPath = path.join(installPath, '.claude-plugin', 'hooks.json');
+    const requiredFiles = [
+      'hooks/unified-router.sh',
+      'hooks/pre-tool-use-contract-validation.sh',
+      'hooks/pre-task-agent-validator.sh',
+      'hooks/post-tool-use.sh',
+      'scripts/ci/validate-routing.sh',
+      'scripts/lib/task-router.js',
+      'scripts/lib/complexity-scorer.js',
+      'scripts/lib/pre-execution-validator.js',
+      'scripts/lib/routing-index-builder.js',
+      'scripts/lib/routing-routability-audit.js',
+      'scripts/lib/sync-claudemd.js',
+      'scripts/lib/hook-merger.js',
+      'scripts/lib/reconcile-hook-registration.js',
+      'scripts/lib/routing-state-manager.js',
+      'config/mcp-tool-policies.json'
+    ];
+
+    const pluginJson = this.readJsonFile(pluginJsonPath);
+    if (!pluginJson) {
+      issues.push(`Missing or invalid plugin.json: ${pluginJsonPath}`);
+    } else if (pluginJson.version !== targetVersion) {
+      issues.push(`plugin.json version ${pluginJson.version || 'missing'} != ${targetVersion}`);
+    }
+
+    const hooksCheck = this.verifyCacheHooksConfig(hooksJsonPath);
+    if (!hooksCheck.ok) {
+      issues.push(...hooksCheck.issues);
+    }
+
+    for (const relativePath of requiredFiles) {
+      const absolutePath = path.join(installPath, relativePath);
+      if (!fs.existsSync(absolutePath)) {
+        issues.push(`Missing runtime asset: ${relativePath}`);
+      }
+    }
+
+    return {
+      ok: issues.length === 0,
+      issues
+    };
+  }
+
+  checkInstalledRuntime() {
+    this.log(`\n${colors.bold}## Installed Runtime${colors.reset}`);
+
+    const syncSource = this.resolveCacheAssetSyncSource();
+    if (!syncSource) {
+      const message = 'Unable to resolve opspal-core source root for runtime verification';
+      this.results.installedRuntime.errors.push({
+        name: 'runtime-source',
+        message
+      });
+      this.log(`${icons.fail} ${message}`);
+      return { needsFix: true, reason: 'no-source' };
+    }
+
+    const roots = this.getClaudeRoots();
+    let checkedEntries = 0;
+    const issues = [];
+
+    for (const claudeRoot of roots) {
+      const installedPluginsPath = this.getInstalledPluginsPath(claudeRoot);
+      if (!fs.existsSync(installedPluginsPath)) {
+        continue;
+      }
+
+      const installedPlugins = this.readJsonFile(installedPluginsPath);
+      if (!installedPlugins) {
+        issues.push(`Invalid JSON: ${installedPluginsPath}`);
+        this.results.installedRuntime.errors.push({
+          name: path.basename(installedPluginsPath),
+          message: `Failed to parse ${installedPluginsPath}`
+        });
+        continue;
+      }
+
+      const entries = installedPlugins?.plugins?.[INTERNAL_PLUGIN_KEY];
+      if (!Array.isArray(entries) || entries.length === 0) {
+        this.results.installedRuntime.checks.push({
+          name: `installed-runtime:${claudeRoot}`,
+          status: 'skipped',
+          message: `${INTERNAL_PLUGIN_KEY} not installed under ${claudeRoot}`
+        });
+        continue;
+      }
+
+      const expectedInstallPath = path.join(
+        this.getCachePluginBase(claudeRoot),
+        syncSource.version
+      );
+      checkedEntries += entries.length;
+      const rootIssues = [];
+
+      for (const entry of entries) {
+        const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
+          ? entry.installPath
+          : expectedInstallPath;
+
+        if (entry?.version !== syncSource.version) {
+          rootIssues.push(`installed version ${entry?.version || 'missing'} != ${syncSource.version}`);
+        }
+        if (path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath)) {
+          rootIssues.push(`installPath drifted: ${currentInstallPath}`);
+        }
+
+        const runtimeInspection = this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version);
+        if (!runtimeInspection.ok) {
+          rootIssues.push(...runtimeInspection.issues);
+        }
+      }
+
+      if (this.strict && entries.length > 1) {
+        rootIssues.push(`strict mode requires a single install record (found ${entries.length})`);
+      }
+
+      const staleVersionDirs = this.strict
+        ? this.listStaleVersionDirectories(this.getCachePluginBase(claudeRoot), syncSource.version)
+        : [];
+      if (this.strict && staleVersionDirs.length > 0) {
+        rootIssues.push(`strict mode found stale cache versions: ${staleVersionDirs.map((dir) => path.basename(dir)).join(', ')}`);
+      }
+
+      if (rootIssues.length === 0) {
+        this.results.installedRuntime.checks.push({
+          name: `installed-runtime:${claudeRoot}`,
+          status: 'valid',
+          message: `${expectedInstallPath} matches source version ${syncSource.version}`
+        });
+      } else {
+        issues.push(...rootIssues.map((issue) => `${claudeRoot}: ${issue}`));
+        this.results.installedRuntime.checks.push({
+          name: `installed-runtime:${claudeRoot}`,
+          status: 'drifted',
+          message: rootIssues.join('; ')
+        });
+      }
+    }
+
+    if (checkedEntries === 0) {
+      const message = `No installed ${INTERNAL_PLUGIN_KEY} entries found in configured Claude roots`;
+      this.log(`${icons.info} ${message}`);
+      this.results.installedRuntime.checks.push({
+        name: 'installed-runtime',
+        status: 'skipped',
+        message
+      });
+      return { needsFix: false, reason: 'not-installed' };
+    }
+
+    if (issues.length === 0) {
+      this.log(`${icons.pass} Installed runtime matches source version ${syncSource.version}`);
+      return {
+        needsFix: false,
+        sourceVersion: syncSource.version,
+        checkedEntries
+      };
+    }
+
+    this.log(`${icons.fail} Installed runtime drift detected for ${checkedEntries} entry(s)`);
+    return {
+      needsFix: true,
+      sourceVersion: syncSource.version,
+      checkedEntries,
+      issues
+    };
+  }
+
+  reconcileInstalledRuntime() {
+    this.log(`\n${colors.bold}## Installed Runtime${colors.reset}`);
+
+    const syncSource = this.resolveCacheAssetSyncSource();
+    if (!syncSource) {
+      const message = 'Unable to resolve opspal-core source root for runtime reconciliation';
+      this.results.installedRuntime.errors.push({
+        name: 'runtime-source',
+        message
+      });
+      this.log(`${icons.fail} ${message}`);
+      return { fixed: false, reason: 'no-source' };
+    }
+
+    const roots = this.getClaudeRoots();
+    const timestamp = new Date().toISOString();
+    let repairedRoots = 0;
+    let repairedEntries = 0;
+    let installedEntriesFound = 0;
+
+    for (const claudeRoot of roots) {
+      const installedPluginsPath = this.getInstalledPluginsPath(claudeRoot);
+      if (!fs.existsSync(installedPluginsPath)) {
+        continue;
+      }
+
+      const installedPlugins = this.readJsonFile(installedPluginsPath);
+      if (!installedPlugins) {
+        this.results.installedRuntime.errors.push({
+          name: path.basename(installedPluginsPath),
+          message: `Failed to parse ${installedPluginsPath}`
+        });
+        continue;
+      }
+
+      const entries = installedPlugins?.plugins?.[INTERNAL_PLUGIN_KEY];
+      if (!Array.isArray(entries) || entries.length === 0) {
+        continue;
+      }
+
+      installedEntriesFound += entries.length;
+      const expectedInstallPath = path.join(
+        this.getCachePluginBase(claudeRoot),
+        syncSource.version
+      );
+      const staleVersionDirs = this.strict
+        ? this.listStaleVersionDirectories(this.getCachePluginBase(claudeRoot), syncSource.version)
+        : [];
+      const strictMetadataDrift = this.strict && entries.length > 1;
+
+      const needsRepair = entries.some((entry) => {
+        const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
+          ? entry.installPath
+          : expectedInstallPath;
+        return (
+          entry?.version !== syncSource.version ||
+          path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath) ||
+          !this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version).ok
+        );
+      }) || !fs.existsSync(expectedInstallPath) || strictMetadataDrift || staleVersionDirs.length > 0;
+
+      if (!needsRepair) {
+        this.results.installedRuntime.checks.push({
+          name: `installed-runtime:${claudeRoot}`,
+          status: 'valid',
+          message: `${expectedInstallPath} already matches source version ${syncSource.version}`
+        });
+        continue;
+      }
+
+      if (this.dryRun) {
+        this.log(`${icons.info} [DRY RUN] Would sync ${syncSource.root} -> ${expectedInstallPath}`);
+        if (this.strict && staleVersionDirs.length > 0) {
+          for (const staleDirectory of staleVersionDirs) {
+            this.log(`${icons.info} [DRY RUN] Would remove stale cache version ${staleDirectory}`);
+          }
+        }
+        repairedRoots += 1;
+        repairedEntries += entries.length;
+        continue;
+      }
+
+      this.replaceDirectory(syncSource.root, expectedInstallPath);
+      repairedRoots += 1;
+
+      const normalizedEntries = [];
+      const seenEntries = new Set();
+
+      for (const entry of entries) {
+        if (entry.version !== syncSource.version || entry.installPath !== expectedInstallPath) {
+          repairedEntries += 1;
+        }
+
+        const normalizedEntry = {
+          ...entry,
+          version: syncSource.version,
+          installPath: expectedInstallPath,
+          lastUpdated: timestamp
+        };
+        const entryKey = `${normalizedEntry.version}|${normalizedEntry.installPath}`;
+        if (this.strict && seenEntries.has(entryKey)) {
+          repairedEntries += 1;
+          continue;
+        }
+
+        seenEntries.add(entryKey);
+        normalizedEntries.push(normalizedEntry);
+      }
+
+      installedPlugins.plugins[INTERNAL_PLUGIN_KEY] = normalizedEntries;
+      fs.writeFileSync(installedPluginsPath, JSON.stringify(installedPlugins, null, 2) + '\n');
+      this.results.installedRuntime.fixes.push({
+        name: `installed-runtime:${claudeRoot}`,
+        message: `Synced cache bundle and install record to ${expectedInstallPath}`
+      });
+
+      if (this.strict && staleVersionDirs.length > 0) {
+        this.pruneVersionDirectories(this.getCachePluginBase(claudeRoot), syncSource.version);
+        this.results.installedRuntime.fixes.push({
+          name: `installed-runtime-prune:${claudeRoot}`,
+          message: `Removed stale cache versions (${staleVersionDirs.map((dir) => path.basename(dir)).join(', ')})`
+        });
+      }
+      this.log(`${icons.fix} Reconciled installed runtime under ${claudeRoot}`);
+    }
+
+    if (installedEntriesFound === 0) {
+      const message = `No installed ${INTERNAL_PLUGIN_KEY} entries found in configured Claude roots`;
+      this.log(`${icons.info} ${message}`);
+      this.results.installedRuntime.checks.push({
+        name: 'installed-runtime',
+        status: 'skipped',
+        message
+      });
+      return { fixed: false, reason: 'not-installed' };
+    }
+
+    return {
+      fixed: repairedRoots > 0,
+      roots: repairedRoots,
+      entries: repairedEntries,
+      sourceVersion: syncSource.version
+    };
+  }
+
+  resolveManagedUserPromptHooks(existingGroups) {
+    const hooksByKey = new Map();
+    const corePluginRoot = this.findCorePluginRoot();
+
+    for (const group of existingGroups) {
+      for (const hook of this.getGroupHooks(group)) {
+        const key = this.getManagedHookKey(hook.command);
+        if (!key || hooksByKey.has(key)) continue;
+        hooksByKey.set(key, hook.command);
+      }
+    }
+
+    const resolvedHooks = [];
+
+    for (const hookDef of MANAGED_USER_PROMPT_HOOKS) {
+      let command = null;
+
+      if (corePluginRoot) {
+        command = path.join(corePluginRoot, 'hooks', hookDef.file);
+      } else if (hooksByKey.has(hookDef.key)) {
+        const existingCommand = hooksByKey.get(hookDef.key);
+        command = this.toCanonicalScriptPath(existingCommand) || existingCommand;
+      } else {
+        const fallback = path.join(this.projectRoot, 'plugins', 'opspal-core', 'hooks', hookDef.file);
+        if (fs.existsSync(fallback)) {
+          command = fallback;
+        }
+      }
+
+      if (!command) {
+        return {
+          error: `Unable to resolve managed hook path for ${hookDef.file}`
+        };
+      }
+
+      const scriptPath = this.toCanonicalScriptPath(command);
+      if (!scriptPath || !fs.existsSync(scriptPath)) {
+        return {
+          error: `Managed hook script not found for ${hookDef.file}: ${command}`
+        };
+      }
+
+      resolvedHooks.push({
+        type: 'command',
+        command: this.buildManagedHookCommand(scriptPath, hookDef),
+        timeout: hookDef.timeout,
+        description: hookDef.description
+      });
+    }
+
+    return { hooks: resolvedHooks };
+  }
+
+  evaluateUserPromptSubmit(settings, reminderPath) {
+    const groups = this.getUserPromptSubmitGroups(settings);
+    const managedSeen = new Map();
+    const managedDuplicates = new Set();
+    const missingManaged = [];
+    const managedPathDrift = new Set();
+    const managedCommandDrift = new Set();
+    const timeoutMismatches = new Set();
+    const issues = [];
+    let reminderPresent = false;
+    let reminderPathDrift = false;
+    const resolvedManagedHooks = this.resolveManagedUserPromptHooks(groups);
+    const expectedManagedPaths = new Map();
+    const expectedManagedCommands = new Map();
+
+    if (!resolvedManagedHooks.error) {
+      for (let index = 0; index < MANAGED_USER_PROMPT_HOOKS.length; index += 1) {
+        const hookDef = MANAGED_USER_PROMPT_HOOKS[index];
+        const hook = resolvedManagedHooks.hooks[index];
+        const scriptPath = this.toCanonicalScriptPath(hook.command);
+        if (scriptPath) {
+          expectedManagedPaths.set(hookDef.key, scriptPath);
+        }
+        expectedManagedCommands.set(hookDef.key, hook.command.trim());
+      }
+    }
+
+    for (const group of groups) {
+      for (const hook of this.getGroupHooks(group)) {
+        if (!hook || typeof hook !== 'object') continue;
+        if (this.isReminderHook(hook)) {
+          reminderPresent = true;
+          const currentReminderPath = this.extractReminderPath(hook.command);
+          if (!currentReminderPath || !fs.existsSync(currentReminderPath)) {
+            reminderPathDrift = true;
+          } else if (reminderPath && path.resolve(currentReminderPath) !== path.resolve(reminderPath)) {
+            reminderPathDrift = true;
+          }
+        }
+
+        const key = this.getManagedHookKey(hook.command);
+        if (!key) continue;
+
+        const hookDef = MANAGED_USER_PROMPT_HOOKS.find((item) => item.key === key);
+        if (!hookDef) continue;
+
+        if (managedSeen.has(key)) {
+          managedDuplicates.add(key);
+          continue;
+        }
+
+        managedSeen.set(key, hook);
+
+        if (hook.timeout !== hookDef.timeout) {
+          timeoutMismatches.add(key);
+        }
+
+        const currentPath = this.toCanonicalScriptPath(hook.command);
+        const expectedPath = expectedManagedPaths.get(key);
+        if (!currentPath || !fs.existsSync(currentPath) || (expectedPath && currentPath !== expectedPath)) {
+          managedPathDrift.add(key);
+        }
+
+        const expectedCommand = expectedManagedCommands.get(key);
+        if (expectedCommand && hook.command.trim() !== expectedCommand) {
+          managedCommandDrift.add(key);
+        }
+      }
+    }
+
+    for (const hookDef of MANAGED_USER_PROMPT_HOOKS) {
+      if (!managedSeen.has(hookDef.key)) {
+        missingManaged.push(hookDef.key);
+      }
+    }
+
+    if (!settings.hooks || typeof settings.hooks !== 'object') {
+      issues.push('no-hooks-section');
+    }
+
+    if (!Array.isArray(settings?.hooks?.UserPromptSubmit)) {
+      issues.push('no-userpromptsubmit');
+    }
+
+    if (missingManaged.length > 0) {
+      issues.push('missing-managed-hooks');
+    }
+
+    if (managedDuplicates.size > 0) {
+      issues.push('duplicate-managed-hooks');
+    }
+
+    if (resolvedManagedHooks.error || managedPathDrift.size > 0 || managedCommandDrift.size > 0) {
+      issues.push('managed-path-drift');
+    }
+
+    if (timeoutMismatches.size > 0) {
+      issues.push('managed-timeout-drift');
+    }
+
+    if (!reminderPresent) {
+      issues.push(reminderPath ? 'missing-reminder-hook' : 'missing-reminder-hook-and-file');
+    } else if (reminderPathDrift) {
+      issues.push('reminder-path-drift');
+    }
+
+    return {
+      issues,
+      groups,
+      reminderPresent,
+      missingManaged,
+      managedPathDrift: [...managedPathDrift],
+      managedCommandDrift: [...managedCommandDrift],
+      managedDuplicates: [...managedDuplicates],
+      reminderPathDrift,
+      timeoutMismatches: [...timeoutMismatches]
+    };
+  }
+
+  inspectUserLevelHooksTarget(target) {
+    const { claudeRoot, settingsPath } = target;
+    const resultName = `UserPromptSubmit:${claudeRoot}`;
+
+    if (!fs.existsSync(settingsPath)) {
+      this.results.userLevelHooks.checks.push({
+        name: resultName,
+        status: 'missing',
+        message: `${settingsPath} does not exist`
+      });
+      return { ...target, exists: false, needsFix: true };
+    }
+
+    try {
+      const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+      const reminderPath = this.findReminderFile();
+      const analysis = this.evaluateUserPromptSubmit(settings, reminderPath);
+      const projectHookAnalysis = this.evaluateProjectOwnedHookDrift(settings);
+
+      if (analysis.issues.length > 0 || projectHookAnalysis.issues.length > 0) {
+        const combinedIssues = [...analysis.issues, ...projectHookAnalysis.issues];
+        this.results.userLevelHooks.checks.push({
+          name: resultName,
+          status: 'drifted',
+          message: `${settingsPath} needs reconciliation (${combinedIssues.join(', ')})`
+        });
+        return {
+          ...target,
+          exists: true,
+          settings,
+          reminderPath,
+          needsFix: true,
+          reason: combinedIssues[0],
+          analysis,
+          projectHookAnalysis
+        };
+      }
+
+      this.results.userLevelHooks.checks.push({
+        name: resultName,
+        status: 'valid',
+        message: `${settingsPath} configured correctly`
+      });
+      return { ...target, exists: true, settings, reminderPath, needsFix: false, analysis };
+
+    } catch (error) {
+      this.results.userLevelHooks.errors.push({
+        name: settingsPath,
+        message: error.message
+      });
+      return { ...target, exists: true, needsFix: true, reason: 'parse-error', error };
+    }
+  }
+
+  checkUserLevelHooks() {
+    this.log(`\n${colors.bold}## User-Level Hooks${colors.reset}`);
+
+    const inspections = this.getUserSettingsTargets()
+      .map((target) => this.inspectUserLevelHooksTarget(target));
+    const needsFix = inspections.some((inspection) => inspection.needsFix);
+
+    if (!needsFix) {
+      this.log(`${icons.pass} User-level hooks configured correctly across ${inspections.length} Claude root(s)`);
+    }
+
+    return {
+      exists: inspections.some((inspection) => inspection.exists),
+      needsFix,
+      inspections
+    };
+  }
+
+  fixUserLevelHooksTarget(target) {
+    const settingsPath = target.settingsPath;
+
+    try {
+      let settings = {};
+
+      if (target.exists && target.settings) {
+        settings = target.settings;
+      } else if (fs.existsSync(settingsPath)) {
+        settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+      }
+
+      settings.hooks = settings.hooks || {};
+      const existingGroups = this.getUserPromptSubmitGroups(settings);
+      const resolvedManagedHooks = this.resolveManagedUserPromptHooks(existingGroups);
+
+      if (resolvedManagedHooks.error) {
+        this.results.userLevelHooks.errors.push({
+          name: settingsPath,
+          message: resolvedManagedHooks.error
+        });
+        this.log(`${icons.fail} ${resolvedManagedHooks.error}`);
+        return { fixed: false, reason: 'managed-hooks-unresolved' };
+      }
+
+      const reconciledGroups = [];
+
+      for (const group of existingGroups) {
+        const hooks = this.getGroupHooks(group);
+        if (hooks.length === 0) continue;
+
+        const retainedHooks = hooks.filter((hook) => !this.isManagedUserPromptHook(hook) && !this.isReminderHook(hook));
+        if (retainedHooks.length === 0) continue;
+
+        const nextGroup = {
+          hooks: retainedHooks.map((hook) => ({ ...hook }))
+        };
+        const matcher = this.normalizeGroupMatcher(group?.matcher);
+        if (matcher !== undefined) {
+          nextGroup.matcher = matcher;
+        }
+        reconciledGroups.push(nextGroup);
+      }
+
+      const reminderPath = target.reminderPath || this.findReminderFile();
+      if (!reminderPath) {
+        this.log(`${icons.fail} Could not find reminder.md in any known location`);
+        this.results.userLevelHooks.errors.push({
+          name: settingsPath,
+          message: 'Could not find reminder.md - searched local and installed plugin locations'
+        });
+        return { fixed: false, reason: 'reminder-not-found' };
+      }
+
+      this.log(`${icons.info} Found reminder at: ${reminderPath}`, 'verbose');
+      reconciledGroups.unshift({
+        hooks: [
+          {
+            type: 'command',
+            command: `cat ${reminderPath}`,
+            timeout: 5000
+          }
+        ]
+      });
+
+      reconciledGroups.push({
+        hooks: resolvedManagedHooks.hooks
+      });
+
+      settings.hooks.UserPromptSubmit = reconciledGroups;
+      this.reconcileNonUserPromptHooks(settings);
+
+      if (this.dryRun) {
+        this.log(`${icons.info} [DRY RUN] Would update ${settingsPath}`);
+        this.log(`${colors.gray}${JSON.stringify(settings.hooks.UserPromptSubmit, null, 2)}${colors.reset}`, 'verbose');
+      } else {
+        const dir = path.dirname(settingsPath);
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+
+        fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+        this.log(`${icons.fix} Updated ${settingsPath}`);
+      }
+
+      this.results.userLevelHooks.fixes.push({
+        name: `UserPromptSubmit hook:${target.claudeRoot}`,
+        action: 'reconciled',
+        path: settingsPath
+      });
+
+      return { fixed: true, path: settingsPath };
+
+    } catch (error) {
+      this.results.userLevelHooks.errors.push({
+        name: settingsPath,
+        message: error.message
+      });
+      this.log(`${icons.fail} Failed to update settings ${settingsPath}: ${error.message}`);
+      return { fixed: false, error };
+    }
+  }
+
+  fixUserLevelHooks() {
+    const check = this.checkUserLevelHooks();
+
+    if (!check.needsFix) {
+      return { fixed: false, reason: 'already-configured' };
+    }
+
+    const paths = [];
+    for (const target of check.inspections.filter((inspection) => inspection.needsFix)) {
+      const result = this.fixUserLevelHooksTarget(target);
+      if (result.fixed && result.path) {
+        paths.push(result.path);
+      }
+    }
+
+    return {
+      fixed: paths.length > 0,
+      count: paths.length,
+      paths
+    };
+  }
+
+  // ==========================================================================
+  // Python Plugin Fixes (hookify, etc.)
+  // ==========================================================================
+
+  checkPythonPluginFixes() {
+    this.log(`\n${colors.bold}## Official Plugin Fixes${colors.reset}`);
+
+    const issues = [];
+
+    for (const pluginConfig of CONFIG.pythonPluginFixes) {
+      const pluginCacheDir = path.join(CONFIG.officialPluginsCache, pluginConfig.name);
+
+      if (!fs.existsSync(pluginCacheDir)) {
+        this.log(`${icons.info} ${pluginConfig.name}: not installed`, 'verbose');
+        continue;
+      }
+
+      // Find the actual plugin directory (could be hash-named)
+      const entries = fs.readdirSync(pluginCacheDir);
+      for (const entry of entries) {
+        const pluginDir = path.join(pluginCacheDir, entry);
+
+        // Use lstatSync to handle broken symlinks gracefully
+        let stat;
+        try {
+          stat = fs.lstatSync(pluginDir);
+        } catch (e) {
+          continue; // Skip if we can't stat the entry
+        }
+
+        // Skip symlinks (could be broken) and non-directories
+        if (stat.isSymbolicLink()) continue;
+        if (!stat.isDirectory()) continue;
+        if (entry === 'unknown') continue; // Skip 'unknown' directory
+
+        // Check symlink
+        if (pluginConfig.symlink) {
+          const symlinkPath = path.join(pluginDir, pluginConfig.symlink);
+          if (!fs.existsSync(symlinkPath)) {
+            issues.push({
+              plugin: pluginConfig.name,
+              dir: pluginDir,
+              type: 'symlink',
+              path: symlinkPath,
+              target: '.'
+            });
+            this.results.pythonPluginFixes.checks.push({
+              name: `${pluginConfig.name} symlink`,
+              status: 'missing',
+              message: `Missing ${pluginConfig.symlink} symlink`
+            });
+          } else {
+            this.log(`${icons.pass} ${pluginConfig.name}: symlink exists`);
+          }
+        }
+
+        // Check __init__.py
+        if (pluginConfig.initFile) {
+          const initPath = path.join(pluginDir, '__init__.py');
+          if (!fs.existsSync(initPath)) {
+            issues.push({
+              plugin: pluginConfig.name,
+              dir: pluginDir,
+              type: 'init',
+              path: initPath
+            });
+            this.results.pythonPluginFixes.checks.push({
+              name: `${pluginConfig.name} __init__.py`,
+              status: 'missing',
+              message: `Missing __init__.py`
+            });
+          } else {
+            this.log(`${icons.pass} ${pluginConfig.name}: __init__.py exists`);
+          }
+        }
+      }
+    }
+
+    return issues;
+  }
+
+  fixPythonPluginFixes() {
+    const issues = this.checkPythonPluginFixes();
+
+    if (issues.length === 0) {
+      return { fixed: false, reason: 'no-issues' };
+    }
+
+    const fixes = [];
+
+    for (const issue of issues) {
+      try {
+        if (issue.type === 'symlink') {
+          if (this.dryRun) {
+            this.log(`${icons.info} [DRY RUN] Would create symlink: ${issue.path} -> ${issue.target}`);
+          } else {
+            // Remove if exists (might be broken)
+            if (fs.existsSync(issue.path)) {
+              fs.unlinkSync(issue.path);
+            }
+            fs.symlinkSync(issue.target, issue.path);
+            this.log(`${icons.fix} Created symlink: ${issue.path} -> ${issue.target}`);
+          }
+          fixes.push({ type: 'symlink', path: issue.path });
+        } else if (issue.type === 'init') {
+          if (this.dryRun) {
+            this.log(`${icons.info} [DRY RUN] Would create: ${issue.path}`);
+          } else {
+            fs.writeFileSync(issue.path, '');
+            this.log(`${icons.fix} Created: ${issue.path}`);
+          }
+          fixes.push({ type: 'init', path: issue.path });
+        }
+
+        this.results.pythonPluginFixes.fixes.push({
+          name: `${issue.plugin} ${issue.type}`,
+          action: 'created',
+          path: issue.path
+        });
+
+      } catch (error) {
+        this.results.pythonPluginFixes.errors.push({
+          name: `${issue.plugin} ${issue.type}`,
+          message: error.message
+        });
+        this.log(`${icons.fail} Failed to fix ${issue.plugin}: ${error.message}`);
+      }
+    }
+
+    return { fixed: fixes.length > 0, fixes };
+  }
+
+  // ==========================================================================
+  // Reminder File Validation
+  // ==========================================================================
+
+  checkReminderFile() {
+    this.log(`\n${colors.bold}## Reminder File${colors.reset}`);
+
+    const reminderPath = this.findReminderFile();
+
+    if (!reminderPath) {
+      this.results.reminderFile.checks.push({
+        name: 'reminder.md',
+        status: 'missing',
+        message: 'Not found in any known location (project, plugin, or installed)'
+      });
+      this.log(`${icons.warn} Reminder file not found in any location`);
+      return { exists: false, path: null };
+    }
+
+    const content = fs.readFileSync(reminderPath, 'utf8');
+    const wordCount = content.split(/\s+/).length;
+
+    // Check if it's still the test content
+    if (content.includes('TEST: Hook Output Injection')) {
+      this.results.reminderFile.checks.push({
+        name: 'reminder.md',
+        status: 'test-content',
+        message: 'Contains test content, needs real routing instructions'
+      });
+      this.log(`${icons.warn} Reminder file contains test content`);
+      return { exists: true, path: reminderPath, isTestContent: true, wordCount };
+    }
+
+    this.log(`${icons.pass} Reminder file found: ${reminderPath} (${wordCount} words)`);
+    this.results.reminderFile.checks.push({
+      name: 'reminder.md',
+      status: 'valid',
+      message: `Found at ${reminderPath} (${wordCount} words)`
+    });
+    return { exists: true, path: reminderPath, wordCount };
+  }
+
+  // ==========================================================================
+  // Plugin Cache hooks.json Reconciliation
+  // ==========================================================================
+
+  /**
+   * Ensures the plugin-level hooks.json in ~/.claude/plugins/cache/ has the
+   * correct env overrides on the unified-router command. Without these, the
+   * router defaults to hard-blocking prompts that match mandatory routes.
+   */
+  fixPluginCacheHooksJson() {
+    this.log(`\n${colors.bold}## Plugin Cache hooks.json${colors.reset}`);
+
+    const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ';
+    const bareCommand = '${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh';
+    let totalFixed = 0;
+
+    for (const claudeRoot of this.getClaudeRoots()) {
+      const cacheBase = this.getCachePluginBase(claudeRoot);
+      if (!fs.existsSync(cacheBase)) {
+        continue;
+      }
+
+      for (const entry of fs.readdirSync(cacheBase)) {
+        const hooksJsonPath = path.join(cacheBase, entry, '.claude-plugin', 'hooks.json');
+        if (!fs.existsSync(hooksJsonPath)) continue;
+
+        try {
+          const content = fs.readFileSync(hooksJsonPath, 'utf8');
+          const hooksConfig = JSON.parse(content);
+          let modified = false;
+
+          const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
+          if (!Array.isArray(upsGroups)) continue;
+
+          for (const group of upsGroups) {
+            const hooks = Array.isArray(group.hooks) ? group.hooks : [];
+            for (const hook of hooks) {
+              if (typeof hook.command !== 'string') continue;
+              if (!hook.command.includes('unified-router.sh')) continue;
+
+              if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
+                  hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
+                  hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
+                  hook.command.includes('ENABLE_INTAKE_HARD_BLOCKING=0') &&
+                  hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
+                this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
+                continue;
+              }
+
+              const newCommand = requiredEnvPrefix + bareCommand;
+              if (this.dryRun) {
+                this.log(`${icons.info} [DRY RUN] Would patch ${entry} hooks.json`);
+              } else {
+                hook.command = newCommand;
+                modified = true;
+              }
+            }
+          }
+
+          if (modified) {
+            fs.writeFileSync(hooksJsonPath, JSON.stringify(hooksConfig, null, 2));
+            this.log(`${icons.fix} Patched cache ${entry}/.claude-plugin/hooks.json with env overrides`);
+            totalFixed++;
+          }
+        } catch (err) {
+          this.log(`${icons.fail} Failed to patch ${entry}: ${err.message}`);
+          this.results.pluginCacheAssets.errors.push({
+            name: `cache-hooks-${entry}`,
+            message: err.message
+          });
+        }
+      }
+    }
+
+    return { fixed: totalFixed > 0, count: totalFixed };
+  }
+
+  syncPluginCacheRoutingAssets() {
+    this.log(`\n${colors.bold}## Plugin Cache Routing Assets${colors.reset}`);
+
+    const syncSource = this.resolveCacheAssetSyncSource();
+    if (!syncSource) {
+      this.log(`${icons.info} No routing asset source found, skipping`);
+      return { fixed: false, reason: 'no-source' };
+    }
+
+    const assets = [
+      '.claude-plugin/hooks.json',
+      'hooks/unified-router.sh',
+      'hooks/pre-tool-use-contract-validation.sh',
+      'hooks/pre-task-agent-validator.sh',
+      'hooks/post-tool-use.sh',
+      'scripts/lib/routing-state-manager.js',
+      'config/mcp-tool-policies.json'
+    ];
+
+    let copied = 0;
+    let matchingCacheRoots = 0;
+
+    for (const claudeRoot of this.getClaudeRoots()) {
+      const cacheBase = this.getCachePluginBase(claudeRoot);
+      if (!fs.existsSync(cacheBase)) {
+        continue;
+      }
+
+      const matchingEntries = fs.readdirSync(cacheBase)
+        .filter((entry) => entry === syncSource.version)
+        .map((entry) => path.join(cacheBase, entry));
+
+      if (matchingEntries.length === 0) {
+        continue;
+      }
+
+      matchingCacheRoots += matchingEntries.length;
+
+      for (const cacheRoot of matchingEntries) {
+        for (const relativePath of assets) {
+          const sourcePath = path.join(syncSource.root, relativePath);
+          if (!fs.existsSync(sourcePath)) {
+            this.results.pluginCacheAssets.errors.push({
+              name: `missing-source-${relativePath}`,
+              message: `Missing source asset: ${sourcePath}`
+            });
+            continue;
+          }
+
+          const targetPath = path.join(cacheRoot, relativePath);
+          if (this.dryRun) {
+            this.log(`${icons.info} [DRY RUN] Would sync ${relativePath} into ${cacheRoot}`);
+            copied += 1;
+            continue;
+          }
+
+          this.copyCacheAsset(sourcePath, targetPath);
+          copied += 1;
+        }
+      }
+    }
+
+    if (matchingCacheRoots === 0) {
+      const message = `No cache entry matches source version ${syncSource.version}; skipping asset sync to avoid version drift`;
+      this.log(`${icons.info} ${message}`);
+      this.results.pluginCacheAssets.checks.push({
+        name: 'routing-cache-asset-sync',
+        status: 'skipped',
+        message
+      });
+      return { fixed: false, reason: 'no-matching-cache-version', sourceVersion: syncSource.version };
+    }
+
+    if (copied > 0) {
+      this.log(`${icons.fix} Synced routing assets into cache version ${syncSource.version}`);
+      this.results.pluginCacheAssets.fixes.push({
+        name: 'routing-cache-assets',
+        message: `Synced ${copied} asset copies from ${syncSource.root}`
+      });
+    }
+
+    return {
+      fixed: copied > 0,
+      count: copied,
+      sourceVersion: syncSource.version
+    };
+  }
+
+  // ==========================================================================
+  // Run All Fixes
+  // ==========================================================================
+
+  async runAllFixes() {
+    this.log(`${colors.bold}${colors.cyan}Post-Plugin-Update Fixes${colors.reset}`);
+    this.log(`${colors.gray}${'='.repeat(50)}${colors.reset}`);
+
+    const results = {
+      installedRuntime: this.reconcileInstalledRuntime(),
+      userLevelHooks: this.fixUserLevelHooks(),
+      pluginCacheHooks: this.fixPluginCacheHooksJson(),
+      pluginCacheAssets: this.syncPluginCacheRoutingAssets(),
+      pythonPluginFixes: this.fixPythonPluginFixes(),
+      reminderFile: this.checkReminderFile()
+    };
+
+    // Summary
+    this.log(`\n${colors.bold}## Summary${colors.reset}`);
+
+    const totalFixes =
+      (results.installedRuntime?.fixed ? (results.installedRuntime.entries || results.installedRuntime.roots || 1) : 0) +
+      (results.userLevelHooks.fixed ? results.userLevelHooks.count || 1 : 0) +
+      (results.pluginCacheHooks?.fixed ? results.pluginCacheHooks.count || 1 : 0) +
+      (results.pluginCacheAssets?.fixed ? results.pluginCacheAssets.count || 1 : 0) +
+      (results.pythonPluginFixes.fixed ? results.pythonPluginFixes.fixes?.length || 0 : 0);
+
+    if (totalFixes > 0) {
+      this.log(`${icons.fix} Applied ${totalFixes} fix(es)`);
+    } else {
+      this.log(`${icons.pass} No fixes needed`);
+    }
+
+    if (results.reminderFile.isTestContent) {
+      this.log(`${icons.warn} Reminder file needs real routing content`);
+    }
+
+    return results;
+  }
+
+  // ==========================================================================
+  // Run All Checks (without fixing)
+  // ==========================================================================
+
+  runAllChecks() {
+    this.log(`${colors.bold}${colors.cyan}Post-Plugin-Update Checks${colors.reset}`);
+    this.log(`${colors.gray}${'='.repeat(50)}${colors.reset}`);
+
+    const results = {
+      installedRuntime: this.checkInstalledRuntime(),
+      userLevelHooks: this.checkUserLevelHooks(),
+      pluginCacheHooks: this.fixPluginCacheHooksJson(),  // Always fix cache — it's idempotent
+      pluginCacheAssets: this.syncPluginCacheRoutingAssets(),
+      pythonPluginFixes: this.checkPythonPluginFixes(),
+      reminderFile: this.checkReminderFile()
+    };
+
+    return results;
+  }
+
+  getResults() {
+    return this.results;
+  }
+}
+
+// ============================================================================
+// CLI
+// ============================================================================
+
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const options = {
+    verbose: args.includes('--verbose') || args.includes('-v'),
+    dryRun: args.includes('--dry-run') || !args.includes('--fix'),
+    fix: args.includes('--fix'),
+    strict: args.includes('--strict'),
+    verifyRuntime: args.includes('--verify-runtime') || args.includes('--check-runtime'),
+    projectRoot: process.cwd()
+  };
+
+  // Handle --project-root option
+  const projectRootIdx = args.findIndex(a => a.startsWith('--project-root'));
+  if (projectRootIdx !== -1) {
+    if (args[projectRootIdx].includes('=')) {
+      options.projectRoot = args[projectRootIdx].split('=')[1];
+    } else if (args[projectRootIdx + 1]) {
+      options.projectRoot = args[projectRootIdx + 1];
+    }
+  }
+
+  const fixer = new PostPluginUpdateFixes(options);
+
+  if (options.verifyRuntime) {
+    const result = fixer.checkInstalledRuntime();
+    process.exit(result.needsFix ? 1 : 0);
+  } else if (options.fix) {
+    fixer.runAllFixes();
+  } else {
+    fixer.runAllChecks();
+  }
+}
+
+module.exports = { PostPluginUpdateFixes, CONFIG };

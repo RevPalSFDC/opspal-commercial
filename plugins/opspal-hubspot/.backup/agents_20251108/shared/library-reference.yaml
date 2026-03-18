@@ -1,0 +1,232 @@
+# HubSpot Plugin - Shared Library Reference
+# Version: 1.0.0
+# Last Updated: 2025-10-26
+#
+# This file documents commonly used scripts available to all HubSpot agents.
+# All paths relative to: .claude-plugins/opspal-hubspot/scripts/lib/
+
+---
+
+# Data Operations
+data:
+  company_fetcher:
+    path: hubspot-company-fetcher.js
+    purpose: Fetch associated company records for contacts
+    capabilities:
+      - Caching to avoid repeat API calls
+      - Handles multiple company associations
+      - Network retry logic for resilience
+      - Fail-fast error handling (No-Mocks compliant)
+    usage: |
+      const HubSpotCompanyFetcher = require('./hubspot-company-fetcher');
+      const fetcher = new HubSpotCompanyFetcher({ enableCache: true });
+      const companies = await fetcher.fetchAssociatedCompanies(contactId);
+
+  data_operations:
+    path: hubspot-data-operations-manager.js
+    purpose: Bulk data operations with validation
+    capabilities:
+      - Large-scale data imports/updates
+      - Validation and quality checks
+      - Error handling and rollback
+    usage: "node hubspot-data-operations-manager.js --operation upsert --object contacts --file data.csv"
+
+# Workflow Management
+workflows:
+  workflow_builder:
+    path: hubspot-workflow-builder.js
+    purpose: Create and manage HubSpot workflows
+    capabilities:
+      - Workflow creation from templates
+      - Trigger configuration
+      - Action definition
+    usage: "node hubspot-workflow-builder.js --create --template lead-nurture --portal myPortal"
+
+# Error Handling & Data Integrity
+utilities:
+  data_access_error:
+    path: ../../opspal-core/scripts/lib/data-access-error.js
+    purpose: |
+      **CRITICAL - No-Mocks Policy Enforcement**: Fail-fast error class for data access failures.
+      MANDATORY for all data query/fetch operations to prevent silent failures and empty array returns.
+    capabilities:
+      - Explicit error throwing when data unavailable
+      - Structured error context with source, message, and metadata
+      - Prevents misleading empty returns
+      - Security: Blocks unimplemented features from returning fake data
+    usage: |
+      const { DataAccessError } = require('../../opspal-core/scripts/lib/data-access-error');
+
+      // Throw when data unavailable
+      if (!response.ok) {
+        throw new DataAccessError(
+          'HubSpot_API',
+          'Failed to fetch contacts',
+          {
+            endpoint: '/contacts/search',
+            statusCode: response.status,
+            workaround: 'Check portal API permissions'
+          }
+        );
+      }
+
+      // Throw for unimplemented features
+      throw new DataAccessError(
+        'Feature_Name',
+        'Feature not yet implemented',
+        {
+          status: 'not_implemented',
+          tracking_issue: 'https://github.com/.../issues/123'
+        }
+      );
+    mandatory_for:
+      - All agents that query HubSpot data
+      - All agents that fetch external data
+      - All unimplemented data retrieval methods
+    added: v1.4.0 (Phase 1 No-Mocks enforcement)
+
+# Analytics & Reporting
+analytics:
+  pdf_generation_helper:
+    path: ../../opspal-core/scripts/lib/pdf-generation-helper.js
+    purpose: |
+      **MANDATORY PDF Deliverable Generation**: All assessment, audit, and report agents MUST produce PDF outputs.
+      Provides professional PDF generation with branded covers and multi-document compilation.
+    capabilities:
+      - Professional branded PDF covers (8 templates available)
+      - Multi-document compilation (multiple MD files → single PDF)
+      - Automatic table of contents
+      - Metadata embedding (title, author, version, date)
+      - Cover templates: hubspot-assessment, data-quality, executive-report, etc.
+    usage: |
+      const PDFGenerationHelper = require('../../opspal-core/scripts/lib/pdf-generation-helper');
+
+      // Generate multi-report PDF
+      await PDFGenerationHelper.generateMultiReportPDF({
+        orgAlias: 'my-portal',
+        outputDir: './reports',
+        documents: [
+          { path: 'summary.md', title: 'Executive Summary', order: 0 },
+          { path: 'analysis.md', title: 'Detailed Analysis', order: 1 },
+          { path: 'recommendations.md', title: 'Recommendations', order: 2 }
+        ],
+        coverTemplate: 'hubspot-assessment',
+        metadata: {
+          title: 'HubSpot Workflow Assessment - MyPortal',
+          version: '1.0.0',
+          date: '2025-10-26'
+        }
+      });
+
+      // Available cover templates:
+      // - default, hubspot-assessment, security-audit, executive-report
+      // - data-quality, cross-platform-integration
+    mandatory_for:
+      - All audit agents (*-auditor)
+      - All assessment agents (*-assessment, *-analyzer)
+      - All report generation agents (*-report*, *-reporting)
+      - Workflow, data hygiene, and analytics agents
+    validation: |
+      # Validate PDF integration compliance:
+      node ../../opspal-core/scripts/validate-pdf-integration.js --all
+    added: v1.4.0 (Mandatory PDF deliverables standard)
+
+# Portal Management
+portal:
+  quirks_detector:
+    path: portal-quirks-detector.js
+    purpose: Auto-detect portal-specific customizations
+    capabilities:
+      - Property naming pattern detection
+      - Custom object detection
+      - Integration detection (not yet implemented)
+    usage: "node portal-quirks-detector.js detect --portal myPortal"
+
+  metadata_cache:
+    path: hubspot-metadata-cache.js
+    purpose: Cache HubSpot metadata for performance
+    capabilities:
+      - Property caching (throws DataAccessError - not yet implemented)
+      - Workflow caching (throws DataAccessError - not yet implemented)
+      - Pipeline caching (throws DataAccessError - not yet implemented)
+    usage: "const cache = new HubSpotMetadataCache(portalId); await cache.loadAll();"
+    note: "Most caching methods not yet implemented - will throw DataAccessError"
+
+---
+
+# Integration with Asana
+
+All agents that interact with Asana for project management MUST follow:
+- **Asana Agent Playbook**: @import ../../opspal-core/docs/ASANA_AGENT_PLAYBOOK.md
+- **Update Templates**: Use templates from ../../opspal-core/templates/asana-updates/
+- **Brevity Standard**: All updates < 100 words
+- **Format**: Progress/Blockers/Next Steps pattern
+
+---
+
+# Common Patterns
+
+# Pattern 1: Contact Data Operations
+#   1. Fetch contacts with company data
+#   2. Enrich with classification
+#   3. Update properties
+#   4. Generate PDF report
+
+# Pattern 2: Workflow Assessment
+#   1. Analyze active workflows
+#   2. Detect conflicts and issues
+#   3. Generate recommendations
+#   4. Produce PDF deliverable
+
+# Pattern 3: Portal Audit
+#   1. Detect portal quirks
+#   2. Analyze data quality
+#   3. Review integrations
+#   4. Generate comprehensive PDF report
+
+---
+
+# Notes for Agents
+
+# Script Locations:
+# - All scripts: .claude-plugins/opspal-hubspot/scripts/lib/
+# - Run from plugin root: node scripts/lib/<script-name>
+# - Cross-platform tools: ../../opspal-core/scripts/lib/
+
+# Common Flags:
+# --portal <id>        : Target HubSpot portal
+# --output <path>      : Output file path
+# --dry-run            : Simulate without making changes
+# --verbose            : Detailed logging
+# --help               : Show usage information
+
+# Error Handling:
+# - All scripts return exit code 0 on success, non-zero on failure
+# - Error messages written to stderr
+# - JSON output includes "status": "success" or "error"
+# - MANDATORY: Use DataAccessError for data fetch failures (No-Mocks policy)
+
+# Integration with Agents:
+# - Use Bash tool to execute scripts
+# - Parse JSON output for structured data
+# - Check exit codes for success/failure
+# - Use --verbose for debugging
+# - Always throw DataAccessError when data unavailable
+
+# PDF Deliverables:
+# - MANDATORY: All assessment/audit agents must produce PDF outputs
+# - Use PDFGenerationHelper for professional branded reports
+# - Include table of contents and metadata
+# - Use appropriate cover template (hubspot-assessment recommended)
+
+---
+
+# Version History
+
+# v1.0.0 (2025-10-26):
+# - Initial library reference for HubSpot plugin
+# - Added DataAccessError (No-Mocks policy enforcement)
+# - Added PDFGenerationHelper (Mandatory PDF deliverables)
+# - Documented core HubSpot data operations
+# - Integrated Asana playbook reference
+# - Cross-platform tool integration

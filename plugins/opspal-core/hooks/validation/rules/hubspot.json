@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "platform": "hubspot",
+  "description": "HubSpot-specific validation rules for tool inputs and outputs",
+
+  "rules": [
+    {
+      "id": "hs-property-naming",
+      "description": "Custom properties must use snake_case",
+      "tools": ["mcp__hubspot*__property_create", "mcp__hubspot*__hubspot_create"],
+      "condition": {
+        "pattern": "[A-Z]",
+        "field": "name"
+      },
+      "action": "warn",
+      "message": "HubSpot properties should use snake_case naming convention"
+    },
+    {
+      "id": "hs-lists-api-structure",
+      "description": "Lists API requires OR-with-nested-AND filter structure",
+      "tools": ["mcp__hubspot*__list_*", "mcp__hubspot*__lists*"],
+      "condition": {
+        "pattern": "filterBranches",
+        "field": "body"
+      },
+      "action": "validate",
+      "message": "Lists API filter structure must use OR-with-nested-AND pattern"
+    },
+    {
+      "id": "hs-association-ids",
+      "description": "Verify association type IDs are correct",
+      "tools": ["mcp__hubspot*__association*"],
+      "commonErrors": {
+        "279": "Company to Contact (should be 280 for Contact to Company)",
+        "280": "Contact to Company (should be 279 for Company to Contact)"
+      },
+      "action": "warn",
+      "message": "Verify association type ID is correct for the direction of association"
+    },
+    {
+      "id": "hs-operator-syntax",
+      "description": "HubSpot uses full operator names, not symbols",
+      "tools": ["mcp__hubspot*__search*", "mcp__hubspot*__list*"],
+      "invalidOperators": [">=", "<=", ">", "<", "!=", "=="],
+      "validOperators": {
+        ">=": "IS_GREATER_THAN_OR_EQUAL_TO",
+        "<=": "IS_LESS_THAN_OR_EQUAL_TO",
+        ">": "IS_GREATER_THAN",
+        "<": "IS_LESS_THAN",
+        "!=": "IS_NOT_EQUAL_TO",
+        "==": "IS_EQUAL_TO"
+      },
+      "action": "autofix",
+      "message": "HubSpot uses full operator names (e.g., IS_GREATER_THAN_OR_EQUAL_TO not >=)"
+    },
+    {
+      "id": "hs-rate-limit-awareness",
+      "description": "Warn on potential rate limit issues",
+      "tools": ["mcp__hubspot*"],
+      "condition": {
+        "batchSize": ">100"
+      },
+      "action": "warn",
+      "message": "Large batch operations may hit rate limits (100-200 requests/10s depending on tier)"
+    },
+    {
+      "id": "hs-required-fields",
+      "description": "Contact creation requires email",
+      "tools": ["mcp__hubspot*__contact_create", "mcp__hubspot*__hubspot_create"],
+      "requiredFields": ["email"],
+      "action": "block",
+      "message": "Contact creation requires email field"
+    }
+  ],
+
+  "outputRules": [
+    {
+      "id": "hs-api-error-detection",
+      "description": "Detect common HubSpot API errors",
+      "patterns": [
+        "VALIDATION_ERROR",
+        "RATE_LIMIT_EXCEEDED",
+        "AUTHENTICATION_ERROR",
+        "PROPERTY_NOT_FOUND",
+        "OBJECT_NOT_FOUND"
+      ],
+      "action": "error",
+      "message": "HubSpot API returned an error"
+    },
+    {
+      "id": "hs-sync-conflict-detection",
+      "description": "Detect Salesforce sync conflicts",
+      "patterns": [
+        "SYNC_CONFLICT",
+        "salesforce_contact_id",
+        "sync error"
+      ],
+      "action": "warn",
+      "message": "Potential Salesforce sync conflict detected"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "HubSpot Rate Limits - Single Source of Truth",
+  "description": "Canonical rate limit values per HubSpot tier. All scripts MUST import from this file.",
+  "version": "1.0.0",
+  "created": "2026-03-09",
+  "source": "https://developers.hubspot.com/docs/api/usage-details",
+
+  "tiers": {
+    "free": {
+      "requestsPer10Seconds": 100,
+      "dailyLimit": 250000,
+      "description": "Free tier"
+    },
+    "starter": {
+      "requestsPer10Seconds": 100,
+      "dailyLimit": 250000,
+      "description": "Starter tier"
+    },
+    "professional": {
+      "requestsPer10Seconds": 190,
+      "dailyLimit": 625000,
+      "description": "Professional tier"
+    },
+    "enterprise": {
+      "requestsPer10Seconds": 190,
+      "dailyLimit": 1000000,
+      "description": "Enterprise tier"
+    },
+    "oauth_app": {
+      "requestsPer10Seconds": 110,
+      "dailyLimit": null,
+      "description": "Public OAuth app (fixed rate, no daily limit per app)"
+    }
+  },
+
+  "windowMs": 10000,
+
+  "notes": {
+    "professionalAndEnterprise": "Both Pro and Enterprise share 190 req/10s. Enterprise has higher daily limit.",
+    "oauthApps": "Public OAuth apps have a fixed 110 req/10s regardless of portal tier.",
+    "searchEndpoints": "Search endpoints have separate, lower limits. Use CRM exports for large datasets.",
+    "batchEndpoints": "Batch endpoints count as 1 request per batch call (up to 100 records per call)."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "defaultDownloadDir": "./monday-downloads",
+  "maxRetries": 3,
+  "retryDelayMs": 1000,
+  "urlExpirationMinutes": 60,
+  "supportedFileTypes": [
+    "pdf",
+    "docx",
+    "xlsx",
+    "xls",
+    "pptx",
+    "ppt",
+    "png",
+    "jpg",
+    "jpeg",
+    "gif",
+    "svg",
+    "csv",
+    "txt",
+    "zip",
+    "rar",
+    "mp4",
+    "mov",
+    "mp3"
+  ],
+  "rateLimits": {
+    "requestsPerMinute": 60,
+    "complexityBudget": 5000000
+  },
+  "logging": {
+    "level": "info",
+    "includeRequestId": true
+  },
+  "download": {
+    "timeout": 60000,
+    "followRedirects": true,
+    "sanitizeFilenames": true
+  }
+}

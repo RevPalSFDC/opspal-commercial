@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.io/schemas/field-dictionary.schema.json",
+  "title": "Field Dictionary Schema",
+  "description": "Schema for LLM-consumable field dictionaries that bridge technical Salesforce/HubSpot metadata with business context for reporting agents",
+  "type": "object",
+  "required": ["dictionary_metadata", "platforms"],
+  "properties": {
+    "dictionary_metadata": {
+      "type": "object",
+      "description": "Metadata about the dictionary itself",
+      "required": ["schema_version", "org_slug", "generated_at", "enrichment_status"],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "description": "Semantic version of this schema",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "default": "1.0.0"
+        },
+        "org_slug": {
+          "type": "string",
+          "description": "Organization identifier (slug format)",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when dictionary was generated"
+        },
+        "enrichment_status": {
+          "type": "string",
+          "enum": ["none", "partial", "complete"],
+          "description": "Indicates how much business context has been added",
+          "default": "none"
+        },
+        "source_metadata_hash": {
+          "type": "string",
+          "description": "Hash of source metadata to detect drift"
+        },
+        "last_enriched_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of last enrichment"
+        },
+        "enriched_by": {
+          "type": "string",
+          "description": "Who performed the enrichment (user or agent)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-form notes about this dictionary"
+        }
+      },
+      "additionalProperties": false
+    },
+    "platforms": {
+      "type": "object",
+      "description": "Platform-specific object and field definitions",
+      "properties": {
+        "salesforce": {
+          "type": "object",
+          "description": "Salesforce objects and their fields",
+          "additionalProperties": {
+            "$ref": "#/$defs/objectDefinition"
+          }
+        },
+        "hubspot": {
+          "type": "object",
+          "description": "HubSpot objects and their fields",
+          "additionalProperties": {
+            "$ref": "#/$defs/objectDefinition"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "objectDefinition": {
+      "type": "object",
+      "description": "Definition of an object/entity with its fields",
+      "required": ["object_label", "fields"],
+      "properties": {
+        "object_label": {
+          "type": "string",
+          "description": "Human-readable name of the object"
+        },
+        "object_description": {
+          "type": "string",
+          "description": "Business context description of what this object represents"
+        },
+        "object_api_name": {
+          "type": "string",
+          "description": "API name of the object (e.g., Account, SBQQ__Quote__c)"
+        },
+        "is_custom": {
+          "type": "boolean",
+          "description": "Whether this is a custom object"
+        },
+        "record_type_count": {
+          "type": "integer",
+          "description": "Number of record types defined"
+        },
+        "fields": {
+          "type": "object",
+          "description": "Field definitions keyed by API name",
+          "additionalProperties": {
+            "$ref": "#/$defs/fieldDefinition"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "fieldDefinition": {
+      "type": "object",
+      "description": "Complete field definition with both technical metadata and business context",
+      "required": ["api_name", "field_name", "field_type"],
+      "properties": {
+        "api_name": {
+          "type": "string",
+          "description": "Technical API name of the field"
+        },
+        "field_name": {
+          "type": "string",
+          "description": "Human-readable field label"
+        },
+        "field_type": {
+          "type": "string",
+          "enum": [
+            "Text",
+            "Number",
+            "Currency",
+            "Date",
+            "DateTime",
+            "Picklist",
+            "MultiPicklist",
+            "Checkbox",
+            "Formula",
+            "Lookup",
+            "MasterDetail",
+            "Email",
+            "Phone",
+            "URL",
+            "Percent",
+            "AutoNumber",
+            "RichText",
+            "Geolocation",
+            "Address",
+            "Id",
+            "Reference",
+            "LongTextArea",
+            "TextArea",
+            "EncryptedText",
+            "Time",
+            "Unknown"
+          ],
+          "description": "Normalized field data type"
+        },
+        "description": {
+          "type": "string",
+          "description": "Business description of what this field represents and how it's used"
+        },
+        "example_values": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Representative example values for this field"
+        },
+        "is_required": {
+          "type": "boolean",
+          "description": "Whether this field is required for record creation"
+        },
+        "is_calculated": {
+          "type": "boolean",
+          "description": "Whether this is a formula/calculated field"
+        },
+        "formula": {
+          "type": "string",
+          "description": "Formula definition if this is a calculated field"
+        },
+        "source_system": {
+          "type": "string",
+          "description": "Where data originates (e.g., Manual entry, Integration, Calculated)"
+        },
+        "sync_frequency": {
+          "type": "string",
+          "description": "How often this field is updated (e.g., Real-time, Daily, Manual)"
+        },
+        "reporting_guidance": {
+          "type": "object",
+          "description": "Guidance for using this field in reports",
+          "properties": {
+            "recommended_aggregations": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Recommended aggregation functions (SUM, AVG, COUNT, etc.)"
+            },
+            "caveats": {
+              "type": "string",
+              "description": "Important considerations when using this field in reports"
+            },
+            "related_fields": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fields often used together with this one"
+            },
+            "drill_down_fields": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fields useful for drilling down from this metric"
+            }
+          },
+          "additionalProperties": false
+        },
+        "use_cases": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Common business use cases for this field"
+        },
+        "audience_relevance": {
+          "type": "string",
+          "enum": ["Executive", "Manager", "Analyst", "Operations", "All"],
+          "description": "Primary audience who uses this field"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Revenue",
+              "Pipeline",
+              "Marketing",
+              "Sales",
+              "Service",
+              "Firmographic",
+              "Contact",
+              "Activity",
+              "Product",
+              "Financial",
+              "Operational",
+              "Custom",
+              "System",
+              "Integration",
+              "CPQ",
+              "Renewal",
+              "Forecast"
+            ]
+          },
+          "description": "Categorization tags for field discovery"
+        },
+        "data_quality": {
+          "type": "object",
+          "description": "Data quality metadata for this field",
+          "properties": {
+            "fill_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Percentage of records with non-null values"
+            },
+            "last_measured": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When fill rate was last measured"
+            },
+            "quality_notes": {
+              "type": "string",
+              "description": "Notes about data quality issues or concerns"
+            }
+          },
+          "additionalProperties": false
+        },
+        "_technical": {
+          "type": "object",
+          "description": "Raw technical metadata from source system",
+          "properties": {
+            "precision": {
+              "type": "integer",
+              "description": "Numeric precision (for Number/Currency fields)"
+            },
+            "scale": {
+              "type": "integer",
+              "description": "Decimal places (for Number/Currency fields)"
+            },
+            "length": {
+              "type": "integer",
+              "description": "Maximum field length"
+            },
+            "nillable": {
+              "type": "boolean",
+              "description": "Whether field accepts null values"
+            },
+            "custom": {
+              "type": "boolean",
+              "description": "Whether this is a custom field"
+            },
+            "createable": {
+              "type": "boolean",
+              "description": "Whether field can be set on create"
+            },
+            "updateable": {
+              "type": "boolean",
+              "description": "Whether field can be updated"
+            },
+            "referenceTo": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Related objects for lookup fields"
+            },
+            "relationshipName": {
+              "type": "string",
+              "description": "Relationship name for lookup fields"
+            },
+            "picklistValues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": { "type": "string" },
+                  "label": { "type": "string" },
+                  "active": { "type": "boolean" }
+                }
+              },
+              "description": "Available picklist values"
+            },
+            "defaultValue": {
+              "description": "Default value for this field"
+            },
+            "inlineHelpText": {
+              "type": "string",
+              "description": "Help text configured in the system"
+            },
+            "externalId": {
+              "type": "boolean",
+              "description": "Whether this is an external ID field"
+            },
+            "unique": {
+              "type": "boolean",
+              "description": "Whether values must be unique"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

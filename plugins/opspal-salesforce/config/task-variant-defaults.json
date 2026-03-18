@@ -1,0 +1,525 @@
+{
+  "schemaVersion": "1.0",
+  "lastUpdated": "2026-02-02T00:00:00Z",
+  "defaultVariant": "backup",
+  "taskVariants": {
+    "backup": {
+      "id": "backup",
+      "name": "Data Backup",
+      "description": "Full data backup for disaster recovery. Includes all queryable fields including system fields. Does not include formula fields as they can be recalculated.",
+      "fieldSelectionMode": "policy",
+      "fieldFilters": {
+        "updateable": false,
+        "createable": false
+      },
+      "includeSystemFields": true,
+      "includeFormulaFields": false,
+      "includeRollupSummaryFields": false,
+      "maxFields": 150,
+      "requiredFields": ["Id", "SystemModstamp", "IsDeleted", "CreatedDate", "LastModifiedDate", "CreatedById", "LastModifiedById"],
+      "excludedFields": [],
+      "workflowSteps": [
+        {
+          "id": "validate_policy",
+          "name": "Validate Field Policy",
+          "action": "validate_policy",
+          "onFailure": "abort"
+        },
+        {
+          "id": "select_fields",
+          "name": "Select Fields from Policy",
+          "action": "select_fields",
+          "onFailure": "abort"
+        },
+        {
+          "id": "build_query",
+          "name": "Build SOQL Query",
+          "action": "build_query",
+          "onFailure": "abort"
+        },
+        {
+          "id": "execute_query",
+          "name": "Execute Query",
+          "action": "execute_query",
+          "parameters": { "useBulkApi": true, "batchSize": 2000 },
+          "onFailure": "retry",
+          "retryCount": 3
+        },
+        {
+          "id": "verify_results",
+          "name": "Verify Record Count",
+          "action": "verify_results",
+          "onFailure": "warn"
+        },
+        {
+          "id": "emit_trace",
+          "name": "Emit Execution Trace",
+          "action": "emit_trace",
+          "onFailure": "skip"
+        }
+      ],
+      "qualityGates": [
+        {
+          "id": "records_exist",
+          "name": "Records Retrieved",
+          "condition": "recordCount >= 0",
+          "severity": "info",
+          "onFailure": "warn"
+        },
+        {
+          "id": "no_errors",
+          "name": "No Query Errors",
+          "condition": "errorCount == 0",
+          "severity": "error",
+          "onFailure": "block"
+        }
+      ],
+      "rollbackStrategy": {
+        "type": "none"
+      },
+      "riskLevel": "low",
+      "approvalRequired": false,
+      "auditLogging": "summary"
+    },
+    "migration": {
+      "id": "migration",
+      "name": "Data Migration",
+      "description": "Full data migration for org transfers or data restructuring. Requires snapshot for rollback capability. Includes all creatable fields.",
+      "fieldSelectionMode": "all",
+      "fieldFilters": {
+        "createable": true
+      },
+      "includeSystemFields": true,
+      "includeFormulaFields": false,
+      "includeRollupSummaryFields": false,
+      "maxFields": 200,
+      "requiredFields": ["Id", "ExternalId__c"],
+      "excludedFields": ["SystemModstamp", "LastViewedDate", "LastReferencedDate"],
+      "objectOverrides": {
+        "User": {
+          "additionalExcluded": ["Password", "FederationIdentifier", "SessionId"],
+          "maxFields": 50
+        },
+        "ContentVersion": {
+          "additionalExcluded": ["VersionData"],
+          "maxFields": 30
+        }
+      },
+      "workflowSteps": [
+        {
+          "id": "validate_policy",
+          "name": "Validate Field Policy",
+          "action": "validate_policy",
+          "onFailure": "abort"
+        },
+        {
+          "id": "create_snapshot",
+          "name": "Create Pre-Migration Snapshot",
+          "action": "create_snapshot",
+          "onFailure": "abort"
+        },
+        {
+          "id": "select_fields",
+          "name": "Select Migration Fields",
+          "action": "select_fields",
+          "onFailure": "abort"
+        },
+        {
+          "id": "build_query",
+          "name": "Build Source Query",
+          "action": "build_query",
+          "onFailure": "abort"
+        },
+        {
+          "id": "execute_query",
+          "name": "Extract Source Data",
+          "action": "execute_query",
+          "parameters": { "useBulkApi": true, "batchSize": 5000 },
+          "onFailure": "retry",
+          "retryCount": 3
+        },
+        {
+          "id": "transform_data",
+          "name": "Transform Data",
+          "action": "transform_data",
+          "onFailure": "abort"
+        },
+        {
+          "id": "validate_data",
+          "name": "Validate Transformed Data",
+          "action": "validate_data",
+          "onFailure": "abort"
+        },
+        {
+          "id": "write_records",
+          "name": "Write to Target",
+          "action": "write_records",
+          "parameters": { "operation": "upsert", "useBulkApi": true },
+          "onFailure": "rollback"
+        },
+        {
+          "id": "verify_results",
+          "name": "Verify Migration",
+          "action": "verify_results",
+          "onFailure": "warn"
+        },
+        {
+          "id": "emit_trace",
+          "name": "Emit Execution Trace",
+          "action": "emit_trace",
+          "onFailure": "skip"
+        }
+      ],
+      "qualityGates": [
+        {
+          "id": "snapshot_created",
+          "name": "Snapshot Created",
+          "condition": "snapshotExists == true",
+          "severity": "critical",
+          "onFailure": "abort"
+        },
+        {
+          "id": "error_rate",
+          "name": "Error Rate Below Threshold",
+          "condition": "errorRate < 0.01",
+          "severity": "error",
+          "onFailure": "block"
+        },
+        {
+          "id": "record_count_match",
+          "name": "Record Count Match",
+          "condition": "sourceCount == targetCount",
+          "severity": "warning",
+          "onFailure": "warn"
+        }
+      ],
+      "rollbackStrategy": {
+        "type": "snapshot",
+        "snapshotRetention": "30d",
+        "autoRollbackOnFailure": true
+      },
+      "riskLevel": "high",
+      "approvalRequired": true,
+      "auditLogging": "full"
+    },
+    "enrichment": {
+      "id": "enrichment",
+      "name": "Data Enrichment",
+      "description": "Update existing records with enriched data. Only includes updateable fields. Requires incremental rollback.",
+      "fieldSelectionMode": "updateable",
+      "fieldFilters": {
+        "updateable": true,
+        "nillable": true
+      },
+      "includeSystemFields": false,
+      "includeFormulaFields": false,
+      "includeRollupSummaryFields": false,
+      "maxFields": 50,
+      "requiredFields": ["Id"],
+      "excludedFields": ["OwnerId", "CreatedDate", "CreatedById", "SystemModstamp"],
+      "workflowSteps": [
+        {
+          "id": "validate_policy",
+          "name": "Validate Field Policy",
+          "action": "validate_policy",
+          "onFailure": "abort"
+        },
+        {
+          "id": "select_fields",
+          "name": "Select Updateable Fields",
+          "action": "select_fields",
+          "onFailure": "abort"
+        },
+        {
+          "id": "build_query",
+          "name": "Build Update Query",
+          "action": "build_query",
+          "onFailure": "abort"
+        },
+        {
+          "id": "create_snapshot",
+          "name": "Capture Before State",
+          "action": "create_snapshot",
+          "parameters": { "type": "incremental" },
+          "onFailure": "abort"
+        },
+        {
+          "id": "write_records",
+          "name": "Apply Enrichment",
+          "action": "write_records",
+          "parameters": { "operation": "update", "useBulkApi": false },
+          "onFailure": "rollback"
+        },
+        {
+          "id": "verify_results",
+          "name": "Verify Updates",
+          "action": "verify_results",
+          "onFailure": "warn"
+        },
+        {
+          "id": "emit_trace",
+          "name": "Emit Execution Trace",
+          "action": "emit_trace",
+          "onFailure": "skip"
+        }
+      ],
+      "qualityGates": [
+        {
+          "id": "has_enrichment_data",
+          "name": "Enrichment Data Provided",
+          "condition": "enrichmentFields > 0",
+          "severity": "error",
+          "onFailure": "abort"
+        },
+        {
+          "id": "update_success",
+          "name": "Update Success Rate",
+          "condition": "successRate > 0.95",
+          "severity": "warning",
+          "onFailure": "warn"
+        }
+      ],
+      "rollbackStrategy": {
+        "type": "incremental",
+        "snapshotRetention": "7d",
+        "autoRollbackOnFailure": false
+      },
+      "riskLevel": "medium",
+      "approvalRequired": false,
+      "auditLogging": "detailed"
+    },
+    "audit": {
+      "id": "audit",
+      "name": "Data Audit",
+      "description": "Read-only audit for compliance and analysis. Includes all readable fields including formulas.",
+      "fieldSelectionMode": "readable",
+      "fieldFilters": {},
+      "includeSystemFields": true,
+      "includeFormulaFields": true,
+      "includeRollupSummaryFields": true,
+      "maxFields": 200,
+      "requiredFields": ["Id", "Name", "CreatedDate", "LastModifiedDate", "OwnerId"],
+      "excludedFields": [],
+      "workflowSteps": [
+        {
+          "id": "validate_policy",
+          "name": "Validate Field Policy",
+          "action": "validate_policy",
+          "onFailure": "abort"
+        },
+        {
+          "id": "select_fields",
+          "name": "Select Audit Fields",
+          "action": "select_fields",
+          "onFailure": "abort"
+        },
+        {
+          "id": "build_query",
+          "name": "Build Audit Query",
+          "action": "build_query",
+          "onFailure": "abort"
+        },
+        {
+          "id": "execute_query",
+          "name": "Execute Audit Query",
+          "action": "execute_query",
+          "parameters": { "useBulkApi": true, "batchSize": 2000 },
+          "onFailure": "retry",
+          "retryCount": 3
+        },
+        {
+          "id": "verify_results",
+          "name": "Verify Completeness",
+          "action": "verify_results",
+          "onFailure": "warn"
+        },
+        {
+          "id": "emit_trace",
+          "name": "Emit Execution Trace",
+          "action": "emit_trace",
+          "onFailure": "skip"
+        }
+      ],
+      "qualityGates": [
+        {
+          "id": "complete_data",
+          "name": "Data Completeness",
+          "condition": "nullRate < 0.5",
+          "severity": "info",
+          "onFailure": "warn"
+        }
+      ],
+      "rollbackStrategy": {
+        "type": "none"
+      },
+      "riskLevel": "low",
+      "approvalRequired": false,
+      "auditLogging": "summary"
+    },
+    "export": {
+      "id": "export",
+      "name": "Data Export",
+      "description": "Export data for external systems or reporting. Uses configurable field subset with PII protection.",
+      "fieldSelectionMode": "custom",
+      "fieldFilters": {
+        "excludeNamePatterns": ["*Internal*", "*Confidential*", "*Notes*"]
+      },
+      "includeSystemFields": false,
+      "includeFormulaFields": true,
+      "includeRollupSummaryFields": true,
+      "maxFields": 100,
+      "requiredFields": ["Id", "Name"],
+      "excludedFields": ["Description", "Internal_Notes__c"],
+      "workflowSteps": [
+        {
+          "id": "validate_policy",
+          "name": "Validate Export Policy",
+          "action": "validate_policy",
+          "onFailure": "abort"
+        },
+        {
+          "id": "select_fields",
+          "name": "Select Export Fields",
+          "action": "select_fields",
+          "onFailure": "abort"
+        },
+        {
+          "id": "build_query",
+          "name": "Build Export Query",
+          "action": "build_query",
+          "onFailure": "abort"
+        },
+        {
+          "id": "execute_query",
+          "name": "Execute Export Query",
+          "action": "execute_query",
+          "parameters": { "useBulkApi": true, "batchSize": 2000 },
+          "onFailure": "retry",
+          "retryCount": 3
+        },
+        {
+          "id": "transform_data",
+          "name": "Apply Export Transforms",
+          "action": "transform_data",
+          "parameters": { "maskPii": true },
+          "onFailure": "abort"
+        },
+        {
+          "id": "verify_results",
+          "name": "Verify Export",
+          "action": "verify_results",
+          "onFailure": "warn"
+        },
+        {
+          "id": "emit_trace",
+          "name": "Emit Execution Trace",
+          "action": "emit_trace",
+          "onFailure": "skip"
+        }
+      ],
+      "qualityGates": [
+        {
+          "id": "no_pii_leak",
+          "name": "No PII in Export",
+          "condition": "piiFieldCount == 0",
+          "severity": "critical",
+          "onFailure": "abort"
+        }
+      ],
+      "rollbackStrategy": {
+        "type": "none"
+      },
+      "riskLevel": "medium",
+      "approvalRequired": false,
+      "auditLogging": "detailed"
+    },
+    "sync": {
+      "id": "sync",
+      "name": "Data Sync",
+      "description": "Bidirectional sync with external systems. Uses external ID for matching. Tracks changes via audit trail.",
+      "fieldSelectionMode": "policy",
+      "fieldFilters": {
+        "updateable": true,
+        "externalId": true
+      },
+      "includeSystemFields": false,
+      "includeFormulaFields": false,
+      "includeRollupSummaryFields": false,
+      "maxFields": 75,
+      "requiredFields": ["Id", "ExternalId__c", "LastModifiedDate"],
+      "excludedFields": ["CreatedDate", "CreatedById", "SystemModstamp"],
+      "workflowSteps": [
+        {
+          "id": "validate_policy",
+          "name": "Validate Sync Policy",
+          "action": "validate_policy",
+          "onFailure": "abort"
+        },
+        {
+          "id": "select_fields",
+          "name": "Select Sync Fields",
+          "action": "select_fields",
+          "onFailure": "abort"
+        },
+        {
+          "id": "build_query",
+          "name": "Build Delta Query",
+          "action": "build_query",
+          "parameters": { "deltaMode": true },
+          "onFailure": "abort"
+        },
+        {
+          "id": "execute_query",
+          "name": "Fetch Changed Records",
+          "action": "execute_query",
+          "parameters": { "useBulkApi": false },
+          "onFailure": "retry",
+          "retryCount": 3
+        },
+        {
+          "id": "transform_data",
+          "name": "Apply Sync Transforms",
+          "action": "transform_data",
+          "onFailure": "abort"
+        },
+        {
+          "id": "write_records",
+          "name": "Upsert Changes",
+          "action": "write_records",
+          "parameters": { "operation": "upsert", "externalIdField": "ExternalId__c" },
+          "onFailure": "skip"
+        },
+        {
+          "id": "emit_trace",
+          "name": "Emit Execution Trace",
+          "action": "emit_trace",
+          "onFailure": "skip"
+        }
+      ],
+      "qualityGates": [
+        {
+          "id": "external_id_present",
+          "name": "External ID Configured",
+          "condition": "externalIdFieldExists == true",
+          "severity": "critical",
+          "onFailure": "abort"
+        },
+        {
+          "id": "sync_success",
+          "name": "Sync Success Rate",
+          "condition": "successRate > 0.99",
+          "severity": "warning",
+          "onFailure": "warn"
+        }
+      ],
+      "rollbackStrategy": {
+        "type": "audit_trail",
+        "snapshotRetention": "7d",
+        "autoRollbackOnFailure": false
+      },
+      "riskLevel": "medium",
+      "approvalRequired": false,
+      "auditLogging": "detailed"
+    }
+  }
+}

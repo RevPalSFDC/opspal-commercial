@@ -1,0 +1,282 @@
+{# Pricing Table Module Template #}
+{# HubSpot CMS Module - Accessible pricing card with features #}
+
+{% set features = module.features.list|split('\n') %}
+{% set billing_text = module.pricing.billing_period %}
+{% if module.pricing.billing_period == "custom" %}
+  {% set billing_text = module.pricing.custom_period %}
+{% elif module.pricing.billing_period == "monthly" %}
+  {% set billing_text = "/month" %}
+{% elif module.pricing.billing_period == "yearly" %}
+  {% set billing_text = "/year" %}
+{% elif module.pricing.billing_period == "one_time" %}
+  {% set billing_text = "" %}
+{% endif %}
+
+<article
+  class="pricing-card pricing-card--{{ module.style_options.card_style }}{% if module.style_options.is_featured %} pricing-card--featured{% endif %}"
+  style="--accent-color: {{ module.style_options.accent_color.color }};"
+>
+  {% if module.style_options.is_featured and module.style_options.featured_label %}
+  <div class="pricing-card__badge">
+    {{ module.style_options.featured_label }}
+  </div>
+  {% endif %}
+
+  <header class="pricing-card__header">
+    <h3 class="pricing-card__name">{{ module.plan_name }}</h3>
+    {% if module.plan_description %}
+    <p class="pricing-card__description">{{ module.plan_description }}</p>
+    {% endif %}
+  </header>
+
+  <div class="pricing-card__price-wrapper">
+    {% if module.pricing.original_price %}
+    <span class="pricing-card__original-price">
+      {{ module.pricing.currency_symbol }}{{ module.pricing.original_price }}
+    </span>
+    {% endif %}
+    <div class="pricing-card__price">
+      <span class="pricing-card__currency">{{ module.pricing.currency_symbol }}</span>
+      <span class="pricing-card__amount">{{ module.pricing.price }}</span>
+      {% if billing_text %}
+      <span class="pricing-card__period">{{ billing_text }}</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if features|length > 0 %}
+  <ul class="pricing-card__features" role="list">
+    {% for feature in features %}
+    {% if feature|trim %}
+    <li class="pricing-card__feature{% if loop.index <= module.features.highlight_count %} pricing-card__feature--highlighted{% endif %}">
+      <svg class="pricing-card__check" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>{{ feature|trim }}</span>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <footer class="pricing-card__footer">
+    <a
+      href="{{ module.cta.link.url.href }}"
+      class="pricing-card__cta pricing-card__cta--{{ module.cta.style }}"
+      {% if module.cta.link.url.type == "EXTERNAL" %}
+      target="_blank"
+      rel="noopener noreferrer"
+      {% endif %}
+    >
+      {{ module.cta.text }}
+    </a>
+  </footer>
+</article>
+
+<style>
+  .pricing-card {
+    --accent-color: #ff7a59;
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .pricing-card--bordered {
+    border: 2px solid #e0e0e0;
+  }
+
+  .pricing-card--shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .pricing-card--gradient .pricing-card__header {
+    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    margin: -2rem -2rem 1.5rem -2rem;
+    padding: 2rem;
+    border-radius: 12px 12px 0 0;
+    color: #fff;
+  }
+
+  .pricing-card--gradient .pricing-card__name,
+  .pricing-card--gradient .pricing-card__description {
+    color: #fff;
+  }
+
+  .pricing-card--featured {
+    border: 2px solid var(--accent-color);
+    transform: scale(1.05);
+    z-index: 1;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .pricing-card--featured:hover {
+    transform: scale(1.05) translateY(-4px);
+  }
+
+  .pricing-card__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color);
+    color: #fff;
+    padding: 0.375rem 1rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .pricing-card__header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .pricing-card__name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: #1a1a2e;
+  }
+
+  .pricing-card__description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+  }
+
+  .pricing-card__price-wrapper {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .pricing-card__original-price {
+    display: block;
+    font-size: 1rem;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 0.25rem;
+  }
+
+  .pricing-card__price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .pricing-card__currency {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .pricing-card__amount {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #1a1a2e;
+  }
+
+  .pricing-card__period {
+    font-size: 1rem;
+    color: #666;
+  }
+
+  .pricing-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    flex-grow: 1;
+  }
+
+  .pricing-card__feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .pricing-card__feature--highlighted {
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  .pricing-card__check {
+    flex-shrink: 0;
+    color: var(--accent-color);
+    margin-top: 2px;
+  }
+
+  .pricing-card__feature--highlighted .pricing-card__check {
+    color: #4caf50;
+  }
+
+  .pricing-card__footer {
+    margin-top: auto;
+  }
+
+  .pricing-card__cta {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .pricing-card__cta--primary {
+    background: var(--accent-color);
+    color: #fff;
+    border: 2px solid var(--accent-color);
+  }
+
+  .pricing-card__cta--primary:hover {
+    background: transparent;
+    color: var(--accent-color);
+  }
+
+  .pricing-card__cta--secondary {
+    background: transparent;
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+  }
+
+  .pricing-card__cta--secondary:hover {
+    background: var(--accent-color);
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .pricing-card {
+      max-width: 100%;
+    }
+
+    .pricing-card--featured {
+      transform: none;
+    }
+
+    .pricing-card--featured:hover {
+      transform: translateY(-4px);
+    }
+  }
+</style>

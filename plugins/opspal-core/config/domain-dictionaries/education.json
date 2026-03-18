@@ -1,0 +1,188 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "education",
+  "version": "1.0.0",
+  "description": "Higher education institutions, university systems, colleges, and educational organizations",
+
+  "detectionPatterns": {
+    "keywords": [
+      "university", "college", "campus", "academic", "education",
+      "school", "institute", "faculty", "student", "alumni",
+      "undergraduate", "graduate", "doctoral", "research", "provost"
+    ],
+    "entityTypes": ["University", "College", "Institute", "Campus", "System"],
+    "fieldPatterns": [
+      "IPEDS", "FICE", "OPE", "AccreditationId", "CampusCode"
+    ]
+  },
+
+  "abbreviations": {
+    "degrees": {
+      "BA": "Bachelor of Arts",
+      "BS": "Bachelor of Science",
+      "MA": "Master of Arts",
+      "MS": "Master of Science",
+      "MBA": "Master of Business Administration",
+      "PhD": "Doctor of Philosophy",
+      "EdD": "Doctor of Education",
+      "JD": "Juris Doctor",
+      "MD": "Doctor of Medicine",
+      "DO": "Doctor of Osteopathic Medicine"
+    },
+    "systems": {
+      "UC": "University of California",
+      "CSU": "California State University",
+      "SUNY": "State University of New York",
+      "CUNY": "City University of New York",
+      "UT": "University of Texas"
+    },
+    "organizations": {
+      "NCAA": "National Collegiate Athletic Association",
+      "AAUP": "American Association of University Professors",
+      "ACE": "American Council on Education"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC"],
+    "preserve": [
+      "University", "College", "Institute", "School",
+      "Academy", "Center", "Campus"
+    ]
+  },
+
+  "synonyms": {
+    "University": ["Univ", "Univ."],
+    "College": ["Coll", "Coll."],
+    "Institute": ["Inst", "Inst."],
+    "Community College": ["CC", "Junior College", "JC"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.90,
+    "minimumConfidence": 80
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 95,
+      "review": 85,
+      "tag": 70
+    },
+    "stateMismatchPenalty": -40
+  },
+
+  "genericEntityPatterns": [
+    "University of *",
+    "* State University",
+    "* University",
+    "* College",
+    "* Community College",
+    "* Technical College",
+    "* Institute of Technology",
+    "* School of *"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["state_match OR system_match"],
+    "boosts": ["domain_match", "ipeds_match", "system_match"],
+    "blockers": ["different_state_generic_name"]
+  },
+
+  "knownEntities": [
+    "Harvard University",
+    "Yale University",
+    "Princeton University",
+    "Columbia University",
+    "University of Pennsylvania",
+    "Brown University",
+    "Dartmouth College",
+    "Cornell University",
+    "Stanford University",
+    "MIT",
+    "Caltech",
+    "Duke University",
+    "Northwestern University",
+    "University of Chicago",
+    "Johns Hopkins University",
+    "Vanderbilt University",
+    "Rice University",
+    "Notre Dame",
+    "Georgetown University",
+    "Carnegie Mellon University",
+    "UC Berkeley",
+    "UCLA",
+    "University of Michigan",
+    "University of Virginia",
+    "University of North Carolina",
+    "University of Wisconsin",
+    "Ohio State University",
+    "Penn State University",
+    "University of Florida",
+    "University of Texas at Austin",
+    "Texas A&M University",
+    "University of Washington",
+    "University of Illinois",
+    "Purdue University",
+    "University of Minnesota",
+    "Indiana University",
+    "Arizona State University",
+    "University of Arizona",
+    "University of Colorado",
+    "University of Oregon",
+    "University of Southern California",
+    "Boston University",
+    "New York University",
+    "George Washington University",
+    "American University",
+    "Emory University",
+    "Washington University in St. Louis",
+    "University of Miami",
+    "University of Pittsburgh"
+  ],
+
+  "knownEntityAliases": {
+    "MIT": ["Massachusetts Institute of Technology"],
+    "Caltech": ["California Institute of Technology"],
+    "UC Berkeley": ["University of California Berkeley", "Cal", "Berkeley"],
+    "UCLA": ["University of California Los Angeles"],
+    "Notre Dame": ["University of Notre Dame"],
+    "Penn State University": ["Pennsylvania State University", "Penn State"],
+    "Ohio State University": ["OSU", "The Ohio State University"],
+    "Texas A&M University": ["TAMU", "Texas A&M"],
+    "University of Southern California": ["USC"],
+    "New York University": ["NYU"],
+    "Washington University in St. Louis": ["WashU", "WUSTL"]
+  },
+
+  "universitySystems": {
+    "University of California": {
+      "abbreviation": "UC",
+      "campuses": ["Berkeley", "Los Angeles", "San Diego", "Davis", "Irvine", "Santa Barbara", "Santa Cruz", "Riverside", "Merced", "San Francisco"]
+    },
+    "California State University": {
+      "abbreviation": "CSU",
+      "note": "23 campuses"
+    },
+    "State University of New York": {
+      "abbreviation": "SUNY",
+      "note": "64 campuses"
+    },
+    "City University of New York": {
+      "abbreviation": "CUNY",
+      "note": "25 campuses"
+    },
+    "University of Texas System": {
+      "abbreviation": "UT System",
+      "note": "13 institutions"
+    },
+    "University System of Georgia": {
+      "abbreviation": "USG",
+      "note": "26 institutions"
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/hubspot-field-policy.schema.json",
+  "title": "HubSpot Field Policy Schema",
+  "description": "Schema for HubSpot property policies that define required, default, and excluded properties per object type",
+  "type": "object",
+  "required": ["schemaVersion", "platform"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Schema version for compatibility",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "platform": {
+      "type": "string",
+      "const": "hubspot",
+      "description": "Platform identifier"
+    },
+    "globalDefaults": {
+      "type": "object",
+      "description": "Global default settings for all objects",
+      "properties": {
+        "alwaysExclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Property patterns to always exclude (supports wildcards)"
+        },
+        "alwaysInclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Properties to always include"
+        },
+        "piiDetectionEnabled": {
+          "type": "boolean",
+          "description": "Enable automatic PII detection",
+          "default": true
+        },
+        "maxPropertiesDefault": {
+          "type": "integer",
+          "description": "Default max properties per query",
+          "default": 100
+        },
+        "excludeReadOnlyProperties": {
+          "type": "boolean",
+          "description": "Exclude read-only properties from writes",
+          "default": true
+        },
+        "excludeCalculatedProperties": {
+          "type": "boolean",
+          "description": "Exclude calculated properties from exports",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "policies": {
+      "type": "object",
+      "description": "Per-object property policies",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "required_properties": {
+            "type": "object",
+            "properties": {
+              "properties": { "type": "array", "items": { "type": "string" } },
+              "source": { "type": "string", "enum": ["manual", "detected", "inherited"] },
+              "rationale": { "type": "string" }
+            }
+          },
+          "default_properties": {
+            "type": "object",
+            "properties": {
+              "properties": { "type": "array", "items": { "type": "string" } },
+              "source": { "type": "string", "enum": ["manual", "detected", "inherited"] },
+              "rationale": { "type": "string" }
+            }
+          },
+          "recommended_properties": {
+            "type": "object",
+            "properties": {
+              "properties": { "type": "array", "items": { "type": "string" } },
+              "source": { "type": "string" }
+            }
+          },
+          "sensitive_property_exclusions": {
+            "type": "object",
+            "properties": {
+              "properties": { "type": "array", "items": { "type": "string" } },
+              "patterns": { "type": "array", "items": { "type": "string" } },
+              "propertyGroups": { "type": "array", "items": { "type": "string" } },
+              "complianceReason": { "type": "string" }
+            }
+          },
+          "property_aliases": {
+            "type": "object",
+            "description": "Map of display names to internal names",
+            "additionalProperties": { "type": "string" }
+          },
+          "maxProperties": {
+            "type": "integer",
+            "description": "Maximum properties for this object"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "taskVariantOverrides": {
+      "type": "object",
+      "description": "Task-specific property overrides",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "includeAdditional": { "type": "array", "items": { "type": "string" } },
+          "excludeAdditional": { "type": "array", "items": { "type": "string" } },
+          "maxPropertiesOverride": { "type": "integer" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

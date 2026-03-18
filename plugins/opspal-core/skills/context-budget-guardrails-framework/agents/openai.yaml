@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context Budget Guardrails Framework"
+  short_description: "Help with Context Budget Guardrails Framework tasks"
+  default_prompt: "Use $context-budget-guardrails-framework to execute this workflow safely and produce the expected artifacts."

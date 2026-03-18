@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validation Rule Lifecycle Framework"
+  short_description: "Help with Validation Rule Lifecycle Framework tasks"
+  default_prompt: "Use $validation-rule-lifecycle-framework to execute this workflow safely and produce the expected artifacts."

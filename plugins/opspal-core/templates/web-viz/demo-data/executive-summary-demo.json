@@ -1,0 +1,192 @@
+{
+  "metadata": {
+    "template": "executive-summary",
+    "generated": "2025-01-04",
+    "description": "Demo data for Executive Summary Dashboard - QTD revenue, quota, forecast"
+  },
+  "kpis": {
+    "qtdRevenue": {
+      "value": 4850000,
+      "target": 6000000,
+      "percent": 80.8,
+      "priorQuarter": 4200000,
+      "trend": 15.5,
+      "trendDirection": "up"
+    },
+    "quotaAttainment": {
+      "value": 81,
+      "target": 100,
+      "priorQuarter": 78,
+      "trend": 3.8,
+      "trendDirection": "up",
+      "thresholds": [
+        { "value": 70, "color": "#EF4444", "label": "Behind" },
+        { "value": 90, "color": "#F59E0B", "label": "On Track" },
+        { "value": 100, "color": "#22C55E", "label": "Exceeding" }
+      ]
+    },
+    "pipelineCoverage": {
+      "value": 3.2,
+      "description": "Pipeline / Remaining Quota",
+      "status": "healthy",
+      "recommendation": "3x coverage recommended"
+    },
+    "yoyGrowth": {
+      "value": 22,
+      "priorYear": 3975000,
+      "currentYear": 4850000,
+      "trend": 22,
+      "trendDirection": "up"
+    }
+  },
+  "revenueVsGoal": {
+    "labels": ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8", "Week 9", "Week 10", "Week 11", "Week 12"],
+    "datasets": [
+      {
+        "label": "Actual Revenue",
+        "data": [450000, 920000, 1350000, 1850000, 2400000, 2950000, 3500000, 4050000, 4500000, 4850000, null, null],
+        "borderColor": "#5F3B8C",
+        "backgroundColor": "rgba(95, 59, 140, 0.1)",
+        "fill": true
+      },
+      {
+        "label": "Target",
+        "data": [500000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 5500000, 6000000],
+        "borderColor": "#94A3B8",
+        "borderDash": [5, 5],
+        "fill": false
+      },
+      {
+        "label": "Prior Quarter",
+        "data": [380000, 780000, 1150000, 1580000, 2050000, 2520000, 2980000, 3450000, 3850000, 4200000, null, null],
+        "borderColor": "#D1D5DB",
+        "borderDash": [2, 2],
+        "fill": false
+      }
+    ]
+  },
+  "revenueBySegment": {
+    "labels": ["Enterprise", "Mid-Market", "SMB", "Strategic"],
+    "datasets": [{
+      "label": "Revenue",
+      "data": [2100000, 1450000, 850000, 450000],
+      "backgroundColor": ["#5F3B8C", "#818CF8", "#60A5FA", "#22C55E"]
+    }]
+  },
+  "revenueByProduct": {
+    "labels": ["Platform License", "Professional Services", "Support & Maintenance", "Add-on Modules"],
+    "datasets": [{
+      "label": "Revenue",
+      "data": [2800000, 1200000, 650000, 200000],
+      "backgroundColor": ["#5F3B8C", "#F59E0B", "#22C55E", "#EF4444"]
+    }]
+  },
+  "forecastSummary": [
+    {
+      "category": "Commit",
+      "amount": 5200000,
+      "deals": 12,
+      "probability": "90%+",
+      "description": "Verbal commitment or contract out"
+    },
+    {
+      "category": "Best Case",
+      "amount": 5800000,
+      "deals": 18,
+      "probability": "70-89%",
+      "description": "High confidence, decision maker engaged"
+    },
+    {
+      "category": "Pipeline",
+      "amount": 7200000,
+      "deals": 35,
+      "probability": "<70%",
+      "description": "Active opportunities, various stages"
+    },
+    {
+      "category": "Upside",
+      "amount": 8500000,
+      "deals": 47,
+      "probability": "All",
+      "description": "Total including early stage"
+    }
+  ],
+  "keyDeals": [
+    {
+      "name": "Acme Corp - Enterprise License",
+      "amount": 425000,
+      "closeDate": "2025-01-31",
+      "stage": "Negotiation",
+      "probability": 75,
+      "owner": "Sarah Johnson",
+      "daysToClose": 27,
+      "risk": "low"
+    },
+    {
+      "name": "TechStart Inc - Platform Migration",
+      "amount": 380000,
+      "closeDate": "2025-02-15",
+      "stage": "Proposal",
+      "probability": 50,
+      "owner": "Michael Chen",
+      "daysToClose": 42,
+      "risk": "medium"
+    },
+    {
+      "name": "GlobalTrade - Annual Renewal",
+      "amount": 295000,
+      "closeDate": "2025-01-28",
+      "stage": "Negotiation",
+      "probability": 80,
+      "owner": "Emily Rodriguez",
+      "daysToClose": 24,
+      "risk": "low"
+    },
+    {
+      "name": "FinanceFirst - New Implementation",
+      "amount": 275000,
+      "closeDate": "2025-02-28",
+      "stage": "Proposal",
+      "probability": 45,
+      "owner": "David Park",
+      "daysToClose": 55,
+      "risk": "high"
+    },
+    {
+      "name": "SecureBank - Compliance Module",
+      "amount": 175000,
+      "closeDate": "2025-01-25",
+      "stage": "Negotiation",
+      "probability": 70,
+      "owner": "Sarah Johnson",
+      "daysToClose": 21,
+      "risk": "low"
+    }
+  ],
+  "teamPerformance": {
+    "labels": ["Sarah Johnson", "Michael Chen", "Emily Rodriguez", "David Park", "Alex Kim"],
+    "datasets": [
+      {
+        "label": "Closed Won",
+        "data": [1250000, 980000, 850000, 720000, 450000],
+        "backgroundColor": "#22C55E"
+      },
+      {
+        "label": "Quota",
+        "data": [1500000, 1200000, 1000000, 900000, 600000],
+        "backgroundColor": "#E5E7EB"
+      }
+    ]
+  },
+  "quarterlyComparison": {
+    "labels": ["Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024", "Q1 2025 (QTD)"],
+    "datasets": [{
+      "label": "Revenue",
+      "data": [4500000, 5200000, 5800000, 6200000, 4850000],
+      "backgroundColor": ["#D1D5DB", "#D1D5DB", "#D1D5DB", "#D1D5DB", "#5F3B8C"]
+    }]
+  },
+  "lastUpdated": "2025-01-04T15:30:00Z",
+  "dataSource": "Salesforce CRM",
+  "reportPeriod": "Q1 FY2025 (Jan 1 - Mar 31)"
+}

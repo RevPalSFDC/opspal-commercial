@@ -1,0 +1,107 @@
+name: Marketplace Catalog Update
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - 'scripts/generate-plugin-suite-docs.js'
+      - 'scripts/lib/plugin-doc-inventory.js'
+      - '.github/workflows/marketplace-update.yml'
+  workflow_dispatch:
+
+jobs:
+  update-catalog:
+    name: Update Suite Catalog Artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Detect changed plugin manifests
+        id: changes
+        run: |
+          BEFORE_SHA="${{ github.event.before }}"
+          AFTER_SHA="${{ github.sha }}"
+
+          if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE_SHA="HEAD~1"
+          fi
+
+          CHANGED_MANIFESTS=$(git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -E '^plugins/.*/\.claude-plugin/plugin\.json$' || true)
+
+          if [ -z "$CHANGED_MANIFESTS" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No plugin manifest changes detected"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Changed manifests:"
+            echo "$CHANGED_MANIFESTS"
+          fi
+
+      - name: Regenerate suite docs
+        if: steps.changes.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: npm run docs:generate
+
+      - name: Commit generated catalog updates
+        if: steps.changes.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          TARGET_FILES=(
+            AGENTS.md
+            README.md
+            CLAUDE.md
+            docs/PLUGIN_SUITE_CATALOG.md
+            docs/PLUGIN_SUITE_CATALOG.json
+            docs/PLUGIN_OWNERSHIP_AND_LIFECYCLE.md
+          )
+
+          EXISTING_FILES=()
+          for file in "${TARGET_FILES[@]}"; do
+            if [ -f "$file" ]; then
+              EXISTING_FILES+=("$file")
+            fi
+          done
+
+          if [ "${#EXISTING_FILES[@]}" -eq 0 ]; then
+            echo "No catalog files found to commit"
+            exit 0
+          fi
+
+          if git diff --quiet -- "${EXISTING_FILES[@]}"; then
+            echo "No generated catalog changes to commit"
+            exit 0
+          fi
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add "${EXISTING_FILES[@]}"
+          git commit -m "chore: refresh generated plugin suite catalog"
+          git push origin main
+
+      - name: Upload generated catalog artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: suite-catalog
+          path: |
+            AGENTS.md
+            README.md
+            CLAUDE.md
+            docs/PLUGIN_SUITE_CATALOG.md
+            docs/PLUGIN_SUITE_CATALOG.json
+            docs/PLUGIN_OWNERSHIP_AND_LIFECYCLE.md
+          retention-days: 30

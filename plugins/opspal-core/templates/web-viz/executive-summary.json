@@ -1,0 +1,278 @@
+{
+  "id": "executive-summary",
+  "name": "Executive Summary Dashboard",
+  "description": "High-level KPIs and trends for C-suite and leadership review",
+  "version": "1.0.0",
+  "category": "executive",
+  "audience": ["executive", "vp-sales", "cro", "cfo"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "period", "type": "select", "label": "Period", "default": "this-quarter", "options": ["this-quarter", "last-quarter", "this-year", "last-year"] }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "qtd-revenue",
+      "type": "kpi",
+      "title": "QTD Revenue",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "trendLabel": "vs Prior Quarter",
+        "icon": "dollar",
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "qtd-revenue"
+      },
+      "demoData": "kpis.qtdRevenue"
+    },
+    {
+      "id": "quota-attainment",
+      "type": "gauge",
+      "title": "Quota Attainment",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "min": 0,
+        "max": 100,
+        "valueFormat": "percent",
+        "thresholds": [
+          { "value": 70, "color": "#EF4444", "label": "Behind" },
+          { "value": 90, "color": "#F59E0B", "label": "On Track" },
+          { "value": 100, "color": "#22C55E", "label": "Exceeding" }
+        ],
+        "showValue": true,
+        "showLabel": true,
+        "size": 180
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "quota-attainment"
+      },
+      "demoData": "kpis.quotaAttainment"
+    },
+    {
+      "id": "pipeline-coverage",
+      "type": "kpi",
+      "title": "Pipeline Coverage",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "decimals": 1,
+        "suffix": "x",
+        "showTrend": false,
+        "icon": "chart-pie",
+        "description": "Pipeline / Remaining Quota",
+        "target": 3,
+        "showTarget": true
+      },
+      "demoData": "kpis.pipelineCoverage"
+    },
+    {
+      "id": "yoy-growth",
+      "type": "kpi",
+      "title": "YoY Growth",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": true,
+        "trendDirection": "auto",
+        "icon": "trending-up",
+        "valueColor": "#22C55E"
+      },
+      "demoData": "kpis.yoyGrowth"
+    },
+    {
+      "id": "revenue-vs-goal",
+      "type": "chart",
+      "title": "Revenue vs Goal",
+      "position": { "row": 2, "col": 1, "colspan": 6, "rowspan": 2 },
+      "config": {
+        "chartType": "line",
+        "showLegend": true,
+        "fill": true,
+        "tension": 0.3,
+        "annotations": [
+          { "type": "line", "value": "target", "label": "Target", "color": "#94A3B8", "dash": [5, 5] }
+        ]
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "revenue-by-week"
+      },
+      "demoData": "revenueVsGoal"
+    },
+    {
+      "id": "revenue-by-segment",
+      "type": "chart",
+      "title": "Revenue by Segment",
+      "position": { "row": 2, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "doughnut",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "currency-compact",
+        "cutout": "60%"
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "revenue-by-segment"
+      },
+      "demoData": "revenueBySegment"
+    },
+    {
+      "id": "revenue-by-product",
+      "type": "chart",
+      "title": "Revenue by Product",
+      "position": { "row": 3, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "currency-compact"
+      },
+      "demoData": "revenueByProduct"
+    },
+    {
+      "id": "forecast-summary",
+      "type": "table",
+      "title": "Forecast Summary",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "category", "label": "Category", "width": "25%" },
+          { "field": "amount", "label": "Amount", "format": "currency", "width": "25%", "align": "right" },
+          { "field": "deals", "label": "Deals", "width": "15%", "align": "center" },
+          { "field": "probability", "label": "Probability", "width": "15%", "align": "center" },
+          { "field": "description", "label": "Description", "width": "20%" }
+        ],
+        "sortable": false,
+        "pagination": false,
+        "showTotals": false
+      },
+      "demoData": "forecastSummary"
+    },
+    {
+      "id": "key-deals",
+      "type": "table",
+      "title": "Key Deals Closing This Quarter",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Deal", "width": "30%" },
+          { "field": "amount", "label": "Amount", "format": "currency", "width": "18%", "align": "right" },
+          { "field": "closeDate", "label": "Close", "format": "date-short", "width": "15%" },
+          { "field": "stage", "label": "Stage", "width": "17%" },
+          { "field": "risk", "label": "Risk", "width": "10%", "format": "badge" },
+          { "field": "owner", "label": "Owner", "width": "10%" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "maxRows": 5,
+        "rowHighlight": {
+          "field": "risk",
+          "values": {
+            "high": "#FEE2E2",
+            "medium": "#FEF3C7",
+            "low": "#DCFCE7"
+          }
+        }
+      },
+      "demoData": "keyDeals"
+    },
+    {
+      "id": "team-performance",
+      "type": "chart",
+      "title": "Team Performance vs Quota",
+      "position": { "row": 5, "col": 1, "colspan": 8 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "currency-compact",
+        "stacked": false,
+        "groupMode": "grouped"
+      },
+      "demoData": "teamPerformance"
+    },
+    {
+      "id": "quarterly-comparison",
+      "type": "chart",
+      "title": "Quarterly Trend",
+      "position": { "row": 5, "col": 9, "colspan": 4 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "currency-compact"
+      },
+      "demoData": "quarterlyComparison"
+    }
+  ],
+
+  "dataBindings": {
+    "qtd-revenue": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["SUM(Amount) revenue"],
+        "filters": ["IsWon = true", "CloseDate = THIS_FISCAL_QUARTER"]
+      },
+      "hubspot": {
+        "object": "deals",
+        "aggregation": "sum",
+        "property": "amount",
+        "filters": { "dealstage": "closedwon" }
+      }
+    },
+    "quota-attainment": {
+      "salesforce": {
+        "custom": "SELECT SUM(o.Amount) closed, SUM(q.QuotaAmount) quota FROM OpportunityHistory o, QuotaLineItem q WHERE o.IsWon = true",
+        "transform": "(closed / quota) * 100"
+      }
+    },
+    "revenue-by-week": {
+      "salesforce": {
+        "object": "Opportunity",
+        "fields": ["CALENDAR_WEEK(CloseDate) week", "SUM(Amount) amount"],
+        "filters": ["IsWon = true", "CloseDate = THIS_FISCAL_QUARTER"],
+        "groupBy": ["CALENDAR_WEEK(CloseDate)"],
+        "orderBy": "CALENDAR_WEEK(CloseDate)"
+      }
+    }
+  },
+
+  "footer": {
+    "showTimestamp": true,
+    "timestampLabel": "Last Updated",
+    "showDataSource": true,
+    "dataSourceLabel": "Source: Salesforce CRM"
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "segmentColors": {
+      "Enterprise": "#5F3B8C",
+      "Mid-Market": "#818CF8",
+      "SMB": "#60A5FA",
+      "Strategic": "#22C55E"
+    },
+    "riskColors": {
+      "low": "#22C55E",
+      "medium": "#F59E0B",
+      "high": "#EF4444"
+    }
+  }
+}

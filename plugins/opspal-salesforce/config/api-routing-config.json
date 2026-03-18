@@ -1,0 +1,388 @@
+{
+  "version": "1.0.0",
+  "description": "Salesforce API Type Router Configuration - Pluggable routing rules",
+  "lastUpdated": "2026-01-25",
+
+  "thresholds": {
+    "bulkRecordThreshold": 200,
+    "compositeOperationThreshold": 2,
+    "graphqlComplexityThreshold": 3,
+    "batchSizeRest": 200,
+    "batchSizeBulk": 10000
+  },
+
+  "routingRules": [
+    {
+      "id": "bulk-data-read",
+      "condition": { "type": "data", "operation": "read", "volume": ">200" },
+      "recommendedApi": "BULK",
+      "rationale": "Large dataset retrieval is optimized for Bulk API async processing",
+      "sfCommand": "sf data bulk query"
+    },
+    {
+      "id": "bulk-data-write",
+      "condition": { "type": "data", "operation": "write", "volume": ">200" },
+      "recommendedApi": "BULK",
+      "rationale": "High-volume writes are optimized for Bulk API 2.0",
+      "sfCommand": "sf data bulk upsert"
+    },
+    {
+      "id": "bulk-data-delete",
+      "condition": { "type": "data", "operation": "delete", "volume": ">200" },
+      "recommendedApi": "BULK",
+      "rationale": "Mass deletion avoids governor limits with Bulk API",
+      "sfCommand": "sf data bulk delete"
+    },
+    {
+      "id": "composite-batch",
+      "condition": { "type": "data", "operation": "write", "volume": "2-25", "independent": true },
+      "recommendedApi": "COMPOSITE",
+      "rationale": "Multiple independent operations batch efficiently via Composite API",
+      "sfCommand": "sf api request rest --method POST /services/data/vXX.0/composite"
+    },
+    {
+      "id": "graphql-complex",
+      "condition": { "type": "data", "operation": "read", "objects": ">2", "related": true },
+      "recommendedApi": "GRAPHQL",
+      "rationale": "Complex multi-object related queries are efficient with GraphQL",
+      "sfCommand": "sf graphql query"
+    },
+    {
+      "id": "metadata-deploy",
+      "condition": { "type": "metadata", "operation": "deploy" },
+      "recommendedApi": "METADATA",
+      "rationale": "Schema and configuration deployment requires Metadata API",
+      "sfCommand": "sf project deploy start"
+    },
+    {
+      "id": "metadata-retrieve",
+      "condition": { "type": "metadata", "operation": "retrieve" },
+      "recommendedApi": "METADATA",
+      "rationale": "Schema and configuration retrieval requires Metadata API",
+      "sfCommand": "sf project retrieve start"
+    },
+    {
+      "id": "tooling-metadata-query",
+      "condition": { "type": "metadata", "operation": "query" },
+      "recommendedApi": "TOOLING",
+      "rationale": "Metadata object queries use Tooling API for direct access",
+      "sfCommand": "sf data query --use-tooling-api"
+    },
+    {
+      "id": "tooling-single-change",
+      "condition": { "type": "metadata", "operation": "write", "volume": "1" },
+      "recommendedApi": "TOOLING",
+      "rationale": "Single metadata changes are efficient via Tooling API",
+      "sfCommand": "sf api request rest (tooling endpoint)"
+    },
+    {
+      "id": "apex-test",
+      "condition": { "type": "apex", "operation": "test" },
+      "recommendedApi": "TOOLING",
+      "rationale": "Apex test execution uses Tooling API",
+      "sfCommand": "sf apex run test"
+    },
+    {
+      "id": "rest-single",
+      "condition": { "type": "data", "operation": "*", "volume": "1" },
+      "recommendedApi": "REST",
+      "rationale": "Single-record operations are simple and efficient with REST",
+      "sfCommand": "sf data create record / sf data get record"
+    },
+    {
+      "id": "cpq-quote-bulk-write",
+      "condition": { "type": "data", "operation": "write", "volume": ">50", "objects": ["SBQQ__Quote__c"] },
+      "recommendedApi": "BULK",
+      "rationale": "CPQ Quote bulk operations - use small batch size (50) to avoid calculation timeouts",
+      "sfCommand": "sf data bulk upsert --batch-size 50",
+      "cpq": true,
+      "batchSizeRecommendation": 50,
+      "warning": "Each quote triggers CPQ calculations. Monitor for SBQQ_CALCULATION_ERROR."
+    },
+    {
+      "id": "cpq-quoteline-bulk-write",
+      "condition": { "type": "data", "operation": "write", "volume": ">25", "objects": ["SBQQ__QuoteLine__c"] },
+      "recommendedApi": "BULK",
+      "rationale": "CPQ QuoteLine bulk operations - use very small batch size (25) for calculation-heavy objects",
+      "sfCommand": "sf data bulk upsert --batch-size 25",
+      "cpq": true,
+      "batchSizeRecommendation": 25,
+      "warning": "Quote lines trigger pricing recalculation. Process in small batches."
+    },
+    {
+      "id": "cpq-quote-batch-write",
+      "condition": { "type": "data", "operation": "write", "volume": "2-50", "objects": ["SBQQ__Quote__c", "SBQQ__QuoteLine__c"] },
+      "recommendedApi": "REST",
+      "rationale": "CPQ calculation objects in small batches - use REST API sequentially",
+      "sfCommand": "sf data create record (sequential)",
+      "cpq": true,
+      "sequential": true,
+      "warning": "Process records sequentially to maintain calculation integrity."
+    },
+    {
+      "id": "cpq-pricing-read",
+      "condition": { "type": "data", "operation": "read", "objects": ["SBQQ__PriceRule__c", "SBQQ__DiscountSchedule__c"] },
+      "recommendedApi": "REST",
+      "rationale": "CPQ pricing configuration reads - standard REST API is efficient",
+      "sfCommand": "sf data query"
+    },
+    {
+      "id": "cpq-subscription-bulk",
+      "condition": { "type": "data", "operation": "*", "volume": ">200", "objects": ["SBQQ__Subscription__c"] },
+      "recommendedApi": "BULK",
+      "rationale": "CPQ Subscription bulk operations - standard Bulk API is appropriate",
+      "sfCommand": "sf data bulk query / sf data bulk upsert",
+      "cpq": true
+    }
+  ],
+
+  "errorFallbacks": {
+    "REST:REQUEST_LIMIT_EXCEEDED": {
+      "fallback": "BULK",
+      "reason": "Rate limit hit - use async Bulk API for queued processing",
+      "severity": "high"
+    },
+    "REST:QUERY_TOO_COMPLICATED": {
+      "fallback": "GRAPHQL",
+      "reason": "Complex query better suited for GraphQL's precise field selection",
+      "severity": "medium"
+    },
+    "REST:EXCEEDED_MAX_SEMIJOIN_SUBSELECTS": {
+      "fallback": "COMPOSITE",
+      "reason": "Split into separate queries via Composite API",
+      "severity": "medium"
+    },
+    "REST:MALFORMED_QUERY": {
+      "fallback": "REST",
+      "reason": "Check SOQL syntax - may need field API names",
+      "severity": "low"
+    },
+    "DATA:INVALID_FIELD_FOR_INSERT_UPDATE": {
+      "fallback": "TOOLING",
+      "reason": "Field may be metadata-only, requires Tooling API",
+      "severity": "medium"
+    },
+    "DATA:FIELD_FILTER_VALIDATION_EXCEPTION": {
+      "fallback": "TOOLING",
+      "reason": "Object may require Tooling API for filtering",
+      "severity": "medium"
+    },
+    "DATA:ENTITY_NOT_SUPPORTED": {
+      "fallback": "TOOLING",
+      "reason": "sObject not available via REST - use Tooling API",
+      "severity": "high"
+    },
+    "BULK:EXCEEDED_QUOTA": {
+      "fallback": "REST",
+      "reason": "Bulk quota exceeded - fall back to REST with smaller batches",
+      "severity": "high"
+    },
+    "BULK:JOB_FAILED": {
+      "fallback": "REST",
+      "reason": "Bulk job failed - retry with REST for detailed errors",
+      "severity": "medium"
+    },
+    "TOOLING:INVALID_SESSION": {
+      "fallback": "REST",
+      "reason": "Tooling session issue - reauthenticate or use REST",
+      "severity": "high"
+    },
+    "METADATA:DEPLOYMENT_FAILED": {
+      "fallback": "TOOLING",
+      "reason": "Full deployment failed - try Tooling for individual components",
+      "severity": "medium"
+    },
+    "COMPOSITE:TOO_MANY_SUBREQUESTS": {
+      "fallback": "BULK",
+      "reason": "Exceeded 25 subrequest limit - use Bulk API instead",
+      "severity": "medium"
+    },
+    "GRAPHQL:COMPLEXITY_LIMIT": {
+      "fallback": "REST",
+      "reason": "Query too complex for GraphQL - split into REST queries",
+      "severity": "medium"
+    },
+    "CPQ:CALCULATION_TIMEOUT": {
+      "fallback": "REST",
+      "reason": "CPQ calculation timed out - reduce batch size or process sequentially",
+      "severity": "high",
+      "batchSizeRecommendation": 25
+    },
+    "CPQ:PRICING_ERROR": {
+      "fallback": "REST",
+      "reason": "CPQ pricing calculation failed - retry with smaller batch",
+      "severity": "high",
+      "batchSizeRecommendation": 10
+    },
+    "CPQ:SBQQ_CALCULATION_ERROR": {
+      "fallback": "REST",
+      "reason": "SBQQ calculation service error - process records sequentially",
+      "severity": "high",
+      "sequential": true
+    },
+    "CPQ:QUOTE_CALCULATOR_LOCKED": {
+      "fallback": "REST",
+      "reason": "Quote calculator is locked by another process - wait and retry",
+      "severity": "medium",
+      "retryAfter": 5000
+    },
+    "CPQ:PRODUCT_RULE_ERROR": {
+      "fallback": "REST",
+      "reason": "Product rule evaluation failed - check rule configuration",
+      "severity": "medium"
+    },
+    "CPQ:PRICE_RULE_ERROR": {
+      "fallback": "REST",
+      "reason": "Price rule evaluation failed - validate rule conditions",
+      "severity": "medium"
+    },
+    "SBQQ__:TRIGGER_LIMIT": {
+      "fallback": "BULK",
+      "reason": "CPQ trigger hit governor limit - use async Bulk API with small batches",
+      "severity": "high",
+      "batchSizeRecommendation": 50
+    }
+  },
+
+  "apiCapabilities": {
+    "REST": {
+      "description": "Standard REST API for simple CRUD operations",
+      "maxRecords": 2000,
+      "sync": true,
+      "realtime": true,
+      "operations": ["create", "read", "update", "delete", "upsert"],
+      "bestFor": ["single records", "small batches", "real-time needs"],
+      "limitations": ["governor limits", "query complexity limits"]
+    },
+    "BULK": {
+      "description": "Bulk API 2.0 for high-volume async operations",
+      "maxRecords": 10000000,
+      "sync": false,
+      "realtime": false,
+      "operations": ["insert", "update", "upsert", "delete", "query"],
+      "bestFor": ["large data loads", "mass updates", "data migrations"],
+      "limitations": ["async only", "polling required", "daily limits"]
+    },
+    "COMPOSITE": {
+      "description": "Composite API for batching multiple requests",
+      "maxSubrequests": 25,
+      "sync": true,
+      "realtime": true,
+      "operations": ["create", "read", "update", "delete"],
+      "bestFor": ["related operations", "dependency chains", "efficiency"],
+      "limitations": ["25 subrequest max", "memory limits"]
+    },
+    "METADATA": {
+      "description": "Metadata API for schema and configuration changes",
+      "operations": ["deploy", "retrieve", "describe"],
+      "async": true,
+      "bestFor": ["schema changes", "config deployment", "package management"],
+      "limitations": ["async processing", "deploy limits"]
+    },
+    "TOOLING": {
+      "description": "Tooling API for development and metadata queries",
+      "metadataQuery": true,
+      "apexExecution": true,
+      "operations": ["query", "create", "update", "execute"],
+      "bestFor": ["metadata queries", "Apex operations", "single-item changes"],
+      "limitations": ["limited batch size", "specific objects only"]
+    },
+    "GRAPHQL": {
+      "description": "GraphQL API for complex queries with precise field selection",
+      "multiObject": true,
+      "fieldSelection": true,
+      "operations": ["query"],
+      "bestFor": ["multi-object queries", "related data", "precise field control"],
+      "limitations": ["query-only", "complexity limits"]
+    },
+    "SOAP": {
+      "description": "SOAP API for legacy integrations",
+      "wsSecurity": true,
+      "formalContract": true,
+      "operations": ["all CRUD", "describe", "utility"],
+      "bestFor": ["ERP integrations", "formal contracts", "legacy systems"],
+      "limitations": ["verbose XML", "higher overhead"]
+    }
+  },
+
+  "toolingApiObjects": [
+    "ApexClass", "ApexTrigger", "ApexPage", "ApexComponent",
+    "ApexTestQueueItem", "ApexTestResult", "ApexCodeCoverage",
+    "ApexLog", "ApexExecutionOverlayResult",
+    "FlowDefinitionView", "FlowVersionView", "Flow", "FlowDefinition",
+    "CustomField", "CustomObject", "EntityDefinition", "FieldDefinition",
+    "ValidationRule", "WorkflowRule", "WorkflowFieldUpdate",
+    "Layout", "CompactLayout", "PermissionSet", "Profile",
+    "RecordType", "CustomTab", "TraceFlag", "DebugLevel"
+  ],
+
+  "cpqObjects": {
+    "description": "Salesforce CPQ (SBQQ__) objects with special routing considerations",
+    "calculationObjects": [
+      "SBQQ__Quote__c",
+      "SBQQ__QuoteLine__c",
+      "SBQQ__QuoteLineGroup__c"
+    ],
+    "pricingObjects": [
+      "SBQQ__PriceRule__c",
+      "SBQQ__PriceCondition__c",
+      "SBQQ__PriceAction__c",
+      "SBQQ__DiscountSchedule__c",
+      "SBQQ__DiscountTier__c",
+      "SBQQ__BlockPrice__c"
+    ],
+    "configurationObjects": [
+      "SBQQ__ConfigurationRule__c",
+      "SBQQ__ConfigurationAttribute__c",
+      "SBQQ__OptionConstraint__c",
+      "SBQQ__ProductOption__c",
+      "SBQQ__ProductFeature__c"
+    ],
+    "otherObjects": [
+      "SBQQ__Product__c",
+      "SBQQ__Subscription__c",
+      "SBQQ__ContractedPrice__c",
+      "SBQQ__QuoteTemplate__c",
+      "SBQQ__CustomAction__c",
+      "SBQQ__CustomScript__c"
+    ],
+    "batchSizeRecommendations": {
+      "SBQQ__Quote__c": 50,
+      "SBQQ__QuoteLine__c": 25,
+      "SBQQ__QuoteLineGroup__c": 50,
+      "default": 100
+    }
+  },
+
+  "commandPatterns": {
+    "REST": ["sf data query", "sf data get", "sf data create", "sf data update", "sf data delete"],
+    "BULK": ["sf data bulk", "bulk query", "bulk upsert", "bulk delete"],
+    "METADATA": ["sf project deploy", "sf project retrieve"],
+    "TOOLING": ["--use-tooling-api", "sf apex run"],
+    "GRAPHQL": ["sf graphql"],
+    "COMPOSITE": ["composite", "/composite/"]
+  },
+
+  "environmentVariables": {
+    "SF_API_ROUTING_ENABLED": {
+      "description": "Enable/disable API routing suggestions",
+      "default": "1",
+      "values": ["0", "1"]
+    },
+    "SF_API_ROUTING_VERBOSE": {
+      "description": "Verbose output for routing decisions",
+      "default": "0",
+      "values": ["0", "1"]
+    },
+    "SF_BULK_THRESHOLD": {
+      "description": "Record count threshold for Bulk API suggestion",
+      "default": "200",
+      "type": "number"
+    },
+    "SF_COMPOSITE_THRESHOLD": {
+      "description": "Operation count threshold for Composite API suggestion",
+      "default": "2",
+      "type": "number"
+    }
+  }
+}

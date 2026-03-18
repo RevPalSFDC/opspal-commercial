@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Cross-platform pipeline orchestrator configuration - maps platforms to agents and defines reconciliation rules",
+
+  "platforms": {
+    "salesforce": {
+      "envVars": ["SF_TARGET_ORG"],
+      "agents": {
+        "audit": "opspal-salesforce:sfdc-revops-auditor",
+        "query": "opspal-salesforce:sfdc-query-specialist",
+        "data": "opspal-salesforce:sfdc-data-operations",
+        "discovery": "opspal-salesforce:sfdc-discovery",
+        "automation": "opspal-salesforce:sfdc-automation-auditor",
+        "cpq": "opspal-salesforce:sfdc-cpq-assessor"
+      },
+      "entityKeys": ["Id", "Email", "Name"],
+      "aliases": ["sf", "sfdc"]
+    },
+    "hubspot": {
+      "envVars": ["HUBSPOT_ACCESS_TOKEN", "HUBSPOT_PORTAL_ID"],
+      "agents": {
+        "assessment": "opspal-hubspot:hubspot-assessment-analyzer",
+        "data": "opspal-hubspot:hubspot-data-operations-manager",
+        "workflow": "opspal-hubspot:hubspot-workflow-auditor",
+        "orchestrator": "opspal-hubspot:hubspot-orchestrator"
+      },
+      "entityKeys": ["vid", "email", "company"],
+      "aliases": ["hs"]
+    },
+    "asana": {
+      "envVars": ["ASANA_ACCESS_TOKEN"],
+      "agents": {
+        "tasks": "opspal-core:asana-task-manager",
+        "read": "general-purpose"
+      },
+      "entityKeys": ["gid", "name", "assignee"],
+      "aliases": []
+    },
+    "marketo": {
+      "envVars": ["MARKETO_MUNCHKIN_ID", "MARKETO_CLIENT_ID", "MARKETO_CLIENT_SECRET"],
+      "agents": {
+        "audit": "opspal-marketo:marketo-automation-auditor",
+        "data": "opspal-marketo:marketo-data-operations",
+        "orchestrator": "opspal-marketo:marketo-orchestrator"
+      },
+      "entityKeys": ["id", "email", "company"],
+      "aliases": ["mk"]
+    }
+  },
+
+  "reconciliation": {
+    "matchFields": {
+      "primary": "email",
+      "secondary": ["name", "company"],
+      "salesforceIdField": "Id",
+      "hubspotIdField": "vid",
+      "asanaIdField": "gid",
+      "marketoIdField": "id"
+    },
+    "gapTypes": [
+      "exists_in_a_not_b",
+      "ownership_mismatch",
+      "status_mismatch",
+      "data_freshness",
+      "field_value_drift"
+    ],
+    "freshnessThreshold": {
+      "days": 30,
+      "description": "Records not updated in this many days flagged as stale"
+    }
+  },
+
+  "output": {
+    "defaultFormat": "markdown",
+    "formats": ["markdown", "json", "csv"],
+    "reportDir": "reports/pipeline",
+    "createAsanaTasks": true,
+    "updateWorkIndex": true
+  },
+
+  "waves": {
+    "description": "Default wave execution pattern for cross-platform pipelines",
+    "wave1": {
+      "name": "Parallel Data Collection",
+      "parallel": true,
+      "tasks": "Platform-specific queries (one per detected platform)"
+    },
+    "wave2": {
+      "name": "Cross-Platform Reconciliation",
+      "parallel": false,
+      "tasks": "Entity matching, gap analysis, ownership comparison"
+    },
+    "wave3": {
+      "name": "Artifact Generation",
+      "parallel": true,
+      "tasks": "Report generation, Asana task creation, work index update"
+    }
+  }
+}

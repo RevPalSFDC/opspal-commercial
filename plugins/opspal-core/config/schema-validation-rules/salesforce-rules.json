@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Salesforce Validation Rules",
+  "version": "1.0.0",
+  "description": "Platform-specific schema validation rules for Salesforce operations",
+  "created": "2026-01-15",
+  "roiImpact": "$9,200/year",
+  "addressesCohort": "schema/parse (54 reflections)",
+
+  "governorLimits": {
+    "fieldHistoryTracking": {
+      "maxFieldsPerObject": 20,
+      "warningThreshold": 15,
+      "blockingThreshold": 20,
+      "errorCode": "FIELD_HISTORY_LIMIT",
+      "message": "Field history tracking limit ({current}/{max}) - Object: {object}",
+      "remediation": "Remove tracking from low-value fields before adding new tracked fields",
+      "queryTemplate": "SELECT COUNT() FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName = '{object}' AND IsFieldHistoryTracked = true"
+    },
+    "validationRulesPerObject": {
+      "maxRules": 500,
+      "warningThreshold": 400,
+      "errorCode": "VALIDATION_RULE_LIMIT",
+      "message": "Validation rule limit approaching ({current}/{max}) - Object: {object}"
+    },
+    "workflowRulesPerObject": {
+      "maxRules": 50,
+      "warningThreshold": 40,
+      "errorCode": "WORKFLOW_RULE_LIMIT"
+    },
+    "apexCodeCoverage": {
+      "minimumRequired": 75,
+      "recommendedTarget": 85,
+      "errorCode": "APEX_COVERAGE_INSUFFICIENT"
+    },
+    "soqlQueriesPerTransaction": {
+      "sync": 100,
+      "async": 200,
+      "errorCode": "SOQL_QUERY_LIMIT"
+    },
+    "dmlStatementsPerTransaction": {
+      "limit": 150,
+      "errorCode": "DML_LIMIT"
+    },
+    "recordsRetrievedPerQuery": {
+      "limit": 50000,
+      "warningThreshold": 40000,
+      "errorCode": "QUERY_ROWS_LIMIT"
+    }
+  },
+
+  "formulaPatterns": {
+    "picklistValidation": {
+      "severity": "CRITICAL",
+      "description": "Picklist fields cannot use ISBLANK() or ISNULL() - use TEXT(field) = '' instead",
+      "patterns": [
+        {
+          "pattern": "ISBLANK\\s*\\(\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*\\)",
+          "errorCode": "ISBLANK_ON_PICKLIST",
+          "message": "ISBLANK() on picklist field '{field}' will always return false",
+          "remediation": "Replace ISBLANK({field}) with TEXT({field}) = ''"
+        },
+        {
+          "pattern": "ISNULL\\s*\\(\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*\\)",
+          "errorCode": "ISNULL_ON_PICKLIST",
+          "message": "ISNULL() on picklist field '{field}' will always return false",
+          "remediation": "Replace ISNULL({field}) with TEXT({field}) = ''"
+        }
+      ],
+      "picklistFieldSuffixes": ["__c", "Status", "Type", "Stage", "Industry", "Rating", "LeadSource", "Priority"],
+      "validateAgainstOrg": true,
+      "queryTemplate": "SELECT QualifiedApiName FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName = '{object}' AND DataType = 'Picklist'"
+    },
+    "nullSafeOperations": {
+      "severity": "WARNING",
+      "patterns": [
+        {
+          "pattern": "([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*null",
+          "errorCode": "DIRECT_NULL_COMPARISON",
+          "message": "Direct null comparison may not work as expected",
+          "remediation": "Use ISBLANK({field}) for text fields or proper null-safe comparison"
+        }
+      ]
+    },
+    "crossObjectReferences": {
+      "severity": "HIGH",
+      "patterns": [
+        {
+          "pattern": "([A-Za-z_][A-Za-z0-9_]*)\\.([A-Za-z_][A-Za-z0-9_]*)\\.([A-Za-z_][A-Za-z0-9_]*)\\.([A-Za-z_][A-Za-z0-9_]*)\\.([A-Za-z_][A-Za-z0-9_]*)\\.([A-Za-z_][A-Za-z0-9_]*)",
+          "errorCode": "EXCESSIVE_CROSS_OBJECT",
+          "message": "Cross-object formula references exceed 5 levels",
+          "remediation": "Salesforce limits cross-object references to 5 levels"
+        }
+      ]
+    }
+  },
+
+  "metadataValidation": {
+    "objectRelationships": {
+      "severity": "HIGH",
+      "description": "Validate object relationship requirements before operations",
+      "requiredChecks": [
+        {
+          "check": "parentObjectExists",
+          "errorCode": "PARENT_OBJECT_NOT_FOUND",
+          "message": "Parent object '{object}' does not exist or is inaccessible"
+        },
+        {
+          "check": "childRelationshipValid",
+          "errorCode": "INVALID_CHILD_RELATIONSHIP",
+          "message": "Child relationship '{relationship}' is not valid for object '{object}'"
+        }
+      ],
+      "commonConfusions": [
+        {
+          "pair": ["QuoteLineItem", "OpportunityLineItem"],
+          "errorCode": "QUOTE_VS_OPP_LINE_ITEM",
+          "message": "QuoteLineItem and OpportunityLineItem are different objects with different parent relationships"
+        },
+        {
+          "pair": ["Quote", "SBQQ__Quote__c"],
+          "errorCode": "STANDARD_VS_CPQ_QUOTE",
+          "message": "Standard Quote and CPQ Quote (SBQQ__Quote__c) are different objects"
+        },
+        {
+          "pair": ["Product2", "SBQQ__Product__c"],
+          "errorCode": "STANDARD_VS_CPQ_PRODUCT",
+          "message": "Standard Product2 and CPQ Product may have different fields available"
+        }
+      ]
+    },
+    "fieldApiNames": {
+      "severity": "HIGH",
+      "description": "Validate field API names exist on target object",
+      "patterns": [
+        {
+          "pattern": "SELECT\\s+([^\\s,]+(?:\\s*,\\s*[^\\s,]+)*)\\s+FROM",
+          "validate": "fieldsExistOnObject",
+          "errorCode": "INVALID_FIELD_REFERENCE"
+        }
+      ]
+    },
+    "toolingApiRequirements": {
+      "severity": "CRITICAL",
+      "description": "Objects that require --use-tooling-api flag",
+      "objects": [
+        "FlowDefinitionView",
+        "FlowVersionView",
+        "ApexClass",
+        "ApexTrigger",
+        "CustomField",
+        "CustomObject",
+        "Layout",
+        "Profile",
+        "PermissionSet",
+        "ValidationRule",
+        "WorkflowRule",
+        "FlexiPage",
+        "RecordType"
+      ],
+      "errorCode": "MISSING_TOOLING_API_FLAG",
+      "message": "Query on {object} requires --use-tooling-api flag",
+      "remediation": "Add --use-tooling-api flag to sf data query command"
+    }
+  },
+
+  "deploymentValidation": {
+    "requiredComponents": {
+      "apexClass": ["test class with 75%+ coverage"],
+      "apexTrigger": ["handler class", "test class"],
+      "flow": ["test coverage or activation plan"],
+      "permissionSet": ["profile assignment strategy"]
+    },
+    "preDeployChecks": [
+      {
+        "name": "fieldHistoryLimit",
+        "severity": "BLOCKING",
+        "description": "Check field history tracking limits before deployment"
+      },
+      {
+        "name": "validationRuleLimit",
+        "severity": "WARNING",
+        "description": "Check validation rule count approaching limits"
+      },
+      {
+        "name": "picklistFormulaCheck",
+        "severity": "BLOCKING",
+        "description": "Check formulas for ISBLANK/ISNULL on picklists"
+      },
+      {
+        "name": "objectExistenceCheck",
+        "severity": "BLOCKING",
+        "description": "Verify all referenced objects exist"
+      },
+      {
+        "name": "fieldExistenceCheck",
+        "severity": "BLOCKING",
+        "description": "Verify all referenced fields exist"
+      }
+    ]
+  },
+
+  "soqlValidation": {
+    "mixedOperators": {
+      "severity": "HIGH",
+      "description": "Mixed operators in OR conditions cause failures",
+      "patterns": [
+        {
+          "pattern": "(\\w+)\\s*=\\s*'[^']*'\\s+OR\\s+\\1\\s+LIKE",
+          "errorCode": "MIXED_OPERATORS_IN_OR",
+          "message": "Mixed = and LIKE operators in OR condition for field '{field}'",
+          "remediation": "Use consistent operators: WHERE {field} IN ('value') OR {field} LIKE '%pattern%'"
+        }
+      ],
+      "autoCorrect": true
+    },
+    "flowViewFields": {
+      "severity": "CRITICAL",
+      "description": "FlowVersionView uses DeveloperName not ApiName",
+      "corrections": [
+        {
+          "wrong": "ApiName",
+          "correct": "DeveloperName",
+          "object": "FlowVersionView"
+        },
+        {
+          "wrong": "ApiName",
+          "correct": "DeveloperName",
+          "object": "FlowDefinitionView"
+        }
+      ],
+      "autoCorrect": true
+    },
+    "recordLimits": {
+      "severity": "WARNING",
+      "defaultLimit": 200,
+      "bulkThreshold": 10000,
+      "maxQueryRows": 50000
+    }
+  },
+
+  "dependentPicklistRules": {
+    "severity": "CRITICAL",
+    "description": "Dependent picklist value validation",
+    "errorCode": "INVALID_DEPENDENT_PICKLIST_VALUE",
+    "message": "Value '{value}' is not valid for {field} when controlling field {controlling} = '{controllingValue}'",
+    "remediation": "Query valid values: SELECT Value FROM PicklistValueInfo WHERE Field = '{field}' AND IsActive = true",
+    "commonPairs": [
+      {
+        "controlling": "Industry",
+        "dependent": "Sub_Industry__c"
+      },
+      {
+        "controlling": "Type",
+        "dependent": "Sub_Type__c"
+      },
+      {
+        "controlling": "Segment__c",
+        "dependent": "Sub_Segment__c"
+      }
+    ]
+  },
+
+  "territory2Rules": {
+    "booleanFilter": {
+      "severity": "BLOCKING",
+      "description": "BooleanFilter must be cleared before modifying rule items",
+      "errorCode": "BOOLEAN_FILTER_EXISTS",
+      "message": "Cannot modify ObjectTerritory2AssignmentRuleItem when parent rule has BooleanFilter",
+      "remediation": "Clear BooleanFilter, make changes, restore BooleanFilter"
+    },
+    "apiFieldNames": {
+      "corrections": [
+        {
+          "wrong": "Name",
+          "correct": "MasterLabel",
+          "context": "Territory2 queries"
+        }
+      ]
+    }
+  }
+}

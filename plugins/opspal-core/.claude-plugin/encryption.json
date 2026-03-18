@@ -1,0 +1,176 @@
+{
+  "version": 2,
+  "plugin": "opspal-core",
+  "encrypted_assets": [
+    {
+      "path": "config/scoring-weights.json",
+      "encrypted_path": "config/scoring-weights.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:11812eb615229f6e6c2282410adf91a53a488448e8f6bdb7238674fb69458b89",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/sales-benchmarks.json",
+      "encrypted_path": "config/sales-benchmarks.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:2056b6296c35f028080ba784e460261fd4bc28ce2ed5327166ce513c72d5231c",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/intelligent-intake-rubric.json",
+      "encrypted_path": "config/intelligent-intake-rubric.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:3b53c43797c3d86f53ee964615917f32fe889cfc327d140b08a29cce9f2bbc1f",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/complexity-rubric.json",
+      "encrypted_path": "config/complexity-rubric.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:530b0d26d6e5e2ee61f7dcfae099064153bd5cd9df2d514febdfb50cd9ff87cb",
+      "required_domain": "core"
+    },
+    {
+      "path": "scripts/lib/sales-benchmark-engine.js",
+      "encrypted_path": "scripts/lib/sales-benchmark-engine.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:0cc47c141ded6a96936b41cedfa0d515d2cbdc263a0774661664f45f55b971f8",
+      "required_domain": "core"
+    },
+    {
+      "path": "scripts/lib/complexity-scorer.js",
+      "encrypted_path": "scripts/lib/complexity-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:66f1771e4ca965865eb99ce3598d0a490703859c3fa304979ecf7eb87a848d0e",
+      "required_domain": "core"
+    },
+    {
+      "path": "scripts/lib/expansion-opportunity-scorer.js",
+      "encrypted_path": "scripts/lib/expansion-opportunity-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:20f4cb7e499a19869dec4b7e26f0cec2b8ca7586e3858634f64fe892f63b152d",
+      "required_domain": "core"
+    },
+    {
+      "path": "scripts/lib/gong-risk-analyzer.js",
+      "encrypted_path": "scripts/lib/gong-risk-analyzer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:27cbe92926fa62bcae9e612d30864fa71dd7b075ef7cc86924966f8b2710b8a6",
+      "required_domain": "core"
+    },
+    {
+      "path": "scripts/lib/gong-competitor-tracker.js",
+      "encrypted_path": "scripts/lib/gong-competitor-tracker.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:5b83c50435854950e482cb21c89a47c940605225bc16fd653ac073f9b2dda0b1",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/anomaly-patterns.json",
+      "encrypted_path": "config/anomaly-patterns.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:e5217d87373f8b330b3c07b3a6a4c825c2d3091b2059a1517ffec81441cdb59d",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/quality-gate-rules.json",
+      "encrypted_path": "config/quality-gate-rules.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:effa8f7e12cc9fbf1228a353edb617496945b97645ddc1de65905c876b21ddc9",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/funnel-stage-definitions.json",
+      "encrypted_path": "config/funnel-stage-definitions.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:246912eb478069a44fb3b6fabc0d048e962552ce2e36e8cf4f6e4a3282e4ea37",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/persona-definitions.json",
+      "encrypted_path": "config/persona-definitions.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f9faac6e219d3f231bb8ace0231faccf193b0bb446256f7b54ceb58238b7f45b",
+      "required_domain": "core"
+    },
+    {
+      "path": "config/assessment-prefills.json",
+      "encrypted_path": "config/assessment-prefills.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d7eb30597a302f12cea8b4b79b0b4e3015e9b2121445738df27668e6c4df6c7a",
+      "required_domain": "core"
+    }
+  ],
+  "cleanup_on_stop": true,
+  "allow_plaintext_fallback": false
+}

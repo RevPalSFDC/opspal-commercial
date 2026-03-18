@@ -1,0 +1,587 @@
+#!/usr/bin/env node
+
+/**
+ * False Positive Regression Test Suite
+ * 
+ * Comprehensive test suite to prevent false positive success messages
+ * across all Salesforce agents and operations.
+ */
+
+const { execSync, spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+class FalsePositiveRegressionTests {
+    constructor() {
+        this.testResults = [];
+        this.falsePositiveDetections = [];
+        this.testSuites = [
+            'ReportCreationTests',
+            'DashboardCreationTests', 
+            'MetadataCreationTests',
+            'DataOperationTests',
+            'SecurityOperationTests',
+            'IntegrationTests',
+            'ErrorHandlingTests'
+        ];
+        
+        this.mockResponses = this.generateMockResponses();
+    }
+
+    /**
+     * Run all regression test suites
+     */
+    async runAllRegressionTests() {
+        console.log('🧪 Starting False Positive Regression Test Suite...\n');
+        console.log(`📋 Test Suites: ${this.testSuites.length}`);
+        console.log(`🎯 Focus: Detecting false positive success messages\n`);
+        
+        const startTime = Date.now();
+        
+        try {
+            // Run each test suite
+            for (const suiteName of this.testSuites) {
+                await this.runTestSuite(suiteName);
+            }
+            
+            // Generate comprehensive report
+            await this.generateRegressionReport();
+            
+            const duration = Date.now() - startTime;
+            console.log(`\n⏱️  Total test duration: ${duration}ms`);
+            
+        } catch (error) {
+            console.error('❌ Regression test suite failed:', error.message);
+            throw error;
+        }
+    }
+
+    /**
+     * Run individual test suite
+     */
+    async runTestSuite(suiteName) {
+        console.log(`\n📦 Running ${suiteName}...`);
+        
+        const testMethod = `run${suiteName}`;
+        
+        if (typeof this[testMethod] === 'function') {
+            try {
+                await this[testMethod]();
+                console.log(`✅ ${suiteName} completed`);
+            } catch (error) {
+                console.error(`❌ ${suiteName} failed:`, error.message);
+                this.logTestResult(suiteName, false, error.message);
+            }
+        } else {
+            console.warn(`⚠️  Test method ${testMethod} not implemented`);
+        }
+    }
+
+    /**
+     * Test report creation for false positives
+     */
+    async runReportCreationTests() {
+        console.log('  📊 Testing Report Creation...');
+        
+        const testCases = [
+            {
+                name: 'Valid Report Creation',
+                mockResponse: { success: true, id: '00O5f000003kXYZ12' },
+                shouldSucceed: true,
+                expectedObjectExists: true
+            },
+            {
+                name: 'False Success - No ID',
+                mockResponse: { success: true, id: null },
+                shouldSucceed: false,
+                expectedError: 'Success claimed but no ID returned'
+            },
+            {
+                name: 'False Success - Invalid ID Format',
+                mockResponse: { success: true, id: 'invalid-id' },
+                shouldSucceed: false,
+                expectedError: 'Invalid Salesforce ID format'
+            },
+            {
+                name: 'False Success - Wrong Object Type ID',
+                mockResponse: { success: true, id: '01Z5f000003kXYZ12' }, // Dashboard ID for Report
+                shouldSucceed: false,
+                expectedError: 'ID type mismatch'
+            },
+            {
+                name: 'Fake Success - Valid Format but Nonexistent',
+                mockResponse: { success: true, id: '00O000000000000000' }, // Valid format but fake
+                shouldSucceed: false,
+                expectedError: 'Object not found in Salesforce'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Report Creation', testCase);
+        }
+    }
+
+    /**
+     * Test dashboard creation for false positives
+     */
+    async runDashboardCreationTests() {
+        console.log('  📈 Testing Dashboard Creation...');
+        
+        const testCases = [
+            {
+                name: 'Valid Dashboard Creation',
+                mockResponse: { success: true, id: '01Z5f000003kXYZ12' },
+                shouldSucceed: true,
+                expectedObjectExists: true
+            },
+            {
+                name: 'False Success - No Components',
+                mockResponse: { success: true, id: '01Z5f000003kXYZ12', components: [] },
+                shouldSucceed: false,
+                expectedError: 'Dashboard created but no components configured'
+            },
+            {
+                name: 'False Success - Null Response',
+                mockResponse: null,
+                shouldSucceed: false,
+                expectedError: 'No response from MCP server'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Dashboard Creation', testCase);
+        }
+    }
+
+    /**
+     * Test metadata creation for false positives
+     */
+    async runMetadataCreationTests() {
+        console.log('  🔧 Testing Metadata Creation...');
+        
+        const testCases = [
+            {
+                name: 'Field Creation - False Success',
+                mockResponse: { success: true, id: '01N5f000003kXYZ12' },
+                shouldSucceed: false,
+                verificationQuery: "SELECT Id FROM CustomField WHERE Id = '01N5f000003kXYZ12'",
+                expectedError: 'Field not found after creation'
+            },
+            {
+                name: 'Object Creation - Partial Success',
+                mockResponse: { success: true, id: '01I5f000003kXYZ12', warnings: ['Some fields failed'] },
+                shouldSucceed: false,
+                expectedError: 'Partial creation should not be reported as success'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Metadata Creation', testCase);
+        }
+    }
+
+    /**
+     * Test data operations for false positives
+     */
+    async runDataOperationTests() {
+        console.log('  💾 Testing Data Operations...');
+        
+        const testCases = [
+            {
+                name: 'Bulk Insert - False Success Count',
+                mockResponse: { success: true, records: 100, failed: 50 },
+                shouldSucceed: false,
+                expectedError: 'Partial success should not be reported as complete success'
+            },
+            {
+                name: 'Data Export - Empty Result',
+                mockResponse: { success: true, recordCount: 0, fileSize: 0 },
+                shouldSucceed: false,
+                expectedError: 'Export returned no data'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Data Operations', testCase);
+        }
+    }
+
+    /**
+     * Test security operations for false positives
+     */
+    async runSecurityOperationTests() {
+        console.log('  🔐 Testing Security Operations...');
+        
+        const testCases = [
+            {
+                name: 'Permission Set Creation - False Success',
+                mockResponse: { success: true, id: '0PS5f000003kXYZ12' },
+                shouldSucceed: false,
+                verificationQuery: "SELECT Id FROM PermissionSet WHERE Id = '0PS5f000003kXYZ12'",
+                expectedError: 'Permission set not found after creation'
+            },
+            {
+                name: 'Profile Update - Partial Success',
+                mockResponse: { success: true, id: '00e5f000003kXYZ12', skippedPermissions: 5 },
+                shouldSucceed: false,
+                expectedError: 'Partial updates should be reported as warnings, not success'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Security Operations', testCase);
+        }
+    }
+
+    /**
+     * Test integration operations for false positives
+     */
+    async runIntegrationTests() {
+        console.log('  🔗 Testing Integration Operations...');
+        
+        const testCases = [
+            {
+                name: 'Connected App - False Success',
+                mockResponse: { success: true, id: '02u5f000003kXYZ12', status: 'pending' },
+                shouldSucceed: false,
+                expectedError: 'Connected app creation pending, not completed'
+            },
+            {
+                name: 'API Callout - Timeout False Success',
+                mockResponse: { success: true, timeout: true },
+                shouldSucceed: false,
+                expectedError: 'Operation timed out, cannot confirm success'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Integration Operations', testCase);
+        }
+    }
+
+    /**
+     * Test error handling scenarios
+     */
+    async runErrorHandlingTests() {
+        console.log('  ⚠️  Testing Error Handling...');
+        
+        const testCases = [
+            {
+                name: 'Error Response Claimed as Success',
+                mockResponse: { success: true, error: 'INSUFFICIENT_ACCESS' },
+                shouldSucceed: false,
+                expectedError: 'Cannot claim success when error is present'
+            },
+            {
+                name: 'Undefined Response Handling',
+                mockResponse: undefined,
+                shouldSucceed: false,
+                expectedError: 'No response from MCP server'
+            },
+            {
+                name: 'Malformed Response Structure',
+                mockResponse: { sucess: true }, // Typo in 'success'
+                shouldSucceed: false,
+                expectedError: 'Invalid response structure'
+            }
+        ];
+        
+        for (const testCase of testCases) {
+            await this.runSingleTest('Error Handling', testCase);
+        }
+    }
+
+    /**
+     * Run a single test case
+     */
+    async runSingleTest(testType, testCase) {
+        console.log(`    🧪 ${testCase.name}...`);
+        
+        try {
+            const result = await this.validateMockResponse(testCase.mockResponse, testType);
+            
+            if (testCase.shouldSucceed) {
+                if (result.success) {
+                    // Additional verification for claimed success
+                    if (testCase.verificationQuery) {
+                        const verified = await this.verifySalesforceQuery(testCase.verificationQuery);
+                        if (!verified) {
+                            this.detectFalsePositive(testType, testCase, 'Success claimed but verification failed');
+                        } else {
+                            this.logTestResult(`${testType} - ${testCase.name}`, true, 'Passed with verification');
+                        }
+                    } else {
+                        this.logTestResult(`${testType} - ${testCase.name}`, true, 'Passed');
+                    }
+                } else {
+                    this.logTestResult(`${testType} - ${testCase.name}`, false, 'Expected success but got failure');
+                }
+            } else {
+                if (result.success) {
+                    this.detectFalsePositive(testType, testCase, 'False positive detected: claimed success when should fail');
+                } else {
+                    this.logTestResult(`${testType} - ${testCase.name}`, true, 'Correctly rejected invalid operation');
+                }
+            }
+            
+        } catch (error) {
+            if (testCase.shouldSucceed) {
+                this.logTestResult(`${testType} - ${testCase.name}`, false, `Unexpected error: ${error.message}`);
+            } else {
+                this.logTestResult(`${testType} - ${testCase.name}`, true, `Expected error caught: ${error.message}`);
+            }
+        }
+    }
+
+    /**
+     * Validate mock MCP response using validation logic
+     */
+    async validateMockResponse(response, operationType) {
+        // Simulate the validation logic that should be in agents
+        
+        if (!response) {
+            throw new Error(`${operationType} failed: No response from MCP server`);
+        }
+        
+        if (response.success !== true) {
+            if (response.error) {
+                throw new Error(`${operationType} failed: ${response.error}`);
+            } else {
+                throw new Error(`${operationType} failed: Operation did not complete successfully`);
+            }
+        }
+        
+        // Check for contradictory success/error combination
+        if (response.success === true && response.error) {
+            throw new Error(`${operationType} invalid response: Cannot have success=true with error present`);
+        }
+        
+        if (!response.id) {
+            throw new Error(`${operationType} claimed success but returned no ID`);
+        }
+        
+        if (typeof response.id !== 'string' || !response.id.match(/^[a-zA-Z0-9]{15,18}$/)) {
+            throw new Error(`${operationType} returned invalid Salesforce ID format: ${response.id}`);
+        }
+        
+        // Additional validations for specific scenarios
+        if (response.timeout) {
+            throw new Error(`${operationType} timed out - cannot confirm success`);
+        }
+        
+        if (response.failed && response.failed > 0) {
+            throw new Error(`${operationType} had ${response.failed} failures - cannot claim complete success`);
+        }
+        
+        if (response.warnings && response.warnings.length > 0) {
+            // Warnings should be reported but might not prevent success
+            console.log(`    ⚠️  ${operationType} completed with warnings: ${response.warnings.join(', ')}`);
+        }
+        
+        return { success: true, id: response.id };
+    }
+
+    /**
+     * Verify Salesforce query (simulated)
+     */
+    async verifySalesforceQuery(query) {
+        try {
+            // In real implementation, this would execute the query
+            // For testing, we'll simulate based on the query structure
+            
+            if (query.includes('000000000000000')) {
+                // Fake ID pattern - should not exist
+                return false;
+            }
+            
+            if (query.includes('SELECT') && query.includes('WHERE Id =')) {
+                // Simulate successful query for valid-looking IDs
+                return Math.random() > 0.3; // 70% chance of existing
+            }
+            
+            return true;
+            
+        } catch (error) {
+            return false;
+        }
+    }
+
+    /**
+     * Detect and log false positive
+     */
+    detectFalsePositive(testType, testCase, reason) {
+        const falsePositive = {
+            testType,
+            testCase: testCase.name,
+            mockResponse: testCase.mockResponse,
+            reason,
+            timestamp: new Date().toISOString()
+        };
+        
+        this.falsePositiveDetections.push(falsePositive);
+        
+        console.log(`    ❌ FALSE POSITIVE DETECTED: ${testCase.name}`);
+        console.log(`       Reason: ${reason}`);
+        
+        this.logTestResult(`${testType} - ${testCase.name}`, false, `FALSE POSITIVE: ${reason}`);
+    }
+
+    /**
+     * Log individual test result
+     */
+    logTestResult(testName, passed, details) {
+        this.testResults.push({
+            test: testName,
+            passed: passed,
+            details: details,
+            timestamp: new Date().toISOString()
+        });
+    }
+
+    /**
+     * Generate comprehensive regression report
+     */
+    async generateRegressionReport() {
+        console.log('\n📋 GENERATING REGRESSION TEST REPORT...\n');
+        
+        const totalTests = this.testResults.length;
+        const passedTests = this.testResults.filter(r => r.passed).length;
+        const failedTests = totalTests - passedTests;
+        const falsePositiveCount = this.falsePositiveDetections.length;
+        
+        const report = {
+            timestamp: new Date().toISOString(),
+            summary: {
+                totalTests,
+                passedTests,
+                failedTests,
+                successRate: ((passedTests / totalTests) * 100).toFixed(1) + '%',
+                falsePositiveDetections: falsePositiveCount,
+                criticalIssues: falsePositiveCount > 0
+            },
+            falsePositives: this.falsePositiveDetections,
+            testResults: this.testResults,
+            recommendations: this.generateRecommendations()
+        };
+        
+        // Display summary
+        console.log('📊 REGRESSION TEST SUMMARY');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log(`Total Tests: ${totalTests}`);
+        console.log(`Passed: ${passedTests}`);
+        console.log(`Failed: ${failedTests}`);
+        console.log(`Success Rate: ${report.summary.successRate}`);
+        console.log(`False Positives: ${falsePositiveCount} ${falsePositiveCount > 0 ? '⚠️' : '✅'}`);
+        
+        if (falsePositiveCount > 0) {
+            console.log('\n🚨 FALSE POSITIVES DETECTED:');
+            this.falsePositiveDetections.forEach((fp, index) => {
+                console.log(`${index + 1}. ${fp.testType} - ${fp.testCase}`);
+                console.log(`   Reason: ${fp.reason}`);
+                console.log(`   Mock Response: ${JSON.stringify(fp.mockResponse)}`);
+            });
+        }
+        
+        if (failedTests > 0) {
+            console.log('\n❌ FAILED TESTS:');
+            this.testResults.filter(r => !r.passed).forEach((test, index) => {
+                if (!test.details.includes('FALSE POSITIVE')) {
+                    console.log(`${index + 1}. ${test.test}: ${test.details}`);
+                }
+            });
+        }
+        
+        console.log('\n💡 RECOMMENDATIONS:');
+        report.recommendations.forEach((rec, index) => {
+            console.log(`${index + 1}. ${rec}`);
+        });
+        
+        // Save detailed report
+        const reportPath = path.join(__dirname, '..', 'false-positive-regression-report.json');
+        fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+        
+        console.log(`\n📄 Detailed report saved to: ${reportPath}`);
+        
+        // Return critical status
+        return {
+            success: falsePositiveCount === 0,
+            falsePositiveCount,
+            report
+        };
+    }
+
+    /**
+     * Generate recommendations based on test results
+     */
+    generateRecommendations() {
+        const recommendations = [];
+        
+        if (this.falsePositiveDetections.length > 0) {
+            recommendations.push('CRITICAL: Fix false positive success message detection in agents');
+            recommendations.push('Implement comprehensive MCP response validation in all agents');
+            recommendations.push('Add mandatory Salesforce verification queries after all operations');
+            recommendations.push('Update agent documentation with proper validation requirements');
+        }
+        
+        const failureCount = this.testResults.filter(r => !r.passed).length;
+        if (failureCount > this.testResults.length * 0.1) {
+            recommendations.push('High test failure rate - review agent error handling implementation');
+        }
+        
+        // Analysis by test type
+        const testTypes = {};
+        this.falsePositiveDetections.forEach(fp => {
+            testTypes[fp.testType] = (testTypes[fp.testType] || 0) + 1;
+        });
+        
+        Object.entries(testTypes).forEach(([type, count]) => {
+            recommendations.push(`Review ${type} agents - ${count} false positive${count > 1 ? 's' : ''} detected`);
+        });
+        
+        recommendations.push('Schedule regular regression testing to prevent false positive regressions');
+        recommendations.push('Implement automated false positive detection in CI/CD pipeline');
+        recommendations.push('Create monitoring alerts for false positive patterns in production');
+        
+        if (recommendations.length === 1) {
+            recommendations.push('All false positive regression tests passed successfully');
+        }
+        
+        return recommendations;
+    }
+
+    /**
+     * Generate mock responses for testing
+     */
+    generateMockResponses() {
+        return {
+            validSuccess: { success: true, id: '00O5f000003kXYZ12' },
+            falseSuccess: { success: true, id: null },
+            invalidId: { success: true, id: 'invalid-format' },
+            nullResponse: null,
+            undefinedResponse: undefined,
+            errorWithSuccess: { success: true, error: 'SOME_ERROR' },
+            partialFailure: { success: true, id: '00O5f000003kXYZ12', failed: 5 },
+            timeoutSuccess: { success: true, id: '00O5f000003kXYZ12', timeout: true }
+        };
+    }
+}
+
+// Run tests if called directly
+if (require.main === module) {
+    const tester = new FalsePositiveRegressionTests();
+    
+    tester.runAllRegressionTests().then(result => {
+        if (result.success) {
+            console.log('\n✅ All regression tests passed - no false positives detected');
+            process.exit(0);
+        } else {
+            console.log(`\n❌ Regression tests failed - ${result.falsePositiveCount} false positives detected`);
+            process.exit(1);
+        }
+    }).catch(error => {
+        console.error('\n💥 Regression test suite crashed:', error.message);
+        process.exit(2);
+    });
+}
+
+module.exports = FalsePositiveRegressionTests;

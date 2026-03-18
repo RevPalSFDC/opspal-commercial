@@ -1,0 +1,4 @@
+interface:
+  display_name: "Org Claim Evidence Enforcement"
+  short_description: "Help with Org Claim Evidence Enforcement tasks"
+  default_prompt: "Use $org-claim-evidence-enforcement to execute this workflow safely and produce the expected artifacts."

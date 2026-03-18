@@ -1,0 +1,232 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReportPlan",
+  "description": "Strict intermediate contract between user intent and Salesforce Report API call. Execution is blocked if required fields are missing or confidence is below threshold.",
+  "type": "object",
+  "required": [
+    "intent",
+    "primary_object",
+    "grain",
+    "report_type",
+    "columns",
+    "filters",
+    "assumptions",
+    "confidence"
+  ],
+  "properties": {
+    "intent": {
+      "type": "string",
+      "enum": ["create", "update", "clone"],
+      "description": "The CRUD operation to perform"
+    },
+    "business_question": {
+      "type": "string",
+      "description": "The natural-language question this report answers"
+    },
+    "primary_object": {
+      "type": "string",
+      "description": "The primary Salesforce object (e.g., Opportunity, Account, Lead)"
+    },
+    "grain": {
+      "type": "string",
+      "description": "The level of detail per row (e.g., opportunity, account, line_item)"
+    },
+    "report_type": {
+      "type": "string",
+      "description": "Salesforce report type API name (e.g., Opportunity, AccountWithContacts)"
+    },
+    "report_format": {
+      "type": "string",
+      "enum": ["TABULAR", "SUMMARY", "MATRIX", "MULTI_BLOCK"],
+      "default": "TABULAR",
+      "description": "Salesforce report format"
+    },
+    "columns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Column API names to include in the report"
+    },
+    "filters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["column", "operator", "value"],
+        "properties": {
+          "column": { "type": "string" },
+          "operator": { "type": "string" },
+          "value": { "type": ["string", "array", "null"] }
+        }
+      },
+      "description": "Report filter criteria"
+    },
+    "boolean_filter": {
+      "type": ["string", "null"],
+      "description": "Custom boolean filter logic (e.g., '1 AND (2 OR 3)')"
+    },
+    "standard_date_filter": {
+      "type": ["object", "null"],
+      "properties": {
+        "column": { "type": "string" },
+        "durationValue": { "type": "string" },
+        "startDate": { "type": ["string", "null"] },
+        "endDate": { "type": ["string", "null"] }
+      },
+      "description": "Standard date filter for the report"
+    },
+    "groupings": {
+      "type": "object",
+      "properties": {
+        "down": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["field"],
+            "properties": {
+              "field": { "type": "string" },
+              "dateGranularity": { "type": "string" },
+              "sortOrder": { "type": "string", "enum": ["Asc", "Desc"] }
+            }
+          },
+          "maxItems": 3
+        },
+        "across": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["field"],
+            "properties": {
+              "field": { "type": "string" },
+              "dateGranularity": { "type": "string" },
+              "sortOrder": { "type": "string", "enum": ["Asc", "Desc"] }
+            }
+          },
+          "maxItems": 2
+        }
+      },
+      "default": { "down": [], "across": [] }
+    },
+    "summaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "aggregate"],
+        "properties": {
+          "field": { "type": "string" },
+          "aggregate": {
+            "type": "string",
+            "enum": ["SUM", "AVG", "MIN", "MAX", "UNIQUE", "RowCount"]
+          }
+        }
+      },
+      "default": []
+    },
+    "custom_formulas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "formula", "dataType"],
+        "properties": {
+          "label": { "type": "string" },
+          "formula": { "type": "string" },
+          "dataType": { "type": "string" },
+          "decimalPlaces": { "type": "integer" },
+          "description": { "type": "string" }
+        }
+      },
+      "default": []
+    },
+    "chart": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": { "type": "string" },
+        "grouping": { "type": "string" },
+        "summary": { "type": "string" },
+        "secondaryGrouping": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Explicit assumptions made during plan construction"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score (0-1). Execution blocked below 0.7"
+    },
+    "financial_authority_flag": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this report will be used for financial reporting"
+    },
+    "unresolved_semantics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "interpretations"],
+        "properties": {
+          "term": { "type": "string" },
+          "interpretations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label"],
+              "properties": {
+                "label": { "type": "string" },
+                "object": { "type": "string" },
+                "filter": { "type": "string" },
+                "metric": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "default": [],
+      "description": "Business terms that need user clarification. Execution blocked if non-empty."
+    },
+    "report_name": {
+      "type": ["string", "null"],
+      "description": "Display name for the report"
+    },
+    "folder_id": {
+      "type": ["string", "null"],
+      "description": "Salesforce folder ID for the report"
+    },
+    "source_report_id": {
+      "type": ["string", "null"],
+      "description": "Source report ID (for clone or update operations)"
+    },
+    "patch": {
+      "type": ["object", "null"],
+      "description": "Patch object for update operations",
+      "properties": {
+        "add_columns": { "type": "array", "items": { "type": "string" } },
+        "remove_columns": { "type": "array", "items": { "type": "string" } },
+        "add_filters": { "type": "array", "items": { "type": "object" } },
+        "remove_filters": { "type": "array", "items": { "type": "object" } },
+        "update_groupings": { "type": "object" },
+        "update_summaries": { "type": "array" },
+        "update_chart": { "type": ["object", "null"] }
+      }
+    },
+    "correction_notes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "component": { "type": "string" },
+          "original": { "type": "string" },
+          "resolved": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "default": [],
+      "description": "Notes from auto-correction (field substitutions, format changes, etc.)"
+    }
+  },
+  "additionalProperties": false
+}

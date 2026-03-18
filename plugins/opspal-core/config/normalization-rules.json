@@ -1,0 +1,520 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "RevOps Data Quality System - Data Normalization and Canonicalization Rules",
+
+  "company_name": {
+    "description": "Rules for normalizing company/account names",
+    "operations": [
+      {
+        "name": "trim_whitespace",
+        "order": 1,
+        "description": "Remove leading/trailing whitespace and collapse multiple spaces"
+      },
+      {
+        "name": "strip_legal_suffixes",
+        "order": 2,
+        "description": "Remove common legal entity suffixes",
+        "suffixes": [
+          "Inc", "Inc.", "Incorporated",
+          "LLC", "L.L.C.", "Limited Liability Company",
+          "Corp", "Corp.", "Corporation",
+          "Ltd", "Ltd.", "Limited",
+          "Co", "Co.", "Company",
+          "LLP", "L.L.P.", "Limited Liability Partnership",
+          "LP", "L.P.", "Limited Partnership",
+          "PC", "P.C.", "Professional Corporation",
+          "PLC", "P.L.C.", "Public Limited Company",
+          "GmbH", "AG", "SA", "NV", "BV",
+          "Pty Ltd", "Pty. Ltd."
+        ],
+        "preserve_in_alias": true
+      },
+      {
+        "name": "expand_abbreviations",
+        "order": 3,
+        "description": "Expand common abbreviations",
+        "mappings": {
+          "Intl": "International",
+          "Int'l": "International",
+          "Natl": "National",
+          "Nat'l": "National",
+          "Univ": "University",
+          "Assoc": "Associates",
+          "Assn": "Association",
+          "Mfg": "Manufacturing",
+          "Svcs": "Services",
+          "Svc": "Service",
+          "Tech": "Technology",
+          "Techs": "Technologies",
+          "Sys": "Systems",
+          "Mgmt": "Management",
+          "Grp": "Group",
+          "Dept": "Department",
+          "Dist": "District",
+          "Govt": "Government"
+        }
+      },
+      {
+        "name": "normalize_case",
+        "order": 4,
+        "description": "Apply title case with exceptions",
+        "case": "title",
+        "preserve_acronyms": true,
+        "known_acronyms": ["IBM", "HP", "AT&T", "UPS", "FedEx", "CVS", "GE", "3M", "SAP", "AMD", "USA", "UK"]
+      },
+      {
+        "name": "remove_punctuation",
+        "order": 5,
+        "description": "Remove unnecessary punctuation",
+        "remove": [",", ".", "'"],
+        "preserve": ["&", "-", "/"]
+      }
+    ],
+    "output": {
+      "canonical": "normalized name without suffix",
+      "alias_fields": ["original_name", "legal_name_with_suffix", "dba_names"]
+    }
+  },
+
+  "domain": {
+    "description": "Rules for normalizing website domains",
+    "operations": [
+      {
+        "name": "lowercase",
+        "order": 1,
+        "description": "Convert to lowercase"
+      },
+      {
+        "name": "strip_protocol",
+        "order": 2,
+        "description": "Remove http:// or https://",
+        "patterns": ["^https?://"]
+      },
+      {
+        "name": "strip_www",
+        "order": 3,
+        "description": "Remove www. prefix",
+        "pattern": "^www\\."
+      },
+      {
+        "name": "extract_domain",
+        "order": 4,
+        "description": "Extract domain only (remove path, query params)",
+        "pattern": "^([^/]+)"
+      },
+      {
+        "name": "strip_trailing",
+        "order": 5,
+        "description": "Remove trailing dots and slashes",
+        "patterns": ["[./]+$"]
+      }
+    ],
+    "validation": {
+      "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$",
+      "max_length": 253
+    },
+    "examples": [
+      {"input": "https://www.example.com/path", "output": "example.com"},
+      {"input": "EXAMPLE.COM", "output": "example.com"},
+      {"input": "www.example.com/", "output": "example.com"}
+    ]
+  },
+
+  "email": {
+    "description": "Rules for normalizing email addresses",
+    "operations": [
+      {
+        "name": "lowercase",
+        "order": 1,
+        "description": "Convert entire email to lowercase"
+      },
+      {
+        "name": "trim_whitespace",
+        "order": 2,
+        "description": "Remove leading/trailing whitespace"
+      },
+      {
+        "name": "strip_plus_addressing",
+        "order": 3,
+        "description": "Remove plus addressing for matching (e.g., user+tag@domain → user@domain)",
+        "pattern": "\\+[^@]*(?=@)",
+        "apply_for_matching_only": true
+      },
+      {
+        "name": "normalize_common_domains",
+        "order": 4,
+        "description": "Normalize known domain variations",
+        "mappings": {
+          "googlemail.com": "gmail.com"
+        }
+      }
+    ],
+    "validation": {
+      "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "max_length": 254
+    },
+    "classification": {
+      "personal_domains": ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com", "icloud.com", "protonmail.com"],
+      "disposable_domains": ["tempmail.com", "guerrillamail.com", "10minutemail.com", "mailinator.com"],
+      "shared_patterns": ["^info@", "^admin@", "^support@", "^sales@", "^contact@", "^hello@", "^team@"]
+    }
+  },
+
+  "phone": {
+    "description": "Rules for normalizing phone numbers to E.164 format",
+    "operations": [
+      {
+        "name": "strip_formatting",
+        "order": 1,
+        "description": "Remove all non-digit characters except leading +",
+        "pattern": "[^0-9+]",
+        "preserve_leading_plus": true
+      },
+      {
+        "name": "extract_extension",
+        "order": 2,
+        "description": "Extract extension to separate field",
+        "patterns": ["(?:x|ext\\.?|extension)\\s*(\\d+)", "#(\\d+)$"]
+      },
+      {
+        "name": "add_country_code",
+        "order": 3,
+        "description": "Add country code if missing",
+        "default_country": "US",
+        "country_codes": {
+          "US": "+1",
+          "CA": "+1",
+          "UK": "+44",
+          "AU": "+61",
+          "DE": "+49",
+          "FR": "+33"
+        }
+      },
+      {
+        "name": "format_e164",
+        "order": 4,
+        "description": "Format as E.164 (+{country}{number})"
+      }
+    ],
+    "validation": {
+      "pattern": "^\\+[1-9]\\d{1,14}$",
+      "min_length": 8,
+      "max_length": 15
+    },
+    "display_formats": {
+      "US": "(XXX) XXX-XXXX",
+      "UK": "XXXX XXX XXXX",
+      "international": "+X XXX XXX XXXX"
+    },
+    "examples": [
+      {"input": "(212) 555-1234", "output": "+12125551234"},
+      {"input": "212.555.1234 x123", "output": "+12125551234", "extension": "123"},
+      {"input": "+44 20 7946 0958", "output": "+442079460958"}
+    ]
+  },
+
+  "address": {
+    "description": "Rules for normalizing postal addresses (USPS standard for US)",
+    "operations": [
+      {
+        "name": "parse_components",
+        "order": 1,
+        "description": "Parse address into components",
+        "components": ["street", "street2", "city", "state", "postal_code", "country"]
+      },
+      {
+        "name": "uppercase",
+        "order": 2,
+        "description": "Convert to uppercase (USPS standard)",
+        "apply_to": ["street", "city"]
+      },
+      {
+        "name": "abbreviate_street_types",
+        "order": 3,
+        "description": "Use USPS standard abbreviations",
+        "mappings": {
+          "Street": "ST",
+          "Avenue": "AVE",
+          "Boulevard": "BLVD",
+          "Drive": "DR",
+          "Road": "RD",
+          "Lane": "LN",
+          "Court": "CT",
+          "Circle": "CIR",
+          "Place": "PL",
+          "Parkway": "PKWY",
+          "Highway": "HWY",
+          "Way": "WAY",
+          "Terrace": "TER",
+          "Trail": "TRL"
+        }
+      },
+      {
+        "name": "abbreviate_directions",
+        "order": 4,
+        "description": "Abbreviate directional prefixes/suffixes",
+        "mappings": {
+          "North": "N",
+          "South": "S",
+          "East": "E",
+          "West": "W",
+          "Northeast": "NE",
+          "Northwest": "NW",
+          "Southeast": "SE",
+          "Southwest": "SW"
+        }
+      },
+      {
+        "name": "abbreviate_unit_types",
+        "order": 5,
+        "description": "Abbreviate secondary unit types",
+        "mappings": {
+          "Suite": "STE",
+          "Apartment": "APT",
+          "Unit": "UNIT",
+          "Floor": "FL",
+          "Building": "BLDG",
+          "Room": "RM"
+        }
+      },
+      {
+        "name": "normalize_state",
+        "order": 6,
+        "description": "Convert state names to two-letter codes",
+        "use_lookup": "us_states"
+      },
+      {
+        "name": "format_postal_code",
+        "order": 7,
+        "description": "Format postal code (ZIP+4 for US)",
+        "us_format": "XXXXX-XXXX",
+        "uk_format": "XXX XXX"
+      }
+    ],
+    "us_states": {
+      "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR",
+      "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE",
+      "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID",
+      "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS",
+      "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD",
+      "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS",
+      "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV",
+      "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
+      "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK",
+      "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+      "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT",
+      "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV",
+      "Wisconsin": "WI", "Wyoming": "WY", "District of Columbia": "DC"
+    }
+  },
+
+  "person_name": {
+    "description": "Rules for normalizing person names",
+    "operations": [
+      {
+        "name": "trim_whitespace",
+        "order": 1
+      },
+      {
+        "name": "remove_honorifics",
+        "order": 2,
+        "description": "Remove honorific prefixes and store separately",
+        "prefixes": ["Mr.", "Mrs.", "Ms.", "Miss", "Dr.", "Prof.", "Rev.", "Hon.", "Sir"],
+        "store_in": "honorific"
+      },
+      {
+        "name": "remove_suffixes",
+        "order": 3,
+        "description": "Remove name suffixes and store separately",
+        "suffixes": ["Jr.", "Jr", "Sr.", "Sr", "II", "III", "IV", "PhD", "Ph.D.", "MD", "M.D.", "Esq.", "CPA"],
+        "store_in": "suffix"
+      },
+      {
+        "name": "normalize_case",
+        "order": 4,
+        "description": "Apply proper case with cultural awareness",
+        "special_cases": {
+          "mcdonald": "McDonald",
+          "macarthur": "MacArthur",
+          "o'brien": "O'Brien",
+          "o'connor": "O'Connor",
+          "van": "van",
+          "von": "von",
+          "de": "de",
+          "la": "la",
+          "del": "del"
+        }
+      }
+    ]
+  },
+
+  "title": {
+    "description": "Rules for normalizing job titles",
+    "operations": [
+      {
+        "name": "trim_whitespace",
+        "order": 1
+      },
+      {
+        "name": "expand_abbreviations",
+        "order": 2,
+        "mappings": {
+          "VP": "Vice President",
+          "SVP": "Senior Vice President",
+          "EVP": "Executive Vice President",
+          "AVP": "Associate Vice President",
+          "Sr.": "Senior",
+          "Sr": "Senior",
+          "Jr.": "Junior",
+          "Jr": "Junior",
+          "Mgr": "Manager",
+          "Mgr.": "Manager",
+          "Dir": "Director",
+          "Dir.": "Director",
+          "Coord": "Coordinator",
+          "Coord.": "Coordinator",
+          "Admin": "Administrator",
+          "Admin.": "Administrator",
+          "Exec": "Executive",
+          "Exec.": "Executive",
+          "Asst": "Assistant",
+          "Asst.": "Assistant",
+          "Assoc": "Associate",
+          "Assoc.": "Associate",
+          "Eng": "Engineer",
+          "Eng.": "Engineer",
+          "Dev": "Developer",
+          "Tech": "Technical",
+          "Tech.": "Technical",
+          "Ops": "Operations",
+          "Mktg": "Marketing",
+          "Acct": "Accountant"
+        }
+      },
+      {
+        "name": "normalize_case",
+        "order": 3,
+        "case": "title"
+      },
+      {
+        "name": "standardize_separators",
+        "order": 4,
+        "description": "Standardize separators between title parts",
+        "normalize_to": " - ",
+        "patterns": [" / ", " | ", " – ", " — ", " , "]
+      }
+    ],
+    "preserve_original": true
+  },
+
+  "government_entity": {
+    "description": "Rules for normalizing government entity names",
+    "operations": [
+      {
+        "name": "standardize_prefix",
+        "order": 1,
+        "description": "Standardize jurisdiction prefixes",
+        "mappings": {
+          "^City of ": "City of ",
+          "^Town of ": "Town of ",
+          "^Village of ": "Village of ",
+          "^Borough of ": "Borough of ",
+          "^County of ": "County of ",
+          "^State of ": "State of ",
+          "^Commonwealth of ": "Commonwealth of "
+        }
+      },
+      {
+        "name": "standardize_department",
+        "order": 2,
+        "description": "Standardize department name patterns",
+        "patterns": {
+          "Police Dept\\.?": "Police Department",
+          "Fire Dept\\.?": "Fire Department",
+          "PD$": "Police Department",
+          "FD$": "Fire Department",
+          "Dept\\.? of": "Department of"
+        }
+      },
+      {
+        "name": "format_hierarchy",
+        "order": 3,
+        "description": "Format as 'Parent - Department' for clarity",
+        "separator": " - "
+      }
+    ]
+  },
+
+  "industry": {
+    "description": "Rules for normalizing industry values to standard classifications",
+    "operations": [
+      {
+        "name": "map_to_standard",
+        "order": 1,
+        "description": "Map free-text industry to standard values",
+        "target_taxonomy": "salesforce_industry_picklist"
+      }
+    ],
+    "salesforce_industry_picklist": [
+      "Agriculture", "Apparel", "Banking", "Biotechnology", "Chemicals",
+      "Communications", "Construction", "Consulting", "Education",
+      "Electronics", "Energy", "Engineering", "Entertainment", "Environmental",
+      "Finance", "Food & Beverage", "Government", "Healthcare", "Hospitality",
+      "Insurance", "Machinery", "Manufacturing", "Media", "Not For Profit",
+      "Other", "Recreation", "Retail", "Shipping", "Technology",
+      "Telecommunications", "Transportation", "Utilities"
+    ],
+    "mappings": {
+      "High Tech": "Technology",
+      "Tech": "Technology",
+      "IT": "Technology",
+      "Software": "Technology",
+      "SaaS": "Technology",
+      "Health Care": "Healthcare",
+      "Medical": "Healthcare",
+      "Pharma": "Healthcare",
+      "Pharmaceutical": "Healthcare",
+      "Financial Services": "Finance",
+      "FinTech": "Finance",
+      "Bank": "Banking",
+      "Gov": "Government",
+      "Public Sector": "Government",
+      "Non-Profit": "Not For Profit",
+      "Nonprofit": "Not For Profit",
+      "NGO": "Not For Profit"
+    }
+  },
+
+  "matching_normalization": {
+    "description": "Additional normalization applied specifically for matching/deduplication",
+    "company_name_for_matching": {
+      "additional_operations": [
+        {
+          "name": "remove_the_prefix",
+          "pattern": "^The\\s+"
+        },
+        {
+          "name": "remove_all_punctuation",
+          "pattern": "[^a-zA-Z0-9\\s]"
+        },
+        {
+          "name": "collapse_whitespace",
+          "pattern": "\\s+"
+        },
+        {
+          "name": "lowercase",
+          "description": "For case-insensitive comparison"
+        }
+      ]
+    },
+    "email_for_matching": {
+      "additional_operations": [
+        {
+          "name": "strip_plus_addressing",
+          "description": "Remove +tag portion for duplicate detection"
+        }
+      ]
+    }
+  }
+}

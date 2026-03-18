@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "template": "sales-pipeline",
+    "generated": "2025-01-04",
+    "description": "Demo data for Sales Pipeline Dashboard - 50 opportunities across 5 stages"
+  },
+  "kpis": {
+    "totalPipeline": {
+      "value": 4250000,
+      "priorValue": 3800000,
+      "trend": 11.8,
+      "trendDirection": "up"
+    },
+    "openOpportunities": {
+      "value": 47,
+      "priorValue": 42,
+      "trend": 11.9,
+      "trendDirection": "up"
+    },
+    "winRate": {
+      "value": 32,
+      "priorValue": 28,
+      "trend": 14.3,
+      "trendDirection": "up"
+    },
+    "avgDealSize": {
+      "value": 90425,
+      "priorValue": 85000,
+      "trend": 6.4,
+      "trendDirection": "up"
+    }
+  },
+  "pipelineByStage": {
+    "labels": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won"],
+    "datasets": [{
+      "label": "Pipeline Value",
+      "data": [420000, 850000, 1200000, 980000, 800000],
+      "backgroundColor": ["#94A3B8", "#60A5FA", "#818CF8", "#F59E0B", "#22C55E"]
+    }]
+  },
+  "pipelineCount": {
+    "labels": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won"],
+    "datasets": [{
+      "label": "Deal Count",
+      "data": [12, 15, 10, 7, 3],
+      "backgroundColor": ["#94A3B8", "#60A5FA", "#818CF8", "#F59E0B", "#22C55E"]
+    }]
+  },
+  "pipelineTrend": {
+    "labels": ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8"],
+    "datasets": [
+      {
+        "label": "Pipeline Value",
+        "data": [3200000, 3400000, 3600000, 3800000, 3900000, 4100000, 4150000, 4250000],
+        "borderColor": "#5F3B8C",
+        "backgroundColor": "rgba(95, 59, 140, 0.1)",
+        "fill": true
+      },
+      {
+        "label": "Closed Won",
+        "data": [450000, 520000, 580000, 650000, 700000, 750000, 780000, 800000],
+        "borderColor": "#22C55E",
+        "backgroundColor": "rgba(34, 197, 94, 0.1)",
+        "fill": true
+      }
+    ]
+  },
+  "topOpportunities": [
+    {
+      "id": "006DEMO000001",
+      "name": "Acme Corp - Enterprise License",
+      "ownerName": "Sarah Johnson",
+      "amount": 425000,
+      "stageName": "Negotiation",
+      "closeDate": "2025-01-31",
+      "daysInStage": 12,
+      "probability": 75
+    },
+    {
+      "id": "006DEMO000002",
+      "name": "TechStart Inc - Platform Migration",
+      "ownerName": "Michael Chen",
+      "amount": 380000,
+      "stageName": "Proposal",
+      "closeDate": "2025-02-15",
+      "daysInStage": 8,
+      "probability": 50
+    },
+    {
+      "id": "006DEMO000003",
+      "name": "GlobalTrade - Annual Renewal",
+      "ownerName": "Emily Rodriguez",
+      "amount": 295000,
+      "stageName": "Negotiation",
+      "closeDate": "2025-01-28",
+      "daysInStage": 5,
+      "probability": 80
+    },
+    {
+      "id": "006DEMO000004",
+      "name": "FinanceFirst - New Implementation",
+      "ownerName": "David Park",
+      "amount": 275000,
+      "stageName": "Proposal",
+      "closeDate": "2025-02-28",
+      "daysInStage": 14,
+      "probability": 45
+    },
+    {
+      "id": "006DEMO000005",
+      "name": "HealthPlus Systems - Expansion",
+      "ownerName": "Sarah Johnson",
+      "amount": 245000,
+      "stageName": "Qualification",
+      "closeDate": "2025-03-15",
+      "daysInStage": 6,
+      "probability": 30
+    },
+    {
+      "id": "006DEMO000006",
+      "name": "RetailMax - Multi-Location",
+      "ownerName": "Michael Chen",
+      "amount": 220000,
+      "stageName": "Proposal",
+      "closeDate": "2025-02-10",
+      "daysInStage": 10,
+      "probability": 55
+    },
+    {
+      "id": "006DEMO000007",
+      "name": "CloudNative - DevOps Suite",
+      "ownerName": "Emily Rodriguez",
+      "amount": 195000,
+      "stageName": "Qualification",
+      "closeDate": "2025-03-01",
+      "daysInStage": 4,
+      "probability": 35
+    },
+    {
+      "id": "006DEMO000008",
+      "name": "DataDriven Analytics - Enterprise",
+      "ownerName": "David Park",
+      "amount": 185000,
+      "stageName": "Prospecting",
+      "closeDate": "2025-03-31",
+      "daysInStage": 2,
+      "probability": 15
+    },
+    {
+      "id": "006DEMO000009",
+      "name": "SecureBank - Compliance Module",
+      "ownerName": "Sarah Johnson",
+      "amount": 175000,
+      "stageName": "Negotiation",
+      "closeDate": "2025-01-25",
+      "daysInStage": 18,
+      "probability": 70
+    },
+    {
+      "id": "006DEMO000010",
+      "name": "MediaCorp - Content Platform",
+      "ownerName": "Michael Chen",
+      "amount": 165000,
+      "stageName": "Proposal",
+      "closeDate": "2025-02-20",
+      "daysInStage": 7,
+      "probability": 50
+    }
+  ],
+  "conversionFunnel": {
+    "stages": [
+      { "name": "Prospecting", "count": 120, "conversion": 62.5 },
+      { "name": "Qualification", "count": 75, "conversion": 60.0 },
+      { "name": "Proposal", "count": 45, "conversion": 55.6 },
+      { "name": "Negotiation", "count": 25, "conversion": 64.0 },
+      { "name": "Closed Won", "count": 16, "conversion": null }
+    ]
+  },
+  "salesByRep": {
+    "labels": ["Sarah Johnson", "Michael Chen", "Emily Rodriguez", "David Park", "Alex Kim"],
+    "datasets": [{
+      "label": "Pipeline Value",
+      "data": [1250000, 980000, 850000, 720000, 450000],
+      "backgroundColor": "#5F3B8C"
+    }]
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "HubSpot Association IDs",
+  "description": "Directional association mappings for HubSpot Lists API and other endpoints",
+  "version": "1.0.0",
+  "created": "2025-10-24",
+  "note": "Association IDs are DIRECTIONAL - Contact→Company (279) is different from Company→Contact (280)",
+
+  "associations": {
+    "contact_to_company": {
+      "id": 279,
+      "name": "Contact to Company",
+      "fromObject": "contacts",
+      "toObject": "companies",
+      "description": "Used when filtering contacts by company properties",
+      "examples": [
+        "Filter contacts where associated company's industry = 'Technology'",
+        "List API: Use 279 for contact lists with company property filters"
+      ]
+    },
+
+    "company_to_contact": {
+      "id": 280,
+      "name": "Company to Contact",
+      "fromObject": "companies",
+      "toObject": "contacts",
+      "description": "Used when filtering companies by contact properties",
+      "examples": [
+        "Filter companies where associated contact's lifecycle stage = 'Customer'",
+        "List API: Use 280 for company lists with contact property filters"
+      ]
+    },
+
+    "contact_to_deal": {
+      "id": 3,
+      "name": "Contact to Deal",
+      "fromObject": "contacts",
+      "toObject": "deals",
+      "description": "Used when filtering contacts by deal properties"
+    },
+
+    "deal_to_contact": {
+      "id": 4,
+      "name": "Deal to Contact",
+      "fromObject": "deals",
+      "toObject": "contacts",
+      "description": "Used when filtering deals by contact properties"
+    },
+
+    "company_to_deal": {
+      "id": 5,
+      "name": "Company to Deal",
+      "fromObject": "companies",
+      "toObject": "deals",
+      "description": "Used when filtering companies by deal properties"
+    },
+
+    "deal_to_company": {
+      "id": 6,
+      "name": "Deal to Company",
+      "fromObject": "deals",
+      "toObject": "companies",
+      "description": "Used when filtering deals by company properties"
+    },
+
+    "contact_to_ticket": {
+      "id": 15,
+      "name": "Contact to Ticket",
+      "fromObject": "contacts",
+      "toObject": "tickets",
+      "description": "Used when filtering contacts by ticket properties"
+    },
+
+    "ticket_to_contact": {
+      "id": 16,
+      "name": "Ticket to Contact",
+      "fromObject": "tickets",
+      "toObject": "contacts",
+      "description": "Used when filtering tickets by contact properties"
+    },
+
+    "company_to_ticket": {
+      "id": 25,
+      "name": "Company to Ticket",
+      "fromObject": "companies",
+      "toObject": "tickets",
+      "description": "Used when filtering companies by ticket properties"
+    },
+
+    "ticket_to_company": {
+      "id": 26,
+      "name": "Ticket to Company",
+      "fromObject": "tickets",
+      "toObject": "companies",
+      "description": "Used when filtering tickets by company properties"
+    },
+
+    "deal_to_line_item": {
+      "id": 19,
+      "name": "Deal to Line Item",
+      "fromObject": "deals",
+      "toObject": "line_items",
+      "description": "Used when filtering deals by line item properties"
+    },
+
+    "line_item_to_deal": {
+      "id": 20,
+      "name": "Line Item to Deal",
+      "fromObject": "line_items",
+      "toObject": "deals",
+      "description": "Used when filtering line items by deal properties"
+    },
+
+    "contact_to_engagement": {
+      "id": 1,
+      "name": "Contact to Engagement",
+      "fromObject": "contacts",
+      "toObject": "engagements",
+      "description": "Used when filtering contacts by engagement (email, call, meeting) properties"
+    },
+
+    "company_to_engagement": {
+      "id": 2,
+      "name": "Company to Engagement",
+      "fromObject": "companies",
+      "toObject": "engagements",
+      "description": "Used when filtering companies by engagement properties"
+    },
+
+    "deal_to_engagement": {
+      "id": 7,
+      "name": "Deal to Engagement",
+      "fromObject": "deals",
+      "toObject": "engagements",
+      "description": "Used when filtering deals by engagement properties"
+    },
+
+    "ticket_to_engagement": {
+      "id": 17,
+      "name": "Ticket to Engagement",
+      "fromObject": "tickets",
+      "toObject": "engagements",
+      "description": "Used when filtering tickets by engagement properties"
+    }
+  },
+
+  "lookup": {
+    "by_objects": {
+      "contacts_to_companies": 279,
+      "companies_to_contacts": 280,
+      "contacts_to_deals": 3,
+      "deals_to_contacts": 4,
+      "companies_to_deals": 5,
+      "deals_to_companies": 6,
+      "contacts_to_tickets": 15,
+      "tickets_to_contacts": 16,
+      "companies_to_tickets": 25,
+      "tickets_to_companies": 26,
+      "deals_to_line_items": 19,
+      "line_items_to_deals": 20,
+      "contacts_to_engagements": 1,
+      "companies_to_engagements": 2,
+      "deals_to_engagements": 7,
+      "tickets_to_engagements": 17
+    }
+  },
+
+  "common_mistakes": [
+    {
+      "mistake": "Using 280 (Company→Contact) when filtering contacts by company properties",
+      "correct": "Use 279 (Contact→Company) - direction matters!",
+      "example": "List API filtering contacts: associationTypeId should be 279"
+    },
+    {
+      "mistake": "Using 279 (Contact→Company) when filtering companies by contact properties",
+      "correct": "Use 280 (Company→Contact) - reverse direction!",
+      "example": "List API filtering companies: associationTypeId should be 280"
+    },
+    {
+      "mistake": "Assuming association IDs are bidirectional",
+      "correct": "Always check direction: FROM object → TO object",
+      "example": "Contact TO Company (279) ≠ Company TO Contact (280)"
+    }
+  ],
+
+  "lists_api_usage": {
+    "contact_list_with_company_filter": {
+      "description": "Filtering contacts based on company properties",
+      "associationTypeId": 279,
+      "example": {
+        "filterType": "PROPERTY",
+        "property": "industry",
+        "operation": {
+          "operationType": "MULTISTRING",
+          "operator": "IS_EQUAL_TO",
+          "values": ["TECHNOLOGY"]
+        },
+        "associationTypeId": 279,
+        "associationCategory": "HUBSPOT_DEFINED"
+      }
+    },
+
+    "company_list_with_contact_filter": {
+      "description": "Filtering companies based on contact properties",
+      "associationTypeId": 280,
+      "example": {
+        "filterType": "PROPERTY",
+        "property": "lifecyclestage",
+        "operation": {
+          "operationType": "MULTISTRING",
+          "operator": "IS_EQUAL_TO",
+          "values": ["customer"]
+        },
+        "associationTypeId": 280,
+        "associationCategory": "HUBSPOT_DEFINED"
+      }
+    }
+  }
+}

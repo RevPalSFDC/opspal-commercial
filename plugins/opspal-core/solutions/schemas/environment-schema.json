@@ -1,0 +1,393 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.com/schemas/environment-schema.json",
+  "title": "Environment Profile",
+  "description": "Schema for defining deployment environment configurations with inheritance support",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique environment profile name",
+      "examples": ["development", "staging", "production", "acme-corp"]
+    },
+    "extends": {
+      "type": "string",
+      "description": "Path to parent environment profile to inherit from",
+      "examples": ["default.json", "../production.json"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this environment"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["development", "sandbox", "staging", "uat", "production", "client"],
+      "description": "Environment classification"
+    },
+    "credentials": {
+      "type": "object",
+      "description": "Platform connection credentials (use env vars for secrets)",
+      "properties": {
+        "salesforce": {
+          "type": "object",
+          "properties": {
+            "orgAlias": {
+              "type": "string",
+              "description": "SF CLI org alias or env var reference",
+              "examples": ["my-sandbox", "{{env.SF_ORG_ALIAS}}"]
+            },
+            "instanceUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Salesforce instance URL"
+            },
+            "apiVersion": {
+              "type": "string",
+              "pattern": "^\\d+\\.0$",
+              "default": "62.0",
+              "description": "Salesforce API version"
+            },
+            "username": {
+              "type": "string",
+              "description": "Username or env var reference"
+            },
+            "loginUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Login URL (login.salesforce.com or test.salesforce.com)"
+            }
+          }
+        },
+        "hubspot": {
+          "type": "object",
+          "properties": {
+            "portalId": {
+              "type": "string",
+              "description": "HubSpot portal ID or env var reference"
+            },
+            "accessToken": {
+              "type": "string",
+              "description": "Access token env var reference (never store raw)",
+              "examples": ["{{env.HUBSPOT_ACCESS_TOKEN}}"]
+            },
+            "environment": {
+              "type": "string",
+              "enum": ["production", "sandbox"],
+              "default": "production"
+            }
+          }
+        },
+        "n8n": {
+          "type": "object",
+          "properties": {
+            "baseUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "n8n instance URL"
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "API key env var reference",
+              "examples": ["{{env.N8N_API_KEY}}"]
+            }
+          }
+        }
+      }
+    },
+    "fieldMappings": {
+      "type": "object",
+      "description": "Map template field references to actual field API names",
+      "additionalProperties": {
+        "type": "object",
+        "description": "Object-level field mappings",
+        "additionalProperties": {
+          "type": "string",
+          "description": "Template field name -> Actual API name"
+        }
+      },
+      "examples": [{
+        "Lead": {
+          "Score": "Lead_Score__c",
+          "Rating": "Rating",
+          "Status": "Status"
+        },
+        "Opportunity": {
+          "Amount": "Amount",
+          "Stage": "StageName"
+        }
+      }]
+    },
+    "objectMappings": {
+      "type": "object",
+      "description": "Map template object references to actual object API names",
+      "additionalProperties": { "type": "string" },
+      "examples": [{
+        "Quote": "SBQQ__Quote__c",
+        "QuoteLine": "SBQQ__QuoteLine__c"
+      }]
+    },
+    "labelCustomizations": {
+      "type": "object",
+      "description": "Custom labels for org-specific naming (for documentation)",
+      "additionalProperties": { "type": "string" },
+      "examples": [{
+        "Quote": "Order Form",
+        "Opportunity": "Deal"
+      }]
+    },
+    "defaults": {
+      "type": "object",
+      "description": "Default values for deployment operations",
+      "properties": {
+        "salesforce": {
+          "type": "object",
+          "properties": {
+            "testLevel": {
+              "type": "string",
+              "enum": ["NoTestRun", "RunSpecifiedTests", "RunLocalTests", "RunAllTestsInOrg"],
+              "default": "RunLocalTests"
+            },
+            "checkOnly": {
+              "type": "boolean",
+              "default": false,
+              "description": "Validate only without deploying"
+            },
+            "waitTime": {
+              "type": "integer",
+              "default": 30,
+              "description": "Minutes to wait for deployment"
+            },
+            "ignoreWarnings": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "hubspot": {
+          "type": "object",
+          "properties": {
+            "validateBeforeActivate": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "n8n": {
+          "type": "object",
+          "properties": {
+            "activateOnDeploy": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "deployment": {
+          "type": "object",
+          "properties": {
+            "dryRun": {
+              "type": "boolean",
+              "default": false,
+              "description": "Generate deployment plan without executing"
+            },
+            "validateOnly": {
+              "type": "boolean",
+              "default": false,
+              "description": "Run validation checks only"
+            },
+            "activateFlows": {
+              "type": "boolean",
+              "default": true,
+              "description": "Auto-activate flows after deployment"
+            },
+            "runPostDeployTests": {
+              "type": "boolean",
+              "default": true,
+              "description": "Run Apex tests after deployment"
+            },
+            "createCheckpoint": {
+              "type": "boolean",
+              "default": true,
+              "description": "Create rollback checkpoint before deployment"
+            },
+            "notifyOnComplete": {
+              "type": "boolean",
+              "default": false,
+              "description": "Send notification on completion"
+            }
+          }
+        }
+      }
+    },
+    "featureFlags": {
+      "type": "object",
+      "description": "Feature toggles for conditional component inclusion",
+      "additionalProperties": { "type": "boolean" },
+      "examples": [{
+        "enableCPQ": false,
+        "enableServiceCloud": false,
+        "enableNurturing": true,
+        "enableAdvancedApprovals": false
+      }]
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Solution parameter overrides for this environment",
+      "additionalProperties": true
+    },
+    "quirks": {
+      "type": "object",
+      "description": "Org-specific quirks and exceptions discovered during analysis",
+      "properties": {
+        "discoveredAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When quirks were last detected"
+        },
+        "customLabels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Custom object/field labels"
+        },
+        "blockedValidationRules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Validation rules that must be disabled during deployment"
+        },
+        "customRecordTypes": {
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } },
+          "description": "Custom record types by object"
+        },
+        "managedPackages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "namespace": { "type": "string" },
+              "name": { "type": "string" },
+              "version": { "type": "string" }
+            }
+          },
+          "description": "Installed managed packages"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-form notes about org-specific behavior"
+        }
+      }
+    },
+    "notifications": {
+      "type": "object",
+      "description": "Notification configuration for this environment",
+      "properties": {
+        "slack": {
+          "type": "object",
+          "properties": {
+            "webhookUrl": {
+              "type": "string",
+              "description": "Slack webhook URL env var reference"
+            },
+            "channel": {
+              "type": "string",
+              "description": "Default channel"
+            },
+            "notifyOn": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["success", "failure", "warning", "start"]
+              }
+            }
+          }
+        },
+        "email": {
+          "type": "object",
+          "properties": {
+            "recipients": {
+              "type": "array",
+              "items": { "type": "string", "format": "email" }
+            },
+            "notifyOn": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["success", "failure", "warning"]
+              }
+            }
+          }
+        },
+        "asana": {
+          "type": "object",
+          "properties": {
+            "projectId": { "type": "string" },
+            "createTaskOnFailure": { "type": "boolean", "default": true }
+          }
+        }
+      }
+    },
+    "restrictions": {
+      "type": "object",
+      "description": "Deployment restrictions for this environment",
+      "properties": {
+        "allowedDeployers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Users allowed to deploy to this environment"
+        },
+        "requireApproval": {
+          "type": "boolean",
+          "default": false,
+          "description": "Require explicit approval before deployment"
+        },
+        "deploymentWindows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dayOfWeek": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+                }
+              },
+              "startTime": { "type": "string", "pattern": "^\\d{2}:\\d{2}$" },
+              "endTime": { "type": "string", "pattern": "^\\d{2}:\\d{2}$" },
+              "timezone": { "type": "string" }
+            }
+          },
+          "description": "Allowed deployment time windows"
+        },
+        "blockedComponents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Component types blocked from deployment"
+        }
+      }
+    },
+    "history": {
+      "type": "object",
+      "description": "Deployment history tracking (auto-populated)",
+      "properties": {
+        "lastDeployment": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastSolution": {
+          "type": "string"
+        },
+        "deploymentCount": {
+          "type": "integer"
+        },
+        "successRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,150 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "dental-medical",
+  "version": "1.0.0",
+  "description": "Dental practices, medical groups, urgent care, and healthcare practices. DSOs (Dental Service Organizations) and MSOs (Management Service Organizations) are consolidating rapidly, making parent network detection critical.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "dental", "dentist", "dentistry", "orthodontics", "periodontics",
+      "medical", "physician", "doctor", "clinic", "practice",
+      "primary care", "urgent care", "family medicine", "pediatrics"
+    ],
+    "entityTypes": ["DentalPractice", "MedicalPractice", "DSO", "MSO", "UrgentCare"],
+    "fieldPatterns": [
+      "NPI", "TaxonomyCode", "DEANumber", "StateLicense", "MedicareID"
+    ]
+  },
+
+  "abbreviations": {
+    "practiceTypes": {
+      "DSO": "Dental Service Organization",
+      "MSO": "Management Service Organization",
+      "IPA": "Independent Practice Association",
+      "ACO": "Accountable Care Organization",
+      "FQHC": "Federally Qualified Health Center"
+    },
+    "credentials": {
+      "DDS": "Doctor of Dental Surgery",
+      "DMD": "Doctor of Medicine in Dentistry",
+      "MD": "Doctor of Medicine",
+      "DO": "Doctor of Osteopathic Medicine",
+      "PA": "Physician Assistant",
+      "NP": "Nurse Practitioner",
+      "RDH": "Registered Dental Hygienist"
+    },
+    "specialties": {
+      "GP": "General Practice",
+      "Pedo": "Pediatric Dentistry",
+      "Ortho": "Orthodontics",
+      "Perio": "Periodontics",
+      "Endo": "Endodontics",
+      "OMS": "Oral and Maxillofacial Surgery",
+      "FM": "Family Medicine",
+      "IM": "Internal Medicine"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "PC", "PLLC", "PA"],
+    "preserve": [
+      "Dental", "Dentistry", "Orthodontics",
+      "Medical", "Medicine", "Clinic", "Practice",
+      "Health", "Healthcare", "Care"
+    ]
+  },
+
+  "synonyms": {
+    "Dental": ["Dentistry"],
+    "Family Dentistry": ["Family Dental", "General Dentistry"],
+    "Medical Group": ["Medical Practice", "Physicians Group"],
+    "Urgent Care": ["Walk-In Clinic", "Immediate Care"],
+    "Primary Care": ["Family Practice", "Family Medicine"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.80,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 80,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -25
+  },
+
+  "genericEntityPatterns": [
+    "* Dental",
+    "* Dentistry",
+    "* Family Dentistry",
+    "* Orthodontics",
+    "* Pediatric Dentistry",
+    "* Dental Care",
+    "* Dental Group",
+    "* Family Practice",
+    "* Medical Group",
+    "* Health Partners",
+    "* Primary Care",
+    "* Urgent Care",
+    "* Family Medicine",
+    "* Physicians",
+    "* Medical Associates",
+    "* Healthcare",
+    "* Clinic"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["npi_match", "dso_mso_match", "domain_match", "parent_network_match"],
+    "blockers": ["different_npi"]
+  },
+
+  "knownEntities": [
+    "Heartland Dental",
+    "Aspen Dental",
+    "Pacific Dental Services",
+    "MB2 Dental",
+    "Smile Brands",
+    "Sonrava Health",
+    "Affordable Care",
+    "Smile Doctors",
+    "Dental Care Alliance",
+    "Deca Dental Group",
+    "Affordable Dentures & Implants",
+    "Western Dental",
+    "Mortenson Dental Partners",
+    "Great Expressions Dental Centers",
+    "Gentle Dental",
+    "Tend",
+    "Oak Street Health",
+    "One Medical",
+    "VillageMD",
+    "ChenMed",
+    "Carbon Health",
+    "CityMD",
+    "GoHealth Urgent Care",
+    "MedExpress",
+    "FastMed",
+    "American Family Care",
+    "ConvenientMD",
+    "NextCare",
+    "Concentra"
+  ],
+
+  "knownEntityAliases": {
+    "Aspen Dental": ["TAG - The Aspen Group"],
+    "Pacific Dental Services": ["PDS"],
+    "One Medical": ["1Life Healthcare"],
+    "American Family Care": ["AFC"],
+    "GoHealth Urgent Care": ["GoHealth"]
+  },
+
+  "consolidationNote": "The dental and primary care markets are experiencing rapid DSO/MSO consolidation. A local practice like 'Smile Dental' may now be owned by a national DSO. Check for parent network indicators: shared website domains, corporate branding, or DSO/MSO affiliations."
+}

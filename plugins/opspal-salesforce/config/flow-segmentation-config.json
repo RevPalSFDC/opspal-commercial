@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Flow Segmentation Configuration",
+  "description": "Configuration for Flow Segmentation System including thresholds, templates, pattern detection, and guidance messages",
+  "version": "1.0.0",
+  "created": "2025-01-09",
+
+  "complexity_thresholds": {
+    "_description": "Thresholds for determining when segmentation is beneficial",
+    "SEGMENTATION_THRESHOLD": {
+      "value": 10,
+      "description": "Minimum complexity score to recommend segmentation",
+      "usage": "Flows below this threshold may not benefit from segmentation overhead"
+    },
+    "SIMPLE_MODE_THRESHOLD": {
+      "value": 5,
+      "description": "Maximum complexity for Simple Edit Mode",
+      "usage": "Flows at or below this threshold can use Quick Edit Mode safely"
+    },
+    "FORCE_SEGMENTATION_THRESHOLD": {
+      "value": 20,
+      "description": "Complexity level where segmentation is strongly advised",
+      "usage": "Flows at this complexity should always use segmentation"
+    },
+    "CRITICAL_COMPLEXITY_THRESHOLD": {
+      "value": 30,
+      "description": "Critical complexity indicating flow should be refactored",
+      "usage": "Suggest breaking into subflows at this level"
+    }
+  },
+
+  "complexity_scoring": {
+    "_description": "Complexity points assigned to each flow element type",
+    "element_weights": {
+      "decisions": 2,
+      "loops": 3,
+      "waits": 3,
+      "actionCalls": 2,
+      "recordLookups": 2,
+      "recordCreates": 2,
+      "recordUpdates": 2,
+      "recordDeletes": 2,
+      "screens": 2,
+      "subflows": 2,
+      "assignments": 1,
+      "collectionProcessors": 2,
+      "transforms": 2,
+      "customErrors": 1,
+      "recordRollbacks": 1,
+      "orchestrationStages": 3,
+      "orchestrationSteps": 2
+    },
+    "modifier_weights": {
+      "nested_loop": 2,
+      "complex_formula": 1,
+      "multiple_branches": 1,
+      "external_service_call": 2
+    }
+  },
+
+  "risk_categories": {
+    "_description": "Risk classification based on total complexity score",
+    "low": {
+      "min": 0,
+      "max": 5,
+      "label": "Low Risk",
+      "recommendation": "Quick Edit Mode sufficient",
+      "color": "green"
+    },
+    "medium": {
+      "min": 6,
+      "max": 9,
+      "label": "Medium Risk",
+      "recommendation": "Standard editing, segmentation optional",
+      "color": "yellow"
+    },
+    "high": {
+      "min": 10,
+      "max": 19,
+      "label": "High Risk",
+      "recommendation": "Segmentation recommended",
+      "color": "orange"
+    },
+    "critical": {
+      "min": 20,
+      "max": null,
+      "label": "Critical Risk",
+      "recommendation": "Segmentation required, consider refactoring into subflows",
+      "color": "red"
+    }
+  },
+
+  "segment_templates": {
+    "_description": "Pre-defined segment templates with complexity budgets",
+    "validation": {
+      "budget": 5,
+      "description": "Input validation and precondition checks",
+      "typical_elements": ["decisions"],
+      "position": "start",
+      "naming_patterns": ["Check", "Validate", "Is", "Verify", "Has"]
+    },
+    "enrichment": {
+      "budget": 8,
+      "description": "Data lookup and enrichment operations",
+      "typical_elements": ["recordLookups", "assignments"],
+      "position": "early-middle",
+      "naming_patterns": ["Get", "Lookup", "Fetch", "Load", "Enrich"]
+    },
+    "routing": {
+      "budget": 6,
+      "description": "Conditional routing and business logic branching",
+      "typical_elements": ["decisions"],
+      "position": "middle",
+      "naming_patterns": ["Route", "Branch", "Switch", "Direct", "Determine"]
+    },
+    "processing": {
+      "budget": 8,
+      "description": "Core business logic and record operations",
+      "typical_elements": ["recordCreates", "recordUpdates", "recordDeletes", "assignments"],
+      "position": "middle-late",
+      "naming_patterns": ["Process", "Create", "Update", "Execute", "Apply"]
+    },
+    "notification": {
+      "budget": 4,
+      "description": "Communication and alert actions",
+      "typical_elements": ["actionCalls"],
+      "position": "end",
+      "naming_patterns": ["Send", "Notify", "Alert", "Email", "Post"]
+    },
+    "loopProcessing": {
+      "budget": 10,
+      "description": "Iterative processing with loops",
+      "typical_elements": ["loops", "assignments", "recordUpdates"],
+      "position": "any",
+      "naming_patterns": ["Loop", "Iterate", "ForEach", "Bulk", "Batch"]
+    },
+    "errorHandling": {
+      "budget": 4,
+      "description": "Error handling and fault recovery",
+      "typical_elements": ["customErrors", "decisions", "assignments"],
+      "position": "any",
+      "naming_patterns": ["Error", "Fault", "Handle", "Catch", "Recover"]
+    },
+    "imported_legacy": {
+      "budget_multiplier": 1.2,
+      "description": "Auto-generated segment for pre-existing flow elements",
+      "status": "imported",
+      "notes": "Budget is calculated as: existing complexity * budget_multiplier"
+    }
+  },
+
+  "pattern_detection": {
+    "_description": "Heuristics for auto-detecting logical segments in existing flows",
+    "validation_pattern": {
+      "indicators": [
+        "Decision elements at flow start (first 3 positions)",
+        "Decision names contain validation keywords",
+        "Multiple decisions before any record operations",
+        "Decisions with only 2 outcomes (true/false pattern)"
+      ],
+      "confidence_weights": {
+        "position_at_start": 0.3,
+        "naming_match": 0.4,
+        "before_record_ops": 0.2,
+        "two_outcomes": 0.1
+      },
+      "minimum_confidence": 0.7
+    },
+    "enrichment_pattern": {
+      "indicators": [
+        "recordLookups followed by assignments",
+        "Element names suggest data gathering",
+        "Position before major decisions",
+        "Multiple lookups in sequence"
+      ],
+      "confidence_weights": {
+        "lookup_then_assign": 0.4,
+        "naming_match": 0.3,
+        "early_position": 0.2,
+        "sequence_detected": 0.1
+      },
+      "minimum_confidence": 0.65
+    },
+    "routing_pattern": {
+      "indicators": [
+        "Dense cluster of decision elements",
+        "Decisions with 3+ outcomes",
+        "Branching connector patterns",
+        "Position in middle of flow"
+      ],
+      "confidence_weights": {
+        "decision_cluster": 0.35,
+        "multi_outcome": 0.25,
+        "branching_connectors": 0.25,
+        "middle_position": 0.15
+      },
+      "minimum_confidence": 0.6
+    },
+    "notification_pattern": {
+      "indicators": [
+        "actionCalls with email/chatter types",
+        "Position at end of flow or branches",
+        "Element names suggest communication",
+        "No record operations after"
+      ],
+      "confidence_weights": {
+        "action_type_match": 0.4,
+        "end_position": 0.3,
+        "naming_match": 0.2,
+        "no_following_records": 0.1
+      },
+      "minimum_confidence": 0.75
+    },
+    "loop_processing_pattern": {
+      "indicators": [
+        "Loop element present",
+        "Record operations inside loop",
+        "Collection variable usage",
+        "Nested loop detection"
+      ],
+      "confidence_weights": {
+        "has_loop": 0.4,
+        "record_ops_in_loop": 0.3,
+        "collection_usage": 0.2,
+        "nested_loops": 0.1
+      },
+      "minimum_confidence": 0.8
+    }
+  },
+
+  "guidance_messages": {
+    "_description": "User-facing messages for segmentation guidance",
+    "complexity_below_threshold": {
+      "title": "Segmentation May Not Be Beneficial",
+      "message": "This flow has a complexity score of {complexity}/{threshold}. Segmentation overhead may not be worthwhile.",
+      "recommendation": "Consider using Quick Edit Mode for simpler changes, or use --force to enable segmentation anyway."
+    },
+    "complexity_at_threshold": {
+      "title": "Segmentation Recommended",
+      "message": "This flow has a complexity score of {complexity}. Segmentation will help manage changes safely.",
+      "recommendation": "Enable segmentation to track changes by logical segment and maintain complexity budgets."
+    },
+    "complexity_high": {
+      "title": "Segmentation Strongly Advised",
+      "message": "This flow has a complexity score of {complexity} (High Risk). Segmentation is important for safe editing.",
+      "recommendation": "Enable segmentation and consider extracting complex segments into subflows."
+    },
+    "complexity_critical": {
+      "title": "Flow Refactoring Recommended",
+      "message": "This flow has a complexity score of {complexity} (Critical). Consider breaking into multiple subflows.",
+      "recommendation": "Use /flow-analyze-segments to identify extraction candidates, then /flow-extract-subflow to modularize."
+    },
+    "segment_over_budget": {
+      "title": "Segment Over Budget",
+      "message": "Segment '{segment}' has complexity {current}/{budget} points ({percentage}% of budget).",
+      "recommendation": "Consider moving elements to another segment or extracting this segment as a subflow."
+    },
+    "legacy_segment_created": {
+      "title": "Legacy Segment Created",
+      "message": "Existing elements have been placed in 'Imported_Legacy' segment with budget {budget}.",
+      "recommendation": "Review and optionally reorganize elements using /flow-interactive-build Stage 1.5."
+    },
+    "segments_suggested": {
+      "title": "Segment Suggestions Available",
+      "message": "Analysis detected {count} logical segment pattern(s) in this flow.",
+      "recommendation": "Review suggestions in Stage 1.5 or run /flow-analyze-segments for detailed analysis."
+    }
+  },
+
+  "quick_edit_mode": {
+    "_description": "Configuration for Quick Edit Mode (bypass segmentation)",
+    "enabled_for_complexity_up_to": 5,
+    "validation_stages": ["syntax", "references", "variables", "api_version"],
+    "full_validation_stages": 11,
+    "target_validation_time_ms": 500,
+    "rollback_enabled": true,
+    "max_rollback_points": 10
+  },
+
+  "extraction_thresholds": {
+    "_description": "Thresholds for recommending subflow extraction",
+    "budget_exceeded_percentage": 150,
+    "minimum_elements_for_extraction": 3,
+    "maximum_variables_warning": 10,
+    "complexity_reduction_minimum": 3
+  },
+
+  "interactive_build_stages": {
+    "_description": "Stage definitions for interactive flow building",
+    "stage_0": {
+      "name": "Complexity Analysis",
+      "description": "Analyze flow complexity and determine if segmentation is beneficial",
+      "required": true,
+      "skippable": false
+    },
+    "stage_1": {
+      "name": "Flow Loading",
+      "description": "Load existing flow or create new flow structure",
+      "required": true,
+      "skippable": false
+    },
+    "stage_1.5": {
+      "name": "Segment Suggestion Review",
+      "description": "Review auto-detected segment suggestions for existing flows",
+      "required": false,
+      "skippable": true,
+      "condition": "existing_flow_loaded"
+    },
+    "stage_1.6": {
+      "name": "Interactive Partition Mode",
+      "description": "Manually reassign elements between segments",
+      "required": false,
+      "skippable": true,
+      "condition": "user_requested"
+    },
+    "stage_2": {
+      "name": "Segment Planning",
+      "description": "Define segments and complexity budgets",
+      "required": true,
+      "skippable": false
+    },
+    "stage_3": {
+      "name": "Element Building",
+      "description": "Add elements to segments with budget tracking",
+      "required": true,
+      "skippable": false
+    },
+    "stage_4": {
+      "name": "Validation",
+      "description": "Run comprehensive validation checks",
+      "required": true,
+      "skippable": false
+    },
+    "stage_5": {
+      "name": "Deployment",
+      "description": "Deploy flow to target org",
+      "required": false,
+      "skippable": true
+    }
+  }
+}

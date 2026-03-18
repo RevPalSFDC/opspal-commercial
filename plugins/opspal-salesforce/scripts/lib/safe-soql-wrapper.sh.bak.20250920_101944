@@ -1,0 +1,241 @@
+#!/bin/bash
+
+###############################################################################
+# Safe SOQL Wrapper
+#
+# Instance-agnostic SOQL query execution that validates field existence
+# before running queries to prevent failures across different SF instances
+###############################################################################
+
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+BOLD='\033[1m'
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Function to check if a field exists on an object
+check_field_exists() {
+    local object="$1"
+    local field="$2"
+    local org_param="${3:-}"
+
+    # Use sf sobject describe to check field existence
+    local field_exists=$(sf sobject describe --sobject "$object" $org_param --json 2>/dev/null | \
+        jq -r ".result.fields[] | select(.name == \"$field\") | .name" || echo "")
+
+    if [[ -n "$field_exists" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to build safe field list
+build_safe_field_list() {
+    local object="$1"
+    local requested_fields="$2"
+    local org_param="${3:-}"
+
+    # Convert comma-separated fields to array
+    IFS=',' read -ra FIELDS <<< "$requested_fields"
+
+    local safe_fields=()
+    local missing_fields=()
+
+    # Always include Id
+    safe_fields+=("Id")
+
+    for field in "${FIELDS[@]}"; do
+        # Trim whitespace
+        field=$(echo "$field" | xargs)
+
+        # Skip if it's Id (already added)
+        if [[ "$field" == "Id" ]]; then
+            continue
+        fi
+
+        # Check if field exists
+        if check_field_exists "$object" "$field" "$org_param"; then
+            safe_fields+=("$field")
+        else
+            missing_fields+=("$field")
+        fi
+    done
+
+    # Output results as JSON
+    echo "{"
+    echo "  \"safeFields\": \"$(IFS=','; echo "${safe_fields[*]}")\","
+    echo "  \"missingFields\": \"$(IFS=','; echo "${missing_fields[*]}")\""
+    echo "}"
+}
+
+# Function to execute safe SOQL query
+execute_safe_query() {
+    local object="$1"
+    local fields="$2"
+    local where_clause="${3:-}"
+    local limit_clause="${4:-}"
+    local org_param="${5:-}"
+
+    # Build safe field list
+    local field_info=$(build_safe_field_list "$object" "$fields" "$org_param")
+    local safe_fields=$(echo "$field_info" | jq -r '.safeFields')
+    local missing_fields=$(echo "$field_info" | jq -r '.missingFields')
+
+    # Warn about missing fields
+    if [[ -n "$missing_fields" && "$missing_fields" != "" ]]; then
+        echo -e "${YELLOW}⚠️  Warning: The following fields don't exist on $object: $missing_fields${NC}" >&2
+    fi
+
+    # Build query
+    local query="SELECT $safe_fields FROM $object"
+
+    if [[ -n "$where_clause" ]]; then
+        query="$query WHERE $where_clause"
+    fi
+
+    if [[ -n "$limit_clause" ]]; then
+        query="$query LIMIT $limit_clause"
+    fi
+
+    # Execute query
+    echo -e "${BLUE}Executing query: $query${NC}" >&2
+    sf data query --query "$query" $org_param
+}
+
+# Function to validate Tooling API query
+validate_tooling_query() {
+    local query="$1"
+    local org_param="${2:-}"
+
+    # Common Tooling API object corrections
+    local corrected_query="$query"
+
+    # Replace CustomField with FieldDefinition for field queries
+    corrected_query=$(echo "$corrected_query" | sed 's/FROM CustomField/FROM FieldDefinition/g')
+
+    # If query still contains CustomField in WHERE clause, warn
+    if echo "$corrected_query" | grep -q "CustomField"; then
+        echo -e "${YELLOW}⚠️  Warning: CustomField is not a valid Tooling API object. Use FieldDefinition instead.${NC}" >&2
+    fi
+
+    echo "$corrected_query"
+}
+
+# Main function
+main() {
+    local command="${1:-}"
+
+    case "$command" in
+        check-field)
+            if [[ $# -lt 3 ]]; then
+                echo "Usage: $0 check-field <object> <field> [--org <alias>]"
+                exit 1
+            fi
+            local object="$2"
+            local field="$3"
+            local org_param=""
+            if [[ "${4:-}" == "--org" ]]; then
+                org_param="--target-org ${5}"
+            fi
+
+            if check_field_exists "$object" "$field" "$org_param"; then
+                echo -e "${GREEN}✓ Field $field exists on $object${NC}"
+                exit 0
+            else
+                echo -e "${RED}✗ Field $field does not exist on $object${NC}"
+                exit 1
+            fi
+            ;;
+
+        safe-query)
+            if [[ $# -lt 3 ]]; then
+                echo "Usage: $0 safe-query <object> <fields> [--where \"clause\"] [--limit N] [--org <alias>]"
+                exit 1
+            fi
+            local object="$2"
+            local fields="$3"
+            shift 3
+
+            local where_clause=""
+            local limit_clause=""
+            local org_param=""
+
+            while [[ $# -gt 0 ]]; do
+                case "$1" in
+                    --where)
+                        where_clause="$2"
+                        shift 2
+                        ;;
+                    --limit)
+                        limit_clause="$2"
+                        shift 2
+                        ;;
+                    --org)
+                        org_param="--target-org $2"
+                        shift 2
+                        ;;
+                    *)
+                        shift
+                        ;;
+                esac
+            done
+
+            execute_safe_query "$object" "$fields" "$where_clause" "$limit_clause" "$org_param"
+            ;;
+
+        fix-tooling-query)
+            if [[ $# -lt 2 ]]; then
+                echo "Usage: $0 fix-tooling-query \"<query>\" [--org <alias>]"
+                exit 1
+            fi
+            local query="$2"
+            local org_param=""
+            if [[ "${3:-}" == "--org" ]]; then
+                org_param="--target-org ${4}"
+            fi
+
+            local fixed_query=$(validate_tooling_query "$query" "$org_param")
+            echo "$fixed_query"
+            ;;
+
+        *)
+            echo -e "${BOLD}Safe SOQL Wrapper${NC}"
+            echo ""
+            echo "Usage:"
+            echo "  $0 check-field <object> <field> [--org <alias>]"
+            echo "    Check if a field exists on an object"
+            echo ""
+            echo "  $0 safe-query <object> <fields> [options]"
+            echo "    Execute a query with only existing fields"
+            echo "    Options:"
+            echo "      --where \"clause\"  WHERE clause for the query"
+            echo "      --limit N         LIMIT clause for the query"
+            echo "      --org <alias>     Target org alias"
+            echo ""
+            echo "  $0 fix-tooling-query \"<query>\" [--org <alias>]"
+            echo "    Fix common Tooling API query issues"
+            echo ""
+            echo "Examples:"
+            echo "  # Check if a field exists"
+            echo "  $0 check-field Contact Email --org myorg"
+            echo ""
+            echo "  # Execute safe query (skips missing fields)"
+            echo "  $0 safe-query Contact \"Id,Name,Email,MissingField__c\" --where \"Email != null\" --limit 10"
+            echo ""
+            echo "  # Fix Tooling API query"
+            echo "  $0 fix-tooling-query \"SELECT Id FROM CustomField WHERE TableEnumOrId = 'Contact'\""
+            exit 1
+            ;;
+    esac
+}
+
+# Run main function
+main "$@"

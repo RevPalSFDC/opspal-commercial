@@ -1,0 +1,352 @@
+══════════════════════════════════════════════════════════════════════
+IMPORTANCE FIELD DETECTION REPORT
+══════════════════════════════════════════════════════════════════════
+Object: Account
+Org: bluerabbit2021-revpal
+Total Fields: 313
+Important Fields Detected: 176
+Timestamp: 2025-10-16T14:06:07.197Z
+
+🏆 TOP IMPORTANCE FIELDS
+──────────────────────────────────────────────────────────────────────
+1. Id (Account ID)
+   Score: 100/100
+   Type: id
+   Categories: integrationId
+   Breakdown:
+     - pattern_match: +100 (integrationId)
+     - required: +10 (Required field)
+
+2. MasterRecordId (Master Record ID)
+   Score: 100/100
+   Type: reference
+   Categories: integrationId
+   Breakdown:
+     - pattern_match: +100 (integrationId)
+
+3. RecordTypeId (Record Type ID)
+   Score: 100/100
+   Type: reference
+   Categories: customerType, integrationId
+   Breakdown:
+     - pattern_match: +100 (customerType, integrationId)
+
+4. ParentId (Parent Account ID)
+   Score: 100/100
+   Type: reference
+   Categories: integrationId
+   Breakdown:
+     - pattern_match: +100 (integrationId)
+
+5. BillingStreet (Billing Street)
+   Score: 100/100
+   Type: textarea
+   Categories: integrationId
+   Breakdown:
+     - pattern_match: +100 (integrationId)
+
+6. BillingCity (Billing City)
+   Score: 100/100
+   Type: string
+   Categories: integrationId, location
+   Breakdown:
+     - pattern_match: +100 (integrationId, location)
+
+7. BillingState (Billing State/Province)
+   Score: 100/100
+   Type: string
+   Categories: customerStatus, integrationId, location
+   Breakdown:
+     - pattern_match: +100 (customerStatus, integrationId, location)
+
+8. BillingPostalCode (Billing Zip/Postal Code)
+   Score: 100/100
+   Type: string
+   Categories: integrationId
+   Breakdown:
+     - pattern_match: +100 (integrationId)
+
+9. BillingCountry (Billing Country)
+   Score: 100/100
+   Type: string
+   Categories: integrationId, location
+   Breakdown:
+     - pattern_match: +100 (integrationId, location)
+
+10. BillingStateCode (Billing State/Province Code)
+   Score: 100/100
+   Type: picklist
+   Categories: customerStatus, integrationId, location
+   Breakdown:
+     - pattern_match: +100 (customerStatus, integrationId, location)
+
+🔗 INTEGRATION ID FIELDS
+──────────────────────────────────────────────────────────────────────
+• SourceSystemIdentifier (Source System ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• JigsawCompanyId (Jigsaw Company ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• CsCart_id__c (CsCart Id)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• IPS_Id__c (IPS Id)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• p_uuid__c (p_uuid)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• Wickliffe_ID__c (Wickliffe Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Pharmetika_ID__c (Pharmetika Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• IPS_Id_2__c (IPS Id - 2)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• CsCart_Id_2__c (CsCart Id -2)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• Pharmetika_Account_Id__c (Pharmetika Account Id)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• Placebo_ID__c (Mapped Account ID)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• Salesforce_com_ID__c (Salesforce.com ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• VGP_id__c (VGP #)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• TVC__c (TVC #)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• MicrositeId__c (MicrositeId)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• PIMS_Id__c (PIMS Account ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• PIMS_Writeback_Id__c (PIMS Write Back ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Stripe_Account_Id__c (Stripe Account Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Stripe_Customer_Id__c (Stripe Customer Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Stripe_Payment_Method_Id__c (Stripe Payment Method Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• External_Id__c (External ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• GPO_Member_ID__c (GPO Member ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• MWI_Clinic_ID__c (MWI Clinic ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• NationalAcctID__c (NationalAcctID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• PIMS_Read_ID__c (PIMS Read ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• PIMS_Write_ID__c (PIMS Write ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• WWorgAccountId__c (WWorg Account ID)
+  Confidence: high
+  Reason: externalId flag set
+  Importance: 100/100
+
+• PIMS_Writeback_Location_Id__c (PIMS Location ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• PIMS_Writeback_Code_Id__c (PIMS Write Back Code ID)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• PVA_Account_Id__c (PVA_Account_Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Nest_Account_Id__c (Nest_Account_Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Full_Salesforce_Id__c (Full Salesforce Id)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+• Partner_Account_Ids__c (Partner Account Ids)
+  Confidence: medium
+  Reason: ID naming pattern
+  Importance: 80/100
+
+📊 PICKLIST IMPORTANCE ANALYSIS
+──────────────────────────────────────────────────────────────────────
+AccountSource (Account Source)
+  High Importance Values: Customer Event
+
+PIMs2__c (PIMs)
+  High Importance Values: Clienttrax
+
+Engagement_Status__c (Engagement Status)
+  High Importance Values: Active
+
+Practice_Status__c (Practice Status)
+  High Importance Values: Active
+
+GPO__c (GPO)
+  High Importance Values: Equine Elite Platinum, Equine Elite Gold
+  Medium Importance Values: Equine Elite Silver
+
+Customer_Status__c (Customer Status)
+  High Importance Values: Active
+
+Portal_Status__c (Portal Status)
+  High Importance Values: Active
+
+Home_Delivery_Platform__c (Home Delivery Platform)
+  High Importance Values: Vetcove Home Delivery
+
+Account_Target__c (Account Target)
+  High Importance Values: Golden Egg
+
+BR_Account_Status__c (BR Platform Status)
+  High Importance Values: Active
+
+🎯 SUGGESTED SURVIVOR SELECTION WEIGHTS
+──────────────────────────────────────────────────────────────────────
+Use these weights in your deduplication survivor scoring algorithm:
+
+relationshipScore:
+  Weight: 100
+  Description: (Contacts + Opportunities) × multiplier
+  Notes: Prioritize accounts with more relationships
+
+id:
+  Weight: 50
+  Field: Id
+  Description: Account ID
+  Notes: integrationId; Required field
+
+masterrecordid:
+  Weight: 50
+  Field: MasterRecordId
+  Description: Master Record ID
+  Notes: integrationId
+
+recordtypeid:
+  Weight: 50
+  Field: RecordTypeId
+  Description: Record Type ID
+  Notes: customerType, integrationId
+
+parentid:
+  Weight: 50
+  Field: ParentId
+  Description: Parent Account ID
+  Notes: integrationId
+
+billingstreet:
+  Weight: 50
+  Field: BillingStreet
+  Description: Billing Street
+  Notes: integrationId
+
+billingcity:
+  Weight: 50
+  Field: BillingCity
+  Description: Billing City
+  Notes: integrationId, location
+
+billingstate:
+  Weight: 50
+  Field: BillingState
+  Description: Billing State/Province
+  Notes: customerStatus, integrationId, location
+
+billingpostalcode:
+  Weight: 50
+  Field: BillingPostalCode
+  Description: Billing Zip/Postal Code
+  Notes: integrationId
+
+billingcountry:
+  Weight: 50
+  Field: BillingCountry
+  Description: Billing Country
+  Notes: integrationId, location
+
+billingstatecode:
+  Weight: 50
+  Field: BillingStateCode
+  Description: Billing State/Province Code
+  Notes: customerStatus, integrationId, location
+
+══════════════════════════════════════════════════════════════════════

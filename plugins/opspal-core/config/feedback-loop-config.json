@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Configuration for reflection feedback loop automation",
+  "lastUpdated": "2025-12-20",
+
+  "enabled": true,
+  "autoResolveOnCommit": true,
+
+  "reflectionIdPattern": "\\[REFL-[a-f0-9-]+\\]",
+  "reflectionIdExtractPattern": "REFL-([a-f0-9-]+)",
+
+  "statusTransitions": {
+    "onCommit": {
+      "from": ["new", "under_review", "in_progress"],
+      "to": "resolved"
+    },
+    "onPRMerge": {
+      "from": ["resolved"],
+      "to": "verified"
+    }
+  },
+
+  "asanaIntegration": {
+    "enabled": true,
+    "updateOnResolve": true,
+    "commentTemplate": "Reflection resolved via commit: {commitHash}\n\nCommit message: {commitMessage}\n\nBranch: {branch}"
+  },
+
+  "logging": {
+    "enabled": true,
+    "logFile": "logs/feedback-loop.jsonl",
+    "logLevel": "info"
+  },
+
+  "notifications": {
+    "enabled": false,
+    "slackWebhook": null,
+    "notifyOnResolve": true
+  },
+
+  "commitMessageConvention": {
+    "description": "Commit messages can reference reflections using [REFL-xxx] pattern",
+    "examples": [
+      "fix(validator): Add NULL check for AccountId field\n\n[REFL-1b84ed7d-6083-4386-add0-ce878b48d643]",
+      "feat(agent): Add expectation protocol [REFL-abc123]",
+      "chore: Address multiple reflections [REFL-abc123] [REFL-def456]"
+    ]
+  },
+
+  "validation": {
+    "requireCommitMessage": true,
+    "allowMultipleReflections": true,
+    "maxReflectionsPerCommit": 10
+  }
+}

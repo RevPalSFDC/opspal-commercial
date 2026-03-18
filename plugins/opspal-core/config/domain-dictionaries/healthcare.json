@@ -1,0 +1,192 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "healthcare",
+  "version": "1.0.0",
+  "description": "Healthcare providers, hospitals, medical centers, clinics, and health systems",
+
+  "detectionPatterns": {
+    "keywords": [
+      "hospital", "medical", "health", "clinic", "physician", "patient",
+      "healthcare", "nursing", "doctor", "surgery", "emergency", "ICU",
+      "pharmacy", "lab", "diagnostic", "radiology", "cardiology",
+      "oncology", "pediatric", "orthopedic", "dental", "urgent care"
+    ],
+    "entityTypes": ["Hospital", "Clinic", "Practice", "HealthSystem", "MedicalGroup"],
+    "fieldPatterns": [
+      "NPI", "TaxId", "MedicalLicense", "DEA", "CLIA",
+      "BedCount", "FacilityType", "ProviderType"
+    ]
+  },
+
+  "abbreviations": {
+    "facilities": {
+      "MC": "Medical Center",
+      "RMC": "Regional Medical Center",
+      "CMC": "Community Medical Center",
+      "AMC": "Academic Medical Center",
+      "CHC": "Community Health Center",
+      "FQHC": "Federally Qualified Health Center",
+      "RHC": "Rural Health Clinic",
+      "ASC": "Ambulatory Surgery Center",
+      "SNF": "Skilled Nursing Facility",
+      "ALF": "Assisted Living Facility",
+      "LTAC": "Long Term Acute Care",
+      "IRF": "Inpatient Rehabilitation Facility"
+    },
+    "departments": {
+      "ED": "Emergency Department",
+      "ER": "Emergency Room",
+      "ICU": "Intensive Care Unit",
+      "NICU": "Neonatal Intensive Care Unit",
+      "PICU": "Pediatric Intensive Care Unit",
+      "CCU": "Cardiac Care Unit",
+      "OR": "Operating Room",
+      "PACU": "Post-Anesthesia Care Unit",
+      "L&D": "Labor and Delivery",
+      "OB": "Obstetrics",
+      "OBGYN": "Obstetrics and Gynecology"
+    },
+    "specialties": {
+      "ENT": "Ear Nose and Throat",
+      "GI": "Gastroenterology",
+      "ONC": "Oncology",
+      "CARD": "Cardiology",
+      "NEURO": "Neurology",
+      "ORTHO": "Orthopedics",
+      "PEDS": "Pediatrics",
+      "PSYCH": "Psychiatry",
+      "DERM": "Dermatology",
+      "URO": "Urology",
+      "PULM": "Pulmonology",
+      "NEPHRO": "Nephrology",
+      "RHEUM": "Rheumatology",
+      "ENDO": "Endocrinology"
+    },
+    "identifiers": {
+      "NPI": "National Provider Identifier",
+      "DEA": "Drug Enforcement Administration",
+      "CLIA": "Clinical Laboratory Improvement Amendments",
+      "CMS": "Centers for Medicare and Medicaid Services",
+      "TJC": "The Joint Commission",
+      "NCQA": "National Committee for Quality Assurance"
+    },
+    "organizations": {
+      "HMO": "Health Maintenance Organization",
+      "PPO": "Preferred Provider Organization",
+      "ACO": "Accountable Care Organization",
+      "IPA": "Independent Practice Association",
+      "PHO": "Physician Hospital Organization",
+      "MSO": "Management Services Organization"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "PC", "PA", "PLLC"],
+    "preserve": [
+      "Hospital", "Medical Center", "Health System", "Health Services",
+      "Healthcare", "Clinic", "Physicians", "Medical Group", "Associates"
+    ]
+  },
+
+  "synonyms": {
+    "Medical Center": ["MC", "Med Center", "Med Ctr"],
+    "Hospital": ["Hosp", "Hosp."],
+    "Health System": ["Health", "Healthcare System"],
+    "Clinic": ["Clinics"],
+    "Physicians": ["Physician Group", "Physician Associates", "MDs"],
+    "Emergency": ["ER", "ED", "Emergency Room", "Emergency Department"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.88,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 95,
+      "review": 85,
+      "tag": 70
+    },
+    "stateMismatchPenalty": -45
+  },
+
+  "genericEntityPatterns": [
+    "* Hospital",
+    "* Medical Center",
+    "* Health System",
+    "* Regional Medical Center",
+    "* Community Hospital",
+    "* Memorial Hospital",
+    "* General Hospital",
+    "* Community Health Center",
+    "* Clinic",
+    "* Healthcare",
+    "* Health Services",
+    "* Medical Group",
+    "* Physicians",
+    "* Family Medicine",
+    "* Urgent Care",
+    "* Rehabilitation Hospital",
+    "* Children's Hospital"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["domain_match OR npi_match OR parent_name_pattern"],
+    "boosts": ["npi_match", "shared_parent_organization", "tax_id_match"],
+    "blockers": ["different_domain_different_state", "different_npi"]
+  },
+
+  "knownEntities": [
+    "HCA Healthcare",
+    "Universal Health Services",
+    "Tenet Healthcare",
+    "Community Health Systems",
+    "Ascension Health",
+    "CommonSpirit Health",
+    "Trinity Health",
+    "Providence Health & Services",
+    "AdventHealth",
+    "Kaiser Permanente",
+    "LifePoint Health",
+    "Encompass Health",
+    "Scion Health",
+    "Mayo Clinic",
+    "Cleveland Clinic",
+    "Christus Health",
+    "Banner Health",
+    "Intermountain Health",
+    "Atrium Health",
+    "Advocate Aurora Health",
+    "Northwell Health",
+    "NYU Langone Health",
+    "Mass General Brigham",
+    "UPMC",
+    "Geisinger",
+    "SSM Health",
+    "Bon Secours Mercy Health",
+    "Sanford Health",
+    "Sentara Healthcare",
+    "Ochsner Health"
+  ],
+
+  "knownEntityAliases": {
+    "HCA Healthcare": ["HCA", "Hospital Corporation of America"],
+    "Universal Health Services": ["UHS"],
+    "Community Health Systems": ["CHS"],
+    "Kaiser Permanente": ["Kaiser", "KP"],
+    "AdventHealth": ["Adventist Health System"],
+    "Providence Health & Services": ["Providence"],
+    "Trinity Health": ["Trinity"],
+    "CommonSpirit Health": ["CommonSpirit"],
+    "LifePoint Health": ["LifePoint"],
+    "Encompass Health": ["Encompass"],
+    "Tenet Healthcare": ["Tenet"],
+    "UPMC": ["University of Pittsburgh Medical Center"],
+    "Mass General Brigham": ["Partners Healthcare", "MGB"]
+  }
+}

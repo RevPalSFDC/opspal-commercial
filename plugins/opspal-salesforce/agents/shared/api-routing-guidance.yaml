@@ -1,0 +1,189 @@
+# ============================================================================
+# API Type Routing Guidance
+# ============================================================================
+# Import this file in agents that perform Salesforce operations to prevent
+# wrong-API errors and automatically suggest better alternatives.
+#
+# Usage in agent markdown:
+#   @import shared/api-routing-guidance.yaml
+# ============================================================================
+
+api_routing:
+  title: "API Type Selection (Prevents Wrong-API Errors)"
+  version: "1.0.0"
+
+  # ========================================================================
+  # PRE-OPERATION CHECKLIST
+  # ========================================================================
+  before_sf_operation: |
+    Before executing any Salesforce operation, ALWAYS consider:
+
+    1. **What type of operation?**
+       - Data read/write → REST, Bulk, or Composite
+       - Metadata query → Tooling API (--use-tooling-api)
+       - Schema changes → Metadata API (sf project deploy)
+
+    2. **What scale?**
+       - Single record or < 200 → REST API
+       - 200+ records → Bulk API
+       - Multiple independent ops (2-25) → Composite API
+
+    3. **Does this object require Tooling API?**
+       - FlowDefinitionView, FlowVersionView → YES
+       - ApexClass, ApexTrigger, ApexLog → YES
+       - CustomField, ValidationRule, Layout → YES
+       - EntityDefinition, FieldDefinition → YES
+
+  # ========================================================================
+  # DECISION MATRIX
+  # ========================================================================
+  decision_matrix: |
+    | Operation Type | Scale | Recommended API | Command Example |
+    |---------------|-------|-----------------|-----------------|
+    | Data CRUD | < 200 records | REST API | `sf data query` |
+    | Data CRUD | 200+ records | Bulk API | `sf data bulk query` |
+    | Data Query | Simple, single object | REST + SOQL | `sf data query` |
+    | Data Query | Complex, multi-object | GraphQL API | `sf graphql query` |
+    | Metadata Query | FlowDefinitionView, ApexClass | Tooling API | `sf data query --use-tooling-api` |
+    | Schema Changes | Deploy/retrieve | Metadata API | `sf project deploy start` |
+    | Multiple Ops | 2-25 independent | Composite API | REST /composite endpoint |
+
+  # ========================================================================
+  # TOOLING API OBJECTS (MEMORIZE THESE)
+  # ========================================================================
+  tooling_api_objects: |
+    Objects that REQUIRE --use-tooling-api flag:
+
+    **Flow Objects:**
+    - FlowDefinitionView
+    - FlowVersionView
+    - Flow
+    - FlowDefinition
+
+    **Apex Objects:**
+    - ApexClass
+    - ApexTrigger
+    - ApexPage
+    - ApexComponent
+    - ApexTestQueueItem
+    - ApexTestResult
+    - ApexCodeCoverage
+    - ApexLog
+
+    **Metadata Objects:**
+    - CustomField
+    - CustomObject
+    - EntityDefinition
+    - FieldDefinition
+    - ValidationRule
+    - WorkflowRule
+    - Layout
+    - CompactLayout
+    - PermissionSet
+    - Profile
+    - RecordType
+    - TraceFlag
+    - DebugLevel
+
+  # ========================================================================
+  # BULK API UNSUPPORTED OBJECTS (CRITICAL - Will fail silently or error)
+  # ========================================================================
+  bulk_api_unsupported: |
+    The following objects DO NOT support Salesforce Bulk API operations.
+    You MUST use standard REST API or Apex DML instead.
+
+    | Object | Why Bulk API Fails | Use Instead |
+    |--------|-------------------|-------------|
+    | ObjectTerritory2Association | Not supported for Bulk DML | REST API: `sf data create record` / `sf data update record` / `sf data delete record` |
+    | UserTerritory2Association | Not supported for Bulk DML | REST API: `sf data create record` / `sf data update record` / `sf data delete record` |
+    | Territory2 | Limited Bulk support | REST API for CRUD; Metadata API for deploy |
+    | Territory2ObjectExclusion | Not supported for Bulk DML | REST API |
+    | ObjectTerritory2AssignmentRule | Not supported for Bulk DML | REST API with `--use-tooling-api` |
+    | ObjectTerritory2AssignmentRuleItem | Not supported for Bulk DML | REST API with `--use-tooling-api` |
+
+    **Detection Pattern**: If you see errors like:
+    - "Entity is not supported in Bulk API"
+    - "Invalid sObject for Bulk operation"
+    - "ENTITY_NOT_SUPPORTED"
+
+    Switch from `sf data bulk` to `sf data create/update/delete record`.
+
+    **For batch operations on unsupported objects** (e.g., 200+ territory assignments):
+    Use a loop with REST API calls or deploy via Apex Data Loader with REST mode:
+    ```bash
+    # Instead of: sf data bulk upsert --sobject ObjectTerritory2Association --file assignments.csv
+    # Use: Loop with individual REST calls or Apex batch class
+    for id in $(cat record-ids.txt); do
+      sf data create record --sobject ObjectTerritory2Association --values "ObjectId='$id' Territory2Id='0Mlxxx'" -o myorg
+    done
+    ```
+
+  # ========================================================================
+  # ERROR RECOVERY PATTERNS
+  # ========================================================================
+  on_failure: |
+    If a Salesforce API call fails, check if an alternative API might work:
+
+    | Error Pattern | Alternative | Action |
+    |--------------|-------------|--------|
+    | "sObject type X is not supported" | TOOLING | Add `--use-tooling-api` flag |
+    | "REQUEST_LIMIT_EXCEEDED" | BULK | Switch to `sf data bulk query` |
+    | "QUERY_TOO_COMPLICATED" | GRAPHQL | Split query or use GraphQL |
+    | "EXCEEDED_MAX_SEMIJOIN" | COMPOSITE | Break into separate queries |
+    | "INVALID_FIELD_FOR_INSERT_UPDATE" | TOOLING | Field may be metadata-only |
+
+    The error recovery system will automatically suggest alternatives.
+
+  # ========================================================================
+  # VOLUME THRESHOLDS
+  # ========================================================================
+  volume_thresholds: |
+    | Record Count | Recommended API |
+    |--------------|-----------------|
+    | 1 | REST |
+    | 2-199 | REST (batched if needed) |
+    | 200-9,999 | Bulk |
+    | 10,000+ | Bulk (only option) |
+
+    Independent operations:
+    | Operation Count | Recommended API |
+    |-----------------|-----------------|
+    | 1 | REST |
+    | 2-25 | Composite |
+    | 26+ | Multiple Composite calls |
+
+  # ========================================================================
+  # QUICK COMMANDS
+  # ========================================================================
+  quick_commands: |
+    # REST API (standard data)
+    sf data query --query "SELECT Id FROM Account LIMIT 100"
+
+    # Tooling API (metadata objects)
+    sf data query --query "SELECT Id, DeveloperName FROM FlowDefinitionView" --use-tooling-api
+
+    # Bulk API (large datasets)
+    sf data bulk query --query "SELECT Id FROM Contact" --file contacts.csv
+    sf data bulk upsert --sobject Contact --file contacts.csv --external-id Email
+
+    # Metadata API (deployments)
+    sf project deploy start --source-dir force-app
+    sf project retrieve start --target-metadata-dir metadata
+
+  # ========================================================================
+  # AGENT INSTRUCTIONS
+  # ========================================================================
+  agent_instructions: |
+    1. Before ANY sf data query on Flow*, Apex*, or metadata objects:
+       → Add --use-tooling-api flag
+
+    2. Before ANY operation on 200+ records:
+       → Use Bulk API (sf data bulk)
+
+    3. When encountering API errors:
+       → Check the error-to-API mapping above
+       → Try the suggested alternative before reporting failure
+
+    4. The API Type Router (scripts/lib/api-type-router.js) can classify tasks:
+       → node api-type-router.js recommend "<command>"
+       → node api-type-router.js check "<command>"

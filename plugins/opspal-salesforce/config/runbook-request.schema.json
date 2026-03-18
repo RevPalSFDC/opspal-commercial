@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/runbook-request.schema.json",
+  "title": "Runbook Policy Request Schema",
+  "description": "Request schema for the RUNBOOK_REQUEST protocol - mandatory retrieval of field policies before operations",
+  "type": "object",
+  "required": ["org", "object", "task_type"],
+  "properties": {
+    "org": {
+      "type": "string",
+      "description": "Salesforce org alias",
+      "minLength": 1
+    },
+    "object": {
+      "type": "string",
+      "description": "Salesforce object API name (e.g., 'Opportunity', 'SBQQ__Quote__c')",
+      "minLength": 1
+    },
+    "task_type": {
+      "type": "string",
+      "description": "Task variant identifier",
+      "enum": ["backup", "migration", "enrichment", "audit", "export", "sync", "custom"],
+      "default": "backup"
+    },
+    "context": {
+      "type": "object",
+      "description": "Additional context for policy selection",
+      "properties": {
+        "report_type": {
+          "type": "string",
+          "description": "Type of report being generated (e.g., 'pipeline', 'forecast', 'cpq')"
+        },
+        "audience": {
+          "type": "string",
+          "description": "Target audience (e.g., 'executive', 'operations', 'technical')"
+        },
+        "agent_id": {
+          "type": "string",
+          "description": "ID of the requesting agent"
+        },
+        "operation_id": {
+          "type": "string",
+          "description": "Unique ID for tracking this operation"
+        },
+        "parent_trace_id": {
+          "type": "string",
+          "description": "Parent trace ID for distributed tracing"
+        },
+        "user_id": {
+          "type": "string",
+          "description": "User initiating the operation"
+        },
+        "compliance_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["GDPR", "HIPAA", "SOX", "CCPA", "SOC2"]
+          },
+          "description": "Compliance frameworks to enforce"
+        },
+        "requested_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields explicitly requested by user (may be filtered)"
+        },
+        "excluded_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields user wants excluded"
+        }
+      },
+      "additionalProperties": true
+    },
+    "options": {
+      "type": "object",
+      "description": "Request options",
+      "properties": {
+        "include_metadata": {
+          "type": "boolean",
+          "description": "Include object metadata in response",
+          "default": false
+        },
+        "include_workflow": {
+          "type": "boolean",
+          "description": "Include workflow steps in response",
+          "default": true
+        },
+        "include_quality_gates": {
+          "type": "boolean",
+          "description": "Include quality gates in response",
+          "default": true
+        },
+        "generate_if_missing": {
+          "type": "boolean",
+          "description": "Auto-generate policy if not found",
+          "default": false
+        },
+        "strict_mode": {
+          "type": "boolean",
+          "description": "Block operation if policy not found",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Unique request identifier for correlation",
+      "pattern": "^[a-zA-Z0-9-_]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Request timestamp"
+    }
+  },
+  "additionalProperties": false
+}

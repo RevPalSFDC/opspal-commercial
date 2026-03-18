@@ -1,0 +1,152 @@
+{
+  "version": 2,
+  "plugin": "opspal-salesforce",
+  "encrypted_assets": [
+    {
+      "path": "config/agent-permission-matrix.json",
+      "encrypted_path": "config/agent-permission-matrix.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:643016e4b9c754adb9621ccc2e6b47dac3073163bd45f337d29ad95303a5ed23",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "config/order-of-operations-v3.50.json",
+      "encrypted_path": "config/order-of-operations-v3.50.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:b45aee3d7324cff7bab41f4137a421e298bbb966e3802df2bbbd8f16b5ebab26",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "config/decision-kpi-matrix.json",
+      "encrypted_path": "config/decision-kpi-matrix.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f7ea721790d320f6598c22a73537f089cc4eb2206146a7a29f40433a92116011",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "config/cpq-field-mappings.json",
+      "encrypted_path": "config/cpq-field-mappings.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:fd19920616c2dcee9f2a4094a6f29a81ba6c01b22e5ce43848ff97bf76d743f6",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/automation-risk-scorer.js",
+      "encrypted_path": "scripts/lib/automation-risk-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f806d9b1629166c5924d138d937f02aa8561d900574da1786f032266968d058a",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/architecture-health-scorer.js",
+      "encrypted_path": "scripts/lib/architecture-health-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:0028c747f5c79501f5997bc1f320ca50380ae5da33ed99fb738b920adae1e61b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/schema-health-scorer.js",
+      "encrypted_path": "scripts/lib/schema-health-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d2ff4a28a04e80b5b5c630340f17bb87e4c3b6005ad5286e4ffd55d057d4a508",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/cpq-scorecard-generator.js",
+      "encrypted_path": "scripts/lib/cpq-scorecard-generator.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f5761fb7db504b484b2776030a6096f6c56fd4d2eced2a6f9866958e3e1fb4f3",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/enhanced-data-quality-framework.js",
+      "encrypted_path": "scripts/lib/enhanced-data-quality-framework.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c3447d6251de29f582924db54c2c9c3363b0191f9a0748d4cf6db1fb47d88ce7",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/agent-risk-scorer.js",
+      "encrypted_path": "scripts/lib/agent-risk-scorer.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier2",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:49fc6da1870b545609a78e409cc10a99d97617fdd1290e75277540a1c34f480b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "scripts/lib/benchmark-retriever.js",
+      "encrypted_path": "scripts/lib/benchmark-retriever.js.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:ac7943ddba38c8a9d3dc451fbc524261f77fe5bda936d1302962fe3fb122d157",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "config/persona-kpi-contracts.json",
+      "encrypted_path": "config/persona-kpi-contracts.json.enc",
+      "asset_type": "script",
+      "sensitivity": "high",
+      "required_tier": "tier3",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:33786372d73f779e73d142b7cdfcbc4b3b332fcd19399c04dca00eec15b56f3a",
+      "required_domain": "salesforce"
+    }
+  ],
+  "cleanup_on_stop": true,
+  "allow_plaintext_fallback": false
+}

@@ -1,0 +1,538 @@
+{
+  "metadata": {
+    "version": "3.43.0",
+    "description": "Example test cases for all Flow types demonstrating Runbook 7 diagnostic capabilities",
+    "created": "2025-11-12",
+    "purpose": "Reference test cases for flow-test-orchestrator and flow-diagnostician agents"
+  },
+  "recordTriggeredFlows": {
+    "description": "Test cases for record-triggered Flows (after-save, before-save, after-delete)",
+    "testCases": [
+      {
+        "id": "RT-001",
+        "name": "Account Validation - Valid Industry",
+        "flowName": "Account_Validation_Flow",
+        "object": "Account",
+        "triggerType": "after-save",
+        "operation": "insert",
+        "testData": {
+          "recordData": {
+            "Name": "Tech Corp",
+            "Industry": "Technology",
+            "Type": "Customer",
+            "AnnualRevenue": 1000000,
+            "NumberOfEmployees": 50
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Record created successfully",
+          "expectedFields": {
+            "Status__c": "Active",
+            "Rating": "Hot"
+          }
+        },
+        "assertions": [
+          "Record should be created",
+          "Status__c should be set to 'Active'",
+          "Rating should be calculated as 'Hot'",
+          "No validation errors should occur"
+        ]
+      },
+      {
+        "id": "RT-002",
+        "name": "Account Validation - Invalid Industry",
+        "flowName": "Account_Validation_Flow",
+        "object": "Account",
+        "triggerType": "after-save",
+        "operation": "insert",
+        "testData": {
+          "recordData": {
+            "Name": "Invalid Corp",
+            "Industry": "Unknown",
+            "Type": "Customer"
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": false,
+          "expectedError": "FIELD_CUSTOM_VALIDATION_EXCEPTION",
+          "expectedErrorMessage": "Industry must be a valid value"
+        },
+        "assertions": [
+          "Record creation should fail",
+          "Validation error should be thrown",
+          "Error message should mention industry validation"
+        ]
+      },
+      {
+        "id": "RT-003",
+        "name": "Opportunity Stage Update - Won",
+        "flowName": "Opportunity_Stage_Update_Flow",
+        "object": "Opportunity",
+        "triggerType": "after-save",
+        "operation": "update",
+        "testData": {
+          "recordId": "006xx000000XXXX",
+          "recordData": {
+            "StageName": "Closed Won",
+            "Amount": 50000,
+            "CloseDate": "2025-12-31"
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Record updated with calculated fields",
+          "expectedFields": {
+            "Won__c": true,
+            "Revenue_Category__c": "Mid-Market",
+            "Days_To_Close__c": 30
+          }
+        },
+        "assertions": [
+          "Record should be updated",
+          "Won__c checkbox should be checked",
+          "Revenue_Category__c should be calculated",
+          "Days_To_Close__c should be populated"
+        ]
+      },
+      {
+        "id": "RT-004",
+        "name": "Contact Deduplication - Duplicate Found",
+        "flowName": "Contact_Deduplication_Flow",
+        "object": "Contact",
+        "triggerType": "before-save",
+        "operation": "insert",
+        "testData": {
+          "recordData": {
+            "FirstName": "John",
+            "LastName": "Doe",
+            "Email": "john.doe@example.com",
+            "AccountId": "001xx000000XXXX"
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Duplicate flag set",
+          "expectedFields": {
+            "Duplicate_Flag__c": true,
+            "Potential_Duplicate_ID__c": "003xx000000YYYY"
+          }
+        },
+        "assertions": [
+          "Record should be allowed to save",
+          "Duplicate_Flag__c should be true",
+          "Potential_Duplicate_ID__c should reference existing contact"
+        ]
+      },
+      {
+        "id": "RT-005",
+        "name": "Case Escalation - High Priority Overdue",
+        "flowName": "Case_Escalation_Flow",
+        "object": "Case",
+        "triggerType": "after-save",
+        "operation": "update",
+        "testData": {
+          "recordId": "500xx000000XXXX",
+          "recordData": {
+            "Priority": "High",
+            "Status": "Open",
+            "Age_In_Hours__c": 72
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Case escalated to manager queue",
+          "expectedFields": {
+            "OwnerId": "00Gxx000000YYYY",
+            "Escalated__c": true,
+            "Escalation_Date__c": "2025-11-12"
+          }
+        },
+        "assertions": [
+          "Case owner should be changed to escalation queue",
+          "Escalated__c checkbox should be checked",
+          "Escalation_Date__c should be today's date"
+        ]
+      },
+      {
+        "id": "RT-006",
+        "name": "Lead Assignment - California Territory",
+        "flowName": "Lead_Assignment_Flow",
+        "object": "Lead",
+        "triggerType": "after-save",
+        "operation": "insert",
+        "testData": {
+          "recordData": {
+            "FirstName": "Jane",
+            "LastName": "Smith",
+            "Company": "Test Company",
+            "State": "California",
+            "Industry": "Technology"
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Lead assigned to CA territory owner",
+          "expectedFields": {
+            "OwnerId": "005xx000000ZZZZ",
+            "Assignment_Date__c": "2025-11-12",
+            "Territory__c": "West Coast"
+          }
+        },
+        "assertions": [
+          "Lead should be assigned to correct territory owner",
+          "Assignment_Date__c should be populated",
+          "Territory__c should be set to 'West Coast'"
+        ]
+      }
+    ]
+  },
+  "scheduledFlows": {
+    "description": "Test cases for scheduled Flows (on-demand execution without waiting for schedule)",
+    "testCases": [
+      {
+        "id": "SF-001",
+        "name": "Daily Account Cleanup - Inactive Accounts",
+        "flowName": "Daily_Account_Cleanup_Flow",
+        "schedule": "daily-midnight",
+        "testData": {
+          "testDate": "2025-11-12",
+          "existingRecords": [
+            {
+              "Id": "001xx000000AAA",
+              "Name": "Inactive Corp",
+              "Status__c": "Inactive",
+              "Last_Activity_Date__c": "2024-01-01"
+            },
+            {
+              "Id": "001xx000000BBB",
+              "Name": "Active Corp",
+              "Status__c": "Active",
+              "Last_Activity_Date__c": "2025-11-01"
+            }
+          ]
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Inactive accounts flagged for review",
+          "recordsProcessed": 1,
+          "expectedUpdates": [
+            {
+              "recordId": "001xx000000AAA",
+              "updatedFields": {
+                "Flagged_For_Deletion__c": true,
+                "Review_Date__c": "2025-11-12"
+              }
+            }
+          ]
+        },
+        "assertions": [
+          "Only inactive accounts should be processed",
+          "Flagged_For_Deletion__c should be true",
+          "Active accounts should not be modified"
+        ]
+      },
+      {
+        "id": "SF-002",
+        "name": "Weekly Opportunity Rollup - Last 7 Days",
+        "flowName": "Weekly_Opportunity_Rollup_Flow",
+        "schedule": "weekly-monday",
+        "testData": {
+          "testDate": "2025-11-12",
+          "dateRange": {
+            "startDate": "2025-11-05",
+            "endDate": "2025-11-12"
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Rollup summary updated for accounts",
+          "recordsProcessed": 10,
+          "expectedCalculations": {
+            "Total_Opportunities__c": 10,
+            "Total_Opportunity_Amount__c": 500000,
+            "Won_Count__c": 3,
+            "Lost_Count__c": 2
+          }
+        },
+        "assertions": [
+          "All accounts with opportunities should be updated",
+          "Rollup calculations should be accurate",
+          "Last_Rollup_Date__c should be today"
+        ]
+      },
+      {
+        "id": "SF-003",
+        "name": "Monthly Report Generation - Previous Month",
+        "flowName": "Monthly_Report_Generation_Flow",
+        "schedule": "monthly-first",
+        "testData": {
+          "testDate": "2025-11-01",
+          "reportPeriod": {
+            "month": "October",
+            "year": 2025
+          }
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Report generated and emailed",
+          "emailsSent": 5,
+          "reportData": {
+            "totalAccounts": 150,
+            "newAccounts": 25,
+            "revenue": 2000000
+          }
+        },
+        "assertions": [
+          "Report should be generated for previous month",
+          "Email should be sent to all stakeholders",
+          "Report data should be accurate"
+        ]
+      }
+    ]
+  },
+  "screenFlows": {
+    "description": "Test cases for screen Flows (interactive with user input)",
+    "testCases": [
+      {
+        "id": "SC-001",
+        "name": "New Customer Onboarding - Complete Flow",
+        "flowName": "Customer_Onboarding_Flow",
+        "screens": [
+          {
+            "screenName": "Welcome_Screen",
+            "inputs": {},
+            "expectedDisplay": {
+              "header": "Welcome to Customer Onboarding",
+              "fields": []
+            }
+          },
+          {
+            "screenName": "Company_Info_Screen",
+            "inputs": {
+              "CompanyName": "Tech Startup Inc",
+              "Industry": "Technology",
+              "AnnualRevenue": 500000,
+              "NumberOfEmployees": 25
+            },
+            "expectedDisplay": {
+              "header": "Company Information",
+              "fields": ["CompanyName", "Industry", "AnnualRevenue", "NumberOfEmployees"]
+            }
+          },
+          {
+            "screenName": "Primary_Contact_Screen",
+            "inputs": {
+              "FirstName": "John",
+              "LastName": "Doe",
+              "Email": "john@techstartup.com",
+              "Phone": "555-1234"
+            },
+            "expectedDisplay": {
+              "header": "Primary Contact",
+              "fields": ["FirstName", "LastName", "Email", "Phone"]
+            }
+          },
+          {
+            "screenName": "Confirmation_Screen",
+            "inputs": {
+              "ConfirmCreate": true
+            },
+            "expectedDisplay": {
+              "header": "Confirm Details",
+              "summary": "Review information before creating account"
+            }
+          }
+        ],
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutcome": "Account and Contact created",
+          "createdRecords": {
+            "Account": {
+              "Name": "Tech Startup Inc",
+              "Industry": "Technology"
+            },
+            "Contact": {
+              "FirstName": "John",
+              "LastName": "Doe"
+            }
+          }
+        },
+        "assertions": [
+          "All screens should be displayed",
+          "User inputs should be captured",
+          "Account should be created with provided data",
+          "Contact should be linked to account"
+        ]
+      },
+      {
+        "id": "SC-002",
+        "name": "Case Creation Wizard - Missing Required Fields",
+        "flowName": "Case_Creation_Wizard_Flow",
+        "screens": [
+          {
+            "screenName": "Case_Details_Screen",
+            "inputs": {
+              "Subject": "Need Help",
+              "Priority": "High"
+            },
+            "expectedDisplay": {
+              "header": "Case Details",
+              "validationError": "Description is required for High priority cases"
+            }
+          }
+        ],
+        "expectedBehavior": {
+          "shouldSucceed": false,
+          "expectedOutcome": "Validation error shown",
+          "errorOnScreen": "Case_Details_Screen"
+        },
+        "assertions": [
+          "Validation should trigger on missing description",
+          "User should remain on same screen",
+          "Error message should be displayed"
+        ]
+      }
+    ]
+  },
+  "autoLaunchedFlows": {
+    "description": "Test cases for auto-launched Flows (invoked via process/code with input variables)",
+    "testCases": [
+      {
+        "id": "AL-001",
+        "name": "Calculate Tax - Standard Rate",
+        "flowName": "Calculate_Tax_Flow",
+        "inputVariables": {
+          "SubtotalAmount": 100.00,
+          "TaxRate": 0.08,
+          "DiscountPercent": 0
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutputs": {
+            "TaxAmount": 8.00,
+            "TotalAmount": 108.00,
+            "DiscountAmount": 0.00
+          }
+        },
+        "assertions": [
+          "TaxAmount should be SubtotalAmount * TaxRate",
+          "TotalAmount should be SubtotalAmount + TaxAmount",
+          "Calculations should be accurate to 2 decimal places"
+        ]
+      },
+      {
+        "id": "AL-002",
+        "name": "Calculate Tax - With Discount",
+        "flowName": "Calculate_Tax_Flow",
+        "inputVariables": {
+          "SubtotalAmount": 100.00,
+          "TaxRate": 0.08,
+          "DiscountPercent": 10
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutputs": {
+            "DiscountAmount": 10.00,
+            "SubtotalAfterDiscount": 90.00,
+            "TaxAmount": 7.20,
+            "TotalAmount": 97.20
+          }
+        },
+        "assertions": [
+          "Discount should be applied before tax",
+          "TaxAmount should be calculated on discounted subtotal",
+          "All calculations should be accurate"
+        ]
+      },
+      {
+        "id": "AL-003",
+        "name": "Send Notification - Valid Recipients",
+        "flowName": "Send_Notification_Flow",
+        "inputVariables": {
+          "RecipientUserIds": ["005xx000000AAA", "005xx000000BBB"],
+          "Subject": "Important Update",
+          "Body": "This is a test notification",
+          "Priority": "High"
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutputs": {
+            "EmailsSent": 2,
+            "SuccessfulRecipients": ["005xx000000AAA", "005xx000000BBB"],
+            "FailedRecipients": []
+          }
+        },
+        "assertions": [
+          "Email should be sent to all recipients",
+          "No failures should occur",
+          "EmailsSent count should match recipient count"
+        ]
+      },
+      {
+        "id": "AL-004",
+        "name": "Data Validation - Invalid Input",
+        "flowName": "Data_Validation_Flow",
+        "inputVariables": {
+          "Email": "invalid-email",
+          "PhoneNumber": "123",
+          "PostalCode": "ABCDE"
+        },
+        "expectedBehavior": {
+          "shouldSucceed": false,
+          "expectedOutputs": {
+            "IsValid": false,
+            "ValidationErrors": [
+              "Email format is invalid",
+              "Phone number must be 10 digits",
+              "Postal code must be 5 digits"
+            ]
+          }
+        },
+        "assertions": [
+          "IsValid should be false",
+          "All validation errors should be captured",
+          "Flow should not throw exception"
+        ]
+      },
+      {
+        "id": "AL-005",
+        "name": "Bulk Record Update - Process Multiple IDs",
+        "flowName": "Bulk_Record_Update_Flow",
+        "inputVariables": {
+          "RecordIds": ["001xx000000AAA", "001xx000000BBB", "001xx000000CCC"],
+          "FieldToUpdate": "Status__c",
+          "NewValue": "Reviewed"
+        },
+        "expectedBehavior": {
+          "shouldSucceed": true,
+          "expectedOutputs": {
+            "RecordsProcessed": 3,
+            "SuccessCount": 3,
+            "FailureCount": 0
+          }
+        },
+        "assertions": [
+          "All records should be updated",
+          "No DML errors should occur",
+          "RecordsProcessed should match input count"
+        ]
+      }
+    ]
+  },
+  "usageGuidelines": {
+    "howToUse": "Use these test cases with flow-test-orchestrator or flow-diagnostician agents",
+    "cliExamples": [
+      "flow-test Account_Validation_Flow orgAlias --test-case RT-001",
+      "flow-diagnose Lead_Assignment_Flow orgAlias --test-cases RT-006 --type execution"
+    ],
+    "programmaticExamples": [
+      "const testCase = require('./test/fixtures/flows/example-test-cases.json');",
+      "const executor = new FlowExecutor(orgAlias);",
+      "const result = await executor.executeRecordTriggeredFlow(",
+      "  testCase.recordTriggeredFlows.testCases[0].flowName,",
+      "  testCase.recordTriggeredFlows.testCases[0].testData",
+      ");"
+    ]
+  }
+}

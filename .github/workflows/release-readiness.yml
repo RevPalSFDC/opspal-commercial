@@ -1,0 +1,134 @@
+name: Release Readiness
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - '.github/workflows/release.yml'
+      - '.github/workflows/release-readiness.yml'
+    tags:
+      - 'opspal-*-v*'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'plugins/**/.claude-plugin/plugin.json'
+      - '.github/workflows/release.yml'
+      - '.github/workflows/release-readiness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release-config:
+    name: Validate Release Configuration
+    runs-on: ubuntu-latest
+    if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate manifests and release tag conventions
+        run: |
+          set -euo pipefail
+
+          failures=0
+          manifest_count=0
+
+          while IFS= read -r manifest; do
+            manifest_count=$((manifest_count + 1))
+
+            plugin_dir=$(basename "$(dirname "$(dirname "$manifest")")")
+            plugin_name=$(jq -r '.name // empty' "$manifest")
+            version=$(jq -r '.version // empty' "$manifest")
+            description=$(jq -r '.description // empty' "$manifest")
+
+            if [ -z "$plugin_name" ] || [ -z "$version" ] || [ -z "$description" ]; then
+              echo "::error file=$manifest::Manifest must include non-empty name/version/description."
+              failures=$((failures + 1))
+              continue
+            fi
+
+            if [ "$plugin_name" != "$plugin_dir" ]; then
+              echo "::error file=$manifest::Manifest name ($plugin_name) must match plugin directory ($plugin_dir)."
+              failures=$((failures + 1))
+            fi
+
+            if ! echo "$plugin_name" | grep -Eq '^opspal-[a-z0-9-]+$'; then
+              echo "::error file=$manifest::Plugin name must follow opspal-* convention."
+              failures=$((failures + 1))
+            fi
+
+            if ! echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$'; then
+              echo "::error file=$manifest::Version must be semver-like (x.y.z or x.y.z-suffix)."
+              failures=$((failures + 1))
+            fi
+
+            candidate_tag="${plugin_name}-v${version}"
+            if ! echo "$candidate_tag" | grep -Eq '^opspal-[a-z0-9-]+-v[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$'; then
+              echo "::error file=$manifest::Derived release tag is invalid: $candidate_tag"
+              failures=$((failures + 1))
+            fi
+          done < <(find plugins -type f -path '*/.claude-plugin/plugin.json' | sort)
+
+          if [ "$manifest_count" -eq 0 ]; then
+            echo "::error::No plugin manifests found."
+            exit 1
+          fi
+
+          if ! grep -Fq "opspal-*-v*" .github/workflows/release.yml; then
+            echo "::error file=.github/workflows/release.yml::Release workflow must include push tag trigger 'opspal-*-v*'."
+            failures=$((failures + 1))
+          fi
+
+          if grep -Fq "*-plugin-v*" .github/workflows/release.yml; then
+            echo "::error file=.github/workflows/release.yml::Legacy tag trigger '*-plugin-v*' detected; use 'opspal-*-v*'."
+            failures=$((failures + 1))
+          fi
+
+          if [ "$failures" -gt 0 ]; then
+            echo "::error::Release readiness validation failed with ${failures} issue(s)."
+            exit 1
+          fi
+
+          echo "Validated ${manifest_count} plugin manifest(s)."
+          echo "Release readiness checks passed."
+
+  validate-release-tag:
+    name: Validate Release Tag to Manifest
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate tag maps to manifest version
+        run: |
+          set -euo pipefail
+
+          tag_name="${GITHUB_REF#refs/tags/}"
+
+          if [[ ! "$tag_name" =~ ^(opspal-[a-z0-9-]+)-v([0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?)$ ]]; then
+            echo "::error::Tag does not match required format 'opspal-<plugin>-v<version>': ${tag_name}"
+            exit 1
+          fi
+
+          plugin="${BASH_REMATCH[1]}"
+          version="${BASH_REMATCH[2]}"
+          manifest_path="plugins/${plugin}/.claude-plugin/plugin.json"
+
+          if [ ! -f "$manifest_path" ]; then
+            echo "::error::Manifest not found for tagged plugin: $manifest_path"
+            exit 1
+          fi
+
+          manifest_version=$(jq -r '.version // empty' "$manifest_path")
+          if [ "$manifest_version" != "$version" ]; then
+            echo "::error file=$manifest_path::Tag version (${version}) does not match manifest version (${manifest_version})."
+            exit 1
+          fi
+
+          echo "Tag ${tag_name} matches ${manifest_path} version ${manifest_version}."

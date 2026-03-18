@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Flow API Version Compatibility",
+  "description": "Documents breaking changes and compatibility differences between Flow API versions",
+  "version": "1.0.0",
+  "created": "2025-10-24",
+  "addresses": "Cohort #3 - Flow API v65.0 Compatibility ($15k ROI)",
+
+  "versions": {
+    "v64.0": {
+      "release_date": "2024-02-01",
+      "status": "deprecated",
+      "supported_until": "2027-02-01",
+      "major_features": [
+        "actionType='flow' in actionCalls",
+        "Original flow invocation pattern",
+        "Supported for autolaunched flows"
+      ]
+    },
+    "v65.0": {
+      "release_date": "2024-08-01",
+      "status": "current",
+      "breaking_changes": [
+        "actionType='flow' no longer supported in autolaunched flows",
+        "Must use subflows element instead of actionCalls",
+        "Flow invocation requires different XML structure"
+      ],
+      "recommended": true
+    },
+    "v66.0": {
+      "release_date": "2025-02-01",
+      "status": "latest",
+      "new_features": [
+        "Enhanced flow debugging",
+        "Improved error messages",
+        "Performance optimizations"
+      ],
+      "backward_compatible_with": ["v65.0"]
+    }
+  },
+
+  "breaking_changes": {
+    "v64_to_v65": {
+      "actionType_flow_deprecated": {
+        "description": "actionType='flow' no longer supported for autolaunched flows triggered by records",
+        "affected_flow_types": [
+          "Record-Triggered Flows (Before Save)",
+          "Record-Triggered Flows (After Save)",
+          "Autolaunched Flows called from other flows"
+        ],
+        "error_message": "actionType value of 'flow' is not supported",
+        "migration_required": true,
+        "severity": "CRITICAL",
+        "workaround": "Use subflows element instead of actionCalls with actionType='flow'",
+        "example_old": {
+          "element": "actionCalls",
+          "actionType": "flow",
+          "flowName": "SubFlowToInvoke"
+        },
+        "example_new": {
+          "element": "subflows",
+          "flowName": "SubFlowToInvoke"
+        }
+      }
+    }
+  },
+
+  "deprecated_patterns": [
+    {
+      "pattern_name": "actionType_flow_in_autolaunched",
+      "deprecated_in": "v65.0",
+      "xml_pattern": "<actionType>flow</actionType>",
+      "context": "Within <actionCalls> in autolaunched flows",
+      "replacement": "<subflows>",
+      "severity": "CRITICAL",
+      "auto_fixable": true
+    },
+    {
+      "pattern_name": "actionCalls_for_flow_invocation",
+      "deprecated_in": "v65.0",
+      "xml_pattern": "<actionCalls>.*<actionType>flow</actionType>.*</actionCalls>",
+      "context": "Autolaunched flows",
+      "replacement": "<subflows> element",
+      "severity": "CRITICAL",
+      "auto_fixable": true
+    }
+  ],
+
+  "migration_guide": {
+    "v64_to_v65_flow_invocation": {
+      "description": "Convert actionCalls with actionType='flow' to subflows element",
+      "steps": [
+        "Identify all actionCalls elements with actionType='flow'",
+        "Extract flowName from actionCalls",
+        "Replace actionCalls element with subflows element",
+        "Preserve flowName in subflows element",
+        "Remove actionType field (not needed in subflows)",
+        "Test flow after migration"
+      ],
+      "automated": true,
+      "script": "scripts/lib/flow-pattern-migrator.js"
+    }
+  },
+
+  "validation_rules": {
+    "check_api_version": {
+      "description": "Ensure API version is specified in flow metadata",
+      "severity": "HIGH",
+      "validation": "apiVersion field present and >= 65.0"
+    },
+    "check_deprecated_patterns": {
+      "description": "Scan for deprecated patterns based on API version",
+      "severity": "CRITICAL",
+      "validation": "No actionType='flow' in flows with apiVersion >= 65.0"
+    },
+    "check_subflows_usage": {
+      "description": "Ensure subflows element used for flow invocation",
+      "severity": "HIGH",
+      "validation": "Flow invocations use subflows element in v65.0+"
+    }
+  },
+
+  "compatibility_matrix": {
+    "flow_invocation": {
+      "v64": {
+        "method": "actionCalls with actionType='flow'",
+        "supported": true,
+        "xml_structure": "<actionCalls><actionType>flow</actionType><flowName>SubFlow</flowName></actionCalls>"
+      },
+      "v65": {
+        "method": "subflows element",
+        "supported": true,
+        "xml_structure": "<subflows><flowName>SubFlow</flowName></subflows>",
+        "notes": "actionType='flow' no longer supported"
+      },
+      "v66": {
+        "method": "subflows element",
+        "supported": true,
+        "xml_structure": "<subflows><flowName>SubFlow</flowName></subflows>",
+        "backward_compatible": true
+      }
+    },
+    "formula_functions": {
+      "v64": {
+        "TEXT_on_id_fields": {
+          "supported": true,
+          "redundant": true,
+          "notes": "ID fields are already Text type"
+        }
+      },
+      "v65": {
+        "TEXT_on_id_fields": {
+          "supported": true,
+          "redundant": true,
+          "recommended": false,
+          "notes": "Still redundant but not causing errors"
+        }
+      }
+    }
+  },
+
+  "template_library": {
+    "v64": {
+      "autolaunched_with_flow_invocation": {
+        "file": "templates/flows/v64.0/autolaunched-with-actioncalls.xml",
+        "description": "Autolaunched flow using actionCalls with actionType='flow'",
+        "status": "deprecated",
+        "migrate_to": "v65.0/autolaunched-with-subflow.xml"
+      }
+    },
+    "v65": {
+      "autolaunched_with_flow_invocation": {
+        "file": "templates/flows/v65.0/autolaunched-with-subflow.xml",
+        "description": "Autolaunched flow using subflows element",
+        "status": "recommended",
+        "required_for": "API v65.0+"
+      }
+    }
+  },
+
+  "error_patterns": {
+    "actionType_flow_not_supported": {
+      "error_code": "INVALID_TYPE",
+      "error_message": "actionType value of 'flow' is not supported",
+      "cause": "Using v64.0 pattern in v65.0+ flow",
+      "fix": "Convert actionCalls to subflows element",
+      "auto_fixable": true,
+      "prevention": "Pre-deployment validation with flow-api-version-validator.js"
+    }
+  },
+
+  "ci_cd_checks": {
+    "pre_deployment": [
+      "Validate API version is compatible with flow patterns",
+      "Scan for deprecated patterns (actionType='flow')",
+      "Suggest migration if deprecated patterns found",
+      "Block deployment if critical incompatibilities detected"
+    ],
+    "post_deployment": [
+      "Verify flow deployed successfully",
+      "Check flow activation status",
+      "Run smoke test to validate flow executes",
+      "Log API version used for deployment"
+    ]
+  },
+
+  "element_version_requirements": {
+    "_description": "Minimum API version required for each Flow element type. Used by FlowAPIVersionGuard for proactive compatibility checking.",
+    "_usage": "Before adding an element to a flow, check if the flow's API version meets the minimum requirement.",
+
+    "subflows": {
+      "minimum_version": 65.0,
+      "description": "Subflow invocation element (replaces actionCalls with actionType='flow')",
+      "introduced_in": "v48.0",
+      "breaking_change_in": "v65.0",
+      "notes": "In v65.0+, autolaunched flows MUST use subflows element instead of actionCalls"
+    },
+    "recordChoiceSets": {
+      "minimum_version": 58.0,
+      "description": "Dynamic choice set from records",
+      "notes": "Enhanced filtering and sorting options added in v58.0"
+    },
+    "transforms": {
+      "minimum_version": 60.0,
+      "description": "Data transformation element",
+      "notes": "Enables complex data manipulation within flows"
+    },
+    "collectionProcessors": {
+      "minimum_version": 58.0,
+      "description": "Collection processor for filtering/sorting collections",
+      "notes": "Replaces complex loop-based collection manipulation"
+    },
+    "orchestrationStages": {
+      "minimum_version": 56.0,
+      "description": "Flow Orchestrator stage element",
+      "notes": "Part of Flow Orchestrator feature set"
+    },
+    "orchestrationSteps": {
+      "minimum_version": 56.0,
+      "description": "Flow Orchestrator step element",
+      "notes": "Part of Flow Orchestrator feature set"
+    },
+    "evaluatedDecisions": {
+      "minimum_version": 58.0,
+      "description": "Evaluated decision element with enhanced outcome handling",
+      "notes": "Provides more granular decision path configuration"
+    },
+    "waitEvents": {
+      "minimum_version": 50.0,
+      "description": "Wait element for pausing flow execution",
+      "notes": "Available for Screen Flows and Autolaunched Flows"
+    },
+    "actionCalls": {
+      "minimum_version": 30.0,
+      "description": "Invoke actions (Apex, Quick Actions, email alerts)",
+      "notes": "actionType='flow' deprecated in v65.0 for autolaunched flows"
+    },
+    "customErrors": {
+      "minimum_version": 54.0,
+      "description": "Custom error element for controlled error handling",
+      "notes": "Enables graceful error handling without fault paths"
+    },
+    "recordRollbacks": {
+      "minimum_version": 56.0,
+      "description": "Rollback transaction element",
+      "notes": "Allows partial transaction rollback in after-save flows"
+    },
+    "dataTypeHints": {
+      "minimum_version": 59.0,
+      "description": "Type hints for external service responses",
+      "notes": "Improves handling of untyped data from external services"
+    }
+  },
+
+  "element_categories": {
+    "core": {
+      "elements": ["decisions", "assignments", "loops", "recordLookups", "recordCreates", "recordUpdates", "recordDeletes"],
+      "minimum_version": 30.0,
+      "description": "Core flow elements available since early API versions"
+    },
+    "enhanced_collections": {
+      "elements": ["collectionProcessors", "transforms"],
+      "minimum_version": 58.0,
+      "description": "Advanced collection manipulation elements"
+    },
+    "orchestration": {
+      "elements": ["orchestrationStages", "orchestrationSteps"],
+      "minimum_version": 56.0,
+      "description": "Flow Orchestrator elements for multi-step processes"
+    },
+    "error_handling": {
+      "elements": ["customErrors", "recordRollbacks"],
+      "minimum_version": 54.0,
+      "description": "Enhanced error handling and transaction control"
+    }
+  }
+}

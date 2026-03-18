@@ -1,0 +1,168 @@
+{
+  "validation": {
+    "slides": {
+      "title": {
+        "maxLength": 50,
+        "minLength": 5,
+        "required": true
+      },
+      "subtitle": {
+        "maxLength": 80,
+        "minLength": 10,
+        "required": false
+      },
+      "bullet": {
+        "maxLength": 80,
+        "minLength": 10,
+        "maxBulletsPerSlide": 5
+      },
+      "quote": {
+        "maxLength": 200,
+        "minLength": 20,
+        "requiresAttribution": true
+      },
+      "content": {
+        "maxLength": 500,
+        "minLength": 20
+      }
+    },
+    "totals": {
+      "maxSlidesPerDeck": 12,
+      "minSlidesPerDeck": 5,
+      "maxWordsPerSlide": 75
+    }
+  },
+  "branding": {
+    "requiredElements": ["RevPal"],
+    "preferredElements": ["OpsPal", "Partnership"],
+    "prohibitedElements": ["lorem ipsum", "example corp", "ACME", "placeholder"]
+  },
+  "factualAccuracy": {
+    "prohibitedPatterns": [
+      {
+        "pattern": "\\d{3,}%",
+        "reason": "Unrealistic percentage claims (over 99%)"
+      },
+      {
+        "pattern": "guaranteed",
+        "reason": "Overpromising language"
+      },
+      {
+        "pattern": "absolutely|definitely|certainly",
+        "reason": "Absolute claims without evidence"
+      },
+      {
+        "pattern": "\\$\\d+M|\\$\\d+ million",
+        "reason": "Large dollar claims require source validation"
+      }
+    ],
+    "requiredSourceValidation": [
+      "statistics",
+      "percentages",
+      "dollar amounts",
+      "time estimates"
+    ]
+  },
+  "toneConsistency": {
+    "prohibitedWords": {
+      "executive": ["implementation details", "code", "API", "technical architecture", "backend"],
+      "operations": ["strategic vision", "market dynamics", "competitive landscape"],
+      "technical": ["business value", "ROI", "revenue impact"],
+      "endUser": ["architecture", "integration", "API endpoints"]
+    },
+    "requiredTone": {
+      "executive": ["concise", "outcome-focused", "strategic"],
+      "operations": ["metrics-driven", "process-oriented", "efficient"],
+      "technical": ["detailed", "accurate", "implementation-focused"],
+      "endUser": ["practical", "supportive", "clear"]
+    }
+  },
+  "hallucination": {
+    "preventionRules": [
+      {
+        "rule": "No statistics not mentioned in transcript",
+        "severity": "high"
+      },
+      {
+        "rule": "No named individuals not in stakeholder list",
+        "severity": "high"
+      },
+      {
+        "rule": "No tech stack items not mentioned in discovery",
+        "severity": "medium"
+      },
+      {
+        "rule": "No competitor mentions unless explicitly discussed",
+        "severity": "medium"
+      },
+      {
+        "rule": "No timeline promises beyond what client stated",
+        "severity": "high"
+      }
+    ],
+    "requiredCrossReference": [
+      "pain points must trace to transcript",
+      "quotes must be verbatim from speaker",
+      "budget figures must match stated range",
+      "timeline must align with client availability"
+    ]
+  },
+  "enhancementImpact": {
+    "levels": {
+      "high": {
+        "description": "Changes that significantly improve proposal effectiveness",
+        "examples": ["Strengthening title hook", "Adding ROI framing", "Addressing objections"],
+        "autoApply": false
+      },
+      "medium": {
+        "description": "Changes that moderately improve clarity or impact",
+        "examples": ["Quote context addition", "Bullet point refinement", "Tone adjustment"],
+        "autoApply": true
+      },
+      "low": {
+        "description": "Minor improvements or polish",
+        "examples": ["Word choice optimization", "Punctuation fixes", "Spacing"],
+        "autoApply": true
+      }
+    },
+    "thresholds": {
+      "autoApplyBelow": 0.5,
+      "requireApprovalAbove": 0.7
+    }
+  },
+  "qualityGates": {
+    "preEnhancement": [
+      {
+        "check": "All slides have content",
+        "failureAction": "block"
+      },
+      {
+        "check": "No placeholder text remains",
+        "failureAction": "block"
+      },
+      {
+        "check": "Client name is populated",
+        "failureAction": "block"
+      }
+    ],
+    "postEnhancement": [
+      {
+        "check": "No hallucinated statistics",
+        "failureAction": "revert"
+      },
+      {
+        "check": "Branding elements present",
+        "failureAction": "warn"
+      },
+      {
+        "check": "Character limits respected",
+        "failureAction": "truncate"
+      },
+      {
+        "check": "Tone matches persona",
+        "failureAction": "warn"
+      }
+    ]
+  },
+  "version": "1.0.0"
+}

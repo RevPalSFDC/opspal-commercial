@@ -1,0 +1,157 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "automotive",
+  "version": "1.0.0",
+  "description": "Automotive dealerships, dealer groups, and vehicle sales. Major dealer groups have multi-state presence, while individual dealerships are typically location-specific with brand franchise patterns.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "automotive", "dealership", "dealer", "car", "auto", "vehicle",
+      "sales", "service", "parts", "certified", "pre-owned", "fleet",
+      "lease", "finance", "trade-in", "showroom"
+    ],
+    "entityTypes": ["Dealership", "DealerGroup", "AutoMall", "ServiceCenter"],
+    "fieldPatterns": [
+      "DealerCode", "FranchiseCode", "VIN", "StockNumber", "DealerLicense"
+    ]
+  },
+
+  "abbreviations": {
+    "brands": {
+      "GM": "General Motors",
+      "FCA": "Fiat Chrysler Automobiles",
+      "VW": "Volkswagen",
+      "BMW": "Bayerische Motoren Werke",
+      "MB": "Mercedes-Benz"
+    },
+    "operations": {
+      "CPO": "Certified Pre-Owned",
+      "F&I": "Finance and Insurance",
+      "BDC": "Business Development Center",
+      "PDI": "Pre-Delivery Inspection"
+    },
+    "certifications": {
+      "ASE": "Automotive Service Excellence",
+      "NADA": "National Automobile Dealers Association"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "Enterprises"],
+    "preserve": [
+      "Toyota", "Ford", "Honda", "Chevrolet", "Nissan", "Hyundai", "Kia",
+      "BMW", "Mercedes-Benz", "Audi", "Lexus", "Volkswagen", "Subaru",
+      "Jeep", "Dodge", "Ram", "Chrysler", "GMC", "Buick", "Cadillac",
+      "Motors", "Auto Mall", "Automotive", "Auto Group"
+    ]
+  },
+
+  "synonyms": {
+    "Chevrolet": ["Chevy"],
+    "Mercedes-Benz": ["Mercedes", "MB"],
+    "Volkswagen": ["VW"],
+    "Pre-Owned": ["Used", "Previously Owned"],
+    "Dealership": ["Dealer"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 70
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 80,
+      "tag": 60
+    },
+    "stateMismatchPenalty": -20
+  },
+
+  "genericEntityPatterns": [
+    "* Toyota",
+    "* Ford",
+    "* Honda",
+    "* Chevrolet",
+    "* Nissan",
+    "* Hyundai",
+    "* Kia",
+    "* BMW",
+    "* Mercedes-Benz",
+    "* Audi",
+    "* Lexus",
+    "* Volkswagen",
+    "* Subaru",
+    "* Jeep",
+    "* Dodge",
+    "* Motors",
+    "* Auto Mall",
+    "* Car Sales",
+    "* Automotive",
+    "* Auto Sales",
+    "* Auto Center",
+    "City of * Fleet Services"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["dealer_group_match", "dealer_code_match", "domain_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "Lithia Motors",
+    "Penske Automotive Group",
+    "AutoNation",
+    "Group 1 Automotive",
+    "Sonic Automotive",
+    "Asbury Automotive Group",
+    "Hendrick Automotive Group",
+    "Ken Garff Automotive Group",
+    "Larry H. Miller Dealerships",
+    "Morgan Auto Group",
+    "Herb Chambers Companies",
+    "Victory Automotive Group",
+    "Greenway Automotive",
+    "Napleton Automotive Group",
+    "West Herr Automotive Group",
+    "Sewell Automotive Companies",
+    "Jim Koons Automotive",
+    "Ed Morse Automotive Group",
+    "Fields Auto Group",
+    "Parks Automotive Group",
+    "Germain Motor Company",
+    "Serra Automotive",
+    "Bell Motor Group",
+    "Chapman Automotive Group",
+    "Galpin Motors",
+    "Van Tuyl Group"
+  ],
+
+  "knownEntityAliases": {
+    "Larry H. Miller Dealerships": ["Larry H. Miller", "LHM"],
+    "Penske Automotive Group": ["Penske"],
+    "Hendrick Automotive Group": ["Hendrick"],
+    "Ken Garff Automotive Group": ["Ken Garff"],
+    "Herb Chambers Companies": ["Herb Chambers"]
+  },
+
+  "locationPatterns": [
+    {
+      "pattern": "^(.+?)\\s+(Toyota|Ford|Honda|Chevrolet|Nissan|Hyundai|Kia|BMW|Mercedes-Benz|Audi|Lexus|Volkswagen|Subaru)$",
+      "description": "Location + Brand: 'Austin Toyota'",
+      "baseGroup": 2,
+      "locationGroup": 1
+    },
+    {
+      "pattern": "^(Toyota|Ford|Honda|Chevrolet|Nissan|Hyundai|Kia|BMW|Mercedes-Benz|Audi|Lexus|Volkswagen|Subaru)\\s+of\\s+(.+)$",
+      "description": "Brand of Location: 'Toyota of Dallas'",
+      "baseGroup": 1,
+      "locationGroup": 2
+    }
+  ]
+}

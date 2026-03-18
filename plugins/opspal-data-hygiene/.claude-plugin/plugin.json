@@ -1,0 +1,23 @@
+{
+  "name": "opspal-data-hygiene",
+  "deprecated": true,
+  "description": "[DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functionality has been consolidated into opspal-core. Use /dedup-companies or /deduplicate commands instead.",
+  "version": "1.2.0",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "deduplication",
+    "data-hygiene",
+    "hubspot",
+    "salesforce",
+    "merge",
+    "data-quality",
+    "contact-dedup",
+    "lead-dedup",
+    "fuzzy-matching"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+  "license": "Proprietary"
+}

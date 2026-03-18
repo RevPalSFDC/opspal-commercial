@@ -1,0 +1,338 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "governance-policies.json",
+  "description": "Governance policies for RevOps data quality operations",
+  "version": "1.0.0",
+
+  "approval_thresholds": {
+    "description": "Confidence thresholds for automated vs manual approval",
+    "auto_approve": {
+      "threshold": 95,
+      "description": "Actions above this threshold execute automatically"
+    },
+    "review_queue": {
+      "min_threshold": 80,
+      "max_threshold": 94,
+      "description": "Actions in this range require human review"
+    },
+    "reject": {
+      "threshold": 79,
+      "description": "Actions below this threshold are rejected"
+    }
+  },
+
+  "protected_fields": {
+    "description": "Fields that cannot be modified by automated processes",
+    "crm_fields": [
+      "do_not_call",
+      "do_not_email",
+      "email_opt_out",
+      "gdpr_consent",
+      "gdpr_consent_date",
+      "ccpa_opt_out",
+      "lead_source",
+      "lead_source_detail",
+      "original_lead_source",
+      "opportunity_stage",
+      "opportunity_amount",
+      "close_date",
+      "owner_id",
+      "created_by_id",
+      "created_date",
+      "system_modstamp"
+    ],
+    "financial_fields": [
+      "annual_revenue",
+      "number_of_employees",
+      "account_rating",
+      "credit_limit",
+      "payment_terms"
+    ],
+    "compliance_fields": [
+      "data_privacy_flag",
+      "restricted_account",
+      "sanctions_flag",
+      "kyc_status",
+      "aml_status"
+    ]
+  },
+
+  "required_approval": {
+    "description": "Actions that always require manual approval regardless of confidence",
+    "operations": [
+      {
+        "name": "account_merge",
+        "description": "Merging two or more accounts",
+        "approvers": ["data_steward", "admin"],
+        "min_approvals": 1
+      },
+      {
+        "name": "contact_reassignment",
+        "description": "Moving contact from one account to another",
+        "approvers": ["data_steward", "account_owner"],
+        "min_approvals": 1
+      },
+      {
+        "name": "bulk_update",
+        "description": "Updating more than 100 records at once",
+        "threshold": 100,
+        "approvers": ["admin"],
+        "min_approvals": 1
+      },
+      {
+        "name": "bulk_delete",
+        "description": "Deleting any records",
+        "approvers": ["admin"],
+        "min_approvals": 2
+      },
+      {
+        "name": "ownership_change",
+        "description": "Changing record ownership",
+        "approvers": ["admin", "sales_ops"],
+        "min_approvals": 1
+      },
+      {
+        "name": "production_deployment",
+        "description": "Deploying changes to production",
+        "approvers": ["admin", "release_manager"],
+        "min_approvals": 1
+      }
+    ]
+  },
+
+  "audit_retention": {
+    "description": "How long to retain audit logs",
+    "default_days": 365,
+    "by_action_type": {
+      "merge": 730,
+      "delete": 1095,
+      "bulk_update": 730,
+      "compliance_change": 2555,
+      "field_update": 365,
+      "enrichment": 180
+    },
+    "gdpr_retention_days": 2555,
+    "ccpa_retention_days": 1095
+  },
+
+  "compliance": {
+    "gdpr": {
+      "enabled": true,
+      "regions": ["EU", "EEA", "UK"],
+      "requirements": {
+        "right_to_erasure": true,
+        "data_portability": true,
+        "consent_tracking": true,
+        "processing_records": true
+      },
+      "personal_data_fields": [
+        "first_name", "last_name", "email", "phone", "mobile_phone",
+        "mailing_address", "billing_address", "birthdate", "title"
+      ],
+      "retention_review_days": 730
+    },
+    "ccpa": {
+      "enabled": true,
+      "regions": ["CA", "US-CA"],
+      "requirements": {
+        "right_to_know": true,
+        "right_to_delete": true,
+        "right_to_opt_out": true,
+        "non_discrimination": true
+      },
+      "sale_of_data_tracking": true
+    },
+    "hipaa": {
+      "enabled": false,
+      "phi_fields": [
+        "medical_record_number", "health_plan_id", "diagnosis_code"
+      ]
+    },
+    "sox": {
+      "enabled": false,
+      "financial_controls": true,
+      "segregation_of_duties": true
+    }
+  },
+
+  "rate_limits": {
+    "description": "Rate limits for automated operations",
+    "enrichment": {
+      "max_per_hour": 1000,
+      "max_per_day": 10000,
+      "cool_down_minutes": 5
+    },
+    "deduplication": {
+      "max_merges_per_hour": 100,
+      "max_merges_per_day": 500,
+      "require_review_after": 50
+    },
+    "bulk_operations": {
+      "max_records_per_batch": 200,
+      "max_batches_per_hour": 10,
+      "delay_between_batches_ms": 1000
+    },
+    "api_calls": {
+      "salesforce": {
+        "max_per_day": 100000,
+        "warning_threshold_percent": 80
+      },
+      "hubspot": {
+        "max_per_day": 250000,
+        "warning_threshold_percent": 80
+      },
+      "third_party": {
+        "max_per_day": 10000,
+        "cost_tracking": true
+      }
+    }
+  },
+
+  "notifications": {
+    "description": "When to send notifications about data quality actions",
+    "channels": {
+      "slack": {
+        "enabled": true,
+        "webhook_env_var": "SLACK_WEBHOOK_URL"
+      },
+      "email": {
+        "enabled": false,
+        "recipients_env_var": "NOTIFICATION_EMAILS"
+      },
+      "asana": {
+        "enabled": true,
+        "project_env_var": "ASANA_REVIEW_PROJECT_ID"
+      }
+    },
+    "triggers": {
+      "review_required": {
+        "enabled": true,
+        "channels": ["slack", "asana"],
+        "message": "Data quality action requires review"
+      },
+      "bulk_operation_started": {
+        "enabled": true,
+        "channels": ["slack"],
+        "threshold": 50
+      },
+      "anomaly_detected": {
+        "enabled": true,
+        "channels": ["slack"],
+        "min_severity": "medium"
+      },
+      "rate_limit_warning": {
+        "enabled": true,
+        "channels": ["slack"],
+        "threshold_percent": 80
+      },
+      "compliance_event": {
+        "enabled": true,
+        "channels": ["slack", "email"],
+        "message": "Compliance-related data change detected"
+      }
+    }
+  },
+
+  "rollback": {
+    "description": "Rollback configuration for data operations",
+    "enabled": true,
+    "snapshot_before_operations": ["merge", "bulk_update", "delete"],
+    "max_snapshots_per_operation": 100,
+    "snapshot_retention_days": 30,
+    "auto_rollback_on_error": true,
+    "rollback_window_hours": 24
+  },
+
+  "data_masking": {
+    "description": "Masking rules for sensitive data in logs and exports",
+    "enabled": true,
+    "fields": {
+      "email": { "pattern": "partial", "show_chars": 3 },
+      "phone": { "pattern": "last_four", "show_chars": 4 },
+      "ssn": { "pattern": "full", "replacement": "***-**-****" },
+      "credit_card": { "pattern": "last_four", "show_chars": 4 },
+      "birthdate": { "pattern": "year_only" }
+    },
+    "contexts": {
+      "logs": true,
+      "exports": true,
+      "notifications": true,
+      "api_responses": false
+    }
+  },
+
+  "quality_gates": {
+    "description": "Quality gates that must pass before operations proceed",
+    "pre_operation": [
+      {
+        "name": "duplicate_check",
+        "enabled": true,
+        "block_on_fail": false,
+        "warn_on_fail": true
+      },
+      {
+        "name": "field_validation",
+        "enabled": true,
+        "block_on_fail": true
+      },
+      {
+        "name": "relationship_check",
+        "enabled": true,
+        "block_on_fail": false,
+        "warn_on_fail": true
+      },
+      {
+        "name": "compliance_check",
+        "enabled": true,
+        "block_on_fail": true
+      }
+    ],
+    "post_operation": [
+      {
+        "name": "data_integrity_check",
+        "enabled": true,
+        "trigger_rollback_on_fail": true
+      },
+      {
+        "name": "audit_log_verification",
+        "enabled": true,
+        "block_on_fail": true
+      }
+    ]
+  },
+
+  "roles": {
+    "description": "Role definitions for data governance",
+    "data_steward": {
+      "description": "Responsible for data quality oversight",
+      "permissions": [
+        "approve_merges",
+        "approve_enrichment",
+        "view_audit_logs",
+        "manage_review_queue",
+        "override_confidence_threshold"
+      ]
+    },
+    "admin": {
+      "description": "Full system administrator",
+      "permissions": ["*"]
+    },
+    "analyst": {
+      "description": "Read-only access to data quality reports",
+      "permissions": [
+        "view_reports",
+        "view_audit_logs",
+        "export_reports"
+      ]
+    },
+    "automation": {
+      "description": "System automation user",
+      "permissions": [
+        "execute_enrichment",
+        "execute_deduplication",
+        "create_audit_logs"
+      ],
+      "rate_limited": true
+    }
+  }
+}

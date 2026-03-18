@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Evaluation scenarios for the Report CRUD pipeline. Each scenario defines input, expected output, and failure class. Used for regression testing.",
+  "scenarios": [
+    {
+      "id": "basic-pipeline",
+      "description": "Simple pipeline by stage report",
+      "input": {
+        "business_question": "Show me pipeline by stage",
+        "primary_object": "Opportunity",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT", "CLOSE_DATE", "STAGE_NAME"],
+        "filters": [{ "column": "STAGE_NAME", "operator": "notEqual", "value": "Closed Lost" }],
+        "groupings": { "down": [{ "field": "STAGE_NAME" }], "across": [] },
+        "summaries": [{ "field": "AMOUNT", "aggregate": "SUM" }],
+        "assumptions": ["Pipeline = not Closed Lost"],
+        "confidence": 0.9
+      },
+      "expected": {
+        "report_type": "Opportunity",
+        "format": "SUMMARY",
+        "has_grouping": "STAGE_NAME",
+        "has_filter_excluding_closed_lost": true,
+        "executable": true,
+        "column_count_min": 4
+      },
+      "failure_class": null
+    },
+    {
+      "id": "wrong-object-guard",
+      "description": "Request for Contact data shouldn't use Lead report type",
+      "input": {
+        "business_question": "Show me contacts by account",
+        "primary_object": "Contact",
+        "report_type": "Contact",
+        "columns": ["CONTACT_NAME", "ACCOUNT_NAME", "EMAIL"],
+        "filters": [],
+        "groupings": { "down": [{ "field": "ACCOUNT_NAME" }], "across": [] },
+        "assumptions": ["Contact object, grouped by account"],
+        "confidence": 0.85
+      },
+      "expected": {
+        "report_type_not": "Lead",
+        "report_type": "Contact",
+        "format": "SUMMARY",
+        "executable": true
+      },
+      "failure_class": "wrong_object"
+    },
+    {
+      "id": "tabular-auto-upgrade",
+      "description": "TABULAR format with groupings should auto-convert to SUMMARY",
+      "input": {
+        "primary_object": "Opportunity",
+        "report_format": "TABULAR",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT"],
+        "filters": [],
+        "groupings": { "down": [{ "field": "STAGE_NAME" }], "across": [] },
+        "assumptions": ["Groupings require SUMMARY format"],
+        "confidence": 0.8
+      },
+      "expected": {
+        "format": "SUMMARY",
+        "has_correction_note": true,
+        "executable": true
+      },
+      "failure_class": "bad_format"
+    },
+    {
+      "id": "matrix-auto-upgrade",
+      "description": "SUMMARY format with across-groupings should auto-convert to MATRIX",
+      "input": {
+        "primary_object": "Opportunity",
+        "report_format": "SUMMARY",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT"],
+        "filters": [],
+        "groupings": {
+          "down": [{ "field": "STAGE_NAME" }],
+          "across": [{ "field": "CLOSE_DATE", "dateGranularity": "QUARTER" }]
+        },
+        "assumptions": ["Across groupings require MATRIX"],
+        "confidence": 0.8
+      },
+      "expected": {
+        "format": "MATRIX",
+        "has_correction_note": true,
+        "executable": true
+      },
+      "failure_class": "bad_format"
+    },
+    {
+      "id": "no-groupings-downgrade",
+      "description": "SUMMARY format with no groupings should auto-convert to TABULAR",
+      "input": {
+        "primary_object": "Opportunity",
+        "report_format": "SUMMARY",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT", "CLOSE_DATE"],
+        "filters": [],
+        "groupings": { "down": [], "across": [] },
+        "assumptions": ["No groupings = TABULAR"],
+        "confidence": 0.8
+      },
+      "expected": {
+        "format": "TABULAR",
+        "has_correction_note": true,
+        "executable": true
+      },
+      "failure_class": "bad_format"
+    },
+    {
+      "id": "disambiguation-churn",
+      "description": "Ambiguous 'churn' term should be flagged",
+      "input": {
+        "business_question": "Show me churn",
+        "primary_object": "Opportunity",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT"],
+        "filters": [],
+        "assumptions": [],
+        "confidence": 0.5
+      },
+      "expected": {
+        "has_unresolved_semantics": true,
+        "unresolved_term": "churn",
+        "executable": false
+      },
+      "failure_class": "semantic_mismatch"
+    },
+    {
+      "id": "disambiguation-revenue-churn",
+      "description": "Contextualized 'revenue churn' should auto-resolve",
+      "input": {
+        "business_question": "Show me revenue churn by quarter",
+        "primary_object": "Opportunity",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT"],
+        "filters": [],
+        "assumptions": [],
+        "confidence": 0.7
+      },
+      "expected": {
+        "has_unresolved_semantics": false,
+        "has_assumption_about_churn": true,
+        "executable": true
+      },
+      "failure_class": "semantic_mismatch"
+    },
+    {
+      "id": "low-confidence-block",
+      "description": "Low confidence should block execution",
+      "input": {
+        "primary_object": "Opportunity",
+        "columns": ["OPPORTUNITY_NAME"],
+        "filters": [],
+        "assumptions": [],
+        "confidence": 0.4
+      },
+      "expected": {
+        "executable": false,
+        "blocked_by": "confidence"
+      },
+      "failure_class": null
+    },
+    {
+      "id": "update-preserves-columns",
+      "description": "Patch-based update should preserve existing columns",
+      "input": {
+        "intent": "update",
+        "primary_object": "Opportunity",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT", "CLOSE_DATE"],
+        "filters": [{ "column": "STAGE_NAME", "operator": "notEqual", "value": "Closed Lost" }],
+        "assumptions": ["Existing report being updated"],
+        "confidence": 0.95,
+        "source_report_id": "00OxxDUMMYxx001"
+      },
+      "patch": {
+        "add_columns": ["OWNER_FULL_NAME"],
+        "remove_columns": []
+      },
+      "expected": {
+        "column_count_min": 4,
+        "has_column": "OWNER_FULL_NAME",
+        "has_column_preserved": "OPPORTUNITY_NAME",
+        "executable": true
+      },
+      "failure_class": "broken_update"
+    },
+    {
+      "id": "silent-drop-detection",
+      "description": "Verify that silent drop detection catches missing elements",
+      "input": {
+        "primary_object": "Opportunity",
+        "columns": ["OPPORTUNITY_NAME", "AMOUNT", "NONEXISTENT_FIELD__c"],
+        "filters": [],
+        "assumptions": ["Testing silent drop detection"],
+        "confidence": 0.8
+      },
+      "expected": {
+        "detects_invalid_field": true
+      },
+      "failure_class": "silent_drop"
+    }
+  ],
+  "failure_classes": {
+    "wrong_object": "Used incorrect primary object",
+    "invalid_field": "Field doesn't exist on report type",
+    "bad_format": "Wrong format for the data structure",
+    "silent_drop": "Element requested but not in final report (MUST BE ZERO)",
+    "broken_update": "Update lost existing elements",
+    "semantic_mismatch": "Report doesn't answer the business question"
+  }
+}

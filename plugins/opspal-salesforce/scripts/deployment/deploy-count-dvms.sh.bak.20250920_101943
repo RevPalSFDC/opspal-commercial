@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Deploy Count_of_DVMs__c field to Account object in beta-sandbox
+
+echo "🚀 Deploying Count_of_DVMs__c field to beta-sandbox..."
+
+# Set target org
+TARGET_ORG="beta-sandbox"
+
+# Check if org is authenticated
+echo "📋 Checking authentication for $TARGET_ORG..."
+if ! sf org display --target-org $TARGET_ORG >/dev/null 2>&1; then
+    echo "❌ $TARGET_ORG org is not authenticated."
+    echo "Please authenticate first:"
+    echo "sf org login web --alias $TARGET_ORG --instance-url https://test.salesforce.com"
+    exit 1
+fi
+
+echo "✅ $TARGET_ORG org is authenticated"
+
+# Deploy the field using the field metadata file
+echo "📦 Deploying Account.Count_of_DVMs__c field..."
+
+sf project deploy start \
+    --source-dir "force-app/main/default/objects/Account/fields/Count_of_DVMs__c.field-meta.xml" \
+    --target-org $TARGET_ORG \
+    --wait 10 \
+    --verbose
+
+DEPLOY_EXIT_CODE=$?
+
+if [ $DEPLOY_EXIT_CODE -eq 0 ]; then
+    echo "✅ Successfully deployed Count_of_DVMs__c field to Account object"
+    
+    # Verify the deployment
+    echo "🔍 Verifying field deployment..."
+    
+    # Query to check if the field exists
+    QUERY="SELECT DeveloperName, Label, DataType FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'"
+    
+    sf data query \
+        --query "$QUERY" \
+        --target-org $TARGET_ORG
+        
+    if [ $? -eq 0 ]; then
+        echo "✅ Field verification successful"
+        echo ""
+        echo "🎉 Next Steps:"
+        echo "1. Add the Count_of_DVMs__c field to Account page layouts"
+        echo "2. Configure field-level security if needed"
+        echo "3. Test the field by updating Account records"
+    else
+        echo "⚠️  Field deployment succeeded but verification query failed"
+    fi
+        
+else
+    echo "❌ Deployment failed with exit code: $DEPLOY_EXIT_CODE"
+    exit 1
+fi
+
+echo "🎉 Deployment process completed successfully!"

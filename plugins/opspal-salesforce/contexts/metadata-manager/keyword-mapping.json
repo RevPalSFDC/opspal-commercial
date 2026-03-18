@@ -1,0 +1,665 @@
+{
+  "agentName": "sfdc-metadata-manager",
+  "version": "1.0.0",
+  "description": "Progressive disclosure keyword mapping for sfdc-metadata-manager contexts",
+  "lastUpdated": "2025-10-30",
+  "rules": {
+    "maxContextsPerRequest": 8,
+    "relatedContextThreshold": 12,
+    "relatedContextMinScore": 6,
+    "minKeywordMatches": 1,
+    "priorityWeighting": {
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    }
+  },
+  "contexts": [
+    {
+      "contextName": "flow-management-framework",
+      "contextFile": "flow-management-framework.md",
+      "priority": "high",
+      "description": "Complete flow management lifecycle including deployment, activation, and validation",
+      "keywords": [
+        "flow",
+        "automation",
+        "activate flow",
+        "deactivate flow",
+        "flow version",
+        "flow definition",
+        "deploy flow",
+        "flow deployment",
+        "inactive flow",
+        "flow activation",
+        "flow lifecycle"
+      ],
+      "intentPatterns": [
+        "(create|deploy|build).*(flow|automation)",
+        "(activate|deactivate).*(flow)",
+        "flow.*(version|deployment|lifecycle)",
+        "(manage|update|modify).*(flow)"
+      ],
+      "relatedContexts": ["common-tasks-reference"],
+      "estimatedTokens": 1998
+    },
+    {
+      "contextName": "runbook-context-loading",
+      "contextFile": "runbook-context-loading.md",
+      "priority": "medium",
+      "description": "Dynamic runbook loading for org-specific operational context",
+      "keywords": [
+        "runbook",
+        "operational context",
+        "org-specific",
+        "load context",
+        "runbook context",
+        "instance context",
+        "org runbook",
+        "operational playbook"
+      ],
+      "intentPatterns": [
+        "(load|fetch|get).*(runbook|context)",
+        "org.*(specific|context|runbook)",
+        "runbook.*(load|context)",
+        "operational.*(context|playbook)"
+      ],
+      "relatedContexts": [],
+      "estimatedTokens": 1944
+    },
+    {
+      "contextName": "fls-field-deployment",
+      "contextFile": "fls-field-deployment.md",
+      "priority": "high",
+      "description": "Atomic field deployment with automatic FLS bundling",
+      "keywords": [
+        "field deployment",
+        "FLS",
+        "field-level security",
+        "custom field",
+        "deploy field",
+        "create field",
+        "add field",
+        "field permissions",
+        "FLS bundling",
+        "atomic field",
+        "field FLS"
+      ],
+      "intentPatterns": [
+        "(deploy|create|add).*(custom )?field",
+        "field.*(deployment|FLS|permissions)",
+        "(FLS|field-level security).*(field|deploy)",
+        "(atomic|bundle).*(field|FLS)"
+      ],
+      "relatedContexts": ["field-verification-protocol", "master-detail-relationship"],
+      "estimatedTokens": 1791
+    },
+    {
+      "contextName": "picklist-modification-protocol",
+      "contextFile": "picklist-modification-protocol.md",
+      "priority": "high",
+      "description": "Safe picklist modification preventing record type accessibility failures",
+      "keywords": [
+        "picklist",
+        "picklist values",
+        "add value",
+        "modify picklist",
+        "record type",
+        "picklist modification",
+        "update picklist",
+        "picklist value",
+        "record type access",
+        "picklist record type",
+        "record type mapping",
+        "add values",
+        "picklist mapping",
+        "values to picklist"
+      ],
+      "intentPatterns": [
+        "(add|modify|update).*(picklist|picklist value|values)",
+        "picklist.*(modification|update|value|mapping)",
+        "(record type).*(picklist|value|mapping|access)",
+        "(modify|change|add).*(picklist).*(value|mapping)"
+      ],
+      "relatedContexts": ["picklist-dependency-deployment"],
+      "estimatedTokens": 1485
+    },
+    {
+      "contextName": "picklist-dependency-deployment",
+      "contextFile": "picklist-dependency-deployment.md",
+      "priority": "high",
+      "description": "Complete picklist dependency management including controlling/dependent field handling",
+      "keywords": [
+        "picklist dependency",
+        "controlling field",
+        "dependent field",
+        "picklist cascade",
+        "field dependency",
+        "picklist relationship",
+        "dependent picklist",
+        "controlling picklist",
+        "cascade picklist"
+      ],
+      "intentPatterns": [
+        "(controlling|dependent).*(field|picklist)",
+        "picklist.*(dependency|cascade|relationship)",
+        "(field|picklist).*(dependency|cascade)",
+        "(create|setup).*(dependent|controlling)"
+      ],
+      "relatedContexts": ["picklist-modification-protocol"],
+      "estimatedTokens": 3879
+    },
+    {
+      "contextName": "master-detail-relationship",
+      "contextFile": "master-detail-relationship.md",
+      "priority": "high",
+      "description": "Master-detail relationship creation and modification with propagation handling",
+      "keywords": [
+        "master-detail",
+        "relationship",
+        "cascade",
+        "reparenting",
+        "rollup",
+        "master-detail field",
+        "relationship field",
+        "cascading delete",
+        "relationship propagation",
+        "lookup to master-detail",
+        "create relationship",
+        "relationship creation",
+        "create master-detail",
+        "add relationship"
+      ],
+      "intentPatterns": [
+        "(create|add|modify).*(master-detail|relationship).*field",
+        "master-detail.*(relationship|field|cascade)",
+        "(cascade|propagat|reparent).*(relationship|master)",
+        "(rollup|sharing).*(master-detail)",
+        "create.*(master-detail|relationship).*(from|to|on)"
+      ],
+      "relatedContexts": ["fls-field-deployment"],
+      "estimatedTokens": 1818
+    },
+    {
+      "contextName": "field-verification-protocol",
+      "contextFile": "field-verification-protocol.md",
+      "priority": "high",
+      "description": "Comprehensive field and FLS verification after deployment",
+      "keywords": [
+        "verify field",
+        "field verification",
+        "schema check",
+        "FLS verification",
+        "validate field",
+        "check field",
+        "field validation",
+        "verify FLS",
+        "verify deployment",
+        "post-deployment check",
+        "verify all fields",
+        "check deployment",
+        "verify correctly",
+        "validation check",
+        "verify all",
+        "check all fields",
+        "post deployment",
+        "after deployment"
+      ],
+      "intentPatterns": [
+        "(verify|validate|check).*(all )?(field|FLS|deployment)",
+        "(verify|check|validate).*(correct|proper|successful)",
+        "(post|after).*(deploy|deployment).*(verify|check|validate)",
+        "(field|FLS).*(verification|validation|check|verify)",
+        "(all|every).*(field).*(verify|check|validate)",
+        "(ensure|confirm).*(field|FLS|deployment).*(correct|proper)"
+      ],
+      "relatedContexts": ["fls-field-deployment"],
+      "estimatedTokens": 2007
+    },
+    {
+      "contextName": "common-tasks-reference",
+      "contextFile": "common-tasks-reference.md",
+      "priority": "low",
+      "description": "Reference examples for common metadata management tasks",
+      "keywords": [
+        "examples",
+        "common tasks",
+        "how to",
+        "walkthrough",
+        "tutorial",
+        "reference",
+        "example",
+        "guide",
+        "task example",
+        "step by step"
+      ],
+      "intentPatterns": [
+        "(example|how to|walkthrough|tutorial)",
+        "common.*(task|example|operation)",
+        "(show|give).*(example|walkthrough)",
+        "step.*(by.)?step"
+      ],
+      "relatedContexts": [],
+      "estimatedTokens": 1296
+    },
+    {
+      "contextName": "bulk-operations",
+      "contextFile": "bulk-operations.md",
+      "priority": "medium",
+      "description": "Bulk metadata operations for managing multiple components at scale",
+      "keywords": [
+        "bulk",
+        "batch",
+        "multiple objects",
+        "mass operation",
+        "bulk deploy",
+        "batch operation",
+        "mass update",
+        "bulk modification",
+        "batch processing",
+        "15 fields",
+        "20 fields",
+        "many objects",
+        "across objects",
+        "across multiple"
+      ],
+      "intentPatterns": [
+        "(bulk|batch|mass).*(operation|deploy|update|create|modify)",
+        "(deploy|create|modify|update).*([0-9]+|multiple|many).*(object|field|component)",
+        "([0-9]+|multiple|many).*(object|field|component).*(deploy|create|modify)",
+        "(across|all).*(multiple|many).*(object|component)"
+      ],
+      "relatedContexts": [],
+      "estimatedTokens": 1251
+    },
+    {
+      "contextName": "flow-xml-runbook-authoring",
+      "contextFile": "flow-xml-runbook-authoring.md",
+      "priority": "high",
+      "description": "Comprehensive guide for authoring Salesforce Flows via XML including templates, NLP, and direct XML editing",
+      "keywords": [
+        "create flow",
+        "new flow",
+        "flow xml",
+        "authoring flow",
+        "generate flow",
+        "flow type",
+        "record-triggered flow",
+        "auto-launched flow",
+        "scheduled flow",
+        "flow template",
+        "flow element",
+        "customize flow"
+      ],
+      "intentPatterns": [
+        "(create|author|generate|build).*(new )?flow",
+        "flow.*(xml|authoring|creation|template)",
+        "(record-triggered|auto-launched|scheduled).*(flow)",
+        "(customize|modify|edit).*(flow xml)"
+      ],
+      "relatedContexts": ["flow-management-framework", "flow-xml-runbook-tools"],
+      "estimatedTokens": 2500
+    },
+    {
+      "contextName": "flow-xml-runbook-scenarios",
+      "contextFile": "flow-xml-runbook-scenarios.md",
+      "priority": "medium",
+      "description": "Design patterns for common Flow project scenarios: process automation, data quality, migration, and assessment remediation",
+      "keywords": [
+        "process automation",
+        "data quality flow",
+        "migration flow",
+        "cpq flow",
+        "lead routing",
+        "opportunity validation",
+        "case escalation",
+        "workflow migration",
+        "process builder conversion",
+        "flow consolidation",
+        "assessment remediation"
+      ],
+      "intentPatterns": [
+        "(process automation|data quality|migration).*(flow|project)",
+        "(lead|opportunity|case).*(routing|validation|escalation)",
+        "(workflow|process builder).*(migration|conversion)",
+        "(cpq|revops|assessment).*(flow|remediation)"
+      ],
+      "relatedContexts": ["flow-xml-runbook-authoring", "flow-management-framework"],
+      "estimatedTokens": 3000
+    },
+    {
+      "contextName": "flow-xml-runbook-tools",
+      "contextFile": "flow-xml-runbook-tools.md",
+      "priority": "high",
+      "description": "Multi-modal Flow development: template-driven generation, NLP modification, and direct XML editing techniques",
+      "keywords": [
+        "flow nlp",
+        "nlp modifier",
+        "flow template",
+        "direct xml",
+        "edit flow",
+        "modify flow",
+        "flow-author",
+        "flow-element-templates",
+        "flow-xml-parser",
+        "hybrid workflow",
+        "template generation"
+      ],
+      "intentPatterns": [
+        "(nlp|natural language).*(modify|flow)",
+        "(template|programmatic).*(generation|flow)",
+        "(direct|manual).*(xml|edit)",
+        "(hybrid|multi-modal).*(workflow|approach)"
+      ],
+      "relatedContexts": ["flow-xml-runbook-authoring"],
+      "estimatedTokens": 2200
+    },
+    {
+      "contextName": "flow-xml-runbook-validation",
+      "contextFile": "flow-xml-runbook-validation.md",
+      "priority": "high",
+      "description": "Comprehensive Flow validation using 11 validators: syntax, metadata, formulas, logic, and best practices enforcement",
+      "keywords": [
+        "validate flow",
+        "flow best practices",
+        "flow error",
+        "flow syntax",
+        "formula validation",
+        "field reference",
+        "decision logic",
+        "loop variable",
+        "api version",
+        "governance",
+        "pre-deployment",
+        "flow validator"
+      ],
+      "intentPatterns": [
+        "(validate|check|verify).*(flow|xml)",
+        "flow.*(validation|error|syntax|best practices)",
+        "(formula|field|decision|loop).*(validation|validator)",
+        "(pre-deploy|pre-deployment).*(validation|check)"
+      ],
+      "relatedContexts": ["flow-xml-runbook-authoring", "flow-xml-runbook-deployment"],
+      "estimatedTokens": 2800
+    },
+    {
+      "contextName": "flow-xml-runbook-deployment",
+      "contextFile": "flow-xml-runbook-deployment.md",
+      "priority": "high",
+      "description": "End-to-end Flow deployment: sandbox testing, deployment orchestration, activation, and CI/CD integration",
+      "keywords": [
+        "deploy flow",
+        "test flow",
+        "activate flow",
+        "flow ci/cd",
+        "flow deployment",
+        "sandbox testing",
+        "deployment manager",
+        "flow activation",
+        "smoke test",
+        "deployment wrapper",
+        "version management"
+      ],
+      "intentPatterns": [
+        "(deploy|test|activate).*(flow)",
+        "flow.*(deployment|testing|activation|ci/cd)",
+        "(sandbox|smoke).*(test|testing)",
+        "(deployment|version).*(manager|management)"
+      ],
+      "relatedContexts": ["flow-xml-runbook-validation", "flow-xml-runbook-monitoring", "flow-management-framework"],
+      "estimatedTokens": 2600
+    },
+    {
+      "contextName": "flow-xml-runbook-monitoring",
+      "contextFile": "flow-xml-runbook-monitoring.md",
+      "priority": "medium",
+      "description": "Production Flow monitoring, maintenance, safe removal, and emergency rollback procedures",
+      "keywords": [
+        "monitor flow",
+        "rollback flow",
+        "flow maintenance",
+        "deactivate flow",
+        "flow error",
+        "flow performance",
+        "remove flow",
+        "flow version",
+        "emergency rollback",
+        "production flow",
+        "flow monitoring"
+      ],
+      "intentPatterns": [
+        "(monitor|track).*(flow|performance|error)",
+        "(rollback|revert|undo).*(flow|deployment)",
+        "(maintain|update).*(production )?flow",
+        "(remove|deactivate|delete).*(flow)",
+        "(emergency|urgent).*(rollback|fix)"
+      ],
+      "relatedContexts": ["flow-xml-runbook-deployment", "flow-management-framework"],
+      "estimatedTokens": 2400
+    },
+    {
+      "contextName": "flow-diagnostics",
+      "contextFile": "flow-diagnostics.json",
+      "priority": "high",
+      "description": "Flow Testing & Diagnostic Framework (Runbook 7): pre-flight checks, execution testing, log analysis, coverage analysis, and diagnostic workflows",
+      "keywords": [
+        "preflight",
+        "pre-flight",
+        "test flow",
+        "flow test",
+        "flow testing",
+        "diagnose",
+        "diagnostic",
+        "debug log",
+        "parse log",
+        "log analysis",
+        "flow coverage",
+        "branch coverage",
+        "test coverage",
+        "flow execution",
+        "execute flow",
+        "run flow",
+        "flow error",
+        "flow failure",
+        "troubleshoot flow",
+        "competing automation",
+        "validation rules",
+        "trace flag",
+        "state snapshot",
+        "diff analysis",
+        "governor limits",
+        "test data",
+        "test case",
+        "test plan",
+        "flow not triggering",
+        "flow not firing",
+        "unexpected outcome",
+        "wrong branch"
+      ],
+      "intentPatterns": [
+        "(preflight|pre-flight).*(check|validation)",
+        "(test|execute|run).*(flow)",
+        "(diagnose|troubleshoot|debug).*(flow|error|failure)",
+        "(parse|analyze).*(debug )?log",
+        "(coverage|branch).*(analysis|test)",
+        "flow.*(test|diagnostic|execution|coverage)",
+        "(competing|conflicting).*(automation|flow|trigger)",
+        "(state|diff).*(snapshot|analysis|comparison)",
+        "flow.*(not triggering|not firing|failed|error)"
+      ],
+      "relatedContexts": ["flow-xml-runbook-validation", "flow-xml-runbook-deployment", "flow-xml-runbook-monitoring", "flow-management-framework"],
+      "estimatedTokens": 3500
+    }
+  ],
+  "testScenarios": [
+    {
+      "name": "Flow Deployment",
+      "prompt": "Deploy a new flow for Opportunity validation",
+      "expectedContexts": ["flow-management-framework"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Field with FLS",
+      "prompt": "Create custom field Revenue_Tier__c on Account with FLS permissions",
+      "expectedContexts": ["fls-field-deployment"],
+      "minimumScore": 9
+    },
+    {
+      "name": "Picklist Modification",
+      "prompt": "Add new values to Industry picklist on Account with record type mapping",
+      "expectedContexts": ["picklist-modification-protocol", "picklist-dependency-deployment"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Master-Detail Creation",
+      "prompt": "Create master-detail relationship from OpportunityLineItem to Opportunity",
+      "expectedContexts": ["master-detail-relationship", "fls-field-deployment"],
+      "minimumScore": 9
+    },
+    {
+      "name": "Bulk Field Deployment",
+      "prompt": "Deploy 15 custom fields across multiple objects",
+      "expectedContexts": ["bulk-operations", "fls-field-deployment"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Dependent Picklist Setup",
+      "prompt": "Create dependent picklist where Product_Category__c controls Product_Type__c",
+      "expectedContexts": ["picklist-dependency-deployment", "picklist-modification-protocol"],
+      "minimumScore": 12
+    },
+    {
+      "name": "Field Verification",
+      "prompt": "Verify all fields deployed correctly with FLS permissions",
+      "expectedContexts": ["field-verification-protocol"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Runbook Loading",
+      "prompt": "Load operational runbook for gamma-corp org",
+      "expectedContexts": ["runbook-context-loading"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Common Task Example",
+      "prompt": "Show me an example of deploying a custom object with fields",
+      "expectedContexts": ["common-tasks-reference"],
+      "minimumScore": 4
+    },
+    {
+      "name": "Simple Metadata Query",
+      "prompt": "Describe the Account object metadata",
+      "expectedContexts": [],
+      "minimumScore": 0
+    },
+    {
+      "name": "Flow XML Authoring",
+      "prompt": "Create a Record-Triggered Flow on Account using XML",
+      "expectedContexts": ["flow-xml-runbook-authoring", "flow-management-framework"],
+      "minimumScore": 9
+    },
+    {
+      "name": "Flow Project Scenario",
+      "prompt": "Design a Lead routing automation flow for process automation project",
+      "expectedContexts": ["flow-xml-runbook-scenarios", "flow-xml-runbook-authoring"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow NLP Modification",
+      "prompt": "Modify flow using NLP to add a decision element",
+      "expectedContexts": ["flow-xml-runbook-tools"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Validation",
+      "prompt": "Validate flow XML for best practices and syntax errors",
+      "expectedContexts": ["flow-xml-runbook-validation"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Deployment",
+      "prompt": "Deploy flow to production with activation and smoke testing",
+      "expectedContexts": ["flow-xml-runbook-deployment", "flow-xml-runbook-validation"],
+      "minimumScore": 9
+    },
+    {
+      "name": "Flow Rollback",
+      "prompt": "Emergency rollback of failed flow deployment",
+      "expectedContexts": ["flow-xml-runbook-monitoring"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Pre-Flight Check",
+      "prompt": "Run pre-flight checks before deploying Account_Validation_Flow",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Testing",
+      "prompt": "Test Flow with test data and capture state changes",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Debug Log Analysis",
+      "prompt": "Parse debug logs to find Flow execution errors",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Coverage Analysis",
+      "prompt": "Analyze branch coverage for Flow test cases",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Troubleshooting",
+      "prompt": "My Flow isn't triggering, help me diagnose the issue",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Competing Automation Detection",
+      "prompt": "Detect competing automation on Account object that might conflict with my Flow",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    },
+    {
+      "name": "Flow Diagnostic Workflow",
+      "prompt": "Run complete diagnostic workflow including preflight, execution, and coverage",
+      "expectedContexts": ["flow-diagnostics"],
+      "minimumScore": 6
+    }
+  ],
+  "notes": {
+    "coupledContexts": [
+      {
+        "pair": ["fls-field-deployment", "field-verification-protocol"],
+        "relationship": "FLS deployment patterns verified by verification protocol",
+        "recommendation": "Load together when deploying and verifying fields"
+      },
+      {
+        "pair": ["picklist-modification-protocol", "picklist-dependency-deployment"],
+        "relationship": "Picklist modification patterns extended by dependency management",
+        "recommendation": "Load together when working with picklists"
+      },
+      {
+        "pair": ["fls-field-deployment", "master-detail-relationship"],
+        "relationship": "Master-detail creation uses field deployment patterns",
+        "recommendation": "Load FLS deployment when creating master-detail relationships"
+      }
+    ],
+    "largeContexts": [
+      {
+        "context": "picklist-dependency-deployment",
+        "size": 431,
+        "tokens": 3879,
+        "subdivisionConsideration": "May split into Basic (200 lines) + Advanced (231 lines) if testing shows poor performance"
+      }
+    ],
+    "extractionSequence": [
+      "Phase A: runbook-context-loading, common-tasks-reference, bulk-operations (low risk)",
+      "Phase B: flow-management-framework, picklist-modification-protocol, picklist-dependency-deployment (medium risk)",
+      "Phase C: fls-field-deployment, field-verification-protocol, master-detail-relationship (high risk - coupled contexts)"
+    ]
+  }
+}

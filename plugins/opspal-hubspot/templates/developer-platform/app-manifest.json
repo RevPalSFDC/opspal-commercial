@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developers.hubspot.com/schemas/app.json",
+  "name": "{{APP_NAME}}",
+  "uid": "{{APP_UID}}",
+  "description": "{{APP_DESCRIPTION}}",
+  "allowedAccountTypes": ["STANDARD"],
+  "public": false,
+  "extensions": {
+    "crm": {
+      "cards": []
+    }
+  },
+  "auth": {
+    "type": "OAUTH",
+    "scopes": {
+      "required": [],
+      "optional": []
+    },
+    "redirectUrls": []
+  }
+}

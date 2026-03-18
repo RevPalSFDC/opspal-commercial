@@ -1,0 +1,417 @@
+{
+  "description": "Address format configurations for Asia-Pacific",
+  "version": "1.0.0",
+  "AU": {
+    "name": "Australia",
+    "format": {
+      "order": ["street", "street2", "city", "state", "postalCode"],
+      "template": "{number} {street}\n{street2}\n{city} {state} {postalCode}",
+      "uppercase": true
+    },
+    "postalCode": {
+      "name": "Postcode",
+      "format": "####",
+      "regex": "^\\d{4}$",
+      "examples": ["2000", "3000", "4000"]
+    },
+    "streetTypes": {
+      "Street": "St",
+      "Road": "Rd",
+      "Avenue": "Ave",
+      "Lane": "Ln",
+      "Drive": "Dr",
+      "Court": "Ct",
+      "Place": "Pl",
+      "Crescent": "Cres",
+      "Close": "Cl",
+      "Terrace": "Tce",
+      "Boulevard": "Bvd",
+      "Highway": "Hwy",
+      "Parade": "Pde",
+      "Way": "Way",
+      "Grove": "Gr",
+      "Circuit": "Cct",
+      "Rise": "Rise",
+      "Walk": "Wlk"
+    },
+    "directions": {
+      "North": "N",
+      "South": "S",
+      "East": "E",
+      "West": "W"
+    },
+    "units": {
+      "Unit": "Unit",
+      "Apartment": "Apt",
+      "Suite": "Ste",
+      "Level": "Lvl",
+      "Shop": "Shop",
+      "Office": "Off"
+    }
+  },
+  "NZ": {
+    "name": "New Zealand",
+    "format": {
+      "order": ["street", "street2", "suburb", "city", "postalCode"],
+      "template": "{number} {street}\n{street2}\n{suburb}\n{city} {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Postcode",
+      "format": "####",
+      "regex": "^\\d{4}$",
+      "examples": ["1010", "6011"]
+    },
+    "streetTypes": {
+      "Street": "St",
+      "Road": "Rd",
+      "Avenue": "Ave",
+      "Lane": "Ln",
+      "Drive": "Dr",
+      "Court": "Ct",
+      "Place": "Pl",
+      "Crescent": "Cres",
+      "Close": "Cl",
+      "Terrace": "Tce",
+      "Way": "Way",
+      "Grove": "Gr"
+    },
+    "units": {
+      "Unit": "Unit",
+      "Flat": "Flat",
+      "Apartment": "Apt",
+      "Suite": "Suite",
+      "Level": "Level"
+    }
+  },
+  "JP": {
+    "name": "Japan",
+    "format": {
+      "order": ["postalCode", "prefecture", "city", "ward", "block", "building"],
+      "template": "〒{postalCode}\n{prefecture}{city}{ward}\n{block}\n{building}",
+      "templateLatin": "{postalCode}\n{building}\n{block}\n{ward}, {city}\n{prefecture}",
+      "uppercase": false,
+      "addressOrder": "large-to-small"
+    },
+    "postalCode": {
+      "name": "郵便番号",
+      "format": "###-####",
+      "regex": "^\\d{3}-?\\d{4}$",
+      "examples": ["100-0001", "150-0041"]
+    },
+    "addressComponents": {
+      "prefecture": "都道府県",
+      "city": "市区町村",
+      "ward": "区",
+      "block": "丁目・番地",
+      "building": "建物名・部屋番号"
+    },
+    "units": {
+      "号室": "Room",
+      "階": "Floor",
+      "棟": "Building"
+    }
+  },
+  "KR": {
+    "name": "South Korea",
+    "format": {
+      "order": ["postalCode", "province", "city", "district", "street", "building"],
+      "template": "({postalCode})\n{province} {city} {district}\n{street} {number}\n{building}",
+      "templateLatin": "{building}\n{number} {street}\n{district}, {city}\n{province} {postalCode}",
+      "uppercase": false,
+      "addressOrder": "large-to-small"
+    },
+    "postalCode": {
+      "name": "우편번호",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["06236", "04524"]
+    },
+    "streetTypes": {
+      "로": "Ro",
+      "길": "Gil",
+      "대로": "Daero"
+    },
+    "units": {
+      "동": "Dong",
+      "호": "Ho",
+      "층": "Floor"
+    }
+  },
+  "SG": {
+    "name": "Singapore",
+    "format": {
+      "order": ["street", "building", "unit", "postalCode"],
+      "template": "{number} {street}\n{building}\n#{floor}-{unit}\nSingapore {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Postal Code",
+      "format": "######",
+      "regex": "^\\d{6}$",
+      "examples": ["018956", "238823"]
+    },
+    "streetTypes": {
+      "Road": "Rd",
+      "Street": "St",
+      "Avenue": "Ave",
+      "Lane": "Ln",
+      "Drive": "Dr",
+      "Boulevard": "Blvd",
+      "Crescent": "Cres",
+      "Walk": "Walk",
+      "Link": "Link",
+      "View": "View"
+    },
+    "units": {
+      "notation": "#{floor}-{unit}",
+      "example": "#12-34"
+    }
+  },
+  "HK": {
+    "name": "Hong Kong",
+    "format": {
+      "order": ["flat", "floor", "building", "street", "district"],
+      "template": "Flat {flat}, {floor}/F\n{building}\n{number} {street}\n{district}\nHong Kong",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "N/A",
+      "format": "none",
+      "regex": null,
+      "note": "Hong Kong does not use postal codes"
+    },
+    "streetTypes": {
+      "Road": "Rd",
+      "Street": "St",
+      "Avenue": "Ave",
+      "Lane": "Ln",
+      "Path": "Path",
+      "Terrace": "Terr"
+    },
+    "units": {
+      "Flat": "Flat",
+      "Floor": "F",
+      "Block": "Block",
+      "Tower": "Tower"
+    },
+    "districts": ["Central", "Wan Chai", "Causeway Bay", "Kowloon", "Tsim Sha Tsui", "Mong Kok", "New Territories"]
+  },
+  "IN": {
+    "name": "India",
+    "format": {
+      "order": ["building", "street", "locality", "city", "state", "postalCode"],
+      "template": "{building}\n{street}\n{locality}\n{city} - {postalCode}\n{state}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "PIN Code",
+      "format": "######",
+      "regex": "^\\d{6}$",
+      "examples": ["110001", "400001"]
+    },
+    "streetTypes": {
+      "Road": "Rd",
+      "Street": "St",
+      "Lane": "Ln",
+      "Marg": "Marg",
+      "Path": "Path",
+      "Gali": "Gali",
+      "Cross": "Cross",
+      "Main": "Main"
+    },
+    "units": {
+      "Flat": "Flat",
+      "Floor": "Floor",
+      "Block": "Block",
+      "Wing": "Wing",
+      "Tower": "Tower",
+      "Building": "Bldg"
+    }
+  },
+  "CN": {
+    "name": "China",
+    "format": {
+      "order": ["province", "city", "district", "street", "building", "postalCode"],
+      "template": "{province}{city}{district}\n{street}{number}号\n{building}\n{postalCode}",
+      "templateLatin": "{building}\n{number} {street}\n{district}, {city}\n{province} {postalCode}\nChina",
+      "uppercase": false,
+      "addressOrder": "large-to-small"
+    },
+    "postalCode": {
+      "name": "邮政编码",
+      "format": "######",
+      "regex": "^\\d{6}$",
+      "examples": ["100000", "200000"]
+    },
+    "streetTypes": {
+      "路": "Road",
+      "街": "Street",
+      "巷": "Lane",
+      "弄": "Lane",
+      "大道": "Avenue"
+    },
+    "units": {
+      "号楼": "Building",
+      "单元": "Unit",
+      "室": "Room",
+      "层": "Floor"
+    }
+  },
+  "TW": {
+    "name": "Taiwan",
+    "format": {
+      "order": ["postalCode", "city", "district", "street", "building"],
+      "template": "{postalCode}\n{city}{district}\n{street}{number}號\n{building}",
+      "templateLatin": "{building}\n{number} {street}\n{district}, {city} {postalCode}\nTaiwan",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "郵遞區號",
+      "format": "###",
+      "regex": "^\\d{3}$",
+      "examples": ["100", "220"]
+    },
+    "streetTypes": {
+      "路": "Rd",
+      "街": "St",
+      "巷": "Ln",
+      "弄": "Aly",
+      "大道": "Blvd"
+    },
+    "units": {
+      "樓": "F",
+      "室": "Room",
+      "之": "-"
+    }
+  },
+  "MY": {
+    "name": "Malaysia",
+    "format": {
+      "order": ["unit", "building", "street", "postalCode", "city", "state"],
+      "template": "{unit}\n{building}\n{number}, {street}\n{postalCode} {city}\n{state}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Postcode",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["50450", "47500"]
+    },
+    "streetTypes": {
+      "Jalan": "Jln",
+      "Lorong": "Lrg",
+      "Persiaran": "Psrn",
+      "Lebuh": "Lbh",
+      "Taman": "Tmn"
+    },
+    "units": {
+      "Unit": "Unit",
+      "Suite": "Suite",
+      "Level": "Level",
+      "Block": "Block",
+      "Lot": "Lot"
+    }
+  },
+  "TH": {
+    "name": "Thailand",
+    "format": {
+      "order": ["building", "floor", "street", "subdistrict", "district", "province", "postalCode"],
+      "template": "{building} {floor}\n{number} {street}\n{subdistrict} {district}\n{province} {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "รหัสไปรษณีย์",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["10110", "10400"]
+    },
+    "streetTypes": {
+      "Thanon": "Th.",
+      "Soi": "Soi",
+      "Road": "Rd"
+    },
+    "units": {
+      "Floor": "Fl.",
+      "Room": "Rm.",
+      "Building": "Bldg."
+    }
+  },
+  "PH": {
+    "name": "Philippines",
+    "format": {
+      "order": ["unit", "building", "street", "barangay", "city", "postalCode"],
+      "template": "{unit}\n{building}\n{number} {street}\n{barangay}\n{city} {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "ZIP Code",
+      "format": "####",
+      "regex": "^\\d{4}$",
+      "examples": ["1000", "1200"]
+    },
+    "streetTypes": {
+      "Street": "St",
+      "Avenue": "Ave",
+      "Road": "Rd",
+      "Boulevard": "Blvd",
+      "Drive": "Dr"
+    },
+    "units": {
+      "Unit": "Unit",
+      "Floor": "Flr",
+      "Building": "Bldg",
+      "Room": "Rm"
+    }
+  },
+  "ID": {
+    "name": "Indonesia",
+    "format": {
+      "order": ["street", "rt", "kelurahan", "kecamatan", "city", "postalCode"],
+      "template": "{street} No. {number}\nRT {rt}/RW {rw}, {kelurahan}\n{kecamatan}, {city} {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Kode Pos",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["10110", "12190"]
+    },
+    "streetTypes": {
+      "Jalan": "Jl.",
+      "Gang": "Gg.",
+      "Komplek": "Komp."
+    },
+    "units": {
+      "Blok": "Blok",
+      "No": "No.",
+      "Lantai": "Lt.",
+      "Gedung": "Ged."
+    }
+  },
+  "VN": {
+    "name": "Vietnam",
+    "format": {
+      "order": ["street", "ward", "district", "city", "postalCode"],
+      "template": "{number} {street}\n{ward}, {district}\n{city} {postalCode}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Mã bưu chính",
+      "format": "######",
+      "regex": "^\\d{6}$",
+      "examples": ["100000", "700000"]
+    },
+    "streetTypes": {
+      "Đường": "Đ.",
+      "Phố": "P.",
+      "Ngõ": "Ng.",
+      "Hẻm": "H."
+    },
+    "units": {
+      "Phòng": "P.",
+      "Tầng": "T.",
+      "Tòa nhà": "TN"
+    }
+  }
+}

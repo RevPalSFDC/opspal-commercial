@@ -1,0 +1,222 @@
+#!/bin/bash
+
+# Comprehensive field accessibility verification utility
+# Checks multiple aspects of field deployment and accessibility
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Field configuration
+OBJECT_NAME="Contract"
+FIELD_NAME="Renewal_Opportunity__c"
+FIELD_DEVELOPER_NAME="Renewal_Opportunity"
+
+echo "================================================"
+echo "Field Accessibility Verification Tool"
+echo "================================================"
+echo -e "Object: ${BLUE}$OBJECT_NAME${NC}"
+echo -e "Field:  ${BLUE}$FIELD_NAME${NC}"
+echo "================================================"
+
+# Check for org alias
+if [ -z "$SFDX_ALIAS" ]; then
+    echo -e "${YELLOW}No SFDX_ALIAS set. Using default: delta-sandbox${NC}"
+    SFDX_ALIAS="delta-sandbox"
+fi
+
+echo -e "\n📋 Target Org: ${GREEN}$SFDX_ALIAS${NC}"
+
+# Initialize status tracking
+CHECKS_PASSED=0
+CHECKS_FAILED=0
+ISSUES=()
+
+# Function to run a check
+run_check() {
+    local check_name="$1"
+    local check_command="$2"
+    local success_pattern="$3"
+    local failure_pattern="$4"
+    
+    echo -e "\n🔍 ${check_name}..."
+    
+    RESULT=$(eval "$check_command" 2>&1 || true)
+    
+    if [ -n "$failure_pattern" ] && echo "$RESULT" | grep -q "$failure_pattern"; then
+        echo -e "${RED}   ❌ FAILED${NC}"
+        CHECKS_FAILED=$((CHECKS_FAILED + 1))
+        ISSUES+=("$check_name: Failed")
+        return 1
+    elif [ -n "$success_pattern" ] && echo "$RESULT" | grep -q "$success_pattern"; then
+        echo -e "${GREEN}   ✅ PASSED${NC}"
+        CHECKS_PASSED=$((CHECKS_PASSED + 1))
+        return 0
+    else
+        echo -e "${YELLOW}   ⚠️  UNCERTAIN${NC}"
+        echo "   Result: $(echo "$RESULT" | head -1)"
+        CHECKS_FAILED=$((CHECKS_FAILED + 1))
+        ISSUES+=("$check_name: Uncertain result")
+        return 1
+    fi
+}
+
+# Check 1: Org connectivity
+run_check "Org Connectivity" \
+    "sf org display --target-org $SFDX_ALIAS --json" \
+    '"status":"Active"' \
+    '"status":"Error"'
+
+# Check 2: Field in Tooling API
+run_check "Field in Tooling API" \
+    "sf data query --query \"SELECT Id, DeveloperName FROM CustomField WHERE DeveloperName = '$FIELD_DEVELOPER_NAME' AND TableEnumOrId = '$OBJECT_NAME' LIMIT 1\" --target-org $SFDX_ALIAS --use-tooling-api --json" \
+    '"totalSize":1' \
+    '"totalSize":0'
+
+# Check 3: Field in metadata
+run_check "Field in Local Metadata" \
+    "ls -la force-app/main/default/objects/$OBJECT_NAME/fields/${FIELD_NAME}.field-meta.xml" \
+    "${FIELD_NAME}.field-meta.xml" \
+    "No such file"
+
+# Check 4: SOQL Query Access
+run_check "SOQL Query Access" \
+    "sf data query --query \"SELECT Id, $FIELD_NAME FROM $OBJECT_NAME LIMIT 1\" --target-org $SFDX_ALIAS --json" \
+    '"records"' \
+    "No such column '$FIELD_NAME'"
+
+# Check 5: Field Describe
+echo -e "\n🔍 Field Describe Information..."
+DESCRIBE_RESULT=$(sf sobject describe --sobject "$OBJECT_NAME" --target-org "$SFDX_ALIAS" --json 2>&1 || true)
+
+if echo "$DESCRIBE_RESULT" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    fields = data.get('result', {}).get('fields', [])
+    field_found = any(f['name'] == '$FIELD_NAME' for f in fields)
+    if field_found:
+        field = next(f for f in fields if f['name'] == '$FIELD_NAME')
+        print(f'   ✅ Field found in describe')
+        print(f'   Type: {field.get(\"type\", \"Unknown\")}')
+        print(f'   Createable: {field.get(\"createable\", False)}')
+        print(f'   Updateable: {field.get(\"updateable\", False)}')
+        sys.exit(0)
+    else:
+        print('   ❌ Field not found in describe')
+        sys.exit(1)
+except:
+    print('   ⚠️  Unable to parse describe result')
+    sys.exit(1)
+" 2>/dev/null; then
+    CHECKS_PASSED=$((CHECKS_PASSED + 1))
+else
+    CHECKS_FAILED=$((CHECKS_FAILED + 1))
+    ISSUES+=("Field not in describe result")
+fi
+
+# Check 6: Field Permissions (for current user)
+echo -e "\n🔍 Field-Level Security..."
+FLS_RESULT=$(sf data query \
+    --query "SELECT Id, Field, PermissionsEdit, PermissionsRead FROM FieldPermissions WHERE SobjectType = '$OBJECT_NAME' AND Field = '${OBJECT_NAME}.${FIELD_NAME}' LIMIT 5" \
+    --target-org "$SFDX_ALIAS" \
+    --json 2>&1 || echo '{"result":{"totalSize":0}}')
+
+FLS_COUNT=$(echo "$FLS_RESULT" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    count = data.get('result', {}).get('totalSize', 0)
+    print(count)
+except:
+    print(0)
+" 2>/dev/null || echo "0")
+
+if [ "$FLS_COUNT" -gt 0 ]; then
+    echo -e "${GREEN}   ✅ Field permissions configured (${FLS_COUNT} permission sets/profiles)${NC}"
+    CHECKS_PASSED=$((CHECKS_PASSED + 1))
+else
+    echo -e "${YELLOW}   ⚠️  No field permissions found${NC}"
+    CHECKS_FAILED=$((CHECKS_FAILED + 1))
+    ISSUES+=("No field-level security configured")
+fi
+
+# Check 7: Test data query
+echo -e "\n🔍 Test Data Query..."
+TEST_QUERY="SELECT COUNT(Id) TotalContracts, COUNT($FIELD_NAME) WithRenewal FROM $OBJECT_NAME"
+TEST_RESULT=$(sf data query \
+    --query "$TEST_QUERY" \
+    --target-org "$SFDX_ALIAS" \
+    --json 2>&1 || echo "FAILED")
+
+if echo "$TEST_RESULT" | grep -q "TotalContracts"; then
+    echo -e "${GREEN}   ✅ Aggregate query successful${NC}"
+    
+    # Parse and display results
+    echo "$TEST_RESULT" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    record = data['result']['records'][0]
+    print(f\"   Total Contracts: {record.get('TotalContracts', 0)}\")
+    print(f\"   With Renewal Opportunity: {record.get('WithRenewal', 0)}\")
+except:
+    pass
+" 2>/dev/null || true
+    
+    CHECKS_PASSED=$((CHECKS_PASSED + 1))
+else
+    echo -e "${RED}   ❌ Query failed${NC}"
+    CHECKS_FAILED=$((CHECKS_FAILED + 1))
+    ISSUES+=("Cannot run aggregate queries on field")
+fi
+
+# Summary Report
+echo -e "\n================================================"
+echo -e "📊 VERIFICATION SUMMARY"
+echo -e "================================================"
+echo -e "Checks Passed: ${GREEN}$CHECKS_PASSED${NC}"
+echo -e "Checks Failed: ${RED}$CHECKS_FAILED${NC}"
+
+if [ $CHECKS_FAILED -eq 0 ]; then
+    echo -e "\n${GREEN}🎉 SUCCESS: Field is fully deployed and accessible!${NC}"
+    exit 0
+else
+    echo -e "\n${RED}❌ ISSUES DETECTED:${NC}"
+    for issue in "${ISSUES[@]}"; do
+        echo -e "   • $issue"
+    done
+    
+    echo -e "\n${YELLOW}📋 RECOMMENDED ACTIONS:${NC}"
+    
+    if [[ " ${ISSUES[@]} " =~ "Field in Tooling API" ]]; then
+        echo "   1. Deploy the field using: ./scripts/deploy-renewal-field-with-verification.sh"
+    fi
+    
+    if [[ " ${ISSUES[@]} " =~ "SOQL Query Access" ]]; then
+        echo "   2. Check field-level security in Setup > Object Manager > Contract > Field-Level Security"
+        echo "   3. Ensure your profile has Read access to the field"
+    fi
+    
+    if [[ " ${ISSUES[@]} " =~ "Field not in describe" ]]; then
+        echo "   4. Clear metadata cache: sf project retrieve start --manifest manifest/renewal-opportunity-field-package.xml"
+        echo "   5. Re-deploy the field metadata"
+    fi
+    
+    if [[ " ${ISSUES[@]} " =~ "No field-level security" ]]; then
+        echo "   6. Configure field permissions for relevant profiles and permission sets"
+    fi
+    
+    echo -e "\n${BLUE}For manual verification:${NC}"
+    echo "   • Login to Salesforce Setup"
+    echo "   • Navigate to Object Manager > Contract > Fields & Relationships"
+    echo "   • Search for 'Renewal Opportunity'"
+    echo "   • Check Field-Level Security settings"
+    
+    exit 1
+fi

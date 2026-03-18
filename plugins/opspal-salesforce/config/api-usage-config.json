@@ -1,0 +1,100 @@
+{
+  "description": "Salesforce API Usage Monitor Configuration",
+  "version": "1.0.0",
+  "thresholds": {
+    "warning": 0.70,
+    "critical": 0.85,
+    "emergency": 0.95
+  },
+  "limits": {
+    "default": {
+      "daily": 15000,
+      "hourly": 1000,
+      "comment": "Default Enterprise Edition limits"
+    },
+    "unlimited": {
+      "daily": 1000000,
+      "hourly": 100000,
+      "comment": "Unlimited Edition limits"
+    },
+    "performance": {
+      "daily": 100000,
+      "hourly": 10000,
+      "comment": "Performance Edition limits"
+    },
+    "developer": {
+      "daily": 15000,
+      "hourly": 1000,
+      "comment": "Developer Edition limits"
+    },
+    "sandbox": {
+      "daily": 5000,
+      "hourly": 500,
+      "comment": "Sandbox limits (varies by type)"
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "trackingInterval": "realtime",
+    "retentionDays": 7,
+    "reportSchedule": "weekly"
+  },
+  "alerts": {
+    "slack": {
+      "enabled": true,
+      "webhookUrl": "${SLACK_WEBHOOK_URL}",
+      "rateLimitMinutes": 15
+    },
+    "email": {
+      "enabled": false,
+      "smtpHost": "${SMTP_HOST}",
+      "smtpPort": 587,
+      "from": "api-monitor@company.com",
+      "to": ["ops-team@company.com"]
+    },
+    "console": {
+      "enabled": true,
+      "level": "WARNING"
+    },
+    "file": {
+      "enabled": true,
+      "path": "~/.claude/api-usage/{org}_alerts.log"
+    }
+  },
+  "apiCallEstimates": {
+    "data query": 1,
+    "data create": 0.005,
+    "data update": 0.005,
+    "data upsert": 0.005,
+    "data delete": 0.005,
+    "metadata deployment": 5,
+    "apex execution": 1,
+    "apex testing": 3,
+    "bulk query": 1,
+    "bulk create": 0.01,
+    "bulk update": 0.01,
+    "bulk upsert": 0.01,
+    "bulk delete": 0.01,
+    "tooling api": 1,
+    "composite api": 1,
+    "comment": "Multipliers for record-based operations (per record). Deployments are estimated."
+  },
+  "optimization": {
+    "highQueryVolumeThreshold": 0.5,
+    "singleAgentThreshold": 0.3,
+    "highFailureRateThreshold": 0.05
+  },
+  "orgLimits": {
+    "production": {
+      "daily": 15000,
+      "hourly": 1000,
+      "edition": "Enterprise"
+    },
+    "sandbox": {
+      "daily": 5000,
+      "hourly": 500,
+      "edition": "Sandbox"
+    },
+    "comment": "Override default limits per org alias"
+  }
+}

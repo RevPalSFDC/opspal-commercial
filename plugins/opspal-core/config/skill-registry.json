@@ -1,0 +1,342 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "ACE Framework Skill Registry - Centralized skill ID definitions for reflection tracking",
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-10",
+
+  "skillCategories": {
+    "assessment": {
+      "description": "Skills for evaluating, auditing, and analyzing configurations",
+      "skills": {
+        "cpq-assessment": {
+          "displayName": "CPQ Assessment",
+          "description": "Evaluate CPQ configuration, pricing rules, product bundles",
+          "agents": ["sfdc-cpq-assessor"],
+          "keywords": ["cpq", "quote", "pricing", "product bundle", "discount"]
+        },
+        "revops-audit": {
+          "displayName": "RevOps Audit",
+          "description": "Analyze pipeline health, forecast accuracy, sales processes",
+          "agents": ["sfdc-revops-auditor"],
+          "keywords": ["revops", "pipeline", "forecast", "sales process"]
+        },
+        "automation-audit": {
+          "displayName": "Automation Audit",
+          "description": "Audit flows, process builders, workflow rules, triggers",
+          "agents": ["sfdc-automation-auditor"],
+          "keywords": ["automation", "flow audit", "process builder", "workflow"]
+        },
+        "permission-review": {
+          "displayName": "Permission Review",
+          "description": "Analyze permission sets, profiles, sharing rules",
+          "agents": ["sfdc-permission-assessor"],
+          "keywords": ["permission", "profile", "sharing", "access"]
+        },
+        "object-audit": {
+          "displayName": "Object Audit",
+          "description": "Comprehensive metadata analysis of Salesforce objects",
+          "agents": ["sfdc-object-auditor"],
+          "keywords": ["object", "metadata", "field analysis"]
+        }
+      }
+    },
+
+    "deployment": {
+      "description": "Skills for deploying and managing metadata",
+      "skills": {
+        "metadata-deploy": {
+          "displayName": "Metadata Deployment",
+          "description": "Deploy Salesforce metadata with validation",
+          "agents": ["sfdc-deployment-manager", "sfdc-metadata-manager"],
+          "keywords": ["deploy", "metadata", "package"]
+        },
+        "flow-deploy": {
+          "displayName": "Flow Deployment",
+          "description": "Deploy and activate Salesforce flows",
+          "agents": ["sfdc-flow-diagnostician"],
+          "keywords": ["flow deploy", "activate flow"]
+        },
+        "apex-deploy": {
+          "displayName": "Apex Deployment",
+          "description": "Deploy Apex classes, triggers with test coverage",
+          "agents": ["sfdc-apex-developer"],
+          "keywords": ["apex deploy", "trigger deploy", "class deploy"]
+        },
+        "permission-deploy": {
+          "displayName": "Permission Deployment",
+          "description": "Deploy permission sets and profiles",
+          "agents": ["sfdc-permission-orchestrator"],
+          "keywords": ["permission deploy", "profile deploy"]
+        }
+      }
+    },
+
+    "validation": {
+      "description": "Skills for validating configurations before changes",
+      "skills": {
+        "pre-deploy-check": {
+          "displayName": "Pre-Deployment Check",
+          "description": "Validate deployment before execution",
+          "agents": ["sfdc-deployment-manager"],
+          "keywords": ["validate", "pre-deploy", "check deployment"]
+        },
+        "field-validation": {
+          "displayName": "Field Validation",
+          "description": "Validate field configurations and dependencies",
+          "agents": ["sfdc-field-analyzer"],
+          "keywords": ["field check", "field validation", "field dependency"]
+        },
+        "dependency-check": {
+          "displayName": "Dependency Check",
+          "description": "Analyze metadata dependencies before changes",
+          "agents": ["sfdc-dependency-analyzer"],
+          "keywords": ["dependency", "reference check", "impact analysis"]
+        },
+        "syntax-validation": {
+          "displayName": "Syntax Validation",
+          "description": "Validate formula, flow XML, and code syntax",
+          "agents": ["sfdc-flow-diagnostician"],
+          "keywords": ["syntax", "formula check", "xml validation"]
+        },
+        "data-validation": {
+          "displayName": "Data Validation",
+          "description": "Validate data integrity and quality",
+          "agents": ["sfdc-data-operations"],
+          "keywords": ["data check", "data quality", "integrity"]
+        }
+      }
+    },
+
+    "query": {
+      "description": "Skills for building and executing queries",
+      "skills": {
+        "soql-build": {
+          "displayName": "SOQL Query Building",
+          "description": "Build and optimize SOQL queries",
+          "agents": ["sfdc-query-specialist"],
+          "keywords": ["soql", "query", "select"]
+        },
+        "report-create": {
+          "displayName": "Report Creation",
+          "description": "Create Salesforce reports with proper types",
+          "agents": ["sfdc-reports-dashboards"],
+          "keywords": ["report", "create report", "report type"]
+        },
+        "dashboard-create": {
+          "displayName": "Dashboard Creation",
+          "description": "Create dashboards with components",
+          "agents": ["sfdc-reports-dashboards", "sfdc-dashboard-designer"],
+          "keywords": ["dashboard", "create dashboard", "kpi"]
+        },
+        "data-export": {
+          "displayName": "Data Export",
+          "description": "Export data with field selection",
+          "agents": ["sfdc-data-export-manager"],
+          "keywords": ["export", "data export", "backup"]
+        },
+        "data-import": {
+          "displayName": "Data Import",
+          "description": "Import and upsert data with validation",
+          "agents": ["sfdc-data-import-manager"],
+          "keywords": ["import", "upsert", "data load"]
+        },
+        "data-quality-audit": {
+          "displayName": "Data Quality Audit",
+          "description": "Comprehensive data quality audit with health scoring",
+          "agents": ["revops-data-quality-orchestrator"],
+          "keywords": ["data quality", "data audit", "health score", "data health", "quality check"]
+        },
+        "deduplication": {
+          "displayName": "Deduplication",
+          "description": "Identify and merge duplicate records",
+          "agents": ["revops-data-quality-orchestrator"],
+          "keywords": ["deduplicate", "dedup", "duplicate", "merge records", "find duplicates"]
+        },
+        "data-enrichment": {
+          "displayName": "Data Enrichment",
+          "description": "Enrich records with missing data from multiple sources",
+          "agents": ["revops-data-quality-orchestrator"],
+          "keywords": ["enrich", "enrichment", "fill gaps", "missing data", "data fill"]
+        },
+        "anomaly-detection": {
+          "displayName": "Anomaly Detection",
+          "description": "Detect data quality anomalies and mismatches",
+          "agents": ["revops-data-quality-orchestrator"],
+          "keywords": ["anomaly", "mismatch", "data issue", "role mismatch", "inconsistent"]
+        },
+        "review-queue": {
+          "displayName": "Review Queue",
+          "description": "Process pending data quality actions",
+          "agents": ["revops-data-quality-orchestrator"],
+          "keywords": ["review queue", "pending review", "approve merge", "data steward"]
+        }
+      }
+    },
+
+    "automation": {
+      "description": "Skills for creating automated processes",
+      "skills": {
+        "flow-create": {
+          "displayName": "Flow Creation",
+          "description": "Create Salesforce flows",
+          "agents": ["sfdc-automation-builder"],
+          "keywords": ["create flow", "build flow", "flow builder"]
+        },
+        "trigger-create": {
+          "displayName": "Trigger Creation",
+          "description": "Create Apex triggers with handlers",
+          "agents": ["trigger-orchestrator"],
+          "keywords": ["trigger", "apex trigger", "handler"]
+        },
+        "workflow-build": {
+          "displayName": "Workflow Building",
+          "description": "Build workflow rules and processes",
+          "agents": ["sfdc-automation-builder"],
+          "keywords": ["workflow", "process builder"]
+        },
+        "approval-process": {
+          "displayName": "Approval Process",
+          "description": "Create approval processes",
+          "agents": ["sfdc-automation-builder"],
+          "keywords": ["approval", "approval process"]
+        },
+        "validation-rule-create": {
+          "displayName": "Validation Rule Creation",
+          "description": "Create validation rules with formulas",
+          "agents": ["validation-rule-orchestrator"],
+          "keywords": ["validation rule", "formula"]
+        }
+      }
+    },
+
+    "configuration": {
+      "description": "Skills for configuring Salesforce objects and fields",
+      "skills": {
+        "field-create": {
+          "displayName": "Field Creation",
+          "description": "Create custom fields",
+          "agents": ["sfdc-metadata-manager"],
+          "keywords": ["create field", "custom field", "add field"]
+        },
+        "object-create": {
+          "displayName": "Object Creation",
+          "description": "Create custom objects",
+          "agents": ["sfdc-metadata-manager"],
+          "keywords": ["create object", "custom object"]
+        },
+        "layout-modify": {
+          "displayName": "Layout Modification",
+          "description": "Modify page layouts and Lightning pages",
+          "agents": ["sfdc-layout-generator", "sfdc-ui-customizer"],
+          "keywords": ["layout", "page layout", "lightning page"]
+        },
+        "permission-set-create": {
+          "displayName": "Permission Set Creation",
+          "description": "Create and configure permission sets",
+          "agents": ["sfdc-permission-orchestrator"],
+          "keywords": ["permission set", "create permission"]
+        },
+        "record-type-config": {
+          "displayName": "Record Type Configuration",
+          "description": "Configure record types and business processes",
+          "agents": ["sfdc-ui-customizer"],
+          "keywords": ["record type", "business process"]
+        }
+      }
+    },
+
+    "visualization": {
+      "description": "Skills for generating visualizations and dashboards",
+      "skills": {
+        "web-dashboard": {
+          "displayName": "Web Dashboard",
+          "description": "Generate interactive web dashboards with charts, tables, maps",
+          "agents": ["web-viz-generator"],
+          "keywords": ["web dashboard", "interactive dashboard", "data visualization", "visualize data"]
+        },
+        "chart-create": {
+          "displayName": "Chart Creation",
+          "description": "Create bar, line, pie, scatter, and other chart types",
+          "agents": ["web-viz-generator"],
+          "keywords": ["bar chart", "line chart", "pie chart", "scatter chart", "chart"]
+        },
+        "kpi-dashboard": {
+          "displayName": "KPI Dashboard",
+          "description": "Create KPI cards with metrics and trend indicators",
+          "agents": ["web-viz-generator"],
+          "keywords": ["kpi", "kpi dashboard", "metrics dashboard", "metric cards"]
+        },
+        "territory-map": {
+          "displayName": "Territory Map",
+          "description": "Generate geographic maps with markers, heatmaps, or territory overlays",
+          "agents": ["web-viz-generator"],
+          "keywords": ["territory map", "heat map", "geographic visualization", "map"]
+        },
+        "data-table-viz": {
+          "displayName": "Data Table Visualization",
+          "description": "Create sortable, filterable data tables for web",
+          "agents": ["web-viz-generator"],
+          "keywords": ["data table", "interactive table", "table visualization"]
+        }
+      }
+    },
+
+    "troubleshooting": {
+      "description": "Skills for debugging and resolving issues",
+      "skills": {
+        "debug-log-analysis": {
+          "displayName": "Debug Log Analysis",
+          "description": "Analyze Salesforce debug logs",
+          "agents": ["sfdc-apex-developer", "opspal-salesforce:apex-debug-analyst"],
+          "keywords": ["debug log", "trace", "log analysis"]
+        },
+        "error-diagnosis": {
+          "displayName": "Error Diagnosis",
+          "description": "Diagnose deployment and runtime errors",
+          "agents": ["sfdc-conflict-resolver"],
+          "keywords": ["error", "diagnose", "troubleshoot"]
+        },
+        "performance-optimize": {
+          "displayName": "Performance Optimization",
+          "description": "Optimize queries and governor limits",
+          "agents": ["sfdc-performance-optimizer"],
+          "keywords": ["performance", "optimize", "governor limit"]
+        },
+        "flow-debug": {
+          "displayName": "Flow Debugging",
+          "description": "Debug flow execution issues",
+          "agents": ["sfdc-flow-diagnostician", "opspal-salesforce:flow-log-analyst"],
+          "keywords": ["flow debug", "flow error", "flow execution"]
+        },
+        "conflict-resolution": {
+          "displayName": "Conflict Resolution",
+          "description": "Resolve metadata conflicts",
+          "agents": ["sfdc-conflict-resolver"],
+          "keywords": ["conflict", "merge conflict", "deployment conflict"]
+        }
+      }
+    }
+  },
+
+  "errorTypes": {
+    "tool-contract": "Tool returned unexpected format or missing required fields",
+    "api-failure": "External API call failed or timed out",
+    "validation-failure": "Input validation failed",
+    "dependency-missing": "Required dependency not found",
+    "permission-denied": "Insufficient permissions for operation",
+    "data-quality": "Data quality issues prevented operation",
+    "timeout": "Operation timed out",
+    "unknown": "Unknown error type"
+  },
+
+  "confidenceLevels": {
+    "high": { "min": 0.8, "description": "Consistently successful skill" },
+    "medium": { "min": 0.5, "description": "Moderately reliable skill" },
+    "low": { "min": 0.0, "description": "Skill with known issues" }
+  },
+
+  "getSkillById": "function(skillId) - Returns skill definition by ID",
+  "getSkillsByCategory": "function(category) - Returns all skills in category",
+  "getSkillsByAgent": "function(agentName) - Returns skills associated with agent",
+  "getSkillsByKeyword": "function(keyword) - Returns skills matching keyword"
+}

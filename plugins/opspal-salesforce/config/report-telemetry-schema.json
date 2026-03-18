@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReportTelemetryEvent",
+  "description": "Schema for report CRUD telemetry events. Stored as JSONL. Rolling 90-day window, max 10K entries.",
+  "type": "object",
+  "required": ["timestamp", "operation", "outcome"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "operation": {
+      "type": "string",
+      "enum": ["create", "read", "update", "delete", "preflight", "disambiguate"]
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["success", "failed", "blocked_dependencies", "api_error", "exception", "repaired"]
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "org_alias": {
+      "type": ["string", "null"]
+    },
+    "report_id": {
+      "type": ["string", "null"]
+    },
+    "report_type": {
+      "type": ["string", "null"]
+    },
+    "report_format": {
+      "type": ["string", "null"]
+    },
+    "preflight_attempts": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "repairs_applied": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "repair_strategies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "silent_drop_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "MUST be 0. Any non-zero value is a critical issue."
+    },
+    "disambiguation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "type_fallback_used": {
+      "type": "boolean",
+      "default": false
+    },
+    "constraint_transformations": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "dependency_warnings": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "extra": {
+      "type": "object",
+      "description": "Operation-specific metadata"
+    }
+  }
+}

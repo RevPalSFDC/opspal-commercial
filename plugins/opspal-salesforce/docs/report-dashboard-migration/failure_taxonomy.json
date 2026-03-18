@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Failure taxonomy for report/dashboard migrations that succeed technically but fail business expectations.",
+  "categories": [
+    {
+      "name": "Definition Drift",
+      "description": "Same label, different metric definition or denominator/numerator.",
+      "signals": [
+        "Formula changes",
+        "Aggregation type changes (SUM vs COUNT)",
+        "Currency conversion differences"
+      ],
+      "defaultSeverity": "high",
+      "recommendedGuardrail": "require_review"
+    },
+    {
+      "name": "Filter Drift",
+      "description": "Scope changes due to filter operator or logic updates.",
+      "signals": [
+        "Operator changes (equals vs contains)",
+        "AND/OR logic differences",
+        "Record type or stage scope changes"
+      ],
+      "defaultSeverity": "high",
+      "recommendedGuardrail": "require_review"
+    },
+    {
+      "name": "Time Drift",
+      "description": "Date logic shifts that alter reporting windows or fiscal mappings.",
+      "signals": [
+        "Fiscal vs calendar changes",
+        "Relative date translation mismatches",
+        "Timezone or locale differences"
+      ],
+      "defaultSeverity": "medium",
+      "recommendedGuardrail": "require_review"
+    },
+    {
+      "name": "Population Drift",
+      "description": "Report type or join population shifts (e.g., Lead vs Contact model).",
+      "signals": [
+        "Report type change",
+        "Lead/Contact object substitutions",
+        "Join path differences"
+      ],
+      "defaultSeverity": "high",
+      "recommendedGuardrail": "require_review"
+    },
+    {
+      "name": "Data Truncation / Limits",
+      "description": "Silent truncation from summary/matrix limits or row limits.",
+      "signals": [
+        "Row limit introduced or removed",
+        "Summary/matrix >2k group risk",
+        "Runtime row count drops"
+      ],
+      "defaultSeverity": "critical",
+      "recommendedGuardrail": "block"
+    },
+    {
+      "name": "Trust & UX Drift",
+      "description": "Visual parity preserved but key breakdowns or KPIs missing.",
+      "signals": [
+        "Missing dashboard components",
+        "Removed breakdowns users rely on",
+        "Misaligned chart types"
+      ],
+      "defaultSeverity": "medium",
+      "recommendedGuardrail": "require_review"
+    }
+  ]
+}

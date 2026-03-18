@@ -1,0 +1,222 @@
+#!/bin/bash
+
+# Automation Discovery and Audit Script
+# Quickly identify all automations in a Salesforce org
+# 
+# Usage: ./automation-discovery-audit.sh [org-alias]
+
+set -e
+
+ORG_ALIAS=${1:-production}
+OUTPUT_DIR="automation-audit-$(date +%Y%m%d)"
+REPORT_FILE="$OUTPUT_DIR/automation-summary.md"
+
+echo "Starting automation discovery for org: $ORG_ALIAS"
+echo "Output directory: $OUTPUT_DIR"
+
+# Create output directory
+mkdir -p "$OUTPUT_DIR"
+
+# Function to query and export data
+query_and_export() {
+    local query="$1"
+    local filename="$2"
+    local use_tooling="$3"
+    
+    echo "Querying: $filename..."
+    
+    if [ "$use_tooling" = "true" ]; then
+        sf data query --query "$query" --use-tooling-api --target-org "$ORG_ALIAS" --json > "$OUTPUT_DIR/$filename.json" 2>/dev/null || true
+    else
+        sf data query --query "$query" --target-org "$ORG_ALIAS" --json > "$OUTPUT_DIR/$filename.json" 2>/dev/null || true
+    fi
+}
+
+# 1. Discover Apex Triggers
+echo "Discovering Apex Triggers..."
+query_and_export \
+    "SELECT Id, Name, TableEnumOrId, Body, Status, IsValid, CreatedDate, LastModifiedDate FROM ApexTrigger ORDER BY TableEnumOrId, Name" \
+    "apex-triggers" \
+    "true"
+
+# Count triggers per object
+echo "Analyzing trigger distribution..."
+sf data query --query "SELECT TableEnumOrId, COUNT(Id) TriggerCount FROM ApexTrigger WHERE Status = 'Active' GROUP BY TableEnumOrId ORDER BY COUNT(Id) DESC" \
+    --use-tooling-api --target-org "$ORG_ALIAS" > "$OUTPUT_DIR/triggers-per-object.txt" 2>/dev/null || true
+
+# 2. Discover Flows and Process Builders
+echo "Discovering Flows and Process Builders..."
+query_and_export \
+    "SELECT Id, Definition.DeveloperName, MasterLabel, ProcessType, TriggerType, Status, VersionNumber, LastModifiedDate FROM Flow WHERE Status = 'Active' ORDER BY ProcessType, MasterLabel" \
+    "flows-active" \
+    "true"
+
+# 3. Discover Workflow Rules
+echo "Discovering Workflow Rules..."
+query_and_export \
+    "SELECT Id, Name, TableEnumOrId, CreatedDate, LastModifiedDate FROM WorkflowRule" \
+    "workflow-rules" \
+    "true"
+
+# 4. Discover Validation Rules
+echo "Discovering Validation Rules..."
+query_and_export \
+    "SELECT Id, ValidationName, EntityDefinition.QualifiedApiName, Active, ErrorMessage FROM ValidationRule WHERE Active = true ORDER BY EntityDefinition.QualifiedApiName" \
+    "validation-rules" \
+    "true"
+
+# 5. Generate Summary Report
+echo "Generating summary report..."
+
+cat > "$REPORT_FILE" << EOF
+# Automation Audit Report
+**Org:** $ORG_ALIAS  
+**Date:** $(date '+%Y-%m-%d %H:%M:%S')  
+**Auditor:** Automation Remediation Team
+
+## Executive Summary
+
+EOF
+
+# Count automations
+TRIGGER_COUNT=$(jq '.result.totalSize // 0' "$OUTPUT_DIR/apex-triggers.json" 2>/dev/null || echo "0")
+FLOW_COUNT=$(jq '.result.totalSize // 0' "$OUTPUT_DIR/flows-active.json" 2>/dev/null || echo "0")
+WORKFLOW_COUNT=$(jq '.result.totalSize // 0' "$OUTPUT_DIR/workflow-rules.json" 2>/dev/null || echo "0")
+VALIDATION_COUNT=$(jq '.result.totalSize // 0' "$OUTPUT_DIR/validation-rules.json" 2>/dev/null || echo "0")
+
+TOTAL_AUTOMATIONS=$((TRIGGER_COUNT + FLOW_COUNT + WORKFLOW_COUNT))
+
+cat >> "$REPORT_FILE" << EOF
+### Automation Counts
+- **Apex Triggers:** $TRIGGER_COUNT
+- **Flows/Process Builders:** $FLOW_COUNT
+- **Workflow Rules:** $WORKFLOW_COUNT
+- **Validation Rules:** $VALIDATION_COUNT
+- **TOTAL AUTOMATIONS:** $TOTAL_AUTOMATIONS
+
+### Risk Assessment
+EOF
+
+# Risk assessment based on counts
+if [ "$TRIGGER_COUNT" -gt 100 ]; then
+    echo "- 🔴 **CRITICAL:** Excessive Apex Triggers ($TRIGGER_COUNT) - Immediate consolidation required" >> "$REPORT_FILE"
+elif [ "$TRIGGER_COUNT" -gt 50 ]; then
+    echo "- 🟡 **WARNING:** High number of Apex Triggers ($TRIGGER_COUNT) - Consolidation recommended" >> "$REPORT_FILE"
+else
+    echo "- 🟢 **OK:** Apex Trigger count within acceptable range ($TRIGGER_COUNT)" >> "$REPORT_FILE"
+fi
+
+if [ "$FLOW_COUNT" -gt 100 ]; then
+    echo "- 🔴 **CRITICAL:** Excessive Flows ($FLOW_COUNT) - Performance impact likely" >> "$REPORT_FILE"
+elif [ "$FLOW_COUNT" -gt 50 ]; then
+    echo "- 🟡 **WARNING:** High number of Flows ($FLOW_COUNT) - Review needed" >> "$REPORT_FILE"
+else
+    echo "- 🟢 **OK:** Flow count manageable ($FLOW_COUNT)" >> "$REPORT_FILE"
+fi
+
+if [ "$WORKFLOW_COUNT" -gt 50 ]; then
+    echo "- 🟡 **WARNING:** Legacy Workflow Rules present ($WORKFLOW_COUNT) - Migration to Flow recommended" >> "$REPORT_FILE"
+fi
+
+# Identify problem objects
+echo -e "\n### Objects with Multiple Triggers (Top 10)" >> "$REPORT_FILE"
+echo '```' >> "$REPORT_FILE"
+head -n 11 "$OUTPUT_DIR/triggers-per-object.txt" >> "$REPORT_FILE" 2>/dev/null || echo "No data available" >> "$REPORT_FILE"
+echo '```' >> "$REPORT_FILE"
+
+# Identify duplicate-prone patterns
+echo -e "\n### Potential Duplicate Automations" >> "$REPORT_FILE"
+
+# Check for Lead conversion triggers
+LEAD_TRIGGERS=$(jq '.result.records | map(select(.TableEnumOrId == "Lead" or .TableEnumOrId == "00Q")) | length' "$OUTPUT_DIR/apex-triggers.json" 2>/dev/null || echo "0")
+if [ "$LEAD_TRIGGERS" -gt 1 ]; then
+    echo "- ⚠️ **Lead Object:** $LEAD_TRIGGERS triggers detected - Check for duplicate conversion logic" >> "$REPORT_FILE"
+fi
+
+# Check for Account triggers
+ACCOUNT_TRIGGERS=$(jq '.result.records | map(select(.TableEnumOrId == "Account" or .TableEnumOrId == "001")) | length' "$OUTPUT_DIR/apex-triggers.json" 2>/dev/null || echo "0")
+if [ "$ACCOUNT_TRIGGERS" -gt 1 ]; then
+    echo "- ⚠️ **Account Object:** $ACCOUNT_TRIGGERS triggers detected - Consolidation recommended" >> "$REPORT_FILE"
+fi
+
+# Generate recommendations
+echo -e "\n## Recommendations" >> "$REPORT_FILE"
+cat >> "$REPORT_FILE" << EOF
+
+### Immediate Actions (Week 1)
+1. Deploy Emergency Governor Protection
+2. Deactivate duplicate Lead conversion triggers
+3. Implement trigger execution order
+4. Create automation inventory spreadsheet
+
+### Short-term (Month 1)
+1. Deploy Trigger Handler Framework
+2. Consolidate triggers on critical objects (Account, Lead, Opportunity)
+3. Establish governance committee
+4. Begin workflow rule retirement
+
+### Long-term (6 Months)
+1. Achieve single trigger per object pattern
+2. Migrate all Process Builders to Flow
+3. Retire all Workflow Rules
+4. Implement comprehensive testing framework
+
+EOF
+
+# Create CSV for detailed analysis
+echo "Creating CSV export..."
+cat > "$OUTPUT_DIR/automation-inventory.csv" << EOF
+Type,Name,Object,Status,Last Modified,Risk Level
+EOF
+
+# Add triggers to CSV
+jq -r '.result.records[] | [
+    "Trigger",
+    .Name,
+    .TableEnumOrId,
+    .Status,
+    .LastModifiedDate,
+    (if .TableEnumOrId == "Lead" or .TableEnumOrId == "Account" or .TableEnumOrId == "Opportunity" then "HIGH" else "MEDIUM" end)
+] | @csv' "$OUTPUT_DIR/apex-triggers.json" >> "$OUTPUT_DIR/automation-inventory.csv" 2>/dev/null || true
+
+# Add flows to CSV
+jq -r '.result.records[] | [
+    .ProcessType,
+    .MasterLabel,
+    "Multiple",
+    .Status,
+    .LastModifiedDate,
+    "MEDIUM"
+] | @csv' "$OUTPUT_DIR/flows-active.json" >> "$OUTPUT_DIR/automation-inventory.csv" 2>/dev/null || true
+
+echo -e "\n## Appendix" >> "$REPORT_FILE"
+echo "- Full trigger list: \`$OUTPUT_DIR/apex-triggers.json\`" >> "$REPORT_FILE"
+echo "- Active flows: \`$OUTPUT_DIR/flows-active.json\`" >> "$REPORT_FILE"
+echo "- Workflow rules: \`$OUTPUT_DIR/workflow-rules.json\`" >> "$REPORT_FILE"
+echo "- CSV inventory: \`$OUTPUT_DIR/automation-inventory.csv\`" >> "$REPORT_FILE"
+
+echo "---" >> "$REPORT_FILE"
+echo "Report generated: $(date)" >> "$REPORT_FILE"
+
+# Display summary
+echo ""
+echo "==================================="
+echo "AUTOMATION AUDIT COMPLETE"
+echo "==================================="
+echo "Total Automations: $TOTAL_AUTOMATIONS"
+echo "  - Apex Triggers: $TRIGGER_COUNT"
+echo "  - Flows: $FLOW_COUNT"
+echo "  - Workflow Rules: $WORKFLOW_COUNT"
+echo ""
+echo "Report saved to: $REPORT_FILE"
+echo "Full data in: $OUTPUT_DIR/"
+echo ""
+
+# Check for critical issues
+if [ "$TRIGGER_COUNT" -gt 100 ] || [ "$TOTAL_AUTOMATIONS" -gt 300 ]; then
+    echo "⚠️  CRITICAL ISSUES DETECTED - IMMEDIATE ACTION REQUIRED"
+    echo "Run emergency stabilization procedures immediately!"
+    exit 1
+else
+    echo "✅ Audit complete - Review report for recommendations"
+fi

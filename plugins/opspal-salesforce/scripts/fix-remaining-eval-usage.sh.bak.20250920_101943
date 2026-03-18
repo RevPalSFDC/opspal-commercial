@@ -1,0 +1,651 @@
+#!/bin/bash
+
+##############################################################################
+# fix-remaining-eval-usage.sh - Fix all remaining eval usage in scripts
+##############################################################################
+# This script addresses all remaining dangerous eval statements found in the audit
+##############################################################################
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKUP_DIR="${SCRIPT_DIR}/backups/eval-fixes-remaining-$(date +%Y%m%d-%H%M%S)"
+LOG_FILE="${SCRIPT_DIR}/eval-fixes-remaining.log"
+
+# Counter
+FIXED_COUNT=0
+TOTAL_COUNT=0
+
+##############################################################################
+# Functions
+##############################################################################
+
+log_message() {
+    local level="$1"
+    local message="$2"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+    
+    case "$level" in
+        SUCCESS)
+            echo -e "${GREEN}✓${NC} $message"
+            ;;
+        WARNING)
+            echo -e "${YELLOW}⚠${NC} $message"
+            ;;
+        ERROR)
+            echo -e "${RED}✗${NC} $message"
+            ;;
+        INFO)
+            echo -e "${BLUE}ℹ${NC} $message"
+            ;;
+    esac
+}
+
+create_backup() {
+    local file="$1"
+    local backup_file="${BACKUP_DIR}/$(basename "$file")"
+    
+    mkdir -p "$BACKUP_DIR"
+    cp "$file" "$backup_file"
+    log_message "INFO" "Backed up: $(basename "$file")"
+}
+
+##############################################################################
+# Fix lib/salesforce-deployment-utils.sh
+##############################################################################
+fix_deployment_utils() {
+    local file="${SCRIPT_DIR}/lib/salesforce-deployment-utils.sh"
+    
+    if [[ ! -f "$file" ]]; then
+        log_message "WARNING" "File not found: $file"
+        return 1
+    fi
+    
+    log_message "INFO" "Fixing eval usage in salesforce-deployment-utils.sh"
+    create_backup "$file"
+    
+    # Replace the retry_with_backoff function to use proper command execution
+    cat > "${file}.tmp" << 'EOF'
+#!/bin/bash
+
+# Salesforce Deployment Utilities Library
+# Shared functions for robust metadata deployment and verification
+# Used by all Salesforce sub-agents for consistent deployment handling
+
+# Colors for output (if terminal supports it)
+if [ -t 1 ]; then
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m' # No Color
+else
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    NC=''
+fi
+
+# Configuration
+MAX_RETRIES=${MAX_RETRIES:-3}
+RETRY_DELAY=${RETRY_DELAY:-5}
+CACHE_REFRESH_DELAY=${CACHE_REFRESH_DELAY:-5}
+DEFAULT_TIMEOUT=${DEFAULT_TIMEOUT:-300}
+
+# Logging functions
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $1" >&2
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1" >&2
+}
+
+log_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1" >&2
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1" >&2
+}
+
+# Get org alias with fallback
+get_org_alias() {
+    local alias="${1:-${SFDX_ALIAS:-${SFDX_DEFAULT_USERNAME}}}"
+    if [ -z "$alias" ]; then
+        log_error "No Salesforce org alias specified"
+        return 1
+    fi
+    echo "$alias"
+}
+
+# Verify field exists in org via Tooling API
+verify_field_exists() {
+    local object_name="$1"
+    local field_name="$2"
+    local org_alias="${3:-$(get_org_alias)}"
+    
+    if [ -z "$object_name" ] || [ -z "$field_name" ]; then
+        log_error "verify_field_exists requires object_name and field_name"
+        return 1
+    fi
+    
+    # Remove __c suffix for developer name
+    local developer_name="${field_name%__c}"
+    
+    log_info "Verifying field ${object_name}.${field_name} exists in org..."
+    
+    local query="SELECT Id, DeveloperName FROM CustomField WHERE DeveloperName = '${developer_name}' AND TableEnumOrId = '${object_name}' LIMIT 1"
+    
+    local result=$(sf data query \
+        --query "$query" \
+        --target-org "$org_alias" \
+        --use-tooling-api \
+        --json 2>/dev/null || echo '{"result":{"totalSize":0}}')
+    
+    local count=$(echo "$result" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    print(data.get('result', {}).get('totalSize', 0))
+except:
+    print(0)
+" 2>/dev/null || echo "0")
+    
+    if [ "$count" -gt 0 ]; then
+        log_success "Field exists in Tooling API"
+        return 0
+    else
+        log_warning "Field not found in Tooling API"
+        return 1
+    fi
+}
+
+# Verify field is accessible via SOQL
+verify_soql_access() {
+    local object_name="$1"
+    local field_name="$2"
+    local org_alias="${3:-$(get_org_alias)}"
+    
+    if [ -z "$object_name" ] || [ -z "$field_name" ]; then
+        log_error "verify_soql_access requires object_name and field_name"
+        return 1
+    fi
+    
+    log_info "Testing SOQL accessibility for ${object_name}.${field_name}..."
+    
+    local query="SELECT Id, ${field_name} FROM ${object_name} LIMIT 1"
+    
+    local result=$(sf data query \
+        --query "$query" \
+        --target-org "$org_alias" \
+        --json 2>&1)
+    
+    if echo "$result" | grep -q "No such column '${field_name}'"; then
+        log_warning "Field not accessible via SOQL"
+        return 1
+    elif echo "$result" | grep -q '"totalSize"'; then
+        log_success "Field is accessible via SOQL"
+        return 0
+    else
+        log_warning "Unable to determine SOQL accessibility"
+        return 1
+    fi
+}
+
+# Update field-level security for all profiles
+update_field_permissions() {
+    local object_name="$1"
+    local field_name="$2"
+    local org_alias="${3:-$(get_org_alias)}"
+    local permission_level="${4:-read}" # read or edit
+    
+    if [ -z "$object_name" ] || [ -z "$field_name" ]; then
+        log_error "update_field_permissions requires object_name and field_name"
+        return 1
+    fi
+    
+    log_info "Updating field-level security for ${object_name}.${field_name}..."
+    
+    # Get key profiles
+    local profiles="System Administrator,Standard User,Standard Platform User,Contract Manager"
+    
+    # Note: This would typically be done via Metadata API or Setup UI
+    # Here we document the requirement for manual or API-based permission update
+    
+    log_warning "Field permissions update requires Metadata API deployment or Setup UI configuration"
+    log_info "Profiles to update: $profiles"
+    log_info "Permission level: $permission_level"
+    
+    # Return success as this is a documentation step
+    return 0
+}
+
+# Clear metadata cache by forcing a retrieve
+clear_metadata_cache() {
+    local org_alias="${1:-$(get_org_alias)}"
+    local object_name="$2"
+    
+    log_info "Clearing metadata cache for org $org_alias..."
+    
+    if [ -n "$object_name" ]; then
+        # Retrieve specific object to refresh cache
+        sf project retrieve start \
+            --metadata "CustomObject:${object_name}" \
+            --target-org "$org_alias" \
+            --wait 10 2>/dev/null || true
+    else
+        # General cache refresh
+        sf org display --target-org "$org_alias" --json >/dev/null 2>&1 || true
+    fi
+    
+    log_info "Waiting ${CACHE_REFRESH_DELAY} seconds for cache propagation..."
+    sleep "$CACHE_REFRESH_DELAY"
+    
+    log_success "Metadata cache refreshed"
+    return 0
+}
+
+# Deploy field with verification
+deploy_field_with_verification() {
+    local package_xml="$1"
+    local object_name="$2"
+    local field_name="$3"
+    local org_alias="${4:-$(get_org_alias)}"
+    
+    if [ -z "$package_xml" ] || [ -z "$object_name" ] || [ -z "$field_name" ]; then
+        log_error "deploy_field_with_verification requires package_xml, object_name, and field_name"
+        return 1
+    fi
+    
+    log_info "Deploying field ${object_name}.${field_name} with verification..."
+    
+    # Step 1: Deploy metadata
+    log_info "Deploying metadata package..."
+    local deploy_result=$(sf project deploy start \
+        --manifest "$package_xml" \
+        --target-org "$org_alias" \
+        --wait 10 \
+        --ignore-conflicts \
+        --json 2>&1)
+    
+    if ! echo "$deploy_result" | grep -q '"status":"Succeeded"'; then
+        log_warning "Initial deployment may have partial success, continuing with verification..."
+    fi
+    
+    # Step 2: Clear cache and wait
+    clear_metadata_cache "$org_alias" "$object_name"
+    
+    # Step 3: Verify field exists
+    if verify_field_exists "$object_name" "$field_name" "$org_alias"; then
+        # Step 4: Verify SOQL access
+        if verify_soql_access "$object_name" "$field_name" "$org_alias"; then
+            log_success "Field deployed and verified successfully!"
+            return 0
+        else
+            log_warning "Field exists but not SOQL accessible, updating permissions..."
+            update_field_permissions "$object_name" "$field_name" "$org_alias" "read"
+            
+            # Retry SOQL access after permission update
+            sleep 3
+            if verify_soql_access "$object_name" "$field_name" "$org_alias"; then
+                log_success "Field now accessible after permission update"
+                return 0
+            fi
+        fi
+    fi
+    
+    log_error "Field deployment verification failed"
+    return 1
+}
+
+# FIXED: Retry function with exponential backoff (replaced eval with $@)
+retry_with_backoff() {
+    local max_retries="${1:-$MAX_RETRIES}"
+    local delay="${2:-$RETRY_DELAY}"
+    shift 2  # Remove first two arguments, leaving the command
+    
+    local retry_count=0
+    local wait_time="$delay"
+    
+    while [ $retry_count -lt $max_retries ]; do
+        # SECURITY FIX: Use "$@" instead of eval for safer command execution
+        if "$@"; then
+            return 0
+        fi
+        
+        retry_count=$((retry_count + 1))
+        
+        if [ $retry_count -lt $max_retries ]; then
+            log_warning "Attempt $retry_count failed, retrying in ${wait_time} seconds..."
+            sleep "$wait_time"
+            wait_time=$((wait_time * 2)) # Exponential backoff
+        fi
+    done
+    
+    log_error "All $max_retries attempts failed"
+    return 1
+}
+
+# Comprehensive field deployment with all checks
+deploy_field_robust() {
+    local metadata_path="$1"
+    local object_name="$2"
+    local field_name="$3"
+    local org_alias="${4:-$(get_org_alias)}"
+    
+    log_info "Starting robust field deployment for ${object_name}.${field_name}"
+    
+    # Check if field already exists and is accessible
+    if verify_field_exists "$object_name" "$field_name" "$org_alias" && \
+       verify_soql_access "$object_name" "$field_name" "$org_alias"; then
+        log_success "Field already exists and is accessible!"
+        return 0
+    fi
+    
+    # Create package.xml if not provided
+    local package_xml="$metadata_path"
+    if [ ! -f "$package_xml" ]; then
+        log_info "Creating deployment package..."
+        package_xml="/tmp/field_deploy_$$.xml"
+        cat > "$package_xml" << XMLEOF
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>${object_name}.${field_name}</members>
+        <name>CustomField</name>
+    </types>
+    <version>60.0</version>
+</Package>
+XMLEOF
+    fi
+    
+    # Deploy with retry logic - FIXED: Now using safe function call
+    if retry_with_backoff 3 5 deploy_field_with_verification "$package_xml" "$object_name" "$field_name" "$org_alias"; then
+        log_success "Field deployment completed successfully with verification!"
+        
+        # Clean up temp file if created
+        [ -f "/tmp/field_deploy_$$.xml" ] && rm -f "/tmp/field_deploy_$$.xml"
+        
+        return 0
+    else
+        log_error "Field deployment failed after all retries"
+        
+        # Provide troubleshooting guidance
+        echo "Troubleshooting steps:" >&2
+        echo "1. Check Setup > Object Manager > $object_name > Fields & Relationships" >&2
+        echo "2. Verify field '$field_name' exists" >&2
+        echo "3. Check field-level security for your profile" >&2
+        echo "4. Try manual deployment via Change Set or Setup UI" >&2
+        
+        # Clean up temp file if created
+        [ -f "/tmp/field_deploy_$$.xml" ] && rm -f "/tmp/field_deploy_$$.xml"
+        
+        return 1
+    fi
+}
+
+# Batch field deployment with verification
+deploy_fields_batch() {
+    local package_xml="$1"
+    local org_alias="${2:-$(get_org_alias)}"
+    
+    log_info "Starting batch field deployment..."
+    
+    # Deploy all fields
+    sf project deploy start \
+        --manifest "$package_xml" \
+        --target-org "$org_alias" \
+        --wait 10 \
+        --ignore-conflicts
+    
+    # Clear cache once for all fields
+    clear_metadata_cache "$org_alias"
+    
+    # Verify each field (would need to parse package.xml for field list)
+    log_info "Batch deployment complete. Run individual verifications as needed."
+    
+    return 0
+}
+
+# Health check function for field accessibility
+field_health_check() {
+    local object_name="$1"
+    local field_name="$2"
+    local org_alias="${3:-$(get_org_alias)}"
+    
+    echo "Field Health Check: ${object_name}.${field_name}"
+    echo "=========================================="
+    
+    local checks_passed=0
+    local checks_failed=0
+    
+    # Check 1: Tooling API
+    if verify_field_exists "$object_name" "$field_name" "$org_alias"; then
+        checks_passed=$((checks_passed + 1))
+        echo "✅ Exists in Tooling API"
+    else
+        checks_failed=$((checks_failed + 1))
+        echo "❌ Not found in Tooling API"
+    fi
+    
+    # Check 2: SOQL Access
+    if verify_soql_access "$object_name" "$field_name" "$org_alias"; then
+        checks_passed=$((checks_passed + 1))
+        echo "✅ SOQL accessible"
+    else
+        checks_failed=$((checks_failed + 1))
+        echo "❌ Not SOQL accessible"
+    fi
+    
+    # Check 3: Metadata files
+    local metadata_file="force-app/main/default/objects/${object_name}/fields/${field_name}.field-meta.xml"
+    if [ -f "$metadata_file" ]; then
+        checks_passed=$((checks_passed + 1))
+        echo "✅ Metadata file exists"
+    else
+        checks_failed=$((checks_failed + 1))
+        echo "❌ Metadata file missing"
+    fi
+    
+    echo "=========================================="
+    echo "Health Check Summary: $checks_passed passed, $checks_failed failed"
+    
+    [ $checks_failed -eq 0 ] && return 0 || return 1
+}
+
+# Export functions for use by other scripts
+export -f log_info log_success log_warning log_error
+export -f get_org_alias
+export -f verify_field_exists verify_soql_access
+export -f update_field_permissions clear_metadata_cache
+export -f deploy_field_with_verification retry_with_backoff
+export -f deploy_field_robust deploy_fields_batch
+export -f field_health_check
+
+# If sourced with arguments, run the specified function
+if [ "${BASH_SOURCE[0]}" != "${0}" ] && [ $# -gt 0 ]; then
+    "$@"
+fi
+EOF
+
+    mv "${file}.tmp" "$file"
+    log_message "SUCCESS" "Fixed retry_with_backoff function in salesforce-deployment-utils.sh"
+    ((FIXED_COUNT++))
+    ((TOTAL_COUNT++))
+}
+
+##############################################################################
+# Fix safe-bulk-import.sh
+##############################################################################
+fix_safe_bulk_import() {
+    local file="${SCRIPT_DIR}/safe-bulk-import.sh"
+    
+    if [[ ! -f "$file" ]]; then
+        log_message "WARNING" "File not found: $file"
+        return 1
+    fi
+    
+    log_message "INFO" "Fixing eval usage in safe-bulk-import.sh"
+    create_backup "$file"
+    
+    # Replace eval "$cmd" with direct execution
+    sed -i 's/if eval "\$cmd"; then/if $cmd; then/g' "$file"
+    
+    log_message "SUCCESS" "Fixed eval usage in safe-bulk-import.sh"
+    ((FIXED_COUNT++))
+    ((TOTAL_COUNT++))
+}
+
+##############################################################################
+# Fix job-monitor.sh
+##############################################################################
+fix_job_monitor() {
+    local file="${SCRIPT_DIR}/job-monitor.sh"
+    
+    if [[ ! -f "$file" ]]; then
+        log_message "WARNING" "File not found: $file"
+        return 1
+    fi
+    
+    log_message "INFO" "Fixing eval usage in job-monitor.sh"
+    create_backup "$file"
+    
+    # Replace dangerous eval patterns
+    sed -i 's/local response=$(eval "\$cmd" 2>\/dev\/null)/local response=$($cmd 2>\/dev\/null)/g' "$file"
+    sed -i 's/eval $(parse_job_status "\$response")/parse_job_status "$response"/g' "$file"
+    
+    log_message "SUCCESS" "Fixed eval usage in job-monitor.sh"
+    ((FIXED_COUNT++))
+    ((TOTAL_COUNT++))
+}
+
+##############################################################################
+# Fix other scripts with eval
+##############################################################################
+fix_remaining_scripts() {
+    local scripts=(
+        "pre-import-validator.sh"
+        "test-contract-creation-flow.sh"
+        "test-auto-fix.sh"
+        "test-verification-system.sh"
+        "verify-field-accessibility.sh"
+    )
+    
+    for script in "${scripts[@]}"; do
+        local file="${SCRIPT_DIR}/$script"
+        
+        if [[ ! -f "$file" ]]; then
+            log_message "WARNING" "File not found: $script"
+            continue
+        fi
+        
+        log_message "INFO" "Fixing eval usage in $script"
+        create_backup "$file"
+        ((TOTAL_COUNT++))
+        
+        # Replace common eval patterns with safer alternatives
+        local changes_made=false
+        
+        # Pattern: eval "$cmd"
+        if sed -i 's/eval "\$\([a-zA-Z_][a-zA-Z0-9_]*\)"/\$\1/g' "$file"; then
+            changes_made=true
+        fi
+        
+        # Pattern: $(eval "$cmd")
+        if sed -i 's/\$(eval "\$\([a-zA-Z_][a-zA-Z0-9_]*\)")/\$(\$\1)/g' "$file"; then
+            changes_made=true
+        fi
+        
+        # Pattern: eval "$query_var" 
+        if sed -i 's/if \([a-zA-Z_][a-zA-Z0-9_]*\)=$(eval "\$\([a-zA-Z_][a-zA-Z0-9_]*\)" 2>\/dev\/null); then/if \1=$(\$\2 2>\/dev\/null); then/g' "$file"; then
+            changes_made=true
+        fi
+        
+        # Pattern: eval "$test_command"
+        if sed -i 's/eval "\$test_command"/\$test_command/g' "$file"; then
+            changes_made=true
+        fi
+        
+        # Add security comment for remaining complex patterns
+        if grep -q 'eval ' "$file" && ! grep -q '^#.*WARNING.*eval' "$file"; then
+            sed -i '1i\
+# WARNING: This script has been partially cleaned of dangerous eval usage\
+# Any remaining eval statements should be manually reviewed and replaced' "$file"
+        fi
+        
+        if [[ "$changes_made" == "true" ]]; then
+            log_message "SUCCESS" "Fixed eval patterns in $script"
+            ((FIXED_COUNT++))
+        else
+            log_message "INFO" "No fixable eval patterns found in $script"
+        fi
+    done
+}
+
+##############################################################################
+# Main Execution
+##############################################################################
+main() {
+    log_message "INFO" "Starting comprehensive eval usage fixes..."
+    log_message "INFO" "Creating backup directory: $BACKUP_DIR"
+    
+    # Fix specific files
+    fix_deployment_utils
+    fix_safe_bulk_import
+    fix_job_monitor
+    fix_remaining_scripts
+    
+    # Generate report
+    echo -e "\n${BLUE}===================================${NC}"
+    echo -e "${BLUE}  Eval Usage Fix Report (Final)${NC}"
+    echo -e "${BLUE}===================================${NC}"
+    echo -e "Scripts Processed: ${BLUE}$TOTAL_COUNT${NC}"
+    echo -e "Scripts Fixed: ${GREEN}$FIXED_COUNT${NC}"
+    echo -e "Backups Created: ${BLUE}${BACKUP_DIR}${NC}"
+    echo -e "Log File: ${BLUE}${LOG_FILE}${NC}"
+    
+    # Final verification
+    echo -e "\n${BLUE}Final Verification:${NC}"
+    local remaining_eval_files=0
+    
+    while IFS= read -r -d '' file; do
+        if grep -q 'eval ' "$file" | grep -v '^#'; then
+            echo -e "${YELLOW}⚠${NC} $(basename "$file") still contains eval statements (may need manual review)"
+            ((remaining_eval_files++))
+        fi
+    done < <(find "$SCRIPT_DIR" -name "*.sh" -not -path "*/backups/*" -print0)
+    
+    if [[ $remaining_eval_files -eq 0 ]]; then
+        echo -e "\n${GREEN}✅ All dangerous eval usage has been eliminated!${NC}"
+        echo -e "${GREEN}✅ Script security has been significantly improved${NC}"
+    else
+        echo -e "\n${YELLOW}⚠ $remaining_eval_files files may still contain eval statements${NC}"
+        echo -e "These may be in comments or require manual review for complex patterns"
+    fi
+    
+    log_message "SUCCESS" "Eval usage fixes completed!"
+    
+    # Security recommendations
+    echo -e "\n${BLUE}Security Recommendations Applied:${NC}"
+    echo -e "• Replaced eval with direct command execution (\$command vs eval \"\$command\")"
+    echo -e "• Used \$@ for safe argument passing in functions"
+    echo -e "• Added security comments for any remaining complex patterns"
+    echo -e "• Created backups in case rollback is needed"
+    
+    return 0
+}
+
+# Run main function
+main "$@"

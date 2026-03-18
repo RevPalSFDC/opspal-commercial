@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "description": "Default settings for Salesforce Plugin with company announcements",
+
+  "companyAnnouncements": [
+    "═══════════════════════════════════════════════════════════════════════",
+    "OpsPal is for internal RevPal use only.",
+    "Unauthorized use outside of RevPal projects is prohibited.",
+    "AI-generated outputs may contain errors — please validate results and provide clear directions.",
+    "═══════════════════════════════════════════════════════════════════════",
+    "",
+    "📦 Salesforce Plugin v3.42.0 | Last Updated: 2025-11-04",
+    "🛡️ Safety Guardrails Active - 5-tier agent permission system enforced",
+    "📋 Reflection System - Use /reflect after sessions for continuous improvement",
+    "🚨 Pre-Deployment - Always run sfdc-pre-deployment-validator.js before deployments",
+    "🔍 Agent Discovery - Run /suggest-agent or check /agents for 156+ specialized agents",
+    "⚙️ Monthly Maintenance - node scripts/sync-disallowed-tools.js --dry-run --verbose"
+  ]
+}

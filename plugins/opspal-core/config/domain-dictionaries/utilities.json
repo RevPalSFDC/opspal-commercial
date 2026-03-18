@@ -1,0 +1,172 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "utilities",
+  "version": "1.0.0",
+  "description": "Electric, gas, water, and telecommunications utilities. Most are regulated monopolies serving specific geographic territories, making same-name entities in different states definitively different organizations.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "electric", "power", "energy", "utility", "utilities", "gas",
+      "water", "sewer", "wastewater", "telecommunications", "telecom",
+      "cooperative", "municipal", "district", "authority", "commission"
+    ],
+    "entityTypes": ["Utility", "Cooperative", "MunicipalUtility", "District", "Authority"],
+    "fieldPatterns": [
+      "UtilityID", "FERC_ID", "EIA_ID", "PUC_Number", "ServiceTerritory"
+    ]
+  },
+
+  "abbreviations": {
+    "utilityTypes": {
+      "IOU": "Investor-Owned Utility",
+      "POU": "Publicly Owned Utility",
+      "REC": "Rural Electric Cooperative",
+      "MUD": "Municipal Utility District",
+      "PUD": "Public Utility District",
+      "CCD": "Community Choice District"
+    },
+    "regulatory": {
+      "FERC": "Federal Energy Regulatory Commission",
+      "PUC": "Public Utility Commission",
+      "PSC": "Public Service Commission",
+      "EIA": "Energy Information Administration",
+      "NERC": "North American Electric Reliability Corporation",
+      "RTO": "Regional Transmission Organization",
+      "ISO": "Independent System Operator"
+    },
+    "services": {
+      "T&D": "Transmission and Distribution",
+      "G&T": "Generation and Transmission",
+      "CCA": "Community Choice Aggregation",
+      "DER": "Distributed Energy Resources"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp"],
+    "preserve": [
+      "Electric", "Power", "Energy", "Gas", "Water",
+      "Utility", "Utilities", "Cooperative", "Co-op",
+      "Authority", "District", "Commission", "Department"
+    ]
+  },
+
+  "synonyms": {
+    "Electric Cooperative": ["Electric Co-op", "EC", "REC"],
+    "Power & Light": ["Power and Light", "P&L"],
+    "Municipal Utility District": ["MUD"],
+    "Public Utility District": ["PUD"],
+    "Water Authority": ["Water Dist", "Water District"],
+    "Department": ["Dept"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.80,
+    "minimumConfidence": 85
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "BLOCK",
+    "uniquenessLevel": "HIGH",
+    "confidenceThresholds": {
+      "autoMerge": 96,
+      "review": 88,
+      "tag": 75
+    },
+    "stateMismatchPenalty": -45
+  },
+
+  "genericEntityPatterns": [
+    "* Electric Cooperative",
+    "* Electric Co-op",
+    "* Rural Electric",
+    "* Power & Light",
+    "* Power and Light",
+    "* Power Company",
+    "* Electric Company",
+    "* Energy",
+    "* Water Authority",
+    "* Water District",
+    "* Water Department",
+    "* Municipal Utility District",
+    "* Public Utility District",
+    "* Gas Company",
+    "* Natural Gas",
+    "City of * Utilities",
+    "City of * Water",
+    "City of * Electric",
+    "Town of * Water Dept",
+    "* County Water",
+    "* Regional Water"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["service_territory_match OR ferc_id_match"],
+    "boosts": ["domain_match", "eia_id_match"],
+    "blockers": ["different_service_territory", "different_state"]
+  },
+
+  "knownEntities": [
+    "Duke Energy",
+    "Southern Company",
+    "Dominion Energy",
+    "Exelon",
+    "American Electric Power",
+    "Xcel Energy",
+    "Entergy",
+    "FirstEnergy",
+    "PPL Corporation",
+    "Consolidated Edison",
+    "Pacific Gas and Electric",
+    "Southern California Edison",
+    "San Diego Gas & Electric",
+    "Florida Power & Light",
+    "Georgia Power",
+    "Alabama Power",
+    "Mississippi Power",
+    "CenterPoint Energy",
+    "Oncor",
+    "NRG Energy",
+    "Vistra Energy",
+    "NextEra Energy",
+    "Eversource Energy",
+    "National Grid",
+    "Ameren",
+    "Evergy",
+    "DTE Energy",
+    "Consumers Energy",
+    "We Energies",
+    "Alliant Energy",
+    "Portland General Electric",
+    "Puget Sound Energy",
+    "Idaho Power",
+    "PacifiCorp",
+    "Arizona Public Service",
+    "Salt River Project",
+    "Tucson Electric Power",
+    "Public Service Company of New Mexico",
+    "El Paso Electric",
+    "American Water",
+    "Aqua America",
+    "California Water Service",
+    "SJW Group",
+    "Essential Utilities"
+  ],
+
+  "knownEntityAliases": {
+    "Pacific Gas and Electric": ["PG&E", "Pacific Gas & Electric"],
+    "Southern California Edison": ["SCE"],
+    "San Diego Gas & Electric": ["SDG&E", "SDGE"],
+    "Florida Power & Light": ["FPL"],
+    "Consolidated Edison": ["Con Edison", "ConEd"],
+    "American Electric Power": ["AEP"],
+    "Portland General Electric": ["PGE"],
+    "Arizona Public Service": ["APS"],
+    "Salt River Project": ["SRP"],
+    "Public Service Company of New Mexico": ["PNM"]
+  },
+
+  "regulatoryNote": "Utilities are typically regulated monopolies with defined service territories. A 'City Water Department' in Texas is a completely separate entity from a 'City Water Department' in California, even with identical names. They have different regulators, rate structures, and service areas."
+}

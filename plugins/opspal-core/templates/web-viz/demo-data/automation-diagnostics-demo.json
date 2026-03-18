@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "template": "automation-diagnostics",
+    "generated": "2025-01-04",
+    "description": "Demo data for Automation Diagnostics Dashboard - 30 days error data, 8 automation types"
+  },
+  "kpis": {
+    "errorsToday": {
+      "value": 12,
+      "priorValue": 8,
+      "trend": 50,
+      "trendDirection": "up",
+      "status": "warning"
+    },
+    "errorsThisWeek": {
+      "value": 47,
+      "priorValue": 52,
+      "trend": -9.6,
+      "trendDirection": "down",
+      "status": "improving"
+    },
+    "usersImpacted": {
+      "value": 8,
+      "description": "Distinct users affected today"
+    },
+    "flowWaits": {
+      "value": 23,
+      "description": "Paused flow interviews"
+    }
+  },
+  "errorTrend": {
+    "labels": ["Dec 5", "Dec 6", "Dec 7", "Dec 8", "Dec 9", "Dec 10", "Dec 11", "Dec 12", "Dec 13", "Dec 14", "Dec 15", "Dec 16", "Dec 17", "Dec 18", "Dec 19", "Dec 20", "Dec 21", "Dec 22", "Dec 23", "Dec 24", "Dec 25", "Dec 26", "Dec 27", "Dec 28", "Dec 29", "Dec 30", "Dec 31", "Jan 1", "Jan 2", "Jan 3"],
+    "datasets": [
+      {
+        "label": "Errors",
+        "data": [15, 12, 8, 22, 18, 14, 10, 9, 11, 25, 20, 16, 12, 8, 7, 15, 18, 12, 9, 5, 3, 8, 14, 16, 12, 10, 8, 15, 14, 12],
+        "borderColor": "#EF4444",
+        "backgroundColor": "rgba(239, 68, 68, 0.1)",
+        "fill": true
+      },
+      {
+        "label": "Warnings",
+        "data": [25, 22, 18, 35, 30, 24, 20, 18, 22, 40, 35, 28, 22, 16, 14, 28, 32, 24, 18, 12, 8, 18, 26, 30, 24, 20, 16, 28, 26, 22],
+        "borderColor": "#F59E0B",
+        "backgroundColor": "rgba(245, 158, 11, 0.1)",
+        "fill": true
+      }
+    ]
+  },
+  "errorsByType": {
+    "labels": ["Validation Error", "Null Pointer", "Governor Limit", "FIELD_CUSTOM_VALIDATION", "DUPLICATE_VALUE", "REQUIRED_FIELD", "INVALID_CROSS_REF", "Other"],
+    "datasets": [{
+      "label": "Error Count",
+      "data": [85, 42, 28, 35, 22, 18, 12, 15],
+      "backgroundColor": ["#EF4444", "#F59E0B", "#8B5CF6", "#EC4899", "#22C55E", "#3B82F6", "#14B8A6", "#64748B"]
+    }]
+  },
+  "topFailingAutomations": [
+    {
+      "name": "Lead Assignment Flow",
+      "type": "Record-Triggered Flow",
+      "errorCount": 28,
+      "lastError": "2025-01-04T14:30:00Z",
+      "primaryError": "FIELD_CUSTOM_VALIDATION_EXCEPTION: Territory field required",
+      "trend": "stable"
+    },
+    {
+      "name": "Account Enrichment Flow",
+      "type": "Record-Triggered Flow",
+      "errorCount": 22,
+      "lastError": "2025-01-04T13:45:00Z",
+      "primaryError": "System.NullPointerException: Attempt to de-reference null object",
+      "trend": "increasing"
+    },
+    {
+      "name": "OpportunityTriggerHandler",
+      "type": "Apex Trigger",
+      "errorCount": 18,
+      "lastError": "2025-01-04T12:20:00Z",
+      "primaryError": "System.LimitException: Too many SOQL queries: 101",
+      "trend": "decreasing"
+    },
+    {
+      "name": "Quote Approval Flow",
+      "type": "Record-Triggered Flow",
+      "errorCount": 15,
+      "lastError": "2025-01-04T11:55:00Z",
+      "primaryError": "INVALID_CROSS_REFERENCE_KEY: invalid cross reference id",
+      "trend": "stable"
+    },
+    {
+      "name": "Case Escalation Flow",
+      "type": "Record-Triggered Flow",
+      "errorCount": 12,
+      "lastError": "2025-01-03T16:30:00Z",
+      "primaryError": "DUPLICATE_VALUE: duplicate value found",
+      "trend": "decreasing"
+    }
+  ],
+  "recentErrors": [
+    {
+      "timestamp": "2025-01-04T14:30:22Z",
+      "automation": "Lead Assignment Flow",
+      "errorType": "FIELD_CUSTOM_VALIDATION_EXCEPTION",
+      "message": "Territory field is required when Status is 'Qualified'",
+      "user": "sarah.johnson@company.com",
+      "recordId": "00Q8c00001ABC123",
+      "stackTrace": "Flow_Lead_Assignment: Decision[Check_Territory] -> Assignment[Set_Territory]"
+    },
+    {
+      "timestamp": "2025-01-04T14:15:08Z",
+      "automation": "Account Enrichment Flow",
+      "errorType": "System.NullPointerException",
+      "message": "Attempt to de-reference a null object",
+      "user": "michael.chen@company.com",
+      "recordId": "0018c00001XYZ789",
+      "stackTrace": "Flow_Account_Enrichment: Get_External_Data -> Update_Account"
+    },
+    {
+      "timestamp": "2025-01-04T13:45:33Z",
+      "automation": "OpportunityTriggerHandler",
+      "errorType": "System.LimitException",
+      "message": "Too many SOQL queries: 101",
+      "user": "david.park@company.com",
+      "recordId": "0068c00001DEF456",
+      "stackTrace": "OpportunityTriggerHandler.handleAfterUpdate() line 145"
+    },
+    {
+      "timestamp": "2025-01-04T12:20:17Z",
+      "automation": "Quote Approval Flow",
+      "errorType": "INVALID_CROSS_REFERENCE_KEY",
+      "message": "Invalid cross reference id",
+      "user": "emily.rodriguez@company.com",
+      "recordId": "a0B8c00001GHI012",
+      "stackTrace": "Flow_Quote_Approval: Get_Approver -> Create_Approval"
+    },
+    {
+      "timestamp": "2025-01-04T11:55:42Z",
+      "automation": "Lead Assignment Flow",
+      "errorType": "REQUIRED_FIELD_MISSING",
+      "message": "Required fields are missing: [Company]",
+      "user": "alex.kim@company.com",
+      "recordId": "00Q8c00001JKL345",
+      "stackTrace": "Flow_Lead_Assignment: Validate_Lead -> Update_Lead"
+    }
+  ],
+  "performanceMetrics": {
+    "avgExecutionTime": {
+      "labels": ["Lead Assignment", "Account Enrichment", "Opp Handler", "Quote Approval", "Case Escalation"],
+      "datasets": [{
+        "label": "Avg Time (ms)",
+        "data": [450, 1200, 850, 620, 380],
+        "backgroundColor": "#5F3B8C"
+      }]
+    },
+    "executionCounts": {
+      "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "datasets": [{
+        "label": "Executions",
+        "data": [2450, 2680, 2520, 2890, 2750, 450, 380],
+        "borderColor": "#5F3B8C",
+        "fill": false
+      }]
+    }
+  },
+  "alertThresholds": {
+    "errorsPerHour": { "warning": 5, "critical": 15 },
+    "governorLimitUsage": { "warning": 70, "critical": 90 },
+    "executionTime": { "warning": 2000, "critical": 5000 }
+  },
+  "currentAlerts": [
+    {
+      "severity": "warning",
+      "title": "Elevated Error Rate",
+      "message": "12 errors in the last hour (threshold: 5)",
+      "timestamp": "2025-01-04T14:00:00Z"
+    },
+    {
+      "severity": "info",
+      "title": "Governor Limit Usage",
+      "message": "Account Enrichment Flow at 68% SOQL query limit",
+      "timestamp": "2025-01-04T13:30:00Z"
+    }
+  ]
+}

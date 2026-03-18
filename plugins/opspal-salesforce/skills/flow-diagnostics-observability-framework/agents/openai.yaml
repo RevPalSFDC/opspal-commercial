@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flow Diagnostics Observability Framework"
+  short_description: "Help with Flow Diagnostics Observability Framework tasks"
+  default_prompt: "Use $flow-diagnostics-observability-framework to execute this workflow safely and produce the expected artifacts."

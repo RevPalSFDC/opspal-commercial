@@ -1,0 +1,251 @@
+{
+  "description": "State and province mappings for Europe",
+  "version": "1.0.0",
+  "DE": {
+    "name": "Germany",
+    "subdivisionType": "state",
+    "states": {
+      "Baden-Württemberg": "BW",
+      "Bayern": "BY",
+      "Berlin": "BE",
+      "Brandenburg": "BB",
+      "Bremen": "HB",
+      "Hamburg": "HH",
+      "Hessen": "HE",
+      "Mecklenburg-Vorpommern": "MV",
+      "Niedersachsen": "NI",
+      "Nordrhein-Westfalen": "NW",
+      "Rheinland-Pfalz": "RP",
+      "Saarland": "SL",
+      "Sachsen": "SN",
+      "Sachsen-Anhalt": "ST",
+      "Schleswig-Holstein": "SH",
+      "Thüringen": "TH"
+    },
+    "aliases": {
+      "Bavaria": "BY",
+      "Hesse": "HE",
+      "Lower Saxony": "NI",
+      "North Rhine-Westphalia": "NW",
+      "Rhineland-Palatinate": "RP",
+      "Saxony": "SN",
+      "Saxony-Anhalt": "ST",
+      "Thuringia": "TH"
+    }
+  },
+  "FR": {
+    "name": "France",
+    "subdivisionType": "region",
+    "states": {
+      "Auvergne-Rhône-Alpes": "ARA",
+      "Bourgogne-Franche-Comté": "BFC",
+      "Bretagne": "BRE",
+      "Centre-Val de Loire": "CVL",
+      "Corse": "COR",
+      "Grand Est": "GES",
+      "Hauts-de-France": "HDF",
+      "Île-de-France": "IDF",
+      "Normandie": "NOR",
+      "Nouvelle-Aquitaine": "NAQ",
+      "Occitanie": "OCC",
+      "Pays de la Loire": "PDL",
+      "Provence-Alpes-Côte d'Azur": "PAC"
+    }
+  },
+  "ES": {
+    "name": "Spain",
+    "subdivisionType": "autonomous community",
+    "states": {
+      "Andalucía": "AN",
+      "Aragón": "AR",
+      "Asturias": "AS",
+      "Islas Baleares": "IB",
+      "Islas Canarias": "CN",
+      "Cantabria": "CB",
+      "Castilla-La Mancha": "CM",
+      "Castilla y León": "CL",
+      "Cataluña": "CT",
+      "Comunidad Valenciana": "VC",
+      "Extremadura": "EX",
+      "Galicia": "GA",
+      "Comunidad de Madrid": "MD",
+      "Región de Murcia": "MC",
+      "Navarra": "NC",
+      "País Vasco": "PV",
+      "La Rioja": "RI",
+      "Ceuta": "CE",
+      "Melilla": "ML"
+    },
+    "aliases": {
+      "Catalonia": "CT",
+      "Valencia": "VC",
+      "Basque Country": "PV",
+      "Madrid": "MD"
+    }
+  },
+  "IT": {
+    "name": "Italy",
+    "subdivisionType": "region",
+    "states": {
+      "Abruzzo": "ABR",
+      "Basilicata": "BAS",
+      "Calabria": "CAL",
+      "Campania": "CAM",
+      "Emilia-Romagna": "EMR",
+      "Friuli Venezia Giulia": "FVG",
+      "Lazio": "LAZ",
+      "Liguria": "LIG",
+      "Lombardia": "LOM",
+      "Marche": "MAR",
+      "Molise": "MOL",
+      "Piemonte": "PIE",
+      "Puglia": "PUG",
+      "Sardegna": "SAR",
+      "Sicilia": "SIC",
+      "Toscana": "TOS",
+      "Trentino-Alto Adige": "TAA",
+      "Umbria": "UMB",
+      "Valle d'Aosta": "VDA",
+      "Veneto": "VEN"
+    },
+    "aliases": {
+      "Lombardy": "LOM",
+      "Piedmont": "PIE",
+      "Tuscany": "TOS",
+      "Sardinia": "SAR",
+      "Sicily": "SIC"
+    }
+  },
+  "NL": {
+    "name": "Netherlands",
+    "subdivisionType": "province",
+    "states": {
+      "Drenthe": "DR",
+      "Flevoland": "FL",
+      "Friesland": "FR",
+      "Gelderland": "GE",
+      "Groningen": "GR",
+      "Limburg": "LI",
+      "Noord-Brabant": "NB",
+      "Noord-Holland": "NH",
+      "Overijssel": "OV",
+      "Utrecht": "UT",
+      "Zeeland": "ZE",
+      "Zuid-Holland": "ZH"
+    }
+  },
+  "BE": {
+    "name": "Belgium",
+    "subdivisionType": "province",
+    "states": {
+      "Antwerpen": "VAN",
+      "Brussels-Capital": "BRU",
+      "Hainaut": "WHT",
+      "Liège": "WLG",
+      "Limburg": "VLI",
+      "Luxembourg": "WLX",
+      "Namur": "WNA",
+      "Oost-Vlaanderen": "VOV",
+      "Vlaams-Brabant": "VBR",
+      "Brabant wallon": "WBR",
+      "West-Vlaanderen": "VWV"
+    },
+    "aliases": {
+      "Antwerp": "VAN",
+      "Brussels": "BRU",
+      "East Flanders": "VOV",
+      "Flemish Brabant": "VBR",
+      "West Flanders": "VWV",
+      "Walloon Brabant": "WBR"
+    }
+  },
+  "CH": {
+    "name": "Switzerland",
+    "subdivisionType": "canton",
+    "states": {
+      "Aargau": "AG",
+      "Appenzell Ausserrhoden": "AR",
+      "Appenzell Innerrhoden": "AI",
+      "Basel-Landschaft": "BL",
+      "Basel-Stadt": "BS",
+      "Bern": "BE",
+      "Fribourg": "FR",
+      "Genève": "GE",
+      "Glarus": "GL",
+      "Graubünden": "GR",
+      "Jura": "JU",
+      "Luzern": "LU",
+      "Neuchâtel": "NE",
+      "Nidwalden": "NW",
+      "Obwalden": "OW",
+      "Sankt Gallen": "SG",
+      "Schaffhausen": "SH",
+      "Schwyz": "SZ",
+      "Solothurn": "SO",
+      "Thurgau": "TG",
+      "Ticino": "TI",
+      "Uri": "UR",
+      "Valais": "VS",
+      "Vaud": "VD",
+      "Zug": "ZG",
+      "Zürich": "ZH"
+    },
+    "aliases": {
+      "Geneva": "GE",
+      "Lucerne": "LU",
+      "Zurich": "ZH"
+    }
+  },
+  "AT": {
+    "name": "Austria",
+    "subdivisionType": "state",
+    "states": {
+      "Burgenland": "BGL",
+      "Kärnten": "KTN",
+      "Niederösterreich": "NOE",
+      "Oberösterreich": "OOE",
+      "Salzburg": "SBG",
+      "Steiermark": "STM",
+      "Tirol": "TIR",
+      "Vorarlberg": "VBG",
+      "Wien": "WIE"
+    },
+    "aliases": {
+      "Carinthia": "KTN",
+      "Lower Austria": "NOE",
+      "Upper Austria": "OOE",
+      "Styria": "STM",
+      "Tyrol": "TIR",
+      "Vienna": "WIE"
+    }
+  },
+  "PL": {
+    "name": "Poland",
+    "subdivisionType": "voivodeship",
+    "states": {
+      "Dolnośląskie": "DS",
+      "Kujawsko-Pomorskie": "KP",
+      "Lubelskie": "LU",
+      "Lubuskie": "LB",
+      "Łódzkie": "LD",
+      "Małopolskie": "MA",
+      "Mazowieckie": "MZ",
+      "Opolskie": "OP",
+      "Podkarpackie": "PK",
+      "Podlaskie": "PD",
+      "Pomorskie": "PM",
+      "Śląskie": "SL",
+      "Świętokrzyskie": "SK",
+      "Warmińsko-Mazurskie": "WN",
+      "Wielkopolskie": "WP",
+      "Zachodniopomorskie": "ZP"
+    },
+    "aliases": {
+      "Lower Silesian": "DS",
+      "Lesser Poland": "MA",
+      "Masovian": "MZ",
+      "Greater Poland": "WP",
+      "Silesian": "SL"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Joined Report Engineering Framework"
+  short_description: "Help with Joined Report Engineering Framework tasks"
+  default_prompt: "Use $joined-report-engineering-framework to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,468 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.com/schemas/solution-schema.json",
+  "title": "Solution Template Manifest",
+  "description": "Schema for defining multi-platform solution templates with parameterization and deployment configuration",
+  "type": "object",
+  "required": ["name", "version", "description", "components"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique solution name (lowercase, hyphenated)",
+      "examples": ["lead-management-solution", "quote-to-cash"]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (MAJOR.MINOR.PATCH)",
+      "examples": ["1.0.0", "2.3.1"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of what this solution provides",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata about the solution",
+      "properties": {
+        "author": {
+          "type": "string",
+          "description": "Solution author or team"
+        },
+        "created": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date when solution was created"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date when solution was last updated"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Searchable tags for discovery"
+        },
+        "complexity": {
+          "type": "string",
+          "enum": ["simple", "moderate", "complex"],
+          "description": "Overall solution complexity"
+        },
+        "estimatedDeployTime": {
+          "type": "string",
+          "pattern": "^\\d+\\s*(min|hour|hours|minutes)$",
+          "description": "Estimated deployment time",
+          "examples": ["15 min", "1 hour"]
+        },
+        "documentation": {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to extended documentation"
+        }
+      }
+    },
+    "platforms": {
+      "type": "object",
+      "description": "Platform-specific requirements and configuration",
+      "properties": {
+        "salesforce": {
+          "type": "object",
+          "properties": {
+            "minApiVersion": {
+              "type": "string",
+              "pattern": "^\\d+\\.0$",
+              "description": "Minimum Salesforce API version required",
+              "examples": ["62.0", "58.0"]
+            },
+            "requiredFeatures": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Flow", "ValidationRule", "CustomField", "CustomObject",
+                  "ApexTrigger", "ApexClass", "PermissionSet", "Profile",
+                  "Layout", "RecordType", "Report", "Dashboard",
+                  "CPQ", "ServiceCloud", "ExperienceCloud", "ParallelLeadConversion",
+                  "EmailTemplate", "Territory2", "ApprovalProcess"
+                ]
+              },
+              "description": "Required Salesforce features"
+            },
+            "optionalFeatures": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional features that enable additional components"
+            },
+            "editions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["Enterprise", "Unlimited", "Developer", "Professional"]
+              },
+              "description": "Compatible Salesforce editions"
+            }
+          }
+        },
+        "hubspot": {
+          "type": "object",
+          "properties": {
+            "requiredScopes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Required HubSpot API scopes",
+              "examples": [["contacts", "workflows", "automation"]]
+            },
+            "optionalScopes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional scopes for additional features"
+            },
+            "portalType": {
+              "type": "string",
+              "enum": ["Marketing", "Sales", "Service", "CMS", "Operations"],
+              "description": "Primary HubSpot hub type"
+            }
+          }
+        },
+        "n8n": {
+          "type": "object",
+          "properties": {
+            "minVersion": {
+              "type": "string",
+              "description": "Minimum n8n version required"
+            },
+            "requiredNodes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Required n8n node types"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Configurable parameters for solution customization",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type", "description"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean", "array", "object", "fieldReference", "userId", "queueId", "profileId", "recordTypeId", "picklistValue"],
+            "description": "Parameter data type"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the parameter"
+          },
+          "required": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this parameter must be provided"
+          },
+          "default": {
+            "description": "Default value if not provided"
+          },
+          "min": {
+            "type": "number",
+            "description": "Minimum value (for number type)"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value (for number type)"
+          },
+          "minLength": {
+            "type": "integer",
+            "description": "Minimum length (for string/array types)"
+          },
+          "maxLength": {
+            "type": "integer",
+            "description": "Maximum length (for string/array types)"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regex pattern (for string type)"
+          },
+          "enum": {
+            "type": "array",
+            "description": "Allowed values"
+          },
+          "itemType": {
+            "type": "string",
+            "description": "Type of array items (for array type)"
+          },
+          "properties": {
+            "type": "object",
+            "description": "Nested properties (for object type)"
+          },
+          "object": {
+            "type": "string",
+            "description": "Salesforce object name (for fieldReference type)"
+          },
+          "createIfMissing": {
+            "type": "boolean",
+            "default": false,
+            "description": "Create the referenced item if it doesn't exist"
+          },
+          "platformRequirement": {
+            "type": "object",
+            "description": "Platform-specific features required for this parameter",
+            "additionalProperties": { "type": "string" }
+          },
+          "validationMessage": {
+            "type": "string",
+            "description": "Custom error message for validation failures"
+          },
+          "examples": {
+            "type": "array",
+            "description": "Example values for documentation"
+          },
+          "sensitive": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this parameter contains sensitive data"
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "description": "Solution components to deploy",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "template"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Unique component identifier within the solution"
+          },
+          "type": {
+            "type": "string",
+            "description": "Component type (platform:metadataType format)",
+            "examples": [
+              "salesforce:customField", "salesforce:flow", "salesforce:validationRule",
+              "salesforce:permissionSet", "salesforce:layout", "salesforce:trigger",
+              "salesforce:apexClass", "salesforce:report", "salesforce:dashboard",
+              "hubspot:workflow", "hubspot:property", "hubspot:list",
+              "n8n:workflow"
+            ]
+          },
+          "template": {
+            "type": "string",
+            "description": "Relative path to component template file"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Deployment order (lower numbers deploy first)"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "IDs of components this depends on"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Handlebars condition for including this component",
+            "examples": ["{{#if enableNurturing}}true{{/if}}", "{{#if platforms.hubspot}}true{{/if}}"]
+          },
+          "parameters": {
+            "type": "object",
+            "description": "Component-specific parameter overrides"
+          },
+          "rollbackAction": {
+            "type": "string",
+            "enum": ["delete", "deactivate", "preserve", "restore-previous"],
+            "default": "delete",
+            "description": "Action to take on rollback"
+          },
+          "validateAfter": {
+            "type": "boolean",
+            "default": true,
+            "description": "Run validation after deploying this component"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "preDeployChecks": {
+      "type": "array",
+      "description": "Validation checks to run before deployment",
+      "items": {
+        "type": "object",
+        "required": ["type", "errorMessage"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "fieldExists", "objectExists", "userAccessible", "permissionExists",
+              "recordTypeExists", "apexTestCoverage", "flowNotActive", "customCode",
+              "hubspotPropertyExists", "hubspotWorkflowNotActive", "n8nWorkflowNotActive"
+            ],
+            "description": "Type of pre-deploy check"
+          },
+          "platform": {
+            "type": "string",
+            "enum": ["salesforce", "hubspot", "n8n"],
+            "description": "Target platform for the check"
+          },
+          "object": {
+            "type": "string",
+            "description": "Object/entity to check"
+          },
+          "field": {
+            "type": "string",
+            "description": "Field to check"
+          },
+          "users": {
+            "type": "string",
+            "description": "Parameter reference for users to check"
+          },
+          "minCoverage": {
+            "type": "number",
+            "description": "Minimum required code coverage percentage"
+          },
+          "script": {
+            "type": "string",
+            "description": "Path to custom validation script"
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Error message to display if check fails"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["error", "warning"],
+            "default": "error",
+            "description": "Whether failure blocks deployment"
+          }
+        }
+      }
+    },
+    "postDeployActions": {
+      "type": "array",
+      "description": "Actions to perform after successful deployment",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "activateFlow", "deactivateFlow", "assignPermissions", "runApexTest",
+              "createTestData", "sendNotification", "runScript", "activateWorkflow",
+              "activateN8nWorkflow", "waitForPropagation"
+            ],
+            "description": "Post-deploy action type"
+          },
+          "flowName": {
+            "type": "string",
+            "description": "Flow API name (for activateFlow/deactivateFlow)"
+          },
+          "permissionSet": {
+            "type": "string",
+            "description": "Permission set API name"
+          },
+          "assignTo": {
+            "type": "string",
+            "description": "Parameter reference for users to assign permissions"
+          },
+          "testClass": {
+            "type": "string",
+            "description": "Apex test class to run"
+          },
+          "script": {
+            "type": "string",
+            "description": "Path to script to execute"
+          },
+          "notification": {
+            "type": "object",
+            "properties": {
+              "channel": { "type": "string", "enum": ["slack", "email", "asana"] },
+              "message": { "type": "string" }
+            }
+          },
+          "waitSeconds": {
+            "type": "integer",
+            "description": "Seconds to wait (for waitForPropagation)"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Condition for executing this action"
+          }
+        }
+      }
+    },
+    "rollbackStrategy": {
+      "type": "object",
+      "description": "Configuration for deployment rollback",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["checkpoint", "full", "component-level", "none"],
+          "default": "checkpoint",
+          "description": "Rollback strategy type"
+        },
+        "maxCheckpoints": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 5,
+          "description": "Maximum checkpoints to retain"
+        },
+        "autoRollbackOnFailure": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically rollback if any component fails"
+        },
+        "components": {
+          "type": "object",
+          "description": "Component-type specific rollback actions",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["delete", "deactivate", "preserve", "restore-previous"]
+          }
+        },
+        "excludeFromRollback": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Component IDs to exclude from rollback"
+        }
+      }
+    },
+    "documentation": {
+      "type": "object",
+      "description": "Documentation configuration",
+      "properties": {
+        "overview": {
+          "type": "string",
+          "description": "Path to overview documentation"
+        },
+        "parameters": {
+          "type": "string",
+          "description": "Path to parameter documentation"
+        },
+        "troubleshooting": {
+          "type": "string",
+          "description": "Path to troubleshooting guide"
+        },
+        "generateRunbook": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-generate deployment runbook"
+        }
+      }
+    },
+    "extends": {
+      "type": "string",
+      "description": "Path to parent solution template to extend"
+    }
+  },
+  "additionalProperties": false
+}

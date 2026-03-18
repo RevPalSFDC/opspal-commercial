@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Territory2 API Quirks",
+  "version": "1.0.0",
+  "description": "Configuration for Territory2 API quirks and auto-corrections",
+  "created": "2026-01-15",
+  "roiImpact": "$6,000/year",
+  "playbook": "../playbooks/territory2-operations.md",
+
+  "fieldNameCorrections": {
+    "description": "Territory2 objects use MasterLabel instead of Name/DeveloperName for display",
+    "enabled": true,
+    "corrections": [
+      {
+        "objects": ["Territory2", "Territory2Model", "Territory2Type", "ObjectTerritory2AssignmentRule"],
+        "from": "Name",
+        "to": "MasterLabel",
+        "context": "SELECT queries",
+        "autoCorrect": true
+      },
+      {
+        "objects": ["Territory2", "Territory2Model", "Territory2Type"],
+        "from": "Label",
+        "to": "MasterLabel",
+        "context": "SELECT queries",
+        "autoCorrect": true
+      }
+    ]
+  },
+
+  "toolingApiRequirements": {
+    "description": "Territory2 objects require Tooling API",
+    "enabled": true,
+    "objects": [
+      "Territory2",
+      "Territory2Model",
+      "Territory2Type",
+      "Territory2Rule",
+      "Territory2RuleItem",
+      "UserTerritory2Association",
+      "ObjectTerritory2Association",
+      "ObjectTerritory2AssignmentRule",
+      "ObjectTerritory2AssignmentRuleItem",
+      "Territory2AlignmentLog"
+    ],
+    "errorCode": "TERRITORY2_NEEDS_TOOLING_API",
+    "message": "Territory2 queries require --use-tooling-api flag",
+    "autoCorrect": true
+  },
+
+  "booleanFilterBlocking": {
+    "description": "Cannot modify rule items when parent rule has BooleanFilter",
+    "enabled": true,
+    "affectedObjects": ["ObjectTerritory2AssignmentRuleItem"],
+    "blockedOperations": ["create", "update", "delete", "upsert"],
+    "errorCode": "BOOLEAN_FILTER_BLOCKS_MODIFICATION",
+    "validator": "../scripts/lib/territory-rule-validator.js",
+    "hook": "../hooks/pre-tool-use-territory-rule-validator.sh",
+    "workflow": {
+      "steps": [
+        {
+          "step": 1,
+          "action": "save_boolean_filter",
+          "description": "Query and save current BooleanFilter value",
+          "command": "sf data query --query \"SELECT Id, BooleanFilter FROM ObjectTerritory2AssignmentRule WHERE Id = '{ruleId}'\" --use-tooling-api"
+        },
+        {
+          "step": 2,
+          "action": "clear_boolean_filter",
+          "description": "Clear BooleanFilter to allow modifications",
+          "command": "sf data update record --sobject ObjectTerritory2AssignmentRule --record-id {ruleId} --values \"BooleanFilter=''\" --use-tooling-api"
+        },
+        {
+          "step": 3,
+          "action": "modify_items",
+          "description": "Perform item create/update/delete operations",
+          "command": "(user operations)"
+        },
+        {
+          "step": 4,
+          "action": "update_boolean_filter",
+          "description": "Update BooleanFilter if items were added/removed",
+          "command": "sf data update record --sobject ObjectTerritory2AssignmentRule --record-id {ruleId} --values \"BooleanFilter='{newFilter}'\" --use-tooling-api",
+          "note": "Update item numbers in filter logic if items were added/removed"
+        },
+        {
+          "step": 5,
+          "action": "restore_boolean_filter",
+          "description": "Restore original BooleanFilter if unchanged",
+          "command": "sf data update record --sobject ObjectTerritory2AssignmentRule --record-id {ruleId} --values \"BooleanFilter='{savedFilter}'\" --use-tooling-api"
+        }
+      ]
+    }
+  },
+
+  "idPrefixes": {
+    "description": "Salesforce ID prefixes for Territory2 objects",
+    "prefixes": {
+      "0TM": {
+        "object": "Territory2Model",
+        "description": "Territory model"
+      },
+      "0Ml": {
+        "object": "Territory2",
+        "description": "Territory"
+      },
+      "0TB": {
+        "object": "Territory2Type",
+        "description": "Territory type"
+      },
+      "0M1": {
+        "object": "UserTerritory2Association",
+        "description": "User-territory assignment"
+      },
+      "0Le": {
+        "object": "ObjectTerritory2Association",
+        "description": "Object-territory assignment"
+      },
+      "0OH": {
+        "object": "ObjectTerritory2AssignmentRule",
+        "description": "Territory assignment rule"
+      },
+      "0OK": {
+        "object": "ObjectTerritory2AssignmentRuleItem",
+        "description": "Territory assignment rule item/filter"
+      }
+    }
+  },
+
+  "modelStates": {
+    "description": "Territory2Model state machine",
+    "states": {
+      "Planning": {
+        "description": "Model is being configured",
+        "allowedOperations": ["modify", "test", "activate"],
+        "userAssignments": "temporary",
+        "accountAssignments": "temporary"
+      },
+      "Active": {
+        "description": "Model is in production use",
+        "allowedOperations": ["view", "report", "deactivate"],
+        "userAssignments": "permanent",
+        "accountAssignments": "permanent",
+        "note": "Only ONE model can be Active per org"
+      },
+      "Archived": {
+        "description": "Model is archived",
+        "allowedOperations": ["view", "clone"],
+        "userAssignments": "read-only",
+        "accountAssignments": "read-only"
+      }
+    },
+    "transitions": [
+      { "from": "Planning", "to": "Active", "action": "activate" },
+      { "from": "Active", "to": "Planning", "action": "deactivate" },
+      { "from": "Planning", "to": "Archived", "action": "archive" },
+      { "from": "Active", "to": "Archived", "action": "archive" }
+    ]
+  },
+
+  "alignmentLogQuirks": {
+    "description": "Territory2AlignmentLog query limitations",
+    "limitations": [
+      "Cannot filter by CreatedDate",
+      "System auto-purges old logs",
+      "Limited to recent operations"
+    ],
+    "recommendedQuery": "SELECT Id, Status, RequestType, EndDate, Territory2ModelId FROM Territory2AlignmentLog ORDER BY EndDate DESC LIMIT 10"
+  },
+
+  "cascadeDeletionBehavior": {
+    "description": "What happens when Territory2 objects are deleted",
+    "Territory2Model": {
+      "cascades": ["Territory2", "Territory2Type", "ObjectTerritory2AssignmentRule"],
+      "doesNotCascade": []
+    },
+    "Territory2": {
+      "cascades": [],
+      "doesNotCascade": ["UserTerritory2Association", "ObjectTerritory2Association"],
+      "note": "Must manually delete associations before deleting territory"
+    }
+  },
+
+  "commonErrors": {
+    "FIELD_NOT_FOUND_NAME": {
+      "pattern": "Field.*Name.*does not exist",
+      "cause": "Using 'Name' instead of 'MasterLabel'",
+      "solution": "Replace 'Name' with 'MasterLabel' in query",
+      "autoCorrect": true
+    },
+    "MISSING_TOOLING_API": {
+      "pattern": "Invalid sobject type|sObject type.*not supported",
+      "cause": "Missing --use-tooling-api flag",
+      "solution": "Add --use-tooling-api to command",
+      "autoCorrect": true
+    },
+    "BOOLEAN_FILTER_LOCK": {
+      "pattern": "Cannot.*modify.*rule.*item|DML.*failed.*rule",
+      "cause": "Parent rule has BooleanFilter set",
+      "solution": "Follow BooleanFilter modification workflow",
+      "autoCorrect": false,
+      "workflowRequired": true
+    },
+    "ORPHANED_ASSOCIATION": {
+      "pattern": "UserTerritory2Association.*invalid|Territory2.*not found",
+      "cause": "Association references deleted territory",
+      "solution": "Delete orphaned UserTerritory2Association records",
+      "autoCorrect": false
+    }
+  },
+
+  "ruleCreatedAssociationRestriction": {
+    "description": "ObjectTerritory2Association records created by assignment rules cannot be deleted via API. They can only be modified by re-running the assignment rules.",
+    "enabled": true,
+    "affectedObjects": ["ObjectTerritory2Association"],
+    "blockedOperations": ["delete"],
+    "detection": {
+      "field": "AssociationCause",
+      "ruleCreatedValue": "Territory2AssignmentRule",
+      "manualValue": "Territory2Manual",
+      "query": "SELECT Id, ObjectId, Territory2Id, AssociationCause FROM ObjectTerritory2Association WHERE Id = '{recordId}'"
+    },
+    "resolution": {
+      "steps": [
+        "Check AssociationCause field: if 'Territory2AssignmentRule', the record was created by rules",
+        "To remove rule-created associations: modify the assignment rule criteria to exclude the account",
+        "Then re-run assignment rules via: sf data query --query \"SELECT Id FROM Territory2Model WHERE State = 'Active'\" --use-tooling-api",
+        "Use Salesforce UI: Setup > Territory Models > [Model] > Run Assignment Rules",
+        "Alternative: Add account to Territory2ObjectExclusion to prevent future rule assignment"
+      ]
+    },
+    "errorPattern": "DELETE_FAILED|CANNOT_DELETE_MANAGED_OBJECT|DML.*not allowed",
+    "autoCorrect": false
+  },
+
+  "bestPractices": [
+    {
+      "id": "always-tooling-api",
+      "description": "Always use --use-tooling-api for Territory2 queries",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "use-masterlabel",
+      "description": "Use MasterLabel for display names, DeveloperName for API names",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "check-boolean-filter",
+      "description": "Check BooleanFilter before modifying rule items",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "test-in-planning",
+      "description": "Test changes in Planning model before activating",
+      "severity": "HIGH"
+    },
+    {
+      "id": "cleanup-associations",
+      "description": "Delete user/object associations before deleting territories",
+      "severity": "HIGH"
+    },
+    {
+      "id": "check-association-cause",
+      "description": "Check AssociationCause before attempting to delete ObjectTerritory2Association - rule-created records cannot be API-deleted",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "backup-before-bulk",
+      "description": "Export current state before bulk territory operations",
+      "severity": "MEDIUM"
+    }
+  ]
+}

@@ -1,0 +1,471 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-03",
+  "description": "Field mappings between Salesforce objects and HubSpot properties for n8n workflows",
+
+  "salesforceToHubspot": {
+    "Lead": {
+      "objectType": "contact",
+      "fields": {
+        "FirstName": {
+          "target": "firstname",
+          "expression": "={{ $json.FirstName }}"
+        },
+        "LastName": {
+          "target": "lastname",
+          "expression": "={{ $json.LastName }}"
+        },
+        "Email": {
+          "target": "email",
+          "expression": "={{ $json.Email }}"
+        },
+        "Phone": {
+          "target": "phone",
+          "expression": "={{ $json.Phone }}"
+        },
+        "MobilePhone": {
+          "target": "mobilephone",
+          "expression": "={{ $json.MobilePhone }}"
+        },
+        "Company": {
+          "target": "company",
+          "expression": "={{ $json.Company }}"
+        },
+        "Title": {
+          "target": "jobtitle",
+          "expression": "={{ $json.Title }}"
+        },
+        "LeadSource": {
+          "target": "leadsource",
+          "expression": "={{ $json.LeadSource }}"
+        },
+        "Industry": {
+          "target": "industry",
+          "expression": "={{ $json.Industry }}"
+        },
+        "Website": {
+          "target": "website",
+          "expression": "={{ $json.Website }}"
+        },
+        "Street": {
+          "target": "address",
+          "expression": "={{ $json.Street }}"
+        },
+        "City": {
+          "target": "city",
+          "expression": "={{ $json.City }}"
+        },
+        "State": {
+          "target": "state",
+          "expression": "={{ $json.State }}"
+        },
+        "PostalCode": {
+          "target": "zip",
+          "expression": "={{ $json.PostalCode }}"
+        },
+        "Country": {
+          "target": "country",
+          "expression": "={{ $json.Country }}"
+        },
+        "Description": {
+          "target": "message",
+          "expression": "={{ $json.Description }}"
+        }
+      }
+    },
+    "Contact": {
+      "objectType": "contact",
+      "fields": {
+        "FirstName": {
+          "target": "firstname",
+          "expression": "={{ $json.FirstName }}"
+        },
+        "LastName": {
+          "target": "lastname",
+          "expression": "={{ $json.LastName }}"
+        },
+        "Email": {
+          "target": "email",
+          "expression": "={{ $json.Email }}"
+        },
+        "Phone": {
+          "target": "phone",
+          "expression": "={{ $json.Phone }}"
+        },
+        "MobilePhone": {
+          "target": "mobilephone",
+          "expression": "={{ $json.MobilePhone }}"
+        },
+        "Title": {
+          "target": "jobtitle",
+          "expression": "={{ $json.Title }}"
+        },
+        "Department": {
+          "target": "department",
+          "expression": "={{ $json.Department }}"
+        },
+        "MailingStreet": {
+          "target": "address",
+          "expression": "={{ $json.MailingStreet }}"
+        },
+        "MailingCity": {
+          "target": "city",
+          "expression": "={{ $json.MailingCity }}"
+        },
+        "MailingState": {
+          "target": "state",
+          "expression": "={{ $json.MailingState }}"
+        },
+        "MailingPostalCode": {
+          "target": "zip",
+          "expression": "={{ $json.MailingPostalCode }}"
+        },
+        "MailingCountry": {
+          "target": "country",
+          "expression": "={{ $json.MailingCountry }}"
+        }
+      }
+    },
+    "Account": {
+      "objectType": "company",
+      "fields": {
+        "Name": {
+          "target": "name",
+          "expression": "={{ $json.Name }}"
+        },
+        "Phone": {
+          "target": "phone",
+          "expression": "={{ $json.Phone }}"
+        },
+        "Website": {
+          "target": "website",
+          "expression": "={{ $json.Website }}"
+        },
+        "Industry": {
+          "target": "industry",
+          "expression": "={{ $json.Industry }}"
+        },
+        "Type": {
+          "target": "type",
+          "expression": "={{ $json.Type }}"
+        },
+        "BillingStreet": {
+          "target": "address",
+          "expression": "={{ $json.BillingStreet }}"
+        },
+        "BillingCity": {
+          "target": "city",
+          "expression": "={{ $json.BillingCity }}"
+        },
+        "BillingState": {
+          "target": "state",
+          "expression": "={{ $json.BillingState }}"
+        },
+        "BillingPostalCode": {
+          "target": "zip",
+          "expression": "={{ $json.BillingPostalCode }}"
+        },
+        "BillingCountry": {
+          "target": "country",
+          "expression": "={{ $json.BillingCountry }}"
+        },
+        "NumberOfEmployees": {
+          "target": "numberofemployees",
+          "expression": "={{ $json.NumberOfEmployees }}"
+        },
+        "AnnualRevenue": {
+          "target": "annualrevenue",
+          "expression": "={{ $json.AnnualRevenue }}"
+        },
+        "Description": {
+          "target": "description",
+          "expression": "={{ $json.Description }}"
+        }
+      }
+    },
+    "Opportunity": {
+      "objectType": "deal",
+      "fields": {
+        "Name": {
+          "target": "dealname",
+          "expression": "={{ $json.Name }}"
+        },
+        "Amount": {
+          "target": "amount",
+          "expression": "={{ $json.Amount }}"
+        },
+        "CloseDate": {
+          "target": "closedate",
+          "expression": "={{ $json.CloseDate }}",
+          "transform": "timestamp"
+        },
+        "StageName": {
+          "target": "dealstage",
+          "expression": "={{ $json.StageName }}",
+          "requiresMapping": true,
+          "mappingNote": "Map SF stages to HS pipeline stages"
+        },
+        "Type": {
+          "target": "dealtype",
+          "expression": "={{ $json.Type }}"
+        },
+        "Description": {
+          "target": "description",
+          "expression": "={{ $json.Description }}"
+        },
+        "NextStep": {
+          "target": "notes",
+          "expression": "={{ $json.NextStep }}"
+        }
+      },
+      "stageMapping": {
+        "note": "Customize based on your HubSpot pipeline",
+        "Prospecting": "appointmentscheduled",
+        "Qualification": "qualifiedtobuy",
+        "Needs Analysis": "qualifiedtobuy",
+        "Value Proposition": "presentationscheduled",
+        "Id. Decision Makers": "presentationscheduled",
+        "Perception Analysis": "decisionmakerboughtin",
+        "Proposal/Price Quote": "contractsent",
+        "Negotiation/Review": "contractsent",
+        "Closed Won": "closedwon",
+        "Closed Lost": "closedlost"
+      }
+    }
+  },
+
+  "hubspotToSalesforce": {
+    "contact": {
+      "objectType": "Lead",
+      "alternativeObject": "Contact",
+      "fields": {
+        "firstname": {
+          "target": "FirstName",
+          "expression": "={{ $json.properties.firstname }}"
+        },
+        "lastname": {
+          "target": "LastName",
+          "expression": "={{ $json.properties.lastname }}"
+        },
+        "email": {
+          "target": "Email",
+          "expression": "={{ $json.properties.email }}"
+        },
+        "phone": {
+          "target": "Phone",
+          "expression": "={{ $json.properties.phone }}"
+        },
+        "mobilephone": {
+          "target": "MobilePhone",
+          "expression": "={{ $json.properties.mobilephone }}"
+        },
+        "company": {
+          "target": "Company",
+          "expression": "={{ $json.properties.company }}"
+        },
+        "jobtitle": {
+          "target": "Title",
+          "expression": "={{ $json.properties.jobtitle }}"
+        },
+        "website": {
+          "target": "Website",
+          "expression": "={{ $json.properties.website }}"
+        },
+        "address": {
+          "target": "Street",
+          "expression": "={{ $json.properties.address }}"
+        },
+        "city": {
+          "target": "City",
+          "expression": "={{ $json.properties.city }}"
+        },
+        "state": {
+          "target": "State",
+          "expression": "={{ $json.properties.state }}"
+        },
+        "zip": {
+          "target": "PostalCode",
+          "expression": "={{ $json.properties.zip }}"
+        },
+        "country": {
+          "target": "Country",
+          "expression": "={{ $json.properties.country }}"
+        },
+        "leadsource": {
+          "target": "LeadSource",
+          "expression": "={{ $json.properties.leadsource }}"
+        },
+        "industry": {
+          "target": "Industry",
+          "expression": "={{ $json.properties.industry }}"
+        }
+      }
+    },
+    "company": {
+      "objectType": "Account",
+      "fields": {
+        "name": {
+          "target": "Name",
+          "expression": "={{ $json.properties.name }}"
+        },
+        "phone": {
+          "target": "Phone",
+          "expression": "={{ $json.properties.phone }}"
+        },
+        "website": {
+          "target": "Website",
+          "expression": "={{ $json.properties.website }}"
+        },
+        "industry": {
+          "target": "Industry",
+          "expression": "={{ $json.properties.industry }}"
+        },
+        "address": {
+          "target": "BillingStreet",
+          "expression": "={{ $json.properties.address }}"
+        },
+        "city": {
+          "target": "BillingCity",
+          "expression": "={{ $json.properties.city }}"
+        },
+        "state": {
+          "target": "BillingState",
+          "expression": "={{ $json.properties.state }}"
+        },
+        "zip": {
+          "target": "BillingPostalCode",
+          "expression": "={{ $json.properties.zip }}"
+        },
+        "country": {
+          "target": "BillingCountry",
+          "expression": "={{ $json.properties.country }}"
+        },
+        "numberofemployees": {
+          "target": "NumberOfEmployees",
+          "expression": "={{ $json.properties.numberofemployees }}"
+        },
+        "annualrevenue": {
+          "target": "AnnualRevenue",
+          "expression": "={{ $json.properties.annualrevenue }}"
+        },
+        "description": {
+          "target": "Description",
+          "expression": "={{ $json.properties.description }}"
+        }
+      }
+    },
+    "deal": {
+      "objectType": "Opportunity",
+      "fields": {
+        "dealname": {
+          "target": "Name",
+          "expression": "={{ $json.properties.dealname }}"
+        },
+        "amount": {
+          "target": "Amount",
+          "expression": "={{ $json.properties.amount }}"
+        },
+        "closedate": {
+          "target": "CloseDate",
+          "expression": "={{ $json.properties.closedate }}",
+          "transform": "sfDate"
+        },
+        "dealstage": {
+          "target": "StageName",
+          "expression": "={{ $json.properties.dealstage }}",
+          "requiresMapping": true,
+          "mappingNote": "Map HS stages to SF Opportunity stages"
+        },
+        "dealtype": {
+          "target": "Type",
+          "expression": "={{ $json.properties.dealtype }}"
+        },
+        "description": {
+          "target": "Description",
+          "expression": "={{ $json.properties.description }}"
+        }
+      },
+      "stageMapping": {
+        "note": "Customize based on your Salesforce Opportunity stages",
+        "appointmentscheduled": "Prospecting",
+        "qualifiedtobuy": "Qualification",
+        "presentationscheduled": "Value Proposition",
+        "decisionmakerboughtin": "Perception Analysis",
+        "contractsent": "Proposal/Price Quote",
+        "closedwon": "Closed Won",
+        "closedlost": "Closed Lost"
+      }
+    }
+  },
+
+  "dataTransformations": {
+    "timestamp": {
+      "description": "Convert date to Unix timestamp for HubSpot",
+      "code": "new Date(value).getTime()"
+    },
+    "sfDate": {
+      "description": "Convert timestamp to Salesforce date format",
+      "code": "new Date(value).toISOString().split('T')[0]"
+    },
+    "booleanToString": {
+      "description": "Convert boolean to Yes/No string",
+      "code": "value ? 'Yes' : 'No'"
+    },
+    "stringToBoolean": {
+      "description": "Convert Yes/No to boolean",
+      "code": "value.toLowerCase() === 'yes' || value.toLowerCase() === 'true'"
+    },
+    "currencyToNumber": {
+      "description": "Strip currency formatting",
+      "code": "parseFloat(value.replace(/[^0-9.-]/g, ''))"
+    }
+  },
+
+  "customPropertySuggestions": {
+    "salesforce": {
+      "note": "Custom fields use __c suffix in API name",
+      "example": {
+        "fieldName": "Custom_Field__c",
+        "expression": "={{ $json.Custom_Field__c }}"
+      }
+    },
+    "hubspot": {
+      "note": "Custom properties use snake_case naming",
+      "example": {
+        "propertyName": "custom_property_name",
+        "expression": "={{ $json.properties.custom_property_name }}"
+      }
+    }
+  },
+
+  "idFields": {
+    "salesforce": {
+      "recordId": "Id",
+      "externalIds": ["External_ID__c"],
+      "note": "Use external IDs for upsert operations"
+    },
+    "hubspot": {
+      "recordId": "hs_object_id",
+      "alternativeIds": ["email", "domain"],
+      "note": "Contacts can be identified by email, Companies by domain"
+    }
+  },
+
+  "associationMappings": {
+    "contactToAccount": {
+      "salesforce": "AccountId",
+      "hubspot": "associatedcompanyid",
+      "note": "Lookup company association"
+    },
+    "opportunityToAccount": {
+      "salesforce": "AccountId",
+      "hubspot": "associatedcompanyid",
+      "note": "Deal to Company association"
+    },
+    "contactToOpportunity": {
+      "salesforce": "via OpportunityContactRole",
+      "hubspot": "via associations API",
+      "note": "Many-to-many relationship"
+    }
+  }
+}

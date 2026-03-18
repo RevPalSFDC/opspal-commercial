@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACE Skill Injection Configuration",
+  "description": "Configuration for automatic skill context injection into agent prompts",
+
+  "enabled": true,
+
+  "complexityGates": {
+    "LOW": {
+      "threshold": 0.5,
+      "maxSkills": 3,
+      "includeHistory": false,
+      "includeTips": false,
+      "description": "Minimal context for simple tasks"
+    },
+    "MEDIUM": {
+      "threshold": 0.7,
+      "maxSkills": 5,
+      "includeHistory": true,
+      "includeTips": false,
+      "description": "Standard context with historical data"
+    },
+    "HIGH": {
+      "threshold": 1.0,
+      "maxSkills": 8,
+      "includeHistory": true,
+      "includeTips": true,
+      "description": "Full context with tips for complex tasks"
+    }
+  },
+
+  "cache": {
+    "ttlSeconds": 300,
+    "directory": "~/.claude/cache/ace-routing",
+    "enabled": true
+  },
+
+  "performance": {
+    "maxLatencyMs": 500,
+    "timeoutMs": 1000,
+    "fallbackOnError": true
+  },
+
+  "categoryKeywords": {
+    "assessment": ["audit", "assessment", "review", "evaluate", "analyze", "check", "cpq", "revops"],
+    "deployment": ["deploy", "release", "push", "publish", "migrate", "ship"],
+    "validation": ["validate", "verify", "check", "pre-deploy", "lint", "test"],
+    "query": ["query", "soql", "report", "dashboard", "export", "import", "data"],
+    "automation": ["flow", "trigger", "workflow", "process", "automation", "rule"],
+    "configuration": ["field", "object", "layout", "permission", "profile", "configure"],
+    "troubleshooting": ["debug", "fix", "error", "issue", "troubleshoot", "diagnose", "log"]
+  },
+
+  "output": {
+    "format": "text",
+    "maxTokens": 500,
+    "includeTimestamp": false
+  },
+
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-13"
+}

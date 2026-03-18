@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metric Field Mapping",
+  "type": "object",
+  "required": ["schemaVersion", "org", "metrics"],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "org": { "type": "string" },
+    "lastUpdated": { "type": "string" },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["baseObject", "fields", "source", "updatedAt"],
+        "properties": {
+          "baseObject": { "type": "string" },
+          "fields": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "source": {
+            "type": "string",
+            "enum": ["inferred", "confirmed", "manual"]
+          },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "notes": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reportOverrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["metricId", "fields", "updatedAt"],
+        "properties": {
+          "metricId": { "type": "string" },
+          "fields": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "notes": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,322 @@
+{
+  "version": "1.0.0",
+  "description": "Quality gate rules for Google Slides generation",
+  "quality_gates": {
+    "branding": {
+      "required": true,
+      "severity": "error",
+      "checks": [
+        {
+          "id": "branding_label",
+          "name": "OpsPal by RevPal label present",
+          "description": "Verify presentation includes 'OpsPal by RevPal' branding",
+          "location": "first_slide_or_footer",
+          "validation": "text_contains",
+          "expected": "OpsPal by RevPal"
+        },
+        {
+          "id": "font_consistency",
+          "name": "Font consistency (Montserrat/Figtree)",
+          "description": "Ensure all text uses approved fonts",
+          "fonts": {
+            "headings": "Montserrat",
+            "body": "Figtree"
+          },
+          "validation": "font_check"
+        },
+        {
+          "id": "color_palette",
+          "name": "Color palette matches brand",
+          "description": "Verify colors match RevPal brand guidelines",
+          "colors": {
+            "primary": "#5F3B8C",
+            "primaryName": "Deep Grape",
+            "secondary": "#3E4A61",
+            "secondaryName": "Slate Indigo",
+            "accent": "#E99560",
+            "accentName": "Muted Apricot",
+            "success": "#6FBF73",
+            "error": "#E94B3C"
+          },
+          "validation": "color_check",
+          "tolerance": 5
+        },
+        {
+          "id": "disclaimer",
+          "name": "Standard disclaimer included",
+          "description": "Verify disclaimer present on final or appendix slide",
+          "location": "last_slide_or_appendix",
+          "validation": "text_contains",
+          "expected": "OpsPal, by RevPal"
+        }
+      ]
+    },
+    "content": {
+      "required": true,
+      "severity": "error",
+      "checks": [
+        {
+          "id": "no_placeholders",
+          "name": "No placeholder text remaining",
+          "description": "Verify all {{placeholder}} tokens have been replaced",
+          "validation": "text_not_contains",
+          "patterns": ["{{", "}}"],
+          "excludeSlides": []
+        },
+        {
+          "id": "data_cited",
+          "name": "All data cited with sources",
+          "description": "Verify quantitative claims have citations",
+          "validation": "sources_present",
+          "quantitativePatterns": [
+            "\\d+%",
+            "\\$\\d+",
+            "\\d+x",
+            "\\d+ increase",
+            "\\d+ decrease"
+          ],
+          "requireSources": true
+        },
+        {
+          "id": "no_fake_data",
+          "name": "No lorem ipsum or fake data",
+          "description": "Detect placeholder or fake content",
+          "validation": "text_not_contains",
+          "patterns": [
+            "lorem ipsum",
+            "\\[insert .*?\\]",
+            "\\[placeholder\\]",
+            "\\[TBD\\]",
+            "\\[TODO\\]",
+            "Example Corp",
+            "John Doe",
+            "Jane Smith",
+            "ACME Corporation"
+          ],
+          "caseInsensitive": true
+        },
+        {
+          "id": "slide_count",
+          "name": "Slide count within limits",
+          "description": "Verify slide count is reasonable",
+          "validation": "count_check",
+          "minSlides": 1,
+          "maxSlides": 50,
+          "warnAbove": 30
+        }
+      ]
+    },
+    "layout": {
+      "required": true,
+      "severity": "warning",
+      "checks": [
+        {
+          "id": "no_overflow",
+          "name": "No text overflow detected",
+          "description": "Verify all text fits within slide boundaries",
+          "validation": "overflow_check",
+          "autoFix": true,
+          "fixStrategy": "4_tier"
+        },
+        {
+          "id": "images_scaled",
+          "name": "Images properly scaled",
+          "description": "Verify images fit within slide bounds",
+          "validation": "image_bounds_check",
+          "maxWidth": "90%",
+          "maxHeight": "80%"
+        },
+        {
+          "id": "wcag_contrast",
+          "name": "WCAG color contrast",
+          "description": "Ensure text-background contrast meets WCAG AA",
+          "validation": "contrast_ratio",
+          "minimumRatio": 4.5,
+          "standard": "WCAG_AA",
+          "applyTo": ["text", "headings"]
+        }
+      ]
+    },
+    "accessibility": {
+      "required": false,
+      "severity": "info",
+      "checks": [
+        {
+          "id": "alt_text",
+          "name": "Alt text on all images",
+          "description": "Verify images have descriptive alt text",
+          "validation": "alt_text_check",
+          "minLength": 10,
+          "maxLength": 125
+        },
+        {
+          "id": "reading_order",
+          "name": "Reading order logical",
+          "description": "Verify slide elements follow logical reading order",
+          "validation": "reading_order_check",
+          "expectedOrder": ["title", "body", "footer"]
+        },
+        {
+          "id": "color_not_sole_indicator",
+          "name": "Color not sole indicator",
+          "description": "Ensure information isn't conveyed by color alone",
+          "validation": "color_independence_check"
+        }
+      ]
+    }
+  },
+  "limits": {
+    "maxSlides": 50,
+    "maxBulletsPerSlide": 5,
+    "maxWordsPerBullet": 15,
+    "maxWordsPerTitle": 10,
+    "maxWordsPerSlide": 30,
+    "maxElementsPerSlide": 6,
+    "minFontSize": 12,
+    "maxFontSize": 72,
+    "maxImageSizeMB": 10
+  },
+  "overflowStrategies": {
+    "tiers": [
+      {
+        "level": 1,
+        "name": "Reduce Font Size",
+        "trigger": {
+          "overflowPercentage": "< 10%"
+        },
+        "action": "reduce_font",
+        "parameters": {
+          "maxReduction": 3,
+          "minFontSize": 12
+        }
+      },
+      {
+        "level": 2,
+        "name": "Abbreviate Content",
+        "trigger": {
+          "overflowPercentage": "10-30%"
+        },
+        "action": "abbreviate",
+        "parameters": {
+          "targetReduction": 0.25,
+          "preserveMeaning": true
+        }
+      },
+      {
+        "level": 3,
+        "name": "Split Slide",
+        "trigger": {
+          "overflowPercentage": "30-50%"
+        },
+        "action": "split",
+        "parameters": {
+          "breakpoint": 0.5,
+          "continuationLabel": "(cont.)"
+        }
+      },
+      {
+        "level": 4,
+        "name": "Move to Appendix",
+        "trigger": {
+          "overflowPercentage": "> 50%"
+        },
+        "action": "appendix",
+        "parameters": {
+          "referenceSlide": true,
+          "appendixLabel": "Appendix"
+        }
+      }
+    ]
+  },
+  "contentGuidelines": {
+    "tone": {
+      "executive": "concise, data-driven, action-oriented",
+      "technical": "analytical, thorough, evidence-based",
+      "sales": "engaging, benefit-focused, customer-centric",
+      "customer": "collaborative, transparent, forward-looking"
+    },
+    "punchline": {
+      "label": "Punchline",
+      "maxWords": 12
+    },
+    "assertionTitles": {
+      "required": true,
+      "style": "assertive",
+      "bluf": true
+    },
+    "bulletPoints": {
+      "maxPerSlide": 5,
+      "maxWordsPerBullet": 15,
+      "style": "sentence_fragments",
+      "startWithVerb": true,
+      "oneIdeaPerBullet": true,
+      "parallelStructure": true,
+      "noTerminalPunctuation": true
+    },
+    "titles": {
+      "maxWords": 10,
+      "style": "descriptive",
+      "capitalization": "title_case"
+    },
+    "citations": {
+      "required": true,
+      "format": "[Source Name]",
+      "location": "slide_notes_or_footnote"
+    }
+  },
+  "runbook": {
+    "punchlineLabels": ["punchline", "tldr", "tl;dr"],
+    "staticHeadingMarkers": ["[static]", "(static)", "[locked]", "(locked)", "[editable]", "(editable)"],
+    "staticTitlePatterns": []
+  },
+  "validationLevels": {
+    "error": {
+      "description": "Critical issues that prevent delivery",
+      "blockDelivery": true,
+      "requireFix": true
+    },
+    "warning": {
+      "description": "Issues that should be addressed but don't block",
+      "blockDelivery": false,
+      "recommendFix": true
+    },
+    "info": {
+      "description": "Best practice suggestions",
+      "blockDelivery": false,
+      "recommendFix": false
+    }
+  },
+  "autoFix": {
+    "enabled": true,
+    "rules": {
+      "overflow": {
+        "autoFix": true,
+        "maxAttempts": 3
+      },
+      "font_size": {
+        "autoFix": true,
+        "maxAttempts": 1
+      },
+      "image_scale": {
+        "autoFix": true,
+        "maxAttempts": 1
+      },
+      "placeholders": {
+        "autoFix": false,
+        "reason": "Requires human judgment"
+      },
+      "branding": {
+        "autoFix": false,
+        "reason": "Manual verification required"
+      }
+    }
+  },
+  "reporting": {
+    "format": "markdown",
+    "includeSummary": true,
+    "includeSeverityCounts": true,
+    "includeFixSuggestions": true,
+    "outputLocation": "./validation-reports/",
+    "filename": "slides-validation-{timestamp}.md"
+  }
+}

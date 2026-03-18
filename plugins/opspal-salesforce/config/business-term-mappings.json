@@ -1,0 +1,357 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Business term to Salesforce report construct mappings. Each term maps to one or more interpretations with disambiguation flags. Used by the Semantic Disambiguator to surface ambiguity rather than guess.",
+  "terms": {
+    "churn": {
+      "category": "retention",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Logo churn (count of lost accounts)",
+          "object": "Account",
+          "filter": "Status__c = 'Churned' OR Type = 'Former Customer'",
+          "metric": "COUNT",
+          "context_hints": ["logo", "account", "customer count"]
+        },
+        {
+          "label": "Revenue churn (ARR lost from churned deals)",
+          "object": "Opportunity",
+          "filter": "Type IN ('Churn','Downgrade') AND StageName = 'Closed Lost'",
+          "metric": "SUM(Amount)",
+          "context_hints": ["revenue", "arr", "dollar", "amount"]
+        }
+      ]
+    },
+    "pipeline": {
+      "category": "sales",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Open pipeline (all non-closed stages)",
+          "object": "Opportunity",
+          "filter": "IsClosed = false",
+          "metric": "SUM(Amount)",
+          "context_hints": ["open", "all", "total"]
+        },
+        {
+          "label": "Qualified pipeline (past qualification stage)",
+          "object": "Opportunity",
+          "filter": "IsClosed = false AND StageName NOT IN ('Prospecting','Qualification')",
+          "metric": "SUM(Amount)",
+          "context_hints": ["qualified", "quality", "real"]
+        },
+        {
+          "label": "Weighted pipeline (probability-adjusted)",
+          "object": "Opportunity",
+          "filter": "IsClosed = false",
+          "metric": "SUM(Amount * Probability)",
+          "context_hints": ["weighted", "probability", "expected"]
+        }
+      ]
+    },
+    "win_rate": {
+      "category": "sales",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Win rate by count (won / total closed)",
+          "object": "Opportunity",
+          "filter": "IsClosed = true",
+          "metric": "COUNT(Won) / COUNT(Closed)",
+          "context_hints": ["count", "deal", "number"]
+        },
+        {
+          "label": "Win rate by value (won revenue / total closed revenue)",
+          "object": "Opportunity",
+          "filter": "IsClosed = true",
+          "metric": "SUM(Won Amount) / SUM(Closed Amount)",
+          "context_hints": ["value", "revenue", "dollar", "amount"]
+        }
+      ]
+    },
+    "bookings": {
+      "category": "sales",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "New bookings (new business only)",
+          "object": "Opportunity",
+          "filter": "StageName = 'Closed Won' AND Type = 'New Business'",
+          "metric": "SUM(Amount)",
+          "context_hints": ["new", "new business"]
+        },
+        {
+          "label": "Total bookings (all closed won)",
+          "object": "Opportunity",
+          "filter": "StageName = 'Closed Won'",
+          "metric": "SUM(Amount)",
+          "context_hints": ["total", "all"]
+        },
+        {
+          "label": "Net bookings (new + expansion - churn)",
+          "object": "Opportunity",
+          "filter": "StageName = 'Closed Won'",
+          "metric": "SUM(Amount) segmented by Type",
+          "context_hints": ["net", "including churn"]
+        }
+      ]
+    },
+    "arr": {
+      "category": "revenue",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Current ARR (active subscriptions annualized)",
+          "object": "Opportunity",
+          "filter": "Type = 'Subscription' AND Status = 'Active'",
+          "metric": "SUM(ARR__c)",
+          "context_hints": ["current", "active", "today"]
+        },
+        {
+          "label": "Ending ARR (period-end snapshot)",
+          "object": "Opportunity",
+          "filter": "Subscription_End_Date__c >= period_end",
+          "metric": "SUM(ARR__c)",
+          "context_hints": ["ending", "period", "quarter-end"]
+        }
+      ]
+    },
+    "nrr": {
+      "category": "retention",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Net Revenue Retention (ending ARR / beginning ARR)",
+          "object": "Opportunity",
+          "filter": "Cohort-based: same customer set at period start vs end",
+          "metric": "(Beginning ARR + Expansion - Contraction - Churn) / Beginning ARR",
+          "context_hints": []
+        }
+      ]
+    },
+    "grr": {
+      "category": "retention",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Gross Revenue Retention (excludes expansion)",
+          "object": "Opportunity",
+          "filter": "Cohort-based: same customer set",
+          "metric": "(Beginning ARR - Contraction - Churn) / Beginning ARR",
+          "context_hints": []
+        }
+      ]
+    },
+    "expansion": {
+      "category": "revenue",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Expansion revenue (upsell + cross-sell)",
+          "object": "Opportunity",
+          "filter": "Type IN ('Upsell','Cross-Sell','Expansion') AND StageName = 'Closed Won'",
+          "metric": "SUM(Amount)",
+          "context_hints": ["revenue", "upsell", "cross-sell"]
+        },
+        {
+          "label": "Expansion count (number of expansion deals)",
+          "object": "Opportunity",
+          "filter": "Type IN ('Upsell','Cross-Sell','Expansion') AND StageName = 'Closed Won'",
+          "metric": "COUNT",
+          "context_hints": ["count", "deals", "number"]
+        }
+      ]
+    },
+    "contraction": {
+      "category": "revenue",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Contraction revenue (downgrades, seat reductions)",
+          "object": "Opportunity",
+          "filter": "Type IN ('Downgrade','Contraction') AND StageName = 'Closed Won'",
+          "metric": "SUM(Amount)",
+          "context_hints": []
+        }
+      ]
+    },
+    "new_business": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "New business (first-time customers)",
+          "object": "Opportunity",
+          "filter": "Type = 'New Business' AND StageName = 'Closed Won'",
+          "metric": "SUM(Amount)",
+          "context_hints": []
+        }
+      ]
+    },
+    "renewal": {
+      "category": "retention",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Renewal rate (renewed / up for renewal)",
+          "object": "Opportunity",
+          "filter": "Type = 'Renewal'",
+          "metric": "COUNT(Won) / COUNT(Total)",
+          "context_hints": ["rate", "percentage"]
+        },
+        {
+          "label": "Renewal revenue (total renewed ARR)",
+          "object": "Opportunity",
+          "filter": "Type = 'Renewal' AND StageName = 'Closed Won'",
+          "metric": "SUM(Amount)",
+          "context_hints": ["revenue", "amount", "dollar"]
+        },
+        {
+          "label": "Upcoming renewals (due for renewal)",
+          "object": "Opportunity",
+          "filter": "Type = 'Renewal' AND IsClosed = false",
+          "metric": "SUM(Amount)",
+          "context_hints": ["upcoming", "due", "open"]
+        }
+      ]
+    },
+    "close_rate": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Close rate (won / total closed, by count)",
+          "object": "Opportunity",
+          "filter": "IsClosed = true",
+          "metric": "COUNT(Won) / COUNT(Closed)",
+          "context_hints": []
+        }
+      ]
+    },
+    "sales_cycle": {
+      "category": "sales",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Sales cycle for won deals (avg days created->closed won)",
+          "object": "Opportunity",
+          "filter": "StageName = 'Closed Won'",
+          "metric": "AVG(CloseDate - CreatedDate)",
+          "context_hints": ["won", "closed won", "winning"]
+        },
+        {
+          "label": "Sales cycle for all closed (avg days created->any close)",
+          "object": "Opportunity",
+          "filter": "IsClosed = true",
+          "metric": "AVG(CloseDate - CreatedDate)",
+          "context_hints": ["all", "total", "average"]
+        }
+      ]
+    },
+    "aso": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Average Sale/Order (avg deal size for won opps)",
+          "object": "Opportunity",
+          "filter": "StageName = 'Closed Won'",
+          "metric": "AVG(Amount)",
+          "context_hints": []
+        }
+      ]
+    },
+    "coverage_ratio": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Pipeline coverage ratio (pipeline / quota)",
+          "object": "Opportunity",
+          "filter": "IsClosed = false",
+          "metric": "SUM(Pipeline Amount) / Target Quota",
+          "context_hints": []
+        }
+      ]
+    },
+    "quota_attainment": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Quota attainment (closed won / quota target)",
+          "object": "Opportunity",
+          "filter": "StageName = 'Closed Won'",
+          "metric": "SUM(Amount) / Quota Target",
+          "context_hints": []
+        }
+      ]
+    },
+    "forecast_accuracy": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Forecast accuracy (forecast vs actual, by period)",
+          "object": "Opportunity",
+          "filter": "IsClosed = true",
+          "metric": "1 - ABS(Forecast - Actual) / Actual",
+          "context_hints": []
+        }
+      ]
+    },
+    "velocity": {
+      "category": "sales",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Pipeline velocity (# opps * win rate * avg deal / cycle)",
+          "object": "Opportunity",
+          "filter": "IsClosed = false",
+          "metric": "Composite: count * win_rate * avg_deal / avg_cycle",
+          "context_hints": ["pipeline", "sales"]
+        },
+        {
+          "label": "Deal velocity (time in each stage)",
+          "object": "Opportunity",
+          "filter": "Stage history analysis",
+          "metric": "AVG(days per stage)",
+          "context_hints": ["stage", "deal", "movement"]
+        }
+      ]
+    },
+    "slipped": {
+      "category": "sales",
+      "disambiguation_required": false,
+      "interpretations": [
+        {
+          "label": "Slipped deals (close date pushed beyond original)",
+          "object": "Opportunity",
+          "filter": "CloseDate > Original_Close_Date__c AND IsClosed = false",
+          "metric": "COUNT and SUM(Amount)",
+          "context_hints": []
+        }
+      ]
+    },
+    "conversion_rate": {
+      "category": "marketing",
+      "disambiguation_required": true,
+      "interpretations": [
+        {
+          "label": "Lead conversion rate (converted / total leads)",
+          "object": "Lead",
+          "filter": "All leads in period",
+          "metric": "COUNT(Converted) / COUNT(Total)",
+          "context_hints": ["lead", "mql"]
+        },
+        {
+          "label": "Stage conversion rate (opportunities progressing)",
+          "object": "Opportunity",
+          "filter": "Stage progression analysis",
+          "metric": "COUNT(entered next stage) / COUNT(entered this stage)",
+          "context_hints": ["stage", "opportunity", "funnel"]
+        }
+      ]
+    }
+  }
+}

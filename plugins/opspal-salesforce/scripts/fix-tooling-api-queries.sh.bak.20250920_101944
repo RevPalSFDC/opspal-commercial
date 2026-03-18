@@ -1,0 +1,88 @@
+#!/bin/bash
+
+###############################################################################
+# Fix Tooling API Query Issues
+#
+# Corrects common Tooling API query mistakes across the codebase:
+# - CustomField -> FieldDefinition
+# - Proper field reference patterns
+# - Null check handling in JQ
+###############################################################################
+
+echo "🔧 Fixing Tooling API queries across the codebase..."
+
+# Function to fix a file
+fix_file() {
+    local file="$1"
+    local temp_file="${file}.tmp"
+    local changed=false
+
+    # Create backup
+    cp "$file" "${file}.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+
+    # Fix Tooling API query patterns
+    sed -e 's/FROM CustomField WHERE/FROM FieldDefinition WHERE/g' \
+        -e 's/SELECT.*FROM CustomField/SELECT Id, DeveloperName, QualifiedApiName FROM FieldDefinition/g' \
+        -e "s/TableEnumOrId = '\([^']*\)'/EntityDefinition.QualifiedApiName = '\1'/g" \
+        -e "s/DeveloperName = '\([^']*\)'/QualifiedApiName LIKE '%.\1'/g" \
+        -e 's/jq -r "\.result/jq -r ".result // {}/' \
+        -e 's/jq "\.result/jq ".result // {}/' \
+        -e 's/| jq -r \./ | jq -r ". // empty"/' \
+        "$file" > "$temp_file"
+
+    # Check if file changed
+    if ! cmp -s "$file" "$temp_file"; then
+        mv "$temp_file" "$file"
+        changed=true
+        echo "✅ Fixed: $file"
+    else
+        rm "$temp_file"
+        rm "${file}.bak."* 2>/dev/null || true
+    fi
+}
+
+# Fix all shell scripts
+echo "🔍 Searching for shell scripts with Tooling API queries..."
+find . -type f \( -name "*.sh" -o -name "*.bash" \) -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(FROM CustomField|TableEnumOrId)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+# Fix JavaScript/TypeScript files
+echo "🔍 Searching for JS/TS files with Tooling API queries..."
+find . -type f \( -name "*.js" -o -name "*.ts" \) -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(FROM CustomField|TableEnumOrId)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+# Fix Python files
+echo "🔍 Searching for Python files with Tooling API queries..."
+find . -type f -name "*.py" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(FROM CustomField|TableEnumOrId)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+# Fix documentation files
+echo "🔍 Searching for documentation with Tooling API examples..."
+find . -type f -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(FROM CustomField|TableEnumOrId)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+echo ""
+echo "✨ Tooling API query fixes complete!"
+echo ""
+echo "📋 Summary of fixes applied:"
+echo "  - CustomField → FieldDefinition (Tooling API object)"
+echo "  - TableEnumOrId → EntityDefinition.QualifiedApiName"
+echo "  - DeveloperName → QualifiedApiName with proper pattern"
+echo "  - Added null safety to JQ queries (// {} and // empty)"
+echo ""
+echo "💡 Remember:"
+echo "  - FieldDefinition is the correct Tooling API object for field metadata"
+echo "  - Always use null-safe JQ patterns to prevent errors"
+echo "  - Test queries in different orgs to ensure compatibility"

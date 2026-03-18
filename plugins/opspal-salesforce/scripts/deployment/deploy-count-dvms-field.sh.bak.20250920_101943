@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Script to deploy Count_of_DVMs__c field to Account object in beta-sandbox
+
+echo "🚀 Deploying Count_of_DVMs__c field to beta-sandbox..."
+
+# Check if beta-sandbox org is authenticated
+echo "📋 Checking authentication for beta-sandbox..."
+if ! sf org display --target-org beta-sandbox >/dev/null 2>&1; then
+    echo "❌ beta-sandbox org is not authenticated."
+    echo "Please authenticate first:"
+    echo "sf org login web --alias beta-sandbox --instance-url https://test.salesforce.com"
+    exit 1
+fi
+
+echo "✅ beta-sandbox org is authenticated"
+
+# Deploy the custom field
+echo "📦 Deploying Count_of_DVMs__c field to Account object..."
+
+sf project deploy start \
+    --source-dir metadata \
+    --target-org beta-sandbox \
+    --wait 10 \
+    --verbose
+
+if [ $? -eq 0 ]; then
+    echo "✅ Successfully deployed Count_of_DVMs__c field to Account object in beta-sandbox"
+    
+    # Verify the deployment
+    echo "🔍 Verifying field deployment..."
+    sf data query \
+        --query "SELECT DeveloperName, Label, DataType FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'" \
+        --target-org beta-sandbox
+        
+else
+    echo "❌ Deployment failed"
+    exit 1
+fi
+
+echo "🎉 Deployment completed successfully!"

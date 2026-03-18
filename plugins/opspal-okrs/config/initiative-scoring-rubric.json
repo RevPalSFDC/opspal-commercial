@@ -1,0 +1,158 @@
+{
+  "version": "1.0.0",
+  "description": "5-dimension initiative scoring rubric for OKR-linked initiative prioritization",
+  "total_possible": 100,
+  "dimensions": [
+    {
+      "id": "revenue_impact",
+      "name": "Revenue Impact",
+      "weight": 20,
+      "description": "Estimated ARR contribution, weighted by time-to-impact",
+      "scoring_guide": {
+        "0-4": "No measurable revenue impact or speculative at best",
+        "5-9": "Indirect revenue impact through efficiency or enablement",
+        "10-14": "Direct impact on $100K-$500K ARR within 2-4 quarters",
+        "15-17": "Direct impact on $500K-$2M ARR within 1-2 quarters",
+        "18-20": "Direct impact on >$2M ARR within current quarter"
+      },
+      "data_sources": ["salesforce:pipeline", "salesforce:forecast", "hubspot:deals"],
+      "stage_modifiers": {
+        "seed": { "multiplier": 1.5, "rationale": "Small ARR moves are proportionally larger" },
+        "series-a": { "multiplier": 1.2, "rationale": "Growth-phase prioritizes revenue acceleration" },
+        "series-b": { "multiplier": 1.0, "rationale": "Baseline scoring" },
+        "series-c": { "multiplier": 0.9, "rationale": "Efficiency matters more than top-line" },
+        "growth": { "multiplier": 0.8, "rationale": "Unit economics trump raw growth" },
+        "scale": { "multiplier": 0.7, "rationale": "Margin and NRR are primary levers" }
+      },
+      "funnel_leverage": {
+        "description": "Rewards initiatives that improve a constrained funnel stage with strong downstream revenue leverage.",
+        "max_bonus": 5,
+        "default_average_contract_value": 25000,
+        "expected_lift_cap_pct": 30,
+        "stage_weights": {
+          "visitor": 1.3,
+          "signup": 1.15,
+          "activated": 1.1,
+          "pql": 1.0,
+          "sql": 0.9,
+          "opportunity": 0.8,
+          "proposal": 0.7,
+          "closed_won": 0.6
+        },
+        "bonus_thresholds": [
+          { "min_incremental_arr": 1500000, "bonus": 5 },
+          { "min_incremental_arr": 750000, "bonus": 4 },
+          { "min_incremental_arr": 250000, "bonus": 3 },
+          { "min_incremental_arr": 100000, "bonus": 2 },
+          { "min_incremental_arr": 25000, "bonus": 1 }
+        ]
+      }
+    },
+    {
+      "id": "effort_cost",
+      "name": "Effort / Cost (Inverted)",
+      "weight": 20,
+      "description": "Person-weeks, technical complexity, dependency count. Lower effort = higher score",
+      "scoring_guide": {
+        "0-4": ">20 person-weeks, multiple team dependencies, new infrastructure required",
+        "5-9": "10-20 person-weeks, 2-3 team dependencies",
+        "10-14": "4-10 person-weeks, 1-2 team dependencies",
+        "15-17": "1-4 person-weeks, single team, existing tooling",
+        "18-20": "<1 person-week, no dependencies, configuration change only"
+      },
+      "data_sources": ["manual:estimation"],
+      "stage_modifiers": {
+        "seed": { "multiplier": 1.3, "rationale": "Small teams must be ruthlessly efficient" },
+        "series-a": { "multiplier": 1.1, "rationale": "Lean teams still constrained" },
+        "series-b": { "multiplier": 1.0, "rationale": "Baseline" },
+        "series-c": { "multiplier": 0.9, "rationale": "More capacity available" },
+        "growth": { "multiplier": 0.8, "rationale": "Can absorb larger initiatives" },
+        "scale": { "multiplier": 0.7, "rationale": "Effort is less constraining at scale" }
+      }
+    },
+    {
+      "id": "strategic_alignment",
+      "name": "Strategic Alignment",
+      "weight": 20,
+      "description": "Match to active Objectives, board priorities, PLG/SLG motion fit",
+      "scoring_guide": {
+        "0-4": "No clear link to any active objective or company priority",
+        "5-9": "Tangentially related to a secondary objective",
+        "10-14": "Directly supports one active objective",
+        "15-17": "Directly supports a primary objective and aligns with board priorities",
+        "18-20": "Critical enabler for the #1 company priority, multi-objective impact"
+      },
+      "data_sources": ["okr:active_objectives", "manual:board_priorities"],
+      "gtm_model_modifiers": {
+        "plg": { "bonus_if": "initiative_involves_product_led_activation", "bonus": 3 },
+        "slg": { "bonus_if": "initiative_involves_sales_enablement", "bonus": 2 },
+        "hybrid": { "bonus_if": "initiative_bridges_plg_and_slg", "bonus": 4 }
+      }
+    },
+    {
+      "id": "timing_sensitivity",
+      "name": "Timing Sensitivity",
+      "weight": 20,
+      "description": "Market window, competitive pressure (Gong signals), seasonality, contract cycles",
+      "scoring_guide": {
+        "0-4": "No time pressure, can be done any quarter",
+        "5-9": "Mild seasonal benefit if done soon",
+        "10-14": "Clear benefit to doing this quarter vs next",
+        "15-17": "Competitive threat or market window closing within 1-2 quarters",
+        "18-20": "Urgent: customer churn risk, competitive loss pattern, or regulatory deadline"
+      },
+      "data_sources": ["gong:competitive_trackers", "salesforce:renewal_calendar", "manual:market_signals"],
+      "gong_signal_integration": {
+        "description": "Optional weighting model for urgency signals from Gong or similar conversation intelligence systems.",
+        "enabled": true,
+        "weights": {
+          "competitive_mentions_delta_pct": 0.35,
+          "competitive_loss_count": 0.4,
+          "urgent_buying_language_count": 0.25
+        },
+        "thresholds": {
+          "competitive_mentions_delta_pct": { "medium": 0.15, "high": 0.3 },
+          "competitive_loss_count": { "medium": 2, "high": 4 },
+          "urgent_buying_language_count": { "medium": 3, "high": 6 }
+        }
+      },
+      "stage_modifiers": {
+        "seed": { "multiplier": 0.8, "rationale": "Less market pressure at small scale" },
+        "series-a": { "multiplier": 1.0, "rationale": "Baseline" },
+        "series-b": { "multiplier": 1.1, "rationale": "Competitive dynamics intensify" },
+        "series-c": { "multiplier": 1.2, "rationale": "Market positioning critical" },
+        "growth": { "multiplier": 1.3, "rationale": "Category dynamics matter most" },
+        "scale": { "multiplier": 1.0, "rationale": "Market position usually established" }
+      }
+    },
+    {
+      "id": "confidence_data_quality",
+      "name": "Confidence / Data Quality",
+      "weight": 20,
+      "description": "Strength of evidence: live baseline data, historical analog, benchmark coverage",
+      "scoring_guide": {
+        "0-4": "No data support, pure hypothesis",
+        "5-9": "Industry benchmarks only, no org-specific data",
+        "10-14": "Org-specific data for 1-2 metrics, some benchmarks",
+        "15-17": "Strong org data + benchmarks + historical analog from similar initiatives",
+        "18-20": "Full live baseline with query evidence, proven pattern from prior cycle, high benchmark coverage"
+      },
+      "data_sources": ["all:query_evidence", "okr:outcome_history", "benchmarks:revops-kpi-definitions"],
+      "stage_modifiers": {
+        "seed": { "multiplier": 0.7, "rationale": "Limited data expected, don't penalize" },
+        "series-a": { "multiplier": 0.85, "rationale": "Building data foundation" },
+        "series-b": { "multiplier": 1.0, "rationale": "Should have reasonable data by now" },
+        "series-c": { "multiplier": 1.1, "rationale": "Data-driven decisions expected" },
+        "growth": { "multiplier": 1.2, "rationale": "Must justify with evidence" },
+        "scale": { "multiplier": 1.3, "rationale": "Data-poor initiatives are red flags" }
+      }
+    }
+  ],
+  "composite_formula": "sum(dimension_score * stage_modifier) + gtm_bonuses, capped at 100",
+  "thresholds": {
+    "must_do": { "min": 75, "label": "Must-Do: Top quartile, recommend for OKR inclusion" },
+    "should_do": { "min": 50, "label": "Should-Do: Strong candidates, include if capacity allows" },
+    "nice_to_have": { "min": 25, "label": "Nice-to-Have: Low priority, park for future cycles" },
+    "deprioritize": { "min": 0, "label": "Deprioritize: Insufficient evidence or alignment" }
+  }
+}

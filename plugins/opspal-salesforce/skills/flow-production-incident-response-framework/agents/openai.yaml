@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flow Production Incident Response Framework"
+  short_description: "Help with Flow Production Incident Response Framework tasks"
+  default_prompt: "Use $flow-production-incident-response-framework to execute this workflow safely and produce the expected artifacts."

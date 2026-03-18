@@ -1,0 +1,96 @@
+{
+  "version": "3.0.0",
+  "description": "Routing keyword registration for the OKR strategy plugin",
+  "patterns": [
+    {
+      "pattern_id": "okr-strategy-orchestrator",
+      "keywords": ["okr", "objective", "key result", "okr generate", "strategic okr", "revenue okr", "okr cycle"],
+      "agent": "opspal-okrs:okr-strategy-orchestrator",
+      "blocking": true
+    },
+    {
+      "pattern_id": "okr-initiative-scoring",
+      "keywords": ["initiative prioritization", "score initiative", "initiative backlog", "okr prioritize"],
+      "agent": "opspal-okrs:okr-initiative-prioritizer",
+      "blocking": true
+    },
+    {
+      "pattern_id": "okr-progress-status",
+      "keywords": ["okr status", "okr progress", "kr health", "okr tracking"],
+      "agent": "opspal-okrs:okr-progress-tracker",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-executive-reporting",
+      "keywords": ["okr report", "board okr report", "executive okr report", "bluf okr"],
+      "agent": "opspal-okrs:okr-executive-reporter",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-approval",
+      "keywords": ["approve okr", "activate okr", "okr approve"],
+      "agent": "opspal-okrs:okr-strategy-orchestrator",
+      "blocking": true
+    },
+    {
+      "pattern_id": "okr-funnel-analysis",
+      "keywords": ["funnel leverage", "okr funnel", "full funnel analysis", "funnel bottleneck"],
+      "agent": "opspal-okrs:okr-funnel-analyst",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-asana-sync",
+      "keywords": ["okr asana", "sync okr asana", "asana okr bridge"],
+      "agent": "opspal-okrs:okr-asana-bridge",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-learning-engine",
+      "keywords": ["okr retrospective", "okr history", "okr learning", "okr calibration", "close cycle learning"],
+      "agent": "opspal-okrs:okr-learning-engine",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-plg-signals",
+      "keywords": ["okr plg", "plg signals", "pql signals", "product led okr", "hybrid okr"],
+      "agent": "opspal-okrs:okr-plg-specialist",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-benchmarking",
+      "keywords": ["okr benchmark", "benchmark okr", "okr peer comparison"],
+      "agent": "opspal-okrs:okr-initiative-evaluator",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-snapshot",
+      "keywords": ["revenue snapshot", "okr snapshot", "platform data snapshot"],
+      "agent": "opspal-okrs:okr-data-aggregator",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-generate",
+      "keywords": ["generate okr", "create okr", "draft okr", "okr set"],
+      "agent": "opspal-okrs:okr-generator",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-dashboard",
+      "keywords": ["okr dashboard", "okr heatmap", "visualize okr", "okr viz", "okr html", "kr confidence chart"],
+      "agent": "opspal-okrs:okr-dashboard-generator",
+      "blocking": true
+    },
+    {
+      "pattern_id": "okr-cadence",
+      "keywords": ["okr cadence", "okr schedule", "okr rhythm", "operating rhythm", "weekly check-in", "monthly scorecard", "okr rollout"],
+      "agent": "opspal-okrs:okr-cadence-manager",
+      "blocking": false
+    },
+    {
+      "pattern_id": "okr-alignment",
+      "keywords": ["okr alignment", "cascade audit", "okr cascade", "alignment score", "orphan objective", "cascade check"],
+      "agent": "opspal-okrs:okr-alignment-auditor",
+      "blocking": false
+    }
+  ]
+}

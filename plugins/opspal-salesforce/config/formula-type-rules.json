@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Flow Formula Type Rules",
+  "description": "Rules for TEXT() function usage and field type handling in Flow formulas",
+  "version": "1.0.0",
+  "created": "2025-10-24",
+  "addresses": "Cohort #5 - Flow TEXT() Wrapping ($12k ROI)",
+
+  "text_wrapping_rules": {
+    "never_wrap": {
+      "description": "Field types that should NEVER be wrapped in TEXT()",
+      "field_types": [
+        "id",
+        "reference",
+        "string",
+        "textarea",
+        "email",
+        "phone",
+        "url"
+      ],
+      "reason": "These fields are already Text type - TEXT() is redundant and causes errors",
+      "examples": {
+        "id_fields": {
+          "wrong": "TEXT(Id)",
+          "correct": "Id",
+          "error": "Incorrect parameter type for function TEXT()"
+        },
+        "lookup_fields": {
+          "wrong": "TEXT(AccountId)",
+          "correct": "AccountId",
+          "error": "Lookup/Master-Detail fields are already Text type"
+        },
+        "string_fields": {
+          "wrong": "TEXT(Name)",
+          "correct": "Name",
+          "error": "String fields don't need TEXT() wrapper"
+        }
+      }
+    },
+
+    "always_wrap": {
+      "description": "Field types that SHOULD be wrapped in TEXT() for string operations",
+      "field_types": [
+        "picklist",
+        "multipicklist",
+        "boolean",
+        "number",
+        "currency",
+        "percent",
+        "date",
+        "datetime",
+        "time"
+      ],
+      "reason": "These non-text types need conversion for string comparisons",
+      "examples": {
+        "picklist_fields": {
+          "wrong": "Status = 'Open'",
+          "correct": "TEXT(Status) = 'Open'",
+          "error": "ISBLANK or direct comparison on picklist without TEXT()"
+        },
+        "number_fields": {
+          "wrong": "Amount = '100'",
+          "correct": "Amount = 100 OR TEXT(Amount) = '100'",
+          "notes": "Use TEXT() only for string comparisons, not numeric"
+        }
+      }
+    },
+
+    "conditional_wrap": {
+      "description": "Field types where TEXT() depends on usage",
+      "scenarios": {
+        "formula_fields": {
+          "check": "Query formula return type",
+          "rule": "If formula returns Text, don't wrap. If returns Number/Date, wrap for string ops."
+        },
+        "calculated_fields": {
+          "check": "Query field type from describe",
+          "rule": "Follow same rules as base field type"
+        }
+      }
+    }
+  },
+
+  "field_type_detection": {
+    "by_suffix": {
+      "id_fields": {
+        "patterns": ["Id$", "__c$", "__r$"],
+        "likely_type": "id or reference",
+        "validation_required": true,
+        "notes": "Must query describe to confirm - some custom fields end in Id"
+      },
+      "custom_fields": {
+        "patterns": ["__c$"],
+        "likely_type": "unknown",
+        "validation_required": true,
+        "notes": "Custom fields can be any type - must query describe"
+      }
+    },
+
+    "by_describe_query": {
+      "command": "sf sobject describe --sobject {Object} --target-org {org}",
+      "parse": "result.fields.find(f => f.name === fieldName).type",
+      "cache": "Cache describe results for performance",
+      "recommended": true
+    }
+  },
+
+  "validation_rules": {
+    "text_on_id_field": {
+      "pattern": "TEXT\\s*\\(\\s*\\w*Id(__c|__r)?\\w*\\s*\\)",
+      "severity": "ERROR",
+      "message": "TEXT() wrapper on ID field is redundant",
+      "auto_fix": "Remove TEXT() wrapper",
+      "example": {
+        "wrong": "TEXT(AccountId) = '001...'",
+        "correct": "AccountId = '001...'"
+      }
+    },
+
+    "text_on_string_field": {
+      "pattern": "TEXT\\s*\\(\\s*[A-Z]\\w*\\s*\\)",
+      "severity": "WARNING",
+      "message": "TEXT() may be redundant on string field",
+      "auto_fix": "Check field type, remove if Text",
+      "validation_required": true
+    },
+
+    "no_text_on_picklist": {
+      "pattern": "(\\w+Status|\\w+Type|\\w+Stage)\\s*=\\s*['\"]",
+      "severity": "ERROR",
+      "message": "Picklist comparison without TEXT() will fail",
+      "auto_fix": "Wrap picklist field in TEXT()",
+      "example": {
+        "wrong": "Status = 'Open'",
+        "correct": "TEXT(Status) = 'Open'"
+      }
+    }
+  },
+
+  "auto_correction_rules": {
+    "remove_text_from_id": {
+      "description": "Remove TEXT() wrapper from ID/reference fields",
+      "pattern": "TEXT\\s*\\(\\s*(\\w*Id(__c|__r)?\\w*)\\s*\\)",
+      "replacement": "$1",
+      "conditions": ["Field type is id, reference, or string"],
+      "validation": "Query describe to confirm field type"
+    },
+
+    "add_text_to_picklist": {
+      "description": "Add TEXT() wrapper to picklist fields in comparisons",
+      "pattern": "(\\w+__c|Status|Type|Stage|Priority)\\s*=\\s*",
+      "replacement": "TEXT($1) = ",
+      "conditions": ["Field type is picklist or multipicklist"],
+      "validation": "Query describe to confirm picklist type"
+    }
+  },
+
+  "integration": {
+    "with_error_prevention_system": {
+      "description": "Integrate formula validation into sf-command-auto-corrector.js",
+      "trigger": "On flow deployment commands",
+      "actions": [
+        "Scan flow XML for formulas",
+        "Validate TEXT() usage",
+        "Auto-correct redundant wrapping",
+        "Block deployment if unfixable errors"
+      ]
+    },
+
+    "with_flow_formula_validator": {
+      "description": "Enhance existing flow-formula-validator.js",
+      "additions": [
+        "Add ID field detection",
+        "Add field type resolution",
+        "Add TEXT() redundancy checks",
+        "Integrate with Error Prevention System"
+      ]
+    }
+  }
+}

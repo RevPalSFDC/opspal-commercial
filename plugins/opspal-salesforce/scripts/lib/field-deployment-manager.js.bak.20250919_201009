@@ -1,0 +1,837 @@
+#!/usr/bin/env node
+
+/**
+ * Comprehensive Field Deployment Manager
+ * Orchestrates the complete field deployment lifecycle with all validations
+ * and error prevention mechanisms
+ */
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+// Import our utility modules
+const AutoFLSConfigurator = require('./auto-fls-configurator');
+const DuplicateFieldAnalyzer = require('./duplicate-field-analyzer');
+const MetadataPropagationMonitor = require('./metadata-propagation-monitor');
+
+class FieldDeploymentManager {
+    constructor(options = {}) {
+        this.orgAlias = options.orgAlias || process.env.SFDX_DEFAULT_USERNAME;
+        this.verbose = options.verbose || false;
+        this.dryRun = options.dryRun || false;
+        this.autoFix = options.autoFix || true;
+
+        // Initialize utility classes
+        this.flsConfigurator = new AutoFLSConfigurator({ orgAlias: this.orgAlias, verbose: this.verbose });
+        this.duplicateAnalyzer = new DuplicateFieldAnalyzer({ orgAlias: this.orgAlias, verbose: this.verbose });
+        this.propagationMonitor = new MetadataPropagationMonitor({ orgAlias: this.orgAlias, verbose: this.verbose });
+
+        // Deployment phases
+        this.phases = {
+            VALIDATE: 'Validation',
+            DEPLOY: 'Deployment',
+            PROPAGATE: 'Propagation',
+            CONFIGURE: 'Configuration',
+            VERIFY: 'Verification'
+        };
+    }
+
+    /**
+     * Main deployment method that orchestrates the entire process
+     */
+    async deployField(objectName, fieldMetadata, options = {}) {
+        console.log(`\n🚀 Field Deployment Manager`);
+        console.log('='.repeat(60));
+        console.log(`Object: ${objectName}`);
+        console.log(`Field: ${fieldMetadata.fullName || fieldMetadata.name}`);
+        console.log(`Org: ${this.orgAlias}`);
+        console.log('='.repeat(60));
+
+        const deploymentLog = {
+            startTime: new Date().toISOString(),
+            object: objectName,
+            field: fieldMetadata.fullName || fieldMetadata.name,
+            phases: {},
+            success: false,
+            errors: []
+        };
+
+        try {
+            // Phase 1: Validation
+            console.log(`\n📋 Phase 1: ${this.phases.VALIDATE}`);
+            const validationResult = await this.validateDeployment(objectName, fieldMetadata);
+            deploymentLog.phases.validation = validationResult;
+
+            if (!validationResult.success && !this.autoFix) {
+                throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
+            }
+
+            if (validationResult.warnings && validationResult.warnings.length > 0) {
+                console.log(`\n⚠️ Warnings detected:`);
+                validationResult.warnings.forEach(w => console.log(`  - ${w}`));
+
+                if (!options.skipWarnings && !this.confirmProceed()) {
+                    throw new Error('Deployment cancelled by user');
+                }
+            }
+
+            // Phase 2: Deployment
+            console.log(`\n🔧 Phase 2: ${this.phases.DEPLOY}`);
+            const deployResult = await this.deployFieldMetadata(objectName, fieldMetadata);
+            deploymentLog.phases.deployment = deployResult;
+
+            if (!deployResult.success) {
+                throw new Error(`Deployment failed: ${deployResult.error}`);
+            }
+
+            // Phase 3: Propagation Monitoring
+            console.log(`\n⏳ Phase 3: ${this.phases.PROPAGATE}`);
+            const propagationResult = await this.propagationMonitor.monitorFieldPropagation(
+                objectName,
+                fieldMetadata.fullName || fieldMetadata.name
+            );
+            deploymentLog.phases.propagation = propagationResult;
+
+            if (!propagationResult.success) {
+                console.log(`\n⚠️ Propagation incomplete. Attempting to continue...`);
+            }
+
+            // Phase 4: Configuration (FLS)
+            console.log(`\n🔐 Phase 4: ${this.phases.CONFIGURE}`);
+            const configResult = await this.configureFieldPermissions(
+                objectName,
+                fieldMetadata.fullName || fieldMetadata.name,
+                options.profiles,
+                options.permissionSets
+            );
+            deploymentLog.phases.configuration = configResult;
+
+            // Phase 5: Verification
+            console.log(`\n✅ Phase 5: ${this.phases.VERIFY}`);
+            const verifyResult = await this.verifyDeployment(
+                objectName,
+                fieldMetadata.fullName || fieldMetadata.name
+            );
+            deploymentLog.phases.verification = verifyResult;
+
+            deploymentLog.success = verifyResult.success;
+            deploymentLog.endTime = new Date().toISOString();
+
+            // Generate summary
+            this.generateDeploymentSummary(deploymentLog);
+
+            // Save deployment log
+            this.saveDeploymentLog(deploymentLog);
+
+            return deploymentLog;
+
+        } catch (error) {
+            deploymentLog.success = false;
+            deploymentLog.errors.push(error.message);
+            deploymentLog.endTime = new Date().toISOString();
+
+            console.error(`\n❌ Deployment failed: ${error.message}`);
+
+            // Attempt rollback if configured
+            if (options.enableRollback) {
+                console.log(`\n🔄 Attempting rollback...`);
+                await this.rollbackDeployment(objectName, fieldMetadata);
+            }
+
+            this.saveDeploymentLog(deploymentLog);
+            return deploymentLog;
+        }
+    }
+
+    /**
+     * Validate deployment before execution
+     */
+    async validateDeployment(objectName, fieldMetadata) {
+        const result = {
+            success: true,
+            errors: [],
+            warnings: [],
+            checks: {}
+        };
+
+        console.log('  Running validation checks...');
+
+        // Check 1: Duplicate field analysis
+        console.log('  ✓ Checking for duplicate fields...');
+        const duplicateAnalysis = await this.duplicateAnalyzer.analyzeObject(objectName);
+        result.checks.duplicates = duplicateAnalysis;
+
+        if (duplicateAnalysis.duplicates && duplicateAnalysis.duplicates.length > 0) {
+            const fieldName = (fieldMetadata.fullName || fieldMetadata.name).toLowerCase();
+
+            // Check if our new field would be a duplicate
+            const isDuplicate = duplicateAnalysis.duplicates.some(group => {
+                const names = [group.primary.name, ...group.duplicates.map(d => d.name)]
+                    .map(n => n.toLowerCase());
+                return names.some(n => this.similarFieldNames(n, fieldName));
+            });
+
+            if (isDuplicate) {
+                result.warnings.push(`Field appears to be a duplicate of existing field(s)`);
+                result.checks.duplicates.isDuplicate = true;
+            }
+        }
+
+        // Check 2: Object exists
+        console.log('  ✓ Verifying object exists...');
+        const objectExists = await this.verifyObjectExists(objectName);
+        result.checks.objectExists = objectExists;
+
+        if (!objectExists) {
+            result.success = false;
+            result.errors.push(`Object ${objectName} does not exist`);
+        }
+
+        // Check 3: Field name validity
+        console.log('  ✓ Validating field name...');
+        const nameValid = this.validateFieldName(fieldMetadata.fullName || fieldMetadata.name);
+        result.checks.fieldNameValid = nameValid;
+
+        if (!nameValid.valid) {
+            result.success = false;
+            result.errors.push(`Invalid field name: ${nameValid.reason}`);
+        }
+
+        // Check 4: Field doesn't already exist
+        console.log('  ✓ Checking if field already exists...');
+        const fieldExists = await this.checkFieldExists(objectName, fieldMetadata.fullName || fieldMetadata.name);
+        result.checks.fieldExists = fieldExists;
+
+        if (fieldExists) {
+            result.success = false;
+            result.errors.push(`Field ${fieldMetadata.fullName || fieldMetadata.name} already exists`);
+        }
+
+        // Check 5: Metadata structure validation
+        console.log('  ✓ Validating metadata structure...');
+        const metadataValid = this.validateMetadataStructure(fieldMetadata);
+        result.checks.metadataValid = metadataValid;
+
+        if (!metadataValid.valid) {
+            result.success = false;
+            result.errors.push(`Invalid metadata: ${metadataValid.errors.join(', ')}`);
+        }
+
+        // Check 6: Field limits
+        console.log('  ✓ Checking field limits...');
+        const limitsOk = await this.checkFieldLimits(objectName);
+        result.checks.fieldLimits = limitsOk;
+
+        if (!limitsOk.ok) {
+            result.warnings.push(`Approaching field limit: ${limitsOk.message}`);
+        }
+
+        return result;
+    }
+
+    /**
+     * Deploy field metadata
+     */
+    async deployFieldMetadata(objectName, fieldMetadata) {
+        try {
+            console.log('  Creating deployment package...');
+
+            // Create temporary deployment directory
+            const deployDir = path.join(process.cwd(), '.field-deploy-temp', Date.now().toString());
+            const metadataDir = path.join(deployDir, 'force-app', 'main', 'default', 'objects', objectName, 'fields');
+
+            // Create directory structure
+            fs.mkdirSync(metadataDir, { recursive: true });
+
+            // Write field metadata
+            const fieldFileName = `${fieldMetadata.fullName || fieldMetadata.name}.field-meta.xml`;
+            const fieldPath = path.join(metadataDir, fieldFileName);
+
+            const xmlContent = this.generateFieldXML(fieldMetadata);
+            fs.writeFileSync(fieldPath, xmlContent);
+
+            console.log('  Deploying to Salesforce...');
+
+            if (this.dryRun) {
+                console.log('  [DRY RUN] Would deploy field to Salesforce');
+
+                // Clean up
+                fs.rmSync(deployDir, { recursive: true, force: true });
+
+                return {
+                    success: true,
+                    dryRun: true,
+                    message: 'Dry run completed'
+                };
+            }
+
+            // Deploy using sf CLI
+            const deployCmd = `sf project deploy start --source-dir ${deployDir} --target-org ${this.orgAlias} --wait 10 --json`;
+            const deployResult = execSync(deployCmd, { encoding: 'utf8' });
+            const deployData = JSON.parse(deployResult);
+
+            // Clean up temporary directory
+            fs.rmSync(deployDir, { recursive: true, force: true });
+
+            if (deployData.status === 0) {
+                return {
+                    success: true,
+                    deploymentId: deployData.result?.id,
+                    message: 'Field deployed successfully'
+                };
+            } else {
+                return {
+                    success: false,
+                    error: deployData.message || 'Deployment failed'
+                };
+            }
+
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Configure field permissions
+     */
+    async configureFieldPermissions(objectName, fieldName, profiles, permissionSets) {
+        console.log('  Configuring field-level security...');
+
+        const configOptions = {
+            profiles: profiles || ['System Administrator'],
+            permissionSets: permissionSets || [],
+            permissions: { read: true, edit: true }
+        };
+
+        const result = await this.flsConfigurator.configureFieldPermissions(
+            objectName,
+            fieldName,
+            configOptions
+        );
+
+        return result;
+    }
+
+    /**
+     * Verify deployment was successful
+     */
+    async verifyDeployment(objectName, fieldName) {
+        const verifications = {
+            success: true,
+            checks: []
+        };
+
+        console.log('  Running verification checks...');
+
+        // Verify field is queryable
+        try {
+            const query = `SELECT ${fieldName} FROM ${objectName} LIMIT 1`;
+            execSync(`sf data query --query "${query}" --target-org ${this.orgAlias} --json`, { stdio: 'pipe' });
+            verifications.checks.push({ name: 'Field Queryable', passed: true });
+        } catch {
+            verifications.checks.push({ name: 'Field Queryable', passed: false });
+            verifications.success = false;
+        }
+
+        // Verify field is writable
+        try {
+            const testValue = this.getTestValue(fieldName);
+            execSync(`sf data create record --sobject ${objectName} --values "${fieldName}='${testValue}'" --target-org ${this.orgAlias} --json`, { stdio: 'pipe' });
+            verifications.checks.push({ name: 'Field Writable', passed: true });
+        } catch {
+            verifications.checks.push({ name: 'Field Writable', passed: false });
+            // This might fail due to validation rules, so don't mark as failure
+        }
+
+        // Verify permissions are set
+        try {
+            const query = `SELECT Id FROM FieldPermissions WHERE Field = '${objectName}.${fieldName}' LIMIT 1`;
+            const result = execSync(`sf data query --query "${query}" --target-org ${this.orgAlias} --json`, { encoding: 'utf8', stdio: 'pipe' });
+            const data = JSON.parse(result);
+            const hasPermissions = data.result && data.result.totalSize > 0;
+            verifications.checks.push({ name: 'Permissions Configured', passed: hasPermissions });
+        } catch {
+            verifications.checks.push({ name: 'Permissions Configured', passed: false });
+        }
+
+        // Print verification results
+        verifications.checks.forEach(check => {
+            console.log(`    ${check.passed ? '✅' : '❌'} ${check.name}`);
+        });
+
+        return verifications;
+    }
+
+    /**
+     * Rollback deployment if it fails
+     */
+    async rollbackDeployment(objectName, fieldMetadata) {
+        try {
+            console.log(`  Rolling back field ${fieldMetadata.fullName || fieldMetadata.name}...`);
+
+            // Create destructive changes package
+            const rollbackDir = path.join(process.cwd(), '.rollback-temp', Date.now().toString());
+            fs.mkdirSync(rollbackDir, { recursive: true });
+
+            // Create destructiveChangesPost.xml
+            const destructiveXML = `<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>${objectName}.${fieldMetadata.fullName || fieldMetadata.name}</members>
+        <name>CustomField</name>
+    </types>
+    <version>62.0</version>
+</Package>`;
+
+            fs.writeFileSync(path.join(rollbackDir, 'destructiveChangesPost.xml'), destructiveXML);
+
+            // Create empty package.xml
+            const emptyPackage = `<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <version>62.0</version>
+</Package>`;
+
+            fs.writeFileSync(path.join(rollbackDir, 'package.xml'), emptyPackage);
+
+            // Deploy destructive changes
+            const rollbackCmd = `sf project deploy start --manifest ${rollbackDir}/package.xml --post-destructive-changes ${rollbackDir}/destructiveChangesPost.xml --target-org ${this.orgAlias} --wait 10`;
+            execSync(rollbackCmd, { stdio: 'inherit' });
+
+            // Clean up
+            fs.rmSync(rollbackDir, { recursive: true, force: true });
+
+            console.log('  ✅ Rollback completed');
+            return true;
+
+        } catch (error) {
+            console.error(`  ❌ Rollback failed: ${error.message}`);
+            return false;
+        }
+    }
+
+    /**
+     * Generate field metadata XML
+     */
+    generateFieldXML(fieldMetadata) {
+        const defaultMetadata = {
+            type: 'Text',
+            length: 255,
+            required: false,
+            unique: false,
+            externalId: false,
+            trackHistory: false,
+            trackTrending: false
+        };
+
+        const metadata = { ...defaultMetadata, ...fieldMetadata };
+
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>${metadata.fullName || metadata.name}</fullName>`;
+
+        if (metadata.description) {
+            xml += `\n    <description>${this.escapeXML(metadata.description)}</description>`;
+        }
+
+        if (metadata.inlineHelpText) {
+            xml += `\n    <inlineHelpText>${this.escapeXML(metadata.inlineHelpText)}</inlineHelpText>`;
+        }
+
+        xml += `\n    <label>${metadata.label || metadata.fullName || metadata.name}</label>`;
+
+        // Handle different field types
+        switch (metadata.type.toLowerCase()) {
+            case 'text':
+            case 'string':
+                xml += `\n    <length>${metadata.length}</length>`;
+                xml += `\n    <type>Text</type>`;
+                break;
+
+            case 'textarea':
+                xml += `\n    <length>${metadata.length || 32768}</length>`;
+                xml += `\n    <visibleLines>${metadata.visibleLines || 3}</visibleLines>`;
+                xml += `\n    <type>LongTextArea</type>`;
+                break;
+
+            case 'number':
+            case 'int':
+            case 'integer':
+                xml += `\n    <precision>${metadata.precision || 18}</precision>`;
+                xml += `\n    <scale>${metadata.scale || 0}</scale>`;
+                xml += `\n    <type>Number</type>`;
+                break;
+
+            case 'currency':
+                xml += `\n    <precision>${metadata.precision || 18}</precision>`;
+                xml += `\n    <scale>${metadata.scale || 2}</scale>`;
+                xml += `\n    <type>Currency</type>`;
+                break;
+
+            case 'percent':
+                xml += `\n    <precision>${metadata.precision || 18}</precision>`;
+                xml += `\n    <scale>${metadata.scale || 2}</scale>`;
+                xml += `\n    <type>Percent</type>`;
+                break;
+
+            case 'date':
+                xml += `\n    <type>Date</type>`;
+                break;
+
+            case 'datetime':
+                xml += `\n    <type>DateTime</type>`;
+                break;
+
+            case 'checkbox':
+            case 'boolean':
+                xml += `\n    <defaultValue>${metadata.defaultValue || false}</defaultValue>`;
+                xml += `\n    <type>Checkbox</type>`;
+                break;
+
+            case 'picklist':
+                xml += `\n    <type>Picklist</type>`;
+                xml += `\n    <valueSet>`;
+                if (metadata.values) {
+                    metadata.values.forEach(value => {
+                        xml += `\n        <value>`;
+                        xml += `\n            <fullName>${value.fullName || value}</fullName>`;
+                        xml += `\n            <default>${value.default || false}</default>`;
+                        xml += `\n            <label>${value.label || value}</label>`;
+                        xml += `\n        </value>`;
+                    });
+                }
+                xml += `\n    </valueSet>`;
+                break;
+
+            case 'lookup':
+            case 'reference':
+                xml += `\n    <referenceTo>${metadata.referenceTo}</referenceTo>`;
+                xml += `\n    <relationshipLabel>${metadata.relationshipLabel || metadata.label}</relationshipLabel>`;
+                xml += `\n    <relationshipName>${metadata.relationshipName || metadata.fullName?.replace('__c', '')}</relationshipName>`;
+                xml += `\n    <type>Lookup</type>`;
+                break;
+
+            case 'masterdetail':
+                xml += `\n    <referenceTo>${metadata.referenceTo}</referenceTo>`;
+                xml += `\n    <relationshipLabel>${metadata.relationshipLabel || metadata.label}</relationshipLabel>`;
+                xml += `\n    <relationshipName>${metadata.relationshipName || metadata.fullName?.replace('__c', '')}</relationshipName>`;
+                xml += `\n    <type>MasterDetail</type>`;
+                break;
+
+            default:
+                xml += `\n    <type>${metadata.type}</type>`;
+        }
+
+        // Common attributes
+        xml += `\n    <required>${metadata.required}</required>`;
+
+        if (metadata.unique) {
+            xml += `\n    <unique>${metadata.unique}</unique>`;
+        }
+
+        if (metadata.externalId) {
+            xml += `\n    <externalId>${metadata.externalId}</externalId>`;
+        }
+
+        if (metadata.trackHistory) {
+            xml += `\n    <trackHistory>${metadata.trackHistory}</trackHistory>`;
+        }
+
+        if (metadata.trackTrending) {
+            xml += `\n    <trackTrending>${metadata.trackTrending}</trackTrending>`;
+        }
+
+        xml += `\n</CustomField>`;
+
+        return xml;
+    }
+
+    /**
+     * Helper methods
+     */
+
+    async verifyObjectExists(objectName) {
+        try {
+            const cmd = `sfdx force:schema:sobject:describe --sobjecttype ${objectName} --json --targetusername ${this.orgAlias}`;
+            const result = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
+            const data = JSON.parse(result);
+            return data.status === 0;
+        } catch {
+            return false;
+        }
+    }
+
+    validateFieldName(fieldName) {
+        const result = { valid: true, reason: '' };
+
+        // Check length
+        if (fieldName.length > 40) {
+            result.valid = false;
+            result.reason = 'Field name exceeds 40 characters';
+            return result;
+        }
+
+        // Check for valid characters
+        if (!/^[a-zA-Z][a-zA-Z0-9_]*(__c)?$/.test(fieldName)) {
+            result.valid = false;
+            result.reason = 'Field name contains invalid characters';
+            return result;
+        }
+
+        // Check for reserved words
+        const reserved = ['id', 'name', 'created', 'modified', 'system', 'type'];
+        if (reserved.includes(fieldName.toLowerCase().replace('__c', ''))) {
+            result.valid = false;
+            result.reason = 'Field name is a reserved word';
+            return result;
+        }
+
+        return result;
+    }
+
+    async checkFieldExists(objectName, fieldName) {
+        try {
+            const cmd = `sfdx force:schema:sobject:describe --sobjecttype ${objectName} --json --targetusername ${this.orgAlias}`;
+            const result = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
+            const data = JSON.parse(result);
+
+            if (data.result && data.result.fields) {
+                return data.result.fields.some(f =>
+                    f.name === fieldName || f.name === fieldName.replace('__c', '')
+                );
+            }
+            return false;
+        } catch {
+            return false;
+        }
+    }
+
+    validateMetadataStructure(metadata) {
+        const result = { valid: true, errors: [] };
+
+        // Required fields
+        if (!metadata.fullName && !metadata.name) {
+            result.valid = false;
+            result.errors.push('Field name is required');
+        }
+
+        if (!metadata.type) {
+            result.valid = false;
+            result.errors.push('Field type is required');
+        }
+
+        // Type-specific validations
+        if (metadata.type === 'Text' && !metadata.length) {
+            metadata.length = 255; // Default
+        }
+
+        if ((metadata.type === 'Lookup' || metadata.type === 'MasterDetail') && !metadata.referenceTo) {
+            result.valid = false;
+            result.errors.push('Reference object is required for relationship fields');
+        }
+
+        return result;
+    }
+
+    async checkFieldLimits(objectName) {
+        try {
+            const cmd = `sfdx force:schema:sobject:describe --sobjecttype ${objectName} --json --targetusername ${this.orgAlias}`;
+            const result = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
+            const data = JSON.parse(result);
+
+            const customFieldCount = data.result.fields.filter(f => f.custom).length;
+
+            // Salesforce limits
+            const maxCustomFields = 500; // Simplified, actual limits vary by edition
+            const warningThreshold = 400;
+
+            if (customFieldCount >= maxCustomFields) {
+                return {
+                    ok: false,
+                    message: `Object has reached maximum custom field limit (${customFieldCount}/${maxCustomFields})`
+                };
+            }
+
+            if (customFieldCount >= warningThreshold) {
+                return {
+                    ok: true,
+                    message: `Object approaching field limit (${customFieldCount}/${maxCustomFields})`
+                };
+            }
+
+            return {
+                ok: true,
+                message: `Field count OK (${customFieldCount}/${maxCustomFields})`
+            };
+
+        } catch (error) {
+            return {
+                ok: true,
+                message: 'Could not check field limits'
+            };
+        }
+    }
+
+    similarFieldNames(name1, name2) {
+        const n1 = name1.toLowerCase().replace(/__c$/, '').replace(/[_-]/g, '');
+        const n2 = name2.toLowerCase().replace(/__c$/, '').replace(/[_-]/g, '');
+        return n1 === n2 || n1.includes(n2) || n2.includes(n1);
+    }
+
+    getTestValue(fieldName) {
+        if (fieldName.toLowerCase().includes('date')) return '2024-01-01';
+        if (fieldName.toLowerCase().includes('amount')) return '100';
+        if (fieldName.toLowerCase().includes('email')) return 'test@example.com';
+        return 'Test';
+    }
+
+    confirmProceed() {
+        // In automated mode, always proceed
+        if (process.env.CI || process.env.AUTOMATED) {
+            return true;
+        }
+
+        // For CLI, would implement readline prompt
+        console.log('  Proceeding with warnings...');
+        return true;
+    }
+
+    escapeXML(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+    }
+
+    generateDeploymentSummary(log) {
+        console.log('\n' + '='.repeat(60));
+        console.log('📊 Deployment Summary');
+        console.log('='.repeat(60));
+
+        console.log(`\nField: ${log.field}`);
+        console.log(`Object: ${log.object}`);
+        console.log(`Status: ${log.success ? '✅ Success' : '❌ Failed'}`);
+
+        const duration = (new Date(log.endTime) - new Date(log.startTime)) / 1000;
+        console.log(`Duration: ${duration.toFixed(1)} seconds`);
+
+        console.log('\nPhases:');
+        Object.entries(log.phases).forEach(([phase, result]) => {
+            if (result) {
+                const status = result.success ? '✅' : '❌';
+                console.log(`  ${status} ${phase}`);
+            }
+        });
+
+        if (log.errors && log.errors.length > 0) {
+            console.log('\nErrors:');
+            log.errors.forEach(e => console.log(`  - ${e}`));
+        }
+
+        console.log('='.repeat(60));
+    }
+
+    saveDeploymentLog(log) {
+        const logsDir = path.join(process.cwd(), 'deployment-logs');
+        fs.mkdirSync(logsDir, { recursive: true });
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const fileName = `field-deployment-${log.object}-${log.field.replace('.', '_')}-${timestamp}.json`;
+        const filePath = path.join(logsDir, fileName);
+
+        fs.writeFileSync(filePath, JSON.stringify(log, null, 2));
+        console.log(`\n📄 Log saved to: ${filePath}`);
+    }
+}
+
+// CLI interface
+if (require.main === module) {
+    const args = process.argv.slice(2);
+
+    if (args.length < 2) {
+        console.log(`
+Usage: node field-deployment-manager.js <ObjectName> <FieldMetadata> [options]
+
+Options:
+  --org <alias>            Salesforce org alias
+  --profiles <list>        Comma-separated list of profiles for FLS
+  --permission-sets <list> Comma-separated list of permission sets
+  --dry-run               Run validation only, don't deploy
+  --skip-warnings         Don't prompt for warnings
+  --enable-rollback       Enable automatic rollback on failure
+  --verbose               Show detailed output
+
+Field metadata can be:
+  1. JSON file path: path/to/field.json
+  2. Inline JSON: '{"fullName":"CustomField__c","type":"Text","length":100}'
+
+Examples:
+  node field-deployment-manager.js Account field.json --org myorg
+  node field-deployment-manager.js Contact '{"fullName":"Score__c","type":"Number","precision":18,"scale":2}'
+        `);
+        process.exit(1);
+    }
+
+    const [objectName, fieldInput] = args;
+
+    // Parse field metadata
+    let fieldMetadata;
+    try {
+        if (fieldInput.startsWith('{')) {
+            // Inline JSON
+            fieldMetadata = JSON.parse(fieldInput);
+        } else {
+            // File path
+            const filePath = path.resolve(fieldInput);
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+
+            if (filePath.endsWith('.xml')) {
+                // Parse XML to extract metadata
+                console.log('XML parsing not implemented. Please provide JSON.');
+                process.exit(1);
+            } else {
+                fieldMetadata = JSON.parse(fileContent);
+            }
+        }
+    } catch (error) {
+        console.error(`Error parsing field metadata: ${error.message}`);
+        process.exit(1);
+    }
+
+    const options = {
+        orgAlias: args.find(a => a.startsWith('--org'))?.split('=')[1],
+        dryRun: args.includes('--dry-run'),
+        verbose: args.includes('--verbose'),
+        skipWarnings: args.includes('--skip-warnings'),
+        enableRollback: args.includes('--enable-rollback')
+    };
+
+    // Parse profiles and permission sets
+    const profilesArg = args.find(a => a.startsWith('--profiles'));
+    if (profilesArg) {
+        options.profiles = profilesArg.split('=')[1].split(',');
+    }
+
+    const permSetsArg = args.find(a => a.startsWith('--permission-sets'));
+    if (permSetsArg) {
+        options.permissionSets = permSetsArg.split('=')[1].split(',');
+    }
+
+    const manager = new FieldDeploymentManager(options);
+
+    manager.deployField(objectName, fieldMetadata, options)
+        .then(result => {
+            process.exit(result.success ? 0 : 1);
+        })
+        .catch(error => {
+            console.error(error);
+            process.exit(1);
+        });
+}
+
+module.exports = FieldDeploymentManager;

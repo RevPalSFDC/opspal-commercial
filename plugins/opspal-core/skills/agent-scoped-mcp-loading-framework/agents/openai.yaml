@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Scoped MCP Loading Framework"
+  short_description: "Help with Agent Scoped MCP Loading Framework tasks"
+  default_prompt: "Use $agent-scoped-mcp-loading-framework to execute this workflow safely and produce the expected artifacts."

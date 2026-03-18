@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Cross-platform data normalization rules for Salesforce, HubSpot, and Marketo",
+  "lastUpdated": "2026-01-07",
+  "purpose": "Prevent data format mismatches during sync operations - Cohort 3 (data-quality) remediation",
+
+  "marketo-to-salesforce": {
+    "Annual_Revenue__c": {
+      "description": "Add space after < symbol in revenue range",
+      "pattern": "^<\\$",
+      "replacement": "< $",
+      "examples": [
+        {"input": "<$1 million", "output": "< $1 million"},
+        {"input": "<$500K", "output": "< $500K"}
+      ]
+    },
+    "Country": {
+      "description": "Normalize country names to Salesforce format",
+      "mapping": {
+        "United States": "USA",
+        "United Kingdom": "UK",
+        "United States of America": "USA"
+      },
+      "defaultValue": null
+    },
+    "State": {
+      "description": "Convert state names to abbreviations",
+      "mapping": {
+        "California": "CA",
+        "New York": "NY",
+        "Texas": "TX",
+        "Florida": "FL",
+        "Illinois": "IL"
+      }
+    },
+    "Email": {
+      "description": "Normalize email to lowercase and trim",
+      "function": "normalizeEmail",
+      "trim": true
+    },
+    "Phone": {
+      "description": "Normalize phone number format",
+      "function": "normalizePhone"
+    },
+    "Website": {
+      "description": "Ensure URL has protocol",
+      "function": "normalizeUrl"
+    },
+    "Industry": {
+      "description": "Normalize industry names to title case",
+      "case": "title"
+    },
+    "Lead_Status__c": {
+      "description": "Map Marketo statuses to Salesforce",
+      "mapping": {
+        "New": "Open - Not Contacted",
+        "Working": "Working - Contacted",
+        "Qualified": "Qualified",
+        "Nurture": "Nurturing",
+        "Unqualified": "Unqualified",
+        "Bad Data": "Bad Data"
+      }
+    },
+    "Boolean_Opt_In__c": {
+      "description": "Normalize boolean values",
+      "mapping": {
+        "true": true,
+        "false": false,
+        "1": true,
+        "0": false,
+        "yes": true,
+        "no": false,
+        "Y": true,
+        "N": false
+      }
+    }
+  },
+
+  "salesforce-to-marketo": {
+    "Annual_Revenue__c": {
+      "description": "Remove space after < symbol for Marketo",
+      "pattern": "<\\s+\\$",
+      "replacement": "<$",
+      "examples": [
+        {"input": "< $1 million", "output": "<$1 million"},
+        {"input": "< $500K", "output": "<$500K"}
+      ]
+    },
+    "Country": {
+      "description": "Expand country abbreviations",
+      "mapping": {
+        "USA": "United States",
+        "UK": "United Kingdom"
+      }
+    },
+    "State": {
+      "description": "Expand state abbreviations",
+      "mapping": {
+        "CA": "California",
+        "NY": "New York",
+        "TX": "Texas",
+        "FL": "Florida",
+        "IL": "Illinois"
+      }
+    },
+    "Email": {
+      "description": "Normalize email to lowercase and trim",
+      "function": "normalizeEmail",
+      "trim": true
+    },
+    "Phone": {
+      "description": "Normalize phone number format",
+      "function": "normalizePhone"
+    },
+    "Status": {
+      "description": "Map Salesforce statuses to Marketo",
+      "mapping": {
+        "Open - Not Contacted": "New",
+        "Working - Contacted": "Working",
+        "Qualified": "Qualified",
+        "Nurturing": "Nurture",
+        "Unqualified": "Unqualified",
+        "Bad Data": "Bad Data"
+      }
+    }
+  },
+
+  "marketo-to-hubspot": {
+    "Country": {
+      "description": "Use full country names for HubSpot",
+      "mapping": {
+        "USA": "United States",
+        "UK": "United Kingdom",
+        "US": "United States"
+      }
+    },
+    "Email": {
+      "description": "Normalize email to lowercase",
+      "function": "normalizeEmail",
+      "trim": true
+    },
+    "Phone": {
+      "description": "Normalize phone number format",
+      "function": "normalizePhone"
+    },
+    "Company_Size__c": {
+      "description": "Map company size ranges",
+      "mapping": {
+        "1-10": "1-10 employees",
+        "11-50": "11-50 employees",
+        "51-200": "51-200 employees",
+        "201-500": "201-500 employees",
+        "501-1000": "501-1000 employees",
+        "1000+": "1001-5000 employees"
+      }
+    },
+    "Lead_Status__c": {
+      "description": "Map Marketo statuses to HubSpot lifecycle stage",
+      "mapping": {
+        "New": "lead",
+        "Working": "lead",
+        "Qualified": "marketingqualifiedlead",
+        "Nurture": "lead",
+        "Customer": "customer",
+        "Unqualified": "other"
+      }
+    }
+  },
+
+  "hubspot-to-marketo": {
+    "country": {
+      "description": "Normalize country format",
+      "mapping": {
+        "United States": "USA",
+        "United Kingdom": "UK"
+      }
+    },
+    "email": {
+      "description": "Normalize email format",
+      "function": "normalizeEmail",
+      "trim": true
+    },
+    "phone": {
+      "description": "Normalize phone number",
+      "function": "normalizePhone"
+    },
+    "lifecyclestage": {
+      "description": "Map HubSpot lifecycle to Marketo status",
+      "mapping": {
+        "lead": "New",
+        "marketingqualifiedlead": "Qualified",
+        "salesqualifiedlead": "Qualified",
+        "opportunity": "Qualified",
+        "customer": "Customer",
+        "evangelist": "Customer",
+        "other": "Unqualified"
+      }
+    },
+    "hs_lead_status": {
+      "description": "Map HubSpot lead status to Marketo",
+      "mapping": {
+        "NEW": "New",
+        "OPEN": "Working",
+        "IN_PROGRESS": "Working",
+        "CONNECTED": "Working",
+        "BAD_TIMING": "Nurture",
+        "UNQUALIFIED": "Unqualified"
+      }
+    }
+  },
+
+  "salesforce-to-hubspot": {
+    "Email": {
+      "description": "Normalize email format",
+      "function": "normalizeEmail",
+      "trim": true
+    },
+    "Phone": {
+      "description": "Normalize phone number",
+      "function": "normalizePhone"
+    },
+    "Country": {
+      "description": "Use full country names",
+      "mapping": {
+        "USA": "United States",
+        "UK": "United Kingdom"
+      }
+    },
+    "Status": {
+      "description": "Map Salesforce status to HubSpot lifecycle",
+      "mapping": {
+        "Open - Not Contacted": "lead",
+        "Working - Contacted": "lead",
+        "Qualified": "marketingqualifiedlead",
+        "Nurturing": "lead",
+        "Converted": "customer",
+        "Unqualified": "other"
+      }
+    },
+    "Website": {
+      "description": "Ensure URL has protocol",
+      "function": "normalizeUrl"
+    }
+  },
+
+  "hubspot-to-salesforce": {
+    "email": {
+      "description": "Normalize email format",
+      "function": "normalizeEmail",
+      "trim": true
+    },
+    "phone": {
+      "description": "Normalize phone number",
+      "function": "normalizePhone"
+    },
+    "country": {
+      "description": "Normalize country to abbreviation",
+      "mapping": {
+        "United States": "USA",
+        "United Kingdom": "UK"
+      }
+    },
+    "lifecyclestage": {
+      "description": "Map HubSpot lifecycle to Salesforce status",
+      "mapping": {
+        "lead": "Open - Not Contacted",
+        "marketingqualifiedlead": "Qualified",
+        "salesqualifiedlead": "Qualified",
+        "opportunity": "Qualified",
+        "customer": "Converted",
+        "evangelist": "Converted",
+        "other": "Unqualified"
+      }
+    },
+    "website": {
+      "description": "Ensure URL has protocol",
+      "function": "normalizeUrl"
+    }
+  },
+
+  "common-transformations": {
+    "description": "Common transformations applied to all platforms",
+    "rules": [
+      {
+        "field": "Email",
+        "description": "Always lowercase and trim emails",
+        "function": "normalizeEmail"
+      },
+      {
+        "field": "Phone",
+        "description": "Standardize phone number format",
+        "function": "normalizePhone"
+      },
+      {
+        "field": "Website",
+        "description": "Ensure URLs have protocol",
+        "function": "normalizeUrl"
+      }
+    ]
+  },
+
+  "validation": {
+    "strictMode": false,
+    "warnOnMissingMapping": true,
+    "logTransformations": true
+  },
+
+  "examples": [
+    {
+      "scenario": "Marketo → Salesforce revenue range",
+      "input": {"Annual_Revenue__c": "<$1 million"},
+      "output": {"Annual_Revenue__c": "< $1 million"},
+      "rule": "marketo-to-salesforce.Annual_Revenue__c"
+    },
+    {
+      "scenario": "Marketo → Salesforce country",
+      "input": {"Country": "United States"},
+      "output": {"Country": "USA"},
+      "rule": "marketo-to-salesforce.Country"
+    },
+    {
+      "scenario": "HubSpot → Salesforce lifecycle",
+      "input": {"lifecyclestage": "marketingqualifiedlead"},
+      "output": {"Status": "Qualified"},
+      "rule": "hubspot-to-salesforce.lifecyclestage"
+    }
+  ],
+
+  "notes": [
+    "Rules are applied in the order they appear in the configuration",
+    "Pattern-based rules use JavaScript RegExp syntax",
+    "Mapping rules perform exact key matching (case-sensitive)",
+    "Custom functions are defined in data-normalizer.js",
+    "All transformations are logged if logTransformations is true"
+  ]
+}

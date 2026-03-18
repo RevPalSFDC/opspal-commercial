@@ -1,0 +1,272 @@
+{
+  "templateMetadata": {
+    "templateId": "renewal-pipeline",
+    "templateName": "Renewal Pipeline Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "Renewal pipeline visibility with at-risk tracking, forecast, and win/loss analysis",
+    "audience": "CS Leadership, Revenue Operations, CFO",
+    "function": "customer-success",
+    "level": "executive",
+    "useCase": "Renewal forecasting, at-risk identification, revenue planning",
+    "refreshFrequency": "Daily",
+    "componentCount": 6,
+    "prerequisites": [
+      "Opportunity.Type with 'Renewal' value",
+      "Opportunity.CloseDate for renewal dates",
+      "Account.Health_Score__c (recommended)",
+      "Renewal tracking process established"
+    ],
+    "tags": ["renewals", "pipeline", "at-risk", "forecast", "retention", "arr"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "cpq", "enterprise"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified renewal view with 4 key metrics",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["Renewal Pipeline by Stage", "Renewal Forecast - Next 90 Days"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full renewal pipeline dashboard with all 6 components"
+      },
+      "cpq": {
+        "description": "CPQ-enabled renewal tracking with subscription metrics",
+        "fieldSubstitutions": {
+          "Amount": "SBQQ__NetAmount__c",
+          "Contract_End_Date__c": "SBQQ__RenewalOpportunity__r.CloseDate"
+        },
+        "filterOverrides": [
+          { "field": "SBQQ__RenewalForecast__c", "values": ["Renewal", "At Risk", "Likely to Churn"] }
+        ]
+      },
+      "enterprise": {
+        "description": "Enterprise thresholds with higher ARR at-risk limits",
+        "metricAdjustments": {
+          "atRiskThreshold": {
+            "greenZone": { "min": 0, "max": 150000 },
+            "yellowZone": { "min": 150000, "max": 500000 },
+            "redZone": { "min": 500000, "max": 50000000 }
+          },
+          "renewalRateTarget": {
+            "target": 95,
+            "thresholds": { "green": ">=95%", "yellow": "90-95%", "red": "<90%" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Opportunity.CloseDate", "Opportunity.Amount"],
+    "optionalFields": ["Opportunity.Type", "Account.Health_Score__c", "Account.CSM_Owner__c"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "RenewalType": {
+        "patterns": ["Type = 'Renewal'", "RecordType.DeveloperName = 'Renewal'", "Is_Renewal__c"],
+        "labelHints": ["Renewal", "Renewal Opportunity", "Is Renewal"],
+        "dataType": "boolean"
+      },
+      "HealthScore": {
+        "patterns": ["Health_Score__c", "Customer_Health__c", "Account_Health__c", "Risk_Level__c"],
+        "labelHints": ["Health Score", "Health", "Risk Level"],
+        "dataType": "picklist"
+      },
+      "ARR": {
+        "patterns": ["ARR__c", "Annual_Recurring_Revenue__c", "Amount"],
+        "cpqPatterns": ["SBQQ__NetAmount__c", "SBQQ__RenewedAmount__c"],
+        "labelHints": ["ARR", "Annual Revenue", "Contract Value"],
+        "dataType": "currency"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Renewals Due This Quarter", "Renewal Rate (YTD)", "At-Risk Renewals", "Renewal Rate Trend"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Renewals Due This Quarter", "Renewal Rate (YTD)"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Renewals Due This Quarter",
+        "sourceReport": "renewals-due-quarter",
+        "metric": "SUM(Amount WHERE Type='Renewal' AND CloseDate IN THIS_FISCAL_QUARTER AND IsClosed=FALSE)",
+        "format": "currency",
+        "secondaryMetric": "COUNT",
+        "secondaryLabel": "accounts"
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Gauge",
+        "title": "Renewal Rate (YTD)",
+        "sourceReport": "renewal-rate",
+        "metric": "Won_Renewal_Value / Total_Renewal_Value * 100",
+        "format": "percent",
+        "target": 90,
+        "greenZone": { "min": 90, "max": 100 },
+        "yellowZone": { "min": 80, "max": 90 },
+        "redZone": { "min": 0, "max": 80 },
+        "benchmark": { "excellent": ">95%", "good": ">90%", "warning": "<85%" }
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "At-Risk Renewals",
+        "sourceReport": "at-risk-renewals",
+        "metric": "SUM(Amount WHERE Type='Renewal' AND Account.Health_Score__c IN ('Red', 'Yellow') AND IsClosed=FALSE)",
+        "format": "currency",
+        "secondaryMetric": "COUNT",
+        "secondaryLabel": "accounts",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 50000 },
+        "yellowZone": { "min": 50000, "max": 150000 },
+        "redZone": { "min": 150000, "max": 10000000 }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Funnel Chart",
+        "title": "Renewal Pipeline by Stage",
+        "sourceReport": "renewal-pipeline-stages",
+        "stages": [
+          { "name": "Upcoming (90+ days)", "filter": "DaysToClose > 90" },
+          { "name": "In Negotiation (30-90 days)", "filter": "DaysToClose BETWEEN 30 AND 90" },
+          { "name": "Due Soon (<30 days)", "filter": "DaysToClose < 30" },
+          { "name": "Committed", "filter": "ForecastCategory = 'Commit'" },
+          { "name": "Closed Won", "filter": "IsWon = TRUE" }
+        ],
+        "metric": "SUM(Amount)",
+        "showCounts": true,
+        "showValues": true
+      },
+      {
+        "position": { "row": 1, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Line Chart",
+        "title": "Renewal Rate Trend",
+        "sourceReport": "renewal-rate-trend",
+        "xAxis": "Month",
+        "yAxis": "Renewal_Rate_Percent",
+        "showTrendLine": true,
+        "targetLine": 90,
+        "showDataLabels": true
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 3 },
+        "type": "Table",
+        "title": "Renewal Forecast - Next 90 Days",
+        "sourceReport": "renewal-forecast",
+        "columns": [
+          { "field": "Account.Name", "header": "Account", "width": "20%" },
+          { "field": "Amount", "header": "ARR", "format": "currency", "width": "12%" },
+          { "field": "CloseDate", "header": "Renewal Date", "format": "date", "width": "12%" },
+          { "field": "ForecastCategory", "header": "Forecast", "width": "10%" },
+          { "field": "Account.Health_Score__c", "header": "Health", "width": "10%" },
+          { "field": "Owner.Name", "header": "CSM", "width": "12%" },
+          { "field": "StageName", "header": "Stage", "width": "12%" },
+          { "field": "NextStep", "header": "Next Step", "width": "12%" }
+        ],
+        "sortBy": "CloseDate ASC",
+        "rowLimit": 20,
+        "conditionalFormatting": {
+          "Account.Health_Score__c": {
+            "Green": "green-text",
+            "Yellow": "yellow-text",
+            "Red": "red-text"
+          },
+          "ForecastCategory": {
+            "Commit": "green-background",
+            "Best Case": "yellow-background",
+            "Pipeline": "default"
+          }
+        }
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "CloseDate",
+      "type": "dateRange",
+      "placeholder": "{{period}}",
+      "default": "NEXT_90_DAYS",
+      "values": ["NEXT_30_DAYS", "NEXT_90_DAYS", "THIS_FISCAL_QUARTER", "NEXT_FISCAL_QUARTER"]
+    },
+    {
+      "field": "Account.Segment__c",
+      "type": "picklist",
+      "placeholder": "{{segment}}",
+      "default": "All",
+      "values": ["All", "Enterprise", "Mid-Market", "SMB"]
+    },
+    {
+      "field": "Account.Health_Score__c",
+      "type": "picklist",
+      "placeholder": "{{health}}",
+      "default": "All",
+      "values": ["All", "Green", "Yellow", "Red", "At Risk (Yellow + Red)"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "csmLevel": "OwnerId = $User.Id",
+    "managerLevel": "Owner.ManagerId = $User.Id"
+  },
+  "sourceReportTemplates": [
+    "customer-success/renewal-pipeline",
+    "customer-success/account-health"
+  ],
+  "kpiDefinitions": {
+    "renewal_rate": {
+      "formula": "Won_Renewal_Value / (Won_Renewal_Value + Lost_Renewal_Value) * 100",
+      "note": "Also called Gross Dollar Retention for renewals",
+      "benchmark": { "excellent": ">95%", "good": ">90%", "warning": "<85%" }
+    },
+    "at_risk_percentage": {
+      "formula": "At_Risk_Renewal_Value / Total_Renewal_Pipeline * 100",
+      "benchmark": { "good": "<10%", "warning": ">20%" }
+    },
+    "renewal_forecast_accuracy": {
+      "formula": "Actual_Renewals / Forecasted_Renewals * 100",
+      "benchmark": { "excellent": "95-105%", "good": "90-110%", "warning": "<85% or >115%" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Opportunity.Type includes 'Renewal' or equivalent",
+      "Confirm renewal Opportunities are being created",
+      "Check Account.Health_Score__c exists",
+      "Create report folder: Renewal Management"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Customer Success folder",
+      "Set daily refresh",
+      "Subscribe CS leadership to weekly snapshot"
+    ]
+  },
+  "relatedTemplates": ["cs-overview", "account-health", "my-accounts"]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Runbook Linkage Linter"
+  short_description: "Help with Runbook Linkage Linter tasks"
+  default_prompt: "Use $runbook-linkage-linter to execute this workflow safely and produce the expected artifacts."

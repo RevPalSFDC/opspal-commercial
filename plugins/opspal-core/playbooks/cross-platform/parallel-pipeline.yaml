@@ -1,0 +1,185 @@
+# Cross-Platform Parallel Pipeline Playbook
+# Default DAG template for cross-platform operations
+#
+# Triggers: cross-platform, compare, reconcile, multi-platform, pipeline
+# Complexity: High (base 0.7, always uses task graph)
+
+name: cross-platform-parallel-pipeline
+version: "1.0.0"
+description: Default DAG for cross-platform data reconciliation and analysis
+domain: cross-platform
+base_complexity: 0.7
+
+triggers:
+  keywords:
+    - cross-platform
+    - compare
+    - reconcile
+    - multi-platform
+    - pipeline
+    - sync analysis
+    - gap analysis
+    - ownership comparison
+  patterns:
+    - "compare.*across"
+    - "reconcile.*between"
+    - "check.*both.*platforms"
+    - ".*in SF.*and.*HubSpot"
+    - ".*salesforce.*asana"
+
+# Wave-based DAG template
+# Actual tasks are generated dynamically based on detected platforms
+default_dag:
+  # Wave 1: Parallel platform queries
+  - id: T-01
+    title: "Query Salesforce data"
+    domain: salesforce-data
+    goal: Extract relevant entity data from Salesforce org
+    inputs:
+      - org_alias
+      - entity_type
+      - query_scope
+    outputs:
+      - sf_entity_data.json
+    acceptance_criteria:
+      - All matching records retrieved
+      - Key fields included (Id, Email, Name, Owner, LastModifiedDate)
+      - Record count documented
+    dependencies: []
+    can_run_in_parallel_with: ["T-02", "T-03", "T-04"]
+    wave: 1
+    conditional: "platform_detected('salesforce')"
+
+  - id: T-02
+    title: "Query HubSpot data"
+    domain: hubspot-data
+    goal: Extract relevant entity data from HubSpot portal
+    inputs:
+      - portal_id
+      - entity_type
+      - query_scope
+    outputs:
+      - hs_entity_data.json
+    acceptance_criteria:
+      - All matching records retrieved
+      - Key fields included (vid, email, company, owner, lastmodifieddate)
+      - Record count documented
+    dependencies: []
+    can_run_in_parallel_with: ["T-01", "T-03", "T-04"]
+    wave: 1
+    conditional: "platform_detected('hubspot')"
+
+  - id: T-03
+    title: "Query Asana data"
+    domain: cross-platform
+    goal: Extract relevant task/project data from Asana workspace
+    inputs:
+      - workspace_id
+      - project_pattern
+      - task_scope
+    outputs:
+      - asana_task_data.json
+    acceptance_criteria:
+      - All matching tasks/projects retrieved
+      - Assignee and status information included
+      - Task count documented
+    dependencies: []
+    can_run_in_parallel_with: ["T-01", "T-02", "T-04"]
+    wave: 1
+    conditional: "platform_detected('asana')"
+
+  - id: T-04
+    title: "Query Marketo data"
+    domain: cross-platform
+    goal: Extract relevant lead/campaign data from Marketo instance
+    inputs:
+      - instance_id
+      - entity_type
+      - query_scope
+    outputs:
+      - mk_entity_data.json
+    acceptance_criteria:
+      - All matching records retrieved
+      - Key fields included (id, email, company, status)
+      - Record count documented
+    dependencies: []
+    can_run_in_parallel_with: ["T-01", "T-02", "T-03"]
+    wave: 1
+    conditional: "platform_detected('marketo')"
+
+  # Wave 2: Cross-platform reconciliation (sequential)
+  - id: T-05
+    title: "Cross-platform entity reconciliation"
+    domain: cross-platform
+    goal: Match entities across platforms, identify gaps, ownership mismatches, and data drift
+    inputs:
+      - sf_entity_data.json
+      - hs_entity_data.json
+      - asana_task_data.json
+      - mk_entity_data.json
+    outputs:
+      - reconciliation_results.json
+      - gap_analysis.json
+      - ownership_map.json
+    acceptance_criteria:
+      - All entities matched by email/name/ID
+      - Gaps identified (exists in A not B)
+      - Ownership mismatches documented
+      - Data freshness assessed
+    dependencies: ["T-01", "T-02", "T-03", "T-04"]
+    can_run_in_parallel_with: []
+    wave: 2
+
+  # Wave 3: Artifact generation (parallel)
+  - id: T-06
+    title: "Generate reconciliation report"
+    domain: documentation
+    goal: Create markdown report with gap analysis tables, recommendations, and action items
+    inputs:
+      - reconciliation_results.json
+      - gap_analysis.json
+    outputs:
+      - pipeline_reconciliation_report.md
+    acceptance_criteria:
+      - Report contains summary table
+      - Gap analysis with record counts
+      - Ownership mismatch details
+      - Recommended actions listed
+    dependencies: ["T-05"]
+    can_run_in_parallel_with: ["T-07", "T-08"]
+    wave: 3
+
+  - id: T-07
+    title: "Create Asana tasks for gaps"
+    domain: cross-platform
+    goal: Create Asana tasks for each identified gap requiring remediation
+    inputs:
+      - gap_analysis.json
+      - asana_project_gid
+    outputs:
+      - asana_tasks_created.json
+    acceptance_criteria:
+      - One task per gap category
+      - Tasks assigned to appropriate team member
+      - Priority based on gap severity
+    dependencies: ["T-05"]
+    can_run_in_parallel_with: ["T-06", "T-08"]
+    wave: 3
+    conditional: "platform_detected('asana') && config.output.createAsanaTasks"
+
+  - id: T-08
+    title: "Update work index"
+    domain: cross-platform
+    goal: Log pipeline operation to client work index for project memory
+    inputs:
+      - reconciliation_results.json
+      - org_slug
+    outputs:
+      - work_index_entry
+    acceptance_criteria:
+      - Work index updated with operation summary
+      - Classification and deliverables recorded
+    dependencies: ["T-05"]
+    can_run_in_parallel_with: ["T-06", "T-07"]
+    wave: 3
+    conditional: "env('ORG_SLUG')"

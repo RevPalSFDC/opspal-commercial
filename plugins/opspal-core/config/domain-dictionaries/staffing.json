@@ -1,0 +1,171 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "staffing",
+  "version": "1.0.0",
+  "description": "Staffing agencies, recruiting firms, and workforce solutions. Major national firms have offices across states (same entity), while many local agencies share generic names.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "staffing", "recruiting", "recruitment", "employment", "personnel",
+      "talent", "workforce", "temporary", "temp", "contract", "placement",
+      "headhunter", "executive search", "hr", "human resources"
+    ],
+    "entityTypes": ["StaffingAgency", "RecruitingFirm", "ExecutiveSearch", "TempAgency"],
+    "fieldPatterns": [
+      "ASAMemberID", "SIACode", "StateLicenseNumber", "EIN"
+    ]
+  },
+
+  "abbreviations": {
+    "industryTerms": {
+      "MSP": "Managed Service Provider",
+      "VMS": "Vendor Management System",
+      "RPO": "Recruitment Process Outsourcing",
+      "PEO": "Professional Employer Organization",
+      "EOR": "Employer of Record",
+      "SOW": "Statement of Work",
+      "C2C": "Corp to Corp",
+      "W2": "W-2 Employee",
+      "1099": "Independent Contractor"
+    },
+    "organizations": {
+      "ASA": "American Staffing Association",
+      "SIA": "Staffing Industry Analysts",
+      "SHRM": "Society for Human Resource Management",
+      "AESC": "Association of Executive Search Consultants"
+    },
+    "specialties": {
+      "IT": "Information Technology",
+      "HR": "Human Resources",
+      "FA": "Finance and Accounting",
+      "Eng": "Engineering",
+      "HC": "Healthcare"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "Co"],
+    "preserve": [
+      "Staffing", "Recruiting", "Personnel", "Employment",
+      "Talent", "Workforce", "Solutions", "Services", "Group"
+    ]
+  },
+
+  "synonyms": {
+    "Staffing": ["Staff", "Staffing Services"],
+    "Recruiting": ["Recruitment", "Recruiters"],
+    "Personnel": ["Personnel Services"],
+    "Employment": ["Employment Services", "Employment Agency"],
+    "Talent": ["Talent Solutions", "Talent Acquisition"],
+    "Workforce": ["Workforce Solutions"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 72
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 88,
+      "review": 78,
+      "tag": 62
+    },
+    "stateMismatchPenalty": -20
+  },
+
+  "genericEntityPatterns": [
+    "* Staffing",
+    "* Recruiting",
+    "* Personnel",
+    "* Employment Services",
+    "* Search Group",
+    "* Talent Solutions",
+    "* Workforce Solutions",
+    "* Staffing Services",
+    "* Staffing Solutions",
+    "* Technical Services",
+    "* Professional Services",
+    "* Consulting Services",
+    "* Executive Search",
+    "* Search Partners",
+    "* Resources"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["national_firm_match", "domain_match", "asa_member_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "Allegis Group",
+    "Randstad",
+    "Adecco",
+    "ManpowerGroup",
+    "Kelly Services",
+    "Robert Half",
+    "Aya Healthcare",
+    "Insight Global",
+    "Express Employment Professionals",
+    "Kforce",
+    "TEKsystems",
+    "Aerotek",
+    "Aston Carter",
+    "Apex Group",
+    "Cielo Talent",
+    "CHG Healthcare",
+    "Cross Country Healthcare",
+    "AMN Healthcare",
+    "Jackson Healthcare",
+    "Hays",
+    "Michael Page",
+    "Hudson",
+    "Mastech Digital",
+    "Collabera",
+    "Modis",
+    "Volt Information Sciences",
+    "TrueBlue",
+    "Korn Ferry",
+    "Spencer Stuart",
+    "Heidrick & Struggles",
+    "Russell Reynolds Associates",
+    "Egon Zehnder"
+  ],
+
+  "knownEntityAliases": {
+    "Allegis Group": ["TEKsystems", "Aerotek", "Aston Carter"],
+    "ManpowerGroup": ["Manpower", "Experis"],
+    "Robert Half": ["Robert Half International", "Protiviti"],
+    "Express Employment Professionals": ["Express Employment", "Express Pros"],
+    "CHG Healthcare": ["CHG", "CompHealth", "Weatherby Healthcare"],
+    "AMN Healthcare": ["AMN", "Nursefinders"],
+    "Korn Ferry": ["Hay Group"],
+    "Heidrick & Struggles": ["Heidrick"]
+  },
+
+  "firmTiers": {
+    "global": {
+      "members": ["Allegis Group", "Randstad", "Adecco", "ManpowerGroup"],
+      "description": "Global staffing firms with presence in most major markets",
+      "matchingHint": "Same name different state/country is same entity"
+    },
+    "national": {
+      "description": "National firms with multi-state presence",
+      "matchingHint": "Usually same entity across states"
+    },
+    "regional": {
+      "description": "Regional or local staffing agencies",
+      "matchingHint": "Review cross-state matches, may be different entities"
+    },
+    "executiveSearch": {
+      "members": ["Korn Ferry", "Spencer Stuart", "Heidrick & Struggles", "Russell Reynolds", "Egon Zehnder"],
+      "description": "Global executive search firms",
+      "matchingHint": "Same entity globally"
+    }
+  }
+}

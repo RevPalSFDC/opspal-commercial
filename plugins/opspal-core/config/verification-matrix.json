@@ -1,0 +1,550 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Domain-specific verification gates for task graph orchestration",
+
+  "verification_gates": {
+    "salesforce-apex": {
+      "required": [
+        {
+          "name": "apex_compile",
+          "type": "command",
+          "description": "Verify Apex code compiles without errors",
+          "command": "sf project deploy validate --source-dir {sourcePath} --target-org {orgAlias} --json",
+          "success_criteria": {
+            "json_path": "$.result.status",
+            "expected_value": "Succeeded"
+          },
+          "timeout_seconds": 300,
+          "retry_count": 1
+        },
+        {
+          "name": "apex_tests",
+          "type": "command",
+          "description": "Run Apex tests with code coverage",
+          "command": "sf apex test run --target-org {orgAlias} --code-coverage --result-format json --wait 10",
+          "success_criteria": {
+            "json_path": "$.result.summary.outcome",
+            "expected_value": "Passed",
+            "additional_checks": [
+              {
+                "json_path": "$.result.summary.orgWideCoverage",
+                "operator": ">=",
+                "value": "75%"
+              }
+            ]
+          },
+          "timeout_seconds": 600,
+          "retry_count": 0
+        },
+        {
+          "name": "security_scan",
+          "type": "command",
+          "description": "Run Salesforce Code Analyzer security scan",
+          "command": "sf scanner run --target {sourcePath} --format json --severity-threshold 2",
+          "success_criteria": {
+            "json_path": "$.length",
+            "operator": "==",
+            "value": 0
+          },
+          "timeout_seconds": 300,
+          "retry_count": 0
+        }
+      ],
+      "optional": [
+        {
+          "name": "pmd_check",
+          "type": "command",
+          "description": "Run PMD static analysis",
+          "command": "pmd check --dir {sourcePath} --rulesets apex-ruleset.xml --format json",
+          "success_criteria": {
+            "json_path": "$.violations",
+            "operator": "==",
+            "value": 0
+          },
+          "timeout_seconds": 120
+        },
+        {
+          "name": "complexity_check",
+          "type": "custom",
+          "description": "Check cyclomatic complexity thresholds",
+          "checks": [
+            "max_method_complexity <= 25",
+            "max_class_complexity <= 50"
+          ]
+        }
+      ]
+    },
+
+    "salesforce-flow": {
+      "required": [
+        {
+          "name": "flow_xml_validation",
+          "type": "command",
+          "description": "Validate Flow XML syntax and structure",
+          "command": "sf project deploy validate --source-dir force-app/main/default/flows --target-org {orgAlias} --json",
+          "success_criteria": {
+            "json_path": "$.result.status",
+            "expected_value": "Succeeded"
+          },
+          "timeout_seconds": 300
+        },
+        {
+          "name": "flow_lint",
+          "type": "command",
+          "description": "Run Flow best practices linter",
+          "command": "node scripts/lib/flow-validator.js --path {flowPath} --format json",
+          "success_criteria": {
+            "json_path": "$.errors",
+            "operator": "==",
+            "value": 0
+          },
+          "timeout_seconds": 60
+        }
+      ],
+      "optional": [
+        {
+          "name": "flow_best_practices",
+          "type": "custom",
+          "description": "Check Flow best practices compliance",
+          "checks": [
+            "no_hardcoded_ids",
+            "has_fault_paths",
+            "documented_decisions",
+            "api_version_current",
+            "no_deprecated_elements"
+          ]
+        },
+        {
+          "name": "flow_test_coverage",
+          "type": "custom",
+          "description": "Verify Flow has test coverage",
+          "checks": [
+            "test_class_exists",
+            "test_covers_entry_criteria",
+            "test_covers_branches"
+          ]
+        }
+      ]
+    },
+
+    "salesforce-metadata": {
+      "required": [
+        {
+          "name": "metadata_validation",
+          "type": "command",
+          "description": "Validate metadata deploys successfully",
+          "command": "sf project deploy validate --source-dir {sourcePath} --target-org {orgAlias} --json",
+          "success_criteria": {
+            "json_path": "$.result.status",
+            "expected_value": "Succeeded"
+          },
+          "timeout_seconds": 600
+        },
+        {
+          "name": "package_xml_valid",
+          "type": "file_content",
+          "description": "Verify package.xml is well-formed",
+          "file_path": "{sourcePath}/package.xml",
+          "checks": [
+            "xml_well_formed",
+            "has_api_version",
+            "no_wildcard_types_in_production"
+          ]
+        }
+      ],
+      "optional": [
+        {
+          "name": "api_version_consistency",
+          "type": "custom",
+          "description": "Check API version consistency across components",
+          "checks": [
+            "all_components_same_api_version",
+            "api_version_not_deprecated"
+          ]
+        }
+      ]
+    },
+
+    "salesforce-data": {
+      "required": [
+        {
+          "name": "row_count_reconciliation",
+          "type": "command",
+          "description": "Verify row counts match between source and target",
+          "command": "node scripts/lib/data-reconciliation.js --mode count --source {sourceFile} --target {targetOrg}",
+          "success_criteria": {
+            "json_path": "$.match_percentage",
+            "operator": ">=",
+            "value": 99.9
+          },
+          "timeout_seconds": 300
+        },
+        {
+          "name": "referential_integrity",
+          "type": "command",
+          "description": "Verify no orphaned records or broken references",
+          "command": "node scripts/lib/data-reconciliation.js --mode integrity --target {targetOrg}",
+          "success_criteria": {
+            "json_path": "$.orphan_count",
+            "operator": "==",
+            "value": 0
+          },
+          "timeout_seconds": 300
+        },
+        {
+          "name": "data_type_validation",
+          "type": "custom",
+          "description": "Verify data types match schema",
+          "checks": [
+            "no_type_coercion_errors",
+            "no_truncation",
+            "dates_in_valid_format"
+          ]
+        }
+      ],
+      "optional": [
+        {
+          "name": "checksum_verification",
+          "type": "command",
+          "description": "Verify data checksums match",
+          "command": "node scripts/lib/data-reconciliation.js --mode checksum --source {sourceFile} --target {targetOrg}",
+          "success_criteria": {
+            "json_path": "$.checksum_match",
+            "expected_value": true
+          }
+        }
+      ]
+    },
+
+    "salesforce-permission": {
+      "required": [
+        {
+          "name": "permission_validation",
+          "type": "command",
+          "description": "Validate permission set deploys",
+          "command": "sf project deploy validate --source-dir {sourcePath} --target-org {orgAlias} --json",
+          "success_criteria": {
+            "json_path": "$.result.status",
+            "expected_value": "Succeeded"
+          },
+          "timeout_seconds": 300
+        },
+        {
+          "name": "no_elevated_permissions",
+          "type": "file_content",
+          "description": "Check for dangerous permission escalations",
+          "file_path": "{permissionSetPath}",
+          "forbidden_patterns": [
+            "ModifyAllData.*true",
+            "ViewAllData.*true",
+            "ManageUsers.*true"
+          ],
+          "unless_explicitly_approved": true
+        }
+      ],
+      "optional": [
+        {
+          "name": "least_privilege_check",
+          "type": "custom",
+          "description": "Verify permissions follow least privilege",
+          "checks": [
+            "no_unnecessary_object_access",
+            "field_level_security_appropriate"
+          ]
+        }
+      ]
+    },
+
+    "hubspot-workflow": {
+      "required": [
+        {
+          "name": "workflow_syntax",
+          "type": "command",
+          "description": "Validate workflow configuration syntax",
+          "command": "node scripts/lib/hubspot-workflow-validator.js --workflow {workflowId}",
+          "success_criteria": {
+            "json_path": "$.valid",
+            "expected_value": true
+          },
+          "timeout_seconds": 60
+        },
+        {
+          "name": "enrollment_criteria_valid",
+          "type": "custom",
+          "description": "Verify enrollment criteria are valid",
+          "checks": [
+            "properties_exist",
+            "operators_valid",
+            "no_circular_enrollment"
+          ]
+        }
+      ],
+      "optional": [
+        {
+          "name": "workflow_best_practices",
+          "type": "custom",
+          "description": "Check workflow best practices",
+          "checks": [
+            "has_goal",
+            "reasonable_delays",
+            "exit_criteria_defined"
+          ]
+        }
+      ]
+    },
+
+    "hubspot-data": {
+      "required": [
+        {
+          "name": "property_validation",
+          "type": "custom",
+          "description": "Verify all required properties exist",
+          "checks": [
+            "all_mapped_properties_exist",
+            "property_types_compatible"
+          ]
+        },
+        {
+          "name": "data_format_validation",
+          "type": "custom",
+          "description": "Verify data format compliance",
+          "checks": [
+            "email_format_valid",
+            "phone_format_valid",
+            "date_format_valid",
+            "required_fields_present"
+          ]
+        }
+      ],
+      "optional": [
+        {
+          "name": "deduplication_check",
+          "type": "command",
+          "description": "Check for potential duplicates",
+          "command": "node scripts/lib/hubspot-dedup-checker.js --file {sourceFile}",
+          "success_criteria": {
+            "json_path": "$.duplicate_rate",
+            "operator": "<=",
+            "value": 0.05
+          }
+        }
+      ]
+    },
+
+    "data-transform": {
+      "required": [
+        {
+          "name": "schema_compliance",
+          "type": "custom",
+          "description": "Verify output matches target schema",
+          "checks": [
+            "all_required_fields_present",
+            "data_types_match",
+            "no_schema_violations"
+          ]
+        },
+        {
+          "name": "row_count_preservation",
+          "type": "command",
+          "description": "Verify row counts (accounting for expected changes)",
+          "command": "node scripts/lib/data-reconciliation.js --mode count --source {sourceFile} --target {targetFile}",
+          "success_criteria": {
+            "json_path": "$.match_percentage",
+            "operator": ">=",
+            "value": 100,
+            "tolerance": 0.1
+          }
+        }
+      ],
+      "optional": [
+        {
+          "name": "key_preservation",
+          "type": "custom",
+          "description": "Verify key values preserved through transformation",
+          "checks": [
+            "primary_keys_preserved",
+            "foreign_keys_valid"
+          ]
+        }
+      ]
+    },
+
+    "data-migration": {
+      "required": [
+        {
+          "name": "source_extraction_complete",
+          "type": "custom",
+          "description": "Verify all source data extracted",
+          "checks": [
+            "all_objects_extracted",
+            "row_counts_match_source",
+            "checksums_recorded"
+          ]
+        },
+        {
+          "name": "target_load_complete",
+          "type": "custom",
+          "description": "Verify all data loaded to target",
+          "checks": [
+            "all_records_loaded",
+            "success_rate_above_threshold",
+            "errors_documented"
+          ]
+        },
+        {
+          "name": "reconciliation_passed",
+          "type": "command",
+          "description": "Full source-to-target reconciliation",
+          "command": "node scripts/lib/migration-reconciler.js --source {sourceSystem} --target {targetSystem}",
+          "success_criteria": {
+            "json_path": "$.match_percentage",
+            "operator": ">=",
+            "value": 99.9
+          },
+          "timeout_seconds": 600
+        }
+      ],
+      "optional": [
+        {
+          "name": "relationship_preservation",
+          "type": "custom",
+          "description": "Verify relationships preserved",
+          "checks": [
+            "parent_child_intact",
+            "lookup_references_valid",
+            "no_orphan_records"
+          ]
+        }
+      ]
+    },
+
+    "integration": {
+      "required": [
+        {
+          "name": "auth_verification",
+          "type": "custom",
+          "description": "Verify authentication working",
+          "checks": [
+            "oauth_token_valid",
+            "scopes_sufficient",
+            "refresh_working"
+          ]
+        },
+        {
+          "name": "endpoint_health",
+          "type": "command",
+          "description": "Verify endpoint connectivity",
+          "command": "node scripts/lib/integration-health-check.js --config {configPath}",
+          "success_criteria": {
+            "json_path": "$.status",
+            "expected_value": "healthy"
+          },
+          "timeout_seconds": 30
+        }
+      ],
+      "optional": [
+        {
+          "name": "rate_limit_headroom",
+          "type": "custom",
+          "description": "Verify sufficient API rate limit headroom",
+          "checks": [
+            "current_usage_below_80_percent",
+            "burst_capacity_available"
+          ]
+        }
+      ]
+    },
+
+    "production": {
+      "required": [
+        {
+          "name": "all_tests_pass",
+          "type": "command",
+          "description": "All tests must pass in production validation",
+          "command": "sf apex test run --target-org {prodAlias} --test-level RunLocalTests --code-coverage --result-format json --wait 20",
+          "success_criteria": {
+            "json_path": "$.result.summary.outcome",
+            "expected_value": "Passed"
+          },
+          "timeout_seconds": 1200
+        },
+        {
+          "name": "rollback_available",
+          "type": "file_exists",
+          "description": "Verify rollback package exists",
+          "file_path": "{rollbackPath}/rollback-manifest.xml"
+        },
+        {
+          "name": "backup_verified",
+          "type": "custom",
+          "description": "Verify backup is complete and restorable",
+          "checks": [
+            "backup_file_exists",
+            "backup_checksum_valid",
+            "restore_test_passed"
+          ]
+        },
+        {
+          "name": "approval_recorded",
+          "type": "file_exists",
+          "description": "Verify approval documentation exists",
+          "file_path": "{outputPath}/approval_record.json"
+        }
+      ],
+      "optional": []
+    }
+  },
+
+  "gate_types": {
+    "command": {
+      "description": "Execute shell command and parse output",
+      "parameters": ["command", "success_criteria", "timeout_seconds", "retry_count"],
+      "output_format": "json"
+    },
+    "file_exists": {
+      "description": "Check if file exists at path",
+      "parameters": ["file_path"],
+      "output_format": "boolean"
+    },
+    "file_content": {
+      "description": "Check file content against patterns",
+      "parameters": ["file_path", "checks", "forbidden_patterns"],
+      "output_format": "object"
+    },
+    "custom": {
+      "description": "Run custom validation logic",
+      "parameters": ["checks"],
+      "output_format": "object"
+    },
+    "json_schema": {
+      "description": "Validate JSON against schema",
+      "parameters": ["file_path", "schema_path"],
+      "output_format": "object"
+    }
+  },
+
+  "failure_handling": {
+    "on_required_failure": {
+      "action": "block",
+      "message_template": "Required gate '{gate_name}' failed: {failure_reason}",
+      "allow_override": false
+    },
+    "on_optional_failure": {
+      "action": "warn",
+      "message_template": "Optional gate '{gate_name}' failed: {failure_reason}",
+      "allow_continue": true
+    },
+    "on_timeout": {
+      "action": "retry_then_fail",
+      "max_retries": 1,
+      "message_template": "Gate '{gate_name}' timed out after {timeout}s"
+    }
+  },
+
+  "execution_order": {
+    "parallel_gates": ["compile", "lint", "static_analysis"],
+    "sequential_gates": ["deploy_validation", "test_execution", "reconciliation"],
+    "final_gates": ["approval_check", "backup_verification"]
+  }
+}

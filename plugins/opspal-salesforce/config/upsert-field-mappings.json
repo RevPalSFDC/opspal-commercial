@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Field mappings for Lead/Contact/Account upsert operations",
+
+  "leadToContact": {
+    "description": "Standard field mappings from Lead to Contact during conversion",
+    "mappings": {
+      "FirstName": "FirstName",
+      "LastName": "LastName",
+      "Email": "Email",
+      "Phone": "Phone",
+      "MobilePhone": "MobilePhone",
+      "Title": "Title",
+      "LeadSource": "LeadSource",
+      "Description": "Description",
+      "Fax": "Fax",
+      "MailingStreet": "MailingStreet",
+      "MailingCity": "MailingCity",
+      "MailingState": "MailingState",
+      "MailingPostalCode": "MailingPostalCode",
+      "MailingCountry": "MailingCountry",
+      "DoNotCall": "DoNotCall",
+      "HasOptedOutOfEmail": "HasOptedOutOfEmail",
+      "HasOptedOutOfFax": "HasOptedOutOfFax"
+    },
+    "customMappings": {
+      "comment": "Add org-specific custom field mappings here",
+      "example": {
+        "Lead_Score__c": "Contact_Score__c",
+        "Marketing_Segment__c": "Segment__c"
+      }
+    }
+  },
+
+  "leadToAccount": {
+    "description": "Standard field mappings from Lead to Account during conversion",
+    "mappings": {
+      "Company": "Name",
+      "Website": "Website",
+      "Industry": "Industry",
+      "NumberOfEmployees": "NumberOfEmployees",
+      "AnnualRevenue": "AnnualRevenue",
+      "Phone": "Phone",
+      "Fax": "Fax",
+      "Street": "BillingStreet",
+      "City": "BillingCity",
+      "State": "BillingState",
+      "PostalCode": "BillingPostalCode",
+      "Country": "BillingCountry",
+      "Description": "Description"
+    },
+    "customMappings": {
+      "comment": "Add org-specific custom field mappings here"
+    }
+  },
+
+  "externalToLead": {
+    "description": "Mappings from external systems (CSV, API) to Lead fields",
+    "standardMappings": {
+      "first_name": "FirstName",
+      "firstName": "FirstName",
+      "First Name": "FirstName",
+      "last_name": "LastName",
+      "lastName": "LastName",
+      "Last Name": "LastName",
+      "email": "Email",
+      "email_address": "Email",
+      "Email Address": "Email",
+      "company": "Company",
+      "company_name": "Company",
+      "Company Name": "Company",
+      "phone": "Phone",
+      "phone_number": "Phone",
+      "Phone Number": "Phone",
+      "mobile": "MobilePhone",
+      "mobile_phone": "MobilePhone",
+      "Mobile Phone": "MobilePhone",
+      "title": "Title",
+      "job_title": "Title",
+      "Job Title": "Title",
+      "website": "Website",
+      "company_website": "Website",
+      "Website": "Website",
+      "industry": "Industry",
+      "Industry": "Industry",
+      "employees": "NumberOfEmployees",
+      "employee_count": "NumberOfEmployees",
+      "Number of Employees": "NumberOfEmployees",
+      "revenue": "AnnualRevenue",
+      "annual_revenue": "AnnualRevenue",
+      "Annual Revenue": "AnnualRevenue",
+      "street": "Street",
+      "address": "Street",
+      "Street Address": "Street",
+      "city": "City",
+      "City": "City",
+      "state": "State",
+      "State": "State",
+      "state_code": "State",
+      "State Code": "State",
+      "zip": "PostalCode",
+      "postal_code": "PostalCode",
+      "Postal Code": "PostalCode",
+      "zip_code": "PostalCode",
+      "Zip Code": "PostalCode",
+      "country": "Country",
+      "Country": "Country",
+      "country_code": "Country",
+      "Country Code": "Country",
+      "lead_source": "LeadSource",
+      "source": "LeadSource",
+      "Lead Source": "LeadSource",
+      "description": "Description",
+      "notes": "Description",
+      "Description": "Description"
+    },
+    "caseInsensitive": true
+  },
+
+  "externalToContact": {
+    "description": "Mappings from external systems to Contact fields",
+    "standardMappings": {
+      "first_name": "FirstName",
+      "firstName": "FirstName",
+      "First Name": "FirstName",
+      "last_name": "LastName",
+      "lastName": "LastName",
+      "Last Name": "LastName",
+      "email": "Email",
+      "email_address": "Email",
+      "Email Address": "Email",
+      "phone": "Phone",
+      "phone_number": "Phone",
+      "Phone Number": "Phone",
+      "mobile": "MobilePhone",
+      "mobile_phone": "MobilePhone",
+      "Mobile Phone": "MobilePhone",
+      "title": "Title",
+      "job_title": "Title",
+      "Job Title": "Title",
+      "department": "Department",
+      "Department": "Department",
+      "account_id": "AccountId",
+      "AccountId": "AccountId",
+      "Account ID": "AccountId",
+      "mailing_street": "MailingStreet",
+      "Mailing Street": "MailingStreet",
+      "mailing_city": "MailingCity",
+      "Mailing City": "MailingCity",
+      "mailing_state": "MailingState",
+      "Mailing State": "MailingState",
+      "mailing_postal_code": "MailingPostalCode",
+      "Mailing Postal Code": "MailingPostalCode",
+      "mailing_country": "MailingCountry",
+      "Mailing Country": "MailingCountry"
+    },
+    "caseInsensitive": true
+  },
+
+  "externalToAccount": {
+    "description": "Mappings from external systems to Account fields",
+    "standardMappings": {
+      "name": "Name",
+      "company": "Name",
+      "company_name": "Name",
+      "Company Name": "Name",
+      "Account Name": "Name",
+      "website": "Website",
+      "company_website": "Website",
+      "Website": "Website",
+      "phone": "Phone",
+      "phone_number": "Phone",
+      "Phone Number": "Phone",
+      "industry": "Industry",
+      "Industry": "Industry",
+      "type": "Type",
+      "account_type": "Type",
+      "Account Type": "Type",
+      "employees": "NumberOfEmployees",
+      "employee_count": "NumberOfEmployees",
+      "Number of Employees": "NumberOfEmployees",
+      "revenue": "AnnualRevenue",
+      "annual_revenue": "AnnualRevenue",
+      "Annual Revenue": "AnnualRevenue",
+      "billing_street": "BillingStreet",
+      "Billing Street": "BillingStreet",
+      "billing_city": "BillingCity",
+      "Billing City": "BillingCity",
+      "billing_state": "BillingState",
+      "Billing State": "BillingState",
+      "billing_postal_code": "BillingPostalCode",
+      "Billing Postal Code": "BillingPostalCode",
+      "billing_country": "BillingCountry",
+      "Billing Country": "BillingCountry",
+      "description": "Description",
+      "Description": "Description"
+    },
+    "caseInsensitive": true
+  },
+
+  "transformations": {
+    "description": "Field-level transformation rules",
+    "rules": {
+      "Email": {
+        "transform": "lowercase",
+        "trim": true,
+        "validate": "email"
+      },
+      "Phone": {
+        "transform": "phoneNormalize",
+        "description": "Remove non-digits, format as (XXX) XXX-XXXX for US"
+      },
+      "MobilePhone": {
+        "transform": "phoneNormalize"
+      },
+      "Website": {
+        "transform": "urlNormalize",
+        "description": "Add https:// if missing, remove trailing slash"
+      },
+      "Company": {
+        "transform": "companyNormalize",
+        "description": "Remove Inc, LLC, Corp suffixes for matching"
+      },
+      "FirstName": {
+        "transform": "properCase",
+        "trim": true
+      },
+      "LastName": {
+        "transform": "properCase",
+        "trim": true
+      },
+      "State": {
+        "transform": "stateCode",
+        "description": "Convert state names to 2-letter codes"
+      },
+      "Country": {
+        "transform": "countryCode",
+        "description": "Convert country names to ISO codes"
+      },
+      "NumberOfEmployees": {
+        "transform": "integer",
+        "min": 0
+      },
+      "AnnualRevenue": {
+        "transform": "currency",
+        "min": 0
+      }
+    }
+  },
+
+  "nullHandling": {
+    "description": "How to handle null/empty values during upsert",
+    "default": "preserveExisting",
+    "options": {
+      "preserveExisting": "Do not overwrite if source value is null/empty",
+      "overwrite": "Always overwrite, even with null",
+      "overwriteIfNewer": "Overwrite only if source is newer (requires timestamp)",
+      "writeIfEmpty": "Only write if target field is currently empty (does NOT append/concatenate)"
+    },
+    "_appendWarning": "CAUTION: 'append' is ambiguous (prefix vs suffix). Use 'writeIfEmpty' for empty-field writes. For value concatenation, use clarification-protocol.md Template E to confirm position (prefix/suffix) with user before proceeding.",
+    "fieldOverrides": {
+      "Email": "overwrite",
+      "Phone": "preserveExisting",
+      "Description": "writeIfEmpty"
+    }
+  },
+
+  "requiredFields": {
+    "Lead": ["LastName", "Company"],
+    "Contact": ["LastName"],
+    "Account": ["Name"]
+  },
+
+  "defaultValues": {
+    "Lead": {
+      "LeadSource": "Web",
+      "Status": "Open - Not Contacted"
+    },
+    "Contact": {},
+    "Account": {
+      "Type": "Prospect"
+    }
+  },
+
+  "validationRules": {
+    "Email": {
+      "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "required": false,
+      "errorMessage": "Invalid email format"
+    },
+    "Phone": {
+      "minLength": 7,
+      "maxLength": 20,
+      "required": false
+    },
+    "Website": {
+      "pattern": "^(https?:\\/\\/)?[a-zA-Z0-9][a-zA-Z0-9-]*\\.[a-zA-Z]{2,}",
+      "required": false,
+      "errorMessage": "Invalid website format"
+    }
+  }
+}

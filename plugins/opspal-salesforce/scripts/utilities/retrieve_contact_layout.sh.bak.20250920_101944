@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cd /home/chris/Desktop/RevPal/Agents/ClaudeSFDC
+
+# Create force-app directory structure
+mkdir -p force-app/main/default
+
+echo "=== Checking org connection ==="
+sfdx org display --target-org beta-sandbox
+
+echo -e "\n=== Querying for Contact layouts ==="
+sf data query --use-tooling-api --query "SELECT Name, Id FROM Layout WHERE TableEnumOrId = 'Contact'" --target-org beta-sandbox
+
+echo -e "\n=== Retrieving Contact layouts ==="
+sfdx project retrieve start -m "Layout:Contact*" --target-org beta-sandbox
+
+echo -e "\n=== Listing retrieved files ==="
+find force-app -name "*Contact*" -type f
+
+echo -e "\n=== Showing layout files ==="
+find force-app -name "*.layout*" -type f

@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "RevOps Data Quality System - Data Source Trust Hierarchy",
+
+  "source_definitions": {
+    "crm_user_entered": {
+      "id": "crm_user_entered",
+      "name": "CRM User-Entered Data",
+      "type": "first_party",
+      "description": "Data manually entered by CRM users (sales reps, CSMs, etc.)",
+      "trust_score": 95,
+      "confidence_base": 5,
+      "characteristics": {
+        "authoritative": true,
+        "verified": true,
+        "context_aware": true
+      },
+      "platforms": ["salesforce", "hubspot"]
+    },
+    "customer_provided": {
+      "id": "customer_provided",
+      "name": "Customer-Provided Data",
+      "type": "first_party",
+      "description": "Data provided directly by the customer via forms, surveys, or direct communication",
+      "trust_score": 98,
+      "confidence_base": 5,
+      "characteristics": {
+        "authoritative": true,
+        "verified": true,
+        "self_reported": true
+      }
+    },
+    "product_telemetry": {
+      "id": "product_telemetry",
+      "name": "Product Usage Telemetry",
+      "type": "first_party",
+      "description": "Data collected from product usage and interactions",
+      "trust_score": 90,
+      "confidence_base": 4,
+      "characteristics": {
+        "behavioral": true,
+        "automated": true,
+        "real_time": true
+      }
+    },
+    "email_engagement": {
+      "id": "email_engagement",
+      "name": "Email Engagement Data",
+      "type": "first_party",
+      "description": "Data from email opens, clicks, and responses",
+      "trust_score": 85,
+      "confidence_base": 4,
+      "characteristics": {
+        "behavioral": true,
+        "automated": true,
+        "verifies_contact_active": true
+      }
+    },
+    "company_website": {
+      "id": "company_website",
+      "name": "Company Website",
+      "type": "second_party",
+      "description": "Data scraped or extracted from the company's official website",
+      "trust_score": 80,
+      "confidence_base": 4,
+      "characteristics": {
+        "authoritative": true,
+        "may_be_outdated": true,
+        "public": true
+      }
+    },
+    "linkedin": {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "type": "second_party",
+      "description": "Data from LinkedIn profiles and company pages",
+      "trust_score": 78,
+      "confidence_base": 4,
+      "characteristics": {
+        "professional_network": true,
+        "self_reported": true,
+        "may_be_outdated": true
+      }
+    },
+    "government_database": {
+      "id": "government_database",
+      "name": "Government Database",
+      "type": "second_party",
+      "description": "Data from official government databases (SAM.gov, Census, etc.)",
+      "trust_score": 92,
+      "confidence_base": 5,
+      "characteristics": {
+        "authoritative": true,
+        "verified": true,
+        "official_record": true
+      },
+      "applicable_to": ["government_entities", "contractors"]
+    },
+    "enrichment_provider_tier1": {
+      "id": "enrichment_tier1",
+      "name": "Tier 1 Enrichment Provider",
+      "type": "third_party",
+      "description": "Premium data enrichment providers (ZoomInfo, Dun & Bradstreet)",
+      "trust_score": 70,
+      "confidence_base": 3,
+      "providers": ["zoominfo", "dnb", "clearbit", "apollo"],
+      "characteristics": {
+        "aggregated": true,
+        "regularly_updated": true,
+        "wide_coverage": true
+      }
+    },
+    "enrichment_provider_tier2": {
+      "id": "enrichment_tier2",
+      "name": "Tier 2 Enrichment Provider",
+      "type": "third_party",
+      "description": "Secondary data enrichment providers",
+      "trust_score": 55,
+      "confidence_base": 2,
+      "providers": ["rocketreach", "hunter", "snov"],
+      "characteristics": {
+        "aggregated": true,
+        "variable_accuracy": true
+      }
+    },
+    "business_directory": {
+      "id": "business_directory",
+      "name": "Business Directory",
+      "type": "third_party",
+      "description": "Business directories like Google Business, Yelp, BBB",
+      "trust_score": 50,
+      "confidence_base": 3,
+      "characteristics": {
+        "self_reported": true,
+        "may_be_outdated": true,
+        "public": true
+      }
+    },
+    "news_article": {
+      "id": "news_article",
+      "name": "News Article",
+      "type": "third_party",
+      "description": "Data extracted from news articles and press releases",
+      "trust_score": 60,
+      "confidence_base": 3,
+      "characteristics": {
+        "point_in_time": true,
+        "may_be_outdated": true,
+        "contextual": true
+      }
+    },
+    "web_search": {
+      "id": "web_search",
+      "name": "Web Search Results",
+      "type": "third_party",
+      "description": "Data gathered from general web search results",
+      "trust_score": 40,
+      "confidence_base": 2,
+      "characteristics": {
+        "aggregated": true,
+        "variable_quality": true,
+        "requires_verification": true
+      }
+    },
+    "csv_import": {
+      "id": "csv_import",
+      "name": "CSV Import",
+      "type": "unknown",
+      "description": "Data imported from CSV files (quality varies)",
+      "trust_score": 30,
+      "confidence_base": 2,
+      "characteristics": {
+        "variable_quality": true,
+        "requires_validation": true,
+        "source_unknown": true
+      }
+    },
+    "ai_inference": {
+      "id": "ai_inference",
+      "name": "AI Inference",
+      "type": "inferred",
+      "description": "Data inferred or predicted by AI/ML models",
+      "trust_score": 25,
+      "confidence_base": 1,
+      "characteristics": {
+        "probabilistic": true,
+        "requires_verification": true,
+        "may_be_hallucinated": true
+      }
+    }
+  },
+
+  "field_source_priorities": {
+    "firmographic": {
+      "account_name": {
+        "priority": ["customer_provided", "crm_user_entered", "company_website", "government_database", "enrichment_tier1"],
+        "notes": "Prefer authoritative sources; legal name from official sources"
+      },
+      "website_domain": {
+        "priority": ["company_website", "crm_user_entered", "enrichment_tier1", "linkedin"],
+        "notes": "Company website is most authoritative for its own domain"
+      },
+      "industry": {
+        "priority": ["crm_user_entered", "enrichment_tier1", "company_website", "linkedin"],
+        "notes": "CRM users have context; enrichment provides NAICS/SIC codes"
+      },
+      "annual_revenue": {
+        "priority": ["customer_provided", "government_database", "enrichment_tier1", "crm_user_entered"],
+        "notes": "Self-reported or official filings most accurate; enrichment estimates"
+      },
+      "employee_count": {
+        "priority": ["linkedin", "company_website", "enrichment_tier1", "crm_user_entered"],
+        "notes": "LinkedIn often most current; websites may lag"
+      },
+      "headquarters_address": {
+        "priority": ["company_website", "government_database", "enrichment_tier1", "crm_user_entered"],
+        "notes": "Official website/filings most reliable"
+      },
+      "phone": {
+        "priority": ["crm_user_entered", "company_website", "enrichment_tier1", "business_directory"],
+        "notes": "Direct numbers from CRM; switchboard from website"
+      }
+    },
+    "biographic": {
+      "email": {
+        "priority": ["customer_provided", "crm_user_entered", "email_engagement", "linkedin", "enrichment_tier1"],
+        "notes": "Verified emails from engagement are most reliable"
+      },
+      "phone": {
+        "priority": ["customer_provided", "crm_user_entered", "enrichment_tier1"],
+        "notes": "Direct mobile from customer; office from CRM"
+      },
+      "title": {
+        "priority": ["linkedin", "customer_provided", "crm_user_entered", "enrichment_tier1"],
+        "notes": "LinkedIn often most current for professional roles"
+      },
+      "first_name": {
+        "priority": ["customer_provided", "crm_user_entered", "linkedin", "email_engagement"],
+        "notes": "Self-reported names most accurate"
+      },
+      "last_name": {
+        "priority": ["customer_provided", "crm_user_entered", "linkedin", "email_engagement"],
+        "notes": "Self-reported names most accurate"
+      }
+    },
+    "government": {
+      "government_type": {
+        "priority": ["government_database", "company_website", "crm_user_entered"],
+        "notes": "Official government databases are authoritative"
+      },
+      "jurisdiction": {
+        "priority": ["government_database", "company_website", "crm_user_entered"],
+        "notes": "Census/official sources for jurisdiction data"
+      },
+      "population_served": {
+        "priority": ["government_database", "company_website"],
+        "notes": "Census data is authoritative"
+      }
+    }
+  },
+
+  "survivorship_rules": {
+    "strategies": {
+      "source_priority": {
+        "description": "Use value from highest-priority source",
+        "applicable_to": ["account_name", "email", "phone"]
+      },
+      "most_recent": {
+        "description": "Use most recently updated value",
+        "applicable_to": ["title", "employee_count"],
+        "caveats": ["Ignore automated sync touches", "Consider only meaningful updates"]
+      },
+      "most_complete": {
+        "description": "Use value with most information (least blanks)",
+        "applicable_to": ["headquarters_address", "description"]
+      },
+      "quality_score": {
+        "description": "Use value with highest data quality score",
+        "applicable_to": ["email", "phone"],
+        "factors": ["deliverability", "format_valid", "domain_type"]
+      },
+      "verified_preference": {
+        "description": "Prefer verified values over unverified",
+        "applicable_to": ["email", "phone", "address"]
+      }
+    },
+    "conflict_resolution": {
+      "same_source_type": "most_recent",
+      "different_source_type": "source_priority",
+      "both_verified": "most_recent",
+      "one_verified": "verified_preference"
+    }
+  },
+
+  "protected_fields": {
+    "never_overwrite": [
+      "do_not_call",
+      "do_not_email",
+      "gdpr_consent",
+      "ccpa_opt_out",
+      "lead_source",
+      "opportunity_stage",
+      "close_date"
+    ],
+    "require_approval": [
+      "owner_id",
+      "account_id",
+      "annual_revenue",
+      "contract_value"
+    ]
+  },
+
+  "confidence_calculation": {
+    "base_score_from_source": true,
+    "modifiers": {
+      "corroboration": {
+        "single_source": 0,
+        "two_sources_agree": 0.5,
+        "three_plus_sources_agree": 1
+      },
+      "recency": {
+        "within_30_days": 0.5,
+        "within_90_days": 0,
+        "within_year": -0.5,
+        "over_year": -1
+      },
+      "verification": {
+        "verified_valid": 0.5,
+        "unverified": 0,
+        "verified_invalid": -2
+      }
+    },
+    "max_score": 5,
+    "min_score": 1
+  }
+}

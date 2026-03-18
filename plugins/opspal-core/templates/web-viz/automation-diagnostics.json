@@ -1,0 +1,237 @@
+{
+  "id": "automation-diagnostics",
+  "name": "Automation Diagnostics Dashboard",
+  "description": "Real-time monitoring of automation errors, performance, and user impact",
+  "version": "1.0.0",
+  "category": "operations",
+  "audience": ["admin", "developer"],
+  "platforms": ["salesforce"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "time-range", "type": "select", "label": "Time Range", "default": "today", "options": ["today", "yesterday", "last-7-days", "last-30-days"] },
+      { "id": "automation-type", "type": "multi-select", "label": "Automation Type", "default": "all" },
+      { "id": "error-type", "type": "multi-select", "label": "Error Type", "default": "all" }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "errors-today",
+      "type": "kpi",
+      "title": "Errors Today",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": true,
+        "trendLabel": "vs yesterday",
+        "icon": "exclamation-circle",
+        "thresholds": [
+          { "value": 5, "color": "#22C55E" },
+          { "value": 15, "color": "#F59E0B" },
+          { "value": 999, "color": "#EF4444" }
+        ]
+      },
+      "demoData": "kpis.errorsToday"
+    },
+    {
+      "id": "errors-week",
+      "type": "kpi",
+      "title": "Errors This Week",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": true,
+        "trendLabel": "vs last week",
+        "icon": "calendar"
+      },
+      "demoData": "kpis.errorsThisWeek"
+    },
+    {
+      "id": "users-impacted",
+      "type": "kpi",
+      "title": "Users Impacted",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "users"
+      },
+      "demoData": "kpis.usersImpacted"
+    },
+    {
+      "id": "flow-waits",
+      "type": "kpi",
+      "title": "Paused Flows",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": false,
+        "icon": "pause-circle"
+      },
+      "demoData": "kpis.flowWaits"
+    },
+    {
+      "id": "error-trend",
+      "type": "chart",
+      "title": "Error Trend (30 Days)",
+      "position": { "row": 2, "col": 1, "colspan": 6, "rowspan": 2 },
+      "config": {
+        "chartType": "line",
+        "showLegend": true,
+        "fill": true,
+        "tension": 0.3,
+        "annotations": {
+          "threshold": { "value": 10, "label": "Alert Threshold", "color": "#EF4444", "dash": [5, 5] }
+        }
+      },
+      "dataBinding": {
+        "source": "salesforce",
+        "query": "error-trend"
+      },
+      "demoData": "errorTrend"
+    },
+    {
+      "id": "errors-by-type",
+      "type": "chart",
+      "title": "Errors by Type",
+      "position": { "row": 2, "col": 7, "colspan": 6, "rowspan": 2 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": false,
+        "showValues": true
+      },
+      "demoData": "errorsByType"
+    },
+    {
+      "id": "top-failing",
+      "type": "table",
+      "title": "Top Failing Automations",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Automation", "width": "30%" },
+          { "field": "type", "label": "Type", "width": "20%" },
+          { "field": "errorCount", "label": "Errors", "width": "12%", "align": "center" },
+          { "field": "primaryError", "label": "Primary Error", "width": "28%" },
+          { "field": "trend", "label": "Trend", "width": "10%", "format": "trend-icon" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "maxRows": 5
+      },
+      "demoData": "topFailingAutomations"
+    },
+    {
+      "id": "recent-errors",
+      "type": "table",
+      "title": "Recent Errors",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "timestamp", "label": "Time", "format": "time-ago", "width": "15%" },
+          { "field": "automation", "label": "Automation", "width": "25%" },
+          { "field": "errorType", "label": "Type", "width": "20%" },
+          { "field": "message", "label": "Message", "width": "30%", "truncate": 50 },
+          { "field": "user", "label": "User", "width": "10%" }
+        ],
+        "sortable": true,
+        "pagination": true,
+        "pageSize": 10,
+        "rowActions": [
+          { "id": "details", "label": "View Details", "icon": "eye" }
+        ]
+      },
+      "demoData": "recentErrors"
+    },
+    {
+      "id": "performance-metrics",
+      "type": "chart",
+      "title": "Average Execution Time (ms)",
+      "position": { "row": 5, "col": 1, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": false,
+        "showValues": true,
+        "annotations": {
+          "threshold": { "value": 2000, "label": "Performance Warning", "color": "#F59E0B", "dash": [3, 3] }
+        }
+      },
+      "demoData": "performanceMetrics.avgExecutionTime"
+    },
+    {
+      "id": "current-alerts",
+      "type": "table",
+      "title": "Active Alerts",
+      "position": { "row": 5, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "severity", "label": "Severity", "width": "15%", "format": "badge" },
+          { "field": "title", "label": "Alert", "width": "30%" },
+          { "field": "message", "label": "Details", "width": "40%" },
+          { "field": "timestamp", "label": "Time", "format": "time-ago", "width": "15%" }
+        ],
+        "sortable": false,
+        "pagination": false,
+        "emptyMessage": "No active alerts",
+        "rowHighlight": {
+          "field": "severity",
+          "values": {
+            "critical": "#FEE2E2",
+            "warning": "#FEF3C7",
+            "info": "#DBEAFE"
+          }
+        }
+      },
+      "demoData": "currentAlerts"
+    }
+  ],
+
+  "dataBindings": {
+    "error-trend": {
+      "salesforce": {
+        "tooling": true,
+        "query": "SELECT DAY_ONLY(CreatedDate) day, COUNT(Id) count FROM ApexLog WHERE Status = 'Error' AND CreatedDate = LAST_N_DAYS:30 GROUP BY DAY_ONLY(CreatedDate) ORDER BY DAY_ONLY(CreatedDate)"
+      }
+    },
+    "top-failing": {
+      "salesforce": {
+        "tooling": true,
+        "query": "SELECT Flow.DeveloperName, COUNT(Id) errors FROM FlowInterview WHERE Status = 'Error' AND CreatedDate = TODAY GROUP BY Flow.DeveloperName ORDER BY COUNT(Id) DESC LIMIT 10"
+      }
+    }
+  },
+
+  "alertThresholds": {
+    "errorsPerHour": { "warning": 5, "critical": 15 },
+    "governorLimitUsage": { "warning": 70, "critical": 90 },
+    "executionTime": { "warning": 2000, "critical": 5000 }
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "errorTypeColors": {
+      "Validation Error": "#EF4444",
+      "Null Pointer": "#F59E0B",
+      "Governor Limit": "#8B5CF6",
+      "FIELD_CUSTOM_VALIDATION": "#EC4899",
+      "DUPLICATE_VALUE": "#22C55E",
+      "REQUIRED_FIELD": "#3B82F6",
+      "INVALID_CROSS_REF": "#14B8A6",
+      "Other": "#64748B"
+    },
+    "severityColors": {
+      "critical": "#EF4444",
+      "warning": "#F59E0B",
+      "info": "#3B82F6"
+    }
+  }
+}

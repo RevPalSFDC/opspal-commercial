@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/marketo-field-policy.schema.json",
+  "title": "Marketo Field Policy Schema",
+  "description": "Schema for Marketo field policies that define required, default, and excluded fields per object type",
+  "type": "object",
+  "required": ["schemaVersion", "platform"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Schema version for compatibility",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "platform": {
+      "type": "string",
+      "const": "marketo",
+      "description": "Platform identifier"
+    },
+    "globalDefaults": {
+      "type": "object",
+      "description": "Global default settings for all objects",
+      "properties": {
+        "alwaysExclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Field patterns to always exclude (supports wildcards)"
+        },
+        "alwaysInclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields to always include"
+        },
+        "piiDetectionEnabled": {
+          "type": "boolean",
+          "description": "Enable automatic PII detection",
+          "default": true
+        },
+        "maxFieldsDefault": {
+          "type": "integer",
+          "description": "Default max fields per query",
+          "default": 100
+        },
+        "excludeSystemFields": {
+          "type": "boolean",
+          "description": "Exclude Marketo system fields",
+          "default": false
+        },
+        "excludeActivityFields": {
+          "type": "boolean",
+          "description": "Exclude activity log fields",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "policies": {
+      "type": "object",
+      "description": "Per-object field policies",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "required_fields": {
+            "type": "object",
+            "properties": {
+              "fields": { "type": "array", "items": { "type": "string" } },
+              "source": { "type": "string", "enum": ["manual", "detected", "inherited"] },
+              "rationale": { "type": "string" }
+            }
+          },
+          "default_fields": {
+            "type": "object",
+            "properties": {
+              "fields": { "type": "array", "items": { "type": "string" } },
+              "source": { "type": "string", "enum": ["manual", "detected", "inherited"] },
+              "rationale": { "type": "string" }
+            }
+          },
+          "recommended_fields": {
+            "type": "object",
+            "properties": {
+              "fields": { "type": "array", "items": { "type": "string" } },
+              "source": { "type": "string" }
+            }
+          },
+          "sensitive_field_exclusions": {
+            "type": "object",
+            "properties": {
+              "fields": { "type": "array", "items": { "type": "string" } },
+              "patterns": { "type": "array", "items": { "type": "string" } },
+              "fieldGroups": { "type": "array", "items": { "type": "string" } },
+              "complianceReason": { "type": "string" }
+            }
+          },
+          "field_aliases": {
+            "type": "object",
+            "description": "Map of display names to API names",
+            "additionalProperties": { "type": "string" }
+          },
+          "maxFields": {
+            "type": "integer",
+            "description": "Maximum fields for this object"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "taskVariantOverrides": {
+      "type": "object",
+      "description": "Task-specific field overrides",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "includeAdditional": { "type": "array", "items": { "type": "string" } },
+          "excludeAdditional": { "type": "array", "items": { "type": "string" } },
+          "maxFieldsOverride": { "type": "integer" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

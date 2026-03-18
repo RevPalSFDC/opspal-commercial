@@ -1,0 +1,45 @@
+{
+  "stages": {
+    "schema": {
+      "enabled": true,
+      "blocking": true,
+      "warningMode": false
+    },
+    "parse": {
+      "enabled": true,
+      "blocking": true,
+      "warningMode": false,
+      "autoFix": true
+    },
+    "dataQuality": {
+      "enabled": true,
+      "threshold": 70,
+      "blocking": "criticalOnly",
+      "blockThreshold": 50
+    },
+    "toolContract": {
+      "enabled": true,
+      "blocking": true,
+      "warningMode": false
+    },
+    "permissions": {
+      "enabled": true,
+      "blocking": true,
+      "warningMode": false,
+      "requireSalesforce": true
+    }
+  },
+  "parallelization": {
+    "enabled": true,
+    "maxConcurrent": 3
+  },
+  "performance": {
+    "timeoutMs": 500,
+    "stageTimeoutMs": 200
+  },
+  "reporting": {
+    "verbose": false,
+    "includeRemediation": true,
+    "aggregateErrors": true
+  }
+}

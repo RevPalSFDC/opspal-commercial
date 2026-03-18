@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-consultation-check.sh",
+            "timeout": 5000,
+            "description": "Monitor agent outputs for struggle signals, suggest Gemini consultation, and log outcomes to ACE"
+          }
+        ]
+      }
+    ]
+  }
+}

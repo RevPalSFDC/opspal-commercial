@@ -1,0 +1,20 @@
+#!/bin/bash
+cd /home/chris/Desktop/RevPal/Agents/ClaudeSFDC
+
+echo "Checking SFDX version..."
+sfdx --version
+
+echo -e "\nChecking org connection..."
+sfdx org display --target-org beta-sandbox
+
+echo -e "\nQuery Contact layouts..."
+sf data query --use-tooling-api --query "SELECT Name FROM Layout WHERE TableEnumOrId = 'Contact'" --target-org beta-sandbox
+
+echo -e "\nCreating force-app structure..."
+mkdir -p force-app/main/default
+
+echo -e "\nRetrieving Contact layouts..."
+sfdx project retrieve start -m "Layout:Contact*" --target-org beta-sandbox
+
+echo -e "\nListing retrieved files..."
+find force-app -name "*.layout*" -type f 2>/dev/null || echo "No layout files found"

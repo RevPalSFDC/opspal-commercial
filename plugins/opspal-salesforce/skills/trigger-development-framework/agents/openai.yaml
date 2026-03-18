@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trigger Development Framework"
+  short_description: "Help with Trigger Development Framework tasks"
+  default_prompt: "Use $trigger-development-framework to execute this workflow safely and produce the expected artifacts."

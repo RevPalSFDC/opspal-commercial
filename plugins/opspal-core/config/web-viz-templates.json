@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "description": "RevOps Dashboard Template Registry",
+  "templates": [
+    {
+      "id": "sales-pipeline",
+      "name": "Sales Pipeline Dashboard",
+      "description": "Pipeline health, stage distribution, and opportunity tracking for sales teams",
+      "file": "sales-pipeline.json",
+      "category": "sales",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["pipeline", "funnel", "opportunities", "sales", "deals", "forecast", "quota"]
+    },
+    {
+      "id": "territory-planning",
+      "name": "Territory Planning Dashboard",
+      "description": "Geographic coverage analysis, territory metrics, and workload balancing",
+      "file": "territory-planning.json",
+      "category": "sales",
+      "platforms": ["salesforce"],
+      "keywords": ["territory", "map", "coverage", "accounts", "geography", "region", "assignment"]
+    },
+    {
+      "id": "automation-audit",
+      "name": "Automation Audit Dashboard",
+      "description": "Inventory and health assessment of automated processes (Flows, Triggers, Workflows)",
+      "file": "automation-audit.json",
+      "category": "operations",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["automation", "flows", "triggers", "workflows", "audit", "conflicts", "dependencies"]
+    },
+    {
+      "id": "automation-diagnostics",
+      "name": "Automation Diagnostics Dashboard",
+      "description": "Real-time monitoring of automation errors, performance, and user impact",
+      "file": "automation-diagnostics.json",
+      "category": "operations",
+      "platforms": ["salesforce"],
+      "keywords": ["errors", "diagnostics", "monitoring", "performance", "logs", "failures"]
+    },
+    {
+      "id": "data-quality",
+      "name": "Data Quality Dashboard",
+      "description": "Data completeness, duplicates, and hygiene scoring across CRM objects",
+      "file": "data-quality.json",
+      "category": "operations",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["data quality", "completeness", "duplicates", "hygiene", "score", "health"]
+    },
+    {
+      "id": "executive-summary",
+      "name": "Executive Summary Dashboard",
+      "description": "High-level KPIs and trends for C-suite and leadership review",
+      "file": "executive-summary.json",
+      "category": "executive",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["executive", "summary", "kpi", "revenue", "quota", "leadership", "overview"]
+    },
+    {
+      "id": "process-documentation",
+      "name": "Process Documentation Dashboard",
+      "description": "Visual process flows, system interactions, and step-by-step documentation",
+      "file": "process-documentation.json",
+      "category": "documentation",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["process", "documentation", "flowchart", "workflow", "steps", "sequence"]
+    },
+    {
+      "id": "rep-commission-calculator",
+      "name": "Commission Calculator",
+      "description": "Sales rep dashboard for calculating commissions, tracking YTD earnings, and simulating what-if scenarios",
+      "file": "rep-commission-calculator.json",
+      "category": "compensation",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["commission", "calculator", "earnings", "quota", "attainment", "compensation", "spif", "tier"]
+    },
+    {
+      "id": "comp-plan-designer",
+      "name": "Compensation Plan Designer",
+      "description": "Admin dashboard for designing commission structures, tiers, accelerators, and SPIFs",
+      "file": "comp-plan-designer.json",
+      "category": "compensation",
+      "platforms": ["salesforce", "hubspot"],
+      "keywords": ["compensation", "plan", "design", "tiers", "accelerators", "spif", "admin", "monte carlo"]
+    },
+    {
+      "id": "plan-builder",
+      "name": "Compensation Plan Builder",
+      "description": "Interactive builder for creating and editing compensation plans with live preview",
+      "file": "plan-builder.json",
+      "category": "compensation",
+      "platforms": ["local"],
+      "keywords": ["compensation", "plan", "builder", "tiers", "roles", "spif", "clawback", "local"]
+    }
+  ],
+  "categories": {
+    "sales": {
+      "name": "Sales & Pipeline",
+      "description": "Dashboards for sales teams, managers, and leadership"
+    },
+    "operations": {
+      "name": "Operations & Admin",
+      "description": "System health, automation management, and data quality"
+    },
+    "executive": {
+      "name": "Executive",
+      "description": "High-level summaries for leadership"
+    },
+    "documentation": {
+      "name": "Documentation",
+      "description": "Process and workflow documentation"
+    },
+    "compensation": {
+      "name": "Compensation & Commissions",
+      "description": "Commission calculators, quota tracking, and compensation planning"
+    }
+  }
+}

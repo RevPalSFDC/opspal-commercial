@@ -1,0 +1,550 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.io/schemas/comp-plan.json",
+  "title": "Compensation Plan Schema",
+  "description": "Schema for sales compensation plans with tiered commissions, accelerators, SPIFs, and clawbacks",
+  "type": "object",
+  "required": ["id", "name", "version", "effectivePeriod", "roles", "tiers"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique plan identifier (lowercase, hyphens allowed)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable plan name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Plan description and notes"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (e.g., 1.0.0)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "archived"],
+      "default": "draft",
+      "description": "Plan lifecycle status"
+    },
+    "effectivePeriod": {
+      "type": "object",
+      "required": ["startDate", "endDate"],
+      "properties": {
+        "fiscalYear": {
+          "type": "string",
+          "pattern": "^FY\\d{2}$",
+          "description": "Fiscal year (e.g., FY26)"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Plan effective start date (YYYY-MM-DD)"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Plan effective end date (YYYY-MM-DD)"
+        },
+        "quotaPeriod": {
+          "type": "string",
+          "enum": ["monthly", "quarterly", "semi-annual", "annual"],
+          "default": "annual",
+          "description": "Quota measurement period"
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Role-specific compensation structures",
+      "items": {
+        "type": "object",
+        "required": ["roleId", "roleName", "ote", "baseSalary", "targetCommission", "quotaAmount"],
+        "properties": {
+          "roleId": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Role identifier"
+          },
+          "roleName": {
+            "type": "string",
+            "description": "Display name for the role"
+          },
+          "ote": {
+            "type": "number",
+            "minimum": 0,
+            "description": "On-Target Earnings (annual)"
+          },
+          "baseSalary": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Base salary component"
+          },
+          "targetCommission": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Target commission at 100% quota"
+          },
+          "payMix": {
+            "type": "object",
+            "properties": {
+              "base": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Base salary as decimal (e.g., 0.60 = 60%)"
+              },
+              "variable": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Variable comp as decimal (e.g., 0.40 = 40%)"
+              }
+            }
+          },
+          "quotaType": {
+            "type": "string",
+            "enum": ["bookings", "revenue", "arr", "mrr", "units", "sqls", "meetings", "custom"],
+            "default": "bookings",
+            "description": "Type of quota measurement"
+          },
+          "quotaAmount": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Quota target amount for the period"
+          },
+          "quotaCurrency": {
+            "type": "string",
+            "default": "USD",
+            "description": "Currency for quota and commission"
+          },
+          "rampSchedule": {
+            "type": "array",
+            "description": "Ramp quota percentages by month (for new hires)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "month": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quotaPercent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "commissionPercent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "tiers": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Commission tiers based on quota attainment",
+      "items": {
+        "type": "object",
+        "required": ["name", "minAttainment", "maxAttainment", "rate"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tier name (e.g., 'Decelerator', 'Standard', 'Accelerator')"
+          },
+          "minAttainment": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Minimum quota attainment for this tier (decimal, e.g., 0.70 = 70%)"
+          },
+          "maxAttainment": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Maximum quota attainment for this tier (use 999 for uncapped)"
+          },
+          "rate": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Commission rate as decimal (e.g., 0.10 = 10%)"
+          },
+          "multiplier": {
+            "type": "number",
+            "minimum": 0,
+            "default": 1.0,
+            "description": "Multiplier applied to base rate"
+          },
+          "description": {
+            "type": "string",
+            "description": "Explanation of this tier"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Display color for this tier (hex)"
+          }
+        }
+      }
+    },
+    "accelerators": {
+      "type": "array",
+      "description": "Bonus multipliers at higher attainment levels",
+      "items": {
+        "type": "object",
+        "required": ["name", "threshold", "multiplier"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Accelerator name"
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Quota attainment threshold to trigger (decimal)"
+          },
+          "multiplier": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Commission multiplier when triggered"
+          },
+          "cumulative": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, multipliers stack; if false, only highest applies"
+          },
+          "appliesTo": {
+            "type": "string",
+            "enum": ["all", "incremental", "total"],
+            "default": "all",
+            "description": "Which portion of commission the multiplier applies to"
+          }
+        }
+      }
+    },
+    "decelerators": {
+      "type": "array",
+      "description": "Reduced rates at lower attainment levels",
+      "items": {
+        "type": "object",
+        "required": ["name", "threshold", "multiplier"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Below this attainment, decelerator applies"
+          },
+          "multiplier": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Reduced multiplier (e.g., 0.5 = 50% of normal rate)"
+          }
+        }
+      }
+    },
+    "spifs": {
+      "type": "array",
+      "description": "Special Performance Incentive Funds",
+      "items": {
+        "type": "object",
+        "required": ["name", "startDate", "endDate", "bonusType"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "SPIF identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "SPIF name"
+          },
+          "description": {
+            "type": "string",
+            "description": "SPIF details and rules"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "SPIF start date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "SPIF end date"
+          },
+          "eligibilityCriteria": {
+            "type": "object",
+            "description": "Conditions for SPIF eligibility",
+            "properties": {
+              "products": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Eligible product names/IDs"
+              },
+              "dealTypes": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Eligible deal types"
+              },
+              "minDealSize": {
+                "type": "number",
+                "description": "Minimum deal size to qualify"
+              },
+              "roles": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Eligible role IDs"
+              },
+              "customFormula": {
+                "type": "string",
+                "description": "Custom eligibility formula"
+              }
+            }
+          },
+          "bonusType": {
+            "type": "string",
+            "enum": ["flat", "percentage", "per-unit", "tiered"],
+            "description": "How bonus is calculated"
+          },
+          "bonusAmount": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Flat bonus or percentage rate"
+          },
+          "bonusTiers": {
+            "type": "array",
+            "description": "For tiered SPIF bonuses",
+            "items": {
+              "type": "object",
+              "properties": {
+                "threshold": { "type": "number" },
+                "bonus": { "type": "number" }
+              }
+            }
+          },
+          "maxPayout": {
+            "type": "number",
+            "description": "Maximum total SPIF payout per rep"
+          }
+        }
+      }
+    },
+    "clawbacks": {
+      "type": "array",
+      "description": "Commission recovery rules",
+      "items": {
+        "type": "object",
+        "required": ["name", "triggerCondition", "clawbackPercent"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Clawback rule name"
+          },
+          "triggerCondition": {
+            "type": "string",
+            "enum": ["churn", "downgrade", "payment-default", "cancellation", "custom"],
+            "description": "What triggers the clawback"
+          },
+          "clawbackPeriodDays": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 90,
+            "description": "Window (days from close) for clawback to apply"
+          },
+          "clawbackPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Percentage of commission to claw back (1.0 = 100%)"
+          },
+          "prorated": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, clawback is prorated based on time elapsed"
+          },
+          "customFormula": {
+            "type": "string",
+            "description": "Custom clawback calculation formula"
+          }
+        }
+      }
+    },
+    "draws": {
+      "type": "object",
+      "description": "Draw (advance) configuration for new hires",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Draw amount per period"
+        },
+        "period": {
+          "type": "string",
+          "enum": ["monthly", "quarterly"],
+          "default": "monthly"
+        },
+        "eligibilityMonths": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "How many months draw is available"
+        },
+        "recoverable": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, draws are deducted from future commissions"
+        },
+        "forgivenessRules": {
+          "type": "string",
+          "description": "Conditions under which draw is forgiven"
+        }
+      }
+    },
+    "cap": {
+      "type": "object",
+      "description": "Commission cap configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxMultiplierOfOTE": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Max commission as multiple of OTE (e.g., 2.0 = 200%)"
+        },
+        "absoluteMax": {
+          "type": "number",
+          "description": "Absolute maximum commission amount"
+        },
+        "capType": {
+          "type": "string",
+          "enum": ["hard", "soft"],
+          "default": "hard",
+          "description": "Hard = strict cutoff, Soft = reduced rate above cap"
+        },
+        "softCapRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Rate applied above soft cap"
+        }
+      }
+    },
+    "splits": {
+      "type": "object",
+      "description": "Commission split rules for team deals",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "defaultSplit": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Default split percentage for primary rep"
+        },
+        "splitRoles": {
+          "type": "array",
+          "description": "Roles eligible for splits",
+          "items": {
+            "type": "object",
+            "properties": {
+              "roleId": { "type": "string" },
+              "maxSplitPercent": { "type": "number" }
+            }
+          }
+        },
+        "overlayRules": {
+          "type": "array",
+          "description": "Overlay/support commission rules",
+          "items": {
+            "type": "object",
+            "properties": {
+              "roleId": { "type": "string" },
+              "overlayPercent": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "paymentSchedule": {
+      "type": "object",
+      "description": "When commissions are paid",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": ["monthly", "semi-monthly", "bi-weekly"],
+          "default": "monthly"
+        },
+        "paymentTiming": {
+          "type": "string",
+          "enum": ["on-booking", "on-invoice", "on-payment", "on-recognition"],
+          "default": "on-booking",
+          "description": "When commission is earned/paid"
+        },
+        "holdbackPercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Percentage held back pending clawback window"
+        },
+        "holdbackReleaseDays": {
+          "type": "integer",
+          "description": "Days after close to release holdback"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Plan metadata",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "approvedBy": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

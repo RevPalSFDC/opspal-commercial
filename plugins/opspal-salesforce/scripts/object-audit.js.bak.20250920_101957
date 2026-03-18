@@ -1,0 +1,1016 @@
+#!/usr/bin/env node
+
+/**
+ * Salesforce Object Auditor Script
+ * Performs comprehensive metadata analysis and usage assessment
+ */
+
+const { exec } = require('child_process');
+const { promisify } = require('util');
+const fs = require('fs').promises;
+const path = require('path');
+const execAsync = promisify(exec);
+
+class ObjectAuditor {
+    constructor(objectName, options = {}) {
+        this.objectName = objectName;
+        this.options = {
+            sampleSize: options.sampleSize || 10000,
+            chunkSize: options.chunkSize || 100,
+            includeHistory: options.includeHistory || true,
+            outputFormat: options.outputFormat || 'json',
+            verbose: options.verbose || false,
+            ...options
+        };
+        this.metadata = {};
+        this.analysis = {};
+        this.recommendations = [];
+        this.startTime = Date.now();
+    }
+
+    log(message, level = 'info') {
+        if (this.options.verbose || level === 'error') {
+            const timestamp = new Date().toISOString();
+            console.log(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+        }
+    }
+
+    async runMultipartAssessment() {
+        this.log(`Starting comprehensive audit of ${this.objectName} object`);
+        
+        try {
+            // Phase 1: Basic Metadata
+            this.log('Phase 1: Fetching basic object metadata...');
+            await this.fetchObjectDescribe();
+            
+            // Phase 2: Fields (with chunking for large objects)
+            this.log('Phase 2: Fetching field metadata...');
+            await this.fetchFieldsInChunks();
+            
+            // Phase 3: Record Types
+            this.log('Phase 3: Fetching record types...');
+            await this.fetchRecordTypes();
+            
+            // Phase 4: Page Layouts
+            this.log('Phase 4: Fetching page layouts...');
+            await this.fetchPageLayouts();
+            
+            // Phase 5: Lightning Record Pages
+            this.log('Phase 5: Fetching Lightning record pages...');
+            await this.fetchLightningPages();
+            
+            // Phase 6: Validation Rules
+            this.log('Phase 6: Fetching validation rules...');
+            await this.fetchValidationRules();
+            
+            // Phase 7: Triggers
+            this.log('Phase 7: Fetching triggers...');
+            await this.fetchTriggers();
+            
+            // Phase 8: Flows and Process Builders
+            this.log('Phase 8: Fetching automation...');
+            await this.fetchAutomation();
+            
+            // Phase 9: Relationships
+            this.log('Phase 9: Fetching relationships...');
+            await this.fetchRelationships();
+            
+            // Phase 10: Field Usage Statistics
+            this.log('Phase 10: Calculating field usage...');
+            await this.calculateFieldUsage();
+            
+            // Phase 11: Recent Activity
+            this.log('Phase 11: Analyzing recent activity...');
+            await this.analyzeRecentActivity();
+            
+            // Phase 12: Record Count and Storage
+            this.log('Phase 12: Getting record metrics...');
+            await this.fetchRecordMetrics();
+            
+            this.log('Metadata collection complete', 'success');
+            return this.metadata;
+            
+        } catch (error) {
+            this.log(`Error during assessment: ${error.message}`, 'error');
+            throw error;
+        }
+    }
+
+    async fetchObjectDescribe() {
+        try {
+            const command = `sf sobject describe -s ${this.objectName} --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            this.metadata.basic = {
+                name: data.result.name,
+                label: data.result.label,
+                labelPlural: data.result.labelPlural,
+                customSetting: data.result.customSetting,
+                custom: data.result.custom,
+                createable: data.result.createable,
+                deletable: data.result.deletable,
+                searchable: data.result.searchable,
+                queryable: data.result.queryable,
+                retrieveable: data.result.retrieveable,
+                triggerable: data.result.triggerable,
+                undeletable: data.result.undeletable,
+                updateable: data.result.updateable,
+                keyPrefix: data.result.keyPrefix,
+                rowCount: 0 // Will be updated later
+            };
+            
+            // Extract sharing model and other settings
+            if (data.result.sharingModel) {
+                this.metadata.basic.sharingModel = data.result.sharingModel;
+            }
+            
+        } catch (error) {
+            this.log(`Error fetching object describe: ${error.message}`, 'error');
+            this.metadata.basic = { error: error.message };
+        }
+    }
+
+    async fetchFieldsInChunks() {
+        try {
+            const command = `sf sobject describe -s ${this.objectName} --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            const allFields = data.result.fields || [];
+            this.metadata.fields = {
+                total: allFields.length,
+                custom: allFields.filter(f => f.custom).length,
+                standard: allFields.filter(f => !f.custom).length,
+                required: allFields.filter(f => !f.nillable && !f.defaultedOnCreate).length,
+                encrypted: allFields.filter(f => f.encrypted).length,
+                externalId: allFields.filter(f => f.externalId).length,
+                unique: allFields.filter(f => f.unique).length,
+                details: allFields.map(field => ({
+                    name: field.name,
+                    label: field.label,
+                    type: field.type,
+                    length: field.length,
+                    precision: field.precision,
+                    scale: field.scale,
+                    custom: field.custom,
+                    required: !field.nillable && !field.defaultedOnCreate,
+                    unique: field.unique,
+                    externalId: field.externalId,
+                    encrypted: field.encrypted,
+                    formula: field.calculatedFormula,
+                    defaultValue: field.defaultValue,
+                    picklist: field.picklistValues,
+                    referenceTo: field.referenceTo,
+                    relationshipName: field.relationshipName,
+                    inlineHelpText: field.inlineHelpText,
+                    createdDate: field.createdDate,
+                    lastModifiedDate: field.lastModifiedDate
+                }))
+            };
+            
+            this.log(`Fetched ${allFields.length} fields (${this.metadata.fields.custom} custom, ${this.metadata.fields.standard} standard)`);
+            
+        } catch (error) {
+            this.log(`Error fetching fields: ${error.message}`, 'error');
+            this.metadata.fields = { error: error.message };
+        }
+    }
+
+    async fetchRecordTypes() {
+        try {
+            const query = `SELECT Id, Name, DeveloperName, Description, IsActive, 
+                          BusinessProcessId, SobjectType 
+                          FROM RecordType 
+                          WHERE SobjectType = '${this.objectName}'`;
+            
+            const command = `sf data query -q "${query}" --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            this.metadata.recordTypes = {
+                count: data.result.totalSize,
+                active: data.result.records.filter(rt => rt.IsActive).length,
+                details: data.result.records
+            };
+            
+            this.log(`Found ${this.metadata.recordTypes.count} record types`);
+            
+        } catch (error) {
+            this.log(`Error fetching record types: ${error.message}`, 'error');
+            this.metadata.recordTypes = { count: 0, error: error.message };
+        }
+    }
+
+    async fetchPageLayouts() {
+        try {
+            // Note: This would typically use Metadata API
+            // For now, we'll query CompactLayout as a proxy
+            const query = `SELECT Id, Name, DeveloperName, SobjectType 
+                          FROM CompactLayout 
+                          WHERE SobjectType = '${this.objectName}'`;
+            
+            const command = `sf data query -q "${query}" --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            this.metadata.pageLayouts = {
+                count: data.result.totalSize,
+                details: data.result.records
+            };
+            
+            // In production, would also fetch full layout metadata
+            
+        } catch (error) {
+            this.log(`Error fetching page layouts: ${error.message}`, 'error');
+            this.metadata.pageLayouts = { count: 0, error: error.message };
+        }
+    }
+
+    async fetchLightningPages() {
+        try {
+            const query = `SELECT Id, Name, DeveloperName, Type, SobjectType, 
+                          LastModifiedDate, LastModifiedBy.Name 
+                          FROM FlexiPage 
+                          WHERE EntityDefinitionId = '${this.objectName}' 
+                          OR SobjectType = '${this.objectName}'`;
+            
+            const command = `sf data query -q "${query}" --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            this.metadata.lightningPages = {
+                count: data.result.totalSize,
+                details: data.result.records
+            };
+            
+            this.log(`Found ${this.metadata.lightningPages.count} Lightning pages`);
+            
+        } catch (error) {
+            this.log(`Error fetching Lightning pages: ${error.message}`, 'error');
+            this.metadata.lightningPages = { count: 0, error: error.message };
+        }
+    }
+
+    async fetchValidationRules() {
+        try {
+            const query = `SELECT Id, ValidationName, Active, Description, 
+                          ErrorMessage, ErrorDisplayField 
+                          FROM ValidationRule 
+                          WHERE EntityDefinition.DeveloperName = '${this.objectName}'`;
+            
+            const command = `sf data query -q "${query}" -t --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            this.metadata.validationRules = {
+                count: data.result.totalSize,
+                active: data.result.records.filter(vr => vr.Active).length,
+                details: data.result.records
+            };
+            
+            this.log(`Found ${this.metadata.validationRules.count} validation rules (${this.metadata.validationRules.active} active)`);
+            
+        } catch (error) {
+            this.log(`Error fetching validation rules: ${error.message}`, 'error');
+            this.metadata.validationRules = { count: 0, error: error.message };
+        }
+    }
+
+    async fetchTriggers() {
+        try {
+            const query = `SELECT Id, Name, Body, UsageBeforeInsert, UsageAfterInsert,
+                          UsageBeforeUpdate, UsageAfterUpdate, UsageBeforeDelete,
+                          UsageAfterDelete, UsageAfterUndelete, IsValid, Status,
+                          ApiVersion, LengthWithoutComments
+                          FROM ApexTrigger 
+                          WHERE TableEnumOrId = '${this.objectName}'`;
+            
+            const command = `sf data query -q "${query}" -t --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            this.metadata.triggers = {
+                count: data.result.totalSize,
+                active: data.result.records.filter(t => t.Status === 'Active').length,
+                totalLines: data.result.records.reduce((sum, t) => sum + (t.LengthWithoutComments || 0), 0),
+                details: data.result.records.map(trigger => ({
+                    name: trigger.Name,
+                    isValid: trigger.IsValid,
+                    status: trigger.Status,
+                    apiVersion: trigger.ApiVersion,
+                    linesOfCode: trigger.LengthWithoutComments,
+                    events: {
+                        beforeInsert: trigger.UsageBeforeInsert,
+                        afterInsert: trigger.UsageAfterInsert,
+                        beforeUpdate: trigger.UsageBeforeUpdate,
+                        afterUpdate: trigger.UsageAfterUpdate,
+                        beforeDelete: trigger.UsageBeforeDelete,
+                        afterDelete: trigger.UsageAfterDelete,
+                        afterUndelete: trigger.UsageAfterUndelete
+                    }
+                }))
+            };
+            
+            this.log(`Found ${this.metadata.triggers.count} triggers (${this.metadata.triggers.totalLines} total lines)`);
+            
+        } catch (error) {
+            this.log(`Error fetching triggers: ${error.message}`, 'error');
+            this.metadata.triggers = { count: 0, error: error.message };
+        }
+    }
+
+    async fetchAutomation() {
+        try {
+            // Fetch Flows
+            const flowQuery = `SELECT Id, ApiName, Label, ProcessType, TriggerType,
+                              IsActive, LastModifiedDate
+                              FROM FlowDefinitionView 
+                              WHERE TriggerObjectOrEvent.DeveloperName = '${this.objectName}'`;
+            
+            const flowCommand = `sf data query -q "${flowQuery}" -t --json`;
+            const flowResult = await execAsync(flowCommand);
+            const flowData = JSON.parse(flowResult.stdout);
+            
+            this.metadata.automation = {
+                flows: {
+                    count: flowData.result.totalSize,
+                    active: flowData.result.records.filter(f => f.IsActive).length,
+                    details: flowData.result.records
+                },
+                processBuilders: { count: 0 }, // Would need separate query
+                workflowRules: { count: 0 } // Would need metadata API
+            };
+            
+            this.log(`Found ${this.metadata.automation.flows.count} flows (${this.metadata.automation.flows.active} active)`);
+            
+        } catch (error) {
+            this.log(`Error fetching automation: ${error.message}`, 'error');
+            this.metadata.automation = { error: error.message };
+        }
+    }
+
+    async fetchRelationships() {
+        try {
+            const command = `sf sobject describe -s ${this.objectName} --json`;
+            const result = await execAsync(command);
+            const data = JSON.parse(result.stdout);
+            
+            const childRelationships = data.result.childRelationships || [];
+            const parentRelationships = (data.result.fields || [])
+                .filter(f => f.type === 'reference' && f.referenceTo && f.referenceTo.length > 0)
+                .map(f => ({
+                    field: f.name,
+                    relationshipName: f.relationshipName,
+                    referenceTo: f.referenceTo,
+                    cascadeDelete: f.cascadeDelete
+                }));
+            
+            this.metadata.relationships = {
+                parents: {
+                    count: parentRelationships.length,
+                    details: parentRelationships
+                },
+                children: {
+                    count: childRelationships.length,
+                    details: childRelationships.map(cr => ({
+                        childObject: cr.childSObject,
+                        field: cr.field,
+                        relationshipName: cr.relationshipName,
+                        cascadeDelete: cr.cascadeDelete
+                    }))
+                }
+            };
+            
+            this.log(`Found ${parentRelationships.length} parent and ${childRelationships.length} child relationships`);
+            
+        } catch (error) {
+            this.log(`Error fetching relationships: ${error.message}`, 'error');
+            this.metadata.relationships = { error: error.message };
+        }
+    }
+
+    async calculateFieldUsage() {
+        if (!this.metadata.fields || !this.metadata.fields.details) {
+            this.log('Skipping field usage calculation - no field data available', 'warn');
+            return;
+        }
+        
+        try {
+            const fieldUsage = [];
+            const customFields = this.metadata.fields.details.filter(f => f.custom);
+            
+            // Sample fields for usage (limit to prevent timeout)
+            const fieldsToCheck = customFields.slice(0, 20); // Check first 20 custom fields
+            
+            for (const field of fieldsToCheck) {
+                try {
+                    const query = `SELECT COUNT(Id) totalCount,
+                                  COUNT(${field.name}) populatedCount
+                                  FROM ${this.objectName}
+                                  LIMIT ${this.options.sampleSize}`;
+                    
+                    const command = `sf data query -q "${query}" --json`;
+                    const result = await execAsync(command);
+                    const data = JSON.parse(result.stdout);
+                    
+                    if (data.result.records && data.result.records[0]) {
+                        const total = data.result.records[0].totalCount || 0;
+                        const populated = data.result.records[0].populatedCount || 0;
+                        const usage = total > 0 ? (populated / total) * 100 : 0;
+                        
+                        fieldUsage.push({
+                            fieldName: field.name,
+                            fieldLabel: field.label,
+                            totalRecords: total,
+                            populatedRecords: populated,
+                            usagePercentage: usage.toFixed(2),
+                            classification: usage === 0 ? 'Unused' : 
+                                          usage < 5 ? 'Rarely Used' : 
+                                          usage < 50 ? 'Sometimes Used' : 
+                                          usage < 90 ? 'Frequently Used' : 'Always Used'
+                        });
+                    }
+                } catch (fieldError) {
+                    // Skip fields that can't be queried
+                    this.log(`Skipping usage calculation for ${field.name}: ${fieldError.message}`, 'debug');
+                }
+            }
+            
+            this.metadata.fieldUsage = {
+                analyzed: fieldUsage.length,
+                unused: fieldUsage.filter(f => f.usagePercentage === "0.00").length,
+                rarelyUsed: fieldUsage.filter(f => parseFloat(f.usagePercentage) < 5 && parseFloat(f.usagePercentage) > 0).length,
+                details: fieldUsage
+            };
+            
+            this.log(`Analyzed usage for ${fieldUsage.length} fields`);
+            
+        } catch (error) {
+            this.log(`Error calculating field usage: ${error.message}`, 'error');
+            this.metadata.fieldUsage = { error: error.message };
+        }
+    }
+
+    async analyzeRecentActivity() {
+        try {
+            const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+            const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+            
+            // Get recent creations
+            const createdQuery = `SELECT COUNT(Id) recentCount
+                                 FROM ${this.objectName}
+                                 WHERE CreatedDate >= ${thirtyDaysAgo}`;
+            
+            const createdCommand = `sf data query -q "${createdQuery}" --json`;
+            const createdResult = await execAsync(createdCommand);
+            const createdData = JSON.parse(createdResult.stdout);
+            
+            // Get recent modifications
+            const modifiedQuery = `SELECT COUNT(Id) recentCount
+                                  FROM ${this.objectName}
+                                  WHERE LastModifiedDate >= ${sevenDaysAgo}`;
+            
+            const modifiedCommand = `sf data query -q "${modifiedQuery}" --json`;
+            const modifiedResult = await execAsync(modifiedCommand);
+            const modifiedData = JSON.parse(modifiedResult.stdout);
+            
+            this.metadata.activity = {
+                last30Days: {
+                    created: createdData.result.records[0].recentCount || 0
+                },
+                last7Days: {
+                    modified: modifiedData.result.records[0].recentCount || 0
+                }
+            };
+            
+            this.log(`Recent activity: ${this.metadata.activity.last30Days.created} created (30d), ${this.metadata.activity.last7Days.modified} modified (7d)`);
+            
+        } catch (error) {
+            this.log(`Error analyzing recent activity: ${error.message}`, 'error');
+            this.metadata.activity = { error: error.message };
+        }
+    }
+
+    async fetchRecordMetrics() {
+        try {
+            // Get total record count
+            const countQuery = `SELECT COUNT(Id) totalCount FROM ${this.objectName}`;
+            const countCommand = `sf data query -q "${countQuery}" --json`;
+            const countResult = await execAsync(countCommand);
+            const countData = JSON.parse(countResult.stdout);
+            
+            this.metadata.recordMetrics = {
+                totalRecords: countData.result.records[0].totalCount || 0,
+                storageUsed: 'N/A' // Would need to query Organization object
+            };
+            
+            // Update basic metadata with count
+            if (this.metadata.basic) {
+                this.metadata.basic.rowCount = this.metadata.recordMetrics.totalRecords;
+            }
+            
+            this.log(`Total records: ${this.metadata.recordMetrics.totalRecords}`);
+            
+        } catch (error) {
+            this.log(`Error fetching record metrics: ${error.message}`, 'error');
+            this.metadata.recordMetrics = { error: error.message };
+        }
+    }
+
+    async analyzeMetadata() {
+        this.log('Starting metadata analysis...');
+        
+        this.analysis = {
+            duplicateFields: this.findDuplicateFields(),
+            validationComplexity: this.analyzeValidationComplexity(),
+            triggerComplexity: this.analyzeTriggerComplexity(),
+            fieldUtilization: this.analyzeFieldUtilization(),
+            performanceIssues: this.identifyPerformanceIssues(),
+            securityGaps: this.identifySecurityGaps(),
+            bestPracticeViolations: this.checkBestPractices()
+        };
+        
+        this.log('Metadata analysis complete');
+        return this.analysis;
+    }
+
+    findDuplicateFields() {
+        if (!this.metadata.fields || !this.metadata.fields.details) {
+            return [];
+        }
+        
+        const duplicates = [];
+        const fields = this.metadata.fields.details.filter(f => f.custom);
+        
+        for (let i = 0; i < fields.length; i++) {
+            for (let j = i + 1; j < fields.length; j++) {
+                const similarity = this.calculateFieldSimilarity(fields[i], fields[j]);
+                
+                if (similarity > 0.8) {
+                    duplicates.push({
+                        field1: {
+                            name: fields[i].name,
+                            label: fields[i].label,
+                            type: fields[i].type
+                        },
+                        field2: {
+                            name: fields[j].name,
+                            label: fields[j].label,
+                            type: fields[j].type
+                        },
+                        similarity: (similarity * 100).toFixed(1) + '%',
+                        recommendation: 'Consider consolidating these fields'
+                    });
+                }
+            }
+        }
+        
+        return duplicates;
+    }
+
+    calculateFieldSimilarity(field1, field2) {
+        let score = 0;
+        let weight = 0;
+        
+        // Type match (highest weight)
+        if (field1.type === field2.type) {
+            score += 0.4;
+        }
+        weight += 0.4;
+        
+        // Name similarity
+        const nameSim = this.stringSimilarity(field1.name, field2.name);
+        score += nameSim * 0.3;
+        weight += 0.3;
+        
+        // Label similarity
+        const labelSim = this.stringSimilarity(field1.label, field2.label);
+        score += labelSim * 0.3;
+        weight += 0.3;
+        
+        return score / weight;
+    }
+
+    stringSimilarity(str1, str2) {
+        const longer = str1.length > str2.length ? str1 : str2;
+        const shorter = str1.length > str2.length ? str2 : str1;
+        
+        if (longer.length === 0) {
+            return 1.0;
+        }
+        
+        const distance = this.levenshteinDistance(longer, shorter);
+        return (longer.length - distance) / longer.length;
+    }
+
+    levenshteinDistance(str1, str2) {
+        const matrix = [];
+        
+        for (let i = 0; i <= str2.length; i++) {
+            matrix[i] = [i];
+        }
+        
+        for (let j = 0; j <= str1.length; j++) {
+            matrix[0][j] = j;
+        }
+        
+        for (let i = 1; i <= str2.length; i++) {
+            for (let j = 1; j <= str1.length; j++) {
+                if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+                }
+            }
+        }
+        
+        return matrix[str2.length][str1.length];
+    }
+
+    analyzeValidationComplexity() {
+        if (!this.metadata.validationRules || !this.metadata.validationRules.details) {
+            return { average: 0, high: [], consolidationOpportunities: [] };
+        }
+        
+        // Note: In production, would analyze actual formula complexity
+        return {
+            average: 'N/A',
+            high: [],
+            consolidationOpportunities: []
+        };
+    }
+
+    analyzeTriggerComplexity() {
+        if (!this.metadata.triggers || !this.metadata.triggers.details) {
+            return { totalLines: 0, issues: [] };
+        }
+        
+        const issues = [];
+        
+        this.metadata.triggers.details.forEach(trigger => {
+            if (trigger.linesOfCode > 200) {
+                issues.push({
+                    trigger: trigger.name,
+                    issue: 'Large trigger',
+                    lines: trigger.linesOfCode,
+                    recommendation: 'Consider refactoring into handler classes'
+                });
+            }
+            
+            if (trigger.apiVersion && parseFloat(trigger.apiVersion) < 50) {
+                issues.push({
+                    trigger: trigger.name,
+                    issue: 'Outdated API version',
+                    version: trigger.apiVersion,
+                    recommendation: 'Update to latest API version'
+                });
+            }
+        });
+        
+        return {
+            totalLines: this.metadata.triggers.totalLines,
+            issues
+        };
+    }
+
+    analyzeFieldUtilization() {
+        if (!this.metadata.fieldUsage || !this.metadata.fieldUsage.details) {
+            return { summary: 'No usage data available' };
+        }
+        
+        const unused = this.metadata.fieldUsage.details.filter(f => f.usagePercentage === "0.00");
+        const rarelyUsed = this.metadata.fieldUsage.details.filter(f => 
+            parseFloat(f.usagePercentage) > 0 && parseFloat(f.usagePercentage) < 5
+        );
+        
+        return {
+            unused: unused.map(f => f.fieldName),
+            rarelyUsed: rarelyUsed.map(f => ({
+                name: f.fieldName,
+                usage: f.usagePercentage + '%'
+            })),
+            summary: `${unused.length} unused fields, ${rarelyUsed.length} rarely used fields`
+        };
+    }
+
+    identifyPerformanceIssues() {
+        const issues = [];
+        
+        // Check field count
+        if (this.metadata.fields && this.metadata.fields.custom > 400) {
+            issues.push({
+                type: 'Field Limit',
+                severity: 'High',
+                details: `${this.metadata.fields.custom} custom fields (approaching 500 limit)`,
+                recommendation: 'Archive or remove unused fields'
+            });
+        }
+        
+        // Check trigger complexity
+        if (this.metadata.triggers && this.metadata.triggers.totalLines > 1000) {
+            issues.push({
+                type: 'Trigger Complexity',
+                severity: 'Medium',
+                details: `${this.metadata.triggers.totalLines} total lines in triggers`,
+                recommendation: 'Refactor triggers using handler pattern'
+            });
+        }
+        
+        // Check validation rules
+        if (this.metadata.validationRules && this.metadata.validationRules.count > 20) {
+            issues.push({
+                type: 'Validation Rule Count',
+                severity: 'Low',
+                details: `${this.metadata.validationRules.count} validation rules`,
+                recommendation: 'Consider consolidating related rules'
+            });
+        }
+        
+        return issues;
+    }
+
+    identifySecurityGaps() {
+        const gaps = [];
+        
+        if (this.metadata.fields && this.metadata.fields.details) {
+            // Check for PII fields without encryption
+            const piiPatterns = ['ssn', 'social', 'tax', 'credit', 'card', 'bank', 'account'];
+            
+            this.metadata.fields.details.forEach(field => {
+                const fieldNameLower = field.name.toLowerCase();
+                const isPII = piiPatterns.some(pattern => fieldNameLower.includes(pattern));
+                
+                if (isPII && !field.encrypted) {
+                    gaps.push({
+                        type: 'Unencrypted PII',
+                        field: field.name,
+                        recommendation: 'Enable platform encryption'
+                    });
+                }
+            });
+        }
+        
+        return gaps;
+    }
+
+    checkBestPractices() {
+        const violations = [];
+        
+        // Check naming conventions
+        if (this.metadata.fields && this.metadata.fields.details) {
+            const inconsistentNaming = this.metadata.fields.details.filter(f => 
+                f.custom && !f.name.match(/^[A-Z][a-zA-Z0-9_]*__c$/)
+            );
+            
+            if (inconsistentNaming.length > 0) {
+                violations.push({
+                    type: 'Naming Convention',
+                    count: inconsistentNaming.length,
+                    details: 'Fields not following standard naming convention',
+                    recommendation: 'Use consistent CamelCase naming'
+                });
+            }
+        }
+        
+        // Check for missing descriptions
+        if (this.metadata.fields && this.metadata.fields.details) {
+            const missingDescription = this.metadata.fields.details.filter(f => 
+                f.custom && !f.inlineHelpText
+            );
+            
+            if (missingDescription.length > 10) {
+                violations.push({
+                    type: 'Missing Documentation',
+                    count: missingDescription.length,
+                    details: 'Custom fields without help text',
+                    recommendation: 'Add inline help text for user guidance'
+                });
+            }
+        }
+        
+        return violations;
+    }
+
+    generateRecommendations() {
+        this.log('Generating recommendations...');
+        
+        this.recommendations = [];
+        
+        // Priority 1: Critical Issues
+        if (this.analysis.securityGaps && this.analysis.securityGaps.length > 0) {
+            this.recommendations.push({
+                priority: 1,
+                category: 'Security',
+                title: 'Address Security Vulnerabilities',
+                issues: this.analysis.securityGaps,
+                effort: '2-4 hours',
+                impact: 'High'
+            });
+        }
+        
+        if (this.analysis.performanceIssues) {
+            this.analysis.performanceIssues
+                .filter(issue => issue.severity === 'High')
+                .forEach(issue => {
+                    this.recommendations.push({
+                        priority: 1,
+                        category: 'Performance',
+                        title: issue.type,
+                        details: issue.details,
+                        recommendation: issue.recommendation,
+                        effort: '4-8 hours',
+                        impact: 'High'
+                    });
+                });
+        }
+        
+        // Priority 2: Important Issues
+        if (this.analysis.fieldUtilization && this.analysis.fieldUtilization.unused) {
+            if (this.analysis.fieldUtilization.unused.length > 0) {
+                this.recommendations.push({
+                    priority: 2,
+                    category: 'Field Cleanup',
+                    title: 'Remove Unused Fields',
+                    fields: this.analysis.fieldUtilization.unused,
+                    effort: '1-2 hours',
+                    impact: 'Medium'
+                });
+            }
+        }
+        
+        if (this.analysis.duplicateFields && this.analysis.duplicateFields.length > 0) {
+            this.recommendations.push({
+                priority: 2,
+                category: 'Field Consolidation',
+                title: 'Consolidate Duplicate Fields',
+                duplicates: this.analysis.duplicateFields,
+                effort: '2-4 hours',
+                impact: 'Medium'
+            });
+        }
+        
+        // Priority 3: Best Practices
+        if (this.analysis.bestPracticeViolations && this.analysis.bestPracticeViolations.length > 0) {
+            this.analysis.bestPracticeViolations.forEach(violation => {
+                this.recommendations.push({
+                    priority: 3,
+                    category: 'Best Practices',
+                    title: violation.type,
+                    details: violation.details,
+                    recommendation: violation.recommendation,
+                    effort: '1-3 hours',
+                    impact: 'Low'
+                });
+            });
+        }
+        
+        this.log(`Generated ${this.recommendations.length} recommendations`);
+        return this.recommendations;
+    }
+
+    async generateReport() {
+        const endTime = Date.now();
+        const executionTime = ((endTime - this.startTime) / 1000).toFixed(2);
+        
+        const report = {
+            metadata: {
+                objectName: this.objectName,
+                auditDate: new Date().toISOString(),
+                executionTime: `${executionTime} seconds`,
+                sampleSize: this.options.sampleSize
+            },
+            summary: this.generateSummary(),
+            detailedFindings: this.metadata,
+            analysis: this.analysis,
+            recommendations: this.recommendations,
+            healthScore: this.calculateHealthScore()
+        };
+        
+        // Save report to file
+        const outputPath = path.join(
+            process.cwd(),
+            `audit-${this.objectName}-${Date.now()}.json`
+        );
+        
+        await fs.writeFile(outputPath, JSON.stringify(report, null, 2));
+        this.log(`Report saved to: ${outputPath}`, 'success');
+        
+        return report;
+    }
+
+    generateSummary() {
+        return {
+            object: this.objectName,
+            fields: {
+                total: this.metadata.fields?.total || 0,
+                custom: this.metadata.fields?.custom || 0,
+                unused: this.metadata.fieldUsage?.unused || 0,
+                encrypted: this.metadata.fields?.encrypted || 0
+            },
+            automation: {
+                triggers: this.metadata.triggers?.count || 0,
+                flows: this.metadata.automation?.flows?.count || 0,
+                validationRules: this.metadata.validationRules?.count || 0
+            },
+            records: this.metadata.recordMetrics?.totalRecords || 0,
+            issues: {
+                critical: this.recommendations.filter(r => r.priority === 1).length,
+                important: this.recommendations.filter(r => r.priority === 2).length,
+                minor: this.recommendations.filter(r => r.priority === 3).length
+            }
+        };
+    }
+
+    calculateHealthScore() {
+        let score = 100;
+        
+        // Deduct for critical issues
+        score -= this.recommendations.filter(r => r.priority === 1).length * 15;
+        
+        // Deduct for important issues
+        score -= this.recommendations.filter(r => r.priority === 2).length * 5;
+        
+        // Deduct for minor issues
+        score -= this.recommendations.filter(r => r.priority === 3).length * 2;
+        
+        // Deduct for unused fields
+        if (this.metadata.fieldUsage?.unused > 10) {
+            score -= 10;
+        }
+        
+        // Deduct for too many fields
+        if (this.metadata.fields?.custom > 300) {
+            score -= 10;
+        }
+        
+        return Math.max(0, Math.min(100, score));
+    }
+}
+
+// CLI Interface
+async function main() {
+    const args = process.argv.slice(2);
+    
+    if (args.length === 0) {
+        console.log('Usage: node object-audit.js <ObjectName> [options]');
+        console.log('Options:');
+        console.log('  --sample-size <number>  Number of records to sample (default: 10000)');
+        console.log('  --verbose              Enable verbose logging');
+        console.log('  --format <json|html>   Output format (default: json)');
+        process.exit(1);
+    }
+    
+    const objectName = args[0];
+    const options = {
+        verbose: args.includes('--verbose'),
+        sampleSize: 10000,
+        format: 'json'
+    };
+    
+    // Parse options
+    const sampleSizeIndex = args.indexOf('--sample-size');
+    if (sampleSizeIndex > -1 && args[sampleSizeIndex + 1]) {
+        options.sampleSize = parseInt(args[sampleSizeIndex + 1]);
+    }
+    
+    const formatIndex = args.indexOf('--format');
+    if (formatIndex > -1 && args[formatIndex + 1]) {
+        options.format = args[formatIndex + 1];
+    }
+    
+    try {
+        const auditor = new ObjectAuditor(objectName, options);
+        
+        // Run the audit
+        await auditor.runMultipartAssessment();
+        await auditor.analyzeMetadata();
+        auditor.generateRecommendations();
+        const report = await auditor.generateReport();
+        
+        // Print summary to console
+        console.log('\n=== AUDIT COMPLETE ===');
+        console.log(`Object: ${objectName}`);
+        console.log(`Health Score: ${report.healthScore}/100`);
+        console.log(`Critical Issues: ${report.summary.issues.critical}`);
+        console.log(`Important Issues: ${report.summary.issues.important}`);
+        console.log(`Minor Issues: ${report.summary.issues.minor}`);
+        console.log(`\nFull report saved to: audit-${objectName}-${Date.now()}.json`);
+        
+    } catch (error) {
+        console.error('Audit failed:', error.message);
+        process.exit(1);
+    }
+}
+
+// Export for use as module
+module.exports = ObjectAuditor;
+
+// Run if called directly
+if (require.main === module) {
+    main();
+}

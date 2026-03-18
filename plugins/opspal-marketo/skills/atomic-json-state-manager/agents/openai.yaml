@@ -1,0 +1,4 @@
+interface:
+  display_name: "Atomic Json State Manager"
+  short_description: "Help with Atomic Json State Manager tasks"
+  default_prompt: "Use $atomic-json-state-manager to execute this workflow safely and produce the expected artifacts."

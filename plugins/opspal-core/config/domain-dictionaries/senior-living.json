@@ -1,0 +1,153 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "senior-living",
+  "version": "1.0.0",
+  "description": "Senior living communities, assisted living facilities, nursing homes, and memory care. Mix of national chains and independent facilities. National operators have consistent branding across locations.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "senior", "assisted", "nursing", "memory care", "retirement",
+      "elder", "aged", "skilled nursing", "long-term care", "hospice",
+      "independent living", "continuing care", "life plan", "ccrc"
+    ],
+    "entityTypes": ["AssistedLiving", "NursingHome", "MemoryCare", "CCRC", "IndependentLiving"],
+    "fieldPatterns": [
+      "CMSProviderNumber", "StateLicenseNumber", "MedicareID", "MedicaidID", "BedCount"
+    ]
+  },
+
+  "abbreviations": {
+    "facilityTypes": {
+      "AL": "Assisted Living",
+      "IL": "Independent Living",
+      "MC": "Memory Care",
+      "SNF": "Skilled Nursing Facility",
+      "LTC": "Long-Term Care",
+      "CCRC": "Continuing Care Retirement Community",
+      "RCFE": "Residential Care Facility for the Elderly",
+      "ALF": "Assisted Living Facility"
+    },
+    "care": {
+      "ADL": "Activities of Daily Living",
+      "PT": "Physical Therapy",
+      "OT": "Occupational Therapy",
+      "ST": "Speech Therapy",
+      "RN": "Registered Nurse",
+      "LPN": "Licensed Practical Nurse",
+      "CNA": "Certified Nursing Assistant"
+    },
+    "regulatory": {
+      "CMS": "Centers for Medicare and Medicaid Services",
+      "AHCA": "American Health Care Association",
+      "NCAL": "National Center for Assisted Living",
+      "LeadingAge": "Leading Age (formerly AAHSA)"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp", "LP"],
+    "preserve": [
+      "Senior Living", "Assisted Living", "Memory Care",
+      "Retirement", "Nursing", "Care Center",
+      "Health Center", "Healthcare"
+    ]
+  },
+
+  "synonyms": {
+    "Senior Living": ["Senior Care", "Senior Community"],
+    "Assisted Living": ["Assisted Care", "Personal Care"],
+    "Memory Care": ["Alzheimer's Care", "Dementia Care"],
+    "Retirement Community": ["Retirement Village", "Retirement Home"],
+    "Nursing Home": ["Nursing Facility", "Skilled Nursing"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 80,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -20
+  },
+
+  "genericEntityPatterns": [
+    "* Senior Living",
+    "* Assisted Living",
+    "* Memory Care",
+    "* Retirement Community",
+    "* Retirement Village",
+    "* Care Center",
+    "* Health Center",
+    "* Healthcare Center",
+    "* Nursing Home",
+    "* Nursing Center",
+    "* Rehabilitation Center",
+    "* Place",
+    "* Manor",
+    "* Gardens",
+    "* Lodge",
+    "* Terrace",
+    "* Village",
+    "* Commons"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["cms_provider_match", "operator_match", "domain_match"],
+    "blockers": ["different_cms_provider"]
+  },
+
+  "knownEntities": [
+    "Brookdale Senior Living",
+    "Five Star Senior Living",
+    "Sunrise Senior Living",
+    "Atria Senior Living",
+    "Capital Senior Living",
+    "Senior Lifestyle Corporation",
+    "Holiday Retirement",
+    "Merrill Gardens",
+    "Watermark Retirement Communities",
+    "Belmont Village",
+    "Silverado",
+    "Brightview Senior Living",
+    "Discovery Senior Living",
+    "Integral Senior Living",
+    "Leisure Care",
+    "LCB Senior Living",
+    "Pegasus Senior Living",
+    "Sagora Senior Living",
+    "Senior Care Centers",
+    "Vi Living",
+    "Life Care Services",
+    "Erickson Senior Living",
+    "Acts Retirement-Life Communities",
+    "HumanGood",
+    "Presbyterian Homes",
+    "Ensign Group",
+    "Sabra Health Care REIT",
+    "Ventas",
+    "Welltower",
+    "National HealthCare Corporation"
+  ],
+
+  "knownEntityAliases": {
+    "Brookdale Senior Living": ["Brookdale"],
+    "Five Star Senior Living": ["Five Star", "Diversified Healthcare Trust"],
+    "Sunrise Senior Living": ["Sunrise"],
+    "Atria Senior Living": ["Atria"],
+    "Holiday Retirement": ["Holiday by Atria"],
+    "Erickson Senior Living": ["Erickson"],
+    "National HealthCare Corporation": ["NHC"]
+  },
+
+  "operatorNote": "The senior living industry has significant consolidation with REITs (Real Estate Investment Trusts) owning facilities operated by management companies. A community like 'Sunrise of Dallas' and 'Sunrise of Houston' are typically the same operator (Sunrise Senior Living) even though they're separate facilities."
+}

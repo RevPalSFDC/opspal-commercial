@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Incident Triage Framework"
+  short_description: "Help with Hubspot Incident Triage Framework tasks"
+  default_prompt: "Use $hubspot-incident-triage-framework to execute this workflow safely and produce the expected artifacts."

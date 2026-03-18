@@ -1,0 +1,1060 @@
+{
+  "schemaVersion": "1.1",
+  "description": "Canonical metric semantics for Salesforce reporting. Used for field resolution and semantic validation. Includes sales, marketing, and customer success metrics. Business term aliases link to business-term-mappings.json for disambiguation.",
+  "businessTermAliases": {
+    "churn": ["gross_churn", "logo_churn"],
+    "nrr": ["net_retention"],
+    "grr": ["gross_churn"],
+    "pipeline": ["pipeline.arr"],
+    "win_rate": ["win_rate.count"],
+    "bookings": ["bookings.tcv"],
+    "arr": ["arr.subscription"],
+    "expansion": ["expansion_revenue"],
+    "renewal": ["renewal_rate"],
+    "conversion_rate": ["stage_conversion", "mql_to_sql_conversion"],
+    "sales_cycle": ["sales_cycle_length"],
+    "velocity": ["pipeline.arr"],
+    "aso": ["bookings.tcv"],
+    "coverage_ratio": ["pipeline.arr"],
+    "quota_attainment": ["quota_attainment"],
+    "forecast_accuracy": ["forecast_accuracy"]
+  },
+  "_note_business_terms": "See config/business-term-mappings.json for full disambiguation mappings used by report-semantic-disambiguator.js",
+  "defaultVariants": {
+    "pipeline": "pipeline.arr",
+    "bookings": "bookings.tcv",
+    "revenue": "revenue.recognized",
+    "acv": "acv.contract",
+    "arr": "arr.subscription",
+    "tcv": "tcv.contract",
+    "win_rate": "win_rate.count",
+    "sales_cycle_length": "sales_cycle_length.won",
+    "quota_attainment": "quota_attainment",
+    "forecast_accuracy": "forecast_accuracy",
+    "stage_conversion": "stage_conversion_rate",
+    "renewal_rate": "renewal_rate",
+    "gross_churn": "gross_churn",
+    "net_retention": "net_revenue_retention",
+    "logo_churn": "logo_churn",
+    "health_score": "health_score",
+    "nps": "nps",
+    "csat": "csat",
+    "expansion_revenue": "expansion_revenue",
+    "time_to_value": "time_to_value",
+    "support_cases": "support_cases",
+    "mql_volume": "mql_volume",
+    "pipeline_sourced": "pipeline_sourced",
+    "cost_per_lead": "cost_per_lead",
+    "campaign_roi": "campaign_roi",
+    "mql_to_sql_conversion": "mql_to_sql_conversion"
+  },
+  "metrics": {
+    "pipeline.arr": {
+      "metricName": "Pipeline (ARR)",
+      "category": "pipeline",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Open opportunities expected to close in a period, annualized to recurring revenue.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Annualized recurring value for the deal.",
+          "preferredFields": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c", "Amount"],
+          "labelHints": ["ARR", "Annual Recurring", "ACV", "Annual Contract", "Amount"],
+          "cpqPatterns": ["SBQQ__ARR__c", "SBQQ__ACV__c", "SBQQ__NetAmount__c", "SBQQ__QuotedAmount__c"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Expected close date used for time filtering.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "stage": {
+          "required": true,
+          "description": "Stage for open/closed determination and grouping.",
+          "preferredFields": ["StageName"],
+          "labelHints": ["Stage"]
+        },
+        "probability": {
+          "required": false,
+          "description": "Probability for weighted pipeline.",
+          "preferredFields": ["Probability"],
+          "labelHints": ["Probability", "Stage %"]
+        },
+        "isClosed": {
+          "required": true,
+          "description": "Closed flag for open pipeline filtering.",
+          "preferredFields": ["IsClosed"],
+          "labelHints": ["Closed"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isClosed", "operator": "equals", "value": "false" }
+      ],
+      "highRiskPatterns": [
+        "Using CreatedDate instead of CloseDate for time filtering",
+        "Using multi-year TCV without annualization",
+        "Including Closed Won or Closed Lost in pipeline totals"
+      ]
+    },
+    "pipeline.tcv": {
+      "metricName": "Pipeline (TCV)",
+      "category": "pipeline",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Open opportunities expected to close in a period, measured as total contract value.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Total contract value for the deal.",
+          "preferredFields": ["TCV__c", "Total_Contract_Value__c", "Amount"],
+          "labelHints": ["TCV", "Total Contract", "Amount"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Expected close date used for time filtering.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "stage": {
+          "required": true,
+          "description": "Stage for open/closed determination and grouping.",
+          "preferredFields": ["StageName"],
+          "labelHints": ["Stage"]
+        },
+        "isClosed": {
+          "required": true,
+          "description": "Closed flag for open pipeline filtering.",
+          "preferredFields": ["IsClosed"],
+          "labelHints": ["Closed"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isClosed", "operator": "equals", "value": "false" }
+      ],
+      "highRiskPatterns": [
+        "Using CreatedDate instead of CloseDate for time filtering",
+        "Mixing ARR and TCV in the same pipeline report"
+      ]
+    },
+    "bookings.tcv": {
+      "metricName": "Bookings (TCV)",
+      "category": "bookings",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Closed Won contract value booked in a period.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Total contract value booked.",
+          "preferredFields": ["TCV__c", "Total_Contract_Value__c", "Amount"],
+          "labelHints": ["TCV", "Total Contract", "Amount"],
+          "cpqPatterns": ["SBQQ__TCV__c", "SBQQ__NetAmount__c", "SBQQ__CustomerAmount__c"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Close date used for booking period.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag to isolate Closed Won bookings.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isWon", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including Closed Lost in bookings totals",
+        "Mixing renewals and new business without segmentation"
+      ]
+    },
+    "bookings.acv": {
+      "metricName": "Bookings (ACV)",
+      "category": "bookings",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Closed Won annualized contract value booked in a period.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Annualized contract value booked.",
+          "preferredFields": ["ACV__c", "Annual_Contract_Value__c", "ARR__c", "Amount"],
+          "labelHints": ["ACV", "Annual Contract", "ARR", "Amount"],
+          "cpqPatterns": ["SBQQ__ACV__c", "SBQQ__ARR__c", "SBQQ__NetAmount__c"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Close date used for booking period.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag to isolate Closed Won bookings.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isWon", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including one-time fees in ACV",
+        "Treating ACV bookings as recognized revenue"
+      ]
+    },
+    "revenue.recognized": {
+      "metricName": "Revenue (Recognized)",
+      "category": "revenue",
+      "baseObject": "RevenueSchedule",
+      "timeFieldRole": "revenueDate",
+      "description": "Revenue recognized in a period based on schedules or orders.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Recognized revenue amount.",
+          "preferredFields": ["Revenue", "Amount", "RevenueAmount", "TotalPrice"],
+          "labelHints": ["Revenue", "Recognized", "Amount", "Total Price"]
+        },
+        "revenueDate": {
+          "required": true,
+          "description": "Date of recognized revenue.",
+          "preferredFields": ["RevenueDate", "ServiceDate", "OrderItemStartDate", "ScheduleDate"],
+          "labelHints": ["Revenue Date", "Service Date", "Schedule Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Using Closed Won Amount as revenue for subscriptions",
+        "Recognizing multi-year revenue in the close period"
+      ]
+    },
+    "acv.contract": {
+      "metricName": "ACV (Contract)",
+      "category": "acv",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Annualized contract value for a deal.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Total contract value or recurring amount used for ACV calculation.",
+          "preferredFields": ["ACV__c", "Annual_Contract_Value__c", "ARR__c", "Amount"],
+          "labelHints": ["ACV", "Annual Contract", "ARR", "Amount"],
+          "cpqPatterns": ["SBQQ__ACV__c", "SBQQ__NetAmount__c", "SBQQ__CustomerAmount__c"]
+        },
+        "termMonths": {
+          "required": false,
+          "description": "Contract term in months for annualization.",
+          "preferredFields": ["Contract_Term_Months__c", "Term_Months__c", "Subscription_Term__c"],
+          "labelHints": ["Term", "Months", "Contract Length"],
+          "cpqPatterns": ["SBQQ__SubscriptionTerm__c", "SBQQ__ContractTerm__c"]
+        },
+        "closeDate": {
+          "required": false,
+          "description": "Close date used for time-bounded ACV reporting.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Including one-time fees in ACV",
+        "Annualizing ramped contracts without adjustment"
+      ]
+    },
+    "arr.subscription": {
+      "metricName": "ARR (Subscription)",
+      "category": "arr",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Annual recurring revenue from active subscriptions or new deals.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Annual recurring amount.",
+          "preferredFields": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c", "Amount"],
+          "labelHints": ["ARR", "Annual Recurring", "ACV", "Amount"],
+          "cpqPatterns": ["SBQQ__ARR__c", "SBQQ__ACV__c", "SBQQ__MRR__c", "SBQQ__NetAmount__c"]
+        },
+        "closeDate": {
+          "required": false,
+          "description": "Close date for new ARR attribution.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Summing Closed Won Amounts for ARR without churn adjustments",
+        "Including one-time fees in ARR"
+      ]
+    },
+    "tcv.contract": {
+      "metricName": "TCV (Contract)",
+      "category": "tcv",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Total contract value including recurring and one-time fees.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Total contract value.",
+          "preferredFields": ["TCV__c", "Total_Contract_Value__c", "Amount"],
+          "labelHints": ["TCV", "Total Contract", "Amount"]
+        },
+        "closeDate": {
+          "required": false,
+          "description": "Close date for time-bounded TCV reporting.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Presenting TCV as annualized revenue without term context"
+      ]
+    },
+    "win_rate.count": {
+      "metricName": "Win Rate (Count)",
+      "category": "win_rate",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Percentage of closed opportunities that are won, by count.",
+      "fieldRoles": {
+        "isWon": {
+          "required": true,
+          "description": "Won flag to count wins.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        },
+        "isClosed": {
+          "required": true,
+          "description": "Closed flag to restrict to closed deals.",
+          "preferredFields": ["IsClosed"],
+          "labelHints": ["Closed"]
+        },
+        "closeDate": {
+          "required": false,
+          "description": "Close date to bucket win rates by period.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isClosed", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including open opportunities in win-rate denominator",
+        "Excluding lost opportunities from denominator"
+      ]
+    },
+    "win_rate.value": {
+      "metricName": "Win Rate (Value)",
+      "category": "win_rate",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Win rate by amount (won value divided by total closed value).",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Opportunity value used for value-based win rate.",
+          "preferredFields": ["Amount", "ARR__c", "ACV__c", "TCV__c"],
+          "labelHints": ["Amount", "ARR", "ACV", "TCV"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag to sum won value.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        },
+        "isClosed": {
+          "required": true,
+          "description": "Closed flag to restrict to closed deals.",
+          "preferredFields": ["IsClosed"],
+          "labelHints": ["Closed"]
+        },
+        "closeDate": {
+          "required": false,
+          "description": "Close date to bucket win rates by period.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isClosed", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including open opportunities in value-based win rate"
+      ]
+    },
+    "sales_cycle_length.won": {
+      "metricName": "Sales Cycle Length (Won)",
+      "category": "sales_cycle_length",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Average days from opportunity creation to Closed Won.",
+      "fieldRoles": {
+        "createdDate": {
+          "required": true,
+          "description": "Opportunity creation date.",
+          "preferredFields": ["CreatedDate"],
+          "labelHints": ["Created Date"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Closed Won date.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag to filter to Closed Won deals.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isWon", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including open or closed-lost opportunities in cycle length"
+      ]
+    },
+    "quota_attainment": {
+      "metricName": "Quota Attainment",
+      "category": "performance",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Percentage of quota achieved by a rep or team in a period.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Closed Won amount to compare against quota.",
+          "preferredFields": ["Amount", "ARR__c", "ACV__c", "TCV__c"],
+          "labelHints": ["Amount", "Bookings", "Closed Won"]
+        },
+        "quota": {
+          "required": true,
+          "description": "Target quota value.",
+          "preferredFields": ["Quota__c", "Quota_Amount__c", "Target__c"],
+          "labelHints": ["Quota", "Target", "Goal"]
+        },
+        "owner": {
+          "required": true,
+          "description": "Owner for quota assignment.",
+          "preferredFields": ["OwnerId", "Owner.Name"],
+          "labelHints": ["Owner", "Rep", "User"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Close date for period filtering.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag to filter to Closed Won deals.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isWon", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including pipeline in attainment (only Closed Won counts)",
+        "Using wrong quota period (monthly vs quarterly)",
+        "Mixing individual and team quotas"
+      ]
+    },
+    "forecast_accuracy": {
+      "metricName": "Forecast Accuracy",
+      "category": "performance",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Comparison of forecasted vs actual closed amounts.",
+      "fieldRoles": {
+        "forecastCategory": {
+          "required": true,
+          "description": "Forecast category for commit/best case/pipeline.",
+          "preferredFields": ["ForecastCategory", "ForecastCategoryName"],
+          "labelHints": ["Forecast", "Commit", "Best Case"]
+        },
+        "amount": {
+          "required": true,
+          "description": "Deal amount for forecast calculation.",
+          "preferredFields": ["Amount", "ARR__c", "ACV__c"],
+          "labelHints": ["Amount"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Close date for period matching.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "isWon": {
+          "required": false,
+          "description": "Won flag for actual vs forecast comparison.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Comparing forecast from different point in time than actuals",
+        "Using ForecastCategory without understanding org mapping",
+        "Not accounting for deals that slipped to next period"
+      ]
+    },
+    "stage_conversion_rate": {
+      "metricName": "Stage Conversion Rate",
+      "category": "pipeline",
+      "baseObject": "OpportunityHistory",
+      "timeFieldRole": "createdDate",
+      "description": "Percentage of opportunities that advance from one stage to the next.",
+      "fieldRoles": {
+        "stageName": {
+          "required": true,
+          "description": "Stage name for transition tracking.",
+          "preferredFields": ["StageName"],
+          "labelHints": ["Stage", "Sales Stage"]
+        },
+        "opportunityId": {
+          "required": true,
+          "description": "Opportunity ID for tracking.",
+          "preferredFields": ["OpportunityId"],
+          "labelHints": ["Opportunity"]
+        },
+        "createdDate": {
+          "required": true,
+          "description": "Date of stage change.",
+          "preferredFields": ["CreatedDate"],
+          "labelHints": ["Created Date", "Change Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Not accounting for stage skipping (direct to Closed Won)",
+        "Using current stage instead of historical stage transitions",
+        "Counting re-entries into same stage as new conversions"
+      ]
+    },
+    "renewal_rate": {
+      "metricName": "Renewal Rate",
+      "category": "retention",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Percentage of eligible renewals that closed as won.",
+      "fieldRoles": {
+        "type": {
+          "required": true,
+          "description": "Opportunity type to identify renewals.",
+          "preferredFields": ["Type", "Record_Type__c", "RecordType.Name"],
+          "labelHints": ["Type", "Renewal", "Record Type"]
+        },
+        "amount": {
+          "required": true,
+          "description": "Renewal contract value.",
+          "preferredFields": ["Amount", "ARR__c", "Renewal_Amount__c"],
+          "labelHints": ["Amount", "Renewal Amount"],
+          "cpqPatterns": ["SBQQ__RenewedAmount__c", "SBQQ__RenewalPrice__c", "SBQQ__NetAmount__c"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Renewal close date.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag for renewal success.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        },
+        "isClosed": {
+          "required": true,
+          "description": "Closed flag to restrict to decided renewals.",
+          "preferredFields": ["IsClosed"],
+          "labelHints": ["Closed"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "type", "operator": "contains", "value": "Renewal" },
+        { "role": "isClosed", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including non-renewal opportunities in denominator",
+        "Not accounting for early renewals vs on-time renewals",
+        "Mixing logo renewal rate with dollar renewal rate"
+      ]
+    },
+    "gross_churn": {
+      "metricName": "Gross Revenue Churn (GRR)",
+      "category": "retention",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Revenue lost from churned customers as percentage of beginning ARR.",
+      "fieldRoles": {
+        "churnAmount": {
+          "required": true,
+          "description": "Amount of churned revenue.",
+          "preferredFields": ["Churned_ARR__c", "Lost_Revenue__c", "Amount"],
+          "labelHints": ["Churn", "Lost", "Churned ARR"]
+        },
+        "beginningArr": {
+          "required": true,
+          "description": "Beginning period ARR for denominator.",
+          "preferredFields": ["Beginning_ARR__c", "Prior_Period_ARR__c"],
+          "labelHints": ["Beginning ARR", "Start ARR"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Churn date for period calculation.",
+          "preferredFields": ["CloseDate", "Churn_Date__c"],
+          "labelHints": ["Close Date", "Churn Date"]
+        },
+        "isChurn": {
+          "required": true,
+          "description": "Flag indicating this is a churn event.",
+          "preferredFields": ["Is_Churn__c", "Churn_Flag__c"],
+          "labelHints": ["Churn", "Lost", "Cancelled"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isChurn", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including downgrades in gross churn (that's contraction)",
+        "Using wrong denominator period (end vs beginning ARR)",
+        "Not aligning churn definition with finance"
+      ]
+    },
+    "net_revenue_retention": {
+      "metricName": "Net Revenue Retention (NRR)",
+      "category": "retention",
+      "baseObject": "Account",
+      "timeFieldRole": "periodEnd",
+      "description": "Revenue from existing customers including expansion minus churn.",
+      "fieldRoles": {
+        "currentArr": {
+          "required": true,
+          "description": "Current period ARR from existing customers.",
+          "preferredFields": ["ARR__c", "Current_ARR__c", "Annual_Recurring_Revenue__c"],
+          "labelHints": ["Current ARR", "ARR"]
+        },
+        "beginningArr": {
+          "required": true,
+          "description": "Beginning period ARR for same customer cohort.",
+          "preferredFields": ["Beginning_ARR__c", "Prior_Period_ARR__c"],
+          "labelHints": ["Beginning ARR", "Start ARR"]
+        },
+        "accountId": {
+          "required": true,
+          "description": "Account ID for customer tracking.",
+          "preferredFields": ["Id", "AccountId"],
+          "labelHints": ["Account"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Including new customer revenue (NRR is existing only)",
+        "Not excluding churned customers from denominator correctly",
+        "Mixing monthly and annual periods in calculation"
+      ]
+    },
+    "logo_churn": {
+      "metricName": "Logo Churn Rate",
+      "category": "retention",
+      "baseObject": "Account",
+      "timeFieldRole": "closeDate",
+      "description": "Percentage of customer accounts that churned in a period.",
+      "fieldRoles": {
+        "accountStatus": {
+          "required": true,
+          "description": "Account status indicating churn.",
+          "preferredFields": ["Account_Status__c", "Customer_Status__c", "Type"],
+          "labelHints": ["Status", "Customer Status"]
+        },
+        "churnDate": {
+          "required": false,
+          "description": "Date of churn event.",
+          "preferredFields": ["Churn_Date__c", "Cancellation_Date__c"],
+          "labelHints": ["Churn Date", "Cancelled Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Counting merged accounts as churn",
+        "Not defining what constitutes a 'customer' consistently",
+        "Double-counting accounts with multiple subscriptions"
+      ]
+    },
+    "health_score": {
+      "metricName": "Account Health Score",
+      "category": "customer_success",
+      "baseObject": "Account",
+      "description": "Customer health score indicating risk or engagement level.",
+      "fieldRoles": {
+        "healthScore": {
+          "required": true,
+          "description": "Numeric or categorical health score.",
+          "preferredFields": ["Health_Score__c", "Customer_Health__c", "Account_Health__c", "Health_Rating__c"],
+          "labelHints": ["Health", "Health Score", "Customer Health"]
+        },
+        "healthCategory": {
+          "required": false,
+          "description": "Categorical health (Green/Yellow/Red).",
+          "preferredFields": ["Health_Category__c", "Risk_Level__c"],
+          "labelHints": ["Health Category", "Risk Level", "RAG Status"]
+        }
+      },
+      "recommendedFilters": [],
+      "fallbackStrategy": {
+        "formula": "IF(Days_Since_Last_Touch__c > 90, 'Red', IF(Open_Critical_Cases__c > 0, 'Red', IF(NPS_Score__c < 6, 'Yellow', 'Green')))",
+        "description": "Calculate from activity, cases, and NPS if no explicit field"
+      },
+      "highRiskPatterns": [
+        "Using only single factor (e.g., just NPS) for health",
+        "Not updating health scores regularly",
+        "Missing Red accounts in at-risk reporting"
+      ]
+    },
+    "nps": {
+      "metricName": "Net Promoter Score",
+      "category": "customer_success",
+      "baseObject": "Account",
+      "description": "Net Promoter Score from customer surveys.",
+      "fieldRoles": {
+        "npsScore": {
+          "required": true,
+          "description": "NPS score value (0-10 scale or -100 to 100 calculated).",
+          "preferredFields": ["NPS_Score__c", "NPS__c", "Net_Promoter_Score__c"],
+          "labelHints": ["NPS", "Net Promoter", "Promoter Score"]
+        },
+        "surveyDate": {
+          "required": false,
+          "description": "Date of NPS survey response.",
+          "preferredFields": ["NPS_Date__c", "Survey_Date__c", "LastModifiedDate"],
+          "labelHints": ["Survey Date", "NPS Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Confusing individual response (0-10) with calculated NPS (-100 to 100)",
+        "Using stale NPS data (>12 months old)",
+        "Not segmenting by customer tier"
+      ]
+    },
+    "csat": {
+      "metricName": "Customer Satisfaction Score",
+      "category": "customer_success",
+      "baseObject": "Case",
+      "description": "Customer satisfaction score from case surveys.",
+      "fieldRoles": {
+        "csatScore": {
+          "required": true,
+          "description": "CSAT score (typically 1-5 scale).",
+          "preferredFields": ["CSAT__c", "Satisfaction_Score__c", "CSAT_Rating__c"],
+          "labelHints": ["CSAT", "Satisfaction", "Rating"]
+        },
+        "caseId": {
+          "required": false,
+          "description": "Case ID for case-level CSAT.",
+          "preferredFields": ["CaseId", "Id"],
+          "labelHints": ["Case"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Low survey response rate skewing results",
+        "Not filtering out auto-closed cases",
+        "Mixing different survey scales"
+      ]
+    },
+    "expansion_revenue": {
+      "metricName": "Expansion Revenue",
+      "category": "customer_success",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "closeDate",
+      "description": "Revenue from upsells and cross-sells to existing customers.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Expansion deal value.",
+          "preferredFields": ["Amount", "ARR__c", "Expansion_ARR__c"],
+          "labelHints": ["Amount", "Expansion"]
+        },
+        "type": {
+          "required": true,
+          "description": "Opportunity type indicating expansion.",
+          "preferredFields": ["Type", "Opportunity_Type__c"],
+          "labelHints": ["Type", "Expansion", "Upsell"]
+        },
+        "isWon": {
+          "required": true,
+          "description": "Won flag for closed expansion.",
+          "preferredFields": ["IsWon"],
+          "labelHints": ["Won"]
+        },
+        "closeDate": {
+          "required": true,
+          "description": "Close date for period filtering.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "type", "operator": "contains", "value": "Expansion" },
+        { "role": "isWon", "operator": "equals", "value": "true" }
+      ],
+      "highRiskPatterns": [
+        "Including new customer revenue in expansion",
+        "Not separating upsell from cross-sell for analysis",
+        "Missing contraction offset in net expansion"
+      ]
+    },
+    "time_to_value": {
+      "metricName": "Time to Value",
+      "category": "customer_success",
+      "baseObject": "Account",
+      "description": "Days from contract close to first value milestone.",
+      "fieldRoles": {
+        "contractStartDate": {
+          "required": true,
+          "description": "Contract or subscription start date.",
+          "preferredFields": ["Contract_Start_Date__c", "Customer_Start_Date__c", "Go_Live_Date__c"],
+          "labelHints": ["Start Date", "Contract Date", "Go Live"]
+        },
+        "firstValueDate": {
+          "required": true,
+          "description": "Date of first value milestone.",
+          "preferredFields": ["First_Value_Date__c", "Onboarding_Complete__c", "Activation_Date__c"],
+          "labelHints": ["Value Date", "Activation", "Onboarding Complete"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Inconsistent definition of 'value milestone'",
+        "Not tracking onboarding completion",
+        "Including customers who never reached value"
+      ]
+    },
+    "support_cases": {
+      "metricName": "Support Cases",
+      "category": "customer_success",
+      "baseObject": "Case",
+      "description": "Open or total support cases for an account.",
+      "fieldRoles": {
+        "status": {
+          "required": true,
+          "description": "Case status for open/closed filtering.",
+          "preferredFields": ["Status", "Case_Status__c"],
+          "labelHints": ["Status"]
+        },
+        "accountId": {
+          "required": true,
+          "description": "Account for case aggregation.",
+          "preferredFields": ["AccountId"],
+          "labelHints": ["Account"]
+        },
+        "priority": {
+          "required": false,
+          "description": "Case priority for severity analysis.",
+          "preferredFields": ["Priority", "Case_Priority__c"],
+          "labelHints": ["Priority"]
+        },
+        "createdDate": {
+          "required": false,
+          "description": "Case creation date for trending.",
+          "preferredFields": ["CreatedDate"],
+          "labelHints": ["Created Date"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "status", "operator": "notEquals", "value": "Closed" }
+      ],
+      "highRiskPatterns": [
+        "Not weighting by priority",
+        "Including internal cases in customer metrics",
+        "Not tracking resolution time alongside volume"
+      ]
+    },
+    "mql_volume": {
+      "metricName": "MQL Volume",
+      "category": "marketing",
+      "baseObject": "Lead",
+      "timeFieldRole": "createdDate",
+      "description": "Count of Marketing Qualified Leads in a period.",
+      "fieldRoles": {
+        "status": {
+          "required": true,
+          "description": "Lead status indicating MQL qualification.",
+          "preferredFields": ["Status", "Lead_Status__c", "MQL_Status__c"],
+          "labelHints": ["Status", "MQL", "Qualified"]
+        },
+        "createdDate": {
+          "required": true,
+          "description": "Lead creation or MQL date.",
+          "preferredFields": ["CreatedDate", "MQL_Date__c"],
+          "labelHints": ["Created Date", "MQL Date"]
+        },
+        "leadSource": {
+          "required": false,
+          "description": "Source of the lead for channel analysis.",
+          "preferredFields": ["LeadSource", "Lead_Source__c"],
+          "labelHints": ["Source", "Lead Source"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "status", "operator": "equals", "value": "MQL" }
+      ],
+      "highRiskPatterns": [
+        "Counting all leads as MQLs without qualification",
+        "Not tracking MQL date separately from created date",
+        "Including recycled leads in new MQL counts"
+      ]
+    },
+    "pipeline_sourced": {
+      "metricName": "Marketing-Sourced Pipeline",
+      "category": "marketing",
+      "baseObject": "Opportunity",
+      "timeFieldRole": "createdDate",
+      "description": "Pipeline value attributed to marketing activities.",
+      "fieldRoles": {
+        "amount": {
+          "required": true,
+          "description": "Opportunity value.",
+          "preferredFields": ["Amount", "ARR__c", "Pipeline_Value__c"],
+          "labelHints": ["Amount", "Value"]
+        },
+        "leadSource": {
+          "required": true,
+          "description": "Source indicating marketing attribution.",
+          "preferredFields": ["LeadSource", "Lead_Source__c", "Marketing_Source__c"],
+          "labelHints": ["Lead Source", "Source", "Marketing"]
+        },
+        "isClosed": {
+          "required": true,
+          "description": "Closed flag for pipeline filtering.",
+          "preferredFields": ["IsClosed"],
+          "labelHints": ["Closed"]
+        },
+        "closeDate": {
+          "required": false,
+          "description": "Expected close date.",
+          "preferredFields": ["CloseDate"],
+          "labelHints": ["Close Date"]
+        }
+      },
+      "recommendedFilters": [
+        { "role": "isClosed", "operator": "equals", "value": "false" }
+      ],
+      "highRiskPatterns": [
+        "Not defining which LeadSources are 'marketing'",
+        "Including sales-sourced pipeline",
+        "Not using campaign influence for multi-touch attribution"
+      ]
+    },
+    "cost_per_lead": {
+      "metricName": "Cost Per Lead",
+      "category": "marketing",
+      "baseObject": "Campaign",
+      "description": "Average cost to acquire a lead.",
+      "fieldRoles": {
+        "actualCost": {
+          "required": true,
+          "description": "Campaign spend.",
+          "preferredFields": ["ActualCost", "Campaign_Cost__c", "BudgetedCost"],
+          "labelHints": ["Cost", "Actual Cost", "Spend"]
+        },
+        "numberOfLeads": {
+          "required": true,
+          "description": "Leads generated by campaign.",
+          "preferredFields": ["NumberOfLeads", "Lead_Count__c"],
+          "labelHints": ["Leads", "Lead Count"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Using budgeted instead of actual cost",
+        "Not including all lead acquisition costs",
+        "Comparing CPL across different quality leads"
+      ]
+    },
+    "campaign_roi": {
+      "metricName": "Campaign ROI",
+      "category": "marketing",
+      "baseObject": "Campaign",
+      "description": "Return on investment for marketing campaigns.",
+      "fieldRoles": {
+        "amountWonOpportunities": {
+          "required": true,
+          "description": "Revenue from campaign-influenced opportunities.",
+          "preferredFields": ["AmountWonOpportunities", "Revenue_Generated__c"],
+          "labelHints": ["Revenue", "Won Amount"]
+        },
+        "actualCost": {
+          "required": true,
+          "description": "Campaign spend.",
+          "preferredFields": ["ActualCost", "Campaign_Cost__c"],
+          "labelHints": ["Cost", "Spend"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Using first-touch only attribution",
+        "Not accounting for sales cycle length in ROI timing",
+        "Including non-marketing costs in denominator"
+      ]
+    },
+    "mql_to_sql_conversion": {
+      "metricName": "MQL to SQL Conversion Rate",
+      "category": "marketing",
+      "baseObject": "Lead",
+      "description": "Percentage of MQLs that convert to Sales Qualified Leads.",
+      "fieldRoles": {
+        "mqlStatus": {
+          "required": true,
+          "description": "MQL status indicator.",
+          "preferredFields": ["Status", "MQL_Status__c"],
+          "labelHints": ["MQL Status"]
+        },
+        "sqlStatus": {
+          "required": false,
+          "description": "SQL status indicator.",
+          "preferredFields": ["SQL_Status__c", "Sales_Accepted__c"],
+          "labelHints": ["SQL Status", "Sales Accepted"]
+        },
+        "isConverted": {
+          "required": false,
+          "description": "Lead conversion flag.",
+          "preferredFields": ["IsConverted"],
+          "labelHints": ["Converted"]
+        },
+        "mqlDate": {
+          "required": false,
+          "description": "Date of MQL qualification.",
+          "preferredFields": ["MQL_Date__c", "Marketing_Qualified_Date__c"],
+          "labelHints": ["MQL Date"]
+        },
+        "sqlDate": {
+          "required": false,
+          "description": "Date of SQL qualification.",
+          "preferredFields": ["SQL_Date__c", "Sales_Accepted_Date__c"],
+          "labelHints": ["SQL Date"]
+        }
+      },
+      "recommendedFilters": [],
+      "highRiskPatterns": [
+        "Not tracking SQL stage separately from conversion",
+        "Including disqualified leads in denominator",
+        "Not accounting for lead velocity in conversion analysis"
+      ]
+    }
+  }
+}

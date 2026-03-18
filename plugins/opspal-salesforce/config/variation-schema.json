@@ -1,0 +1,356 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gorevpal.com/schemas/template-variations/1.0",
+  "title": "Template Variation Schema",
+  "description": "JSON Schema for Salesforce report/dashboard template variations with instance adaptability",
+  "type": "object",
+  "properties": {
+    "variations": {
+      "type": "object",
+      "description": "Variation configuration for template adaptability",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "description": "Schema version for variation metadata",
+          "enum": ["1.0"],
+          "default": "1.0"
+        },
+        "baseTemplate": {
+          "type": "boolean",
+          "description": "Whether this is the base template (not a variation)",
+          "default": true
+        },
+        "availableVariations": {
+          "type": "array",
+          "description": "List of available variation keys for this template",
+          "items": {
+            "type": "string",
+            "enum": [
+              "simple",
+              "standard",
+              "advanced",
+              "cpq",
+              "native",
+              "hybrid",
+              "field-sales",
+              "inside-sales",
+              "plg",
+              "enterprise",
+              "mid-market",
+              "smb"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "defaultVariation": {
+          "type": "string",
+          "description": "Default variation to use when none specified"
+        },
+        "variationOverrides": {
+          "type": "object",
+          "description": "Overlay configurations keyed by variation name",
+          "additionalProperties": {
+            "$ref": "#/$defs/variationOverlay"
+          }
+        }
+      },
+      "required": ["schemaVersion", "availableVariations"]
+    },
+    "orgAdaptation": {
+      "$ref": "#/$defs/orgAdaptation"
+    }
+  },
+  "$defs": {
+    "variationOverlay": {
+      "type": "object",
+      "description": "Configuration overlay for a specific variation",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of this variation"
+        },
+        "fieldSubstitutions": {
+          "type": "object",
+          "description": "Field name mappings for this variation (e.g., Quote → SBQQ__Quote__c)",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "componentOverrides": {
+          "type": "object",
+          "description": "Dashboard component overrides",
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Component IDs to include (if specified, excludes all others)"
+            },
+            "exclude": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Component IDs to exclude from base template"
+            },
+            "maxComponents": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "description": "Maximum number of components to include"
+            }
+          }
+        },
+        "filterOverrides": {
+          "type": "array",
+          "description": "Filter modifications for this variation",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "default": { "type": "string" },
+              "values": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "metricAdjustments": {
+          "type": "object",
+          "description": "Metric definition adjustments",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "formula": { "type": "string" },
+              "target": { "type": "string" },
+              "thresholds": {
+                "type": "object",
+                "properties": {
+                  "green": { "type": "string" },
+                  "yellow": { "type": "string" },
+                  "red": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "orgAdaptationOverrides": {
+          "$ref": "#/$defs/orgAdaptationOverride"
+        }
+      }
+    },
+    "orgAdaptation": {
+      "type": "object",
+      "description": "Org-specific adaptation configuration",
+      "properties": {
+        "requiredFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that must exist for template to deploy"
+        },
+        "optionalFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that enhance template but are not required"
+        },
+        "adaptationStrategy": {
+          "type": "string",
+          "enum": ["strict", "graceful-degradation", "fallback-chain"],
+          "default": "graceful-degradation",
+          "description": "How to handle missing optional fields"
+        },
+        "minimumFidelity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.7,
+          "description": "Minimum field resolution rate required (0-1)"
+        },
+        "fieldFallbacks": {
+          "type": "object",
+          "description": "Field-level fallback configuration",
+          "additionalProperties": {
+            "$ref": "#/$defs/fieldFallback"
+          }
+        },
+        "dataAvailabilityTiers": {
+          "type": "object",
+          "description": "Component visibility based on data availability",
+          "properties": {
+            "complete": {
+              "$ref": "#/$defs/dataTier"
+            },
+            "partial": {
+              "$ref": "#/$defs/dataTier"
+            },
+            "minimal": {
+              "$ref": "#/$defs/dataTier"
+            }
+          }
+        }
+      }
+    },
+    "orgAdaptationOverride": {
+      "type": "object",
+      "description": "Overrides for orgAdaptation in variations",
+      "properties": {
+        "minimumFidelity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "additionalRequiredFields": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "additionalOptionalFields": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "fieldFallback": {
+      "type": "object",
+      "description": "Configuration for field resolution fallbacks",
+      "properties": {
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Pattern-based field name matches"
+        },
+        "cpqPatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "CPQ namespace-specific patterns (SBQQ__*)"
+        },
+        "namespaceAware": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to apply namespace-aware resolution"
+        },
+        "fallbackChain": {
+          "type": "array",
+          "description": "Ordered list of fallback options with namespace priority",
+          "items": {
+            "type": "object",
+            "properties": {
+              "namespace": {
+                "type": ["string", "null"],
+                "description": "Namespace prefix (null for standard)"
+              },
+              "field": {
+                "type": "string",
+                "description": "Field API name"
+              }
+            },
+            "required": ["field"]
+          }
+        },
+        "labelHints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "UI label patterns to match"
+        },
+        "dataType": {
+          "type": "string",
+          "enum": ["currency", "number", "percent", "date", "datetime", "text", "picklist", "reference"],
+          "description": "Expected data type for validation"
+        }
+      }
+    },
+    "dataTier": {
+      "type": "object",
+      "properties": {
+        "minimumFidelity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "components": {
+          "type": "string",
+          "enum": ["all", "essential + fallbacks", "essential only"],
+          "description": "Which components to include at this tier"
+        },
+        "enabledComponents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Specific component IDs enabled at this tier"
+        }
+      }
+    }
+  },
+  "variationDimensionDefinitions": {
+    "_comment": "Reference definitions for variation dimensions (not part of schema validation)",
+    "complexity": {
+      "simple": {
+        "description": "Reduced components for quick adoption",
+        "typical": "4-5 components, basic metrics only",
+        "useCase": "New Salesforce adopters, quick wins"
+      },
+      "standard": {
+        "description": "Full template as designed",
+        "typical": "All components with standard fields",
+        "useCase": "Mature Salesforce orgs"
+      },
+      "advanced": {
+        "description": "Extended with custom calculations",
+        "typical": "Additional CPQ/complex metrics",
+        "useCase": "Data-mature organizations"
+      }
+    },
+    "quotingSystem": {
+      "native": {
+        "description": "Standard Salesforce Quote object",
+        "fields": "Quote, QuoteLineItem",
+        "detection": "Quote object exists, no SBQQ namespace"
+      },
+      "cpq": {
+        "description": "Salesforce CPQ (formerly SteelBrick)",
+        "fields": "SBQQ__Quote__c, SBQQ__QuoteLine__c",
+        "detection": "SBQQ namespace present"
+      },
+      "hybrid": {
+        "description": "Both native and CPQ present",
+        "fields": "Mixed usage patterns",
+        "detection": "Both Quote and SBQQ objects exist"
+      }
+    },
+    "gtmModel": {
+      "field-sales": {
+        "description": "Traditional enterprise sales",
+        "focus": "Large deals, long cycles",
+        "metrics": "Opportunity-centric"
+      },
+      "inside-sales": {
+        "description": "High-velocity sales",
+        "focus": "Volume metrics, activity tracking",
+        "metrics": "Activity-centric"
+      },
+      "plg": {
+        "description": "Product-led growth",
+        "focus": "Self-service, trial conversion",
+        "metrics": "Usage-centric"
+      },
+      "hybrid": {
+        "description": "Mixed GTM motions",
+        "focus": "Multiple paths to revenue",
+        "metrics": "Segment-aware"
+      }
+    },
+    "companySize": {
+      "enterprise": {
+        "description": "Large organizations (>1000 employees)",
+        "thresholds": "Higher deal sizes, longer cycles",
+        "typical": ">$100K ACV"
+      },
+      "mid-market": {
+        "description": "Mid-size companies (100-1000 employees)",
+        "thresholds": "Balanced metrics",
+        "typical": "$25K-$100K ACV"
+      },
+      "smb": {
+        "description": "Small businesses (<100 employees)",
+        "thresholds": "Lower thresholds, faster cycles",
+        "typical": "<$25K ACV"
+      }
+    }
+  }
+}

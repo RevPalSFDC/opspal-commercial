@@ -1,0 +1,113 @@
+{
+  "$schema": "./asana-user-mapping.schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2025-10-26",
+  "workspaceId": "REDACTED_ASANA_WORKSPACE",
+  "defaultAssigneeGid": null,
+  "agentToUserMapping": {
+    "sfdc-metadata-manager": {
+      "assigneeGid": null,
+      "assigneeName": "Salesforce Admin",
+      "description": "Manages Salesforce metadata deployments, object/field creation"
+    },
+    "sfdc-data-operations": {
+      "assigneeGid": null,
+      "assigneeName": "Data Specialist",
+      "description": "Handles data imports, exports, migrations, bulk operations"
+    },
+    "sfdc-automation-builder": {
+      "assigneeGid": null,
+      "assigneeName": "Automation Engineer",
+      "description": "Creates and manages Flows, Process Builder, Workflow Rules"
+    },
+    "sfdc-apex-developer": {
+      "assigneeGid": null,
+      "assigneeName": "Apex Developer",
+      "description": "Develops and manages Apex code, triggers, test classes"
+    },
+    "sfdc-security-admin": {
+      "assigneeGid": null,
+      "assigneeName": "Security Admin",
+      "description": "Manages profiles, permission sets, roles, sharing rules"
+    },
+    "sfdc-cpq-specialist": {
+      "assigneeGid": null,
+      "assigneeName": "CPQ Specialist",
+      "description": "Configures CPQ pricing, quotes, product bundles"
+    },
+    "hubspot-workflow-builder": {
+      "assigneeGid": null,
+      "assigneeName": "HubSpot Automation Engineer",
+      "description": "Creates and manages HubSpot workflows and automation"
+    },
+    "hubspot-data-operations-manager": {
+      "assigneeGid": null,
+      "assigneeName": "HubSpot Data Manager",
+      "description": "Handles HubSpot data imports, property management"
+    },
+    "unified-orchestrator": {
+      "assigneeGid": null,
+      "assigneeName": "Technical Lead",
+      "description": "Orchestrates complex multi-platform operations"
+    },
+    "implementation-planner": {
+      "assigneeGid": null,
+      "assigneeName": "Project Manager",
+      "description": "Plans and coordinates implementation projects"
+    }
+  },
+  "stakeholderRoles": {
+    "technical_lead": {
+      "gid": null,
+      "name": "Technical Lead",
+      "description": "Overall technical oversight and architecture decisions"
+    },
+    "project_manager": {
+      "gid": null,
+      "name": "Project Manager",
+      "description": "Project planning, timeline, stakeholder communication"
+    },
+    "qa_lead": {
+      "gid": null,
+      "name": "QA Lead",
+      "description": "Quality assurance and testing coordination"
+    },
+    "business_analyst": {
+      "gid": null,
+      "name": "Business Analyst",
+      "description": "Requirements gathering and validation"
+    },
+    "salesforce_admin": {
+      "gid": null,
+      "name": "Salesforce Administrator",
+      "description": "Salesforce platform administration"
+    },
+    "hubspot_admin": {
+      "gid": null,
+      "name": "HubSpot Administrator",
+      "description": "HubSpot platform administration"
+    }
+  },
+  "phaseStakeholders": {
+    "foundation": ["technical_lead", "project_manager", "business_analyst"],
+    "configuration": ["technical_lead", "salesforce_admin", "hubspot_admin"],
+    "automation": ["technical_lead", "salesforce_admin", "hubspot_admin"],
+    "integration": ["technical_lead", "salesforce_admin", "hubspot_admin", "qa_lead"],
+    "testing": ["qa_lead", "technical_lead", "project_manager"],
+    "deployment": ["technical_lead", "project_manager", "qa_lead"]
+  },
+  "taskTypeStakeholders": {
+    "data": ["technical_lead", "business_analyst"],
+    "functional": ["technical_lead", "business_analyst"],
+    "technical": ["technical_lead"],
+    "integration": ["technical_lead", "salesforce_admin", "hubspot_admin"],
+    "testing": ["qa_lead", "technical_lead"],
+    "deployment": ["technical_lead", "project_manager"]
+  },
+  "setupInstructions": {
+    "step1": "Run: node .claude-plugins/opspal-core/scripts/lib/asana-user-manager.js fetch-users",
+    "step2": "This will populate user GIDs from your workspace",
+    "step3": "Review and adjust role assignments as needed",
+    "step4": "Validate configuration: node .claude-plugins/opspal-core/scripts/lib/asana-user-manager.js validate"
+  }
+}

@@ -1,0 +1,409 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Analytics API Limits",
+  "description": "Documents format-specific row limits and recommendations for Salesforce Analytics/Reports API",
+  "version": "2.0.0",
+  "created": "2025-10-24",
+  "updated": "2025-11-26",
+  "addresses": "Cohort #6 - Analytics API 2,000 Row Limit ($8k ROI)",
+  "runbook_reference": "../docs/runbooks/report-api-development/",
+
+  "format_limits": {
+    "SUMMARY": {
+      "description": "Summary format with groupings and subtotals",
+      "hard_limit": 2000,
+      "warning_threshold": 1800,
+      "recommended_max": 1500,
+      "notes": "Undocumented hard limit - silently truncates at 2,000 rows",
+      "use_when": "Need groupings, subtotals, or summary statistics",
+      "limitations": [
+        "Maximum 2,000 rows returned",
+        "No error when limit exceeded - silent truncation",
+        "Groups may be incomplete if underlying data >2,000 rows"
+      ]
+    },
+
+    "TABULAR": {
+      "description": "Tabular format with flat row data",
+      "hard_limit": null,
+      "warning_threshold": 5000,
+      "recommended_max": 10000,
+      "notes": "No documented hard limit but performance degrades >10k rows",
+      "use_when": "Need all rows, no groupings required",
+      "limitations": [
+        "Large exports may timeout",
+        "Consider Bulk API for >10,000 rows",
+        "Memory constraints on client side"
+      ],
+      "best_for": "Reports with >2,000 rows"
+    },
+
+    "MATRIX": {
+      "description": "Matrix format with row and column groupings",
+      "hard_limit": 2000,
+      "warning_threshold": 1800,
+      "recommended_max": 1500,
+      "notes": "Same 2,000-row limit as SUMMARY - shares REST API constraint",
+      "use_when": "Need cross-tabulation or pivot table style",
+      "limitations": [
+        "Maximum 2,000 rows returned (same as SUMMARY)",
+        "Silent truncation when limit exceeded",
+        "Complex nested structure",
+        "Harder to parse than Summary or Tabular",
+        "Performance considerations with large datasets",
+        "Maximum 3 row groupings, 2 column groupings"
+      ],
+      "runbook": "04-matrix-reports.md"
+    },
+
+    "JOINED": {
+      "description": "Joined (MultiBlock) format combining data from multiple report types",
+      "api_name": "MultiBlock",
+      "hard_limit": 2000,
+      "hard_limit_per_block": true,
+      "warning_threshold": 1800,
+      "recommended_max": 1500,
+      "min_blocks": 2,
+      "max_blocks": 5,
+      "notes": "2,000-row limit applies PER BLOCK. REST API has limited support - use Metadata API for creation.",
+      "use_when": "Comparing data across different report types, year-over-year, forecast vs actual",
+      "api_support": {
+        "rest_api": {
+          "can_create": false,
+          "can_run": true,
+          "can_modify": false,
+          "notes": "REST API can execute joined reports but CANNOT create or modify them"
+        },
+        "metadata_api": {
+          "can_create": true,
+          "can_run": false,
+          "can_modify": true,
+          "notes": "Use sf project deploy with .report-meta.xml files"
+        }
+      },
+      "field_naming": {
+        "format": "Object$FieldName",
+        "examples": ["Opportunity$Amount", "Account$Name", "Case$Status"],
+        "notes": "Joined reports use Object$Field format, NOT standard FIELDNAME format"
+      },
+      "cross_block_formulas": {
+        "syntax": "B{blockId}#{aggregateName}",
+        "examples": ["BB1#B1_Revenue - BB2#B2_Revenue", "IF(BB2#B2_Total != 0, BB1#B1_Total / BB2#B2_Total, 0)"],
+        "max_formulas": 10,
+        "notes": "Reference aggregates from any block using B{id}#{aggregate} syntax"
+      },
+      "common_grouping": {
+        "required": true,
+        "notes": "All blocks must share a common grouping field for proper alignment",
+        "common_fields": ["ACCOUNT_NAME", "OWNER_NAME", "CREATED_DATE", "CLOSE_DATE"]
+      },
+      "limitations": [
+        "2,000-row limit per block",
+        "Maximum 5 blocks",
+        "REST API cannot create - must use Metadata API",
+        "Requires common grouping field across all blocks",
+        "Cross-block formulas limited to aggregate-level calculations",
+        "Cannot use standard report field names - must use Object$Field format"
+      ],
+      "use_cases": [
+        "Year-over-Year comparisons",
+        "Forecast vs Actual analysis",
+        "Pipeline vs Closed Won",
+        "Customer 360 views (Opportunities + Cases + Activities)",
+        "Regional comparisons",
+        "Product line comparisons"
+      ],
+      "runbook": "05-joined-reports-basics.md",
+      "advanced_runbook": "06-joined-reports-advanced.md",
+      "builder_script": "../scripts/lib/joined-report-builder.js"
+    }
+  },
+
+  "format_selection_guide": {
+    "by_row_count": {
+      "0_to_1500": {
+        "recommended": "SUMMARY",
+        "alternatives": ["TABULAR", "MATRIX", "JOINED"],
+        "reason": "Any format works well within safe limits"
+      },
+      "1500_to_2000": {
+        "recommended": "SUMMARY (with warning)",
+        "alternatives": ["TABULAR", "MATRIX"],
+        "reason": "Approaching Summary/Matrix/Joined limit - monitor row count"
+      },
+      "2000_plus": {
+        "recommended": "TABULAR",
+        "alternatives": ["BULK_API"],
+        "avoid": ["SUMMARY", "MATRIX", "JOINED"],
+        "reason": "Summary/Matrix/Joined formats will truncate - use Tabular instead"
+      },
+      "10000_plus": {
+        "recommended": "BULK_API",
+        "alternatives": ["TABULAR (with pagination)"],
+        "reason": "Standard API performance issues - use Bulk API"
+      }
+    },
+
+    "by_use_case": {
+      "need_groupings": {
+        "recommended": "SUMMARY (if <2k rows) or MATRIX",
+        "avoid": "TABULAR",
+        "notes": "Check row count first - use Tabular + client-side grouping if >2k"
+      },
+      "need_all_rows": {
+        "recommended": "TABULAR",
+        "avoid": "SUMMARY, MATRIX, JOINED (if >2k rows)",
+        "notes": "Summary/Matrix/Joined silently truncate - Tabular gets all rows"
+      },
+      "need_cross_tab": {
+        "recommended": "MATRIX",
+        "alternatives": ["TABULAR + client-side pivot"],
+        "notes": "Matrix format designed for cross-tabulation (2k row limit applies)"
+      },
+      "need_multi_source_comparison": {
+        "recommended": "JOINED",
+        "alternatives": ["Multiple separate reports + client-side merge"],
+        "notes": "Joined reports compare data from different report types. 2k row limit per block."
+      },
+      "year_over_year": {
+        "recommended": "JOINED",
+        "alternatives": ["Two TABULAR reports + client-side merge"],
+        "notes": "Joined reports are ideal for YoY, Forecast vs Actual, Pipeline vs Closed comparisons"
+      },
+      "customer_360": {
+        "recommended": "JOINED (3+ blocks)",
+        "alternatives": ["Separate reports per object"],
+        "notes": "Combine Opportunities, Cases, Activities in single report with common grouping"
+      }
+    },
+
+    "by_creation_method": {
+      "rest_api": {
+        "supported": ["TABULAR", "SUMMARY", "MATRIX"],
+        "not_supported": ["JOINED"],
+        "notes": "REST API cannot create Joined reports - can only run existing ones"
+      },
+      "metadata_api": {
+        "supported": ["TABULAR", "SUMMARY", "MATRIX", "JOINED"],
+        "preferred_for": ["JOINED"],
+        "notes": "Metadata API required for creating Joined reports"
+      }
+    }
+  },
+
+  "row_estimation": {
+    "via_report_metadata": {
+      "description": "Estimate row count before running report",
+      "method": "Query report metadata for record count hints",
+      "api": "Analytics API - Report Metadata endpoint",
+      "accuracy": "70-90% depending on filters",
+      "command": "sf data query --query \"SELECT COUNT() FROM {ReportObject} {WHERE filters}\"",
+      "notes": "Estimates based on object record count and filters"
+    },
+
+    "via_object_count": {
+      "description": "Quick estimate from object record counts",
+      "method": "Query COUNT() on report object",
+      "accuracy": "50-70% (doesn't account for filters)",
+      "command": "sf data query --query \"SELECT COUNT() FROM {Object}\"",
+      "use_for": "Quick check before detailed estimation"
+    },
+
+    "heuristics": {
+      "with_date_filter_last_30_days": {
+        "estimate": "5-10% of total records",
+        "confidence": "MEDIUM"
+      },
+      "with_date_filter_last_year": {
+        "estimate": "40-60% of total records",
+        "confidence": "MEDIUM"
+      },
+      "with_owner_filter": {
+        "estimate": "Depends on user count",
+        "confidence": "LOW"
+      },
+      "no_filters": {
+        "estimate": "100% of total records",
+        "confidence": "HIGH"
+      }
+    }
+  },
+
+  "format_switching_strategy": {
+    "automatic_switching": {
+      "description": "Automatically switch format when limits detected",
+      "rules": [
+        {
+          "condition": "Row estimate >2,000 AND format=SUMMARY",
+          "action": "Switch to TABULAR",
+          "reason": "Prevent silent truncation"
+        },
+        {
+          "condition": "Row estimate >2,000 AND format=MATRIX",
+          "action": "Switch to TABULAR",
+          "reason": "Matrix has same 2k limit as Summary"
+        },
+        {
+          "condition": "Row estimate per block >2,000 AND format=JOINED",
+          "action": "Warn and suggest adding filters per block",
+          "reason": "Joined reports have 2k limit per block - cannot switch formats"
+        },
+        {
+          "condition": "Row estimate >10,000 AND format=TABULAR",
+          "action": "Warn and suggest BULK_API",
+          "reason": "Performance considerations"
+        },
+        {
+          "condition": "Row count 1,800-2,000 AND format=SUMMARY|MATRIX",
+          "action": "Warning only - monitor closely",
+          "reason": "Near limit - may hit 2k threshold"
+        },
+        {
+          "condition": "Need cross-source comparison AND format=TABULAR|SUMMARY",
+          "action": "Suggest JOINED format",
+          "reason": "Joined reports designed for multi-source comparisons"
+        }
+      ]
+    },
+
+    "joined_specific": {
+      "description": "Strategies specific to Joined report limitations",
+      "rules": [
+        {
+          "condition": "Need JOINED but >2k rows per source",
+          "action": "Add time-based filters to each block OR use multiple separate reports",
+          "reason": "Cannot switch to TABULAR - must reduce rows per block"
+        },
+        {
+          "condition": "Creating new JOINED report",
+          "action": "Use Metadata API (sf project deploy) - REST API cannot create",
+          "reason": "REST API limitation"
+        },
+        {
+          "condition": "Running existing JOINED report",
+          "action": "REST API works - use Analytics API endpoint",
+          "reason": "REST API can run but not create joined reports"
+        }
+      ]
+    },
+
+    "manual_override": {
+      "description": "Allow manual format selection with warnings",
+      "flag": "--force-format SUMMARY",
+      "use_case": "User understands limitations and accepts truncation",
+      "joined_notes": "Cannot override JOINED creation method - Metadata API always required"
+    }
+  },
+
+  "error_handling": {
+    "silent_truncation_detected": {
+      "detection": "Row count = 2,000 exactly for SUMMARY format",
+      "action": "Warn user that data may be truncated",
+      "recommendation": "Re-run with TABULAR format",
+      "severity": "HIGH"
+    },
+
+    "timeout_on_large_export": {
+      "detection": "Request timeout after 120 seconds",
+      "action": "Suggest Bulk API or pagination",
+      "recommendation": "Use Bulk API for exports >10k rows"
+    }
+  },
+
+  "best_practices": {
+    "always_estimate_before_export": {
+      "description": "Estimate row count before running report",
+      "tool": "report-row-estimator.js",
+      "benefits": [
+        "Choose correct format proactively",
+        "Avoid silent truncation",
+        "Optimize performance",
+        "Set user expectations"
+      ]
+    },
+
+    "prefer_tabular_for_exports": {
+      "description": "Use Tabular format for data exports",
+      "reason": "No row limit, all data guaranteed",
+      "exceptions": "Only use Summary if groupings absolutely required AND row count <1,500"
+    },
+
+    "monitor_exact_2000_rows": {
+      "description": "Check if result is exactly 2,000 rows",
+      "action": "Warn user of potential truncation",
+      "applies_to": ["SUMMARY", "MATRIX", "JOINED (per block)"],
+      "recommendation": "Re-run with Tabular format (or add filters for JOINED) to get complete data"
+    },
+
+    "joined_report_best_practices": {
+      "use_metadata_api_for_creation": {
+        "description": "Always use Metadata API (sf project deploy) to create joined reports",
+        "reason": "REST API cannot create joined reports",
+        "tool": "../scripts/lib/joined-report-builder.js"
+      },
+      "estimate_rows_per_block": {
+        "description": "Estimate row count for EACH block independently",
+        "reason": "2,000-row limit applies per block, not total",
+        "action": "Run COUNT() queries for each block's base object/filters"
+      },
+      "choose_common_grouping_carefully": {
+        "description": "Select a common grouping field that exists in ALL block report types",
+        "common_choices": ["ACCOUNT_NAME", "OWNER_NAME", "CREATED_DATE"],
+        "validation": "Verify field exists in each report type before building"
+      },
+      "use_object_dollar_field_format": {
+        "description": "Use Object$FieldName format for field references",
+        "correct": ["Opportunity$Amount", "Account$Name"],
+        "incorrect": ["AMOUNT", "ACCOUNT_NAME"],
+        "reason": "Joined reports require explicit object qualification"
+      },
+      "validate_cross_block_formula_references": {
+        "description": "Ensure cross-block formulas reference existing block aggregates",
+        "syntax": "B{blockId}#{aggregateName}",
+        "example": "BB1#B1_Revenue - BB2#B2_Revenue",
+        "validation": "Check that B1, B2 blocks exist and have named aggregates"
+      }
+    },
+
+    "format_selection_checklist": {
+      "description": "Quick checklist for choosing report format",
+      "questions": [
+        "Do I need ALL rows? → TABULAR (no row limit)",
+        "Do I need groupings with <2k rows? → SUMMARY",
+        "Do I need cross-tabulation with <2k rows? → MATRIX",
+        "Do I need to compare multiple data sources? → JOINED (Metadata API)",
+        "Do I have >2k rows per source? → TABULAR or split into multiple reports"
+      ]
+    }
+  },
+
+  "tools_and_scripts": {
+    "format_selector": {
+      "path": "../scripts/lib/report-format-selector.js",
+      "description": "Interactive format selection wizard",
+      "usage": "node report-format-selector.js"
+    },
+    "format_validator": {
+      "path": "../scripts/lib/report-format-validator.js",
+      "description": "Pre-deployment validation for all formats",
+      "usage": "node report-format-validator.js --report ./report.json"
+    },
+    "joined_builder": {
+      "path": "../scripts/lib/joined-report-builder.js",
+      "description": "Programmatic XML generation for joined reports",
+      "usage": "node joined-report-builder.js --template yoy --name MyReport"
+    }
+  },
+
+  "runbooks": {
+    "fundamentals": "01-report-formats-fundamentals.md",
+    "tabular": "02-tabular-reports.md",
+    "summary": "03-summary-reports.md",
+    "matrix": "04-matrix-reports.md",
+    "joined_basics": "05-joined-reports-basics.md",
+    "joined_advanced": "06-joined-reports-advanced.md",
+    "custom_types": "07-custom-report-types.md",
+    "validation": "08-validation-and-deployment.md",
+    "troubleshooting": "09-troubleshooting-optimization.md"
+  }
+}

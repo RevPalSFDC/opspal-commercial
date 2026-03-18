@@ -1,0 +1,834 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Central registry of tool input/output contracts for validation",
+  "lastUpdated": "2026-03-17",
+  "contracts": {
+    "sf-api-request-rest-patch": {
+      "description": "Salesforce Tooling API PATCH requires full Metadata block in request body",
+      "input": {
+        "type": "object",
+        "required": ["url", "method", "body"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Tooling API endpoint URL"
+          },
+          "method": {
+            "type": "string",
+            "enum": ["PATCH"],
+            "description": "HTTP method"
+          },
+          "body": {
+            "type": "string",
+            "description": "JSON body with full Metadata block"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "name": "tooling-patch-requires-metadata",
+          "description": "Tooling API PATCH operations must include the full Metadata block, not partial fields. Partial metadata causes silent failures.",
+          "condition": "method === 'PATCH' && url.includes('/tooling/')",
+          "requirement": "body must contain '\"Metadata\"' key with full metadata object",
+          "autoCorrect": false,
+          "severity": "error"
+        }
+      ]
+    },
+    "sf-data-query": {
+      "description": "Salesforce SOQL query execution",
+      "input": {
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 10,
+            "pattern": "^SELECT\\s+",
+            "description": "SOQL query string"
+          },
+          "targetOrg": {
+            "type": "string",
+            "description": "Target org alias"
+          },
+          "useToolingApi": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "properties": {
+          "records": {
+            "type": "array",
+            "description": "Query result records"
+          },
+          "totalSize": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "done": {
+            "type": "boolean"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "aggregate-group-by",
+          "description": "Aggregate queries with non-aggregated fields require GROUP BY",
+          "pattern": "COUNT\\(|SUM\\(|AVG\\(|MIN\\(|MAX\\(",
+          "check": "requiresGroupByValidation"
+        },
+        {
+          "id": "relationship-depth",
+          "description": "Relationship queries limited to 5 levels",
+          "check": "maxRelationshipDepth",
+          "maxDepth": 5
+        },
+        {
+          "id": "field-api-names",
+          "description": "Use DeveloperName not ApiName for custom metadata",
+          "patterns": {
+            "forbidden": [
+              "ApiName"
+            ],
+            "preferred": [
+              "DeveloperName"
+            ]
+          },
+          "objectTypes": [
+            "CustomMetadata"
+          ]
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "AGGREGATE_QUERY_ERROR",
+          "message": "GROUP BY with relationship traversal returns NULL for relationship field",
+          "prevention": "Use subquery or separate queries for aggregate + relationship data"
+        }
+      ]
+    },
+    "sf-project-deploy": {
+      "description": "Salesforce metadata deployment",
+      "input": {
+        "type": "object",
+        "required": [
+          "sourcePath"
+        ],
+        "properties": {
+          "sourcePath": {
+            "type": "string",
+            "description": "Path to deployment source"
+          },
+          "targetOrg": {
+            "type": "string"
+          },
+          "checkOnly": {
+            "type": "boolean",
+            "default": false
+          },
+          "testLevel": {
+            "type": "string",
+            "enum": [
+              "NoTestRun",
+              "RunSpecifiedTests",
+              "RunLocalTests",
+              "RunAllTestsInOrg"
+            ]
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Succeeded",
+              "Failed",
+              "SucceededPartial",
+              "Canceled",
+              "Pending",
+              "InProgress"
+            ]
+          },
+          "numberComponentsDeployed": {
+            "type": "integer"
+          },
+          "numberComponentErrors": {
+            "type": "integer"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "valid-source-flag",
+          "description": "Use -d flag for directory deployment, not --source-path",
+          "check": "sourcePathFlag",
+          "correctFlag": "-d",
+          "incorrectFlags": [
+            "--source-path",
+            "-p"
+          ]
+        },
+        {
+          "id": "deployment-order",
+          "description": "Objects must deploy before their fields",
+          "check": "componentDependencyOrder"
+        },
+        {
+          "id": "destructive-changes",
+          "description": "Destructive changes require dependency check",
+          "check": "destructiveChangeDependencies"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "FIELD_TYPE_CONVERSION",
+          "message": "Cannot update a field to a Formula from something else",
+          "prevention": "Delete and recreate field for type changes"
+        },
+        {
+          "code": "FIELD_REFERENCED",
+          "message": "This custom field is referenced elsewhere in salesforce.com",
+          "prevention": "Query ToolingAPI for all references before deletion"
+        }
+      ]
+    },
+    "sf-flow-deploy": {
+      "description": "Salesforce Flow deployment and activation",
+      "input": {
+        "type": "object",
+        "required": [
+          "flowName"
+        ],
+        "properties": {
+          "flowName": {
+            "type": "string"
+          },
+          "activate": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "flow-activation-verify",
+          "description": "Verify flow activation status after deployment",
+          "check": "postDeploymentActivationStatus",
+          "expectedStatus": "Active"
+        },
+        {
+          "id": "flow-field-references",
+          "description": "Validate all field references exist in org",
+          "check": "flowFieldReferences"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "FLOW_NOT_ACTIVATED",
+          "message": "Flow deployed but not activated",
+          "prevention": "Query FlowDefinition after deployment to verify Active status"
+        }
+      ]
+    },
+    "mermaid-render": {
+      "description": "Mermaid diagram rendering",
+      "input": {
+        "type": "object",
+        "required": [
+          "diagram"
+        ],
+        "properties": {
+          "diagram": {
+            "type": "string",
+            "minLength": 10
+          },
+          "outputFormat": {
+            "type": "string",
+            "enum": [
+              "svg",
+              "png",
+              "pdf"
+            ],
+            "default": "svg"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "mermaid-v11-syntax",
+          "description": "Use Mermaid v11+ syntax",
+          "check": "mermaidSyntaxVersion",
+          "requiredVersion": "11"
+        },
+        {
+          "id": "explicit-io-flags",
+          "description": "Use explicit -i and -o flags with mermaid-cli",
+          "check": "mermaidCliFlags"
+        },
+        {
+          "id": "flowchart-dimensions",
+          "description": "Avoid extremely flat diagrams (min height 200px)",
+          "check": "diagramDimensions",
+          "minHeight": 200
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "MERMAID_SYNTAX_ERROR",
+          "message": "Syntax incompatibility with newer Mermaid versions",
+          "prevention": "Validate syntax against mermaid.live before rendering"
+        }
+      ]
+    },
+    "csv-parse": {
+      "description": "CSV file parsing",
+      "input": {
+        "type": "object",
+        "required": [
+          "filePath"
+        ],
+        "properties": {
+          "filePath": {
+            "type": "string"
+          },
+          "hasHeader": {
+            "type": "boolean",
+            "default": true
+          },
+          "delimiter": {
+            "type": "string",
+            "default": ","
+          },
+          "encoding": {
+            "type": "string",
+            "default": "utf-8"
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "rows"
+        ],
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "headers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rowCount": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "header-based-access",
+          "description": "Access columns by header name, not hardcoded index",
+          "check": "columnAccessPattern",
+          "forbidden": [
+            "row[0]",
+            "row[1]",
+            "columns[0]"
+          ],
+          "preferred": "row.columnName or row['Column Name']"
+        },
+        {
+          "id": "header-validation",
+          "description": "Validate expected headers present",
+          "check": "requiredHeaders"
+        },
+        {
+          "id": "encoding-detection",
+          "description": "Auto-detect or validate file encoding",
+          "check": "fileEncoding"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "INDEX_ACCESS_ERROR",
+          "message": "Column index changed due to file format variation",
+          "prevention": "Use header-based column access with fallback mapping"
+        }
+      ]
+    },
+    "bash-command": {
+      "description": "Bash command execution",
+      "input": {
+        "type": "object",
+        "required": [
+          "command"
+        ],
+        "properties": {
+          "command": {
+            "type": "string"
+          },
+          "workingDirectory": {
+            "type": "string"
+          },
+          "timeout": {
+            "type": "integer",
+            "default": 120000
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "variable-expansion",
+          "description": "Validate shell variables exist before expansion",
+          "check": "shellVariableExpansion",
+          "patterns": [
+            "\\$\\{[A-Z_]+\\}",
+            "\\$[A-Z_]+"
+          ]
+        },
+        {
+          "id": "command-substitution",
+          "description": "Validate command substitution syntax",
+          "check": "commandSubstitution",
+          "patterns": [
+            "\\$\\(.*\\)"
+          ]
+        },
+        {
+          "id": "glob-patterns",
+          "description": "Quote glob patterns to prevent unexpected expansion",
+          "check": "globPatternQuoting"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "EXPANSION_FAILURE",
+          "message": "Bash command expansion with $() syntax fails",
+          "prevention": "Validate variables exist, quote properly, check shell context"
+        }
+      ]
+    },
+    "hubspot-api": {
+      "description": "HubSpot API operations",
+      "input": {
+        "type": "object",
+        "required": [
+          "endpoint"
+        ],
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          },
+          "body": {
+            "type": "object"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "filter-operators",
+          "description": "HubSpot Lists API requires verbose operator names",
+          "check": "hubspotFilterOperators",
+          "mapping": {
+            ">=": "IS_GREATER_THAN_OR_EQUAL_TO",
+            "<=": "IS_LESS_THAN_OR_EQUAL_TO",
+            ">": "IS_GREATER_THAN",
+            "<": "IS_LESS_THAN",
+            "=": "IS_EQUAL_TO"
+          }
+        },
+        {
+          "id": "pagination-limit",
+          "description": "HubSpot Search API hard limit 10,000 records",
+          "check": "paginationLimit",
+          "maxRecords": 10000
+        },
+        {
+          "id": "association-type-ids",
+          "description": "Validate association type IDs match object types",
+          "check": "associationTypeValidation"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "PAGINATION_CEILING",
+          "message": "HubSpot Search API undocumented 10,000 record limit",
+          "prevention": "Design for pagination limits, warn at 9,000 records"
+        },
+        {
+          "code": "WRONG_ASSOCIATION_TYPE",
+          "message": "typeId 279 is contact-to-company, not deal-to-company",
+          "prevention": "Verify association types before bulk operations"
+        }
+      ]
+    },
+    "sf-bulk-api": {
+      "description": "Salesforce Bulk API 2.0 operations",
+      "input": {
+        "type": "object",
+        "required": [
+          "operation",
+          "objectType"
+        ],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "insert",
+              "update",
+              "upsert",
+              "delete"
+            ]
+          },
+          "objectType": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "csv-format-required",
+          "description": "Bulk API 2.0 requires CSV format, not JSON",
+          "check": "bulkApiDataFormat",
+          "requiredFormat": "csv"
+        },
+        {
+          "id": "batch-size-limits",
+          "description": "Respect batch size limits",
+          "check": "batchSizeLimits",
+          "maxRecordsPerBatch": 10000
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "FORMAT_MISMATCH",
+          "message": "Bulk API 2.0 requires CSV but received JSON",
+          "prevention": "Convert to CSV or use record-by-record API"
+        }
+      ]
+    },
+    "pdf-direct-invocation": {
+      "description": "Direct invocation of PDF tools bypassing branded pipeline",
+      "severity": "warning",
+      "input": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string"
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "no-direct-md-to-pdf",
+          "description": "Block direct npx md-to-pdf invocation - use branded generator instead",
+          "check": "blockCommand",
+          "pattern": "npx\\s+md-to-pdf"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "BRANDING_BYPASS",
+          "message": "Direct 'npx md-to-pdf' invocation bypasses RevPal branding, Mermaid rendering, and cover pages",
+          "prevention": "Use the branded PDF generator: /generate-pdf <input.md> <output.pdf> or plugins/opspal-core/scripts/generate-pdf.sh <input.md> <output.pdf>"
+        }
+      ]
+    },
+    "search-replace": {
+      "description": "Code search and replace operations",
+      "input": {
+        "type": "object",
+        "required": [
+          "pattern",
+          "replacement"
+        ],
+        "properties": {
+          "pattern": {
+            "type": "string"
+          },
+          "replacement": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "file",
+              "directory",
+              "global"
+            ]
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "existing-reference-check",
+          "description": "Check if replacement value already exists to avoid duplicates",
+          "check": "existingReferenceDetection"
+        },
+        {
+          "id": "conflict-detection",
+          "description": "Detect potential conflicts before global replacement",
+          "check": "replacementConflicts"
+        },
+        {
+          "id": "preview-required",
+          "description": "Preview changes before applying global replacements",
+          "check": "previewBeforeApply"
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "DUPLICATE_ASSIGNMENT",
+          "message": "Field being assigned more than one value after replacement",
+          "prevention": "Analyze existing usage patterns before replacement"
+        }
+      ]
+    },
+    "gws-cli": {
+      "description": "Google Workspace CLI (gws) for Drive, Calendar, Gmail operations",
+      "input": {
+        "type": "object",
+        "required": [
+          "service",
+          "resource",
+          "method"
+        ],
+        "properties": {
+          "service": {
+            "type": "string",
+            "enum": [
+              "drive",
+              "calendar",
+              "gmail",
+              "sheets",
+              "admin"
+            ],
+            "description": "Google Workspace service"
+          },
+          "resource": {
+            "type": "string",
+            "description": "API resource (e.g., files, events, messages)"
+          },
+          "method": {
+            "type": "string",
+            "description": "API method (e.g., list, get, create, update, delete)"
+          },
+          "params": {
+            "type": "string",
+            "description": "JSON string passed via --params flag. ALL API parameters must be in this JSON object."
+          }
+        }
+      },
+      "validationRules": [
+        {
+          "id": "params-json-required",
+          "description": "All API parameters MUST be passed as --params JSON, not as standalone CLI flags",
+          "check": "requireParamsJson",
+          "severity": "error",
+          "examples": {
+            "correct": "gws drive files list --params '{\"pageSize\": 10, \"q\": \"name contains 'report'\"}'",
+            "incorrect": "gws drive files list --pageSize 10 --q \"name contains 'report'\""
+          }
+        },
+        {
+          "id": "file-id-in-params",
+          "description": "fileId is a path/query parameter — pass it in --params JSON, not as a positional arg or standalone flag",
+          "check": "fileIdInParams",
+          "severity": "error",
+          "examples": {
+            "correct": "gws drive files get --params '{\"fileId\": \"abc123\"}'",
+            "incorrect": "gws drive files get abc123"
+          }
+        }
+      ],
+      "commonErrors": [
+        {
+          "code": "INVALID_FLAG",
+          "message": "Unknown flag passed to gws CLI — API parameters must go in --params JSON",
+          "prevention": "Always use --params '{...}' for API parameters. Only --format, --output, --verbose are standalone flags."
+        },
+        {
+          "code": "MISSING_FILE_ID",
+          "message": "fileId not found — it must be inside the --params JSON object",
+          "prevention": "Use --params '{\"fileId\": \"...\"}' not positional arguments"
+        }
+      ]
+    }
+  },
+  "globalRules": {
+    "nullHandling": {
+      "description": "Standard NULL handling rules",
+      "rules": [
+        {
+          "id": "explicit-null-check",
+          "description": "Always explicitly handle NULL values in queries and data processing"
+        },
+        {
+          "id": "null-in-counts",
+          "description": "NULL AccountId calls should be classified, not excluded"
+        }
+      ]
+    },
+    "improbabilityDetection": {
+      "description": "Statistical sanity checks for query results",
+      "thresholds": {
+        "suspiciousPercentage": 95,
+        "minimumExpectedRecords": 1,
+        "standardDeviationAlert": 3
+      },
+      "examples": [
+        "99.24% orphan rate is statistically improbable - verify query",
+        "0 records when 100+ expected - check query filters"
+      ]
+    },
+    "apiLimits": {
+      "headerSizeLimit": 8192,
+      "queryChunkSize": 500,
+      "maxFieldsPerQuery": 50
+    }
+  },
+  "fieldNameMappings": {
+    "description": "Maps intuitive field names to canonical schema names for alias resolution",
+    "version": "1.0.0",
+    "caseSensitive": false,
+    "bidirectional": true,
+    "mappings": {
+      "date": [
+        "request_date",
+        "created_date",
+        "date_field",
+        "timestamp"
+      ],
+      "created": [
+        "request_date",
+        "created_date",
+        "createdDate",
+        "CreatedDate",
+        "created_at"
+      ],
+      "timestamp": [
+        "request_date",
+        "created_date",
+        "timestamp",
+        "date_field",
+        "datetime"
+      ],
+      "modified": [
+        "modified_date",
+        "modifiedDate",
+        "ModifiedDate",
+        "updated_at",
+        "lastModified"
+      ],
+      "id": [
+        "record_id",
+        "Id",
+        "recordId",
+        "identifier",
+        "gid"
+      ],
+      "name": [
+        "record_name",
+        "Name",
+        "label",
+        "title",
+        "displayName"
+      ],
+      "query": [
+        "soql",
+        "soql_query",
+        "query_string",
+        "queryString"
+      ],
+      "org": [
+        "target_org",
+        "org_alias",
+        "orgAlias",
+        "targetOrg",
+        "org_id"
+      ],
+      "object": [
+        "sobject",
+        "object_type",
+        "objectType",
+        "sObjectType",
+        "entity"
+      ],
+      "file": [
+        "filePath",
+        "file_path",
+        "path",
+        "source",
+        "input"
+      ],
+      "output": [
+        "outputPath",
+        "output_path",
+        "destination",
+        "target"
+      ],
+      "count": [
+        "total",
+        "totalSize",
+        "total_count",
+        "num",
+        "number"
+      ],
+      "status": [
+        "state",
+        "result",
+        "outcome"
+      ]
+    },
+    "hints": {
+      "request_date": "Use 'request_date' for reflection submission dates",
+      "target_org": "Use 'target_org' or 'targetOrg' for Salesforce org alias",
+      "record_id": "Use 'record_id' for database identifiers"
+    }
+  },
+  "validationHooks": {
+    "preExecution": [
+      "validateInputSchema",
+      "checkRequiredFields",
+      "validatePatterns",
+      "checkToolSpecificRules"
+    ],
+    "postExecution": [
+      "validateOutputSchema",
+      "checkResultPlausibility",
+      "detectImprobableResults",
+      "logValidationMetrics"
+    ]
+  }
+}

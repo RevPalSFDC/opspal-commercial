@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Payload Canonicalizer"
+  short_description: "Help with Hook Payload Canonicalizer tasks"
+  default_prompt: "Use $hook-payload-canonicalizer to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Standard Field Mapping",
+  "description": "Documents common field confusions and provides correct field mappings by object",
+  "version": "1.0.0",
+  "created": "2025-10-24",
+  "addresses": "Cohort #4 - Flow Field References ($13k ROI)",
+
+  "common_confusions": {
+    "contract_term_fields": {
+      "description": "ContractTerm field location confusion",
+      "confusion": "Assuming ContractTerm exists on Opportunity",
+      "reality": "ContractTerm is a standard field on Contract object, not Opportunity",
+      "correct_usage": {
+        "opportunity": {
+          "field": "Contract_Term_Months__c",
+          "type": "Number",
+          "description": "Custom field for contract term on Opportunity",
+          "notes": "Must be created manually - not a standard field"
+        },
+        "contract": {
+          "field": "ContractTerm",
+          "type": "Number",
+          "description": "Standard field - number of months for contract",
+          "notes": "Available on Contract object only"
+        }
+      },
+      "recommendation": "Use Opportunity.Contract_Term_Months__c or lookup to Contract.ContractTerm"
+    },
+
+    "created_vs_owner": {
+      "description": "CreatedById vs OwnerId for ownership",
+      "confusion": "Using CreatedById for ownership/assignment logic",
+      "reality": "CreatedById is who created the record (immutable), OwnerId is current owner (mutable)",
+      "correct_usage": {
+        "created_by": {
+          "field": "CreatedById",
+          "use_for": ["Audit trails", "Record creation attribution", "Historical tracking"],
+          "characteristics": ["Immutable", "Set on creation", "Cannot be changed"],
+          "not_for": ["Ownership logic", "Assignment rules", "Access control"]
+        },
+        "owner": {
+          "field": "OwnerId",
+          "use_for": ["Ownership logic", "Assignment rules", "Access control", "Queue assignments"],
+          "characteristics": ["Mutable", "Can be transferred", "Affects sharing/access"],
+          "not_for": ["Tracking who created record"]
+        }
+      },
+      "recommendation": "Use OwnerId for ownership/assignment logic, CreatedById for audit only"
+    },
+
+    "price_fields": {
+      "description": "Price field selection on OpportunityLineItem",
+      "confusion": "Using Net_Price__c or custom price fields",
+      "reality": "Standard TotalPrice field exists and should be used when populated",
+      "correct_usage": {
+        "total_price": {
+          "object": "OpportunityLineItem",
+          "field": "TotalPrice",
+          "type": "Currency",
+          "description": "Standard calculated field (Quantity × UnitPrice)",
+          "population": "Always populated when Quantity and UnitPrice are set",
+          "recommendation": "Primary field for line item price"
+        },
+        "net_price_custom": {
+          "object": "OpportunityLineItem",
+          "field": "Net_Price__c",
+          "type": "Currency (custom)",
+          "description": "Custom field - may not be populated",
+          "population": "Depends on org-specific logic",
+          "recommendation": "Only use if TotalPrice doesn't meet requirements"
+        },
+        "unit_price": {
+          "object": "OpportunityLineItem",
+          "field": "UnitPrice",
+          "type": "Currency",
+          "description": "Price per unit",
+          "population": "Always populated",
+          "recommendation": "Use for per-unit pricing, not total"
+        }
+      },
+      "recommendation": "Prefer TotalPrice over custom Net_Price__c unless specific business logic requires it"
+    }
+  },
+
+  "object_field_mapping": {
+    "Opportunity": {
+      "contract_term": {
+        "available": false,
+        "standard_field": null,
+        "common_custom_field": "Contract_Term_Months__c",
+        "alternative": "Lookup to Contract.ContractTerm",
+        "notes": "No standard contract term field on Opportunity"
+      },
+      "owner": {
+        "available": true,
+        "standard_field": "OwnerId",
+        "type": "Lookup(User)",
+        "use_for": "Ownership and assignment"
+      },
+      "creator": {
+        "available": true,
+        "standard_field": "CreatedById",
+        "type": "Lookup(User)",
+        "use_for": "Audit trail only - immutable"
+      }
+    },
+
+    "Contract": {
+      "contract_term": {
+        "available": true,
+        "standard_field": "ContractTerm",
+        "type": "Number",
+        "description": "Contract duration in months"
+      },
+      "owner": {
+        "available": true,
+        "standard_field": "OwnerId",
+        "type": "Lookup(User)"
+      }
+    },
+
+    "OpportunityLineItem": {
+      "price": {
+        "available": true,
+        "standard_field": "TotalPrice",
+        "type": "Currency",
+        "description": "Calculated: Quantity × UnitPrice",
+        "recommended": true
+      },
+      "net_price": {
+        "available": false,
+        "standard_field": null,
+        "common_custom_field": "Net_Price__c",
+        "notes": "Custom field - check population before use"
+      },
+      "unit_price": {
+        "available": true,
+        "standard_field": "UnitPrice",
+        "type": "Currency",
+        "description": "Price per unit"
+      }
+    },
+
+    "Quote": {
+      "quote_number": {
+        "available": true,
+        "standard_field": "QuoteNumber",
+        "type": "String (auto-number)",
+        "notes": "Auto-generated, read-only"
+      }
+    },
+
+    "QuoteLineItem": {
+      "price": {
+        "available": true,
+        "standard_field": "TotalPrice",
+        "type": "Currency",
+        "description": "Calculated: Quantity × UnitPrice"
+      }
+    }
+  },
+
+  "field_validation_rules": {
+    "check_field_exists": {
+      "description": "Query object describe to verify field exists before using",
+      "command": "sf sobject describe --sobject <Object> --target-org <org>",
+      "validation": "Field must appear in describe results"
+    },
+    "check_field_populated": {
+      "description": "Query field population rate to verify it's usable",
+      "soql": "SELECT COUNT() FROM <Object> WHERE <Field> != null",
+      "threshold": "If <10% populated, consider alternative",
+      "recommendation": "Use field-usage-analyzer.js"
+    },
+    "prefer_standard_over_custom": {
+      "description": "Prefer standard fields when available",
+      "reasoning": [
+        "Standard fields always available across orgs",
+        "Custom fields may not exist in all environments",
+        "Standard fields have consistent behavior",
+        "Easier migration between orgs"
+      ]
+    }
+  },
+
+  "migration_guidelines": {
+    "opportunity_contract_term": {
+      "from": "ContractTerm (assumed on Opportunity)",
+      "to": "Contract_Term_Months__c (custom) or Contract.ContractTerm (lookup)",
+      "migration_steps": [
+        "Verify Contract_Term_Months__c exists on Opportunity",
+        "OR create lookup relationship to Contract.ContractTerm",
+        "Update flow field references",
+        "Test flow with sample records"
+      ]
+    },
+    "oli_net_price_to_total_price": {
+      "from": "Net_Price__c (custom, may be unpopulated)",
+      "to": "TotalPrice (standard, always populated)",
+      "migration_steps": [
+        "Check if Net_Price__c has business logic differences",
+        "If Net_Price__c = Quantity × UnitPrice, use TotalPrice",
+        "If Net_Price__c has discounts/adjustments, keep custom field",
+        "Update flow to use TotalPrice where appropriate"
+      ]
+    },
+    "created_by_to_owner": {
+      "from": "CreatedById (for ownership logic)",
+      "to": "OwnerId (correct field for ownership)",
+      "migration_steps": [
+        "Identify flows using CreatedById for assignment/ownership",
+        "Replace with OwnerId",
+        "Test ownership logic",
+        "Keep CreatedById only for audit purposes"
+      ]
+    }
+  },
+
+  "recommended_practices": {
+    "always_query_describe": {
+      "description": "Query object describe before using fields in flows",
+      "command": "sf sobject describe --sobject <Object>",
+      "benefits": [
+        "Verify field exists",
+        "Get field type",
+        "Check if required",
+        "See picklist values"
+      ]
+    },
+    "check_field_population": {
+      "description": "Check if field is populated before using in logic",
+      "tool": "field-usage-analyzer.js",
+      "threshold": "Warn if <10% populated"
+    },
+    "prefer_standard_fields": {
+      "description": "Use standard fields when available",
+      "reasoning": "More portable, always available, consistent behavior"
+    }
+  }
+}

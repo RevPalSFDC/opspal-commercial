@@ -1,0 +1,4 @@
+interface:
+  display_name: "Incident Commander Checklist"
+  short_description: "Help with Incident Commander Checklist tasks"
+  default_prompt: "Use $incident-commander-checklist to execute this workflow safely and produce the expected artifacts."

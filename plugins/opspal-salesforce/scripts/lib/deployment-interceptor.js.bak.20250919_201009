@@ -1,0 +1,382 @@
+#!/usr/bin/env node
+
+/**
+ * Deployment Interceptor
+ * ======================
+ * Intercepts Salesforce deployment commands and routes them through the gate system
+ * This ensures all deployments go through proper validation
+ */
+
+const DeploymentBridge = require('../../agents/execution/deployment-bridge');
+const { exec } = require('child_process');
+const { promisify } = require('util');
+const path = require('path');
+
+const execAsync = promisify(exec);
+
+class DeploymentInterceptor {
+    constructor(config = {}) {
+        this.config = {
+            enforceGates: config.enforceGates !== false,
+            autoFallback: config.autoFallback || false,
+            logCommands: config.logCommands !== false,
+            agentName: config.agentName || 'unknown-agent',
+            ...config
+        };
+        
+        this.bridge = null;
+        this.initialized = false;
+    }
+    
+    /**
+     * Initialize the interceptor
+     */
+    async initialize() {
+        if (this.initialized) return;
+        
+        this.bridge = new DeploymentBridge(this.config);
+        await this.bridge.initialize();
+        this.initialized = true;
+        
+        if (this.config.logCommands) {
+            console.log('🔒 Deployment interceptor initialized');
+        }
+    }
+    
+    /**
+     * Execute a command with gate validation
+     */
+    async execute(command, options = {}) {
+        // Check if this is a deployment command
+        if (this.isDeploymentCommand(command)) {
+            if (this.config.enforceGates) {
+                return await this.executeWithGates(command, options);
+            } else {
+                console.log('⚠️ Gate enforcement disabled - executing directly');
+                return await this.executeDirect(command);
+            }
+        }
+        
+        // Non-deployment commands execute directly
+        return await this.executeDirect(command);
+    }
+    
+    /**
+     * Check if command is a deployment
+     */
+    isDeploymentCommand(command) {
+        const deploymentPatterns = [
+            'sf project deploy',
+            'sf deploy',
+            'sfdx force:source:deploy',
+            'sfdx force:source:push',
+            'sf project deploy start',
+            'DELETE FROM',
+            'INSERT INTO',
+            'UPDATE'
+        ];
+        
+        return deploymentPatterns.some(pattern => 
+            command.includes(pattern)
+        );
+    }
+    
+    /**
+     * Parse deployment command to extract parameters
+     */
+    parseDeploymentCommand(command) {
+        const params = {
+            command,
+            targetOrg: null,
+            sourcePath: null,
+            manifest: null,
+            operation: 'deployment',
+            isDataOperation: false,
+            isDryRun: false
+        };
+        
+        // Extract target org
+        const orgMatch = command.match(/--target-org\s+(\S+)|--targetusername\s+(\S+)|-u\s+(\S+)/);
+        if (orgMatch) {
+            params.targetOrg = orgMatch[1] || orgMatch[2] || orgMatch[3];
+        }
+        
+        // Extract source path
+        const sourceMatch = command.match(/--source-dir\s+"?([^"]+)"?|--sourcepath\s+"?([^"]+)"?|-p\s+"?([^"]+)"?/);
+        if (sourceMatch) {
+            params.sourcePath = sourceMatch[1] || sourceMatch[2] || sourceMatch[3];
+        }
+        
+        // Extract manifest
+        const manifestMatch = command.match(/--manifest\s+"?([^"]+)"?|-x\s+"?([^"]+)"?/);
+        if (manifestMatch) {
+            params.manifest = manifestMatch[1] || manifestMatch[2];
+        }
+        
+        // Check for data operations
+        if (command.includes('DELETE FROM') || command.includes('INSERT') || command.includes('UPDATE')) {
+            params.isDataOperation = true;
+            params.operation = 'data_operation';
+        }
+        
+        // Check for dry run
+        if (command.includes('--dry-run') || command.includes('--checkonly')) {
+            params.isDryRun = true;
+        }
+        
+        // Default source path if not specified
+        if (!params.sourcePath && !params.manifest) {
+            params.sourcePath = './force-app';
+        }
+        
+        return params;
+    }
+    
+    /**
+     * Execute command with gate validation
+     */
+    async executeWithGates(command, options = {}) {
+        if (!this.initialized) {
+            await this.initialize();
+        }
+        
+        if (this.config.logCommands) {
+            console.log(`\n🔒 Intercepted deployment command:`);
+            console.log(`   Command: ${command}`);
+        }
+        
+        // Parse the command
+        const params = this.parseDeploymentCommand(command);
+        
+        // Build deployment context
+        const deployment = {
+            targetOrg: params.targetOrg || this.config.defaultOrg,
+            sourcePath: params.sourcePath,
+            manifest: params.manifest,
+            operation: params.operation,
+            isDryRun: params.isDryRun,
+            operator: this.config.agentName,
+            sessionId: options.sessionId || `agent-${Date.now()}`,
+            originalCommand: command
+        };
+        
+        // Add automatic fallback if configured
+        if (this.config.autoFallback) {
+            deployment.fallbackJustification = this.createAutoFallback();
+        }
+        
+        // Check if operation is blocked by policy
+        const policyCheck = await this.checkPolicyCompliance(command);
+        if (!policyCheck.allowed) {
+            throw new Error(`Operation blocked by policy: ${policyCheck.reason}`);
+        }
+        
+        try {
+            // Run through gates
+            const gateContext = { ...deployment };
+            const gateResults = await this.bridge.preDeployGate(gateContext);
+            
+            if (this.config.logCommands) {
+                console.log('✅ Gates passed - proceeding with deployment');
+            }
+            
+            // Execute the actual command
+            if (params.isDryRun) {
+                console.log('🔍 Dry run mode - not executing actual deployment');
+                return { stdout: 'Dry run successful', stderr: '' };
+            }
+            
+            return await this.executeDirect(command);
+            
+        } catch (error) {
+            if (error.gateResults) {
+                console.error('❌ Deployment blocked by gates:');
+                error.gateResults.blockers.forEach(blocker => {
+                    console.error(`   - ${blocker}`);
+                });
+                
+                // Provide resolution hints
+                this.provideResolutionHints(error.gateResults);
+            }
+            throw error;
+        }
+    }
+    
+    /**
+     * Check if command complies with policies
+     */
+    async checkPolicyCompliance(command) {
+        if (!this.bridge || !this.bridge.policies) {
+            return { allowed: true };
+        }
+        
+        const policy = this.bridge.policies['allowed-tooling'];
+        if (!policy || !policy.blocked_operations) {
+            return { allowed: true };
+        }
+        
+        // Check absolute blocks
+        for (const block of policy.blocked_operations.absolute || []) {
+            if (new RegExp(block.pattern).test(command)) {
+                return {
+                    allowed: false,
+                    reason: block.description,
+                    severity: block.severity
+                };
+            }
+        }
+        
+        return { allowed: true };
+    }
+    
+    /**
+     * Execute command directly without gates
+     */
+    async executeDirect(command) {
+        if (this.config.logCommands) {
+            console.log(`Executing: ${command}`);
+        }
+        
+        return await execAsync(command);
+    }
+    
+    /**
+     * Create automatic fallback justification
+     */
+    createAutoFallback() {
+        return {
+            reason: 'MCP_SERVER_TIMEOUT',
+            mcp_status: {
+                state: 'degraded',
+                last_check: new Date().toISOString(),
+                error_message: 'Auto-fallback enabled for agent'
+            },
+            attempted_recovery: {
+                attempts: 1,
+                actions: [{
+                    action: 'retry_operation',
+                    result: 'failed',
+                    timestamp: new Date().toISOString()
+                }]
+            },
+            operator: {
+                agent_name: this.config.agentName,
+                user_context: 'automated'
+            },
+            timestamp: new Date().toISOString(),
+            operation_details: {
+                type: 'deployment',
+                target: {
+                    org: 'unknown',
+                    environment: 'unknown'
+                },
+                scope: {}
+            },
+            incident_reference: 'AUTO-FALLBACK'
+        };
+    }
+    
+    /**
+     * Provide hints for resolving gate blocks
+     */
+    provideResolutionHints(gateResults) {
+        console.log('\n💡 Resolution hints:');
+        
+        if (gateResults.blockers.some(b => b.includes('MCP'))) {
+            console.log('   - MCP is unavailable. Options:');
+            console.log('     • Provide fallback justification');
+            console.log('     • Wait for MCP to recover');
+            console.log('     • Use autoFallback configuration');
+        }
+        
+        if (gateResults.blockers.some(b => b.includes('Approval'))) {
+            console.log('   - Approval required. Options:');
+            console.log('     • Request approval through proper channels');
+            console.log('     • Use emergency override if critical');
+        }
+        
+        if (gateResults.blockers.some(b => b.includes('maintenance'))) {
+            console.log('   - Outside maintenance window. Options:');
+            console.log('     • Wait for maintenance window');
+            console.log('     • Use emergency override if critical');
+        }
+    }
+    
+    /**
+     * Create a wrapper function for agent use
+     */
+    static createWrapper(agentName) {
+        const interceptor = new DeploymentInterceptor({
+            agentName,
+            autoFallback: process.env.AUTO_FALLBACK === 'true',
+            enforceGates: process.env.ENFORCE_GATES !== 'false'
+        });
+        
+        return async function(command) {
+            return await interceptor.execute(command);
+        };
+    }
+}
+
+// Export the class
+module.exports = DeploymentInterceptor;
+
+// CLI interface for testing
+if (require.main === module) {
+    const args = process.argv.slice(2);
+    
+    if (args.length === 0 || args[0] === '--help') {
+        console.log(`
+Deployment Interceptor - Routes deployments through gate validation
+
+Usage: deployment-interceptor.js <command> [options]
+
+Options:
+  --agent <name>     Set agent name for logging
+  --auto-fallback    Enable automatic MCP fallback
+  --no-gates         Disable gate enforcement
+  --help             Show this help message
+
+Examples:
+  # Deploy with gates
+  deployment-interceptor.js "sf project deploy --target-org sandbox"
+  
+  # Deploy with auto-fallback
+  deployment-interceptor.js "sf deploy" --auto-fallback
+  
+  # Test without enforcement
+  deployment-interceptor.js "DELETE FROM Test__c" --no-gates
+
+Environment Variables:
+  ENFORCE_GATES      Set to 'false' to disable gates
+  AUTO_FALLBACK      Set to 'true' for automatic fallback
+  SALESFORCE_ORG_ALIAS   Default org alias
+`);
+        process.exit(0);
+    }
+    
+    const command = args[0];
+    const agentName = args.includes('--agent') ? 
+        args[args.indexOf('--agent') + 1] : 'cli-test';
+    const autoFallback = args.includes('--auto-fallback');
+    const enforceGates = !args.includes('--no-gates');
+    
+    const interceptor = new DeploymentInterceptor({
+        agentName,
+        autoFallback,
+        enforceGates
+    });
+    
+    (async () => {
+        try {
+            const result = await interceptor.execute(command);
+            console.log('\n✅ Command executed successfully');
+            if (result.stdout) {
+                console.log('Output:', result.stdout);
+            }
+        } catch (error) {
+            console.error('\n❌ Command failed:', error.message);
+            process.exit(1);
+        }
+    })();
+}

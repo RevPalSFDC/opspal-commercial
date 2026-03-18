@@ -1,0 +1,122 @@
+[
+  {
+    "name": "photo",
+    "label": "Photo",
+    "type": "image",
+    "default": {
+      "src": "",
+      "alt": "Team member photo"
+    },
+    "required": false
+  },
+  {
+    "name": "name",
+    "label": "Name",
+    "type": "text",
+    "default": "John Doe",
+    "required": true
+  },
+  {
+    "name": "job_title",
+    "label": "Job Title",
+    "type": "text",
+    "default": "Team Member",
+    "required": false
+  },
+  {
+    "name": "department",
+    "label": "Department",
+    "type": "choice",
+    "choices": [
+      ["", "Select Department"],
+      ["leadership", "Leadership"],
+      ["engineering", "Engineering"],
+      ["design", "Design"],
+      ["marketing", "Marketing"],
+      ["sales", "Sales"],
+      ["customer_success", "Customer Success"],
+      ["operations", "Operations"],
+      ["hr", "Human Resources"],
+      ["finance", "Finance"]
+    ],
+    "default": ""
+  },
+  {
+    "name": "bio",
+    "label": "Bio",
+    "type": "richtext",
+    "default": "<p>Brief bio about the team member goes here.</p>",
+    "required": false
+  },
+  {
+    "name": "social_links",
+    "label": "Social Links",
+    "type": "group",
+    "children": [
+      {
+        "name": "linkedin",
+        "label": "LinkedIn URL",
+        "type": "url",
+        "default": ""
+      },
+      {
+        "name": "twitter",
+        "label": "Twitter/X URL",
+        "type": "url",
+        "default": ""
+      },
+      {
+        "name": "email",
+        "label": "Email Address",
+        "type": "email",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "name": "style_options",
+    "label": "Style Options",
+    "type": "group",
+    "children": [
+      {
+        "name": "card_style",
+        "label": "Card Style",
+        "type": "choice",
+        "choices": [
+          ["standard", "Standard"],
+          ["minimal", "Minimal"],
+          ["bordered", "Bordered"],
+          ["shadow", "Shadow"]
+        ],
+        "default": "standard"
+      },
+      {
+        "name": "photo_shape",
+        "label": "Photo Shape",
+        "type": "choice",
+        "choices": [
+          ["circle", "Circle"],
+          ["square", "Square"],
+          ["rounded", "Rounded Square"]
+        ],
+        "default": "circle"
+      },
+      {
+        "name": "text_alignment",
+        "label": "Text Alignment",
+        "type": "choice",
+        "choices": [
+          ["left", "Left"],
+          ["center", "Center"]
+        ],
+        "default": "center"
+      },
+      {
+        "name": "hover_effect",
+        "label": "Hover Effect",
+        "type": "boolean",
+        "default": true
+      }
+    ]
+  }
+]

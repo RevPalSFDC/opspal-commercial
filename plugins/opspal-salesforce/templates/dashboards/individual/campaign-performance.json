@@ -1,0 +1,259 @@
+{
+  "templateMetadata": {
+    "templateId": "campaign-performance",
+    "templateName": "Campaign Performance Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "Campaign manager view of campaign ROI, lead generation, engagement metrics, and lead-to-opportunity conversion",
+    "audience": "Campaign Managers, Marketing Operations, Demand Generation",
+    "function": "marketing",
+    "level": "individual",
+    "useCase": "Campaign optimization, performance tracking, budget allocation decisions",
+    "refreshFrequency": "Daily",
+    "componentCount": 5,
+    "prerequisites": [
+      "Campaign object with standard fields",
+      "Campaign Members tracking responses",
+      "ActualCost field populated on Campaigns",
+      "Lead and Contact campaign membership"
+    ],
+    "tags": ["campaign", "roi", "leads", "engagement", "marketing", "mops"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "abm", "demand-gen"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified view with 4 key campaign metrics",
+        "componentOverrides": {
+          "maxComponents": 4,
+          "exclude": ["Campaign Engagement Funnel"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full campaign performance dashboard with all 5 components"
+      },
+      "abm": {
+        "description": "Account-Based Marketing focus with account engagement",
+        "filterOverrides": [
+          { "field": "Campaign.Type", "default": "ABM", "values": ["ABM", "Target Account", "Account Engagement"] }
+        ]
+      },
+      "demand-gen": {
+        "description": "Demand generation focus with lead volume emphasis",
+        "filterOverrides": [
+          { "field": "Campaign.Type", "default": "Demand Gen", "values": ["Webinar", "Content", "Event", "Paid Media"] }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Campaign.Name", "Campaign.Type", "Campaign.Status"],
+    "optionalFields": ["Campaign.ActualCost", "Campaign.NumberOfLeads", "Campaign.NumberOfConvertedLeads"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "CampaignCost": {
+        "patterns": ["ActualCost", "BudgetedCost", "Campaign_Spend__c"],
+        "labelHints": ["Actual Cost", "Budget", "Spend"],
+        "dataType": "currency"
+      },
+      "CampaignROI": {
+        "patterns": ["ROI__c", "Campaign_ROI__c", "Return_on_Investment__c"],
+        "labelHints": ["ROI", "Return on Investment"],
+        "dataType": "percent"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Campaign Leaderboard", "Campaign ROI Summary", "Leads by Campaign Type"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Campaign Leaderboard", "Leads by Campaign Type"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 3 },
+        "type": "Table",
+        "title": "Campaign Leaderboard",
+        "sourceReport": "campaign-leaderboard",
+        "columns": [
+          { "field": "Campaign.Name", "header": "Campaign", "width": "25%" },
+          { "field": "Campaign.Type", "header": "Type", "width": "10%" },
+          { "field": "NumberOfLeads", "header": "Leads", "format": "number", "width": "10%" },
+          { "field": "NumberOfResponses", "header": "Responses", "format": "number", "width": "10%" },
+          { "field": "NumberOfConvertedLeads", "header": "Converted", "format": "number", "width": "10%" },
+          { "field": "ConversionRate", "header": "Conv %", "format": "percent", "width": "10%" },
+          { "field": "ActualCost", "header": "Cost", "format": "currency", "width": "12%" },
+          { "field": "ROI", "header": "ROI", "format": "percent", "width": "13%" }
+        ],
+        "sortBy": "ROI DESC",
+        "rowLimit": 15,
+        "conditionalFormatting": {
+          "ROI": {
+            "green": ">500",
+            "yellow": "300-500",
+            "red": "<300"
+          },
+          "ConversionRate": {
+            "green": ">5",
+            "yellow": "2-5",
+            "red": "<2"
+          }
+        }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Bar Chart",
+        "title": "Leads by Campaign Type",
+        "sourceReport": "leads-by-campaign-type",
+        "groupBy": "Campaign.Type",
+        "metric": "NumberOfLeads",
+        "sortBy": "metric DESC",
+        "showDataLabels": true
+      },
+      {
+        "position": { "row": 1, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Bar Chart",
+        "title": "Lead-to-Opportunity Rate by Type",
+        "sourceReport": "lead-to-opp-by-type",
+        "groupBy": "Campaign.Type",
+        "metric": "NumberOfConvertedLeads / NumberOfLeads * 100",
+        "format": "percent",
+        "sortBy": "metric DESC",
+        "showBenchmarkLine": true,
+        "benchmarkValue": 5
+      },
+      {
+        "position": { "row": 1, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "Marketing Spend by Channel",
+        "sourceReport": "spend-by-channel",
+        "groupBy": "Campaign.Type",
+        "metric": "SUM(ActualCost)",
+        "showPercentages": true,
+        "showLegend": true
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 3 },
+        "type": "Table",
+        "title": "Campaign Engagement Metrics",
+        "sourceReport": "campaign-engagement",
+        "columns": [
+          { "field": "Campaign.Name", "header": "Campaign", "width": "30%" },
+          { "field": "NumberSent", "header": "Sent", "format": "number", "width": "12%" },
+          { "field": "NumberOfResponses", "header": "Responded", "format": "number", "width": "12%" },
+          { "field": "ResponseRate", "header": "Response %", "format": "percent", "width": "12%" },
+          { "field": "OpenRate", "header": "Open %", "format": "percent", "width": "12%" },
+          { "field": "ClickRate", "header": "Click %", "format": "percent", "width": "12%" },
+          { "field": "Status", "header": "Status", "width": "10%" }
+        ],
+        "sortBy": "ResponseRate DESC",
+        "rowLimit": 10,
+        "note": "Open/Click rates require email integration"
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "Campaign.StartDate",
+      "type": "dateRange",
+      "placeholder": "{{period}}",
+      "default": "THIS_FISCAL_QUARTER",
+      "values": ["THIS_MONTH", "LAST_MONTH", "THIS_FISCAL_QUARTER", "THIS_FISCAL_YEAR"]
+    },
+    {
+      "field": "Campaign.Type",
+      "type": "picklist",
+      "placeholder": "{{campaign_type}}",
+      "default": "All",
+      "values": ["All", "Digital", "Events", "Content", "Webinar", "Email", "Partner"]
+    },
+    {
+      "field": "Campaign.Status",
+      "type": "picklist",
+      "placeholder": "{{status}}",
+      "default": "All Active",
+      "values": ["All", "Planned", "In Progress", "Completed", "Aborted"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "campaignOwner": "Campaign.OwnerId = $User.Id",
+    "note": "Filter to show only campaigns owned by current user"
+  },
+  "sourceReportTemplates": [
+    "marketing/campaign-roi",
+    "marketing/lifecycle-funnel"
+  ],
+  "orgAdaptation": {
+    "requiredFields": [],
+    "optionalFields": [
+      "Campaign.Marketing_Channel__c",
+      "Campaign.Budget__c",
+      "Campaign.Target_Leads__c"
+    ],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "ActualCost": {
+        "patterns": ["ActualCost", "Campaign_Cost__c", "Total_Spend__c"],
+        "fallbackField": "BudgetedCost",
+        "fallbackBehavior": "Use BudgetedCost if ActualCost not tracked"
+      },
+      "ResponseRate": {
+        "formula": "NumberOfResponses / NumberSent * 100",
+        "fallbackBehavior": "Calculate from standard fields"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "campaign_roi": {
+      "formula": "(AmountWonOpportunities - ActualCost) / ActualCost * 100",
+      "benchmark": { "good": ">500%", "excellent": ">800%", "warning": "<300%" }
+    },
+    "lead_to_opp_conversion": {
+      "formula": "NumberOfConvertedLeads / NumberOfLeads * 100",
+      "benchmark": { "good": ">5%", "excellent": ">10%", "warning": "<2%" }
+    },
+    "response_rate": {
+      "formula": "NumberOfResponses / NumberSent * 100",
+      "benchmark": { "good": ">10%", "excellent": ">20%", "warning": "<5%" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Campaign.ActualCost is tracked",
+      "Confirm Campaign Member statuses are configured",
+      "Check Campaign.Type picklist values",
+      "Create report folder: Campaign Reports"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Marketing folder",
+      "Set daily refresh",
+      "Share with campaign managers"
+    ]
+  },
+  "relatedTemplates": ["marketing-performance", "demand-gen-funnel", "lead-generation"]
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RevPal Base CSS Demo</title>
+  <link rel="stylesheet" href="base.css">
+  <style>
+    /* Demo-specific styles */
+    body {
+      max-width: 800px;
+      padding: 40px;
+    }
+    .demo-section {
+      margin-bottom: 48px;
+    }
+    .color-swatches {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .swatch {
+      width: 120px;
+      text-align: center;
+    }
+    .swatch-color {
+      height: 60px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .swatch code {
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>RevPal Base CSS Demo</h1>
+  <p class="text-secondary">Demonstrating the updated base.css with RevPal branding (v2.0.0)</p>
+
+  <hr>
+
+  <!-- Color Palette -->
+  <div class="demo-section">
+    <h2>Color Palette</h2>
+    <p>The RevPal brand colors are now baked into base.css as default values.</p>
+
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #5F3B8C;"></div>
+        <strong>Grape</strong><br>
+        <code>#5F3B8C</code>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #E99560;"></div>
+        <strong>Apricot</strong><br>
+        <code>#E99560</code>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #3E4A61;"></div>
+        <strong>Indigo</strong><br>
+        <code>#3E4A61</code>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #EAE4DC;"></div>
+        <strong>Sand</strong><br>
+        <code>#EAE4DC</code>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #6FBF73;"></div>
+        <strong>Green</strong><br>
+        <code>#6FBF73</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Typography -->
+  <div class="demo-section">
+    <h2>Typography</h2>
+    <p>Headings use <strong>Montserrat</strong> (500-800 weight). Body uses <strong>Figtree</strong> (400-700 weight).</p>
+
+    <h1>Heading 1 - Report Title</h1>
+    <h2>Heading 2 - Section Title</h2>
+    <h3>Heading 3 - Subsection</h3>
+    <h4>Heading 4 - Minor Heading</h4>
+    <h5>Heading 5 - Small Heading</h5>
+    <h6>Heading 6 - Smallest Heading</h6>
+
+    <p>This is body text using the Figtree font. It's designed for <strong>readability</strong> and a <strong>modern reporting tone</strong>. Links like <a href="#">this example link</a> use the apricot accent color.</p>
+  </div>
+
+  <!-- Lists -->
+  <div class="demo-section">
+    <h2>Lists</h2>
+
+    <h3>Unordered List</h3>
+    <ul>
+      <li>First item with some explanation</li>
+      <li>Second item with <strong>bold emphasis</strong></li>
+      <li>Third item with a <a href="#">link</a>
+        <ul>
+          <li>Nested item one</li>
+          <li>Nested item two</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Ordered List</h3>
+    <ol>
+      <li>Run the pre-flight validation</li>
+      <li>Review the deployment package</li>
+      <li>Execute the deployment</li>
+      <li>Verify results in production</li>
+    </ol>
+  </div>
+
+  <!-- Code -->
+  <div class="demo-section">
+    <h2>Code Blocks</h2>
+
+    <p>Inline code like <code>sf org display</code> uses grape coloring on a neutral background.</p>
+
+    <h3>Code Block</h3>
+    <pre><code>// Example Apex trigger
+trigger AccountTrigger on Account (before insert, before update) {
+    for (Account acc : Trigger.new) {
+        if (acc.Industry == null) {
+            acc.Industry = 'Technology';
+        }
+    }
+}</code></pre>
+
+    <h3>SOQL Query</h3>
+    <pre><code>SELECT Id, Name, StageName, Amount, CloseDate
+FROM Opportunity
+WHERE StageName = 'Closed Won'
+  AND CloseDate = THIS_FISCAL_QUARTER
+ORDER BY Amount DESC
+LIMIT 10</code></pre>
+  </div>
+
+  <!-- Blockquotes -->
+  <div class="demo-section">
+    <h2>Blockquotes / Callouts</h2>
+
+    <blockquote>
+      <strong>Key Finding:</strong> The current automation landscape has 47 active Flows, 12 Process Builders, and 8 Apex triggers operating on the Opportunity object. This creates significant potential for conflicts and performance issues.
+    </blockquote>
+
+    <blockquote>
+      <strong>Recommendation:</strong> Consolidate the 12 Process Builders into Record-Triggered Flows to improve maintainability and take advantage of modern Flow capabilities.
+    </blockquote>
+  </div>
+
+  <!-- Cards -->
+  <div class="demo-section">
+    <h2>Cards</h2>
+
+    <div class="card">
+      <h3 class="mt-0">Executive Summary</h3>
+      <p>This card uses the <code>.card</code> class with sand background and subtle border. It's ideal for highlighting key information or grouping related content.</p>
+      <p class="mb-0"><strong>Status:</strong> <span class="status-pass">PASS</span></p>
+    </div>
+
+    <div class="card">
+      <h3 class="mt-0">Risk Assessment</h3>
+      <p>Governor limit usage is at 78% for daily async Apex executions.</p>
+      <p class="mb-0"><strong>Status:</strong> <span class="status-partial">WARNING</span></p>
+    </div>
+  </div>
+
+  <!-- Status Indicators -->
+  <div class="demo-section">
+    <h2>Status Indicators</h2>
+
+    <ul>
+      <li><span class="status-pass">PASS</span> - Field-level security configured correctly</li>
+      <li><span class="status-partial">PARTIAL</span> - Some validation rules missing error messages</li>
+      <li><span class="status-fail">FAIL</span> - No test coverage for AccountTrigger</li>
+    </ul>
+  </div>
+
+  <!-- Utility Classes -->
+  <div class="demo-section">
+    <h2>Utility Classes</h2>
+
+    <p class="text-primary">This text uses <code>.text-primary</code> (Grape)</p>
+    <p class="text-accent">This text uses <code>.text-accent</code> (Apricot)</p>
+    <p class="text-success">This text uses <code>.text-success</code> (Green)</p>
+    <p class="text-secondary">This text uses <code>.text-secondary</code> (Neutral)</p>
+    <p class="text-muted">This text uses <code>.text-muted</code> (Muted)</p>
+
+    <div class="bg-sand" style="padding: 16px; border-radius: 8px; margin-top: 16px;">
+      <p class="mb-0">This box uses <code>.bg-sand</code> background.</p>
+    </div>
+
+    <div class="bg-surface" style="padding: 16px; border-radius: 8px; margin-top: 16px;">
+      <p class="mb-0">This box uses <code>.bg-surface</code> background.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Footer -->
+  <div class="content-footer">
+    <strong>RevPal Corp.</strong> | base.css v2.0.0 | Generated 2026-01-31
+  </div>
+
+</body>
+</html>

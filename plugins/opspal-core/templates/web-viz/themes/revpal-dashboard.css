@@ -1,0 +1,1317 @@
+/**
+ * RevPal Dashboard Theme
+ *
+ * Official RevPal branding for web-viz dashboards implementing the complete brand guide:
+ * - Color System: Grape, Indigo, Apricot, Sand, Green
+ * - Typography: Montserrat (headings) + Figtree (body)
+ * - Spacing System: 2-64px scale
+ * - Modern, structured, calm, professional design
+ *
+ * @version 1.1.0
+ * @date 2025-01-15
+ *
+ * v1.1.0 Changes:
+ * - Added logo image classes (.logo-img, .logo-img-sm, .logo-img-lg, .logo-text)
+ * - Added printable report layout (.report-page, .report-header, .report-footer)
+ * - Added content sections with accent border (.section, .section-highlight)
+ * - Added workflow/process diagram styles (.workflow, .workflow-step)
+ * - Added branded list styles (.list-branded)
+ * - Added two-column report grid (.report-grid)
+ * - Enhanced print styles for compliance artifacts
+ */
+
+/* =============================================================================
+   Google Fonts Import - Montserrat & Figtree
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap');
+
+/* =============================================================================
+   RevPal Brand Color System
+   ============================================================================= */
+
+:root {
+  /* Primary Brand Colors */
+  --brand-grape: #5F3B8C;
+  --brand-indigo: #3E4A61;
+  --brand-apricot: #E99560;
+  --brand-apricot-hover: #D88450;
+  --brand-sand: #EAE4DC;
+  --brand-green: #6FBF73;
+
+  /* Neutral Palette */
+  --neutral-100: #FFFFFF;
+  --neutral-90: #F6F5F3;
+  --neutral-80: #EAE4DC;
+  --neutral-60: #C6C3BD;
+  --neutral-20: #8A8A8A;
+  --neutral-0: #000000;
+
+  /* Semantic Color Mapping */
+  --color-primary: var(--brand-grape);
+  --color-primary-light: #7B5BA8;
+  --color-primary-dark: #4A2D6E;
+
+  --color-secondary: var(--brand-indigo);
+  --color-secondary-light: #5A6A82;
+  --color-secondary-dark: #2D3847;
+
+  --color-accent: var(--brand-apricot);
+  --color-accent-light: #F0A87A;
+  --color-accent-dark: var(--brand-apricot-hover);
+
+  --color-success: var(--brand-green);
+  --color-success-dark: #5A9F5E;
+  --color-warning: #E99560;
+  --color-danger: #D35649;
+  --color-info: var(--brand-indigo);
+
+  /* Text Colors */
+  --color-text: var(--neutral-0);
+  --color-text-secondary: var(--brand-indigo);
+  --color-text-muted: var(--neutral-20);
+
+  /* Background Colors */
+  --color-background: var(--neutral-100);
+  --color-surface: var(--neutral-90);
+  --color-surface-dark: var(--brand-sand);
+
+  /* Border Colors */
+  --color-border: rgba(62, 74, 97, 0.15);
+  --color-border-light: var(--neutral-80);
+  --color-border-dark: var(--neutral-60);
+
+  /* Font Stacks */
+  --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-body: 'Figtree', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+
+  /* Spacing System */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(62, 74, 97, 0.08);
+  --shadow-md: 0 4px 12px rgba(62, 74, 97, 0.12);
+  --shadow-lg: 0 10px 24px rgba(62, 74, 97, 0.16);
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+/* =============================================================================
+   Base Styles
+   ============================================================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =============================================================================
+   Dashboard Container
+   ============================================================================= */
+
+.dashboard-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-32);
+  background: var(--color-background);
+}
+
+/* =============================================================================
+   RevPal Branded Header (Optional - set brandedHeader: true in template)
+   ============================================================================= */
+
+.revpal-header {
+  background: linear-gradient(135deg, var(--brand-grape) 0%, #7B5BA8 100%);
+  color: var(--neutral-100);
+  padding: var(--space-24) var(--space-32);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: calc(var(--space-32) * -1) calc(var(--space-32) * -1) var(--space-32);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.revpal-header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.revpal-logo {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: var(--neutral-100);
+}
+
+.revpal-logo span {
+  color: var(--brand-apricot);
+}
+
+.revpal-header-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.revpal-header h1 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.revpal-header-subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: var(--space-4);
+}
+
+.revpal-header .user-info {
+  text-align: right;
+}
+
+.revpal-header .user-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.revpal-header .user-role {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* =============================================================================
+   Dashboard Header (Standard)
+   ============================================================================= */
+
+.dashboard-header {
+  margin-bottom: var(--space-32);
+  padding-bottom: var(--space-24);
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+.dashboard-title {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--brand-grape);
+  line-height: 1.2;
+}
+
+/* Partial underline accent */
+.dashboard-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: var(--brand-apricot);
+  margin-top: var(--space-12);
+  border-radius: 2px;
+}
+
+.dashboard-description {
+  margin: var(--space-16) 0 var(--space-12);
+  font-size: 16px;
+  color: var(--brand-indigo);
+  max-width: 70ch;
+  line-height: 1.5;
+}
+
+.dashboard-meta {
+  display: flex;
+  gap: var(--space-24);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.meta-item::before {
+  content: '•';
+  color: var(--brand-apricot);
+}
+
+.meta-item:first-child::before {
+  display: none;
+}
+
+/* =============================================================================
+   Dashboard Grid
+   ============================================================================= */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-16);
+}
+
+/* =============================================================================
+   Component Base
+   ============================================================================= */
+
+.viz-component {
+  background: var(--neutral-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-24);
+  box-shadow: var(--shadow-sm);
+  grid-column: span 6;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.viz-component:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.component-header {
+  margin-bottom: var(--space-16);
+  padding-bottom: var(--space-12);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.component-title {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--brand-indigo);
+}
+
+.component-description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.component-content {
+  min-height: 180px;
+}
+
+/* =============================================================================
+   KPI Card Styles
+   ============================================================================= */
+
+.viz-kpi {
+  grid-column: span 3;
+  background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-90) 100%);
+}
+
+.viz-kpi .component-header {
+  border-bottom: none;
+  padding-bottom: var(--space-8);
+}
+
+.viz-kpi .component-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.viz-kpi .kpi-value {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--brand-grape);
+  line-height: 1.1;
+  margin-bottom: var(--space-8);
+}
+
+.viz-kpi .kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: 14px;
+  font-weight: 600;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-sm);
+}
+
+.viz-kpi .kpi-trend.positive {
+  color: var(--color-success-dark);
+  background: rgba(111, 191, 115, 0.15);
+}
+
+.viz-kpi .kpi-trend.negative {
+  color: var(--color-danger);
+  background: rgba(211, 86, 73, 0.12);
+}
+
+.viz-kpi .kpi-trend.neutral {
+  color: var(--color-text-muted);
+  background: var(--neutral-90);
+}
+
+.kpi-trend-icon {
+  font-size: 12px;
+}
+
+/* =============================================================================
+   Gauge Component Styles
+   ============================================================================= */
+
+.viz-gauge {
+  grid-column: span 4;
+  text-align: center;
+}
+
+.viz-gauge .gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.viz-gauge .gauge-value {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: 800;
+  fill: var(--brand-grape);
+}
+
+.viz-gauge .gauge-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--brand-indigo);
+}
+
+/* =============================================================================
+   Chart Component Styles
+   ============================================================================= */
+
+.viz-chart {
+  grid-column: span 6;
+}
+
+.viz-chart .chart-container {
+  position: relative;
+  min-height: 280px;
+}
+
+/* Chart.js canvas styling */
+.viz-chart canvas {
+  max-width: 100%;
+}
+
+/* Pie/Doughnut chart size constraints */
+.viz-chart[data-chart-type="pie"] .chart-container,
+.viz-chart[data-chart-type="doughnut"] .chart-container {
+  max-width: 280px;
+  max-height: 280px;
+  margin: 0 auto;
+}
+
+.viz-chart[data-chart-type="pie"] canvas,
+.viz-chart[data-chart-type="doughnut"] canvas {
+  max-height: 250px;
+}
+
+/* =============================================================================
+   Table Component Styles
+   ============================================================================= */
+
+.viz-table {
+  grid-column: span 6;
+}
+
+.viz-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.viz-table th {
+  background-color: var(--brand-grape);
+  color: var(--neutral-100);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  padding: var(--space-12) var(--space-16);
+  text-align: left;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 150ms ease;
+}
+
+.viz-table th:last-child {
+  border-right: none;
+}
+
+.viz-table th:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.viz-table th .sort-indicator {
+  margin-left: var(--space-8);
+  opacity: 0.6;
+  font-size: 10px;
+}
+
+.viz-table th.sorted .sort-indicator {
+  opacity: 1;
+  color: var(--brand-apricot);
+}
+
+.viz-table td {
+  padding: var(--space-12) var(--space-16);
+  border-bottom: 1px solid var(--color-border-light);
+  border-right: 1px solid var(--color-border-light);
+  vertical-align: middle;
+}
+
+.viz-table td:last-child {
+  border-right: none;
+}
+
+.viz-table td:first-child {
+  font-weight: 600;
+  color: var(--brand-indigo);
+}
+
+.viz-table tr:nth-child(even) {
+  background-color: var(--neutral-90);
+}
+
+.viz-table tr:hover td {
+  background-color: var(--brand-sand);
+}
+
+.viz-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Table Pagination */
+.viz-table .table-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-16);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-border);
+}
+
+.viz-table .pagination-info {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.viz-table .pagination-controls {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.viz-table .pagination-btn {
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--neutral-100);
+  color: var(--brand-indigo);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.viz-table .pagination-btn:hover:not(:disabled) {
+  background: var(--brand-grape);
+  color: var(--neutral-100);
+  border-color: var(--brand-grape);
+}
+
+.viz-table .pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Status Badges in Tables */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-12);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.status-badge.good,
+.status-badge.success,
+.status-badge.exceeding {
+  background-color: rgba(111, 191, 115, 0.2);
+  color: var(--color-success-dark);
+}
+
+.status-badge.fair,
+.status-badge.warning,
+.status-badge.meeting {
+  background-color: rgba(233, 149, 96, 0.2);
+  color: var(--brand-apricot-hover);
+}
+
+.status-badge.poor,
+.status-badge.danger,
+.status-badge.below,
+.status-badge.critical {
+  background-color: rgba(211, 86, 73, 0.15);
+  color: var(--color-danger);
+}
+
+.status-badge.info {
+  background-color: rgba(62, 74, 97, 0.15);
+  color: var(--brand-indigo);
+}
+
+/* =============================================================================
+   Map Component Styles
+   ============================================================================= */
+
+.viz-map {
+  grid-column: span 8;
+}
+
+.viz-map .map-container {
+  height: 400px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+/* Custom Leaflet popup styling */
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.leaflet-popup-content {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--brand-indigo);
+}
+
+/* =============================================================================
+   Flow Diagram Styles
+   ============================================================================= */
+
+.flow-diagram-component {
+  grid-column: span 8;
+}
+
+.flow-diagram-component .component-body {
+  min-height: 280px;
+  max-height: 500px;
+  overflow: auto;
+  background: var(--neutral-90);
+  border-radius: var(--radius-md);
+  padding: var(--space-16);
+}
+
+.flow-diagram-container {
+  min-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flow-diagram-container .mermaid {
+  font-family: var(--font-body);
+  line-height: 1.4;
+  background: transparent;
+  width: 100%;
+}
+
+.flow-diagram-container .mermaid svg {
+  width: 100%;
+  height: auto;
+  max-height: 450px;
+}
+
+/* Mermaid node styling */
+.flow-diagram-container .node rect {
+  fill: var(--neutral-100);
+  stroke: var(--brand-grape);
+  stroke-width: 2px;
+}
+
+.flow-diagram-container .node .label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  fill: var(--brand-indigo);
+}
+
+.flow-diagram-container .edgeLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  background: var(--neutral-100);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+/* Subgraph styling */
+.flow-diagram-container .cluster rect {
+  fill: rgba(95, 59, 140, 0.06) !important;
+  stroke: var(--brand-grape) !important;
+  stroke-width: 1px;
+  stroke-dasharray: 4 2;
+  rx: 8;
+  ry: 8;
+}
+
+/* =============================================================================
+   Dashboard Footer
+   ============================================================================= */
+
+.dashboard-footer {
+  margin-top: var(--space-32);
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.dashboard-footer a {
+  color: var(--brand-grape);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.dashboard-footer a:hover {
+  color: var(--brand-apricot);
+}
+
+/* =============================================================================
+   Component Error State
+   ============================================================================= */
+
+.component-error {
+  padding: var(--space-16);
+  background: rgba(211, 86, 73, 0.08);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  .flow-diagram-component {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    padding: var(--space-24);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .viz-component {
+    grid-column: span 6 !important;
+  }
+
+  .viz-kpi {
+    grid-column: span 3 !important;
+  }
+
+  .viz-map {
+    grid-column: span 6 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: var(--space-16);
+  }
+
+  .dashboard-title {
+    font-size: 24px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .viz-component,
+  .viz-kpi,
+  .viz-map {
+    grid-column: span 1 !important;
+  }
+
+  .viz-kpi .kpi-value {
+    font-size: 28px;
+  }
+
+  .flow-diagram-component .component-body {
+    max-height: 350px;
+  }
+}
+
+/* =============================================================================
+   Print Styles
+   ============================================================================= */
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .dashboard-container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .viz-component {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid var(--color-border);
+  }
+
+  .viz-component:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .dashboard-header,
+  .viz-table th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* =============================================================================
+   Form Controls & Inputs (for Calculator Components)
+   ============================================================================= */
+
+.form-group {
+  margin-bottom: var(--space-16);
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--brand-indigo);
+  margin-bottom: var(--space-8);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--neutral-60);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--brand-indigo);
+  background: var(--neutral-100);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--brand-grape);
+  box-shadow: 0 0 0 3px rgba(95, 59, 140, 0.15);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: var(--brand-indigo);
+}
+
+.form-group .help-text {
+  font-size: 12px;
+  color: var(--neutral-20);
+  margin-top: var(--space-4);
+}
+
+/* Slider Input */
+.slider-container {
+  padding: var(--space-8) 0;
+}
+
+.slider-container input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--neutral-80);
+  outline: none;
+  padding: 0;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brand-grape);
+  cursor: pointer;
+  border: 3px solid var(--neutral-100);
+  box-shadow: 0 2px 6px rgba(62, 74, 97, 0.2);
+  transition: transform 150ms ease;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brand-grape);
+  cursor: pointer;
+  border: 3px solid var(--neutral-100);
+  box-shadow: 0 2px 6px rgba(62, 74, 97, 0.2);
+}
+
+.slider-value {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--neutral-20);
+  margin-top: var(--space-4);
+}
+
+/* Calculator Component */
+.calculator-component {
+  background: var(--neutral-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-24);
+}
+
+.calculator-inputs {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.calculator-outputs {
+  margin-top: var(--space-24);
+  padding-top: var(--space-24);
+  border-top: 2px solid var(--brand-sand);
+}
+
+.calculator-output-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-8) 0;
+}
+
+.calculator-output-label {
+  font-size: 13px;
+  color: var(--neutral-20);
+}
+
+.calculator-output-value {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brand-indigo);
+}
+
+.calculator-output-value.primary {
+  font-size: 28px;
+  color: var(--brand-grape);
+}
+
+.calculator-output-value.success {
+  color: var(--brand-green);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-24);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.btn-primary {
+  background: var(--brand-grape);
+  color: var(--neutral-100);
+}
+
+.btn-primary:hover {
+  background: #4A2D6E;
+}
+
+.btn-secondary {
+  background: var(--neutral-100);
+  color: var(--brand-indigo);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  background: var(--neutral-90);
+  border-color: var(--brand-indigo);
+}
+
+.btn-accent {
+  background: var(--brand-apricot);
+  color: var(--neutral-100);
+}
+
+.btn-accent:hover {
+  background: var(--brand-apricot-hover);
+}
+
+/* =============================================================================
+   Accessibility
+   ============================================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--brand-apricot);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
+/* =============================================================================
+   Logo & Branding Elements
+   ============================================================================= */
+
+.logo-img {
+  height: 48px;
+  width: auto;
+}
+
+.logo-img-sm {
+  height: 24px;
+  width: auto;
+}
+
+.logo-img-lg {
+  height: 64px;
+  width: auto;
+}
+
+.logo-text {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--brand-grape);
+}
+
+.logo-text span {
+  color: var(--brand-apricot);
+}
+
+/* =============================================================================
+   Document/Report Page Layout (for printable reports)
+   ============================================================================= */
+
+.report-page {
+  max-width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 0.5in;
+  background: var(--color-background);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-24);
+  padding-bottom: var(--space-16);
+  border-bottom: 3px solid var(--brand-grape);
+}
+
+.report-header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.report-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brand-grape);
+}
+
+.report-subtitle {
+  font-size: 11px;
+  color: var(--brand-indigo);
+  margin-top: var(--space-2);
+}
+
+.report-meta {
+  text-align: right;
+  font-size: 10px;
+  color: var(--brand-indigo);
+}
+
+.report-meta strong {
+  font-weight: 600;
+}
+
+.report-footer {
+  margin-top: var(--space-32);
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+
+/* =============================================================================
+   Content Sections (with accent border)
+   ============================================================================= */
+
+.section {
+  background: var(--neutral-90);
+  border-radius: var(--radius-md);
+  padding: var(--space-16);
+  border-left: 4px solid var(--brand-grape);
+  margin-bottom: var(--space-16);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand-grape);
+  margin-bottom: var(--space-12);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--brand-apricot);
+  margin-top: var(--space-4);
+}
+
+/* Executive/highlight section with gradient background */
+.section-highlight {
+  background: linear-gradient(135deg, var(--brand-grape) 0%, #7B5BA8 100%);
+  color: var(--neutral-100);
+  border-left: none;
+  padding: var(--space-24);
+}
+
+.section-highlight .section-title {
+  color: var(--neutral-100);
+}
+
+.section-highlight .section-title::after {
+  background: var(--brand-apricot);
+}
+
+/* =============================================================================
+   Workflow/Process Diagrams
+   ============================================================================= */
+
+.workflow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  margin: var(--space-16) 0;
+}
+
+.workflow-step {
+  flex: 1;
+  text-align: center;
+  padding: var(--space-12) var(--space-8);
+  background: var(--neutral-100);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--brand-grape);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--brand-indigo);
+}
+
+.workflow-step strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-grape);
+  margin-bottom: var(--space-4);
+}
+
+.workflow-arrow {
+  font-size: 18px;
+  color: var(--brand-apricot);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Vertical workflow variant */
+.workflow-vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.workflow-vertical .workflow-arrow {
+  transform: rotate(90deg);
+  text-align: center;
+  padding: var(--space-4) 0;
+}
+
+/* =============================================================================
+   Lists (branded bullet points)
+   ============================================================================= */
+
+.list-branded {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.list-branded li {
+  padding: var(--space-4) 0 var(--space-4) var(--space-16);
+  position: relative;
+}
+
+.list-branded li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  background: var(--brand-apricot);
+  border-radius: 50%;
+}
+
+/* =============================================================================
+   Two-Column Grid Layout (for reports)
+   ============================================================================= */
+
+.report-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-24);
+}
+
+.report-grid .full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-grid .full-width {
+    grid-column: span 1;
+  }
+}
+
+/* =============================================================================
+   Enhanced Print Styles
+   ============================================================================= */
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 11px;
+  }
+
+  .report-page {
+    padding: 0.4in;
+    min-height: auto;
+  }
+
+  .section,
+  .viz-component {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .section-highlight {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .workflow {
+    break-inside: avoid;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

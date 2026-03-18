@@ -1,0 +1,299 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "hubspot",
+  "globalDefaults": {
+    "alwaysExclude": [
+      "*password*",
+      "*secret*",
+      "*token*",
+      "*ssn*",
+      "*credit_card*",
+      "*bank_account*"
+    ],
+    "alwaysInclude": [
+      "hs_object_id",
+      "createdate",
+      "lastmodifieddate"
+    ],
+    "piiDetectionEnabled": true,
+    "maxPropertiesDefault": 100,
+    "excludeReadOnlyProperties": true,
+    "excludeCalculatedProperties": false
+  },
+  "policies": {
+    "contact": {
+      "required_properties": {
+        "properties": [
+          "hs_object_id",
+          "email",
+          "firstname",
+          "lastname"
+        ],
+        "source": "manual",
+        "rationale": "Core contact identification"
+      },
+      "default_properties": {
+        "properties": [
+          "hs_object_id",
+          "email",
+          "firstname",
+          "lastname",
+          "phone",
+          "company",
+          "jobtitle",
+          "lifecyclestage",
+          "hs_lead_status",
+          "hubspot_owner_id",
+          "createdate",
+          "lastmodifieddate"
+        ],
+        "source": "manual",
+        "rationale": "Standard contact properties for CRM operations"
+      },
+      "recommended_properties": {
+        "properties": [
+          "mobilephone",
+          "address",
+          "city",
+          "state",
+          "zip",
+          "country",
+          "website",
+          "hs_email_optout",
+          "hs_analytics_source",
+          "hs_analytics_first_url",
+          "recent_deal_amount",
+          "num_associated_deals"
+        ],
+        "source": "manual"
+      },
+      "sensitive_property_exclusions": {
+        "properties": [
+          "hs_ip_timezone",
+          "ip_city",
+          "ip_state",
+          "ip_country"
+        ],
+        "patterns": [
+          "*password*",
+          "*ssn*",
+          "*internal_notes*"
+        ],
+        "propertyGroups": [],
+        "complianceReason": "PII and location tracking data"
+      },
+      "property_aliases": {},
+      "maxProperties": 100
+    },
+    "company": {
+      "required_properties": {
+        "properties": [
+          "hs_object_id",
+          "name",
+          "domain"
+        ],
+        "source": "manual",
+        "rationale": "Core company identification"
+      },
+      "default_properties": {
+        "properties": [
+          "hs_object_id",
+          "name",
+          "domain",
+          "industry",
+          "type",
+          "phone",
+          "city",
+          "state",
+          "country",
+          "numberofemployees",
+          "annualrevenue",
+          "hubspot_owner_id",
+          "lifecyclestage",
+          "createdate",
+          "lastmodifieddate"
+        ],
+        "source": "manual",
+        "rationale": "Standard company properties for account management"
+      },
+      "recommended_properties": {
+        "properties": [
+          "description",
+          "website",
+          "linkedin_company_page",
+          "founded_year",
+          "total_revenue",
+          "num_associated_contacts",
+          "num_associated_deals",
+          "recent_deal_amount",
+          "hs_analytics_source"
+        ],
+        "source": "manual"
+      },
+      "sensitive_property_exclusions": {
+        "properties": [],
+        "patterns": [
+          "*internal*",
+          "*competitor*"
+        ],
+        "propertyGroups": [],
+        "complianceReason": "Internal business intelligence"
+      },
+      "property_aliases": {},
+      "maxProperties": 100
+    },
+    "deal": {
+      "required_properties": {
+        "properties": [
+          "hs_object_id",
+          "dealname",
+          "dealstage",
+          "pipeline"
+        ],
+        "source": "manual",
+        "rationale": "Core deal identification and stage"
+      },
+      "default_properties": {
+        "properties": [
+          "hs_object_id",
+          "dealname",
+          "dealstage",
+          "pipeline",
+          "amount",
+          "closedate",
+          "createdate",
+          "hubspot_owner_id",
+          "dealtype",
+          "hs_deal_stage_probability",
+          "hs_forecast_amount",
+          "hs_forecast_probability",
+          "lastmodifieddate"
+        ],
+        "source": "manual",
+        "rationale": "Standard deal properties for pipeline analysis"
+      },
+      "recommended_properties": {
+        "properties": [
+          "description",
+          "hs_acv",
+          "hs_arr",
+          "hs_mrr",
+          "hs_tcv",
+          "num_associated_contacts",
+          "hs_analytics_source",
+          "hs_closed_amount",
+          "hs_is_closed",
+          "hs_is_closed_won"
+        ],
+        "source": "manual"
+      },
+      "sensitive_property_exclusions": {
+        "properties": [
+          "hs_deal_score"
+        ],
+        "patterns": [
+          "*discount_override*",
+          "*internal_pricing*"
+        ],
+        "propertyGroups": [],
+        "complianceReason": "Pricing and competitive intelligence"
+      },
+      "property_aliases": {},
+      "maxProperties": 100
+    },
+    "ticket": {
+      "required_properties": {
+        "properties": [
+          "hs_object_id",
+          "subject",
+          "hs_pipeline_stage",
+          "hs_pipeline"
+        ],
+        "source": "manual",
+        "rationale": "Core ticket identification"
+      },
+      "default_properties": {
+        "properties": [
+          "hs_object_id",
+          "subject",
+          "content",
+          "hs_pipeline_stage",
+          "hs_pipeline",
+          "hs_ticket_priority",
+          "hs_ticket_category",
+          "hubspot_owner_id",
+          "createdate",
+          "lastmodifieddate",
+          "closed_date",
+          "time_to_close"
+        ],
+        "source": "manual",
+        "rationale": "Standard ticket properties for support operations"
+      },
+      "recommended_properties": {
+        "properties": [
+          "source_type",
+          "hs_resolution",
+          "hs_custom_inbox",
+          "num_associated_conversations"
+        ],
+        "source": "manual"
+      },
+      "sensitive_property_exclusions": {
+        "properties": [],
+        "patterns": [
+          "*internal_notes*"
+        ],
+        "propertyGroups": [],
+        "complianceReason": "Internal support notes"
+      },
+      "property_aliases": {},
+      "maxProperties": 80
+    }
+  },
+  "taskVariantOverrides": {
+    "backup": {
+      "includeAdditional": [
+        "createdate",
+        "lastmodifieddate",
+        "hs_object_id"
+      ],
+      "excludeAdditional": [],
+      "maxPropertiesOverride": 150
+    },
+    "migration": {
+      "includeAdditional": [
+        "hs_object_id"
+      ],
+      "excludeAdditional": [
+        "hs_calculated_*"
+      ],
+      "maxPropertiesOverride": 200
+    },
+    "enrichment": {
+      "includeAdditional": [],
+      "excludeAdditional": [
+        "createdate",
+        "hs_object_id"
+      ],
+      "maxPropertiesOverride": 50
+    },
+    "export": {
+      "includeAdditional": [],
+      "excludeAdditional": [
+        "*password*",
+        "*token*",
+        "*ip_*"
+      ],
+      "maxPropertiesOverride": 100
+    },
+    "sync": {
+      "includeAdditional": [
+        "hs_object_id",
+        "lastmodifieddate"
+      ],
+      "excludeAdditional": [],
+      "maxPropertiesOverride": 100
+    }
+  }
+}

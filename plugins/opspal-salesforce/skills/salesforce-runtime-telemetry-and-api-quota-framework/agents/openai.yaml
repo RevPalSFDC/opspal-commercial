@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Runtime Telemetry and API Quota Framework"
+  short_description: "Help with Salesforce Runtime Telemetry and API Quota Framework"
+  default_prompt: "Use $salesforce-runtime-telemetry-and-api-quota-framework to execute this workflow safely and produce the expected artifacts."

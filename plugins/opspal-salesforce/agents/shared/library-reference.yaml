@@ -1,0 +1,1024 @@
+# Salesforce Plugin - Shared Library Reference
+# Version: 1.0.0
+# Last Updated: 2025-10-22
+#
+# This file documents commonly used scripts available to all agents.
+# All paths relative to: .claude-plugins/opspal-salesforce/scripts/lib/
+
+---
+
+# Bulk Operations Engine (v3.74.0)
+bulk_operations:
+  engine:
+    path: bulkops-engine.js
+    purpose: Core engine for batched DML with parallel validation and retry
+    capabilities:
+      - Batched execution (configurable batch size, default 200)
+      - Checkpoint-based resume for interrupted operations
+      - Parallel validation via read-only sub-agent
+      - Retry queue with error categorization
+      - Dry-run mode for pre-flight validation
+    usage: "Invoked via sfdc-bulkops-orchestrator agent"
+    added: v3.74.0
+
+  checkpoint_manager:
+    path: bulkops-checkpoint-manager.js
+    purpose: Checkpoint creation, resumption, and operation tracking
+    capabilities:
+      - Create/update/complete/fail checkpoints
+      - Resume interrupted operations from last batch
+      - List and filter operations by status
+    usage: "node bulkops-checkpoint-manager.js list [status]"
+    added: v3.74.0
+
+  audit_logger:
+    path: bulkops-audit-logger.js
+    purpose: JSONL per-record audit trail with error categorization
+    capabilities:
+      - Per-record success/failure logging
+      - Error categorization (validation_rule, FLS, governor_limit, etc.)
+      - Batch completion tracking
+      - Error summary generation
+    usage: "node bulkops-audit-logger.js summary <operationId>"
+    added: v3.74.0
+
+  diff_tracker:
+    path: bulkops-diff-tracker.js
+    purpose: Before/after value capture for rollback and diff reporting
+    capabilities:
+      - Before-state capture pre-DML
+      - After-state recording post-DML
+      - Diff summary with changed fields
+      - Rollback data generation
+    usage: "node bulkops-diff-tracker.js summary <operationId>"
+    added: v3.74.0
+
+# Permission Set Management (v3.32.0 - v3.34.0)
+permission_sets:
+  orchestrator:
+    path: permission-set-orchestrator.js
+    purpose: Core engine for centralized permission set management
+    capabilities:
+      - Two-tier architecture (Users/Admin)
+      - Merge-safe accretive operations
+      - Idempotent deployments with SHA-256 hashing
+      - No-downgrade policy enforcement
+    usage: "node permission-set-orchestrator.js --input config.json --org myOrg"
+
+  cli:
+    path: permission-set-cli.js
+    purpose: CLI interface for permission management
+    capabilities:
+      - JSON input configuration
+      - Dry-run mode
+      - Migration plan execution
+      - Verbose output
+    usage: "node permission-set-cli.js --input config.json --org myOrg [--dry-run] [--execute-migration plan.json]"
+
+  discovery:
+    path: permission-set-discovery.js
+    purpose: Scan org for fragmented permission sets
+    capabilities:
+      - Pattern detection (phased, tiered, versioned, dated)
+      - Fragmentation scoring (0-100)
+      - Initiative grouping
+      - Risk assessment (HIGH/MEDIUM/LOW)
+    usage: "node permission-set-discovery.js --org myOrg --output discovery.json"
+    added: v3.33.0
+
+  analyzer:
+    path: permission-set-analyzer.js
+    purpose: Analyze overlap and consolidation opportunities
+    capabilities:
+      - Pairwise overlap calculation
+      - Redundant permission detection
+      - Consolidation recommendations with confidence levels
+      - Risk scoring and effort estimation
+    usage: "node permission-set-analyzer.js --org myOrg --initiative CPQ --output analysis.json"
+    added: v3.33.0
+
+  migration_planner:
+    path: permission-set-migration-planner.js
+    purpose: Generate executable migration plans
+    capabilities:
+      - 7-step migration plans with dependencies
+      - Rollback procedures (5 steps, 15-20 min)
+      - Validation checkpoints (5 automated checks)
+      - Risk assessment with mitigations
+    usage: "node permission-set-migration-planner.js --org myOrg --initiative CPQ --output plan.json"
+    added: v3.33.0
+
+  report_generator:
+    path: permission-set-report-generator.js
+    purpose: Generate human-readable markdown reports
+    capabilities:
+      - Discovery reports (org-wide inventory)
+      - Analysis reports (overlap analysis)
+      - Migration plan reports (step-by-step guides)
+      - Batch report generation
+    usage: "node permission-set-report-generator.js all discovery.json analysis.json plan.json ./reports/"
+    added: v3.34.0
+
+# Automation Auditing
+automation:
+  orchestrator_v2:
+    path: automation-audit-v2-orchestrator.js
+    purpose: Comprehensive automation audit orchestration
+    capabilities:
+      - Flow, Process Builder, Workflow Rule, Apex Trigger analysis
+      - Field collision detection
+      - Execution order resolution
+      - Recursion risk detection
+    usage: "node automation-audit-v2-orchestrator.js --org myOrg --output-dir ./audit-results"
+
+  dependency_graph:
+    path: automation-dependency-graph.js
+    purpose: Generate automation dependency graphs
+    capabilities:
+      - Cross-automation dependencies
+      - Circular dependency detection
+      - Impact analysis
+    usage: "node automation-dependency-graph.js --org myOrg --output graph.json"
+
+  conflict_engine:
+    path: automation-conflict-engine.js
+    purpose: Detect field write conflicts
+    capabilities:
+      - Multi-automation field collision detection
+      - Final writer determination
+      - Conflict severity scoring
+    usage: "node automation-conflict-engine.js --org myOrg --output conflicts.json"
+
+# Metadata Management
+metadata:
+  deployment_validator:
+    path: metadata-deployment-validator.js
+    purpose: Pre-deployment validation
+    capabilities:
+      - Dependency checking
+      - Field history tracking limits (20 per object)
+      - Picklist formula validation
+      - Object relationship verification
+    usage: "node metadata-deployment-validator.js --org myOrg --package-xml path/to/package.xml"
+
+  field_analyzer:
+    path: field-analyzer.js
+    purpose: Field-level metadata analysis
+    capabilities:
+      - Field usage analysis
+      - Dependency mapping
+      - Impact assessment
+    usage: "node field-analyzer.js --org myOrg --object Account --field CustomField__c"
+
+  schema_comparator:
+    path: schema-comparator.js
+    purpose: Compare schemas between orgs
+    capabilities:
+      - Object comparison
+      - Field comparison
+      - Relationship comparison
+    usage: "node schema-comparator.js --source-org source --target-org target"
+
+# CPQ Operations
+cpq:
+  quote_analyzer:
+    path: cpq-quote-analyzer.js
+    purpose: CPQ quote analysis
+    capabilities:
+      - Quote structure validation
+      - Line item analysis
+      - Pricing waterfall examination
+    usage: "node cpq-quote-analyzer.js --org myOrg --quote-id <id>"
+
+  product_rule_validator:
+    path: cpq-product-rule-validator.js
+    purpose: Validate CPQ product rules
+    capabilities:
+      - Rule conflict detection
+      - Logic validation
+      - Performance analysis
+    usage: "node cpq-product-rule-validator.js --org myOrg"
+
+# Data Operations
+data:
+  bulk_operations:
+    path: async-bulk-ops.js
+    purpose: Asynchronous bulk data operations
+    capabilities:
+      - Large-scale data loads
+      - Batch processing
+      - Error handling and retry logic
+    usage: "node async-bulk-ops.js --operation insert --object Account --csv data.csv"
+
+  deduplication:
+    path: dedupe-engine.js
+    purpose: Record deduplication
+    capabilities:
+      - Fuzzy matching
+      - Multi-field comparison
+      - Merge recommendations
+    usage: "node dedupe-engine.js --org myOrg --object Contact"
+
+# Security & Compliance
+security:
+  profile_analyzer:
+    path: profile-permission-analyzer.js
+    purpose: Profile and permission analysis
+    capabilities:
+      - Permission comparison
+      - Access level validation
+      - Security review reporting
+    usage: "node profile-permission-analyzer.js --org myOrg --profile 'System Administrator'"
+
+  field_security:
+    path: field-level-security-audit.js
+    purpose: Field-level security audit
+    capabilities:
+      - FLS coverage analysis
+      - Permission set FLS validation
+      - Gap detection
+    usage: "node field-level-security-audit.js --org myOrg --object Account"
+
+# Analytics & Reporting
+analytics:
+  usage_audit:
+    path: usage-audit-orchestrator.js
+    purpose: Org usage analytics
+    capabilities:
+      - Object usage tracking
+      - Field usage analysis
+      - Automation execution stats
+    usage: "node usage-audit-orchestrator.js --org myOrg --days 90"
+
+  dashboard_generator:
+    path: automation-dashboard-generator.js
+    purpose: Generate automation dashboards
+    capabilities:
+      - Visual automation summaries
+      - Metric aggregation
+      - Trend analysis
+    usage: "node automation-dashboard-generator.js --input audit-results.json --output dashboard.html"
+
+  pdf_generation_helper:
+    path: ../../../opspal-core/scripts/lib/pdf-generation-helper.js
+    purpose: |
+      **MANDATORY PDF Deliverable Generation**: All assessment, audit, and report agents MUST produce PDF outputs.
+      Provides professional PDF generation with branded covers and multi-document compilation.
+    capabilities:
+      - Professional branded PDF covers (8 templates available)
+      - Multi-document compilation (multiple MD files → single PDF)
+      - Automatic table of contents
+      - Metadata embedding (title, author, version, date)
+      - Cover templates: salesforce-audit, hubspot-assessment, security-audit, executive-report, etc.
+    usage: |
+      const PDFGenerationHelper = require('../../../opspal-core/scripts/lib/pdf-generation-helper');
+
+      // Generate multi-report PDF
+      await PDFGenerationHelper.generateMultiReportPDF({
+        orgAlias: 'my-org',
+        outputDir: './reports',
+        documents: [
+          { path: 'summary.md', title: 'Executive Summary', order: 0 },
+          { path: 'analysis.md', title: 'Detailed Analysis', order: 1 },
+          { path: 'recommendations.md', title: 'Recommendations', order: 2 }
+        ],
+        coverTemplate: 'salesforce-audit',  // or hubspot-assessment, security-audit, etc.
+        metadata: {
+          title: 'Salesforce CPQ Assessment - MyOrg',
+          version: '1.0.0',
+          date: '2025-10-26'
+        }
+      });
+
+      // Available cover templates:
+      // - default, salesforce-audit, hubspot-assessment, security-audit
+      // - executive-report, data-quality, cross-platform-integration, gtm-planning
+    mandatory_for:
+      - All audit agents (*-auditor)
+      - All assessment agents (*-assessment, *-analyzer)
+      - All report generation agents (*-report*, *-reporting)
+      - RevOps, CPQ, security, and compliance agents
+    validation: |
+      # Validate PDF integration compliance:
+      node .claude-plugins/opspal-core/scripts/validate-pdf-integration.js --all
+    added: v3.41.0 (Mandatory PDF deliverables standard)
+
+# State Discovery
+discovery:
+  state_discovery:
+    path: state-discovery-orchestrator.js
+    purpose: Comprehensive org state discovery
+    capabilities:
+      - Metadata inventory
+      - Configuration analysis
+      - Customization detection
+    usage: "node state-discovery-orchestrator.js --org myOrg --output state.json"
+
+  org_comparison:
+    path: org-comparator.js
+    purpose: Compare two orgs
+    capabilities:
+      - Metadata drift detection
+      - Configuration differences
+      - Missing component identification
+    usage: "node org-comparator.js --source-org source --target-org target"
+
+# Layout Management
+layouts:
+  layout_analyzer:
+    path: layout-analyzer.js
+    purpose: Page layout analysis
+    capabilities:
+      - Field requirement analysis
+      - Section organization
+      - Record type mapping
+    usage: "node layout-analyzer.js --org myOrg --object Account"
+
+  layout_optimizer:
+    path: layout-optimizer.js
+    purpose: Optimize page layouts
+    capabilities:
+      - Field grouping recommendations
+      - Section reordering
+      - Blank space removal
+    usage: "node layout-optimizer.js --org myOrg --object Account --layout 'Account Layout'"
+
+# Backup & Restore
+backup:
+  backup_orchestrator:
+    path: backup-orchestrator.js
+    purpose: Org backup operations
+    capabilities:
+      - Metadata backup
+      - Data backup
+      - Incremental backups
+    usage: "node backup-orchestrator.js --org myOrg --output-dir ./backups"
+
+  restore_engine:
+    path: restore-engine.js
+    purpose: Restore from backup
+    capabilities:
+      - Metadata restoration
+      - Data restoration
+      - Selective restore
+    usage: "node restore-engine.js --org myOrg --backup-dir ./backups/2025-10-22"
+
+# Living Runbook System
+runbook:
+  context_extractor:
+    path: runbook-context-extractor.js
+    purpose: Extract runbook context for operations
+    capabilities:
+      - Historical pattern extraction
+      - Operation-specific context
+      - Success/failure analysis
+    usage: "node runbook-context-extractor.js <org-alias> --operation-type permission --output-format condensed"
+
+  playbook_registry:
+    path: playbook-registry.js
+    purpose: Manage operation playbooks
+    capabilities:
+      - Playbook storage
+      - Version management
+      - Pattern matching
+    usage: "node playbook-registry.js --operation permission --org myOrg"
+
+# Error Handling & Logging
+utilities:
+  error_logger:
+    path: audit-error-logger.js
+    purpose: Structured error logging
+    capabilities:
+      - Error categorization
+      - Stack trace capture
+      - Recovery suggestions
+    usage: "node audit-error-logger.js --log-file errors.json"
+
+  validation_framework:
+    path: validation-framework.js
+    purpose: Reusable validation patterns
+    capabilities:
+      - Schema validation
+      - Business rule validation
+      - Custom validators
+    usage: "Imported as library: const { validate } = require('./validation-framework')"
+
+  data_access_error:
+    path: ../../../opspal-core/scripts/lib/data-access-error.js
+    purpose: |
+      **CRITICAL - No-Mocks Policy Enforcement**: Fail-fast error class for data access failures.
+      MANDATORY for all data query/fetch operations to prevent silent failures and empty array returns.
+    capabilities:
+      - Explicit error throwing when data unavailable
+      - Structured error context with source, message, and metadata
+      - Prevents misleading empty returns
+      - Security: Blocks unimplemented features from returning fake data
+    usage: |
+      const { DataAccessError } = require('../../../opspal-core/scripts/lib/data-access-error');
+
+      // Throw when data unavailable
+      if (!response.ok) {
+        throw new DataAccessError(
+          'Salesforce_API',
+          'Failed to fetch records',
+          {
+            endpoint: '/query',
+            statusCode: response.status,
+            workaround: 'Check org permissions'
+          }
+        );
+      }
+
+      // Throw for unimplemented features
+      throw new DataAccessError(
+        'Feature_Name',
+        'Feature not yet implemented',
+        {
+          status: 'not_implemented',
+          tracking_issue: 'https://github.com/.../issues/123'
+        }
+      );
+    mandatory_for:
+      - All agents that query Salesforce data
+      - All agents that fetch external data
+      - All unimplemented data retrieval methods
+    added: v3.41.0 (Phase 1-4 No-Mocks enforcement)
+
+  deployment_source_validator:
+    path: deployment-source-validator.js
+    purpose: |
+      **Prevents ComponentSetError**: Validates deployment sources before executing sf CLI deploy commands.
+      Prevents "No source-backed components present in the package" errors (100% prevention rate).
+    capabilities:
+      - Validates source directories exist and contain metadata
+      - Validates package.xml references valid files
+      - Checks metadata type formatting
+      - Verifies Salesforce project config (sfdx-project.json) exists
+      - Provides clear guidance for missing components
+    usage: |
+      const validator = require('./deployment-source-validator');
+      await validator.validateSourceDir('./force-app');
+      await validator.validateManifest('./package.xml');
+      await validator.validateMetadata('ApexClass:MyClass', orgAlias);
+    mandatory_for:
+      - Deployment agents (sfdc-deployment-manager, sfdc-metadata-manager)
+      - Metadata agents performing deployments
+      - CI/CD automation agents
+    prevention_rate: "100% of ComponentSetError failures"
+    added: v3.41.0 (Phase 3 validation tool wiring)
+
+  bulk_operation_validator:
+    path: bulk-operation-validator.js
+    purpose: |
+      **Pre-validates bulk operations**: Checks data, limits, and org state before executing bulk DML.
+      Prevents governor limit errors, data quality issues, and partial failures.
+    capabilities:
+      - Validates record count against org limits
+      - Checks required fields present in data
+      - Validates field types and formats
+      - Estimates DML statement usage
+      - Checks org storage limits
+    usage: |
+      const validator = require('./bulk-operation-validator');
+      const result = await validator.validateBulkInsert({
+        objectType: 'Account',
+        records: accountData,
+        orgAlias: 'myorg'
+      });
+      if (!result.valid) {
+        console.error('Validation failed:', result.errors);
+      }
+    mandatory_for:
+      - Bulk data operation agents
+      - Import/migration agents
+      - Data quality agents
+    prevention_rate: "80% of bulk operation failures"
+    added: v3.41.0 (Phase 3 validation tool wiring)
+
+  org_context_validator:
+    path: org-context-validator.js
+    purpose: |
+      **Validates org state before operations**: Ensures org has required features, objects, fields, and permissions.
+      Prevents "object not found", "field does not exist", and permission errors.
+    capabilities:
+      - Validates objects exist in org
+      - Checks fields exist and are accessible
+      - Verifies features are enabled (CPQ, FSL, etc.)
+      - Validates user permissions
+      - Checks org edition and licenses
+    usage: |
+      const validator = require('./org-context-validator');
+      await validator.validateContext({
+        orgAlias: 'myorg',
+        requiredObjects: ['SBQQ__Quote__c', 'SBQQ__QuoteLine__c'],
+        requiredFields: ['Account.AnnualRevenue', 'Contact.Email'],
+        requiredFeatures: ['CPQ']
+      });
+    mandatory_for:
+      - Orchestrator agents
+      - CPQ/FSL feature-specific agents
+      - Cross-org migration agents
+    prevention_rate: "90% of 'not found' errors"
+    added: v3.41.0 (Phase 3 validation tool wiring)
+
+  post_field_deployment_validator:
+    path: post-field-deployment-validator.js
+    purpose: |
+      **Verifies field deployments succeeded**: Validates fields were created correctly with all attributes.
+      Catches silent deployment failures and attribute mismatches.
+    capabilities:
+      - Verifies field existence post-deployment
+      - Validates field types match specification
+      - Checks required field attributes (length, precision, etc.)
+      - Validates picklist values created
+      - Checks field-level security applied
+    usage: |
+      const validator = require('./post-field-deployment-validator');
+      await validator.validateFieldDeployment({
+        orgAlias: 'myorg',
+        objectName: 'Account',
+        fieldName: 'CustomField__c',
+        expectedType: 'Text',
+        expectedLength: 255
+      });
+    mandatory_for:
+      - Field creation/modification agents
+      - Metadata deployment agents
+      - Schema migration agents
+    prevention_rate: "95% of silent field deployment failures"
+    added: v3.41.0 (Phase 3 validation tool wiring)
+
+  flow_decision_logic_analyzer:
+    path: flow-decision-logic-analyzer.js
+    purpose: |
+      **Analyzes flow decision logic for correctness**: Validates decision criteria, detects unreachable paths.
+      Prevents flow runtime failures from logic errors.
+    capabilities:
+      - Validates decision criteria syntax
+      - Detects unreachable flow paths
+      - Checks for missing default outcomes
+      - Analyzes formula expressions in decisions
+      - Validates field references in conditions
+    usage: |
+      const analyzer = require('./flow-decision-logic-analyzer');
+      const analysis = await analyzer.analyzeFlow({
+        orgAlias: 'myorg',
+        flowApiName: 'Account_Status_Update',
+        includeRecommendations: true
+      });
+      console.log('Issues found:', analysis.issues);
+    mandatory_for:
+      - Flow creation/modification agents
+      - Automation audit agents
+      - Flow optimization agents
+    prevention_rate: "70% of flow runtime logic errors"
+    added: v3.41.0 (Phase 3 validation tool wiring)
+
+  business_process_coverage_tracker:
+    path: ../../../opspal-core/scripts/lib/business-process-coverage-tracker.js
+    purpose: |
+      **Tracks business process test coverage ($6K ROI)**: Identifies untested business scenarios with coverage heatmaps.
+      Links tests to processes (Lead-to-Cash, Quote-to-Order, etc.) and calculates coverage percentages.
+    capabilities:
+      - Track coverage by business process
+      - Identify untested scenarios
+      - Generate coverage heatmaps
+      - Link tests to business processes
+      - Calculate coverage percentages
+      - Export coverage reports
+    usage: |
+      const { BusinessProcessCoverageTracker } = require('../../../opspal-core/scripts/lib/business-process-coverage-tracker');
+      const tracker = new BusinessProcessCoverageTracker({ dbPath: './coverage.db' });
+      await tracker.recordCoverage('Lead-to-Cash', 'Lead Creation', 'automated', 'passed');
+      const heatmap = await tracker.generateHeatmap('Lead-to-Cash');
+      console.log('Coverage:', heatmap.coveragePercentage + '%');
+    mandatory_for:
+      - QA/testing agents
+      - Assessment agents
+      - RevOps audit agents
+      - CPQ assessment agents
+    roi_metrics:
+      annual_value: "$6,000"
+      time_saved: "40 hours/year"
+      prevents: "Business process test gaps"
+    added: v3.41.0 (Phase 4 high-ROI tool wiring)
+
+  user_expectation_tracker:
+    path: ../../../opspal-core/scripts/lib/user-expectation-tracker.js
+    purpose: |
+      **Tracks user expectations vs reality ($36K ROI)**: Records what users expect vs what happens.
+      Identifies expectation gaps, prioritizes fixes, and measures satisfaction delta.
+    capabilities:
+      - Record user expectations
+      - Track actual outcomes
+      - Calculate expectation gaps
+      - Prioritize fixes by impact
+      - Measure satisfaction delta
+      - Generate gap analysis reports
+    usage: |
+      const { UserExpectationTracker } = require('../../../opspal-core/scripts/lib/user-expectation-tracker');
+      const tracker = new UserExpectationTracker({ dbPath: './expectations.db' });
+      await tracker.recordExpectation({
+        feature: 'Quote Generation',
+        userExpectation: 'Instant quote creation',
+        actualOutcome: '30-second delay',
+        satisfactionScore: 3,
+        impactLevel: 'high'
+      });
+      const gaps = await tracker.getTopGaps();
+      console.log('Top gaps:', gaps);
+    mandatory_for:
+      - Assessment agents
+      - User research agents
+      - Product feedback agents
+      - RevOps/CPQ audit agents
+    roi_metrics:
+      annual_value: "$36,000"
+      time_saved: "240 hours/year"
+      prevents: "User expectation mismatches"
+    added: v3.41.0 (Phase 4 high-ROI tool wiring)
+
+  business_process_classifier:
+    path: business-process-classifier.js
+    purpose: |
+      **Classifies records by business process**: Automatically tags records with process (Lead-to-Cash, Quote-to-Order).
+      Enables process-level reporting and analysis.
+    capabilities:
+      - Classify records by process
+      - Tag opportunities, quotes, cases by process
+      - Enable process-level reporting
+      - Support multi-process records
+      - Generate process distribution reports
+    usage: |
+      const classifier = require('./business-process-classifier');
+      const process = await classifier.classifyOpportunity({
+        orgAlias: 'myorg',
+        opportunityId: '006...',
+        includeSubProcesses: true
+      });
+      console.log('Process:', process); // e.g., "Lead-to-Cash"
+    mandatory_for:
+      - Assessment agents
+      - RevOps audit agents
+      - Reporting agents
+      - Analytics agents
+    added: v3.41.0 (Phase 4 high-ROI tool wiring)
+
+# Project Management & Collaboration
+asana_integration:
+  task_reader:
+    path: ../../../opspal-core/scripts/lib/asana-task-reader.js
+    purpose: |
+      **Reads and parses Asana tasks**: Extracts structured fields, description, dependencies for agent context.
+      Enables agents to understand what work is assigned to them.
+    capabilities:
+      - Parse task structured fields (name, status, assignee, due date, priority)
+      - Extract custom fields and tags
+      - Read task description and comments
+      - Get project context
+      - Identify dependencies (blocking/blocked tasks)
+      - Map parent-child relationships
+    usage: |
+      const { asanaTaskReader } = require('../../../opspal-core/scripts/lib/asana-task-reader');
+      const taskContext = await asanaTaskReader.parseTask(taskId, {
+        includeComments: true,
+        includeProject: true,
+        includeDependencies: true
+      });
+      console.log('Task:', taskContext.name);
+      console.log('Status:', taskContext.status);
+    mandatory_for:
+      - Long-running operation agents (assessments, audits, migrations)
+      - Orchestrator agents
+      - Agents that work on multi-step projects
+    playbook: "../../../opspal-core/docs/ASANA_AGENT_PLAYBOOK.md"
+    added: v3.41.0 (Phase 5 Asana integration)
+
+  update_formatter:
+    path: ../../../opspal-core/scripts/lib/asana-update-formatter.js
+    purpose: |
+      **Formats Asana updates with brevity validation**: Ensures updates are succinct, actionable, and structured.
+      Validates word count, includes metrics, and follows templates.
+    capabilities:
+      - Format progress updates (< 100 words)
+      - Format blocker updates (< 80 words)
+      - Format completion updates (< 150 words)
+      - Validate brevity requirements
+      - Include concrete metrics
+      - Follow structured templates
+    usage: |
+      const formatter = require('../../../opspal-core/scripts/lib/asana-update-formatter');
+      const update = formatter.formatProgressUpdate({
+        taskName: 'Salesforce Field Cleanup',
+        completed: ['Account object analyzed (350 fields)', 'Found 52 unused fields (15%)'],
+        inProgress: ['Analyzing Opportunity object (2 hours remaining)'],
+        next: ['Complete analysis', 'Generate deprecation plan'],
+        status: 'On Track'
+      });
+      console.log(update); // Formatted, validated update ready for posting
+    templates:
+      - progress-update.md (50-75 words)
+      - blocker-update.md (40-60 words)
+      - completion-update.md (60-100 words)
+      - milestone-update.md (100-150 words)
+    template_location: "../../../opspal-core/templates/asana-updates/"
+    mandatory_for:
+      - All agents posting Asana updates
+      - Assessment/audit agents
+      - Long-running operation agents
+    added: v3.41.0 (Phase 5 Asana integration)
+
+  comment_manager:
+    path: ../../../opspal-core/scripts/lib/asana-comment-manager.js
+    purpose: |
+      **Manages Asana comments**: Posts structured comments for progress, blockers, and completions.
+      Handles tagging, formatting, and comment threading.
+    capabilities:
+      - Post progress comments
+      - Post blocker alerts
+      - Post completion summaries
+      - Tag users (@mentions)
+      - Thread comments on existing updates
+      - Format with templates
+    usage: |
+      const commentMgr = require('../../../opspal-core/scripts/lib/asana-comment-manager');
+      await commentMgr.postProgress(taskId, {
+        completed: ['Analysis complete'],
+        inProgress: ['Implementing fixes'],
+        status: 'On Track'
+      });
+    mandatory_for:
+      - Agents posting narrative updates
+      - Orchestrator agents
+      - Long-running agents
+    added: v3.41.0 (Phase 5 Asana integration)
+
+  roadmap_manager:
+    path: ../../../opspal-core/scripts/lib/asana-roadmap-manager.js
+    purpose: |
+      **Breaks projects into tracked subtasks**: Creates Asana subtasks from multi-step work.
+      Enables checkpoint updates and progress tracking.
+    capabilities:
+      - Break complex work into subtasks
+      - Create subtasks in Asana
+      - Set estimates and dependencies
+      - Track progress across subtasks
+      - Update parent task progress
+    usage: |
+      const roadmapMgr = require('../../../opspal-core/scripts/lib/asana-roadmap-manager');
+      await roadmapMgr.createRoadmap(parentTaskId, [
+        { name: 'Analyze org state', estimate: '2 hours' },
+        { name: 'Design fixes', estimate: '3 hours' },
+        { name: 'Implement changes', estimate: '4 hours' }
+      ]);
+    mandatory_for:
+      - Agents with multi-step work
+      - Assessment agents
+      - Migration agents
+    added: v3.41.0 (Phase 5 Asana integration)
+
+  playbook:
+    path: ../../../opspal-core/docs/ASANA_AGENT_PLAYBOOK.md
+    purpose: |
+      **Complete Asana integration guide for agents**: Standards for reading tasks, tracking progress, and writing updates.
+      Ensures consistent, high-quality communication across 100+ agents.
+    core_principles:
+      - Context-Aware: Pull full task and project context
+      - Succinct: Updates < 100 words with maximum signal
+      - Actionable: Drive projects forward or flag blockers
+      - Data-Driven: Include concrete metrics
+      - Structured: Consistent formatting for scanning
+      - Accountable: Clear ownership via assignments
+    key_sections:
+      - Reading and Understanding Tasks & Projects
+      - Update Templates (progress, blocker, completion, milestone)
+      - Brevity Requirements (strict word limits)
+      - Project-as-Roadmap Pattern
+      - Writing Back to Asana (comments, custom fields, status)
+      - Platform-Specific Integration (Salesforce, HubSpot examples)
+    mandatory_for:
+      - All agents creating or updating Asana tasks
+      - Assessment/audit agents
+      - Long-running operation agents
+      - Orchestrator agents
+    version: "2.0.0"
+    added: v3.41.0 (Phase 5 Asana integration)
+
+# Monitoring & Improvement
+monitoring:
+  tool_usage_monitor:
+    path: tool-usage-monitor.js
+    purpose: |
+      **Tracks which tools are actually used by agents**: Identifies adoption rates, most/least used tools,
+      and tools needing better documentation or deprecation.
+    capabilities:
+      - Record tool usage with status (success/failure)
+      - Track usage by agent
+      - Calculate adoption rates
+      - Identify unused tools
+      - Generate usage reports
+      - Monitor tool performance
+    usage: |
+      const ToolUsageMonitor = require('./tool-usage-monitor');
+      const monitor = new ToolUsageMonitor({ dbPath: './tool-usage.db' });
+      await monitor.initialize();
+
+      // Record usage
+      await monitor.recordUsage('DataAccessError', 'sfdc-cpq-assessor', 'success', {
+        durationMs: 150
+      });
+
+      // Get statistics
+      const stats = await monitor.getUsageStats();
+      const report = await monitor.generateReport();
+    cli_commands:
+      - "node tool-usage-monitor.js report - Generate full usage report"
+      - "node tool-usage-monitor.js stats - Show usage statistics"
+      - "node tool-usage-monitor.js recent [days] - Show recent usage"
+    benefits:
+      - Data-driven decisions about tool improvements
+      - Identify underutilized tools for deprecation
+      - Measure tool adoption success
+      - Prioritize documentation improvements
+    added: v3.41.0 (Optional enhancements - monitoring)
+
+  agent_feedback_collector:
+    path: agent-feedback-collector.js
+    purpose: |
+      **Collects structured feedback from agents**: Enables data-driven improvements to tools,
+      documentation, and agent experience.
+    capabilities:
+      - Submit feedback with 1-5 ratings
+      - Categorize feedback (documentation, usability, performance, bug, feature_request)
+      - Track improvement suggestions
+      - Identify tools needing attention
+      - Generate feedback reports
+      - Monitor issue resolution
+    usage: |
+      const AgentFeedbackCollector = require('./agent-feedback-collector');
+      const collector = new AgentFeedbackCollector({ dbPath: './feedback.db' });
+      await collector.initialize();
+
+      // Submit feedback
+      await collector.submitFeedback({
+        agentName: 'sfdc-cpq-assessor',
+        toolName: 'DataAccessError',
+        rating: 5,
+        category: 'documentation',
+        feedbackText: 'Clear examples, easy to implement',
+        improvementSuggestion: 'Add more error recovery patterns'
+      });
+
+      // Get reports
+      const toolsNeedingAttention = await collector.getToolsNeedingAttention();
+      const featureRequests = await collector.getFeatureRequests();
+    feedback_categories:
+      - documentation: "Feedback on examples, clarity, completeness"
+      - usability: "Ease of use, API design, workflow"
+      - performance: "Speed, efficiency, resource usage"
+      - bug: "Reported bugs or unexpected behavior"
+      - feature_request: "Suggestions for new capabilities"
+    cli_commands:
+      - "node agent-feedback-collector.js report - Full feedback report"
+      - "node agent-feedback-collector.js attention - Tools needing attention"
+      - "node agent-feedback-collector.js features - Feature requests"
+      - "node agent-feedback-collector.js docs - Documentation issues"
+    benefits:
+      - Continuous improvement based on actual agent experience
+      - Prioritize fixes by severity and frequency
+      - Track feedback resolution
+      - Identify documentation gaps
+    added: v3.41.0 (Optional enhancements - feedback)
+
+  usage_examples:
+    path: ../../docs/TOOL_USAGE_EXAMPLES.md
+    purpose: |
+      **Real-world examples of using wired tools**: Comprehensive guide showing how agents should use
+      tools, playbooks, and frameworks with concrete code examples.
+    sections:
+      - DataAccessError examples (fail-fast patterns, unimplemented features)
+      - PDF generation examples (single reports, multi-document compilation)
+      - Validation tool examples (pre-deployment, bulk operations)
+      - High-ROI tracker examples (coverage tracking, expectation gaps)
+      - Playbook integration examples (picklist dependencies, quality gates)
+      - Asana integration examples (reading tasks, posting updates)
+      - Complete workflow examples (end-to-end assessment workflows)
+    example_count: "11 complete examples with 30+ code snippets"
+    benefits:
+      - Copy-paste ready code for common patterns
+      - Best practices and anti-patterns
+      - Complete workflow demonstrations
+      - Reduces learning curve for new agents
+    added: v3.41.0 (Optional enhancements - documentation)
+
+---
+
+# Common Patterns
+
+# Pattern 1: Org Discovery + Analysis
+#   1. node state-discovery-orchestrator.js --org myOrg
+#   2. node permission-set-discovery.js --org myOrg
+#   3. node automation-audit-v2-orchestrator.js --org myOrg
+
+# Pattern 2: Permission Set Consolidation
+#   1. node permission-set-discovery.js --org myOrg
+#   2. node permission-set-analyzer.js --org myOrg --initiative CPQ
+#   3. node permission-set-migration-planner.js --org myOrg --initiative CPQ
+#   4. node permission-set-report-generator.js all discovery.json analysis.json plan.json ./reports/
+#   5. node permission-set-cli.js --execute-migration plan.json --org myOrg --dry-run
+
+# Pattern 3: Metadata Deployment
+#   1. node metadata-deployment-validator.js --org myOrg --package-xml package.xml
+#   2. sf project deploy start --source-dir force-app
+#   3. node permission-set-cli.js --input permissions.json --org myOrg
+
+# Pattern 4: Automation Audit
+#   1. node automation-audit-v2-orchestrator.js --org myOrg
+#   2. node automation-conflict-engine.js --org myOrg
+#   3. node automation-dependency-graph.js --org myOrg
+#   4. node automation-dashboard-generator.js --input results.json
+
+---
+
+# Notes for Agents
+
+# Script Locations:
+# - All scripts: .claude-plugins/opspal-salesforce/scripts/lib/
+# - Run from plugin root: node scripts/lib/<script-name>
+# - Run from lib directory: node <script-name>
+
+# Common Flags:
+# --org <alias>        : Target Salesforce org
+# --output <path>      : Output file path
+# --dry-run            : Simulate without making changes
+# --verbose            : Detailed logging
+# --help               : Show usage information
+
+# Error Handling:
+# - All scripts return exit code 0 on success, non-zero on failure
+# - Error messages written to stderr
+# - JSON output includes "status": "success" or "error"
+
+# Integration with Agents:
+# - Use Bash tool to execute scripts
+# - Parse JSON output for structured data
+# - Check exit codes for success/failure
+# - Use --verbose for debugging
+
+# Living Runbook Integration:
+# - Always load runbook context before major operations
+# - node runbook-context-extractor.js <org> --operation-type <type>
+# - Operation types: permission, metadata, automation, data, cpq
+
+# Permission Set Operations:
+# - DISCOVERY: Always start with discovery to understand fragmentation
+# - ANALYSIS: Deep-dive into specific initiatives
+# - PLANNING: Generate migration plans with rollback
+# - EXECUTION: Execute with --dry-run first, then production
+# - REPORTING: Generate stakeholder-ready markdown reports
+
+---
+
+# Version History
+
+# v1.4.0 (2025-10-26 - Optional Enhancements):
+# - Added monitoring and improvement tools (3 tools)
+# - tool-usage-monitor: Track tool adoption and usage patterns
+# - agent-feedback-collector: Collect structured feedback from agents
+# - usage-examples documentation: 11 complete examples with 30+ code snippets
+# - Expanded Asana templates: Added checkpoint, pivot, handoff templates
+# - Enables data-driven continuous improvement
+# - All 113 agents gain access to monitoring and feedback tools
+
+# v1.3.0 (2025-10-26 - Phase 5):
+# - Added Asana integration resources (4 tools + playbook)
+# - asana-task-reader: Parse tasks, extract context
+# - asana-update-formatter: Format updates with brevity validation
+# - asana-comment-manager: Post structured comments
+# - asana-roadmap-manager: Break projects into tracked subtasks
+# - ASANA_AGENT_PLAYBOOK v2.0.0: Complete integration guide
+# - Update templates: progress, blocker, completion, milestone
+# - All 113 agents gain access to Asana integration tools
+# - Enables consistent, high-quality project management communication
+
+# v1.2.0 (2025-10-26 - Phase 3+4):
+# - Added 8 critical validation and ROI tools
+# - Phase 3: 5 validation tools (deployment, bulk-op, org-context, post-field, flow-logic)
+# - Phase 4: 3 high-ROI trackers ($42K combined annual value)
+# - business-process-coverage-tracker ($6K ROI)
+# - user-expectation-tracker ($36K ROI)
+# - business-process-classifier
+# - Total prevention rates: 70-100% across error types
+# - All 113 agents automatically gain access via library-reference import
+
+# v1.1.0 (2025-10-26 - Phase 1):
+# - Added DataAccessError (No-Mocks enforcement)
+# - Added PDFGenerationHelper (mandatory PDF deliverables)
+# - Wired to 113 agents across 4 plugins
+# - $45K error prevention ROI
+
+# v1.0.0 (2025-10-22):
+# - Initial library reference
+# - Added permission set management suite (v3.32.0 - v3.34.0)
+# - Documented 60+ key scripts across 12 functional domains
+# - Added common patterns and agent integration notes

@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0",
+  "defaults": {
+    "timeout": 600,
+    "retries": 0,
+    "workingDir": "${PROJECT_ROOT}",
+    "logRetentionDays": 30,
+    "notifications": {
+      "slack": {
+        "enabled": true,
+        "webhookEnvVar": "SLACK_WEBHOOK_URL",
+        "notifyOn": [
+          "failure"
+        ]
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "project-connect-periodic-sync",
+      "name": "Project-Connect Periodic Sync",
+      "type": "script",
+      "schedule": "*/30 * * * *",
+      "command": "${PLUGIN_ROOT}/scripts/project-connect-sync-all.sh --pull --quiet",
+      "workingDir": "${PROJECT_ROOT}",
+      "enabled": false,
+      "timeout": 60,
+      "notifications": {
+        "slack": {
+          "enabled": false,
+          "notifyOn": []
+        }
+      }
+    },
+    {
+      "id": "hook-health-check-3b53ff0d",
+      "name": "Hook Health Check",
+      "type": "script",
+      "schedule": "0 7 * * *",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/hook-health-checker.js --quick --format json --project-root ${REPO_ROOT}",
+      "workingDir": "${REPO_ROOT}",
+      "timeout": 120,
+      "enabled": true,
+      "notifications": {
+        "slack": {
+          "notifyOn": [
+            "failure"
+          ]
+        }
+      },
+      "metadata": {
+        "created": "2026-03-08T01:27:11.017Z",
+        "lastModified": "2026-03-08T01:27:11.017Z",
+        "createdBy": "chris"
+      }
+    },
+    {
+      "id": "ace-maintenance-d9e10eae",
+      "name": "ACE Maintenance",
+      "type": "script",
+      "schedule": "0 3 * * 0",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/ace-maintenance-runner.js",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifications": {
+        "slack": {
+          "notifyOn": [
+            "failure"
+          ]
+        }
+      },
+      "metadata": {
+        "created": "2026-03-08T01:27:11.017Z",
+        "lastModified": "2026-03-08T01:27:11.017Z",
+        "createdBy": "chris"
+      }
+    },
+    {
+      "id": "routing-engine-report-6b98f0e8",
+      "name": "Routing Engine Report",
+      "type": "script",
+      "schedule": "0 8 * * 1",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/adaptive-routing-engine.js report",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 300,
+      "enabled": true,
+      "notifications": {
+        "slack": {
+          "notifyOn": [
+            "failure"
+          ]
+        }
+      },
+      "metadata": {
+        "created": "2026-03-08T01:27:11.017Z",
+        "lastModified": "2026-03-08T01:27:11.017Z",
+        "createdBy": "chris"
+      }
+    },
+    {
+      "id": "roi-pending-review-5dfc1410",
+      "name": "ROI Pending Review",
+      "type": "script",
+      "schedule": "30 8 * * 1",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/roi-tracker.js pending",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 300,
+      "enabled": true,
+      "notifications": {
+        "slack": {
+          "notifyOn": [
+            "failure"
+          ]
+        }
+      },
+      "metadata": {
+        "created": "2026-03-08T01:27:11.017Z",
+        "lastModified": "2026-03-08T01:27:11.017Z",
+        "createdBy": "chris"
+      }
+    },
+    {
+      "id": "monthly-roi-report-07d0311c",
+      "name": "Monthly ROI Report",
+      "type": "script",
+      "schedule": "0 9 1 * *",
+      "command": "node ${PLUGIN_ROOT}/scripts/lib/roi-tracker.js report",
+      "workingDir": "${PLUGIN_ROOT}",
+      "timeout": 600,
+      "enabled": true,
+      "notifications": {
+        "slack": {
+          "notifyOn": [
+            "failure",
+            "completion"
+          ]
+        }
+      },
+      "metadata": {
+        "created": "2026-03-08T01:27:11.017Z",
+        "lastModified": "2026-03-08T01:27:11.017Z",
+        "createdBy": "chris"
+      }
+    }
+  ]
+}

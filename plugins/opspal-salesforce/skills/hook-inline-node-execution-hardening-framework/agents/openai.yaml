@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Inline Node Execution Hardening Framework"
+  short_description: "Help with Hook Inline Node Execution Hardening Framework tasks"
+  default_prompt: "Use $hook-inline-node-execution-hardening-framework to execute this workflow safely and produce the expected artifacts."

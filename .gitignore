@@ -1,0 +1,80 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local workspace tooling
+.claude/
+.mcp.json
+.asana-links.json
+.sf/
+.sfdx/
+.cache/
+**/.cache/
+
+# Temp / logs
+tmp/
+temp/
+logs/
+*.log
+audit/
+exports/
+
+# Build / coverage outputs
+coverage/
+.nyc_output/
+test-output/
+dist/
+build/
+**/test/output/
+
+# Root local data
+orgs/
+instances/
+backups/
+state/
+reports/
+
+# Plugin runtime artifacts
+plugins/.claude/
+plugins/*/node_modules/
+plugins/*/instances/
+plugins/*/cache/
+plugins/*/logs/
+plugins/*/tmp/
+plugins/*/backups/
+plugins/*/dashboards/
+plugins/*/output/
+plugins/*/scheduler/logs/
+plugins/*/.recovery-logs/
+plugins/*/.fix-plans/
+plugins/*/.agent-decisions/
+plugins/*/.requirements/
+plugins/*/.wire-test-ledger/
+plugins/*/.test-results/
+plugins/*/scripts/mcp/*/node_modules/
+
+# Generated files and ledgers
+**/agent-alias-cache.json
+**/command-registry.json
+**/.report-registry.json
+**/.hallucination-metrics.json
+hook-circuit-state.json
+hook-metrics.json
+hook-errors.jsonl
+**/hook-errors.jsonl
+QUERY_LINT_REPORT_*.md

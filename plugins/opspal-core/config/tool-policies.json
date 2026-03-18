@@ -1,0 +1,320 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Risk-based tool policy configuration for task graph orchestration",
+
+  "policies": {
+    "low_risk": {
+      "description": "Read-only operations, sandbox-only changes, no data modification",
+      "auto_approve": true,
+      "requires_confirmation": false,
+      "allowed_tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "LSP",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "TodoWrite"
+      ],
+      "approval_required": [],
+      "forbidden": [
+        "production_deploy",
+        "data_delete",
+        "destructive_metadata"
+      ],
+      "audit_level": "minimal",
+      "timeout_minutes": 30
+    },
+
+    "medium_risk": {
+      "description": "File writes, sandbox deployments, non-production data operations",
+      "auto_approve": false,
+      "requires_confirmation": true,
+      "confirmation_points": ["first_write", "deploy_sandbox"],
+      "allowed_tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Write",
+        "Edit",
+        "Bash",
+        "Task",
+        "TodoWrite",
+        "LSP"
+      ],
+      "approval_required": [
+        "first_file_write",
+        "sandbox_deployment",
+        "bulk_data_operation"
+      ],
+      "forbidden": [
+        "production_deploy",
+        "production_data_modify",
+        "permission_change",
+        "security_config_change"
+      ],
+      "audit_level": "standard",
+      "timeout_minutes": 60
+    },
+
+    "high_risk": {
+      "description": "Production-adjacent operations, permission changes, security modifications",
+      "auto_approve": false,
+      "requires_confirmation": true,
+      "confirmation_points": ["every_write", "every_deploy", "data_operations"],
+      "allowed_tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Write",
+        "Edit",
+        "Bash",
+        "Task"
+      ],
+      "approval_required": [
+        "all_writes",
+        "all_deployments",
+        "all_data_operations",
+        "permission_modifications"
+      ],
+      "forbidden": [
+        "force_push",
+        "hard_reset",
+        "unreviewed_production_deploy",
+        "bulk_delete_without_backup"
+      ],
+      "audit_level": "detailed",
+      "timeout_minutes": 120,
+      "requires_rollback_plan": true
+    },
+
+    "critical": {
+      "description": "Production data deletes, permission restructuring, billing/PII operations",
+      "auto_approve": false,
+      "requires_confirmation": true,
+      "confirmation_points": ["every_operation"],
+      "allowed_tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "write_tools_require_explicit_approval": [
+        "Write",
+        "Edit",
+        "Bash"
+      ],
+      "approval_required": [
+        "every_operation"
+      ],
+      "forbidden": [
+        "auto_execute",
+        "batch_operations_without_review",
+        "cascade_deletes"
+      ],
+      "audit_level": "comprehensive",
+      "timeout_minutes": 240,
+      "requires_rollback_plan": true,
+      "requires_human_review": true,
+      "requires_backup": true
+    }
+  },
+
+  "domain_defaults": {
+    "salesforce-apex": "medium_risk",
+    "salesforce-flow": "medium_risk",
+    "salesforce-metadata": "medium_risk",
+    "salesforce-data": "high_risk",
+    "salesforce-permission": "high_risk",
+    "salesforce-production": "critical",
+    "hubspot-workflow": "medium_risk",
+    "hubspot-data": "medium_risk",
+    "hubspot-production": "high_risk",
+    "data-transform": "medium_risk",
+    "data-migration": "high_risk",
+    "data-validation": "low_risk",
+    "integration": "medium_risk",
+    "cross-platform": "high_risk",
+    "production": "critical"
+  },
+
+  "tool_classifications": {
+    "read_only": {
+      "tools": ["Read", "Grep", "Glob", "LSP", "WebFetch", "WebSearch"],
+      "description": "Tools that only read data, no modification capability",
+      "always_allowed": true
+    },
+    "write_local": {
+      "tools": ["Write", "Edit"],
+      "description": "Tools that write to local filesystem",
+      "requires_policy_check": true
+    },
+    "execute": {
+      "tools": ["Bash", "Task"],
+      "description": "Tools that execute commands or spawn processes",
+      "requires_policy_check": true,
+      "special_handling": {
+        "Bash": {
+          "blocked_patterns": [
+            "rm -rf",
+            "git push --force",
+            "git reset --hard",
+            "DROP TABLE",
+            "DELETE FROM.*WHERE 1=1",
+            "sf data delete.*--hard-delete"
+          ],
+          "requires_approval_patterns": [
+            "sf project deploy.*--target-org.*prod",
+            "sf data delete",
+            "sf data update",
+            "git push",
+            "npm publish"
+          ]
+        }
+      }
+    },
+    "salesforce_operations": {
+      "tools": ["mcp_salesforce", "Bash(sf:*)"],
+      "description": "Salesforce-specific operations",
+      "production_patterns": [
+        "--target-org.*prod",
+        "--target-org production",
+        "-o prod"
+      ],
+      "destructive_patterns": [
+        "sf data delete",
+        "sf project delete",
+        "destructiveChanges"
+      ]
+    },
+    "hubspot_operations": {
+      "tools": ["mcp_hubspot", "hubspot-api"],
+      "description": "HubSpot-specific operations",
+      "production_detection": "portal_id in production_portals",
+      "destructive_patterns": [
+        "DELETE /",
+        "bulk/delete",
+        "archived=true"
+      ]
+    }
+  },
+
+  "approval_workflows": {
+    "first_write": {
+      "description": "Approval before first file modification in a task",
+      "trigger": "first_write_operation",
+      "message_template": "Task {task_id} wants to write to: {file_path}. Approve?",
+      "timeout_seconds": 300,
+      "default_on_timeout": "deny"
+    },
+    "sandbox_deployment": {
+      "description": "Approval before sandbox deployment",
+      "trigger": "sf_deploy_to_sandbox",
+      "message_template": "Deploy {component_count} components to {org_alias}?",
+      "timeout_seconds": 300,
+      "default_on_timeout": "deny"
+    },
+    "production_deployment": {
+      "description": "Approval before production deployment",
+      "trigger": "sf_deploy_to_production",
+      "message_template": "⚠️ PRODUCTION DEPLOY: {component_count} components to {org_alias}. Rollback plan: {rollback_available}. Approve?",
+      "timeout_seconds": 600,
+      "default_on_timeout": "deny",
+      "requires_explicit_yes": true
+    },
+    "data_deletion": {
+      "description": "Approval before any data deletion",
+      "trigger": "data_delete_operation",
+      "message_template": "⚠️ DELETE: {record_count} records from {object_type}. Backup: {backup_available}. Approve?",
+      "timeout_seconds": 600,
+      "default_on_timeout": "deny",
+      "requires_explicit_yes": true
+    },
+    "bulk_operation": {
+      "description": "Approval before bulk data operations",
+      "trigger": "bulk_data_operation",
+      "threshold": 1000,
+      "message_template": "Bulk operation on {record_count} records. Continue?",
+      "timeout_seconds": 300,
+      "default_on_timeout": "deny"
+    }
+  },
+
+  "escalation_rules": {
+    "production_detection": {
+      "salesforce": {
+        "org_patterns": ["prod", "production", "live"],
+        "instance_patterns": ["*.my.salesforce.com", "*.lightning.force.com"],
+        "metadata_indicators": ["isProduction: true"]
+      },
+      "hubspot": {
+        "portal_indicators": ["production_portal_ids"],
+        "subdomain_patterns": ["app.hubspot.com"]
+      }
+    },
+    "auto_escalate_to_critical": [
+      "production environment detected",
+      "PII data involved",
+      "billing/payment data",
+      "security configuration",
+      "permission/role changes"
+    ],
+    "auto_escalate_to_high": [
+      "bulk operations (>1000 records)",
+      "cross-platform sync",
+      "destructive metadata changes",
+      "workflow/automation modifications"
+    ]
+  },
+
+  "audit_requirements": {
+    "minimal": {
+      "log_operations": false,
+      "log_results": false,
+      "retain_days": 7
+    },
+    "standard": {
+      "log_operations": true,
+      "log_results": true,
+      "log_tool_calls": false,
+      "retain_days": 30
+    },
+    "detailed": {
+      "log_operations": true,
+      "log_results": true,
+      "log_tool_calls": true,
+      "log_parameters": true,
+      "retain_days": 90
+    },
+    "comprehensive": {
+      "log_operations": true,
+      "log_results": true,
+      "log_tool_calls": true,
+      "log_parameters": true,
+      "log_context": true,
+      "log_approvals": true,
+      "retain_days": 365,
+      "immutable": true
+    }
+  },
+
+  "emergency_overrides": {
+    "enabled": true,
+    "requires_flag": "[EMERGENCY]",
+    "allowed_escalations": [
+      "skip_approval_for_rollback",
+      "expedited_production_access"
+    ],
+    "forbidden_overrides": [
+      "skip_backup",
+      "skip_audit",
+      "skip_verification"
+    ],
+    "post_emergency_requirements": [
+      "incident_documentation",
+      "root_cause_analysis",
+      "approval_chain_notification"
+    ]
+  }
+}

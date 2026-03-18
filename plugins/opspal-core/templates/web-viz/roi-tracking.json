@@ -1,0 +1,257 @@
+{
+  "id": "roi-tracking",
+  "name": "ROI Tracking Dashboard",
+  "description": "Track fix plan implementation ROI: projected vs actual savings, cohort progress, and payback analysis",
+  "version": "1.0.0",
+  "category": "operations",
+  "audience": ["ops-lead", "engineering-manager", "principal-engineer"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "period", "type": "select", "label": "Period", "default": "30-days", "options": ["7-days", "30-days", "90-days", "all-time"] },
+      { "id": "cohort", "type": "select", "label": "Cohort", "default": "all", "options": ["all", "data-quality", "tool-contract", "schema-parse", "config-env", "external-api", "idempotency-state", "prompt-mismatch"] }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "total-annual-roi",
+      "type": "kpi",
+      "title": "Annual ROI",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "currency",
+        "showTrend": true,
+        "trendPeriod": "month",
+        "trendLabel": "vs Prior Month",
+        "icon": "dollar",
+        "size": "large"
+      },
+      "demoData": "kpis.totalAnnualROI"
+    },
+    {
+      "id": "hours-saved",
+      "type": "kpi",
+      "title": "Hours Saved/Month",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "decimals": 1,
+        "suffix": " hrs",
+        "showTrend": true,
+        "icon": "clock",
+        "valueColor": "#6FBF73"
+      },
+      "demoData": "kpis.hoursSaved"
+    },
+    {
+      "id": "issues-prevented",
+      "type": "kpi",
+      "title": "Issues Prevented",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "showTrend": true,
+        "icon": "shield-check",
+        "description": "This month"
+      },
+      "demoData": "kpis.issuesPrevented"
+    },
+    {
+      "id": "payback-progress",
+      "type": "gauge",
+      "title": "Payback Progress",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "min": 0,
+        "max": 100,
+        "valueFormat": "percent",
+        "thresholds": [
+          { "value": 33, "color": "#E99560", "label": "Early" },
+          { "value": 66, "color": "#F4C542", "label": "Progress" },
+          { "value": 100, "color": "#6FBF73", "label": "Achieved" }
+        ],
+        "showValue": true,
+        "showLabel": true,
+        "size": 160
+      },
+      "demoData": "kpis.paybackProgress"
+    },
+    {
+      "id": "roi-trend",
+      "type": "chart",
+      "title": "ROI Over Time",
+      "position": { "row": 2, "col": 1, "colspan": 8, "rowspan": 2 },
+      "config": {
+        "chartType": "line",
+        "showLegend": true,
+        "fill": true,
+        "tension": 0.3,
+        "annotations": [
+          { "type": "line", "value": "target", "label": "Projected", "color": "#94A3B8", "dash": [5, 5] }
+        ]
+      },
+      "demoData": "roiTrend"
+    },
+    {
+      "id": "cohort-roi-breakdown",
+      "type": "chart",
+      "title": "ROI by Cohort",
+      "position": { "row": 2, "col": 9, "colspan": 4 },
+      "config": {
+        "chartType": "doughnut",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "currency-compact",
+        "cutout": "60%"
+      },
+      "demoData": "cohortROI"
+    },
+    {
+      "id": "reduction-by-cohort",
+      "type": "chart",
+      "title": "Reduction % by Cohort",
+      "position": { "row": 3, "col": 9, "colspan": 4 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": false,
+        "showValues": true,
+        "valueFormat": "percent"
+      },
+      "demoData": "reductionByCohort"
+    },
+    {
+      "id": "fix-plan-status",
+      "type": "table",
+      "title": "Fix Plan Implementation Status",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "fixPlan", "label": "Fix Plan", "width": "30%" },
+          { "field": "phase", "label": "Phase", "width": "12%" },
+          { "field": "status", "label": "Status", "width": "15%", "format": "badge" },
+          { "field": "projectedROI", "label": "Projected ROI", "format": "currency", "width": "18%", "align": "right" },
+          { "field": "actualROI", "label": "Actual ROI", "format": "currency", "width": "15%", "align": "right" },
+          { "field": "variance", "label": "Var %", "format": "percent", "width": "10%", "align": "right" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "rowHighlight": {
+          "field": "status",
+          "values": {
+            "completed": "#DCFCE7",
+            "in-progress": "#FEF3C7",
+            "pending": "#F3F4F6"
+          }
+        }
+      },
+      "demoData": "fixPlanStatus"
+    },
+    {
+      "id": "cohort-details",
+      "type": "table",
+      "title": "Cohort Performance Details",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "cohort", "label": "Cohort", "width": "22%" },
+          { "field": "baseline", "label": "Baseline", "width": "12%", "align": "center" },
+          { "field": "current", "label": "Current", "width": "12%", "align": "center" },
+          { "field": "reduction", "label": "Reduction", "format": "percent", "width": "14%", "align": "center" },
+          { "field": "target", "label": "Target", "format": "percent", "width": "12%", "align": "center" },
+          { "field": "status", "label": "Status", "width": "18%", "format": "badge" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "rowHighlight": {
+          "field": "status",
+          "values": {
+            "TARGET_MET": "#DCFCE7",
+            "IMPROVING": "#FEF3C7",
+            "NEEDS_ATTENTION": "#FFEDD5",
+            "NO_CHANGE": "#FEE2E2"
+          }
+        }
+      },
+      "demoData": "cohortDetails"
+    },
+    {
+      "id": "projected-vs-actual",
+      "type": "chart",
+      "title": "Projected vs Actual ROI",
+      "position": { "row": 5, "col": 1, "colspan": 6 },
+      "config": {
+        "chartType": "bar",
+        "showLegend": true,
+        "showValues": true,
+        "valueFormat": "currency-compact",
+        "stacked": false,
+        "groupMode": "grouped"
+      },
+      "demoData": "projectedVsActual"
+    },
+    {
+      "id": "recommendations",
+      "type": "table",
+      "title": "Recommendations",
+      "position": { "row": 5, "col": 7, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "priority", "label": "Priority", "width": "12%", "format": "badge" },
+          { "field": "cohort", "label": "Cohort", "width": "20%" },
+          { "field": "message", "label": "Recommendation", "width": "45%" },
+          { "field": "action", "label": "Action", "width": "23%" }
+        ],
+        "sortable": false,
+        "pagination": false,
+        "maxRows": 5,
+        "rowHighlight": {
+          "field": "priority",
+          "values": {
+            "HIGH": "#FEE2E2",
+            "MEDIUM": "#FEF3C7",
+            "LOW": "#F3F4F6"
+          }
+        }
+      },
+      "demoData": "recommendations"
+    }
+  ],
+
+  "footer": {
+    "showTimestamp": true,
+    "timestampLabel": "Last Updated",
+    "showDataSource": true,
+    "dataSourceLabel": "Source: Reflection Analysis System"
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "statusColors": {
+      "TARGET_MET": "#6FBF73",
+      "IMPROVING": "#F4C542",
+      "NEEDS_ATTENTION": "#E99560",
+      "NO_CHANGE": "#D35649",
+      "completed": "#6FBF73",
+      "in-progress": "#F4C542",
+      "pending": "#94A3B8"
+    },
+    "cohortColors": {
+      "data-quality": "#5F3B8C",
+      "tool-contract": "#818CF8",
+      "schema-parse": "#60A5FA",
+      "config-env": "#6FBF73",
+      "external-api": "#F4C542",
+      "idempotency-state": "#E99560",
+      "prompt-mismatch": "#EC4899"
+    }
+  }
+}

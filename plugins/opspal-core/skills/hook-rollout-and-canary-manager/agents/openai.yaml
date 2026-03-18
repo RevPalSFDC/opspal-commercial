@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Rollout and Canary Manager"
+  short_description: "Help with Hook Rollout and Canary Manager tasks"
+  default_prompt: "Use $hook-rollout-and-canary-manager to execute this workflow safely and produce the expected artifacts."

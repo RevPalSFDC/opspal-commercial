@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Salesforce structural constraints for reports. The constraint engine enforces these rules and auto-converts when possible.",
+  "format_rules": {
+    "TABULAR": {
+      "max_groupings_down": 0,
+      "max_groupings_across": 0,
+      "supports_aggregates": false,
+      "supports_subtotals": false,
+      "row_limit": 50000
+    },
+    "SUMMARY": {
+      "max_groupings_down": 3,
+      "max_groupings_across": 0,
+      "supports_aggregates": true,
+      "supports_subtotals": true,
+      "row_limit": 2000,
+      "row_limit_severity": "critical"
+    },
+    "MATRIX": {
+      "max_groupings_down": 3,
+      "max_groupings_across": 2,
+      "supports_aggregates": true,
+      "supports_subtotals": true,
+      "row_limit": 2000,
+      "row_limit_severity": "critical"
+    },
+    "MULTI_BLOCK": {
+      "max_groupings_down": 3,
+      "max_groupings_across": 0,
+      "supports_aggregates": true,
+      "supports_subtotals": true,
+      "row_limit": 2000,
+      "max_blocks": 5
+    }
+  },
+  "non_aggregatable_types": [
+    "string",
+    "textarea",
+    "boolean",
+    "id",
+    "reference",
+    "url",
+    "email",
+    "phone",
+    "picklist",
+    "multipicklist",
+    "address",
+    "combobox",
+    "encryptedstring"
+  ],
+  "auto_conversion_rules": [
+    {
+      "id": "groupings_present_but_tabular",
+      "condition": "groupings present AND format = TABULAR",
+      "action": "convert_to_SUMMARY",
+      "severity": "auto_fix"
+    },
+    {
+      "id": "across_groupings_but_summary",
+      "condition": "across_groupings present AND format = SUMMARY",
+      "action": "convert_to_MATRIX",
+      "severity": "auto_fix"
+    },
+    {
+      "id": "no_groupings_but_grouped_format",
+      "condition": "no groupings AND format IN (SUMMARY, MATRIX)",
+      "action": "convert_to_TABULAR",
+      "severity": "auto_fix"
+    },
+    {
+      "id": "row_estimate_exceeds_limit",
+      "condition": "row_estimate > 2000 AND format IN (SUMMARY, MATRIX)",
+      "action": "convert_to_TABULAR",
+      "severity": "auto_fix_with_warning"
+    },
+    {
+      "id": "multi_currency_missing_iso",
+      "condition": "multi_currency_org AND Amount field in columns AND no CurrencyIsoCode",
+      "action": "add_CurrencyIsoCode_column",
+      "severity": "auto_fix"
+    },
+    {
+      "id": "owner_id_without_name",
+      "condition": "OWNER_ID in filters without User context",
+      "action": "resolve_to_name_format",
+      "severity": "auto_fix"
+    }
+  ],
+  "warning_rules": [
+    {
+      "id": "excessive_groupings",
+      "condition": "groupings_down > 3",
+      "message": "More than 3 down-groupings degrades performance",
+      "severity": "warning"
+    },
+    {
+      "id": "fiscal_calendar_mismatch",
+      "condition": "fiscal date filter AND calendar date grouping",
+      "message": "Fiscal date filter with calendar date grouping may produce unexpected results",
+      "severity": "warning"
+    }
+  ],
+  "blocking_rules": [
+    {
+      "id": "summary_on_non_aggregatable",
+      "condition": "summary field on non-aggregatable type",
+      "message": "Cannot aggregate text, boolean, or ID fields",
+      "severity": "error"
+    },
+    {
+      "id": "bucket_references_missing_column",
+      "condition": "bucket field references non-existent column",
+      "message": "Bucket field references a column not in the report",
+      "severity": "error"
+    }
+  ]
+}

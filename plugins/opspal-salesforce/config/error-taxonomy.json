@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "Salesforce CLI Error Taxonomy - Classifies errors for proper handling and retry behavior",
+
+  "exitCodes": {
+    "SUCCESS": 0,
+    "VALIDATION_ERROR": 1,
+    "MISSING_DEPENDENCY": 2,
+    "TRANSIENT_ERROR": 3,
+    "PERMISSION_ERROR": 4,
+    "CONFIG_ERROR": 5,
+    "RATE_LIMIT": 6,
+    "TIMEOUT": 7,
+    "CLI_ERROR": 8,
+    "UNKNOWN_ERROR": 99
+  },
+
+  "categories": {
+    "TRANSIENT": {
+      "description": "Temporary failures that may succeed on retry",
+      "retry": true,
+      "maxAttempts": 3,
+      "backoff": "exponential",
+      "baseDelay": 2000,
+      "maxDelay": 30000,
+      "exitCode": 3,
+      "patterns": [
+        "ECONNRESET",
+        "ETIMEDOUT",
+        "ENOTFOUND",
+        "ESOCKETTIMEDOUT",
+        "socket hang up",
+        "connection reset",
+        "network error",
+        "temporarily unavailable",
+        "503",
+        "502",
+        "504",
+        "service unavailable",
+        "gateway timeout",
+        "bad gateway"
+      ]
+    },
+
+    "RATE_LIMIT": {
+      "description": "API rate limit exceeded",
+      "retry": true,
+      "maxAttempts": 5,
+      "backoff": "exponential",
+      "baseDelay": 5000,
+      "maxDelay": 60000,
+      "exitCode": 6,
+      "patterns": [
+        "REQUEST_LIMIT_EXCEEDED",
+        "QUERY_TIMEOUT",
+        "too many requests",
+        "rate limit",
+        "throttled",
+        "429",
+        "API limit exceeded",
+        "concurrent request limit"
+      ]
+    },
+
+    "TIMEOUT": {
+      "description": "Operation timed out",
+      "retry": true,
+      "maxAttempts": 2,
+      "backoff": "linear",
+      "baseDelay": 5000,
+      "maxDelay": 10000,
+      "exitCode": 7,
+      "patterns": [
+        "timeout",
+        "timed out",
+        "deadline exceeded",
+        "operation took too long",
+        "query timeout"
+      ]
+    },
+
+    "VALIDATION": {
+      "description": "Data or query validation failed",
+      "retry": false,
+      "requiresUserAction": true,
+      "exitCode": 1,
+      "patterns": [
+        "INVALID_FIELD",
+        "INVALID_TYPE",
+        "MALFORMED_QUERY",
+        "INVALID_QUERY_LOCATOR",
+        "INVALID_FILTER_VALUE",
+        "DUPLICATE_VALUE",
+        "REQUIRED_FIELD_MISSING",
+        "FIELD_CUSTOM_VALIDATION_EXCEPTION",
+        "FIELD_INTEGRITY_EXCEPTION",
+        "NUMBER_OUTSIDE_VALID_RANGE",
+        "STRING_TOO_LONG",
+        "invalid field",
+        "does not exist",
+        "malformed query",
+        "No such column"
+      ]
+    },
+
+    "PERMISSION": {
+      "description": "Permission or access denied",
+      "retry": false,
+      "requiresUserAction": true,
+      "exitCode": 4,
+      "patterns": [
+        "INSUFFICIENT_ACCESS",
+        "INVALID_SESSION_ID",
+        "INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY",
+        "INVALID_CROSS_REFERENCE_KEY",
+        "CANNOT_INSERT_UPDATE_ACTIVATE_ENTITY",
+        "insufficient access",
+        "access denied",
+        "not authorized",
+        "permission denied",
+        "authentication failed",
+        "invalid session",
+        "session expired"
+      ]
+    },
+
+    "MISSING_METADATA": {
+      "description": "Required metadata not found",
+      "retry": false,
+      "suggestRetrieve": true,
+      "exitCode": 1,
+      "patterns": [
+        "No source-backed components present",
+        "component does not exist",
+        "ENTITY_IS_DELETED",
+        "NOT_FOUND",
+        "metadata not found",
+        "object not found",
+        "field not found",
+        "no components"
+      ],
+      "suggestions": {
+        "No source-backed components present": "Run: sf project retrieve start -m \"<MetadataType>:<Name>\"",
+        "field not found": "Verify field exists in target org or deploy field first",
+        "object not found": "Verify object exists or deploy custom object first"
+      }
+    },
+
+    "CLI_ERROR": {
+      "description": "Salesforce CLI tool error",
+      "retry": false,
+      "checkInstallation": true,
+      "exitCode": 8,
+      "patterns": [
+        "command not found",
+        "sf: command not found",
+        "sfdx: command not found",
+        "CLI not installed",
+        "ENOENT",
+        "spawn ENOENT",
+        "invalid command",
+        "unknown command"
+      ],
+      "suggestions": {
+        "command not found": "Install SF CLI: npm install -g @salesforce/cli",
+        "invalid command": "Check SF CLI version: sf --version"
+      }
+    },
+
+    "CONFIG_ERROR": {
+      "description": "Configuration or environment error",
+      "retry": false,
+      "requiresUserAction": true,
+      "exitCode": 5,
+      "patterns": [
+        "No default org",
+        "org not found",
+        "alias not found",
+        "missing org",
+        "ENOENT.*sfdx-project",
+        "no project",
+        "outside of project"
+      ],
+      "suggestions": {
+        "No default org": "Set default org: sf config set target-org <alias>",
+        "alias not found": "Authenticate to org: sf org login web --alias <name>"
+      }
+    },
+
+    "DEPLOYMENT": {
+      "description": "Deployment-specific errors",
+      "retry": false,
+      "requiresUserAction": true,
+      "exitCode": 1,
+      "patterns": [
+        "Deployment failed",
+        "UNKNOWN_EXCEPTION",
+        "CANNOT_MODIFY_MANAGED_OBJECT",
+        "DUPLICATE_DEVELOPER_NAME",
+        "TEST_FAILURE",
+        "APEX_ERROR",
+        "compilation error",
+        "deployment error",
+        "test failure"
+      ]
+    },
+
+    "DATA_ERROR": {
+      "description": "Data operation errors",
+      "retry": false,
+      "requiresUserAction": true,
+      "exitCode": 1,
+      "patterns": [
+        "DUPLICATES_DETECTED",
+        "DELETE_FAILED",
+        "ENTITY_IS_LOCKED",
+        "UNABLE_TO_LOCK_ROW",
+        "LIMIT_EXCEEDED",
+        "TOO_MANY_ENUM_VALUES",
+        "CSV_ERROR",
+        "INVALID_BATCH_REQUEST",
+        "JOB_ABORTED",
+        "locked",
+        "duplicate"
+      ]
+    }
+  },
+
+  "fallbackStrategies": {
+    "REST_TO_BULK": {
+      "trigger": ["REQUEST_LIMIT_EXCEEDED", "TOO_MANY_RECORDS"],
+      "recommendation": "Use Bulk API for large data operations",
+      "threshold": 200
+    },
+    "REST_TO_TOOLING": {
+      "trigger": ["INVALID_TYPE", "FlowDefinitionView", "ApexClass", "ValidationRule"],
+      "recommendation": "Add --use-tooling-api flag for metadata objects"
+    },
+    "BULK_TO_COMPOSITE": {
+      "trigger": ["BATCH_FAILED", "partial failures"],
+      "recommendation": "Use Composite API for related record operations"
+    }
+  },
+
+  "logging": {
+    "enabled": true,
+    "logFile": "logs/sf-errors.jsonl",
+    "includeStackTrace": true,
+    "includeContext": true,
+    "retention": {
+      "maxFiles": 10,
+      "maxSizeMB": 50
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Picklist value normalization rules - configuration-driven, no hardcoded values",
+  "version": "2.0.0",
+  "defaults": {
+    "similarityThreshold": 80,
+    "autoFix": false,
+    "cacheTimeoutMs": 3600000
+  },
+  "fieldRules": {
+    "_EXAMPLE_Field__c": {
+      "description": "EXAMPLE: Copy this pattern and customize for your org's fields",
+      "suffixPatterns": [
+        "\\s+Suffix1\\s*$",
+        "\\s+Suffix2\\s*$"
+      ],
+      "suffixesToAdd": [
+        " Suffix1",
+        " Suffix2"
+      ],
+      "abbreviations": {
+        "ABBR": "Full Name"
+      },
+      "corrections": {
+        "Common Typo": "Correct Value"
+      },
+      "notes": "Add notes about why these rules exist"
+    },
+    "State": {
+      "description": "US state normalization (code ↔ name) - standard Salesforce pattern",
+      "abbreviations": {
+        "AL": "Alabama",
+        "AK": "Alaska",
+        "AZ": "Arizona",
+        "AR": "Arkansas",
+        "CA": "California",
+        "CO": "Colorado",
+        "CT": "Connecticut",
+        "DE": "Delaware",
+        "FL": "Florida",
+        "GA": "Georgia",
+        "HI": "Hawaii",
+        "ID": "Idaho",
+        "IL": "Illinois",
+        "IN": "Indiana",
+        "IA": "Iowa",
+        "KS": "Kansas",
+        "KY": "Kentucky",
+        "LA": "Louisiana",
+        "ME": "Maine",
+        "MD": "Maryland",
+        "MA": "Massachusetts",
+        "MI": "Michigan",
+        "MN": "Minnesota",
+        "MS": "Mississippi",
+        "MO": "Missouri",
+        "MT": "Montana",
+        "NE": "Nebraska",
+        "NV": "Nevada",
+        "NH": "New Hampshire",
+        "NJ": "New Jersey",
+        "NM": "New Mexico",
+        "NY": "New York",
+        "NC": "North Carolina",
+        "ND": "North Dakota",
+        "OH": "Ohio",
+        "OK": "Oklahoma",
+        "OR": "Oregon",
+        "PA": "Pennsylvania",
+        "RI": "Rhode Island",
+        "SC": "South Carolina",
+        "SD": "South Dakota",
+        "TN": "Tennessee",
+        "TX": "Texas",
+        "UT": "Utah",
+        "VT": "Vermont",
+        "VA": "Virginia",
+        "WA": "Washington",
+        "WV": "West Virginia",
+        "WI": "Wisconsin",
+        "WY": "Wyoming",
+        "DC": "District of Columbia"
+      }
+    },
+    "BillingState": {
+      "inherits": "State",
+      "description": "Standard Salesforce billing state field"
+    },
+    "ShippingState": {
+      "inherits": "State",
+      "description": "Standard Salesforce shipping state field"
+    },
+    "MailingState": {
+      "inherits": "State",
+      "description": "Standard Salesforce mailing state field"
+    }
+  },
+  "globalAbbreviations": {
+    "N.": "North",
+    "S.": "South",
+    "E.": "East",
+    "W.": "West",
+    "St.": "Saint",
+    "Ft.": "Fort",
+    "Mt.": "Mount"
+  },
+  "caseNormalization": {
+    "alwaysTitleCase": [
+      "State",
+      "BillingState",
+      "ShippingState",
+      "MailingState",
+      "City",
+      "BillingCity",
+      "ShippingCity",
+      "MailingCity"
+    ],
+    "preserveCase": [
+      "Id",
+      "AccountId",
+      "ContactId"
+    ]
+  },
+  "metadata": {
+    "createdDate": "2026-02-02",
+    "lastModified": "2026-02-02",
+    "author": "Picklist Value Normalizer",
+    "purpose": "Prevent 'bad value for restricted picklist field' errors in bulk operations",
+    "usage": "Add field-specific rules to fieldRules object. See _EXAMPLE_Field__c for pattern."
+  }
+}

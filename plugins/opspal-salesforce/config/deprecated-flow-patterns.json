@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Deprecated Flow Patterns",
+  "description": "List of deprecated Flow patterns that should be detected and migrated",
+  "version": "1.0.0",
+  "created": "2025-10-24",
+
+  "patterns": [
+    {
+      "pattern_id": "actiontype-flow-autolaunched",
+      "name": "actionType='flow' in Autolaunched Flows",
+      "deprecated_in": "v65.0",
+      "severity": "CRITICAL",
+      "description": "Using actionCalls with actionType='flow' in autolaunched flows",
+
+      "detection": {
+        "xml_regex": "<actionType>flow</actionType>",
+        "context_required": "Within <actionCalls> element",
+        "flow_types_affected": [
+          "autolaunched-flow",
+          "record-triggered-flow-before-save",
+          "record-triggered-flow-after-save"
+        ]
+      },
+
+      "error_info": {
+        "error_code": "INVALID_TYPE",
+        "error_message": "actionType value of 'flow' is not supported",
+        "when_occurs": "During flow deployment or activation",
+        "api_versions_affected": ["65.0", "66.0"]
+      },
+
+      "migration": {
+        "strategy": "Replace actionCalls with subflows element",
+        "auto_fixable": true,
+        "steps": [
+          "Locate <actionCalls> element with <actionType>flow</actionType>",
+          "Extract <flowName> value",
+          "Replace entire <actionCalls> block with <subflows>",
+          "Preserve <flowName> in <subflows> element",
+          "Remove <actionType> (not used in subflows)",
+          "Preserve any input/output assignments"
+        ],
+        "script": "scripts/lib/flow-pattern-migrator.js migrate-actiontype-flow"
+      },
+
+      "examples": {
+        "v64_pattern": {
+          "description": "Deprecated pattern in v64.0",
+          "xml": "<actionCalls>\n    <name>InvokeSubFlow</name>\n    <label>Invoke Sub Flow</label>\n    <actionName>SubFlowToInvoke</actionName>\n    <actionType>flow</actionType>\n    <flowName>SubFlowToInvoke</flowName>\n</actionCalls>"
+        },
+        "v65_pattern": {
+          "description": "Required pattern in v65.0+",
+          "xml": "<subflows>\n    <name>InvokeSubFlow</name>\n    <label>Invoke Sub Flow</label>\n    <flowName>SubFlowToInvoke</flowName>\n</subflows>"
+        }
+      }
+    },
+
+    {
+      "pattern_id": "missing-api-version",
+      "name": "Missing API Version Declaration",
+      "deprecated_in": "v60.0",
+      "severity": "HIGH",
+      "description": "Flow metadata without explicit apiVersion declaration",
+
+      "detection": {
+        "xml_regex": "^(?!.*<apiVersion>)",
+        "context_required": "Root Flow element",
+        "flow_types_affected": ["all"]
+      },
+
+      "error_info": {
+        "error_code": "METADATA_ERROR",
+        "error_message": "No API version specified - defaults may cause issues",
+        "when_occurs": "During deployment",
+        "api_versions_affected": ["all"]
+      },
+
+      "migration": {
+        "strategy": "Add explicit apiVersion declaration",
+        "auto_fixable": true,
+        "steps": [
+          "Check if <apiVersion> element exists",
+          "If missing, add <apiVersion>66.0</apiVersion> (or current version)",
+          "Place after <description> and before <processType>"
+        ],
+        "script": "scripts/lib/flow-pattern-migrator.js add-api-version"
+      }
+    },
+
+    {
+      "pattern_id": "text-wrapping-id-fields",
+      "name": "TEXT() Wrapping on ID Fields",
+      "deprecated_in": "never (but anti-pattern)",
+      "severity": "MEDIUM",
+      "description": "Wrapping ID fields in TEXT() function when they're already Text type",
+
+      "detection": {
+        "formula_regex": "TEXT\\s*\\(\\s*\\w*Id(__c)?\\w*\\s*\\)",
+        "context_required": "Within formula elements",
+        "flow_types_affected": ["all"]
+      },
+
+      "error_info": {
+        "error_code": "INCORRECT_PARAMETER_TYPE",
+        "error_message": "Incorrect parameter type for function TEXT()",
+        "when_occurs": "During flow validation or activation",
+        "api_versions_affected": ["all"]
+      },
+
+      "migration": {
+        "strategy": "Remove redundant TEXT() wrapping from ID fields",
+        "auto_fixable": true,
+        "steps": [
+          "Identify TEXT() calls in formulas",
+          "Check if argument is ID field (ends with Id or __c)",
+          "Query field type to confirm it's already Text/Id type",
+          "Remove TEXT() wrapper if redundant",
+          "Preserve formula logic"
+        ],
+        "script": "scripts/lib/flow-formula-validator.js remove-redundant-text"
+      }
+    }
+  ],
+
+  "validation_strategy": {
+    "pre_deployment": {
+      "description": "Validate before deploying flow metadata",
+      "checks": [
+        {
+          "name": "api_version_declared",
+          "description": "Flow must have explicit apiVersion",
+          "severity": "HIGH",
+          "action": "Add current API version if missing"
+        },
+        {
+          "name": "no_deprecated_patterns",
+          "description": "Scan for deprecated patterns",
+          "severity": "CRITICAL",
+          "action": "Block deployment if deprecated patterns found"
+        },
+        {
+          "name": "version_pattern_compatibility",
+          "description": "Ensure patterns match declared API version",
+          "severity": "CRITICAL",
+          "action": "Auto-migrate if possible, otherwise block"
+        }
+      ]
+    },
+    "during_migration": {
+      "description": "Validate during pattern migration",
+      "checks": [
+        {
+          "name": "migration_completeness",
+          "description": "Ensure all deprecated patterns migrated",
+          "severity": "CRITICAL",
+          "action": "Report any remaining deprecated patterns"
+        },
+        {
+          "name": "syntax_validity",
+          "description": "Migrated XML must be valid",
+          "severity": "CRITICAL",
+          "action": "Validate XML structure after migration"
+        }
+      ]
+    }
+  },
+
+  "migration_toolkit": {
+    "supported_migrations": [
+      {
+        "from": "v64.0",
+        "to": "v65.0",
+        "migrations": ["actiontype-flow-autolaunched"],
+        "script": "scripts/lib/flow-pattern-migrator.js",
+        "auto_fixable": true,
+        "success_rate": "95%+"
+      },
+      {
+        "from": "v65.0",
+        "to": "v66.0",
+        "migrations": [],
+        "notes": "No breaking changes - backward compatible",
+        "auto_fixable": true,
+        "success_rate": "100%"
+      }
+    ]
+  },
+
+  "ci_cd_integration": {
+    "pre_commit_hook": {
+      "name": "pre-flow-deployment.sh",
+      "location": ".claude-plugins/opspal-salesforce/hooks/",
+      "purpose": "Validate flow patterns before git commit",
+      "actions": [
+        "Scan for deprecated patterns in changed flow files",
+        "Warn if deprecated patterns found",
+        "Suggest running migration tool"
+      ]
+    },
+    "pre_deployment_check": {
+      "name": "flow-api-version-validator.js",
+      "location": ".claude-plugins/opspal-salesforce/scripts/lib/",
+      "purpose": "Block deployment if incompatible patterns detected",
+      "actions": [
+        "Validate API version compatibility",
+        "Check for deprecated patterns",
+        "Auto-migrate if enabled",
+        "Block deployment if migration fails"
+      ]
+    }
+  },
+
+  "recommended_practices": {
+    "always_use_latest_api": {
+      "description": "Use latest stable API version for new flows",
+      "current_recommended": "v66.0",
+      "benefits": [
+        "Access to latest features",
+        "Better performance",
+        "Improved error messages",
+        "Future-proof"
+      ]
+    },
+    "use_subflows_element": {
+      "description": "Always use subflows element for flow invocation",
+      "applies_to": "v65.0+",
+      "benefits": [
+        "Compatible with current and future API versions",
+        "Clearer intent",
+        "Simpler XML structure"
+      ]
+    },
+    "validate_before_deploy": {
+      "description": "Always validate flow metadata before deployment",
+      "tool": "flow-api-version-validator.js",
+      "benefits": [
+        "Catch incompatibilities early",
+        "Prevent deployment failures",
+        "Auto-migrate deprecated patterns"
+      ]
+    }
+  }
+}

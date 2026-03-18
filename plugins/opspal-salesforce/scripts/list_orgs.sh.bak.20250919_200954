@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "Listing authenticated Salesforce orgs..."
+echo ""
+
+# List using sfdx
+echo "Using sfdx:"
+sfdx force:org:list --all 2>/dev/null || echo "sfdx not available or no orgs authenticated"
+
+echo ""
+echo "Using sf:"
+sf org list --all 2>/dev/null || echo "sf not available or no orgs authenticated"
+
+echo ""
+echo "Checking default org:"
+echo "SFDX_DEFAULT_USERNAME: $SFDX_DEFAULT_USERNAME"
+
+echo ""
+echo "Looking for gamma-corp specifically:"
+sfdx force:org:display --targetusername gamma-corp 2>&1 | head -5

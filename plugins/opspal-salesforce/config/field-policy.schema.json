@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/field-policy.schema.json",
+  "title": "Field Policy Schema",
+  "description": "Defines per-object field policies for operational agents including required, default, and excluded fields",
+  "type": "object",
+  "required": ["schemaVersion", "globalDefaults", "policies"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Schema version for compatibility tracking",
+      "pattern": "^\\d+\\.\\d+$",
+      "default": "1.0"
+    },
+    "org": {
+      "type": "string",
+      "description": "Salesforce org alias this policy applies to (optional for defaults)"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "globalDefaults": {
+      "type": "object",
+      "description": "Global defaults applied to all objects unless overridden",
+      "required": ["alwaysExclude", "alwaysInclude"],
+      "properties": {
+        "alwaysExclude": {
+          "type": "array",
+          "description": "Field patterns to always exclude (supports wildcards)",
+          "items": { "type": "string" },
+          "default": ["*Password*", "*SSN*", "*Token*", "*Secret*", "*Key*"]
+        },
+        "alwaysInclude": {
+          "type": "array",
+          "description": "Fields to always include in operations",
+          "items": { "type": "string" },
+          "default": ["Id", "Name", "CreatedDate", "LastModifiedDate", "CreatedById", "LastModifiedById"]
+        },
+        "piiDetectionEnabled": {
+          "type": "boolean",
+          "description": "Enable automatic PII detection via data-classification-framework",
+          "default": true
+        },
+        "maxFieldsDefault": {
+          "type": "integer",
+          "description": "Default maximum fields per operation",
+          "minimum": 1,
+          "maximum": 200,
+          "default": 100
+        },
+        "excludeFormulaFields": {
+          "type": "boolean",
+          "description": "Exclude formula fields by default",
+          "default": false
+        },
+        "excludeSystemFields": {
+          "type": "boolean",
+          "description": "Exclude system audit fields by default",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "policies": {
+      "type": "object",
+      "description": "Per-object field policies keyed by object API name",
+      "additionalProperties": {
+        "$ref": "#/definitions/objectPolicy"
+      }
+    },
+    "taskVariantOverrides": {
+      "type": "object",
+      "description": "Per-task-type overrides (backup, migration, enrichment, etc.)",
+      "additionalProperties": {
+        "$ref": "#/definitions/taskVariantOverride"
+      }
+    }
+  },
+  "definitions": {
+    "objectPolicy": {
+      "type": "object",
+      "description": "Field policy for a specific Salesforce object",
+      "properties": {
+        "required_fields": {
+          "$ref": "#/definitions/fieldSet",
+          "description": "Fields that MUST be included in every operation"
+        },
+        "default_fields": {
+          "$ref": "#/definitions/fieldSet",
+          "description": "Fields included by default (can be removed by user)"
+        },
+        "recommended_fields": {
+          "$ref": "#/definitions/fieldSet",
+          "description": "Fields recommended but not required"
+        },
+        "sensitive_field_exclusions": {
+          "$ref": "#/definitions/sensitiveExclusion",
+          "description": "Fields/patterns to exclude for compliance"
+        },
+        "field_aliases": {
+          "type": "object",
+          "description": "Map custom field labels to API names",
+          "additionalProperties": { "type": "string" }
+        },
+        "maxFields": {
+          "type": "integer",
+          "description": "Maximum fields for this object (overrides global)",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "notes": {
+          "type": "string",
+          "description": "Human-readable notes about this policy"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "User or agent that last updated this policy"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fieldSet": {
+      "type": "object",
+      "description": "A set of fields with metadata",
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of field API names"
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Wildcard patterns to match fields (e.g., 'SBQQ__*')"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["manual", "inferred", "runbook", "assessment"],
+          "description": "How this field set was determined"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence score for inferred fields"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Why these fields are in this set"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sensitiveExclusion": {
+      "type": "object",
+      "description": "Defines fields to exclude for compliance/security",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Explicit field API names to exclude"
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Wildcard patterns (e.g., '*Confidential*')"
+        },
+        "classifications": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["DIRECT_IDENTIFIER", "CONTACT_INFO", "DEMOGRAPHIC", "FINANCIAL", "HEALTH", "CONFIDENTIAL", "RESTRICTED"]
+          },
+          "description": "Data classification levels to auto-exclude"
+        },
+        "complianceReason": {
+          "type": "string",
+          "description": "Regulatory reason for exclusion (e.g., 'SOX Section 302', 'GDPR Article 17')"
+        },
+        "excludeFromTaskTypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Task types where this exclusion applies (empty = all)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "taskVariantOverride": {
+      "type": "object",
+      "description": "Override field policy for a specific task type",
+      "properties": {
+        "additionalRequired": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional required fields for this task type"
+        },
+        "additionalExcluded": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional excluded fields for this task type"
+        },
+        "includeSystemFields": {
+          "type": "boolean",
+          "description": "Include system fields for this task type"
+        },
+        "includeFormulaFields": {
+          "type": "boolean",
+          "description": "Include formula fields for this task type"
+        },
+        "maxFields": {
+          "type": "integer",
+          "description": "Override max fields for this task type"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

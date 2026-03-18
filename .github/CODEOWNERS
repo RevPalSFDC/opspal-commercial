@@ -1,0 +1,12 @@
+# Code Owners - Require approval from these users for changes
+# Learn more: https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repo
+* @RevPalSFDC
+
+# Plugin releases require owner approval
+/.claude-plugins/**/plugin.json @RevPalSFDC
+/marketplace-catalog.json @RevPalSFDC
+
+# Workflow changes require owner approval
+/.github/workflows/ @RevPalSFDC

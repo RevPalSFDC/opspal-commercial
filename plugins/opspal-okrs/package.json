@@ -1,0 +1,39 @@
+{
+  "name": "@revpal-internal/opspal-okrs",
+  "version": "3.0.0",
+  "description": "Data-driven OKR generation from live revenue data with initiative prioritization and adaptive learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "okr",
+    "objectives",
+    "key-results",
+    "strategy",
+    "revops",
+    "initiative-prioritization",
+    "plg"
+  ],
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "verbose": true
+  }
+}

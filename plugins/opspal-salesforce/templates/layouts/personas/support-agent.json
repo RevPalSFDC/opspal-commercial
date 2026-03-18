@@ -1,0 +1,213 @@
+{
+  "persona": "support-agent",
+  "label": "Support Agent",
+  "description": "Customer support representative focused on resolving cases, managing customer inquiries, and meeting SLA targets",
+  "role": "Individual Contributor",
+  "decisionScope": "Case resolution, customer communication, daily workload management",
+  "keyQuestions": [
+    "What cases need attention today?",
+    "Am I meeting my SLA targets?",
+    "What's the customer's history?",
+    "Who can I escalate to?",
+    "What solutions have worked for similar issues?"
+  ],
+  "layoutCharacteristics": {
+    "fieldCount": {
+      "optimal": 60,
+      "max": 110,
+      "priority": "Case details, customer context, resolution information"
+    },
+    "sectionCount": {
+      "optimal": 5,
+      "max": 7,
+      "recommended": ["Case Details", "Customer Information", "Resolution", "SLA Status", "Related Issues"]
+    },
+    "components": {
+      "required": ["Highlights Panel", "Activities", "Knowledge"],
+      "recommended": ["Related List - Related Cases", "Related List - Assets", "Related List - Entitlements", "Quick Text", "Macros"],
+      "avoid": ["Dashboard Components", "Long-form description fields in main view"]
+    },
+    "relatedLists": {
+      "max": 7,
+      "priority": ["Related Cases", "Assets", "Contacts", "Emails", "Articles", "Attachments", "Entitlements"]
+    }
+  },
+  "fieldPriorities": {
+    "case": {
+      "criticalFields": [
+        "CaseNumber",
+        "Subject",
+        "Status",
+        "Priority",
+        "AccountId",
+        "ContactId",
+        "OwnerId",
+        "CreatedDate"
+      ],
+      "importantFields": [
+        "Origin",
+        "Type",
+        "Reason",
+        "Description",
+        "AssetId",
+        "ProductId",
+        "EntitlementId"
+      ],
+      "contextualFields": [
+        "SuppliedEmail",
+        "SuppliedName",
+        "SuppliedPhone",
+        "Comments",
+        "ParentId"
+      ],
+      "supportSpecificFields": [
+        "SlaStartDate",
+        "SlaExitDate",
+        "IsStopped",
+        "StopStartDate",
+        "IsEscalated",
+        "EscalationDate"
+      ]
+    },
+    "account": {
+      "criticalFields": [
+        "Name",
+        "Type",
+        "Phone",
+        "Website",
+        "OwnerId",
+        "AccountNumber"
+      ],
+      "supportSpecificFields": [
+        "CustomerPriority__c",
+        "SLA__c",
+        "SupportTier__c",
+        "ContractStatus__c"
+      ]
+    },
+    "contact": {
+      "criticalFields": [
+        "Name",
+        "Email",
+        "Phone",
+        "AccountId",
+        "Title",
+        "Department"
+      ],
+      "supportSpecificFields": [
+        "PreferredContactMethod__c",
+        "TimeZone__c",
+        "Language__c"
+      ]
+    }
+  },
+  "compactLayoutFields": {
+    "case": ["CaseNumber", "Status", "Priority", "ContactId", "Owner.Name"],
+    "account": ["Phone", "Type", "SLA__c", "Owner.Name"],
+    "contact": ["Email", "Phone", "PreferredContactMethod__c", "AccountId"]
+  },
+  "conditionalVisibility": {
+    "rules": [
+      {
+        "name": "Escalated Case",
+        "condition": "IsEscalated = true",
+        "action": "Show section 'Escalation Details' with escalation history"
+      },
+      {
+        "name": "SLA Breach Risk",
+        "condition": "SlaStartDate != null AND Status NOT IN ('Closed', 'Resolved')",
+        "action": "Show section 'SLA Status' with time remaining and milestones"
+      },
+      {
+        "name": "VIP Customer",
+        "condition": "Account.CustomerPriority__c = 'High'",
+        "action": "Show section 'VIP Customer Alert' with account details"
+      },
+      {
+        "name": "Related Assets",
+        "condition": "AssetId != null OR ProductId != null",
+        "action": "Show section 'Product Information' with asset/product details"
+      },
+      {
+        "name": "Entitlement Active",
+        "condition": "EntitlementId != null",
+        "action": "Show section 'Entitlement & SLA' with coverage details"
+      }
+    ]
+  },
+  "mobile": {
+    "optimized": true,
+    "maxFieldsFirstScreen": 18,
+    "priority": "Case number, subject, status, contact info, next action"
+  },
+  "bestPractices": {
+    "useDynamicForms": true,
+    "useHighlightsPanel": true,
+    "usePathComponent": true,
+    "maxComponentsPerPage": 16,
+    "includeKnowledgeComponent": true,
+    "includeQuickTextComponent": true,
+    "prioritizeCustomerContext": true
+  },
+  "notes": [
+    "Support agents need quick access to customer history and context",
+    "SLA compliance is critical - surface SLA status prominently",
+    "Knowledge articles and quick text improve efficiency",
+    "Related cases help identify patterns and solutions",
+    "Asset/product info critical for technical support"
+  ],
+  "objectGuidance": {
+    "Account": {
+      "sections": [
+        {"name": "Customer Information", "fields": ["Name", "Type", "Phone", "Website", "AccountNumber"]},
+        {"name": "Support Context", "fields": ["SLA__c", "SupportTier__c", "CustomerPriority__c"]},
+        {"name": "Contract Status", "fields": ["ContractStatus__c", "Support_End_Date__c"]}
+      ],
+      "compactFields": ["Phone", "Type", "SLA__c", "OwnerId"],
+      "relatedLists": ["Cases", "Contacts", "Assets", "Entitlements", "Contracts"],
+      "defaultTab": "Related",
+      "rationale": "Support agents need case history and assets - Related tab shows open cases and entitlements"
+    },
+    "Contact": {
+      "sections": [
+        {"name": "Contact Details", "fields": ["Name", "AccountId", "Title", "Department"]},
+        {"name": "Contact Methods", "fields": ["Email", "Phone", "MobilePhone"]},
+        {"name": "Support Preferences", "fields": ["PreferredContactMethod__c", "TimeZone__c", "Language__c"]},
+        {"name": "Communication Preferences", "fields": ["DoNotCall", "HasOptedOutOfEmail"]}
+      ],
+      "compactFields": ["Email", "Phone", "PreferredContactMethod__c", "AccountId"],
+      "relatedLists": ["Cases", "Activities"],
+      "defaultTab": "Details",
+      "rationale": "Support agents need contact info and preferences for outreach - Details tab for quick reference"
+    },
+    "Opportunity": {
+      "sections": [
+        {"name": "Opportunity Context", "fields": ["Name", "AccountId", "Amount", "StageName", "CloseDate"]},
+        {"name": "Customer Info", "fields": ["ContactId", "Type"]}
+      ],
+      "compactFields": ["Amount", "StageName", "AccountId", "CloseDate"],
+      "relatedLists": ["Contacts", "Activities"],
+      "defaultTab": "Details",
+      "rationale": "Support agents rarely access Opportunities - basic layout for context when needed"
+    },
+    "Quote": {
+      "sections": [
+        {"name": "Quote Information", "fields": ["Name", "Status", "OpportunityId", "AccountId"]},
+        {"name": "Quote Terms", "fields": ["GrandTotal", "ExpirationDate"]}
+      ],
+      "compactFields": ["Status", "GrandTotal", "ExpirationDate", "OpportunityId"],
+      "relatedLists": ["QuoteLineItems"],
+      "defaultTab": "Details",
+      "rationale": "Support agents may reference quotes for billing questions - Details shows status and pricing"
+    },
+    "QuoteLineItem": {
+      "sections": [
+        {"name": "Product Details", "fields": ["Product2Id", "Quantity", "TotalPrice"]}
+      ],
+      "compactFields": ["Product2Id", "Quantity", "TotalPrice"],
+      "relatedLists": [],
+      "defaultTab": "Details",
+      "rationale": "Minimal layout for support context - rarely accessed directly"
+    }
+  }
+}

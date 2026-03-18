@@ -1,0 +1,435 @@
+{
+  "version": "3.50.0",
+  "description": "Salesforce Order of Operations - Dependency Configuration for Validation Rules, Apex Triggers, and Permission Sets",
+  "lastUpdated": "2025-01-24",
+  "operations": {
+    "validation_rule": {
+      "order": 15,
+      "description": "Validation rule creation and deployment",
+      "dependencies": {
+        "before": [
+          "object_creation",
+          "field_creation",
+          "record_type_creation",
+          "picklist_values"
+        ],
+        "after": [
+          "data_load",
+          "user_assignment"
+        ],
+        "parallel": [
+          "workflow_rules",
+          "process_builder",
+          "other_validation_rules"
+        ],
+        "conflicts": [
+          "duplicate_rules"
+        ]
+      },
+      "validation": {
+        "required_metadata": [
+          "object_exists",
+          "fields_exist",
+          "formula_valid"
+        ],
+        "anti_patterns": [
+          "circular_dependencies",
+          "too_many_rules_on_object"
+        ]
+      },
+      "complexity_thresholds": {
+        "simple": 0.3,
+        "moderate": 0.7,
+        "complex": 1.0
+      },
+      "best_practices": [
+        "Use descriptive error messages",
+        "Test in sandbox first",
+        "Document business logic",
+        "Monitor governor limits"
+      ]
+    },
+    "apex_trigger": {
+      "order": 20,
+      "description": "Apex trigger creation and deployment",
+      "dependencies": {
+        "before": [
+          "object_creation",
+          "field_creation",
+          "record_type_creation",
+          "validation_rules"
+        ],
+        "after": [
+          "test_class_creation",
+          "test_execution"
+        ],
+        "parallel": [
+          "other_triggers_on_different_objects",
+          "apex_classes"
+        ],
+        "conflicts": [
+          "multiple_triggers_same_object_same_event"
+        ]
+      },
+      "validation": {
+        "required_metadata": [
+          "object_exists",
+          "handler_class_exists",
+          "test_class_exists",
+          "coverage_75_percent"
+        ],
+        "anti_patterns": [
+          "soql_in_loops",
+          "dml_in_loops",
+          "no_bulkification",
+          "no_recursion_prevention"
+        ]
+      },
+      "architecture": {
+        "pattern": "handler_pattern",
+        "recursion_prevention": "required",
+        "bulkification": "required",
+        "async_processing": "recommended_for_heavy_operations"
+      },
+      "best_practices": [
+        "Use handler pattern",
+        "Implement recursion prevention",
+        "Bulkify all operations",
+        "Test with 200+ records",
+        "Monitor governor limits"
+      ]
+    },
+    "permission_set": {
+      "order": 5,
+      "description": "Permission set creation and assignment",
+      "dependencies": {
+        "before": [
+          "object_creation",
+          "field_creation",
+          "apex_class_creation",
+          "visualforce_page_creation",
+          "custom_permission_creation",
+          "record_type_creation",
+          "app_creation"
+        ],
+        "after": [
+          "user_creation",
+          "profile_updates"
+        ],
+        "parallel": [
+          "other_permission_sets",
+          "sharing_rules"
+        ],
+        "conflicts": [
+          "profile_conflicts",
+          "duplicate_permission_sets"
+        ]
+      },
+      "validation": {
+        "required_metadata": [
+          "objects_exist",
+          "fields_exist",
+          "apps_exist",
+          "apex_classes_exist",
+          "visualforce_pages_exist"
+        ],
+        "anti_patterns": [
+          "permission_bloat",
+          "overly_permissive",
+          "inconsistent_fls",
+          "missing_dependencies"
+        ]
+      },
+      "architecture": {
+        "tier_1": {
+          "description": "Foundational permission sets (object-specific CRUD and FLS)",
+          "naming": "<SecurityLevel>_<Object>_<AccessType>",
+          "examples": [
+            "Standard_Account_Read",
+            "Standard_Account_Edit",
+            "Restricted_Opportunity_View"
+          ]
+        },
+        "tier_2": {
+          "description": "Composed permission sets (role-based)",
+          "naming": "<Role>_<Department>",
+          "examples": [
+            "Sales_Manager",
+            "Support_Agent",
+            "Finance_Analyst"
+          ],
+          "dependencies": [
+            "tier_1_permission_sets_must_exist"
+          ]
+        }
+      },
+      "complexity_thresholds": {
+        "simple": 0.3,
+        "moderate": 0.7,
+        "complex": 1.0
+      },
+      "best_practices": [
+        "Use two-tier architecture for complex sets",
+        "Follow naming conventions",
+        "Test with real users",
+        "Document justifications for high-risk permissions",
+        "Review quarterly"
+      ]
+    },
+    "apex_class": {
+      "order": 18,
+      "description": "Apex class creation (handlers, utilities, batch)",
+      "dependencies": {
+        "before": [
+          "object_creation",
+          "field_creation",
+          "custom_metadata_types"
+        ],
+        "after": [
+          "test_class_creation",
+          "test_execution"
+        ],
+        "parallel": [
+          "other_apex_classes",
+          "apex_triggers"
+        ]
+      },
+      "validation": {
+        "required_metadata": [
+          "syntax_valid",
+          "test_class_exists",
+          "coverage_75_percent"
+        ]
+      }
+    },
+    "object_creation": {
+      "order": 1,
+      "description": "Custom object creation",
+      "dependencies": {
+        "before": [],
+        "after": [
+          "field_creation",
+          "validation_rules",
+          "apex_triggers",
+          "permission_sets"
+        ],
+        "parallel": [
+          "other_objects"
+        ]
+      }
+    },
+    "field_creation": {
+      "order": 3,
+      "description": "Custom field creation on objects",
+      "dependencies": {
+        "before": [
+          "object_creation"
+        ],
+        "after": [
+          "validation_rules",
+          "apex_triggers",
+          "permission_sets",
+          "page_layouts"
+        ],
+        "parallel": [
+          "other_fields"
+        ]
+      }
+    },
+    "record_type_creation": {
+      "order": 4,
+      "description": "Record type creation for objects",
+      "dependencies": {
+        "before": [
+          "object_creation"
+        ],
+        "after": [
+          "permission_sets",
+          "page_layouts",
+          "validation_rules"
+        ]
+      }
+    }
+  },
+  "execution_order": [
+    "object_creation",
+    "field_creation",
+    "record_type_creation",
+    "permission_set",
+    "validation_rule",
+    "apex_class",
+    "apex_trigger",
+    "page_layouts",
+    "data_load",
+    "user_assignment"
+  ],
+  "conflict_resolution": {
+    "multiple_triggers_same_object_same_event": {
+      "severity": "error",
+      "message": "Multiple triggers on same object and event detected. Consolidate into single trigger with handler pattern.",
+      "recommendation": "Use trigger orchestrator to merge triggers"
+    },
+    "duplicate_rules": {
+      "severity": "warning",
+      "message": "Duplicate validation rule logic detected",
+      "recommendation": "Review and consolidate duplicate rules"
+    },
+    "permission_bloat": {
+      "severity": "warning",
+      "message": "Permission set has too many permissions (complexity > 0.7)",
+      "recommendation": "Split into Tier 1 foundational sets and Tier 2 composed set"
+    },
+    "overly_permissive": {
+      "severity": "critical",
+      "message": "High-risk system permission granted (ModifyAllData, ViewAllData)",
+      "recommendation": "Document justification and get security team approval"
+    },
+    "profile_conflicts": {
+      "severity": "error",
+      "message": "Permission set conflicts with profile permissions",
+      "recommendation": "Review profile permissions and adjust permission set"
+    },
+    "duplicate_permission_sets": {
+      "severity": "warning",
+      "message": "Duplicate permission set name detected",
+      "recommendation": "Rename or merge permission sets"
+    },
+    "circular_dependencies": {
+      "severity": "error",
+      "message": "Circular dependency detected in validation rules",
+      "recommendation": "Refactor validation logic to remove circular dependencies"
+    },
+    "too_many_rules_on_object": {
+      "severity": "warning",
+      "message": "Object has more than 20 validation rules",
+      "recommendation": "Consider consolidating rules or using Apex validation"
+    }
+  },
+  "governor_limits": {
+    "validation_rules": {
+      "per_object": 500,
+      "warning_threshold": 400,
+      "description": "Maximum validation rules per object"
+    },
+    "apex_triggers": {
+      "per_object": 1,
+      "pattern": "handler_pattern_required",
+      "description": "One trigger per object (use handler pattern for multiple operations)"
+    },
+    "permission_sets": {
+      "per_org": "unlimited",
+      "complexity_warning": 0.7,
+      "description": "No hard limit, but monitor complexity"
+    },
+    "apex_code": {
+      "coverage_minimum": 75,
+      "per_transaction_soql": 100,
+      "per_transaction_dml": 150,
+      "description": "Apex code must meet minimum coverage and governor limits"
+    }
+  },
+  "integration_hooks": {
+    "living_runbook_system": {
+      "hook": "post-operation-observe.sh",
+      "captures": [
+        "operation_type",
+        "template_used",
+        "complexity_score",
+        "anti_patterns_detected",
+        "deployment_status"
+      ]
+    },
+    "error_prevention_system": {
+      "hook": "pre-sf-command-validation.sh",
+      "validates": [
+        "command_syntax",
+        "parameter_correctness",
+        "metadata_existence"
+      ]
+    }
+  },
+  "templates": {
+    "validation_rules": {
+      "count": 6,
+      "categories": [
+        "field_validation",
+        "cross_field_validation",
+        "record_type_specific",
+        "date_range_validation",
+        "dependent_field_validation",
+        "lookup_relationship_validation"
+      ]
+    },
+    "apex_triggers": {
+      "count": 32,
+      "categories": [
+        "basic",
+        "data_validation",
+        "data_enrichment",
+        "related_records",
+        "integration",
+        "audit_logging",
+        "business_logic"
+      ]
+    },
+    "permission_sets": {
+      "count": 5,
+      "categories": [
+        "basic",
+        "role_based",
+        "specialized"
+      ]
+    }
+  },
+  "monitoring": {
+    "complexity_tracking": {
+      "enabled": true,
+      "thresholds": {
+        "simple": 0.3,
+        "moderate": 0.7,
+        "complex": 1.0
+      },
+      "actions": {
+        "simple": "direct_deployment",
+        "moderate": "segmented_approach",
+        "complex": "delegate_to_segmentation_specialist"
+      }
+    },
+    "anti_pattern_detection": {
+      "enabled": true,
+      "patterns": [
+        "permission_bloat",
+        "overly_permissive",
+        "inconsistent_fls",
+        "circular_dependencies",
+        "soql_in_loops",
+        "dml_in_loops",
+        "no_bulkification"
+      ]
+    }
+  },
+  "notes": {
+    "version_history": [
+      {
+        "version": "3.50.0",
+        "date": "2025-01-24",
+        "changes": [
+          "Added validation rules operation and dependencies",
+          "Added apex triggers operation and dependencies",
+          "Added permission sets operation with two-tier architecture",
+          "Added conflict resolution rules",
+          "Added governor limits tracking",
+          "Added integration hooks configuration",
+          "Added template registry",
+          "Added monitoring configuration"
+        ]
+      }
+    ],
+    "references": [
+      "docs/SALESFORCE_ORDER_OF_OPERATIONS.md",
+      "agents/validation-rule-orchestrator.md",
+      "agents/trigger-orchestrator.md",
+      "agents/permission-orchestrator.md"
+    ]
+  }
+}

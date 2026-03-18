@@ -1,0 +1,286 @@
+{
+  "templateMetadata": {
+    "templateId": "lead-generation",
+    "templateName": "Lead Generation Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "SDR/BDR view of new leads, source breakdown, MQLs awaiting follow-up, and team activity",
+    "audience": "SDRs, BDRs, Inside Sales Reps, Sales Development Managers",
+    "function": "marketing",
+    "level": "individual",
+    "useCase": "Daily lead management, prioritization, activity tracking, team performance",
+    "refreshFrequency": "Hourly",
+    "componentCount": 7,
+    "prerequisites": [
+      "Lead object with standard fields",
+      "LeadSource field populated",
+      "Lead Status picklist with MQL value",
+      "Lead Owner assignment"
+    ],
+    "tags": ["leads", "sdr", "bdr", "mql", "follow-up", "activity", "sales-development"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "plg", "outbound"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified view with 5 key lead components",
+        "componentOverrides": {
+          "maxComponents": 5,
+          "exclude": ["Lead Source Breakdown", "Team Activity Leaderboard"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full lead generation dashboard with all 7 components"
+      },
+      "plg": {
+        "description": "Product-led growth with trial/freemium lead focus",
+        "filterOverrides": [
+          { "field": "LeadSource", "default": "Product Trial", "values": ["Product Trial", "Freemium", "In-App"] }
+        ]
+      },
+      "outbound": {
+        "description": "Outbound-focused with prospecting metrics",
+        "filterOverrides": [
+          { "field": "LeadSource", "default": "Outbound", "values": ["Outbound", "Cold Call", "Prospecting"] }
+        ]
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Lead.OwnerId", "Lead.Status", "Lead.CreatedDate"],
+    "optionalFields": ["Lead.LeadSource", "Lead.MQL_Date__c", "Lead.Score__c"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "LeadScore": {
+        "patterns": ["Score__c", "Lead_Score__c", "Rating"],
+        "labelHints": ["Lead Score", "Score", "Rating"],
+        "dataType": "number"
+      },
+      "MQLDate": {
+        "patterns": ["MQL_Date__c", "Qualified_Date__c", "StatusChangeDate"],
+        "labelHints": ["MQL Date", "Qualified Date"],
+        "dataType": "date"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["New Leads Today", "MQLs This Week", "MQLs Awaiting Follow-up", "Hot Leads"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["New Leads Today", "MQLs This Week"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "New Leads Today",
+        "sourceReport": "new-leads-today",
+        "metric": "COUNT(Lead.Id WHERE CreatedDate=TODAY)",
+        "format": "number",
+        "target": "{{daily_lead_target}}",
+        "greenZone": { "percentOfTarget": { "min": 100, "max": 200 } },
+        "yellowZone": { "percentOfTarget": { "min": 80, "max": 100 } },
+        "redZone": { "percentOfTarget": { "min": 0, "max": 80 } }
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "MQLs This Week",
+        "sourceReport": "mqls-this-week",
+        "metric": "COUNT(Lead.Id WHERE Status='MQL' AND MQL_Date__c=THIS_WEEK)",
+        "format": "number",
+        "comparisonPeriod": "LAST_WEEK",
+        "greenZone": { "changePercent": { "min": 0, "max": 100 } },
+        "yellowZone": { "changePercent": { "min": -10, "max": 0 } },
+        "redZone": { "changePercent": { "min": -100, "max": -10 } }
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "MQLs Awaiting Follow-up",
+        "sourceReport": "mqls-awaiting-followup",
+        "metric": "COUNT(Lead.Id WHERE Status='MQL' AND LastActivityDate < TODAY-2)",
+        "format": "number",
+        "trendDirection": "lower-is-better",
+        "greenZone": { "min": 0, "max": 5 },
+        "yellowZone": { "min": 5, "max": 15 },
+        "redZone": { "min": 15, "max": 1000 }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "Leads by Source",
+        "sourceReport": "leads-by-source",
+        "groupBy": "LeadSource",
+        "metric": "COUNT(Lead.Id)",
+        "showPercentages": true,
+        "showLegend": true,
+        "colorMapping": {
+          "Content": "#5F3B8C",
+          "Events": "#E99560",
+          "Paid Search": "#3E4A61",
+          "Organic": "#6FBF73",
+          "Referral": "#7B4FAB"
+        }
+      },
+      {
+        "position": { "row": 1, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Table",
+        "title": "Hot Leads - Priority Follow-up",
+        "sourceReport": "hot-leads-priority",
+        "columns": [
+          { "field": "Name", "header": "Lead Name", "width": "20%" },
+          { "field": "Company", "header": "Company", "width": "20%" },
+          { "field": "LeadSource", "header": "Source", "width": "12%" },
+          { "field": "Status", "header": "Status", "width": "10%" },
+          { "field": "Rating", "header": "Rating", "width": "10%" },
+          { "field": "CreatedDate", "header": "Created", "format": "date", "width": "12%" },
+          { "field": "LastActivityDate", "header": "Last Touch", "format": "date", "width": "16%" }
+        ],
+        "sortBy": "Rating DESC, CreatedDate DESC",
+        "rowLimit": 10,
+        "conditionalFormatting": {
+          "Rating": {
+            "Hot": "red-background",
+            "Warm": "yellow-background",
+            "Cold": "default"
+          }
+        },
+        "filterLogic": "Status IN ('New', 'MQL') AND Rating IN ('Hot', 'Warm')"
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Line Chart",
+        "title": "Lead Volume Trend (30 Days)",
+        "sourceReport": "lead-volume-trend",
+        "xAxis": "CreatedDate (Day)",
+        "yAxis": "COUNT(Lead.Id)",
+        "showTrendLine": true,
+        "showDataLabels": false,
+        "targetLine": "{{daily_lead_target}}"
+      },
+      {
+        "position": { "row": 2, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Table",
+        "title": "Team Activity Leaderboard",
+        "sourceReport": "team-activity-leaderboard",
+        "columns": [
+          { "field": "Owner.Name", "header": "Rep", "width": "40%" },
+          { "field": "CallsToday", "header": "Calls", "format": "number", "width": "20%" },
+          { "field": "EmailsToday", "header": "Emails", "format": "number", "width": "20%" },
+          { "field": "LeadsConverted", "header": "Converted", "format": "number", "width": "20%" }
+        ],
+        "sortBy": "CallsToday DESC",
+        "rowLimit": 10
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "CreatedDate",
+      "type": "dateRange",
+      "placeholder": "{{period}}",
+      "default": "THIS_WEEK",
+      "values": ["TODAY", "THIS_WEEK", "THIS_MONTH", "LAST_30_DAYS"]
+    },
+    {
+      "field": "LeadSource",
+      "type": "picklist",
+      "placeholder": "{{lead_source}}",
+      "default": "All",
+      "values": ["All", "Content", "Events", "Paid Search", "Organic", "Referral", "Partner"]
+    },
+    {
+      "field": "Status",
+      "type": "picklist",
+      "placeholder": "{{status}}",
+      "default": "Open",
+      "values": ["All", "Open", "New", "MQL", "Working", "Converted", "Unqualified"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "individualLevel": "OwnerId = $User.Id",
+    "managerLevel": "Owner.ManagerId = $User.Id",
+    "note": "Filter to show only assigned leads"
+  },
+  "sourceReportTemplates": [
+    "marketing/lifecycle-funnel",
+    "marketing/mql-to-sql-conversion"
+  ],
+  "orgAdaptation": {
+    "requiredFields": [],
+    "optionalFields": [
+      "Lead.MQL_Date__c",
+      "Lead.Lead_Score__c",
+      "Lead.Marketing_Channel__c"
+    ],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MQL_Date__c": {
+        "patterns": ["MQL_Date__c", "Marketing_Qualified_Date__c", "Qualified_Date__c"],
+        "fallbackStrategy": "Use Status change date from Lead History",
+        "fallbackBehavior": "Filter by Status='MQL' only"
+      },
+      "Lead_Score__c": {
+        "patterns": ["Lead_Score__c", "Score__c", "Rating_Score__c"],
+        "fallbackField": "Rating",
+        "fallbackBehavior": "Use standard Rating field"
+      }
+    }
+  },
+  "kpiDefinitions": {
+    "speed_to_lead": {
+      "formula": "AVG(First_Activity_Date - CreatedDate)",
+      "benchmark": { "good": "<5 minutes", "acceptable": "<1 hour", "warning": ">4 hours" }
+    },
+    "mql_follow_up_rate": {
+      "formula": "COUNT(MQL with activity within 24h) / COUNT(MQL) * 100",
+      "benchmark": { "good": ">90%", "acceptable": ">75%", "warning": "<60%" }
+    },
+    "lead_conversion_rate": {
+      "formula": "COUNT(Converted) / COUNT(Total Leads) * 100",
+      "benchmark": { "good": ">20%", "acceptable": ">10%", "warning": "<5%" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify Lead.Status picklist includes MQL value",
+      "Confirm LeadSource field is populated",
+      "Check Lead assignment rules are configured",
+      "Create report folder: Sales Development"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Sales Development folder",
+      "Set hourly refresh during business hours",
+      "Share with SDR/BDR team"
+    ]
+  },
+  "relatedTemplates": ["demand-gen-funnel", "campaign-performance", "my-activities"]
+}

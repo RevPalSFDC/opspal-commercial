@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "HubSpot Operator Mappings",
+  "description": "Maps standard SQL/programming operators to HubSpot's verbose operator names",
+  "version": "1.0.0",
+  "created": "2025-10-24",
+  "note": "HubSpot requires verbose operator names like IS_GREATER_THAN_OR_EQUAL_TO instead of >=",
+
+  "operators": {
+    "comparison": {
+      "=": {
+        "hubspot": "IS_EQUAL_TO",
+        "description": "Equals",
+        "example": "property = 'value'"
+      },
+      "==": {
+        "hubspot": "IS_EQUAL_TO",
+        "description": "Equals (double equals)",
+        "example": "property == 'value'"
+      },
+      "!=": {
+        "hubspot": "IS_NOT_EQUAL_TO",
+        "description": "Not equals",
+        "example": "property != 'value'"
+      },
+      "<>": {
+        "hubspot": "IS_NOT_EQUAL_TO",
+        "description": "Not equals (SQL style)",
+        "example": "property <> 'value'"
+      },
+      ">": {
+        "hubspot": "IS_GREATER_THAN",
+        "description": "Greater than",
+        "example": "property > 100"
+      },
+      "<": {
+        "hubspot": "IS_LESS_THAN",
+        "description": "Less than",
+        "example": "property < 100"
+      },
+      ">=": {
+        "hubspot": "IS_GREATER_THAN_OR_EQUAL_TO",
+        "description": "Greater than or equal",
+        "example": "property >= 100"
+      },
+      "<=": {
+        "hubspot": "IS_LESS_THAN_OR_EQUAL_TO",
+        "description": "Less than or equal",
+        "example": "property <= 100"
+      }
+    },
+
+    "string": {
+      "LIKE": {
+        "hubspot": "CONTAINS",
+        "description": "Contains substring",
+        "example": "name LIKE '%test%'"
+      },
+      "NOT LIKE": {
+        "hubspot": "DOES_NOT_CONTAIN",
+        "description": "Does not contain substring",
+        "example": "name NOT LIKE '%test%'"
+      },
+      "STARTS WITH": {
+        "hubspot": "STARTS_WITH",
+        "description": "Starts with prefix",
+        "example": "email STARTS WITH 'admin'"
+      },
+      "ENDS WITH": {
+        "hubspot": "ENDS_WITH",
+        "description": "Ends with suffix",
+        "example": "email ENDS WITH '@example.com'"
+      }
+    },
+
+    "null_checks": {
+      "IS NULL": {
+        "hubspot": "IS_EMPTY",
+        "description": "Is null or empty",
+        "example": "property IS NULL"
+      },
+      "IS NOT NULL": {
+        "hubspot": "IS_NOT_EMPTY",
+        "description": "Is not null or empty",
+        "example": "property IS NOT NULL"
+      },
+      "IS EMPTY": {
+        "hubspot": "IS_EMPTY",
+        "description": "Is empty",
+        "example": "property IS EMPTY"
+      },
+      "IS NOT EMPTY": {
+        "hubspot": "IS_NOT_EMPTY",
+        "description": "Is not empty",
+        "example": "property IS NOT EMPTY"
+      }
+    },
+
+    "set_operations": {
+      "IN": {
+        "hubspot": "IS_ANY_OF",
+        "description": "Value in list",
+        "example": "status IN ('open', 'pending')"
+      },
+      "NOT IN": {
+        "hubspot": "IS_NONE_OF",
+        "description": "Value not in list",
+        "example": "status NOT IN ('closed', 'cancelled')"
+      }
+    },
+
+    "temporal": {
+      "WITHIN": {
+        "hubspot": "WITHIN_TIME_RANGE",
+        "description": "Within time range",
+        "example": "created_date WITHIN last 30 days"
+      },
+      "NOT WITHIN": {
+        "hubspot": "NOT_WITHIN_TIME_RANGE",
+        "description": "Not within time range",
+        "example": "created_date NOT WITHIN last 30 days"
+      }
+    }
+  },
+
+  "reverse_lookup": {
+    "IS_EQUAL_TO": ["=", "=="],
+    "IS_NOT_EQUAL_TO": ["!=", "<>"],
+    "IS_GREATER_THAN": [">"],
+    "IS_LESS_THAN": ["<"],
+    "IS_GREATER_THAN_OR_EQUAL_TO": [">="],
+    "IS_LESS_THAN_OR_EQUAL_TO": ["<="],
+    "CONTAINS": ["LIKE"],
+    "DOES_NOT_CONTAIN": ["NOT LIKE"],
+    "STARTS_WITH": ["STARTS WITH"],
+    "ENDS_WITH": ["ENDS WITH"],
+    "IS_EMPTY": ["IS NULL", "IS EMPTY"],
+    "IS_NOT_EMPTY": ["IS NOT NULL", "IS NOT EMPTY"],
+    "IS_ANY_OF": ["IN"],
+    "IS_NONE_OF": ["NOT IN"],
+    "WITHIN_TIME_RANGE": ["WITHIN"],
+    "NOT_WITHIN_TIME_RANGE": ["NOT WITHIN"]
+  },
+
+  "operation_types": {
+    "MULTISTRING": {
+      "description": "For string/enum values",
+      "applicable_operators": [
+        "IS_EQUAL_TO",
+        "IS_NOT_EQUAL_TO",
+        "IS_ANY_OF",
+        "IS_NONE_OF",
+        "CONTAINS",
+        "DOES_NOT_CONTAIN",
+        "STARTS_WITH",
+        "ENDS_WITH"
+      ]
+    },
+    "NUMBER": {
+      "description": "For numeric values",
+      "applicable_operators": [
+        "IS_EQUAL_TO",
+        "IS_NOT_EQUAL_TO",
+        "IS_GREATER_THAN",
+        "IS_LESS_THAN",
+        "IS_GREATER_THAN_OR_EQUAL_TO",
+        "IS_LESS_THAN_OR_EQUAL_TO"
+      ]
+    },
+    "TIME_RANGED": {
+      "description": "For date/time values",
+      "applicable_operators": [
+        "WITHIN_TIME_RANGE",
+        "NOT_WITHIN_TIME_RANGE",
+        "IS_EQUAL_TO",
+        "IS_GREATER_THAN",
+        "IS_LESS_THAN"
+      ]
+    },
+    "BOOL": {
+      "description": "For boolean values",
+      "applicable_operators": [
+        "IS_EQUAL_TO",
+        "IS_NOT_EQUAL_TO"
+      ]
+    },
+    "ENUMERATION": {
+      "description": "For enum/picklist values",
+      "applicable_operators": [
+        "IS_EQUAL_TO",
+        "IS_NOT_EQUAL_TO",
+        "IS_ANY_OF",
+        "IS_NONE_OF"
+      ]
+    }
+  },
+
+  "common_mistakes": [
+    {
+      "mistake": "Using >= instead of IS_GREATER_THAN_OR_EQUAL_TO",
+      "error": "API rejects with invalid operator error",
+      "correct": "Always use verbose operator names in HubSpot API",
+      "example_wrong": "{ \"operator\": \">=\" }",
+      "example_correct": "{ \"operator\": \"IS_GREATER_THAN_OR_EQUAL_TO\" }"
+    },
+    {
+      "mistake": "Using = for string comparison",
+      "error": "May work but IS_EQUAL_TO is preferred",
+      "correct": "Use IS_EQUAL_TO for clarity",
+      "example_wrong": "{ \"operator\": \"=\" }",
+      "example_correct": "{ \"operator\": \"IS_EQUAL_TO\" }"
+    },
+    {
+      "mistake": "Forgetting operationType field",
+      "error": "API request fails validation",
+      "correct": "Always include operationType (MULTISTRING, NUMBER, etc.)",
+      "example_wrong": "{ \"operator\": \"IS_EQUAL_TO\" }",
+      "example_correct": "{ \"operationType\": \"MULTISTRING\", \"operator\": \"IS_EQUAL_TO\" }"
+    },
+    {
+      "mistake": "Using IS NULL for HubSpot properties",
+      "error": "HubSpot uses IS_EMPTY, not IS_NULL",
+      "correct": "Use IS_EMPTY for null/empty checks",
+      "example_wrong": "{ \"operator\": \"IS_NULL\" }",
+      "example_correct": "{ \"operator\": \"IS_EMPTY\" }"
+    }
+  ],
+
+  "lists_api_examples": {
+    "string_equality": {
+      "description": "Filter by string property equality",
+      "operation": {
+        "operationType": "MULTISTRING",
+        "operator": "IS_EQUAL_TO",
+        "values": ["Technology"]
+      }
+    },
+    "numeric_comparison": {
+      "description": "Filter by numeric property comparison",
+      "operation": {
+        "operationType": "NUMBER",
+        "operator": "IS_GREATER_THAN_OR_EQUAL_TO",
+        "values": ["100"]
+      }
+    },
+    "set_membership": {
+      "description": "Filter by value in set",
+      "operation": {
+        "operationType": "ENUMERATION",
+        "operator": "IS_ANY_OF",
+        "values": ["customer", "opportunity"]
+      }
+    },
+    "string_contains": {
+      "description": "Filter by substring match",
+      "operation": {
+        "operationType": "MULTISTRING",
+        "operator": "CONTAINS",
+        "values": ["@example.com"]
+      }
+    },
+    "empty_check": {
+      "description": "Filter by empty/null value",
+      "operation": {
+        "operationType": "MULTISTRING",
+        "operator": "IS_EMPTY"
+      }
+    }
+  }
+}

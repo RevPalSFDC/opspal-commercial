@@ -1,0 +1,4 @@
+interface:
+  display_name: "Precommit Quality Enforcement Framework"
+  short_description: "Help with Precommit Quality Enforcement Framework tasks"
+  default_prompt: "Use $precommit-quality-enforcement-framework to execute this workflow safely and produce the expected artifacts."

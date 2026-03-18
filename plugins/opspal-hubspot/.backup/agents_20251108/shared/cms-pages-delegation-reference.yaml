@@ -1,0 +1,249 @@
+# CMS Pages API Delegation Reference
+# Used by hubspot-orchestrator and hubspot-cms-content-manager
+#
+# This file defines the delegation rules for CMS Pages API operations
+# to ensure consistent routing across all HubSpot agents
+
+delegation_rules:
+  page_operations:
+    agent: hubspot-cms-page-publisher
+    keywords:
+      - "create page"
+      - "new page"
+      - "landing page"
+      - "website page"
+      - "publish page"
+      - "schedule page"
+      - "clone page"
+      - "duplicate page"
+      - "delete page"
+      - "remove page"
+      - "archive page"
+      - "update page content"
+      - "edit page"
+      - "modify page"
+      - "batch pages"
+      - "bulk pages"
+    actions:
+      - create_page
+      - update_page
+      - publish_page
+      - clone_page
+      - delete_page
+      - batch_create_pages
+      - get_preview_url
+      - create_snapshot
+      - rollback
+    priority: HIGH
+
+  seo_validation:
+    agent: hubspot-seo-optimizer
+    keywords:
+      - "SEO"
+      - "optimize content"
+      - "keyword research"
+      - "meta description"
+      - "search optimization"
+    actions:
+      - analyze_content
+      - research_keywords
+      - generate_topic_cluster
+    priority: MEDIUM
+
+  cms_content_management:
+    agent: hubspot-cms-content-manager
+    keywords:
+      - "blog post"
+      - "blog content"
+      - "CMS settings"
+      - "template"
+      - "module"
+      - "design manager"
+    priority: HIGH
+
+# Coordination workflows define multi-agent sequences
+coordination_workflows:
+  - name: "Create and Publish Page"
+    description: "Complete workflow to create a page and publish it with SEO validation"
+    steps:
+      - step: 1
+        agent: hubspot-cms-page-publisher
+        action: create_page
+        description: "Create page as draft"
+      - step: 2
+        agent: hubspot-seo-optimizer
+        action: analyze_content
+        description: "Validate SEO before publishing"
+      - step: 3
+        agent: hubspot-cms-page-publisher
+        action: publish_page
+        condition: "seoScore >= 60"
+        description: "Publish if SEO score meets threshold"
+
+  - name: "Bulk Page Creation"
+    description: "Create and optionally publish multiple pages"
+    steps:
+      - step: 1
+        agent: hubspot-cms-page-publisher
+        action: batch_create_pages
+        description: "Create multiple pages in batch"
+      - step: 2
+        agent: hubspot-cms-page-publisher
+        action: batch_publish_pages
+        condition: "allPagesValid"
+        description: "Publish all pages if validation passes"
+
+  - name: "Page Migration"
+    description: "Clone pages from one template to another"
+    steps:
+      - step: 1
+        agent: hubspot-cms-page-publisher
+        action: create_snapshot
+        description: "Backup original pages"
+      - step: 2
+        agent: hubspot-cms-page-publisher
+        action: clone_page
+        description: "Clone pages with new template"
+      - step: 3
+        agent: hubspot-seo-optimizer
+        action: analyze_content
+        description: "Validate SEO on migrated pages"
+      - step: 4
+        agent: hubspot-cms-page-publisher
+        action: publish_page
+        condition: "seoScore >= 60"
+        description: "Publish migrated pages"
+
+# Routing table for keyword detection
+routing_table:
+  # Page lifecycle keywords → hubspot-cms-page-publisher
+  - pattern: "^(create|new|build)\\s+(landing\\s+)?page"
+    agent: hubspot-cms-page-publisher
+    confidence: 0.95
+
+  - pattern: "^(publish|schedule|go\\s+live)\\s+(page|landing)"
+    agent: hubspot-cms-page-publisher
+    confidence: 0.95
+
+  - pattern: "^(clone|duplicate|copy)\\s+page"
+    agent: hubspot-cms-page-publisher
+    confidence: 0.95
+
+  - pattern: "^(delete|remove|archive)\\s+page"
+    agent: hubspot-cms-page-publisher
+    confidence: 0.95
+
+  - pattern: "^(update|edit|modify)\\s+page"
+    agent: hubspot-cms-page-publisher
+    confidence: 0.90
+
+  # Blog operations → hubspot-cms-content-manager
+  - pattern: "^(create|new|publish)\\s+blog\\s+post"
+    agent: hubspot-cms-content-manager
+    confidence: 0.95
+
+  # SEO operations → hubspot-seo-optimizer
+  - pattern: "^(analyze|optimize|improve)\\s+SEO"
+    agent: hubspot-seo-optimizer
+    confidence: 0.95
+
+  - pattern: "^keyword\\s+research"
+    agent: hubspot-seo-optimizer
+    confidence: 0.95
+
+# Error handling patterns
+error_handling:
+  template_not_found:
+    error_type: "TEMPLATE_VALIDATION_ERROR"
+    resolution_steps:
+      - "Verify template exists in Design Manager"
+      - "Check template path spelling"
+      - "Ensure template is published"
+      - "Use hubspot-cms-content-manager to create template if needed"
+
+  slug_conflict:
+    error_type: "SLUG_CONFLICT_ERROR"
+    resolution_steps:
+      - "Modify slug to be unique (e.g., add suffix)"
+      - "OR: Update existing page instead of creating new"
+      - "OR: Delete/archive conflicting page first"
+
+  validation_failed:
+    error_type: "VALIDATION_ERROR"
+    resolution_steps:
+      - "Fix validation errors reported"
+      - "Retry operation after fixes"
+      - "Use --force flag to override (not recommended)"
+
+  seo_score_low:
+    error_type: "SEO_VALIDATION_ERROR"
+    resolution_steps:
+      - "Review SEO recommendations from hubspot-seo-optimizer"
+      - "Apply optimizations"
+      - "Re-run validation"
+      - "OR: Proceed with publish using force flag (not recommended)"
+
+# Validation rules for delegation
+validation_rules:
+  - rule: "Page operations MUST delegate to hubspot-cms-page-publisher"
+    enforcement: "pre-task-hook"
+    hook_name: "pre-task-cms-pages-validator"
+
+  - rule: "SEO validation MUST precede publishing"
+    enforcement: "workflow"
+    minimum_score: 60
+
+  - rule: "Template validation MUST precede page creation"
+    enforcement: "pre-api-call"
+
+  - rule: "Snapshots SHOULD be created before risky operations"
+    enforcement: "best-practice"
+    operations: ["delete_page", "publish_page", "batch_publish"]
+
+# Performance optimization hints
+performance:
+  batch_operations:
+    minimum_size: 10
+    description: "Use batch operations when processing 10+ pages"
+    methods: ["batchCreatePages", "batchUpdatePages", "batchPublishPages"]
+
+  rate_limiting:
+    requests_per_window: 150
+    window_seconds: 10
+    description: "HubSpot Professional tier: 150 requests/10 seconds"
+    automatic: true
+    implementation: "Built into HubSpotCMSPagesManager"
+
+  caching:
+    template_cache_ttl: 3600
+    description: "Template validation results cached for 1 hour"
+    automatic: true
+
+# Integration points
+integration_points:
+  - agent: hubspot-cms-page-publisher
+    provides:
+      - "Page CRUD operations"
+      - "Publishing workflows"
+      - "Batch operations"
+      - "Rollback capabilities"
+
+  - agent: hubspot-cms-content-manager
+    provides:
+      - "Blog management"
+      - "Template operations"
+      - "SEO coordination"
+      - "Overall CMS orchestration"
+
+  - agent: hubspot-seo-optimizer
+    provides:
+      - "Content analysis"
+      - "Keyword research"
+      - "SEO scoring"
+      - "Optimization recommendations"
+
+  - agent: hubspot-orchestrator
+    provides:
+      - "Multi-agent coordination"
+      - "Complex workflow management"
+      - "Task routing"

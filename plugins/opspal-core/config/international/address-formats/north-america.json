@@ -1,0 +1,157 @@
+{
+  "description": "Address format configurations for North America",
+  "version": "1.0.0",
+  "US": {
+    "name": "United States",
+    "format": {
+      "order": ["street", "street2", "city", "state", "postalCode"],
+      "template": "{street}\n{street2}\n{city}, {state} {postalCode}",
+      "uppercase": true
+    },
+    "postalCode": {
+      "name": "ZIP Code",
+      "format": "XXXXX or XXXXX-XXXX",
+      "regex": "^\\d{5}(-\\d{4})?$",
+      "examples": ["02101", "94105-1234"]
+    },
+    "streetTypes": {
+      "Street": "ST",
+      "Avenue": "AVE",
+      "Boulevard": "BLVD",
+      "Drive": "DR",
+      "Road": "RD",
+      "Lane": "LN",
+      "Court": "CT",
+      "Circle": "CIR",
+      "Place": "PL",
+      "Parkway": "PKWY",
+      "Highway": "HWY",
+      "Way": "WAY",
+      "Terrace": "TER",
+      "Trail": "TRL",
+      "Square": "SQ",
+      "Expressway": "EXPY",
+      "Freeway": "FWY",
+      "Pike": "PIKE",
+      "Alley": "ALY",
+      "Crescent": "CRES",
+      "Loop": "LOOP",
+      "Path": "PATH",
+      "Row": "ROW",
+      "Run": "RUN",
+      "Walk": "WALK"
+    },
+    "directions": {
+      "North": "N",
+      "South": "S",
+      "East": "E",
+      "West": "W",
+      "Northeast": "NE",
+      "Northwest": "NW",
+      "Southeast": "SE",
+      "Southwest": "SW"
+    },
+    "units": {
+      "Suite": "STE",
+      "Apartment": "APT",
+      "Unit": "UNIT",
+      "Floor": "FL",
+      "Building": "BLDG",
+      "Room": "RM",
+      "Department": "DEPT",
+      "Office": "OFC"
+    }
+  },
+  "CA": {
+    "name": "Canada",
+    "format": {
+      "order": ["street", "street2", "city", "state", "postalCode"],
+      "template": "{street}\n{street2}\n{city} {state}  {postalCode}",
+      "uppercase": true
+    },
+    "postalCode": {
+      "name": "Postal Code",
+      "format": "A#A #A#",
+      "regex": "^[A-Z]\\d[A-Z]\\s?\\d[A-Z]\\d$",
+      "examples": ["K1A 0B1", "V6B 3K9"]
+    },
+    "streetTypes": {
+      "Street": "ST",
+      "Avenue": "AVE",
+      "Boulevard": "BLVD",
+      "Drive": "DR",
+      "Road": "RD",
+      "Lane": "LN",
+      "Court": "CRT",
+      "Circle": "CIR",
+      "Place": "PL",
+      "Way": "WAY",
+      "Terrace": "TERR",
+      "Trail": "TRAIL",
+      "Crescent": "CRES",
+      "Heights": "HTS",
+      "Park": "PK",
+      "Gardens": "GDNS",
+      "Grove": "GRV",
+      "Close": "CLOSE"
+    },
+    "directions": {
+      "North": "N",
+      "South": "S",
+      "East": "E",
+      "West": "W",
+      "Northeast": "NE",
+      "Northwest": "NW",
+      "Southeast": "SE",
+      "Southwest": "SW"
+    },
+    "units": {
+      "Suite": "SUITE",
+      "Apartment": "APT",
+      "Unit": "UNIT",
+      "Floor": "FL",
+      "Bureau": "BUREAU"
+    }
+  },
+  "MX": {
+    "name": "Mexico",
+    "format": {
+      "order": ["street", "street2", "neighborhood", "postalCode", "city", "state"],
+      "template": "{street} {number}\n{street2}\n{neighborhood}\n{postalCode} {city}, {state}",
+      "uppercase": false
+    },
+    "postalCode": {
+      "name": "Código Postal",
+      "format": "#####",
+      "regex": "^\\d{5}$",
+      "examples": ["06600", "44100"]
+    },
+    "streetTypes": {
+      "Calle": "C.",
+      "Avenida": "Av.",
+      "Boulevard": "Blvd.",
+      "Calzada": "Calz.",
+      "Paseo": "Pso.",
+      "Privada": "Priv.",
+      "Cerrada": "Cerr.",
+      "Circuito": "Cto.",
+      "Prolongación": "Prol.",
+      "Retorno": "Ret.",
+      "Andador": "And.",
+      "Camino": "Cam."
+    },
+    "directions": {
+      "Norte": "Nte.",
+      "Sur": "Sur",
+      "Oriente": "Ote.",
+      "Poniente": "Pte."
+    },
+    "units": {
+      "Interior": "Int.",
+      "Departamento": "Depto.",
+      "Piso": "Piso",
+      "Local": "Loc.",
+      "Oficina": "Of."
+    }
+  }
+}

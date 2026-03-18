@@ -1,0 +1,138 @@
+{
+  "object": "Contact",
+  "apiName": "Contact",
+  "description": "Contact merge profile - based on Salesforce Record Merging Runbook specifications",
+  "supportsHierarchy": true,
+  "hierarchyField": "ReportsToId",
+  "maxMergeCandidates": 2,
+  "relatedObjects": [
+    {
+      "object": "Case",
+      "field": "ContactId",
+      "queryFields": "Id, CaseNumber, Status, ContactId",
+      "reparent": true,
+      "description": "Cases where this Contact is the primary contact"
+    },
+    {
+      "object": "Task",
+      "field": "WhoId",
+      "queryFields": "Id, Subject, Status, WhoId",
+      "reparent": true,
+      "polymorphic": true,
+      "description": "Tasks related to this Contact (polymorphic WhoId field)"
+    },
+    {
+      "object": "Event",
+      "field": "WhoId",
+      "queryFields": "Id, Subject, StartDateTime, WhoId",
+      "reparent": true,
+      "polymorphic": true,
+      "description": "Events related to this Contact (polymorphic WhoId field)"
+    },
+    {
+      "object": "CampaignMember",
+      "field": "ContactId",
+      "queryFields": "Id, CampaignId, Status, ContactId",
+      "reparent": true,
+      "description": "Campaign memberships for this Contact"
+    },
+    {
+      "object": "OpportunityContactRole",
+      "field": "ContactId",
+      "queryFields": "Id, OpportunityId, Role, ContactId",
+      "reparent": true,
+      "description": "Opportunity contact roles"
+    },
+    {
+      "object": "AccountContactRelation",
+      "field": "ContactId",
+      "queryFields": "Id, AccountId, Roles, ContactId",
+      "reparent": true,
+      "description": "Account-Contact relationships (if using Contact to Multiple Accounts)"
+    }
+  ],
+  "specialCases": {
+    "portalUser": {
+      "enabled": true,
+      "userField": "User.ContactId",
+      "requireSelection": true,
+      "description": "Runbook: If contacts are portal users, only one user can remain. Use AdditionalInformationMap with PortalUserId.",
+      "cliImplementation": "Query User records WHERE ContactId IN (master, duplicate), select one, reassign to master, deactivate other",
+      "validationRequired": true
+    },
+    "individual": {
+      "enabled": true,
+      "strategy": "most_recent",
+      "description": "Runbook: GDPR Individual records - keep most recently updated if enabled in org settings",
+      "cliImplementation": "Query Individual records, compare LastModifiedDate, link most recent to master",
+      "validationRequired": false
+    },
+    "reportsTo": {
+      "enabled": true,
+      "description": "Runbook: Prevent circular hierarchy where Contact A reports to B, then merging A into B",
+      "validationRequired": true
+    },
+    "sharedContacts": {
+      "enabled": false,
+      "description": "Runbook: Cannot merge contacts that share Account relationships (Contact to Multiple Accounts)",
+      "validationRequired": false
+    }
+  },
+  "fieldResolution": {
+    "importanceKeywords": [
+      "primary",
+      "preferred",
+      "main",
+      "decision",
+      "maker",
+      "email",
+      "phone",
+      "mobile",
+      "title",
+      "role",
+      "department",
+      "owner"
+    ],
+    "preferNonNull": true,
+    "masterWins": true,
+    "description": "Runbook rule: Master values win unless null. Preserve important contact info from duplicate."
+  },
+  "validation": {
+    "validatePermissions": true,
+    "strictPermissionMode": false,
+    "checkCircularHierarchy": true,
+    "checkSharedContacts": false,
+    "checkConvertedStatus": false,
+    "checkPortalUsers": true,
+    "description": "Comprehensive validation: permissions, circular ReportsTo, portal users, Individual records (GDPR)"
+  },
+  "performance": {
+    "useExplicitFields": true,
+    "cacheMetadata": true,
+    "parallelReparenting": true,
+    "description": "Optimizations: explicit field selection, metadata caching, parallel related record updates"
+  },
+  "runbookCompliance": {
+    "soapEquivalent": "merge() call with Contact masterRecord and AdditionalInformationMap for portal users",
+    "cliImplementation": "sf data query + sf data update + portal user handling + sf data delete",
+    "fieldResolutionRule": "Master values win unless null (Runbook default)",
+    "relatedRecordHandling": "Automatic reparenting including polymorphic WhoId fields",
+    "specialCaseHandling": {
+      "portalUsers": "Query User records, select survivor, reassign ContactId, deactivate duplicate user",
+      "individual": "Query Individual records, keep most recent based on LastModifiedDate",
+      "circularHierarchy": "Validate ReportsToId doesn't create circular reference"
+    },
+    "rollbackCapability": "Recovery procedures A/B/C (CSV-based restoration)",
+    "runbookReference": "Contacts - Using SOAP API (Merge Contacts) section"
+  },
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-06",
+  "productionValidated": false,
+  "notes": [
+    "Portal user handling requires additional User object queries and updates",
+    "Individual records (GDPR) require org setting check: Setup > Data Privacy > Individual",
+    "Circular hierarchy validation prevents Contact.ReportsToId loops",
+    "CampaignMember records are deduplicated automatically by Salesforce (one per Campaign)",
+    "Polymorphic WhoId fields (Task/Event) require special handling in reparenting"
+  ]
+}

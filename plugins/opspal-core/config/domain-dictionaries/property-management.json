@@ -1,0 +1,175 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "property-management",
+  "version": "1.0.0",
+  "description": "Property management, HOA, real estate operations, and landlord/tenant relationships",
+
+  "detectionPatterns": {
+    "keywords": [
+      "property", "tenant", "lease", "HOA", "landlord", "unit", "rent", "building",
+      "apartment", "condo", "residential", "commercial", "maintenance", "association",
+      "occupancy", "vacancy", "eviction", "security deposit", "move-in", "move-out"
+    ],
+    "entityTypes": ["Property", "Unit", "Lease", "Tenant", "Building", "Association"],
+    "fieldPatterns": [
+      "RentAmount", "LeaseStart", "LeaseEnd", "UnitNumber", "PropertyAddress",
+      "SecurityDeposit", "MoveInDate", "MoveOutDate", "OccupancyStatus"
+    ]
+  },
+
+  "abbreviations": {
+    "organizations": {
+      "HOA": "Homeowners Association",
+      "COA": "Condominium Owners Association",
+      "POA": "Property Owners Association",
+      "TOA": "Townhome Owners Association",
+      "PM": "Property Management",
+      "PMC": "Property Management Company",
+      "REIT": "Real Estate Investment Trust",
+      "CAI": "Community Associations Institute",
+      "NAA": "National Apartment Association",
+      "IREM": "Institute of Real Estate Management",
+      "NARPM": "National Association of Residential Property Managers",
+      "BOMA": "Building Owners and Managers Association"
+    },
+    "financial": {
+      "CAM": "Common Area Maintenance",
+      "NNN": "Triple Net Lease",
+      "NOI": "Net Operating Income",
+      "GRM": "Gross Rent Multiplier",
+      "ROI": "Return on Investment",
+      "TI": "Tenant Improvement",
+      "LOI": "Letter of Intent",
+      "NAV": "Net Asset Value",
+      "GPR": "Gross Potential Rent",
+      "EGI": "Effective Gross Income",
+      "OPEX": "Operating Expenses",
+      "CAPEX": "Capital Expenditures",
+      "DSC": "Debt Service Coverage",
+      "LTV": "Loan to Value",
+      "IRR": "Internal Rate of Return",
+      "COC": "Cash on Cash Return"
+    },
+    "operational": {
+      "LL": "Landlord",
+      "TEN": "Tenant",
+      "BD": "Board of Directors",
+      "AGM": "Annual General Meeting",
+      "CC&R": "Covenants Conditions and Restrictions",
+      "CC&Rs": "Covenants Conditions and Restrictions",
+      "MGR": "Manager",
+      "MAINT": "Maintenance",
+      "W/O": "Work Order",
+      "MO": "Move Out",
+      "MI": "Move In",
+      "AR": "Accounts Receivable",
+      "AP": "Accounts Payable",
+      "NSF": "Non-Sufficient Funds",
+      "MTM": "Month to Month",
+      "YOY": "Year Over Year"
+    },
+    "unitTypes": {
+      "SFR": "Single Family Residence",
+      "SFH": "Single Family Home",
+      "MFR": "Multi-Family Residence",
+      "MF": "Multi-Family",
+      "COMM": "Commercial",
+      "IND": "Industrial",
+      "MHP": "Mobile Home Park",
+      "SS": "Self Storage",
+      "1BR": "One Bedroom",
+      "2BR": "Two Bedroom",
+      "3BR": "Three Bedroom",
+      "STU": "Studio",
+      "TH": "Townhouse",
+      "DPX": "Duplex",
+      "TPX": "Triplex",
+      "4PX": "Fourplex"
+    },
+    "leaseTerms": {
+      "FAR": "First Article of Rent",
+      "LAR": "Last Article of Rent",
+      "FMRV": "Fair Market Rental Value",
+      "PML": "Periodic Month Lease",
+      "FTL": "Fixed Term Lease",
+      "GSL": "Gross Lease",
+      "NL": "Net Lease",
+      "MGL": "Modified Gross Lease",
+      "PSF": "Per Square Foot",
+      "RSF": "delta-corp Square Feet",
+      "USF": "Usable Square Feet",
+      "GLA": "Gross Leasable Area"
+    },
+    "compliance": {
+      "FHA": "Fair Housing Act",
+      "ADA": "Americans with Disabilities Act",
+      "HUD": "Housing and Urban Development",
+      "EPA": "Environmental Protection Agency",
+      "OSHA": "Occupational Safety and Health Administration",
+      "ESA": "Emotional Support Animal",
+      "SA": "Service Animal"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["LLC", "Inc", "Corp", "LP", "LLP", "Ltd", "Co", "Company"],
+    "preserve": [
+      "Properties", "Property Management", "Management", "Realty",
+      "Holdings", "Investments", "Apartments", "Homes", "Communities",
+      "HOA", "Association", "Condominiums", "Estates"
+    ]
+  },
+
+  "synonyms": {
+    "HOA": ["Homeowners Association", "Home Owners Association", "Owners Association", "OA"],
+    "Property Manager": ["PM", "Property Mgr", "Prop Manager", "Building Manager"],
+    "Tenant": ["Resident", "Lessee", "Renter", "Occupant"],
+    "Landlord": ["LL", "Property Owner", "Lessor", "Owner"],
+    "Lease": ["Rental Agreement", "Tenancy Agreement", "Lease Agreement"],
+    "Unit": ["Apartment", "Suite", "Space", "Dwelling"],
+    "Maintenance": ["Repairs", "Upkeep", "Service", "MAINT"],
+    "Security Deposit": ["Deposit", "Bond", "Damage Deposit"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 70
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 80,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -25
+  },
+
+  "genericEntityPatterns": [
+    "* HOA",
+    "* Homeowners Association",
+    "* Home Owners Association",
+    "* Property Management",
+    "* Apartments",
+    "* Condominiums",
+    "* Condo Association",
+    "* Condominium Association",
+    "* Townhomes",
+    "* Townhouse Association",
+    "* Community Association",
+    "* Owners Association",
+    "* Estates",
+    "* Villas",
+    "* Village HOA"
+  ],
+
+  "sameEntitySignals": {
+    "required": ["domain_match OR management_company_match"],
+    "boosts": ["phone_area_match", "address_proximity", "shared_management"],
+    "blockers": ["different_management_company"]
+  }
+}

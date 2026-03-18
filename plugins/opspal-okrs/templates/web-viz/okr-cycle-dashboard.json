@@ -1,0 +1,269 @@
+{
+  "id": "okr-cycle-dashboard",
+  "name": "OKR Cycle Dashboard",
+  "description": "Interactive executive dashboard showing OKR health, confidence bands, and initiative status",
+  "version": "1.0.0",
+  "category": "okr",
+  "audience": ["board", "executive", "department"],
+
+  "layout": {
+    "columns": 12,
+    "rows": "auto",
+    "gap": 16
+  },
+
+  "filters": {
+    "global": [
+      { "id": "period", "type": "select", "label": "Cycle", "default": "current", "options": ["current", "previous", "all"] },
+      { "id": "audience", "type": "select", "label": "Audience", "default": "exec", "options": ["board", "exec", "department"] }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "arr-growth",
+      "type": "kpi",
+      "title": "ARR Growth",
+      "position": { "row": 1, "col": 1, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "trendLabel": "vs Prior Quarter",
+        "icon": "trending-up",
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "okr-snapshot",
+        "query": "arr-growth"
+      },
+      "demoData": "kpis.arrGrowth"
+    },
+    {
+      "id": "nrr",
+      "type": "kpi",
+      "title": "Net Revenue Retention",
+      "position": { "row": 1, "col": 4, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": true,
+        "trendPeriod": "quarter",
+        "icon": "refresh-cw",
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "okr-snapshot",
+        "query": "nrr"
+      },
+      "demoData": "kpis.nrr"
+    },
+    {
+      "id": "pipeline-coverage",
+      "type": "kpi",
+      "title": "Pipeline Coverage",
+      "position": { "row": 1, "col": 7, "colspan": 3 },
+      "config": {
+        "format": "number",
+        "decimals": 1,
+        "suffix": "x",
+        "showTrend": true,
+        "icon": "chart-pie",
+        "target": 3,
+        "showTarget": true,
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "okr-snapshot",
+        "query": "pipeline-coverage"
+      },
+      "demoData": "kpis.pipelineCoverage"
+    },
+    {
+      "id": "kr-completion",
+      "type": "kpi",
+      "title": "KR Completion Rate",
+      "position": { "row": 1, "col": 10, "colspan": 3 },
+      "config": {
+        "format": "percent",
+        "showTrend": true,
+        "trendDirection": "auto",
+        "icon": "check-circle",
+        "size": "large"
+      },
+      "dataBinding": {
+        "source": "okr-status",
+        "query": "kr-completion-rate"
+      },
+      "demoData": "kpis.krCompletion"
+    },
+    {
+      "id": "objective-health-heatmap",
+      "type": "table",
+      "title": "Objective Health Heatmap",
+      "position": { "row": 2, "col": 1, "colspan": 8, "rowspan": 2 },
+      "config": {
+        "columns": [
+          { "field": "objective", "label": "Objective", "width": "35%" },
+          { "field": "owner", "label": "Owner", "width": "15%" },
+          { "field": "kr1", "label": "KR 1", "width": "10%", "format": "rag-badge", "align": "center" },
+          { "field": "kr2", "label": "KR 2", "width": "10%", "format": "rag-badge", "align": "center" },
+          { "field": "kr3", "label": "KR 3", "width": "10%", "format": "rag-badge", "align": "center" },
+          { "field": "overall", "label": "Overall", "width": "10%", "format": "rag-badge", "align": "center" },
+          { "field": "trend", "label": "Trend", "width": "10%", "format": "trend-arrow" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "ragClasses": {
+          "on_track": "status-green",
+          "at_risk": "status-yellow",
+          "off_track": "status-red"
+        }
+      },
+      "dataBinding": {
+        "source": "okr-status",
+        "query": "objective-health"
+      },
+      "demoData": "objectiveHealth"
+    },
+    {
+      "id": "kr-confidence-chart",
+      "type": "chart",
+      "title": "KR Confidence Bands",
+      "position": { "row": 2, "col": 9, "colspan": 4, "rowspan": 2 },
+      "config": {
+        "chartType": "bar",
+        "indexAxis": "y",
+        "showLegend": true,
+        "showValues": false,
+        "stacked": false,
+        "datasets": [
+          { "label": "P10", "color": "#94A3B8" },
+          { "label": "P50", "color": "#5F3B8C" },
+          { "label": "P90", "color": "#E99560" }
+        ],
+        "annotations": [
+          { "type": "line", "value": 100, "label": "Target", "color": "#3E4A61", "dash": [5, 5] }
+        ]
+      },
+      "dataBinding": {
+        "source": "okr-status",
+        "query": "kr-confidence"
+      },
+      "demoData": "krConfidence"
+    },
+    {
+      "id": "initiative-watchlist",
+      "type": "table",
+      "title": "Initiative Watchlist",
+      "position": { "row": 4, "col": 1, "colspan": 6 },
+      "config": {
+        "columns": [
+          { "field": "name", "label": "Initiative", "width": "30%" },
+          { "field": "owner", "label": "Owner", "width": "15%" },
+          { "field": "status", "label": "Status", "width": "15%", "format": "badge" },
+          { "field": "priority_score", "label": "Priority", "width": "15%", "align": "center" },
+          { "field": "linked_kr", "label": "Linked KR", "width": "25%" }
+        ],
+        "sortable": true,
+        "pagination": false,
+        "maxRows": 8,
+        "rowHighlight": {
+          "field": "status",
+          "values": {
+            "blocked": "#FEE2E2",
+            "at_risk": "#FEF3C7",
+            "on_track": "#DCFCE7"
+          }
+        }
+      },
+      "dataBinding": {
+        "source": "okr-initiatives",
+        "query": "watchlist"
+      },
+      "demoData": "initiativeWatchlist"
+    },
+    {
+      "id": "cycle-health-trend",
+      "type": "chart",
+      "title": "Cycle Health Trend",
+      "position": { "row": 4, "col": 7, "colspan": 6 },
+      "config": {
+        "chartType": "line",
+        "showLegend": false,
+        "fill": true,
+        "tension": 0.3,
+        "valueFormat": "percent",
+        "annotations": [
+          { "type": "line", "value": 70, "label": "On Track Threshold", "color": "#22C55E", "dash": [5, 5] }
+        ]
+      },
+      "dataBinding": {
+        "source": "okr-status",
+        "query": "weekly-kr-completion"
+      },
+      "demoData": "healthTrend"
+    }
+  ],
+
+  "dataBindings": {
+    "arr-growth": {
+      "okr-snapshot": {
+        "file": "snapshots/revenue-snapshot.json",
+        "path": "revenue.arr_growth_pct"
+      }
+    },
+    "nrr": {
+      "okr-snapshot": {
+        "file": "snapshots/revenue-snapshot.json",
+        "path": "retention.nrr"
+      }
+    },
+    "pipeline-coverage": {
+      "okr-snapshot": {
+        "file": "snapshots/revenue-snapshot.json",
+        "path": "pipeline.coverage_ratio"
+      }
+    },
+    "kr-completion-rate": {
+      "okr-status": {
+        "file": "reports/okr-status-latest.json",
+        "path": "summary.kr_completion_pct"
+      }
+    },
+    "objective-health": {
+      "okr-status": {
+        "file": "reports/okr-status-latest.json",
+        "path": "objectives"
+      }
+    },
+    "kr-confidence": {
+      "okr-status": {
+        "file": "reports/okr-status-latest.json",
+        "path": "kr_confidence_bands"
+      }
+    },
+    "weekly-kr-completion": {
+      "okr-status": {
+        "file": "reports/okr-status-latest.json",
+        "path": "weekly_health_trend"
+      }
+    }
+  },
+
+  "footer": {
+    "showTimestamp": true,
+    "timestampLabel": "Last Updated",
+    "showDataSource": true,
+    "dataSourceLabel": "Source: OKR Cycle Data"
+  },
+
+  "theme": {
+    "baseTheme": "revpal",
+    "primaryColor": "#5F3B8C",
+    "ragColors": {
+      "on_track": "#22C55E",
+      "at_risk": "#F59E0B",
+      "off_track": "#EF4444"
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "$schema": "./schemas/enrichment-config.schema.json",
+  "version": "1.0.0",
+  "description": "Configuration for Mira-inspired agentic enrichment pipeline",
+
+  "pipeline": {
+    "confidenceThreshold": 4,
+    "maxIterations": 3,
+    "timeout_ms": 30000,
+    "parallelEnrichers": false,
+    "stopOnFirstSuccess": false,
+    "retryOnFailure": true,
+    "maxRetries": 2,
+    "retryDelay_ms": 1000
+  },
+
+  "enrichers": {
+    "order": ["website", "linkedin", "search"],
+    "enabled": {
+      "website": true,
+      "linkedin": true,
+      "search": true
+    },
+    "timeout_ms": {
+      "website": 15000,
+      "linkedin": 10000,
+      "search": 10000
+    }
+  },
+
+  "firmographic_fields": {
+    "required": ["industry", "employee_count", "annual_revenue"],
+    "optional": ["founded_year", "headquarters", "website", "description", "stock_symbol", "naics_code", "sic_code"],
+    "enrichment_priority": {
+      "industry": ["website", "linkedin", "search"],
+      "employee_count": ["linkedin", "website", "search"],
+      "annual_revenue": ["search", "linkedin"],
+      "founded_year": ["linkedin", "website", "search"],
+      "headquarters": ["website", "linkedin"],
+      "description": ["website", "linkedin"],
+      "stock_symbol": ["search"],
+      "naics_code": ["search"],
+      "sic_code": ["search"]
+    }
+  },
+
+  "biographic_fields": {
+    "required": ["email", "title", "seniority"],
+    "optional": ["phone", "linkedin_url", "department", "location", "tenure_years"],
+    "enrichment_priority": {
+      "email": ["linkedin", "website", "search"],
+      "title": ["linkedin", "website"],
+      "seniority": ["linkedin"],
+      "phone": ["website", "search"],
+      "linkedin_url": ["linkedin", "search"],
+      "department": ["linkedin", "website"],
+      "location": ["linkedin", "website"]
+    }
+  },
+
+  "source_priority": {
+    "customer_provided": 5.0,
+    "crm_user_entered": 4.5,
+    "company_website": 4.0,
+    "linkedin": 4.0,
+    "government_database": 4.0,
+    "business_directory": 3.5,
+    "news_article": 3.0,
+    "web_search": 2.5,
+    "third_party_enrichment": 3.0,
+    "ai_inference": 1.5,
+    "unknown": 1.0
+  },
+
+  "confidence_scoring": {
+    "base_scores": {
+      "customer_provided": 5,
+      "crm_user_entered": 5,
+      "company_website": 4,
+      "linkedin": 4,
+      "government_database": 4,
+      "business_directory": 3,
+      "news_article": 3,
+      "web_search": 2,
+      "ai_inference": 1
+    },
+    "boosts": {
+      "corroboration": 0.5,
+      "exact_match": 0.5,
+      "verified": 1.0,
+      "recent_data": 0.3
+    },
+    "penalties": {
+      "stale_data_days": 365,
+      "stale_penalty": 1.0,
+      "fuzzy_match": 0.5,
+      "single_source": 0.3
+    },
+    "min_score": 1,
+    "max_score": 5
+  },
+
+  "early_termination": {
+    "enabled": true,
+    "all_required_threshold": 4,
+    "any_required_threshold": 3,
+    "min_fields_enriched": 2,
+    "cost_aware": true,
+    "max_api_calls": 10
+  },
+
+  "protected_fields": [
+    "do_not_call",
+    "do_not_email",
+    "gdpr_consent",
+    "ccpa_consent",
+    "lead_source",
+    "opportunity_stage",
+    "created_date",
+    "created_by_id",
+    "owner_id"
+  ],
+
+  "field_validation": {
+    "email": {
+      "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "reject_free_domains": false,
+      "free_domains": ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com"]
+    },
+    "phone": {
+      "min_digits": 10,
+      "max_digits": 15,
+      "reject_obvious_fake": true
+    },
+    "website": {
+      "require_valid_tld": true,
+      "valid_tlds": [".com", ".org", ".net", ".gov", ".edu", ".io", ".co", ".ai"]
+    },
+    "employee_count": {
+      "min": 1,
+      "max": 10000000,
+      "allow_ranges": true
+    },
+    "annual_revenue": {
+      "min": 0,
+      "currency": "USD",
+      "allow_estimates": true
+    }
+  },
+
+  "rate_limiting": {
+    "website": {
+      "requests_per_minute": 30,
+      "concurrent_requests": 3
+    },
+    "linkedin": {
+      "requests_per_minute": 10,
+      "concurrent_requests": 1
+    },
+    "search": {
+      "requests_per_minute": 20,
+      "concurrent_requests": 2
+    }
+  },
+
+  "caching": {
+    "enabled": true,
+    "ttl_seconds": {
+      "website": 86400,
+      "linkedin": 604800,
+      "search": 3600
+    },
+    "max_entries": 10000
+  },
+
+  "logging": {
+    "level": "info",
+    "include_raw_responses": false,
+    "include_timing": true,
+    "include_cost_tracking": true
+  }
+}

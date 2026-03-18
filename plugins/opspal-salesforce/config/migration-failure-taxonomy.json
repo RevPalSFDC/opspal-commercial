@@ -1,0 +1,383 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Taxonomy of migration failure modes - cases where reports/dashboards were technically migrated successfully but rejected by business users.",
+  "categories": {
+    "semantic_drift": {
+      "name": "Semantic Drift",
+      "description": "Structure preserved but meaning altered",
+      "subcategories": {
+        "metric_type_change": {
+          "name": "Metric Type Change",
+          "description": "Report appears similar but measures a fundamentally different metric",
+          "examples": [
+            "Pipeline report changed from ARR to TCV without labeling",
+            "Win rate switched from count-based to value-based",
+            "Revenue report changed from bookings to recognized revenue"
+          ],
+          "rootCauses": [
+            "Field mapping used Amount instead of ARR__c",
+            "Filter logic implicitly changed denominator definition",
+            "Aggregation changed from SUM to COUNT"
+          ],
+          "prevention": [
+            "Validate inferred metricId matches before and after",
+            "Require explicit metric definition ID in report metadata",
+            "Run semantic diff with metric drift detection"
+          ],
+          "severity": "critical"
+        },
+        "date_window_shift": {
+          "name": "Date Window Shift",
+          "description": "Reporting period changed subtly",
+          "examples": [
+            "THIS_FISCAL_QUARTER → THIS_QUARTER caused 3-week shift",
+            "LAST_90_DAYS → LAST_QUARTER changed from rolling to fixed window",
+            "CloseDate filter changed to CreatedDate"
+          ],
+          "rootCauses": [
+            "Fiscal/calendar confusion in date filter migration",
+            "Relative date range not equivalent across orgs",
+            "Date field mapping error"
+          ],
+          "prevention": [
+            "Detect fiscal vs calendar semantic changes",
+            "Compare row counts at date boundaries",
+            "Require explicit date field role validation"
+          ],
+          "severity": "critical"
+        },
+        "population_scope_change": {
+          "name": "Population Scope Change",
+          "description": "Report includes/excludes different records than expected",
+          "examples": [
+            "Closed Lost now excluded from win rate denominator",
+            "Renewals mixed with new business without segmentation",
+            "Owner filter changed from individual to team"
+          ],
+          "rootCauses": [
+            "Filter logic not equivalent after migration",
+            "Record type mapping incomplete",
+            "Sharing rules differ between orgs"
+          ],
+          "prevention": [
+            "Compare record counts pre/post migration",
+            "Validate key record presence (named accounts, top deals)",
+            "Document filter intent, not just syntax"
+          ],
+          "severity": "high"
+        }
+      }
+    },
+    "visual_mismatch": {
+      "name": "Visual Mismatch",
+      "description": "Data correct but presentation doesn't meet expectations",
+      "subcategories": {
+        "chart_type_change": {
+          "name": "Chart Type Change",
+          "description": "Different visualization obscures or distorts insight",
+          "examples": [
+            "Funnel chart converted to bar chart - lost narrowing visual",
+            "Line chart to area chart - trends harder to compare",
+            "Gauge without breakpoints lost target context"
+          ],
+          "rootCauses": [
+            "Automated migration defaulted to simpler chart type",
+            "Chart type not supported in target format",
+            "Manual recreation missed visualization intent"
+          ],
+          "prevention": [
+            "Document intended visualization pattern",
+            "Validate chart type matches data pattern",
+            "Preserve gauge breakpoints and targets"
+          ],
+          "severity": "medium"
+        },
+        "layout_degradation": {
+          "name": "Layout Degradation",
+          "description": "Dashboard structure makes insights harder to find",
+          "examples": [
+            "Primary KPI moved from top-left to bottom",
+            "Components resized uniformly, lost visual hierarchy",
+            "Action items separated from related metrics"
+          ],
+          "rootCauses": [
+            "Grid layout constraints differ between systems",
+            "Automated migration didn't preserve importance ranking",
+            "Manual layout recreation by non-expert"
+          ],
+          "prevention": [
+            "Document component importance and placement rationale",
+            "Validate F-pattern visual hierarchy preserved",
+            "Size primary KPIs larger than supporting metrics"
+          ],
+          "severity": "low"
+        }
+      }
+    },
+    "performance_regression": {
+      "name": "Performance Regression",
+      "description": "Report works but is too slow to be useful",
+      "subcategories": {
+        "load_time_increase": {
+          "name": "Load Time Increase",
+          "description": "Report loads significantly slower than before",
+          "examples": [
+            "2-second report now takes 30+ seconds",
+            "Dashboard timeout on initial load",
+            "Users abandon report before data displays"
+          ],
+          "rootCauses": [
+            "Additional joins from changed report type",
+            "Unindexed custom fields in filters",
+            "Cross-object rollups recalculated on each view"
+          ],
+          "prevention": [
+            "Benchmark load time before/after migration",
+            "Validate filter fields are indexed",
+            "Limit dashboard to 5-7 components"
+          ],
+          "severity": "high"
+        },
+        "truncation_surprise": {
+          "name": "Truncation Surprise",
+          "description": "Report silently truncates data user expected to see",
+          "examples": [
+            "Summary report shows 2,000 rows but org has 8,000",
+            "Matrix pivot incomplete due to cell limits",
+            "Export appears complete but missing records"
+          ],
+          "rootCauses": [
+            "Format change from TABULAR to SUMMARY",
+            "Row count grew past 2,000 threshold",
+            "User unaware of format limitations"
+          ],
+          "prevention": [
+            "Estimate row count before migration",
+            "Use TABULAR for data export use cases",
+            "Add row count warning to reports near limit"
+          ],
+          "severity": "critical"
+        }
+      }
+    },
+    "context_loss": {
+      "name": "Context Loss",
+      "description": "Report technically correct but missing business context",
+      "subcategories": {
+        "missing_targets": {
+          "name": "Missing Targets",
+          "description": "Metrics shown without benchmarks or goals",
+          "examples": [
+            "Pipeline shown as $2M but target unknown",
+            "Win rate 25% but no industry benchmark",
+            "Quota attainment without quota values"
+          ],
+          "rootCauses": [
+            "Target values hardcoded in old system",
+            "Benchmark data not migrated",
+            "Formula fields referencing deleted objects"
+          ],
+          "prevention": [
+            "Document all benchmark/target sources",
+            "Validate gauge breakpoints have values",
+            "Include target context in report description"
+          ],
+          "severity": "high"
+        },
+        "lost_drill_down": {
+          "name": "Lost Drill-Down",
+          "description": "Users can't investigate anomalies",
+          "examples": [
+            "Dashboard metrics no longer clickable",
+            "Detail report links broken",
+            "Action list not navigable"
+          ],
+          "rootCauses": [
+            "Source report IDs not updated in dashboard",
+            "Drill-through permissions not granted",
+            "Detail report deleted during cleanup"
+          ],
+          "prevention": [
+            "Validate all drill-through links post-migration",
+            "Maintain report-to-dashboard dependency map",
+            "Test navigation from every component"
+          ],
+          "severity": "medium"
+        },
+        "orphaned_documentation": {
+          "name": "Orphaned Documentation",
+          "description": "Report assumptions and usage notes not migrated",
+          "examples": [
+            "Report purpose unclear to new users",
+            "Calculation methodology undocumented",
+            "Known limitations not communicated"
+          ],
+          "rootCauses": [
+            "Description field not migrated",
+            "Wiki/Confluence links broken",
+            "Tribal knowledge not captured"
+          ],
+          "prevention": [
+            "Migrate report descriptions and notes",
+            "Update documentation links",
+            "Add methodology section to exec reports"
+          ],
+          "severity": "low"
+        }
+      }
+    },
+    "trust_failure": {
+      "name": "Trust Failure",
+      "description": "Users don't believe the migrated report is correct",
+      "subcategories": {
+        "number_mismatch": {
+          "name": "Number Mismatch",
+          "description": "Totals don't match what users expected",
+          "examples": [
+            "Pipeline $500k lower than CEO's spreadsheet",
+            "Win rate 5% different from sales manager's calculation",
+            "Booking total doesn't match finance report"
+          ],
+          "rootCauses": [
+            "Different filter logic produces different totals",
+            "Currency conversion differences",
+            "Timing of data refresh varies"
+          ],
+          "prevention": [
+            "Reconcile totals with known sources before release",
+            "Document any expected differences and reasons",
+            "Run parallel for one reporting period"
+          ],
+          "severity": "critical"
+        },
+        "missing_records": {
+          "name": "Missing Records",
+          "description": "Known accounts, deals, or entities not appearing",
+          "examples": [
+            "Top 10 deals list missing Acme Corp",
+            "My pipeline doesn't show expected opportunities",
+            "Customer health missing key accounts"
+          ],
+          "rootCauses": [
+            "Record type not included in filter",
+            "Sharing rules exclude records for user",
+            "Object relationship broken"
+          ],
+          "prevention": [
+            "Validate key record presence with stakeholders",
+            "Test with actual user credentials",
+            "Compare named entity lists pre/post"
+          ],
+          "severity": "critical"
+        }
+      }
+    }
+  },
+  "validationChecklist": {
+    "description": "Post-migration business validation checklist",
+    "items": [
+      {
+        "id": "total_sum_match",
+        "name": "Total Sum Match",
+        "question": "Do primary aggregate values match within 1% tolerance?",
+        "autoValidate": true,
+        "tolerance": 0.01
+      },
+      {
+        "id": "row_count_reasonable",
+        "name": "Row Count Reasonable",
+        "question": "Does row count match expectation within 10%?",
+        "autoValidate": true,
+        "tolerance": 0.10
+      },
+      {
+        "id": "key_records_present",
+        "name": "Key Records Present",
+        "question": "Do expected accounts/deals appear in results?",
+        "autoValidate": false,
+        "manualCheck": "Provide list of 5-10 key records to verify"
+      },
+      {
+        "id": "trend_direction",
+        "name": "Trend Direction Correct",
+        "question": "Do charts show trends in expected direction?",
+        "autoValidate": false,
+        "manualCheck": "Compare to prior period visualization"
+      },
+      {
+        "id": "drill_through_works",
+        "name": "Drill-Through Works",
+        "question": "Can users click through to detail reports?",
+        "autoValidate": false,
+        "manualCheck": "Click each dashboard component"
+      },
+      {
+        "id": "load_time_acceptable",
+        "name": "Load Time Acceptable",
+        "question": "Does report load within performance targets?",
+        "autoValidate": true,
+        "threshold": {
+          "tabular": 2,
+          "summary": 5,
+          "matrix": 10,
+          "dashboard": 10
+        }
+      },
+      {
+        "id": "targets_present",
+        "name": "Targets Present",
+        "question": "Are benchmarks and targets visible where expected?",
+        "autoValidate": false,
+        "manualCheck": "Verify gauge breakpoints and goal lines"
+      },
+      {
+        "id": "documentation_updated",
+        "name": "Documentation Updated",
+        "question": "Is report description and methodology documented?",
+        "autoValidate": false,
+        "manualCheck": "Review description field and linked wiki"
+      }
+    ]
+  },
+  "guardrails": {
+    "description": "Automated guardrails to prevent failure modes",
+    "rules": [
+      {
+        "id": "metric_drift_block",
+        "trigger": "Inferred metric type changed with confidence > 60%",
+        "action": "block",
+        "message": "Migration appears to change metric definition. Requires explicit approval."
+      },
+      {
+        "id": "date_semantic_block",
+        "trigger": "Fiscal/calendar date filter type changed",
+        "action": "block",
+        "message": "Date filter semantic change detected. Verify reporting period alignment."
+      },
+      {
+        "id": "row_count_warn",
+        "trigger": "Row count delta > 10%",
+        "action": "require_review",
+        "message": "Row count variance exceeds threshold. Validate population scope."
+      },
+      {
+        "id": "total_mismatch_warn",
+        "trigger": "Primary aggregate delta > 1%",
+        "action": "require_review",
+        "message": "Total value mismatch detected. Reconcile with source before release."
+      },
+      {
+        "id": "truncation_warn",
+        "trigger": "SUMMARY/MATRIX format with estimated rows > 1500",
+        "action": "require_review",
+        "message": "Report may hit 2,000 row limit. Consider TABULAR format."
+      },
+      {
+        "id": "chart_change_log",
+        "trigger": "Chart type differs from source",
+        "action": "log_only",
+        "message": "Chart type changed. Verify visualization intent preserved."
+      }
+    ]
+  }
+}

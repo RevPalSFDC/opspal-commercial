@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Environment Registry - Per-plugin and per-instance configuration management",
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-19T00:00:00Z",
+
+  "environments": {
+    "development": {
+      "description": "Local development environment",
+      "priority": 1,
+      "variables": {
+        "NODE_ENV": "development",
+        "LOG_LEVEL": "debug",
+        "SAFE_CURL_DEBUG": "1",
+        "DATA_VALIDATION_STRICT": "0",
+        "IDEMPOTENCY_CHECK_STRICT": "0"
+      },
+      "platforms": {
+        "salesforce": {
+          "defaultOrg": "dev-sandbox",
+          "apiVersion": "62.0",
+          "deployOnSave": false
+        },
+        "hubspot": {
+          "portalType": "sandbox",
+          "rateLimit": 100
+        },
+        "supabase": {
+          "project": "local",
+          "schema": "public"
+        }
+      }
+    },
+    "staging": {
+      "description": "Staging/UAT environment",
+      "priority": 2,
+      "variables": {
+        "NODE_ENV": "staging",
+        "LOG_LEVEL": "info",
+        "SAFE_CURL_DEBUG": "0",
+        "DATA_VALIDATION_STRICT": "1",
+        "IDEMPOTENCY_CHECK_STRICT": "1"
+      },
+      "platforms": {
+        "salesforce": {
+          "defaultOrg": "staging-sandbox",
+          "apiVersion": "62.0",
+          "deployOnSave": false
+        },
+        "hubspot": {
+          "portalType": "sandbox",
+          "rateLimit": 100
+        },
+        "supabase": {
+          "project": "staging",
+          "schema": "public"
+        }
+      }
+    },
+    "production": {
+      "description": "Production environment",
+      "priority": 3,
+      "variables": {
+        "NODE_ENV": "production",
+        "LOG_LEVEL": "warn",
+        "SAFE_CURL_DEBUG": "0",
+        "DATA_VALIDATION_STRICT": "1",
+        "IDEMPOTENCY_CHECK_STRICT": "1",
+        "TOOL_CONTRACT_BLOCK_ON_VIOLATION": "true"
+      },
+      "platforms": {
+        "salesforce": {
+          "defaultOrg": "production",
+          "apiVersion": "62.0",
+          "deployOnSave": false,
+          "requireApproval": true
+        },
+        "hubspot": {
+          "portalType": "production",
+          "rateLimit": 100
+        },
+        "supabase": {
+          "project": "production",
+          "schema": "public"
+        }
+      },
+      "safeguards": {
+        "requireApproval": true,
+        "blockDestructiveOps": true,
+        "maxBatchSize": 200,
+        "auditLogging": true
+      }
+    }
+  },
+
+  "plugins": {
+    "opspal-core": {
+      "description": "Core utilities and orchestration",
+      "requiredEnvVars": [
+        "SUPABASE_URL",
+        "SUPABASE_SERVICE_ROLE_KEY"
+      ],
+      "optionalEnvVars": [
+        "ASANA_ACCESS_TOKEN",
+        "ASANA_WORKSPACE_ID",
+        "SLACK_WEBHOOK_URL"
+      ],
+      "defaults": {
+        "DATA_VALIDATION_ENABLED": "1",
+        "IDEMPOTENCY_CHECK_ENABLED": "1",
+        "ENABLE_AUTO_BLUF": "1",
+        "BLUF_OUTPUT_FORMAT": "terminal"
+      }
+    },
+    "salesforce-plugin": {
+      "description": "Salesforce operations",
+      "requiredEnvVars": [],
+      "optionalEnvVars": [
+        "SF_ORG_ALIAS",
+        "SFDX_AUTH_URL"
+      ],
+      "defaults": {
+        "SF_API_VERSION": "62.0",
+        "SF_API_ROUTING_ENABLED": "1",
+        "ENABLE_FLOW_ACTIVATION_VERIFY": "1"
+      },
+      "platformConfig": {
+        "apiVersion": "62.0",
+        "metadataTypes": ["Flow", "ApexClass", "ApexTrigger", "CustomObject", "CustomField"],
+        "deploymentOptions": {
+          "checkOnly": false,
+          "rollbackOnError": true,
+          "ignoreWarnings": false
+        }
+      }
+    },
+    "hubspot-plugin": {
+      "description": "HubSpot operations",
+      "requiredEnvVars": [
+        "HUBSPOT_ACCESS_TOKEN"
+      ],
+      "optionalEnvVars": [
+        "HUBSPOT_PORTAL_ID"
+      ],
+      "defaults": {
+        "HUBSPOT_RATE_LIMIT": "100",
+        "HUBSPOT_BATCH_SIZE": "100"
+      }
+    },
+    "marketo-plugin": {
+      "description": "Marketo operations",
+      "requiredEnvVars": [
+        "MARKETO_CLIENT_ID",
+        "MARKETO_CLIENT_SECRET",
+        "MARKETO_MUNCHKIN_ID"
+      ],
+      "optionalEnvVars": [],
+      "defaults": {
+        "MARKETO_BATCH_SIZE": "300"
+      }
+    }
+  },
+
+  "instances": {
+    "_template": {
+      "description": "Template for instance configuration",
+      "environment": "development",
+      "plugin": "salesforce-plugin",
+      "credentials": {
+        "method": "env",
+        "envPrefix": "INSTANCE_"
+      },
+      "overrides": {}
+    }
+  },
+
+  "validation": {
+    "rules": [
+      {
+        "id": "production-safeguards",
+        "description": "Production environment must have safeguards enabled",
+        "condition": "environment === 'production'",
+        "required": ["safeguards.requireApproval", "safeguards.auditLogging"]
+      },
+      {
+        "id": "required-env-vars",
+        "description": "All required environment variables must be set",
+        "condition": "always",
+        "action": "validate_required_vars"
+      },
+      {
+        "id": "url-format",
+        "description": "URL environment variables must be valid URLs",
+        "pattern": ".*_URL$",
+        "format": "uri"
+      },
+      {
+        "id": "no-secrets-in-config",
+        "description": "Secrets must not be stored in config files",
+        "forbiddenPatterns": [".*KEY.*", ".*SECRET.*", ".*TOKEN.*", ".*PASSWORD.*"]
+      }
+    ]
+  },
+
+  "migration": {
+    "description": "Migration helpers for environment changes",
+    "hooks": {
+      "preSwitch": "scripts/lib/pre-env-switch.sh",
+      "postSwitch": "scripts/lib/post-env-switch.sh"
+    },
+    "backupConfig": true,
+    "validateBeforeSwitch": true
+  }
+}

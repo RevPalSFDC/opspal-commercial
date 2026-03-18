@@ -1,0 +1,255 @@
+{
+  "templateMetadata": {
+    "templateId": "marketing-performance",
+    "templateName": "Marketing Performance Dashboard",
+    "templateVersion": "1.1.0",
+    "description": "CMO-level view of marketing-sourced pipeline, MROI, CAC, and funnel velocity",
+    "audience": "Marketing Executives (CMO, VP Marketing, Head of Marketing)",
+    "function": "marketing",
+    "level": "executive",
+    "useCase": "Monthly marketing reviews, board reporting, budget justification",
+    "refreshFrequency": "Daily",
+    "componentCount": 7,
+    "prerequisites": [
+      "Campaign object with ActualCost field populated",
+      "LeadSource or Marketing_Source__c on Opportunity",
+      "Campaign influence tracking enabled",
+      "MQL tracking on Lead/Contact"
+    ],
+    "tags": ["marketing", "mroi", "cac", "pipeline-sourced", "executive", "cmo"]
+  },
+  "variations": {
+    "schemaVersion": "1.0",
+    "baseTemplate": true,
+    "availableVariations": ["simple", "standard", "plg", "abm"],
+    "defaultVariation": "standard",
+    "variationOverrides": {
+      "simple": {
+        "description": "Simplified marketing view with 5 key metrics",
+        "componentOverrides": {
+          "maxComponents": 5,
+          "exclude": ["Marketing Funnel Velocity", "Cost Per Lead by Channel"]
+        },
+        "orgAdaptationOverrides": {
+          "minimumFidelity": 0.5
+        }
+      },
+      "standard": {
+        "description": "Full marketing performance dashboard with all 7 components"
+      },
+      "plg": {
+        "description": "Product-led growth focus with trial and freemium metrics",
+        "filterOverrides": [
+          { "field": "LeadSource", "default": "Product", "values": ["Product Trial", "Freemium", "In-App Signup", "Self-Serve"] }
+        ],
+        "metricAdjustments": {
+          "cacTarget": {
+            "benchmark": { "good": "<$100", "warning": ">$250" }
+          },
+          "funnelConversion": {
+            "target": "40%",
+            "thresholds": { "green": ">=40%", "yellow": "25-40%", "red": "<25%" }
+          }
+        }
+      },
+      "abm": {
+        "description": "Account-based marketing with account engagement focus",
+        "filterOverrides": [
+          { "field": "Campaign.Type", "default": "ABM", "values": ["ABM", "Target Account", "Executive Engagement"] }
+        ],
+        "metricAdjustments": {
+          "mroiTarget": {
+            "target": "800%",
+            "thresholds": { "green": ">=800%", "yellow": "500-800%", "red": "<500%" }
+          }
+        }
+      }
+    }
+  },
+  "orgAdaptation": {
+    "requiredFields": ["Campaign.Name", "Lead.LeadSource"],
+    "optionalFields": ["Campaign.ActualCost", "Lead.MQL_Date__c", "Opportunity.Marketing_Source__c"],
+    "adaptationStrategy": "graceful-degradation",
+    "minimumFidelity": 0.7,
+    "fieldFallbacks": {
+      "MarketingSource": {
+        "patterns": ["Marketing_Source__c", "Lead_Source_Detail__c", "Marketing_Channel__c"],
+        "labelHints": ["Marketing Source", "Lead Source Detail", "Marketing Channel"],
+        "dataType": "picklist"
+      },
+      "MQLDate": {
+        "patterns": ["MQL_Date__c", "Marketing_Qualified_Date__c", "Qualified_Date__c"],
+        "labelHints": ["MQL Date", "Qualified Date", "Marketing Qualified"],
+        "dataType": "date"
+      },
+      "CampaignCost": {
+        "patterns": ["ActualCost", "BudgetedCost", "Campaign_Spend__c", "Total_Cost__c"],
+        "labelHints": ["Actual Cost", "Campaign Cost", "Spend"],
+        "dataType": "currency"
+      }
+    },
+    "dataAvailabilityTiers": {
+      "complete": {
+        "minimumFidelity": 0.9,
+        "components": "all"
+      },
+      "partial": {
+        "minimumFidelity": 0.7,
+        "components": "essential + fallbacks",
+        "enabledComponents": ["Marketing-Sourced Pipeline", "Marketing ROI", "Pipeline by Marketing Channel", "Marketing-Sourced Pipeline Trend"]
+      },
+      "minimal": {
+        "minimumFidelity": 0.5,
+        "components": "essential only",
+        "enabledComponents": ["Marketing-Sourced Pipeline", "Pipeline by Marketing Channel"]
+      }
+    }
+  },
+  "dashboardLayout": {
+    "columns": 3,
+    "components": [
+      {
+        "position": { "row": 0, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Marketing-Sourced Pipeline",
+        "sourceReport": "marketing-sourced-pipeline",
+        "metric": "SUM(Amount WHERE LeadSource IN Marketing_Sources AND IsClosed=FALSE)",
+        "format": "currency",
+        "comparisonPeriod": "LAST_QUARTER",
+        "greenZone": { "changePercent": { "min": 10, "max": 100 } },
+        "yellowZone": { "changePercent": { "min": 0, "max": 10 } },
+        "redZone": { "changePercent": { "min": -100, "max": 0 } }
+      },
+      {
+        "position": { "row": 0, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Marketing ROI",
+        "sourceReport": "marketing-roi",
+        "metric": "(Revenue_From_Marketing - Marketing_Spend) / Marketing_Spend * 100",
+        "format": "percent",
+        "benchmark": { "good": ">500%", "excellent": ">800%", "warning": "<300%" },
+        "greenZone": { "min": 500, "max": 2000 },
+        "yellowZone": { "min": 300, "max": 500 },
+        "redZone": { "min": 0, "max": 300 }
+      },
+      {
+        "position": { "row": 0, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Metric",
+        "title": "Customer Acquisition Cost",
+        "sourceReport": "marketing-roi",
+        "metric": "Total_Marketing_Spend / New_Customers",
+        "format": "currency",
+        "trendDirection": "lower-is-better",
+        "benchmark": { "good": "<$500", "warning": ">$1000" }
+      },
+      {
+        "position": { "row": 1, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Line Chart",
+        "title": "Marketing-Sourced Pipeline Trend (12 Months)",
+        "sourceReport": "marketing-sourced-pipeline",
+        "xAxis": "CloseDate (Month)",
+        "yAxis": "SUM(Amount)",
+        "seriesGrouping": "LeadSource",
+        "showDataLabels": true,
+        "showTrendLine": true
+      },
+      {
+        "position": { "row": 1, "column": 2 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Donut Chart",
+        "title": "Pipeline by Marketing Channel",
+        "sourceReport": "marketing-sourced-pipeline",
+        "groupBy": "LeadSource",
+        "metric": "SUM(Amount WHERE IsClosed=FALSE)",
+        "showPercentages": true,
+        "showLegend": true
+      },
+      {
+        "position": { "row": 2, "column": 0 },
+        "size": { "rowSpan": 1, "colSpan": 1 },
+        "type": "Funnel Chart",
+        "title": "Marketing Funnel Velocity",
+        "sourceReport": "marketing-funnel-velocity",
+        "stages": ["Lead", "MQL", "SQL", "Opportunity", "Closed Won"],
+        "metric": "COUNT",
+        "showConversionRates": true
+      },
+      {
+        "position": { "row": 2, "column": 1 },
+        "size": { "rowSpan": 1, "colSpan": 2 },
+        "type": "Bar Chart",
+        "title": "Cost Per Lead by Channel",
+        "sourceReport": "cost-per-lead-by-channel",
+        "groupBy": "Campaign.Type",
+        "metric": "ActualCost / NumberOfLeads",
+        "format": "currency",
+        "sortBy": "metric ASC",
+        "showBenchmarkLine": true,
+        "benchmarkValue": 50
+      }
+    ]
+  },
+  "dashboardFilters": [
+    {
+      "field": "CloseDate",
+      "type": "dateRange",
+      "placeholder": "{{fiscal_period}}",
+      "default": "THIS_FISCAL_QUARTER",
+      "values": ["THIS_MONTH", "THIS_FISCAL_QUARTER", "THIS_FISCAL_YEAR", "LAST_90_DAYS"]
+    },
+    {
+      "field": "LeadSource",
+      "type": "picklist",
+      "placeholder": "{{marketing_channel}}",
+      "default": "All Marketing",
+      "values": ["All Marketing", "Content", "Events", "Paid Search", "Paid Social", "Organic", "Referral"]
+    }
+  ],
+  "dynamicUserFilters": {
+    "note": "Marketing dashboards typically do not have user-level filtering"
+  },
+  "sourceReportTemplates": [
+    "marketing/marketing-sourced-pipeline",
+    "marketing/marketing-roi",
+    "marketing/lifecycle-funnel",
+    "marketing/campaign-roi"
+  ],
+  "kpiDefinitions": {
+    "marketing_sourced_pipeline": {
+      "formula": "SUM(Amount) WHERE LeadSource IN (Marketing Channels) AND IsClosed = FALSE",
+      "benchmark": { "good": ">3x quota", "warning": "<2x quota" }
+    },
+    "mroi": {
+      "formula": "(Closed Won Revenue from Marketing - Marketing Spend) / Marketing Spend",
+      "benchmark": { "good": ">500%", "excellent": ">800%", "warning": "<300%" }
+    },
+    "cac": {
+      "formula": "Total Marketing + Sales Spend / New Customers Acquired",
+      "benchmark": { "good": "<12 months payback", "warning": ">18 months payback" }
+    },
+    "funnel_velocity": {
+      "formula": "Average days from Lead to Closed Won",
+      "benchmark": { "good": "<90 days", "warning": ">120 days" }
+    }
+  },
+  "deploymentInstructions": {
+    "preDeploy": [
+      "Verify LeadSource values include marketing channels",
+      "Confirm Campaign.ActualCost is being tracked",
+      "Check for Campaign Influence records if using attribution",
+      "Create report folder: Marketing Dashboards"
+    ],
+    "deploy": "Use sfdc-reports-dashboards agent with Task tool",
+    "postDeploy": [
+      "Assign to Marketing Leadership folder",
+      "Set daily refresh at 7 AM",
+      "Subscribe CMO and VP Marketing to weekly email snapshot",
+      "Verify data populates correctly"
+    ]
+  },
+  "relatedTemplates": ["demand-gen-funnel", "campaign-performance", "marketing-sourced-pipeline"]
+}

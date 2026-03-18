@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Multi Object Migration Framework"
+  short_description: "Help with Hubspot Multi Object Migration Framework tasks"
+  default_prompt: "Use $hubspot-multi-object-migration-framework to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,521 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-18",
+  "description": "Unified integration mappings for sales tech stack (Outreach, Gong, Product Analytics)",
+  "documentation": "See agents/outreach-integration-agent.md, gong-integration-agent.md, product-analytics-bridge.md",
+
+  "outreach": {
+    "name": "Outreach/SalesLoft Integration",
+    "enabled": true,
+    "platform": "outreach",
+    "alternativePlatform": "salesloft",
+    "syncDirection": "bidirectional",
+
+    "authentication": {
+      "authType": "OAuth2",
+      "tokenUrl": "https://api.outreach.io/oauth/token",
+      "scopes": ["prospects.read", "sequences.read", "activities.read", "webhooks.write"],
+      "refreshStrategy": "automatic",
+      "envVars": {
+        "clientId": "OUTREACH_CLIENT_ID",
+        "clientSecret": "OUTREACH_CLIENT_SECRET",
+        "refreshToken": "OUTREACH_REFRESH_TOKEN"
+      }
+    },
+
+    "realTimeSync": {
+      "enabled": true,
+      "webhookEndpoint": "/api/outreach/webhook",
+      "webhookEvents": [
+        "email.delivered",
+        "email.opened",
+        "email.clicked",
+        "email.replied",
+        "email.bounced",
+        "call.created",
+        "meeting.created",
+        "sequence_state.created",
+        "sequence_state.finished"
+      ]
+    },
+
+    "batchSync": {
+      "enabled": true,
+      "schedule": "0 */4 * * *",
+      "batchSize": 100,
+      "lookbackDays": 1
+    },
+
+    "targets": {
+      "salesforce": {
+        "enabled": true,
+        "orgAlias": "production",
+        "activitySync": true,
+        "prospectSync": true,
+        "attributionSync": true
+      },
+      "hubspot": {
+        "enabled": true,
+        "portalId": "${HUBSPOT_PORTAL_ID}",
+        "activitySync": true,
+        "prospectSync": false
+      }
+    },
+
+    "fieldMappings": {
+      "email": {
+        "targetObject": "Task",
+        "mappings": {
+          "subject": "Subject",
+          "bodyText": "Description",
+          "mailedAt": "ActivityDate",
+          "openCount": "Email_Opens__c",
+          "clickCount": "Email_Clicks__c",
+          "repliedAt": "Email_Reply_Date__c"
+        },
+        "staticFields": {
+          "Type": "Email",
+          "TaskSubtype": "Email",
+          "Status": "Completed",
+          "Source__c": "Outreach"
+        }
+      },
+      "call": {
+        "targetObject": "Task",
+        "mappings": {
+          "subject": "Subject",
+          "duration": "CallDurationInSeconds",
+          "outcome": "CallDisposition",
+          "notes": "Description"
+        },
+        "staticFields": {
+          "Type": "Call",
+          "TaskSubtype": "Call",
+          "Status": "Completed",
+          "Source__c": "Outreach"
+        }
+      },
+      "meeting": {
+        "targetObject": "Event",
+        "mappings": {
+          "title": "Subject",
+          "startAt": "StartDateTime",
+          "endAt": "EndDateTime",
+          "location": "Location"
+        },
+        "staticFields": {
+          "Source__c": "Outreach"
+        }
+      }
+    },
+
+    "sequenceAttribution": {
+      "enabled": true,
+      "attributionWindow": {
+        "days": 90,
+        "touchTypes": ["email_sent", "email_opened", "email_clicked", "email_replied", "call_completed", "meeting_completed"]
+      },
+      "opportunityFields": {
+        "First_Sequence__c": "First sequence that touched contacts",
+        "Last_Sequence__c": "Most recent sequence before opportunity",
+        "Sequence_Touches__c": "Total sequence touches",
+        "Sequence_Influenced__c": "Boolean flag"
+      }
+    },
+
+    "conflictResolution": {
+      "strategy": "crm-wins",
+      "fieldOverrides": {
+        "email": "outreach-wins",
+        "phone": "crm-wins",
+        "owner": "crm-wins"
+      }
+    },
+
+    "deduplication": {
+      "matchFields": ["email"],
+      "fuzzyMatch": false,
+      "createMissing": true
+    },
+
+    "rateLimits": {
+      "requestsPerHour": 10000,
+      "bufferPercentage": 0.8
+    }
+  },
+
+  "gong": {
+    "name": "Gong/Chorus Integration",
+    "enabled": true,
+    "platform": "gong",
+    "alternativePlatform": "chorus",
+    "syncDirection": "gong-to-crm",
+
+    "authentication": {
+      "authType": "OAuth2",
+      "tokenUrl": "https://app.gong.io/oauth2/token",
+      "scopes": [
+        "api:calls:read:basic",
+        "api:calls:read:extensive",
+        "api:stats:user",
+        "api:crm:integration",
+        "api:meetings:user:basic"
+      ],
+      "envVars": {
+        "accessKeyId": "GONG_ACCESS_KEY_ID",
+        "accessKeySecret": "GONG_ACCESS_KEY_SECRET"
+      }
+    },
+
+    "realTimeSync": {
+      "enabled": true,
+      "webhookEndpoint": "/api/gong/webhook",
+      "webhookEvents": [
+        "call.created",
+        "call.updated",
+        "call.insights.ready",
+        "deal.updated"
+      ],
+      "minCallDuration": 60
+    },
+
+    "batchSync": {
+      "enabled": true,
+      "schedule": "0 6 * * *",
+      "lookbackDays": 1
+    },
+
+    "targets": {
+      "salesforce": {
+        "enabled": true,
+        "orgAlias": "production",
+        "callSync": true,
+        "insightsSync": true,
+        "riskSignals": true,
+        "trackerSync": true
+      },
+      "hubspot": {
+        "enabled": true,
+        "portalId": "${HUBSPOT_PORTAL_ID}",
+        "callSync": true,
+        "insightsSync": false
+      }
+    },
+
+    "fieldMappings": {
+      "call": {
+        "targetObject": "Event",
+        "mappings": {
+          "title": "Subject",
+          "scheduled": "StartDateTime",
+          "duration": "DurationInMinutes",
+          "url": "Gong_Recording_URL__c"
+        },
+        "staticFields": {
+          "Type": "Meeting",
+          "Source__c": "Gong"
+        }
+      },
+      "insights": {
+        "targetObject": "Opportunity",
+        "mappings": {
+          "talkRatio": "Rep_Talk_Ratio__c",
+          "longestMonologue": "Longest_Monologue_Sec__c",
+          "questionsAsked": "Questions_Asked__c",
+          "interactivity": "Call_Interactivity__c"
+        }
+      }
+    },
+
+    "trackerMappings": {
+      "competitor": {
+        "gongTrackers": ["Competitor - Salesforce", "Competitor - HubSpot", "Competitor - Other"],
+        "salesforceField": "Competitors_Mentioned__c",
+        "action": "append",
+        "alertChannel": "#competitive-intel"
+      },
+      "pricing": {
+        "gongTrackers": ["Pricing Objection", "Budget Concern", "Too Expensive"],
+        "salesforceField": "Pricing_Objection__c",
+        "action": "flag_if_mentioned"
+      },
+      "timeline": {
+        "gongTrackers": ["Urgency", "Timeline", "Decision Date"],
+        "salesforceField": "Timeline_Discussed__c",
+        "action": "flag_if_mentioned"
+      },
+      "risk": {
+        "gongTrackers": ["Going Dark", "No Response", "Delayed", "Reevaluate"],
+        "salesforceField": "Deal_Risk_Signal__c",
+        "action": "flag_and_alert"
+      },
+      "champion": {
+        "gongTrackers": ["Champion Identified", "Executive Sponsor", "Internal Advocate"],
+        "salesforceField": "Champion_Strength__c",
+        "action": "update_if_positive"
+      }
+    },
+
+    "riskSignals": {
+      "enabled": true,
+      "daysSinceCallWarning": 14,
+      "daysSinceCallCritical": 21,
+      "talkRatioMin": 30,
+      "talkRatioMax": 60,
+      "alertChannel": "#deal-alerts"
+    },
+
+    "stakeholderTracking": {
+      "enabled": true,
+      "trackRoles": ["economic_buyer", "champion", "end_user", "technical", "blocker"],
+      "multiThreadingThreshold": 2
+    }
+  },
+
+  "productAnalytics": {
+    "name": "Product Analytics Bridge",
+    "enabled": true,
+    "platform": "pendo",
+    "alternativePlatforms": ["amplitude", "mixpanel", "heap"],
+    "syncDirection": "analytics-to-crm",
+
+    "authentication": {
+      "pendo": {
+        "authType": "APIKey",
+        "baseUrl": "https://app.pendo.io/api/v1",
+        "envVars": {
+          "apiKey": "PENDO_API_KEY",
+          "appId": "PENDO_APP_ID"
+        }
+      },
+      "amplitude": {
+        "authType": "APIKey",
+        "baseUrl": "https://amplitude.com/api/2",
+        "envVars": {
+          "apiKey": "AMPLITUDE_API_KEY",
+          "secretKey": "AMPLITUDE_SECRET_KEY"
+        }
+      },
+      "mixpanel": {
+        "authType": "ServiceAccount",
+        "baseUrl": "https://mixpanel.com/api/2.0",
+        "envVars": {
+          "serviceAccount": "MIXPANEL_SERVICE_ACCOUNT",
+          "projectId": "MIXPANEL_PROJECT_ID"
+        }
+      },
+      "heap": {
+        "authType": "APIKey",
+        "baseUrl": "https://heapanalytics.com/api",
+        "envVars": {
+          "apiKey": "HEAP_API_KEY",
+          "appId": "HEAP_APP_ID"
+        }
+      }
+    },
+
+    "syncSchedule": "0 6 * * *",
+
+    "targets": {
+      "salesforce": {
+        "enabled": true,
+        "orgAlias": "production",
+        "contactSync": true,
+        "accountSync": true,
+        "pqlScoring": true,
+        "expansionSignals": true
+      },
+      "hubspot": {
+        "enabled": true,
+        "portalId": "${HUBSPOT_PORTAL_ID}",
+        "contactSync": true,
+        "lifecycleUpdates": true
+      }
+    },
+
+    "fieldMappings": {
+      "contact": {
+        "targetObject": "Contact",
+        "mappings": {
+          "lastActive": "Last_Product_Activity__c",
+          "sessions30d": "Sessions_Last_30_Days__c",
+          "totalTime30d": "Time_In_App_30_Days__c",
+          "featuresUsed": "Features_Adopted__c",
+          "activationComplete": "Product_Activated__c",
+          "npsScore": "Product_NPS__c",
+          "powerUserScore": "Power_User_Score__c"
+        }
+      },
+      "account": {
+        "targetObject": "Account",
+        "mappings": {
+          "totalUsers": "Total_Product_Users__c",
+          "activeUsers30d": "Active_Users_30_Days__c",
+          "dauMauRatio": "DAU_MAU_Ratio__c",
+          "featureAdoptionScore": "Feature_Adoption_Score__c",
+          "licenseUtilization": "License_Utilization__c",
+          "powerUsers": "Power_User_Count__c",
+          "expansionSignals": "Expansion_Signals__c",
+          "usageChurnRisk": "Usage_Churn_Risk__c"
+        }
+      }
+    },
+
+    "usageMetrics": {
+      "dauWindow": 1,
+      "wauWindow": 7,
+      "mauWindow": 30,
+      "sessionTimeout": 30
+    },
+
+    "featureCategories": {
+      "core": {
+        "description": "Essential features for basic value",
+        "features": ["dashboard_view", "report_create", "data_import"],
+        "adoptionTarget": 80,
+        "churnImpact": "high"
+      },
+      "growth": {
+        "description": "Features that drive expansion",
+        "features": ["team_invite", "integration_connect", "automation_create"],
+        "adoptionTarget": 50,
+        "expansionSignal": true
+      },
+      "advanced": {
+        "description": "Power user features",
+        "features": ["api_usage", "custom_reports", "bulk_operations"],
+        "adoptionTarget": 20,
+        "powerUserIndicator": true
+      },
+      "premium": {
+        "description": "Features requiring upgrade",
+        "features": ["sso_config", "audit_log", "advanced_permissions"],
+        "adoptionTarget": 10,
+        "upsellTrigger": true
+      }
+    },
+
+    "pqlScoring": {
+      "enabled": true,
+      "components": {
+        "activation": { "weight": 0.25 },
+        "engagement": { "weight": 0.30 },
+        "featureDepth": { "weight": 0.25 },
+        "teamSignal": { "weight": 0.20 }
+      },
+      "thresholds": {
+        "hotPql": 80,
+        "warmPql": 60,
+        "nurture": 40,
+        "cold": 0
+      },
+      "salesReadyThreshold": 70,
+      "alertChannel": "#pql-alerts"
+    },
+
+    "powerUserDefinition": {
+      "minimumCriteria": {
+        "sessions30d": 20,
+        "dauRatio": 0.5,
+        "featuresUsed": 8
+      },
+      "scoring": {
+        "sessionFrequency": 30,
+        "featureAdoption": 30,
+        "advancedUsage": 20,
+        "teamInfluence": 20
+      }
+    },
+
+    "expansionSignals": {
+      "licenseUtilizationThreshold": 0.9,
+      "teamGrowthThreshold": 2,
+      "powerUserClusterThreshold": 3
+    },
+
+    "usageChurnSignals": {
+      "dauDropThreshold": 0.4,
+      "loginFrequencyDecline": "weekly-to-monthly",
+      "featureAbandonmentDays": 14,
+      "powerUserInactiveDays": 7
+    }
+  },
+
+  "globalSettings": {
+    "retryPolicy": {
+      "maxRetries": 3,
+      "initialDelayMs": 1000,
+      "maxDelayMs": 30000,
+      "backoffMultiplier": 2,
+      "retryableErrors": [
+        "RATE_LIMIT_EXCEEDED",
+        "TIMEOUT",
+        "SERVICE_UNAVAILABLE",
+        "NETWORK_ERROR"
+      ]
+    },
+
+    "errorHandling": {
+      "logLevel": "info",
+      "alertChannel": "#integration-alerts",
+      "errorThresholds": {
+        "warning": 0.01,
+        "critical": 0.05
+      }
+    },
+
+    "monitoring": {
+      "enabled": true,
+      "metricsPrefix": "integration",
+      "healthCheckInterval": 300
+    },
+
+    "idempotency": {
+      "enabled": true,
+      "windowHours": 24,
+      "checkFields": ["externalId", "timestamp"]
+    }
+  },
+
+  "orgOverrides": {
+    "description": "Organization-specific configuration overrides",
+    "example_acme": {
+      "outreach": {
+        "batchSync": {
+          "schedule": "0 */2 * * *"
+        }
+      },
+      "gong": {
+        "riskSignals": {
+          "daysSinceCallWarning": 10,
+          "daysSinceCallCritical": 14
+        }
+      },
+      "productAnalytics": {
+        "pqlScoring": {
+          "salesReadyThreshold": 65
+        }
+      }
+    }
+  },
+
+  "validation": {
+    "description": "Target metrics for integration validation",
+    "outreach": {
+      "syncSuccessRate": ">99%",
+      "syncLatency": "<5min (webhook), <1hr (batch)",
+      "attributionCoverage": ">90% of influenced opps"
+    },
+    "gong": {
+      "syncSuccessRate": ">99%",
+      "insightsCoverage": ">95% of calls",
+      "riskSignalAccuracy": ">70% precision"
+    },
+    "productAnalytics": {
+      "syncSuccessRate": ">99%",
+      "pqlConversionCorrelation": "r > 0.5",
+      "expansionSignalAccuracy": ">60% conversion"
+    }
+  }
+}

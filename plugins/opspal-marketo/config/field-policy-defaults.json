@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "1.0",
+  "platform": "marketo",
+  "globalDefaults": {
+    "alwaysExclude": [
+      "*password*",
+      "*secret*",
+      "*token*",
+      "*ssn*",
+      "*credit_card*",
+      "*bank_account*"
+    ],
+    "alwaysInclude": [
+      "id",
+      "createdAt",
+      "updatedAt"
+    ],
+    "piiDetectionEnabled": true,
+    "maxFieldsDefault": 100,
+    "excludeSystemFields": false,
+    "excludeActivityFields": true
+  },
+  "policies": {
+    "lead": {
+      "required_fields": {
+        "fields": [
+          "id",
+          "email"
+        ],
+        "source": "manual",
+        "rationale": "Core lead identification"
+      },
+      "default_fields": {
+        "fields": [
+          "id",
+          "email",
+          "firstName",
+          "lastName",
+          "company",
+          "title",
+          "phone",
+          "mobilePhone",
+          "leadStatus",
+          "leadSource",
+          "leadScore",
+          "acquisitionProgramId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "source": "manual",
+        "rationale": "Standard lead fields for marketing automation"
+      },
+      "recommended_fields": {
+        "fields": [
+          "address",
+          "city",
+          "state",
+          "postalCode",
+          "country",
+          "website",
+          "industry",
+          "annualRevenue",
+          "numberOfEmployees",
+          "sfdcLeadId",
+          "sfdcContactId",
+          "sfdcAccountId",
+          "unsubscribed",
+          "emailInvalid",
+          "doNotCall"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": [
+          "cookies",
+          "inferredCompany",
+          "inferredCountry",
+          "inferredMetropolitanArea",
+          "inferredPhoneAreaCode",
+          "inferredPostalCode",
+          "inferredStateRegion",
+          "originalSourceType",
+          "originalSourceInfo",
+          "originalReferrer",
+          "originalSearchEngine",
+          "originalSearchPhrase"
+        ],
+        "patterns": [
+          "*password*",
+          "*ssn*",
+          "*internal_notes*",
+          "*inferred*"
+        ],
+        "fieldGroups": [],
+        "complianceReason": "PII and tracking data"
+      },
+      "field_aliases": {
+        "First Name": "firstName",
+        "Last Name": "lastName",
+        "Email Address": "email",
+        "Company Name": "company",
+        "Job Title": "title",
+        "Lead Status": "leadStatus",
+        "Lead Source": "leadSource",
+        "Lead Score": "leadScore"
+      },
+      "maxFields": 100
+    },
+    "activity": {
+      "required_fields": {
+        "fields": [
+          "id",
+          "leadId",
+          "activityTypeId",
+          "activityDate"
+        ],
+        "source": "manual",
+        "rationale": "Core activity identification"
+      },
+      "default_fields": {
+        "fields": [
+          "id",
+          "leadId",
+          "activityTypeId",
+          "activityDate",
+          "primaryAttributeValue",
+          "primaryAttributeValueId",
+          "campaignId"
+        ],
+        "source": "manual",
+        "rationale": "Standard activity fields for engagement tracking"
+      },
+      "recommended_fields": {
+        "fields": [
+          "attributes"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": [
+          "userAgent",
+          "clientIpAddress",
+          "queryParameters"
+        ],
+        "patterns": [
+          "*ip*",
+          "*userAgent*",
+          "*browser*"
+        ],
+        "fieldGroups": [],
+        "complianceReason": "Tracking and device fingerprint data"
+      },
+      "field_aliases": {
+        "Activity ID": "id",
+        "Lead ID": "leadId",
+        "Activity Type": "activityTypeId",
+        "Activity Date": "activityDate",
+        "Campaign ID": "campaignId"
+      },
+      "maxFields": 50
+    },
+    "program": {
+      "required_fields": {
+        "fields": [
+          "id",
+          "name",
+          "type"
+        ],
+        "source": "manual",
+        "rationale": "Core program identification"
+      },
+      "default_fields": {
+        "fields": [
+          "id",
+          "name",
+          "description",
+          "type",
+          "channel",
+          "status",
+          "workspace",
+          "folder",
+          "createdAt",
+          "updatedAt",
+          "startDate",
+          "endDate"
+        ],
+        "source": "manual",
+        "rationale": "Standard program fields for campaign management"
+      },
+      "recommended_fields": {
+        "fields": [
+          "url",
+          "costs",
+          "tags",
+          "sfdc"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": [],
+        "patterns": [
+          "*internal*",
+          "*budget_detail*"
+        ],
+        "fieldGroups": [],
+        "complianceReason": "Internal program planning"
+      },
+      "field_aliases": {
+        "Program Name": "name",
+        "Program Type": "type",
+        "Program Channel": "channel",
+        "Program Status": "status"
+      },
+      "maxFields": 80
+    },
+    "static_list": {
+      "required_fields": {
+        "fields": [
+          "id",
+          "name"
+        ],
+        "source": "manual",
+        "rationale": "Core list identification"
+      },
+      "default_fields": {
+        "fields": [
+          "id",
+          "name",
+          "description",
+          "workspaceId",
+          "workspaceName",
+          "folderId",
+          "folderType",
+          "createdAt",
+          "updatedAt"
+        ],
+        "source": "manual",
+        "rationale": "Standard list fields for segmentation"
+      },
+      "recommended_fields": {
+        "fields": [
+          "computedUrl"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": [],
+        "patterns": [],
+        "fieldGroups": [],
+        "complianceReason": ""
+      },
+      "field_aliases": {
+        "List Name": "name",
+        "List ID": "id"
+      },
+      "maxFields": 50
+    },
+    "smart_campaign": {
+      "required_fields": {
+        "fields": [
+          "id",
+          "name",
+          "type"
+        ],
+        "source": "manual",
+        "rationale": "Core campaign identification"
+      },
+      "default_fields": {
+        "fields": [
+          "id",
+          "name",
+          "description",
+          "type",
+          "status",
+          "isActive",
+          "isRequestable",
+          "isCommunicationLimitEnabled",
+          "recurrence",
+          "workspace",
+          "folder",
+          "createdAt",
+          "updatedAt"
+        ],
+        "source": "manual",
+        "rationale": "Standard smart campaign fields for automation"
+      },
+      "recommended_fields": {
+        "fields": [
+          "qualificationRuleType",
+          "qualificationRuleInterval",
+          "maxMembers",
+          "smartListId",
+          "flowId"
+        ],
+        "source": "manual"
+      },
+      "sensitive_field_exclusions": {
+        "fields": [],
+        "patterns": [
+          "*internal*"
+        ],
+        "fieldGroups": [],
+        "complianceReason": "Internal automation logic"
+      },
+      "field_aliases": {
+        "Campaign Name": "name",
+        "Campaign Type": "type",
+        "Campaign Status": "status"
+      },
+      "maxFields": 60
+    }
+  },
+  "taskVariantOverrides": {
+    "backup": {
+      "includeAdditional": [
+        "createdAt",
+        "updatedAt",
+        "id"
+      ],
+      "excludeAdditional": [],
+      "maxFieldsOverride": 150
+    },
+    "migration": {
+      "includeAdditional": [
+        "id",
+        "sfdcLeadId",
+        "sfdcContactId",
+        "sfdcAccountId"
+      ],
+      "excludeAdditional": [
+        "inferred*"
+      ],
+      "maxFieldsOverride": 200
+    },
+    "enrichment": {
+      "includeAdditional": [],
+      "excludeAdditional": [
+        "createdAt",
+        "id"
+      ],
+      "maxFieldsOverride": 50
+    },
+    "export": {
+      "includeAdditional": [],
+      "excludeAdditional": [
+        "*password*",
+        "*token*",
+        "*ip*",
+        "*inferred*"
+      ],
+      "maxFieldsOverride": 100
+    },
+    "sync": {
+      "includeAdditional": [
+        "id",
+        "sfdcLeadId",
+        "sfdcContactId",
+        "updatedAt"
+      ],
+      "excludeAdditional": [],
+      "maxFieldsOverride": 100
+    },
+    "audit": {
+      "includeAdditional": [
+        "createdAt",
+        "updatedAt",
+        "originalSourceType",
+        "originalSourceInfo"
+      ],
+      "excludeAdditional": [],
+      "maxFieldsOverride": 150
+    }
+  }
+}

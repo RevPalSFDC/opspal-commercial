@@ -1,0 +1,46 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+.cache/
+
+# Build artifacts
+dist/
+build/
+*.tgz
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+
+# HubSpot specific
+hubspot.config.yml
+.hs-config
+
+# Encrypted assets (plaintext excluded from distribution)
+/skills/hubspot-assessment-methodology/scoring-criteria.md

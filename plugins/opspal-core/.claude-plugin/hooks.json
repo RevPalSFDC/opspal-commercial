@@ -1,0 +1,491 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh",
+            "timeout": 10000,
+            "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-graph-trigger.sh",
+            "timeout": 5000,
+            "description": "Detect when Task Graph orchestration is needed based on complexity"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/intake-suggestion.sh",
+            "timeout": 5000,
+            "description": "Suggest /intake for project-level requests using complexity scoring and language detection"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/routing-context-refresher.sh",
+            "timeout": 3000,
+            "description": "Inject condensed routing reminder after context compaction or periodically"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Task(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-agent-validator.sh",
+            "timeout": 5000,
+            "description": "Validate and resolve agent names - detects commands mistakenly invoked as agents, auto-resolves short names to fully-qualified"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-runbook-reminder.sh",
+            "timeout": 5000,
+            "description": "Remind agents to review org-specific runbooks before starting work"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-template-injector.sh",
+            "timeout": 5000,
+            "description": "Inject template and branding guidance from master registry into agent context"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-field-dictionary-injector.sh",
+            "timeout": 8000,
+            "description": "Inject field dictionary context for reporting agents (field semantics, caveats, guidance)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-work-context.sh",
+            "timeout": 5000,
+            "description": "Load client work history and pending follow-ups at session start when ORG_SLUG is set"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-runbook-policy-enforcer.sh",
+            "timeout": 10000,
+            "description": "Enforce runbook policy retrieval for operational agents before field selection (Runbook Policy Infrastructure)"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-graph-policy-enforcer.sh",
+            "timeout": 5000,
+            "description": "Enforce risk-based tool policies for Task Graph tasks"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__salesforce*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__hubspot*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool inputs against contracts before execution"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__gong*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-gong-api-call.sh",
+            "timeout": 5000,
+            "description": "Validate Gong credentials and check daily API budget before Gong API calls"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__fireflies*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-fireflies-api-call.sh",
+            "timeout": 5000,
+            "description": "Validate Fireflies credentials and check daily API budget before Fireflies API calls"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/permission-request-handler.sh",
+            "timeout": 2000,
+            "description": "Auto-approve safe read/query permission requests and log an audit trail"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact.sh",
+            "timeout": 10000,
+            "description": "Backup conversation transcript before compaction to prevent data loss"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Task(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-work-index.sh",
+            "timeout": 5000,
+            "description": "Auto-capture work request entries after assessment agents complete"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-runbook-compliance-check.sh",
+            "timeout": 5000,
+            "description": "Verify operational agents respected runbook policies in field selections (Runbook Policy Infrastructure)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-audit-bluf-generator.sh",
+            "timeout": 10000,
+            "description": "Auto-generate BLUF+4 executive summary after audit/assessment completion"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-win-loss-calibration.sh",
+            "timeout": 15000,
+            "description": "Feed win/loss outcomes into deal-score-calibrator for Bayesian weight learning"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-stall-check.sh",
+            "timeout": 5000,
+            "description": "Check for stalls during multi-agent operations"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          }
+        ]
+      },
+      {
+        "matcher": "TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-todowrite-scratchpad.sh",
+            "timeout": 5000,
+            "description": "Persist TodoWrite state for session continuity"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__salesforce*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__hubspot*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__gong*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-gong-sync.sh",
+            "timeout": 5000,
+            "description": "Log Gong sync events and trigger work-index auto-capture"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__fireflies*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-fireflies-sync.sh",
+            "timeout": 5000,
+            "description": "Log Fireflies sync events and trigger work-index auto-capture"
+          }
+        ]
+      },
+      {
+        "matcher": "Write(*SESSION_REFLECTION*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-reflect-strategy-update.sh",
+            "timeout": 15000,
+            "description": "Extract skills from reflections and update routing confidence"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-init.sh",
+            "timeout": 15000,
+            "description": "Unified session initialization (scratchpad, env, platform context)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-session-silent-failure-check.sh",
+            "timeout": 10000,
+            "description": "Detect silent failure conditions (env bypass, circuit breakers, stale cache) before session begins"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-envcheck.sh",
+            "timeout": 5000,
+            "description": "Fast environment preflight: detect expired tokens, missing deps, MCP issues at session start"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-repo-sync.sh",
+            "timeout": 10000,
+            "description": "Auto-pull project-connected git repos at session start (opt-out: ENABLE_GIT_SYNC=0)"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start-context.sh",
+            "timeout": 10000,
+            "description": "Inject runbook/template/field/work context into spawned subagents"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-stop-capture.sh",
+            "timeout": 3000,
+            "description": "Capture failed subagent runs and log feedback signals"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-subagent-verification.sh",
+            "timeout": 10000,
+            "description": "Verify subagent claims and surface hidden-error patterns"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-completed-metrics.sh",
+            "timeout": 5000,
+            "description": "Record subagent completion metrics for routing feedback loops"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-stop-org-verification.sh",
+            "timeout": 5000,
+            "description": "Verify org-state claims have query evidence (STRICT mode by default)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-end.sh",
+            "timeout": 10000,
+            "description": "Unified session cleanup (scratchpad, cache, logs)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-end-reliability.sh",
+            "timeout": 60000,
+            "description": "Auto-reliability checks: retry failed submissions, refresh stale skill data, trigger processreflections if threshold reached"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-session-silent-failure-summary.sh",
+            "timeout": 15000,
+            "description": "Analyze session for silent failure patterns and update metrics baseline"
+          }
+        ]
+      }
+    ]
+  }
+}

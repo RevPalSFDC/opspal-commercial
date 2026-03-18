@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hubspot Company Merge Strategy"
+  short_description: "Help with Hubspot Company Merge Strategy tasks"
+  default_prompt: "Use $hubspot-company-merge-strategy to execute this workflow safely and produce the expected artifacts."

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Ranked fallback report types when the primary type is missing fields. The engine tries each alternative in order. Org-specific overrides are loaded from the org runbook if available.",
+  "fallbacks": {
+    "Opportunity": ["OpptywithProducts", "OpportunityLineItem", "OpptyContactRole"],
+    "Account": ["AccountContact", "AccountOpportunity", "AccountCase"],
+    "Contact": ["ContactAccount", "ContactOpportunity", "ContactCase"],
+    "Lead": ["LeadHistory"],
+    "Case": ["CaseSolution", "CaseContact", "CaseHistory"],
+    "Campaign": ["CampaignMember", "CampaignOpportunity"],
+    "Product2": ["Product2Family"],
+    "Contract": ["ContractLineItem"],
+    "SBQQ__Quote__c": ["SBQQ__QuoteLine", "SBQQ__Quote__c"],
+    "Order": ["OrderProduct"]
+  },
+  "common_type_aliases": {
+    "OpportunitywithProducts": "OpptywithProducts",
+    "OpportunityProduct": "OpptywithProducts",
+    "OpportunityWithProducts": "OpptywithProducts",
+    "OpportunityContactRole": "OpptyContactRole",
+    "AccountWithContacts": "AccountContact",
+    "AccountWithOpportunities": "AccountOpportunity",
+    "AccountWithCases": "AccountCase",
+    "ContactWithAccount": "ContactAccount",
+    "CaseWithSolutions": "CaseSolution",
+    "CampaignWithMembers": "CampaignMember"
+  },
+  "notes": {
+    "OpptywithProducts": "Joins Opportunity with OpportunityLineItem - use when line-item fields needed",
+    "OpptyContactRole": "Joins Opportunity with OpportunityContactRole - use when contact info needed on opps",
+    "AccountContact": "Joins Account with Contact - use when both account and contact fields needed",
+    "CampaignMember": "Joins Campaign with CampaignMember - use when member-level detail needed"
+  }
+}

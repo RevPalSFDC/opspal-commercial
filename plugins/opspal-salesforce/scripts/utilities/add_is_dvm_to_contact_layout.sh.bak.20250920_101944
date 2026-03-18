@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# Script to add Is_DVM__c field to Contact page layout in beta-sandbox
+# Author: Claude Code - Salesforce Metadata Manager
+# Date: $(date)
+
+set -e  # Exit on any error
+
+cd "$(dirname "$0")"
+
+echo "🎯 Adding Is_DVM__c field to Contact page layout"
+echo "================================================="
+
+# Step 1: Test connection
+echo -e "\n1️⃣  Testing connection to beta-sandbox..."
+if ! sfdx org display --target-org beta-sandbox > /dev/null 2>&1; then
+    echo "❌ Cannot connect to beta-sandbox org"
+    echo "   Please run: sfdx auth:web:login --alias beta-sandbox --instanceurl https://test.salesforce.com"
+    exit 1
+fi
+echo "✅ Connected to beta-sandbox"
+
+# Step 2: Create project structure
+echo -e "\n2️⃣  Setting up project structure..."
+mkdir -p force-app/main/default/layouts
+
+# Create sfdx-project.json if it doesn't exist
+if [ ! -f sfdx-project.json ]; then
+    cat > sfdx-project.json << EOF
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "ContactLayoutMod",
+  "sourceApiVersion": "61.0"
+}
+EOF
+fi
+echo "✅ Project structure ready"
+
+# Step 3: Query Contact layouts
+echo -e "\n3️⃣  Querying Contact layouts..."
+LAYOUTS=$(sf data query --use-tooling-api --query "SELECT Name FROM Layout WHERE TableEnumOrId = 'Contact'" --target-org beta-sandbox --json | jq -r '.result.records[].Name')
+echo "✅ Found layouts: $LAYOUTS"
+
+# Step 4: Retrieve Contact layouts
+echo -e "\n4️⃣  Retrieving Contact layouts..."
+if sfdx project retrieve start -m "Layout:Contact*" --target-org beta-sandbox; then
+    echo "✅ Layout retrieval completed"
+else
+    echo "⚠️  Layout retrieval had issues, but continuing..."
+fi
+
+# Step 5: Check for retrieved files
+echo -e "\n5️⃣  Checking retrieved files..."
+LAYOUT_FILES=$(find force-app -name "*.layout-meta.xml" -type f 2>/dev/null || true)
+
+if [ -z "$LAYOUT_FILES" ]; then
+    echo "❌ No layout files found after retrieval"
+    echo "   You may need to manually add the field through Setup > Object Manager > Contact > Page Layouts"
+    exit 1
+fi
+
+echo "✅ Found layout files:"
+echo "$LAYOUT_FILES" | while read file; do
+    echo "   📄 $file"
+done
+
+# Step 6: Check if Is_DVM__c is already in any layout
+echo -e "\n6️⃣  Checking for existing Is_DVM__c field..."
+FIELD_EXISTS=false
+echo "$LAYOUT_FILES" | while read file; do
+    if grep -q "Is_DVM__c" "$file" 2>/dev/null; then
+        echo "✅ Is_DVM__c field already exists in $file"
+        FIELD_EXISTS=true
+    fi
+done
+
+if [ "$FIELD_EXISTS" = true ]; then
+    echo "✅ Field already exists in layout - no changes needed"
+    exit 0
+fi
+
+# Step 7: Add Is_DVM__c field to the first layout found
+FIRST_LAYOUT=$(echo "$LAYOUT_FILES" | head -n1)
+echo -e "\n7️⃣  Adding Is_DVM__c field to layout: $FIRST_LAYOUT"
+
+# Create backup
+cp "$FIRST_LAYOUT" "${FIRST_LAYOUT}.backup"
+
+# Note: This is where we would modify the XML
+echo "   📝 Manual step required:"
+echo "   Edit $FIRST_LAYOUT and add this XML snippet to a layoutColumns section:"
+echo ""
+echo "   <layoutItems>"
+echo "       <behavior>Edit</behavior>"
+echo "       <field>Is_DVM__c</field>"
+echo "   </layoutItems>"
+echo ""
+echo "   Or run the Python script: python3 add_field_to_layout.py"
+
+# Step 8: Deploy (commented out until modification is done)
+echo -e "\n8️⃣  Deployment step (run after modifying layout):"
+echo "   sfdx project deploy start --source-dir force-app/main/default/layouts --target-org beta-sandbox"
+
+echo -e "\n🏁 Script completed!"
+echo "   Next: Modify the layout XML file and then deploy"
+echo "   Or use the automated Python script for complete automation"

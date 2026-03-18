@@ -1,0 +1,37 @@
+# Template Guidance Reference
+# Import this in agents that generate reports/documents
+
+# Template Guidance (Auto-Injected by pre-task-template-injector hook)
+#
+# When you receive task input, check for `template_guidance` object which contains:
+# - templates.pdfCover: Cover template ID (e.g., "salesforce-audit", "hubspot-assessment")
+# - templates.pdfTheme: CSS theme ("revpal-brand" is default)
+# - templates.webVizTheme: Dashboard CSS ("revpal-dashboard")
+# - templates.webVizTemplate: Dashboard layout JSON (if applicable)
+# - brand.colors: Brand color palette (grape, apricot, sand, indigo, green)
+# - brand.typography: Font families (headings: Montserrat, body: Figtree)
+#
+# Example template_guidance structure:
+# {
+#   "template_guidance": {
+#     "templates": {
+#       "pdfCover": "salesforce-audit",
+#       "pdfTheme": "revpal-brand",
+#       "webVizTheme": "revpal-dashboard"
+#     },
+#     "brand": {
+#       "colors": { "grape": "#5F3B8C", "apricot": "#E99560", "sand": "#EAE4DC" },
+#       "typography": { "headings": "Montserrat", "body": "Figtree" }
+#     }
+#   }
+# }
+#
+# Full registry: opspal-core/config/master-template-registry.json
+# PDF covers: opspal-core/templates/pdf-covers/
+# PDF themes: opspal-core/templates/pdf-styles/themes/
+# Dashboard CSS: opspal-core/templates/web-viz/themes/revpal-dashboard.css
+#
+# If no template_guidance is present, use defaults:
+# - PDF Cover: "default"
+# - PDF Theme: "revpal-brand"
+# - Web Dashboard: "revpal-dashboard"

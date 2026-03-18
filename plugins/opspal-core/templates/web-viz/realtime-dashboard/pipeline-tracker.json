@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "templateId": "realtime-pipeline-tracker",
+  "name": "Real-time Pipeline Tracker",
+  "description": "Live pipeline dashboard showing deal movement, stage progression, and pipeline value with WebSocket updates",
+  "version": "1.0.0",
+  "category": "realtime",
+  "refreshMode": "websocket",
+  "topics": ["pipeline.summary", "pipeline.deals", "pipeline.stages"],
+
+  "layout": {
+    "type": "dashboard",
+    "theme": "revpal-dashboard",
+    "columns": 12,
+    "rows": "auto",
+    "gap": "16px"
+  },
+
+  "header": {
+    "title": "Pipeline Tracker",
+    "subtitle": "Real-time deal movement and pipeline health",
+    "showConnectionStatus": true,
+    "showLastUpdate": true,
+    "actions": [
+      { "label": "Refresh", "action": "reconnect", "icon": "refresh" },
+      { "label": "Export", "action": "export", "icon": "download" }
+    ]
+  },
+
+  "components": [
+    {
+      "id": "pipeline-value",
+      "type": "kpi",
+      "title": "Pipeline Value",
+      "topic": "pipeline.summary",
+      "dataPath": "totalValue",
+      "format": "currency",
+      "trend": {
+        "enabled": true,
+        "compareField": "previousPeriodValue",
+        "format": "percentage"
+      },
+      "layout": { "col": 1, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "deal-count",
+      "type": "kpi",
+      "title": "Open Deals",
+      "topic": "pipeline.summary",
+      "dataPath": "totalDeals",
+      "format": "number",
+      "trend": {
+        "enabled": true,
+        "compareField": "previousPeriodDeals",
+        "format": "delta"
+      },
+      "layout": { "col": 4, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "avg-deal-size",
+      "type": "kpi",
+      "title": "Avg Deal Size",
+      "topic": "pipeline.summary",
+      "dataPath": "avgDealSize",
+      "format": "currency",
+      "layout": { "col": 7, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "weighted-pipeline",
+      "type": "kpi",
+      "title": "Weighted Pipeline",
+      "topic": "pipeline.summary",
+      "dataPath": "weightedValue",
+      "format": "currency",
+      "description": "Pipeline value × stage probability",
+      "layout": { "col": 10, "row": 1, "width": 3, "height": 1 }
+    },
+    {
+      "id": "stage-funnel",
+      "type": "chart",
+      "chartType": "bar",
+      "title": "Pipeline by Stage",
+      "topic": "pipeline.summary",
+      "dataPath": "byStage",
+      "horizontal": true,
+      "options": {
+        "xAxis": { "field": "stageName", "label": "Stage" },
+        "yAxis": { "field": "value", "label": "Value", "format": "currency" },
+        "colorField": "stageName",
+        "colorScheme": "pipeline-stages",
+        "showLabels": true,
+        "animation": { "duration": 300 }
+      },
+      "layout": { "col": 1, "row": 2, "width": 6, "height": 2 }
+    },
+    {
+      "id": "stage-movement",
+      "type": "chart",
+      "chartType": "sankey",
+      "title": "Stage Movement (Last 7 Days)",
+      "topic": "pipeline.stages",
+      "dataPath": "movements",
+      "options": {
+        "sourceField": "fromStage",
+        "targetField": "toStage",
+        "valueField": "count",
+        "colorScheme": "pipeline-stages"
+      },
+      "layout": { "col": 7, "row": 2, "width": 6, "height": 2 }
+    },
+    {
+      "id": "deal-list",
+      "type": "table",
+      "title": "Active Deals",
+      "topic": "pipeline.deals",
+      "dataPath": "deals",
+      "sortable": true,
+      "filterable": true,
+      "pagination": { "enabled": true, "pageSize": 10 },
+      "columns": [
+        { "field": "name", "label": "Deal", "width": "25%", "link": true },
+        { "field": "account", "label": "Account", "width": "15%" },
+        { "field": "amount", "label": "Amount", "width": "12%", "format": "currency", "align": "right" },
+        { "field": "stage", "label": "Stage", "width": "12%", "badge": true, "colorMap": "pipeline-stages" },
+        { "field": "score", "label": "Score", "width": "10%", "format": "score", "colorScale": true },
+        { "field": "closeDate", "label": "Close Date", "width": "12%", "format": "date" },
+        { "field": "owner", "label": "Owner", "width": "14%" }
+      ],
+      "rowHighlight": {
+        "field": "recentlyUpdated",
+        "className": "row-highlight-updated",
+        "duration": 5000
+      },
+      "layout": { "col": 1, "row": 4, "width": 12, "height": 3 }
+    },
+    {
+      "id": "recent-movement",
+      "type": "feed",
+      "title": "Recent Activity",
+      "topic": "pipeline.stages",
+      "dataPath": "recentMovements",
+      "maxItems": 10,
+      "itemTemplate": {
+        "icon": "{{movementIcon}}",
+        "title": "{{dealName}}",
+        "subtitle": "{{fromStage}} → {{toStage}}",
+        "timestamp": "{{timestamp}}",
+        "meta": "{{amount | currency}}"
+      },
+      "layout": { "col": 1, "row": 7, "width": 4, "height": 2 }
+    },
+    {
+      "id": "at-risk-deals",
+      "type": "list",
+      "title": "Deals at Risk",
+      "topic": "pipeline.deals",
+      "dataPath": "deals",
+      "filter": { "field": "score", "operator": "lt", "value": 50 },
+      "sort": { "field": "amount", "direction": "desc" },
+      "maxItems": 5,
+      "itemTemplate": {
+        "title": "{{name}}",
+        "subtitle": "Score: {{score}} | {{stage}}",
+        "value": "{{amount | currency}}",
+        "badge": { "text": "At Risk", "variant": "danger" }
+      },
+      "emptyState": {
+        "icon": "check-circle",
+        "message": "No deals at risk"
+      },
+      "layout": { "col": 5, "row": 7, "width": 4, "height": 2 }
+    },
+    {
+      "id": "closing-soon",
+      "type": "list",
+      "title": "Closing This Week",
+      "topic": "pipeline.deals",
+      "dataPath": "deals",
+      "filter": { "field": "closeDate", "operator": "within", "value": "7days" },
+      "sort": { "field": "closeDate", "direction": "asc" },
+      "maxItems": 5,
+      "itemTemplate": {
+        "title": "{{name}}",
+        "subtitle": "{{stage}} | Score: {{score}}",
+        "value": "{{amount | currency}}",
+        "meta": "{{closeDate | relativeDate}}"
+      },
+      "layout": { "col": 9, "row": 7, "width": 4, "height": 2 }
+    }
+  ],
+
+  "websocket": {
+    "topics": ["pipeline.summary", "pipeline.deals", "pipeline.stages"],
+    "reconnectStrategy": {
+      "maxAttempts": 10,
+      "initialDelay": 1000,
+      "maxDelay": 30000,
+      "backoffMultiplier": 2
+    },
+    "deltaUpdates": true,
+    "batchUpdates": {
+      "enabled": true,
+      "intervalMs": 1000
+    }
+  },
+
+  "filters": {
+    "global": [
+      {
+        "id": "owner",
+        "type": "select",
+        "label": "Owner",
+        "options": "dynamic:users",
+        "default": "all"
+      },
+      {
+        "id": "stage",
+        "type": "multiselect",
+        "label": "Stages",
+        "options": "dynamic:stages",
+        "default": "all"
+      },
+      {
+        "id": "minAmount",
+        "type": "number",
+        "label": "Min Amount",
+        "default": 0
+      }
+    ]
+  },
+
+  "styles": {
+    "customCSS": ".row-highlight-updated { animation: highlight-fade 5s ease-out; } @keyframes highlight-fade { 0% { background-color: var(--brand-apricot); } 100% { background-color: transparent; } }"
+  }
+}

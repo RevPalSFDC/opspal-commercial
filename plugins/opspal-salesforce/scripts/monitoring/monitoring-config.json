@@ -1,0 +1,147 @@
+{
+  "monitoring": {
+    "defaultOrg": "production",
+    "schedules": {
+      "dailyComplexityAudit": {
+        "enabled": true,
+        "cron": "0 2 * * *",
+        "script": "flow-complexity-audit.js",
+        "description": "Daily flow complexity audit at 2 AM",
+        "options": {
+          "threshold": 7,
+          "email": "devteam@company.com"
+        }
+      },
+      "weeklyConsolidationCheck": {
+        "enabled": true,
+        "cron": "0 6 * * 0",
+        "script": "flow-consolidation-validator.sh",
+        "description": "Weekly consolidation check on Sunday at 6 AM",
+        "options": {
+          "autoFix": true,
+          "email": "devteam@company.com"
+        }
+      },
+      "dailyValidationMonitor": {
+        "enabled": true,
+        "cron": "0 7 * * *",
+        "script": "validation-rule-monitor.js",
+        "description": "Daily validation rule change monitor at 7 AM",
+        "options": {
+          "email": "devteam@company.com"
+        }
+      },
+      "quarterlyHealthDashboard": {
+        "enabled": true,
+        "cron": "0 8 * * *",
+        "script": "system-health-dashboard.js",
+        "description": "Daily system health dashboard at 8 AM",
+        "options": {
+          "days": 30
+        }
+      }
+    },
+    "alerting": {
+      "email": {
+        "enabled": true,
+        "defaultRecipients": [
+          "devteam@company.com",
+          "admin@company.com"
+        ],
+        "highPriorityRecipients": [
+          "devteam@company.com",
+          "admin@company.com",
+          "manager@company.com"
+        ],
+        "smtpConfig": {
+          "host": "localhost",
+          "port": 25,
+          "secure": false
+        }
+      },
+      "slack": {
+        "enabled": false,
+        "webhookUrl": "",
+        "channel": "#salesforce-alerts"
+      },
+      "discord": {
+        "enabled": false,
+        "webhookUrl": ""
+      }
+    },
+    "thresholds": {
+      "flowComplexity": {
+        "warning": 7,
+        "critical": 15
+      },
+      "consolidationCompliance": {
+        "warning": 85,
+        "critical": 70
+      },
+      "validationRuleChanges": {
+        "warning": 5,
+        "critical": 10
+      },
+      "systemHealthScore": {
+        "warning": 80,
+        "critical": 60
+      }
+    },
+    "retention": {
+      "reportRetentionDays": 90,
+      "logRetentionDays": 30,
+      "dashboardRetentionDays": 7
+    },
+    "performance": {
+      "maxConcurrentJobs": 3,
+      "timeoutMinutes": 30,
+      "retryAttempts": 2
+    }
+  },
+  "organizations": {
+    "production": {
+      "alias": "production",
+      "type": "production",
+      "monitoring": {
+        "enabled": true,
+        "alertLevel": "high",
+        "customThresholds": {
+          "flowComplexity.critical": 12
+        }
+      }
+    },
+    "sandbox": {
+      "alias": "sandbox",
+      "type": "sandbox",
+      "monitoring": {
+        "enabled": true,
+        "alertLevel": "medium",
+        "customThresholds": {
+          "flowComplexity.critical": 20
+        }
+      }
+    },
+    "development": {
+      "alias": "dev",
+      "type": "sandbox",
+      "monitoring": {
+        "enabled": false,
+        "alertLevel": "low"
+      }
+    }
+  },
+  "integrations": {
+    "asana": {
+      "enabled": false,
+      "createTasks": true,
+      "projectId": "",
+      "assigneeId": ""
+    },
+    "jira": {
+      "enabled": false,
+      "createIssues": true,
+      "project": "",
+      "issueType": "Bug"
+    }
+  }
+}

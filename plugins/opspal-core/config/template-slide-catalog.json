@@ -1,0 +1,1548 @@
+{
+  "templateId": "1VUGRtUbqwz-UIc9J2pDXp3PQllFdv9K27cHPrM-urhc",
+  "templateTitle": "OpsPal RevPal Slides Master Template Dec 2025",
+  "totalSlides": 46,
+  "indexedAt": "2025-12-09T02:45:52.594Z",
+  "mandatorySlides": [
+    {
+      "slideIndex": 0,
+      "role": "title",
+      "position": "first"
+    },
+    {
+      "slideIndex": 1,
+      "role": "title",
+      "position": "second"
+    },
+    {
+      "slideIndex": 44,
+      "role": "investment",
+      "position": "nearEnd"
+    },
+    {
+      "slideIndex": 45,
+      "role": "closing",
+      "position": "last"
+    }
+  ],
+  "slides": [
+    {
+      "slideIndex": 0,
+      "objectId": "g36e86330f3e_0_58",
+      "type": "title",
+      "title": "Slide Title",
+      "description": "Subtitle",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": true,
+      "textPreview": [
+        "Slide Title",
+        "Subtitle"
+      ]
+    },
+    {
+      "slideIndex": 1,
+      "objectId": "g36eaa0956f9_0_56",
+      "type": "title",
+      "title": "Section Divider",
+      "description": "Section Divider Subtitle",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": true,
+      "textPreview": [
+        "Section Divider",
+        "Section Divider Subtitle"
+      ]
+    },
+    {
+      "slideIndex": 2,
+      "objectId": "g36eaa0956f9_0_208",
+      "type": "title",
+      "title": "Agenda",
+      "description": "Subtitle Topic 1",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Agenda",
+        "Subtitle",
+        "Topic 1",
+        "Owner Name | 15 minutes",
+        "Topic 2"
+      ]
+    },
+    {
+      "slideIndex": 3,
+      "objectId": "g36eaa0956f9_0_116",
+      "type": "title",
+      "title": "Core Content Slides",
+      "description": "",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Core Content Slides"
+      ]
+    },
+    {
+      "slideIndex": 4,
+      "objectId": "g36eaa0956f9_0_123",
+      "type": "title",
+      "title": "One-Column Slide",
+      "description": "Content Punchline | TLDR",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "One-Column Slide",
+        "Content",
+        "Punchline | TLDR"
+      ]
+    },
+    {
+      "slideIndex": 5,
+      "objectId": "g36eaa0956f9_0_195",
+      "type": "title",
+      "title": "Two-Column Slide",
+      "description": "Subtitle Content",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Two-Column Slide",
+        "Subtitle",
+        "Content",
+        "Subtitle",
+        "Content"
+      ]
+    },
+    {
+      "slideIndex": 6,
+      "objectId": "g36eaa0956f9_0_188",
+      "type": "title",
+      "title": "Three-Column Slide (Vertical)",
+      "description": "Subtitle Content",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Three-Column Slide (Vertical)",
+        "Subtitle",
+        "Content",
+        "Subtitle",
+        "Content"
+      ]
+    },
+    {
+      "slideIndex": 7,
+      "objectId": "g36e86330f3e_0_332",
+      "type": "title",
+      "title": "Three-Column Slide (Horizontal)",
+      "description": "Content Subtitle",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Three-Column Slide (Horizontal)",
+        "Content",
+        "Subtitle",
+        "Content",
+        "Subtitle"
+      ]
+    },
+    {
+      "slideIndex": 8,
+      "objectId": "g36eaa0956f9_0_214",
+      "type": "general",
+      "title": "Content",
+      "description": "Bullet 1 Sub-bullet",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Content",
+        "Bullet 1",
+        "Sub-bullet",
+        "Sub-bullet",
+        "Bullet 2"
+      ]
+    },
+    {
+      "slideIndex": 9,
+      "objectId": "g36eaa0956f9_0_223",
+      "type": "title",
+      "title": "Specialized Layouts",
+      "description": "",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Specialized Layouts"
+      ]
+    },
+    {
+      "slideIndex": 10,
+      "objectId": "g36eaa0956f9_0_451",
+      "type": "general",
+      "title": "Single Table with Content",
+      "description": "Column Header Column Header",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Single Table with Content",
+        "Column Header",
+        "Column Header",
+        "Column Header",
+        "Data"
+      ]
+    },
+    {
+      "slideIndex": 11,
+      "objectId": "g36eaa0956f9_0_458",
+      "type": "general",
+      "title": "Single Table",
+      "description": "Column Header Column Header",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Single Table",
+        "Column Header",
+        "Column Header",
+        "Column Header",
+        "Data"
+      ]
+    },
+    {
+      "slideIndex": 12,
+      "objectId": "g36eaa0956f9_0_464",
+      "type": "general",
+      "title": "Stats or KPIs",
+      "description": "▲ KPI / Stat Context or details here",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Stats or KPIs",
+        "▲ KPI / Stat",
+        "Context or details here",
+        "▲ KPI / Stat",
+        "Context or details here"
+      ]
+    },
+    {
+      "slideIndex": 13,
+      "objectId": "g36eaa0956f9_0_743",
+      "type": "general",
+      "title": "Status or KPIs alternative",
+      "description": "🤝 Stat / KPI",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Status or KPIs alternative",
+        "🤝",
+        "Stat / KPI",
+        "Details",
+        "📊"
+      ]
+    },
+    {
+      "slideIndex": 14,
+      "objectId": "g36eaa0956f9_0_370",
+      "type": "investment",
+      "title": "Process | Lifecycle Mapping Example",
+      "description": "Draft Quote manually created by AE. Default stage upon creation.",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Process | Lifecycle Mapping Example",
+        "Draft",
+        "Quote manually created by AE. Default stage upon creation.",
+        "Account Executive",
+        "Submitted for Pricing"
+      ]
+    },
+    {
+      "slideIndex": 15,
+      "objectId": "g36eaa0956f9_0_228",
+      "type": "investment",
+      "title": "Two Tables (i.e., Definitions, Comparisons)",
+      "description": "📧 Contact Stages",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Two Tables (i.e., Definitions, Comparisons)",
+        "📧",
+        "Contact Stages",
+        "New",
+        "Recently added to CRM; no outreach has been made."
+      ]
+    },
+    {
+      "slideIndex": 16,
+      "objectId": "g36eaa0956f9_0_235",
+      "type": "investment",
+      "title": "Process | Journey",
+      "description": "Process | Journey New Contact Created",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Process | Journey",
+        "Process | Journey",
+        "New Contact Created",
+        "NEW",
+        "OUTREACH INITIATED"
+      ]
+    },
+    {
+      "slideIndex": 17,
+      "objectId": "g36eaa0956f9_0_559",
+      "type": "service",
+      "title": "Roadmap Timeline Example",
+      "description": "Operational Foundation “Get the foundation right to scale”",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "hubspot",
+        "hs",
+        "revops",
+        "gtm",
+        "admin",
+        "support",
+        "reporting"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "reporting needs",
+          "visibility"
+        ],
+        "techStackMatch": [
+          "Salesforce",
+          "Hubspot"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Roadmap Timeline Example",
+        "Operational Foundation",
+        "“Get the foundation right to scale”",
+        "✓",
+        "System Architecture & Data Foundation"
+      ]
+    },
+    {
+      "slideIndex": 18,
+      "objectId": "g36eaa0956f9_0_578",
+      "type": "service",
+      "title": "Roadmap Details Example",
+      "description": "🏗️ 🤝",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "flow",
+        "cpq",
+        "integration",
+        "connect",
+        "revops",
+        "gtm",
+        "admin",
+        "support"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "integration issues",
+          "data sync",
+          "reporting needs",
+          "visibility"
+        ],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations",
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Roadmap Details Example",
+        "🏗️",
+        "🤝",
+        "🎯",
+        "⚡️"
+      ]
+    },
+    {
+      "slideIndex": 19,
+      "objectId": "g36eaa0956f9_0_654",
+      "type": "investment",
+      "title": "Timeline Alternative Slide (per roadmap phase)",
+      "description": "Success Metrics PRIORITY LEVEL",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Timeline Alternative Slide (per roadmap phase)",
+        "Success Metrics",
+        "PRIORITY LEVEL",
+        "#%",
+        "KPI definition"
+      ]
+    },
+    {
+      "slideIndex": 20,
+      "objectId": "g36eaa0956f9_0_551",
+      "type": "title",
+      "title": "“Insert quote here”",
+      "description": "Content Quote Slide",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "“Insert quote here”",
+        "Content",
+        "Quote Slide"
+      ]
+    },
+    {
+      "slideIndex": 21,
+      "objectId": "g36eaa0956f9_0_877",
+      "type": "title",
+      "title": "Success Stories",
+      "description": "",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Success Stories"
+      ]
+    },
+    {
+      "slideIndex": 22,
+      "objectId": "g36eaa0956f9_0_801",
+      "type": "caseStudy",
+      "title": "🔗 Connecting Marketing + Sales for Smarter Growth",
+      "description": "EdTech Startup | Scaling demand gen | Multi-tool CRM stack ⚠️",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "hubspot",
+        "integration",
+        "connect",
+        "growth"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "data quality",
+          "duplicate records"
+        ],
+        "techStackMatch": [
+          "Salesforce",
+          "Hubspot"
+        ],
+        "servicesMatch": [
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.85,
+        "operations": 0.75,
+        "technical": 0.6,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "🔗 Connecting Marketing + Sales for Smarter Growth",
+        "EdTech Startup | Scaling demand gen | Multi-tool CRM stack",
+        "⚠️",
+        "The Challenge",
+        "Salesforce and HubSpot were speaking different languages.  Leads were getting stuck in spreadsheets.  Attribution was fuzzy.  Assignments were manual and error-prone."
+      ]
+    },
+    {
+      "slideIndex": 23,
+      "objectId": "g36eaa0956f9_0_813",
+      "type": "investment",
+      "title": "📊 Restoring Confidence in Reporting",
+      "description": "B2B Tech Company | Rapid scaling | Disjointed reporting systems ⚠️",
+      "keywords": [
+        "integration",
+        "api",
+        "cost",
+        "reporting"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "📊 Restoring Confidence in Reporting",
+        "B2B Tech Company | Rapid scaling | Disjointed reporting systems",
+        "⚠️",
+        "The Challenge",
+        "Reports were slow, complex, and not trusted.  Data inputs varied wildly, and too much time was spent just building reports - not analyzing them."
+      ]
+    },
+    {
+      "slideIndex": 24,
+      "objectId": "g36eaa0956f9_0_882",
+      "type": "caseStudy",
+      "title": "📈 From Pipeline Paralysis to Predictable Growth",
+      "description": "Series B E-Commerce SaaS | Sales-led motion | SDR-heavy model ⚠️",
+      "keywords": [
+        "integration",
+        "connect",
+        "growth"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.85,
+        "operations": 0.75,
+        "technical": 0.6,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "📈 From Pipeline Paralysis to Predictable Growth",
+        "Series B E-Commerce SaaS | Sales-led motion | SDR-heavy model",
+        "⚠️",
+        "The Challenge",
+        "They lacked visibility into competitor installs and struggled to surface qualified prospects fast enough.  SDRs were flying blind."
+      ]
+    },
+    {
+      "slideIndex": 25,
+      "objectId": "g36eaa0956f9_0_894",
+      "type": "caseStudy",
+      "title": "Getting Renewal-Ready",
+      "description": "Getting Renewal-Ready AI SaaS company | 200+ customers | Hypergrowth stage",
+      "keywords": [
+        "salesforce",
+        "flow",
+        "integration",
+        "api",
+        "automation",
+        "workflow",
+        "growth"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Integration Services",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.85,
+        "operations": 0.75,
+        "technical": 0.6,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "🧩",
+        "Getting Renewal-Ready",
+        "AI SaaS company | 200+ customers | Hypergrowth stage",
+        "⚠️",
+        "The Challenge"
+      ]
+    },
+    {
+      "slideIndex": 26,
+      "objectId": "g36eaa0956f9_0_958",
+      "type": "title",
+      "title": "Sales Slides",
+      "description": "",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Sales Slides"
+      ]
+    },
+    {
+      "slideIndex": 27,
+      "objectId": "g36eaa0956f9_0_963",
+      "type": "methodology",
+      "title": "from",
+      "description": "to Operational Stagnation",
+      "keywords": [
+        "salesforce",
+        "flow",
+        "revops",
+        "gtm",
+        "automation",
+        "workflow",
+        "growth",
+        "revenue"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Revenue Operations",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.7,
+        "operations": 0.85,
+        "technical": 0.75,
+        "endUser": 0.4
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "from",
+        "to",
+        "Operational Stagnation",
+        "Scalable Revenue Growth",
+        "Broken, Reactive Processes"
+      ]
+    },
+    {
+      "slideIndex": 28,
+      "objectId": "g36eaa0956f9_0_1033",
+      "type": "service",
+      "title": "Why RevPal:  A Strategic Operating Partner",
+      "description": "RevPal is not a temp staff augmentation shop.  We are a high-performance operating team built specifically for B2B companies at your stage.  Here’s ho",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "cpq",
+        "revops",
+        "gtm",
+        "sales ops",
+        "marketing ops",
+        "automation",
+        "analytics"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Revenue Operations",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Why RevPal:  A Strategic Operating Partner",
+        "RevPal is not a temp staff augmentation shop.  We are a high-performance operating team built specifically for B2B companies at your stage.  Here’s how we deliver:",
+        "RevPal Operating Model",
+        "What You Get",
+        "Pod-Based Delivery"
+      ]
+    },
+    {
+      "slideIndex": 29,
+      "objectId": "g36eaa0956f9_0_1039",
+      "type": "service",
+      "title": "1 | Nail the Basics",
+      "description": "Align & Assess: We take stock of your current revenue operations landscape, identifying roadblocks, inefficiencies, and untapped opportunities.",
+      "keywords": [
+        "salesforce",
+        "flow",
+        "integration",
+        "sync",
+        "revops",
+        "revenue operations",
+        "gtm",
+        "go-to-market",
+        "admin",
+        "support"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "integration issues",
+          "data sync",
+          "reporting needs",
+          "visibility"
+        ],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations",
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "1 | Nail the Basics",
+        "Align & Assess:",
+        "We take stock of your current revenue operations landscape, identifying roadblocks, inefficiencies, and untapped opportunities.",
+        "RevOps Playbook:",
+        "Together, we establish priorities and a roadmap, defining how we’ll measure success."
+      ]
+    },
+    {
+      "slideIndex": 30,
+      "objectId": "g36eaa0956f9_0_1055",
+      "type": "service",
+      "title": "Our Workstream Management",
+      "description": "Delivering Value at Every Speed Projects",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "hubspot",
+        "hs",
+        "integration",
+        "api",
+        "admin",
+        "support",
+        "automation",
+        "revenue"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "integration issues",
+          "data sync",
+          "reporting needs",
+          "visibility"
+        ],
+        "techStackMatch": [
+          "Salesforce",
+          "Hubspot"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Integration Services",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Our Workstream Management",
+        "Delivering Value at Every Speed",
+        "Projects",
+        "drive transformational impact",
+        "Enhancements"
+      ]
+    },
+    {
+      "slideIndex": 31,
+      "objectId": "g36eaa0956f9_0_1085",
+      "type": "service",
+      "title": "The Future of RevOps",
+      "description": "At RevPal, we’re not just solving today’s RevOps challenges - we’re building tomorrow’s solutions",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "flow",
+        "integration",
+        "api",
+        "revops",
+        "revenue operations",
+        "automation",
+        "workflow",
+        "revenue"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Revenue Operations",
+          "Integration Services",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "The Future of RevOps",
+        "At RevPal, we’re not just solving today’s RevOps challenges - we’re",
+        "building tomorrow’s solutions",
+        ".",
+        "While we transform your foundational systems, we’re also pioneering the next generation of"
+      ]
+    },
+    {
+      "slideIndex": 32,
+      "objectId": "g36eaa0956f9_0_1152",
+      "type": "investment",
+      "title": "If You Built This In-House",
+      "description": "beta-corp’s current team includes a RevOps Enablement and Salesforce Admin.  While that covers important ground, it leaves critical gaps in Analytics,",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "hubspot",
+        "hs",
+        "revops",
+        "gtm",
+        "admin",
+        "cost",
+        "analytics"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce",
+          "Hubspot"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "If You Built This In-House",
+        "beta-corp’s current team includes a RevOps Enablement and Salesforce Admin.  While that covers important ground, it leaves critical gaps in Analytics, Planning, Compensation strategy, and functional operations across Sales, SDRs, CS, and Partnerships.",
+        "To fully replicate the coverage and velocity of RevPal, here’s what it would look like to build it internally:",
+        "Capability",
+        "RevPal (Now)"
+      ]
+    },
+    {
+      "slideIndex": 33,
+      "objectId": "g36eaa0956f9_0_1159",
+      "type": "investment",
+      "title": "What’s Included",
+      "description": "Your Investment By the end of this engagement, your team will be equipped with the",
+      "keywords": [
+        "hubspot",
+        "hs",
+        "integration",
+        "sync",
+        "revops",
+        "gtm",
+        "admin",
+        "support",
+        "reporting",
+        "implementation"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Hubspot"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations",
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "What’s Included",
+        "Your Investment",
+        "By the end of this engagement, your team will be equipped with the",
+        "operational infrastructure, reporting clarity,",
+        "and"
+      ]
+    },
+    {
+      "slideIndex": 34,
+      "objectId": "g36eaa0956f9_0_1231",
+      "type": "service",
+      "title": "Meet Your RevPal Team",
+      "description": "A connector at heart and optimizer by nature, Christian brings energy and execution to sales and biz ops. He turns bottlenecks into breakthroughs (and",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "flow",
+        "cpq",
+        "hubspot",
+        "hs",
+        "integration",
+        "connect",
+        "revops",
+        "gtm"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce",
+          "Hubspot"
+        ],
+        "servicesMatch": [
+          "Revenue Operations",
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Meet Your RevPal Team",
+        "A connector at heart and optimizer by nature, Christian brings energy and execution to sales and biz ops. He turns bottlenecks into breakthroughs (and might offer you a cold one to celebrate). Bend, OR is home, but his reach is coast-to-coast.",
+        "CHRISTIAN FREESE",
+        "The Revenue Spark",
+        "CHRIS ACEVEDO"
+      ]
+    },
+    {
+      "slideIndex": 35,
+      "objectId": "g36eaa0956f9_0_1404",
+      "type": "service",
+      "title": "How We Work:",
+      "description": "Flexible RevOps Engagement Models",
+      "keywords": [
+        "revops",
+        "admin",
+        "support"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "How We Work:",
+        "Flexible RevOps",
+        "Engagement Models",
+        "Scalable support for systems, strategy, and execution"
+      ]
+    },
+    {
+      "slideIndex": 36,
+      "objectId": "g36eaa0956f9_0_1284",
+      "type": "caseStudy",
+      "title": "Three Ways to Work with RevPal",
+      "description": "🧭 Advisory",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "revops",
+        "admin",
+        "support",
+        "dashboards"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "reporting needs",
+          "visibility"
+        ],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.85,
+        "operations": 0.75,
+        "technical": 0.6,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Three Ways to Work with RevPal",
+        "🧭",
+        "Advisory",
+        "Strategic coaching and tools",
+        "Lightweight guidance"
+      ]
+    },
+    {
+      "slideIndex": 37,
+      "objectId": "g36eaa0956f9_0_1293",
+      "type": "service",
+      "title": "RevOps-as-a-Service:  Embedded, Ongoing Support",
+      "description": "⚫️ Tactical + strategic support across your GTM motion ⚫️ Weekly/bilweekly syncs, Slack support, roadmap alignment",
+      "keywords": [
+        "integration",
+        "sync",
+        "revops",
+        "gtm",
+        "admin",
+        "support",
+        "reporting"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [
+          "integration issues",
+          "data sync",
+          "reporting needs",
+          "visibility"
+        ],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Revenue Operations",
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "RevOps-as-a-Service:  Embedded, Ongoing Support",
+        "⚫️ Tactical + strategic support across your GTM motion",
+        "⚫️ Weekly/bilweekly syncs, Slack support, roadmap alignment",
+        "⚫️ Covers CRM, reporting, enablement, comp, tech stack",
+        "⚫️ Proactive execution with flexibility to adapt"
+      ]
+    },
+    {
+      "slideIndex": 38,
+      "objectId": "g36eaa0956f9_0_1300",
+      "type": "investment",
+      "title": "ProjectPal:  High-Impact, Milestone-Based Work",
+      "description": "Best for teams tackling strategic initiatives that go beyond quick fixes or day-to-day support. ✓",
+      "keywords": [
+        "salesforce",
+        "sf",
+        "flow",
+        "admin",
+        "support",
+        "day-to-day",
+        "automation",
+        "workflow",
+        "revenue",
+        "optimization"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Salesforce Administration",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "ProjectPal:  High-Impact, Milestone-Based Work",
+        "Best for teams tackling strategic initiatives that go beyond quick fixes or day-to-day support.",
+        "✓",
+        "System",
+        "Overhauls"
+      ]
+    },
+    {
+      "slideIndex": 39,
+      "objectId": "g36eaa0956f9_0_1311",
+      "type": "service",
+      "title": "Most Clients Combine RaaS + Projects",
+      "description": "We’ll work with you to design a custom engagement that supports day-to-day momentum and major initiatives - without over engineering or overcommitting",
+      "keywords": [
+        "admin",
+        "support",
+        "day-to-day"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Salesforce Administration"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.6,
+        "operations": 0.9,
+        "technical": 0.8,
+        "endUser": 0.5
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Most Clients Combine RaaS + Projects",
+        "We’ll work with you to design a custom engagement that supports day-to-day momentum and major initiatives - without over engineering or overcommitting.",
+        "Retainer Consistency & Flexibility",
+        "Unified Delivery Under One Pod",
+        "Retainer →"
+      ]
+    },
+    {
+      "slideIndex": 40,
+      "objectId": "g36eaa0956f9_0_1325",
+      "type": "title",
+      "title": "Let’s Build the Right Model Together",
+      "description": "",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Let’s Build the Right Model Together"
+      ]
+    },
+    {
+      "slideIndex": 41,
+      "objectId": "g36eaa0956f9_0_1411",
+      "type": "title",
+      "title": "Branding",
+      "description": "",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Branding"
+      ]
+    },
+    {
+      "slideIndex": 42,
+      "objectId": "g36eaa0956f9_0_1416",
+      "type": "title",
+      "title": "Colors",
+      "description": "Deep Grape HEX:",
+      "keywords": [
+        "admin",
+        "support",
+        "growth"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Salesforce Administration"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.9,
+        "operations": 0.7,
+        "technical": 0.5,
+        "endUser": 0.6
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Colors",
+        "Deep Grape",
+        "HEX:",
+        "#5F3B8C",
+        "Role:"
+      ]
+    },
+    {
+      "slideIndex": 43,
+      "objectId": "g36eaa0956f9_0_1450",
+      "type": "investment",
+      "title": "Fonts",
+      "description": "Level Use",
+      "keywords": [],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": []
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": false,
+      "textPreview": [
+        "Fonts",
+        "Level",
+        "Use",
+        "Font",
+        "Size (Web / Slides)"
+      ]
+    },
+    {
+      "slideIndex": 44,
+      "objectId": "g36eaa0956f9_0_1463",
+      "type": "investment",
+      "title": "RevPal Tone of Voice Guide",
+      "description": "Style: Confidently Conversational with Strategic Wit",
+      "keywords": [
+        "integration",
+        "sync",
+        "connect",
+        "revops"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [],
+        "servicesMatch": [
+          "Revenue Operations",
+          "Integration Services"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.95,
+        "operations": 0.7,
+        "technical": 0.4,
+        "endUser": 0.3
+      },
+      "isMandatory": true,
+      "textPreview": [
+        "RevPal Tone of Voice Guide",
+        "Style:",
+        "Confidently Conversational with Strategic Wit",
+        "Brand Personality at a Glance:",
+        "Think of RevPal’s voice as a"
+      ]
+    },
+    {
+      "slideIndex": 45,
+      "objectId": "g36eaa0956f9_0_1475",
+      "type": "closing",
+      "title": "1. Professional—but Human",
+      "description": "We’re experts, and we don’t need buzzwords to prove it. We use plainspoken, intelligent language that builds trust and makes our audience feel like we",
+      "keywords": [
+        "salesforce",
+        "flow",
+        "revops",
+        "gtm",
+        "automation",
+        "workflow",
+        "revenue"
+      ],
+      "triggerConditions": {
+        "painPointsMatch": [],
+        "techStackMatch": [
+          "Salesforce"
+        ],
+        "servicesMatch": [
+          "Revenue Operations",
+          "Automation Development"
+        ]
+      },
+      "personaRelevanceScores": {
+        "executive": 0.8,
+        "operations": 0.6,
+        "technical": 0.5,
+        "endUser": 0.4
+      },
+      "isMandatory": true,
+      "textPreview": [
+        "1. Professional—but Human",
+        "We’re experts, and we don’t need buzzwords to prove it. We use plainspoken, intelligent language that builds trust and makes our audience feel like we",
+        "get",
+        "them.",
+        "✅ “We built OpsPal to tackle the real, frustrating stuff.”\u000b❌ “OpsPal is a cutting-edge solution designed to optimize cross-functional workflows.”"
+      ]
+    }
+  ]
+}

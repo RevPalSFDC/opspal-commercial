@@ -1,0 +1,165 @@
+# PDF Generation Service Reference
+# Import this in any agent that needs to generate PDF reports
+#
+# Usage in agent: @import opspal-core/agents/shared/pdf-generation-reference.yaml
+
+## Centralized PDF Generation
+
+**MANDATORY**: All PDF report generation MUST use the centralized ReportService.
+
+### Service Location
+**Path**: `opspal-core/scripts/lib/report-service.js`
+
+### Quick Reference
+
+```javascript
+const ReportService = require('opspal-core/scripts/lib/report-service.js');
+
+// Generate a report
+const result = await ReportService.generate({
+  type: 'revops-audit',      // See available types below
+  org: 'acme-corp',          // Organization name
+  title: 'RevOps Assessment',
+  content: markdownContent,  // OR: markdownPath: './report.md'
+  includeBLUF: true,         // Generate executive summary
+  renderMermaid: true,       // Render diagrams (default: true)
+  landscape: false           // Landscape orientation (default: false, OKR types default to true)
+});
+
+// Result contains:
+// - result.pdfPath: Full path to generated PDF
+// - result.outputDir: Directory containing all outputs
+// - result.registry: Tracking entry with ID
+```
+
+### Available Report Types
+
+| Type | Platform | Cover Template | Category |
+|------|----------|----------------|----------|
+| `revops-audit` | salesforce | salesforce-audit | audit |
+| `cpq-assessment` | salesforce | salesforce-audit | assessment |
+| `automation-audit` | salesforce | salesforce-audit | audit |
+| `flow-diagnostic` | salesforce | salesforce-audit | diagnostic |
+| `metadata-analysis` | salesforce | salesforce-audit | analysis |
+| `security-audit` | salesforce | security-audit | audit |
+| `permission-analysis` | salesforce | security-audit | analysis |
+| `data-quality` | salesforce | data-quality | audit |
+| `hubspot-audit` | hubspot | hubspot-assessment | audit |
+| `hubspot-workflow` | hubspot | hubspot-assessment | analysis |
+| `marketo-audit` | marketo | marketo-assessment | audit |
+| `marketo-analytics` | marketo | marketo-assessment | assessment |
+| `marketo-deliverability` | marketo | marketo-assessment | audit |
+| `marketo-roi` | marketo | marketo-assessment | assessment |
+| `marketo-lead-quality` | marketo | marketo-assessment | audit |
+| `executive-summary` | cross-platform | executive-report | summary |
+| `integration-review` | cross-platform | cross-platform-integration | review |
+| `gtm-planning` | cross-platform | gtm-planning | planning |
+| `uat-results` | cross-platform | default | test |
+| `okr-executive` | cross-platform | okr-executive-report | report (landscape) |
+| `okr-status` | cross-platform | okr-executive-report | report (landscape) |
+| `okr-retrospective` | cross-platform | okr-executive-report | report (landscape) |
+
+### Multi-Document Collation
+
+For reports with multiple sections:
+
+```javascript
+const result = await ReportService.generateCollated({
+  type: 'revops-audit',
+  org: 'acme-corp',
+  title: 'Comprehensive RevOps Assessment',
+  documents: [
+    { path: './summary.md', title: 'Executive Summary', order: 0 },
+    { path: './gtm-analysis.md', title: 'GTM Analysis', order: 1 },
+    { path: './automation-review.md', title: 'Automation Review', order: 2 },
+    { path: './recommendations.md', title: 'Recommendations', order: 3 }
+  ]
+});
+```
+
+### CLI Usage
+
+```bash
+# Generate report
+node opspal-core/scripts/lib/report-service.js generate \
+  --type revops-audit \
+  --org acme-corp \
+  --content ./report.md \
+  --verbose
+
+# List recent reports
+node opspal-core/scripts/lib/report-service.js list --org acme-corp --limit 10
+
+# View available types
+node opspal-core/scripts/lib/report-service.js types
+```
+
+### Output Directory Structure
+
+Reports are saved to standardized paths:
+```
+instances/
+├── salesforce/
+│   └── {org}/
+│       └── reports/
+│           └── {type}/
+│               └── {date}/
+│                   ├── report.pdf
+│                   ├── report.md
+│                   └── EXECUTIVE_SUMMARY.md
+├── hubspot/
+│   └── {org}/reports/{type}/{date}/
+├── marketo/
+│   └── {instance}/reports/{type}/{date}/
+└── cross-platform/
+    └── {org}/reports/{type}/{date}/
+```
+
+### Report Registry
+
+All generated reports are tracked in `.report-registry.json`:
+
+```javascript
+// List reports for an org
+const reports = ReportService.listReports({ org: 'acme-corp' });
+
+// Get report by ID
+const report = service.getReport('rpt_abc123_xyz');
+```
+
+### Integration with Content Generation
+
+If using the developer-tools-plugin report_service for content:
+
+```javascript
+// Step 1: Generate content with report_service (developer-tools-plugin)
+const ContentService = require('developer-tools-plugin/scripts/lib/report-service.js');
+const contentService = new ContentService();
+const content = await contentService.generateReport({
+  report_type: 'assessment',
+  audience: 'exec',
+  // ... content options
+});
+
+// Step 2: Convert to PDF with ReportService (opspal-core)
+const ReportService = require('opspal-core/scripts/lib/report-service.js');
+const result = await ReportService.generate({
+  type: 'revops-audit',
+  org: 'acme-corp',
+  title: 'RevOps Assessment',
+  content: content.content,  // Use generated content
+  includeBLUF: false         // Already included in content
+});
+```
+
+### Features Included Automatically
+
+- ✅ RevPal branding and logo
+- ✅ Cover page with metadata
+- ✅ Table of contents (auto-generated for 5+ headings)
+- ✅ Header/footer with page numbers
+- ✅ Mermaid diagram rendering
+- ✅ Print-optimized styling
+- ✅ Report registry tracking
+- ✅ BLUF+4 executive summary (optional)
+- ✅ Landscape orientation (per-type default or explicit override)

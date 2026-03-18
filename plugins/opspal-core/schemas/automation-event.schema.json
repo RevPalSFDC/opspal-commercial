@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/automation-event.schema.json",
+  "title": "Automation Event Schema",
+  "description": "Cross-platform schema for automation health, policy, auth, and UI intervention events.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "event_id",
+    "timestamp",
+    "source",
+    "platform",
+    "category",
+    "event_type",
+    "severity",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt-[0-9]+-[a-z0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["marketo", "hubspot", "salesforce", "playwright", "cross-platform", "unknown"]
+    },
+    "category": {
+      "type": "string",
+      "enum": ["auth", "rate_limit", "retry", "policy_block", "ui_checkpoint", "manual_intervention", "incident", "policy"]
+    },
+    "event_type": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "warning", "error", "critical"]
+    },
+    "correlation_id": {
+      "type": ["string", "null"]
+    },
+    "operation": {
+      "type": ["string", "null"]
+    },
+    "instance": {
+      "type": ["string", "null"]
+    },
+    "auth_method": {
+      "type": ["string", "null"],
+      "enum": ["oauth", "api_key", "session_state", "manual", "unknown", null]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["observed", "success", "failure", "blocked", "retrying", "manual_required"]
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number", "integer", "boolean", "null"]
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 25
+    }
+  },
+  "additionalProperties": false
+}

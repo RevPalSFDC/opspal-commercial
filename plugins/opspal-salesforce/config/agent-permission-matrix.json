@@ -1,0 +1,1006 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-10-25",
+  "description": "Agent Permission Matrix - Defines what each agent tier can do and approval requirements",
+  "permissionTiers": {
+    "tier1": {
+      "name": "Read-Only Agents",
+      "description": "Agents that only query data and read metadata",
+      "permissions": {
+        "read": ["*"],
+        "write": [],
+        "deploy": [],
+        "delete": []
+      },
+      "limits": {
+        "maxRecordsPerQuery": 50000,
+        "maxConcurrentQueries": 10
+      },
+      "requiresApproval": false,
+      "requiresDocumentation": false,
+      "requiresRollbackPlan": false
+    },
+    "tier2": {
+      "name": "Standard Operations",
+      "description": "CRUD on records, non-destructive metadata",
+      "permissions": {
+        "read": ["*"],
+        "write": ["records"],
+        "deploy": ["reports", "dashboards", "layouts"],
+        "delete": []
+      },
+      "limits": {
+        "maxRecordsPerOperation": 10000,
+        "maxComponentsPerDeployment": 25
+      },
+      "requiresApproval": {
+        "production": true,
+        "recordCountThreshold": 1000,
+        "bulkOperations": true
+      },
+      "requiresDocumentation": false,
+      "requiresRollbackPlan": "recommended"
+    },
+    "tier3": {
+      "name": "Metadata Management",
+      "description": "Deploy fields, flows, validation rules, permission sets",
+      "permissions": {
+        "read": ["*"],
+        "write": ["records", "metadata"],
+        "deploy": [
+          "customFields",
+          "customObjects",
+          "flows",
+          "validationRules",
+          "workflowRules",
+          "permissionSets",
+          "customTabs",
+          "lightningPages"
+        ],
+        "delete": []
+      },
+      "limits": {
+        "maxComponentsPerDeployment": 50,
+        "maxFieldsPerObject": 20
+      },
+      "requiresApproval": {
+        "production": true,
+        "sandbox": {
+          "componentCountThreshold": 5
+        },
+        "fields": true,
+        "flows": true
+      },
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "tier4": {
+      "name": "Security & Permissions",
+      "description": "Modify profiles, permission sets, roles, sharing rules",
+      "permissions": {
+        "read": ["*"],
+        "write": ["records", "metadata", "security"],
+        "deploy": [
+          "profiles",
+          "permissionSets",
+          "permissionSetGroups",
+          "roles",
+          "sharingRules",
+          "groups",
+          "queues"
+        ],
+        "delete": []
+      },
+      "limits": {
+        "maxPermissionSetsPerOperation": 10,
+        "maxUsersAffected": 500
+      },
+      "requiresApproval": {
+        "all": true,
+        "multipleApprovers": true
+      },
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true,
+      "requiresSecurityReview": true
+    },
+    "tier5": {
+      "name": "Destructive Operations",
+      "description": "Delete records, destructive metadata changes",
+      "permissions": {
+        "read": ["*"],
+        "write": ["records", "metadata"],
+        "deploy": ["*"],
+        "delete": ["records", "metadata"]
+      },
+      "limits": {
+        "maxRecordsPerDelete": 100,
+        "maxComponentsPerDestructive": 5
+      },
+      "requiresApproval": {
+        "all": true,
+        "executiveApproval": true,
+        "multipleApprovers": true,
+        "minimumApprovers": 2
+      },
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true,
+      "requiresBackup": true,
+      "requiresSecurityReview": true
+    }
+  },
+  "agents": {
+    "_comment": "60 agents total: Tier 1 (17), Tier 2 (15), Tier 3 (22), Tier 4 (5), Tier 5 (1)",
+    "response-validator": {
+      "tier": 1,
+      "description": "Validates agent responses for accuracy",
+      "permissions": ["read"]
+    },
+    "sfdc-state-discovery": {
+      "tier": 1,
+      "description": "Read-only org analysis",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-automation-auditor": {
+      "tier": 1,
+      "description": "Automation audit (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-cpq-assessor": {
+      "tier": 1,
+      "description": "CPQ assessment (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-dashboard-analyzer": {
+      "tier": 1,
+      "description": "Dashboard analysis (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-dependency-analyzer": {
+      "tier": 1,
+      "description": "Analyzes object/field dependencies",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-discovery": {
+      "tier": 1,
+      "description": "Read-only org discovery",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-field-analyzer": {
+      "tier": 1,
+      "description": "Field analysis (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-layout-analyzer": {
+      "tier": 1,
+      "description": "Layout quality analysis",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-metadata-analyzer": {
+      "tier": 1,
+      "description": "Metadata analysis (validation rules, flows)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-object-auditor": {
+      "tier": 1,
+      "description": "Object metadata auditing",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-performance-optimizer": {
+      "tier": 1,
+      "description": "Performance analysis (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-permission-assessor": {
+      "tier": 1,
+      "description": "Permission set assessment (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-quality-auditor": {
+      "tier": 1,
+      "description": "Quality auditing and health checks",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-reports-usage-auditor": {
+      "tier": 1,
+      "description": "Report usage analysis (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-revops-auditor": {
+      "tier": 1,
+      "description": "RevOps audit (read-only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-planner": {
+      "tier": 1,
+      "description": "Creates implementation plans (analysis only)",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000
+    },
+    "sfdc-advocate-assignment": {
+      "tier": 2,
+      "description": "Assigns advocates (creates/updates records)",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000}
+    },
+    "sfdc-csv-enrichment": {
+      "tier": 2,
+      "description": "Enriches CSV data with Salesforce IDs",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000}
+    },
+    "sfdc-dashboard-designer": {
+      "tier": 2,
+      "description": "Designs and creates dashboards",
+      "permissions": ["read", "write:records", "deploy:dashboards"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "componentCountThreshold": 10}
+    },
+    "sfdc-dashboard-optimizer": {
+      "tier": 2,
+      "description": "Optimizes dashboard layouts",
+      "permissions": ["read", "write:records", "deploy:dashboards"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-data-generator": {
+      "tier": 2,
+      "description": "Test data generation",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 5000,
+      "environmentRestrictions": ["dev", "sandbox"],
+      "requiresApproval": {"production": false, "sandbox": false}
+    },
+    "sfdc-data-operations": {
+      "tier": 2,
+      "description": "Standard data CRUD operations",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000, "bulkOperations": true}
+    },
+    "sfdc-layout-generator": {
+      "tier": 2,
+      "description": "Generates Lightning page layouts",
+      "permissions": ["read", "deploy:layouts"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-lucid-diagrams": {
+      "tier": 2,
+      "description": "Creates architecture diagrams",
+      "permissions": ["read"],
+      "requiresApproval": false
+    },
+    "sfdc-renewal-import": {
+      "tier": 2,
+      "description": "Imports renewal opportunities",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000}
+    },
+    "sfdc-report-designer": {
+      "tier": 2,
+      "description": "Designs reports",
+      "permissions": ["read", "deploy:reports"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "componentCountThreshold": 10}
+    },
+    "sfdc-reports-dashboards": {
+      "tier": 2,
+      "description": "Report and dashboard creation",
+      "permissions": ["read", "write:records", "deploy:reports", "deploy:dashboards"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "componentCountThreshold": 10}
+    },
+    "sfdc-report-template-deployer": {
+      "tier": 2,
+      "description": "Deploys reports from templates",
+      "permissions": ["read", "deploy:reports"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-report-type-manager": {
+      "tier": 2,
+      "description": "Manages report types",
+      "permissions": ["read", "deploy:reportTypes"],
+      "maxComponentsPerDeployment": 10,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-report-validator": {
+      "tier": 2,
+      "description": "Validates report configurations",
+      "permissions": ["read"],
+      "requiresApproval": false
+    },
+    "sfdc-query-specialist": {
+      "tier": 2,
+      "description": "Builds and optimizes SOQL queries",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000,
+      "requiresApproval": false
+    },
+    "sfdc-apex": {
+      "tier": 3,
+      "description": "Apex development and deployment",
+      "permissions": ["read", "write:records", "deploy:apex"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "requiresTestCoverage": true, "minimumCoverage": 75},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-apex-developer": {
+      "tier": 3,
+      "description": "Apex code deployment",
+      "permissions": ["read", "write:records", "deploy:apex"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "requiresTestCoverage": true, "minimumCoverage": 75},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-automation-builder": {
+      "tier": 3,
+      "description": "Flow and automation creation",
+      "permissions": ["read", "write:records", "deploy:flows", "deploy:validationRules"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "flows": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-cli-executor": {
+      "tier": 3,
+      "description": "Executes Salesforce CLI commands",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-conflict-resolver": {
+      "tier": 3,
+      "description": "Deployment conflict resolution",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-cpq-specialist": {
+      "tier": 3,
+      "description": "Configures CPQ (metadata)",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-dashboard-migrator": {
+      "tier": 3,
+      "description": "Migrates dashboards (metadata operations)",
+      "permissions": ["read", "deploy:dashboards", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-deployment-manager": {
+      "tier": 3,
+      "description": "Deployment orchestration with validation",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true, "sandbox": {"componentCountThreshold": 10}},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-einstein-admin": {
+      "tier": 3,
+      "description": "Configures Einstein AI features",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-integration-specialist": {
+      "tier": 3,
+      "description": "Configures integrations and APIs",
+      "permissions": ["read", "deploy:metadata", "deploy:connectedApps"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-lightning-developer": {
+      "tier": 3,
+      "description": "Develops LWC and Aura components",
+      "permissions": ["read", "deploy:lwc", "deploy:aura"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-metadata": {
+      "tier": 3,
+      "description": "Metadata deploys (flows, layouts, permissions)",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true, "sandbox": {"componentCountThreshold": 5}},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-metadata-manager": {
+      "tier": 3,
+      "description": "Metadata deployments (fields, flows, validation rules)",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true, "sandbox": {"componentCountThreshold": 5}},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-orchestrator": {
+      "tier": 3,
+      "description": "Coordinates complex multi-step operations",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-remediation-executor": {
+      "tier": 3,
+      "description": "Executes remediation plans",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-revops-coordinator": {
+      "tier": 3,
+      "description": "Coordinates RevOps optimizations",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-sales-operations": {
+      "tier": 3,
+      "description": "Configures sales processes",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-service-cloud-admin": {
+      "tier": 3,
+      "description": "Configures Service Cloud",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-ui-customizer": {
+      "tier": 3,
+      "description": "Customizes UI (layouts, pages)",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-merge-orchestrator": {
+      "tier": 3,
+      "description": "Object and field merge operations",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 100},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true,
+      "requiresBackup": true
+    },
+    "sfdc-advocate-assignment": {
+      "tier": 2,
+      "description": "Assigns advocates (creates/updates records)",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000}
+    },
+    "sfdc-csv-enrichment": {
+      "tier": 2,
+      "description": "Enriches CSV data with Salesforce IDs",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000}
+    },
+    "sfdc-dashboard-designer": {
+      "tier": 2,
+      "description": "Designs and creates dashboards",
+      "permissions": ["read", "write:records", "deploy:dashboards"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "componentCountThreshold": 10}
+    },
+    "sfdc-dashboard-optimizer": {
+      "tier": 2,
+      "description": "Optimizes dashboard layouts",
+      "permissions": ["read", "write:records", "deploy:dashboards"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-data-generator": {
+      "tier": 2,
+      "description": "Test data generation",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 5000,
+      "environmentRestrictions": ["dev", "sandbox"],
+      "requiresApproval": {"production": false, "sandbox": false}
+    },
+    "sfdc-data-operations": {
+      "tier": 2,
+      "description": "Standard data CRUD operations",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000, "bulkOperations": true}
+    },
+    "sfdc-layout-generator": {
+      "tier": 2,
+      "description": "Generates Lightning page layouts",
+      "permissions": ["read", "deploy:layouts"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-lucid-diagrams": {
+      "tier": 2,
+      "description": "Creates architecture diagrams",
+      "permissions": ["read"],
+      "requiresApproval": false
+    },
+    "sfdc-renewal-import": {
+      "tier": 2,
+      "description": "Imports renewal opportunities",
+      "permissions": ["read", "write:records"],
+      "maxRecordsPerOperation": 10000,
+      "requiresApproval": {"production": true, "recordCountThreshold": 1000}
+    },
+    "sfdc-report-designer": {
+      "tier": 2,
+      "description": "Designs reports",
+      "permissions": ["read", "deploy:reports"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "componentCountThreshold": 10}
+    },
+    "sfdc-reports-dashboards": {
+      "tier": 2,
+      "description": "Report and dashboard creation",
+      "permissions": ["read", "write:records", "deploy:reports", "deploy:dashboards"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "componentCountThreshold": 10}
+    },
+    "sfdc-report-template-deployer": {
+      "tier": 2,
+      "description": "Deploys reports from templates",
+      "permissions": ["read", "deploy:reports"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-report-type-manager": {
+      "tier": 2,
+      "description": "Manages report types",
+      "permissions": ["read", "deploy:reportTypes"],
+      "maxComponentsPerDeployment": 10,
+      "requiresApproval": {"production": true}
+    },
+    "sfdc-report-validator": {
+      "tier": 2,
+      "description": "Validates report configurations",
+      "permissions": ["read"],
+      "requiresApproval": false
+    },
+    "sfdc-query-specialist": {
+      "tier": 2,
+      "description": "Builds and optimizes SOQL queries",
+      "permissions": ["read"],
+      "maxRecordsPerQuery": 50000,
+      "requiresApproval": false
+    },
+    "sfdc-apex": {
+      "tier": 3,
+      "description": "Apex development and deployment",
+      "permissions": ["read", "write:records", "deploy:apex"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "requiresTestCoverage": true, "minimumCoverage": 75},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-apex-developer": {
+      "tier": 3,
+      "description": "Apex triggers, classes, batch jobs",
+      "permissions": ["read", "write:records", "deploy:apex"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "requiresTestCoverage": true, "minimumCoverage": 75},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-automation-builder": {
+      "tier": 3,
+      "description": "Creates flows, process builders, workflows",
+      "permissions": ["read", "write:records", "deploy:flows", "deploy:validationRules"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true, "flows": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-cli-executor": {
+      "tier": 3,
+      "description": "Executes Salesforce CLI commands",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-conflict-resolver": {
+      "tier": 3,
+      "description": "Resolves deployment conflicts",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-cpq-specialist": {
+      "tier": 3,
+      "description": "Configures CPQ (metadata)",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-dashboard-migrator": {
+      "tier": 3,
+      "description": "Migrates dashboards (metadata)",
+      "permissions": ["read", "deploy:dashboards", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-deployment-manager": {
+      "tier": 3,
+      "description": "Manages deployments with validation pipeline",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true, "sandbox": {"componentCountThreshold": 10}},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-einstein-admin": {
+      "tier": 3,
+      "description": "Configures Einstein AI features",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-integration-specialist": {
+      "tier": 3,
+      "description": "Configures integrations and APIs",
+      "permissions": ["read", "deploy:metadata", "deploy:connectedApps"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-lightning-developer": {
+      "tier": 3,
+      "description": "Develops LWC and Aura components",
+      "permissions": ["read", "deploy:lwc", "deploy:aura"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-metadata": {
+      "tier": 3,
+      "description": "Metadata deploys (flows, layouts, permissions)",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true, "sandbox": {"componentCountThreshold": 5}},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-metadata-manager": {
+      "tier": 3,
+      "description": "Manages metadata with validation",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true, "sandbox": {"componentCountThreshold": 5}},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-orchestrator": {
+      "tier": 3,
+      "description": "Coordinates complex operations",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-remediation-executor": {
+      "tier": 3,
+      "description": "Executes remediation plans with phased fixes",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 50,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true
+    },
+    "sfdc-revops-coordinator": {
+      "tier": 3,
+      "description": "Coordinates RevOps optimizations",
+      "permissions": ["read", "write:records", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-sales-operations": {
+      "tier": 3,
+      "description": "Configures sales processes",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-service-cloud-admin": {
+      "tier": 3,
+      "description": "Configures Service Cloud",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-ui-customizer": {
+      "tier": 3,
+      "description": "Customizes UI (layouts, pages)",
+      "permissions": ["read", "deploy:metadata"],
+      "maxComponentsPerDeployment": 25,
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-agent-governance": {
+      "tier": 4,
+      "description": "Agent governance and risk management",
+      "permissions": ["read", "write:governance"],
+      "requiresApproval": {"all": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-communication-manager": {
+      "tier": 4,
+      "description": "Email templates (security implications)",
+      "permissions": ["read", "deploy:emailTemplates"],
+      "requiresApproval": {"production": true},
+      "requiresDocumentation": true
+    },
+    "sfdc-compliance-officer": {
+      "tier": 4,
+      "description": "GDPR, HIPAA, SOC compliance management",
+      "permissions": ["read", "write:security", "deploy:metadata"],
+      "requiresApproval": {"all": true},
+      "requiresDocumentation": true,
+      "requiresSecurityReview": true
+    },
+    "sfdc-permission-orchestrator": {
+      "tier": 4,
+      "description": "Permission set management (two-tier architecture)",
+      "permissions": ["read", "write:security", "deploy:permissionSets"],
+      "maxPermissionSetsPerOperation": 10,
+      "requiresApproval": {"all": true, "multipleApprovers": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true,
+      "requiresSecurityReview": true
+    },
+    "sfdc-security-admin": {
+      "tier": 4,
+      "description": "Security and permission management",
+      "permissions": ["read", "write:records", "write:security", "deploy:profiles", "deploy:permissionSets", "deploy:roles"],
+      "maxPermissionSetsPerOperation": 10,
+      "requiresApproval": {"all": true, "multipleApprovers": true},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true,
+      "requiresSecurityReview": true
+    },
+    "sfdc-dedup-safety-copilot": {
+      "tier": 5,
+      "description": "Account deduplication (merges with delete)",
+      "permissions": ["read", "write:records", "delete:records"],
+      "maxRecordsPerDelete": 100,
+      "requiresApproval": {"all": true, "executiveApproval": true, "minimumApprovers": 2},
+      "requiresDocumentation": true,
+      "requiresRollbackPlan": true,
+      "requiresBackup": true,
+      "requiresSecurityReview": true
+    }
+  },
+  "environmentRestrictions": {
+    "production": {
+      "allowedTiers": [1, 2, 3, 4],
+      "requiresApprovalForTiers": [2, 3, 4, 5],
+      "maxRecordsPerOperation": 10000,
+      "deploymentWindow": {
+        "enabled": true,
+        "days": ["Tuesday", "Thursday"],
+        "hours": "22:00-02:00 UTC",
+        "exceptions": ["emergency-override"]
+      },
+      "additionalControls": {
+        "requiresChangeTicket": true,
+        "requiresBackupBeforeDestructive": true,
+        "requiresPostDeploymentVerification": true
+      }
+    },
+    "fullSandbox": {
+      "allowedTiers": [1, 2, 3, 4],
+      "requiresApprovalForTiers": [4, 5],
+      "maxRecordsPerOperation": 50000,
+      "additionalControls": {
+        "requiresChangeTicket": false,
+        "requiresBackupBeforeDestructive": true
+      }
+    },
+    "sandbox": {
+      "allowedTiers": [1, 2, 3, 4, 5],
+      "requiresApprovalForTiers": [5],
+      "maxRecordsPerOperation": 50000,
+      "additionalControls": {
+        "requiresChangeTicket": false,
+        "requiresBackupBeforeDestructive": false
+      }
+    },
+    "dev": {
+      "allowedTiers": [1, 2, 3, 4, 5],
+      "requiresApprovalForTiers": [],
+      "maxRecordsPerOperation": 100000,
+      "additionalControls": {
+        "requiresChangeTicket": false,
+        "requiresBackupBeforeDestructive": false
+      }
+    }
+  },
+  "approvalRouting": {
+    "LOW": {
+      "riskRange": [0, 30],
+      "requiresApproval": false,
+      "action": "PROCEED",
+      "logging": "standard"
+    },
+    "MEDIUM": {
+      "riskRange": [31, 50],
+      "requiresApproval": false,
+      "action": "PROCEED",
+      "logging": "enhanced",
+      "notification": ["team-lead"]
+    },
+    "HIGH": {
+      "riskRange": [51, 70],
+      "requiresApproval": true,
+      "action": "REQUIRE_APPROVAL",
+      "approvers": {
+        "dataOperations": ["team-lead"],
+        "metadataDeployment": ["architect"],
+        "securityChanges": ["security-lead"]
+      },
+      "responseTime": {
+        "dataOperations": "1 hour",
+        "metadataDeployment": "4 hours",
+        "securityChanges": "2 hours"
+      }
+    },
+    "CRITICAL": {
+      "riskRange": [71, 100],
+      "requiresApproval": true,
+      "action": "BLOCK",
+      "approvers": {
+        "dataOperations": ["team-lead", "manager"],
+        "metadataDeployment": ["architect", "director"],
+        "securityChanges": ["security-lead", "ciso"],
+        "destructiveOperations": ["director", "vp"]
+      },
+      "responseTime": {
+        "dataOperations": "4 hours",
+        "metadataDeployment": "1 business day",
+        "securityChanges": "1 business day",
+        "destructiveOperations": "2 business days"
+      },
+      "requiresManualReview": true,
+      "requiresDetailedJustification": true
+    }
+  },
+  "emergencyOverride": {
+    "enabled": true,
+    "requiresCode": true,
+    "codeValidityMinutes": 60,
+    "allowedPersonnel": [
+      "cto",
+      "vp-engineering",
+      "director-engineering",
+      "security-lead"
+    ],
+    "triggers": [
+      "Immediate notification to security team",
+      "Audit log entry with full context",
+      "Follow-up review required within 24 hours",
+      "Override code expires after single use"
+    ]
+  },
+  "auditTrail": {
+    "storage": {
+      "local": ".claude/logs/agent-governance/",
+      "supabase": {
+        "enabled": true,
+        "table": "agent_actions"
+      },
+      "salesforce": {
+        "enabled": true,
+        "eventMonitoring": true
+      }
+    },
+    "retention": {
+      "production": "7 years",
+      "sandbox": "2 years",
+      "dev": "6 months"
+    },
+    "requiredFields": [
+      "logId",
+      "timestamp",
+      "agent",
+      "operation",
+      "riskScore",
+      "riskLevel",
+      "approvalRequired",
+      "approvalStatus",
+      "environment",
+      "execution",
+      "verification",
+      "reasoning"
+    ]
+  },
+  "complianceReporting": {
+    "gdpr": {
+      "enabled": true,
+      "reportFields": [
+        "dataSubjectRequests",
+        "dataRetention",
+        "dataDeletion",
+        "consentManagement"
+      ]
+    },
+    "hipaa": {
+      "enabled": true,
+      "reportFields": [
+        "phiHandling",
+        "encryption",
+        "accessLogs",
+        "auditTrails"
+      ]
+    },
+    "sox": {
+      "enabled": true,
+      "reportFields": [
+        "changeControl",
+        "segregationOfDuties",
+        "auditTrails",
+        "accessReviews"
+      ]
+    }
+  }
+}

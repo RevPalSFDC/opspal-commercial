@@ -1,0 +1,42 @@
+{
+  "name": "opspal-marketo",
+  "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
+  "version": "2.6.16",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "marketo",
+    "marketing-automation",
+    "leads",
+    "lead-scoring",
+    "smart-campaigns",
+    "email",
+    "landing-pages",
+    "forms",
+    "programs",
+    "analytics",
+    "attribution",
+    "revenue-cycle",
+    "nurture",
+    "salesforce-sync",
+    "mql-handoff",
+    "webinar",
+    "governance",
+    "data-operations",
+    "bulk-api",
+    "agentic-automation",
+    "orchestration",
+    "observability",
+    "continuous-intelligence",
+    "marketing-analytics",
+    "ai-recommendations",
+    "bulk-extract",
+    "data-normalization",
+    "campaign-diagnostics",
+    "troubleshooting"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
+  "license": "Proprietary"
+}

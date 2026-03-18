@@ -1,0 +1,48 @@
+flowchart TB
+  %% Salesforce CPQ Quote Process Template
+  %% Customize for Salesforce CPQ or Steelbrick implementation
+
+  Start((New Quote)) --> CreateQuote[Create Quote from Opportunity]
+
+  CreateQuote --> AddProducts{Add Products?}
+
+  AddProducts -->|Manual| ProductSelection[Manual Product Selection]
+  AddProducts -->|Guided| GuidedSelling[Guided Selling Flow]
+
+  ProductSelection --> ConfigureProducts[Configure Products]
+  GuidedSelling --> ConfigureProducts
+
+  ConfigureProducts --> AddOptions{Add Options/Bundles?}
+
+  AddOptions -->|Yes| OptionSelection[Select Options & Bundles]
+  AddOptions -->|No| ApplyDiscounts
+
+  OptionSelection --> ApplyDiscounts[Apply Discounts & Promotions]
+
+  ApplyDiscounts --> CalculatePrice[Calculate Pricing]
+
+  CalculatePrice --> CheckApproval{Requires Approval?}
+
+  CheckApproval -->|Yes| SubmitApproval[Submit for Approval]
+  CheckApproval -->|No| GenerateDocument
+
+  SubmitApproval --> ApprovalDecision{Approved?}
+
+  ApprovalDecision -->|Approved| GenerateDocument[Generate Quote Document]
+  ApprovalDecision -->|Rejected| RevisePricing[Revise Pricing]
+  ApprovalDecision -->|Recalled| RevisePricing
+
+  RevisePricing --> ApplyDiscounts
+
+  GenerateDocument --> ReviewQuote[Review with Customer]
+
+  ReviewQuote --> CustomerDecision{Customer Decision?}
+
+  CustomerDecision -->|Accepted| CreateContract[Create Contract]
+  CustomerDecision -->|Negotiate| RevisePricing
+  CustomerDecision -->|Rejected| CloseQuote[Close Quote - Lost]
+
+  CreateContract --> GenerateOrders[Generate Orders]
+
+  GenerateOrders --> End((Quote Processed))
+  CloseQuote --> End

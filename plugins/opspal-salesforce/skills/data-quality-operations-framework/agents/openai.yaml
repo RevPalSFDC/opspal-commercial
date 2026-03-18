@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Quality Operations Framework"
+  short_description: "Help with Data Quality Operations Framework tasks"
+  default_prompt: "Use $data-quality-operations-framework to execute this workflow safely and produce the expected artifacts."

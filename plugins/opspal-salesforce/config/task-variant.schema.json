@@ -1,0 +1,308 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/task-variant.schema.json",
+  "title": "Task Variant Schema",
+  "description": "Defines task type variants with operation-specific field bundles, workflows, and quality gates",
+  "type": "object",
+  "required": ["schemaVersion", "taskVariants"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Schema version for compatibility",
+      "pattern": "^\\d+\\.\\d+$",
+      "default": "1.0"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "taskVariants": {
+      "type": "object",
+      "description": "Task variant definitions keyed by variant ID",
+      "additionalProperties": {
+        "$ref": "#/definitions/taskVariant"
+      }
+    },
+    "defaultVariant": {
+      "type": "string",
+      "description": "Default variant when none specified",
+      "default": "backup"
+    }
+  },
+  "definitions": {
+    "taskVariant": {
+      "type": "object",
+      "description": "A task variant defining operation-specific behavior",
+      "required": ["id", "name", "fieldSelectionMode"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the task variant",
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of when to use this variant"
+        },
+        "fieldSelectionMode": {
+          "type": "string",
+          "enum": ["all", "updateable", "createable", "readable", "policy", "custom"],
+          "description": "How fields are selected for this operation"
+        },
+        "fieldFilters": {
+          "$ref": "#/definitions/fieldFilters",
+          "description": "Technical filters applied to field selection"
+        },
+        "includeSystemFields": {
+          "type": "boolean",
+          "description": "Include system audit fields",
+          "default": false
+        },
+        "includeFormulaFields": {
+          "type": "boolean",
+          "description": "Include formula/calculated fields",
+          "default": false
+        },
+        "includeRollupSummaryFields": {
+          "type": "boolean",
+          "description": "Include rollup summary fields",
+          "default": false
+        },
+        "maxFields": {
+          "type": "integer",
+          "description": "Maximum fields allowed for this operation",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "requiredFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields always required for this task type"
+        },
+        "excludedFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields always excluded for this task type"
+        },
+        "objectOverrides": {
+          "type": "object",
+          "description": "Per-object overrides for this task variant",
+          "additionalProperties": {
+            "$ref": "#/definitions/objectOverride"
+          }
+        },
+        "workflowSteps": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/workflowStep" },
+          "description": "Ordered steps to execute for this task"
+        },
+        "qualityGates": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/qualityGate" },
+          "description": "Validation gates that must pass"
+        },
+        "rollbackStrategy": {
+          "$ref": "#/definitions/rollbackStrategy",
+          "description": "How to handle rollback for this task type"
+        },
+        "riskLevel": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "description": "Risk classification for this operation"
+        },
+        "approvalRequired": {
+          "type": "boolean",
+          "description": "Whether approval is required before execution"
+        },
+        "auditLogging": {
+          "type": "string",
+          "enum": ["none", "summary", "detailed", "full"],
+          "description": "Level of audit logging required"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fieldFilters": {
+      "type": "object",
+      "description": "Filters to apply during field selection",
+      "properties": {
+        "updateable": {
+          "type": "boolean",
+          "description": "Only include updateable fields"
+        },
+        "createable": {
+          "type": "boolean",
+          "description": "Only include createable fields"
+        },
+        "nillable": {
+          "type": "boolean",
+          "description": "Only include nillable fields"
+        },
+        "externalId": {
+          "type": "boolean",
+          "description": "Only include external ID fields"
+        },
+        "custom": {
+          "type": "boolean",
+          "description": "Only include custom fields"
+        },
+        "standard": {
+          "type": "boolean",
+          "description": "Only include standard fields"
+        },
+        "dataTypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Filter by specific data types (e.g., 'string', 'currency', 'reference')"
+        },
+        "excludeDataTypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Exclude specific data types"
+        },
+        "namePatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Include fields matching these patterns"
+        },
+        "excludeNamePatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Exclude fields matching these patterns"
+        }
+      },
+      "additionalProperties": false
+    },
+    "objectOverride": {
+      "type": "object",
+      "description": "Object-specific override for a task variant",
+      "properties": {
+        "additionalRequired": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional required fields for this object"
+        },
+        "additionalExcluded": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional excluded fields for this object"
+        },
+        "fieldSelectionMode": {
+          "type": "string",
+          "enum": ["all", "updateable", "createable", "readable", "policy", "custom"],
+          "description": "Override field selection mode for this object"
+        },
+        "maxFields": {
+          "type": "integer",
+          "description": "Override max fields for this object"
+        },
+        "customFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Explicit field list for custom mode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "workflowStep": {
+      "type": "object",
+      "description": "A step in the task workflow",
+      "required": ["id", "name", "action"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Step identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable step name"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "validate_policy",
+            "select_fields",
+            "build_query",
+            "execute_query",
+            "transform_data",
+            "validate_data",
+            "write_records",
+            "create_snapshot",
+            "verify_results",
+            "emit_trace"
+          ],
+          "description": "Action to perform in this step"
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Parameters for the action"
+        },
+        "onFailure": {
+          "type": "string",
+          "enum": ["abort", "skip", "retry", "rollback"],
+          "description": "What to do if this step fails"
+        },
+        "retryCount": {
+          "type": "integer",
+          "description": "Number of retries on failure"
+        }
+      },
+      "additionalProperties": false
+    },
+    "qualityGate": {
+      "type": "object",
+      "description": "A validation gate for the task",
+      "required": ["id", "name", "condition"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Gate identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable gate name"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition expression (e.g., 'recordCount > 0', 'errorRate < 0.01')"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["info", "warning", "error", "critical"],
+          "description": "Severity if gate fails"
+        },
+        "onFailure": {
+          "type": "string",
+          "enum": ["warn", "block", "abort"],
+          "description": "Action on gate failure"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rollbackStrategy": {
+      "type": "object",
+      "description": "How to handle rollback for this task",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["none", "snapshot", "incremental", "audit_trail"],
+          "description": "Type of rollback support"
+        },
+        "snapshotRetention": {
+          "type": "string",
+          "description": "How long to retain snapshots (e.g., '7d', '30d')"
+        },
+        "autoRollbackOnFailure": {
+          "type": "boolean",
+          "description": "Automatically rollback on failure"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

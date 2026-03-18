@@ -1,0 +1,171 @@
+{
+  "$schema": "../../schemas/domain-dictionary.schema.json",
+  "domain": "professional-services",
+  "version": "1.0.0",
+  "description": "Accounting firms, management consulting, and business advisory services. Big 4 and major firms have global presence, while regional and local firms are typically jurisdiction-specific.",
+
+  "detectionPatterns": {
+    "keywords": [
+      "accounting", "audit", "tax", "advisory", "consulting", "CPA",
+      "assurance", "bookkeeping", "financial services", "management consulting",
+      "strategy", "operations", "due diligence", "valuation"
+    ],
+    "entityTypes": ["AccountingFirm", "ConsultingFirm", "AdvisoryFirm", "CPA"],
+    "fieldPatterns": [
+      "CPALicense", "PCOABRegistration", "FirmID", "EngagementCode"
+    ]
+  },
+
+  "abbreviations": {
+    "credentials": {
+      "CPA": "Certified Public Accountant",
+      "CMA": "Certified Management Accountant",
+      "CIA": "Certified Internal Auditor",
+      "CFE": "Certified Fraud Examiner",
+      "CFA": "Chartered Financial Analyst",
+      "PMP": "Project Management Professional",
+      "CISA": "Certified Information Systems Auditor"
+    },
+    "services": {
+      "A&A": "Audit and Assurance",
+      "TAS": "Transaction Advisory Services",
+      "FDD": "Financial Due Diligence",
+      "IPO": "Initial Public Offering",
+      "SOX": "Sarbanes-Oxley",
+      "GAAP": "Generally Accepted Accounting Principles",
+      "IFRS": "International Financial Reporting Standards"
+    },
+    "firmTypes": {
+      "LLP": "Limited Liability Partnership",
+      "PC": "Professional Corporation",
+      "PLLC": "Professional Limited Liability Company"
+    }
+  },
+
+  "suffixes": {
+    "strip": ["Inc", "LLC", "Corp"],
+    "preserve": [
+      "LLP", "PC", "PLLC",
+      "CPA", "CPAs", "& Company", "& Co",
+      "Consulting", "Consulting Group", "Advisors", "Advisory"
+    ]
+  },
+
+  "synonyms": {
+    "PwC": ["PricewaterhouseCoopers"],
+    "EY": ["Ernst & Young", "Ernst and Young"],
+    "& Company": ["& Co", "and Company"],
+    "CPAs": ["CPA", "Certified Public Accountants"],
+    "Consulting": ["Consultants"],
+    "Advisors": ["Advisory", "Adviser", "Advisers"]
+  },
+
+  "matchingRules": {
+    "ignoreCase": true,
+    "expandBeforeMatch": true,
+    "synonymWeight": 0.85,
+    "minimumConfidence": 75
+  },
+
+  "matchingPolicy": {
+    "sameNameDifferentStatePolicy": "REVIEW",
+    "uniquenessLevel": "MEDIUM",
+    "confidenceThresholds": {
+      "autoMerge": 90,
+      "review": 80,
+      "tag": 65
+    },
+    "stateMismatchPenalty": -20
+  },
+
+  "genericEntityPatterns": [
+    "* CPA",
+    "* CPAs",
+    "* Consulting",
+    "* Consulting Group",
+    "* Advisors",
+    "* Advisory",
+    "* & Company",
+    "* & Co",
+    "* Solutions",
+    "* Associates",
+    "* Management",
+    "* Partners",
+    "* Group",
+    "* Services"
+  ],
+
+  "sameEntitySignals": {
+    "required": [],
+    "boosts": ["cpa_license_match", "domain_match", "pcaob_match"],
+    "blockers": []
+  },
+
+  "knownEntities": [
+    "Deloitte",
+    "PwC",
+    "EY",
+    "KPMG",
+    "RSM US",
+    "BDO USA",
+    "Grant Thornton",
+    "Forvis Mazars",
+    "CliftonLarsonAllen",
+    "Baker Tilly",
+    "CBIZ",
+    "Crowe",
+    "Marcum",
+    "Moss Adams",
+    "Plante Moran",
+    "CohnReznick",
+    "EisnerAmper",
+    "Cherry Bekaert",
+    "Wipfli",
+    "Armanino",
+    "Carr, Riggs & Ingram",
+    "Sikich",
+    "Eide Bailly",
+    "DHG",
+    "Rehmann",
+    "McKinsey & Company",
+    "Boston Consulting Group",
+    "Bain & Company",
+    "Accenture",
+    "Booz Allen Hamilton",
+    "Kearney",
+    "Oliver Wyman",
+    "L.E.K. Consulting",
+    "Roland Berger",
+    "Strategy&",
+    "AlixPartners",
+    "FTI Consulting",
+    "Huron Consulting Group"
+  ],
+
+  "knownEntityAliases": {
+    "PwC": ["PricewaterhouseCoopers", "Price Waterhouse"],
+    "EY": ["Ernst & Young", "Ernst and Young"],
+    "CliftonLarsonAllen": ["CLA"],
+    "Boston Consulting Group": ["BCG"],
+    "McKinsey & Company": ["McKinsey"],
+    "Bain & Company": ["Bain"],
+    "Booz Allen Hamilton": ["Booz Allen", "BAH"],
+    "Strategy&": ["Strategy and", "formerly Booz & Company"]
+  },
+
+  "firmTiers": {
+    "big4": {
+      "members": ["Deloitte", "PwC", "EY", "KPMG"],
+      "description": "Global firms with offices in every major market",
+      "matchingHint": "Same name in different states/countries is same entity"
+    },
+    "nationalRegional": {
+      "description": "Top 25 firms with multi-state presence",
+      "matchingHint": "Review cross-state matches, usually same entity"
+    },
+    "local": {
+      "description": "Small CPA firms typically single-state",
+      "matchingHint": "Same name different state is likely different entity"
+    }
+  }
+}

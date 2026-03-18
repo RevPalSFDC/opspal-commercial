@@ -1,0 +1,270 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opspal.gorevpal.com/schemas/runbook-response.schema.json",
+  "title": "Runbook Policy Response Schema",
+  "description": "Response schema for the RUNBOOK_REQUEST protocol - provides field policies and operational guidance",
+  "type": "object",
+  "required": ["status", "request_id", "timestamp"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["found", "not_found", "generated", "escalated", "error"],
+      "description": "Status of the policy retrieval"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Correlation ID matching the request"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Response timestamp"
+    },
+    "runbook_version": {
+      "type": "string",
+      "description": "Version of the runbook used (e.g., '1.2.3')"
+    },
+    "field_policy": {
+      "type": "object",
+      "description": "Field policy for the operation",
+      "properties": {
+        "required_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that MUST be included"
+        },
+        "recommended_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields recommended for this operation"
+        },
+        "prohibited_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that MUST NOT be included"
+        },
+        "max_fields": {
+          "type": "integer",
+          "description": "Maximum number of fields allowed"
+        },
+        "field_aliases": {
+          "type": "object",
+          "description": "Map of custom labels to API names",
+          "additionalProperties": { "type": "string" }
+        },
+        "field_metadata": {
+          "type": "object",
+          "description": "Additional metadata per field",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "rationale": { "type": "string" },
+              "source": { "type": "string" },
+              "compliance_notes": { "type": "string" }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "task_variant": {
+      "type": "object",
+      "description": "Task variant configuration",
+      "properties": {
+        "variant_id": {
+          "type": "string",
+          "description": "Task variant identifier"
+        },
+        "variant_name": {
+          "type": "string",
+          "description": "Human-readable variant name"
+        },
+        "field_selection_mode": {
+          "type": "string",
+          "description": "How fields should be selected"
+        },
+        "workflow_steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "action": { "type": "string" },
+              "on_failure": { "type": "string" }
+            }
+          },
+          "description": "Ordered workflow steps"
+        },
+        "quality_gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "condition": { "type": "string" },
+              "severity": { "type": "string" },
+              "on_failure": { "type": "string" }
+            }
+          },
+          "description": "Quality gates to enforce"
+        },
+        "rollback_strategy": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "snapshot_retention": { "type": "string" },
+            "auto_rollback": { "type": "boolean" }
+          }
+        },
+        "risk_level": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "approval_required": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "exclusions": {
+      "type": "object",
+      "description": "Record and field exclusions",
+      "properties": {
+        "record_types": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Record types to exclude"
+        },
+        "filter_conditions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "SOQL WHERE conditions to apply (e.g., \"Name NOT LIKE 'TEST%'\")"
+        },
+        "owners_excluded": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Owner IDs to exclude"
+        }
+      },
+      "additionalProperties": false
+    },
+    "compliance_rules": {
+      "type": "object",
+      "description": "Compliance rules to enforce",
+      "properties": {
+        "frameworks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Active compliance frameworks"
+        },
+        "pii_handling": {
+          "type": "object",
+          "properties": {
+            "mask_fields": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fields to mask in output"
+            },
+            "exclude_from_exports": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fields to exclude from exports"
+            },
+            "encryption_required": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fields requiring encryption"
+            }
+          }
+        },
+        "audit_requirements": {
+          "type": "object",
+          "properties": {
+            "log_level": { "type": "string" },
+            "retention_days": { "type": "integer" },
+            "fields_to_track": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "operational_context": {
+      "type": "object",
+      "description": "Org-specific operational knowledge",
+      "properties": {
+        "known_exceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "recommendation": { "type": "string" },
+              "is_recurring": { "type": "boolean" }
+            }
+          }
+        },
+        "object_quirks": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Object-specific quirks (label customizations, etc.)"
+        },
+        "performance_hints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Performance recommendations"
+        }
+      },
+      "additionalProperties": false
+    },
+    "escalation": {
+      "type": "object",
+      "description": "Escalation details (when status is 'escalated')",
+      "properties": {
+        "escalation_id": {
+          "type": "string",
+          "description": "Escalation tracking ID"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why escalation was triggered"
+        },
+        "suggested_action": {
+          "type": "string",
+          "description": "Recommended action to resolve"
+        },
+        "command_to_fix": {
+          "type": "string",
+          "description": "Command to run to create missing policy"
+        }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "description": "Error details (when status is 'error')",
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "recoverable": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "cache_metadata": {
+      "type": "object",
+      "description": "Cache information",
+      "properties": {
+        "from_cache": { "type": "boolean" },
+        "cache_key": { "type": "string" },
+        "cache_ttl": { "type": "integer" },
+        "expires_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

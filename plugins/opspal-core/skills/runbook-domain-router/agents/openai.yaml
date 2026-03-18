@@ -1,0 +1,4 @@
+interface:
+  display_name: "Runbook Domain Router"
+  short_description: "Help with Runbook Domain Router tasks"
+  default_prompt: "Use $runbook-domain-router to execute this workflow safely and produce the expected artifacts."

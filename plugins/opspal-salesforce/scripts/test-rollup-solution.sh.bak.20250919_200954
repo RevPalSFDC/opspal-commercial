@@ -1,0 +1,177 @@
+#!/bin/bash
+
+# Rollup Solution Test Script
+# This script validates the deployment and functionality of the rollup solution
+
+echo "🚀 Starting Rollup Solution Validation..."
+echo "======================================="
+
+# Check if SFDX is available
+if ! command -v sfdx &> /dev/null; then
+    echo "❌ Salesforce CLI (sfdx) is not installed or not in PATH"
+    exit 1
+fi
+
+# Check if authenticated to an org
+if ! sfdx force:org:display > /dev/null 2>&1; then
+    echo "❌ Not authenticated to any Salesforce org"
+    echo "Please run: sfdx auth:web:login"
+    exit 1
+fi
+
+echo "✅ Salesforce CLI authenticated"
+
+# Function to run Apex code and check results
+run_apex_test() {
+    local test_name="$1"
+    local apex_code="$2"
+    
+    echo "📝 Running test: $test_name"
+    
+    # Create temporary file for apex code
+    temp_file=$(mktemp)
+    echo "$apex_code" > "$temp_file"
+    
+    # Execute apex code
+    result=$(sfdx force:apex:execute -f "$temp_file" 2>&1)
+    exit_code=$?
+    
+    # Clean up temp file
+    rm "$temp_file"
+    
+    if [ $exit_code -eq 0 ]; then
+        echo "✅ $test_name - PASSED"
+        echo "   Result: $result"
+    else
+        echo "❌ $test_name - FAILED"
+        echo "   Error: $result"
+        return 1
+    fi
+    
+    return 0
+}
+
+# Test 1: Check if classes are deployed
+echo ""
+echo "🔍 Test 1: Checking deployed classes..."
+run_apex_test "RollupFramework Class" "System.debug('RollupFramework available: ' + (RollupFramework.getAllConfigurations() != null));"
+
+run_apex_test "ContactTriggerHandler Class" "System.debug('ContactTriggerHandler available: ' + (ContactTriggerHandler.recalculateAllDVMCounts() >= 0));"
+
+run_apex_test "RollupMigrationUtility Class" "System.debug('RollupMigrationUtility available: ' + (RollupMigrationUtility.createRollupBackup() != null));"
+
+# Test 2: Run unit tests
+echo ""
+echo "🧪 Test 2: Running unit tests..."
+echo "Running ContactTriggerHandlerTest..."
+
+test_result=$(sfdx force:apex:test:run -c -t ContactTriggerHandlerTest -r json 2>&1)
+if echo "$test_result" | grep -q '"Fail": 0'; then
+    echo "✅ Unit tests - PASSED"
+    coverage=$(echo "$test_result" | grep -o '"totalLines":[0-9]*' | head -1 | cut -d':' -f2)
+    covered=$(echo "$test_result" | grep -o '"coveredLines":[0-9]*' | head -1 | cut -d':' -f2)
+    if [ ! -z "$coverage" ] && [ ! -z "$covered" ] && [ "$coverage" -gt 0 ]; then
+        percentage=$((covered * 100 / coverage))
+        echo "   Code Coverage: $percentage%"
+        if [ "$percentage" -ge 75 ]; then
+            echo "✅ Code coverage meets requirement (≥75%)"
+        else
+            echo "⚠️  Code coverage below 75%"
+        fi
+    fi
+else
+    echo "❌ Unit tests - FAILED"
+    echo "$test_result"
+fi
+
+# Test 3: Data validation
+echo ""
+echo "🔍 Test 3: Validating data consistency..."
+run_apex_test "Data Consistency Check" "
+RollupMigrationUtility.ValidationResult validation = RollupMigrationUtility.validateDVMRollupConsistency();
+System.debug('Data validation passed: ' + validation.isValid);
+System.debug('Total records checked: ' + validation.totalRecords);
+System.debug('Incorrect records: ' + validation.incorrectRecords);
+"
+
+# Test 4: Health check
+echo ""
+echo "🏥 Test 4: System health check..."
+run_apex_test "Health Check" "
+Map<String, Object> health = RollupMigrationUtility.performHealthCheck();
+System.debug('Overall health: ' + health.get('overallHealth'));
+System.debug('Health check completed at: ' + health.get('healthCheckTimestamp'));
+"
+
+# Test 5: Framework configuration check
+echo ""
+echo "⚙️  Test 5: Framework configuration check..."
+run_apex_test "Framework Configuration" "
+Map<String, List<RollupFramework.RollupConfiguration>> configs = RollupFramework.getAllConfigurations();
+System.debug('Total object configurations: ' + configs.size());
+if (configs.containsKey('Contact')) {
+    System.debug('Contact rollup configurations: ' + configs.get('Contact').size());
+}
+"
+
+# Test 6: Create test data and verify rollup
+echo ""
+echo "📊 Test 6: Testing rollup functionality..."
+run_apex_test "Rollup Functionality Test" "
+// Create test account
+Account testAcc = new Account(Name = 'Rollup Test Account', Count_of_DVMs__c = 0);
+insert testAcc;
+
+// Create test contacts
+List<Contact> contacts = new List<Contact>();
+contacts.add(new Contact(FirstName = 'DVM', LastName = 'Test1', AccountId = testAcc.Id, Is_DVM__c = true, Email = 'dvm1@test.com'));
+contacts.add(new Contact(FirstName = 'DVM', LastName = 'Test2', AccountId = testAcc.Id, Is_DVM__c = true, Email = 'dvm2@test.com'));
+contacts.add(new Contact(FirstName = 'Regular', LastName = 'Test3', AccountId = testAcc.Id, Is_DVM__c = false, Email = 'regular@test.com'));
+insert contacts;
+
+// Check if rollup worked
+Account updatedAcc = [SELECT Count_of_DVMs__c FROM Account WHERE Id = :testAcc.Id];
+System.debug('DVM Count after insert: ' + updatedAcc.Count_of_DVMs__c);
+
+Boolean rollupWorking = (updatedAcc.Count_of_DVMs__c == 2);
+System.debug('Rollup functionality working: ' + rollupWorking);
+
+// Cleanup
+delete contacts;
+delete testAcc;
+"
+
+# Test 7: Check trigger status
+echo ""
+echo "🎯 Test 7: Checking trigger status..."
+
+trigger_check=$(sfdx force:data:soql:query -q "SELECT Name, Status FROM ApexTrigger WHERE Name = 'ContactTrigger'" -r csv 2>&1)
+if echo "$trigger_check" | grep -q "ContactTrigger"; then
+    echo "✅ ContactTrigger found and deployed"
+    if echo "$trigger_check" | grep -q "Active"; then
+        echo "✅ ContactTrigger is active"
+    else
+        echo "⚠️  ContactTrigger exists but may not be active"
+    fi
+else
+    echo "❌ ContactTrigger not found"
+fi
+
+# Summary
+echo ""
+echo "📋 Test Summary"
+echo "==============="
+echo "Validation completed at: $(date)"
+
+# Check overall results
+echo ""
+echo "🎉 All tests completed!"
+echo ""
+echo "Next steps:"
+echo "1. Review any failed tests above"
+echo "2. If all tests pass, the rollup solution is ready for use"
+echo "3. Consider running the migration utility if you have existing data"
+echo "4. Set up monitoring for ongoing health checks"
+echo ""
+echo "For detailed deployment instructions, see: ROLLUP_DEPLOYMENT_GUIDE.md"
+echo "For ongoing maintenance, see: ROLLUP_AGENT_PROCEDURES.md"

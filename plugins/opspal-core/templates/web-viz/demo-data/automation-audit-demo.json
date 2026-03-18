@@ -1,0 +1,204 @@
+{
+  "metadata": {
+    "template": "automation-audit",
+    "generated": "2025-01-04",
+    "description": "Demo data for Automation Audit Dashboard - 25 automations, 3 conflicts, 1 cycle"
+  },
+  "kpis": {
+    "totalAutomations": {
+      "value": 25,
+      "description": "Total automation components"
+    },
+    "activeFlows": {
+      "value": 18,
+      "description": "Active Record-Triggered Flows"
+    },
+    "highRiskCount": {
+      "value": 3,
+      "description": "Automations with overlap conflicts"
+    },
+    "circularDeps": {
+      "value": 1,
+      "description": "Detected circular dependencies"
+    }
+  },
+  "automationsByType": {
+    "labels": ["Record-Triggered Flow", "Screen Flow", "Apex Trigger", "Process Builder", "Workflow Rule"],
+    "datasets": [{
+      "label": "Count",
+      "data": [12, 4, 5, 3, 1],
+      "backgroundColor": ["#5F3B8C", "#818CF8", "#60A5FA", "#F59E0B", "#EF4444"]
+    }]
+  },
+  "automationInventory": [
+    {
+      "id": "Flow_Lead_Assignment",
+      "name": "Lead Assignment Flow",
+      "type": "Record-Triggered Flow",
+      "object": "Lead",
+      "event": "create",
+      "status": "Active",
+      "lastModified": "2024-12-15",
+      "modifiedBy": "Admin User",
+      "description": "Assigns leads based on territory and round-robin",
+      "riskLevel": "low"
+    },
+    {
+      "id": "Flow_Opp_Stage_Update",
+      "name": "Opportunity Stage Handler",
+      "type": "Record-Triggered Flow",
+      "object": "Opportunity",
+      "event": "update",
+      "status": "Active",
+      "lastModified": "2024-11-20",
+      "modifiedBy": "Sales Admin",
+      "description": "Updates related records when stage changes",
+      "riskLevel": "medium"
+    },
+    {
+      "id": "Flow_Account_Enrichment",
+      "name": "Account Data Enrichment",
+      "type": "Record-Triggered Flow",
+      "object": "Account",
+      "event": "create,update",
+      "status": "Active",
+      "lastModified": "2024-12-01",
+      "modifiedBy": "Data Admin",
+      "description": "Enriches account data from external sources",
+      "riskLevel": "high"
+    },
+    {
+      "id": "Trigger_OpportunityHandler",
+      "name": "OpportunityTriggerHandler",
+      "type": "Apex Trigger",
+      "object": "Opportunity",
+      "event": "before insert,after update",
+      "status": "Active",
+      "lastModified": "2024-10-15",
+      "modifiedBy": "Developer",
+      "description": "Main trigger handler for opportunity logic",
+      "riskLevel": "high"
+    },
+    {
+      "id": "Flow_Case_Escalation",
+      "name": "Case Escalation Flow",
+      "type": "Record-Triggered Flow",
+      "object": "Case",
+      "event": "update",
+      "status": "Active",
+      "lastModified": "2024-12-10",
+      "modifiedBy": "Service Admin",
+      "description": "Escalates cases based on age and priority",
+      "riskLevel": "low"
+    },
+    {
+      "id": "PB_Contact_Welcome",
+      "name": "Contact Welcome Email",
+      "type": "Process Builder",
+      "object": "Contact",
+      "event": "create",
+      "status": "Active",
+      "lastModified": "2023-05-20",
+      "modifiedBy": "Marketing Admin",
+      "description": "Legacy - sends welcome email to new contacts",
+      "riskLevel": "medium",
+      "legacyWarning": true
+    },
+    {
+      "id": "Flow_Quote_Approval",
+      "name": "Quote Approval Process",
+      "type": "Record-Triggered Flow",
+      "object": "SBQQ__Quote__c",
+      "event": "update",
+      "status": "Active",
+      "lastModified": "2024-11-30",
+      "modifiedBy": "CPQ Admin",
+      "description": "Manages quote approval routing",
+      "riskLevel": "medium"
+    },
+    {
+      "id": "Trigger_AccountHandler",
+      "name": "AccountTriggerHandler",
+      "type": "Apex Trigger",
+      "object": "Account",
+      "event": "after update",
+      "status": "Active",
+      "lastModified": "2024-09-10",
+      "modifiedBy": "Developer",
+      "description": "Syncs account changes to related records",
+      "riskLevel": "high"
+    }
+  ],
+  "overlapWarnings": [
+    {
+      "object": "Opportunity",
+      "event": "update",
+      "automations": ["Flow_Opp_Stage_Update", "Trigger_OpportunityHandler"],
+      "severity": "high",
+      "recommendation": "Consolidate into single trigger framework",
+      "potentialIssues": ["Execution order conflicts", "Duplicate field updates", "Governor limit risks"]
+    },
+    {
+      "object": "Account",
+      "event": "update",
+      "automations": ["Flow_Account_Enrichment", "Trigger_AccountHandler"],
+      "severity": "medium",
+      "recommendation": "Define clear ownership - Flow for enrichment, Trigger for sync",
+      "potentialIssues": ["Possible infinite loop", "Conflicting field values"]
+    },
+    {
+      "object": "Contact",
+      "event": "create",
+      "automations": ["PB_Contact_Welcome", "Flow_Contact_Onboarding"],
+      "severity": "low",
+      "recommendation": "Migrate Process Builder to Flow",
+      "potentialIssues": ["Duplicate emails possible"]
+    }
+  ],
+  "circularDependencies": [
+    {
+      "cycle": ["Account Update", "Contact Sync", "Account Rollup"],
+      "severity": "critical",
+      "objects": ["Account", "Contact"],
+      "description": "Account update triggers Contact sync, which triggers Account rollup, creating potential infinite loop",
+      "recommendation": "Add recursion guards or consolidate logic"
+    }
+  ],
+  "dependencyGraph": {
+    "mermaid": "graph TD\n    subgraph Lead_Automations[Lead Automations]\n        LA[Lead Assignment Flow]\n        LC[Lead Conversion Flow]\n    end\n    \n    subgraph Account_Automations[Account Automations]\n        AE[Account Enrichment Flow]\n        AT[Account Trigger Handler]\n    end\n    \n    subgraph Opportunity_Automations[Opportunity Automations]\n        OS[Opp Stage Handler]\n        OT[Opportunity Trigger]\n    end\n    \n    subgraph Contact_Automations[Contact Automations]\n        CW[Contact Welcome PB]\n        CO[Contact Onboarding Flow]\n    end\n    \n    LC --> AE\n    LC --> CO\n    AE --> AT\n    AT --> OS\n    OS --> OT\n    \n    style LA fill:#22C55E\n    style LC fill:#22C55E\n    style AE fill:#F59E0B\n    style AT fill:#EF4444\n    style OS fill:#F59E0B\n    style OT fill:#EF4444\n    style CW fill:#F59E0B\n    style CO fill:#22C55E"
+  },
+  "recommendations": [
+    {
+      "priority": 1,
+      "type": "critical",
+      "title": "Resolve Circular Dependency",
+      "description": "Break the Account-Contact update cycle by adding recursion prevention",
+      "effort": "medium",
+      "impact": "high"
+    },
+    {
+      "priority": 2,
+      "type": "high",
+      "title": "Consolidate Opportunity Automations",
+      "description": "Merge Flow_Opp_Stage_Update logic into Trigger framework",
+      "effort": "high",
+      "impact": "high"
+    },
+    {
+      "priority": 3,
+      "type": "medium",
+      "title": "Migrate Process Builder",
+      "description": "Convert Contact Welcome Email from Process Builder to Flow",
+      "effort": "low",
+      "impact": "medium"
+    },
+    {
+      "priority": 4,
+      "type": "low",
+      "title": "Retire Workflow Rule",
+      "description": "Evaluate and migrate remaining Workflow Rule to Flow",
+      "effort": "low",
+      "impact": "low"
+    }
+  ]
+}

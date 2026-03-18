@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rollback Executor Safeguard"
+  short_description: "Help with Rollback Executor Safeguard tasks"
+  default_prompt: "Use $rollback-executor-safeguard to execute this workflow safely and produce the expected artifacts."

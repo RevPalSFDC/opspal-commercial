@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# Fix SF CLI command syntax across all files
+# Handles migration from deprecated commands to current syntax
+
+echo "🔧 Fixing Salesforce CLI command syntax..."
+
+# Function to fix a file
+fix_file() {
+    local file="$1"
+    local temp_file="${file}.tmp"
+    local changed=false
+
+    # Create backup
+    cp "$file" "${file}.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null
+
+    # Fix various deprecated patterns
+    sed -e 's/sf schema describe --sobject/sf sobject describe --sobject/g' \
+        -e 's/sfdx force:schema:sobject:describe --sobjecttype/sf sobject describe --sobject/g' \
+        -e 's/sfdx force:schema:sobject:describe/sf sobject describe/g' \
+        -e 's/--sobjecttype/--sobject/g' \
+        -e 's/sfdx force:schema:sobject:list/sf sobject list/g' \
+        -e 's/sfdx force:org:display/sf org display/g' \
+        -e 's/sfdx force:org:list/sf org list/g' \
+        -e 's/sfdx force:data:soql:query/sf data query/g' \
+        -e 's/sfdx force:source:deploy/sf project deploy start/g' \
+        -e 's/sfdx force:source:retrieve/sf project retrieve start/g' \
+        -e 's/sfdx force:source:push/sf project deploy start/g' \
+        -e 's/sfdx force:source:pull/sf project retrieve start/g' \
+        -e 's/sfdx force:mdapi:deploy/sf deploy metadata/g' \
+        -e 's/sfdx force:mdapi:retrieve/sf retrieve metadata/g' \
+        -e 's/sfdx force:apex:execute/sf apex run/g' \
+        -e 's/sfdx force:apex:test:run/sf apex test run/g' \
+        -e 's/sfdx force:user:permset:assign/sf org assign permset/g' \
+        -e 's/sfdx force:data:record:create/sf data create record/g' \
+        -e 's/sfdx force:data:record:update/sf data update record/g' \
+        -e 's/sfdx force:data:record:delete/sf data delete record/g' \
+        -e 's/sfdx force:data:bulk:upsert/sf data upsert bulk/g' \
+        -e 's/sfdx auth:web:login/sf org login web/g' \
+        -e 's/sfdx auth:logout/sf org logout/g' \
+        "$file" > "$temp_file"
+
+    # Check if file changed
+    if ! cmp -s "$file" "$temp_file"; then
+        mv "$temp_file" "$file"
+        changed=true
+        echo "✅ Fixed: $file"
+    else
+        rm "$temp_file"
+    fi
+
+    # Clean up old backup if no changes
+    if [ "$changed" = false ]; then
+        rm "${file}.bak."* 2>/dev/null
+    fi
+}
+
+# Find and fix all files
+echo "🔍 Searching for files to fix..."
+
+# Fix shell scripts
+find . -type f \( -name "*.sh" -o -name "*.bash" \) -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(sf schema describe|sfdx force:schema:|sfdx force:)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+# Fix JavaScript files
+find . -type f \( -name "*.js" -o -name "*.ts" \) -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(sf schema describe|sfdx force:schema:|sfdx force:)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+# Fix Markdown files
+find . -type f -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(sf schema describe|sfdx force:schema:|sfdx force:)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+# Fix YAML files
+find . -type f \( -name "*.yaml" -o -name "*.yml" \) -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+    if grep -q -E "(sf schema describe|sfdx force:schema:|sfdx force:)" "$file" 2>/dev/null; then
+        fix_file "$file"
+    fi
+done
+
+echo "✨ CLI syntax fix complete!"
+echo ""
+echo "📋 Summary of deprecated commands replaced:"
+echo "  - sf schema describe → sf sobject describe"
+echo "  - sfdx force:schema:sobject:describe → sf sobject describe"
+echo "  - sfdx force:org:* → sf org *"
+echo "  - sfdx force:data:* → sf data *"
+echo "  - sfdx force:source:* → sf project *"
+echo "  - sfdx force:mdapi:* → sf * metadata"
+echo "  - sfdx force:apex:* → sf apex *"
+echo "  - sfdx auth:* → sf org *"
+echo ""
+echo "💡 Tip: Run 'sf help' to see all available commands"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hook Observability Standardizer"
+  short_description: "Help with Hook Observability Standardizer tasks"
+  default_prompt: "Use $hook-observability-standardizer to execute this workflow safely and produce the expected artifacts."

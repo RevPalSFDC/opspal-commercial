@@ -1,0 +1,67 @@
+{
+  "name": "opspal-commercial",
+  "owner": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "plugins": [
+    {
+      "name": "opspal-salesforce",
+      "source": "./plugins/opspal-salesforce",
+      "description": "Comprehensive Salesforce operations — CPQ/Q2C assessments, RevOps auditing, Flow management, permission orchestration, territory management, deployment automation.",
+      "version": "3.79.1"
+    },
+    {
+      "name": "opspal-hubspot",
+      "source": "./plugins/opspal-hubspot",
+      "description": "Full HubSpot CRM operations — workflow automation, contact/deal management, marketing campaigns, CMS, SEO, Service Hub, revenue intelligence.",
+      "version": "3.7.16"
+    },
+    {
+      "name": "opspal-core",
+      "source": "./plugins/opspal-core",
+      "description": "Cross-platform orchestration — diagram generation, PDF/PPTX output, RevOps reporting, sales funnel diagnostics, data quality, Asana integration.",
+      "version": "2.35.0"
+    },
+    {
+      "name": "opspal-marketo",
+      "source": "./plugins/opspal-marketo",
+      "description": "Marketo marketing automation — lead management, smart campaigns, email marketing, program architecture, analytics, lead scoring, MQL handoff.",
+      "version": "2.6.11"
+    },
+    {
+      "name": "opspal-gtm-planning",
+      "source": "./plugins/opspal-gtm-planning",
+      "description": "GTM Annual Planning — territory design, quota modeling (Monte Carlo), compensation planning, attribution governance, strategic reporting.",
+      "version": "2.1.4"
+    },
+    {
+      "name": "opspal-monday",
+      "source": "./plugins/opspal-monday",
+      "description": "Monday.com integration — file extraction, board management, task synchronization.",
+      "version": "1.4.5"
+    },
+    {
+      "name": "opspal-ai-consult",
+      "source": "./plugins/opspal-ai-consult",
+      "description": "Multi-model AI consultation with Gemini integration.",
+      "version": "1.4.4"
+    },
+    {
+      "name": "opspal-mcp-client",
+      "source": "./plugins/opspal-mcp-client",
+      "description": "Thin client for OpsPal proprietary MCP server — validation hooks and resolver only, ships no IP.",
+      "version": "1.0.2"
+    },
+    {
+      "name": "opspal-okrs",
+      "source": "./plugins/opspal-okrs",
+      "description": "OKR lifecycle management — strategy orchestration, data-driven objective generation, initiative scoring, executive reporting, PLG signals, cadence management.",
+      "version": "3.0.2"
+    }
+  ],
+  "_stats": {
+    "total_plugins": 9,
+    "last_updated": "2026-03-11"
+  }
+}

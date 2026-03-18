@@ -1,0 +1,16 @@
+{
+  "name": "test-custom-template",
+  "description": "Test custom template",
+  "category": "custom",
+  "type": "AutoLaunchedFlow",
+  "parameters": {},
+  "structure": {
+    "metadata": {
+      "apiVersion": "62.0",
+      "processType": "AutoLaunchedFlow",
+      "status": "Draft"
+    },
+    "elements": []
+  },
+  "createdAt": "2026-03-09T22:28:16.746Z"
+}
