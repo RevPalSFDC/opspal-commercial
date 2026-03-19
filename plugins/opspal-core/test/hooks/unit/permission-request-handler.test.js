@@ -60,9 +60,8 @@ async function runAllTests() {
   results.push(await runTest('Auto-approves safe sf data query requests', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: { command: 'sf data query --query "SELECT Id FROM Account LIMIT 1"' },
-        agent_type: 'opspal-salesforce:sfdc-data-operations'
+        tool_name: 'Bash',
+        tool_input: { command: 'sf data query --query "SELECT Id FROM Account LIMIT 1"' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -71,14 +70,22 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Hook should exit successfully');
-    assert.deepStrictEqual(result.output, { decision: 'allow' }, 'Safe query should be auto-approved');
+    assert.deepStrictEqual(result.output, {
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: 'PermissionRequest',
+        decision: {
+          behavior: 'allow'
+        }
+      }
+    }, 'Safe query should be auto-approved with the live PermissionRequest contract');
   }));
 
   results.push(await runTest('Leaves write/deploy commands as pass-through', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: { command: 'sf project deploy start --target-org prod' }
+        tool_name: 'Bash',
+        tool_input: { command: 'sf project deploy start --target-org prod' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -96,8 +103,8 @@ async function runAllTests() {
   results.push(await runTest('Auto-approves read-only MCP request names', async () => {
     const result = await tester.run({
       input: {
-        tool: 'mcp__salesforce__query_records',
-        input: {}
+        tool_name: 'mcp__salesforce__query_records',
+        tool_input: {}
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -106,7 +113,15 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Hook should exit successfully');
-    assert.deepStrictEqual(result.output, { decision: 'allow' }, 'Read-only MCP operations should be auto-approved');
+    assert.deepStrictEqual(result.output, {
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: 'PermissionRequest',
+        decision: {
+          behavior: 'allow'
+        }
+      }
+    }, 'Read-only MCP operations should be auto-approved');
   }));
 
   fs.rmSync(tempHome, { recursive: true, force: true });

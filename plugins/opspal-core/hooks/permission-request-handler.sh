@@ -15,7 +15,7 @@
 #   - Write, Edit, deploy operations
 #   - MCP create/update/delete operations
 #
-# Output JSON: {"decision": "allow"} or nothing (pass-through)
+# Output JSON: hookSpecificOutput.decision.behavior="allow" or nothing (pass-through)
 #
 # Timeout: 2000ms (fast path)
 #
@@ -57,9 +57,9 @@ DECISION="pass-through"
 REASON="no auto-approval rule matched"
 
 if command -v jq >/dev/null 2>&1 && [[ -n "$INPUT" ]] && echo "$INPUT" | jq -e . >/dev/null 2>&1; then
-    TOOL_NAME=$(echo "$INPUT" | jq -r '.tool // .toolName // .tool_name // ""' 2>/dev/null || true)
-    COMMAND=$(echo "$INPUT" | jq -r '.input.command // .tool_input.command // .command // ""' 2>/dev/null || true)
-    AGENT_NAME=$(echo "$INPUT" | jq -r '.agent_type // .subagent_type // .agentName // .agent_name // ""' 2>/dev/null || true)
+    TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // .tool // .toolName // ""' 2>/dev/null || true)
+    COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || true)
+    AGENT_NAME=$(echo "$INPUT" | jq -r '.agent_type // .tool_input.subagent_type // .subagent_type // .agentName // .agent_name // ""' 2>/dev/null || true)
 fi
 
 if [[ -z "$TOOL_NAME" ]]; then
@@ -118,7 +118,15 @@ safe_append_log "$LOG_LINE"
 
 # Return decision
 if [[ "$DECISION" == "allow" ]]; then
-    echo '{"decision": "allow"}'
+    jq -nc '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "PermissionRequest",
+        decision: {
+          behavior: "allow"
+        }
+      }
+    }'
 fi
 
 exit 0

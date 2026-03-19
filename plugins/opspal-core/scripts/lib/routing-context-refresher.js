@@ -79,12 +79,12 @@ function extractMandatoryRoutes(index) {
 function generateCompact(routes) {
   if (routes.length === 0) return generateFallback();
 
-  let text = `## CRITICAL: Agent Routing Rules
+  let text = `## Agent Routing Guidance
 
-**STOP** before responding. Check this table first.
+Check this table before starting operational work. Use the listed agent when the request clearly matches a specialist domain or the hooks require routing.
 
-| If user mentions... | Use this agent | Invoke with |
-|---------------------|---------------|-------------|
+| If user mentions... | Prefer this agent | Invoke with |
+|---------------------|-------------------|-------------|
 `;
 
   for (const route of routes) {
@@ -92,8 +92,8 @@ function generateCompact(routes) {
   }
 
   text += `
-**Self-check**: (1) Does this match a keyword above? (2) Is this multi-step? (3) Is this an assessment/audit?
-If YES to any → use Agent(). If unsure → use Agent(). Override: \`[DIRECT]\` to skip.`;
+**Self-check**: (1) Does this match a keyword above? (2) Is this multi-step or cross-system? (3) Is this an assessment, audit, workflow, or configuration change?
+If YES to any, prefer \`Agent(...)\`. If runtime hooks require a route, invoke the approved agent before operational tools. Direct execution is acceptable for low-risk reads and small local tasks when hooks do not require routing.`;
 
   return text;
 }
@@ -134,9 +134,9 @@ function generateFull(index) {
 
 // Hardcoded fallback if no routing index found
 function generateFallback() {
-  return `## CRITICAL: Agent Routing Rules
+  return `## Agent Routing Guidance
 
-**STOP** before responding. For revops/audit use \`opspal-salesforce:sfdc-revops-auditor\`, for cpq/quote use \`opspal-salesforce:sfdc-cpq-assessor\`, for automation audit use \`opspal-salesforce:sfdc-automation-auditor\`, for hubspot assessment use \`opspal-hubspot:hubspot-assessment-analyzer\`, for marketo use \`opspal-marketo:marketo-orchestrator\`. Always invoke via Agent(subagent_type='<agent>', prompt=<request>). If unsure → use Agent().`;
+Check routing before starting operational work. For revops or audit use \`opspal-salesforce:sfdc-revops-auditor\`, for cpq or quoting use \`opspal-salesforce:sfdc-cpq-assessor\`, for automation audit use \`opspal-salesforce:sfdc-automation-auditor\`, for HubSpot assessment use \`opspal-hubspot:hubspot-assessment-analyzer\`, and for Marketo work use \`opspal-marketo:marketo-orchestrator\`. Invoke via \`Agent(subagent_type='<agent>', prompt=<request>)\` when the task clearly matches a specialist domain or hooks require routing.`;
 }
 
 // Main

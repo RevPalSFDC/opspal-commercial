@@ -27,6 +27,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { normalizeProjectHookSettings } = require('./hook-settings-normalizer');
 
 // ANSI colors
 const colors = {
@@ -471,7 +472,9 @@ class HookMerger {
       });
     }
 
-    return merged;
+    return normalizeProjectHookSettings(merged, {
+      projectRoot: path.resolve(path.dirname(this.config.projectSettingsPath), '..')
+    });
   }
 
   /**
@@ -542,6 +545,9 @@ class HookMerger {
    */
   writeSettings(settings) {
     const settingsPath = this.config.projectSettingsPath;
+    const normalizedSettings = normalizeProjectHookSettings(settings, {
+      projectRoot: path.resolve(path.dirname(settingsPath), '..')
+    });
 
     console.log(`\n${colors.blue}## Writing Settings${colors.reset}`);
 
@@ -554,7 +560,7 @@ class HookMerger {
 
     // Write settings
     try {
-      const content = JSON.stringify(settings, null, 2);
+      const content = JSON.stringify(normalizedSettings, null, 2);
       fs.writeFileSync(settingsPath, content, 'utf8');
       console.log(`  ${icons.pass} Written: ${settingsPath}`);
     } catch (error) {

@@ -5,12 +5,15 @@
 ##############################################################################
 
 # Colors for output
-export RED='\033[0;31m'
-export GREEN='\033[0;32m'
-export YELLOW='\033[1;33m'
-export BLUE='\033[0;34m'
-export CYAN='\033[0;36m'
-export NC='\033[0m' # No Color
+# Some hooks source the shared core error handler first, which defines these as
+# readonly globals. Guard every assignment so this library remains safe to
+# source inside those hook pipelines.
+if ! declare -p RED >/dev/null 2>&1; then export RED='\033[0;31m'; fi
+if ! declare -p GREEN >/dev/null 2>&1; then export GREEN='\033[0;32m'; fi
+if ! declare -p YELLOW >/dev/null 2>&1; then export YELLOW='\033[1;33m'; fi
+if ! declare -p BLUE >/dev/null 2>&1; then export BLUE='\033[0;34m'; fi
+if ! declare -p CYAN >/dev/null 2>&1; then export CYAN='\033[0;36m'; fi
+if ! declare -p NC >/dev/null 2>&1; then export NC='\033[0m'; fi # No Color
 
 # Get script directory
 VALIDATION_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

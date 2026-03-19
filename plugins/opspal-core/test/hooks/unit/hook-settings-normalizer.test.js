@@ -202,6 +202,29 @@ async function runAllTests() {
     assert(postToolWriteGroup.hooks[0].command.includes('post-reflect-strategy-update.sh'), 'Guarded Write command should still call the reflect strategy hook');
   }));
 
+  results.push(await runTest('Removes legacy persisted Bash deny rules from effective settings', async () => {
+    const normalized = normalizeProjectHookSettings({
+      permissions: {
+        deny: [
+          'Bash*',
+          'Read',
+          { toolName: 'Bash', ruleContent: '*' },
+          { toolName: 'Write', ruleContent: 'SESSION_REFLECTION' }
+        ]
+      },
+      hooks: {}
+    }, { projectRoot });
+
+    assert.deepStrictEqual(
+      normalized.permissions.deny,
+      [
+        'Read',
+        { toolName: 'Write', ruleContent: 'SESSION_REFLECTION' }
+      ],
+      'Legacy blanket Bash deny rules should be removed while preserving unrelated policy'
+    );
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.filter((result) => !result.passed).length;
 

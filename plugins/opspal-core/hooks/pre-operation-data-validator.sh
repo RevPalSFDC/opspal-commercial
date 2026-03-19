@@ -160,8 +160,8 @@ if [ -z "$INPUT_DATA" ]; then
 fi
 
 # Extract tool name and input
-TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool // .toolName // .name // empty' 2>/dev/null)
-TOOL_INPUT=$(echo "$INPUT_DATA" | jq -c '.input // .parameters // {}' 2>/dev/null)
+TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // .tool // .toolName // .name // empty' 2>/dev/null)
+TOOL_INPUT=$(echo "$INPUT_DATA" | jq -c '.tool_input // .input // .parameters // {}' 2>/dev/null)
 
 if [ -n "$TOOL_INPUT" ] && is_json "$TOOL_INPUT"; then
     INPUT_TYPE=$(echo "$TOOL_INPUT" | jq -r 'type' 2>/dev/null || echo "")
@@ -227,7 +227,7 @@ is_data_operation() {
 
     # Agent tool with data agents
     if [[ "$tool" == "Agent" ]] || [[ "$tool" == "Task" ]]; then
-        local subagent=$(echo "$input" | jq -r '.subagent_type // .tool_input.subagent_type // ""' 2>/dev/null)
+        local subagent=$(echo "$input" | jq -r '.subagent_type // .agent_type // ""' 2>/dev/null)
         if [[ "$subagent" =~ (data-import|data-export|data-operations|csv) ]]; then
             echo "agent_data"
             return 0

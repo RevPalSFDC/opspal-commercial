@@ -65,8 +65,9 @@ const HOOK_TYPES = [
 // Hooks that should return JSON with systemMessage
 const HOOKS_EXPECTING_OUTPUT = ['UserPromptSubmit'];
 
-// Hooks that may return JSON with decision field
-const HOOKS_WITH_DECISION = ['PreToolUse', 'PermissionRequest'];
+// Hooks with event-specific decision schemas
+const PRE_TOOL_DECISION_HOOKS = ['PreToolUse'];
+const PERMISSION_REQUEST_DECISION_HOOKS = ['PermissionRequest'];
 
 // Hook type classification for context injection analysis
 const CONTEXT_INJECTING_HOOKS = ['UserPromptSubmit', 'SessionStart', 'SubagentStart', 'PreCompact'];
@@ -128,8 +129,7 @@ const TEST_INPUTS = {
   },
   PermissionRequest: {
     tool_name: 'Bash',
-    tool: 'Bash',
-    input: { command: 'sf data query --query "SELECT Id FROM Account LIMIT 1"' },
+    tool_input: { command: 'sf data query --query "SELECT Id FROM Account LIMIT 1"' },
     hook_event_name: 'PermissionRequest',
     _test: true
   },
@@ -973,30 +973,86 @@ class HookHealthChecker {
               }
             }
 
-            // Check 4: PreToolUse decision field
-            if (HOOKS_WITH_DECISION.includes(hookType) && output.trim()) {
+            // Check 4: event-specific decision fields
+            if ((PRE_TOOL_DECISION_HOOKS.includes(hookType) || PERMISSION_REQUEST_DECISION_HOOKS.includes(hookType)) && output.trim()) {
               try {
                 const parsed = JSON.parse(output);
 
                 const hookSpecificOutput = parsed?.hookSpecificOutput || {};
-                const permissionDecision = hookSpecificOutput.permissionDecision;
-                if (
-                  permissionDecision !== undefined &&
-                  !['allow', 'deny', 'ask', 'approve', 'block'].includes(permissionDecision)
-                ) {
-                  this.results.push(new CheckResult(
-                    stage, stageName, HEALTH_STATUS.DEGRADED,
-                    `Silent failure: ${hookName} has invalid permissionDecision`,
-                    {
-                      hookType,
-                      command,
-                      source,
-                      isSilentFailure: true,
-                      permissionDecision,
-                      fix: 'Use permissionDecision: allow, deny, or ask'
-                    }
-                  ));
-                  silentFailures++;
+                if (PRE_TOOL_DECISION_HOOKS.includes(hookType)) {
+                  const permissionDecision = hookSpecificOutput.permissionDecision;
+                  if (
+                    permissionDecision !== undefined &&
+                    !['allow', 'deny', 'ask'].includes(permissionDecision)
+                  ) {
+                    this.results.push(new CheckResult(
+                      stage, stageName, HEALTH_STATUS.DEGRADED,
+                      `Silent failure: ${hookName} has invalid permissionDecision`,
+                      {
+                        hookType,
+                        command,
+                        source,
+                        isSilentFailure: true,
+                        permissionDecision,
+                        fix: 'Use permissionDecision: allow, deny, or ask'
+                      }
+                    ));
+                    silentFailures++;
+                  }
+                }
+
+                if (PERMISSION_REQUEST_DECISION_HOOKS.includes(hookType)) {
+                  const decisionBehavior = hookSpecificOutput?.decision?.behavior;
+                  if (
+                    decisionBehavior !== undefined &&
+                    !['allow', 'deny'].includes(decisionBehavior)
+                  ) {
+                    this.results.push(new CheckResult(
+                      stage, stageName, HEALTH_STATUS.DEGRADED,
+                      `Silent failure: ${hookName} has invalid PermissionRequest decision.behavior`,
+                      {
+                        hookType,
+                        command,
+                        source,
+                        isSilentFailure: true,
+                        decisionBehavior,
+                        fix: 'Use hookSpecificOutput.decision.behavior: allow or deny'
+                      }
+                    ));
+                    silentFailures++;
+                  }
+                  if (parsed.decision !== undefined) {
+                    this.results.push(new CheckResult(
+                      stage, stageName, HEALTH_STATUS.DEGRADED,
+                      `Silent failure: ${hookName} uses deprecated top-level decision for PermissionRequest`,
+                      {
+                        hookType,
+                        command,
+                        source,
+                        isSilentFailure: true,
+                        decision: parsed.decision,
+                        fix: 'Move PermissionRequest decisions under hookSpecificOutput.decision.behavior'
+                      }
+                    ));
+                    silentFailures++;
+                  }
+                  if (
+                    hookSpecificOutput.updatedPermissions !== undefined &&
+                    !Array.isArray(hookSpecificOutput.updatedPermissions)
+                  ) {
+                    this.results.push(new CheckResult(
+                      stage, stageName, HEALTH_STATUS.DEGRADED,
+                      `Silent failure: ${hookName} has invalid updatedPermissions shape`,
+                      {
+                        hookType,
+                        command,
+                        source,
+                        isSilentFailure: true,
+                        fix: 'Use an array for hookSpecificOutput.updatedPermissions'
+                      }
+                    ));
+                    silentFailures++;
+                  }
                 }
 
                 if (

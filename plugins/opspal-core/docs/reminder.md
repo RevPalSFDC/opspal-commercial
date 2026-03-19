@@ -1,11 +1,9 @@
 # Agent Routing Reminder
 
-## BLOCKED Operations - MUST Use Agent Tool
+Check routing before operational work. Use the listed specialist when the request clearly matches that domain or the hooks explicitly require routing.
 
-Before responding, check if the request matches any blocked operation:
-
-| Keywords | Required Agent | Agent Tool Call |
-|----------|----------------|----------------|
+| Keywords | Preferred Agent | Agent Tool Call |
+|----------|-----------------|-----------------|
 | cpq, quote, pricing, q2c | `sfdc-cpq-assessor` | `Agent(subagent_type='opspal-salesforce:sfdc-cpq-assessor', ...)` |
 | revops, pipeline, forecast | `sfdc-revops-auditor` | `Agent(subagent_type='opspal-salesforce:sfdc-revops-auditor', ...)` |
 | automation audit, flow audit | `sfdc-automation-auditor` | `Agent(subagent_type='opspal-salesforce:sfdc-automation-auditor', ...)` |
@@ -18,43 +16,29 @@ Before responding, check if the request matches any blocked operation:
 
 ## Complexity Assessment
 
-**HIGH (Must use agent):**
+**Route to an agent when the work is clearly specialist or high risk:**
 - Multi-step operations (3+ steps)
-- Cross-platform operations
+- Cross-platform or cross-object operations
 - Org-wide analysis or audit
-- Data migrations, production changes
+- Data migrations or production changes
+- Workflow, automation, or configuration changes
 
-**MEDIUM (Should use agent):**
-- Multi-object modifications
-- Workflow/Flow creation
-- Permission restructuring
-
-**LOW (Direct execution OK):**
-- Single field creation
-- Simple SOQL queries
-- Documentation updates
-- Configuration reads
+**Direct execution is usually acceptable when hooks do not require routing:**
+- Simple reads or status checks
+- Small local documentation updates
+- Narrow repo-only edits
+- Simple configuration inspection
 
 ## Self-Check Protocol
 
-Before every response, ask yourself:
+Before every response, ask:
 
-1. Does this match a BLOCKED keyword above? → **Use Agent tool**
-2. Is this HIGH complexity? → **Use Agent tool**
-3. Am I performing an assessment or audit? → **Use Agent tool**
-4. Is this a production deployment? → **Use Agent tool**
+1. Does this clearly match a specialist domain above?
+2. Is this multi-step, cross-system, or operationally risky?
+3. Am I performing an assessment, audit, deployment, or automation change?
+4. Did the runtime hooks require a route or name an approved agent family?
 
-**If uncertain → Default to using the Agent tool**
-
-## Why This Matters
-
-Specialists deliver:
-- 60-90% time savings
-- 40-80% error reduction
-- Consistent, validated outputs
-- Proper methodology adherence
-
-**NEVER respond directly to a specialist task. Always use the Agent tool.**
+If yes, invoke the appropriate `Agent` before operational tools. If the hooks do not require routing and the task is low-risk, direct execution is acceptable.
 
 ---
-*Injected via UserPromptSubmit hook - see docs/HOOK_BUG_SUMMARY.md*
+*Injected via `UserPromptSubmit` hook.*

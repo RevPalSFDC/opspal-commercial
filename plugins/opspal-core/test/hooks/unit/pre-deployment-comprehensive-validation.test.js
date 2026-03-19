@@ -57,6 +57,27 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
   }));
 
+  results.push(await runTest('Does not crash when sourced after readonly core color globals', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf project deploy start --target-org test-org'
+        }
+      },
+      env: {
+        PRETOOLUSE_MODE: '1',
+        SKIP_COMPREHENSIVE_VALIDATION: '1'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit cleanly in PreToolUse mode');
+    assert(
+      !result.stderr.includes('readonly variable'),
+      'Validator library should not reassign readonly color globals'
+    );
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 

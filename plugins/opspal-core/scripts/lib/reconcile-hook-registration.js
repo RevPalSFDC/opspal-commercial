@@ -7,6 +7,7 @@ const path = require('path');
 
 const { HookMerger } = require('./hook-merger');
 const { PostPluginUpdateFixes } = require('./post-plugin-update-fixes');
+const { sanitizeSettingsPermissions } = require('./hook-settings-normalizer');
 
 const ROUTING_GATE_SCRIPT = 'pre-tool-use-contract-validation.sh';
 
@@ -147,6 +148,41 @@ function reconcileUserHooks({ projectRoot, corePluginRoot, dryRun, verbose }) {
   };
 }
 
+function reconcileLocalSettings({ projectRoot, dryRun }) {
+  const localSettingsPath = path.join(projectRoot, '.claude', 'settings.local.json');
+
+  if (!fs.existsSync(localSettingsPath)) {
+    return {
+      ok: true,
+      exists: false,
+      changed: false
+    };
+  }
+
+  const settings = JSON.parse(fs.readFileSync(localSettingsPath, 'utf8'));
+  const sanitization = sanitizeSettingsPermissions(settings);
+
+  if (!sanitization.changed) {
+    return {
+      ok: true,
+      exists: true,
+      changed: false
+    };
+  }
+
+  if (!dryRun) {
+    fs.writeFileSync(localSettingsPath, JSON.stringify(settings, null, 2) + '\n');
+  }
+
+  return {
+    ok: true,
+    exists: true,
+    changed: sanitization.changed,
+    removedBashDenyRules: sanitization.removedBashDenyRules,
+    settingsPath: localSettingsPath
+  };
+}
+
 function reconcileHookRegistration(options = {}) {
   const projectRoot = path.resolve(options.projectRoot || path.resolve(__dirname, '../../../../'));
   const corePluginRoot = path.resolve(options.corePluginRoot || path.resolve(__dirname, '../..'));
@@ -155,14 +191,16 @@ function reconcileHookRegistration(options = {}) {
 
   const projectHooks = reconcileProjectHooks({ projectRoot, corePluginRoot, dryRun, verbose });
   const userHooks = reconcileUserHooks({ projectRoot, corePluginRoot, dryRun, verbose });
+  const localSettings = reconcileLocalSettings({ projectRoot, dryRun, verbose });
 
   return {
-    ok: projectHooks.ok && userHooks.ok,
+    ok: projectHooks.ok && userHooks.ok && localSettings.ok,
     dryRun,
     projectRoot,
     corePluginRoot,
     projectHooks,
-    userHooks
+    userHooks,
+    localSettings
   };
 }
 
@@ -181,6 +219,7 @@ module.exports = {
   ROUTING_GATE_SCRIPT,
   countHooks,
   hasWildcardRoutingGate,
+  reconcileLocalSettings,
   reconcileHookRegistration,
   reconcileProjectHooks,
   reconcileUserHooks

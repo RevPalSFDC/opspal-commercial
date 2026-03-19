@@ -27,6 +27,10 @@ const {
   DEFAULT_MARKETPLACE_NAME,
   listMarketplaceNames
 } = require('./marketplace-config');
+const {
+  normalizeProjectHookSettings,
+  sanitizeSettingsPermissions
+} = require('./hook-settings-normalizer');
 
 // ============================================================================
 // Configuration
@@ -222,6 +226,7 @@ class PostPluginUpdateFixes {
     const issues = [];
     let projectOwnedHooks = 0;
     let emptyMatchers = 0;
+    const permissionSanitization = sanitizeSettingsPermissions(settings);
 
     for (const [eventName, groups] of Object.entries(settings?.hooks || {})) {
       if (!Array.isArray(groups)) continue;
@@ -247,10 +252,15 @@ class PostPluginUpdateFixes {
       issues.push('empty-matchers');
     }
 
+    if (permissionSanitization.removedBashDenyRules > 0) {
+      issues.push('legacy-bash-deny-rules');
+    }
+
     return {
       issues,
       projectOwnedHooks,
-      emptyMatchers
+      emptyMatchers,
+      removedBashDenyRules: permissionSanitization.removedBashDenyRules
     };
   }
 
@@ -1444,6 +1454,7 @@ class PostPluginUpdateFixes {
 
       settings.hooks.UserPromptSubmit = reconciledGroups;
       this.reconcileNonUserPromptHooks(settings);
+      sanitizeSettingsPermissions(settings);
 
       if (this.dryRun) {
         this.log(`${icons.info} [DRY RUN] Would update ${settingsPath}`);
@@ -1696,8 +1707,13 @@ class PostPluginUpdateFixes {
 
           try {
             const content = fs.readFileSync(hooksJsonPath, 'utf8');
-            const hooksConfig = JSON.parse(content);
-            let modified = false;
+            let hooksConfig = JSON.parse(content);
+            const installRoot = path.dirname(path.dirname(hooksJsonPath));
+            const normalizedHooksConfig = normalizeProjectHookSettings(hooksConfig, {
+              projectRoot: installRoot
+            });
+            let modified = JSON.stringify(normalizedHooksConfig) !== JSON.stringify(hooksConfig);
+            hooksConfig = normalizedHooksConfig;
 
             const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
             if (!Array.isArray(upsGroups)) continue;
@@ -1757,10 +1773,16 @@ class PostPluginUpdateFixes {
 
     const assets = [
       '.claude-plugin/hooks.json',
+      'docs/reminder.md',
       'hooks/unified-router.sh',
+      'hooks/permission-request-handler.sh',
+      'hooks/pre-operation-data-validator.sh',
       'hooks/pre-tool-use-contract-validation.sh',
       'hooks/pre-task-agent-validator.sh',
       'hooks/post-tool-use.sh',
+      'scripts/lib/hook-event-normalizer.js',
+      'scripts/lib/hook-settings-normalizer.js',
+      'scripts/lib/routing-context-refresher.js',
       'scripts/lib/routing-state-manager.js',
       'config/mcp-tool-policies.json'
     ];

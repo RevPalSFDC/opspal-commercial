@@ -21,6 +21,11 @@ const ARGUMENT_MATCHER_CONFIG = {
   'Agent(*)': { matcher: 'Agent', type: 'task' },
   Task: { matcher: 'Agent', type: 'task' }
 };
+const LEGACY_BASH_DENY_RULE_PATTERNS = [
+  /^Bash$/,
+  /^Bash\*$/,
+  /^Bash\.\*$/
+];
 
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -193,9 +198,60 @@ function appendNormalizedHook(groupsByMatcher, matcherOrder, matcher, hook) {
   group.seen.add(hook.command);
 }
 
+function isLegacyBashDenyRule(rule) {
+  if (typeof rule === 'string') {
+    return LEGACY_BASH_DENY_RULE_PATTERNS.some((pattern) => pattern.test(rule.trim()));
+  }
+
+  if (!rule || typeof rule !== 'object') {
+    return false;
+  }
+
+  const toolName = typeof rule.toolName === 'string' ? rule.toolName.trim() : '';
+  const ruleContent = typeof rule.ruleContent === 'string' ? rule.ruleContent.trim() : '';
+  if (toolName !== 'Bash') {
+    return false;
+  }
+
+  return ruleContent === '' || ruleContent === '*' || ruleContent === '.*';
+}
+
+function sanitizeSettingsPermissions(settings) {
+  if (!settings || typeof settings !== 'object' || !settings.permissions || typeof settings.permissions !== 'object') {
+    return {
+      settings,
+      changed: false,
+      removedBashDenyRules: 0
+    };
+  }
+
+  const denyRules = Array.isArray(settings.permissions.deny) ? settings.permissions.deny : null;
+  if (!denyRules) {
+    return {
+      settings,
+      changed: false,
+      removedBashDenyRules: 0
+    };
+  }
+
+  const sanitizedDenyRules = denyRules.filter((rule) => !isLegacyBashDenyRule(rule));
+  const removedBashDenyRules = denyRules.length - sanitizedDenyRules.length;
+
+  if (removedBashDenyRules > 0) {
+    settings.permissions.deny = sanitizedDenyRules;
+  }
+
+  return {
+    settings,
+    changed: removedBashDenyRules > 0,
+    removedBashDenyRules
+  };
+}
+
 function normalizeProjectHookSettings(settings, options = {}) {
   const projectRoot = path.resolve(options.projectRoot || process.cwd());
   const cloned = JSON.parse(JSON.stringify(settings || {}));
+  sanitizeSettingsPermissions(cloned);
   const hooks = cloned.hooks && typeof cloned.hooks === 'object' ? cloned.hooks : {};
   const normalizedHooks = {};
   const subagentStopCommands = new Set();
@@ -291,6 +347,8 @@ module.exports = {
   ARGUMENT_MATCHER_CONFIG,
   PRETASK_CONTEXT_BASENAMES,
   extractScriptBasename,
+  isLegacyBashDenyRule,
   normalizeProjectHookSettings,
+  sanitizeSettingsPermissions,
   rewriteCommandPaths
 };

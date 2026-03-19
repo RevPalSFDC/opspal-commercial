@@ -75,8 +75,8 @@ async function runAllTests() {
   results.push(await runTest('Skips non-data operations', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: { command: 'ls -la' }
+        tool_name: 'Bash',
+        tool_input: { command: 'ls -la' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -92,8 +92,8 @@ async function runAllTests() {
   results.push(await runTest('Validates simple JSON data write', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Write',
-        input: {
+        tool_name: 'Write',
+        tool_input: {
           file_path: 'data.json',
           content: '{"foo":"bar"}'
         }
@@ -112,8 +112,8 @@ async function runAllTests() {
   results.push(await runTest('Falls back when preferred log root is not writable', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Write',
-        input: {
+        tool_name: 'Write',
+        tool_input: {
           file_path: 'data.json',
           content: '{\"foo\":\"bar\"}'
         }
@@ -139,8 +139,8 @@ async function runAllTests() {
 
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: {
+        tool_name: 'Bash',
+        tool_input: {
           command: 'node plugins/opspal-salesforce/scripts/lib/bulk-merge-executor.js --org test --decisions ' + decisionsFile + ' --dry-run'
         }
       },
@@ -167,8 +167,8 @@ async function runAllTests() {
 
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: {
+        tool_name: 'Bash',
+        tool_input: {
           command: 'node plugins/opspal-salesforce/scripts/lib/bulk-merge-executor.js --org test --decisions ' + decisionsFile + ' --dry-run'
         }
       },
@@ -196,8 +196,8 @@ async function runAllTests() {
 
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: {
+        tool_name: 'Bash',
+        tool_input: {
           command: 'node plugins/opspal-salesforce/scripts/lib/bulk-merge-executor.js --org test --decisions ' + decisionsFile + ' --dry-run'
         }
       },
@@ -212,6 +212,26 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should allow merge when confidence meets threshold');
+  }));
+
+  results.push(await runTest('Recognizes live Agent payloads without schema errors', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Agent',
+        tool_input: {
+          subagent_type: 'opspal-salesforce:sfdc-data-operations'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        DATA_VALIDATION_ENABLED: '1'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Live Agent payloads should parse cleanly');
+    assert.strictEqual(result.parseError, null, 'Hook should not emit malformed output');
   }));
 
   // Cleanup

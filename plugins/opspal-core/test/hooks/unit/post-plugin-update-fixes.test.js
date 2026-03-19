@@ -175,6 +175,43 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Cleans legacy Bash deny rules from user-level settings during hook reconciliation', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'post-plugin-fixes-home-'));
+    const userSettingsPath = path.join(tempHome, '.claude', 'settings.json');
+
+    try {
+      writeJson(userSettingsPath, {
+        permissions: {
+          deny: ['Bash*', 'Read']
+        },
+        hooks: {
+          UserPromptSubmit: []
+        }
+      });
+
+      const PostPluginUpdateFixes = loadFreshFixer(tempHome);
+      const fixer = new PostPluginUpdateFixes({
+        projectRoot: PROJECT_ROOT,
+        corePluginRoot: PLUGIN_ROOT,
+        dryRun: false,
+        verbose: false
+      });
+
+      const result = fixer.fixUserLevelHooks();
+      assert.strictEqual(result.fixed, true, 'User hook reconciliation should rewrite stale settings');
+
+      const repairedSettings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf8'));
+      assert.deepStrictEqual(
+        repairedSettings.permissions.deny,
+        ['Read'],
+        'User-level reconciliation should remove legacy blanket Bash deny rules'
+      );
+    } finally {
+      process.env.HOME = originalHome;
+      fs.rmSync(tempHome, { recursive: true, force: true });
+    }
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.filter((result) => !result.passed).length;
 

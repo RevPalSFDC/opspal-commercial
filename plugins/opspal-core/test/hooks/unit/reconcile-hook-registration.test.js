@@ -57,14 +57,23 @@ async function runAllTests() {
     const tempProjectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'routing-reconcile-project-'));
     const reminderPath = path.join(tempProjectRoot, 'docs', 'reminder.md');
     const projectSettingsPath = path.join(tempProjectRoot, '.claude', 'settings.json');
+    const localSettingsPath = path.join(tempProjectRoot, '.claude', 'settings.local.json');
     const userSettingsPath = path.join(tempHome, '.claude', 'settings.json');
 
     try {
       fs.mkdirSync(path.dirname(reminderPath), { recursive: true });
       fs.writeFileSync(reminderPath, 'Routing reminder content');
       writeJson(projectSettingsPath, {
+        permissions: {
+          deny: ['Bash*', 'Read']
+        },
         hooks: {
           PreToolUse: []
+        }
+      });
+      writeJson(localSettingsPath, {
+        permissions: {
+          deny: ['Bash*', 'Write']
         }
       });
 
@@ -87,12 +96,25 @@ async function runAllTests() {
         true,
         'Project settings should contain PreToolUse(*) routing gate'
       );
+      assert.deepStrictEqual(
+        projectSettings.permissions.deny,
+        ['Read'],
+        'Project reconciliation should remove legacy blanket Bash deny rules'
+      );
 
       const userSettings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf8'));
       const userPromptGroups = Array.isArray(userSettings?.hooks?.UserPromptSubmit)
         ? userSettings.hooks.UserPromptSubmit
         : [];
       assert(userPromptGroups.length > 0, 'User settings should contain UserPromptSubmit hooks');
+
+      const localSettings = JSON.parse(fs.readFileSync(localSettingsPath, 'utf8'));
+      assert.deepStrictEqual(
+        localSettings.permissions.deny,
+        ['Write'],
+        'Local settings reconciliation should remove legacy blanket Bash deny rules'
+      );
+      assert.strictEqual(result.localSettings.changed, true, 'Local settings cleanup should be reported');
     } finally {
       process.env.HOME = originalHome;
       fs.rmSync(tempHome, { recursive: true, force: true });
