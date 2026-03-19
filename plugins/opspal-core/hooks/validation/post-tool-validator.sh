@@ -32,6 +32,11 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
+ASSET_RESOLVER="$PLUGIN_ROOT/hooks/lib/resolve-encrypted-asset.sh"
+if [[ -f "$ASSET_RESOLVER" ]]; then
+    source "$ASSET_RESOLVER"
+fi
+
 # Configuration
 SKIP_VALIDATION="${SKIP_TOOL_VALIDATION:-0}"
 SKIP_ALL="${SKIP_VALIDATION:-0}"
@@ -72,7 +77,12 @@ fi
 # =============================================================================
 
 run_data_quality_validation() {
-    local validator="$PLUGIN_ROOT/scripts/lib/enhanced-data-quality-framework.js"
+    local validator=""
+    local salesforce_root="$PLUGIN_ROOT/../opspal-salesforce"
+
+    if declare -F resolve_enc_asset >/dev/null 2>&1 && [[ -d "$salesforce_root" ]]; then
+        validator=$(resolve_enc_asset "$salesforce_root" "opspal-salesforce" "scripts/lib/enhanced-data-quality-framework.js")
+    fi
 
     if [[ -f "$validator" ]] && command -v node &>/dev/null; then
         # Only validate if result looks like data

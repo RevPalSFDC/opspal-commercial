@@ -11,6 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../protected-asset-runtime');
 
 /**
  * Anomaly severity levels
@@ -49,6 +50,12 @@ class AnomalyDetectionEngine {
     constructor(options = {}) {
         // Load patterns configuration
         this.patternsPath = options.patternsPath ||
+            resolveProtectedAssetPath({
+                pluginRoot: path.resolve(__dirname, '../../..'),
+                pluginName: 'opspal-core',
+                relativePath: 'config/anomaly-patterns.json',
+                allowPlaintextFallback: true
+            }) ||
             path.join(__dirname, '../../..', 'config', 'anomaly-patterns.json');
         this.patterns = this._loadPatterns();
 

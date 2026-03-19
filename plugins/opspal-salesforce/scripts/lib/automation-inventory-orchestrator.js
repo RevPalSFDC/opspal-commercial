@@ -22,6 +22,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { requireProtectedModule } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Import all analysis libraries
 const ApexStaticAnalyzer = require('./apex-static-analyzer');
@@ -30,7 +31,11 @@ const WorkflowRuleExtractor = require('./workflow-rule-extractor');
 const AutomationDependencyGraph = require('./automation-dependency-graph');
 const AutomationConflictEngine = require('./automation-conflict-engine');
 const AutomationUDMNormalizer = require('./automation-udm-normalizer');
-const AutomationRiskScorer = require('./automation-risk-scorer');
+const AutomationRiskScorer = requireProtectedModule({
+    pluginRoot: path.resolve(__dirname, '../..'),
+    pluginName: 'opspal-salesforce',
+    relativePath: 'scripts/lib/automation-risk-scorer.js'
+});
 const FlowStreamingQuery = require('./flow-streaming-query');
 const FlowMetadataRetriever = require('./flow-metadata-retriever');
 

@@ -25,18 +25,18 @@ resolve_enc_asset() {
     local plugin_root="$1"
     local plugin_name="$2"
     local rel_path="$3"
-
-    # 1. Check plaintext in plugin directory (dev mode or pre-encryption)
     local plaintext="$plugin_root/$rel_path"
-    if [[ -f "$plaintext" ]]; then
-        echo "$plaintext"
-        return 0
+    local encrypted="$plaintext.enc"
+    local protected_asset=0
+    local allow_plaintext_fallback="${OPSPAL_ALLOW_PROTECTED_PLAINTEXT_FALLBACK:-0}"
+
+    if [[ -f "$encrypted" ]]; then
+        protected_asset=1
     fi
 
-    # 2. Check session runtime directory
+    # 1. Check session runtime directory first for protected assets.
     local session_dir="${OPSPAL_ENC_SESSION_DIR:-}"
 
-    # If env var not set, read from .current-session pointer
     if [[ -z "$session_dir" ]]; then
         local pointer="$HOME/.claude/opspal-enc/runtime/.current-session"
         if [[ -f "$pointer" ]]; then
@@ -48,6 +48,19 @@ resolve_enc_asset() {
         local runtime_path="$session_dir/$plugin_name/$rel_path"
         if [[ -f "$runtime_path" ]]; then
             echo "$runtime_path"
+            return 0
+        fi
+    fi
+
+    # 2. Plaintext fallback is allowed only for non-protected assets or explicit maintainer bypass.
+    if [[ -f "$plaintext" ]]; then
+        if [[ "$protected_asset" -eq 0 ]]; then
+            echo "$plaintext"
+            return 0
+        fi
+
+        if [[ "${OPSPAL_ENC_DEV_MODE:-0}" = "1" || "$allow_plaintext_fallback" = "1" ]]; then
+            echo "$plaintext"
             return 0
         fi
     fi

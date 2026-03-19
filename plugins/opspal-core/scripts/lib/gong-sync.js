@@ -16,9 +16,23 @@
  */
 
 const { GongAPIClient } = require('./gong-api-client');
-const { calculateConversationRisk, aggregateCallMetrics, detectTrackerSignals } = require('./gong-risk-analyzer');
 const fs = require('fs');
 const path = require('path');
+const { requireProtectedModule } = require('./protected-asset-runtime');
+
+let gongRiskAnalyzer = null;
+
+function getGongRiskAnalyzer() {
+  if (!gongRiskAnalyzer) {
+    gongRiskAnalyzer = requireProtectedModule({
+      pluginRoot: path.resolve(__dirname, '../..'),
+      pluginName: 'opspal-core',
+      relativePath: 'scripts/lib/gong-risk-analyzer.js'
+    });
+  }
+
+  return gongRiskAnalyzer;
+}
 
 class GongSyncEngine {
   constructor(options = {}) {
@@ -114,6 +128,7 @@ class GongSyncEngine {
     });
 
     const results = { opportunitiesUpdated: 0, insights: [] };
+    const { aggregateCallMetrics } = getGongRiskAnalyzer();
 
     for (const [oppId, oppCalls] of byOpportunity) {
       const metrics = aggregateCallMetrics(oppCalls);
@@ -170,6 +185,7 @@ class GongSyncEngine {
     });
 
     const riskResults = [];
+    const { calculateConversationRisk } = getGongRiskAnalyzer();
     for (const [oppId, oppCalls] of byOpportunity) {
       const opportunity = { Id: oppId, Amount: options.minAmount || 0 };
       const risk = calculateConversationRisk(oppCalls, opportunity);
@@ -222,6 +238,7 @@ class GongSyncEngine {
       positive: ['champion', 'executive buy-in', 'urgency', 'timeline set', 'next steps']
     };
 
+    const { detectTrackerSignals } = getGongRiskAnalyzer();
     const signals = detectTrackerSignals(calls, trackerMappings);
 
     // Group competitor mentions by name

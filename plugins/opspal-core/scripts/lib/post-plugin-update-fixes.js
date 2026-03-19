@@ -844,7 +844,7 @@ class PostPluginUpdateFixes {
 
     for (const relativePath of requiredFiles) {
       const absolutePath = path.join(installPath, relativePath);
-      if (!fs.existsSync(absolutePath)) {
+      if (!fs.existsSync(absolutePath) && !fs.existsSync(`${absolutePath}.enc`)) {
         issues.push(`Missing runtime asset: ${relativePath}`);
       }
     }

@@ -25,7 +25,13 @@
  * - Must verify the PERSON first (Jane Doe @lacounty.gov) before trusting entity data
  */
 
-const EnhancedGovClassifier = require('./enhanced-gov-classifier');
+const path = require('path');
+const { requireProtectedModule } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
+const EnhancedGovClassifier = requireProtectedModule({
+  pluginRoot: path.resolve(__dirname, '../..'),
+  pluginName: 'opspal-hubspot',
+  relativePath: 'scripts/lib/enhanced-gov-classifier.js'
+});
 const DomainAwareClassifier = require('./domain-aware-classifier');
 const HubSpotCompanyFetcher = require('./hubspot-company-fetcher');
 const WebSearchHelper = require('./web-search-helper');

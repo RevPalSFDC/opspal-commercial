@@ -2,16 +2,9 @@
 'use strict';
 
 const crypto = require('crypto');
-const fs = require('fs');
 const os = require('os');
-const path = require('path');
 
-const {
-  DEFAULT_SERVER_URL,
-  activateLicenseRequest,
-  normalizeServerUrl
-} = require('./license-auth-client');
-const { KEY_DIR, writeDomainKeyFiles } = require('./asset-encryption-engine');
+const client = require('./license-auth-client');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -29,6 +22,7 @@ function parseArgs(argv) {
     licenseKey: '',
     serverUrl: '',
     machineId: '',
+    json: false,
     help: false
   };
   const positional = [];
@@ -37,6 +31,11 @@ function parseArgs(argv) {
     const token = tokens[index];
     if (token === '--help' || token === '-h') {
       options.help = true;
+      continue;
+    }
+
+    if (token === '--json') {
+      options.json = true;
       continue;
     }
 
@@ -75,14 +74,6 @@ function parseArgs(argv) {
     options.licenseKey = positional[1];
   }
 
-  if (!options.serverUrl && process.env.OPSPAL_LICENSE_SERVER) {
-    options.serverUrl = process.env.OPSPAL_LICENSE_SERVER;
-  }
-
-  if (!options.machineId && process.env.OPSPAL_MACHINE_ID) {
-    options.machineId = process.env.OPSPAL_MACHINE_ID;
-  }
-
   return options;
 }
 
@@ -92,10 +83,6 @@ function normalizeUserEmail(value) {
 
 function isValidEmail(value) {
   return EMAIL_REGEX.test(normalizeUserEmail(value));
-}
-
-function getDefaultServerUrl() {
-  return normalizeServerUrl(process.env.OPSPAL_LICENSE_SERVER || DEFAULT_SERVER_URL);
 }
 
 function resolveMachineId(overrideValue) {
@@ -120,58 +107,16 @@ function resolveMachineId(overrideValue) {
   return `opspal-${crypto.createHash('sha256').update(fingerprint).digest('hex').slice(0, 24)}`;
 }
 
-function ensureDirectory(dirPath) {
-  fs.mkdirSync(dirPath, { recursive: true, mode: 0o700 });
-}
-
 function getCacheDir() {
-  return path.join(process.env.HOME || os.homedir(), '.opspal');
+  return client.getLicenseCacheFile().replace(/\/license-cache\.json$/, '');
 }
 
 function getLicenseCacheFile() {
-  return path.join(getCacheDir(), 'license-cache.json');
-}
-
-function cacheLicenseSession(session, options) {
-  const cacheDir = getCacheDir();
-  const cacheFile = getLicenseCacheFile();
-  ensureDirectory(cacheDir);
-
-  const cachePayload = {
-    updated_at: new Date().toISOString(),
-    server_url: options.serverUrl,
-    license_key: options.licenseKey,
-    user_email: options.userEmail,
-    machine_id: options.machineId,
-    session_token: session.session_token,
-    tier: session.tier,
-    organization: session.organization || '',
-    allowed_asset_tiers: session.allowed_asset_tiers || [],
-    tier_metadata: session.tier_metadata || {},
-    blocked_domains: session.blocked_domains || [],
-    key_bundle_version: session.key_bundle_version,
-    grace_until: session.grace_until
-  };
-
-  fs.writeFileSync(
-    cacheFile,
-    `${JSON.stringify(cachePayload, null, 2)}\n`,
-    { mode: 0o600 }
-  );
+  return client.getLicenseCacheFile();
 }
 
 function validateActivationResponse(response) {
-  if (!response || response.valid !== true) {
-    throw new Error('License server did not return a valid activation payload');
-  }
-
-  if (!response.session_token) {
-    throw new Error('License server response is missing session_token');
-  }
-
-  if (!response.key_bundle || !response.key_bundle.keys) {
-    throw new Error('License server response is missing key_bundle.keys');
-  }
+  client.validateSessionPayload(response);
 }
 
 async function activateLicense(options) {
@@ -191,25 +136,17 @@ async function activateLicense(options) {
   }
 
   const machineId = resolveMachineId(options.machineId);
-  const serverUrl = normalizeServerUrl(options.serverUrl || getDefaultServerUrl());
-  const response = await activateLicenseRequest({
-    serverUrl,
+  const response = await client.activate({
+    userEmail,
     licenseKey,
     machineId,
-    userEmail
+    serverUrl: options.serverUrl
   });
 
   validateActivationResponse(response);
-  writeDomainKeyFiles(response.key_bundle.keys);
-  cacheLicenseSession(response, {
-    serverUrl,
-    licenseKey,
-    userEmail,
-    machineId
-  });
 
   return {
-    serverUrl,
+    serverUrl: client.getServerUrl(options.serverUrl),
     machineId,
     userEmail,
     licenseKey,
@@ -217,12 +154,63 @@ async function activateLicense(options) {
   };
 }
 
+function getStatus(options = {}) {
+  return client.status({ serverUrl: options.serverUrl, machineId: options.machineId });
+}
+
+async function deactivateLicense(options = {}) {
+  return client.deactivate({ serverUrl: options.serverUrl, machineId: options.machineId });
+}
+
+function checkGuidance() {
+  const currentStatus = getStatus();
+  const showGuidance = currentStatus.status !== 'valid';
+
+  return {
+    show_guidance: showGuidance,
+    status: currentStatus.status,
+    message: showGuidance
+      ? 'OpsPal premium assets remain locked until you activate with /activate-license <email> <license-key>.'
+      : ''
+  };
+}
+
 function printUsage() {
   console.log('Usage:');
   console.log('  node license-activation-manager.js activate --email <email> --license-key <license-key> [--server <url>] [--machine-id <id>]');
+  console.log('  node license-activation-manager.js status [--json] [--server <url>]');
+  console.log('  node license-activation-manager.js deactivate [--server <url>] [--machine-id <id>]');
+  console.log('  node license-activation-manager.js check-guidance');
   console.log('');
   console.log('Positional form:');
   console.log('  node license-activation-manager.js activate <email> <license-key>');
+}
+
+function printStatus(result) {
+  console.log(`Status: ${result.status}`);
+  console.log(`Server: ${result.server_url}`);
+
+  if (result.user_email) {
+    console.log(`Email: ${result.user_email}`);
+  }
+
+  if (result.machine_id) {
+    console.log(`Machine ID: ${result.machine_id}`);
+  }
+
+  if (result.tier) {
+    console.log(`Tier: ${result.tier}`);
+  }
+
+  if (Array.isArray(result.allowed_asset_tiers) && result.allowed_asset_tiers.length > 0) {
+    console.log(`Allowed domains: ${result.allowed_asset_tiers.join(', ')}`);
+  }
+
+  if (result.grace_until) {
+    console.log(`Grace until: ${result.grace_until}`);
+  }
+
+  console.log(`Cache file: ${getLicenseCacheFile()}`);
 }
 
 async function runCli(argv = process.argv.slice(2)) {
@@ -233,19 +221,54 @@ async function runCli(argv = process.argv.slice(2)) {
     return;
   }
 
-  if (options.action !== 'activate') {
-    throw new Error(`Unsupported action: ${options.action}`);
+  switch (options.action) {
+    case 'activate': {
+      const result = await activateLicense(options);
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+        return;
+      }
+
+      console.log(`Activated ${result.licenseKey} for ${result.userEmail}`);
+      console.log(`Server: ${result.serverUrl}`);
+      console.log(`Machine ID: ${result.machineId}`);
+      console.log(`Tier: ${result.session.tier}`);
+      console.log(`Allowed domains: ${(result.session.allowed_asset_tiers || []).join(', ')}`);
+      console.log(`Cache file: ${getLicenseCacheFile()}`);
+      return;
+    }
+
+    case 'status': {
+      const result = getStatus(options);
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+        return;
+      }
+
+      printStatus(result);
+      return;
+    }
+
+    case 'deactivate': {
+      const result = await deactivateLicense(options);
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+        return;
+      }
+
+      console.log(`Deactivated ${result.license_key} on ${result.machine_id}`);
+      console.log(`Server: ${result.server_url}`);
+      return;
+    }
+
+    case 'check-guidance': {
+      console.log(JSON.stringify(checkGuidance()));
+      return;
+    }
+
+    default:
+      throw new Error(`Unsupported action: ${options.action}`);
   }
-
-  const result = await activateLicense(options);
-
-  console.log(`Activated ${result.licenseKey} for ${result.userEmail}`);
-  console.log(`Server: ${result.serverUrl}`);
-  console.log(`Machine ID: ${result.machineId}`);
-  console.log(`Tier: ${result.session.tier}`);
-  console.log(`Allowed domains: ${(result.session.allowed_asset_tiers || []).join(', ')}`);
-  console.log(`Key dir: ${KEY_DIR}`);
-  console.log(`Cache file: ${getLicenseCacheFile()}`);
 }
 
 if (require.main === module) {
@@ -258,10 +281,11 @@ if (require.main === module) {
 module.exports = {
   EMAIL_REGEX,
   activateLicense,
-  cacheLicenseSession,
+  checkGuidance,
+  deactivateLicense,
   getCacheDir,
-  getDefaultServerUrl,
   getLicenseCacheFile,
+  getStatus,
   isValidEmail,
   normalizeUserEmail,
   parseArgs,

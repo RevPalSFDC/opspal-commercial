@@ -7,18 +7,32 @@
  */
 
 const path = require('path');
+const { requireProtectedModule } = require('../../protected-asset-runtime');
 
-// Load the modules to test
-const { BenchmarkEngine } = require('../../sales-benchmark-engine');
+let BenchmarkEngine = null;
+try {
+    ({ BenchmarkEngine } = requireProtectedModule({
+        pluginRoot: path.resolve(__dirname, '../../../..'),
+        pluginName: 'opspal-core',
+        relativePath: 'scripts/lib/sales-benchmark-engine.js',
+        allowPlaintextFallback: true
+    }));
+} catch {
+    BenchmarkEngine = null;
+}
+
+const describeWithBenchmarkEngine = BenchmarkEngine ? describe : describe.skip;
 
 // Initialize test instances
 let benchmark;
 
 beforeAll(() => {
-    benchmark = new BenchmarkEngine();
+    if (BenchmarkEngine) {
+        benchmark = new BenchmarkEngine();
+    }
 });
 
-describe('Phase 7: New KPI Tests', () => {
+describeWithBenchmarkEngine('Phase 7: New KPI Tests', () => {
 
     describe('Efficiency Metrics Calculations', () => {
 

@@ -9,6 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { resolveProtectedAssetPath } = require('../../opspal-core/scripts/lib/protected-asset-runtime');
 
 const args = process.argv.slice(2);
 const options = {
@@ -55,7 +56,7 @@ function record(status, label, detail) {
 }
 
 function checkFile(relativePath, label) {
-  const fullPath = path.resolve(pluginRoot, relativePath);
+  const fullPath = path.isAbsolute(relativePath) ? relativePath : path.resolve(pluginRoot, relativePath);
   if (fs.existsSync(fullPath)) {
     record('pass', label, relativePath);
   } else {
@@ -179,7 +180,12 @@ checkFile('scripts/lib/api-usage-monitor.js', 'API usage monitor');
 checkFile('scripts/lib/approval-queue-monitor.js', 'Approval queue monitor');
 checkFile('scripts/lib/human-in-the-loop-controller.js', 'Approval controller');
 checkFile('scripts/install-claude-hooks.js', 'Hook installer');
-checkFile('config/agent-permission-matrix.json', 'Permission matrix');
+checkFile(resolveProtectedAssetPath({
+  pluginRoot,
+  pluginName: 'opspal-salesforce',
+  relativePath: 'config/agent-permission-matrix.json',
+  allowPlaintextFallback: true
+}) || 'config/agent-permission-matrix.json', 'Permission matrix');
 checkFile('config/api-usage-config.json', 'API usage config');
 checkFile('config/change-management-config.json', 'Change management config');
 

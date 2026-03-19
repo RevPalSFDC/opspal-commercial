@@ -26,10 +26,19 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     # Keep strict mode for security-critical hook
 fi
 
+ASSET_RESOLVER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh"
+if [[ -f "$ASSET_RESOLVER" ]]; then
+    source "$ASSET_RESOLVER"
+fi
+
 # Configuration
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 RISK_SCORER="$PLUGIN_ROOT/scripts/lib/agent-risk-scorer.js"
 APPROVAL_CONTROLLER="$PLUGIN_ROOT/scripts/lib/human-in-the-loop-controller.js"
+
+if declare -F resolve_enc_asset >/dev/null 2>&1; then
+    RISK_SCORER=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "scripts/lib/agent-risk-scorer.js")
+fi
 
 # Load stop prompt helper
 source "$PLUGIN_ROOT/scripts/lib/hook-stop-prompt-helper.sh"

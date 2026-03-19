@@ -20,7 +20,6 @@ const path = require('path');
 const OPSPAL_DIR = path.join(process.env.HOME, '.opspal');
 const STATE_FILE = path.join(OPSPAL_DIR, 'last-poll.json');
 const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
-const LICENSE_KEY_FILE = path.join(OPSPAL_DIR, 'license.key');
 
 const DEFAULT_INTERVAL_HOURS = 4;
 const MIN_INTERVAL_HOURS = 0.5;
@@ -34,8 +33,9 @@ function getLicenseKey() {
     return process.env.OPSPAL_LICENSE_KEY.trim();
   }
   try {
-    if (fs.existsSync(LICENSE_KEY_FILE)) {
-      return fs.readFileSync(LICENSE_KEY_FILE, 'utf8').trim();
+    if (fs.existsSync(CACHE_FILE)) {
+      const cache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+      return typeof cache.license_key === 'string' ? cache.license_key.trim() : null;
     }
   } catch { /* fall through */ }
   return null;
@@ -147,8 +147,7 @@ async function doPoll() {
     process.stderr.write('╚══════════════════════════════════════════════════════════════╝\n');
     process.stderr.write('\n');
 
-    // Wipe local credentials
-    try { fs.unlinkSync(LICENSE_KEY_FILE); } catch { /* ok */ }
+    // Wipe local cache
     try { fs.unlinkSync(CACHE_FILE); } catch { /* ok */ }
     process.stdout.write('{}');
     return;

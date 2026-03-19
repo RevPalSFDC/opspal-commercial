@@ -55,9 +55,25 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     HOOK_NAME="universal-agent-governance"
     # Keep strict mode - governance enforcement needs proper error tracking
 fi
+
+if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+    ASSET_RESOLVER="${CLAUDE_PLUGIN_ROOT}/opspal-core/hooks/lib/resolve-encrypted-asset.sh"
+else
+    ASSET_RESOLVER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh"
+fi
+
+if [[ -f "$ASSET_RESOLVER" ]]; then
+    source "$ASSET_RESOLVER"
+fi
+
 PERMISSION_MATRIX="$PLUGIN_ROOT/config/agent-permission-matrix.json"
 RISK_SCORER="$PLUGIN_ROOT/scripts/lib/agent-risk-scorer.js"
 GOVERNANCE_WRAPPER="$PLUGIN_ROOT/scripts/lib/agent-governance.js"
+
+if declare -F resolve_enc_asset >/dev/null 2>&1; then
+    PERMISSION_MATRIX=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "config/agent-permission-matrix.json")
+    RISK_SCORER=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "scripts/lib/agent-risk-scorer.js")
+fi
 
 # OutputFormatter and HookLogger
 OUTPUT_FORMATTER="${SCRIPT_DIR}/../../opspal-core/scripts/lib/output-formatter.js"

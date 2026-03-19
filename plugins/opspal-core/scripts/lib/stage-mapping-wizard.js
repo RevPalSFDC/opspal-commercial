@@ -31,6 +31,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const { resolveProtectedAssetPath } = require('./protected-asset-runtime');
 
 /**
  * Stage Mapping Wizard
@@ -40,6 +41,12 @@ class StageMappingWizard {
     this.platform = options.platform || 'salesforce';
     this.verbose = options.verbose || false;
     this.configPath = options.configPath ||
+      resolveProtectedAssetPath({
+        pluginRoot: path.resolve(__dirname, '../..'),
+        pluginName: 'opspal-core',
+        relativePath: 'config/funnel-stage-definitions.json',
+        allowPlaintextFallback: true
+      }) ||
       path.join(__dirname, '../../config/funnel-stage-definitions.json');
 
     // Load standard stage definitions

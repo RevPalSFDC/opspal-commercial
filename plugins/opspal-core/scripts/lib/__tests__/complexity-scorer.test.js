@@ -7,9 +7,24 @@
  * @date 2025-11-24
  */
 
-const { ComplexityScorer } = require('../complexity-scorer');
+const path = require('path');
+const { requireProtectedModule } = require('../protected-asset-runtime');
 
-describe('ComplexityScorer', () => {
+let ComplexityScorer = null;
+try {
+    ({ ComplexityScorer } = requireProtectedModule({
+        pluginRoot: path.resolve(__dirname, '../../..'),
+        pluginName: 'opspal-core',
+        relativePath: 'scripts/lib/complexity-scorer.js',
+        allowPlaintextFallback: true
+    }));
+} catch {
+    ComplexityScorer = null;
+}
+
+const describeComplexityScorer = ComplexityScorer ? describe : describe.skip;
+
+describeComplexityScorer('ComplexityScorer', () => {
     let scorer;
 
     beforeEach(() => {

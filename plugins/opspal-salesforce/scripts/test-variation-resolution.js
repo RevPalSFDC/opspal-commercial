@@ -17,6 +17,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const { resolveProtectedAssetPath } = require('../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Test configuration
 const CONFIG = {
@@ -176,7 +177,12 @@ async function testVariationSchema() {
 async function testCpqFieldMappings() {
   log('\n📋 Test Suite: CPQ Field Mappings', 'cyan');
 
-  const mappingsPath = path.join(__dirname, '../config/cpq-field-mappings.json');
+  const mappingsPath = resolveProtectedAssetPath({
+    pluginRoot: path.resolve(__dirname, '..'),
+    pluginName: 'opspal-salesforce',
+    relativePath: 'config/cpq-field-mappings.json',
+    allowPlaintextFallback: true
+  }) || path.join(__dirname, '../config/cpq-field-mappings.json');
 
   // Test: Mappings file exists
   assertTrue(fs.existsSync(mappingsPath), 'CPQ mappings file exists');

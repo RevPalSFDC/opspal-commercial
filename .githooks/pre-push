@@ -9,6 +9,7 @@ cd "$REPO_ROOT"
 
 echo "Running commercial pre-push guardrails..."
 npm run docs:ci >/dev/null
+npm run verify:encrypted-assets >/dev/null
 
 DEFAULT_BASE="HEAD"
 if git rev-parse --verify "${REMOTE_NAME}/main" >/dev/null 2>&1; then

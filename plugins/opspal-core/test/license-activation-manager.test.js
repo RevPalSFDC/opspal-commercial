@@ -54,9 +54,11 @@ describe('license activation manager', () => {
     });
 
     jest.doMock('../scripts/lib/license-auth-client', () => ({
-      DEFAULT_SERVER_URL: 'https://license.gorevpal.com',
-      activateLicenseRequest,
-      normalizeServerUrl: jest.requireActual('../scripts/lib/license-auth-client').normalizeServerUrl
+      activate: activateLicenseRequest,
+      getLicenseCacheFile: () => path.join(tempHome, '.opspal', 'license-cache.json'),
+      getServerUrl: () => 'https://license.gorevpal.com',
+      status: jest.fn(),
+      validateSessionPayload: jest.fn()
     }));
 
     const manager = require('../scripts/lib/license-activation-manager');
@@ -66,26 +68,15 @@ describe('license activation manager', () => {
       machineId: 'machine-01'
     });
 
-    expect(activateLicenseRequest).toHaveBeenCalledWith(expect.objectContaining({
+    expect(activateLicenseRequest).toHaveBeenCalledWith({
+      userEmail: 'user@example.com',
       licenseKey: 'OPSPAL-PRO-demo',
       machineId: 'machine-01',
-      userEmail: 'user@example.com'
-    }));
+      serverUrl: undefined
+    });
 
     expect(result.userEmail).toBe('user@example.com');
-
-    const cachePath = path.join(tempHome, '.opspal', 'license-cache.json');
-    const cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-    expect(cache).toEqual(expect.objectContaining({
-      license_key: 'OPSPAL-PRO-demo',
-      machine_id: 'machine-01',
-      user_email: 'user@example.com',
-      tier: 'professional'
-    }));
-
-    expect(fs.existsSync(path.join(tempHome, '.claude', 'opspal-enc', 'core.key'))).toBe(true);
-    expect(fs.existsSync(path.join(tempHome, '.claude', 'opspal-enc', 'salesforce.key'))).toBe(true);
-    expect(fs.existsSync(path.join(tempHome, '.claude', 'opspal-enc', 'hubspot.key'))).toBe(true);
+    expect(result.session.tier).toBe('professional');
   });
 
   test('activateLicense rejects a missing email address', async () => {
@@ -95,5 +86,20 @@ describe('license activation manager', () => {
       email: '',
       licenseKey: 'OPSPAL-PRO-demo'
     })).rejects.toThrow('Email address is required');
+  });
+
+  test('checkGuidance reports activation guidance when no valid cache exists', () => {
+    jest.doMock('../scripts/lib/license-auth-client', () => ({
+      getLicenseCacheFile: jest.fn(() => '/tmp/license-cache.json'),
+      status: jest.fn(() => ({ status: 'not_activated' })),
+      validateSessionPayload: jest.fn()
+    }));
+
+    const manager = require('../scripts/lib/license-activation-manager');
+    expect(manager.checkGuidance()).toEqual({
+      show_guidance: true,
+      status: 'not_activated',
+      message: 'OpsPal premium assets remain locked until you activate with /activate-license <email> <license-key>.'
+    });
   });
 });

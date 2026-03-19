@@ -7,9 +7,10 @@
     "docs:generate": "node scripts/generate-plugin-suite-docs.js",
     "docs:ci": "node scripts/generate-plugin-suite-docs.js --check",
     "verify:version-bumps": "node scripts/lib/verify-plugin-version-bumps.js",
+    "verify:encrypted-assets": "node scripts/lib/verify-encrypted-assets.js",
     "verify:repo-boundaries": "node scripts/lib/verify-commercial-repo-boundaries.js",
     "smoke:marketplace": "bash scripts/smoke-commercial-marketplace.sh",
-    "ci:hardening": "npm run docs:ci && npm run verify:repo-boundaries && npm run smoke:marketplace"
+    "ci:hardening": "npm run docs:ci && npm run verify:encrypted-assets && npm run verify:repo-boundaries && npm run smoke:marketplace"
   },
   "repository": {
     "type": "git",

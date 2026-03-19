@@ -17,24 +17,16 @@ behavior inside `opspal-core`.
 
 The runtime uses these files:
 
-- `~/.opspal/license.key` — stored license key
-- `~/.opspal/machine.id` — machine identifier used for activation
-- `~/.opspal/license-cache.json` — cached session token, tier metadata, and scoped key bundle
+- `~/.opspal/license-cache.json` — canonical cached activation state, including license key, user email, machine ID, session token, and scoped key bundle
 - `~/.claude/opspal-enc/runtime/{session_id}/...` — per-session decrypted assets
 
-The decryptor can also read local fallback tier keys from:
-
-- `~/.claude/opspal-enc/tier1.key`
-- `~/.claude/opspal-enc/tier2.key`
-- `~/.claude/opspal-enc/tier3.key`
-
-Those fallback files are for maintainer or controlled test use. The normal production path is the server-delivered scoped key ring injected through `OPSPAL_PLUGIN_KEYRING_JSON`.
+The commercial runtime no longer relies on `~/.opspal/license.key`, and session-start decryption no longer treats local key files as authoritative. The normal production path is the live or cached server-delivered scoped key ring injected through `OPSPAL_PLUGIN_KEYRING_JSON`.
 
 ## Runtime Flow
 
 ### 1. Activation
 
-`/activate-license <key>` stores the license key locally and performs a live session-token request against the configured license server.
+`/activate-license <email> <license-key>` performs a live session-token request against the configured license server and persists the returned scoped bundle in `license-cache.json`.
 
 The runtime sends:
 
@@ -42,6 +34,7 @@ The runtime sends:
 {
   "license_key": "OPSPAL-...",
   "machine_id": "<machine-id>",
+  "user_email": "user@example.com",
   "key_bundle_version": 2
 }
 ```
@@ -59,10 +52,7 @@ On success the runtime caches:
 - `key_bundle.version`
 - `key_bundle.keys`
 
-The cache is considered:
-
-- fresh for 24 hours
-- usable offline for up to 7 days if the license is not terminated
+The cache is the runtime source of truth and remains usable offline for up to 7 days when the cached scoped bundle is still within `grace_until`.
 
 If the server reports `terminated: true`, the runtime wipes local activation state and blocks decryption.
 
@@ -77,10 +67,11 @@ If the server reports `terminated: true`, the runtime wipes local activation sta
 The `session-start-asset-decryptor.sh` hook:
 
 1. refreshes or loads the cached license state
-2. exports `OPSPAL_PLUGIN_KEYRING_JSON` when a scoped bundle is present
+2. exports `OPSPAL_PLUGIN_KEYRING_JSON` only when a live or still-valid cached scoped bundle is present
 3. discovers plugin encryption manifests
-4. decrypts only assets whose `required_tier` is allowed by the current license
-5. writes plaintext only into the current session runtime directory
+4. decrypts only assets whose `required_domain` is allowed by the current license
+5. builds a session-local runtime overlay so protected modules can still resolve their non-protected siblings
+6. writes plaintext only into the current session runtime directory
 
 The hook also cleans up stale runtime directories from earlier crashed sessions.
 
@@ -88,14 +79,17 @@ The hook also cleans up stale runtime directories from earlier crashed sessions.
 
 The current tier map is:
 
-| License Tier | Allowed Asset Tiers |
-|--------------|---------------------|
-| `starter` | `tier3` |
-| `trial` | `tier3` |
-| `professional` | `tier2`, `tier3` |
-| `enterprise` | `tier1`, `tier2`, `tier3` |
+| License Tier | Allowed Asset Domains |
+|--------------|-----------------------|
+| `starter` | `core` |
+| `trial` | `core` |
+| `salesforce` | `core`, `salesforce` |
+| `hubspot` | `core`, `hubspot` |
+| `marketo` | `core`, `marketo` |
+| `professional` | `core`, `salesforce`, `hubspot` |
+| `enterprise` | `core`, `salesforce`, `hubspot`, `marketo`, `gtm`, `data-hygiene` |
 
-The server delivers only keys for the allowed asset tiers. The runtime must never assume access to a missing tier.
+The server delivers only keys for the allowed asset domains. The runtime must never assume access to a missing domain.
 
 ## V2 Asset Format
 

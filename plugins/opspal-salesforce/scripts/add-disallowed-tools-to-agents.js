@@ -23,6 +23,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -82,7 +83,12 @@ const TIER_RESTRICTIONS = {
 
 // Load agent permission matrix
 function loadPermissionMatrix() {
-  const matrixPath = path.join(__dirname, '../config/agent-permission-matrix.json');
+  const matrixPath = resolveProtectedAssetPath({
+    pluginRoot: path.resolve(__dirname, '..'),
+    pluginName: 'opspal-salesforce',
+    relativePath: 'config/agent-permission-matrix.json',
+    allowPlaintextFallback: true
+  }) || path.join(__dirname, '../config/agent-permission-matrix.json');
   if (!fs.existsSync(matrixPath)) {
     console.error('❌ Error: agent-permission-matrix.json not found');
     console.error(`   Expected at: ${matrixPath}`);

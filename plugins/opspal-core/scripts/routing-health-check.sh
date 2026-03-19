@@ -89,6 +89,11 @@ log_section() {
     echo "─────────────────────────────────────────────────────────"
 }
 
+asset_exists() {
+    local asset_path="$1"
+    [ -f "$asset_path" ] || [ -f "${asset_path}.enc" ]
+}
+
 run_synthetic_probe() {
     local metrics_file="$1"
     local metrics_schema="$2"
@@ -213,7 +218,7 @@ check_filesystem() {
     )
 
     for script in "${required_scripts[@]}"; do
-        if [ ! -f "$script" ]; then
+        if ! asset_exists "$script"; then
             scripts_ok=false
             break
         fi

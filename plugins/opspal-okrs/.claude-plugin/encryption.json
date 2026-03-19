@@ -1,3 +1,7 @@
 {
-  "encrypted_files": []
+  "version": 2,
+  "plugin": "opspal-okrs",
+  "encrypted_assets": [],
+  "cleanup_on_stop": true,
+  "allow_plaintext_fallback": false
 }

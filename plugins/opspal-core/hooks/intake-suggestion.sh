@@ -24,12 +24,23 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+RESOLVE_ENC_ASSET_LIB="$SCRIPT_DIR/lib/resolve-encrypted-asset.sh"
+
+if [[ -f "$RESOLVE_ENC_ASSET_LIB" ]]; then
+    # shellcheck source=/dev/null
+    source "$RESOLVE_ENC_ASSET_LIB"
+fi
 
 # Configuration
 ENABLED="${ENABLE_INTAKE_SUGGESTION:-1}"
 THRESHOLD="${INTAKE_SUGGEST_THRESHOLD:-0.5}"
 VERBOSE="${ROUTING_VERBOSE:-0}"
-COMPLEXITY_SCORER="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
+COMPLEXITY_SCORER=""
+if declare -F resolve_enc_asset >/dev/null 2>&1; then
+    COMPLEXITY_SCORER=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-core" "scripts/lib/complexity-scorer.js" 2>/dev/null || true)
+elif [[ -f "$PLUGIN_ROOT/scripts/lib/complexity-scorer.js" ]]; then
+    COMPLEXITY_SCORER="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
+fi
 
 # Exit early if disabled
 if [[ "$ENABLED" != "1" ]]; then

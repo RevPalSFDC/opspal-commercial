@@ -10,6 +10,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../protected-asset-runtime');
 
 class ComplexityCalculator {
   constructor(options = {}) {
@@ -20,7 +21,12 @@ class ComplexityCalculator {
       this.rubric = JSON.parse(fs.readFileSync(options.rubricPath, 'utf8'));
     } else {
       // Load default rubric
-      const defaultPath = path.join(__dirname, '../../../config/complexity-rubric.json');
+      const defaultPath = resolveProtectedAssetPath({
+        pluginRoot: path.resolve(__dirname, '../../..'),
+        pluginName: 'opspal-core',
+        relativePath: 'config/complexity-rubric.json',
+        allowPlaintextFallback: true
+      }) || path.join(__dirname, '../../../config/complexity-rubric.json');
       if (fs.existsSync(defaultPath)) {
         this.rubric = JSON.parse(fs.readFileSync(defaultPath, 'utf8'));
       } else {

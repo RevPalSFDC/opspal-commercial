@@ -19,7 +19,13 @@
  *   const udmArray = normalizer.normalizeAll(automations);
  */
 
-const AutomationRiskScorer = require('./automation-risk-scorer');
+const path = require('path');
+const { requireProtectedModule } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
+const AutomationRiskScorer = requireProtectedModule({
+    pluginRoot: path.resolve(__dirname, '../..'),
+    pluginName: 'opspal-salesforce',
+    relativePath: 'scripts/lib/automation-risk-scorer.js'
+});
 
 class AutomationUDMNormalizer {
     constructor() {

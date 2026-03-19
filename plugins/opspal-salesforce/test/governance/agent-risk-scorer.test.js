@@ -12,7 +12,14 @@
  */
 
 const assert = require('assert');
-const AgentRiskScorer = require('../../scripts/lib/agent-risk-scorer');
+const path = require('path');
+const { requireProtectedModule } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
+const AgentRiskScorer = requireProtectedModule({
+    pluginRoot: path.resolve(__dirname, '../..'),
+    pluginName: 'opspal-salesforce',
+    relativePath: 'scripts/lib/agent-risk-scorer.js',
+    allowPlaintextFallback: true
+});
 
 // Test suite
 const tests = [];

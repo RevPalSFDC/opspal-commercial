@@ -10,10 +10,17 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Template directory relative to plugin root
 const TEMPLATE_DIR = path.join(__dirname, '..', '..', 'templates', 'reports', 'strategic');
-const BENCHMARK_FILE = path.join(__dirname, '..', '..', 'config', 'benchmark-baseline.json');
+const PLUGIN_ROOT = path.join(__dirname, '..', '..');
+const BENCHMARK_FILE = resolveProtectedAssetPath({
+  pluginRoot: PLUGIN_ROOT,
+  pluginName: 'opspal-gtm-planning',
+  relativePath: 'config/benchmark-baseline.json',
+  allowPlaintextFallback: true
+}) || path.join(PLUGIN_ROOT, 'config', 'benchmark-baseline.json');
 
 /**
  * ReportTemplateEngine class

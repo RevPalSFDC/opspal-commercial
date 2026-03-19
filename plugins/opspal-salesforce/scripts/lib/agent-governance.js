@@ -18,11 +18,16 @@
  * @created 2025-10-25
  */
 
-const AgentRiskScorer = require('./agent-risk-scorer');
-const HumanInTheLoopController = require('./human-in-the-loop-controller');
-const AgentActionAuditLogger = require('./agent-action-audit-logger');
 const fs = require('fs');
 const path = require('path');
+const { requireProtectedModule } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
+const AgentRiskScorer = requireProtectedModule({
+    pluginRoot: path.resolve(__dirname, '../..'),
+    pluginName: 'opspal-salesforce',
+    relativePath: 'scripts/lib/agent-risk-scorer.js'
+});
+const HumanInTheLoopController = require('./human-in-the-loop-controller');
+const AgentActionAuditLogger = require('./agent-action-audit-logger');
 
 /**
  * Agent Governance class

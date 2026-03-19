@@ -14,12 +14,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const licenseClient = require('./license-auth-client');
 
 const OPSPAL_DIR = path.join(process.env.HOME, '.opspal');
-const LICENSE_KEY_FILE = path.join(OPSPAL_DIR, 'license.key');
 const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
-
-const DEFAULT_SERVER = 'https://license.gorevpal.com';
 
 // ─── Tier info (domain-scoped encryption model) ────────────────────────────
 
@@ -65,18 +63,6 @@ function tierAssetCount(tier) {
 
 // ─── Detection ──────────────────────────────────────────────────────────────
 
-function getStoredKey() {
-  if (process.env.OPSPAL_LICENSE_KEY) {
-    return process.env.OPSPAL_LICENSE_KEY.trim();
-  }
-  try {
-    if (fs.existsSync(LICENSE_KEY_FILE)) {
-      return fs.readFileSync(LICENSE_KEY_FILE, 'utf8').trim();
-    }
-  } catch { /* fall through */ }
-  return null;
-}
-
 function loadCache() {
   try {
     if (!fs.existsSync(CACHE_FILE)) return null;
@@ -87,17 +73,17 @@ function loadCache() {
 }
 
 function getServerUrl() {
-  return (process.env.OPSPAL_LICENSE_SERVER || DEFAULT_SERVER).replace(/\/$/, '');
+  return licenseClient.getServerUrl();
 }
 
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 function main() {
-  const storedKey = getStoredKey();
   const cache = loadCache();
+  const currentStatus = licenseClient.status();
 
   // Already activated
-  if (storedKey && cache && cache.valid !== false) {
+  if (currentStatus.status === 'valid' && cache && cache.license_key) {
     const tier = cache.tier || 'unknown';
     const count = tierAssetCount(tier);
     console.log(JSON.stringify({

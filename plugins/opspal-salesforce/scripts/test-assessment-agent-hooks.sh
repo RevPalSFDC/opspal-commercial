@@ -18,6 +18,13 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+ASSET_RESOLVER="$SCRIPT_DIR/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh"
+if [[ -f "$ASSET_RESOLVER" ]]; then
+    source "$ASSET_RESOLVER"
+fi
+
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -178,7 +185,12 @@ EOF
 
     # Test 1: Run cpq-scorecard-generator.js
     echo "Test 1: CPQ Scorecard Generator"
-    if node scripts/lib/cpq-scorecard-generator.js "$transcript" --output-dir "$work_dir"; then
+    local scorecard_generator="$PLUGIN_ROOT/scripts/lib/cpq-scorecard-generator.js"
+    if declare -F resolve_enc_asset >/dev/null 2>&1; then
+        scorecard_generator=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "scripts/lib/cpq-scorecard-generator.js")
+    fi
+
+    if node "$scorecard_generator" "$transcript" --output-dir "$work_dir"; then
         log_info "CPQ scorecard generator succeeded"
         TESTS_PASSED=$((TESTS_PASSED + 1))
 

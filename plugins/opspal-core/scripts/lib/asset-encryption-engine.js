@@ -153,6 +153,10 @@ function resolveKeyring() {
     return envDomainKeyring;
   }
 
+  if (process.env.OPSPAL_DISABLE_LOCAL_KEY_FILES === '1') {
+    return null;
+  }
+
   // Source 3: Key files on disk (~/.claude/opspal-enc/*.key)
   const keyring = {};
   for (const [domain, filePath] of Object.entries(DOMAIN_KEY_FILES)) {

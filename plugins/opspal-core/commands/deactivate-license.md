@@ -5,7 +5,6 @@ argument-hint: "[options]"
 intent: remove the machine-local license session and free its activation slot
 dependencies:
   - OpsPal license server
-  - ~/.opspal/license.key
   - ~/.opspal/license-cache.json
 failure_modes:
   - license server unreachable
@@ -19,7 +18,7 @@ tags:
 
 # /deactivate-license Command
 
-Remove the OpsPal license key from this machine, clear the session cache, and notify the license server to free up an activation slot.
+Remove the OpsPal cached activation from this machine, clear any cached scoped key material, and notify the license server to free up an activation slot.
 
 For backend, activation, and admin operations, use the runbooks in the sibling `opspal-license-server/docs/` directory.
 
@@ -32,8 +31,8 @@ For backend, activation, and admin operations, use the runbooks in the sibling `
 ## What It Does
 
 1. Notifies the license server to mark this machine as inactive
-2. Removes `~/.opspal/license.key`
-3. Clears `~/.opspal/license-cache.json`
+2. Clears `~/.opspal/license-cache.json`
+3. Removes any cached scoped key files under `~/.claude/opspal-enc/`
 4. Encrypted assets will no longer decrypt on this machine
 
 ## When to Use

@@ -5,10 +5,9 @@ argument-hint: "[--expect-tier <starter|professional|enterprise|trial>] [--licen
 intent: verify that this machine receives and verifies the expected v2 tier-scoped key bundle
 dependencies:
   - OpsPal license server
-  - ~/.opspal/license.key
   - ~/.opspal/license-cache.json
 failure_modes:
-  - no local or provided license key
+  - no cached activation and no provided license key
   - wrong tier or tier-scoped bundle contents
   - verification endpoint unreachable
 visibility: user-invocable

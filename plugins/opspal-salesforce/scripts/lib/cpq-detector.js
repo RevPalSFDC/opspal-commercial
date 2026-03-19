@@ -14,6 +14,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Live-first mode - query live org first, use cache only as fallback on API failure
 // Set CPQ_LIVE_FIRST=false to use cache-first behavior (not recommended)
@@ -30,8 +31,14 @@ class CPQDetector {
         this.liveFirst = options.liveFirst !== undefined ? options.liveFirst : LIVE_FIRST;
 
         // Load CPQ field mappings for reference
-        this.fieldMappingsPath = options.fieldMappingsPath ||
-            path.resolve(__dirname, '../../config/cpq-field-mappings.json');
+        this.fieldMappingsPath = options.fieldMappingsPath
+            || resolveProtectedAssetPath({
+                pluginRoot: path.resolve(__dirname, '../..'),
+                pluginName: 'opspal-salesforce',
+                relativePath: 'config/cpq-field-mappings.json',
+                allowPlaintextFallback: true
+            })
+            || path.resolve(__dirname, '../../config/cpq-field-mappings.json');
 
         this.fieldMappings = null;
     }

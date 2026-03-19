@@ -140,6 +140,11 @@ log_stage() {
     echo -e "${CYAN}═══════════════════════════════════════${NC}\n" | tee -a "$DEPLOYMENT_LOG"
 }
 
+asset_exists() {
+    local asset_path="$1"
+    [[ -f "$asset_path" || -f "${asset_path}.enc" ]]
+}
+
 # Stage: Pre-flight checks
 stage_pre_flight() {
     log_stage "STAGE 1: Pre-flight Checks"
@@ -199,7 +204,7 @@ stage_pre_flight() {
     )
 
     for file in "${required_files[@]}"; do
-        if [ ! -f "$PROJECT_ROOT/$file" ]; then
+        if ! asset_exists "$PROJECT_ROOT/$file"; then
             log_error "Required file missing: $file"
             return 1
         fi

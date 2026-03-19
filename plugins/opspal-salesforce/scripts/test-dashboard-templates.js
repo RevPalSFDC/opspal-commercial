@@ -21,16 +21,27 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Configuration
 const PLUGIN_ROOT = path.join(__dirname, '..');
 const TEMPLATES_DIR = path.join(PLUGIN_ROOT, 'templates', 'dashboards');
 const REPORTS_DIR = path.join(PLUGIN_ROOT, 'templates', 'reports');
 const REGISTRY_PATH = path.join(TEMPLATES_DIR, 'dashboard-template-registry.json');
-const PERSONA_KPI_PATH = path.join(PLUGIN_ROOT, 'config', 'persona-kpi-contracts.json');
+const PERSONA_KPI_PATH = resolveProtectedAssetPath({
+  pluginRoot: PLUGIN_ROOT,
+  pluginName: 'opspal-salesforce',
+  relativePath: 'config/persona-kpi-contracts.json',
+  allowPlaintextFallback: true
+}) || path.join(PLUGIN_ROOT, 'config', 'persona-kpi-contracts.json');
 const METRIC_DEFINITIONS_PATH = path.join(PLUGIN_ROOT, 'config', 'metric-definitions.json');
 const VARIATION_SCHEMA_PATH = path.join(PLUGIN_ROOT, 'config', 'variation-schema.json');
-const CPQ_MAPPINGS_PATH = path.join(PLUGIN_ROOT, 'config', 'cpq-field-mappings.json');
+const CPQ_MAPPINGS_PATH = resolveProtectedAssetPath({
+  pluginRoot: PLUGIN_ROOT,
+  pluginName: 'opspal-salesforce',
+  relativePath: 'config/cpq-field-mappings.json',
+  allowPlaintextFallback: true
+}) || path.join(PLUGIN_ROOT, 'config', 'cpq-field-mappings.json');
 
 // Required fields in dashboard templates
 const REQUIRED_FIELDS = [

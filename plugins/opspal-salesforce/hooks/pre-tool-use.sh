@@ -29,6 +29,16 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     HOOK_NAME="pre-tool-use"
 fi
 
+if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+    ASSET_RESOLVER="${CLAUDE_PLUGIN_ROOT}/opspal-core/hooks/lib/resolve-encrypted-asset.sh"
+else
+    ASSET_RESOLVER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh"
+fi
+
+if [[ -f "$ASSET_RESOLVER" ]]; then
+    source "$ASSET_RESOLVER"
+fi
+
 set -euo pipefail
 
 # Get plugin root
@@ -173,6 +183,9 @@ fi
 
 # Get agent tier info
 MATRIX_FILE="$PLUGIN_ROOT/config/agent-permission-matrix.json"
+if declare -F resolve_enc_asset >/dev/null 2>&1; then
+  MATRIX_FILE=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "config/agent-permission-matrix.json")
+fi
 TIER="Unknown"
 TIER_NAME="Unknown"
 

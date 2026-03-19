@@ -17,19 +17,28 @@ const path = require('path');
 const SchemaRegistry = require('./schema-registry');
 const ParseErrorHandler = require('./parse-error-handler');
 const ToolContractValidator = require('./tool-contract-validator');
+const { requireProtectedModule } = require('./protected-asset-runtime');
 
 // Conditional requires for Salesforce-specific validators
 let EnhancedDataQualityFramework;
 let EnhancedPermissionValidator;
 
 try {
-  EnhancedDataQualityFramework = require('../../../salesforce-plugin/scripts/lib/enhanced-data-quality-framework');
+  const salesforcePluginRoot = path.resolve(__dirname, '../../../opspal-salesforce');
+  if (fs.existsSync(salesforcePluginRoot)) {
+    EnhancedDataQualityFramework = requireProtectedModule({
+      pluginRoot: salesforcePluginRoot,
+      pluginName: 'opspal-salesforce',
+      relativePath: 'scripts/lib/enhanced-data-quality-framework.js',
+      allowPlaintextFallback: true
+    });
+  }
 } catch (e) {
   // Salesforce plugin not available
 }
 
 try {
-  EnhancedPermissionValidator = require('../../../salesforce-plugin/scripts/lib/validators/enhanced-permission-validator');
+  EnhancedPermissionValidator = require('../../../opspal-salesforce/scripts/lib/validators/enhanced-permission-validator');
 } catch (e) {
   // Salesforce plugin not available
 }

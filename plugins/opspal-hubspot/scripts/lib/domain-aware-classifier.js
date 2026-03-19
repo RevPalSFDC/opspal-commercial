@@ -13,7 +13,13 @@
  * provides high inherent confidence.
  */
 
-const EnhancedGovClassifier = require('./enhanced-gov-classifier');
+const path = require('path');
+const { requireProtectedModule } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
+const EnhancedGovClassifier = requireProtectedModule({
+  pluginRoot: path.resolve(__dirname, '../..'),
+  pluginName: 'opspal-hubspot',
+  relativePath: 'scripts/lib/enhanced-gov-classifier.js'
+});
 const GovDomainEnricher = require('./gov-domain-enricher');
 
 // Direct domain-to-bucket mappings for unambiguous federal/state domains

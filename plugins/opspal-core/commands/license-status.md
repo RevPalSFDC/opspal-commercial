@@ -5,7 +5,6 @@ argument-hint: "[options]"
 intent: inspect the cached machine license session and unlocked asset tiers
 dependencies:
   - ~/.opspal/license-cache.json
-  - ~/.opspal/license.key
   - OpsPal license server
 failure_modes:
   - no local license activation
@@ -29,14 +28,13 @@ Display the current license activation status including tier, organization, cach
 
 ## Output Includes
 
-- License key presence (masked)
+- Cached activation presence
 - Machine ID
 - Active license server URL
 - Subscription tier and organization
 - Cached key bundle version and scoped bundle presence
-- Cache freshness (24h validity)
 - Offline grace period status (7-day)
-- Per-tier access breakdown (Tier 1/2/3 locked/unlocked)
+- Allowed asset domains returned by the cached scoped bundle
 
 ## Recommended Follow-Up
 

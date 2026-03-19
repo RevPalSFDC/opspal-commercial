@@ -28,8 +28,14 @@ const { inferMetricId } = require('./report-semantic-validator');
 const { loadLog: loadMetricLog } = require('./metric-semantic-log');
 const { loadLog: loadDiagnosticsLog } = require('./report-diagnostics-log');
 const { appendLogEntry } = require('./persona-kpi-log');
+const { resolveProtectedAssetPath } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
 
-const DEFAULT_CONTRACTS_PATH = path.join(__dirname, '../../config/persona-kpi-contracts.json');
+const DEFAULT_CONTRACTS_PATH = resolveProtectedAssetPath({
+  pluginRoot: path.resolve(__dirname, '../..'),
+  pluginName: 'opspal-salesforce',
+  relativePath: 'config/persona-kpi-contracts.json',
+  allowPlaintextFallback: true
+}) || path.join(__dirname, '../../config/persona-kpi-contracts.json');
 const DEFAULT_METRICS_PATH = path.join(__dirname, '../../config/metric-definitions.json');
 
 function loadJson(filePath) {

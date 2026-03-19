@@ -21,11 +21,19 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('./protected-asset-runtime');
 
 class QualityGateValidator {
     constructor(options = {}) {
         this.verbose = options.verbose || false;
-        this.rulesPath = options.rulesPath || path.join(__dirname, '../../config/quality-gate-rules.json');
+        this.rulesPath = options.rulesPath
+            || resolveProtectedAssetPath({
+                pluginRoot: path.resolve(__dirname, '../..'),
+                pluginName: 'opspal-core',
+                relativePath: 'config/quality-gate-rules.json',
+                allowPlaintextFallback: true
+            })
+            || path.join(__dirname, '../../config/quality-gate-rules.json');
         this.rules = this.loadRules();
 
         this.stats = {

@@ -14,9 +14,15 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveProtectedAssetPath } = require('../../../opspal-core/scripts/lib/protected-asset-runtime');
 
 // Default path to funnel stage definitions
-const DEFAULT_DEFINITIONS_PATH = path.join(
+const DEFAULT_DEFINITIONS_PATH = resolveProtectedAssetPath({
+    pluginRoot: path.resolve(__dirname, '../../../opspal-core'),
+    pluginName: 'opspal-core',
+    relativePath: 'config/funnel-stage-definitions.json',
+    allowPlaintextFallback: true
+}) || path.join(
     __dirname,
     '../../../opspal-core/config/funnel-stage-definitions.json'
 );

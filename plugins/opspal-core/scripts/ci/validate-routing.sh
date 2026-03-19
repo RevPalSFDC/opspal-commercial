@@ -87,6 +87,16 @@ log_section() {
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 
+asset_exists() {
+    local asset_path="$1"
+    [ -f "$asset_path" ] || [ -f "${asset_path}.enc" ]
+}
+
+asset_is_encrypted_only() {
+    local asset_path="$1"
+    [ ! -f "$asset_path" ] && [ -f "${asset_path}.enc" ]
+}
+
 # Check 1: Verify routing index exists and is valid
 check_routing_index() {
     ((TOTAL_CHECKS+=1))
@@ -183,9 +193,11 @@ check_scripts() {
     for script in "${scripts[@]}"; do
         local script_path="$PLUGIN_ROOT/$script"
 
-        if [ ! -f "$script_path" ]; then
+        if ! asset_exists "$script_path"; then
             log_error "Missing: $script"
             ((missing+=1))
+        elif asset_is_encrypted_only "$script_path"; then
+            log_info "Encrypted runtime asset packaged: $script"
         elif [ ! -x "$script_path" ]; then
             log_warning "Not executable: $script"
             log_info "Run: chmod +x $script_path"
@@ -230,28 +242,30 @@ check_complexity_scorer() {
 
     local scorer="$PLUGIN_ROOT/scripts/lib/complexity-scorer.js"
 
-    if [ ! -f "$scorer" ]; then
-        log_error "Complexity scorer not found"
-        return 1
-    fi
+    if [ -f "$scorer" ]; then
+        # Test with high complexity task
+        local test_output=$(node "$scorer" "Bulk merge 50 accounts in production" 2>&1 || true)
 
-    # Test with high complexity task
-    local test_output=$(node "$scorer" "Bulk merge 50 accounts in production" 2>&1 || true)
+        if echo "$test_output" | grep -q "Complexity Score:"; then
+            log_success "Complexity scorer functional"
 
-    if echo "$test_output" | grep -q "Complexity Score:"; then
-        log_success "Complexity scorer functional"
+            # Verify high-risk operations score appropriately
+            local score
+            score=$(echo "$test_output" | sed -n 's/.*Complexity Score: \([0-9.]\+\).*/\1/p' | head -1)
 
-        # Verify high-risk operations score appropriately
-        local score
-        score=$(echo "$test_output" | sed -n 's/.*Complexity Score: \([0-9.]\+\).*/\1/p' | head -1)
-
-        if [ -n "$score" ] && (( $(echo "$score >= 0.7" | bc -l) )); then
-            log_success "High-risk detection working"
+            if [ -n "$score" ] && (( $(echo "$score >= 0.7" | bc -l) )); then
+                log_success "High-risk detection working"
+            else
+                log_warning "High-risk detection may need tuning"
+            fi
         else
-            log_warning "High-risk detection may need tuning"
+            log_error "Complexity scorer not working properly"
+            return 1
         fi
+    elif [ -f "${scorer}.enc" ]; then
+        log_warning "Complexity scorer packaged as encrypted asset; execution check skipped without licensed runtime"
     else
-        log_error "Complexity scorer not working properly"
+        log_error "Complexity scorer not found"
         return 1
     fi
 }

@@ -40,7 +40,9 @@ RUNTIME_BASE="$ENC_BASE_DIR/runtime"
 SESSION_ID="${CLAUDE_SESSION_ID:-$(date +%s)-$$}"
 SESSION_DIR="$RUNTIME_BASE/$SESSION_ID"
 DECRYPTOR_SCRIPT="$PLUGIN_ROOT/scripts/lib/asset-encryption-engine.js"
+RUNTIME_HELPER_SCRIPT="$PLUGIN_ROOT/scripts/lib/protected-asset-runtime.js"
 MANIFEST_NAME=".claude-plugin/encryption.json"
+MESSAGES=()
 
 log_verbose() {
     if [[ "$VERBOSE" = "1" ]]; then
@@ -162,7 +164,7 @@ LICENSE_AUTH_CLIENT="$PLUGIN_ROOT/scripts/lib/license-auth-client.js"
 ALLOWED_TIERS=""
 LICENSE_TERMINATED=0
 
-if [[ -f "$LICENSE_AUTH_CLIENT" ]] && [[ -n "${OPSPAL_LICENSE_KEY:-}" || -f "$HOME/.opspal/license.key" ]]; then
+if [[ -f "$LICENSE_AUTH_CLIENT" ]]; then
     log_verbose "Checking license for tier-gated decryption..."
     LICENSE_RESULT=$(node "$LICENSE_AUTH_CLIENT" session-token 2>/dev/null) || true
 
@@ -178,7 +180,7 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]] && [[ -n "${OPSPAL_LICENSE_KEY:-}" || -f "$HO
             MESSAGES+=("License terminated: decryption blocked. Contact support@gorevpal.com")
         elif echo "$LICENSE_RESULT" | node -e '
             const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
-            process.exit(d.valid !== false ? 0 : 1);
+            process.exit(d.valid === true ? 0 : 1);
         ' 2>/dev/null; then
             # Valid license — extract allowed tiers and server-delivered key material
             ALLOWED_TIERS=$(echo "$LICENSE_RESULT" | node -e '
@@ -198,7 +200,15 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]] && [[ -n "${OPSPAL_LICENSE_KEY:-}" || -f "$HO
                 export OPSPAL_PLUGIN_KEYRING_JSON="$SERVER_KEYRING"
                 log_verbose "Using server-delivered scoped keyring (tier: $(echo "$LICENSE_RESULT" | node -e 'const d=JSON.parse(require(\"fs\").readFileSync(\"/dev/stdin\",\"utf8\"));console.log(d.tier||\"unknown\")' 2>/dev/null))"
             else
-                log_verbose "License is valid but no scoped keyring was delivered; falling back to local tier key sources if available"
+                log_verbose "License is valid but no scoped keyring was delivered"
+            fi
+        else
+            LICENSE_ERROR=$(echo "$LICENSE_RESULT" | node -e '
+                const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+                console.log(d.message || d.error || "");
+            ' 2>/dev/null || echo "")
+            if [[ -n "$LICENSE_ERROR" ]]; then
+                MESSAGES+=("$LICENSE_ERROR")
             fi
         fi
     fi
@@ -237,15 +247,18 @@ decrypt_plugin_assets() {
     # Use Node.js to iterate assets and decrypt — all paths via env vars (Fix C1/C2/C3)
     # ENC_ALLOWED_TIERS: comma-separated tiers the license allows (empty = no filtering)
     ENC_ENGINE="$DECRYPTOR_SCRIPT" \
+    ENC_RUNTIME_HELPER="$RUNTIME_HELPER_SCRIPT" \
     ENC_MANIFEST="$manifest_path" \
     ENC_PLUGIN_DIR="$plugin_dir" \
     ENC_SESSION_DIR="$SESSION_DIR" \
     ENC_ALLOWED_TIERS="$ALLOWED_TIERS" \
     ENC_LICENSE_TERMINATED="$LICENSE_TERMINATED" \
+    OPSPAL_DISABLE_LOCAL_KEY_FILES="1" \
     node -e '
         const engine = require(process.env.ENC_ENGINE);
         const fs = require("fs");
         const path = require("path");
+        const runtime = require(process.env.ENC_RUNTIME_HELPER);
 
         // If license was terminated, skip all decryption
         if (process.env.ENC_LICENSE_TERMINATED === "1") {
@@ -257,6 +270,12 @@ decrypt_plugin_assets() {
         const pluginName = manifest.plugin;
         const pluginDir = process.env.ENC_PLUGIN_DIR;
         const sessionDir = process.env.ENC_SESSION_DIR;
+        runtime.prepareRuntimeOverlay({
+            pluginDir,
+            pluginName,
+            sessionDir,
+            manifest
+        });
         const keyMaterial = engine.resolveKeyMaterial(pluginName);
 
         if (!keyMaterial) {
@@ -365,7 +384,6 @@ echo "$SESSION_DIR" > "$RUNTIME_BASE/.current-session" 2>/dev/null || true
 ALL_RESULTS="[]"
 ALL_BLOCKED="[]"
 ASSETS_BLOCKED=0
-MESSAGES=()
 
 while IFS= read -r plugin_dir; do
     [[ -n "$plugin_dir" ]] || continue
@@ -377,7 +395,7 @@ while IFS= read -r plugin_dir; do
             const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
             console.log(d.plugin || "unknown");
         ' 2>/dev/null || echo "unknown")
-        MESSAGES+=("Encrypted assets skipped for $plugin_name: no decrypt key material configured. Run /encrypt-assets key-setup")
+        MESSAGES+=("Encrypted assets remain locked for $plugin_name until this machine has a valid OpsPal license. Run /activate-license <email> <license-key>.")
         continue
     fi
 
