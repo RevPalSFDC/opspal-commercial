@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ZERO_SHA="0000000000000000000000000000000000000000"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+REMOTE_NAME="${1:-origin}"
+
+cd "$REPO_ROOT"
+
+echo "Running commercial pre-push guardrails..."
+npm run docs:ci >/dev/null
+
+DEFAULT_BASE="HEAD"
+if git rev-parse --verify "${REMOTE_NAME}/main" >/dev/null 2>&1; then
+  DEFAULT_BASE="$(git merge-base HEAD "${REMOTE_NAME}/main")"
+elif git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+  DEFAULT_BASE="$(git rev-parse HEAD^)"
+fi
+
+ran_range_check="false"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ -z "${local_sha:-}" ] || [ "$local_sha" = "$ZERO_SHA" ]; then
+    continue
+  fi
+
+  base_ref="$remote_sha"
+  if [ -z "${base_ref:-}" ] || [ "$base_ref" = "$ZERO_SHA" ]; then
+    base_ref="$DEFAULT_BASE"
+  fi
+
+  node scripts/lib/verify-plugin-version-bumps.js --base "$base_ref" --head "$local_sha" >/dev/null
+  node scripts/lib/verify-commercial-repo-boundaries.js --base "$base_ref" --head "$local_sha" >/dev/null
+  ran_range_check="true"
+done
+
+if [ "$ran_range_check" != "true" ]; then
+  node scripts/lib/verify-plugin-version-bumps.js --base "$DEFAULT_BASE" --head HEAD >/dev/null
+  node scripts/lib/verify-commercial-repo-boundaries.js --base "$DEFAULT_BASE" --head HEAD >/dev/null
+fi
+
+echo "Commercial pre-push guardrails passed."

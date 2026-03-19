@@ -49,58 +49,70 @@ Run all docs gates locally before commit:
 npm run docs:ci
 ```
 
-Equivalent individual gates:
+Commercial hardening commands:
 
-- `npm run docs:check`
-- `npm run docs:lint`
-- `npm run docs:lint:baseline` (refresh warning baseline intentionally)
-- `npm run docs:verify-routing`
-- `npm run docs:verify-commands`
-- `npm run docs:verify-version-bumps`
-- `npm run docs:verify-hook-path-isolation`
-- `npm run docs:verify-lifecycle-metadata`
-- `npm run docs:verify-lifecycle-metadata:baseline` (refresh lifecycle baseline intentionally)
-- `npm run docs:verify-architecture-boundaries`
-- `npm run docs:verify-architecture-boundaries:baseline` (refresh boundary baseline intentionally)
-- `npm run docs:verify-shell-safety`
-- `npm run docs:verify-shell-safety:baseline` (refresh shell-safety baseline intentionally)
+- `npm run docs:generate`
+- `npm run docs:ci`
+- `npm run verify:version-bumps -- --base <base-ref> --head HEAD`
+- `npm run verify:repo-boundaries`
+- `npm run smoke:marketplace`
+- `npm run ci:hardening`
 
-`docs:lint` enforces a non-regression warning baseline from `docs/docs-lint-baseline.json`.
-If warning debt is intentionally reduced or reclassified, regenerate the baseline with `npm run docs:lint:baseline` and commit the baseline file in the same change.
-
-`docs:verify-lifecycle-metadata` and `docs:verify-architecture-boundaries` are also baseline-guarded.
-These gates fail on net-new violations while allowing existing legacy debt to be paid down incrementally.
+`verify:version-bumps` is diff-aware and should be run with an explicit base ref locally when validating a branch.
+Any tracked change under `plugins/<plugin>/` must ship with a higher `.claude-plugin/plugin.json` version for that plugin.
 
 ## Local Workflow
 
 1. Make plugin metadata/content changes.
 2. Regenerate docs: `npm run docs:generate`.
 3. Validate docs and integrity: `npm run docs:ci`.
-4. Commit source + regenerated docs together.
+4. Validate repo boundaries: `npm run verify:repo-boundaries`.
+5. Run smoke validation: `npm run smoke:marketplace`.
+6. Validate plugin version bumps against your base branch: `npm run verify:version-bumps -- --base origin/main --head HEAD`.
+7. Commit source + regenerated docs together.
 
 ## Git Hook Guardrail
 
 Optional local enforcement:
 
 - `git config core.hooksPath .githooks`
-- `.githooks/pre-commit` runs `npm run docs:ci`
+- `.githooks/pre-push` runs `npm run docs:ci`, the plugin version bump gate, and the commercial repo-boundary gate against the refs being pushed
 
 ## CI Enforcement
 
-GitHub workflow `documentation-drift-check.yml` runs docs validation gates on plugin/doc generator changes.
+GitHub workflow `.github/workflows/plugin-validation.yml` runs:
 
-GitHub workflow `docs-gardening.yml` runs a weekly scheduled maintenance pass:
+- manifest structure validation for every commercial plugin
+- `npm run docs:ci`
+- `npm run smoke:marketplace`
 
-- Regenerates docs
-- Runs `npm run docs:ci`
-- Opens/updates a GitHub issue if drift or gate failures are detected
+GitHub workflow `.github/workflows/plugin-version-enforcement.yml` runs:
+
+- the diff-aware plugin version bump gate
+- the commercial repo-boundary gate
+
+GitHub workflow `.github/workflows/workflow-integrity.yml` lints workflow definitions.
+
+GitHub workflow `.github/workflows/release-readiness.yml` validates manifest/tag readiness.
+
+Branch protection must require these checks on `main`:
+
+- `Validate Suite Catalog Artifacts`
+- `Smoke Test Commercial Marketplace`
+- `Enforce Plugin Version Bumps`
+- `Validate Commercial Repo Boundaries`
+- `Lint Workflow Definitions`
+- `Validate Release Configuration`
 
 If CI fails:
 
 1. Run `npm run docs:generate`
 2. Run `npm run docs:ci`
-3. Commit regenerated outputs
-4. Re-run checks
+3. Run `npm run verify:repo-boundaries`
+4. Run `npm run smoke:marketplace`
+5. If plugin content changed, run `npm run verify:version-bumps -- --base origin/main --head HEAD`
+6. Commit regenerated outputs and the required plugin version bump
+7. Re-run checks
 
 ## Main Push Release Notes
 
@@ -124,6 +136,7 @@ Before release or tag:
 
 1. `npm run docs:generate`
 2. `npm run docs:ci`
-3. Confirm `AGENTS.md` runtime matrix reflects expected plugin state
-4. Confirm `docs/PLUGIN_SUITE_CATALOG.md` includes new/renamed components
-5. Confirm `docs/PLUGIN_OWNERSHIP_AND_LIFECYCLE.md` reflects expected ownership/lifecycle metadata coverage
+3. `npm run smoke:marketplace`
+4. Confirm every changed plugin has a higher `.claude-plugin/plugin.json` version than the base branch
+5. Confirm `docs/PLUGIN_SUITE_CATALOG.md` includes new/renamed components
+6. Confirm `docs/PLUGIN_OWNERSHIP_AND_LIFECYCLE.md` reflects expected ownership/lifecycle metadata coverage

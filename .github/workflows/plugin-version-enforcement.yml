@@ -1,4 +1,4 @@
-name: Plugin Version Enforcement
+name: Commercial Change Enforcement
 
 on:
   push:
@@ -6,13 +6,19 @@ on:
     paths:
       - 'plugins/**'
       - 'scripts/lib/verify-plugin-version-bumps.js'
+      - 'scripts/lib/verify-commercial-repo-boundaries.js'
       - 'package.json'
+      - '.githooks/**'
+      - '.github/workflows/plugin-version-enforcement.yml'
   pull_request:
     branches: [ main, develop ]
     paths:
       - 'plugins/**'
       - 'scripts/lib/verify-plugin-version-bumps.js'
+      - 'scripts/lib/verify-commercial-repo-boundaries.js'
       - 'package.json'
+      - '.githooks/**'
+      - '.github/workflows/plugin-version-enforcement.yml'
   workflow_dispatch:
 
 jobs:
@@ -44,4 +50,34 @@ jobs:
             node scripts/lib/verify-plugin-version-bumps.js --base "$BEFORE_SHA" --head "HEAD"
           else
             node scripts/lib/verify-plugin-version-bumps.js --base "HEAD~1" --head "HEAD"
+          fi
+
+  validate-repo-boundaries:
+    name: Validate Commercial Repo Boundaries
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run repo boundary gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ] && [ -n "$BASE_REF" ]; then
+            git fetch origin "$BASE_REF" --depth=1
+            node scripts/lib/verify-commercial-repo-boundaries.js --base "origin/$BASE_REF" --head "HEAD"
+          elif [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            node scripts/lib/verify-commercial-repo-boundaries.js --base "$BEFORE_SHA" --head "HEAD"
+          else
+            node scripts/lib/verify-commercial-repo-boundaries.js --base "HEAD~1" --head "HEAD"
           fi
