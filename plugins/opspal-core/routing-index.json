@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-19T18:21:19.578Z",
+  "buildDate": "2026-03-19T20:07:07.901Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 271,
-  "totalHooks": 231,
+  "totalHooks": 227,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48720,7 +48720,7 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "Agent(*)"
+        "matcher": "Agent"
       },
       {
         "plugin": "opspal-core",
@@ -48755,42 +48755,42 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__salesforce*"
+        "matcher": "^mcp__salesforce.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__hubspot*"
+        "matcher": "^mcp__hubspot.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__marketo*"
+        "matcher": "^mcp__marketo.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__gong*"
+        "matcher": "^mcp__gong.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__fireflies*"
+        "matcher": "^mcp__fireflies.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "Write(*SESSION_REFLECTION*)"
+        "matcher": "Write"
       },
       {
         "plugin": "opspal-core",
@@ -48902,21 +48902,7 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "Bash(sf project deploy*)"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "Bash(sf data query*)"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "Bash(sf sobject describe*)"
+        "matcher": "Bash"
       }
     ],
     "UserPromptSubmit": [
@@ -48941,7 +48927,7 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "Agent(*)"
+        "matcher": "Agent"
       },
       {
         "plugin": "opspal-core",
@@ -48962,21 +48948,21 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__salesforce*"
+        "matcher": "^mcp__salesforce.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__hubspot*"
+        "matcher": "^mcp__hubspot.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__marketo*"
+        "matcher": "^mcp__marketo.*$"
       },
       {
         "plugin": "opspal-core",
@@ -48990,14 +48976,14 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__gong*"
+        "matcher": "^mcp__gong.*$"
       },
       {
         "plugin": "opspal-core",
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "mcp__fireflies*"
+        "matcher": "^mcp__fireflies.*$"
       },
       {
         "plugin": "opspal-core",
@@ -49144,21 +49130,7 @@
         "name": "unknown",
         "description": "",
         "file": null,
-        "matcher": "Bash(sf project deploy*)"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "Bash(sf data query*)"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "Bash(*jq*)"
+        "matcher": "Bash"
       },
       {
         "plugin": "opspal-salesforce",
@@ -50353,7 +50325,7 @@
     "totalAgents": 299,
     "totalAgentsFull": 302,
     "totalCommands": 271,
-    "totalHooks": 231,
+    "totalHooks": 227,
     "totalRoutingRules": 0,
     "totalKeywords": 2782,
     "totalKeywordsFull": 2782,
@@ -50365,9 +50337,9 @@
     "agentsWithToolsFull": 302,
     "avgKeywordsPerAgent": "16.01",
     "hooksByEvent": {
-      "PostToolUse": 31,
+      "PostToolUse": 29,
       "UserPromptSubmit": 2,
-      "PreToolUse": 34,
+      "PreToolUse": 32,
       "PermissionRequest": 1,
       "PreCompact": 1,
       "SessionStart": 6,

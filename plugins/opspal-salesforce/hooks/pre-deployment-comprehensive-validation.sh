@@ -83,7 +83,17 @@ else
     log_error() { echo "[$(date '+%H:%M:%S')] ✗ $1"; }
 fi
 
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
 if [ "$PRETOOLUSE_MODE" = "1" ]; then
+    local_deploy_command=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
+    if [[ -z "$local_deploy_command" ]] || ! printf '%s' "$local_deploy_command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+        exit 0
+    fi
+
     # PreToolUse hooks must emit JSON or nothing on stdout.
     exec 3>&1 1>&2
 fi
@@ -91,7 +101,14 @@ fi
 emit_block() {
     local message="$1"
     if [ "$PRETOOLUSE_MODE" = "1" ]; then
-        jq -Rn --arg message "$message" '{"permissionDecision":"block","systemMessage":$message}' >&3
+        jq -Rn --arg message "$message" '{
+          suppressOutput: true,
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            permissionDecision: "deny",
+            permissionDecisionReason: $message
+          }
+        }' >&3
     fi
 }
 
@@ -751,7 +768,7 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
 
     if [ "$PRETOOLUSE_MODE" = "1" ]; then
         emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed. Review stderr for details or set SKIP_COMPREHENSIVE_VALIDATION=1 to bypass."
-        exit $EXIT_VALIDATION_ERROR
+        exit 0
     elif [ -f "$OUTPUT_FORMATTER" ]; then
         node "$OUTPUT_FORMATTER" error \
             "Deployment Validation Failed" \

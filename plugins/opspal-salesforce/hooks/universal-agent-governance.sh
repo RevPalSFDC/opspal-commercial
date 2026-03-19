@@ -91,8 +91,31 @@ HOOK_NAME="universal-agent-governance"
 # Parse context from environment or Claude Code task metadata
 ###############################################################################
 
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+# This hook uses exit-code-based control, so keep stdout clean.
+exec 1>&2
+
 # Detect agent name from context
-AGENT_NAME="${AGENT_NAME:-unknown}"
+AGENT_NAME="${AGENT_NAME:-${CLAUDE_AGENT_NAME:-${CLAUDE_TASK_AGENT:-unknown}}}"
+
+if [[ -n "$HOOK_INPUT" ]]; then
+    AGENT_NAME=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // empty' 2>/dev/null || echo "$AGENT_NAME")
+fi
+
+AGENT_NAME=$(echo "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')
+
+# Only apply Salesforce-local governance to Salesforce agents.
+case "$AGENT_NAME" in
+    *salesforce*|sfdc-*)
+        ;;
+    *)
+        exit 0
+        ;;
+esac
 
 # Try to detect from task metadata
 if [ -z "$AGENT_NAME" ] || [ "$AGENT_NAME" = "unknown" ]; then
@@ -218,7 +241,7 @@ if [[ "$BLOCKED" == "true" ]] || [[ "$RISK_SCORE" -ge 71 ]]; then
             "Agent:$AGENT_NAME,Tier:$AGENT_TIER,Risk Score:$RISK_SCORE/100,Risk Level:$RISK_LEVEL,Environment:$ENVIRONMENT,Operation:$OPERATION_TYPE" \
             "Detailed business justification required,Executive approval (2+ approvers) required,Comprehensive rollback plan required,Test in full sandbox first,Backup affected data if destructive,Request approval: node $PLUGIN_ROOT/scripts/lib/human-in-the-loop-controller.js request <approval-request.json>" \
             "Emergency override: export AGENT_GOVERNANCE_OVERRIDE=true; OVERRIDE_REASON=\"ticket #XXXXX\"; OVERRIDE_APPROVER=\"your-email\""
-        exit 1
+        exit 2
     else
         echo ""
         echo -e "${RED}❌ OPERATION BLOCKED${NC}"
@@ -240,7 +263,7 @@ if [[ "$BLOCKED" == "true" ]] || [[ "$RISK_SCORE" -ge 71 ]]; then
         echo "   export OVERRIDE_REASON=\"Production outage - ticket #XXXXX\""
         echo "   export OVERRIDE_APPROVER=\"your-email@example.com\""
         echo ""
-        exit 1
+        exit 2
     fi
 fi
 
@@ -289,14 +312,14 @@ if [[ "$REQUIRES_APPROVAL" == "true" ]] || [[ "$TIER_REQUIRES_APPROVAL" == "true
                 "Agent:$AGENT_NAME,Tier:$AGENT_TIER,Risk:$RISK_SCORE/100 ($RISK_LEVEL),Environment:$ENVIRONMENT,Approvers:$APPROVERS" \
                 "Create approval request file,Submit via: node $PLUGIN_ROOT/scripts/lib/human-in-the-loop-controller.js request approval-request.json,Include detailed reasoning and rollback plan" \
                 "Non-interactive environment detected"
-            exit 1
+            exit 2
         else
             echo ""
             echo "   Non-interactive environment detected."
             echo "   Create approval request file and submit manually:"
             echo ""
             echo "   node $PLUGIN_ROOT/scripts/lib/human-in-the-loop-controller.js request approval-request.json"
-            exit 1
+            exit 2
         fi
     fi
 

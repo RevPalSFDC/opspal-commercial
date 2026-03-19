@@ -212,6 +212,75 @@ async function runAllTests() {
     assertNoStructuredDeny(result, 'Read-only tool should not be denied');
   }));
 
+  results.push(await runTest('Allows read-only Slack MCP tools while routing requirement is pending', async () => {
+    const sessionId = 'pending-slack-session';
+    writeRoutingState(tempHome, sessionId, {
+      session_key: sessionId,
+      route_id: 'intake-required',
+      action: 'BLOCKED',
+      recommended_agent: 'opspal-core:intelligent-intake-orchestrator',
+      clearance_agents: ['opspal-core:intelligent-intake-orchestrator'],
+      blocked: true,
+      status: 'pending',
+      created_at: Math.floor(Date.now() / 1000),
+      updated_at: Math.floor(Date.now() / 1000),
+      expires_at: Math.floor(Date.now() / 1000) + 600
+    });
+
+    const result = await tester.run({
+      input: {
+        tool: 'mcp__slack__conversations_replies',
+        sessionKey: sessionId,
+        input: { channel_id: 'C123', thread_ts: '1773673563.161709' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_SESSION_ID: sessionId
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Read-only Slack MCP tools should still pass');
+    assertNoStructuredDeny(result, 'Read-only Slack MCP tool should not be denied');
+  }));
+
+  results.push(await runTest('Does not enforce stale recommended routing state as a pending block', async () => {
+    const sessionId = 'pending-recommended-session';
+    writeRoutingState(tempHome, sessionId, {
+      session_key: sessionId,
+      route_id: 'permission-maintenance',
+      action: 'RECOMMENDED',
+      recommended_agent: 'opspal-salesforce:sfdc-permission-orchestrator',
+      clearance_agents: ['opspal-salesforce:sfdc-permission-orchestrator'],
+      blocked: false,
+      enforced_block: false,
+      mandatory: false,
+      status: 'pending',
+      created_at: Math.floor(Date.now() / 1000),
+      updated_at: Math.floor(Date.now() / 1000),
+      expires_at: Math.floor(Date.now() / 1000) + 600
+    });
+
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: sessionId,
+        input: { command: 'echo "recommended route stays advisory"' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_SESSION_ID: sessionId,
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Recommended routing state should not deny execution');
+    assertNoStructuredDeny(result, 'Recommended routing state should stay advisory');
+  }));
+
   results.push(await runTest('Skips pending-route denial when routing state is bypassed', async () => {
     const sessionId = 'bypassed-route-session';
     writeRoutingState(tempHome, sessionId, {

@@ -1066,17 +1066,9 @@ if [[ "$PROCEDURAL_REQUEST" == "true" ]] &&
     SHOULD_BLOCK="false"
 fi
 
-# Persist medium-complexity specialist recommendations for the PreToolUse gate
-# without turning them into prompt-time hard blocks.
+# Persist only enforceable routes for the PreToolUse gate. Recommendation-only
+# routes stay advisory and should not activate pending-route enforcement.
 SHOULD_PERSIST_ROUTE="$SHOULD_BLOCK"
-if [[ "$SHOULD_PERSIST_ROUTE" != "true" ]] &&
-   [[ "$ACTION_TYPE" == "RECOMMENDED" ]] &&
-   [[ -n "$SUGGESTED_AGENT" ]] &&
-   [[ "$PROCEDURAL_REQUEST" != "true" ]] &&
-   float_ge "${COMPLEXITY:-0}" "0.5" &&
-   ! float_ge "${COMPLEXITY:-0}" "0.7"; then
-    SHOULD_PERSIST_ROUTE="true"
-fi
 
 BLOCK_REASON=""
 if [[ "$IS_MANDATORY" == "true" ]] && [[ "$SHOULD_BLOCK" == "true" ]]; then

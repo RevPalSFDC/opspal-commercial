@@ -25,14 +25,12 @@ CROSS_PLATFORM_ROOT="${PLUGIN_ROOT}/../opspal-core"
 # Read hook input from stdin
 HOOK_INPUT=$(cat)
 
-# Extract tool name and result
-TOOL_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_name // ""')
-TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_output // ""')
+# Extract the completed command and result payload
+COMMAND=$(echo "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
+TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_result.stdout // .result.stdout // .tool_output // ""' 2>/dev/null || echo "")
 
 # Only validate sf data query results
-if [[ "$TOOL_NAME" != *"data query"* ]] && [[ "$TOOL_NAME" != *"data_query"* ]]; then
-    # Not a query tool, pass through
-    echo '{"continue": true}'
+if [[ -z "$COMMAND" ]] || ! printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
     exit 0
 fi
 

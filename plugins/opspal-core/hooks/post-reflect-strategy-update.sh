@@ -51,6 +51,15 @@ if ! command -v node &> /dev/null; then
   exit 0
 fi
 
+# Claude matchers only see the tool name, so guard on the written file path here
+# instead of relying on an argument-shaped matcher.
+HOOK_INPUT="$(cat 2>/dev/null || true)"
+WRITE_PATH="$(echo "$HOOK_INPUT" | jq -r '.tool_input.file_path // .input.file_path // .file_path // ""' 2>/dev/null || echo "")"
+WRITE_PATH_LOWER="$(printf '%s' "$WRITE_PATH" | tr '[:upper:]' '[:lower:]')"
+if [[ -z "$WRITE_PATH_LOWER" ]] || [[ "$WRITE_PATH_LOWER" != *"reflection"* ]]; then
+  exit 0
+fi
+
 # Find the most recent reflection file
 find_recent_reflection() {
   local claude_dir="${HOME}/.claude"

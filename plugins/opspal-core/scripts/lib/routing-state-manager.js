@@ -217,11 +217,19 @@ function checkState(sessionKey) {
   }
 
   const pending = ACTIVE_STATUSES.has(state.status);
+  const action = String(state.action || '').trim().toUpperCase();
+  const enforceableAction = toBoolean(state.blocked) ||
+    toBoolean(state.mandatory) ||
+    toBoolean(state.enforced_block) ||
+    action === 'BLOCKED' ||
+    action === 'INTAKE_REQUIRED' ||
+    action === 'MANDATORY_BLOCKED' ||
+    action === 'MANDATORY_ALERT';
 
   return {
     hasState: true,
     pending,
-    enforce: pending && !toBoolean(state.override_applied),
+    enforce: pending && enforceableAction && !toBoolean(state.override_applied),
     bypassed: state.status === 'bypassed' || toBoolean(state.override_applied),
     cleared: state.status === 'cleared',
     blocked: toBoolean(state.blocked),

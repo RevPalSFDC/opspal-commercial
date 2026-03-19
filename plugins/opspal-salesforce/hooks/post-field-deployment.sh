@@ -17,6 +17,14 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$SCRIPT_DIR")}"
 WAIT_TIMEOUT="${FIELD_WAIT_TIMEOUT:-60}"
 POLL_INTERVAL="${FIELD_POLL_INTERVAL:-5}"
 VERBOSE="${FIELD_DEPLOYMENT_VERBOSE:-0}"
+HOOK_INPUT="$(cat 2>/dev/null || true)"
+COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")"
+
+# This hook now runs behind a plain Bash matcher. Exit unless the completed
+# command was a Salesforce deploy.
+if [[ -z "$COMMAND" ]] || ! printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+    exit 0
+fi
 
 # Colors for output
 RED='\033[0;31m'

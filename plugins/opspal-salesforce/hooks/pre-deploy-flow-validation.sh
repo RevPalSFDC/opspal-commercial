@@ -40,13 +40,30 @@ fi
 
 set -e
 
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
 # Redirect all informational output to stderr — PreToolUse hooks must output JSON or nothing on stdout
 exec 3>&1 1>&2
 
 emit_block() {
     local message="$1"
-    jq -Rn --arg message "$message" '{"permissionDecision":"block","systemMessage":$message}' >&3
+    jq -Rn --arg message "$message" '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: $message
+      }
+    }' >&3
 }
+
+DEPLOY_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
+if [[ -z "$DEPLOY_COMMAND" ]] || ! printf '%s' "$DEPLOY_COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+    exit 0
+fi
 
 # Check if flow validation should be skipped
 if [ "$SKIP_FLOW_VALIDATION" = "1" ]; then
@@ -225,7 +242,7 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
     echo ""
     echo "⏭️  Skip validation with: SKIP_FLOW_VALIDATION=1"
     emit_block "Flow validation failed: $LOGIC_ERRORS logic error(s), $STRUCTURAL_ERRORS structural error(s), $DUPLICATE_ERRORS duplicate assignment error(s), $FIELD_EXISTENCE_ERRORS field existence error(s). Fix issues or set SKIP_FLOW_VALIDATION=1 to bypass."
-    exit $EXIT_VALIDATION_ERROR
+    exit 0
 fi
 
 echo "✅ All flows validated successfully"

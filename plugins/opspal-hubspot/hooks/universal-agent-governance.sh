@@ -61,9 +61,27 @@ if [[ "$GOVERNANCE_ENABLED" != "true" ]]; then
   exit 0
 fi
 
-# Parse agent name from environment
+# Read hook input for additional context
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+  HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+# Parse agent name from the live Agent payload first, then fall back to env.
 AGENT_NAME="${CLAUDE_AGENT_NAME:-${CLAUDE_TASK_AGENT:-unknown}}"
+if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
+  AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // empty' 2>/dev/null || echo "$AGENT_NAME")
+fi
 AGENT_NAME=$(echo "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')
+
+# Only apply this governance hook to HubSpot-local agents.
+case "$AGENT_NAME" in
+  *hubspot*)
+    ;;
+  *)
+    exit 0
+    ;;
+esac
 
 # Skip self-governance agents
 case "$AGENT_NAME" in
@@ -80,12 +98,6 @@ RISK_LEVEL="LOW"
 RISK_REASON=""
 REQUIRES_APPROVAL="false"
 BLOCKED="false"
-
-# Read hook input for additional context
-HOOK_INPUT=""
-if [ ! -t 0 ]; then
-  HOOK_INPUT=$(cat 2>/dev/null || true)
-fi
 
 PROMPT=""
 if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
@@ -174,8 +186,7 @@ if [[ "$BLOCKED" == "true" ]]; then
   echo "  Risk: $RISK_LEVEL — $RISK_REASON" >&2
   echo "  Action: Operation denied. Use [GOVERNANCE_OVERRIDE] with justification." >&2
   echo "" >&2
-  [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
-  exit 1
+  exit 2
 fi
 
 # HIGH — approval warning
@@ -192,6 +203,4 @@ if [[ "$RISK_LEVEL" == "MEDIUM" ]]; then
   echo -e "${BLUE}HubSpot Governance: $RISK_REASON${NC}" >&2
 fi
 
-# Pass through
-[ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
 exit 0

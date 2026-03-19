@@ -13,7 +13,7 @@
         ]
       },
       {
-        "matcher": "Bash(sf project deploy*)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
@@ -38,23 +38,13 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-report-quality-gate.sh",
             "timeout": 60000,
             "description": "Validate report and dashboard quality before deployment"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash(sf data query*)",
-        "hooks": [
+          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-soql-validator.sh",
             "timeout": 10000,
             "description": "Validate SOQL field names before query execution to prevent INVALID_FIELD errors"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash(*jq*)",
-        "hooks": [
+          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-jq-validator.sh",
@@ -85,19 +75,14 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Bash(sf project deploy*)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-field-deployment.sh",
             "timeout": 30000,
             "description": "Verify field accessibility after deployment before proceeding"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash(sf data query*)",
-        "hooks": [
+          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-sf-query-validation.sh",
@@ -108,18 +93,7 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
             "timeout": 5000,
-            "description": "Provide recovery guidance for INVALID_FIELD and other SOQL errors"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash(sf sobject describe*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
-            "timeout": 5000,
-            "description": "Provide recovery guidance for describe failures"
+            "description": "Provide recovery guidance for query and describe failures"
           }
         ]
       }

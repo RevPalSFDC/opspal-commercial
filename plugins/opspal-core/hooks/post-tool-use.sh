@@ -703,6 +703,7 @@ check_routing_compliance() {
   local session_key=""
   local routing_state="{}"
   local pending="false"
+  local enforce="false"
   local recommended_agent=""
   local action_type=""
 
@@ -728,10 +729,11 @@ check_routing_compliance() {
 
   routing_state=$(node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo "{}")
   pending=$(echo "$routing_state" | jq -r '.pending // false' 2>/dev/null || echo "false")
+  enforce=$(echo "$routing_state" | jq -r '.enforce // false' 2>/dev/null || echo "false")
   recommended_agent=$(echo "$routing_state" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
   action_type=$(echo "$routing_state" | jq -r '.action // ""' 2>/dev/null || echo "")
 
-  if [ "$pending" != "true" ]; then
+  if [ "$pending" != "true" ] || [ "$enforce" != "true" ]; then
     return 0
   fi
 

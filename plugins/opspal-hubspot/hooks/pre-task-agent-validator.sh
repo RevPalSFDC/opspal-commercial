@@ -47,6 +47,14 @@ if [[ -z "$AGENT_NAME" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 
     AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // ""' 2>/dev/null || echo "")
 fi
 
+AGENT_NAME_LOWER="$(printf '%s' "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')"
+
+# Only validate HubSpot-local agent launches here. Other plugin agents should
+# not inherit HubSpot routing behavior just because this plugin is enabled.
+if [[ -z "$AGENT_NAME_LOWER" ]] || [[ "$AGENT_NAME_LOWER" != *"hubspot"* ]]; then
+    exit 0
+fi
+
 # Exit if no task description
 if [[ -z "$TASK_DESC" ]]; then
     # Not blocking - just informational

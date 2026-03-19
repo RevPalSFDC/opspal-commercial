@@ -16,20 +16,21 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 # Color codes for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-BLINK='\033[5m'
-NC='\033[0m' # No Color
+: "${RED:=\033[0;31m}"
+: "${GREEN:=\033[0;32m}"
+: "${YELLOW:=\033[1;33m}"
+: "${BLUE:=\033[0;34m}"
+: "${PURPLE:=\033[0;35m}"
+: "${CYAN:=\033[0;36m}"
+: "${BOLD:=\033[1m}"
+: "${BLINK:=\033[5m}"
+: "${NC:=\033[0m}" # No Color
 
 # Get the user's input/task
 TASK_INPUT="$1"
 OPERATION_TYPE="${2:-unknown}"
 BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
+AGENT_NAME="${AGENT_NAME:-}"
 
 HOOK_INPUT=""
 if [[ ! -t 0 ]]; then
@@ -39,6 +40,23 @@ fi
 if [[ -z "$TASK_INPUT" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
     TASK_INPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // ""' 2>/dev/null || echo "")
 fi
+
+if [[ -z "$AGENT_NAME" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
+    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // ""' 2>/dev/null || echo "")
+fi
+
+AGENT_NAME_LOWER="$(printf '%s' "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')"
+
+# Only apply this governance to HubSpot agents. Other plugin agent launches
+# should never be blocked by HubSpot-local policy.
+if [[ -z "$AGENT_NAME_LOWER" ]] || [[ "$AGENT_NAME_LOWER" != *"hubspot"* ]]; then
+    exit 0
+fi
+
+# PreToolUse command hooks should keep stdout clean unless they emit structured
+# control JSON. This hook uses exit code blocking semantics, so user feedback
+# belongs on stderr only.
+exec 1>&2
 
 # Log file for tracking
 LOG_FILE="/tmp/agent-hook-mandatory-hubspot.log"
@@ -96,7 +114,6 @@ display_mandatory_requirement() {
     local category="$1"
     local required_agent="${REQUIRED_AGENTS[$category]}"
 
-    clear
     echo ""
     echo -e "${RED}${BLINK}╔════════════════════════════════════════════════════════╗${NC}"
     echo -e "${RED}${BOLD}║           🛑 AGENT REQUIRED - STOP! 🛑                ║${NC}"
@@ -163,7 +180,8 @@ check_bypass_attempt() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
     # Check if user is trying to bypass
-    if echo "$task" | grep -iE "force|bypass|skip.*check|ignore.*warning" > /dev/null; then
+    local bypass_pattern='(^|[[:space:][:punct:]])(bypass|skip([[:space:]-]+(the[[:space:]-]+)?)?checks?|ignore([[:space:]-]+(the[[:space:]-]+)?)?warnings?|override([[:space:]-]+(the[[:space:]-]+)?)?(checks?|gate|guardrail)|force[[:space:]-]+(it|this|execution|run|deploy|merge|delete)|without[[:space:]-]+(checks?|validation|approval))($|[[:space:][:punct:]])'
+    if echo "$task" | grep -iE "$bypass_pattern" > /dev/null; then
         echo ""
         echo -e "${RED}${BOLD}⚠️  BYPASS ATTEMPT DETECTED ⚠️${NC}"
         echo -e "${RED}Attempting to bypass safety checks is not allowed.${NC}"

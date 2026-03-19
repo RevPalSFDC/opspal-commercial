@@ -546,11 +546,9 @@ class RoutingIndexBuilder {
                         name: hook.name || path.basename(hook.file || 'unknown', '.sh'),
                         description: hook.description || '',
                         file: hook.file || null,
-                        matcher: hook.matcher === 'Task(*)'
-                            ? 'Agent(*)'
-                            : hook.matcher === 'Task'
-                                ? 'Agent'
-                                : (hook.matcher || null)
+                        matcher: hook.matcher === 'Task(*)' || hook.matcher === 'Task' || hook.matcher === 'Agent(*)'
+                            ? 'Agent'
+                            : (hook.matcher || null)
                     });
                 }
 

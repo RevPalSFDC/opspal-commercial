@@ -17,15 +17,15 @@ This repository is the commercial OpsPal marketplace. It publishes 10 plugins an
 | Plugin | Version | Status |
 |--------|---------|--------|
 | `opspal-ai-consult` | 1.4.6 | active |
-| `opspal-core` | 2.42.5 | active |
+| `opspal-core` | 2.42.6 | active |
 | `opspal-data-hygiene` | 1.2.0 | deprecated |
-| `opspal-gtm-planning` | 2.3.1 | active |
-| `opspal-hubspot` | 3.9.1 | active |
+| `opspal-gtm-planning` | 2.3.2 | active |
+| `opspal-hubspot` | 3.9.2 | active |
 | `opspal-marketo` | 2.6.16 | active |
 | `opspal-mcp-client` | 1.1.0 | active |
 | `opspal-monday` | 1.4.5 | experimental |
 | `opspal-okrs` | 3.0.4 | active |
-| `opspal-salesforce` | 3.84.1 | active |
+| `opspal-salesforce` | 3.84.2 | active |
 
 ## Updating
 

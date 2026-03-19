@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-03-10",
+  "lastUpdated": "2026-03-19",
   "defaults": {
     "unknownPendingRouteAction": "deny",
     "unknownMutability": "unknown"
@@ -119,6 +119,26 @@
       "mutability": "mutating",
       "pendingRouteAction": "deny",
       "notes": "Asana task/project mutations."
+    },
+    {
+      "id": "slack-read-only",
+      "patterns": [
+        "^mcp__slack__(conversations_(history|replies|info|members)|users_(info|list)|search_messages|files_info|team_info|bookmarks_list)$"
+      ],
+      "namespace": "slack",
+      "mutability": "read_only",
+      "pendingRouteAction": "allow",
+      "notes": "Slack thread, channel, user, and message retrieval surfaces."
+    },
+    {
+      "id": "slack-mutating",
+      "patterns": [
+        "^mcp__slack__(chat_(postMessage|update|delete)|conversations_(create|invite|kick|rename|setTopic|setPurpose|archive|unarchive)|reactions_(add|remove)|pins_(add|remove)|bookmarks_(add|edit|remove)|files_upload)$"
+      ],
+      "namespace": "slack",
+      "mutability": "mutating",
+      "pendingRouteAction": "deny",
+      "notes": "Slack posting, channel administration, and message mutation surfaces."
     },
     {
       "id": "gong-read-only",

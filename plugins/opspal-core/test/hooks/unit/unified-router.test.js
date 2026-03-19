@@ -316,14 +316,7 @@ async function runAllTests() {
     assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Should classify as RECOMMENDED');
     assert.strictEqual(result.output?.metadata?.blocked, false, 'Should not classify as blocked');
     assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should not enforce hard block');
-    const routingState = readRoutingState(env);
-    assert(routingState, 'Medium-complexity recommended route should persist pending routing state');
-    assert.strictEqual(routingState.status, 'pending', 'Recommended route should remain pending until Agent clears it');
-    assert.strictEqual(
-      routingState.recommended_agent,
-      'opspal-salesforce:sfdc-permission-orchestrator',
-      'Recommended route should persist the permission orchestrator'
-    );
+    assert.strictEqual(readRoutingState(env), null, 'Recommended routes should stay advisory and not persist pending state');
   }));
 
   results.push(await runTest('Downgrades procedural specialist requests to recommended routing', async () => {

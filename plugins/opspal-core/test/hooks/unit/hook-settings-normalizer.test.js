@@ -161,6 +161,15 @@ async function runAllTests() {
                 command: `${legacyRoot}/plugins/opspal-salesforce/hooks/pre-bash-soql-validator.sh`
               }
             ]
+          },
+          {
+            matcher: 'Agent',
+            hooks: [
+              {
+                type: 'command',
+                command: `${legacyRoot}/plugins/opspal-core/hooks/pre-task-runbook-reminder.sh`
+              }
+            ]
           }
         ],
         PostToolUse: [

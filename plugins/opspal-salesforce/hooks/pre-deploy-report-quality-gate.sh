@@ -47,8 +47,18 @@ fi
 
 set -e
 
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
 # Redirect all informational output to stderr — PreToolUse hooks must output JSON or nothing on stdout
 exec 3>&1 1>&2
+
+DEPLOY_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
+if [[ -z "$DEPLOY_COMMAND" ]] || ! printf '%s' "$DEPLOY_COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+    exit 0
+fi
 
 # Check if quality gate should be skipped
 if [ "$SKIP_REPORT_QUALITY_GATE" = "1" ]; then
@@ -386,8 +396,17 @@ if [ "$TOTAL_ERRORS" -gt 0 ]; then
     echo "     REPORT_MIN_HEALTH_SCORE=$MIN_HEALTH_SCORE"
     echo "     DASHBOARD_MIN_ACTIONABILITY=$MIN_ACTIONABILITY"
     # Emit blocking decision on original stdout (fd 3)
-    echo '{"permissionDecision":"block","systemMessage":"Report quality gate failed: '$REPORT_ERRORS' report error(s), '$DASHBOARD_ERRORS' dashboard error(s). Fix issues or set SKIP_REPORT_QUALITY_GATE=1 to bypass."}' >&3
-    exit $EXIT_VALIDATION_ERROR
+    jq -Rn \
+      --arg message "Report quality gate failed: $REPORT_ERRORS report error(s), $DASHBOARD_ERRORS dashboard error(s). Fix issues or set SKIP_REPORT_QUALITY_GATE=1 to bypass." \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "deny",
+          permissionDecisionReason: $message
+        }
+      }' >&3
+    exit 0
 fi
 
 echo "✅ Report Quality Gate PASSED"

@@ -387,17 +387,34 @@ async function runAllTests() {
     });
   }));
 
-  results.push(await runTest('Recommended specialist route denies operational tool until approved Agent clears it', async () => {
-    await assertPendingRouteLifecycle({
-      name: 'permission maintenance route',
-      prompt: 'Add all new fields to the Account Taxonomy Permission Set',
-      directTool: {
+  results.push(await runTest('Recommended specialist route stays advisory for direct operational tools', async () => {
+    const env = createIsolatedEnv();
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const pretool = new HookTester(PRETOOL_HOOK);
+
+    const routed = await router.run({
+      input: { userPrompt: 'Add all new fields to the Account Taxonomy Permission Set' },
+      env
+    });
+    assert.strictEqual(routed.exitCode, 0, 'Recommended routing prompt should succeed');
+    assert.strictEqual(
+      routed.output?.metadata?.agent,
+      'opspal-salesforce:sfdc-permission-orchestrator',
+      'Permission maintenance should still recommend the specialist'
+    );
+    assert.strictEqual(routed.output?.metadata?.action, 'RECOMMENDED', 'Permission maintenance should remain recommendation-only');
+    assert.strictEqual(readRoutingState(env), null, 'Recommendation-only routing should not persist pending state');
+
+    const allowedDirect = await pretool.run({
+      input: {
         tool: 'Edit',
+        sessionKey: env.CLAUDE_SESSION_ID,
         input: { file_path: 'force-app/main/default/permissionsets/Account_Taxonomy.permissionset-meta.xml' }
       },
-      expectedRouteAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
-      approvedTaskAgent: 'opspal-salesforce:sfdc-permission-orchestrator'
+      env
     });
+    assert.strictEqual(allowedDirect.exitCode, 0, 'Recommendation-only routing should not block direct operational tools');
+    assertNoStructuredDeny(allowedDirect, 'Recommendation-only routing should remain advisory');
   }));
 
   results.push(await runTest('Release routing denies mutating MCP tool until deployment specialist clears it', async () => {

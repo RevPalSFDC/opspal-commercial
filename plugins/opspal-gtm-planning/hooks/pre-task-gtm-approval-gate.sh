@@ -52,14 +52,12 @@ case "$AGENT_LOWER" in
   *gtm-planning*|*gtm-strategy*|*gtm-territory*|*gtm-quota*|*gtm-comp*|*gtm-attribution*|*gtm-data*|*gtm-revenue*|*gtm-retention*|*gtm-market*|*gtm-strategic*|*forecast-orchestrator*)
     ;;
   *)
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
     exit 0
     ;;
 esac
 
 # Require ORG_SLUG
 if [[ -z "${ORG_SLUG:-}" ]]; then
-  [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
   exit 0
 fi
 
@@ -83,7 +81,6 @@ REQUIRED_PHASE=$(get_agent_phase "$AGENT_LOWER")
 
 # Phase 0 = reporting/analytics agents, no gate needed
 if [[ "$REQUIRED_PHASE" == "0" ]]; then
-  [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
   exit 0
 fi
 
@@ -104,13 +101,11 @@ fi
 # No state file = no enforcement (first run)
 if [[ -z "$STATE_FILE" ]] || [[ ! -f "$STATE_FILE" ]]; then
   echo "[GTM-GATE] No cycle-state.json found — running without gate enforcement" >&2
-  [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
   exit 0
 fi
 
 # Read phase states
 if ! command -v jq &>/dev/null; then
-  [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
   exit 0
 fi
 
@@ -138,7 +133,6 @@ if [[ "$BLOCKED" == "true" ]]; then
     echo "[GTM-GATE] BLOCKED: Agent ${AGENT_NAME} requires Phase ${REQUIRED_PHASE}, but prerequisite phases incomplete: ${MISSING_GATES}" >&2
     echo "[GTM-GATE] Complete and approve prerequisite phases before proceeding." >&2
     echo "[GTM-GATE] To override: export GTM_APPROVAL_GATE_STRICT=0" >&2
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
     exit 2
   else
     echo "[GTM-GATE] WARNING: Agent ${AGENT_NAME} (Phase ${REQUIRED_PHASE}) invoked but prerequisite phases incomplete: ${MISSING_GATES}" >&2
@@ -153,6 +147,4 @@ if [[ "$REQUIRED_PHASE" -gt "$CURRENT_PHASE" ]] && [[ "$BLOCKED" != "true" ]]; t
     mv "$TMP_STATE" "$STATE_FILE" || rm -f "$TMP_STATE"
 fi
 
-# Pass through
-[ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
 exit 0

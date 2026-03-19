@@ -235,7 +235,12 @@ function normalizeProjectHookSettings(settings, options = {}) {
         const basename = extractScriptBasename(hook.command);
         if (
           eventType === 'PreToolUse' &&
-          (originalMatcher === 'Task(*)' || originalMatcher === 'Agent(*)') &&
+          (
+            originalMatcher === 'Task(*)' ||
+            originalMatcher === 'Task' ||
+            originalMatcher === 'Agent(*)' ||
+            originalMatcher === 'Agent'
+          ) &&
           PRETASK_CONTEXT_BASENAMES.has(basename)
         ) {
           continue;
