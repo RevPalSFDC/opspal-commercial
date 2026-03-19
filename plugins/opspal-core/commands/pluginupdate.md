@@ -17,21 +17,22 @@ find_plugin_script() {
   local script_name="$1"
   local search_paths=(
     "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name}"
+    "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib/$script_name"
+    "$HOME/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/lib/$script_name"
     "$PWD/plugins/opspal-core/scripts/lib/$script_name"
     "$PWD/.claude-plugins/opspal-core/scripts/lib/$script_name"
     "./plugins/opspal-core/scripts/lib/$script_name"
     "./.claude-plugins/opspal-core/scripts/lib/$script_name"
-    "$HOME/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/$script_name"
   )
   for path in "${search_paths[@]}"; do
     [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0
   done
   # Fallback: use find command
-  local found=$(find . -name "$script_name" -path "*/opspal-core/scripts/lib/*" 2>/dev/null | head -1)
+  local found=$(find "$HOME/.claude/plugins/marketplaces" "$HOME/.claude/plugins/cache" . -name "$script_name" -path "*/opspal-core/scripts/lib/*" 2>/dev/null | head -1)
   [ -n "$found" ] && echo "$found" && return 0
   echo "Error: $script_name not found in:" >&2
   printf '  %s\n' "${search_paths[@]}" >&2
-  echo "  (also tried: find . -name $script_name)" >&2
+  echo "  (also tried: find \$HOME/.claude/plugins/marketplaces \$HOME/.claude/plugins/cache . -name $script_name)" >&2
   return 1
 }
 

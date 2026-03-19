@@ -23,6 +23,10 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const {
+  DEFAULT_MARKETPLACE_NAME,
+  listMarketplaceNames
+} = require('./marketplace-config');
 
 // ============================================================================
 // Configuration
@@ -47,15 +51,21 @@ const CONFIG = {
     (projectRoot) => path.join(projectRoot, 'docs', 'reminder.md'),
     // Local development - inside plugin directory
     (projectRoot) => path.join(projectRoot, '.claude-plugins', 'opspal-core', 'docs', 'reminder.md'),
-    // Installed from marketplace (revpal-internal-plugins)
+    // Installed from marketplace cache
     () => {
-      const cacheBase = path.join(os.homedir(), '.claude', 'plugins', 'cache', 'revpal-internal-plugins', 'opspal-core');
-      if (fs.existsSync(cacheBase)) {
-        const entries = fs.readdirSync(cacheBase);
-        for (const entry of entries) {
-          const reminderPath = path.join(cacheBase, entry, 'docs', 'reminder.md');
-          if (fs.existsSync(reminderPath)) {
-            return reminderPath;
+      const cacheRoot = path.join(os.homedir(), '.claude', 'plugins', 'cache');
+      if (fs.existsSync(cacheRoot)) {
+        for (const marketplaceName of fs.readdirSync(cacheRoot)) {
+          const cacheBase = path.join(cacheRoot, marketplaceName, 'opspal-core');
+          if (!fs.existsSync(cacheBase)) {
+            continue;
+          }
+          const entries = fs.readdirSync(cacheBase);
+          for (const entry of entries) {
+            const reminderPath = path.join(cacheBase, entry, 'docs', 'reminder.md');
+            if (fs.existsSync(reminderPath)) {
+              return reminderPath;
+            }
           }
         }
       }
@@ -93,12 +103,13 @@ const MANAGED_USER_PROMPT_HOOKS = [
 ];
 const USER_LEVEL_PROJECT_OWNED_EVENTS = new Set(['SessionStart', 'PreToolUse', 'PostToolUse']);
 const USER_LEVEL_PROJECT_HOOK_PATTERNS = [
+  DEFAULT_MARKETPLACE_NAME,
   'opspal-internal-plugins',
   `.claude-plugins/${['opspal', 'salesforce'].join('-')}`,
   'session-start-repo-sync.sh',
   'post-git-push-slack-notifier.sh'
 ];
-const INTERNAL_PLUGIN_KEY = 'opspal-core@revpal-internal-plugins';
+const CORE_PLUGIN_NAME = 'opspal-core';
 
 // ============================================================================
 // ANSI Colors
@@ -485,14 +496,56 @@ class PostPluginUpdateFixes {
     return path.join(claudeRoot, 'plugins', 'installed_plugins.json');
   }
 
-  getCachePluginBase(claudeRoot = this.getClaudeRoots()[0]) {
+  getMarketplaceNames() {
+    return listMarketplaceNames({
+      projectDir: this.projectRoot,
+      scriptDir: __dirname,
+      pluginName: CORE_PLUGIN_NAME
+    });
+  }
+
+  getCachePluginBase(claudeRoot = this.getClaudeRoots()[0], marketplaceName = this.getMarketplaceNames()[0]) {
     return path.join(
       claudeRoot,
       'plugins',
       'cache',
-      'revpal-internal-plugins',
-      'opspal-core'
+      marketplaceName,
+      CORE_PLUGIN_NAME
     );
+  }
+
+  getCachePluginBases(claudeRoot = this.getClaudeRoots()[0]) {
+    const bases = [];
+    const seen = new Set();
+    const addBase = (candidate) => {
+      if (!candidate || !fs.existsSync(candidate)) {
+        return;
+      }
+
+      const resolvedCandidate = path.resolve(candidate);
+      if (seen.has(resolvedCandidate)) {
+        return;
+      }
+
+      seen.add(resolvedCandidate);
+      bases.push(resolvedCandidate);
+    };
+
+    const cacheRoot = path.join(claudeRoot, 'plugins', 'cache');
+    for (const marketplaceName of this.getMarketplaceNames()) {
+      addBase(this.getCachePluginBase(claudeRoot, marketplaceName));
+    }
+
+    if (fs.existsSync(cacheRoot)) {
+      for (const entry of fs.readdirSync(cacheRoot, { withFileTypes: true })) {
+        if (!entry.isDirectory()) {
+          continue;
+        }
+        addBase(path.join(cacheRoot, entry.name, CORE_PLUGIN_NAME));
+      }
+    }
+
+    return bases;
   }
 
   getMarketplacePluginRoot(claudeRoot = this.getClaudeRoots()[0]) {
@@ -501,23 +554,14 @@ class PostPluginUpdateFixes {
 
   getMarketplacePluginRoots(claudeRoot = this.getClaudeRoots()[0]) {
     const roots = [];
-    const directPath = path.join(
-      claudeRoot,
-      'plugins',
-      'marketplaces',
-      'revpal-internal-plugins',
-      'plugins',
-      'opspal-core'
-    );
-
-    if (fs.existsSync(directPath)) {
-      roots.push(path.resolve(directPath));
-    }
-
     const marketplaceBase = path.join(claudeRoot, 'plugins', 'marketplaces');
     if (fs.existsSync(marketplaceBase)) {
-      for (const entry of fs.readdirSync(marketplaceBase)) {
-        const candidate = path.join(marketplaceBase, entry, 'plugins', 'opspal-core');
+      for (const entry of fs.readdirSync(marketplaceBase, { withFileTypes: true })) {
+        if (!entry.isDirectory()) {
+          continue;
+        }
+
+        const candidate = path.join(marketplaceBase, entry.name, 'plugins', CORE_PLUGIN_NAME);
         if (fs.existsSync(candidate)) {
           roots.push(path.resolve(candidate));
         }
@@ -528,12 +572,7 @@ class PostPluginUpdateFixes {
   }
 
   getCachePluginRoots(claudeRoot = this.getClaudeRoots()[0]) {
-    const cacheBase = this.getCachePluginBase(claudeRoot);
-    if (!fs.existsSync(cacheBase)) {
-      return [];
-    }
-
-    return fs.readdirSync(cacheBase)
+    return this.getCachePluginBases(claudeRoot).flatMap((cacheBase) => fs.readdirSync(cacheBase)
       .map((entry) => path.join(cacheBase, entry))
       .filter((candidate) => {
         try {
@@ -542,7 +581,33 @@ class PostPluginUpdateFixes {
           return false;
         }
       })
-      .map((candidate) => path.resolve(candidate));
+      .map((candidate) => path.resolve(candidate)));
+  }
+
+  getInstalledPluginRecords(installedPlugins) {
+    const pluginMap = installedPlugins?.plugins;
+    if (!pluginMap || typeof pluginMap !== 'object') {
+      return [];
+    }
+
+    const preferredNames = this.getMarketplaceNames();
+    const preferredOrder = new Map(preferredNames.map((name, index) => [name, index]));
+
+    return Object.entries(pluginMap)
+      .filter(([key, entries]) => key.startsWith(`${CORE_PLUGIN_NAME}@`) && Array.isArray(entries) && entries.length > 0)
+      .map(([key, entries]) => ({
+        key,
+        entries,
+        marketplaceName: key.split('@')[1] || preferredNames[0] || DEFAULT_MARKETPLACE_NAME
+      }))
+      .sort((left, right) => {
+        const leftOrder = preferredOrder.get(left.marketplaceName) ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = preferredOrder.get(right.marketplaceName) ?? Number.MAX_SAFE_INTEGER;
+        if (leftOrder !== rightOrder) {
+          return leftOrder - rightOrder;
+        }
+        return left.key.localeCompare(right.key);
+      });
   }
 
   getCorePluginCandidates() {
@@ -824,70 +889,72 @@ class PostPluginUpdateFixes {
         continue;
       }
 
-      const entries = installedPlugins?.plugins?.[INTERNAL_PLUGIN_KEY];
-      if (!Array.isArray(entries) || entries.length === 0) {
+      const records = this.getInstalledPluginRecords(installedPlugins);
+      if (records.length === 0) {
         this.results.installedRuntime.checks.push({
           name: `installed-runtime:${claudeRoot}`,
           status: 'skipped',
-          message: `${INTERNAL_PLUGIN_KEY} not installed under ${claudeRoot}`
+          message: `${CORE_PLUGIN_NAME} is not installed under ${claudeRoot}`
         });
         continue;
       }
 
-      const expectedInstallPath = path.join(
-        this.getCachePluginBase(claudeRoot),
-        syncSource.version
-      );
-      checkedEntries += entries.length;
-      const rootIssues = [];
+      for (const record of records) {
+        const expectedInstallPath = path.join(
+          this.getCachePluginBase(claudeRoot, record.marketplaceName),
+          syncSource.version
+        );
+        checkedEntries += record.entries.length;
+        const rootIssues = [];
 
-      for (const entry of entries) {
-        const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
-          ? entry.installPath
-          : expectedInstallPath;
+        for (const entry of record.entries) {
+          const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
+            ? entry.installPath
+            : expectedInstallPath;
 
-        if (entry?.version !== syncSource.version) {
-          rootIssues.push(`installed version ${entry?.version || 'missing'} != ${syncSource.version}`);
+          if (entry?.version !== syncSource.version) {
+            rootIssues.push(`installed version ${entry?.version || 'missing'} != ${syncSource.version}`);
+          }
+          if (path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath)) {
+            rootIssues.push(`installPath drifted: ${currentInstallPath}`);
+          }
+
+          const runtimeInspection = this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version);
+          if (!runtimeInspection.ok) {
+            rootIssues.push(...runtimeInspection.issues);
+          }
         }
-        if (path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath)) {
-          rootIssues.push(`installPath drifted: ${currentInstallPath}`);
+
+        if (this.strict && record.entries.length > 1) {
+          rootIssues.push(`strict mode requires a single install record (found ${record.entries.length})`);
         }
 
-        const runtimeInspection = this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version);
-        if (!runtimeInspection.ok) {
-          rootIssues.push(...runtimeInspection.issues);
+        const staleVersionDirs = this.strict
+          ? this.listStaleVersionDirectories(this.getCachePluginBase(claudeRoot, record.marketplaceName), syncSource.version)
+          : [];
+        if (this.strict && staleVersionDirs.length > 0) {
+          rootIssues.push(`strict mode found stale cache versions: ${staleVersionDirs.map((dir) => path.basename(dir)).join(', ')}`);
         }
-      }
 
-      if (this.strict && entries.length > 1) {
-        rootIssues.push(`strict mode requires a single install record (found ${entries.length})`);
-      }
-
-      const staleVersionDirs = this.strict
-        ? this.listStaleVersionDirectories(this.getCachePluginBase(claudeRoot), syncSource.version)
-        : [];
-      if (this.strict && staleVersionDirs.length > 0) {
-        rootIssues.push(`strict mode found stale cache versions: ${staleVersionDirs.map((dir) => path.basename(dir)).join(', ')}`);
-      }
-
-      if (rootIssues.length === 0) {
-        this.results.installedRuntime.checks.push({
-          name: `installed-runtime:${claudeRoot}`,
-          status: 'valid',
-          message: `${expectedInstallPath} matches source version ${syncSource.version}`
-        });
-      } else {
-        issues.push(...rootIssues.map((issue) => `${claudeRoot}: ${issue}`));
-        this.results.installedRuntime.checks.push({
-          name: `installed-runtime:${claudeRoot}`,
-          status: 'drifted',
-          message: rootIssues.join('; ')
-        });
+        if (rootIssues.length === 0) {
+          this.results.installedRuntime.checks.push({
+            name: `installed-runtime:${claudeRoot}:${record.key}`,
+            status: 'valid',
+            message: `${expectedInstallPath} matches source version ${syncSource.version}`
+          });
+        } else {
+          issues.push(...rootIssues.map((issue) => `${claudeRoot} (${record.key}): ${issue}`));
+          this.results.installedRuntime.checks.push({
+            name: `installed-runtime:${claudeRoot}:${record.key}`,
+            status: 'drifted',
+            message: rootIssues.join('; ')
+          });
+        }
       }
     }
 
     if (checkedEntries === 0) {
-      const message = `No installed ${INTERNAL_PLUGIN_KEY} entries found in configured Claude roots`;
+      const message = `No installed ${CORE_PLUGIN_NAME} marketplace entries found in configured Claude roots`;
       this.log(`${icons.info} ${message}`);
       this.results.installedRuntime.checks.push({
         name: 'installed-runtime',
@@ -950,99 +1017,101 @@ class PostPluginUpdateFixes {
         continue;
       }
 
-      const entries = installedPlugins?.plugins?.[INTERNAL_PLUGIN_KEY];
-      if (!Array.isArray(entries) || entries.length === 0) {
+      const records = this.getInstalledPluginRecords(installedPlugins);
+      if (records.length === 0) {
         continue;
       }
 
-      installedEntriesFound += entries.length;
-      const expectedInstallPath = path.join(
-        this.getCachePluginBase(claudeRoot),
-        syncSource.version
-      );
-      const staleVersionDirs = this.strict
-        ? this.listStaleVersionDirectories(this.getCachePluginBase(claudeRoot), syncSource.version)
-        : [];
-      const strictMetadataDrift = this.strict && entries.length > 1;
-
-      const needsRepair = entries.some((entry) => {
-        const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
-          ? entry.installPath
-          : expectedInstallPath;
-        return (
-          entry?.version !== syncSource.version ||
-          path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath) ||
-          !this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version).ok
+      for (const record of records) {
+        installedEntriesFound += record.entries.length;
+        const expectedInstallPath = path.join(
+          this.getCachePluginBase(claudeRoot, record.marketplaceName),
+          syncSource.version
         );
-      }) || !fs.existsSync(expectedInstallPath) || strictMetadataDrift || staleVersionDirs.length > 0;
+        const staleVersionDirs = this.strict
+          ? this.listStaleVersionDirectories(this.getCachePluginBase(claudeRoot, record.marketplaceName), syncSource.version)
+          : [];
+        const strictMetadataDrift = this.strict && record.entries.length > 1;
 
-      if (!needsRepair) {
-        this.results.installedRuntime.checks.push({
-          name: `installed-runtime:${claudeRoot}`,
-          status: 'valid',
-          message: `${expectedInstallPath} already matches source version ${syncSource.version}`
-        });
-        continue;
-      }
+        const needsRepair = record.entries.some((entry) => {
+          const currentInstallPath = typeof entry?.installPath === 'string' && entry.installPath.trim()
+            ? entry.installPath
+            : expectedInstallPath;
+          return (
+            entry?.version !== syncSource.version ||
+            path.resolve(currentInstallPath) !== path.resolve(expectedInstallPath) ||
+            !this.inspectInstalledRuntimePath(currentInstallPath, syncSource.version).ok
+          );
+        }) || !fs.existsSync(expectedInstallPath) || strictMetadataDrift || staleVersionDirs.length > 0;
 
-      if (this.dryRun) {
-        this.log(`${icons.info} [DRY RUN] Would sync ${syncSource.root} -> ${expectedInstallPath}`);
-        if (this.strict && staleVersionDirs.length > 0) {
-          for (const staleDirectory of staleVersionDirs) {
-            this.log(`${icons.info} [DRY RUN] Would remove stale cache version ${staleDirectory}`);
-          }
-        }
-        repairedRoots += 1;
-        repairedEntries += entries.length;
-        continue;
-      }
-
-      this.replaceDirectory(syncSource.root, expectedInstallPath);
-      repairedRoots += 1;
-
-      const normalizedEntries = [];
-      const seenEntries = new Set();
-
-      for (const entry of entries) {
-        if (entry.version !== syncSource.version || entry.installPath !== expectedInstallPath) {
-          repairedEntries += 1;
-        }
-
-        const normalizedEntry = {
-          ...entry,
-          version: syncSource.version,
-          installPath: expectedInstallPath,
-          lastUpdated: timestamp
-        };
-        const entryKey = `${normalizedEntry.version}|${normalizedEntry.installPath}`;
-        if (this.strict && seenEntries.has(entryKey)) {
-          repairedEntries += 1;
+        if (!needsRepair) {
+          this.results.installedRuntime.checks.push({
+            name: `installed-runtime:${claudeRoot}:${record.key}`,
+            status: 'valid',
+            message: `${expectedInstallPath} already matches source version ${syncSource.version}`
+          });
           continue;
         }
 
-        seenEntries.add(entryKey);
-        normalizedEntries.push(normalizedEntry);
-      }
+        if (this.dryRun) {
+          this.log(`${icons.info} [DRY RUN] Would sync ${syncSource.root} -> ${expectedInstallPath}`);
+          if (this.strict && staleVersionDirs.length > 0) {
+            for (const staleDirectory of staleVersionDirs) {
+              this.log(`${icons.info} [DRY RUN] Would remove stale cache version ${staleDirectory}`);
+            }
+          }
+          repairedRoots += 1;
+          repairedEntries += record.entries.length;
+          continue;
+        }
 
-      installedPlugins.plugins[INTERNAL_PLUGIN_KEY] = normalizedEntries;
-      fs.writeFileSync(installedPluginsPath, JSON.stringify(installedPlugins, null, 2) + '\n');
-      this.results.installedRuntime.fixes.push({
-        name: `installed-runtime:${claudeRoot}`,
-        message: `Synced cache bundle and install record to ${expectedInstallPath}`
-      });
+        this.replaceDirectory(syncSource.root, expectedInstallPath);
+        repairedRoots += 1;
 
-      if (this.strict && staleVersionDirs.length > 0) {
-        this.pruneVersionDirectories(this.getCachePluginBase(claudeRoot), syncSource.version);
+        const normalizedEntries = [];
+        const seenEntries = new Set();
+
+        for (const entry of record.entries) {
+          if (entry.version !== syncSource.version || entry.installPath !== expectedInstallPath) {
+            repairedEntries += 1;
+          }
+
+          const normalizedEntry = {
+            ...entry,
+            version: syncSource.version,
+            installPath: expectedInstallPath,
+            lastUpdated: timestamp
+          };
+          const entryKey = `${normalizedEntry.version}|${normalizedEntry.installPath}`;
+          if (this.strict && seenEntries.has(entryKey)) {
+            repairedEntries += 1;
+            continue;
+          }
+
+          seenEntries.add(entryKey);
+          normalizedEntries.push(normalizedEntry);
+        }
+
+        installedPlugins.plugins[record.key] = normalizedEntries;
+        fs.writeFileSync(installedPluginsPath, JSON.stringify(installedPlugins, null, 2) + '\n');
         this.results.installedRuntime.fixes.push({
-          name: `installed-runtime-prune:${claudeRoot}`,
-          message: `Removed stale cache versions (${staleVersionDirs.map((dir) => path.basename(dir)).join(', ')})`
+          name: `installed-runtime:${claudeRoot}:${record.key}`,
+          message: `Synced cache bundle and install record to ${expectedInstallPath}`
         });
+
+        if (this.strict && staleVersionDirs.length > 0) {
+          this.pruneVersionDirectories(this.getCachePluginBase(claudeRoot, record.marketplaceName), syncSource.version);
+          this.results.installedRuntime.fixes.push({
+            name: `installed-runtime-prune:${claudeRoot}:${record.key}`,
+            message: `Removed stale cache versions (${staleVersionDirs.map((dir) => path.basename(dir)).join(', ')})`
+          });
+        }
+        this.log(`${icons.fix} Reconciled installed runtime under ${claudeRoot} (${record.key})`);
       }
-      this.log(`${icons.fix} Reconciled installed runtime under ${claudeRoot}`);
     }
 
     if (installedEntriesFound === 0) {
-      const message = `No installed ${INTERNAL_PLUGIN_KEY} entries found in configured Claude roots`;
+      const message = `No installed ${CORE_PLUGIN_NAME} marketplace entries found in configured Claude roots`;
       this.log(`${icons.info} ${message}`);
       this.results.installedRuntime.checks.push({
         name: 'installed-runtime',
@@ -1620,59 +1689,56 @@ class PostPluginUpdateFixes {
     let totalFixed = 0;
 
     for (const claudeRoot of this.getClaudeRoots()) {
-      const cacheBase = this.getCachePluginBase(claudeRoot);
-      if (!fs.existsSync(cacheBase)) {
-        continue;
-      }
+      for (const cacheBase of this.getCachePluginBases(claudeRoot)) {
+        for (const entry of fs.readdirSync(cacheBase)) {
+          const hooksJsonPath = path.join(cacheBase, entry, '.claude-plugin', 'hooks.json');
+          if (!fs.existsSync(hooksJsonPath)) continue;
 
-      for (const entry of fs.readdirSync(cacheBase)) {
-        const hooksJsonPath = path.join(cacheBase, entry, '.claude-plugin', 'hooks.json');
-        if (!fs.existsSync(hooksJsonPath)) continue;
+          try {
+            const content = fs.readFileSync(hooksJsonPath, 'utf8');
+            const hooksConfig = JSON.parse(content);
+            let modified = false;
 
-        try {
-          const content = fs.readFileSync(hooksJsonPath, 'utf8');
-          const hooksConfig = JSON.parse(content);
-          let modified = false;
+            const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
+            if (!Array.isArray(upsGroups)) continue;
 
-          const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
-          if (!Array.isArray(upsGroups)) continue;
+            for (const group of upsGroups) {
+              const hooks = Array.isArray(group.hooks) ? group.hooks : [];
+              for (const hook of hooks) {
+                if (typeof hook.command !== 'string') continue;
+                if (!hook.command.includes('unified-router.sh')) continue;
 
-          for (const group of upsGroups) {
-            const hooks = Array.isArray(group.hooks) ? group.hooks : [];
-            for (const hook of hooks) {
-              if (typeof hook.command !== 'string') continue;
-              if (!hook.command.includes('unified-router.sh')) continue;
+                if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
+                    hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
+                    hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
+                    hook.command.includes('ENABLE_INTAKE_HARD_BLOCKING=0') &&
+                    hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
+                  this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
+                  continue;
+                }
 
-              if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
-                  hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
-                  hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
-                  hook.command.includes('ENABLE_INTAKE_HARD_BLOCKING=0') &&
-                  hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
-                this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
-                continue;
-              }
-
-              const newCommand = requiredEnvPrefix + bareCommand;
-              if (this.dryRun) {
-                this.log(`${icons.info} [DRY RUN] Would patch ${entry} hooks.json`);
-              } else {
-                hook.command = newCommand;
-                modified = true;
+                const newCommand = requiredEnvPrefix + bareCommand;
+                if (this.dryRun) {
+                  this.log(`${icons.info} [DRY RUN] Would patch ${entry} hooks.json`);
+                } else {
+                  hook.command = newCommand;
+                  modified = true;
+                }
               }
             }
-          }
 
-          if (modified) {
-            fs.writeFileSync(hooksJsonPath, JSON.stringify(hooksConfig, null, 2));
-            this.log(`${icons.fix} Patched cache ${entry}/.claude-plugin/hooks.json with env overrides`);
-            totalFixed++;
+            if (modified) {
+              fs.writeFileSync(hooksJsonPath, JSON.stringify(hooksConfig, null, 2));
+              this.log(`${icons.fix} Patched cache ${entry}/.claude-plugin/hooks.json with env overrides`);
+              totalFixed++;
+            }
+          } catch (err) {
+            this.log(`${icons.fail} Failed to patch ${entry}: ${err.message}`);
+            this.results.pluginCacheAssets.errors.push({
+              name: `cache-hooks-${entry}`,
+              message: err.message
+            });
           }
-        } catch (err) {
-          this.log(`${icons.fail} Failed to patch ${entry}: ${err.message}`);
-          this.results.pluginCacheAssets.errors.push({
-            name: `cache-hooks-${entry}`,
-            message: err.message
-          });
         }
       }
     }
@@ -1703,41 +1769,38 @@ class PostPluginUpdateFixes {
     let matchingCacheRoots = 0;
 
     for (const claudeRoot of this.getClaudeRoots()) {
-      const cacheBase = this.getCachePluginBase(claudeRoot);
-      if (!fs.existsSync(cacheBase)) {
-        continue;
-      }
+      for (const cacheBase of this.getCachePluginBases(claudeRoot)) {
+        const matchingEntries = fs.readdirSync(cacheBase)
+          .filter((entry) => entry === syncSource.version)
+          .map((entry) => path.join(cacheBase, entry));
 
-      const matchingEntries = fs.readdirSync(cacheBase)
-        .filter((entry) => entry === syncSource.version)
-        .map((entry) => path.join(cacheBase, entry));
+        if (matchingEntries.length === 0) {
+          continue;
+        }
 
-      if (matchingEntries.length === 0) {
-        continue;
-      }
+        matchingCacheRoots += matchingEntries.length;
 
-      matchingCacheRoots += matchingEntries.length;
+        for (const cacheRoot of matchingEntries) {
+          for (const relativePath of assets) {
+            const sourcePath = path.join(syncSource.root, relativePath);
+            if (!fs.existsSync(sourcePath)) {
+              this.results.pluginCacheAssets.errors.push({
+                name: `missing-source-${relativePath}`,
+                message: `Missing source asset: ${sourcePath}`
+              });
+              continue;
+            }
 
-      for (const cacheRoot of matchingEntries) {
-        for (const relativePath of assets) {
-          const sourcePath = path.join(syncSource.root, relativePath);
-          if (!fs.existsSync(sourcePath)) {
-            this.results.pluginCacheAssets.errors.push({
-              name: `missing-source-${relativePath}`,
-              message: `Missing source asset: ${sourcePath}`
-            });
-            continue;
-          }
+            const targetPath = path.join(cacheRoot, relativePath);
+            if (this.dryRun) {
+              this.log(`${icons.info} [DRY RUN] Would sync ${relativePath} into ${cacheRoot}`);
+              copied += 1;
+              continue;
+            }
 
-          const targetPath = path.join(cacheRoot, relativePath);
-          if (this.dryRun) {
-            this.log(`${icons.info} [DRY RUN] Would sync ${relativePath} into ${cacheRoot}`);
+            this.copyCacheAsset(sourcePath, targetPath);
             copied += 1;
-            continue;
           }
-
-          this.copyCacheAsset(sourcePath, targetPath);
-          copied += 1;
         }
       }
     }

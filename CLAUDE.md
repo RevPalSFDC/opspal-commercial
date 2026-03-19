@@ -1,79 +1,48 @@
-# OpsPal Commercial Plugin Marketplace
+# OpsPal Commercial Marketplace
 
-This repository is the **commercial distribution** of the OpsPal plugin ecosystem for Claude Code. It contains 9 plugins that add Salesforce, HubSpot, Marketo, and cross-platform RevOps capabilities.
+This repository is the commercial OpsPal marketplace. It publishes 10 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
 
 ## Installation
 
 ```bash
-# Install the marketplace
-/plugin marketplace add RevPalSFDC/opspal-commercial-plugins
-
-# Install individual plugins
-/plugin install opspal-core          # Foundation (required)
-/plugin install opspal-salesforce    # Salesforce operations
-/plugin install opspal-hubspot       # HubSpot CRM
-/plugin install opspal-marketo       # Marketo automation
-/plugin install opspal-gtm-planning  # GTM annual planning
-/plugin install opspal-monday        # Monday.com integration
-/plugin install opspal-data-hygiene  # Cross-platform dedup
-/plugin install opspal-ai-consult    # Multi-model consultation
-/plugin install opspal-mcp-client    # OpsPal MCP server client
-/plugin install opspal-okrs          # OKR lifecycle management
+/plugin marketplace add RevPalSFDC/opspal-commercial
+/plugin install opspal-core@opspal-commercial
+/plugin install opspal-salesforce@opspal-commercial
+/plugin install opspal-hubspot@opspal-commercial
+/plugin install opspal-marketo@opspal-commercial
 ```
 
-## Plugins
+## Published Versions
 
-| Plugin | Version | Description |
-|--------|---------|-------------|
-| **opspal-core** | 2.35.0 | Cross-platform orchestration, diagram generation, PDF/PPTX output, RevOps reporting, sales funnel diagnostics |
-| **opspal-salesforce** | 3.79.1 | CPQ/Q2C assessments, RevOps auditing, Flow management, permission orchestration, territory management, deployment automation |
-| **opspal-hubspot** | 3.7.16 | Workflow automation, contact/deal management, marketing campaigns, CMS, SEO, Service Hub, revenue intelligence |
-| **opspal-marketo** | 2.6.11 | Lead management, smart campaigns, email marketing, program architecture, analytics, lead scoring, MQL handoff |
-| **opspal-gtm-planning** | 2.1.4 | Territory design, quota modeling (Monte Carlo), compensation planning, attribution governance, strategic reporting |
-| **opspal-monday** | 1.4.5 | Monday.com file extraction, board management, task synchronization |
-| **opspal-data-hygiene** | 1.1.5 | Cross-platform deduplication for HubSpot and Salesforce, data quality validation |
-| **opspal-ai-consult** | 1.4.4 | Multi-model AI consultation (Gemini integration) |
-| **opspal-mcp-client** | 1.0.2 | Thin client for OpsPal proprietary MCP server |
-| **opspal-okrs** | 3.0.2 | OKR lifecycle management — strategy orchestration, data-driven objectives, initiative scoring, executive reporting |
+| Plugin | Version | Status |
+|--------|---------|--------|
+| `opspal-ai-consult` | 1.4.6 | active |
+| `opspal-core` | 2.42.4 | active |
+| `opspal-data-hygiene` | 1.2.0 | deprecated |
+| `opspal-gtm-planning` | 2.3.0 | active |
+| `opspal-hubspot` | 3.9.0 | active |
+| `opspal-marketo` | 2.6.16 | active |
+| `opspal-mcp-client` | 1.1.0 | active |
+| `opspal-monday` | 1.4.5 | experimental |
+| `opspal-okrs` | 3.0.3 | active |
+| `opspal-salesforce` | 3.84.0 | active |
 
-## Encrypted Assets
+## Updating
 
-Some plugins contain `.enc` files — these are proprietary algorithms (scoring engines, benchmark data, assessment methodologies) encrypted with the OpsPal license system. They are automatically decrypted at runtime when a valid license is present.
+```bash
+cd ~/.claude/plugins/marketplaces/opspal-commercial
+git pull origin main
+/pluginupdate --fix
+```
 
-**Without a license**: All open-source agents, commands, hooks, and skills work normally. Encrypted assets gracefully degrade with informational messages.
+## License Activation
 
-**With a license**: Full access to proprietary scoring engines, benchmark databases, and advanced assessment methodologies.
-
-## Per-Plugin Documentation
-
-Each plugin includes detailed usage documentation:
-
-- `plugins/opspal-core/USAGE.md`
-- `plugins/opspal-salesforce/USAGE.md`
-- `plugins/opspal-hubspot/USAGE.md`
-- `plugins/opspal-marketo/USAGE.md`
-- `plugins/opspal-gtm-planning/USAGE.md`
-- `plugins/opspal-data-hygiene/USAGE.md`
-
-## Plugin Development
-
-See `docs/PLUGIN_DEVELOPMENT_GUIDE.md` for creating new plugins compatible with this marketplace.
-
-Additional developer references:
-- `docs/PLUGIN_DEVELOPMENT_STANDARDS.md` — Coding standards and conventions
-- `docs/HOOK_ARCHITECTURE.md` — Hook system design
-- `docs/PLUGIN_DEPRECATION_POLICY.md` — Deprecation and lifecycle
-- `docs/TROUBLESHOOTING_PLUGIN_LOADING.md` — Common issues and fixes
-- `docs/routing-help.md` — Agent routing tables
-
-## Security
-
-- **No customer data** is stored in this repository
-- All proprietary IP is encrypted (`.enc` files)
-- Environment files (`.env*`) are gitignored
-- Plugin runtime data (`instances/`, `cache/`, `logs/`) is gitignored
+```bash
+/activate-license <license-key> <email>
+/license-status
+```
 
 ## Support
 
-- Issues: https://github.com/RevPalSFDC/opspal-commercial-plugins/issues
-- Docs: https://docs.gorevpal.com
+- Repository: https://github.com/RevPalSFDC/opspal-commercial
+- Issues: https://github.com/RevPalSFDC/opspal-commercial/issues

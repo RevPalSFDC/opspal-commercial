@@ -20,6 +20,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { resolveMarketplaceContext } = require('./marketplace-config');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -34,6 +35,12 @@ const projectDirArg = args.find(a => a.startsWith('--project-dir='));
 if (projectDirArg) {
   options.projectDir = projectDirArg.split('=')[1];
 }
+
+const marketplaceContext = resolveMarketplaceContext({
+  projectDir: options.projectDir,
+  scriptDir: __dirname,
+  pluginName: 'opspal-core'
+});
 
 // Color output helpers
 const colors = {
@@ -681,18 +688,18 @@ function generateQuickStart(plugins) {
 ### Installation
 
 \`\`\`bash
-/plugin marketplace add RevPalSFDC/opspal-internal-plugins
-/plugin install opspal-core@revpal-internal-plugins      # Foundation
+/plugin marketplace add ${marketplaceContext.repositorySlug}
+/plugin install opspal-core@${marketplaceContext.name}      # Foundation
 `;
 
   if (platforms.includes('salesforce')) {
-    section += `/plugin install opspal-salesforce@revpal-internal-plugins # Salesforce\n`;
+    section += `/plugin install opspal-salesforce@${marketplaceContext.name} # Salesforce\n`;
   }
   if (platforms.includes('hubspot')) {
-    section += `/plugin install opspal-hubspot@revpal-internal-plugins    # HubSpot\n`;
+    section += `/plugin install opspal-hubspot@${marketplaceContext.name}    # HubSpot\n`;
   }
   if (platforms.includes('marketo')) {
-    section += `/plugin install opspal-marketo@revpal-internal-plugins    # Marketo\n`;
+    section += `/plugin install opspal-marketo@${marketplaceContext.name}    # Marketo\n`;
   }
 
   section += `\`\`\`
@@ -1135,7 +1142,7 @@ async function main() {
   if (plugins.length === 0) {
     log('\n⚠️  No plugins found!', colors.yellow);
     log('   Install plugins first:', colors.dim);
-    log('   /plugin install opspal-core@revpal-internal-plugins', colors.dim);
+    log(`   /plugin install opspal-core@${marketplaceContext.name}`, colors.dim);
     process.exit(1);
   }
 

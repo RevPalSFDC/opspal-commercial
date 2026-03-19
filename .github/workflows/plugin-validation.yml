@@ -32,7 +32,9 @@ jobs:
           - opspal-gtm-planning
           - opspal-hubspot
           - opspal-marketo
+          - opspal-mcp-client
           - opspal-monday
+          - opspal-okrs
           - opspal-salesforce
 
     steps:
@@ -125,13 +127,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Verify generated catalog files
         run: |
           set -euo pipefail
 
+          npm run docs:ci
+
+          test -f .claude-plugin/marketplace.json
           test -f docs/PLUGIN_SUITE_CATALOG.json
           test -f docs/PLUGIN_SUITE_CATALOG.md
+          jq empty .claude-plugin/marketplace.json
           jq empty docs/PLUGIN_SUITE_CATALOG.json
 
+          echo "✓ .claude-plugin/marketplace.json is valid JSON"
           echo "✓ docs/PLUGIN_SUITE_CATALOG.json is valid JSON"
           echo "✓ docs/PLUGIN_SUITE_CATALOG.md exists"

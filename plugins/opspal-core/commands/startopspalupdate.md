@@ -30,14 +30,14 @@ SCRIPT_PATHS=(
   "./plugins/opspal-core/scripts/opspal-update-manager.sh"
   "./.claude-plugins/opspal-core/scripts/opspal-update-manager.sh"
   "$HOME/.claude/plugins/opspal-core/scripts/opspal-update-manager.sh"
-  "$HOME/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/opspal-update-manager.sh"
+  "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/opspal-update-manager.sh"
 )
 
 # WSL-aware: add Windows profile .claude path if available
 if [ -n "${WSL_DISTRO_NAME:-}" ] || [ -n "${WSL_INTEROP:-}" ]; then
   if [ -n "${USERPROFILE:-}" ] && command -v wslpath >/dev/null 2>&1; then
     WIN_PROFILE="$(wslpath -u "$USERPROFILE" 2>/dev/null || true)"
-    [ -n "$WIN_PROFILE" ] && SCRIPT_PATHS+=("$WIN_PROFILE/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/opspal-update-manager.sh")
+    [ -n "$WIN_PROFILE" ] && SCRIPT_PATHS+=("$WIN_PROFILE/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/opspal-update-manager.sh")
   fi
 fi
 
@@ -303,7 +303,7 @@ The script searches multiple locations. If not found:
 3. Reinstall if needed:
    ```bash
    # Run in a regular terminal
-   claude plugin install opspal-core@revpal-internal-plugins
+   claude plugin install opspal-core@opspal-commercial
    ```
 
 ### "Legacy mode blocked inside Claude session"

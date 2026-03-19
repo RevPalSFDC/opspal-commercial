@@ -38,6 +38,8 @@ SHOW_HISTORY=false
 EXECUTION_MODE="${OPSPAL_UPDATE_MODE:-external}"
 EMIT_SCRIPT_ONLY=false
 ALLOW_IN_SESSION_LEGACY="${OPSPAL_UPDATE_ALLOW_IN_SESSION_CLAUDE_CLI:-0}"
+DEFAULT_MARKETPLACE_NAME="${OPSPAL_MARKETPLACE_NAME:-opspal-commercial}"
+PREFERRED_MARKETPLACE_NAME="$DEFAULT_MARKETPLACE_NAME"
 
 SCRIPT_ABS_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 
@@ -279,11 +281,10 @@ render_manual_commands() {
   echo "Run the following in a regular terminal (outside Claude Code session):"
   echo ""
   echo "# Step 0: Refresh marketplace checkout"
-  echo "git -C ~/.claude/plugins/marketplaces/revpal-internal-plugins pull"
+  echo "git -C ~/.claude/plugins/marketplaces/${PREFERRED_MARKETPLACE_NAME} pull"
   echo ""
   for plugin in "${PLUGINS_TO_UPDATE[@]}"; do
-    echo "claude plugin uninstall \"$plugin\" || true"
-    echo "claude plugin install \"${plugin}@revpal-internal-plugins\""
+    echo "claude plugin install \"${plugin}@${PREFERRED_MARKETPLACE_NAME}\""
     echo ""
   done
   echo "Then run:"
@@ -425,6 +426,29 @@ detect_claude_roots() {
     append_unique CLAUDE_ROOTS "/mnt/c/Users/${USERNAME:-}/.claude"
     append_unique CLAUDE_ROOTS "/mnt/c/Users/${USER:-}/.claude"
   fi
+}
+
+resolve_preferred_marketplace() {
+  local claude_root mp_base mp_dir
+  PREFERRED_MARKETPLACE_NAME="$DEFAULT_MARKETPLACE_NAME"
+
+  for claude_root in "${CLAUDE_ROOTS[@]}"; do
+    mp_base="$claude_root/plugins/marketplaces"
+    [ -d "$mp_base" ] || continue
+
+    if [ -d "$mp_base/$DEFAULT_MARKETPLACE_NAME/plugins/opspal-core" ]; then
+      PREFERRED_MARKETPLACE_NAME="$DEFAULT_MARKETPLACE_NAME"
+      return 0
+    fi
+
+    for mp_dir in "$mp_base"/*; do
+      [ -d "$mp_dir" ] || continue
+      if [ -d "$mp_dir/plugins/opspal-core" ]; then
+        PREFERRED_MARKETPLACE_NAME="$(basename "$mp_dir")"
+        return 0
+      fi
+    done
+  done
 }
 
 refresh_marketplace_checkouts() {
@@ -674,6 +698,7 @@ fi
 # Resolve Claude roots first (Linux/macOS + WSL).
 declare -a CLAUDE_ROOTS=()
 detect_claude_roots
+resolve_preferred_marketplace
 
 # Find plugin directories - check multiple locations.
 # Priority: 1. Local dev paths, 2. Marketplace installs, 3. Direct plugin installs.
@@ -682,7 +707,7 @@ append_unique PLUGIN_DIRS "./.claude-plugins"
 append_unique PLUGIN_DIRS "./plugins"
 
 for claude_root in "${CLAUDE_ROOTS[@]}"; do
-  append_unique PLUGIN_DIRS "$claude_root/plugins/marketplaces/revpal-internal-plugins/plugins"
+  append_unique PLUGIN_DIRS "$claude_root/plugins/marketplaces/$PREFERRED_MARKETPLACE_NAME/plugins"
 
   if [ -d "$claude_root/plugins/marketplaces" ]; then
     for mp_dir in "$claude_root/plugins/marketplaces"/*/plugins; do
@@ -892,7 +917,7 @@ if [ "$SKIP_CONFIRM" = false ]; then
         echo -e "${YELLOW}This will print manual plugin update commands for ${#PLUGINS_TO_UPDATE[@]} plugins.${NC}"
         ;;
       legacy)
-        echo -e "${YELLOW}This will uninstall and reinstall ${#PLUGINS_TO_UPDATE[@]} plugins directly.${NC}"
+        echo -e "${YELLOW}This will install ${#PLUGINS_TO_UPDATE[@]} plugins directly from ${PREFERRED_MARKETPLACE_NAME}.${NC}"
         ;;
     esac
     echo ""
@@ -947,30 +972,10 @@ declare -A NEW_VERSIONS
 for plugin in "${PLUGINS_TO_UPDATE[@]}"; do
   echo -e "${CYAN}━━━ $plugin ━━━${NC}"
 
-  # Uninstall
-  echo -n "   Uninstalling... "
-  uninstall_output=""
-  if uninstall_output=$(claude plugin uninstall "$plugin" 2>&1); then
-    echo -e "${GREEN}done${NC}"
-  else
-    if echo "$uninstall_output" | grep -qi "not found"; then
-      echo -e "${YELLOW}not found (will install fresh)${NC}"
-    else
-      echo -e "${RED}FAILED${NC}"
-      if [ -n "$uninstall_output" ]; then
-        echo "$uninstall_output" | sed 's/^/      /'
-      fi
-      FAILED_PLUGINS+=("$plugin")
-      log_update "$plugin" "${OLD_VERSIONS[$plugin]}" "failed" "failed" "$EXECUTION_MODE"
-      echo ""
-      continue
-    fi
-  fi
-
-  # Reinstall from marketplace
-  echo -n "   Installing from marketplace... "
+  # Install from marketplace without destructive pre-uninstall.
+  echo -n "   Installing from marketplace ${PREFERRED_MARKETPLACE_NAME}... "
   install_output=""
-  if install_output=$(claude plugin install "${plugin}@revpal-internal-plugins" 2>&1); then
+  if install_output=$(claude plugin install "${plugin}@${PREFERRED_MARKETPLACE_NAME}" 2>&1); then
     echo -e "${GREEN}done${NC}"
     SUCCESS_PLUGINS+=("$plugin")
 
@@ -988,6 +993,11 @@ for plugin in "${PLUGINS_TO_UPDATE[@]}"; do
 
     # Log successful update
     log_update "$plugin" "${OLD_VERSIONS[$plugin]}" "$new_version" "success" "$EXECUTION_MODE"
+  elif echo "$install_output" | grep -qiE "already installed|up to date|no changes"; then
+    echo -e "${YELLOW}no change${NC}"
+    SUCCESS_PLUGINS+=("$plugin")
+    NEW_VERSIONS["$plugin"]="$(resolve_latest_known_plugin_version "$plugin")"
+    log_update "$plugin" "${OLD_VERSIONS[$plugin]}" "${NEW_VERSIONS[$plugin]}" "success" "$EXECUTION_MODE"
   else
     echo -e "${RED}FAILED${NC}"
     FAILED_PLUGINS+=("$plugin")

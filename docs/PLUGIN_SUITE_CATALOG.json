@@ -1,76 +1,221 @@
 {
-  "name": "opspal-commercial",
-  "repository": "https://github.com/RevPalSFDC/opspal-commercial",
-  "repository_slug": "RevPalSFDC/opspal-commercial",
-  "owner": {
-    "name": "RevPal Engineering",
-    "email": "engineering@gorevpal.com"
+  "generated_at": "2026-03-19",
+  "marketplace": {
+    "name": "opspal-commercial",
+    "repository": "https://github.com/RevPalSFDC/opspal-commercial",
+    "repository_slug": "RevPalSFDC/opspal-commercial",
+    "owner": {
+      "name": "RevPal Engineering",
+      "email": "engineering@gorevpal.com"
+    }
+  },
+  "totals": {
+    "plugins": 10,
+    "agents": 302,
+    "commands": 271,
+    "hooks": 158,
+    "skills": 1
   },
   "plugins": [
     {
       "name": "opspal-ai-consult",
+      "version": "1.4.6",
       "source": "./plugins/opspal-ai-consult",
       "description": "Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemini CLI invocation, Claude + Gemini response synthesis, alignment scoring, auto-consultation triggers, domain canonicalization for shadow duplicate detection, and ACE skill registry integration for learning from outcomes.",
-      "version": "1.4.6"
+      "counts": {
+        "agents": 2,
+        "commands": 3,
+        "hooks": 1,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-ai",
+        "stability": "stable",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-core",
+      "version": "2.42.4",
       "source": "./plugins/opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.42.4"
+      "counts": {
+        "agents": 79,
+        "commands": 111,
+        "hooks": 74,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-platform",
+        "stability": "stable",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-data-hygiene",
+      "version": "1.2.0",
       "source": "./plugins/opspal-data-hygiene",
       "description": "[DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functionality has been consolidated into opspal-core. Use /dedup-companies or /deduplicate commands instead.",
-      "version": "1.2.0"
+      "counts": {
+        "agents": 2,
+        "commands": 1,
+        "hooks": 1,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "deprecated",
+        "owner": "revpal-platform",
+        "stability": "deprecated",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": "2026-02-15",
+        "replaced_by": "opspal-core"
+      }
     },
     {
       "name": "opspal-gtm-planning",
+      "version": "2.3.0",
       "source": "./plugins/opspal-gtm-planning",
       "description": "GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes territory design, quota modeling, compensation planning, revenue modeling, retention analysis, market intelligence, 13 strategic report templates, session context loading, telemetry, and path validation. 12 agents, 15 commands, 3 hooks, 4 skill frameworks.",
-      "version": "2.3.0"
+      "counts": {
+        "agents": 13,
+        "commands": 16,
+        "hooks": 4,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-gtm",
+        "stability": "stable",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-hubspot",
+      "version": "3.9.0",
       "source": "./plugins/opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
-      "version": "3.9.0"
+      "counts": {
+        "agents": 59,
+        "commands": 33,
+        "hooks": 13,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-hubspot",
+        "stability": "stable",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-marketo",
+      "version": "2.6.16",
       "source": "./plugins/opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
-      "version": "2.6.16"
+      "counts": {
+        "agents": 30,
+        "commands": 30,
+        "hooks": 19,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-marketing-ops",
+        "stability": "stable",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-mcp-client",
+      "version": "1.1.0",
       "source": "./plugins/opspal-mcp-client",
       "description": "OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server. Includes scoring orchestrator, benchmark agent, compute orchestrator, client-side validation hooks, and usage tracking.",
-      "version": "1.1.0"
+      "counts": {
+        "agents": 3,
+        "commands": 3,
+        "hooks": 3,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": null,
+        "owner": null,
+        "stability": null,
+        "last_reviewed_at": null,
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-monday",
+      "version": "1.4.5",
       "source": "./plugins/opspal-monday",
       "description": "[EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export, and cross-board operations.",
-      "version": "1.4.5"
+      "counts": {
+        "agents": 6,
+        "commands": 1,
+        "hooks": 0,
+        "skills": 1
+      },
+      "lifecycle": {
+        "status": "experimental",
+        "owner": "revpal-experimental",
+        "stability": "experimental",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-okrs",
+      "version": "3.0.3",
       "source": "./plugins/opspal-okrs",
       "description": "Data-driven OKR generation from live revenue data. Derives objectives and key results from Salesforce, HubSpot, product analytics, and conversation intelligence with initiative prioritization and adaptive learning.",
-      "version": "3.0.3"
+      "counts": {
+        "agents": 14,
+        "commands": 14,
+        "hooks": 3,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-strategy",
+        "stability": "experimental",
+        "last_reviewed_at": "2026-03-10",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     },
     {
       "name": "opspal-salesforce",
+      "version": "3.84.0",
       "source": "./plugins/opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-      "version": "3.84.0"
+      "counts": {
+        "agents": 94,
+        "commands": 59,
+        "hooks": 40,
+        "skills": 0
+      },
+      "lifecycle": {
+        "status": "active",
+        "owner": "revpal-salesforce",
+        "stability": "stable",
+        "last_reviewed_at": "2026-02-15",
+        "deprecation_date": null,
+        "replaced_by": null
+      }
     }
-  ],
-  "_stats": {
-    "total_plugins": 10,
-    "last_updated": "2026-03-19",
-    "generated_at": "2026-03-19"
-  }
+  ]
 }

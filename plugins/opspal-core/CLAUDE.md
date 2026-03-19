@@ -6,14 +6,14 @@ This file provides guidance when using the OpsPal Core with Claude Code.
 
 The **OpsPal Core** provides utilities and orchestration across Salesforce, HubSpot, and more. Includes 46 agents for diagrams, PDFs, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake, RevOps data quality governance, NotebookLM client knowledge bases, and LLM-ready field dictionaries.
 
-**Repository**: https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace
+**Repository**: https://github.com/RevPalSFDC/opspal-commercial
 
 ## Quick Start
 
 ```bash
 # Installation
-/plugin marketplace add RevPalSFDC/opspal-internal-plugins
-/plugin install opspal-core@revpal-internal-plugins
+/plugin marketplace add RevPalSFDC/opspal-commercial
+/plugin install opspal-core@opspal-commercial
 
 # Verify
 /agents  # Should show cross-platform agents
@@ -1052,7 +1052,7 @@ node scripts/lib/metadata-loader.js load-org acme
 
 Runs the comprehensive hook health checker across all plugins.
 
-**Fix permissions**: `chmod +x ~/.claude/plugins/opspal-core@revpal-internal-plugins/hooks/*.sh`
+**Fix permissions**: `chmod +x ~/.claude/plugins/cache/opspal-commercial/opspal-core/<version>/hooks/*.sh`
 
 ## Documentation
 

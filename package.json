@@ -1,19 +1,22 @@
 {
-  "name": "opspal-commercial-plugins",
+  "name": "opspal-commercial",
   "version": "1.0.0",
   "description": "OpsPal commercial plugin marketplace for Claude Code — Salesforce, HubSpot, Marketo, and cross-platform RevOps plugins.",
   "type": "commonjs",
-  "scripts": {},
+  "scripts": {
+    "docs:generate": "node scripts/generate-plugin-suite-docs.js",
+    "docs:ci": "node scripts/generate-plugin-suite-docs.js --check"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RevPalSFDC/opspal-commercial-plugins.git"
+    "url": "git+https://github.com/RevPalSFDC/opspal-commercial.git"
   },
   "author": "RevPal Engineering <engineering@gorevpal.com>",
   "license": "Proprietary",
   "bugs": {
-    "url": "https://github.com/RevPalSFDC/opspal-commercial-plugins/issues"
+    "url": "https://github.com/RevPalSFDC/opspal-commercial/issues"
   },
-  "homepage": "https://github.com/RevPalSFDC/opspal-commercial-plugins#readme",
+  "homepage": "https://github.com/RevPalSFDC/opspal-commercial#readme",
   "dependencies": {
     "dotenv": "~17.2.3",
     "playwright": "~1.57.0"

@@ -79,7 +79,7 @@ find_script() {
 
   local root mp_dir cache_hit found
   for root in "${CLAUDE_ROOTS[@]}"; do
-    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/lib/$script_name")
+    paths+=("$root/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib/$script_name")
     for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core/scripts/lib; do
       [ -d "$mp_dir" ] && paths+=("$mp_dir/$script_name")
     done
@@ -113,7 +113,7 @@ find_ci_script() {
 
   local root mp_dir cache_hit found
   for root in "${CLAUDE_ROOTS[@]}"; do
-    paths+=("$root/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/ci/$script_name")
+    paths+=("$root/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/ci/$script_name")
     for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core/scripts/ci; do
       [ -d "$mp_dir" ] && paths+=("$mp_dir/$script_name")
     done

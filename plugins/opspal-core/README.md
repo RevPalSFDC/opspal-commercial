@@ -13,7 +13,8 @@ This plugin provides 37 agents, 17 scripts, 51 commands.
 ### Installation
 
 ```bash
-/plugin install opspal-core@revpal-internal-plugins
+/plugin marketplace add RevPalSFDC/opspal-commercial
+/plugin install opspal-core@opspal-commercial
 ```
 
 ### Verify Installation

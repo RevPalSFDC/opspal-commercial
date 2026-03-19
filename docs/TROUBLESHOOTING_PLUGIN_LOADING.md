@@ -32,8 +32,8 @@ cat > /tmp/plugin-test/.claude/settings.json <<EOF
 {
   "marketplaces": [
     {
-      "url": "https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace",
-      "name": "revpal-internal-plugins"
+      "url": "https://github.com/RevPalSFDC/opspal-commercial",
+      "name": "opspal-commercial"
     }
   ]
 }
@@ -41,7 +41,7 @@ EOF
 
 # Try installation
 cd /tmp/plugin-test
-claude plugin install <plugin-name>@revpal-internal-plugins
+claude plugin install <plugin-name>@opspal-commercial
 ```
 
 ### 3. Check Plugin Structure
@@ -157,7 +157,7 @@ claude --version
 If you've tried these steps and still having issues:
 
 1. **Check the plugin's README**: `.claude-plugins/<plugin>/README.md`
-2. **Report an issue**: https://github.com/RevPalSFDC/opspal-plugin-internal-marketplace/issues
+2. **Report an issue**: https://github.com/RevPalSFDC/opspal-commercial/issues
 3. **Include in your report**:
    - Error message (full text)
    - Output of `claude plugin validate`

@@ -16,6 +16,8 @@ const path = require('path');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../../../../..');
 const PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-core');
+const CURRENT_MARKETPLACE_NAME = 'opspal-commercial';
+const LEGACY_MARKETPLACE_NAME = 'revpal-internal-plugins';
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -44,113 +46,129 @@ async function runTest(name, testFn) {
   }
 }
 
+function assertInstalledRuntimeRepair(tempHome, marketplaceName) {
+  const pluginVersion = JSON.parse(
+    fs.readFileSync(path.join(PLUGIN_ROOT, '.claude-plugin', 'plugin.json'), 'utf8')
+  ).version;
+
+  const staleVersion = '2.0.0';
+  const staleInstallPath = path.join(
+    tempHome,
+    '.claude',
+    'plugins',
+    'cache',
+    marketplaceName,
+    'opspal-core',
+    staleVersion
+  );
+  const installedPluginsPath = path.join(tempHome, '.claude', 'plugins', 'installed_plugins.json');
+  const pluginKey = `opspal-core@${marketplaceName}`;
+
+  writeJson(path.join(staleInstallPath, '.claude-plugin', 'plugin.json'), {
+    name: 'opspal-core',
+    version: staleVersion
+  });
+  writeJson(path.join(staleInstallPath, '.claude-plugin', 'hooks.json'), {
+    hooks: {
+      UserPromptSubmit: [],
+      PreToolUse: []
+    }
+  });
+  writeJson(installedPluginsPath, {
+    version: 2,
+    plugins: {
+      [pluginKey]: [
+        {
+          scope: 'user',
+          installPath: staleInstallPath,
+          version: staleVersion,
+          installedAt: '2026-03-01T00:00:00.000Z',
+          lastUpdated: '2026-03-01T00:00:00.000Z'
+        }
+      ]
+    }
+  });
+
+  const PostPluginUpdateFixes = loadFreshFixer(tempHome);
+  const fixer = new PostPluginUpdateFixes({
+    projectRoot: PROJECT_ROOT,
+    corePluginRoot: PLUGIN_ROOT,
+    dryRun: false,
+    verbose: false
+  });
+
+  const preCheck = fixer.checkInstalledRuntime();
+  assert.strictEqual(preCheck.needsFix, true, 'Stale install record should require repair');
+
+  const repair = fixer.reconcileInstalledRuntime();
+  assert.strictEqual(repair.fixed, true, 'Repair should update the installed runtime');
+
+  const expectedInstallPath = path.join(
+    tempHome,
+    '.claude',
+    'plugins',
+    'cache',
+    marketplaceName,
+    'opspal-core',
+    pluginVersion
+  );
+
+  assert(fs.existsSync(expectedInstallPath), 'Expected cache version should exist after repair');
+  assert(
+    fs.existsSync(path.join(expectedInstallPath, 'scripts/lib/routing-state-manager.js')),
+    'Expected runtime bundle should include routing-state-manager.js'
+  );
+
+  const updatedPlugins = JSON.parse(fs.readFileSync(installedPluginsPath, 'utf8'));
+  const updatedEntry = updatedPlugins.plugins[pluginKey][0];
+  assert.strictEqual(updatedEntry.version, pluginVersion, 'Installed version should be updated');
+  assert.strictEqual(updatedEntry.installPath, expectedInstallPath, 'installPath should point at the repaired cache bundle');
+
+  const cachedHooks = JSON.parse(
+    fs.readFileSync(path.join(expectedInstallPath, '.claude-plugin', 'hooks.json'), 'utf8')
+  );
+  const userPromptHooks = cachedHooks.hooks.UserPromptSubmit
+    .flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : []);
+  const unifiedRouterHook = userPromptHooks.find((hook) => hook?.command?.includes('unified-router.sh'));
+  assert(unifiedRouterHook, 'Repaired cache bundle should contain unified-router hook');
+  assert(
+    unifiedRouterHook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1'),
+    'Repaired cache bundle should preserve unified-router env overrides'
+  );
+
+  const wildcardGate = cachedHooks.hooks.PreToolUse.some((group) => (
+    group?.matcher === '*' &&
+    Array.isArray(group?.hooks) &&
+    group.hooks.some((hook) => hook?.command?.includes('pre-tool-use-contract-validation.sh'))
+  ));
+  assert.strictEqual(wildcardGate, true, 'Repaired cache bundle should restore wildcard PreToolUse routing gate');
+
+  const postCheck = fixer.checkInstalledRuntime();
+  assert.strictEqual(postCheck.needsFix, false, 'Installed runtime should verify cleanly after repair');
+}
+
 async function runAllTests() {
   console.log('\n[Tests] post-plugin-update-fixes.js Tests\n');
 
   const results = [];
   const originalHome = process.env.HOME;
 
-  results.push(await runTest('Repairs installed runtime cache and manifest drift', async () => {
+  results.push(await runTest('Repairs installed runtime cache and manifest drift for commercial marketplace', async () => {
     const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'post-plugin-fixes-home-'));
 
     try {
-      const pluginVersion = JSON.parse(
-        fs.readFileSync(path.join(PLUGIN_ROOT, '.claude-plugin', 'plugin.json'), 'utf8')
-      ).version;
+      assertInstalledRuntimeRepair(tempHome, CURRENT_MARKETPLACE_NAME);
+    } finally {
+      process.env.HOME = originalHome;
+      fs.rmSync(tempHome, { recursive: true, force: true });
+    }
+  }));
 
-      const staleVersion = '2.0.0';
-      const staleInstallPath = path.join(
-        tempHome,
-        '.claude',
-        'plugins',
-        'cache',
-        'revpal-internal-plugins',
-        'opspal-core',
-        staleVersion
-      );
-      const installedPluginsPath = path.join(tempHome, '.claude', 'plugins', 'installed_plugins.json');
+  results.push(await runTest('Repairs installed runtime cache and manifest drift for legacy internal marketplace installs', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'post-plugin-fixes-home-'));
 
-      writeJson(path.join(staleInstallPath, '.claude-plugin', 'plugin.json'), {
-        name: 'opspal-core',
-        version: staleVersion
-      });
-      writeJson(path.join(staleInstallPath, '.claude-plugin', 'hooks.json'), {
-        hooks: {
-          UserPromptSubmit: [],
-          PreToolUse: []
-        }
-      });
-      writeJson(installedPluginsPath, {
-        version: 2,
-        plugins: {
-          'opspal-core@revpal-internal-plugins': [
-            {
-              scope: 'user',
-              installPath: staleInstallPath,
-              version: staleVersion,
-              installedAt: '2026-03-01T00:00:00.000Z',
-              lastUpdated: '2026-03-01T00:00:00.000Z'
-            }
-          ]
-        }
-      });
-
-      const PostPluginUpdateFixes = loadFreshFixer(tempHome);
-      const fixer = new PostPluginUpdateFixes({
-        projectRoot: PROJECT_ROOT,
-        corePluginRoot: PLUGIN_ROOT,
-        dryRun: false,
-        verbose: false
-      });
-
-      const preCheck = fixer.checkInstalledRuntime();
-      assert.strictEqual(preCheck.needsFix, true, 'Stale install record should require repair');
-
-      const repair = fixer.reconcileInstalledRuntime();
-      assert.strictEqual(repair.fixed, true, 'Repair should update the installed runtime');
-
-      const expectedInstallPath = path.join(
-        tempHome,
-        '.claude',
-        'plugins',
-        'cache',
-        'revpal-internal-plugins',
-        'opspal-core',
-        pluginVersion
-      );
-
-      assert(fs.existsSync(expectedInstallPath), 'Expected cache version should exist after repair');
-      assert(
-        fs.existsSync(path.join(expectedInstallPath, 'scripts/lib/routing-state-manager.js')),
-        'Expected runtime bundle should include routing-state-manager.js'
-      );
-
-      const updatedPlugins = JSON.parse(fs.readFileSync(installedPluginsPath, 'utf8'));
-      const updatedEntry = updatedPlugins.plugins['opspal-core@revpal-internal-plugins'][0];
-      assert.strictEqual(updatedEntry.version, pluginVersion, 'Installed version should be updated');
-      assert.strictEqual(updatedEntry.installPath, expectedInstallPath, 'installPath should point at the repaired cache bundle');
-
-      const cachedHooks = JSON.parse(
-        fs.readFileSync(path.join(expectedInstallPath, '.claude-plugin', 'hooks.json'), 'utf8')
-      );
-      const userPromptHooks = cachedHooks.hooks.UserPromptSubmit
-        .flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : []);
-      const unifiedRouterHook = userPromptHooks.find((hook) => hook?.command?.includes('unified-router.sh'));
-      assert(unifiedRouterHook, 'Repaired cache bundle should contain unified-router hook');
-      assert(
-        unifiedRouterHook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1'),
-        'Repaired cache bundle should preserve unified-router env overrides'
-      );
-
-      const wildcardGate = cachedHooks.hooks.PreToolUse.some((group) => (
-        group?.matcher === '*' &&
-        Array.isArray(group?.hooks) &&
-        group.hooks.some((hook) => hook?.command?.includes('pre-tool-use-contract-validation.sh'))
-      ));
-      assert.strictEqual(wildcardGate, true, 'Repaired cache bundle should restore wildcard PreToolUse routing gate');
-
-      const postCheck = fixer.checkInstalledRuntime();
-      assert.strictEqual(postCheck.needsFix, false, 'Installed runtime should verify cleanly after repair');
+    try {
+      assertInstalledRuntimeRepair(tempHome, LEGACY_MARKETPLACE_NAME);
     } finally {
       process.env.HOME = originalHome;
       fs.rmSync(tempHome, { recursive: true, force: true });
