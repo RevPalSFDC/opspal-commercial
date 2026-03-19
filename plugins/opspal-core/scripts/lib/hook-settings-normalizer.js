@@ -17,7 +17,9 @@ const ARGUMENT_MATCHER_CONFIG = {
   'Bash(*sed*)': { matcher: 'Bash', type: 'bash', pattern: 'sed' },
   'Bash(sf sobject describe*)': { matcher: 'Bash', type: 'bash', pattern: 'sf sobject describe' },
   'Write(*SESSION_REFLECTION*)': { matcher: 'Write', type: 'write', pattern: 'SESSION_REFLECTION' },
-  'Task(*)': { matcher: 'Task', type: 'task' }
+  'Task(*)': { matcher: 'Agent', type: 'task' },
+  'Agent(*)': { matcher: 'Agent', type: 'task' },
+  Task: { matcher: 'Agent', type: 'task' }
 };
 
 function escapeRegExp(value) {
@@ -231,7 +233,11 @@ function normalizeProjectHookSettings(settings, options = {}) {
         }
 
         const basename = extractScriptBasename(hook.command);
-        if (eventType === 'PreToolUse' && originalMatcher === 'Task(*)' && PRETASK_CONTEXT_BASENAMES.has(basename)) {
+        if (
+          eventType === 'PreToolUse' &&
+          (originalMatcher === 'Task(*)' || originalMatcher === 'Agent(*)') &&
+          PRETASK_CONTEXT_BASENAMES.has(basename)
+        ) {
           continue;
         }
 

@@ -1,20 +1,20 @@
 # Agent Routing Reminder
 
-## BLOCKED Operations - MUST Use Task Tool
+## BLOCKED Operations - MUST Use Agent Tool
 
 Before responding, check if the request matches any blocked operation:
 
-| Keywords | Required Agent | Task Tool Call |
+| Keywords | Required Agent | Agent Tool Call |
 |----------|----------------|----------------|
-| cpq, quote, pricing, q2c | `sfdc-cpq-assessor` | `Task(subagent_type='opspal-salesforce:sfdc-cpq-assessor', ...)` |
-| revops, pipeline, forecast | `sfdc-revops-auditor` | `Task(subagent_type='opspal-salesforce:sfdc-revops-auditor', ...)` |
-| automation audit, flow audit | `sfdc-automation-auditor` | `Task(subagent_type='opspal-salesforce:sfdc-automation-auditor', ...)` |
-| permission set | `sfdc-permission-orchestrator` | `Task(subagent_type='opspal-salesforce:sfdc-permission-orchestrator', ...)` |
-| report, dashboard | `sfdc-reports-dashboards` | `Task(subagent_type='opspal-salesforce:sfdc-reports-dashboards', ...)` |
-| import data, export data | `sfdc-data-operations` | `Task(subagent_type='opspal-salesforce:sfdc-data-operations', ...)` |
-| deploy, production | `release-coordinator` | `Task(subagent_type='release-coordinator', ...)` |
-| diagram, flowchart, ERD | `diagram-generator` | `Task(subagent_type='diagram-generator', ...)` |
-| territory | `sfdc-territory-orchestrator` | `Task(subagent_type='opspal-salesforce:sfdc-territory-orchestrator', ...)` |
+| cpq, quote, pricing, q2c | `sfdc-cpq-assessor` | `Agent(subagent_type='opspal-salesforce:sfdc-cpq-assessor', ...)` |
+| revops, pipeline, forecast | `sfdc-revops-auditor` | `Agent(subagent_type='opspal-salesforce:sfdc-revops-auditor', ...)` |
+| automation audit, flow audit | `sfdc-automation-auditor` | `Agent(subagent_type='opspal-salesforce:sfdc-automation-auditor', ...)` |
+| permission set | `sfdc-permission-orchestrator` | `Agent(subagent_type='opspal-salesforce:sfdc-permission-orchestrator', ...)` |
+| report, dashboard | `sfdc-reports-dashboards` | `Agent(subagent_type='opspal-salesforce:sfdc-reports-dashboards', ...)` |
+| import data, export data | `sfdc-data-operations` | `Agent(subagent_type='opspal-salesforce:sfdc-data-operations', ...)` |
+| deploy, production | `release-coordinator` | `Agent(subagent_type='release-coordinator', ...)` |
+| diagram, flowchart, ERD | `diagram-generator` | `Agent(subagent_type='diagram-generator', ...)` |
+| territory | `sfdc-territory-orchestrator` | `Agent(subagent_type='opspal-salesforce:sfdc-territory-orchestrator', ...)` |
 
 ## Complexity Assessment
 
@@ -39,12 +39,12 @@ Before responding, check if the request matches any blocked operation:
 
 Before every response, ask yourself:
 
-1. Does this match a BLOCKED keyword above? → **Use Task tool**
-2. Is this HIGH complexity? → **Use Task tool**
-3. Am I performing an assessment or audit? → **Use Task tool**
-4. Is this a production deployment? → **Use Task tool**
+1. Does this match a BLOCKED keyword above? → **Use Agent tool**
+2. Is this HIGH complexity? → **Use Agent tool**
+3. Am I performing an assessment or audit? → **Use Agent tool**
+4. Is this a production deployment? → **Use Agent tool**
 
-**If uncertain → Default to using the Task tool**
+**If uncertain → Default to using the Agent tool**
 
 ## Why This Matters
 
@@ -54,7 +54,7 @@ Specialists deliver:
 - Consistent, validated outputs
 - Proper methodology adherence
 
-**NEVER respond directly to a specialist task. Always use the Task tool.**
+**NEVER respond directly to a specialist task. Always use the Agent tool.**
 
 ---
 *Injected via UserPromptSubmit hook - see docs/HOOK_BUG_SUMMARY.md*

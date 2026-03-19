@@ -40,7 +40,7 @@ Generate unified executive dashboards combining revenue, pipeline, marketing, an
 Use the unified-exec-dashboard-agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:unified-exec-dashboard-agent',
   prompt: `Generate executive dashboard. Period: ${period || 'this_quarter'}. Template: ${template || 'executive_summary'}. Format: ${format || 'web'}`
 });

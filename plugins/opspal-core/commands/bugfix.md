@@ -3,7 +3,7 @@ name: bugfix
 description: Parallel hypothesis bug fix pipeline -- generates 3 hypotheses, tests each on its own branch, presents results
 argument-hint: "<bug description> [--test-cmd <cmd>] [--files <file1,file2>] [--dry-run] [--resume]"
 allowed-tools:
-  - Task
+  - Agent
   - Bash
   - Read
   - Write
@@ -75,10 +75,10 @@ If `--files` was not provided:
 
 ### Step 3: Generate Hypotheses
 
-Use the Task tool to invoke the bugfix hypothesis agent:
+Use the Agent tool to invoke the bugfix hypothesis agent:
 
 ```
-Task(
+Agent(
   subagent_type='opspal-core:bugfix-hypothesis-agent',
   model='sonnet',
   prompt='Analyze this bug and generate 3 hypotheses:

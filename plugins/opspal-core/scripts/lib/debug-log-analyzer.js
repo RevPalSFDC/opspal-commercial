@@ -233,7 +233,7 @@ class DebugLogAnalyzer {
       const errorMatch = line.match(/\[(ERROR|WARN)\]\s*(.+)/i);
       if (errorMatch) {
         // Try to extract tool name
-        const toolMatch = errorMatch[2].match(/(?:Tool|MCP|mcp_\w+|Bash|Read|Write|Edit|Task)[\s:]+(\S+)/i);
+        const toolMatch = errorMatch[2].match(/(?:Tool|MCP|mcp_\w+|Bash|Read|Write|Edit|Agent|Task)[\s:]+(\S+)/i);
 
         entries.push({
           line_number: lineNumber,

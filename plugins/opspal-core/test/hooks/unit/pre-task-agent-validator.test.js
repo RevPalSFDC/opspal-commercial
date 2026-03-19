@@ -41,9 +41,9 @@ function createTester() {
   });
 }
 
-function createTaskEvent(toolInput = {}) {
+function createAgentEvent(toolInput = {}) {
   return {
-    tool_name: 'Task',
+    tool_name: 'Agent',
     tool_input: toolInput
   };
 }
@@ -119,7 +119,7 @@ async function runAllTests() {
   results.push(await runTest('Passes through when no subagent_type', async () => {
     const env = createIsolatedEnv();
     const result = await tester.run({
-      input: createTaskEvent({ prompt: 'test prompt', description: 'test' }),
+      input: createAgentEvent({ prompt: 'test prompt', description: 'test' }),
       env
     });
 
@@ -130,7 +130,7 @@ async function runAllTests() {
   // Test 3: Already fully-qualified name passes through
   results.push(await runTest('Passes through fully-qualified agent name', async () => {
     const env = createIsolatedEnv();
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'opspal-salesforce:sfdc-cpq-assessor',
       prompt: 'test prompt'
     });
@@ -148,7 +148,7 @@ async function runAllTests() {
   // Note: This test may fail if agent-alias-resolver.js isn't accessible from test environment
   results.push(await runTest('Handles short agent name (resolution depends on env)', async () => {
     const env = createIsolatedEnv();
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'sfdc-cpq-assessor',
       prompt: 'test prompt'
     });
@@ -176,7 +176,7 @@ async function runAllTests() {
   // Note: Depends on agent-alias-resolver being accessible
   results.push(await runTest('Handles command name gracefully', async () => {
     const env = createIsolatedEnv();
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'reflect',
       prompt: 'test prompt'
     });
@@ -201,7 +201,7 @@ async function runAllTests() {
   // Test 6: Agent not found error
   results.push(await runTest('Reports error for non-existent agent', async () => {
     const env = createIsolatedEnv();
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'non-existent-fake-agent-xyz',
       prompt: 'test prompt'
     });
@@ -252,7 +252,7 @@ async function runAllTests() {
     const env = createIsolatedEnv({
       ENABLE_ROUTING_METRICS: '1'
     });
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'sfdc-discovery',
       prompt: 'test prompt'
     });
@@ -273,7 +273,7 @@ async function runAllTests() {
       RUNBOOK_COHORT_ENFORCEMENT: '1',
       RUNBOOK_COHORT_STRICT: '0'
     });
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'sfdc-discovery',
       prompt: 'Investigate dark agents and routing keyword index mismatch before execution'
     });
@@ -296,7 +296,7 @@ async function runAllTests() {
   // Test 11: Injects permission fallback contract for Bash-required subagents
   results.push(await runTest('Injects Bash permission fallback contract for data/query subagents', async () => {
     const env = createIsolatedEnv();
-    const input = createTaskEvent({
+    const input = createAgentEvent({
       subagent_type: 'opspal-salesforce:sfdc-data-operations',
       prompt: 'Run a core object query and summarize results'
     });
@@ -325,7 +325,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Clears pending routing state when Task uses approved family member', async () => {
+  results.push(await runTest('Clears pending routing state when Agent uses approved family member', async () => {
     const env = createIsolatedEnv();
     writeRoutingState(env, {
       session_key: env.CLAUDE_SESSION_ID,
@@ -345,7 +345,7 @@ async function runAllTests() {
     });
 
     const result = await tester.run({
-      input: createTaskEvent({
+      input: createAgentEvent({
         subagent_type: 'sfdc-query-specialist',
         prompt: 'Run the approved data-operation route'
       }),
@@ -355,7 +355,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const state = readRoutingState(env);
     assert(state, 'State file should still exist for telemetry');
-    assert.strictEqual(state.status, 'cleared', 'Approved Task should clear pending routing state');
+    assert.strictEqual(state.status, 'cleared', 'Approved Agent should clear pending routing state');
     assert.strictEqual(
       state.last_resolved_agent,
       'opspal-salesforce:sfdc-query-specialist',
@@ -363,7 +363,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Denies Task when pending routing requires a different agent family', async () => {
+  results.push(await runTest('Denies Agent when pending routing requires a different agent family', async () => {
     const env = createIsolatedEnv();
     writeRoutingState(env, {
       session_key: env.CLAUDE_SESSION_ID,
@@ -380,7 +380,7 @@ async function runAllTests() {
     });
 
     const result = await tester.run({
-      input: createTaskEvent({
+      input: createAgentEvent({
         subagent_type: 'sfdc-cpq-assessor',
         prompt: 'Try the wrong agent first'
       }),
@@ -391,15 +391,15 @@ async function runAllTests() {
     assert.strictEqual(
       result.output?.hookSpecificOutput?.permissionDecision,
       'deny',
-      'Wrong Task family should be denied while routing requirement is pending'
+      'Wrong Agent family should be denied while routing requirement is pending'
     );
     assert(
       (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ROUTING_REQUIRED_AGENT_MISMATCH'),
       'Should explain the routing-family mismatch'
     );
     const state = readRoutingState(env);
-    assert(state, 'Pending state should remain after denied Task');
-    assert.strictEqual(state.status, 'pending', 'Denied Task should not clear routing state');
+    assert(state, 'Pending state should remain after denied Agent');
+    assert.strictEqual(state.status, 'pending', 'Denied Agent should not clear routing state');
   }));
 
   // Summary

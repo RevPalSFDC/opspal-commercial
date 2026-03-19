@@ -42,7 +42,7 @@ Automate CS operations including QBR preparation, health score interventions, re
 Use the cs-operations-orchestrator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:cs-operations-orchestrator',
   prompt: `CS Operations: ${action || 'overview'}. Account: ${account || 'all'}. Period: ${period || 'current'}. Org: ${org || 'default'}`
 });

@@ -8,7 +8,7 @@
 # Created: 2025-11-25
 #
 # Triggers when:
-# - Task tool completes (PostToolUse event)
+# - Agent tool completes (PostToolUse event)
 # - Agent name matches audit patterns (*auditor*, *assessor*, *audit*, *assessment*)
 # - Audit output files are detected
 #
@@ -113,10 +113,10 @@ is_audit_agent() {
     return 1
 }
 
-# Check if Task tool was used
+# Check if Agent tool was used
 is_task_tool() {
     local tool_name="${TOOL_NAME:-}"
-    [[ "$tool_name" == "Task" ]]
+    [[ "$tool_name" == "Agent" ]] || [[ "$tool_name" == "Task" ]]
 }
 
 # Check for NO_BLUF opt-out flag in context
@@ -281,9 +281,9 @@ main() {
         exit 0
     fi
 
-    # Check if this is a Task tool completion
+    # Check if this is an Agent tool completion
     if ! is_task_tool; then
-        log_debug "Not a Task tool"
+        log_debug "Not an Agent tool"
         exit 0
     fi
 

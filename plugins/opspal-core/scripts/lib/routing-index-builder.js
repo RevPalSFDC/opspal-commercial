@@ -397,7 +397,8 @@ class RoutingIndexBuilder {
                 agent.tier = String(frontmatter.tier).trim();
             }
 
-            const tools = this.normalizeStringArray(frontmatter.tools);
+            const tools = this.normalizeStringArray(frontmatter.tools)
+                .map(tool => tool === 'Task' ? 'Agent' : tool);
             if (tools.length > 0) {
                 agent.tools = tools;
             }
@@ -545,7 +546,11 @@ class RoutingIndexBuilder {
                         name: hook.name || path.basename(hook.file || 'unknown', '.sh'),
                         description: hook.description || '',
                         file: hook.file || null,
-                        matcher: hook.matcher || null
+                        matcher: hook.matcher === 'Task(*)'
+                            ? 'Agent(*)'
+                            : hook.matcher === 'Task'
+                                ? 'Agent'
+                                : (hook.matcher || null)
                     });
                 }
 

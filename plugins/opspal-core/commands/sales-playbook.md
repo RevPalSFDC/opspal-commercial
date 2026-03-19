@@ -40,7 +40,7 @@ Generate targeted sales playbooks and next-best-action recommendations based on 
 Use the sales-playbook-orchestrator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:sales-playbook-orchestrator',
   prompt: `Generate sales playbook for segment: ${segment || 'auto-detect'}. Deal ID: ${deal || 'none'}. Org: ${org || 'default'}`
 });

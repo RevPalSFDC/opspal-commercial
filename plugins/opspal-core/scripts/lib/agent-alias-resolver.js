@@ -276,7 +276,7 @@ function buildAgentRegistry() {
 
 /**
  * Scans all plugins and builds a registry of command names
- * Commands are different from agents - they're invoked via Skill tool, not Task tool
+ * Commands are different from agents - they're invoked via Skill tool, not Agent tool
  * @returns {Object} Map of command names to their plugin and invocation info
  */
 function buildCommandRegistry() {
@@ -743,7 +743,7 @@ if (require.main === module) {
                 crossConflicts.forEach(conflict => {
                     console.log(`  ${conflict.shortName}:`);
                     console.log(`    COMMAND: ${conflict.asCommand.fullName} → ${conflict.asCommand.invocation}`);
-                    console.log(`    AGENT:   ${conflict.asAgent.fullName} → Task tool`);
+                    console.log(`    AGENT:   ${conflict.asAgent.fullName} → Agent tool`);
                     console.log('');
                 });
                 console.log('⚠️  These names are ambiguous - users may confuse command vs agent invocation.');
@@ -836,12 +836,12 @@ function getCrossTypeConflictInfo(name) {
         },
         asAgent: {
             fullName: agentFullName,
-            invocation: `Task(subagent_type='${agentFullName}')`,
-            tool: 'Task'
+            invocation: `Agent(subagent_type='${agentFullName}')`,
+            tool: 'Agent'
         },
         message: `AMBIGUOUS: '${shortName}' exists as both a COMMAND and an AGENT.\n` +
                  `  - As COMMAND: Use Skill(skill='${shortName}') or /${shortName}\n` +
-                 `  - As AGENT: Use Task(subagent_type='${agentFullName}')\n` +
+                 `  - As AGENT: Use Agent(subagent_type='${agentFullName}')\n` +
                  `Please use the fully-qualified name to avoid confusion.`
     };
 }

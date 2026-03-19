@@ -1164,7 +1164,7 @@ if [[ -n "$SUGGESTED_AGENT" ]] && [[ "$SUGGESTED_AGENT" != "null" ]]; then
     echo "[ROUTING] Agent: $SUGGESTED_AGENT | Complexity: ${COMPLEXITY_PCT}% | Action: $ACTION_TYPE" >&2
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
     # Namespace reminder - agent names MUST include plugin prefix
-    echo "⚠️  Use fully-qualified name: Task(subagent_type='$SUGGESTED_AGENT', ...)" >&2
+    echo "⚠️  Use fully-qualified name: Agent(subagent_type='$SUGGESTED_AGENT', ...)" >&2
     echo "    Short names (without prefix) will fail with 'Agent not found'" >&2
 fi
 
@@ -1404,57 +1404,57 @@ elif [[ "$IS_MANDATORY" == "true" ]] &&
      [[ "$USER_PROMPT_MANDATORY_HARD_BLOCKING" == "1" ]] &&
      [[ "$ENABLE_HARD_BLOCKING" == "1" ]]; then
     CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Destructive operation matched mandatory routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
-Recommended specialist: Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Proceed only if this bypass is intentional."
 
 elif [[ "$IS_MANDATORY" == "true" ]] && [[ "$ENFORCED_BLOCK" == "true" ]]; then
     CONTEXT_MESSAGE="INSTRUCTION: STOP. Destructive operation detected.
-Use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 CRITICAL: Use the EXACT agent name shown above. Short names will fail.
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
 
 elif [[ "$IS_MANDATORY" == "true" ]]; then
     CONTEXT_MESSAGE="MANDATORY ROUTING: This operation MUST use a specialist agent.
-You MUST use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) to handle this.
+You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) to handle this.
 Do NOT execute this directly. Route through the specialist agent above.
 CRITICAL: Use the EXACT fully-qualified agent name shown above. Short names will fail."
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
     if [[ "$ENABLE_INTAKE_HARD_BLOCKING" == "1" ]]; then
         CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Request looks project-level and under-specified, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
-Recommended specialist: Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
+Recommended specialist: Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
 Proceed only if bypassing intake is intentional."
     else
         CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Request looks project-level and under-specified.
-Recommended specialist: Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
+Recommended specialist: Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
 Override token detected; direct operational tools may proceed only if this bypass is intentional."
     fi
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]]; then
     if [[ "$ENABLE_INTAKE_HARD_BLOCKING" == "1" ]]; then
         CONTEXT_MESSAGE="INSTRUCTION: STOP. Request appears project-level but under-specified.
-Run Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) first.
+Run Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) first.
 Reason: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE (< $ACTIVE_INTAKE_COMPLETENESS_MAX).
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
     else
         CONTEXT_MESSAGE="ROUTING REQUIRED: Request appears project-level but under-specified.
-Start with Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to gather specifics and produce a structured plan.
+Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to gather specifics and produce a structured plan.
 Reason: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE (< $ACTIVE_INTAKE_COMPLETENESS_MAX).
 Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked or an override is used."
     fi
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$ADAPTIVE_FALLBACK_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING ADAPTIVE FALLBACK: High-complexity signal detected (${COMPLEXITY_PCT}%), but this prompt appears to be continuation/noisy context.
-Recommended specialist: Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Proceeding without hard block for this turn."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: High-complexity task (${COMPLEXITY_PCT}%) matched enforced routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
-Recommended specialist: Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Proceed only if this bypass is intentional."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]]; then
-    CONTEXT_MESSAGE="MANDATORY ROUTING: High complexity (${COMPLEXITY_PCT}%). You MUST use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+    CONTEXT_MESSAGE="MANDATORY ROUTING: High complexity (${COMPLEXITY_PCT}%). You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Do NOT execute this directly - route through the specialist agent.
 CRITICAL: Use the EXACT agent name shown above (fully-qualified with plugin prefix).
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
@@ -1462,11 +1462,11 @@ If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
 elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]]; then
     if [[ "$SUGGESTED_AGENT" == "opspal-core:intelligent-intake-orchestrator" ]] && [[ "$INTAKE_GATE_APPLIED" == "true" ]]; then
         CONTEXT_MESSAGE="This looks like a project-level request with missing implementation specifics.
-Start with Task(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to run intake questions and generate a structured plan.
+Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to run intake questions and generate a structured plan.
 Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE.
 Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked."
     else
-        CONTEXT_MESSAGE="ROUTING: Use Task(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task. Complexity: ${COMPLEXITY_PCT}%.
+        CONTEXT_MESSAGE="ROUTING: Use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task. Complexity: ${COMPLEXITY_PCT}%.
 REMINDER: Use the EXACT fully-qualified agent name shown above.
 Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked."
     fi
@@ -1483,11 +1483,11 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
     if [[ "$ENFORCED_BLOCK" == "true" ]]; then
         DECISION_VALUE="block"
         if [[ "$IS_MANDATORY" == "true" ]]; then
-            DECISION_REASON="Mandatory routing enforcement: use Task(subagent_type='$SUGGESTED_AGENT') before proceeding."
+            DECISION_REASON="Mandatory routing enforcement: use Agent(subagent_type='$SUGGESTED_AGENT') before proceeding."
         elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]]; then
-            DECISION_REASON="Active intake enforcement: route to Task(subagent_type='opspal-core:intelligent-intake-orchestrator') before specialist execution."
+            DECISION_REASON="Active intake enforcement: route to Agent(subagent_type='opspal-core:intelligent-intake-orchestrator') before specialist execution."
         else
-            DECISION_REASON="High-complexity routing enforcement: use Task(subagent_type='$SUGGESTED_AGENT') before proceeding."
+            DECISION_REASON="High-complexity routing enforcement: use Agent(subagent_type='$SUGGESTED_AGENT') before proceeding."
         fi
     fi
 

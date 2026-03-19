@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #
-# Pre-Task Agent Validator Hook
+# Pre-Agent Validator Hook
 #
-# Validates and resolves agent names before Task tool execution.
+# Validates and resolves agent names before Agent tool execution.
 # This prevents two common routing errors:
 #   1. Commands mistakenly invoked as agents (e.g., "reflect" should use Skill tool)
 #   2. Short agent names not resolved to fully-qualified names
@@ -27,6 +27,7 @@ CROSS_PLUGIN_COORDINATOR="$PLUGIN_ROOT/scripts/lib/cross-plugin-coordinator.js"
 ROUTING_METRICS="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
 ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
+HOOK_EVENT_NORMALIZER="$PLUGIN_ROOT/scripts/lib/hook-event-normalizer.js"
 
 # Log file for debugging
 LOG_FILE="${TASK_VALIDATOR_LOG:-/tmp/task-validator-hook.log}"
@@ -362,16 +363,30 @@ main() {
         exit 0
     fi
 
+    if [ ! -f "$HOOK_EVENT_NORMALIZER" ]; then
+        log "Hook event normalizer not found at $HOOK_EVENT_NORMALIZER, skipping validation"
+        echo '{}'
+        exit 0
+    fi
+
+    local normalized_hook_input
+    normalized_hook_input=$(printf '%s' "$HOOK_INPUT" | node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "{}")
+    if [[ -z "$normalized_hook_input" ]] || ! echo "$normalized_hook_input" | jq -e . >/dev/null 2>&1; then
+        log "Could not normalize hook input, skipping"
+        echo '{}'
+        exit 0
+    fi
+
     local tool_name
-    tool_name=$(echo "$HOOK_INPUT" | jq -r '.tool_name // empty' 2>/dev/null || echo "")
-    if [[ "$tool_name" != "Task" ]]; then
-        log "Non-Task tool event, skipping"
+    tool_name=$(echo "$normalized_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || echo "")
+    if [[ "$tool_name" != "Agent" ]] && [[ "$tool_name" != "Task" ]]; then
+        log "Non-Agent tool event, skipping"
         echo '{}'
         exit 0
     fi
 
     # Extract tool_input payload from hook input
-    TOOL_INPUT=$(echo "$HOOK_INPUT" | jq -c '.tool_input // {}' 2>/dev/null || echo "{}")
+    TOOL_INPUT=$(echo "$normalized_hook_input" | jq -c '.tool_input // {}' 2>/dev/null || echo "{}")
     if [[ "$TOOL_INPUT" == "{}" ]]; then
         log "No tool_input payload, skipping"
         echo '{}'
@@ -388,7 +403,7 @@ main() {
     fi
 
     ADDITIONAL_CONTEXT=""
-    SESSION_KEY=$(extract_session_key "$HOOK_INPUT")
+    SESSION_KEY=$(extract_session_key "$normalized_hook_input")
 
     log "Validating agent: $AGENT_NAME"
 
@@ -402,9 +417,9 @@ main() {
 
         log "Cross-type conflict detected: $AGENT_NAME"
 
-        # Since user explicitly used Task tool, they likely want the agent
+        # Since user explicitly used the Agent tool, they likely want the agent
         # But we should warn them about the ambiguity
-        ADDITIONAL_CONTEXT="WARN [ROUTING_AMBIGUOUS_NAME]: '$AGENT_NAME' exists as both command and agent. Since Task tool was used, proceeding with agent invocation. If command was intended, use Skill(skill='$AGENT_NAME') or /$AGENT_NAME. Prefer fully-qualified names like 'plugin:agent-name'."
+        ADDITIONAL_CONTEXT="WARN [ROUTING_AMBIGUOUS_NAME]: '$AGENT_NAME' exists as both command and agent. Since the Agent tool was used, proceeding with agent invocation. If command was intended, use Skill(skill='$AGENT_NAME') or /$AGENT_NAME. Prefer fully-qualified names like 'plugin:agent-name'."
         # Continue with agent resolution (don't exit)
     fi
 
@@ -553,7 +568,7 @@ main() {
             log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_requirement_mismatch" "Pending route requires approved agent family"
             emit_pretool_response \
               "deny" \
-              "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use Task(subagent_type='${REQUIRED_AGENT:-unknown}', prompt=<original request>) or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}." \
+              "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}." \
               "" \
               "" \
               "ROUTING_REQUIRED_AGENT_MISMATCH" \

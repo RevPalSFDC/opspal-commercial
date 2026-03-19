@@ -17,7 +17,7 @@ Extract the following from the user's command:
 
 ## Invoke Implementation Planner
 
-Use the Task tool to invoke the implementation-planner agent with this prompt:
+Use the Agent tool to invoke the implementation-planner agent with this prompt:
 
 ```
 Parse and execute the specification at: <spec_file>
@@ -32,7 +32,7 @@ Steps:
 3. Query existing project sections and map phases to sections
 4. ${dry_run ? 'Display plan summary and exit' : 'Create tasks in Asana project with section assignments'}
 5. Link task dependencies automatically based on detected requirements
-6. ${execute && !dry_run ? 'Delegate tasks to specialized agents using Task() tool' : 'Wait for user approval'}
+6. ${execute && !dry_run ? 'Delegate tasks to specialized agents using Agent() tool' : 'Wait for user approval'}
 7. Track progress and post status updates to project
 ```
 
@@ -67,7 +67,7 @@ If the agent reports errors:
 4. **Create Asana Tasks**: Build tasks with section assignments and full descriptions
 5. **Link Dependencies**: Automatically connect tasks based on detected dependencies
 6. **Approval**: Present plan summary for review (unless --execute flag set)
-7. **Execute**: Delegate tasks to specialized agents via Task() tool (if --execute)
+7. **Execute**: Delegate tasks to specialized agents via Agent() tool (if --execute)
 8. **Track Progress**: Monitor completion and post status updates to project
 
 ## Example

@@ -3,7 +3,7 @@
  * Routing State Manager
  *
  * Persists session-scoped routing requirements between UserPromptSubmit,
- * PreToolUse(Task), and PreToolUse(non-Task) hooks.
+ * PreToolUse(Agent), and PreToolUse(non-Agent) hooks.
  *
  * Usage:
  *   node routing-state-manager.js save <session-key>          # reads JSON from stdin

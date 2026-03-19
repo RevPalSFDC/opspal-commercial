@@ -91,7 +91,7 @@ fi
 
 # Fallback: hardcoded minimal reminder
 if [ -z "$ROUTING_TEXT" ]; then
-  ROUTING_TEXT="ROUTING REMINDER: For revops/audit use sfdc-revops-auditor, cpq/quote use sfdc-cpq-assessor, automation audit use sfdc-automation-auditor, hubspot assessment use hubspot-assessment-analyzer. Always invoke via Task(subagent_type='<agent>', prompt=<request>)."
+  ROUTING_TEXT="ROUTING REMINDER: For revops/audit use sfdc-revops-auditor, cpq/quote use sfdc-cpq-assessor, automation audit use sfdc-automation-auditor, hubspot assessment use hubspot-assessment-analyzer. Always invoke via Agent(subagent_type='<agent>', prompt=<request>)."
 fi
 
 # Escape for JSON

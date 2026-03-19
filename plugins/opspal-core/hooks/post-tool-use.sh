@@ -67,11 +67,12 @@ STRICT="${TOOL_VALIDATION_STRICT:-0}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_FORMATTER="$SCRIPT_DIR/../scripts/lib/output-formatter.js"
 HOOK_LOGGER="$SCRIPT_DIR/../scripts/lib/hook-logger.js"
+HOOK_EVENT_NORMALIZER="$SCRIPT_DIR/../scripts/lib/hook-event-normalizer.js"
 HOOK_NAME="post-tool-use"
 
 # If disabled, pass through
 if [ "$ENABLED" != "1" ]; then
-  echo '{}' >&2
+  echo '{}'
   exit 0
 fi
 
@@ -83,6 +84,11 @@ esac
 
 # Read hook input (JSON from Claude Code, if provided)
 HOOK_INPUT=$(read_stdin_json)
+NORMALIZED_HOOK_INPUT="$HOOK_INPUT"
+
+if [ -n "$HOOK_INPUT" ] && [ -f "$HOOK_EVENT_NORMALIZER" ] && command -v node >/dev/null 2>&1; then
+  NORMALIZED_HOOK_INPUT=$(printf '%s' "$HOOK_INPUT" | node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "$HOOK_INPUT")
+fi
 
 # Extract tool information (env first, then hook input)
 TOOL_NAME="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-${TOOL_NAME:-}}}"
@@ -90,18 +96,18 @@ TOOL_ARGS_RAW="${CLAUDE_TOOL_INPUT:-${HOOK_TOOL_INPUT:-${TOOL_INPUT:-}}}"
 TOOL_RESULT="${CLAUDE_TOOL_OUTPUT:-${CLAUDE_TOOL_RESULT:-${HOOK_TOOL_OUTPUT:-${TOOL_OUTPUT:-}}}}"
 TOOL_EXIT_CODE="${CLAUDE_TOOL_EXIT_CODE:-${HOOK_TOOL_EXIT_CODE:-${TOOL_EXIT_CODE:-}}}"
 
-if [ -n "$HOOK_INPUT" ]; then
+if [ -n "$NORMALIZED_HOOK_INPUT" ]; then
   if [ -z "$TOOL_NAME" ]; then
-    TOOL_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool // .tool_name // .toolName // .name // "unknown"' 2>/dev/null || echo "unknown")
+    TOOL_NAME=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_name // .tool // .toolName // .name // "unknown"' 2>/dev/null || echo "unknown")
   fi
   if [ -z "$TOOL_ARGS_RAW" ]; then
-    TOOL_ARGS_RAW=$(echo "$HOOK_INPUT" | jq -c '.args // .input // .parameters // .tool_input // {}' 2>/dev/null || echo "")
+    TOOL_ARGS_RAW=$(echo "$NORMALIZED_HOOK_INPUT" | jq -c '.tool_input // .input // .parameters // .args // {}' 2>/dev/null || echo "")
   fi
   if [ -z "$TOOL_RESULT" ]; then
-    TOOL_RESULT=$(echo "$HOOK_INPUT" | jq -r '.result // .output // .tool_output // .tool_result // ""' 2>/dev/null || echo "")
+    TOOL_RESULT=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_result // .result // .output // .tool_output // ""' 2>/dev/null || echo "")
   fi
   if [ -z "$TOOL_EXIT_CODE" ]; then
-    TOOL_EXIT_CODE=$(echo "$HOOK_INPUT" | jq -r '.exitCode // .exit_code // 0' 2>/dev/null || echo "0")
+    TOOL_EXIT_CODE=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_exit_code // .exitCode // .exit_code // 0' 2>/dev/null || echo "0")
   fi
 fi
 
@@ -690,7 +696,7 @@ validate_edit_tool() {
 # ============================================================================
 # ROUTING COMPLIANCE CHECKING
 # ============================================================================
-# Check if Claude ignored a routing recommendation (when Task tool was required)
+# Check if Claude ignored a routing recommendation (when Agent delegation was required)
 
 check_routing_compliance() {
   local tool_name="$1"
@@ -704,7 +710,7 @@ check_routing_compliance() {
     return 0
   fi
 
-  session_key=$(echo "$HOOK_INPUT" | jq -r '
+  session_key=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '
     .session_key
     // .sessionKey
     // .session_id
@@ -729,7 +735,7 @@ check_routing_compliance() {
     return 0
   fi
 
-  if [ "$tool_name" != "Task" ]; then
+  if [ "$tool_name" != "Agent" ]; then
     local compliance_log="$HOME/.claude/logs/compliance.jsonl"
     mkdir -p "$(dirname "$compliance_log")" 2>/dev/null || true
 
@@ -784,18 +790,18 @@ case "$TOOL_NAME" in
     # Could add checks for empty files or permission errors
     ;;
 
-  Task)
-    log_validation "Task" "agent_used" "Agent delegation detected" "info"
+  Agent|Task)
+    log_validation "Agent" "agent_used" "Agent delegation detected" "info"
 
     # =========================================================================
-    # ACE FRAMEWORK: Record Task Execution
+    # ACE FRAMEWORK: Record Agent Execution
     # =========================================================================
     # Records agent task completions to ACE for routing optimization
     if [ "${ENABLE_ACE_TRACKING:-1}" = "1" ]; then
       ACE_RECORDER="$PLUGIN_ROOT/scripts/lib/ace-execution-recorder.js"
 
       if [ -f "$ACE_RECORDER" ] && command -v node &> /dev/null; then
-        # Extract agent name and result from Task args
+        # Extract agent name and result from Agent args
         TASK_AGENT=$(echo "$TOOL_ARGS" | jq -r '.subagent_type // ""')
         TASK_PROMPT=$(echo "$TOOL_ARGS" | jq -r '.prompt // ""' | head -c 200)
         TASK_SUCCESS="true"
@@ -822,7 +828,7 @@ case "$TOOL_NAME" in
           ) &
 
           [ "${ROUTING_VERBOSE:-0}" = "1" ] && \
-            echo "[ACE] Recording Task execution: agent=$TASK_AGENT success=$TASK_SUCCESS" >&2
+            echo "[ACE] Recording Agent execution: agent=$TASK_AGENT success=$TASK_SUCCESS" >&2
         fi
       fi
     fi
@@ -892,5 +898,5 @@ esac
 
 # If we reach here, validation passed
 log_validation "$TOOL_NAME" "passed" "Validation successful" "info"
-echo '{}' >&2
+echo '{}'
 exit 0

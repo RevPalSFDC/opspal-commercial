@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ##
-# Pre-Task Agent Validator Hook
+# Pre-Agent Validator Hook
 #
-# Validates agent selection before task execution to prevent routing errors.
+# Validates agent selection before agent execution to prevent routing errors.
 # Blocks wrong agents and suggests correct ones based on task description.
 #
 # Adapted from SFDC pre-task-agent-validator.sh
@@ -40,11 +40,11 @@ TASK_DESC="${TASK_DESCRIPTION:-$1}"
 AGENT_NAME="${AGENT_NAME:-$2}"
 
 if [[ -z "$TASK_DESC" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
-    TASK_DESC=$(echo "$HOOK_INPUT" | jq -r '.prompt // .description // .task // ""' 2>/dev/null || echo "")
+    TASK_DESC=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // ""' 2>/dev/null || echo "")
 fi
 
 if [[ -z "$AGENT_NAME" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
-    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.subagent_type // .agent // ""' 2>/dev/null || echo "")
+    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // ""' 2>/dev/null || echo "")
 fi
 
 # Exit if no task description

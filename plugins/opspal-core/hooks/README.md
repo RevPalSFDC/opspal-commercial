@@ -97,7 +97,7 @@ or continuation-style prompts that can otherwise trigger false-positive complexi
 OpsPal now enforces specialist routing with a two-step model:
 
 - `UserPromptSubmit` writes session-scoped routing state for blocking, mandatory, and medium-complexity recommended specialist routes, but does not block prompt submission by default.
-- `PreToolUse` denies operational execution until the correct `Task(subagent_type='plugin:agent', ...)` specialist clears that session state.
+- `PreToolUse` denies operational execution until the correct `Agent(subagent_type='plugin:agent', ...)` specialist clears that session state.
 - Read-only tools stay allowed while a route is pending.
 - Mutating MCP tools are classified via `config/mcp-tool-policies.json`.
 - Unknown MCP tools default to deny while a pending route is active and are logged for follow-up classification.

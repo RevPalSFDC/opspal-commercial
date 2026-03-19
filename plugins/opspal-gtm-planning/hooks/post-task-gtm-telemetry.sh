@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Hook: post-task-gtm-telemetry.sh
-# Event: PostToolUse (Task matcher)
+# Event: PostToolUse (Agent matcher)
 # Purpose: Capture GTM planning agent telemetry to gtm-telemetry.jsonl
 # Pattern: mirrors opspal-okrs/hooks/post-task-okr-telemetry.sh
 
@@ -20,7 +20,7 @@ fi
 # Extract agent name from environment or input
 AGENT_NAME="${CLAUDE_AGENT_NAME:-}"
 if [ -z "$AGENT_NAME" ] && [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
-  AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.subagent_type // ""' 2>/dev/null || echo "")
+  AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // ""' 2>/dev/null || echo "")
 fi
 
 # Only track GTM planning agents
@@ -43,7 +43,7 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 CYCLE="${GTM_ACTIVE_CYCLE:-unknown}"
 PHASE="${GTM_ACTIVE_PHASE:-unknown}"
 
-# Extract metrics from Task result if available
+# Extract metrics from Agent result if available
 TOKEN_COUNT=""
 DURATION_MS=""
 TOOL_USES=""

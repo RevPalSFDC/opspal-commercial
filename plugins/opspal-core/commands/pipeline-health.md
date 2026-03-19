@@ -39,7 +39,7 @@ Comprehensive pipeline health scoring with bottleneck detection, deal risk asses
 Use the pipeline-intelligence-agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:pipeline-intelligence-agent',
   prompt: `Analyze pipeline health for ${org || 'default org'}. Segment: ${segment || 'all'}. Detail level: ${detailed ? 'deal-level' : 'summary'}`
 });

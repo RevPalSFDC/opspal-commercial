@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Hook: post-task-okr-telemetry.sh
-# Event: PostToolUse on Task
+# Event: PostToolUse on Agent
 # Purpose: Capture OKR agent telemetry (token_count, duration_ms, tool_uses)
 # Writes JSONL to ~/.claude/logs/okr-telemetry.jsonl
 # Never blocks on failure
@@ -13,7 +13,7 @@ INPUT="$(cat 2>/dev/null || true)"
 # Only process OKR agent results
 IS_OKR=""
 if command -v jq &>/dev/null; then
-  AGENT_TYPE="$(echo "$INPUT" | jq -r '.subagent_type // empty' 2>/dev/null || true)"
+  AGENT_TYPE="$(echo "$INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // empty' 2>/dev/null || true)"
   case "$AGENT_TYPE" in
     *okr*|*opspal-okrs*)
       IS_OKR="1"

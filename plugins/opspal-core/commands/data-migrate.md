@@ -45,7 +45,7 @@ Orchestrate data migrations between platforms with comprehensive field mapping, 
 Use the data-migration-orchestrator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:data-migration-orchestrator',
   prompt: `Data migration: ${action || 'plan'}. Source: ${source || 'none'}. Target: ${target || 'none'}. Mapping: ${mapping || 'auto'}`
 });

@@ -118,7 +118,7 @@ function getComplianceRate() {
     e => e.blocked === true || e.action === 'BLOCKED' || e.action === 'MANDATORY_BLOCKED'
   );
 
-  // Count violations (blocked but not using Task)
+  // Count violations (blocked but not using the required Agent route)
   const violations = complianceEntries.filter(e => e.violation === true);
 
   const totalBlocking = blockingDecisions.length;

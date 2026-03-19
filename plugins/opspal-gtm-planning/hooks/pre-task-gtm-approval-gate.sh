@@ -6,7 +6,7 @@
 # Purpose: Enforce the 7-phase GTM planning methodology by preventing agents
 #          from executing phases out of order or without required gate approvals.
 #
-# Triggers: PreToolUse/Task — for GTM planning agents
+# Triggers: PreToolUse/Agent — for GTM planning agents
 #
 # Flow:
 #   1. Read cycle-state.json for the active GTM cycle
@@ -42,7 +42,7 @@ fi
 # Extract agent from input
 AGENT_NAME=""
 if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
-  AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.subagent_type // ""' 2>/dev/null || echo "")
+  AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // ""' 2>/dev/null || echo "")
 fi
 AGENT_NAME="${AGENT_NAME:-${CLAUDE_AGENT_NAME:-}}"
 AGENT_LOWER=$(echo "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')

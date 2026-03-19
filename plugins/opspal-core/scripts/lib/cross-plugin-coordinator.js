@@ -10,7 +10,7 @@
  * Features:
  * - Cross-plugin invocation validation
  * - Dependency graph of plugin interactions
- * - Runtime validation for Task tool calls
+ * - Runtime validation for Agent tool calls
  * - Workflow compatibility checking
  *
  * Usage:
@@ -108,15 +108,15 @@ function extractCrossPluginRefs(agentPath, sourcePlugin) {
   try {
     const content = fs.readFileSync(agentPath, 'utf8');
 
-    // Pattern 1: Task tool invocations with subagent_type
-    const taskMatches = content.matchAll(/Task\s*\(\s*subagent_type\s*[=:]\s*['"]([^'"]+)['"]/gi);
+    // Pattern 1: Agent tool invocations with subagent_type
+    const taskMatches = content.matchAll(/(?:Agent|Task)\s*\(\s*subagent_type\s*[=:]\s*['"]([^'"]+)['"]/gi);
     for (const match of taskMatches) {
       const targetAgent = match[1];
       const targetPlugin = targetAgent.includes(':') ? targetAgent.split(':')[0] : null;
 
       if (targetPlugin && targetPlugin !== sourcePlugin) {
         refs.push({
-          type: 'task_invocation',
+          type: 'agent_invocation',
           target: targetAgent,
           targetPlugin,
           raw: match[0]
@@ -291,7 +291,7 @@ function validateAllCrossPluginRefs() {
 
   for (const [sourceAgent, data] of Object.entries(allRefs)) {
     for (const ref of data.refs) {
-      if (ref.type === 'task_invocation') {
+      if (ref.type === 'agent_invocation') {
         results.total++;
         const validation = validateCrossPluginCall(sourceAgent, ref.target);
 

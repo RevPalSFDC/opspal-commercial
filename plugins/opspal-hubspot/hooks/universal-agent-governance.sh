@@ -89,7 +89,7 @@ fi
 
 PROMPT=""
 if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
-  PROMPT=$(echo "$HOOK_INPUT" | jq -r '.prompt // ""' 2>/dev/null || echo "")
+  PROMPT=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // ""' 2>/dev/null || echo "")
 fi
 
 PROMPT_LOWER=$(echo "${PROMPT}" | tr '[:upper:]' '[:lower:]')

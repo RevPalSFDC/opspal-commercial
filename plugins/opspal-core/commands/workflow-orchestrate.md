@@ -40,7 +40,7 @@ Orchestrate complex multi-platform workflows with dependency management, error r
 Use the multi-platform-workflow-orchestrator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:multi-platform-workflow-orchestrator',
   prompt: `Workflow orchestration: ${action || 'status'}. Workflow: ${workflow || 'none'}. Input: ${input || '{}'}`
 });

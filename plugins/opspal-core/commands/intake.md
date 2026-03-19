@@ -48,7 +48,7 @@ Classify a natural language request, generate a phased implementation plan, and 
 
 ## Instructions
 
-You MUST use the Task tool to route this to the `intelligent-intake-orchestrator` agent.
+You MUST use the Agent tool to route this to the `intelligent-intake-orchestrator` agent.
 
 Parse the user's input to extract:
 1. **request_text** — everything that isn't a flag
@@ -57,7 +57,7 @@ Parse the user's input to extract:
 Then invoke:
 
 ```
-Task(
+Agent(
   subagent_type = "intelligent-intake-orchestrator",
   prompt = "Process this intake request.\n\nRequest: {request_text}\n\nFlags: {parsed_flags}\n\nFollow your full workflow: Understand → Classify → Identify gaps → Ask questions (if allowed) → Generate plan → Confirm → Create Asana tasks (if not --plan-only)."
 )

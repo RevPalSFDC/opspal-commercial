@@ -88,12 +88,12 @@ function generateCompact(routes) {
 `;
 
   for (const route of routes) {
-    text += `| ${route.keywords} | \`${route.agent}\` | \`Task(subagent_type='${route.agent}', prompt=<request>)\` |\n`;
+    text += `| ${route.keywords} | \`${route.agent}\` | \`Agent(subagent_type='${route.agent}', prompt=<request>)\` |\n`;
   }
 
   text += `
 **Self-check**: (1) Does this match a keyword above? (2) Is this multi-step? (3) Is this an assessment/audit?
-If YES to any → use Task(). If unsure → use Task(). Override: \`[DIRECT]\` to skip.`;
+If YES to any → use Agent(). If unsure → use Agent(). Override: \`[DIRECT]\` to skip.`;
 
   return text;
 }
@@ -136,7 +136,7 @@ function generateFull(index) {
 function generateFallback() {
   return `## CRITICAL: Agent Routing Rules
 
-**STOP** before responding. For revops/audit use \`opspal-salesforce:sfdc-revops-auditor\`, for cpq/quote use \`opspal-salesforce:sfdc-cpq-assessor\`, for automation audit use \`opspal-salesforce:sfdc-automation-auditor\`, for hubspot assessment use \`opspal-hubspot:hubspot-assessment-analyzer\`, for marketo use \`opspal-marketo:marketo-orchestrator\`. Always invoke via Task(subagent_type='<agent>', prompt=<request>). If unsure → use Task().`;
+**STOP** before responding. For revops/audit use \`opspal-salesforce:sfdc-revops-auditor\`, for cpq/quote use \`opspal-salesforce:sfdc-cpq-assessor\`, for automation audit use \`opspal-salesforce:sfdc-automation-auditor\`, for hubspot assessment use \`opspal-hubspot:hubspot-assessment-analyzer\`, for marketo use \`opspal-marketo:marketo-orchestrator\`. Always invoke via Agent(subagent_type='<agent>', prompt=<request>). If unsure → use Agent().`;
 }
 
 // Main

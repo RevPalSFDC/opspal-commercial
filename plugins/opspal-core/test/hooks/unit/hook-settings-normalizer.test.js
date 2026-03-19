@@ -177,10 +177,10 @@ async function runAllTests() {
       }
     }, { projectRoot });
 
-    const preToolTaskGroup = normalized.hooks.PreToolUse.find((group) => group.matcher === 'Task');
-    assert(preToolTaskGroup, 'Task(*) should normalize to Task');
-    assert.strictEqual(preToolTaskGroup.hooks.length, 1, 'Migrated Task context hooks should be removed from PreToolUse');
-    assert(preToolTaskGroup.hooks[0].command.endsWith('/pre-task-agent-validator.sh'), 'Task validator should remain');
+    const preToolAgentGroup = normalized.hooks.PreToolUse.find((group) => group.matcher === 'Agent');
+    assert(preToolAgentGroup, 'Legacy Task(*) should normalize to the live Agent matcher');
+    assert.strictEqual(preToolAgentGroup.hooks.length, 1, 'Migrated agent context hooks should be removed from PreToolUse');
+    assert(preToolAgentGroup.hooks[0].command.endsWith('/pre-task-agent-validator.sh'), 'Agent validator should remain');
 
     const preToolBashGroup = normalized.hooks.PreToolUse.find((group) => group.matcher === 'Bash');
     assert(preToolBashGroup, 'Argument-style Bash matcher should normalize to Bash');

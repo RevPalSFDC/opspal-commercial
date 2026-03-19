@@ -31,6 +31,15 @@ TASK_INPUT="$1"
 OPERATION_TYPE="${2:-unknown}"
 BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 
+HOOK_INPUT=""
+if [[ ! -t 0 ]]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+if [[ -z "$TASK_INPUT" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
+    TASK_INPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // ""' 2>/dev/null || echo "")
+fi
+
 # Log file for tracking
 LOG_FILE="/tmp/agent-hook-mandatory-hubspot.log"
 BYPASS_FILE="/tmp/agent-bypass-reasons-hubspot.log"
@@ -248,7 +257,7 @@ main() {
         echo -e "${BOLD}${RED}This operation is BLOCKED until you use the required agent.${NC}"
         echo ""
         echo -e "${GREEN}To proceed, use:${NC}"
-        echo -e "${CYAN}  Task tool with subagent_type='${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'${NC}"
+        echo -e "${CYAN}  Agent tool with subagent_type='${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'${NC}"
         echo ""
         echo -e "${YELLOW}Or check the agent matrix: /agent-matrix${NC}"
         echo -e "${RED}${BOLD}Operation blocked. Please use the required agent.${NC}"

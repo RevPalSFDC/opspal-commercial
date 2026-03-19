@@ -41,6 +41,7 @@ VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/tool-contract-validator.js"
 ROUTING_STATE_MANAGER="${PLUGIN_ROOT}/scripts/lib/routing-state-manager.js"
 MCP_TOOL_POLICY_CONFIG="${PLUGIN_ROOT}/config/mcp-tool-policies.json"
 MCP_TOOL_POLICY_RESOLVER="${PLUGIN_ROOT}/scripts/lib/mcp-tool-policy-resolver.js"
+HOOK_EVENT_NORMALIZER="${PLUGIN_ROOT}/scripts/lib/hook-event-normalizer.js"
 DEFAULT_LOG_ROOT="${PROJECT_ROOT}/.claude/logs"
 LOG_ROOT="${CLAUDE_HOOK_LOG_ROOT:-$DEFAULT_LOG_ROOT}"
 FALLBACK_LOG_ROOT="/tmp/.claude/logs"
@@ -63,8 +64,17 @@ PENDING_ROUTE_MCP_POLICY_MATCHED=""
 PENDING_ROUTE_MCP_POLICY_NOTE=""
 
 # Parse tool name and input from stdin (or env fallback)
-# Claude passes: {"tool": "toolName", "input": {...}}
-INPUT_DATA=$(read_stdin_json)
+RAW_INPUT_DATA=$(read_stdin_json)
+
+if [ -f "$HOOK_EVENT_NORMALIZER" ] && command -v node >/dev/null 2>&1; then
+    if [ -n "$RAW_INPUT_DATA" ]; then
+        INPUT_DATA=$(printf '%s' "$RAW_INPUT_DATA" | node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
+    else
+        INPUT_DATA=$(node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
+    fi
+else
+    INPUT_DATA="$RAW_INPUT_DATA"
+fi
 
 if [ -z "$INPUT_DATA" ]; then
     TOOL_NAME_FALLBACK="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-}}"
@@ -87,11 +97,11 @@ if [ -z "$INPUT_DATA" ]; then
     INPUT_DATA=$(jq -nc \
         --arg tool "$TOOL_NAME_FALLBACK" \
         --argjson input "$TOOL_INPUT_JSON" \
-        '{tool: $tool, input: $input}')
+        '{tool_name: $tool, tool: $tool, tool_input: $input, input: $input}')
 fi
 
 # Extract tool name
-TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool // .toolName // .name // empty' 2>/dev/null)
+TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // .tool // .toolName // .name // empty' 2>/dev/null)
 
 if [ -z "$TOOL_NAME" ]; then
     echo '{"continue": true, "note": "Could not determine tool name"}' >&2
@@ -290,7 +300,7 @@ tool_requires_pending_route_clearance() {
     local tool_name="$1"
 
     case "$tool_name" in
-        Task|Read|Glob|Grep|LS|WebSearch|WebFetch|TaskList|TaskGet|TodoWrite|Skill)
+        Agent|Task|Read|Glob|Grep|LS|WebSearch|WebFetch|TaskList|TaskGet|TodoWrite|Skill)
             return 1
             ;;
         Bash|Write|Edit|MultiEdit)
@@ -365,7 +375,7 @@ enforce_pending_route_gate() {
 
     emit_pretool_decision \
       "deny" \
-      "ROUTING_REQUIRED_BEFORE_OPERATION: Use Task(subagent_type='${required_agent:-unknown}', prompt=<original request>) before direct execution. Approved family: ${clearance_agents:-none}. Current action=${action:-unknown}." \
+      "ROUTING_REQUIRED_BEFORE_OPERATION: Use the Agent tool with subagent_type='${required_agent:-unknown}' before direct execution. Approved family: ${clearance_agents:-none}. Current action=${action:-unknown}." \
       "$additional_context"
     return 1
 }
@@ -709,7 +719,7 @@ enforce_mandatory_routing() {
             if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+query'; then
                 if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
                     emit_routing_event "warn" "sf_permission_security_query" "opspal-salesforce:sfdc-permission-assessor" "Permission/security query detected." "$command" "$caller_agent" "$tool"
-                    echo "[ROUTING WARNING] Permission/security query detected. Prefer Task with opspal-salesforce:sfdc-permission-assessor." >&2
+                    echo "[ROUTING WARNING] Permission/security query detected. Prefer the Agent tool with subagent_type='opspal-salesforce:sfdc-permission-assessor'." >&2
                     return 0
                 fi
             fi
@@ -728,7 +738,7 @@ enforce_mandatory_routing() {
         emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
         emit_pretool_decision \
           "deny" \
-          "ROUTING_SPECIALIST_REQUIRED: $reason Use Task(subagent_type='${required_agent}', prompt=<original request>) before direct execution. Approved family: ${approved_agents_display:-$required_agent}." \
+          "ROUTING_SPECIALIST_REQUIRED: $reason Use the Agent tool with subagent_type='${required_agent}' before direct execution. Approved family: ${approved_agents_display:-$required_agent}." \
           "Direct operational workflow blocked until an approved specialist agent is used."
         return 1
     fi

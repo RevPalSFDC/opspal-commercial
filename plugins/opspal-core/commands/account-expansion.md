@@ -45,7 +45,7 @@ Identify, score, and prioritize expansion opportunities across your customer bas
 Use the account-expansion-orchestrator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:account-expansion-orchestrator',
   prompt: `Identify expansion opportunities. Account: ${account || 'all'}. Segment: ${segment || 'all'}. Top: ${top || '25'}. Org: ${org || 'default'}`
 });

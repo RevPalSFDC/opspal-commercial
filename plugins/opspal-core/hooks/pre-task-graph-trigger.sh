@@ -246,7 +246,7 @@ main() {
         "Task Graph Required" \
         "Complexity score $score/$((TASK_GRAPH_THRESHOLD * 2)) exceeds threshold. Task Graph orchestration is required." \
         "Score:$score,Factors:$factors_display,Threshold:$TASK_GRAPH_THRESHOLD" \
-        "Use Task(subagent_type='task-graph-orchestrator') to decompose this request"
+        "Use the Agent tool with subagent_type='task-graph-orchestrator' to decompose this request"
       exit 2
     else
       # Recommendation mode - suggest Task Graph

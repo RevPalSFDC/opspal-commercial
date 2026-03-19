@@ -209,7 +209,7 @@ function generateRoutingTable(plugins) {
 
 /**
  * Generate critical routing preamble - placed FIRST in CLAUDE.md for maximum visibility
- * Compact (~300 tokens) block with top mandatory routes and Task() invocation examples
+ * Compact (~300 tokens) block with top mandatory routes and Agent() invocation examples
  */
 function generateCriticalRoutingPreamble(plugins) {
   const routes = generateRoutingTable(plugins);
@@ -223,14 +223,14 @@ function generateCriticalRoutingPreamble(plugins) {
 
 | If user mentions... | Use this agent | Invoke with |
 |---------------------|---------------|-------------|
-| revops, audit, pipeline | \`opspal-salesforce:sfdc-revops-auditor\` | \`Task(subagent_type='opspal-salesforce:sfdc-revops-auditor', prompt=<request>)\` |
-| cpq, quote, pricing | \`opspal-salesforce:sfdc-cpq-assessor\` | \`Task(subagent_type='opspal-salesforce:sfdc-cpq-assessor', prompt=<request>)\` |
-| automation audit, flow audit | \`opspal-salesforce:sfdc-automation-auditor\` | \`Task(subagent_type='opspal-salesforce:sfdc-automation-auditor', prompt=<request>)\` |
-| hubspot assessment | \`opspal-hubspot:hubspot-assessment-analyzer\` | \`Task(subagent_type='opspal-hubspot:hubspot-assessment-analyzer', prompt=<request>)\` |
-| permission set | \`opspal-salesforce:sfdc-permission-orchestrator\` | \`Task(subagent_type='opspal-salesforce:sfdc-permission-orchestrator', prompt=<request>)\` |
+| revops, audit, pipeline | \`opspal-salesforce:sfdc-revops-auditor\` | \`Agent(subagent_type='opspal-salesforce:sfdc-revops-auditor', prompt=<request>)\` |
+| cpq, quote, pricing | \`opspal-salesforce:sfdc-cpq-assessor\` | \`Agent(subagent_type='opspal-salesforce:sfdc-cpq-assessor', prompt=<request>)\` |
+| automation audit, flow audit | \`opspal-salesforce:sfdc-automation-auditor\` | \`Agent(subagent_type='opspal-salesforce:sfdc-automation-auditor', prompt=<request>)\` |
+| hubspot assessment | \`opspal-hubspot:hubspot-assessment-analyzer\` | \`Agent(subagent_type='opspal-hubspot:hubspot-assessment-analyzer', prompt=<request>)\` |
+| permission set | \`opspal-salesforce:sfdc-permission-orchestrator\` | \`Agent(subagent_type='opspal-salesforce:sfdc-permission-orchestrator', prompt=<request>)\` |
 
 **Self-check**: (1) Does this match a keyword above? (2) Is this multi-step? (3) Is this an assessment/audit?
-If YES to any → use Task(). If unsure → use Task(). Override: \`[DIRECT]\` to skip.`;
+If YES to any → use Agent(). If unsure → use Agent(). Override: \`[DIRECT]\` to skip.`;
   }
 
   let content = `## 🚨 CRITICAL: Agent Routing Rules
@@ -242,12 +242,12 @@ If YES to any → use Task(). If unsure → use Task(). Override: \`[DIRECT]\` t
 `;
 
   for (const route of topMandatory) {
-    content += `| ${route.keywords} | \`${route.agent}\` | \`Task(subagent_type='${route.agent}', prompt=<request>)\` |\n`;
+    content += `| ${route.keywords} | \`${route.agent}\` | \`Agent(subagent_type='${route.agent}', prompt=<request>)\` |\n`;
   }
 
   content += `
 **Self-check**: (1) Does this match a keyword above? (2) Is this multi-step? (3) Is this an assessment/audit?
-If YES to any → use Task(). If unsure → use Task(). Override: \`[DIRECT]\` to skip.`;
+If YES to any → use Agent(). If unsure → use Agent(). Override: \`[DIRECT]\` to skip.`;
 
   return content;
 }
@@ -622,7 +622,7 @@ function generatePluginSection(plugins) {
 function generateWorkIndexSection() {
   return `## 📋 Work-Index Auto-Capture
 
-**Project memory system** - Automatically tracks work requests per client when using Task() with specialist agents.
+**Project memory system** - Automatically tracks work requests per client when using Agent() with specialist agents.
 
 ### Required Setup
 
@@ -739,14 +739,14 @@ function generateAgentProtocol(plugins) {
 
   // Generate Mandatory Routing section if there are mandatory agents
   if (mandatoryRoutes.length > 0) {
-    content += `### Mandatory Routing (MUST Use Task Tool)
+    content += `### Mandatory Routing (MUST Use Agent Tool)
 
 | Keywords | Agent | Invoke With |
 |----------|-------|-------------|
 `;
 
     for (const route of mandatoryRoutes) {
-      content += `| ${route.keywords} | \`${route.agent}\` | \`Task(subagent_type='${route.agent}', prompt=...)\` |\n`;
+      content += `| ${route.keywords} | \`${route.agent}\` | \`Agent(subagent_type='${route.agent}', prompt=...)\` |\n`;
     }
 
     content += '\n';
@@ -792,8 +792,8 @@ function generateAgentProtocol(plugins) {
 ### Self-Check Before Every Task
 
 1. Does this task match ANY pattern in the routing tables above?
-2. If in **Mandatory Routing** → MUST use Task tool
-3. If in **Recommended Routing** → Use Task tool for best results
+2. If in **Mandatory Routing** → MUST use Agent tool
+3. If in **Recommended Routing** → Use Agent tool for best results
 4. If NO match → Proceed with direct execution
 
 ### Plugin Documentation
@@ -838,11 +838,11 @@ function generateCommonWorkflows(plugins) {
 
 `;
 
-  if (platforms.includes('salesforce')) {
+ if (platforms.includes('salesforce')) {
     section += `**Salesforce Assessment**:
 \`\`\`
 1. /reflect context <org>     # Load previous work
-2. Task: sfdc-revops-auditor  # Run assessment
+2. Agent: sfdc-revops-auditor # Run assessment
 3. /work-index add <org>      # Log completion
 \`\`\`
 
@@ -853,7 +853,7 @@ function generateCommonWorkflows(plugins) {
     section += `**HubSpot Assessment**:
 \`\`\`
 1. /reflect context <org>     # Load previous work
-2. Task: hubspot-assessor     # Run assessment
+2. Agent: hubspot-assessor    # Run assessment
 3. /work-index add <org>      # Log completion
 \`\`\`
 

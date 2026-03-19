@@ -43,7 +43,7 @@ Coordinate sales enablement activities including skill assessments, training pat
 Use the sales-enablement-coordinator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:sales-enablement-coordinator',
   prompt: `Sales enablement: ${action || 'assess'}. Rep: ${rep || 'team'}. Segment: ${segment || 'all'}. Org: ${org || 'default'}`
 });

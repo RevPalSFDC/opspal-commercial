@@ -40,7 +40,7 @@ Orchestrate marketing campaigns across multiple platforms with coordinated audie
 Use the multi-platform-campaign-orchestrator agent:
 
 ```javascript
-Task({
+Agent({
   subagent_type: 'opspal-core:multi-platform-campaign-orchestrator',
   prompt: `Campaign orchestration: ${action || 'status'}. Campaign: ${campaign || 'current'}. Platforms: ${platforms || 'salesforce,hubspot'}`
 });

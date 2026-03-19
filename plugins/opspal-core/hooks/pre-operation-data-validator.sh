@@ -225,9 +225,9 @@ is_data_operation() {
         fi
     fi
 
-    # Task tool with data agents
-    if [[ "$tool" == "Task" ]]; then
-        local subagent=$(echo "$input" | jq -r '.subagent_type // ""' 2>/dev/null)
+    # Agent tool with data agents
+    if [[ "$tool" == "Agent" ]] || [[ "$tool" == "Task" ]]; then
+        local subagent=$(echo "$input" | jq -r '.subagent_type // .tool_input.subagent_type // ""' 2>/dev/null)
         if [[ "$subagent" =~ (data-import|data-export|data-operations|csv) ]]; then
             echo "agent_data"
             return 0

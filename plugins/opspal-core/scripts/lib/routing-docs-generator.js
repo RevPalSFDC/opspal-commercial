@@ -120,7 +120,7 @@ function generateRoutingTable(registry) {
 
   // Generate rows
   for (const pattern of allPatterns) {
-    const invoke = `\`Task(subagent_type='${pattern.agent}', prompt=...)\``;
+    const invoke = `\`Agent(subagent_type='${pattern.agent}', prompt=...)\``;
     lines.push(`| ${pattern.keywords} | ${pattern.agent.split(':').pop()} | ${invoke} |`);
   }
 
@@ -163,7 +163,7 @@ function generateBlockedOperations(registry) {
   for (const pattern of blockingPatterns) {
     const agentName = pattern.agent;
     const keywords = pattern.keywords.slice(0, 2).join('/');
-    lines.push(`- ❌ **${keywords}** → \`Task(subagent_type='${agentName}', prompt='...')\``);
+    lines.push(`- ❌ **${keywords}** → \`Agent(subagent_type='${agentName}', prompt='...')\``);
   }
 
   return lines.join('\n');
@@ -193,7 +193,7 @@ function generateRoutingHelpDoc(registry) {
   lines.push('## Overview');
   lines.push('');
   lines.push('The routing system automatically directs tasks to specialized agents based on keywords.');
-  lines.push('When a keyword match is found, the corresponding agent should be invoked via the Task tool.');
+  lines.push('When a keyword match is found, the corresponding agent should be invoked via the Agent tool.');
   lines.push('');
 
   // Exclusive keywords

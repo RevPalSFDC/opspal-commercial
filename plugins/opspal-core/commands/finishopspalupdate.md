@@ -922,7 +922,7 @@ After execution, summarize the results to the user.
 
 8. **Runs `/sync-claudemd`** - Updates CLAUDE.md with latest plugin info:
    - Plugin versions and feature counts
-   - Agent routing tables (with Task() invocation examples)
+   - Agent routing tables (with Agent() invocation examples)
    - Command references
    - Trigger keywords
 

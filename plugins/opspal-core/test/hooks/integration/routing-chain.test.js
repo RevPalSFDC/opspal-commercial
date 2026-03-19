@@ -48,9 +48,9 @@ async function runTest(name, testFn) {
   }
 }
 
-function createTaskEvent(toolInput = {}) {
+function createAgentEvent(toolInput = {}) {
   return {
-    tool_name: 'Task',
+    tool_name: 'Agent',
     tool_input: toolInput
   };
 }
@@ -135,30 +135,30 @@ async function assertPendingRouteLifecycle({
 
   if (wrongTaskAgent) {
     const wrongTask = await validator.run({
-      input: createTaskEvent({
+      input: createAgentEvent({
         subagent_type: wrongTaskAgent,
         prompt
       }),
       env
     });
-    assert.strictEqual(wrongTask.exitCode, 0, `${name}: wrong Task should still use structured contract handling`);
+    assert.strictEqual(wrongTask.exitCode, 0, `${name}: wrong Agent should still use structured contract handling`);
     assert.strictEqual(
       wrongTask.output?.hookSpecificOutput?.permissionDecision,
       'deny',
-      `${name}: wrong Task family should be denied`
+      `${name}: wrong Agent family should be denied`
     );
-    assert.strictEqual(readRoutingState(env)?.status, 'pending', `${name}: wrong Task should not clear pending state`);
+    assert.strictEqual(readRoutingState(env)?.status, 'pending', `${name}: wrong Agent should not clear pending state`);
   }
 
   const clearTask = await validator.run({
-    input: createTaskEvent({
+    input: createAgentEvent({
       subagent_type: approvedTaskAgent,
       prompt
     }),
     env
   });
-  assert.strictEqual(clearTask.exitCode, 0, `${name}: approved Task should pass`);
-  assert.strictEqual(readRoutingState(env)?.status, 'cleared', `${name}: approved Task should clear pending state`);
+  assert.strictEqual(clearTask.exitCode, 0, `${name}: approved Agent should pass`);
+  assert.strictEqual(readRoutingState(env)?.status, 'cleared', `${name}: approved Agent should clear pending state`);
 
   const allowedAfterClear = await pretool.run({
     input: {
@@ -231,7 +231,7 @@ async function runAllTests() {
     );
     const routingState = readRoutingState(env);
     assert(routingState, 'Mandatory route should persist pending routing state');
-    assert.strictEqual(routingState.status, 'pending', 'Mandatory route should remain pending until Task clears it');
+    assert.strictEqual(routingState.status, 'pending', 'Mandatory route should remain pending until Agent clears it');
   }));
 
   // Test 4: Short name resolution works through chain
@@ -240,7 +240,7 @@ async function runAllTests() {
     const validator = new HookTester(ROUTING_CHAIN[1]);
 
     const result = await validator.run({
-      input: createTaskEvent({
+      input: createAgentEvent({
         subagent_type: 'sfdc-discovery',
         prompt: 'discover org'
       }),
@@ -271,7 +271,7 @@ async function runAllTests() {
       const env = createIsolatedEnv();
 
       const result = await validator.run({
-        input: createTaskEvent({
+        input: createAgentEvent({
           subagent_type: scenario.input,
           prompt: `test ${scenario.name}`
         }),
@@ -288,7 +288,7 @@ async function runAllTests() {
     const env = createIsolatedEnv();
 
     const result = await validator.run({
-      input: createTaskEvent({
+      input: createAgentEvent({
         subagent_type: 'completely-fake-agent-xyz-123',
         prompt: 'test'
       }),
@@ -333,7 +333,7 @@ async function runAllTests() {
   }));
 
   // Test 8: Chain timing is reasonable
-  results.push(await runTest('Chain enforces intake-first in require mode for vague project prompts', async () => {
+  results.push(await runTest('Chain requires intake-first routing in require mode for vague project prompts', async () => {
     const chain = new HookChainTester(ROUTING_CHAIN);
     const env = createIsolatedEnv({
       ACTIVE_INTAKE_MODE: 'require'
@@ -348,8 +348,10 @@ async function runAllTests() {
 
     assert(result.allPassed, 'All hooks should pass');
     assert.strictEqual(result.executedCount, 2, 'Should execute both hooks');
-    assert.strictEqual(result.results[0]?.output?.decision, 'block', 'Router should enforce decision=block');
+    assert.strictEqual(result.results[0]?.output?.decision, undefined, 'Router should avoid prompt-time hard block by default');
     assert.strictEqual(result.results[0]?.output?.metadata?.action, 'INTAKE_REQUIRED', 'Router should mark intake required');
+    assert.strictEqual(result.results[0]?.output?.metadata?.enforcedBlock, false, 'Router should leave hard blocking off by default');
+    assert.strictEqual(result.results[0]?.output?.metadata?.intakeGateApplied, true, 'Router should mark intake gate as applied');
     assert.strictEqual(
       result.results[0]?.output?.metadata?.agent,
       'opspal-core:intelligent-intake-orchestrator',
@@ -372,7 +374,7 @@ async function runAllTests() {
     assert(result.totalDuration < 2000, `Chain took ${result.totalDuration}ms, should be <2000ms`);
   }));
 
-  results.push(await runTest('Pending route denies operational tool until approved Task clears it', async () => {
+  results.push(await runTest('Pending route denies operational tool until approved Agent clears it', async () => {
     await assertPendingRouteLifecycle({
       name: 'reports dashboards route',
       prompt: 'Create a Salesforce dashboard for executive pipeline visibility',
@@ -385,7 +387,7 @@ async function runAllTests() {
     });
   }));
 
-  results.push(await runTest('Recommended specialist route denies operational tool until approved Task clears it', async () => {
+  results.push(await runTest('Recommended specialist route denies operational tool until approved Agent clears it', async () => {
     await assertPendingRouteLifecycle({
       name: 'permission maintenance route',
       prompt: 'Add all new fields to the Account Taxonomy Permission Set',

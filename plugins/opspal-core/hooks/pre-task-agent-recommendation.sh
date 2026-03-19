@@ -118,7 +118,7 @@ if echo "$ANALYSIS" | grep -q "Recommended Agents"; then
           "Agent Recommendation" \
           "Based on task analysis, a specialized agent is recommended for this task" \
           "Task Complexity:${COMPLEXITY:-N/A}%,Task Facets:${FACET_COUNT:-N/A},Recommended Agent:$TOP_AGENT" \
-          "Set AGENT_RECOMMENDATION_VERBOSE=1 for detailed analysis,Consider using Task tool with recommended agent" \
+          "Set AGENT_RECOMMENDATION_VERBOSE=1 for detailed analysis,Consider using the Agent tool with the recommended agent" \
           "Helps select optimal agent • \$12K/year ROI"
       else
         echo "💡 Agent Recommendation:"

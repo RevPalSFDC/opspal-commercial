@@ -318,7 +318,7 @@ async function runAllTests() {
     assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should not enforce hard block');
     const routingState = readRoutingState(env);
     assert(routingState, 'Medium-complexity recommended route should persist pending routing state');
-    assert.strictEqual(routingState.status, 'pending', 'Recommended route should remain pending until Task clears it');
+    assert.strictEqual(routingState.status, 'pending', 'Recommended route should remain pending until Agent clears it');
     assert.strictEqual(
       routingState.recommended_agent,
       'opspal-salesforce:sfdc-permission-orchestrator',
@@ -390,8 +390,8 @@ async function runAllTests() {
     assert.strictEqual(result.output?.metadata?.adaptiveFallbackApplied, true, 'Should mark adaptive fallback applied');
   }));
 
-  // Test 14: Vague project prompts should be blocked in require mode and sent to intake first
-  results.push(await runTest('Blocks vague project prompts in ACTIVE_INTAKE_MODE=require', async () => {
+  // Test 14: Vague project prompts should require intake-first routing in require mode
+  results.push(await runTest('Requires intake-first routing in ACTIVE_INTAKE_MODE=require', async () => {
     const env = createIsolatedEnv({
       ACTIVE_INTAKE_MODE: 'require'
     });
@@ -401,12 +401,14 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output?.decision, 'block', 'Should emit decision=block');
+    assert.strictEqual(result.output?.decision, undefined, 'Should avoid prompt-time hard block by default');
     assert.strictEqual(result.output?.metadata?.action, 'INTAKE_REQUIRED', 'Should classify as INTAKE_REQUIRED');
     assert.strictEqual(result.output?.metadata?.agent, 'opspal-core:intelligent-intake-orchestrator', 'Should route to intake orchestrator');
     assert.strictEqual(result.output?.metadata?.intakeRequired, true, 'Should mark intakeRequired=true');
-    assert.strictEqual(result.output?.metadata?.enforcedBlock, true, 'Should enforce hard block for intake gating');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should leave hard blocking disabled by default');
+    assert.strictEqual(result.output?.metadata?.intakeGateApplied, true, 'Should mark intake gating as applied');
     assert.strictEqual(result.output?.metadata?.routingSource, 'intake-gate', 'Should use intake-gate source');
+    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Should persist pending routing state for PreToolUse enforcement');
   }));
 
   // Test 15: Continue-intent still blocks when hard blocking is explicitly enabled and adaptive mode is disabled
@@ -452,7 +454,7 @@ async function runAllTests() {
     const result = await tester.run({
       input: {
         message: `UserPromptSubmit operation blocked by hook:
-High-complexity routing enforcement: use Task(subagent_type='opspal-salesforce:sfdc-permission-orchestrator') before proceeding.
+High-complexity routing enforcement: use Agent(subagent_type='opspal-salesforce:sfdc-permission-orchestrator') before proceeding.
 Original prompt: Please continue - looks like the last session hanged
 @metadata-manager❯ Acknowledged, standing by for Task #6
 Build FM territory name stamping flow › blocked by #3, #4`

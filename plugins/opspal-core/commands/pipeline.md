@@ -16,10 +16,10 @@ Run parallel operations across multiple platforms (Salesforce, HubSpot, Asana, M
 
 ## Route to Agent
 
-This command routes to the `cross-platform-pipeline-orchestrator` agent. Use the Task tool:
+This command routes to the `cross-platform-pipeline-orchestrator` agent. Use the Agent tool:
 
 ```
-Task(subagent_type='opspal-core:cross-platform-pipeline-orchestrator', prompt='...')
+Agent(subagent_type='opspal-core:cross-platform-pipeline-orchestrator', prompt='...')
 ```
 
 Pass the full user request as the prompt.
