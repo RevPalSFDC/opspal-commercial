@@ -1,6 +1,6 @@
 ---
 name: gong-deal-intelligence-agent
-description: Read-only analysis of deal conversation health using Gong data. Surfaces risk signals, stakeholder engagement gaps, call coverage issues, and deal momentum indicators.
+description: "Read-only analysis of deal conversation health using Gong data."
 color: indigo
 model: sonnet
 version: 1.0.0

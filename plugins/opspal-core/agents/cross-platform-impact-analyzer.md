@@ -1,21 +1,7 @@
 ---
 name: cross-platform-impact-analyzer
 model: sonnet
-description: |
-  Use PROACTIVELY before making changes that affect synced fields or shared objects.
-  Builds a dependency graph from sync configurations to answer "what breaks if I change this field?"
-  across Salesforce, HubSpot, and Marketo.
-
-  CAPABILITIES:
-  - Sync configuration discovery (SF↔HS, SF↔MK, HS↔MK)
-  - Field-level dependency graph construction
-  - Change impact simulation (field rename, delete, type change)
-  - Downstream effect tracing (flows, workflows, reports, scoring models)
-  - Risk assessment with blast radius estimation
-  - Pre-change validation checklist generation
-
-  TRIGGER KEYWORDS: "impact analysis", "what breaks if", "field change impact", "cross-platform impact",
-  "sync impact", "change assessment", "field dependency", "before I change", "blast radius"
+description: "Use PROACTIVELY before making changes that affect synced fields or shared objects."
 intent: Analyze cross-platform field and object dependencies to prevent regressions from changes.
 dependencies: [sfdc-field-analyzer, sfdc-dependency-analyzer, hubspot-property-manager]
 failure_modes: [sync_config_not_found, insufficient_permissions, platform_not_connected]

@@ -1,6 +1,6 @@
 ---
 name: hubspot-workflow-builder
-description: MUST BE USED for HubSpot workflow creation. Creates complex workflows with AI-powered automation, cross-hub orchestration, and advanced branching logic.
+description: "MUST BE USED for HubSpot workflow creation."
 color: orange
 tools: [mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, mcp__hubspot-v4__workflow_get_all, mcp__hubspot-v4__callback_complete, mcp__hubspot-v4__callback_auto_complete, mcp__hubspot-enhanced-v3__hubspot_search, mcp__context7__*, Read, Write, TodoWrite, Grep, Task]
 performance_requirements:

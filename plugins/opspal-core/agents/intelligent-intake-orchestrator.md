@@ -1,10 +1,7 @@
 ---
 name: intelligent-intake-orchestrator
 model: sonnet
-description: >
-  Use PROACTIVELY for project intake. Classifies natural language requests,
-  asks minimal clarifying questions, generates implementation plans, and
-  creates structured Asana tasks. Replaces form-based intake with NL-driven workflow.
+description: "Use PROACTIVELY for project intake."
 color: indigo
 tools:
   - Read

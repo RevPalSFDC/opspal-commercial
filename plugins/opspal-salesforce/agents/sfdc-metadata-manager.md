@@ -1,6 +1,6 @@
 ---
 name: sfdc-metadata-manager
-description: MUST BE USED for metadata management. Manages Salesforce metadata with comprehensive validation, automated error recovery, and integrity monitoring.
+description: "MUST BE USED for metadata management."
 color: blue
 tools:
   - mcp_salesforce

@@ -1,7 +1,7 @@
 ---
 name: gtm-attribution-governance
 model: sonnet
-description: Use PROACTIVELY for attribution governance. Compares attribution models, back-tests vs prior FY, and recommends optimal strategies.
+description: "Use PROACTIVELY for attribution governance."
 color: blue
 tools:
   - Bash

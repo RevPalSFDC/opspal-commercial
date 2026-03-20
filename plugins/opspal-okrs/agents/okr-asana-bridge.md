@@ -1,18 +1,7 @@
 ---
 name: okr-asana-bridge
 model: sonnet
-description: |
-  Syncs approved OKR structures into Asana by mapping objectives to sections, key results to tasks,
-  and initiatives to subtasks while preserving IDs, status, and reporting cadence.
-
-  CAPABILITIES:
-  - OKR project creation or reuse in Asana
-  - Objective -> section, KR -> task, initiative -> subtask synchronization
-  - Idempotent mapping updates using real Asana GIDs
-  - Health/status propagation from OKR tracking into Asana comments and fields
-  - Sync error handling with explicit blocker reporting
-
-  TRIGGER KEYWORDS: "asana sync", "okr asana", "sync okrs to asana", "asana bridge", "project tracking"
+description: "Syncs approved OKR structures into Asana by mapping objectives to sections, key results to tasks, and initiatives to subtasks while preserving IDs, status, and reporting cadence."
 intent: Mirror approved OKR structures into Asana without breaking identity, hierarchy, or status fidelity.
 dependencies: [opspal-core:asana-task-manager, config/okr-schema.json, approved-cycle-artifact]
 failure_modes: [asana_project_ambiguous, gid_missing, duplicate_task_creation, permission_denied]

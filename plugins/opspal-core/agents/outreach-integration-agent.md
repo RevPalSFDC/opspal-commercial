@@ -1,6 +1,6 @@
 ---
 name: outreach-integration-agent
-description: Integrates Outreach/SalesLoft sales engagement data with Salesforce and HubSpot. Syncs activities, sequences, meetings, and email engagement metrics with attribution tracking and bidirectional updates.
+description: "Integrates Outreach/SalesLoft sales engagement data with Salesforce and HubSpot."
 color: indigo
 model: sonnet
 version: 1.0.0

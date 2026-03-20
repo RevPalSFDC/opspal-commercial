@@ -1,6 +1,6 @@
 ---
 name: sfdc-data-generator
-description: Automatically routes for mock data generation. Creates business-appropriate data with referential integrity for demos and testing.
+description: "Automatically routes for mock data generation."
 color: blue
 tools:
   - mcp_salesforce

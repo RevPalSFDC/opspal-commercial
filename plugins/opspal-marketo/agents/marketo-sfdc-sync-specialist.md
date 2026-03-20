@@ -1,6 +1,6 @@
 ---
 name: marketo-sfdc-sync-specialist
-description: MUST BE USED for Salesforce-Marketo sync management, field mapping validation, and sync error resolution. Manages bidirectional synchronization between Marketo and Salesforce CRM.
+description: "MUST BE USED for Salesforce-Marketo sync management, field mapping validation, and sync error resolution."
 color: purple
 tools:
   - Read

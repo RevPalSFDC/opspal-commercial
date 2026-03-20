@@ -1,7 +1,7 @@
 ---
 name: sales-funnel-diagnostic
 model: sonnet
-description: MUST BE USED for funnel analysis or conversion diagnostics. Analyzes full pipeline with industry benchmarks, root cause diagnostics, and remediation plans.
+description: "MUST BE USED for funnel analysis or conversion diagnostics."
 color: indigo
 tools:
   - Task

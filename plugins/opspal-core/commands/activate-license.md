@@ -24,6 +24,7 @@ Activate the local OpsPal commercial runtime against the license server and pers
 ```
 
 - Never continue with only a license key.
+- If a different license key is already active on this machine, stop and tell the user to run `/deactivate-license` first instead of overwriting the cached activation.
 
 ## Execute
 

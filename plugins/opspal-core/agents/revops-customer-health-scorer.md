@@ -1,6 +1,6 @@
 ---
 name: revops-customer-health-scorer
-description: Generates composite customer health scores using rules-based weighted scoring across engagement, support, usage, payment, and NPS dimensions. Provides risk tier classification (Green/Yellow/Red) with transparent scoring logic.
+description: "Generates composite customer health scores using rules-based weighted scoring across engagement, support, usage, payment, and NPS dimensions."
 color: indigo
 model: sonnet
 version: 1.0.0

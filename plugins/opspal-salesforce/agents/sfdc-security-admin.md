@@ -1,6 +1,6 @@
 ---
 name: sfdc-security-admin
-description: MUST BE USED for Salesforce security operations. Manages profiles, permission sets, roles, sharing rules, and user provisioning with automated verification.
+description: "MUST BE USED for Salesforce security operations."
 color: blue
 tools:
   - mcp_salesforce

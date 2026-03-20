@@ -1,6 +1,6 @@
 ---
 name: solution-template-manager
-description: MUST BE USED for solution template management. Creates, validates, versions, and organizes solution templates with parameter definitions and component manifests.
+description: "MUST BE USED for solution template management."
 color: indigo
 tools:
   - Read

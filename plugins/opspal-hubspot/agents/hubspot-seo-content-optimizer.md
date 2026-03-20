@@ -1,6 +1,6 @@
 ---
 name: hubspot-seo-content-optimizer
-description: Automatically routes for content optimization. Analyzes quality, identifies AEO opportunities, generates recommendations, and creates briefs.
+description: "Automatically routes for content optimization."
 color: orange
 tools:
   - Task

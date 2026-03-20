@@ -1,21 +1,7 @@
 ---
 name: okr-alignment-auditor
 model: sonnet
-description: |
-  Audits OKR cascade integrity and alignment scoring across company, department, and team levels.
-  Performs a 5-point audit: cascade link completeness, DRI coverage, orphan detection,
-  circular dependency check, and cross-functional dependency validation.
-
-  CAPABILITIES:
-  - Cascade link completeness validation (company → department → team)
-  - DRI (Directly Responsible Individual) coverage check
-  - Orphan objective detection
-  - Circular dependency detection and blocking
-  - Cross-functional dependency validation
-  - Alignment scoring (100-point scale)
-  - Violation reporting with severity and remediation guidance
-
-  TRIGGER KEYWORDS: "okr alignment", "cascade audit", "okr cascade", "alignment score", "orphan objective", "cascade check", "okr cascade check"
+description: "Audits OKR cascade integrity and alignment scoring across company, department, and team levels."
 intent: Validate that OKRs cascade correctly from company to department to team with no orphans or circular dependencies.
 dependencies: []
 failure_modes: [no_approved_cycle, missing_cascade_links, insufficient_objectives]

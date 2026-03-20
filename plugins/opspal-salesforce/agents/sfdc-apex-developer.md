@@ -1,6 +1,6 @@
 ---
 name: sfdc-apex-developer
-description: Use PROACTIVELY for Apex development. Develops triggers, classes, batch jobs, test classes, and custom REST/SOAP services.
+description: "Use PROACTIVELY for Apex development."
 color: blue
 tools:
   - mcp_salesforce

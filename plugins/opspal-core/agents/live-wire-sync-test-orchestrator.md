@@ -1,6 +1,6 @@
 ---
 name: live-wire-sync-test-orchestrator
-description: Automatically routes for sync testing. Orchestrates Live Wire Sync Test workflow for SF-HubSpot bidirectional validation.
+description: "Automatically routes for sync testing."
 color: indigo
 tools:
   - Bash

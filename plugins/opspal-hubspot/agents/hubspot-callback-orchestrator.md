@@ -1,6 +1,6 @@
 ---
 name: hubspot-callback-orchestrator
-description: Manages async workflow callback execution for HubSpot Automation Actions V4. Handles BLOCK state, expiration tracking, callback completion, and multi-step async workflows.
+description: "Manages async workflow callback execution for HubSpot Automation Actions V4."
 color: orange
 tools: [mcp__hubspot-v4__callback_complete, mcp__hubspot-v4__callback_auto_complete, mcp__hubspot-enhanced-v3__*, Read, Write, TodoWrite, Grep, Bash]
 model: sonnet

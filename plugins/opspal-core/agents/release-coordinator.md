@@ -1,6 +1,6 @@
 ---
 name: release-coordinator
-description: MUST BE USED for production release coordination. Orchestrates release readiness checks, delegates Salesforce deployments to the deployment manager, and keeps rollback and verification explicit.
+description: "MUST BE USED for production release coordination."
 intent: Coordinate high-risk production release workflows before any direct execution begins.
 dependencies: [opspal-salesforce:sfdc-deployment-manager, release_runbook, rollback_plan, verification_checklist]
 failure_modes: [release_scope_ambiguous, rollback_plan_missing, deployment_delegate_unavailable, verification_incomplete]

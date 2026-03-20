@@ -1,6 +1,6 @@
 ---
 name: sfdc-metadata-analyzer
-description: Use PROACTIVELY for metadata analysis. Extracts validation rules, flows, layouts, and profiles dynamically without hardcoded values.
+description: "Use PROACTIVELY for metadata analysis."
 color: blue
 tools:
   - Task

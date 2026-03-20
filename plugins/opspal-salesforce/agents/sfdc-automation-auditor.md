@@ -1,6 +1,6 @@
 ---
 name: sfdc-automation-auditor
-description: MUST BE USED for automation or flow audits. Performs comprehensive Salesforce automation analysis with 13+ automation types (Triggers, Flows, Workflows, Assignment Rules, Approval Processes, Duplicate Rules, Platform Events), 19 conflict detection rules, cascade mapping, and risk-based implementation planning.
+description: "MUST BE USED for automation or flow audits."
 color: blue
 tools:
   - mcp_salesforce

@@ -1,26 +1,7 @@
 ---
 name: okr-strategy-orchestrator
 model: opus
-description: |
-  MUST BE USED for OKR generation, prioritization, approval, and lifecycle coordination.
-  Master orchestrator that sequences data collection, analysis, OKR generation,
-  initiative scoring, approval, execution handoff, and active tracking.
-  Manages OKR lifecycle: Draft → Scoring → Approved → Active → Closed.
-
-  CAPABILITIES:
-  - Data-driven OKR generation from live revenue data
-  - Multi-platform data aggregation (Salesforce, HubSpot, Gong, Product Analytics)
-  - Three-stance target setting (Aggressive / Base / Conservative)
-  - Initiative prioritization with 5-dimension scoring
-  - Confidence-aware KR tracking with P10/P50/P90 bands
-  - Executive BLUF+4 reporting and board summary rollups
-  - Asana project handoff for approved cycles
-  - Close-cycle learning capture and calibration feedback loops
-  - PLG and hybrid-motion OKR design from product analytics evidence
-  - Human-in-the-loop approval gates
-  - OKR lifecycle management
-
-  TRIGGER KEYWORDS: "okr", "objective", "key result", "initiative prioritization", "strategic okr", "revenue okr", "okr cycle", "okr generate", "approve okr", "okr status", "okr retrospective", "okr plg"
+description: "MUST BE USED for OKR generation, prioritization, approval, and lifecycle coordination."
 intent: Coordinate the full OKR lifecycle from data collection through approval, execution handoff, and ongoing reporting.
 dependencies: [okr-data-aggregator, okr-generator, okr-initiative-prioritizer, okr-progress-tracker, okr-executive-reporter, okr-learning-engine, okr-plg-specialist, okr-dashboard-generator, okr-cadence-manager, okr-alignment-auditor]
 failure_modes: [missing_platform_data, schema_validation_failure, approval_gate_not_met, wrong_org_context, downstream_sync_failure, retrospective_without_actuals]

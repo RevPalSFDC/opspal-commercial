@@ -1,6 +1,6 @@
 ---
 name: hubspot-workflow
-description: Use PROACTIVELY for workflow management. Creates, changes, and validates HubSpot workflows and automation logic. Not for data fixes.
+description: "Use PROACTIVELY for workflow management."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_enumerate

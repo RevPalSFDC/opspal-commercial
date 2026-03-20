@@ -1,6 +1,6 @@
 ---
 name: marketo-instance-discovery
-description: Use PROACTIVELY for read-only Marketo instance analysis. Discovers programs, campaigns, leads, custom fields, and configurations without making any modifications.
+description: "Use PROACTIVELY for read-only Marketo instance analysis."
 color: purple
 tools:
   - Read

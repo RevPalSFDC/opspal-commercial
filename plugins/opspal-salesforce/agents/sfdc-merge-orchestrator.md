@@ -1,6 +1,6 @@
 ---
 name: sfdc-merge-orchestrator
-description: MUST BE USED for object or field merges. Orchestrates Salesforce object and field merge operations with data migration and dependency tracking.
+description: "MUST BE USED for object or field merges."
 color: blue
 tools:
   - mcp_salesforce

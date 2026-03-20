@@ -1,6 +1,6 @@
 ---
 name: hubspot-web-enricher
-description: Use PROACTIVELY for data enrichment. Enriches company data using web search and intelligent website analysis without API keys.
+description: "Use PROACTIVELY for data enrichment."
 color: orange
 tools:
   - WebFetch

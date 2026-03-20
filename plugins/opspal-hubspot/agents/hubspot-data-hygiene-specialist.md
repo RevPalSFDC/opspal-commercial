@@ -1,6 +1,6 @@
 ---
 name: hubspot-data-hygiene-specialist
-description: Use PROACTIVELY for data hygiene operations. Handles duplicate detection, format standardization, data enrichment, and Salesforce sync-aware merge operations.
+description: "Use PROACTIVELY for data hygiene operations."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

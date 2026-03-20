@@ -1,6 +1,6 @@
 ---
 name: marketo-program-roi-assessor
-description: MUST BE USED for program ROI analysis, campaign effectiveness assessment, and cost analysis. Performs comprehensive read-only analysis of program performance, channel effectiveness, and marketing ROI.
+description: "MUST BE USED for program ROI analysis, campaign effectiveness assessment, and cost analysis."
 color: purple
 tools:
   - Read

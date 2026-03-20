@@ -1,6 +1,6 @@
 ---
 name: sfdc-revops-coordinator
-description: Use PROACTIVELY for RevOps coordination. Orchestrates audits, optimizations, and monitoring across RevOps tasks.
+description: "Use PROACTIVELY for RevOps coordination."
 color: blue
 tools:
   - Task

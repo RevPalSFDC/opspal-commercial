@@ -1,7 +1,7 @@
 ---
 name: gtm-comp-planner
 model: sonnet
-description: Use PROACTIVELY for compensation planning. Designs OTE structures, commission rates, accelerators, and UAT test plans.
+description: "Use PROACTIVELY for compensation planning."
 color: blue
 tools:
   - Bash

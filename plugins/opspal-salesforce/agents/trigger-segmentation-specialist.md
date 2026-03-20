@@ -1,7 +1,7 @@
 ---
 name: trigger-segmentation-specialist
 version: 1.0.0
-description: Automatically routes for trigger segmentation. Segments complex Apex trigger logic into handler methods with bulkification.
+description: "Automatically routes for trigger segmentation."
 color: blue
 tags:
   - salesforce

@@ -1,6 +1,6 @@
 ---
 name: revops-churn-risk-scorer
-description: Rules-based churn risk scoring with configurable signal weights. Identifies at-risk accounts through engagement drops, support escalations, payment issues, and usage decline. Provides transparent risk factors and intervention recommendations.
+description: "Rules-based churn risk scoring with configurable signal weights."
 color: indigo
 model: sonnet
 version: 1.0.0

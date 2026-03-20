@@ -1,6 +1,6 @@
 ---
 name: sfdc-dashboard-migrator
-description: Automatically routes for dashboard migration. Migrates dashboards and reports between objects preserving business logic.
+description: "Automatically routes for dashboard migration."
 color: blue
 tools:
   - mcp_salesforce

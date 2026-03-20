@@ -1,6 +1,6 @@
 ---
 name: marketo-analytics-assessor
-description: MUST BE USED for comprehensive Marketo analytics and reporting. Analyzes program performance, email metrics, attribution, engagement scoring, lead velocity, and campaign ROI.
+description: "MUST BE USED for comprehensive Marketo analytics and reporting."
 color: purple
 tools:
   - Read

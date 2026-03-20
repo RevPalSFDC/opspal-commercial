@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-monitor
-description: Monitors Salesforce Territory2 operations and health. Queries Territory2AlignmentLog, Territory2ModelHistory, and generates health reports.
+description: "Monitors Salesforce Territory2 operations and health."
 color: blue
 tools:
   - mcp_salesforce_data_query

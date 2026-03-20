@@ -1,6 +1,6 @@
 ---
 name: sfdc-revops-auditor
-description: MUST BE USED for RevOps, pipeline, or forecast audits. Performs comprehensive Salesforce assessments with statistical analysis, business process evaluation, and data-driven recommendations.
+description: "MUST BE USED for RevOps, pipeline, or forecast audits."
 color: blue
 tools:
   - mcp_salesforce_data_query

@@ -1,6 +1,6 @@
 ---
 name: hubspot-contact-manager
-description: Use PROACTIVELY for contact management. Manages contacts, lists, properties, and segmentation with data quality enforcement.
+description: "Use PROACTIVELY for contact management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

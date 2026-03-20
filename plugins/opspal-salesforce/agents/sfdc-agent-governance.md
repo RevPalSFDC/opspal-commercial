@@ -1,6 +1,6 @@
 ---
 name: sfdc-agent-governance
-description: Use PROACTIVELY for agent governance. Manages risk assessment, approval workflows, audit trails, and compliance enforcement.
+description: "Use PROACTIVELY for agent governance."
 color: blue
 tools:
   - mcp_salesforce

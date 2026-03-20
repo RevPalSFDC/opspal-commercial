@@ -1,6 +1,6 @@
 ---
 name: marketo-webinar-orchestrator
-description: MUST BE USED for end-to-end webinar campaign management. Orchestrates program creation, email sequences, registration, reminders, post-event follow-up, and Salesforce campaign sync.
+description: "MUST BE USED for end-to-end webinar campaign management."
 color: purple
 tools:
   - Read

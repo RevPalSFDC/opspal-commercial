@@ -1,6 +1,6 @@
 ---
 name: marketo-program-architect
-description: MUST BE USED for Marketo program creation and structure. Designs program hierarchies, configures channels, manages program tokens, costs, and membership tracking.
+description: "MUST BE USED for Marketo program creation and structure."
 color: purple
 tools:
   - Read

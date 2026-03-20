@@ -1,6 +1,6 @@
 ---
 name: hubspot-reporting-builder
-description: Use PROACTIVELY for reporting. Creates custom reports, dashboards, and data visualizations for marketing, sales, and service teams.
+description: "Use PROACTIVELY for reporting."
 color: orange
 tools:
   - mcp__hubspot-v4__search_with_total

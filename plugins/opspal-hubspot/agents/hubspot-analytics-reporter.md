@@ -1,6 +1,6 @@
 ---
 name: hubspot-analytics-reporter
-description: Use PROACTIVELY for HubSpot analytics. Generates comprehensive reports and insights across all hubs with AI-powered analysis.
+description: "Use PROACTIVELY for HubSpot analytics."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_performance

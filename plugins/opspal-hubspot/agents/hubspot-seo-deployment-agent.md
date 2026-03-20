@@ -1,6 +1,6 @@
 ---
 name: hubspot-seo-deployment-agent
-description: Automatically routes for SEO deployment. Deploys AI search optimizations to HubSpot with backup and rollback capability.
+description: "Automatically routes for SEO deployment."
 color: orange
 tools:
   - Bash

@@ -1,7 +1,7 @@
 ---
 name: hubspot-assessment-analyzer
 model: sonnet
-description: MUST BE USED for HubSpot assessments. Performs comprehensive RevOps analysis using statistical methodologies to identify automation gaps, attribution issues, and integration health.
+description: "MUST BE USED for HubSpot assessments."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_enumerate

@@ -1,17 +1,6 @@
 ---
 name: win-loss-analyzer
-description: |
-  Analyzes closed deals to extract win/loss patterns and competitive intelligence.
-  Identifies success factors and competitive weaknesses.
-
-  CAPABILITIES:
-  - Win/loss data extraction and pattern analysis
-  - Competitive positioning analysis
-  - Success factor identification
-  - Loss reason categorization and trending
-  - Rep performance patterns
-
-  TRIGGER KEYWORDS: "win loss", "win rate analysis", "competitive analysis", "why we win", "why we lose", "deal analysis", "loss reason"
+description: "Analyzes closed deals to extract win/loss patterns and competitive intelligence."
 model: sonnet
 tools:
   - Read

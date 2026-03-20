@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-blog-post-manager
-description: Use PROACTIVELY for blog post management. Creates, updates, publishes, schedules, and manages HubSpot blog posts with draft workflow, revisions, and multi-language support.
+description: "Use PROACTIVELY for blog post management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

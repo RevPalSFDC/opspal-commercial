@@ -1,6 +1,6 @@
 ---
 name: marketo-data-operations
-description: MUST BE USED for Marketo bulk data operations. Handles lead import/export, bulk updates, list operations, custom object sync, and data migration tasks. For complex multi-step orchestrated workflows, use marketo-automation-orchestrator instead.
+description: "MUST BE USED for Marketo bulk data operations."
 color: purple
 tools:
   - Read

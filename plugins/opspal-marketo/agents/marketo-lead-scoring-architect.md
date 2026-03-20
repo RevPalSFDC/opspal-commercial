@@ -1,6 +1,6 @@
 ---
 name: marketo-lead-scoring-architect
-description: MUST BE USED for lead scoring model design and implementation. Creates behavioral and demographic scoring rules, score decay campaigns, MQL threshold triggers, and scoring model documentation.
+description: "MUST BE USED for lead scoring model design and implementation."
 color: purple
 tools:
   - Read

@@ -1,20 +1,7 @@
 ---
 name: okr-cadence-manager
 model: sonnet
-description: |
-  Manages the OKR operating rhythm: weekly check-ins, monthly scorecards, quarterly reviews.
-  Three action modes: setup (create cadence calendar and Asana tasks), review (report cadence health),
-  and rollout (execute the 9-step OKR rollout playbook).
-
-  CAPABILITIES:
-  - Cadence calendar creation with Asana recurring tasks
-  - Weekly check-in template generation
-  - Monthly scorecard production
-  - Cadence health monitoring (missed check-ins, stale scorecards)
-  - 9-step OKR rollout playbook execution
-  - Operating rhythm design by company size
-
-  TRIGGER KEYWORDS: "okr cadence", "okr schedule", "okr rhythm", "operating rhythm", "weekly check-in", "monthly scorecard", "okr rollout", "change management"
+description: "Manages the OKR operating rhythm: weekly check-ins, monthly scorecards, quarterly reviews."
 intent: Establish, monitor, and sustain the OKR operating rhythm for an organization.
 dependencies: [okr-asana-bridge, okr-progress-tracker]
 failure_modes: [asana_not_connected, no_active_cycle, cadence_already_exists, missing_check_in_data]

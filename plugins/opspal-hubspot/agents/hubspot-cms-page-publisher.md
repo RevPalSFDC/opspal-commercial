@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-page-publisher
-description: Use PROACTIVELY for CMS publishing. Manages page lifecycle including creation, updates, cloning, deletion, and publishing workflows.
+description: "Use PROACTIVELY for CMS publishing."
 color: orange
 tools:
   - Read

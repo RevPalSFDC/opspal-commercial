@@ -218,3 +218,18 @@ Action:
 ## Security Boundary
 
 This design is a tier-containment model, not a perfect secrecy model. A licensed client that is entitled to `tier2` can decrypt shipped `tier2` assets. The security improvement is that `starter` no longer receives `tier1` or `tier2` key material.
+
+## First-Run Onboarding
+
+On `SessionStart`, the commercial runtime now checks two conditions:
+
+1. whether this machine has a valid cached OpsPal license activation
+2. whether the current workspace appears initialized for OpsPal usage
+
+If activation is missing or the workspace has not been initialized, the runtime:
+
+- emits a startup warning to the user
+- injects onboarding context so Claude prioritizes setup guidance
+- points the user to `/activate-license`, `/initialize`, and `/opspalfirst`
+
+`/opspalfirst` is the guided first-run checkpoint. It reports the current machine license status and whether the current workspace already has an OpsPal marker such as `CLAUDE.md`.

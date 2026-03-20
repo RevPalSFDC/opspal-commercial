@@ -1,6 +1,6 @@
 ---
 name: sfdc-report-template-deployer
-description: Automatically routes for report template deployment. Deploys reports from templates with 95%+ field resolution rate.
+description: "Automatically routes for report template deployment."
 color: blue
 tools:
   - Read

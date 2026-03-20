@@ -1,6 +1,6 @@
 ---
 name: sfdc-compliance-officer
-description: Use PROACTIVELY for compliance requirements. Manages GDPR, HIPAA, SOC, data privacy, audit trails, and regulatory compliance.
+description: "Use PROACTIVELY for compliance requirements."
 color: blue
 tools:
   - mcp_salesforce

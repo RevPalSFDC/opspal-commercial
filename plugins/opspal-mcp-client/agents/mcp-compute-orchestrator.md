@@ -1,13 +1,7 @@
 ---
 name: mcp-compute-orchestrator
 model: sonnet
-description: |
-  Use PROACTIVELY for OpsPal proprietary compute operations. Runs revenue models with
-  Monte Carlo simulation, scenario planning (base/upside/downside), market sizing
-  (TAM/SAM/SOM), rep ramp curves, and seasonality analysis.
-
-  TRIGGER KEYWORDS: "compute revenue", "monte carlo", "scenario model", "market sizing",
-  "tam calculation", "ramp curve", "seasonality", "opspal compute", "revenue projection compute"
+description: "Use PROACTIVELY for OpsPal proprietary compute operations."
 intent: Execute OpsPal compute-heavy analytical operations with budget awareness.
 dependencies: []
 failure_modes: [api_budget_exceeded, mcp_server_unavailable, invalid_parameters, compute_timeout]

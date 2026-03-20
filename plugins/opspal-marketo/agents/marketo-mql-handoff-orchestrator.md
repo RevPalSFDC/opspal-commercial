@@ -1,6 +1,6 @@
 ---
 name: marketo-mql-handoff-orchestrator
-description: MUST BE USED for MQL qualification and sales handoff automation. Configures score threshold triggers, SFDC lead sync, lead assignment, sales notifications, SLA monitoring, and MQL recycle workflows.
+description: "MUST BE USED for MQL qualification and sales handoff automation."
 color: purple
 tools:
   - Read

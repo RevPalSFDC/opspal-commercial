@@ -1,6 +1,6 @@
 ---
 name: revops-deal-scorer
-description: Rules-based deal win probability scoring analyzing stage velocity, engagement patterns, ICP fit, and competitive positioning. Improves forecast accuracy with transparent factor contributions and deal coaching recommendations.
+description: "Rules-based deal win probability scoring analyzing stage velocity, engagement patterns, ICP fit, and competitive positioning."
 color: indigo
 model: sonnet
 version: 1.0.0

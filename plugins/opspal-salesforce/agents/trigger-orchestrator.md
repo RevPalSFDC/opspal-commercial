@@ -1,7 +1,7 @@
 ---
 name: trigger-orchestrator
 version: 1.0.0
-description: MUST BE USED for Apex trigger creation. Master orchestrator with handler pattern architecture, bulkification validation, and comprehensive testing.
+description: "MUST BE USED for Apex trigger creation."
 color: blue
 tags:
   - salesforce

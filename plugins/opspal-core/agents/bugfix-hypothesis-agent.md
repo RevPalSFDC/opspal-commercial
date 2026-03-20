@@ -1,6 +1,6 @@
 ---
 name: bugfix-hypothesis-agent
-description: Analyze bug reports to generate 3 ranked hypotheses with root causes, fix descriptions, and affected files. Analysis-only — does not modify code.
+description: "Analyze bug reports to generate 3 ranked hypotheses with root causes, fix descriptions, and affected files."
 model: sonnet
 color: orange
 tools:

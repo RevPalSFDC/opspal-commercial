@@ -1,16 +1,6 @@
 ---
 name: gtm-market-intelligence
-description: |
-  Provides market sizing, segmentation analysis, and ICP performance insights for SaaS businesses.
-  Specializes in TAM/SAM/SOM calculations, segment revenue analysis, and win profile identification.
-
-  TEMPLATES HANDLED:
-  - tam-sam-som: Market opportunity sizing with penetration analysis
-  - revenue-by-segment: Segment/industry/geo revenue breakdown
-  - icp-performance-win-profile: ICP win rate and profile analysis
-  - product-adoption-by-segment: Feature adoption vs expansion correlation
-
-  TRIGGER KEYWORDS: "tam", "sam", "som", "market size", "segment", "industry", "icp", "win profile", "penetration", "adoption"
+description: "Provides market sizing, segmentation analysis, and ICP performance insights for SaaS businesses."
 model: sonnet
 tools:
   - Bash

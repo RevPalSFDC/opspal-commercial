@@ -1,7 +1,7 @@
 ---
 name: flow-template-specialist
 model: sonnet
-description: Automatically routes for Flow templates. Applies and customizes Salesforce Flow templates for common patterns.
+description: "Automatically routes for Flow templates."
 color: blue
 tools:
   - Read

@@ -6,6 +6,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-first-run.sh",
+            "timeout": 4000,
+            "description": "Guide first-run activation and workspace initialization before normal OpsPal work"
+          },
+          {
+            "type": "command",
             "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh",
             "timeout": 10000,
             "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
@@ -387,6 +393,12 @@
       {
         "matcher": "*",
         "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-first-run.sh",
+            "timeout": 5000,
+            "description": "Detect missing license activation or workspace initialization and guide first-run onboarding"
+          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-init.sh",

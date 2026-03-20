@@ -1,6 +1,6 @@
 ---
 name: marketo-campaign-builder
-description: MUST BE USED for Marketo smart campaign creation and management. Creates trigger campaigns, batch campaigns, and complex automation flows with proper validation and testing.
+description: "MUST BE USED for Marketo smart campaign creation and management."
 color: purple
 tools:
   - Read

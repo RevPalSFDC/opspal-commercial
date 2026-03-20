@@ -1,19 +1,6 @@
 ---
 name: gtm-strategic-reports-orchestrator
-description: |
-  Master coordinator for strategic GTM report generation. Routes requests to specialized agents,
-  validates data contracts, manages cross-plugin integration, and ensures report quality.
-
-  TRIGGER KEYWORDS: "strategic report", "gtm report", "arr waterfall", "revenue model", "nrr",
-  "retention report", "tam sam som", "market size", "capacity model", "scenario planning"
-
-  BLOCKED OPERATIONS (Must Use This Agent):
-  - Any strategic/annual planning report from the template library
-  - Cross-platform revenue analytics
-  - Multi-year revenue projections
-  - Retention and expansion analysis
-
-  USE PROACTIVELY when user requests any report from the strategic template library.
+description: "Master coordinator for strategic GTM report generation."
 model: sonnet
 tools:
   - Task

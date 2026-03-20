@@ -1,6 +1,6 @@
 ---
 name: hubspot-attribution-analyst
-description: Use PROACTIVELY for attribution analysis. Handles multi-touch attribution modeling and marketing performance measurement.
+description: "Use PROACTIVELY for attribution analysis."
 color: orange
 tools: [mcp__hubspot-v4__search_with_total, mcp__hubspot-v4__get_total_count, mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, Read, Write, TodoWrite, Grep, Task]
 triggerKeywords: [hubspot, attribution, analyst, analysis]

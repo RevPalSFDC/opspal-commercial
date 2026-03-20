@@ -1,6 +1,6 @@
 ---
 name: hubspot-admin-specialist
-description: Use PROACTIVELY for portal administration. Manages users, permissions, security configuration, and governance standards.
+description: "Use PROACTIVELY for portal administration."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_enumerate

@@ -1,7 +1,7 @@
 ---
 name: plugin-doctor
 model: sonnet
-description: Use PROACTIVELY for plugin diagnostics. Identifies installation issues, validates health, and auto-submits reflections.
+description: "Use PROACTIVELY for plugin diagnostics."
 color: indigo
 tools:
   - Read

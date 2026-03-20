@@ -1,6 +1,6 @@
 ---
 name: solution-analyzer
-description: Use PROACTIVELY for reverse engineering solutions. Analyzes existing implementations to extract templatizable patterns, dependencies, and parameterization opportunities.
+description: "Use PROACTIVELY for reverse engineering solutions."
 color: indigo
 tools:
   - Read

@@ -1,6 +1,6 @@
 ---
 name: sfdc-data-operations
-description: MUST BE USED for data import/export operations. Orchestrates Salesforce data operations by routing to specialized agents for imports, exports, transformations, and bulk operations.
+description: "MUST BE USED for data import/export operations."
 color: blue
 tools:
   - mcp_salesforce_data_query

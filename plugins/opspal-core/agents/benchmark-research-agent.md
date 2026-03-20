@@ -1,6 +1,6 @@
 ---
 name: benchmark-research-agent
-description: "**DEPRECATED** - Use opspal-salesforce:benchmark-research-agent instead. This duplicate will be removed in a future release."
+description: "\"**DEPRECATED** - Use opspal-salesforce:benchmark-research-agent instead."
 color: gray
 deprecated: true
 deprecation_target: "opspal-salesforce:benchmark-research-agent"

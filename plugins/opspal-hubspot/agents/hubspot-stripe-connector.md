@@ -1,7 +1,7 @@
 ---
 id: hubspot-stripe-connector
 name: hubspot-stripe-connector
-description: Use PROACTIVELY for Stripe integration. Manages bidirectional sync for subscription data, payments, and revenue tracking.
+description: "Use PROACTIVELY for Stripe integration."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

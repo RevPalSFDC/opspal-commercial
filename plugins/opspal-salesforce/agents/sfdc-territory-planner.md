@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-planner
-description: Designs Salesforce Territory2 structures and plans territory changes. Creates hierarchy designs, metadata packages, and migration plans.
+description: "Designs Salesforce Territory2 structures and plans territory changes."
 color: blue
 tools:
   - Read

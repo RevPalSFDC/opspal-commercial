@@ -1,6 +1,6 @@
 ---
 name: sfdc-metadata
-description: Automatically routes for metadata deploys. Handles flows, layouts, permissions, and package.xml management. Not for APEX.
+description: "Automatically routes for metadata deploys."
 color: blue
 tools:
   - mcp__salesforce-dx

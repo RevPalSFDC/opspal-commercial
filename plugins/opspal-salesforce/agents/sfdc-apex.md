@@ -1,6 +1,6 @@
 ---
 name: sfdc-apex
-description: Use PROACTIVELY for Apex development. Handles code writing, tests, and code review. Not for metadata deploy packaging.
+description: "Use PROACTIVELY for Apex development."
 color: blue
 tools:
   - Read

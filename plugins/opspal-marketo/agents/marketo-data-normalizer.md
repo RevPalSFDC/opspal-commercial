@@ -1,9 +1,6 @@
 ---
 name: marketo-data-normalizer
-description: |
-  Transforms raw Marketo bulk export CSV data into normalized JSON structures suitable
-  for Claude analysis. Handles CSV parsing, JSON attribute extraction, activity type
-  mapping, and metric aggregation. Use for data transformation and normalization tasks.
+description: "Transforms raw Marketo bulk export CSV data into normalized JSON structures suitable for Claude analysis."
 color: purple
 tools:
   - mcp__marketo__activity_types_list

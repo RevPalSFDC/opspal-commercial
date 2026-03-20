@@ -1,6 +1,6 @@
 ---
 name: marketo-landing-page-manager
-description: MUST BE USED for Marketo landing page creation and management. Creates landing pages, manages templates, configures forms on pages, and handles URL/SEO settings.
+description: "MUST BE USED for Marketo landing page creation and management."
 color: purple
 tools:
   - Read

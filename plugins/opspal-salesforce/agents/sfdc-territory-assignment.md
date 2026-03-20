@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-assignment
-description: Manages Salesforce Territory2 user and account assignments. Handles bulk assignments, duplicate prevention, exclusions, and assignment rule execution.
+description: "Manages Salesforce Territory2 user and account assignments."
 color: blue
 tools:
   - mcp_salesforce_data_query

@@ -1,6 +1,6 @@
 ---
 name: sfdc-lucid-diagrams
-description: Automatically routes for Lucid diagrams. Creates architecture diagrams for Salesforce with multi-tenant isolation and vision analysis.
+description: "Automatically routes for Lucid diagrams."
 color: blue
 tools:
   - mcp_lucid

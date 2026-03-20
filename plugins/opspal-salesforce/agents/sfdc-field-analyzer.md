@@ -1,6 +1,6 @@
 ---
 name: sfdc-field-analyzer
-description: Use PROACTIVELY for field analysis. Provides intelligent field discovery, validation rule analysis, and pre-operation validation to prevent field-related errors.
+description: "Use PROACTIVELY for field analysis."
 color: blue
 tools:
   - mcp_salesforce

@@ -1,6 +1,6 @@
 ---
 name: solution-runbook-generator
-description: Use PROACTIVELY for deployment documentation. Generates deployment runbooks, operational guides, and solution documentation from templates and deployments.
+description: "Use PROACTIVELY for deployment documentation."
 color: indigo
 tools:
   - Read

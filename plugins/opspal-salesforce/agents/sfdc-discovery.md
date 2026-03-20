@@ -1,6 +1,6 @@
 ---
 name: sfdc-discovery
-description: Use PROACTIVELY for org analysis. Read-only discovery of objects, flows, permissions, and integration points with recommendations. Auto-generates field dictionary on completion.
+description: "Use PROACTIVELY for org analysis."
 color: blue
 tools:
   - mcp__salesforce-dx

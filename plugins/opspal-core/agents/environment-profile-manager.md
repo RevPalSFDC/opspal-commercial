@@ -1,6 +1,6 @@
 ---
 name: environment-profile-manager
-description: Use PROACTIVELY for environment profile management. Manages environment profiles, parameter mappings, credentials, and org-specific quirks with inheritance support.
+description: "Use PROACTIVELY for environment profile management."
 color: indigo
 tools:
   - Read

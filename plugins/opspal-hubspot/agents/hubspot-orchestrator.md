@@ -1,6 +1,6 @@
 ---
 name: hubspot-orchestrator
-description: MUST BE USED for complex multi-step HubSpot operations. Coordinates workflows across domains, manages dependencies, and orchestrates specialized agents.
+description: "MUST BE USED for complex multi-step HubSpot operations."
 color: orange
 tools:
   - Task

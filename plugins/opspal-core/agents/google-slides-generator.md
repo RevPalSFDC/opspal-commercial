@@ -1,7 +1,7 @@
 ---
 name: google-slides-generator
 model: sonnet
-description: Use when Google Slides is explicitly requested or collaboration is required. Generates decks from templates, raw content, or modifies existing presentations with overflow handling and quality validation.
+description: "Use when Google Slides is explicitly requested or collaboration is required."
 color: indigo
 tools:
   - Read

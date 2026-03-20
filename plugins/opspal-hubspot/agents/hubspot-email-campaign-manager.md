@@ -1,6 +1,6 @@
 ---
 name: hubspot-email-campaign-manager
-description: Use PROACTIVELY for email campaigns. Manages templates, sequences, and marketing communications with personalization and optimization.
+description: "Use PROACTIVELY for email campaigns."
 color: orange
 tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__context7__*, Read, Write, TodoWrite, Grep, Task]
 triggerKeywords: [manage, hubspot, email, campaign]

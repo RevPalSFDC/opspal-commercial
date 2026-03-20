@@ -1,7 +1,7 @@
 ---
 name: instance-deployer
 model: haiku
-description: Automatically routes for SF deployments. Handles sandbox-to-production promotion and cross-instance metadata migrations.
+description: "Automatically routes for SF deployments."
 color: indigo
 tools:
   - Bash

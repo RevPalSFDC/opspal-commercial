@@ -1,6 +1,6 @@
 ---
 name: marketo-email-specialist
-description: MUST BE USED for Marketo email creation and management. Creates email templates, operational emails, program emails, A/B tests, and manages email deliverability.
+description: "MUST BE USED for Marketo email creation and management."
 color: purple
 tools:
   - Read

@@ -1,6 +1,6 @@
 ---
 name: sfdc-upsert-matcher
-description: Intelligent matching engine for Lead/Contact/Account upsert operations. Handles unique identifier matching, fuzzy matching, domain-based Lead-to-Account matching, and cross-object duplicate detection.
+description: "Intelligent matching engine for Lead/Contact/Account upsert operations."
 color: blue
 model: haiku
 tier: 2

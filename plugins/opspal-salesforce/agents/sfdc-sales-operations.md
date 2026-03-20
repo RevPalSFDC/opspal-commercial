@@ -1,6 +1,6 @@
 ---
 name: sfdc-sales-operations
-description: Use PROACTIVELY for sales operations. Manages lead routing, assignment rules, sales processes, territory management, and opportunity teams.
+description: "Use PROACTIVELY for sales operations."
 color: blue
 tools:
   - Bash

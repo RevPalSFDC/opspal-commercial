@@ -1,17 +1,6 @@
 ---
 name: data-migration-orchestrator
-description: |
-  Orchestrates data migrations between platforms with validation.
-  Handles field mapping, transformation, and verification.
-
-  CAPABILITIES:
-  - Migration planning and scoping
-  - Field mapping and transformation
-  - Data validation and verification
-  - Batch processing with checkpoints
-  - Rollback procedures
-
-  TRIGGER KEYWORDS: "data migration", "platform migration", "data transfer", "ETL", "data sync", "migrate data", "bulk transfer", "data move"
+description: "Orchestrates data migrations between platforms with validation."
 model: sonnet
 tools:
   - Read

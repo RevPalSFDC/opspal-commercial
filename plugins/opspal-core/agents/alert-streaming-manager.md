@@ -1,6 +1,6 @@
 ---
 name: alert-streaming-manager
-description: Manages push-based alert delivery with intelligent grouping, multi-channel routing (Slack, email, SMS, webhooks), configurable thresholds, and alert fatigue prevention. Streams critical RevOps alerts in real-time.
+description: "Manages push-based alert delivery with intelligent grouping, multi-channel routing (Slack, email, SMS, webhooks), configurable thresholds, and alert fatigue prevention."
 color: indigo
 model: sonnet
 version: 1.0.0

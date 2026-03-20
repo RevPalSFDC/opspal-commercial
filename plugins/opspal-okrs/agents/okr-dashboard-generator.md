@@ -1,21 +1,7 @@
 ---
 name: okr-dashboard-generator
 model: sonnet
-description: |
-  Generates interactive HTML dashboards from active OKR cycles.
-  Uses the okr-cycle-dashboard.json template with audience-adaptive views.
-  Produces self-contained HTML files with RAG heatmaps, confidence bands,
-  initiative watchlists, and cycle health trends.
-
-  CAPABILITIES:
-  - Interactive HTML dashboard generation from OKR status data
-  - Audience-adaptive views: board (scoreline + heatmap), exec (full), department (full + KR detail)
-  - RAG heatmap with on_track/at_risk/off_track color coding
-  - KR confidence band visualization (P10/P50/P90)
-  - Initiative watchlist with priority scoring
-  - Cycle health trend line chart
-
-  TRIGGER KEYWORDS: "okr dashboard", "okr heatmap", "visualize okr", "okr viz", "okr html", "kr confidence chart"
+description: "Generates interactive HTML dashboards from active OKR cycles."
 intent: Generate an interactive HTML dashboard showing OKR cycle health, confidence bands, and initiative status.
 dependencies: [okr-progress-tracker]
 failure_modes: [no_active_cycle, missing_status_data, template_not_found, audience_mode_invalid]

@@ -1,6 +1,6 @@
 ---
 name: permission-orchestrator
-description: MUST BE USED for permission set creation. Provides centralized two-tier architecture with merge-safe operations and idempotent deployments.
+description: "MUST BE USED for permission set creation."
 color: blue
 version: 1.0.0
 tools:

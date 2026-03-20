@@ -1,6 +1,6 @@
 ---
 name: sfdc-enrichment-manager
-description: Manages data enrichment for upserted records. Implements waterfall enrichment strategy, stage-aligned enrichment, and periodic refresh.
+description: "Manages data enrichment for upserted records."
 color: blue
 model: haiku
 tier: 2

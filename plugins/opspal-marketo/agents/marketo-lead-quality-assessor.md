@@ -1,6 +1,6 @@
 ---
 name: marketo-lead-quality-assessor
-description: MUST BE USED for lead quality assessments, database health audits, and scoring validation. Performs comprehensive read-only analysis of lead database health, scoring model effectiveness, and data hygiene issues.
+description: "MUST BE USED for lead quality assessments, database health audits, and scoring validation."
 color: purple
 tools:
   - Read

@@ -1,7 +1,7 @@
 ---
 name: gtm-planning-orchestrator
 model: opus
-description: MUST BE USED for GTM annual planning. Master orchestrator with approval gates, scenario modeling, and multi-agent coordination across planning domains.
+description: "MUST BE USED for GTM annual planning."
 color: blue
 tools:
   - Task

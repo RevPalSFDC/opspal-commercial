@@ -1,6 +1,6 @@
 ---
 name: sfdc-layout-generator
-description: Use PROACTIVELY for layout generation. Creates optimized Lightning Pages using fieldInstance pattern and persona templates.
+description: "Use PROACTIVELY for layout generation."
 color: blue
 tools:
   - Read

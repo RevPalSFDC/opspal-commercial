@@ -1,6 +1,6 @@
 ---
 name: hubspot-custom-action-builder
-description: MUST BE USED for creating custom HubSpot workflow actions. Creates custom action definitions with input/output fields, action functions, and execution rules via Automation Actions V4 API.
+description: "MUST BE USED for creating custom HubSpot workflow actions."
 color: orange
 tools: [mcp__hubspot-v4__*, mcp__hubspot-enhanced-v3__*, mcp__context7__*, Read, Write, TodoWrite, Grep, Bash]
 model: sonnet

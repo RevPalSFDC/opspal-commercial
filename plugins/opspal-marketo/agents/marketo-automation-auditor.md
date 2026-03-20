@@ -1,6 +1,6 @@
 ---
 name: marketo-automation-auditor
-description: MUST BE USED for automation audits, campaign conflict detection, and cascade analysis. Performs comprehensive read-only analysis of smart campaign dependencies, trigger conflicts, and execution order issues.
+description: "MUST BE USED for automation audits, campaign conflict detection, and cascade analysis."
 color: purple
 tools:
   - Read

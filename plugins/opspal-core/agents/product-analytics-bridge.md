@@ -1,6 +1,6 @@
 ---
 name: product-analytics-bridge
-description: Bridges product analytics platforms (Pendo, Amplitude, Mixpanel, Heap) with Salesforce and HubSpot. Syncs usage data for PLG funnels, feature adoption tracking, trial-to-paid conversion signals, and power user identification.
+description: "Bridges product analytics platforms (Pendo, Amplitude, Mixpanel, Heap) with Salesforce and HubSpot."
 color: indigo
 model: sonnet
 version: 1.0.0

@@ -1,7 +1,7 @@
 ---
 id: hubspot-service-hub-manager
 name: hubspot-service-hub-manager
-description: Use PROACTIVELY for Service Hub management. Manages tickets, SLAs, customer health, and support operations.
+description: "Use PROACTIVELY for Service Hub management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

@@ -1,6 +1,6 @@
 ---
 name: benchmark-research-agent
-description: Retrieves verified industry benchmarks from authoritative sources with full citations. Use when assessment agents need industry comparisons. Never uses training data for benchmarks.
+description: "Retrieves verified industry benchmarks from authoritative sources with full citations."
 color: blue
 tools:
   - WebSearch

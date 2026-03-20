@@ -1,24 +1,7 @@
 ---
 name: remediation-sequencer
 model: opus
-description: |
-  Use PROACTIVELY after any assessment or audit completes. Ingests findings from multiple
-  assessments, scores by urgency/effort using the OKR initiative scoring methodology,
-  produces a dependency-aware remediation roadmap with phased implementation plan.
-
-  Converts assessment deliverables into actionable implementation systems.
-
-  CAPABILITIES:
-  - Multi-assessment finding ingestion (SF, HS, MK, maturity)
-  - 5-dimension urgency/effort scoring (reuses OKR initiative scoring rubric)
-  - Dependency graph construction (identifies which fixes must precede others)
-  - Phased remediation plan (Quick Wins → Foundation → Optimization → Strategic)
-  - Effort estimation with T-shirt sizing
-  - Asana project generation for implementation tracking
-  - Progress tracking against remediation milestones
-
-  TRIGGER KEYWORDS: "remediation plan", "fix roadmap", "implementation plan", "what to fix first",
-  "prioritize findings", "action plan from audit", "remediation sequence", "next steps from assessment"
+description: "Use PROACTIVELY after any assessment or audit completes."
 intent: Convert multi-assessment findings into a dependency-aware, prioritized remediation roadmap.
 dependencies: [okr-initiative-prioritizer, asana-task-manager, solution-deployment-orchestrator]
 failure_modes: [no_assessment_findings, insufficient_context, circular_dependency]

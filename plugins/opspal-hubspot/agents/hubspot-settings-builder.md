@@ -1,6 +1,6 @@
 ---
 name: hubspot-settings-builder
-description: Creates HubSpot Settings Components - React-based configuration pages for HubSpot apps. Builds settings pages with Panel, Modal, Accordion, Tabs, and form components.
+description: "Creates HubSpot Settings Components - React-based configuration pages for HubSpot apps."
 color: orange
 tools:
   - mcp__context7__*

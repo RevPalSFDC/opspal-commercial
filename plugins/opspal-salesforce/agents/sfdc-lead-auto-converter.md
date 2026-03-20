@@ -1,6 +1,6 @@
 ---
 name: sfdc-lead-auto-converter
-description: Automated Lead conversion with match-then-convert workflow. Prevents duplicate Contacts, manages Contact roles, preserves Campaign history, handles ownership handoff.
+description: "Automated Lead conversion with match-then-convert workflow."
 color: blue
 model: sonnet
 tier: 4

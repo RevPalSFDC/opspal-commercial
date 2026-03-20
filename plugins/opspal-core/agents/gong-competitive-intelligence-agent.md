@@ -1,6 +1,6 @@
 ---
 name: gong-competitive-intelligence-agent
-description: Analyzes Gong tracker data for competitive intelligence. Identifies competitor mentions, tracks trends, groups by deal stage and outcome, and generates battlecard-ready insights.
+description: "Analyzes Gong tracker data for competitive intelligence."
 color: orange
 model: sonnet
 version: 1.0.0

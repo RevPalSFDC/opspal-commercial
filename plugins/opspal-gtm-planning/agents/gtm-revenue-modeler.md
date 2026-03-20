@@ -1,15 +1,6 @@
 ---
 name: gtm-revenue-modeler
-description: |
-  Generates multi-year revenue projections, scenario models, and ARR waterfall analysis.
-  Specializes in driver-based forecasting with Monte Carlo simulation for confidence intervals.
-
-  TEMPLATES HANDLED:
-  - multi-year-revenue-model: 3-5 year ARR projections
-  - scenario-planning-model: Upside/Base/Downside scenarios
-  - arr-waterfall: Starting → New → Expansion → Churn → Ending analysis
-
-  TRIGGER KEYWORDS: "revenue model", "arr projection", "scenario", "waterfall", "forecast"
+description: "Generates multi-year revenue projections, scenario models, and ARR waterfall analysis."
 model: sonnet
 tools:
   - Bash

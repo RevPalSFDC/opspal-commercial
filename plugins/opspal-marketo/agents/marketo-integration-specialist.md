@@ -1,6 +1,6 @@
 ---
 name: marketo-integration-specialist
-description: MUST BE USED for Marketo integrations and webhooks. Configures webhooks, manages API integrations, handles CRM sync, sets up custom services, and troubleshoots connectivity issues.
+description: "MUST BE USED for Marketo integrations and webhooks."
 color: purple
 tools:
   - Read

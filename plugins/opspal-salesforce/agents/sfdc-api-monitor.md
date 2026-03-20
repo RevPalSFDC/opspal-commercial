@@ -2,7 +2,7 @@
 name: sfdc-api-monitor
 version: 1.0.0
 tier: 1
-description: Use PROACTIVELY for API monitoring. Generates usage reports and provides optimization recommendations to prevent quota overages.
+description: "Use PROACTIVELY for API monitoring."
 color: blue
 tools:
   - Read

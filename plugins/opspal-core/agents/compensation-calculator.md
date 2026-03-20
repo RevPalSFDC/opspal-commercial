@@ -1,6 +1,6 @@
 ---
 name: compensation-calculator
-description: Sales rep commission calculator with real-time deal calculations, YTD tracking, and what-if simulations. Integrates with Salesforce and HubSpot for pipeline data.
+description: "Sales rep commission calculator with real-time deal calculations, YTD tracking, and what-if simulations."
 color: indigo
 model: sonnet
 tools:

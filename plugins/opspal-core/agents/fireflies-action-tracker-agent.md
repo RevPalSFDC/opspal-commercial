@@ -1,6 +1,6 @@
 ---
 name: fireflies-action-tracker-agent
-description: Read-only extraction and tracking of action items from Fireflies.ai transcripts. Surfaces meeting follow-ups, attributes tasks to owners, cross-references against CRM tasks, and generates overdue action item reports.
+description: "Read-only extraction and tracking of action items from Fireflies.ai transcripts."
 color: teal
 model: sonnet
 version: 1.0.0

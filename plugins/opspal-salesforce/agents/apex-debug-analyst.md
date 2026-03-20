@@ -1,6 +1,6 @@
 ---
 name: apex-debug-analyst
-description: Automatically routes for Apex debug analysis. Analyzes debug logs, execution tracing, and governor limit troubleshooting.
+description: "Automatically routes for Apex debug analysis."
 color: blue
 tools:
   - mcp_salesforce

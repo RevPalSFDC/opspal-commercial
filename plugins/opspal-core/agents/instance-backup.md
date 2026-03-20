@@ -1,7 +1,7 @@
 ---
 name: instance-backup
 model: sonnet
-description: Use PROACTIVELY for SF instance backups. Manages automated metadata, data, and configuration backups with restore capabilities.
+description: "Use PROACTIVELY for SF instance backups."
 color: indigo
 tools:
   - Bash

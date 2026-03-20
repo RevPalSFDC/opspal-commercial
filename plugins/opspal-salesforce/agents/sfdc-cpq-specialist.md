@@ -1,6 +1,6 @@
 ---
 name: sfdc-cpq-specialist
-description: Use PROACTIVELY for CPQ configuration. Configures pricing, quotes, product bundles, discount schedules, and revenue optimization.
+description: "Use PROACTIVELY for CPQ configuration."
 color: blue
 tools:
   - mcp_salesforce

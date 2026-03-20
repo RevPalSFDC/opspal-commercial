@@ -1,17 +1,6 @@
 ---
 name: unified-exec-dashboard-agent
-description: |
-  Generates unified executive dashboards combining data from all platforms.
-  Creates C-level views of revenue, pipeline, and operational metrics.
-
-  CAPABILITIES:
-  - Multi-platform data aggregation (Salesforce, HubSpot, Marketo)
-  - Executive KPI definition and calculation
-  - Dashboard layout generation
-  - Trend visualization and commentary
-  - Board-ready report generation
-
-  TRIGGER KEYWORDS: "executive dashboard", "unified dashboard", "c-level report", "cross-platform metrics", "board report", "executive summary", "leadership dashboard"
+description: "Generates unified executive dashboards combining data from all platforms."
 model: sonnet
 tools:
   - Read

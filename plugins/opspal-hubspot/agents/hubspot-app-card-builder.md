@@ -1,6 +1,6 @@
 ---
 name: hubspot-app-card-builder
-description: Creates HubSpot App Cards for UI extensibility. Builds React-based custom components for CRM records, preview panels, help desk, and sales workspace with HubSpot UI SDK patterns.
+description: "Creates HubSpot App Cards for UI extensibility."
 color: orange
 tools:
   - mcp__context7__*

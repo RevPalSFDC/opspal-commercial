@@ -1,6 +1,6 @@
 ---
 name: sfdc-communication-manager
-description: Use PROACTIVELY for communication features. Manages email templates, letterheads, mass email, deliverability, and communication preferences.
+description: "Use PROACTIVELY for communication features."
 color: blue
 tools:
   - Bash

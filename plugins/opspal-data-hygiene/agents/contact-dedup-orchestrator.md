@@ -1,7 +1,7 @@
 ---
 name: contact-dedup-orchestrator
 model: sonnet
-description: MUST BE USED for Contact/Lead deduplication. Orchestrates Contact dedup between HubSpot and Salesforce with fuzzy matching, merge rules, and comprehensive safety guardrails.
+description: "MUST BE USED for Contact/Lead deduplication."
 color: teal
 tools:
   - Read

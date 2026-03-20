@@ -1,6 +1,6 @@
 ---
 name: marketo-performance-optimizer
-description: Use PROACTIVELY for Marketo performance optimization, API efficiency, rate limit management, and system health monitoring. Analyzes and improves operational performance.
+description: "Use PROACTIVELY for Marketo performance optimization, API efficiency, rate limit management, and system health monitoring."
 color: purple
 tools:
   - Read

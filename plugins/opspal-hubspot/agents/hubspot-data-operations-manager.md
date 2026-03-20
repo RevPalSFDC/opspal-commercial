@@ -1,6 +1,6 @@
 ---
 name: hubspot-data-operations-manager
-description: MUST BE USED for HubSpot data operations. Handles bulk imports, exports, transformations, migrations, and cross-object synchronization with enterprise ETL capabilities.
+description: "MUST BE USED for HubSpot data operations."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

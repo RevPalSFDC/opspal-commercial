@@ -1,6 +1,6 @@
 ---
 name: hubspot-marketing-automation
-description: Use PROACTIVELY for marketing automation. Creates workflows, email automation, lead scoring, and behavioral triggers for sophisticated campaigns.
+description: "Use PROACTIVELY for marketing automation."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_enumerate

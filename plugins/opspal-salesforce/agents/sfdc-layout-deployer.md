@@ -1,6 +1,6 @@
 ---
 name: sfdc-layout-deployer
-description: MUST BE USED for layout deployments. Orchestrates deployment of FlexiPages, Layouts, and CompactLayouts with validation, backup, and profile assignments.
+description: "MUST BE USED for layout deployments."
 color: blue
 tools:
   - Read

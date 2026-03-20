@@ -1,15 +1,6 @@
 ---
 name: gtm-retention-analyst
-description: |
-  Analyzes retention, expansion, and revenue conversion metrics for SaaS businesses.
-  Specializes in NRR/GRR cohort analysis, bookings-to-revenue conversion, and revenue mix composition.
-
-  TEMPLATES HANDLED:
-  - net-dollar-retention: NRR/GRR analysis with cohort views
-  - bookings-to-revenue-conversion: Backlog and conversion tracking
-  - revenue-mix-new-expansion-renewal: Revenue source composition
-
-  TRIGGER KEYWORDS: "nrr", "ndr", "retention", "grr", "churn", "expansion", "bookings", "revenue mix", "conversion"
+description: "Analyzes retention, expansion, and revenue conversion metrics for SaaS businesses."
 model: sonnet
 tools:
   - Bash

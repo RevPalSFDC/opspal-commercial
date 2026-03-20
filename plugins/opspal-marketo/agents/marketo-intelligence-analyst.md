@@ -1,10 +1,6 @@
 ---
 name: marketo-intelligence-analyst
-description: |
-  Claude-powered analysis and actionable recommendations for Marketo marketing data.
-  Interprets activity patterns, analyzes campaign performance, generates optimization
-  recommendations, and produces natural language summaries. Use for AI-driven marketing
-  insights and recommendations.
+description: "Claude-powered analysis and actionable recommendations for Marketo marketing data."
 color: purple
 tools:
   - Read

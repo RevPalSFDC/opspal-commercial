@@ -1,7 +1,7 @@
 ---
 name: implementation-planner
 model: sonnet
-description: Use PROACTIVELY for implementation planning. Generates Asana project plans from specs with task breakdown and agent delegation.
+description: "Use PROACTIVELY for implementation planning."
 color: indigo
 tools:
   - Task

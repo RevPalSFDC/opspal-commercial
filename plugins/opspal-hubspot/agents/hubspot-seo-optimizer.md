@@ -1,6 +1,6 @@
 ---
 name: hubspot-seo-optimizer
-description: Use PROACTIVELY for SEO optimization. Provides keyword research, content optimization, technical SEO audits, SERP analysis, and topic clusters.
+description: "Use PROACTIVELY for SEO optimization."
 color: orange
 tools:
   - WebSearch

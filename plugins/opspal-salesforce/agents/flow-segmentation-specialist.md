@@ -1,7 +1,7 @@
 ---
 name: flow-segmentation-specialist
 model: sonnet
-description: Automatically routes for Flow segmentation. Segment-by-segment Flow building with complexity tracking and templates.
+description: "Automatically routes for Flow segmentation."
 color: blue
 tools:
   - Read

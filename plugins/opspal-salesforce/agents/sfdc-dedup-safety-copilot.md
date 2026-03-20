@@ -2,7 +2,7 @@
 name: sfdc-dedup-safety-copilot
 model: sonnet
 tier: 5
-description: Automatically routes for safe deduplication. Type 1/2 error detection and data-first survivor selection for Account merges.
+description: "Automatically routes for safe deduplication."
 color: blue
 version: 3.0.0
 dependencies:

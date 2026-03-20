@@ -1,7 +1,7 @@
 ---
 name: gtm-quota-capacity
 model: sonnet
-description: Use PROACTIVELY for quota modeling. Builds P10/P50/P90 scenarios via Monte Carlo, sensitivity analysis, and back-tests vs prior FY.
+description: "Use PROACTIVELY for quota modeling."
 color: blue
 tools:
   - Bash

@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-files-manager
-description: Use PROACTIVELY for file and asset management. Manages HubSpot files including images, documents, and media with upload, organization, optimization, and CDN configuration.
+description: "Use PROACTIVELY for file and asset management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

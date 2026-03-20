@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-cta-manager
-description: Use PROACTIVELY for CTA management. Creates and manages HubSpot CTAs using Playwright automation, including button configuration, styling, tracking, and embedding.
+description: "Use PROACTIVELY for CTA management."
 color: orange
 tools:
   - mcp__playwright__browser_navigate

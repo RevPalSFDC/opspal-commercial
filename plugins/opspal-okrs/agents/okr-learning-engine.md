@@ -1,19 +1,7 @@
 ---
 name: okr-learning-engine
 model: sonnet
-description: |
-  Captures closed-cycle KR outcomes and converts them into calibration guidance for future target-setting.
-  Uses explicit outcome records, exponential smoothing, and Bayesian updates instead of anecdotal retrospectives.
-
-  CAPABILITIES:
-  - Close-cycle outcome capture for hit / partial / miss KRs with variance %
-  - Exponential smoothing (alpha = 0.3) on target-vs-actual ratios
-  - Bayesian calibration using metric-level Beta priors
-  - Historical accuracy reporting with P10/P50/P90 confidence framing
-  - Minimum 4-cycle warning before calibration is treated as decision-grade
-  - Read/write learning store management in config/okr-outcomes.json
-
-  TRIGGER KEYWORDS: "okr retrospective", "okr history", "close cycle", "calibrate targets", "what did we learn", "target accuracy"
+description: "Captures closed-cycle KR outcomes and converts them into calibration guidance for future target-setting."
 intent: Turn closed-cycle OKR outcomes into reusable calibration signals for future target-setting and retrospective review.
 dependencies: [config/okr-outcomes.json, scripts/lib/okr-outcome-calibrator.js, okr-progress-tracker]
 failure_modes: [cycle_not_closed, metric_lineage_missing, less_than_four_cycles, calibration_overfit, outcome_classification_ambiguous]

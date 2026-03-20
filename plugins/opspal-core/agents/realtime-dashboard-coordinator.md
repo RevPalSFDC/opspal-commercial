@@ -1,6 +1,6 @@
 ---
 name: realtime-dashboard-coordinator
-description: Coordinates real-time dashboard updates via WebSocket connections. Manages configurable refresh intervals, delta-only data transmission, connection state recovery, and multi-dashboard scaling for live RevOps visibility.
+description: "Coordinates real-time dashboard updates via WebSocket connections."
 color: indigo
 model: sonnet
 version: 1.0.0

@@ -1,7 +1,7 @@
 ---
 id: hubspot-adoption-tracker
 name: hubspot-adoption-tracker
-description: Use PROACTIVELY for adoption tracking. Monitors user activity, feature adoption metrics, training effectiveness, and ROI measurement.
+description: "Use PROACTIVELY for adoption tracking."
 color: orange
 tools:
   - mcp__hubspot-v4__search_with_total

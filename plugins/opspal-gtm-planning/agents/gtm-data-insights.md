@@ -1,7 +1,7 @@
 ---
 name: gtm-data-insights
 model: sonnet
-description: Use PROACTIVELY for GTM data analysis. Extracts historical data, builds cohorts, validates fields, and generates Data Dictionary.
+description: "Use PROACTIVELY for GTM data analysis."
 color: blue
 tools:
   - Task

@@ -1,6 +1,6 @@
 ---
 name: sfdc-performance-optimizer
-description: Use PROACTIVELY for performance optimization. Handles query optimization, indexing, governor limits, storage management, and system health monitoring.
+description: "Use PROACTIVELY for performance optimization."
 color: blue
 tools:
   - mcp_salesforce

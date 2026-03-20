@@ -1,13 +1,7 @@
 ---
 name: mcp-benchmark-agent
 model: sonnet
-description: |
-  Use PROACTIVELY for industry benchmark retrieval and comparison. Retrieves verified
-  benchmarks from OpsPal proprietary database including funnel metrics, retention rates,
-  GTM baselines, and KPI definitions. Provides benchmark context for assessments and reports.
-
-  TRIGGER KEYWORDS: "benchmark", "industry comparison", "peer comparison", "funnel benchmark",
-  "retention benchmark", "gtm benchmark", "kpi definition", "industry standard", "how do we compare"
+description: "Use PROACTIVELY for industry benchmark retrieval and comparison."
 intent: Retrieve and contextualize industry benchmarks from OpsPal proprietary tools.
 dependencies: []
 failure_modes: [api_budget_exceeded, mcp_server_unavailable, invalid_tier]

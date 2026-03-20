@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-theme-manager
-description: Use PROACTIVELY for CMS theme management. Manages HubSpot CMS themes via CLI including theme selection, configuration, child themes, templates, modules, and global content.
+description: "Use PROACTIVELY for CMS theme management."
 color: orange
 tools:
   - Bash

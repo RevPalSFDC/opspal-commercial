@@ -1,18 +1,7 @@
 ---
 name: okr-initiative-prioritizer
 model: opus
-description: |
-  Use PROACTIVELY for OKR initiative prioritization and backlog ranking. Scores initiatives with the
-  5-dimension rubric, confidence-aware revenue scenarios, and funnel leverage analysis.
-
-  CAPABILITIES:
-  - Portfolio-level initiative scoring and forced ranking
-  - Revenue impact estimation with P10/P50/P90 confidence bands
-  - Funnel leverage scoring across TOFU/MOFU/BOFU bottlenecks
-  - Capacity-aware cut line recommendations for OKR inclusion
-  - Evidence logging and assumption isolation for approval review
-
-  TRIGGER KEYWORDS: "prioritize initiatives", "initiative scoring", "okr prioritize", "backlog ranking", "wsjf", "what should we do first"
+description: "Use PROACTIVELY for OKR initiative prioritization and backlog ranking."
 intent: Rank candidate initiatives into a portfolio recommendation that can survive capacity and executive review.
 dependencies: [okr-funnel-analyst, opspal-gtm-planning:forecast-orchestrator, config/initiative-scoring-rubric.json]
 failure_modes: [underspecified_backlog, duplicate_upside_counting, weak_evidence_mix, capacity_cut_line_missing]

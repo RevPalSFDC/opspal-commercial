@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-orchestrator
-description: MUST BE USED for territory management operations. Master coordinator for Territory2 model lifecycle, hierarchy management, and user/account assignments with validation and rollback support.
+description: "MUST BE USED for territory management operations."
 color: blue
 tools:
   - Task

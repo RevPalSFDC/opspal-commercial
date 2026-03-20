@@ -1,6 +1,6 @@
 ---
 name: monday-board-manager
-description: Manages Monday.com boards - creation, configuration, archival, and permissions. Use for board-level operations.
+description: "Manages Monday.com boards - creation, configuration, archival, and permissions."
 color: blue
 tools:
   - Read

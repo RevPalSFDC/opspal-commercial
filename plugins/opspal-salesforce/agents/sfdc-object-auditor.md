@@ -1,6 +1,6 @@
 ---
 name: sfdc-object-auditor
-description: Use PROACTIVELY for object audits. Performs comprehensive metadata analysis providing insights, usage statistics, and optimization recommendations.
+description: "Use PROACTIVELY for object audits."
 color: blue
 tools:
   - mcp_salesforce

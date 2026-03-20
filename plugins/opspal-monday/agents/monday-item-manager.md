@@ -1,6 +1,6 @@
 ---
 name: monday-item-manager
-description: Manages Monday.com items - create, update, delete, column values, and subitems. Use for item-level operations.
+description: "Manages Monday.com items - create, update, delete, column values, and subitems."
 color: blue
 tools:
   - Read

@@ -88,6 +88,70 @@ describe('license activation manager', () => {
     })).rejects.toThrow('Email address is required');
   });
 
+  test('activateLicense rejects a different concurrently active cached license', async () => {
+    jest.doMock('../scripts/lib/license-auth-client', () => ({
+      activate: jest.fn(),
+      getLicenseCacheFile: () => '/tmp/license-cache.json',
+      getServerUrl: () => 'https://license.gorevpal.com',
+      status: jest.fn(() => ({
+        status: 'valid',
+        license_key: 'OPSPAL-PRO-existing-123456',
+        user_email: 'user@example.com'
+      })),
+      validateSessionPayload: jest.fn()
+    }));
+
+    const manager = require('../scripts/lib/license-activation-manager');
+
+    await expect(manager.activateLicense({
+      email: 'user@example.com',
+      licenseKey: 'OPSPAL-PRO-new-654321',
+      machineId: 'machine-01'
+    })).rejects.toThrow('Run /deactivate-license before activating a different license key.');
+  });
+
+  test('activateLicense allows refreshing the same cached license key', async () => {
+    const activateLicenseRequest = jest.fn().mockResolvedValue({
+      valid: true,
+      session_token: 'session-token',
+      tier: 'professional',
+      organization: 'Acme Corp',
+      allowed_asset_tiers: ['core'],
+      tier_metadata: {},
+      blocked_domains: [],
+      key_bundle_version: 2,
+      grace_until: '2026-03-25T12:00:00.000Z',
+      key_bundle: {
+        version: 2,
+        keys: {
+          core: Buffer.alloc(32, 1).toString('base64')
+        }
+      }
+    });
+
+    jest.doMock('../scripts/lib/license-auth-client', () => ({
+      activate: activateLicenseRequest,
+      getLicenseCacheFile: () => '/tmp/license-cache.json',
+      getServerUrl: () => 'https://license.gorevpal.com',
+      status: jest.fn(() => ({
+        status: 'valid',
+        license_key: 'OPSPAL-PRO-same-123456',
+        user_email: 'user@example.com'
+      })),
+      validateSessionPayload: jest.fn()
+    }));
+
+    const manager = require('../scripts/lib/license-activation-manager');
+    const result = await manager.activateLicense({
+      email: 'user@example.com',
+      licenseKey: 'OPSPAL-PRO-same-123456',
+      machineId: 'machine-01'
+    });
+
+    expect(activateLicenseRequest).toHaveBeenCalledTimes(1);
+    expect(result.licenseKey).toBe('OPSPAL-PRO-same-123456');
+  });
+
   test('checkGuidance reports activation guidance when no valid cache exists', () => {
     jest.doMock('../scripts/lib/license-auth-client', () => ({
       getLicenseCacheFile: jest.fn(() => '/tmp/license-cache.json'),

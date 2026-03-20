@@ -1,6 +1,6 @@
 ---
 name: sfdc-upsert-orchestrator
-description: MUST BE USED for Lead/Contact/Account upsert operations. Orchestrates matching, enrichment, conversion, ownership routing, and error handling with mandatory validation.
+description: "MUST BE USED for Lead/Contact/Account upsert operations."
 color: blue
 model: sonnet
 tier: 3

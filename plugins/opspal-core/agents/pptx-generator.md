@@ -1,7 +1,7 @@
 ---
 name: pptx-generator
 model: sonnet
-description: Use PROACTIVELY for offline PPTX generation. Converts markdown to branded PowerPoint decks with embedded fonts and Mermaid diagrams.
+description: "Use PROACTIVELY for offline PPTX generation."
 color: indigo
 tools:
   - Read

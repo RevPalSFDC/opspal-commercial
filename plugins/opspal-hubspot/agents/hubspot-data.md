@@ -1,6 +1,6 @@
 ---
 name: hubspot-data
-description: Use PROACTIVELY for data operations. Handles contact/company property and data hygiene operations. Not for workflows.
+description: "Use PROACTIVELY for data operations."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

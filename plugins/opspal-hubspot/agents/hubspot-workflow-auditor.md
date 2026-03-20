@@ -1,6 +1,6 @@
 ---
 name: hubspot-workflow-auditor
-description: Use PROACTIVELY for workflow auditing. Verifies API operations with evidence-based validation, detecting silent failures.
+description: "Use PROACTIVELY for workflow auditing."
 color: orange
 version: 1.0.0
 category: validation

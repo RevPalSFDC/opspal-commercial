@@ -1,6 +1,6 @@
 ---
 name: sfdc-dashboard-analyzer
-description: Automatically routes for dashboard analysis. Extracts business process definitions for object migration while preserving functionality.
+description: "Automatically routes for dashboard analysis."
 color: blue
 tools:
   - mcp_salesforce

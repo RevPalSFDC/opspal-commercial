@@ -1,6 +1,6 @@
 ---
 name: sfdc-conflict-resolver
-description: MUST BE USED for deployment conflicts. Detects and resolves Salesforce metadata conflicts, field type incompatibilities, and deployment blockers before failures.
+description: "MUST BE USED for deployment conflicts."
 color: blue
 tools:
   - mcp_salesforce

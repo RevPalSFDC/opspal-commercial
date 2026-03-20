@@ -1,6 +1,6 @@
 ---
 name: sfdc-layout-analyzer
-description: Use PROACTIVELY for layout analysis. Analyzes Lightning Pages and Classic Layouts for quality, performance, and UX.
+description: "Use PROACTIVELY for layout analysis."
 color: blue
 tools:
   - Read

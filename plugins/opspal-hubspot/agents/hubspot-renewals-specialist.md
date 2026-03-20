@@ -1,7 +1,7 @@
 ---
 id: hubspot-renewals-specialist
 name: hubspot-renewals-specialist
-description: Use PROACTIVELY for renewal management. Manages renewal pipelines, churn prevention, contract tracking, and renewal forecasting.
+description: "Use PROACTIVELY for renewal management."
 color: orange
 tools:
   - mcp__hubspot-v4__search_with_total

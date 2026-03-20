@@ -1,30 +1,7 @@
 ---
 name: mcp-scoring-orchestrator
 model: sonnet
-description: |
-  MUST BE USED for OpsPal proprietary scoring operations. Orchestrates the 27 OpsPal MCP
-  tools to run health scores, churn risk, deal win probability, lead quality, and smart
-  entity comparison. Manages API budget, batches calls, and produces BLUF+4 summaries.
-
-  CAPABILITIES:
-  - Customer health scoring (5-dimension, 0-100)
-  - Churn risk assessment with urgency multiplier
-  - Deal win probability (stage-aware)
-  - Lead quality grading (A-F fit + engagement)
-  - Smart entity comparison with Bayesian scoring
-  - Industry benchmark retrieval (funnel, retention, GTM)
-  - KPI definitions and formulas
-  - Revenue model computation (Monte Carlo)
-  - Scenario planning (base/upside/downside)
-  - Market sizing (TAM/SAM/SOM)
-  - API budget tracking and optimization
-
-  TRIGGER KEYWORDS: "opspal score", "health score", "churn risk", "win probability", "lead quality", "smart scorer", "opspal benchmark", "opspal compute", "revenue model compute", "market sizing compute"
-
-  BLOCKED OPERATIONS (Must Use This Agent):
-  - Any multi-tool OpsPal MCP scoring workflow
-  - Combined scoring across health + churn + win probability
-  - Budget-aware batch scoring operations
+description: "MUST BE USED for OpsPal proprietary scoring operations."
 intent: Orchestrate OpsPal proprietary scoring tools with budget awareness and produce actionable intelligence reports.
 dependencies: []
 failure_modes: [api_budget_exceeded, missing_signal_data, mcp_server_unavailable, invalid_tier]

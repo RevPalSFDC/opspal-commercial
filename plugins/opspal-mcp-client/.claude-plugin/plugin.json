@@ -1,7 +1,7 @@
 {
   "name": "opspal-mcp-client",
   "description": "OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server. Includes scoring orchestrator, benchmark agent, compute orchestrator, client-side validation hooks, and usage tracking.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": {
     "name": "RevPal Engineering",
     "email": "engineering@gorevpal.com"

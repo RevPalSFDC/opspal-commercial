@@ -1,7 +1,7 @@
 ---
 name: project-connect
 model: sonnet
-description: Use PROACTIVELY for customer onboarding. Orchestrates project setup across Supabase, GitHub, Drive, and Asana.
+description: "Use PROACTIVELY for customer onboarding."
 color: indigo
 tools:
   - mcp__asana__*

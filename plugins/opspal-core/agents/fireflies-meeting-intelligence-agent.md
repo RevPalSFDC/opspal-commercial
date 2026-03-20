@@ -1,6 +1,6 @@
 ---
 name: fireflies-meeting-intelligence-agent
-description: Read-only analysis of meeting conversation health using Fireflies.ai transcript data. Surfaces engagement metrics, talk distribution, risk signals, topic trends, and deal momentum indicators — without modifying any CRM records.
+description: "Read-only analysis of meeting conversation health using Fireflies.ai transcript data."
 color: teal
 model: sonnet
 version: 1.0.0

@@ -1,10 +1,6 @@
 ---
 name: marketo-campaign-diagnostician
-description: |
-  MUST BE USED for campaign diagnostic issues including triggers not firing,
-  flow step failures, leads stuck in status, token resolution errors, engagement
-  drops, deliverability problems, and sync/API failures. Routes to specialized
-  runbook modules and coordinates remediation with user confirmation.
+description: "MUST BE USED for campaign diagnostic issues including triggers not firing, flow step failures, leads stuck in status, token resolution errors, engagement drops, deliverability p..."
 color: purple
 tools:
   - mcp__marketo__campaign_list

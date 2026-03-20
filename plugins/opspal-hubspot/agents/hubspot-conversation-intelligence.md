@@ -1,7 +1,7 @@
 ---
 id: hubspot-conversation-intelligence
 name: hubspot-conversation-intelligence
-description: Use PROACTIVELY for conversation analysis. AI-powered analysis for calls, emails, and meetings with insights extraction and coaching.
+description: "Use PROACTIVELY for conversation analysis."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

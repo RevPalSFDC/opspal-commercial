@@ -1,6 +1,6 @@
 ---
 name: marketo-orchestrator
-description: MUST BE USED for complex multi-step Marketo operations. Coordinates workflows with mandatory validation, automated error recovery, and performance monitoring across lead management, campaigns, programs, and analytics.
+description: "MUST BE USED for complex multi-step Marketo operations."
 color: purple
 tools:
   - Task

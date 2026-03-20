@@ -1,6 +1,6 @@
 ---
 name: flow-log-analyst
-description: Automatically routes for Flow log analysis. Parses debug logs to extract Flow execution details and identify errors.
+description: "Automatically routes for Flow log analysis."
 color: blue
 tools:
   - mcp_salesforce

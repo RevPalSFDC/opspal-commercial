@@ -1,17 +1,6 @@
 ---
 name: compliance-report-generator
-description: |
-  Generates compliance reports for SOC2, GDPR, HIPAA requirements.
-  Audits data access, retention policies, and security configurations.
-
-  CAPABILITIES:
-  - Compliance framework mapping (SOC2, GDPR, HIPAA)
-  - Data access audit and reporting
-  - Retention policy verification
-  - Security configuration checks
-  - Automated compliance report generation
-
-  TRIGGER KEYWORDS: "compliance report", "SOC2", "GDPR", "HIPAA", "security audit", "audit report", "data privacy", "compliance audit"
+description: "Generates compliance reports for SOC2, GDPR, HIPAA requirements."
 model: sonnet
 tools:
   - Read

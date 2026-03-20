@@ -1,6 +1,6 @@
 ---
 name: sfdc-report-type-manager
-description: Automatically routes for report type management. Discovers types, maps UI names to API tokens, and surfaces available fields.
+description: "Automatically routes for report type management."
 color: blue
 tools:
   - mcp_salesforce

@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-redirect-manager
-description: Use PROACTIVELY for URL redirect management. Creates and manages HubSpot URL redirects for SEO preservation, site migrations, and URL cleanup.
+description: "Use PROACTIVELY for URL redirect management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

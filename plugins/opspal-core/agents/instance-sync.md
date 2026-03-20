@@ -1,7 +1,7 @@
 ---
 name: instance-sync
 model: sonnet
-description: Use PROACTIVELY for SF instance sync. Synchronizes configurations, metadata, and data between environments.
+description: "Use PROACTIVELY for SF instance sync."
 color: indigo
 tools:
   - Bash

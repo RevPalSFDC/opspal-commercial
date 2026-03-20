@@ -1,7 +1,7 @@
 ---
 name: sfdc-hubspot-dedup-orchestrator
 model: sonnet
-description: "**DEPRECATED** - Use opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator instead. This duplicate will be removed in a future release."
+description: "\"**DEPRECATED** - Use opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator instead."
 color: gray
 deprecated: true
 deprecation_target: "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"

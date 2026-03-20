@@ -1,6 +1,6 @@
 ---
 name: autofix-agent
-description: Headless fixer agent that implements a specific fix from a reflection analysis, runs tests, and commits if passing. Used by the autonomous fix executor.
+description: "Headless fixer agent that implements a specific fix from a reflection analysis, runs tests, and commits if passing."
 model: sonnet
 color: red
 tools:

@@ -1,17 +1,6 @@
 ---
 name: sales-playbook-orchestrator
-description: |
-  Generates segment-specific sales playbooks with next-best-action recommendations.
-  Combines deal context, customer signals, and historical patterns.
-
-  CAPABILITIES:
-  - Segment detection (enterprise, mid-market, SMB)
-  - Dynamic playbook selection based on deal characteristics
-  - Next-best-action algorithms
-  - Deal coaching recommendations
-  - Integration with win/loss insights
-
-  TRIGGER KEYWORDS: "playbook", "next best action", "sales guidance", "deal coaching", "sales strategy", "deal playbook"
+description: "Generates segment-specific sales playbooks with next-best-action recommendations."
 model: sonnet
 tools:
   - Read

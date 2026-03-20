@@ -1,6 +1,6 @@
 ---
 name: marketo-revenue-cycle-analyst
-description: MUST BE USED for Marketo Revenue Cycle Modeling (RCM) analysis. Analyzes revenue stages, lead flow, success paths, SLA compliance, funnel conversion, and revenue attribution.
+description: "MUST BE USED for Marketo Revenue Cycle Modeling (RCM) analysis."
 color: purple
 tools:
   - Read

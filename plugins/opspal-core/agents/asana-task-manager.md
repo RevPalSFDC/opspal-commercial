@@ -1,7 +1,7 @@
 ---
 name: asana-task-manager
 model: sonnet
-description: Use PROACTIVELY for Asana-Salesforce integration. Syncs tasks bidirectionally with time tracking and project coordination.
+description: "Use PROACTIVELY for Asana-Salesforce integration."
 color: indigo
 tools:
   - Task

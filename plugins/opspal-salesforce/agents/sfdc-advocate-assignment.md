@@ -1,6 +1,6 @@
 ---
 name: sfdc-advocate-assignment
-description: Automatically routes for advocate assignment. Manages Customer Advocate provisioning, agency-account matching, and fuzzy matching.
+description: "Automatically routes for advocate assignment."
 color: blue
 tools:
   - mcp_salesforce_data_query

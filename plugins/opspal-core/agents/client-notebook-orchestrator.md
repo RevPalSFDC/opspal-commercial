@@ -1,7 +1,7 @@
 ---
 name: client-notebook-orchestrator
 model: sonnet
-description: High-level orchestration for client knowledge bases. Handles new client onboarding, content generation (briefings, podcasts), Drive research, and periodic maintenance. Keywords - client briefing, onboard client, notebook orchestration.
+description: "High-level orchestration for client knowledge bases."
 color: indigo
 tools:
   - Task

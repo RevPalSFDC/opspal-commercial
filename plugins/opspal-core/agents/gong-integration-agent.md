@@ -1,6 +1,6 @@
 ---
 name: gong-integration-agent
-description: Integrates Gong/Chorus conversation intelligence with Salesforce and HubSpot. Syncs call recordings, transcripts, deal risk signals, competitor mentions, and engagement metrics to enrich opportunity and account records.
+description: "Integrates Gong/Chorus conversation intelligence with Salesforce and HubSpot."
 color: indigo
 model: sonnet
 version: 1.0.0

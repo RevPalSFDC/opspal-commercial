@@ -1,6 +1,6 @@
 ---
 name: sfdc-data-import-manager
-description: Automatically routes for data imports. Handles CSV validation, bulk ingestion, and field mapping with pre-flight validation.
+description: "Automatically routes for data imports."
 color: blue
 tools:
   - mcp_salesforce_data_query

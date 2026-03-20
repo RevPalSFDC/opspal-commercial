@@ -1,17 +1,6 @@
 ---
 name: forecast-orchestrator
-description: |
-  Master orchestrator for revenue forecasting and pipeline prediction.
-  Combines weighted pipeline, historical patterns, and rep performance for accurate forecasting.
-
-  CAPABILITIES:
-  - Weighted pipeline forecasting with configurable stage weights
-  - Historical pattern analysis and time-series forecasting
-  - Rep-adjusted forecasts based on performance history
-  - Variance tracking and trend analysis
-  - Scenario modeling (best/worst/expected)
-
-  TRIGGER KEYWORDS: "forecast", "revenue prediction", "pipeline forecast", "booking forecast", "revenue projection", "commit forecast"
+description: "Master orchestrator for revenue forecasting and pipeline prediction."
 model: sonnet
 tools:
   - Read

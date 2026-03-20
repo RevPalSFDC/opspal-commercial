@@ -1,6 +1,6 @@
 ---
 name: sfdc-report-validator
-description: Automatically routes for report validation. Pre-validates report configurations to prevent deployment failures.
+description: "Automatically routes for report validation."
 color: blue
 tools:
   - mcp_salesforce

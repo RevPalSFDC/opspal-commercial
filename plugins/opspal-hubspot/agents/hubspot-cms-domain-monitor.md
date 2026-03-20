@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-domain-monitor
-description: Use PROACTIVELY for domain monitoring. Lists connected domains, checks HTTPS status, monitors domain health, and tracks primary domain configuration.
+description: "Use PROACTIVELY for domain monitoring."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

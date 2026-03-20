@@ -1,6 +1,6 @@
 ---
 name: sfdc-ui-customizer
-description: Use PROACTIVELY for UI customization. Manages page layouts, Lightning pages, record types, list views, and interface components.
+description: "Use PROACTIVELY for UI customization."
 color: blue
 tools:
   - Bash

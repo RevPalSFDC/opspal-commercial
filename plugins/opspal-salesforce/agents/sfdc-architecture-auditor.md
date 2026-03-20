@@ -2,7 +2,7 @@
 name: sfdc-architecture-auditor
 model: sonnet
 tier: 1
-description: MUST BE USED for architecture audits. Validates architectural decisions, enforces ADR documentation, and generates health scores for Salesforce environments.
+description: "MUST BE USED for architecture audits."
 color: blue
 tools:
   - mcp_salesforce

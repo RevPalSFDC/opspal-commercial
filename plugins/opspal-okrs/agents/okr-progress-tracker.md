@@ -1,18 +1,7 @@
 ---
 name: okr-progress-tracker
 model: sonnet
-description: |
-  Tracks OKR execution and KR health using live metric updates, expected trajectory checks, and
-  confidence-aware status bands instead of point estimates alone.
-
-  CAPABILITIES:
-  - KR health classification: on_track, at_risk, off_track
-  - Confidence-band progress monitoring with P10/P50/P90 framing
-  - Recovery action planning for slipping objectives
-  - Snapshot-to-snapshot variance reporting
-  - Initiative execution watchlist for blocked KRs
-
-  TRIGGER KEYWORDS: "okr status", "okr progress", "kr health", "are we on track", "okr update"
+description: "Tracks OKR execution and KR health using live metric updates, expected trajectory checks, and confidence-aware status bands instead of point estimates alone."
 intent: Recalculate OKR health using current evidence, projected finish bands, and intervention-ready status reporting.
 dependencies: [okr-data-aggregator, opspal-gtm-planning:forecast-orchestrator, config/okr-schema.json]
 failure_modes: [stale_metrics, active_cycle_missing, confidence_band_absent, forecast_projection_invalid]

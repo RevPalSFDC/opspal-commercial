@@ -1,7 +1,7 @@
 ---
 name: gemini-consult
 model: sonnet
-description: Consults Google Gemini for alternative perspectives, code review, or second opinions. Returns synthesized Claude + Gemini comparison.
+description: "Consults Google Gemini for alternative perspectives, code review, or second opinions."
 color: magenta
 tools:
   - Read

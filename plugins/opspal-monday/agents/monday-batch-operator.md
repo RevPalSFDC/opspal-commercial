@@ -1,6 +1,6 @@
 ---
 name: monday-batch-operator
-description: Handles bulk Monday.com operations with parallel processing, rate limiting, and error recovery. Use for large-scale item/board operations.
+description: "Handles bulk Monday.com operations with parallel processing, rate limiting, and error recovery."
 color: blue
 tools:
   - Read

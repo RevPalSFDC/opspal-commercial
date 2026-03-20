@@ -1,7 +1,7 @@
 ---
 name: platform-instance-manager
 model: haiku
-description: Use PROACTIVELY for multi-platform management. Manages instances across SF, HubSpot with environment switching.
+description: "Use PROACTIVELY for multi-platform management."
 color: indigo
 tools:
   - Bash

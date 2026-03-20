@@ -1,6 +1,6 @@
 ---
 name: hubspot-seo-site-crawler
-description: Automatically routes for site crawling. Parses sitemaps, performs batch analysis, detects broken links, calculates health scores, and audits images.
+description: "Automatically routes for site crawling."
 color: orange
 tools:
   - WebFetch

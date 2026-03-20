@@ -1,6 +1,6 @@
 ---
 name: sfdc-renewal-import
-description: Automatically routes for renewal imports. Handles bulk renewal opportunity imports with validation, mapping, and advocate integration.
+description: "Automatically routes for renewal imports."
 color: blue
 tools:
   - mcp_salesforce_data_query

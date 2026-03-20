@@ -1,6 +1,6 @@
 ---
 name: hubspot-app-developer
-description: MUST BE USED for HubSpot app development. Master orchestrator for creating, configuring, and deploying HubSpot apps with app cards, settings components, and marketplace submission workflows.
+description: "MUST BE USED for HubSpot app development."
 color: orange
 tools:
   - mcp__hubspot-v4__*

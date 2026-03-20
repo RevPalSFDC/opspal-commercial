@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-hubdb-manager
-description: Use PROACTIVELY for HubDB management. Manages HubSpot HubDB tables, rows, columns, and draft/publish workflows for dynamic CMS pages.
+description: "Use PROACTIVELY for HubDB management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

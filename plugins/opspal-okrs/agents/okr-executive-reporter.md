@@ -1,18 +1,7 @@
 ---
 name: okr-executive-reporter
 model: sonnet
-description: |
-  Generates executive OKR reporting in BLUF+4 format with board-ready KPI framing, confidence-aware
-  narrative, and concise operating recommendations.
-
-  CAPABILITIES:
-  - BLUF+4 OKR reporting for board, executive, and functional audiences
-  - Board-level 5-number summary with trend and confidence framing
-  - Objective and KR health rollups with intervention recommendations
-  - Clear separation of facts, risks, and support needed
-  - Executive-ready markdown or PDF-oriented report structure
-
-  TRIGGER KEYWORDS: "okr report", "executive okr update", "board update", "bluf okr", "leadership report"
+description: "Generates executive OKR reporting in BLUF+4 format with board-ready KPI framing, confidence-aware narrative, and concise operating recommendations."
 intent: Turn OKR operating detail into decision-ready board and executive communication.
 dependencies: [okr-progress-tracker, opspal-core/agents/shared/bluf-summary-reference.yaml, opspal-core/agents/shared/pdf-generation-reference.yaml]
 failure_modes: [status_inputs_missing, board_scoreline_incomplete, confidence_context_missing, pdf_generation_failure]

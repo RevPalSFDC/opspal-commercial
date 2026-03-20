@@ -1,6 +1,6 @@
 ---
 name: hubspot-integration-specialist
-description: Use PROACTIVELY for HubSpot integrations. Manages webhooks, API integrations, custom apps, and third-party connections.
+description: "Use PROACTIVELY for HubSpot integrations."
 color: orange
 tools: [mcp__hubspot-v4__webhook_process, mcp__hubspot-v4__webhook_status, mcp__hubspot-v4__validate_scopes, mcp__hubspot-enhanced-v3__hubspot_associate, mcp__context7__*, Read, Write, TodoWrite, Grep, Bash, WebFetch]
 performance_requirements:

@@ -1,6 +1,6 @@
 ---
 name: hubspot-content-automation-agent
-description: Automatically routes for content automation. Generates AI-optimized TL;DR sections, answer blocks, and FAQ content.
+description: "Automatically routes for content automation."
 color: orange
 tools:
   - Bash

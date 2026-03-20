@@ -1,6 +1,6 @@
 ---
 name: gong-sync-orchestrator
-description: Orchestrates Gong-to-CRM data synchronization workflows. Handles batch call sync, insights aggregation, error recovery, and dry-run previews for Salesforce and HubSpot targets.
+description: "Orchestrates Gong-to-CRM data synchronization workflows."
 color: green
 model: sonnet
 version: 1.0.0

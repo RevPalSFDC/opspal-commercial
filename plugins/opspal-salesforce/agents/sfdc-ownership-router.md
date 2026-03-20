@@ -1,6 +1,6 @@
 ---
 name: sfdc-ownership-router
-description: Handles ownership assignment for upserted records. Evaluates assignment rules, territory assignments, round-robin queues, and auto-reassignment on conversion.
+description: "Handles ownership assignment for upserted records."
 color: blue
 model: haiku
 tier: 2

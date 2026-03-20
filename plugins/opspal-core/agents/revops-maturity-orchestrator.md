@@ -1,32 +1,7 @@
 ---
 name: revops-maturity-orchestrator
 model: opus
-description: |
-  MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.
-  Coordinates platform-specific auditors in parallel, normalizes scores to a 6-dimension rubric,
-  produces a branded PDF maturity report with interactive web-viz dashboard.
-
-  This is the platform's signature diagnostic and primary entry point for new client engagements.
-
-  CAPABILITIES:
-  - Parallel multi-platform assessment (SF + HS + MK)
-  - 6-dimension maturity scoring: Data Foundation, Process Automation, Revenue Intelligence,
-    Governance & Compliance, Cross-Platform Integration, Strategic Planning
-  - Platform-weighted normalization (accounts for varying platform complexity)
-  - Industry benchmark comparison via OpsPal MCP tools
-  - Branded PDF report with maturity radar chart
-  - Interactive web-viz dashboard with drill-down
-  - Gap prioritization using OKR initiative scoring methodology
-  - Remediation roadmap with effort/impact matrix
-
-  TRIGGER KEYWORDS: "revops maturity", "maturity assessment", "platform health", "revops score",
-  "how mature are we", "revops readiness", "full assessment", "cross-platform assessment",
-  "client assessment", "new client audit"
-
-  BLOCKED OPERATIONS (Must Use This Agent):
-  - Any cross-platform maturity or readiness assessment
-  - Combined SF+HS+MK health scoring
-  - New client diagnostic engagements
+description: "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo."
 intent: Produce a unified RevOps maturity score across all connected platforms with actionable remediation roadmap.
 dependencies: [sfdc-revops-auditor, hubspot-assessment-analyzer, marketo-orchestrator, web-viz-generator, pdf-generator, benchmark-research-agent, mcp-scoring-orchestrator]
 failure_modes: [no_platforms_connected, single_platform_only, assessment_timeout, scoring_tool_unavailable]

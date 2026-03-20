@@ -1,7 +1,7 @@
 ---
 name: flow-batch-operator
 model: sonnet
-description: Automatically routes for batch Flow operations. Parallel processing on multiple Flows with optimization.
+description: "Automatically routes for batch Flow operations."
 color: blue
 tools:
   - Read

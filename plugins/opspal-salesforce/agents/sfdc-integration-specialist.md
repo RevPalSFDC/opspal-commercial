@@ -1,6 +1,6 @@
 ---
 name: sfdc-integration-specialist
-description: Use PROACTIVELY for integrations. Manages APIs, connected apps, external services, middleware, and real-time event streaming.
+description: "Use PROACTIVELY for integrations."
 color: blue
 tools:
   - mcp_salesforce

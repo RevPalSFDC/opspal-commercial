@@ -1,6 +1,6 @@
 ---
 name: revops-lead-scorer
-description: Rules-based lead quality scoring combining ICP firmographic fit and behavioral engagement signals. Generates MQL quality scores with transparent factor contributions for sales prioritization and marketing optimization.
+description: "Rules-based lead quality scoring combining ICP firmographic fit and behavioral engagement signals."
 color: indigo
 model: sonnet
 version: 1.0.0

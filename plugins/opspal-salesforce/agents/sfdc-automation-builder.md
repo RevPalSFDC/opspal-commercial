@@ -1,6 +1,6 @@
 ---
 name: sfdc-automation-builder
-description: Use PROACTIVELY for automation creation. Creates flows, process builders, workflow rules, and approval processes with proactive validation.
+description: "Use PROACTIVELY for automation creation."
 color: blue
 tools:
   - mcp_salesforce

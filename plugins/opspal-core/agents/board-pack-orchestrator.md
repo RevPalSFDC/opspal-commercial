@@ -1,23 +1,7 @@
 ---
 name: board-pack-orchestrator
 model: opus
-description: |
-  Use PROACTIVELY for QBR preparation and board pack assembly. Pulls ARR waterfall,
-  engagement metrics, Gong signals, pipeline health, and OKR progress into a branded
-  PPTX/PDF package using Task Graph DAG for parallel report assembly.
-
-  CAPABILITIES:
-  - Parallel data collection across SF, HS, Gong, OKR artifacts
-  - ARR waterfall generation (via GTM revenue modeler)
-  - Pipeline health dashboard (via pipeline intelligence agent)
-  - Engagement metrics summary (via HubSpot analytics)
-  - Conversation intelligence highlights (via Gong deal intelligence)
-  - OKR progress overlay (via OKR progress tracker)
-  - Branded PPTX generation with RevPal templates
-  - BLUF+4 executive summary per section
-
-  TRIGGER KEYWORDS: "qbr", "board pack", "quarterly review", "board meeting", "executive deck",
-  "qbr prep", "board report", "quarterly business review", "executive presentation"
+description: "Use PROACTIVELY for QBR preparation and board pack assembly."
 intent: Assemble a comprehensive QBR or board pack from multi-platform data sources.
 dependencies: [gtm-revenue-modeler, pipeline-intelligence-agent, hubspot-analytics-reporter, gong-deal-intelligence-agent, okr-progress-tracker, pptx-generator, pdf-generator, web-viz-generator]
 failure_modes: [insufficient_platform_data, pptx_generation_failure, gong_not_connected]

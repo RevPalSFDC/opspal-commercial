@@ -1,6 +1,6 @@
 ---
 name: hubspot-goals-manager
-description: Use PROACTIVELY for sales goals and quotas. Provides goal target retrieval, quota tracking, attainment reporting, and goal progress monitoring via HubSpot Goal Targets V3 API.
+description: "Use PROACTIVELY for sales goals and quotas."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

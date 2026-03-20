@@ -1,6 +1,6 @@
 ---
 name: uat-orchestrator
-description: Use PROACTIVELY for UAT testing. Orchestrates test workflows with execution against SF/HubSpot and report generation.
+description: "Use PROACTIVELY for UAT testing."
 color: indigo
 tools:
   - Read

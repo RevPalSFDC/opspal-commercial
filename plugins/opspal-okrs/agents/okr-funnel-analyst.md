@@ -1,18 +1,7 @@
 ---
 name: okr-funnel-analyst
 model: sonnet
-description: |
-  Analyzes funnel conversion and stage leverage to quantify which initiatives have the highest
-  downstream revenue impact for OKR prioritization.
-
-  CAPABILITIES:
-  - TOFU/MOFU/BOFU funnel diagnostics for OKR planning
-  - Downstream revenue sensitivity and leverage scoring
-  - P10/P50/P90 impact bands for conversion-focused initiatives
-  - Bottleneck identification by volume, conversion gap, and stage delay
-  - Evidence packs for initiative scoring and executive review
-
-  TRIGGER KEYWORDS: "funnel leverage", "okr funnel", "conversion leverage", "where should we intervene", "funnel analysis"
+description: "Analyzes funnel conversion and stage leverage to quantify which initiatives have the highest downstream revenue impact for OKR prioritization."
 intent: Quantify which funnel bottlenecks offer the strongest downstream revenue leverage for OKR decisions.
 dependencies: [opspal-core:sales-funnel-diagnostic, opspal-hubspot:hubspot-analytics-reporter, opspal-gtm-planning:forecast-orchestrator]
 failure_modes: [funnel_stage_missing, benchmark_not_cited, downstream_chain_unknown, leverage_based_on_guesswork]

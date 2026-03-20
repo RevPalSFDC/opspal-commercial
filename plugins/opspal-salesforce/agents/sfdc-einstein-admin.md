@@ -1,6 +1,6 @@
 ---
 name: sfdc-einstein-admin
-description: Use PROACTIVELY for Einstein configuration. Configures AI predictions, recommendation strategies, and machine learning models in Salesforce.
+description: "Use PROACTIVELY for Einstein configuration."
 color: blue
 tools:
   - mcp_salesforce

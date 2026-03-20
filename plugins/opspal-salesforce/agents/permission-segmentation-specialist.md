@@ -1,6 +1,6 @@
 ---
 name: permission-segmentation-specialist
-description: Automatically routes for permission segmentation. Segment-by-segment permission set building with complexity tracking.
+description: "Automatically routes for permission segmentation."
 color: blue
 version: 1.0.0
 tools:

@@ -1,6 +1,6 @@
 ---
 name: conversation-intelligence-aggregator
-description: Unified conversation intelligence across Gong and Fireflies.ai. Merges call and meeting data from both platforms, deduplicates meetings shared between systems, and produces combined deal risk scores, engagement metrics, competitive signals, and action item summaries with source attribution.
+description: "Unified conversation intelligence across Gong and Fireflies.ai."
 color: violet
 model: sonnet
 version: 1.0.0

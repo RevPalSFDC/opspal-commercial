@@ -1,6 +1,6 @@
 ---
 name: hubspot-revenue-intelligence
-description: Use PROACTIVELY for revenue intelligence. Provides deal health scoring, predictive forecasting, pipeline velocity analysis, and ML-powered sales optimization.
+description: "Use PROACTIVELY for revenue intelligence."
 color: orange
 tools:
   - mcp__hubspot-v4__search_with_total

@@ -1,6 +1,6 @@
 ---
 name: hubspot-seo-competitor-analyzer
-description: Automatically routes for competitor analysis. Identifies content gaps and opportunities through SERP analysis and competitive benchmarking.
+description: "Automatically routes for competitor analysis."
 color: orange
 tools:
   - Task

@@ -1,7 +1,7 @@
 ---
 id: hubspot-autonomous-operations
 name: hubspot-autonomous-operations
-description: Use PROACTIVELY for autonomous operations. Self-operating system for automated decisions, process optimization, and workflow orchestration.
+description: "Use PROACTIVELY for autonomous operations."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_enumerate

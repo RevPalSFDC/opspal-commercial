@@ -1,18 +1,7 @@
 ---
 name: okr-plg-specialist
 model: sonnet
-description: |
-  Translates product-led growth signals into benchmark-calibrated OKRs for PLG and hybrid motions.
-  Bridges visitor, signup, activation, PQL, paid conversion, and expansion signals into cycle-ready KRs.
-
-  CAPABILITIES:
-  - PQL-to-OKR translation for self-serve, sales-assisted, and hybrid motions
-  - Benchmark framing for visitor->signup, activation, free/trial->paid, and expansion ARR
-  - Delegation to product-analytics-bridge for Pendo, Amplitude, and Mixpanel evidence
-  - Hybrid motion handoff logic across product-led and sales-led revenue paths
-  - Attribution framing that separates product-sourced, sales-assisted, and sales-sourced outcomes
-
-  TRIGGER KEYWORDS: "plg okr", "pql", "product-led growth", "hybrid motion", "product-sourced pipeline", "free to paid", "trial to paid"
+description: "Translates product-led growth signals into benchmark-calibrated OKRs for PLG and hybrid motions."
 intent: Translate product-led growth signals into OKRs that fit self-serve, sales-assisted, and hybrid revenue motions.
 dependencies: [opspal-core:product-analytics-bridge, opspal-hubspot:hubspot-plg-foundation, opspal-salesforce:sfdc-revops-auditor, ../../opspal-core/config/revops-kpi-definitions.json]
 failure_modes: [product_analytics_unavailable, benchmark_used_as_baseline, handoff_threshold_undefined, attribution_double_counting, pql_definition_missing]

@@ -1,6 +1,6 @@
 ---
 name: task-scheduler
-description: Use PROACTIVELY for scheduling automated tasks. Manages scheduled Claude Code prompts and scripts with cron-based execution and Slack notifications.
+description: "Use PROACTIVELY for scheduling automated tasks."
 color: indigo
 tools:
   - Bash

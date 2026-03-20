@@ -81,8 +81,25 @@ function normalizeUserEmail(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';
 }
 
+function normalizeLicenseKey(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
 function isValidEmail(value) {
   return EMAIL_REGEX.test(normalizeUserEmail(value));
+}
+
+function maskLicenseKey(value) {
+  const normalized = normalizeLicenseKey(value);
+  if (!normalized) {
+    return '';
+  }
+
+  if (normalized.length <= 12) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 10)}...${normalized.slice(-6)}`;
 }
 
 function resolveMachineId(overrideValue) {
@@ -121,7 +138,7 @@ function validateActivationResponse(response) {
 
 async function activateLicense(options) {
   const userEmail = normalizeUserEmail(options.email);
-  const licenseKey = typeof options.licenseKey === 'string' ? options.licenseKey.trim() : '';
+  const licenseKey = normalizeLicenseKey(options.licenseKey);
 
   if (!userEmail) {
     throw new Error('Email address is required. Usage: activate --email <email> --license-key <license-key>');
@@ -133,6 +150,19 @@ async function activateLicense(options) {
 
   if (!licenseKey) {
     throw new Error('License key is required. Usage: activate --email <email> --license-key <license-key>');
+  }
+
+  const currentStatus = getStatus(options) || {};
+  const currentLicenseKey = normalizeLicenseKey(currentStatus.license_key);
+  const hasConflictingActiveLicense = currentLicenseKey
+    && currentLicenseKey !== licenseKey
+    && ['valid', 'offline_grace_expired'].includes(currentStatus.status);
+
+  if (hasConflictingActiveLicense) {
+    throw new Error(
+      `This machine is already activated with ${maskLicenseKey(currentLicenseKey)} (${currentStatus.status}). ` +
+      'Run /deactivate-license before activating a different license key.'
+    );
   }
 
   const machineId = resolveMachineId(options.machineId);
@@ -288,6 +318,8 @@ module.exports = {
   getStatus,
   isValidEmail,
   normalizeUserEmail,
+  normalizeLicenseKey,
+  maskLicenseKey,
   parseArgs,
   printUsage,
   resolveMachineId,

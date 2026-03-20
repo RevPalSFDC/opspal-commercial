@@ -1,6 +1,6 @@
 ---
 name: sfdc-dependency-analyzer
-description: Use PROACTIVELY for dependency analysis. Determines optimal execution order, identifies circular dependencies, and plans sequential operations.
+description: "Use PROACTIVELY for dependency analysis."
 color: blue
 tools:
   - mcp_salesforce

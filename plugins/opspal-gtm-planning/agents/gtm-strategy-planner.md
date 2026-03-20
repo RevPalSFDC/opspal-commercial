@@ -1,7 +1,7 @@
 ---
 name: gtm-strategy-planner
 model: sonnet
-description: Use PROACTIVELY for GTM strategy. Defines motion playbooks, credit rules, PLG→SLG transitions, and partner strategies.
+description: "Use PROACTIVELY for GTM strategy."
 color: blue
 tools:
   - Bash

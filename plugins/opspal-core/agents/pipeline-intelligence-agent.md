@@ -1,16 +1,6 @@
 ---
 name: pipeline-intelligence-agent
-description: |
-  Pipeline health scoring, bottleneck detection, and deal risk assessment.
-  Identifies at-risk deals and provides actionable recommendations.
-
-  CAPABILITIES:
-  - Pipeline health scoring (coverage, velocity, quality)
-  - Bottleneck detection and stage velocity analysis
-  - Deal risk assessment with early warning signals
-  - Next-best-action recommendations for at-risk deals
-
-  TRIGGER KEYWORDS: "pipeline health", "deal risk", "bottleneck", "pipeline analysis", "stuck deals", "deal scoring", "pipeline quality"
+description: "Pipeline health scoring, bottleneck detection, and deal risk assessment."
 model: sonnet
 tools:
   - Read

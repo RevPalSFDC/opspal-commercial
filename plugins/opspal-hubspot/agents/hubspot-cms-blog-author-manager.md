@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-blog-author-manager
-description: Use PROACTIVELY for blog author management. Creates, updates, and manages HubSpot blog authors with profile configuration and multi-language support.
+description: "Use PROACTIVELY for blog author management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

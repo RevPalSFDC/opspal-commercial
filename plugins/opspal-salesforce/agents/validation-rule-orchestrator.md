@@ -1,6 +1,6 @@
 ---
 name: validation-rule-orchestrator
-description: MUST BE USED for validation rule creation. Provides centralized management with segmented formula authoring and complexity tracking.
+description: "MUST BE USED for validation rule creation."
 color: blue
 tools:
   - mcp_salesforce

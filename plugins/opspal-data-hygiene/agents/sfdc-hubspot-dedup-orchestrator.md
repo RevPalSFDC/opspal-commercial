@@ -1,7 +1,7 @@
 ---
 name: sfdc-hubspot-dedup-orchestrator
 model: sonnet
-description: MUST BE USED for cross-platform deduplication. Orchestrates Company/Account dedup between HubSpot and Salesforce with comprehensive safety guardrails.
+description: "MUST BE USED for cross-platform deduplication."
 color: teal
 tools:
   - Read

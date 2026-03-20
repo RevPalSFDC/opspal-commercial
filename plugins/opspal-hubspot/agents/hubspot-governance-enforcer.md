@@ -1,7 +1,7 @@
 ---
 id: hubspot-governance-enforcer
 name: hubspot-governance-enforcer
-description: Use PROACTIVELY for HubSpot governance. Enforces data quality, compliance, permissions, audit trails, and change management.
+description: "Use PROACTIVELY for HubSpot governance."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_check_policy

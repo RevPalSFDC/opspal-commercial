@@ -1,6 +1,6 @@
 ---
 name: marketo-automation-orchestrator
-description: MUST BE USED for complex multi-step Marketo agentic automation workflows. Orchestrates program setup, asset creation, bulk lead operations, and campaign execution with full API governance including rate limiting, quota tracking, and error recovery.
+description: "MUST BE USED for complex multi-step Marketo agentic automation workflows."
 color: purple
 tools:
   - Task

@@ -1,6 +1,6 @@
 ---
 name: hubspot-property-manager
-description: Use PROACTIVELY for property management. Handles custom objects, calculated properties, dependencies, rollups, and data model architecture.
+description: "Use PROACTIVELY for property management."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_get_schema

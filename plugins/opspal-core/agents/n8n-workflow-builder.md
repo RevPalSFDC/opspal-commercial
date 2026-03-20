@@ -1,7 +1,7 @@
 ---
 name: n8n-workflow-builder
 model: sonnet
-description: Use PROACTIVELY for n8n automation. Designs and creates n8n workflows from natural language specifications. Supports full complexity including parallel execution, sub-workflows, error branches, loops, and SF/HS platform integration.
+description: "Use PROACTIVELY for n8n automation."
 color: indigo
 tools:
   - Task

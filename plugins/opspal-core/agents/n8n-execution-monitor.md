@@ -1,7 +1,7 @@
 ---
 name: n8n-execution-monitor
 model: haiku
-description: Use for n8n execution monitoring and debugging. Provides on-demand status checks, error analysis, and execution reports for n8n workflows.
+description: "Use for n8n execution monitoring and debugging."
 color: indigo
 tools:
   - Read

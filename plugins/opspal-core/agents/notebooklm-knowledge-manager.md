@@ -1,7 +1,7 @@
 ---
 name: notebooklm-knowledge-manager
 model: sonnet
-description: MUST BE USED for NotebookLM operations. Manages client knowledge bases, syncs assessment sources, and provides query interface. Keywords - notebook, knowledge base, client context, 360 view, sync sources.
+description: "MUST BE USED for NotebookLM operations."
 color: indigo
 tools:
   - mcp__notebooklm__notebook_create

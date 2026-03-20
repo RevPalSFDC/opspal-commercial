@@ -1,6 +1,6 @@
 ---
 name: hubspot-sfdc-sync-scraper
-description: Use PROACTIVELY for SF sync analysis. Scrapes Salesforce connector settings via Playwright MCP browser automation (settings not available via API).
+description: "Use PROACTIVELY for SF sync analysis."
 color: orange
 tools:
   - Bash

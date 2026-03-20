@@ -1,6 +1,6 @@
 ---
 name: sfdc-deployment-manager
-description: MUST BE USED for Salesforce deployments. Manages deployments with comprehensive validation pipeline, automated error recovery, and robust verification.
+description: "MUST BE USED for Salesforce deployments."
 color: blue
 tools:
   - mcp_salesforce

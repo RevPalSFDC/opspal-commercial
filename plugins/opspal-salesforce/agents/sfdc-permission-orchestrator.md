@@ -1,6 +1,6 @@
 ---
 name: sfdc-permission-orchestrator
-description: MUST BE USED for permission set management. Provides centralized two-tier architecture with merge-safe operations and idempotent deployments.
+description: "MUST BE USED for permission set management."
 color: blue
 tools:
   - mcp_salesforce

@@ -1,19 +1,7 @@
 ---
 name: okr-generator
 model: sonnet
-description: |
-  Drafts OKRs from revenue snapshot data with three target stances (Aggressive/Base/Conservative).
-  Produces schema-compliant OKR sets with real baselines and benchmark-calibrated targets.
-
-  CAPABILITIES:
-  - OKR creation from normalized revenue snapshots
-  - Three-stance target setting calibrated to company stage and GTM model
-  - Confidence-band target framing (P10/P50/P90) for each KR
-  - Benchmark comparison using revops-kpi-definitions.json
-  - Schema validation against okr-schema.json
-  - Anti-pattern detection (vanity metrics, activity-based KRs)
-
-  TRIGGER KEYWORDS: "generate okr", "create okr", "draft okr", "okr set", "set targets"
+description: "Drafts OKRs from revenue snapshot data with three target stances (Aggressive/Base/Conservative)."
 intent: Convert a normalized revenue snapshot into a schema-valid OKR draft with stance and confidence framing.
 dependencies: [okr-data-aggregator, ../../opspal-core/config/revops-kpi-definitions.json, config/okr-schema.json]
 failure_modes: [missing_snapshot, benchmark_gap, schema_validation_failure, manual_baseline_required]

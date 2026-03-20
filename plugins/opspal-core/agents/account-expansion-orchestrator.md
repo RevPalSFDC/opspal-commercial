@@ -1,17 +1,6 @@
 ---
 name: account-expansion-orchestrator
-description: |
-  Identifies and scores cross-sell/upsell opportunities for existing customers.
-  Calculates expansion ROI and prioritizes accounts for expansion campaigns.
-
-  CAPABILITIES:
-  - Expansion signal detection (usage, growth, engagement)
-  - Cross-sell/upsell opportunity identification
-  - Whitespace analysis
-  - Account prioritization and scoring
-  - ROI calculation and expansion potential
-
-  TRIGGER KEYWORDS: "expansion", "upsell", "cross-sell", "account growth", "whitespace", "expand accounts", "customer expansion"
+description: "Identifies and scores cross-sell/upsell opportunities for existing customers."
 model: sonnet
 tools:
   - Read

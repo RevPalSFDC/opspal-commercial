@@ -1,6 +1,6 @@
 ---
 name: sfdc-query-specialist
-description: Use PROACTIVELY for complex SOQL queries. Builds, optimizes, and executes queries with performance monitoring and error prevention.
+description: "Use PROACTIVELY for complex SOQL queries."
 color: blue
 tools:
   - mcp_salesforce_data_query

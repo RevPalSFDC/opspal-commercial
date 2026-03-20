@@ -2,9 +2,8 @@
 'use strict';
 
 /**
- * License First-Run Helper — outputs structured JSON for the /opspalfirst
- * command to interpret. Detects whether the user already has an active
- * license or needs guided activation.
+ * License First-Run Helper — reports whether the current machine already has
+ * an active OpsPal commercial license or needs guided activation.
  *
  * Usage:
  *   node license-first-run.js
@@ -78,7 +77,7 @@ function getServerUrl() {
 
 // ─── Main ───────────────────────────────────────────────────────────────────
 
-function main() {
+function getLicenseFirstRunState() {
   const cache = loadCache();
   const currentStatus = licenseClient.status();
 
@@ -86,16 +85,16 @@ function main() {
   if (currentStatus.status === 'valid' && cache && cache.license_key) {
     const tier = cache.tier || 'unknown';
     const count = tierAssetCount(tier);
-    console.log(JSON.stringify({
+    return {
       mode: 'already_activated',
+      status: currentStatus.status,
       tier,
       organization: cache.organization || '',
       assets_unlocked: count,
       assets_total: TOTAL_ASSETS,
       allowed_asset_tiers: cache.allowed_asset_tiers || [],
       server_url: getServerUrl()
-    }));
-    return;
+    };
   }
 
   // First run — needs activation
@@ -132,15 +131,32 @@ function main() {
     ''
   ].join('\n');
 
-  console.log(JSON.stringify({
+  return {
     mode: 'first_run',
+    status: currentStatus.status,
     prompt_user: true,
     expected_format: 'OPSPAL-{TIER}-{HASH}-{TIMESTAMP}-{CHECKSUM}',
     welcome_text: welcomeText,
     tier_table: tierTable,
     purchase_url: 'https://gorevpal.com/pricing',
     server_url: getServerUrl()
-  }));
+  };
 }
 
-main();
+function main() {
+  console.log(JSON.stringify(getLicenseFirstRunState()));
+}
+
+module.exports = {
+  DOMAIN_ASSET_COUNTS,
+  TIER_INFO,
+  TOTAL_ASSETS,
+  getLicenseFirstRunState,
+  getServerUrl,
+  loadCache,
+  tierAssetCount
+};
+
+if (require.main === module) {
+  main();
+}

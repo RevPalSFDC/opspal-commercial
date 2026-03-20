@@ -22,15 +22,15 @@
 
 | Plugin | Version | Status | Owner | Stability | Last Reviewed | Deprecation Date | Replaced By |
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
-| `opspal-ai-consult` | 1.4.7 | `active` | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-core` | 2.42.10 | `active` | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-data-hygiene` | 1.2.0 | `deprecated` | `revpal-platform` | `deprecated` | `2026-02-15` | `2026-02-15` | `opspal-core` |
-| `opspal-gtm-planning` | 2.3.2 | `active` | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-hubspot` | 3.9.3 | `active` | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-marketo` | 2.6.17 | `active` | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-mcp-client` | 1.1.0 | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ |
-| `opspal-monday` | 1.4.5 | `experimental` | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-okrs` | 3.0.4 | `active` | `revpal-strategy` | `experimental` | `2026-03-10` | _unset_ | _unset_ |
-| `opspal-salesforce` | 3.84.6 | `active` | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-ai-consult` | 1.4.8 | `active` | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-core` | 2.42.13 | `active` | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-data-hygiene` | 1.2.1 | `deprecated` | `revpal-platform` | `deprecated` | `2026-02-15` | `2026-02-15` | `opspal-core` |
+| `opspal-gtm-planning` | 2.3.3 | `active` | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-hubspot` | 3.9.4 | `active` | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-marketo` | 2.6.18 | `active` | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-mcp-client` | 1.1.1 | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ |
+| `opspal-monday` | 1.4.6 | `experimental` | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-okrs` | 3.0.5 | `active` | `revpal-strategy` | `experimental` | `2026-03-10` | _unset_ | _unset_ |
+| `opspal-salesforce` | 3.84.7 | `active` | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 
 _End of auto-generated ownership and lifecycle report._

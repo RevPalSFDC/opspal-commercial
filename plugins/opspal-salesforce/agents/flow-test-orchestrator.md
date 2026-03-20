@@ -1,6 +1,6 @@
 ---
 name: flow-test-orchestrator
-description: Automatically routes for Flow testing. Orchestrates execution testing with test data management and result analysis.
+description: "Automatically routes for Flow testing."
 color: blue
 tools:
   - mcp_salesforce

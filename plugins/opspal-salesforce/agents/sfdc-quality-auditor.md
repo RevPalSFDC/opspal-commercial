@@ -1,6 +1,6 @@
 ---
 name: sfdc-quality-auditor
-description: Use PROACTIVELY for quality auditing. Continuous metadata auditing with health checks, drift detection, and compliance.
+description: "Use PROACTIVELY for quality auditing."
 color: blue
 tools:
   - Read

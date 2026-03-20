@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-deployment
-description: Executes Salesforce Territory2 changes with validation and rollback support. Deploys models, creates territories, and manages hierarchy modifications.
+description: "Executes Salesforce Territory2 changes with validation and rollback support."
 color: blue
 tools:
   - mcp_salesforce

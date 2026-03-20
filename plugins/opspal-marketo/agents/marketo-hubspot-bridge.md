@@ -1,6 +1,6 @@
 ---
 name: marketo-hubspot-bridge
-description: MUST BE USED for HubSpot-Marketo data synchronization, cross-platform lead routing, and unified contact management. Bridges data between Marketo and HubSpot for organizations using both platforms.
+description: "MUST BE USED for HubSpot-Marketo data synchronization, cross-platform lead routing, and unified contact management."
 color: purple
 tools:
   - Read

@@ -1,6 +1,6 @@
 ---
 name: marketo-form-builder
-description: MUST BE USED for Marketo form creation and configuration. Creates forms, manages fields, configures validation, sets up progressive profiling, and handles form submissions.
+description: "MUST BE USED for Marketo form creation and configuration."
 color: purple
 tools:
   - Read

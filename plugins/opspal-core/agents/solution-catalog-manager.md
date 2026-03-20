@@ -1,6 +1,6 @@
 ---
 name: solution-catalog-manager
-description: Use PROACTIVELY for solution catalog operations. Manages the shared solution catalog including browsing, searching, publishing, and installing solution templates across plugin installations.
+description: "Use PROACTIVELY for solution catalog operations."
 color: indigo
 tools:
   - Read

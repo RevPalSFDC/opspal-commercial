@@ -1,6 +1,6 @@
 ---
 name: sfdc-reports-dashboards
-description: MUST BE USED for report or dashboard creation. Creates and manages Salesforce reports and dashboards with advanced API capabilities and comprehensive validation.
+description: "MUST BE USED for report or dashboard creation."
 color: blue
 tools:
   - mcp_salesforce

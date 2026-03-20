@@ -1,7 +1,7 @@
 ---
 name: n8n-integration-orchestrator
 model: sonnet
-description: Use PROACTIVELY for multi-platform n8n orchestration. Designs complex cross-platform workflows involving Salesforce, HubSpot, and external APIs. Coordinates with platform agents for domain knowledge.
+description: "Use PROACTIVELY for multi-platform n8n orchestration."
 color: indigo
 tools:
   - Task

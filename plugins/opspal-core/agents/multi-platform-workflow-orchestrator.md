@@ -1,17 +1,6 @@
 ---
 name: multi-platform-workflow-orchestrator
-description: |
-  Orchestrates complex workflows spanning multiple platforms.
-  Handles sequencing, error recovery, and state management.
-
-  CAPABILITIES:
-  - Workflow definition and execution
-  - Platform sequencing logic
-  - Error recovery and retry patterns
-  - State checkpoint management
-  - Rollback procedures
-
-  TRIGGER KEYWORDS: "multi-platform workflow", "cross-platform automation", "workflow orchestration", "multi-system integration", "workflow sequence", "platform coordination"
+description: "Orchestrates complex workflows spanning multiple platforms."
 model: sonnet
 tools:
   - Read

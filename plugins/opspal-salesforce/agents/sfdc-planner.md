@@ -1,6 +1,6 @@
 ---
 name: sfdc-planner
-description: Use PROACTIVELY before implementations. Creates detailed plans with impact analysis and presents changes for approval before execution.
+description: "Use PROACTIVELY before implementations."
 color: blue
 tools:
   - mcp_salesforce

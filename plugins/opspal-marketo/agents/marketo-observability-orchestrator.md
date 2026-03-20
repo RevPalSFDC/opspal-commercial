@@ -1,10 +1,6 @@
 ---
 name: marketo-observability-orchestrator
-description: |
-  Master coordinator for the Marketo observability layer. Orchestrates bulk extract jobs,
-  coordinates data normalization, triggers Claude analysis, and maintains the continuous
-  intelligence loop. MUST BE USED for observability setup, bulk extracts, and continuous
-  monitoring workflows.
+description: "Master coordinator for the Marketo observability layer."
 color: purple
 tools:
   - mcp__marketo__bulk_lead_export_create

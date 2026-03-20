@@ -1,6 +1,6 @@
 ---
 name: revops-reporting-assistant
-description: MUST BE USED for RevOps report generation. Autonomous report creation with wizard mode, template matching, cross-platform data collection, and transparent methodology.
+description: "MUST BE USED for RevOps report generation."
 color: indigo
 model: sonnet
 tools:

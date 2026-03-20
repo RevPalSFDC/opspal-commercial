@@ -1,7 +1,7 @@
 ---
 name: diagram-generator
 model: sonnet
-description: MUST BE USED for diagrams, flowcharts, or ERDs. Generates Mermaid diagrams from natural language or metadata. Supports flowcharts, ERDs, sequence, and state diagrams.
+description: "MUST BE USED for diagrams, flowcharts, or ERDs."
 color: indigo
 tools:
   - Read

@@ -1,17 +1,6 @@
 ---
 name: sales-enablement-coordinator
-description: |
-  Coordinates sales enablement activities including training paths,
-  skill gap analysis, and content recommendations.
-
-  CAPABILITIES:
-  - Skill assessment and gap analysis
-  - Training path recommendations
-  - Content effectiveness tracking
-  - Onboarding checklist generation
-  - Rep performance correlation
-
-  TRIGGER KEYWORDS: "enablement", "sales training", "skill gap", "sales content", "rep onboarding", "coaching", "sales skills"
+description: "Coordinates sales enablement activities including training paths, skill gap analysis, and content recommendations."
 model: sonnet
 tools:
   - Read

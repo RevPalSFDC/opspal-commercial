@@ -1,6 +1,6 @@
 ---
 name: sfdc-permission-assessor
-description: Use PROACTIVELY for permission assessment. Interactive wizard for fragmentation discovery, overlap analysis, and consolidation.
+description: "Use PROACTIVELY for permission assessment."
 color: blue
 tools:
   - Read

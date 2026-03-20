@@ -1,7 +1,7 @@
 ---
 name: validation-rule-segmentation-specialist
 model: sonnet
-description: Automatically routes for validation rule segmentation. Segment-by-segment formula authoring with complexity tracking.
+description: "Automatically routes for validation rule segmentation."
 color: blue
 tools:
   - Read

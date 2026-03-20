@@ -1,7 +1,7 @@
 ---
 name: field-dictionary-manager
 model: sonnet
-description: Use PROACTIVELY for field dictionary operations. Manages LLM-consumable field dictionaries that bridge technical Salesforce/HubSpot metadata with business context for reporting agents. Keywords - field dictionary, data dictionary, field context, field lookup, metadata dictionary.
+description: "Use PROACTIVELY for field dictionary operations."
 color: teal
 tools:
   - Bash

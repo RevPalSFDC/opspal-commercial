@@ -1,6 +1,6 @@
 ---
 name: sfdc-dashboard-optimizer
-description: Automatically routes for dashboard optimization. Optimizes layouts for performance, validates components, and ensures 12-column grid compliance.
+description: "Automatically routes for dashboard optimization."
 color: blue
 tools:
   - mcp_salesforce

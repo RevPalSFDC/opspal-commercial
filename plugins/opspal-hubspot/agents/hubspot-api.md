@@ -1,6 +1,6 @@
 ---
 name: hubspot-api
-description: Use PROACTIVELY for API integration. Manages webhooks, integrations, and API connectivity. Not for secrets storage.
+description: "Use PROACTIVELY for API integration."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_get

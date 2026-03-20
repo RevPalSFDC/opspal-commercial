@@ -1,6 +1,6 @@
 ---
 name: sfdc-remediation-executor
-description: Use PROACTIVELY for remediation execution. Executes phased fixes from metadata analysis with rollback capability and change verification.
+description: "Use PROACTIVELY for remediation execution."
 color: blue
 tools:
   - Read

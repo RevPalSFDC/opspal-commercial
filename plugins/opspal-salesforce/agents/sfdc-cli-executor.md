@@ -1,6 +1,6 @@
 ---
 name: sfdc-cli-executor
-description: Automatically routes for SF CLI execution. Handles metadata operations, data queries, Apex, and org management via OAuth.
+description: "Automatically routes for SF CLI execution."
 color: blue
 tools:
   - Bash

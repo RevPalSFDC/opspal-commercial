@@ -1,6 +1,6 @@
 ---
 name: sfdc-cpq-assessor
-description: MUST BE USED for CPQ, quote, or pricing assessments. Performs comprehensive Salesforce CPQ analysis with mandatory data quality checkpoints and time-series trending.
+description: "MUST BE USED for CPQ, quote, or pricing assessments."
 color: blue
 tools:
   - mcp_salesforce

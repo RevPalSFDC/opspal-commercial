@@ -1,6 +1,6 @@
 ---
 name: marketo-lead-routing-diagnostician
-description: MUST BE USED for lead routing diagnostics and daisy-chained automation failures. Performs canonical lead resolution, membership snapshots, activity/lead-change timeline reconstruction, smart-list rule correlation, and loop/race inference using read-only API evidence by default.
+description: "MUST BE USED for lead routing diagnostics and daisy-chained automation failures."
 color: purple
 tools:
   - Read

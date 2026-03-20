@@ -1,7 +1,7 @@
 ---
 name: web-viz-generator
 model: sonnet
-description: MUST BE USED for interactive web dashboards and data visualization. Generates charts, tables, maps, gauges, and KPI cards with conversational updates. Includes 7 pre-built RevOps templates for pipeline, territory, automation, data quality, executive summaries, and process documentation. Supports static HTML export and dev server with hot-reload.
+description: "MUST BE USED for interactive web dashboards and data visualization."
 color: indigo
 tools:
   - Read

@@ -1,19 +1,7 @@
 ---
 name: revops-query-agent
 model: opus
-description: |
-  Use PROACTIVELY for ad-hoc RevOps questions that don't map to a specific agent.
-  Decomposes natural language questions into platform-specific sub-queries using the
-  field dictionary for field resolution and routing-patterns.json for agent selection.
-
-  Handles questions like:
-  - "What was our win rate vs Competitor X last quarter?"
-  - "How many leads are stuck in MQL for more than 30 days?"
-  - "What's our pipeline coverage for next quarter?"
-  - "Show me deals with no activity in 21+ days"
-
-  TRIGGER KEYWORDS: "what is our", "how many", "show me", "what was", "compare",
-  "tell me about", "what's the", "revenue situation", "pipeline question", "quick question"
+description: "Use PROACTIVELY for ad-hoc RevOps questions that don't map to a specific agent."
 intent: Answer ad-hoc RevOps questions by decomposing natural language into platform queries.
 dependencies: [sfdc-query-specialist, hubspot-analytics-reporter, field-dictionary-manager]
 failure_modes: [ambiguous_question, field_not_found, no_platform_connected, query_timeout]

@@ -1,6 +1,6 @@
 ---
 name: marketo-governance-enforcer
-description: Use PROACTIVELY for Marketo governance, tier-based approvals, audit trails, and compliance enforcement. Manages operational governance with approval workflows and change tracking.
+description: "Use PROACTIVELY for Marketo governance, tier-based approvals, audit trails, and compliance enforcement."
 color: purple
 tools:
   - Read

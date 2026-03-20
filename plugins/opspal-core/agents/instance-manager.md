@@ -1,7 +1,7 @@
 ---
 name: instance-manager
 model: haiku
-description: Use PROACTIVELY for SF instance management. Handles switching between instances and maintains configurations.
+description: "Use PROACTIVELY for SF instance management."
 color: indigo
 tools:
   - Bash

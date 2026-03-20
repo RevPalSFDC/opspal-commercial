@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-discovery
-description: Read-only analysis of Salesforce Territory2 configuration. Discovers territory models, hierarchies, user assignments, and account distribution.
+description: "Read-only analysis of Salesforce Territory2 configuration."
 color: blue
 tools:
   - mcp_salesforce_data_query

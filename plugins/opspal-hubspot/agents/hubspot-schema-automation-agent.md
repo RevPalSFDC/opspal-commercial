@@ -1,6 +1,6 @@
 ---
 name: hubspot-schema-automation-agent
-description: Automatically routes for schema generation. Generates and validates JSON-LD schema markup for AI search optimization.
+description: "Automatically routes for schema generation."
 color: orange
 tools:
   - Bash

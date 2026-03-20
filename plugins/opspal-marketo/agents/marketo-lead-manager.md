@@ -1,6 +1,6 @@
 ---
 name: marketo-lead-manager
-description: MUST BE USED for Marketo lead operations. Manages lead creation, updates, queries, merging, scoring, and lifecycle management with comprehensive validation and bulk operation support.
+description: "MUST BE USED for Marketo lead operations."
 color: purple
 tools:
   - Read

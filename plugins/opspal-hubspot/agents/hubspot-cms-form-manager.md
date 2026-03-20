@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-form-manager
-description: Use PROACTIVELY for HubSpot form operations. Creates, configures, and manages HubSpot forms including field configuration, validation, follow-up actions, progressive profiling, and GDPR consent.
+description: "Use PROACTIVELY for HubSpot form operations."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

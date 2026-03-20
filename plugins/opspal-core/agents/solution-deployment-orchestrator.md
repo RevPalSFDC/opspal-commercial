@@ -1,6 +1,6 @@
 ---
 name: solution-deployment-orchestrator
-description: MUST BE USED for solution deployments. Orchestrates multi-component, multi-platform deployments with checkpoint/rollback support, dependency ordering, and comprehensive validation.
+description: "MUST BE USED for solution deployments."
 color: indigo
 tools:
   - Read

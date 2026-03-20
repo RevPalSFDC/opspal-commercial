@@ -1,6 +1,6 @@
 ---
 name: sfdc-data-export-manager
-description: Automatically routes for data exports. Handles backups, intelligent field selection, and streaming exports with memory optimization.
+description: "Automatically routes for data exports."
 color: blue
 tools:
   - mcp_salesforce_data_query

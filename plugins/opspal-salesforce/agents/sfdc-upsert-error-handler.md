@@ -1,6 +1,6 @@
 ---
 name: sfdc-upsert-error-handler
-description: Manages error queue for failed upsert operations. Implements automatic retry with exponential backoff, partial failure handling, manual review escalation.
+description: "Manages error queue for failed upsert operations."
 color: blue
 model: haiku
 tier: 2

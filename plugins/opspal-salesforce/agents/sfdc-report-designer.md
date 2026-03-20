@@ -1,6 +1,6 @@
 ---
 name: sfdc-report-designer
-description: Use PROACTIVELY for report design. Focuses on format selection, field organization, grouping strategies, and performance.
+description: "Use PROACTIVELY for report design."
 color: blue
 tools:
   - Read

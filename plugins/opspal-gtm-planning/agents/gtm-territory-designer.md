@@ -1,7 +1,7 @@
 ---
 name: gtm-territory-designer
 model: sonnet
-description: Use PROACTIVELY for territory design. Creates balanced carves, validates fairness, generates account assignments, and defines ROE rules.
+description: "Use PROACTIVELY for territory design."
 color: blue
 tools:
   - Bash

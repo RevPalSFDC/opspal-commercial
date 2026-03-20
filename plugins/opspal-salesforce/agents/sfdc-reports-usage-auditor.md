@@ -1,6 +1,6 @@
 ---
 name: sfdc-reports-usage-auditor
-description: Automatically routes for report usage audits. Analyzes 6-month usage patterns, classifies by department, identifies gaps with quality scoring.
+description: "Automatically routes for report usage audits."
 color: blue
 tools:
   - mcp_salesforce

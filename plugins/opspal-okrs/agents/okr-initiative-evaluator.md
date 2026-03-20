@@ -1,18 +1,7 @@
 ---
 name: okr-initiative-evaluator
 model: sonnet
-description: |
-  Evaluates a single proposed initiative against the OKR scoring rubric and produces an evidence-backed
-  scorecard with impact scenarios, confidence bands, and recommendation.
-
-  CAPABILITIES:
-  - One-shot initiative scorecard generation
-  - P10/P50/P90 impact framing for a proposed initiative
-  - Cross-checking against pipeline, funnel, and benchmark evidence
-  - Identification of missing evidence before executive approval
-  - Recommendation: approve, validate, defer, or reject
-
-  TRIGGER KEYWORDS: "score initiative", "evaluate initiative", "okr score", "should we do this", "initiative scorecard"
+description: "Evaluates a single proposed initiative against the OKR scoring rubric and produces an evidence-backed scorecard with impact scenarios, confidence bands, and recommendation."
 intent: Produce a decision-quality scorecard for a single initiative before it is committed into the cycle.
 dependencies: [okr-funnel-analyst, opspal-gtm-planning:forecast-orchestrator, config/initiative-scoring-rubric.json]
 failure_modes: [initiative_mechanism_unclear, insufficient_evidence, benchmark_only_case, impact_band_too_wide]

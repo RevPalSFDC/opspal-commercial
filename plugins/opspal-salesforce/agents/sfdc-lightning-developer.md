@@ -1,6 +1,6 @@
 ---
 name: sfdc-lightning-developer
-description: Use PROACTIVELY for Lightning development. Creates LWC, Aura components, and custom UI experiences for Salesforce applications.
+description: "Use PROACTIVELY for Lightning development."
 color: blue
 tools:
   - mcp_salesforce

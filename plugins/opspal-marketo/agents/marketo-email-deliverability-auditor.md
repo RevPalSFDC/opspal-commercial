@@ -1,6 +1,6 @@
 ---
 name: marketo-email-deliverability-auditor
-description: MUST BE USED for email deliverability audits, compliance checks, and engagement trend analysis. Performs comprehensive read-only analysis of email performance, deliverability issues, and compliance status.
+description: "MUST BE USED for email deliverability audits, compliance checks, and engagement trend analysis."
 color: purple
 tools:
   - Read

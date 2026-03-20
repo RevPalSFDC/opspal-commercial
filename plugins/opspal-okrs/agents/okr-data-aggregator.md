@@ -1,17 +1,7 @@
 ---
 name: okr-data-aggregator
 model: sonnet
-description: |
-  Pulls current revenue state from all connected platforms via existing specialist agents.
-  Produces a normalized revenue snapshot for OKR generation.
-
-  CAPABILITIES:
-  - Multi-platform data aggregation (Salesforce, HubSpot, Gong, Product Analytics)
-  - Data normalization into canonical OKR snapshot format
-  - Query evidence preservation for every data point
-  - Graceful degradation when platforms are unavailable
-
-  TRIGGER KEYWORDS: "revenue snapshot", "okr snapshot", "platform data snapshot"
+description: "Pulls current revenue state from all connected platforms via existing specialist agents."
 intent: Collect the cross-platform revenue snapshot needed to ground OKR generation and tracking.
 dependencies: [opspal-salesforce:sfdc-query-specialist, opspal-gtm-planning:forecast-orchestrator, opspal-hubspot:hubspot-analytics-reporter]
 failure_modes: [salesforce_unavailable, partial_platform_coverage, stale_metrics, missing_query_evidence]

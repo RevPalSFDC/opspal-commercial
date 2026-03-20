@@ -1,6 +1,6 @@
 ---
 name: response-validator
-description: Automatically routes for response validation. Validates plausibility, statistical accuracy, and consistency with auto-retry.
+description: "Automatically routes for response validation."
 color: blue
 tools:
   - Read

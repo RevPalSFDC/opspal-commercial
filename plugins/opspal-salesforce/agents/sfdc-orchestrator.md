@@ -1,6 +1,6 @@
 ---
 name: sfdc-orchestrator
-description: MUST BE USED for complex multi-step Salesforce operations. Coordinates workflows with mandatory validation, automated error recovery, and performance monitoring.
+description: "MUST BE USED for complex multi-step Salesforce operations."
 color: blue
 tools:
   - Task

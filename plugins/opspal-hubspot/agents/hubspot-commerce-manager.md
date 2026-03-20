@@ -1,6 +1,6 @@
 ---
 name: hubspot-commerce-manager
-description: Use PROACTIVELY for commerce operations. Handles product catalogs, pricing, quotes, payments, invoicing, and e-commerce lifecycle.
+description: "Use PROACTIVELY for commerce operations."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

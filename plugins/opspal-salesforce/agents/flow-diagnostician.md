@@ -1,6 +1,6 @@
 ---
 name: flow-diagnostician
-description: Automatically routes for Flow diagnostics. Orchestrates pre-flight validation, execution testing, and coverage analysis.
+description: "Automatically routes for Flow diagnostics."
 color: blue
 tools:
   - mcp_salesforce

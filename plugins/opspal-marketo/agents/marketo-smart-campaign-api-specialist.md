@@ -1,6 +1,6 @@
 ---
 name: marketo-smart-campaign-api-specialist
-description: MUST BE USED for programmatic Smart Campaign CRUD operations via REST API. Creates, reads, updates, clones, and deletes campaigns with full validation and error handling. Use for API-driven campaign management workflows.
+description: "MUST BE USED for programmatic Smart Campaign CRUD operations via REST API."
 color: purple
 tools:
   - Read

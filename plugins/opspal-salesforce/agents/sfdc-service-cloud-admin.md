@@ -1,6 +1,6 @@
 ---
 name: sfdc-service-cloud-admin
-description: Use PROACTIVELY for Service Cloud configuration. Manages Cases, Knowledge Articles, Service Console, Omni-Channel routing, and support operations.
+description: "Use PROACTIVELY for Service Cloud configuration."
 color: blue
 tools:
   - mcp_salesforce

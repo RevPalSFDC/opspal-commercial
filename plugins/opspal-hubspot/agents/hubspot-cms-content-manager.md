@@ -1,6 +1,6 @@
 ---
 name: hubspot-cms-content-manager
-description: Use PROACTIVELY for CMS management. Manages website pages, blog posts, landing pages, templates, modules, SEO, and multi-language content.
+description: "Use PROACTIVELY for CMS management."
 color: orange
 tools:
   - Task

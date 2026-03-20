@@ -1,6 +1,6 @@
 ---
 name: sfdc-csv-enrichment
-description: Automatically routes for CSV enrichment. Enriches CSV data with Salesforce IDs through fuzzy matching and validation.
+description: "Automatically routes for CSV enrichment."
 color: blue
 tools:
   - Task

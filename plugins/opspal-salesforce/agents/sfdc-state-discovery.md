@@ -1,6 +1,6 @@
 ---
 name: sfdc-state-discovery
-description: MUST BE USED before org modifications. Performs comprehensive state discovery, metadata comparison, and drift detection between local files and org configuration.
+description: "MUST BE USED before org modifications."
 color: blue
 tools:
   - mcp_salesforce

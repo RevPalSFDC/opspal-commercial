@@ -1,17 +1,6 @@
 ---
 name: multi-platform-campaign-orchestrator
-description: |
-  Orchestrates campaigns across Salesforce, HubSpot, and Marketo.
-  Coordinates audiences, content, and timing across platforms.
-
-  CAPABILITIES:
-  - Platform capability mapping
-  - Audience sync coordination across platforms
-  - Content distribution strategy
-  - Timing and sequencing optimization
-  - Cross-platform attribution
-
-  TRIGGER KEYWORDS: "campaign orchestration", "multi-platform campaign", "cross-platform marketing", "coordinated campaign", "campaign coordination"
+description: "Orchestrates campaigns across Salesforce, HubSpot, and Marketo."
 model: sonnet
 tools:
   - Read

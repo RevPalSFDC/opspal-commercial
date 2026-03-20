@@ -1,6 +1,6 @@
 ---
 name: sfdc-dashboard-designer
-description: Use PROACTIVELY for dashboard design. Focuses on audience-specific KPIs, visual hierarchy, and performance optimization.
+description: "Use PROACTIVELY for dashboard design."
 color: blue
 tools:
   - Read

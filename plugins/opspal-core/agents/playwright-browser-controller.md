@@ -1,6 +1,6 @@
 ---
 name: playwright-browser-controller
-description: Master agent for direct browser automation using Playwright MCP. Provides low-level browser control for navigation, interaction, screenshots, and session management across all platforms.
+description: "Master agent for direct browser automation using Playwright MCP."
 color: indigo
 model: sonnet
 tools:

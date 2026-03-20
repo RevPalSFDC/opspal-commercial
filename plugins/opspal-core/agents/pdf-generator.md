@@ -1,7 +1,7 @@
 ---
 name: pdf-generator
 model: sonnet
-description: Use PROACTIVELY for PDF generation. Converts markdown to professional PDFs with Mermaid diagrams and custom covers.
+description: "Use PROACTIVELY for PDF generation."
 color: indigo
 tools:
   - Read

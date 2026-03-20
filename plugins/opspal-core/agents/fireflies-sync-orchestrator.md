@@ -1,6 +1,6 @@
 ---
 name: fireflies-sync-orchestrator
-description: Orchestrates Fireflies.ai-to-CRM data synchronization workflows. Handles batch transcript sync, meeting insights aggregation, error recovery, and dry-run previews for Salesforce and HubSpot targets.
+description: "Orchestrates Fireflies.ai-to-CRM data synchronization workflows."
 color: teal
 model: sonnet
 version: 1.0.0

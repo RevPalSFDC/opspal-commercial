@@ -1,13 +1,7 @@
 ---
 name: gtm-asana-bridge
 model: sonnet
-description: |
-  Use PROACTIVELY for syncing GTM planning deliverables to Asana for execution tracking.
-  Maps GTM planning phases to Asana project sections, territory assignments to tasks,
-  and action items to subtasks. Modeled on the OKR Asana bridge pattern.
-
-  TRIGGER KEYWORDS: "gtm asana", "planning to asana", "sync territories to asana",
-  "gtm execution tracking", "territory assignment tasks", "quota rollout asana"
+description: "Use PROACTIVELY for syncing GTM planning deliverables to Asana for execution tracking."
 intent: Sync GTM planning artifacts to Asana for execution tracking and accountability.
 dependencies: [opspal-core:asana-task-manager, config/cycle-state.json]
 failure_modes: [asana_project_ambiguous, gid_missing, duplicate_task_creation, permission_denied, cycle_state_missing]
