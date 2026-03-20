@@ -53,7 +53,7 @@ async function runAllTests() {
     const result = await tester.run({
       input: {
         tool_name: 'Bash',
-        input: { command: 'sf data query --query "SELECT Id FROM Account"' }
+        tool_input: { command: 'sf data query --query "SELECT Id FROM Account"' }
       },
       env: {
         SKIP_TERRITORY_VALIDATION: '1'
@@ -67,7 +67,7 @@ async function runAllTests() {
     const result = await tester.run({
       input: {
         tool_name: 'ReadFile',
-        input: { command: 'sf data update --sobject ObjectTerritory2AssignmentRuleItem' }
+        tool_input: { command: 'sf data update --sobject ObjectTerritory2AssignmentRuleItem' }
       }
     });
 
@@ -78,7 +78,7 @@ async function runAllTests() {
     const result = await tester.run({
       input: {
         tool_name: 'Bash',
-        input: { command: 'sf data update --sobject Account --record-id 001xx' }
+        tool_input: { command: 'sf data update --sobject Account --record-id 001xx' }
       }
     });
 
@@ -89,7 +89,7 @@ async function runAllTests() {
     const result = await tester.run({
       input: {
         tool_name: 'Bash',
-        input: { command: 'sf data update --sobject ObjectTerritory2AssignmentRuleItem --record-id 0OH000000000000' }
+        tool_input: { command: 'sf data update --sobject ObjectTerritory2AssignmentRuleItem --record-id 0OH000000000000' }
       }
     });
 
@@ -129,7 +129,7 @@ async function runAllTests() {
       const result = await tester.run({
         input: {
           tool_name: 'Bash',
-          input: {
+          tool_input: {
             command: "sf data update --sobject ObjectTerritory2AssignmentRuleItem --values \"ObjectTerritory2AssignmentRuleId='0OH000000000000'\""
           }
         },
@@ -138,9 +138,16 @@ async function runAllTests() {
         }
       });
 
-      assert.strictEqual(result.exitCode, 1, 'Should exit with 1 when blocked');
-      assert(result.output && result.output.blocked === true, 'Should emit blocked response');
-      assert(result.output && result.output.rule_id === '0OH000000000000', 'Should include rule id');
+      assert.strictEqual(result.exitCode, 0, 'Should use structured deny semantics');
+      assert.strictEqual(
+        result.output?.hookSpecificOutput?.permissionDecision,
+        'deny',
+        'Should emit PreToolUse deny response'
+      );
+      assert(
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('0OH000000000000'),
+        'Should include rule id in deny reason'
+      );
     } finally {
       fs.rmSync(tempDir, { recursive: true, force: true });
     }

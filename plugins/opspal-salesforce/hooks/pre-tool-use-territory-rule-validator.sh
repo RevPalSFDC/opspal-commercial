@@ -49,14 +49,23 @@ log_debug "Tool input: $TOOL_INPUT"
 
 # Extract tool name and command from input
 TOOL_NAME=$(echo "$TOOL_INPUT" | jq -r '.tool_name // empty' 2>/dev/null || echo "")
-COMMAND=$(echo "$TOOL_INPUT" | jq -r '.input.command // empty' 2>/dev/null || echo "")
-
-# If not structured JSON, try to parse as plain text command
-if [[ -z "$COMMAND" ]]; then
-    COMMAND="$TOOL_INPUT"
-fi
+COMMAND=$(echo "$TOOL_INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || echo "")
 
 log_debug "Tool: $TOOL_NAME, Command: $COMMAND"
+
+emit_pretool_deny() {
+    local message="$1"
+    jq -nc \
+      --arg message "$message" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "deny",
+          permissionDecisionReason: $message
+        }
+      }'
+}
 
 # Check if this is a territory rule item operation
 is_territory_rule_item_operation() {
@@ -174,18 +183,8 @@ main() {
             log_error "  node $VALIDATOR_SCRIPT workflow $RULE_ID $ORG_FLAG"
             log_error ""
 
-            # Output structured block response
-            cat << EOF
-{
-  "blocked": true,
-  "reason": "BooleanFilter exists on parent rule",
-  "rule_id": "$RULE_ID",
-  "boolean_filter": "$BOOLEAN_FILTER",
-  "message": "Cannot modify rule items when BooleanFilter exists. Follow the BooleanFilter modification workflow.",
-  "help_command": "node $VALIDATOR_SCRIPT workflow $RULE_ID $ORG_FLAG"
-}
-EOF
-            exit 1
+            emit_pretool_deny "Cannot modify ObjectTerritory2AssignmentRuleItem records when BooleanFilter exists on parent rule $RULE_ID. Save the BooleanFilter, clear it, make the item changes, then restore it. For workflow details run: node $VALIDATOR_SCRIPT workflow $RULE_ID $ORG_FLAG"
+            exit 0
         fi
     fi
 

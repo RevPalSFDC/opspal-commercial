@@ -57,9 +57,9 @@ DECISION="pass-through"
 REASON="no auto-approval rule matched"
 
 if command -v jq >/dev/null 2>&1 && [[ -n "$INPUT" ]] && echo "$INPUT" | jq -e . >/dev/null 2>&1; then
-    TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // .tool // .toolName // ""' 2>/dev/null || true)
-    COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || true)
-    AGENT_NAME=$(echo "$INPUT" | jq -r '.agent_type // .tool_input.subagent_type // .subagent_type // .agentName // .agent_name // ""' 2>/dev/null || true)
+    TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""' 2>/dev/null || true)
+    COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || true)
+    AGENT_NAME=$(echo "$INPUT" | jq -r '.agent_type // .tool_input.subagent_type // ""' 2>/dev/null || true)
 fi
 
 if [[ -z "$TOOL_NAME" ]]; then
