@@ -81,7 +81,7 @@ else
 fi
 
 # Reset runtime monitor for next session
-node "$RUNTIME_MONITOR" reset 2>/dev/null || true
+node "$RUNTIME_MONITOR" reset >/dev/null 2>&1 || true
 
 log "Post-session analysis complete"
 

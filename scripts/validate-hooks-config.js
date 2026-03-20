@@ -49,6 +49,40 @@ if (pluginPaths.length === 0) {
 const errors = [];
 const warnings = [];
 
+function extractCommandPath(command) {
+  if (typeof command !== 'string' || command.trim() === '') {
+    return null;
+  }
+
+  const envMatch = command.match(
+    /(?:^|\s)env(?:\s+[A-Z_][A-Z0-9_]*=[^\s]+)+\s+(?:"([^"]+\.(?:sh|js))"|'([^']+\.(?:sh|js))'|([^"'`\s;]+\.(?:sh|js)))/
+  );
+  if (envMatch) {
+    return envMatch[1] || envMatch[2] || envMatch[3];
+  }
+
+  const bashMatch = command.match(/bash\s+(?:-c\s+)?["']?([^"'\s;]+\.sh)/);
+  if (bashMatch) {
+    return bashMatch[1];
+  }
+
+  const nodeMatch = command.match(/node\s+["']?([^"'\s;]+\.js)/);
+  if (nodeMatch) {
+    return nodeMatch[1];
+  }
+
+  if (command.endsWith('.sh') || command.endsWith('.js')) {
+    return command.split(/\s+/)[0];
+  }
+
+  const quotedMatch = command.match(/["']([^"']+\.(?:sh|js))["']/);
+  if (quotedMatch) {
+    return quotedMatch[1];
+  }
+
+  return null;
+}
+
 for (const { name: pluginName, root: pluginRoot } of pluginPaths) {
   const pluginConfigDir = path.join(pluginRoot, '.claude-plugin');
   const pluginJsonPath = path.join(pluginConfigDir, 'plugin.json');
@@ -128,8 +162,8 @@ for (const { name: pluginName, root: pluginRoot } of pluginPaths) {
           continue;
         }
 
-        const commandToken = hook.command.split(/\s+/)[0];
-        const resolved = commandToken.replace('${CLAUDE_PLUGIN_ROOT}', pluginRoot);
+        const commandPath = extractCommandPath(hook.command) || hook.command.split(/\s+/)[0];
+        const resolved = commandPath.replace('${CLAUDE_PLUGIN_ROOT}', pluginRoot);
         if (!fs.existsSync(resolved)) {
           errors.push(`${pluginName}: ${hookName} command missing file ${resolved}`);
           continue;

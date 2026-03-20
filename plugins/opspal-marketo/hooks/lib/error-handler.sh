@@ -37,6 +37,13 @@ else
     set_strict_mode()  { set -euo pipefail; }
 fi
 
+# Backwards-compatible alias used by older Marketo hooks.
+if ! declare -F log_warning >/dev/null 2>&1; then
+    log_warning() {
+        log_warn "$@"
+    }
+fi
+
 # --- Marketo-specific extensions ---
 
 # Plugin root directory

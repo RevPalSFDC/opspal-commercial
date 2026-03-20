@@ -107,6 +107,15 @@ async function runAllTests() {
         ? userSettings.hooks.UserPromptSubmit
         : [];
       assert(userPromptGroups.length > 0, 'User settings should contain UserPromptSubmit hooks');
+      const userPromptHooks = userPromptGroups.flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : []);
+      const structuredReminderHook = userPromptHooks.find((hook) => (
+        typeof hook?.command === 'string' && hook.command.includes('user-prompt-reminder.sh')
+      ));
+      assert(structuredReminderHook, 'User settings should contain the structured reminder hook');
+      assert(
+        !userPromptHooks.some((hook) => typeof hook?.command === 'string' && hook.command.startsWith('cat ')),
+        'User settings should not register a raw cat reminder hook'
+      );
 
       const localSettings = JSON.parse(fs.readFileSync(localSettingsPath, 'utf8'));
       assert.deepStrictEqual(

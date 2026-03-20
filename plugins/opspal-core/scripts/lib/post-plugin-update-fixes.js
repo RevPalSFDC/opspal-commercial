@@ -331,7 +331,10 @@ class PostPluginUpdateFixes {
 
   isReminderHook(hook) {
     if (!hook || typeof hook !== 'object') return false;
-    return typeof hook.command === 'string' && hook.command.includes('reminder.md');
+    return typeof hook.command === 'string' && (
+      hook.command.includes('reminder.md') ||
+      hook.command.includes('user-prompt-reminder.sh')
+    );
   }
 
   extractScriptPath(command) {
@@ -1437,12 +1440,22 @@ class PostPluginUpdateFixes {
         return { fixed: false, reason: 'reminder-not-found' };
       }
 
+      const corePluginRoot = this.findCorePluginRoot();
+      if (!corePluginRoot) {
+        this.results.userLevelHooks.errors.push({
+          name: settingsPath,
+          message: 'Could not resolve opspal-core plugin root for structured reminder hook'
+        });
+        return { fixed: false, reason: 'core-plugin-root-not-found' };
+      }
+
+      const reminderHookPath = path.join(corePluginRoot, 'hooks', 'user-prompt-reminder.sh');
       this.log(`${icons.info} Found reminder at: ${reminderPath}`, 'verbose');
       reconciledGroups.unshift({
         hooks: [
           {
             type: 'command',
-            command: `cat ${reminderPath}`,
+            command: `env REMINDER_PATH=${JSON.stringify(reminderPath)} bash ${JSON.stringify(reminderHookPath)}`,
             timeout: 5000
           }
         ]

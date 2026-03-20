@@ -23,6 +23,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DETECTOR="$SCRIPT_DIR/../scripts/lib/silent-failure-detector.js"
+DEFAULT_RESULT='{"passed":true,"totalViolations":0,"criticalCount":0}'
 
 # Check if detector script exists
 if [ ! -f "$DETECTOR" ]; then
@@ -36,16 +37,31 @@ if ! command -v node &>/dev/null; then
 fi
 
 # Run pre-session checks
-RESULT=$(node "$DETECTOR" pre-session --json 2>/dev/null || echo '{"passed":true}')
+RESULT="$DEFAULT_RESULT"
+set +e
+DETECTOR_OUTPUT=$(node "$DETECTOR" pre-session --json 2>/dev/null)
+set -e
+
+if [ -n "$DETECTOR_OUTPUT" ] && printf '%s' "$DETECTOR_OUTPUT" | jq -e . >/dev/null 2>&1; then
+    RESULT="$DETECTOR_OUTPUT"
+fi
 
 # Extract key values
-VIOLATIONS=$(echo "$RESULT" | jq -r '.totalViolations // 0' 2>/dev/null || echo "0")
-CRITICAL=$(echo "$RESULT" | jq -r '.criticalCount // 0' 2>/dev/null || echo "0")
+VIOLATIONS="$(printf '%s' "$RESULT" | jq -r '.totalViolations // 0' 2>/dev/null || printf '0')"
+CRITICAL="$(printf '%s' "$RESULT" | jq -r '.criticalCount // 0' 2>/dev/null || printf '0')"
+
+if ! [[ "$VIOLATIONS" =~ ^[0-9]+$ ]]; then
+    VIOLATIONS=0
+fi
+
+if ! [[ "$CRITICAL" =~ ^[0-9]+$ ]]; then
+    CRITICAL=0
+fi
 
 # Output system message for critical issues
 if [ "$CRITICAL" -gt 0 ]; then
     # Extract critical summary
-    SUMMARY=$(echo "$RESULT" | jq -r '.criticalSummary // "Critical silent failure conditions detected"' 2>/dev/null)
+    SUMMARY="$(printf '%s' "$RESULT" | jq -r '.criticalSummary // "Critical silent failure conditions detected"' 2>/dev/null || printf 'Critical silent failure conditions detected')"
 
     # Output JSON for Claude
     echo "{\"systemMessage\":\"⚠️ SILENT FAILURE WARNING: $SUMMARY\",\"violations\":$VIOLATIONS,\"critical\":$CRITICAL}"

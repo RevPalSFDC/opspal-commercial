@@ -59,7 +59,7 @@ log "INFO" "Running reliability checks..."
 
 (
     # Run with timeout to prevent hanging
-    timeout 60 node "$RELIABILITY_SCRIPT" run 2>/dev/null || {
+    timeout 60 node "$RELIABILITY_SCRIPT" run >/dev/null 2>&1 || {
         log "WARN" "Reliability checks timed out or failed"
     }
 ) &

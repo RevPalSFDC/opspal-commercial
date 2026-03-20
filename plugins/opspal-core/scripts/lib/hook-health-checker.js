@@ -63,7 +63,7 @@ const HOOK_TYPES = [
 ];
 
 // Hooks that should return JSON with systemMessage
-const HOOKS_EXPECTING_OUTPUT = ['UserPromptSubmit'];
+const HOOKS_EXPECTING_OUTPUT = ['UserPromptSubmit', 'SessionStart'];
 
 // Hooks with event-specific decision schemas
 const PRE_TOOL_DECISION_HOOKS = ['PreToolUse'];
@@ -1490,9 +1490,10 @@ class HookHealthChecker {
 
     const trimmed = output.trim();
 
-    // UserPromptSubmit hooks can legitimately return plain text (added as systemMessage)
+    // UserPromptSubmit and SessionStart hooks can legitimately return plain text
+    // that Claude adds to context.
     // Only JSON output needs envelope validation; plain text is always valid for context injection
-    if (hookType === 'UserPromptSubmit' && !trimmed.startsWith('{')) {
+    if ((hookType === 'UserPromptSubmit' || hookType === 'SessionStart') && !trimmed.startsWith('{')) {
       result.verdict = 'WILL_INJECT';
       result.details = `Plain text context injection (${trimmed.length} chars)`;
       return result;
@@ -1518,10 +1519,11 @@ class HookHealthChecker {
       // Find the last JSON object in output (skip contamination prefix)
       const jsonMatch = trimmed.match(/\{[\s\S]*\}$/);
       if (!jsonMatch) {
-        // For context-injecting hooks other than UserPromptSubmit, non-JSON is invalid
+        // For context-injecting hooks other than UserPromptSubmit and SessionStart,
+        // non-JSON is invalid.
         if (role === 'context-injecting') {
           result.verdict = 'INVALID';
-          result.details = 'Output is not valid JSON (non-UserPromptSubmit context hooks must use JSON)';
+          result.details = 'Output is not valid JSON (non-UserPromptSubmit/SessionStart context hooks must use JSON)';
           result.recommendation = 'Wrap context in {"systemMessage": "..."} envelope';
           return result;
         }

@@ -9,6 +9,9 @@
     "verify:version-bumps": "node scripts/lib/verify-plugin-version-bumps.js",
     "verify:encrypted-assets": "node scripts/lib/verify-encrypted-assets.js",
     "verify:repo-boundaries": "node scripts/lib/verify-commercial-repo-boundaries.js",
+    "verify:claude-installed-runtime": "bash scripts/test-claude-installed-runtime.sh",
+    "smoke:claude-hooks": "bash scripts/test-claude-hooks-smoke.sh",
+    "smoke:claude-hooks:static": "bash scripts/test-claude-hooks-smoke.sh --skip-live",
     "smoke:marketplace": "bash scripts/smoke-commercial-marketplace.sh",
     "ci:hardening": "npm run docs:ci && npm run verify:encrypted-assets && npm run verify:repo-boundaries && npm run smoke:marketplace"
   },
