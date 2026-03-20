@@ -222,6 +222,22 @@ extract_session_key() {
     echo "unknown-session"
 }
 
+extract_budget_scope_key() {
+    local session_key caller_agent session_safe agent_safe
+
+    session_key="$(extract_session_key)"
+    caller_agent="${CLAUDE_AGENT_NAME:-${CLAUDE_SUBAGENT_NAME:-main}}"
+
+    if [ -z "$caller_agent" ] || [ "$caller_agent" = "unknown" ]; then
+        caller_agent="main"
+    fi
+
+    session_safe="$(printf '%s' "$session_key" | sed -E 's/[^A-Za-z0-9._-]+/_/g')"
+    agent_safe="$(printf '%s' "$caller_agent" | sed -E 's/[^A-Za-z0-9._-]+/_/g')"
+
+    printf '%s__%s' "$session_safe" "$agent_safe"
+}
+
 emit_pretool_decision() {
     local permission_decision="$1"
     local permission_reason="$2"
@@ -396,7 +412,7 @@ channel_in_hardening_scope() {
         return 0
     fi
     if [ -z "$channel_id" ]; then
-        return 0
+        return 1
     fi
 
     local channel_upper enforced_upper
@@ -434,8 +450,9 @@ looks_like_broad_secret_discovery() {
 
 enforce_bash_loop_budget() {
     local command="${1:-}"
-    local channel_id session_key session_safe now state_file
+    local channel_id budget_scope now state_file
     local window_start count last_fingerprint repeat_count fingerprint
+    local next_count next_repeat_count next_fingerprint
 
     if [ "$BASH_BUDGET_ENABLED" != "1" ]; then
         return 0
@@ -446,14 +463,13 @@ enforce_bash_loop_budget() {
         return 0
     fi
 
-    session_key="$(extract_session_key)"
-    session_safe="$(printf '%s' "$session_key" | sed -E 's/[^A-Za-z0-9._-]+/_/g')"
+    budget_scope="$(extract_budget_scope_key)"
     now="$(date +%s)"
 
     mkdir -p "$BUDGET_STATE_DIR" 2>/dev/null || mkdir -p "${FALLBACK_LOG_ROOT}/hook-state" 2>/dev/null || true
-    state_file="${BUDGET_STATE_DIR}/bash-budget-${session_safe}.json"
+    state_file="${BUDGET_STATE_DIR}/bash-budget-${budget_scope}.json"
     if [ ! -d "$BUDGET_STATE_DIR" ] || [ ! -w "$BUDGET_STATE_DIR" ]; then
-        state_file="${FALLBACK_LOG_ROOT}/hook-state/bash-budget-${session_safe}.json"
+        state_file="${FALLBACK_LOG_ROOT}/hook-state/bash-budget-${budget_scope}.json"
     fi
 
     window_start=0
@@ -474,34 +490,35 @@ enforce_bash_loop_budget() {
         last_fingerprint=""
     fi
 
-    count=$((count + 1))
+    next_count=$((count + 1))
     fingerprint="$(normalize_command_fingerprint "$command")"
     if [ "$fingerprint" = "$last_fingerprint" ] && [ -n "$fingerprint" ]; then
-        repeat_count=$((repeat_count + 1))
+        next_repeat_count=$((repeat_count + 1))
+        next_fingerprint="$last_fingerprint"
     else
-        repeat_count=1
-        last_fingerprint="$fingerprint"
+        next_repeat_count=1
+        next_fingerprint="$fingerprint"
     fi
 
-    jq -nc \
-      --argjson window_start "$window_start" \
-      --argjson count "$count" \
-      --arg last_fingerprint "$last_fingerprint" \
-      --argjson repeat_count "$repeat_count" \
-      '{window_start:$window_start,count:$count,last_fingerprint:$last_fingerprint,repeat_count:$repeat_count}' \
-      > "$state_file" 2>/dev/null || true
-
-    if [ "$repeat_count" -gt "$BASH_BUDGET_MAX_REPEATS" ]; then
-        echo "[GUARDRAIL BLOCKED] Repeated command pattern detected (${repeat_count} repeats)." >&2
+    if [ "$next_repeat_count" -gt "$BASH_BUDGET_MAX_REPEATS" ]; then
+        echo "[GUARDRAIL BLOCKED] Repeated command pattern detected (${next_repeat_count} repeats)." >&2
         echo "Use a targeted command or provide a status + explicit missing input request." >&2
         return 1
     fi
 
-    if [ "$count" -gt "$BASH_BUDGET_MAX_COMMANDS" ]; then
-        echo "[GUARDRAIL BLOCKED] Bash command budget exceeded (${count} in ${BASH_BUDGET_WINDOW_SECONDS}s)." >&2
+    if [ "$next_count" -gt "$BASH_BUDGET_MAX_COMMANDS" ]; then
+        echo "[GUARDRAIL BLOCKED] Bash command budget exceeded (${next_count} in ${BASH_BUDGET_WINDOW_SECONDS}s)." >&2
         echo "Pause and summarize findings before issuing additional shell commands." >&2
         return 1
     fi
+
+    jq -nc \
+      --argjson window_start "$window_start" \
+      --argjson count "$next_count" \
+      --arg last_fingerprint "$next_fingerprint" \
+      --argjson repeat_count "$next_repeat_count" \
+      '{window_start:$window_start,count:$count,last_fingerprint:$last_fingerprint,repeat_count:$repeat_count}' \
+      > "$state_file" 2>/dev/null || true
 
     return 0
 }

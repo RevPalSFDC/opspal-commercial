@@ -23,6 +23,7 @@ const HOOK_PATH = 'plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh
 const PROJECT_ROOT = path.resolve(__dirname, '../../../../..');
 const PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-core');
 const { sanitizeSessionKey } = require(path.join(PLUGIN_ROOT, 'scripts/lib/routing-state-manager.js'));
+const HARDENED_CHANNEL_ID = 'C0AGVQFDB18';
 
 // =============================================================================
 // Test Helpers
@@ -67,6 +68,16 @@ function assertStructuredRoutingDeny(result, reasonFragment, message) {
     (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes(reasonFragment),
     `${message} should mention ${reasonFragment}`
   );
+}
+
+function withHardenedChannel(input) {
+  return {
+    ...input,
+    context: {
+      ...(input.context || {}),
+      channelId: HARDENED_CHANNEL_ID
+    }
+  };
 }
 
 async function runTest(name, testFn) {
@@ -564,12 +575,12 @@ async function runAllTests() {
   // Test 14: Blocks inline secret literals in Bash commands
   results.push(await runTest('Blocks inline secret literals', async () => {
     const result = await tester.run({
-      input: {
+      input: withHardenedChannel({
         tool: 'Bash',
         input: {
           command: 'ASANA_TOKEN=2/1234567890123456:supersecret curl -s https://app.asana.com/api/1.0/users/me'
         }
-      },
+      }),
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
         HOME: tempHome,
@@ -587,12 +598,12 @@ async function runAllTests() {
   // Test 15: Blocks broad filesystem credential discovery patterns
   results.push(await runTest('Blocks broad credential discovery scans', async () => {
     const result = await tester.run({
-      input: {
+      input: withHardenedChannel({
         tool: 'Bash',
         input: {
           command: 'find /home/chris -name "*.env" 2>/dev/null | xargs grep -l "ASANA"'
         }
-      },
+      }),
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
         HOME: tempHome,
@@ -607,7 +618,38 @@ async function runAllTests() {
     );
   }));
 
-  // Test 16: Enforces loop budget across repeated commands in same session
+  results.push(await runTest('Skips Bash budget when hardened channel metadata is absent', async () => {
+    const env = {
+      CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+      HOME: tempHome,
+      CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+      OPSPAL_BASH_BUDGET_MAX_REPEATS: '1',
+      OPSPAL_BASH_BUDGET_MAX_COMMANDS: '1',
+      OPSPAL_BASH_BUDGET_WINDOW_SECONDS: '600'
+    };
+
+    const first = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-no-channel-budget',
+        input: { command: 'echo "one"' }
+      },
+      env
+    });
+    assert.strictEqual(first.exitCode, 0, 'First command should pass without hardening channel metadata');
+
+    const second = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-no-channel-budget',
+        input: { command: 'echo "two"' }
+      },
+      env
+    });
+    assert.strictEqual(second.exitCode, 0, 'Budget should not apply when hardening channel metadata is absent');
+  }));
+
+  // Test 16: Enforces loop budget across repeated commands in same hardened session
   results.push(await runTest('Blocks repeated command loops by budget', async () => {
     const env = {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -619,27 +661,126 @@ async function runAllTests() {
       };
 
     const first = await tester.run({
-      input: {
+      input: withHardenedChannel({
         tool: 'Bash',
         sessionKey: 'session-loop-test',
         input: { command: 'echo "loop-check"' }
-      },
+      }),
       env
     });
     assert.strictEqual(first.exitCode, 0, 'First command should pass');
 
     const second = await tester.run({
-      input: {
+      input: withHardenedChannel({
         tool: 'Bash',
         sessionKey: 'session-loop-test',
         input: { command: 'echo "loop-check"' }
-      },
+      }),
       env
     });
     assert.strictEqual(second.exitCode, 2, 'Second repeated command should be blocked');
     assert(
       second.stderr.includes('Repeated command pattern detected'),
       'Should emit repeated command guardrail message'
+    );
+  }));
+
+  results.push(await runTest('Blocks aggregate Bash volume in hardened sessions', async () => {
+    const env = {
+      CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+      HOME: tempHome,
+      CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+      OPSPAL_BASH_BUDGET_MAX_REPEATS: '10',
+      OPSPAL_BASH_BUDGET_MAX_COMMANDS: '2',
+      OPSPAL_BASH_BUDGET_WINDOW_SECONDS: '600'
+    };
+
+    const first = await tester.run({
+      input: withHardenedChannel({
+        tool: 'Bash',
+        sessionKey: 'session-count-budget',
+        input: { command: 'echo "first"' }
+      }),
+      env
+    });
+    assert.strictEqual(first.exitCode, 0, 'First command should pass');
+
+    const second = await tester.run({
+      input: withHardenedChannel({
+        tool: 'Bash',
+        sessionKey: 'session-count-budget',
+        input: { command: 'echo "second"' }
+      }),
+      env
+    });
+    assert.strictEqual(second.exitCode, 0, 'Second command should pass');
+
+    const third = await tester.run({
+      input: withHardenedChannel({
+        tool: 'Bash',
+        sessionKey: 'session-count-budget',
+        input: { command: 'echo "third"' }
+      }),
+      env
+    });
+    assert.strictEqual(third.exitCode, 2, 'Third command should exceed the aggregate Bash budget');
+    assert(
+      third.stderr.includes('Bash command budget exceeded'),
+      'Should emit the aggregate Bash budget message'
+    );
+  }));
+
+  results.push(await runTest('Partitions Bash budget by agent within the same session', async () => {
+    const baseEnv = {
+      CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+      HOME: tempHome,
+      CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+      OPSPAL_BASH_BUDGET_MAX_REPEATS: '10',
+      OPSPAL_BASH_BUDGET_MAX_COMMANDS: '1',
+      OPSPAL_BASH_BUDGET_WINDOW_SECONDS: '600'
+    };
+
+    const agentOneFirst = await tester.run({
+      input: withHardenedChannel({
+        tool: 'Bash',
+        sessionKey: 'session-parallel-agents',
+        input: { command: 'echo "agent-one"' }
+      }),
+      env: {
+        ...baseEnv,
+        CLAUDE_AGENT_NAME: 'opspal-core:pdf-generator'
+      }
+    });
+    assert.strictEqual(agentOneFirst.exitCode, 0, 'First command for agent one should pass');
+
+    const agentTwoFirst = await tester.run({
+      input: withHardenedChannel({
+        tool: 'Bash',
+        sessionKey: 'session-parallel-agents',
+        input: { command: 'echo "agent-two"' }
+      }),
+      env: {
+        ...baseEnv,
+        CLAUDE_AGENT_NAME: 'opspal-core:google-slides-generator'
+      }
+    });
+    assert.strictEqual(agentTwoFirst.exitCode, 0, 'First command for agent two should use an independent budget bucket');
+
+    const agentOneSecond = await tester.run({
+      input: withHardenedChannel({
+        tool: 'Bash',
+        sessionKey: 'session-parallel-agents',
+        input: { command: 'echo "agent-one-second"' }
+      }),
+      env: {
+        ...baseEnv,
+        CLAUDE_AGENT_NAME: 'opspal-core:pdf-generator'
+      }
+    });
+    assert.strictEqual(agentOneSecond.exitCode, 2, 'Second command for agent one should exceed only its own budget bucket');
+    assert(
+      agentOneSecond.stderr.includes('Bash command budget exceeded'),
+      'Should emit the aggregate Bash budget message for the over-budget agent'
     );
   }));
 

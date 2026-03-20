@@ -113,6 +113,7 @@ function normalizeHookEvent(rawInput = null) {
   const envInput = readEnvRawInput();
   const stdinInput = rawInput === null ? parseJson(readStdin()) : parseJson(rawInput);
   const raw = normalizeObject(stdinInput || {});
+  const rawContext = normalizeObject(raw.context);
 
   const toolName = String(
     raw.tool_name ||
@@ -180,6 +181,18 @@ function normalizeHookEvent(rawInput = null) {
     ''
   ).trim();
 
+  const channelId = String(
+    raw.channel_id ||
+    raw.channelId ||
+    rawContext.channel_id ||
+    rawContext.channelId ||
+    raw.event?.params?.channel_id ||
+    raw.event?.params?.channelId ||
+    raw.event?.params?.metadata?.channel_id ||
+    raw.event?.params?.metadata?.channelId ||
+    ''
+  ).trim();
+
   const toolResult = coerceToolResult(
     raw.tool_result !== undefined ? raw.tool_result
       : raw.result !== undefined ? raw.result
@@ -188,6 +201,18 @@ function normalizeHookEvent(rawInput = null) {
             : envInput.tool_result
   );
 
+  const normalizedContext = Object.keys(rawContext).length > 0 ? { ...rawContext } : {};
+  if (sessionId) {
+    normalizedContext.session_id = normalizedContext.session_id || sessionId;
+    normalizedContext.sessionId = normalizedContext.sessionId || sessionId;
+    normalizedContext.session_key = normalizedContext.session_key || sessionId;
+    normalizedContext.sessionKey = normalizedContext.sessionKey || sessionId;
+  }
+  if (channelId) {
+    normalizedContext.channel_id = normalizedContext.channel_id || channelId;
+    normalizedContext.channelId = normalizedContext.channelId || channelId;
+  }
+
   const normalized = {
     hook_event_name: hookEventName,
     hookEventName: hookEventName,
@@ -195,6 +220,9 @@ function normalizeHookEvent(rawInput = null) {
     sessionId: sessionId,
     session_key: sessionId,
     sessionKey: sessionId,
+    channel_id: channelId,
+    channelId,
+    context: normalizedContext,
     cwd: raw.cwd || envInput.cwd,
     tool_name: toolName,
     tool: toolName,
