@@ -106,6 +106,18 @@ assert_file_exists() {
   [ -f "$file_path" ] || fail "Missing expected file: $file_path"
 }
 
+assert_json_expr() {
+  local file_path="$1"
+  local expression="$2"
+  local message="$3"
+
+  assert_file_exists "$file_path"
+  jq -e "$expression" "$file_path" >/dev/null || {
+    [ "$VERBOSE" = true ] && cat "$file_path" >&2 || true
+    fail "$message"
+  }
+}
+
 seed_repo_copy() {
   mkdir -p "$WORKDIR" "$STATE_HOME"
   if command -v rsync >/dev/null 2>&1; then
@@ -114,6 +126,78 @@ seed_repo_copy() {
     cp -R "$REPO_ROOT"/. "$WORKDIR"/
     rm -rf "$WORKDIR/.git" "$WORKDIR/node_modules"
   fi
+}
+
+run_static_contract_scenarios() {
+  local failure_output="$TMP_ROOT/post-tool-use-failure.json"
+  local warning_output="$TMP_ROOT/post-tool-use-warning.json"
+  local contaminated_hook="$TMP_ROOT/contaminated-post-tool-use.sh"
+
+  log_step "Running deterministic hook contract scenarios"
+
+  jq -nc \
+    --arg command 'sf data query --query "SELECT ApiName FROM FlowVersionView" --json' \
+    --arg error "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'" \
+    '{
+      hook_event_name: "PostToolUseFailure",
+      tool_name: "Bash",
+      tool_input: { command: $command },
+      error: $error,
+      is_interrupt: false
+    }' \
+    | bash "$WORKDIR/plugins/opspal-salesforce/hooks/post-bash-error-handler.sh" \
+    >"$failure_output"
+
+  assert_json_expr \
+    "$failure_output" \
+    '.suppressOutput == true and .hookSpecificOutput.hookEventName == "PostToolUseFailure" and (.hookSpecificOutput.additionalContext | contains("[SOQL Error Recovery]"))' \
+    "PostToolUseFailure recovery hook did not emit the expected structured guidance"
+
+  jq -nc \
+    --arg command 'sf data query --query "SELECT Id FROM Account" --json' \
+    --arg stdout '{"totalSize":0,"records":[]}' \
+    '{
+      hook_event_name: "PostToolUse",
+      tool_name: "Bash",
+      tool_input: { command: $command },
+      tool_response: { stdout: $stdout }
+    }' \
+    | bash "$WORKDIR/plugins/opspal-salesforce/hooks/post-sf-query-validation.sh" \
+    >"$warning_output"
+
+  assert_json_expr \
+    "$warning_output" \
+    '.suppressOutput == true and .hookSpecificOutput.hookEventName == "PostToolUse" and (.hookSpecificOutput.additionalContext | contains("0 records"))' \
+    "PostToolUse query-validation hook did not emit the expected structured warning"
+
+  printf '%s\n' \
+    '#!/usr/bin/env bash' \
+    'printf "Shell ready\n"' \
+    'printf "{\"systemMessage\":\"bad\"}\n"' \
+    >"$contaminated_hook"
+  chmod +x "$contaminated_hook"
+
+  node - "$WORKDIR" "$contaminated_hook" <<'EOF'
+const path = require('path');
+
+const workdir = process.argv[2];
+const hookPath = process.argv[3];
+const { HookTester } = require(path.join(workdir, 'plugins/opspal-core/test/hooks/runner.js'));
+
+(async () => {
+  const tester = new HookTester(hookPath);
+  const result = await tester.run({
+    input: { hook_event_name: 'PostToolUse' }
+  });
+
+  if (!result.parseError) {
+    throw new Error(`Expected parseError for contaminated hook stdout, got ${JSON.stringify(result.output)}`);
+  }
+})().catch((error) => {
+  console.error(error.message);
+  process.exit(1);
+});
+EOF
 }
 
 generate_isolated_settings() {
@@ -156,6 +240,8 @@ run_static_checks() {
 
   log_step "Running hook config validation"
   (cd "$WORKDIR" && node scripts/validate-hooks-config.js)
+
+  run_static_contract_scenarios
 
   log_step "Running quick hook health check"
   set +e
@@ -219,6 +305,7 @@ assert_no_debug_failures() {
     'command not found'
     'integer expression expected'
     'Could not determine tool name'
+    '[Hh]ook error'
   )
 
   [ -f "$debug_file" ] || return 0
@@ -228,6 +315,55 @@ assert_no_debug_failures() {
       fail "Debug log contains forbidden pattern '$pattern' in $debug_file"
     fi
   done
+}
+
+assert_no_invalid_plaintext_hook_output() {
+  local debug_file="$1"
+  local findings_file="$TMP_ROOT/invalid-plain-text-hook-output.log"
+
+  [ -f "$debug_file" ] || return 0
+
+if node - "$debug_file" >"$findings_file" <<'EOF'
+const fs = require('fs');
+
+const filePath = process.argv[2];
+const lines = fs.readFileSync(filePath, 'utf8').split(/\r?\n/);
+const invalid = [];
+
+for (let index = 0; index < lines.length; index += 1) {
+  const line = lines[index];
+  const match = line.match(/"Hook .* \(([^)]+)\) success:\\n(.*)$/);
+  if (!match) {
+    continue;
+  }
+
+  const eventType = match[1];
+  if (eventType === 'UserPromptSubmit' || eventType === 'SessionStart') {
+    continue;
+  }
+
+  let payload = match[2];
+  if (payload.endsWith('"')) {
+    payload = payload.slice(0, -1);
+  }
+
+  const trimmed = payload.replace(/\\n$/, '').trim();
+  if (trimmed && !trimmed.startsWith('{')) {
+    invalid.push(`${index + 1}:${eventType}:${line}`);
+  }
+}
+
+if (invalid.length > 0) {
+  process.stdout.write(invalid.join('\n'));
+  process.exit(1);
+}
+EOF
+  then
+    return 0
+  fi
+
+  [ "$VERBOSE" = true ] && cat "$findings_file" >&2 || true
+  fail "Debug log contains plain-text hook output for non-context events in $debug_file"
 }
 
 run_live_bash_scenario() {
@@ -258,6 +394,7 @@ run_live_bash_scenario() {
   [ "$VERBOSE" = true ] && printf 'Claude debug log: %s\n' "$claude_debug_file" >&2 || true
   assert_no_debug_failures "$stderr_file"
   assert_no_debug_failures "$claude_debug_file"
+  assert_no_invalid_plaintext_hook_output "$claude_debug_file"
 
   if [ "$exit_code" -ne 0 ]; then
     fail "Live Bash smoke scenario failed. See $stdout_file, $stderr_file, and $claude_debug_file"
@@ -313,6 +450,7 @@ EOF
   [ "$VERBOSE" = true ] && printf 'Claude debug log: %s\n' "$claude_debug_file" >&2 || true
   assert_no_debug_failures "$stderr_file"
   assert_no_debug_failures "$claude_debug_file"
+  assert_no_invalid_plaintext_hook_output "$claude_debug_file"
 
   if [ "$exit_code" -ne 0 ]; then
     fail "Live Agent smoke scenario failed. See $stdout_file, $stderr_file, and $claude_debug_file"

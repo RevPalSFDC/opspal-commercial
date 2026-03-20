@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# Post-Bash Error Handler Hook
+# Post-Tool Use Failure Bash Error Handler Hook
 # Provides recovery guidance for SOQL errors, jq errors, and describe failures
 #
-# Triggered: After bash commands fail
+# Triggered: After Bash tool executions fail
 # Exit Codes:
 #   0 = Continue (always, just provides guidance)
 
@@ -85,15 +85,19 @@ fi
 # Read input from stdin
 INPUT=$(cat)
 
-# Extract tool result and command from the live PostToolUse payload
+# Extract tool result and command from the live PostToolUseFailure payload.
+# Keep legacy fallbacks for older local test payloads.
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_response.exit_code // .tool_response.exitCode // .tool_result.exit_code // .tool_result.exitCode // empty' 2>/dev/null)
+IS_INTERRUPT=$(echo "$INPUT" | jq -r '.is_interrupt // false' 2>/dev/null)
 RESULT=$(echo "$INPUT" | jq -r '
-  (
-    (.tool_response.stderr // .tool_result.stderr // "")
-    + " "
-    + (.tool_response.stdout // .tool_result.stdout // "")
-  ) | gsub("\\s+"; " ") | sub("^\\s+"; "") | sub("\\s+$"; "")
+  .error // (
+    (
+      (.tool_response.stderr // .tool_result.stderr // "")
+      + " "
+      + (.tool_response.stdout // .tool_result.stdout // "")
+    ) | gsub("\\s+"; " ") | sub("^\\s+"; "") | sub("\\s+$"; "")
+  )
 ' 2>/dev/null)
 
 # Fallback to the serialized result payload when stderr/stdout are missing
@@ -101,13 +105,13 @@ if [ -z "$RESULT" ]; then
     RESULT=$(echo "$INPUT" | jq -c '.tool_response // .tool_result // empty' 2>/dev/null)
 fi
 
-# If no result or command, or success, pass through
+# If no result or command, or if the failure was user interruption, pass through
 if [ -z "$RESULT" ] && [ -z "$COMMAND" ]; then
     exit 0
 fi
 
-# Check for success (no error handling needed)
-if [ "$EXIT_CODE" = "0" ]; then
+# User interruption does not need recovery guidance.
+if [ "$IS_INTERRUPT" = "true" ]; then
     exit 0
 fi
 
@@ -182,9 +186,14 @@ fi
 
 # Output guidance if found
 if [ -n "$GUIDANCE" ]; then
-    # Escape for JSON
-    GUIDANCE_JSON=$(echo -e "$GUIDANCE" | jq -Rs '.')
-    echo "{\"systemMessage\": $GUIDANCE_JSON}"
+    GUIDANCE_TEXT=$(printf '%b' "$GUIDANCE")
+    jq -nc --arg guidance "$GUIDANCE_TEXT" '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+            hookEventName: "PostToolUseFailure",
+            additionalContext: $guidance
+        }
+    }'
 fi
 
 # Persist structured error event for easier root-cause analysis

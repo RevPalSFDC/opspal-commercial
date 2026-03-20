@@ -29,9 +29,9 @@
 #   - Customer Success: cs-operations, expansion-orchestrator, etc.
 #
 # Feedback Behavior:
-#   - Shows message when agent not in whitelist (suggests WORK_INDEX_CATCH_ALL)
-#   - Shows warning when ORG_SLUG not set (provides export command)
-#   - Shows message when disabled (WORK_INDEX_AUTO_CAPTURE=0)
+#   - Skips silently by default when auto-capture is disabled or the agent is not whitelisted
+#   - Emits structured PostToolUse context when required configuration blocks capture
+#   - Emits optional structured verbose context when WORK_INDEX_VERBOSE=1
 #
 # Version: 1.1.0
 # Date: 2026-02-01
@@ -67,10 +67,30 @@ fi
 ENABLED="${WORK_INDEX_AUTO_CAPTURE:-1}"
 VERBOSE="${WORK_INDEX_VERBOSE:-0}"
 CATCH_ALL="${WORK_INDEX_CATCH_ALL:-0}"
+HOOK_CONTEXT=""
+
+emit_post_tool_use_context() {
+    local context="$1"
+
+    jq -nc --arg context "$context" '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+            hookEventName: "PostToolUse",
+            additionalContext: $context
+        }
+    }'
+}
+
+set_verbose_context() {
+    local context="$1"
+
+    if [ "$VERBOSE" = "1" ] && [ -z "$HOOK_CONTEXT" ]; then
+        HOOK_CONTEXT="$context"
+    fi
+}
 
 # Early exit if disabled
 if [ "$ENABLED" != "1" ]; then
-    echo "ℹ️  Work-index auto-capture disabled (WORK_INDEX_AUTO_CAPTURE=0)" >&2
     exit 0
 fi
 
@@ -82,7 +102,10 @@ fi
 
 # Exit if no input
 if [ -z "$HOOK_INPUT" ]; then
-    [ "$VERBOSE" = "1" ] && echo "[work-index] No hook input, skipping" >&2
+    set_verbose_context "Work-index hook skipped because no hook input was provided."
+    if [ -n "$HOOK_CONTEXT" ]; then
+        emit_post_tool_use_context "$HOOK_CONTEXT"
+    fi
     exit 0
 fi
 
@@ -97,7 +120,6 @@ EXTERNAL_CLASSIFICATION=""
 CONFIG_FILE="$PLUGIN_ROOT/config/work-index-agent-mappings.json"
 if [ -n "$AGENT_NAME" ] && [ -f "$CONFIG_FILE" ] && command -v jq &> /dev/null; then
     EXTERNAL_CLASSIFICATION=$(jq -r --arg agent "$AGENT_NAME" '.mappings[$agent] // empty' "$CONFIG_FILE" 2>/dev/null || true)
-    [ "$VERBOSE" = "1" ] && [ -n "$EXTERNAL_CLASSIFICATION" ] && echo "[work-index] Loaded classification from config: $EXTERNAL_CLASSIFICATION" >&2
 fi
 
 # Map of assessment agents to classifications (fallback if not in config file)
@@ -217,7 +239,6 @@ SUB_TYPE=""
 if [ -n "$EXTERNAL_CLASSIFICATION" ]; then
     # Use external config file mapping (highest priority)
     IFS=':' read -r CLASSIFICATION SUB_TYPE <<< "$EXTERNAL_CLASSIFICATION"
-    [ "$VERBOSE" = "1" ] && echo "[work-index] Using config file classification for '$AGENT_NAME'" >&2
 elif [ -n "$AGENT_NAME" ] && [ -n "${AGENT_CLASSIFICATIONS[$AGENT_NAME]:-}" ]; then
     # Use hardcoded whitelist mapping
     IFS=':' read -r CLASSIFICATION SUB_TYPE <<< "${AGENT_CLASSIFICATIONS[$AGENT_NAME]}"
@@ -225,12 +246,13 @@ elif [ "$CATCH_ALL" = "1" ] && [ -n "$AGENT_NAME" ]; then
     # Catch-all mode: capture ANY Agent completion with generic classification
     CLASSIFICATION="support"
     SUB_TYPE="general-request"
-    echo "[work-index] Using catch-all classification for agent '$AGENT_NAME'" >&2
+    set_verbose_context "Work-index catch-all mode applied to agent '$AGENT_NAME'."
 else
-    # Agent not in whitelist - provide user feedback
-    echo "ℹ️  Work-index: Agent '$AGENT_NAME' not in auto-capture list" >&2
-    echo "   Set WORK_INDEX_CATCH_ALL=1 to capture all agents, or add to whitelist" >&2
-    echo "   Or add to: $CONFIG_FILE" >&2
+    # Agent not in whitelist - skip silently by default, verbose mode surfaces structured context.
+    set_verbose_context "Work-index capture skipped: agent '$AGENT_NAME' is not in the auto-capture list. Set WORK_INDEX_CATCH_ALL=1 or add it to $CONFIG_FILE."
+    if [ -n "$HOOK_CONTEXT" ]; then
+        emit_post_tool_use_context "$HOOK_CONTEXT"
+    fi
     exit 0
 fi
 
@@ -246,49 +268,27 @@ fi
 
 # Exit if no org context - with prominent warning
 if [ -z "$ORG" ]; then
-    # Use ANSI colors for prominent warning (yellow background, bold)
-    if [ -t 2 ]; then
-        # Terminal output - use colors
-        echo "" >&2
-        echo -e "\033[1;43;30m ⚠️  WORK INDEX: ORG_SLUG NOT SET \033[0m" >&2
-        echo -e "\033[1;33m    Work entry was NOT captured for this assessment.\033[0m" >&2
-        echo "" >&2
-        echo "    To enable auto-capture, set ORG_SLUG before running assessments:" >&2
-        echo "" >&2
-        echo -e "    \033[1;36mexport ORG_SLUG=<client-org-name>\033[0m" >&2
-        echo "" >&2
-        echo "    Or add to your shell profile (~/.bashrc or ~/.zshrc):" >&2
-        echo "    # Set default org for current client engagement" >&2
-        echo "    export ORG_SLUG=acme-corp" >&2
-        echo "" >&2
-    else
-        # Non-terminal output - plain text
-        echo "" >&2
-        echo "======================================================" >&2
-        echo "⚠️  WORK INDEX: ORG_SLUG NOT SET" >&2
-        echo "    Work entry was NOT captured for this assessment." >&2
-        echo "======================================================" >&2
-        echo "" >&2
-        echo "    To enable auto-capture:" >&2
-        echo "    export ORG_SLUG=<client-org-name>" >&2
-        echo "" >&2
-    fi
-    # Exit with code 78 (EX_CONFIG from sysexits.h) to indicate configuration issue
-    # This is non-fatal but signals that the hook couldn't complete its purpose
-    exit 78
+    emit_post_tool_use_context "Work-index capture skipped because ORG_SLUG is not set for agent '$AGENT_NAME'. Export ORG_SLUG=<client-org-name> or set CLIENT_ORG before running assessment agents."
+    exit 0
 fi
 
 # Path to work-index-manager
 MANAGER_SCRIPT="$PLUGIN_ROOT/scripts/lib/work-index-manager.js"
 
 if [ ! -f "$MANAGER_SCRIPT" ]; then
-    [ "$VERBOSE" = "1" ] && echo "[work-index] Manager script not found" >&2
+    set_verbose_context "Work-index manager script was not found, so capture was skipped."
+    if [ -n "$HOOK_CONTEXT" ]; then
+        emit_post_tool_use_context "$HOOK_CONTEXT"
+    fi
     exit 0
 fi
 
 # Check if node is available
 if ! command -v node &> /dev/null; then
-    [ "$VERBOSE" = "1" ] && echo "[work-index] Node.js not available" >&2
+    set_verbose_context "Work-index capture skipped because Node.js is not available."
+    if [ -n "$HOOK_CONTEXT" ]; then
+        emit_post_tool_use_context "$HOOK_CONTEXT"
+    fi
     exit 0
 fi
 
@@ -365,19 +365,19 @@ fi
 # Build the command
 if [ -n "$EXISTING_REQUEST" ]; then
     # Update existing request
-    [ "$VERBOSE" = "1" ] && echo "[work-index] Updating existing request: $EXISTING_REQUEST" >&2
+    set_verbose_context "Work-index updating existing request $EXISTING_REQUEST."
 
     UPDATE_CMD=(node "$MANAGER_SCRIPT" update "$ORG" "$EXISTING_REQUEST" --status completed)
     [ -n "$ABSTRACT" ] && UPDATE_CMD+=(--abstract "$ABSTRACT")
 
     if "${UPDATE_CMD[@]}" 2>/dev/null; then
-        echo "[work-index] Updated work request: $EXISTING_REQUEST" >&2
+        set_verbose_context "Work-index updated request $EXISTING_REQUEST."
     fi
 
     # Add session if available
     if [ -n "$SESSION_ID" ]; then
         # Session linking would require extending the CLI - for now just log
-        [ "$VERBOSE" = "1" ] && echo "[work-index] Session ID: $SESSION_ID" >&2
+        set_verbose_context "Work-index associated session $SESSION_ID with request $EXISTING_REQUEST."
     fi
 else
     # Create new request
@@ -391,13 +391,17 @@ else
     if OUTPUT=$("${ADD_CMD[@]}" 2>&1); then
         REQUEST_ID=$(echo "$OUTPUT" | grep -oP 'WRK-\d{8}-\d{3}' | head -1 || true)
         if [ -n "$REQUEST_ID" ]; then
-            echo "[work-index] Created work request: $REQUEST_ID" >&2
+            set_verbose_context "Work-index created request $REQUEST_ID."
         else
-            echo "[work-index] Created work request" >&2
+            set_verbose_context "Work-index created a new request entry."
         fi
     else
-        [ "$VERBOSE" = "1" ] && echo "[work-index] Failed to create request: $OUTPUT" >&2
+        set_verbose_context "Work-index create attempt failed to persist a request entry."
     fi
+fi
+
+if [ -n "$HOOK_CONTEXT" ]; then
+    emit_post_tool_use_context "$HOOK_CONTEXT"
 fi
 
 # Always exit successfully - work indexing is non-blocking

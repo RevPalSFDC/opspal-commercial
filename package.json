@@ -7,16 +7,18 @@
     "docs:generate": "node scripts/generate-plugin-suite-docs.js",
     "docs:ci": "node scripts/generate-plugin-suite-docs.js --check && node scripts/validate-active-hook-contracts.js && node scripts/validate-agent-description-budget.js",
     "fix:agent-descriptions": "node scripts/normalize-agent-descriptions.js",
+    "test:hooks": "node plugins/opspal-core/test/hooks/runner.js",
     "verify:active-hook-contracts": "node scripts/validate-active-hook-contracts.js",
     "verify:agent-description-budget": "node scripts/validate-agent-description-budget.js",
     "verify:version-bumps": "node scripts/lib/verify-plugin-version-bumps.js",
     "verify:encrypted-assets": "node scripts/lib/verify-encrypted-assets.js",
     "verify:repo-boundaries": "node scripts/lib/verify-commercial-repo-boundaries.js",
+    "verify:hook-runtime": "node scripts/validate-active-hook-contracts.js && bash scripts/test-claude-hooks-smoke.sh --skip-live",
     "verify:claude-installed-runtime": "bash scripts/test-claude-installed-runtime.sh",
     "smoke:claude-hooks": "bash scripts/test-claude-hooks-smoke.sh",
     "smoke:claude-hooks:static": "bash scripts/test-claude-hooks-smoke.sh --skip-live",
     "smoke:marketplace": "bash scripts/smoke-commercial-marketplace.sh",
-    "ci:hardening": "npm run docs:ci && npm run verify:encrypted-assets && npm run verify:repo-boundaries && npm run smoke:marketplace"
+    "ci:hardening": "npm run docs:ci && npm run verify:hook-runtime && npm run verify:encrypted-assets && npm run verify:repo-boundaries && npm run smoke:marketplace"
   },
   "repository": {
     "type": "git",

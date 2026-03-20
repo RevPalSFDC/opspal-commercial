@@ -3,30 +3,53 @@
  * Validate plugin hook configuration files.
  * - Ensures hooks.json parses and hook commands exist.
  * - Flags legacy hooks fields in plugin.json.
- * - Validates both distributable plugins (.claude-plugins/) and dev tools (dev-tools/).
+ * - Validates active plugins (plugins/), bundled plugins (.claude-plugins/), and dev tools (dev-tools/).
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const repoRoot = path.join(__dirname, '..');
-const pluginsRoot = path.join(repoRoot, '.claude-plugins');
+const activePluginsRoot = path.join(repoRoot, 'plugins');
+const bundledPluginsRoot = path.join(repoRoot, '.claude-plugins');
 const devToolsRoot = path.join(repoRoot, 'dev-tools');
 
 // Collect all plugin directories to validate
 const pluginPaths = [];
+const seenPluginRoots = new Set();
 
-// Add distributable plugins from .claude-plugins/
-if (fs.existsSync(pluginsRoot)) {
-  const distributablePlugins = fs.readdirSync(pluginsRoot, { withFileTypes: true })
+function addPluginRoot(name, root) {
+  if (seenPluginRoots.has(root)) {
+    return;
+  }
+  seenPluginRoots.add(root);
+  pluginPaths.push({ name, root });
+}
+
+// Add active plugin sources from plugins/
+if (fs.existsSync(activePluginsRoot)) {
+  const activePlugins = fs.readdirSync(activePluginsRoot, { withFileTypes: true })
     .filter(entry => entry.isDirectory())
     .map(entry => ({
-      name: entry.name,
-      root: path.join(pluginsRoot, entry.name)
+      name: `plugins/${entry.name}`,
+      root: path.join(activePluginsRoot, entry.name)
     }));
-  pluginPaths.push(...distributablePlugins);
+  activePlugins.forEach(({ name, root }) => addPluginRoot(name, root));
 } else {
-  console.warn(`⚠️ Missing plugins directory: ${pluginsRoot}`);
+  console.warn(`⚠️ Missing active plugins directory: ${activePluginsRoot}`);
+}
+
+// Add distributable plugins from .claude-plugins/
+if (fs.existsSync(bundledPluginsRoot)) {
+  const bundledPlugins = fs.readdirSync(bundledPluginsRoot, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => ({
+      name: `.claude-plugins/${entry.name}`,
+      root: path.join(bundledPluginsRoot, entry.name)
+    }));
+  bundledPlugins.forEach(({ name, root }) => addPluginRoot(name, root));
+} else {
+  console.warn(`⚠️ Missing bundled plugins directory: ${bundledPluginsRoot}`);
 }
 
 // Add dev-tools plugins
@@ -38,7 +61,7 @@ if (fs.existsSync(devToolsRoot)) {
       name: `dev-tools/${entry.name}`,
       root: path.join(devToolsRoot, entry.name)
     }));
-  pluginPaths.push(...devToolsPlugins);
+  devToolsPlugins.forEach(({ name, root }) => addPluginRoot(name, root));
 }
 
 if (pluginPaths.length === 0) {

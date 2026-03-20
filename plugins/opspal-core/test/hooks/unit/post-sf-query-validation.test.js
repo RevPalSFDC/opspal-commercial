@@ -3,7 +3,7 @@
 /**
  * Unit Tests for post-sf-query-validation.sh
  *
- * Covers non-query pass-through and warning on empty results.
+ * Covers non-query pass-through and structured PostToolUse feedback.
  *
  * @copyright 2024-2026 RevPal Partners, LLC
  */
@@ -62,6 +62,7 @@ async function runAllTests() {
   results.push(await runTest('Warns on empty query results', async () => {
     const result = await tester.run({
       input: {
+        hook_event_name: 'PostToolUse',
         tool_name: 'Bash',
         tool_input: {
           command: 'sf data query --query "SELECT Id FROM Account" --json'
@@ -73,11 +74,38 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output.continue, true, 'Should continue');
+    assert.strictEqual(result.output.suppressOutput, true, 'Should suppress verbose stdout noise');
     assert(
-      result.output.message.includes('0 records'),
+      result.output.hookSpecificOutput.hookEventName === 'PostToolUse',
+      'Should target the PostToolUse event'
+    );
+    assert(
+      result.output.hookSpecificOutput.additionalContext.includes('0 records'),
       'Should warn about empty results'
     );
+  }));
+
+  results.push(await runTest('Blocks on query output that still contains field errors', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'PostToolUse',
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf data query --query "SELECT ApiName FROM FlowVersionView" --json'
+        },
+        tool_response: {
+          stdout: 'INVALID_FIELD: No such column ApiName on entity FlowVersionView'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.output.decision, 'block', 'Should block follow-on processing');
+    assert(
+      result.output.reason.includes('Data quality validation failed'),
+      'Should explain why Claude should pause'
+    );
+    assert.strictEqual(result.output.hookSpecificOutput.hookEventName, 'PostToolUse', 'Should target PostToolUse');
   }));
 
   const passed = results.filter(r => r.passed).length;

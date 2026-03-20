@@ -51,6 +51,7 @@ const HOOK_TYPES = [
   'SessionStart',
   'PreToolUse',
   'PostToolUse',
+  'PostToolUseFailure',
   'PermissionRequest',
   'PreCommit',
   'PostCommit',
@@ -72,7 +73,8 @@ const PERMISSION_REQUEST_DECISION_HOOKS = ['PermissionRequest'];
 // Hook type classification for context injection analysis
 const CONTEXT_INJECTING_HOOKS = ['UserPromptSubmit', 'SessionStart', 'SubagentStart', 'PreCompact'];
 const DECISION_HOOKS = ['PreToolUse', 'PermissionRequest'];
-const SIDE_EFFECT_HOOKS = ['PostToolUse', 'Stop', 'SubagentStop', 'TaskCompleted', 'PreCommit', 'PostCommit', 'Setup'];
+const FEEDBACK_HOOKS = ['PostToolUse', 'PostToolUseFailure'];
+const SIDE_EFFECT_HOOKS = ['Stop', 'SubagentStop', 'TaskCompleted', 'PreCommit', 'PostCommit', 'Setup'];
 
 const VALID_CONTEXT_KEYS = {
   UserPromptSubmit: ['systemMessage', 'hookSpecificOutput', 'suppressOutput', 'decision', 'hookEventName'],
@@ -125,6 +127,16 @@ const TEST_INPUTS = {
     tool_name: 'Test',
     tool_result: { success: true },
     hook_event_name: 'PostToolUse',
+    _test: true
+  },
+  PostToolUseFailure: {
+    tool_name: 'Bash',
+    tool_input: {
+      command: 'sf data query --query "SELECT ApiName FROM FlowVersionView" --json'
+    },
+    hook_event_name: 'PostToolUseFailure',
+    error: 'INVALID_FIELD: No such column ApiName on entity FlowVersionView',
+    is_interrupt: false,
     _test: true
   },
   PermissionRequest: {
@@ -1455,6 +1467,7 @@ class HookHealthChecker {
   _classifyHookRole(hookType) {
     if (CONTEXT_INJECTING_HOOKS.includes(hookType)) return 'context-injecting';
     if (DECISION_HOOKS.includes(hookType)) return 'decision-making';
+    if (FEEDBACK_HOOKS.includes(hookType)) return 'feedback';
     if (SIDE_EFFECT_HOOKS.includes(hookType)) return 'side-effect';
     return 'unknown';
   }
@@ -1481,6 +1494,9 @@ class HookHealthChecker {
       if (role === 'context-injecting') {
         result.verdict = 'NOOP';
         result.details = 'Empty output — hook chose not to inject (valid no-op)';
+      } else if (role === 'feedback') {
+        result.verdict = 'NOOP';
+        result.details = 'Empty output — feedback hook chose not to annotate';
       } else {
         result.verdict = 'NOOP';
         result.details = 'Empty output';
@@ -1590,6 +1606,67 @@ class HookHealthChecker {
         result.verdict = 'NOOP';
         result.details = 'Decision hook without permissionDecision — passes through';
       }
+      return result;
+    }
+
+    if (role === 'feedback') {
+      const allowedKeys = new Set(['continue', 'stopReason', 'suppressOutput', 'systemMessage', 'decision', 'reason', 'hookSpecificOutput']);
+      if (hookType === 'PostToolUse') {
+        allowedKeys.add('updatedMCPToolOutput');
+      }
+
+      const unknownKeys = Object.keys(parsed).filter((key) => !allowedKeys.has(key));
+      if (unknownKeys.length > 0) {
+        result.verdict = 'INVALID';
+        result.details = `Unknown feedback keys: ${unknownKeys.join(', ')}`;
+        result.recommendation = `Use documented ${hookType} fields only`;
+        return result;
+      }
+
+      if (parsed.decision !== undefined && parsed.decision !== 'block') {
+        result.verdict = 'INVALID';
+        result.details = `Invalid ${hookType} decision value: ${parsed.decision}`;
+        result.recommendation = 'Use decision="block" or omit decision';
+        return result;
+      }
+
+      if (parsed.decision === 'block' && (!parsed.reason || typeof parsed.reason !== 'string')) {
+        result.verdict = 'INVALID';
+        result.details = `${hookType} decision "block" requires a non-empty reason`;
+        result.recommendation = 'Add a reason string whenever decision="block"';
+        return result;
+      }
+
+      if (parsed.hookSpecificOutput) {
+        if (parsed.hookSpecificOutput.hookEventName !== hookType) {
+          result.verdict = 'INVALID';
+          result.details = `hookSpecificOutput.hookEventName must be ${hookType}`;
+          result.recommendation = `Set hookSpecificOutput.hookEventName to "${hookType}"`;
+          return result;
+        }
+
+        const feedbackKeys = Object.keys(parsed.hookSpecificOutput);
+        const invalidFeedbackKeys = feedbackKeys.filter((key) => !['hookEventName', 'additionalContext'].includes(key));
+        if (invalidFeedbackKeys.length > 0) {
+          result.verdict = 'INVALID';
+          result.details = `Unsupported hookSpecificOutput keys: ${invalidFeedbackKeys.join(', ')}`;
+          result.recommendation = `Only hookEventName and additionalContext are supported for ${hookType} feedback output`;
+          return result;
+        }
+      }
+
+      if (parsed.systemMessage || parsed.decision === 'block' || parsed.hookSpecificOutput?.additionalContext) {
+        const feedbackPaths = [];
+        if (parsed.systemMessage) feedbackPaths.push('systemMessage');
+        if (parsed.decision === 'block') feedbackPaths.push('decision');
+        if (parsed.hookSpecificOutput?.additionalContext) feedbackPaths.push('hookSpecificOutput.additionalContext');
+        result.verdict = 'WILL_INJECT';
+        result.details = `Feedback via: ${feedbackPaths.join(', ')}`;
+        return result;
+      }
+
+      result.verdict = 'NOOP';
+      result.details = 'Valid JSON but no feedback fields present';
       return result;
     }
 
@@ -1713,6 +1790,63 @@ class HookHealthChecker {
         return result;
       }
 
+      if (role === 'feedback') {
+        const hasSystemMessage = STATIC_CONTEXT_PATTERNS.systemMessage.test(content);
+        const hasAdditionalContext = STATIC_CONTEXT_PATTERNS.additionalContext.test(content);
+        const hasDecision = /["']decision["']\s*:\s*["']block["']/.test(content);
+        const hasHookSpecificOutput = STATIC_CONTEXT_PATTERNS.hookSpecificOutput.test(content);
+        const hasEmptyJson = STATIC_CONTEXT_PATTERNS.emptyJson.test(content);
+
+        if (hasHookSpecificOutput && !/hookEventName/.test(content)) {
+          result.verdict = 'INVALID';
+          result.details = 'Static: hookSpecificOutput is missing hookEventName';
+          result.recommendation = `Set hookSpecificOutput.hookEventName to "${hookType}"`;
+          return result;
+        }
+
+        if (hasHookSpecificOutput && !new RegExp(`hookEventName["']?\\s*[:=]\\s*["']${hookType}["']`).test(content) && !content.includes(`hookEventName: "${hookType}"`) && !content.includes(`hookEventName":"${hookType}"`)) {
+          result.verdict = 'INVALID';
+          result.details = `Static: hookSpecificOutput does not clearly target ${hookType}`;
+          result.recommendation = `Set hookSpecificOutput.hookEventName to "${hookType}"`;
+          return result;
+        }
+
+        if (/hookSpecificOutput[\s\S]{0,400}systemMessage/.test(content)) {
+          result.verdict = 'INVALID';
+          result.details = 'Static: systemMessage is nested inside hookSpecificOutput';
+          result.recommendation = 'Use hookSpecificOutput.additionalContext or top-level systemMessage';
+          return result;
+        }
+
+        if (
+          /["']continue["']\s*:\s*(?:true|false)[\s\S]{0,240}["']message["']\s*:/.test(content)
+        ) {
+          result.verdict = 'INVALID';
+          result.details = 'Static: uses ad hoc continue/message output';
+          result.recommendation = `Use documented ${hookType} decision/additionalContext fields`;
+          return result;
+        }
+
+        if (hasSystemMessage || hasAdditionalContext || hasDecision) {
+          const paths = [];
+          if (hasSystemMessage) paths.push('systemMessage');
+          if (hasAdditionalContext) paths.push('hookSpecificOutput.additionalContext');
+          if (hasDecision) paths.push('decision');
+          result.verdict = 'WILL_INJECT';
+          result.details = `Static: found feedback keys: ${paths.join(', ')}`;
+          return result;
+        }
+
+        if (hasEmptyJson) {
+          result.verdict = 'NOOP';
+          result.details = 'Static: only outputs empty JSON {}';
+        } else {
+          result.verdict = 'UNKNOWN';
+          result.details = 'Static: could not determine feedback behavior';
+        }
+        return result;
+      }
+
       if (role === 'context-injecting') {
         const hasSystemMessage = STATIC_CONTEXT_PATTERNS.systemMessage.test(content);
         const hasAdditionalContext = STATIC_CONTEXT_PATTERNS.additionalContext.test(content);
@@ -1761,6 +1895,7 @@ class HookHealthChecker {
       total: 0,
       contextInjecting: 0,
       decisionMaking: 0,
+      feedback: 0,
       sideEffect: 0,
       confirmed: 0,
       noop: 0,
@@ -1787,6 +1922,7 @@ class HookHealthChecker {
 
             if (role === 'context-injecting') counters.contextInjecting++;
             else if (role === 'decision-making') counters.decisionMaking++;
+            else if (role === 'feedback') counters.feedback++;
             else if (role === 'side-effect') counters.sideEffect++;
 
             let analysis;

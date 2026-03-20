@@ -42,6 +42,17 @@ log_always() {
     echo -e "[post-field-deployment] $1" >&2
 }
 
+emit_post_tool_use_context() {
+    local context="$1"
+    jq -nc --arg context "$context" '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+            hookEventName: "PostToolUse",
+            additionalContext: $context
+        }
+    }'
+}
+
 # Parse deployment info from environment or stdin
 # Expected format: JSON with deployedFields array
 parse_deployment_info() {
@@ -173,15 +184,8 @@ main() {
 
         # Output success for Claude to see
         if [[ "${USE_HOOKSPECIFIC_OUTPUT:-0}" == "1" ]]; then
-            cat <<EOF
-{
-  "hookSpecificOutput": {
-    "systemMessage": "Post-deployment field validation: All fields are accessible and queryable.",
-    "status": "success",
-    "fieldsValidated": "$(echo "$fields" | tr '\n' ',' | sed 's/,$//')"
-  }
-}
-EOF
+            fields_list="$(echo "$fields" | tr '\n' ',' | sed 's/,$//')"
+            emit_post_tool_use_context "Post-deployment field validation: All fields are accessible and queryable. Fields validated: ${fields_list}."
         fi
 
         exit 0
@@ -192,15 +196,7 @@ EOF
 
         # Output warning for Claude to see
         if [[ "${USE_HOOKSPECIFIC_OUTPUT:-0}" == "1" ]]; then
-            cat <<EOF
-{
-  "hookSpecificOutput": {
-    "systemMessage": "WARNING: Some deployed fields are not yet accessible. Wait before querying or check field-level security.",
-    "status": "warning",
-    "recommendation": "Use metadata-propagation-waiter.js to wait for fields before querying"
-  }
-}
-EOF
+            emit_post_tool_use_context "WARNING: Some deployed fields are not yet accessible. Wait before querying or check field-level security. Use metadata-propagation-waiter.js before querying newly deployed fields."
         fi
 
         # Exit with warning, not error (to not block workflow)

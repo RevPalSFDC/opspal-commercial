@@ -38,6 +38,17 @@ fi
 WARNINGS=()
 ERRORS=()
 
+emit_post_tool_use_context() {
+    local context="$1"
+    jq -nc --arg context "$context" '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+            hookEventName: "PostToolUse",
+            additionalContext: $context
+        }
+    }'
+}
+
 # Check for empty results when data was expected
 if echo "$TOOL_OUTPUT" | grep -q '"totalSize":0' || echo "$TOOL_OUTPUT" | grep -q '"records":\[\]'; then
     WARNINGS+=("Query returned 0 records - verify this is expected")
@@ -80,17 +91,22 @@ fi
 
 # Build response
 if [ ${#ERRORS[@]} -gt 0 ]; then
-    # Has errors - block execution
     ERROR_MSG=$(IFS='; '; echo "${ERRORS[*]}")
-    echo "{\"continue\": false, \"message\": \"Data quality validation failed: $ERROR_MSG\"}"
+    jq -nc --arg reason "Data quality validation failed: $ERROR_MSG" --arg context "Data quality validation failed: $ERROR_MSG" '{
+        decision: "block",
+        reason: $reason,
+        suppressOutput: true,
+        hookSpecificOutput: {
+            hookEventName: "PostToolUse",
+            additionalContext: $context
+        }
+    }'
     exit 0
 elif [ ${#WARNINGS[@]} -gt 0 ]; then
-    # Has warnings - continue but add message
     WARN_MSG=$(IFS='; '; echo "${WARNINGS[*]}")
-    echo "{\"continue\": true, \"message\": \"Data quality warnings: $WARN_MSG\"}"
+    emit_post_tool_use_context "Data quality warnings: $WARN_MSG"
     exit 0
 else
-    # All good
-    echo '{"continue": true}'
+    echo '{}'
     exit 0
 fi

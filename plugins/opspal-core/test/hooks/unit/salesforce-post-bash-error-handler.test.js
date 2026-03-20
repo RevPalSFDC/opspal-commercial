@@ -61,18 +61,20 @@ async function runAllTests() {
     assert.strictEqual(result.status, 0, 'Hook should have valid bash syntax');
   }));
 
-  results.push(await runTest('Passes through successful commands without emitting guidance', async () => {
+  results.push(await runTest('Passes through interrupted failures without emitting guidance', async () => {
     if (!hasJq()) {
       return;
     }
     const result = runHook({
+      hook_event_name: 'PostToolUseFailure',
       tool_name: 'Bash',
-      tool_response: { exitCode: 0, stdout: '', stderr: '' },
+      error: 'Command interrupted by user',
+      is_interrupt: true,
       tool_input: { command: 'sf data query --query "SELECT Id FROM Account"' }
     });
 
     assert.strictEqual(result.status, 0, 'Should exit with 0');
-    assert.strictEqual(result.stdout.trim(), '', 'Should not emit guidance for successful commands');
+    assert.strictEqual(result.stdout.trim(), '', 'Should not emit guidance for interrupted failures');
   }));
 
   results.push(await runTest('Emits SOQL recovery guidance on INVALID_FIELD errors', async () => {
@@ -81,12 +83,9 @@ async function runAllTests() {
     }
 
     const result = runHook({
+      hook_event_name: 'PostToolUseFailure',
       tool_name: 'Bash',
-      tool_response: {
-        exitCode: 1,
-        stdout: '',
-        stderr: "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'"
-      },
+      error: "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'",
       tool_input: {
         command: 'sf data query --query "SELECT ApiName FROM FlowVersionView" --target-org test --json'
       }
@@ -95,7 +94,12 @@ async function runAllTests() {
     assert.strictEqual(result.status, 0, 'Should exit with 0');
     const output = JSON.parse(result.stdout.trim());
     assert(
-      output.systemMessage.includes('[SOQL Error Recovery]'),
+      output.suppressOutput === true,
+      'Should suppress verbose stdout noise'
+    );
+    assert.strictEqual(output.hookSpecificOutput.hookEventName, 'PostToolUseFailure', 'Should target PostToolUseFailure');
+    assert(
+      output.hookSpecificOutput.additionalContext.includes('[SOQL Error Recovery]'),
       'Should emit SOQL recovery guidance'
     );
   }));
@@ -110,12 +114,9 @@ async function runAllTests() {
 
     try {
       const result = runHook({
+        hook_event_name: 'PostToolUseFailure',
         tool_name: 'Bash',
-        tool_response: {
-          exitCode: 1,
-          stdout: '',
-          stderr: "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'"
-        },
+        error: "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'",
         tool_input: {
           command: 'sf data query --query "SELECT ApiName FROM FlowVersionView" --target-org test --json'
         }
@@ -132,7 +133,7 @@ async function runAllTests() {
       const entry = JSON.parse(entries[entries.length - 1]);
       assert.strictEqual(entry.hook, 'post-bash-error-handler', 'Should include hook name');
       assert.strictEqual(entry.errorClass, 'INVALID_FIELD', 'Should classify INVALID_FIELD errors');
-      assert.strictEqual(entry.exitCode, '1', 'Should capture exit code from hook payload');
+      assert.strictEqual(entry.exitCode, 'unknown', 'Should tolerate PostToolUseFailure payloads without exit codes');
       assert.strictEqual(entry.guidanceProvided, true, 'Should indicate recovery guidance was emitted');
     } finally {
       fs.rmSync(tempLogRoot, { recursive: true, force: true });

@@ -1,16 +1,28 @@
 #!/usr/bin/env bash
 # Post-call usage tracker for all OpsPal MCP tools.
 # Tracks daily usage locally and warns when approaching limits.
-# Outputs feedback to Claude via stdout (JSON format).
+# Outputs structured PostToolUse feedback to Claude via stdout.
 
 set -euo pipefail
 
-INPUT=$(cat /dev/stdin)
+INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 
 if [[ -z "$TOOL" ]]; then
   exit 0
 fi
+
+emit_post_tool_use_context() {
+  local context="$1"
+
+  jq -nc --arg context "$context" '{
+    suppressOutput: true,
+    hookSpecificOutput: {
+      hookEventName: "PostToolUse",
+      additionalContext: $context
+    }
+  }'
+}
 
 # Usage tracking file (per day)
 USAGE_DIR="${HOME}/.claude/api-limits"
@@ -52,9 +64,9 @@ USAGE_PCT=$(( (NEW_CALLS * 100) / DAILY_LIMIT ))
 
 # Warn at thresholds
 if [[ $USAGE_PCT -ge 95 ]]; then
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"decision\":\"allow\",\"reason\":\"OpsPal CRITICAL: ${USAGE_PCT}% of daily budget used (${NEW_CALLS}/${DAILY_LIMIT}). Remaining calls are limited.\"}}"
+  emit_post_tool_use_context "OpsPal CRITICAL: ${USAGE_PCT}% of daily budget used (${NEW_CALLS}/${DAILY_LIMIT}). Remaining calls are limited."
 elif [[ $USAGE_PCT -ge 80 ]]; then
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"decision\":\"allow\",\"reason\":\"OpsPal WARNING: ${USAGE_PCT}% of daily budget used (${NEW_CALLS}/${DAILY_LIMIT}). Consider batching remaining calls.\"}}"
+  emit_post_tool_use_context "OpsPal WARNING: ${USAGE_PCT}% of daily budget used (${NEW_CALLS}/${DAILY_LIMIT}). Consider batching remaining calls."
 fi
 
 exit 0

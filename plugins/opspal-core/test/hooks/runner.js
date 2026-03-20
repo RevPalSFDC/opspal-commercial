@@ -31,6 +31,45 @@ const DEFAULT_ENV = {
   HOOK_TEST_MODE: '1'
 };
 
+function allowsPlainTextStdout(input = {}) {
+  return input.hook_event_name === 'UserPromptSubmit' || input.hook_event_name === 'SessionStart';
+}
+
+function parseHookStdout(stdout, exitCode, input = {}) {
+  const parsedResult = {
+    output: null,
+    hookSpecificOutput: null,
+    parseError: null
+  };
+
+  if (exitCode !== 0) {
+    return parsedResult;
+  }
+
+  const trimmed = stdout.trim();
+  if (!trimmed) {
+    return parsedResult;
+  }
+
+  if (!trimmed.startsWith('{')) {
+    parsedResult.output = trimmed;
+    if (!allowsPlainTextStdout(input)) {
+      parsedResult.parseError = 'Hook stdout must be valid JSON or empty for this event';
+    }
+    return parsedResult;
+  }
+
+  try {
+    parsedResult.output = JSON.parse(trimmed);
+    parsedResult.hookSpecificOutput = parsedResult.output.hookSpecificOutput || null;
+  } catch (e) {
+    parsedResult.output = trimmed;
+    parsedResult.parseError = e.message;
+  }
+
+  return parsedResult;
+}
+
 // =============================================================================
 // HookTester - Unit Test Individual Hooks
 // =============================================================================
@@ -107,30 +146,15 @@ class HookTester {
 
       proc.on('close', (code) => {
         const duration = Date.now() - startTime;
-
-        // Try to parse output as JSON
-        let output = null;
-        let hookSpecificOutput = null;
-        let parseError = null;
-
-        try {
-          const trimmed = stdout.trim();
-          if (trimmed) {
-            output = JSON.parse(trimmed);
-            hookSpecificOutput = output.hookSpecificOutput;
-          }
-        } catch (e) {
-          parseError = e.message;
-          output = stdout.trim();
-        }
+        const parsed = parseHookStdout(stdout, code, input);
 
         resolve({
           exitCode: code,
           stdout,
           stderr,
-          output,
-          hookSpecificOutput,
-          parseError,
+          output: parsed.output,
+          hookSpecificOutput: parsed.hookSpecificOutput,
+          parseError: parsed.parseError,
           duration,
           input,
           hookPath: this.hookPath

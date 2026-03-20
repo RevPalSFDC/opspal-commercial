@@ -8,8 +8,9 @@ const repoRoot = path.join(__dirname, '..');
 const pluginsRoot = path.join(repoRoot, 'plugins');
 
 const violations = [];
+const violationKeys = new Set();
 
-const checks = [
+const lineChecks = [
   {
     id: 'legacy-task-guidance',
     description: 'contains stale Task-tool guidance',
@@ -101,7 +102,7 @@ function extractCommandPaths(command) {
   if (nodeMatch) {
     paths.add(nodeMatch[1]);
     return Array.from(paths);
-    }
+  }
 
   if (command.endsWith('.sh') || command.endsWith('.js')) {
     paths.add(command.split(/\s+/)[0]);
@@ -116,16 +117,16 @@ function extractCommandPaths(command) {
   return Array.from(paths);
 }
 
-function collectActiveHookFiles(pluginRoot) {
+function collectActiveHookEntries(pluginRoot) {
   const hooksPath = path.join(pluginRoot, '.claude-plugin', 'hooks.json');
   if (!fs.existsSync(hooksPath)) {
     return [];
   }
 
   const hooksJson = JSON.parse(fs.readFileSync(hooksPath, 'utf8'));
-  const resolved = new Set();
+  const entries = [];
 
-  for (const hookEntries of Object.values(hooksJson.hooks || {})) {
+  for (const [eventType, hookEntries] of Object.entries(hooksJson.hooks || {})) {
     if (!Array.isArray(hookEntries)) {
       continue;
     }
@@ -139,49 +140,192 @@ function collectActiveHookFiles(pluginRoot) {
 
         const commandPaths = extractCommandPaths(hook.command);
         commandPaths.forEach((commandPath) => {
-          const absolutePath = commandPath.replace('${CLAUDE_PLUGIN_ROOT}', pluginRoot);
-          resolved.add(absolutePath);
+          entries.push({
+            eventType,
+            matcher: entry.matcher || '*',
+            command: hook.command,
+            pluginRoot,
+            filePath: commandPath.replace('${CLAUDE_PLUGIN_ROOT}', pluginRoot)
+          });
         });
       }
     }
   }
 
-  return Array.from(resolved);
+  return entries;
 }
 
-function scanFile(filePath) {
-  if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-    violations.push({
-      filePath,
-      line: 0,
-      id: 'missing-hook-file',
-      description: 'active hook command references a missing file',
-      snippet: ''
-    });
+function addViolation(entry, id, description, line, snippet) {
+  const filePath = entry.filePath;
+  const key = [filePath, entry.eventType, id, line || 0, snippet || ''].join(':');
+  if (violationKeys.has(key)) {
     return;
   }
-
-  const content = fs.readFileSync(filePath, 'utf8');
-  const lines = content.split('\n');
-
-  lines.forEach((line, index) => {
-    checks.forEach((check) => {
-      if (check.regexes.some((regex) => regex.test(line))) {
-        violations.push({
-          filePath,
-          line: index + 1,
-          id: check.id,
-          description: check.description,
-          snippet: line.trim()
-        });
-      }
-    });
+  violationKeys.add(key);
+  violations.push({
+    filePath,
+    eventType: entry.eventType,
+    line: line || 0,
+    id,
+    description,
+    snippet: snippet || ''
   });
 }
 
+function lineNumberForIndex(content, index) {
+  if (index < 0) {
+    return 0;
+  }
+  return content.slice(0, index).split('\n').length;
+}
+
+function findFirstLine(content, regex) {
+  const match = content.match(regex);
+  if (!match || match.index === undefined) {
+    return 0;
+  }
+  return lineNumberForIndex(content, match.index);
+}
+
+function getLineSnippet(lines, lineNumber) {
+  if (!lineNumber || lineNumber < 1 || lineNumber > lines.length) {
+    return '';
+  }
+  return lines[lineNumber - 1].trim();
+}
+
+const nestedHookSpecificOutputFieldChecks = [
+  {
+    id: 'hook-specific-output-nested-system-message',
+    field: 'systemMessage',
+    description: 'nests systemMessage inside hookSpecificOutput instead of using additionalContext or top-level systemMessage'
+  },
+  {
+    id: 'hook-specific-output-nested-decision',
+    field: 'decision',
+    description: 'nests decision inside hookSpecificOutput instead of using top-level decision'
+  },
+  {
+    id: 'hook-specific-output-nested-reason',
+    field: 'reason',
+    description: 'nests reason inside hookSpecificOutput instead of using top-level reason'
+  },
+  {
+    id: 'hook-specific-output-nested-continue',
+    field: 'continue',
+    description: 'nests continue inside hookSpecificOutput instead of using supported top-level fields'
+  },
+  {
+    id: 'hook-specific-output-nested-message',
+    field: 'message',
+    description: 'nests ad hoc message inside hookSpecificOutput instead of using additionalContext or top-level systemMessage'
+  },
+  {
+    id: 'hook-specific-output-nested-status',
+    field: 'status',
+    description: 'nests ad hoc status inside hookSpecificOutput instead of using documented fields'
+  },
+  {
+    id: 'hook-specific-output-nested-recommendation',
+    field: 'recommendation',
+    description: 'nests ad hoc recommendation inside hookSpecificOutput instead of using additionalContext'
+  }
+];
+
+function findHookSpecificOutputFieldLine(content, fieldName) {
+  return findFirstLine(
+    content,
+    new RegExp(`hookSpecificOutput[\\s\\S]{0,400}["']${fieldName}["']\\s*:`)
+  );
+}
+
+function scanHookEntry(entry) {
+  if (!fs.existsSync(entry.filePath) || !fs.statSync(entry.filePath).isFile()) {
+    addViolation(
+      entry,
+      'missing-hook-file',
+      'active hook command references a missing file',
+      0,
+      ''
+    );
+    return;
+  }
+
+  const content = fs.readFileSync(entry.filePath, 'utf8');
+  const lines = content.split('\n');
+
+  lines.forEach((line, index) => {
+    lineChecks.forEach((check) => {
+      if (check.regexes.some((regex) => regex.test(line))) {
+        addViolation(entry, check.id, check.description, index + 1, line.trim());
+      }
+    });
+  });
+
+  if (/hookSpecificOutput/.test(content) && !/hookEventName/.test(content)) {
+    const line = findFirstLine(content, /hookSpecificOutput/);
+    addViolation(
+      entry,
+      'hook-specific-output-missing-event-name',
+      'emits hookSpecificOutput without hookEventName',
+      line,
+      getLineSnippet(lines, line)
+    );
+  }
+
+  nestedHookSpecificOutputFieldChecks.forEach((check) => {
+    const line = findHookSpecificOutputFieldLine(content, check.field);
+    if (!line) {
+      return;
+    }
+
+    addViolation(
+      entry,
+      check.id,
+      check.description,
+      line,
+      getLineSnippet(lines, line)
+    );
+  });
+
+  if (
+    entry.eventType === 'PostToolUse' &&
+    /(?:^|-)error-handler(?:-[a-z0-9-]+)?\.sh$/i.test(path.basename(entry.filePath))
+  ) {
+    addViolation(
+      entry,
+      'post-tool-use-failure-hook-misregistered',
+      'failure-recovery hook is registered on PostToolUse instead of PostToolUseFailure',
+      0,
+      entry.command
+    );
+  }
+
+  if (
+    entry.eventType === 'PostToolUse' &&
+    /["']continue["']\s*:\s*(?:true|false)[\s\S]{0,240}["']message["']\s*:/.test(content)
+  ) {
+    const line = findFirstLine(content, /["']continue["']\s*:\s*(?:true|false)[\s\S]{0,240}["']message["']\s*:/);
+    addViolation(
+      entry,
+      'post-tool-use-ad-hoc-message-envelope',
+      'uses ad hoc continue/message JSON instead of PostToolUse decision or additionalContext fields',
+      line,
+      getLineSnippet(lines, line)
+    );
+  }
+}
+
+const scannedEntries = new Set();
+
 for (const pluginRoot of listPluginRoots()) {
-  for (const hookFile of collectActiveHookFiles(pluginRoot)) {
-    scanFile(hookFile);
+  for (const entry of collectActiveHookEntries(pluginRoot)) {
+    const key = `${entry.eventType}:${entry.filePath}`;
+    if (scannedEntries.has(key)) {
+      continue;
+    }
+    scannedEntries.add(key);
+    scanHookEntry(entry);
   }
 }
 
@@ -190,12 +334,16 @@ if (violations.length > 0) {
   violations
     .sort((a, b) => {
       if (a.filePath === b.filePath) {
-        return a.line - b.line;
+        if (a.eventType === b.eventType) {
+          return a.line - b.line;
+        }
+        return a.eventType.localeCompare(b.eventType);
       }
       return a.filePath.localeCompare(b.filePath);
     })
     .forEach((violation) => {
-      console.error(`- ${path.relative(repoRoot, violation.filePath)}:${violation.line} ${violation.description} [${violation.id}]`);
+      const location = `${path.relative(repoRoot, violation.filePath)}:${violation.line}`;
+      console.error(`- ${location} ${violation.description} [${violation.id}] (${violation.eventType})`);
       if (violation.snippet) {
         console.error(`  ${violation.snippet}`);
       }
