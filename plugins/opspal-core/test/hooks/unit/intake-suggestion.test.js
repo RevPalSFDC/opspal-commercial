@@ -60,6 +60,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert(result.output && typeof result.output === 'object', 'Should return JSON output');
+    assert.strictEqual(result.output.hookSpecificOutput?.hookEventName, 'UserPromptSubmit', 'Should emit the UserPromptSubmit hook event name');
     assert(result.output.hookSpecificOutput?.additionalContext, 'Should provide additionalContext');
   }));
 
@@ -73,6 +74,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert(result.output && typeof result.output === 'object', 'Should return JSON output');
+    assert.strictEqual(result.output.hookSpecificOutput?.hookEventName, 'UserPromptSubmit', 'Should emit the UserPromptSubmit hook event name');
     assert(result.output.hookSpecificOutput?.additionalContext, 'Should provide additionalContext for userPrompt payload');
   }));
 

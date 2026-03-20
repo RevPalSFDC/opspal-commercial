@@ -182,6 +182,7 @@ jq -n \
     '{
         suppressOutput: true,
         hookSpecificOutput: {
+            hookEventName: "UserPromptSubmit",
             additionalContext: $context
         }
     }'
