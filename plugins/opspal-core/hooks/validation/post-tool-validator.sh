@@ -62,8 +62,8 @@ if [[ "$SKIP_ALL" = "1" ]] || [[ "$SKIP_VALIDATION" = "1" ]]; then
 fi
 
 # Extract tool name and result
-TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool // .toolName // .name // ""' 2>/dev/null || echo "")
-TOOL_RESULT=$(echo "$INPUT_DATA" | jq -r '.result // .output // ""' 2>/dev/null || echo "")
+TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // ""' 2>/dev/null || echo "")
+TOOL_RESULT=$(echo "$INPUT_DATA" | jq -c '.tool_response // ""' 2>/dev/null || echo "")
 
 if [[ -z "$TOOL_NAME" ]]; then
     echo '{}'

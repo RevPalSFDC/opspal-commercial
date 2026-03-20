@@ -51,7 +51,7 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when validation disabled', async () => {
     const result = await tester.run({
-      input: { tool: 'mcp__salesforce__query', result: { records: [] } },
+      input: { tool_name: 'mcp__salesforce__query', tool_response: { records: [] } },
       env: { SKIP_TOOL_VALIDATION: '1' }
     });
 
@@ -61,7 +61,7 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when tool name missing', async () => {
     const result = await tester.run({
-      input: { result: { records: [] } }
+      input: { tool_response: { records: [] } }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');

@@ -1,8 +1,13 @@
 #!/bin/bash
 #
-# Sub-Agent Utilization Booster Hook (v4.0.0 - Maximized Compliance)
+# Sub-Agent Utilization Booster Hook (Deprecated, do not reactivate)
 #
-# Purpose: Maximize sub-agent utilization through:
+# Purpose: Historical Task-era booster retained for forensic reference only.
+#          The live commercial runtime now uses Agent-based routing in
+#          opspal-core/hooks/unified-router.sh and related validators.
+#          Do not wire this hook back into any active hooks manifest.
+#
+# Historical behavior:
 #          - Combined outcome-based + coercive messaging
 #          - True blocking (exit code 1) for destructive operations
 #          - Routing state persistence for compliance tracking

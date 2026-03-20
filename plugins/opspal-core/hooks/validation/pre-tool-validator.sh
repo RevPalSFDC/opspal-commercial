@@ -57,7 +57,7 @@ if [[ "$SKIP_ALL" = "1" ]] || [[ "$SKIP_VALIDATION" = "1" ]]; then
 fi
 
 # Extract tool name
-TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool // .toolName // .name // ""' 2>/dev/null || echo "")
+TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // ""' 2>/dev/null || echo "")
 
 if [[ -z "$TOOL_NAME" ]]; then
     echo '{}'
@@ -103,7 +103,7 @@ detect_platform_from_tool() {
         Bash)
             # Check command content
             local cmd
-            cmd=$(echo "$input" | jq -r '.input.command // .command // ""' 2>/dev/null || echo "")
+            cmd=$(echo "$input" | jq -r '.tool_input.command // .command // ""' 2>/dev/null || echo "")
             if [[ "$cmd" =~ ^sf\  ]] || [[ "$cmd" =~ ^sfdx\  ]]; then
                 echo "salesforce"
             elif [[ "$cmd" =~ hubspot ]] || [[ "$cmd" =~ hs-cli ]]; then

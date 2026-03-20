@@ -51,7 +51,7 @@ async function runAllTests() {
 
   results.push(await runTest('Approves when tool is not Supabase', async () => {
     const result = await tester.run({
-      input: { tool: 'mcp__salesforce__query', input: { query: 'SELECT Id FROM Account' } }
+      input: { tool_name: 'mcp__salesforce__query', tool_input: { query: 'SELECT Id FROM Account' } }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');

@@ -43,8 +43,13 @@ async function runAllTests() {
       encoding: 'utf8',
       cwd: PROJECT_ROOT
     });
+    const combinedOutput = `${result.stdout || ''}${result.stderr || ''}`;
 
     assert.strictEqual(result.status, 10, 'Should exit with agent-required code');
+    assert(
+      combinedOutput.includes('Agent tool'),
+      'Should reference the Agent tool in blocking guidance'
+    );
   }));
 
   results.push(await runTest('Allows non-high-risk tasks', async () => {

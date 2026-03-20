@@ -35,7 +35,7 @@ check_pdf_context() {
 
     # Only run for relevant tools
     case "$tool_name" in
-        Bash|Write|Agent|Task)
+        Bash|Write|Agent)
             # Check if output mentions PDF
             if echo "$tool_output" | grep -qi "\.pdf\|pdf generated\|pdf created"; then
                 return 0

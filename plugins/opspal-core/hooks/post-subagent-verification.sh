@@ -2,7 +2,7 @@
 
 # Post Sub-Agent Verification Hook
 #
-# Runs after sub-agent (Task tool) completion to verify claims.
+# Runs after sub-agent (Agent tool) completion to verify claims.
 # Addresses tool-contract violations (42 reflections) by detecting:
 # - Hidden errors in sub-agent output
 # - Unverified record creation/update claims

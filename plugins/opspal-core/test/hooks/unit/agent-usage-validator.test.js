@@ -68,6 +68,10 @@ async function runAllTests() {
       result.stderr.includes('Suggested agent'),
       'Should emit a suggested agent reminder'
     );
+    assert(
+      result.stderr.includes('Agent tool'),
+      'Should reference the Agent tool in advisory guidance'
+    );
   }));
 
   const passed = results.filter(r => r.passed).length;

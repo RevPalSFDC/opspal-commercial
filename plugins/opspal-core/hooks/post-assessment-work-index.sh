@@ -16,7 +16,7 @@
 # Configuration:
 #   WORK_INDEX_AUTO_CAPTURE=1     - Enable/disable auto-capture (default: 1)
 #   WORK_INDEX_VERBOSE=1          - Show detailed output (default: 0)
-#   WORK_INDEX_CATCH_ALL=1        - Capture ALL Task() completions (default: 0)
+#   WORK_INDEX_CATCH_ALL=1        - Capture ALL Agent completions (default: 0)
 #   ORG_SLUG                      - **Required** for auto-capture to work
 #   CLAUDE_SESSION_ID             - Session ID for tracking (auto from Claude)
 #
@@ -222,7 +222,7 @@ elif [ -n "$AGENT_NAME" ] && [ -n "${AGENT_CLASSIFICATIONS[$AGENT_NAME]:-}" ]; t
     # Use hardcoded whitelist mapping
     IFS=':' read -r CLASSIFICATION SUB_TYPE <<< "${AGENT_CLASSIFICATIONS[$AGENT_NAME]}"
 elif [ "$CATCH_ALL" = "1" ] && [ -n "$AGENT_NAME" ]; then
-    # Catch-all mode: capture ANY Task() completion with generic classification
+    # Catch-all mode: capture ANY Agent completion with generic classification
     CLASSIFICATION="support"
     SUB_TYPE="general-request"
     echo "[work-index] Using catch-all classification for agent '$AGENT_NAME'" >&2

@@ -101,13 +101,13 @@ if [ -n "$CLAUDE_USER_MESSAGE" ]; then
 
         log_success "Salesforce task detected!"
         echo -e "${YELLOW}📌 Suggested agent: ${GREEN}${suggested_agent}${NC}" >&2
-        echo -e "${YELLOW}💡 Remember to use the Task tool to launch the appropriate sub-agent.${NC}" >&2
+        echo -e "${YELLOW}💡 Remember to use the Agent tool to launch the appropriate sub-agent.${NC}" >&2
 
         # Set environment variable for Claude to use
         export SUGGESTED_SFDC_AGENT="$suggested_agent"
 
         # Add a reminder to the context
-        echo -e "\n${YELLOW}REMINDER: Use the '${suggested_agent}' agent via the Task tool for this Salesforce operation.${NC}" >&2
+        echo -e "\n${YELLOW}REMINDER: Use the '${suggested_agent}' agent via the Agent tool for this Salesforce operation.${NC}" >&2
     fi
 fi
 

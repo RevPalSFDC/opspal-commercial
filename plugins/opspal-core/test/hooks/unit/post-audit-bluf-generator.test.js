@@ -73,8 +73,8 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
   }));
 
-  // Test 3: Non-Task tool exits cleanly
-  results.push(await runTest('Skips when not Task tool', async () => {
+  // Test 3: Non-Agent tool exits cleanly
+  results.push(await runTest('Skips when not Agent tool', async () => {
     const result = await tester.run({
       input: {},
       env: {

@@ -14,7 +14,7 @@ LIB_DIR="$SCRIPT_DIR/../scripts/lib"
 INPUT=$(cat)
 
 # Check if this is a Supabase tool call
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool // empty' 2>/dev/null)
+TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
 
 if [[ "$TOOL_NAME" != mcp__supabase__* ]]; then
   echo '{"status": "approve", "message": "Not a Supabase operation"}'

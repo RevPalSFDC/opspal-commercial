@@ -2,12 +2,12 @@
 #
 # Pre-Task Field Dictionary Injector Hook
 #
-# Purpose: Automatically inject field dictionary context into Task tool
+# Purpose: Automatically inject field dictionary context into the Agent tool
 #          invocations for reporting agents so they understand field
 #          semantics, use cases, and reporting guidance.
 #
 # Behavior:
-#   1. Detects agent type from Task tool input
+#   1. Detects agent type from Agent tool input
 #   2. Checks if agent is a reporting agent that needs field context
 #   3. Extracts org slug from prompt or environment
 #   4. Loads field dictionary and generates focused context

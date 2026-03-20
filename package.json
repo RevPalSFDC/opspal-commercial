@@ -5,7 +5,8 @@
   "type": "commonjs",
   "scripts": {
     "docs:generate": "node scripts/generate-plugin-suite-docs.js",
-    "docs:ci": "node scripts/generate-plugin-suite-docs.js --check",
+    "docs:ci": "node scripts/generate-plugin-suite-docs.js --check && node scripts/validate-active-hook-contracts.js",
+    "verify:active-hook-contracts": "node scripts/validate-active-hook-contracts.js",
     "verify:version-bumps": "node scripts/lib/verify-plugin-version-bumps.js",
     "verify:encrypted-assets": "node scripts/lib/verify-encrypted-assets.js",
     "verify:repo-boundaries": "node scripts/lib/verify-commercial-repo-boundaries.js",

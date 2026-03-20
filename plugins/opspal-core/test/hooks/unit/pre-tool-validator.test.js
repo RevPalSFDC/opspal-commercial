@@ -51,7 +51,7 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when validation disabled', async () => {
     const result = await tester.run({
-      input: { tool: 'Bash', input: { command: 'ls' } },
+      input: { tool_name: 'Bash', tool_input: { command: 'ls' } },
       env: { SKIP_TOOL_VALIDATION: '1' }
     });
 
@@ -61,7 +61,7 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when tool name missing', async () => {
     const result = await tester.run({
-      input: { input: { command: 'ls' } }
+      input: { tool_input: { command: 'ls' } }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');

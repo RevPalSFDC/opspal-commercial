@@ -2,7 +2,7 @@
 #
 # Pre-Task Context Loader Hook
 #
-# Purpose: Automatically load org context and environment data before Task tool
+# Purpose: Automatically load org context and environment data before the Agent tool
 #          invocations, ensuring all agents have consistent context information.
 #
 # Behavior:

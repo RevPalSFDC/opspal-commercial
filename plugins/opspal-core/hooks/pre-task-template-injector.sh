@@ -2,11 +2,11 @@
 #
 # Pre-Task Template Injector Hook
 #
-# Purpose: Automatically inject template and branding guidance into Task tool
+# Purpose: Automatically inject template and branding guidance into the Agent tool
 #          invocations so sub-agents know which templates and CSS to use.
 #
 # Behavior:
-#   1. Detects agent type from Task tool input
+#   1. Detects agent type from Agent tool input
 #   2. Looks up agent in master-template-registry.json
 #   3. Injects template recommendations into the task context
 #   4. Always passes through (non-blocking)

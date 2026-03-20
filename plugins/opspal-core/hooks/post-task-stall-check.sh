@@ -2,9 +2,9 @@
 
 # =============================================================================
 # Post Task Stall Check Hook
-# ACE Framework - Monitors progress after Task tool invocations
+# ACE Framework - Monitors progress after Agent tool invocations
 #
-# Triggered: After Task tool completes (PostToolUse hook)
+# Triggered: After Agent tool completes (PostToolUse hook)
 # Purpose: Check for stalls during complex multi-agent operations
 #
 # Version: 1.0.0

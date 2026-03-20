@@ -10,10 +10,10 @@
 #
 # Behavior:
 #   1. Detect if agent is operational (has field selection responsibility)
-#   2. Extract org/object/task_type from Task input
+#   2. Extract org/object/task_type from Agent input
 #   3. Issue RUNBOOK_REQUEST via runbook-policy-retriever.js
 #   4. If not_found AND STRICT=1 → BLOCK operation
-#   5. Inject RUNBOOK_RESPONSE into Task input as runbook_policy
+#   5. Inject RUNBOOK_RESPONSE into Agent input as runbook_policy
 #   6. Log request for audit
 #
 # Configuration:

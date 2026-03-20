@@ -135,8 +135,8 @@ if [ ${#SUGGESTED_AGENTS[@]} -gt 0 ]; then
     done
 
     echo
-    echo -e "${YELLOW}To use an agent, invoke with:${NC} Task tool with subagent_type"
-    echo -e "${YELLOW}Example:${NC} Use Task tool with subagent_type='sfdc-planner'"
+    echo -e "${YELLOW}To use an agent, invoke with:${NC} Agent tool with subagent_type"
+    echo -e "${YELLOW}Example:${NC} Use Agent tool with subagent_type='sfdc-planner'"
     echo
 fi
 
@@ -181,7 +181,7 @@ for pattern in "${!MANDATORY_OPERATIONS[@]}"; do
         echo -e "${RED}╚════════════════════════════════════════════════════════════════╝${NC}"
         echo
         echo -e "${RED}${BOLD}HIGH-RISK OPERATION DETECTED:${NC}"
-        echo -e "  Task matches pattern: ${YELLOW}${pattern}${NC}"
+        echo -e "  Request matches pattern: ${YELLOW}${pattern}${NC}"
         echo
         echo -e "${RED}${BOLD}MANDATORY AGENT REQUIRED:${NC}"
         echo -e "  ${GREEN}→ ${REQUIRED_AGENT}${NC}"
@@ -194,7 +194,7 @@ for pattern in "${!MANDATORY_OPERATIONS[@]}"; do
         echo -e "  • Production incidents"
         echo
         echo -e "${CYAN}${BOLD}To proceed:${NC}"
-        echo -e "  1. Use the Task tool with subagent_type='${REQUIRED_AGENT}'"
+        echo -e "  1. Use the Agent tool with subagent_type='${REQUIRED_AGENT}'"
         echo -e "  2. Let the agent handle validation and execution"
         echo -e "  3. Review agent output before confirming"
         echo

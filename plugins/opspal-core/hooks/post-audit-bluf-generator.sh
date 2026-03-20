@@ -114,9 +114,9 @@ is_audit_agent() {
 }
 
 # Check if Agent tool was used
-is_task_tool() {
+is_agent_tool() {
     local tool_name="${TOOL_NAME:-}"
-    [[ "$tool_name" == "Agent" ]] || [[ "$tool_name" == "Task" ]]
+    [[ "$tool_name" == "Agent" ]]
 }
 
 # Check for NO_BLUF opt-out flag in context
@@ -282,7 +282,7 @@ main() {
     fi
 
     # Check if this is an Agent tool completion
-    if ! is_task_tool; then
+    if ! is_agent_tool; then
         log_debug "Not an Agent tool"
         exit 0
     fi
