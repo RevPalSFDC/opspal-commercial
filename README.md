@@ -34,8 +34,8 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.8 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.42.15 | active | 79 | 112 | 77 |
-| `opspal-data-hygiene` | 1.2.1 | deprecated | 2 | 1 | 1 |
+| `opspal-core` | 2.42.16 | active | 79 | 112 | 77 |
+| `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 1 | 1 |
 | `opspal-gtm-planning` | 2.3.3 | active | 13 | 16 | 4 |
 | `opspal-hubspot` | 3.9.4 | active | 59 | 33 | 13 |
 | `opspal-marketo` | 2.6.18 | active | 30 | 30 | 19 |

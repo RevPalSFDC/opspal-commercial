@@ -8,8 +8,7 @@
 
 set -euo pipefail
 
-# Read hook input
-HOOK_INPUT=""
+HOOK_INPUT="{}"
 if [ ! -t 0 ]; then
   HOOK_INPUT=$(cat)
 fi
@@ -27,38 +26,26 @@ fi
 PROMPT_LOWER=$(echo "$PROMPT" | tr '[:upper:]' '[:lower:]')
 
 # Match dedup/hygiene related keywords
-if echo "$PROMPT_LOWER" | grep -qE "(dedup|deduplicate|duplicate|merge.*(company|account|contact)|data.*(hygiene|clean|quality)|company.*(hygiene|clean))"; then
-  cat >&2 <<'EOF'
-
-┌──────────────────────────────────────────────────────────────────────────┐
-│  DEPRECATION NOTICE: opspal-data-hygiene                                │
-├──────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  The opspal-data-hygiene plugin is DEPRECATED.                          │
-│                                                                          │
-│  Data deduplication capabilities have been consolidated into:            │
-│                                                                          │
-│    opspal-core:                                                          │
-│      - survivorship-engine.js (canonical selection)                      │
-│      - sfdc-dedup-safety-copilot (Salesforce dedup)                     │
-│      - data-migration-orchestrator (cross-platform)                      │
-│                                                                          │
-│    opspal-hubspot:                                                       │
-│      - hubspot-data-hygiene-specialist                                   │
-│                                                                          │
-│    opspal-salesforce:                                                    │
-│      - sfdc-dedup-safety-copilot                                        │
-│      - sfdc-merge-orchestrator                                          │
-│                                                                          │
-│  Use these agents instead for improved results.                          │
-│                                                                          │
-│  To uninstall: /plugin uninstall opspal-data-hygiene                    │
-│                                                                          │
-└──────────────────────────────────────────────────────────────────────────┘
-
-EOF
+if ! echo "$PROMPT_LOWER" | grep -qE "(dedup|deduplicate|duplicate|merge.*(company|account|contact)|data.*(hygiene|clean|quality)|company.*(hygiene|clean))"; then
+  echo '{}'
+  exit 0
 fi
 
-# Always pass through — this is a warning, not a blocker
-echo "$HOOK_INPUT"
+NOTICE="DEPRECATION: opspal-data-hygiene is deprecated. Use opspal-core survivorship and migration tooling, opspal-hubspot:hubspot-data-hygiene-specialist, or opspal-salesforce:sfdc-dedup-safety-copilot / sfdc-merge-orchestrator. To uninstall, run /plugin uninstall opspal-data-hygiene."
+
+if ! command -v jq &>/dev/null; then
+  echo '{}'
+  exit 0
+fi
+
+jq -nc \
+  --arg context "$NOTICE" \
+  '{
+    suppressOutput: true,
+    hookSpecificOutput: {
+      hookEventName: "UserPromptSubmit",
+      additionalContext: $context
+    }
+  }'
+
 exit 0

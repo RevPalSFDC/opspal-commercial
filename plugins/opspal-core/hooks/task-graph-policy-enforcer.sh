@@ -115,6 +115,44 @@ log_decision() {
     fi
 }
 
+is_opspal_runtime_maintenance_command() {
+    if [[ "$TOOL_NAME" != "Bash" ]] || [[ -z "$TOOL_ARGS" ]]; then
+        return 1
+    fi
+
+    local args_lower
+    args_lower="$(printf '%s' "$TOOL_ARGS" | tr '[:upper:]' '[:lower:]')"
+
+    case "$args_lower" in
+        *plugin-update-manager.js*|\
+        *post-plugin-update-fixes.js*|\
+        *reconcile-hook-registration.js*|\
+        *routing-index-builder.js*|\
+        *hook-health-checker.js*|\
+        *routing-state-manager.js*|\
+        *validate-routing.sh*|\
+        *project-connect-schema-migrate.js*|\
+        *project-connect-sync-all.sh*|\
+        *scheduler-manager.js*)
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
+    if [[ "$args_lower" == *".claude"* ]] || \
+       [[ "$args_lower" == *"settings.json"* ]] || \
+       [[ "$args_lower" == *"plugins/cache"* ]] || \
+       [[ "$args_lower" == *"plugins/marketplaces"* ]] || \
+       [[ "$args_lower" == *"routing-state.json"* ]] || \
+       [[ "$args_lower" == *"circuit-breaker"* ]] || \
+       [[ "$args_lower" == *"routing-vector-cache.json"* ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
 # Check if tool is in allowed list for risk level
 check_allowed_tools() {
     local risk="$1"
@@ -225,6 +263,11 @@ main() {
             exit 0
             ;;
     esac
+
+    if is_opspal_runtime_maintenance_command; then
+        log_decision "allow" "opspal_runtime_maintenance"
+        exit 0
+    fi
 
     # Check forbidden patterns first (hard block)
     local forbidden_result

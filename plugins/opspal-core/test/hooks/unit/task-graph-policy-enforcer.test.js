@@ -81,6 +81,53 @@ async function runAllTests() {
     assert.strictEqual(result.status, 0, 'Should allow execution from live stdin payloads');
   }));
 
+  results.push(await runTest('Allows OpsPal runtime maintenance bash payloads', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const command = [
+      'CLAUDE_ROOTS=("/home/revpal/.claude" "/mnt/c/Users/revpal/.claude")',
+      'UPDATE_SCRIPT=$(find_script "plugin-update-manager.js")',
+      'HOOK_RECONCILE_SCRIPT=$(find_script "reconcile-hook-registration.js")',
+      'HOOK_HEALTH_SCRIPT=$(find_script "hook-health-checker.js")',
+      'STATE_SCRIPT=$(find_script "routing-state-manager.js")',
+      'ROUTING_VALIDATOR=$(find_ci_script "validate-routing.sh")',
+      'SETTINGS_FILE="$HOME/.claude/settings.json"',
+      'node "$UPDATE_SCRIPT" --fix',
+      'node "$HOOK_RECONCILE_SCRIPT" --project-root "$PWD"',
+      'node "$HOOK_HEALTH_SCRIPT" --quick --format json',
+      'node "$STATE_SCRIPT" clear-expired',
+      'bash "$ROUTING_VALIDATOR"',
+      'rm -rf "$HOME/.claude/plugins/cache/opspal-commercial/opspal-core/2.42.10"'
+    ].join(' && ');
+
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'Should allow OpsPal runtime maintenance commands');
+  }));
+
+  results.push(await runTest('Still blocks raw cache purge commands outside OpsPal maintenance flow', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'rm -rf "$HOME/.claude/plugins/cache"' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 3, 'Should continue blocking raw cache purge commands');
+    assert(result.stderr.includes('BLOCKED: Matches forbidden pattern: rm -rf'), 'Should report the blocked rm -rf pattern');
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 
