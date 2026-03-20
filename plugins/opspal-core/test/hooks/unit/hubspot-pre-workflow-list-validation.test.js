@@ -44,14 +44,13 @@ async function runAllTests() {
   }));
 
   results.push(await runTest('Approves non-workflow tool', async () => {
-    const payload = JSON.stringify({ tool: 'hubspot-contacts' });
+    const payload = JSON.stringify({ tool_name: 'hubspot-contacts', tool_input: {} });
     const result = spawnSync('bash', ['-c', `echo '${payload}' | bash \"${HOOK_PATH}\"`], {
       encoding: 'utf8'
     });
 
     assert.strictEqual(result.status, 0, 'Should exit with 0');
-    const output = JSON.parse(result.stdout.trim());
-    assert.strictEqual(output.status, 'approve', 'Should approve non-workflow tool');
+    assert.strictEqual(result.stdout.trim(), '', 'Should stay silent for non-workflow tool');
   }));
 
   const passed = results.filter(r => r.passed).length;

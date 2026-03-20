@@ -60,7 +60,7 @@ emit_block() {
     }' >&3
 }
 
-DEPLOY_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
+DEPLOY_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
 if [[ -z "$DEPLOY_COMMAND" ]] || ! printf '%s' "$DEPLOY_COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
     exit 0
 fi

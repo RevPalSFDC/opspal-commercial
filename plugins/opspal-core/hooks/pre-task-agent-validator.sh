@@ -379,7 +379,7 @@ main() {
 
     local tool_name
     tool_name=$(echo "$normalized_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || echo "")
-    if [[ "$tool_name" != "Agent" ]] && [[ "$tool_name" != "Task" ]]; then
+    if [[ "$tool_name" != "Agent" ]]; then
         log "Non-Agent tool event, skipping"
         echo '{}'
         exit 0

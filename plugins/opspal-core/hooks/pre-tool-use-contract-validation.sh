@@ -97,11 +97,11 @@ if [ -z "$INPUT_DATA" ]; then
     INPUT_DATA=$(jq -nc \
         --arg tool "$TOOL_NAME_FALLBACK" \
         --argjson input "$TOOL_INPUT_JSON" \
-        '{tool_name: $tool, tool: $tool, tool_input: $input, input: $input}')
+        '{tool_name: $tool, tool_input: $input}')
 fi
 
 # Extract tool name
-TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // .tool // .toolName // .name // empty' 2>/dev/null)
+TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // empty' 2>/dev/null)
 
 if [ -z "$TOOL_NAME" ]; then
     echo '{"continue": true, "note": "Could not determine tool name"}' >&2
@@ -300,7 +300,7 @@ tool_requires_pending_route_clearance() {
     local tool_name="$1"
 
     case "$tool_name" in
-        Agent|Task|Read|Glob|Grep|LS|WebSearch|WebFetch|TaskList|TaskGet|TodoWrite|Skill)
+        Agent|Read|Glob|Grep|LS|WebSearch|WebFetch|TaskList|TaskGet|TodoWrite|Skill)
             return 1
             ;;
         Bash|Write|Edit|MultiEdit)
@@ -348,7 +348,7 @@ enforce_pending_route_gate() {
             command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
             ;;
         Write|Edit|MultiEdit)
-            command_summary=$(echo "$INPUT_DATA" | jq -r '.input.file_path // .input.path // .tool_input.file_path // .tool_input.path // ""' 2>/dev/null || echo "")
+            command_summary=$(echo "$INPUT_DATA" | jq -r '.tool_input.file_path // .tool_input.path // ""' 2>/dev/null || echo "")
             ;;
         *)
             command_summary="$tool_name"
@@ -524,7 +524,7 @@ caller_matches_allowed_agents() {
 }
 
 extract_bash_command() {
-    echo "$INPUT_DATA" | jq -r '.input.command // .command // ""' 2>/dev/null
+    echo "$INPUT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null
 }
 
 extract_soql_query_from_command() {
@@ -567,7 +567,8 @@ map_tool_to_contract() {
     case "$tool" in
         "Bash")
             # Check if it's a Salesforce CLI command
-            local cmd=$(echo "$INPUT_DATA" | jq -r '.input.command // .command // ""' 2>/dev/null)
+            local cmd
+            cmd=$(extract_bash_command)
             if [[ "$cmd" =~ ^sf\ data\ query ]]; then
                 echo "sf-data-query"
             elif [[ "$cmd" =~ ^sf\ project\ deploy ]]; then
@@ -774,7 +775,7 @@ check_api_routing() {
     case "$tool" in
         "Bash")
             # Extract command from input
-            local cmd=$(echo "$input_json" | jq -r '.input.command // .command // ""' 2>/dev/null)
+            local cmd=$(echo "$input_json" | jq -r '.tool_input.command // ""' 2>/dev/null)
 
             # Only check Salesforce CLI commands
             if [[ "$cmd" =~ ^sf\ (data|project|apex|api) ]]; then
@@ -784,7 +785,7 @@ check_api_routing() {
 
         mcp__salesforce*|mcp_salesforce*)
             # Check MCP Salesforce tools
-            local params=$(echo "$input_json" | jq -c '.input // .parameters // {}' 2>/dev/null)
+            local params=$(echo "$input_json" | jq -c '.tool_input // {}' 2>/dev/null)
 
             # Build a pseudo-command for the router
             local pseudo_cmd="sf data query"
@@ -883,7 +884,7 @@ if [ -z "$CONTRACT_EXISTS" ]; then
 fi
 
 # Extract tool input for validation
-TOOL_INPUT=$(echo "$INPUT_DATA" | jq -c '.input // .parameters // {}' 2>/dev/null)
+TOOL_INPUT=$(echo "$INPUT_DATA" | jq -c '.tool_input // {}' 2>/dev/null)
 
 # Run validation via Node.js validator
 if [ -f "$VALIDATOR_SCRIPT" ]; then

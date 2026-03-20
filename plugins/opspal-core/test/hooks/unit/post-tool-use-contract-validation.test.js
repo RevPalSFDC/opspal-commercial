@@ -75,8 +75,9 @@ async function runAllTests() {
   results.push(await runTest('Warns on suspicious percentage outputs', async () => {
     const result = await tester.run({
       input: {
-        tool: 'sf-data-query',
-        result: {
+        tool_name: 'sf-data-query',
+        tool_input: {},
+        tool_response: {
           records: [],
           totalSize: 0,
           successRate: 99
@@ -100,8 +101,9 @@ async function runAllTests() {
   results.push(await runTest('Continues when preferred log root is not writable', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        result: { successRate: 42 },
+        tool_name: 'Bash',
+        tool_input: { command: 'echo hello' },
+        tool_response: { successRate: 42 },
         success: true
       },
       env: {
@@ -112,6 +114,30 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should continue with fallback log root');
+  }));
+
+  results.push(await runTest('Accepts live PostToolUse input schema', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Write',
+        tool_input: {
+          file_path: '/tmp/test.txt',
+          content: 'hello'
+        },
+        tool_response: {
+          filePath: '/tmp/test.txt',
+          success: true
+        },
+        success: true
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
   }));
 
   // Cleanup

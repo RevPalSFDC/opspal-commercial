@@ -98,13 +98,13 @@ TOOL_EXIT_CODE="${CLAUDE_TOOL_EXIT_CODE:-${HOOK_TOOL_EXIT_CODE:-${TOOL_EXIT_CODE
 
 if [ -n "$NORMALIZED_HOOK_INPUT" ]; then
   if [ -z "$TOOL_NAME" ]; then
-    TOOL_NAME=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_name // .tool // .toolName // .name // "unknown"' 2>/dev/null || echo "unknown")
+    TOOL_NAME=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_name // "unknown"' 2>/dev/null || echo "unknown")
   fi
   if [ -z "$TOOL_ARGS_RAW" ]; then
-    TOOL_ARGS_RAW=$(echo "$NORMALIZED_HOOK_INPUT" | jq -c '.tool_input // .input // .parameters // .args // {}' 2>/dev/null || echo "")
+    TOOL_ARGS_RAW=$(echo "$NORMALIZED_HOOK_INPUT" | jq -c '.tool_input // .args // {}' 2>/dev/null || echo "")
   fi
   if [ -z "$TOOL_RESULT" ]; then
-    TOOL_RESULT=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_result // .result // .output // .tool_output // ""' 2>/dev/null || echo "")
+    TOOL_RESULT=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_response // .tool_result // .tool_output // ""' 2>/dev/null || echo "")
   fi
   if [ -z "$TOOL_EXIT_CODE" ]; then
     TOOL_EXIT_CODE=$(echo "$NORMALIZED_HOOK_INPUT" | jq -r '.tool_exit_code // .exitCode // .exit_code // 0' 2>/dev/null || echo "0")
@@ -196,7 +196,7 @@ log_query_evidence() {
   # Log evidence asynchronously to not slow down response
   (
     node "$QUERY_EVIDENCE_TRACKER" log "$platform" "$query_type" "$target" \
-      --details "$details" 2>/dev/null || true
+      --details "$details" >/dev/null 2>&1 || true
   ) &
 }
 
@@ -792,7 +792,7 @@ case "$TOOL_NAME" in
     # Could add checks for empty files or permission errors
     ;;
 
-  Agent|Task)
+  Agent)
     log_validation "Agent" "agent_used" "Agent delegation detected" "info"
 
     # =========================================================================
@@ -826,7 +826,7 @@ case "$TOOL_NAME" in
               --success "$TASK_SUCCESS" \
               --task "$TASK_PROMPT" \
               ${ROUTING_VERBOSE:+--verbose} \
-              2>/dev/null || true
+              >/dev/null 2>&1 || true
           ) &
 
           [ "${ROUTING_VERBOSE:-0}" = "1" ] && \

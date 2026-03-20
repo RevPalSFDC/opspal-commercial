@@ -8,7 +8,7 @@
 APPROVED_AGENTS="sfdc-deployment-manager|release-coordinator|sfdc-orchestrator|sfdc-metadata-manager"
 CALLING_AGENT="${CLAUDE_AGENT_NAME:-${AGENT_NAME:-${SUBAGENT_TYPE:-}}}"
 HOOK_INPUT="$(cat 2>/dev/null || true)"
-COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")"
+COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")"
 
 # Only guard direct deploy commands. This hook now runs behind a plain Bash
 # matcher because Claude matchers filter on tool_name, not command arguments.

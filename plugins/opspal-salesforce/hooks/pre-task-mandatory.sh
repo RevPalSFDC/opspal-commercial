@@ -238,7 +238,7 @@ main() {
         echo ""
         agent="${REQUIRED_AGENTS[$RISK_CATEGORY]%% or*}"
         echo "BLOCKED: This operation requires a specialist agent."
-        echo "Use: Task(subagent_type='$agent', prompt=<your request>)"
+        echo "Use: Agent(subagent_type='$agent', prompt=<your request>)"
         echo "The agent provides validation, rollback planning, and compliance checks."
         exit 1
     else

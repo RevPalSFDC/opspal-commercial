@@ -180,9 +180,9 @@ if [ "$FINDINGS_COUNT" -gt "$THRESHOLD" ]; then
     if [ "$AUTO_TRIGGER" = "1" ]; then
         echo "" >&2
         echo "💡 Suggested Next Step:" >&2
-        echo "   Use Task tool with implementation-planner agent:" >&2
+        echo "   Use the Agent tool with implementation-planner:" >&2
         echo "" >&2
-        echo "   Task(subagent_type='implementation-planner', prompt='''" >&2
+        echo "   Agent(subagent_type='implementation-planner', prompt='''" >&2
         echo "   Create implementation plan based on RevOps assessment for $ORG_ALIAS." >&2
         echo "   Assessment file: $ASSESSMENT_OUTPUT" >&2
         echo "   Priority: $PRIORITY ($FINDINGS_COUNT findings)" >&2

@@ -50,19 +50,25 @@ async function runAllTests() {
     const result = await tester.run({
       input: {
         tool_name: 'Bash',
-        tool_output: 'ok'
+        tool_input: { command: 'echo ok' },
+        tool_response: { stdout: 'ok' }
       }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output.continue, true, 'Should continue');
+    assert.strictEqual(result.output, null, 'Should stay silent for non-query tools');
   }));
 
   results.push(await runTest('Warns on empty query results', async () => {
     const result = await tester.run({
       input: {
-        tool_name: 'sf data query',
-        tool_output: '{"totalSize":0,"records":[]}'
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf data query --query "SELECT Id FROM Account" --json'
+        },
+        tool_response: {
+          stdout: '{"totalSize":0,"records":[]}'
+        }
       }
     });
 

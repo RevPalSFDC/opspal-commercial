@@ -89,7 +89,7 @@ if [ ! -t 0 ]; then
 fi
 
 if [ "$PRETOOLUSE_MODE" = "1" ]; then
-    local_deploy_command=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
+    local_deploy_command=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
     if [[ -z "$local_deploy_command" ]] || ! printf '%s' "$local_deploy_command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
         exit 0
     fi

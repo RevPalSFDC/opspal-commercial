@@ -26,8 +26,8 @@ CROSS_PLATFORM_ROOT="${PLUGIN_ROOT}/../opspal-core"
 HOOK_INPUT=$(cat)
 
 # Extract the completed command and result payload
-COMMAND=$(echo "$HOOK_INPUT" | jq -r '.tool_input.command // .input.command // .command // ""' 2>/dev/null || echo "")
-TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_result.stdout // .result.stdout // .tool_output // ""' 2>/dev/null || echo "")
+COMMAND=$(echo "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
+TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_response.stdout // .tool_result.stdout // .tool_output // ""' 2>/dev/null || echo "")
 
 # Only validate sf data query results
 if [[ -z "$COMMAND" ]] || ! printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then

@@ -51,12 +51,29 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when tool validation disabled', async () => {
     const result = await tester.run({
-      input: { tool: 'Bash', input: { command: 'ls' }, result: '' },
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'ls' },
+        tool_response: { stdout: '' }
+      },
       env: { ENABLE_TOOL_VALIDATION: '0' }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.deepStrictEqual(result.output, {}, 'Should return empty JSON');
+  }));
+
+  results.push(await runTest('Accepts live Agent completion payloads', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Agent',
+        tool_input: { subagent_type: 'opspal-salesforce:sfdc-data-operations' },
+        tool_response: { success: true, summary: 'done' }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should not emit malformed output');
   }));
 
   const passed = results.filter(r => r.passed).length;

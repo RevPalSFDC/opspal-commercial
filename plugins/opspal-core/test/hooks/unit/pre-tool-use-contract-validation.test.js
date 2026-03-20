@@ -124,8 +124,8 @@ async function runAllTests() {
   results.push(await runTest('Allows basic tool input without blocking', async () => {
     const result = await tester.run({
       input: {
-        tool: 'Bash',
-        input: { command: 'echo "hello"' }
+        tool_name: 'Bash',
+        tool_input: { command: 'echo "hello"' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -155,9 +155,9 @@ async function runAllTests() {
 
     const result = await tester.run({
       input: {
-        tool: 'Bash',
+        tool_name: 'Bash',
         sessionKey: sessionId,
-        input: { command: 'echo "try direct execution"' }
+        tool_input: { command: 'echo "try direct execution"' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -196,9 +196,9 @@ async function runAllTests() {
 
     const result = await tester.run({
       input: {
-        tool: 'Read',
+        tool_name: 'Read',
         sessionKey: sessionId,
-        input: { file_path: 'README.md' }
+        tool_input: { file_path: 'README.md' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
@@ -229,9 +229,9 @@ async function runAllTests() {
 
     const result = await tester.run({
       input: {
-        tool: 'mcp__slack__conversations_replies',
+        tool_name: 'mcp__slack__conversations_replies',
         sessionKey: sessionId,
-        input: { channel_id: 'C123', thread_ts: '1773673563.161709' }
+        tool_input: { channel_id: 'C123', thread_ts: '1773673563.161709' }
       },
       env: {
         CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,

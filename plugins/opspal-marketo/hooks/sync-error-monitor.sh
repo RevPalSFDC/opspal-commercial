@@ -148,7 +148,7 @@ Recommended Action:
 Pause operations and investigate the root cause before continuing.
 
 Use the marketo-sfdc-sync-specialist agent for diagnosis:
-Task(subagent_type='marketo-sfdc-sync-specialist', prompt='Diagnose sync errors')
+Agent(subagent_type='marketo-sfdc-sync-specialist', prompt='Diagnose sync errors')
 
 EOF
         fi

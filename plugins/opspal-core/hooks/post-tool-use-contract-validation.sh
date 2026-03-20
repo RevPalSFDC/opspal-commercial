@@ -121,7 +121,7 @@ update_metrics() {
 }
 
 # Parse tool result from stdin
-# Claude passes: {"tool": "toolName", "result": {...}, "success": true/false}
+# Claude passes: {"tool_name": "toolName", "tool_input": {...}, "tool_response": {...}, "success": true/false}
 RESULT_DATA=$(read_stdin_json)
 
 if [ -z "$RESULT_DATA" ]; then
@@ -140,12 +140,12 @@ if [ -z "$RESULT_DATA" ]; then
     RESULT_DATA=$(jq -nc \
         --arg tool "$TOOL_NAME_FALLBACK" \
         --argjson result "$TOOL_RESULT_RAW" \
-        '{tool: $tool, result: $result, success: true}')
+        '{tool_name: $tool, tool_input: {}, tool_response: $result, success: true}')
 fi
 
 # Extract tool name and result
-TOOL_NAME=$(echo "$RESULT_DATA" | jq -r '.tool // .toolName // .name // empty' 2>/dev/null)
-TOOL_RESULT=$(echo "$RESULT_DATA" | jq -c '.result // .output // {}' 2>/dev/null)
+TOOL_NAME=$(echo "$RESULT_DATA" | jq -r '.tool_name // empty' 2>/dev/null)
+TOOL_RESULT=$(echo "$RESULT_DATA" | jq -c '.tool_response // .tool_result // {}' 2>/dev/null)
 TOOL_SUCCESS=$(echo "$RESULT_DATA" | jq -r '.success // true' 2>/dev/null)
 
 if [ -z "$TOOL_NAME" ]; then
@@ -162,7 +162,7 @@ map_tool_to_contract() {
     local tool="$1"
     case "$tool" in
         "Bash")
-            local cmd=$(echo "$RESULT_DATA" | jq -r '.input.command // .command // ""' 2>/dev/null)
+            local cmd=$(echo "$RESULT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null)
             if [[ "$cmd" =~ ^sf\ data\ query ]]; then
                 echo "sf-data-query"
             elif [[ "$cmd" =~ ^sf\ project\ deploy ]]; then

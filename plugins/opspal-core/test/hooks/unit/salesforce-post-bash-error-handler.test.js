@@ -66,8 +66,8 @@ async function runAllTests() {
       return;
     }
     const result = runHook({
-      tool: 'Bash',
-      result: { exitCode: 0, stdout: '', stderr: '' },
+      tool_name: 'Bash',
+      tool_response: { exitCode: 0, stdout: '', stderr: '' },
       tool_input: { command: 'sf data query --query "SELECT Id FROM Account"' }
     });
 
@@ -81,8 +81,8 @@ async function runAllTests() {
     }
 
     const result = runHook({
-      tool: 'Bash',
-      result: {
+      tool_name: 'Bash',
+      tool_response: {
         exitCode: 1,
         stdout: '',
         stderr: "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'"
@@ -110,8 +110,8 @@ async function runAllTests() {
 
     try {
       const result = runHook({
-        tool: 'Bash',
-        result: {
+        tool_name: 'Bash',
+        tool_response: {
           exitCode: 1,
           stdout: '',
           stderr: "INVALID_FIELD: No such column 'ApiName' on entity 'FlowVersionView'"

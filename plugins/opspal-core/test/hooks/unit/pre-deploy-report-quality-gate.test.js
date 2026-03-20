@@ -51,7 +51,12 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when report quality gate disabled', async () => {
     const result = await tester.run({
-      input: {},
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf project deploy start --target-org test-org'
+        }
+      },
       env: {
         SKIP_REPORT_QUALITY_GATE: '1'
       }
@@ -59,7 +64,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert(
-      result.stdout.includes('Report quality gate skipped'),
+      result.stderr.includes('Report quality gate skipped'),
       'Should note skipped validation'
     );
   }));
@@ -68,7 +73,12 @@ async function runAllTests() {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-report-gate-'));
     try {
       const result = await tester.run({
-        input: {},
+        input: {
+          tool_name: 'Bash',
+          tool_input: {
+            command: 'sf project deploy start --target-org test-org'
+          }
+        },
         env: {
           SF_DEPLOY_DIR: tempDir
         }
@@ -76,7 +86,7 @@ async function runAllTests() {
 
       assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
       assert(
-        result.stdout.includes('No reports or dashboards to validate'),
+        result.stderr.includes('No reports or dashboards to validate'),
         'Should report no files to validate'
       );
     } finally {

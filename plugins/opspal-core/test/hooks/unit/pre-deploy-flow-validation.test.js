@@ -48,14 +48,19 @@ async function runAllTests() {
 
   results.push(await runTest('Skips when flow validation disabled', async () => {
     const result = await tester.run({
-      input: {},
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf project deploy start --target-org test-org'
+        }
+      },
       env: {
         SKIP_FLOW_VALIDATION: '1'
       }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert(result.stdout.includes('Flow validation skipped'), 'Should note skipped validation');
+    assert(result.stderr.includes('Flow validation skipped'), 'Should note skipped validation');
   }));
 
   const passed = results.filter(r => r.passed).length;

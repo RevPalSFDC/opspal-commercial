@@ -293,6 +293,23 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Ignores legacy Task hook payloads on the live path', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: {
+        tool_name: 'Task',
+        tool_input: {
+          subagent_type: 'opspal-salesforce:sfdc-cpq-assessor',
+          prompt: 'test prompt'
+        }
+      },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.deepStrictEqual(result.output, {}, 'Legacy Task payload should be skipped');
+  }));
+
   // Test 11: Injects permission fallback contract for Bash-required subagents
   results.push(await runTest('Injects Bash permission fallback contract for data/query subagents', async () => {
     const env = createIsolatedEnv();

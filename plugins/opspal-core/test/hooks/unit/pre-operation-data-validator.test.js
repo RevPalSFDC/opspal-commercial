@@ -234,6 +234,26 @@ async function runAllTests() {
     assert.strictEqual(result.parseError, null, 'Hook should not emit malformed output');
   }));
 
+  results.push(await runTest('Ignores legacy Task payloads on the live path', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Task',
+        tool_input: {
+          subagent_type: 'opspal-salesforce:sfdc-data-operations'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        DATA_VALIDATION_ENABLED: '1'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Legacy Task payload should be ignored safely');
+    assert.strictEqual(result.parseError, null, 'Hook should remain well-formed');
+  }));
+
   // Cleanup
   fs.rmSync(tempHome, { recursive: true, force: true });
 

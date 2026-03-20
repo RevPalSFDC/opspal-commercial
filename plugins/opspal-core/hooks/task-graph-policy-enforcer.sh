@@ -61,16 +61,22 @@ fi
 
 # Read tool info from stdin (Claude passes JSON via stdin for PreToolUse hooks)
 INPUT_JSON=""
+TOOL_ARGS_FROM_STDIN=""
 if [ -z "${1:-}" ] && [ -z "${CLAUDE_TOOL_NAME:-}" ] && [ ! -t 0 ]; then
     INPUT_JSON=$(cat 2>/dev/null || true)
 fi
 
 # Extract tool name from stdin JSON, then fall back to env/args
 if [ -n "$INPUT_JSON" ] && command -v jq &>/dev/null; then
-    TOOL_NAME=$(echo "$INPUT_JSON" | jq -r '.tool_name // .tool // .toolName // .name // empty' 2>/dev/null || true)
+    TOOL_NAME=$(echo "$INPUT_JSON" | jq -r '.tool_name // empty' 2>/dev/null || true)
+    TOOL_ARGS_FROM_STDIN=$(echo "$INPUT_JSON" | jq -r '
+        if .tool_name == "Bash" then (.tool_input.command // "")
+        else (.tool_input // {} | @json)
+        end
+    ' 2>/dev/null || true)
 fi
 TOOL_NAME="${TOOL_NAME:-${1:-${CLAUDE_TOOL_NAME:-unknown}}}"
-TOOL_ARGS="${2:-${CLAUDE_TOOL_ARGS:-}}"
+TOOL_ARGS="${2:-${CLAUDE_TOOL_ARGS:-${TOOL_ARGS_FROM_STDIN:-}}}"
 TASK_CONTEXT="${CLAUDE_TASK_CONTEXT:-}"
 
 # Extract task information

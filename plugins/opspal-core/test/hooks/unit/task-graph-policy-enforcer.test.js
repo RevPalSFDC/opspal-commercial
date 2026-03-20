@@ -66,6 +66,21 @@ async function runAllTests() {
     assert.strictEqual(result.status, 0, 'Should allow execution using fallback log root');
   }));
 
+  results.push(await runTest('Reads live stdin tool payloads without CLI args', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'echo hello' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'Should allow execution from live stdin payloads');
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 

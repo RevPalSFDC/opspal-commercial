@@ -13,7 +13,7 @@
 #   - Very high complexity tasks (>= 85%)
 #
 # ACE Integration (v1.1.0):
-#   - Detects gemini-consult task completions
+#   - Detects gemini-consult agent completions
 #   - Extracts alignment scores from consultation results
 #   - Logs outcomes to ACE skill registry for future learning
 #
@@ -57,17 +57,17 @@ HOOK_INPUT=$(cat)
 
 # Extract tool information
 TOOL_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_name // ""')
-TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_output // ""')
-TOOL_ERROR=$(echo "$HOOK_INPUT" | jq -r '.error // ""')
+TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_response // .tool_result // .tool_output // ""')
+TOOL_ERROR=$(echo "$HOOK_INPUT" | jq -r '.tool_response.error // .tool_result.error // .error // ""')
 
 # Path to ACE integration
 ACE_INTEGRATION="$SCRIPT_DIR/../scripts/lib/ace-integration.js"
 
 # ============================================================================
-# ACE LOGGING: Log gemini-consult task completions to skill registry
+# ACE LOGGING: Log gemini-consult agent completions to skill registry
 # ============================================================================
-if [ "$ENABLE_ACE_LOGGING" = "1" ] && [ "$TOOL_NAME" = "Task" ]; then
-  # Check if this was a gemini-consult task
+if [ "$ENABLE_ACE_LOGGING" = "1" ] && [ "$TOOL_NAME" = "Agent" ]; then
+  # Check if this was a gemini-consult agent invocation
   SUBAGENT_TYPE=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // ""')
 
   if [ "$SUBAGENT_TYPE" = "gemini-consult" ]; then
@@ -108,7 +108,7 @@ if [ "$ENABLE_ACE_LOGGING" = "1" ] && [ "$TOOL_NAME" = "Task" ]; then
       [ -n "$TOOL_ERROR" ] && [ "$TOOL_ERROR" != "null" ] && ACE_ARGS="$ACE_ARGS --error-message \"${TOOL_ERROR:0:200}\""
 
       # Run ACE logging in background to not block hook
-      (node "$ACE_INTEGRATION" record $ACE_ARGS 2>/dev/null || true) &
+      (node "$ACE_INTEGRATION" record $ACE_ARGS >/dev/null 2>&1 || true) &
 
       [ "$VERBOSE" = "1" ] && echo "[ACE] Consultation logged to skill registry" >&2
     else
@@ -216,7 +216,7 @@ Reason: $REASONS
 Urgency: $(echo "$URGENCY" | tr '[:lower:]' '[:upper:]')
 
 To get a second opinion:
-  Task(subagent_type='gemini-consult', prompt='<describe what you need help with>')
+  Agent(subagent_type='gemini-consult', prompt='<describe what you need help with>')
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   # Output to stderr for user visibility

@@ -85,20 +85,20 @@ fi
 # Read input from stdin
 INPUT=$(cat)
 
-# Extract tool result and command (support both Claude hook payload variants)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .input.command // .command // empty' 2>/dev/null)
-EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_result.exit_code // .tool_result.exitCode // .result.exit_code // .result.exitCode // empty' 2>/dev/null)
+# Extract tool result and command from the live PostToolUse payload
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
+EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_response.exit_code // .tool_response.exitCode // .tool_result.exit_code // .tool_result.exitCode // empty' 2>/dev/null)
 RESULT=$(echo "$INPUT" | jq -r '
   (
-    (.tool_result.stderr // .result.stderr // "")
+    (.tool_response.stderr // .tool_result.stderr // "")
     + " "
-    + (.tool_result.stdout // .result.stdout // "")
+    + (.tool_response.stdout // .tool_result.stdout // "")
   ) | gsub("\\s+"; " ") | sub("^\\s+"; "") | sub("\\s+$"; "")
 ' 2>/dev/null)
 
 # Fallback to the serialized result payload when stderr/stdout are missing
 if [ -z "$RESULT" ]; then
-    RESULT=$(echo "$INPUT" | jq -c '.tool_result // .result // empty' 2>/dev/null)
+    RESULT=$(echo "$INPUT" | jq -c '.tool_response // .tool_result // empty' 2>/dev/null)
 fi
 
 # If no result or command, or success, pass through

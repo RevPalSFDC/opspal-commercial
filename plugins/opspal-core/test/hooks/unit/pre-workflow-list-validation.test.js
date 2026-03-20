@@ -48,11 +48,11 @@ async function runAllTests() {
 
   results.push(await runTest('Approves non-workflow tool', async () => {
     const result = await tester.run({
-      input: { tool: 'hubspot-crm', params: {} }
+      input: { tool_name: 'hubspot-crm', tool_input: {} }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert(result.stdout.includes('Not a workflow operation'), 'Should note non-workflow operation');
+    assert.strictEqual(result.output, null, 'Should stay silent for non-workflow operations');
   }));
 
   const passed = results.filter(r => r.passed).length;
