@@ -9,6 +9,9 @@
  */
 
 const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { HookTester } = require('../runner');
 
 const HOOK_PATH = 'plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh';
@@ -76,6 +79,74 @@ async function runAllTests() {
       !result.stderr.includes('readonly variable'),
       'Validator library should not reassign readonly color globals'
     );
+  }));
+
+  results.push(await runTest('Honors command-visible SKIP_COMPREHENSIVE_VALIDATION flag', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'SKIP_COMPREHENSIVE_VALIDATION=1 sf project deploy start --source-dir force-app/main/default/layouts'
+        }
+      },
+      env: {
+        PRETOOLUSE_MODE: '1'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+    assert(
+      result.stderr.includes('Comprehensive validation skipped') ||
+      result.stderr.includes('Validation disabled via environment variable'),
+      'Should honor inline skip flag'
+    );
+  }));
+
+  results.push(await runTest('Stages non-root source-dir deploys instead of scanning the full source tree', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-comprehensive-scope-'));
+    try {
+      const flowDir = path.join(tempDir, 'force-app/main/default/flows');
+      const layoutDir = path.join(tempDir, 'force-app/main/default/layouts');
+      fs.mkdirSync(flowDir, { recursive: true });
+      fs.mkdirSync(layoutDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(flowDir, 'Broken.flow-meta.xml'),
+        '<Flow><broken></Flow>',
+        'utf8'
+      );
+      fs.writeFileSync(
+        path.join(layoutDir, 'Account-Layout.layout-meta.xml'),
+        '<Layout xmlns="http://soap.sforce.com/2006/04/metadata"></Layout>',
+        'utf8'
+      );
+
+      const result = await tester.run({
+        input: {
+          tool_name: 'Bash',
+          cwd: tempDir,
+          tool_input: {
+            command: 'sf project deploy start --source-dir force-app/main/default/layouts'
+          }
+        },
+        env: {
+          PRETOOLUSE_MODE: '1'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+      assert(
+        result.stderr.includes('Deploy Scope:') && result.stderr.includes('force-app/main/default/layouts'),
+        'Should report only the selected deploy scope'
+      );
+      assert(
+        /Deployment Dir: .*opspal-deploy-scope-/.test(result.stderr),
+        'Leaf source-dir deploys should use a staged scope root instead of the raw layout directory'
+      );
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
   }));
 
   const passed = results.filter(r => r.passed).length;

@@ -60,32 +60,61 @@ if [[ -z "$DEPLOY_COMMAND" ]] || ! printf '%s' "$DEPLOY_COMMAND" | grep -qE '(^|
     exit 0
 fi
 
-# Check if quality gate should be skipped
-if [ "$SKIP_REPORT_QUALITY_GATE" = "1" ]; then
-    echo "⏭️  Report quality gate skipped (SKIP_REPORT_QUALITY_GATE=1)"
-    exit 0
-fi
-
 # Configuration
 MIN_HEALTH_SCORE="${REPORT_MIN_HEALTH_SCORE:-60}"
 MIN_ACTIONABILITY="${DASHBOARD_MIN_ACTIONABILITY:-50}"
 BLOCK_VANITY="${BLOCK_VANITY_METRICS:-0}"
 STRICT_MODE="${REPORT_QUALITY_STRICT:-0}"
 
-# Get deployment source directory from command
+# Fallback deploy scope if the shared resolver is unavailable
 DEPLOY_DIR="${SF_DEPLOY_DIR:-force-app/main/default}"
+DEPLOY_SCOPE_RESOLVER="${SCRIPT_DIR}/../scripts/lib/deploy-scope-resolver.js"
+HOOK_CWD=$(printf '%s' "$HOOK_INPUT" | jq -r '.cwd // empty' 2>/dev/null || echo "")
+[ -n "$HOOK_CWD" ] || HOOK_CWD="$(pwd)"
 
-# Find report and dashboard files in deployment
-REPORT_FILES=$(find "$DEPLOY_DIR" -name "*.report-meta.xml" 2>/dev/null || echo "")
-DASHBOARD_FILES=$(find "$DEPLOY_DIR" -name "*.dashboard-meta.xml" 2>/dev/null || echo "")
+SCOPE_ANALYSIS=""
+if [ -f "$DEPLOY_SCOPE_RESOLVER" ] && command -v node >/dev/null; then
+    SCOPE_ANALYSIS=$(node "$DEPLOY_SCOPE_RESOLVER" analyze --command "$DEPLOY_COMMAND" --cwd "$HOOK_CWD" 2>/dev/null || echo "")
+fi
+
+COMMAND_SKIP="false"
+SCOPE_SUMMARY=""
+if [ -n "$SCOPE_ANALYSIS" ] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/null 2>&1; then
+    COMMAND_SKIP=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.envAssignments.SKIP_REPORT_QUALITY_GATE // "false"' 2>/dev/null || echo "false")
+    SCOPE_SUMMARY=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.selectedPaths[]?' 2>/dev/null | sed "s#^${HOOK_CWD}/##")
+    SCOPE_WARNINGS=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.warnings[]?' 2>/dev/null || true)
+    if [ -n "$SCOPE_WARNINGS" ]; then
+        while IFS= read -r warning; do
+            [ -n "$warning" ] && echo "ℹ️  $warning"
+        done <<< "$SCOPE_WARNINGS"
+    fi
+    REPORT_FILES=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.reportFiles[]?' 2>/dev/null || true)
+    DASHBOARD_FILES=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.dashboardFiles[]?' 2>/dev/null || true)
+else
+    REPORT_FILES=$(find "$DEPLOY_DIR" -name "*.report-meta.xml" 2>/dev/null || echo "")
+    DASHBOARD_FILES=$(find "$DEPLOY_DIR" -name "*.dashboard-meta.xml" 2>/dev/null || echo "")
+fi
+
+if [ "$SKIP_REPORT_QUALITY_GATE" = "1" ] || [ "$COMMAND_SKIP" = "1" ]; then
+    echo "⏭️  Report quality gate skipped (SKIP_REPORT_QUALITY_GATE=1)"
+    exit 0
+fi
 
 if [ -z "$REPORT_FILES" ] && [ -z "$DASHBOARD_FILES" ]; then
-    echo "✓ No reports or dashboards to validate"
+    echo "✓ No reports or dashboards to validate in deploy scope"
     exit 0
 fi
 
 echo "🔍 Report Quality Gate - Pre-Deployment Validation"
 echo ""
+
+if [ -n "$SCOPE_SUMMARY" ]; then
+    echo "📦 Deploy scope:"
+    while IFS= read -r scope_path; do
+        [ -n "$scope_path" ] && echo "  - $scope_path"
+    done <<< "$SCOPE_SUMMARY"
+    echo ""
+fi
 
 # Paths to validator scripts
 REPORT_INTELLIGENCE="${SCRIPT_DIR}/../scripts/lib/report-intelligence-diagnostics.js"

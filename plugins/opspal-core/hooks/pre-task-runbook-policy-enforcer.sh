@@ -37,6 +37,11 @@ else
     PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 fi
 
+PRETOOL_AGENT_CONTRACT="${SCRIPT_DIR}/lib/pretool-agent-contract.sh"
+if [ -f "$PRETOOL_AGENT_CONTRACT" ]; then
+    source "$PRETOOL_AGENT_CONTRACT"
+fi
+
 # Configuration
 ENABLED="${RUNBOOK_POLICY_ENABLED:-1}"
 STRICT="${RUNBOOK_POLICY_STRICT:-0}"
@@ -117,11 +122,15 @@ if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat)
 fi
 
-# Early exit if disabled
-if [ "$ENABLED" = "0" ]; then
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
+normalize_pretool_agent_event "$HOOK_INPUT"
+
+# Early exit if disabled, no input, or this is not an Agent tool event
+if [ "$ENABLED" = "0" ] || [ -z "$HOOK_INPUT" ] || ! pretool_agent_event_is_agent; then
+    emit_pretool_agent_noop
     exit 0
 fi
+
+AGENT_INPUT_JSON="${PRETOOL_TOOL_INPUT:-{}}"
 
 # ============================================================================
 # Functions
@@ -268,32 +277,33 @@ retrieve_policy() {
 # Check if we have input
 if [ -z "$HOOK_INPUT" ]; then
     log_verbose "No input received"
+    emit_pretool_agent_noop
     exit 0
 fi
 
 # Extract context
-if ! extract_context "$HOOK_INPUT"; then
-    echo "$HOOK_INPUT"
+if ! extract_context "$AGENT_INPUT_JSON"; then
+    emit_pretool_agent_noop
     exit 0
 fi
 
 # Check if this is an operational agent
 if ! is_operational_agent "$AGENT_TYPE"; then
     log_verbose "Agent $AGENT_TYPE is not operational, skipping"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
 # Check if we have enough context
 if [ -z "$ORG" ]; then
     log_verbose "No org detected, cannot retrieve policy"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
 if [ -z "$OBJECT" ]; then
     log_verbose "No object detected, proceeding without policy injection"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -303,7 +313,7 @@ POLICY_RESPONSE=$(retrieve_policy "$ORG" "$OBJECT" "$TASK_TYPE")
 
 if [ -z "$POLICY_RESPONSE" ]; then
     log_verbose "No policy response"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -316,40 +326,28 @@ case "$POLICY_STATUS" in
         log_info "✅ Runbook policy loaded for $OBJECT ($TASK_TYPE)"
 
         # Add policy to input
-        ENHANCED_INPUT=$(echo "$HOOK_INPUT" | jq --argjson policy "$POLICY_RESPONSE" '.runbook_policy = $policy' 2>/dev/null || echo "$HOOK_INPUT")
+        ENHANCED_INPUT=$(echo "$AGENT_INPUT_JSON" | jq --argjson policy "$POLICY_RESPONSE" '.runbook_policy = $policy' 2>/dev/null || echo "$AGENT_INPUT_JSON")
 
-        echo "$ENHANCED_INPUT"
+        emit_pretool_agent_update \
+          "$ENHANCED_INPUT" \
+          "Injected runbook policy for ${OBJECT}" \
+          "RUNBOOK_POLICY: Loaded ${POLICY_STATUS} policy guidance for ${ORG}.${OBJECT} (${TASK_TYPE})." \
+          "RUNBOOK_POLICY_INJECTED" \
+          "INFO"
         ;;
 
     "escalated")
         if [ "$STRICT" = "1" ]; then
             # Block the operation
             log_info "🚫 BLOCKED: No runbook policy found for $OBJECT"
-            echo ""
-            echo "┌─────────────────────────────────────────────────────────────────┐"
-            echo "│  🚫 OPERATION BLOCKED - Missing Runbook Policy                  │"
-            echo "├─────────────────────────────────────────────────────────────────┤"
-            echo "│                                                                 │"
-            echo "│  No field policy found for: $OBJECT                            │"
-            echo "│  Org: $ORG                                                      │"
-            echo "│  Task Type: $TASK_TYPE                                         │"
-            echo "│                                                                 │"
-            echo "│  Strict mode requires a policy before field selection.         │"
-            echo "│                                                                 │"
-            echo "│  To fix, run:                                                   │"
-            echo "│  node scripts/lib/field-policy-manager.js init $ORG            │"
-            echo "│                                                                 │"
-            echo "│  Or disable strict mode:                                       │"
-            echo "│  export RUNBOOK_POLICY_STRICT=0                                │"
-            echo "│                                                                 │"
-            echo "└─────────────────────────────────────────────────────────────────┘"
-            echo "" >&2
-
-            # Return empty to block
-            exit "$BLOCK_EXIT_CODE"
+            emit_pretool_agent_deny \
+              "RUNBOOK_POLICY_MISSING: No field policy found for ${ORG}.${OBJECT} (${TASK_TYPE}). Run node scripts/lib/field-policy-manager.js init ${ORG} or set RUNBOOK_POLICY_STRICT=0 to bypass temporarily." \
+              "" \
+              "RUNBOOK_POLICY_MISSING" \
+              "ERROR"
         else
             log_info "⚠️  No runbook policy found for $OBJECT (proceeding anyway)"
-            echo "$HOOK_INPUT"
+            emit_pretool_agent_noop
         fi
         ;;
 
@@ -357,20 +355,25 @@ case "$POLICY_STATUS" in
         log_verbose "Policy not found, proceeding with defaults"
 
         # Still inject the default response
-        ENHANCED_INPUT=$(echo "$HOOK_INPUT" | jq --argjson policy "$POLICY_RESPONSE" '.runbook_policy = $policy' 2>/dev/null || echo "$HOOK_INPUT")
+        ENHANCED_INPUT=$(echo "$AGENT_INPUT_JSON" | jq --argjson policy "$POLICY_RESPONSE" '.runbook_policy = $policy' 2>/dev/null || echo "$AGENT_INPUT_JSON")
 
-        echo "$ENHANCED_INPUT"
+        emit_pretool_agent_update \
+          "$ENHANCED_INPUT" \
+          "Injected default runbook policy response for ${OBJECT}" \
+          "RUNBOOK_POLICY: No explicit policy found for ${ORG}.${OBJECT}; default guidance was attached." \
+          "RUNBOOK_POLICY_DEFAULTED" \
+          "INFO"
         ;;
 
     "error")
         ERROR_MSG=$(echo "$POLICY_RESPONSE" | jq -r '.error.message // "Unknown error"' 2>/dev/null || echo "Unknown error")
         log_verbose "Policy retrieval error: $ERROR_MSG"
-        echo "$HOOK_INPUT"
+        emit_pretool_agent_noop
         ;;
 
     *)
         log_verbose "Unknown policy status: $POLICY_STATUS"
-        echo "$HOOK_INPUT"
+        emit_pretool_agent_noop
         ;;
 esac
 

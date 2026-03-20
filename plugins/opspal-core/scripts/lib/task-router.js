@@ -43,7 +43,22 @@ class TaskRouter {
             'sfdc-conflict-resolver': ['conflict', 'deployment failed', 'field mismatch', 'metadata error'],
             'sfdc-revops-auditor': ['revops assessment', 'revops audit', 'pipeline assessment', 'forecast audit', 'salesforce assessment', 'revops', 'revenue operations', 'audit', 'assessment', 'analysis', 'lifecycle', 'stage definitions', 'stage exit', 'lifecycle governance', 'lifecycle rules', 'salesforce governance', 'sf governance'],
             'sfdc-cpq-assessor': ['cpq', 'pricing', 'quote', 'steelbrick', 'sbqq'],
-            'sfdc-deployment-manager': ['deploy', 'deployment', 'metadata', 'package.xml'],
+            'sfdc-deployment-manager': [
+                'deploy',
+                'deployment',
+                'metadata',
+                'metadata deploy',
+                'sf project deploy',
+                'deploy start',
+                'package.xml',
+                'manifest',
+                'source-dir',
+                'force-app',
+                'layout',
+                'layouts',
+                'quick action',
+                'quickaction'
+            ],
             'sfdc-metadata-analyzer': ['analyze metadata', 'validation rules', 'flow analysis', 'layout audit'],
             'sfdc-field-analyzer': [
                 'field analysis',

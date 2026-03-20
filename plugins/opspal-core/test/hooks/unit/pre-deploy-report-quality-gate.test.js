@@ -69,6 +69,24 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Honors command-visible SKIP_REPORT_QUALITY_GATE flag', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'SKIP_REPORT_QUALITY_GATE=1 sf project deploy start --target-org test-org'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+    assert(
+      result.stderr.includes('Report quality gate skipped'),
+      'Should honor inline skip flag'
+    );
+  }));
+
   results.push(await runTest('Reports no files when deploy dir empty', async () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-report-gate-'));
     try {
@@ -88,6 +106,45 @@ async function runAllTests() {
       assert(
         result.stderr.includes('No reports or dashboards to validate'),
         'Should report no files to validate'
+      );
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Validates only reports and dashboards in the resolved deploy scope', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-report-scope-'));
+    try {
+      const reportDir = path.join(tempDir, 'force-app/main/default/reports/Public');
+      const layoutDir = path.join(tempDir, 'force-app/main/default/layouts');
+      fs.mkdirSync(reportDir, { recursive: true });
+      fs.mkdirSync(layoutDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(reportDir, 'Pipeline.report-meta.xml'),
+        '<Report xmlns="http://soap.sforce.com/2006/04/metadata"></Report>',
+        'utf8'
+      );
+      fs.writeFileSync(
+        path.join(layoutDir, 'Account-Layout.layout-meta.xml'),
+        '<Layout xmlns="http://soap.sforce.com/2006/04/metadata"></Layout>',
+        'utf8'
+      );
+
+      const result = await tester.run({
+        input: {
+          tool_name: 'Bash',
+          cwd: tempDir,
+          tool_input: {
+            command: 'sf project deploy start --source-dir force-app/main/default/layouts --target-org test-org'
+          }
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+      assert(
+        result.stderr.includes('No reports or dashboards to validate in deploy scope'),
+        'Should ignore unrelated report metadata outside the selected deploy scope'
       );
     } finally {
       fs.rmSync(tempDir, { recursive: true, force: true });

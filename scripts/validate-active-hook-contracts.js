@@ -58,6 +58,14 @@ const lineChecks = [
       /\[[^\n]*["']Task["'][^\n]*\]/,
       /\|Task\)/
     ]
+  },
+  {
+    id: 'raw-hook-input-passthrough',
+    description: 'writes raw HOOK_INPUT back to stdout instead of emitting a documented hook response',
+    regexes: [
+      /^\s*echo\s+["']?\$HOOK_INPUT["']?\s*$/,
+      /^\s*printf\s+['"][^'"]*%s[^'"]*['"]\s+["']?\$HOOK_INPUT["']?\s*$/
+    ]
   }
 ];
 

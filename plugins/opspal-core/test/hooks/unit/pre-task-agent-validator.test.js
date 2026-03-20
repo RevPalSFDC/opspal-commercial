@@ -172,6 +172,30 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Reroutes Salesforce metadata deploy tasks away from instance-deployer', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'opspal-core:instance-deployer',
+      prompt: 'Run sf project deploy start for package.xml updates covering layouts and quick actions in force-app.'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.hookSpecificOutput?.updatedInput?.subagent_type,
+      'opspal-salesforce:sfdc-deployment-manager',
+      'Salesforce metadata deploys should be rerouted to the designated deployment specialist'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_SPECIALIST_OVERRIDE'),
+      'Should explain why the reroute happened'
+    );
+  }));
+
   // Test 5: Command name handling
   // Note: Depends on agent-alias-resolver being accessible
   results.push(await runTest('Handles command name gracefully', async () => {

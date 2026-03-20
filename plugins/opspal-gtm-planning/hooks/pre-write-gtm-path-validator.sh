@@ -24,11 +24,10 @@ fi
 # Extract file path from Write tool input
 FILE_PATH=""
 if command -v jq &>/dev/null; then
-  FILE_PATH=$(echo "$HOOK_INPUT" | jq -r '.file_path // ""' 2>/dev/null || echo "")
+  FILE_PATH=$(echo "$HOOK_INPUT" | jq -r '.tool_input.file_path // .file_path // ""' 2>/dev/null || echo "")
 fi
 
 if [ -z "$FILE_PATH" ]; then
-  echo "$HOOK_INPUT"
   exit 0
 fi
 
@@ -37,8 +36,7 @@ case "$FILE_PATH" in
   *gtm*|*territory*|*quota*|*comp-plan*|*attribution*|*capacity*|*revenue-model*|*scenario*)
     ;;
   *)
-    # Not GTM-related, pass through
-    echo "$HOOK_INPUT"
+    # Not GTM-related
     exit 0
     ;;
 esac
@@ -47,8 +45,6 @@ esac
 EXPECTED_PREFIX="orgs/${ORG_SLUG}/platforms/gtm-planning/"
 
 if [[ "$FILE_PATH" == *"$EXPECTED_PREFIX"* ]] || [[ "$FILE_PATH" == "./$EXPECTED_PREFIX"* ]]; then
-  # Path follows convention
-  echo "$HOOK_INPUT"
   exit 0
 fi
 
@@ -57,5 +53,14 @@ echo "[GTM-PATH-WARN] GTM output should be written to ${EXPECTED_PREFIX}<cycle>/
 echo "[GTM-PATH-WARN] Got: $FILE_PATH" >&2
 echo "[GTM-PATH-WARN] Allowing write but consider using the standard path." >&2
 
-echo "$HOOK_INPUT"
+jq -n \
+  --arg context "GTM path guidance: write GTM planning artifacts under ${EXPECTED_PREFIX}<cycle>/. Current path: ${FILE_PATH}." \
+  '{
+    suppressOutput: true,
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      permissionDecision: "allow",
+      additionalContext: $context
+    }
+  }'
 exit 0

@@ -32,6 +32,13 @@ function createTester() {
   });
 }
 
+function createAgentEvent(toolInput = {}) {
+  return {
+    tool_name: 'Agent',
+    tool_input: toolInput
+  };
+}
+
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
   try {
@@ -64,11 +71,11 @@ async function runAllTests() {
   }));
 
   // Test 2: Non-reporting agent passes through
-  results.push(await runTest('Passes through for non-reporting agent', async () => {
-    const input = {
+  results.push(await runTest('Emits no-op JSON for non-reporting agent', async () => {
+    const input = createAgentEvent({
       subagent_type: 'sfdc-orchestrator',
       prompt: 'General assistance'
-    };
+    });
 
     const result = await tester.run({
       input,
@@ -76,15 +83,16 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.deepStrictEqual(result.output, input, 'Should pass through original input');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a no-op response');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
   }));
 
   // Test 3: Reporting agent with missing dictionary adds status
   results.push(await runTest('Adds status when dictionary missing', async () => {
-    const input = {
+    const input = createAgentEvent({
       subagent_type: 'sfdc-report-designer',
       prompt: 'Build a revenue report for missing-org'
-    };
+    });
 
     const result = await tester.run({
       input,
@@ -96,8 +104,11 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert(result.output && typeof result.output === 'object', 'Should output JSON');
-    assert(result.output.field_dictionary_status, 'Should add field_dictionary_status');
-    assert.strictEqual(result.output.field_dictionary_status.available, false, 'Should mark dictionary unavailable');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+    assert(updatedInput, 'Should emit updatedInput for Agent hook updates');
+    assert(updatedInput.field_dictionary_status, 'Should add field_dictionary_status');
+    assert.strictEqual(updatedInput.field_dictionary_status.available, false, 'Should mark dictionary unavailable');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
   }));
 
   // Summary

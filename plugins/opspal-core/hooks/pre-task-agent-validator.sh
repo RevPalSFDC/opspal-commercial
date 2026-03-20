@@ -342,6 +342,34 @@ apply_subagent_permission_contract() {
     return 0
 }
 
+is_salesforce_deploy_request() {
+    local input_json="$1"
+    local prompt=""
+
+    prompt=$(echo "$input_json" | jq -r '[.prompt // "", .description // "", .message // ""] | join(" ")' 2>/dev/null || echo "")
+    prompt=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')
+
+    echo "$prompt" | grep -qiE 'sf[[:space:]]+project[[:space:]]+deploy|package\.xml|force-app|quick[[:space:]-]?action|layouts?([[:space:]]|$)|metadata deploy|deploy start|--source-dir|--manifest'
+}
+
+reroute_salesforce_deployment_specialist() {
+    local resolved_agent="$1"
+    local input_json="$2"
+    local normalized_agent="${resolved_agent##*:}"
+
+    if [[ "$normalized_agent" != "instance-deployer" ]]; then
+        printf '%s' "$resolved_agent"
+        return 0
+    fi
+
+    if is_salesforce_deploy_request "$input_json"; then
+        printf '%s' "opspal-salesforce:sfdc-deployment-manager"
+        return 0
+    fi
+
+    printf '%s' "$resolved_agent"
+}
+
 # Main validation logic
 main() {
     log "Hook triggered"
@@ -472,6 +500,17 @@ main() {
           "ROUTING_AGENT_NOT_FOUND" \
           "ERROR"
         exit 0
+    fi
+
+    REROUTED_AGENT=$(reroute_salesforce_deployment_specialist "$RESOLVED" "$TOOL_INPUT")
+    if [ "$REROUTED_AGENT" != "$RESOLVED" ]; then
+        log "Rerouted Salesforce deployment task: $RESOLVED -> $REROUTED_AGENT"
+        if [ -n "$ADDITIONAL_CONTEXT" ]; then
+            ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_SPECIALIST_OVERRIDE: Salesforce metadata deployments must use '$REROUTED_AGENT' instead of '$RESOLVED'."
+        else
+            ADDITIONAL_CONTEXT="ROUTING_SPECIALIST_OVERRIDE: Salesforce metadata deployments must use '$REROUTED_AGENT' instead of '$RESOLVED'."
+        fi
+        RESOLVED="$REROUTED_AGENT"
     fi
 
     # Step 3: If resolved name differs, update the tool input

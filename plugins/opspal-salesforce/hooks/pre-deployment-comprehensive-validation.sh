@@ -116,8 +116,52 @@ emit_block() {
 # Configuration
 ##############################################################################
 
+# Resolve the deploy scope from the actual sf command whenever possible.
+DEPLOY_SCOPE_RESOLVER="${SCRIPT_DIR}/../scripts/lib/deploy-scope-resolver.js"
+HOOK_CWD=$(printf '%s' "$HOOK_INPUT" | jq -r '.cwd // empty' 2>/dev/null || echo "")
+[ -n "$HOOK_CWD" ] || HOOK_CWD="$(pwd)"
+SCOPE_ANALYSIS=""
+SCOPE_SUMMARY=""
+SCOPE_ROOT=""
+SCOPE_CLEANUP_REQUIRED="false"
+
+cleanup_scope_root() {
+    if [ "$SCOPE_CLEANUP_REQUIRED" = "true" ] && [ -n "$SCOPE_ROOT" ] && [ -d "$SCOPE_ROOT" ]; then
+        rm -rf "$SCOPE_ROOT"
+    fi
+}
+
+trap cleanup_scope_root EXIT
+
+if [ "$PRETOOLUSE_MODE" = "1" ] && [ -n "${local_deploy_command:-}" ] && [ -f "$DEPLOY_SCOPE_RESOLVER" ] && command -v node >/dev/null; then
+    SCOPE_ANALYSIS=$(node "$DEPLOY_SCOPE_RESOLVER" stage --command "$local_deploy_command" --cwd "$HOOK_CWD" 2>/dev/null || echo "")
+fi
+
+COMMAND_SKIP="false"
+TARGET_ORG="${SF_TARGET_ORG:-}"
+DEPLOY_DIR="${SF_DEPLOY_DIR:-force-app/main/default}"
+
+if [ -n "$SCOPE_ANALYSIS" ] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/null 2>&1; then
+    COMMAND_SKIP=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.envAssignments.SKIP_COMPREHENSIVE_VALIDATION // "false"' 2>/dev/null || echo "false")
+    TARGET_ORG=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.targetOrg // empty' 2>/dev/null || echo "")
+    SCOPE_ROOT=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.scopeRoot // empty' 2>/dev/null || echo "")
+    SCOPE_CLEANUP_REQUIRED=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.cleanupRequired // false' 2>/dev/null || echo "false")
+    SCOPE_SUMMARY=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.selectedPaths[]?' 2>/dev/null | sed "s#^${HOOK_CWD}/##")
+
+    SCOPE_WARNINGS=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.warnings[]?' 2>/dev/null || true)
+    if [ -n "$SCOPE_WARNINGS" ]; then
+        while IFS= read -r warning; do
+            [ -n "$warning" ] && log_info "$warning"
+        done <<< "$SCOPE_WARNINGS"
+    fi
+
+    if [ -n "$SCOPE_ROOT" ]; then
+        DEPLOY_DIR="$SCOPE_ROOT"
+    fi
+fi
+
 # Check if validation should be skipped
-if [ "$SKIP_COMPREHENSIVE_VALIDATION" = "1" ]; then
+if [ "$SKIP_COMPREHENSIVE_VALIDATION" = "1" ] || [ "$COMMAND_SKIP" = "1" ]; then
     if [ -f "$OUTPUT_FORMATTER" ]; then
         node "$OUTPUT_FORMATTER" warning \
             "Comprehensive Validation Skipped" \
@@ -133,9 +177,14 @@ if [ "$SKIP_COMPREHENSIVE_VALIDATION" = "1" ]; then
     fi
 fi
 
-# Get deployment parameters from environment or command
-TARGET_ORG="${SF_TARGET_ORG:-${SF_TARGET_ORG}}"
-DEPLOY_DIR="${SF_DEPLOY_DIR:-force-app/main/default}"
+if [ -n "$SCOPE_ANALYSIS" ] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/null 2>&1; then
+    SELECTED_SCOPE_COUNT=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.selectedPaths | length // 0' 2>/dev/null || echo "0")
+    if [ "$SELECTED_SCOPE_COUNT" -eq 0 ] && [ "$PRETOOLUSE_MODE" = "1" ]; then
+        log_info "No deployable local metadata resolved from command scope; skipping comprehensive validation"
+        exit 0
+    fi
+fi
+
 HAS_TARGET_ORG=0
 if [ -n "$TARGET_ORG" ]; then
     HAS_TARGET_ORG=1
@@ -169,6 +218,12 @@ echo "════════════════════════�
 echo ""
 log_info "Target Org: ${TARGET_ORG}"
 log_info "Deployment Dir: ${DEPLOY_DIR}"
+if [ -n "$SCOPE_SUMMARY" ]; then
+    echo "Deploy Scope:"
+    while IFS= read -r scope_path; do
+        [ -n "$scope_path" ] && echo "  - $scope_path"
+    done <<< "$SCOPE_SUMMARY"
+fi
 echo ""
 
 # Log validation start
@@ -589,68 +644,62 @@ if [ -f "$ENV_CONFIG_VALIDATOR" ]; then
     DEPLOYMENT_ORDER_ERRORS=0
 
     # Check for reports requiring folders
-    if [ -d "$DEPLOY_DIR/reports" ]; then
-        REPORT_COUNT=$(find "$DEPLOY_DIR/reports" -name "*.report-meta.xml" 2>/dev/null | wc -l)
-        FOLDER_COUNT=$(find "$DEPLOY_DIR/reports" -name "*.reportFolder-meta.xml" 2>/dev/null | wc -l)
+    REPORT_COUNT=$(find "$DEPLOY_DIR" -name "*.report-meta.xml" 2>/dev/null | wc -l)
+    FOLDER_COUNT=$(find "$DEPLOY_DIR" -name "*.reportFolder-meta.xml" 2>/dev/null | wc -l)
 
-        if [ "$REPORT_COUNT" -gt 0 ]; then
-            ORDER_RESULT=$(node -e "
-                const { validateDeploymentOrder } = require('$ENV_CONFIG_VALIDATOR');
-                const result = validateDeploymentOrder('$INSTANCE_NAME', 'reports');
-                console.log(JSON.stringify(result));
-            " 2>/dev/null || echo '{"valid":"unknown"}')
+    if [ "$REPORT_COUNT" -gt 0 ]; then
+        ORDER_RESULT=$(node -e "
+            const { validateDeploymentOrder } = require('$ENV_CONFIG_VALIDATOR');
+            const result = validateDeploymentOrder('$INSTANCE_NAME', 'reports');
+            console.log(JSON.stringify(result));
+        " 2>/dev/null || echo '{"valid":"unknown"}')
 
-            RULE=$(echo "$ORDER_RESULT" | jq -r '.rule // "standard"' 2>/dev/null || echo "standard")
+        RULE=$(echo "$ORDER_RESULT" | jq -r '.rule // "standard"' 2>/dev/null || echo "standard")
 
-            if [ "$RULE" = "before_reports" ] && [ "$FOLDER_COUNT" -eq 0 ]; then
-                log_warning "Reports found but no report folders - folders should deploy first"
-                DEPLOYMENT_ORDER_WARNINGS=$((DEPLOYMENT_ORDER_WARNINGS + 1))
-            else
-                log_info "Report deployment order: OK (folders: $FOLDER_COUNT, reports: $REPORT_COUNT)"
-            fi
+        if [ "$RULE" = "before_reports" ] && [ "$FOLDER_COUNT" -eq 0 ]; then
+            log_warning "Reports found but no report folders - folders should deploy first"
+            DEPLOYMENT_ORDER_WARNINGS=$((DEPLOYMENT_ORDER_WARNINGS + 1))
+        else
+            log_info "Report deployment order: OK (folders: $FOLDER_COUNT, reports: $REPORT_COUNT)"
         fi
     fi
 
     # Check for flows requiring layouts
-    if [ -d "$DEPLOY_DIR/flows" ]; then
-        FLOW_COUNT=$(find "$DEPLOY_DIR/flows" -name "*.flow-meta.xml" 2>/dev/null | wc -l)
-        LAYOUT_COUNT=$(find "$DEPLOY_DIR/layouts" -name "*.layout-meta.xml" 2>/dev/null | wc -l)
+    FLOW_COUNT=$(find "$DEPLOY_DIR" -name "*.flow-meta.xml" 2>/dev/null | wc -l)
+    LAYOUT_COUNT=$(find "$DEPLOY_DIR" -name "*.layout-meta.xml" 2>/dev/null | wc -l)
 
-        if [ "$FLOW_COUNT" -gt 0 ]; then
-            ORDER_RESULT=$(node -e "
-                const { validateDeploymentOrder } = require('$ENV_CONFIG_VALIDATOR');
-                const result = validateDeploymentOrder('$INSTANCE_NAME', 'flows');
-                console.log(JSON.stringify(result));
-            " 2>/dev/null || echo '{"valid":"unknown"}')
+    if [ "$FLOW_COUNT" -gt 0 ]; then
+        ORDER_RESULT=$(node -e "
+            const { validateDeploymentOrder } = require('$ENV_CONFIG_VALIDATOR');
+            const result = validateDeploymentOrder('$INSTANCE_NAME', 'flows');
+            console.log(JSON.stringify(result));
+        " 2>/dev/null || echo '{"valid":"unknown"}')
 
-            RULE=$(echo "$ORDER_RESULT" | jq -r '.rule // "standard"' 2>/dev/null || echo "standard")
+        RULE=$(echo "$ORDER_RESULT" | jq -r '.rule // "standard"' 2>/dev/null || echo "standard")
 
-            if [ "$RULE" = "after_layouts" ] && [ "$LAYOUT_COUNT" -gt 0 ]; then
-                log_info "Flow deployment order: OK (layouts will deploy first)"
-            else
-                log_info "Flow deployment order: standard rules apply"
-            fi
+        if [ "$RULE" = "after_layouts" ] && [ "$LAYOUT_COUNT" -gt 0 ]; then
+            log_info "Flow deployment order: OK (layouts will deploy first)"
+        else
+            log_info "Flow deployment order: standard rules apply"
         fi
     fi
 
     # Check for customMetadata requiring early deployment
-    if [ -d "$DEPLOY_DIR/customMetadata" ]; then
-        CMD_COUNT=$(find "$DEPLOY_DIR/customMetadata" -name "*.md-meta.xml" 2>/dev/null | wc -l)
+    CMD_COUNT=$(find "$DEPLOY_DIR" -name "*.md-meta.xml" 2>/dev/null | wc -l)
 
-        if [ "$CMD_COUNT" -gt 0 ]; then
-            ORDER_RESULT=$(node -e "
-                const { validateDeploymentOrder } = require('$ENV_CONFIG_VALIDATOR');
-                const result = validateDeploymentOrder('$INSTANCE_NAME', 'customMetadata');
-                console.log(JSON.stringify(result));
-            " 2>/dev/null || echo '{"valid":"unknown"}')
+    if [ "$CMD_COUNT" -gt 0 ]; then
+        ORDER_RESULT=$(node -e "
+            const { validateDeploymentOrder } = require('$ENV_CONFIG_VALIDATOR');
+            const result = validateDeploymentOrder('$INSTANCE_NAME', 'customMetadata');
+            console.log(JSON.stringify(result));
+        " 2>/dev/null || echo '{"valid":"unknown"}')
 
-            RULE=$(echo "$ORDER_RESULT" | jq -r '.rule // "standard"' 2>/dev/null || echo "standard")
+        RULE=$(echo "$ORDER_RESULT" | jq -r '.rule // "standard"' 2>/dev/null || echo "standard")
 
-            if [ "$RULE" = "before_flows" ]; then
-                log_info "Custom Metadata: $CMD_COUNT types will deploy before flows (correct order)"
-            else
-                log_info "Custom Metadata: $CMD_COUNT types detected"
-            fi
+        if [ "$RULE" = "before_flows" ]; then
+            log_info "Custom Metadata: $CMD_COUNT types will deploy before flows (correct order)"
+        else
+            log_info "Custom Metadata: $CMD_COUNT types detected"
         fi
     fi
 
@@ -689,13 +738,13 @@ elif [ -f "$PRE_OP_ORCHESTRATOR" ]; then
     METADATA_TYPES=""
 
     # Detect metadata types in deployment
-    [ -d "$DEPLOY_DIR/flows" ] && METADATA_TYPES="${METADATA_TYPES}Flow,"
-    [ -d "$DEPLOY_DIR/objects" ] && METADATA_TYPES="${METADATA_TYPES}CustomObject,"
-    [ -d "$DEPLOY_DIR/permissionsets" ] && METADATA_TYPES="${METADATA_TYPES}PermissionSet,"
-    [ -d "$DEPLOY_DIR/profiles" ] && METADATA_TYPES="${METADATA_TYPES}Profile,"
-    [ -d "$DEPLOY_DIR/layouts" ] && METADATA_TYPES="${METADATA_TYPES}Layout,"
-    [ -d "$DEPLOY_DIR/classes" ] && METADATA_TYPES="${METADATA_TYPES}ApexClass,"
-    [ -d "$DEPLOY_DIR/triggers" ] && METADATA_TYPES="${METADATA_TYPES}ApexTrigger,"
+    find "$DEPLOY_DIR" -name "*.flow-meta.xml" -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}Flow,"
+    find "$DEPLOY_DIR" -path "*/objects/*" -type f -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}CustomObject,"
+    find "$DEPLOY_DIR" -name "*.permissionset-meta.xml" -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}PermissionSet,"
+    find "$DEPLOY_DIR" -name "*.profile-meta.xml" -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}Profile,"
+    find "$DEPLOY_DIR" -name "*.layout-meta.xml" -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}Layout,"
+    find "$DEPLOY_DIR" -name "*.cls" -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}ApexClass,"
+    find "$DEPLOY_DIR" -name "*.trigger" -print -quit 2>/dev/null | grep -q . && METADATA_TYPES="${METADATA_TYPES}ApexTrigger,"
 
     # Remove trailing comma
     METADATA_TYPES="${METADATA_TYPES%,}"

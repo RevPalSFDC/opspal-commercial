@@ -9,6 +9,9 @@
  */
 
 const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { HookTester } = require('../runner');
 
 const HOOK_PATH = 'plugins/opspal-salesforce/hooks/pre-deploy-flow-validation.sh';
@@ -61,6 +64,60 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert(result.stderr.includes('Flow validation skipped'), 'Should note skipped validation');
+  }));
+
+  results.push(await runTest('Honors command-visible SKIP_FLOW_VALIDATION flag', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'SKIP_FLOW_VALIDATION=1 sf project deploy start --target-org test-org'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+    assert(result.stderr.includes('Flow validation skipped'), 'Should honor inline skip flag');
+  }));
+
+  results.push(await runTest('Validates only the resolved deploy scope', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-flow-scope-'));
+    try {
+      const flowDir = path.join(tempDir, 'force-app/main/default/flows');
+      const layoutDir = path.join(tempDir, 'force-app/main/default/layouts');
+      fs.mkdirSync(flowDir, { recursive: true });
+      fs.mkdirSync(layoutDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(flowDir, 'Broken.flow-meta.xml'),
+        '<Flow><broken></Flow>',
+        'utf8'
+      );
+      fs.writeFileSync(
+        path.join(layoutDir, 'Account-Layout.layout-meta.xml'),
+        '<Layout xmlns="http://soap.sforce.com/2006/04/metadata"></Layout>',
+        'utf8'
+      );
+
+      const result = await tester.run({
+        input: {
+          tool_name: 'Bash',
+          cwd: tempDir,
+          tool_input: {
+            command: 'sf project deploy start --source-dir force-app/main/default/layouts --target-org test-org'
+          }
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+      assert(
+        result.stderr.includes('No flows to validate in deploy scope'),
+        'Should skip unrelated flows outside the selected deploy scope'
+      );
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
   }));
 
   const passed = results.filter(r => r.passed).length;

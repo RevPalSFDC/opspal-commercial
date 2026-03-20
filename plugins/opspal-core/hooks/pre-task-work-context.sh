@@ -73,6 +73,11 @@ fi
 
 debug_log "Final PLUGIN_ROOT=$PLUGIN_ROOT"
 
+PRETOOL_AGENT_CONTRACT="$PLUGIN_ROOT/hooks/lib/pretool-agent-contract.sh"
+if [ -f "$PRETOOL_AGENT_CONTRACT" ]; then
+    source "$PRETOOL_AGENT_CONTRACT"
+fi
+
 # Configuration
 ENABLED="${WORK_CONTEXT_ENABLED:-1}"
 VERBOSE="${WORK_CONTEXT_VERBOSE:-0}"
@@ -84,44 +89,63 @@ LIMIT="${WORK_CONTEXT_LIMIT:-5}"
 LIVE_FIRST="${WORK_CONTEXT_LIVE_FIRST:-${GLOBAL_LIVE_FIRST:-true}}"
 WORK_INDEX_STALE_DAYS="${WORK_INDEX_STALE_DAYS:-7}"
 
-# Early exit if disabled
-if [ "$ENABLED" != "1" ]; then
+# Read hook input
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat)
+fi
+
+normalize_pretool_agent_event "$HOOK_INPUT"
+
+# Early exit if disabled or this is not an Agent tool event
+if [ "$ENABLED" != "1" ] || [ -z "$HOOK_INPUT" ] || ! pretool_agent_event_is_agent; then
+    emit_pretool_agent_noop
     exit 0
 fi
 
+AGENT_INPUT_JSON="${PRETOOL_TOOL_INPUT:-{}}"
+
 # Determine org slug from various sources
 ORG=""
-if [ -n "${ORG_SLUG:-}" ]; then
+if [ -n "$AGENT_INPUT_JSON" ] && command -v jq &>/dev/null; then
+    ORG=$(echo "$AGENT_INPUT_JSON" | jq -r '.sf_org_context.detected_org // .org // .context.org // empty' 2>/dev/null || echo "")
+fi
+
+if [ -z "$ORG" ] && [ -n "${ORG_SLUG:-}" ]; then
     ORG="$ORG_SLUG"
-elif [ -n "${CLIENT_ORG:-}" ]; then
+elif [ -z "$ORG" ] && [ -n "${CLIENT_ORG:-}" ]; then
     ORG="$CLIENT_ORG"
-elif [ -n "${SF_TARGET_ORG:-}" ]; then
+elif [ -z "$ORG" ] && [ -n "${SF_TARGET_ORG:-}" ]; then
     ORG="$SF_TARGET_ORG"
 fi
 
 # Exit silently if no org context
 if [ -z "$ORG" ]; then
     [ "$VERBOSE" = "1" ] && echo "[work-context] No ORG_SLUG set, skipping" >&2
+    emit_pretool_agent_noop
     exit 0
 fi
 
 # Path to work-index-manager
 MANAGER_SCRIPT="$PLUGIN_ROOT/scripts/lib/work-index-manager.js"
+PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
 
 # Check if manager script exists
 if [ ! -f "$MANAGER_SCRIPT" ]; then
     [ "$VERBOSE" = "1" ] && echo "[work-context] Manager script not found: $MANAGER_SCRIPT" >&2
+    emit_pretool_agent_noop
     exit 0
 fi
 
 # Check if node is available
 if ! command -v node &> /dev/null; then
     [ "$VERBOSE" = "1" ] && echo "[work-context] Node.js not available" >&2
+    emit_pretool_agent_noop
     exit 0
 fi
 
 # Check WORK_INDEX.yaml staleness in live-first mode
-WORK_INDEX_FILE="orgs/$ORG/WORK_INDEX.yaml"
+WORK_INDEX_FILE="$PROJECT_ROOT/orgs/$ORG/WORK_INDEX.yaml"
 STALENESS_WARNING=""
 if [ "$LIVE_FIRST" = "1" ] || [ "$LIVE_FIRST" = "true" ]; then
     if [ -f "$WORK_INDEX_FILE" ]; then
@@ -136,31 +160,82 @@ if [ "$LIVE_FIRST" = "1" ] || [ "$LIVE_FIRST" = "true" ]; then
 fi
 
 # Get context from manager
-CONTEXT_OUTPUT=""
-if CONTEXT_OUTPUT=$(node "$MANAGER_SCRIPT" context "$ORG" 2>/dev/null); then
-    # Check if there's any content to show
-    if [ -n "$CONTEXT_OUTPUT" ] && [ "$CONTEXT_OUTPUT" != "No work history found for this org." ]; then
-        echo ""
-        echo "======================================================================"
-        echo "PROJECT MEMORY: $ORG"
-        echo "======================================================================"
-        if [ -n "$STALENESS_WARNING" ]; then
-            echo "$STALENESS_WARNING"
-            echo "----------------------------------------------------------------------"
-        fi
-        echo ""
-        echo "$CONTEXT_OUTPUT"
-        echo ""
-        echo "----------------------------------------------------------------------"
-        echo "Use '/work-index list $ORG' for full history"
-        echo "======================================================================"
-        echo ""
-    elif [ "$VERBOSE" = "1" ]; then
-        echo "[work-context] No work history for $ORG" >&2
-    fi
-else
+CONTEXT_JSON=""
+if ! CONTEXT_JSON=$(node "$MANAGER_SCRIPT" context "$ORG" --json 2>/dev/null); then
     [ "$VERBOSE" = "1" ] && echo "[work-context] Failed to load context for $ORG" >&2
+    emit_pretool_agent_noop
+    exit 0
 fi
 
-# Always exit successfully - context loading is informational
+if [ -z "$CONTEXT_JSON" ] || ! printf '%s' "$CONTEXT_JSON" | jq -e . >/dev/null 2>&1; then
+    [ "$VERBOSE" = "1" ] && echo "[work-context] No structured context for $ORG" >&2
+    emit_pretool_agent_noop
+    exit 0
+fi
+
+CONTEXT_SUMMARY=$(printf '%s' "$CONTEXT_JSON" | jq -r '
+  def lines(items):
+    items
+    | map("  - " + (.id // "unknown") + ": " + (.title // "Untitled"))
+    | join("\n");
+  [
+    (if (.inProgress | length) > 0 then "In Progress:\n" + lines(.inProgress[:3]) else empty end),
+    (if (.followUps | length) > 0 then "Follow-ups:\n" + lines(.followUps[:3]) else empty end),
+    (if (.recent | length) > 0 then "Recent Work:\n" + lines(.recent[:3]) else empty end)
+  ]
+  | map(select(length > 0))
+  | join("\n\n")
+' 2>/dev/null || echo "")
+
+if [ -z "$CONTEXT_SUMMARY" ]; then
+    [ "$VERBOSE" = "1" ] && echo "[work-context] No work history for $ORG" >&2
+    emit_pretool_agent_noop
+    exit 0
+fi
+
+CONTEXT_PREAMBLE="[PROJECT MEMORY]
+Org: ${ORG}
+${CONTEXT_SUMMARY}
+"
+
+if [ -n "$STALENESS_WARNING" ]; then
+    CONTEXT_PREAMBLE="${CONTEXT_PREAMBLE}${STALENESS_WARNING}
+"
+fi
+
+CONTEXT_PREAMBLE="${CONTEXT_PREAMBLE}Use '/work-index list ${ORG}' for full history.
+
+"
+
+ENHANCED_INPUT=$(prepend_pretool_agent_prompt "$AGENT_INPUT_JSON" "[PROJECT MEMORY]" "$CONTEXT_PREAMBLE")
+ENHANCED_INPUT=$(printf '%s' "$ENHANCED_INPUT" | jq -c \
+    --arg org "$ORG" \
+    --arg warning "$STALENESS_WARNING" \
+    '. + {
+        work_context: {
+            org: $org,
+            staleness_warning: (if $warning != "" then $warning else null end),
+            counts: {
+                in_progress: (.work_context.counts.in_progress // 0),
+                follow_ups: (.work_context.counts.follow_ups // 0),
+                recent: (.work_context.counts.recent // 0)
+            }
+        }
+    }' 2>/dev/null || printf '%s' "$AGENT_INPUT_JSON")
+
+ENHANCED_INPUT=$(printf '%s' "$ENHANCED_INPUT" | jq -c \
+    --argjson context "$CONTEXT_JSON" \
+    '.work_context.counts = {
+        in_progress: ($context.inProgress | length),
+        follow_ups: ($context.followUps | length),
+        recent: ($context.recent | length)
+      }' 2>/dev/null || printf '%s' "$ENHANCED_INPUT")
+
+emit_pretool_agent_update \
+  "$ENHANCED_INPUT" \
+  "Injected work context for ${ORG}" \
+  "WORK_CONTEXT: Added recent work and follow-up context for ${ORG}." \
+  "WORK_CONTEXT" \
+  "INFO"
+
 exit 0

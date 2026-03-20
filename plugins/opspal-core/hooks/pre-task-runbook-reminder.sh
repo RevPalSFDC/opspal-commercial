@@ -49,6 +49,11 @@ if [ -f "$ERROR_HANDLER" ]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
+PRETOOL_AGENT_CONTRACT="${SCRIPT_DIR}/lib/pretool-agent-contract.sh"
+if [ -f "$PRETOOL_AGENT_CONTRACT" ]; then
+    source "$PRETOOL_AGENT_CONTRACT"
+fi
+
 # Configuration
 ENABLED="${RUNBOOK_REMINDER_ENABLED:-1}"
 VERBOSE="${RUNBOOK_REMINDER_VERBOSE:-0}"
@@ -60,11 +65,15 @@ if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat)
 fi
 
+normalize_pretool_agent_event "$HOOK_INPUT"
+
 # Early exit if disabled
-if [ "$ENABLED" = "0" ]; then
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
+if [ "$ENABLED" = "0" ] || [ -z "$HOOK_INPUT" ] || ! pretool_agent_event_is_agent; then
+    emit_pretool_agent_noop
     exit 0
 fi
+
+AGENT_INPUT_JSON="${PRETOOL_TOOL_INPUT:-{}}"
 
 # ============================================================================
 # Functions
@@ -81,8 +90,8 @@ detect_org() {
     local org=""
 
     # Try hook input first
-    if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
-        org=$(echo "$HOOK_INPUT" | jq -r '.sf_org_context.detected_org // ""' 2>/dev/null || echo "")
+    if [ -n "$AGENT_INPUT_JSON" ] && command -v jq &>/dev/null; then
+        org=$(echo "$AGENT_INPUT_JSON" | jq -r '.sf_org_context.detected_org // .org // .context.org // ""' 2>/dev/null || echo "")
         [ -n "$org" ] && echo "$org" && return 0
     fi
 
@@ -122,9 +131,10 @@ detect_platform() {
     local platform=""
 
     # Try hook input for agent type
-    if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
+    if [ -n "$AGENT_INPUT_JSON" ] && command -v jq &>/dev/null; then
         local agent_type
-        agent_type=$(echo "$HOOK_INPUT" | jq -r '.subagent_type // ""' 2>/dev/null || echo "")
+        agent_type=$(echo "$AGENT_INPUT_JSON" | jq -r '.subagent_type // ""' 2>/dev/null || echo "")
+        agent_type="${agent_type##*:}"
 
         case "$agent_type" in
             sfdc-*|salesforce-*|trigger-*|validation-rule-*|permission-*|flow-*)
@@ -275,43 +285,59 @@ fi
 # Display reminder if runbook found
 if [ -n "$RUNBOOK_PATH" ] && [ -f "$RUNBOOK_PATH" ]; then
     RUNBOOK_AGE=$(get_runbook_age "$RUNBOOK_PATH")
-
-    echo ""
-    echo "┌─────────────────────────────────────────────────────────────────┐"
-    echo "│  📚 RUNBOOK AVAILABLE                                           │"
-    echo "├─────────────────────────────────────────────────────────────────┤"
-    echo "│  Review operational knowledge before starting work.            │"
-    echo "│                                                                 │"
-    printf "│  %-63s │\n" "Path: ${RUNBOOK_PATH##*/instances/}"
-    printf "│  %-63s │\n" "Last updated: ${RUNBOOK_AGE} days ago"
-
+    SUMMARY_LINES=""
+    SUMMARY_TEXT=""
     if [ "$SHOW_SUMMARY" = "1" ]; then
-        SUMMARY=$(extract_runbook_summary "$RUNBOOK_PATH")
-        if [ -n "$SUMMARY" ]; then
-            echo "│                                                                 │"
-            echo "│  Key sections:                                                  │"
-            while IFS= read -r line; do
-                printf "│  %-63s │\n" "$line"
-            done <<< "$SUMMARY"
+        SUMMARY_LINES=$(extract_runbook_summary "$RUNBOOK_PATH")
+        if [ -n "$SUMMARY_LINES" ]; then
+            SUMMARY_TEXT=$(printf '%s\n' "$SUMMARY_LINES" | sed 's/^  - //' | paste -sd '; ' -)
         fi
     fi
 
-    echo "│                                                                 │"
-    echo "│  Command: /view-runbook                                        │"
-    echo "└─────────────────────────────────────────────────────────────────┘"
-    echo "" >&2
+    REMINDER_PREAMBLE="[RUNBOOK REMINDER]
+Review ${RUNBOOK_PATH} before starting work.
+Last updated: ${RUNBOOK_AGE} day(s) ago.
+"
 
-    # If runbook is stale (>30 days), add warning
-    if [ "$RUNBOOK_AGE" -gt 30 ]; then
-        echo "⚠️  Runbook may be stale (${RUNBOOK_AGE} days old). Consider running /generate-runbook" >&2
+    if [ -n "$SUMMARY_TEXT" ]; then
+        REMINDER_PREAMBLE="${REMINDER_PREAMBLE}Key sections: ${SUMMARY_TEXT}
+"
     fi
+
+    if [ "$RUNBOOK_AGE" -gt 30 ]; then
+        REMINDER_PREAMBLE="${REMINDER_PREAMBLE}Staleness warning: runbook may be stale; consider /generate-runbook.
+"
+    fi
+
+    REMINDER_PREAMBLE="${REMINDER_PREAMBLE}
+"
+
+    ENHANCED_INPUT=$(prepend_pretool_agent_prompt "$AGENT_INPUT_JSON" "[RUNBOOK REMINDER]" "$REMINDER_PREAMBLE")
+    ENHANCED_INPUT=$(printf '%s' "$ENHANCED_INPUT" | jq -c \
+        --arg path "$RUNBOOK_PATH" \
+        --argjson age "$RUNBOOK_AGE" \
+        --arg summary "$SUMMARY_TEXT" \
+        '. + {
+            runbook_reminder: {
+                available: true,
+                path: $path,
+                age_days: $age,
+                stale: ($age > 30),
+                summary: (if $summary != "" then $summary else null end),
+                command: "/view-runbook"
+            }
+        }' 2>/dev/null || printf '%s' "$AGENT_INPUT_JSON")
+
+    echo "[runbook-reminder] Injected reminder from $RUNBOOK_PATH" >&2
+    emit_pretool_agent_update \
+      "$ENHANCED_INPUT" \
+      "Injected runbook reminder for ${ORG:-current context}" \
+      "RUNBOOK_REMINDER: Review ${RUNBOOK_PATH} before starting work." \
+      "RUNBOOK_REMINDER" \
+      "INFO"
 else
     log_verbose "No runbook found for org: $ORG"
-fi
-
-# Pass through input unchanged
-if [ -n "$HOOK_INPUT" ]; then
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
 fi
 
 exit 0

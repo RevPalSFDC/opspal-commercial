@@ -12,9 +12,24 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
+const { HookTester } = require('../runner');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../../../../..');
 const HOOK_PATH = path.join(PROJECT_ROOT, 'plugins/opspal-core/hooks/pre-task-work-context.sh');
+
+function createTester() {
+  return new HookTester('plugins/opspal-core/hooks/pre-task-work-context.sh', {
+    timeout: 10000,
+    verbose: process.env.VERBOSE === '1'
+  });
+}
+
+function createAgentEvent(toolInput = {}) {
+  return {
+    tool_name: 'Agent',
+    tool_input: toolInput
+  };
+}
 
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
@@ -33,6 +48,7 @@ async function runAllTests() {
   console.log('\n[Tests] pre-task-work-context.sh Tests\n');
 
   const results = [];
+  const tester = createTester();
 
   results.push(await runTest('Hook exists and is valid', async () => {
     assert(fs.existsSync(HOOK_PATH), 'Hook file should exist');
@@ -41,12 +57,25 @@ async function runAllTests() {
   }));
 
   results.push(await runTest('Skips when work context disabled', async () => {
-    const result = spawnSync('bash', [HOOK_PATH], {
-      encoding: 'utf8',
-      env: { ...process.env, WORK_CONTEXT_ENABLED: '0' }
+    const result = await tester.run({
+      input: createAgentEvent({ subagent_type: 'sfdc-object-auditor' }),
+      env: { WORK_CONTEXT_ENABLED: '0' }
     });
 
-    assert.strictEqual(result.status, 0, 'Should exit with 0');
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.deepStrictEqual(result.output, {}, 'Disabled hook should emit a no-op response');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+  }));
+
+  results.push(await runTest('Skips when no org context is available', async () => {
+    const result = await tester.run({
+      input: createAgentEvent({ subagent_type: 'sfdc-object-auditor', prompt: 'Inspect metadata' }),
+      env: { WORK_CONTEXT_ENABLED: '1' }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.deepStrictEqual(result.output, {}, 'No org context should produce a no-op response');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
   }));
 
   const passed = results.filter(r => r.passed).length;

@@ -255,8 +255,26 @@ class HookChainTester {
         }
       }
 
-      // Use output as input for next hook (if valid JSON)
-      if (result.output && typeof result.output === 'object') {
+      const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+      if (updatedInput && typeof updatedInput === 'object') {
+        if (currentInput && typeof currentInput === 'object' && currentInput.tool_input) {
+          currentInput = {
+            ...currentInput,
+            tool_input: updatedInput
+          };
+        } else {
+          currentInput = updatedInput;
+        }
+        continue;
+      }
+
+      // Preserve legacy chaining for hooks that still emit the full payload directly.
+      if (
+        result.output &&
+        typeof result.output === 'object' &&
+        Object.keys(result.output).length > 0 &&
+        !result.output.hookSpecificOutput
+      ) {
         currentInput = result.output;
       }
     }

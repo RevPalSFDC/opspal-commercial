@@ -42,6 +42,11 @@ if [ -f "$ERROR_HANDLER" ]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
+PRETOOL_AGENT_CONTRACT="${SCRIPT_DIR}/lib/pretool-agent-contract.sh"
+if [ -f "$PRETOOL_AGENT_CONTRACT" ]; then
+    source "$PRETOOL_AGENT_CONTRACT"
+fi
+
 # Configuration
 ENABLED="${FIELD_DICT_INJECTION_ENABLED:-1}"
 VERBOSE="${FIELD_DICT_INJECTION_VERBOSE:-0}"
@@ -121,11 +126,15 @@ if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat)
 fi
 
-# Early exit if disabled or no input
-if [ "$ENABLED" = "0" ] || [ -z "$HOOK_INPUT" ]; then
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
+normalize_pretool_agent_event "$HOOK_INPUT"
+
+# Early exit if disabled, no input, or this is not an Agent tool event
+if [ "$ENABLED" = "0" ] || [ -z "$HOOK_INPUT" ] || ! pretool_agent_event_is_agent; then
+    emit_pretool_agent_noop
     exit 0
 fi
+
+AGENT_INPUT_JSON="${PRETOOL_TOOL_INPUT:-{}}"
 
 # ============================================================================
 # Functions
@@ -144,7 +153,7 @@ log_info() {
 # Extract agent type from hook input
 get_agent_type() {
     if command -v jq &>/dev/null; then
-        echo "$HOOK_INPUT" | jq -r '.subagent_type // ""' 2>/dev/null || echo ""
+        echo "$AGENT_INPUT_JSON" | jq -r '.subagent_type // ""' 2>/dev/null || echo ""
     else
         echo ""
     fi
@@ -153,8 +162,7 @@ get_agent_type() {
 # Normalize agent type (remove plugin prefix if present)
 normalize_agent_type() {
     local agent="$1"
-    # Remove common prefixes like "opspal-salesforce:", "opspal-hubspot:", "salesforce-plugin:", etc.
-    echo "$agent" | sed -E 's/^[a-z]+-[a-z]+://' | sed -E 's/^[a-z]+-plugin://'
+    echo "$agent" | sed -E 's/^[A-Za-z0-9-]+://'
 }
 
 # Check if agent is excluded via opt-out env var
@@ -199,7 +207,7 @@ is_reporting_agent() {
 # Get prompt from hook input
 get_prompt() {
     if command -v jq &>/dev/null; then
-        echo "$HOOK_INPUT" | jq -r '.prompt // ""' 2>/dev/null || echo ""
+        echo "$AGENT_INPUT_JSON" | jq -r '.prompt // ""' 2>/dev/null || echo ""
     else
         echo ""
     fi
@@ -208,6 +216,13 @@ get_prompt() {
 # Extract org slug from prompt or environment
 extract_org_slug() {
     local prompt="$1"
+    local hook_org=""
+
+    hook_org=$(echo "$AGENT_INPUT_JSON" | jq -r '.sf_org_context.detected_org // .org // .context.org // empty' 2>/dev/null || echo "")
+    if [ -n "$hook_org" ]; then
+        echo "$hook_org"
+        return 0
+    fi
 
     # First check environment
     if [ -n "${ORG_SLUG:-}" ]; then
@@ -391,7 +406,7 @@ AGENT_TYPE=$(get_agent_type)
 
 if [ -z "$AGENT_TYPE" ]; then
     log_verbose "No agent type detected in input"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -401,7 +416,7 @@ log_verbose "Agent type: $AGENT_TYPE -> normalized: $NORMALIZED_AGENT"
 
 if ! is_reporting_agent "$AGENT_TYPE"; then
     log_verbose "Not a reporting agent, skipping field dictionary injection"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -413,7 +428,7 @@ ORG_SLUG_DETECTED=$(extract_org_slug "$PROMPT" || echo "")
 
 if [ -z "$ORG_SLUG_DETECTED" ]; then
     log_verbose "Could not determine org slug from prompt or environment"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -422,9 +437,9 @@ log_verbose "Org slug detected: $ORG_SLUG_DETECTED"
 # Check if dictionary exists
 if ! dictionary_exists "$ORG_SLUG_DETECTED"; then
     log_verbose "No field dictionary found for org: $ORG_SLUG_DETECTED"
-    # Pass through with a note that dictionary is not available
+    # Emit a structured status note so the agent contract stays valid.
     if command -v jq &>/dev/null; then
-        ENHANCED_INPUT=$(echo "$HOOK_INPUT" | jq \
+        ENHANCED_INPUT=$(echo "$AGENT_INPUT_JSON" | jq \
             --arg org "$ORG_SLUG_DETECTED" \
             '. + {
                 field_dictionary_status: {
@@ -434,10 +449,15 @@ if ! dictionary_exists "$ORG_SLUG_DETECTED"; then
                 }
             }'
         )
-        echo "$ENHANCED_INPUT"
+        emit_pretool_agent_update \
+          "$ENHANCED_INPUT" \
+          "Field dictionary unavailable for ${ORG_SLUG_DETECTED}" \
+          "FIELD_DICTIONARY_STATUS: No field dictionary is available for this org yet." \
+          "FIELD_DICTIONARY_STATUS" \
+          "INFO"
         exit 0
     fi
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -452,7 +472,7 @@ FIELD_CONTEXT=$(generate_field_context "$ORG_SLUG_DETECTED" "$AUDIENCE" "$TAGS" 
 
 if [ -z "$FIELD_CONTEXT" ]; then
     log_verbose "Failed to generate field context"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -474,7 +494,7 @@ $FIELD_CONTEXT
 "
 
     # Prepend context to prompt AND add field_dictionary_context object
-    ENHANCED_INPUT=$(echo "$HOOK_INPUT" | jq \
+    ENHANCED_INPUT=$(echo "$AGENT_INPUT_JSON" | jq \
         --arg contextPreamble "$CONTEXT_PREAMBLE" \
         --arg org "$ORG_SLUG_DETECTED" \
         --arg audience "${AUDIENCE:-all}" \
@@ -492,10 +512,15 @@ $FIELD_CONTEXT
             }
         }'
     )
-    echo "$ENHANCED_INPUT"
+    emit_pretool_agent_update \
+      "$ENHANCED_INPUT" \
+      "Injected field dictionary context for ${ORG_SLUG_DETECTED}" \
+      "FIELD_DICTIONARY_CONTEXT_INJECTED: Reporting guidance was added from the org field dictionary." \
+      "FIELD_DICTIONARY_CONTEXT" \
+      "INFO"
     exit 0
 fi
 
-# Pass through unchanged if jq not available
-echo "$HOOK_INPUT"
+# jq is required for structured updates; otherwise leave the tool input unchanged.
+emit_pretool_agent_noop
 exit 0

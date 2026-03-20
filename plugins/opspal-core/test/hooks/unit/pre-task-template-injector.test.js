@@ -32,6 +32,13 @@ function createTester() {
   });
 }
 
+function createAgentEvent(toolInput = {}) {
+  return {
+    tool_name: 'Agent',
+    tool_input: toolInput
+  };
+}
+
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
   try {
@@ -65,10 +72,10 @@ async function runAllTests() {
 
   // Test 2: Injects template guidance for known agent
   results.push(await runTest('Injects template guidance for known agent', async () => {
-    const input = {
+    const input = createAgentEvent({
       subagent_type: 'sfdc-cpq-assessor',
       prompt: 'Generate a CPQ assessment report'
-    };
+    });
 
     const result = await tester.run({
       input,
@@ -77,24 +84,27 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert(result.output && typeof result.output === 'object', 'Should output JSON');
-    assert(result.output.template_guidance, 'Should add template_guidance');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+    assert(updatedInput, 'Should emit updatedInput for Agent hook updates');
+    assert(result.parseError === null, 'Should not emit invalid stdout');
+    assert(updatedInput.template_guidance, 'Should add template_guidance');
     assert.strictEqual(
-      result.output.template_guidance.templates.pdfCover,
+      updatedInput.template_guidance.templates.pdfCover,
       'salesforce-audit',
       'Should set Salesforce audit cover'
     );
     assert(
-      result.output.prompt.startsWith('[BRANDING:'),
+      updatedInput.prompt.startsWith('[BRANDING:'),
       'Should prepend branding guidance to prompt'
     );
   }));
 
-  // Test 3: Pass-through when disabled
-  results.push(await runTest('Passes through unchanged when disabled', async () => {
-    const input = {
+  // Test 3: No-op when disabled
+  results.push(await runTest('Emits no-op JSON when disabled', async () => {
+    const input = createAgentEvent({
       subagent_type: 'sfdc-cpq-assessor',
       prompt: 'Generate a CPQ assessment report'
-    };
+    });
 
     const result = await tester.run({
       input,
@@ -105,7 +115,8 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.deepStrictEqual(result.output, input, 'Should pass through original input');
+    assert.deepStrictEqual(result.output, {}, 'Disabled hook should emit a no-op response');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
   }));
 
   // Summary

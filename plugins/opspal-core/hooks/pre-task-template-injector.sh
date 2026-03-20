@@ -38,6 +38,11 @@ if [ -f "$ERROR_HANDLER" ]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
+PRETOOL_AGENT_CONTRACT="${SCRIPT_DIR}/lib/pretool-agent-contract.sh"
+if [ -f "$PRETOOL_AGENT_CONTRACT" ]; then
+    source "$PRETOOL_AGENT_CONTRACT"
+fi
+
 # Configuration
 ENABLED="${TEMPLATE_INJECTION_ENABLED:-1}"
 VERBOSE="${TEMPLATE_INJECTION_VERBOSE:-0}"
@@ -49,11 +54,15 @@ if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat)
 fi
 
-# Early exit if disabled or no input
-if [ "$ENABLED" = "0" ] || [ -z "$HOOK_INPUT" ]; then
-    [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"
+normalize_pretool_agent_event "$HOOK_INPUT"
+
+# Early exit if disabled, no input, or this is not an Agent tool event
+if [ "$ENABLED" = "0" ] || [ -z "$HOOK_INPUT" ] || ! pretool_agent_event_is_agent; then
+    emit_pretool_agent_noop
     exit 0
 fi
+
+AGENT_INPUT_JSON="${PRETOOL_TOOL_INPUT:-{}}"
 
 # ============================================================================
 # Functions
@@ -68,7 +77,7 @@ log_verbose() {
 # Extract agent type from hook input
 get_agent_type() {
     if command -v jq &>/dev/null; then
-        echo "$HOOK_INPUT" | jq -r '.subagent_type // ""' 2>/dev/null || echo ""
+        echo "$AGENT_INPUT_JSON" | jq -r '.subagent_type // ""' 2>/dev/null || echo ""
     else
         echo ""
     fi
@@ -77,8 +86,7 @@ get_agent_type() {
 # Normalize agent type (remove plugin prefix if present)
 normalize_agent_type() {
     local agent="$1"
-    # Remove common prefixes like "opspal-salesforce:", "opspal-hubspot:", etc.
-    echo "$agent" | sed -E 's/^[a-z]+-plugin://'
+    echo "$agent" | sed -E 's/^[A-Za-z0-9-]+://'
 }
 
 # Look up agent in registry
@@ -203,7 +211,7 @@ detect_templates_from_keywords() {
 # Get prompt from hook input
 get_prompt() {
     if command -v jq &>/dev/null; then
-        echo "$HOOK_INPUT" | jq -r '.prompt // ""' 2>/dev/null || echo ""
+        echo "$AGENT_INPUT_JSON" | jq -r '.prompt // ""' 2>/dev/null || echo ""
     else
         echo ""
     fi
@@ -284,7 +292,7 @@ AGENT_TYPE=$(get_agent_type)
 
 if [ -z "$AGENT_TYPE" ]; then
     log_verbose "No agent type detected in input"
-    echo "$HOOK_INPUT"
+    emit_pretool_agent_noop
     exit 0
 fi
 
@@ -336,7 +344,7 @@ if [ -n "$TEMPLATE_MAPPING" ]; then
 
 "
         # Prepend branding to prompt AND add template_guidance object
-        ENHANCED_INPUT=$(echo "$HOOK_INPUT" | jq \
+        ENHANCED_INPUT=$(echo "$AGENT_INPUT_JSON" | jq \
             --arg brandingPreamble "$BRANDING_PREAMBLE" \
             --argjson templates "$TEMPLATE_MAPPING" \
             --arg registryPath "$REGISTRY_FILE" \
@@ -364,13 +372,18 @@ if [ -n "$TEMPLATE_MAPPING" ]; then
                 }
             }'
         )
-        echo "$ENHANCED_INPUT"
+        emit_pretool_agent_update \
+          "$ENHANCED_INPUT" \
+          "Injected template guidance for ${NORMALIZED_AGENT}" \
+          "TEMPLATE_GUIDANCE_INJECTED: Applied branded output guidance from the master template registry." \
+          "TEMPLATE_GUIDANCE_INJECTED" \
+          "INFO"
         exit 0
     fi
 else
     log_verbose "No template mapping found for agent: $NORMALIZED_AGENT"
 fi
 
-# Pass through unchanged if no enhancement needed
-echo "$HOOK_INPUT"
+# No update needed for this agent
+emit_pretool_agent_noop
 exit 0

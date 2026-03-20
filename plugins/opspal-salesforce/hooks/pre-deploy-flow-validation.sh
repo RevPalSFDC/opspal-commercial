@@ -65,31 +65,59 @@ if [[ -z "$DEPLOY_COMMAND" ]] || ! printf '%s' "$DEPLOY_COMMAND" | grep -qE '(^|
     exit 0
 fi
 
-# Check if flow validation should be skipped
-if [ "$SKIP_FLOW_VALIDATION" = "1" ]; then
-    echo "⏭️  Flow validation skipped (SKIP_FLOW_VALIDATION=1)"
-    exit 0
-fi
-
-# Get deployment source directory from command
+# Fallback deploy scope if the shared resolver is unavailable
 DEPLOY_DIR="${SF_DEPLOY_DIR:-force-app/main/default}"
 TARGET_ORG="${SF_TARGET_ORG:-}"
 
 VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/flow-decision-logic-analyzer.js"
 STRUCTURAL_VALIDATOR="${PLUGIN_ROOT}/scripts/lib/flow-xml-validator.js"
 FIELD_REF_VALIDATOR="${PLUGIN_ROOT}/scripts/lib/flow-field-reference-validator.js"
+DEPLOY_SCOPE_RESOLVER="${PLUGIN_ROOT}/scripts/lib/deploy-scope-resolver.js"
+HOOK_CWD=$(printf '%s' "$HOOK_INPUT" | jq -r '.cwd // empty' 2>/dev/null || echo "")
+[ -n "$HOOK_CWD" ] || HOOK_CWD="$(pwd)"
 
-# Find all flow files in deployment
-FLOW_FILES=$(find "$DEPLOY_DIR" -name "*.flow-meta.xml" 2>/dev/null || echo "")
+SCOPE_ANALYSIS=""
+if [ -f "$DEPLOY_SCOPE_RESOLVER" ] && command -v node >/dev/null; then
+    SCOPE_ANALYSIS=$(node "$DEPLOY_SCOPE_RESOLVER" analyze --command "$DEPLOY_COMMAND" --cwd "$HOOK_CWD" 2>/dev/null || echo "")
+fi
+
+COMMAND_SKIP="false"
+SCOPE_SUMMARY=""
+if [ -n "$SCOPE_ANALYSIS" ] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/null 2>&1; then
+    COMMAND_SKIP=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.envAssignments.SKIP_FLOW_VALIDATION // "false"' 2>/dev/null || echo "false")
+    TARGET_ORG=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.targetOrg // empty' 2>/dev/null || echo "")
+    SCOPE_SUMMARY=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.selectedPaths[]?' 2>/dev/null | sed "s#^${HOOK_CWD}/##")
+    SCOPE_WARNINGS=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.warnings[]?' 2>/dev/null || true)
+    if [ -n "$SCOPE_WARNINGS" ]; then
+        while IFS= read -r warning; do
+            [ -n "$warning" ] && echo "ℹ️  $warning"
+        done <<< "$SCOPE_WARNINGS"
+    fi
+    FLOW_FILES=$(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.flowFiles[]?' 2>/dev/null || true)
+else
+    FLOW_FILES=$(find "$DEPLOY_DIR" -name "*.flow-meta.xml" 2>/dev/null || echo "")
+fi
+
+if [ "$SKIP_FLOW_VALIDATION" = "1" ] || [ "$COMMAND_SKIP" = "1" ]; then
+    echo "⏭️  Flow validation skipped (SKIP_FLOW_VALIDATION=1)"
+    exit 0
+fi
 
 if [ -z "$FLOW_FILES" ]; then
-    echo "✓ No flows to validate"
+    echo "✓ No flows to validate in deploy scope"
     exit 0
 fi
 
 echo "🔍 Validating flows before deployment..."
 
-FLOW_COUNT=$(echo "$FLOW_FILES" | wc -l | tr -d ' ')
+if [ -n "$SCOPE_SUMMARY" ]; then
+    echo "📦 Deploy scope:"
+    while IFS= read -r scope_path; do
+        [ -n "$scope_path" ] && echo "  - $scope_path"
+    done <<< "$SCOPE_SUMMARY"
+fi
+
+FLOW_COUNT=$(printf '%s\n' "$FLOW_FILES" | sed '/^$/d' | wc -l | tr -d ' ')
 
 if [ ! -f "$VALIDATOR_SCRIPT" ]; then
     echo "⚠️  Warning: Flow logic validator not found at $VALIDATOR_SCRIPT"
