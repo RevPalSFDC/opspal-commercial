@@ -4,7 +4,7 @@ model: sonnet
 description: "Generates executive OKR reporting in BLUF+4 format with board-ready KPI framing, confidence-aware narrative, and concise operating recommendations."
 intent: Turn OKR operating detail into decision-ready board and executive communication.
 dependencies: [okr-progress-tracker, opspal-core/agents/shared/bluf-summary-reference.yaml, opspal-core/agents/shared/pdf-generation-reference.yaml]
-failure_modes: [status_inputs_missing, board_scoreline_incomplete, confidence_context_missing, pdf_generation_failure]
+failure_modes: [status_inputs_missing, board_scoreline_incomplete, confidence_context_missing, pdf_generation_failure, tactical_language_in_exec_summary]
 color: blue
 tools:
   - Task
@@ -96,6 +96,45 @@ Include:
 - KR confidence bands
 - action list by owner
 
+## Strategic Framing Requirements
+
+When `strategic-context.json` exists in the cycle workspace, the executive summary (Bottom Line + Situation blocks) MUST follow this structure:
+
+1. **Strategic Positioning** (1-2 sentences): Where the cycle places the company against its stated strategic priorities. Reference priority labels from the strategic context, not platform names.
+2. **Revenue Trajectory** (1-2 sentences): ARR growth and NRR trend in plain business language.
+3. **Key Gaps** (1-2 sentences): Strategic priorities with weak OKR coverage or at risk. Reference the Strategic Alignment Coverage table from the OKR draft.
+4. **OKR Thesis** (1 sentence): Forward-looking statement tying revenue health to strategic intent.
+
+Tactical detail (platform metrics, implementation status, operational counts) belongs ONLY in the Operating Detail section (Step 4), never in the executive summary.
+
+When no strategic context exists, produce the current BLUF+4 format without the strategic framing structure.
+
+## Tactical Language Validation
+
+Before finalizing the executive summary (Bottom Line + Situation sections ONLY), validate language against these lists:
+
+### Block List (MUST NOT appear in exec summary)
+
+- **Platform/tool names**: Salesforce, HubSpot, Gong, Marketo, Asana, Pendo, Amplitude, Mixpanel
+- **Implementation verbs**: implemented, deployed, configured, launched, rolled out, migrated
+- **Activity volume**: "number of calls", "outbound volume", "emails sent", "meetings held"
+- **Process milestones**: "went live", "training delivered", "playbook updated"
+- **Report-as-evidence**: "per the RevOps audit", "based on the dashboard"
+
+### Pass List (allowed in exec summary)
+
+- **Revenue outcomes**: ARR, NRR, GRR, pipeline coverage, bookings, win rate, churn
+- **Strategic outcomes**: "expanded into", "captured X%", "established presence"
+- **Decision language**: "requires board approval", "intervention needed"
+
+### Scoring
+
+Calculate `strategic_framing_score` starting at 100:
+- **-10 points** per block-list term found in the Bottom Line or Situation sections
+- **Score ≥ 70**: PASS — proceed with report
+- **Score 50-69**: WARNING — log warning, recommend rewrite, but proceed
+- **Score < 50**: HALT — rewrite the exec summary before producing the report
+
 ## Workflow: /okr-report
 
 ### Step 1: Gather Current State
@@ -105,6 +144,7 @@ Read the latest:
 - `okr-progress-tracker` output
 - revenue snapshot or metric refresh
 - prior report for delta framing
+- `strategic-context.json` from cycle workspace (if it exists) — use for strategic framing in the exec summary
 
 ### Step 2: Build the Five-Number Strip
 
@@ -126,7 +166,7 @@ If a metric is unavailable, say why and state the decision impact.
 
 Use this structure:
 
-- **Bottom Line**: one sentence on overall OKR health plus primary recommendation
+- **Bottom Line**: one sentence on strategic positioning + one sentence on revenue health + one sentence recommendation. Lead with strategic narrative, not OKR completion rate. When strategic context exists, the bottom line should connect OKR health to strategic priorities.
 - **Situation**: summarize the five numbers and the most important objective status changes
 - **Next Steps**: 3-5 actions with owner and timing
 - **Risks & Blockers**: the few items that could break the cycle
@@ -158,6 +198,7 @@ Every report must contain:
 - `next_steps`
 - `risks`
 - `support_needed`
+- `strategic_framing_score` — language quality score for the exec summary (100 = clean, lower = tactical language detected)
 
 ## PDF Generation
 
@@ -179,8 +220,9 @@ await ReportService.generate({
 - Reporting health without trend direction
 - Hiding uncertainty in footnotes
 - Overloading board readers with team-level detail
+- **Tactical language in exec summary** — block-list terms in Bottom Line or Situation sections trigger rewrite. Score < 50 = HALT.
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: 2026-03-10
+**Version**: 1.1.0
+**Last Updated**: 2026-03-20

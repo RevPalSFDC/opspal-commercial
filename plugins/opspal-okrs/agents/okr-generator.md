@@ -30,9 +30,8 @@ Produce OKR sets that are:
 
 ## Input
 
-Revenue snapshot from `okr-data-aggregator` containing:
-- `company_context`: stage, GTM model, ARR, NRR, etc.
-- `metrics`: categorized metrics with baselines and query evidence
+1. **Strategic context** (primary, if available): `strategic-context.json` from the cycle workspace — contains extracted strategic priorities with `data_domains` and `alignment_label`
+2. **Revenue snapshot** (evidence): `revenue-snapshot.json` from `okr-data-aggregator` — contains `company_context`, categorized `metrics` with baselines and query evidence, and optional `strategic_tagging`
 
 ## OKR Generation Process
 
@@ -44,9 +43,13 @@ Read the revenue snapshot and identify:
 - **Opportunities**: Metrics with high improvement potential (gap between current and P75)
 - **Threats**: Metrics trending downward or at risk
 
-### Step 2: Select Strategic Themes
+### Step 2: Select Objective Themes (Strategy-First)
 
-Based on the snapshot analysis, select 3-5 themes from:
+Theme selection uses a three-phase approach. When strategic context exists, strategy drives themes; data supplements. When no strategic context exists, the original data-driven rules apply as fallback.
+
+#### Canonical Theme Set
+
+All themes map to one of these categories:
 - **Growth**: Pipeline generation, new logo acquisition, ARR growth
 - **Retention**: NRR improvement, churn reduction, customer health
 - **Efficiency**: Sales cycle reduction, win rate improvement, CAC optimization
@@ -54,11 +57,39 @@ Based on the snapshot analysis, select 3-5 themes from:
 - **PLG**: Product-led activation, PQL-to-pipeline, self-serve revenue
 - **Enablement**: Rep productivity, ramp time, quota attainment distribution
 
-Theme selection rules:
-- Always include at least one Growth objective
-- If NRR < 100%, always include a Retention objective
-- If GTM model is "plg" or "hybrid", include a PLG objective
-- Maximum 5 objectives total
+#### Phase A — Strategy-First Pass (when strategic-context.json exists and `alignment_label != "STRATEGY_ABSENT"`)
+
+1. Each `strategic_priority` from the context becomes a candidate objective theme
+2. Map each priority to the nearest canonical theme (growth/retention/efficiency/expansion/plg/enablement) based on the priority's `label` and `data_domains`
+3. Check the revenue snapshot for tagged metrics supporting each priority:
+   - **2+ tagged metrics** → `data_support: "STRONG"`, proceed with HIGH confidence
+   - **1 tagged metric** → `data_support: "PARTIAL"`, proceed with LOW confidence flag
+   - **0 tagged metrics** → `data_support: "GAP"`, flag for user confirmation before including
+4. Set `theme_source: "strategic"` on each theme derived from this phase
+
+#### Phase B — Data-Driven Supplement (existing rules as fallback for uncovered themes)
+
+After Phase A, check if any essential themes are missing:
+- Growth always included (if not already covered by a strategic theme)
+- Retention if NRR < 100% (if not already covered)
+- PLG if GTM model is "plg" or "hybrid" (if not already covered)
+- Set `theme_source: "data_driven"` on themes added in this phase
+
+#### Phase C — Objective Count Management
+
+- If total candidate themes > 5: present the conflict to the user, rank strategic themes first by `data_support` level, and wait for user to select final set
+- Maximum 5 objectives cap preserved
+- Strategic themes take priority over data-driven supplements when trimming
+
+#### Fallback (no strategic context)
+
+When no `strategic-context.json` exists or `alignment_label === "STRATEGY_ABSENT"`:
+- Run the original hard-coded theme selection rules unchanged:
+  - Always include at least one Growth objective
+  - If NRR < 100%, always include a Retention objective
+  - If GTM model is "plg" or "hybrid", include a PLG objective
+  - Maximum 5 objectives total
+- Set `theme_source: "data_driven"` on all themes
 
 ### Step 3: Draft Objectives
 
@@ -118,6 +149,8 @@ Before writing the final OKR set:
    - No vanity metrics (e.g., "increase page views")
    - No KRs the team can't influence
    - No KRs without a clear measurement method
+   - **No platform implementation details in objectives** — objectives that reference tool/platform names (Salesforce, HubSpot, Gong, Marketo, Asana, Pendo) or implementation verbs ("implement", "deploy", "configure", "migrate", "roll out") must be rewritten as business outcomes
+   - **No operational infrastructure metrics in executive summary** — process metrics ("workflows active", "emails sent", "meetings held") must be replaced with outcome metrics (ARR, NRR, win rate, pipeline coverage)
 5. **Target reasonableness**: Conservative < Base < Aggressive for all KRs
 6. **Objective balance**: At least 2 themes represented
 
@@ -128,6 +161,19 @@ Create a human-readable summary alongside the JSON:
 - Baseline evidence quality (% with query_evidence)
 - Benchmark comparison highlights
 - Recommendations for manual review
+
+**Strategic Alignment Coverage** (include when strategic context exists):
+
+| Strategic Priority | Objective Mapped | Data Support | Gap? |
+|---|---|---|---|
+| {priority.label} | {objective_id or "—"} | {STRONG / PARTIAL / GAP} | {Yes/No} |
+
+Include one row per strategic priority from the context. This table gives the user immediate visibility into which strategic goals are covered by the OKR set and where gaps remain.
+
+If `alignment_label === "STRATEGY_ABSENT"`, output this banner at the top of the summary:
+
+> **Operational OKR Draft — Pending Strategic Alignment**
+> This OKR set was generated from platform data without strategic context. Objectives reflect data-driven themes only. Provide a strategy document via `/okr-generate` to align OKRs with company strategic priorities.
 
 ## Benchmark Reference
 
@@ -182,6 +228,11 @@ Write two files:
 1. `okr-draft-{cycle}.json` — Full schema-compliant OKR set
 2. `okr-summary-{cycle}.md` — Human-readable summary with tables and highlights
 
+The JSON output includes the following strategic fields:
+- **Top-level**: `strategic_context_id` — the `context_id` from `strategic-context.json` (or `null` if absent)
+- **Per-objective**: `theme_source` — either `"strategic"` or `"data_driven"` indicating how the theme was selected
+- **Per-objective** (when strategic): `strategic_priority_id` — the ID of the strategic priority that generated this objective
+
 ## Error Handling
 
 - **Missing benchmark data**: Use general SaaS benchmarks, note reduced confidence
@@ -190,5 +241,5 @@ Write two files:
 
 ---
 
-**Version**: 0.1.0
-**Last Updated**: 2026-03-09
+**Version**: 0.2.0
+**Last Updated**: 2026-03-20

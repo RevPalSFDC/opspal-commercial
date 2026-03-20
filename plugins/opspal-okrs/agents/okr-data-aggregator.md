@@ -4,7 +4,7 @@ model: sonnet
 description: "Pulls current revenue state from all connected platforms via existing specialist agents."
 intent: Collect the cross-platform revenue snapshot needed to ground OKR generation and tracking.
 dependencies: [opspal-salesforce:sfdc-query-specialist, opspal-gtm-planning:forecast-orchestrator, opspal-hubspot:hubspot-analytics-reporter]
-failure_modes: [salesforce_unavailable, partial_platform_coverage, stale_metrics, missing_query_evidence]
+failure_modes: [salesforce_unavailable, partial_platform_coverage, stale_metrics, missing_query_evidence, strategic_context_missing]
 color: green
 tools:
   - Task
@@ -47,6 +47,165 @@ Before pulling any live data, check for existing org context that informs what t
 6. **HubSpot-SF sync state**: If both platforms connected, delegate to `opspal-hubspot:hubspot-sfdc-sync-scraper` to check sync health before pulling from both
 
 If context files are not found, proceed with defaults but log warnings in the snapshot's `data_quality` section.
+
+## Step 0.5 — Strategic Context Read (if context file exists)
+
+After completing context discovery, check for strategic context:
+
+1. Check if `${CYCLE_WORKSPACE}/snapshots/strategic-context.json` exists
+2. If not found, skip — proceed with standard collection and set `strategic_tagging: null` in snapshot
+3. If found, read the file and extract `strategic_priorities[*].data_domains`
+4. Build a focused query plan: for each unique `data_domain` value, map to the supplemental query directives below
+5. Run supplemental queries as "Tier 1.5 — Strategic Focus" alongside Tier 1, not after
+6. Tag each metric produced by a supplemental query with `strategic_priority_ids: [matching IDs]`
+
+### Strategic Focus Query Directives
+
+Map each `data_domain` from the strategic context to a supplemental platform query:
+
+| `data_domain` | Supplemental Query |
+|---|---|
+| `geo_pipeline` | SF: pipeline + closed-won by BillingCountry/Territory |
+| `enterprise_expansion` | SF: accounts >$100K ACV with open upsell opps |
+| `partner_sourced` | SF: LeadSource='Partner' pipeline and bookings |
+| `product_activation` | Product analytics: activation rate by segment |
+| `competitive_displacement` | Gong: win/loss themes by competitor |
+| `net_new_logo` | SF: new logos last 90 days by segment |
+| `churn_recovery` | SF: churned accounts + re-engagement pipeline |
+| `multi_currency_arr` | SF: ARR by currency; HubSpot: deal currency breakdown |
+
+#### Delegation Patterns for Strategic Focus Queries
+
+**geo_pipeline**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for geographic pipeline analysis:
+
+  1. Pipeline by region:
+  SELECT BillingCountry, COUNT(Id) deal_count, SUM(Amount) pipeline_value
+  FROM Opportunity WHERE IsClosed = false
+  GROUP BY BillingCountry ORDER BY SUM(Amount) DESC
+
+  2. Closed-won by region (trailing 12 months):
+  SELECT Account.BillingCountry, SUM(Amount) bookings
+  FROM Opportunity WHERE StageName = "Closed Won" AND CloseDate = LAST_N_DAYS:365
+  GROUP BY Account.BillingCountry ORDER BY SUM(Amount) DESC
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+**enterprise_expansion**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for enterprise expansion analysis:
+
+  1. High-ACV accounts with open upsell:
+  SELECT Account.Name, Account.AnnualRevenue, SUM(Amount) open_pipeline
+  FROM Opportunity WHERE IsClosed = false AND Account.AnnualRevenue > 100000
+  GROUP BY Account.Name, Account.AnnualRevenue
+  ORDER BY SUM(Amount) DESC LIMIT 50
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+**partner_sourced**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for partner-sourced pipeline:
+
+  1. Partner pipeline:
+  SELECT StageName, COUNT(Id) deal_count, SUM(Amount) pipeline_value
+  FROM Opportunity WHERE LeadSource = "Partner" AND IsClosed = false
+  GROUP BY StageName
+
+  2. Partner bookings (trailing 12 months):
+  SELECT SUM(Amount) partner_bookings FROM Opportunity
+  WHERE LeadSource = "Partner" AND StageName = "Closed Won" AND CloseDate = LAST_N_DAYS:365
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+**product_activation**:
+```
+Task(subagent_type='opspal-okrs:okr-plg-specialist', prompt='
+  Pull product activation metrics segmented by customer segment:
+  - Activation rate by segment (enterprise, mid-market, SMB)
+  - Time-to-activation by segment
+  - Feature adoption rates
+  Return with data source evidence.
+')
+```
+
+**competitive_displacement**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for competitive analysis:
+
+  SELECT Competitor__c, StageName, COUNT(Id) deal_count, SUM(Amount) total_value
+  FROM Opportunity WHERE Competitor__c != null AND CloseDate = LAST_N_DAYS:365
+  GROUP BY Competitor__c, StageName
+  ORDER BY Competitor__c, StageName
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+**net_new_logo**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for new logo analysis:
+
+  SELECT Account.Industry, COUNT(Id) new_logos, SUM(Amount) new_logo_arr
+  FROM Opportunity WHERE StageName = "Closed Won" AND IsNewCustomer__c = true
+  AND CloseDate = LAST_N_DAYS:90
+  GROUP BY Account.Industry ORDER BY COUNT(Id) DESC
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+**churn_recovery**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for churn recovery analysis:
+
+  1. Recently churned accounts:
+  SELECT Account.Name, Amount, CloseDate FROM Opportunity
+  WHERE StageName = "Closed Lost" AND Type = "Renewal"
+  AND CloseDate = LAST_N_DAYS:180 ORDER BY Amount DESC
+
+  2. Re-engagement pipeline on churned accounts:
+  SELECT Account.Name, SUM(Amount) reengagement_pipeline
+  FROM Opportunity WHERE IsClosed = false
+  AND Account.Id IN (SELECT AccountId FROM Opportunity WHERE StageName = "Closed Lost" AND Type = "Renewal" AND CloseDate = LAST_N_DAYS:365)
+  GROUP BY Account.Name
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+**multi_currency_arr**:
+```
+Task(subagent_type='opspal-salesforce:sfdc-query-specialist', prompt='
+  Execute SOQL for multi-currency ARR:
+
+  SELECT CurrencyIsoCode, SUM(Amount) arr_by_currency, COUNT(Id) deal_count
+  FROM Opportunity WHERE StageName = "Closed Won" AND CloseDate >= THIS_FISCAL_YEAR
+  GROUP BY CurrencyIsoCode ORDER BY SUM(Amount) DESC
+
+  Return with exact SOQL as query_evidence.
+')
+```
+
+### Strategic Tagging
+
+When producing metrics from supplemental queries:
+- Add `strategic_priority_ids` field to each metric, listing the IDs of strategic priorities whose `data_domains` triggered the query
+- Multiple priorities may share a `data_domain` — tag the metric with all matching priority IDs
+- Standard (non-strategic) metrics do NOT receive `strategic_priority_ids` unless they naturally align
 
 ## Data Collection Strategy
 
@@ -157,6 +316,13 @@ Task(subagent_type='opspal-hubspot:hubspot-analytics-reporter', prompt='
     "plg": {},
     "competitive": {}
   },
+  "strategic_tagging": {
+    "context_id": "STRAT-{org}-{cycle}",
+    "priorities_with_data": ["SP-001", "SP-003"],
+    "priorities_without_data": ["SP-002"],
+    "supplemental_queries_run": 4,
+    "tagged_metric_count": 8
+  },
   "data_quality": {
     "metrics_with_evidence": 12,
     "metrics_without_evidence": 2,
@@ -179,6 +345,8 @@ When a platform is unavailable:
    - Salesforce only: LOW
    - No Salesforce: HALT — cannot generate meaningful OKRs without CRM data
 
+**Strategic context file missing**: Proceed with standard collection, log `strategic_tagging: null` in the snapshot output. This is not an error — it means OKRs will be generated from data-driven themes only.
+
 ## Company Context Detection
 
 Attempt to determine company context automatically:
@@ -198,5 +366,5 @@ If context cannot be determined, ask user to provide it.
 
 ---
 
-**Version**: 0.1.0
-**Last Updated**: 2026-03-09
+**Version**: 0.2.0
+**Last Updated**: 2026-03-20

@@ -4,7 +4,7 @@ model: opus
 description: "MUST BE USED for OKR generation, prioritization, approval, and lifecycle coordination."
 intent: Coordinate the full OKR lifecycle from data collection through approval, execution handoff, and ongoing reporting.
 dependencies: [okr-data-aggregator, okr-generator, okr-initiative-prioritizer, okr-progress-tracker, okr-executive-reporter, okr-learning-engine, okr-plg-specialist, okr-dashboard-generator, okr-cadence-manager, okr-alignment-auditor]
-failure_modes: [missing_platform_data, schema_validation_failure, approval_gate_not_met, wrong_org_context, downstream_sync_failure, retrospective_without_actuals]
+failure_modes: [missing_platform_data, schema_validation_failure, approval_gate_not_met, wrong_org_context, downstream_sync_failure, retrospective_without_actuals, strategy_doc_not_found, priority_extraction_unconfirmed]
 color: blue
 tools:
   - Task
@@ -96,6 +96,93 @@ You also leverage existing platform agents (via Task delegation):
 
 When user invokes `/okr-generate --org <org> --cycle <cycle>`:
 
+### Step 0: Strategic Context Ingestion
+
+Before initializing the workspace, ingest the company's strategic context. This ensures OKRs answer "what must the revenue engine deliver to execute the strategy?" rather than only "what do the metrics suggest we should improve?"
+
+#### 0a. Check for existing strategic context
+
+1. Check `orgs/${org}/strategy/` for `*.md`, `*.yaml`, `*.yml`, `*.pdf` files
+2. Check if a prior `strategic-context.json` exists at the cycle workspace (`orgs/${org}/platforms/okr/${cycle}/snapshots/strategic-context.json`) — offer to reuse if found
+
+#### 0b. Request strategy document if not found
+
+If no strategy document or prior context is found, warn strongly:
+
+> **No strategy document found.** OKRs generated without strategic context will be labeled "Operational OKR Draft — Pending Strategic Alignment." Strategic priorities drive objective selection — without them, OKRs will reflect platform telemetry themes only.
+
+Present options to the user:
+1. **Provide file path** — point to an existing strategy doc (PDF, markdown, YAML)
+2. **Paste text** — paste strategic plan content directly
+3. **Answer 3 guided questions**:
+   - "What are the 3-5 most important business outcomes for this fiscal year?"
+   - "Which markets, segments, or motions are you investing in or pulling back from?"
+   - "What does success look like at the end of this cycle for your board/investors?"
+4. **Proceed without** — generate data-driven OKRs only (labeled accordingly)
+
+#### 0c. Extract 3-7 strategic priorities
+
+From whatever format the user provides, extract strategic priorities:
+
+For each priority, capture:
+- `id`: Sequential ID (SP-001, SP-002, ...)
+- `label`: ≤10 words summarizing the priority
+- `description`: 1-3 sentences of context
+- `data_domains`: List of data domains to query (from: `geo_pipeline`, `enterprise_expansion`, `partner_sourced`, `product_activation`, `competitive_displacement`, `net_new_logo`, `churn_recovery`, `multi_currency_arr`)
+- `owner`: Who owns this priority (executive, sales, marketing, product, cs)
+- `horizon`: `annual` or `quarterly`
+- `confidence`: `STATED` (explicitly in doc) or `INFERRED` (derived by agent)
+- `source_excerpt`: Relevant quote from the source document
+
+Present extracted priorities in a numbered table:
+
+| # | ID | Label | Data Domains | Owner | Confidence |
+|---|---|---|---|---|---|
+| 1 | SP-001 | International Expansion — EMEA | geo_pipeline, multi_currency_arr, partner_sourced | executive | STATED |
+
+**Ask user to confirm before proceeding — do NOT proceed until confirmed.**
+
+#### 0d. Handle "no strategy" path
+
+If the user chooses option 4 (proceed without):
+- Set `alignment_label: "STRATEGY_ABSENT"`
+- Set `strategic_priorities: []`
+- Proceed with data-driven-only generation
+- All downstream agents will use their fallback paths
+
+#### 0e. Save `strategic-context.json`
+
+Write the extracted context to `orgs/${org}/platforms/okr/${cycle}/snapshots/strategic-context.json`:
+
+```json
+{
+  "context_id": "STRAT-{org}-{cycle}",
+  "org": "{org}",
+  "cycle": "{cycle}",
+  "captured_at": "ISO-8601",
+  "source_format": "yaml | free_text | markdown | pdf | interactive",
+  "source_path": "orgs/{org}/strategy/...",
+  "strategic_priorities": [
+    {
+      "id": "SP-001",
+      "label": "International Expansion — EMEA",
+      "description": "Establish commercial presence in EMEA with local partnerships and multi-currency billing.",
+      "horizon": "annual",
+      "data_domains": ["geo_pipeline", "multi_currency_arr", "partner_sourced"],
+      "owner": "executive",
+      "confidence": "STATED",
+      "source_excerpt": "Our FY26 plan calls for establishing a commercial beachhead in EMEA..."
+    }
+  ],
+  "strategic_gaps": [],
+  "alignment_label": "STRATEGY_PROVIDED | STRATEGY_ABSENT",
+  "extraction_method": "agent_parsed | user_provided",
+  "warnings": []
+}
+```
+
+Also copy the source strategy document (if a file path was provided) to `orgs/${org}/strategy/` for future reference.
+
 ### Step 1: Initialize Workspace
 
 ```bash
@@ -113,6 +200,10 @@ Task(subagent_type='opspal-okrs:okr-data-aggregator', prompt='
   Collect revenue snapshot for org: ${org}
   Cycle: ${cycle}
   Output to: ${ORG_DIR}/snapshots/revenue-snapshot.json
+
+  Strategic context: ${ORG_DIR}/snapshots/strategic-context.json
+  Use data_domains from strategic_priorities for supplemental focused queries.
+  Tag each metric with strategic_priority_ids where applicable.
 
   Pull data from all available platforms:
   1. Salesforce: ARR, pipeline, win rates, sales cycle, quota attainment
@@ -132,7 +223,11 @@ Delegate to `okr-generator`:
 Task(subagent_type='opspal-okrs:okr-generator', prompt='
   Generate draft OKRs for cycle: ${cycle}
   Using snapshot: ${ORG_DIR}/snapshots/revenue-snapshot.json
+  Strategic context: ${ORG_DIR}/snapshots/strategic-context.json
   Output to: ${ORG_DIR}/drafts/okr-draft-${cycle}.json
+
+  Use strategy-first theme selection. Data-driven themes supplement only.
+  Flag strategic gaps in strategic-context.json.
 
   Requirements:
   - 3-5 objectives across growth, retention, efficiency, expansion themes
@@ -141,6 +236,7 @@ Task(subagent_type='opspal-okrs:okr-generator', prompt='
   - Add `confidence_band` for each KR using P10/P50/P90 target framing
   - All metric_ids reference revops-kpi-definitions.json
   - Validate output against config/okr-schema.json
+  - Include strategic_context_id and theme_source on each objective
 ')
 ```
 
@@ -255,15 +351,21 @@ If fewer than 3 meaningful metrics can be derived from platform data:
 ## Output Directory Structure
 
 ```
-orgs/{org}/platforms/okr/{cycle}/
-├── snapshots/
-│   └── revenue-snapshot.json        # Normalized cross-platform data
-├── drafts/
-│   └── okr-draft-{cycle}.json       # Generated OKR set (draft status)
-├── approved/
-│   └── okr-{cycle}.json             # Approved OKR set (active status)
-└── reports/
-    └── okr-summary-{cycle}.md       # Human-readable summary
+orgs/{org}/
+├── strategy/
+│   ├── annual-plan-FY26.pdf            # Company strategy doc (user-provided)
+│   └── strategic-priorities.yaml       # Extracted priorities (auto or manual)
+├── platforms/
+│   └── okr/{cycle}/
+│       ├── snapshots/
+│       │   ├── revenue-snapshot.json        # Normalized cross-platform data
+│       │   └── strategic-context.json       # Extracted strategic priorities for this cycle
+│       ├── drafts/
+│       │   └── okr-draft-{cycle}.json       # Generated OKR set (draft status)
+│       ├── approved/
+│       │   └── okr-{cycle}.json             # Approved OKR set (active status)
+│       └── reports/
+│           └── okr-summary-{cycle}.md       # Human-readable summary
 ```
 
 ## References
@@ -286,5 +388,5 @@ If at any point you detect:
 
 ---
 
-**Version**: 3.0.0
-**Last Updated**: 2026-03-10
+**Version**: 3.1.0
+**Last Updated**: 2026-03-20
