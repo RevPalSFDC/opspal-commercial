@@ -92,15 +92,7 @@ fi
 # Build response
 if [ ${#ERRORS[@]} -gt 0 ]; then
     ERROR_MSG=$(IFS='; '; echo "${ERRORS[*]}")
-    jq -nc --arg reason "Data quality validation failed: $ERROR_MSG" --arg context "Data quality validation failed: $ERROR_MSG" '{
-        decision: "block",
-        reason: $reason,
-        suppressOutput: true,
-        hookSpecificOutput: {
-            hookEventName: "PostToolUse",
-            additionalContext: $context
-        }
-    }'
+    emit_post_tool_use_context "Data quality validation found query errors: $ERROR_MSG"
     exit 0
 elif [ ${#WARNINGS[@]} -gt 0 ]; then
     WARN_MSG=$(IFS='; '; echo "${WARNINGS[*]}")

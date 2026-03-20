@@ -10,7 +10,7 @@
 - Plugins: 10
 - Agents: 302
 - Commands: 272
-- Hooks: 161
+- Hooks: 163
 
 ## Plugins
 
@@ -25,6 +25,6 @@
 | `opspal-mcp-client` | 1.1.1 | active | 3 | 3 | 3 | OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server |
 | `opspal-monday` | 1.4.6 | experimental | 6 | 1 | 0 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export,... |
 | `opspal-okrs` | 3.0.5 | active | 14 | 14 | 3 | Data-driven OKR generation from live revenue data |
-| `opspal-salesforce` | 3.84.7 | active | 94 | 59 | 40 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with a... |
+| `opspal-salesforce` | 3.84.7 | active | 94 | 59 | 42 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with a... |
 
 _End of auto-generated suite catalog._

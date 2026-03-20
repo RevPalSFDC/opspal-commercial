@@ -74,7 +74,7 @@ async function runAllTests() {
     assert.strictEqual(result.stdout.trim(), '', 'Should not emit warnings for non-jq commands');
   }));
 
-  results.push(await runTest('Warns and returns exit code 2 for incomplete jq pipe expressions', async () => {
+  results.push(await runTest('Returns structured PreToolUse guidance for incomplete jq pipe expressions', async () => {
     if (!hasJq()) {
       return;
     }
@@ -85,10 +85,12 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.status, 2, 'Should return warning exit code 2');
+    assert.strictEqual(result.status, 0, 'Should keep the command runnable');
     const output = JSON.parse(result.stdout.trim());
     assert(
-      output.systemMessage && output.systemMessage.includes('incomplete pipe'),
+      output.hookSpecificOutput &&
+      output.hookSpecificOutput.hookEventName === 'PreToolUse' &&
+      output.hookSpecificOutput.additionalContext.includes('incomplete pipe'),
       'Should warn about incomplete jq pipe expressions'
     );
   }));

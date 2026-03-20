@@ -144,6 +144,22 @@ async function runAllTests() {
     assert.deepStrictEqual(result.output, {}, 'Should not emit updates for fully-qualified names');
   }));
 
+  results.push(await runTest('Allows Claude internal helper agents to pass through', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'statusline-setup',
+      description: 'Configure statusline setting'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.deepStrictEqual(result.output, {}, 'Claude internal helper agents should bypass plugin agent resolution');
+  }));
+
   // Test 4: Short name resolution
   // Note: This test may fail if agent-alias-resolver.js isn't accessible from test environment
   results.push(await runTest('Handles short agent name (resolution depends on env)', async () => {

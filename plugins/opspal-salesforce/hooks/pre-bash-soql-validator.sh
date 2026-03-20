@@ -5,11 +5,44 @@
 #
 # Triggered: Before `sf data query` commands
 # Exit Codes:
-#   0 = Continue execution
+#   0 = Continue execution with optional structured guidance
 #   1 = Block execution (severe issue)
-#   2 = Warning, continue
 
 set -e
+
+emit_pretool_context() {
+    local context="$1"
+    local updated_command="${2:-}"
+
+    if [ -n "$updated_command" ]; then
+        jq -nc \
+          --arg context "$context" \
+          --arg command "$updated_command" \
+          '{
+            suppressOutput: true,
+            hookSpecificOutput: {
+              hookEventName: "PreToolUse",
+              permissionDecision: "allow",
+              additionalContext: $context,
+              updatedInput: {
+                command: $command
+              }
+            }
+          }'
+        return
+    fi
+
+    jq -nc \
+      --arg context "$context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "allow",
+          additionalContext: $context
+        }
+      }'
+}
 
 # Read input from stdin
 INPUT=$(cat)
@@ -67,16 +100,14 @@ if [ ${#ISSUES[@]} -gt 0 ]; then
     if echo "$QUERY" | grep -qE '[^<>!]!=' && [ ${#ISSUES[@]} -eq 1 ]; then
         FIXED_QUERY=$(echo "$QUERY" | sed 's/\([^<>!]\)!=/\1<>/g')
         FIXED_COMMAND=$(echo "$COMMAND" | sed "s|$QUERY|$FIXED_QUERY|")
-        jq -n \
-          --arg message "[SOQL Validator] != operator detected. Auto-replacing with <> (shell-safe equivalent)." \
-          --arg suggestion "$FIXED_COMMAND" \
-          '{systemMessage: $message, suggestion: $suggestion}'
+        emit_pretool_context \
+          "[SOQL Validator] != operator detected. Auto-replacing with <> (shell-safe equivalent)." \
+          "$FIXED_COMMAND"
         exit 0
     fi
 
-    jq -n --arg message "[SOQL Validator] Potential issues detected:\n$WARNING_MSG" \
-      '{systemMessage: $message}'
-    # Exit 0 to allow execution (let auto-correction handle it)
+    emit_pretool_context "[SOQL Validator] Potential issues detected:\n$WARNING_MSG"
+    # Exit 0 to allow execution with structured guidance.
     exit 0
 fi
 

@@ -55,7 +55,13 @@ if command -v jq &>/dev/null && [[ -n "$HOOK_INPUT" ]] && echo "$HOOK_INPUT" | j
     # v2.1.69+: agent_type and agent_id are now standardized fields
     AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent_type // .subagent_type // .agent_name // empty' 2>/dev/null || true)
     AGENT_ID=$(echo "$HOOK_INPUT" | jq -r '.agent_id // empty' 2>/dev/null || true)
-    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '.success // .task_success // .result.success // empty' 2>/dev/null || true)
+    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '
+        if has("success") then .success
+        elif has("task_success") then .task_success
+        elif (.result | type) == "object" and (.result | has("success")) then .result.success
+        else empty
+        end
+    ' 2>/dev/null || true)
     ERROR_MSG=$(echo "$HOOK_INPUT" | jq -r '.error // .error_message // .reason // .stop_reason // empty' 2>/dev/null || true)
     DURATION_MS=$(echo "$HOOK_INPUT" | jq -r '.duration_ms // .task_duration_ms // 0' 2>/dev/null || echo "0")
 fi

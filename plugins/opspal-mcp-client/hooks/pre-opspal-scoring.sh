@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-INPUT=$(cat /dev/stdin)
+INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty')
 

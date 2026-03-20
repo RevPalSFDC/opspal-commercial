@@ -140,6 +140,28 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
   }));
 
+  results.push(await runTest('Skips validation when the tool explicitly failed', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'sf project deploy start --source-dir force-app/layouts' },
+        tool_response: {
+          successRate: 42,
+          error: 'deployment failed'
+        },
+        success: false
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.stderr.trim(), '', 'Failed tool executions should not be validated as successful output');
+  }));
+
   // Cleanup
   fs.rmSync(tempHome, { recursive: true, force: true });
 

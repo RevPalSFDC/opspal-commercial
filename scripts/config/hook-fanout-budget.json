@@ -1,0 +1,37 @@
+{
+  "defaultMax": 3,
+  "budgets": {
+    "PreToolUse :: Agent": {
+      "max": 11,
+      "reason": "Current layered agent-governance stack; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
+    },
+    "SessionStart :: *": {
+      "max": 11,
+      "reason": "Global startup hooks are intentionally broad today; hold the line until domain gating is implemented."
+    },
+    "PostToolUse :: Agent": {
+      "max": 9,
+      "reason": "Agent post-hooks are already noisy; fail further growth until the chain is reduced."
+    },
+    "PreToolUse :: Bash": {
+      "max": 3,
+      "reason": "Bash pre-hooks are now dispatched per domain; fail any attempt to reintroduce broad Salesforce Bash fan-out."
+    },
+    "UserPromptSubmit :: *": {
+      "max": 6,
+      "reason": "Prompt-time routing and deprecation notices are global today; keep the current ceiling."
+    },
+    "PreToolUse :: Write": {
+      "max": 5,
+      "reason": "Write hooks are already layered across domains; this budget prevents quiet growth."
+    },
+    "PostToolUse :: Bash": {
+      "max": 3,
+      "reason": "Post-Bash hooks are now dispatched per domain; fail any attempt to reintroduce broad Bash post-hook fan-out."
+    },
+    "Stop :: *": {
+      "max": 4,
+      "reason": "Global stop hooks are capped until session-stop behavior is consolidated."
+    }
+  }
+}

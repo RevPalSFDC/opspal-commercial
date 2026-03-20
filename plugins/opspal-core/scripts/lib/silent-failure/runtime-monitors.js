@@ -59,6 +59,25 @@ const DEFAULT_THRESHOLDS = {
   cacheFallbacks: 3
 };
 
+function ensureDir(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
+function writeJsonAtomic(filePath, value) {
+  ensureDir(path.dirname(filePath));
+  const tempPath = `${filePath}.tmp-${process.pid}`;
+  fs.writeFileSync(tempPath, JSON.stringify(value, null, 2), 'utf8');
+  fs.renameSync(tempPath, filePath);
+}
+
+function sanitizeSessionId(sessionId) {
+  return String(sessionId || 'default')
+    .replace(/[^A-Za-z0-9._-]+/g, '_')
+    .slice(0, 120);
+}
+
 // =============================================================================
 // Validation Skip Tracker
 // =============================================================================
@@ -412,12 +431,87 @@ class RuntimeMonitorManager extends EventEmitter {
     this.cacheMonitor = new CacheHitMissMonitor(options);
     this.hookFailureCounter = new HookFailureCounter(options);
 
-    this.sessionId = options.sessionId || this.generateSessionId();
+    this.sessionId = options.sessionId || process.env.CLAUDE_SESSION_ID || this.generateSessionId();
     this.startTime = null;
     this.isRunning = false;
+    this.metricsDir = options.metricsDir || path.join(os.homedir(), '.claude', 'metrics');
+    this.stateFilePath = options.stateFilePath || this.resolveStateFilePath(this.sessionId);
 
     // Forward events from child monitors
     this.setupEventForwarding();
+    this.loadState();
+  }
+
+  resolveStateFilePath(sessionId) {
+    return path.join(this.metricsDir, `runtime-monitor-${sanitizeSessionId(sessionId)}.json`);
+  }
+
+  loadState() {
+    if (!fs.existsSync(this.stateFilePath)) {
+      return;
+    }
+
+    try {
+      const persisted = JSON.parse(fs.readFileSync(this.stateFilePath, 'utf8'));
+
+      this.sessionId = persisted.sessionId || this.sessionId;
+      this.startTime = typeof persisted.startTime === 'number' ? persisted.startTime : null;
+      this.isRunning = Boolean(persisted.isRunning);
+
+      const validation = persisted.validationSkipTracker || {};
+      this.validationSkipTracker.skips = Array.isArray(validation.skips) ? validation.skips : [];
+      this.validationSkipTracker.sessionSkipCount = Number(validation.sessionSkipCount || 0);
+      this.validationSkipTracker.byType = new Map(Object.entries(validation.byType || {}));
+      this.validationSkipTracker.thresholdExceeded = Boolean(validation.thresholdExceeded);
+
+      const cache = persisted.cacheMonitor || {};
+      this.cacheMonitor.hits = Number(cache.hits || 0);
+      this.cacheMonitor.misses = Number(cache.misses || 0);
+      this.cacheMonitor.staleHits = Number(cache.staleHits || 0);
+      this.cacheMonitor.fallbacks = Number(cache.fallbacks || 0);
+      this.cacheMonitor.events = Array.isArray(cache.events) ? cache.events : [];
+
+      const hookFailures = persisted.hookFailureCounter || {};
+      this.hookFailureCounter.failures = new Map(Object.entries(hookFailures.failures || {}));
+      this.hookFailureCounter.silentFailures = new Map(Object.entries(hookFailures.silentFailures || {}));
+      this.hookFailureCounter.totalFailures = Number(hookFailures.totalFailures || 0);
+      this.hookFailureCounter.totalSilentFailures = Number(hookFailures.totalSilentFailures || 0);
+    } catch {
+      // Corrupt monitor state should never block the session.
+    }
+  }
+
+  persistState() {
+    const serializedState = {
+      sessionId: this.sessionId,
+      startTime: this.startTime,
+      isRunning: this.isRunning,
+      validationSkipTracker: {
+        skips: this.validationSkipTracker.skips,
+        sessionSkipCount: this.validationSkipTracker.sessionSkipCount,
+        byType: Object.fromEntries(this.validationSkipTracker.byType),
+        thresholdExceeded: this.validationSkipTracker.thresholdExceeded
+      },
+      cacheMonitor: {
+        hits: this.cacheMonitor.hits,
+        misses: this.cacheMonitor.misses,
+        staleHits: this.cacheMonitor.staleHits,
+        fallbacks: this.cacheMonitor.fallbacks,
+        events: this.cacheMonitor.events
+      },
+      hookFailureCounter: {
+        failures: Object.fromEntries(this.hookFailureCounter.failures),
+        silentFailures: Object.fromEntries(this.hookFailureCounter.silentFailures),
+        totalFailures: this.hookFailureCounter.totalFailures,
+        totalSilentFailures: this.hookFailureCounter.totalSilentFailures
+      }
+    };
+
+    try {
+      writeJsonAtomic(this.stateFilePath, serializedState);
+    } catch {
+      // Persistence is best-effort only.
+    }
   }
 
   setupEventForwarding() {
@@ -460,8 +554,11 @@ class RuntimeMonitorManager extends EventEmitter {
    * Start monitoring
    */
   start() {
-    this.startTime = Date.now();
+    if (!this.startTime) {
+      this.startTime = Date.now();
+    }
     this.isRunning = true;
+    this.persistState();
     this.emit('started', { sessionId: this.sessionId, startTime: this.startTime });
   }
 
@@ -471,6 +568,7 @@ class RuntimeMonitorManager extends EventEmitter {
   stop() {
     this.isRunning = false;
     const summary = this.getSummary();
+    this.persistState();
     this.emit('stopped', summary);
     return summary;
   }
@@ -480,7 +578,9 @@ class RuntimeMonitorManager extends EventEmitter {
    */
   recordValidationSkip(toolName, reason, skipType = 'unknown') {
     if (!this.isRunning) this.start();
-    return this.validationSkipTracker.recordSkip({ toolName, reason, skipType });
+    const result = this.validationSkipTracker.recordSkip({ toolName, reason, skipType });
+    this.persistState();
+    return result;
   }
 
   /**
@@ -488,7 +588,9 @@ class RuntimeMonitorManager extends EventEmitter {
    */
   recordCacheHit(cacheType, isStale = false) {
     if (!this.isRunning) this.start();
-    return this.cacheMonitor.recordHit(cacheType, isStale);
+    const result = this.cacheMonitor.recordHit(cacheType, isStale);
+    this.persistState();
+    return result;
   }
 
   /**
@@ -496,7 +598,9 @@ class RuntimeMonitorManager extends EventEmitter {
    */
   recordCacheMiss(cacheType) {
     if (!this.isRunning) this.start();
-    return this.cacheMonitor.recordMiss(cacheType);
+    const result = this.cacheMonitor.recordMiss(cacheType);
+    this.persistState();
+    return result;
   }
 
   /**
@@ -504,7 +608,9 @@ class RuntimeMonitorManager extends EventEmitter {
    */
   recordCacheFallback(cacheType, error) {
     if (!this.isRunning) this.start();
-    return this.cacheMonitor.recordFallback(cacheType, error);
+    const result = this.cacheMonitor.recordFallback(cacheType, error);
+    this.persistState();
+    return result;
   }
 
   /**
@@ -512,7 +618,9 @@ class RuntimeMonitorManager extends EventEmitter {
    */
   recordHookFailure(hookName, error, isSilent = false) {
     if (!this.isRunning) this.start();
-    return this.hookFailureCounter.recordFailure(hookName, error, isSilent);
+    const result = this.hookFailureCounter.recordFailure(hookName, error, isSilent);
+    this.persistState();
+    return result;
   }
 
   /**
@@ -603,12 +711,18 @@ class RuntimeMonitorManager extends EventEmitter {
    * Reset all monitors
    */
   reset() {
+    const stateFilePath = this.stateFilePath;
     this.validationSkipTracker.reset();
     this.cacheMonitor.reset();
     this.hookFailureCounter.reset();
-    this.sessionId = this.generateSessionId();
     this.startTime = null;
     this.isRunning = false;
+
+    try {
+      fs.rmSync(stateFilePath, { force: true });
+    } catch {
+      // Ignore cleanup failures.
+    }
   }
 
   generateSessionId() {

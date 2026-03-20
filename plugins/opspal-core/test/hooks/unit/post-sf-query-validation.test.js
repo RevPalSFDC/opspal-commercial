@@ -85,7 +85,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Blocks on query output that still contains field errors', async () => {
+  results.push(await runTest('Surfaces query field errors as PostToolUse context', async () => {
     const result = await tester.run({
       input: {
         hook_event_name: 'PostToolUse',
@@ -100,10 +100,9 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output.decision, 'block', 'Should block follow-on processing');
     assert(
-      result.output.reason.includes('Data quality validation failed'),
-      'Should explain why Claude should pause'
+      result.output.hookSpecificOutput.additionalContext.includes('Data quality validation found query errors'),
+      'Should explain the query error in additional context'
     );
     assert.strictEqual(result.output.hookSpecificOutput.hookEventName, 'PostToolUse', 'Should target PostToolUse');
   }));

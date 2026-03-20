@@ -41,6 +41,7 @@ RUNBOOK_COHORT_ENFORCEMENT="${RUNBOOK_COHORT_ENFORCEMENT:-1}"
 RUNBOOK_COHORT_STRICT="${RUNBOOK_COHORT_STRICT:-0}"
 RUNBOOK_ENFORCEMENT_MESSAGE=""
 PERMISSION_FALLBACK_GUIDANCE=""
+CLAUDE_INTERNAL_AGENT_ALLOWLIST="${CLAUDE_INTERNAL_AGENT_ALLOWLIST:-statusline-setup}"
 
 # Function to log messages
 log() {
@@ -342,6 +343,30 @@ apply_subagent_permission_contract() {
     return 0
 }
 
+is_claude_internal_helper_agent() {
+    local agent_name="$1"
+    local tool_input_json="${2:-{}}"
+    local description=""
+    local allowlist_value
+
+    if [[ -z "$agent_name" ]] || [[ "$agent_name" == *:* ]]; then
+        return 1
+    fi
+
+    description=$(echo "$tool_input_json" | jq -r '.description // .prompt // .message // ""' 2>/dev/null || echo "")
+    allowlist_value=$(printf '%s' ",${CLAUDE_INTERNAL_AGENT_ALLOWLIST}," | tr '[:upper:]' '[:lower:]')
+
+    if [[ "$allowlist_value" == *",${agent_name,,},"* ]]; then
+        return 0
+    fi
+
+    if [[ "$agent_name" == "statusline-setup" ]] && [[ "$description" == *"Configure statusline setting"* ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
 is_salesforce_deploy_request() {
     local input_json="$1"
     local prompt=""
@@ -426,6 +451,12 @@ main() {
 
     if [ -z "$AGENT_NAME" ]; then
         log "No subagent_type specified, skipping"
+        echo '{}'
+        exit 0
+    fi
+
+    if is_claude_internal_helper_agent "$AGENT_NAME" "$TOOL_INPUT"; then
+        log "Allowing Claude internal helper agent without plugin resolution: $AGENT_NAME"
         echo '{}'
         exit 0
     fi

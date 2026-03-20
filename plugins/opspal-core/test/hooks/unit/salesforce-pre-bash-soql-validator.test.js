@@ -88,11 +88,13 @@ async function runAllTests() {
     assert.strictEqual(result.status, 0, 'Should exit with 0');
     const output = JSON.parse(result.stdout.trim());
     assert(
-      output.systemMessage && output.systemMessage.includes('FlowVersionView uses DeveloperName'),
+      output.hookSpecificOutput &&
+      output.hookSpecificOutput.additionalContext.includes('FlowVersionView uses DeveloperName'),
       'Should warn about ApiName vs DeveloperName mismatch'
     );
     assert(
-      output.systemMessage && output.systemMessage.includes('--use-tooling-api'),
+      output.hookSpecificOutput &&
+      output.hookSpecificOutput.additionalContext.includes('--use-tooling-api'),
       'Should warn about missing Tooling API flag'
     );
   }));

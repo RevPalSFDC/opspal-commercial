@@ -62,7 +62,12 @@ if command -v jq &>/dev/null && [[ -n "$HOOK_INPUT" ]] && echo "$HOOK_INPUT" | j
     DURATION=$(echo "$HOOK_INPUT" | jq -r '.duration_ms // .task_duration_ms // 0' 2>/dev/null || echo "0")
     TOKENS=$(echo "$HOOK_INPUT" | jq -r '.token_count // .task_token_count // 0' 2>/dev/null || echo "0")
     TOOL_USES=$(echo "$HOOK_INPUT" | jq -r '.tool_uses // .task_tool_uses // 0' 2>/dev/null || echo "0")
-    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '.success // .task_success // true' 2>/dev/null || echo "true")
+    SUCCESS=$(echo "$HOOK_INPUT" | jq -r '
+        if has("success") then .success
+        elif has("task_success") then .task_success
+        else true
+        end
+    ' 2>/dev/null || echo "true")
 fi
 
 # Extract metrics from environment as fallback

@@ -5,11 +5,24 @@
 #
 # Triggered: Before bash commands containing 'jq'
 # Exit Codes:
-#   0 = Continue execution
+#   0 = Continue execution with optional structured guidance
 #   1 = Block execution (severe issue)
-#   2 = Warning, continue
 
 set -e
+
+emit_pretool_context() {
+    local context="$1"
+    jq -nc \
+      --arg context "$context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "allow",
+          additionalContext: $context
+        }
+      }'
+}
 
 # Read input from stdin
 INPUT=$(cat)
@@ -71,9 +84,8 @@ fi
 # If issues found, output warning
 if [ ${#ISSUES[@]} -gt 0 ]; then
     WARNING_MSG=$(printf '%s\n' "${ISSUES[@]}")
-    jq -n --arg message "[jq Validator] Potential issues detected:\n$WARNING_MSG" \
-      '{systemMessage: $message}'
-    exit 2  # Warning, continue
+    emit_pretool_context "[jq Validator] Potential issues detected:\n$WARNING_MSG"
+    exit 0
 fi
 
 # No issues found

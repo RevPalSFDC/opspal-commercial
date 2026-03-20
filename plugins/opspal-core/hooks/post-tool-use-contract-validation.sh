@@ -146,7 +146,7 @@ fi
 # Extract tool name and result
 TOOL_NAME=$(echo "$RESULT_DATA" | jq -r '.tool_name // empty' 2>/dev/null)
 TOOL_RESULT=$(echo "$RESULT_DATA" | jq -c '.tool_response // .tool_result // {}' 2>/dev/null)
-TOOL_SUCCESS=$(echo "$RESULT_DATA" | jq -r '.success // true' 2>/dev/null)
+TOOL_SUCCESS=$(echo "$RESULT_DATA" | jq -r 'if has("success") then .success else true end' 2>/dev/null)
 
 if [ -z "$TOOL_NAME" ]; then
     exit 0

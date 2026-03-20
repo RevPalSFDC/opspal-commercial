@@ -17,39 +17,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-agent-context-check.sh",
-            "timeout": 5000,
-            "description": "Block direct sf project deploy outside approved agent context - steers to sfdc-deployment-manager"
-          },
-          {
-            "type": "command",
-            "command": "bash -c 'PRETOOLUSE_MODE=1 \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-deployment-comprehensive-validation.sh\"'",
-            "timeout": 30000,
-            "description": "Run source-first comprehensive deployment preflight before Salesforce deploys"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-flow-validation.sh",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-dispatcher.sh",
             "timeout": 60000,
-            "description": "Validate all flows before deployment"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-deploy-report-quality-gate.sh",
-            "timeout": 60000,
-            "description": "Validate report and dashboard quality before deployment"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-soql-validator.sh",
-            "timeout": 10000,
-            "description": "Validate SOQL field names before query execution to prevent INVALID_FIELD errors"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-jq-validator.sh",
-            "timeout": 5000,
-            "description": "Validate jq expressions for syntax errors and incomplete pipes (prevents exit code 5)"
+            "description": "Dispatch Salesforce deploy, query, and jq Bash validations with structured output and scoped execution"
           }
         ]
       }
@@ -79,15 +49,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-field-deployment.sh",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-dispatcher.sh",
             "timeout": 30000,
-            "description": "Verify field accessibility after deployment before proceeding"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-sf-query-validation.sh",
-            "timeout": 5000,
-            "description": "Validate query results for data quality issues"
+            "description": "Dispatch Salesforce deploy and query post-processing with structured output"
           }
         ]
       }
