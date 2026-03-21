@@ -55,7 +55,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output, null, 'Should not emit output for non-OKR paths');
+    assert.deepStrictEqual(result.output, {}, 'Should emit structured no-op JSON for non-OKR paths');
   }));
 
   results.push(await runTest('Blocks invalid OKR output paths by default', async () => {
@@ -63,10 +63,19 @@ async function runAllTests() {
       input: createWriteInput('tmp/okr-quarterly-plan.md')
     });
 
-    assert.strictEqual(result.exitCode, 2, 'Should block invalid OKR paths');
+    assert.strictEqual(result.exitCode, 0, 'Should return structured denial without shell failure');
     assert(
       result.stderr.includes('BLOCKED: OKR path validation'),
       'Should explain the block reason on stderr'
+    );
+    assert.strictEqual(
+      result.output?.hookSpecificOutput?.permissionDecision,
+      'deny',
+      'Should deny invalid OKR output paths'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('OKR_PATH_VALIDATION_BLOCKED'),
+      'Should include the structured denial reason'
     );
   }));
 

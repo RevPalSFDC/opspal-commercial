@@ -57,7 +57,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
-    assert.strictEqual(result.output, null, 'Should not emit output for non-GTM paths');
+    assert.deepStrictEqual(result.output, {}, 'Should emit structured no-op JSON for non-GTM paths');
   }));
 
   results.push(await runTest('Emits structured guidance for off-path GTM writes', async () => {

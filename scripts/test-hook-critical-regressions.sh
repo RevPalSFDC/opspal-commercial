@@ -23,6 +23,7 @@ run_test "subagent-start-context" node plugins/opspal-core/test/hooks/unit/subag
 run_test "subagent-stop-capture" node plugins/opspal-core/test/hooks/unit/subagent-stop-capture.test.js
 run_test "task-completed-metrics" node plugins/opspal-core/test/hooks/unit/task-completed-metrics.test.js
 run_test "stop-session-silent-failure-summary" node plugins/opspal-core/test/hooks/unit/stop-session-silent-failure-summary.test.js
+run_test "pre-deploy-agent-context-check" node plugins/opspal-core/test/hooks/unit/pre-deploy-agent-context-check.test.js
 run_test "salesforce-pre-bash-dispatcher" node plugins/opspal-core/test/hooks/unit/salesforce-pre-bash-dispatcher.test.js
 run_test "salesforce-post-bash-dispatcher" node plugins/opspal-core/test/hooks/unit/salesforce-post-bash-dispatcher.test.js
 run_test "gtm-pre-write-gtm-path-validator" node plugins/opspal-core/test/hooks/unit/gtm-pre-write-gtm-path-validator.test.js

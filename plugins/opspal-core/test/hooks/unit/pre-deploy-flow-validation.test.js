@@ -66,6 +66,22 @@ async function runAllTests() {
     assert(result.stderr.includes('Flow validation skipped'), 'Should note skipped validation');
   }));
 
+  results.push(await runTest('Skips deploy lifecycle and status commands', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf project deploy report --job-id 0Af000000000123AAA --target-org test-org --json'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+    assert.strictEqual(result.output, null, 'Should skip lifecycle commands entirely');
+    assert(!result.stderr.includes('Validating flows before deployment'), 'Should not start flow validation for deploy report');
+  }));
+
   results.push(await runTest('Honors command-visible SKIP_FLOW_VALIDATION flag', async () => {
     const result = await tester.run({
       input: {

@@ -53,6 +53,24 @@ async function runAllTests() {
     assert.strictEqual(result.output, null, 'Should stay silent for unrelated Bash commands');
   }));
 
+  results.push(await runTest('Allows deploy report lifecycle commands to pass through without pre-deploy validation', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'PreToolUse',
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf project deploy report --job-id 0Af000000000123AAA --target-org peregrine-sandbox --json'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Lifecycle deploy commands should stay runnable');
+    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+    assert.strictEqual(result.output, null, 'Lifecycle deploy commands should not emit dispatcher JSON by default');
+    assert(!result.stderr.includes('DEPLOY BLOCKED'), 'Should not trigger direct deploy routing for report commands');
+    assert(!result.stderr.includes('Deployment validation failed'), 'Should not trigger comprehensive validation for report commands');
+  }));
+
   results.push(await runTest('Blocks direct Salesforce deploy commands outside agent context', async () => {
     const result = await tester.run({
       input: {

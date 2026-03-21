@@ -8,8 +8,8 @@ HOOK_INPUT="$(cat 2>/dev/null || true)"
 COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")"
 LAST_JSON=""
 
-is_deploy_command() {
-  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'
+is_deploy_scope_command() {
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
 }
 
 is_data_query_command() {
@@ -121,7 +121,7 @@ if [ -z "$COMMAND" ]; then
   exit 0
 fi
 
-if is_deploy_command; then
+if is_deploy_scope_command; then
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-agent-context-check.sh"
   run_child_hook env PRETOOLUSE_MODE=1 "${PLUGIN_ROOT}/hooks/pre-deployment-comprehensive-validation.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-flow-validation.sh"

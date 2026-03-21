@@ -61,7 +61,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output, null, 'Should not emit output for non-GTM agents');
+    assert.deepStrictEqual(result.output, {}, 'Should emit structured no-op JSON for non-GTM agents');
   }));
 
   results.push(await runTest('Blocks out-of-order GTM phases in strict mode', async () => {
@@ -93,9 +93,18 @@ async function runAllTests() {
         }
       });
 
-      assert.strictEqual(result.exitCode, 2, 'Strict mode should block out-of-order GTM agents');
+      assert.strictEqual(result.exitCode, 0, 'Strict mode should return structured denial without shell failure');
       assert(result.stderr.includes('[GTM-GATE] BLOCKED'), 'Should explain the GTM gate block');
       assert(result.stderr.includes('Phase 2'), 'Should identify missing prerequisite phases');
+      assert.strictEqual(
+        result.output?.hookSpecificOutput?.permissionDecision,
+        'deny',
+        'Strict mode should deny out-of-order GTM agents'
+      );
+      assert(
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('GTM_APPROVAL_GATE_BLOCKED'),
+        'Should expose the structured GTM approval gate reason'
+      );
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }

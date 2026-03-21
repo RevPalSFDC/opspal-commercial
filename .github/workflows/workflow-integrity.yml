@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run actionlint
-        uses: reviewdog/action-actionlint@v1
+        uses: reviewdog/action-actionlint@v1.71.0
         with:
           reporter: github-check
           filter_mode: nofilter
@@ -51,11 +51,11 @@ jobs:
             fi
           }
 
-          check_pattern 'uses:\s*actions/upload-artifact@v(1|2|3)\b' 'Deprecated upload-artifact version detected. Use actions/upload-artifact@v4.'
-          check_pattern 'uses:\s*actions/download-artifact@v(1|2|3)\b' 'Deprecated download-artifact version detected. Use actions/download-artifact@v4.'
-          check_pattern 'uses:\s*actions/checkout@v(1|2|3)\b' 'Legacy checkout version detected. Use actions/checkout@v4.'
-          check_pattern 'uses:\s*actions/setup-node@v(1|2|3)\b' 'Legacy setup-node version detected. Use actions/setup-node@v4.'
-          check_pattern 'uses:\s*actions/github-script@v([1-6])\b' 'Legacy github-script version detected. Use actions/github-script@v7.'
+          check_pattern 'uses:\s*actions/upload-artifact@v([1-6])\b' 'Outdated upload-artifact version detected. Use actions/upload-artifact@v7.'
+          check_pattern 'uses:\s*actions/download-artifact@v([1-7])\b' 'Outdated download-artifact version detected. Use actions/download-artifact@v8.'
+          check_pattern 'uses:\s*actions/checkout@v([1-5])\b' 'Outdated checkout version detected. Use actions/checkout@v6.'
+          check_pattern 'uses:\s*actions/setup-node@v([1-5])\b' 'Outdated setup-node version detected. Use actions/setup-node@v6.'
+          check_pattern 'uses:\s*actions/github-script@v([1-7])\b' 'Outdated github-script version detected. Use actions/github-script@v8.'
           check_pattern 'uses:\s*[^[:space:]]+@(main|master)\b' 'Action references pinned to a branch are not allowed. Pin to a release tag or full SHA.'
 
           if [ "$violations" -gt 0 ]; then

@@ -15,21 +15,60 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: Validate Slack webhook secret
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Build main push summary
+        id: summary
         run: |
-          if [ -z "$SLACK_WEBHOOK_URL" ]; then
-            echo "::error::Missing SLACK_WEBHOOK_URL secret. Configure it to enable release note notifications."
-            exit 1
+          set -euo pipefail
+
+          BEFORE_SHA="${{ github.event.before }}"
+          AFTER_SHA="${{ github.sha }}"
+          COMPARE_URL="${{ github.event.compare }}"
+
+          if [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            RANGE="$BEFORE_SHA..$AFTER_SHA"
+          else
+            RANGE="$AFTER_SHA"
           fi
+
+          COMMIT_LINES="$(git log --format='- %h %s' "$RANGE" | sed -n '1,15p')"
+          if [ -z "$COMMIT_LINES" ]; then
+            COMMIT_LINES='- No commit summary available'
+          fi
+
+          {
+            echo "message<<EOF"
+            echo "${{ github.repository }} main updated"
+            echo "Ref: ${{ github.ref_name }}"
+            echo "Compare: $COMPARE_URL"
+            echo ""
+            printf '%s\n' "$COMMIT_LINES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Publish step summary
+        run: |
+          {
+            echo "# Main Push Release Notes"
+            echo ""
+            printf '%s\n' "${{ steps.summary.outputs.message }}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Send release notes notification
         env:
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: node scripts/lib/send-main-push-release-notification.js
+          MESSAGE: ${{ steps.summary.outputs.message }}
+        run: |
+          set -euo pipefail
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "SLACK_WEBHOOK_URL not configured; notification skipped."
+            exit 0
+          fi
+          payload=$(jq -n --arg text "$MESSAGE" '{text:$text}')
+          curl -fsSL -X POST \
+            -H 'Content-type: application/json' \
+            --data "$payload" \
+            "$SLACK_WEBHOOK_URL"

@@ -24,205 +24,219 @@ jobs:
   release:
     name: Release Plugin
     runs-on: ubuntu-latest
-    # Only run on tag pushes or manual workflow dispatch
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
-      issues: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            plugins/**/package-lock.json
 
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Extract plugin and version from tag
+      - name: Extract plugin and version
         id: extract
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PLUGIN="${{ github.event.inputs.plugin }}"
             VERSION="${{ github.event.inputs.version }}"
             SKIP_TESTS="${{ github.event.inputs.skip_tests }}"
           else
-            TAG_NAME=${GITHUB_REF#refs/tags/}
-            # Extract plugin-name and version from tag (format: plugin-name-vX.Y.Z)
-            PLUGIN=$(echo "$TAG_NAME" | sed -E 's/(-v[0-9]+\.[0-9]+\.[0-9]+)$//')
-            VERSION=$(echo "$TAG_NAME" | sed -E 's/.*-(v[0-9]+\.[0-9]+\.[0-9]+)$/\1/')
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+            if [[ ! "$TAG_NAME" =~ ^(opspal-[a-z0-9-]+)-(v[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?)$ ]]; then
+              echo "::error::Tag does not match required format 'opspal-<plugin>-v<version>': ${TAG_NAME}"
+              exit 1
+            fi
+            PLUGIN="${BASH_REMATCH[1]}"
+            VERSION="${BASH_REMATCH[2]}"
             SKIP_TESTS="false"
           fi
 
-          echo "plugin=$PLUGIN" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "skip_tests=$SKIP_TESTS" >> $GITHUB_OUTPUT
-          echo "tag_name=$PLUGIN-$VERSION" >> $GITHUB_OUTPUT
+          if [[ "$VERSION" != v* ]]; then
+            VERSION="v${VERSION}"
+          fi
 
-          echo "### Release Details" >> $GITHUB_STEP_SUMMARY
-          echo "- **Plugin**: $PLUGIN" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
-          echo "- **Tag**: $PLUGIN-$VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "plugin=$PLUGIN" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "skip_tests=$SKIP_TESTS" >> "$GITHUB_OUTPUT"
+          echo "tag_name=$PLUGIN-$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Validate plugin exists
+          {
+            echo "### Release Details"
+            echo "- **Plugin**: $PLUGIN"
+            echo "- **Version**: $VERSION"
+            echo "- **Tag**: $PLUGIN-$VERSION"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate plugin and manifest version
         run: |
+          set -euo pipefail
+
           PLUGIN_DIR="plugins/${{ steps.extract.outputs.plugin }}"
+          MANIFEST="$PLUGIN_DIR/.claude-plugin/plugin.json"
+          EXPECTED_VERSION="${{ steps.extract.outputs.version }}"
+          EXPECTED_VERSION="${EXPECTED_VERSION#v}"
+
           if [ ! -d "$PLUGIN_DIR" ]; then
             echo "::error::Plugin directory not found: $PLUGIN_DIR"
             exit 1
           fi
-          echo "✓ Plugin found: $PLUGIN_DIR"
 
-      - name: Install dependencies
-        run: |
-          cd dev-tools/developer-tools-plugin
-          npm install --production
-
-      - name: Run pre-release validation
-        if: steps.extract.outputs.skip_tests == 'false'
-        env:
-          NODE_PATH: ${{ github.workspace }}/dev-tools/developer-tools-plugin/node_modules
-        run: |
-          PLUGIN_DIR="plugins/${{ steps.extract.outputs.plugin }}"
-
-          echo "Running plugin validation..."
-          node dev-tools/developer-tools-plugin/scripts/validate-plugin.js "$PLUGIN_DIR" --json > validation-result.json
-
-          SCORE=$(jq -r '.qualityScore.score' validation-result.json)
-          CRITICAL=$(jq -r '.summary.critical' validation-result.json)
-
-          echo "Quality Score: $SCORE/100"
-          echo "Critical Issues: $CRITICAL"
-
-          if [ "$SCORE" -lt 80 ] || [ "$CRITICAL" -gt 0 ]; then
-            echo "::error::Plugin quality below threshold for release"
-            jq '.issues' validation-result.json
+          if [ ! -f "$MANIFEST" ]; then
+            echo "::error::Plugin manifest not found: $MANIFEST"
             exit 1
           fi
 
-          echo "✓ Plugin validation passed"
-
-      - name: Run integration tests
-        if: steps.extract.outputs.skip_tests == 'false'
-        env:
-          NODE_PATH: ${{ github.workspace }}/dev-tools/developer-tools-plugin/node_modules
-        run: |
-          echo "Running integration tests (Levels 1-3)..."
-          node dev-tools/developer-tools-plugin/scripts/test-plugin-installation.js \
-            --plugin "${{ steps.extract.outputs.plugin }}" \
-            --level 1-3 || {
-            echo "::error::Integration tests failed"
+          MANIFEST_VERSION="$(jq -r '.version // empty' "$MANIFEST")"
+          if [ "$MANIFEST_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "::error file=$MANIFEST::Manifest version ($MANIFEST_VERSION) does not match release version ($EXPECTED_VERSION)"
             exit 1
-          }
-          echo "✓ Integration tests passed"
+          fi
+
+          echo "✓ Plugin found: $PLUGIN_DIR"
+          echo "✓ Manifest version matches release tag"
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install plugin dependencies
+        run: |
+          set -euo pipefail
+
+          PLUGIN_DIR="plugins/${{ steps.extract.outputs.plugin }}"
+          if [ ! -f "$PLUGIN_DIR/package.json" ]; then
+            echo "No plugin package.json found for $PLUGIN_DIR; skipping plugin dependency install"
+            exit 0
+          fi
+
+          if [ -f "$PLUGIN_DIR/package-lock.json" ]; then
+            (cd "$PLUGIN_DIR" && npm ci)
+          else
+            (cd "$PLUGIN_DIR" && npm install)
+          fi
+
+      - name: Run pre-release validation
+        if: steps.extract.outputs.skip_tests == 'false'
+        run: |
+          set -euo pipefail
+
+          PLUGIN_DIR="plugins/${{ steps.extract.outputs.plugin }}"
+
+          echo "Running repository validation gates..."
+          npm run docs:ci
+          node scripts/lib/verify-encrypted-assets.js
+
+          if [ -f "$PLUGIN_DIR/package.json" ]; then
+            echo "Running plugin tests for $PLUGIN_DIR..."
+            (cd "$PLUGIN_DIR" && npm test --if-present)
+          else
+            echo "No plugin package.json found for $PLUGIN_DIR; skipping plugin test run"
+          fi
+
+          echo "✓ Pre-release validation passed"
 
       - name: Extract release notes
-        id: release_notes
         run: |
+          set -euo pipefail
+
           PLUGIN_DIR="plugins/${{ steps.extract.outputs.plugin }}"
           CHANGELOG_FILE="$PLUGIN_DIR/CHANGELOG.md"
           VERSION="${{ steps.extract.outputs.version }}"
 
           if [ -f "$CHANGELOG_FILE" ]; then
-            # Extract section for this version
             NOTES=$(awk "/## \[$VERSION\]|## \[${VERSION#v}\]/,/## \[/{
               if (/## \[/ && !/## \[$VERSION\]|## \[${VERSION#v}\]/) exit;
               if (!/## \[$VERSION\]|## \[${VERSION#v}\]/) print
             }" "$CHANGELOG_FILE" | sed '/^$/d' || echo "")
 
             if [ -z "$NOTES" ]; then
-              NOTES="Release $VERSION for ${{ steps.extract.outputs.plugin }}\n\nSee [CHANGELOG.md]($PLUGIN_DIR/CHANGELOG.md) for details."
+              NOTES="Release $VERSION for ${{ steps.extract.outputs.plugin }}\n\nSee $PLUGIN_DIR/CHANGELOG.md for details."
             fi
           else
             NOTES="Release $VERSION for ${{ steps.extract.outputs.plugin }}"
           fi
 
-          # Save to file for multiline support
-          echo "$NOTES" > /tmp/release-notes.md
-
+          printf '%b\n' "$NOTES" > release-notes.md
           echo "Release notes:"
-          cat /tmp/release-notes.md
+          cat release-notes.md
 
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
+
           TAG_NAME="${{ steps.extract.outputs.tag_name }}"
           PLUGIN="${{ steps.extract.outputs.plugin }}"
           VERSION="${{ steps.extract.outputs.version }}"
 
-          # Check if release already exists
           if gh release view "$TAG_NAME" >/dev/null 2>&1; then
             echo "::warning::GitHub release $TAG_NAME already exists"
           else
             gh release create "$TAG_NAME" \
               --title "$PLUGIN $VERSION" \
-              --notes-file /tmp/release-notes.md \
+              --notes-file release-notes.md \
               --target main
 
             echo "✓ GitHub release created: $TAG_NAME"
           fi
 
-          # Add release URL to summary
-          echo "### Release Published" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🎉 [View Release](https://github.com/${{ github.repository }}/releases/tag/$TAG_NAME)" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### Release Published"
+            echo ""
+            echo "🎉 [View Release](https://github.com/${{ github.repository }}/releases/tag/$TAG_NAME)"
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Update marketplace catalog
-        env:
-          NODE_PATH: ${{ github.workspace }}/dev-tools/developer-tools-plugin/node_modules
+      - name: Verify catalog artifacts stay current
         run: |
-          echo "Regenerating marketplace catalog..."
-          node dev-tools/developer-tools-plugin/scripts/build-marketplace-catalog.js --all --json > marketplace-catalog.json
-          echo "✓ Marketplace catalog updated"
-
-      - name: Commit catalog update
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-
-          git add marketplace-catalog.json
-
-          if git diff --staged --quiet; then
-            echo "No catalog changes to commit"
-          else
-            git commit -m "$(cat <<EOF
-          chore: Update marketplace catalog for ${{ steps.extract.outputs.plugin }} ${{ steps.extract.outputs.version }}
-
-          🤖 Automated update via GitHub Actions
-          EOF
-          )"
-            git push origin main
-            echo "✓ Catalog updated and pushed"
-          fi
+          set -euo pipefail
+          npm run docs:ci
+          echo "✓ Generated marketplace catalog is current"
 
       - name: Send Slack notification
         if: success()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
+          set -euo pipefail
+
           if [ -z "$SLACK_WEBHOOK_URL" ]; then
-            echo "::warning::SLACK_WEBHOOK_URL not configured - skipping notification"
+            echo "SLACK_WEBHOOK_URL not configured; notification skipped."
             exit 0
           fi
 
-          # Use the notification script
-          node dev-tools/developer-tools-plugin/scripts/send-plugin-release-notification.js \
-            "${{ steps.extract.outputs.version }}" \
-            "${{ steps.extract.outputs.plugin }}" || {
-            echo "::warning::Failed to send Slack notification"
-          }
+          TAG_NAME="${{ steps.extract.outputs.tag_name }}"
+          payload=$(jq -n \
+            --arg plugin "${{ steps.extract.outputs.plugin }}" \
+            --arg version "${{ steps.extract.outputs.version }}" \
+            --arg url "https://github.com/${{ github.repository }}/releases/tag/$TAG_NAME" \
+            '{text: ("Plugin release published: " + $plugin + " " + $version + "\n" + $url)}')
+          curl -fsSL -X POST \
+            -H 'Content-type: application/json' \
+            --data "$payload" \
+            "$SLACK_WEBHOOK_URL"
 
-      - name: Upload validation report
+      - name: Upload release artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: release-validation-${{ steps.extract.outputs.plugin }}-${{ steps.extract.outputs.version }}
-          path: validation-result.json
+          name: release-artifacts-${{ steps.extract.outputs.plugin }}-${{ steps.extract.outputs.version }}
+          path: |
+            plugins/${{ steps.extract.outputs.plugin }}/.claude-plugin/plugin.json
+            release-notes.md
+            .claude-plugin/marketplace.json
+            docs/PLUGIN_SUITE_CATALOG.json
+            docs/PLUGIN_SUITE_CATALOG.md
+          if-no-files-found: error
           retention-days: 90

@@ -45,6 +45,11 @@ if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
+is_deploy_scope_command() {
+    local command="$1"
+    printf '%s' "$command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
+}
+
 # Redirect all informational output to stderr — PreToolUse hooks must output JSON or nothing on stdout
 exec 3>&1 1>&2
 
@@ -61,7 +66,7 @@ emit_block() {
 }
 
 DEPLOY_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
-if [[ -z "$DEPLOY_COMMAND" ]] || ! printf '%s' "$DEPLOY_COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+if [[ -z "$DEPLOY_COMMAND" ]] || ! is_deploy_scope_command "$DEPLOY_COMMAND"; then
     exit 0
 fi
 

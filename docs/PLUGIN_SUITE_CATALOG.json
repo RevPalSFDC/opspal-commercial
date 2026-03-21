@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-20",
+  "generated_at": "2026-03-21",
   "marketplace": {
     "name": "opspal-commercial",
     "repository": "https://github.com/RevPalSFDC/opspal-commercial",
@@ -13,7 +13,7 @@
     "plugins": 10,
     "agents": 302,
     "commands": 272,
-    "hooks": 163,
+    "hooks": 164,
     "skills": 1
   },
   "plugins": [
@@ -45,7 +45,7 @@
       "counts": {
         "agents": 79,
         "commands": 112,
-        "hooks": 77,
+        "hooks": 78,
         "skills": 0
       },
       "lifecycle": {

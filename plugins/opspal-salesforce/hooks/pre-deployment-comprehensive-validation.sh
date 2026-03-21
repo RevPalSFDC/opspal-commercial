@@ -88,9 +88,14 @@ if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
+is_deploy_scope_command() {
+    local command="$1"
+    printf '%s' "$command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
+}
+
 if [ "$PRETOOLUSE_MODE" = "1" ]; then
     local_deploy_command=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
-    if [[ -z "$local_deploy_command" ]] || ! printf '%s' "$local_deploy_command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+    if [[ -z "$local_deploy_command" ]] || ! is_deploy_scope_command "$local_deploy_command"; then
         exit 0
     fi
 
