@@ -255,6 +255,78 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Preserves runtime plugin roots for non-repo workspaces that do not vend local plugins', async () => {
+    const workspaceRoot = '/mnt/c/Users/cnace/RevPal/workspace';
+    const runtimeRoots = {
+      'opspal-core': '/home/revpal/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core',
+      'opspal-salesforce': '/home/revpal/.claude/plugins/cache/opspal-commercial/opspal-salesforce/3.84.3'
+    };
+    const normalized = normalizeProjectHookSettings({
+      hooks: {
+        Stop: [
+          {
+            matcher: 'sfdc-discovery',
+            hooks: [
+              {
+                type: 'command',
+                command: `${workspaceRoot}/plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh`
+              }
+            ]
+          },
+          {
+            matcher: '*',
+            hooks: [
+              {
+                type: 'command',
+                command: `${workspaceRoot}/plugins/opspal-core/hooks/stop-session-silent-failure-summary.sh`
+              }
+            ]
+          }
+        ],
+        SubagentStop: [
+          {
+            matcher: 'sfdc-discovery',
+            hooks: [
+              {
+                type: 'command',
+                command: `${workspaceRoot}/plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh`
+              }
+            ]
+          }
+        ],
+        PreToolUse: [
+          {
+            matcher: 'Bash(sf data query*)',
+            hooks: [
+              {
+                type: 'command',
+                command: '/home/revpal/.claude/plugins/cache/opspal-commercial/opspal-salesforce/3.84.3/hooks/pre-bash-soql-validator.sh'
+              }
+            ]
+          }
+        ]
+      }
+    }, {
+      projectRoot: workspaceRoot,
+      preferredPluginRoots: runtimeRoots
+    });
+
+    const stopGroups = normalized.hooks.Stop;
+    assert.strictEqual(stopGroups.length, 1, 'Stop hooks duplicated in SubagentStop should still be removed');
+    assert.strictEqual(
+      stopGroups[0].hooks[0].command,
+      `${runtimeRoots['opspal-core']}/hooks/stop-session-silent-failure-summary.sh`,
+      'Stop hooks should resolve to the runtime plugin root when the workspace has no local plugin checkout'
+    );
+
+    const preToolBashGroup = normalized.hooks.PreToolUse.find((group) => group.matcher === 'Bash');
+    assert(preToolBashGroup, 'Bash group should remain after normalization');
+    assert(
+      preToolBashGroup.hooks[0].command.includes(`${runtimeRoots['opspal-salesforce']}/hooks/pre-bash-soql-validator.sh`),
+      'Runtime cache hook paths should stay pointed at the installed plugin root'
+    );
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.filter((result) => !result.passed).length;
 

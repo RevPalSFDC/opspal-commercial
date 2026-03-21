@@ -115,6 +115,10 @@ if (value === undefined) {
   process.exit(0);
 }
 
+if (value === null) {
+  process.exit(0);
+}
+
 if (typeof value === 'string') {
   process.stdout.write(value);
 } else {

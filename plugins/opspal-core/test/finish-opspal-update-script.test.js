@@ -209,6 +209,42 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Treats persisted null claudeRootOverride as unset when resuming finish validation', async () => {
+    const { tempRoot, homeDir } = scaffoldWorkspace();
+    const sessionDir = path.join(homeDir, '.claude', 'session-context');
+    const sessionPath = path.join(sessionDir, 'opspal-update-session.json');
+    const otherCwd = fs.mkdtempSync(path.join(os.tmpdir(), 'finish-opspal-othercwd-'));
+
+    try {
+      fs.mkdirSync(sessionDir, { recursive: true });
+      fs.writeFileSync(sessionPath, JSON.stringify({
+        sessionId: 'session-null-root',
+        workspaceRoot: tempRoot,
+        claudeRootOverride: null,
+        finishPending: true,
+        status: 'runner_generated',
+        startReportFile: path.join(homeDir, '.claude', 'logs', 'opspal-update-start-last.json')
+      }, null, 2) + '\n', 'utf8');
+
+      const result = spawnSync('bash', [SCRIPT_PATH, '--skip-fix', '--json'], {
+        cwd: otherCwd,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          HOME: homeDir
+        }
+      });
+
+      assert.strictEqual(result.status, 0, `Expected finish run to ignore null Claude root override. stderr=${result.stderr}`);
+      const report = parseJson(result.stdout);
+      assert.strictEqual(report.sessionId, 'session-null-root');
+      assert.strictEqual(report.workspaceRoot, tempRoot);
+    } finally {
+      fs.rmSync(otherCwd, { recursive: true, force: true });
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  }));
+
   results.push(await runTest('Backs up settings.json before mutating stale hook entries', async () => {
     const { tempRoot, homeDir, claudeDir } = scaffoldWorkspace();
     const settingsPath = path.join(claudeDir, 'settings.json');

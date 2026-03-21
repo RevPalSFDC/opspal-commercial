@@ -267,6 +267,58 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Removes stale OpsPal Stop hooks from user-level settings during hook reconciliation', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'post-plugin-fixes-home-'));
+    const userSettingsPath = path.join(tempHome, '.claude', 'settings.json');
+
+    try {
+      writeJson(userSettingsPath, {
+        hooks: {
+          Stop: [
+            {
+              matcher: '*',
+              hooks: [
+                {
+                  type: 'command',
+                  command: '/mnt/c/Users/cnace/RevPal/workspace/plugins/opspal-core/hooks/session-end.sh'
+                }
+              ]
+            }
+          ],
+          SubagentStop: [
+            {
+              matcher: 'sfdc-discovery',
+              hooks: [
+                {
+                  type: 'command',
+                  command: '/mnt/c/Users/cnace/RevPal/workspace/plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh'
+                }
+              ]
+            }
+          ]
+        }
+      });
+
+      const PostPluginUpdateFixes = loadFreshFixer(tempHome);
+      const fixer = new PostPluginUpdateFixes({
+        projectRoot: PROJECT_ROOT,
+        corePluginRoot: PLUGIN_ROOT,
+        dryRun: false,
+        verbose: false
+      });
+
+      const result = fixer.fixUserLevelHooks();
+      assert.strictEqual(result.fixed, true, 'User hook reconciliation should rewrite stale Stop hook settings');
+
+      const repairedSettings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf8'));
+      assert.strictEqual(repairedSettings.hooks.Stop, undefined, 'Stale Stop hook entries should be removed from user settings');
+      assert.strictEqual(repairedSettings.hooks.SubagentStop, undefined, 'Stale SubagentStop entries should be removed from user settings');
+    } finally {
+      process.env.HOME = originalHome;
+      fs.rmSync(tempHome, { recursive: true, force: true });
+    }
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.filter((result) => !result.passed).length;
 

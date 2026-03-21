@@ -79,6 +79,7 @@ class HookMerger {
       projectSettingsPath: options.projectSettingsPath || CONFIG.projectSettingsPath,
       backupSuffix: options.backupSuffix || CONFIG.backupSuffix
     };
+    this.preferredPluginRoots = {};
 
     this.stats = {
       pluginsScanned: 0,
@@ -351,6 +352,7 @@ class HookMerger {
     const matchers = [
       /\/\.claude\/plugins\/marketplaces\/[^/]+\/plugins\/([^/]+)\//,
       /\/\.claude\/plugins\/cache\/[^/]+\/([^/]+)\/[^/]+\//,
+      /(?:^|\/)\.claude-plugins\/([^/]+)\//,
       /(?:^|\/)plugins\/([^/]+)\//
     ];
 
@@ -461,6 +463,20 @@ class HookMerger {
   /**
    * Merge plugin hooks into settings
    */
+  buildPreferredPluginRoots(pluginHooks) {
+    const preferredRoots = {};
+
+    for (const plugin of Array.isArray(pluginHooks) ? pluginHooks : []) {
+      if (!plugin || typeof plugin.name !== 'string' || typeof plugin.path !== 'string') {
+        continue;
+      }
+
+      preferredRoots[plugin.name] = path.resolve(plugin.path);
+    }
+
+    return preferredRoots;
+  }
+
   mergeHooks(settings, pluginHooks) {
     if (this.verbose) {
       console.log(`\n${colors.blue}## Merging Hooks${colors.reset}`);
@@ -582,8 +598,11 @@ class HookMerger {
       });
     }
 
+    this.preferredPluginRoots = this.buildPreferredPluginRoots(pluginHooks);
+
     return normalizeProjectHookSettings(merged, {
-      projectRoot: path.resolve(path.dirname(this.config.projectSettingsPath), '..')
+      projectRoot: path.resolve(path.dirname(this.config.projectSettingsPath), '..'),
+      preferredPluginRoots: this.preferredPluginRoots
     });
   }
 
@@ -656,7 +675,8 @@ class HookMerger {
   writeSettings(settings) {
     const settingsPath = this.config.projectSettingsPath;
     const normalizedSettings = normalizeProjectHookSettings(settings, {
-      projectRoot: path.resolve(path.dirname(settingsPath), '..')
+      projectRoot: path.resolve(path.dirname(settingsPath), '..'),
+      preferredPluginRoots: this.preferredPluginRoots
     });
 
     console.log(`\n${colors.blue}## Writing Settings${colors.reset}`);

@@ -37,7 +37,56 @@ function escapeForDoubleQuotedScript(value) {
     .replace(/"/g, '\\"');
 }
 
-function rewriteCommandPaths(command, projectRoot) {
+function resolvePreferredPluginRoot(pluginName, projectRoot, options = {}) {
+  if (typeof pluginName !== 'string' || pluginName.trim() === '') {
+    return null;
+  }
+
+  const preferredPluginRoots = options.preferredPluginRoots && typeof options.preferredPluginRoots === 'object'
+    ? options.preferredPluginRoots
+    : {};
+  const preferredRoot = preferredPluginRoots[pluginName];
+  if (typeof preferredRoot === 'string' && preferredRoot.trim() !== '') {
+    return path.resolve(preferredRoot);
+  }
+
+  return path.join(path.resolve(projectRoot), 'plugins', pluginName);
+}
+
+function rewritePluginRootReferences(command, projectRoot, options = {}) {
+  if (typeof command !== 'string' || command.trim() === '') {
+    return command;
+  }
+
+  const replacePluginRoot = (_match, pluginName) => {
+    const preferredRoot = resolvePreferredPluginRoot(pluginName, projectRoot, options);
+    return preferredRoot || _match;
+  };
+
+  return command
+    .replace(
+      /\/home\/[^/'"\s]+\/\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/(opspal-[^/'"\s]+)(?=\/)/g,
+      replacePluginRoot
+    )
+    .replace(
+      /\$HOME\/\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/(opspal-[^/'"\s]+)(?=\/)/g,
+      replacePluginRoot
+    )
+    .replace(
+      /\/home\/[^/'"\s]+\/\.claude\/plugins\/cache\/[^/'"\s]+\/(opspal-[^/'"\s]+)\/[^/'"\s]+(?=\/)/g,
+      replacePluginRoot
+    )
+    .replace(
+      /\$HOME\/\.claude\/plugins\/cache\/[^/'"\s]+\/(opspal-[^/'"\s]+)\/[^/'"\s]+(?=\/)/g,
+      replacePluginRoot
+    )
+    .replace(
+      /(?:\/[^/'"\s]+)+(?:\/plugins|\/\.claude-plugins)\/(opspal-[^/'"\s]+)(?=\/)/g,
+      replacePluginRoot
+    );
+}
+
+function rewriteCommandPaths(command, projectRoot, options = {}) {
   if (typeof command !== 'string' || command.trim() === '') {
     return command;
   }
@@ -51,23 +100,7 @@ function rewriteCommandPaths(command, projectRoot) {
     .replace(absoluteRootPattern, normalizedRoot)
     .replace(homeRootPattern, normalizedRoot);
 
-  rewritten = rewritten
-    .replace(
-      /\/home\/[^/'"\s]+\/\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/([^/'"\s]+)/g,
-      `${normalizedRoot}/plugins/$1`
-    )
-    .replace(
-      /\$HOME\/\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/([^/'"\s]+)/g,
-      `${normalizedRoot}/plugins/$1`
-    )
-    .replace(
-      /\/home\/[^/'"\s]+\/\.claude\/plugins\/cache\/[^/'"\s]+\/([^/'"\s]+)\/[^/'"\s]+/g,
-      `${normalizedRoot}/plugins/$1`
-    )
-    .replace(
-      /\$HOME\/\.claude\/plugins\/cache\/[^/'"\s]+\/([^/'"\s]+)\/[^/'"\s]+/g,
-      `${normalizedRoot}/plugins/$1`
-    );
+  rewritten = rewritePluginRootReferences(rewritten, normalizedRoot, options);
 
   const wrongDeveloperToolsRoot = `${normalizedRoot}/plugins/developer-tools-plugin`;
   const correctDeveloperToolsRoot = `${normalizedRoot}/dev-tools/developer-tools-plugin`;
@@ -165,8 +198,8 @@ function buildGuardedWriteCommand(command, pattern) {
     `if echo \\"$INPUT_PATH $INPUT\\" | grep -q \\"${escapedPattern}\\"; then ${escapedCommand}; fi"`;
 }
 
-function normalizeHookCommand(command, eventType, originalMatcher, projectRoot) {
-  const rewritten = rewriteCommandPaths(command, projectRoot);
+function normalizeHookCommand(command, eventType, originalMatcher, projectRoot, options = {}) {
+  const rewritten = rewriteCommandPaths(command, projectRoot, options);
   const matcherConfig = ARGUMENT_MATCHER_CONFIG[originalMatcher];
 
   if (!matcherConfig) {
@@ -276,7 +309,7 @@ function normalizeProjectHookSettings(settings, options = {}) {
 
   for (const group of Array.isArray(hooks.SubagentStop) ? hooks.SubagentStop : []) {
     for (const hook of Array.isArray(group?.hooks) ? group.hooks : []) {
-      const basename = extractScriptBasename(rewriteCommandPaths(hook.command, projectRoot));
+      const basename = extractScriptBasename(rewriteCommandPaths(hook.command, projectRoot, options));
       if (basename) {
         subagentStopCommands.add(basename);
       }
@@ -322,7 +355,7 @@ function normalizeProjectHookSettings(settings, options = {}) {
 
         normalizedHookList.push({
           ...hook,
-          command: normalizeHookCommand(hook.command, eventType, originalMatcher, projectRoot)
+          command: normalizeHookCommand(hook.command, eventType, originalMatcher, projectRoot, options)
         });
       }
 

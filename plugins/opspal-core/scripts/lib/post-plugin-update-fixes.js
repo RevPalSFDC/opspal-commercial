@@ -105,7 +105,7 @@ const MANAGED_USER_PROMPT_HOOKS = [
     description: 'Suggest /intake for project-level requests using complexity scoring and language detection'
   }
 ];
-const USER_LEVEL_PROJECT_OWNED_EVENTS = new Set(['SessionStart', 'PreToolUse', 'PostToolUse']);
+const USER_LEVEL_PROJECT_OWNED_EVENTS = new Set(['SessionStart', 'PreToolUse', 'PostToolUse', 'Stop', 'SubagentStop']);
 const USER_LEVEL_PROJECT_HOOK_PATTERNS = [
   DEFAULT_MARKETPLACE_NAME,
   'opspal-internal-plugins',
@@ -113,6 +113,8 @@ const USER_LEVEL_PROJECT_HOOK_PATTERNS = [
   'session-start-repo-sync.sh',
   'post-git-push-slack-notifier.sh'
 ];
+const USER_LEVEL_OPSPAL_PLUGIN_HOOK_PATTERN =
+  /(?:\/|^)(?:\.claude-plugins|plugins)\/(opspal-[^/'"\s]+)\/hooks\/|\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/(opspal-[^/'"\s]+)\/hooks\/|\.claude\/plugins\/cache\/[^/'"\s]+\/(opspal-[^/'"\s]+)\/[^/'"\s]+\/hooks\//;
 const CORE_PLUGIN_NAME = 'opspal-core';
 const CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS = [
   'scripts/finish-opspal-update.sh',
@@ -225,7 +227,8 @@ class PostPluginUpdateFixes {
       return false;
     }
 
-    return USER_LEVEL_PROJECT_HOOK_PATTERNS.some((pattern) => hook.command.includes(pattern));
+    return USER_LEVEL_PROJECT_HOOK_PATTERNS.some((pattern) => hook.command.includes(pattern)) ||
+      USER_LEVEL_OPSPAL_PLUGIN_HOOK_PATTERN.test(hook.command);
   }
 
   evaluateProjectOwnedHookDrift(settings) {
