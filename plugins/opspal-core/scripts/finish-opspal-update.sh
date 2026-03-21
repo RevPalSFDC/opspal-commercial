@@ -1709,19 +1709,19 @@ step8_routing_promotion() {
   done
 
   if [ -n "$routing_index" ] && command -v node >/dev/null 2>&1; then
-    route_stats=$(node -e "
-      const idx = JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'));
+    route_stats=$(node -e '
+      const idx = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
       const agents = idx.agents || {};
       let mandatory = 0, recommended = 0, total = 0;
       for (const agent of Object.values(agents)) {
         if (!agent.triggerKeywords || agent.triggerKeywords.length === 0) continue;
         total += 1;
-        const desc = String(agent.description || '').toLowerCase();
+        const desc = String(agent.description || "").toLowerCase();
         if (/must be used|mandatory|blocked operation/i.test(desc)) mandatory += 1;
         else if (/proactively|recommended/i.test(desc)) recommended += 1;
       }
-      process.stdout.write(`${mandatory}|${recommended}|${total}`);
-    " "$routing_index" 2>/dev/null || echo "0|0|0")
+      process.stdout.write(mandatory + "|" + recommended + "|" + total);
+    ' "$routing_index" 2>/dev/null || echo "0|0|0")
 
     mandatory_count="${route_stats%%|*}"
     rest="${route_stats#*|}"
@@ -1764,11 +1764,19 @@ step9_subagent_remediation() {
   local checks_passed=0
   local total_checks=0
 
-  # Locate plugin hook files across marketplace, cache, and workspace roots
+  # Derive plugin roots from SCRIPT_DIR (scripts/ -> opspal-core -> plugins/)
+  local core_plugin_root
+  core_plugin_root="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd)"
+  local plugins_root
+  plugins_root="$(cd "$core_plugin_root/.." 2>/dev/null && pwd)"
+  local home_claude="${HOME:-.}/.claude"
+
+  # Locate plugin hook files across workspace and marketplace roots
   local validator_paths=()
   local deploy_check_paths=()
 
-  for search_root in "$PLUGINS_ROOT" "$CLAUDE_ROOT/plugins/marketplaces" "$CLAUDE_ROOT/plugins/cache"; do
+  local search_root
+  for search_root in "$plugins_root" "$home_claude/plugins/marketplaces" "$home_claude/plugins/cache"; do
     if [ -d "$search_root" ]; then
       while IFS= read -r f; do
         validator_paths+=("$f")

@@ -380,8 +380,9 @@ async function runAllTests() {
     assert.deepStrictEqual(result.output, {}, 'Legacy Task payload should be skipped');
   }));
 
-  // Test 11: Injects permission fallback contract for Bash-required subagents
+  // Test 11: Bash permission contract is opt-in (disabled by default)
   results.push(await runTest('Injects Bash permission fallback contract for data/query subagents', async () => {
+    // Without SUBAGENT_BASH_CONTRACT_ENABLED, the contract should NOT be injected
     const env = createIsolatedEnv();
     const input = createAgentEvent({
       subagent_type: 'opspal-salesforce:sfdc-data-operations',
@@ -395,20 +396,37 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
-    assert(updatedInput, 'Should emit updated input contract for Bash-required agents');
+    // Contract is opt-in — when disabled, no SUBAGENT_BASH_PERMISSION_BLOCKED marker
+    if (updatedInput) {
+      assert(
+        !(updatedInput.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
+        'Prompt should NOT include permission-block fallback marker when contract is opt-in (default off)'
+      );
+      assert.strictEqual(
+        updatedInput.permission_contract,
+        undefined,
+        'Permission contract should not be injected when SUBAGENT_BASH_CONTRACT_ENABLED is off'
+      );
+    }
+
+    // Verify contract IS injected when opt-in is enabled
+    const envEnabled = createIsolatedEnv();
+    envEnabled.SUBAGENT_BASH_CONTRACT_ENABLED = '1';
+    const resultEnabled = await tester.run({
+      input,
+      env: envEnabled
+    });
+    assert.strictEqual(resultEnabled.exitCode, 0, 'Should exit with 0 when contract enabled');
+    const updatedEnabled = resultEnabled.output?.hookSpecificOutput?.updatedInput;
+    assert(updatedEnabled, 'Should emit updated input contract when SUBAGENT_BASH_CONTRACT_ENABLED=1');
     assert(
-      (updatedInput.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
-      'Prompt should include explicit permission-block fallback marker'
+      (updatedEnabled.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
+      'Prompt should include fallback marker when contract is opt-in enabled'
     );
     assert.strictEqual(
-      updatedInput.permission_contract?.fallbackMarker,
+      updatedEnabled.permission_contract?.fallbackMarker,
       'SUBAGENT_BASH_PERMISSION_BLOCKED',
-      'Permission contract should define explicit fallback marker'
-    );
-    assert.strictEqual(
-      result.output?.hookSpecificOutput?.permissionDecision,
-      'allow',
-      'Contract-injected updates should explicitly allow execution'
+      'Permission contract should define fallback marker when enabled'
     );
   }));
 
@@ -426,26 +444,23 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
-    assert(updatedInput, 'Should emit updated input contract for deployment manager');
-    // Deploy contract injection removed — the deployment manager now has its own
-    // adaptive execution logic (try Bash first, fallback to handoff if unavailable).
-    assert(
-      !(updatedInput.prompt || '').includes('DEPLOY EXECUTION CONTRACT'),
-      'Deployment manager prompt should NOT have deploy contract injected (removed)'
-    );
-    assert.strictEqual(
-      updatedInput.deployment_execution_contract,
-      undefined,
-      'Deploy handoff contract should not be injected (deployment manager handles its own logic)'
-    );
-    // With deploy contract removed, deployment manager now receives the generic
-    // Bash permission contract — correct behavior (fallback if Bash unavailable).
-    // permission_contract may or may not be present depending on agent-tool-registry results.
-    assert.strictEqual(
-      result.output?.hookSpecificOutput?.permissionDecision,
-      'allow',
-      'Deployment manager handoff updates should explicitly allow execution'
-    );
+    // Both deploy contract and Bash permission contract are disabled by default.
+    // The agent should pass through with minimal or no updatedInput modifications.
+    if (updatedInput) {
+      assert(
+        !(updatedInput.prompt || '').includes('DEPLOY EXECUTION CONTRACT'),
+        'Deployment manager prompt should NOT have deploy contract injected (removed)'
+      );
+      assert.strictEqual(
+        updatedInput.deployment_execution_contract,
+        undefined,
+        'Deploy handoff contract should not be injected (function removed)'
+      );
+      assert(
+        !(updatedInput.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
+        'Bash permission contract should not be injected (opt-in off by default)'
+      );
+    }
   }));
 
   results.push(await runTest('Records deploy clearance for planning-only deployment-manager requests', async () => {
@@ -480,6 +495,7 @@ async function runAllTests() {
   }));
 
   results.push(await runTest('Injects Bash permission fallback contract for HubSpot Bash agents', async () => {
+    // Contract is opt-in — verify it is NOT injected by default
     const env = createIsolatedEnv();
     const input = createAgentEvent({
       subagent_type: 'opspal-hubspot:hubspot-cms-theme-manager',
@@ -493,20 +509,17 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
-    assert(updatedInput, 'Should emit updated input contract for HubSpot Bash agents');
-    assert.deepStrictEqual(
-      updatedInput.permission_contract?.requiredTools,
-      ['Bash'],
-      'HubSpot Bash agent contract should explicitly require Bash'
-    );
-    assert.strictEqual(
-      updatedInput.permission_contract?.fallbackMarker,
-      'SUBAGENT_BASH_PERMISSION_BLOCKED',
-      'HubSpot Bash agent contract should define explicit fallback marker'
-    );
+    if (updatedInput) {
+      assert.strictEqual(
+        updatedInput.permission_contract,
+        undefined,
+        'HubSpot Bash agent should NOT have permission contract when opt-in is off'
+      );
+    }
   }));
 
   results.push(await runTest('Injects Bash permission fallback contract for Marketo Bash agents', async () => {
+    // Contract is opt-in — verify it is NOT injected by default
     const env = createIsolatedEnv();
     const input = createAgentEvent({
       subagent_type: 'opspal-marketo:marketo-data-operations',
@@ -520,17 +533,13 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
-    assert(updatedInput, 'Should emit updated input contract for Marketo Bash agents');
-    assert.deepStrictEqual(
-      updatedInput.permission_contract?.requiredTools,
-      ['Bash'],
-      'Marketo Bash agent contract should explicitly require Bash'
-    );
-    assert.strictEqual(
-      updatedInput.permission_contract?.fallbackMarker,
-      'SUBAGENT_BASH_PERMISSION_BLOCKED',
-      'Marketo Bash agent contract should define explicit fallback marker'
-    );
+    if (updatedInput) {
+      assert.strictEqual(
+        updatedInput.permission_contract,
+        undefined,
+        'Marketo Bash agent should NOT have permission contract when opt-in is off'
+      );
+    }
   }));
 
   results.push(await runTest('Clears pending routing state when Agent uses approved family member', async () => {
