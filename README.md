@@ -42,7 +42,7 @@ git pull origin main
 | `opspal-mcp-client` | 1.1.2 | active | 3 | 3 | 3 |
 | `opspal-monday` | 1.4.6 | experimental | 6 | 1 | 0 |
 | `opspal-okrs` | 3.0.6 | active | 14 | 14 | 3 |
-| `opspal-salesforce` | 3.84.9 | active | 94 | 59 | 42 |
+| `opspal-salesforce` | 3.84.10 | active | 94 | 59 | 42 |
 
 Deprecated compatibility note: `opspal-data-hygiene` remains published for compatibility, but new installs should prefer the deduplication commands in `opspal-core`.
 
