@@ -9,12 +9,11 @@
 
 set -euo pipefail
 
-SCRIPT_DIR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if ! command -v jq &>/dev/null; then
     echo "[pre-deploy-agent-context-check] jq not found, skipping" >&2
     exit 0
 fi
-="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 PLUGINS_ROOT="$(cd "$PLUGIN_ROOT/.." && pwd)"
 ROUTING_STATE_MANAGER="${PLUGINS_ROOT}/opspal-core/scripts/lib/routing-state-manager.js"

@@ -33,7 +33,7 @@ fi
 : "${NC:=\033[0m}" # No Color
 
 # Get the user's input/task
-TASK_INPUT="$1"
+TASK_INPUT="${1:-}"
 OPERATION_TYPE="${2:-unknown}"
 BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 AGENT_NAME="${AGENT_NAME:-}"
@@ -300,9 +300,10 @@ main() {
     fi
 
     # Check if high-risk operation
-    RISK_CATEGORY=$(check_high_risk "$TASK_INPUT")
+    local _risk_rc=0
+    RISK_CATEGORY=$(check_high_risk "$TASK_INPUT") || _risk_rc=$?
 
-    if [ $? -eq 0 ]; then
+    if [ "$_risk_rc" -eq 0 ] && [ -n "$RISK_CATEGORY" ]; then
         # High-risk operation - MANDATORY agent use
         display_mandatory_requirement "$RISK_CATEGORY"
 

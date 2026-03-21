@@ -66,8 +66,8 @@ if [[ ! -t 0 ]]; then
 fi
 
 # Extract task description from environment or arguments
-TASK_DESC="${TASK_DESCRIPTION:-$1}"
-AGENT_NAME="${AGENT_NAME:-$2}"
+TASK_DESC="${TASK_DESCRIPTION:-${1:-}}"
+AGENT_NAME="${AGENT_NAME:-${2:-}}"
 
 if [[ -z "$TASK_DESC" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
     TASK_DESC=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // ""' 2>/dev/null || echo "")

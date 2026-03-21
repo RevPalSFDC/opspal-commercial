@@ -18,7 +18,7 @@
 set -euo pipefail
 
 # Source standardized error handler for centralized logging
-SCRIPT_DIR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if ! command -v jq &>/dev/null; then
     echo "[pre-high-risk-operation] jq not found, skipping" >&2
     exit 0
@@ -28,7 +28,6 @@ if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     set -x
     echo "DEBUG: [pre-high-risk-operation] starting" >&2
 fi
-="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
 if [[ -f "$ERROR_HANDLER" ]]; then
     source "$ERROR_HANDLER"
