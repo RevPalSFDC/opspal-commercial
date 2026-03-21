@@ -71,7 +71,7 @@ log_info() {
 
 ensure_log_dir() {
     if [ ! -d "$LOG_DIR" ]; then
-        mkdir -p "$LOG_DIR"
+        mkdir -p "$LOG_DIR" || true
     fi
 }
 

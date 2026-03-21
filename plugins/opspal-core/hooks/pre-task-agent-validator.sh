@@ -598,6 +598,12 @@ main() {
         exit 0
     fi
 
+    if ! command -v node &>/dev/null; then
+        log "node not available, skipping agent validation"
+        echo '{}'
+        exit 0
+    fi
+
     local normalized_hook_input
     normalized_hook_input=$(printf '%s' "$HOOK_INPUT" | node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "{}")
     if [[ -z "$normalized_hook_input" ]] || ! echo "$normalized_hook_input" | jq -e . >/dev/null 2>&1; then

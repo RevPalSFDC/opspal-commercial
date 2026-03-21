@@ -94,6 +94,9 @@ if [ "$ENABLED" != "1" ]; then
     exit 0
 fi
 
+# Early exit if ORG_SLUG is not set (no org context available)
+[[ -z "${ORG_SLUG:-}" ]] && [[ -z "${CLIENT_ORG:-}" ]] && [[ -z "${SF_TARGET_ORG:-}" ]] && exit 0
+
 # Read hook input (contains agent output details)
 HOOK_INPUT=""
 if [ ! -t 0 ]; then

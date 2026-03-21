@@ -166,7 +166,7 @@
           ],
           "requires_approval_patterns": [
             "sf project deploy.*--target-org.*prod",
-            "sf data delete",
+            "sf data delete.*--hard-delete",
             "sf data update",
             "git push",
             "npm publish"

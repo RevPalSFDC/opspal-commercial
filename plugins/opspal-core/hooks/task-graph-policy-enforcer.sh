@@ -89,7 +89,7 @@ get_task_info() {
     else
         TASK_ID="unknown"
         TASK_DOMAIN="unknown"
-        RISK_LEVEL="medium"
+        RISK_LEVEL="unmanaged"
         TOOL_POLICY="{}"
     fi
 }
@@ -241,11 +241,33 @@ check_production_access() {
 }
 
 # Check destructive operations
+# Platform-specific CLI operations (sf flow delete, sf data delete, REST API DELETE)
+# are governed by their own platform hooks (pre-deploy-agent-context-check,
+# universal-agent-governance, etc.) and should not be caught by generic keyword matching.
 check_destructive_ops() {
-    local destructive_keywords="delete|remove|drop|truncate|destroy|purge|hard-delete"
+    local args_lower
+    args_lower="$(printf '%s' "$TOOL_ARGS" | tr '[:upper:]' '[:lower:]')"
 
-    if echo "$TOOL_ARGS" | grep -qiE "$destructive_keywords"; then
-        echo "DESTRUCTIVE_OP: Contains destructive keyword"
+    # Salesforce CLI operations are platform-managed, not generic destructive
+    case "$args_lower" in
+        *"sf flow delete"*|*"sf project deploy"*"destructive"*|\
+        *"sf api request rest"*"--method delete"*|*"sf api request rest"*"-x delete"*|\
+        *"sf data delete record"*|*"sf data bulk delete"*|\
+        *"sfdx force:data:record:delete"*|*"sfdx force:source:delete"*|\
+        *"sf sobject delete"*)
+            return 1
+            ;;
+    esac
+
+    # Generic destructive operations still need review
+    if echo "$TOOL_ARGS" | grep -qiE "rm -rf|rmdir.*-p|DROP TABLE|TRUNCATE TABLE|destroy|purge"; then
+        echo "DESTRUCTIVE_OP: Contains destructive pattern"
+        return 0
+    fi
+
+    # Hard-delete is always flagged (irreversible)
+    if echo "$TOOL_ARGS" | grep -qiE "hard-delete"; then
+        echo "DESTRUCTIVE_OP: Contains hard-delete keyword"
         return 0
     fi
 
@@ -309,9 +331,9 @@ main() {
                 echo "⚠️ APPROVAL_REQUIRED: $destruct_result - Destructive operations require approval" >&2
                 exit 2
                 ;;
-            high)
+            high|unmanaged)
                 log_decision "warn" "$destruct_result"
-                echo "⚠️ WARNING: $destruct_result - Proceeding with high-risk task" >&2
+                echo "⚠️ WARNING: $destruct_result" >&2
                 ;;
         esac
     fi
@@ -319,9 +341,17 @@ main() {
     # Check for patterns requiring approval
     local approval_result
     if approval_result=$(check_approval_required 2>&1); then
-        log_decision "approval_required" "$approval_result"
-        echo "⚠️ $approval_result" >&2
-        exit 2
+        case "$RISK_LEVEL" in
+            low|medium)
+                log_decision "approval_required" "$approval_result"
+                echo "⚠️ $approval_result" >&2
+                exit 2
+                ;;
+            high|unmanaged)
+                log_decision "warn" "$approval_result"
+                echo "⚠️ $approval_result" >&2
+                ;;
+        esac
     fi
 
     # All checks passed

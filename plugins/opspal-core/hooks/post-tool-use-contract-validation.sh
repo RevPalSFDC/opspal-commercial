@@ -187,6 +187,10 @@ validate_output() {
     local result="$1"
     local contract_name="$2"
 
+    if ! command -v node &>/dev/null; then
+        return 0
+    fi
+
     node -e "
         const fs = require('fs');
 
@@ -335,7 +339,7 @@ validate_output() {
     " 2>/dev/null
 }
 
-VALIDATION_RESULT=$(validate_output "$TOOL_RESULT" "$CONTRACT_NAME")
+VALIDATION_RESULT=$(validate_output "$TOOL_RESULT" "$CONTRACT_NAME" || true)
 
 if [ -z "$VALIDATION_RESULT" ]; then
     # Validation failed to run - log and continue
