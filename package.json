@@ -13,15 +13,17 @@
     "verify:agent-description-budget": "node scripts/validate-agent-description-budget.js",
     "verify:hook-fanout-budget": "node scripts/validate-hook-fanout-budget.js",
     "verify:hook-test-coverage": "node scripts/validate-active-hook-test-coverage.js",
+    "verify:runtime-replay": "node scripts/validate-runtime-incident-fixtures.js",
     "verify:version-bumps": "node scripts/lib/verify-plugin-version-bumps.js",
     "verify:encrypted-assets": "node scripts/lib/verify-encrypted-assets.js",
     "verify:repo-boundaries": "node scripts/lib/verify-commercial-repo-boundaries.js",
-    "verify:hook-runtime": "node scripts/validate-active-hook-contracts.js && node scripts/validate-active-hook-test-coverage.js && node scripts/validate-hook-fanout-budget.js && bash scripts/test-hook-critical-regressions.sh && bash scripts/test-claude-hooks-smoke.sh --skip-live",
+    "verify:hook-runtime": "node scripts/validate-active-hook-contracts.js && node scripts/validate-active-hook-test-coverage.js && node scripts/validate-hook-fanout-budget.js && bash scripts/test-hook-critical-regressions.sh && node scripts/validate-runtime-incident-fixtures.js && bash scripts/test-claude-hooks-smoke.sh --skip-live",
     "verify:claude-installed-runtime": "bash scripts/test-claude-installed-runtime.sh",
+    "verify:runtime-fidelity": "npm run verify:hook-runtime && npm run verify:claude-installed-runtime",
     "smoke:claude-hooks": "bash scripts/test-claude-hooks-smoke.sh",
     "smoke:claude-hooks:static": "bash scripts/test-claude-hooks-smoke.sh --skip-live",
     "smoke:marketplace": "bash scripts/smoke-commercial-marketplace.sh",
-    "ci:hardening": "npm run docs:ci && npm run verify:hook-runtime && npm run verify:encrypted-assets && npm run verify:repo-boundaries && npm run smoke:marketplace"
+    "ci:hardening": "npm run docs:ci && npm run verify:runtime-fidelity && npm run verify:encrypted-assets && npm run verify:repo-boundaries && npm run smoke:marketplace"
   },
   "repository": {
     "type": "git",

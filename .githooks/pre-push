@@ -4,6 +4,14 @@ set -euo pipefail
 ZERO_SHA="0000000000000000000000000000000000000000"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 REMOTE_NAME="${1:-origin}"
+RUNTIME_FIDELITY_REGEX='^(plugins/[^/]+/(hooks|agents)/|plugins/[^/]+/\.claude-plugin/(hooks\.json|plugin\.json)$|plugins/opspal-core/scripts/|scripts/|\.github/workflows/|\.githooks/pre-push$|package(-lock)?\.json$)'
+CHANGED_FILES_FILE="$(mktemp "${TMPDIR:-/tmp}/opspal-pre-push-files.XXXXXX")"
+
+cleanup() {
+  rm -f "$CHANGED_FILES_FILE"
+}
+
+trap cleanup EXIT
 
 cd "$REPO_ROOT"
 
@@ -20,6 +28,13 @@ fi
 
 ran_range_check="false"
 
+record_changed_files() {
+  local base_ref="$1"
+  local head_ref="$2"
+
+  git diff --name-only "$base_ref" "$head_ref" >> "$CHANGED_FILES_FILE"
+}
+
 while read -r local_ref local_sha remote_ref remote_sha; do
   if [ -z "${local_sha:-}" ] || [ "$local_sha" = "$ZERO_SHA" ]; then
     continue
@@ -32,12 +47,19 @@ while read -r local_ref local_sha remote_ref remote_sha; do
 
   node scripts/lib/verify-plugin-version-bumps.js --base "$base_ref" --head "$local_sha" >/dev/null
   node scripts/lib/verify-commercial-repo-boundaries.js --base "$base_ref" --head "$local_sha" >/dev/null
+  record_changed_files "$base_ref" "$local_sha"
   ran_range_check="true"
 done
 
 if [ "$ran_range_check" != "true" ]; then
   node scripts/lib/verify-plugin-version-bumps.js --base "$DEFAULT_BASE" --head HEAD >/dev/null
   node scripts/lib/verify-commercial-repo-boundaries.js --base "$DEFAULT_BASE" --head HEAD >/dev/null
+  record_changed_files "$DEFAULT_BASE" HEAD
+fi
+
+if [ -s "$CHANGED_FILES_FILE" ] && sort -u "$CHANGED_FILES_FILE" | grep -Eq "$RUNTIME_FIDELITY_REGEX"; then
+  echo "Detected runtime-sensitive changes; running runtime fidelity guardrails..."
+  npm run verify:runtime-fidelity >/dev/null
 fi
 
 echo "Commercial pre-push guardrails passed."

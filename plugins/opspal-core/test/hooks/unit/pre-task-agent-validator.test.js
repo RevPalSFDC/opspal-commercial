@@ -208,13 +208,18 @@ async function runAllTests() {
       'Salesforce metadata deploys should be rerouted to the designated deployment specialist'
     );
     assert(
-      (updatedInput?.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
-      'Rerouted deployment specialist should receive the Bash permission fallback marker'
+      (updatedInput?.prompt || '').includes('PARENT_CONTEXT_DEPLOY_REQUIRED'),
+      'Rerouted deployment specialist should be converted into a parent-context deploy handoff'
     );
     assert.strictEqual(
-      updatedInput?.permission_contract?.fallbackMarker,
-      'SUBAGENT_BASH_PERMISSION_BLOCKED',
-      'Rerouted deployment specialist should receive the Bash permission contract'
+      updatedInput?.deployment_execution_contract?.marker,
+      'PARENT_CONTEXT_DEPLOY_REQUIRED',
+      'Rerouted deployment specialist should receive the deploy handoff contract'
+    );
+    assert.strictEqual(
+      updatedInput?.permission_contract,
+      undefined,
+      'Deploy handoff requests should not receive the generic Bash permission contract'
     );
     assert(
       (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_SPECIALIST_OVERRIDE'),
@@ -273,7 +278,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Rejects generic role labels like Explore', async () => {
+  results.push(await runTest('Allows built-in Claude agents like Explore to pass through', async () => {
     const env = createIsolatedEnv();
     const input = createAgentEvent({
       subagent_type: 'Explore',
@@ -286,19 +291,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 for contract handling');
-    assert.strictEqual(
-      result.output?.hookSpecificOutput?.permissionDecision,
-      'deny',
-      'Generic role labels should be denied'
-    );
-    assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('Generic role labels'),
-      'Should explain that generic role labels are unsupported'
-    );
-    assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('Use fully-qualified names'),
-      'Should direct the caller to fully-qualified agent names'
-    );
+    assert.deepStrictEqual(result.output, {}, 'Built-in Claude agents should bypass plugin routing resolution');
   }));
 
   // Test 7: Invalid JSON handling
@@ -420,7 +413,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Injects Bash permission fallback contract for Salesforce deployment manager', async () => {
+  results.push(await runTest('Transforms deployment-manager execution requests into parent-context handoffs', async () => {
     const env = createIsolatedEnv();
     const input = createAgentEvent({
       subagent_type: 'opspal-salesforce:sfdc-deployment-manager',
@@ -436,23 +429,65 @@ async function runAllTests() {
     const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
     assert(updatedInput, 'Should emit updated input contract for deployment manager');
     assert(
-      (updatedInput.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
-      'Deployment manager prompt should include explicit permission-block fallback marker'
+      (updatedInput.prompt || '').includes('PARENT_CONTEXT_DEPLOY_REQUIRED'),
+      'Deployment manager prompt should include the parent-context deploy handoff marker'
     );
     assert.deepStrictEqual(
-      updatedInput.permission_contract?.requiredTools,
-      ['Bash'],
-      'Deployment manager contract should explicitly require Bash'
+      updatedInput.deployment_execution_contract?.blockedCommands,
+      [
+        'sf project deploy start',
+        'sf project deploy validate',
+        'sf project deploy preview',
+        'sf project deploy quick',
+        'sf project deploy report'
+      ],
+      'Deployment manager handoff contract should enumerate the blocked deploy commands'
     );
     assert.strictEqual(
-      updatedInput.permission_contract?.fallbackMarker,
-      'SUBAGENT_BASH_PERMISSION_BLOCKED',
-      'Deployment manager contract should define explicit fallback marker'
+      updatedInput.deployment_execution_contract?.marker,
+      'PARENT_CONTEXT_DEPLOY_REQUIRED',
+      'Deployment manager handoff contract should define explicit fallback marker'
+    );
+    assert.strictEqual(
+      updatedInput.permission_contract,
+      undefined,
+      'Deployment handoff requests should not receive the generic Bash permission contract'
     );
     assert.strictEqual(
       result.output?.hookSpecificOutput?.permissionDecision,
       'allow',
-      'Deployment manager contract-injected updates should explicitly allow execution'
+      'Deployment manager handoff updates should explicitly allow execution'
+    );
+  }));
+
+  results.push(await runTest('Records deploy clearance for planning-only deployment-manager requests', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'opspal-salesforce:sfdc-deployment-manager',
+      prompt: 'Prepare a parent-context deployment handoff for package.xml validation. Do not execute sf project deploy from the subagent.'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+    assert.strictEqual(
+      updatedInput?.deployment_execution_contract,
+      undefined,
+      'Planning-only deployment requests should not be rewritten into the forced parent-context handoff contract'
+    );
+    assert.strictEqual(
+      readRoutingState(env)?.status,
+      'cleared',
+      'Planning-only deployment-manager invocations should persist a cleared deploy handoff state for the parent context'
+    );
+    assert.strictEqual(
+      readRoutingState(env)?.last_resolved_agent,
+      'opspal-salesforce:sfdc-deployment-manager',
+      'Deploy handoff state should record the planning agent that cleared the session'
     );
   }));
 

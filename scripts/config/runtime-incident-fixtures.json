@@ -1,0 +1,31 @@
+{
+  "fixtures": [
+    {
+      "label": "salesforce-deploy-incident",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-deploy-incident.log",
+      "expect": "fail",
+      "failureSubstrings": [
+        "Plain-text hook outputs exceeded budget",
+        "Attached skills exceeded budget",
+        "Primary runtime failure detected: flow_validation_scope_mismatch"
+      ],
+      "primaryFailureKind": "flow_validation_scope_mismatch",
+      "minPlainTextHookOutputs": 4,
+      "minTreeSitterFallbacks": 1
+    },
+    {
+      "label": "read-path-failures",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-read-path-failures.txt",
+      "expect": "fail",
+      "failureSubstrings": [
+        "Attached skills exceeded budget",
+        "PreToolUse:Agent hook fanout exceeded budget",
+        "Missing-file Read failures detected",
+        "Directory Read failures detected"
+      ],
+      "minMissingFileReads": 2,
+      "minDirectoryReads": 1,
+      "minAgentHookFanout": 7
+    }
+  ]
+}

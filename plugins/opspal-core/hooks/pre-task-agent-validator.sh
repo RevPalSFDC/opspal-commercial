@@ -42,7 +42,8 @@ RUNBOOK_COHORT_ENFORCEMENT="${RUNBOOK_COHORT_ENFORCEMENT:-1}"
 RUNBOOK_COHORT_STRICT="${RUNBOOK_COHORT_STRICT:-0}"
 RUNBOOK_ENFORCEMENT_MESSAGE=""
 PERMISSION_FALLBACK_GUIDANCE=""
-CLAUDE_INTERNAL_AGENT_ALLOWLIST="${CLAUDE_INTERNAL_AGENT_ALLOWLIST:-statusline-setup}"
+DEPLOYMENT_PARENT_CONTEXT_GUIDANCE=""
+CLAUDE_INTERNAL_AGENT_ALLOWLIST="${CLAUDE_INTERNAL_AGENT_ALLOWLIST:-statusline-setup,Explore,Plan,General-purpose,Other,Bash,Claude Code Guide}"
 
 # Function to log messages
 log() {
@@ -316,6 +317,13 @@ apply_runbook_cohort_requirements() {
 apply_subagent_permission_contract() {
     local input_json="$1"
     local resolved_agent="${2:-}"
+    local handoff_required="false"
+
+    handoff_required=$(echo "$input_json" | jq -r 'has("deployment_execution_contract")' 2>/dev/null || echo "false")
+    if [ "$handoff_required" = "true" ]; then
+        echo "$input_json"
+        return 0
+    fi
 
     # Prefer metadata-driven tool detection from agent frontmatter/routing-index.
     # Keep the legacy fallback list for stale runtimes that have not refreshed
@@ -353,6 +361,151 @@ apply_subagent_permission_contract() {
     return 0
 }
 
+normalize_agent_label() {
+    printf '%s' "$1" \
+      | tr '[:upper:]' '[:lower:]' \
+      | tr '_' '-' \
+      | sed -E 's/[[:space:]]+/-/g'
+}
+
+is_claude_builtin_agent_name() {
+    local normalized=""
+
+    normalized="$(normalize_agent_label "$1")"
+
+    case "$normalized" in
+        explore|plan|general-purpose|other|bash|claude-code-guide|statusline-setup)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+collect_task_text() {
+    echo "$1" | jq -r '[.prompt // "", .description // "", .message // ""] | join(" ")' 2>/dev/null || echo ""
+}
+
+is_deploy_planning_only_request() {
+    local input_json="$1"
+    local prompt=""
+
+    prompt=$(collect_task_text "$input_json")
+    prompt=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')
+
+    if echo "$prompt" | grep -qiE 'do not execute|dont execute|return parent-context commands|return parent context commands'; then
+        return 0
+    fi
+
+    if ! echo "$prompt" | grep -qiE 'plan|planning|handoff|return parent-context commands|return parent context commands|do not execute|rollback|checklist|verification|verify|review|assess|assessment|analy[sz]e|prepare|proposal|document|what commands|what should|steps'; then
+        return 1
+    fi
+
+    if echo "$prompt" | grep -qiE '(^|[^[:alnum:]_])(run|execute|launch|ship now|deploy now)([^[:alnum:]_]|$)'; then
+        return 1
+    fi
+
+    return 0
+}
+
+apply_deployment_parent_context_contract() {
+    local input_json="$1"
+    local resolved_agent="${2:-}"
+    local normalized_agent="${resolved_agent##*:}"
+    local has_marker="false"
+
+    if [ "${ALLOW_PLUGIN_DEPLOY_SUBAGENT_EXECUTION:-0}" = "1" ]; then
+        echo "$input_json"
+        return 0
+    fi
+
+    if [[ "$normalized_agent" != "sfdc-deployment-manager" ]] && [[ "$normalized_agent" != "instance-deployer" ]]; then
+        echo "$input_json"
+        return 0
+    fi
+
+    if ! is_salesforce_deploy_request "$input_json"; then
+        echo "$input_json"
+        return 0
+    fi
+
+    if is_deploy_planning_only_request "$input_json"; then
+        echo "$input_json"
+        return 0
+    fi
+
+    has_marker=$(echo "$input_json" | jq -r '(.prompt // "") | contains("PARENT_CONTEXT_DEPLOY_REQUIRED")' 2>/dev/null || echo "false")
+
+    if [ "$has_marker" != "true" ]; then
+        input_json=$(echo "$input_json" | jq '.prompt = ((.prompt // "") + "\n\n[DEPLOY EXECUTION CONTRACT]\nThis Claude Code runtime cannot be relied on to provision Bash for plugin deployment subagents.\nDo NOT execute sf project deploy commands from this subagent.\nAnalyze the request, then return this exact handoff block and stop:\nSTATUS: PARENT_CONTEXT_DEPLOY_REQUIRED\nTARGET_ORG: <target org>\nDEPLOY_COMMAND: <exact sf project deploy command>\nFOLLOWUP_COMMANDS:\n- <verification/report commands>\nWHY: Parent/main context must execute deploy commands on this runtime.\n")' 2>/dev/null || echo "$input_json")
+    fi
+
+    input_json=$(echo "$input_json" | jq -c '.deployment_execution_contract = {
+        mode: "parent_context_handoff",
+        marker: "PARENT_CONTEXT_DEPLOY_REQUIRED",
+        blockedCommands: [
+            "sf project deploy start",
+            "sf project deploy validate",
+            "sf project deploy preview",
+            "sf project deploy quick",
+            "sf project deploy report"
+        ],
+        onBlockedExecution: "return_parent_context_handoff"
+    }' 2>/dev/null || echo "$input_json")
+
+    DEPLOYMENT_PARENT_CONTEXT_GUIDANCE="DEPLOYMENT_HANDOFF_HINT: '$resolved_agent' should plan, validate, and return parent-context deploy commands instead of executing sf project deploy from plugin-subagent context."
+
+    echo "$input_json"
+    return 0
+}
+
+persist_parent_context_deploy_clearance() {
+    local session_key="$1"
+    local resolved_agent="${2:-}"
+    local normalized_agent="${resolved_agent##*:}"
+    local existing_state=""
+    local has_existing_state="false"
+
+    if [[ -z "$session_key" ]] || [[ -z "$resolved_agent" ]]; then
+        return 0
+    fi
+
+    case "$normalized_agent" in
+        release-coordinator|sfdc-deployment-manager|instance-deployer|sfdc-orchestrator|sfdc-metadata-manager)
+            ;;
+        *)
+            return 0
+            ;;
+    esac
+
+    if [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &> /dev/null; then
+        return 0
+    fi
+
+    existing_state=$(node "$ROUTING_STATE_MANAGER" get "$session_key" 2>/dev/null || echo '{"state":null}')
+    has_existing_state=$(echo "$existing_state" | jq -r 'if has("state") then (.state != null) else true end' 2>/dev/null || echo "false")
+
+    if [[ "$has_existing_state" == "true" ]]; then
+        node "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
+        return 0
+    fi
+
+    jq -n \
+      --arg session_key "$session_key" \
+      --arg agent "$resolved_agent" \
+      '{
+        session_key: $session_key,
+        recommended_agent: $agent,
+        clearance_agents: [$agent],
+        action: "DEPLOYMENT_HANDOFF",
+        blocked: false,
+        mandatory: false,
+        status: "cleared",
+        last_resolved_agent: $agent
+      }' \
+      | node "$ROUTING_STATE_MANAGER" save "$session_key" >/dev/null 2>&1 || true
+}
+
 is_claude_internal_helper_agent() {
     local agent_name="$1"
     local tool_input_json="${2:-{}}"
@@ -361,6 +514,10 @@ is_claude_internal_helper_agent() {
 
     if [[ -z "$agent_name" ]] || [[ "$agent_name" == *:* ]]; then
         return 1
+    fi
+
+    if is_claude_builtin_agent_name "$agent_name"; then
+        return 0
     fi
 
     description=$(echo "$tool_input_json" | jq -r '.description // .prompt // .message // ""' 2>/dev/null || echo "")
@@ -381,10 +538,19 @@ is_salesforce_deploy_request() {
     local input_json="$1"
     local prompt=""
 
-    prompt=$(echo "$input_json" | jq -r '[.prompt // "", .description // "", .message // ""] | join(" ")' 2>/dev/null || echo "")
+    prompt=$(collect_task_text "$input_json")
     prompt=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')
 
-    echo "$prompt" | grep -qiE 'sf[[:space:]]+project[[:space:]]+deploy|package\.xml|force-app|quick[[:space:]-]?action|layouts?([[:space:]]|$)|metadata deploy|deploy start|--source-dir|--manifest'
+    if echo "$prompt" | grep -qiE 'sf[[:space:]]+project[[:space:]]+deploy|package\.xml|package xml|force-app|quick[[:space:]-]?action|layouts?([[:space:]]|$)|metadata deploy|deploy start|deploy validate|deploy preview|--source-dir|--manifest|target-org'; then
+        return 0
+    fi
+
+    if echo "$prompt" | grep -qiE '(^|[^[:alnum:]_])(deploy|deployment|promote|release)([^[:alnum:]_]|$)' \
+        && echo "$prompt" | grep -qiE 'salesforce|sfdc|metadata|flow|flows|layout|layouts|quick action|quickaction|validation rule|sandbox|production|manifest|package'; then
+        return 0
+    fi
+
+    return 1
 }
 
 reroute_salesforce_deployment_specialist() {
@@ -536,7 +702,7 @@ main() {
 
         emit_pretool_response \
           "deny" \
-          "ROUTING_AGENT_NOT_FOUND: Agent '$AGENT_NAME' not found in any plugin. Suggestions: ${SUGGESTIONS:-none}. Use fully-qualified names like 'opspal-salesforce:sfdc-revops-auditor'. Generic role labels such as 'Explore' are not valid agent names. Valid agents include: ${EXAMPLE_AGENTS:-opspal-salesforce:sfdc-revops-auditor, opspal-salesforce:sfdc-cpq-assessor}." \
+          "ROUTING_AGENT_NOT_FOUND: Agent '$AGENT_NAME' not found in any plugin. Suggestions: ${SUGGESTIONS:-none}. Use fully-qualified names like 'opspal-salesforce:sfdc-revops-auditor' for OpsPal plugin agents. Claude Code built-in agents such as 'Explore' and 'Plan' are valid without plugin prefixes, but custom OpsPal agents must resolve to installed plugin identifiers. Valid OpsPal agents include: ${EXAMPLE_AGENTS:-opspal-salesforce:sfdc-revops-auditor, opspal-salesforce:sfdc-cpq-assessor}." \
           "" \
           "" \
           "ROUTING_AGENT_NOT_FOUND" \
@@ -602,7 +768,11 @@ main() {
     # Step 5: Inject runbook cohort requirements before execution
     FINAL_OUTPUT=$(apply_runbook_cohort_requirements "$FINAL_OUTPUT")
 
-    # Step 5b: Inject permission fallback contract for Bash-required sub-agents
+    # Step 5b: Convert deploy-execution requests into parent-context handoff
+    # contracts before generic Bash permission logic runs.
+    FINAL_OUTPUT=$(apply_deployment_parent_context_contract "$FINAL_OUTPUT" "$RESOLVED")
+
+    # Step 5c: Inject permission fallback contract for Bash-required sub-agents
     FINAL_OUTPUT=$(apply_subagent_permission_contract "$FINAL_OUTPUT" "$RESOLVED")
 
     # Strict mode: block with visible guidance when required runbook artifacts are missing
@@ -623,6 +793,14 @@ main() {
             ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ${PERMISSION_FALLBACK_GUIDANCE}"
         else
             ADDITIONAL_CONTEXT="$PERMISSION_FALLBACK_GUIDANCE"
+        fi
+    fi
+
+    if [ -n "$DEPLOYMENT_PARENT_CONTEXT_GUIDANCE" ]; then
+        if [ -n "$ADDITIONAL_CONTEXT" ]; then
+            ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ${DEPLOYMENT_PARENT_CONTEXT_GUIDANCE}"
+        else
+            ADDITIONAL_CONTEXT="$DEPLOYMENT_PARENT_CONTEXT_GUIDANCE"
         fi
     fi
 
@@ -657,6 +835,8 @@ main() {
             exit 0
         fi
     fi
+
+    persist_parent_context_deploy_clearance "$SESSION_KEY" "$RESOLVED"
 
     if [ "$FINAL_OUTPUT" != "$TOOL_INPUT" ] || [ -n "$ADDITIONAL_CONTEXT" ]; then
         local reason_msg

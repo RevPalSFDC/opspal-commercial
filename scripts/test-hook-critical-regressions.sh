@@ -19,6 +19,9 @@ run_test() {
 run_test "deploy-scope-resolver" node plugins/opspal-core/test/hooks/unit/deploy-scope-resolver.test.js
 run_test "task-router-deployment-routing" node plugins/opspal-core/test/hooks/unit/task-router-deployment-routing.test.js
 run_test "claude-debug-log-analyzer" node plugins/opspal-core/test/hooks/unit/claude-debug-log-analyzer.test.js
+run_test "claude-runtime-replay-validator" node plugins/opspal-core/test/hooks/unit/claude-runtime-replay-validator.test.js
+run_test "json-hook-contracts" node plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js
+run_test "agent-tool-registry" node plugins/opspal-core/test/hooks/unit/agent-tool-registry.test.js
 run_test "subagent-start-context" node plugins/opspal-core/test/hooks/unit/subagent-start-context.test.js
 run_test "subagent-stop-capture" node plugins/opspal-core/test/hooks/unit/subagent-stop-capture.test.js
 run_test "task-completed-metrics" node plugins/opspal-core/test/hooks/unit/task-completed-metrics.test.js
@@ -26,6 +29,10 @@ run_test "stop-session-silent-failure-summary" node plugins/opspal-core/test/hoo
 run_test "pre-deploy-agent-context-check" node plugins/opspal-core/test/hooks/unit/pre-deploy-agent-context-check.test.js
 run_test "salesforce-pre-bash-dispatcher" node plugins/opspal-core/test/hooks/unit/salesforce-pre-bash-dispatcher.test.js
 run_test "salesforce-post-bash-dispatcher" node plugins/opspal-core/test/hooks/unit/salesforce-post-bash-dispatcher.test.js
+run_test "hook-settings-normalizer" node plugins/opspal-core/test/hooks/unit/hook-settings-normalizer.test.js
+run_test "hook-merger" node plugins/opspal-core/test/hooks/unit/hook-merger.test.js
+run_test "post-plugin-update-fixes" node plugins/opspal-core/test/hooks/unit/post-plugin-update-fixes.test.js
+run_test "finish-opspal-update-script" node plugins/opspal-core/test/finish-opspal-update-script.test.js
 run_test "gtm-pre-write-gtm-path-validator" node plugins/opspal-core/test/hooks/unit/gtm-pre-write-gtm-path-validator.test.js
 run_test "okr-pre-write-okr-path-validator" node plugins/opspal-core/test/hooks/unit/okr-pre-write-okr-path-validator.test.js
 run_test "mcp-client-pre-opspal-compute" node plugins/opspal-core/test/hooks/unit/mcp-client-pre-opspal-compute.test.js
