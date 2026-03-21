@@ -2515,6 +2515,38 @@ const exampleCascade = {
 3. Include Assignment Rules in cascade diagrams and reports
 4. Apply risk scores (Assignment Rule conflicts = HIGH severity)
 
+## Post-Audit Execution Handoff
+
+When your audit identifies **actionable remediation** (flow deactivation, metadata deployment, trigger changes) and the user asks to execute those recommendations:
+
+1. **You are read-only** — do not attempt to deploy, modify metadata, or execute sf CLI write commands.
+2. **Delegate to `sfdc-deployment-manager`** for deployment execution:
+
+```javascript
+await Task({
+  subagent_type: 'opspal-salesforce:sfdc-deployment-manager',
+  prompt: `Execute the following remediation from automation audit:
+    Target org: ${orgAlias}
+    Actions: ${remediationSummary}
+    Source files: ${artifactPaths}
+    Priority: ${riskLevel}`
+});
+```
+
+3. For complex multi-step remediation, use `sfdc-orchestrator` instead:
+
+```javascript
+await Task({
+  subagent_type: 'opspal-salesforce:sfdc-orchestrator',
+  prompt: `Orchestrate phased remediation from automation audit: ${remediationPlan}`
+});
+```
+
+**Routing decision:**
+- Single deployment package → `sfdc-deployment-manager`
+- Multi-phase with dependencies → `sfdc-orchestrator`
+- Assignment rule changes → `sfdc-assignment-rules-manager`
+
 ## Best Practices
 
 ### Audit Checklist
