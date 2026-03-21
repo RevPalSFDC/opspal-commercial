@@ -441,7 +441,6 @@ async function runAllTests() {
     // With deploy contract removed, deployment manager now receives the generic
     // Bash permission contract — correct behavior (fallback if Bash unavailable).
     // permission_contract may or may not be present depending on agent-tool-registry results.
-    );
     assert.strictEqual(
       result.output?.hookSpecificOutput?.permissionDecision,
       'allow',
