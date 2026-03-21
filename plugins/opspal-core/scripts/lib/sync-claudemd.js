@@ -727,32 +727,18 @@ export ORG_SLUG=<client-name>  # Required for work tracking
 function generateAgentProtocol(plugins) {
   const routes = generateRoutingTable(plugins);
 
-  // Split into mandatory vs optional
-  const mandatoryRoutes = routes.filter(r => r.isMandatory).slice(0, 20);
+  // Only show recommended (non-mandatory) routes here.
+  // Mandatory routing is already in the Critical Routing Preamble at the top
+  // of CLAUDE.md — duplicating it wastes tokens and creates maintenance drift.
   const optionalRoutes = routes.filter(r => !r.isMandatory).slice(0, 15);
 
   let content = `## 🎯 AGENT-FIRST PROTOCOL
 
-**MANDATORY**: Always check for appropriate agent before performing tasks!
+**MANDATORY**: Always check the routing table at the top of this file before performing tasks!
 
 `;
 
-  // Generate Mandatory Routing section if there are mandatory agents
-  if (mandatoryRoutes.length > 0) {
-    content += `### Mandatory Routing (MUST Use Agent Tool)
-
-| Keywords | Agent | Invoke With |
-|----------|-------|-------------|
-`;
-
-    for (const route of mandatoryRoutes) {
-      content += `| ${route.keywords} | \`${route.agent}\` | \`Agent(subagent_type='${route.agent}', prompt=...)\` |\n`;
-    }
-
-    content += '\n';
-  }
-
-  // Generate Recommended Routing section
+  // Generate Recommended Routing section (non-mandatory agents)
   if (optionalRoutes.length > 0) {
     content += `### Recommended Routing
 
@@ -767,32 +753,12 @@ function generateAgentProtocol(plugins) {
     content += '\n';
   }
 
-  // If no routes were generated, show the static fallback table
-  if (mandatoryRoutes.length === 0 && optionalRoutes.length === 0) {
-    content += `### Routing Quick Reference
-
-| Keywords | Agent |
-|----------|-------|
-| cpq/q2c/quote/pricing | \`opspal-salesforce:sfdc-cpq-assessor\` |
-| revops/pipeline/forecast | \`opspal-salesforce:sfdc-revops-auditor\` |
-| automation audit/flow audit | \`opspal-salesforce:sfdc-automation-auditor\` |
-| permission set | \`opspal-salesforce:sfdc-permission-orchestrator\` |
-| report/dashboard | \`opspal-salesforce:sfdc-reports-dashboards\` |
-| import/export data | \`opspal-salesforce:sfdc-data-operations\` |
-| diagram/flowchart/ERD | \`opspal-core:diagram-generator\` |
-| territory | \`opspal-salesforce:sfdc-territory-orchestrator\` |
-| hubspot workflow | \`opspal-hubspot:hubspot-workflow-builder\` |
-| intake/kickoff/new project/scope | \`opspal-core:intelligent-intake-orchestrator\` |
-
-`;
-  }
-
   content += `**Full routing tables**: See \`docs/routing-help.md\`
 
 ### Self-Check Before Every Task
 
 1. Does this task match ANY pattern in the routing tables above?
-2. If in **Mandatory Routing** → MUST use Agent tool
+2. If in **Critical Routing** (top of file) → MUST use Agent tool
 3. If in **Recommended Routing** → Use Agent tool for best results
 4. If NO match → Proceed with direct execution
 
@@ -826,9 +792,6 @@ function generateAgentProtocol(plugins) {
   return content;
 }
 
-/**
- * Generate common workflows section
- */
 function generateCommonWorkflows(plugins) {
   const platforms = detectPlatforms(plugins);
 
