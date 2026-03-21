@@ -1755,6 +1755,108 @@ step8_routing_promotion() {
   return 0
 }
 
+# Step 9: Sub-agent tool access remediation
+# Verifies that the Bash permission contract is disabled (opt-in only),
+# the deploy execution contract is removed, and deploy-agent-context-check
+# reads agent_type from hook JSON input.
+step9_subagent_remediation() {
+  local fixes_applied=0
+  local checks_passed=0
+  local total_checks=0
+
+  # Locate plugin hook files across marketplace, cache, and workspace roots
+  local validator_paths=()
+  local deploy_check_paths=()
+
+  for search_root in "$PLUGINS_ROOT" "$CLAUDE_ROOT/plugins/marketplaces" "$CLAUDE_ROOT/plugins/cache"; do
+    if [ -d "$search_root" ]; then
+      while IFS= read -r f; do
+        validator_paths+=("$f")
+      done < <(find "$search_root" -name "pre-task-agent-validator.sh" -path "*/opspal-core/*" 2>/dev/null || true)
+
+      while IFS= read -r f; do
+        deploy_check_paths+=("$f")
+      done < <(find "$search_root" -name "pre-deploy-agent-context-check.sh" -path "*/opspal-salesforce/*" 2>/dev/null || true)
+    fi
+  done
+
+  # Check 1: Bash permission contract is opt-in (SUBAGENT_BASH_CONTRACT_ENABLED guard)
+  total_checks=$((total_checks + 1))
+  local bash_contract_ok=true
+  for vpath in "${validator_paths[@]}"; do
+    if [ -f "$vpath" ] && grep -q 'SUBAGENT_BASH_CONTRACT_ENABLED' "$vpath"; then
+      : # Has the opt-in guard
+    elif [ -f "$vpath" ] && grep -q 'SUBAGENT_BASH_PERMISSION_BLOCKED' "$vpath"; then
+      bash_contract_ok=false
+      if [ "$SKIP_FIX" = "false" ]; then
+        # Patch: insert opt-in guard at the top of apply_subagent_permission_contract
+        if sed -i 's/^apply_subagent_permission_contract() {$/apply_subagent_permission_contract() {\n    if [ "${SUBAGENT_BASH_CONTRACT_ENABLED:-0}" != "1" ]; then echo "$1"; return 0; fi/' "$vpath" 2>/dev/null; then
+          fixes_applied=$((fixes_applied + 1))
+          echo "  Fixed: Patched Bash permission contract to opt-in in $(basename "$(dirname "$(dirname "$vpath")")")"
+          bash_contract_ok=true
+        fi
+      fi
+    fi
+  done
+  if [ "$bash_contract_ok" = "true" ]; then
+    checks_passed=$((checks_passed + 1))
+    echo "✅ Bash permission contract is opt-in (SUBAGENT_BASH_CONTRACT_ENABLED)"
+  else
+    echo "⚠️  Bash permission contract still active — sub-agents may report false SUBAGENT_BASH_PERMISSION_BLOCKED"
+    echo "   Fix: Add SUBAGENT_BASH_CONTRACT_ENABLED guard to apply_subagent_permission_contract()"
+  fi
+
+  # Check 2: Deploy execution contract removed
+  total_checks=$((total_checks + 1))
+  local deploy_contract_ok=true
+  for vpath in "${validator_paths[@]}"; do
+    if [ -f "$vpath" ] && grep -q 'apply_deployment_parent_context_contract.*input_json' "$vpath" && ! grep -q 'REMOVED' "$vpath"; then
+      deploy_contract_ok=false
+      echo "⚠️  Deploy execution contract still active in $(basename "$(dirname "$(dirname "$vpath")")")"
+    fi
+  done
+  if [ "$deploy_contract_ok" = "true" ]; then
+    checks_passed=$((checks_passed + 1))
+    echo "✅ Deploy execution contract removed (no prompt injection for deploy agents)"
+  fi
+
+  # Check 3: Deploy agent context check reads agent_type from hook JSON
+  total_checks=$((total_checks + 1))
+  local agent_type_ok=true
+  for dpath in "${deploy_check_paths[@]}"; do
+    if [ -f "$dpath" ] && ! grep -q 'agent_type' "$dpath"; then
+      agent_type_ok=false
+      echo "⚠️  pre-deploy-agent-context-check.sh missing agent_type extraction in $(basename "$(dirname "$(dirname "$dpath")")")"
+    fi
+  done
+  if [ "$agent_type_ok" = "true" ]; then
+    checks_passed=$((checks_passed + 1))
+    echo "✅ Deploy agent context check reads agent_type from hook JSON input"
+  fi
+
+  # Check 4: ALLOW_PLUGIN_DEPLOY_SUBAGENT_EXECUTION not needed (informational)
+  total_checks=$((total_checks + 1))
+  if [ "${ALLOW_PLUGIN_DEPLOY_SUBAGENT_EXECUTION:-}" = "1" ]; then
+    echo "ℹ️  ALLOW_PLUGIN_DEPLOY_SUBAGENT_EXECUTION=1 set — no longer needed after deploy contract removal"
+    checks_passed=$((checks_passed + 1))
+  else
+    checks_passed=$((checks_passed + 1))
+    echo "✅ No legacy deploy contract bypass env vars set"
+  fi
+
+  if [ "$checks_passed" -eq "$total_checks" ]; then
+    append_step_message "All $total_checks sub-agent remediation checks passed"
+    if [ "$fixes_applied" -gt 0 ]; then
+      append_step_message " ($fixes_applied auto-fixed)"
+    fi
+  else
+    update_step_status "degraded"
+    append_step_message "$checks_passed/$total_checks checks passed — review sub-agent tool access configuration"
+  fi
+
+  return 0
+}
+
 run_step "step1-plugin-validation" "Step 1: Plugin Validation" "🔧 Step 1: Running plugin validation..." step1_plugin_validation
 run_step "step2-clean-stale-hooks" "Step 2: Clean stale plugin hooks and activate statusline" "🧹 Step 2: Cleaning stale plugin hooks and activating the OpsPal statusline..." step2_clean_stale_hooks
 run_step "step3-runtime-reconciliation" "Step 3: Runtime reconciliation and routing validation" "🧭 Step 3: Reconciling installed runtime, refreshing routing artifacts, and validating hook health..." step3_runtime_reconciliation
@@ -1763,6 +1865,7 @@ run_step "step5-schema-migration" "Step 5: Project-connect schema check" "🔗 S
 run_step "step6-project-connect-autosync" "Step 6: Project-connect auto-sync" "🔄 Step 6: Checking project-connect auto-sync..." step6_project_connect_autosync
 run_step "step7-sync-claudemd" "Step 7: CLAUDE.md sync" "📝 Step 7: Syncing CLAUDE.md..." step7_sync_claudemd
 run_step "step8-routing-promotion" "Step 8: Routing promotion verification" "🚦 Step 8: Routing promotion verification & condensed routing pre-gen..." step8_routing_promotion
+run_step "step9-subagent-remediation" "Step 9: Sub-agent tool access remediation" "🔓 Step 9: Verifying sub-agent tool access configuration..." step9_subagent_remediation
 
 # Summary
 CURRENT_STEP="summary"

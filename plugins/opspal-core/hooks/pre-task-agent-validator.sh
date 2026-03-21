@@ -42,7 +42,7 @@ RUNBOOK_COHORT_ENFORCEMENT="${RUNBOOK_COHORT_ENFORCEMENT:-1}"
 RUNBOOK_COHORT_STRICT="${RUNBOOK_COHORT_STRICT:-0}"
 RUNBOOK_ENFORCEMENT_MESSAGE=""
 PERMISSION_FALLBACK_GUIDANCE=""
-DEPLOYMENT_PARENT_CONTEXT_GUIDANCE=""
+# DEPLOYMENT_PARENT_CONTEXT_GUIDANCE removed — deploy contract was removed
 CLAUDE_INTERNAL_AGENT_ALLOWLIST="${CLAUDE_INTERNAL_AGENT_ALLOWLIST:-statusline-setup,Explore,Plan,General-purpose,Other,Bash,Claude Code Guide}"
 
 # Function to log messages
@@ -317,10 +317,13 @@ apply_runbook_cohort_requirements() {
 apply_subagent_permission_contract() {
     local input_json="$1"
     local resolved_agent="${2:-}"
-    local handoff_required="false"
 
-    handoff_required=$(echo "$input_json" | jq -r 'has("deployment_execution_contract")' 2>/dev/null || echo "false")
-    if [ "$handoff_required" = "true" ]; then
+    # Sub-agents inherit parent permissions per Claude Code docs.
+    # The Bash permission contract is now opt-in only — it was causing
+    # sub-agents to preemptively report SUBAGENT_BASH_PERMISSION_BLOCKED
+    # even when Bash was actually available to them.
+    # Enable with: export SUBAGENT_BASH_CONTRACT_ENABLED=1
+    if [ "${SUBAGENT_BASH_CONTRACT_ENABLED:-0}" != "1" ]; then
         echo "$input_json"
         return 0
     fi
@@ -386,78 +389,14 @@ collect_task_text() {
     echo "$1" | jq -r '[.prompt // "", .description // "", .message // ""] | join(" ")' 2>/dev/null || echo ""
 }
 
-is_deploy_planning_only_request() {
-    local input_json="$1"
-    local prompt=""
-
-    prompt=$(collect_task_text "$input_json")
-    prompt=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')
-
-    if echo "$prompt" | grep -qiE 'do not execute|dont execute|return parent-context commands|return parent context commands'; then
-        return 0
-    fi
-
-    if ! echo "$prompt" | grep -qiE 'plan|planning|handoff|return parent-context commands|return parent context commands|do not execute|rollback|checklist|verification|verify|review|assess|assessment|analy[sz]e|prepare|proposal|document|what commands|what should|steps'; then
-        return 1
-    fi
-
-    if echo "$prompt" | grep -qiE '(^|[^[:alnum:]_])(run|execute|launch|ship now|deploy now)([^[:alnum:]_]|$)'; then
-        return 1
-    fi
-
-    return 0
-}
-
-apply_deployment_parent_context_contract() {
-    local input_json="$1"
-    local resolved_agent="${2:-}"
-    local normalized_agent="${resolved_agent##*:}"
-    local has_marker="false"
-
-    if [ "${ALLOW_PLUGIN_DEPLOY_SUBAGENT_EXECUTION:-0}" = "1" ]; then
-        echo "$input_json"
-        return 0
-    fi
-
-    if [[ "$normalized_agent" != "sfdc-deployment-manager" ]] && [[ "$normalized_agent" != "instance-deployer" ]]; then
-        echo "$input_json"
-        return 0
-    fi
-
-    if ! is_salesforce_deploy_request "$input_json"; then
-        echo "$input_json"
-        return 0
-    fi
-
-    if is_deploy_planning_only_request "$input_json"; then
-        echo "$input_json"
-        return 0
-    fi
-
-    has_marker=$(echo "$input_json" | jq -r '(.prompt // "") | contains("PARENT_CONTEXT_DEPLOY_REQUIRED")' 2>/dev/null || echo "false")
-
-    if [ "$has_marker" != "true" ]; then
-        input_json=$(echo "$input_json" | jq '.prompt = ((.prompt // "") + "\n\n[DEPLOY EXECUTION CONTRACT]\nThis Claude Code runtime cannot be relied on to provision Bash for plugin deployment subagents.\nDo NOT execute sf project deploy commands from this subagent.\nAnalyze the request, then return this exact handoff block and stop:\nSTATUS: PARENT_CONTEXT_DEPLOY_REQUIRED\nTARGET_ORG: <target org>\nDEPLOY_COMMAND: <exact sf project deploy command>\nFOLLOWUP_COMMANDS:\n- <verification/report commands>\nWHY: Parent/main context must execute deploy commands on this runtime.\n")' 2>/dev/null || echo "$input_json")
-    fi
-
-    input_json=$(echo "$input_json" | jq -c '.deployment_execution_contract = {
-        mode: "parent_context_handoff",
-        marker: "PARENT_CONTEXT_DEPLOY_REQUIRED",
-        blockedCommands: [
-            "sf project deploy start",
-            "sf project deploy validate",
-            "sf project deploy preview",
-            "sf project deploy quick",
-            "sf project deploy report"
-        ],
-        onBlockedExecution: "return_parent_context_handoff"
-    }' 2>/dev/null || echo "$input_json")
-
-    DEPLOYMENT_PARENT_CONTEXT_GUIDANCE="DEPLOYMENT_HANDOFF_HINT: '$resolved_agent' should plan, validate, and return parent-context deploy commands instead of executing sf project deploy from plugin-subagent context."
-
-    echo "$input_json"
-    return 0
-}
+    # is_deploy_planning_only_request() — REMOVED (was only used by deploy contract)
+    # apply_deployment_parent_context_contract() — REMOVED
+    # This function was injecting prompt instructions that told deployment
+    # sub-agents not to execute sf project deploy, forcing a parent-context
+    # handoff. Per Claude Code docs, sub-agents inherit parent permissions
+    # and can use Bash if the parent allows it. The pre-deploy-agent-context-check.sh
+    # hook already validates agent identity at the Bash tool level.
+    # See: https://github.com/RevPalSFDC/opspal-commercial/issues/SUBAGENT-BASH-FIX
 
 persist_parent_context_deploy_clearance() {
     local session_key="$1"

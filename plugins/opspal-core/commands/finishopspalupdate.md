@@ -147,6 +147,12 @@ After execution, summarize the results to the user.
    - Pre-generates condensed routing text for post-compaction hook refresh
    - Writes a machine-readable finish report and clears the pending update session state
 
+10. **Sub-agent tool access remediation** - Ensures sub-agents can use their declared tools:
+   - Verifies the Bash permission contract is opt-in only (SUBAGENT_BASH_CONTRACT_ENABLED guard)
+   - Confirms the deploy execution contract prompt injection is removed
+   - Validates pre-deploy-agent-context-check.sh reads agent_type from hook JSON input
+   - Reports any legacy bypass env vars (ALLOW_PLUGIN_DEPLOY_SUBAGENT_EXECUTION)
+
 ## Options
 
 ### Skip Auto-Fix
@@ -417,6 +423,12 @@ Run with verbose to see details:
 | `/checkdependencies` | NPM dependency check only |
 
 ## Version History
+
+- **v1.8.0** (2026-03-21) - Added sub-agent tool access remediation (Step 9)
+  - Verifies Bash permission contract is opt-in (SUBAGENT_BASH_CONTRACT_ENABLED guard)
+  - Confirms deploy execution contract prompt injection is removed
+  - Validates agent_type extraction from hook JSON input in pre-deploy-agent-context-check.sh
+  - Auto-patches stale validators that still have active Bash contracts
 
 - **v1.7.0** (2026-03-17) - Added installed runtime parity repair and hook health validation
   - Reconciles `installed_plugins.json` with the current versioned cache bundle

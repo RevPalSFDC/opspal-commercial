@@ -19,8 +19,12 @@ PLUGINS_ROOT="$(cd "$PLUGIN_ROOT/.." && pwd)"
 ROUTING_STATE_MANAGER="${PLUGINS_ROOT}/opspal-core/scripts/lib/routing-state-manager.js"
 
 APPROVED_AGENTS="sfdc-deployment-manager|release-coordinator|sfdc-orchestrator|sfdc-metadata-manager"
-CALLING_AGENT="${CLAUDE_AGENT_NAME:-${AGENT_NAME:-${SUBAGENT_TYPE:-}}}"
 HOOK_INPUT="$(cat 2>/dev/null || true)"
+# Extract agent identity from hook JSON — Claude Code provides agent_type
+# in the hook input when running inside a sub-agent context.
+HOOK_AGENT_TYPE="$(printf '%s' "$HOOK_INPUT" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+# Prefer hook-provided agent_type, fall back to env vars for backward compat
+CALLING_AGENT="${HOOK_AGENT_TYPE:-${CLAUDE_AGENT_NAME:-${AGENT_NAME:-${SUBAGENT_TYPE:-}}}}"
 COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")"
 TARGET_ORG="${SF_TARGET_ORG:-}"
 
@@ -114,11 +118,10 @@ if [[ -n "$CALLING_AGENT" ]] && echo "$CALLING_AGENT" | grep -qE "$APPROVED_AGEN
 fi
 
 # Allow any Agent context — the routing system already ensures the right agent
-# is used. Double-gating here creates a Bash deadlock because Claude Code's
-# Agent tool does not grant Bash to subagents, so approved agents cannot
-# actually execute sf project deploy from within their subagent context.
-if [[ -n "${CLAUDE_TASK_ID:-}" ]]; then
-    echo "INFO: sf project deploy running inside Agent context (task=${CLAUDE_TASK_ID}, agent=${CALLING_AGENT:-unknown}). Allowing." >&2
+# is used. Sub-agents inherit parent permissions per Claude Code docs, so
+# approved agents CAN execute sf project deploy from sub-agent context.
+if [[ -n "${HOOK_AGENT_TYPE}" ]] || [[ -n "${CLAUDE_TASK_ID:-}" ]]; then
+    echo "INFO: sf project deploy running inside Agent context (agent=${CALLING_AGENT:-unknown}). Allowing." >&2
     exit 0
 fi
 
