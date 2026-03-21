@@ -33,6 +33,10 @@
 
 set -euo pipefail
 
+emit_noop_json() {
+    printf '{}\n'
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
@@ -63,6 +67,7 @@ fi
 
 # If no input, nothing to validate
 if [ -z "$HOOK_INPUT" ]; then
+    emit_noop_json
     exit 0
 fi
 
@@ -92,6 +97,7 @@ fi
 
 # Skip if no meaningful response content
 if [ -z "$RESPONSE_CONTENT" ] || [ ${#RESPONSE_CONTENT} -lt 50 ]; then
+    emit_noop_json
     exit 0
 fi
 
@@ -106,6 +112,7 @@ if [ "${SKIP_SF_ORG_VERIFICATION:-0}" = "1" ] && \
    [ "${SKIP_HS_ORG_VERIFICATION:-0}" = "1" ] && \
    [ "${SKIP_MARKETO_ORG_VERIFICATION:-0}" = "1" ]; then
     # All platforms skipped - pass through
+    emit_noop_json
     exit 0
 fi
 
@@ -116,6 +123,7 @@ fi
 # Check if validator exists
 if [ ! -f "$CLAIM_VALIDATOR" ]; then
     echo "⚠️  Claim validator not found - skipping verification" >&2
+    emit_noop_json
     exit 0
 fi
 
@@ -132,6 +140,7 @@ rm -f "$TEMP_RESPONSE"
 
 # Parse validation result
 if [ -z "$VALIDATION_RESULT" ]; then
+    emit_noop_json
     exit 0
 fi
 
@@ -151,6 +160,7 @@ HOOK_OUTPUT=$(echo "$VALIDATION_RESULT" | jq -r '.hookOutput // {}' 2>/dev/null 
 
 if [ "$IS_VALID" = "true" ] || [ "$CLAIMS_FOUND" = "0" ]; then
     # All claims verified or no claims found - pass through
+    emit_noop_json
     exit 0
 fi
 
@@ -219,5 +229,6 @@ $WARNING_MSG
     fi
 
     # Pass through the original input
+    emit_noop_json
     exit 0
 fi

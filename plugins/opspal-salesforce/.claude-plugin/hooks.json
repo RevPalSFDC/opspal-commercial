@@ -2,17 +2,6 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Agent",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
-            "timeout": 10000,
-            "description": "Universal agent governance — 5-tier risk scoring, approval gates, and audit trail for all Salesforce agent operations"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {

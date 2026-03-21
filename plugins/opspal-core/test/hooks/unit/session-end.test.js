@@ -128,6 +128,36 @@ async function runAllTests() {
     assert.deepStrictEqual(result.output, {}, 'Should return empty JSON output');
   }));
 
+  results.push(await runTest('Redirects scratchpad child stdout away from hook stdout', async () => {
+    const scratchpadDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-session-end-scratchpad-'));
+    fs.writeFileSync(
+      path.join(scratchpadDir, 'state.json'),
+      JSON.stringify({
+        metadata: {}
+      }, null, 2),
+      'utf8'
+    );
+
+    try {
+      const result = await tester.run({
+        input: {},
+        env: {
+          HOME: tempHome,
+          SKIP_CLEANUP: '1',
+          DETECTED_PLATFORM: 'unknown',
+          CLAUDE_SESSION_ID: 'session-end-json-contract',
+          CLAUDE_SCRATCHPAD_DIR: scratchpadDir
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+      assert.deepStrictEqual(result.output, {}, 'Should preserve JSON-only stdout even when scratchpad saver runs');
+    } finally {
+      fs.rmSync(scratchpadDir, { recursive: true, force: true });
+    }
+  }));
+
   restoreFile(CACHE_FILE, cacheBackup);
   fs.rmSync(tempHome, { recursive: true, force: true });
 

@@ -65,6 +65,8 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 when disabled');
+    assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
     assert(
       result.stderr.includes('Auto-reliability disabled'),
       'Should log disabled state'
@@ -75,17 +77,18 @@ async function runAllTests() {
     const result = await tester.run({
       input: {},
       env: {
-        CLAUDE_PLUGIN_ROOT: tempRoot,
+        RELIABILITY_SCRIPT_OVERRIDE: path.join(tempRoot, 'missing-reflection-reliability-manager.js'),
         RELIABILITY_VERBOSE: '1',
         HOME: tempHome
       }
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 when manager missing');
+    assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
     assert(
-      result.stderr.includes('Reliability manager not found') ||
-        result.stderr.includes('Node.js not available'),
-      'Should log missing manager path or missing node'
+      result.stderr.includes('Reliability manager not found'),
+      'Should log missing manager path'
     );
   }));
 

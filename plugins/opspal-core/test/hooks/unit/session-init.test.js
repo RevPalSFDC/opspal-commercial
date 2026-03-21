@@ -68,6 +68,31 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Clears stale task scope state at session start', async () => {
+    const home = fs.mkdtempSync(path.join(require('os').tmpdir(), 'session-init-scope-'));
+    const stateDir = path.join(home, '.claude', 'session-context');
+    const stateFile = path.join(stateDir, 'task-scope.json');
+    fs.mkdirSync(stateDir, { recursive: true });
+    fs.writeFileSync(stateFile, '{"selectedPlugins":["opspal-hubspot"]}\n', 'utf8');
+
+    try {
+      const result = await tester.run({
+        input: {},
+        env: {
+          HOME: home,
+          SKIP_SCRATCHPAD: '1',
+          SKIP_ENV_CHECK: '1',
+          SKIP_VERSION_CHECK: '1'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      assert.strictEqual(fs.existsSync(stateFile), false, 'Should remove stale task scope state');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 

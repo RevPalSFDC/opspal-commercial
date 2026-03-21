@@ -8,7 +8,8 @@ const path = require('path');
 const PROJECT_ROOT = path.resolve(__dirname, '../../../../..');
 const {
   analyzeDeploymentScope,
-  parseDeploymentCommand
+  parseDeploymentCommand,
+  resolveEffectiveCwd
 } = require(path.join(
   PROJECT_ROOT,
   'plugins/opspal-salesforce/scripts/lib/deploy-scope-resolver.js'
@@ -135,6 +136,32 @@ async function runAllTests() {
       assert(
         result.selectedPaths.every((selectedPath) => !selectedPath.endsWith('Broken.flow-meta.xml')),
         'Should not select unrelated flow metadata from the project tree'
+      );
+    } finally {
+      fs.rmSync(projectRoot, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Resolves inline cd commands before source-dir analysis', async () => {
+    const projectRoot = createFixtureProject();
+    try {
+      const resolvedCwd = resolveEffectiveCwd(
+        `cd "${projectRoot}" && sf project deploy start --source-dir force-app/main/default/layouts`,
+        os.tmpdir()
+      );
+      assert.strictEqual(resolvedCwd, projectRoot, 'Should resolve the deploy cwd from the inline cd preamble');
+
+      const result = analyzeDeploymentScope(
+        `cd "${projectRoot}" && sf project deploy start --source-dir force-app/main/default/layouts`,
+        os.tmpdir()
+      );
+
+      assert.strictEqual(result.cwd, projectRoot, 'Should analyze source-dir paths relative to the inline cd target');
+      assert.strictEqual(result.invocationCwd, path.resolve(os.tmpdir()), 'Should retain the original invocation cwd for telemetry');
+      assert.strictEqual(result.warnings.length, 0, 'Should not report false missing-path warnings');
+      assert(
+        result.selectedPaths.some((selectedPath) => selectedPath.endsWith('force-app/main/default/layouts')),
+        'Should select the source-dir under the inline cd target'
       );
     } finally {
       fs.rmSync(projectRoot, { recursive: true, force: true });

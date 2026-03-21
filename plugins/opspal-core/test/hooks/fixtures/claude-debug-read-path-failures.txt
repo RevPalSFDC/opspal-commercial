@@ -1,0 +1,5 @@
+2026-03-20T21:38:42.116Z [DEBUG] Sending 439 skills via attachment (initial, 437 total sent)
+2026-03-20T21:39:36.725Z [DEBUG] Matched 7 unique hooks for query "Agent" (7 before deduplication)
+2026-03-20T21:39:45.898Z [DEBUG] Read tool error (2ms): File does not exist. Note: your current working directory is /mnt/c/Users/cnace/RevPal/workspace.
+2026-03-20T22:05:41.753Z [DEBUG] Read tool error (4ms): EISDIR: illegal operation on a directory, read '/mnt/c/Users/cnace/RevPal/workspace/orgs/lula/platforms/salesforce/staging/force-app/main/default/flows'
+2026-03-20T22:21:55.935Z [DEBUG] Read tool error (6ms): File does not exist. Note: your current working directory is /mnt/c/Users/cnace/RevPal/workspace.

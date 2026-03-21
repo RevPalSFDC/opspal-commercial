@@ -88,6 +88,8 @@ async function runAllTests() {
       });
 
       assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+      assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
 
       const logPath = path.join(home, '.claude/logs/silent-failure-session.log');
       assert(fs.existsSync(logPath), 'Should write a Stop-hook log');

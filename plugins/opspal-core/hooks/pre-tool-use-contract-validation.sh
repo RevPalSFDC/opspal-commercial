@@ -28,6 +28,10 @@ read_stdin_json() {
     fi
 }
 
+emit_pretool_noop() {
+    printf '{}\n'
+}
+
 # Get plugin root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT_DEFAULT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -81,7 +85,8 @@ if [ -z "$INPUT_DATA" ]; then
     TOOL_INPUT_RAW="${CLAUDE_TOOL_INPUT:-${HOOK_TOOL_INPUT:-}}"
 
     if [ -z "$TOOL_NAME_FALLBACK" ] && [ -z "$TOOL_INPUT_RAW" ]; then
-        echo '{"continue": true, "note": "No input data provided"}' >&2
+        echo 'No input data provided' >&2
+        emit_pretool_noop
         exit 0
     fi
 
@@ -104,7 +109,8 @@ fi
 TOOL_NAME=$(echo "$INPUT_DATA" | jq -r '.tool_name // empty' 2>/dev/null)
 
 if [ -z "$TOOL_NAME" ]; then
-    echo '{"continue": true, "note": "Could not determine tool name"}' >&2
+    echo 'Could not determine tool name' >&2
+    emit_pretool_noop
     exit 0
 fi
 
@@ -256,6 +262,92 @@ emit_pretool_decision() {
           + (if $context != "" then { additionalContext: $context } else {} end)
         )
       }'
+}
+
+extract_tool_path() {
+    echo "$INPUT_DATA" | jq -r '
+        .tool_input.file_path
+        // .tool_input.filePath
+        // .tool_input.path
+        // .tool_input.target
+        // ""
+    ' 2>/dev/null
+}
+
+extract_effective_cwd() {
+    local extracted
+    extracted="$(echo "$INPUT_DATA" | jq -r '
+        .cwd
+        // .context.cwd
+        // .working_directory
+        // .workingDirectory
+        // .tool_input.cwd
+        // ""
+    ' 2>/dev/null)"
+
+    if [ -z "$extracted" ] || [ "$extracted" = "null" ]; then
+        echo "$PWD"
+        return 0
+    fi
+
+    if [[ "$extracted" = /* ]]; then
+        echo "$extracted"
+    else
+        echo "$PWD/$extracted"
+    fi
+}
+
+resolve_candidate_path() {
+    local base_dir="$1"
+    local candidate="$2"
+
+    if [[ "$candidate" = /* ]]; then
+        echo "$candidate"
+    else
+        echo "$base_dir/$candidate"
+    fi
+}
+
+enforce_read_target_preflight() {
+    local requested_path effective_cwd resolved_path
+
+    requested_path="$(extract_tool_path)"
+    if [ -z "$requested_path" ] || [ "$requested_path" = "null" ]; then
+        emit_pretool_decision \
+          "deny" \
+          "READ_TARGET_MISSING: Read requires a file_path/path. Use LS or Glob to discover files before reading." \
+          "Read target was empty or omitted."
+        return 1
+    fi
+
+    effective_cwd="$(extract_effective_cwd)"
+    resolved_path="$(resolve_candidate_path "$effective_cwd" "$requested_path")"
+
+    if [ -d "$resolved_path" ]; then
+        emit_pretool_decision \
+          "deny" \
+          "READ_TARGET_IS_DIRECTORY: ${requested_path} resolves to a directory. Use LS or Glob before Read." \
+          "Resolved read target: ${resolved_path}"
+        return 1
+    fi
+
+    if [ ! -e "$resolved_path" ]; then
+        emit_pretool_decision \
+          "deny" \
+          "READ_TARGET_NOT_FOUND: ${requested_path} does not exist from cwd ${effective_cwd}. Use LS or Glob before Read." \
+          "Resolved read target: ${resolved_path}"
+        return 1
+    fi
+
+    if [ ! -f "$resolved_path" ]; then
+        emit_pretool_decision \
+          "deny" \
+          "READ_TARGET_UNSUPPORTED: ${requested_path} is not a regular file. Use LS or Glob before Read." \
+          "Resolved read target: ${resolved_path}"
+        return 1
+    fi
+
+    return 0
 }
 
 get_routing_state_check() {
@@ -626,6 +718,12 @@ if ! enforce_pending_route_gate "$TOOL_NAME" "$SESSION_KEY"; then
     exit 0
 fi
 
+if [ "$TOOL_NAME" = "Read" ]; then
+    if ! enforce_read_target_preflight; then
+        exit 0
+    fi
+fi
+
 # ============================================================================
 # MANDATORY ROUTING ENFORCEMENT
 # Blocks direct high-risk workflows that have mandatory specialist agents.
@@ -880,7 +978,8 @@ check_api_routing "$TOOL_NAME" "$INPUT_DATA"
 
 # Check if we have a contract for this tool
 if [ ! -f "$CONTRACTS_FILE" ]; then
-    echo '{"continue": true, "note": "Contracts file not found"}' >&2
+    echo 'Contracts file not found' >&2
+    emit_pretool_noop
     exit 0
 fi
 
@@ -897,6 +996,7 @@ if [ -z "$CONTRACT_EXISTS" ]; then
         --arg timestamp "$(date -Iseconds)" \
         '{timestamp: $timestamp, tool: $tool, contract: $contract, status: $status, reason: $reason}')
     safe_append_jsonl "$log_entry" "$LOG_FILE"
+    emit_pretool_noop
     exit 0
 fi
 
@@ -1007,6 +1107,7 @@ if [ -f "$VALIDATOR_SCRIPT" ]; then
             --arg timestamp "$(date -Iseconds)" \
             '{timestamp: $timestamp, tool: $tool, contract: $contract, status: $status, reason: $reason}')
         safe_append_jsonl "$log_entry" "$LOG_FILE"
+        emit_pretool_noop
         exit 0
     fi
 
@@ -1019,23 +1120,24 @@ if [ -f "$VALIDATOR_SCRIPT" ]; then
 
     if [ "$IS_VALID" = "true" ]; then
         # Validation passed
+        emit_pretool_noop
         exit 0
     else
         # Validation failed - output warning but don't block (configurable)
         BLOCK_ON_VIOLATION="${TOOL_CONTRACT_BLOCK_ON_VIOLATION:-false}"
 
         if [ "$BLOCK_ON_VIOLATION" = "true" ]; then
-            # Block execution
-            echo "[CONTRACT VIOLATION] Tool: $TOOL_NAME"
-            echo "Errors: $ERRORS"
-            echo ""
-            echo "Set TOOL_CONTRACT_BLOCK_ON_VIOLATION=false to warn instead of block"
-            exit "$HOOK_BLOCK_EXIT_CODE"
+            emit_pretool_decision \
+              "deny" \
+              "CONTRACT_VIOLATION: ${TOOL_NAME} input failed validation. ${ERRORS}" \
+              "Review required fields and contract types before retrying."
+            exit 0
         else
             # Warn but allow
             echo "[CONTRACT WARNING] Tool: $TOOL_NAME" >&2
             echo "Potential issues: $ERRORS" >&2
             echo "" >&2
+            emit_pretool_noop
             exit 0
         fi
     fi
@@ -1048,5 +1150,6 @@ else
         --arg timestamp "$(date -Iseconds)" \
         '{timestamp: $timestamp, tool: $tool, status: $status, reason: $reason}')
     safe_append_jsonl "$log_entry" "$LOG_FILE"
+    emit_pretool_noop
     exit 0
 fi

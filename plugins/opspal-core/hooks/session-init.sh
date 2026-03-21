@@ -44,6 +44,7 @@ VERBOSE="${SESSION_INIT_VERBOSE:-0}"
 SKIP_SCRATCHPAD="${SKIP_SCRATCHPAD:-0}"
 SKIP_ENV_CHECK="${SKIP_ENV_CHECK:-0}"
 SKIP_VERSION_CHECK="${SKIP_VERSION_CHECK:-0}"
+RESET_TASK_SCOPE_STATE="${RESET_TASK_SCOPE_STATE:-1}"
 
 # Output message collection
 INIT_MESSAGES=()
@@ -56,6 +57,18 @@ log_verbose() {
 
 add_message() {
     INIT_MESSAGES+=("$1")
+}
+
+reset_task_scope_state() {
+    if [[ "$RESET_TASK_SCOPE_STATE" != "1" ]]; then
+        return
+    fi
+
+    local scope_state_dir="${HOME}/.claude/session-context"
+    local scope_state_file="${scope_state_dir}/task-scope.json"
+
+    mkdir -p "$scope_state_dir" 2>/dev/null || true
+    rm -f "$scope_state_file" 2>/dev/null || true
 }
 
 # =============================================================================
@@ -235,6 +248,8 @@ check_agent_teams_flag() {
 # =============================================================================
 
 log_verbose "Session initialization starting..."
+
+reset_task_scope_state
 
 # Run heavy subprocesses in parallel (writes to temp files, not arrays)
 load_scratchpad &

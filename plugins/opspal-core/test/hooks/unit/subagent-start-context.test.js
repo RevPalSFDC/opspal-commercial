@@ -61,6 +61,18 @@ async function runAllTests() {
     assert(validation.syntaxValid, 'Hook should have valid bash syntax');
   }));
 
+  results.push(await runTest('Returns JSON no-op when agent metadata is missing', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'SubagentStart'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
+  }));
+
   results.push(await runTest('Injects runbook, field dictionary, and work context for reporting agents', async () => {
     const fixture = createOrgFixture();
 
@@ -91,6 +103,22 @@ async function runAllTests() {
     } finally {
       fs.rmSync(fixture.orgRoot, { recursive: true, force: true });
     }
+  }));
+
+  results.push(await runTest('Injects scoped plugin guidance for Salesforce agents', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'SubagentStart',
+        agent_type: 'opspal-salesforce:sfdc-automation-auditor',
+        prompt: 'Audit Salesforce flow deployment blockers in staging and inspect force-app flow metadata.'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const context = result.output?.hookSpecificOutput?.additionalContext || '';
+    assert(context.includes('TASK SCOPE:'), 'Should include scoped plugin guidance');
+    assert(context.includes('opspal-salesforce'), 'Should include Salesforce in the allowlist');
+    assert(context.includes('opspal-core'), 'Should retain opspal-core in the allowlist');
   }));
 
   const passed = results.filter((result) => result.passed).length;

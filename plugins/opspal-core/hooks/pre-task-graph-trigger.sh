@@ -32,8 +32,13 @@ TASK_GRAPH_THRESHOLD="${TASK_GRAPH_THRESHOLD:-4}"
 TASK_GRAPH_BLOCKING="${TASK_GRAPH_BLOCKING:-0}"
 TASK_GRAPH_VERBOSE="${TASK_GRAPH_VERBOSE:-0}"
 
+emit_noop_json() {
+  printf '{}\n'
+}
+
 # Exit if disabled
 if [ "$TASK_GRAPH_ENABLED" = "0" ]; then
+  emit_noop_json
   exit 0
 fi
 
@@ -45,6 +50,7 @@ fi
 
 # Exit if no task description
 if [ -z "$TASK_DESCRIPTION" ]; then
+  emit_noop_json
   exit 0
 fi
 
@@ -172,7 +178,7 @@ format_output() {
   local suggestions="$4"
 
   if [ -f "$OUTPUT_FORMATTER" ] && command -v node &>/dev/null; then
-    node "$OUTPUT_FORMATTER" info "$title" "$message" "$details" "$suggestions" "" 2>/dev/null || {
+    node "$OUTPUT_FORMATTER" info "$title" "$message" "$details" "$suggestions" "" 1>&2 2>/dev/null || {
       # Fallback to basic output
       echo "" >&2
       echo "📊 $title" >&2
@@ -205,6 +211,7 @@ main() {
         "Flag:Detected,Mode:Sequential" \
         "The task-graph-orchestrator will create a DAG for this request"
       # Exit 0 to allow continuation - the routing system will pick up the recommendation
+      emit_noop_json
       exit 0
       ;;
     USER_FLAG_SKIP)
@@ -212,6 +219,7 @@ main() {
       if [ "$TASK_GRAPH_VERBOSE" = "1" ]; then
         echo "⚡ [Task Graph] Skipped by user flag" >&2
       fi
+      emit_noop_json
       exit 0
       ;;
   esac
@@ -222,6 +230,7 @@ main() {
 
   # Parse result (requires jq)
   if ! command -v jq &>/dev/null; then
+    emit_noop_json
     exit 0
   fi
 
@@ -262,6 +271,7 @@ main() {
         echo "   Recommendation: Use task-graph-orchestrator for this request" >&2
         echo "" >&2
       fi
+      emit_noop_json
       exit 0
     fi
   fi
@@ -271,6 +281,7 @@ main() {
     echo "✅ [Task Graph] Complexity $score < threshold $TASK_GRAPH_THRESHOLD - direct execution OK" >&2
   fi
 
+  emit_noop_json
   exit 0
 }
 

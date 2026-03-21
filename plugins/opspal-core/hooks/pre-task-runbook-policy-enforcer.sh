@@ -309,7 +309,7 @@ fi
 
 # Retrieve policy
 log_verbose "Retrieving policy for $ORG/$OBJECT/$TASK_TYPE"
-POLICY_RESPONSE=$(retrieve_policy "$ORG" "$OBJECT" "$TASK_TYPE")
+POLICY_RESPONSE="$(retrieve_policy "$ORG" "$OBJECT" "$TASK_TYPE" || true)"
 
 if [ -z "$POLICY_RESPONSE" ]; then
     log_verbose "No policy response"

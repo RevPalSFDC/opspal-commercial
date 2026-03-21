@@ -56,7 +56,8 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.deepStrictEqual(result.output, input, 'Should echo original input');
+    assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
   }));
 
   const passed = results.filter(r => r.passed).length;

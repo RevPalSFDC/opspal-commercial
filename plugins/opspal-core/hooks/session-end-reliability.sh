@@ -15,6 +15,10 @@
 
 set -o pipefail
 
+emit_noop_json() {
+    printf '{}\n'
+}
+
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Always resolve plugin root from script location, not CLAUDE_PLUGIN_ROOT
@@ -37,20 +41,23 @@ log() {
 # Check if auto-reliability is enabled
 if [[ "$ENABLE_AUTO_RELIABILITY" != "1" ]]; then
     log "INFO" "Auto-reliability disabled (ENABLE_AUTO_RELIABILITY=0)"
+    emit_noop_json
     exit 0
 fi
 
 # Check for node
 if ! command -v node &> /dev/null; then
     log "WARN" "Node.js not available - skipping reliability checks"
+    emit_noop_json
     exit 0
 fi
 
 # Find reliability manager script
-RELIABILITY_SCRIPT="$PLUGIN_ROOT/scripts/lib/reflection-reliability-manager.js"
+RELIABILITY_SCRIPT="${RELIABILITY_SCRIPT_OVERRIDE:-$PLUGIN_ROOT/scripts/lib/reflection-reliability-manager.js}"
 
 if [[ ! -f "$RELIABILITY_SCRIPT" ]]; then
     log "WARN" "Reliability manager not found at $RELIABILITY_SCRIPT"
+    emit_noop_json
     exit 0
 fi
 
@@ -69,5 +76,6 @@ disown
 
 log "INFO" "Reliability checks started in background"
 
-# Stop hooks: output nothing to allow stop, exit 0
+# Stop hooks: emit a JSON no-op envelope and exit 0.
+emit_noop_json
 exit 0

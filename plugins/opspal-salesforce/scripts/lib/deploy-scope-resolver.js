@@ -207,6 +207,31 @@ function parseDeploymentCommand(command) {
   return parsed;
 }
 
+function resolveEffectiveCwd(command, cwd = process.cwd()) {
+  const invocationCwd = path.resolve(cwd || process.cwd());
+  const deployMatch = String(command || '').match(/\bsf\s+project\s+deploy\b/i);
+
+  if (!deployMatch || typeof deployMatch.index !== 'number') {
+    return invocationCwd;
+  }
+
+  const preamble = String(command || '').slice(0, deployMatch.index);
+  const segments = preamble
+    .split(/&&|;|\n/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+
+  let effectiveCwd = invocationCwd;
+  segments.forEach((segment) => {
+    const tokens = tokenizeCommand(segment);
+    if (tokens[0] === 'cd' && tokens[1]) {
+      effectiveCwd = path.resolve(effectiveCwd, tokens[1]);
+    }
+  });
+
+  return effectiveCwd;
+}
+
 function resolvePath(cwd, candidate) {
   if (!candidate) {
     return '';
@@ -621,7 +646,8 @@ function createScopeRoot(selectedPaths, cwd) {
 
 function analyzeDeploymentScope(command, cwd = process.cwd(), options = {}) {
   const parsedCommand = parseDeploymentCommand(command);
-  const resolvedCwd = path.resolve(cwd || process.cwd());
+  const invocationCwd = path.resolve(cwd || process.cwd());
+  const resolvedCwd = resolveEffectiveCwd(command, invocationCwd);
   const selected = collectSelectedPaths(parsedCommand, resolvedCwd);
   const allFiles = collectScopeFiles(selected.selectedPaths);
   const flowFiles = allFiles.filter((filePath) => filePath.endsWith('.flow-meta.xml'));
@@ -631,6 +657,7 @@ function analyzeDeploymentScope(command, cwd = process.cwd(), options = {}) {
   const result = {
     ...parsedCommand,
     cwd: resolvedCwd,
+    invocationCwd,
     targetOrg: parsedCommand.targetOrg || parsedCommand.envAssignments.SF_TARGET_ORG || process.env.SF_TARGET_ORG || '',
     selectedPaths: selected.selectedPaths,
     warnings: selected.warnings,
@@ -711,5 +738,6 @@ if (require.main === module) {
 module.exports = {
   analyzeDeploymentScope,
   parseDeploymentCommand,
+  resolveEffectiveCwd,
   tokenizeCommand
 };

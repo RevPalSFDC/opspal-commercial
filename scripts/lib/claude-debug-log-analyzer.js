@@ -18,6 +18,10 @@ function analyzeClaudeDebugLog(content) {
   let enabledPlugins = 0;
   let loadedPluginCommands = 0;
   let loadedPluginSkills = 0;
+  const readFailures = {
+    missingFiles: [],
+    directories: []
+  };
   let pendingHookLookup = null;
 
   function recordEvent(kind, lineNumber, line) {
@@ -59,6 +63,24 @@ function analyzeClaudeDebugLog(content) {
 
     if (line.includes('tree-sitter unavailable, using legacy shell-quote path')) {
       treeSitterFallbacks += 1;
+    }
+
+    const missingFileMatch = line.match(/Read tool error \(\d+ms\): File does not exist\. Note: your current working directory is (.+)\.$/);
+    if (missingFileMatch) {
+      readFailures.missingFiles.push({
+        lineNumber,
+        line,
+        cwd: missingFileMatch[1]
+      });
+    }
+
+    const directoryReadMatch = line.match(/Read tool error \(\d+ms\): EISDIR: illegal operation on a directory, read '([^']+)'/);
+    if (directoryReadMatch) {
+      readFailures.directories.push({
+        lineNumber,
+        line,
+        path: directoryReadMatch[1]
+      });
     }
 
     const attachedSkillsMatch = line.match(/Sending (\d+) skills via attachment/);
@@ -155,6 +177,14 @@ function analyzeClaudeDebugLog(content) {
     line: event.line
   }));
 
+  const maxAgentHookFanout = Object.entries(hookFanout).reduce((max, [key, value]) => {
+    const query = key.split(':').slice(1).join(':');
+    if (query === 'Agent') {
+      return Math.max(max, value);
+    }
+    return max;
+  }, 0);
+
   return {
     plainTextHookOutputs,
     treeSitterFallbacks,
@@ -162,9 +192,11 @@ function analyzeClaudeDebugLog(content) {
     enabledPlugins,
     loadedPluginCommands,
     loadedPluginSkills,
+    maxAgentHookFanout,
     hookFanout,
     events,
     eventOccurrences,
+    readFailures,
     primaryFailure,
     secondaryFailures
   };

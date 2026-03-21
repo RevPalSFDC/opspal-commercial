@@ -47,7 +47,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.status, 0, 'Should exit with 0');
-    assert.strictEqual(result.stdout.trim(), '', 'Should not emit output');
+    assert.strictEqual(result.stdout.trim(), '{}', 'Should emit JSON no-op output');
   }));
 
   results.push(await runTest('Continues when primary log path is not writable', async () => {
@@ -61,6 +61,20 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.status, 0, 'Should continue via fallback log path');
+  }));
+
+  results.push(await runTest('Routes formatter output to stderr and keeps stdout JSON-only', async () => {
+    const result = spawnSync('bash', [HOOK_PATH, '[SEQUENTIAL] Decompose this task into a plan.'], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        TASK_GRAPH_ENABLED: '1'
+      }
+    });
+
+    assert.strictEqual(result.status, 0, 'Should exit with 0');
+    assert.strictEqual(result.stdout.trim(), '{}', 'Should keep stdout as JSON-only noop output');
+    assert(result.stderr.length > 0, 'Should route formatter output to stderr');
   }));
 
   const passed = results.filter(r => r.passed).length;

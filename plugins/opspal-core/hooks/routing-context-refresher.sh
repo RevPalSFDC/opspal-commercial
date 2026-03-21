@@ -20,16 +20,86 @@ set -euo pipefail
 # Configuration
 ENABLE="${ENABLE_ROUTING_REFRESH:-1}"
 INTERVAL="${ROUTING_REFRESH_INTERVAL:-20}"
+COOLDOWN_SECONDS="${ROUTING_REFRESH_COOLDOWN_SECONDS:-600}"
 SENTINEL_DIR="$HOME/.claude/session-context"
 SENTINEL_FILE="$SENTINEL_DIR/.needs-routing-refresh"
 COUNTER_FILE="/tmp/.routing-refresh-counter-${USER:-$(id -un 2>/dev/null || echo default)}"
 CONDENSED_FILE="$SENTINEL_DIR/condensed-routing.txt"
+STATE_FILE="$SENTINEL_DIR/routing-refresh-state.json"
 
 # Quick exit if disabled
 if [ "$ENABLE" = "0" ]; then
   echo '{}'
   exit 0
 fi
+
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+  HOOK_INPUT=$(cat)
+fi
+
+extract_user_message() {
+  if [ -z "${HOOK_INPUT// }" ]; then
+    return
+  fi
+
+  echo "$HOOK_INPUT" | jq -r '.user_message // .userPrompt // .prompt // .userMessage // .message // ""' 2>/dev/null || echo ""
+}
+
+is_specific_prompt() {
+  local message="$1"
+  local message_lower
+
+  message_lower=$(echo "$message" | tr '[:upper:]' '[:lower:]')
+
+  if [ -z "${message_lower// }" ]; then
+    return 1
+  fi
+
+  if [ "${#message_lower}" -ge 120 ]; then
+    return 0
+  fi
+
+  if echo "$message_lower" | grep -qE '^/'; then
+    return 0
+  fi
+
+  if echo "$message_lower" | grep -qE '\b(agent\(|subagent_type|salesforce|sfdc|hubspot|marketo|okr|gtm|monday|flow|apex|soql|deploy|audit|validation rule|territory|report|dashboard)\b'; then
+    return 0
+  fi
+
+  return 1
+}
+
+was_recently_injected() {
+  if [ ! -f "$STATE_FILE" ] || ! command -v jq >/dev/null 2>&1; then
+    return 1
+  fi
+
+  local last_epoch now age
+  last_epoch=$(jq -r '.lastInjectedEpoch // 0' "$STATE_FILE" 2>/dev/null || echo "0")
+  if ! [[ "$last_epoch" =~ ^[0-9]+$ ]]; then
+    return 1
+  fi
+
+  now=$(date +%s)
+  age=$((now - last_epoch))
+
+  [ "$age" -lt "$COOLDOWN_SECONDS" ]
+}
+
+record_injection() {
+  mkdir -p "$SENTINEL_DIR" 2>/dev/null || true
+  jq -n \
+    --arg reason "$1" \
+    --arg text "$2" \
+    --argjson epoch "$(date +%s)" \
+    '{
+      lastInjectedEpoch: $epoch,
+      lastReason: $reason,
+      lastText: $text
+    }' > "$STATE_FILE" 2>/dev/null || true
+}
 
 SHOULD_INJECT=false
 REASON=""
@@ -71,6 +141,17 @@ if [ "$SHOULD_INJECT" = "false" ]; then
   exit 0
 fi
 
+USER_MESSAGE="$(extract_user_message)"
+if [ "$REASON" != "post-compaction" ] && is_specific_prompt "$USER_MESSAGE"; then
+  echo '{}'
+  exit 0
+fi
+
+if [ "$REASON" != "post-compaction" ] && was_recently_injected; then
+  echo '{}'
+  exit 0
+fi
+
 # Get condensed routing text
 ROUTING_TEXT=""
 
@@ -107,5 +188,7 @@ cat <<EOF
   }
 }
 EOF
+
+record_injection "$REASON" "$ROUTING_TEXT"
 
 exit 0

@@ -125,6 +125,8 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
     assert(
       result.stderr.includes('Could not determine tool name'),
       'Should warn about missing tool name'
@@ -147,6 +149,8 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
+    assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
   }));
 
   results.push(await runTest('Denies operational tools while routing requirement is pending', async () => {
@@ -192,6 +196,8 @@ async function runAllTests() {
 
   results.push(await runTest('Allows read-only tools while routing requirement is pending', async () => {
     const sessionId = 'pending-readonly-session';
+    const tempReadRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-read-allow-'));
+    fs.writeFileSync(path.join(tempReadRoot, 'README.md'), '# fixture\n', 'utf8');
     writeRoutingState(tempHome, sessionId, {
       session_key: sessionId,
       route_id: 'reports-dashboards',
@@ -205,22 +211,99 @@ async function runAllTests() {
       expires_at: Math.floor(Date.now() / 1000) + 600
     });
 
-    const result = await tester.run({
-      input: {
-        tool_name: 'Read',
-        sessionKey: sessionId,
-        tool_input: { file_path: 'README.md' }
-      },
-      env: {
-        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
-        HOME: tempHome,
-        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
-        CLAUDE_SESSION_ID: sessionId
-      }
-    });
+    try {
+      const result = await tester.run({
+        input: {
+          tool_name: 'Read',
+          sessionKey: sessionId,
+          cwd: tempReadRoot,
+          tool_input: { file_path: 'README.md' }
+        },
+        env: {
+          CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+          HOME: tempHome,
+          CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+          CLAUDE_SESSION_ID: sessionId
+        }
+      });
 
-    assert.strictEqual(result.exitCode, 0, 'Read-only tools should still pass');
-    assertNoStructuredDeny(result, 'Read-only tool should not be denied');
+      assert.strictEqual(result.exitCode, 0, 'Read-only tools should still pass');
+      assertNoStructuredDeny(result, 'Read-only tool should not be denied');
+    } finally {
+      fs.rmSync(tempReadRoot, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Denies missing Read targets with structured JSON', async () => {
+    const missingRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-read-missing-'));
+    try {
+      const result = await tester.run({
+        input: {
+          tool_name: 'Read',
+          cwd: missingRoot,
+          tool_input: { file_path: 'missing.txt' }
+        },
+        env: {
+          CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+          HOME: tempHome,
+          CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+        }
+      });
+
+      assertStructuredRoutingDeny(result, 'READ_TARGET_NOT_FOUND', 'Missing read target');
+    } finally {
+      fs.rmSync(missingRoot, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Denies directory Read targets with structured JSON', async () => {
+    const directoryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-read-directory-'));
+    const flowsDir = path.join(directoryRoot, 'flows');
+    fs.mkdirSync(flowsDir, { recursive: true });
+
+    try {
+      const result = await tester.run({
+        input: {
+          tool_name: 'Read',
+          cwd: directoryRoot,
+          tool_input: { file_path: 'flows' }
+        },
+        env: {
+          CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+          HOME: tempHome,
+          CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+        }
+      });
+
+      assertStructuredRoutingDeny(result, 'READ_TARGET_IS_DIRECTORY', 'Directory read target');
+    } finally {
+      fs.rmSync(directoryRoot, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Allows absolute Read targets that exist', async () => {
+    const absoluteRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-read-absolute-'));
+    const absoluteFile = path.join(absoluteRoot, 'existing.txt');
+    fs.writeFileSync(absoluteFile, 'fixture\n', 'utf8');
+
+    try {
+      const result = await tester.run({
+        input: {
+          tool_name: 'Read',
+          tool_input: { file_path: absoluteFile }
+        },
+        env: {
+          CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+          HOME: tempHome,
+          CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Absolute read target should pass');
+      assertNoStructuredDeny(result, 'Absolute read target should not be denied');
+    } finally {
+      fs.rmSync(absoluteRoot, { recursive: true, force: true });
+    }
   }));
 
   results.push(await runTest('Allows read-only Slack MCP tools while routing requirement is pending', async () => {

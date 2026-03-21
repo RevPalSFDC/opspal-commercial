@@ -24,6 +24,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
+TASK_SCOPE_SELECTOR="$PLUGIN_ROOT/scripts/lib/task-scope-selector.js"
+
+emit_noop_json() {
+  printf '{}\n'
+}
 
 # Read hook input from stdin
 INPUT=$(cat)
@@ -33,11 +38,20 @@ AGENT_NAME=$(echo "$INPUT" | jq -r '.agent_type // .subagent_type // .agentName 
 
 # Skip if no agent identified
 if [[ -z "$AGENT_NAME" ]]; then
+    emit_noop_json
     exit 0
 fi
 
 # Initialize context parts
 CONTEXT_PARTS=()
+
+# ─── 0. Task Scope Guidance ──────────────────────────────────────────────────
+if [[ -f "$TASK_SCOPE_SELECTOR" ]] && command -v node >/dev/null 2>&1; then
+    TASK_SCOPE_CONTEXT=$(printf '%s' "$INPUT" | node "$TASK_SCOPE_SELECTOR" from-hook --format subagent-context 2>/dev/null || true)
+    if [[ -n "${TASK_SCOPE_CONTEXT// }" ]]; then
+        CONTEXT_PARTS+=("$TASK_SCOPE_CONTEXT")
+    fi
+fi
 
 # ─── 1. Runbook Reminder ───────────────────────────────────────────────────
 if [[ "${RUNBOOK_REMINDER_ENABLED:-1}" == "1" ]]; then
@@ -129,6 +143,8 @@ if [[ ${#CONTEXT_PARTS[@]} -gt 0 ]]; then
           additionalContext: $context
         }
       }'
+else
+    emit_noop_json
 fi
 
 exit 0

@@ -15,6 +15,12 @@ const FIXTURE_PATH = path.join(
   'fixtures',
   'claude-debug-salesforce-deploy-incident.log'
 );
+const READ_FAILURE_FIXTURE = path.join(
+  __dirname,
+  '..',
+  'fixtures',
+  'claude-debug-read-path-failures.txt'
+);
 
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
@@ -55,6 +61,20 @@ async function runAllTests() {
     assert(analysis.events.instanceDeployerEISDIR, 'Should detect the instance-deployer misroute');
     assert(analysis.events.postToolUseAgentError, 'Should detect downstream Agent hook noise');
     assert(analysis.events.postToolUseBashError, 'Should detect downstream Bash hook noise');
+  }));
+
+  results.push(await runTest('Parses missing-file and directory Read failures', async () => {
+    const analysis = analyzeClaudeDebugLogFile(READ_FAILURE_FIXTURE);
+
+    assert.strictEqual(analysis.skillsAttachedMax, 439, 'Should preserve attached skill count');
+    assert.strictEqual(analysis.maxAgentHookFanout, 7, 'Should capture Agent hook fanout');
+    assert.strictEqual(analysis.readFailures.missingFiles.length, 2, 'Should count missing-file Read failures');
+    assert.strictEqual(analysis.readFailures.directories.length, 1, 'Should count directory Read failures');
+    assert.strictEqual(
+      analysis.readFailures.directories[0].path,
+      '/mnt/c/Users/cnace/RevPal/workspace/orgs/lula/platforms/salesforce/staging/force-app/main/default/flows',
+      'Should capture the directory path that was read'
+    );
   }));
 
   const passed = results.filter((result) => result.passed).length;

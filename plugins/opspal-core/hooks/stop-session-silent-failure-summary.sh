@@ -20,6 +20,10 @@
 
 set -euo pipefail
 
+emit_noop_json() {
+    printf '{}\n'
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RUNTIME_MONITOR="$SCRIPT_DIR/../scripts/lib/silent-failure/runtime-monitors.js"
 POST_ANALYZER="$SCRIPT_DIR/../scripts/lib/silent-failure/post-session-analyzers.js"
@@ -45,10 +49,12 @@ log() {
 
 # Check if scripts exist
 if [ ! -f "$RUNTIME_MONITOR" ]; then
+    emit_noop_json
     exit 0
 fi
 
 if ! command -v node &>/dev/null; then
+    emit_noop_json
     exit 0
 fi
 
@@ -85,4 +91,5 @@ node "$RUNTIME_MONITOR" reset >/dev/null 2>&1 || true
 
 log "Post-session analysis complete"
 
+emit_noop_json
 exit 0

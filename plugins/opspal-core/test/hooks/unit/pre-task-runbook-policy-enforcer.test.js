@@ -9,6 +9,9 @@
  */
 
 const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { HookTester } = require('../runner');
 
 const HOOK_PATH = 'plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh';
@@ -80,6 +83,29 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.deepStrictEqual(result.output, {}, 'Missing context should not echo raw input');
     assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+  }));
+
+  results.push(await runTest('Fails open with no-op JSON when the retriever is unavailable', async () => {
+    const tempPluginRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'runbook-policy-hook-'));
+
+    try {
+      const result = await tester.run({
+        input: createAgentEvent({
+          subagent_type: 'sfdc-report-designer',
+          prompt: 'Build an Account export report for staging'
+        }),
+        env: {
+          CLAUDE_PLUGIN_ROOT: tempPluginRoot,
+          SF_TARGET_ORG: 'staging'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Missing retriever should not abort the hook');
+      assert.deepStrictEqual(result.output, {}, 'Missing retriever should emit a JSON no-op response');
+      assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+    } finally {
+      fs.rmSync(tempPluginRoot, { recursive: true, force: true });
+    }
   }));
 
   const passed = results.filter(r => r.passed).length;

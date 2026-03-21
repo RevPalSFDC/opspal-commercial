@@ -12,6 +12,10 @@
     "test:task-graph": "jest test/task-graph/",
     "test:unit": "jest test/task-graph/*.test.js --testPathIgnorePatterns=integration",
     "test:integration": "jest test/task-graph/integration.test.js",
+    "test:hooks:json-contracts": "node test/hooks/unit/json-hook-contracts.test.js",
+    "test:hooks:scope": "node test/hooks/unit/task-scope-selector.test.js && node test/hooks/unit/routing-context-refresher.test.js",
+    "test:runtime-patcher": "node test/hooks/unit/patch-claude-code-task-scope-runtime.test.js",
+    "test:runtime-replay": "node test/hooks/unit/claude-runtime-replay-validator.test.js",
     "pdf": "node scripts/lib/pdf-generator.js",
     "pdf:generate": "node scripts/lib/pdf-generator.js"
   },

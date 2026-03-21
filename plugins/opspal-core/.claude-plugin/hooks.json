@@ -18,6 +18,12 @@
           },
           {
             "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-scope-selector.sh",
+            "timeout": 5000,
+            "description": "Persist a minimal plugin and skill scope for the current task and inject a concise allowlist reminder"
+          },
+          {
+            "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-graph-trigger.sh",
             "timeout": 5000,
             "description": "Detect when Task Graph orchestration is needed based on complexity"
@@ -46,30 +52,6 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-agent-validator.sh",
             "timeout": 5000,
             "description": "Validate and resolve agent names - detects commands mistakenly invoked as agents, auto-resolves short names to fully-qualified"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-runbook-reminder.sh",
-            "timeout": 5000,
-            "description": "Remind agents to review org-specific runbooks before starting work"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-template-injector.sh",
-            "timeout": 5000,
-            "description": "Inject template and branding guidance from master registry into agent context"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-field-dictionary-injector.sh",
-            "timeout": 8000,
-            "description": "Inject field dictionary context for reporting agents (field semantics, caveats, guidance)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-work-context.sh",
-            "timeout": 5000,
-            "description": "Load client work history and pending follow-ups at session start when ORG_SLUG is set"
           },
           {
             "type": "command",

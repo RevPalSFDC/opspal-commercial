@@ -58,7 +58,7 @@ save_scratchpad() {
     local scratchpad_saver="$PLUGIN_ROOT/hooks/session-end-scratchpad.sh"
     if [[ -f "$scratchpad_saver" ]] && [[ -x "$scratchpad_saver" ]]; then
         log_verbose "Saving scratchpad state..."
-        bash "$scratchpad_saver" 2>/dev/null || true
+        bash "$scratchpad_saver" 1>&2 2>&2 || true
     fi
 }
 
@@ -124,19 +124,19 @@ platform_cleanup() {
         salesforce)
             local sf_cleanup="${PLUGIN_ROOT}/../salesforce-plugin/hooks/session-end-sf.sh"
             if [[ -f "$sf_cleanup" ]] && [[ -x "$sf_cleanup" ]]; then
-                bash "$sf_cleanup" 2>/dev/null || true
+                bash "$sf_cleanup" 1>&2 2>&2 || true
             fi
             ;;
         hubspot)
             local hs_cleanup="${PLUGIN_ROOT}/../hubspot-plugin/hooks/session-end-hs.sh"
             if [[ -f "$hs_cleanup" ]] && [[ -x "$hs_cleanup" ]]; then
-                bash "$hs_cleanup" 2>/dev/null || true
+                bash "$hs_cleanup" 1>&2 2>&2 || true
             fi
             ;;
         marketo)
             local mkto_cleanup="${PLUGIN_ROOT}/../marketo-plugin/hooks/session-end-mkto.sh"
             if [[ -f "$mkto_cleanup" ]] && [[ -x "$mkto_cleanup" ]]; then
-                bash "$mkto_cleanup" 2>/dev/null || true
+                bash "$mkto_cleanup" 1>&2 2>&2 || true
             fi
             ;;
     esac
@@ -182,5 +182,6 @@ write_session_summary
 
 log_verbose "Session cleanup complete"
 
-# Stop hooks: output nothing to allow stop, exit 0
+# Stop hooks: emit a JSON no-op envelope and exit 0.
+printf '{}\n'
 exit 0
