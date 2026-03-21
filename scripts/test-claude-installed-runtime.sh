@@ -123,11 +123,11 @@ seed_repo_copy() {
 }
 
 should_use_simulated_install() {
-  if [ "${OPSPAL_SKIP_CLAUDE_CLI:-0}" = "1" ]; then
+  if [ "${OPSPAL_USE_CLAUDE_CLI:-0}" != "1" ]; then
     return 0
   fi
 
-  if [ "${CI:-}" = "true" ] && [ "${OPSPAL_USE_CLAUDE_CLI:-0}" != "1" ]; then
+  if [ "${OPSPAL_SKIP_CLAUDE_CLI:-0}" = "1" ]; then
     return 0
   fi
 
