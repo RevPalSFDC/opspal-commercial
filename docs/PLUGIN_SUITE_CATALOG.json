@@ -99,7 +99,7 @@
     },
     {
       "name": "opspal-hubspot",
-      "version": "3.9.5",
+      "version": "3.9.6",
       "source": "./plugins/opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
       "counts": {
@@ -119,7 +119,7 @@
     },
     {
       "name": "opspal-marketo",
-      "version": "2.6.19",
+      "version": "2.6.20",
       "source": "./plugins/opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
       "counts": {
@@ -199,7 +199,7 @@
     },
     {
       "name": "opspal-salesforce",
-      "version": "3.84.11",
+      "version": "3.84.12",
       "source": "./plugins/opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
       "counts": {
