@@ -82,8 +82,16 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 2, 'Should preserve the direct deploy guardrail');
+    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits JSON blockExecution)');
     assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the direct deploy block');
+    const output = result.output || {};
+    const hookOutput = output.hookSpecificOutput || {};
+    // The child hook emits {"blockExecution": true} which the dispatcher merges into its JSON
+    // The merged output may surface as permissionDecision or as blockExecution depending on dispatcher merge logic
+    assert(
+      hookOutput.permissionDecision === 'deny' || (result.stdout || '').includes('blockExecution'),
+      'Should contain a blocking signal in the merged output'
+    );
   }));
 
   results.push(await runTest('Returns structured jq validation guidance', async () => {

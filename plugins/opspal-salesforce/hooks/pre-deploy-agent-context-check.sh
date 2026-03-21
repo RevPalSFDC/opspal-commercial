@@ -139,7 +139,10 @@ if [[ -n "$SESSION_KEY" ]] && has_parent_context_deploy_clearance "$SESSION_KEY"
     exit 0
 fi
 
-# Not in agent context — output steering instruction and block the tool call
+# Not in agent context — output steering instruction and block the tool call.
+# Write human-readable message to stderr (visible in Claude Code output).
+# Emit JSON blockExecution to stdout so the dispatcher merges it and exits 0.
+# (exit 2 would be treated as hook FAILURE by Claude Code, not intentional blocking.)
 cat <<'EOF' >&2
 DEPLOY BLOCKED: sf project deploy needs approved deployment planning before parent-context execution.
 Use: Agent(subagent_type='opspal-salesforce:sfdc-deployment-manager', prompt='Prepare a parent-context deployment handoff for <your deploy request>. Do not execute sf project deploy from the subagent.')
@@ -147,4 +150,4 @@ For production or non-sandbox deploys, you can also use: Agent(subagent_type='op
 After planning clears the session, rerun the deploy command from the parent/main context.
 To bypass: export ALLOW_DIRECT_DEPLOY=1
 EOF
-exit 2
+jq -nc '{"blockExecution": true, "blockMessage": "DEPLOY BLOCKED: sf project deploy needs approved deployment planning. Use Agent(subagent_type=\"opspal-salesforce:sfdc-deployment-manager\") to prepare a deployment handoff first. To bypass: export ALLOW_DIRECT_DEPLOY=1"}' && exit 0

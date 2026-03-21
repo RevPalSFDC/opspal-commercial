@@ -15,6 +15,17 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "mcp__marketo__campaign_activate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-activation.sh",
+            "timeout": 10000,
+            "description": "Validate campaignId, check API rate limits, and enforce deactivation cooldown before campaign activation"
+          }
+        ]
+      },
+      {
         "matcher": "mcp__marketo__lead_create|mcp__marketo__lead_update|mcp__marketo__lead_delete",
         "hooks": [
           {

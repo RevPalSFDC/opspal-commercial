@@ -83,7 +83,8 @@ async function runAllTests() {
         env
       });
 
-      assert.strictEqual(result.exitCode, 2, 'Direct deploy start should still be blocked by default');
+      assert.strictEqual(result.exitCode, 0, 'Hook should exit 0 with JSON blockExecution (not exit 2)');
+      assert(result.stdout.includes('blockExecution'), 'Should emit blockExecution JSON to stdout');
       assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the direct deploy block');
       assert(
         result.stderr.includes('parent-context deployment handoff'),
