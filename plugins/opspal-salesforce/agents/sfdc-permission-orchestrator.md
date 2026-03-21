@@ -14,7 +14,7 @@ tools:
   - Task
 disallowedTools:
   - Bash(sf data delete:*)
-  - Bash(sf project deploy --metadata-dir:*)
+  - Bash(sf project deploy:*)
   - mcp__salesforce__*_delete
 model: sonnet
 tier: 4

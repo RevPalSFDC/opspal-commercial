@@ -11,6 +11,8 @@ tools:
   - TodoWrite
   - mcp__marketo__campaign_list
   - mcp__marketo__campaign_get
+  - mcp__marketo__campaign_create
+  - mcp__marketo__campaign_clone
   - mcp__marketo__campaign_activate
   - mcp__marketo__campaign_deactivate
   - mcp__marketo__campaign_schedule

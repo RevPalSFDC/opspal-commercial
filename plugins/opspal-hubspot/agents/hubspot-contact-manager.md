@@ -11,6 +11,7 @@ tools:
   - mcp__hubspot-enhanced-v3__hubspot_batch_upsert
   - Read
   - Write
+  - Bash
   - TodoWrite
   - Grep
 disallowedTools:

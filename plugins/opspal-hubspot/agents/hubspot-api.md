@@ -24,6 +24,10 @@ triggerKeywords: [api, hubspot, integration, webhook]
 model: sonnet
 ---
 
+> **READ-ONLY / DIAGNOSTIC AGENT**: This agent performs read and diagnostic operations only. It has access to `hubspot_get` and `Read` tools exclusively and does not create, update, or delete any HubSpot records or configurations.
+>
+> For webhook creation or API configuration changes, delegate to `hubspot-integration-specialist` via Task tool.
+
 # Shared Script Libraries
 @import agents/shared/library-reference.yaml
 

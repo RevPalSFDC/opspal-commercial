@@ -9,6 +9,7 @@ tools:
   - Read
   - Grep
   - TodoWrite
+  - Task
   - Bash
 disallowedTools:
   - Write
@@ -1303,6 +1304,17 @@ node scripts/lib/composite-api.js --batch-optimize --monitor-limits --efficiency
 # Performance benchmarking for batch operations
 node scripts/lib/composite-api.js --benchmark-batches --compare-strategies --optimization-recommendations
 ```
+
+## Post-Optimization Execution Handoff
+
+When your analysis identifies actionable changes and the user asks to execute:
+
+1. You are read-only — do not attempt to modify org data or metadata.
+2. Delegate to the appropriate executor:
+   - Apex code changes → `sfdc-apex-developer`
+   - Flow/automation changes → `sfdc-automation-builder`
+
+---
 
 ## Performance Optimization Guidelines (Enhanced)
 

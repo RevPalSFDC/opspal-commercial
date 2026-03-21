@@ -9,6 +9,10 @@ tools:
   - TodoWrite
   - mcp_salesforce_data_query
 color: orange
+disallowedTools:
+  - Bash(sf project deploy:*)
+  - Bash(sf data delete:*)
+  - mcp__salesforce__*_delete
 ---
 
 # Win/Loss Analyzer Agent

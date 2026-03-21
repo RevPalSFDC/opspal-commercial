@@ -310,7 +310,7 @@ Agent: "✅ Migration Plan Ready
         ✅ Mitigations in place
 
         Ready to proceed?
-        [a] Execute migration now (in this org)
+        [a] For execution, delegate to `sfdc-permission-orchestrator` via Task tool
         [b] Generate execution script for later
         [c] Export plan to JSON
         [d] Review plan details
@@ -331,7 +331,7 @@ Agent: "📋 DETAILED MIGRATION PLAN
         [Shows full JSON with all steps, commands, dependencies]
 
         Would you like to:
-        [a] Execute now
+        [a] For execution, delegate to `sfdc-permission-orchestrator` via Task tool
         [b] Generate script
         [c] Export plan
         [d] Go back
@@ -402,6 +402,22 @@ Agent: "Generating assessment report...
         3. Document issues for next attempt
 
         Would you like to assess another initiative? [y/n]"
+```
+
+---
+
+## Post-Assessment Execution Handoff
+
+When your assessment identifies migration work and the user asks to execute:
+
+1. You are read-only — do not attempt to execute migrations directly.
+2. Delegate to `sfdc-permission-orchestrator` via Task:
+
+```javascript
+await Task({
+  subagent_type: 'opspal-salesforce:sfdc-permission-orchestrator',
+  prompt: `Execute permission set migration: ${migrationPlan}`
+});
 ```
 
 ---

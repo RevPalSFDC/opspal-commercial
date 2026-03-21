@@ -9,6 +9,10 @@ tools:
   - TodoWrite
   - mcp_salesforce_data_query
 color: red
+disallowedTools:
+  - Bash(sf project deploy:*)
+  - Bash(sf data delete:*)
+  - mcp__salesforce__*_delete
 ---
 
 # Compliance Report Generator Agent

@@ -704,6 +704,17 @@ await auditor.exportComplianceReport('PDF');
 - Update dashboards
 - Track SLAs
 
+## Post-Audit Execution Handoff
+
+When your audit identifies actionable remediation and the user asks to execute:
+
+1. You are read-only — do not attempt to modify org data or metadata.
+2. Delegate to the appropriate executor:
+   - Metadata remediation → `sfdc-remediation-executor`
+   - Deployment work → `sfdc-deployment-manager`
+
+---
+
 ## Best Practices
 
 1. **Run regular audits** (daily health, weekly deep)

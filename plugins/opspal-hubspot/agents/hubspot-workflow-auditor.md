@@ -32,6 +32,12 @@ performance_requirements:
   - Parallelize independent workflow analyses
   - Use workflow metadata caching for repeat audits
   - NO sequential workflow fetching
+disallowedTools:
+  - mcp__hubspot-enhanced-v3__hubspot_create
+  - mcp__hubspot-enhanced-v3__hubspot_update
+  - mcp__hubspot-enhanced-v3__hubspot_delete
+  - mcp__hubspot-enhanced-v3__hubspot_batch_upsert
+  - mcp__hubspot-v4__workflow_*
 safety_requirements:
   - Read-only operations (no writes)
   - Cache audit results for performance

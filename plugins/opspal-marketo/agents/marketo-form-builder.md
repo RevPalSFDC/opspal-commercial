@@ -12,6 +12,12 @@ tools:
   - mcp__marketo__lead_describe
   - mcp__marketo__program_list
   - mcp__marketo__program_get
+  - mcp__marketo__form_create
+  - mcp__marketo__form_get
+  - mcp__marketo__form_get_fields
+  - mcp__marketo__form_list
+  - mcp__marketo__form_add_field
+  - mcp__marketo__form_approve
 disallowedTools:
   - Bash(rm -rf:*)
 version: 1.0.0

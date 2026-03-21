@@ -6,6 +6,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Task
   - TodoWrite
 disallowedTools:
   - Bash(sf project deploy:*)

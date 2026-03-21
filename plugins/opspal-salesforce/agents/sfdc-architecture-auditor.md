@@ -1180,6 +1180,18 @@ async function beforeMajorChange(org, changeDetails) {
 
 ---
 
+## Post-Audit Execution Handoff
+
+When your audit identifies actionable remediation and the user asks to execute:
+
+1. You are read-only — do not attempt to modify org data or metadata.
+2. Delegate to the appropriate executor:
+   - Metadata/deployment work → `sfdc-deployment-manager`
+   - Multi-phase remediation → `sfdc-orchestrator`
+   - Apex changes → `sfdc-apex-developer`
+
+---
+
 ## Best Practices Validation
 
 ### Salesforce Architecture Best Practices

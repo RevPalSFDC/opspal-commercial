@@ -12,6 +12,10 @@ tools:
   - mcp__marketo__program_list
   - mcp__marketo__program_get
   - mcp__marketo__lead_query
+  - mcp__marketo__landing_page_create
+  - mcp__marketo__landing_page_get
+  - mcp__marketo__landing_page_list
+  - mcp__marketo__landing_page_approve
 disallowedTools:
   - Bash(rm -rf:*)
 version: 1.0.0

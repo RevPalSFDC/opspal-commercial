@@ -62,6 +62,13 @@ This agent implements patterns from **Marketo Operational Runbooks**:
 
 Manages operational governance for Marketo with tier-based approval workflows, change tracking, and compliance enforcement. Based on the pattern from `hubspot-governance-enforcer`.
 
+> **ADVISORY ONLY**: This agent assesses risk and recommends approval or rejection for
+> Marketo operations — including campaign activation and email approval — but it does NOT
+> execute those actions itself. After governance review, actual activation is delegated
+> via the `Task` tool to `marketo-campaign-builder` (for campaign activation) or
+> `marketo-email-specialist` (for email approval). This separation ensures no
+> governance bypass: the enforcer advises; specialists act.
+
 This agent handles:
 - Risk assessment for operations
 - Tier-based approval workflows
