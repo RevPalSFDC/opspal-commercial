@@ -1,6 +1,6 @@
 # OpsPal Commercial
 
-Commercial Claude Code marketplace for RevOps delivery across Salesforce, HubSpot, Marketo, GTM planning, and executive reporting. This repo currently ships 10 plugins with 302 agents, 272 commands, and 163 hooks.
+Commercial Claude Code marketplace for RevOps delivery across Salesforce, HubSpot, Marketo, GTM planning, and executive reporting. This repo currently ships 10 plugins with 302 agents, 272 commands, and 164 hooks.
 
 ## Install
 
@@ -34,15 +34,15 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.9 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.42.21 | active | 79 | 112 | 78 |
+| `opspal-core` | 2.42.22 | active | 79 | 112 | 78 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 1 | 1 |
 | `opspal-gtm-planning` | 2.3.3 | active | 13 | 16 | 4 |
 | `opspal-hubspot` | 3.9.6 | active | 59 | 33 | 13 |
-| `opspal-marketo` | 2.6.20 | active | 30 | 30 | 18 |
+| `opspal-marketo` | 2.6.21 | active | 30 | 30 | 19 |
 | `opspal-mcp-client` | 1.1.2 | active | 3 | 3 | 3 |
 | `opspal-monday` | 1.4.6 | experimental | 6 | 1 | 0 |
 | `opspal-okrs` | 3.0.6 | active | 14 | 14 | 3 |
-| `opspal-salesforce` | 3.84.12 | active | 94 | 59 | 42 |
+| `opspal-salesforce` | 3.84.13 | active | 94 | 59 | 42 |
 
 Deprecated compatibility note: `opspal-data-hygiene` remains published for compatibility, but new installs should prefer the deduplication commands in `opspal-core`.
 
