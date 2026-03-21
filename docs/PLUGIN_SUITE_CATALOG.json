@@ -19,7 +19,7 @@
   "plugins": [
     {
       "name": "opspal-ai-consult",
-      "version": "1.4.8",
+      "version": "1.4.9",
       "source": "./plugins/opspal-ai-consult",
       "description": "Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemini CLI invocation, Claude + Gemini response synthesis, alignment scoring, auto-consultation triggers, domain canonicalization for shadow duplicate detection, and ACE skill registry integration for learning from outcomes.",
       "counts": {
@@ -39,7 +39,7 @@
     },
     {
       "name": "opspal-core",
-      "version": "2.42.18",
+      "version": "2.42.19",
       "source": "./plugins/opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
       "counts": {
@@ -99,7 +99,7 @@
     },
     {
       "name": "opspal-hubspot",
-      "version": "3.9.4",
+      "version": "3.9.5",
       "source": "./plugins/opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
       "counts": {
@@ -119,7 +119,7 @@
     },
     {
       "name": "opspal-marketo",
-      "version": "2.6.18",
+      "version": "2.6.19",
       "source": "./plugins/opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
       "counts": {
@@ -139,7 +139,7 @@
     },
     {
       "name": "opspal-mcp-client",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "source": "./plugins/opspal-mcp-client",
       "description": "OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server. Includes scoring orchestrator, benchmark agent, compute orchestrator, client-side validation hooks, and usage tracking.",
       "counts": {
@@ -179,7 +179,7 @@
     },
     {
       "name": "opspal-okrs",
-      "version": "3.0.5",
+      "version": "3.0.6",
       "source": "./plugins/opspal-okrs",
       "description": "Data-driven OKR generation from live revenue data. Derives objectives and key results from Salesforce, HubSpot, product analytics, and conversation intelligence with initiative prioritization and adaptive learning.",
       "counts": {
@@ -199,7 +199,7 @@
     },
     {
       "name": "opspal-salesforce",
-      "version": "3.84.8",
+      "version": "3.84.9",
       "source": "./plugins/opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
       "counts": {
