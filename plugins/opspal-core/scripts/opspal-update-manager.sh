@@ -16,6 +16,14 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMMON_HELPER="$SCRIPT_DIR/lib/opspal-update-common.sh"
+if [ ! -f "$COMMON_HELPER" ]; then
+  echo "Error: shared update helper not found at $COMMON_HELPER"
+  exit 1
+fi
+source "$COMMON_HELPER"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -24,10 +32,6 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 BOLD='\033[1m'
-
-# Update history log file
-UPDATE_LOG_DIR="$HOME/.claude/logs"
-UPDATE_LOG_FILE="$UPDATE_LOG_DIR/opspal-updates.jsonl"
 
 # Parse arguments
 DRY_RUN=false
@@ -40,8 +44,12 @@ EMIT_SCRIPT_ONLY=false
 ALLOW_IN_SESSION_LEGACY="${OPSPAL_UPDATE_ALLOW_IN_SESSION_CLAUDE_CLI:-0}"
 DEFAULT_MARKETPLACE_NAME="${OPSPAL_MARKETPLACE_NAME:-opspal-commercial}"
 PREFERRED_MARKETPLACE_NAME="$DEFAULT_MARKETPLACE_NAME"
+PRECHECK_ONLY=false
+JSON_OUTPUT=false
+WORKSPACE_ROOT_INPUT="${OPSPAL_UPDATE_WORKSPACE:-$PWD}"
+CLAUDE_ROOT_OVERRIDE="${OPSPAL_UPDATE_CLAUDE_ROOT:-}"
 
-SCRIPT_ABS_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+SCRIPT_ABS_PATH="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -81,6 +89,30 @@ while [[ $# -gt 0 ]]; do
       EMIT_SCRIPT_ONLY=true
       shift
       ;;
+    --preflight)
+      PRECHECK_ONLY=true
+      shift
+      ;;
+    --json)
+      JSON_OUTPUT=true
+      shift
+      ;;
+    --workspace)
+      WORKSPACE_ROOT_INPUT="$2"
+      shift 2
+      ;;
+    --workspace=*)
+      WORKSPACE_ROOT_INPUT="${1#*=}"
+      shift
+      ;;
+    --claude-root)
+      CLAUDE_ROOT_OVERRIDE="$2"
+      shift 2
+      ;;
+    --claude-root=*)
+      CLAUDE_ROOT_OVERRIDE="${1#*=}"
+      shift
+      ;;
     --help)
       echo "Usage: $0 [OPTIONS]"
       echo ""
@@ -96,6 +128,10 @@ while [[ $# -gt 0 ]]; do
       echo "                         manual   = print exact commands to run yourself"
       echo "                         legacy   = run claude plugin install/uninstall directly"
       echo "  --emit-script-only     Only print generated runner path (external mode)"
+      echo "  --workspace <path>     Run the update against a specific workspace root"
+      echo "  --claude-root <path>   Use a specific ~/.claude root instead of auto-detecting"
+      echo "  --preflight            Validate auth, discovery, and writable paths without updating"
+      echo "  --json                 Emit the final report JSON to stdout"
       echo ""
       echo "Examples:"
       echo "  $0                           # Generate external runner for all plugins"
@@ -104,6 +140,7 @@ while [[ $# -gt 0 ]]; do
       echo "  $0 --only salesforce-plugin,opspal-core --skip-confirm"
       echo "  $0 --mode manual             # Print exact commands to run manually"
       echo "  $0 --mode legacy             # Direct update (host terminal only)"
+      echo "  $0 --preflight              # Validate auth/discovery without updating"
       echo "  $0 --history                 # Show last 10 updates"
       echo ""
       exit 0
@@ -129,6 +166,50 @@ validate_execution_mode() {
 }
 
 validate_execution_mode
+
+opspal_update_init_paths
+UPDATE_LOG_DIR="$OPSPAL_UPDATE_LOG_DIR"
+UPDATE_LOG_FILE="$OPSPAL_UPDATE_LOG_DIR/opspal-updates.jsonl"
+START_REPORT_FILE="${OPSPAL_UPDATE_START_REPORT_FILE:-$OPSPAL_UPDATE_LOG_DIR/opspal-update-start-last.json}"
+SESSION_FILE="${OPSPAL_UPDATE_SESSION_FILE:-$OPSPAL_UPDATE_STATE_DIR/opspal-update-session.json}"
+SESSION_ID="${OPSPAL_UPDATE_SESSION_ID:-$(opspal_update_session_id)}"
+
+ORIGINAL_STDOUT_OPENED=false
+JSON_CAPTURE_FILE=""
+if [ "$JSON_OUTPUT" = true ]; then
+  exec 3>&1
+  ORIGINAL_STDOUT_OPENED=true
+  JSON_CAPTURE_FILE="$(mktemp "${TMPDIR:-/tmp}/opspal-update-json.XXXXXX")"
+  exec >"$JSON_CAPTURE_FILE"
+fi
+
+if ! WORKSPACE_ROOT="$(cd "$WORKSPACE_ROOT_INPUT" 2>/dev/null && pwd)"; then
+  echo -e "${RED}Error: workspace root not found: $WORKSPACE_ROOT_INPUT${NC}"
+  exit 1
+fi
+
+if [ -n "$CLAUDE_ROOT_OVERRIDE" ]; then
+  if ! CLAUDE_ROOT_OVERRIDE="$(cd "$CLAUDE_ROOT_OVERRIDE" 2>/dev/null && pwd)"; then
+    echo -e "${RED}Error: Claude root not found: $CLAUDE_ROOT_OVERRIDE${NC}"
+    exit 1
+  fi
+fi
+
+cd "$WORKSPACE_ROOT"
+
+declare -a CLAUDE_ROOTS=()
+declare -a PLUGIN_DIRS=()
+declare -a SELECTED_PLUGINS=()
+declare -a PLUGINS_TO_UPDATE=()
+declare -a SKIPPED_PLUGINS=()
+declare -a SUCCESS_PLUGINS=()
+declare -a FAILED_PLUGINS=()
+declare -a PREFLIGHT_WARNINGS=()
+declare -A OLD_VERSIONS=()
+declare -A NEW_VERSIONS=()
+RUNNER_PATH=""
+UPGRADED_COUNT=0
+UNCHANGED_COUNT=0
 
 # Function to log update to history
 log_update() {
@@ -201,6 +282,233 @@ show_history() {
   exit 0
 }
 
+json_array_from_args() {
+  if [ "$#" -eq 0 ]; then
+    printf '[]'
+    return 0
+  fi
+
+  printf '%s\n' "$@" | node -e '
+    "use strict";
+    const fs = require("fs");
+    const values = fs.readFileSync(0, "utf8")
+      .split("\n")
+      .map((value) => value.trim())
+      .filter(Boolean);
+    process.stdout.write(JSON.stringify(values));
+  '
+}
+
+json_map_from_assoc() {
+  local assoc_name="$1"
+  local rows=""
+  local key
+
+  eval "for key in \"\${!${assoc_name}[@]}\"; do printf '%s\t%s\n' \"\$key\" \"\${${assoc_name}[\$key]}\"; done" | node -e '
+    "use strict";
+    const fs = require("fs");
+    const payload = {};
+    for (const line of fs.readFileSync(0, "utf8").split("\n")) {
+      if (!line.trim()) continue;
+      const [key, ...rest] = line.split("\t");
+      payload[key] = rest.join("\t");
+    }
+    process.stdout.write(JSON.stringify(payload));
+  '
+}
+
+build_start_report_json() {
+  local status="$1"
+  local message="${2:-}"
+  local timestamp requested_json selected_json skipped_json success_json failed_json roots_json discovered_json updated_json
+  local requires_finish="false"
+  local manual_commands_json="[]"
+
+  timestamp="$(opspal_update_timestamp_utc)"
+  requested_json="$(json_array_from_args "${SELECTED_PLUGINS[@]}")"
+  selected_json="$(json_array_from_args "${PLUGINS_TO_UPDATE[@]}")"
+  skipped_json="$(json_array_from_args "${SKIPPED_PLUGINS[@]}")"
+  success_json="$(json_array_from_args "${SUCCESS_PLUGINS[@]}")"
+  failed_json="$(json_array_from_args "${FAILED_PLUGINS[@]}")"
+  roots_json="$(json_array_from_args "${CLAUDE_ROOTS[@]}")"
+  discovered_json="$(json_map_from_assoc OLD_VERSIONS)"
+  updated_json="$(json_map_from_assoc NEW_VERSIONS)"
+
+  case "$status" in
+    runner_generated|manual_commands_ready|update_completed|update_partial_failure|update_failed)
+      requires_finish="true"
+      ;;
+  esac
+
+  STATUS="$status" \
+  MESSAGE="$message" \
+  TIMESTAMP="$timestamp" \
+  SESSION_ID="$SESSION_ID" \
+  WORKSPACE_ROOT="$WORKSPACE_ROOT" \
+  CLAUDE_ROOT_OVERRIDE="$CLAUDE_ROOT_OVERRIDE" \
+  EXECUTION_MODE="$EXECUTION_MODE" \
+  PREFERRED_MARKETPLACE_NAME="$PREFERRED_MARKETPLACE_NAME" \
+  DRY_RUN="$DRY_RUN" \
+  PRECHECK_ONLY="$PRECHECK_ONLY" \
+  SKIP_CONFIRM="$SKIP_CONFIRM" \
+  EMIT_SCRIPT_ONLY="$EMIT_SCRIPT_ONLY" \
+  RUNNER_PATH="${RUNNER_PATH:-}" \
+  REQUESTED_JSON="$requested_json" \
+  SELECTED_JSON="$selected_json" \
+  SKIPPED_JSON="$skipped_json" \
+  SUCCESS_JSON="$success_json" \
+  FAILED_JSON="$failed_json" \
+  ROOTS_JSON="$roots_json" \
+  DISCOVERED_JSON="$discovered_json" \
+  UPDATED_JSON="$updated_json" \
+  START_REPORT_FILE="$START_REPORT_FILE" \
+  SESSION_FILE="$SESSION_FILE" \
+  UPDATE_LOG_FILE="$UPDATE_LOG_FILE" \
+  LOCK_PATH="${OPSPAL_UPDATE_ACTIVE_LOCK:-}" \
+  REQUIRES_FINISH="$requires_finish" \
+  MANUAL_COMMANDS_JSON="$manual_commands_json" \
+  SELECTED_COUNT="${#PLUGINS_TO_UPDATE[@]}" \
+  DISCOVERED_COUNT="${#OLD_VERSIONS[@]}" \
+  SKIPPED_COUNT="${#SKIPPED_PLUGINS[@]}" \
+  SUCCESS_COUNT="${#SUCCESS_PLUGINS[@]}" \
+  FAILED_COUNT="${#FAILED_PLUGINS[@]}" \
+  UPGRADED_COUNT="${UPGRADED_COUNT:-0}" \
+  UNCHANGED_COUNT="${UNCHANGED_COUNT:-0}" \
+  node - <<'EOF'
+'use strict';
+
+function parseJson(name, fallback) {
+  try {
+    return JSON.parse(process.env[name] || fallback);
+  } catch (_error) {
+    return JSON.parse(fallback);
+  }
+}
+
+const payload = {
+  reportType: 'start-opspal-update',
+  sessionId: process.env.SESSION_ID,
+  timestamp: process.env.TIMESTAMP,
+  updatedAt: process.env.TIMESTAMP,
+  status: process.env.STATUS,
+  message: process.env.MESSAGE || '',
+  workspaceRoot: process.env.WORKSPACE_ROOT,
+  claudeRootOverride: process.env.CLAUDE_ROOT_OVERRIDE || null,
+  claudeRoots: parseJson('ROOTS_JSON', '[]'),
+  executionMode: process.env.EXECUTION_MODE,
+  marketplaceName: process.env.PREFERRED_MARKETPLACE_NAME,
+  dryRun: process.env.DRY_RUN === 'true',
+  preflight: process.env.PRECHECK_ONLY === 'true',
+  skipConfirm: process.env.SKIP_CONFIRM === 'true',
+  emitScriptOnly: process.env.EMIT_SCRIPT_ONLY === 'true',
+  runnerPath: process.env.RUNNER_PATH || null,
+  reportFile: process.env.START_REPORT_FILE,
+  sessionFile: process.env.SESSION_FILE,
+  historyLogFile: process.env.UPDATE_LOG_FILE,
+  lockPath: process.env.LOCK_PATH || null,
+  requestedPlugins: parseJson('REQUESTED_JSON', '[]'),
+  selectedPlugins: parseJson('SELECTED_JSON', '[]'),
+  skippedPlugins: parseJson('SKIPPED_JSON', '[]'),
+  successfulPlugins: parseJson('SUCCESS_JSON', '[]'),
+  failedPlugins: parseJson('FAILED_JSON', '[]'),
+  discoveredVersions: parseJson('DISCOVERED_JSON', '{}'),
+  updatedVersions: parseJson('UPDATED_JSON', '{}'),
+  requiresFinish: process.env.REQUIRES_FINISH === 'true',
+  summary: {
+    discoveredCount: Number(process.env.DISCOVERED_COUNT || 0),
+    selectedCount: Number(process.env.SELECTED_COUNT || 0),
+    skippedCount: Number(process.env.SKIPPED_COUNT || 0),
+    successfulCount: Number(process.env.SUCCESS_COUNT || 0),
+    failedCount: Number(process.env.FAILED_COUNT || 0),
+    upgradedCount: Number(process.env.UPGRADED_COUNT || 0),
+    unchangedCount: Number(process.env.UNCHANGED_COUNT || 0)
+  }
+};
+
+process.stdout.write(JSON.stringify(payload));
+EOF
+}
+
+persist_start_artifacts() {
+  local status="$1"
+  local message="${2:-}"
+  local report_json session_json session_tmp
+
+  report_json="$(build_start_report_json "$status" "$message")"
+  opspal_update_write_json "$START_REPORT_FILE" "$report_json"
+
+  session_tmp="$(mktemp "${TMPDIR:-/tmp}/opspal-update-session.XXXXXX")"
+  REPORT_JSON="$report_json" node - <<'EOF' > "$session_tmp"
+'use strict';
+
+const report = JSON.parse(process.env.REPORT_JSON || '{}');
+const payload = {
+  sessionId: report.sessionId,
+  workspaceRoot: report.workspaceRoot,
+  claudeRootOverride: report.claudeRootOverride,
+  claudeRoots: report.claudeRoots,
+  marketplaceName: report.marketplaceName,
+  executionMode: report.executionMode,
+  requestedPlugins: report.requestedPlugins,
+  selectedPlugins: report.selectedPlugins,
+  discoveredVersions: report.discoveredVersions,
+  updatedVersions: report.updatedVersions,
+  runnerPath: report.runnerPath,
+  historyLogFile: report.historyLogFile,
+  startReportFile: report.reportFile,
+  finishReportFile: report.finishReportFile || null,
+  status: report.status,
+  updatedAt: report.updatedAt,
+  finishPending: report.requiresFinish,
+  start: report
+};
+
+if (!report.dryRun && !report.preflight) {
+  payload.createdAt = report.timestamp;
+}
+
+process.stdout.write(JSON.stringify(payload));
+EOF
+  session_json="$(cat "$session_tmp")"
+  rm -f "$session_tmp"
+  opspal_update_merge_json "$SESSION_FILE" "$session_json"
+}
+
+emit_start_json_report() {
+  if [ "$JSON_OUTPUT" = true ] && [ "$ORIGINAL_STDOUT_OPENED" = true ] && [ -f "$START_REPORT_FILE" ]; then
+    cat "$START_REPORT_FILE" >&3
+  fi
+}
+
+START_FINALIZED=false
+finalize_start_script() {
+  local exit_code="$1"
+  local status="$2"
+  local message="${3:-}"
+
+  persist_start_artifacts "$status" "$message"
+  START_FINALIZED=true
+  emit_start_json_report
+  opspal_update_release_lock
+  [ -n "$JSON_CAPTURE_FILE" ] && rm -f "$JSON_CAPTURE_FILE"
+  exit "$exit_code"
+}
+
+cleanup_start_script() {
+  local exit_code=$?
+
+  if [ "$START_FINALIZED" != true ] && [ "$SHOW_HISTORY" != true ]; then
+    persist_start_artifacts "unexpected_exit" "Start update exited unexpectedly"
+    emit_start_json_report
+  fi
+
+  opspal_update_release_lock
+  [ -n "$JSON_CAPTURE_FILE" ] && rm -f "$JSON_CAPTURE_FILE"
+  return "$exit_code"
+}
+
+trap cleanup_start_script EXIT
+
 has_nested_session_markers() {
   if [ -n "${CLAUDE_TOOLS_DIR:-}" ] || [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] || [ -n "${CODEX_THREAD_ID:-}" ] || [ -n "${CLAUDECODE:-}" ]; then
     return 0
@@ -223,8 +531,10 @@ ensure_legacy_mode_safe() {
     echo ""
     echo "If you intentionally want to bypass this check, rerun with:"
     echo "  OPSPAL_UPDATE_ALLOW_IN_SESSION_CLAUDE_CLI=1 $0 --mode legacy ..."
-    exit 1
+    return 1
   fi
+
+  return 0
 }
 
 run_claude_auth_precheck() {
@@ -274,6 +584,68 @@ run_claude_auth_precheck() {
   return 0
 }
 
+check_writable_location() {
+  local label="$1"
+  local target_dir="$2"
+  local probe_file=""
+
+  if ! mkdir -p "$target_dir" 2>/dev/null; then
+    echo -e "   ${RED}✗${NC} $label is not writable: $target_dir"
+    return 1
+  fi
+
+  probe_file="$(mktemp "$target_dir/.opspal-write-check.XXXXXX" 2>/dev/null || true)"
+  if [ -z "$probe_file" ]; then
+    echo -e "   ${RED}✗${NC} $label is not writable: $target_dir"
+    return 1
+  fi
+
+  rm -f "$probe_file"
+  echo -e "   ${GREEN}✓${NC} $label writable: $target_dir"
+  return 0
+}
+
+run_start_preflight_checks() {
+  local failure=0
+  local runner_dir="${TMPDIR:-/tmp}/opspal-update"
+
+  echo -e "${BLUE}🩺 Running update preflight checks...${NC}"
+  echo ""
+
+  if ! check_writable_location "Workspace root" "$WORKSPACE_ROOT"; then
+    failure=1
+  fi
+  if ! check_writable_location "Update log directory" "$OPSPAL_UPDATE_LOG_DIR"; then
+    failure=1
+  fi
+  if ! check_writable_location "Update state directory" "$OPSPAL_UPDATE_STATE_DIR"; then
+    failure=1
+  fi
+  if ! check_writable_location "Update lock directory" "$OPSPAL_UPDATE_LOCK_DIR"; then
+    failure=1
+  fi
+  if ! check_writable_location "Runner output directory" "$runner_dir"; then
+    failure=1
+  fi
+
+  if [ ${#PLUGIN_DIRS[@]} -gt 0 ]; then
+    echo -e "   ${GREEN}✓${NC} Plugin discovery roots available: ${#PLUGIN_DIRS[@]}"
+  else
+    echo -e "   ${RED}✗${NC} No plugin discovery roots available"
+    failure=1
+  fi
+
+  if [ ${#PLUGINS_TO_UPDATE[@]} -gt 0 ]; then
+    echo -e "   ${GREEN}✓${NC} Selected plugins discovered: ${#PLUGINS_TO_UPDATE[@]}"
+  else
+    PREFLIGHT_WARNINGS+=("No matching OpsPal plugins were selected for update")
+    echo -e "   ${YELLOW}⚠${NC} No matching OpsPal plugins were selected for update"
+  fi
+
+  echo ""
+  return "$failure"
+}
+
 render_manual_commands() {
   local plugin
   echo -e "${YELLOW}Manual mode selected - no plugin lifecycle commands were executed.${NC}"
@@ -301,6 +673,8 @@ generate_external_runner() {
   local only_csv_escaped
   local skip_confirm_escaped
   local verbose_escaped
+  local workspace_root_escaped
+  local claude_root_escaped
 
   timestamp=$(date -u +"%Y%m%dT%H%M%SZ")
   runner_path="$runner_dir/run-opspal-update-${timestamp}.sh"
@@ -311,6 +685,8 @@ generate_external_runner() {
   only_csv_escaped=$(printf '%q' "$only_csv")
   skip_confirm_escaped=$(printf '%q' "$SKIP_CONFIRM")
   verbose_escaped=$(printf '%q' "$VERBOSE")
+  workspace_root_escaped=$(printf '%q' "$WORKSPACE_ROOT")
+  claude_root_escaped=$(printf '%q' "$CLAUDE_ROOT_OVERRIDE")
 
   cat > "$runner_path" <<EOF
 #!/usr/bin/env bash
@@ -325,11 +701,15 @@ MANAGER_PATH=${manager_path_escaped}
 ONLY_PLUGINS=${only_csv_escaped}
 SKIP_CONFIRM=${skip_confirm_escaped}
 VERBOSE=${verbose_escaped}
+WORKSPACE_ROOT=${workspace_root_escaped}
+CLAUDE_ROOT_OVERRIDE=${claude_root_escaped}
 
 if [ ! -f "\$MANAGER_PATH" ]; then
   echo "Could not locate opspal-update-manager.sh at: \$MANAGER_PATH"
   exit 1
 fi
+
+cd "$WORKSPACE_ROOT"
 
 # Refresh marketplace checkouts before running update
 echo "Refreshing marketplace checkouts..."
@@ -347,7 +727,10 @@ for mp_dir in "\$HOME/.claude/plugins/marketplaces"/*/; do
 done
 echo ""
 
-CMD=(bash "\$MANAGER_PATH" --mode legacy --only "\$ONLY_PLUGINS")
+CMD=(bash "\$MANAGER_PATH" --mode legacy --only "\$ONLY_PLUGINS" --workspace "\$WORKSPACE_ROOT")
+if [ -n "\$CLAUDE_ROOT_OVERRIDE" ]; then
+  CMD+=(--claude-root "\$CLAUDE_ROOT_OVERRIDE")
+fi
 if [ "\$SKIP_CONFIRM" = "true" ]; then
   CMD+=(--skip-confirm)
 fi
@@ -366,6 +749,10 @@ EOF
 # Show history if requested
 if [ "$SHOW_HISTORY" = true ]; then
   show_history
+fi
+
+if ! opspal_update_acquire_lock "opspal-update"; then
+  finalize_start_script 1 "lock_unavailable" "Another OpsPal update process is already running"
 fi
 
 # Helpers
@@ -413,6 +800,12 @@ plugin_matches_pattern() {
 
 detect_claude_roots() {
   CLAUDE_ROOTS=()
+
+  if [ -n "$CLAUDE_ROOT_OVERRIDE" ]; then
+    append_unique CLAUDE_ROOTS "$CLAUDE_ROOT_OVERRIDE"
+    return 0
+  fi
+
   append_unique CLAUDE_ROOTS "$HOME/.claude"
   append_unique CLAUDE_ROOTS "${CLAUDE_HOME:-}"
   append_unique CLAUDE_ROOTS "${CLAUDE_CONFIG_DIR:-}"
@@ -685,7 +1078,6 @@ echo -e "${CYAN}╚════════════════════�
 echo ""
 
 # Parse --only plugins into array
-declare -a SELECTED_PLUGINS=()
 if [ -n "$ONLY_PLUGINS" ]; then
   IFS=',' read -ra SELECTED_PLUGINS <<< "$ONLY_PLUGINS"
   echo -e "${BLUE}📌 Selective update mode: ${#SELECTED_PLUGINS[@]} plugin(s) specified${NC}"
@@ -696,15 +1088,13 @@ if [ -n "$ONLY_PLUGINS" ]; then
 fi
 
 # Resolve Claude roots first (Linux/macOS + WSL).
-declare -a CLAUDE_ROOTS=()
 detect_claude_roots
 resolve_preferred_marketplace
 
 # Find plugin directories - check multiple locations.
 # Priority: 1. Local dev paths, 2. Marketplace installs, 3. Direct plugin installs.
-declare -a PLUGIN_DIRS=()
-append_unique PLUGIN_DIRS "./.claude-plugins"
-append_unique PLUGIN_DIRS "./plugins"
+append_unique PLUGIN_DIRS "$WORKSPACE_ROOT/.claude-plugins"
+append_unique PLUGIN_DIRS "$WORKSPACE_ROOT/plugins"
 
 for claude_root in "${CLAUDE_ROOTS[@]}"; do
   append_unique PLUGIN_DIRS "$claude_root/plugins/marketplaces/$PREFERRED_MARKETPLACE_NAME/plugins"
@@ -732,7 +1122,7 @@ if [ ${#PLUGIN_DIRS[@]} -eq 0 ]; then
   echo "  - WSL Windows profile .claude paths (if available)"
   echo ""
   echo "If plugins are installed, verify with: claude plugin list"
-  exit 1
+  finalize_start_script 1 "no_plugin_directories" "No Claude plugin directories were discovered for this workspace"
 fi
 
 # Show where we're looking (verbose mode)
@@ -783,17 +1173,13 @@ is_selected() {
 }
 
 # Refresh marketplace checkouts BEFORE discovering plugins
-if [ "$DRY_RUN" != true ]; then
+if [ "$DRY_RUN" != true ] && [ "$PRECHECK_ONLY" != true ]; then
   refresh_marketplace_checkouts
 fi
 
 # Discover installed plugins
 echo -e "${BLUE}📦 Discovering installed plugins...${NC}"
 echo ""
-
-declare -A OLD_VERSIONS
-declare -a PLUGINS_TO_UPDATE=()
-declare -a SKIPPED_PLUGINS=()
 
 # Capture cache plugin inventory before update so we can refresh stale version paths.
 scan_cache_plugins
@@ -878,7 +1264,7 @@ if [ ${#PLUGINS_TO_UPDATE[@]} -eq 0 ]; then
   else
     echo -e "${YELLOW}No OpsPal plugins found to update.${NC}"
   fi
-  exit 0
+  finalize_start_script 0 "no_matching_plugins" "No OpsPal plugins matched the current selection"
 fi
 
 # Dry run mode
@@ -891,16 +1277,36 @@ if [ "$DRY_RUN" = true ]; then
   done
   echo ""
   echo -e "${CYAN}Run without --dry-run to execute the update.${NC}"
-  exit 0
+  finalize_start_script 0 "dry_run" "Dry run completed without making any changes"
 fi
 
 # Validate auth before any non-dry-run update path.
 if ! run_claude_auth_precheck; then
-  exit 1
+  finalize_start_script 1 "auth_failed" "Claude CLI authentication failed"
+fi
+
+if [ "$PRECHECK_ONLY" = true ]; then
+  if run_start_preflight_checks; then
+    if [ ${#PREFLIGHT_WARNINGS[@]} -gt 0 ]; then
+      echo -e "${YELLOW}Preflight completed with advisory warnings:${NC}"
+      for warning in "${PREFLIGHT_WARNINGS[@]}"; do
+        echo "  - $warning"
+      done
+      echo ""
+    fi
+    echo -e "${GREEN}✅ Preflight passed${NC}"
+    finalize_start_script 0 "preflight_passed" "Update preflight completed successfully"
+  else
+    echo ""
+    echo -e "${RED}❌ Preflight failed${NC}"
+    finalize_start_script 1 "preflight_failed" "Update preflight detected blocking issues"
+  fi
 fi
 
 # Legacy mode can only run safely outside nested Claude sessions unless explicitly overridden.
-ensure_legacy_mode_safe
+if ! ensure_legacy_mode_safe; then
+  finalize_start_script 1 "legacy_mode_blocked" "Legacy mode is blocked inside the current Claude session"
+fi
 
 # Confirmation
 if [ "$SKIP_CONFIRM" = false ]; then
@@ -925,7 +1331,7 @@ if [ "$SKIP_CONFIRM" = false ]; then
     echo ""
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
       echo "Aborted."
-      exit 1
+      finalize_start_script 1 "aborted" "Update aborted at confirmation prompt"
     fi
   fi
 fi
@@ -937,7 +1343,7 @@ if [ "$EXECUTION_MODE" = "external" ]; then
 
   if [ "$EMIT_SCRIPT_ONLY" = true ]; then
     echo "$RUNNER_PATH"
-    exit 0
+    finalize_start_script 0 "runner_generated" "Generated host-terminal runner path"
   fi
 
   echo -e "${GREEN}✅ Generated host-terminal update runner${NC}"
@@ -951,13 +1357,13 @@ if [ "$EXECUTION_MODE" = "external" ]; then
   echo "After it completes, run:"
   echo "  /finishopspalupdate"
   echo ""
-  exit 0
+  finalize_start_script 0 "runner_generated" "Generated host-terminal runner for the selected plugins"
 fi
 
 # Manual mode: print exact commands and stop.
 if [ "$EXECUTION_MODE" = "manual" ]; then
   render_manual_commands
-  exit 0
+  finalize_start_script 0 "manual_commands_ready" "Printed manual OpsPal update commands"
 fi
 
 # Update each plugin
@@ -1070,10 +1476,10 @@ echo ""
 # Exit code
 if [ ${#FAILED_PLUGINS[@]} -gt 0 ]; then
   if [ ${#SUCCESS_PLUGINS[@]} -eq 0 ]; then
-    exit 2  # Complete failure
+    finalize_start_script 2 "update_failed" "All selected plugin updates failed"
   else
-    exit 1  # Partial failure
+    finalize_start_script 1 "update_partial_failure" "Some selected plugin updates failed"
   fi
 fi
 
-exit 0
+finalize_start_script 0 "update_completed" "All selected plugin updates completed"

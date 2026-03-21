@@ -166,6 +166,44 @@ function getHookCommandLabel(command) {
   return command.trim().split(/\s+/)[0];
 }
 
+function formatAppliedFix(fix) {
+  if (typeof fix === 'string') {
+    return fix;
+  }
+
+  if (!fix || typeof fix !== 'object') {
+    return String(fix);
+  }
+
+  if (typeof fix.message === 'string' && fix.message.trim() !== '') {
+    return fix.message;
+  }
+
+  if (typeof fix.description === 'string' && fix.description.trim() !== '') {
+    return fix.description;
+  }
+
+  if (fix.type === 'default_applied' && fix.variable) {
+    return `Applied default ${fix.variable}=${fix.value}`;
+  }
+
+  const segments = [];
+  if (fix.type) segments.push(String(fix.type).replace(/_/g, ' '));
+  if (fix.variable) segments.push(String(fix.variable));
+  if (fix.path) segments.push(String(fix.path));
+  if (fix.value !== undefined) segments.push(`value=${fix.value}`);
+
+  if (segments.length > 0) {
+    return segments.join(': ');
+  }
+
+  try {
+    return JSON.stringify(fix);
+  } catch (_error) {
+    return String(fix);
+  }
+}
+
 // ============================================================================
 // Plugin Update Manager Class
 // ============================================================================
@@ -1312,9 +1350,23 @@ class PluginUpdateManager {
     }
 
     const registryPath = path.join(CONFIG.pluginsDir, 'opspal-core', 'config', 'routing-patterns.json');
+    const routingIndexPath = path.join(CONFIG.pluginsDir, 'opspal-core', 'routing-index.json');
 
     // Check 1: Registry file exists
     if (!fs.existsSync(registryPath)) {
+      if (fs.existsSync(routingIndexPath)) {
+        this.results.routingRegistry.passed.push({ name: 'routing-index.json fallback' });
+        this.results.routingRegistry.warnings.push({
+          name: 'routing-patterns.json',
+          reason: `File not found; using routing-index.json fallback at ${routingIndexPath}`
+        });
+        if (this.verbose) {
+          console.log(`${icons.warn} routing-patterns.json: not found at ${registryPath}`);
+          console.log(`${icons.pass} routing-index.json fallback: found at ${routingIndexPath}`);
+        }
+        return;
+      }
+
       this.results.routingRegistry.failed.push({
         name: 'routing-patterns.json',
         reason: 'File not found'
@@ -1731,7 +1783,7 @@ class PluginUpdateManager {
     if (this.fixesApplied.length > 0) {
       console.log(`\n${colors.cyan}Fixes Applied:${colors.reset}`);
       for (const fix of this.fixesApplied) {
-        console.log(`  - ${fix}`);
+        console.log(`  - ${formatAppliedFix(fix)}`);
       }
     }
 
@@ -1827,17 +1879,23 @@ async function main() {
 
   if (options.help) {
     showHelp();
-    process.exit(0);
+    return 0;
   }
 
   const manager = new PluginUpdateManager(options);
-  const exitCode = await manager.run();
-  process.exit(exitCode);
+  return manager.run();
 }
 
 // Run CLI
 if (require.main === module) {
-  main();
+  main()
+    .then((exitCode) => {
+      process.exitCode = exitCode;
+    })
+    .catch((error) => {
+      console.error(error);
+      process.exitCode = 1;
+    });
 }
 
-module.exports = { PluginUpdateManager };
+module.exports = { PluginUpdateManager, formatAppliedFix };

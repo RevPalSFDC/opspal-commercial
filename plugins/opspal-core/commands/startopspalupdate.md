@@ -1,6 +1,6 @@
 ---
 description: Force refresh marketplace and update all installed OpsPal plugins to latest versions
-argument-hint: "[--dry-run] [--skip-confirm] [--only plugin1,plugin2] [--history] [--verbose] [--mode external|manual|legacy] [--emit-script-only]"
+argument-hint: "[--dry-run] [--skip-confirm] [--only plugin1,plugin2] [--history] [--verbose] [--mode external|manual|legacy] [--emit-script-only] [--workspace path] [--claude-root path] [--preflight] [--json]"
 allowed_tools:
   - Bash
 tags:
@@ -99,7 +99,8 @@ After execution, remind the user to run `/finishopspalupdate` to complete the pr
    - `legacy`: runs install/uninstall directly (blocked in nested session unless explicit override)
 4. **Reinstalls from marketplace** - Pulls latest versions when execution actually runs
 5. **Repairs cache compatibility paths** - Re-points stale cached versions to newest payload
-6. **Reports/logs changes** - Tracks upgrade results in update history
+6. **Persists update session state** - Writes a resumable session manifest for `/finishopspalupdate`
+7. **Reports/logs changes** - Tracks upgrade results in update history and machine-readable JSON reports
 
 ## Plugin Detection Patterns
 
@@ -175,6 +176,30 @@ Shows the last 20 updates with timestamps, versions, and status.
 ```
 
 Prints only the generated runner script path for automation wrappers.
+
+### Preflight Checks (--preflight)
+
+```bash
+/startopspalupdate --preflight
+```
+
+Validates auth, workspace paths, writable update directories, and plugin discovery without performing any update.
+
+### Explicit Workspace / Claude Root
+
+```bash
+/startopspalupdate --workspace /path/to/repo --claude-root /path/to/.claude
+```
+
+Pins the update workflow to a specific workspace root and Claude runtime root instead of relying on the current shell context.
+
+### Machine-Readable Output (--json)
+
+```bash
+/startopspalupdate --mode external --json
+```
+
+Emits the final start-session report JSON to stdout for wrappers and CI automation.
 
 ### Combined
 

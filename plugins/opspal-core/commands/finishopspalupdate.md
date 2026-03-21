@@ -1,6 +1,6 @@
 ---
 description: Run post-update validation, routing health checks, cache prune, and documentation sync
-argument-hint: "[--skip-fix] [--verbose] [--no-cache-prune] [--strict]"
+argument-hint: "[--skip-fix] [--verbose] [--no-cache-prune] [--strict] [--workspace path] [--claude-root path] [--json]"
 allowed_tools:
   - Bash
 tags:
@@ -26,13 +26,16 @@ Run the post-update validation steps:
 SCRIPT_PATHS=(
   "./plugins/opspal-core/scripts/finish-opspal-update.sh"
   "./.claude-plugins/opspal-core/scripts/finish-opspal-update.sh"
+  "$HOME/.claude/plugins/opspal-core/scripts/finish-opspal-update.sh"
   "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/finish-opspal-update.sh"
 )
 
 if [ -n "${CLAUDE_HOME:-}" ]; then
+  SCRIPT_PATHS+=("$CLAUDE_HOME/plugins/opspal-core/scripts/finish-opspal-update.sh")
   SCRIPT_PATHS+=("$CLAUDE_HOME/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/finish-opspal-update.sh")
 fi
 if [ -n "${CLAUDE_CONFIG_DIR:-}" ]; then
+  SCRIPT_PATHS+=("$CLAUDE_CONFIG_DIR/plugins/opspal-core/scripts/finish-opspal-update.sh")
   SCRIPT_PATHS+=("$CLAUDE_CONFIG_DIR/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/finish-opspal-update.sh")
 fi
 
@@ -92,10 +95,12 @@ After execution, summarize the results to the user.
    - MCP server connectivity
    - Cache directories
 
-2. **Cleans stale plugin hooks from settings.json**:
+2. **Cleans stale plugin hooks from settings.json and activates the bundled OpsPal statusline**:
    - Detects hook entries in `~/.claude/settings.json` that duplicate plugin `hooks.json`
    - Removes entries pointing to plugin hook scripts (e.g., `unified-router.sh`) that should only run via the plugin's `hooks.json` (which includes safe env overrides)
    - Prevents false-positive hard blocks caused by duplicate hook execution without env overrides
+   - Ensures `statusLine` points at the shipped `scripts/opspal-statusline.js`
+   - Preserves an unrelated custom statusline if the user already configured one
 
 3. **Repairs and verifies the installed runtime before routing validation**:
    - Runs `post-plugin-update-fixes.js` to reconcile the live installed runtime
@@ -140,6 +145,7 @@ After execution, summarize the results to the user.
    - Checks CLAUDE.md contains the critical routing preamble
    - Counts mandatory vs recommended routes from routing-index.json
    - Pre-generates condensed routing text for post-compaction hook refresh
+   - Writes a machine-readable finish report and clears the pending update session state
 
 ## Options
 
@@ -167,6 +173,22 @@ Shows detailed output for validation, routing checks, and sync steps.
 
 Skips removal of old cached plugin versions.
 
+### Explicit Workspace / Claude Root
+
+```bash
+/finishopspalupdate --workspace /path/to/repo --claude-root /path/to/.claude
+```
+
+Runs finish validation against a specific workspace or Claude runtime root. If omitted, the command will reuse the persisted start-session manifest when present.
+
+### Machine-Readable Output (--json)
+
+```bash
+/finishopspalupdate --json
+```
+
+Emits the final finish report JSON to stdout for wrappers and CI automation.
+
 ## Two-Command Workflow
 
 This command is the second step of a two-command workflow:
@@ -183,7 +205,7 @@ This command is the second step of a two-command workflow:
 # Step 1: Update all plugins from marketplace
 /startopspalupdate
 
-# Step 2: Repair runtime + refresh routing + prune cache + sync documentation
+# Step 2: Repair runtime + activate statusline + refresh routing + prune cache + sync documentation
 /finishopspalupdate
 
 # Step 3: Commit changes
@@ -219,10 +241,11 @@ Overall: READY (0 warnings)
 ✅ Plugin validation passed
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧹 Step 2: Cleaning stale plugin hooks from settings.json...
+🧹 Step 2: Cleaning stale plugin hooks and activating the OpsPal statusline...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ No stale plugin hooks found in settings.json
+✅ Activated OpsPal statusline in ~/.claude/settings.json
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🧭 Step 3: Reconciling installed runtime, refreshing routing artifacts, and validating hook health...
@@ -404,6 +427,7 @@ Run with verbose to see details:
 - **v1.6.0** (2026-03-16) - Added stale plugin hook cleanup (Step 2)
   - Detects and removes duplicate hook entries in settings.json that bypass plugin hooks.json env overrides
   - Prevents false-positive UserPromptSubmit hard blocks from stale unified-router.sh entries
+  - Activates the bundled OpsPal statusline unless the user already has an unrelated custom statusline
   - All steps renumbered (now 8 steps total)
 
 - **v1.5.0** (2026-03-09) - Added routing promotion verification (Step 8)
