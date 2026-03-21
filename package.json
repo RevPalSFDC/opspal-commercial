@@ -4,6 +4,8 @@
   "description": "OpsPal commercial plugin marketplace for Claude Code — Salesforce, HubSpot, Marketo, and cross-platform RevOps plugins.",
   "type": "commonjs",
   "scripts": {
+    "setup:githooks": "bash scripts/setup-githooks.sh",
+    "prepare": "npm run setup:githooks",
     "docs:generate": "node scripts/generate-plugin-suite-docs.js",
     "docs:ci": "node scripts/generate-plugin-suite-docs.js --check && node scripts/validate-active-hook-contracts.js && node scripts/validate-agent-description-budget.js",
     "fix:agent-descriptions": "node scripts/normalize-agent-descriptions.js",
