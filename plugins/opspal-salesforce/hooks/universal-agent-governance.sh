@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ###############################################################################
 # Universal Agent Governance Hook
@@ -32,6 +32,15 @@ set -euo pipefail
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+if ! command -v jq &>/dev/null; then
+    echo "[universal-agent-governance] jq not found, skipping" >&2
+    exit 0
+fi
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [universal-agent-governance] starting" >&2
+fi
 
 # Source standardized exit codes
 if [[ -f "${PLUGIN_ROOT}/scripts/lib/sf-exit-codes.sh" ]]; then

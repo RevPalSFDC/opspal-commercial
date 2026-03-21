@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Pre-Tool-Use Territory Rule Validator Hook
 #
@@ -18,6 +18,11 @@
 set -euo pipefail
 
 # Get script directory for relative imports
+if ! command -v jq &>/dev/null; then
+    echo "[pre-tool-use-territory-rule-validator] jq not found, skipping" >&2
+    exit 0
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/territory-rule-validator.js"

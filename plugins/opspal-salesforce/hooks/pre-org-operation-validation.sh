@@ -1,5 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # Pre-Org Operation Validation Hook
+if ! command -v jq &>/dev/null; then
+    echo "[pre-org-operation-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
 # Validates org alias before any Salesforce operation
 #
 # Related reflections: c44fe70e

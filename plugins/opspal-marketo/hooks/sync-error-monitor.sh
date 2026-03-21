@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 #
 # Hook: sync-error-monitor
 # Trigger: PostToolUse (mcp__marketo__lead_*, mcp__marketo__sync_*)
@@ -20,7 +21,9 @@ exec 3>&1 1>&2
 
 # Source error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
     source "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh"
 fi
 

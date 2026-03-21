@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # MANDATORY: Validates that SFDC projects are created in correct location
 #
 # Exit Codes (standardized - see sf-exit-codes.sh):

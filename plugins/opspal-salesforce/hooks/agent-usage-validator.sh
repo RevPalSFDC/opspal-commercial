@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Agent Usage Validator Hook for Claude Code
 # This hook ensures that Claude Code uses appropriate sub-agents for Salesforce tasks

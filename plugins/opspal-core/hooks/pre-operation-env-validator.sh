@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-operation-env-validator] jq not found, skipping" >&2
+    exit 0
+fi
 
 ###############################################################################
 # Pre-Operation Environment Validator Hook

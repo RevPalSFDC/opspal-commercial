@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # post-field-deployment.sh - Verify field accessibility after deployment
 #
 # This hook runs after field deployment to ensure fields are actually

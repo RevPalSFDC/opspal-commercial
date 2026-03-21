@@ -2,6 +2,16 @@
 
 set -euo pipefail
 
+if ! command -v jq &>/dev/null; then
+    echo "[pre-bash-dispatcher] jq not found, skipping" >&2
+    exit 0
+fi
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-bash-dispatcher] starting" >&2
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 HOOK_INPUT="$(cat 2>/dev/null || true)"

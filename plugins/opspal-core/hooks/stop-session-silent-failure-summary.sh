@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # =============================================================================
 # Stop Session Silent Failure Summary Hook
@@ -19,6 +19,11 @@
 # =============================================================================
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[stop-session-silent-failure-summary] jq not found, skipping" >&2
+    exit 0
+fi
 
 emit_noop_json() {
     printf '{}\n'

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # Unified Router Hook
 # =============================================================================
@@ -46,6 +46,11 @@
 # =============================================================================
 
 set -euo pipefail
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [unified-router] starting" >&2
+fi
 
 # Source standardized error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

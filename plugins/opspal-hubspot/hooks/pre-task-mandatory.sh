@@ -1,10 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Pre-Task Mandatory Hook - Enforces agent usage for critical HubSpot operations
 # This version REQUIRES agents for high-risk operations (no bypass)
 #
 # Version: 1.1.0 (Error Handler Integration)
 # Date: 2025-11-24
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-task-mandatory] starting" >&2
+fi
 
 # Source standardized error handler for centralized logging
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

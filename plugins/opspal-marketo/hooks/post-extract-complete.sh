@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Post-Extract Complete Hook
 #
 # Triggered after a bulk export job completes successfully.
@@ -12,7 +12,8 @@
 # 0 = Success
 # 1 = Error (logged but doesn't block)
 
-set -e
+set -euo pipefail
+exec 3>&1 1>&2
 
 # Configuration
 ANALYSIS_THRESHOLD_RECORDS=1000  # Minimum records for auto-analysis

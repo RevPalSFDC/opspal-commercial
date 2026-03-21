@@ -1,5 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # Pre-SOQL Validation Hook
+if ! command -v jq &>/dev/null; then
+    echo "[pre-soql-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
 # Validates SOQL queries for reserved keyword conflicts and optimization
 #
 # Related reflections: a8d12f3c

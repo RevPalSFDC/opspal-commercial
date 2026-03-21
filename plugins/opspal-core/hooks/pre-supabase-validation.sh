@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-supabase-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
 # Pre-Supabase Validation Hook
 # Validates Supabase credentials before operations
 #

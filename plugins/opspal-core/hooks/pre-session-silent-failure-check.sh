@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # =============================================================================
 # Pre-Session Silent Failure Check Hook
@@ -20,6 +20,11 @@
 # =============================================================================
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-session-silent-failure-check] jq not found, skipping" >&2
+    exit 0
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DETECTOR="$SCRIPT_DIR/../scripts/lib/silent-failure-detector.js"

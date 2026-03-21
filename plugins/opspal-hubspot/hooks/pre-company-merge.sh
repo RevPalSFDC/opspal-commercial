@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Pre-Company Merge Validation Hook
 # Auto-runs before company merge operations to detect SF sync blockers
@@ -22,6 +22,11 @@ set -e
 
 # Hook configuration
 HOOK_NAME="pre-company-merge"
+if ! command -v jq &>/dev/null; then
+    echo "[pre-company-merge] jq not found, skipping" >&2
+    exit 0
+fi
+
 LOG_FILE="${HOME}/.claude/logs/hubspot/pre-company-merge.log"
 PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
 

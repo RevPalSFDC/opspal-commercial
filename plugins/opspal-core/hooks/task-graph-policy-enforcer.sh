@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Task Graph Policy Enforcer Hook
 # Enforces tool policies based on task risk level and domain

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Setup Hook - Environment Maintenance & Onboarding
 #

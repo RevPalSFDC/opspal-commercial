@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Post-Task Verification Hook
 #
@@ -23,6 +23,11 @@
 # Version: 1.0.0
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[post-task-verification] jq not found, skipping" >&2
+    exit 0
+fi
 
 # Get plugin root
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"

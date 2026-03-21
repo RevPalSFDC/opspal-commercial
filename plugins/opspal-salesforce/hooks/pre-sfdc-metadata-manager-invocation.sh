@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ##############################################################################
 # Pre-Agent Hook: sfdc-metadata-manager Progressive Disclosure
 #
@@ -31,6 +31,11 @@ set -euo pipefail
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+if ! command -v jq &>/dev/null; then
+    echo "[pre-sfdc-metadata-manager-invocation] jq not found, skipping" >&2
+    exit 0
+fi
+
 KEYWORD_DETECTOR="$PLUGIN_DIR/scripts/lib/keyword-detector.js"
 CONTEXT_INJECTOR="$PLUGIN_DIR/scripts/lib/context-injector.js"
 KEYWORD_CONFIG="$PLUGIN_DIR/contexts/metadata-manager/keyword-mapping.json"

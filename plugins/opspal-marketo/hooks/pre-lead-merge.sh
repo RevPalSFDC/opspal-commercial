@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+exec 3>&1 1>&2
+if ! command -v jq &>/dev/null; then
+    echo "[pre-lead-merge] jq not found, skipping" >&2
+    exit 0
+fi
 #
 # Hook: pre-lead-merge
 # Trigger: PreToolUse (mcp__marketo__lead_merge)
@@ -19,14 +25,15 @@
 
 # Source error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
     source "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh"
 fi
 
 # Configuration
 VALIDATION_ENABLED="${MARKETO_MERGE_VALIDATION:-1}"
 STRICT_MODE="${MARKETO_STRICT_MERGE:-0}"
-BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 
 # Skip if validation disabled
 if [[ "$VALIDATION_ENABLED" != "1" ]]; then
@@ -133,7 +140,8 @@ EOF
     done
     echo ""
     echo "Please fix the errors above before proceeding with the merge."
-    exit "$BLOCK_EXIT_CODE"
+    jq -nc --arg msg "Lead merge blocked: validation errors found. Winner ID or loser IDs are missing or invalid. Please fix before proceeding." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    exit 0
 fi
 
 # Output warnings if any
@@ -152,7 +160,8 @@ EOF
 
     if [[ "$STRICT_MODE" == "1" ]]; then
         echo "Strict mode enabled - blocking merge due to warnings"
-        exit "$BLOCK_EXIT_CODE"
+        jq -nc --arg msg "Lead merge blocked in strict mode: warnings present. Merging ${LOSER_COUNT} leads is a large operation. Disable strict mode (MARKETO_STRICT_MERGE=0) to proceed." '{"blockExecution": true, "blockMessage": $msg}' >&3
+        exit 0
     fi
 fi
 

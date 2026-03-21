@@ -1,7 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 ##
 # Pre-Task Context Loader Hook
+if ! command -v jq &>/dev/null; then
+    echo "[pre-task-context-loader] jq not found, skipping" >&2
+    exit 0
+fi
+
 #
 # Auto-loads portal context before task execution to provide agents with
 # historical context and previous assessment findings.

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-commit Config Validation Hook
 #
@@ -27,6 +27,11 @@
 #
 
 set -e
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-commit-config-validation] jq not found, skipping" >&2
+    exit 0
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${SCRIPT_DIR}/.."

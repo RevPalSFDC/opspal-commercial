@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 ###############################################################################
 # Session Start Environment Configuration Hook (v2.0.0)

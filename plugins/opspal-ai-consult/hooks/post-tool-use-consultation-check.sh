@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Post-Tool-Use Consultation Check Hook
 #

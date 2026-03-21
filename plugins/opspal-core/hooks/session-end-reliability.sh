@@ -13,7 +13,7 @@
 # Version: 1.1.0
 # =============================================================================
 
-set -o pipefail
+set -euo pipefail
 
 emit_noop_json() {
     printf '{}\n'

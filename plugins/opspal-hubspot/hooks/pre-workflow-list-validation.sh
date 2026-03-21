@@ -1,5 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # Pre-Workflow List Validation Hook
+if ! command -v jq &>/dev/null; then
+    echo "[pre-workflow-list-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
 # Validates list-workflow pairings before workflow operations
 #
 # Related reflections: 44f17e3e

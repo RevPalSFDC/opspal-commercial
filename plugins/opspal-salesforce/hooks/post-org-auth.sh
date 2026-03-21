@@ -20,7 +20,12 @@
 set -euo pipefail
 
 # Configuration
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR
+if ! command -v jq &>/dev/null; then
+    echo "[post-org-auth] jq not found, skipping" >&2
+    exit 0
+fi
+="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 QUIRKS_DETECTOR="$PLUGIN_ROOT/scripts/lib/org-quirks-detector.js"
 

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+exec 3>&1 1>&2
 
 #
 # Post Instance Authentication Hook - Marketo Plugin

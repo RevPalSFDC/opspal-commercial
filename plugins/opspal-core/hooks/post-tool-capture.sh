@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # post-tool-capture.sh - Capture tool invocations for session context
 #
 # Hook Type: PostToolUse

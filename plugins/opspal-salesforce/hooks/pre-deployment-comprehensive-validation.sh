@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ##############################################################################
 # Pre-Deployment Comprehensive Validation Hook
@@ -32,6 +32,15 @@
 
 set -e
 PRETOOLUSE_MODE="${PRETOOLUSE_MODE:-0}"
+if ! command -v jq &>/dev/null; then
+    echo "[pre-deployment-comprehensive-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-deployment-comprehensive-validation] starting" >&2
+fi
 
 # Source standardized error handler for centralized logging
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

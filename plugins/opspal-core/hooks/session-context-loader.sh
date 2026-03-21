@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ###############################################################################
 # Session Context Loader Hook
@@ -28,6 +28,11 @@
 ###############################################################################
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[session-context-loader] jq not found, skipping" >&2
+    exit 0
+fi
 
 # Source standardized error handler for centralized logging
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

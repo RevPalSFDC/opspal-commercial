@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Session Start Agent Reminder Hook
 # Displays agent usage reminder at session start

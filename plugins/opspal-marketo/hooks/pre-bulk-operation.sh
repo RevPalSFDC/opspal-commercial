@@ -1,4 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+exec 3>&1 1>&2
+if ! command -v jq &>/dev/null; then
+    echo "[pre-bulk-operation] jq not found, skipping" >&2
+    exit 0
+fi
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-bulk-operation] starting" >&2
+fi
 #
 # Hook: pre-bulk-operation
 # Trigger: PreToolUse (mcp__marketo__lead_create, mcp__marketo__lead_update, mcp__marketo__lead_delete)
@@ -19,7 +30,9 @@
 
 # Source error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
     source "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh"
 fi
 
@@ -27,7 +40,6 @@ fi
 VALIDATION_ENABLED="${MARKETO_BULK_VALIDATION:-1}"
 HIGH_VOLUME_THRESHOLD="${MARKETO_HIGH_VOLUME_THRESHOLD:-1000}"
 WARNING_THRESHOLD="${MARKETO_WARNING_THRESHOLD:-500}"
-BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 
 # Skip if validation disabled
 if [[ "$VALIDATION_ENABLED" != "1" ]]; then
@@ -137,7 +149,8 @@ Or reduce the batch size below ${HIGH_VOLUME_THRESHOLD} records.
 
 EOF
         if [[ "${MARKETO_CONFIRM_BULK_DELETE:-0}" != "1" ]]; then
-            exit "$BLOCK_EXIT_CODE"
+            jq -nc --arg msg "Bulk delete of ${RECORD_COUNT} records requires explicit confirmation. Set MARKETO_CONFIRM_BULK_DELETE=1 or reduce batch below ${HIGH_VOLUME_THRESHOLD} records." '{"blockExecution": true, "blockMessage": $msg}' >&3
+            exit 0
         fi
     fi
 elif [[ "$RECORD_COUNT" -ge "$WARNING_THRESHOLD" ]]; then

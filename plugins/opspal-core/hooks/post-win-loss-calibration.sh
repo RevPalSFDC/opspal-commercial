@@ -24,6 +24,11 @@
 
 set -euo pipefail
 
+if ! command -v jq &>/dev/null; then
+    echo "[post-win-loss-calibration] jq not found, skipping" >&2
+    exit 0
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then

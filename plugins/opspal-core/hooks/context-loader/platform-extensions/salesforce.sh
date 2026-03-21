@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # Salesforce Context Extension
 # =============================================================================
@@ -14,6 +14,11 @@
 # =============================================================================
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[salesforce] jq not found, skipping" >&2
+    exit 0
+fi
 
 COMMON_CONTEXT="${1:-{}}"
 

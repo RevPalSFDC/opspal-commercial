@@ -1,5 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # Pre-Write Alias Linter
+if ! command -v jq &>/dev/null; then
+    echo "[pre-write-alias-linter] jq not found, skipping" >&2
+    exit 0
+fi
+
 #
 # Scans file content being written for hardcoded org alias patterns.
 # Emits non-blocking warnings when literal aliases are detected.

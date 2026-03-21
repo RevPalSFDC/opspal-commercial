@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ################################################################################
 # pre-territory-migration-validator.sh
 # Pre-Territory Migration Validation Hook
@@ -24,6 +24,11 @@
 set -euo pipefail
 
 # Colors
+if ! command -v jq &>/dev/null; then
+    echo "[pre-territory-migration-validator] jq not found, skipping" >&2
+    exit 0
+fi
+
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'

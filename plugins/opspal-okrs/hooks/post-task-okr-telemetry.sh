@@ -5,7 +5,7 @@
 # Writes JSONL to ~/.claude/logs/okr-telemetry.jsonl
 # Never blocks on failure
 
-set -uo pipefail
+set -euo pipefail
 
 # Read tool output from stdin
 INPUT="$(cat 2>/dev/null || true)"

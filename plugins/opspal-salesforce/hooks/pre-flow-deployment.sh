@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-Flow Deployment Hook
 #
@@ -48,6 +48,11 @@ fi
 set -euo pipefail
 
 FLOW_PATH="${1:-}"
+if ! command -v jq &>/dev/null; then
+    echo "[pre-flow-deployment] jq not found, skipping" >&2
+    exit 0
+fi
+
 ORG_ALIAS="${2:-}"
 
 if [ -z "$FLOW_PATH" ]; then

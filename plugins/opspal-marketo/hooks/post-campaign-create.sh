@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 #
 # Hook: post-campaign-create
 # Trigger: PostToolUse (mcp__marketo__campaign_create, mcp__marketo__campaign_clone)
@@ -16,7 +17,9 @@
 
 # Source error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
     source "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh"
 fi
 

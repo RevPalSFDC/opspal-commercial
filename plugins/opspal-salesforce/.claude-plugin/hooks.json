@@ -8,7 +8,7 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-dispatcher.sh",
             "timeout": 60000,
-            "description": "Dispatch Salesforce deploy, query, and jq Bash validations with structured output and scoped execution"
+            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher — dispatcher fast-exits for non-SF commands within ~1ms"
           }
         ]
       }
@@ -65,7 +65,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
-            "timeout": 120000,
+            "timeout": 60000,
             "description": "Generate field dictionary after org discovery completes"
           }
         ]
@@ -76,7 +76,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
-            "timeout": 120000,
+            "timeout": 60000,
             "description": "Generate field dictionary after state discovery completes"
           }
         ]

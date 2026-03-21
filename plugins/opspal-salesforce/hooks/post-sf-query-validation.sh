@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Post-SF Query Validation Hook
 #
@@ -14,6 +14,11 @@
 # Addresses: data-quality cohort (query result validation)
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[post-sf-query-validation] jq not found, skipping" >&2
+    exit 0
+fi
 
 # Get script directory for relative imports
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

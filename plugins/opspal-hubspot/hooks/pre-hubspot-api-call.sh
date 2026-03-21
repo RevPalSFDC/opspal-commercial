@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-HubSpot API Call Hook
 #
@@ -32,6 +32,11 @@ if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
 else
     ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
 fi
+if ! command -v jq &>/dev/null; then
+    echo "[pre-hubspot-api-call] jq not found, skipping" >&2
+    exit 0
+fi
+
 
 if [[ -f "$ERROR_HANDLER" ]]; then
     source "$ERROR_HANDLER"

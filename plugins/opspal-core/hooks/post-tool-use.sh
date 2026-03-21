@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # PostToolUse Hook - Tool Result Validation
 #
@@ -38,6 +38,11 @@ fi
 
 # NOTE: Do NOT set -euo pipefail here — lenient mode is intentional
 # to prevent internal hook errors from blocking tool execution
+
+if ! command -v jq &>/dev/null; then
+    echo "[post-tool-use] jq not found, skipping" >&2
+    exit 0
+fi
 
 is_json() {
   echo "$1" | jq -e . >/dev/null 2>&1

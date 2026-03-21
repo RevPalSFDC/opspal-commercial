@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Pre-Dependency Check Hook
 # Validates system dependencies before operations that require them

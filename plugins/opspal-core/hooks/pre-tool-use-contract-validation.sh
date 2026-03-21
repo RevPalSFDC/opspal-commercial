@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-Tool Use Contract Validation Hook
 # Validates tool inputs against registered contracts before execution
@@ -11,6 +11,16 @@
 #
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-tool-use-contract-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-tool-use-contract-validation] starting" >&2
+fi
 
 is_json() {
     echo "$1" | jq -e . >/dev/null 2>&1

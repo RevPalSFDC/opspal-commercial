@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Post-Tool Use Failure Bash Error Handler Hook
 # Provides recovery guidance for SOQL errors, jq errors, and describe failures

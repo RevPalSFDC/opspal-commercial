@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # session-capture-init.sh - Initialize session context capture
 #
 # Hook Type: Notification (SessionStart)

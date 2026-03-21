@@ -93,7 +93,22 @@ User Prompt / Session State
 
 **Output**: None (side effects: creates directories, displays messages)
 
-### 3. Pre-Commit Hooks
+### 3. PostToolUseFailure Hook
+
+**When**: Fires after a tool execution fails (non-zero exit from the tool itself)
+
+**Purpose**:
+- Provide structured recovery guidance after failed operations
+- Suggest alternative approaches or corrective actions
+- Log failure patterns for diagnostics
+
+**Current Implementation**: `post-bash-error-handler.sh` (Salesforce plugin)
+
+**Input**: Tool name + error details
+
+**Output**: JSON with `systemMessage` containing recovery guidance. Always exits 0 (advisory only).
+
+### 4. Pre-Commit Hooks
 
 **When**: Before git commit operations
 
@@ -141,10 +156,18 @@ Claude Code invokes: master-prompt-handler.sh
     │   │ - pre-agent-performance-monitor.sh      │
     │   └─────────────────────────────────────────┘
     │       ↓
-    │   Exit Code Check:
+    │   Exit Code Check (internal orchestrator-to-child convention):
     │   - 0 = Success, continue
     │   - 1 = Block execution, return error
     │   - 2 = Warning, continue with message
+    │
+    │   NOTE: This exit code convention applies ONLY to child hooks
+    │   called by master dispatchers (shell-to-shell communication).
+    │   For hooks registered directly in hooks.json (invoked by
+    │   Claude Code), blocking uses exit 0 + JSON:
+    │     {"blockExecution": true, "blockMessage": "reason"}
+    │   Non-zero exit from a hooks.json-registered hook signals
+    │   hook *failure*, not intentional blocking.
     │
     └─→ Phase 2: Sub-Agent Utilization
         ┌─────────────────────────────────────────┐

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # Session End Hook (Unified)
 # =============================================================================
@@ -22,6 +22,11 @@
 # =============================================================================
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[session-end] jq not found, skipping" >&2
+    exit 0
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Always calculate from SCRIPT_DIR - CLAUDE_PLUGIN_ROOT may point to workspace root

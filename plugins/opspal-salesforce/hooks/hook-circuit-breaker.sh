@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Hook Circuit Breaker - Graceful degradation for hook failures
@@ -40,6 +40,11 @@ if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
 else
     ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
 fi
+if ! command -v jq &>/dev/null; then
+    echo "[hook-circuit-breaker] jq not found, skipping" >&2
+    exit 0
+fi
+
 
 if [[ -f "$ERROR_HANDLER" ]]; then
     source "$ERROR_HANDLER"

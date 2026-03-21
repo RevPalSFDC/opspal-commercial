@@ -1,6 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Pre-Task Mandatory Hook - Enforces agent usage for critical operations
+# Pre-Task Mandatory Hook
+if ! command -v jq &>/dev/null; then
+    echo "[pre-task-mandatory] jq not found, skipping" >&2
+    exit 0
+fi
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-task-mandatory] starting" >&2
+fi
+ - Enforces agent usage for critical operations
 # This version REQUIRES agents for high-risk operations (no bypass)
 #
 # Version: 1.1.0 (Error Handler Integration)

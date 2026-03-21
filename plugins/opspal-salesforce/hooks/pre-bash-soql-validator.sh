@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-Bash SOQL Validator Hook
 # Validates SOQL field names before query execution to prevent INVALID_FIELD errors
@@ -9,6 +9,11 @@
 #   1 = Block execution (severe issue)
 
 set -e
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-bash-soql-validator] jq not found, skipping" >&2
+    exit 0
+fi
 
 emit_pretool_context() {
     local context="$1"

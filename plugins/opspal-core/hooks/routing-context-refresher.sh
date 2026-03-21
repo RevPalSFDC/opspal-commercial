@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # routing-context-refresher.sh - Post-compaction & periodic routing context injection
 #

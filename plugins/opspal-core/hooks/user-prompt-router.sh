@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # User Prompt Router - Automatic Agent Routing Hook

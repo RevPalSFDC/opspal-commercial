@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+exec 3>&1 1>&2
+if ! command -v jq &>/dev/null; then
+    echo "[pre-campaign-clone] jq not found, skipping" >&2
+    exit 0
+fi
 #
 # Hook: pre-campaign-clone
 # Trigger: PreToolUse (mcp__marketo__campaign_clone)
@@ -19,7 +25,9 @@
 
 # Source error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
     source "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh"
 fi
 
@@ -133,7 +141,8 @@ if [[ ${#VALIDATION_ERRORS[@]} -gt 0 ]]; then
     echo "  1. Verify source campaign ID exists"
     echo "  2. Verify target folder ID and type"
     echo "  3. Ensure name is unique in target folder"
-    exit 1
+    jq -nc --arg msg "Campaign clone blocked: validation errors found. Check campaign ID, target folder ID/type, and that the new name is unique in the target folder." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    exit 0
 fi
 
 if [[ ${#VALIDATION_WARNINGS[@]} -gt 0 ]]; then

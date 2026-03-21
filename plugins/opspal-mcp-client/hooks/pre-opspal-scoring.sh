@@ -5,6 +5,11 @@
 
 set -euo pipefail
 
+if ! command -v jq &>/dev/null; then
+    echo "[pre-opspal-scoring] jq not found, skipping" >&2
+    exit 0
+fi
+
 INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty')

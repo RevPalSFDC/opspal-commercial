@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ##
 # Post-CMS Publish Notification Hook
@@ -17,6 +17,11 @@ set -euo pipefail
 exec 3>&1 1>&2
 
 PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
+if ! command -v jq &>/dev/null; then
+    echo "[post-cms-publish-notification] jq not found, skipping" >&2
+    exit 0
+fi
+
 LIB_DIR="$PROJECT_ROOT/scripts/lib"
 
 # Configuration

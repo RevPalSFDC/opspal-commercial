@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[post-audit-bluf-generator] jq not found, skipping" >&2
+    exit 0
+fi
+
 # =============================================================================
 # Post-Audit BLUF+4 Summary Generator Hook
 # =============================================================================

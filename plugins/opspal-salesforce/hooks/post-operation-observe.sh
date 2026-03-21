@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # Post-Operation Observer Hook
 #
 # Triggered after: Agent operations (deployments, assessments, data operations)

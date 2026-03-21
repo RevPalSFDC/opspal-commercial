@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[post-assessment-notebooklm-sync] jq not found, skipping" >&2
+    exit 0
+fi
 
 #
 # Post-Assessment NotebookLM Sync Hook

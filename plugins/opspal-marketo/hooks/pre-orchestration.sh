@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+exec 3>&1 1>&2
+if ! command -v jq &>/dev/null; then
+    echo "[pre-orchestration] jq not found, skipping" >&2
+    exit 0
+fi
 #
 # Hook: pre-orchestration
 # Trigger: PreToolUse (mcp__marketo__program_clone)
@@ -19,7 +25,9 @@
 
 # Source error handler
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh" ]]; then
     source "${SCRIPT_DIR}/../opspal-core/hooks/lib/error-handler.sh"
 fi
 
@@ -86,7 +94,8 @@ Required parameters for program clone:
 • folder - Target folder { id: number, type: 'Folder' }
 
 EOF
-    exit 1
+    jq -nc --arg msg "Program clone blocked: missing required parameters (${MISSING_PARAMS%,*}). Required: programId, name, folder {id, type: Folder}." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    exit 0
 fi
 
 # Check 2: Folder type validation (CRITICAL)
@@ -106,7 +115,8 @@ This is a common Marketo API limitation.
 Programs cannot be cloned into other programs.
 
 EOF
-    exit 1
+    jq -nc --arg msg "Program clone blocked: target folder type must be Folder not Program. Programs cannot be cloned into other programs. Change folder type from Program to Folder." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    exit 0
 fi
 
 echo "✓ Folder type validation passed (type: ${FOLDER_TYPE:-Folder})"

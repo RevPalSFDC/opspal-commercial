@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+exec 3>&1 1>&2
 # Pre-Intelligence Analysis Hook
 #
 # Validates data freshness before Claude analysis:

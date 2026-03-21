@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # Pre-Tool-Use Asset Resolver (Bash)
 # =============================================================================
@@ -18,6 +18,11 @@
 # =============================================================================
 
 set -euo pipefail
+
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "DEBUG: [pre-tool-use-asset-resolver] starting" >&2
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"

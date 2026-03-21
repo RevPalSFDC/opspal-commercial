@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-Bash jq Validator Hook
 # Validates jq expressions for syntax errors and incomplete pipes
@@ -9,6 +9,11 @@
 #   1 = Block execution (severe issue)
 
 set -e
+
+if ! command -v jq &>/dev/null; then
+    echo "[pre-bash-jq-validator] jq not found, skipping" >&2
+    exit 0
+fi
 
 emit_pretool_context() {
     local context="$1"

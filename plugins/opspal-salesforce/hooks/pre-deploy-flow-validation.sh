@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Pre-Deployment Flow Validation Hook
 #
@@ -41,6 +41,11 @@ fi
 set -e
 
 HOOK_INPUT=""
+if ! command -v jq &>/dev/null; then
+    echo "[pre-deploy-flow-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
 if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat 2>/dev/null || true)
 fi

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Post-Tool Use Contract Validation Hook
 # Validates tool outputs against contracts and detects improbable results
@@ -14,6 +14,11 @@
 #
 
 set -euo pipefail
+
+if ! command -v jq &>/dev/null; then
+    echo "[post-tool-use-contract-validation] jq not found, skipping" >&2
+    exit 0
+fi
 
 # Fast-exit for read-only tools that never produce actionable contract violations
 TOOL_NAME_QUICK="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-${TOOL_NAME:-}}}"

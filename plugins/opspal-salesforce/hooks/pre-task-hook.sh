@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Pre-Task Agent Discovery & Organization Enforcement Hook
 # ENHANCED: Now BLOCKS high-risk operations without agents

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ##
 # Pre-CMS Publish Validation Hook
@@ -29,6 +29,11 @@ fi
 set -euo pipefail
 
 PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
+if ! command -v jq &>/dev/null; then
+    echo "[pre-cms-publish-validation] jq not found, skipping" >&2
+    exit 0
+fi
+
 SCRIPT_DIR="$PROJECT_ROOT/scripts/lib"
 
 # Configuration

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+exec 3>&1 1>&2
 # Observability Quota Monitor Hook
 #
 # Monitors and alerts on quota usage for bulk operations:

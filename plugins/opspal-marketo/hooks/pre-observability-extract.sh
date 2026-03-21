@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Pre-Observability Extract Hook
 #
 # Validates before starting bulk extract jobs:
@@ -12,7 +12,12 @@
 # 2 = Error (block extract)
 # Note: validation skip paths also return 0 (non-blocking)
 
-set -e
+set -euo pipefail
+exec 3>&1 1>&2
+if ! command -v jq &>/dev/null; then
+    echo "[pre-observability-extract] jq not found, skipping" >&2
+    exit 0
+fi
 
 # Configuration
 DAILY_QUOTA_MB=500
@@ -21,7 +26,6 @@ MAX_QUEUED=10
 MAX_DATE_RANGE_DAYS=31
 WARNING_THRESHOLD_PERCENT=80
 CRITICAL_THRESHOLD_PERCENT=95
-BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 
 # Get tool arguments
 TOOL_ARGS="${CLAUDE_TOOL_ARGS:-}"
@@ -78,7 +82,8 @@ main() {
     if [ "$DATE_RANGE_DAYS" -gt "$MAX_DATE_RANGE_DAYS" ]; then
         echo "ERROR: Date range of ${DATE_RANGE_DAYS} days exceeds maximum ${MAX_DATE_RANGE_DAYS} days" >&2
         echo "Suggestion: Split the export into smaller date ranges" >&2
-        exit "$BLOCK_EXIT_CODE"
+        jq -nc --arg msg "Date range of ${DATE_RANGE_DAYS} days exceeds maximum ${MAX_DATE_RANGE_DAYS}" '{"blockExecution": true, "blockMessage": $msg}' >&3
+        exit 0
     fi
 
     if [ "$DATE_RANGE_DAYS" -gt 0 ]; then
@@ -97,7 +102,8 @@ main() {
     if [ "$(echo "$USAGE_PERCENT >= $CRITICAL_THRESHOLD_PERCENT" | bc 2>/dev/null)" = "1" ]; then
         echo "ERROR: Daily quota at ${USAGE_PERCENT}% - critical threshold exceeded" >&2
         echo "Quota resets at midnight UTC" >&2
-        exit "$BLOCK_EXIT_CODE"
+        jq -nc --arg msg "Daily quota at ${USAGE_PERCENT}% - critical threshold exceeded. Resets at midnight UTC." '{"blockExecution": true, "blockMessage": $msg}' >&3
+        exit 0
     fi
 
     # Warn at warning threshold
