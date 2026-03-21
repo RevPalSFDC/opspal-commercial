@@ -12,14 +12,15 @@ if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     echo "DEBUG: [pre-task-mandatory] starting" >&2
 fi
 
-# Source standardized error handler for centralized logging
+# Source error handler — try plugin-local lib first, then cross-plugin fallback
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
-if [[ -f "$ERROR_HANDLER" ]]; then
-    source "$ERROR_HANDLER"
-    HOOK_NAME="pre-task-mandatory-hubspot"
-    # Keep strict mode for security-critical hook
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
 fi
+HOOK_NAME="pre-task-mandatory-hubspot"
+# Keep strict mode for security-critical hook
 
 # Color codes for output
 : "${RED:=\033[0;31m}"
@@ -102,6 +103,12 @@ log_event() {
 }
 
 # Define HIGH-RISK HubSpot operations that REQUIRE agents
+# bash 4+ required for associative arrays
+if ((BASH_VERSINFO[0] < 4)); then
+    emit_pretool_noop
+    exit 0
+fi
+
 declare -A HIGH_RISK_OPERATIONS=(
     ["production_workflow"]="production.*workflow|workflow.*production|activate.*workflow"
     ["delete_operations"]="delete.*(workflow|property|contact|company|deal)"

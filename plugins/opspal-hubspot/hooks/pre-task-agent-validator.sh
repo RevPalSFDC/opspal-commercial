@@ -12,18 +12,20 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Source standardized error handler for centralized logging
-if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
-    ERROR_HANDLER="${CLAUDE_PLUGIN_ROOT}/opspal-core/hooks/lib/error-handler.sh"
-else
-    ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
+# Source error handler — try plugin-local lib first, then cross-plugin fallback
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" ]]; then
+    source "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
 fi
 
-if [[ -f "$ERROR_HANDLER" ]]; then
-    source "$ERROR_HANDLER"
+if declare -f set_lenient_mode &>/dev/null; then
     HOOK_NAME="pre-task-agent-validator"
-    # Lenient mode - validation should not block on internal errors
     set_lenient_mode 2>/dev/null || true
+else
+    # Inline fallback if error-handler not found
+    set +e
+    trap - ERR
 fi
 
 PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"

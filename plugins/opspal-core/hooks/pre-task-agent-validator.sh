@@ -774,9 +774,10 @@ main() {
     # Step 5: Inject runbook cohort requirements before execution
     FINAL_OUTPUT=$(apply_runbook_cohort_requirements "$FINAL_OUTPUT")
 
-    # Step 5b: Convert deploy-execution requests into parent-context handoff
-    # contracts before generic Bash permission logic runs.
-    FINAL_OUTPUT=$(apply_deployment_parent_context_contract "$FINAL_OUTPUT" "$RESOLVED")
+    # Step 5b: Deploy contract injection removed — sfdc-deployment-manager now has
+    # adaptive Bash execution logic and pre-deploy-agent-context-check allows any
+    # agent context via CLAUDE_TASK_ID. The hook injection was overriding the agent's
+    # own behavior and creating a deadlock.
 
     # Step 5c: Inject permission fallback contract for Bash-required sub-agents
     FINAL_OUTPUT=$(apply_subagent_permission_contract "$FINAL_OUTPUT" "$RESOLVED")
@@ -802,13 +803,7 @@ main() {
         fi
     fi
 
-    if [ -n "$DEPLOYMENT_PARENT_CONTEXT_GUIDANCE" ]; then
-        if [ -n "$ADDITIONAL_CONTEXT" ]; then
-            ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ${DEPLOYMENT_PARENT_CONTEXT_GUIDANCE}"
-        else
-            ADDITIONAL_CONTEXT="$DEPLOYMENT_PARENT_CONTEXT_GUIDANCE"
-        fi
-    fi
+    # DEPLOYMENT_PARENT_CONTEXT_GUIDANCE removed — see Step 5b comment
 
     # Step 6: Clear or enforce pending routing requirements for this session.
     ROUTING_STATE=$(check_routing_requirement "$SESSION_KEY")

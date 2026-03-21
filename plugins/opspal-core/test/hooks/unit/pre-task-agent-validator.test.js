@@ -207,20 +207,19 @@ async function runAllTests() {
       'opspal-salesforce:sfdc-deployment-manager',
       'Salesforce metadata deploys should be rerouted to the designated deployment specialist'
     );
+    // Deploy contract injection removed — sfdc-deployment-manager now has adaptive
+    // Bash execution logic. The hook no longer overrides the agent's own behavior.
     assert(
-      (updatedInput?.prompt || '').includes('PARENT_CONTEXT_DEPLOY_REQUIRED'),
-      'Rerouted deployment specialist should be converted into a parent-context deploy handoff'
+      !(updatedInput?.prompt || '').includes('DEPLOY EXECUTION CONTRACT'),
+      'Rerouted deployment specialist should NOT have deploy contract injected (removed)'
     );
     assert.strictEqual(
-      updatedInput?.deployment_execution_contract?.marker,
-      'PARENT_CONTEXT_DEPLOY_REQUIRED',
-      'Rerouted deployment specialist should receive the deploy handoff contract'
-    );
-    assert.strictEqual(
-      updatedInput?.permission_contract,
+      updatedInput?.deployment_execution_contract,
       undefined,
-      'Deploy handoff requests should not receive the generic Bash permission contract'
+      'Deploy handoff contract should not be injected (deployment manager handles its own logic)'
     );
+    // With deploy contract removed, deployment agents now receive the generic
+    // Bash permission contract — this is correct (fallback if Bash unavailable).
     assert(
       (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_SPECIALIST_OVERRIDE'),
       'Should explain why the reroute happened'
@@ -428,30 +427,20 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
     assert(updatedInput, 'Should emit updated input contract for deployment manager');
+    // Deploy contract injection removed — the deployment manager now has its own
+    // adaptive execution logic (try Bash first, fallback to handoff if unavailable).
     assert(
-      (updatedInput.prompt || '').includes('PARENT_CONTEXT_DEPLOY_REQUIRED'),
-      'Deployment manager prompt should include the parent-context deploy handoff marker'
-    );
-    assert.deepStrictEqual(
-      updatedInput.deployment_execution_contract?.blockedCommands,
-      [
-        'sf project deploy start',
-        'sf project deploy validate',
-        'sf project deploy preview',
-        'sf project deploy quick',
-        'sf project deploy report'
-      ],
-      'Deployment manager handoff contract should enumerate the blocked deploy commands'
+      !(updatedInput.prompt || '').includes('DEPLOY EXECUTION CONTRACT'),
+      'Deployment manager prompt should NOT have deploy contract injected (removed)'
     );
     assert.strictEqual(
-      updatedInput.deployment_execution_contract?.marker,
-      'PARENT_CONTEXT_DEPLOY_REQUIRED',
-      'Deployment manager handoff contract should define explicit fallback marker'
-    );
-    assert.strictEqual(
-      updatedInput.permission_contract,
+      updatedInput.deployment_execution_contract,
       undefined,
-      'Deployment handoff requests should not receive the generic Bash permission contract'
+      'Deploy handoff contract should not be injected (deployment manager handles its own logic)'
+    );
+    // With deploy contract removed, deployment manager now receives the generic
+    // Bash permission contract — correct behavior (fallback if Bash unavailable).
+    // permission_contract may or may not be present depending on agent-tool-registry results.
     );
     assert.strictEqual(
       result.output?.hookSpecificOutput?.permissionDecision,
