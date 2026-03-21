@@ -3,11 +3,38 @@
     "plugins/opspal-core/hooks/session-start-envcheck.sh": [
       "plugins/opspal-core/test/hooks/unit/session-start-env-config.test.js"
     ],
+    "plugins/opspal-core/hooks/pre-operation-data-validator.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
+    "plugins/opspal-core/hooks/permission-request-handler.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
     "plugins/opspal-salesforce/hooks/post-bash-error-handler.sh": [
       "plugins/opspal-core/test/hooks/unit/salesforce-post-bash-error-handler.test.js"
     ],
+    "plugins/opspal-hubspot/hooks/universal-agent-governance.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
+    "plugins/opspal-hubspot/hooks/pre-task-mandatory.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
+    "plugins/opspal-hubspot/hooks/pre-write-path-validator.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
+    "plugins/opspal-hubspot/hooks/pre-property-write-validation.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
     "plugins/opspal-marketo/hooks/session-start-marketo.sh": [
       "plugins/opspal-core/test/hooks/unit/marketo-session-start-marketo.test.js"
+    ],
+    "plugins/opspal-gtm-planning/hooks/pre-task-gtm-approval-gate.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
+    "plugins/opspal-gtm-planning/hooks/pre-write-gtm-path-validator.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+    ],
+    "plugins/opspal-okrs/hooks/pre-write-okr-path-validator.sh": [
+      "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
     ]
   },
   "allowedUntested": {
@@ -18,7 +45,6 @@
     "plugins/opspal-core/hooks/pre-fireflies-api-call.sh": "Credentialed Fireflies API preflight still needs a service-stub harness.",
     "plugins/opspal-core/hooks/pre-gong-api-call.sh": "Credentialed Gong API preflight still needs a service-stub harness.",
     "plugins/opspal-core/hooks/pre-session-silent-failure-check.sh": "Needs a session-log replay harness that reproduces pre-tool Claude session state.",
-    "plugins/opspal-core/hooks/routing-context-refresher.sh": "Mutates shared routing-state files across sessions; pending isolated state-transition coverage.",
     "plugins/opspal-core/hooks/session-start-repo-sync.sh": "Touches git/worktree state and needs an isolated repository fixture to test safely.",
     "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures.",
     "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."

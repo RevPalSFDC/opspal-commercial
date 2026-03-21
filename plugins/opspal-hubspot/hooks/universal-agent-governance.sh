@@ -57,7 +57,37 @@ fi
 # Configuration
 GOVERNANCE_ENABLED="${HS_AGENT_GOVERNANCE_ENABLED:-true}"
 
+emit_pretool_noop() {
+  printf '{}\n'
+}
+
+emit_pretool_response() {
+  local permission_decision="$1"
+  local permission_reason="$2"
+  local additional_context="${3:-}"
+
+  if ! command -v jq >/dev/null 2>&1; then
+    emit_pretool_noop
+    return 0
+  fi
+
+  jq -nc \
+    --arg decision "$permission_decision" \
+    --arg reason "$permission_reason" \
+    --arg context "$additional_context" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: (
+        { hookEventName: "PreToolUse" }
+        + (if $decision != "" then { permissionDecision: $decision } else {} end)
+        + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+        + (if $context != "" then { additionalContext: $context } else {} end)
+      )
+    }'
+}
+
 if [[ "$GOVERNANCE_ENABLED" != "true" ]]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -79,6 +109,7 @@ case "$AGENT_NAME" in
   *hubspot*)
     ;;
   *)
+    emit_pretool_noop
     exit 0
     ;;
 esac
@@ -86,6 +117,7 @@ esac
 # Skip self-governance agents
 case "$AGENT_NAME" in
   *governance*|*validator*|*auditor*|unknown)
+    emit_pretool_noop
     exit 0
     ;;
 esac
@@ -186,7 +218,11 @@ if [[ "$BLOCKED" == "true" ]]; then
   echo "  Risk: $RISK_LEVEL — $RISK_REASON" >&2
   echo "  Action: Operation denied. Use [GOVERNANCE_OVERRIDE] with justification." >&2
   echo "" >&2
-  exit 2
+  emit_pretool_response \
+    "deny" \
+    "HUBSPOT_GOVERNANCE_BLOCKED: ${RISK_REASON}." \
+    "Agent ${AGENT_NAME} was blocked by HubSpot governance at risk level ${RISK_LEVEL}. Use an approved override path before retrying."
+  exit 0
 fi
 
 # HIGH — approval warning
@@ -196,6 +232,11 @@ if [[ "$REQUIRES_APPROVAL" == "true" ]]; then
   echo "  Risk: $RISK_LEVEL — $RISK_REASON" >&2
   echo "  Action: Proceeding with enhanced logging. Confirm before irreversible operations." >&2
   echo "" >&2
+  emit_pretool_response \
+    "allow" \
+    "HUBSPOT_GOVERNANCE_APPROVAL_RECOMMENDED: ${RISK_REASON}." \
+    "HubSpot governance marked ${AGENT_NAME} as ${RISK_LEVEL} risk. Confirm approval before irreversible operations."
+  exit 0
 fi
 
 # MEDIUM — info
@@ -203,4 +244,5 @@ if [[ "$RISK_LEVEL" == "MEDIUM" ]]; then
   echo -e "${BLUE}HubSpot Governance: $RISK_REASON${NC}" >&2
 fi
 
+emit_pretool_noop
 exit 0

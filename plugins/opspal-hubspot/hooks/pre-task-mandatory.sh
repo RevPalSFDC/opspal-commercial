@@ -47,16 +47,41 @@ fi
 
 AGENT_NAME_LOWER="$(printf '%s' "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')"
 
+emit_pretool_noop() {
+    printf '{}\n'
+}
+
+emit_pretool_response() {
+    local permission_decision="$1"
+    local permission_reason="$2"
+    local additional_context="${3:-}"
+
+    if ! command -v jq >/dev/null 2>&1; then
+        emit_pretool_noop
+        return 0
+    fi
+
+    jq -nc \
+      --arg decision "$permission_decision" \
+      --arg reason "$permission_reason" \
+      --arg context "$additional_context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: (
+          { hookEventName: "PreToolUse" }
+          + (if $decision != "" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "" then { additionalContext: $context } else {} end)
+        )
+      }'
+}
+
 # Only apply this governance to HubSpot agents. Other plugin agent launches
 # should never be blocked by HubSpot-local policy.
 if [[ -z "$AGENT_NAME_LOWER" ]] || [[ "$AGENT_NAME_LOWER" != *"hubspot"* ]]; then
+    emit_pretool_noop
     exit 0
 fi
-
-# PreToolUse command hooks should keep stdout clean unless they emit structured
-# control JSON. This hook uses exit code blocking semantics, so user feedback
-# belongs on stderr only.
-exec 1>&2
 
 # Log file for tracking
 LOG_FILE="/tmp/agent-hook-mandatory-hubspot.log"
@@ -114,63 +139,63 @@ display_mandatory_requirement() {
     local category="$1"
     local required_agent="${REQUIRED_AGENTS[$category]}"
 
-    echo ""
-    echo -e "${RED}${BLINK}╔════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${RED}${BOLD}║           🛑 AGENT REQUIRED - STOP! 🛑                ║${NC}"
-    echo -e "${RED}${BLINK}╚════════════════════════════════════════════════════════╝${NC}"
-    echo ""
+    echo "" >&2
+    echo -e "${RED}${BLINK}╔════════════════════════════════════════════════════════╗${NC}" >&2
+    echo -e "${RED}${BOLD}║           🛑 AGENT REQUIRED - STOP! 🛑                ║${NC}" >&2
+    echo -e "${RED}${BLINK}╚════════════════════════════════════════════════════════╝${NC}" >&2
+    echo "" >&2
 
-    echo -e "${YELLOW}${BOLD}HIGH-RISK HUBSPOT OPERATION DETECTED${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${YELLOW}${BOLD}HIGH-RISK HUBSPOT OPERATION DETECTED${NC}" >&2
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}" >&2
 
     # Show risk category
     case "$category" in
         "production_workflow")
-            echo -e "${RED}⚠️  PRODUCTION WORKFLOW MODIFICATION${NC}"
-            echo "   Risk: Can impact active campaigns and automations"
-            echo "   Potential Issues: Broken automation, incorrect enrollments"
+            echo -e "${RED}⚠️  PRODUCTION WORKFLOW MODIFICATION${NC}" >&2
+            echo "   Risk: Can impact active campaigns and automations" >&2
+            echo "   Potential Issues: Broken automation, incorrect enrollments" >&2
             ;;
         "delete_operations")
-            echo -e "${RED}⚠️  DESTRUCTIVE OPERATION${NC}"
-            echo "   Risk: Permanent data/configuration loss"
-            echo "   Potential Issues: Lost contacts, broken workflows, data corruption"
+            echo -e "${RED}⚠️  DESTRUCTIVE OPERATION${NC}" >&2
+            echo "   Risk: Permanent data/configuration loss" >&2
+            echo "   Potential Issues: Lost contacts, broken workflows, data corruption" >&2
             ;;
         "bulk_operations")
-            echo -e "${RED}⚠️  BULK DATA OPERATION${NC}"
-            echo "   Risk: API rate limits, data corruption"
-            echo "   Potential Issues: Partial updates, duplicate records, rate limiting"
+            echo -e "${RED}⚠️  BULK DATA OPERATION${NC}" >&2
+            echo "   Risk: API rate limits, data corruption" >&2
+            echo "   Potential Issues: Partial updates, duplicate records, rate limiting" >&2
             ;;
         "integration_setup")
-            echo -e "${RED}⚠️  INTEGRATION CONFIGURATION${NC}"
-            echo "   Risk: Data sync issues, authentication failures"
-            echo "   Potential Issues: Broken integrations, data loss, security exposure"
+            echo -e "${RED}⚠️  INTEGRATION CONFIGURATION${NC}" >&2
+            echo "   Risk: Data sync issues, authentication failures" >&2
+            echo "   Potential Issues: Broken integrations, data loss, security exposure" >&2
             ;;
         "data_migration")
-            echo -e "${RED}⚠️  DATA MIGRATION${NC}"
-            echo "   Risk: Large-scale data corruption"
-            echo "   Potential Issues: Data loss, incorrect mappings, broken associations"
+            echo -e "${RED}⚠️  DATA MIGRATION${NC}" >&2
+            echo "   Risk: Large-scale data corruption" >&2
+            echo "   Potential Issues: Data loss, incorrect mappings, broken associations" >&2
             ;;
         *)
-            echo -e "${RED}⚠️  CRITICAL OPERATION${NC}"
-            echo "   Risk: Portal-wide impact"
+            echo -e "${RED}⚠️  CRITICAL OPERATION${NC}" >&2
+            echo "   Risk: Portal-wide impact" >&2
             ;;
     esac
 
-    echo ""
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}${BOLD}REQUIRED AGENT(S):${NC} ${PURPLE}$required_agent${NC}"
-    echo ""
+    echo "" >&2
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}" >&2
+    echo -e "${GREEN}${BOLD}REQUIRED AGENT(S):${NC} ${PURPLE}$required_agent${NC}" >&2
+    echo "" >&2
 
-    echo -e "${YELLOW}This operation CANNOT proceed without the proper agent.${NC}"
-    echo -e "${YELLOW}The agent will:${NC}"
-    echo "  ✓ Validate prerequisites and portal state"
-    echo "  ✓ Check API rate limits"
-    echo "  ✓ Create rollback plan"
-    echo "  ✓ Handle pagination correctly"
-    echo "  ✓ Ensure data integrity"
-    echo "  ✓ Document changes"
+    echo -e "${YELLOW}This operation CANNOT proceed without the proper agent.${NC}" >&2
+    echo -e "${YELLOW}The agent will:${NC}" >&2
+    echo "  ✓ Validate prerequisites and portal state" >&2
+    echo "  ✓ Check API rate limits" >&2
+    echo "  ✓ Create rollback plan" >&2
+    echo "  ✓ Handle pagination correctly" >&2
+    echo "  ✓ Ensure data integrity" >&2
+    echo "  ✓ Document changes" >&2
 
-    echo ""
+    echo "" >&2
     log_event "HIGH_RISK_BLOCKED" "$category: $TASK_INPUT"
 }
 
@@ -182,9 +207,9 @@ check_bypass_attempt() {
     # Check if user is trying to bypass
     local bypass_pattern='(^|[[:space:][:punct:]])(bypass|skip([[:space:]-]+(the[[:space:]-]+)?)?checks?|ignore([[:space:]-]+(the[[:space:]-]+)?)?warnings?|override([[:space:]-]+(the[[:space:]-]+)?)?(checks?|gate|guardrail)|force[[:space:]-]+(it|this|execution|run|deploy|merge|delete)|without[[:space:]-]+(checks?|validation|approval))($|[[:space:][:punct:]])'
     if echo "$task" | grep -iE "$bypass_pattern" > /dev/null; then
-        echo ""
-        echo -e "${RED}${BOLD}⚠️  BYPASS ATTEMPT DETECTED ⚠️${NC}"
-        echo -e "${RED}Attempting to bypass safety checks is not allowed.${NC}"
+        echo "" >&2
+        echo -e "${RED}${BOLD}⚠️  BYPASS ATTEMPT DETECTED ⚠️${NC}" >&2
+        echo -e "${RED}Attempting to bypass safety checks is not allowed.${NC}" >&2
         echo "[$timestamp] BYPASS_ATTEMPT: $task" >> "$BYPASS_FILE"
         return 0
     fi
@@ -217,24 +242,24 @@ suggest_for_medium_risk() {
     done
 
     if [ ${#suggested_agents[@]} -gt 0 ]; then
-        echo ""
-        echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║      💡 AGENT RECOMMENDATION (Medium Risk) 💡          ║${NC}"
-        echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}"
-        echo ""
+        echo "" >&2
+        echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}" >&2
+        echo -e "${YELLOW}║      💡 AGENT RECOMMENDATION (Medium Risk) 💡          ║${NC}" >&2
+        echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}" >&2
+        echo "" >&2
 
-        echo -e "${BLUE}Suggested agents for this task:${NC}"
+        echo -e "${BLUE}Suggested agents for this task:${NC}" >&2
         for agent in "${suggested_agents[@]}"; do
-            echo -e "  ${GREEN}▸${NC} ${PURPLE}$agent${NC}"
+            echo -e "  ${GREEN}▸${NC} ${PURPLE}$agent${NC}" >&2
         done
 
-        echo ""
-        echo -e "${YELLOW}While not mandatory, using an agent will:${NC}"
-        echo "  • Handle pagination automatically (100% data coverage)"
-        echo "  • Manage API rate limits properly"
-        echo "  • Reduce errors by 80%"
-        echo "  • Save 60-90% time"
-        echo "  • Ensure best practices"
+        echo "" >&2
+        echo -e "${YELLOW}While not mandatory, using an agent will:${NC}" >&2
+        echo "  • Handle pagination automatically (100% data coverage)" >&2
+        echo "  • Manage API rate limits properly" >&2
+        echo "  • Reduce errors by 80%" >&2
+        echo "  • Save 60-90% time" >&2
+        echo "  • Ensure best practices" >&2
 
         log_event "MEDIUM_RISK_SUGGESTED" "$task: ${suggested_agents[*]}"
     fi
@@ -261,7 +286,11 @@ track_decision() {
 main() {
     # Check for bypass attempts first
     if check_bypass_attempt "$TASK_INPUT"; then
-        exit "$BLOCK_EXIT_CODE"
+        emit_pretool_response \
+          "deny" \
+          "HUBSPOT_BYPASS_ATTEMPT: Attempting to bypass safety checks is not allowed." \
+          "Task input requested bypass semantics. Use the required HubSpot agent flow instead."
+        exit 0
     fi
 
     # Check if high-risk operation
@@ -271,17 +300,20 @@ main() {
         # High-risk operation - MANDATORY agent use
         display_mandatory_requirement "$RISK_CATEGORY"
 
-        echo ""
-        echo -e "${BOLD}${RED}This operation is BLOCKED until you use the required agent.${NC}"
-        echo ""
-        echo -e "${GREEN}To proceed, use:${NC}"
-        echo -e "${CYAN}  Agent tool with subagent_type='${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'${NC}"
-        echo ""
-        echo -e "${YELLOW}Or check the agent matrix: /agent-matrix${NC}"
-        echo -e "${RED}${BOLD}Operation blocked. Please use the required agent.${NC}"
+        echo "" >&2
+        echo -e "${BOLD}${RED}This operation is BLOCKED until you use the required agent.${NC}" >&2
+        echo "" >&2
+        echo -e "${GREEN}To proceed, use:${NC}" >&2
+        echo -e "${CYAN}  Agent tool with subagent_type='${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'${NC}" >&2
+        echo "" >&2
+        echo -e "${YELLOW}Or check the agent matrix: /agent-matrix${NC}" >&2
+        echo -e "${RED}${BOLD}Operation blocked. Please use the required agent.${NC}" >&2
 
-        # Exit with error to prevent operation
-        exit "$BLOCK_EXIT_CODE"
+        emit_pretool_response \
+          "deny" \
+          "HUBSPOT_AGENT_REQUIRED: High-risk HubSpot operation requires agent '${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'." \
+          "Risk category: ${RISK_CATEGORY}. Route through the required HubSpot specialist before retrying."
+        exit 0
     else
         # Not high-risk, but check for suggestions
         suggest_for_medium_risk "$TASK_INPUT"
@@ -297,4 +329,5 @@ main() {
 main
 
 # Exit successfully to continue execution (for non-blocked operations)
+emit_pretool_noop
 exit 0

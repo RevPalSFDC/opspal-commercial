@@ -127,6 +127,8 @@ if [[ "$DECISION" == "allow" ]]; then
         }
       }
     }'
+else
+    printf '{}\n'
 fi
 
 exit 0

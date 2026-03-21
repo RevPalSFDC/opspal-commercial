@@ -85,6 +85,7 @@ class HookMerger {
       pluginsWithHooks: 0,
       hooksDiscovered: 0,
       hooksMerged: 0,
+      hooksPruned: 0,
       hooksSkipped: 0,
       hooksRejected: 0,
       errors: []
@@ -343,11 +344,118 @@ class HookMerger {
    * Looks for "plugins/<name>/" directory patterns in the path.
    */
   extractPluginName(scriptPath) {
-    // Match plugins/<plugin-name>/ in the path
-    const match = scriptPath.match(/plugins\/([^/]+)\//);
-    if (match) return match[1];
+    if (typeof scriptPath !== 'string' || scriptPath.trim() === '') {
+      return null;
+    }
+
+    const matchers = [
+      /\/\.claude\/plugins\/marketplaces\/[^/]+\/plugins\/([^/]+)\//,
+      /\/\.claude\/plugins\/cache\/[^/]+\/([^/]+)\/[^/]+\//,
+      /(?:^|\/)plugins\/([^/]+)\//
+    ];
+
+    for (const pattern of matchers) {
+      const match = scriptPath.match(pattern);
+      if (match) {
+        return match[1];
+      }
+    }
 
     return null;
+  }
+
+  collectDeclaredHookKeys(plugin) {
+    const keys = new Set();
+    const hooks = plugin?.hooks && typeof plugin.hooks === 'object' ? plugin.hooks : {};
+
+    for (const [eventType, groups] of Object.entries(hooks)) {
+      if (!Array.isArray(groups)) {
+        continue;
+      }
+
+      for (const group of groups) {
+        const matcher = group?.matcher || '*';
+        const hookList = Array.isArray(group?.hooks) ? group.hooks : [];
+        for (const hook of hookList) {
+          if (!hook || typeof hook.command !== 'string') {
+            continue;
+          }
+
+          const resolvedHook = {
+            ...hook,
+            command: this.resolveHookPath(hook.command, plugin.path)
+          };
+          keys.add(this.getHookKey(resolvedHook, matcher, eventType));
+        }
+      }
+    }
+
+    return keys;
+  }
+
+  pruneObsoletePluginHooks(settings, pluginHooks) {
+    const hooks = settings?.hooks;
+    if (!hooks || typeof hooks !== 'object') {
+      return 0;
+    }
+
+    const declaredKeysByPlugin = new Map();
+    for (const plugin of pluginHooks) {
+      declaredKeysByPlugin.set(plugin.name, this.collectDeclaredHookKeys(plugin));
+    }
+
+    let removed = 0;
+
+    for (const [eventType, groups] of Object.entries(hooks)) {
+      if (!Array.isArray(groups)) {
+        continue;
+      }
+
+      const retainedGroups = [];
+
+      for (const group of groups) {
+        const matcher = group?.matcher || '*';
+        const hookList = Array.isArray(group?.hooks) ? group.hooks : [];
+        const retainedHooks = [];
+
+        for (const hook of hookList) {
+          if (!hook || typeof hook.command !== 'string') {
+            continue;
+          }
+
+          const scriptPath = this.extractScriptPath(hook.command) || hook.command;
+          const pluginName = this.extractPluginName(scriptPath);
+
+          if (!pluginName || !declaredKeysByPlugin.has(pluginName)) {
+            retainedHooks.push(hook);
+            continue;
+          }
+
+          const declaredKeys = declaredKeysByPlugin.get(pluginName);
+          const key = this.getHookKey(hook, matcher, eventType);
+          if (declaredKeys.has(key)) {
+            retainedHooks.push(hook);
+            continue;
+          }
+
+          removed += 1;
+          if (this.verbose) {
+            console.log(`    ${icons.info} ${eventType}/${matcher}: pruned stale ${path.basename(scriptPath)}`);
+          }
+        }
+
+        if (retainedHooks.length > 0) {
+          retainedGroups.push({
+            ...group,
+            hooks: retainedHooks
+          });
+        }
+      }
+
+      hooks[eventType] = retainedGroups;
+    }
+
+    return removed;
   }
 
   /**
@@ -360,6 +468,8 @@ class HookMerger {
 
     // Clone settings to avoid mutation
     const merged = JSON.parse(JSON.stringify(settings));
+
+    this.stats.hooksPruned += this.pruneObsoletePluginHooks(merged, pluginHooks);
 
     // Track existing hooks for deduplication
     const existingKeys = new Set();
@@ -586,6 +696,7 @@ class HookMerger {
     console.log(`  Plugins with hooks:  ${this.stats.pluginsWithHooks}`);
     console.log(`  Hooks discovered:    ${this.stats.hooksDiscovered}`);
     console.log(`  Hooks merged:        ${this.stats.hooksMerged}`);
+    console.log(`  Hooks pruned:        ${this.stats.hooksPruned} (stale registrations)`);
     console.log(`  Hooks skipped:       ${this.stats.hooksSkipped} (duplicates)`);
     console.log(`  Hooks rejected:      ${this.stats.hooksRejected} (policy violations)`);
     if (missingScriptCount > 0) {

@@ -18,8 +18,8 @@
       "reason": "Bash pre-hooks are now dispatched per domain; fail any attempt to reintroduce broad Salesforce Bash fan-out."
     },
     "UserPromptSubmit :: *": {
-      "max": 6,
-      "reason": "Prompt-time routing and deprecation notices are global today; keep the current ceiling."
+      "max": 7,
+      "reason": "Prompt-time routing and deprecation notices are global today; keep the current ceiling including the data-hygiene deprecation warning hook."
     },
     "PreToolUse :: Write": {
       "max": 5,

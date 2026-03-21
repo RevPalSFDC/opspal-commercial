@@ -6,8 +6,13 @@
 
 set -euo pipefail
 
+emit_pretool_noop() {
+  printf '{}\n'
+}
+
 # Skip if ORG_SLUG is not set
 if [ -z "${ORG_SLUG:-}" ]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -18,6 +23,7 @@ if [ ! -t 0 ]; then
 fi
 
 if [ -z "$HOOK_INPUT" ]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -28,6 +34,7 @@ if command -v jq &>/dev/null; then
 fi
 
 if [ -z "$FILE_PATH" ]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -37,6 +44,7 @@ case "$FILE_PATH" in
     ;;
   *)
     # Not GTM-related
+    emit_pretool_noop
     exit 0
     ;;
 esac
@@ -45,6 +53,7 @@ esac
 EXPECTED_PREFIX="orgs/${ORG_SLUG}/platforms/gtm-planning/"
 
 if [[ "$FILE_PATH" == *"$EXPECTED_PREFIX"* ]] || [[ "$FILE_PATH" == "./$EXPECTED_PREFIX"* ]]; then
+  emit_pretool_noop
   exit 0
 fi
 

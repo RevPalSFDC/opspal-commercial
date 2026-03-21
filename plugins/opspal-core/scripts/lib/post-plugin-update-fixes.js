@@ -114,6 +114,12 @@ const USER_LEVEL_PROJECT_HOOK_PATTERNS = [
   'post-git-push-slack-notifier.sh'
 ];
 const CORE_PLUGIN_NAME = 'opspal-core';
+const CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS = [
+  'scripts/finish-opspal-update.sh',
+  'scripts/lib/post-plugin-update-fixes.js',
+  'scripts/lib/hook-merger.js',
+  'scripts/lib/reconcile-hook-registration.js'
+];
 
 // ============================================================================
 // ANSI Colors
@@ -830,6 +836,7 @@ class PostPluginUpdateFixes {
       'hooks/pre-tool-use-contract-validation.sh',
       'hooks/pre-task-agent-validator.sh',
       'hooks/post-tool-use.sh',
+      ...CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS,
       'scripts/ci/validate-routing.sh',
       'scripts/lib/task-router.js',
       'scripts/lib/complexity-scorer.js',
@@ -837,8 +844,6 @@ class PostPluginUpdateFixes {
       'scripts/lib/routing-index-builder.js',
       'scripts/lib/routing-routability-audit.js',
       'scripts/lib/sync-claudemd.js',
-      'scripts/lib/hook-merger.js',
-      'scripts/lib/reconcile-hook-registration.js',
       'scripts/lib/routing-state-manager.js',
       'config/mcp-tool-policies.json'
     ];
@@ -1793,6 +1798,7 @@ class PostPluginUpdateFixes {
       'hooks/pre-tool-use-contract-validation.sh',
       'hooks/pre-task-agent-validator.sh',
       'hooks/post-tool-use.sh',
+      ...CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS,
       'scripts/lib/hook-event-normalizer.js',
       'scripts/lib/hook-settings-normalizer.js',
       'scripts/lib/routing-context-refresher.js',

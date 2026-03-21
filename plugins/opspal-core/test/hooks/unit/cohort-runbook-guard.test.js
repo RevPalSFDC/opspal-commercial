@@ -43,6 +43,27 @@ async function runAllTests() {
     assert(data.required_artifacts.length > 0, 'required artifacts should be returned');
   }));
 
+  results.push(await runTest('Guidance text uses canonical absolute paths and discovery-first guidance', async () => {
+    const payload = {
+      subagent_type: 'opspal-salesforce:sfdc-data-operations',
+      prompt: "Fix SOQL error: No such column AccountId on ObjectTerritory2Association"
+    };
+    const data = guard.assessTask(payload, { workspaceRoot: PROJECT_ROOT });
+
+    assert(
+      data.required_artifacts.every((artifact) => artifact.absolute_path.startsWith(PROJECT_ROOT)),
+      'required artifacts should resolve to absolute paths under the workspace root'
+    );
+    assert(
+      data.guidance_text.includes(PROJECT_ROOT),
+      'guidance text should surface absolute runtime paths'
+    );
+    assert(
+      data.guidance_text.includes('use LS or Glob before Read'),
+      'guidance text should enforce discover-before-read when path certainty is low'
+    );
+  }));
+
   results.push(await runTest('Flags missing runbook evidence in output', async () => {
     const output = 'SOQL parser failed with malformed query and invalid field reference.';
     const data = guard.verifyOutput(output, {

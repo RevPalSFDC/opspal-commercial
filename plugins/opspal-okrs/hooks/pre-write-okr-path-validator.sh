@@ -8,6 +8,35 @@ set -euo pipefail
 
 BLOCK_MODE="${OKR_PATH_VALIDATOR_BLOCK:-1}"
 
+emit_pretool_noop() {
+  printf '{}\n'
+}
+
+emit_pretool_response() {
+  local permission_decision="$1"
+  local permission_reason="$2"
+  local additional_context="${3:-}"
+
+  if ! command -v jq >/dev/null 2>&1; then
+    emit_pretool_noop
+    return 0
+  fi
+
+  jq -nc \
+    --arg decision "$permission_decision" \
+    --arg reason "$permission_reason" \
+    --arg context "$additional_context" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: (
+        { hookEventName: "PreToolUse" }
+        + (if $decision != "" then { permissionDecision: $decision } else {} end)
+        + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+        + (if $context != "" then { additionalContext: $context } else {} end)
+      )
+    }'
+}
+
 # Read the tool input from stdin
 INPUT="$(cat)"
 
@@ -19,6 +48,7 @@ fi
 
 # If we couldn't extract the path, allow the write
 if [ -z "$FILE_PATH" ]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -28,6 +58,7 @@ case "$FILE_PATH" in
     ;;
   *)
     # Not an OKR-related path — skip validation
+    emit_pretool_noop
     exit 0
     ;;
 esac
@@ -36,11 +67,13 @@ esac
 VALID_PATTERN="orgs/[^/]+/platforms/okr/"
 
 if echo "$FILE_PATH" | grep -qE "$VALID_PATTERN"; then
+  emit_pretool_noop
   exit 0
 fi
 
 # Also allow writes to the plugin directory itself (templates, config, etc.)
 if echo "$FILE_PATH" | grep -qE "plugins/opspal-okrs/"; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -49,8 +82,16 @@ MSG="OKR path validation: '${FILE_PATH}' does not follow the orgs/{org}/platform
 
 if [ "$BLOCK_MODE" = "1" ]; then
   echo "BLOCKED: $MSG" >&2
-  exit 2
+  emit_pretool_response \
+    "deny" \
+    "OKR_PATH_VALIDATION_BLOCKED: ${MSG}" \
+    "Path: ${FILE_PATH}"
+  exit 0
 else
   echo "WARNING: $MSG" >&2
+  emit_pretool_response \
+    "allow" \
+    "OKR_PATH_VALIDATION_WARNING: ${MSG}" \
+    "Path: ${FILE_PATH}"
   exit 0
 fi

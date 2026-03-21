@@ -175,6 +175,61 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Syncs finishopspalupdate helper assets into matching cache versions', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'post-plugin-fixes-home-'));
+    const pluginVersion = JSON.parse(
+      fs.readFileSync(path.join(PLUGIN_ROOT, '.claude-plugin', 'plugin.json'), 'utf8')
+    ).version;
+    const cacheRoot = path.join(
+      tempHome,
+      '.claude',
+      'plugins',
+      'cache',
+      CURRENT_MARKETPLACE_NAME,
+      'opspal-core',
+      pluginVersion
+    );
+    const syncedFiles = [
+      'scripts/finish-opspal-update.sh',
+      'scripts/lib/post-plugin-update-fixes.js',
+      'scripts/lib/hook-merger.js',
+      'scripts/lib/reconcile-hook-registration.js'
+    ];
+
+    try {
+      for (const relativePath of syncedFiles) {
+        const targetPath = path.join(cacheRoot, relativePath);
+        fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+        fs.writeFileSync(targetPath, '// stale runtime helper\n', 'utf8');
+      }
+
+      const PostPluginUpdateFixes = loadFreshFixer(tempHome);
+      const fixer = new PostPluginUpdateFixes({
+        projectRoot: PROJECT_ROOT,
+        corePluginRoot: PLUGIN_ROOT,
+        dryRun: false,
+        verbose: false
+      });
+
+      const result = fixer.syncPluginCacheRoutingAssets();
+      assert.strictEqual(result.fixed, true, 'Matching cache version should be refreshed');
+
+      for (const relativePath of syncedFiles) {
+        const sourcePath = path.join(PLUGIN_ROOT, relativePath);
+        const targetPath = path.join(cacheRoot, relativePath);
+        assert(fs.existsSync(targetPath), `Expected synced runtime helper at ${relativePath}`);
+        assert.strictEqual(
+          fs.readFileSync(targetPath, 'utf8'),
+          fs.readFileSync(sourcePath, 'utf8'),
+          `Expected cache copy of ${relativePath} to match the workspace source`
+        );
+      }
+    } finally {
+      process.env.HOME = originalHome;
+      fs.rmSync(tempHome, { recursive: true, force: true });
+    }
+  }));
+
   results.push(await runTest('Cleans legacy Bash deny rules from user-level settings during hook reconciliation', async () => {
     const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'post-plugin-fixes-home-'));
     const userSettingsPath = path.join(tempHome, '.claude', 'settings.json');

@@ -9,6 +9,10 @@ const { spawnSync } = require('child_process');
 const { HookTester } = require('../runner');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../../../../..');
+const CORE_PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-core');
+const HUBSPOT_PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-hubspot');
+const GTM_PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-gtm-planning');
+const OKR_PLUGIN_ROOT = path.join(PROJECT_ROOT, 'plugins/opspal-okrs');
 const PRE_TASK_GRAPH_TRIGGER = path.join(PROJECT_ROOT, 'plugins/opspal-core/hooks/pre-task-graph-trigger.sh');
 
 function createTester(hookPath) {
@@ -109,6 +113,128 @@ async function runAllTests() {
       name: 'pre-tool-use-contract-validation emits JSON no-op',
       hookPath: 'plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh',
       input: {}
+    },
+    {
+      name: 'pre-operation-data-validator emits JSON no-op',
+      hookPath: 'plugins/opspal-core/hooks/pre-operation-data-validator.sh',
+      input: {
+        tool_name: 'Read',
+        tool_input: {
+          file_path: 'README.md'
+        }
+      }
+    },
+    {
+      name: 'permission-request-handler emits JSON pass-through no-op',
+      hookPath: 'plugins/opspal-core/hooks/permission-request-handler.sh',
+      input: {
+        tool_name: 'Write',
+        tool_input: {
+          file_path: 'notes.txt'
+        }
+      }
+    },
+    {
+      name: 'permission-request-handler emits JSON allow for safe reads',
+      hookPath: 'plugins/opspal-core/hooks/permission-request-handler.sh',
+      input: {
+        tool_name: 'Read',
+        tool_input: {
+          file_path: 'README.md'
+        }
+      },
+      assertResult(result) {
+        assertJsonStdout(result, 'permission-request-handler emits JSON allow for safe reads');
+        assert.strictEqual(
+          result.output?.hookSpecificOutput?.decision?.behavior,
+          'allow',
+          'safe read permission requests should auto-allow'
+        );
+      }
+    },
+    {
+      name: 'hubspot universal-agent-governance emits JSON no-op',
+      hookPath: 'plugins/opspal-hubspot/hooks/universal-agent-governance.sh',
+      input: {
+        tool_name: 'Agent',
+        tool_input: {
+          subagent_type: 'opspal-hubspot:hubspot-contact-manager',
+          prompt: 'Review contact associations and summarize findings'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: HUBSPOT_PLUGIN_ROOT
+      }
+    },
+    {
+      name: 'hubspot pre-task-agent-validator emits JSON no-op',
+      hookPath: 'plugins/opspal-hubspot/hooks/pre-task-agent-validator.sh',
+      input: {
+        tool_name: 'Agent',
+        tool_input: {
+          subagent_type: 'opspal-hubspot:hubspot-contact-manager'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: HUBSPOT_PLUGIN_ROOT
+      }
+    },
+    {
+      name: 'hubspot pre-task-mandatory emits JSON no-op',
+      hookPath: 'plugins/opspal-hubspot/hooks/pre-task-mandatory.sh',
+      input: {
+        tool_name: 'Agent',
+        tool_input: {
+          subagent_type: 'opspal-hubspot:hubspot-contact-manager',
+          prompt: 'Review contact associations and summarize findings'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: HUBSPOT_PLUGIN_ROOT
+      }
+    },
+    {
+      name: 'hubspot pre-write-path-validator emits JSON no-op',
+      hookPath: 'plugins/opspal-hubspot/hooks/pre-write-path-validator.sh',
+      input: {},
+      env: {
+        CLAUDE_PLUGIN_ROOT: HUBSPOT_PLUGIN_ROOT,
+        WRITE_FILE_PATH: 'plugins/opspal-hubspot/scripts/example.js'
+      }
+    },
+    {
+      name: 'hubspot pre-property-write-validation emits JSON no-op',
+      hookPath: 'plugins/opspal-hubspot/hooks/pre-property-write-validation.sh',
+      input: {},
+      env: {
+        TOOL_NAME: 'hubspot_create'
+      }
+    },
+    {
+      name: 'gtm approval gate emits JSON no-op',
+      hookPath: 'plugins/opspal-gtm-planning/hooks/pre-task-gtm-approval-gate.sh',
+      input: {
+        tool_name: 'Agent',
+        tool_input: {
+          subagent_type: 'opspal-gtm-planning:gtm-strategy-planner'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: GTM_PLUGIN_ROOT
+      }
+    },
+    {
+      name: 'gtm write path validator emits JSON no-op',
+      hookPath: 'plugins/opspal-gtm-planning/hooks/pre-write-gtm-path-validator.sh',
+      input: {}
+    },
+    {
+      name: 'okr write path validator emits JSON no-op',
+      hookPath: 'plugins/opspal-okrs/hooks/pre-write-okr-path-validator.sh',
+      input: {},
+      env: {
+        CLAUDE_PLUGIN_ROOT: OKR_PLUGIN_ROOT
+      }
     }
   ];
 
@@ -122,11 +248,16 @@ async function runAllTests() {
           input: hookCase.input,
           env: {
             HOME: home,
+            CLAUDE_PLUGIN_ROOT: CORE_PLUGIN_ROOT,
             ...(hookCase.env || {})
           }
         });
 
-        assertJsonStdout(result, hookCase.name);
+        if (typeof hookCase.assertResult === 'function') {
+          hookCase.assertResult(result);
+        } else {
+          assertJsonStdout(result, hookCase.name);
+        }
       } finally {
         fs.rmSync(home, { recursive: true, force: true });
       }

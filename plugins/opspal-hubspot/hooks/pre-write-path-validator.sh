@@ -28,6 +28,35 @@ fi
 PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/../../.." && pwd)}"
 BLOCK_ON_PATH_VIOLATION="${HUBSPOT_PATH_VALIDATOR_BLOCK:-1}"
 
+emit_pretool_noop() {
+    printf '{}\n'
+}
+
+emit_pretool_response() {
+    local permission_decision="$1"
+    local permission_reason="$2"
+    local additional_context="${3:-}"
+
+    if ! command -v jq >/dev/null 2>&1; then
+        emit_pretool_noop
+        return 0
+    fi
+
+    jq -nc \
+      --arg decision "$permission_decision" \
+      --arg reason "$permission_reason" \
+      --arg context "$additional_context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: (
+          { hookEventName: "PreToolUse" }
+          + (if $decision != "" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "" then { additionalContext: $context } else {} end)
+        )
+      }'
+}
+
 emit_path_violation() {
     local message="$1"
     echo "⚠️  Path Validation Warning" >&2
@@ -38,9 +67,18 @@ emit_path_violation() {
     echo "" >&2
     if [[ "$BLOCK_ON_PATH_VIOLATION" == "1" ]]; then
         echo "❌ Write blocked by pre-write path validator" >&2
-        exit 2
+        emit_pretool_response \
+          "deny" \
+          "HUBSPOT_PATH_VALIDATION_BLOCKED: ${message}" \
+          "Path: ${FILE_PATH}"
+        exit 0
     fi
     echo "ℹ️  Continuing because HUBSPOT_PATH_VALIDATOR_BLOCK=$BLOCK_ON_PATH_VIOLATION" >&2
+    emit_pretool_response \
+      "allow" \
+      "HUBSPOT_PATH_VALIDATION_WARNING: ${message}" \
+      "Path: ${FILE_PATH}"
+    exit 0
 }
 
 # Get file path from environment or arguments
@@ -48,6 +86,7 @@ FILE_PATH="${WRITE_FILE_PATH:-$1}"
 
 # Exit if no file path
 if [[ -z "$FILE_PATH" ]]; then
+    emit_pretool_noop
     exit 0
 fi
 
@@ -56,6 +95,7 @@ REQUIREMENTS_FILE="$PROJECT_ROOT/.claude/domain-path-requirements.json"
 
 if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
     # No requirements file - allow
+    emit_pretool_noop
     exit 0
 fi
 
@@ -78,5 +118,5 @@ if [[ "$FILE_PATH" == *"REPORT"* ]] || [[ "$FILE_PATH" == *"SUMMARY"* ]]; then
     fi
 fi
 
-echo "✅ Path validation passed"
+emit_pretool_noop
 exit 0

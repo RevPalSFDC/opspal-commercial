@@ -29,6 +29,35 @@ PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
 BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
 STRICT_VALIDATION="${HUBSPOT_TASK_AGENT_VALIDATOR_STRICT:-0}"
 
+emit_pretool_noop() {
+    printf '{}\n'
+}
+
+emit_pretool_response() {
+    local permission_decision="$1"
+    local permission_reason="$2"
+    local additional_context="${3:-}"
+
+    if ! command -v jq >/dev/null 2>&1; then
+        emit_pretool_noop
+        return 0
+    fi
+
+    jq -nc \
+      --arg decision "$permission_decision" \
+      --arg reason "$permission_reason" \
+      --arg context "$additional_context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: (
+          { hookEventName: "PreToolUse" }
+          + (if $decision != "" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "" then { additionalContext: $context } else {} end)
+        )
+      }'
+}
+
 # Read hook input from stdin if available
 HOOK_INPUT=""
 if [[ ! -t 0 ]]; then
@@ -52,12 +81,14 @@ AGENT_NAME_LOWER="$(printf '%s' "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')"
 # Only validate HubSpot-local agent launches here. Other plugin agents should
 # not inherit HubSpot routing behavior just because this plugin is enabled.
 if [[ -z "$AGENT_NAME_LOWER" ]] || [[ "$AGENT_NAME_LOWER" != *"hubspot"* ]]; then
+    emit_pretool_noop
     exit 0
 fi
 
 # Exit if no task description
 if [[ -z "$TASK_DESC" ]]; then
     # Not blocking - just informational
+    emit_pretool_noop
     exit 0
 fi
 
@@ -86,7 +117,11 @@ if [[ -f "$DETECTOR_SCRIPT" ]]; then
             if [[ "$STRICT_VALIDATION" == "1" ]]; then
                 echo "" >&2
                 echo "❌ Blocking due to HUBSPOT_TASK_AGENT_VALIDATOR_STRICT=1" >&2
-                exit "$BLOCK_EXIT_CODE"
+                emit_pretool_response \
+                  "deny" \
+                  "HUBSPOT_AGENT_VALIDATION_STRICT: Selected agent '${AGENT_NAME}' did not match HubSpot task routing guidance." \
+                  "Suggested agent: ${SUGGESTED_AGENT}. Validation detail: ${VALIDATION}"
+                exit 0
             fi
         else
             echo "✅ Agent validation passed: $AGENT_NAME" >&2
@@ -99,4 +134,5 @@ if [[ -f "$DETECTOR_SCRIPT" ]]; then
     fi
 fi
 
+emit_pretool_noop
 exit 0

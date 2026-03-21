@@ -263,6 +263,34 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Rejects generic role labels like Explore', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'Explore',
+      prompt: 'Inspect deployment blockers'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0 for contract handling');
+    assert.strictEqual(
+      result.output?.hookSpecificOutput?.permissionDecision,
+      'deny',
+      'Generic role labels should be denied'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('Generic role labels'),
+      'Should explain that generic role labels are unsupported'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('Use fully-qualified names'),
+      'Should direct the caller to fully-qualified agent names'
+    );
+  }));
+
   // Test 7: Invalid JSON handling
   results.push(await runTest('Handles invalid JSON input gracefully', async () => {
     const env = createIsolatedEnv();

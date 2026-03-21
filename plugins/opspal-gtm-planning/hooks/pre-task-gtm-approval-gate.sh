@@ -29,7 +29,37 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 ENABLED="${GTM_APPROVAL_GATE_ENABLED:-1}"
 STRICT="${GTM_APPROVAL_GATE_STRICT:-0}"
 
+emit_pretool_noop() {
+  printf '{}\n'
+}
+
+emit_pretool_response() {
+  local permission_decision="$1"
+  local permission_reason="$2"
+  local additional_context="${3:-}"
+
+  if ! command -v jq >/dev/null 2>&1; then
+    emit_pretool_noop
+    return 0
+  fi
+
+  jq -nc \
+    --arg decision "$permission_decision" \
+    --arg reason "$permission_reason" \
+    --arg context "$additional_context" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: (
+        { hookEventName: "PreToolUse" }
+        + (if $decision != "" then { permissionDecision: $decision } else {} end)
+        + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+        + (if $context != "" then { additionalContext: $context } else {} end)
+      )
+    }'
+}
+
 if [[ "$ENABLED" != "1" ]]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -52,12 +82,14 @@ case "$AGENT_LOWER" in
   *gtm-planning*|*gtm-strategy*|*gtm-territory*|*gtm-quota*|*gtm-comp*|*gtm-attribution*|*gtm-data*|*gtm-revenue*|*gtm-retention*|*gtm-market*|*gtm-strategic*|*forecast-orchestrator*)
     ;;
   *)
+    emit_pretool_noop
     exit 0
     ;;
 esac
 
 # Require ORG_SLUG
 if [[ -z "${ORG_SLUG:-}" ]]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -81,6 +113,7 @@ REQUIRED_PHASE=$(get_agent_phase "$AGENT_LOWER")
 
 # Phase 0 = reporting/analytics agents, no gate needed
 if [[ "$REQUIRED_PHASE" == "0" ]]; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -101,11 +134,13 @@ fi
 # No state file = no enforcement (first run)
 if [[ -z "$STATE_FILE" ]] || [[ ! -f "$STATE_FILE" ]]; then
   echo "[GTM-GATE] No cycle-state.json found — running without gate enforcement" >&2
+  emit_pretool_noop
   exit 0
 fi
 
 # Read phase states
 if ! command -v jq &>/dev/null; then
+  emit_pretool_noop
   exit 0
 fi
 
@@ -133,10 +168,19 @@ if [[ "$BLOCKED" == "true" ]]; then
     echo "[GTM-GATE] BLOCKED: Agent ${AGENT_NAME} requires Phase ${REQUIRED_PHASE}, but prerequisite phases incomplete: ${MISSING_GATES}" >&2
     echo "[GTM-GATE] Complete and approve prerequisite phases before proceeding." >&2
     echo "[GTM-GATE] To override: export GTM_APPROVAL_GATE_STRICT=0" >&2
-    exit 2
+    emit_pretool_response \
+      "deny" \
+      "GTM_APPROVAL_GATE_BLOCKED: Agent ${AGENT_NAME} requires Phase ${REQUIRED_PHASE}, but prerequisite phases are incomplete." \
+      "Missing gates: ${MISSING_GATES}."
+    exit 0
   else
     echo "[GTM-GATE] WARNING: Agent ${AGENT_NAME} (Phase ${REQUIRED_PHASE}) invoked but prerequisite phases incomplete: ${MISSING_GATES}" >&2
     echo "[GTM-GATE] Consider completing prerequisite phases first for methodology compliance." >&2
+    emit_pretool_response \
+      "allow" \
+      "GTM_APPROVAL_GATE_WARNING: Prerequisite phases are incomplete for ${AGENT_NAME}." \
+      "Missing gates: ${MISSING_GATES}."
+    exit 0
   fi
 fi
 
@@ -147,4 +191,5 @@ if [[ "$REQUIRED_PHASE" -gt "$CURRENT_PHASE" ]] && [[ "$BLOCKED" != "true" ]]; t
     mv "$TMP_STATE" "$STATE_FILE" || rm -f "$TMP_STATE"
 fi
 
+emit_pretool_noop
 exit 0

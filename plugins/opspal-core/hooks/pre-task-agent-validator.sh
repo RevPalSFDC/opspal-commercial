@@ -519,13 +519,14 @@ main() {
         # Get suggestions using the last part of the name
         SEARCH_TERM="${AGENT_NAME##*-}"
         SUGGESTIONS=$(node "$AGENT_RESOLVER" search "$SEARCH_TERM" 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
+        EXAMPLE_AGENTS=$(node "$AGENT_RESOLVER" list 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
 
         # Log metric: agent not found
         log_routing_metric "$AGENT_NAME" "" "false" "true" "agent_not_found" "Agent not found in any plugin"
 
         emit_pretool_response \
           "deny" \
-          "ROUTING_AGENT_NOT_FOUND: Agent '$AGENT_NAME' not found in any plugin. Suggestions: ${SUGGESTIONS:-none}. Use fully-qualified names like 'opspal-salesforce:sfdc-revops-auditor'." \
+          "ROUTING_AGENT_NOT_FOUND: Agent '$AGENT_NAME' not found in any plugin. Suggestions: ${SUGGESTIONS:-none}. Use fully-qualified names like 'opspal-salesforce:sfdc-revops-auditor'. Generic role labels such as 'Explore' are not valid agent names. Valid agents include: ${EXAMPLE_AGENTS:-opspal-salesforce:sfdc-revops-auditor, opspal-salesforce:sfdc-cpq-assessor}." \
           "" \
           "" \
           "ROUTING_AGENT_NOT_FOUND" \

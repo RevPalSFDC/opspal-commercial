@@ -172,7 +172,7 @@ fi
 
 # Fallback: hardcoded minimal reminder
 if [ -z "$ROUTING_TEXT" ]; then
-  ROUTING_TEXT="ROUTING REMINDER: For revops/audit use sfdc-revops-auditor, cpq/quote use sfdc-cpq-assessor, automation audit use sfdc-automation-auditor, hubspot assessment use hubspot-assessment-analyzer. Always invoke via Agent(subagent_type='<agent>', prompt=<request>)."
+  ROUTING_TEXT="ROUTING REMINDER: For revops/audit use opspal-salesforce:sfdc-revops-auditor, cpq/quote use opspal-salesforce:sfdc-cpq-assessor, automation audit use opspal-salesforce:sfdc-automation-auditor, hubspot assessment use opspal-hubspot:hubspot-assessment-analyzer. Always invoke via Agent(subagent_type='<fully-qualified-agent>', prompt=<request>). Use fully-qualified names only and never generic labels like Explore."
 fi
 
 # Escape for JSON

@@ -230,13 +230,14 @@ function buildGuidanceLines(cohorts, artifacts, missingArtifacts) {
 
   for (const artifact of artifacts) {
     const marker = artifact.exists ? '[OK]' : '[MISSING]';
-    lines.push(`- ${marker} (${artifact.cohort}) ${artifact.path}`);
+    lines.push(`- ${marker} (${artifact.cohort}) ${artifact.absolute_path || artifact.path}`);
   }
 
   if (missingArtifacts.length > 0) {
     lines.push('Missing artifacts must be remediated before strict execution.');
   }
 
+  lines.push('Use the canonical runtime paths above. If any path is missing or uncertain, use LS or Glob before Read instead of guessing workspace-relative plugin paths.');
   lines.push('Cite runbook evidence in the final sub-agent response.');
   return lines;
 }

@@ -51,6 +51,24 @@ function rewriteCommandPaths(command, projectRoot) {
     .replace(absoluteRootPattern, normalizedRoot)
     .replace(homeRootPattern, normalizedRoot);
 
+  rewritten = rewritten
+    .replace(
+      /\/home\/[^/'"\s]+\/\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/([^/'"\s]+)/g,
+      `${normalizedRoot}/plugins/$1`
+    )
+    .replace(
+      /\$HOME\/\.claude\/plugins\/marketplaces\/[^/'"\s]+\/plugins\/([^/'"\s]+)/g,
+      `${normalizedRoot}/plugins/$1`
+    )
+    .replace(
+      /\/home\/[^/'"\s]+\/\.claude\/plugins\/cache\/[^/'"\s]+\/([^/'"\s]+)\/[^/'"\s]+/g,
+      `${normalizedRoot}/plugins/$1`
+    )
+    .replace(
+      /\$HOME\/\.claude\/plugins\/cache\/[^/'"\s]+\/([^/'"\s]+)\/[^/'"\s]+/g,
+      `${normalizedRoot}/plugins/$1`
+    );
+
   const wrongDeveloperToolsRoot = `${normalizedRoot}/plugins/developer-tools-plugin`;
   const correctDeveloperToolsRoot = `${normalizedRoot}/dev-tools/developer-tools-plugin`;
   rewritten = rewritten.replace(new RegExp(escapeRegExp(wrongDeveloperToolsRoot), 'g'), correctDeveloperToolsRoot);

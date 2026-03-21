@@ -15,12 +15,17 @@
 
 set -euo pipefail
 
+emit_pretool_noop() {
+  printf '{}\n'
+}
+
 # Only run for HubSpot write operations
 TOOL_NAME="${TOOL_NAME:-}"
 case "$TOOL_NAME" in
   hubspot_create|hubspot_update|hubspot_batch_upsert)
     ;;
   *)
+    emit_pretool_noop
     exit 0
     ;;
 esac
@@ -60,4 +65,5 @@ if [ "$HAS_PROPERTIES" -gt 0 ]; then
   fi
 fi
 
+emit_pretool_noop
 exit 0

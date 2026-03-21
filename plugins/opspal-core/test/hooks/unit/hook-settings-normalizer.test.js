@@ -225,6 +225,36 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Rewrites marketplace and cache plugin roots before Bash deduplication', async () => {
+    const normalized = normalizeProjectHookSettings({
+      hooks: {
+        PreToolUse: [
+          {
+            matcher: 'Bash(sf data query*)',
+            hooks: [
+              {
+                type: 'command',
+                command: '/home/chris/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-salesforce/hooks/pre-bash-soql-validator.sh'
+              },
+              {
+                type: 'command',
+                command: '/home/chris/.claude/plugins/cache/revpal-internal-plugins/opspal-salesforce/3.84.3/hooks/pre-bash-soql-validator.sh'
+              }
+            ]
+          }
+        ]
+      }
+    }, { projectRoot });
+
+    const preToolBashGroup = normalized.hooks.PreToolUse.find((group) => group.matcher === 'Bash');
+    assert(preToolBashGroup, 'Bash group should remain after normalization');
+    assert.strictEqual(preToolBashGroup.hooks.length, 1, 'Equivalent marketplace/cache hooks should collapse into one normalized command');
+    assert(
+      preToolBashGroup.hooks[0].command.includes(`${projectRoot}/plugins/opspal-salesforce/hooks/pre-bash-soql-validator.sh`),
+      'Normalized hook command should point to the current project plugin root'
+    );
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.filter((result) => !result.passed).length;
 

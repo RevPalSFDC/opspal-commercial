@@ -12,6 +12,12 @@ const { validateAnalysis } = require(path.join(
   '../../../../../scripts/validate-claude-runtime-replay.js'
 ));
 
+const DEPLOY_INCIDENT_FIXTURE = path.join(
+  __dirname,
+  '..',
+  'fixtures',
+  'claude-debug-salesforce-deploy-incident.log'
+);
 const READ_FAILURE_FIXTURE = path.join(
   __dirname,
   '..',
@@ -37,7 +43,15 @@ async function runAllTests() {
 
   const results = [];
 
-  results.push(await runTest('Flags attachment bloat, Agent fanout, and Read failures', async () => {
+  results.push(await runTest('Flags plain-text hook output, attachment bloat, and Agent fanout', async () => {
+    const analysis = analyzeClaudeDebugLogFile(DEPLOY_INCIDENT_FIXTURE);
+    const { failures } = validateAnalysis(analysis);
+
+    assert(failures.some((failure) => failure.includes('Plain-text hook outputs exceeded budget')), 'Should flag plain-text hook outputs');
+    assert(failures.some((failure) => failure.includes('Attached skills exceeded budget')), 'Should flag oversized skill attachments');
+  }));
+
+  results.push(await runTest('Flags Read failures from the read-path fixture', async () => {
     const analysis = analyzeClaudeDebugLogFile(READ_FAILURE_FIXTURE);
     const { failures } = validateAnalysis(analysis);
 

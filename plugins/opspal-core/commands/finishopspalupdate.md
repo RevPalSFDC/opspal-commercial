@@ -105,7 +105,7 @@ After execution, summarize the results to the user.
 3. **Repairs and verifies the installed runtime before routing validation**:
    - Runs `post-plugin-update-fixes.js` to reconcile the live installed runtime
    - Ensures `installed_plugins.json` points at the current versioned cache entry
-   - Syncs the canonical cache bundle, including `.claude-plugin/hooks.json`
+   - Syncs the canonical cache bundle, including `.claude-plugin/hooks.json` plus the finish/update runtime helpers used for hook reconciliation
    - Verifies wildcard `PreToolUse(*)` routing gate registration
    - Clears expired routing state, legacy routing-state files, and routing circuit breaker files
 

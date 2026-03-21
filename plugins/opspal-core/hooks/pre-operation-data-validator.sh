@@ -64,6 +64,35 @@ read_stdin_json() {
     fi
 }
 
+emit_pretool_noop() {
+    printf '{}\n'
+}
+
+emit_pretool_decision() {
+    local permission_decision="$1"
+    local permission_reason="$2"
+    local additional_context="${3:-}"
+
+    if ! command -v jq >/dev/null 2>&1; then
+        emit_pretool_noop
+        return 0
+    fi
+
+    jq -nc \
+      --arg decision "$permission_decision" \
+      --arg reason "$permission_reason" \
+      --arg context "$additional_context" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: (
+          { hookEventName: "PreToolUse" }
+          + (if $decision != "" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "" then { additionalContext: $context } else {} end)
+        )
+      }'
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
 PROJECT_ROOT="$(cd "$PLUGIN_DIR/../.." 2>/dev/null && pwd || pwd)"
@@ -143,12 +172,14 @@ fi
 
 # Exit early if disabled
 if [ "$ENABLED" != "1" ]; then
+    emit_pretool_noop
     exit 0
 fi
 
 # Check if data quality monitor exists
 if [ ! -f "$DATA_QUALITY_MONITOR" ]; then
     echo "Warning: data-quality-monitor.js not found at $DATA_QUALITY_MONITOR" >&2
+    emit_pretool_noop
     exit 0
 fi
 
@@ -156,6 +187,7 @@ fi
 INPUT_DATA=$(read_stdin_json)
 
 if [ -z "$INPUT_DATA" ]; then
+    emit_pretool_noop
     exit 0
 fi
 
@@ -178,6 +210,7 @@ else
 fi
 
 if [ -z "$TOOL_NAME" ]; then
+    emit_pretool_noop
     exit 0
 fi
 
@@ -327,6 +360,7 @@ OPERATION_TYPE=$(is_data_operation "$TOOL_NAME" "$TOOL_INPUT" 2>/dev/null || tru
 
 if [ -z "$OPERATION_TYPE" ]; then
     # Not a data operation, skip validation
+    emit_pretool_noop
     exit 0
 fi
 
@@ -341,9 +375,14 @@ if [ "$DATA_COUNT" == "0" ] || [ "$DATA_COUNT" == "null" ]; then
         [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Merge validation blocked - no decision data extracted" \
             "{\"operationType\":\"$OPERATION_TYPE\",\"tool\":\"$TOOL_NAME\"}" 2>/dev/null || true
         echo "Data validation blocked: unable to extract merge decision records (expected --decisions JSON)." >&2
-        exit 1
+        emit_pretool_decision \
+          "deny" \
+          "DATA_VALIDATION_BLOCKED: Unable to extract merge decision records (expected --decisions JSON)." \
+          "Operation type: ${OPERATION_TYPE}. Use a valid --decisions JSON payload before retrying."
+        exit 0
     fi
     # No data to validate, allow operation
+    emit_pretool_noop
     exit 0
 fi
 
@@ -351,7 +390,11 @@ if [ "$OPERATION_TYPE" = "merge_decision_data" ] && [ "$DATA_COUNT" -lt "$MERGE_
     [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Merge validation blocked - insufficient sample size" \
         "{\"operationType\":\"$OPERATION_TYPE\",\"recordCount\":$DATA_COUNT,\"requiredMin\":$MERGE_MIN_SAMPLE_SIZE}" 2>/dev/null || true
     echo "Data validation blocked: merge decision sample too small ($DATA_COUNT records, requires >= $MERGE_MIN_SAMPLE_SIZE)." >&2
-    exit 1
+    emit_pretool_decision \
+      "deny" \
+      "DATA_VALIDATION_BLOCKED: Merge decision sample too small (${DATA_COUNT} records, requires >= ${MERGE_MIN_SAMPLE_SIZE})." \
+      "Operation type: ${OPERATION_TYPE}. Increase the merge decision sample before retrying."
+    exit 0
 fi
 
 # Run validation via Node.js data-quality-monitor
@@ -655,18 +698,22 @@ if [ "$ERROR_COUNT" -gt 0 ]; then
             "$ERROR_COUNT validation errors found in $RECORD_COUNT records" \
             "Operation:$OPERATION_TYPE,Errors:$ERROR_COUNT,Records:$RECORD_COUNT,Valid:$VALID_COUNT,QualityScore:$QUALITY_SCORE,QualityConfidence:$QUALITY_CONFIDENCE" \
             "Review the validation errors below,Fix invalid data before proceeding,Use semantic validation for business rule compliance" \
-            "Prevents data quality issues | \$45K/year ROI" 2>/dev/null || true
+            "Prevents data quality issues | \$45K/year ROI" 1>&2 2>/dev/null || true
     fi
 
-    echo ""
-    echo "Validation Errors:"
-    echo "$FIRST_ERRORS"
+    ERROR_CONTEXT="Validation errors for ${OPERATION_TYPE} (${VALID_COUNT}/${RECORD_COUNT} valid, quality score ${QUALITY_SCORE}).
+${FIRST_ERRORS}"
 
     if [ "$ERROR_COUNT" -gt 3 ]; then
-        echo "... and $((ERROR_COUNT - 3)) more errors"
+        ERROR_CONTEXT="${ERROR_CONTEXT}
+... and $((ERROR_COUNT - 3)) more errors"
     fi
 
-    exit 1
+    emit_pretool_decision \
+      "deny" \
+      "DATA_VALIDATION_ERRORS: ${ERROR_COUNT} validation errors found in ${RECORD_COUNT} records." \
+      "$ERROR_CONTEXT"
+    exit 0
 fi
 
 # Handle warnings
@@ -683,21 +730,28 @@ if [ "$WARNING_COUNT" -gt 0 ]; then
                 "$WARNING_COUNT warnings found - blocking due to STRICT mode" \
                 "Operation:$OPERATION_TYPE,Warnings:$WARNING_COUNT,Records:$RECORD_COUNT,QualityScore:$QUALITY_SCORE,QualityConfidence:$QUALITY_CONFIDENCE" \
                 "Review warnings and fix if needed,Set DATA_VALIDATION_STRICT=0 to allow with warnings" \
-                "" 2>/dev/null || true
+                "" 1>&2 2>/dev/null || true
         fi
 
-        echo ""
-        echo "Validation Warnings (blocking in STRICT mode):"
-        echo "$FIRST_WARNINGS"
+        WARNING_CONTEXT="Validation warnings for ${OPERATION_TYPE} (${VALID_COUNT}/${RECORD_COUNT} valid, quality score ${QUALITY_SCORE}).
+${FIRST_WARNINGS}"
 
-        exit 1
+        emit_pretool_decision \
+          "deny" \
+          "DATA_VALIDATION_WARNINGS_STRICT: ${WARNING_COUNT} warnings found in ${RECORD_COUNT} records." \
+          "$WARNING_CONTEXT"
+        exit 0
     else
-        # Exit 2 pattern: Feedback to Claude but allow operation
+        WARNING_CONTEXT="Data validation warnings for ${OPERATION_TYPE}: ${WARNING_COUNT} warnings, ${VALID_COUNT}/${RECORD_COUNT} valid, quality score ${QUALITY_SCORE}."
         [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed with warnings" \
             "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
 
         echo "Data validation: $VALID_COUNT/$RECORD_COUNT records valid ($WARNING_COUNT warnings, quality score $QUALITY_SCORE)" >&2
-        exit 2
+        emit_pretool_decision \
+          "allow" \
+          "DATA_VALIDATION_WARNINGS: ${WARNING_COUNT} warnings found in ${RECORD_COUNT} records." \
+          "$WARNING_CONTEXT"
+        exit 0
     fi
 fi
 
@@ -705,4 +759,5 @@ fi
 [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed" \
     "{\"operationType\":\"$OPERATION_TYPE\",\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE,\"staleHardViolations\":$STALE_HARD_VIOLATIONS}" 2>/dev/null || true
 
+emit_pretool_noop
 exit 0
