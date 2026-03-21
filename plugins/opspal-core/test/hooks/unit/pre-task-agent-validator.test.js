@@ -127,11 +127,11 @@ async function runAllTests() {
     assert.deepStrictEqual(result.output, {}, 'Should emit empty JSON for pass-through');
   }));
 
-  // Test 3: Already fully-qualified name passes through
-  results.push(await runTest('Passes through fully-qualified agent name', async () => {
+  // Test 3: Already fully-qualified non-Bash agent passes through
+  results.push(await runTest('Passes through fully-qualified non-Bash agent name', async () => {
     const env = createIsolatedEnv();
     const input = createAgentEvent({
-      subagent_type: 'opspal-salesforce:sfdc-cpq-assessor',
+      subagent_type: 'opspal-salesforce:sfdc-cpq-specialist',
       prompt: 'test prompt'
     });
 
@@ -141,7 +141,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.deepStrictEqual(result.output, {}, 'Should not emit updates for fully-qualified names');
+    assert.deepStrictEqual(result.output, {}, 'Should not emit updates for fully-qualified agents that do not require extra tool contracts');
   }));
 
   results.push(await runTest('Allows Claude internal helper agents to pass through', async () => {
@@ -201,10 +201,20 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
     assert.strictEqual(
-      result.output?.hookSpecificOutput?.updatedInput?.subagent_type,
+      updatedInput?.subagent_type,
       'opspal-salesforce:sfdc-deployment-manager',
       'Salesforce metadata deploys should be rerouted to the designated deployment specialist'
+    );
+    assert(
+      (updatedInput?.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
+      'Rerouted deployment specialist should receive the Bash permission fallback marker'
+    );
+    assert.strictEqual(
+      updatedInput?.permission_contract?.fallbackMarker,
+      'SUBAGENT_BASH_PERMISSION_BLOCKED',
+      'Rerouted deployment specialist should receive the Bash permission contract'
     );
     assert(
       (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_SPECIALIST_OVERRIDE'),
@@ -407,6 +417,96 @@ async function runAllTests() {
       result.output?.hookSpecificOutput?.permissionDecision,
       'allow',
       'Contract-injected updates should explicitly allow execution'
+    );
+  }));
+
+  results.push(await runTest('Injects Bash permission fallback contract for Salesforce deployment manager', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'opspal-salesforce:sfdc-deployment-manager',
+      prompt: 'Run sf project deploy start for package.xml updates covering flow deactivation changes'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+    assert(updatedInput, 'Should emit updated input contract for deployment manager');
+    assert(
+      (updatedInput.prompt || '').includes('SUBAGENT_BASH_PERMISSION_BLOCKED'),
+      'Deployment manager prompt should include explicit permission-block fallback marker'
+    );
+    assert.deepStrictEqual(
+      updatedInput.permission_contract?.requiredTools,
+      ['Bash'],
+      'Deployment manager contract should explicitly require Bash'
+    );
+    assert.strictEqual(
+      updatedInput.permission_contract?.fallbackMarker,
+      'SUBAGENT_BASH_PERMISSION_BLOCKED',
+      'Deployment manager contract should define explicit fallback marker'
+    );
+    assert.strictEqual(
+      result.output?.hookSpecificOutput?.permissionDecision,
+      'allow',
+      'Deployment manager contract-injected updates should explicitly allow execution'
+    );
+  }));
+
+  results.push(await runTest('Injects Bash permission fallback contract for HubSpot Bash agents', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'opspal-hubspot:hubspot-cms-theme-manager',
+      prompt: 'Generate and validate the HubSpot CMS theme packaging assets'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+    assert(updatedInput, 'Should emit updated input contract for HubSpot Bash agents');
+    assert.deepStrictEqual(
+      updatedInput.permission_contract?.requiredTools,
+      ['Bash'],
+      'HubSpot Bash agent contract should explicitly require Bash'
+    );
+    assert.strictEqual(
+      updatedInput.permission_contract?.fallbackMarker,
+      'SUBAGENT_BASH_PERMISSION_BLOCKED',
+      'HubSpot Bash agent contract should define explicit fallback marker'
+    );
+  }));
+
+  results.push(await runTest('Injects Bash permission fallback contract for Marketo Bash agents', async () => {
+    const env = createIsolatedEnv();
+    const input = createAgentEvent({
+      subagent_type: 'opspal-marketo:marketo-data-operations',
+      prompt: 'Run the Marketo bulk extract validation workflow and summarize the results'
+    });
+
+    const result = await tester.run({
+      input,
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const updatedInput = result.output?.hookSpecificOutput?.updatedInput;
+    assert(updatedInput, 'Should emit updated input contract for Marketo Bash agents');
+    assert.deepStrictEqual(
+      updatedInput.permission_contract?.requiredTools,
+      ['Bash'],
+      'Marketo Bash agent contract should explicitly require Bash'
+    );
+    assert.strictEqual(
+      updatedInput.permission_contract?.fallbackMarker,
+      'SUBAGENT_BASH_PERMISSION_BLOCKED',
+      'Marketo Bash agent contract should define explicit fallback marker'
     );
   }));
 

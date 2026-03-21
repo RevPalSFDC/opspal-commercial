@@ -10,6 +10,7 @@ tools:
   - mcp_salesforce_data_query
   - mcp_salesforce_data_create
   - mcp_salesforce_data_update
+  - mcp__context7__*
   - Read
   - Write
   - TodoWrite

@@ -23,6 +23,7 @@ VERBOSE="${TASK_VALIDATOR_VERBOSE:-0}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 AGENT_RESOLVER="$PLUGIN_ROOT/scripts/lib/agent-alias-resolver.js"
+AGENT_TOOL_REGISTRY="$PLUGIN_ROOT/scripts/lib/agent-tool-registry.js"
 CROSS_PLUGIN_COORDINATOR="$PLUGIN_ROOT/scripts/lib/cross-plugin-coordinator.js"
 ROUTING_METRICS="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
@@ -316,10 +317,19 @@ apply_subagent_permission_contract() {
     local input_json="$1"
     local resolved_agent="${2:-}"
 
-    # Agents that routinely require Bash access for CLI/API query workflows.
-    local bash_required_agents='sfdc-data-operations|sfdc-query-specialist|sfdc-bulkops-orchestrator|sfdc-upsert-orchestrator|marketo-data-operations|marketo-observability-orchestrator|hubspot-data-operations-manager'
+    # Prefer metadata-driven tool detection from agent frontmatter/routing-index.
+    # Keep the legacy fallback list for stale runtimes that have not refreshed
+    # supporting helper files yet.
+    local bash_required_agents='sfdc-data-operations|sfdc-query-specialist|sfdc-bulkops-orchestrator|sfdc-upsert-orchestrator|sfdc-deployment-manager|instance-deployer|marketo-data-operations|marketo-observability-orchestrator|hubspot-data-operations-manager'
+    local requires_bash_contract="false"
 
-    if [ -z "$resolved_agent" ] || ! echo "$resolved_agent" | grep -qiE "$bash_required_agents"; then
+    if [ -n "$resolved_agent" ] && [ -f "$AGENT_TOOL_REGISTRY" ] && node "$AGENT_TOOL_REGISTRY" has-tool "$resolved_agent" "Bash" "$PLUGIN_ROOT" >/dev/null 2>&1; then
+        requires_bash_contract="true"
+    elif [ -n "$resolved_agent" ] && echo "$resolved_agent" | grep -qiE "$bash_required_agents"; then
+        requires_bash_contract="true"
+    fi
+
+    if [ -z "$resolved_agent" ] || [ "$requires_bash_contract" != "true" ]; then
         echo "$input_json"
         return 0
     fi

@@ -3,6 +3,13 @@ name: sfdc-metadata-analyzer
 description: "Use PROACTIVELY for metadata analysis."
 color: blue
 tools:
+  - mcp_salesforce
+  - mcp_salesforce_data_query
+  - mcp_salesforce_metadata_describe
+  - Read
+  - Grep
+  - TodoWrite
+  - Bash
   - Task
 disallowedTools:
   - Write
