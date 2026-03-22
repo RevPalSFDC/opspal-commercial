@@ -147,6 +147,12 @@ DUPLICATE_ERRORS=0
 STRUCTURAL_ERRORS=0
 FIELD_EXISTENCE_ERRORS=0
 FLOWS_PASSED=0
+USED_FALLBACK_SCOPE=0
+PER_FLOW_JSON='[]'
+
+if [ -z "$SCOPE_ANALYSIS" ] || ! printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/null 2>&1; then
+    USED_FALLBACK_SCOPE=1
+fi
 
 if [ -z "$TARGET_ORG" ]; then
     echo "ℹ️  Field existence validation skipped (SF_TARGET_ORG not set)"
@@ -159,19 +165,26 @@ while IFS= read -r flow_file; do
 
     FLOW_NAME=$(basename "$flow_file" .flow-meta.xml)
     FLOW_FAILED=0
+    FLOW_LOGIC_OK=1
+    FLOW_STRUCT_OK=1
+    FLOW_DUP_OK=1
+    FLOW_EXIST_OK=1
     TMP_OUTPUT="${TMPDIR:-/tmp}/flow-validation-$$.json"
 
     # Phase 1: Decision logic validation
     if [ -f "$VALIDATOR_SCRIPT" ]; then
-        if node "$VALIDATOR_SCRIPT" "$flow_file" > "$TMP_OUTPUT" 2>&1; then
+        if node "$VALIDATOR_SCRIPT" "$flow_file" --json > "$TMP_OUTPUT" 2>&1; then
             echo "  ✅ $FLOW_NAME (logic)"
         else
             VALIDATION_FAILED=1
             FLOW_FAILED=1
+            FLOW_LOGIC_OK=0
             LOGIC_ERRORS=$((LOGIC_ERRORS + 1))
             echo "  ❌ $FLOW_NAME (logic) - validation failed"
-            if [ -f "$TMP_OUTPUT" ]; then
-                grep -E "ERROR|WARNING" "$TMP_OUTPUT" | head -5 || true
+            if [ -f "$TMP_OUTPUT" ] && jq -e '.errors' "$TMP_OUTPUT" >/dev/null 2>&1; then
+                jq -r '.errors[:3][] | "     [\(.type // "ERROR")] \(.message // "unknown")"' "$TMP_OUTPUT" 2>/dev/null || true
+            elif [ -f "$TMP_OUTPUT" ]; then
+                grep -E "ERROR|WARNING" "$TMP_OUTPUT" 2>/dev/null | head -3 || true
             fi
         fi
     fi
@@ -187,6 +200,7 @@ while IFS= read -r flow_file; do
         if [ "$STRUCT_ERROR_COUNT" -gt 0 ]; then
             VALIDATION_FAILED=1
             FLOW_FAILED=1
+            FLOW_STRUCT_OK=0
             STRUCTURAL_ERRORS=$((STRUCTURAL_ERRORS + STRUCT_ERROR_COUNT))
             echo "  ❌ $FLOW_NAME (structure) - $STRUCT_ERROR_COUNT error(s)"
             echo "$STRUCT_RESULT" | jq -r '.errors[:3][]? | "     - [\(.type)] \(.message)"' 2>/dev/null || true
@@ -203,19 +217,20 @@ while IFS= read -r flow_file; do
         fi
 
         DUP_SEVERITY=$(echo "$DUPLICATE_RESULT" | jq -r '.severity // "NONE"' 2>/dev/null || echo "NONE")
-        DUP_COUNT=$(echo "$DUPLICATE_RESULT" | jq -r '.duplicates | length // 0' 2>/dev/null || echo "0")
-        SEQ_COUNT=$(echo "$DUPLICATE_RESULT" | jq -r '.sequentialDuplicates | length // 0' 2>/dev/null || echo "0")
-        CONFLICT_COUNT=$(echo "$DUPLICATE_RESULT" | jq -r '.conflictingValues | length // 0' 2>/dev/null || echo "0")
+        # Count only blocking (non-branch-exclusive) duplicates and conflicts
+        BLOCKING_DUP_COUNT=$(echo "$DUPLICATE_RESULT" | jq -r '[.duplicates[]? | select(.branchExclusive != true)] | length' 2>/dev/null || echo "0")
+        BLOCKING_CONFLICT_COUNT=$(echo "$DUPLICATE_RESULT" | jq -r '[.conflictingValues[]? | select(.branchExclusive != true)] | length' 2>/dev/null || echo "0")
 
         if [ "$DUP_SEVERITY" = "ERROR" ]; then
             VALIDATION_FAILED=1
             FLOW_FAILED=1
-            DUPLICATE_ERRORS=$((DUPLICATE_ERRORS + DUP_COUNT + CONFLICT_COUNT))
-            echo "  ❌ $FLOW_NAME (assignments) - $DUP_COUNT duplicate(s), $CONFLICT_COUNT conflict(s)"
-            echo "$DUPLICATE_RESULT" | jq -r '.duplicates[:3][]? | "     ⚠️  \(.field) assigned \(.count) times in: \(.elements | join(", "))"' 2>/dev/null || true
-            echo "$DUPLICATE_RESULT" | jq -r '.conflictingValues[:3][]? | "     ⚠️  \(.field) has conflicting values: \(.values | join(", "))"' 2>/dev/null || true
-        elif [ "$DUP_SEVERITY" = "WARNING" ] && [ "$SEQ_COUNT" -gt 0 ]; then
-            echo "  ⚠️  $FLOW_NAME (assignments) - $SEQ_COUNT sequential duplicate(s)"
+            FLOW_DUP_OK=0
+            DUPLICATE_ERRORS=$((DUPLICATE_ERRORS + BLOCKING_DUP_COUNT + BLOCKING_CONFLICT_COUNT))
+            echo "  ❌ $FLOW_NAME (assignments) - $BLOCKING_DUP_COUNT blocking duplicate(s), $BLOCKING_CONFLICT_COUNT blocking conflict(s)"
+            echo "$DUPLICATE_RESULT" | jq -r '[.duplicates[]? | select(.branchExclusive != true)][:3][] | "     ⚠️  \(.field) assigned \(.count) times in: \(.elements | join(", "))"' 2>/dev/null || true
+            echo "$DUPLICATE_RESULT" | jq -r '[.conflictingValues[]? | select(.branchExclusive != true)][:3][] | "     ⚠️  \(.field) has conflicting values: \(.values | join(", "))"' 2>/dev/null || true
+        elif [ "$DUP_SEVERITY" = "WARNING" ]; then
+            echo "  ⚠️  $FLOW_NAME (assignments) - branch-exclusive or sequential duplicates (non-blocking)"
         else
             echo "  ✅ $FLOW_NAME (assignments)"
         fi
@@ -232,6 +247,7 @@ while IFS= read -r flow_file; do
         if [ "$NOT_FOUND_COUNT" -gt 0 ]; then
             VALIDATION_FAILED=1
             FLOW_FAILED=1
+            FLOW_EXIST_OK=0
             FIELD_EXISTENCE_ERRORS=$((FIELD_EXISTENCE_ERRORS + NOT_FOUND_COUNT))
             echo "  ❌ $FLOW_NAME (field existence) - $NOT_FOUND_COUNT blocking error(s)"
             echo "$EXISTENCE_RESULT" | jq -r '.errors[:5][]? | "     - \(.object // "Unknown").\(.field // "Unknown"): \(.message)"' 2>/dev/null || true
@@ -245,6 +261,20 @@ while IFS= read -r flow_file; do
     if [ "$FLOW_FAILED" -eq 0 ]; then
         FLOWS_PASSED=$((FLOWS_PASSED + 1))
     fi
+
+    # Accumulate per-flow result for structured output
+    FLOW_RESULT=$(jq -n \
+        --arg name "$FLOW_NAME" \
+        --arg path "$flow_file" \
+        --argjson passed "$((1 - FLOW_FAILED))" \
+        --argjson logic "$FLOW_LOGIC_OK" \
+        --argjson structure "$FLOW_STRUCT_OK" \
+        --argjson duplicates "$FLOW_DUP_OK" \
+        --argjson existence "$FLOW_EXIST_OK" \
+        '{flowName: $name, flowPath: $path, passed: ($passed == 1), validators: {logic: ($logic == 1), structure: ($structure == 1), duplicates: ($duplicates == 1), fieldExistence: ($existence == 1)}}' 2>/dev/null || echo '{}')
+    if [ "$FLOW_RESULT" != "{}" ]; then
+        PER_FLOW_JSON=$(printf '%s' "$PER_FLOW_JSON" | jq --argjson r "$FLOW_RESULT" '. + [$r]' 2>/dev/null || echo "$PER_FLOW_JSON")
+    fi
 done <<< "$FLOW_FILES"
 
 echo ""
@@ -252,13 +282,20 @@ echo "📊 Flow Validation Summary:"
 echo "  Total flows: $FLOW_COUNT"
 echo "  Logic errors: $LOGIC_ERRORS"
 echo "  Structural errors: $STRUCTURAL_ERRORS"
-echo "  Duplicate assignment errors: $DUPLICATE_ERRORS"
+echo "  Duplicate assignment errors: $DUPLICATE_ERRORS (blocking only)"
 if [ -n "$TARGET_ORG" ]; then
     echo "  Field existence errors: $FIELD_EXISTENCE_ERRORS"
 else
     echo "  Field existence errors: skipped (no target org)"
 fi
-echo "  Passed flows: $FLOWS_PASSED"
+echo "  Passed flows: $FLOWS_PASSED / $FLOW_COUNT"
+
+if [ "$USED_FALLBACK_SCOPE" -eq 1 ]; then
+    echo ""
+    echo "ℹ️  Note: Deploy scope could not be resolved from command."
+    echo "   Validated all flows under ${DEPLOY_DIR}."
+    echo "   Some blocked flows may not be part of this deploy target."
+fi
 
 if [ $VALIDATION_FAILED -eq 1 ]; then
     echo ""
@@ -266,20 +303,47 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
     echo ""
     echo "💡 To resolve:"
     if [ $LOGIC_ERRORS -gt 0 ]; then
-        echo "   - Fix logic validation errors (unreachable branches, infinite loops)"
+        echo "   - Fix logic validation errors (contradictory conditions, infinite loops)"
     fi
     if [ $STRUCTURAL_ERRORS -gt 0 ]; then
         echo "   - Fix structural Flow XML issues before deploy"
     fi
     if [ $DUPLICATE_ERRORS -gt 0 ]; then
-        echo "   - Remove duplicate field assignments and resolve conflicting values"
+        echo "   - Remove same-branch duplicate field assignments and resolve conflicting values"
     fi
     if [ $FIELD_EXISTENCE_ERRORS -gt 0 ]; then
         echo "   - Deploy missing fields before deploying or activating flows"
     fi
     echo ""
     echo "⏭️  Skip validation with: SKIP_FLOW_VALIDATION=1"
-    emit_block "Flow validation failed: $LOGIC_ERRORS logic error(s), $STRUCTURAL_ERRORS structural error(s), $DUPLICATE_ERRORS duplicate assignment error(s), $FIELD_EXISTENCE_ERRORS field existence error(s). Fix issues or set SKIP_FLOW_VALIDATION=1 to bypass."
+
+    # Build recovery hints
+    RECOVERY_HINTS=""
+    [ $LOGIC_ERRORS -gt 0 ] && RECOVERY_HINTS="${RECOVERY_HINTS}Fix logic errors in failing flows. "
+    [ $DUPLICATE_ERRORS -gt 0 ] && RECOVERY_HINTS="${RECOVERY_HINTS}Remove same-branch duplicate field assignments. "
+    [ $STRUCTURAL_ERRORS -gt 0 ] && RECOVERY_HINTS="${RECOVERY_HINTS}Fix structural XML issues. "
+    [ $FIELD_EXISTENCE_ERRORS -gt 0 ] && RECOVERY_HINTS="${RECOVERY_HINTS}Deploy missing fields first. "
+    [ "$USED_FALLBACK_SCOPE" -eq 1 ] && RECOVERY_HINTS="${RECOVERY_HINTS}Try --source-dir to narrow deploy scope. "
+    RECOVERY_HINTS="${RECOVERY_HINTS}Set SKIP_FLOW_VALIDATION=1 as documented bypass (not recommended for production)."
+
+    # Structured deny output with per-flow results and recovery hints
+    jq -n \
+        --arg message "Flow validation failed: $LOGIC_ERRORS logic error(s), $STRUCTURAL_ERRORS structural error(s), $DUPLICATE_ERRORS duplicate assignment error(s), $FIELD_EXISTENCE_ERRORS field existence error(s)." \
+        --argjson perFlow "$PER_FLOW_JSON" \
+        --arg hints "$RECOVERY_HINTS" \
+        --argjson fallbackScope "$USED_FALLBACK_SCOPE" \
+        '{
+          suppressOutput: true,
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            permissionDecision: "deny",
+            permissionDecisionReason: $message,
+            additionalContext: ("Per-flow results and recovery hints available. " + $hints),
+            perFlowResults: $perFlow,
+            recoveryHints: $hints,
+            usedFallbackScope: ($fallbackScope == 1)
+          }
+        }' >&3
     exit 0
 fi
 

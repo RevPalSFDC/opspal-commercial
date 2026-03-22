@@ -98,6 +98,9 @@ class FlowDecisionLogicAnalyzer {
         result.flowGraph = flowGraph;
         this.stats.decisionsAnalyzed += decisions.length;
 
+        // Build reachability matrix first — needed by contradiction check
+        result.reachabilityMatrix = this.buildReachabilityMatrix(flowGraph);
+
         // Analysis 1: Check for contradictory conditions
         const contradictions = this.findContradictoryConditions(decisions);
         result.errors.push(...contradictions);
@@ -126,9 +129,6 @@ class FlowDecisionLogicAnalyzer {
             result.warnings.push(...deadEnds);
             this.stats.deadEnds += deadEnds.length;
         }
-
-        // Analysis 6: Build reachability matrix
-        result.reachabilityMatrix = this.buildReachabilityMatrix(flowGraph);
 
         // Determine overall validity
         result.valid = result.errors.length === 0;
@@ -354,6 +354,12 @@ class FlowDecisionLogicAnalyzer {
             for (let j = i + 1; j < allConditions.length; j++) {
                 const c1 = allConditions[i];
                 const c2 = allConditions[j];
+
+                // Conditions on different rules of the same decision are mutually
+                // exclusive by definition — only one rule fires. Not contradictions.
+                if (c1.decision === c2.decision && c1.rule !== c2.rule) {
+                    continue;
+                }
 
                 // Check if same field
                 if (c1.leftValueReference === c2.leftValueReference) {
@@ -685,16 +691,27 @@ module.exports = FlowDecisionLogicAnalyzer;
 if (require.main === module) {
     const args = process.argv.slice(2);
 
-    if (args.length < 2) {
-        console.log('Usage: flow-decision-logic-analyzer.js <orgAlias> <flowXmlPath>');
+    if (args.length < 1) {
+        console.log('Usage: flow-decision-logic-analyzer.js [orgAlias] <flowXmlPath>');
+        console.log('');
+        console.log('  orgAlias is optional. When omitted, org-dependent checks are skipped.');
         console.log('');
         console.log('Examples:');
+        console.log('  node flow-decision-logic-analyzer.js ./flows/MyFlow.flow-meta.xml');
         console.log('  node flow-decision-logic-analyzer.js myorg ./flows/MyFlow.flow-meta.xml');
         console.log('  node flow-decision-logic-analyzer.js myorg ./force-app/main/default/flows/');
         process.exit(1);
     }
 
-    const [orgAlias, flowPath] = args;
+    // Support both:  <orgAlias> <flowXmlPath>  and just  <flowXmlPath>
+    let orgAlias, flowPath;
+    if (args.length >= 2 && !args[0].endsWith('.xml')) {
+        orgAlias = args[0];
+        flowPath = args[1];
+    } else {
+        orgAlias = null;
+        flowPath = args[0];
+    }
     const analyzer = new FlowDecisionLogicAnalyzer(orgAlias, { verbose: true });
 
     (async () => {

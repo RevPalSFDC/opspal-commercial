@@ -945,25 +945,46 @@ class FlowFieldReferenceValidator {
         const uniqueFields = new Set(assignments.map(a => a.field));
         result.uniqueFields = uniqueFields.size;
 
-        // Find duplicates
-        result.duplicates = this._findDuplicateAssignments(assignments);
+        // Build branch exclusivity map for branch-aware detection
+        const exclusivityMap = this._buildBranchExclusivityMap(flowXml);
 
-        // Find sequential duplicates (within same element)
+        // Find duplicates (branch-aware)
+        result.duplicates = this._findDuplicateAssignments(assignments, exclusivityMap);
+
+        // Find sequential duplicates (within same element — not affected by branches)
         result.sequentialDuplicates = this._findSequentialDuplicates(flowXml);
 
-        // Find conflicting values
-        result.conflictingValues = this._findConflictingValues(assignments);
+        // Find conflicting values (branch-aware)
+        result.conflictingValues = this._findConflictingValues(assignments, exclusivityMap);
 
-        // Generate recommendations
-        if (result.duplicates.length > 0) {
+        // Generate recommendations — separate blocking from branch-exclusive
+        const blockingDuplicates = result.duplicates.filter(d => !d.branchExclusive);
+        const branchDuplicates = result.duplicates.filter(d => d.branchExclusive);
+        const blockingConflicts = result.conflictingValues.filter(c => !c.branchExclusive);
+        const branchConflicts = result.conflictingValues.filter(c => c.branchExclusive);
+
+        if (blockingDuplicates.length > 0) {
             result.severity = 'ERROR';
             result.recommendations.push({
                 type: 'REMOVE_DUPLICATES',
-                message: `Remove ${result.duplicates.length} duplicate field assignment(s)`,
-                details: result.duplicates.map(d => ({
+                message: `Remove ${blockingDuplicates.length} duplicate field assignment(s)`,
+                details: blockingDuplicates.map(d => ({
                     field: d.field,
                     elements: d.elements,
                     action: 'Keep only the intended assignment and remove others'
+                }))
+            });
+        }
+
+        if (branchDuplicates.length > 0) {
+            result.severity = result.severity === 'NONE' ? 'WARNING' : result.severity;
+            result.recommendations.push({
+                type: 'BRANCH_EXCLUSIVE_ASSIGNMENTS',
+                message: `${branchDuplicates.length} field assignment(s) are on mutually exclusive decision branches (intentional pattern)`,
+                details: branchDuplicates.map(d => ({
+                    field: d.field,
+                    elements: d.elements,
+                    action: 'No action required - these assignments are on different decision branches'
                 }))
             });
         }
@@ -982,16 +1003,30 @@ class FlowFieldReferenceValidator {
             });
         }
 
-        if (result.conflictingValues.length > 0) {
+        if (blockingConflicts.length > 0) {
             result.severity = 'ERROR';
             result.recommendations.push({
                 type: 'RESOLVE_CONFLICTS',
-                message: `Resolve ${result.conflictingValues.length} conflicting value assignment(s)`,
-                details: result.conflictingValues.map(c => ({
+                message: `Resolve ${blockingConflicts.length} conflicting value assignment(s)`,
+                details: blockingConflicts.map(c => ({
                     field: c.field,
                     values: c.values,
                     elements: c.elements,
                     action: 'Determine which value is correct and remove conflicting assignments'
+                }))
+            });
+        }
+
+        if (branchConflicts.length > 0) {
+            result.severity = result.severity === 'NONE' ? 'WARNING' : result.severity;
+            result.recommendations.push({
+                type: 'BRANCH_EXCLUSIVE_VALUES',
+                message: `${branchConflicts.length} field(s) have different values on mutually exclusive branches (intentional pattern)`,
+                details: branchConflicts.map(c => ({
+                    field: c.field,
+                    values: c.values,
+                    elements: c.elements,
+                    action: 'No action required - values differ intentionally across decision branches'
                 }))
             });
         }
@@ -1168,10 +1203,125 @@ class FlowFieldReferenceValidator {
     }
 
     /**
-     * Find duplicate field assignments (same field assigned in multiple elements)
+     * Build a branch exclusivity map from the flow's decision/connector graph.
+     * Two elements are mutually exclusive when they are reachable only via
+     * different outgoing connectors of the same decision node.
+     *
+     * @param {Object} flowXml - Parsed flow XML (xml2js)
+     * @returns {Map<string, Set<string>>} elementName → set of mutually exclusive element names
      * @private
      */
-    _findDuplicateAssignments(assignments) {
+    _buildBranchExclusivityMap(flowXml) {
+        const flow = flowXml.Flow || flowXml;
+        const exclusivityMap = new Map();
+
+        // Build forward connector graph: elementName → [targetNames]
+        const forwardEdges = new Map();
+        const elementTypes = [
+            'assignments', 'recordUpdates', 'recordCreates', 'recordLookups',
+            'recordDeletes', 'actionCalls', 'subflows', 'screens', 'loops', 'waits'
+        ];
+
+        for (const elType of elementTypes) {
+            if (!flow[elType]) continue;
+            const items = Array.isArray(flow[elType]) ? flow[elType] : [flow[elType]];
+            for (const item of items) {
+                const name = item.name?.[0];
+                if (!name) continue;
+                if (!forwardEdges.has(name)) forwardEdges.set(name, []);
+                if (item.connector?.[0]?.targetReference?.[0]) {
+                    forwardEdges.get(name).push(item.connector[0].targetReference[0]);
+                }
+                // Loops have noMoreValuesConnector
+                if (item.noMoreValuesConnector?.[0]?.targetReference?.[0]) {
+                    forwardEdges.get(name).push(item.noMoreValuesConnector[0].targetReference[0]);
+                }
+            }
+        }
+
+        // Process decisions: each outgoing branch defines a set of reachable elements
+        if (!flow.decisions) return exclusivityMap;
+        const decisions = Array.isArray(flow.decisions) ? flow.decisions : [flow.decisions];
+
+        for (const decision of decisions) {
+            const decName = decision.name?.[0];
+            if (!decName) continue;
+
+            // Collect branch entry points
+            const branchEntries = [];
+            if (decision.rules) {
+                const rules = Array.isArray(decision.rules) ? decision.rules : [decision.rules];
+                for (const rule of rules) {
+                    const target = rule.connector?.[0]?.targetReference?.[0];
+                    if (target) branchEntries.push(target);
+                }
+            }
+            if (decision.defaultConnector?.[0]?.targetReference?.[0]) {
+                branchEntries.push(decision.defaultConnector[0].targetReference[0]);
+            }
+
+            if (branchEntries.length < 2) continue; // Need 2+ branches for exclusivity
+
+            // BFS from each branch entry to collect reachable elements
+            const branchSets = [];
+            for (const entry of branchEntries) {
+                const reachable = new Set();
+                const queue = [entry];
+                const visited = new Set();
+                while (queue.length > 0) {
+                    const current = queue.shift();
+                    if (visited.has(current)) continue;
+                    visited.add(current);
+                    reachable.add(current);
+                    const targets = forwardEdges.get(current) || [];
+                    for (const t of targets) {
+                        if (!visited.has(t)) queue.push(t);
+                    }
+                }
+                branchSets.push(reachable);
+            }
+
+            // Elements exclusive to one branch (not in any other branch's set)
+            const exclusiveSets = branchSets.map((branchSet, idx) => {
+                const exclusive = new Set();
+                for (const elem of branchSet) {
+                    let inOtherBranch = false;
+                    for (let j = 0; j < branchSets.length; j++) {
+                        if (j !== idx && branchSets[j].has(elem)) {
+                            inOtherBranch = true;
+                            break;
+                        }
+                    }
+                    if (!inOtherBranch) exclusive.add(elem);
+                }
+                return exclusive;
+            });
+
+            // Mark elements from different exclusive sets as mutually exclusive
+            for (let i = 0; i < exclusiveSets.length; i++) {
+                for (let j = i + 1; j < exclusiveSets.length; j++) {
+                    for (const elemA of exclusiveSets[i]) {
+                        for (const elemB of exclusiveSets[j]) {
+                            if (!exclusivityMap.has(elemA)) exclusivityMap.set(elemA, new Set());
+                            if (!exclusivityMap.has(elemB)) exclusivityMap.set(elemB, new Set());
+                            exclusivityMap.get(elemA).add(elemB);
+                            exclusivityMap.get(elemB).add(elemA);
+                        }
+                    }
+                }
+            }
+        }
+
+        return exclusivityMap;
+    }
+
+    /**
+     * Find duplicate field assignments (same field assigned in multiple elements)
+     * @param {Array} assignments - Extracted assignments
+     * @param {Map|null} exclusivityMap - Branch exclusivity map (null = legacy behavior)
+     * @private
+     */
+    _findDuplicateAssignments(assignments, exclusivityMap = null) {
         const fieldToElements = new Map();
 
         for (const assign of assignments) {
@@ -1189,12 +1339,28 @@ class FlowFieldReferenceValidator {
         const duplicates = [];
         for (const [field, elementList] of fieldToElements.entries()) {
             if (elementList.length > 1) {
+                // Check if all element pairs are on mutually exclusive branches
+                let branchExclusive = false;
+                if (exclusivityMap && exclusivityMap.size > 0) {
+                    const elements = elementList.map(e => e.element);
+                    branchExclusive = true;
+                    for (let i = 0; i < elements.length && branchExclusive; i++) {
+                        for (let j = i + 1; j < elements.length && branchExclusive; j++) {
+                            const exclusiveSet = exclusivityMap.get(elements[i]);
+                            if (!exclusiveSet || !exclusiveSet.has(elements[j])) {
+                                branchExclusive = false;
+                            }
+                        }
+                    }
+                }
+
                 duplicates.push({
                     field,
                     count: elementList.length,
                     elements: elementList.map(e => e.element),
                     values: elementList.map(e => e.value),
-                    elementTypes: elementList.map(e => e.elementType)
+                    elementTypes: elementList.map(e => e.elementType),
+                    branchExclusive
                 });
             }
         }
@@ -1272,7 +1438,7 @@ class FlowFieldReferenceValidator {
      * Find conflicting values (same field assigned different values)
      * @private
      */
-    _findConflictingValues(assignments) {
+    _findConflictingValues(assignments, exclusivityMap = null) {
         const fieldToValues = new Map();
 
         for (const assign of assignments) {
@@ -1290,11 +1456,27 @@ class FlowFieldReferenceValidator {
         for (const [field, valueList] of fieldToValues.entries()) {
             const uniqueValues = new Set(valueList.map(v => String(v.value)));
             if (uniqueValues.size > 1 && valueList.length > 1) {
+                // Check if all element pairs are on mutually exclusive branches
+                let branchExclusive = false;
+                if (exclusivityMap && exclusivityMap.size > 0) {
+                    const elements = valueList.map(v => v.element);
+                    branchExclusive = true;
+                    for (let i = 0; i < elements.length && branchExclusive; i++) {
+                        for (let j = i + 1; j < elements.length && branchExclusive; j++) {
+                            const exclusiveSet = exclusivityMap.get(elements[i]);
+                            if (!exclusiveSet || !exclusiveSet.has(elements[j])) {
+                                branchExclusive = false;
+                            }
+                        }
+                    }
+                }
+
                 conflicts.push({
                     field,
                     values: Array.from(uniqueValues),
                     elements: valueList.map(v => v.element),
-                    assignments: valueList
+                    assignments: valueList,
+                    branchExclusive
                 });
             }
         }
