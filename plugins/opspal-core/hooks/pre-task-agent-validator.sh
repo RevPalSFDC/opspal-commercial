@@ -778,17 +778,26 @@ main() {
 
     persist_parent_context_deploy_clearance "$SESSION_KEY" "$RESOLVED"
 
-    if [ "$FINAL_OUTPUT" != "$TOOL_INPUT" ] || [ -n "$ADDITIONAL_CONTEXT" ]; then
+    # Build minimal updatedInput with only the fields that actually changed.
+    # Sending the full tool_input blob overwrites the prompt and injects extra
+    # fields (runbook_requirements, permission_contract) that over-constrain
+    # the sub-agent. Per Claude Code docs, only fields in updatedInput are modified.
+    local minimal_update=""
+    if [ "$RESOLVED" != "$AGENT_NAME" ]; then
+        minimal_update=$(jq -nc --arg resolved "$RESOLVED" '{subagent_type: $resolved}')
+    fi
+
+    if [ -n "$minimal_update" ] || [ -n "$ADDITIONAL_CONTEXT" ]; then
         local reason_msg
         reason_msg="Agent validation passed"
-        if [ "$FINAL_OUTPUT" != "$TOOL_INPUT" ]; then
+        if [ -n "$minimal_update" ]; then
             reason_msg="Resolved subagent_type '$AGENT_NAME' to '$RESOLVED'"
         fi
         emit_pretool_response \
           "allow" \
           "$reason_msg" \
           "$ADDITIONAL_CONTEXT" \
-          "$FINAL_OUTPUT" \
+          "$minimal_update" \
           "ROUTING_VALIDATED" \
           "INFO"
         exit 0
