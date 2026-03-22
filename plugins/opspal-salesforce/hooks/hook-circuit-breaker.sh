@@ -313,6 +313,10 @@ main() {
       }"
     else
       echo "{
+        \"hookSpecificOutput\": {
+          \"hookEventName\": \"PreToolUse\",
+          \"additionalContext\": \"WARNING: Hook failed ($recent_failures/$FAILURE_THRESHOLD failures). Operation allowed but hook protection may be degraded.\"
+        },
         \"systemMessage\": \"⚠️  Hook failed but circuit breaker still CLOSED ($recent_failures/$FAILURE_THRESHOLD failures). Allowing operation to proceed.\",
         \"circuitBreakerState\": \"CLOSED\",
         \"recentFailures\": $recent_failures,

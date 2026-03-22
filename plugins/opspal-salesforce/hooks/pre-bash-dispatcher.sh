@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if ! command -v jq &>/dev/null; then
-    echo "[pre-bash-dispatcher] jq not found, skipping" >&2
+    echo "[pre-bash-dispatcher] WARNING: jq not found — Salesforce deploy/query hooks disabled for this call" >&2
     exit 0
 fi
 

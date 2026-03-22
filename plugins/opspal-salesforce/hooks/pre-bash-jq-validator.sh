@@ -53,23 +53,26 @@ for EXPR in $JQ_EXPRESSIONS; do
         ISSUES+=("jq expression ends with incomplete pipe (|)")
     fi
 
+    # Strip quoted strings before counting brackets (avoids false positives on chars in strings)
+    STRIPPED_EXPR=$(echo "$EXPR" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
+
     # Check for unbalanced brackets
-    OPEN_BRACKETS=$(echo "$EXPR" | tr -cd '[' | wc -c)
-    CLOSE_BRACKETS=$(echo "$EXPR" | tr -cd ']' | wc -c)
+    OPEN_BRACKETS=$(echo "$STRIPPED_EXPR" | tr -cd '[' | wc -c)
+    CLOSE_BRACKETS=$(echo "$STRIPPED_EXPR" | tr -cd ']' | wc -c)
     if [ "$OPEN_BRACKETS" -ne "$CLOSE_BRACKETS" ]; then
         ISSUES+=("jq expression has unbalanced brackets: $OPEN_BRACKETS [ vs $CLOSE_BRACKETS ]")
     fi
 
     # Check for unbalanced braces
-    OPEN_BRACES=$(echo "$EXPR" | tr -cd '{' | wc -c)
-    CLOSE_BRACES=$(echo "$EXPR" | tr -cd '}' | wc -c)
+    OPEN_BRACES=$(echo "$STRIPPED_EXPR" | tr -cd '{' | wc -c)
+    CLOSE_BRACES=$(echo "$STRIPPED_EXPR" | tr -cd '}' | wc -c)
     if [ "$OPEN_BRACES" -ne "$CLOSE_BRACES" ]; then
         ISSUES+=("jq expression has unbalanced braces: $OPEN_BRACES { vs $CLOSE_BRACES }")
     fi
 
     # Check for unbalanced parentheses
-    OPEN_PARENS=$(echo "$EXPR" | tr -cd '(' | wc -c)
-    CLOSE_PARENS=$(echo "$EXPR" | tr -cd ')' | wc -c)
+    OPEN_PARENS=$(echo "$STRIPPED_EXPR" | tr -cd '(' | wc -c)
+    CLOSE_PARENS=$(echo "$STRIPPED_EXPR" | tr -cd ')' | wc -c)
     if [ "$OPEN_PARENS" -ne "$CLOSE_PARENS" ]; then
         ISSUES+=("jq expression has unbalanced parentheses: $OPEN_PARENS ( vs $CLOSE_PARENS )")
     fi

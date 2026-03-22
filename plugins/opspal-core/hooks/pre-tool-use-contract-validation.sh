@@ -13,7 +13,8 @@
 set -euo pipefail
 
 if ! command -v jq &>/dev/null; then
-    echo "[pre-tool-use-contract-validation] jq not found, skipping" >&2
+    echo "[pre-tool-use-contract-validation] WARNING: jq not found — guardrails disabled for this call" >&2
+    echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"WARNING: jq not installed. PreToolUse guardrails (routing enforcement, Bash budget, inline-secret detection) are inactive. Install jq to restore protection."}}'
     exit 0
 fi
 
@@ -575,10 +576,9 @@ enforce_bash_loop_budget() {
         return 0
     fi
 
-    channel_id="$(extract_channel_id)"
-    if ! channel_in_hardening_scope "$channel_id"; then
-        return 0
-    fi
+    # C3 fix: Budget guardrail runs for all contexts including sub-agents.
+    # channel_in_hardening_scope gate removed — was causing budget to skip
+    # in sub-agent context where no Slack channel ID is present.
 
     budget_scope="$(extract_budget_scope_key)"
     now="$(date +%s)"
@@ -618,14 +618,14 @@ enforce_bash_loop_budget() {
     fi
 
     if [ "$next_repeat_count" -gt "$BASH_BUDGET_MAX_REPEATS" ]; then
-        echo "[GUARDRAIL BLOCKED] Repeated command pattern detected (${next_repeat_count} repeats)." >&2
-        echo "Use a targeted command or provide a status + explicit missing input request." >&2
+        BUDGET_BLOCK_MSG="Repeated command pattern detected (${next_repeat_count} repeats). Use a different command or summarize findings."
+        echo "[GUARDRAIL BLOCKED] $BUDGET_BLOCK_MSG" >&2
         return 1
     fi
 
     if [ "$next_count" -gt "$BASH_BUDGET_MAX_COMMANDS" ]; then
-        echo "[GUARDRAIL BLOCKED] Bash command budget exceeded (${next_count} in ${BASH_BUDGET_WINDOW_SECONDS}s)." >&2
-        echo "Pause and summarize findings before issuing additional shell commands." >&2
+        BUDGET_BLOCK_MSG="Bash command budget exceeded (${next_count} in ${BASH_BUDGET_WINDOW_SECONDS}s). Pause and summarize findings."
+        echo "[GUARDRAIL BLOCKED] $BUDGET_BLOCK_MSG" >&2
         return 1
     fi
 
@@ -635,7 +635,10 @@ enforce_bash_loop_budget() {
       --arg last_fingerprint "$next_fingerprint" \
       --argjson repeat_count "$next_repeat_count" \
       '{window_start:$window_start,count:$count,last_fingerprint:$last_fingerprint,repeat_count:$repeat_count}' \
-      > "$state_file" 2>/dev/null || true
+      > "${state_file}.tmp.$$" 2>/dev/null && mv -f "${state_file}.tmp.$$" "$state_file" 2>/dev/null || {
+        echo "[budget] WARNING: Failed to persist budget state" >&2
+        rm -f "${state_file}.tmp.$$" 2>/dev/null
+    }
 
     return 0
 }
@@ -766,6 +769,7 @@ enforce_mandatory_routing() {
     local rule_id=""
 
     if [ "${ROUTING_ENFORCEMENT_ENABLED:-1}" = "0" ]; then
+        echo "[routing] WARNING: ROUTING_ENFORCEMENT_ENABLED=0 — all routing rules bypassed" >&2
         return 0
     fi
 
@@ -985,7 +989,16 @@ if [ "$TOOL_NAME" = "Bash" ]; then
     fi
 
     if ! enforce_bash_loop_budget "$TOOL_COMMAND"; then
-        exit "$HOOK_BLOCK_EXIT_CODE"
+        jq -n --arg msg "${BUDGET_BLOCK_MSG:-Bash command budget exceeded}" '{
+            suppressOutput: true,
+            hookSpecificOutput: {
+                hookEventName: "PreToolUse",
+                permissionDecision: "deny",
+                permissionDecisionReason: $msg,
+                additionalContext: "BASH_BUDGET_EXCEEDED: Pause, summarize findings, and reduce command frequency. The budget window resets automatically."
+            }
+        }'
+        exit 0
     fi
 fi
 

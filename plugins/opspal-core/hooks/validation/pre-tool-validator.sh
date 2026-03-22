@@ -38,8 +38,9 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 # Configuration
-SKIP_VALIDATION="${SKIP_TOOL_VALIDATION:-0}"
-SKIP_ALL="${SKIP_VALIDATION:-0}"
+# M6 fix: Use distinct names to avoid env var shadowing
+SKIP_TOOL_VAL="${SKIP_TOOL_VALIDATION:-0}"
+SKIP_ALL_VAL="${SKIP_VALIDATION:-0}"
 VERBOSE="${VALIDATION_VERBOSE:-0}"
 RULES_DIR="$SCRIPT_DIR/rules"
 LOG_FILE="$HOME/.claude/logs/tool-validation.jsonl"
@@ -56,7 +57,7 @@ if [[ -z "$INPUT_DATA" ]]; then
 fi
 
 # Skip if disabled
-if [[ "$SKIP_ALL" = "1" ]] || [[ "$SKIP_VALIDATION" = "1" ]]; then
+if [[ "$SKIP_ALL_VAL" = "1" ]] || [[ "$SKIP_TOOL_VAL" = "1" ]]; then
     echo '{}'
     exit 0
 fi

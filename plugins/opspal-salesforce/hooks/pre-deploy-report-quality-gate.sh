@@ -103,6 +103,12 @@ if [ -n "$SCOPE_ANALYSIS" ] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/nul
 else
     REPORT_FILES=$(find "$DEPLOY_DIR" -name "*.report-meta.xml" 2>/dev/null || echo "")
     DASHBOARD_FILES=$(find "$DEPLOY_DIR" -name "*.dashboard-meta.xml" 2>/dev/null || echo "")
+    USED_FALLBACK_SCOPE=1
+fi
+
+if [ "${USED_FALLBACK_SCOPE:-0}" = "1" ]; then
+    echo "ℹ️  Note: Deploy scope could not be resolved. Validated all reports/dashboards under ${DEPLOY_DIR}."
+    echo "   Some blocked files may not be part of this deploy target."
 fi
 
 if [ "$SKIP_REPORT_QUALITY_GATE" = "1" ] || [ "$COMMAND_SKIP" = "1" ]; then
@@ -435,14 +441,19 @@ if [ "$TOTAL_ERRORS" -gt 0 ]; then
     echo "     REPORT_MIN_HEALTH_SCORE=$MIN_HEALTH_SCORE"
     echo "     DASHBOARD_MIN_ACTIONABILITY=$MIN_ACTIONABILITY"
     # Emit blocking decision on original stdout (fd 3)
-    jq -Rn \
+    REPORT_DETAIL_TEXT="Failing reports/dashboards: ${FAILED_NAMES:-see stderr output}. Fix health/actionability scores or set SKIP_REPORT_QUALITY_GATE=1."
+    jq -n \
       --arg message "Report quality gate failed: $REPORT_ERRORS report error(s), $DASHBOARD_ERRORS dashboard error(s). Fix issues or set SKIP_REPORT_QUALITY_GATE=1 to bypass." \
+      --arg details "$REPORT_DETAIL_TEXT" \
+      --arg hints "Fix report health/actionability scores, or set SKIP_REPORT_QUALITY_GATE=1 to bypass. Use /audit-reports for detailed analysis." \
       '{
         suppressOutput: true,
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "deny",
-          permissionDecisionReason: $message
+          permissionDecisionReason: $message,
+          additionalContext: $details,
+          recoveryHints: $hints
         }
       }' >&3
     exit 0

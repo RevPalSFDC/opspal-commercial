@@ -93,8 +93,11 @@ if echo "$QUERY" | grep -qE '[^<>!]!='; then
 fi
 
 # Check for common field name mistakes
+# Owner.Name is only polymorphic on certain objects (Task, Event, CaseComment)
 if echo "$QUERY" | grep -q "Owner\.Name" && ! echo "$QUERY" | grep -qi "TYPEOF"; then
-    ISSUES+=("Owner.Name may fail on polymorphic lookup - consider using OwnerId instead")
+    if echo "$QUERY" | grep -qiE 'FROM\s+(Task|Event|CaseComment)'; then
+        ISSUES+=("Owner.Name may fail on polymorphic lookup (Task/Event) - consider using TYPEOF or OwnerId")
+    fi
 fi
 
 # If issues found, output warning with auto-fix suggestion for != operator
@@ -104,7 +107,10 @@ if [ ${#ISSUES[@]} -gt 0 ]; then
     # If the only issue is !=, suggest auto-corrected command
     if echo "$QUERY" | grep -qE '[^<>!]!=' && [ ${#ISSUES[@]} -eq 1 ]; then
         FIXED_QUERY=$(echo "$QUERY" | sed 's/\([^<>!]\)!=/\1<>/g')
-        FIXED_COMMAND=$(echo "$COMMAND" | sed "s|$QUERY|$FIXED_QUERY|")
+        # Escape regex-special characters in SOQL before using as sed pattern
+        ESCAPED_QUERY=$(printf '%s' "$QUERY" | sed 's/[&/\\]/\\&/g; s/\[/\\[/g; s/\]/\\]/g; s/\./\\./g')
+        ESCAPED_FIXED=$(printf '%s' "$FIXED_QUERY" | sed 's/[&/\\]/\\&/g')
+        FIXED_COMMAND=$(echo "$COMMAND" | sed "s|$ESCAPED_QUERY|$ESCAPED_FIXED|")
         emit_pretool_context \
           "[SOQL Validator] != operator detected. Auto-replacing with <> (shell-safe equivalent)." \
           "$FIXED_COMMAND"

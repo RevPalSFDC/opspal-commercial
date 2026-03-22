@@ -123,7 +123,8 @@ class FlowXMLValidator {
 
       // Run validation checks
       this.checkCurrentItemSyntax(doc, flowXML);
-      this.checkDuplicateFieldAssignments(doc);
+      // checkDuplicateFieldAssignments removed — duplicate detection delegated to
+      // flow-field-reference-validator.js which has branch-awareness (audit finding C7).
       this.checkInvalidReferences(doc);
       this.checkScreenFlowComponents(doc);
       this.checkFormulasSyntax(doc);
@@ -203,50 +204,9 @@ class FlowXMLValidator {
     });
   }
 
-  /**
-   * Check for duplicate field assignments
-   */
-  checkDuplicateFieldAssignments(doc) {
-    const assignments = doc.getElementsByTagName('assignments');
-    const fieldMap = new Map();
-
-    for (let i = 0; i < assignments.length; i++) {
-      const assignment = assignments[i];
-      const assignmentItems = assignment.getElementsByTagName('assignmentItems');
-
-      for (let j = 0; j < assignmentItems.length; j++) {
-        const item = assignmentItems[j];
-        const fieldElement = item.getElementsByTagName('field')[0];
-
-        if (fieldElement) {
-          const fieldName = fieldElement.textContent;
-          const assignToRef = assignment.getElementsByTagName('assignToReference')[0]?.textContent;
-
-          const key = `${assignToRef}:${fieldName}`;
-
-          if (fieldMap.has(key)) {
-            this.errors.push({
-              type: 'DUPLICATE_ASSIGNMENT',
-              severity: 'HIGH',
-              message: `Duplicate assignment to field: ${fieldName}`,
-              details: `Field "${fieldName}" is assigned multiple times in the same assignment block`,
-              location: `Assignment to ${assignToRef}`,
-              fix: {
-                description: 'Remove duplicate assignment or merge into single assignment',
-                automated: false  // Requires human judgment
-              }
-            });
-          } else {
-            fieldMap.set(key, true);
-          }
-        }
-      }
-    }
-
-    if (fieldMap.size > 0) {
-      this.log(`  ✅ Checked ${fieldMap.size} field assignment(s)`);
-    }
-  }
+  // checkDuplicateFieldAssignments removed — duplicate detection is now handled
+  // exclusively by flow-field-reference-validator.js which has branch-awareness.
+  // See: preventative-reliability-audit-2026-03-21.md finding C7.
 
   /**
    * Check for invalid element references

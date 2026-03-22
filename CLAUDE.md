@@ -17,7 +17,7 @@ This repository is the commercial OpsPal marketplace. It publishes 10 plugins an
 | Plugin | Version | Status |
 |--------|---------|--------|
 | `opspal-ai-consult` | 1.4.9 | active |
-| `opspal-core` | 2.42.26 | active |
+| `opspal-core` | 2.42.27 | active |
 | `opspal-data-hygiene` | 1.2.2 | deprecated |
 | `opspal-gtm-planning` | 2.3.3 | active |
 | `opspal-hubspot` | 3.9.7 | active |
@@ -25,7 +25,7 @@ This repository is the commercial OpsPal marketplace. It publishes 10 plugins an
 | `opspal-mcp-client` | 1.1.2 | active |
 | `opspal-monday` | 1.4.6 | experimental |
 | `opspal-okrs` | 3.0.6 | active |
-| `opspal-salesforce` | 3.84.15 | active |
+| `opspal-salesforce` | 3.84.16 | active |
 
 ## Updating
 

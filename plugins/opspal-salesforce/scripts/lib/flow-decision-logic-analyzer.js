@@ -689,7 +689,9 @@ module.exports = FlowDecisionLogicAnalyzer;
 
 // CLI usage
 if (require.main === module) {
-    const args = process.argv.slice(2);
+    const rawArgs = process.argv.slice(2);
+    const jsonOutput = rawArgs.includes('--json');
+    const args = rawArgs.filter(a => a !== '--json' && a !== '--verbose');
 
     if (args.length < 1) {
         console.log('Usage: flow-decision-logic-analyzer.js [orgAlias] <flowXmlPath>');
@@ -722,41 +724,59 @@ if (require.main === module) {
                     .filter(f => f.endsWith('.flow-meta.xml'))
                     .map(f => path.join(flowPath, f));
 
-                console.log(`\n📊 Analyzing ${flowFiles.length} flows in ${flowPath}\n`);
+                if (!jsonOutput) {
+                    console.log(`\n📊 Analyzing ${flowFiles.length} flows in ${flowPath}\n`);
+                }
 
+                const allResults = [];
                 for (const flowFile of flowFiles) {
                     const result = await analyzer.analyze(flowFile);
+                    allResults.push(result);
 
-                    console.log(`\n${result.valid ? '✅' : '❌'} ${result.flowName}`);
+                    if (!jsonOutput) {
+                        console.log(`\n${result.valid ? '✅' : '❌'} ${result.flowName}`);
 
-                    if (result.errors.length > 0) {
-                        console.log(`\n  Errors (${result.errors.length}):`);
-                        for (const error of result.errors) {
-                            console.log(`    - ${error.message}`);
+                        if (result.errors.length > 0) {
+                            console.log(`\n  Errors (${result.errors.length}):`);
+                            for (const error of result.errors) {
+                                console.log(`    - ${error.message}`);
+                            }
                         }
-                    }
 
-                    if (result.warnings.length > 0) {
-                        console.log(`\n  Warnings (${result.warnings.length}):`);
-                        for (const warning of result.warnings) {
-                            console.log(`    - ${warning.message}`);
+                        if (result.warnings.length > 0) {
+                            console.log(`\n  Warnings (${result.warnings.length}):`);
+                            for (const warning of result.warnings) {
+                                console.log(`    - ${warning.message}`);
+                            }
                         }
                     }
                 }
 
-                console.log('\n📈 Statistics:');
-                console.log(JSON.stringify(analyzer.getStats(), null, 2));
+                if (jsonOutput) {
+                    console.log(JSON.stringify({ flows: allResults, stats: analyzer.getStats() }));
+                } else {
+                    console.log('\n📈 Statistics:');
+                    console.log(JSON.stringify(analyzer.getStats(), null, 2));
+                }
 
             } else {
                 // Analyze single flow
                 const result = await analyzer.analyze(flowPath);
 
-                console.log(`\n${result.valid ? '✅' : '❌'} Analysis Result: ${result.flowName}\n`);
-                console.log(JSON.stringify(result, null, 2));
+                if (jsonOutput) {
+                    console.log(JSON.stringify(result));
+                } else {
+                    console.log(`\n${result.valid ? '✅' : '❌'} Analysis Result: ${result.flowName}\n`);
+                    console.log(JSON.stringify(result, null, 2));
+                }
             }
 
         } catch (error) {
-            console.error('❌ Error:', error.message);
+            if (jsonOutput) {
+                console.log(JSON.stringify({ valid: false, errors: [{ type: 'ANALYSIS_ERROR', message: error.message }], warnings: [] }));
+            } else {
+                console.error('❌ Error:', error.message);
+            }
             process.exit(1);
         }
     })();

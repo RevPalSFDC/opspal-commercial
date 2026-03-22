@@ -1287,7 +1287,12 @@ await kit.executeWithRecovery(async () => {
 - Use `kit.executeWithRecovery()` for ALL bulk operations
 - Use `kit.getField()` instead of hardcoding field names
 - Use `kit.getOrgContext()` instead of hardcoded org aliases
-- Use `kit.executeWithBypass()` for validation-sensitive operations
+- When a hook denies an operation:
+  1. Parse the deny reason from the hook response
+  2. If scope-related: narrow the deploy target (use --source-dir or --metadata)
+  3. If validator-related: fix the specific issue identified in the deny message
+  4. If 3 identical denials occur: escalate to user with the deny details
+  5. NEVER use kit.executeWithBypass() to circumvent hook denials
 
 **Documentation**: `.claude/agents/shared/instance-agnostic-toolkit-reference.md`
 ### Mandatory Patterns (From Shared Libraries)
@@ -1643,7 +1648,8 @@ const validatedOrchestrationOperation = await withValidationAwareErrorRecovery(a
     return await executeValidatedOrchestration(orchestrationConfig);
 }, {
     validationFramework: 'comprehensive',
-    retryPatterns: ['validation-temporary-failure', 'agent-validation-error'],
+    retryPatterns: ['validation-temporary-failure'],
+    // 'agent-validation-error' removed — hook denials are authoritative, not transient.
     autoFix: ['validation-inconsistency', 'orchestration-validation-drift'],
     escalation: ['validation-framework-failure', 'critical-validation-compromise'],
     rollback: ['validation-integrity-lost', 'agent-validation-chain-broken']

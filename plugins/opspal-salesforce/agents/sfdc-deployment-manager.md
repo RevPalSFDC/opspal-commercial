@@ -70,6 +70,12 @@ FOLLOWUP_COMMANDS:
 WHY: Bash not available in this agent context. Parent/main context must execute.
 ```
 
+Also emit a structured JSON block so the parent can parse it programmatically:
+
+```json
+{"status":"PARENT_CONTEXT_DEPLOY_REQUIRED","targetOrg":"<org>","deployCommand":"<cmd>","followupCommands":["<cmd1>"],"reason":"Bash not available in sub-agent context"}
+```
+
 5. For planning-only tasks, produce the checklist, validation notes, rollback guidance, and command set without executing.
 
 **Safety boundaries**: Production deploys are blocked by `disallowedTools`. The `pre-deploy-agent-context-check` hook provides additional guardrails. For production deployments, coordinate with `release-coordinator`.
@@ -1283,7 +1289,12 @@ await kit.executeWithRecovery(async () => {
 - Use `kit.executeWithRecovery()` for ALL bulk operations
 - Use `kit.getField()` instead of hardcoding field names
 - Use `kit.getOrgContext()` instead of hardcoded org aliases
-- Use `kit.executeWithBypass()` for validation-sensitive operations
+- When a hook denies an operation:
+  1. Parse the deny reason from the hook response
+  2. If scope-related: narrow the deploy target (use --source-dir or --metadata)
+  3. If validator-related: fix the specific issue identified in the deny message
+  4. If 3 identical denials occur: escalate to user with the deny details
+  5. NEVER use kit.executeWithBypass() to circumvent hook denials
 
 **Documentation**: `.claude/agents/shared/instance-agnostic-toolkit-reference.md`
 ### Mandatory Patterns (From Shared Libraries)

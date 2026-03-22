@@ -242,8 +242,8 @@ is_data_operation() {
             echo "sf_cli_data"
             return 0
         fi
-        # CSV processing
-        if [[ "$cmd" =~ \.csv ]]; then
+        # CSV processing — only for write/upsert/import commands, not reads
+        if [[ "$cmd" =~ \.csv ]] && echo "$cmd" | grep -qiE 'upsert|import|create|update|insert|load|bulk'; then
             echo "csv_processing"
             return 0
         fi
@@ -505,20 +505,8 @@ async function validate() {
             ? inputRecord
             : { value: inputRecord };
 
-        if (BUILT_IN_RULES && BUILT_IN_RULES.crossFieldValidation) {
-            const crossFieldResult = BUILT_IN_RULES.crossFieldValidation.validate(
-                record,
-                'record',
-                { rules: [] }
-            );
-            if (!crossFieldResult.valid) {
-                results.errors.push({
-                    record: i + 1,
-                    rule: 'crossFieldValidation',
-                    message: crossFieldResult.message
-                });
-            }
-        }
+        // crossFieldValidation removed — was passing rules: [] (always no-op).
+        // Re-enable when config/data-quality-rules.json is populated.
 
         if (BUILT_IN_RULES && BUILT_IN_RULES.semanticValidation) {
             for (const [field, value] of Object.entries(record)) {
@@ -561,6 +549,11 @@ async function validate() {
                 }
 
                 if (hardStaleEnabled) {
+                    // C6 fix: Skip read-only Salesforce system timestamps
+                    const SF_READONLY_DATES = ['CreatedDate','LastModifiedDate','SystemModstamp','LastActivityDate','LastViewedDate','LastReferencedDate'];
+                    if (SF_READONLY_DATES.some(f => field.toLowerCase() === f.toLowerCase())) {
+                        // Skip — these are always old on historical records
+                    } else {
                     const ageDays = parseDateAgeDays(value);
                     if (ageDays !== null && ageDays > hardStaleDays) {
                         results.staleHardGateViolations += 1;
@@ -572,6 +565,7 @@ async function validate() {
                                 ' days old, exceeding hard stale-data policy (' + hardStaleDays + ' days)'
                         });
                     }
+                    } // end SF_READONLY_DATES else
                 }
             }
         }
