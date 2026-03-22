@@ -183,7 +183,21 @@ function normalizeMatcher(eventType, matcher) {
   return normalizeGlobMatcher(matcher);
 }
 
+/**
+ * @deprecated These guard functions generate env-var-based content matching
+ * (CLAUDE_TOOL_INPUT) that Claude Code does not set. They produce guards that
+ * silently skip in sub-agent contexts. Use the dispatcher pattern instead:
+ * a broad Bash matcher + a dispatcher script that reads stdin JSON.
+ * See: plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh
+ *
+ * Retained for backward compatibility with internal-style hooks.json that
+ * use argument-aware matchers like Bash(sf project deploy*). When these
+ * matchers are encountered, a warning is logged.
+ */
 function buildGuardedBashCommand(command, pattern) {
+  console.error(`[hook-settings-normalizer] WARNING: buildGuardedBashCommand used for pattern "${pattern}". ` +
+    'This generates env-var guards (CLAUDE_TOOL_INPUT) that Claude Code does not set. ' +
+    'Prefer the dispatcher pattern (broad Bash matcher + stdin JSON check).');
   const escapedCommand = escapeForDoubleQuotedScript(command);
   const escapedPattern = escapeForDoubleQuotedScript(pattern);
   return 'bash -c "INPUT=\\"${CLAUDE_TOOL_INPUT:-${HOOK_TOOL_INPUT:-${TOOL_INPUT:-}}}\\"; ' +
@@ -191,6 +205,8 @@ function buildGuardedBashCommand(command, pattern) {
 }
 
 function buildGuardedWriteCommand(command, pattern) {
+  console.error(`[hook-settings-normalizer] WARNING: buildGuardedWriteCommand used for pattern "${pattern}". ` +
+    'This generates env-var guards that may not work in sub-agent contexts.');
   const escapedCommand = escapeForDoubleQuotedScript(command);
   const escapedPattern = escapeForDoubleQuotedScript(pattern);
   return 'bash -c "INPUT_PATH=\\"${CLAUDE_TOOL_INPUT_PATH:-${HOOK_TOOL_INPUT_PATH:-${TOOL_INPUT_PATH:-}}}\\"; ' +
