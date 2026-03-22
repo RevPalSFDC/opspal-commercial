@@ -8,7 +8,7 @@
 # (collaborator) scope.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/RevPalSFDC/opspal-commercial/main/scripts/bootstrap-opspal.sh | bash
+#   curl -fsSL https://opspal.gorevpal.com/bootstrap-opspal.sh | bash
 #
 #   # Or locally:
 #   bash scripts/bootstrap-opspal.sh [--skip-claude-install] [--scope user]
