@@ -49,7 +49,7 @@ fi
 
 # Plugin root detection
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
-    PLUGIN_ROOT="$CLAUDE_PLUGIN_ROOT"
+    PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
 else
     PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 fi

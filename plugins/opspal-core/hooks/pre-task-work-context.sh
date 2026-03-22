@@ -56,7 +56,7 @@ elif [ -f "$(pwd)/.claude-plugins/opspal-core/scripts/lib/work-index-manager.js"
     debug_log "Using Strategy 2: .claude-plugins symlink"
 # Strategy 3: CLAUDE_PLUGIN_ROOT env var (only if manager script exists there)
 elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/scripts/lib/work-index-manager.js" ]; then
-    PLUGIN_ROOT="$CLAUDE_PLUGIN_ROOT"
+    PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
     debug_log "Using Strategy 3: CLAUDE_PLUGIN_ROOT"
 # Strategy 4: Fall back to $0-based detection
 else

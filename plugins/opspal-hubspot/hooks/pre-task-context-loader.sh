@@ -38,7 +38,7 @@ LIVE_FIRST="${CONTEXT_LIVE_FIRST:-${GLOBAL_LIVE_FIRST:-true}}"
 CACHE_FILE="/tmp/hs-portal-context.json"
 CACHE_TTL="${HS_CONTEXT_CACHE_TTL:-300}"
 
-PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
+PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
 
 # Get portal name from environment or current portal config
 PORTAL_NAME="${HUBSPOT_PORTAL_NAME:-}"

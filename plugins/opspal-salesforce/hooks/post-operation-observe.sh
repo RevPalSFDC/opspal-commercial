@@ -57,8 +57,8 @@ fi
 
 detect_plugin_root() {
   # Use CLAUDE_PLUGIN_ROOT if available
-  if [ -n "$CLAUDE_PLUGIN_ROOT" ]; then
-    echo "$CLAUDE_PLUGIN_ROOT"
+  if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+    echo "${CLAUDE_PLUGIN_ROOT:-}"
     return 0
   fi
 

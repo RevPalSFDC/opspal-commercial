@@ -25,8 +25,8 @@ PLUGIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_DIR="$(cd "$PLUGIN_DIR/../.." && pwd)"
 
 # Use CLAUDE_PLUGIN_ROOT if available, otherwise use calculated path
-if [ -n "$CLAUDE_PLUGIN_ROOT" ]; then
-  PROJECT_DIR="$CLAUDE_PLUGIN_ROOT"
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+  PROJECT_DIR="${CLAUDE_PLUGIN_ROOT:-}"
 fi
 
 AGENT_REMINDER_FILE="$PROJECT_DIR/.claude/AGENT_REMINDER.md"
