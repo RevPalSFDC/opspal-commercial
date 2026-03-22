@@ -124,6 +124,21 @@ if [ -z "$TOOL_NAME" ]; then
     exit 0
 fi
 
+# Extract caller agent identity from hook JSON input.
+# Claude Code provides agent_type in the hook JSON when running inside a
+# sub-agent context. Fall back to env vars for backward compatibility.
+CALLER_AGENT_FROM_HOOK="$(echo "$INPUT_DATA" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+CALLER_AGENT_IDENTITY="${CALLER_AGENT_FROM_HOOK:-${CLAUDE_AGENT_NAME:-${CLAUDE_SUBAGENT_NAME:-}}}"
+
+resolve_caller_agent() {
+    local default_value="${1:-unknown}"
+    if [ -n "$CALLER_AGENT_IDENTITY" ] && [ "$CALLER_AGENT_IDENTITY" != "null" ]; then
+        printf '%s' "$CALLER_AGENT_IDENTITY"
+    else
+        printf '%s' "$default_value"
+    fi
+}
+
 append_jsonl_to_target() {
     local line="$1"
     local target_file="$2"
@@ -242,7 +257,7 @@ extract_budget_scope_key() {
     local session_key caller_agent session_safe agent_safe
 
     session_key="$(extract_session_key)"
-    caller_agent="${CLAUDE_AGENT_NAME:-${CLAUDE_SUBAGENT_NAME:-main}}"
+    caller_agent="$(resolve_caller_agent main)"
 
     if [ -z "$caller_agent" ] || [ "$caller_agent" = "unknown" ]; then
         caller_agent="main"
@@ -479,7 +494,7 @@ enforce_pending_route_gate() {
       "${required_agent:-unknown}" \
       "Pending routing requirement not cleared before operational tool execution." \
       "${command_summary:-$tool_name}" \
-      "${CLAUDE_AGENT_NAME:-unknown}" \
+      "$(resolve_caller_agent unknown)" \
       "$tool_name"
 
     additional_context="Routing requirement is still pending for this session."
@@ -741,7 +756,7 @@ fi
 
 enforce_mandatory_routing() {
     local tool="$1"
-    local caller_agent="${CLAUDE_AGENT_NAME:-${CLAUDE_SUBAGENT_NAME:-unknown}}"
+    local caller_agent="$(resolve_caller_agent unknown)"
     local command=""
     local command_lower=""
     local required_agent=""
