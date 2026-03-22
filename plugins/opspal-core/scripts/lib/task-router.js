@@ -813,6 +813,28 @@ class TaskRouter {
         const text = String(task || '').toLowerCase();
         const shortName = this.getAgentShortName(agentName).toLowerCase();
 
+        // Verb-aware intent classification: audit agents audit, execution agents execute.
+        // When the task contains WRITE verbs, penalize read-only agents.
+        // When the task contains READ-only verbs, penalize execution-only agents.
+        const WRITE_VERBS = /\b(delete|remove|deactivate|disable|create|build|deploy|update|modify|change|fix|add|set|assign|enable|activate|migrate|merge|convert)\b/;
+        const READ_VERBS = /\b(audit|assess|analyze|review|check|inspect|list|describe|report|diagnose|evaluate|investigate|discover|scan|query)\b/;
+        const READ_ONLY_AGENTS = /auditor|assessor|analyzer|discovery|diagnostician|reviewer|intelligence|reporter/;
+        const WRITE_AGENTS = /manager|orchestrator|builder|deployer|executor|specialist|creator|architect/;
+
+        const hasWriteVerb = WRITE_VERBS.test(text);
+        const hasReadVerb = READ_VERBS.test(text);
+
+        if (hasWriteVerb && !hasReadVerb && READ_ONLY_AGENTS.test(shortName)) {
+            // Task is write-only but agent is read-only — strong penalty
+            adjusted *= 0.4;
+        } else if (hasWriteVerb && hasReadVerb && READ_ONLY_AGENTS.test(shortName)) {
+            // Mixed intent (e.g. "audit then fix") — mild penalty on read-only agents
+            adjusted *= 0.75;
+        } else if (!hasWriteVerb && hasReadVerb && WRITE_AGENTS.test(shortName)) {
+            // Task is read-only but agent is execution-focused — mild penalty
+            adjusted *= 0.8;
+        }
+
         // Preserve dedicated RevOps reporting route without hijacking assessment/audit flows.
         if (/revops/.test(text) && /\b(report|kpi|metrics|forecast|alert)\b/.test(text)) {
             const hasAssessmentIntent = /\b(audit|assessment|governance|lifecycle)\b/.test(text);
