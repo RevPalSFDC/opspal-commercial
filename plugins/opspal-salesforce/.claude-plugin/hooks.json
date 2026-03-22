@@ -41,12 +41,19 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-dispatcher.sh",
             "timeout": 30000,
             "description": "Dispatch Salesforce deploy and query post-processing with structured output"
-          },
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
             "timeout": 5000,
-            "description": "Provide recovery guidance for INVALID_FIELD and other SOQL errors"
+            "description": "Provide recovery guidance after failed Salesforce Bash operations"
           }
         ]
       }
