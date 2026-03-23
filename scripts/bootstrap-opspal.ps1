@@ -38,17 +38,36 @@ Write-Step "Step 1: Checking for Git / Bash"
 
 $bashPath = $null
 
-# Check common locations
-$candidates = @(
-    (Get-Command bash -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source),
+# Check Git Bash locations FIRST — WSL bash won't work because it can't see
+# Windows-installed Node.js, Claude Code, or npm. The bare "bash" command on
+# a machine with WSL resolves to C:\Windows\System32\bash.exe (WSL), which
+# is the wrong environment for OpsPal.
+$gitBashCandidates = @(
     "$env:ProgramFiles\Git\bin\bash.exe",
     "${env:ProgramFiles(x86)}\Git\bin\bash.exe",
-    "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe"
+    "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe",
+    "$env:USERPROFILE\scoop\apps\git\current\bin\bash.exe"
 ) | Where-Object { $_ -and (Test-Path $_ -ErrorAction SilentlyContinue) }
 
-if ($candidates.Count -gt 0) {
-    $bashPath = $candidates[0]
-    Write-Ok "Found bash: $bashPath"
+if ($gitBashCandidates.Count -gt 0) {
+    $bashPath = $gitBashCandidates[0]
+    Write-Ok "Found Git Bash: $bashPath"
+}
+else {
+    # Fall back to PATH lookup, but warn if it looks like WSL
+    $pathBash = Get-Command bash -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+    if ($pathBash -and (Test-Path $pathBash -ErrorAction SilentlyContinue)) {
+        if ($pathBash -match 'System32|WindowsApps') {
+            Write-Warn "Found bash at $pathBash — this is likely WSL, not Git Bash."
+            Write-Warn "WSL bash cannot access Windows Node.js or Claude Code."
+            Write-Host "  OpsPal requires Git Bash (Git for Windows), not WSL." -ForegroundColor Yellow
+            # Don't use it — fall through to installer
+        }
+        else {
+            $bashPath = $pathBash
+            Write-Ok "Found bash: $bashPath"
+        }
+    }
 }
 else {
     Write-Warn "Git for Windows (bash) not found."
@@ -87,9 +106,8 @@ else {
     $userPath    = [System.Environment]::GetEnvironmentVariable('Path', 'User')
     $env:Path    = "$machinePath;$userPath"
 
-    # Re-check for bash
+    # Re-check for Git Bash specifically (same order as above — Git Bash first)
     $postCandidates = @(
-        (Get-Command bash -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source),
         "$env:ProgramFiles\Git\bin\bash.exe",
         "${env:ProgramFiles(x86)}\Git\bin\bash.exe",
         "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe"
@@ -97,7 +115,7 @@ else {
 
     if ($postCandidates.Count -gt 0) {
         $bashPath = $postCandidates[0]
-        Write-Ok "bash is now available: $bashPath"
+        Write-Ok "Git Bash is now available: $bashPath"
     }
     else {
         Write-Err "bash still not found after installing Git for Windows."
