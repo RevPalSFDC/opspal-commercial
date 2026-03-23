@@ -402,10 +402,72 @@ for plugin in "${DEPRECATED_PLUGINS[@]}"; do
 done
 
 # ═════════════════════════════════════════════════════════════════════════════
-# Step 6: Verify installation
+# Step 6: Install npm dependencies
 # ═════════════════════════════════════════════════════════════════════════════
 
-step "Step 6: Verification"
+step "Step 6: Installing npm dependencies"
+
+if [ "$DRY_RUN" = false ] && command -v node &>/dev/null && command -v npm &>/dev/null; then
+  CACHE_ROOT="$HOME/.claude/plugins/cache/$MARKETPLACE_NAME"
+  NPM_INSTALLED=0
+  NPM_SKIPPED=0
+  NPM_FAILED=0
+
+  for plugin in "${PLUGINS[@]}"; do
+    # Find the latest versioned cache directory for this plugin
+    PLUGIN_CACHE="$CACHE_ROOT/$plugin"
+    if [ ! -d "$PLUGIN_CACHE" ]; then
+      continue
+    fi
+
+    # Get newest version directory
+    LATEST_DIR=$(ls -1d "$PLUGIN_CACHE"/*/ 2>/dev/null | sort -V | tail -1)
+    if [ -z "$LATEST_DIR" ]; then
+      continue
+    fi
+
+    # Only install if package.json exists
+    if [ ! -f "$LATEST_DIR/package.json" ]; then
+      NPM_SKIPPED=$((NPM_SKIPPED + 1))
+      continue
+    fi
+
+    # Skip if node_modules already populated
+    DEP_COUNT=$(node -e "try{const p=require('$LATEST_DIR/package.json');console.log(Object.keys(p.dependencies||{}).length)}catch{console.log(0)}" 2>/dev/null || echo "0")
+    if [ "$DEP_COUNT" = "0" ]; then
+      NPM_SKIPPED=$((NPM_SKIPPED + 1))
+      continue
+    fi
+
+    MODULES_COUNT=$(ls -1 "$LATEST_DIR/node_modules/" 2>/dev/null | wc -l)
+    if [ "$MODULES_COUNT" -ge "$DEP_COUNT" ] 2>/dev/null; then
+      success "$plugin: dependencies already installed ($MODULES_COUNT packages)"
+      NPM_INSTALLED=$((NPM_INSTALLED + 1))
+      continue
+    fi
+
+    info "$plugin: installing $DEP_COUNT dependencies..."
+    if (cd "$LATEST_DIR" && npm install --omit=dev --no-audit --no-fund --loglevel=error 2>&1 | tail -3); then
+      success "$plugin: npm install complete"
+      NPM_INSTALLED=$((NPM_INSTALLED + 1))
+    else
+      warn "$plugin: npm install had issues (non-critical, /checkdependencies --fix can retry)"
+      NPM_FAILED=$((NPM_FAILED + 1))
+    fi
+  done
+
+  info "npm results: $NPM_INSTALLED installed, $NPM_SKIPPED skipped (no deps), $NPM_FAILED warnings"
+elif [ "$DRY_RUN" = true ]; then
+  echo -e "  ${YELLOW}[DRY-RUN]${NC} npm install --omit=dev in each plugin cache directory"
+else
+  warn "npm not found — skipping dependency install. Run /checkdependencies --fix after setup."
+fi
+
+# ═════════════════════════════════════════════════════════════════════════════
+# Step 7: Verify installation
+# ═════════════════════════════════════════════════════════════════════════════
+
+step "Step 7: Verification"
 
 if [ "$DRY_RUN" = false ] && command -v claude &>/dev/null; then
   info "Installed plugins:"
