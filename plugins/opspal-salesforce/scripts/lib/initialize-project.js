@@ -39,32 +39,100 @@ class ProjectInitializer {
   }
 
   /**
-   * Detect installed plugins
+   * Find marketplace cache base directory for a given plugin name.
+   * Returns the versioned plugin directory (e.g. ~/.claude/plugins/cache/opspal-commercial/opspal-salesforce/3.84.24)
+   * or null if not found.
+   */
+  findMarketplaceCachePath(pluginName) {
+    const cacheBase = path.join(
+      process.env.HOME || process.env.USERPROFILE || '',
+      '.claude/plugins/cache/opspal-commercial',
+      pluginName
+    );
+    if (!fs.existsSync(cacheBase)) return null;
+
+    // Pick the newest version directory
+    try {
+      const versions = fs.readdirSync(cacheBase)
+        .filter(v => /^\d+\.\d+/.test(v))
+        .sort()
+        .reverse();
+      if (versions.length > 0) {
+        return path.join(cacheBase, versions[0]);
+      }
+    } catch { /* ignore */ }
+    return null;
+  }
+
+  /**
+   * Detect installed plugins by checking multiple installation locations:
+   *   1. Marketplace cache (opspal-commercial) — current standard
+   *   2. Legacy internal marketplace (.claude-plugins)
+   *   3. Local project .claude-plugins
    */
   detectPlugins() {
     console.log(`${colors.blue}Detecting installed plugins...${colors.reset}`);
 
-    const pluginDirs = [
-      path.join(process.env.HOME, '.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins'),
-      path.join(process.cwd(), '.claude-plugins')
-    ];
+    // Check marketplace cache first (current installation method)
+    const sfCachePath = this.findMarketplaceCachePath('opspal-salesforce');
+    if (sfCachePath) {
+      this.installedPlugins.salesforce = true;
+      this._sfPluginRoot = sfCachePath;
+      console.log(`  ${colors.green}✓${colors.reset} opspal-salesforce detected (marketplace cache)`);
+    }
 
-    for (const dir of pluginDirs) {
-      // Check for salesforce-plugin
-      if (fs.existsSync(path.join(dir, 'salesforce-plugin/.claude-plugin/plugin.json'))) {
-        this.installedPlugins.salesforce = true;
-        console.log(`  ${colors.green}✓${colors.reset} salesforce-plugin detected`);
-      }
+    const hsCachePath = this.findMarketplaceCachePath('opspal-hubspot');
+    if (hsCachePath) {
+      this.installedPlugins.hubspot = true;
+      this._hsPluginRoot = hsCachePath;
+      console.log(`  ${colors.green}✓${colors.reset} opspal-hubspot detected (marketplace cache)`);
+    }
 
-      // Check for hubspot-plugin
-      if (fs.existsSync(path.join(dir, 'hubspot-plugin/.claude-plugin/plugin.json'))) {
-        this.installedPlugins.hubspot = true;
-        console.log(`  ${colors.green}✓${colors.reset} hubspot-plugin detected`);
+    // Fall back to legacy paths if not found in cache
+    if (!this.installedPlugins.salesforce || !this.installedPlugins.hubspot) {
+      const legacyDirs = [
+        path.join(process.env.HOME || process.env.USERPROFILE || '', '.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins'),
+        path.join(process.cwd(), '.claude-plugins')
+      ];
+
+      for (const dir of legacyDirs) {
+        // Current naming: opspal-salesforce
+        if (!this.installedPlugins.salesforce &&
+            fs.existsSync(path.join(dir, 'opspal-salesforce/.claude-plugin/plugin.json'))) {
+          this.installedPlugins.salesforce = true;
+          this._sfPluginRoot = path.join(dir, 'opspal-salesforce');
+          console.log(`  ${colors.green}✓${colors.reset} opspal-salesforce detected (legacy)`);
+        }
+        // Legacy naming: salesforce-plugin
+        if (!this.installedPlugins.salesforce &&
+            fs.existsSync(path.join(dir, 'salesforce-plugin/.claude-plugin/plugin.json'))) {
+          this.installedPlugins.salesforce = true;
+          this._sfPluginRoot = path.join(dir, 'salesforce-plugin');
+          console.log(`  ${colors.green}✓${colors.reset} salesforce-plugin detected (legacy)`);
+        }
+
+        // Current naming: opspal-hubspot
+        if (!this.installedPlugins.hubspot &&
+            fs.existsSync(path.join(dir, 'opspal-hubspot/.claude-plugin/plugin.json'))) {
+          this.installedPlugins.hubspot = true;
+          this._hsPluginRoot = path.join(dir, 'opspal-hubspot');
+          console.log(`  ${colors.green}✓${colors.reset} opspal-hubspot detected (legacy)`);
+        }
+        // Legacy naming: hubspot-plugin
+        if (!this.installedPlugins.hubspot &&
+            fs.existsSync(path.join(dir, 'hubspot-plugin/.claude-plugin/plugin.json'))) {
+          this.installedPlugins.hubspot = true;
+          this._hsPluginRoot = path.join(dir, 'hubspot-plugin');
+          console.log(`  ${colors.green}✓${colors.reset} hubspot-plugin detected (legacy)`);
+        }
       }
     }
 
     if (!this.installedPlugins.salesforce && !this.installedPlugins.hubspot) {
-      throw new Error('No plugins detected. Please install salesforce-plugin or hubspot-plugin first.');
+      throw new Error(
+        'No plugins detected. Checked marketplace cache (~/.claude/plugins/cache/opspal-commercial/) ' +
+        'and legacy paths. Please install opspal-salesforce or opspal-hubspot first.'
+      );
     }
 
     return this.installedPlugins;
@@ -139,14 +207,34 @@ class ProjectInitializer {
   }
 
   /**
-   * Get template path for plugin
+   * Get template path for plugin.
+   * Uses the resolved plugin root from detectPlugins() first, then falls back to legacy paths.
    */
   getTemplatePath(plugin, templateName) {
-    const possiblePaths = [
-      path.join(process.env.HOME, `.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins/${plugin}-plugin/templates/${templateName}`),
+    // Use resolved plugin root if available (set by detectPlugins)
+    const pluginRoot = plugin === 'salesforce' ? this._sfPluginRoot : this._hsPluginRoot;
+
+    const possiblePaths = [];
+
+    if (pluginRoot) {
+      possiblePaths.push(path.join(pluginRoot, `templates/${templateName}`));
+    }
+
+    // Marketplace cache with current naming
+    const home = process.env.HOME || process.env.USERPROFILE || '';
+    const cachePath = this.findMarketplaceCachePath(`opspal-${plugin}`);
+    if (cachePath) {
+      possiblePaths.push(path.join(cachePath, `templates/${templateName}`));
+    }
+
+    // Legacy paths
+    possiblePaths.push(
+      path.join(home, `.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins/opspal-${plugin}/templates/${templateName}`),
+      path.join(home, `.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins/${plugin}-plugin/templates/${templateName}`),
+      path.join(process.cwd(), `.claude-plugins/opspal-${plugin}/templates/${templateName}`),
       path.join(process.cwd(), `.claude-plugins/${plugin}-plugin/templates/${templateName}`),
       path.join(__dirname, `../../templates/${templateName}`)
-    ];
+    );
 
     for (const templatePath of possiblePaths) {
       if (fs.existsSync(templatePath)) {

@@ -20,10 +20,13 @@
 #   --help                  Show this help
 #
 # Requirements:
-#   - macOS, Linux, or WSL
+#   - macOS, Linux, WSL, or Git Bash (Windows)
 #   - curl or wget
 #   - git
 #   - Node.js 22+ (for plugin scripts)
+#
+# Windows users: Run from Git Bash, not PowerShell.
+#   bash -c "$(curl -fsSL https://opspal.gorevpal.com/bootstrap-opspal.sh)"
 #
 # Copyright 2024-2026 RevPal Partners, LLC
 # =============================================================================
@@ -138,7 +141,8 @@ OS="$(uname -s)"
 case "$OS" in
   Linux|Darwin) success "OS: $OS" ;;
   MINGW*|MSYS*|CYGWIN*)
-    warn "Windows detected — WSL recommended for best compatibility"
+    warn "Windows detected (Git Bash / MSYS2). This is supported."
+    info "Tip: If you ran this from PowerShell and got an error, re-run from Git Bash instead."
     ;;
   *)
     error "Unsupported OS: $OS"
@@ -185,7 +189,14 @@ if command -v jq &>/dev/null; then
   success "jq: $(jq --version 2>/dev/null || echo 'available')"
 else
   warn "jq not found — required for hook system"
-  echo "  Install: sudo apt-get install jq (Linux) or brew install jq (macOS)"
+  case "$OS" in
+    Linux|Darwin)
+      echo "  Install: sudo apt-get install jq (Linux) or brew install jq (macOS)"
+      ;;
+    MINGW*|MSYS*|CYGWIN*)
+      echo "  Install: winget install jqlang.jq  (or: choco install jq)"
+      ;;
+  esac
 fi
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -274,30 +285,62 @@ step "Step 4: Auto-update configuration"
 
 SETTINGS_FILE="$HOME/.claude/settings.json"
 
+# Helper: update settings JSON using Node.js (fallback when jq unavailable)
+update_settings_node() {
+  local file="$1"
+  local key="$2"
+  node -e "
+    const fs = require('fs');
+    const file = process.argv[1];
+    const key = process.argv[2];
+    let data = {};
+    try { data = JSON.parse(fs.readFileSync(file, 'utf8')); } catch {}
+    if (!data.marketplaceAutoUpdate) data.marketplaceAutoUpdate = {};
+    data.marketplaceAutoUpdate[key] = true;
+    fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
+  " "$file" "$key"
+}
+
 if [ -f "$SETTINGS_FILE" ]; then
   # Check if auto-update is already configured for this marketplace
-  if jq -e ".marketplaceAutoUpdate.\"$MARKETPLACE_NAME\"" "$SETTINGS_FILE" &>/dev/null 2>&1; then
+  if command -v jq &>/dev/null && jq -e ".marketplaceAutoUpdate.\"$MARKETPLACE_NAME\"" "$SETTINGS_FILE" &>/dev/null 2>&1; then
     success "Auto-update already configured for $MARKETPLACE_NAME"
   else
     info "Enabling auto-update for $MARKETPLACE_NAME..."
-    if [ "$DRY_RUN" = false ] && command -v jq &>/dev/null; then
-      TMP_SETTINGS="${SETTINGS_FILE}.tmp.$$"
-      jq --arg mp "$MARKETPLACE_NAME" '.marketplaceAutoUpdate[$mp] = true' "$SETTINGS_FILE" > "$TMP_SETTINGS" && \
-        mv -f "$TMP_SETTINGS" "$SETTINGS_FILE" && \
-        success "Auto-update enabled" || {
-          rm -f "$TMP_SETTINGS"
-          warn "Could not enable auto-update in settings.json — configure manually via /plugin"
-        }
+    if [ "$DRY_RUN" = false ]; then
+      if command -v jq &>/dev/null; then
+        TMP_SETTINGS="${SETTINGS_FILE}.tmp.$$"
+        jq --arg mp "$MARKETPLACE_NAME" '.marketplaceAutoUpdate[$mp] = true' "$SETTINGS_FILE" > "$TMP_SETTINGS" && \
+          mv -f "$TMP_SETTINGS" "$SETTINGS_FILE" && \
+          success "Auto-update enabled" || {
+            rm -f "$TMP_SETTINGS"
+            warn "jq failed — falling back to Node.js"
+            update_settings_node "$SETTINGS_FILE" "$MARKETPLACE_NAME" && \
+              success "Auto-update enabled (via Node.js)" || \
+              warn "Could not enable auto-update — configure manually via /plugin"
+          }
+      elif command -v node &>/dev/null; then
+        update_settings_node "$SETTINGS_FILE" "$MARKETPLACE_NAME" && \
+          success "Auto-update enabled (via Node.js)" || \
+          warn "Could not enable auto-update — configure manually via /plugin"
+      else
+        warn "Neither jq nor node available — skipping auto-update config"
+      fi
     else
-      echo -e "  ${YELLOW}[DRY-RUN]${NC} jq '.marketplaceAutoUpdate[\"$MARKETPLACE_NAME\"] = true' $SETTINGS_FILE"
+      echo -e "  ${YELLOW}[DRY-RUN]${NC} Enable auto-update for $MARKETPLACE_NAME in $SETTINGS_FILE"
     fi
   fi
 else
   info "Creating settings.json with auto-update enabled..."
   if [ "$DRY_RUN" = false ]; then
     mkdir -p "$(dirname "$SETTINGS_FILE")"
-    echo "{\"marketplaceAutoUpdate\":{\"$MARKETPLACE_NAME\":true}}" | jq . > "$SETTINGS_FILE" 2>/dev/null || \
+    if command -v jq &>/dev/null; then
+      echo "{\"marketplaceAutoUpdate\":{\"$MARKETPLACE_NAME\":true}}" | jq . > "$SETTINGS_FILE"
+    elif command -v node &>/dev/null; then
+      update_settings_node "$SETTINGS_FILE" "$MARKETPLACE_NAME"
+    else
       echo "{\"marketplaceAutoUpdate\":{\"$MARKETPLACE_NAME\":true}}" > "$SETTINGS_FILE"
+    fi
     success "Settings created with auto-update enabled"
   fi
 fi
@@ -386,26 +429,30 @@ echo -e "  Auto-update:  ${GREEN}enabled${NC}"
 echo ""
 
 if [ "$FAILED" -eq 0 ]; then
-  echo -e "${BOLD}Next steps:${NC}"
+  echo -e "${BOLD}${GREEN}What to do next:${NC}"
   echo ""
-  echo "  1. Start Claude Code in your project directory:"
-  echo "     cd /path/to/your/salesforce-project"
+  echo -e "  ${YELLOW}⚠  You must restart Claude Code to load the new plugins.${NC}"
+  echo ""
+  echo "  1. Exit Claude Code (type /exit or close the terminal)"
+  echo ""
+  echo "  2. Reopen Claude Code in your project directory:"
+  echo "     cd /path/to/your/project"
   echo "     claude"
   echo ""
-  echo "  2. Run initial setup (inside Claude Code):"
-  echo "     /initialize"
+  echo "  3. Run first-time setup (inside Claude Code):"
+  echo "     /opspalfirst"
   echo ""
-  echo "  3. Run post-install validation:"
-  echo "     /finishopspalupdate"
+  echo "  4. Activate your license:"
+  echo "     /activate-license your@email.com YOUR-LICENSE-KEY"
   echo ""
-  echo "  4. Verify with:"
-  echo "     /agents          — list available agents"
-  echo "     /hooks-health    — check hook system"
-  echo "     /routing-health  — check routing system"
+  echo "  5. Connect your platforms:"
+  echo "     Tell Claude: \"connect to salesforce\" or \"connect to hubspot\""
+  echo ""
+  echo -e "  ${BLUE}Have your license key ready for step 4.${NC}"
   echo ""
 else
   echo -e "${YELLOW}Some plugins failed to install. Try:${NC}"
-  echo "  1. Start Claude Code: claude"
+  echo "  1. Exit and restart Claude Code"
   echo "  2. Add marketplace:   /plugin marketplace add $MARKETPLACE_REPO"
   echo "  3. Install manually:  /plugin install <plugin-name>@$MARKETPLACE_NAME"
   echo ""
