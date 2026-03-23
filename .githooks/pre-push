@@ -16,6 +16,23 @@ trap cleanup EXIT
 cd "$REPO_ROOT"
 
 echo "Running commercial pre-push guardrails..."
+
+# Layer 1: Secret scanning (blocks push if secrets detected in commit range)
+GITLEAKS="$(command -v gitleaks 2>/dev/null || echo "$HOME/.local/bin/gitleaks")"
+if [ -x "$GITLEAKS" ]; then
+  echo "Scanning commits for secrets..."
+  "$GITLEAKS" detect --source "$REPO_ROOT" --config "$REPO_ROOT/.gitleaks.toml" --exit-code 1 --no-banner 2>/dev/null || {
+    echo ""
+    echo "BLOCKED: Secrets detected in commit history."
+    echo "  Run: gitleaks detect --source . --config .gitleaks.toml --verbose"
+    echo "  Fix the issues, then retry the push."
+    exit 1
+  }
+  echo "Secret scan passed."
+else
+  echo "WARNING: gitleaks not found — skipping pre-push secret scan"
+fi
+
 npm run docs:ci >/dev/null
 npm run verify:encrypted-assets >/dev/null
 
