@@ -25,6 +25,22 @@ const path = require('path');
 const https = require('https');
 const { execSync, spawn } = require('child_process');
 
+// Load .env from project root (walk up from __dirname)
+(function loadEnv() {
+    let dir = __dirname;
+    for (let i = 0; i < 6; i++) {
+        const envPath = path.join(dir, '.env');
+        if (fs.existsSync(envPath)) {
+            for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+                const m = line.match(/^([A-Z_][A-Z0-9_]*)\s*=\s*(.+)/);
+                if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
+            }
+            break;
+        }
+        dir = path.dirname(dir);
+    }
+})();
+
 // Configuration
 const CONFIG = {
     // Paths

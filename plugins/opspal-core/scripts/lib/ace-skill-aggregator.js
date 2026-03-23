@@ -18,11 +18,28 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+// Load .env from project root (walk up from __dirname)
+(function loadEnv() {
+    let dir = __dirname;
+    for (let i = 0; i < 6; i++) {
+        const envPath = path.join(dir, '.env');
+        if (fs.existsSync(envPath)) {
+            for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+                const m = line.match(/^([A-Z_][A-Z0-9_]*)\s*=\s*(.+)/);
+                if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
+            }
+            break;
+        }
+        dir = path.dirname(dir);
+    }
+})();
+
 // Configuration
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     console.error('SUPABASE_URL and SUPABASE_ANON_KEY environment variables are required');
+    console.error('Set them in .env or export them in your shell');
     process.exit(1);
 }
 
