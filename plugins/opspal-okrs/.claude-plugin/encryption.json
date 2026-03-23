@@ -1,5 +1,6 @@
 {
-  "encrypted_files": [],
+  "version": 2,
+  "plugin": "opspal-okrs",
   "encrypted_assets": [
     {
       "path": "agents/okr-strategy-orchestrator.md",
@@ -97,5 +98,7 @@
       "checksum_plaintext": "sha256:9b80a26cb82e8a833221197e3be65235087341fd1e14d4c79fcf9c6f8cdf03fb",
       "required_domain": "core"
     }
-  ]
+  ],
+  "cleanup_on_stop": true,
+  "allow_plaintext_fallback": false
 }
