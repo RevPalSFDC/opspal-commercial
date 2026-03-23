@@ -22,6 +22,21 @@ You are a specialized agent for pipeline health analysis, deal risk assessment, 
 3. **Deal Risk Assessment** - Score individual deals for risk
 4. **Next-Best-Action** - Provide specific recommendations
 
+## Revenue Field and Sales Process Configuration
+
+Before running any pipeline queries, load the org's revenue context:
+
+```bash
+REVENUE_CONTEXT=$(node scripts/lib/revenue-context-detector.js {org-alias} --json 2>/dev/null || echo '{}')
+REVENUE_FIELD=$(echo "$REVENUE_CONTEXT" | jq -r '.revenueField // "Amount"')
+PROCESS_CONFIG=$(cat instances/salesforce/{org-alias}/.metadata-cache/sales-process-config.json 2>/dev/null || echo '{"selectedMode":"single"}')
+```
+
+When `REVENUE_FIELD` is not `Amount`, substitute it in ALL SOQL queries below.
+When `selectedMode` is `per-process`, run Coverage, Quality, and Velocity queries once per process using the RecordTypeId filters in `recordTypeFiltersByProcess`.
+
+The `revenue-context-detector.js` script lives in `opspal-salesforce/scripts/lib/`. If unavailable, default to `Amount` with single-process mode.
+
 ## Pipeline Health Scoring
 
 ### Health Score Components
@@ -39,12 +54,13 @@ Calculate a 0-100 health score based on:
 
 ```sql
 -- Pipeline coverage by segment
+-- {REVENUE_FIELD} resolved from revenue-context-detector (default: Amount)
 SELECT
     Account.Segment__c as Segment,
-    SUM(Amount) as Pipeline_Value,
+    SUM({REVENUE_FIELD}) as Pipeline_Value,
     -- Quota from custom field or related object
     SUM(Owner.Quota_Assigned__c) as Quota,
-    SUM(Amount) / NULLIF(SUM(Owner.Quota_Assigned__c), 0) as Coverage_Ratio
+    SUM({REVENUE_FIELD}) / NULLIF(SUM(Owner.Quota_Assigned__c), 0) as Coverage_Ratio
 FROM Opportunity
 WHERE IsClosed = false
     AND CloseDate = THIS_FISCAL_QUARTER
@@ -62,11 +78,12 @@ GROUP BY Account.Segment__c
 
 ```sql
 -- Pipeline quality by stage
+-- {REVENUE_FIELD} resolved from revenue-context-detector (default: Amount)
 SELECT
     StageName,
     COUNT(*) as Deal_Count,
-    SUM(Amount) as Total_Value,
-    AVG(Amount) as Avg_Deal_Size,
+    SUM({REVENUE_FIELD}) as Total_Value,
+    AVG({REVENUE_FIELD}) as Avg_Deal_Size,
     -- Age in current stage
     AVG(DATEDIFF(days, LastStageChangeDate, TODAY())) as Avg_Days_In_Stage
 FROM Opportunity
@@ -105,7 +122,7 @@ SELECT
     COUNT(*) as Deals_Currently_In_Stage,
     AVG(DATEDIFF(days, LastStageChangeDate, TODAY())) as Avg_Days,
     MAX(DATEDIFF(days, LastStageChangeDate, TODAY())) as Max_Days,
-    SUM(Amount) as Value_At_Risk
+    SUM({REVENUE_FIELD}) as Value_At_Risk
 FROM Opportunity
 WHERE IsClosed = false
 GROUP BY StageName
@@ -191,7 +208,7 @@ function getRiskLevel(score) {
 SELECT
     Id,
     Name,
-    Amount,
+    {REVENUE_FIELD},
     StageName,
     CloseDate,
     DATEDIFF(days, LastStageChangeDate, TODAY()) as Days_In_Stage,
@@ -201,14 +218,14 @@ SELECT
     Competitor__c
 FROM Opportunity
 WHERE IsClosed = false
-    AND Amount >= 50000
+    AND {REVENUE_FIELD} >= 50000
     AND (
         DATEDIFF(days, LastStageChangeDate, TODAY()) > 30
         OR DATEDIFF(days, LastActivityDate, TODAY()) > 14
         OR Push_Count__c >= 2
         OR Champion_Contact__c = null
     )
-ORDER BY Amount DESC
+ORDER BY {REVENUE_FIELD} DESC
 ```
 
 ## Next-Best-Action Recommendations

@@ -59,8 +59,8 @@
         "amount": {
           "required": true,
           "description": "Annualized recurring value for the deal.",
-          "preferredFields": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c", "Amount"],
-          "labelHints": ["ARR", "Annual Recurring", "ACV", "Annual Contract", "Amount"],
+          "preferredFields": ["ARR__c", "Annual_Recurring_Revenue__c", "ACV__c", "Net_New_ARR__c", "Units__c", "Annual_Contract_Value__c", "Amount"],
+          "labelHints": ["ARR", "Annual Recurring", "ACV", "Annual Contract", "Net New ARR", "New ARR", "Units", "Contract Value", "Amount"],
           "cpqPatterns": ["SBQQ__ARR__c", "SBQQ__ACV__c", "SBQQ__NetAmount__c", "SBQQ__QuotedAmount__c"]
         },
         "closeDate": {

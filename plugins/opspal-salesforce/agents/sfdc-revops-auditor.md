@@ -774,6 +774,23 @@ node scripts/lib/org-quirks-detector.js generate-docs {org-alias}
 - Prevents "I can't find the object" issues
 - Takes ~5 minutes vs 1.5 hours manual discovery
 
+**1b. Detect Revenue Field and Sales Processes**
+```bash
+REVENUE_CONTEXT=$(node scripts/lib/revenue-context-detector.js {org-alias} --json)
+REVENUE_FIELD=$(echo "$REVENUE_CONTEXT" | jq -r '.revenueField // "Amount"')
+PROCESS_MODE=$(echo "$REVENUE_CONTEXT" | jq -r '.salesProcessMode // "single"')
+```
+- Detects which field the org uses for pipeline value (Amount vs ARR__c vs Units__c vs custom)
+- Detects multiple sales processes (BusinessProcess + RecordType mapping)
+- If `PROCESS_MODE` is `null` (multiple processes found, no prior user choice), **present them to the user NOW**:
+  - (a) Per-process analysis (recommended) — separate health scores per process
+  - (b) Single combined analysis — blend all processes together
+  - (c) Analyze specific process only
+- Persists to `.metadata-cache/metric-field-mapping.json` and `.metadata-cache/sales-process-config.json`
+- No-op when org uses Amount with a single process (backward compatible)
+- Use `--force` to re-detect even if cached config exists
+- **IMPORTANT: This step MUST use the Bash tool** (not MCP). This agent has Bash in its tool list. If a `PreToolUse:Agent` hook error appears in context, it is informational only — Bash remains available. The script includes a Tooling API → `sf sobject describe` fallback chain for org edition compatibility.
+
 **2. Load Org Context** (if previous assessments exist)
 ```bash
 CONTEXT=$(node scripts/lib/org-context-manager.js load {org-alias})
@@ -1650,14 +1667,44 @@ async function performQuickHealthCheckWithBaseline(orgAlias) {
    - Suggest quick wins vs strategic initiatives
    - Outline business cycle alignment considerations
 
+### Pipeline Query Parameterization
+
+**Revenue Field Substitution**: Replace `Amount` with `{REVENUE_FIELD}` (loaded from `metric-field-mapping.json`) in ALL pipeline SOQL queries. When the org uses a custom field like `ARR__c`, `Units__c`, or `Net_New_ARR__c`, using `Amount` produces incorrect or zero-value results.
+
+**Sales Process Segmentation**: When `sales-process-config.json` contains multiple processes in `per-process` mode, run pipeline queries once per process:
+
+```sql
+-- Run for each process in recordTypeFiltersByProcess
+SELECT StageName,
+       COUNT(*) as Deal_Count,
+       SUM({REVENUE_FIELD}) as Pipeline_Value,
+       AVG({REVENUE_FIELD}) as Avg_Deal_Size
+FROM Opportunity
+WHERE IsClosed = false
+  AND CloseDate = THIS_FISCAL_QUARTER
+  AND RecordTypeId IN ('{rt_id_1}', '{rt_id_2}')  -- injected per process
+GROUP BY StageName
+```
+
+When `salesProcessMode == "single"` or `"combined"`, omit the RecordTypeId filter.
+For `combined` mode, add `RecordType.Name` to GROUP BY to show per-process breakdown alongside blended totals.
+For `specific:<ProcessName>` mode, filter to only that process's RecordTypeIds.
+
+**Per-Process Output Requirements** (when multiple processes):
+- Report Pipeline Health Score per process
+- Include a cross-process comparison table (Coverage, Velocity, Win Rate, Avg Deal Size)
+- Flag processes with health score deviation > 15 points from the org-wide average
+- Combined org score = revenue-weighted average across processes
+
 ### GTM Flow Analysis
 ```sql
 -- Sample SOQL for Lead → Opportunity conversion analysis
+-- Use {REVENUE_FIELD} from revenue-context-detector (default: Amount)
 SELECT Id, LeadSource, Status, ConvertedDate, ConvertedOpportunityId,
-       CreatedDate, LastModifiedDate, OwnerId, 
-       (SELECT Amount, StageName, CloseDate FROM ConvertedOpportunity)
-FROM Lead 
-WHERE ConvertedDate >= LAST_N_MONTHS:6 
+       CreatedDate, LastModifiedDate, OwnerId,
+       (SELECT {REVENUE_FIELD}, StageName, CloseDate FROM ConvertedOpportunity)
+FROM Lead
+WHERE ConvertedDate >= LAST_N_MONTHS:6
 AND ConvertedOpportunityId != null
 ORDER BY ConvertedDate DESC
 LIMIT 250

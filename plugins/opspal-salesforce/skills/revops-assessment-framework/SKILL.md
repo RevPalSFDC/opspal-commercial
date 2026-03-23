@@ -15,6 +15,8 @@ context:
     - forecast-accuracy
     - health-scores
     - gtm-architecture
+    - revenue-field-config
+    - sales-process-config
 ---
 
 # RevOps Assessment Framework
@@ -52,7 +54,7 @@ function detectInstanceType(orgUrl) {
 | Category | Focus Area |
 |----------|-----------|
 | GTM Architecture | Sales model alignment, territory design |
-| Pipeline Health | Stage conversion, velocity, aging |
+| Pipeline Health | Stage conversion, velocity, aging (supports per-process segmentation) |
 | Data Quality | Field utilization, accuracy, completeness |
 | Automation | Process efficiency, manual steps |
 | Forecasting | Accuracy, methodology, confidence |
@@ -85,9 +87,18 @@ Overall Score = (
 
 ### 3. Pre-Assessment Automation
 1. Auto-detect org quirks (label customizations)
-2. Load org context (previous assessments)
-3. Confirm assessment framework
-4. Update context post-assessment
+2. **Detect revenue field and sales processes** (NEW)
+   ```bash
+   node scripts/lib/revenue-context-detector.js {org-alias} [--interactive]
+   ```
+   - Detects org-specific revenue field (Amount vs ARR__c vs Units__c vs custom)
+   - Detects multiple sales processes (BusinessProcess + RecordType mapping)
+   - Persists to `.metadata-cache/metric-field-mapping.json` and `.metadata-cache/sales-process-config.json`
+   - No-op if org uses Amount with a single process (backward compatible)
+   - Use `--interactive` to confirm ambiguous field choices in a terminal session
+3. Load org context (previous assessments)
+4. Confirm assessment framework
+5. Update context post-assessment
 
 ## Detailed Documentation
 
