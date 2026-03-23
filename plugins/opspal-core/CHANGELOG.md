@@ -2,6 +2,44 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## [2.42.34] - 2026-03-23 (Hook Remediation + Agent Routing Fixes)
+
+### Fixed — Hook Remediation (177 hooks audited)
+
+- **Safety flags**: Added `set -euo pipefail` to 59 hooks missing error safety across all plugins
+- **Shebang normalization**: Replaced `#!/bin/bash` with `#!/usr/bin/env bash` in 143 hooks for NixOS/non-standard bash compatibility
+- **jq dependency guards**: Added `command -v jq` guard to 57 hooks that use jq without checking availability
+- **Stdout contamination**: Added `exec 3>&1 1>&2` to Marketo PreToolUse hooks that wrote plain text to stdout (corrupting JSON hook contract)
+- **Cross-plugin sourcing**: Redirected 11 Marketo hooks to source own `lib/error-handler.sh` first, with core as fallback
+- **Exit code convention**: Converted 7 Marketo blocking hooks from `exit 2` to JSON `blockExecution` pattern (Claude Code treats non-zero as hook failure)
+- **Unbound variables**: Batch-fixed bare `$1`/`$2`/`$3` in 17 hooks that crash under `set -u` when invoked via stdin
+- **HubSpot error-handler path**: Fixed `CLAUDE_PLUGIN_ROOT` resolution that pointed to wrong directory, causing `set_lenient_mode` to never run
+- **Bash 3 compatibility**: Added `BASH_VERSINFO` guard for `declare -A` in HubSpot `pre-task-mandatory.sh`
+
+### Fixed — Agent Routing Deadlocks
+
+- **Deploy agent deadlock**: Removed `PARENT_CONTEXT_DEPLOY_REQUIRED` injection from `pre-task-agent-validator.sh` — was overriding `sfdc-deployment-manager`'s adaptive execution logic
+- **Routing enforcement bypass**: Added `CLAUDE_TASK_ID`/`agent_type` bypass to mandatory routing in `pre-tool-use-contract-validation.sh` — approved agents can now execute operations they were spawned for
+- **Deploy hook blocking**: Replaced `exit 2` with JSON `blockExecution` in `pre-deploy-agent-context-check.sh`
+
+### Fixed — Hook Infrastructure
+
+- **Campaign activation validation**: Replaced stub `pre-campaign-activation.sh` with real validation (campaignId format, API rate limits, deactivation cooldown)
+- **HOOK_DEBUG support**: Added standardized debug blocks to 10 highest-risk hooks
+- **Stop timeout reduction**: Reduced `post-discovery-field-dictionary.sh` timeout from 120s to 60s
+
+### Changed
+
+- `sync-claudemd.js`: Deduplicated routing table — `generateAgentProtocol()` no longer emits mandatory routes (already in critical preamble), saving ~300 tokens
+- Documented `PostToolUseFailure` as valid event type in HOOK_ARCHITECTURE.md
+- Clarified exit code conventions (hooks.json vs internal orchestrator) in HOOK_ARCHITECTURE.md
+- RTH smoke test made advisory in pre-push hook (L2 failures logged but don't block)
+
+### Removed
+
+- 2 `.deprecated` hook files (`subagent-utilization-booster.sh.deprecated`)
+- Disabled stub `pre-campaign-activation.sh` (replaced with real implementation)
+
 ## [2.1.0] - 2026-01-18
 
 ### Added

@@ -5,6 +5,30 @@ All notable changes to the Marketo Plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.22] - 2026-03-23 (Hook Remediation + Agent Tool Fixes)
+
+### Fixed — Hook Safety
+
+- All 20 hooks: Normalized shebangs to `#!/usr/bin/env bash`
+- 17 hooks: Added `set -euo pipefail` safety flags (2 lenient-mode hooks excluded by design)
+- 11 hooks: Redirected cross-plugin sourcing to own `lib/error-handler.sh` first, core as fallback
+- 9 PreToolUse hooks: Added `exec 3>&1 1>&2` stdout/stderr separation
+- 7 blocking hooks: Converted from `exit $BLOCK_EXIT_CODE` to JSON `blockExecution` pattern
+- 6 hooks: Added `command -v jq` dependency guards (from blocking pattern conversion)
+
+### Fixed — Campaign Activation Validation
+
+- Replaced stub `pre-campaign-activation.sh` (6 echo-only checks, no real validation) with real implementation
+- New validation: campaignId format check, API rate limit check (blocks at 95% quota), deactivation cooldown enforcement (5min default)
+- Re-registered in `hooks.json` with 10s timeout
+
+### Fixed — Agent Tool Gaps
+
+- `marketo-form-builder`: Added 6 form MCP tools (had zero — couldn't create forms)
+- `marketo-landing-page-manager`: Added 4 landing page MCP tools (had zero — couldn't create pages)
+- `marketo-campaign-builder`: Added `campaign_create` and `campaign_clone` tools
+- `marketo-governance-enforcer`: Documented as advisory-only (approval authority has no approval power by design)
+
 ## [2.5.0] - 2026-01-13
 
 ### Added

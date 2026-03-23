@@ -2,6 +2,34 @@
 
 All notable changes to the Salesforce Plugin will be documented in this file.
 
+## [3.84.23] - 2026-03-23 (Agent Handoff + Hook Fixes)
+
+### Fixed — Deployment Agent Deadlock
+
+- `sfdc-deployment-manager`: Replaced unconditional "Deployment Execution Contract" (never deploy) with adaptive approach — tries Bash first, falls back to parent handoff only if Bash unavailable
+- `pre-deploy-agent-context-check.sh`: Allows any agent context via `CLAUDE_TASK_ID` — routing system already ensures correct agent
+- `pre-deploy-agent-context-check.sh`: Replaced `exit 2` blocking with JSON `blockExecution` pattern
+
+### Fixed — Agent Handoff Gaps
+
+- `sfdc-automation-auditor`: Added "Post-Audit Execution Handoff" section routing deployment work to `sfdc-deployment-manager` or `sfdc-orchestrator`
+- `sfdc-architecture-auditor`: Added execution handoff section
+- `sfdc-performance-optimizer`: Added `Task` tool + execution handoff to `sfdc-apex-developer`/`sfdc-automation-builder`
+- `sfdc-quality-auditor`: Added execution handoff to `sfdc-remediation-executor`
+- `sfdc-permission-assessor`: Replaced stub "Execute now" with handoff to `sfdc-permission-orchestrator`
+- `sfdc-layout-generator`: Added `Task` tool for `sfdc-layout-deployer` handoff
+
+### Fixed — Hook Safety
+
+- `sfdc-security-admin` + `sfdc-permission-orchestrator`: Fixed `disallowedTools` pattern from `--metadata-dir` to `sf project deploy:*` (covers modern CLI syntax)
+- `permission-set-cli.js`: Implemented `executeMigration()` — was throwing `NotImplementedError` for all 5 phases
+- Added `disallowedTools` defense-in-depth to `win-loss-analyzer` and `compliance-report-generator`
+- Fixed 11 hooks with bare `$1`/`$2` unbound variable crashes under `set -euo pipefail`
+
+### Fixed — Routing Enforcement
+
+- `pre-tool-use-contract-validation.sh`: Added agent-context bypass to mandatory routing — territory/permission/validation-rule agents can now execute their own operations
+
 ## [3.70.0] - 2026-02-03 (User Reports Extraction & Template Generation)
 
 ### User Reports Extraction System

@@ -5,6 +5,21 @@ All notable changes to the hubspot-plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.9.10] - 2026-03-23 (Hook Safety + Agent Tool Gaps)
+
+### Fixed
+
+- `pre-task-agent-validator.sh`: Fixed error-handler path resolution — `CLAUDE_PLUGIN_ROOT/opspal-core/` doesn't exist, now uses `SCRIPT_DIR`-relative with inline fallback
+- `pre-task-mandatory.sh`: Added `BASH_VERSINFO` guard for `declare -A` (crashes on macOS bash 3). Fixed error-handler path. Fixed `check_high_risk` return code handling under `set -e`
+- `pre-write-path-validator.sh`: Fixed error-handler path and bare `$1` unbound variable
+- `pre-task-agent-validator.sh`: Fixed bare `$1`/`$2` unbound variables under `set -euo pipefail`
+- Added `disallowedTools` enforcement to `hubspot-workflow-auditor` (read-only agent had no tool-level protection)
+- `hubspot-api`: Documented as read-only diagnostic with delegation path
+- `hubspot-contact-manager`: Added `Bash` tool for optimizer scripts
+- All 11 HubSpot hooks: Normalized shebangs to `#!/usr/bin/env bash`
+- 6 hooks: Added `set -euo pipefail` safety flags
+- 6 hooks: Added `command -v jq` dependency guards
+
 ## [3.8.0] - 2026-03-09
 
 ### Added - HubSpot API Capabilities Hardening (Comprehensive)
