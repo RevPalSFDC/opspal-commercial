@@ -45,4 +45,20 @@ tags = ["context7", "key"]
 paths = [
     '''node_modules/''',
     '''.gitleaks.toml''',
+    '''.env.example''',
+    '''.env.production.example''',
+    '''__tests__/''',
+    '''test/''',
+    '''tests/''',
+]
+# Asana task IDs (numeric IDs, not secrets)
+# Documentation/example placeholders (your-key-here patterns)
+# Slack webhook URL examples in docs
+commits = [
+    "65c33ece1f310b4d7d5ded84d85f16aed6bd74ee",
+]
+# sb_publishable_ (Supabase anon key) is public by design — protected by RLS
+regexTarget = "match"
+regexes = [
+    '''sb_publishable_''',
 ]
