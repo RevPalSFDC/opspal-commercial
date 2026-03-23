@@ -880,6 +880,17 @@ enforce_mandatory_routing() {
             return 0
         fi
 
+        # Allow any agent context — if CLAUDE_TASK_ID is set or hook input has
+        # agent_type, we're inside a sub-agent. The routing system already ensured
+        # the correct agent was invoked; blocking here creates a deadlock where
+        # approved agents can't execute the operations they were spawned for.
+        local hook_agent_type=""
+        hook_agent_type="$(echo "$INPUT_DATA" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+        if [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$hook_agent_type" ]; then
+            emit_routing_event "allow" "$rule_id" "$required_agent" "Agent context detected (task=${CLAUDE_TASK_ID:-none}, agent=${hook_agent_type:-${caller_agent}}). Routing enforcement bypassed." "$command" "$caller_agent" "$tool"
+            return 0
+        fi
+
         emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
         emit_pretool_decision \
           "deny" \
