@@ -106,11 +106,11 @@ validate_merge() {
     if ! strategy_output=$(node scripts/lib/hubspot-merge-strategy-selector.js "$company1" "$company2" --json 2>&1); then
         log "Warning: Merge strategy selector failed - $strategy_output"
         log "Allowing operation with warning"
-        echo ""
+        echo "${1:-}"
         echo "⚠️  WARNING: Could not validate merge strategy"
         echo "   Error: $strategy_output"
         echo "   Proceeding anyway, but verify manually"
-        echo ""
+        echo "${1:-}"
         return 0
     fi
 
@@ -128,10 +128,10 @@ validate_merge() {
     case "$strategy" in
         "STANDARD_MERGE")
             log "✅ Standard merge allowed"
-            echo ""
+            echo "${1:-}"
             echo "✅ Merge Strategy: STANDARD_MERGE"
             echo "   Safe to use HubSpot merge API"
-            echo ""
+            echo "${1:-}"
             return 0
             ;;
 
@@ -140,26 +140,26 @@ validate_merge() {
             local reason
             reason=$(echo "$strategy_output" | jq -r '.reason' 2>/dev/null)
 
-            echo ""
+            echo "${1:-}"
             echo "❌ MERGE BLOCKED: Salesforce Sync Constraint Detected"
-            echo ""
+            echo "${1:-}"
             echo "Reason: $reason"
-            echo ""
+            echo "${1:-}"
             echo "Both companies have active Salesforce sync. HubSpot merge API"
             echo "will return HTTP 400 blocking the merge."
-            echo ""
+            echo "${1:-}"
             echo "Required Action: Use lift-and-shift pattern instead"
-            echo ""
+            echo "${1:-}"
             echo "Options:"
             echo "  1. Run: /hsmerge $company1 $company2"
             echo "     (Shows detailed strategy recommendation)"
-            echo ""
+            echo "${1:-}"
             echo "  2. Use lift-and-shift script:"
             echo "     node scripts/lift-and-shift-company-duplicates.js --dry-run"
-            echo ""
+            echo "${1:-}"
             echo "  3. Check documentation:"
             echo "     docs/SALESFORCE_SYNC_MERGE_CONSTRAINTS.md"
-            echo ""
+            echo "${1:-}"
 
             # Write blocked operation to audit log
             echo "{\"timestamp\":\"$(date -Iseconds)\",\"operation\":\"merge\",\"company1\":\"$company1\",\"company2\":\"$company2\",\"strategy\":\"$strategy\",\"blocked\":true}" >> ${HOME}/.claude/logs/hubspot/blocked-merges.jsonl
@@ -172,22 +172,22 @@ validate_merge() {
             local reason
             reason=$(echo "$strategy_output" | jq -r '.reason' 2>/dev/null)
 
-            echo ""
+            echo "${1:-}"
             echo "⚠️  MERGE REQUIRES MANUAL REVIEW"
-            echo ""
+            echo "${1:-}"
             echo "Reason: $reason"
-            echo ""
+            echo "${1:-}"
             echo "These companies may be legitimately separate accounts."
             echo "Verify in Salesforce before proceeding."
-            echo ""
+            echo "${1:-}"
             echo "Options:"
             echo "  1. Verify in Salesforce: Are these truly duplicates?"
             echo "  2. Run: /hsmerge $company1 $company2"
             echo "  3. If separate accounts: DO NOT MERGE"
             echo "  4. If duplicates in SF: Merge in Salesforce first"
-            echo ""
+            echo "${1:-}"
             echo "Type 'proceed' to override this warning (at your own risk)"
-            echo ""
+            echo "${1:-}"
 
             # Write warning to audit log
             echo "{\"timestamp\":\"$(date -Iseconds)\",\"operation\":\"merge\",\"company1\":\"$company1\",\"company2\":\"$company2\",\"strategy\":\"$strategy\",\"warning\":true}" >> ${HOME}/.claude/logs/hubspot/merge-warnings.jsonl

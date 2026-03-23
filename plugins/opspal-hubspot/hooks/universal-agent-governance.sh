@@ -79,9 +79,9 @@ emit_pretool_response() {
       suppressOutput: true,
       hookSpecificOutput: (
         { hookEventName: "PreToolUse" }
-        + (if $decision != "" then { permissionDecision: $decision } else {} end)
-        + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-        + (if $context != "" then { additionalContext: $context } else {} end)
+        + (if $decision != "${1:-}" then { permissionDecision: $decision } else {} end)
+        + (if $reason != "${1:-}" then { permissionDecisionReason: $reason } else {} end)
+        + (if $context != "${1:-}" then { additionalContext: $context } else {} end)
       )
     }'
 }
@@ -92,7 +92,7 @@ if [[ "$GOVERNANCE_ENABLED" != "true" ]]; then
 fi
 
 # Read hook input for additional context
-HOOK_INPUT=""
+HOOK_INPUT="${1:-}"
 if [ ! -t 0 ]; then
   HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
@@ -127,13 +127,13 @@ esac
 ###############################################################################
 
 RISK_LEVEL="LOW"
-RISK_REASON=""
+RISK_REASON="${1:-}"
 REQUIRES_APPROVAL="false"
 BLOCKED="false"
 
-PROMPT=""
+PROMPT="${1:-}"
 if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
-  PROMPT=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // ""' 2>/dev/null || echo "")
+  PROMPT=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // "${1:-}"' 2>/dev/null || echo "${1:-}")
 fi
 
 PROMPT_LOWER=$(echo "${PROMPT}" | tr '[:upper:]' '[:lower:]')
@@ -217,7 +217,7 @@ if [[ "$BLOCKED" == "true" ]]; then
   echo "  Agent: $AGENT_NAME" >&2
   echo "  Risk: $RISK_LEVEL — $RISK_REASON" >&2
   echo "  Action: Operation denied. Use [GOVERNANCE_OVERRIDE] with justification." >&2
-  echo "" >&2
+  echo "${1:-}" >&2
   emit_pretool_response \
     "deny" \
     "HUBSPOT_GOVERNANCE_BLOCKED: ${RISK_REASON}." \
@@ -231,7 +231,7 @@ if [[ "$REQUIRES_APPROVAL" == "true" ]]; then
   echo "  Agent: $AGENT_NAME" >&2
   echo "  Risk: $RISK_LEVEL — $RISK_REASON" >&2
   echo "  Action: Proceeding with enhanced logging. Confirm before irreversible operations." >&2
-  echo "" >&2
+  echo "${1:-}" >&2
   emit_pretool_response \
     "allow" \
     "HUBSPOT_GOVERNANCE_APPROVAL_RECOMMENDED: ${RISK_REASON}." \

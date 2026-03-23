@@ -53,7 +53,7 @@ if [ "$PICKLIST_VALIDATION_ENABLED" = "false" ]; then
 fi
 
 # Parse command from arguments
-COMMAND="$1"
+COMMAND="${1:-}"
 shift
 ARGS=("$@")
 

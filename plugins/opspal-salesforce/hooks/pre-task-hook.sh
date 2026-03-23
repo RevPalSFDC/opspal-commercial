@@ -43,7 +43,7 @@ ORG_ENFORCER="$BASE_DIR/scripts/lib/organization-enforcer.js"
 PROJECT_INIT="$BASE_DIR/scripts/init-project.sh"
 
 # Get the user's input/task
-TASK_INPUT="$1"
+TASK_INPUT="${1:-}"
 
 # ═══════════════════════════════════════════════════════════════
 # PROMINENT AGENT DECISION REMINDER

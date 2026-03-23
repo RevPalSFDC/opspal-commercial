@@ -11,8 +11,8 @@ set -euo pipefail
 #   1 - Logging failed (non-blocking)
 
 # Get the command that was executed and its result
-COMMAND="$1"
-EXIT_CODE="$2"
+COMMAND="${1:-}"
+EXIT_CODE="${2:-}"
 shift 2
 
 # Script directory

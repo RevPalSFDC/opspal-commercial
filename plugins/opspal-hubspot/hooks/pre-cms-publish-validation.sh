@@ -43,7 +43,7 @@ REQUIRE_TEMPLATE_VALIDATION="${REQUIRE_TEMPLATE_VALIDATION:-true}"
 SKIP_VALIDATION="${SKIP_CMS_VALIDATION:-false}"
 
 # Extract page ID from environment or arguments
-PAGE_ID="${PAGE_ID:-$1}"
+PAGE_ID="${PAGE_ID:-${1:-}}"
 PAGE_TYPE="${PAGE_TYPE:-landing-pages}"
 FORCE_PUBLISH="${FORCE_PUBLISH:-false}"
 

@@ -50,7 +50,7 @@ if [[ "${API_MONITORING_ENABLED:-true}" != "true" ]]; then
 fi
 
 # Get the command that was executed
-COMMAND="$1"
+COMMAND="${1:-}"
 EXIT_CODE="${2:-0}"
 
 # Extract command type and org

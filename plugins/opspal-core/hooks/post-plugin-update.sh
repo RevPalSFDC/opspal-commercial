@@ -37,7 +37,7 @@ if [ "${ENABLE_POST_PLUGIN_CHECK}" = "0" ]; then
 fi
 
 # Get plugin name from environment or command arguments
-PLUGIN_NAME="${PLUGIN_NAME:-$1}"
+PLUGIN_NAME="${PLUGIN_NAME:-${1:-}}"
 
 # Determine plugin directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

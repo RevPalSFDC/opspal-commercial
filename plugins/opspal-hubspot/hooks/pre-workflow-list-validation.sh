@@ -78,7 +78,7 @@ if [ -f "$LIB_DIR/list-workflow-pairing-validator.js" ]; then
   LISTS_SOURCE="cache"
 
   # In live-first mode, check if cache is stale and warn
-  STALE_WARNING=""
+  STALE_WARNING="${1:-}"
   if [ "$LIVE_FIRST" = "true" ] && [ -f "$LISTS_CACHE" ]; then
     CACHE_AGE_MINUTES=0
     if command -v stat &>/dev/null; then

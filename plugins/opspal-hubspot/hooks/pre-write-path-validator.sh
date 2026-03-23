@@ -13,10 +13,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source standardized error handler for centralized logging
-if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
-    ERROR_HANDLER="${CLAUDE_PLUGIN_ROOT}/opspal-core/hooks/lib/error-handler.sh"
-else
+if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
+    ERROR_HANDLER="${SCRIPT_DIR}/lib/error-handler.sh"
+elif [[ -f "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" ]]; then
     ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
+else
+    ERROR_HANDLER=""
 fi
 
 if [[ -f "$ERROR_HANDLER" ]]; then
@@ -51,9 +53,9 @@ emit_pretool_response() {
         suppressOutput: true,
         hookSpecificOutput: (
           { hookEventName: "PreToolUse" }
-          + (if $decision != "" then { permissionDecision: $decision } else {} end)
-          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-          + (if $context != "" then { additionalContext: $context } else {} end)
+          + (if $decision != "${1:-}" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "${1:-}" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "${1:-}" then { additionalContext: $context } else {} end)
         )
       }'
 }
@@ -62,10 +64,10 @@ emit_path_violation() {
     local message="$1"
     echo "⚠️  Path Validation Warning" >&2
     echo "=============================" >&2
-    echo "" >&2
+    echo "${1:-}" >&2
     echo "$message" >&2
     echo "Path: $FILE_PATH" >&2
-    echo "" >&2
+    echo "${1:-}" >&2
     if [[ "$BLOCK_ON_PATH_VIOLATION" == "1" ]]; then
         echo "❌ Write blocked by pre-write path validator" >&2
         emit_pretool_response \
@@ -83,7 +85,7 @@ emit_path_violation() {
 }
 
 # Get file path from environment or arguments
-FILE_PATH="${WRITE_FILE_PATH:-$1}"
+FILE_PATH="${WRITE_FILE_PATH:-${1:-}}"
 
 # Exit if no file path
 if [[ -z "$FILE_PATH" ]]; then

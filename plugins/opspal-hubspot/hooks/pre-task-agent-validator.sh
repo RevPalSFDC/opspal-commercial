@@ -54,15 +54,15 @@ emit_pretool_response() {
         suppressOutput: true,
         hookSpecificOutput: (
           { hookEventName: "PreToolUse" }
-          + (if $decision != "" then { permissionDecision: $decision } else {} end)
-          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-          + (if $context != "" then { additionalContext: $context } else {} end)
+          + (if $decision != "${1:-}" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "${1:-}" then { permissionDecisionReason: $reason } else {} end)
+          + (if $context != "${1:-}" then { additionalContext: $context } else {} end)
         )
       }'
 }
 
 # Read hook input from stdin if available
-HOOK_INPUT=""
+HOOK_INPUT="${1:-}"
 if [[ ! -t 0 ]]; then
     HOOK_INPUT=$(cat)
 fi
@@ -72,11 +72,11 @@ TASK_DESC="${TASK_DESCRIPTION:-${1:-}}"
 AGENT_NAME="${AGENT_NAME:-${2:-}}"
 
 if [[ -z "$TASK_DESC" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
-    TASK_DESC=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // ""' 2>/dev/null || echo "")
+    TASK_DESC=$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // "${1:-}"' 2>/dev/null || echo "${1:-}")
 fi
 
 if [[ -z "$AGENT_NAME" ]] && [[ -n "$HOOK_INPUT" ]] && command -v jq >/dev/null 2>&1; then
-    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // ""' 2>/dev/null || echo "")
+    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // "${1:-}"' 2>/dev/null || echo "${1:-}")
 fi
 
 AGENT_NAME_LOWER="$(printf '%s' "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')"
@@ -111,14 +111,14 @@ if [[ -f "$DETECTOR_SCRIPT" ]]; then
         if [[ $VALIDATION_CODE -ne 0 ]]; then
             echo "⚠️  Agent Validation Warning" >&2
             echo "================================" >&2
-            echo "" >&2
+            echo "${1:-}" >&2
             echo "Task: $TASK_DESC" >&2
             echo "Selected Agent: $AGENT_NAME" >&2
             echo "Suggested Agent: $SUGGESTED_AGENT" >&2
-            echo "" >&2
+            echo "${1:-}" >&2
             echo "$VALIDATION" >&2
             if [[ "$STRICT_VALIDATION" == "1" ]]; then
-                echo "" >&2
+                echo "${1:-}" >&2
                 echo "❌ Blocking due to HUBSPOT_TASK_AGENT_VALIDATOR_STRICT=1" >&2
                 emit_pretool_response \
                   "deny" \

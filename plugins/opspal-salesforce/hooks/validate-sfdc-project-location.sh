@@ -30,7 +30,7 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     HOOK_NAME="validate-sfdc-project-location"
 fi
 
-PROJECT_PATH="$1"
+PROJECT_PATH="${1:-}"
 
 # Check if this is an SFDC-related operation
 if [[ "$PROJECT_PATH" == *"instances/"* ]] && [[ "$PROJECT_PATH" != *"SFDC/instances/"* ]]; then

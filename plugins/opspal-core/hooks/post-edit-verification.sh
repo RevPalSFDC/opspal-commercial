@@ -38,9 +38,9 @@ if [ "${EDIT_VERIFICATION_ENABLED:-1}" = "0" ]; then
 fi
 
 # Get edit operation details from arguments
-OPERATION="$1"
-SEARCH_PATTERN="$2"
-REPLACEMENT_PATTERN="$3"
+OPERATION="${1:-}"
+SEARCH_PATTERN="${2:-}"
+REPLACEMENT_PATTERN="${3:-}"
 FILES="$4"
 EXPECTED_COUNT="$5"
 

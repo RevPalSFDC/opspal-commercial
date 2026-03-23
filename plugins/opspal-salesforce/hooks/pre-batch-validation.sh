@@ -63,8 +63,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Parse arguments
-ANALYSIS_FILE="$1"
-TARGET_ORG="$2"
+ANALYSIS_FILE="${1:-}"
+TARGET_ORG="${2:-}"
 
 if [ -z "$ANALYSIS_FILE" ] || [ -z "$TARGET_ORG" ]; then
   echo -e "${RED}❌ Usage: $0 <analysis-file> <target-org>${NC}"

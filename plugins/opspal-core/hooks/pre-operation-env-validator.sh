@@ -30,9 +30,9 @@ if [ "${ENV_VALIDATION_ENABLED:-1}" = "0" ]; then
 fi
 
 # Get the command being executed
-COMMAND="$1"
-PLATFORM="$2"
-INSTANCE="$3"
+COMMAND="${1:-}"
+PLATFORM="${2:-}"
+INSTANCE="${3:-}"
 
 # Path to validator script
 VALIDATOR_SCRIPT=".claude-plugins/opspal-core/scripts/lib/env-config-validator.js"

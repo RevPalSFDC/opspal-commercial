@@ -13,7 +13,7 @@
 set -e
 
 # Get the command being executed
-COMMAND="$1"
+COMMAND="${1:-}"
 shift
 
 # Source error handler if available
