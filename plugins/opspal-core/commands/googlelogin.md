@@ -48,9 +48,11 @@ npm install -g @googleworkspace/cli
 The Google Workspace CLI requires OAuth client credentials. These MUST be set before any `gws` command:
 
 ```bash
-export GOOGLE_WORKSPACE_CLI_CLIENT_ID="REDACTED_GOOGLE_CLIENT_ID"
-export GOOGLE_WORKSPACE_CLI_CLIENT_SECRET="REDACTED_GOOGLE_OAUTH_SECRET"
+export GOOGLE_WORKSPACE_CLI_CLIENT_ID="$GOOGLE_WORKSPACE_CLI_CLIENT_ID"
+export GOOGLE_WORKSPACE_CLI_CLIENT_SECRET="$GOOGLE_WORKSPACE_CLI_CLIENT_SECRET"
 ```
+
+> **Note:** Set `GOOGLE_WORKSPACE_CLI_CLIENT_ID` and `GOOGLE_WORKSPACE_CLI_CLIENT_SECRET` in `~/.bashrc` or your environment. Do not hardcode credentials in source files.
 
 **IMPORTANT**: Always export these env vars before running any `gws` command in this session.
 
@@ -127,7 +129,7 @@ These are set automatically by this command and should also be in `~/.bashrc` fo
 ## GCP Project
 
 - **Project**: RevPalInternal
-- **Client ID**: `REDACTED_GOOGLE_CLIENT_ID`
+- **Client ID**: Set via `GOOGLE_WORKSPACE_CLI_CLIENT_ID` env var
 - **OAuth Type**: Desktop app
 
 ## Scopes Granted

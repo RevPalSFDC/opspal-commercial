@@ -166,8 +166,8 @@ cd /home/chris/Desktop/RevPal/Agents/opspal-internal-plugins
 # 1. Update .env with your token
 ./claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh \
   update \
-  "REDACTED_ASANA_PAT_2" \
-  "REDACTED_ASANA_WORKSPACE"
+  "$ASANA_ACCESS_TOKEN" \
+  "$ASANA_WORKSPACE_GID"
 
 # 2. Validate connection
 ./claude-plugins/opspal-core/scripts/lib/asana-connection-manager.sh validate

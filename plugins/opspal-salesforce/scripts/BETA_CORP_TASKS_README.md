@@ -6,8 +6,8 @@ This guide documents the creation of 5 Asana tasks for sample-org Production Sal
 ## Prerequisites
 
 1. **Environment Variables** - Already configured in `.env`:
-   - `ASANA_ACCESS_TOKEN`: REDACTED_ASANA_PAT_1
-   - `ASANA_WORKSPACE_GID`: REDACTED_ASANA_WORKSPACE
+   - `ASANA_ACCESS_TOKEN`: Set via environment variable (never hardcode)
+   - `ASANA_WORKSPACE_GID`: Set via environment variable
 
 2. **Dependencies** - Already installed:
    - `axios` - HTTP client for Asana API calls

@@ -96,8 +96,8 @@ function makeRequest(url, options, body) {
  * Query reflections from Supabase
  */
 async function queryReflections(org, options = {}) {
-  const supabaseUrl = options.supabaseUrl || process.env.SUPABASE_URL || 'https://REDACTED_SUPABASE_PROJECT_REF.supabase.co';
-  const supabaseKey = options.supabaseKey || process.env.SUPABASE_ANON_KEY || 'REDACTED_SUPABASE_ANON_KEY';
+  const supabaseUrl = options.supabaseUrl || process.env.SUPABASE_URL;
+  const supabaseKey = options.supabaseKey || process.env.SUPABASE_ANON_KEY;
 
   // Build query parameters
   const queryParams = new URLSearchParams();

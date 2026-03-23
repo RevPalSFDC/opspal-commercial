@@ -82,8 +82,16 @@ function makeRequest(url, options) {
  */
 async function queryNewReflections() {
   // Use hardcoded defaults (can be overridden with environment variables)
-  const supabaseUrl = process.env.SUPABASE_URL || 'https://REDACTED_SUPABASE_PROJECT_REF.supabase.co';
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'REDACTED_SUPABASE_SERVICE_KEY';
+  const supabaseUrl = process.env.SUPABASE_URL;
+  if (!supabaseUrl) {
+    console.error('❌ SUPABASE_URL environment variable is required');
+    process.exit(1);
+  }
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseKey) {
+    console.error('❌ SUPABASE_SERVICE_ROLE_KEY environment variable is required');
+    process.exit(1);
+  }
 
   console.error('Querying reflections with status="new"...');
 

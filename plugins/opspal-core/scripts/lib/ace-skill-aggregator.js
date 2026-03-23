@@ -19,8 +19,12 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration
-const SUPABASE_URL = 'https://REDACTED_SUPABASE_PROJECT_REF.supabase.co';
-const SUPABASE_ANON_KEY = 'REDACTED_SUPABASE_ANON_KEY';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    console.error('SUPABASE_URL and SUPABASE_ANON_KEY environment variables are required');
+    process.exit(1);
+}
 
 // Resolve plugin root - prefer __dirname resolution for accuracy
 // CLAUDE_PLUGIN_ROOT may point to parent repo, not specific plugin
