@@ -1,0 +1,52 @@
+[extend]
+useDefault = true
+
+title = "OpsPal Commercial - Secret Scanning Config"
+
+[[rules]]
+id = "hubspot-pat"
+description = "HubSpot Private App Token"
+regex = '''pat-na1-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
+tags = ["hubspot", "token"]
+
+[[rules]]
+id = "supabase-service-key"
+description = "Supabase Service Role Key"
+regex = '''sb_secret_[A-Za-z0-9_-]{20,}'''
+tags = ["supabase", "key"]
+
+[[rules]]
+id = "supabase-anon-key"
+description = "Supabase Anon Key"
+regex = '''sb_publishable_[A-Za-z0-9_-]{20,}'''
+tags = ["supabase", "key"]
+
+[[rules]]
+id = "asana-pat"
+description = "Asana Personal Access Token"
+regex = '''2/\d{13,16}/\d{13,16}:[0-9a-f]{32}'''
+tags = ["asana", "token"]
+
+[[rules]]
+id = "google-oauth-secret"
+description = "Google OAuth Client Secret"
+regex = '''GOCSPX-[A-Za-z0-9_-]{20,}'''
+tags = ["google", "oauth"]
+
+[[rules]]
+id = "slack-webhook-url"
+description = "Slack Incoming Webhook URL"
+regex = '''hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]+'''
+tags = ["slack", "webhook"]
+
+[[rules]]
+id = "context7-api-key"
+description = "Context7 API Key"
+regex = '''ctx7sk-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
+tags = ["context7", "key"]
+
+[allowlist]
+paths = [
+    '''node_modules/''',
+    '''.gitleaks.toml''',
+]
