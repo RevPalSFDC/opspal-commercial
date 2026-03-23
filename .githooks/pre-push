@@ -62,4 +62,10 @@ if [ -s "$CHANGED_FILES_FILE" ] && sort -u "$CHANGED_FILES_FILE" | grep -Eq "$RU
   npm run verify:runtime-fidelity >/dev/null
 fi
 
+RTH_BIN="$REPO_ROOT/../dev-tools/recursive-test-harness/bin/rth.js"
+if [ -f "$RTH_BIN" ] && sort -u "$CHANGED_FILES_FILE" | grep -qE '^plugins/'; then
+  echo "Running RTH smoke test against commercial plugins..."
+  node "$RTH_BIN" run --mode smoke --plugins-dir "$REPO_ROOT/plugins" --no-evidence 2>/dev/null
+fi
+
 echo "Commercial pre-push guardrails passed."

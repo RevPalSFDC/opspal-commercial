@@ -109,6 +109,41 @@ cleanup_stale_sessions() {
 cleanup_stale_sessions
 
 # =============================================================================
+# 2b. Restore agent stubs from any prior crashed session
+# =============================================================================
+# If a prior session crashed without running session-stop, agent stubs may still
+# be overwritten with full-body agents. Restore from backups before proceeding.
+
+restore_stale_agent_stubs() {
+    [[ -d "$RUNTIME_BASE" ]] || return
+    for session_dir in "$RUNTIME_BASE"/*/; do
+        [[ -d "$session_dir" ]] || continue
+        [[ "$(basename "$session_dir")" = ".current-session" ]] && continue
+        local manifest="$session_dir/.session-manifest.json"
+        [[ -f "$manifest" ]] || continue
+        if command -v node &>/dev/null; then
+            ENC_STALE_MANIFEST="$manifest" node -e '
+                const fs = require("fs");
+                try {
+                    const m = JSON.parse(fs.readFileSync(process.env.ENC_STALE_MANIFEST, "utf8"));
+                    for (const asset of (m.assets || [])) {
+                        if (asset.stub_backup_path && asset.overwritten_path) {
+                            try {
+                                if (fs.existsSync(asset.stub_backup_path)) {
+                                    fs.copyFileSync(asset.stub_backup_path, asset.overwritten_path);
+                                }
+                            } catch {}
+                        }
+                    }
+                } catch {}
+            ' 2>/dev/null || true
+        fi
+    done
+}
+
+restore_stale_agent_stubs
+
+# =============================================================================
 # 3. Discover plugins with encryption manifests
 # =============================================================================
 
@@ -323,13 +358,60 @@ decrypt_plugin_assets() {
                     expectedChecksum: asset.checksum_plaintext,
                     fileMode: 0o600
                 });
-                results.push({
-                    path: asset.path,
-                    status: "ok",
-                    decrypted_path: outputPath,
-                    plugin: pluginName,
-                    encrypted_path: asset.encrypted_path
-                });
+
+                // Agent body in-place overwrite: replace the stub with the decrypted full-body agent
+                if (asset.asset_type === "agent_body") {
+                    const agentStubPath = path.resolve(pluginDir, asset.path);
+                    const backupPath = outputPath + ".stub-backup";
+
+                    // Read decrypted content and inline @import directives
+                    let body = fs.readFileSync(outputPath, "utf8");
+                    body = body.replace(/^@import\s+(.+)$/gm, (match, importPath) => {
+                        const trimmed = importPath.trim();
+                        // Resolve relative to plugin agents/ dir or plugin root
+                        const candidates = [
+                            path.resolve(pluginDir, trimmed),
+                            path.resolve(pluginDir, "agents", trimmed),
+                            // Cross-plugin: resolve relative to parent plugins dir
+                            path.resolve(pluginDir, "..", trimmed)
+                        ];
+                        for (const candidate of candidates) {
+                            try {
+                                if (fs.existsSync(candidate)) {
+                                    return fs.readFileSync(candidate, "utf8");
+                                }
+                            } catch { /* skip */ }
+                        }
+                        return match; // Leave unresolved imports as-is
+                    });
+
+                    // Back up the current stub before overwriting
+                    if (fs.existsSync(agentStubPath)) {
+                        fs.copyFileSync(agentStubPath, backupPath);
+                    }
+
+                    // Overwrite the stub with the full decrypted + inlined agent
+                    fs.writeFileSync(agentStubPath, body, { mode: 0o644 });
+
+                    results.push({
+                        path: asset.path,
+                        status: "ok",
+                        asset_type: "agent_body",
+                        decrypted_path: outputPath,
+                        stub_backup_path: backupPath,
+                        overwritten_path: agentStubPath,
+                        plugin: pluginName,
+                        encrypted_path: asset.encrypted_path
+                    });
+                } else {
+                    results.push({
+                        path: asset.path,
+                        status: "ok",
+                        decrypted_path: outputPath,
+                        plugin: pluginName,
+                        encrypted_path: asset.encrypted_path
+                    });
+                }
             } catch (err) {
                 results.push({
                     path: asset.path,
@@ -427,12 +509,21 @@ while IFS= read -r plugin_dir; do
         const prev = JSON.parse(process.env.ENC_PREV_RESULTS);
         const prevBlocked = JSON.parse(process.env.ENC_PREV_BLOCKED || "[]");
         const curr = JSON.parse(fs.readFileSync("/dev/stdin","utf8"));
-        const merged = prev.concat((curr.results||[]).filter(r=>r.status==="ok").map(r=>({
-            plugin: curr.plugin,
-            logical_path: r.path,
-            decrypted_path: r.decrypted_path,
-            encrypted_path: r.encrypted_path
-        })));
+        const merged = prev.concat((curr.results||[]).filter(r=>r.status==="ok").map(r=>{
+            const entry = {
+                plugin: curr.plugin,
+                logical_path: r.path,
+                decrypted_path: r.decrypted_path,
+                encrypted_path: r.encrypted_path
+            };
+            // Preserve agent_body backup metadata for session-stop restoration
+            if (r.asset_type === "agent_body") {
+                entry.asset_type = "agent_body";
+                entry.stub_backup_path = r.stub_backup_path;
+                entry.overwritten_path = r.overwritten_path;
+            }
+            return entry;
+        }));
         const mergedBlocked = prevBlocked.concat((curr.results||[]).filter(r=>r.status==="tier_blocked").map(r=>({
             plugin: curr.plugin,
             logical_path: r.path,

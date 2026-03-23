@@ -96,6 +96,32 @@ SESSION_ID=$(basename "$SESSION_DIR")
 log_verbose "Cleaning session: $SESSION_ID"
 
 # =============================================================================
+# Restore agent body stubs before wiping
+# =============================================================================
+
+MANIFEST_FILE="$SESSION_DIR/.session-manifest.json"
+if [[ -f "$MANIFEST_FILE" ]] && command -v node &>/dev/null; then
+    ENC_MANIFEST_FILE="$MANIFEST_FILE" node -e '
+        const fs = require("fs");
+        try {
+            const manifest = JSON.parse(fs.readFileSync(process.env.ENC_MANIFEST_FILE, "utf8"));
+            for (const asset of (manifest.assets || [])) {
+                if (asset.stub_backup_path && asset.overwritten_path) {
+                    try {
+                        if (fs.existsSync(asset.stub_backup_path)) {
+                            fs.copyFileSync(asset.stub_backup_path, asset.overwritten_path);
+                        }
+                    } catch (err) {
+                        process.stderr.write("[asset-cleanup] Failed to restore stub: " + asset.overwritten_path + " - " + err.message + "\n");
+                    }
+                }
+            }
+        } catch { /* manifest read failure is non-fatal */ }
+    ' 2>/dev/null || true
+    log_verbose "Agent body stubs restored"
+fi
+
+# =============================================================================
 # Wipe all decrypted files
 # =============================================================================
 

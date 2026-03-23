@@ -13,6 +13,102 @@
       ],
       "checksum_plaintext": "sha256:ccc1e470f1eba28bf952b803b2740e4c02710a62587e1d270503caa7b83eeff4",
       "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-planning-orchestrator.md",
+      "encrypted_path": "agents/gtm-planning-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:73840caf948467401294a0564772f9ff73051948962d4c003cfed7b946e5d052",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-quota-capacity.md",
+      "encrypted_path": "agents/gtm-quota-capacity.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:2190ab6bd338f34a54d196bd94a45ae58bc96b5a5389d16f228b13f3694561e0",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-territory-designer.md",
+      "encrypted_path": "agents/gtm-territory-designer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:3ac49b661cf9bcb5259a5bcc99e2c40df53c7bb1ce8a9e79ee67365ec2f42509",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-comp-planner.md",
+      "encrypted_path": "agents/gtm-comp-planner.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:80332eeb6a804bcf8b726c859cc10885e01bd0c6bbcee140a01e9e401503ee9a",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-revenue-modeler.md",
+      "encrypted_path": "agents/gtm-revenue-modeler.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c9629df67afa928277668a123d22d323a1c27d2748a8bbc3f6b57a88bbf1ca0b",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-strategy-planner.md",
+      "encrypted_path": "agents/gtm-strategy-planner.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:396b4db853414802ed2ef9718e1d14c2059b70fc4af3343347179cc71d8ef899",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-attribution-governance.md",
+      "encrypted_path": "agents/gtm-attribution-governance.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:dfd82e917aedb79a1dc75020f9afa0c9c7e5f6df0ddb494b265556c09b142b14",
+      "required_domain": "gtm"
+    },
+    {
+      "path": "agents/gtm-retention-analyst.md",
+      "encrypted_path": "agents/gtm-retention-analyst.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:4af36f4ae95858af318a5a9ffa4df8b0649b43bc5ca3bb8b51e676fd82e94b60",
+      "required_domain": "gtm"
     }
   ],
   "cleanup_on_stop": true,

@@ -148,6 +148,9 @@ function parseROIValue(roiString) {
  * - Common credential patterns
  */
 function sanitizeReflection(data) {
+  // Guard against null/undefined input
+  if (data == null) return data;
+
   // Deep clone to avoid mutating original
   const sanitized = JSON.parse(JSON.stringify(data));
 
@@ -1654,6 +1657,9 @@ async function submitReflection(reflectionPath) {
  * @returns {Object|Array} Sanitized copy with org references anonymized
  */
 function sanitizeForExternalOutput(data) {
+  // Guard against null/undefined input
+  if (data == null) return data;
+
   // Step 1: Apply Tier 1 sanitization
   const sanitized = sanitizeReflection(data);
 

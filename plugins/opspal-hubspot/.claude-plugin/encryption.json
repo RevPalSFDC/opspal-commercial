@@ -37,6 +37,246 @@
       ],
       "checksum_plaintext": "sha256:d6e3eb217dd235090519a5aa058bb92cee742814c2583da91a1bd4ad83f64efd",
       "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-assessment-analyzer.md",
+      "encrypted_path": "agents/hubspot-assessment-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:030da80d15b69e3157026679927794c94f1ab2d1205273fcc2b3376e9fc21b26",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-revenue-intelligence.md",
+      "encrypted_path": "agents/hubspot-revenue-intelligence.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:db1f802b732f71001693a90d97abde74e3b4cbdf68f6f2249b98c48cadc07e9d",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-ai-revenue-intelligence.md",
+      "encrypted_path": "agents/hubspot-ai-revenue-intelligence.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:84dd3f1e9d9b3a86063e561d2a33c3c3fbbc0728b8e5bf8e945671423e8d811e",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-lead-scoring-specialist.md",
+      "encrypted_path": "agents/hubspot-lead-scoring-specialist.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:de21961761bc0cc31afe168e9ed550737d64fffbf17d3ec151f9e4ad9976f05d",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-plg-foundation.md",
+      "encrypted_path": "agents/hubspot-plg-foundation.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c72eb19fe9d0d132a8b3e2d3fad7a3f83c81bf415bf2b3c3da3b369940d97b25",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-attribution-analyst.md",
+      "encrypted_path": "agents/hubspot-attribution-analyst.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:e18f190913239ec44ff95d60f1f32a6993d0772be43bd45ac23c370ce3e3e70b",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-orchestrator.md",
+      "encrypted_path": "agents/hubspot-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:fdefcad962ae28ae00e483f07038b5c4265f58ebe7bc4980eb3f5c740a0d1f02",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-autonomous-operations.md",
+      "encrypted_path": "agents/hubspot-autonomous-operations.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:acfda758d8fcfb1c2a03f1955d0ef912710600cb8ad3d98127d63392da8ad82a",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-workflow-builder.md",
+      "encrypted_path": "agents/hubspot-workflow-builder.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:5d3e8d31256fb1831f8465714fda8321e8df57f8ccd4b99dae73b5bc39b6a28c",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-marketing-automation.md",
+      "encrypted_path": "agents/hubspot-marketing-automation.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:370d969dce52e87ed4608d2fe6386a079ea74acea34a5932f982f586c0f144a7",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-seo-optimizer.md",
+      "encrypted_path": "agents/hubspot-seo-optimizer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:3044b7350fdca98a764a23e991c8914ed02ddf5f3ad359be172b2585c9140716",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-seo-content-optimizer.md",
+      "encrypted_path": "agents/hubspot-seo-content-optimizer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:fe470f263c9960261fb4f73f77cf3a1dd8e6cc419945f2d104991d5d0ce09d9b",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-seo-competitor-analyzer.md",
+      "encrypted_path": "agents/hubspot-seo-competitor-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:59f535178bbeae28cb8c46fb410af4dab9540725bff4a5ff931fefee3218fce4",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-seo-site-crawler.md",
+      "encrypted_path": "agents/hubspot-seo-site-crawler.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:77337dbc371b63673da9824dee9b68e88adb775136294ee83a1a42516150329c",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-seo-deployment-agent.md",
+      "encrypted_path": "agents/hubspot-seo-deployment-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:687001db26f3236ea559515a4c7d65adbc38e2742cec1f64f34408cf50959692",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-schema-automation-agent.md",
+      "encrypted_path": "agents/hubspot-schema-automation-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:eb941a1884f19b1f9babe7eb5813469716cfa476f9188b6aa7fc7b1983dcf757",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-content-automation-agent.md",
+      "encrypted_path": "agents/hubspot-content-automation-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:71cdc82dd7a1b549d3b88e0aea21b47a681dd1e91b1335943749f51ee6fa1936",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-governance-enforcer.md",
+      "encrypted_path": "agents/hubspot-governance-enforcer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:188bb4a0238b7cffafd7d24373922d310d8063c38820966a8f906ec2be6a534e",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-renewals-specialist.md",
+      "encrypted_path": "agents/hubspot-renewals-specialist.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:170ab047e91599fa3757fc926b88824c55a3d0b8acbe6337b03b72de24a216a4",
+      "required_domain": "hubspot"
+    },
+    {
+      "path": "agents/hubspot-pipeline-manager.md",
+      "encrypted_path": "agents/hubspot-pipeline-manager.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:ef2f42c076f64af2e7d6fd4d62be377737809dec8b3022702ed5a862aa65565b",
+      "required_domain": "hubspot"
     }
   ],
   "cleanup_on_stop": true,

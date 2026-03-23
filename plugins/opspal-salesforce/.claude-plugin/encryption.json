@@ -145,6 +145,546 @@
       ],
       "checksum_plaintext": "sha256:33786372d73f779e73d142b7cdfcbc4b3b332fcd19399c04dca00eec15b56f3a",
       "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-cpq-assessor.md",
+      "encrypted_path": "agents/sfdc-cpq-assessor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c6f57eaf270963f90a28e3cd2bb5a3f6d7fdd988d645831a61011ca111bf98cd",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-revops-auditor.md",
+      "encrypted_path": "agents/sfdc-revops-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:29624d427be0929ca30c3d4b4ce8beec8f9445acd2a29f38554bc9cbee43d878",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-automation-auditor.md",
+      "encrypted_path": "agents/sfdc-automation-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:21b2fdd629d9ad1b5aba467f6281356eef2a306ba5b85c8900e605656a58486b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-permission-orchestrator.md",
+      "encrypted_path": "agents/sfdc-permission-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:eb9217ce3a3fc24af64688506d29983a6eb22de27826c0760a4a72a4a0c85a49",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-architecture-auditor.md",
+      "encrypted_path": "agents/sfdc-architecture-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:a558f9b6cc4f40fa755cb68ba589410d4019dcc79b406c8c0e7749334f21be6b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-orchestrator.md",
+      "encrypted_path": "agents/sfdc-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f596c15fc3004d8d63080dd3581bc5cdfb5080c839b54d35d2dadac399c3a63e",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-planner.md",
+      "encrypted_path": "agents/sfdc-planner.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:092c14dc02c2cf289c4b0b702cd8e924f52057e5412d4820101057e12afb8961",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-state-discovery.md",
+      "encrypted_path": "agents/sfdc-state-discovery.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:8d502f0f040425cc0b464a7998809c5d88c588695a55d8f1c5bd74056a8cf38f",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-metadata-manager.md",
+      "encrypted_path": "agents/sfdc-metadata-manager.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:b73bbf45738020206e03eeb702e3a88ea5e0e8f2a386bdcb7336e12123eee12f",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-quality-auditor.md",
+      "encrypted_path": "agents/sfdc-quality-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d19a097f5cbb65c1dada46d983b1d5121f2ba41597e0b7c75b3e38cdc95b4c32",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-deployment-manager.md",
+      "encrypted_path": "agents/sfdc-deployment-manager.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f07a7476ceefd3a67b2793cef901447c1897ed7056d29efcb767b3566fcbc473",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-merge-orchestrator.md",
+      "encrypted_path": "agents/sfdc-merge-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:a3dc0f3c90ba56b2f221e22c4613b51f5b9432e1079b7fd1200abc4d9c2bd4e2",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-dependency-analyzer.md",
+      "encrypted_path": "agents/sfdc-dependency-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:19b578d1037b73e10dc87999769a1602ffd0c27da0489a98e8ca7359fce8c66b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-object-auditor.md",
+      "encrypted_path": "agents/sfdc-object-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:bb5f821ae40287eeb181eeb009d98a0be473e5339f12750ce8e48f9cf389f76a",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-reports-usage-auditor.md",
+      "encrypted_path": "agents/sfdc-reports-usage-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:4cafc9039741ff1c9649fb75dc0b9dc73f49d0385355d35e925cb3c783bfde8b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-security-admin.md",
+      "encrypted_path": "agents/sfdc-security-admin.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:43c2ffc9e4d1f79fa7007abde1cbd233a8db8b554545f3f6a74dc1b71cd597d9",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-permission-assessor.md",
+      "encrypted_path": "agents/sfdc-permission-assessor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:7635b9ce3ad8c20ff2751d229b763332d08828285c9dfc46d5d1195f6fc771d5",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-upsert-orchestrator.md",
+      "encrypted_path": "agents/sfdc-upsert-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:716e502ccddb97147c56bb2373f298c4aa376372d9fb76047e9c88398fcd1173",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-lead-auto-converter.md",
+      "encrypted_path": "agents/sfdc-lead-auto-converter.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:7fc842649c68146ac879b86196ed307cab489299e4d872cf0fdcb2172aaf13d8",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-reports-dashboards.md",
+      "encrypted_path": "agents/sfdc-reports-dashboards.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:68ec3a1b926ec6c32ec2f5f9ef28f2df96d2ecc038bf08f78084f3dd59a0cf5b",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-report-designer.md",
+      "encrypted_path": "agents/sfdc-report-designer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:6d7af0ac7bb305339fa6094a98b49f9a5d5058593d549721fc298b30d69a2f8a",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-dashboard-designer.md",
+      "encrypted_path": "agents/sfdc-dashboard-designer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:913f777980df0e2de912c70deeb4ce9ae0d91917cf9f9544ada722e2963a3227",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-automation-builder.md",
+      "encrypted_path": "agents/sfdc-automation-builder.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f1ca183a3d6b55dc0ef0cfbd58de04b6764dc79b9a2aa5a257ecb1dde6b3c94f",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/validation-rule-orchestrator.md",
+      "encrypted_path": "agents/validation-rule-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:6c92fe2a31dd1964c511368cec2796c99b155fcc899707a1a4bb2c4d321e0e93",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/trigger-orchestrator.md",
+      "encrypted_path": "agents/trigger-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f8f877ca9e8188da7afdd9689f3b6f7974f2490246215183dbf78a91584e45ff",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-territory-orchestrator.md",
+      "encrypted_path": "agents/sfdc-territory-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c2ac7bd85f0fc5aa01d584ae72376c4968a7d337ab08c34a37c6affd1fd8c8f7",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-territory-planner.md",
+      "encrypted_path": "agents/sfdc-territory-planner.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:4fa9ba220154bc52efc14c75bb140f6f5b845236485a9cea3b299bd6f0deddc8",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-territory-deployment.md",
+      "encrypted_path": "agents/sfdc-territory-deployment.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:a0c578f2f34cf67ac9c1b394e3a604b5eb88837ce179228a43585490e63861e8",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-territory-assignment.md",
+      "encrypted_path": "agents/sfdc-territory-assignment.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:4f717e73f93adabc61b6f9016a57e7fb82c53c9b6f43a9b3b32a20b0f03e16f2",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-territory-monitor.md",
+      "encrypted_path": "agents/sfdc-territory-monitor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:446b41d5216331a9a107084f549db0dfbf00278c8b0b9f6a046d5ed322e136c2",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/win-loss-analyzer.md",
+      "encrypted_path": "agents/win-loss-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:2721a7597bc88c47dd802542003e55197b11ef7d3114695b8ed74f3ca722c2a0",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/benchmark-research-agent.md",
+      "encrypted_path": "agents/benchmark-research-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:63fb58d966d782e5aed08b0d3d7f3ad490da694a6ad1a30557a48acf841e8640",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-agent-governance.md",
+      "encrypted_path": "agents/sfdc-agent-governance.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c282e56a2a3df374cd25a3cf2ad006b108f003e744ad3f1e0ad7d71440a7d043",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-revops-coordinator.md",
+      "encrypted_path": "agents/sfdc-revops-coordinator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:cf4040d62abfa5eebd7aac5159b946e2602d936011552ed1bf3252c843b86dfa",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-cpq-specialist.md",
+      "encrypted_path": "agents/sfdc-cpq-specialist.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:4d2d94abcf6d27e985c872899bcc73bf50dfbb3443ba5c7dc70562a70fb4f024",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-sales-operations.md",
+      "encrypted_path": "agents/sfdc-sales-operations.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:ec2e0aae7c18d3e759617055ac0b3908b95efe9619c4d7b1e47851d15638afa9",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/compliance-report-generator.md",
+      "encrypted_path": "agents/compliance-report-generator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:cec74e1959a1bdc00fdf9bccef90676027fa77ac4a13668ae8835e5f9b778aea",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-assignment-rules-manager.md",
+      "encrypted_path": "agents/sfdc-assignment-rules-manager.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:91aa7290e18ee48796de1326137141df4abed13d935501c43dac93bc91ecd295",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-performance-optimizer.md",
+      "encrypted_path": "agents/sfdc-performance-optimizer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:a0b592a53568fb1bf88a724d9cd1a6d404eeddad5c5b448746e2b1751046809c",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-field-analyzer.md",
+      "encrypted_path": "agents/sfdc-field-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:45353abfde82c4cc877978fdc617c41f95ddad983ecbbeaec4da47a699b8a8e2",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-dashboard-analyzer.md",
+      "encrypted_path": "agents/sfdc-dashboard-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:14dea28fa05f9bec2f1b377074e6be5cecce6b525fc06c2c8a82ab3491179d1f",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-bulkops-orchestrator.md",
+      "encrypted_path": "agents/sfdc-bulkops-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:76d98112fdd7729013cdb67b544e54da588514329b2984bf87c2af64b26918ed",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-layout-analyzer.md",
+      "encrypted_path": "agents/sfdc-layout-analyzer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:f7fbe548a87f6d73723f829c06ee513d7a51b72fe442c791d976d4cc499273da",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-layout-generator.md",
+      "encrypted_path": "agents/sfdc-layout-generator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:37990f50a71001a5f670b246824abee06e37960bef4880e90aa283966e90ff23",
+      "required_domain": "salesforce"
+    },
+    {
+      "path": "agents/sfdc-dedup-safety-copilot.md",
+      "encrypted_path": "agents/sfdc-dedup-safety-copilot.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:499a0eb94fcaeb067f3bdb1f84531c467ef959cba975279826412831adf8d370",
+      "required_domain": "salesforce"
     }
   ],
   "cleanup_on_stop": true,

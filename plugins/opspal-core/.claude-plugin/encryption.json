@@ -169,6 +169,222 @@
       ],
       "checksum_plaintext": "sha256:d7eb30597a302f12cea8b4b79b0b4e3015e9b2121445738df27668e6c4df6c7a",
       "required_domain": "core"
+    },
+    {
+      "path": "agents/pipeline-intelligence-agent.md",
+      "encrypted_path": "agents/pipeline-intelligence-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:11e754c48b81e8188c8b0648dc2895c792ffdcd6901ad85ea20820a1b1c2f7bc",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/sales-playbook-orchestrator.md",
+      "encrypted_path": "agents/sales-playbook-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:38dc6c5b36074eab389ad24621cac18c02567670a007433f00cb64f0f95e1d60",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/account-expansion-orchestrator.md",
+      "encrypted_path": "agents/account-expansion-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:85a292ab1fb2db344dca12b01529c6501334458e84ec497b681eb28e48d2abeb",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/cs-operations-orchestrator.md",
+      "encrypted_path": "agents/cs-operations-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:a3a808a6e2b5573ce804624e7fb03302254c22a1b408ca7bed066946665dcd08",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/sales-enablement-coordinator.md",
+      "encrypted_path": "agents/sales-enablement-coordinator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:2dfbe1bcc1dda30bc2b2a1b1ed7a459a7a2125dec6c36f500d6b06cdbd7316fd",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/multi-platform-campaign-orchestrator.md",
+      "encrypted_path": "agents/multi-platform-campaign-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:4b7db14cfb04db3db742b334d46cbaedc79aebe8004ee3590fedc632759b3e54",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/unified-exec-dashboard-agent.md",
+      "encrypted_path": "agents/unified-exec-dashboard-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:5fe3c8b00031004f0381213dd12a7214edf153c43db02e576a98b9b9525f85b2",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/intelligent-intake-orchestrator.md",
+      "encrypted_path": "agents/intelligent-intake-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:1880cd1327e90340e5178d3763b8ffefdf0347c6339c1b73e0bd4df413877e0d",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/task-graph-orchestrator.md",
+      "encrypted_path": "agents/task-graph-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:1676202b0723754fc6429d61966ae67640672cb498064e2fe2ce96de229270da",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/gong-deal-intelligence-agent.md",
+      "encrypted_path": "agents/gong-deal-intelligence-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:e777211a97d47f9652783e41c361b545ede2d00ca9c2fb0965c2c6bf48c12a23",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/gong-competitive-intelligence-agent.md",
+      "encrypted_path": "agents/gong-competitive-intelligence-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d3041738d28a628d8be387ddc9aaecd17cbe3ace1e4945338a9754c79c65f9e4",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/gong-sync-orchestrator.md",
+      "encrypted_path": "agents/gong-sync-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:c1a7ac1d7e08426c044f6813f51a68e38691dcb9fe11c70d927098776181e8fd",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/gong-integration-agent.md",
+      "encrypted_path": "agents/gong-integration-agent.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:57597cd669bb3fb90013ef611254e2e374debff52ffd5bd62f1653867fd46983",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/cross-platform-pipeline-orchestrator.md",
+      "encrypted_path": "agents/cross-platform-pipeline-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:0ee1a937a83a0bc3464e50f7748ae0c02ebe6fa840a10902270581c2ef9081f7",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/revops-reporting-assistant.md",
+      "encrypted_path": "agents/revops-reporting-assistant.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:62c390a739cc298b0cd568839c09ff58ed2fc269b7b73feeaf2e738aca7d5148",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/multi-platform-workflow-orchestrator.md",
+      "encrypted_path": "agents/multi-platform-workflow-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d1f01ed9728c1bd85d10280b90acaff2b59ff4a7b515b884cfe2bea6216e1104",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/data-migration-orchestrator.md",
+      "encrypted_path": "agents/data-migration-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:49885972068feece4797130b4d0a89401e2ea25fa1ef548c82767ca304b683d4",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/solution-deployment-orchestrator.md",
+      "encrypted_path": "agents/solution-deployment-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:aa028d66950b22a3d44c79dd94e56fff746dae1697567814a1c13cb634a876af",
+      "required_domain": "core"
     }
   ],
   "cleanup_on_stop": true,

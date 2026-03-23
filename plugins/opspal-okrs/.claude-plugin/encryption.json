@@ -1,7 +1,101 @@
 {
-  "version": 2,
-  "plugin": "opspal-okrs",
-  "encrypted_assets": [],
-  "cleanup_on_stop": true,
-  "allow_plaintext_fallback": false
+  "encrypted_files": [],
+  "encrypted_assets": [
+    {
+      "path": "agents/okr-strategy-orchestrator.md",
+      "encrypted_path": "agents/okr-strategy-orchestrator.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:56ea6d9ddc2d41f0b645435ccbdc42726ba42f1b1bbbe5638a535c9b6c3aaea0",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-executive-reporter.md",
+      "encrypted_path": "agents/okr-executive-reporter.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:5f2f180170b8ab720b1f17713cca0cf50a8e5da015d592c48be369bff8bb1933",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-initiative-prioritizer.md",
+      "encrypted_path": "agents/okr-initiative-prioritizer.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:a1fc518bed3cde00dd049184483025d8af2289492d7e96a03619f6bf45e898ec",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-progress-tracker.md",
+      "encrypted_path": "agents/okr-progress-tracker.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:25925636e5d27a026f6ced20dfea79ec7577941c570b05ac900fa3714d33ca25",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-learning-engine.md",
+      "encrypted_path": "agents/okr-learning-engine.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:d04e0a47fe24de0889da220c6d5dd5a148b8477d14a8e1b37c30ca88f70fd8ab",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-plg-specialist.md",
+      "encrypted_path": "agents/okr-plg-specialist.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:defbf476d12a8e596e4265b9475d686e20e61b0fd0a7e88dd6e04ad97872847d",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-cadence-manager.md",
+      "encrypted_path": "agents/okr-cadence-manager.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:2a3358f44e9a9b9fd8be383616c6e857041b70705237373a3c5ff2af718d4c20",
+      "required_domain": "core"
+    },
+    {
+      "path": "agents/okr-alignment-auditor.md",
+      "encrypted_path": "agents/okr-alignment-auditor.md.enc",
+      "asset_type": "agent_body",
+      "sensitivity": "high",
+      "required_tier": "tier1",
+      "decrypt_on": [
+        "SessionStart"
+      ],
+      "checksum_plaintext": "sha256:9b80a26cb82e8a833221197e3be65235087341fd1e14d4c79fcf9c6f8cdf03fb",
+      "required_domain": "core"
+    }
+  ]
 }

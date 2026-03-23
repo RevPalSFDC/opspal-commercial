@@ -171,7 +171,40 @@ function resolveKeyring() {
     }
   }
 
-  return Object.keys(keyring).length > 0 ? keyring : null;
+  if (Object.keys(keyring).length > 0) {
+    return keyring;
+  }
+
+  // Source 4: License cache (~/.opspal/license-cache.json)
+  // The activation manager stores key_bundle.keys here after license validation.
+  const licenseCachePath = path.join(HOME_DIR, '.opspal', 'license-cache.json');
+  try {
+    if (fs.existsSync(licenseCachePath)) {
+      const raw = fs.readFileSync(licenseCachePath, 'utf8');
+      const cache = JSON.parse(raw);
+      if (cache.valid !== false
+          && !cache.terminated
+          && cache.key_bundle
+          && cache.key_bundle.version === 2
+          && cache.key_bundle.keys
+          && (!cache.grace_until || new Date(cache.grace_until) >= new Date())) {
+        const cacheKeyring = {};
+        for (const [domain, b64Key] of Object.entries(cache.key_bundle.keys)) {
+          const decoded = decodeBase64Key(b64Key);
+          if (decoded) {
+            cacheKeyring[domain] = decoded;
+          }
+        }
+        if (Object.keys(cacheKeyring).length > 0) {
+          return cacheKeyring;
+        }
+      }
+    }
+  } catch {
+    // Ignore malformed or unreadable license cache.
+  }
+
+  return null;
 }
 
 function resolveKeyMaterial(_pluginName) {
