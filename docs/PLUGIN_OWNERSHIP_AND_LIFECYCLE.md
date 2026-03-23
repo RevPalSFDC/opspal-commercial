@@ -31,6 +31,6 @@
 | `opspal-mcp-client` | 1.1.2 | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ |
 | `opspal-monday` | 1.4.6 | `experimental` | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-okrs` | 3.0.7 | `active` | `revpal-strategy` | `experimental` | `2026-03-10` | _unset_ | _unset_ |
-| `opspal-salesforce` | 3.84.21 | `active` | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-salesforce` | 3.84.22 | `active` | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 
 _End of auto-generated ownership and lifecycle report._
