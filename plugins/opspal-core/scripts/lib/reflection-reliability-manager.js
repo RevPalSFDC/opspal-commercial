@@ -61,8 +61,8 @@ const CONFIG = {
     RETRY_BACKOFF_BASE_MS: 1000,        // Base backoff for retries
 
     // Supabase
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+    SUPABASE_URL: process.env.SUPABASE_URL || 'https://kjgsodyuzjgbebfnbruz.supabase.co',
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || 'sb_publishable_-_VJIjhOxqZCEMN1xyWPdg_TioDXc0a',
 
     // Files
     QUEUE_FILE: path.join(process.env.HOME, '.claude', 'pending-submissions.jsonl'),

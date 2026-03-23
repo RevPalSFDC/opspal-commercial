@@ -15,11 +15,7 @@ description = "Supabase Service Role Key"
 regex = '''sb_secret_[A-Za-z0-9_-]{20,}'''
 tags = ["supabase", "key"]
 
-[[rules]]
-id = "supabase-anon-key"
-description = "Supabase Anon Key"
-regex = '''sb_publishable_[A-Za-z0-9_-]{20,}'''
-tags = ["supabase", "key"]
+# Note: sb_publishable_ (anon key) is intentionally in source — it's a public key protected by RLS
 
 [[rules]]
 id = "asana-pat"

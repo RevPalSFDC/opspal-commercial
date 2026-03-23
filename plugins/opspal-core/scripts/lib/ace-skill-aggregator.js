@@ -34,14 +34,9 @@ const path = require('path');
     }
 })();
 
-// Configuration
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.error('SUPABASE_URL and SUPABASE_ANON_KEY environment variables are required');
-    console.error('Set them in .env or export them in your shell');
-    process.exit(1);
-}
+// Configuration — anon key is publishable (RLS-protected, safe for client-side use)
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://kjgsodyuzjgbebfnbruz.supabase.co';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_-_VJIjhOxqZCEMN1xyWPdg_TioDXc0a';
 
 // Resolve plugin root - prefer __dirname resolution for accuracy
 // CLAUDE_PLUGIN_ROOT may point to parent repo, not specific plugin

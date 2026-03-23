@@ -467,8 +467,8 @@ See `REPORTS_USAGE_AUDITOR_LESSONS_LEARNED.md` for detailed testing results and 
 export SFDX_DEFAULT_USERNAME=myorg-alias
 
 # Optional: Reflection system integration
-export SUPABASE_URL='<your-supabase-project-url>'
-export SUPABASE_ANON_KEY='<your-supabase-anon-key>'
+export SUPABASE_URL='https://kjgsodyuzjgbebfnbruz.supabase.co'
+export SUPABASE_ANON_KEY='sb_publishable_-_VJIjhOxqZCEMN1xyWPdg_TioDXc0a'
 export USER_EMAIL='your-email@example.com'
 ```
 

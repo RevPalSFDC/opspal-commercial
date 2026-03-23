@@ -114,8 +114,8 @@ function makeRequest(url, options, body) {
  * Query reflections from Supabase
  */
 async function queryReflections(org, options = {}) {
-  const supabaseUrl = options.supabaseUrl || process.env.SUPABASE_URL;
-  const supabaseKey = options.supabaseKey || process.env.SUPABASE_ANON_KEY;
+  const supabaseUrl = options.supabaseUrl || process.env.SUPABASE_URL || 'https://kjgsodyuzjgbebfnbruz.supabase.co';
+  const supabaseKey = options.supabaseKey || process.env.SUPABASE_ANON_KEY || 'sb_publishable_-_VJIjhOxqZCEMN1xyWPdg_TioDXc0a';
 
   // Build query parameters
   const queryParams = new URLSearchParams();
