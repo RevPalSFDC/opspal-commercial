@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-orchestrator
-description: "MUST BE USED for territory management operations."
+description: MUST BE USED for territory management operations. Master coordinator for Territory2 model lifecycle, hierarchy management, and user/account assignments with validation and rollback support.
 color: blue
 tools:
   - Task
@@ -187,6 +187,112 @@ sf data query --query "SELECT Id, PermissionsManageTerritories FROM PermissionSe
 sf data query --query "SELECT Id, Name, DeveloperName, State
   FROM Territory2Model" --target-org $ORG
 ```
+
+### Phase 0.5: Territory Assignment Job API Availability
+
+**MANDATORY before invoking any territory assignment job endpoint:**
+
+Probe the Territory2 assignment job API before attempting job-based assignment:
+
+```bash
+sf api request rest '/services/data/v62.0/territory2/' --method GET --target-org {org}
+```
+
+**Decision tree:**
+
+| Response | Action |
+|----------|--------|
+| HTTP 200 | Set `TERRITORY2_JOB_API_AVAILABLE=true` — proceed with job API |
+| HTTP 404 or error | Set `TERRITORY2_JOB_API_AVAILABLE=false` — use Composite API fallback |
+
+**Composite API fallback (when job API unavailable):**
+
+Create `ObjectTerritory2Association` records directly:
+
+```bash
+sf api request rest '/services/data/v62.0/composite/sobjects' \
+  --method POST \
+  --body '{"records":[{"attributes":{"type":"ObjectTerritory2Association"},"ObjectId":"{accountId}","Territory2Id":"{territoryId}"}]}'
+```
+
+Then update `Primary_Territory2` fields directly on the associated records.
+
+**Example Composite payload (multi-record):**
+
+```json
+{
+  "records": [
+    {
+      "attributes": { "type": "ObjectTerritory2Association" },
+      "ObjectId": "001XXXXXXXXXXXXXXX",
+      "Territory2Id": "0MIXXXXXXXXXXXXXXX"
+    },
+    {
+      "attributes": { "type": "ObjectTerritory2Association" },
+      "ObjectId": "001YYYYYYYYYYYYYYY",
+      "Territory2Id": "0MIXXXXXXXXXXXXXXX"
+    }
+  ]
+}
+```
+
+Log the fallback decision in the operation audit trail:
+
+```javascript
+auditTrail.log({
+  phase: 'assignment-api-probe',
+  jobApiAvailable: TERRITORY2_JOB_API_AVAILABLE,
+  fallbackMethod: TERRITORY2_JOB_API_AVAILABLE ? 'job-api' : 'composite-sobjects',
+  timestamp: new Date().toISOString()
+});
+```
+
+---
+
+### Phase 0.6: Territory2 DeveloperName Namespace Convention
+
+**MANDATORY before any Territory2 creation:**
+
+**Step 1 — Query existing DeveloperNames for the target model:**
+
+```bash
+sf data query --query "SELECT DeveloperName FROM Territory2 WHERE Territory2ModelId = '{modelId}'" --target-org $ORG
+```
+
+**Step 2 — Apply namespaced naming convention:**
+
+Format: `{Prefix}_{RegionCode}_{SegmentCode}`
+
+- `Prefix` — 2–4 character abbreviation scoping to the model context (e.g., `FY26`, `NA`, `ENT`)
+- `RegionCode` — geographic or organizational region identifier (e.g., `WEST`, `EMEA`)
+- `SegmentCode` — segment or sub-classification (e.g., `MM`, `ENT`, `SMB`)
+
+Example: `FY26_WEST_ENT`
+
+**Step 3 — Handle name collisions:**
+
+If the generated DeveloperName already exists in the query results, append a numeric suffix: `_01`, `_02`, etc. (e.g., `FY26_WEST_ENT_01`).
+
+**Allowed character validation:**
+
+| Rule | Requirement |
+|------|-------------|
+| Allowed characters | Letters (A–Z, a–z), numbers (0–9), underscores (`_`) |
+| No spaces | Spaces are not permitted |
+| No leading underscore | Must begin with a letter or number |
+| Max length | 80 characters |
+
+**SOQL pre-creation existence check (concrete command):**
+
+```bash
+sf data query \
+  --query "SELECT DeveloperName FROM Territory2 WHERE DeveloperName = '{proposedName}' AND Territory2ModelId = '{modelId}'" \
+  --target-org $ORG
+```
+
+If the query returns one or more records, increment the suffix and re-check before proceeding with creation.
+
+---
 
 ### Phase 1: Discovery
 
