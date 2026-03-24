@@ -65,6 +65,77 @@ const SF_CLI_HOOKS = [
     commands: [
       'sf data query --query "SELECT Id FROM Account" --target-org sandbox --json'
     ]
+  },
+  {
+    name: "pre-deploy-agent-context-check",
+    path: "plugins/opspal-salesforce/hooks/pre-deploy-agent-context-check.sh",
+    commands: [
+      "sf project deploy start --source-dir force-app --target-org sandbox"
+    ]
+  },
+  {
+    name: "pre-deploy-flow-validation",
+    path: "plugins/opspal-salesforce/hooks/pre-deploy-flow-validation.sh",
+    commands: [
+      "sf project deploy start --source-dir force-app --target-org sandbox"
+    ]
+  },
+  {
+    name: "pre-deploy-report-quality-gate",
+    path: "plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh",
+    commands: [
+      "sf project deploy start --source-dir force-app --target-org sandbox"
+    ]
+  },
+  {
+    name: "pre-deployment-comprehensive-validation",
+    path: "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh",
+    commands: [
+      "sf project deploy start --source-dir force-app --target-org sandbox"
+    ]
+  },
+  {
+    name: "post-field-deployment",
+    path: "plugins/opspal-salesforce/hooks/post-field-deployment.sh",
+    commands: [
+      "sf project deploy start --source-dir force-app --target-org sandbox"
+    ]
+  },
+  {
+    name: "post-sf-query-validation",
+    path: "plugins/opspal-salesforce/hooks/post-sf-query-validation.sh",
+    commands: [
+      "sf data query --query \"SELECT Id FROM Account\" --target-org sandbox --json"
+    ]
+  },
+  {
+    name: "pre-tool-use-contract-validation",
+    path: "plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh",
+    commands: [
+      "sf data query --query \"SELECT Id FROM Account\" --target-org sandbox --json",
+      "sf data create --sobject Account --values \"Name=Test\" --target-org sandbox"
+    ]
+  },
+  {
+    name: "task-graph-policy-enforcer",
+    path: "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh",
+    commands: [
+      "sf data query --query \"SELECT Id FROM Account\" --target-org sandbox --json"
+    ]
+  },
+  {
+    name: "soql-enhancer",
+    path: "plugins/opspal-salesforce/hooks/pre-tool-use/soql-enhancer.sh",
+    commands: [
+      "sf data query --query \"SELECT Id FROM Account\" --target-org sandbox --json"
+    ]
+  },
+  {
+    name: "pre-territory-write-validator",
+    path: "plugins/opspal-salesforce/hooks/pre-territory-write-validator.sh",
+    commands: [
+      "sf data create --sobject ObjectTerritory2Association --target-org sandbox"
+    ]
   }
 ];
 

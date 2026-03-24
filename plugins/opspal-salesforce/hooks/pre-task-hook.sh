@@ -23,19 +23,19 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     # Keep strict mode - this hook can block operations
 fi
 
-# Color codes for output (fallback if error handler not loaded)
-RED="${RED:-\033[0;31m}"
-GREEN="${GREEN:-\033[0;32m}"
-YELLOW="${YELLOW:-\033[1;33m}"
-BLUE="${BLUE:-\033[0;34m}"
-PURPLE="${PURPLE:-\033[0;35m}"
+# Color codes — error handler sets RED/YELLOW/GREEN/BLUE/NC as readonly,
+# so only set missing ones. Use :- to avoid readonly conflicts under set -u.
 CYAN="${CYAN:-\033[0;36m}"
+PURPLE="${PURPLE:-\033[0;35m}"
 BOLD="${BOLD:-\033[1m}"
-NC="${NC:-\033[0m}"
 
-# Exit codes
-EXIT_AGENT_REQUIRED=10  # Agent required but not detected
-EXIT_SUCCESS=0          # Continue execution
+# Exit codes (only set if error handler was NOT loaded)
+if [[ -z "${HOOK_NAME:-}" ]]; then
+    EXIT_AGENT_REQUIRED=10
+    EXIT_SUCCESS=0
+else
+    EXIT_AGENT_REQUIRED=${EXIT_AGENT_REQUIRED:-10}
+fi
 
 # Organization enforcement configuration
 BASE_DIR="${CLAUDE_PLUGIN_ROOT:-}"

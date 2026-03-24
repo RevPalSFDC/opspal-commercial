@@ -41,21 +41,9 @@ HOOK_NAME="post-task-verification"
 
 # Check if validator exists
 if [ ! -f "$VALIDATOR_SCRIPT" ]; then
-    # Log validator missing
-    [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Quality gate validator script not found" \
-      "{\"validatorPath\":\"$VALIDATOR_SCRIPT\"}"
-
-    if [ -f "$OUTPUT_FORMATTER" ]; then
-      node "$OUTPUT_FORMATTER" error \
-        "Quality Gate Validator Missing" \
-        "Cannot validate task deliverables - validator script not found" \
-        "Expected Path:$VALIDATOR_SCRIPT" \
-        "Ensure opspal-core is fully installed,Verify script path is correct,Check plugin directory structure" \
-        "Quality gate validation unavailable"
-    fi
-
-    echo '{"error": "Quality gate validator not found", "path": "'"$VALIDATOR_SCRIPT"'"}' >&2
-    exit 0  # Graceful skip when validator unavailable
+    # Validator unavailable — log and skip gracefully (do not block)
+    echo "[post-task-verification] Validator not found at $VALIDATOR_SCRIPT, skipping" >&2
+    exit 0
 fi
 
 # Check if node is available
@@ -64,7 +52,7 @@ if ! command -v node &>/dev/null; then
     [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Node.js not found - required for validation" "{}"
 
     if [ -f "$OUTPUT_FORMATTER" ]; then
-      node "$OUTPUT_FORMATTER" error \
+      node "$OUTPUT_FORMATTER" error \\
         "Node.js Not Found" \
         "Quality gate validation requires Node.js to be installed" \
         "" \
@@ -125,7 +113,7 @@ if node "$VALIDATOR_SCRIPT" "$TASK_TYPE" "$DELIVERABLE_FILE" > "$RESULT_FILE" 2>
               "{\"taskType\":\"$TASK_TYPE\",\"criticalCount\":$CRITICAL_COUNT,\"failures\":\"$FAILURES\"}"
 
             if [ -f "$OUTPUT_FORMATTER" ]; then
-              node "$OUTPUT_FORMATTER" error \
+              node "$OUTPUT_FORMATTER" error \\
                 "Task Validation Failed" \
                 "Task deliverables have critical quality failures that must be resolved" \
                 "Task Type:$TASK_TYPE,Critical Failures:$CRITICAL_COUNT,Failures:$FAILURES" \
@@ -164,7 +152,7 @@ else
       "{\"taskType\":\"$TASK_TYPE\",\"errorPreview\":\"$ERROR_PREVIEW\"}"
 
     if [ -f "$OUTPUT_FORMATTER" ]; then
-      node "$OUTPUT_FORMATTER" error \
+      node "$OUTPUT_FORMATTER" error \\
         "Validation Script Failed" \
         "Quality gate validation script encountered an error during execution" \
         "Task Type:$TASK_TYPE,Error Preview:$ERROR_PREVIEW..." \

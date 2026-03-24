@@ -199,7 +199,7 @@
     },
     {
       "name": "opspal-salesforce",
-      "version": "3.85.4",
+      "version": "3.85.5",
       "source": "./plugins/opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
       "counts": {

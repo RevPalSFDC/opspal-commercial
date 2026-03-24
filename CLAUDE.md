@@ -25,7 +25,7 @@ This repository is the commercial OpsPal marketplace. It publishes 10 plugins an
 | `opspal-mcp-client` | 1.1.2 | active |
 | `opspal-monday` | 1.4.6 | experimental |
 | `opspal-okrs` | 3.0.7 | active |
-| `opspal-salesforce` | 3.85.4 | active |
+| `opspal-salesforce` | 3.85.5 | active |
 
 ## Updating
 
