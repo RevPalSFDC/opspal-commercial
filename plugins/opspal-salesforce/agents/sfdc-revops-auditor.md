@@ -1222,6 +1222,11 @@ async function recordRevOpsAssessmentResults(orgAlias, assessmentResults, contex
       dataQualityScore: assessmentResults.dataQualityScore,
       fieldUtilizationScore: assessmentResults.fieldUtilizationScore
     },
+    revenueContext: {
+      revenueField: assessmentResults.revenueField || 'Amount',
+      salesProcessMode: assessmentResults.salesProcessMode || 'single',
+      salesProcesses: assessmentResults.salesProcesses || []
+    },
     keyFindings: assessmentResults.topFindings,
     recommendations: assessmentResults.recommendations,
     userFeedback: null // Will be populated via /reflect
