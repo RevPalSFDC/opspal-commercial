@@ -170,6 +170,14 @@ declare -A MANDATORY_OPERATIONS=(
 AGENT_REQUIRED=false
 REQUIRED_AGENT=""
 
+# Sub-agents bypass mandatory routing — the routing system already ensured
+# the correct specialist was spawned. Blocking here creates a deadlock.
+HOOK_AGENT_TYPE_CHECK="$(echo "${HOOK_INPUT:-$TASK_INPUT}" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+if [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$HOOK_AGENT_TYPE_CHECK" ]; then
+    echo "[pre-task-hook] Agent context detected (task=${CLAUDE_TASK_ID:-none}, agent=${HOOK_AGENT_TYPE_CHECK:-unknown}). Skipping mandatory routing." >&2
+    AGENT_REQUIRED=false
+else
+
 for pattern in "${!MANDATORY_OPERATIONS[@]}"; do
     if echo "$TASK_INPUT" | grep -iE "$pattern" > /dev/null; then
         AGENT_REQUIRED=true
@@ -204,6 +212,8 @@ for pattern in "${!MANDATORY_OPERATIONS[@]}"; do
         exit $EXIT_AGENT_REQUIRED
     fi
 done
+fi  # end agent-context bypass
+
 
 # Organization Enforcement Check
 echo -e "${BLUE}═══════════════════════════════════════════════════════${NC}"

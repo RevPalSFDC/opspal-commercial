@@ -791,26 +791,29 @@ enforce_mandatory_routing() {
             command_lower=$(echo "$command" | tr '[:upper:]' '[:lower:]')
 
             # Rule 1: Permission/security write operations -> dedicated permission/security agents
-            if echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)'; then
+            # Escape hatch: ALLOW_DIRECT_PERMSET=1
+            if [ "${ALLOW_DIRECT_PERMSET:-0}" = "1" ]; then
+                : # Rule 1 bypassed via ALLOW_DIRECT_PERMSET
+            elif echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)'; then
                 rule_id="sf_permission_security_write"
                 required_agent="opspal-salesforce:sfdc-security-admin"
-                approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor"]'
+                approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor","opspal-salesforce:sfdc-orchestrator"]'
                 reason="Direct Salesforce permission/security write detected."
             elif echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete)'; then
                 if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
                     rule_id="sf_permission_security_write"
                     required_agent="opspal-salesforce:sfdc-security-admin"
-                    approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor"]'
+                    approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor","opspal-salesforce:sfdc-orchestrator"]'
                     reason="Direct Salesforce permission/security write detected."
                 fi
             fi
 
             # Rule 2: Lead/Contact/Account upsert-import workflows -> upsert orchestrator
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(upsert|import|create|update|bulk[[:space:]]+upsert)'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(upsert|import|bulk[[:space:]]+upsert)'; then
                 if echo "$command" | grep -qiE '(^|[[:space:]])(Lead|Contact|Account)([[:space:]]|$)|--sobject[[:space:]]+(Lead|Contact|Account)'; then
                     rule_id="sf_core_object_upsert"
                     required_agent="opspal-salesforce:sfdc-upsert-orchestrator"
-                    approved_agents_json='["opspal-salesforce:sfdc-upsert-orchestrator"]'
+                    approved_agents_json='["opspal-salesforce:sfdc-upsert-orchestrator","opspal-salesforce:sfdc-orchestrator","opspal-salesforce:sfdc-data-operations"]'
                     reason="Direct lead/contact/account upsert-import workflow detected."
                 fi
             fi
@@ -850,9 +853,11 @@ enforce_mandatory_routing() {
                     local is_simple_query=0
                     if echo "$command" | grep -qiE 'WHERE[[:space:]]+Id[[:space:]]*(=|IN)'; then
                         is_simple_query=1
-                    elif echo "$command" | grep -qiE 'LIMIT[[:space:]]+[1-5]([[:space:]]|$)'; then
+                    elif echo "$command" | grep -qiE 'LIMIT[[:space:]]+[1-9]([[:space:]]|$)'; then
                         is_simple_query=1
-                    elif [ ${#command} -lt 300 ]; then
+                    elif echo "$command" | grep -qiE 'COUNT\(\)'; then
+                        is_simple_query=1
+                    elif [ ${#command} -lt 500 ]; then
                         is_simple_query=1
                     fi
 

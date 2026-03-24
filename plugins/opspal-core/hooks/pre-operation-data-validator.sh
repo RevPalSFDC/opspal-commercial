@@ -551,7 +551,10 @@ async function validate() {
                 if (hardStaleEnabled) {
                     // C6 fix: Skip read-only Salesforce system timestamps
                     const SF_READONLY_DATES = ['CreatedDate','LastModifiedDate','SystemModstamp','LastActivityDate','LastViewedDate','LastReferencedDate'];
-                    if (SF_READONLY_DATES.some(f => field.toLowerCase() === f.toLowerCase())) {
+                    // User-configurable exempt fields for historical data imports
+                    const userExemptFields = (process.env.DATA_VALIDATION_STALE_EXEMPT_FIELDS || '').split(',').map(f => f.trim()).filter(Boolean);
+                    const allExemptFields = [...SF_READONLY_DATES, ...userExemptFields];
+                    if (allExemptFields.some(f => field.toLowerCase() === f.toLowerCase())) {
                         // Skip — these are always old on historical records
                     } else {
                     const ageDays = parseDateAgeDays(value);

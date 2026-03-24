@@ -148,7 +148,7 @@ check_bypass_attempt() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
     # Check if user is trying to bypass
-    if echo "$task" | grep -iE "force|bypass|skip.*check|ignore.*warning" > /dev/null; then
+    if echo "$task" | grep -iE "\\bforce\\b|\\bbypass\\b|skip.*check|ignore.*warning" | grep -viE "salesforce" > /dev/null; then
         echo ""
         echo -e "${RED}${BOLD}⚠️  BYPASS ATTEMPT DETECTED ⚠️${NC}"
         echo -e "${RED}Attempting to bypass safety checks is not allowed.${NC}"
@@ -223,6 +223,12 @@ track_decision() {
 
 # Main execution
 main() {
+    # Sub-agents bypass mandatory checks — routing already ensured specialist was spawned
+    HOOK_AGENT_TYPE_CHECK="$(echo "${HOOK_INPUT:-}" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+    if [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$HOOK_AGENT_TYPE_CHECK" ]; then
+        exit 0
+    fi
+
     # Check for bypass attempts first
     if check_bypass_attempt "$TASK_INPUT"; then
         exit 1
