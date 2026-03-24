@@ -46,7 +46,7 @@ $bashPath = $null
 # Windows-installed Node.js, Claude Code, or npm. The bare "bash" command on
 # a machine with WSL resolves to C:\Windows\System32\bash.exe (WSL), which
 # is the wrong environment for OpsPal.
-$gitBashCandidates = @(
+[string[]]$gitBashCandidates = @(
     "$env:ProgramFiles\Git\bin\bash.exe",
     "${env:ProgramFiles(x86)}\Git\bin\bash.exe",
     "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe",
@@ -107,7 +107,7 @@ if (-not $bashPath) {
     $env:Path    = "$machinePath;$userPath"
 
     # Re-check for Git Bash specifically (same order as above -- Git Bash first)
-    $postCandidates = @(
+    [string[]]$postCandidates = @(
         "$env:ProgramFiles\Git\bin\bash.exe",
         "${env:ProgramFiles(x86)}\Git\bin\bash.exe",
         "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe"
