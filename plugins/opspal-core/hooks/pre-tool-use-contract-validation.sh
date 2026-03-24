@@ -768,6 +768,18 @@ enforce_mandatory_routing() {
     local reason=""
     local rule_id=""
 
+    # Sub-agent context bypass: If running inside a spawned sub-agent,
+    # the routing system already validated the correct agent at spawn time
+    # via pre-task-agent-validator.sh. Blocking here creates a deadlock
+    # where approved agents can't execute the operations they were spawned for.
+    # This mirrors the pattern in pre-deploy-agent-context-check.sh:122-126.
+    if [ -n "${CALLER_AGENT_FROM_HOOK}" ] || [ -n "${CLAUDE_TASK_ID:-}" ]; then
+        emit_routing_event "allow" "subagent_context_bypass" "" \
+            "Sub-agent context: routing already validated at spawn" \
+            "$(extract_bash_command 2>/dev/null || echo '')" "$caller_agent" "$tool"
+        return 0
+    fi
+
     if [ "${ROUTING_ENFORCEMENT_ENABLED:-1}" = "0" ]; then
         echo "[routing] WARNING: ROUTING_ENFORCEMENT_ENABLED=0 — all routing rules bypassed" >&2
         return 0
