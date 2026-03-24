@@ -82,10 +82,10 @@ TASK_CONTEXT="${CLAUDE_TASK_CONTEXT:-}"
 # Extract task information
 get_task_info() {
     if [[ -n "$TASK_CONTEXT" ]] && command -v jq &>/dev/null; then
-        TASK_ID=$(echo "$TASK_CONTEXT" | jq -r '.id // "unknown"')
-        TASK_DOMAIN=$(echo "$TASK_CONTEXT" | jq -r '.domain // "unknown"')
-        RISK_LEVEL=$(echo "$TASK_CONTEXT" | jq -r '.risk_level // "medium"')
-        TOOL_POLICY=$(echo "$TASK_CONTEXT" | jq -r '.tool_policy // {}')
+        TASK_ID=$(echo "$TASK_CONTEXT" | jq -r '.id // "unknown"' 2>/dev/null || echo "unknown")
+        TASK_DOMAIN=$(echo "$TASK_CONTEXT" | jq -r '.domain // "unknown"' 2>/dev/null || echo "unknown")
+        RISK_LEVEL=$(echo "$TASK_CONTEXT" | jq -r '.risk_level // "medium"' 2>/dev/null || echo "medium")
+        TOOL_POLICY=$(echo "$TASK_CONTEXT" | jq -r '.tool_policy // {}' 2>/dev/null || echo "{}")
     else
         TASK_ID="unknown"
         TASK_DOMAIN="unknown"

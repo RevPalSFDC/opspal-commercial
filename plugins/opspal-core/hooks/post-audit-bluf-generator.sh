@@ -321,7 +321,7 @@ main() {
     # Display summary via structured JSON envelope (hook protocol)
     # Escape for JSON: replace newlines, backslashes, quotes
     local escaped_summary
-    escaped_summary=$(printf '%s' "$summary" | jq -Rs '.')
+    escaped_summary=$(printf '%s' "$summary" | jq -Rs '.' 2>/dev/null || echo '""')
     echo "{\"systemMessage\": ${escaped_summary}}" >&3
 
     # Also display to stderr for terminal visibility

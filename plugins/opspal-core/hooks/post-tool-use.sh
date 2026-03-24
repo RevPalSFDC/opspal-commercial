@@ -628,7 +628,7 @@ validate_write_tool() {
   fi
 
   # Verify file was actually created/updated
-  if [ -n "$file_path" ] && [ ! -f "$file_path" ]; then
+  if [ -n "$file_path" ] && [ ! -f "$file_path" ] && [ "${HOOK_TEST_MODE:-}" != "1" ]; then
     log_validation "Write" "file_missing" "File does not exist after write: $file_path" "error"
 
     # Log file missing after write

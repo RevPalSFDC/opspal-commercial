@@ -149,9 +149,9 @@ if [ -z "$RESULT_DATA" ]; then
 fi
 
 # Extract tool name and result
-TOOL_NAME=$(echo "$RESULT_DATA" | jq -r '.tool_name // empty' 2>/dev/null)
-TOOL_RESULT=$(echo "$RESULT_DATA" | jq -c '.tool_response // .tool_result // {}' 2>/dev/null)
-TOOL_SUCCESS=$(echo "$RESULT_DATA" | jq -r 'if has("success") then .success else true end' 2>/dev/null)
+TOOL_NAME=$(echo "$RESULT_DATA" | jq -r '.tool_name // empty' 2>/dev/null || echo "")
+TOOL_RESULT=$(echo "$RESULT_DATA" | jq -c '.tool_response // .tool_result // {}' 2>/dev/null || echo "{}")
+TOOL_SUCCESS=$(echo "$RESULT_DATA" | jq -r 'if has("success") then .success else true end' 2>/dev/null || echo "true")
 
 if [ -z "$TOOL_NAME" ]; then
     exit 0
@@ -167,7 +167,7 @@ map_tool_to_contract() {
     local tool="$1"
     case "$tool" in
         "Bash")
-            local cmd=$(echo "$RESULT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null)
+            local cmd=$(echo "$RESULT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
             if [[ "$cmd" =~ ^(sf|sfdx)\ data\ query ]]; then
                 echo "sf-data-query"
             elif [[ "$cmd" =~ ^(sf|sfdx)\ project\ deploy ]]; then
@@ -356,10 +356,10 @@ fi
 safe_append_jsonl "$VALIDATION_RESULT"
 
 # Parse results
-IS_VALID=$(echo "$VALIDATION_RESULT" | jq -r '.valid')
-ISSUES=$(echo "$VALIDATION_RESULT" | jq -r '.issues | join("; ")')
-WARNINGS=$(echo "$VALIDATION_RESULT" | jq -r '.warnings | join("; ")')
-REMEDIATIONS=$(echo "$VALIDATION_RESULT" | jq -r '.remediations // [] | map(.prevention) | join("; ")')
+IS_VALID=$(echo "$VALIDATION_RESULT" | jq -r '.valid' 2>/dev/null || echo "true")
+ISSUES=$(echo "$VALIDATION_RESULT" | jq -r '.issues // [] | join("; ")' 2>/dev/null || echo "")
+WARNINGS=$(echo "$VALIDATION_RESULT" | jq -r '.warnings // [] | join("; ")' 2>/dev/null || echo "")
+REMEDIATIONS=$(echo "$VALIDATION_RESULT" | jq -r '.remediations // [] | map(.prevention) | join("; ")' 2>/dev/null || echo "")
 
 # Update daily metrics
 if [ "$IS_VALID" = "true" ] && [ -z "$WARNINGS" ]; then

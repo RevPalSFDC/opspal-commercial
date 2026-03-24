@@ -200,7 +200,7 @@ if [ -n "$TOOL_INPUT" ] && is_json "$TOOL_INPUT"; then
     if [ "$INPUT_TYPE" != "object" ]; then
         if [ "$TOOL_NAME" = "Bash" ] && [ "$INPUT_TYPE" = "string" ]; then
             RAW_COMMAND=$(echo "$TOOL_INPUT" | jq -r '.' 2>/dev/null || echo "")
-            TOOL_INPUT=$(jq -nc --arg command "$RAW_COMMAND" '{command:$command}')
+            TOOL_INPUT=$(jq -nc --arg command "$RAW_COMMAND" '{command:$command}' 2>/dev/null || echo '{}')
         else
             TOOL_INPUT="{}"
         fi

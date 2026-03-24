@@ -28,6 +28,9 @@
 
 set -euo pipefail
 
+# Redirect all output to stderr — this hook emits diagnostic text, not JSON
+exec 1>&2
+
 # Colors
 RED='\033[0;31m'
 YELLOW='\033[1;33m'

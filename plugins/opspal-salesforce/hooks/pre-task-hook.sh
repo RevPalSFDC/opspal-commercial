@@ -42,6 +42,9 @@ BASE_DIR="${CLAUDE_PLUGIN_ROOT:-}"
 ORG_ENFORCER="$BASE_DIR/scripts/lib/organization-enforcer.js"
 PROJECT_INIT="$BASE_DIR/scripts/init-project.sh"
 
+# Redirect all output to stderr — this hook emits informational banners, not JSON
+exec 1>&2
+
 # Get the user's input/task
 TASK_INPUT="${1:-}"
 

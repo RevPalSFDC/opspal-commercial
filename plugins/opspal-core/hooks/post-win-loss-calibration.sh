@@ -180,7 +180,7 @@ if [[ "$RECORD_COUNT" -gt 0 ]]; then
 
     if [[ "$STATUS" == "proposal_ready" ]]; then
       # Send proposal as systemMessage for human review
-      ESCAPED=$(printf '%s' "$PROPOSAL" | jq -Rs '.')
+      ESCAPED=$(printf '%s' "$PROPOSAL" | jq -Rs '.' 2>/dev/null || echo '""')
       echo "{\"systemMessage\": \"## Deal Score Calibration Proposal\\n\\nBased on accumulated win/loss outcomes, the following weight adjustments are proposed for the deal scoring model.\\n\\n\`\`\`json\\n${PROPOSAL}\\n\`\`\`\\n\\n**This proposal requires human approval.** Review the changes and confirm before applying.\\nTo apply: \`node ${CALIBRATOR} apply ${ORG_SLUG}\`\"}" >&3
       echo "[win-loss-calibration] Weight adjustment proposal generated — awaiting approval"
     elif [[ "$STATUS" == "insufficient_data" ]]; then

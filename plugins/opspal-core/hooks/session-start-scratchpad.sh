@@ -134,18 +134,14 @@ main() {
 
   # Output context as systemMessage for Claude
   if [[ -n "$context_message" ]]; then
-    # Create JSON output for hook response
-    cat <<EOF
-{
-  "systemMessage": "$context_message",
-  "metadata": {
-    "sessionId": "$session_id",
-    "previousIterations": $iterations,
-    "openBlockers": $open_blockers,
-    "scratchpadDir": "${HOME}/.claude/scratchpad/$session_id"
-  }
-}
-EOF
+    # Create JSON output using jq for proper escaping
+    jq -nc \
+      --arg msg "$context_message" \
+      --arg sid "$session_id" \
+      --argjson iters "${iterations:-0}" \
+      --argjson blockers "${open_blockers:-0}" \
+      --arg dir "${HOME}/.claude/scratchpad/$session_id" \
+      '{systemMessage: $msg, metadata: {sessionId: $sid, previousIterations: $iters, openBlockers: $blockers, scratchpadDir: $dir}}' 2>/dev/null || echo "{}"
   fi
 
   log "INFO" "Session start scratchpad hook complete"

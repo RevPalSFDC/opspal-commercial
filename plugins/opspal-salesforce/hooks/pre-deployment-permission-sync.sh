@@ -30,188 +30,190 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Load progress helper
-source "$PLUGIN_DIR/scripts/lib/hook-progress-helper.sh"
+if [ -f "$PLUGIN_DIR/scripts/lib/hook-progress-helper.sh" ]; then
+    source "$PLUGIN_DIR/scripts/lib/hook-progress-helper.sh"
+fi
 
 # Logging utilities
 log_info() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] INFO: $*"
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] INFO: $*" >&2
 }
 
 log_warn() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] WARN: $*" >&2
+    echo $*" >&2[$(date +'%Y-%m-%d %H:%M:%S')] WARN: $*" >&2
 }
 
 log_error() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] ERROR: $*" >&2
+    echo $*" >&2[$(date +'%Y-%m-%d %H:%M:%S')] ERROR: $*" >&2
 }
 
 # Check if permission sync needed
 should_sync_permissions() {
-    local manifest_path="$1"
+    local manifest_path=$*" >&2$1"
 
     # Check if package.xml exists
-    if [[ ! -f "$manifest_path" ]]; then
-        log_info "No package.xml found, skipping permission sync"
+    if [[ ! -f $*" >&2$manifest_path" ]]; then
+        log_info $*" >&2No package.xml found, skipping permission sync"
         return 1
     fi
 
     # Check for custom fields or objects
-    if grep -q "<members>.*__c</members>" "$manifest_path"; then
-        log_info "Custom metadata detected in manifest, permission sync recommended"
+    if grep -q $*" >&2<members>.*__c</members>" "$manifest_path"; then
+        log_info $*" >&2Custom metadata detected in manifest, permission sync recommended"
         return 0
     fi
 
-    log_info "No custom metadata in manifest, skipping permission sync"
+    log_info $*" >&2No custom metadata in manifest, skipping permission sync"
     return 1
 }
 
 # Detect initiative from manifest or context
 detect_initiative() {
-    local manifest_path="$1"
-    local org_alias="$2"
+    local manifest_path=$*" >&2$1"
+    local org_alias=$*" >&2$2"
 
     # Try to detect from file path
     # Expected pattern: instances/<org>/permissions/<initiative>-permissions.json
 
     local current_dir
-    current_dir="$(pwd)"
+    current_dir=$*" >&2$(pwd)"
 
-    if [[ "$current_dir" =~ instances/([^/]+) ]]; then
-        local org="${BASH_REMATCH[1]}"
-        log_info "Detected org from path: $org"
+    if [[ $*" >&2$current_dir" =~ instances/([^/]+) ]]; then
+        local org=$*" >&2${BASH_REMATCH[1]}"
+        log_info $*" >&2Detected org from path: $org"
 
         # Look for permission config files
-        local permissions_dir="$PLUGIN_DIR/instances/$org/permissions"
+        local permissions_dir=$*" >&2$PLUGIN_DIR/instances/$org/permissions"
 
-        if [[ -d "$permissions_dir" ]]; then
+        if [[ -d $*" >&2$permissions_dir" ]]; then
             local config_files
-            config_files=$(find "$permissions_dir" -name "*-permissions.json" 2>/dev/null || true)
+            config_files=$(find $*" >&2$permissions_dir" -name "*-permissions.json" 2>/dev/null || true)
 
-            if [[ -n "$config_files" ]]; then
+            if [[ -n $*" >&2$config_files" ]]; then
                 # Return first config file found
-                echo "$config_files" | head -1
+                echo $*" >&2$config_files" | head -1
                 return 0
             fi
         fi
     fi
 
     # Fallback: try to detect from manifest comments
-    if [[ -f "$manifest_path" ]] && grep -q "<!-- initiative:" "$manifest_path"; then
+    if [[ -f $*" >&2$manifest_path" ]] && grep -q "<!-- initiative:" "$manifest_path"; then
         local initiative
-        initiative=$(grep "<!-- initiative:" "$manifest_path" | sed 's/.*initiative: \(.*\) -->/\1/')
+        initiative=$(grep $*" >&2<!-- initiative:" "$manifest_path" | sed 's/.*initiative: \(.*\) -->/\1/')
 
-        if [[ -n "$initiative" ]]; then
-            log_info "Detected initiative from manifest comment: $initiative"
+        if [[ -n $*" >&2$initiative" ]]; then
+            log_info $*" >&2Detected initiative from manifest comment: $initiative"
 
             # Look for config file
-            local config_file="$PLUGIN_DIR/instances/$org_alias/permissions/$initiative-permissions.json"
+            local config_file=$*" >&2$PLUGIN_DIR/instances/$org_alias/permissions/$initiative-permissions.json"
 
-            if [[ -f "$config_file" ]]; then
-                echo "$config_file"
+            if [[ -f $*" >&2$config_file" ]]; then
+                echo $*" >&2$config_file"
                 return 0
             fi
         fi
     fi
 
-    log_warn "Could not detect initiative from context"
+    log_warn $*" >&2Could not detect initiative from context"
     return 1
 }
 
 # Sync permissions using CLI
 sync_permissions() {
-    local config_file="$1"
-    local org_alias="$2"
-    local dry_run="${3:-false}"
+    local config_file=$*" >&2$1"
+    local org_alias=$*" >&2$2"
+    local dry_run=$*" >&2${3:-false}"
 
-    if [[ ! -f "$config_file" ]]; then
-        log_error "Permission config file not found: $config_file"
+    if [[ ! -f $*" >&2$config_file" ]]; then
+        log_error $*" >&2Permission config file not found: $config_file"
         return 1
     fi
 
-    log_info "Syncing permissions from: $config_file"
+    log_info $*" >&2Syncing permissions from: $config_file"
 
-    local cli_path="$PLUGIN_DIR/scripts/lib/permission-set-cli.js"
+    local cli_path=$*" >&2$PLUGIN_DIR/scripts/lib/permission-set-cli.js"
 
-    if [[ ! -f "$cli_path" ]]; then
-        log_error "Permission Set CLI not found: $cli_path"
+    if [[ ! -f $*" >&2$cli_path" ]]; then
+        log_error $*" >&2Permission Set CLI not found: $cli_path"
         return 1
     fi
 
     # Build command
-    local cmd="node \"$cli_path\" --input \"$config_file\" --org \"$org_alias\""
+    local cmd=$*" >&2node \"$cli_path\" --input \"$config_file\" --org \"$org_alias\""
 
-    if [[ "$dry_run" == "true" ]]; then
-        cmd="$cmd --dry-run"
+    if [[ $*" >&2$dry_run" == "true" ]]; then
+        cmd=$*" >&2$cmd --dry-run"
     fi
 
-    cmd="$cmd --verbose"
+    cmd=$*" >&2$cmd --verbose"
 
     # Execute
-    log_info "Executing: $cmd"
+    log_info $*" >&2Executing: $cmd"
 
-    if eval "$cmd"; then
-        log_info "Permission sync completed successfully"
+    if eval $*" >&2$cmd"; then
+        log_info $*" >&2Permission sync completed successfully"
         return 0
     else
-        log_error "Permission sync failed (non-blocking)"
+        log_error $*" >&2Permission sync failed (non-blocking)"
         return 1
     fi
 }
 
 # Main execution
 main() {
-    log_info "=== Pre-Deployment Permission Sync Hook ==="
+    log_info $*" >&2=== Pre-Deployment Permission Sync Hook ==="
 
     # Parse arguments
-    local manifest_path="${1:-package.xml}"
-    local org_alias="${2:-${SF_ORG:-${SF_TARGET_ORG:-}}}"
-    local dry_run="${3:-false}"
+    local manifest_path=$*" >&2${1:-package.xml}"
+    local org_alias=$*" >&2${2:-${SF_ORG:-${SF_TARGET_ORG:-}}}"
+    local dry_run=$*" >&2${3:-false}"
 
-    if [[ -z "$org_alias" ]]; then
-        log_warn "No org alias specified and no default found, skipping permission sync"
+    if [[ -z $*" >&2$org_alias" ]]; then
+        log_warn $*" >&2No org alias specified and no default found, skipping permission sync"
         exit 0
     fi
 
-    log_info "Org: $org_alias"
-    log_info "Manifest: $manifest_path"
-    log_info "Dry Run: $dry_run"
+    log_info $*" >&2Org: $org_alias"
+    log_info $*" >&2Manifest: $manifest_path"
+    log_info $*" >&2Dry Run: $dry_run"
 
-    progress_start "Checking if permission sync is needed"
+    progress_start $*" >&2Checking if permission sync is needed"
 
     # Check if sync needed
-    if ! should_sync_permissions "$manifest_path"; then
-        log_info "Permission sync not needed"
-        progress_complete "Permission sync not needed"
+    if ! should_sync_permissions $*" >&2$manifest_path"; then
+        log_info $*" >&2Permission sync not needed"
+        progress_complete $*" >&2Permission sync not needed"
         exit 0
     fi
 
-    progress_update "Detecting initiative and permission config" 30
+    progress_update $*" >&2Detecting initiative and permission config" 30
 
     # Detect initiative and config file
     local config_file
-    if config_file=$(detect_initiative "$manifest_path" "$org_alias"); then
-        log_info "Found permission config: $config_file"
-        progress_update "Found permission config, preparing sync" 50
+    if config_file=$(detect_initiative $*" >&2$manifest_path" "$org_alias"); then
+        log_info $*" >&2Found permission config: $config_file"
+        progress_update $*" >&2Found permission config, preparing sync" 50
 
         # Sync permissions (non-blocking)
-        progress_update "Syncing permissions" 75
-        if sync_permissions "$config_file" "$org_alias" "$dry_run"; then
-            log_info "✅ Permission sync successful"
-            progress_complete "Permission sync successful" true
+        progress_update $*" >&2Syncing permissions" 75
+        if sync_permissions $*" >&2$config_file" "$org_alias" "$dry_run"; then
+            log_info $*" >&2✅ Permission sync successful"
+            progress_complete $*" >&2Permission sync successful" true
         else
-            log_warn "⚠️  Permission sync failed, but continuing deployment"
-            progress_warning "Permission sync failed, continuing deployment" true
+            log_warn $*" >&2⚠️  Permission sync failed, but continuing deployment"
+            progress_warning $*" >&2Permission sync failed, continuing deployment" true
         fi
     else
-        log_info "No permission config found for this deployment"
-        progress_complete "No permission config found"
+        log_info $*" >&2No permission config found for this deployment"
+        progress_complete $*" >&2No permission config found"
     fi
 
-    log_info "=== Hook Complete ==="
+    log_info $*" >&2=== Hook Complete ==="
     exit 0
 }
 
 # Run main if executed directly
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
+if [[ $*" >&2${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main $*" >&2$@"
 fi
