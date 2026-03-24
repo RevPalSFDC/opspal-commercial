@@ -197,7 +197,7 @@ async function runAllTests() {
       assert.strictEqual(report.resumedFromStartSession, true);
       assert.strictEqual(report.startSessionPending, true);
       assert(Array.isArray(report.steps), 'Expected finish report to include structured step results');
-      assert.strictEqual(report.summary.stepCount, 9, `Expected nine recorded finish steps. report=${result.stdout}`);
+      assert.strictEqual(report.summary.stepCount, 10, `Expected ten recorded finish steps. report=${result.stdout}`);
       assert(report.steps.some((step) => step.key === 'step3-runtime-reconciliation'), 'Expected runtime reconciliation step metadata');
       assert(report.summary.rollbackCount >= 1, `Expected at least one rollback artifact in the report. report=${result.stdout}`);
       assert(fs.existsSync(report.reportFile), `Expected finish report to exist at ${report.reportFile}`);
