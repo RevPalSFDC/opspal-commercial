@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-23",
+  "generated_at": "2026-03-24",
   "marketplace": {
     "name": "opspal-commercial",
     "repository": "https://github.com/RevPalSFDC/opspal-commercial",
@@ -12,8 +12,8 @@
   "totals": {
     "plugins": 10,
     "agents": 302,
-    "commands": 272,
-    "hooks": 164,
+    "commands": 273,
+    "hooks": 165,
     "skills": 1
   },
   "plugins": [
@@ -44,8 +44,8 @@
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
       "counts": {
         "agents": 79,
-        "commands": 112,
-        "hooks": 78,
+        "commands": 113,
+        "hooks": 79,
         "skills": 0
       },
       "lifecycle": {
