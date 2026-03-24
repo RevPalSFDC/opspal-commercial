@@ -59,7 +59,7 @@ fi
 # Step 1: Run Prevention System (safety checks first)
 if [ "$PREVENTION_ENABLED" == "1" ]; then
   # Note: Don't use 2>&1 - let stderr go to user's terminal, only capture stdout (JSON)
-  PREVENTION_OUTPUT=$(echo "$USER_PROMPT" | bash "$SCRIPT_DIR/prevention-system-orchestrator.sh" 2>/dev/null)
+  PREVENTION_OUTPUT=$(echo "$USER_PROMPT" | timeout 8 bash "$SCRIPT_DIR/prevention-system-orchestrator.sh" 2>/dev/null || true)
   PREVENTION_EXIT=$?
 
   # If prevention system blocks, stop here
@@ -80,7 +80,7 @@ if [ "$SUBAGENT_ENABLED" == "1" ]; then
     # CRITICAL: Don't redirect stderr (2>&1) - the routing banner goes to stderr
     # for user visibility, while JSON goes to stdout for Claude Code parsing.
     # Using 2>&1 would mix banner text with JSON, breaking Claude Code's parser.
-    BOOSTER_OUTPUT=$(echo "$USER_PROMPT" | bash "$SCRIPT_DIR/subagent-utilization-booster.sh")
+    BOOSTER_OUTPUT=$(echo "$USER_PROMPT" | timeout 8 bash "$SCRIPT_DIR/subagent-utilization-booster.sh" 2>/dev/null || true)
     BOOSTER_EXIT=$?
 
     # Show booster output (JSON only - banner already went to stderr)

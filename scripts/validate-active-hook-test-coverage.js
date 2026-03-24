@@ -322,8 +322,62 @@ function resolveCoverage() {
   return report;
 }
 
+
+/**
+ * Validate that blocking hooks have tests asserting their block behavior.
+ * A blocking hook must have at least one test file containing an assertion
+ * that the hook exits with one of the expected block exit codes.
+ */
+function validateBlockingHookCoverage(report) {
+  const blockingConfig = readJson(coverageConfigPath, {}).blockingHooks || {};
+  const insufficient = [];
+
+  for (const [hookPath, spec] of Object.entries(blockingConfig)) {
+    if (!spec.mustTestBlock) continue;
+
+    const entry = report.entries.find((e) => e.hookPath === hookPath);
+    if (!entry || !entry.covered) continue; // Skip — already flagged as missing coverage
+
+    const testFiles = entry.matchedTests || [];
+    let hasBlockAssertion = false;
+
+    for (const testFile of testFiles) {
+      const absPath = path.resolve(repoRoot, testFile);
+      if (!fs.existsSync(absPath)) continue;
+
+      const testContent = fs.readFileSync(absPath, "utf8");
+      // Check for exit code assertions matching the expected block codes
+      for (const code of spec.blockExitCodes) {
+        const patterns = [
+          new RegExp("exitCode.*" + code),
+          new RegExp("exit.*" + code),
+          new RegExp("status.*" + code),
+          new RegExp("result\\.status.*" + code)
+        ];
+        if (patterns.some((p) => p.test(testContent))) {
+          hasBlockAssertion = true;
+          break;
+        }
+      }
+      if (hasBlockAssertion) break;
+    }
+
+    if (!hasBlockAssertion) {
+      insufficient.push({
+        hookPath,
+        matchedTests: testFiles,
+        expectedBlockCodes: spec.blockExitCodes,
+        description: spec.description
+      });
+    }
+  }
+
+  return insufficient;
+}
+
 function main() {
   const report = resolveCoverage();
+  const insufficientBlocking = validateBlockingHookCoverage(report);
   const hasErrors = report.missingCoverage.length > 0 || report.staleConfiguration.length > 0;
 
   if (report.allowlistedUntested.length > 0) {
@@ -345,7 +399,15 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`✅ Active hook test coverage checks passed (${report.totals.coveredHooks}/${report.totals.activeHooks} covered, ${report.totals.allowlistedUntested} debt allowlisted)`);
+  if (insufficientBlocking.length > 0) {
+    console.warn(`\n⚠️  Blocking hook coverage warnings (${insufficientBlocking.length}):`);
+    for (const entry of insufficientBlocking) {
+      console.warn(`  - ${entry.hookPath}: no test asserts exit ${entry.expectedBlockCodes.join("/")} — ${entry.description}`);
+    }
+    console.warn("");
+  }
+
+  console.log(`✅ Active hook test coverage checks passed (${report.totals.coveredHooks}/${report.totals.activeHooks} covered, ${report.totals.allowlistedUntested} debt allowlisted${insufficientBlocking.length > 0 ? ", " + insufficientBlocking.length + " blocking-assertion warnings" : ""})`);
 }
 
 if (require.main === module) {

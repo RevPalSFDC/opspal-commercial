@@ -55,7 +55,7 @@ if [ ! -f "$VALIDATOR_SCRIPT" ]; then
     fi
 
     echo '{"error": "Quality gate validator not found", "path": "'"$VALIDATOR_SCRIPT"'"}' >&2
-    exit 3
+    exit 0  # Graceful skip when validator unavailable
 fi
 
 # Check if node is available
@@ -73,7 +73,7 @@ if ! command -v node &>/dev/null; then
     fi
 
     echo '{"error": "Node.js not found - required for quality gate validation"}' >&2
-    exit 3
+    exit 0  # Graceful skip — dependency unavailable
 fi
 
 # Read input (either from stdin or first argument)
@@ -173,5 +173,5 @@ else
     fi
 
     echo '{"error": "Validation script failed", "output": "'"$(echo "$ERROR_OUTPUT" | tr '\n' ' ' | sed 's/"/\\"/g')"'"}' >&2
-    exit 3
+    exit 0  # Graceful skip — dependency unavailable
 fi

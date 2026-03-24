@@ -48,5 +48,36 @@
     "plugins/opspal-core/hooks/session-start-repo-sync.sh": "Touches git/worktree state and needs an isolated repository fixture to test safely.",
     "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures.",
     "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
+  },
+  "blockingHooks": {
+    "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh": {
+      "mustTestBlock": true,
+      "blockExitCodes": [
+        2,
+        3
+      ],
+      "description": "Must have at least one test asserting exit 2 or 3 (production escalation or forbidden block)"
+    },
+    "plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh": {
+      "mustTestBlock": true,
+      "blockExitCodes": [
+        2
+      ],
+      "description": "Must have at least one test asserting deploy blocking via dispatcher chain"
+    },
+    "plugins/opspal-salesforce/hooks/pre-deploy-agent-context-check.sh": {
+      "mustTestBlock": true,
+      "blockExitCodes": [
+        2
+      ],
+      "description": "Must have at least one test asserting direct deploy block outside agent context"
+    },
+    "plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh": {
+      "mustTestBlock": true,
+      "blockExitCodes": [
+        2
+      ],
+      "description": "Must have at least one test asserting routing enforcement block"
+    }
   }
 }

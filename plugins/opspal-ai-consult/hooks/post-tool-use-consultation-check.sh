@@ -56,9 +56,9 @@ fi
 HOOK_INPUT=$(cat)
 
 # Extract tool information
-TOOL_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_name // ""')
-TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_response // .tool_result // .tool_output // ""')
-TOOL_ERROR=$(echo "$HOOK_INPUT" | jq -r '.tool_response.error // .tool_result.error // .error // ""')
+TOOL_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_name // ""' 2>/dev/null || echo "")
+TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_response // .tool_result // .tool_output // ""' 2>/dev/null || echo "")
+TOOL_ERROR=$(echo "$HOOK_INPUT" | jq -r '.tool_response.error // .tool_result.error // .error // ""' 2>/dev/null || echo "")
 
 # Path to ACE integration
 ACE_INTEGRATION="$SCRIPT_DIR/../scripts/lib/ace-integration.js"
@@ -66,7 +66,7 @@ ACE_INTEGRATION="$SCRIPT_DIR/../scripts/lib/ace-integration.js"
 # ============================================================================
 # ACE LOGGING: Log gemini-consult agent completions to skill registry
 # ============================================================================
-if [ "$ENABLE_ACE_LOGGING" = "1" ] && [ "$TOOL_NAME" = "Agent" ]; then
+if [ "${ENABLE_ACE_LOGGING:-}" = "1" ] && [ "$TOOL_NAME" = "Agent" ]; then
   # Check if this was a gemini-consult agent invocation
   SUBAGENT_TYPE=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // ""')
 

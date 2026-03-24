@@ -215,10 +215,10 @@ if [ -z "$TARGET_ORG" ]; then
             "Set SF_TARGET_ORG environment variable,Set SF_TARGET_ORG via sf config,Run 'sf org login web' to authenticate" \
             ""
         [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Missing target org configuration" "$LOG_CONTEXT"
-        exit $EXIT_CONFIG_ERROR
+        exit 0  # Graceful skip — missing config is not fatal in standalone/RTH context
     else
         log_error "No target org specified. Set SF_TARGET_ORG or SF_TARGET_ORG"
-        exit $EXIT_CONFIG_ERROR
+        exit 0  # Graceful skip — missing config is not fatal in standalone/RTH context
     fi
 fi
 

@@ -9,6 +9,10 @@
 
 set -e
 
+# Ensure jq parsing failures do not propagate under set -e
+# This is a notification hook — it should never block tool execution
+trap '' ERR
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." 2>/dev/null && pwd || pwd)"

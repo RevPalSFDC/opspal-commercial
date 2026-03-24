@@ -11,7 +11,7 @@ set -euo pipefail
 # This hook runs non-blocking to avoid impacting tool performance.
 
 # Skip if session capture is disabled
-if [ "$DISABLE_SESSION_CAPTURE" = "1" ]; then
+if [ "${DISABLE_SESSION_CAPTURE:-}" = "1" ]; then
     exit 0
 fi
 
@@ -26,7 +26,7 @@ if [ -f "$SESSION_DIR/.current_session" ]; then
 fi
 
 # Skip if no session
-if [ -z "$CLAUDE_SESSION_ID" ]; then
+if [ -z "${CLAUDE_SESSION_ID:-}" ]; then
     exit 0
 fi
 
@@ -40,8 +40,8 @@ INPUT=$(cat)
 
 # Extract tool info using jq (if available)
 if command -v jq &> /dev/null; then
-    TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // "unknown"' 2>/dev/null)
-    TOOL_RESULT=$(echo "$INPUT" | jq -r '.tool_result // "success"' 2>/dev/null)
+    TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // "unknown"' 2>/dev/null || echo "unknown")
+    TOOL_RESULT=$(echo "$INPUT" | jq -r '.tool_result // "success"' 2>/dev/null || echo "success")
 
     # Skip internal/meta tools
     case "$TOOL_NAME" in
