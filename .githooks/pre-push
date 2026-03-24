@@ -82,9 +82,13 @@ fi
 RTH_BIN="$REPO_ROOT/../dev-tools/recursive-test-harness/bin/rth.js"
 if [ -f "$RTH_BIN" ] && sort -u "$CHANGED_FILES_FILE" | grep -qE '^plugins/'; then
   echo "Running RTH smoke test against commercial plugins..."
-  # L2 failures are advisory for the full suite, but we log them for review.
-  node "$RTH_BIN" run --mode smoke --plugins-dir "$REPO_ROOT/plugins" --no-evidence 2>/dev/null || {
-    echo "WARNING: RTH smoke test reported failures (see output above). L2 failures are advisory — review but do not block."
+  # RTH L1+L2 tests are now enforced. L1 checks structure, L2 checks hook behavior.
+  # All hooks must exit 0 or 2 on canonical and plugin-specific fixtures.
+  node "$RTH_BIN" run --mode smoke --plugins-dir "$REPO_ROOT/plugins" --no-evidence || {
+    echo ""
+    echo "RTH smoke test FAILED. Fix hook exit codes before pushing."
+    echo "To debug: node ../dev-tools/recursive-test-harness/bin/rth.js run --mode smoke --plugins-dir plugins --plugin <name>"
+    exit 1
   }
 fi
 

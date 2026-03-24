@@ -7,7 +7,8 @@
 # Exit Codes:
 #   0 = Continue (always, just provides guidance)
 
-set -e
+# This is a notification hook — never block. Disable set -e to prevent jq propagation.
+set +e
 
 # Ensure jq parsing failures do not propagate under set -e
 # This is a notification hook — it should never block tool execution
@@ -91,9 +92,9 @@ INPUT=$(cat)
 
 # Extract tool result and command from the live PostToolUseFailure payload.
 # Keep legacy fallbacks for older local test payloads.
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
-EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_response.exit_code // .tool_response.exitCode // .tool_result.exit_code // .tool_result.exitCode // empty' 2>/dev/null)
-IS_INTERRUPT=$(echo "$INPUT" | jq -r '.is_interrupt // false' 2>/dev/null)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || echo "")
+EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_response.exit_code // .tool_response.exitCode // .tool_result.exit_code // .tool_result.exitCode // empty' 2>/dev/null || echo "")
+IS_INTERRUPT=$(echo "$INPUT" | jq -r '.is_interrupt // false' 2>/dev/null || echo "")
 RESULT=$(echo "$INPUT" | jq -r '
   .error // (
     (
@@ -106,7 +107,7 @@ RESULT=$(echo "$INPUT" | jq -r '
 
 # Fallback to the serialized result payload when stderr/stdout are missing
 if [ -z "$RESULT" ]; then
-    RESULT=$(echo "$INPUT" | jq -c '.tool_response // .tool_result // empty' 2>/dev/null)
+    RESULT=$(echo "$INPUT" | jq -c '.tool_response // .tool_result // empty' 2>/dev/null || echo "")
 fi
 
 # If no result or command, or if the failure was user interruption, pass through

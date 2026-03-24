@@ -73,6 +73,12 @@ else
     TASK_CONTEXT=$(cat)
 fi
 
+# PostToolUse payloads from Claude Code are tool results, not task verification contexts.
+# Only proceed if the payload looks like a task verification request (has taskType/deliverable).
+if echo "${TASK_CONTEXT:-}" | jq -e ".hook_event_name" >/dev/null 2>&1; then
+    exit 0
+fi
+
 # Parse task context to extract relevant information
 TASK_TYPE=$(echo "$TASK_CONTEXT" | jq -r '.taskType // .type // "unknown"' 2>/dev/null || echo "unknown")
 DELIVERABLE=$(echo "$TASK_CONTEXT" | jq -r '.deliverable // {}' 2>/dev/null || echo "{}")
