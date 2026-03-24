@@ -404,6 +404,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-repo-sync.sh",
             "timeout": 10000,
             "description": "Auto-pull project-connected git repos at session start (opt-out: ENABLE_GIT_SYNC=0)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-plugin-update-customizations.sh",
+            "timeout": 10000,
+            "description": "Run pending customization migrations after plugin updates (non-blocking)"
           }
         ]
       }

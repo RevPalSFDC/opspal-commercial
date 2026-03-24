@@ -273,9 +273,45 @@ build_guidance_message() {
 │"
     fi
 
+    # Resolve brand colors — check customization store first, fall back to defaults
+    local brand_grape="#5F3B8C"
+    local brand_apricot="#E99560"
+    local brand_sand="#EAE4DC"
+    local brand_heading="Montserrat"
+    local brand_body="Figtree"
+    local customization_index="$HOME/.claude/opspal/customizations/index.json"
+    if [ -f "$customization_index" ] && command -v jq &>/dev/null; then
+        local palette
+        palette=$(jq -r '
+            .[] | select(.resource_id == "brand:color-palette:default" and .status == "published")
+            | .content // empty
+        ' "$customization_index" 2>/dev/null)
+        if [ -n "$palette" ] && [ "$palette" != "null" ]; then
+            local g a s
+            g=$(echo "$palette" | jq -r '.grape // empty' 2>/dev/null)
+            a=$(echo "$palette" | jq -r '.apricot // empty' 2>/dev/null)
+            s=$(echo "$palette" | jq -r '.sand // empty' 2>/dev/null)
+            [ -n "$g" ] && brand_grape="$g"
+            [ -n "$a" ] && brand_apricot="$a"
+            [ -n "$s" ] && brand_sand="$s"
+        fi
+        local fontset
+        fontset=$(jq -r '
+            .[] | select(.resource_id == "brand:font-set:default" and .status == "published")
+            | .content // empty
+        ' "$customization_index" 2>/dev/null)
+        if [ -n "$fontset" ] && [ "$fontset" != "null" ]; then
+            local fh fb
+            fh=$(echo "$fontset" | jq -r '.headings // empty' 2>/dev/null)
+            fb=$(echo "$fontset" | jq -r '.body // empty' 2>/dev/null)
+            [ -n "$fh" ] && brand_heading="$fh"
+            [ -n "$fb" ] && brand_body="$fb"
+        fi
+    fi
+
     msg+="
-│  Brand Colors: Grape #5F3B8C | Apricot #E99560 | Sand #EAE4DC   │
-│  Typography: Montserrat (headings) | Figtree (body)             │
+│  Brand Colors: Grape ${brand_grape} | Apricot ${brand_apricot} | Sand ${brand_sand}
+│  Typography: ${brand_heading} (headings) | ${brand_body} (body)
 │                                                                 │
 │  Registry: config/master-template-registry.json                 │
 └─────────────────────────────────────────────────────────────────┘

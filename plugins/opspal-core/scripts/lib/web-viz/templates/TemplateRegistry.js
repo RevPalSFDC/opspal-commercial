@@ -26,6 +26,8 @@ class TemplateRegistry {
 
     this.templates = new Map();
     this.loaded = false;
+    // Optional customization resolver for template overrides
+    this.resolver = options.resolver || null;
   }
 
   /**
@@ -132,6 +134,22 @@ class TemplateRegistry {
    * @returns {Promise<Object>} Full template specification
    */
   async loadTemplate(templateId) {
+    // Check customization resolver first for template override
+    if (this.resolver) {
+      try {
+        const resolved = await this.resolver.resolveTemplate(templateId, 'web-viz');
+        if (resolved?.content && resolved.record?.source_type === 'custom') {
+          const template = typeof resolved.content === 'string'
+            ? JSON.parse(resolved.content)
+            : resolved.content;
+          this.validateTemplate(template);
+          return { id: templateId, spec: template, source: 'custom' };
+        }
+      } catch {
+        // Resolver failed — fall through to packaged file
+      }
+    }
+
     const meta = this.get(templateId);
     if (!meta) {
       throw new Error(`Template not found: ${templateId}`);

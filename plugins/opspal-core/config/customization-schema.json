@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpsPal Customization Resource Record",
+  "description": "Schema for resource records stored in the customization layer",
+  "type": "object",
+  "required": [
+    "resource_id",
+    "resource_type",
+    "scope",
+    "source_type",
+    "schema_version",
+    "status",
+    "title"
+  ],
+  "properties": {
+    "resource_id": {
+      "type": "string",
+      "description": "Stable resource identifier (namespaced key or UUID)",
+      "examples": ["brand:color-palette:default", "template:pdf-cover:salesforce-audit"]
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": ["brand_asset", "template"],
+      "description": "Resource type category"
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["global", "site", "tenant"],
+      "description": "Storage scope — global (packaged), site (user-global), tenant (org-specific)"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": ["core", "custom"],
+      "description": "Whether this is a packaged default or customer customization"
+    },
+    "source_resource_id": {
+      "type": ["string", "null"],
+      "description": "Resource ID of the packaged default this was cloned from"
+    },
+    "source_version": {
+      "type": ["string", "null"],
+      "description": "Plugin version at the time of cloning"
+    },
+    "source_checksum": {
+      "type": ["string", "null"],
+      "description": "Checksum of the source at clone time (for drift detection)"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1",
+      "description": "Schema version for future migration support"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "published", "archived"],
+      "description": "Resource lifecycle status"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable name"
+    },
+    "content": {
+      "description": "Inline content (text, JSON, or null for binary resources)",
+      "type": ["string", "object", "null"]
+    },
+    "storage_uri": {
+      "type": ["string", "null"],
+      "description": "Absolute file path for binary assets"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Arbitrary metadata (subType, fileType, etc.)",
+      "additionalProperties": true
+    },
+    "checksum": {
+      "type": ["string", "null"],
+      "description": "SHA-256 checksum prefixed with 'sha256:'"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Creator identifier"
+    },
+    "updated_by": {
+      "type": "string",
+      "description": "Last updater identifier"
+    },
+    "created_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Creation timestamp (ISO 8601)"
+    },
+    "updated_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Last update timestamp (ISO 8601)"
+    }
+  },
+  "additionalProperties": false
+}

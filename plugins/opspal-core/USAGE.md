@@ -325,4 +325,104 @@ sudo apt-get install jq nodejs
 
 ---
 
+## Brand & Template Customization
+
+Customize brand assets and templates that **persist safely across plugin updates**. Customer overrides are stored outside the plugin directory in `~/.claude/opspal/customizations/` (global) or `orgs/<org>/customizations/` (per-org).
+
+### Quick Start
+
+```bash
+# List all available resources (defaults + custom)
+/customize list
+
+# Clone a packaged default for customization
+/customize clone brand:color-palette:default title="Acme Brand Colors"
+
+# Edit the cloned resource
+/customize edit brand:color-palette:default
+
+# Publish to make it active
+/customize publish brand:color-palette:default
+
+# Check if upstream defaults changed since you cloned
+/customize drifted
+
+# Revert to packaged default
+/customize revert brand:color-palette:default
+```
+
+### Resource ID Reference
+
+| Type | Pattern | Examples |
+|------|---------|----------|
+| Colors | `brand:color-palette:default` | Brand color palette |
+| Fonts | `brand:font-set:default` | Heading and body fonts |
+| Logos | `brand:logo:<variant>` | `brand:logo:primary`, `brand:logo:icon`, `brand:logo:favicon` |
+| CSS Themes | `brand:css-theme:<name>` | `brand:css-theme:revpal-brand`, `brand:css-theme:default` |
+| PDF Covers | `template:pdf-cover:<id>` | `template:pdf-cover:salesforce-audit`, `template:pdf-cover:default` |
+| Web Viz | `template:web-viz:<id>` | `template:web-viz:sales-pipeline` |
+| PPTX | `template:pptx:<id>` | `template:pptx:solutions-proposal` |
+
+### Lifecycle
+
+1. **Clone** a packaged default — creates a draft copy in persistent storage
+2. **Edit** the custom resource (colors, CSS, template content)
+3. **Publish** — activates the override for all generation
+4. **Archive** — deactivates without deleting (reversible)
+5. **Revert** — deletes the override, falls back to packaged default
+
+### Resolution Order
+
+When generating output, the system resolves resources in this priority:
+
+1. **Tenant override** (`orgs/<org>/customizations/`) — org-specific
+2. **Site override** (`~/.claude/opspal/customizations/`) — user-global
+3. **Packaged default** — shipped with the plugin
+
+Only `published` resources are active. Draft and archived resources are skipped.
+
+### Upgrade Safety
+
+- Plugin updates **never touch** `~/.claude/opspal/` or `orgs/` directories
+- Packaged defaults can be updated by new releases without affecting your overrides
+- `/customize drifted` shows when an upstream default changed since you cloned it
+- `/customize compare <id>` shows the exact differences
+
+### Backup & Export
+
+```bash
+# Backup all customizations
+/customize backup label="pre-release"
+
+# Export as portable bundle
+/customize export
+
+# Import from bundle
+/customize import ./customizations-bundle.json
+
+# Run pending migrations (automatic on session start)
+/customize migrate
+```
+
+### Programmatic API
+
+```javascript
+const { createCustomizationLayer } = require(
+  process.env.CLAUDE_PLUGIN_ROOT + '/scripts/lib/customization'
+);
+const layer = await createCustomizationLayer();
+
+// Resolve active color palette
+const palette = await layer.resolver.resolveColorPalette();
+
+// Clone + edit + publish
+await layer.admin.clone('brand:color-palette:default');
+await layer.admin.edit('brand:color-palette:default', {
+  content: { grape: '#AA0000', indigo: '#00AA00' }
+});
+await layer.admin.publish('brand:color-palette:default');
+```
+
+---
+
 **Full Documentation**: See CLAUDE.md for comprehensive feature documentation.

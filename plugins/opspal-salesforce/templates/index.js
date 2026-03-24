@@ -12,11 +12,21 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
 
 class TemplateRegistry {
-    constructor() {
+    /**
+     * @param {Object} [options]
+     * @param {Object} [options.resolver] - Optional customization ResourceResolver
+     * @param {Object} [options.store] - Optional CustomResourceStore for persistent saves
+     */
+    constructor(options = {}) {
         this.templates = new Map();
         this.templatesLoaded = false;
+        // Optional customization resolver — when present, custom templates
+        // are resolved from persistent storage before falling back to plugin files
+        this.resolver = options.resolver || null;
+        this.store = options.store || null;
     }
 
     /**
@@ -99,6 +109,20 @@ class TemplateRegistry {
      * @returns {Object|null} Template object or null if not found
      */
     async getTemplate(name) {
+        // Check customization resolver first for custom Flow template overrides
+        if (this.resolver) {
+            try {
+                const resolved = await this.resolver.resolveTemplate(name, 'flow');
+                if (resolved?.content && resolved.record?.source_type === 'custom') {
+                    const template = typeof resolved.content === 'string'
+                        ? JSON.parse(resolved.content) : resolved.content;
+                    return template;
+                }
+            } catch {
+                // Resolver failed — fall through to in-memory registry
+            }
+        }
+
         await this.loadTemplates();
         return this.templates.get(name) || null;
     }
@@ -310,7 +334,35 @@ class TemplateRegistry {
             createdAt: new Date().toISOString()
         };
 
-        // Save template
+        // Prefer persistent customization store (survives plugin updates)
+        if (this.store) {
+            const contentStr = JSON.stringify(template, null, 2);
+            const checksum = 'sha256:' + crypto.createHash('sha256').update(contentStr, 'utf8').digest('hex');
+            const record = {
+                resource_id: `template:flow:${templateName}`,
+                resource_type: 'template',
+                scope: 'site',
+                source_type: 'custom',
+                source_resource_id: null,
+                source_version: null,
+                source_checksum: null,
+                schema_version: '1',
+                status: 'published',
+                title: template.name,
+                content: template,
+                storage_uri: null,
+                metadata: { subType: 'flow', fileType: 'json', category: template.category },
+                checksum,
+                created_by: process.env.CLAUDE_AGENT_NAME || 'claude-code',
+                updated_by: process.env.CLAUDE_AGENT_NAME || 'claude-code'
+            };
+            await this.store.saveRecord(record, 'site');
+            if (this.resolver) this.resolver.invalidateCache(`template:flow:${templateName}`);
+            this.templatesLoaded = false;
+            return `customization-store://template:flow:${templateName}`;
+        }
+
+        // Fallback: save to plugin-local custom directory (legacy behavior)
         const customDir = path.join(__dirname, 'custom');
         await fs.mkdir(customDir, { recursive: true });
 

@@ -35,6 +35,7 @@ const {
   assertNoLegacyStyleOverrides,
   DEFAULT_STYLE_PROFILE
 } = require('./pdf-style-policy');
+const { getResolver } = require('./customization/resolver-factory');
 
 // =============================================================================
 // Report Type Configuration
@@ -371,9 +372,11 @@ class ReportService {
     }
 
     try {
-      // Use PDFGenerator directly for more control
+      // Use PDFGenerator directly for more control, with customization resolver
+      const resolver = await getResolver();
       const generator = new PDFGenerator({
-        verbose: this.verbose
+        verbose: this.verbose,
+        resolver
       });
 
       // Resolve landscape: explicit option > type config default > false
@@ -512,8 +515,10 @@ class ReportService {
       ...metadata
     };
 
+    const resolverForCollate = await getResolver();
     const generator = new PDFGenerator({
-      verbose: this.verbose
+      verbose: this.verbose,
+      resolver: resolverForCollate
     });
 
     const resolvedLandscape = landscape !== undefined ? landscape : (typeConfig.landscape || false);

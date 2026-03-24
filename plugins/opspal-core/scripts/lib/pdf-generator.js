@@ -124,11 +124,16 @@ class PDFGenerator {
             );
         }
 
+        // Optional customization resolver — when present, templates and
+        // brand assets are resolved from persistent customer storage first
+        this.resolver = options.resolver || null;
+
         // Initialize style manager with RevPal brand theme and default branding
         this.styleManager = new StyleManager({
             verbose: this.verbose,
             theme: CANONICAL_THEME,
-            branding: { ...StyleManager.getDefaultBranding(), ...(options.branding || {}) }
+            branding: { ...StyleManager.getDefaultBranding(), ...(options.branding || {}) },
+            resolver: this.resolver
         });
 
         // Initialize template engine
@@ -628,8 +633,10 @@ class PDFGenerator {
         const coverTemplate = options.coverPage?.template || 'default';
         const templatePath = path.join(__dirname, `../../templates/pdf-covers/${coverTemplate}.md`);
 
-        // Get default branding for logo
-        const defaultBranding = StyleManager.getDefaultBranding();
+        // Get branding for logo — use resolver if available
+        const defaultBranding = this.resolver
+            ? await this.styleManager.getResolvedBranding()
+            : StyleManager.getDefaultBranding();
         const logoPath = options.branding?.logo?.path || defaultBranding.logo.path;
 
         // Convert logo to base64 data URI for reliable PDF rendering
@@ -661,8 +668,26 @@ class PDFGenerator {
         };
 
         try {
-            // Try to use template file
-            const templateContent = await fs.readFile(templatePath, 'utf8');
+            // Check customization resolver first for cover template override
+            let templateContent = null;
+            if (this.resolver) {
+                try {
+                    const resolved = await this.resolver.resolveTemplate(coverTemplate, 'pdf-cover');
+                    if (resolved?.content) {
+                        templateContent = typeof resolved.content === 'string'
+                            ? resolved.content
+                            : JSON.stringify(resolved.content);
+                    }
+                } catch {
+                    // Resolver failed — fall through to file system
+                }
+            }
+
+            // Fall back to packaged template file
+            if (!templateContent) {
+                templateContent = await fs.readFile(templatePath, 'utf8');
+            }
+
             return await this.templateEngine.render(templateContent, data);
         } catch (e) {
             // Fallback to basic cover

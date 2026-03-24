@@ -86,6 +86,11 @@ class PptxGenerator {
   constructor(options = {}) {
     this.verbose = options.verbose || false;
     this.branding = options.branding || {};
+    // Optional customization resolver — when present, brand colors/logos
+    // are resolved from persistent customer storage first
+    this.resolver = options.resolver || null;
+    // Instance-level brand config — overridable via resolver in init()
+    this.brand = { ...BRAND, colors: { ...BRAND.colors }, fonts: { ...BRAND.fonts } };
     this.logoPath = options.logoPath || path.join(__dirname, '../../templates/branding-gallery/assets/revpal-logo-primary.png');
     this.embedFonts = options.embedFonts !== false;
     const libraryTemplatePath = path.join(
@@ -100,6 +105,37 @@ class PptxGenerator {
       || (fs.existsSync(libraryTemplatePath) ? libraryTemplatePath : legacyTemplatePath);
     this.tempDir = options.tempDir || path.join(__dirname, '../../.temp/pptx-generation');
     this.shapeType = null;
+  }
+
+  /**
+   * Initialize resolver-based brand overrides. Call before generating output
+   * when a resolver is configured. Safe to call multiple times or skip entirely.
+   */
+  async initBranding() {
+    if (!this.resolver) return;
+    try {
+      const colors = await this.resolver.resolveColorPalette();
+      if (colors) {
+        // Map registry color names (with #) to pptxgenjs format (6-char hex without #)
+        const strip = c => (c || '').replace('#', '');
+        const colorMap = {
+          grape: 'grape', indigo: 'indigo', apricot: 'apricot',
+          sand: 'sand', green: 'green'
+        };
+        for (const [regName, brandName] of Object.entries(colorMap)) {
+          if (colors[regName]) this.brand.colors[brandName] = strip(colors[regName]);
+        }
+      }
+      const fonts = await this.resolver.resolveFontSet();
+      if (fonts) {
+        if (fonts.headings) this.brand.fonts.heading = fonts.headings;
+        if (fonts.body) this.brand.fonts.body = fonts.body;
+      }
+      const logoPath = await this.resolver.resolveLogoPath('main');
+      if (logoPath) this.logoPath = logoPath;
+    } catch {
+      // Resolver failed — use defaults
+    }
   }
 
   async generateFromSpec(slideSpec, outputPath) {
@@ -149,8 +185,8 @@ class PptxGenerator {
     pptx.subject = slideSpec.metadata?.title || 'RevPal Presentation';
     pptx.title = slideSpec.metadata?.title || 'RevPal Presentation';
     pptx.theme = {
-      headFontFace: BRAND.fonts.heading,
-      bodyFontFace: BRAND.fonts.body,
+      headFontFace: this.brand.fonts.heading,
+      bodyFontFace: this.brand.fonts.body,
       lang: 'en-US'
     };
 
@@ -222,8 +258,8 @@ class PptxGenerator {
       y: 0,
       w: LAYOUT.width,
       h: LAYOUT.height,
-      fill: { color: BRAND.colors.neutral90 },
-      line: { color: BRAND.colors.neutral90 }
+      fill: { color: this.brand.colors.neutral90 },
+      line: { color: this.brand.colors.neutral90 }
     });
 
     if (options.topRule !== false) {
@@ -232,8 +268,8 @@ class PptxGenerator {
         y: 0,
         w: LAYOUT.width,
         h: LAYOUT.accentHeight,
-        fill: { color: BRAND.colors.apricot },
-        line: { color: BRAND.colors.apricot }
+        fill: { color: this.brand.colors.apricot },
+        line: { color: this.brand.colors.apricot }
       });
     }
 
@@ -243,8 +279,8 @@ class PptxGenerator {
         y: 0,
         w: LAYOUT.bandWidth,
         h: LAYOUT.height,
-        fill: { color: BRAND.colors.grape },
-        line: { color: BRAND.colors.grape }
+        fill: { color: this.brand.colors.grape },
+        line: { color: this.brand.colors.grape }
       });
     }
   }
@@ -255,8 +291,8 @@ class PptxGenerator {
       y,
       w,
       h,
-      fill: { color: options.fill || BRAND.colors.sand },
-      line: { color: options.line || BRAND.colors.neutral60, width: 1 }
+      fill: { color: options.fill || this.brand.colors.sand },
+      line: { color: options.line || this.brand.colors.neutral60, width: 1 }
     });
   }
 
@@ -267,8 +303,8 @@ class PptxGenerator {
       w: CONTENT.w,
       h: 0.3,
       fontSize: TYPE.small,
-      color: BRAND.colors.neutral20,
-      fontFace: BRAND.fonts.body
+      color: this.brand.colors.neutral20,
+      fontFace: this.brand.fonts.body
     });
   }
 
@@ -328,8 +364,8 @@ class PptxGenerator {
       w: box.w,
       h: box.h,
       fontSize,
-      color: options.color || BRAND.colors.indigo,
-      fontFace: options.fontFace || BRAND.fonts.body,
+      color: options.color || this.brand.colors.indigo,
+      fontFace: options.fontFace || this.brand.fonts.body,
       lineSpacingMultiple: adjustedLineSpacing,
       paraSpaceAfter: sizeDelta > 0 ? Math.max(paraSpaceAfter - 2, 2) : paraSpaceAfter
     });
@@ -392,14 +428,14 @@ class PptxGenerator {
       console.log(`WARN: Logo not found: ${this.logoPath}`);
     }
 
-    this._addCard(slide, card, { fill: BRAND.colors.sand, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.sand, line: this.brand.colors.neutral60 });
     slide.addShape(this.shapeType.rect, {
       x: card.x,
       y: card.y,
       w: SPACE.s8,
       h: card.h,
-      fill: { color: BRAND.colors.apricot },
-      line: { color: BRAND.colors.apricot }
+      fill: { color: this.brand.colors.apricot },
+      line: { color: this.brand.colors.apricot }
     });
 
     const titleText = data.title || 'Presentation';
@@ -410,8 +446,8 @@ class PptxGenerator {
       h: 0.9,
       fontSize: this._titleFontSize(titleText, TYPE.h1),
       bold: true,
-      color: BRAND.colors.grape,
-      fontFace: BRAND.fonts.heading
+      color: this.brand.colors.grape,
+      fontFace: this.brand.fonts.heading
     });
 
     if (data.subtitle) {
@@ -421,8 +457,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 0.6,
         fontSize: TYPE.h3,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body
       });
     }
 
@@ -438,14 +474,14 @@ class PptxGenerator {
       h: 2.1
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.sand, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.sand, line: this.brand.colors.neutral60 });
     slide.addShape(this.shapeType.rect, {
       x: card.x + SPACE.s24,
       y: card.y + SPACE.s16,
       w: 1.4,
       h: SPACE.s4,
-      fill: { color: BRAND.colors.apricot },
-      line: { color: BRAND.colors.apricot }
+      fill: { color: this.brand.colors.apricot },
+      line: { color: this.brand.colors.apricot }
     });
 
     const titleText = data.title || 'Section';
@@ -456,8 +492,8 @@ class PptxGenerator {
       h: 1,
       fontSize: this._titleFontSize(titleText, TYPE.h1),
       bold: true,
-      color: BRAND.colors.grape,
-      fontFace: BRAND.fonts.heading
+      color: this.brand.colors.grape,
+      fontFace: this.brand.fonts.heading
     });
   }
 
@@ -474,7 +510,7 @@ class PptxGenerator {
       h: 4.9
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     if (bullets.length === 0 && !hasPunchline) {
       slide.addText('No content available.', {
@@ -483,8 +519,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 1.2,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -500,8 +536,8 @@ class PptxGenerator {
         h: punchlineHeight,
         fontSize: TYPE.body,
         bold: true,
-        color: BRAND.colors.grape,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.grape,
+        fontFace: this.brand.fonts.body
       });
     }
 
@@ -512,8 +548,8 @@ class PptxGenerator {
       h: card.h - SPACE.s32 - punchlineHeight - punchlineGap
     }, {
       fontSize: TYPE.bodyLg,
-      color: BRAND.colors.indigo,
-      fontFace: BRAND.fonts.body,
+      color: this.brand.colors.indigo,
+      fontFace: this.brand.fonts.body,
       indent: 18,
       lineSpacingMultiple: 1.15,
       paraSpaceAfter: 6
@@ -540,14 +576,14 @@ class PptxGenerator {
       const x = CONTENT.x + (col * (cardW + cardGap));
       const y = startY + (row * (cardH + 0.5));
 
-      this._addCard(slide, { x, y, w: cardW, h: cardH }, { fill: BRAND.colors.sand, line: BRAND.colors.neutral60 });
+      this._addCard(slide, { x, y, w: cardW, h: cardH }, { fill: this.brand.colors.sand, line: this.brand.colors.neutral60 });
       slide.addShape(this.shapeType.rect, {
         x,
         y,
         w: cardW,
         h: SPACE.s4,
-        fill: { color: BRAND.colors.apricot },
-        line: { color: BRAND.colors.apricot }
+        fill: { color: this.brand.colors.apricot },
+        line: { color: this.brand.colors.apricot }
       });
 
       slide.addText(metric.value || '-', {
@@ -557,8 +593,8 @@ class PptxGenerator {
         h: 0.7,
         fontSize: TYPE.h2,
         bold: true,
-        color: BRAND.colors.grape,
-        fontFace: BRAND.fonts.heading,
+        color: this.brand.colors.grape,
+        fontFace: this.brand.fonts.heading,
         align: 'center'
       });
 
@@ -568,8 +604,8 @@ class PptxGenerator {
         w: cardW - SPACE.s32,
         h: 0.5,
         fontSize: TYPE.body,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'center'
       });
 
@@ -580,8 +616,8 @@ class PptxGenerator {
           w: cardW - SPACE.s32,
           h: 0.4,
           fontSize: TYPE.small,
-          color: BRAND.colors.neutral20,
-          fontFace: BRAND.fonts.body,
+          color: this.brand.colors.neutral20,
+          fontFace: this.brand.fonts.body,
           align: 'center'
         });
       }
@@ -600,7 +636,7 @@ class PptxGenerator {
 
     columns.forEach((column, index) => {
       const x = CONTENT.x + (index * (columnWidth + LAYOUT.columnGap));
-      this._addCard(slide, { x, y: cardY, w: columnWidth, h: cardH }, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+      this._addCard(slide, { x, y: cardY, w: columnWidth, h: cardH }, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
       slide.addText(column.heading || '', {
         x: x + SPACE.s16,
@@ -609,8 +645,8 @@ class PptxGenerator {
         h: 0.4,
         fontSize: TYPE.h4,
         bold: true,
-        color: BRAND.colors.grape,
-        fontFace: BRAND.fonts.heading
+        color: this.brand.colors.grape,
+        fontFace: this.brand.fonts.heading
       });
 
       this._addBulletedText(slide, column.bullets || [], {
@@ -620,8 +656,8 @@ class PptxGenerator {
         h: cardH - 1.0
       }, {
         fontSize: TYPE.body,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         indent: 16,
         lineSpacingMultiple: 1.1,
         paraSpaceAfter: 4
@@ -642,8 +678,8 @@ class PptxGenerator {
         text: header,
         options: {
           bold: true,
-          color: BRAND.colors.indigo,
-          fill: BRAND.colors.sand
+          color: this.brand.colors.indigo,
+          fill: this.brand.colors.sand
         }
       })));
     }
@@ -661,11 +697,11 @@ class PptxGenerator {
       y: LAYOUT.bodyY + SPACE.s16,
       w: CONTENT.w,
       h: 4.8,
-      border: { type: 'solid', pt: 1, color: BRAND.colors.neutral60 },
-      fontFace: BRAND.fonts.body,
+      border: { type: 'solid', pt: 1, color: this.brand.colors.neutral60 },
+      fontFace: this.brand.fonts.body,
       fontSize: TYPE.body,
-      fill: BRAND.colors.neutral100,
-      color: BRAND.colors.indigo
+      fill: this.brand.colors.neutral100,
+      color: this.brand.colors.indigo
     });
 
     this._addFooter(slide);
@@ -681,8 +717,8 @@ class PptxGenerator {
         w: CONTENT.w,
         h: 1,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -695,8 +731,8 @@ class PptxGenerator {
         w: CONTENT.w,
         h: 1,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -708,7 +744,7 @@ class PptxGenerator {
       w: CONTENT.w,
       h: 4.6
     };
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     this._addContainedImage(slide, data.image.path, {
       x: card.x + SPACE.s16,
@@ -724,8 +760,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 0.3,
         fontSize: TYPE.small,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
     }
 
@@ -743,7 +779,7 @@ class PptxGenerator {
       h: 4.8
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     if (steps.length === 0) {
       slide.addText('No steps available.', {
@@ -752,8 +788,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 1.2,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -766,8 +802,8 @@ class PptxGenerator {
       lineRatio: 0.45,
       labelHeight: 0.6,
       nodeSize: 0.34,
-      nodeFill: BRAND.colors.grape,
-      nodeTextColor: BRAND.colors.neutral100
+      nodeFill: this.brand.colors.grape,
+      nodeTextColor: this.brand.colors.neutral100
     });
 
     this._addFooter(slide);
@@ -784,7 +820,7 @@ class PptxGenerator {
       h: 4.8
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     if (steps.length === 0) {
       slide.addText('No timeline milestones available.', {
@@ -793,8 +829,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 1.2,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -811,8 +847,8 @@ class PptxGenerator {
       spanRatio: 0.5,
       labelInset: SPACE.s12,
       nodeSize: 0.3,
-      nodeFill: BRAND.colors.apricot,
-      nodeTextColor: BRAND.colors.neutral0
+      nodeFill: this.brand.colors.apricot,
+      nodeTextColor: this.brand.colors.neutral0
     });
 
     this._addFooter(slide);
@@ -830,7 +866,7 @@ class PptxGenerator {
       h: 4.8
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     if (!quoteText) {
       slide.addText('Quote unavailable.', {
@@ -839,8 +875,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 1.2,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -854,8 +890,8 @@ class PptxGenerator {
       h: card.h - 1.0,
       fontSize: TYPE.h3,
       italic: true,
-      color: BRAND.colors.indigo,
-      fontFace: BRAND.fonts.body,
+      color: this.brand.colors.indigo,
+      fontFace: this.brand.fonts.body,
       align: 'left',
       valign: 'top'
     });
@@ -867,8 +903,8 @@ class PptxGenerator {
         w: card.w - SPACE.s48,
         h: 0.4,
         fontSize: TYPE.body,
-        color: BRAND.colors.grape,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.grape,
+        fontFace: this.brand.fonts.body,
         align: 'right'
       });
     }
@@ -887,7 +923,7 @@ class PptxGenerator {
       h: 4.8
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     if (!chart || !Array.isArray(chart.series) || chart.series.length === 0) {
       slide.addText('Chart data unavailable.', {
@@ -896,8 +932,8 @@ class PptxGenerator {
         w: card.w - SPACE.s32,
         h: 1.2,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
       this._addFooter(slide);
       return;
@@ -925,7 +961,7 @@ class PptxGenerator {
       h: 4.8
     };
 
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     const chartWidth = card.w * 0.6;
     const textWidth = card.w - chartWidth - LAYOUT.columnGap;
@@ -951,16 +987,16 @@ class PptxGenerator {
         w: chartBox.w,
         h: 1.2,
         fontSize: TYPE.body,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body
       });
     }
 
     if (bullets.length > 0) {
       this._addBulletedText(slide, bullets, textBox, {
         fontSize: TYPE.body,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         indent: 16,
         lineSpacingMultiple: 1.1,
         paraSpaceAfter: 4
@@ -981,7 +1017,7 @@ class PptxGenerator {
       w: CONTENT.w,
       h: 4.8
     };
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     slide.addText(code, {
       x: card.x + SPACE.s16,
@@ -989,8 +1025,8 @@ class PptxGenerator {
       w: card.w - SPACE.s32,
       h: card.h - SPACE.s32,
       fontSize: TYPE.mono,
-      color: BRAND.colors.neutral0,
-      fontFace: BRAND.fonts.mono
+      color: this.brand.colors.neutral0,
+      fontFace: this.brand.fonts.mono
     });
 
     this._addFooter(slide);
@@ -1006,7 +1042,7 @@ class PptxGenerator {
       w: CONTENT.w,
       h: 4.6
     };
-    this._addCard(slide, card, { fill: BRAND.colors.sand, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.sand, line: this.brand.colors.neutral60 });
 
     if (bullets.length > 0) {
       this._addBulletedText(slide, bullets, {
@@ -1016,8 +1052,8 @@ class PptxGenerator {
         h: card.h - SPACE.s32
       }, {
         fontSize: TYPE.bodyLg,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         indent: 18,
         lineSpacingMultiple: 1.15,
         paraSpaceAfter: 6
@@ -1037,7 +1073,7 @@ class PptxGenerator {
       w: CONTENT.w,
       h: 4.8
     };
-    this._addCard(slide, card, { fill: BRAND.colors.neutral100, line: BRAND.colors.neutral60 });
+    this._addCard(slide, card, { fill: this.brand.colors.neutral100, line: this.brand.colors.neutral60 });
 
     this._addBulletedText(slide, bullets, {
       x: card.x + SPACE.s16,
@@ -1046,8 +1082,8 @@ class PptxGenerator {
       h: card.h - SPACE.s32
     }, {
       fontSize: TYPE.body,
-      color: BRAND.colors.indigo,
-      fontFace: BRAND.fonts.body,
+      color: this.brand.colors.indigo,
+      fontFace: this.brand.fonts.body,
       indent: 16,
       lineSpacingMultiple: 1.1,
       paraSpaceAfter: 4
@@ -1065,8 +1101,8 @@ class PptxGenerator {
       h: 0.6,
       fontSize: this._titleFontSize(titleText, TYPE.h2),
       bold: true,
-      color: BRAND.colors.grape,
-      fontFace: BRAND.fonts.heading
+      color: this.brand.colors.grape,
+      fontFace: this.brand.fonts.heading
     });
 
     slide.addShape(this.shapeType.rect, {
@@ -1074,8 +1110,8 @@ class PptxGenerator {
       y: LAYOUT.titleY + 0.55,
       w: 1.5,
       h: SPACE.s4,
-      fill: { color: BRAND.colors.apricot },
-      line: { color: BRAND.colors.apricot }
+      fill: { color: this.brand.colors.apricot },
+      line: { color: this.brand.colors.apricot }
     });
   }
 
@@ -1089,8 +1125,8 @@ class PptxGenerator {
     };
     const labelPosition = options.labelPosition || 'below';
     const showNumbers = options.showNumbers === true;
-    const nodeFill = options.nodeFill || BRAND.colors.grape;
-    const nodeTextColor = options.nodeTextColor || BRAND.colors.neutral100;
+    const nodeFill = options.nodeFill || this.brand.colors.grape;
+    const nodeTextColor = options.nodeTextColor || this.brand.colors.neutral100;
     const edgePadding = options.edgePadding || Math.min(0.6, frame.w * 0.08);
     const spanRatio = Math.min(1, Math.max(0.2, options.spanRatio || 1));
 
@@ -1119,8 +1155,8 @@ class PptxGenerator {
       y: lineY,
       w: lineWidth,
       h: SPACE.s4,
-      fill: { color: BRAND.colors.neutral60 },
-      line: { color: BRAND.colors.neutral60 }
+      fill: { color: this.brand.colors.neutral60 },
+      line: { color: this.brand.colors.neutral60 }
     });
 
     trimmed.forEach((step, index) => {
@@ -1147,7 +1183,7 @@ class PptxGenerator {
           fontSize: TYPE.small,
           bold: true,
           color: nodeTextColor,
-          fontFace: BRAND.fonts.heading,
+          fontFace: this.brand.fonts.heading,
           align: 'center',
           valign: 'middle'
         });
@@ -1192,8 +1228,8 @@ class PptxGenerator {
         w: labelWidth,
         h: labelHeight,
         fontSize: labelFont,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'center',
         valign: 'top'
       });
@@ -1263,8 +1299,8 @@ class PptxGenerator {
         w: barWidth,
         h: valueHeight,
         fontSize: TYPE.small,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'center',
         valign: 'bottom'
       });
@@ -1275,8 +1311,8 @@ class PptxGenerator {
         w: barWidth,
         h: labelHeight,
         fontSize: TYPE.small,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'center',
         valign: 'top'
       });
@@ -1323,8 +1359,8 @@ class PptxGenerator {
         w: labelColumn - 0.1,
         h: barHeight,
         fontSize: TYPE.small,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'left',
         valign: 'middle'
       });
@@ -1345,8 +1381,8 @@ class PptxGenerator {
         w: 0.6,
         h: barHeight,
         fontSize: TYPE.small,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'left',
         valign: 'middle'
       });
@@ -1372,7 +1408,7 @@ class PptxGenerator {
     const minValue = Math.min(...series.map(point => point.value || 0));
     const range = Math.max(1, maxValue - minValue);
     const gap = series.length > 1 ? chartBox.w / (series.length - 1) : 0;
-    const lineColor = BRAND.colors.grape;
+    const lineColor = this.brand.colors.grape;
 
     const points = series.map((point, index) => {
       const value = point.value || 0;
@@ -1403,8 +1439,8 @@ class PptxGenerator {
         y: point.y - 0.08,
         w: 0.16,
         h: 0.16,
-        fill: { color: BRAND.colors.apricot },
-        line: { color: BRAND.colors.apricot }
+        fill: { color: this.brand.colors.apricot },
+        line: { color: this.brand.colors.apricot }
       });
 
       slide.addText(point.display, {
@@ -1413,8 +1449,8 @@ class PptxGenerator {
         w: 0.5,
         h: 0.25,
         fontSize: TYPE.small,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'center',
         valign: 'bottom'
       });
@@ -1425,8 +1461,8 @@ class PptxGenerator {
         w: 0.8,
         h: 0.3,
         fontSize: TYPE.small,
-        color: BRAND.colors.indigo,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.indigo,
+        fontFace: this.brand.fonts.body,
         align: 'center',
         valign: 'top'
       });
@@ -1436,12 +1472,12 @@ class PptxGenerator {
   _barColorForIndex(chart, index, total) {
     const style = (chart && chart.style) || 'default';
     if (style === 'highlight-last' && index === total - 1) {
-      return BRAND.colors.grape;
+      return this.brand.colors.grape;
     }
     if (style === 'muted') {
-      return BRAND.colors.neutral60;
+      return this.brand.colors.neutral60;
     }
-    return BRAND.colors.apricot;
+    return this.brand.colors.apricot;
   }
 
   _getStepItems(data) {
@@ -1515,8 +1551,8 @@ class PptxGenerator {
         w: CONTENT.w,
         h: 0.3,
         fontSize: TYPE.small,
-        color: BRAND.colors.neutral20,
-        fontFace: BRAND.fonts.body,
+        color: this.brand.colors.neutral20,
+        fontFace: this.brand.fonts.body,
         align: 'right'
       });
     }
@@ -1693,11 +1729,19 @@ if (require.main === module) {
     }
 
     const options = parseArgs(args.slice(2));
+    // Initialize with customization resolver for brand overrides
+    let resolver = null;
+    try {
+      const { getResolver } = require('./customization/resolver-factory');
+      resolver = await getResolver();
+    } catch { /* customization layer not available */ }
     const generator = new PptxGenerator({
       verbose: options.verbose,
       embedFonts: options.embedFonts,
-      fontTemplatePath: options.fontTemplatePath
+      fontTemplatePath: options.fontTemplatePath,
+      resolver
     });
+    await generator.initBranding();
 
     if (input.endsWith('.json')) {
       const spec = JSON.parse(await fsPromises.readFile(input, 'utf8'));

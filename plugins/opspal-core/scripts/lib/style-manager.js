@@ -28,6 +28,9 @@ class StyleManager {
     this.branding = options.branding || {};
     this.cache = new Map();
     this.cacheEnabled = options.cache !== false;
+    // Optional customization resolver — when present, overrides are
+    // resolved from persistent storage before falling back to plugin files
+    this.resolver = options.resolver || null;
   }
 
   /**
@@ -100,6 +103,17 @@ class StyleManager {
    * @private
    */
   async _loadFile(relativePath) {
+    // If a customization resolver is present, check for overrides on theme files
+    if (this.resolver && relativePath.startsWith('themes/')) {
+      const themeId = relativePath.replace('themes/', '').replace('.css', '');
+      try {
+        const resolved = await this.resolver.resolveCSSTheme(themeId);
+        if (resolved) return resolved;
+      } catch {
+        // Resolver failed — fall through to file system
+      }
+    }
+
     const fullPath = path.join(this.baseDir, relativePath);
     const cacheKey = fullPath;
 
@@ -449,6 +463,25 @@ class StyleManager {
   }
 
   /**
+   * Get logo paths with customization resolver support.
+   * Instance method — uses resolver if available, falls back to static defaults.
+   * @returns {Promise<Object>}
+   */
+  async getResolvedLogoPaths() {
+    if (!this.resolver) return StyleManager.getLogoPaths();
+    const defaults = StyleManager.getLogoPaths();
+    const variants = ['main', 'icon', 'favicon', 'export'];
+    const result = { ...defaults };
+    for (const variant of variants) {
+      try {
+        const resolved = await this.resolver.resolveLogoPath(variant);
+        if (resolved) result[variant] = resolved;
+      } catch { /* keep default */ }
+    }
+    return result;
+  }
+
+  /**
    * Get default branding configuration (RevPal Brand Guide)
    *
    * Brand Context:
@@ -499,6 +532,48 @@ class StyleManager {
         disclaimer: 'This report includes analysis and insights generated with the assistance of OpsPal, by RevPal. While every effort has been made to ensure accuracy, results may include inaccuracies or omissions. Please validate findings before relying on them for business decisions.'
       }
     };
+  }
+
+  /**
+   * Get branding configuration with customization resolver support.
+   * Instance method — merges resolved overrides onto static defaults.
+   * @returns {Promise<Object>}
+   */
+  async getResolvedBranding() {
+    const defaults = StyleManager.getDefaultBranding();
+    if (!this.resolver) return defaults;
+
+    try {
+      // Resolve color palette override
+      const colors = await this.resolver.resolveColorPalette();
+      if (colors) {
+        // Map registry color names to branding color names
+        const colorMap = {
+          grape: 'primary', indigo: 'secondary', apricot: 'accent',
+          green: 'success', sand: 'surfaceDark'
+        };
+        for (const [regName, brandName] of Object.entries(colorMap)) {
+          if (colors[regName]) defaults.colors[brandName] = colors[regName];
+        }
+      }
+
+      // Resolve font override
+      const fonts = await this.resolver.resolveFontSet();
+      if (fonts) {
+        if (fonts.headings) defaults.fonts.heading = fonts.headings;
+        if (fonts.body) defaults.fonts.primary = fonts.body;
+      }
+
+      // Resolve logo paths
+      const logos = await this.getResolvedLogoPaths();
+      defaults.logo.path = logos.main;
+      defaults.logo.iconPath = logos.icon;
+      defaults.logo.faviconPath = logos.favicon;
+    } catch {
+      // Resolver failed — return unmodified defaults
+    }
+
+    return defaults;
   }
 
   /**

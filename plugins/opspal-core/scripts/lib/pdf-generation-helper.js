@@ -54,6 +54,7 @@ const {
   assertNoLegacyStyleOverrides,
   DEFAULT_STYLE_PROFILE
 } = require('./pdf-style-policy');
+const { getResolver } = require('./customization/resolver-factory');
 
 // =============================================================================
 // Configuration Constants
@@ -164,9 +165,10 @@ class PDFGenerationHelper {
         return null;
       }
 
-      // Load PDF generator
+      // Load PDF generator with customization resolver
       const PDFGenerator = require('./pdf-generator');
-      const generator = new PDFGenerator({ verbose });
+      const resolver = await getResolver();
+      const generator = new PDFGenerator({ verbose, resolver });
       const resolvedProfile = resolveStyleProfile(profile || DEFAULT_STYLE_PROFILE);
       assertNoLegacyStyleOverrides({ theme, coverTemplate });
       const resolvedCoverTemplate = (coverTemplate && coverTemplate.trim())
@@ -284,9 +286,10 @@ class PDFGenerationHelper {
         return null;
       }
 
-      // Load PDF generator
+      // Load PDF generator with customization resolver
       const PDFGenerator = require('./pdf-generator');
-      const generator = new PDFGenerator({ verbose });
+      const resolver = await getResolver();
+      const generator = new PDFGenerator({ verbose, resolver });
       const resolvedProfile = resolveStyleProfile(profile || DEFAULT_STYLE_PROFILE);
       assertNoLegacyStyleOverrides({ theme, coverTemplate, toc });
       const inferredReportType = metadata?.reportType || metadata?.title || 'executive summary';

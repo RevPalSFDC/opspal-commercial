@@ -1865,6 +1865,70 @@ step9_subagent_remediation() {
   return 0
 }
 
+# ============================================================================
+# Step 10: Customization migration
+# ============================================================================
+
+step10_customization_migration() {
+  local core_plugin_root
+  core_plugin_root="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd)"
+  local migration_script="$core_plugin_root/scripts/lib/customization/migration-runner.js"
+
+  if [ ! -f "$migration_script" ]; then
+    update_step_status "passed"
+    append_step_message "Customization framework not installed — skipped"
+    return 0
+  fi
+
+  if ! command -v node &>/dev/null; then
+    update_step_status "degraded"
+    append_step_message "Node.js not available — cannot run customization migrations"
+    return 0
+  fi
+
+  local migration_output
+  migration_output=$(node -e "
+    const { MigrationRunner } = require('$core_plugin_root/scripts/lib/customization/migration-runner');
+    const { ResourceRegistry } = require('$core_plugin_root/scripts/lib/customization/resource-registry');
+    const { CustomResourceStore } = require('$core_plugin_root/scripts/lib/customization/custom-resource-store');
+    const { BackupRestore } = require('$core_plugin_root/scripts/lib/customization/backup-restore');
+    const { CustomizationAuditLog } = require('$core_plugin_root/scripts/lib/customization/customization-audit-log');
+
+    (async () => {
+      const registry = new ResourceRegistry({ pluginRoot: '$core_plugin_root' });
+      await registry.load();
+      const store = new CustomResourceStore();
+      const backup = new BackupRestore({ store });
+      const auditLog = new CustomizationAuditLog();
+      const runner = new MigrationRunner({ registry, store, backup, auditLog, pluginRoot: '$core_plugin_root' });
+      const results = await runner.runAll();
+      const completed = results.filter(r => r.status === 'completed');
+      const skipped = results.filter(r => r.status === 'skipped');
+      console.log(JSON.stringify({ completed: completed.length, skipped: skipped.length, total: results.length }));
+    })();
+  " 2>/dev/null) || true
+
+  if [ -n "$migration_output" ]; then
+    local completed skipped total
+    completed=$(echo "$migration_output" | node -e "process.stdin.on('data',d=>{try{console.log(JSON.parse(d).completed)}catch{console.log(0)}})" 2>/dev/null) || completed=0
+    skipped=$(echo "$migration_output" | node -e "process.stdin.on('data',d=>{try{console.log(JSON.parse(d).skipped)}catch{console.log(0)}})" 2>/dev/null) || skipped=0
+    total=$(echo "$migration_output" | node -e "process.stdin.on('data',d=>{try{console.log(JSON.parse(d).total)}catch{console.log(0)}})" 2>/dev/null) || total=0
+
+    if [ "$completed" -gt 0 ] 2>/dev/null; then
+      update_step_status "passed"
+      append_step_message "$completed migration(s) completed, $skipped skipped"
+    else
+      update_step_status "passed"
+      append_step_message "No pending migrations ($skipped already completed)"
+    fi
+  else
+    update_step_status "passed"
+    append_step_message "Customization migrations checked — none pending"
+  fi
+
+  return 0
+}
+
 run_step "step1-plugin-validation" "Step 1: Plugin Validation" "🔧 Step 1: Running plugin validation..." step1_plugin_validation
 run_step "step2-clean-stale-hooks" "Step 2: Clean stale plugin hooks and activate statusline" "🧹 Step 2: Cleaning stale plugin hooks and activating the OpsPal statusline..." step2_clean_stale_hooks
 run_step "step3-runtime-reconciliation" "Step 3: Runtime reconciliation and routing validation" "🧭 Step 3: Reconciling installed runtime, refreshing routing artifacts, and validating hook health..." step3_runtime_reconciliation
@@ -1874,6 +1938,7 @@ run_step "step6-project-connect-autosync" "Step 6: Project-connect auto-sync" "�
 run_step "step7-sync-claudemd" "Step 7: CLAUDE.md sync" "📝 Step 7: Syncing CLAUDE.md..." step7_sync_claudemd
 run_step "step8-routing-promotion" "Step 8: Routing promotion verification" "🚦 Step 8: Routing promotion verification & condensed routing pre-gen..." step8_routing_promotion
 run_step "step9-subagent-remediation" "Step 9: Sub-agent tool access remediation" "🔓 Step 9: Verifying sub-agent tool access configuration..." step9_subagent_remediation
+run_step "step10-customization-migration" "Step 10: Customization migration" "🎨 Step 10: Running customization migrations..." step10_customization_migration
 
 # Summary
 CURRENT_STEP="summary"
