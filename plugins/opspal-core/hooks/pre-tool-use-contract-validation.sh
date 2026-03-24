@@ -845,10 +845,26 @@ enforce_mandatory_routing() {
 
             if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
                 if echo "$command" | grep -qiE 'from[[:space:]]+(Lead|Contact|Account|Opportunity|Case)\b'; then
-                    rule_id="sf_core_object_query"
-                    required_agent="opspal-salesforce:sfdc-data-operations"
-                    approved_agents_json='["opspal-salesforce:sfdc-data-operations","opspal-salesforce:sfdc-query-specialist","opspal-salesforce:sfdc-upsert-orchestrator","opspal-salesforce:sfdc-bulkops-orchestrator"]'
-                    reason="Direct Salesforce core-object data query detected."
+                    # Simple verification queries (single-record by Id, LIMIT 1-5, short commands)
+                    # are downgraded to warning-only — validation reads after sub-agent work.
+                    local is_simple_query=0
+                    if echo "$command" | grep -qiE 'WHERE[[:space:]]+Id[[:space:]]*(=|IN)'; then
+                        is_simple_query=1
+                    elif echo "$command" | grep -qiE 'LIMIT[[:space:]]+[1-5]([[:space:]]|$)'; then
+                        is_simple_query=1
+                    elif [ ${#command} -lt 300 ]; then
+                        is_simple_query=1
+                    fi
+
+                    if [ "$is_simple_query" -eq 1 ]; then
+                        emit_routing_event "warn" "sf_core_object_query" "opspal-salesforce:sfdc-data-operations" "Simple verification query on core object — allowed." "$command" "$caller_agent" "$tool"
+                        echo "[ROUTING INFO] Core-object verification query allowed. For complex queries, prefer Agent(subagent_type='opspal-salesforce:sfdc-query-specialist')." >&2
+                    else
+                        rule_id="sf_core_object_query"
+                        required_agent="opspal-salesforce:sfdc-data-operations"
+                        approved_agents_json='["opspal-salesforce:sfdc-data-operations","opspal-salesforce:sfdc-query-specialist","opspal-salesforce:sfdc-upsert-orchestrator","opspal-salesforce:sfdc-bulkops-orchestrator"]'
+                        reason="Direct Salesforce core-object data query detected."
+                    fi
                 fi
             fi
 

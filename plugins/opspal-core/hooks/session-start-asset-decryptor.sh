@@ -22,6 +22,11 @@
 
 set -euo pipefail
 
+# Skip in test mode — decryption is expensive and requires real license keys
+if [ "${HOOK_TEST_MODE:-}" = "1" ]; then
+    exit 0
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 
