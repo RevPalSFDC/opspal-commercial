@@ -128,6 +128,96 @@ async function runAllTests() {
     assert(result.stderr.includes('BLOCKED: Matches forbidden pattern: rm -rf'), 'Should report the blocked rm -rf pattern');
   }));
 
+
+  // ==========================================================================
+  // Production detection + read-only allowlist tests
+  // ==========================================================================
+
+  results.push(await runTest('Allows read-only sf data query on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sf data query --query "SELECT Id FROM Account" --target-org aspireiq-production --json' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'Read-only query on production should be allowed');
+  }));
+
+  results.push(await runTest('Allows read-only sfdx data query on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sfdx data query --query "SELECT Id FROM Account" --target-org production --json' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'Read-only sfdx query on production should be allowed');
+  }));
+
+  results.push(await runTest('Allows sf sobject describe on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sf sobject describe Account --target-org production --json' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'sobject describe on production should be allowed');
+  }));
+
+  results.push(await runTest('Escalates sf project deploy on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sf project deploy start --source-dir force-app --target-org production' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 2, 'Deploy to production should trigger escalation (exit 2)');
+    assert(result.stderr.includes('PRODUCTION_DETECTED'), 'Should report production detection');
+  }));
+
+  results.push(await runTest('Escalates sf data delete on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sf data delete record --sobject Account --record-id 001xx --target-org prod-org' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 2, 'Data delete on production should trigger escalation (exit 2)');
+  }));
+
+  results.push(await runTest('Allows sf data query on sandbox org (no prod detection)', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sf data query --query "SELECT Id FROM Account" --target-org sandbox-dev --json' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'Sandbox query should pass through without escalation');
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 

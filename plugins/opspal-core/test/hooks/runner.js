@@ -630,6 +630,31 @@ async function main() {
   process.exit(results.failed > 0 ? 1 : 0);
 }
 
+
+// =============================================================================
+// SF CLI Dual-Prefix Testing Helper
+// =============================================================================
+
+/**
+ * Generate sf and sfdx variants of a command for dual-prefix testing.
+ * Ensures both CLI prefixes exercise the same hook code paths.
+ *
+ * Usage:
+ *   const { sfVariants } = require('../runner');
+ *   for (const cmd of sfVariants('sf data query --target-org prod')) {
+ *     // runs with both 'sf data query...' and 'sfdx data query...'
+ *   }
+ */
+function sfVariants(command) {
+  const variants = [command];
+  if (/\bsf\s/.test(command) && !/\bsfdx\s/.test(command)) {
+    variants.push(command.replace(/\bsf\s/, 'sfdx '));
+  } else if (/\bsfdx\s/.test(command)) {
+    variants.push(command.replace(/\bsfdx\s/, 'sf '));
+  }
+  return variants;
+}
+
 // =============================================================================
 // Exports
 // =============================================================================
@@ -640,7 +665,8 @@ module.exports = {
   discoverHooks,
   discoverTests,
   runTests,
-  generateCoverage
+  generateCoverage,
+  sfVariants
 };
 
 // Run if executed directly
