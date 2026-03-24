@@ -99,7 +99,7 @@ fi
 
 is_deploy_scope_command() {
     local command="$1"
-    printf '%s' "$command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
+    printf '%s' "$command" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
 }
 
 if [ "$PRETOOLUSE_MODE" = "1" ]; then

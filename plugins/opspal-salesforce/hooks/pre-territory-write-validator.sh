@@ -164,7 +164,7 @@ main() {
   fi
 
   # Check for bulk operations - BLOCK Bulk API on Territory2 objects (not supported)
-  if echo "$full_command" | grep -qE "(sf data bulk|data:bulk|bulk upsert|bulk delete|bulk import)"; then
+  if echo "$full_command" | grep -qE "((sf|sfdx) data bulk|data:bulk|bulk upsert|bulk delete|bulk import)"; then
     local sobject
     sobject=$(echo "$full_command" | sed 's/.*--sobject[= ]*\([^ ]*\).*/\1/')
 

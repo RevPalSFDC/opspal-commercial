@@ -52,7 +52,7 @@ fi
 
 is_deploy_scope_command() {
     local command="$1"
-    printf '%s' "$command" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
+    printf '%s' "$command" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
 }
 
 # Redirect all informational output to stderr — PreToolUse hooks must output JSON or nothing on stdout

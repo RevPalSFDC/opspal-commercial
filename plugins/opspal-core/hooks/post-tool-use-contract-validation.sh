@@ -168,9 +168,9 @@ map_tool_to_contract() {
     case "$tool" in
         "Bash")
             local cmd=$(echo "$RESULT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null)
-            if [[ "$cmd" =~ ^sf\ data\ query ]]; then
+            if [[ "$cmd" =~ ^(sf|sfdx)\ data\ query ]]; then
                 echo "sf-data-query"
-            elif [[ "$cmd" =~ ^sf\ project\ deploy ]]; then
+            elif [[ "$cmd" =~ ^(sf|sfdx)\ project\ deploy ]]; then
                 echo "sf-project-deploy"
             else
                 echo "bash-command"

@@ -478,8 +478,8 @@ class SalesforceApiTypeRouter {
 
         // Command-based detection
         if (task.command) {
-            if (task.command.includes('sf project deploy') || task.command.includes('sf project retrieve')) return 'metadata';
-            if (task.command.includes('sf apex')) return 'apex';
+            if (/\b(?:sf|sfdx)\b.*\bproject\s+deploy\b/.test(task.command) || /\b(?:sf|sfdx)\b.*\bproject\s+retrieve\b/.test(task.command)) return 'metadata';
+            if (/\b(?:sf|sfdx)\b.*\bapex\b/.test(task.command)) return 'apex';
             if (task.command.includes('FlowDefinitionView') || task.command.includes('FlowVersion')) return 'flow';
         }
 
@@ -644,11 +644,11 @@ class SalesforceApiTypeRouter {
 
     _detectApiFromCommand(command) {
         if (command.includes('--use-tooling-api')) return 'TOOLING';
-        if (command.includes('sf data bulk') || command.includes('bulk query') || command.includes('bulk upsert')) return 'BULK';
-        if (command.includes('sf project deploy') || command.includes('sf project retrieve')) return 'METADATA';
-        if (command.includes('sf graphql')) return 'GRAPHQL';
+        if (/\b(?:sf|sfdx)\s+data\s+bulk\b/.test(command) || command.includes('bulk query') || command.includes('bulk upsert')) return 'BULK';
+        if (/\b(?:sf|sfdx)\s+project\s+deploy\b/.test(command) || /\b(?:sf|sfdx)\s+project\s+retrieve\b/.test(command)) return 'METADATA';
+        if (/\b(?:sf|sfdx)\s+graphql\b/.test(command)) return 'GRAPHQL';
         if (command.includes('composite')) return 'COMPOSITE';
-        if (command.includes('sf data') || command.includes('sf api')) return 'REST';
+        if (/\b(?:sf|sfdx)\s+data\b/.test(command) || /\b(?:sf|sfdx)\s+api\b/.test(command)) return 'REST';
         return null;
     }
 }

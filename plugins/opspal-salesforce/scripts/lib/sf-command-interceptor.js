@@ -219,13 +219,13 @@ class SFCommandInterceptor {
 
         // Detect command type
         let type = CommandType.OTHER;
-        if (cleaned.includes('sf data query') || cleaned.includes('sf data:query')) {
+        if (/\b(?:sf|sfdx)\b.*\bdata\s+query\b/.test(cleaned) || cleaned.includes('sf data:query')) {
             type = CommandType.QUERY;
-        } else if (cleaned.includes('sf project deploy') || cleaned.includes('sf project:deploy')) {
+        } else if (/\b(?:sf|sfdx)\b.*\bproject\s+deploy\b/.test(cleaned) || cleaned.includes('sf project:deploy')) {
             type = CommandType.DEPLOY;
-        } else if (cleaned.includes('sf data upsert bulk') || cleaned.includes('sf data:upsert:bulk')) {
+        } else if (/\b(?:sf|sfdx)\b.*\bdata\s+upsert\s+bulk\b/.test(cleaned) || cleaned.includes('sf data:upsert:bulk')) {
             type = CommandType.BULK;
-        } else if (cleaned.includes('sf project retrieve') || cleaned.includes('sf sobject describe')) {
+        } else if (/\b(?:sf|sfdx)\b.*\bproject\s+retrieve\b/.test(cleaned) || /\b(?:sf|sfdx)\b.*\bsobject\s+describe\b/.test(cleaned)) {
             type = CommandType.METADATA;
         }
 

@@ -54,9 +54,9 @@ COMMAND="${1:-}"
 EXIT_CODE="${2:-0}"
 
 # Extract command type and org
-if [[ "$COMMAND" =~ ^sf[[:space:]] ]]; then
+if [[ "$COMMAND" =~ ^(sf|sfdx)[[:space:]] ]]; then
     # Extract subcommand (e.g., "data query", "project deploy")
-    SUBCOMMAND=$(echo "$COMMAND" | grep -oP 'sf \K[a-z]+ [a-z]+' || echo "unknown")
+    SUBCOMMAND=$(echo "$COMMAND" | grep -oP '(sf|sfdx) \K[a-z]+ [a-z]+' || echo "unknown")
     
     # Extract org from command
     ORG=$(echo "$COMMAND" | grep -oP '(?:--target-org|-o)[[:space:]]+\K[^[:space:]]+' || echo "${SF_TARGET_ORG:-}")

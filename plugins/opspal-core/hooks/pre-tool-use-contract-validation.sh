@@ -706,11 +706,11 @@ map_tool_to_contract() {
             # Check if it's a Salesforce CLI command
             local cmd
             cmd=$(extract_bash_command)
-            if [[ "$cmd" =~ ^sf\ data\ query ]]; then
+            if [[ "$cmd" =~ ^(sf|sfdx)\ data\ query ]]; then
                 echo "sf-data-query"
-            elif [[ "$cmd" =~ ^sf\ project\ deploy ]]; then
+            elif [[ "$cmd" =~ ^(sf|sfdx)\ project\ deploy ]]; then
                 echo "sf-project-deploy"
-            elif [[ "$cmd" =~ ^sf\ data\ export|^sf\ data\ import ]]; then
+            elif [[ "$cmd" =~ ^(sf|sfdx)\ data\ export|^(sf|sfdx)\ data\ import ]]; then
                 echo "sf-bulk-api"
             elif [[ "$cmd" =~ npx[[:space:]]+md-to-pdf|npx[[:space:]]+@mermaid-js/mermaid-cli ]]; then
                 echo "pdf-direct-invocation"
@@ -779,12 +779,12 @@ enforce_mandatory_routing() {
             command_lower=$(echo "$command" | tr '[:upper:]' '[:lower:]')
 
             # Rule 1: Permission/security write operations -> dedicated permission/security agents
-            if echo "$command_lower" | grep -qE 'sf[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)'; then
+            if echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)'; then
                 rule_id="sf_permission_security_write"
                 required_agent="opspal-salesforce:sfdc-security-admin"
                 approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor"]'
                 reason="Direct Salesforce permission/security write detected."
-            elif echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete)'; then
+            elif echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete)'; then
                 if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
                     rule_id="sf_permission_security_write"
                     required_agent="opspal-salesforce:sfdc-security-admin"
@@ -794,7 +794,7 @@ enforce_mandatory_routing() {
             fi
 
             # Rule 2: Lead/Contact/Account upsert-import workflows -> upsert orchestrator
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+(upsert|import|create|update|bulk[[:space:]]+upsert)'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(upsert|import|create|update|bulk[[:space:]]+upsert)'; then
                 if echo "$command" | grep -qiE '(^|[[:space:]])(Lead|Contact|Account)([[:space:]]|$)|--sobject[[:space:]]+(Lead|Contact|Account)'; then
                     rule_id="sf_core_object_upsert"
                     required_agent="opspal-salesforce:sfdc-upsert-orchestrator"
@@ -805,7 +805,7 @@ enforce_mandatory_routing() {
 
             # Rule 2b: Core object data queries -> data operations/query specialist
             # Prevents shell parsing pitfalls (e.g., "!=" history expansion) and fragile direct JSON parsing.
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+query'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
                 local soql_query=""
                 local safe_url_threshold="${SOQL_URL_SAFE_LENGTH_THRESHOLD:-6000}"
                 local in_clause_threshold="${SOQL_IN_CLAUSE_ITEM_THRESHOLD:-200}"
@@ -831,7 +831,7 @@ enforce_mandatory_routing() {
                 fi
             fi
 
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+query'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
                 if echo "$command" | grep -qiE 'from[[:space:]]+(Lead|Contact|Account|Opportunity|Case)\b'; then
                     rule_id="sf_core_object_query"
                     required_agent="opspal-salesforce:sfdc-data-operations"
@@ -841,7 +841,7 @@ enforce_mandatory_routing() {
             fi
 
             # Rule 3: Territory model write workflows -> territory orchestrator/deployment agents
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+(create|update|upsert|delete)|sf[[:space:]]+project[[:space:]]+deploy'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete)|(sf|sfdx)[[:space:]]+project[[:space:]]+deploy'; then
                 if echo "$command" | grep -qiE 'Territory2|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association'; then
                     rule_id="sf_territory_write"
                     required_agent="opspal-salesforce:sfdc-territory-orchestrator"
@@ -851,7 +851,7 @@ enforce_mandatory_routing() {
             fi
 
             # Rule 4: Validation rule write/deploy workflows -> validation-rule orchestrator
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+(create|update|upsert|delete)|sf[[:space:]]+project[[:space:]]+deploy'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete)|(sf|sfdx)[[:space:]]+project[[:space:]]+deploy'; then
                 if echo "$command" | grep -qiE 'ValidationRule|validation[._ -]?rule'; then
                     rule_id="sf_validation_rule_write"
                     required_agent="opspal-salesforce:validation-rule-orchestrator"
@@ -861,7 +861,7 @@ enforce_mandatory_routing() {
             fi
 
             # Permission/security reads are warning-only guidance
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE 'sf[[:space:]]+data[[:space:]]+query'; then
+            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
                 if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
                     emit_routing_event "warn" "sf_permission_security_query" "opspal-salesforce:sfdc-permission-assessor" "Permission/security query detected." "$command" "$caller_agent" "$tool"
                     echo "[ROUTING WARNING] Permission/security query detected. Prefer the Agent tool with subagent_type='opspal-salesforce:sfdc-permission-assessor'." >&2
@@ -933,7 +933,7 @@ check_api_routing() {
             local cmd=$(echo "$input_json" | jq -r '.tool_input.command // ""' 2>/dev/null)
 
             # Only check Salesforce CLI commands
-            if [[ "$cmd" =~ ^sf\ (data|project|apex|api) ]]; then
+            if [[ "$cmd" =~ ^(sf|sfdx)\ (data|project|apex|api) ]]; then
                 suggestion=$(node "$API_ROUTER" check "$cmd" 2>/dev/null || true)
             fi
             ;;

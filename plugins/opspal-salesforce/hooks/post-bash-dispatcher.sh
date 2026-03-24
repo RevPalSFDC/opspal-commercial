@@ -14,11 +14,11 @@ COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/
 LAST_JSON=""
 
 is_deploy_command() {
-  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'
 }
 
 is_data_query_command() {
-  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+data[[:space:]]+query([[:space:]]|$)'
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'
 }
 
 merge_hook_json() {

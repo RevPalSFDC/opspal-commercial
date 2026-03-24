@@ -108,7 +108,7 @@ if [ -n "$HOOK_INPUT" ] && command -v jq &>/dev/null; then
 fi
 
 # If no command to validate, just ensure context is set
-if [ -z "$COMMAND" ] || [[ ! "$COMMAND" =~ ^sf[[:space:]] ]]; then
+if [ -z "$COMMAND" ] || [[ ! "$COMMAND" =~ ^(sf|sfdx)[[:space:]] ]]; then
     # Not an SF command - export expected org for downstream use
     export SF_EXPECTED_ORG="$EXPECTED_ORG"
     [ -n "$HOOK_INPUT" ] && echo "$HOOK_INPUT"

@@ -94,6 +94,51 @@ async function runAllTests() {
     );
   }));
 
+  // sfdx bypass prevention tests
+  results.push(await runTest('Blocks sfdx project deploy start (no sfdx bypass)', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'PreToolUse',
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sfdx project deploy start --source-dir force-app/main/default/layouts'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits JSON blockExecution)');
+    assert(result.stderr.includes('DEPLOY BLOCKED'), 'sfdx deploy should be blocked just like sf deploy');
+    const output = result.output || {};
+    const hookOutput = output.hookSpecificOutput || {};
+    assert(
+      hookOutput.permissionDecision === 'deny' || (result.stdout || '').includes('blockExecution'),
+      'Should contain a blocking signal for sfdx deploy commands'
+    );
+  }));
+
+  results.push(await runTest('Validates sfdx data query through SOQL validator', async () => {
+    // sfdx data query should trigger the same SOQL validation as sf data query
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'PreToolUse',
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sfdx data query --query "SELECT ApiName FROM FlowVersionView" --json'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    // The SOQL validator should fire and correct ApiName -> DeveloperName
+    if (result.output?.hookSpecificOutput?.additionalContext) {
+      assert(
+        result.output.hookSpecificOutput.additionalContext.includes('DeveloperName') ||
+        result.output.hookSpecificOutput.updatedInput,
+        'sfdx data query should trigger SOQL field corrections'
+      );
+    }
+  }));
+
   results.push(await runTest('Returns structured jq validation guidance', async () => {
     const result = await tester.run({
       input: {

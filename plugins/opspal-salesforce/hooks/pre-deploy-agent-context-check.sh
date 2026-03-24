@@ -57,7 +57,7 @@ extract_session_key() {
 }
 
 is_deploy_scope_command() {
-    printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
+    printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
 }
 
 extract_target_org() {

@@ -108,7 +108,10 @@ function parseDeploymentCommand(command) {
     index += 1;
   }
 
-  const sfIndex = tokens.indexOf('sf', index);
+  let sfIndex = tokens.indexOf('sf', index);
+  if (sfIndex === -1) {
+    sfIndex = tokens.indexOf('sfdx', index);
+  }
   if (sfIndex === -1) {
     return {
       command: String(command || ''),
@@ -209,7 +212,7 @@ function parseDeploymentCommand(command) {
 
 function resolveEffectiveCwd(command, cwd = process.cwd()) {
   const invocationCwd = path.resolve(cwd || process.cwd());
-  const deployMatch = String(command || '').match(/\bsf\s+project\s+deploy\b/i);
+  const deployMatch = String(command || '').match(/\b(?:sf|sfdx)\s+project\s+deploy\b/i);
 
   if (!deployMatch || typeof deployMatch.index !== 'number') {
     return invocationCwd;

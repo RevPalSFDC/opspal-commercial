@@ -101,9 +101,9 @@ parse_tool_name() {
 
   # Extract tool name from invocation
   # Handles: sf data query, mcp_salesforce, sf project deploy, etc.
-  if [[ "$tool_invocation" =~ ^sf[[:space:]]+([a-z]+)[[:space:]]+([a-z]+) ]]; then
-    # sf CLI command: sf data query -> sf_data_query
-    echo "sf_${BASH_REMATCH[1]}_${BASH_REMATCH[2]}"
+  if [[ "$tool_invocation" =~ ^(sf|sfdx)[[:space:]]+([a-z]+)[[:space:]]+([a-z]+) ]]; then
+    # sf/sfdx CLI command: sf data query -> sf_data_query
+    echo "sf_${BASH_REMATCH[2]}_${BASH_REMATCH[3]}"
   elif [[ "$tool_invocation" =~ ^mcp_([a-z_]+) ]]; then
     # MCP tool: mcp_salesforce -> mcp_salesforce
     echo "${BASH_REMATCH[0]}"
@@ -232,7 +232,7 @@ should_validate_tool() {
   local tool_invocation="$1"
 
   # Only validate sf CLI and MCP tools
-  if [[ "$tool_invocation" =~ ^sf[[:space:]] ]] || [[ "$tool_invocation" =~ ^mcp_ ]]; then
+  if [[ "$tool_invocation" =~ ^(sf|sfdx)[[:space:]] ]] || [[ "$tool_invocation" =~ ^mcp_ ]]; then
     return 0
   fi
 

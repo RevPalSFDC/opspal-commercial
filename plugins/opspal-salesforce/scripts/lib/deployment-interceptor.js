@@ -67,10 +67,11 @@ class DeploymentInterceptor {
     isDeploymentCommand(command) {
         const deploymentPatterns = [
             'sf project deploy',
+            'sfdx project deploy',
             'sf deploy',
+            'sfdx deploy',
             'sf project deploy start',
-            'sf project deploy start',
-            'sf project deploy start',
+            'sfdx project deploy start',
             'DELETE FROM',
             'INSERT INTO',
             'UPDATE'

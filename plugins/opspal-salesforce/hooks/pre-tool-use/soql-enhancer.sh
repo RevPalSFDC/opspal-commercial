@@ -167,7 +167,7 @@ if [[ "$TOOL_NAME" != "Bash" ]]; then
 fi
 
 # Check if this is an SF CLI command (query, deploy, bulk, metadata)
-SF_COMMAND_PATTERN='sf[[:space:]]+(data[[:space:]]+query|data:query|project[[:space:]]+deploy|project:deploy|data[[:space:]]+upsert[[:space:]]+bulk|data:upsert:bulk)'
+SF_COMMAND_PATTERN='(sf|sfdx)[[:space:]]+(data[[:space:]]+query|data:query|project[[:space:]]+deploy|project:deploy|data[[:space:]]+upsert[[:space:]]+bulk|data:upsert:bulk)'
 
 if [[ ! "$TOOL_INPUT" =~ $SF_COMMAND_PATTERN ]]; then
     # Not an SF CLI command, return unchanged
@@ -268,7 +268,7 @@ if [[ "$ERROR_PREVENTION_ENABLED" == "true" ]]; then
 fi
 
 # Continue with existing SOQL enhancement logic only for query commands
-if [[ ! "$COMMAND" =~ sf[[:space:]]+(data[[:space:]]+query|data:query) ]]; then
+if [[ ! "$COMMAND" =~ (sf|sfdx)[[:space:]]+(data[[:space:]]+query|data:query) ]]; then
     # Not a query command, skip SOQL enhancement
     # Return command as-is (possibly corrected by error prevention)
     emit_command_output "$COMMAND"

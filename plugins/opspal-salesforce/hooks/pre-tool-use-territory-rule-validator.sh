@@ -84,7 +84,7 @@ is_territory_rule_item_operation() {
     fi
 
     # Check for direct record operations with sobject flag
-    if echo "$cmd" | grep -qiE "sf\s+data\s+(create|update|delete|upsert).*--sobject.*ObjectTerritory2AssignmentRuleItem"; then
+    if echo "$cmd" | grep -qiE "(sf|sfdx)\s+data\s+(create|update|delete|upsert).*--sobject.*ObjectTerritory2AssignmentRuleItem"; then
         return 0
     fi
 

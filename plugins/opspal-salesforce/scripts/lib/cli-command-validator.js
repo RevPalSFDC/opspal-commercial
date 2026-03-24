@@ -119,20 +119,19 @@ function validate(commandStr, options = {}) {
     suggestions: []
   };
 
-  // Check for legacy CLI syntax
-  if (parsed.base.startsWith('sfdx ')) {
-    result.valid = false;
-    result.errors.push('Legacy sfdx commands are not supported');
-    result.suggestions.push({
-      issue: 'legacy command',
-      fix: 'Use the sf CLI and update flags for SF v2.x',
-      reason: 'This plugin only supports sf commands'
-    });
-    return result;
+  // Check for legacy CLI syntax — route sfdx through the same validation
+  // as sf commands by normalizing the prefix for lookup purposes
+  const normalizedBase = parsed.base.startsWith('sfdx ')
+    ? 'sf ' + parsed.base.slice(5)
+    : parsed.base;
+
+  // Reject commands that are neither sf nor sfdx
+  if (!parsed.base.startsWith('sf ') && !parsed.base.startsWith('sfdx ')) {
+    result.warnings.push('Command is not a recognized sf/sfdx CLI invocation');
   }
 
   // Check if command exists in reference
-  const commandDef = reference.commands[parsed.base];
+  const commandDef = reference.commands[normalizedBase] || reference.commands[parsed.base];
 
   if (!commandDef) {
     // Command not in reference - check common errors

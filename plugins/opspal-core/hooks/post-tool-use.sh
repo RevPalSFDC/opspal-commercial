@@ -218,7 +218,7 @@ track_salesforce_query() {
   local result="$2"
 
   # Track sf sobject describe
-  if echo "$command" | grep -q "sf sobject describe"; then
+  if echo "$command" | grep -qE "(sf|sfdx) sobject describe"; then
     local object=$(echo "$command" | grep -oP 'describe\s+\K[A-Za-z_][A-Za-z0-9_]*' | head -1)
     if [ -n "$object" ]; then
       log_query_evidence "salesforce" "sobject-describe" "$object" '{}'
@@ -226,7 +226,7 @@ track_salesforce_query() {
   fi
 
   # Track sf data query
-  if echo "$command" | grep -q "sf data query"; then
+  if echo "$command" | grep -qE "(sf|sfdx) data query"; then
     local soql=$(echo "$command" | grep -oP "(?:--query|-q)\s+['\"]?\K[^'\"]+|(?:--query|-q)\s+\K\S+")
     if [ -n "$soql" ]; then
       local object=$(extract_soql_object "$soql")
@@ -242,7 +242,7 @@ track_salesforce_query() {
   fi
 
   # Track sf metadata describe
-  if echo "$command" | grep -q "sf sobject list\|sf org list metadata"; then
+  if echo "$command" | grep -qE "(sf|sfdx) sobject list|(sf|sfdx) org list metadata"; then
     log_query_evidence "salesforce" "metadata-describe" "org-metadata" '{}'
   fi
 }
@@ -343,17 +343,17 @@ validate_bash_tool() {
   fi
 
   # Validate SOQL queries
-  if echo "$command" | grep -q "sf data query"; then
+  if echo "$command" | grep -qE "(sf|sfdx) data query"; then
     validate_soql_query "$command" "$result" "$exit_code"
   fi
 
   # Validate deployments
-  if echo "$command" | grep -q "sf project deploy"; then
+  if echo "$command" | grep -qE "(sf|sfdx) project deploy"; then
     validate_deployment "$command" "$result" "$exit_code"
   fi
 
   # Validate data operations
-  if echo "$command" | grep -qE "sf data (create|update|upsert|delete)"; then
+  if echo "$command" | grep -qE "(sf|sfdx) data (create|update|upsert|delete)"; then
     validate_data_operation "$command" "$result" "$exit_code"
   fi
 
@@ -365,7 +365,7 @@ validate_bash_tool() {
   # Only track successful commands (exit code 0)
   if [ "$exit_code" -eq 0 ]; then
     # Track Salesforce queries
-    if echo "$command" | grep -qE "^sf\s|sf\s+data|sf\s+sobject"; then
+    if echo "$command" | grep -qE "^(sf|sfdx)\s|(sf|sfdx)\s+data|(sf|sfdx)\s+sobject"; then
       track_salesforce_query "$command" "$result"
     fi
 

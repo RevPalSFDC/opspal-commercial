@@ -42,6 +42,7 @@ function createGateAwareExec(agentName, config = {}) {
         // Check if this is a Salesforce command
         const sfPatterns = [
             'sf ',
+            'sfdx ',
             'SELECT ',
             'INSERT ',
             'UPDATE ',
@@ -50,10 +51,7 @@ function createGateAwareExec(agentName, config = {}) {
         ];
 
         const trimmed = command.trim();
-        if (trimmed.startsWith('sfdx ')) {
-            throw new Error('Legacy sfdx commands are not supported. Use sf commands only.');
-        }
-        
+
         const isSalesforceCommand = sfPatterns.some(pattern =>
             trimmed.startsWith(pattern) || command.includes(pattern)
         );

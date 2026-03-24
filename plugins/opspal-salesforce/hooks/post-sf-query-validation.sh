@@ -35,7 +35,7 @@ COMMAND=$(echo "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || 
 TOOL_OUTPUT=$(echo "$HOOK_INPUT" | jq -r '.tool_response.stdout // .tool_result.stdout // .tool_output // ""' 2>/dev/null || echo "")
 
 # Only validate sf data query results
-if [[ -z "$COMMAND" ]] || ! printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])sf[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
+if [[ -z "$COMMAND" ]] || ! printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
     exit 0
 fi
 

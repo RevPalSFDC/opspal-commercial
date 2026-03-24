@@ -81,10 +81,10 @@ case "$TOOL_NAME" in
         REASON="read-only tool"
         ;;
     Bash)
-        if echo "$COMMAND" | grep -qiE '^[[:space:]]*sf[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
+        if echo "$COMMAND" | grep -qiE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
             DECISION="allow"
             REASON="safe sf data query read"
-        elif echo "$COMMAND" | grep -qiE '^[[:space:]]*sf[[:space:]]+org[[:space:]]+(display|list)([[:space:]]|$)'; then
+        elif echo "$COMMAND" | grep -qiE '^[[:space:]]*(sf|sfdx)[[:space:]]+org[[:space:]]+(display|list)([[:space:]]|$)'; then
             DECISION="allow"
             REASON="safe sf org status read"
         elif echo "$COMMAND" | grep -qiE '^[[:space:]]*(ls|echo|cat|head|tail|wc|pwd)([[:space:]]|$)'; then

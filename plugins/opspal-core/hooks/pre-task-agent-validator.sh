@@ -480,7 +480,7 @@ is_salesforce_deploy_request() {
     prompt=$(collect_task_text "$input_json")
     prompt=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')
 
-    if echo "$prompt" | grep -qiE 'sf[[:space:]]+project[[:space:]]+deploy|package\.xml|package xml|force-app|quick[[:space:]-]?action|layouts?([[:space:]]|$)|metadata deploy|deploy start|deploy validate|deploy preview|--source-dir|--manifest|target-org'; then
+    if echo "$prompt" | grep -qiE '(sf|sfdx)[[:space:]]+project[[:space:]]+deploy|package\.xml|package xml|force-app|quick[[:space:]-]?action|layouts?([[:space:]]|$)|metadata deploy|deploy start|deploy validate|deploy preview|--source-dir|--manifest|target-org'; then
         return 0
     fi
 
