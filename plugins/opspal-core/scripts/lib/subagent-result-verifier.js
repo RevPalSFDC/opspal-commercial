@@ -57,6 +57,11 @@ const ERROR_PATTERNS = [
   { pattern: /timeout|ETIMEDOUT|ECONNREFUSED/gi, type: 'network', severity: SEVERITY.HIGH },
   { pattern: /401|403|500|502|503/gi, type: 'http', severity: SEVERITY.WARNING },
 
+  // Org/auth errors (sub-agent couldn't connect to org)
+  { pattern: /NamedOrgNotFound|NoOrgFound|No org configuration found/gi, type: 'org_auth', severity: SEVERITY.CRITICAL },
+  { pattern: /INVALID_SESSION_ID|Session expired|INVALID_LOGIN/gi, type: 'org_auth', severity: SEVERITY.CRITICAL },
+  { pattern: /authentication failed|unable to authenticate/gi, type: 'org_auth', severity: SEVERITY.HIGH },
+
   // HubSpot errors
   { pattern: /PROPERTY_DOESNT_EXIST|INVALID_EMAIL|CONTACT_EXISTS/gi, type: 'hubspot', severity: SEVERITY.HIGH },
   { pattern: /RATE_LIMIT|Too many requests/gi, type: 'hubspot', severity: SEVERITY.WARNING },
@@ -64,6 +69,22 @@ const ERROR_PATTERNS = [
   // False positives to ignore
   { pattern: /Status: (Success|OK|Completed)/gi, type: 'ignore', severity: null },
   { pattern: /No errors found/gi, type: 'ignore', severity: null }
+];
+
+/**
+ * Degradation patterns - indicate the sub-agent ran but used stale/cached data
+ * instead of live queries. Separate from errors because the agent may have
+ * produced useful output, but it needs live verification.
+ */
+const DEGRADATION_PATTERNS = [
+  { pattern: /live quer(?:y|ies) required/gi, type: 'needs_live_data' },
+  { pattern: /using cached|from cache|cached data|reading from cache/gi, type: 'used_cache' },
+  { pattern: /could not (?:connect|query|authenticate|reach)/gi, type: 'connection_failed' },
+  { pattern: /unable to (?:verify|confirm|validate) (?:live|against|with)/gi, type: 'unverified' },
+  { pattern: /based on (?:documentation|cached|local|static|previous)/gi, type: 'used_stale_source' },
+  { pattern: /requires? (?:live|direct|API) (?:access|connection|quer(?:y|ies))/gi, type: 'needs_live_access' },
+  { pattern: /no (?:live|direct) (?:data|query|connection|access)/gi, type: 'no_live_data' },
+  { pattern: /fell back to|falling back to|fallback to/gi, type: 'explicit_fallback' }
 ];
 
 /**
@@ -177,7 +198,11 @@ class SubagentResultVerifier {
       this.stats.byType[claim.type] = (this.stats.byType[claim.type] || 0) + 1;
     }
 
-    // Step 4: Final assessment
+    // Step 4: Detect degradation (cached/stale data usage)
+    const degradation = this.detectDegradation(text);
+    result.degradation = degradation;
+
+    // Step 5: Final assessment
     if (this.strictMode && result.warnings.length > 0) {
       result.verified = false;
     }
@@ -216,6 +241,30 @@ class SubagentResultVerifier {
     }
 
     return result;
+  }
+
+  /**
+   * Detect degradation signals - agent fell back to cached/stale data
+   */
+  detectDegradation(text) {
+    const signals = [];
+
+    for (const dp of DEGRADATION_PATTERNS) {
+      const regex = new RegExp(dp.pattern.source, dp.pattern.flags);
+      const matches = text.match(regex);
+      if (matches) {
+        signals.push({
+          type: dp.type,
+          match: matches[0],
+          count: matches.length
+        });
+      }
+    }
+
+    return {
+      detected: signals.length > 0,
+      signals
+    };
   }
 
   /**
@@ -659,6 +708,25 @@ class SubagentResultVerifier {
         }
       },
       {
+        name: 'Detect org auth errors',
+        test: () => {
+          const text = 'Error (1): NamedOrgNotFoundError: No org found with name or alias aspireiq';
+          const result = this.detectHiddenErrors(text);
+          if (result.errors.length === 0) throw new Error('Should detect NamedOrgNotFound');
+          return 'Detected org auth error';
+        }
+      },
+      {
+        name: 'Detect degradation signals',
+        test: () => {
+          const text = 'Analysis based on cached data from automation-audit-20260106. Live Queries Required to Confirm.';
+          const degradation = this.detectDegradation(text);
+          if (!degradation.detected) throw new Error('Should detect degradation');
+          if (degradation.signals.length === 0) throw new Error('Should have signals');
+          return `Detected ${degradation.signals.length} degradation signal(s)`;
+        }
+      },
+      {
         name: 'Full verification flow',
         test: async () => {
           const output = `
@@ -693,7 +761,7 @@ class SubagentResultVerifier {
 }
 
 // Export
-module.exports = { SubagentResultVerifier, ERROR_PATTERNS, CLAIM_PATTERNS, SEVERITY };
+module.exports = { SubagentResultVerifier, ERROR_PATTERNS, CLAIM_PATTERNS, DEGRADATION_PATTERNS, SEVERITY };
 
 // CLI Interface
 if (require.main === module) {

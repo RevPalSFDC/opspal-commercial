@@ -16,8 +16,9 @@
 #
 # Timeout: 10000ms
 #
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2026-02-06
+# Updated: 2026-03-24 - Added org alias pre-flight validation
 
 set -euo pipefail
 
@@ -50,6 +51,54 @@ if [[ -f "$TASK_SCOPE_SELECTOR" ]] && command -v node >/dev/null 2>&1; then
     TASK_SCOPE_CONTEXT=$(printf '%s' "$INPUT" | node "$TASK_SCOPE_SELECTOR" from-hook --format subagent-context 2>/dev/null || true)
     if [[ -n "${TASK_SCOPE_CONTEXT// }" ]]; then
         CONTEXT_PARTS+=("$TASK_SCOPE_CONTEXT")
+    fi
+fi
+
+# ─── 0b. Org Alias Pre-Flight Validation ─────────────────────────────────────
+# For Salesforce-scoped agents, validate that the org alias in the prompt exists.
+# This catches wrong-alias errors before the sub-agent wastes a full run.
+if [[ "${SUBAGENT_ORG_PREFLIGHT:-1}" == "1" ]]; then
+    SF_AGENT_PATTERN="sfdc-|salesforce|trigger-|validation-rule-|permission-|flow-"
+    if echo "$AGENT_NAME" | grep -qiE "$SF_AGENT_PATTERN"; then
+        # Extract org alias from the agent's prompt
+        AGENT_PROMPT=$(echo "$INPUT" | jq -r '.prompt // .message // .description // ""' 2>/dev/null || echo "")
+
+        if [[ -n "$AGENT_PROMPT" ]]; then
+            # Look for --target-org or -o flags in the prompt
+            PROMPT_ORG=$(echo "$AGENT_PROMPT" | grep -oP '(?:--target-org|-o)\s+(\S+)' | head -1 | awk '{print $NF}' || true)
+
+            # Also look for "Target org: <alias>" or "org alias: <alias>" patterns
+            if [[ -z "$PROMPT_ORG" ]]; then
+                PROMPT_ORG=$(echo "$AGENT_PROMPT" | grep -oiP '(?:target\s+org|org\s+alias)[:\s]+(\S+)' | head -1 | awk '{print $NF}' || true)
+            fi
+
+            if [[ -n "$PROMPT_ORG" ]] && command -v sf &>/dev/null; then
+                # Quick check: does this alias exist in authenticated orgs?
+                # Use timeout to avoid blocking if sf is slow
+                ORG_LIST=$(timeout 5 sf org list --json 2>/dev/null || echo '{"result":[]}')
+                ALIAS_EXISTS=$(echo "$ORG_LIST" | jq -r --arg alias "$PROMPT_ORG" '
+                    [.result[]? | select(.alias == $alias or .username == $alias)] | length
+                ' 2>/dev/null || echo "0")
+
+                if [[ "$ALIAS_EXISTS" == "0" ]]; then
+                    # Find similar aliases for suggestions
+                    SIMILAR=$(echo "$ORG_LIST" | jq -r --arg alias "$PROMPT_ORG" '
+                        [.result[]?.alias // empty] | map(select(. != null and . != "")) |
+                        map(select(ascii_downcase | contains($alias | ascii_downcase) or
+                                   ($alias | ascii_downcase | contains(. | ascii_downcase)))) |
+                        .[0:3] | join(", ")
+                    ' 2>/dev/null || echo "")
+
+                    WARNING_MSG="ORG_ALIAS_WARNING: Org alias '${PROMPT_ORG}' was not found in authenticated orgs."
+                    if [[ -n "$SIMILAR" ]]; then
+                        WARNING_MSG="${WARNING_MSG} Similar aliases found: ${SIMILAR}. Verify the correct alias before running sf CLI commands."
+                    else
+                        WARNING_MSG="${WARNING_MSG} Run \`sf org list\` to see available orgs."
+                    fi
+                    CONTEXT_PARTS+=("$WARNING_MSG")
+                fi
+            fi
+        fi
     fi
 fi
 

@@ -8,6 +8,8 @@
 # - Unverified record creation/update claims
 # - Missing files that were claimed to be created
 # - Failed deployments reported as successful
+# - Graceful degradation to cached/stale data (v2.44.0)
+# - Org authentication failures (v2.44.0)
 #
 # Hook Type: SubagentStop
 # ROI: $8,000/year (addresses 42 tool-contract violations)
@@ -74,6 +76,11 @@ quick_error_check() {
         "command failed"
         "TypeError:"
         "ReferenceError:"
+        "NamedOrgNotFound"
+        "NoOrgFound"
+        "INVALID_SESSION_ID"
+        "Session expired"
+        "INVALID_LOGIN"
     )
 
     for pattern in "${critical_patterns[@]}"; do
@@ -84,6 +91,52 @@ quick_error_check() {
     done
 
     return 0
+}
+
+# Detect degradation signals - agent fell back to cached/stale data
+degradation_check() {
+    local output="$1"
+
+    local degradation_patterns=(
+        "live quer(y|ies) required"
+        "using cached|from cache|cached data|reading from cache"
+        "could not (connect|query|authenticate|reach)"
+        "unable to (verify|confirm|validate) (live|against|with)"
+        "based on (documentation|cached|local|static|previous)"
+        "requires? (live|direct|API) (access|connection|quer(y|ies))"
+        "no (live|direct) (data|query|connection|access)"
+        "fell back to|falling back to|fallback to"
+    )
+
+    for pattern in "${degradation_patterns[@]}"; do
+        if echo "$output" | grep -qiE "$pattern"; then
+            log_info "Degradation signal detected: $pattern"
+            return 1
+        fi
+    done
+
+    return 0
+}
+
+# Emit structured JSON to stdout so parent agent receives the finding
+emit_parent_context() {
+    local context_message="$1"
+
+    if ! command -v jq &>/dev/null; then
+        # Fallback: just log to stderr if jq unavailable
+        log_error "$context_message"
+        return
+    fi
+
+    jq -n \
+      --arg context "$context_message" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+          hookEventName: "SubagentStop",
+          additionalContext: $context
+        }
+      }'
 }
 
 runbook_evidence_check() {
@@ -138,8 +191,8 @@ runbook_evidence_check() {
 
     cat >&2 << EOF
 
-⚠️  RUNBOOK EVIDENCE WARNING
-═══════════════════════════════════════════════════════════
+RUNBOOK EVIDENCE WARNING
+===============================================================
 
 Detected unresolved-issue cohorts in sub-agent output:
   $cohorts
@@ -172,9 +225,41 @@ main() {
         exit 0
     fi
 
-    # Quick error check first
+    local parent_context_messages=()
+
+    # Check for degradation signals (cached/stale data usage)
+    if ! degradation_check "$SUBAGENT_OUTPUT"; then
+        log_info "Sub-agent degradation detected - fell back to cached/stale data"
+
+        cat >&2 << EOF
+
+SUBAGENT DEGRADATION WARNING
+===============================================================
+
+The sub-agent appears to have used cached or stale data instead of
+live queries. This typically happens when:
+  - Wrong org alias was provided (NamedOrgNotFound)
+  - Session expired or auth failed
+  - Network connectivity issues
+
+The output may be useful but should NOT be treated as authoritative.
+Re-delegate with corrected parameters rather than running queries directly.
+
+EOF
+
+        parent_context_messages+=("SUBAGENT_DEGRADATION_DETECTED: The sub-agent could not execute live queries and fell back to cached/local data analysis. DO NOT attempt to run the queries directly from parent context. Instead: (1) verify the correct org alias with \`sf org list | grep <keyword>\`, (2) re-delegate to the same or appropriate sub-agent with corrected parameters.")
+    fi
+
+    # Quick error check for critical patterns
     if ! quick_error_check "$SUBAGENT_OUTPUT"; then
         log_info "Potential errors detected in sub-agent output"
+
+        # Check specifically for org auth errors to give targeted guidance
+        if echo "$SUBAGENT_OUTPUT" | grep -qiE "NamedOrgNotFound|NoOrgFound|No org configuration found"; then
+            parent_context_messages+=("SUBAGENT_ORG_NOT_FOUND: The sub-agent hit a NamedOrgNotFound error. The org alias provided does not exist. Run \`sf org list | grep <keyword>\` to find the correct alias before retrying.")
+        elif echo "$SUBAGENT_OUTPUT" | grep -qiE "INVALID_SESSION_ID|Session expired|INVALID_LOGIN"; then
+            parent_context_messages+=("SUBAGENT_AUTH_FAILED: The sub-agent hit an authentication error. The org session may be expired. Run \`sf org login web --alias <alias>\` to re-authenticate before retrying.")
+        fi
 
         # Run full verification
         VERIFY_ARGS=""
@@ -201,8 +286,8 @@ main() {
                 # Output structured warning (not blocking, just informational)
                 cat >&2 << EOF
 
-⚠️  SUB-AGENT VERIFICATION WARNING
-═══════════════════════════════════
+SUB-AGENT VERIFICATION WARNING
+===============================================
 
 The sub-agent output contains potential issues that should be reviewed:
 
@@ -227,6 +312,20 @@ EOF
         if [[ "${SUBAGENT_VERIFY_RUNBOOK_STRICT:-0}" == "1" ]]; then
             exit 1
         fi
+    fi
+
+    # Emit accumulated parent context messages via additionalContext
+    if [[ ${#parent_context_messages[@]} -gt 0 ]]; then
+        local joined_message=""
+        for msg in "${parent_context_messages[@]}"; do
+            if [[ -n "$joined_message" ]]; then
+                joined_message="${joined_message} ${msg}"
+            else
+                joined_message="$msg"
+            fi
+        done
+        emit_parent_context "$joined_message"
+        exit 0
     fi
 
     # Always exit successfully (non-blocking verification)
