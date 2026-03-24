@@ -232,6 +232,18 @@ check_production_access() {
 
     while IFS= read -r pattern; do
         if [[ -n "$pattern" ]] && echo "$TOOL_ARGS" | grep -qiE "(--target-org|--username|-u).*$pattern"; then
+            # Allow read-only SF CLI operations against production orgs without escalation.
+            # Agents need non-destructive queries/describes for investigation and auditing.
+            # Mutating commands (create, update, delete, deploy) still trigger escalation.
+            local args_lower
+            args_lower="$(printf '%s' "$TOOL_ARGS" | tr '[:upper:]' '[:lower:]')"
+            if echo "$args_lower" | grep -qE '(sf|sfdx)[[:space:]]+(data[[:space:]]+query|sobject[[:space:]]+describe|sobject[[:space:]]+list|org[[:space:]]+display|org[[:space:]]+list|data[[:space:]]+export|apex[[:space:]]+tail)' \
+               && ! echo "$args_lower" | grep -qE '(sf|sfdx)[[:space:]]+(data[[:space:]]+(create|update|upsert|delete|bulk)|project[[:space:]]+deploy)'; then
+                log_decision "allow" "read_only_production_query: $pattern"
+                echo "INFO: Read-only SF CLI operation allowed on production org ($pattern)" >&2
+                return 1
+            fi
+
             echo "PRODUCTION_DETECTED: Salesforce production org pattern: $pattern"
             return 0
         fi
