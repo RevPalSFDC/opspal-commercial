@@ -24,7 +24,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source shell commons if available
 if [ -f "${SCRIPT_DIR}/shell-commons.sh" ]; then
+    _sf_wrapper_disable_error_handling="${DISABLE_ERROR_HANDLING:-}"
+    export DISABLE_ERROR_HANDLING=true
     source "${SCRIPT_DIR}/shell-commons.sh"
+    if [ -n "${_sf_wrapper_disable_error_handling}" ]; then
+        export DISABLE_ERROR_HANDLING="${_sf_wrapper_disable_error_handling}"
+    else
+        unset DISABLE_ERROR_HANDLING
+    fi
+    unset _sf_wrapper_disable_error_handling
 fi
 
 # Source exit codes
@@ -66,6 +74,10 @@ resolve_sf_binary() {
     if command -v sf >/dev/null 2>&1; then
         command -v sf
         return 0
+    fi
+
+    if [ "${SF_DISABLE_AUTO_DISCOVERY:-0}" = "1" ]; then
+        return 1
     fi
 
     # Common locations (npm global, nvm-managed node bins, local installs)
@@ -114,6 +126,271 @@ ensure_sf_in_path() {
     return 0
 }
 
+resolve_salesforce_cli_binary() {
+    local candidates=()
+
+    if [ -n "${SF_CLI_BIN:-}" ] && [ -x "${SF_CLI_BIN}" ]; then
+        printf '%s\n' "${SF_CLI_BIN}"
+        return 0
+    fi
+
+    if command -v sf >/dev/null 2>&1; then
+        command -v sf
+        return 0
+    fi
+
+    if command -v sfdx >/dev/null 2>&1; then
+        command -v sfdx
+        return 0
+    fi
+
+    if [ "${SF_DISABLE_AUTO_DISCOVERY:-0}" = "1" ]; then
+        return 1
+    fi
+
+    candidates+=(
+        "${HOME}/.local/share/sf/bin/sf"
+        "${HOME}/.npm-global/bin/sf"
+        "${HOME}/bin/sf"
+        "/usr/local/bin/sf"
+        "/opt/homebrew/bin/sf"
+        "/usr/bin/sf"
+        "${HOME}/.local/share/sf/bin/sfdx"
+        "${HOME}/.npm-global/bin/sfdx"
+        "${HOME}/bin/sfdx"
+        "/usr/local/bin/sfdx"
+        "/opt/homebrew/bin/sfdx"
+        "/usr/bin/sfdx"
+    )
+
+    local nvm_sf=""
+    local nvm_sfdx=""
+    local bin_dir=""
+    for bin_dir in "${HOME}"/.nvm/versions/node/*/bin; do
+        if [ -x "${bin_dir}/sf" ]; then
+            nvm_sf="${bin_dir}/sf"
+        fi
+        if [ -x "${bin_dir}/sfdx" ]; then
+            nvm_sfdx="${bin_dir}/sfdx"
+        fi
+    done
+
+    if [ -n "${nvm_sf}" ]; then
+        candidates=("${nvm_sf}" "${candidates[@]}")
+    fi
+    if [ -n "${nvm_sfdx}" ]; then
+        candidates=("${nvm_sfdx}" "${candidates[@]}")
+    fi
+
+    local candidate=""
+    for candidate in "${candidates[@]}"; do
+        if [ -x "${candidate}" ]; then
+            printf '%s\n' "${candidate}"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+detect_salesforce_cli_family() {
+    local cli_path=""
+    local cli_name=""
+
+    cli_path="$(resolve_salesforce_cli_binary 2>/dev/null)" || return 1
+    cli_name="$(basename "${cli_path}")"
+
+    case "${cli_name}" in
+        sf|sfdx)
+            export SF_AVAILABLE_CLI="${cli_name}"
+            export SF_AVAILABLE_CLI_BIN="${cli_path}"
+            printf '%s\n' "${cli_name}"
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+translate_sf_command_for_sfdx() {
+    local command="${1:-}"
+    local translated="${command}"
+
+    if printf '%s' "${command}" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:(data:soql:query|schema:sobject:(describe|list)|org:(display|list))([[:space:]]|$)'; then
+        printf '%s\n' "${command}"
+        return 0
+    fi
+
+    if printf '%s' "${command}" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)/sfdx force:data:soql:query\2/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+sobject[[:space:]]+describe([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*(sf|sfdx)[[:space:]]+sobject[[:space:]]+describe([[:space:]]|$)/sfdx force:schema:sobject:describe\2/')"
+        translated="$(printf '%s' "${translated}" | sed -E 's/^([[:space:]]*sfdx[[:space:]]+force:schema:sobject:describe)[[:space:]]+([^[:space:]-][^[:space:]]*)([[:space:]]|$)/\1 --sobject \2\3/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+sobject[[:space:]]+list([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*(sf|sfdx)[[:space:]]+sobject[[:space:]]+list([[:space:]]|$)/sfdx force:schema:sobject:list\2/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+org[[:space:]]+display([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*(sf|sfdx)[[:space:]]+org[[:space:]]+display([[:space:]]|$)/sfdx force:org:display\2/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+org[[:space:]]+list([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*(sf|sfdx)[[:space:]]+org[[:space:]]+list([[:space:]]|$)/sfdx force:org:list\2/')"
+    else
+        return 1
+    fi
+
+    printf '%s\n' "${translated}"
+    return 0
+}
+
+translate_sfdx_command_for_sf() {
+    local command="${1:-}"
+    local translated="${command}"
+
+    if printf '%s' "${command}" | grep -qE '^[[:space:]]*sf[[:space:]]+(data[[:space:]]+query|sobject[[:space:]]+(describe|list)|org[[:space:]]+(display|list))([[:space:]]|$)'; then
+        printf '%s\n' "${command}"
+        return 0
+    fi
+
+    if printf '%s' "${command}" | grep -qE '^[[:space:]]*sfdx[[:space:]]+(force:data:soql:query|data[[:space:]]+query)([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*sfdx[[:space:]]+(force:data:soql:query|data[[:space:]]+query)([[:space:]]|$)/sf data query\2/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*sfdx[[:space:]]+(force:schema:sobject:describe|sobject[[:space:]]+describe)([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*sfdx[[:space:]]+(force:schema:sobject:describe|sobject[[:space:]]+describe)([[:space:]]|$)/sf sobject describe\2/')"
+        translated="$(printf '%s' "${translated}" | sed -E 's/^([[:space:]]*sf[[:space:]]+sobject[[:space:]]+describe)[[:space:]]+([^[:space:]-][^[:space:]]*)([[:space:]]|$)/\1 --sobject \2\3/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*sfdx[[:space:]]+(force:schema:sobject:list|sobject[[:space:]]+list)([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*sfdx[[:space:]]+(force:schema:sobject:list|sobject[[:space:]]+list)([[:space:]]|$)/sf sobject list\2/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*sfdx[[:space:]]+(force:org:display|org[[:space:]]+display)([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*sfdx[[:space:]]+(force:org:display|org[[:space:]]+display)([[:space:]]|$)/sf org display\2/')"
+    elif printf '%s' "${command}" | grep -qE '^[[:space:]]*sfdx[[:space:]]+(force:org:list|org[[:space:]]+list)([[:space:]]|$)'; then
+        translated="$(printf '%s' "${command}" | sed -E 's/^[[:space:]]*sfdx[[:space:]]+(force:org:list|org[[:space:]]+list)([[:space:]]|$)/sf org list\2/')"
+    else
+        return 1
+    fi
+
+    printf '%s\n' "${translated}"
+    return 0
+}
+
+translate_salesforce_command_for_available_cli() {
+    local command="${1:-}"
+    local cli_family=""
+
+    cli_family="$(detect_salesforce_cli_family 2>/dev/null || true)"
+    case "${cli_family}" in
+        sf)
+            translate_sfdx_command_for_sf "${command}"
+            ;;
+        sfdx)
+            translate_sf_command_for_sfdx "${command}"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+render_shell_command() {
+    local rendered=""
+    local token=""
+
+    for token in "$@"; do
+        if [ -n "${rendered}" ]; then
+            rendered="${rendered} "
+        fi
+        rendered="${rendered}$(printf '%q' "${token}")"
+    done
+
+    printf '%s\n' "${rendered}"
+}
+
+ensure_salesforce_cli_available() {
+    local cli_family=""
+    local cli_path=""
+    local cli_dir=""
+    local message=""
+
+    cli_family="$(detect_salesforce_cli_family 2>/dev/null || true)"
+    if [ -z "${cli_family}" ]; then
+        message="Neither sf nor sfdx is installed or available on PATH. Install @salesforce/cli or expose an existing Salesforce CLI binary to this session."
+        if type log_error >/dev/null 2>&1; then
+            log_error "SF_CLI_NOT_FOUND" "${message}" "${EXIT_MISSING_DEPENDENCY:-2}"
+        else
+            echo "[SF_CLI_NOT_FOUND] ${message}" >&2
+        fi
+        return "${EXIT_MISSING_DEPENDENCY:-2}"
+    fi
+
+    cli_path="${SF_AVAILABLE_CLI_BIN:-$(resolve_salesforce_cli_binary 2>/dev/null || true)}"
+    if [ -n "${cli_path}" ]; then
+        cli_dir="$(dirname "${cli_path}")"
+        if [[ ":${PATH}:" != *":${cli_dir}:"* ]]; then
+            export PATH="${cli_dir}:${PATH}"
+        fi
+        export SF_CLI_BIN="${cli_path}"
+        export SF_AVAILABLE_CLI_BIN="${cli_path}"
+    fi
+
+    export SF_AVAILABLE_CLI="${cli_family}"
+    printf '%s\n' "${cli_family}"
+}
+
+build_salesforce_cli_command() {
+    local requested_command=""
+    local translated_command=""
+    local cli_family=""
+    local message=""
+
+    requested_command="$(render_shell_command sf "$@")"
+    cli_family="$(ensure_salesforce_cli_available)" || return $?
+
+    case "${cli_family}" in
+        sf)
+            printf '%s\n' "${requested_command}"
+            return 0
+            ;;
+        sfdx)
+            translated_command="$(translate_sf_command_for_sfdx "${requested_command}" 2>/dev/null || true)"
+            if [ -z "${translated_command}" ]; then
+                message="Only legacy sfdx is available, and this sf command cannot be safely translated. Install sf or rewrite the command to a supported legacy equivalent."
+                if type log_error >/dev/null 2>&1; then
+                    log_error "SF_CLI_FALLBACK_UNSUPPORTED" "${message}" "${EXIT_CLI_ERROR:-8}"
+                else
+                    echo "[SF_CLI_FALLBACK_UNSUPPORTED] ${message}" >&2
+                fi
+                return "${EXIT_CLI_ERROR:-8}"
+            fi
+
+            printf '%s\n' "${translated_command}"
+            return 0
+            ;;
+        *)
+            message="Detected Salesforce CLI family '${cli_family}', but no execution strategy is defined."
+            if type log_error >/dev/null 2>&1; then
+                log_error "SF_CLI_UNKNOWN_FAMILY" "${message}" "${EXIT_CLI_ERROR:-8}"
+            else
+                echo "[SF_CLI_UNKNOWN_FAMILY] ${message}" >&2
+            fi
+            return "${EXIT_CLI_ERROR:-8}"
+            ;;
+    esac
+}
+
+run_salesforce_cli_command() {
+    local rendered_command="${1:-}"
+    local output_var="${2:-SF_COMMAND_OUTPUT}"
+    local tmpfile=""
+    local output=""
+    local exit_code=0
+
+    tmpfile="$(mktemp)"
+    bash -lc "${rendered_command}" > "${tmpfile}" 2>&1
+    exit_code=$?
+
+    output="$(suppress_update_warnings < "${tmpfile}")"
+    rm -f "${tmpfile}"
+
+    printf -v "${output_var}" '%s' "${output}"
+    return "${exit_code}"
+}
+
 # Suppress update warnings in output
 suppress_update_warnings() {
     grep -v "Warning.*update available" | \
@@ -131,6 +408,13 @@ _classify_sf_error() {
     local error_msg="${1:-}"
     local msg_lower
     msg_lower="$(echo "$error_msg" | tr '[:upper:]' '[:lower:]')"
+
+    if echo "$msg_lower" | grep -qE 'command not found|no such file or directory|spawn enoent|enoent|cli not installed'; then
+        CLASSIFIED_CATEGORY="CLI_NOT_FOUND"
+        CLASSIFIED_EXIT_CODE=${EXIT_MISSING_DEPENDENCY:-2}
+        CLASSIFIED_RETRYABLE=0
+        return 0
+    fi
 
     # Transient errors (retry-able)
     if echo "$msg_lower" | grep -qE 'econnreset|etimedout|enotfound|socket hang up|connection reset|network error|temporarily unavailable|503|502|504|service unavailable|gateway timeout|bad gateway'; then
@@ -153,6 +437,34 @@ _classify_sf_error() {
         CLASSIFIED_CATEGORY="TIMEOUT"
         CLASSIFIED_EXIT_CODE=${EXIT_TIMEOUT:-7}
         CLASSIFIED_RETRYABLE=1
+        return 0
+    fi
+
+    if echo "$msg_lower" | grep -qE 'insufficient_access|invalid_session|access denied|not authorized|permission denied|authentication failed|session expired'; then
+        CLASSIFIED_CATEGORY="PERMISSION"
+        CLASSIFIED_EXIT_CODE=${EXIT_PERMISSION_ERROR:-4}
+        CLASSIFIED_RETRYABLE=0
+        return 0
+    fi
+
+    if echo "$msg_lower" | grep -qE 'no default org|org not found|alias not found|missing org|no project|outside of project'; then
+        CLASSIFIED_CATEGORY="CONFIG_ERROR"
+        CLASSIFIED_EXIT_CODE=${EXIT_CONFIG_ERROR:-5}
+        CLASSIFIED_RETRYABLE=0
+        return 0
+    fi
+
+    if echo "$msg_lower" | grep -qE 'invalid command|unknown command'; then
+        CLASSIFIED_CATEGORY="CLI_ERROR"
+        CLASSIFIED_EXIT_CODE=${EXIT_CLI_ERROR:-8}
+        CLASSIFIED_RETRYABLE=0
+        return 0
+    fi
+
+    if echo "$msg_lower" | grep -qE 'invalid_field|invalid_type|malformed|no such column|duplicate|required_field|does not exist'; then
+        CLASSIFIED_CATEGORY="VALIDATION"
+        CLASSIFIED_EXIT_CODE=${EXIT_VALIDATION_ERROR:-1}
+        CLASSIFIED_RETRYABLE=0
         return 0
     fi
 
@@ -225,21 +537,24 @@ sync_sf_auth() {
 sf_exec() {
     local cmd="$1"
     shift
+    local rendered_command=""
+    local output=""
+    local exit_code=0
 
     # Set environment to suppress warnings
     export NODE_NO_WARNINGS=1
     export SF_HIDE_RELEASE_NOTES=true
     sync_sf_auth
-    ensure_sf_in_path >/dev/null 2>&1 || true
 
-    # Execute command and filter warnings
-    if command -v sf >/dev/null 2>&1; then
-        sf $cmd "$@" 2>&1 | suppress_update_warnings
-        return ${PIPESTATUS[0]}
-    else
-        echo "Error: Salesforce CLI (sf) not found" >&2
-        return ${EXIT_CLI_ERROR:-8}
+    rendered_command="$(build_salesforce_cli_command "$cmd" "$@")" || return $?
+    run_salesforce_cli_command "${rendered_command}" output
+    exit_code=$?
+
+    if [ -n "${output}" ]; then
+        printf '%s\n' "${output}"
     fi
+
+    return "${exit_code}"
 }
 
 # ============================================================================
@@ -252,7 +567,7 @@ sf_exec() {
 sf_exec_safe() {
     local cmd="$1"
     shift
-    local full_cmd="sf $cmd $*"
+    local full_cmd=""
 
     # If retry is disabled, use simple execution
     if [ "${SF_DISABLE_RETRY:-0}" = "1" ]; then
@@ -268,34 +583,21 @@ sf_exec_safe() {
     # Set environment
     export NODE_NO_WARNINGS=1
     export SF_HIDE_RELEASE_NOTES=true
-    export SF_CURRENT_COMMAND="$full_cmd"
     sync_sf_auth
-    ensure_sf_in_path >/dev/null 2>&1 || true
-
-    # Check if sf is available
-    if ! command -v sf >/dev/null 2>&1; then
-        echo "Error: Salesforce CLI (sf) not found" >&2
-        echo "  Suggestion: Install SF CLI: npm install -g @salesforce/cli" >&2
-        return ${EXIT_CLI_ERROR:-8}
-    fi
+    full_cmd="$(build_salesforce_cli_command "$cmd" "$@")" || return $?
+    export SF_CURRENT_COMMAND="$full_cmd"
 
     while [ $attempt -le "$max_attempts" ]; do
         _log_verbose "Attempt $attempt/$max_attempts: $full_cmd"
 
-        # Execute and capture both stdout and stderr
-        # Use temp file to preserve exit code through pipe
-        local tmpfile
-        tmpfile=$(mktemp)
-
-        sf $cmd "$@" > "$tmpfile" 2>&1
+        run_salesforce_cli_command "$full_cmd" output
         exit_code=$?
-
-        output=$(cat "$tmpfile" | suppress_update_warnings)
-        rm -f "$tmpfile"
 
         # Success - return output
         if [ $exit_code -eq 0 ]; then
-            echo "$output"
+            if [ -n "$output" ]; then
+                printf '%s\n' "$output"
+            fi
             return 0
         fi
 
@@ -306,7 +608,9 @@ sf_exec_safe() {
 
         # If not retryable or last attempt, return error
         if [ "$CLASSIFIED_RETRYABLE" != "1" ] || [ $attempt -ge "$max_attempts" ]; then
-            echo "$output"
+            if [ -n "$output" ]; then
+                printf '%s\n' "$output"
+            fi
 
             # Log to structured log if sf-exit-codes.sh is available
             if type log_error &>/dev/null; then
@@ -359,12 +663,23 @@ sf_query_safe() {
 
     local output
     local exit_code
+    local compact_output=""
 
     output=$(sf_exec_safe data query --query "$query" "$@")
     exit_code=$?
 
     if [ $exit_code -ne 0 ]; then
         return $exit_code
+    fi
+
+    compact_output="$(printf '%s' "$output" | tr -d '[:space:]')"
+    if [ -z "$compact_output" ]; then
+        if type log_error >/dev/null 2>&1; then
+            log_error "SF_QUERY_FAILED" "Salesforce query returned no output. Verify the CLI is available and inspect the raw command output before piping to jq or Python." "${EXIT_CLI_ERROR:-8}"
+        else
+            echo "[SF_QUERY_FAILED] Salesforce query returned no output. Verify the CLI is available and inspect the raw command output before piping to jq or Python." >&2
+        fi
+        return ${EXIT_CLI_ERROR:-8}
     fi
 
     # Check for empty result (common silent failure pattern)

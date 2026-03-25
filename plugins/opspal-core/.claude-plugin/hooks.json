@@ -12,7 +12,7 @@
           },
           {
             "type": "command",
-            "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh",
+            "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=1 ENABLE_INTAKE_HARD_BLOCKING=0 ${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh",
             "timeout": 10000,
             "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
           },

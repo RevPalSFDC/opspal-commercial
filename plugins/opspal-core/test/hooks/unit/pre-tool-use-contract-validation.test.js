@@ -492,13 +492,36 @@ async function runAllTests() {
     );
   }));
 
-  // Test 7: Blocks direct core object query workflows
-  results.push(await runTest('Blocks direct core object data queries', async () => {
+  results.push(await runTest('Allows direct core object upsert workflows for capability-matched specialists', async () => {
     const result = await tester.run({
       input: {
         tool: 'Bash',
         input: {
-          command: 'sf data query --query "SELECT Id FROM Account WHERE OwnerId != null LIMIT 10" --target-org prod'
+          command: 'sf data upsert bulk --sobject Account --file ./accounts.csv'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-data-import-manager'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Capability-matched specialists should pass without a hardcoded allowlist entry');
+    assertNoStructuredDeny(result, 'Capability-matched specialist should not be denied');
+  }));
+
+  // Test 7: Blocks direct complex core object query workflows
+  results.push(await runTest('Blocks direct complex core object data queries', async () => {
+    const longProjection = Array.from({ length: 45 }, (_, i) => `CustomField${String(i).padStart(2, '0')}__c`).join(', ');
+    const command = `sf data query --query "SELECT Id, Name, ${longProjection} FROM Account WHERE BillingCountry = 'US'" --target-org prod`;
+
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command
         }
       },
       env: {
@@ -513,6 +536,26 @@ async function runAllTests() {
       (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('sfdc-data-operations'),
       'Should recommend data-operations/query specialist agents'
     );
+  }));
+
+  results.push(await runTest('Bypasses mandatory routing when agent_type marks sub-agent context', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        agent_type: 'opspal-salesforce:sfdc-cpq-assessor',
+        tool_input: {
+          command: 'sf data upsert bulk --sobject Account --file ./accounts.csv'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Sub-agent context should bypass parent-context routing enforcement');
+    assertNoStructuredDeny(result, 'Sub-agent context should not emit a routing deny');
   }));
 
   // Test 8: Allows core object queries for approved data/query agents
@@ -701,7 +744,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Skips Bash budget when hardened channel metadata is absent', async () => {
+  results.push(await runTest('Enforces Bash budget even without hardened channel metadata', async () => {
     const env = {
       CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
       HOME: tempHome,
@@ -729,7 +772,55 @@ async function runAllTests() {
       },
       env
     });
-    assert.strictEqual(second.exitCode, 0, 'Budget should not apply when hardening channel metadata is absent');
+    assertStructuredRoutingDeny(second, 'Bash command budget exceeded', 'Budget without hardened channel metadata');
+  }));
+
+  results.push(await runTest('Expands Bash budget for discovery-heavy Salesforce contexts', async () => {
+    const env = {
+      CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+      HOME: tempHome,
+      CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+      CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-discovery',
+      OPSPAL_BASH_BUDGET_MAX_REPEATS: '10',
+      OPSPAL_BASH_BUDGET_MAX_COMMANDS: '1',
+      OPSPAL_DISCOVERY_BASH_BUDGET_MAX_COMMANDS: '2',
+      OPSPAL_BASH_BUDGET_WINDOW_SECONDS: '600'
+    };
+
+    const first = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-discovery-budget',
+        input: { command: 'sf sobject describe Account --json' }
+      },
+      env
+    });
+    assert.strictEqual(first.exitCode, 0, 'First discovery command should pass');
+
+    const second = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-discovery-budget',
+        input: { command: 'sf sobject describe Opportunity --json' }
+      },
+      env
+    });
+    assert.strictEqual(second.exitCode, 0, 'Second discovery command should use the expanded discovery budget');
+    assertNoStructuredDeny(second, 'Expanded discovery budget should still allow the second command');
+
+    const third = await tester.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: 'session-discovery-budget',
+        input: { command: 'sf sobject describe Lead --json' }
+      },
+      env
+    });
+    assertStructuredRoutingDeny(third, 'Bash command budget exceeded', 'Discovery Bash budget');
+    assert(
+      (third.stderr || '').includes('(3/2'),
+      'Budget message should include the expanded discovery limit'
+    );
   }));
 
   // Test 16: Enforces loop budget across repeated commands in same hardened session
@@ -761,11 +852,7 @@ async function runAllTests() {
       }),
       env
     });
-    assert.strictEqual(second.exitCode, 2, 'Second repeated command should be blocked');
-    assert(
-      second.stderr.includes('Repeated command pattern detected'),
-      'Should emit repeated command guardrail message'
-    );
+    assertStructuredRoutingDeny(second, 'Repeated command pattern detected', 'Repeated command loop budget');
   }));
 
   results.push(await runTest('Blocks aggregate Bash volume in hardened sessions', async () => {
@@ -806,11 +893,7 @@ async function runAllTests() {
       }),
       env
     });
-    assert.strictEqual(third.exitCode, 2, 'Third command should exceed the aggregate Bash budget');
-    assert(
-      third.stderr.includes('Bash command budget exceeded'),
-      'Should emit the aggregate Bash budget message'
-    );
+    assertStructuredRoutingDeny(third, 'Bash command budget exceeded', 'Aggregate Bash budget');
   }));
 
   results.push(await runTest('Partitions Bash budget by agent within the same session', async () => {
@@ -860,7 +943,7 @@ async function runAllTests() {
         CLAUDE_AGENT_NAME: 'opspal-core:pdf-generator'
       }
     });
-    assert.strictEqual(agentOneSecond.exitCode, 2, 'Second command for agent one should exceed only its own budget bucket');
+    assertStructuredRoutingDeny(agentOneSecond, 'Bash command budget exceeded', 'Per-agent Bash budget bucket');
     assert(
       agentOneSecond.stderr.includes('Bash command budget exceeded'),
       'Should emit the aggregate Bash budget message for the over-budget agent'

@@ -1,6 +1,6 @@
 ---
 name: sfdc-discovery
-description: "Use PROACTIVELY for org analysis."
+description: "Use PROACTIVELY for read-only Salesforce org discovery, object/flow/permission inventory, and discovery-heavy investigation."
 color: blue
 tools:
   - mcp__salesforce-dx
@@ -44,6 +44,9 @@ triggerKeywords:
   - field inventory
   - object inventory
   - metadata inventory
+  - inspect org
+  - describe object
+  - schema inventory
 ---
 
 # Shared Script Libraries

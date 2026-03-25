@@ -72,6 +72,7 @@ DEFAULT_HARDENED_CHANNEL_ID="${OPSPAL_HARDENED_ENFORCED_CHANNEL_ID:-C0AGVQFDB18}
 BASH_BUDGET_ENABLED="${OPSPAL_BASH_BUDGET_ENABLED:-1}"
 BASH_BUDGET_WINDOW_SECONDS="${OPSPAL_BASH_BUDGET_WINDOW_SECONDS:-180}"
 BASH_BUDGET_MAX_COMMANDS="${OPSPAL_BASH_BUDGET_MAX_COMMANDS:-24}"
+BASH_DISCOVERY_BUDGET_MAX_COMMANDS="${OPSPAL_DISCOVERY_BASH_BUDGET_MAX_COMMANDS:-48}"
 BASH_BUDGET_MAX_REPEATS="${OPSPAL_BASH_BUDGET_MAX_REPEATS:-5}"
 BUDGET_STATE_DIR="${LOG_ROOT}/hook-state"
 PENDING_ROUTE_MCP_POLICY='{}'
@@ -594,7 +595,7 @@ enforce_bash_loop_budget() {
     local command="${1:-}"
     local channel_id budget_scope now state_file
     local window_start count last_fingerprint repeat_count fingerprint
-    local next_count next_repeat_count next_fingerprint
+    local next_count next_repeat_count next_fingerprint effective_max_commands
 
     if [ "$BASH_BUDGET_ENABLED" != "1" ]; then
         return 0
@@ -632,6 +633,12 @@ enforce_bash_loop_budget() {
     fi
 
     next_count=$((count + 1))
+    effective_max_commands="$BASH_BUDGET_MAX_COMMANDS"
+    if command_is_discovery_heavy_context "$command"; then
+        if [ "$BASH_DISCOVERY_BUDGET_MAX_COMMANDS" -gt "$effective_max_commands" ] 2>/dev/null; then
+            effective_max_commands="$BASH_DISCOVERY_BUDGET_MAX_COMMANDS"
+        fi
+    fi
     fingerprint="$(normalize_command_fingerprint "$command")"
     if [ "$fingerprint" = "$last_fingerprint" ] && [ -n "$fingerprint" ]; then
         next_repeat_count=$((repeat_count + 1))
@@ -647,8 +654,8 @@ enforce_bash_loop_budget() {
         return 1
     fi
 
-    if [ "$next_count" -gt "$BASH_BUDGET_MAX_COMMANDS" ]; then
-        BUDGET_BLOCK_MSG="Bash command budget exceeded (${next_count} in ${BASH_BUDGET_WINDOW_SECONDS}s). Pause and summarize findings."
+    if [ "$next_count" -gt "$effective_max_commands" ]; then
+        BUDGET_BLOCK_MSG="Bash command budget exceeded (${next_count}/${effective_max_commands} in ${BASH_BUDGET_WINDOW_SECONDS}s). Pause and summarize findings."
         echo "[GUARDRAIL BLOCKED] $BUDGET_BLOCK_MSG" >&2
         return 1
     fi
@@ -665,6 +672,24 @@ enforce_bash_loop_budget() {
     }
 
     return 0
+}
+
+command_is_discovery_heavy_context() {
+    local command="${1:-}"
+    local caller_agent=""
+    local sf_classification=""
+
+    caller_agent="$(resolve_caller_agent main)"
+    if printf '%s' "$caller_agent" | grep -qE '(^|:)(sfdc-state-discovery|sfdc-discovery|sfdc-planner|sfdc-field-analyzer)$'; then
+        return 0
+    fi
+
+    sf_classification="$(classify_sf_command "$command")"
+    if [ "$sf_classification" != "read" ]; then
+        return 1
+    fi
+
+    printf '%s' "$command" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+(data[[:space:]]+query|sobject[[:space:]]+(describe|list)|org[[:space:]]+(display|list))|sfdx[[:space:]]+force:(data:soql:query|schema:sobject:(describe|list)|org:(display|list)))([[:space:]]|$)'
 }
 
 caller_matches_allowed_agents() {

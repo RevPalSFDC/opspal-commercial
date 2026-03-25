@@ -202,10 +202,9 @@ async function runAllTests() {
     );
   }));
 
-  // Test 6: Legacy mandatory hard-block can be explicitly enabled
-  results.push(await runTest('Respects USER_PROMPT_MANDATORY_HARD_BLOCKING=1 for mandatory prompts', async () => {
+  // Test 6: Mandatory prompt hard-block no longer depends on broad ENABLE_HARD_BLOCKING
+  results.push(await runTest('Respects USER_PROMPT_MANDATORY_HARD_BLOCKING=1 for mandatory prompts without broad hard-blocking', async () => {
     const env = createIsolatedEnv({
-      ENABLE_HARD_BLOCKING: '1',
       USER_PROMPT_MANDATORY_HARD_BLOCKING: '1'
     });
     const result = await tester.run({
@@ -214,11 +213,11 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
-    assert.strictEqual(result.output?.decision, 'block', 'Should emit decision=block in legacy hard-block mode');
+    assert.strictEqual(result.output?.decision, 'block', 'Should emit decision=block when mandatory hard-blocking is enabled');
     assert.strictEqual(result.output?.metadata?.action, 'MANDATORY_BLOCKED', 'Should classify as MANDATORY_BLOCKED');
     assert.strictEqual(result.output?.metadata?.blocked, true, 'Should mark blocked=true');
     assert.strictEqual(result.output?.metadata?.mandatory, true, 'Should mark mandatory=true');
-    assert.strictEqual(result.output?.metadata?.enforcedBlock, true, 'Should enforce hard block when legacy flag is enabled');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, true, 'Should enforce hard block without requiring broad blocking');
   }));
 
   // Test 7: Path strings should not trigger mandatory release routing
@@ -317,6 +316,87 @@ async function runAllTests() {
     assert.strictEqual(result.output?.metadata?.blocked, false, 'Should not classify as blocked');
     assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should not enforce hard block');
     assert.strictEqual(readRoutingState(env), null, 'Recommended routes should stay advisory and not persist pending state');
+  }));
+
+  results.push(await runTest('Routes Fireflies transcript analysis prompts to the meeting intelligence specialist', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Fetch Fireflies transcripts and extract action items from last week' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-core:fireflies-meeting-intelligence-agent',
+      'Should route read-only Fireflies transcript work to the meeting intelligence agent'
+    );
+    assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Fireflies transcript analysis should stay advisory');
+  }));
+
+  results.push(await runTest('Routes combined Gong and Fireflies requests to the conversation intelligence aggregator', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Combine Gong and Fireflies transcripts for cross-platform meeting analysis' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-core:conversation-intelligence-aggregator',
+      'Should route multi-platform conversation intelligence work to the aggregator'
+    );
+    assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Cross-platform transcript analysis should stay advisory');
+  }));
+
+  results.push(await runTest('Routes Salesforce org inspection prompts to state discovery', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Inspect the Salesforce org schema and describe objects before we make changes' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-salesforce:sfdc-state-discovery',
+      'Should route schema inspection to state discovery'
+    );
+    assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Schema inspection should stay advisory');
+  }));
+
+  results.push(await runTest('Routes Salesforce implementation planning prompts to the planner specialist', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Plan a Salesforce implementation rollout for lead assignment and approvals' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-salesforce:sfdc-planner',
+      'Should route implementation planning to the planner specialist'
+    );
+    assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Planning should stay advisory');
+  }));
+
+  results.push(await runTest('Routes field usage audits to the field analyzer specialist', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Run a pricing field usage audit and analyze validation dependencies in Salesforce' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-salesforce:sfdc-field-analyzer',
+      'Should route field usage analysis to the field analyzer specialist'
+    );
+    assert.strictEqual(result.output?.decision, undefined, 'Field analysis should remain advisory at prompt time');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Field analysis should not be hard-blocked');
   }));
 
   results.push(await runTest('Downgrades procedural specialist requests to recommended routing', async () => {

@@ -1,6 +1,6 @@
 ---
 name: sfdc-field-analyzer
-description: "Use PROACTIVELY for field analysis."
+description: "MUST BE USED for Salesforce field analysis, pricing-field audits, validation dependencies, and field usage investigations."
 color: blue
 tools:
   - mcp_salesforce
@@ -34,6 +34,9 @@ triggerKeywords:
   - analyzer
   - analysis
   - error
+  - pricing field analysis
+  - field usage audit
+  - field population analysis
 ---
 
 # Shared Script Libraries
@@ -1407,4 +1410,3 @@ await depManager.createDependency({
 - **Global Sets**: `scripts/lib/global-value-set-manager.js`
 - **Analysis**: `scripts/lib/picklist-describer.js`
 - **Playbook**: See implementation plan for complete workflow
-

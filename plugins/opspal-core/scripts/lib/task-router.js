@@ -873,6 +873,17 @@ class TaskRouter {
             }
         }
 
+        // Salesforce implementation-planning requests should prefer the Salesforce planner
+        // over the generic implementation planner unless the user explicitly asks for Asana/project scaffolding.
+        if (/\b(salesforce|sfdc)\b/.test(text) && /\b(plan|planning|rollout|implementation|design|architecture|pre-build)\b/.test(text)) {
+            const wantsGenericProjectPlan = /\basana\b|\bproject plan\b|\bfrom a spec\b|\bspecification\b/.test(text);
+            if (shortName === 'sfdc-planner') {
+                adjusted *= 2.2;
+            } else if (!wantsGenericProjectPlan && shortName === 'implementation-planner') {
+                adjusted *= 0.65;
+            }
+        }
+
         // Salesforce field-creation requests should route to Salesforce field/metadata specialists.
         if (/\b(salesforce|sfdc)\b/.test(text) && /\bfield\b/.test(text) && /\b(add|create|update|modify|text|picklist|number|date)\b/.test(text)) {
             if (shortName === 'sfdc-field-analyzer') {

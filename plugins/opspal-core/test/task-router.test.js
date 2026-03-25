@@ -24,6 +24,13 @@ describe('TaskRouter scenario coverage', () => {
     expect(result.agentShortName).toBe('implementation-planner');
   });
 
+  test('Scenario C2 routes Salesforce implementation planning to sfdc-planner', () => {
+    const result = router.analyze(
+      'Plan a Salesforce implementation rollout for lead assignment and approvals'
+    );
+    expect(result.agentShortName).toBe('sfdc-planner');
+  });
+
   test('KPI report requests route to revops-reporting-assistant', () => {
     const result = router.analyze('Generate a KPI report with forecasts and alerts');
     expect(result.agentShortName).toBe('revops-reporting-assistant');

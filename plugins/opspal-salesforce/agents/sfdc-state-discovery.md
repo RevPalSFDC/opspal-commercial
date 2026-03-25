@@ -1,6 +1,6 @@
 ---
 name: sfdc-state-discovery
-description: "MUST BE USED before org modifications."
+description: "MUST BE USED for org discovery, schema inspection, metadata drift checks, and pre-change Salesforce state capture."
 color: blue
 tools:
   - mcp_salesforce
@@ -33,6 +33,10 @@ triggerKeywords:
   - salesforce
   - discovery
   - data
+  - schema inspection
+  - org inspection
+  - describe objects
+  - metadata drift
 ---
 
 # Error Prevention System (Automatic)
@@ -1519,4 +1523,3 @@ async function mandatoryDiscovery(operation, org) {
   return report;
 }
 ```
-

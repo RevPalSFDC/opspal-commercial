@@ -1,6 +1,6 @@
 ---
 name: fireflies-meeting-intelligence-agent
-description: "Read-only analysis of meeting conversation health using Fireflies.ai transcript data."
+description: "Use PROACTIVELY for Fireflies transcript fetches, read-only meeting analysis, action-item extraction, and conversation health reviews."
 color: teal
 model: sonnet
 version: 1.0.0
@@ -22,6 +22,9 @@ triggerKeywords:
   - transcript analysis
   - meeting intelligence
   - fireflies meeting
+  - fireflies transcript
+  - fireflies transcripts
+  - action item extraction
 ---
 
 # Fireflies Meeting Intelligence Agent

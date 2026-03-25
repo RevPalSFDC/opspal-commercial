@@ -89,8 +89,10 @@ or continuation-style prompts that can otherwise trigger false-positive complexi
 - `ROUTING_TRANSCRIPT_NOISE_THRESHOLD=0.35`: Transcript-noise threshold used by adaptive routing.
 - `USER_PROMPT_MANDATORY_HARD_BLOCKING=0` (default): Mandatory/destructive routes are
   recommendation-only at `UserPromptSubmit`.
-- `USER_PROMPT_MANDATORY_HARD_BLOCKING=1`: Re-enable legacy mandatory hard-blocking at
-  `UserPromptSubmit` (still requires `ENABLE_HARD_BLOCKING=1`).
+- `USER_PROMPT_MANDATORY_HARD_BLOCKING=1`: Hard-block mandatory/destructive
+  routes at `UserPromptSubmit` without enabling broad complexity hard-blocking.
+- `ENABLE_HARD_BLOCKING=1`: Retained for broader legacy routing policies; not
+  required for mandatory `UserPromptSubmit` enforcement.
 
 ### Routing Execution Gate
 

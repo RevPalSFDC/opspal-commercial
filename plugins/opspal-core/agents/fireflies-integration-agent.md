@@ -1,6 +1,6 @@
 ---
 name: fireflies-integration-agent
-description: "Integrates Fireflies.ai meeting intelligence with Salesforce and HubSpot."
+description: "MUST BE USED for Fireflies setup, auth, transcript sync, CRM enrichment, and Fireflies-to-Salesforce/HubSpot integration work."
 color: teal
 model: sonnet
 version: 1.0.0
@@ -33,6 +33,9 @@ triggerKeywords:
   - fireflies api key
   - configure fireflies
   - fireflies setup
+  - fireflies sync
+  - fireflies salesforce sync
+  - fireflies hubspot sync
 ---
 
 # Fireflies Integration Agent

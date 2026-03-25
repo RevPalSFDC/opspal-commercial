@@ -88,7 +88,7 @@ const MANAGED_USER_PROMPT_HOOKS = [
       ROUTING_ADAPTIVE_CONTINUE: '1',
       ENABLE_HARD_BLOCKING: '0',
       ENABLE_COMPLEXITY_HARD_BLOCKING: '0',
-      USER_PROMPT_MANDATORY_HARD_BLOCKING: '0',
+      USER_PROMPT_MANDATORY_HARD_BLOCKING: '1',
       ENABLE_INTAKE_HARD_BLOCKING: '0'
     }
   },
@@ -797,7 +797,7 @@ class PostPluginUpdateFixes {
         'ROUTING_ADAPTIVE_CONTINUE=1',
         'ENABLE_HARD_BLOCKING=0',
         'ENABLE_COMPLEXITY_HARD_BLOCKING=0',
-        'USER_PROMPT_MANDATORY_HARD_BLOCKING=0',
+        'USER_PROMPT_MANDATORY_HARD_BLOCKING=1',
         'ENABLE_INTAKE_HARD_BLOCKING=0'
       ];
       for (const envKey of requiredEnv) {
@@ -1148,6 +1148,108 @@ class PostPluginUpdateFixes {
       entries: repairedEntries,
       sourceVersion: syncSource.version
     };
+  }
+
+
+  /**
+   * Reconcile cache entries for ALL opspal-* sibling plugins in the marketplace.
+   * The core reconcileInstalledRuntime() only handles opspal-core. This method
+   * iterates every opspal-* plugin in the marketplace source, detects version
+   * drift against the installed cache, and refreshes when needed.
+   */
+  reconcileSiblingPluginCaches() {
+    this.log(`\n${colors.bold}## Sibling Plugin Cache Reconciliation${colors.reset}`);
+
+    const pluginsDir = path.join(this.projectRoot, 'plugins');
+    if (!fs.existsSync(pluginsDir)) {
+      this.log(`${icons.info} No plugins directory found at ${pluginsDir}`);
+      return { fixed: false, reason: 'no-plugins-dir' };
+    }
+
+    const siblingPlugins = fs.readdirSync(pluginsDir)
+      .filter((name) => name.startsWith('opspal-') && name !== CORE_PLUGIN_NAME)
+      .filter((name) => {
+        const pluginDir = path.join(pluginsDir, name);
+        return fs.statSync(pluginDir).isDirectory() && this.getPluginVersion(pluginDir);
+      });
+
+    if (siblingPlugins.length === 0) {
+      this.log(`${icons.info} No sibling opspal-* plugins found`);
+      return { fixed: false, reason: 'no-siblings' };
+    }
+
+    const roots = this.getClaudeRoots();
+    const timestamp = new Date().toISOString();
+    let totalRepaired = 0;
+
+    for (const pluginName of siblingPlugins) {
+      const sourceDir = path.join(pluginsDir, pluginName);
+      const sourceVersion = this.getPluginVersion(sourceDir);
+      if (!sourceVersion) continue;
+
+      for (const claudeRoot of roots) {
+        const installedPluginsPath = this.getInstalledPluginsPath(claudeRoot);
+        if (!fs.existsSync(installedPluginsPath)) continue;
+
+        const installedPlugins = this.readJsonFile(installedPluginsPath);
+        if (!installedPlugins?.plugins) continue;
+
+        // Find installed entries for this plugin across all marketplaces
+        const matchingKeys = Object.keys(installedPlugins.plugins)
+          .filter((key) => key.startsWith(`${pluginName}@`));
+
+        for (const key of matchingKeys) {
+          const entries = installedPlugins.plugins[key];
+          if (!Array.isArray(entries) || entries.length === 0) continue;
+
+          const marketplaceName = key.split('@')[1] || 'opspal-commercial';
+          const cachePluginBase = path.join(
+            claudeRoot, 'plugins', 'cache', marketplaceName, pluginName
+          );
+          const expectedInstallPath = path.join(cachePluginBase, sourceVersion);
+
+          const needsRepair = entries.some((entry) =>
+            entry?.version !== sourceVersion ||
+            !fs.existsSync(expectedInstallPath)
+          );
+
+          if (!needsRepair) continue;
+
+          if (this.dryRun) {
+            this.log(`${icons.info} [DRY RUN] Would sync ${pluginName} ${entries[0]?.version || 'unknown'} -> ${sourceVersion}`);
+            totalRepaired += 1;
+            continue;
+          }
+
+          // Copy source plugin to expected cache path
+          this.replaceDirectory(sourceDir, expectedInstallPath);
+
+          // Update installed_plugins.json entries
+          const updatedEntries = entries.map((entry) => ({
+            ...entry,
+            version: sourceVersion,
+            installPath: expectedInstallPath,
+            lastUpdated: timestamp
+          }));
+
+          installedPlugins.plugins[key] = updatedEntries;
+          fs.writeFileSync(installedPluginsPath, JSON.stringify(installedPlugins, null, 2) + '\n');
+
+          this.log(`${icons.fix} Reconciled ${pluginName}: ${entries[0]?.version || 'unknown'} -> ${sourceVersion}`);
+          this.results.installedRuntime.fixes.push({
+            name: `sibling-cache:${claudeRoot}:${key}`,
+            message: `Synced ${pluginName} cache to ${sourceVersion}`
+          });
+          totalRepaired += 1;
+        }
+      }
+    }
+
+    if (totalRepaired === 0) {
+      this.log(`${icons.pass} All sibling plugin caches match source versions`);
+    }
+
+    return { fixed: totalRepaired > 0, count: totalRepaired };
   }
 
   resolveManagedUserPromptHooks(existingGroups) {
@@ -1716,7 +1818,7 @@ class PostPluginUpdateFixes {
   fixPluginCacheHooksJson() {
     this.log(`\n${colors.bold}## Plugin Cache hooks.json${colors.reset}`);
 
-    const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ';
+    const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=1 ENABLE_INTAKE_HARD_BLOCKING=0 ';
     const bareCommand = '${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh';
     let totalFixed = 0;
 
@@ -1747,7 +1849,7 @@ class PostPluginUpdateFixes {
 
                 if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
                     hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
-                    hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
+                    hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=1') &&
                     hook.command.includes('ENABLE_INTAKE_HARD_BLOCKING=0') &&
                     hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
                   this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
@@ -1885,6 +1987,7 @@ class PostPluginUpdateFixes {
 
     const results = {
       installedRuntime: this.reconcileInstalledRuntime(),
+      siblingCaches: this.reconcileSiblingPluginCaches(),
       userLevelHooks: this.fixUserLevelHooks(),
       pluginCacheHooks: this.fixPluginCacheHooksJson(),
       pluginCacheAssets: this.syncPluginCacheRoutingAssets(),
@@ -1897,6 +2000,7 @@ class PostPluginUpdateFixes {
 
     const totalFixes =
       (results.installedRuntime?.fixed ? (results.installedRuntime.entries || results.installedRuntime.roots || 1) : 0) +
+      (results.siblingCaches?.fixed ? results.siblingCaches.count || 1 : 0) +
       (results.userLevelHooks.fixed ? results.userLevelHooks.count || 1 : 0) +
       (results.pluginCacheHooks?.fixed ? results.pluginCacheHooks.count || 1 : 0) +
       (results.pluginCacheAssets?.fixed ? results.pluginCacheAssets.count || 1 : 0) +

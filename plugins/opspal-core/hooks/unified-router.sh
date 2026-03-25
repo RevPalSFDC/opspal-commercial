@@ -22,7 +22,7 @@
 # Configuration:
 #   ENABLE_UNIFIED_ROUTING=1     # Enable routing (default)
 #   ENABLE_AGENT_BLOCKING=1      # Block high-complexity tasks (default)
-#   ENABLE_HARD_BLOCKING=1       # Exit code 1 for destructive ops (default)
+#   ENABLE_HARD_BLOCKING=1       # Legacy broad hard-block toggle (retained for compatibility)
 #   USER_PROMPT_MANDATORY_HARD_BLOCKING=0 # Emit decision=block for mandatory UserPromptSubmit routes (default disabled)
 #   ENABLE_COMPLEXITY_HARD_BLOCKING=0  # Emit decision=block for ACTION_TYPE=BLOCKED (default disabled)
 #   ACTIVE_INTAKE_MODE=recommend # Intake gate mode: suggest|recommend|require (default recommend)
@@ -1105,7 +1105,6 @@ if [[ "$SHOULD_BLOCK" == "true" ]]; then
     elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]] && [[ "$ENABLE_INTAKE_HARD_BLOCKING" == "1" ]]; then
         ENFORCED_BLOCK="true"
     elif [[ "$IS_MANDATORY" == "true" ]] &&
-         [[ "$ENABLE_HARD_BLOCKING" == "1" ]] &&
          [[ "$USER_PROMPT_MANDATORY_HARD_BLOCKING" == "1" ]]; then
         ENFORCED_BLOCK="true"
     elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$ENABLE_COMPLEXITY_HARD_BLOCKING" == "1" ]]; then
@@ -1398,8 +1397,7 @@ Do not use this agent name. Re-run routing or resolve a valid fully-qualified ag
 
 elif [[ "$IS_MANDATORY" == "true" ]] &&
      [[ "$OVERRIDE_APPLIED" == "true" ]] &&
-     [[ "$USER_PROMPT_MANDATORY_HARD_BLOCKING" == "1" ]] &&
-     [[ "$ENABLE_HARD_BLOCKING" == "1" ]]; then
+     [[ "$USER_PROMPT_MANDATORY_HARD_BLOCKING" == "1" ]]; then
     CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Destructive operation matched mandatory routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
 Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Proceed only if this bypass is intentional."

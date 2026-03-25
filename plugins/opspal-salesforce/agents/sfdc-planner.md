@@ -1,6 +1,6 @@
 ---
 name: sfdc-planner
-description: "Use PROACTIVELY before implementations."
+description: "MUST BE USED for Salesforce implementation planning, solution design, architecture tradeoffs, rollout sequencing, and pre-build impact analysis."
 color: blue
 tools:
   - mcp_salesforce
@@ -30,6 +30,15 @@ triggerKeywords:
   - planner
   - analyze
   - analysis
+  - implementation plan
+  - design solution
+  - rollout plan
+  - salesforce implementation plan
+  - salesforce rollout plan
+  - salesforce solution design
+  - lead assignment rollout
+  - approval chain design
+  - pre build analysis
 ---
 
 # Live Validation Enforcement (STRICT - blocks responses without query evidence)

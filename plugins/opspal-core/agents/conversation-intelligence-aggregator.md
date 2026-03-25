@@ -1,6 +1,6 @@
 ---
 name: conversation-intelligence-aggregator
-description: "Unified conversation intelligence across Gong and Fireflies.ai."
+description: "MUST BE USED for combined Gong + Fireflies conversation intelligence, transcript deduplication, and cross-platform deal health analysis."
 color: violet
 model: sonnet
 version: 1.0.0
@@ -28,6 +28,9 @@ triggerKeywords:
   - cross-platform calls
   - meeting coverage
   - deal conversation health
+  - fireflies and gong
+  - combined transcripts
+  - cross-platform transcript analysis
 ---
 
 # Conversation Intelligence Aggregator

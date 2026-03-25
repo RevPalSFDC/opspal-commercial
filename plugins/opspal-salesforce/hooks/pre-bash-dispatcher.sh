@@ -14,20 +14,104 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+SF_WRAPPER="${PLUGIN_ROOT}/scripts/lib/sf-wrapper.sh"
 HOOK_INPUT="$(cat 2>/dev/null || true)"
 COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")"
 LAST_JSON=""
 
+if [ -f "$SF_WRAPPER" ]; then
+  # shellcheck source=/dev/null
+  source "$SF_WRAPPER"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+fi
+
+emit_pretool_context() {
+  local context="$1"
+  local updated_command="${2:-}"
+
+  if [ -n "$updated_command" ]; then
+    jq -nc \
+      --arg context "$context" \
+      --arg command "$updated_command" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "allow",
+          additionalContext: $context,
+          updatedInput: {
+            command: $command
+          }
+        }
+      }'
+    return
+  fi
+
+  jq -nc \
+    --arg context "$context" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "allow",
+        additionalContext: $context
+      }
+    }'
+}
+
+emit_pretool_deny() {
+  local reason="$1"
+  local context="$2"
+
+  jq -nc \
+    --arg reason "$reason" \
+    --arg context "$context" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: $reason,
+        additionalContext: $context
+      }
+    }'
+}
+
+update_hook_input_command() {
+  local updated_command="$1"
+
+  HOOK_INPUT="$(
+    printf '%s' "$HOOK_INPUT" | jq -c --arg command "$updated_command" '
+      .tool_input.command = $command
+    ' 2>/dev/null || printf '%s' "$HOOK_INPUT"
+  )"
+  COMMAND="$updated_command"
+}
+
+is_salesforce_cli_command() {
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)([[:space:]]+(data|sobject|org|project)|[[:space:]]+force:)([[:space:]]|$)'
+}
+
 is_deploy_scope_command() {
-  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)([[:space:]]|$)'
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)|sfdx[[:space:]]+force:source:deploy)([[:space:]]|$)'
 }
 
 is_data_query_command() {
-  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+data[[:space:]]+query|sfdx[[:space:]]+force:data:soql:query)([[:space:]]|$)'
 }
 
 uses_jq() {
   printf '%s' "$COMMAND" | grep -q 'jq'
+}
+
+uses_python_postprocessor() {
+  printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])python(3)?([[:space:]]|$)'
+}
+
+has_pipeline_without_pipefail() {
+  printf '%s' "$COMMAND" | grep -q '|' &&
+    ! printf '%s' "$COMMAND" | grep -qE '(^|[;&(])[[:space:]]*set[[:space:]]+-o[[:space:]]+pipefail([[:space:];&)]|$)|(^|[[:space:]])bash[[:space:]]+-o[[:space:]]+pipefail([[:space:]]|$)'
 }
 
 merge_hook_json() {
@@ -129,6 +213,33 @@ run_child_hook() {
 
 if [ -z "$COMMAND" ]; then
   exit 0
+fi
+
+if is_salesforce_cli_command; then
+  CLI_FAMILY="$(detect_salesforce_cli_family 2>/dev/null || true)"
+  if [ -z "$CLI_FAMILY" ]; then
+    emit_pretool_deny \
+      "SF_CLI_NOT_FOUND: Neither sf nor sfdx is installed or available on PATH." \
+      "Salesforce CLI command requested, but no supported Salesforce CLI binary is available to this Claude session. Install @salesforce/cli or expose it on PATH."
+    exit 0
+  fi
+
+  TRANSLATED_COMMAND="$(translate_salesforce_command_for_available_cli "$COMMAND" 2>/dev/null || true)"
+  if [ -n "$TRANSLATED_COMMAND" ] && [ "$TRANSLATED_COMMAND" != "$COMMAND" ]; then
+    update_hook_input_command "$TRANSLATED_COMMAND"
+    merge_hook_json "$(emit_pretool_context "Salesforce CLI compatibility fallback applied: using ${CLI_FAMILY} because the requested command family is unavailable in this session." "$TRANSLATED_COMMAND")"
+  elif [ "$CLI_FAMILY" = "sfdx" ] && printf '%s' "$COMMAND" | grep -qE '^[[:space:]]*sf[[:space:]]'; then
+    emit_pretool_deny \
+      "SF_CLI_FALLBACK_UNSUPPORTED: sf is unavailable and this command cannot be safely translated to sfdx." \
+      "Only legacy sfdx is available on PATH for this session. Install sf or rewrite the command to a supported legacy equivalent before retrying."
+    exit 0
+  fi
+fi
+
+if is_salesforce_cli_command && has_pipeline_without_pipefail && (uses_jq || uses_python_postprocessor); then
+  PIPESAFE_COMMAND="set -o pipefail; $COMMAND"
+  update_hook_input_command "$PIPESAFE_COMMAND"
+  merge_hook_json "$(emit_pretool_context "Applied set -o pipefail so Salesforce CLI failures stay visible before jq/python post-processing. Prefer validating the raw --json output before piping when debugging." "$PIPESAFE_COMMAND")"
 fi
 
 if is_deploy_scope_command; then
