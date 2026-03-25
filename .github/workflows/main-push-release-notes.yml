@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   send-release-notes:
@@ -57,6 +58,28 @@ jobs:
             printf '%s\n' "${{ steps.summary.outputs.message }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Check for breaking changes
+        id: check_breaking
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          HAS_BREAKING="false"
+          if [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            if git log --format='%s%n%b' "$BEFORE_SHA..$AFTER_SHA" | grep -qiE '^[a-z]+![:(]|BREAKING CHANGE|BREAKING:'; then
+              HAS_BREAKING="true"
+            fi
+          fi
+          echo "has_breaking=$HAS_BREAKING" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger release notes update
+        env:
+          GH_TOKEN: ${{ secrets.COMMERCIAL }}
+        run: |
+          gh workflow run weekly-release-notes.yml \
+            --repo RevPalSFDC/opspal-plugin-internal-marketplace
+
       - name: Send release notes notification
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -67,7 +90,10 @@ jobs:
             echo "SLACK_WEBHOOK_URL not configured; notification skipped."
             exit 0
           fi
-          payload=$(jq -n --arg text "$MESSAGE" '{text:$text}')
+          FULL_MESSAGE="${MESSAGE}
+
+View release notes: https://opspal.gorevpal.com/release-notes.html"
+          payload=$(jq -n --arg text "$FULL_MESSAGE" '{text:$text}')
           curl -fsSL -X POST \
             -H 'Content-type: application/json' \
             --data "$payload" \
