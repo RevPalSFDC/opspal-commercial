@@ -77,6 +77,26 @@ async function runAllTests() {
     assert(result.stderr.length > 0, 'Should route formatter output to stderr');
   }));
 
+  results.push(await runTest('Suppresses TASK_GRAPH_BLOCKING=1 into non-blocking UserPromptSubmit guidance', async () => {
+    const result = spawnSync('bash', [HOOK_PATH, 'Review the integration plan for this complex migration with multiple dependencies and rollout steps.'], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        TASK_GRAPH_ENABLED: '1',
+        TASK_GRAPH_BLOCKING: '1',
+        TASK_GRAPH_THRESHOLD: '0'
+      }
+    });
+
+    assert.strictEqual(result.status, 0, 'Should not reject the prompt in blocking mode');
+    const output = JSON.parse(result.stdout);
+    assert.strictEqual(output.decision, undefined, 'Should not emit decision=block');
+    assert.strictEqual(output.hookSpecificOutput?.hookEventName, 'UserPromptSubmit', 'Should emit UserPromptSubmit guidance');
+    assert.strictEqual(output.metadata?.orchestrationType, 'task-graph', 'Should identify task-graph orchestration');
+    assert.strictEqual(output.metadata?.promptBlockRequested, true, 'Should record legacy prompt-block request');
+    assert.strictEqual(output.metadata?.promptBlockSuppressed, true, 'Should suppress user-visible prompt blocking');
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 

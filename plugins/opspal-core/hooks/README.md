@@ -87,23 +87,29 @@ or continuation-style prompts that can otherwise trigger false-positive complexi
   continuation/noisy prompts.
 - `ROUTING_CONTINUE_LOW_SIGNAL_THRESHOLD=0.65`: Confidence threshold for low-signal adaptive routing.
 - `ROUTING_TRANSCRIPT_NOISE_THRESHOLD=0.35`: Transcript-noise threshold used by adaptive routing.
-- `USER_PROMPT_MANDATORY_HARD_BLOCKING=0` (default): Mandatory/destructive routes are
-  recommendation-only at `UserPromptSubmit`.
-- `USER_PROMPT_MANDATORY_HARD_BLOCKING=1`: Hard-block mandatory/destructive
-  routes at `UserPromptSubmit` without enabling broad complexity hard-blocking.
-- `ENABLE_HARD_BLOCKING=1`: Retained for broader legacy routing policies; not
-  required for mandatory `UserPromptSubmit` enforcement.
+- `USER_PROMPT_MANDATORY_HARD_BLOCKING=0` (default): Mandatory/destructive routes stay
+  non-blocking at `UserPromptSubmit` and are enforced downstream.
+- `USER_PROMPT_MANDATORY_HARD_BLOCKING=1`: Deprecated for `UserPromptSubmit`; retained
+  only for telemetry/backward compatibility and is suppressed into routing guidance.
+- `ENABLE_COMPLEXITY_HARD_BLOCKING=1`: Deprecated for `UserPromptSubmit`; high-complexity
+  routing remains non-blocking at prompt submission and is enforced downstream.
+- `ENABLE_INTAKE_HARD_BLOCKING=1`: Deprecated for `UserPromptSubmit`; intake-first routing
+  remains non-blocking at prompt submission and is enforced downstream.
+- `ENABLE_HARD_BLOCKING=1`: Legacy toggle retained for compatibility; normal routing/orchestration
+  prompts are no longer user-blocked at `UserPromptSubmit`.
 
 ### Routing Execution Gate
 
 OpsPal now enforces specialist routing with a two-step model:
 
-- `UserPromptSubmit` writes session-scoped routing state for blocking, mandatory, and medium-complexity recommended specialist routes, but does not block prompt submission by default.
+- `UserPromptSubmit` writes session-scoped routing state for blocking, mandatory, and medium-complexity recommended specialist routes and injects internal routing guidance, but does not block prompt submission for normal routing/orchestration flows.
 - `PreToolUse` denies operational execution until the correct `Agent(subagent_type='plugin:agent', ...)` specialist clears that session state.
 - Read-only tools stay allowed while a route is pending.
 - Mutating MCP tools are classified via `config/mcp-tool-policies.json`.
 - Unknown MCP tools default to deny while a pending route is active and are logged for follow-up classification.
 - `[ROUTING_OVERRIDE]` marks the route as bypassed for that request and is logged as an audited exception.
+
+Only true safety/policy hooks should produce a user-visible hard block. Routing hooks should guide delegation and rely on downstream enforcement.
 
 ## Dependencies
 

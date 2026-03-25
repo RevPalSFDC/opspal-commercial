@@ -14,13 +14,12 @@
 #   3. If score >= 4, recommend or require Task Graph orchestration
 #
 # Exit Codes:
-#   0 = Continue (no Task Graph needed or user declined)
-#   2 = Recommend Task Graph (automatic feedback to user)
+#   0 = Continue (task graph guidance is non-blocking at UserPromptSubmit)
 #
 # Configuration:
 #   TASK_GRAPH_ENABLED=1        Enable/disable hook (default: 1)
 #   TASK_GRAPH_THRESHOLD=4      Complexity threshold (default: 4)
-#   TASK_GRAPH_BLOCKING=0       Block execution if threshold met (default: 0)
+#   TASK_GRAPH_BLOCKING=0       Deprecated at UserPromptSubmit; retained for telemetry only
 #   TASK_GRAPH_VERBOSE=0        Show detailed complexity breakdown (default: 0)
 ###############################################################################
 
@@ -34,6 +33,41 @@ TASK_GRAPH_VERBOSE="${TASK_GRAPH_VERBOSE:-0}"
 
 emit_noop_json() {
   printf '{}\n'
+}
+
+emit_guidance_json() {
+  local context="$1"
+  local recommendation="$2"
+  local score="$3"
+  local factors_json="$4"
+  local prompt_block_requested="${5:-false}"
+
+  if ! command -v jq &>/dev/null; then
+    emit_noop_json
+    return 0
+  fi
+
+  jq -n \
+    --arg context "$context" \
+    --arg recommendation "$recommendation" \
+    --argjson score "$score" \
+    --argjson factors "$factors_json" \
+    --argjson prompt_block_requested "$prompt_block_requested" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "UserPromptSubmit",
+        additionalContext: $context
+      },
+      metadata: {
+        orchestrationType: "task-graph",
+        recommendation: $recommendation,
+        score: $score,
+        factors: $factors,
+        promptBlockRequested: $prompt_block_requested,
+        promptBlockSuppressed: $prompt_block_requested
+      }
+    }'
 }
 
 # Exit if disabled
@@ -250,13 +284,20 @@ main() {
     factors_display=$(echo "$factors" | jq -r 'join(", ")' 2>/dev/null || echo "$factors")
 
     if [ "$TASK_GRAPH_BLOCKING" = "1" ]; then
-      # Blocking mode - must use Task Graph
+      # Legacy blocking mode is suppressed into internal routing guidance so the
+      # user prompt is never rejected for orchestration reasons.
       format_output \
         "Task Graph Required" \
         "Complexity score $score/$((TASK_GRAPH_THRESHOLD * 2)) exceeds threshold. Task Graph orchestration is required." \
         "Score:$score,Factors:$factors_display,Threshold:$TASK_GRAPH_THRESHOLD" \
         "Use the Agent tool with subagent_type='task-graph-orchestrator' to decompose this request"
-      exit 2
+      emit_guidance_json \
+        "TASK GRAPH REQUIRED: Route this request through task-graph-orchestrator before direct execution. Prompt submission continues; use task graph orchestration for decomposition and downstream execution control." \
+        "task_graph_required" \
+        "$score" \
+        "$factors" \
+        "true"
+      exit 0
     else
       # Recommendation mode - suggest Task Graph
       if [ "$TASK_GRAPH_VERBOSE" = "1" ]; then
@@ -271,7 +312,12 @@ main() {
         echo "   Recommendation: Use task-graph-orchestrator for this request" >&2
         echo "" >&2
       fi
-      emit_noop_json
+      emit_guidance_json \
+        "TASK GRAPH RECOMMENDED: Consider routing this request through task-graph-orchestrator for better decomposition, tracking, and parallel execution." \
+        "task_graph_recommended" \
+        "$score" \
+        "$factors" \
+        "false"
       exit 0
     fi
   fi
@@ -290,6 +336,5 @@ main
 
 ###############################################################################
 # Exit Codes:
-#   0 = Continue (no Task Graph needed, or recommendation only)
-#   2 = Block and recommend Task Graph (when TASK_GRAPH_BLOCKING=1)
+#   0 = Continue (task graph guidance is emitted without blocking prompt submission)
 ###############################################################################

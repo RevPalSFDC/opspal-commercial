@@ -135,6 +135,14 @@ function assertInstalledRuntimeRepair(tempHome, marketplaceName) {
     unifiedRouterHook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1'),
     'Repaired cache bundle should preserve unified-router env overrides'
   );
+  assert(
+    unifiedRouterHook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0'),
+    'Repaired cache bundle should keep prompt-time mandatory routing non-blocking'
+  );
+  assert(
+    !unifiedRouterHook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=1'),
+    'Repaired cache bundle should not re-enable prompt-time mandatory routing blocks'
+  );
 
   const wildcardGate = cachedHooks.hooks.PreToolUse.some((group) => (
     group?.matcher === '*' &&

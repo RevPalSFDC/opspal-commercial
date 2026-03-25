@@ -202,8 +202,8 @@ async function runAllTests() {
     );
   }));
 
-  // Test 6: Mandatory prompt hard-block no longer depends on broad ENABLE_HARD_BLOCKING
-  results.push(await runTest('Respects USER_PROMPT_MANDATORY_HARD_BLOCKING=1 for mandatory prompts without broad hard-blocking', async () => {
+  // Test 6: Legacy mandatory hard-block env no longer rejects prompt submission
+  results.push(await runTest('Suppresses USER_PROMPT_MANDATORY_HARD_BLOCKING=1 into downstream routing enforcement', async () => {
     const env = createIsolatedEnv({
       USER_PROMPT_MANDATORY_HARD_BLOCKING: '1'
     });
@@ -213,11 +213,14 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
-    assert.strictEqual(result.output?.decision, 'block', 'Should emit decision=block when mandatory hard-blocking is enabled');
+    assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for routing-only enforcement');
     assert.strictEqual(result.output?.metadata?.action, 'MANDATORY_BLOCKED', 'Should classify as MANDATORY_BLOCKED');
     assert.strictEqual(result.output?.metadata?.blocked, true, 'Should mark blocked=true');
     assert.strictEqual(result.output?.metadata?.mandatory, true, 'Should mark mandatory=true');
-    assert.strictEqual(result.output?.metadata?.enforcedBlock, true, 'Should enforce hard block without requiring broad blocking');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should keep prompt submission non-blocking');
+    assert.strictEqual(result.output?.metadata?.promptBlockRequested, true, 'Should surface legacy block request telemetry');
+    assert.strictEqual(result.output?.metadata?.promptBlockSuppressed, true, 'Should surface suppressed prompt-block telemetry');
+    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Should still persist pending specialist routing');
   }));
 
   // Test 7: Path strings should not trigger mandatory release routing
@@ -285,8 +288,8 @@ async function runAllTests() {
     assert.strictEqual(routingState.status, 'bypassed', 'Should mark override state as bypassed');
   }));
 
-  // Test 11: Complexity hard-block can be explicitly enabled
-  results.push(await runTest('Respects ENABLE_COMPLEXITY_HARD_BLOCKING=1', async () => {
+  // Test 11: Complexity hard-block env is suppressed into downstream enforcement
+  results.push(await runTest('Suppresses ENABLE_COMPLEXITY_HARD_BLOCKING=1 into downstream routing enforcement', async () => {
     const env = createIsolatedEnv({
       ENABLE_COMPLEXITY_HARD_BLOCKING: '1'
     });
@@ -296,9 +299,30 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output?.decision, 'block', 'Should emit decision=block when hard blocking is enabled');
+    assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for routing-only enforcement');
     assert.strictEqual(result.output?.metadata?.blocked, true, 'Should still classify as blocked');
-    assert.strictEqual(result.output?.metadata?.enforcedBlock, true, 'Should enforce hard block when explicitly enabled');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should keep prompt submission non-blocking');
+    assert.strictEqual(result.output?.metadata?.promptBlockRequested, true, 'Should record legacy hard-block request');
+    assert.strictEqual(result.output?.metadata?.promptBlockSuppressed, true, 'Should suppress user-visible prompt blocking');
+  }));
+
+  results.push(await runTest('Suppresses ENABLE_INTAKE_HARD_BLOCKING=1 into downstream intake enforcement', async () => {
+    const env = createIsolatedEnv({
+      ACTIVE_INTAKE_MODE: 'require',
+      ENABLE_INTAKE_HARD_BLOCKING: '1'
+    });
+    const result = await tester.run({
+      input: { userPrompt: 'We need to redesign lead routing in Salesforce with territory-based assignment and approval chains' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for intake routing');
+    assert.strictEqual(result.output?.metadata?.action, 'INTAKE_REQUIRED', 'Should still classify as INTAKE_REQUIRED');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should keep prompt submission non-blocking');
+    assert.strictEqual(result.output?.metadata?.promptBlockRequested, true, 'Should record legacy intake block request');
+    assert.strictEqual(result.output?.metadata?.promptBlockSuppressed, true, 'Should suppress user-visible prompt blocking');
+    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Should still persist pending intake route');
   }));
 
   // Test 12: Permission-set field updates should route without hard-blocking
@@ -334,6 +358,22 @@ async function runAllTests() {
     assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Fireflies transcript analysis should stay advisory');
   }));
 
+  results.push(await runTest('Routes implicit meeting transcript action-item prompts to Fireflies meeting intelligence', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Review the meeting transcript and identify action items with owners' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-core:fireflies-meeting-intelligence-agent',
+      'Implicit transcript analysis should route to the meeting intelligence specialist'
+    );
+    assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Implicit transcript analysis should stay advisory');
+  }));
+
   results.push(await runTest('Routes combined Gong and Fireflies requests to the conversation intelligence aggregator', async () => {
     const env = createIsolatedEnv();
     const result = await tester.run({
@@ -348,6 +388,21 @@ async function runAllTests() {
       'Should route multi-platform conversation intelligence work to the aggregator'
     );
     assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Cross-platform transcript analysis should stay advisory');
+  }));
+
+  results.push(await runTest('Routes Gong deal-risk prompts to the Gong specialist instead of generic pipeline intelligence', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Review the Gong call and surface deal risk for this opportunity' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-core:gong-deal-intelligence-agent',
+      'Gong prompts should prefer the Gong specialist'
+    );
   }));
 
   results.push(await runTest('Routes Salesforce org inspection prompts to state discovery', async () => {
@@ -397,6 +452,37 @@ async function runAllTests() {
     );
     assert.strictEqual(result.output?.decision, undefined, 'Field analysis should remain advisory at prompt time');
     assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Field analysis should not be hard-blocked');
+  }));
+
+  results.push(await runTest('Routes Salesforce data quality audits to the quality auditor specialist', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Audit data quality issues across Salesforce objects and orphan contacts' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-salesforce:sfdc-quality-auditor',
+      'Salesforce data quality audits should route to the quality auditor'
+    );
+    assert.strictEqual(result.output?.metadata?.action, 'RECOMMENDED', 'Data quality audits should stay advisory');
+  }));
+
+  results.push(await runTest('Routes HubSpot workflow audit prompts to the workflow auditor specialist', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Audit a HubSpot workflow and identify automation issues' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-hubspot:hubspot-workflow-auditor',
+      'Workflow audit prompts should prefer the auditor over the builder'
+    );
   }));
 
   results.push(await runTest('Downgrades procedural specialist requests to recommended routing', async () => {
@@ -484,8 +570,8 @@ async function runAllTests() {
     assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Should persist pending routing state for PreToolUse enforcement');
   }));
 
-  // Test 15: Continue-intent still blocks when hard blocking is explicitly enabled and adaptive mode is disabled
-  results.push(await runTest('Keeps hard block for continue-intent prompt when adaptive mode is disabled and hard blocking is enabled', async () => {
+  // Test 15: Continue-intent still avoids prompt rejection even with legacy hard-block env
+  results.push(await runTest('Keeps continue-intent prompt non-blocking when legacy hard-block env is enabled', async () => {
     const env = createIsolatedEnv({
       ENABLE_COMPLEXITY_HARD_BLOCKING: '1'
     });
@@ -495,8 +581,10 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output?.decision, 'block', 'Should emit decision=block');
-    assert.strictEqual(result.output?.metadata?.enforcedBlock, true, 'Should enforce hard block');
+    assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should keep prompt submission non-blocking');
+    assert.strictEqual(result.output?.metadata?.promptBlockRequested, true, 'Should record legacy block request');
+    assert.strictEqual(result.output?.metadata?.promptBlockSuppressed, true, 'Should suppress user-visible prompt blocking');
     assert.notStrictEqual(
       result.output?.metadata?.blockOverrideReason,
       'adaptive_continue_fallback',
@@ -604,6 +692,28 @@ Build FM territory name stamping flow › blocked by #3, #4`
       'deny',
       'Pending route should still deny direct operational execution after harmless follow-up'
     );
+  }));
+
+  results.push(await runTest('Routes production deployment planning to release coordinator without user-facing block', async () => {
+    const env = createIsolatedEnv({
+      USER_PROMPT_MANDATORY_HARD_BLOCKING: '1'
+    });
+    const result = await tester.run({
+      input: { userPrompt: 'Develop the final plan to deploy to production ultrathink' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for deployment planning');
+    assert.strictEqual(
+      result.output?.metadata?.agent,
+      'opspal-core:release-coordinator',
+      'Should route production deployment planning to release coordinator'
+    );
+    assert.strictEqual(result.output?.metadata?.mandatory, true, 'Should mark release routing as mandatory');
+    assert.strictEqual(result.output?.metadata?.blocked, true, 'Should still classify the route as blocked for downstream enforcement');
+    assert.strictEqual(result.output?.metadata?.enforcedBlock, false, 'Should avoid prompt-time hard block');
+    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Should persist pending release routing state');
   }));
 
   // Summary

@@ -88,7 +88,7 @@ const MANAGED_USER_PROMPT_HOOKS = [
       ROUTING_ADAPTIVE_CONTINUE: '1',
       ENABLE_HARD_BLOCKING: '0',
       ENABLE_COMPLEXITY_HARD_BLOCKING: '0',
-      USER_PROMPT_MANDATORY_HARD_BLOCKING: '1',
+      USER_PROMPT_MANDATORY_HARD_BLOCKING: '0',
       ENABLE_INTAKE_HARD_BLOCKING: '0'
     }
   },
@@ -797,7 +797,7 @@ class PostPluginUpdateFixes {
         'ROUTING_ADAPTIVE_CONTINUE=1',
         'ENABLE_HARD_BLOCKING=0',
         'ENABLE_COMPLEXITY_HARD_BLOCKING=0',
-        'USER_PROMPT_MANDATORY_HARD_BLOCKING=1',
+        'USER_PROMPT_MANDATORY_HARD_BLOCKING=0',
         'ENABLE_INTAKE_HARD_BLOCKING=0'
       ];
       for (const envKey of requiredEnv) {
@@ -1812,13 +1812,13 @@ class PostPluginUpdateFixes {
 
   /**
    * Ensures the plugin-level hooks.json in ~/.claude/plugins/cache/ has the
-   * correct env overrides on the unified-router command. Without these, the
-   * router defaults to hard-blocking prompts that match mandatory routes.
+   * correct env overrides on the unified-router command. Without these, stale
+   * installs can still re-enable prompt-time routing blocks.
    */
   fixPluginCacheHooksJson() {
     this.log(`\n${colors.bold}## Plugin Cache hooks.json${colors.reset}`);
 
-    const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=1 ENABLE_INTAKE_HARD_BLOCKING=0 ';
+    const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ';
     const bareCommand = '${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh';
     let totalFixed = 0;
 
@@ -1849,7 +1849,7 @@ class PostPluginUpdateFixes {
 
                 if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
                     hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
-                    hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=1') &&
+                    hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
                     hook.command.includes('ENABLE_INTAKE_HARD_BLOCKING=0') &&
                     hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
                   this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);

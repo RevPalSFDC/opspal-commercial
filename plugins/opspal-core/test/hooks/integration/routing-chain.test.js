@@ -234,6 +234,50 @@ async function runAllTests() {
     assert.strictEqual(routingState.status, 'pending', 'Mandatory route should remain pending until Agent clears it');
   }));
 
+  results.push(await runTest('Production deployment planning routes to release coordinator without prompt rejection', async () => {
+    const chain = new HookChainTester(ROUTING_CHAIN);
+    const pretool = new HookTester(PRETOOL_HOOK);
+    const env = createIsolatedEnv({
+      USER_PROMPT_MANDATORY_HARD_BLOCKING: '1'
+    });
+
+    const result = await chain.run({
+      input: {
+        userPrompt: 'Develop the final plan to deploy to production ultrathink'
+      },
+      env
+    });
+
+    assert(result.allPassed, 'All hooks should pass');
+    assert.strictEqual(result.results[0]?.output?.decision, undefined, 'Router should not reject the prompt');
+    assert.strictEqual(
+      result.results[0]?.output?.metadata?.agent,
+      'opspal-core:release-coordinator',
+      'Router should direct deployment planning to release coordinator'
+    );
+    assert.strictEqual(result.results[0]?.output?.metadata?.mandatory, true, 'Router should flag the route as mandatory');
+    assert.strictEqual(result.results[0]?.output?.metadata?.enforcedBlock, false, 'Router should suppress prompt-time hard block');
+    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Router should persist pending release routing state');
+
+    const blockedDirect = await pretool.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: env.CLAUDE_SESSION_ID,
+        input: {
+          command: 'sf project deploy start --target-org production'
+        }
+      },
+      env
+    });
+
+    assert.strictEqual(blockedDirect.exitCode, 0, 'Direct deploy should use structured deny semantics');
+    assert.strictEqual(
+      blockedDirect.output?.hookSpecificOutput?.permissionDecision,
+      'deny',
+      'Direct deploy should remain blocked downstream until the specialist path clears the route'
+    );
+  }));
+
   // Test 4: Short name resolution works through chain
   results.push(await runTest('Short name resolved through chain', async () => {
     // Run validator directly with short name

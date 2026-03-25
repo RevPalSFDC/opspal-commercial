@@ -23,10 +23,10 @@
 #   ENABLE_UNIFIED_ROUTING=1     # Enable routing (default)
 #   ENABLE_AGENT_BLOCKING=1      # Block high-complexity tasks (default)
 #   ENABLE_HARD_BLOCKING=1       # Legacy broad hard-block toggle (retained for compatibility)
-#   USER_PROMPT_MANDATORY_HARD_BLOCKING=0 # Emit decision=block for mandatory UserPromptSubmit routes (default disabled)
-#   ENABLE_COMPLEXITY_HARD_BLOCKING=0  # Emit decision=block for ACTION_TYPE=BLOCKED (default disabled)
+#   USER_PROMPT_MANDATORY_HARD_BLOCKING=0 # Deprecated at UserPromptSubmit; retained for telemetry/back-compat only
+#   ENABLE_COMPLEXITY_HARD_BLOCKING=0  # Deprecated at UserPromptSubmit; retained for telemetry/back-compat only
 #   ACTIVE_INTAKE_MODE=recommend # Intake gate mode: suggest|recommend|require (default recommend)
-#   ENABLE_INTAKE_HARD_BLOCKING=0 # Emit decision=block for ACTION_TYPE=INTAKE_REQUIRED (default disabled)
+#   ENABLE_INTAKE_HARD_BLOCKING=0 # Deprecated at UserPromptSubmit; retained for telemetry/back-compat only
 #   ACTIVE_INTAKE_PROJECT_SIGNAL_MIN=3  # Min project signal to evaluate intake completeness
 #   ACTIVE_INTAKE_COMPLETENESS_MAX=0.5  # Max completeness score treated as vague
 #   ACTIVE_INTAKE_VERBOSE=0      # Debug intake gate scoring
@@ -41,7 +41,7 @@
 #   < 0.5  -> AVAILABLE: Agent available if needed
 #   0.5-0.7 -> RECOMMENDED: Agent suggested
 #   >= 0.7  -> BLOCKED: Agent strongly required (instruction by default, hard block only when explicitly enabled)
-#   Destructive -> MANDATORY: Recommendation by default (hard block only when explicitly enabled)
+#   Destructive -> MANDATORY: Prompt continues with mandatory routing state; downstream tools enforce the specialist path
 #
 # =============================================================================
 
@@ -1091,6 +1091,8 @@ OVERRIDE_APPLIED="false"
 BLOCK_OVERRIDE_REASON=""
 LOW_SIGNAL_ROUTING="false"
 ADAPTIVE_FALLBACK_APPLIED="false"
+PROMPT_BLOCK_REQUESTED="false"
+PROMPT_BLOCK_SUPPRESSED="false"
 
 if [[ -n "$SUGGESTED_AGENT" ]] && ! float_ge "$ROUTING_CONFIDENCE" "$ROUTING_CONTINUE_LOW_SIGNAL_THRESHOLD"; then
     LOW_SIGNAL_ROUTING="true"
@@ -1103,13 +1105,18 @@ if [[ "$SHOULD_BLOCK" == "true" ]]; then
         OVERRIDE_APPLIED="true"
         BLOCK_OVERRIDE_REASON="prompt_override_token"
     elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]] && [[ "$ENABLE_INTAKE_HARD_BLOCKING" == "1" ]]; then
-        ENFORCED_BLOCK="true"
+        PROMPT_BLOCK_REQUESTED="true"
     elif [[ "$IS_MANDATORY" == "true" ]] &&
          [[ "$USER_PROMPT_MANDATORY_HARD_BLOCKING" == "1" ]]; then
-        ENFORCED_BLOCK="true"
+        PROMPT_BLOCK_REQUESTED="true"
     elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$ENABLE_COMPLEXITY_HARD_BLOCKING" == "1" ]]; then
-        ENFORCED_BLOCK="true"
+        PROMPT_BLOCK_REQUESTED="true"
     fi
+fi
+
+if [[ "$PROMPT_BLOCK_REQUESTED" == "true" ]]; then
+    PROMPT_BLOCK_SUPPRESSED="true"
+    ENFORCED_BLOCK="false"
 fi
 
 if [[ "$ROUTING_ADAPTIVE_CONTINUE" == "1" ]] &&
@@ -1133,7 +1140,7 @@ if [[ "$ROUTING_ADAPTIVE_CONTINUE" == "1" ]] &&
     fi
 fi
 
-[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, Block: $SHOULD_BLOCK, Persist: $SHOULD_PERSIST_ROUTE, Enforced: $ENFORCED_BLOCK, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED" >&2
+[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, Block: $SHOULD_BLOCK, Persist: $SHOULD_PERSIST_ROUTE, Enforced: $ENFORCED_BLOCK, RequestedPromptBlock: $PROMPT_BLOCK_REQUESTED, SuppressedPromptBlock: $PROMPT_BLOCK_SUPPRESSED, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED" >&2
 
 if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
     if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
@@ -1189,6 +1196,8 @@ LOG_ENTRY=$(jq -n \
     --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
     --argjson blocked "$SHOULD_BLOCK" \
     --argjson enforced_block "$ENFORCED_BLOCK" \
+    --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+    --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
     --argjson override_applied "$OVERRIDE_APPLIED" \
     --argjson continue_intent "$CONTINUE_INTENT" \
     --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
@@ -1221,6 +1230,8 @@ LOG_ENTRY=$(jq -n \
         continue_intent: $continue_intent,
         blocked: $blocked,
         enforced_block: $enforced_block,
+        prompt_block_requested: $prompt_block_requested,
+        prompt_block_suppressed: $prompt_block_suppressed,
         override_applied: $override_applied,
         adaptive_fallback_applied: $adaptive_fallback_applied,
         low_signal_routing: $low_signal_routing,
@@ -1273,6 +1284,8 @@ if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]
         --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
         --argjson blocked "$SHOULD_BLOCK" \
         --argjson enforced_block "$ENFORCED_BLOCK" \
+        --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+        --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
         --argjson override_applied "$OVERRIDE_APPLIED" \
         --argjson continue_intent "$CONTINUE_INTENT" \
         --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
@@ -1298,6 +1311,8 @@ if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]
             continue_intent: $continue_intent,
             blocked: $blocked,
             enforced_block: $enforced_block,
+            prompt_block_requested: $prompt_block_requested,
+            prompt_block_suppressed: $prompt_block_suppressed,
             override_applied: $override_applied,
             adaptive_fallback_applied: $adaptive_fallback_applied,
             mandatory: $mandatory,
@@ -1332,6 +1347,8 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
         --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
         --argjson blocked "$SHOULD_BLOCK" \
         --argjson enforced_block "$ENFORCED_BLOCK" \
+        --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+        --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
         --argjson continue_intent "$CONTINUE_INTENT" \
         --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
         --argjson fallback_used "$FALLBACK_USED" \
@@ -1350,7 +1367,9 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
                 agent: (if $agent != "" then $agent else null end),
                 blocked: $blocked,
                 blockReason: (if $block_reason != "" then $block_reason else null end),
-                action: $action
+                action: $action,
+                promptBlockRequested: $prompt_block_requested,
+                promptBlockSuppressed: $prompt_block_suppressed
             },
             metrics: {
                 complexity: $complexity,
@@ -1367,6 +1386,8 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
             adaptiveFallbackApplied: $adaptive_fallback_applied,
             mandatory: $mandatory,
             enforcedBlock: $enforced_block,
+            promptBlockRequested: $prompt_block_requested,
+            promptBlockSuppressed: $prompt_block_suppressed,
             intakeMode: $intake_mode,
             intakeReason: (if $intake_reason != "" then $intake_reason else null end),
             intakeEligible: $intake_eligible,
@@ -1387,56 +1408,35 @@ CONTEXT_MESSAGE=""
 # Short names like 'sfdc-territory-discovery' will fail with "Agent not found"
 
 if [[ -n "$GUARDRAIL_ALERT" ]] && [[ "$IS_MANDATORY" == "true" ]]; then
-    CONTEXT_MESSAGE="INSTRUCTION: STOP. Destructive operation detected and routing guardrail triggered.
-Semver-prefixed agent '$GUARDRAIL_LEAKED_AGENT' was blocked.
-Use a valid specialist agent from the current registry before proceeding."
+    CONTEXT_MESSAGE="ROUTING GUARDRAIL ALERT: Mandatory specialist routing matched a stale semver-prefixed agent alias ('$GUARDRAIL_LEAKED_AGENT').
+Re-run routing with a valid fully-qualified specialist agent from the current registry before any direct operational execution."
 
 elif [[ -n "$GUARDRAIL_ALERT" ]]; then
     CONTEXT_MESSAGE="ROUTING GUARDRAIL ALERT: '$GUARDRAIL_LEAKED_AGENT' was blocked because it looks like a stale semver-prefixed plugin alias.
 Do not use this agent name. Re-run routing or resolve a valid fully-qualified agent from current plugin registry."
 
-elif [[ "$IS_MANDATORY" == "true" ]] &&
-     [[ "$OVERRIDE_APPLIED" == "true" ]] &&
-     [[ "$USER_PROMPT_MANDATORY_HARD_BLOCKING" == "1" ]]; then
-    CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Destructive operation matched mandatory routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
+elif [[ "$IS_MANDATORY" == "true" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
+    CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Mandatory specialist routing matched this request, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
 Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-Proceed only if this bypass is intentional."
-
-elif [[ "$IS_MANDATORY" == "true" ]] && [[ "$ENFORCED_BLOCK" == "true" ]]; then
-    CONTEXT_MESSAGE="INSTRUCTION: STOP. Destructive operation detected.
-Use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-CRITICAL: Use the EXACT agent name shown above. Short names will fail.
-If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
+Prompt submission continues, but this bypass should be treated as an audited exception."
 
 elif [[ "$IS_MANDATORY" == "true" ]]; then
     CONTEXT_MESSAGE="MANDATORY ROUTING: This operation MUST use a specialist agent.
 You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) to handle this.
 Do NOT execute this directly. Route through the specialist agent above.
-CRITICAL: Use the EXACT fully-qualified agent name shown above. Short names will fail."
+CRITICAL: Use the EXACT fully-qualified agent name shown above. Short names will fail.
+Prompt submission continues; downstream operational tools remain gated until this specialist clears the route."
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
-    if [[ "$ENABLE_INTAKE_HARD_BLOCKING" == "1" ]]; then
-        CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Request looks project-level and under-specified, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
-Recommended specialist: Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
-Proceed only if bypassing intake is intentional."
-    else
-        CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Request looks project-level and under-specified.
+    CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Request looks project-level and under-specified.
 Recommended specialist: Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
 Override token detected; direct operational tools may proceed only if this bypass is intentional."
-    fi
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]]; then
-    if [[ "$ENABLE_INTAKE_HARD_BLOCKING" == "1" ]]; then
-        CONTEXT_MESSAGE="INSTRUCTION: STOP. Request appears project-level but under-specified.
-Run Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) first.
-Reason: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE (< $ACTIVE_INTAKE_COMPLETENESS_MAX).
-If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
-    else
-        CONTEXT_MESSAGE="ROUTING REQUIRED: Request appears project-level but under-specified.
+    CONTEXT_MESSAGE="ROUTING REQUIRED: Request appears project-level but under-specified.
 Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to gather specifics and produce a structured plan.
 Reason: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE (< $ACTIVE_INTAKE_COMPLETENESS_MAX).
-Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked or an override is used."
-    fi
+Prompt submission continues; direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked or an override is used."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$ADAPTIVE_FALLBACK_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING ADAPTIVE FALLBACK: High-complexity signal detected (${COMPLEXITY_PCT}%), but this prompt appears to be continuation/noisy context.
@@ -1444,14 +1444,15 @@ Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original
 Proceeding without hard block for this turn."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
-    CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: High-complexity task (${COMPLEXITY_PCT}%) matched enforced routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
+    CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: High-complexity task (${COMPLEXITY_PCT}%) matched specialist routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
 Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-Proceed only if this bypass is intentional."
+Prompt submission continues, but this bypass should be treated as an audited exception."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]]; then
-    CONTEXT_MESSAGE="MANDATORY ROUTING: High complexity (${COMPLEXITY_PCT}%). You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+    CONTEXT_MESSAGE="ROUTING REQUIRED: High complexity (${COMPLEXITY_PCT}%). You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Do NOT execute this directly - route through the specialist agent.
 CRITICAL: Use the EXACT agent name shown above (fully-qualified with plugin prefix).
+Prompt submission continues; direct operational tools remain gated until the specialist clears the route.
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
 
 elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]]; then
@@ -1471,20 +1472,10 @@ fi
 # OUTPUT JSON RESPONSE
 # =============================================================================
 
-# Only inject context for blocking/recommended actions
+# Only inject context for routing and guidance actions
 if [[ -n "$CONTEXT_MESSAGE" ]]; then
     DECISION_VALUE=""
     DECISION_REASON=""
-    if [[ "$ENFORCED_BLOCK" == "true" ]]; then
-        DECISION_VALUE="block"
-        if [[ "$IS_MANDATORY" == "true" ]]; then
-            DECISION_REASON="Mandatory routing enforcement: use Agent(subagent_type='$SUGGESTED_AGENT') before proceeding."
-        elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]]; then
-            DECISION_REASON="Active intake enforcement: route to Agent(subagent_type='opspal-core:intelligent-intake-orchestrator') before specialist execution."
-        else
-            DECISION_REASON="High-complexity routing enforcement: use Agent(subagent_type='$SUGGESTED_AGENT') before proceeding."
-        fi
-    fi
 
     jq -n \
         --arg context "$CONTEXT_MESSAGE" \
@@ -1503,6 +1494,8 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
         --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
         --argjson blocked "$SHOULD_BLOCK" \
         --argjson enforced_block "$ENFORCED_BLOCK" \
+        --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+        --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
         --argjson override_applied "$OVERRIDE_APPLIED" \
         --argjson continue_intent "$CONTINUE_INTENT" \
         --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
@@ -1533,6 +1526,8 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
                 transcriptNoiseScore: $transcript_noise_score,
                 blocked: $blocked,
                 enforcedBlock: $enforced_block,
+                promptBlockRequested: $prompt_block_requested,
+                promptBlockSuppressed: $prompt_block_suppressed,
                 overrideApplied: $override_applied,
                 continueIntent: $continue_intent,
                 adaptiveFallbackApplied: $adaptive_fallback_applied,
@@ -1561,6 +1556,6 @@ fi
 # EXIT CODE
 # =============================================================================
 
-# Blocking is enforced via JSON decision="block" on UserPromptSubmit.
-# Keep exit code 0 so structured JSON is processed by Claude Code.
+# UserPromptSubmit routing is guidance-only. Specialist enforcement happens via
+# persisted routing state plus downstream Agent/PreToolUse validation.
 exit 0

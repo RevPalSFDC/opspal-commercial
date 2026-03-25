@@ -116,6 +116,33 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
   }));
 
+  results.push(await runTest('Suppresses fail-closed routing clarity into non-blocking guidance', async () => {
+    const result = spawnSync('bash', [
+      HOOK_ABS_PATH,
+      'Develop the final plan to deploy to production ultrathink',
+      'opspal-core:release-coordinator'
+    ], {
+      cwd: PROJECT_ROOT,
+      env: {
+        ...process.env,
+        ROUTING_CLARITY_ENABLED: '1',
+        ROUTING_CLARITY_VERBOSE: '1',
+        ROUTING_CLARITY_FAIL_CLOSED: '1',
+        ROUTING_CLARITY_CONFIDENCE_OVERRIDE: '45'
+      },
+      encoding: 'utf8'
+    });
+
+    assert.strictEqual(result.status, 0, 'Should not reject the prompt for routing clarity');
+    const output = JSON.parse(result.stdout);
+    assert.strictEqual(output.decision, undefined, 'Should not emit decision=block');
+    assert.strictEqual(output.hookSpecificOutput?.hookEventName, 'UserPromptSubmit', 'Should emit UserPromptSubmit guidance');
+    assert.strictEqual(output.metadata?.orchestrationType, 'routing-clarity', 'Should identify routing-clarity orchestration');
+    assert.strictEqual(output.metadata?.recommendation, 'opspal-core:release-coordinator', 'Should preserve the recommended specialist');
+    assert.strictEqual(output.metadata?.promptBlockRequested, true, 'Should record the legacy prompt-block request');
+    assert.strictEqual(output.metadata?.promptBlockSuppressed, true, 'Should suppress the user-visible routing block');
+  }));
+
   // Summary
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
