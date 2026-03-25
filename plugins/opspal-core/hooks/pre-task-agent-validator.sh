@@ -239,6 +239,33 @@ agent_clears_requirement() {
     ' >/dev/null 2>&1
 }
 
+derive_route_requirements() {
+    local preferred_agent="$1"
+    local clearance_agents_json="$2"
+
+    if [[ -z "$preferred_agent" ]] || [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &> /dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$AGENT_TOOL_REGISTRY" route-requirements "$preferred_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+}
+
+agent_matches_route_requirements() {
+    local resolved_agent="$1"
+    local requirements_json="$2"
+
+    if [[ -z "$resolved_agent" ]] || [[ -z "$requirements_json" ]] || [[ "$requirements_json" == "{}" ]]; then
+        return 0
+    fi
+
+    if [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &> /dev/null; then
+        return 0
+    fi
+
+    node "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
+}
+
 apply_runbook_cohort_requirements() {
     local input_json="$1"
     local workspace_root
@@ -449,11 +476,18 @@ persist_parent_context_deploy_clearance() {
       --arg agent "$resolved_agent" \
       '{
         session_key: $session_key,
-        recommended_agent: $agent,
+        required_agent: $agent,
         clearance_agents: [$agent],
-        action: "DEPLOYMENT_HANDOFF",
-        blocked: false,
-        mandatory: false,
+        route_kind: "deployment_handoff",
+        guidance_action: "recommend_specialist",
+        routing_reason: "deployment_handoff",
+        requires_specialist: false,
+        prompt_guidance_only: true,
+        prompt_blocked: false,
+        execution_block_until_cleared: false,
+        route_pending_clearance: false,
+        route_cleared: true,
+        routing_confidence: 1,
         status: "cleared",
         last_resolved_agent: $agent
       }' \
@@ -591,20 +625,41 @@ main() {
         exit 0
     fi
 
-    if is_claude_internal_helper_agent "$AGENT_NAME" "$TOOL_INPUT"; then
-        log "Allowing Claude internal helper agent without plugin resolution: $AGENT_NAME"
-        echo '{}'
-        exit 0
-    fi
-
     ADDITIONAL_CONTEXT=""
     SESSION_KEY=$(extract_session_key "$normalized_hook_input")
+    PENDING_ROUTING_STATE=$(check_routing_requirement "$SESSION_KEY")
+    PENDING_ROUTE_ACTIVE=$(echo "$PENDING_ROUTING_STATE" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")
+    PENDING_EXECUTION_GATE=$(echo "$PENDING_ROUTING_STATE" | jq -r '.executionBlockActive // false' 2>/dev/null || echo "false")
+    AUTO_DELEGATION_ACTIVE=$(echo "$PENDING_ROUTING_STATE" | jq -r '.autoDelegation.active // false' 2>/dev/null || echo "false")
+    AUTO_DELEGATION_AGENT=$(echo "$PENDING_ROUTING_STATE" | jq -r '.autoDelegation.agent // .requiredAgent // ""' 2>/dev/null || echo "")
+    FORCED_RESOLUTION=""
+    ROUTING_AUTO_DELEGATED="false"
+
+    if is_claude_internal_helper_agent "$AGENT_NAME" "$TOOL_INPUT"; then
+        if [[ "$PENDING_ROUTE_ACTIVE" == "true" ]] &&
+           [[ "$PENDING_EXECUTION_GATE" == "true" ]] &&
+           [[ "$AUTO_DELEGATION_ACTIVE" == "true" ]] &&
+           [[ -n "$AUTO_DELEGATION_AGENT" ]]; then
+            log "Auto-delegating helper agent $AGENT_NAME -> $AUTO_DELEGATION_AGENT"
+            FORCED_RESOLUTION="$AUTO_DELEGATION_AGENT"
+            ROUTING_AUTO_DELEGATED="true"
+            ADDITIONAL_CONTEXT="ROUTING_AUTO_DELEGATED: Pending mandatory route rewrote helper agent '$AGENT_NAME' to required specialist '$AUTO_DELEGATION_AGENT'."
+        else
+            log "Allowing Claude internal helper agent without plugin resolution: $AGENT_NAME"
+            echo '{}'
+            exit 0
+        fi
+    fi
 
     log "Validating agent: $AGENT_NAME"
 
     # Step 1: Check for cross-type conflict (name exists as BOTH command AND agent)
     # This is the most important check - ambiguous names cause the most confusion
-    IS_AMBIGUOUS=$(node "$AGENT_RESOLVER" is-ambiguous "$AGENT_NAME" 2>/dev/null || echo "false")
+    if [[ -n "$FORCED_RESOLUTION" ]]; then
+        IS_AMBIGUOUS="false"
+    else
+        IS_AMBIGUOUS=$(node "$AGENT_RESOLVER" is-ambiguous "$AGENT_NAME" 2>/dev/null || echo "false")
+    fi
 
     if [ "$IS_AMBIGUOUS" = "true" ]; then
         # Get detailed info about the conflict
@@ -614,13 +669,22 @@ main() {
 
         # Since user explicitly used the Agent tool, they likely want the agent
         # But we should warn them about the ambiguity
-        ADDITIONAL_CONTEXT="WARN [ROUTING_AMBIGUOUS_NAME]: '$AGENT_NAME' exists as both command and agent. Since the Agent tool was used, proceeding with agent invocation. If command was intended, use Skill(skill='$AGENT_NAME') or /$AGENT_NAME. Prefer fully-qualified names like 'plugin:agent-name'."
+        if [ -n "$ADDITIONAL_CONTEXT" ]; then
+            ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} WARN [ROUTING_AMBIGUOUS_NAME]: '$AGENT_NAME' exists as both command and agent. Since the Agent tool was used, proceeding with agent invocation. If command was intended, use Skill(skill='$AGENT_NAME') or /$AGENT_NAME. Prefer fully-qualified names like 'plugin:agent-name'."
+        else
+            ADDITIONAL_CONTEXT="WARN [ROUTING_AMBIGUOUS_NAME]: '$AGENT_NAME' exists as both command and agent. Since the Agent tool was used, proceeding with agent invocation. If command was intended, use Skill(skill='$AGENT_NAME') or /$AGENT_NAME. Prefer fully-qualified names like 'plugin:agent-name'."
+        fi
         # Continue with agent resolution (don't exit)
     fi
 
     # Step 2: Check if this name is ONLY a COMMAND (not an agent)
-    IS_COMMAND=$(node "$AGENT_RESOLVER" is-command "$AGENT_NAME" 2>/dev/null || echo "false")
-    IS_AGENT=$(node "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null || true)
+    if [[ -n "$FORCED_RESOLUTION" ]]; then
+        IS_COMMAND="false"
+        IS_AGENT="$FORCED_RESOLUTION"
+    else
+        IS_COMMAND=$(node "$AGENT_RESOLVER" is-command "$AGENT_NAME" 2>/dev/null || echo "false")
+        IS_AGENT=$(node "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null || true)
+    fi
 
     # Only block if it's a command but NOT an agent
     if [ "$IS_COMMAND" = "true" ] && [ -z "$IS_AGENT" ]; then
@@ -643,31 +707,50 @@ main() {
     fi
 
     # Step 2: Resolve short name to fully-qualified name
-    set +e
-    RESOLVED=$(node "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null)
-    RESOLVE_EXIT_CODE=$?
-    set -e
+    if [[ -n "$FORCED_RESOLUTION" ]]; then
+        RESOLVED="$FORCED_RESOLUTION"
+        RESOLVE_EXIT_CODE=0
+    else
+        set +e
+        RESOLVED=$(node "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null)
+        RESOLVE_EXIT_CODE=$?
+        set -e
+    fi
 
     if [ $RESOLVE_EXIT_CODE -ne 0 ] || [ -z "$RESOLVED" ]; then
+        if [[ "$PENDING_ROUTE_ACTIVE" == "true" ]] &&
+           [[ "$PENDING_EXECUTION_GATE" == "true" ]] &&
+           [[ "$AUTO_DELEGATION_ACTIVE" == "true" ]] &&
+           [[ -n "$AUTO_DELEGATION_AGENT" ]]; then
+            log "Auto-delegating unresolved agent $AGENT_NAME -> $AUTO_DELEGATION_AGENT"
+            RESOLVED="$AUTO_DELEGATION_AGENT"
+            ROUTING_AUTO_DELEGATED="true"
+            if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_AUTO_DELEGATED: Pending mandatory route rewrote '$AGENT_NAME' to '$AUTO_DELEGATION_AGENT'."
+            else
+                ADDITIONAL_CONTEXT="ROUTING_AUTO_DELEGATED: Pending mandatory route rewrote '$AGENT_NAME' to '$AUTO_DELEGATION_AGENT'."
+            fi
+        else
         # Agent not found - provide suggestions
-        log_error "Agent '$AGENT_NAME' not found"
+            log_error "Agent '$AGENT_NAME' not found"
 
         # Get suggestions using the last part of the name
-        SEARCH_TERM="${AGENT_NAME##*-}"
-        SUGGESTIONS=$(node "$AGENT_RESOLVER" search "$SEARCH_TERM" 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
-        EXAMPLE_AGENTS=$(node "$AGENT_RESOLVER" list 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
+            SEARCH_TERM="${AGENT_NAME##*-}"
+            SUGGESTIONS=$(node "$AGENT_RESOLVER" search "$SEARCH_TERM" 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
+            EXAMPLE_AGENTS=$(node "$AGENT_RESOLVER" list 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
 
         # Log metric: agent not found
-        log_routing_metric "$AGENT_NAME" "" "false" "true" "agent_not_found" "Agent not found in any plugin"
+            log_routing_metric "$AGENT_NAME" "" "false" "true" "agent_not_found" "Agent not found in any plugin"
 
-        emit_pretool_response \
-          "deny" \
-          "ROUTING_AGENT_NOT_FOUND: Agent '$AGENT_NAME' not found in any plugin. Suggestions: ${SUGGESTIONS:-none}. Use fully-qualified names like 'opspal-salesforce:sfdc-revops-auditor' for OpsPal plugin agents. Claude Code built-in agents such as 'Explore' and 'Plan' are valid without plugin prefixes, but custom OpsPal agents must resolve to installed plugin identifiers. Valid OpsPal agents include: ${EXAMPLE_AGENTS:-opspal-salesforce:sfdc-revops-auditor, opspal-salesforce:sfdc-cpq-assessor}." \
-          "" \
-          "" \
-          "ROUTING_AGENT_NOT_FOUND" \
-          "ERROR"
-        exit 0
+            emit_pretool_response \
+              "deny" \
+              "ROUTING_AGENT_NOT_FOUND: Agent '$AGENT_NAME' not found in any plugin. Suggestions: ${SUGGESTIONS:-none}. Use fully-qualified names like 'opspal-salesforce:sfdc-revops-auditor' for OpsPal plugin agents. Claude Code built-in agents such as 'Explore' and 'Plan' are valid without plugin prefixes, but custom OpsPal agents must resolve to installed plugin identifiers. Valid OpsPal agents include: ${EXAMPLE_AGENTS:-opspal-salesforce:sfdc-revops-auditor, opspal-salesforce:sfdc-cpq-assessor}." \
+              "" \
+              "" \
+              "ROUTING_AGENT_NOT_FOUND" \
+              "ERROR"
+            exit 0
+        fi
     fi
 
     REROUTED_AGENT=$(reroute_salesforce_deployment_specialist "$RESOLVED" "$TOOL_INPUT")
@@ -761,20 +844,64 @@ main() {
 
     # Step 6: Clear or enforce pending routing requirements for this session.
     ROUTING_STATE=$(check_routing_requirement "$SESSION_KEY")
-    ROUTING_PENDING=$(echo "$ROUTING_STATE" | jq -r '.pending // false' 2>/dev/null || echo "false")
-    ROUTING_ENFORCE=$(echo "$ROUTING_STATE" | jq -r '.enforce // false' 2>/dev/null || echo "false")
+    ROUTING_PENDING=$(echo "$ROUTING_STATE" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")
+    ROUTING_ENFORCE=$(echo "$ROUTING_STATE" | jq -r '.executionBlockActive // false' 2>/dev/null || echo "false")
 
     if [[ "$ROUTING_PENDING" == "true" ]] && [[ "$ROUTING_ENFORCE" == "true" ]]; then
-        REQUIRED_AGENT=$(echo "$ROUTING_STATE" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
+        REQUIRED_AGENT=$(echo "$ROUTING_STATE" | jq -r '.requiredAgent // ""' 2>/dev/null || echo "")
         CLEARANCE_AGENTS=$(echo "$ROUTING_STATE" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
-        ROUTE_ACTION=$(echo "$ROUTING_STATE" | jq -r '.action // ""' 2>/dev/null || echo "")
+        ROUTE_ACTION=$(echo "$ROUTING_STATE" | jq -r '.guidanceAction // ""' 2>/dev/null || echo "")
+        ROUTE_KIND=$(echo "$ROUTING_STATE" | jq -r '.routeKind // ""' 2>/dev/null || echo "")
+        AUTO_DELEGATION_ACTIVE=$(echo "$ROUTING_STATE" | jq -r '.autoDelegation.active // false' 2>/dev/null || echo "false")
+        AUTO_DELEGATION_AGENT=$(echo "$ROUTING_STATE" | jq -r '.autoDelegation.agent // .requiredAgent // ""' 2>/dev/null || echo "")
+        ROUTE_REQUIREMENTS=$(derive_route_requirements "$REQUIRED_AGENT" "$CLEARANCE_AGENTS")
 
         if agent_clears_requirement "$RESOLVED" "$CLEARANCE_AGENTS"; then
+            if ! agent_matches_route_requirements "$RESOLVED" "$ROUTE_REQUIREMENTS"; then
+                local required_capabilities
+                local allowed_actor_types
+                required_capabilities=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.requiredCapabilities // [] | join(", ")' 2>/dev/null || echo "")
+                allowed_actor_types=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.allowedActorTypes // [] | join(", ")' 2>/dev/null || echo "")
+                log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_capability_mismatch" "Resolved agent failed route capability fit"
+                emit_pretool_response \
+                  "deny" \
+                  "ROUTING_REQUIRED_CAPABILITY_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist} and the selected agent '${RESOLVED}' does not satisfy the route's actor/capability requirements. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}." \
+                  "" \
+                  "" \
+                  "ROUTING_REQUIRED_CAPABILITY_MISMATCH" \
+                  "ERROR"
+                exit 0
+            fi
             mark_routing_requirement_cleared "$SESSION_KEY" "$RESOLVED"
             if [ -n "$ADDITIONAL_CONTEXT" ]; then
                 ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_REQUIREMENT_CLEARED: '$RESOLVED' satisfied pending route '${REQUIRED_AGENT:-unknown}'."
             else
                 ADDITIONAL_CONTEXT="ROUTING_REQUIREMENT_CLEARED: '$RESOLVED' satisfied pending route '${REQUIRED_AGENT:-unknown}'."
+            fi
+        elif [[ "$AUTO_DELEGATION_ACTIVE" == "true" ]] && [[ -n "$AUTO_DELEGATION_AGENT" ]]; then
+            local previous_resolved="$RESOLVED"
+            RESOLVED="$AUTO_DELEGATION_AGENT"
+            ROUTING_AUTO_DELEGATED="true"
+
+            if ! agent_matches_route_requirements "$RESOLVED" "$ROUTE_REQUIREMENTS"; then
+                log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "true" "routing_auto_delegation_capability_mismatch" "Auto-delegated agent failed route capability fit"
+                emit_pretool_response \
+                  "deny" \
+                  "ROUTING_AUTO_DELEGATION_CAPABILITY_MISMATCH: Pending ${ROUTE_KIND:-specialist} route attempted auto-delegation to '${RESOLVED}', but that agent does not satisfy the route's actor/capability requirements." \
+                  "" \
+                  "" \
+                  "ROUTING_AUTO_DELEGATION_CAPABILITY_MISMATCH" \
+                  "ERROR"
+                exit 0
+            fi
+
+            FINAL_OUTPUT=$(echo "$FINAL_OUTPUT" | jq -c --arg resolved "$RESOLVED" '.subagent_type = $resolved')
+            mark_routing_requirement_cleared "$SESSION_KEY" "$RESOLVED"
+            log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "false" "" ""
+            if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_AUTO_DELEGATED: Pending ${ROUTE_KIND:-mandatory} route rewrote '$previous_resolved' to '$RESOLVED'. ROUTING_REQUIREMENT_CLEARED: '$RESOLVED' satisfied pending route '${REQUIRED_AGENT:-unknown}'."
+            else
+                ADDITIONAL_CONTEXT="ROUTING_AUTO_DELEGATED: Pending ${ROUTE_KIND:-mandatory} route rewrote '$previous_resolved' to '$RESOLVED'. ROUTING_REQUIREMENT_CLEARED: '$RESOLVED' satisfied pending route '${REQUIRED_AGENT:-unknown}'."
             fi
         else
             local allowed_agents

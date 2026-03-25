@@ -5,6 +5,14 @@
  * Persists session-scoped routing requirements between UserPromptSubmit,
  * PreToolUse(Agent), and PreToolUse(non-Agent) hooks.
  *
+ * Routing state is explicitly split into:
+ * - prompt-time guidance semantics
+ * - execution-time specialist enforcement semantics
+ *
+ * Ambiguous legacy fields such as blocked/action/recommended_agent are still
+ * translated on read, but new state is written with explicit names so future
+ * consumers cannot accidentally recreate prompt-time routing blocks.
+ *
  * Usage:
  *   node routing-state-manager.js save <session-key>          # reads JSON from stdin
  *   node routing-state-manager.js get <session-key>
@@ -27,7 +35,10 @@ const os = require('os');
 const LEGACY_STATE_FILE = path.join(os.homedir(), '.claude', 'routing-state.json');
 const STATE_DIR = path.join(os.homedir(), '.claude', 'routing-state');
 const STATE_TTL_SECONDS = Number.parseInt(process.env.ROUTING_STATE_TTL_SECONDS || '900', 10);
-const ACTIVE_STATUSES = new Set(['pending']);
+const ACTIVE_CLEARANCE_STATUSES = new Set(['pending_clearance']);
+const AUTO_DELEGATION_MIN_CONFIDENCE = Number.parseFloat(
+  process.env.ROUTING_AUTO_DELEGATION_MIN_CONFIDENCE || '0.95'
+);
 
 function nowSeconds() {
   return Math.floor(Date.now() / 1000);
@@ -74,40 +85,213 @@ function normalizeClearanceAgents(value, fallbackAgent = null) {
   return [...new Set(agents)];
 }
 
+function normalizeLegacyStatus(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized) {
+    return '';
+  }
+
+  switch (normalized) {
+    case 'pending':
+    case 'pending_clearance':
+      return 'pending_clearance';
+    case 'cleared':
+      return 'cleared';
+    case 'bypassed':
+      return 'bypassed';
+    default:
+      return '';
+  }
+}
+
+function normalizeRouteKind(routeKind, legacyAction, mandatory, executionBlockUntilCleared) {
+  const explicit = String(routeKind || '').trim();
+  if (explicit) {
+    return explicit;
+  }
+
+  if (mandatory) {
+    return 'mandatory_specialist';
+  }
+
+  const action = String(legacyAction || '').trim().toUpperCase();
+  if (action === 'INTAKE_REQUIRED') {
+    return 'intake_specialist';
+  }
+
+  if (executionBlockUntilCleared) {
+    return 'complexity_specialist';
+  }
+
+  return 'advisory';
+}
+
+function normalizeGuidanceAction(guidanceAction, routeKind, executionBlockUntilCleared) {
+  const explicit = String(guidanceAction || '').trim();
+  if (explicit) {
+    return explicit;
+  }
+
+  switch (routeKind) {
+    case 'mandatory_specialist':
+      return 'require_specialist';
+    case 'intake_specialist':
+      return 'require_intake';
+    default:
+      if (executionBlockUntilCleared) {
+        return 'require_specialist';
+      }
+      return 'recommend_specialist';
+  }
+}
+
+function normalizeRoutingConfidence(value, existing = 0) {
+  const parsed = Number.parseFloat(value ?? existing ?? 0);
+  if (!Number.isFinite(parsed)) {
+    return 0;
+  }
+
+  if (parsed < 0) return 0;
+  if (parsed > 1) return 1;
+  return parsed;
+}
+
+function normalizeAutoDelegation(state = {}, fallback = {}) {
+  const current = state.auto_delegation || state.autoDelegation || fallback.auto_delegation || fallback.autoDelegation || {};
+  const agent = current.agent || current.required_agent || fallback.required_agent || fallback.requiredAgent || null;
+  const confidence = normalizeRoutingConfidence(
+    current.confidence,
+    fallback.routing_confidence || fallback.routingConfidence || 0
+  );
+  const eligible = toBoolean(
+    current.eligible ??
+    current.enabled ??
+    (fallback.route_kind === 'mandatory_specialist' && agent && confidence >= AUTO_DELEGATION_MIN_CONFIDENCE)
+  );
+  const active = toBoolean(current.active ?? (eligible && fallback.route_pending_clearance && !fallback.override_applied));
+  let status = String(current.status || '').trim();
+  if (!status) {
+    if (fallback.clearance_status === 'cleared') {
+      status = 'cleared';
+    } else if (fallback.clearance_status === 'bypassed') {
+      status = 'bypassed';
+    } else if (active) {
+      status = 'pending';
+    } else if (eligible) {
+      status = 'ready';
+    } else {
+      status = 'disabled';
+    }
+  }
+
+  return {
+    eligible,
+    active,
+    mode: String(current.mode || (eligible ? 'agent_rewrite_bridge' : 'disabled')).trim(),
+    agent,
+    confidence,
+    handoff_prompt: current.handoff_prompt || current.handoffPrompt || fallback.handoff_prompt || null,
+    status
+  };
+}
+
 function normalizeState(sessionKey, state = {}, existing = null) {
   const timestamp = nowSeconds();
   const createdAt = Number.parseInt(state.created_at || state.createdAt || existing?.created_at || timestamp, 10);
-  const status = String(state.status || existing?.status || 'pending').trim() || 'pending';
-  const recommendedAgent = state.recommended_agent || state.agent || existing?.recommended_agent || existing?.agent || null;
+  const legacyStatus = normalizeLegacyStatus(state.clearance_status || state.clearanceStatus || state.status || existing?.clearance_status || existing?.status);
+  const requiredAgent = state.required_agent || state.requiredAgent ||
+    state.recommended_agent || state.recommendedAgent ||
+    state.agent || existing?.required_agent || existing?.recommended_agent || existing?.agent || null;
   const clearanceAgents = normalizeClearanceAgents(
     state.clearance_agents || state.clearanceAgents || existing?.clearance_agents,
-    recommendedAgent
+    requiredAgent
   );
   const ttlSeconds = Number.parseInt(state.ttl_seconds || state.ttlSeconds || existing?.ttl_seconds || STATE_TTL_SECONDS, 10);
   const expiresAt = Number.parseInt(
     state.expires_at || state.expiresAt || existing?.expires_at || (timestamp + ttlSeconds),
     10
   );
-
-  return {
+  const overrideApplied = toBoolean(state.override_applied ?? existing?.override_applied);
+  const routingConfidence = normalizeRoutingConfidence(
+    state.routing_confidence ?? state.routingConfidence,
+    existing?.routing_confidence ?? existing?.routingConfidence
+  );
+  const explicitExecutionBlock = state.execution_block_until_cleared ?? state.executionBlockUntilCleared;
+  const legacyAction = state.action || existing?.action || null;
+  const legacyMandatory = toBoolean(state.mandatory ?? existing?.mandatory);
+  const explicitExecutionBlockValue = explicitExecutionBlock === undefined
+    ? null
+    : toBoolean(explicitExecutionBlock);
+  const executionBlockUntilCleared = explicitExecutionBlockValue !== null
+    ? explicitExecutionBlockValue
+    : (
+      toBoolean(state.execution_block_until_cleared ?? existing?.execution_block_until_cleared) ||
+      toBoolean(state.enforced_block ?? state.hard_blocked ?? existing?.enforced_block) ||
+      toBoolean(state.blocked ?? existing?.blocked) ||
+      legacyMandatory ||
+      ['BLOCKED', 'INTAKE_REQUIRED', 'MANDATORY_BLOCKED', 'MANDATORY_ALERT'].includes(String(legacyAction || '').trim().toUpperCase())
+    );
+  const routeKind = normalizeRouteKind(
+    state.route_kind || state.routeKind || existing?.route_kind,
+    legacyAction,
+    legacyMandatory,
+    executionBlockUntilCleared
+  );
+  const clearanceStatus = legacyStatus || (executionBlockUntilCleared && !overrideApplied ? 'pending_clearance' : 'cleared');
+  const explicitRouteCleared = state.route_cleared ?? state.routeCleared ?? existing?.route_cleared;
+  const routeCleared = explicitRouteCleared === undefined || explicitRouteCleared === null
+    ? clearanceStatus === 'cleared'
+    : toBoolean(explicitRouteCleared);
+  const explicitRoutePending = state.route_pending_clearance ?? state.routePendingClearance ?? existing?.route_pending_clearance;
+  const routePendingClearance = explicitRoutePending === undefined || explicitRoutePending === null
+    ? clearanceStatus === 'pending_clearance'
+    : toBoolean(explicitRoutePending);
+  const requiresSpecialist = toBoolean(
+    state.requires_specialist ??
+    state.requiresSpecialist ??
+    existing?.requires_specialist ??
+    existing?.requiresSpecialist ??
+    executionBlockUntilCleared
+  );
+  const guidanceAction = normalizeGuidanceAction(
+    state.guidance_action || state.guidanceAction || existing?.guidance_action,
+    routeKind,
+    executionBlockUntilCleared
+  );
+  const normalizedState = {
     session_key: normalizeSessionKey(sessionKey),
     route_id: state.route_id || state.routeId || existing?.route_id || null,
-    action: state.action || existing?.action || null,
-    reason: state.reason || existing?.reason || null,
-    recommended_agent: recommendedAgent,
+    route_kind: routeKind,
+    guidance_action: guidanceAction,
+    routing_reason: state.routing_reason || state.routingReason || state.reason || existing?.routing_reason || existing?.reason || null,
+    required_agent: requiredAgent,
     clearance_agents: clearanceAgents,
-    mandatory: toBoolean(state.mandatory ?? existing?.mandatory),
-    blocked: toBoolean(state.blocked ?? existing?.blocked),
-    enforced_block: toBoolean(state.enforced_block ?? state.hard_blocked ?? existing?.enforced_block),
-    override_applied: toBoolean(state.override_applied ?? existing?.override_applied),
-    status,
+    requires_specialist: requiresSpecialist,
+    prompt_guidance_only: toBoolean(state.prompt_guidance_only ?? state.promptGuidanceOnly ?? existing?.prompt_guidance_only ?? true),
+    prompt_blocked: toBoolean(state.prompt_blocked ?? state.promptBlocked ?? existing?.prompt_blocked),
+    execution_block_until_cleared: executionBlockUntilCleared,
+    route_pending_clearance: routePendingClearance,
+    route_cleared: routeCleared,
+    routing_confidence: routingConfidence,
+    override_applied: overrideApplied,
+    clearance_status: clearanceStatus,
+    status: clearanceStatus === 'pending_clearance' ? 'pending' : clearanceStatus,
     user_message_preview: state.user_message_preview || state.userMessagePreview || existing?.user_message_preview || null,
+    handoff_prompt: state.handoff_prompt || state.handoffPrompt || existing?.handoff_prompt || null,
     created_at: createdAt,
     updated_at: timestamp,
     expires_at: expiresAt,
     ttl_seconds: ttlSeconds,
-    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || null
+    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || null,
+    action: legacyAction,
+    recommended_agent: requiredAgent,
+    mandatory: legacyMandatory,
+    enforced_block: toBoolean(state.enforced_block ?? state.hard_blocked ?? existing?.enforced_block),
+    blocked: false
   };
+  normalizedState.auto_delegation = normalizeAutoDelegation(state, normalizedState);
+
+  return normalizedState;
 }
 
 function isExpired(state, timestamp = nowSeconds()) {
@@ -164,8 +348,33 @@ function updateStateStatus(sessionKey, status, updates = {}) {
     return null;
   }
 
+  const nextClearanceStatus = normalizeLegacyStatus(status);
+  let derivedStatusUpdates = {};
+  if (nextClearanceStatus === 'pending_clearance') {
+    derivedStatusUpdates = {
+      clearance_status: nextClearanceStatus,
+      route_pending_clearance: true,
+      route_cleared: false,
+      override_applied: false
+    };
+  } else if (nextClearanceStatus === 'cleared') {
+    derivedStatusUpdates = {
+      clearance_status: nextClearanceStatus,
+      route_pending_clearance: false,
+      route_cleared: true
+    };
+  } else if (nextClearanceStatus === 'bypassed') {
+    derivedStatusUpdates = {
+      clearance_status: nextClearanceStatus,
+      route_pending_clearance: false,
+      route_cleared: false,
+      override_applied: true
+    };
+  }
+
   const nextState = normalizeState(sessionKey, {
     ...current,
+    ...derivedStatusUpdates,
     ...updates,
     status
   }, current);
@@ -207,39 +416,69 @@ function checkState(sessionKey) {
   if (!state) {
     return {
       hasState: false,
-      pending: false,
-      enforce: false,
-      blocked: false,
+      promptGuidanceOnly: false,
+      promptBlocked: false,
+      requiresSpecialist: false,
+      executionBlockUntilCleared: false,
+      executionBlockActive: false,
+      routePendingClearance: false,
+      routeCleared: false,
+      clearanceStatus: null,
       status: null,
-      recommendedAgent: null,
-      clearanceAgents: []
+      requiredAgent: null,
+      clearanceAgents: [],
+      routeId: null,
+      routeKind: null,
+      guidanceAction: null,
+      routingReason: null,
+      routingConfidence: 0,
+      autoDelegation: {
+        eligible: false,
+        active: false,
+        mode: 'disabled',
+        agent: null,
+        confidence: 0,
+        handoff_prompt: null,
+        status: 'disabled'
+      }
     };
   }
 
-  const pending = ACTIVE_STATUSES.has(state.status);
-  const action = String(state.action || '').trim().toUpperCase();
-  const enforceableAction = toBoolean(state.blocked) ||
-    toBoolean(state.mandatory) ||
-    toBoolean(state.enforced_block) ||
-    action === 'BLOCKED' ||
-    action === 'INTAKE_REQUIRED' ||
-    action === 'MANDATORY_BLOCKED' ||
-    action === 'MANDATORY_ALERT';
+  const clearanceStatus = normalizeLegacyStatus(state.clearance_status || state.status) || 'cleared';
+  const routePendingClearance = toBoolean(state.route_pending_clearance) || ACTIVE_CLEARANCE_STATUSES.has(clearanceStatus);
+  const routeCleared = toBoolean(state.route_cleared) || clearanceStatus === 'cleared';
+  const overrideApplied = toBoolean(state.override_applied);
+  const executionBlockUntilCleared = toBoolean(state.execution_block_until_cleared);
+  const executionBlockActive = routePendingClearance && executionBlockUntilCleared && !overrideApplied;
+  const autoDelegation = normalizeAutoDelegation(state, {
+    ...state,
+    route_pending_clearance: routePendingClearance,
+    override_applied: overrideApplied,
+    clearance_status: clearanceStatus
+  });
 
   return {
     hasState: true,
-    pending,
-    enforce: pending && enforceableAction && !toBoolean(state.override_applied),
-    bypassed: state.status === 'bypassed' || toBoolean(state.override_applied),
-    cleared: state.status === 'cleared',
-    blocked: toBoolean(state.blocked),
-    hardBlocked: toBoolean(state.enforced_block),
-    mandatory: toBoolean(state.mandatory),
+    promptGuidanceOnly: toBoolean(state.prompt_guidance_only ?? true),
+    promptBlocked: toBoolean(state.prompt_blocked),
+    requiresSpecialist: toBoolean(state.requires_specialist),
+    executionBlockUntilCleared,
+    executionBlockActive,
+    routePendingClearance,
+    routeCleared,
+    bypassed: clearanceStatus === 'bypassed' || overrideApplied,
+    cleared: routeCleared,
+    clearanceStatus,
     status: state.status,
     routeId: state.route_id || null,
-    action: state.action || null,
-    recommendedAgent: state.recommended_agent || null,
+    routeKind: state.route_kind || null,
+    guidanceAction: state.guidance_action || null,
+    routingReason: state.routing_reason || null,
+    requiredAgent: state.required_agent || state.recommended_agent || null,
     clearanceAgents: normalizeClearanceAgents(state.clearance_agents, state.recommended_agent),
+    routingConfidence: normalizeRoutingConfidence(state.routing_confidence),
+    overrideApplied,
+    autoDelegation,
     age: nowSeconds() - Number.parseInt(state.created_at || 0, 10),
     state
   };
@@ -264,10 +503,14 @@ function readJsonFromStdin() {
 
 function saveLegacyState(agent, blocked, action) {
   const payload = {
-    recommended_agent: agent || null,
-    blocked,
-    action: action || 'BLOCKED',
-    status: blocked ? 'pending' : 'cleared'
+    required_agent: agent || null,
+    execution_block_until_cleared: blocked,
+    route_pending_clearance: blocked,
+    route_cleared: !blocked,
+    guidance_action: blocked ? 'require_specialist' : 'recommend_specialist',
+    route_kind: blocked ? 'complexity_specialist' : 'advisory',
+    clearance_status: blocked ? 'pending_clearance' : 'cleared',
+    action: action || 'BLOCKED'
   };
   return saveState(process.env.CLAUDE_SESSION_ID || 'legacy-session', payload);
 }

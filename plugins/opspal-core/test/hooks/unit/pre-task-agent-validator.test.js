@@ -547,15 +547,22 @@ async function runAllTests() {
     writeRoutingState(env, {
       session_key: env.CLAUDE_SESSION_ID,
       route_id: 'data-operations',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-data-operations',
+      route_kind: 'complexity_specialist',
+      guidance_action: 'require_specialist',
+      required_agent: 'opspal-salesforce:sfdc-data-operations',
       clearance_agents: [
         'opspal-salesforce:sfdc-data-operations',
         'opspal-salesforce:sfdc-query-specialist'
       ],
-      blocked: true,
-      mandatory: false,
-      status: 'pending',
+      requires_specialist: true,
+      prompt_guidance_only: true,
+      prompt_blocked: false,
+      execution_block_until_cleared: true,
+      route_pending_clearance: true,
+      route_cleared: false,
+      routing_confidence: 0.92,
+      status: 'pending_clearance',
+      clearance_status: 'pending_clearance',
       created_at: Math.floor(Date.now() / 1000),
       updated_at: Math.floor(Date.now() / 1000),
       expires_at: Math.floor(Date.now() / 1000) + 600
@@ -572,7 +579,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const state = readRoutingState(env);
     assert(state, 'State file should still exist for telemetry');
-    assert.strictEqual(state.status, 'cleared', 'Approved Agent should clear pending routing state');
+    assert.strictEqual(state.clearance_status, 'cleared', 'Approved Agent should clear pending routing state');
     assert.strictEqual(
       state.last_resolved_agent,
       'opspal-salesforce:sfdc-query-specialist',
@@ -580,17 +587,81 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Auto-delegates mandatory helper Agent calls to the required specialist', async () => {
+    const env = createIsolatedEnv();
+    writeRoutingState(env, {
+      session_key: env.CLAUDE_SESSION_ID,
+      route_id: 'prod-deploy',
+      route_kind: 'mandatory_specialist',
+      guidance_action: 'require_specialist',
+      required_agent: 'opspal-core:release-coordinator',
+      clearance_agents: [
+        'opspal-core:release-coordinator',
+        'opspal-salesforce:sfdc-deployment-manager'
+      ],
+      requires_specialist: true,
+      prompt_guidance_only: true,
+      prompt_blocked: false,
+      execution_block_until_cleared: true,
+      route_pending_clearance: true,
+      route_cleared: false,
+      routing_confidence: 1,
+      status: 'pending_clearance',
+      clearance_status: 'pending_clearance',
+      auto_delegation: {
+        eligible: true,
+        active: true,
+        mode: 'agent_rewrite_bridge',
+        agent: 'opspal-core:release-coordinator',
+        confidence: 1
+      },
+      created_at: Math.floor(Date.now() / 1000),
+      updated_at: Math.floor(Date.now() / 1000),
+      expires_at: Math.floor(Date.now() / 1000) + 600
+    });
+
+    const result = await tester.run({
+      input: createAgentEvent({
+        subagent_type: 'Plan',
+        prompt: 'Develop the final plan to deploy to production ultrathink'
+      }),
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.hookSpecificOutput?.updatedInput?.subagent_type,
+      'opspal-core:release-coordinator',
+      'Mandatory helper Agent call should be rewritten to the required specialist'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
+      'Should surface auto-delegation bridge context'
+    );
+    const state = readRoutingState(env);
+    assert(state, 'State file should still exist after auto-delegation');
+    assert.strictEqual(state.clearance_status, 'cleared', 'Auto-delegated specialist should clear the pending route');
+    assert.strictEqual(state.last_resolved_agent, 'opspal-core:release-coordinator', 'Should record the auto-delegated specialist');
+  }));
+
   results.push(await runTest('Denies Agent when pending routing requires a different agent family', async () => {
     const env = createIsolatedEnv();
     writeRoutingState(env, {
       session_key: env.CLAUDE_SESSION_ID,
       route_id: 'reports-dashboards',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-reports-dashboards',
+      route_kind: 'complexity_specialist',
+      guidance_action: 'require_specialist',
+      required_agent: 'opspal-salesforce:sfdc-reports-dashboards',
       clearance_agents: ['opspal-salesforce:sfdc-reports-dashboards'],
-      blocked: true,
-      mandatory: false,
-      status: 'pending',
+      requires_specialist: true,
+      prompt_guidance_only: true,
+      prompt_blocked: false,
+      execution_block_until_cleared: true,
+      route_pending_clearance: true,
+      route_cleared: false,
+      routing_confidence: 0.86,
+      status: 'pending_clearance',
+      clearance_status: 'pending_clearance',
       created_at: Math.floor(Date.now() / 1000),
       updated_at: Math.floor(Date.now() / 1000),
       expires_at: Math.floor(Date.now() / 1000) + 600
@@ -616,7 +687,7 @@ async function runAllTests() {
     );
     const state = readRoutingState(env);
     assert(state, 'Pending state should remain after denied Agent');
-    assert.strictEqual(state.status, 'pending', 'Denied Agent should not clear routing state');
+    assert.strictEqual(state.route_pending_clearance, true, 'Denied Agent should not clear routing state');
   }));
 
   // Summary

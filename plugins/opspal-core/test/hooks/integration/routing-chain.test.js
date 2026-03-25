@@ -113,11 +113,11 @@ async function assertPendingRouteLifecycle({
   });
   assert.strictEqual(routerResult.exitCode, 0, `${name}: router should complete`);
   assert.strictEqual(
-    routerResult.output?.metadata?.agent,
+    routerResult.output?.metadata?.suggestedAgent,
     expectedRouteAgent,
     `${name}: router should recommend the expected specialist`
   );
-  assert.strictEqual(readRoutingState(env)?.status, 'pending', `${name}: router should persist pending state`);
+  assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, `${name}: router should persist pending state`);
 
   const blockedDirect = await pretool.run({
     input: {
@@ -147,7 +147,7 @@ async function assertPendingRouteLifecycle({
       'deny',
       `${name}: wrong Agent family should be denied`
     );
-    assert.strictEqual(readRoutingState(env)?.status, 'pending', `${name}: wrong Agent should not clear pending state`);
+    assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, `${name}: wrong Agent should not clear pending state`);
   }
 
   const clearTask = await validator.run({
@@ -158,7 +158,7 @@ async function assertPendingRouteLifecycle({
     env
   });
   assert.strictEqual(clearTask.exitCode, 0, `${name}: approved Agent should pass`);
-  assert.strictEqual(readRoutingState(env)?.status, 'cleared', `${name}: approved Agent should clear pending state`);
+  assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', `${name}: approved Agent should clear pending state`);
 
   const allowedAfterClear = await pretool.run({
     input: {
@@ -222,16 +222,17 @@ async function runAllTests() {
     assert(result.allPassed, 'All hooks should pass');
     assert.strictEqual(result.executedCount, 2, 'Should execute both hooks');
     assert.strictEqual(result.results[0]?.output?.decision, undefined, 'Router should not prompt-block by default');
-    assert.strictEqual(result.results[0]?.output?.metadata?.mandatory, true, 'Router should flag mandatory=true');
-    assert.strictEqual(result.results[0]?.output?.metadata?.enforcedBlock, false, 'Router should avoid prompt-time hard block by default');
+    assert.strictEqual(result.results[0]?.output?.metadata?.routeKind, 'mandatory_specialist', 'Router should flag the route as mandatory');
+    assert.strictEqual(result.results[0]?.output?.metadata?.promptBlocked, false, 'Router should avoid prompt-time hard block by default');
     assert.strictEqual(
-      result.results[0]?.output?.metadata?.agent,
+      result.results[0]?.output?.metadata?.suggestedAgent,
       'opspal-salesforce:sfdc-merge-orchestrator',
       'Router should direct to merge orchestrator'
     );
+    assert.strictEqual(result.results[0]?.output?.metadata?.autoDelegationEligible, true, 'Mandatory merge route should stage auto-delegation');
     const routingState = readRoutingState(env);
     assert(routingState, 'Mandatory route should persist pending routing state');
-    assert.strictEqual(routingState.status, 'pending', 'Mandatory route should remain pending until Agent clears it');
+    assert.strictEqual(routingState.route_pending_clearance, true, 'Mandatory route should remain pending until Agent clears it');
   }));
 
   results.push(await runTest('Production deployment planning routes to release coordinator without prompt rejection', async () => {
@@ -251,13 +252,14 @@ async function runAllTests() {
     assert(result.allPassed, 'All hooks should pass');
     assert.strictEqual(result.results[0]?.output?.decision, undefined, 'Router should not reject the prompt');
     assert.strictEqual(
-      result.results[0]?.output?.metadata?.agent,
+      result.results[0]?.output?.metadata?.suggestedAgent,
       'opspal-core:release-coordinator',
       'Router should direct deployment planning to release coordinator'
     );
-    assert.strictEqual(result.results[0]?.output?.metadata?.mandatory, true, 'Router should flag the route as mandatory');
-    assert.strictEqual(result.results[0]?.output?.metadata?.enforcedBlock, false, 'Router should suppress prompt-time hard block');
-    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Router should persist pending release routing state');
+    assert.strictEqual(result.results[0]?.output?.metadata?.routeKind, 'mandatory_specialist', 'Router should flag the route as mandatory');
+    assert.strictEqual(result.results[0]?.output?.metadata?.promptBlocked, false, 'Router should suppress prompt-time hard block');
+    assert.strictEqual(result.results[0]?.output?.metadata?.autoDelegationEligible, true, 'Router should stage the auto-delegation bridge');
+    assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, 'Router should persist pending release routing state');
 
     const blockedDirect = await pretool.run({
       input: {
@@ -276,6 +278,43 @@ async function runAllTests() {
       'deny',
       'Direct deploy should remain blocked downstream until the specialist path clears the route'
     );
+  }));
+
+  results.push(await runTest('Mandatory deployment route auto-delegates helper Agent calls through the bridge', async () => {
+    const env = createIsolatedEnv({
+      USER_PROMPT_MANDATORY_HARD_BLOCKING: '1'
+    });
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const validator = new HookTester(ROUTING_CHAIN[1]);
+
+    const routed = await router.run({
+      input: {
+        userPrompt: 'Develop the final plan to deploy to production ultrathink'
+      },
+      env
+    });
+    assert.strictEqual(routed.exitCode, 0, 'Router should complete');
+    assert.strictEqual(routed.output?.metadata?.autoDelegationEligible, true, 'Route should activate the auto-delegation bridge');
+
+    const autoDelegated = await validator.run({
+      input: createAgentEvent({
+        subagent_type: 'Plan',
+        prompt: 'Develop the final plan to deploy to production ultrathink'
+      }),
+      env
+    });
+
+    assert.strictEqual(autoDelegated.exitCode, 0, 'Validator should keep Agent handling structured');
+    assert.strictEqual(
+      autoDelegated.output?.hookSpecificOutput?.updatedInput?.subagent_type,
+      'opspal-core:release-coordinator',
+      'Helper Agent call should be rewritten to the required release specialist'
+    );
+    assert(
+      (autoDelegated.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
+      'Validator should explain that the mandatory route was auto-delegated'
+    );
+    assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', 'Auto-delegated specialist should clear the pending route');
   }));
 
   // Test 4: Short name resolution works through chain
@@ -393,11 +432,11 @@ async function runAllTests() {
     assert(result.allPassed, 'All hooks should pass');
     assert.strictEqual(result.executedCount, 2, 'Should execute both hooks');
     assert.strictEqual(result.results[0]?.output?.decision, undefined, 'Router should avoid prompt-time hard block by default');
-    assert.strictEqual(result.results[0]?.output?.metadata?.action, 'INTAKE_REQUIRED', 'Router should mark intake required');
-    assert.strictEqual(result.results[0]?.output?.metadata?.enforcedBlock, false, 'Router should leave hard blocking off by default');
+    assert.strictEqual(result.results[0]?.output?.metadata?.routingActionType, 'INTAKE_REQUIRED', 'Router should mark intake required');
+    assert.strictEqual(result.results[0]?.output?.metadata?.promptBlocked, false, 'Router should leave hard blocking off by default');
     assert.strictEqual(result.results[0]?.output?.metadata?.intakeGateApplied, true, 'Router should mark intake gate as applied');
     assert.strictEqual(
-      result.results[0]?.output?.metadata?.agent,
+      result.results[0]?.output?.metadata?.suggestedAgent,
       'opspal-core:intelligent-intake-orchestrator',
       'Router should direct to intake orchestrator'
     );
@@ -442,11 +481,11 @@ async function runAllTests() {
     });
     assert.strictEqual(routed.exitCode, 0, 'Recommended routing prompt should succeed');
     assert.strictEqual(
-      routed.output?.metadata?.agent,
+      routed.output?.metadata?.suggestedAgent,
       'opspal-salesforce:sfdc-permission-orchestrator',
       'Permission maintenance should still recommend the specialist'
     );
-    assert.strictEqual(routed.output?.metadata?.action, 'RECOMMENDED', 'Permission maintenance should remain recommendation-only');
+    assert.strictEqual(routed.output?.metadata?.routingActionType, 'RECOMMENDED', 'Permission maintenance should remain recommendation-only');
     assert.strictEqual(readRoutingState(env), null, 'Recommendation-only routing should not persist pending state');
 
     const allowedDirect = await pretool.run({
@@ -470,8 +509,7 @@ async function runAllTests() {
         input: { manifestPath: 'package.xml', targetOrg: 'prod' }
       },
       expectedRouteAgent: 'opspal-core:release-coordinator',
-      approvedTaskAgent: 'opspal-salesforce:sfdc-deployment-manager',
-      wrongTaskAgent: 'opspal-salesforce:sfdc-reports-dashboards'
+      approvedTaskAgent: 'opspal-salesforce:sfdc-deployment-manager'
     });
   }));
 
@@ -527,14 +565,14 @@ async function runAllTests() {
       env
     });
     assert.strictEqual(first.exitCode, 0, 'Initial routing prompt should succeed');
-    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Initial prompt should persist pending routing state');
+    assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, 'Initial prompt should persist pending routing state');
 
     const second = await router.run({
       input: { userPrompt: 'What time is it?' },
       env
     });
     assert.strictEqual(second.exitCode, 0, 'Harmless follow-up should succeed');
-    assert.strictEqual(readRoutingState(env)?.status, 'pending', 'Harmless follow-up should not clear pending routing state');
+    assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, 'Harmless follow-up should not clear pending routing state');
 
     const blockedDirect = await pretool.run({
       input: {
@@ -565,7 +603,7 @@ async function runAllTests() {
       env
     });
     assert.strictEqual(routed.exitCode, 0, 'Procedural routing prompt should succeed');
-    assert.strictEqual(routed.output?.metadata?.action, 'RECOMMENDED', 'Procedural routing should remain recommendation-only');
+    assert.strictEqual(routed.output?.metadata?.routingActionType, 'RECOMMENDED', 'Procedural routing should remain recommendation-only');
     assert.strictEqual(readRoutingState(env), null, 'Procedural recommendation should not persist pending routing state');
 
     const allowedDirect = await pretool.run({

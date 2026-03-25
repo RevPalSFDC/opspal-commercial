@@ -80,6 +80,8 @@ ACTIVE_INTAKE_PROJECT_SIGNAL_MIN="${ACTIVE_INTAKE_PROJECT_SIGNAL_MIN:-3}"
 ACTIVE_INTAKE_COMPLETENESS_MAX="${ACTIVE_INTAKE_COMPLETENESS_MAX:-0.5}"
 ACTIVE_INTAKE_VERBOSE="${ACTIVE_INTAKE_VERBOSE:-0}"
 ROUTING_OVERRIDE_TOKEN="${ROUTING_OVERRIDE_TOKEN:-[ROUTING_OVERRIDE]}"
+ROUTING_AUTO_DELEGATION_ENABLED="${ROUTING_AUTO_DELEGATION_ENABLED:-1}"
+ROUTING_AUTO_DELEGATION_MIN_CONFIDENCE="${ROUTING_AUTO_DELEGATION_MIN_CONFIDENCE:-0.95}"
 VERBOSE="${ROUTING_VERBOSE:-0}"
 LOW_CONFIDENCE_THRESHOLD="${ROUTING_LOW_CONFIDENCE_THRESHOLD:-0.60}"
 FALLBACK_MIN_CONFIDENCE="${ROUTING_FALLBACK_MIN_CONFIDENCE:-0.55}"
@@ -797,29 +799,51 @@ persist_routing_state() {
     payload=$(jq -nc \
       --arg session_key "$ROUTING_SESSION_KEY" \
       --arg route_id "${ROUTE_ID:-}" \
-      --arg action "${ACTION_TYPE:-}" \
-      --arg reason "$reason" \
+      --arg route_kind "${ROUTE_KIND:-}" \
+      --arg guidance_action "${GUIDANCE_ACTION:-}" \
+      --arg routing_reason "$reason" \
       --arg agent "${SUGGESTED_AGENT:-}" \
       --argjson clearance_agents "${CLEARANCE_AGENTS_JSON:-[]}" \
       --arg status "$status" \
+      --arg handoff_prompt "$USER_MESSAGE" \
       --arg user_message_preview "${USER_MESSAGE:0:200}" \
-      --argjson blocked "${SHOULD_BLOCK:-false}" \
-      --argjson enforced_block "${ENFORCED_BLOCK:-false}" \
-      --argjson mandatory "${IS_MANDATORY:-false}" \
+      --argjson requires_specialist "${REQUIRES_SPECIALIST:-false}" \
+      --argjson prompt_guidance_only "${PROMPT_GUIDANCE_ONLY:-true}" \
+      --argjson prompt_blocked "${PROMPT_BLOCKED:-false}" \
+      --argjson execution_block_until_cleared "${EXECUTION_BLOCK_UNTIL_CLEARED:-false}" \
+      --argjson route_pending_clearance "${ROUTE_PENDING_CLEARANCE:-false}" \
+      --argjson route_cleared "${ROUTE_CLEARED:-false}" \
+      --argjson routing_confidence "${ROUTING_CONFIDENCE:-0}" \
       --argjson override_applied "${OVERRIDE_APPLIED:-false}" \
+      --argjson auto_delegation_eligible "${AUTO_DELEGATION_ELIGIBLE:-false}" \
+      --arg auto_delegation_mode "${AUTO_DELEGATION_MODE:-disabled}" \
       '{
         session_key: $session_key,
         route_id: (if $route_id != "" then $route_id else null end),
-        action: (if $action != "" then $action else null end),
-        reason: (if $reason != "" then $reason else null end),
-        recommended_agent: (if $agent != "" then $agent else null end),
+        route_kind: (if $route_kind != "" then $route_kind else null end),
+        guidance_action: (if $guidance_action != "" then $guidance_action else null end),
+        routing_reason: (if $routing_reason != "" then $routing_reason else null end),
+        required_agent: (if $agent != "" then $agent else null end),
         clearance_agents: $clearance_agents,
-        blocked: $blocked,
-        enforced_block: $enforced_block,
-        mandatory: $mandatory,
+        requires_specialist: $requires_specialist,
+        prompt_guidance_only: $prompt_guidance_only,
+        prompt_blocked: $prompt_blocked,
+        execution_block_until_cleared: $execution_block_until_cleared,
+        route_pending_clearance: $route_pending_clearance,
+        route_cleared: $route_cleared,
+        routing_confidence: $routing_confidence,
         override_applied: $override_applied,
         status: $status,
-        user_message_preview: $user_message_preview
+        user_message_preview: $user_message_preview,
+        handoff_prompt: $handoff_prompt,
+        auto_delegation: {
+          eligible: $auto_delegation_eligible,
+          active: ($auto_delegation_eligible and $route_pending_clearance and ($override_applied | not)),
+          mode: $auto_delegation_mode,
+          agent: (if $agent != "" then $agent else null end),
+          confidence: $routing_confidence,
+          handoff_prompt: $handoff_prompt
+        }
       }' 2>/dev/null || echo "")
 
     if [[ -n "$payload" ]]; then
@@ -836,7 +860,7 @@ routing_state_has_pending_requirement() {
         return 1
     fi
 
-    node "$ROUTING_STATE_MANAGER" check "$ROUTING_SESSION_KEY" 2>/dev/null | jq -e '.pending == true and .enforce == true' >/dev/null 2>&1
+    node "$ROUTING_STATE_MANAGER" check "$ROUTING_SESSION_KEY" 2>/dev/null | jq -e '.routePendingClearance == true and .executionBlockActive == true' >/dev/null 2>&1
 }
 
 mark_routing_state_bypassed() {
@@ -1140,13 +1164,72 @@ if [[ "$ROUTING_ADAPTIVE_CONTINUE" == "1" ]] &&
     fi
 fi
 
-[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, Block: $SHOULD_BLOCK, Persist: $SHOULD_PERSIST_ROUTE, Enforced: $ENFORCED_BLOCK, RequestedPromptBlock: $PROMPT_BLOCK_REQUESTED, SuppressedPromptBlock: $PROMPT_BLOCK_SUPPRESSED, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED" >&2
+ROUTE_KIND="direct"
+GUIDANCE_ACTION="direct_ok"
+ROUTING_REASON="${BLOCK_REASON:-advisory}"
+PROMPT_GUIDANCE_ONLY="true"
+PROMPT_BLOCKED="false"
+REQUIRES_SPECIALIST="$SHOULD_PERSIST_ROUTE"
+EXECUTION_BLOCK_UNTIL_CLEARED="$SHOULD_PERSIST_ROUTE"
+ROUTE_PENDING_CLEARANCE="$SHOULD_PERSIST_ROUTE"
+ROUTE_CLEARED="false"
+AUTO_DELEGATION_ELIGIBLE="false"
+AUTO_DELEGATION_MODE="disabled"
+
+if [[ -n "$GUARDRAIL_ALERT" ]] && [[ "$IS_MANDATORY" == "true" ]]; then
+    ROUTE_KIND="routing_alert"
+    GUIDANCE_ACTION="require_specialist"
+    ROUTING_REASON="${BLOCK_REASON:-guardrail_alert}"
+elif [[ -n "$GUARDRAIL_ALERT" ]]; then
+    ROUTE_KIND="routing_alert"
+    GUIDANCE_ACTION="alert"
+    ROUTING_REASON="${BLOCK_REASON:-guardrail_alert}"
+elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]]; then
+    ROUTE_KIND="intake_specialist"
+    GUIDANCE_ACTION="require_intake"
+    ROUTING_REASON="${BLOCK_REASON:-intake_required}"
+elif [[ "$IS_MANDATORY" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    ROUTE_KIND="mandatory_specialist"
+    GUIDANCE_ACTION="require_specialist"
+    ROUTING_REASON="${BLOCK_REASON:-mandatory_destructive}"
+elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    ROUTE_KIND="complexity_specialist"
+    GUIDANCE_ACTION="require_specialist"
+    ROUTING_REASON="${BLOCK_REASON:-high_complexity}"
+elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    ROUTE_KIND="advisory_specialist"
+    GUIDANCE_ACTION="recommend_specialist"
+    ROUTING_REASON="advisory_specialist"
+elif [[ "$ACTION_TYPE" == "AVAILABLE" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    ROUTE_KIND="advisory_specialist"
+    GUIDANCE_ACTION="recommend_specialist"
+    ROUTING_REASON="available_specialist"
+fi
+
+if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
+    EXECUTION_BLOCK_UNTIL_CLEARED="false"
+    ROUTE_PENDING_CLEARANCE="false"
+fi
+
+if [[ "$ROUTING_AUTO_DELEGATION_ENABLED" == "1" ]] &&
+   [[ "$ROUTE_KIND" == "mandatory_specialist" ]] &&
+   [[ "$REQUIRES_SPECIALIST" == "true" ]] &&
+   [[ -n "$SUGGESTED_AGENT" ]] &&
+   [[ "$SUGGESTED_AGENT" == *:* ]] &&
+   [[ "$OVERRIDE_APPLIED" != "true" ]] &&
+   [[ -z "$GUARDRAIL_ALERT" ]] &&
+   float_ge "$ROUTING_CONFIDENCE" "$ROUTING_AUTO_DELEGATION_MIN_CONFIDENCE"; then
+    AUTO_DELEGATION_ELIGIBLE="true"
+    AUTO_DELEGATION_MODE="agent_rewrite_bridge"
+fi
+
+[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, RouteKind: $ROUTE_KIND, Guidance: $GUIDANCE_ACTION, RequiresSpecialist: $REQUIRES_SPECIALIST, ExecutionGate: $EXECUTION_BLOCK_UNTIL_CLEARED, RequestedPromptBlock: $PROMPT_BLOCK_REQUESTED, SuppressedPromptBlock: $PROMPT_BLOCK_SUPPRESSED, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED, AutoDelegation: $AUTO_DELEGATION_ELIGIBLE" >&2
 
 if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
     if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
         persist_routing_state "bypassed" "${BLOCK_OVERRIDE_REASON:-prompt_override_token}"
     else
-        persist_routing_state "pending" "${BLOCK_REASON:-routing_required}"
+        persist_routing_state "pending_clearance" "${ROUTING_REASON:-routing_required}"
     fi
 elif [[ "$HAS_OVERRIDE" == "true" ]] && routing_state_has_pending_requirement; then
     OVERRIDE_APPLIED="true"
@@ -1187,27 +1270,34 @@ LOG_ENTRY=$(jq -n \
     --arg ts "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
     --arg route_id "${ROUTE_ID:-}" \
     --arg agent "${SUGGESTED_AGENT:-}" \
+    --arg route_kind "${ROUTE_KIND:-}" \
+    --arg guidance_action "${GUIDANCE_ACTION:-}" \
     --arg leaked_agent "${GUARDRAIL_LEAKED_AGENT:-}" \
     --arg guardrail_alert "${GUARDRAIL_ALERT:-}" \
-    --arg block_reason "${BLOCK_REASON:-}" \
+    --arg routing_reason "${ROUTING_REASON:-}" \
     --arg block_override_reason "${BLOCK_OVERRIDE_REASON:-}" \
+    --arg routing_action_type "$ACTION_TYPE" \
+    --arg routing_source "$ROUTING_SOURCE" \
+    --arg intake_mode "$ACTIVE_INTAKE_MODE" \
+    --arg intake_reason "${INTAKE_REASON:-}" \
     --argjson complexity "${COMPLEXITY:-0}" \
-    --argjson confidence "${ROUTING_CONFIDENCE:-0}" \
+    --argjson routing_confidence "${ROUTING_CONFIDENCE:-0}" \
     --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
-    --argjson blocked "$SHOULD_BLOCK" \
-    --argjson enforced_block "$ENFORCED_BLOCK" \
-    --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
-    --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
+    --argjson requires_specialist "$REQUIRES_SPECIALIST" \
+    --argjson prompt_guidance_only "$PROMPT_GUIDANCE_ONLY" \
+    --argjson prompt_blocked "$PROMPT_BLOCKED" \
+    --argjson execution_block_until_cleared "$EXECUTION_BLOCK_UNTIL_CLEARED" \
+    --argjson route_pending_clearance "$ROUTE_PENDING_CLEARANCE" \
+    --argjson route_cleared "$ROUTE_CLEARED" \
+    --argjson legacy_prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+    --argjson legacy_prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
     --argjson override_applied "$OVERRIDE_APPLIED" \
     --argjson continue_intent "$CONTINUE_INTENT" \
     --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
     --argjson low_signal_routing "$LOW_SIGNAL_ROUTING" \
-    --argjson mandatory "$IS_MANDATORY" \
-    --arg action "$ACTION_TYPE" \
-    --arg routing_source "$ROUTING_SOURCE" \
+    --argjson auto_delegation_eligible "$AUTO_DELEGATION_ELIGIBLE" \
+    --arg auto_delegation_mode "${AUTO_DELEGATION_MODE:-disabled}" \
     --argjson fallback_used "$FALLBACK_USED" \
-    --arg intake_mode "$ACTIVE_INTAKE_MODE" \
-    --arg intake_reason "${INTAKE_REASON:-}" \
     --argjson intake_eligible "$INTAKE_ELIGIBLE" \
     --argjson intake_required "$INTAKE_REQUIRED" \
     --argjson intake_gate_applied "$INTAKE_GATE_APPLIED" \
@@ -1219,24 +1309,32 @@ LOG_ENTRY=$(jq -n \
     '{
         timestamp: $ts,
         route_id: (if $route_id != "" then $route_id else null end),
-        agent: (if $agent != "" then $agent else null end),
+        suggested_agent: (if $agent != "" then $agent else null end),
+        required_agent: (if $requires_specialist and $agent != "" then $agent else null end),
+        route_kind: (if $route_kind != "" then $route_kind else null end),
+        guidance_action: (if $guidance_action != "" then $guidance_action else null end),
         guardrail_leaked_agent: (if $leaked_agent != "" then $leaked_agent else null end),
         guardrail_alert: (if $guardrail_alert != "" then $guardrail_alert else null end),
-        block_reason: (if $block_reason != "" then $block_reason else null end),
+        routing_reason: (if $routing_reason != "" then $routing_reason else null end),
         block_override_reason: (if $block_override_reason != "" then $block_override_reason else null end),
+        routing_action_type: $routing_action_type,
         complexity: $complexity,
-        confidence: $confidence,
+        routing_confidence: $routing_confidence,
         transcript_noise_score: $transcript_noise_score,
         continue_intent: $continue_intent,
-        blocked: $blocked,
-        enforced_block: $enforced_block,
-        prompt_block_requested: $prompt_block_requested,
-        prompt_block_suppressed: $prompt_block_suppressed,
+        requires_specialist: $requires_specialist,
+        prompt_guidance_only: $prompt_guidance_only,
+        prompt_blocked: $prompt_blocked,
+        execution_block_until_cleared: $execution_block_until_cleared,
+        route_pending_clearance: $route_pending_clearance,
+        route_cleared: $route_cleared,
+        legacy_prompt_block_requested: $legacy_prompt_block_requested,
+        legacy_prompt_block_suppressed: $legacy_prompt_block_suppressed,
         override_applied: $override_applied,
         adaptive_fallback_applied: $adaptive_fallback_applied,
         low_signal_routing: $low_signal_routing,
-        mandatory: $mandatory,
-        action: $action,
+        auto_delegation_eligible: $auto_delegation_eligible,
+        auto_delegation_mode: $auto_delegation_mode,
         routing_source: $routing_source,
         fallback_used: $fallback_used,
         intake_mode: $intake_mode,
@@ -1277,21 +1375,28 @@ if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]
         --arg ts "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
         --arg route_id "${ROUTE_ID:-}" \
         --arg agent "${SUGGESTED_AGENT:-}" \
-        --arg action "$ACTION_TYPE" \
-        --arg block_reason "${BLOCK_REASON:-}" \
+        --arg route_kind "${ROUTE_KIND:-}" \
+        --arg guidance_action "${GUIDANCE_ACTION:-}" \
+        --arg routing_reason "${ROUTING_REASON:-}" \
+        --arg routing_action_type "$ACTION_TYPE" \
         --arg override_reason "${BLOCK_OVERRIDE_REASON:-}" \
         --arg override_token "$ROUTING_OVERRIDE_TOKEN" \
+        --arg intake_mode "$ACTIVE_INTAKE_MODE" \
+        --arg intake_reason "${INTAKE_REASON:-}" \
         --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
-        --argjson blocked "$SHOULD_BLOCK" \
-        --argjson enforced_block "$ENFORCED_BLOCK" \
-        --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
-        --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
+        --argjson requires_specialist "$REQUIRES_SPECIALIST" \
+        --argjson prompt_guidance_only "$PROMPT_GUIDANCE_ONLY" \
+        --argjson prompt_blocked "$PROMPT_BLOCKED" \
+        --argjson execution_block_until_cleared "$EXECUTION_BLOCK_UNTIL_CLEARED" \
+        --argjson route_pending_clearance "$ROUTE_PENDING_CLEARANCE" \
+        --argjson route_cleared "$ROUTE_CLEARED" \
+        --argjson legacy_prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+        --argjson legacy_prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
         --argjson override_applied "$OVERRIDE_APPLIED" \
         --argjson continue_intent "$CONTINUE_INTENT" \
         --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
-        --argjson mandatory "$IS_MANDATORY" \
-        --arg intake_mode "$ACTIVE_INTAKE_MODE" \
-        --arg intake_reason "${INTAKE_REASON:-}" \
+        --argjson auto_delegation_eligible "$AUTO_DELEGATION_ELIGIBLE" \
+        --arg auto_delegation_mode "${AUTO_DELEGATION_MODE:-disabled}" \
         --argjson intake_eligible "$INTAKE_ELIGIBLE" \
         --argjson intake_required "$INTAKE_REQUIRED" \
         --argjson intake_project_signal "${INTAKE_PROJECT_SIGNAL:-0}" \
@@ -1302,20 +1407,28 @@ if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]
             timestamp: $ts,
             source: "unified-router",
             route_id: (if $route_id != "" then $route_id else null end),
-            agent: (if $agent != "" then $agent else null end),
-            action: $action,
-            block_reason: (if $block_reason != "" then $block_reason else null end),
+            suggested_agent: (if $agent != "" then $agent else null end),
+            required_agent: (if $requires_specialist and $agent != "" then $agent else null end),
+            route_kind: (if $route_kind != "" then $route_kind else null end),
+            guidance_action: (if $guidance_action != "" then $guidance_action else null end),
+            routing_reason: (if $routing_reason != "" then $routing_reason else null end),
+            routing_action_type: $routing_action_type,
             override_reason: (if $override_reason != "" then $override_reason else null end),
             override_token: (if $override_applied then $override_token else null end),
             transcript_noise_score: $transcript_noise_score,
             continue_intent: $continue_intent,
-            blocked: $blocked,
-            enforced_block: $enforced_block,
-            prompt_block_requested: $prompt_block_requested,
-            prompt_block_suppressed: $prompt_block_suppressed,
+            requires_specialist: $requires_specialist,
+            prompt_guidance_only: $prompt_guidance_only,
+            prompt_blocked: $prompt_blocked,
+            execution_block_until_cleared: $execution_block_until_cleared,
+            route_pending_clearance: $route_pending_clearance,
+            route_cleared: $route_cleared,
+            legacy_prompt_block_requested: $legacy_prompt_block_requested,
+            legacy_prompt_block_suppressed: $legacy_prompt_block_suppressed,
             override_applied: $override_applied,
             adaptive_fallback_applied: $adaptive_fallback_applied,
-            mandatory: $mandatory,
+            auto_delegation_eligible: $auto_delegation_eligible,
+            auto_delegation_mode: $auto_delegation_mode,
             intake_mode: $intake_mode,
             intake_reason: (if $intake_reason != "" then $intake_reason else null end),
             intake_eligible: $intake_eligible,
@@ -1336,23 +1449,30 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
     METRICS_EVENT=$(jq -n \
         --arg route_id "${ROUTE_ID:-}" \
         --arg agent "${SUGGESTED_AGENT:-}" \
-        --arg action "$ACTION_TYPE" \
-        --arg block_reason "${BLOCK_REASON:-}" \
-        --arg routing_source "$ROUTING_SOURCE" \
+        --arg route_kind "${ROUTE_KIND:-}" \
+        --arg guidance_action "${GUIDANCE_ACTION:-}" \
+        --arg routing_reason "${ROUTING_REASON:-}" \
+        --arg routing_action_type "$ACTION_TYPE" \
         --arg intake_mode "$ACTIVE_INTAKE_MODE" \
         --arg intake_reason "${INTAKE_REASON:-}" \
+        --arg routing_source "$ROUTING_SOURCE" \
+        --arg auto_delegation_mode "${AUTO_DELEGATION_MODE:-disabled}" \
         --arg msg_preview "${USER_MESSAGE:0:200}" \
         --argjson complexity "${COMPLEXITY:-0}" \
-        --argjson confidence "${ROUTING_CONFIDENCE:-0}" \
+        --argjson routing_confidence "${ROUTING_CONFIDENCE:-0}" \
         --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
-        --argjson blocked "$SHOULD_BLOCK" \
-        --argjson enforced_block "$ENFORCED_BLOCK" \
-        --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
-        --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
+        --argjson requires_specialist "$REQUIRES_SPECIALIST" \
+        --argjson prompt_guidance_only "$PROMPT_GUIDANCE_ONLY" \
+        --argjson prompt_blocked "$PROMPT_BLOCKED" \
+        --argjson execution_block_until_cleared "$EXECUTION_BLOCK_UNTIL_CLEARED" \
+        --argjson route_pending_clearance "$ROUTE_PENDING_CLEARANCE" \
+        --argjson route_cleared "$ROUTE_CLEARED" \
+        --argjson legacy_prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+        --argjson legacy_prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
         --argjson continue_intent "$CONTINUE_INTENT" \
         --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
         --argjson fallback_used "$FALLBACK_USED" \
-        --argjson mandatory "$IS_MANDATORY" \
+        --argjson auto_delegation_eligible "$AUTO_DELEGATION_ELIGIBLE" \
         --argjson intake_eligible "$INTAKE_ELIGIBLE" \
         --argjson intake_required "$INTAKE_REQUIRED" \
         --argjson intake_project_signal "${INTAKE_PROJECT_SIGNAL:-0}" \
@@ -1364,16 +1484,26 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
                 messagePreview: $msg_preview
             },
             output: {
-                agent: (if $agent != "" then $agent else null end),
-                blocked: $blocked,
-                blockReason: (if $block_reason != "" then $block_reason else null end),
-                action: $action,
-                promptBlockRequested: $prompt_block_requested,
-                promptBlockSuppressed: $prompt_block_suppressed
+                suggestedAgent: (if $agent != "" then $agent else null end),
+                requiredAgent: (if $requires_specialist and $agent != "" then $agent else null end),
+                routeKind: (if $route_kind != "" then $route_kind else null end),
+                guidanceAction: (if $guidance_action != "" then $guidance_action else null end),
+                routingReason: (if $routing_reason != "" then $routing_reason else null end),
+                requiresSpecialist: $requires_specialist,
+                promptGuidanceOnly: $prompt_guidance_only,
+                promptBlocked: $prompt_blocked,
+                executionBlockUntilCleared: $execution_block_until_cleared,
+                routePendingClearance: $route_pending_clearance,
+                routeCleared: $route_cleared,
+                legacyPromptBlockRequested: $legacy_prompt_block_requested,
+                legacyPromptBlockSuppressed: $legacy_prompt_block_suppressed,
+                routingActionType: $routing_action_type,
+                autoDelegationEligible: $auto_delegation_eligible,
+                autoDelegationMode: $auto_delegation_mode
             },
             metrics: {
                 complexity: $complexity,
-                confidence: $confidence,
+                confidence: $routing_confidence,
                 transcriptNoiseScore: $transcript_noise_score,
                 intakeProjectSignal: $intake_project_signal,
                 intakeCompletenessScore: $intake_completeness_score,
@@ -1384,10 +1514,18 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
             fallbackUsed: $fallback_used,
             continueIntent: $continue_intent,
             adaptiveFallbackApplied: $adaptive_fallback_applied,
-            mandatory: $mandatory,
-            enforcedBlock: $enforced_block,
-            promptBlockRequested: $prompt_block_requested,
-            promptBlockSuppressed: $prompt_block_suppressed,
+            routeKind: (if $route_kind != "" then $route_kind else null end),
+            guidanceAction: (if $guidance_action != "" then $guidance_action else null end),
+            requiresSpecialist: $requires_specialist,
+            executionBlockUntilCleared: $execution_block_until_cleared,
+            routePendingClearance: $route_pending_clearance,
+            routeCleared: $route_cleared,
+            promptGuidanceOnly: $prompt_guidance_only,
+            promptBlocked: $prompt_blocked,
+            autoDelegationEligible: $auto_delegation_eligible,
+            autoDelegationMode: $auto_delegation_mode,
+            legacyPromptBlockRequested: $legacy_prompt_block_requested,
+            legacyPromptBlockSuppressed: $legacy_prompt_block_suppressed,
             intakeMode: $intake_mode,
             intakeReason: (if $intake_reason != "" then $intake_reason else null end),
             intakeEligible: $intake_eligible,
@@ -1403,6 +1541,11 @@ fi
 # =============================================================================
 
 CONTEXT_MESSAGE=""
+AUTO_DELEGATION_CONTEXT=""
+
+if [[ "$AUTO_DELEGATION_ELIGIBLE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
+    AUTO_DELEGATION_CONTEXT="AUTO-DELEGATION BRIDGE: Mandatory specialist handoff is staged for '$SUGGESTED_AGENT'. If the next internal step uses the Agent tool with any non-approved helper or placeholder, runtime validation will rewrite it to this required specialist automatically until route clearance is recorded."
+fi
 
 # CRITICAL: All agent names must be fully-qualified (plugin-name:agent-name)
 # Short names like 'sfdc-territory-discovery' will fail with "Agent not found"
@@ -1417,42 +1560,42 @@ Do not use this agent name. Re-run routing or resolve a valid fully-qualified ag
 
 elif [[ "$IS_MANDATORY" == "true" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Mandatory specialist routing matched this request, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
-Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-Prompt submission continues, but this bypass should be treated as an audited exception."
+Required specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Prompt submission continues and execution-time specialist enforcement is bypassed for this request only. Treat this as an audited exception."
 
 elif [[ "$IS_MANDATORY" == "true" ]]; then
-    CONTEXT_MESSAGE="MANDATORY ROUTING: This operation MUST use a specialist agent.
-You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) to handle this.
-Do NOT execute this directly. Route through the specialist agent above.
+    CONTEXT_MESSAGE="MANDATORY SPECIALIST ROUTE: This request requires Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+Do not continue direct operational execution in the parent path.
 CRITICAL: Use the EXACT fully-qualified agent name shown above. Short names will fail.
-Prompt submission continues; downstream operational tools remain gated until this specialist clears the route."
+${AUTO_DELEGATION_CONTEXT}
+Prompt submission continues; execution-time validators remain active until the specialist route is cleared."
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: Request looks project-level and under-specified.
 Recommended specialist: Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>).
-Override token detected; direct operational tools may proceed only if this bypass is intentional."
+Override token detected; execution-time specialist enforcement is bypassed for this request only."
 
 elif [[ "$ACTION_TYPE" == "INTAKE_REQUIRED" ]]; then
     CONTEXT_MESSAGE="ROUTING REQUIRED: Request appears project-level but under-specified.
 Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to gather specifics and produce a structured plan.
 Reason: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE (< $ACTIVE_INTAKE_COMPLETENESS_MAX).
-Prompt submission continues; direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked or an override is used."
+Prompt submission continues; execution-time validators gate direct operational work until this specialist route is cleared or explicitly bypassed."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$ADAPTIVE_FALLBACK_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING ADAPTIVE FALLBACK: High-complexity signal detected (${COMPLEXITY_PCT}%), but this prompt appears to be continuation/noisy context.
 Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-Proceeding without hard block for this turn."
+Prompt submission continues without user-visible blocking for this turn, but execution-time specialist enforcement remains active."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]] && [[ "$OVERRIDE_APPLIED" == "true" ]]; then
     CONTEXT_MESSAGE="ROUTING OVERRIDE APPLIED: High-complexity task (${COMPLEXITY_PCT}%) matched specialist routing, but override token '$ROUTING_OVERRIDE_TOKEN' was detected.
 Recommended specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-Prompt submission continues, but this bypass should be treated as an audited exception."
+Prompt submission continues and execution-time specialist enforcement is bypassed for this request only. Treat this as an audited exception."
 
 elif [[ "$ACTION_TYPE" == "BLOCKED" ]]; then
     CONTEXT_MESSAGE="ROUTING REQUIRED: High complexity (${COMPLEXITY_PCT}%). You MUST use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
 Do NOT execute this directly - route through the specialist agent.
 CRITICAL: Use the EXACT agent name shown above (fully-qualified with plugin prefix).
-Prompt submission continues; direct operational tools remain gated until the specialist clears the route.
+Prompt submission continues; execution-time validators remain active until the specialist clears the route.
 If bypass is intentional, add '$ROUTING_OVERRIDE_TOKEN' to the prompt."
 
 elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]]; then
@@ -1460,11 +1603,11 @@ elif [[ "$ACTION_TYPE" == "RECOMMENDED" ]]; then
         CONTEXT_MESSAGE="This looks like a project-level request with missing implementation specifics.
 Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', prompt=<original request>) to run intake questions and generate a structured plan.
 Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE.
-Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked."
+This is prompt-time guidance only; direct execution is not blocked by routing state for this advisory route."
     else
         CONTEXT_MESSAGE="ROUTING: Use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task. Complexity: ${COMPLEXITY_PCT}%.
 REMINDER: Use the EXACT fully-qualified agent name shown above.
-Direct Bash/Write/Edit/MultiEdit and mutating MCP tools stay gated until this specialist is invoked."
+This is prompt-time guidance only; direct execution is not blocked by routing state for this advisory route."
     fi
 fi
 
@@ -1480,34 +1623,41 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
     jq -n \
         --arg context "$CONTEXT_MESSAGE" \
         --arg agent "${SUGGESTED_AGENT:-}" \
+        --arg route_kind "${ROUTE_KIND:-}" \
+        --arg guidance_action "${GUIDANCE_ACTION:-}" \
         --arg guardrail_alert "${GUARDRAIL_ALERT:-}" \
         --arg route_id "${ROUTE_ID:-}" \
-        --arg block_reason "${BLOCK_REASON:-}" \
+        --arg routing_reason "${ROUTING_REASON:-}" \
         --arg block_override_reason "${BLOCK_OVERRIDE_REASON:-}" \
         --arg intake_mode "$ACTIVE_INTAKE_MODE" \
         --arg intake_reason "${INTAKE_REASON:-}" \
         --arg decision "$DECISION_VALUE" \
         --arg decision_reason "$DECISION_REASON" \
         --arg routing_source "$ROUTING_SOURCE" \
+        --arg auto_delegation_mode "${AUTO_DELEGATION_MODE:-disabled}" \
         --argjson complexity "${COMPLEXITY:-0}" \
-        --argjson confidence "${ROUTING_CONFIDENCE:-0}" \
+        --argjson routing_confidence "${ROUTING_CONFIDENCE:-0}" \
         --argjson transcript_noise_score "${TRANSCRIPT_NOISE_SCORE:-0}" \
-        --argjson blocked "$SHOULD_BLOCK" \
-        --argjson enforced_block "$ENFORCED_BLOCK" \
-        --argjson prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
-        --argjson prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
+        --argjson requires_specialist "$REQUIRES_SPECIALIST" \
+        --argjson prompt_guidance_only "$PROMPT_GUIDANCE_ONLY" \
+        --argjson prompt_blocked "$PROMPT_BLOCKED" \
+        --argjson execution_block_until_cleared "$EXECUTION_BLOCK_UNTIL_CLEARED" \
+        --argjson route_pending_clearance "$ROUTE_PENDING_CLEARANCE" \
+        --argjson route_cleared "$ROUTE_CLEARED" \
+        --argjson legacy_prompt_block_requested "$PROMPT_BLOCK_REQUESTED" \
+        --argjson legacy_prompt_block_suppressed "$PROMPT_BLOCK_SUPPRESSED" \
         --argjson override_applied "$OVERRIDE_APPLIED" \
         --argjson continue_intent "$CONTINUE_INTENT" \
         --argjson adaptive_fallback_applied "$ADAPTIVE_FALLBACK_APPLIED" \
         --argjson fallback_used "$FALLBACK_USED" \
-        --argjson mandatory "$IS_MANDATORY" \
+        --argjson auto_delegation_eligible "$AUTO_DELEGATION_ELIGIBLE" \
         --argjson procedural_request "$PROCEDURAL_REQUEST" \
         --argjson intake_eligible "$INTAKE_ELIGIBLE" \
         --argjson intake_required "$INTAKE_REQUIRED" \
         --argjson intake_gate_applied "$INTAKE_GATE_APPLIED" \
         --argjson intake_project_signal "${INTAKE_PROJECT_SIGNAL:-0}" \
         --argjson intake_completeness_score "${INTAKE_COMPLETENESS_SCORE:-1}" \
-        --arg action "$ACTION_TYPE" \
+        --arg routing_action_type "$ACTION_TYPE" \
         --arg normalized_message_preview "${USER_MESSAGE:0:100}" \
         '{
             suppressOutput: true,
@@ -1516,23 +1666,31 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
                 additionalContext: $context
             },
             metadata: {
-                agent: $agent,
+                suggestedAgent: (if $agent != "" then $agent else null end),
+                requiredAgent: (if $requires_specialist and $agent != "" then $agent else null end),
                 routeId: (if $route_id != "" then $route_id else null end),
+                routeKind: (if $route_kind != "" then $route_kind else null end),
+                guidanceAction: (if $guidance_action != "" then $guidance_action else null end),
                 guardrailAlert: (if $guardrail_alert != "" then $guardrail_alert else null end),
-                blockReason: (if $block_reason != "" then $block_reason else null end),
+                routingReason: (if $routing_reason != "" then $routing_reason else null end),
                 blockOverrideReason: (if $block_override_reason != "" then $block_override_reason else null end),
                 complexity: $complexity,
-                confidence: $confidence,
+                routingConfidence: $routing_confidence,
                 transcriptNoiseScore: $transcript_noise_score,
-                blocked: $blocked,
-                enforcedBlock: $enforced_block,
-                promptBlockRequested: $prompt_block_requested,
-                promptBlockSuppressed: $prompt_block_suppressed,
+                requiresSpecialist: $requires_specialist,
+                promptGuidanceOnly: $prompt_guidance_only,
+                promptBlocked: $prompt_blocked,
+                executionBlockUntilCleared: $execution_block_until_cleared,
+                routePendingClearance: $route_pending_clearance,
+                routeCleared: $route_cleared,
+                legacyPromptBlockRequested: $legacy_prompt_block_requested,
+                legacyPromptBlockSuppressed: $legacy_prompt_block_suppressed,
                 overrideApplied: $override_applied,
                 continueIntent: $continue_intent,
                 adaptiveFallbackApplied: $adaptive_fallback_applied,
                 fallbackUsed: $fallback_used,
-                mandatory: $mandatory,
+                autoDelegationEligible: $auto_delegation_eligible,
+                autoDelegationMode: $auto_delegation_mode,
                 proceduralRequest: $procedural_request,
                 intakeMode: $intake_mode,
                 intakeReason: (if $intake_reason != "" then $intake_reason else null end),
@@ -1541,7 +1699,7 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
                 intakeGateApplied: $intake_gate_applied,
                 projectSignal: $intake_project_signal,
                 completenessScore: $intake_completeness_score,
-                action: $action,
+                routingActionType: $routing_action_type,
                 routingSource: $routing_source,
                 normalizedMessagePreview: $normalized_message_preview
             }

@@ -86,8 +86,15 @@ function createRoutingEvent(params) {
     type = 'routing_decision',
     inputAgent,
     resolvedAgent,
+    requiredAgent,
+    routeKind,
+    guidanceAction,
     wasResolved,
     blocked = false,
+    requiresSpecialist = false,
+    promptGuidanceOnly = true,
+    promptBlocked = false,
+    executionBlockUntilCleared = false,
     blockReason,
     keywords = [],
     complexity,
@@ -104,8 +111,16 @@ function createRoutingEvent(params) {
     },
     output: {
       agent: resolvedAgent,
+      suggestedAgent: resolvedAgent,
+      requiredAgent,
+      routeKind,
+      guidanceAction,
       wasResolved,
-      blocked,
+      blocked: executionBlockUntilCleared || blocked,
+      requiresSpecialist,
+      promptGuidanceOnly,
+      promptBlocked,
+      executionBlockUntilCleared,
       blockReason
     },
     metrics: {
@@ -118,6 +133,43 @@ function createRoutingEvent(params) {
       code: error.code
     } : undefined
   };
+}
+
+function getRoutingOutput(entry = {}) {
+  return entry.output || entry;
+}
+
+function getResolvedAgent(entry = {}) {
+  const output = getRoutingOutput(entry);
+  return (
+    output.agent ||
+    output.suggestedAgent ||
+    output.requiredAgent ||
+    entry.selectedAgent ||
+    entry.recommendedAgent ||
+    entry.agent ||
+    null
+  );
+}
+
+function isExecutionGatedRoute(entry = {}) {
+  const output = getRoutingOutput(entry);
+
+  if (typeof output.executionBlockUntilCleared === 'boolean') {
+    return output.executionBlockUntilCleared;
+  }
+  if (typeof entry.executionBlockUntilCleared === 'boolean') {
+    return entry.executionBlockUntilCleared;
+  }
+
+  if (typeof output.requiresSpecialist === 'boolean' && typeof output.promptGuidanceOnly === 'boolean') {
+    return output.requiresSpecialist && !output.promptGuidanceOnly;
+  }
+  if (typeof entry.requiresSpecialist === 'boolean' && typeof entry.promptGuidanceOnly === 'boolean') {
+    return entry.requiresSpecialist && !entry.promptGuidanceOnly;
+  }
+
+  return output.blocked === true || entry.blocked === true;
 }
 
 // =============================================================================
@@ -213,7 +265,7 @@ function calculateStats(entries) {
 
   const successful = routingDecisions.filter(e => !e.error);
   const errors = routingDecisions.filter(e => e.error);
-  const blocked = routingDecisions.filter(e => e.output?.blocked);
+  const executionGated = routingDecisions.filter(isExecutionGatedRoute);
   const resolved = routingDecisions.filter(e => e.output?.wasResolved);
 
   const durations = routingDecisions
@@ -230,8 +282,10 @@ function calculateStats(entries) {
     errorCount: errors.length,
     successRate: successful.length / routingDecisions.length,
     errorRate: errors.length / routingDecisions.length,
-    blockingCount: blocked.length,
-    blockingRate: blocked.length / routingDecisions.length,
+    executionGateCount: executionGated.length,
+    executionGateRate: executionGated.length / routingDecisions.length,
+    blockingCount: executionGated.length,
+    blockingRate: executionGated.length / routingDecisions.length,
     resolutionCount: resolved.length,
     resolutionRate: resolved.length / routingDecisions.length,
     avgDurationMs: Math.round(avgDuration * 100) / 100,
@@ -254,7 +308,7 @@ function getAgentUsage(entries) {
   const inputAgentCounts = {};
 
   for (const entry of routingDecisions) {
-    const resolvedAgent = entry.output?.agent;
+    const resolvedAgent = getResolvedAgent(entry);
     const inputAgent = entry.input?.agent;
 
     if (resolvedAgent) {
@@ -386,12 +440,12 @@ function detectAnomalies(entries) {
   }
 
   // High blocking rate
-  if (stats.blockingRate > 0.3) {
+  if (stats.executionGateRate > 0.3) {
     anomalies.push({
-      type: 'high_blocking_rate',
+      type: 'high_execution_gate_rate',
       severity: 'info',
-      message: `${(stats.blockingRate * 100).toFixed(1)}% of routing attempts were blocked - review routing rules`,
-      value: stats.blockingRate
+      message: `${(stats.executionGateRate * 100).toFixed(1)}% of routing attempts activated execution-time specialist gates`,
+      value: stats.executionGateRate
     });
   }
 
@@ -484,7 +538,7 @@ async function main() {
         console.log(`Total Decisions:   ${stats.totalDecisions}`);
         console.log(`Success Rate:      ${(stats.successRate * 100).toFixed(1)}%`);
         console.log(`Error Rate:        ${(stats.errorRate * 100).toFixed(1)}%`);
-        console.log(`Blocking Rate:     ${(stats.blockingRate * 100).toFixed(1)}%`);
+        console.log(`Execution Gates:   ${(stats.executionGateRate * 100).toFixed(1)}%`);
         console.log(`Resolution Rate:   ${(stats.resolutionRate * 100).toFixed(1)}%`);
         console.log(`Avg Duration:      ${stats.avgDurationMs}ms`);
         console.log(`Min/Max Duration:  ${stats.minDurationMs}ms / ${stats.maxDurationMs}ms`);
@@ -592,7 +646,7 @@ async function main() {
         console.log(`total_decisions,${stats.totalDecisions}`);
         console.log(`success_rate,${stats.successRate}`);
         console.log(`error_rate,${stats.errorRate}`);
-        console.log(`blocking_rate,${stats.blockingRate}`);
+        console.log(`execution_gate_rate,${stats.executionGateRate}`);
         console.log(`resolution_rate,${stats.resolutionRate}`);
         console.log(`avg_duration_ms,${stats.avgDurationMs}`);
         console.log(`unique_agents,${agentUsage.uniqueAgents}`);

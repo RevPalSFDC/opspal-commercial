@@ -19,6 +19,31 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+function getRoutingOutput(entry = {}) {
+    return entry.output || entry;
+}
+
+function isExecutionGatedRoute(entry = {}) {
+    const output = getRoutingOutput(entry);
+
+    if (typeof output.executionBlockUntilCleared === 'boolean') {
+        return output.executionBlockUntilCleared;
+    }
+    if (typeof entry.executionBlockUntilCleared === 'boolean') {
+        return entry.executionBlockUntilCleared;
+    }
+    if (typeof output.requiresSpecialist === 'boolean' && typeof output.promptGuidanceOnly === 'boolean') {
+        return output.requiresSpecialist && !output.promptGuidanceOnly;
+    }
+
+    return output.blocked === true || entry.blocked === true;
+}
+
+function getRoutedAgent(entry = {}) {
+    const output = getRoutingOutput(entry);
+    return output.agent || output.suggestedAgent || output.requiredAgent || entry.selectedAgent || entry.recommendedAgent || null;
+}
+
 class RoutingLearner {
     constructor(options = {}) {
         this.metricsFile = options.metricsFile || path.join('/tmp', 'routing-metrics.jsonl');
@@ -364,22 +389,22 @@ class RoutingLearner {
             });
         }
 
-        // Blocked operations
-        const blocked = routings.filter(r => r.blocked).length;
-        const blockRate = blocked / routings.length;
+        // Execution-time gated routes
+        const executionGated = routings.filter(isExecutionGatedRoute).length;
+        const executionGateRate = executionGated / routings.length;
 
         insights.push({
             type: 'routing_accuracy',
             severity: 'info',
-            message: `Blocked operations: ${blocked} (${(blockRate * 100).toFixed(1)}%)`,
+            message: `Execution-gated routes: ${executionGated} (${(executionGateRate * 100).toFixed(1)}%)`,
             data: {
-                blocked,
+                executionGated,
                 total: routings.length,
-                blockRate
+                executionGateRate
             },
-            recommendation: blockRate > 0.1 ?
-                'Consider reviewing validation rules - may be too strict' :
-                'Validation rules are working well'
+            recommendation: executionGateRate > 0.1 ?
+                'Consider reviewing execution-time specialist rules - they may be too broad' :
+                'Execution-time specialist rules are working well'
         });
 
         return insights;
@@ -467,7 +492,7 @@ class RoutingLearner {
         // Find most routed-to agents
         const agentCounts = {};
         for (const routing of routings) {
-            const agent = routing.selectedAgent || routing.recommendedAgent;
+            const agent = getRoutedAgent(routing);
             if (agent) {
                 agentCounts[agent] = (agentCounts[agent] || 0) + 1;
             }

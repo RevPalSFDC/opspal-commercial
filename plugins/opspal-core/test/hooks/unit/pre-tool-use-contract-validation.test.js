@@ -50,6 +50,52 @@ function writeRoutingState(home, sessionId, state) {
   fs.writeFileSync(filePath, JSON.stringify(state, null, 2));
 }
 
+function buildRoutingState({
+  sessionKey,
+  routeId,
+  requiredAgent,
+  clearanceAgents = requiredAgent ? [requiredAgent] : [],
+  routeKind = 'complexity_specialist',
+  guidanceAction = 'require_specialist',
+  requiresSpecialist = true,
+  promptGuidanceOnly = true,
+  promptBlocked = false,
+  executionBlockUntilCleared = true,
+  clearanceStatus = 'pending_clearance',
+  overrideApplied = false,
+  routingConfidence = executionBlockUntilCleared ? 0.9 : 0.65,
+  lastResolvedAgent = null,
+  autoDelegation = null
+} = {}) {
+  const now = Math.floor(Date.now() / 1000);
+  const routePendingClearance = clearanceStatus === 'pending_clearance';
+  const routeCleared = clearanceStatus === 'cleared';
+
+  return {
+    session_key: sessionKey,
+    route_id: routeId,
+    route_kind: routeKind,
+    guidance_action: guidanceAction,
+    required_agent: requiredAgent,
+    clearance_agents: clearanceAgents,
+    requires_specialist: requiresSpecialist,
+    prompt_guidance_only: promptGuidanceOnly,
+    prompt_blocked: promptBlocked,
+    execution_block_until_cleared: executionBlockUntilCleared,
+    route_pending_clearance: routePendingClearance,
+    route_cleared: routeCleared,
+    clearance_status: clearanceStatus,
+    status: clearanceStatus,
+    override_applied: overrideApplied,
+    routing_confidence: routingConfidence,
+    last_resolved_agent: lastResolvedAgent,
+    auto_delegation: autoDelegation,
+    created_at: now,
+    updated_at: now,
+    expires_at: now + 600
+  };
+}
+
 function assertNoStructuredDeny(result, message) {
   assert(
     result.output == null || (typeof result.output === 'object' && Object.keys(result.output).length === 0),
@@ -155,18 +201,11 @@ async function runAllTests() {
 
   results.push(await runTest('Denies operational tools while routing requirement is pending', async () => {
     const sessionId = 'pending-route-session';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'reports-dashboards',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-reports-dashboards',
-      clearance_agents: ['opspal-salesforce:sfdc-reports-dashboards'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'reports-dashboards',
+      requiredAgent: 'opspal-salesforce:sfdc-reports-dashboards'
+    }));
 
     const result = await tester.run({
       input: {
@@ -198,18 +237,11 @@ async function runAllTests() {
     const sessionId = 'pending-readonly-session';
     const tempReadRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-read-allow-'));
     fs.writeFileSync(path.join(tempReadRoot, 'README.md'), '# fixture\n', 'utf8');
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'reports-dashboards',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-reports-dashboards',
-      clearance_agents: ['opspal-salesforce:sfdc-reports-dashboards'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'reports-dashboards',
+      requiredAgent: 'opspal-salesforce:sfdc-reports-dashboards'
+    }));
 
     try {
       const result = await tester.run({
@@ -308,18 +340,13 @@ async function runAllTests() {
 
   results.push(await runTest('Allows read-only Slack MCP tools while routing requirement is pending', async () => {
     const sessionId = 'pending-slack-session';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'intake-required',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-core:intelligent-intake-orchestrator',
-      clearance_agents: ['opspal-core:intelligent-intake-orchestrator'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'intake-required',
+      routeKind: 'intake_specialist',
+      guidanceAction: 'require_intake',
+      requiredAgent: 'opspal-core:intelligent-intake-orchestrator'
+    }));
 
     const result = await tester.run({
       input: {
@@ -341,20 +368,17 @@ async function runAllTests() {
 
   results.push(await runTest('Does not enforce stale recommended routing state as a pending block', async () => {
     const sessionId = 'pending-recommended-session';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'permission-maintenance',
-      action: 'RECOMMENDED',
-      recommended_agent: 'opspal-salesforce:sfdc-permission-orchestrator',
-      clearance_agents: ['opspal-salesforce:sfdc-permission-orchestrator'],
-      blocked: false,
-      enforced_block: false,
-      mandatory: false,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'permission-maintenance',
+      routeKind: 'advisory_specialist',
+      guidanceAction: 'recommend_specialist',
+      requiredAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
+      requiresSpecialist: false,
+      executionBlockUntilCleared: false,
+      clearanceStatus: 'pending_clearance',
+      routingConfidence: 0.62
+    }));
 
     const result = await tester.run({
       input: {
@@ -377,19 +401,13 @@ async function runAllTests() {
 
   results.push(await runTest('Skips pending-route denial when routing state is bypassed', async () => {
     const sessionId = 'bypassed-route-session';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'reports-dashboards',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-reports-dashboards',
-      clearance_agents: ['opspal-salesforce:sfdc-reports-dashboards'],
-      blocked: true,
-      status: 'bypassed',
-      override_applied: true,
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'reports-dashboards',
+      requiredAgent: 'opspal-salesforce:sfdc-reports-dashboards',
+      clearanceStatus: 'bypassed',
+      overrideApplied: true
+    }));
 
     const result = await tester.run({
       input: {
@@ -538,7 +556,7 @@ async function runAllTests() {
     );
   }));
 
-  results.push(await runTest('Bypasses mandatory routing when agent_type marks sub-agent context', async () => {
+  results.push(await runTest('Denies unvalidated sub-agent context when agent_type alone does not satisfy routing', async () => {
     const result = await tester.run({
       input: {
         tool_name: 'Bash',
@@ -554,8 +572,41 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Sub-agent context should bypass parent-context routing enforcement');
-    assertNoStructuredDeny(result, 'Sub-agent context should not emit a routing deny');
+    assertStructuredRoutingDeny(result, 'ROUTING_SPECIALIST_REQUIRED', 'Unvalidated sub-agent context');
+  }));
+
+  results.push(await runTest('Allows cleared capability-matched sub-agent context', async () => {
+    const sessionId = 'cleared-subagent-route';
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'core-object-upsert',
+      requiredAgent: 'opspal-salesforce:sfdc-upsert-orchestrator',
+      clearanceAgents: [
+        'opspal-salesforce:sfdc-upsert-orchestrator',
+        'opspal-salesforce:sfdc-data-import-manager'
+      ],
+      clearanceStatus: 'cleared',
+      lastResolvedAgent: 'opspal-salesforce:sfdc-data-import-manager'
+    }));
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        sessionKey: sessionId,
+        agent_type: 'opspal-salesforce:sfdc-data-import-manager',
+        tool_input: {
+          command: 'sf data upsert bulk --sobject Account --file ./accounts.csv'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Capability-matched cleared sub-agent should be allowed');
+    assertNoStructuredDeny(result, 'Capability-matched cleared sub-agent should not emit a routing deny');
   }));
 
   // Test 8: Allows core object queries for approved data/query agents
@@ -952,18 +1003,11 @@ async function runAllTests() {
 
   results.push(await runTest('Allows read-only Salesforce MCP tools while routing requirement is pending', async () => {
     const sessionId = 'pending-salesforce-read-mcp';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'data-operations',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-data-operations',
-      clearance_agents: ['opspal-salesforce:sfdc-data-operations'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'data-operations',
+      requiredAgent: 'opspal-salesforce:sfdc-data-operations'
+    }));
 
     const result = await tester.run({
       input: {
@@ -985,18 +1029,11 @@ async function runAllTests() {
 
   results.push(await runTest('Denies mutating Salesforce MCP tools while routing requirement is pending', async () => {
     const sessionId = 'pending-salesforce-write-mcp';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'data-operations',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-data-operations',
-      clearance_agents: ['opspal-salesforce:sfdc-data-operations'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'data-operations',
+      requiredAgent: 'opspal-salesforce:sfdc-data-operations'
+    }));
 
     const result = await tester.run({
       input: {
@@ -1017,18 +1054,11 @@ async function runAllTests() {
 
   results.push(await runTest('Allows read-only Marketo MCP tools while routing requirement is pending', async () => {
     const sessionId = 'pending-marketo-read-mcp';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'lead-quality',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-marketo:marketo-lead-quality-assessor',
-      clearance_agents: ['opspal-marketo:marketo-lead-quality-assessor'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'lead-quality',
+      requiredAgent: 'opspal-marketo:marketo-lead-quality-assessor'
+    }));
 
     const result = await tester.run({
       input: {
@@ -1050,18 +1080,11 @@ async function runAllTests() {
 
   results.push(await runTest('Denies mutating Marketo MCP tools while routing requirement is pending', async () => {
     const sessionId = 'pending-marketo-write-mcp';
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'lead-quality',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-marketo:marketo-lead-quality-assessor',
-      clearance_agents: ['opspal-marketo:marketo-lead-quality-assessor'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'lead-quality',
+      requiredAgent: 'opspal-marketo:marketo-lead-quality-assessor'
+    }));
 
     const result = await tester.run({
       input: {
@@ -1083,18 +1106,11 @@ async function runAllTests() {
   results.push(await runTest('Unknown MCP tools default to deny while routing requirement is pending and log fallback telemetry', async () => {
     const sessionId = 'pending-unknown-mcp';
     const policyLog = path.join(tempHome, '.claude/logs/mcp-tool-policy.jsonl');
-    writeRoutingState(tempHome, sessionId, {
-      session_key: sessionId,
-      route_id: 'reports-dashboards',
-      action: 'BLOCKED',
-      recommended_agent: 'opspal-salesforce:sfdc-reports-dashboards',
-      clearance_agents: ['opspal-salesforce:sfdc-reports-dashboards'],
-      blocked: true,
-      status: 'pending',
-      created_at: Math.floor(Date.now() / 1000),
-      updated_at: Math.floor(Date.now() / 1000),
-      expires_at: Math.floor(Date.now() / 1000) + 600
-    });
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'reports-dashboards',
+      requiredAgent: 'opspal-salesforce:sfdc-reports-dashboards'
+    }));
 
     const result = await tester.run({
       input: {

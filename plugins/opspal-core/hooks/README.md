@@ -102,14 +102,25 @@ or continuation-style prompts that can otherwise trigger false-positive complexi
 
 OpsPal now enforces specialist routing with a two-step model:
 
-- `UserPromptSubmit` writes session-scoped routing state for blocking, mandatory, and medium-complexity recommended specialist routes and injects internal routing guidance, but does not block prompt submission for normal routing/orchestration flows.
+- `UserPromptSubmit` injects routing guidance for advisory and required specialist routes, but prompt-time routing remains non-blocking for ordinary workflow/orchestration prompts.
+- Only execution-gated routes persist session-scoped routing state. Advisory/recommended routes stay guidance-only and do not activate pending-route enforcement.
 - `PreToolUse` denies operational execution until the correct `Agent(subagent_type='plugin:agent', ...)` specialist clears that session state.
+- Mandatory high-confidence specialist routes can stage an internal auto-delegation bridge. The next `Agent` call can be rewritten to the required specialist automatically when the target agent is confidently known.
 - Read-only tools stay allowed while a route is pending.
 - Mutating MCP tools are classified via `config/mcp-tool-policies.json`.
 - Unknown MCP tools default to deny while a pending route is active and are logged for follow-up classification.
 - `[ROUTING_OVERRIDE]` marks the route as bypassed for that request and is logged as an audited exception.
 
 Only true safety/policy hooks should produce a user-visible hard block. Routing hooks should guide delegation and rely on downstream enforcement.
+
+Routing state is explicitly split between prompt-time and execution-time semantics:
+
+- `prompt_guidance_only=true` means the route is advisory at prompt submission.
+- `prompt_blocked=false` is the default for routing/orchestration flows; only real safety/policy hooks should hard-block prompt submission.
+- `execution_block_until_cleared=true` means downstream validators must gate direct operational execution until the specialist route is cleared.
+- `route_pending_clearance` / `route_cleared` track whether the execution gate is still active.
+- `required_agent` identifies the specialist needed to clear the route.
+- `auto_delegation` records whether the mandatory-route bridge is staged and active.
 
 ## Dependencies
 

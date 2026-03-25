@@ -709,8 +709,9 @@ check_routing_compliance() {
   local routing_state="{}"
   local pending="false"
   local enforce="false"
-  local recommended_agent=""
+  local required_agent=""
   local action_type=""
+  local route_kind=""
 
   if [ ! -f "$ROUTING_STATE_MANAGER" ] || ! command -v node &>/dev/null; then
     return 0
@@ -733,10 +734,11 @@ check_routing_compliance() {
   fi
 
   routing_state=$(node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo "{}")
-  pending=$(echo "$routing_state" | jq -r '.pending // false' 2>/dev/null || echo "false")
-  enforce=$(echo "$routing_state" | jq -r '.enforce // false' 2>/dev/null || echo "false")
-  recommended_agent=$(echo "$routing_state" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
-  action_type=$(echo "$routing_state" | jq -r '.action // ""' 2>/dev/null || echo "")
+  pending=$(echo "$routing_state" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")
+  enforce=$(echo "$routing_state" | jq -r '.executionBlockActive // false' 2>/dev/null || echo "false")
+  required_agent=$(echo "$routing_state" | jq -r '.requiredAgent // ""' 2>/dev/null || echo "")
+  action_type=$(echo "$routing_state" | jq -r '.guidanceAction // ""' 2>/dev/null || echo "")
+  route_kind=$(echo "$routing_state" | jq -r '.routeKind // ""' 2>/dev/null || echo "")
 
   if [ "$pending" != "true" ] || [ "$enforce" != "true" ]; then
     return 0
@@ -749,23 +751,25 @@ check_routing_compliance() {
     local violation_entry=$(jq -n \
       --arg timestamp "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
       --arg session_key "$session_key" \
-      --arg recommended "$recommended_agent" \
+      --arg required "$required_agent" \
       --arg actual "$tool_name" \
       --arg action "$action_type" \
+      --arg route_kind "$route_kind" \
       --arg status "pending_after_tool" \
       '{
         timestamp: $timestamp,
         session_key: $session_key,
         type: "routing_pending_after_tool",
-        recommended_agent: $recommended,
+        required_agent: $required,
         actual_tool: $actual,
-        action_type: $action,
+        guidance_action: $action,
+        route_kind: $route_kind,
         status: $status
       }')
 
     echo "$violation_entry" >> "$compliance_log" 2>/dev/null || true
 
-    log_validation "$tool_name" "routing_pending" "Routing requirement still pending after tool execution: $recommended_agent" "warning"
+    log_validation "$tool_name" "routing_pending" "Routing requirement still pending after tool execution: $required_agent" "warning"
   fi
 
   return 0

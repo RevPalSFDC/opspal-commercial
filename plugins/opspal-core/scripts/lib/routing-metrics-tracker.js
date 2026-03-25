@@ -13,6 +13,20 @@
 const fs = require('fs');
 const path = require('path');
 
+function isExecutionGated(event = {}) {
+    if (typeof event.executionBlockUntilCleared === 'boolean') {
+        return event.executionBlockUntilCleared;
+    }
+    if (typeof event.requiresSpecialist === 'boolean' && typeof event.promptGuidanceOnly === 'boolean') {
+        return event.requiresSpecialist && !event.promptGuidanceOnly;
+    }
+    return event.blocked || false;
+}
+
+function getRecommendedAgent(event = {}) {
+    return event.requiredAgent || event.recommendedAgent || null;
+}
+
 class RoutingMetricsTracker {
     constructor(options = {}) {
         this.metricsFile = options.metricsFile || path.join('/tmp', 'routing-metrics.jsonl');
@@ -31,13 +45,17 @@ class RoutingMetricsTracker {
             timestamp: new Date().toISOString(),
             type: 'routing_decision',
             taskDescription: event.taskDescription || '',
-            recommendedAgent: event.recommendedAgent || null,
+            recommendedAgent: getRecommendedAgent(event),
+            requiredAgent: event.requiredAgent || null,
             selectedAgent: event.selectedAgent || null,
             confidence: event.confidence || 0,
             complexity: event.complexity || 0,
             autoRouted: event.autoRouted || false,
             userOverride: event.userOverride || false,
-            blocked: event.blocked || false,
+            blocked: isExecutionGated(event),
+            executionBlockUntilCleared: event.executionBlockUntilCleared || false,
+            promptGuidanceOnly: event.promptGuidanceOnly !== false,
+            requiresSpecialist: event.requiresSpecialist || false,
             reason: event.reason || ''
         };
 
@@ -84,7 +102,8 @@ class RoutingMetricsTracker {
             timestamp: new Date().toISOString(),
             type: 'routing_validation',
             valid: event.valid || false,
-            blocked: event.blocked || false,
+            blocked: isExecutionGated(event),
+            executionBlockUntilCleared: event.executionBlockUntilCleared || false,
             requiredAgent: event.requiredAgent || null,
             currentAgent: event.currentAgent || null,
             severity: event.severity || 'LOW',
@@ -187,12 +206,12 @@ class RoutingMetricsTracker {
 
         const autoRouted = records.filter(r => r.autoRouted).length;
         const userOverride = records.filter(r => r.userOverride).length;
-        const blocked = records.filter(r => r.blocked).length;
+        const blocked = records.filter(isExecutionGated).length;
 
         // Count agent usage
         const agentCounts = {};
         for (const record of records) {
-            const agent = record.selectedAgent || record.recommendedAgent;
+            const agent = record.selectedAgent || getRecommendedAgent(record);
             if (agent) {
                 agentCounts[agent] = (agentCounts[agent] || 0) + 1;
             }
@@ -279,7 +298,7 @@ class RoutingMetricsTracker {
         }
 
         const passed = records.filter(r => r.valid).length;
-        const blocked = records.filter(r => r.blocked).length;
+        const blocked = records.filter(isExecutionGated).length;
 
         return {
             totalValidations: records.length,

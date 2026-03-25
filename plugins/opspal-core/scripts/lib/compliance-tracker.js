@@ -3,10 +3,10 @@
  * Compliance Tracker
  *
  * Tracks and analyzes routing compliance - detecting when Claude ignores
- * agent routing recommendations.
+ * execution-time specialist routing requirements.
  *
  * Usage:
- *   node compliance-tracker.js log <recommended> <actual> <action>
+ *   node compliance-tracker.js log <required> <actual> <guidance-action>
  *   node compliance-tracker.js stats
  *   node compliance-tracker.js report
  *   node compliance-tracker.js recent [count]
@@ -37,19 +37,19 @@ function ensureLogDir() {
 
 /**
  * Log a compliance violation
- * @param {string} recommendedAgent - The agent that was recommended
+ * @param {string} requiredAgent - The agent that was required
  * @param {string} actualTool - The tool that was actually used
- * @param {string} actionType - The action type (BLOCKED, RECOMMENDED, etc.)
+ * @param {string} guidanceAction - The routing guidance/enforcement action
  */
-function logViolation(recommendedAgent, actualTool, actionType) {
+function logViolation(requiredAgent, actualTool, guidanceAction) {
   ensureLogDir();
 
   const entry = {
     timestamp: new Date().toISOString(),
     type: 'routing_ignored',
-    recommended_agent: recommendedAgent,
+    required_agent: requiredAgent,
     actual_tool: actualTool,
-    action_type: actionType,
+    guidance_action: guidanceAction,
     violation: true
   };
 
@@ -113,10 +113,16 @@ function getComplianceRate() {
   const routingEntries = readRoutingLog();
   const complianceEntries = readComplianceLog();
 
-  // Count blocking decisions
-  const blockingDecisions = routingEntries.filter(
-    e => e.blocked === true || e.action === 'BLOCKED' || e.action === 'MANDATORY_BLOCKED'
-  );
+  // Count execution-time gated decisions
+  const blockingDecisions = routingEntries.filter((entry) => {
+    if (entry.execution_block_until_cleared === true) {
+      return true;
+    }
+    if (entry.requires_specialist === true && entry.prompt_guidance_only === false) {
+      return true;
+    }
+    return entry.blocked === true || entry.action === 'BLOCKED' || entry.action === 'MANDATORY_BLOCKED';
+  });
 
   // Count violations (blocked but not using the required Agent route)
   const violations = complianceEntries.filter(e => e.violation === true);
@@ -132,6 +138,7 @@ function getComplianceRate() {
 
   return {
     total_routing_decisions: routingEntries.length,
+    execution_gated_decisions: totalBlocking,
     blocking_decisions: totalBlocking,
     violations: totalViolations,
     compliance_rate: `${complianceRate}%`,
@@ -150,14 +157,14 @@ function getStats() {
   // Group by action type
   const byAction = {};
   routingEntries.forEach(entry => {
-    const action = entry.action || 'unknown';
+    const action = entry.guidance_action || entry.action || 'unknown';
     byAction[action] = (byAction[action] || 0) + 1;
   });
 
   // Most ignored agents
   const ignoredAgents = {};
   complianceEntries.forEach(entry => {
-    const agent = entry.recommended_agent || 'unknown';
+    const agent = entry.required_agent || entry.recommended_agent || 'unknown';
     ignoredAgents[agent] = (ignoredAgents[agent] || 0) + 1;
   });
 
@@ -262,10 +269,10 @@ if (require.main === module) {
 
   switch (command) {
     case 'log':
-      const recommended = args[1];
+      const required = args[1];
       const actual = args[2];
-      const action = args[3] || 'BLOCKED';
-      const entry = logViolation(recommended, actual, action);
+      const action = args[3] || 'require_specialist';
+      const entry = logViolation(required, actual, action);
       console.log(JSON.stringify(entry));
       break;
 
@@ -290,7 +297,7 @@ if (require.main === module) {
       console.error(`Unknown command: ${command}`);
       console.error('Usage: compliance-tracker.js <log|stats|report|recent|rate> [args]');
       console.error('\nCommands:');
-      console.error('  log <recommended> <actual> <action>  - Log a violation');
+      console.error('  log <required> <actual> <guidance-action>  - Log a violation');
       console.error('  stats                                - Get detailed statistics');
       console.error('  report                               - Generate formatted report');
       console.error('  recent [count]                       - Get recent violations');

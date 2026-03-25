@@ -56,6 +56,7 @@ VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/tool-contract-validator.js"
 BASH_CLASSIFIER_LIB="${PLUGIN_ROOT}/scripts/lib/classify-bash-command.sh"
 OPERATION_CLASSIFIER="${PLUGIN_ROOT}/scripts/lib/classify-operation.js"
 ROUTING_STATE_MANAGER="${PLUGIN_ROOT}/scripts/lib/routing-state-manager.js"
+AGENT_TOOL_REGISTRY="${PLUGIN_ROOT}/scripts/lib/agent-tool-registry.js"
 MCP_TOOL_POLICY_CONFIG="${PLUGIN_ROOT}/config/mcp-tool-policies.json"
 MCP_TOOL_POLICY_RESOLVER="${PLUGIN_ROOT}/scripts/lib/mcp-tool-policy-resolver.js"
 HOOK_EVENT_NORMALIZER="${PLUGIN_ROOT}/scripts/lib/hook-event-normalizer.js"
@@ -484,10 +485,11 @@ enforce_pending_route_gate() {
     local routing_state
     routing_state=$(get_routing_state_check "$session_key")
 
-    local pending enforce required_agent route_id action
+    local pending enforce required_agent route_id action route_kind
     local clearance_agents command_summary additional_context
-    pending=$(echo "$routing_state" | jq -r '.pending // false' 2>/dev/null || echo "false")
-    enforce=$(echo "$routing_state" | jq -r '.enforce // false' 2>/dev/null || echo "false")
+    local auto_delegation_active auto_delegation_mode
+    pending=$(echo "$routing_state" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")
+    enforce=$(echo "$routing_state" | jq -r '.executionBlockActive // false' 2>/dev/null || echo "false")
 
     if [[ "$pending" != "true" ]] || [[ "$enforce" != "true" ]]; then
         return 0
@@ -497,10 +499,13 @@ enforce_pending_route_gate() {
         return 0
     fi
 
-    required_agent=$(echo "$routing_state" | jq -r '.recommendedAgent // ""' 2>/dev/null || echo "")
+    required_agent=$(echo "$routing_state" | jq -r '.requiredAgent // ""' 2>/dev/null || echo "")
     clearance_agents=$(echo "$routing_state" | jq -r '.clearanceAgents // [] | join(", ")' 2>/dev/null || echo "")
     route_id=$(echo "$routing_state" | jq -r '.routeId // ""' 2>/dev/null || echo "")
-    action=$(echo "$routing_state" | jq -r '.action // ""' 2>/dev/null || echo "")
+    action=$(echo "$routing_state" | jq -r '.guidanceAction // ""' 2>/dev/null || echo "")
+    route_kind=$(echo "$routing_state" | jq -r '.routeKind // ""' 2>/dev/null || echo "")
+    auto_delegation_active=$(echo "$routing_state" | jq -r '.autoDelegation.active // false' 2>/dev/null || echo "false")
+    auto_delegation_mode=$(echo "$routing_state" | jq -r '.autoDelegation.mode // "disabled"' 2>/dev/null || echo "disabled")
 
     case "$tool_name" in
         Bash)
@@ -523,7 +528,12 @@ enforce_pending_route_gate() {
       "$(resolve_caller_agent unknown)" \
       "$tool_name"
 
-    additional_context="Routing requirement is still pending for this session."
+    additional_context="Execution-time routing requirement is still pending for this session."
+    if [[ "$auto_delegation_active" == "true" ]] && [[ -n "$required_agent" ]]; then
+        additional_context="${additional_context} Internal specialist handoff is staged for '${required_agent}' via ${auto_delegation_mode:-agent_rewrite_bridge}; direct operational tools remain gated until that route is cleared."
+    elif [[ -n "$route_kind" ]]; then
+        additional_context="${additional_context} Active route kind=${route_kind}."
+    fi
     if [[ "$tool_name" == mcp__* || "$tool_name" == mcp_* ]]; then
         if [[ "$PENDING_ROUTE_MCP_POLICY_MATCHED" == "true" ]]; then
             additional_context="${additional_context} MCP policy: ${PENDING_ROUTE_MCP_POLICY_MUTABILITY:-unknown} via ${PENDING_ROUTE_MCP_POLICY_NOTE:-configured rule}."
@@ -534,7 +544,7 @@ enforce_pending_route_gate() {
 
     emit_pretool_decision \
       "deny" \
-      "ROUTING_REQUIRED_BEFORE_OPERATION: Use the Agent tool with subagent_type='${required_agent:-unknown}' before direct execution. Approved family: ${clearance_agents:-none}. Current action=${action:-unknown}." \
+      "ROUTING_REQUIRED_BEFORE_OPERATION: Use the Agent tool with subagent_type='${required_agent:-unknown}' before direct execution. Approved family: ${clearance_agents:-none}. Current guidanceAction=${action:-unknown}." \
       "$additional_context"
     return 1
 }
@@ -709,6 +719,59 @@ caller_matches_allowed_agents() {
     ' >/dev/null 2>&1
 }
 
+derive_route_requirements_from_state() {
+    local required_agent="$1"
+    local clearance_agents_json="$2"
+
+    if [[ -z "$required_agent" ]] || [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &>/dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$AGENT_TOOL_REGISTRY" route-requirements "$required_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+}
+
+subagent_has_validated_route_clearance() {
+    local caller_agent="$1"
+    local session_key="${2:-}"
+    local routing_state="{}"
+    local routing_cleared="false"
+    local required_agent=""
+    local clearance_agents_json="[]"
+    local last_resolved_agent=""
+    local requirements_json="{}"
+
+    if [[ -z "$caller_agent" ]] || [[ -z "$session_key" ]]; then
+        return 1
+    fi
+
+    routing_state="$(get_routing_state_check "$session_key")"
+    routing_cleared="$(echo "$routing_state" | jq -r '.routeCleared // .cleared // false' 2>/dev/null || echo "false")"
+    if [[ "$routing_cleared" != "true" ]]; then
+        return 1
+    fi
+
+    required_agent="$(echo "$routing_state" | jq -r '.requiredAgent // .state.required_agent // .state.recommended_agent // ""' 2>/dev/null || echo "")"
+    clearance_agents_json="$(echo "$routing_state" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")"
+    last_resolved_agent="$(echo "$routing_state" | jq -r '.state.last_resolved_agent // .state.lastResolvedAgent // ""' 2>/dev/null || echo "")"
+
+    if ! caller_matches_allowed_agents "$caller_agent" "$clearance_agents_json"; then
+        return 1
+    fi
+
+    if [[ -n "$last_resolved_agent" ]] && [[ "$caller_agent" != "$last_resolved_agent" ]]; then
+        return 1
+    fi
+
+    requirements_json="$(derive_route_requirements_from_state "$required_agent" "$clearance_agents_json")"
+    if [[ "$requirements_json" != "{}" ]] && [[ -f "$AGENT_TOOL_REGISTRY" ]] && command -v node &>/dev/null; then
+        node "$AGENT_TOOL_REGISTRY" matches-requirements "$caller_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
+        return $?
+    fi
+
+    return 0
+}
+
 extract_bash_command() {
     echo "$INPUT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null
 }
@@ -788,16 +851,13 @@ enforce_mandatory_routing() {
     local routing_action=""
     local warning_message=""
 
-    # Sub-agent context bypass: If running inside a spawned sub-agent,
-    # the routing system already validated the correct agent at spawn time
-    # via pre-task-agent-validator.sh. Blocking here creates a deadlock
-    # where approved agents can't execute the operations they were spawned for.
-    # This mirrors the pattern in pre-deploy-agent-context-check.sh:122-126.
     if [ -n "${CALLER_AGENT_FROM_HOOK}" ] || [ -n "${CLAUDE_TASK_ID:-}" ]; then
-        emit_routing_event "allow" "subagent_context_bypass" "" \
-            "Sub-agent context: routing already validated at spawn" \
-            "$(extract_bash_command 2>/dev/null || echo '')" "$caller_agent" "$tool"
-        return 0
+        if subagent_has_validated_route_clearance "$caller_agent" "${SESSION_KEY:-}"; then
+            emit_routing_event "allow" "subagent_context_bypass" "" \
+                "Sub-agent context: validated route clearance present for caller" \
+                "$(extract_bash_command 2>/dev/null || echo '')" "$caller_agent" "$tool"
+            return 0
+        fi
     fi
 
     if [ "${ROUTING_ENFORCEMENT_ENABLED:-1}" = "0" ]; then
@@ -849,14 +909,10 @@ enforce_mandatory_routing() {
             return 0
         fi
 
-        # Allow any agent context — if CLAUDE_TASK_ID is set or hook input has
-        # agent_type, we're inside a sub-agent. The routing system already ensured
-        # the correct agent was invoked; blocking here creates a deadlock where
-        # approved agents can't execute the operations they were spawned for.
         local hook_agent_type=""
         hook_agent_type="$(echo "$INPUT_DATA" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
-        if [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$hook_agent_type" ]; then
-            emit_routing_event "allow" "$rule_id" "$required_agent" "Agent context detected (task=${CLAUDE_TASK_ID:-none}, agent=${hook_agent_type:-${caller_agent}}). Routing enforcement bypassed." "$command" "$caller_agent" "$tool"
+        if { [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$hook_agent_type" ]; } && subagent_has_validated_route_clearance "$caller_agent" "${SESSION_KEY:-}"; then
+            emit_routing_event "allow" "$rule_id" "$required_agent" "Agent context detected with validated route clearance." "$command" "$caller_agent" "$tool"
             return 0
         fi
 

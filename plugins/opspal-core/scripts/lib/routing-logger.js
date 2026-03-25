@@ -38,6 +38,20 @@ const os = require('os');
 const LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
 const LOG_FILE = path.join(LOG_DIR, 'routing.jsonl');
 
+function getAgent(entry = {}) {
+  return entry.agent || entry.suggested_agent || entry.required_agent || null;
+}
+
+function isExecutionGated(entry = {}) {
+  if (typeof entry.execution_block_until_cleared === 'boolean') {
+    return entry.execution_block_until_cleared;
+  }
+  if (typeof entry.requires_specialist === 'boolean' && typeof entry.prompt_guidance_only === 'boolean') {
+    return entry.requires_specialist && !entry.prompt_guidance_only;
+  }
+  return entry.blocked === true || entry.action === 'BLOCKED' || entry.action === 'MANDATORY_BLOCKED';
+}
+
 /**
  * Ensure log directory exists
  */
@@ -158,6 +172,7 @@ function getRoutingStats(options = {}) {
     byAgent: {},
     avgComplexity: 0,
     avgConfidence: 0,
+    executionGated: 0,
     blocked: 0,
     allowed: 0,
     timeRange: {
@@ -173,15 +188,19 @@ function getRoutingStats(options = {}) {
 
   for (const entry of entries) {
     // Count by action
-    const action = entry.action || 'UNKNOWN';
+    const action = entry.guidance_action || entry.routing_action_type || entry.action || 'UNKNOWN';
     stats.byAction[action] = (stats.byAction[action] || 0) + 1;
 
-    if (action === 'BLOCKED') stats.blocked++;
+    if (isExecutionGated(entry)) {
+      stats.executionGated++;
+      stats.blocked++;
+    }
     if (action === 'ALLOWED') stats.allowed++;
 
     // Count by agent
-    if (entry.agent && entry.agent !== 'null' && entry.agent !== '') {
-      stats.byAgent[entry.agent] = (stats.byAgent[entry.agent] || 0) + 1;
+    const agent = getAgent(entry);
+    if (agent && agent !== 'null' && agent !== '') {
+      stats.byAgent[agent] = (stats.byAgent[agent] || 0) + 1;
     }
 
     // Sum for averages

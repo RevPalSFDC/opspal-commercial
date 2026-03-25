@@ -324,7 +324,7 @@ check_metrics() {
       split("\n")
       | map(select(length > 0) | fromjson?)
       | map(select(.timestamp and .timestamp >= $cutoff))
-      | map(select((.autoRouted == true) or (.output.agent != null) or (.agent != null)))
+      | map(select((.autoRouted == true) or (.output.agent != null) or (.output.suggestedAgent != null) or (.output.requiredAgent != null) or (.agent != null) or (.suggestedAgent != null) or (.requiredAgent != null)))
       | length
     ' "$metrics_file" 2>/dev/null || echo "0")
     local auto_rate=$((auto_routed * 100 / recent_count))
@@ -366,8 +366,12 @@ check_metrics() {
       | map(select(length > 0) | fromjson?)
       | map(select(.timestamp and .timestamp >= $cutoff))
       | map(
-          .recommendedAgent
+          .requiredAgent
+          // .recommendedAgent
+          // .suggestedAgent
           // .agent
+          // .output.requiredAgent
+          // .output.suggestedAgent
           // .output.agent
           // .selectedAgent
           // empty
