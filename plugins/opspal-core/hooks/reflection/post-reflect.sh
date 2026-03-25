@@ -46,6 +46,9 @@ RED="${RED:-\033[0;31m}"
 CYAN="${CYAN:-\033[0;36m}"
 NC="${NC:-\033[0m}"
 
+# PostToolUse hooks must not emit human-readable stdout.
+exec 1>&2
+
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${CYAN}📤 Automatic Reflection Submission${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -63,8 +66,8 @@ if type find_project_root &>/dev/null; then
 else
     # Fallback implementation
     PROJECT_ROOT="$PWD"
-    local current="$PWD"
-    local depth=0
+    current="$PWD"
+    depth=0
     while [[ "$depth" -lt 10 ]]; do
         if [[ -d "$current/.claude-plugins" ]]; then
             PROJECT_ROOT="$current"

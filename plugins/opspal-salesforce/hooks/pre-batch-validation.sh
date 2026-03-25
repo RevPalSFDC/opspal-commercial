@@ -48,6 +48,21 @@ fi
 # Exit on error
 set -e
 
+# Standalone guard — this hook is normally invoked by a parent dispatcher.
+# When run directly without dispatcher context, skip cleanly instead of
+# failing on missing positional arguments.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
+HOOK_INPUT=""
+HOOK_COMMAND=""
+if command -v jq >/dev/null 2>&1 && [ ! -t 0 ]; then
+  HOOK_INPUT=$(cat 2>/dev/null || true)
+  HOOK_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || echo "")
+fi
+
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -57,16 +72,26 @@ VALIDATOR_SCRIPT="$PLUGIN_ROOT/scripts/lib/validate-analysis-freshness.js"
 source "$PLUGIN_ROOT/scripts/lib/hook-stop-prompt-helper.sh"
 
 # Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+if ! declare -p RED >/dev/null 2>&1; then RED='\033[0;31m'; fi
+if ! declare -p GREEN >/dev/null 2>&1; then GREEN='\033[0;32m'; fi
+if ! declare -p YELLOW >/dev/null 2>&1; then YELLOW='\033[1;33m'; fi
+if ! declare -p NC >/dev/null 2>&1; then NC='\033[0m'; fi # No Color
 
 # Parse arguments
 ANALYSIS_FILE="${1:-}"
 TARGET_ORG="${2:-}"
 
 if [ -z "$ANALYSIS_FILE" ] || [ -z "$TARGET_ORG" ]; then
+  if [ -n "$HOOK_INPUT" ]; then
+    case "$HOOK_COMMAND" in
+      *batch*|*merge*|*analysis*)
+        ;;
+      *)
+        echo "[$(basename "$0")] INFO: no batch-analysis context detected, skipping" >&2
+        exit 0
+        ;;
+    esac
+  fi
   echo -e "${RED}❌ Usage: $0 <analysis-file> <target-org>${NC}"
   echo ""
   echo "Example:"

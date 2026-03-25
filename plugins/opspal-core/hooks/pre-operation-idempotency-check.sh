@@ -73,16 +73,29 @@ if [ ! -f "$REGISTRY_SCRIPT" ]; then
 fi
 
 # Parse hook input to detect operation type
-# Input format: tool=<tool-name> args=<json>
-TOOL_NAME=""
-TOOL_ARGS=""
+HOOK_INPUT=""
+TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
+TOOL_ARGS="${CLAUDE_TOOL_INPUT:-}"
 
-while IFS='=' read -r key value; do
-  case "$key" in
-    tool) TOOL_NAME="$value" ;;
-    args) TOOL_ARGS="$value" ;;
-  esac
-done
+if [ ! -t 0 ]; then
+  HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+if [ -n "$HOOK_INPUT" ] && jq -e . >/dev/null 2>&1 <<<"$HOOK_INPUT"; then
+  TOOL_NAME=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_name // .toolName // .tool // empty' 2>/dev/null || echo "$TOOL_NAME")
+  TOOL_ARGS=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // .tool_input.file_path // .tool_input.path // (.tool_input | tostring) // empty' 2>/dev/null || echo "$TOOL_ARGS")
+else
+  while IFS='=' read -r key value; do
+    case "$key" in
+      tool) TOOL_NAME="$value" ;;
+      args) TOOL_ARGS="$value" ;;
+    esac
+  done <<< "$HOOK_INPUT"
+fi
+
+if [ -z "$TOOL_NAME" ]; then
+  exit 0
+fi
 
 # Detect high-risk operations that should be checked
 is_high_risk_operation() {
@@ -171,7 +184,7 @@ extract_context() {
 }
 
 # Check operation
-OPERATION_TYPE=$(is_high_risk_operation "$TOOL_NAME" "$TOOL_ARGS")
+OPERATION_TYPE=$(is_high_risk_operation "$TOOL_NAME" "$TOOL_ARGS" || true)
 
 if [ -z "$OPERATION_TYPE" ]; then
   # Not a high-risk operation, allow it
@@ -182,9 +195,7 @@ fi
 CONTEXT=$(extract_context "$TOOL_NAME" "$TOOL_ARGS")
 
 # Check if operation can retry
-RETRY_CHECK=$(node "$REGISTRY_SCRIPT" check "$OPERATION_TYPE" "$CONTEXT" 2>/dev/null)
-
-if [ $? -ne 0 ]; then
+if ! RETRY_CHECK=$(node "$REGISTRY_SCRIPT" check "$OPERATION_TYPE" "$CONTEXT" 2>/dev/null); then
   echo "⚠️  Could not check operation registry"
   exit 0  # Don't block on registry errors
 fi

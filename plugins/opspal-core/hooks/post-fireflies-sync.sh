@@ -49,11 +49,11 @@ fi
 # Work-index auto-capture
 ###############################################################################
 
-if [ -n "${ORG_SLUG}" ]; then
+if [ -n "${ORG_SLUG:-}" ]; then
   WORK_INDEX_SCRIPT="${SCRIPT_DIR}/../scripts/lib/work-index-manager.js"
   if [ -f "$WORK_INDEX_SCRIPT" ]; then
     node "$WORK_INDEX_SCRIPT" auto-capture \
-      --org "${ORG_SLUG}" \
+      --org "${ORG_SLUG:-}" \
       --type "fireflies-sync" \
       --tool "${TOOL_NAME}" \
       --timestamp "${TIMESTAMP}" 2>/dev/null || true

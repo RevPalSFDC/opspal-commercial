@@ -16,6 +16,26 @@ set -e
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$SCRIPT_DIR")}"
+HOOK_INPUT=""
+SESSION_CWD="${CLAUDE_PROJECT_DIR:-}"
+
+if [ ! -t 0 ]; then
+  HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+if [ -n "$HOOK_INPUT" ] && command -v jq >/dev/null 2>&1; then
+  SESSION_CWD="${SESSION_CWD:-$(printf '%s' "$HOOK_INPUT" | jq -r '.cwd // empty' 2>/dev/null || echo "")}"
+fi
+
+if [ -z "$SESSION_CWD" ] || [ ! -d "$SESSION_CWD" ]; then
+  echo "[pre-session-path-validator] INFO: no session workspace context, skipping" >&2
+  exit 0
+fi
+
+if [ ! -d "$SESSION_CWD/.claude" ] && [ ! -d "$SESSION_CWD/.claude-plugins" ] && [ ! -d "$SESSION_CWD/plugins" ]; then
+  echo "[pre-session-path-validator] INFO: no Claude workspace markers in $SESSION_CWD, skipping" >&2
+  exit 0
+fi
 
 # Find the unified path resolver
 UNIFIED_RESOLVER=""

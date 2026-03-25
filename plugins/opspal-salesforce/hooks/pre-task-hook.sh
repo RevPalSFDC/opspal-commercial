@@ -25,14 +25,14 @@ fi
 
 # Color codes — error handler sets RED/YELLOW/GREEN/BLUE/NC as readonly,
 # so only set missing ones. Use :- to avoid readonly conflicts under set -u.
-RED="${RED:-\033[0;31m}"
-YELLOW="${YELLOW:-\033[1;33m}"
-GREEN="${GREEN:-\033[0;32m}"
-BLUE="${BLUE:-\033[0;34m}"
-NC="${NC:-\033[0m}"
-CYAN="${CYAN:-\033[0;36m}"
-PURPLE="${PURPLE:-\033[0;35m}"
-BOLD="${BOLD:-\033[1m}"
+if ! declare -p RED >/dev/null 2>&1; then RED='\033[0;31m'; fi
+if ! declare -p YELLOW >/dev/null 2>&1; then YELLOW='\033[1;33m'; fi
+if ! declare -p GREEN >/dev/null 2>&1; then GREEN='\033[0;32m'; fi
+if ! declare -p BLUE >/dev/null 2>&1; then BLUE='\033[0;34m'; fi
+if ! declare -p NC >/dev/null 2>&1; then NC='\033[0m'; fi
+if ! declare -p CYAN >/dev/null 2>&1; then CYAN='\033[0;36m'; fi
+if ! declare -p PURPLE >/dev/null 2>&1; then PURPLE='\033[0;35m'; fi
+if ! declare -p BOLD >/dev/null 2>&1; then BOLD='\033[1m'; fi
 
 # Exit codes (only set if error handler was NOT loaded)
 if [[ -z "${HOOK_NAME:-}" ]]; then
@@ -50,8 +50,28 @@ PROJECT_INIT="$BASE_DIR/scripts/init-project.sh"
 # Redirect all output to stderr — this hook emits informational banners, not JSON
 exec 1>&2
 
+HOOK_INPUT=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
 # Get the user's input/task
 TASK_INPUT="${1:-}"
+HOOK_TOOL_NAME="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_name // empty' 2>/dev/null || echo "")"
+if [ -n "$HOOK_TOOL_NAME" ] && [ "$HOOK_TOOL_NAME" != "Agent" ]; then
+    echo "[pre-task-hook] INFO: non-Agent tool context detected, skipping"
+    exit 0
+fi
+
+if [ -z "$TASK_INPUT" ] && [ -n "$HOOK_INPUT" ]; then
+    TASK_INPUT="$(printf '%s' "$HOOK_INPUT" | jq -r '.prompt // .message // .user_prompt // .tool_input.prompt // .tool_input.message // empty' 2>/dev/null || echo "")"
+fi
+
+HOOK_AGENT_TYPE_CHECK="$(printf '%s' "${HOOK_INPUT:-$TASK_INPUT}" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+if [ -z "$TASK_INPUT" ] && [ -z "${CLAUDE_TASK_ID:-}" ] && [ -z "$HOOK_AGENT_TYPE_CHECK" ]; then
+    echo "[pre-task-hook] INFO: no task prompt or agent context, skipping"
+    exit 0
+fi
 
 # ═══════════════════════════════════════════════════════════════
 # PROMINENT AGENT DECISION REMINDER
@@ -180,7 +200,7 @@ REQUIRED_AGENT=""
 
 # Sub-agents bypass mandatory routing — the routing system already ensured
 # the correct specialist was spawned. Blocking here creates a deadlock.
-HOOK_AGENT_TYPE_CHECK="$(echo "${HOOK_INPUT:-$TASK_INPUT}" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
+HOOK_AGENT_TYPE_CHECK="${HOOK_AGENT_TYPE_CHECK:-$(printf '%s' "${HOOK_INPUT:-$TASK_INPUT}" | jq -r '.agent_type // empty' 2>/dev/null || echo "")}"
 if [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$HOOK_AGENT_TYPE_CHECK" ]; then
     echo "[pre-task-hook] Agent context detected (task=${CLAUDE_TASK_ID:-none}, agent=${HOOK_AGENT_TYPE_CHECK:-unknown}). Skipping mandatory routing." >&2
     AGENT_REQUIRED=false

@@ -13,7 +13,11 @@ set -euo pipefail
 # Get the command that was executed and its result
 COMMAND="${1:-}"
 EXIT_CODE="${2:-}"
-shift 2
+if [ "$#" -ge 2 ]; then
+  shift 2
+else
+  set --
+fi
 
 # Script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -151,10 +155,10 @@ main() {
 
   # Print summary if verbose
   if [ "${TERRITORY_LOG_VERBOSE:-0}" = "1" ]; then
-    echo "📝 Territory operation logged:"
-    echo "   Operation: $operation"
-    echo "   Object:    $object"
-    echo "   Status:    $status"
+    echo "📝 Territory operation logged:" >&2
+    echo "   Operation: $operation" >&2
+    echo "   Object:    $object" >&2
+    echo "   Status:    $status" >&2
   fi
 
   # Rotate log if too large (> 10MB)
@@ -172,8 +176,8 @@ main() {
     if [ -f "${PLUGIN_ROOT}/scripts/territory/territory-model-lifecycle.js" ]; then
       # Check for active model and log status
       if echo "$full_command" | grep -q "model-id\|Territory2Model"; then
-        echo "ℹ️  Bulk/activation operation detected - consider running:"
-        echo "   node scripts/territory/territory-model-lifecycle.js [org] status [model-id]"
+        echo "ℹ️  Bulk/activation operation detected - consider running:" >&2
+        echo "   node scripts/territory/territory-model-lifecycle.js [org] status [model-id]" >&2
       fi
     fi
   fi

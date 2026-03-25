@@ -52,9 +52,18 @@ if [ "$PICKLIST_VALIDATION_ENABLED" = "false" ]; then
     exit 0
 fi
 
+# Standalone guard — this hook is dispatched from a parent Bash validator.
+# Skip cleanly when run directly without dispatcher context.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+    echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+    exit 0
+fi
+
 # Parse command from arguments
 COMMAND="${1:-}"
-shift
+if [ "$#" -gt 0 ]; then
+    shift
+fi
 ARGS=("$@")
 
 # Function to print colored messages

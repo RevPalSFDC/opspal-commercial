@@ -26,12 +26,26 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DAILY_FILE="${HOME}/.claude/api-limits/fireflies-daily.json"
+HOOK_INPUT=""
+TOOL_NAME="${CLAUDE_TOOL_NAME:-}"
+
+if [ ! -t 0 ]; then
+  HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+if [ -n "$HOOK_INPUT" ] && command -v jq >/dev/null 2>&1; then
+  TOOL_NAME=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_name // empty' 2>/dev/null || echo "$TOOL_NAME")
+fi
+
+if [ -z "$TOOL_NAME" ] || [[ ! "$TOOL_NAME" =~ ^mcp__fireflies ]]; then
+  exit 0
+fi
 
 ###############################################################################
 # Credential Validation
 ###############################################################################
 
-if [ -z "${FIREFLIES_API_KEY}" ]; then
+if [ -z "${FIREFLIES_API_KEY:-}" ]; then
   cat <<'EOF'
 ⚠️ **Fireflies API key not configured**
 

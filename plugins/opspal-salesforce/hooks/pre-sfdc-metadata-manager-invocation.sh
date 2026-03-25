@@ -40,6 +40,7 @@ KEYWORD_DETECTOR="$PLUGIN_DIR/scripts/lib/keyword-detector.js"
 CONTEXT_INJECTOR="$PLUGIN_DIR/scripts/lib/context-injector.js"
 KEYWORD_CONFIG="$PLUGIN_DIR/contexts/metadata-manager/keyword-mapping.json"
 CONTEXTS_DIR="$PLUGIN_DIR/contexts/metadata-manager"
+HOOK_INPUT=""
 
 # Source standardized exit codes
 if [[ -f "${PLUGIN_DIR}/scripts/lib/sf-exit-codes.sh" ]]; then
@@ -53,12 +54,15 @@ else
 fi
 
 # Get user message from first argument or environment variable
-USER_MESSAGE="${1:-${AGENT_MESSAGE:-}}"
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+fi
+
+USER_MESSAGE="${1:-${AGENT_MESSAGE:-$(printf '%s' "$HOOK_INPUT" | jq -r '.prompt // .message // .tool_input.prompt // .tool_input.message // empty' 2>/dev/null || echo "")}}"
 
 if [ -z "$USER_MESSAGE" ]; then
-    echo "Error: No user message provided" >&2
-    echo "Usage: $0 <user_message>" >&2
-    exit $EXIT_CONFIG_ERROR
+    echo "[pre-sfdc-metadata-manager-invocation] INFO: no agent message/runtime context, skipping" >&2
+    exit 0
 fi
 
 # Validate required files exist

@@ -41,8 +41,8 @@ fi
 OPERATION="${1:-}"
 SEARCH_PATTERN="${2:-}"
 REPLACEMENT_PATTERN="${3:-}"
-FILES="$4"
-EXPECTED_COUNT="$5"
+FILES="${4:-}"
+EXPECTED_COUNT="${5:-}"
 
 # Path to verification script
 VERIFIER_SCRIPT=".claude-plugins/opspal-core/scripts/lib/edit-verification-checkpoint.js"

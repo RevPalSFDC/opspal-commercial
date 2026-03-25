@@ -12,9 +12,18 @@
 
 set -e
 
+# Standalone guard — this hook is normally invoked from a parent dispatcher.
+# Skip cleanly when run directly without dispatcher context.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
 # Get the command being executed
 COMMAND="${1:-}"
-shift
+if [ "$#" -gt 0 ]; then
+  shift
+fi
 
 # Source error handler if available
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

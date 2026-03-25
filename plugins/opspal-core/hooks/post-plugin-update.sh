@@ -31,8 +31,11 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
+# PostToolUse hooks must not emit human-readable stdout.
+exec 1>&2
+
 # Check if hook is enabled (default: enabled)
-if [ "${ENABLE_POST_PLUGIN_CHECK}" = "0" ]; then
+if [ "${ENABLE_POST_PLUGIN_CHECK:-1}" = "0" ]; then
   exit 0
 fi
 

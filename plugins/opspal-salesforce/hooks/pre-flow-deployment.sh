@@ -53,9 +53,34 @@ if ! command -v jq &>/dev/null; then
     exit 0
 fi
 
+# Standalone guard — this hook is invoked by pre-bash-dispatcher.sh via
+# run_child_hook() which sets DISPATCHER_CONTEXT=1 and pipes HOOK_INPUT.
+# When run standalone, skip cleanly instead of failing on missing arguments.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+    echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+    exit 0
+fi
+
+HOOK_INPUT=""
+HOOK_COMMAND=""
+if [ ! -t 0 ]; then
+    HOOK_INPUT=$(cat 2>/dev/null || true)
+    HOOK_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || echo "")
+fi
+
 ORG_ALIAS="${2:-}"
 
 if [ -z "$FLOW_PATH" ]; then
+    if [ -n "$HOOK_INPUT" ]; then
+        case "$HOOK_COMMAND" in
+            *".flow-meta.xml"*|*"flows/"*|*" flow "*)
+                ;;
+            *)
+                echo "[$(basename "$0")] INFO: no flow deployment context detected, skipping" >&2
+                exit 0
+                ;;
+        esac
+    fi
     echo "Usage: bash pre-flow-deployment.sh <flow-path> [org-alias]"
     exit $EXIT_CONFIG_ERROR
 fi

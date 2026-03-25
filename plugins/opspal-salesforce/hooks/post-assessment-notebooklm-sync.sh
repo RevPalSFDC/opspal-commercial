@@ -40,16 +40,16 @@ SOURCE_FORMATTER="${OPSPAL_CORE}/scripts/lib/notebooklm-source-formatter.js"
 # Log function
 log() {
     if [[ "$NOTEBOOKLM_SYNC_VERBOSE" == "true" ]]; then
-        echo -e "${BLUE}[NotebookLM Sync]${NC} $1"
+        echo -e "${BLUE}[NotebookLM Sync]${NC} $1" >&2
     fi
 }
 
 log_success() {
-    echo -e "${GREEN}[NotebookLM Sync]${NC} $1"
+    echo -e "${GREEN}[NotebookLM Sync]${NC} $1" >&2
 }
 
 log_warn() {
-    echo -e "${YELLOW}[NotebookLM Sync]${NC} $1"
+    echo -e "${YELLOW}[NotebookLM Sync]${NC} $1" >&2
 }
 
 # Parse hook input
@@ -205,7 +205,7 @@ emit_sync_notification() {
     local assessment_type="$3"
 
     # Output structured notification that agents can parse
-    cat << EOF
+    cat >&2 << EOF
 
 📚 NotebookLM Sync Triggered
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -231,8 +231,8 @@ main() {
     local file_path="${FILE_PATH:-}"
 
     # Also check if passed as argument
-    if [[ -z "$file_path" && -n "$2" ]]; then
-        file_path="$2"
+    if [[ -z "$file_path" && -n "${2:-}" ]]; then
+        file_path="${2:-}"
     fi
 
     # Check tool output for file paths (Write tool)

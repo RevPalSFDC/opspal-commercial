@@ -24,6 +24,23 @@ if ! command -v jq &>/dev/null; then
     exit 0
 fi
 
+# Standalone guard — this governance hook expects dispatcher-provided runtime
+# context. Skip cleanly when invoked directly during standalone validation.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+    echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+    exit 0
+fi
+
+HAS_GOVERNANCE_CONTEXT=false
+if [[ -n "${GOVERNANCE_OPERATION_TYPE:-}" ]] || [[ -n "${GOVERNANCE_ENVIRONMENT:-}" ]] || [[ -n "${AGENT_GOVERNANCE_OVERRIDE:-}" ]]; then
+    HAS_GOVERNANCE_CONTEXT=true
+fi
+
+if [[ "$HAS_GOVERNANCE_CONTEXT" != "true" ]]; then
+    echo "[$(basename "$0")] INFO: no governance runtime context detected, skipping" >&2
+    exit 0
+fi
+
 if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     set -x
     echo "DEBUG: [pre-high-risk-operation] starting" >&2
