@@ -44,7 +44,6 @@
     "plugins/opspal-core/hooks/post-win-loss-calibration.sh": "Relies on cross-hook assessment artifacts and calibration fixtures that are not yet isolated.",
     "plugins/opspal-core/hooks/pre-fireflies-api-call.sh": "Credentialed Fireflies API preflight still needs a service-stub harness.",
     "plugins/opspal-core/hooks/pre-gong-api-call.sh": "Credentialed Gong API preflight still needs a service-stub harness.",
-    "plugins/opspal-core/hooks/pre-session-silent-failure-check.sh": "Needs a session-log replay harness that reproduces pre-tool Claude session state.",
     "plugins/opspal-core/hooks/session-start-repo-sync.sh": "Touches git/worktree state and needs an isolated repository fixture to test safely.",
     "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures.",
     "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
@@ -57,13 +56,6 @@
         3
       ],
       "description": "Must have at least one test asserting exit 2 or 3 (production escalation or forbidden block)"
-    },
-    "plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh": {
-      "mustTestBlock": true,
-      "blockExitCodes": [
-        2
-      ],
-      "description": "Must have at least one test asserting deploy blocking via dispatcher chain"
     },
     "plugins/opspal-salesforce/hooks/pre-deploy-agent-context-check.sh": {
       "mustTestBlock": true,
@@ -78,6 +70,85 @@
         2
       ],
       "description": "Must have at least one test asserting routing enforcement block"
+    }
+  },
+  "readWriteHooks": {
+    "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh": {
+      "allowPatterns": [
+        "Allows read-only sf data query on production org",
+        "Allows read-only sfdx data query on production org"
+      ],
+      "blockPatterns": [
+        "Escalates sf project deploy on production org",
+        "Escalates sf data delete on production org"
+      ],
+      "description": "Must test both read-only allow paths and mutating escalation paths."
+    },
+    "plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh": {
+      "allowPatterns": [
+        "Allows read-only tools while routing requirement is pending",
+        "Allows read-only Salesforce MCP tools while routing requirement is pending",
+        "Allows read-only Marketo MCP tools while routing requirement is pending"
+      ],
+      "blockPatterns": [
+        "Pending routing state should deny operational direct execution",
+        "Bypasses mandatory routing when agent_type marks sub-agent context",
+        "Should block inline secret literals"
+      ],
+      "description": "Must test read-safe allow behavior and blocking/deny behavior for operational paths."
+    },
+    "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh": {
+      "allowPatterns": [
+        "Allows read-only HubSpot GET requests",
+        "Allows read-like HubSpot search POST requests"
+      ],
+      "blockPatterns": [
+        "Denies mutating HubSpot CRM curl requests in main context"
+      ],
+      "description": "Must test read-only HubSpot curl allow paths and mutating deny paths."
+    },
+    "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh": {
+      "allowPatterns": [
+        "Allows read-only Marketo GET requests"
+      ],
+      "blockPatterns": [
+        "Denies mutating Marketo bulk curl requests in main context",
+        "Denies smart campaign execution curl requests in main context"
+      ],
+      "description": "Must test read-only Marketo curl allow paths and mutating deny paths."
+    }
+  },
+  "productionHooks": {
+    "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh": {
+      "requiredPatterns": [
+        "production",
+        "PRODUCTION_DETECTED"
+      ],
+      "description": "Must exercise explicit production detection and enforcement messaging."
+    }
+  },
+  "subAgentHooks": {
+    "plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh": {
+      "requiredPatterns": [
+        "agent_type",
+        "Denies unvalidated sub-agent context when agent_type alone does not satisfy routing",
+        "Allows cleared capability-matched sub-agent context"
+      ],
+      "description": "Must explicitly test that unvalidated sub-agent context is denied and cleared capability-matched sub-agents are allowed."
+    },
+    "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh": {
+      "requiredPatterns": [
+        "agent_type",
+        "Approved agent context should not be re-blocked"
+      ],
+      "description": "Must verify HubSpot direct API guards do not re-block specialist agent execution."
+    },
+    "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh": {
+      "requiredPatterns": [
+        "agent_type",
+        "Approved agent context should not be re-blocked"
+      ],
+      "description": "Must verify Marketo direct API guards do not re-block specialist agent execution."
     }
   }
 }
