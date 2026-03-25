@@ -89,11 +89,9 @@ jobs:
             echo "SLACK_WEBHOOK_URL not configured; notification skipped."
             exit 0
           fi
-          FULL_MESSAGE="${MESSAGE}
-
-View release notes: https://opspal.gorevpal.com/release-notes.html"
-          payload=$(jq -n --arg text "$FULL_MESSAGE" '{text:$text}')
+          FULL_MESSAGE="${MESSAGE}"$'\n\n'"View release notes: https://opspal.gorevpal.com/release-notes.html"
+          payload=$(jq -n --arg text "$FULL_MESSAGE" '{"text":$text}')
           curl -fsSL -X POST \
-            -H 'Content-type: application/json' \
+            -H "Content-type: application/json" \
             --data "$payload" \
             "$SLACK_WEBHOOK_URL"
