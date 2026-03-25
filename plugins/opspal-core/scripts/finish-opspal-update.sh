@@ -763,6 +763,40 @@ find_script() {
   return 1
 }
 
+find_routing_index() {
+  local candidate=""
+  local root=""
+  local mp_dir=""
+  local cache_hit=""
+  local candidates=(
+    "$WORKSPACE_ROOT/plugins/opspal-core/routing-index.json"
+    "$WORKSPACE_ROOT/.claude-plugins/opspal-core/routing-index.json"
+    "$PWD/plugins/opspal-core/routing-index.json"
+    "$PWD/.claude-plugins/opspal-core/routing-index.json"
+    "$SCRIPT_DIR/../routing-index.json"
+  )
+
+  for root in "${CLAUDE_ROOTS[@]}"; do
+    candidates+=(
+      "$root/plugins/opspal-core/routing-index.json"
+      "$root/plugins/marketplaces/opspal-commercial/plugins/opspal-core/routing-index.json"
+    )
+
+    for mp_dir in "$root/plugins/marketplaces"/*/plugins/opspal-core; do
+      [ -d "$mp_dir" ] && candidates+=("$mp_dir/routing-index.json")
+    done
+
+    cache_hit="$(find_latest_cache_script "$root" "*/opspal-core/*/routing-index.json" || true)"
+    [ -n "$cache_hit" ] && candidates+=("$cache_hit")
+  done
+
+  for candidate in "${candidates[@]}"; do
+    [ -f "$candidate" ] && echo "$candidate" && return 0
+  done
+
+  return 1
+}
+
 # Find CI script in multiple locations (dev + marketplace + cache)
 find_ci_script() {
   local script_name="$1"
@@ -1702,11 +1736,7 @@ step8_routing_promotion() {
     echo "⚠️  CLAUDE.md not found at $claudemd_path"
   fi
 
-  for candidate in \
-    "$PWD/plugins/opspal-core/routing-index.json" \
-    "$PWD/.claude-plugins/opspal-core/routing-index.json"; do
-    [ -f "$candidate" ] && routing_index="$candidate" && break
-  done
+  routing_index="$(find_routing_index || true)"
 
   if [ -n "$routing_index" ] && command -v node >/dev/null 2>&1; then
     route_stats=$(node -e '
@@ -1728,6 +1758,7 @@ step8_routing_promotion() {
     recommended_count="${rest%%|*}"
     total_count="${rest#*|}"
     echo "  Routing index: $mandatory_count mandatory, $recommended_count recommended, $total_count total routable agents"
+    [ "$VERBOSE_FLAG" = "--verbose" ] && echo "  Routing index source: $routing_index"
   else
     update_step_status "degraded"
     append_step_message "Routing index not found"

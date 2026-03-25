@@ -18,6 +18,24 @@ const args = process.argv.slice(2);
 const format = (args.find(a => a.startsWith('--format=')) || '--format=compact').split('=')[1];
 const outputPath = (args.find(a => a.startsWith('--output=')) || '').split('=')[1] || '';
 
+function addHomeRoutingIndexCandidates(candidates, home) {
+  if (!home) return;
+
+  candidates.push(path.join(home, '.claude', 'plugins', 'opspal-core', 'routing-index.json'));
+
+  const marketplacesRoot = path.join(home, '.claude', 'plugins', 'marketplaces');
+  if (!fs.existsSync(marketplacesRoot)) return;
+
+  try {
+    for (const entry of fs.readdirSync(marketplacesRoot, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      candidates.push(path.join(marketplacesRoot, entry.name, 'plugins', 'opspal-core', 'routing-index.json'));
+    }
+  } catch (_error) {
+    // Ignore marketplace discovery issues and fall back to the standard candidates.
+  }
+}
+
 // Find routing index
 function findRoutingIndex() {
   const customPath = (args.find(a => a.startsWith('--routing-index=')) || '').split('=')[1];
@@ -31,9 +49,7 @@ function findRoutingIndex() {
 
   // Also check marketplace paths
   const home = process.env.HOME || process.env.USERPROFILE || '';
-  if (home) {
-    candidates.push(path.join(home, '.claude', 'plugins', 'marketplaces', 'revpal-internal-plugins', 'plugins', 'opspal-core', 'routing-index.json'));
-  }
+  addHomeRoutingIndexCandidates(candidates, home);
 
   for (const p of candidates) {
     if (fs.existsSync(p)) return p;

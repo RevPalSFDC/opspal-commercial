@@ -245,6 +245,53 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Accepts routing index from installed marketplace path during routing promotion', async () => {
+    const { tempRoot, homeDir } = scaffoldWorkspace();
+    const workspaceIndexPath = path.join(tempRoot, 'plugins', 'opspal-core', 'routing-index.json');
+    const marketplaceIndexPath = path.join(
+      homeDir,
+      '.claude',
+      'plugins',
+      'marketplaces',
+      'opspal-commercial',
+      'plugins',
+      'opspal-core',
+      'routing-index.json'
+    );
+
+    try {
+      fs.rmSync(workspaceIndexPath, { force: true });
+      fs.mkdirSync(path.dirname(marketplaceIndexPath), { recursive: true });
+      fs.writeFileSync(marketplaceIndexPath, JSON.stringify({ agents: {} }), 'utf8');
+
+      const result = spawnSync('bash', [SCRIPT_PATH, '--skip-fix', '--json'], {
+        cwd: tempRoot,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          HOME: homeDir
+        }
+      });
+
+      assert.strictEqual(result.status, 0, `Expected finish validation to succeed. stderr=${result.stderr}`);
+      const report = parseJson(result.stdout);
+      const routingPromotionStep = report.steps.find((step) => step.key === 'step8-routing-promotion');
+
+      assert(routingPromotionStep, 'Expected routing promotion step in finish report');
+      assert.notStrictEqual(
+        routingPromotionStep.status,
+        'degraded',
+        `Expected routing promotion to resolve installed routing index. report=${result.stdout}`
+      );
+      assert(
+        !routingPromotionStep.message.includes('Routing index not found'),
+        `Expected routing promotion message to avoid false missing-index warning. report=${result.stdout}`
+      );
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  }));
+
   results.push(await runTest('Backs up settings.json before mutating stale hook entries', async () => {
     const { tempRoot, homeDir, claudeDir } = scaffoldWorkspace();
     const settingsPath = path.join(claudeDir, 'settings.json');
