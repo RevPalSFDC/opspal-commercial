@@ -16,15 +16,15 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 # Color codes for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-BLINK='\033[5m'
-NC='\033[0m' # No Color
+RED="${RED:-\033[0;31m}"
+GREEN="${GREEN:-\033[0;32m}"
+YELLOW="${YELLOW:-\033[1;33m}"
+BLUE="${BLUE:-\033[0;34m}"
+PURPLE="${PURPLE:-\033[0;35m}"
+CYAN="${CYAN:-\033[0;36m}"
+BOLD="${BOLD:-\033[1m}"
+BLINK="${BLINK:-\033[5m}"
+NC="${NC:-\033[0m}" # No Color
 
 # Get the user's input/task from stdin (Claude Code hooks receive JSON via stdin)
 HOOK_INPUT="$(cat)"

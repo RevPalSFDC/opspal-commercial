@@ -25,6 +25,11 @@ fi
 
 # Color codes — error handler sets RED/YELLOW/GREEN/BLUE/NC as readonly,
 # so only set missing ones. Use :- to avoid readonly conflicts under set -u.
+RED="${RED:-\033[0;31m}"
+YELLOW="${YELLOW:-\033[1;33m}"
+GREEN="${GREEN:-\033[0;32m}"
+BLUE="${BLUE:-\033[0;34m}"
+NC="${NC:-\033[0m}"
 CYAN="${CYAN:-\033[0;36m}"
 PURPLE="${PURPLE:-\033[0;35m}"
 BOLD="${BOLD:-\033[1m}"

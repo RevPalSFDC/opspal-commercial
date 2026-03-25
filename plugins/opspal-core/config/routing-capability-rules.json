@@ -1,0 +1,116 @@
+{
+  "version": "1.0.0",
+  "salesforce": {
+    "rules": [
+      {
+        "rule_id": "sf_permission_security_write",
+        "required_capabilities": [
+          "salesforce:permission:write"
+        ],
+        "allowed_actor_types": [
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-security-admin",
+        "escalation": "block"
+      },
+      {
+        "rule_id": "sf_core_object_upsert",
+        "required_capabilities": [
+          "salesforce:data:core:upsert"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-upsert-orchestrator",
+        "escalation": "block"
+      },
+      {
+        "rule_id": "sf_query_url_length_risk",
+        "required_capabilities": [
+          "salesforce:data:bulk"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-bulkops-orchestrator",
+        "escalation": "block"
+      },
+      {
+        "rule_id": "sf_core_object_query",
+        "required_capabilities": [
+          "salesforce:data:core:query"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-data-operations",
+        "escalation": "block"
+      },
+      {
+        "rule_id": "sf_permission_security_query",
+        "required_capabilities": [
+          "salesforce:permission:read"
+        ],
+        "allowed_actor_types": [
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-permission-assessor",
+        "escalation": "warn"
+      },
+      {
+        "rule_id": "sf_territory_write",
+        "required_capabilities": [
+          "salesforce:territory:write"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-territory-orchestrator",
+        "escalation": "block"
+      },
+      {
+        "rule_id": "sf_validation_rule_write",
+        "required_capabilities": [
+          "salesforce:metadata:validation-rule:write"
+        ],
+        "allowed_actor_types": [
+          "orchestrator"
+        ],
+        "preferred_agent": "opspal-salesforce:validation-rule-orchestrator",
+        "escalation": "block"
+      }
+    ],
+    "deployPolicies": {
+      "parent_clearance": {
+        "required_capabilities": [
+          "salesforce:deploy:plan"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ]
+      },
+      "sandbox_execute": {
+        "required_capabilities": [
+          "salesforce:deploy:sandbox"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ]
+      },
+      "production_execute": {
+        "required_capabilities": [
+          "salesforce:deploy:production"
+        ],
+        "allowed_actor_types": [
+          "specialist"
+        ]
+      }
+    }
+  }
+}

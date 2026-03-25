@@ -18,6 +18,10 @@ disallowedTools:
   - mcp__salesforce__*_delete
 model: sonnet
 tier: 4
+actorType: orchestrator
+capabilities:
+  - salesforce:permission:plan
+  - salesforce:permission:read
 governanceIntegration: true
 version: 2.1.0
 triggerKeywords:

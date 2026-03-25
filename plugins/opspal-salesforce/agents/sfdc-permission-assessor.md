@@ -22,6 +22,9 @@ disallowedTools:
   - mcp__salesforce__*_update
   - mcp__salesforce__*_delete
 model: haiku
+actorType: specialist
+capabilities:
+  - salesforce:permission:read
 triggerKeywords:
   - permission
   - assess

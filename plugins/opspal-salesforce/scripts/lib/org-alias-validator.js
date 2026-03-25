@@ -10,16 +10,17 @@
  * @module org-alias-validator
  */
 
-const { execSync, spawnSync } = require('child_process');
-const fs = require('fs');
+'use strict';
+
+const { execSync } = require('child_process');
 const path = require('path');
+const {
+  SALESFORCE_ALIAS_PATTERNS,
+  detectSalesforceEnvironment
+} = require(path.join(__dirname, '../../../opspal-core/scripts/lib/classify-operation'));
 
 // Common alias patterns
-const ALIAS_PATTERNS = {
-  production: /^(prod|production|prd|live|main)$/i,
-  sandbox: /^(sandbox|sbx|dev|test|qa|uat|staging|stg|sit)[\w-]*$/i,
-  scratch: /^(scratch|so|scratchorg)[\w-]*$/i
-};
+const ALIAS_PATTERNS = SALESFORCE_ALIAS_PATTERNS;
 
 /**
  * List all authenticated orgs
@@ -284,6 +285,10 @@ function levenshteinDistance(a, b) {
  * @returns {Object} Detected type
  */
 function detectOrgType(alias) {
+  const environment = detectSalesforceEnvironment(alias, {
+    useCache: false,
+    querySfCli: false
+  });
   const result = {
     alias,
     type: 'unknown',
@@ -291,14 +296,14 @@ function detectOrgType(alias) {
     warnings: []
   };
 
-  if (ALIAS_PATTERNS.production.test(alias)) {
+  if (environment.environment === 'production') {
     result.type = 'production';
     result.confidence = 'high';
     result.warnings.push('This appears to be a production org - exercise caution');
-  } else if (ALIAS_PATTERNS.sandbox.test(alias)) {
+  } else if (environment.environment === 'sandbox') {
     result.type = 'sandbox';
     result.confidence = 'high';
-  } else if (ALIAS_PATTERNS.scratch.test(alias)) {
+  } else if (environment.environment === 'scratch') {
     result.type = 'scratch';
     result.confidence = 'high';
     result.warnings.push('Scratch orgs are temporary and may expire');
@@ -319,7 +324,24 @@ function getOrgInfo(alias) {
     return validation;
   }
 
-  const orgType = detectOrgType(alias);
+  let orgType = detectOrgType(alias);
+  if (!validation.orgDetails?.isScratch) {
+    const environment = detectSalesforceEnvironment(alias, {
+      useCache: true,
+      querySfCli: true
+    });
+
+    if (environment.environment !== 'unknown') {
+      orgType = {
+        alias,
+        type: environment.environment,
+        confidence: environment.source === 'alias-heuristic' ? 'high' : 'very-high',
+        warnings: environment.environment === 'production'
+          ? ['This appears to be a production org - exercise caution']
+          : []
+      };
+    }
+  }
 
   return {
     ...validation,

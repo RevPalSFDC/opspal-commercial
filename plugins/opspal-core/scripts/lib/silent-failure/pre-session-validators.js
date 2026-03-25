@@ -26,6 +26,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execSync } = require('child_process');
+const { getActiveOverrides } = require('../override-registry');
 
 // =============================================================================
 // Constants
@@ -114,6 +115,7 @@ class BaseValidator {
 class EnvBypassValidator extends BaseValidator {
   constructor(options = {}) {
     super('env-bypass');
+    this.env = options.env || process.env;
     this.dangerousVars = options.dangerousVars ||
       CONFIG?.dangerousEnvVars ||
       DEFAULT_DANGEROUS_ENV_VARS;
@@ -121,9 +123,49 @@ class EnvBypassValidator extends BaseValidator {
 
   check() {
     const violations = [];
+    const overrideAudit = getActiveOverrides({ env: this.env });
+
+    if (overrideAudit.activeOverrides.length > 0) {
+      for (const override of overrideAudit.activeOverrides) {
+        const warning = overrideAudit.warnings.find((item) => item.overrideId === override.id);
+        const recommendation = override.reasonRequired && !override.reasonPresent
+          ? `Set ${override.reasonEnvVar} before continuing or unset ${override.envVar}`
+          : `Unset ${override.envVar} unless intentionally testing: unset ${override.envVar}`;
+        const reasonContext = override.reasonPresent
+          ? ` Reason: ${override.reason}.`
+          : (override.reasonRequired ? ` ${override.reasonEnvVar} is missing.` : '');
+
+        violations.push(this.createViolation(
+          'ENV_BYPASS',
+          override.severity,
+          `${override.envVar} is set, which ${override.risk || override.description || 'activates an audited override'}.${reasonContext}`,
+          {
+            variable: override.envVar,
+            currentValue: override.currentValue,
+            risk: override.risk || override.description,
+            scope: override.scope,
+            overrideId: override.id,
+            reasonRequired: override.reasonRequired,
+            reasonPresent: override.reasonPresent,
+            warningCode: warning?.code,
+            recommendation
+          }
+        ));
+      }
+    }
+
+    if (violations.length > 0) {
+      return {
+        validator: this.name,
+        violations,
+        passed: false,
+        criticalCount: violations.filter(v => v.severity === SEVERITY.CRITICAL).length,
+        highCount: violations.filter(v => v.severity === SEVERITY.HIGH).length
+      };
+    }
 
     for (const envVar of this.dangerousVars) {
-      const currentValue = process.env[envVar.name];
+      const currentValue = this.env[envVar.name];
 
       // Check if variable is set to a "truthy" disabling value
       let isViolation = false;

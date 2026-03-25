@@ -16,6 +16,9 @@ disallowedTools:
   - mcp__salesforce__*_delete
 model: sonnet
 tier: 3
+actorType: orchestrator
+capabilities:
+  - salesforce:territory:write
 governanceIntegration: true
 version: 1.0.0
 created: 2025-12-12

@@ -4,6 +4,10 @@ description: "MUST BE USED for Lead/Contact/Account upsert operations."
 color: blue
 model: sonnet
 tier: 3
+actorType: orchestrator
+capabilities:
+  - salesforce:data:core:query
+  - salesforce:data:core:upsert
 version: 1.0.0
 tools:
   - Task

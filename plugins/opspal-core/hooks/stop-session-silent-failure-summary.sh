@@ -33,6 +33,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RUNTIME_MONITOR="$SCRIPT_DIR/../scripts/lib/silent-failure/runtime-monitors.js"
 POST_ANALYZER="$SCRIPT_DIR/../scripts/lib/silent-failure/post-session-analyzers.js"
 METRICS_AGG="$SCRIPT_DIR/../scripts/lib/silent-failure/metrics-aggregator.js"
+OVERRIDE_REGISTRY="$SCRIPT_DIR/../scripts/lib/override-registry.js"
 
 LOG_DIR="${HOME}/.claude/logs"
 LOG_FILE="$LOG_DIR/silent-failure-session.log"
@@ -89,6 +90,36 @@ if [ "$TOTAL" -gt 0 ]; then
     fi
 else
     log "Clean session - no silent failure indicators"
+fi
+
+if [ -f "$OVERRIDE_REGISTRY" ]; then
+    OVERRIDE_SUMMARY=$(node "$OVERRIDE_REGISTRY" read-session --json 2>/dev/null || echo '{}')
+    ACTIVE_OVERRIDES=$(echo "$OVERRIDE_SUMMARY" | jq -r '.summary.activeCount // 0' 2>/dev/null || echo "0")
+    OVERRIDE_WARNINGS=$(echo "$OVERRIDE_SUMMARY" | jq -r '.summary.warningCount // 0' 2>/dev/null || echo "0")
+
+    if [[ "$ACTIVE_OVERRIDES" =~ ^[0-9]+$ ]] && [ "$ACTIVE_OVERRIDES" -gt 0 ]; then
+        log "Session override summary: $(echo "$OVERRIDE_SUMMARY" | jq -r '.summary.logLine // empty' 2>/dev/null || echo "$ACTIVE_OVERRIDES active override(s)")"
+
+        while IFS= read -r override_line; do
+            [ -n "$override_line" ] || continue
+            log "Override summary detail: $override_line"
+        done < <(
+            echo "$OVERRIDE_SUMMARY" |
+                jq -r '.activeOverrides[]? | "\(.envVar)=\(.currentValue) scope=\(.scope) severity=\(.severity) reason=\(.reason // "none")"' 2>/dev/null ||
+                true
+        )
+
+        if [[ "$OVERRIDE_WARNINGS" =~ ^[0-9]+$ ]] && [ "$OVERRIDE_WARNINGS" -gt 0 ]; then
+            while IFS= read -r warning_line; do
+                [ -n "$warning_line" ] || continue
+                log "Override summary warning: $warning_line"
+            done < <(
+                echo "$OVERRIDE_SUMMARY" |
+                    jq -r '.warnings[]?.message' 2>/dev/null ||
+                    true
+            )
+        fi
+    fi
 fi
 
 # Reset runtime monitor for next session

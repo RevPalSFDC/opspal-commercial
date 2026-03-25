@@ -22,11 +22,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${SCRIPT_DIR}/.."
 CONFIG_PATH="${PLUGIN_ROOT}/config/tool-policies.json"
 PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
+CLASSIFIER_LIB="${PLUGIN_ROOT}/scripts/lib/classify-bash-command.sh"
 DEFAULT_LOG_ROOT="${PROJECT_ROOT}/.claude/logs"
 LOG_ROOT="${CLAUDE_HOOK_LOG_ROOT:-$DEFAULT_LOG_ROOT}"
 FALLBACK_LOG_ROOT="/tmp/.claude/logs"
 LOG_DIR=""
 LOG_FILE=""
+
+# shellcheck source=/dev/null
+source "$CLASSIFIER_LIB"
 
 resolve_log_dir() {
     local primary="${LOG_ROOT}/task-graph"
@@ -222,34 +226,29 @@ check_approval_required() {
 
 # Check for production indicators
 check_production_access() {
-    if [[ ! -f "$CONFIG_PATH" ]] || ! command -v jq &>/dev/null; then
+    if [[ "$TOOL_NAME" != "Bash" ]]; then
         return 1
     fi
 
-    # Check Salesforce production patterns
-    local sf_prod_patterns
-    sf_prod_patterns=$(jq -r '.escalation_rules.production_detection.salesforce.org_patterns[]?' "$CONFIG_PATH" 2>/dev/null)
+    local target_environment target_alias
+    target_environment="$(detect_target_environment "$TOOL_ARGS")"
+    if [[ "$target_environment" != "production" ]]; then
+        return 1
+    fi
 
-    while IFS= read -r pattern; do
-        if [[ -n "$pattern" ]] && echo "$TOOL_ARGS" | grep -qiE "(--target-org|--username|-u).*$pattern"; then
-            # Allow read-only SF CLI operations against production orgs without escalation.
-            # Agents need non-destructive queries/describes for investigation and auditing.
-            # Mutating commands (create, update, delete, deploy) still trigger escalation.
-            local args_lower
-            args_lower="$(printf '%s' "$TOOL_ARGS" | tr '[:upper:]' '[:lower:]')"
-            if echo "$args_lower" | grep -qE '(sf|sfdx)[[:space:]]+(data[[:space:]]+query|sobject[[:space:]]+describe|sobject[[:space:]]+list|org[[:space:]]+display|org[[:space:]]+list|data[[:space:]]+export|apex[[:space:]]+tail)' \
-               && ! echo "$args_lower" | grep -qE '(sf|sfdx)[[:space:]]+(data[[:space:]]+(create|update|upsert|delete|bulk)|project[[:space:]]+deploy)'; then
-                log_decision "allow" "read_only_production_query: $pattern"
-                echo "INFO: Read-only SF CLI operation allowed on production org ($pattern)" >&2
-                return 1
-            fi
+    target_alias="$(extract_salesforce_target_alias "$TOOL_ARGS")"
 
-            echo "PRODUCTION_DETECTED: Salesforce production org pattern: $pattern"
-            return 0
-        fi
-    done <<< "$sf_prod_patterns"
+    # Allow read-only SF CLI operations against production orgs without escalation.
+    # Agents need non-destructive queries/describes for investigation and auditing.
+    # Mutating commands (create, update, delete, deploy) still trigger escalation.
+    if is_read_only_command "$TOOL_ARGS"; then
+        log_decision "allow" "read_only_production_query"
+        echo "INFO: Read-only SF CLI operation allowed on production org (${target_alias:-production})" >&2
+        return 1
+    fi
 
-    return 1
+    echo "PRODUCTION_DETECTED: Salesforce production target detected (${target_alias:-production})"
+    return 0
 }
 
 # Check destructive operations

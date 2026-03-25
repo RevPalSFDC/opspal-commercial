@@ -1,3 +1,30 @@
 {
-  "hooks": {}
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
+            "timeout": 5000,
+            "description": "Govern Monday agent launches for destructive or large-scale workflows"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__monday__*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-monday-audit.sh",
+            "timeout": 5000,
+            "description": "Classify Monday MCP calls as read or mutating and write audit telemetry"
+          }
+        ]
+      }
+    ]
+  }
 }

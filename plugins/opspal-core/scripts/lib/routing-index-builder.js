@@ -396,11 +396,19 @@ class RoutingIndexBuilder {
             if (frontmatter.tier != null) {
                 agent.tier = String(frontmatter.tier).trim();
             }
+            if (frontmatter.actorType != null || frontmatter.actor_type != null) {
+                agent.actorType = String(frontmatter.actorType || frontmatter.actor_type).trim().toLowerCase();
+            }
 
             const tools = this.normalizeStringArray(frontmatter.tools)
                 .map(tool => tool === 'Task' ? 'Agent' : tool);
             if (tools.length > 0) {
                 agent.tools = tools;
+            }
+
+            const capabilities = this.normalizeStringArray(frontmatter.capabilities);
+            if (capabilities.length > 0) {
+                agent.capabilities = capabilities;
             }
 
             const keywords = this.collectTriggerKeywords(frontmatter, body, agent.name, pluginName);

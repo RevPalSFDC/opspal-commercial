@@ -109,7 +109,7 @@ run_child_hook() {
   stdout_file="$(mktemp)"
   stderr_file="$(mktemp)"
 
-  if printf '%s' "$HOOK_INPUT" | "$@" >"$stdout_file" 2>"$stderr_file"; then
+  if printf '%s' "$HOOK_INPUT" | env DISPATCHER_CONTEXT=1 "$@" >"$stdout_file" 2>"$stderr_file"; then
     exit_code=0
   else
     exit_code=$?

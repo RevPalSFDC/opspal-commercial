@@ -35,7 +35,9 @@ mkdir -p "$(dirname "$LOG_FILE")"
 
 # Log function
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+    local line="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+    printf '%s\n' "$line" >> "$LOG_FILE"
+    printf '%s\n' "$line" >&2
 }
 
 # Extract company IDs from user input

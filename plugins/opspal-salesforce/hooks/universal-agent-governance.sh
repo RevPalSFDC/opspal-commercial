@@ -36,6 +36,13 @@ if ! command -v jq &>/dev/null; then
     echo "[universal-agent-governance] jq not found, skipping" >&2
     exit 0
 fi
+CORE_PLUGIN_ROOT="$(cd "$SCRIPT_DIR/../../opspal-core" && pwd)"
+ENVIRONMENT_LIB="${CORE_PLUGIN_ROOT}/scripts/lib/detect-environment.sh"
+
+if [[ -f "$ENVIRONMENT_LIB" ]]; then
+    # shellcheck source=/dev/null
+    source "$ENVIRONMENT_LIB"
+fi
 
 if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     set -x
@@ -80,8 +87,16 @@ RISK_SCORER="$PLUGIN_ROOT/scripts/lib/agent-risk-scorer.js"
 GOVERNANCE_WRAPPER="$PLUGIN_ROOT/scripts/lib/agent-governance.js"
 
 if declare -F resolve_enc_asset >/dev/null 2>&1; then
-    PERMISSION_MATRIX=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "config/agent-permission-matrix.json")
-    RISK_SCORER=$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "scripts/lib/agent-risk-scorer.js")
+    RESOLVED_PERMISSION_MATRIX="$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "config/agent-permission-matrix.json" || true)"
+    RESOLVED_RISK_SCORER="$(resolve_enc_asset "$PLUGIN_ROOT" "opspal-salesforce" "scripts/lib/agent-risk-scorer.js" || true)"
+
+    if [[ -n "$RESOLVED_PERMISSION_MATRIX" ]]; then
+        PERMISSION_MATRIX="$RESOLVED_PERMISSION_MATRIX"
+    fi
+
+    if [[ -n "$RESOLVED_RISK_SCORER" ]]; then
+        RISK_SCORER="$RESOLVED_RISK_SCORER"
+    fi
 fi
 
 # OutputFormatter and HookLogger
@@ -134,9 +149,30 @@ fi
 
 # Operation details
 OPERATION_TYPE="${OPERATION_TYPE:-UNKNOWN}"
-ENVIRONMENT="${SALESFORCE_ENVIRONMENT:-${TARGET_ORG:-${SF_TARGET_ORG:-unknown}}}"
 RECORD_COUNT="${RECORD_COUNT:-0}"
 COMPONENT_COUNT="${COMPONENT_COUNT:-0}"
+
+detect_governance_environment() {
+    local candidate="${SALESFORCE_ENVIRONMENT:-${TARGET_ORG:-${SF_TARGET_ORG:-}}}"
+
+    if declare -F detect_salesforce_environment >/dev/null 2>&1; then
+        local detected_environment
+        detected_environment="$(detect_salesforce_environment "$candidate")"
+        if [[ -n "$detected_environment" ]]; then
+            printf '%s' "$detected_environment"
+            return 0
+        fi
+    fi
+
+    if [[ -n "$candidate" ]]; then
+        printf '%s' "$candidate"
+        return 0
+    fi
+
+    printf 'unknown'
+}
+
+ENVIRONMENT="$(detect_governance_environment)"
 
 # Check if governance is enabled
 if [[ "${AGENT_GOVERNANCE_ENABLED:-true}" != "true" ]]; then
@@ -188,7 +224,7 @@ fi
 # Tier 2: Standard operations - conditional governance
 if [[ "$AGENT_TIER" == "2" ]]; then
     # Check if in production and high volume
-    if [[ "$ENVIRONMENT" == *"production"* ]] && [[ "$RECORD_COUNT" -gt 1000 ]]; then
+    if [[ "$ENVIRONMENT" == "production" ]] && [[ "$RECORD_COUNT" -gt 1000 ]]; then
         echo "   Decision: ⚠️  Tier 2 in production with >1k records - governance required"
     else
         echo "   Decision: ⚠️  Tier 2 - governance check"

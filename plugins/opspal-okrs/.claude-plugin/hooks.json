@@ -15,6 +15,17 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-okr-approval-gate.sh",
+            "timeout": 5000,
+            "description": "Enforce OKR lifecycle sequencing before specialized agent launches"
+          }
+        ]
+      },
+      {
         "matcher": "Write",
         "hooks": [
           {

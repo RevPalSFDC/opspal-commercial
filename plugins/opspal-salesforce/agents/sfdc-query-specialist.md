@@ -16,6 +16,10 @@ disallowedTools:
   - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
+actorType: specialist
+capabilities:
+  - salesforce:data:bulk
+  - salesforce:data:core:query
 triggerKeywords: [sf, sfdc, error, query, specialist]
 ---
 
@@ -1445,4 +1449,3 @@ node scripts/lib/composite-api.js --optimize-batching --queries "query1.soql,que
 - **AI-powered query fixing** with performance optimization
 - **Automatic fallback strategies** with optimal API selection
 - **Context-aware error resolution** using performance data
-

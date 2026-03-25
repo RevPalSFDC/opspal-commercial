@@ -12,7 +12,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const yaml = require('js-yaml');
+let yaml = null;
+
+try {
+  yaml = require('js-yaml');
+} catch (_error) {
+  yaml = null;
+}
+
+const AGENT_METADATA_LIST_CACHE = new Map();
 
 function unique(values) {
   return [...new Set(values.filter(Boolean))];
@@ -37,21 +45,159 @@ function normalizeStringArray(value) {
   return [];
 }
 
+function normalizeActorType(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function stripMatchingQuotes(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith('\'') && trimmed.endsWith('\''))
+  ) {
+    return trimmed.slice(1, -1);
+  }
+
+  return trimmed;
+}
+
+function splitInlineSequence(value) {
+  const items = [];
+  let current = '';
+  let quote = '';
+
+  for (const char of String(value || '')) {
+    if ((char === '"' || char === '\'') && (!quote || quote === char)) {
+      quote = quote === char ? '' : char;
+      current += char;
+      continue;
+    }
+
+    if (char === ',' && !quote) {
+      items.push(current.trim());
+      current = '';
+      continue;
+    }
+
+    current += char;
+  }
+
+  if (current.trim()) {
+    items.push(current.trim());
+  }
+
+  return items.filter(Boolean);
+}
+
+function parseFallbackScalar(rawValue) {
+  const value = String(rawValue || '').trim();
+
+  if (!value) {
+    return '';
+  }
+
+  if (value.startsWith('[') && value.endsWith(']')) {
+    const inner = value.slice(1, -1).trim();
+    if (!inner) {
+      return [];
+    }
+
+    return splitInlineSequence(inner).map((item) => stripMatchingQuotes(item));
+  }
+
+  return stripMatchingQuotes(value);
+}
+
+function parseFallbackFrontmatter(frontmatterText) {
+  const data = {};
+  let currentKey = '';
+
+  for (const line of String(frontmatterText || '').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
+
+    const arrayMatch = line.match(/^\s*-\s+(.*)$/);
+    if (arrayMatch && currentKey) {
+      if (!Array.isArray(data[currentKey])) {
+        data[currentKey] = data[currentKey] ? [data[currentKey]] : [];
+      }
+      data[currentKey].push(parseFallbackScalar(arrayMatch[1]));
+      continue;
+    }
+
+    const keyValueMatch = line.match(/^([A-Za-z_][A-Za-z0-9_]*):\s*(.*)$/);
+    if (!keyValueMatch) {
+      if (currentKey && !Array.isArray(data[currentKey])) {
+        data[currentKey] = `${data[currentKey]}\n${stripMatchingQuotes(trimmed)}`.trim();
+      }
+      continue;
+    }
+
+    const [, key, rawValue] = keyValueMatch;
+    currentKey = key;
+
+    if (!rawValue) {
+      data[currentKey] = [];
+      continue;
+    }
+
+    data[currentKey] = parseFallbackScalar(rawValue);
+  }
+
+  return data;
+}
+
+function patternMatches(declaredPattern, requiredValue) {
+  const declared = String(declaredPattern || '').trim();
+  const required = String(requiredValue || '').trim();
+
+  if (!declared || !required) {
+    return false;
+  }
+
+  if (declared === required) {
+    return true;
+  }
+
+  if (declared.startsWith(`${required}(`)) {
+    return true;
+  }
+
+  if (declared.endsWith('*')) {
+    return required.startsWith(declared.slice(0, -1));
+  }
+
+  return false;
+}
+
 function parseFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---\s*\n?/);
   if (!match) {
     return { data: {}, body: content };
   }
 
-  try {
-    const data = yaml.load(match[1]) || {};
-    return {
-      data: typeof data === 'object' ? data : {},
-      body: content.slice(match[0].length)
-    };
-  } catch (error) {
-    return { data: {}, body: content };
+  if (yaml) {
+    try {
+      const data = yaml.load(match[1]) || {};
+      return {
+        data: typeof data === 'object' ? data : {},
+        body: content.slice(match[0].length)
+      };
+    } catch (_error) {
+      // Fall through to the dependency-free parser below.
+    }
   }
+
+  return {
+    data: parseFallbackFrontmatter(match[1]),
+    body: content.slice(match[0].length)
+  };
 }
 
 function resolvePluginRoot(explicitPluginRoot = '') {
@@ -136,6 +282,31 @@ function resolveAgentFilePath(agentName, explicitPluginRoot = '') {
   return null;
 }
 
+function inferPluginFromFilePath(filePath) {
+  return path.basename(path.dirname(path.dirname(filePath)));
+}
+
+function normalizeAgentMetadata(metadata = {}, fallback = {}) {
+  const name = String(metadata.name || fallback.name || '').trim();
+  const plugin = String(metadata.plugin || fallback.plugin || '').trim();
+  const actorType = normalizeActorType(metadata.actorType || metadata.actor_type || fallback.actorType || fallback.actor_type);
+  const capabilities = unique(normalizeStringArray(metadata.capabilities || fallback.capabilities));
+  const tools = normalizeStringArray(metadata.tools || fallback.tools).map((tool) => tool === 'Task' ? 'Agent' : tool);
+  const shortName = String(metadata.shortName || fallback.shortName || name).trim() || name;
+  const fullName = String(metadata.fullName || fallback.fullName || (plugin && shortName ? `${plugin}:${shortName}` : '')).trim();
+
+  return {
+    ...metadata,
+    name: name || shortName,
+    shortName: shortName || name,
+    fullName,
+    plugin: plugin || (fullName.includes(':') ? fullName.split(':', 1)[0] : ''),
+    actorType,
+    capabilities,
+    tools
+  };
+}
+
 function extractAgentMetadataFromFile(filePath) {
   if (!filePath || !fs.existsSync(filePath)) {
     return null;
@@ -143,13 +314,19 @@ function extractAgentMetadataFromFile(filePath) {
 
   const content = fs.readFileSync(filePath, 'utf8');
   const { data } = parseFrontmatter(content);
-  const tools = normalizeStringArray(data.tools).map((tool) => tool === 'Task' ? 'Agent' : tool);
+  const plugin = inferPluginFromFilePath(filePath);
+  const shortName = path.basename(filePath, '.md');
 
-  return {
-    name: String(data.name || path.basename(filePath, '.md')).trim(),
-    tools,
+  return normalizeAgentMetadata({
+    name: String(data.name || shortName).trim(),
+    shortName,
+    fullName: `${plugin}:${String(data.name || shortName).trim()}`,
+    plugin,
+    actorType: data.actorType || data.actor_type || '',
+    capabilities: data.capabilities || [],
+    tools: data.tools || [],
     filePath
-  };
+  });
 }
 
 function extractAgentMetadataFromRoutingIndex(agentName, explicitPluginRoot = '') {
@@ -159,16 +336,16 @@ function extractAgentMetadataFromRoutingIndex(agentName, explicitPluginRoot = ''
   }
 
   if (routingIndex.agentsByFull?.[agentName]) {
-    return routingIndex.agentsByFull[agentName];
+    return normalizeAgentMetadata(routingIndex.agentsByFull[agentName], { fullName: agentName });
   }
 
   if (routingIndex.agents?.[agentName]) {
-    return routingIndex.agents[agentName];
+    return normalizeAgentMetadata(routingIndex.agents[agentName], { shortName: agentName });
   }
 
   if (routingIndex.agentsByShort?.[agentName]?.length && routingIndex.agentsByFull) {
     const firstFull = routingIndex.agentsByShort[agentName][0];
-    return routingIndex.agentsByFull[firstFull] || null;
+    return normalizeAgentMetadata(routingIndex.agentsByFull[firstFull] || null, { fullName: firstFull });
   }
 
   return null;
@@ -182,36 +359,57 @@ function getAgentMetadata(agentName, explicitPluginRoot = '') {
 
   const fromIndex = extractAgentMetadataFromRoutingIndex(agentName, explicitPluginRoot);
   if (fromIndex) {
-    return {
-      ...fromIndex,
-      tools: normalizeStringArray(fromIndex.tools).map((tool) => tool === 'Task' ? 'Agent' : tool)
-    };
+    return normalizeAgentMetadata(fromIndex, {
+      shortName: agentName.includes(':') ? agentName.split(':', 2)[1] : agentName,
+      fullName: agentName.includes(':') ? agentName : ''
+    });
   }
 
   return null;
 }
 
+function listAgentMetadata(explicitPluginRoot = '') {
+  const cacheKey = resolvePluginRoot(explicitPluginRoot);
+  if (AGENT_METADATA_LIST_CACHE.has(cacheKey)) {
+    return AGENT_METADATA_LIST_CACHE.get(cacheKey).map((metadata) => ({ ...metadata }));
+  }
+
+  const pluginsRoot = resolvePluginsRoot(explicitPluginRoot);
+  const metadataList = [];
+
+  if (fs.existsSync(pluginsRoot)) {
+    const entries = fs.readdirSync(pluginsRoot, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+
+      const agentsDir = path.join(pluginsRoot, entry.name, 'agents');
+      if (!fs.existsSync(agentsDir) || !fs.statSync(agentsDir).isDirectory()) {
+        continue;
+      }
+
+      const files = fs.readdirSync(agentsDir)
+        .filter((file) => file.endsWith('.md'))
+        .sort();
+
+      for (const file of files) {
+        const metadata = extractAgentMetadataFromFile(path.join(agentsDir, file));
+        if (!metadata) {
+          continue;
+        }
+
+        metadataList.push(metadata);
+      }
+    }
+  }
+
+  AGENT_METADATA_LIST_CACHE.set(cacheKey, metadataList);
+  return metadataList.map((metadata) => ({ ...metadata }));
+}
+
 function toolMatches(declaredTool, requiredTool) {
-  const declared = String(declaredTool || '').trim();
-  const required = String(requiredTool || '').trim();
-
-  if (!declared || !required) {
-    return false;
-  }
-
-  if (declared === required) {
-    return true;
-  }
-
-  if (declared.startsWith(`${required}(`)) {
-    return true;
-  }
-
-  if (declared.endsWith('*')) {
-    return required.startsWith(declared.slice(0, -1));
-  }
-
-  return false;
+  return patternMatches(declaredTool, requiredTool);
 }
 
 function agentHasTool(agentName, requiredTool, explicitPluginRoot = '') {
@@ -223,11 +421,86 @@ function agentHasTool(agentName, requiredTool, explicitPluginRoot = '') {
   return normalizeStringArray(metadata.tools).some((tool) => toolMatches(tool, requiredTool));
 }
 
+function capabilityMatches(declaredCapability, requiredCapability) {
+  return patternMatches(declaredCapability, requiredCapability);
+}
+
+function agentHasCapability(agentName, requiredCapability, explicitPluginRoot = '') {
+  const metadata = getAgentMetadata(agentName, explicitPluginRoot);
+  if (!metadata) {
+    return false;
+  }
+
+  return normalizeStringArray(metadata.capabilities).some((capability) => capabilityMatches(capability, requiredCapability));
+}
+
+function agentMatchesRequirements(agentName, requirements = {}, explicitPluginRoot = '') {
+  const metadata = getAgentMetadata(agentName, explicitPluginRoot);
+  if (!metadata) {
+    return false;
+  }
+
+  const requiredCapabilities = normalizeStringArray(
+    requirements.requiredCapabilities || requirements.required_capabilities
+  );
+  const allowedActorTypes = normalizeStringArray(
+    requirements.allowedActorTypes || requirements.allowed_actor_types
+  ).map(normalizeActorType);
+  const capabilityMatchMode = String(
+    requirements.capabilityMatchMode || requirements.capability_match_mode || 'all'
+  ).trim().toLowerCase();
+
+  if (allowedActorTypes.length > 0 && !allowedActorTypes.includes(normalizeActorType(metadata.actorType))) {
+    return false;
+  }
+
+  if (requiredCapabilities.length === 0) {
+    return true;
+  }
+
+  const matchedCount = requiredCapabilities.filter((requiredCapability) => (
+    metadata.capabilities.some((capability) => capabilityMatches(capability, requiredCapability))
+  )).length;
+
+  if (capabilityMatchMode === 'any') {
+    return matchedCount > 0;
+  }
+
+  return matchedCount === requiredCapabilities.length;
+}
+
+function getAgentsMatchingRequirements(requirements = {}, explicitPluginRoot = '') {
+  const preferredAgent = String(requirements.preferredAgent || requirements.preferred_agent || '').trim();
+  const matches = listAgentMetadata(explicitPluginRoot)
+    .filter((metadata) => metadata.fullName)
+    .filter((metadata) => agentMatchesRequirements(metadata.fullName, requirements, explicitPluginRoot))
+    .map((metadata) => metadata.fullName);
+
+  matches.sort((left, right) => {
+    if (left === preferredAgent) {
+      return -1;
+    }
+    if (right === preferredAgent) {
+      return 1;
+    }
+    return left.localeCompare(right);
+  });
+
+  return unique(matches);
+}
+
 module.exports = {
+  agentHasCapability,
   agentHasTool,
+  agentMatchesRequirements,
+  capabilityMatches,
+  getAgentsMatchingRequirements,
   getAgentMetadata,
+  listAgentMetadata,
   loadRoutingIndex,
   normalizeStringArray,
+  normalizeActorType,
+  patternMatches,
   parseFrontmatter,
   resolveAgentFilePath,
   resolvePluginRoot,
@@ -255,6 +528,41 @@ if (require.main === module) {
     process.exit(0);
   }
 
-  process.stderr.write('Usage: agent-tool-registry.js <has-tool|metadata> <agentName> [toolName] [pluginRoot]\n');
+  if (command === 'has-capability') {
+    const hasCapability = agentHasCapability(agentName, toolName, explicitPluginRoot || '');
+    process.stdout.write(hasCapability ? 'true\n' : 'false\n');
+    process.exit(hasCapability ? 0 : 1);
+  }
+
+  if (command === 'matches-requirements') {
+    let requirements = {};
+
+    try {
+      requirements = JSON.parse(toolName || '{}');
+    } catch (_error) {
+      process.stderr.write('Invalid requirements JSON\n');
+      process.exit(2);
+    }
+
+    const matches = agentMatchesRequirements(agentName, requirements, explicitPluginRoot || '');
+    process.stdout.write(matches ? 'true\n' : 'false\n');
+    process.exit(matches ? 0 : 1);
+  }
+
+  if (command === 'resolve-requirements') {
+    let requirements = {};
+
+    try {
+      requirements = JSON.parse(agentName || '{}');
+    } catch (_error) {
+      process.stderr.write('Invalid requirements JSON\n');
+      process.exit(2);
+    }
+
+    process.stdout.write(`${JSON.stringify(getAgentsMatchingRequirements(requirements, toolName || ''))}\n`);
+    process.exit(0);
+  }
+
+  process.stderr.write('Usage: agent-tool-registry.js <has-tool|has-capability|metadata|matches-requirements|resolve-requirements> <agentName|requirements> [toolName|requirements] [pluginRoot]\n');
   process.exit(2);
 }

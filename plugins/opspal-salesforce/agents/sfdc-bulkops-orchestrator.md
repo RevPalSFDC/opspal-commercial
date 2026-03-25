@@ -3,6 +3,10 @@ name: sfdc-bulkops-orchestrator
 description: Autonomous bulk DML orchestrator with batched execution, parallel validation, checkpointing, and audit trails for large-scale Salesforce data operations
 color: orange
 model: sonnet
+actorType: orchestrator
+capabilities:
+  - salesforce:data:bulk
+  - salesforce:data:core:query
 tools:
   - Task
   - Read

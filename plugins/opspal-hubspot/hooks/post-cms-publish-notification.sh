@@ -16,7 +16,8 @@ set -euo pipefail
 # Redirect stdout→stderr so status messages don't pollute Claude's context.
 exec 3>&1 1>&2
 
-PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 if ! command -v jq &>/dev/null; then
     echo "[post-cms-publish-notification] jq not found, skipping" >&2
     exit 0

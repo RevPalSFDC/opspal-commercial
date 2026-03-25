@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "description": "Audited override mechanisms for governance, validation, and safety bypasses in opspal-commercial.",
+  "overrides": [
+    {
+      "id": "routing_enforcement_disabled",
+      "env_var": "ROUTING_ENFORCEMENT_ENABLED",
+      "bypass_value": "0",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": true,
+      "severity": "CRITICAL",
+      "description": "Disables PreToolUse routing enforcement for the session.",
+      "risk": "All routing guardrails are bypassed."
+    },
+    {
+      "id": "skip_validation",
+      "env_var": "SKIP_VALIDATION",
+      "match": "truthy",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "CRITICAL",
+      "description": "Disables broad validation and safety checks.",
+      "risk": "All safety checks can be bypassed."
+    },
+    {
+      "id": "skip_tool_validation",
+      "env_var": "SKIP_TOOL_VALIDATION",
+      "match": "truthy",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "HIGH",
+      "description": "Disables tool contract validation hooks.",
+      "risk": "Tool-level governance checks can be skipped."
+    },
+    {
+      "id": "skip_mocks_check",
+      "env_var": "SKIP_MOCKS_CHECK",
+      "match": "truthy",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "HIGH",
+      "description": "Bypasses no-mocks enforcement.",
+      "risk": "Mock-backed results can slip into production-facing workflows."
+    },
+    {
+      "id": "skip_pre_commit",
+      "env_var": "SKIP_PRE_COMMIT",
+      "match": "truthy",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "MEDIUM",
+      "description": "Skips pre-commit validation hooks.",
+      "risk": "Validation regressions can land without local checks."
+    },
+    {
+      "id": "force_cache",
+      "env_var": "FORCE_CACHE",
+      "match": "truthy",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "MEDIUM",
+      "description": "Prefers cache over live reads.",
+      "risk": "Stale data can be used instead of current source-of-truth data."
+    },
+    {
+      "id": "global_live_first_disabled",
+      "env_var": "GLOBAL_LIVE_FIRST",
+      "bypass_value": "false",
+      "scope": "global",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "MEDIUM",
+      "description": "Disables live-first cache behavior globally.",
+      "risk": "Cross-system cache fallback can mask stale data."
+    },
+    {
+      "id": "allow_direct_deploy",
+      "env_var": "ALLOW_DIRECT_DEPLOY",
+      "bypass_value": "1",
+      "scope": "salesforce",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "HIGH",
+      "description": "Allows direct Salesforce deploy execution without deployment planning.",
+      "risk": "Direct deploys can bypass orchestrated review and handoff."
+    },
+    {
+      "id": "allow_direct_permset",
+      "env_var": "ALLOW_DIRECT_PERMSET",
+      "bypass_value": "1",
+      "scope": "salesforce",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "HIGH",
+      "description": "Allows direct Salesforce permission/security writes.",
+      "risk": "Permission changes can bypass security-admin routing."
+    },
+    {
+      "id": "agent_governance_override",
+      "env_var": "AGENT_GOVERNANCE_OVERRIDE",
+      "match": "truthy",
+      "scope": "salesforce",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "CRITICAL",
+      "description": "Enables emergency override for Salesforce high-risk governance.",
+      "risk": "High-risk operations can proceed without standard approval flow."
+    },
+    {
+      "id": "skip_cms_validation",
+      "env_var": "SKIP_CMS_VALIDATION",
+      "bypass_value": "true",
+      "scope": "hubspot",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "HIGH",
+      "description": "Skips HubSpot CMS publish validation.",
+      "risk": "CMS publishes can bypass publish-time safeguards."
+    },
+    {
+      "id": "marketo_skip_auth_check",
+      "env_var": "MARKETO_SKIP_AUTH_CHECK",
+      "bypass_value": "1",
+      "scope": "marketo",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "HIGH",
+      "description": "Skips Marketo session auth validation.",
+      "risk": "Session work can proceed without auth verification."
+    },
+    {
+      "id": "marketo_skip_quirks_detection",
+      "env_var": "MARKETO_SKIP_QUIRKS_DETECTION",
+      "bypass_value": "1",
+      "scope": "marketo",
+      "audit_required": true,
+      "reason_required": false,
+      "severity": "MEDIUM",
+      "description": "Skips Marketo instance quirks detection.",
+      "risk": "Known instance-specific safety adjustments can be missed."
+    }
+  ]
+}

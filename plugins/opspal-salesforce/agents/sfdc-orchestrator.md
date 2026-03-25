@@ -22,6 +22,12 @@ disallowedTools:
   - Bash(sfdx data delete:*)
   - mcp__salesforce__*_delete
 model: opus
+actorType: orchestrator
+capabilities:
+  - salesforce:data:core:query
+  - salesforce:data:core:upsert
+  - salesforce:deploy:plan
+  - salesforce:deploy:sandbox
 triggerKeywords:
   - sf
   - validation

@@ -15,6 +15,13 @@ fi
 
 SCRIPT_DIR="$(dirname "$0")"
 LIB_DIR="$SCRIPT_DIR/../scripts/lib"
+CORE_PLUGIN_ROOT="$(cd "$SCRIPT_DIR/../../opspal-core" && pwd)"
+ENVIRONMENT_LIB="${CORE_PLUGIN_ROOT}/scripts/lib/detect-environment.sh"
+
+if [ -f "$ENVIRONMENT_LIB" ]; then
+  # shellcheck source=/dev/null
+  source "$ENVIRONMENT_LIB"
+fi
 
 # Get the tool input from stdin
 INPUT=$(cat)
@@ -34,7 +41,7 @@ fi
 
 # Check for org alias in command string
 if [ -z "$ORG_ALIAS" ]; then
-  ORG_ALIAS=$(echo "$INPUT" | grep -oP '(?<=--target-org\s)[^\s"]+' | head -1)
+  ORG_ALIAS=$(echo "$INPUT" | grep -oP '(?<=--target-org\s)[^\s"]+' | head -1 || true)
 fi
 
 # If no org alias found, allow the operation (might use default)
@@ -45,9 +52,7 @@ fi
 
 # Validate the org alias
 if [ -f "$LIB_DIR/org-alias-validator.js" ]; then
-  VALIDATION=$(node "$LIB_DIR/org-alias-validator.js" validate "$ORG_ALIAS" 2>/dev/null)
-
-  if [ $? -ne 0 ]; then
+  if ! VALIDATION=$(node "$LIB_DIR/org-alias-validator.js" validate "$ORG_ALIAS" 2>/dev/null); then
     # Extract suggestions from validation result
     SUGGESTIONS=$(echo "$VALIDATION" | jq -r '.suggestions[]?' 2>/dev/null | head -3 | tr '\n' ' ')
 
@@ -56,8 +61,12 @@ if [ -f "$LIB_DIR/org-alias-validator.js" ]; then
   fi
 
   # Check for production org warnings
-  ORG_TYPE=$(echo "$VALIDATION" | jq -r '.orgDetails.isScratch // false' 2>/dev/null)
-  if echo "$ORG_ALIAS" | grep -qiE '^(prod|production|prd|live|main)$'; then
+  DETECTED_ENVIRONMENT="unknown"
+  if declare -F detect_salesforce_environment >/dev/null 2>&1; then
+    DETECTED_ENVIRONMENT="$(detect_salesforce_environment "$ORG_ALIAS")"
+  fi
+
+  if [ "$DETECTED_ENVIRONMENT" = "production" ]; then
     echo "{\"status\": \"approve\", \"message\": \"⚠️ Production org detected: $ORG_ALIAS - proceed with caution\"}"
     exit 0
   fi

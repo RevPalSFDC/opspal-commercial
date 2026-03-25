@@ -28,13 +28,13 @@ fi
 
 set -euo pipefail
 
-PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
+PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 if ! command -v jq &>/dev/null; then
     echo "[pre-cms-publish-validation] jq not found, skipping" >&2
     exit 0
 fi
 
-SCRIPT_DIR="$PROJECT_ROOT/scripts/lib"
+LIB_DIR="$PROJECT_ROOT/scripts/lib"
 
 # Configuration
 MIN_SEO_SCORE="${MIN_SEO_SCORE:-60}"
@@ -48,14 +48,14 @@ PAGE_TYPE="${PAGE_TYPE:-landing-pages}"
 FORCE_PUBLISH="${FORCE_PUBLISH:-false}"
 
 # Colors for output
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+COLOR_RED='\033[0;31m'
+COLOR_YELLOW='\033[1;33m'
+COLOR_GREEN='\033[0;32m'
+COLOR_NC='\033[0m' # No Color
 
 # Skip if validation disabled
 if [[ "$SKIP_VALIDATION" == "true" ]]; then
-    echo -e "${YELLOW}⚠️  CMS publish validation skipped (SKIP_CMS_VALIDATION=true)${NC}"
+    echo -e "${COLOR_YELLOW}⚠️  CMS publish validation skipped (SKIP_CMS_VALIDATION=true)${COLOR_NC}"
     exit 0
 fi
 
@@ -70,11 +70,11 @@ echo "🔍 Pre-Publish Validation: CMS Page ${PAGE_ID}"
 echo "=========================================="
 
 # Check if required scripts exist
-PAGES_MANAGER="$SCRIPT_DIR/hubspot-cms-pages-manager.js"
-PUBLISHING_CONTROLLER="$SCRIPT_DIR/hubspot-cms-publishing-controller.js"
+PAGES_MANAGER="$LIB_DIR/hubspot-cms-pages-manager.js"
+PUBLISHING_CONTROLLER="$LIB_DIR/hubspot-cms-publishing-controller.js"
 
 if [[ ! -f "$PAGES_MANAGER" ]]; then
-    echo -e "${YELLOW}⚠️  CMS Pages Manager not found, skipping validation${NC}"
+    echo -e "${COLOR_YELLOW}⚠️  CMS Pages Manager not found, skipping validation${COLOR_NC}"
     exit 0
 fi
 
@@ -100,12 +100,12 @@ pagesManager.getPage('$PAGE_ID')
 " 2>&1)
 
 if [[ $? -ne 0 ]]; then
-    echo -e "${RED}❌ FAILED${NC}"
-    echo -e "${RED}Cannot retrieve page: $PAGE_DATA${NC}"
+    echo -e "${COLOR_RED}❌ FAILED${COLOR_NC}"
+    echo -e "${COLOR_RED}Cannot retrieve page: $PAGE_DATA${COLOR_NC}"
     exit 1
 fi
 
-echo -e "${GREEN}✓${NC}"
+echo -e "${COLOR_GREEN}✓${COLOR_NC}"
 
 # Parse page data
 PAGE_NAME=$(echo "$PAGE_DATA" | jq -r '.name // empty')
@@ -139,9 +139,9 @@ if [[ "$WIDGET_COUNT" -eq 0 ]]; then
 fi
 
 if [[ ${#VALIDATION_ERRORS[@]} -eq 0 ]]; then
-    echo -e "${GREEN}✓${NC}"
+    echo -e "${COLOR_GREEN}✓${COLOR_NC}"
 else
-    echo -e "${RED}✗ ${#VALIDATION_ERRORS[@]} error(s)${NC}"
+    echo -e "${COLOR_RED}✗ ${#VALIDATION_ERRORS[@]} error(s)${COLOR_NC}"
 fi
 
 # 3. Validate template exists (if enabled)
@@ -166,12 +166,12 @@ if [[ "$REQUIRE_TEMPLATE_VALIDATION" == "true" ]] && [[ -n "$TEMPLATE_PATH" ]]; 
     " 2>&1)
 
     if [[ "$TEMPLATE_VALIDATION" == "VALID" ]]; then
-        echo -e "${GREEN}✓${NC}"
+        echo -e "${COLOR_GREEN}✓${COLOR_NC}"
     elif [[ "$TEMPLATE_VALIDATION" == "NOT_FOUND" ]]; then
-        echo -e "${RED}✗${NC}"
+        echo -e "${COLOR_RED}✗${COLOR_NC}"
         VALIDATION_ERRORS+=("Template not found: $TEMPLATE_PATH")
     else
-        echo -e "${YELLOW}⚠️  Could not validate${NC}"
+        echo -e "${COLOR_YELLOW}⚠️  Could not validate${COLOR_NC}"
         VALIDATION_WARNINGS+=("Template validation failed: $TEMPLATE_VALIDATION")
     fi
 fi
@@ -198,29 +198,29 @@ echo "Currently Published: $CURRENTLY_PUBLISHED"
 # Show errors
 if [[ ${#VALIDATION_ERRORS[@]} -gt 0 ]]; then
     echo ""
-    echo -e "${RED}❌ Errors (${#VALIDATION_ERRORS[@]}):${NC}"
+    echo -e "${COLOR_RED}❌ Errors (${#VALIDATION_ERRORS[@]}):${COLOR_NC}"
     for error in "${VALIDATION_ERRORS[@]}"; do
-        echo -e "  ${RED}•${NC} $error"
+        echo -e "  ${COLOR_RED}•${COLOR_NC} $error"
     done
 fi
 
 # Show warnings
 if [[ ${#VALIDATION_WARNINGS[@]} -gt 0 ]]; then
     echo ""
-    echo -e "${YELLOW}⚠️  Warnings (${#VALIDATION_WARNINGS[@]}):${NC}"
+    echo -e "${COLOR_YELLOW}⚠️  Warnings (${#VALIDATION_WARNINGS[@]}):${COLOR_NC}"
     for warning in "${VALIDATION_WARNINGS[@]}"; do
-        echo -e "  ${YELLOW}•${NC} $warning"
+        echo -e "  ${COLOR_YELLOW}•${COLOR_NC} $warning"
     done
 fi
 
 # Decision logic
 if [[ ${#VALIDATION_ERRORS[@]} -gt 0 ]]; then
     echo ""
-    echo -e "${RED}❌ Validation FAILED${NC}"
+    echo -e "${COLOR_RED}❌ Validation FAILED${COLOR_NC}"
     echo ""
 
     if [[ "$FORCE_PUBLISH" == "true" ]]; then
-        echo -e "${YELLOW}⚠️  FORCE_PUBLISH=true, proceeding anyway${NC}"
+        echo -e "${COLOR_YELLOW}⚠️  FORCE_PUBLISH=true, proceeding anyway${COLOR_NC}"
         exit 0
     fi
 
@@ -235,7 +235,7 @@ fi
 
 if [[ ${#VALIDATION_WARNINGS[@]} -gt 0 ]]; then
     echo ""
-    echo -e "${YELLOW}⚠️  Validation passed with warnings${NC}"
+    echo -e "${COLOR_YELLOW}⚠️  Validation passed with warnings${COLOR_NC}"
     echo ""
 
     # Don't block on warnings, just inform
@@ -243,7 +243,7 @@ if [[ ${#VALIDATION_WARNINGS[@]} -gt 0 ]]; then
 fi
 
 echo ""
-echo -e "${GREEN}✅ Validation PASSED - Ready to publish${NC}"
+echo -e "${COLOR_GREEN}✅ Validation PASSED - Ready to publish${COLOR_NC}"
 echo ""
 
 exit 0

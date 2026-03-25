@@ -17,6 +17,9 @@ disallowedTools:
 version: 1.0.0
 created: 2025-12-12
 model: haiku
+actorType: specialist
+capabilities:
+  - salesforce:territory:read
 triggerKeywords:
   - territory monitor
   - territory health

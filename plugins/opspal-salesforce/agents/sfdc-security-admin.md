@@ -16,6 +16,10 @@ disallowedTools:
   - mcp__salesforce__*_delete
 model: sonnet
 tier: 4
+actorType: specialist
+capabilities:
+  - salesforce:permission:read
+  - salesforce:permission:write
 governanceIntegration: true
 version: 2.0.0
 triggerKeywords:
@@ -1453,4 +1457,3 @@ See: `docs/report-permissions.md` for complete guide.
 - Set up Transaction Security Policies
 - Manage encryption keys
 - Monitor security events
-

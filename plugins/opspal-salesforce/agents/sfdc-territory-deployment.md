@@ -17,6 +17,9 @@ version: 1.0.0
 created: 2025-12-12
 model: sonnet
 tier: 3
+actorType: specialist
+capabilities:
+  - salesforce:territory:write
 governanceIntegration: true
 triggerKeywords:
   - territory deploy

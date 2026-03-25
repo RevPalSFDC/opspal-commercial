@@ -29,6 +29,7 @@ ROUTING_METRICS="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
 ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 HOOK_EVENT_NORMALIZER="$PLUGIN_ROOT/scripts/lib/hook-event-normalizer.js"
+ROUTING_CAPABILITY_RULES="$PLUGIN_ROOT/config/routing-capability-rules.json"
 
 # Log file for debugging
 LOG_FILE="${TASK_VALIDATOR_LOG:-/tmp/task-validator-hook.log}"
@@ -401,21 +402,35 @@ collect_task_text() {
 persist_parent_context_deploy_clearance() {
     local session_key="$1"
     local resolved_agent="${2:-}"
-    local normalized_agent="${resolved_agent##*:}"
     local existing_state=""
     local has_existing_state="false"
+    local requirements_json=""
 
     if [[ -z "$session_key" ]] || [[ -z "$resolved_agent" ]]; then
         return 0
     fi
 
-    case "$normalized_agent" in
-        release-coordinator|sfdc-deployment-manager|instance-deployer|sfdc-orchestrator|sfdc-metadata-manager)
-            ;;
-        *)
+    if [[ -f "$ROUTING_CAPABILITY_RULES" ]] && command -v jq &> /dev/null; then
+        requirements_json="$(jq -c '
+          .salesforce.deployPolicies.parent_clearance // {}
+        ' "$ROUTING_CAPABILITY_RULES" 2>/dev/null || echo "{}")"
+    fi
+
+    if [[ -n "$requirements_json" ]] && [[ "$requirements_json" != "{}" ]] && [[ -f "$AGENT_TOOL_REGISTRY" ]] && command -v node &> /dev/null; then
+        if ! node "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1; then
             return 0
-            ;;
-    esac
+        fi
+    else
+        local normalized_agent="${resolved_agent##*:}"
+
+        case "$normalized_agent" in
+            release-coordinator|sfdc-deployment-manager|instance-deployer|sfdc-orchestrator|sfdc-metadata-manager)
+                ;;
+            *)
+                return 0
+                ;;
+        esac
+    fi
 
     if [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &> /dev/null; then
         return 0

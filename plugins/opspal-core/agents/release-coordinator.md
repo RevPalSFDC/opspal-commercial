@@ -7,6 +7,9 @@ failure_modes: [release_scope_ambiguous, rollback_plan_missing, deployment_deleg
 color: red
 model: sonnet
 version: 1.0.0
+actorType: orchestrator
+capabilities:
+  - salesforce:deploy:plan
 tools:
   - Read
   - Grep

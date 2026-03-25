@@ -53,6 +53,8 @@ fi
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." 2>/dev/null && pwd || pwd)"
 CONTRACTS_FILE="${PLUGIN_ROOT}/config/tool-contracts.json"
 VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/tool-contract-validator.js"
+BASH_CLASSIFIER_LIB="${PLUGIN_ROOT}/scripts/lib/classify-bash-command.sh"
+OPERATION_CLASSIFIER="${PLUGIN_ROOT}/scripts/lib/classify-operation.js"
 ROUTING_STATE_MANAGER="${PLUGIN_ROOT}/scripts/lib/routing-state-manager.js"
 MCP_TOOL_POLICY_CONFIG="${PLUGIN_ROOT}/config/mcp-tool-policies.json"
 MCP_TOOL_POLICY_RESOLVER="${PLUGIN_ROOT}/scripts/lib/mcp-tool-policy-resolver.js"
@@ -77,6 +79,9 @@ PENDING_ROUTE_MCP_POLICY_PENDING_ACTION=""
 PENDING_ROUTE_MCP_POLICY_MUTABILITY=""
 PENDING_ROUTE_MCP_POLICY_MATCHED=""
 PENDING_ROUTE_MCP_POLICY_NOTE=""
+
+# shellcheck source=/dev/null
+source "$BASH_CLASSIFIER_LIB"
 
 # Parse tool name and input from stdin (or env fallback)
 RAW_INPUT_DATA=$(read_stdin_json)
@@ -430,6 +435,22 @@ classify_mcp_tool_policy() {
     fi
 }
 
+classify_salesforce_mandatory_routing() {
+    local command="$1"
+    local routing_json=""
+
+    if [[ -f "$OPERATION_CLASSIFIER" ]] && command -v node &>/dev/null; then
+        routing_json=$(node "$OPERATION_CLASSIFIER" routing "$command" 2>/dev/null || echo "")
+    fi
+
+    if [[ -z "$routing_json" ]] || ! echo "$routing_json" | jq -e . >/dev/null 2>&1; then
+        echo '{}'
+        return 0
+    fi
+
+    echo "$routing_json"
+}
+
 tool_requires_pending_route_clearance() {
     local tool_name="$1"
 
@@ -442,6 +463,9 @@ tool_requires_pending_route_clearance() {
             ;;
         mcp__*|mcp_*)
             classify_mcp_tool_policy "$tool_name"
+            if [[ "$PENDING_ROUTE_MCP_POLICY_MUTABILITY" == "read_only" ]]; then
+                return 1
+            fi
             if [[ "$PENDING_ROUTE_MCP_POLICY_PENDING_ACTION" == "allow" ]]; then
                 return 1
             fi
@@ -645,13 +669,13 @@ enforce_bash_loop_budget() {
 
 caller_matches_allowed_agents() {
     local caller_agent="$1"
-    local approved_agents_json="$2"
+    local clearance_agents_json="$2"
 
-    if [ -z "$caller_agent" ] || [ -z "$approved_agents_json" ]; then
+    if [ -z "$caller_agent" ] || [ -z "$clearance_agents_json" ]; then
         return 1
     fi
 
-    echo "$approved_agents_json" | jq -e --arg agent "$caller_agent" '
+    echo "$clearance_agents_json" | jq -e --arg agent "$caller_agent" '
       if type != "array" then
         false
       else
@@ -664,53 +688,18 @@ extract_bash_command() {
     echo "$INPUT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null
 }
 
-extract_soql_query_from_command() {
-    local command="$1"
-    local query=""
-
-    # Support --query/-q with double-quoted SOQL (allows single quotes inside query).
-    query=$(printf '%s\n' "$command" | sed -nE 's/.*--query[[:space:]]+"([^"]+)".*/\1/p' | head -1)
-    if [ -z "$query" ]; then
-        query=$(printf '%s\n' "$command" | sed -nE "s/.*--query[[:space:]]+'([^']+)'.*/\\1/p" | head -1)
-    fi
-    if [ -z "$query" ]; then
-        query=$(printf '%s\n' "$command" | sed -nE 's/.*-q[[:space:]]+"([^"]+)".*/\1/p' | head -1)
-    fi
-    if [ -z "$query" ]; then
-        query=$(printf '%s\n' "$command" | sed -nE "s/.*-q[[:space:]]+'([^']+)'.*/\\1/p" | head -1)
-    fi
-
-    echo "$query"
-}
-
-estimate_in_clause_items() {
-    local query="$1"
-    local in_list=""
-    local count=0
-
-    in_list=$(printf '%s\n' "$query" | sed -nE "s/.*[Ii][Nn][[:space:]]*\\(([^)]*)\\).*/\\1/p" | head -1)
-    if [ -z "$in_list" ]; then
-        echo "0"
-        return 0
-    fi
-
-    count=$(printf '%s\n' "$in_list" | awk -F',' '{print NF}' 2>/dev/null || echo "0")
-    echo "${count:-0}"
-}
-
 # Map Claude tool names to contract names
 map_tool_to_contract() {
     local tool="$1"
     case "$tool" in
         "Bash")
-            # Check if it's a Salesforce CLI command
             local cmd
             cmd=$(extract_bash_command)
-            if [[ "$cmd" =~ ^(sf|sfdx)\ data\ query ]]; then
+            if is_sf_data_query_command "$cmd"; then
                 echo "sf-data-query"
-            elif [[ "$cmd" =~ ^(sf|sfdx)\ project\ deploy ]]; then
+            elif is_sf_deploy_command "$cmd"; then
                 echo "sf-project-deploy"
-            elif [[ "$cmd" =~ ^(sf|sfdx)\ data\ export|^(sf|sfdx)\ data\ import ]]; then
+            elif uses_sf_bulk_api_contract "$cmd"; then
                 echo "sf-bulk-api"
             elif [[ "$cmd" =~ npx[[:space:]]+md-to-pdf|npx[[:space:]]+@mermaid-js/mermaid-cli ]]; then
                 echo "pdf-direct-invocation"
@@ -761,12 +750,18 @@ enforce_mandatory_routing() {
     local tool="$1"
     local caller_agent="$(resolve_caller_agent unknown)"
     local command=""
-    local command_lower=""
     local required_agent=""
-    local approved_agents_json="[]"
-    local approved_agents_display=""
+    local clearance_agents_json="[]"
+    local clearance_agents_display=""
+    local required_capabilities_json="[]"
+    local allowed_actor_types_json="[]"
+    local required_capabilities_display=""
+    local allowed_actor_types_display=""
     local reason=""
     local rule_id=""
+    local routing_decision="{}"
+    local routing_action=""
+    local warning_message=""
 
     # Sub-agent context bypass: If running inside a spawned sub-agent,
     # the routing system already validated the correct agent at spawn time
@@ -788,127 +783,43 @@ enforce_mandatory_routing() {
     case "$tool" in
         "Bash")
             command="$(extract_bash_command)"
-            command_lower=$(echo "$command" | tr '[:upper:]' '[:lower:]')
+            routing_decision="$(classify_salesforce_mandatory_routing "$command")"
+            routing_action="$(echo "$routing_decision" | jq -r '.decision // "none"' 2>/dev/null || echo "none")"
 
-            # Rule 1: Permission/security write operations -> dedicated permission/security agents
-            # Escape hatch: ALLOW_DIRECT_PERMSET=1
-            if [ "${ALLOW_DIRECT_PERMSET:-0}" = "1" ]; then
-                : # Rule 1 bypassed via ALLOW_DIRECT_PERMSET
-            elif echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)'; then
-                rule_id="sf_permission_security_write"
-                required_agent="opspal-salesforce:sfdc-security-admin"
-                approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor","opspal-salesforce:sfdc-orchestrator"]'
-                reason="Direct Salesforce permission/security write detected."
-            elif echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete)'; then
-                if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
-                    rule_id="sf_permission_security_write"
-                    required_agent="opspal-salesforce:sfdc-security-admin"
-                    approved_agents_json='["opspal-salesforce:sfdc-security-admin","opspal-salesforce:sfdc-permission-orchestrator","opspal-salesforce:sfdc-permission-assessor","opspal-salesforce:sfdc-orchestrator"]'
-                    reason="Direct Salesforce permission/security write detected."
+            if [ "$routing_action" = "warn" ]; then
+                rule_id="$(echo "$routing_decision" | jq -r '.ruleId // ""' 2>/dev/null || echo "")"
+                required_agent="$(echo "$routing_decision" | jq -r '.requiredAgent // ""' 2>/dev/null || echo "")"
+                clearance_agents_json="$(echo "$routing_decision" | jq -c '.clearanceAgents // .approvedAgents // []' 2>/dev/null || echo "[]")"
+                required_capabilities_json="$(echo "$routing_decision" | jq -c '.requiredCapabilities // []' 2>/dev/null || echo "[]")"
+                allowed_actor_types_json="$(echo "$routing_decision" | jq -c '.allowedActorTypes // []' 2>/dev/null || echo "[]")"
+                reason="$(echo "$routing_decision" | jq -r '.reason // ""' 2>/dev/null || echo "")"
+                warning_message="$(echo "$routing_decision" | jq -r '.warningMessage // ""' 2>/dev/null || echo "")"
+
+                emit_routing_event "warn" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
+                if [ -n "$warning_message" ]; then
+                    echo "$warning_message" >&2
                 fi
+                return 0
             fi
 
-            # Rule 2: Lead/Contact/Account upsert-import workflows -> upsert orchestrator
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(upsert|import|bulk[[:space:]]+upsert)'; then
-                if echo "$command" | grep -qiE '(^|[[:space:]])(Lead|Contact|Account)([[:space:]]|$)|--sobject[[:space:]]+(Lead|Contact|Account)'; then
-                    rule_id="sf_core_object_upsert"
-                    required_agent="opspal-salesforce:sfdc-upsert-orchestrator"
-                    approved_agents_json='["opspal-salesforce:sfdc-upsert-orchestrator","opspal-salesforce:sfdc-orchestrator","opspal-salesforce:sfdc-data-operations"]'
-                    reason="Direct lead/contact/account upsert-import workflow detected."
-                fi
-            fi
-
-            # Rule 2b: Core object data queries -> data operations/query specialist
-            # Prevents shell parsing pitfalls (e.g., "!=" history expansion) and fragile direct JSON parsing.
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
-                local soql_query=""
-                local safe_url_threshold="${SOQL_URL_SAFE_LENGTH_THRESHOLD:-6000}"
-                local in_clause_threshold="${SOQL_IN_CLAUSE_ITEM_THRESHOLD:-200}"
-                local command_length=0
-                local query_length=0
-                local in_clause_count=0
-
-                soql_query=$(extract_soql_query_from_command "$command")
-                command_length=${#command}
-                query_length=${#soql_query}
-                if [ -n "$soql_query" ]; then
-                    in_clause_count=$(estimate_in_clause_items "$soql_query")
-                else
-                    in_clause_count=$(estimate_in_clause_items "$command")
-                fi
-
-                # Rule 2b1: Query length / IN-clause size likely to exceed URL limits (HTTP 431)
-                if [ "$query_length" -gt "$safe_url_threshold" ] || [ "$command_length" -gt "$safe_url_threshold" ] || [ "$in_clause_count" -gt "$in_clause_threshold" ]; then
-                    rule_id="sf_query_url_length_risk"
-                    required_agent="opspal-salesforce:sfdc-bulkops-orchestrator"
-                    approved_agents_json='["opspal-salesforce:sfdc-bulkops-orchestrator","opspal-salesforce:sfdc-query-specialist","opspal-salesforce:sfdc-data-operations","opspal-salesforce:sfdc-data-export-manager"]'
-                    reason="SOQL query likely exceeds safe URL limits (command_len=$command_length query_len=$query_length in_items=$in_clause_count). Use chunked/bulk extraction workflow."
-                fi
-            fi
-
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
-                if echo "$command" | grep -qiE 'from[[:space:]]+(Lead|Contact|Account|Opportunity|Case)\b'; then
-                    # Simple verification queries (single-record by Id, LIMIT 1-5, short commands)
-                    # are downgraded to warning-only — validation reads after sub-agent work.
-                    local is_simple_query=0
-                    if echo "$command" | grep -qiE 'WHERE[[:space:]]+Id[[:space:]]*(=|IN)'; then
-                        is_simple_query=1
-                    elif echo "$command" | grep -qiE 'LIMIT[[:space:]]+[1-9]([[:space:]]|$)'; then
-                        is_simple_query=1
-                    elif echo "$command" | grep -qiE 'COUNT\(\)'; then
-                        is_simple_query=1
-                    elif [ ${#command} -lt 500 ]; then
-                        is_simple_query=1
-                    fi
-
-                    if [ "$is_simple_query" -eq 1 ]; then
-                        emit_routing_event "warn" "sf_core_object_query" "opspal-salesforce:sfdc-data-operations" "Simple verification query on core object — allowed." "$command" "$caller_agent" "$tool"
-                        echo "[ROUTING INFO] Core-object verification query allowed. For complex queries, prefer Agent(subagent_type='opspal-salesforce:sfdc-query-specialist')." >&2
-                    else
-                        rule_id="sf_core_object_query"
-                        required_agent="opspal-salesforce:sfdc-data-operations"
-                        approved_agents_json='["opspal-salesforce:sfdc-data-operations","opspal-salesforce:sfdc-query-specialist","opspal-salesforce:sfdc-upsert-orchestrator","opspal-salesforce:sfdc-bulkops-orchestrator"]'
-                        reason="Direct Salesforce core-object data query detected."
-                    fi
-                fi
-            fi
-
-            # Rule 3: Territory model write workflows -> territory orchestrator/deployment agents
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete)|(sf|sfdx)[[:space:]]+project[[:space:]]+deploy'; then
-                if echo "$command" | grep -qiE 'Territory2|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association'; then
-                    rule_id="sf_territory_write"
-                    required_agent="opspal-salesforce:sfdc-territory-orchestrator"
-                    approved_agents_json='["opspal-salesforce:sfdc-territory-orchestrator","opspal-salesforce:sfdc-territory-deployment","opspal-salesforce:sfdc-territory-monitor"]'
-                    reason="Direct Salesforce territory write workflow detected."
-                fi
-            fi
-
-            # Rule 4: Validation rule write/deploy workflows -> validation-rule orchestrator
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete)|(sf|sfdx)[[:space:]]+project[[:space:]]+deploy'; then
-                if echo "$command" | grep -qiE 'ValidationRule|validation[._ -]?rule'; then
-                    rule_id="sf_validation_rule_write"
-                    required_agent="opspal-salesforce:validation-rule-orchestrator"
-                    approved_agents_json='["opspal-salesforce:validation-rule-orchestrator"]'
-                    reason="Direct Salesforce validation rule write workflow detected."
-                fi
-            fi
-
-            # Permission/security reads are warning-only guidance
-            if [ -z "$rule_id" ] && echo "$command_lower" | grep -qE '(sf|sfdx)[[:space:]]+data[[:space:]]+query'; then
-                if echo "$command" | grep -qiE 'PermissionSetAssignment|PermissionSetGroupAssignment|PermissionSetLicenseAssign|PermissionSetGroup|PermissionSet|MutingPermissionSet|ObjectPermissions|FieldPermissions|SetupEntityAccess|UserRole|Profile'; then
-                    emit_routing_event "warn" "sf_permission_security_query" "opspal-salesforce:sfdc-permission-assessor" "Permission/security query detected." "$command" "$caller_agent" "$tool"
-                    echo "[ROUTING WARNING] Permission/security query detected. Prefer the Agent tool with subagent_type='opspal-salesforce:sfdc-permission-assessor'." >&2
-                    return 0
-                fi
+            if [ "$routing_action" = "block" ]; then
+                rule_id="$(echo "$routing_decision" | jq -r '.ruleId // ""' 2>/dev/null || echo "")"
+                required_agent="$(echo "$routing_decision" | jq -r '.requiredAgent // ""' 2>/dev/null || echo "")"
+                clearance_agents_json="$(echo "$routing_decision" | jq -c '.clearanceAgents // .approvedAgents // []' 2>/dev/null || echo "[]")"
+                required_capabilities_json="$(echo "$routing_decision" | jq -c '.requiredCapabilities // []' 2>/dev/null || echo "[]")"
+                allowed_actor_types_json="$(echo "$routing_decision" | jq -c '.allowedActorTypes // []' 2>/dev/null || echo "[]")"
+                reason="$(echo "$routing_decision" | jq -r '.reason // ""' 2>/dev/null || echo "")"
             fi
             ;;
     esac
 
     # Enforce blocking when a mandatory rule matched and caller is not approved
     if [ -n "$rule_id" ]; then
-        approved_agents_display=$(echo "$approved_agents_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
+        clearance_agents_display=$(echo "$clearance_agents_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
+        required_capabilities_display=$(echo "$required_capabilities_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
+        allowed_actor_types_display=$(echo "$allowed_actor_types_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
 
-        if caller_matches_allowed_agents "$caller_agent" "$approved_agents_json"; then
+        if caller_matches_allowed_agents "$caller_agent" "$clearance_agents_json"; then
             emit_routing_event "allow" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
             return 0
         fi
@@ -927,7 +838,7 @@ enforce_mandatory_routing() {
         emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
         emit_pretool_decision \
           "deny" \
-          "ROUTING_SPECIALIST_REQUIRED: $reason Use the Agent tool with subagent_type='${required_agent}' before direct execution. Approved family: ${approved_agents_display:-$required_agent}." \
+          "ROUTING_SPECIALIST_REQUIRED: $reason Use the Agent tool with subagent_type='${required_agent}' before direct execution. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}. Eligible agents: ${clearance_agents_display:-$required_agent}." \
           "Direct operational workflow blocked until an approved specialist agent is used."
         return 1
     fi

@@ -2,71 +2,52 @@
 
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
+const {
+  DEFAULT_MCP_POLICY_CONFIG_PATH,
+  classifyMCPTool,
+  inferNamespace,
+  loadMcpPolicyConfig
+} = require('./classify-operation');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
-const DEFAULT_CONFIG_PATH = path.join(PROJECT_ROOT, 'config', 'mcp-tool-policies.json');
+const DEFAULT_CONFIG_PATH = DEFAULT_MCP_POLICY_CONFIG_PATH || path.join(PROJECT_ROOT, 'config', 'mcp-tool-policies.json');
 
 function loadConfig(configPath = DEFAULT_CONFIG_PATH) {
-  const raw = fs.readFileSync(configPath, 'utf8');
-  return JSON.parse(raw);
+  return loadMcpPolicyConfig(configPath);
 }
 
 function unknownClassification(toolName, config = {}) {
-  const defaults = config.defaults || {};
+  const classification = classifyMCPTool(toolName, {}, config);
   return {
     tool: toolName,
     matched: false,
     policyId: null,
     namespace: inferNamespace(toolName),
-    mutability: defaults.unknownMutability || 'unknown',
-    pendingRouteAction: defaults.unknownPendingRouteAction || 'deny',
+    mutability: classification.mutability,
+    pendingRouteAction: classification.pendingRouteAction,
     matchedPattern: null,
     notes: 'No explicit MCP tool policy matched.'
   };
 }
 
-function inferNamespace(toolName) {
-  if (!toolName) {
-    return 'unknown';
-  }
-
-  const namespaced = toolName.match(/^mcp__([^_]+)__.+$/);
-  if (namespaced) {
-    return namespaced[1];
-  }
-
-  const legacy = toolName.match(/^mcp_([^_]+)(?:_|$)/);
-  if (legacy) {
-    return legacy[1];
-  }
-
-  return 'unknown';
-}
-
 function classifyTool(toolName, config = loadConfig()) {
-  for (const policy of config.policies || []) {
-    for (const pattern of policy.patterns || []) {
-      const regex = new RegExp(pattern);
-      if (!regex.test(toolName)) {
-        continue;
-      }
+  const classification = classifyMCPTool(toolName, {}, config);
 
-      return {
-        tool: toolName,
-        matched: true,
-        policyId: policy.id,
-        namespace: policy.namespace || inferNamespace(toolName),
-        mutability: policy.mutability || 'unknown',
-        pendingRouteAction: policy.pendingRouteAction || 'deny',
-        matchedPattern: pattern,
-        notes: policy.notes || ''
-      };
-    }
+  if (!classification.matched) {
+    return unknownClassification(toolName, config);
   }
 
-  return unknownClassification(toolName, config);
+  return {
+    tool: toolName,
+    matched: true,
+    policyId: classification.policyId,
+    namespace: classification.namespace,
+    mutability: classification.mutability,
+    pendingRouteAction: classification.pendingRouteAction,
+    matchedPattern: classification.matchedPattern,
+    notes: classification.notes || ''
+  };
 }
 
 function main() {

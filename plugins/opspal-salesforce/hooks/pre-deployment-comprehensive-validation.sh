@@ -42,6 +42,16 @@ if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     echo "DEBUG: [pre-deployment-comprehensive-validation] starting" >&2
 fi
 
+# Standalone guard — this hook is invoked by pre-bash-dispatcher.sh via
+# run_child_hook() which sets DISPATCHER_CONTEXT=1 and pipes HOOK_INPUT.
+# When run standalone (no dispatcher context and stdin is a terminal),
+# exit 0 cleanly rather than failing on missing context.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
+
 # Source standardized error handler for centralized logging
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"

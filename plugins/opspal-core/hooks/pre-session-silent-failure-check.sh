@@ -28,7 +28,23 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DETECTOR="$SCRIPT_DIR/../scripts/lib/silent-failure-detector.js"
+OVERRIDE_REGISTRY="$SCRIPT_DIR/../scripts/lib/override-registry.js"
 DEFAULT_RESULT='{"passed":true,"totalViolations":0,"criticalCount":0}'
+LOG_DIR="${HOME}/.claude/logs"
+LOG_FILE="$LOG_DIR/silent-failure-session.log"
+
+if ! mkdir -p "$LOG_DIR" 2>/dev/null; then
+    FALLBACK_ROOT="${CLAUDE_PROJECT_DIR:-$PWD}"
+    LOG_DIR="${FALLBACK_ROOT}/.claude/logs"
+    LOG_FILE="$LOG_DIR/silent-failure-session.log"
+    mkdir -p "$LOG_DIR" 2>/dev/null || true
+fi
+
+log() {
+    if ! echo "[$(date -Iseconds)] $*" >> "$LOG_FILE" 2>/dev/null; then
+        return 0
+    fi
+}
 
 # Check if detector script exists
 if [ ! -f "$DETECTOR" ]; then
@@ -39,6 +55,40 @@ fi
 # Check if node is available
 if ! command -v node &>/dev/null; then
     exit 0
+fi
+
+if [ -f "$OVERRIDE_REGISTRY" ]; then
+    OVERRIDE_AUDIT=$(node "$OVERRIDE_REGISTRY" record --json 2>/dev/null || printf '{}')
+
+    if printf '%s' "$OVERRIDE_AUDIT" | jq -e . >/dev/null 2>&1; then
+        ACTIVE_OVERRIDES="$(printf '%s' "$OVERRIDE_AUDIT" | jq -r '.summary.activeCount // 0' 2>/dev/null || printf '0')"
+        ACTIVE_WARNINGS="$(printf '%s' "$OVERRIDE_AUDIT" | jq -r '.summary.warningCount // 0' 2>/dev/null || printf '0')"
+        OVERRIDE_LOG_LINE="$(printf '%s' "$OVERRIDE_AUDIT" | jq -r '.summary.logLine // empty' 2>/dev/null || printf '')"
+
+        if [[ "$ACTIVE_OVERRIDES" =~ ^[0-9]+$ ]] && [ "$ACTIVE_OVERRIDES" -gt 0 ]; then
+            log "Session override audit: ${OVERRIDE_LOG_LINE:-$ACTIVE_OVERRIDES active override(s)}"
+
+            while IFS= read -r override_line; do
+                [ -n "$override_line" ] || continue
+                log "Active override: $override_line"
+            done < <(
+                printf '%s' "$OVERRIDE_AUDIT" |
+                    jq -r '.activeOverrides[]? | "\(.envVar)=\(.currentValue) scope=\(.scope) severity=\(.severity) reason=\(.reason // "none")"' 2>/dev/null ||
+                    true
+            )
+
+            if [[ "$ACTIVE_WARNINGS" =~ ^[0-9]+$ ]] && [ "$ACTIVE_WARNINGS" -gt 0 ]; then
+                while IFS= read -r warning_line; do
+                    [ -n "$warning_line" ] || continue
+                    log "Override warning: $warning_line"
+                done < <(
+                    printf '%s' "$OVERRIDE_AUDIT" |
+                        jq -r '.warnings[]?.message' 2>/dev/null ||
+                        true
+                )
+            fi
+        fi
+    fi
 fi
 
 # Run pre-session checks

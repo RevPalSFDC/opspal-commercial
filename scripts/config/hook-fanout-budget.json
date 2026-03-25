@@ -10,12 +10,12 @@
       "reason": "Global startup hooks are intentionally broad today; hold the line until domain gating is implemented."
     },
     "PostToolUse :: Agent": {
-      "max": 9,
-      "reason": "Agent post-hooks are already noisy; fail further growth until the chain is reduced."
+      "max": 10,
+      "reason": "Agent post-hooks now include AI consult plus GTM and OKR telemetry; hold the line here until the post-agent chain is consolidated."
     },
     "PreToolUse :: Bash": {
-      "max": 3,
-      "reason": "Bash pre-hooks are now dispatched per domain; fail any attempt to reintroduce broad Salesforce Bash fan-out."
+      "max": 5,
+      "reason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, and Marketo plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
     },
     "UserPromptSubmit :: *": {
       "max": 7,

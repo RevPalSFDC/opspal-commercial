@@ -29,7 +29,7 @@ fi
 # Redirect stdout→stderr so status messages don't pollute Claude's context.
 exec 3>&1 1>&2
 
-PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT}"
+PROJECT_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 
 # Get portal name from environment or current portal config
 PORTAL_NAME="${HUBSPOT_PORTAL_NAME:-}"

@@ -187,6 +187,13 @@ async function getRecentEntries(days = 7) {
  */
 function calculateStats(entries) {
   const routingDecisions = entries.filter(e => e.type === 'routing_decision');
+  const overrideAuditEvents = entries.filter(e => e.type === 'override_audit');
+  const overrideWarningEvents = entries.filter(e => e.type === 'override_warning');
+  const sessionsWithOverrides = new Set(
+    [...overrideAuditEvents, ...overrideWarningEvents]
+      .map((entry) => entry.sessionId)
+      .filter(Boolean)
+  ).size;
 
   if (routingDecisions.length === 0) {
     return {
@@ -194,7 +201,13 @@ function calculateStats(entries) {
       successRate: 0,
       errorRate: 0,
       avgDurationMs: 0,
-      blockingRate: 0
+      blockingRate: 0,
+      resolutionRate: 0,
+      minDurationMs: 0,
+      maxDurationMs: 0,
+      overrideAuditCount: overrideAuditEvents.length,
+      overrideWarningCount: overrideWarningEvents.length,
+      sessionsWithOverrides
     };
   }
 
@@ -223,7 +236,10 @@ function calculateStats(entries) {
     resolutionRate: resolved.length / routingDecisions.length,
     avgDurationMs: Math.round(avgDuration * 100) / 100,
     minDurationMs: durations.length > 0 ? Math.min(...durations) : 0,
-    maxDurationMs: durations.length > 0 ? Math.max(...durations) : 0
+    maxDurationMs: durations.length > 0 ? Math.max(...durations) : 0,
+    overrideAuditCount: overrideAuditEvents.length,
+    overrideWarningCount: overrideWarningEvents.length,
+    sessionsWithOverrides
   };
 }
 
@@ -472,6 +488,9 @@ async function main() {
         console.log(`Resolution Rate:   ${(stats.resolutionRate * 100).toFixed(1)}%`);
         console.log(`Avg Duration:      ${stats.avgDurationMs}ms`);
         console.log(`Min/Max Duration:  ${stats.minDurationMs}ms / ${stats.maxDurationMs}ms`);
+        console.log(`Override Audits:   ${stats.overrideAuditCount}`);
+        console.log(`Override Warnings: ${stats.overrideWarningCount}`);
+        console.log(`Override Sessions: ${stats.sessionsWithOverrides}`);
       }
       break;
     }

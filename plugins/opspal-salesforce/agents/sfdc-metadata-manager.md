@@ -18,6 +18,12 @@ disallowedTools:
   - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
+actorType: specialist
+capabilities:
+  - salesforce:deploy:plan
+  - salesforce:deploy:production
+  - salesforce:deploy:sandbox
+  - salesforce:metadata:write
 triggerKeywords:
   - metadata
   - manage

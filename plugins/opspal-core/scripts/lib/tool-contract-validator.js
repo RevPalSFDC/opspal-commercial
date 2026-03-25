@@ -23,6 +23,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { detectSalesforceEnvironment } = require('./classify-operation');
 
 const SEVERITY = {
   CRITICAL: 'CRITICAL',
@@ -836,22 +837,17 @@ class ToolContractValidator {
       return { isProduction: false, orgType: 'unknown' };
     }
 
-    try {
-      const cmd = `sf org display --target-org ${orgAlias} --json`;
-      const result = execSync(cmd, { encoding: 'utf8', timeout: 30000 });
-      const parsed = JSON.parse(result);
+    const environment = detectSalesforceEnvironment(orgAlias, {
+      useCache: true,
+      querySfCli: true,
+      timeout: 30000
+    });
 
-      const orgType = parsed.result?.orgType || 'unknown';
-      const isSandbox = parsed.result?.isSandbox ?? true;
-
-      return {
-        isProduction: !isSandbox && orgType !== 'Developer Edition',
-        orgType: orgType,
-        isSandbox: isSandbox
-      };
-    } catch {
-      return { isProduction: false, orgType: 'unknown' };
-    }
+    return {
+      isProduction: environment.isProduction,
+      orgType: environment.orgType || 'unknown',
+      isSandbox: environment.isSandbox
+    };
   }
 }
 

@@ -14,11 +14,36 @@ if ! command -v jq &>/dev/null; then
     echo "[pre-deploy-agent-context-check] jq not found, skipping" >&2
     exit 0
 fi
+
+# Standalone guard — this hook is invoked by pre-bash-dispatcher.sh via
+# run_child_hook() which sets DISPATCHER_CONTEXT=1 and pipes HOOK_INPUT.
+# When run standalone (no dispatcher context and stdin is a terminal),
+# exit 0 cleanly rather than failing on missing context.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 PLUGINS_ROOT="$(cd "$PLUGIN_ROOT/.." && pwd)"
 ROUTING_STATE_MANAGER="${PLUGINS_ROOT}/opspal-core/scripts/lib/routing-state-manager.js"
+CORE_PLUGIN_ROOT="${PLUGINS_ROOT}/opspal-core"
+CLASSIFIER_LIB="${CORE_PLUGIN_ROOT}/scripts/lib/classify-bash-command.sh"
+ENVIRONMENT_LIB="${CORE_PLUGIN_ROOT}/scripts/lib/detect-environment.sh"
+AGENT_TOOL_REGISTRY="${CORE_PLUGIN_ROOT}/scripts/lib/agent-tool-registry.js"
+ROUTING_CAPABILITY_RULES="${CORE_PLUGIN_ROOT}/config/routing-capability-rules.json"
 
-APPROVED_AGENTS="sfdc-deployment-manager|release-coordinator|sfdc-orchestrator|sfdc-metadata-manager"
+if [[ -f "$CLASSIFIER_LIB" ]]; then
+    # shellcheck source=/dev/null
+    source "$CLASSIFIER_LIB"
+fi
+
+if [[ -f "$ENVIRONMENT_LIB" ]]; then
+    # shellcheck source=/dev/null
+    source "$ENVIRONMENT_LIB"
+fi
+
+LEGACY_APPROVED_AGENTS="sfdc-deployment-manager|release-coordinator|sfdc-orchestrator|sfdc-metadata-manager"
 HOOK_INPUT="$(cat 2>/dev/null || true)"
 # Extract agent identity from hook JSON — Claude Code provides agent_type
 # in the hook input when running inside a sub-agent context.
@@ -63,7 +88,14 @@ is_deploy_scope_command() {
 extract_target_org() {
     local extracted=""
 
-    extracted="$(printf '%s' "$COMMAND" | sed -nE 's/.*(--target-org|-o)[[:space:]]+([^[:space:]]+).*/\2/p' | head -n 1)"
+    if declare -F extract_salesforce_target_alias >/dev/null 2>&1; then
+        extracted="$(extract_salesforce_target_alias "$COMMAND")"
+    fi
+
+    if [[ -z "$extracted" ]]; then
+        extracted="$(printf '%s' "$COMMAND" | sed -nE 's/.*(--target-org|-o)[[:space:]]+([^[:space:]]+).*/\2/p' | head -n 1)"
+    fi
+
     if [[ -z "$extracted" ]]; then
         extracted="$(printf '%s' "$COMMAND" | sed -nE 's/.*(--target-org|-o)=([^[:space:]]+).*/\2/p' | head -n 1)"
     fi
@@ -78,9 +110,76 @@ extract_target_org() {
 is_sandbox_like_target() {
     local org_alias="$1"
 
+    if declare -F is_salesforce_sandbox_like >/dev/null 2>&1; then
+        is_salesforce_sandbox_like "$org_alias"
+        return $?
+    fi
+
     printf '%s' "$org_alias" \
         | tr '[:upper:]' '[:lower:]' \
         | grep -qE '(^|[-_])(sandbox|sbx|dev|test|qa|uat|staging|stg|sit|scratch|so|scratchorg)([-_]|[0-9]|$)'
+}
+
+read_deploy_policy_requirements() {
+    local policy_name="$1"
+
+    if [[ ! -f "$ROUTING_CAPABILITY_RULES" ]]; then
+        printf '%s' '{}'
+        return 0
+    fi
+
+    jq -c --arg policy_name "$policy_name" '
+      .salesforce.deployPolicies[$policy_name] // {}
+    ' "$ROUTING_CAPABILITY_RULES" 2>/dev/null || printf '%s' '{}'
+    return 0
+}
+
+agent_matches_requirements() {
+    local agent_name="$1"
+    local requirements_json="$2"
+
+    if [[ -z "$agent_name" ]] || [[ -z "$requirements_json" ]] || [[ "$requirements_json" == "{}" ]]; then
+        return 1
+    fi
+
+    if [[ -f "$AGENT_TOOL_REGISTRY" ]] && command -v node &>/dev/null; then
+        node "$AGENT_TOOL_REGISTRY" matches-requirements "$agent_name" "$requirements_json" "$CORE_PLUGIN_ROOT" >/dev/null 2>&1
+        return $?
+    fi
+
+    if [[ "$agent_name" =~ $LEGACY_APPROVED_AGENTS ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+resolve_deploy_execute_policy_name() {
+    local org_alias="$1"
+
+    if [[ -n "$org_alias" ]] && is_sandbox_like_target "$org_alias"; then
+        printf '%s' 'sandbox_execute'
+        return 0
+    fi
+
+    printf '%s' 'production_execute'
+}
+
+agent_matches_deploy_policy() {
+    local agent_name="$1"
+    local policy_name="$2"
+    local requirements_json=""
+
+    requirements_json="$(read_deploy_policy_requirements "$policy_name")"
+    agent_matches_requirements "$agent_name" "$requirements_json"
+}
+
+agent_has_parent_clearance_capability() {
+    local agent_name="$1"
+    local requirements_json=""
+
+    requirements_json="$(read_deploy_policy_requirements "parent_clearance")"
+    agent_matches_requirements "$agent_name" "$requirements_json"
 }
 
 has_parent_context_deploy_clearance() {
@@ -97,7 +196,7 @@ has_parent_context_deploy_clearance() {
     status=$(printf '%s' "$state" | jq -r '.status // .state.status // ""' 2>/dev/null || echo "")
     resolved_agent=$(printf '%s' "$state" | jq -r '.last_resolved_agent // .state.last_resolved_agent // .recommended_agent // .state.recommended_agent // ""' 2>/dev/null || echo "")
 
-    if [[ "$status" =~ ^(cleared|bypassed)$ ]] && [[ "$resolved_agent" =~ $APPROVED_AGENTS ]]; then
+    if [[ "$status" =~ ^(cleared|bypassed)$ ]] && agent_has_parent_clearance_capability "$resolved_agent"; then
         return 0
     fi
 
@@ -112,8 +211,11 @@ if [[ -z "$COMMAND" ]] || ! is_deploy_scope_command; then
     exit 0
 fi
 
+TARGET_ORG="$(extract_target_org)"
+DEPLOY_POLICY_NAME="$(resolve_deploy_execute_policy_name "$TARGET_ORG")"
+
 # If inside an approved agent, allow
-if [[ -n "$CALLING_AGENT" ]] && echo "$CALLING_AGENT" | grep -qE "$APPROVED_AGENTS"; then
+if [[ -n "$CALLING_AGENT" ]] && agent_matches_deploy_policy "$CALLING_AGENT" "$DEPLOY_POLICY_NAME"; then
     exit 0
 fi
 
@@ -130,7 +232,6 @@ if [[ "${ALLOW_DIRECT_DEPLOY:-0}" == "1" ]]; then
     exit 0
 fi
 
-TARGET_ORG="$(extract_target_org)"
 if [[ -n "$TARGET_ORG" ]] && is_sandbox_like_target "$TARGET_ORG"; then
     echo "WARNING: Allowing direct sf project deploy for sandbox-like target org '$TARGET_ORG' to avoid deployment-agent Bash deadlock." >&2
     exit 0

@@ -2,7 +2,7 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "*",
+        "matcher": "Agent",
         "hooks": [
           {
             "type": "command",

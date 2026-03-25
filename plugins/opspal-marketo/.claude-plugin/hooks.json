@@ -15,6 +15,34 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-marketo-api.sh",
+            "timeout": 8000,
+            "description": "Detect direct Marketo API curl calls and route mutating work through approved Marketo specialists"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
+            "timeout": 8000,
+            "description": "Universal agent governance for Marketo bulk, sync, and destructive workflows"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-intelligence-analysis.sh",
+            "timeout": 8000,
+            "description": "Validate observability export freshness before Marketo analysis agents execute"
+          }
+        ]
+      },
+      {
         "matcher": "mcp__marketo__campaign_activate",
         "hooks": [
           {
@@ -22,6 +50,28 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-activation.sh",
             "timeout": 10000,
             "description": "Validate campaignId, check API rate limits, and enforce deactivation cooldown before campaign activation"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo__campaign_clone",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-clone.sh",
+            "timeout": 30000,
+            "description": "Validate campaign clone source, name, and destination before execution"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo__campaign_delete",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-delete.sh",
+            "timeout": 30000,
+            "description": "Validate campaign deletion safety before execution"
           }
         ]
       },
@@ -48,8 +98,25 @@
         ]
       },
       {
+        "matcher": "mcp__marketo__program_clone",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-orchestration.sh",
+            "timeout": 30000,
+            "description": "Validate Marketo program clone orchestration inputs before execution"
+          }
+        ]
+      },
+      {
         "matcher": "mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create",
         "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bulk-export.sh",
+            "timeout": 30000,
+            "description": "Validate bulk export date ranges, activity types, and quota before execution"
+          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-observability-extract.sh",
@@ -60,6 +127,28 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "mcp__marketo__campaign_create|mcp__marketo__campaign_clone",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-campaign-create.sh",
+            "timeout": 15000,
+            "description": "Verify Marketo campaign create and clone results"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__marketo__bulk_lead_import_status",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bulk-import.sh",
+            "timeout": 15000,
+            "description": "Summarize completed Marketo bulk import results"
+          }
+        ]
+      },
       {
         "matcher": "mcp__marketo__*",
         "hooks": [
