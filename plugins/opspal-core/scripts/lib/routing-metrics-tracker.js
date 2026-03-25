@@ -12,19 +12,20 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveRoutingSemantics } = require('./routing-semantics');
 
 function isExecutionGated(event = {}) {
-    if (typeof event.executionBlockUntilCleared === 'boolean') {
-        return event.executionBlockUntilCleared;
-    }
-    if (typeof event.requiresSpecialist === 'boolean' && typeof event.promptGuidanceOnly === 'boolean') {
-        return event.requiresSpecialist && !event.promptGuidanceOnly;
-    }
-    return event.blocked || false;
+    return resolveRoutingSemantics(event, {
+        allowLegacy: true,
+        source: 'routing-metrics-tracker'
+    }).executionBlockUntilCleared;
 }
 
-function getRecommendedAgent(event = {}) {
-    return event.requiredAgent || event.recommendedAgent || null;
+function getRoutedAgent(event = {}) {
+    return resolveRoutingSemantics(event, {
+        allowLegacy: true,
+        source: 'routing-metrics-tracker'
+    }).routedAgent;
 }
 
 class RoutingMetricsTracker {
@@ -40,29 +41,34 @@ class RoutingMetricsTracker {
      */
     recordRouting(event) {
         if (!this.enableTracking) return;
+        const semantics = resolveRoutingSemantics(event, {
+            allowLegacy: true,
+            source: 'routing-metrics-tracker'
+        });
 
         const record = {
             timestamp: new Date().toISOString(),
             type: 'routing_decision',
             taskDescription: event.taskDescription || '',
-            recommendedAgent: getRecommendedAgent(event),
-            requiredAgent: event.requiredAgent || null,
+            suggestedAgent: semantics.routedAgent,
+            requiredAgent: semantics.requiredAgent,
             selectedAgent: event.selectedAgent || null,
             confidence: event.confidence || 0,
             complexity: event.complexity || 0,
             autoRouted: event.autoRouted || false,
             userOverride: event.userOverride || false,
-            blocked: isExecutionGated(event),
-            executionBlockUntilCleared: event.executionBlockUntilCleared || false,
-            promptGuidanceOnly: event.promptGuidanceOnly !== false,
-            requiresSpecialist: event.requiresSpecialist || false,
+            executionBlockUntilCleared: semantics.executionBlockUntilCleared,
+            promptGuidanceOnly: semantics.promptGuidanceOnly,
+            requiresSpecialist: semantics.requiresSpecialist,
+            guidanceAction: semantics.guidanceAction,
+            routeKind: semantics.routeKind,
             reason: event.reason || ''
         };
 
         this.writeRecord(record);
 
         if (this.verbose) {
-            console.log(`[METRICS] Recorded routing: ${record.recommendedAgent || 'none'}`);
+            console.log(`[METRICS] Recorded routing: ${record.suggestedAgent || 'none'}`);
         }
     }
 
@@ -97,14 +103,17 @@ class RoutingMetricsTracker {
      */
     recordValidation(event) {
         if (!this.enableTracking) return;
+        const semantics = resolveRoutingSemantics(event, {
+            allowLegacy: true,
+            source: 'routing-metrics-tracker'
+        });
 
         const record = {
             timestamp: new Date().toISOString(),
             type: 'routing_validation',
             valid: event.valid || false,
-            blocked: isExecutionGated(event),
-            executionBlockUntilCleared: event.executionBlockUntilCleared || false,
-            requiredAgent: event.requiredAgent || null,
+            executionBlockUntilCleared: semantics.executionBlockUntilCleared,
+            requiredAgent: semantics.requiredAgent,
             currentAgent: event.currentAgent || null,
             severity: event.severity || 'LOW',
             errorCount: event.errorCount || 0,
@@ -165,7 +174,8 @@ class RoutingMetricsTracker {
 
         if (filters.agent) {
             filtered = filtered.filter(r =>
-                r.recommendedAgent === filters.agent ||
+                r.suggestedAgent === filters.agent ||
+                r.requiredAgent === filters.agent ||
                 r.selectedAgent === filters.agent ||
                 r.agent === filters.agent
             );
@@ -196,22 +206,22 @@ class RoutingMetricsTracker {
                 totalRoutings: 0,
                 autoRouted: 0,
                 userOverride: 0,
-                blocked: 0,
+                executionGated: 0,
                 autoRoutingRate: 0,
                 overrideRate: 0,
-                blockRate: 0,
+                executionGateRate: 0,
                 topAgents: []
             };
         }
 
         const autoRouted = records.filter(r => r.autoRouted).length;
         const userOverride = records.filter(r => r.userOverride).length;
-        const blocked = records.filter(isExecutionGated).length;
+        const executionGated = records.filter(isExecutionGated).length;
 
         // Count agent usage
         const agentCounts = {};
         for (const record of records) {
-            const agent = record.selectedAgent || getRecommendedAgent(record);
+            const agent = record.selectedAgent || getRoutedAgent(record);
             if (agent) {
                 agentCounts[agent] = (agentCounts[agent] || 0) + 1;
             }
@@ -226,10 +236,10 @@ class RoutingMetricsTracker {
             totalRoutings: records.length,
             autoRouted,
             userOverride,
-            blocked,
+            executionGated,
             autoRoutingRate: (autoRouted / records.length * 100).toFixed(1),
             overrideRate: (userOverride / records.length * 100).toFixed(1),
-            blockRate: (blocked / records.length * 100).toFixed(1),
+            executionGateRate: (executionGated / records.length * 100).toFixed(1),
             topAgents
         };
     }
@@ -291,22 +301,22 @@ class RoutingMetricsTracker {
                 totalValidations: 0,
                 passed: 0,
                 failed: 0,
-                blocked: 0,
+                executionGated: 0,
                 passRate: 0,
-                blockRate: 0
+                executionGateRate: 0
             };
         }
 
         const passed = records.filter(r => r.valid).length;
-        const blocked = records.filter(isExecutionGated).length;
+        const executionGated = records.filter(isExecutionGated).length;
 
         return {
             totalValidations: records.length,
             passed,
             failed: records.length - passed,
-            blocked,
+            executionGated,
             passRate: (passed / records.length * 100).toFixed(1),
-            blockRate: (blocked / records.length * 100).toFixed(1)
+            executionGateRate: (executionGated / records.length * 100).toFixed(1)
         };
     }
 
@@ -345,7 +355,7 @@ class RoutingMetricsTracker {
         lines.push(`Total routings:      ${report.routing.totalRoutings}`);
         lines.push(`Auto-routed:         ${report.routing.autoRouted} (${report.routing.autoRoutingRate}%)`);
         lines.push(`User overrides:      ${report.routing.userOverride} (${report.routing.overrideRate}%)`);
-        lines.push(`Blocked:             ${report.routing.blocked} (${report.routing.blockRate}%)`);
+        lines.push(`Execution gated:     ${report.routing.executionGated} (${report.routing.executionGateRate}%)`);
         lines.push('');
 
         if (report.routing.topAgents.length > 0) {
@@ -379,7 +389,7 @@ class RoutingMetricsTracker {
         lines.push(`Total validations:   ${report.validation.totalValidations}`);
         lines.push(`Passed:              ${report.validation.passed} (${report.validation.passRate}%)`);
         lines.push(`Failed:              ${report.validation.failed}`);
-        lines.push(`Blocked:             ${report.validation.blocked} (${report.validation.blockRate}%)`);
+        lines.push(`Execution gated:     ${report.validation.executionGated} (${report.validation.executionGateRate}%)`);
         lines.push('');
 
         lines.push('='.repeat(60));

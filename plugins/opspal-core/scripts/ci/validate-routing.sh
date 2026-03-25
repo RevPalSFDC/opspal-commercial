@@ -182,6 +182,8 @@ check_scripts() {
         "scripts/lib/task-router.js"
         "scripts/lib/complexity-scorer.js"
         "scripts/lib/pre-execution-validator.js"
+        "scripts/lib/validate-routing-integrity.js"
+        "scripts/lib/validate-routing-state-semantics.js"
         "scripts/lib/routing-index-builder.js"
         "scripts/lib/routing-routability-audit.js"
         "scripts/lib/routing-metrics-tracker.js"
@@ -263,7 +265,7 @@ check_complexity_scorer() {
             return 1
         fi
     elif [ -f "${scorer}.enc" ]; then
-        log_warning "Complexity scorer packaged as encrypted asset; execution check skipped without licensed runtime"
+        log_success "Complexity scorer packaged as encrypted runtime asset; local execution check intentionally skipped"
     else
         log_error "Complexity scorer not found"
         return 1
@@ -298,7 +300,30 @@ check_validator() {
     fi
 }
 
-# Check 7: Verify routing index coverage
+# Check 7: Validate end-to-end routing integrity
+check_routing_integrity() {
+    ((TOTAL_CHECKS+=1))
+    log_section "7. Routing Integrity"
+
+    local validator="$PLUGIN_ROOT/scripts/lib/validate-routing-integrity.js"
+
+    if [ ! -f "$validator" ]; then
+        log_error "Routing integrity validator not found"
+        return 1
+    fi
+
+    if node "$validator" >/dev/null 2>&1; then
+        log_success "Routing integrity validator passed"
+    else
+        log_error "Routing integrity validator failed"
+        if [ "$VERBOSE" = "1" ]; then
+            node "$validator" || true
+        fi
+        return 1
+    fi
+}
+
+# Check 8: Verify routing index coverage
 check_index_coverage() {
     ((TOTAL_CHECKS+=1))
     log_section "7. Routing Index Coverage"
@@ -346,7 +371,7 @@ check_index_coverage() {
     fi
 }
 
-# Check 8: Validate keyword quality
+# Check 9: Validate keyword quality
 check_keyword_quality() {
     ((TOTAL_CHECKS+=1))
     log_section "8. Keyword Quality"
@@ -385,7 +410,7 @@ check_keyword_quality() {
     fi
 }
 
-# Check 9: Guardrail against semver-prefixed agent leaks
+# Check 10: Guardrail against semver-prefixed agent leaks
 check_semver_guardrail() {
     ((TOTAL_CHECKS+=1))
     log_section "9. Semver Prefix Guardrail"
@@ -435,7 +460,7 @@ check_semver_guardrail() {
     fi
 }
 
-# Check 10: Verify per-agent routability (not just index presence)
+# Check 11: Verify per-agent routability (not just index presence)
 check_agent_routability() {
     ((TOTAL_CHECKS+=1))
     log_section "10. Agent Routability Audit"
@@ -496,6 +521,7 @@ main() {
     check_task_router
     check_complexity_scorer
     check_validator
+    check_routing_integrity
     check_index_coverage
     check_keyword_quality
     check_semver_guardrail

@@ -21,6 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const readline = require('readline');
+const { resolveRoutingSemantics } = require('./routing-semantics');
 
 // =============================================================================
 // Configuration
@@ -90,7 +91,6 @@ function createRoutingEvent(params) {
     routeKind,
     guidanceAction,
     wasResolved,
-    blocked = false,
     requiresSpecialist = false,
     promptGuidanceOnly = true,
     promptBlocked = false,
@@ -116,7 +116,6 @@ function createRoutingEvent(params) {
       routeKind,
       guidanceAction,
       wasResolved,
-      blocked: executionBlockUntilCleared || blocked,
       requiresSpecialist,
       promptGuidanceOnly,
       promptBlocked,
@@ -139,37 +138,19 @@ function getRoutingOutput(entry = {}) {
   return entry.output || entry;
 }
 
+function resolveEntrySemantics(entry = {}) {
+  return resolveRoutingSemantics(entry, {
+    allowLegacy: true,
+    source: 'routing-metrics'
+  });
+}
+
 function getResolvedAgent(entry = {}) {
-  const output = getRoutingOutput(entry);
-  return (
-    output.agent ||
-    output.suggestedAgent ||
-    output.requiredAgent ||
-    entry.selectedAgent ||
-    entry.recommendedAgent ||
-    entry.agent ||
-    null
-  );
+  return resolveEntrySemantics(entry).routedAgent;
 }
 
 function isExecutionGatedRoute(entry = {}) {
-  const output = getRoutingOutput(entry);
-
-  if (typeof output.executionBlockUntilCleared === 'boolean') {
-    return output.executionBlockUntilCleared;
-  }
-  if (typeof entry.executionBlockUntilCleared === 'boolean') {
-    return entry.executionBlockUntilCleared;
-  }
-
-  if (typeof output.requiresSpecialist === 'boolean' && typeof output.promptGuidanceOnly === 'boolean') {
-    return output.requiresSpecialist && !output.promptGuidanceOnly;
-  }
-  if (typeof entry.requiresSpecialist === 'boolean' && typeof entry.promptGuidanceOnly === 'boolean') {
-    return entry.requiresSpecialist && !entry.promptGuidanceOnly;
-  }
-
-  return output.blocked === true || entry.blocked === true;
+  return resolveEntrySemantics(entry).executionBlockUntilCleared;
 }
 
 // =============================================================================

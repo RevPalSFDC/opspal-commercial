@@ -41,6 +41,13 @@ function writeRoutingState(env, state) {
   fs.writeFileSync(filePath, JSON.stringify(state, null, 2));
 }
 
+function writeSalesforceCache(env, alias, payload) {
+  const cacheRoot = env.TMPDIR || path.join(env.HOME, 'tmp');
+  const cachePath = path.join(cacheRoot, `sf-org-info-${alias}.json`);
+  fs.mkdirSync(path.dirname(cachePath), { recursive: true });
+  fs.writeFileSync(cachePath, JSON.stringify(payload, null, 2));
+}
+
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
   try {
@@ -113,6 +120,39 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Allows direct deploys when cached org info marks the target as sandbox', async () => {
+    const env = createIsolatedEnv({
+      TMPDIR: path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'pre-deploy-cache-')), 'tmp')
+    });
+
+    try {
+      writeSalesforceCache(env, 'client-primary', {
+        orgType: 'sandbox',
+        isSandbox: true
+      });
+
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'PreToolUse',
+          tool_name: 'Bash',
+          tool_input: {
+            command: 'sf project deploy start --source-dir force-app/main/default/layouts --target-org client-primary'
+          }
+        },
+        env
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Cache-backed sandbox targets should bypass the direct deploy block');
+      assert(
+        result.stderr.includes('sandbox-like target org'),
+        'Should explain that shared environment detection allowed the sandbox target'
+      );
+    } finally {
+      fs.rmSync(path.dirname(env.TMPDIR), { recursive: true, force: true });
+      fs.rmSync(env.HOME, { recursive: true, force: true });
+    }
+  }));
+
   results.push(await runTest('Ignores deploy lifecycle and status commands', async () => {
     const result = await tester.run({
       input: {
@@ -145,17 +185,42 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Approved deployment agents should pass through');
   }));
 
+  results.push(await runTest('Blocks planning-only orchestrators from running direct production deploys', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'PreToolUse',
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf project deploy start --source-dir force-app/main/default/layouts --target-org production'
+        }
+      },
+      env: {
+        CLAUDE_AGENT_NAME: 'opspal-core:release-coordinator'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Planning-only orchestrators should still use structured block semantics');
+    assert(result.stdout.includes('blockExecution'), 'Should emit a structured deploy block');
+    assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the blocked direct deploy');
+  }));
+
   results.push(await runTest('Allows parent-context deploys after approved deployment planning clears the session', async () => {
     const env = createIsolatedEnv();
 
     try {
       writeRoutingState(env, {
         session_key: env.CLAUDE_SESSION_ID,
-        recommended_agent: 'opspal-salesforce:sfdc-deployment-manager',
+        route_kind: 'deployment_handoff',
+        guidance_action: 'recommend_specialist',
+        required_agent: 'opspal-salesforce:sfdc-deployment-manager',
         clearance_agents: ['opspal-salesforce:sfdc-deployment-manager'],
-        action: 'DEPLOYMENT_HANDOFF',
-        status: 'cleared',
-        blocked: false,
+        requires_specialist: false,
+        prompt_guidance_only: true,
+        prompt_blocked: false,
+        execution_block_until_cleared: false,
+        route_pending_clearance: false,
+        route_cleared: true,
+        clearance_status: 'cleared',
         created_at: Math.floor(Date.now() / 1000),
         updated_at: Math.floor(Date.now() / 1000),
         expires_at: Math.floor(Date.now() / 1000) + 900,
@@ -183,6 +248,68 @@ async function runAllTests() {
     } finally {
       fs.rmSync(env.HOME, { recursive: true, force: true });
     }
+  }));
+
+  results.push(await runTest('Allows parent-context deploys after release coordination planning clears the session', async () => {
+    const env = createIsolatedEnv();
+
+    try {
+      writeRoutingState(env, {
+        session_key: env.CLAUDE_SESSION_ID,
+        route_kind: 'deployment_handoff',
+        guidance_action: 'recommend_specialist',
+        required_agent: 'opspal-core:release-coordinator',
+        clearance_agents: ['opspal-core:release-coordinator'],
+        requires_specialist: false,
+        prompt_guidance_only: true,
+        prompt_blocked: false,
+        execution_block_until_cleared: false,
+        route_pending_clearance: false,
+        route_cleared: true,
+        clearance_status: 'cleared',
+        created_at: Math.floor(Date.now() / 1000),
+        updated_at: Math.floor(Date.now() / 1000),
+        expires_at: Math.floor(Date.now() / 1000) + 900,
+        ttl_seconds: 900,
+        last_resolved_agent: 'opspal-core:release-coordinator'
+      });
+
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'PreToolUse',
+          tool_name: 'Bash',
+          session_key: env.CLAUDE_SESSION_ID,
+          tool_input: {
+            command: 'sf project deploy start --source-dir force-app/main/default/layouts --target-org production'
+          }
+        },
+        env
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Release planning capability should clear parent-context deploy execution');
+      assert(
+        result.stderr.includes('approved deployment planning'),
+        'Should explain that planning clearance unlocked the parent-context deploy'
+      );
+    } finally {
+      fs.rmSync(env.HOME, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Bypasses deploy routing when agent_type marks sub-agent context', async () => {
+    const result = await tester.run({
+      input: {
+        hook_event_name: 'PreToolUse',
+        tool_name: 'Bash',
+        agent_type: 'opspal-salesforce:sfdc-cpq-assessor',
+        tool_input: {
+          command: 'sf project deploy start --source-dir force-app/main/default/layouts --target-org production'
+        }
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Sub-agent context should bypass deploy routing checks');
+    assert(!result.stdout.includes('blockExecution'), 'Sub-agent bypass should not emit a deploy block');
   }));
 
   const passed = results.filter((result) => result.passed).length;

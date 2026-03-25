@@ -18,30 +18,24 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { resolveRoutingSemantics } = require('./routing-semantics');
 
 function getRoutingOutput(entry = {}) {
     return entry.output || entry;
 }
 
 function isExecutionGatedRoute(entry = {}) {
-    const output = getRoutingOutput(entry);
-
-    if (typeof output.executionBlockUntilCleared === 'boolean') {
-        return output.executionBlockUntilCleared;
-    }
-    if (typeof entry.executionBlockUntilCleared === 'boolean') {
-        return entry.executionBlockUntilCleared;
-    }
-    if (typeof output.requiresSpecialist === 'boolean' && typeof output.promptGuidanceOnly === 'boolean') {
-        return output.requiresSpecialist && !output.promptGuidanceOnly;
-    }
-
-    return output.blocked === true || entry.blocked === true;
+    return resolveRoutingSemantics(entry, {
+        allowLegacy: true,
+        source: 'routing-learner'
+    }).executionBlockUntilCleared;
 }
 
 function getRoutedAgent(entry = {}) {
-    const output = getRoutingOutput(entry);
-    return output.agent || output.suggestedAgent || output.requiredAgent || entry.selectedAgent || entry.recommendedAgent || null;
+    return resolveRoutingSemantics(entry, {
+        allowLegacy: true,
+        source: 'routing-learner'
+    }).routedAgent;
 }
 
 class RoutingLearner {

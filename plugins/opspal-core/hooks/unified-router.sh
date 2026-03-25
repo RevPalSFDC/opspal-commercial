@@ -833,7 +833,7 @@ persist_routing_state() {
         route_cleared: $route_cleared,
         routing_confidence: $routing_confidence,
         override_applied: $override_applied,
-        status: $status,
+        clearance_status: $status,
         user_message_preview: $user_message_preview,
         handoff_prompt: $handoff_prompt,
         auto_delegation: {
@@ -1223,7 +1223,7 @@ if [[ "$ROUTING_AUTO_DELEGATION_ENABLED" == "1" ]] &&
     AUTO_DELEGATION_MODE="agent_rewrite_bridge"
 fi
 
-[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Action: $ACTION_TYPE, RouteKind: $ROUTE_KIND, Guidance: $GUIDANCE_ACTION, RequiresSpecialist: $REQUIRES_SPECIALIST, ExecutionGate: $EXECUTION_BLOCK_UNTIL_CLEARED, RequestedPromptBlock: $PROMPT_BLOCK_REQUESTED, SuppressedPromptBlock: $PROMPT_BLOCK_SUPPRESSED, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED, AutoDelegation: $AUTO_DELEGATION_ELIGIBLE" >&2
+[[ "$VERBOSE" = "1" ]] && echo "[ROUTER] RouteKind: $ROUTE_KIND, Guidance: $GUIDANCE_ACTION, RequiresSpecialist: $REQUIRES_SPECIALIST, ExecutionGate: $EXECUTION_BLOCK_UNTIL_CLEARED, RequestedPromptBlock: $PROMPT_BLOCK_REQUESTED, SuppressedPromptBlock: $PROMPT_BLOCK_SUPPRESSED, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED, AutoDelegation: $AUTO_DELEGATION_ELIGIBLE" >&2
 
 if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
     if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
@@ -1247,7 +1247,7 @@ COMPLEXITY_PCT="${COMPLEXITY_PCT:-0}"
 if [[ -n "$SUGGESTED_AGENT" ]] && [[ "$SUGGESTED_AGENT" != "null" ]]; then
     echo "" >&2
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
-    echo "[ROUTING] Agent: $SUGGESTED_AGENT | Complexity: ${COMPLEXITY_PCT}% | Action: $ACTION_TYPE" >&2
+    echo "[ROUTING] Agent: $SUGGESTED_AGENT | Complexity: ${COMPLEXITY_PCT}% | RouteKind: $ROUTE_KIND | Guidance: $GUIDANCE_ACTION" >&2
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
     # Namespace reminder - agent names MUST include plugin prefix
     echo "⚠️  Use fully-qualified name: Agent(subagent_type='$SUGGESTED_AGENT', ...)" >&2
@@ -1276,7 +1276,6 @@ LOG_ENTRY=$(jq -n \
     --arg guardrail_alert "${GUARDRAIL_ALERT:-}" \
     --arg routing_reason "${ROUTING_REASON:-}" \
     --arg block_override_reason "${BLOCK_OVERRIDE_REASON:-}" \
-    --arg routing_action_type "$ACTION_TYPE" \
     --arg routing_source "$ROUTING_SOURCE" \
     --arg intake_mode "$ACTIVE_INTAKE_MODE" \
     --arg intake_reason "${INTAKE_REASON:-}" \
@@ -1317,7 +1316,6 @@ LOG_ENTRY=$(jq -n \
         guardrail_alert: (if $guardrail_alert != "" then $guardrail_alert else null end),
         routing_reason: (if $routing_reason != "" then $routing_reason else null end),
         block_override_reason: (if $block_override_reason != "" then $block_override_reason else null end),
-        routing_action_type: $routing_action_type,
         complexity: $complexity,
         routing_confidence: $routing_confidence,
         transcript_noise_score: $transcript_noise_score,
@@ -1378,7 +1376,6 @@ if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]
         --arg route_kind "${ROUTE_KIND:-}" \
         --arg guidance_action "${GUIDANCE_ACTION:-}" \
         --arg routing_reason "${ROUTING_REASON:-}" \
-        --arg routing_action_type "$ACTION_TYPE" \
         --arg override_reason "${BLOCK_OVERRIDE_REASON:-}" \
         --arg override_token "$ROUTING_OVERRIDE_TOKEN" \
         --arg intake_mode "$ACTIVE_INTAKE_MODE" \
@@ -1412,7 +1409,6 @@ if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] || [[ "$OVERRIDE_APPLIED" == "true" ]
             route_kind: (if $route_kind != "" then $route_kind else null end),
             guidance_action: (if $guidance_action != "" then $guidance_action else null end),
             routing_reason: (if $routing_reason != "" then $routing_reason else null end),
-            routing_action_type: $routing_action_type,
             override_reason: (if $override_reason != "" then $override_reason else null end),
             override_token: (if $override_applied then $override_token else null end),
             transcript_noise_score: $transcript_noise_score,
@@ -1452,7 +1448,6 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
         --arg route_kind "${ROUTE_KIND:-}" \
         --arg guidance_action "${GUIDANCE_ACTION:-}" \
         --arg routing_reason "${ROUTING_REASON:-}" \
-        --arg routing_action_type "$ACTION_TYPE" \
         --arg intake_mode "$ACTIVE_INTAKE_MODE" \
         --arg intake_reason "${INTAKE_REASON:-}" \
         --arg routing_source "$ROUTING_SOURCE" \
@@ -1497,7 +1492,6 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
                 routeCleared: $route_cleared,
                 legacyPromptBlockRequested: $legacy_prompt_block_requested,
                 legacyPromptBlockSuppressed: $legacy_prompt_block_suppressed,
-                routingActionType: $routing_action_type,
                 autoDelegationEligible: $auto_delegation_eligible,
                 autoDelegationMode: $auto_delegation_mode
             },
@@ -1657,7 +1651,6 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
         --argjson intake_gate_applied "$INTAKE_GATE_APPLIED" \
         --argjson intake_project_signal "${INTAKE_PROJECT_SIGNAL:-0}" \
         --argjson intake_completeness_score "${INTAKE_COMPLETENESS_SCORE:-1}" \
-        --arg routing_action_type "$ACTION_TYPE" \
         --arg normalized_message_preview "${USER_MESSAGE:0:100}" \
         '{
             suppressOutput: true,
@@ -1699,7 +1692,6 @@ if [[ -n "$CONTEXT_MESSAGE" ]]; then
                 intakeGateApplied: $intake_gate_applied,
                 projectSignal: $intake_project_signal,
                 completenessScore: $intake_completeness_score,
-                routingActionType: $routing_action_type,
                 routingSource: $routing_source,
                 normalizedMessagePreview: $normalized_message_preview
             }

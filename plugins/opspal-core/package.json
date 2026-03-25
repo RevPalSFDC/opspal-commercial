@@ -16,6 +16,8 @@
     "test:hooks:scope": "node test/hooks/unit/task-scope-selector.test.js && node test/hooks/unit/routing-context-refresher.test.js",
     "test:runtime-patcher": "node test/hooks/unit/patch-claude-code-task-scope-runtime.test.js",
     "test:runtime-replay": "node test/hooks/unit/claude-runtime-replay-validator.test.js",
+    "verify:routing-state-semantics": "node scripts/lib/validate-routing-state-semantics.js",
+    "verify:routing-integrity": "node scripts/lib/validate-routing-integrity.js",
     "pdf": "node scripts/lib/pdf-generator.js",
     "pdf:generate": "node scripts/lib/pdf-generator.js"
   },

@@ -21,6 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const readline = require('readline');
+const { resolveRoutingSemantics } = require('./routing-semantics');
 
 const LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
 const COMPLIANCE_LOG = path.join(LOG_DIR, 'compliance.jsonl');
@@ -113,33 +114,26 @@ function getComplianceRate() {
   const routingEntries = readRoutingLog();
   const complianceEntries = readComplianceLog();
 
-  // Count execution-time gated decisions
-  const blockingDecisions = routingEntries.filter((entry) => {
-    if (entry.execution_block_until_cleared === true) {
-      return true;
-    }
-    if (entry.requires_specialist === true && entry.prompt_guidance_only === false) {
-      return true;
-    }
-    return entry.blocked === true || entry.action === 'BLOCKED' || entry.action === 'MANDATORY_BLOCKED';
-  });
+  const executionGatedDecisions = routingEntries.filter((entry) => resolveRoutingSemantics(entry, {
+    allowLegacy: true,
+    source: 'compliance-tracker'
+  }).executionBlockUntilCleared);
 
   // Count violations (blocked but not using the required Agent route)
   const violations = complianceEntries.filter(e => e.violation === true);
 
-  const totalBlocking = blockingDecisions.length;
+  const totalExecutionGated = executionGatedDecisions.length;
   const totalViolations = violations.length;
 
   // Calculate compliance rate
   // Compliance = (blocking decisions - violations) / blocking decisions
-  const complianceRate = totalBlocking > 0
-    ? ((totalBlocking - totalViolations) / totalBlocking * 100).toFixed(1)
+  const complianceRate = totalExecutionGated > 0
+    ? ((totalExecutionGated - totalViolations) / totalExecutionGated * 100).toFixed(1)
     : 100;
 
   return {
     total_routing_decisions: routingEntries.length,
-    execution_gated_decisions: totalBlocking,
-    blocking_decisions: totalBlocking,
+    execution_gated_decisions: totalExecutionGated,
     violations: totalViolations,
     compliance_rate: `${complianceRate}%`,
     compliance_rate_numeric: parseFloat(complianceRate)
@@ -154,17 +148,19 @@ function getStats() {
   const routingEntries = readRoutingLog();
   const complianceEntries = readComplianceLog();
 
-  // Group by action type
-  const byAction = {};
+  const byGuidanceAction = {};
   routingEntries.forEach(entry => {
-    const action = entry.guidance_action || entry.action || 'unknown';
-    byAction[action] = (byAction[action] || 0) + 1;
+    const guidanceAction = resolveRoutingSemantics(entry, {
+      allowLegacy: true,
+      source: 'compliance-tracker'
+    }).guidanceAction || 'unknown';
+    byGuidanceAction[guidanceAction] = (byGuidanceAction[guidanceAction] || 0) + 1;
   });
 
   // Most ignored agents
   const ignoredAgents = {};
   complianceEntries.forEach(entry => {
-    const agent = entry.required_agent || entry.recommended_agent || 'unknown';
+    const agent = entry.required_agent || 'unknown';
     ignoredAgents[agent] = (ignoredAgents[agent] || 0) + 1;
   });
 
@@ -182,7 +178,7 @@ function getStats() {
 
   return {
     ...getComplianceRate(),
-    by_action: byAction,
+    by_guidance_action: byGuidanceAction,
     most_ignored_agents: topIgnored,
     violations_last_24h: recentViolations,
     log_file: COMPLIANCE_LOG
@@ -204,16 +200,16 @@ function generateReport() {
 📊 OVERALL STATISTICS
 ────────────────────────────────────────────────────────────────────
   Total Routing Decisions: ${stats.total_routing_decisions}
-  Blocking Decisions:      ${stats.blocking_decisions}
+  Execution-Gated Routes:  ${stats.execution_gated_decisions}
   Compliance Violations:   ${stats.violations}
   Compliance Rate:         ${stats.compliance_rate}
   Violations (24h):        ${stats.violations_last_24h}
 
-📈 DECISIONS BY ACTION TYPE
+📈 ROUTES BY GUIDANCE ACTION
 ────────────────────────────────────────────────────────────────────`;
 
-  for (const [action, count] of Object.entries(stats.by_action)) {
-    report += `\n  ${action.padEnd(20)} ${count}`;
+  for (const [guidanceAction, count] of Object.entries(stats.by_guidance_action)) {
+    report += `\n  ${guidanceAction.padEnd(20)} ${count}`;
   }
 
   if (stats.most_ignored_agents.length > 0) {

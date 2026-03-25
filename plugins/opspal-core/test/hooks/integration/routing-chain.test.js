@@ -432,7 +432,8 @@ async function runAllTests() {
     assert(result.allPassed, 'All hooks should pass');
     assert.strictEqual(result.executedCount, 2, 'Should execute both hooks');
     assert.strictEqual(result.results[0]?.output?.decision, undefined, 'Router should avoid prompt-time hard block by default');
-    assert.strictEqual(result.results[0]?.output?.metadata?.routingActionType, 'INTAKE_REQUIRED', 'Router should mark intake required');
+    assert.strictEqual(result.results[0]?.output?.metadata?.routeKind, 'intake_specialist', 'Router should use the intake specialist route kind');
+    assert.strictEqual(result.results[0]?.output?.metadata?.guidanceAction, 'require_intake', 'Router should require intake explicitly');
     assert.strictEqual(result.results[0]?.output?.metadata?.promptBlocked, false, 'Router should leave hard blocking off by default');
     assert.strictEqual(result.results[0]?.output?.metadata?.intakeGateApplied, true, 'Router should mark intake gate as applied');
     assert.strictEqual(
@@ -485,7 +486,8 @@ async function runAllTests() {
       'opspal-salesforce:sfdc-permission-orchestrator',
       'Permission maintenance should still recommend the specialist'
     );
-    assert.strictEqual(routed.output?.metadata?.routingActionType, 'RECOMMENDED', 'Permission maintenance should remain recommendation-only');
+    assert.strictEqual(routed.output?.metadata?.routeKind, 'advisory_specialist', 'Permission maintenance should remain advisory');
+    assert.strictEqual(routed.output?.metadata?.guidanceAction, 'recommend_specialist', 'Permission maintenance should remain recommendation-only');
     assert.strictEqual(readRoutingState(env), null, 'Recommendation-only routing should not persist pending state');
 
     const allowedDirect = await pretool.run({
@@ -603,7 +605,8 @@ async function runAllTests() {
       env
     });
     assert.strictEqual(routed.exitCode, 0, 'Procedural routing prompt should succeed');
-    assert.strictEqual(routed.output?.metadata?.routingActionType, 'RECOMMENDED', 'Procedural routing should remain recommendation-only');
+    assert.strictEqual(routed.output?.metadata?.routeKind, 'advisory_specialist', 'Procedural routing should remain advisory');
+    assert.strictEqual(routed.output?.metadata?.guidanceAction, 'recommend_specialist', 'Procedural routing should remain recommendation-only');
     assert.strictEqual(readRoutingState(env), null, 'Procedural recommendation should not persist pending routing state');
 
     const allowedDirect = await pretool.run({

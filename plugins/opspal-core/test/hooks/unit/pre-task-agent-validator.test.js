@@ -483,7 +483,7 @@ async function runAllTests() {
       'Planning-only deployment requests should not be rewritten into the forced parent-context handoff contract'
     );
     assert.strictEqual(
-      readRoutingState(env)?.status,
+      readRoutingState(env)?.clearance_status,
       'cleared',
       'Planning-only deployment-manager invocations should persist a cleared deploy handoff state for the parent context'
     );
@@ -561,7 +561,6 @@ async function runAllTests() {
       route_pending_clearance: true,
       route_cleared: false,
       routing_confidence: 0.92,
-      status: 'pending_clearance',
       clearance_status: 'pending_clearance',
       created_at: Math.floor(Date.now() / 1000),
       updated_at: Math.floor(Date.now() / 1000),
@@ -606,7 +605,6 @@ async function runAllTests() {
       route_pending_clearance: true,
       route_cleared: false,
       routing_confidence: 1,
-      status: 'pending_clearance',
       clearance_status: 'pending_clearance',
       auto_delegation: {
         eligible: true,
@@ -660,7 +658,6 @@ async function runAllTests() {
       route_pending_clearance: true,
       route_cleared: false,
       routing_confidence: 0.86,
-      status: 'pending_clearance',
       clearance_status: 'pending_clearance',
       created_at: Math.floor(Date.now() / 1000),
       updated_at: Math.floor(Date.now() / 1000),

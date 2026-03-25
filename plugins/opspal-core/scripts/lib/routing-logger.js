@@ -14,7 +14,7 @@
  *     agent: 'sfdc-revops-auditor',
  *     complexity: 0.72,
  *     confidence: 85,
- *     action: 'BLOCKED',
+ *     guidance_action: 'require_specialist',
  *     message: 'Run automation audit'
  *   });
  *
@@ -33,23 +33,24 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { resolveRoutingSemantics } = require('./routing-semantics');
 
 // Log file location
 const LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
 const LOG_FILE = path.join(LOG_DIR, 'routing.jsonl');
 
 function getAgent(entry = {}) {
-  return entry.agent || entry.suggested_agent || entry.required_agent || null;
+  return resolveRoutingSemantics(entry, {
+    allowLegacy: true,
+    source: 'routing-logger'
+  }).routedAgent;
 }
 
 function isExecutionGated(entry = {}) {
-  if (typeof entry.execution_block_until_cleared === 'boolean') {
-    return entry.execution_block_until_cleared;
-  }
-  if (typeof entry.requires_specialist === 'boolean' && typeof entry.prompt_guidance_only === 'boolean') {
-    return entry.requires_specialist && !entry.prompt_guidance_only;
-  }
-  return entry.blocked === true || entry.action === 'BLOCKED' || entry.action === 'MANDATORY_BLOCKED';
+  return resolveRoutingSemantics(entry, {
+    allowLegacy: true,
+    source: 'routing-logger'
+  }).executionBlockUntilCleared;
 }
 
 /**
@@ -68,7 +69,7 @@ function ensureLogDir() {
  * @param {string} [data.agent] - Recommended agent name
  * @param {number} [data.complexity] - Task complexity (0-1)
  * @param {number} [data.confidence] - Match confidence (0-100)
- * @param {string} [data.action] - Action taken (BLOCKED, ALLOWED, RECOMMENDED)
+ * @param {string} [data.guidance_action] - Explicit routing guidance action
  * @param {string} [data.message] - Original user message (truncated)
  * @param {string} [data.source] - Source of routing (hybrid, direct, fallback)
  */
@@ -105,11 +106,11 @@ function logRouting(data) {
  * @param {number} [options.limit=100] - Maximum entries to return
  * @param {string} [options.since] - ISO date string to filter from
  * @param {string} [options.agent] - Filter by agent name
- * @param {string} [options.action] - Filter by action (BLOCKED, ALLOWED, etc.)
+ * @param {string} [options.guidanceAction] - Filter by explicit guidance action
  * @returns {Array} Array of log entries
  */
 function readRoutingLog(options = {}) {
-  const { limit = 100, since, agent, action } = options;
+  const { limit = 100, since, agent, guidanceAction } = options;
 
   if (!fs.existsSync(LOG_FILE)) {
     return [];
@@ -134,11 +135,17 @@ function readRoutingLog(options = {}) {
     }
 
     if (agent) {
-      entries = entries.filter(e => e.agent === agent);
+      entries = entries.filter(entry => getAgent(entry) === agent);
     }
 
-    if (action) {
-      entries = entries.filter(e => e.action === action);
+    if (guidanceAction) {
+      entries = entries.filter((entry) => {
+        const semantics = resolveRoutingSemantics(entry, {
+          allowLegacy: true,
+          source: 'routing-logger'
+        });
+        return semantics.guidanceAction === guidanceAction;
+      });
     }
 
     // Return most recent entries (last N)
@@ -173,8 +180,7 @@ function getRoutingStats(options = {}) {
     avgComplexity: 0,
     avgConfidence: 0,
     executionGated: 0,
-    blocked: 0,
-    allowed: 0,
+    advisory: 0,
     timeRange: {
       first: entries[0]?.timestamp,
       last: entries[entries.length - 1]?.timestamp
@@ -187,15 +193,19 @@ function getRoutingStats(options = {}) {
   let confidenceCount = 0;
 
   for (const entry of entries) {
-    // Count by action
-    const action = entry.guidance_action || entry.routing_action_type || entry.action || 'UNKNOWN';
-    stats.byAction[action] = (stats.byAction[action] || 0) + 1;
+    const semantics = resolveRoutingSemantics(entry, {
+      allowLegacy: true,
+      source: 'routing-logger'
+    });
+    const guidanceAction = semantics.guidanceAction || 'UNKNOWN';
+    stats.byAction[guidanceAction] = (stats.byAction[guidanceAction] || 0) + 1;
 
     if (isExecutionGated(entry)) {
       stats.executionGated++;
-      stats.blocked++;
     }
-    if (action === 'ALLOWED') stats.allowed++;
+    if (guidanceAction === 'recommend_specialist') {
+      stats.advisory++;
+    }
 
     // Count by agent
     const agent = getAgent(entry);

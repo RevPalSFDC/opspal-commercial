@@ -124,7 +124,7 @@ log_routing_metric() {
     local input_agent="$1"
     local resolved_agent="$2"
     local was_resolved="$3"
-    local blocked="$4"
+    local execution_block_until_cleared="$4"
     local block_reason="$5"
     local error_msg="$6"
 
@@ -151,7 +151,7 @@ log_routing_metric() {
       --arg block_reason "$block_reason" \
       --arg error_msg "$error_msg" \
       --argjson was_resolved "$was_resolved" \
-      --argjson blocked "$blocked" \
+      --argjson execution_block_until_cleared "$execution_block_until_cleared" \
       --argjson duration_ms "$duration_ms" \
       '{
         type: "routing_decision",
@@ -161,7 +161,7 @@ log_routing_metric() {
         output: {
           agent: (if $resolved_agent != "" then $resolved_agent else null end),
           wasResolved: $was_resolved,
-          blocked: $blocked,
+          executionBlockUntilCleared: $execution_block_until_cleared,
           blockReason: (if $block_reason != "" then $block_reason else null end)
         },
         metrics: {
@@ -488,7 +488,7 @@ persist_parent_context_deploy_clearance() {
         route_pending_clearance: false,
         route_cleared: true,
         routing_confidence: 1,
-        status: "cleared",
+        clearance_status: "cleared",
         last_resolved_agent: $agent
       }' \
       | node "$ROUTING_STATE_MANAGER" save "$session_key" >/dev/null 2>&1 || true

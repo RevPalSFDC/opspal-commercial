@@ -22,15 +22,13 @@
  *   node routing-state-manager.js mark-bypassed <session-key> [agent]
  *   node routing-state-manager.js clear-expired
  *
- * Legacy compatibility:
- *   node routing-state-manager.js save <agent> <blocked> <action>
- *
  * @version 2.0.0
  */
 
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { recordLegacyRoutingCompatibility } = require('./routing-semantics');
 
 const LEGACY_STATE_FILE = path.join(os.homedir(), '.claude', 'routing-state.json');
 const STATE_DIR = path.join(os.homedir(), '.claude', 'routing-state');
@@ -83,6 +81,57 @@ function normalizeClearanceAgents(value, fallbackAgent = null) {
   }
 
   return [...new Set(agents)];
+}
+
+function firstLegacyString(candidates, usedFields) {
+  for (const candidate of candidates) {
+    if (candidate.value === undefined || candidate.value === null) {
+      continue;
+    }
+
+    const normalized = String(candidate.value).trim();
+    if (!normalized) {
+      continue;
+    }
+
+    if (usedFields && candidate.field) {
+      usedFields.add(candidate.field);
+    }
+    return normalized;
+  }
+
+  return null;
+}
+
+function firstLegacyBoolean(candidates, usedFields) {
+  for (const candidate of candidates) {
+    if (candidate.value === undefined || candidate.value === null || candidate.value === '') {
+      continue;
+    }
+
+    if (usedFields && candidate.field) {
+      usedFields.add(candidate.field);
+    }
+    return toBoolean(candidate.value);
+  }
+
+  return null;
+}
+
+function recordLegacyStateUsage(sessionKey, fields, context = {}) {
+  const uniqueFields = [...new Set((fields || []).filter(Boolean))];
+  if (uniqueFields.length === 0) {
+    return;
+  }
+
+  recordLegacyRoutingCompatibility({
+    source: 'routing-state-manager',
+    fields: uniqueFields,
+    context: {
+      sessionKey: normalizeSessionKey(sessionKey),
+      ...context
+    }
+  });
 }
 
 function normalizeLegacyStatus(value) {
@@ -198,10 +247,25 @@ function normalizeAutoDelegation(state = {}, fallback = {}) {
 function normalizeState(sessionKey, state = {}, existing = null) {
   const timestamp = nowSeconds();
   const createdAt = Number.parseInt(state.created_at || state.createdAt || existing?.created_at || timestamp, 10);
-  const legacyStatus = normalizeLegacyStatus(state.clearance_status || state.clearanceStatus || state.status || existing?.clearance_status || existing?.status);
-  const requiredAgent = state.required_agent || state.requiredAgent ||
-    state.recommended_agent || state.recommendedAgent ||
-    state.agent || existing?.required_agent || existing?.recommended_agent || existing?.agent || null;
+  const usedLegacyFields = new Set();
+  const explicitClearanceStatus = state.clearance_status || state.clearanceStatus || existing?.clearance_status || null;
+  const legacyStatus = normalizeLegacyStatus(
+    explicitClearanceStatus ||
+    firstLegacyString([
+      { value: state.status, field: 'status' },
+      { value: existing?.status, field: 'status' }
+    ], usedLegacyFields)
+  );
+  const explicitRequiredAgent = state.required_agent || state.requiredAgent || existing?.required_agent || null;
+  const legacyRequiredAgent = firstLegacyString([
+    { value: state.recommended_agent, field: 'recommended_agent' },
+    { value: state.recommendedAgent, field: 'recommended_agent' },
+    { value: state.agent, field: 'agent' },
+    { value: existing?.recommended_agent, field: 'recommended_agent' },
+    { value: existing?.recommendedAgent, field: 'recommended_agent' },
+    { value: existing?.agent, field: 'agent' }
+  ], usedLegacyFields);
+  const requiredAgent = explicitRequiredAgent || legacyRequiredAgent || null;
   const clearanceAgents = normalizeClearanceAgents(
     state.clearance_agents || state.clearanceAgents || existing?.clearance_agents,
     requiredAgent
@@ -217,8 +281,23 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     existing?.routing_confidence ?? existing?.routingConfidence
   );
   const explicitExecutionBlock = state.execution_block_until_cleared ?? state.executionBlockUntilCleared;
-  const legacyAction = state.action || existing?.action || null;
-  const legacyMandatory = toBoolean(state.mandatory ?? existing?.mandatory);
+  const legacyAction = firstLegacyString([
+    { value: state.action, field: 'action' },
+    { value: existing?.action, field: 'action' }
+  ], usedLegacyFields);
+  const legacyMandatory = firstLegacyBoolean([
+    { value: state.mandatory, field: 'mandatory' },
+    { value: existing?.mandatory, field: 'mandatory' }
+  ], usedLegacyFields) === true;
+  const legacyEnforcedBlock = firstLegacyBoolean([
+    { value: state.enforced_block, field: 'enforced_block' },
+    { value: state.hard_blocked, field: 'hard_blocked' },
+    { value: existing?.enforced_block, field: 'enforced_block' }
+  ], usedLegacyFields);
+  const legacyBlocked = firstLegacyBoolean([
+    { value: state.blocked, field: 'blocked' },
+    { value: existing?.blocked, field: 'blocked' }
+  ], usedLegacyFields);
   const explicitExecutionBlockValue = explicitExecutionBlock === undefined
     ? null
     : toBoolean(explicitExecutionBlock);
@@ -226,8 +305,8 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     ? explicitExecutionBlockValue
     : (
       toBoolean(state.execution_block_until_cleared ?? existing?.execution_block_until_cleared) ||
-      toBoolean(state.enforced_block ?? state.hard_blocked ?? existing?.enforced_block) ||
-      toBoolean(state.blocked ?? existing?.blocked) ||
+      legacyEnforcedBlock === true ||
+      legacyBlocked === true ||
       legacyMandatory ||
       ['BLOCKED', 'INTAKE_REQUIRED', 'MANDATORY_BLOCKED', 'MANDATORY_ALERT'].includes(String(legacyAction || '').trim().toUpperCase())
     );
@@ -258,6 +337,9 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     routeKind,
     executionBlockUntilCleared
   );
+  recordLegacyStateUsage(sessionKey, [...usedLegacyFields], {
+    operation: existing ? 'normalize-existing-state' : 'normalize-incoming-state'
+  });
   const normalizedState = {
     session_key: normalizeSessionKey(sessionKey),
     route_id: state.route_id || state.routeId || existing?.route_id || null,
@@ -275,19 +357,13 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     routing_confidence: routingConfidence,
     override_applied: overrideApplied,
     clearance_status: clearanceStatus,
-    status: clearanceStatus === 'pending_clearance' ? 'pending' : clearanceStatus,
     user_message_preview: state.user_message_preview || state.userMessagePreview || existing?.user_message_preview || null,
     handoff_prompt: state.handoff_prompt || state.handoffPrompt || existing?.handoff_prompt || null,
     created_at: createdAt,
     updated_at: timestamp,
     expires_at: expiresAt,
     ttl_seconds: ttlSeconds,
-    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || null,
-    action: legacyAction,
-    recommended_agent: requiredAgent,
-    mandatory: legacyMandatory,
-    enforced_block: toBoolean(state.enforced_block ?? state.hard_blocked ?? existing?.enforced_block),
-    blocked: false
+    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || null
   };
   normalizedState.auto_delegation = normalizeAutoDelegation(state, normalizedState);
 
@@ -339,7 +415,7 @@ function getState(sessionKey) {
     return null;
   }
 
-  return state;
+  return normalizeState(sessionKey, state, state);
 }
 
 function updateStateStatus(sessionKey, status, updates = {}) {
@@ -375,8 +451,7 @@ function updateStateStatus(sessionKey, status, updates = {}) {
   const nextState = normalizeState(sessionKey, {
     ...current,
     ...derivedStatusUpdates,
-    ...updates,
-    status
+    ...updates
   }, current);
 
   return writeStateFile(getStateFile(sessionKey), nextState);
@@ -424,7 +499,6 @@ function checkState(sessionKey) {
       routePendingClearance: false,
       routeCleared: false,
       clearanceStatus: null,
-      status: null,
       requiredAgent: null,
       clearanceAgents: [],
       routeId: null,
@@ -444,7 +518,8 @@ function checkState(sessionKey) {
     };
   }
 
-  const clearanceStatus = normalizeLegacyStatus(state.clearance_status || state.status) || 'cleared';
+  const clearanceStatus = normalizeLegacyStatus(state.clearance_status) || 'cleared';
+  const lastResolvedAgent = state.last_resolved_agent || state.lastResolvedAgent || null;
   const routePendingClearance = toBoolean(state.route_pending_clearance) || ACTIVE_CLEARANCE_STATUSES.has(clearanceStatus);
   const routeCleared = toBoolean(state.route_cleared) || clearanceStatus === 'cleared';
   const overrideApplied = toBoolean(state.override_applied);
@@ -469,15 +544,15 @@ function checkState(sessionKey) {
     bypassed: clearanceStatus === 'bypassed' || overrideApplied,
     cleared: routeCleared,
     clearanceStatus,
-    status: state.status,
     routeId: state.route_id || null,
     routeKind: state.route_kind || null,
     guidanceAction: state.guidance_action || null,
     routingReason: state.routing_reason || null,
-    requiredAgent: state.required_agent || state.recommended_agent || null,
-    clearanceAgents: normalizeClearanceAgents(state.clearance_agents, state.recommended_agent),
+    requiredAgent: state.required_agent || null,
+    clearanceAgents: normalizeClearanceAgents(state.clearance_agents, state.required_agent),
     routingConfidence: normalizeRoutingConfidence(state.routing_confidence),
     overrideApplied,
+    lastResolvedAgent,
     autoDelegation,
     age: nowSeconds() - Number.parseInt(state.created_at || 0, 10),
     state
@@ -501,20 +576,6 @@ function readJsonFromStdin() {
   }
 }
 
-function saveLegacyState(agent, blocked, action) {
-  const payload = {
-    required_agent: agent || null,
-    execution_block_until_cleared: blocked,
-    route_pending_clearance: blocked,
-    route_cleared: !blocked,
-    guidance_action: blocked ? 'require_specialist' : 'recommend_specialist',
-    route_kind: blocked ? 'complexity_specialist' : 'advisory',
-    clearance_status: blocked ? 'pending_clearance' : 'cleared',
-    action: action || 'BLOCKED'
-  };
-  return saveState(process.env.CLAUDE_SESSION_ID || 'legacy-session', payload);
-}
-
 // CLI interface
 if (require.main === module) {
   const args = process.argv.slice(2);
@@ -530,10 +591,8 @@ if (require.main === module) {
         break;
       }
 
-      const [agent, blockedRaw, action] = args.slice(1);
-      const blocked = blockedRaw === 'true';
-      console.log(JSON.stringify(saveLegacyState(agent, blocked, action)));
-      break;
+      console.error('routing-state-manager.js save requires JSON on stdin');
+      process.exit(1);
     }
 
     case 'get': {

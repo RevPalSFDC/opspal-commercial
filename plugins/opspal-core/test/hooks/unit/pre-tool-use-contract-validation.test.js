@@ -85,7 +85,6 @@ function buildRoutingState({
     route_pending_clearance: routePendingClearance,
     route_cleared: routeCleared,
     clearance_status: clearanceStatus,
-    status: clearanceStatus,
     override_applied: overrideApplied,
     routing_confidence: routingConfidence,
     last_resolved_agent: lastResolvedAgent,

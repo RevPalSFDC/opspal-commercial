@@ -73,6 +73,26 @@ function assertPendingExecutionRoute(state, expectedAgent) {
   assert.strictEqual(state.prompt_blocked, false, 'Prompt-time routing should remain non-blocking');
 }
 
+function assertComplexitySpecialistRoute(metadata, message) {
+  assert.strictEqual(metadata?.routeKind, 'complexity_specialist', `${message} should use the complexity specialist route kind`);
+  assert.strictEqual(metadata?.guidanceAction, 'require_specialist', `${message} should require the specialist explicitly`);
+}
+
+function assertMandatorySpecialistRoute(metadata, message) {
+  assert.strictEqual(metadata?.routeKind, 'mandatory_specialist', `${message} should use the mandatory specialist route kind`);
+  assert.strictEqual(metadata?.guidanceAction, 'require_specialist', `${message} should require the mandatory specialist explicitly`);
+}
+
+function assertAdvisorySpecialistRoute(metadata, message) {
+  assert.strictEqual(metadata?.routeKind, 'advisory_specialist', `${message} should remain advisory`);
+  assert.strictEqual(metadata?.guidanceAction, 'recommend_specialist', `${message} should only recommend the specialist`);
+}
+
+function assertIntakeSpecialistRoute(metadata, message) {
+  assert.strictEqual(metadata?.routeKind, 'intake_specialist', `${message} should use the intake specialist route kind`);
+  assert.strictEqual(metadata?.guidanceAction, 'require_intake', `${message} should require intake explicitly`);
+}
+
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
   try {
@@ -133,7 +153,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
     assert(result.output && typeof result.output === 'object', 'Should return JSON output');
     assert.strictEqual(result.output.decision, undefined, 'Should not emit decision=block by default');
-    assert.strictEqual(result.output.metadata?.routingActionType, 'BLOCKED', 'Should classify as BLOCKED');
+    assertComplexitySpecialistRoute(result.output.metadata, 'CPQ routing');
     assert.strictEqual(result.output.metadata?.executionBlockUntilCleared, true, 'Should still gate execution-time routing');
     assert.strictEqual(result.output.metadata?.promptBlocked, false, 'Should not prompt-block by default');
     assert.strictEqual(result.output.metadata?.overrideApplied, false, 'Should not apply override');
@@ -153,7 +173,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'BLOCKED', 'Dashboard creation should remain blocking');
+    assertComplexitySpecialistRoute(result.output?.metadata, 'Dashboard creation routing');
     assert.strictEqual(
       result.output?.metadata?.suggestedAgent,
       'opspal-salesforce:sfdc-reports-dashboards',
@@ -172,7 +192,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block by default');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'BLOCKED', 'Should classify as BLOCKED');
+    assertComplexitySpecialistRoute(result.output?.metadata, 'RevOps routing');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should not enforce prompt-time hard blocking');
   }));
 
@@ -186,8 +206,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block by default');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'MANDATORY_BLOCKED', 'Should classify as MANDATORY_BLOCKED');
-    assert.strictEqual(result.output?.metadata?.routeKind, 'mandatory_specialist', 'Should mark the route as mandatory');
+    assertMandatorySpecialistRoute(result.output?.metadata, 'Mandatory merge routing');
     assert.strictEqual(result.output?.metadata?.executionBlockUntilCleared, true, 'Should gate execution-time routing');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should not enforce prompt-time hard blocking');
     assert.strictEqual(
@@ -210,8 +229,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for routing-only enforcement');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'MANDATORY_BLOCKED', 'Should classify as MANDATORY_BLOCKED');
-    assert.strictEqual(result.output?.metadata?.routeKind, 'mandatory_specialist', 'Should keep mandatory route semantics');
+    assertMandatorySpecialistRoute(result.output?.metadata, 'Legacy hard-block suppression');
     assert.strictEqual(result.output?.metadata?.executionBlockUntilCleared, true, 'Should keep downstream execution gating');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should keep prompt submission non-blocking');
     assert.strictEqual(result.output?.metadata?.legacyPromptBlockRequested, true, 'Should surface legacy block request telemetry');
@@ -231,7 +249,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block');
-    assert.notStrictEqual(result.output?.metadata?.routingActionType, 'MANDATORY_BLOCKED', 'Should not classify as mandatory blocked');
+    assert.notStrictEqual(result.output?.metadata?.routeKind, 'mandatory_specialist', 'Should not classify as mandatory specialist routing');
   }));
 
   // Test 8: Empty prompt handling
@@ -258,7 +276,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 to preserve structured hook output');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block by default');
     assert.strictEqual(result.output?.metadata?.suggestedAgent, 'opspal-core:intelligent-intake-orchestrator', 'Should route to intake orchestrator');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Should classify as RECOMMENDED');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Recommend-mode intake routing');
     assert.strictEqual(result.output?.metadata?.executionBlockUntilCleared, false, 'Should remain guidance-only in recommend mode');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should not enforce hard block by default');
     assert.strictEqual(result.output?.metadata?.routingSource, 'intake-gate', 'Should mark intake-gate as routing source');
@@ -314,7 +332,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for intake routing');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'INTAKE_REQUIRED', 'Should still classify as INTAKE_REQUIRED');
+    assertIntakeSpecialistRoute(result.output?.metadata, 'Legacy intake hard-block suppression');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should keep prompt submission non-blocking');
     assert.strictEqual(result.output?.metadata?.legacyPromptBlockRequested, true, 'Should record legacy intake block request');
     assert.strictEqual(result.output?.metadata?.legacyPromptBlockSuppressed, true, 'Should suppress user-visible prompt blocking');
@@ -332,7 +350,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block');
     assert.strictEqual(result.output?.metadata?.suggestedAgent, 'opspal-salesforce:sfdc-permission-orchestrator', 'Should route to permission orchestrator');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Should classify as RECOMMENDED');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Permission-set maintenance routing');
     assert.strictEqual(result.output?.metadata?.executionBlockUntilCleared, false, 'Should not classify as execution-gated');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should not enforce hard block');
     assert.strictEqual(readRoutingState(env), null, 'Recommended routes should stay advisory and not persist pending state');
@@ -351,7 +369,7 @@ async function runAllTests() {
       'opspal-core:fireflies-meeting-intelligence-agent',
       'Should route read-only Fireflies transcript work to the meeting intelligence agent'
     );
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Fireflies transcript analysis should stay advisory');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Fireflies transcript analysis');
   }));
 
   results.push(await runTest('Routes implicit meeting transcript action-item prompts to Fireflies meeting intelligence', async () => {
@@ -367,7 +385,7 @@ async function runAllTests() {
       'opspal-core:fireflies-meeting-intelligence-agent',
       'Implicit transcript analysis should route to the meeting intelligence specialist'
     );
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Implicit transcript analysis should stay advisory');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Implicit transcript analysis');
   }));
 
   results.push(await runTest('Routes combined Gong and Fireflies requests to the conversation intelligence aggregator', async () => {
@@ -383,7 +401,7 @@ async function runAllTests() {
       'opspal-core:conversation-intelligence-aggregator',
       'Should route multi-platform conversation intelligence work to the aggregator'
     );
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Cross-platform transcript analysis should stay advisory');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Cross-platform transcript analysis');
   }));
 
   results.push(await runTest('Routes Gong deal-risk prompts to the Gong specialist instead of generic pipeline intelligence', async () => {
@@ -414,7 +432,7 @@ async function runAllTests() {
       'opspal-salesforce:sfdc-state-discovery',
       'Should route schema inspection to state discovery'
     );
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Schema inspection should stay advisory');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Schema inspection');
   }));
 
   results.push(await runTest('Routes Salesforce implementation planning prompts to the planner specialist', async () => {
@@ -430,7 +448,7 @@ async function runAllTests() {
       'opspal-salesforce:sfdc-planner',
       'Should route implementation planning to the planner specialist'
     );
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Planning should stay advisory');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Implementation planning');
   }));
 
   results.push(await runTest('Routes field usage audits to the field analyzer specialist', async () => {
@@ -463,7 +481,7 @@ async function runAllTests() {
       'opspal-salesforce:sfdc-quality-auditor',
       'Salesforce data quality audits should route to the quality auditor'
     );
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Data quality audits should stay advisory');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Data quality audit routing');
   }));
 
   results.push(await runTest('Routes HubSpot workflow audit prompts to the workflow auditor specialist', async () => {
@@ -494,7 +512,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.output?.decision, undefined, 'Should not emit decision=block for procedural requests');
     assert.strictEqual(result.output?.metadata?.suggestedAgent, 'opspal-salesforce:sfdc-cpq-assessor', 'Should keep the specialist recommendation');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'RECOMMENDED', 'Procedural requests should be recommendation-only');
+    assertAdvisorySpecialistRoute(result.output?.metadata, 'Procedural specialist routing');
     assert.strictEqual(result.output?.metadata?.executionBlockUntilCleared, false, 'Procedural requests should not remain execution-gated');
     assert.strictEqual(result.output?.metadata?.proceduralRequest, true, 'Should mark procedural intent');
     assert.strictEqual(readRoutingState(env), null, 'Procedural requests should not persist pending routing state');
@@ -519,7 +537,7 @@ async function runAllTests() {
       'opspal-gtm-planning:gtm-market-intelligence',
       'Should not route generic planning prompts to GTM market intelligence'
     );
-    assert.notStrictEqual(result.output?.metadata?.routingActionType, 'BLOCKED', 'Should not classify the prompt as blocked');
+    assert.notStrictEqual(result.output?.metadata?.routeKind, 'complexity_specialist', 'Should not classify the prompt as execution-gated complexity routing');
     assert.strictEqual(readRoutingState(env), null, 'False-positive prompt should not persist pending routing state');
   }));
 
@@ -557,7 +575,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.output?.decision, undefined, 'Should avoid prompt-time hard block by default');
-    assert.strictEqual(result.output?.metadata?.routingActionType, 'INTAKE_REQUIRED', 'Should classify as INTAKE_REQUIRED');
+    assertIntakeSpecialistRoute(result.output?.metadata, 'Require-mode intake routing');
     assert.strictEqual(result.output?.metadata?.suggestedAgent, 'opspal-core:intelligent-intake-orchestrator', 'Should route to intake orchestrator');
     assert.strictEqual(result.output?.metadata?.intakeRequired, true, 'Should mark intakeRequired=true');
     assert.strictEqual(result.output?.metadata?.promptBlocked, false, 'Should leave prompt blocking disabled by default');
@@ -601,7 +619,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.notStrictEqual(result.output?.metadata?.routingActionType, 'INTAKE_REQUIRED', 'Should not classify as INTAKE_REQUIRED');
+    assert.notStrictEqual(result.output?.metadata?.routeKind, 'intake_specialist', 'Should not classify as intake routing');
     assert.strictEqual(result.output?.metadata?.suggestedAgent, 'opspal-salesforce:sfdc-cpq-assessor', 'Should keep specialist routing');
   }));
 

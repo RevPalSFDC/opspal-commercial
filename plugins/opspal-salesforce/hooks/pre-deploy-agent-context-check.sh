@@ -185,7 +185,7 @@ agent_has_parent_clearance_capability() {
 has_parent_context_deploy_clearance() {
     local session_key="$1"
     local state=""
-    local status=""
+    local clearance_status=""
     local resolved_agent=""
 
     if [[ -z "$session_key" ]] || [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &>/dev/null; then
@@ -193,10 +193,10 @@ has_parent_context_deploy_clearance() {
     fi
 
     state=$(node "$ROUTING_STATE_MANAGER" get "$session_key" 2>/dev/null || echo '{"state":null}')
-    status=$(printf '%s' "$state" | jq -r '.status // .state.status // ""' 2>/dev/null || echo "")
-    resolved_agent=$(printf '%s' "$state" | jq -r '.last_resolved_agent // .state.last_resolved_agent // .recommended_agent // .state.recommended_agent // ""' 2>/dev/null || echo "")
+    clearance_status=$(printf '%s' "$state" | jq -r '.clearance_status // .state.clearance_status // ""' 2>/dev/null || echo "")
+    resolved_agent=$(printf '%s' "$state" | jq -r '.last_resolved_agent // .state.last_resolved_agent // .required_agent // .state.required_agent // ""' 2>/dev/null || echo "")
 
-    if [[ "$status" =~ ^(cleared|bypassed)$ ]] && agent_has_parent_clearance_capability "$resolved_agent"; then
+    if [[ "$clearance_status" =~ ^(cleared|bypassed)$ ]] && agent_has_parent_clearance_capability "$resolved_agent"; then
         return 0
     fi
 

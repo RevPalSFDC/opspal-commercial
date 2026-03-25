@@ -751,7 +751,7 @@ subagent_has_validated_route_clearance() {
         return 1
     fi
 
-    required_agent="$(echo "$routing_state" | jq -r '.requiredAgent // .state.required_agent // .state.recommended_agent // ""' 2>/dev/null || echo "")"
+    required_agent="$(echo "$routing_state" | jq -r '.requiredAgent // .state.required_agent // .lastResolvedAgent // .state.last_resolved_agent // ""' 2>/dev/null || echo "")"
     clearance_agents_json="$(echo "$routing_state" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")"
     last_resolved_agent="$(echo "$routing_state" | jq -r '.state.last_resolved_agent // .state.lastResolvedAgent // ""' 2>/dev/null || echo "")"
 

@@ -116,7 +116,9 @@ run_synthetic_probe() {
           syntheticProbeId: $probe_id,
           schemaHint: $schema,
           autoRouted: false,
-          recommendedAgent: "opspal-core:route"
+          suggestedAgent: "opspal-core:route",
+          guidanceAction: "recommend_specialist",
+          routeKind: "advisory"
         }')
 
     if ! printf '%s\n' "$payload" >> "$metrics_file"; then
@@ -306,7 +308,10 @@ check_metrics() {
       | map(select(.timestamp and .timestamp >= $cutoff))
       | map(select(
           .type == "routing_decision"
-          or .action != null
+          or .guidanceAction != null
+          or .guidance_action != null
+          or .routeKind != null
+          or .route_kind != null
           or .routingSource != null
         ))
       | length
@@ -367,7 +372,6 @@ check_metrics() {
       | map(select(.timestamp and .timestamp >= $cutoff))
       | map(
           .requiredAgent
-          // .recommendedAgent
           // .suggestedAgent
           // .agent
           // .output.requiredAgent
