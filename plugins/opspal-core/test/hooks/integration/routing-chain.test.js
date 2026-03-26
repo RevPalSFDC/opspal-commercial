@@ -671,7 +671,7 @@ async function runAllTests() {
     assertNoStructuredDeny(allowedDirect, 'Procedural recommendation should stay advisory');
   }));
 
-  results.push(await runTest('Mixed Salesforce cleanup routing stays on the specialist path and blocks parent recovery', async () => {
+  results.push(await runTest('Mixed Salesforce cleanup routing allows execution via context continuity after specialist clearance', async () => {
     const env = createIsolatedEnv();
     const router = new HookTester(ROUTING_CHAIN[0]);
     const validator = new HookTester(ROUTING_CHAIN[1]);
@@ -727,10 +727,17 @@ async function runAllTests() {
       env
     });
 
-    assertStructuredRoutingDeny(parentFallback, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Parent fallback after specialist clearance');
+    // With context continuity fix: when route is cleared and last_resolved_agent
+    // matches a clearance agent, caller identity is recovered from cleared route
+    // state and execution is ALLOWED (not blocked as projection mismatch).
+    const parentDecision = parentFallback.output?.hookSpecificOutput?.permissionDecision;
+    assert(
+      parentDecision !== 'deny',
+      'After context continuity fix, cleared specialist route should allow Bash via last_resolved_agent recovery (not block as projection mismatch)'
+    );
   }));
 
-  results.push(await runTest('Merge/delete cleanup routing stays on the merge specialist path and blocks parent recovery', async () => {
+  results.push(await runTest('Merge/delete cleanup routing allows execution via context continuity after specialist clearance', async () => {
     const env = createIsolatedEnv();
     const router = new HookTester(ROUTING_CHAIN[0]);
     const validator = new HookTester(ROUTING_CHAIN[1]);
@@ -786,7 +793,13 @@ async function runAllTests() {
       env
     });
 
-    assertStructuredRoutingDeny(parentFallback, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Parent fallback after merge specialist clearance');
+    // With context continuity fix: cleared route with last_resolved_agent
+    // matching a clearance agent allows execution via identity recovery.
+    const mergeDecision = parentFallback.output?.hookSpecificOutput?.permissionDecision;
+    assert(
+      mergeDecision !== 'deny',
+      'After context continuity fix, cleared merge specialist route should allow Bash via last_resolved_agent recovery (not block as projection mismatch)'
+    );
   }));
 
   // =========================================================================
