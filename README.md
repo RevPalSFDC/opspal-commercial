@@ -2,24 +2,61 @@
 
 Commercial Claude Code marketplace for RevOps delivery across Salesforce, HubSpot, Marketo, GTM planning, and executive reporting. This repo currently ships 10 plugins with 302 agents, 273 commands, and 170 hooks.
 
-## Install
+## Prerequisites
+
+- [Claude Code](https://claude.ai/code) installed
+- [Node.js 22+](https://nodejs.org)
+- [Git](https://git-scm.com) (pre-installed on macOS/Linux; Windows users need [Git for Windows](https://gitforwindows.org))
+
+## Quick Start
+
+### One-Line Installer
+
+**macOS / Linux / WSL:**
+```bash
+curl -fsSL https://opspal.gorevpal.com/bootstrap-opspal.sh | bash
+```
+
+**Windows PowerShell:**
+```powershell
+irm https://opspal.gorevpal.com/bootstrap-opspal.ps1 | iex
+```
+
+**Windows CMD (with Git Bash):**
+```cmd
+"C:\Program Files\Git\bin\bash.exe" -c "curl -fsSL https://opspal.gorevpal.com/bootstrap-opspal.sh | bash"
+```
+
+The installer adds the marketplace, enables auto-update, and installs the full plugin suite. For a dry-run first, append `bash -s -- --dry-run`.
+
+### Manual Install
 
 ```bash
+# Step 1: Add the marketplace
 /plugin marketplace add RevPalSFDC/opspal-commercial
+
+# Step 2: Install plugins (opspal-core first, then platform-specific)
 /plugin install opspal-core@opspal-commercial
 /plugin install opspal-salesforce@opspal-commercial
 /plugin install opspal-hubspot@opspal-commercial
 /plugin install opspal-marketo@opspal-commercial
 /plugin install opspal-gtm-planning@opspal-commercial
 /plugin install opspal-okrs@opspal-commercial
+
+# Step 3: Enable auto-update from the marketplace detail view
 ```
 
+### Verify Installation
+
+After restarting Claude Code, run `/agents` to confirm plugins are loaded.
+
 ## Update
+
+Plugins update automatically if auto-update is enabled. To update manually:
 
 ```bash
 cd ~/.claude/plugins/marketplaces/opspal-commercial
 git pull origin main
-/pluginupdate --fix
 ```
 
 ## License Activation
@@ -48,5 +85,7 @@ Deprecated compatibility note: `opspal-data-hygiene` remains published for compa
 
 ## Support
 
-- Marketplace repository: https://github.com/RevPalSFDC/opspal-commercial
+- Product site: https://opspal.gorevpal.com
+- Setup guide: https://opspal.gorevpal.com/support.html#setup
+- Release notes: https://opspal.gorevpal.com/release-notes.html
 - Issues: https://github.com/RevPalSFDC/opspal-commercial/issues
