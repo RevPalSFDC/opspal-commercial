@@ -498,7 +498,7 @@ const upsertWithDegradation = async (record, orgAlias, options) => {
 | Limitation | Reason | Alternative |
 |------------|--------|-------------|
 | Fix validation rules | Metadata scope | Use `sfdc-metadata-manager` |
-| Grant permissions | Security scope | Use `sfdc-security-admin` |
+| Grant permission/security access | Security scope | Use `sfdc-permission-orchestrator` |
 | Modify data policies | Admin scope | Contact Salesforce admin |
 
 ---

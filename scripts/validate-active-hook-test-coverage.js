@@ -375,6 +375,106 @@ function validateBlockingHookCoverage(report) {
   return insufficient;
 }
 
+function readMatchedTestContents(testFiles, options = {}) {
+  const baseDir = options.baseDir || repoRoot;
+  const contents = [];
+
+  for (const testFile of testFiles || []) {
+    const absPath = path.resolve(baseDir, testFile);
+    if (!fs.existsSync(absPath)) {
+      continue;
+    }
+
+    contents.push(fs.readFileSync(absPath, 'utf8'));
+  }
+
+  return contents;
+}
+
+function validateReadWriteHookCoverage(report, config = {}, options = {}) {
+  const readWriteHooks = config.readWriteHooks || {};
+  const insufficient = [];
+
+  for (const [hookPath, spec] of Object.entries(readWriteHooks)) {
+    const entry = (report.entries || []).find((candidate) => candidate.hookPath === hookPath);
+    if (!entry || !entry.covered) {
+      insufficient.push({
+        hookPath,
+        missingPatterns: [
+          ...((spec.allowPatterns || []).map((pattern) => `allow:${pattern}`)),
+          ...((spec.blockPatterns || []).map((pattern) => `block:${pattern}`))
+        ],
+        description: spec.description
+      });
+      continue;
+    }
+
+    const testContents = readMatchedTestContents(entry.matchedTests, options);
+    const missingPatterns = [];
+
+    for (const pattern of spec.allowPatterns || []) {
+      if (!testContents.some((content) => content.includes(pattern))) {
+        missingPatterns.push(pattern);
+      }
+    }
+
+    for (const pattern of spec.blockPatterns || []) {
+      if (!testContents.some((content) => content.includes(pattern))) {
+        missingPatterns.push(pattern);
+      }
+    }
+
+    if (missingPatterns.length > 0) {
+      insufficient.push({
+        hookPath,
+        matchedTests: entry.matchedTests || [],
+        missingPatterns,
+        description: spec.description
+      });
+    }
+  }
+
+  return insufficient;
+}
+
+function validateRequiredPatternCoverage(report, configKey, config = {}, options = {}) {
+  const hookConfig = config[configKey] || {};
+  const insufficient = [];
+
+  for (const [hookPath, spec] of Object.entries(hookConfig)) {
+    const entry = (report.entries || []).find((candidate) => candidate.hookPath === hookPath);
+    if (!entry || !entry.covered) {
+      insufficient.push({
+        hookPath,
+        matchedTests: entry?.matchedTests || [],
+        missingPatterns: spec.requiredPatterns || [],
+        description: spec.description
+      });
+      continue;
+    }
+
+    const testContents = readMatchedTestContents(entry.matchedTests, options);
+    const missingPatterns = [];
+
+    for (const pattern of spec.requiredPatterns || []) {
+      if (!testContents.some((content) => content.includes(pattern))) {
+        missingPatterns.push(pattern);
+      }
+    }
+
+    if (missingPatterns.length > 0) {
+      insufficient.push({
+        hookPath,
+        matchedTests: entry.matchedTests || [],
+        missingPatterns,
+        description: spec.description
+      });
+    }
+  }
+
+  return insufficient;
+}
+
 function main() {
   const report = resolveCoverage();
   const insufficientBlocking = validateBlockingHookCoverage(report);
@@ -417,5 +517,8 @@ if (require.main === module) {
 module.exports = {
   collectActiveHookEntries,
   discoverHookTests,
-  resolveCoverage
+  resolveCoverage,
+  validateBlockingHookCoverage,
+  validateReadWriteHookCoverage,
+  validateRequiredPatternCoverage
 };

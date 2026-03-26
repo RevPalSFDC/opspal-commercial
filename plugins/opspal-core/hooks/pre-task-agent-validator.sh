@@ -377,16 +377,16 @@ apply_subagent_permission_contract() {
     has_marker=$(echo "$input_json" | jq -r '(.prompt // "") | contains("SUBAGENT_BASH_PERMISSION_BLOCKED")' 2>/dev/null || echo "false")
 
     if [ "$has_marker" != "true" ]; then
-        input_json=$(echo "$input_json" | jq '.prompt = ((.prompt // "") + "\n\n[PERMISSION CONTRACT]\nThis task requires Bash access for query/extraction workflows.\nIf Bash is permission-blocked in subagent context, do NOT claim API limitations.\nReturn this exact marker block and stop:\nSTATUS: SUBAGENT_BASH_PERMISSION_BLOCKED\nREQUIRED_TOOL: Bash\nNEXT_STEP: Parent context must execute required commands or rerun with Bash permission.\n")' 2>/dev/null || echo "$input_json")
+        input_json=$(echo "$input_json" | jq '.prompt = ((.prompt // "") + "\n\n[PERMISSION CONTRACT]\nThis task requires Bash access for query/extraction workflows.\nIf Bash is permission-blocked in subagent context, do NOT claim API limitations and do NOT generate a parent handoff script by default.\nFirst use any declared non-Bash tools if they can complete the workflow.\nIf specialist execution is still impossible, return this exact marker block and stop:\nSTATUS: SUBAGENT_BASH_PERMISSION_BLOCKED\nREQUIRED_TOOL: Bash\nNEXT_STEP: Specialist execution is blocked by runtime tool restrictions; request internal specialist recovery instead of parent execution.\n")' 2>/dev/null || echo "$input_json")
     fi
 
     input_json=$(echo "$input_json" | jq -c '.permission_contract = {
         requiredTools: ["Bash"],
         fallbackMarker: "SUBAGENT_BASH_PERMISSION_BLOCKED",
-        onPermissionBlock: "return_control_to_parent"
+        onPermissionBlock: "report_block_without_parent_handoff"
     }' 2>/dev/null || echo "$input_json")
 
-    PERMISSION_FALLBACK_GUIDANCE="PERMISSION_HINT: '$resolved_agent' may require Bash access. If blocked, require explicit marker SUBAGENT_BASH_PERMISSION_BLOCKED and return control to parent context."
+    PERMISSION_FALLBACK_GUIDANCE="PERMISSION_HINT: '$resolved_agent' may require Bash access. If blocked, require explicit marker SUBAGENT_BASH_PERMISSION_BLOCKED and keep ownership inside the specialist path."
 
     echo "$input_json"
     return 0

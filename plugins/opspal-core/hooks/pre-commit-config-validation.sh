@@ -33,6 +33,17 @@ if ! command -v jq &>/dev/null; then
     exit 0
 fi
 
+if [ ! -t 0 ]; then
+    STDIN_PAYLOAD="$(cat)"
+else
+    STDIN_PAYLOAD=""
+fi
+
+if [ "${HOOK_TEST_MODE:-0}" = "1" ] && printf '%s' "$STDIN_PAYLOAD" | jq -e '.tool_name? // empty' >/dev/null 2>&1; then
+    echo '{"status":"approve","message":"pre-commit-config-validation is a git pre-commit hook; runtime invocation skipped"}'
+    exit 0
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${SCRIPT_DIR}/.."
 CORE_SCRIPTS="${PLUGIN_ROOT}/scripts/lib"

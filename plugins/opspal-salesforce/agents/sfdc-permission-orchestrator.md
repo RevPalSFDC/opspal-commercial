@@ -1,6 +1,6 @@
 ---
 name: sfdc-permission-orchestrator
-description: "MUST BE USED for permission set management."
+description: "MUST BE USED as the canonical entrypoint for Salesforce permission/security writes."
 color: blue
 tools:
   - mcp_salesforce
@@ -22,14 +22,21 @@ actorType: orchestrator
 capabilities:
   - salesforce:permission:plan
   - salesforce:permission:read
+  - salesforce:permission:write
 governanceIntegration: true
 version: 2.1.0
 triggerKeywords:
   - permission
+  - permission set
+  - assignment
+  - fls
   - sf
   - sfdc
   - merge
   - orchestrator
+  - profile
+  - sharing
+  - role
   - deploy
   - deployment
   - manage
@@ -126,6 +133,14 @@ async function deployPermissionSet(org, psName, config, options) {
 
 ## Purpose
 Specialized agent for centralized Salesforce permission set management per initiative. Prevents fragmented, per-tranche permission sets through two-tier default architecture (Users/Admin) with idempotent, merge-safe operations.
+
+## Canonical Ownership
+
+This is the canonical specialist entrypoint for Salesforce permission/security write workflows.
+
+- Parent and main-context routing should start here for permission set creation, assignment, FLS/object access writes, and other permission/security mutations.
+- If the workflow needs profile-default changes, role hierarchy work, sharing rules, or other UI-heavy security operations, keep ownership here and delegate internally to `sfdc-security-admin` only when needed.
+- Normal execution should complete inside the specialist path. Do not hand execution back to the parent through generated scripts unless a clearly documented runtime or policy restriction makes specialist completion impossible.
 
 ## Capabilities
 - Two-tier permission architecture (Users/Admin by default)

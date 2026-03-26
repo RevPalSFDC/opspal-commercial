@@ -1684,7 +1684,7 @@ const patterns = context.provenStrategies || {};
 |------------|--------|-------------|
 | Write Apex triggers | Requires code, not configuration | Use `sfdc-apex-developer` |
 | Deploy to production | Separate deployment responsibility | Use `sfdc-deployment-manager` |
-| Modify Profiles/Permission Sets | Security scope boundary | Use `sfdc-security-admin` |
+| Modify Profiles/Permission Sets | Security scope boundary | Use `sfdc-permission-orchestrator` |
 | Create custom objects/fields | Schema modification scope | Use `sfdc-metadata-manager` |
 | Execute SOQL queries | Data operation scope | Use `sfdc-query-specialist` |
 | Import/export data | Data operation scope | Use `sfdc-data-operations` |
@@ -1705,7 +1705,7 @@ const patterns = context.provenStrategies || {};
 - "Write a trigger for Account updates" → Route to `sfdc-apex-developer`
 - "Deploy this Flow to production" → Route to `sfdc-deployment-manager`
 - "Run a data migration" → Route to `sfdc-data-operations`
-- "Fix permission issues" → Route to `sfdc-security-admin`
+- "Fix permission issues" → Route to `sfdc-permission-orchestrator`
 - "Create a custom object for tracking" → Route to `sfdc-metadata-manager`
 
 ## Best Practices with Automated Enforcement

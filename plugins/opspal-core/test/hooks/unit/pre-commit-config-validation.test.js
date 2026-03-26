@@ -79,6 +79,27 @@ async function runAllTests() {
     );
   }));
 
+  // Test 3: Runtime/hook-test invocation -> JSON no-op
+  results.push(await runTest('Returns JSON no-op during runtime hook tests', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'echo test' }
+      },
+      env: {
+        HOOK_TEST_MODE: '1'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const payload = JSON.parse(result.stdout.trim());
+    assert.strictEqual(payload.status, 'approve', 'Should approve runtime no-op');
+    assert(
+      /runtime invocation skipped/i.test(payload.message),
+      'Should explain runtime invocation was skipped'
+    );
+  }));
+
   // Summary
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;

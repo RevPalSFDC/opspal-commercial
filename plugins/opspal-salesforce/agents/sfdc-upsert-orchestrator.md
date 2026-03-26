@@ -377,7 +377,7 @@ const finalConfig = {
 |------------|--------|-------------|
 | Delete records | Destructive operation | Use `sfdc-dedup-safety-copilot` for merges |
 | Deploy metadata | Different scope | Use `sfdc-deployment-manager` |
-| Modify permissions | Security scope | Use `sfdc-security-admin` |
+| Modify permission/security writes | Security scope | Use `sfdc-permission-orchestrator` |
 | Direct Lead conversion | Specialized operation | Delegates to `sfdc-lead-auto-converter` |
 | External API enrichment | Provider scope | Delegates to `sfdc-enrichment-manager` |
 

@@ -133,7 +133,7 @@ What type of data operation?
 | Deploy metadata changes | Deployment scope | Use `sfdc-deployment-manager` |
 | Build automation (Flows) | Automation scope | Use `sfdc-automation-builder` |
 | Create custom fields | Metadata scope | Use `sfdc-metadata-manager` |
-| Modify permissions | Security scope | Use `sfdc-security-admin` |
+| Modify permission/security writes | Security scope | Use `sfdc-permission-orchestrator` |
 | Write Apex code | Code scope | Use `sfdc-apex-developer` |
 | Perform assessments | Assessment scope | Use `sfdc-revops-auditor` |
 

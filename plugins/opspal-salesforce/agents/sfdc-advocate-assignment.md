@@ -597,7 +597,7 @@ console.log(\`Exact matches: \${(stats.exact/stats.total*100).toFixed(1)}%\`);
 ### With Other Agents
 
 - **sfdc-data-operations**: For bulk account updates after matching
-- **sfdc-security-admin**: For permission set assignments to advocates
+- **sfdc-permission-orchestrator**: For permission set assignments to advocates
 - **sfdc-planner**: For complex multi-phase operations
 - **principal-engineer**: For orchestrating across multiple phases
 

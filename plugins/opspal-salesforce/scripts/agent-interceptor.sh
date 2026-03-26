@@ -66,7 +66,7 @@ get_recommended_agent() {
         ["conflict|error|failed"]="sfdc-conflict-resolver"
         ["merge|consolidate|combine"]="sfdc-merge-orchestrator"
         ["field.*create|object.*create"]="sfdc-metadata-manager"
-        ["permission|security|profile"]="sfdc-security-admin"
+        ["permission|security|profile"]="sfdc-permission-orchestrator"
         ["bulk|import|export|data.*load"]="sfdc-data-operations"
         ["apex|trigger|class"]="sfdc-apex-developer"
         ["flow|automation|workflow"]="sfdc-automation-builder"
@@ -130,8 +130,8 @@ suggest_agent() {
         "sfdc-metadata-manager")
             echo -e "${CYAN}→ Manages objects and fields with dependency checking${NC}"
             ;;
-        "sfdc-security-admin")
-            echo -e "${CYAN}→ Handles permissions with security compliance${NC}"
+        "sfdc-permission-orchestrator")
+            echo -e "${CYAN}→ Canonical entrypoint for permission/security writes with specialist-owned execution${NC}"
             ;;
         *)
             echo -e "${CYAN}→ Specialized agent for this operation type${NC}"

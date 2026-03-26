@@ -64,7 +64,7 @@ list_agents() {
 
     # Security & Compliance
     echo -e "\n${BOLD}🔒 Security & Compliance${RESET}"
-    echo -e "  ${CYAN}sfdc-security-admin${RESET} - Permissions and profiles"
+    echo -e "  ${CYAN}sfdc-permission-orchestrator${RESET} - Canonical permission/security write orchestration"
     echo -e "  ${CYAN}sfdc-compliance-officer${RESET} - Compliance and regulations"
 
     # Analytics & Reporting

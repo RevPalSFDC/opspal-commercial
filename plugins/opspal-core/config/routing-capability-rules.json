@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "salesforce": {
     "rules": [
       {
@@ -8,9 +8,10 @@
           "salesforce:permission:write"
         ],
         "allowed_actor_types": [
+          "orchestrator",
           "specialist"
         ],
-        "preferred_agent": "opspal-salesforce:sfdc-security-admin",
+        "preferred_agent": "opspal-salesforce:sfdc-permission-orchestrator",
         "escalation": "block"
       },
       {

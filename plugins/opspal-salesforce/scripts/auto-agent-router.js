@@ -276,7 +276,7 @@ class AutoAgentRouter {
             'sfdc-conflict-resolver': /conflict|error|failed|incompatible/i,
             'sfdc-data-operations': /data|import|export|bulk|migration/i,
             'sfdc-metadata-manager': /metadata|field|object|validation/i,
-            'sfdc-security-admin': /permission|profile|security|access|sharing/i,
+            'sfdc-permission-orchestrator': /permission|profile|security|access|sharing/i,
             'sfdc-apex-developer': /apex|trigger|class|test|coverage/i,
             'sfdc-automation-builder': /flow|automation|workflow|process/i,
             'sfdc-reports-dashboards': /report|dashboard|analytics|chart/i,

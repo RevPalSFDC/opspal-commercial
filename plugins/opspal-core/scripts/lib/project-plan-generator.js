@@ -21,7 +21,7 @@ class ProjectPlanGenerator {
       // Salesforce agents
       'sfdc-metadata-manager': ['object creation', 'field creation', 'layout', 'page layout', 'record type', 'picklist'],
       'sfdc-data-operations': ['data import', 'data migration', 'bulk update', 'data loader', 'csv import'],
-      'sfdc-security-admin': ['profile', 'permission set', 'sharing rule', 'field level security', 'object permissions'],
+      'sfdc-permission-orchestrator': ['profile', 'permission set', 'sharing rule', 'field level security', 'object permissions'],
       'sfdc-automation-builder': ['flow', 'process builder', 'workflow rule', 'approval process', 'automation'],
       'sfdc-apex-developer': ['apex class', 'trigger', 'test class', 'batch apex', 'scheduled apex'],
       'sfdc-lightning-developer': ['lwc', 'aura', 'lightning component', 'lightning web component'],

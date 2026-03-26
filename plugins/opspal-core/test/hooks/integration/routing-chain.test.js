@@ -515,7 +515,7 @@ async function runAllTests() {
     });
   }));
 
-  results.push(await runTest('Permission routing denies mutating MCP tool until approved security specialist clears it', async () => {
+  results.push(await runTest('Permission routing denies mutating MCP tool until the canonical orchestrator clears it', async () => {
     await assertPendingRouteLifecycle({
       name: 'permission route',
       prompt: 'Create a new permission set with FLS in Salesforce for account fields',
@@ -524,11 +524,47 @@ async function runAllTests() {
         input: { assigneeId: '005xx', permissionSetId: '0PSxx' }
       },
       expectedRouteAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
-      approvedTaskAgent: 'opspal-salesforce:sfdc-security-admin',
+      approvedTaskAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
       envExtra: {
         ACTIVE_INTAKE_MODE: 'suggest'
       }
     });
+  }));
+
+  results.push(await runTest('Permission/security write routing auto-delegates helper Agent calls to the canonical orchestrator', async () => {
+    const env = createIsolatedEnv({
+      ACTIVE_INTAKE_MODE: 'suggest'
+    });
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const validator = new HookTester(ROUTING_CHAIN[1]);
+
+    const routed = await router.run({
+      input: { userPrompt: 'Create a new permission set with FLS in Salesforce for account fields' },
+      env
+    });
+    assert.strictEqual(routed.exitCode, 0, 'Router should complete');
+    assert.strictEqual(routed.output?.metadata?.suggestedAgent, 'opspal-salesforce:sfdc-permission-orchestrator', 'Should route to the canonical permission orchestrator');
+    assert.strictEqual(routed.output?.metadata?.autoDelegationEligible, true, 'Permission/security write route should activate the auto-delegation bridge');
+
+    const autoDelegated = await validator.run({
+      input: createAgentEvent({
+        subagent_type: 'Plan',
+        prompt: 'Create a new permission set with FLS in Salesforce for account fields'
+      }),
+      env
+    });
+
+    assert.strictEqual(autoDelegated.exitCode, 0, 'Validator should keep Agent handling structured');
+    assert.strictEqual(
+      autoDelegated.output?.hookSpecificOutput?.updatedInput?.subagent_type,
+      'opspal-salesforce:sfdc-permission-orchestrator',
+      'Helper Agent call should be rewritten to the canonical permission specialist'
+    );
+    assert(
+      (autoDelegated.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
+      'Validator should explain that the permission route was auto-delegated'
+    );
+    assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', 'Auto-delegated permission specialist should clear the pending route');
   }));
 
   results.push(await runTest('HubSpot assessment routing denies mutating MCP tool until assessment specialist clears it', async () => {

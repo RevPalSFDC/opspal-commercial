@@ -97,7 +97,7 @@ declare -A AGENT_PATTERNS=(
     ["merge.*field|consolidate.*object|combine"]="sfdc-merge-orchestrator"
     ["complex|planning|strategy|roadmap"]="sfdc-planner"
     ["metadata|field|object|validation.*rule"]="sfdc-metadata-manager"
-    ["permission|profile|security|access|field.*level.*security|FLS"]="sfdc-security-admin"
+    ["permission|profile|security|access|field.*level.*security|FLS"]="sfdc-permission-orchestrator"
     ["record.*type.*default|default.*record.*type|profile.*record.*type"]="sfdc-security-admin"
     ["data.*import|bulk|export|migration"]="sfdc-data-operations"
     ["apex|trigger|class|test.*coverage"]="sfdc-apex-developer"
@@ -155,9 +155,9 @@ if [ ${#SUGGESTED_AGENTS[@]} -gt 0 ]; then
                 echo -e "    ${NC}Handles bulk updates, field calculations, and data operations${NC}"
                 echo -e "    ${YELLOW}⚡ Includes pre-validation to check if operation already complete${NC}"
                 ;;
-            "sfdc-security-admin")
-                echo -e "    ${NC}Manages permissions, profiles, FLS, and security settings${NC}"
-                echo -e "    ${YELLOW}⚠️  Profile operations: Agent will recommend UI-based workflow${NC}"
+            "sfdc-permission-orchestrator")
+                echo -e "    ${NC}Canonical entrypoint for permission/security writes and permission set orchestration${NC}"
+                echo -e "    ${YELLOW}⚠️  Profile-default and UI-only security work may still delegate internally to sfdc-security-admin${NC}"
                 ;;
         esac
     done
@@ -176,18 +176,18 @@ fi
 declare -A MANDATORY_OPERATIONS=(
     ["(deploy|push|release).*production|production.*(deploy|push|release)"]="release-coordinator"
     ["delete.*(field|object|class)"]="sfdc-metadata-manager"
-    ["permission.*set.*(create|update)|create.*permission.*set|update.*permission.*set"]="sfdc-security-admin"
+    ["permission.*set.*(create|update)|create.*permission.*set|update.*permission.*set"]="sfdc-permission-orchestrator"
     ["bulk.*(update|insert|delete)|(update|insert|delete).*[0-9]{3,}.*record"]="sfdc-data-operations"
     ["(create|update|modify).*(flow|workflow)"]="sfdc-automation-builder"
     ["revops.*audit|cpq.*assess"]="sfdc-revops-auditor or sfdc-cpq-assessor"
     # NEW: Direct metadata operations (from session reflection)
-    ["(create|update|modify|change).*(profile|permission)"]="sfdc-security-admin"
+    ["(create|update|modify|change).*(profile|permission)"]="sfdc-permission-orchestrator"
     ["(create|update|modify).*(tab|custom tab)"]="sfdc-ui-customizer or sfdc-orchestrator"
     ["(configure|update|modify).*(app|application|custom application)"]="sfdc-ui-customizer or sfdc-orchestrator"
     ["tab.*visibility|visibility.*tab|(default on|default off|hidden).*tab"]="sfdc-security-admin"
     ["profile.*(update|modify|change)|update.*profile.*setting"]="sfdc-security-admin"
     ["(set|change|update).*(default.*record.*type|record.*type.*default)"]="sfdc-security-admin"
-    ["profile.*permission|FLS|field.*level.*security"]="sfdc-security-admin"
+    ["profile.*permission|FLS|field.*level.*security"]="sfdc-permission-orchestrator"
     ["(modify|update|change).*profile.*for.*(all|multiple|many)"]="sfdc-security-admin"
     # NEW: Bulk field calculation operations (from session reflection 2025-10-06)
     ["update.*[0-9]{2,}.*(renewal|opportunit|account|contact)"]="sfdc-data-operations"

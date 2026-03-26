@@ -180,7 +180,7 @@ function selectAgent(requirement) {
     // Salesforce agents
     'salesforce-metadata': ['object creation', 'field creation', 'layout', 'page layout'],
     'sfdc-data-operations': ['data import', 'data migration', 'bulk update'],
-    'sfdc-security-admin': ['profile', 'permission set', 'sharing rule'],
+    'sfdc-permission-orchestrator': ['profile', 'permission set', 'sharing rule'],
     'sfdc-automation-builder': ['flow', 'process builder', 'workflow rule'],
     'sfdc-apex-developer': ['apex class', 'trigger', 'test class'],
     'sfdc-lightning-developer': ['lwc', 'aura', 'lightning component'],

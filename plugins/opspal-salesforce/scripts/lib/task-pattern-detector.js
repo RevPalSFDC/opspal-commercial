@@ -138,7 +138,7 @@ const AGENT_PATTERNS = {
             /access.*control/i,
             /grant.*access/i
         ],
-        agent: 'sfdc-security-admin',
+        agent: 'sfdc-permission-orchestrator',
         base_complexity: 0.6,
         risk_level: 'high'
     },

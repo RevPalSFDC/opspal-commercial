@@ -59,7 +59,7 @@ suggest_agent() {
     elif echo "$input" | grep -qi "field\|object\|validation\|page layout\|record type"; then
         echo "sfdc-metadata-manager"
     elif echo "$input" | grep -qi "user\|permission\|profile\|role\|sharing"; then
-        echo "sfdc-security-admin"
+        echo "sfdc-permission-orchestrator"
     elif echo "$input" | grep -qi "flow\|workflow\|approval\|process builder"; then
         echo "sfdc-automation-builder"
     elif echo "$input" | grep -qi "import\|export\|data load\|bulk"; then

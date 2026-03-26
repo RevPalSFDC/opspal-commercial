@@ -641,7 +641,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
       (isSfWriteLikeCommand(normalizedCommand) && PERMISSION_SECURITY_OBJECT_REGEX.test(normalizedCommand))) {
       return buildRoutingDecision('sf_permission_security_write', {
         decision: 'block',
-        requiredAgent: 'opspal-salesforce:sfdc-security-admin',
+        requiredAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
         reason: 'Direct Salesforce permission/security write detected.'
       }, options);
     }

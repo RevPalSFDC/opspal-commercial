@@ -66,21 +66,20 @@ When a task asks you to execute `sf project deploy`:
 1. Analyze scope, prerequisites, and validation requirements.
 2. Run pre-deployment validation checks.
 3. **Attempt to execute the deploy directly using Bash.** The `pre-deploy-agent-context-check` hook allows deploys from any agent context.
-4. If Bash is unavailable (runtime withholds it), return a parent-context handoff:
+4. If Bash is unavailable (runtime withholds it), first try any declared non-Bash execution path or internal specialist continuation. Only if a clearly documented runtime or policy restriction still prevents specialist completion should you emit a specialist-held execution block:
 
 ```text
-STATUS: PARENT_CONTEXT_DEPLOY_REQUIRED
+STATUS: SPECIALIST_EXECUTION_BLOCKED
 TARGET_ORG: <target org>
-DEPLOY_COMMAND: <exact sf project deploy command>
-FOLLOWUP_COMMANDS:
-- <verification/report commands>
-WHY: Bash not available in this agent context. Parent/main context must execute.
+REQUIRED_TOOL: Bash
+BLOCK_REASON: <exact runtime or policy restriction>
+NEXT_STEP: Continue specialist recovery or escalate through release coordination. Do not ask the parent to run a generated deploy script in the normal path.
 ```
 
-Also emit a structured JSON block so the parent can parse it programmatically:
+Also emit a structured JSON block so the restriction is machine-readable:
 
 ```json
-{"status":"PARENT_CONTEXT_DEPLOY_REQUIRED","targetOrg":"<org>","deployCommand":"<cmd>","followupCommands":["<cmd1>"],"reason":"Bash not available in sub-agent context"}
+{"status":"SPECIALIST_EXECUTION_BLOCKED","targetOrg":"<org>","requiredTool":"Bash","reason":"Runtime or policy restriction blocked specialist execution"}
 ```
 
 5. For planning-only tasks, produce the checklist, validation notes, rollback guidance, and command set without executing.
@@ -1526,7 +1525,7 @@ for (const flowFile of flowsInPackage) {
 | Create metadata components | Metadata authoring scope | Use `sfdc-metadata-manager` |
 | Write Apex code | Code vs deployment scope | Use `sfdc-apex-developer` |
 | Build automation (Flows) | Automation authoring scope | Use `sfdc-automation-builder` |
-| Manage permissions | Security configuration scope | Use `sfdc-security-admin` |
+| Manage permission/security writes | Canonical security-write entrypoint | Use `sfdc-permission-orchestrator` |
 | Execute data migrations | Data vs deployment scope | Use `sfdc-data-operations` |
 | Resolve complex conflicts | Conflict analysis scope | Use `sfdc-conflict-resolver` |
 

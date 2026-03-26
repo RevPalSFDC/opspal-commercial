@@ -60,10 +60,10 @@ declare -A REQUIRED_AGENTS=(
     ["production_deploy"]="sfdc-deployment-manager or release-coordinator"
     ["delete_operations"]="sfdc-metadata-manager"
     ["bulk_operations"]="sfdc-data-operations"
-    ["permission_changes"]="sfdc-security-admin"
+    ["permission_changes"]="sfdc-permission-orchestrator"
     ["data_migration"]="sfdc-data-operations"
     ["metadata_destruction"]="sfdc-metadata-manager with sfdc-planner"
-    ["security_changes"]="sfdc-security-admin"
+    ["security_changes"]="sfdc-permission-orchestrator"
     ["org_changes"]="sfdc-orchestrator"
 )
 

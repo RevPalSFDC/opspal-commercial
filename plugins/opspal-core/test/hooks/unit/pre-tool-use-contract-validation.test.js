@@ -461,13 +461,40 @@ async function runAllTests() {
 
     assertStructuredRoutingDeny(result, 'ROUTING_SPECIALIST_REQUIRED', 'Direct permission writes');
     assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('sfdc-security-admin'),
-      'Should recommend the mandatory permission/security agent'
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('sfdc-permission-orchestrator'),
+      'Should recommend the canonical permission/security orchestrator'
+    );
+    assert(
+      !(result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('sfdc-security-admin'),
+      'Should not surface a competing security-admin recommendation in the primary deny message'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('Do not recover by having the parent context run a generated script'),
+      'Should steer recovery away from parent-context script handoff'
     );
   }));
 
-  // Test 5: Allows permission writes when already inside approved agent
-  results.push(await runTest('Allows permission writes for approved permission agents', async () => {
+  // Test 5: Allows permission writes when already inside canonical agent
+  results.push(await runTest('Allows permission writes for the canonical permission orchestrator', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data update record --sobject PermissionSetAssignment --values "Id=0PaXX PermissionSetId=0PSxx"'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-permission-orchestrator'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should allow execution for approved agents');
+  }));
+
+  results.push(await runTest('Allows permission writes for delegated security-admin specialists', async () => {
     const result = await tester.run({
       input: {
         tool: 'Bash',
@@ -483,7 +510,7 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Should allow execution for approved agents');
+    assert.strictEqual(result.exitCode, 0, 'Delegated security-admin execution should remain allowed inside the specialist path');
   }));
 
   // Test 6: Blocks direct Lead/Contact/Account upsert-import workflows

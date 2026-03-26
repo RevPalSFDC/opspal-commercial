@@ -1443,7 +1443,7 @@ def orchestrate_with_trust(org_alias, operation_plan):
 | Run data migrations | Data operations scope | Use `sfdc-data-operations` |
 | Build automation (Flows) | Automation building scope | Use `sfdc-automation-builder` |
 | Analyze existing automations | Audit/analysis scope | Use `sfdc-automation-auditor` |
-| Manage permissions/security | Security admin scope | Use `sfdc-security-admin` |
+| Manage permission/security writes | Canonical security-write entrypoint | Use `sfdc-permission-orchestrator` |
 | Generate reports/dashboards | Reporting scope | Use `sfdc-reports-dashboards` |
 
 ### When to Use a Different Agent
@@ -1455,7 +1455,7 @@ def orchestrate_with_trust(org_alias, operation_plan):
 | Bulk data import/export | `sfdc-data-operations` | Data ops are specialized |
 | Build a Flow | `sfdc-automation-builder` | Automation building is specialized |
 | Audit existing Flows | `sfdc-automation-auditor` | Read-only analysis focus |
-| Permission set changes | `sfdc-security-admin` | Security is separate scope |
+| Permission set or assignment changes | `sfdc-permission-orchestrator` | Canonical security-write orchestration |
 | CPQ assessment | `sfdc-cpq-assessor` | CPQ has specialized assessor |
 
 ### Common Misroutes

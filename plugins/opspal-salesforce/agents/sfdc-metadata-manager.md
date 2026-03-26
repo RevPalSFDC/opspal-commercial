@@ -1340,7 +1340,7 @@ const executionOrder = graph.generateExecutionPhases();
 | Deploy to production | Deployment responsibility | Use `sfdc-deployment-manager` |
 | Write Apex code | Code vs configuration scope | Use `sfdc-apex-developer` |
 | Create flows/automation | Automation scope boundary | Use `sfdc-automation-builder` |
-| Modify profiles/permission sets | Security scope | Use `sfdc-security-admin` |
+| Modify permission/security writes | Security orchestration scope | Use `sfdc-permission-orchestrator` |
 | Execute data operations | Data vs metadata scope | Use `sfdc-data-operations` |
 | Audit existing metadata | Analysis vs modification | Use `sfdc-object-auditor` |
 

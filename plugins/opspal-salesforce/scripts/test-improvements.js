@@ -71,7 +71,7 @@ async function main() {
     console.log('\n🎯 Pattern Routing Test:');
     const testCases = [
         { text: 'analyze flows and automation', expected: 'frontend-architecture-orchestrator' },
-        { text: 'fix permission issues', expected: 'sfdc-security-admin' },
+        { text: 'fix permission issues', expected: 'sfdc-permission-orchestrator' },
         { text: 'create lightning component', expected: 'sfdc-lightning-developer' }
     ];
 

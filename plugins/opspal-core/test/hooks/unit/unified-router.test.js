@@ -356,6 +356,20 @@ async function runAllTests() {
     assert.strictEqual(readRoutingState(env), null, 'Recommended routes should stay advisory and not persist pending state');
   }));
 
+  results.push(await runTest('Routes permission/security write prompts through the mandatory canonical specialist path', async () => {
+    const env = createIsolatedEnv();
+    const result = await tester.run({
+      input: { userPrompt: 'Create a new permission set with FLS in Salesforce for account fields' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.output?.metadata?.suggestedAgent, 'opspal-salesforce:sfdc-permission-orchestrator', 'Should route to the canonical permission orchestrator');
+    assertMandatorySpecialistRoute(result.output?.metadata, 'Permission/security write routing');
+    assert.strictEqual(result.output?.metadata?.autoDelegationEligible, true, 'Permission/security write routing should stage the auto-delegation bridge');
+    assertPendingExecutionRoute(readRoutingState(env), 'opspal-salesforce:sfdc-permission-orchestrator');
+  }));
+
   results.push(await runTest('Routes Fireflies transcript analysis prompts to the meeting intelligence specialist', async () => {
     const env = createIsolatedEnv();
     const result = await tester.run({

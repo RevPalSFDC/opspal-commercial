@@ -29,7 +29,7 @@ const MANDATORY_PATTERNS = {
     'production.*deploy': 'release-coordinator',
     'delete.*(field|object|class)': 'sfdc-metadata-manager',
     'bulk.*(update|insert|delete)': 'sfdc-data-operations',
-    'permission.*set.*(create|update)': 'sfdc-security-admin',
+    'permission.*set.*(create|update)': 'sfdc-permission-orchestrator',
     '(create|update).*flow': 'sfdc-automation-builder',
     'revops.*audit': 'sfdc-revops-auditor'
 };
@@ -43,7 +43,7 @@ const KEYWORD_PATTERNS = {
     'apex|trigger': 'sfdc-apex-developer',
     'report|dashboard': 'sfdc-reports-dashboards',
     'flow|automation': 'sfdc-automation-builder',
-    'permission|security': 'sfdc-security-admin'
+    'permission|security': 'sfdc-permission-orchestrator'
 };
 
 /**

@@ -544,7 +544,7 @@ enforce_pending_route_gate() {
 
     emit_pretool_decision \
       "deny" \
-      "ROUTING_REQUIRED_BEFORE_OPERATION: Use the Agent tool with subagent_type='${required_agent:-unknown}' before direct execution. Approved family: ${clearance_agents:-none}. Current guidanceAction=${action:-unknown}." \
+      "ROUTING_REQUIRED_BEFORE_OPERATION: This workflow is still staged for '${required_agent:-unknown}'. Continue through that specialist route before operational execution. Current guidanceAction=${action:-unknown}." \
       "$additional_context"
     return 1
 }
@@ -900,6 +900,8 @@ enforce_mandatory_routing() {
 
     # Enforce blocking when a mandatory rule matched and caller is not approved
     if [ -n "$rule_id" ]; then
+        local routing_reason_message=""
+        local routing_context_message=""
         clearance_agents_display=$(echo "$clearance_agents_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
         required_capabilities_display=$(echo "$required_capabilities_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
         allowed_actor_types_display=$(echo "$allowed_actor_types_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
@@ -917,10 +919,19 @@ enforce_mandatory_routing() {
         fi
 
         emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
+
+        if [[ "$rule_id" == "sf_permission_security_write" ]]; then
+            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') so the canonical permission/security specialist keeps execution ownership end-to-end. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}."
+            routing_context_message="Permission/security writes stay on the specialist path after routing. Do not recover by having the parent context run a generated script."
+        else
+            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') before operational execution. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}. Eligible agents: ${clearance_agents_display:-$required_agent}."
+            routing_context_message="Direct operational workflow blocked until an approved specialist agent is used."
+        fi
+
         emit_pretool_decision \
           "deny" \
-          "ROUTING_SPECIALIST_REQUIRED: $reason Use the Agent tool with subagent_type='${required_agent}' before direct execution. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}. Eligible agents: ${clearance_agents_display:-$required_agent}." \
-          "Direct operational workflow blocked until an approved specialist agent is used."
+          "$routing_reason_message" \
+          "$routing_context_message"
         return 1
     fi
 
