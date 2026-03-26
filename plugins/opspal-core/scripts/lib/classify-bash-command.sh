@@ -104,6 +104,28 @@ is_sf_deploy_command() {
   return 1
 }
 
+# Classify metadata retrieve commands — these download metadata but do NOT mutate the org.
+# Treated as 'retrieve' risk level (below deploy, above read) so production policy can
+# allow them without PRODUCTION_DETECTED escalation while still logging the operation.
+is_sf_retrieve_command() {
+  local command_lower
+  command_lower="$(bash_classifier_to_lower "$1")"
+
+  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+project[[:space:]]+retrieve([[:space:]]|$)'; then
+    return 0
+  fi
+
+  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:source:retrieve([[:space:]]|$)'; then
+    return 0
+  fi
+
+  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+project[[:space:]]+generate[[:space:]]+manifest([[:space:]]|$)'; then
+    return 0
+  fi
+
+  return 1
+}
+
 uses_sf_bulk_api_contract() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
@@ -179,6 +201,13 @@ classify_sf_command() {
 
   if is_sf_deploy_command "$command"; then
     printf 'deploy'
+    return 0
+  fi
+
+  # Metadata retrieve is non-mutating — classify as 'retrieve' (treated as read-only
+  # for production policy, but logged distinctly from data queries).
+  if is_sf_retrieve_command "$command"; then
+    printf 'retrieve'
     return 0
   fi
 
@@ -334,10 +363,11 @@ _higher_risk_classification() {
   # Map to numeric risk levels
   _risk_level() {
     case "$1" in
-      bulk-mutate) echo 7 ;;
-      deploy)      echo 6 ;;
-      mutate)      echo 5 ;;
-      permission)  echo 4 ;;
+      bulk-mutate) echo 8 ;;
+      deploy)      echo 7 ;;
+      mutate)      echo 6 ;;
+      permission)  echo 5 ;;
+      retrieve)    echo 4 ;;
       debug)       echo 3 ;;
       read)        echo 2 ;;
       *)           echo 1 ;;
@@ -445,7 +475,10 @@ is_read_only_command() {
   # Use chain-aware classification for SF commands
   chain_classification="$(classify_command_chain "$1")"
   case "$chain_classification" in
-    read|debug)
+    read|debug|retrieve)
+      # read: data queries, sobject describe, org display
+      # debug: apex tail logs
+      # retrieve: metadata download (non-mutating — downloads XML but does not change org state)
       return 0
       ;;
     unknown)

@@ -1467,6 +1467,39 @@ def orchestrate_with_trust(org_alias, operation_plan):
 - "Build a Screen Flow" → Route to `sfdc-automation-builder`
 - "Check if this Flow has issues" → Route to `sfdc-automation-auditor`
 
+### MANDATORY: Anti-Improvisation Guardrail for Specialist Delegation
+
+**When you delegate investigation/audit work to a specialist agent (sfdc-automation-auditor, sfdc-territory-discovery, sfdc-discovery, sfdc-state-discovery) and the specialist fails or returns incomplete results:**
+
+1. **You MUST NOT run the specialist's core investigation queries yourself.** You are the orchestrator — you coordinate, you do not become the hidden execution engine.
+2. **You MUST NOT run `sf data query --use-tooling-api` queries against the org** to fill in gaps left by a failed specialist investigation. That is the specialist's job.
+3. **If the specialist returned without executing**, re-delegate to the same specialist with explicit instructions: "Execute all approved read-only queries. Do not return plans."
+4. **If re-delegation also fails**, report the delegation failure to the user with the specific error. Do not silently produce investigation results from your own improvised queries.
+5. **You MAY** run simple validation queries (e.g., `sf org display`, `sf sobject list`) for coordination purposes. You MUST NOT run Tooling API audit queries (FlowDefinitionView, WorkflowRule, ValidationRule, ApexTrigger) that are the specialist's responsibility.
+
+**Anti-pattern (PROHIBITED):**
+```
+Specialist returns "Here are the queries that should be run"
+→ Orchestrator runs those queries itself
+→ Orchestrator produces investigation report from its own results
+This is WRONG. The orchestrator has become the hidden execution engine.
+```
+
+**Required pattern:**
+```
+Specialist fails to execute
+→ Orchestrator re-delegates with clarified instructions
+→ If re-delegation fails → report failure to user
+→ Orchestrator NEVER runs the specialist's core investigation queries
+```
+
+**Execution Receipt Verification:**
+Investigation specialists using `investigation-fan-out.js` or `safeExecMultipleQueries` automatically produce an execution receipt (SHA-256-signed). The `post-investigation-execution-proof.sh` hook verifies this receipt on SubagentStop. When evaluating specialist results:
+- **Valid receipt** → accept the result as proven execution
+- **Invalid/tampered receipt** → reject, re-delegate or surface integrity failure
+- **Missing receipt** → treat with lower confidence; the hook falls back to text heuristics but warns
+- **Never** accept plan-only output (no receipt, no execution evidence) as successful investigation
+
 ## 🎯 MANDATORY: Flow Architecture v2.0 Pattern Enforcement
 
 **ALL FLOW OPERATIONS MUST FOLLOW v2.0 CENTRAL MASTER PATTERNS**

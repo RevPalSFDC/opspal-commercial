@@ -241,6 +241,46 @@
     }
   },
 
+  "production_operation_tiers": {
+    "_description": "Explicit classification of production operations into 3 tiers. The task-graph-policy-enforcer uses classify-bash-command.sh to map sf CLI commands to these tiers.",
+    "tier_1_read_only": {
+      "description": "Non-mutating data queries and org inspection. Always allowed on production without escalation.",
+      "classifier_results": ["read", "debug"],
+      "examples": [
+        "sf data query --target-org production",
+        "sf sobject describe Account --target-org production",
+        "sf sobject list --target-org production",
+        "sf org display --target-org production",
+        "sf apex tail --target-org production"
+      ],
+      "policy": "allow",
+      "log_as": "read_only_production_query"
+    },
+    "tier_2_metadata_retrieve": {
+      "description": "Metadata download operations. Non-mutating (downloads XML to local filesystem, does not change org state). Allowed on production without escalation.",
+      "classifier_results": ["retrieve"],
+      "examples": [
+        "sf project retrieve start --target-org production",
+        "sf project generate manifest --target-org production"
+      ],
+      "policy": "allow",
+      "log_as": "read_only_production_retrieve"
+    },
+    "tier_3_mutation": {
+      "description": "Operations that modify org state. Triggers PRODUCTION_DETECTED escalation.",
+      "classifier_results": ["deploy", "mutate", "bulk-mutate", "permission"],
+      "examples": [
+        "sf project deploy start --target-org production",
+        "sf data create record --target-org production",
+        "sf data update record --target-org production",
+        "sf data delete record --target-org production",
+        "sf org assign permset --target-org production"
+      ],
+      "policy": "escalate_to_critical",
+      "log_as": "PRODUCTION_DETECTED"
+    }
+  },
+
   "escalation_rules": {
     "production_detection": {
       "salesforce": {

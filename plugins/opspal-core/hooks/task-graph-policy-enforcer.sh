@@ -241,9 +241,21 @@ check_production_access() {
     # Allow read-only SF CLI operations against production orgs without escalation.
     # Agents need non-destructive queries/describes for investigation and auditing.
     # Mutating commands (create, update, delete, deploy) still trigger escalation.
+    #
+    # Production read-only policy (3 tiers):
+    #   1. read/debug  — data queries, sobject describe, org display, apex tail → always allowed
+    #   2. retrieve    — metadata download (sf project retrieve) → allowed (non-mutating)
+    #   3. deploy/mutate/delete → PRODUCTION_DETECTED escalation
     if is_read_only_command "$TOOL_ARGS"; then
-        log_decision "allow" "read_only_production_query"
-        echo "INFO: Read-only SF CLI operation allowed on production org (${target_alias:-production})" >&2
+        local chain_class
+        chain_class="$(classify_command_chain "$TOOL_ARGS" 2>/dev/null || echo 'read')"
+        if [ "$chain_class" = "retrieve" ]; then
+            log_decision "allow" "read_only_production_retrieve"
+            echo "INFO: Metadata retrieve (non-mutating) allowed on production org (${target_alias:-production})" >&2
+        else
+            log_decision "allow" "read_only_production_query"
+            echo "INFO: Read-only SF CLI operation allowed on production org (${target_alias:-production})" >&2
+        fi
         return 1
     fi
 

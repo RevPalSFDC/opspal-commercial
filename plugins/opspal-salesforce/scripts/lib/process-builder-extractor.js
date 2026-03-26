@@ -37,6 +37,7 @@ class ProcessBuilderExtractor {
         console.log('  Extracting Process Builder processes...');
 
         // Query Process Builder flows (ProcessType = 'Workflow' or 'AutoLaunchedFlow')
+        // Primary: FlowDefinitionView. Fallback: Flow object (if FDV unavailable).
         const query = `
             SELECT DurableId, ActiveVersionId, LatestVersionId,
                    ProcessType, DeveloperName, NamespacePrefix,
@@ -47,12 +48,35 @@ class ProcessBuilderExtractor {
             ORDER BY DeveloperName
         `;
 
-        const result = this.execSfCommand(
+        let result = this.execSfCommand(
             `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
         );
 
-        if (!result?.result?.records) {
-            console.log('    No Process Builder processes found');
+        // If FlowDefinitionView failed (result is null), try the Flow object as fallback
+        if (!result) {
+            console.log('    FlowDefinitionView query failed — trying Flow object fallback...');
+            const fallbackQuery = `
+                SELECT Id, DefinitionId, ProcessType, Status, VersionNumber
+                FROM Flow
+                WHERE Status = 'Active'
+                  AND ProcessType IN ('Workflow', 'AutoLaunchedFlow')
+                ORDER BY ProcessType
+            `;
+            result = this.execSfCommand(
+                `sf data query --query "${fallbackQuery}" --use-tooling-api --json --target-org ${this.orgAlias}`
+            );
+
+            if (!result?.result?.records) {
+                // Both primary and fallback failed — this is NOT a confirmed zero-count
+                console.warn('    ⚠ Both FlowDefinitionView and Flow queries failed — cannot confirm process count');
+                console.warn('    ⚠ Returning empty array (query failure, not confirmed zero-count)');
+                return [];
+            }
+            console.log(`    ✓ Flow fallback succeeded`);
+        }
+
+        if (!result?.result?.records || result.result.records.length === 0) {
+            console.log('    No Process Builder processes found (confirmed zero-count)');
             return [];
         }
 

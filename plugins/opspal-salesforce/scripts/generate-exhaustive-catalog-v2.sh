@@ -21,12 +21,20 @@ echo -e "\n[2/8] Querying ALL Apex Classes..."
 sf data query --query "SELECT Id, Name, Status, IsValid, ApiVersion, LengthWithoutComments, CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name FROM ApexClass WHERE NamespacePrefix = null ORDER BY Name" --target-org "$ORG_ALIAS" --result-format json > "$OUTPUT_DIR/apex_classes.json"
 
 # 3. Query ALL Flows (including Process Builders) with corrected fields
+# NOTE: TriggerType is NOT a field on FlowDefinitionView — it exists on the Flow (version) object.
+# TriggerObjectOrEvent.QualifiedApiName may not be available in all API versions.
+# Use safe field set; query Flow object separately for TriggerType if needed.
 echo -e "\n[3/8] Querying ALL Flows and Process Builders..."
-sf data query --query "SELECT Id, DeveloperName, Label, ProcessType, Status, VersionNumber, Description, LastModifiedDate, LastModifiedBy, IsActive, IsDeleted, IsOverridable, IsTemplate, TriggerObjectOrEvent.QualifiedApiName, TriggerOrder, TriggerType FROM FlowDefinitionView ORDER BY ProcessType, Label" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/flows.json"
+sf data query --query "SELECT Id, DeveloperName, Label, ProcessType, Status, VersionNumber, Description, LastModifiedDate, IsActive FROM FlowDefinitionView ORDER BY ProcessType, Label" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/flows.json" 2>/dev/null || {
+  echo "  FlowDefinitionView failed, falling back to Flow object..."
+  sf data query --query "SELECT Id, DefinitionId, ProcessType, Status, TriggerType, VersionNumber FROM Flow WHERE Status = 'Active' ORDER BY ProcessType" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/flows.json" 2>/dev/null || echo '{"result":{"totalSize":0,"records":[]}}' > "$OUTPUT_DIR/flows.json"
+}
 
 # 4. Query ALL Workflow Rules with corrected fields
+# NOTE: Only Id, Name, TableEnumOrId are reliably queryable on WorkflowRule via Tooling API.
+# LastModifiedBy and CreatedBy are relationship fields that may fail in some orgs.
 echo -e "\n[4/8] Querying ALL Workflow Rules..."
-sf data query --query "SELECT Id, Name, TableEnumOrId, LastModifiedDate, LastModifiedBy, CreatedDate, CreatedBy FROM WorkflowRule ORDER BY TableEnumOrId, Name" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/workflow_rules.json"
+sf data query --query "SELECT Id, Name, TableEnumOrId FROM WorkflowRule ORDER BY TableEnumOrId, Name" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/workflow_rules.json" 2>/dev/null || echo '{"result":{"totalSize":0,"records":[]}}' > "$OUTPUT_DIR/workflow_rules.json"
 
 # Also get workflow rule metadata separately for active status
 echo -e "\n[4b/8] Getting Workflow Rule metadata..."

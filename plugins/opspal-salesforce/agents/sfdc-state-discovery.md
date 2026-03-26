@@ -491,8 +491,10 @@ sf data query --query "SELECT Id, Name, TableEnumOrId FROM Layout" --target-org 
 # 5. Discover ALL Validation Rules
 sf data query --query "SELECT Id, Active, Description, EntityDefinition.DeveloperName, ErrorConditionFormula FROM ValidationRule WHERE Active = true" --target-org [org] --use-tooling-api
 
-# 6. Discover ALL Flows
-sf data query --query "SELECT Id, ApiName, ProcessType, TriggerType, IsActive FROM FlowDefinitionView WHERE IsActive = true" --target-org [org] --use-tooling-api
+# 6. Discover ALL Flows (use safe field set — TriggerType is NOT on FlowDefinitionView)
+sf data query --query "SELECT Id, DeveloperName, ProcessType, Status, VersionNumber FROM FlowDefinitionView WHERE IsActive = true" --target-org [org] --use-tooling-api
+# For TriggerType, query the Flow (version) object:
+# sf data query --query "SELECT Id, DefinitionId, ProcessType, TriggerType, Status FROM Flow WHERE Status = 'Active'" --target-org [org] --use-tooling-api
 ```
 
 ## 🔄 Runbook Context Loading (Living Runbook System v2.1.0)

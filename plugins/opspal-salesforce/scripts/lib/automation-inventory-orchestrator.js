@@ -38,6 +38,7 @@ const AutomationRiskScorer = requireProtectedModule({
 });
 const FlowStreamingQuery = require('./flow-streaming-query');
 const FlowMetadataRetriever = require('./flow-metadata-retriever');
+const MetadataCapabilityChecker = require('./metadata-capability-checker');
 
 class AutomationInventoryOrchestrator {
     constructor(orgAlias, options = {}) {
@@ -60,6 +61,10 @@ class AutomationInventoryOrchestrator {
         this.workflowExtractor = new WorkflowRuleExtractor(orgAlias);
         this.normalizer = new AutomationUDMNormalizer();
         this.riskScorer = new AutomationRiskScorer();
+        this.capabilityChecker = new MetadataCapabilityChecker();
+
+        // Capability validation results — populated in initialize()
+        this.orgCapabilities = null;
 
         // Results storage
         this.rawData = {
@@ -196,6 +201,37 @@ class AutomationInventoryOrchestrator {
         } catch (error) {
             throw new Error(`Cannot connect to org: ${this.orgAlias}`);
         }
+
+        // Pre-validate metadata object availability before harvest phase.
+        // This prevents unsupported-object errors (FlowDefinitionView, WorkflowRule)
+        // from cascading into silent empty-array results downstream.
+        // NOTE: orgAlias is an internal configuration value from the constructor,
+        // not external user input. The sf CLI resolves it against authenticated orgs.
+        console.log('  Pre-validating metadata capabilities...');
+        try {
+            this.orgCapabilities = await this.capabilityChecker.preOperationValidation(
+                this.orgAlias,
+                ['FlowDefinitionView', 'WorkflowRule', 'ValidationRule', 'ApexTrigger', 'ApexClass']
+            );
+
+            if (this.orgCapabilities.unavailable.length > 0) {
+                console.log(`    ⚠ Unavailable objects: ${this.orgCapabilities.unavailable.join(', ')}`);
+                for (const rec of this.orgCapabilities.recommendations) {
+                    console.log(`      → ${rec.message}`);
+                }
+            }
+            if (this.orgCapabilities.available.length > 0) {
+                console.log(`    ✓ Available: ${this.orgCapabilities.available.join(', ')}`);
+            }
+
+            // Save capability report for downstream consumers
+            const capPath = `${this.options.outputDir}/raw/metadata-capabilities.json`;
+            fs.writeFileSync(capPath, JSON.stringify(this.orgCapabilities, null, 2));
+        } catch (capError) {
+            console.warn(`    ⚠ Capability pre-validation failed: ${capError.message}`);
+            this.errors.push({ phase: 'initialize', type: 'capability-check', error: capError.message });
+            // Continue — harvesters have their own fallback behavior
+        }
     }
 
     /**
@@ -230,7 +266,13 @@ class AutomationInventoryOrchestrator {
 
         // Harvest Flows
         if (types.includes('Flow') && !this.options.skipFlows) {
-            console.log('  Harvesting Flows...');
+            // Check capability: if FlowDefinitionView is unavailable, warn before attempting
+            const fdvUnavailable = this.orgCapabilities?.unavailable?.includes('FlowDefinitionView');
+            if (fdvUnavailable) {
+                console.log('  Harvesting Flows (FlowDefinitionView unavailable — using fallback)...');
+            } else {
+                console.log('  Harvesting Flows...');
+            }
             try {
                 this.rawData.flows = await this.harvestFlows();
 
@@ -254,12 +296,29 @@ class AutomationInventoryOrchestrator {
 
         // Harvest Process Builder
         if (types.includes('ProcessBuilder')) {
-            console.log('  Harvesting Process Builder...');
+            // Check capability: ProcessBuilder queries FlowDefinitionView
+            const fdvUnavailable = this.orgCapabilities?.unavailable?.includes('FlowDefinitionView');
+            if (fdvUnavailable) {
+                console.log('  Harvesting Process Builder (FlowDefinitionView unavailable — results may be incomplete)...');
+                this.errors.push({
+                    phase: 'harvest',
+                    type: 'ProcessBuilder',
+                    error: 'FlowDefinitionView unavailable — process extraction may return empty results. This is a known limitation, not a real zero-count.',
+                    severity: 'warning'
+                });
+            } else {
+                console.log('  Harvesting Process Builder...');
+            }
             try {
                 this.rawData.processes = await this.processExtractor.extractAllProcesses(
                     this.options.objects
                 );
-                console.log(`    ✓ Found ${this.rawData.processes.length} process(es)`);
+                // Distinguish real zero-count from unsupported-object zero-count
+                if (this.rawData.processes.length === 0 && fdvUnavailable) {
+                    console.log(`    ⚠ Found 0 process(es) — FlowDefinitionView unavailable (not a confirmed zero-count)`);
+                } else {
+                    console.log(`    ✓ Found ${this.rawData.processes.length} process(es)`);
+                }
             } catch (error) {
                 console.warn(`    ⚠ Warning: ${error.message}`);
                 this.errors.push({ phase: 'harvest', type: 'ProcessBuilder', error: error.message });

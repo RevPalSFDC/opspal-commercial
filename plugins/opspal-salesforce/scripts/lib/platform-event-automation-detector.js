@@ -120,8 +120,9 @@ class PlatformEventAutomationDetector {
         console.log(`\n[Phase 2] Detecting Platform Event-triggered Flows...`);
 
         try {
-            // Query FlowDefinitionView for PE-triggered flows
-            const query = `SELECT ApiName, Label, TriggerObjectOrEvent, TriggerType FROM FlowDefinitionView WHERE TriggerType = 'PlatformEvent' AND ActiveVersionId != null`;
+            // TriggerType is a field on Flow (version object), NOT on FlowDefinitionView.
+            // Query the Flow object for platform event trigger detection.
+            const query = `SELECT Id, DefinitionId, ProcessType, TriggerType, Status FROM Flow WHERE TriggerType = 'PlatformEvent' AND Status = 'Active'`;
             const queryCmd = `sf data query --query "${query}" --target-org ${this.orgAlias} --use-tooling-api --json`;
 
             if (this.verbose) {
@@ -136,14 +137,14 @@ class PlatformEventAutomationDetector {
 
                 flows.forEach(flow => {
                     this.results.platformEventFlows.push({
-                        name: flow.ApiName,
-                        label: flow.Label,
-                        platformEvent: flow.TriggerObjectOrEvent,
+                        name: flow.DefinitionId || flow.Id,
+                        label: flow.ProcessType || 'Unknown',
+                        platformEvent: flow.TriggerType,
                         triggerType: flow.TriggerType
                     });
 
-                    if (flow.TriggerObjectOrEvent) {
-                        this.results.summary.platformEventsUsed.add(flow.TriggerObjectOrEvent);
+                    if (flow.TriggerType === 'PlatformEvent') {
+                        this.results.summary.platformEventsUsed.add(flow.DefinitionId || flow.Id);
                     }
                 });
 

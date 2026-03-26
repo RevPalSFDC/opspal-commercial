@@ -48,14 +48,14 @@ class ScheduledAutomationDetector {
         console.log('📅 Detecting scheduled Flows...');
 
         try {
-            // Query for scheduled flows
+            // TriggerType is a field on Flow (version object), NOT on FlowDefinitionView.
+            // Query the Flow object directly for scheduled trigger detection.
             const query = `
-                SELECT DurableId, ActiveVersionId, DeveloperName, MasterLabel,
-                       ProcessType, LastModifiedDate, NamespacePrefix
-                FROM FlowDefinitionView
+                SELECT Id, DefinitionId, ProcessType, TriggerType, Status, VersionNumber
+                FROM Flow
                 WHERE TriggerType = 'Scheduled'
-                  AND IsActive = true
-                ORDER BY DeveloperName
+                  AND Status = 'Active'
+                ORDER BY ProcessType
             `;
 
             const result = this.execSfCommand(

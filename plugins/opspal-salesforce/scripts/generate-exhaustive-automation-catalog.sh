@@ -21,12 +21,16 @@ echo -e "\n[2/7] Querying ALL Apex Classes..."
 sf data query --query "SELECT Id, Name, Body, Status, IsValid, LengthWithoutComments, CreatedDate, LastModifiedDate, CreatedBy.Name, LastModifiedBy.Name FROM ApexClass WHERE NamespacePrefix = null ORDER BY Name" --target-org "$ORG_ALIAS" --result-format json --wait 30 > "$OUTPUT_DIR/apex_classes.json"
 
 # 3. Query ALL Flows (including Process Builders)
+# NOTE: Use safe field set. Definition.DeveloperName may not resolve in all orgs;
+# MasterLabel, IsDeleted, IsOverridable, IsTemplate may not exist on Flow.
 echo -e "\n[3/7] Querying ALL Flows and Process Builders..."
-sf data query --query "SELECT Id, Definition.DeveloperName, MasterLabel, ProcessType, TriggerType, Status, VersionNumber, Description, LastModifiedDate, LastModifiedBy, IsActive, IsDeleted, IsOverridable, IsTemplate FROM Flow WHERE NamespacePrefix = null ORDER BY ProcessType, MasterLabel" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/flows.json"
+sf data query --query "SELECT Id, DefinitionId, ProcessType, TriggerType, Status, VersionNumber, Description FROM Flow WHERE Status = 'Active' ORDER BY ProcessType" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/flows.json" 2>/dev/null || echo '{"result":{"totalSize":0,"records":[]}}' > "$OUTPUT_DIR/flows.json"
 
 # 4. Query ALL Workflow Rules
+# NOTE: Active, Description, Formula are NOT direct fields on WorkflowRule Tooling API object.
+# They live in the Metadata compound field. Use minimal safe fields.
 echo -e "\n[4/7] Querying ALL Workflow Rules..."
-sf data query --query "SELECT Id, Name, TableEnumOrId, Active, Description, Formula, LastModifiedDate, LastModifiedBy FROM WorkflowRule WHERE NamespacePrefix = null ORDER BY TableEnumOrId, Name" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/workflow_rules.json"
+sf data query --query "SELECT Id, Name, TableEnumOrId FROM WorkflowRule WHERE NamespacePrefix = null ORDER BY TableEnumOrId, Name" --target-org "$ORG_ALIAS" --use-tooling-api --result-format json > "$OUTPUT_DIR/workflow_rules.json" 2>/dev/null || echo '{"result":{"totalSize":0,"records":[]}}' > "$OUTPUT_DIR/workflow_rules.json"
 
 # 5. Query ALL Validation Rules
 echo -e "\n[5/7] Querying ALL Validation Rules..."

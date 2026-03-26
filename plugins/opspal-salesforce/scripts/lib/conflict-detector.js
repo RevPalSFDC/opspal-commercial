@@ -80,18 +80,54 @@ class ConflictDetector {
       
       const objectDesc = result.result;
       
+      // Each metadata query is isolated so one failure doesn't abort all queries.
+      // NOTE: objectName comes from the caller's internal configuration, not user input.
+      // The sf CLI resolves it against the authenticated org's schema.
+
       // Get validation rules
-      const validationRulesCmd = `sf data query --query "SELECT Id, Active, ErrorConditionFormula, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
-      const validationResult = JSON.parse(execSync(validationRulesCmd, { encoding: 'utf8' }));
-      
+      let validationRules = [];
+      try {
+        const vrCmd = `sf data query --query "SELECT Id, Active, ErrorConditionFormula, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
+        const vrResult = JSON.parse(execSync(vrCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
+        validationRules = vrResult.result?.records || [];
+      } catch (vrError) {
+        console.warn(`    Warning: ValidationRule query failed for ${objectName}: ${vrError.message}`);
+      }
+
       // Get triggers
-      const triggersCmd = `sf data query --query "SELECT Id, Name, IsActive FROM ApexTrigger WHERE TableEnumOrId = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
-      const triggerResult = JSON.parse(execSync(triggersCmd, { encoding: 'utf8' }));
-      
-      // Get flows (Note: TriggerType not available in FlowDefinitionView)
-      const flowsCmd = `sf data query --query "SELECT Id, ApiName, ProcessType, IsActive FROM FlowDefinitionView WHERE IsActive = true" --target-org ${this.orgAlias} --use-tooling-api --json`;
-      const flowResult = JSON.parse(execSync(flowsCmd, { encoding: 'utf8' }));
-      
+      let triggers = [];
+      try {
+        const trCmd = `sf data query --query "SELECT Id, Name, Status FROM ApexTrigger WHERE TableEnumOrId = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
+        const trResult = JSON.parse(execSync(trCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
+        triggers = trResult.result?.records || [];
+      } catch (trError) {
+        console.warn(`    Warning: ApexTrigger query failed for ${objectName}: ${trError.message}`);
+      }
+
+      // Get flows — use DeveloperName (not ApiName which may not exist).
+      // TriggerType is NOT on FlowDefinitionView — it's on the Flow (version) object.
+      // Fall back to Flow object if FlowDefinitionView is unavailable.
+      let flows = [];
+      try {
+        const flCmd = `sf data query --query "SELECT Id, DeveloperName, ProcessType, IsActive FROM FlowDefinitionView WHERE IsActive = true" --target-org ${this.orgAlias} --use-tooling-api --json`;
+        const flResult = JSON.parse(execSync(flCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
+        flows = (flResult.result?.records || []).filter(f =>
+          f.ProcessType === 'AutoLaunchedFlow' || f.ProcessType === 'Flow'
+        );
+      } catch (fdvError) {
+        // FlowDefinitionView unavailable — fall back to Flow object
+        console.warn(`    Warning: FlowDefinitionView unavailable, trying Flow: ${fdvError.message}`);
+        try {
+          const fbCmd = `sf data query --query "SELECT Id, DefinitionId, ProcessType, TriggerType, Status FROM Flow WHERE Status = 'Active'" --target-org ${this.orgAlias} --use-tooling-api --json`;
+          const fbResult = JSON.parse(execSync(fbCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
+          flows = (fbResult.result?.records || []).filter(f =>
+            f.ProcessType === 'AutoLaunchedFlow' || f.ProcessType === 'Flow'
+          );
+        } catch (flowError) {
+          console.warn(`    Warning: Flow query also failed: ${flowError.message}`);
+        }
+      }
+
       return {
         exists: true,
         name: objectDesc.name,
@@ -107,15 +143,13 @@ class ConflictDetector {
           reference: f.referenceTo,
           picklistValues: f.picklistValues
         })),
-        validationRules: validationResult.result?.records || [],
-        triggers: triggerResult.result?.records || [],
-        flows: flowResult.result?.records?.filter(f => 
-          f.ProcessType === 'AutoLaunchedFlow' || 
-          f.ProcessType === 'Flow'
-        ) || [],
+        validationRules,
+        triggers,
+        flows,
         recordTypes: objectDesc.recordTypeInfos || []
       };
     } catch (error) {
+      // Only the initial sf sobject describe should reach this catch now
       console.error(`Error getting org state: ${error.message}`);
       return { exists: false, error: error.message };
     }
