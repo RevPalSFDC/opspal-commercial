@@ -1,19 +1,32 @@
 {
   "slug": "2026-W13",
   "title": "Week of March 23, 2026",
-  "summary": "This week brought major improvements to OpsPal's Salesforce RevOps assessment capabilities, including automatic revenue field discovery and sales process analysis. We also introduced Windows PowerShell support for easier onboarding and added comprehensive security scanning to protect your data. Platform stability was enhanced with fixes to routing and permission handling across all integrations.",
-  "published_at": "2026-03-26T20:48:31.414Z",
+  "summary": "This week brought major improvements to Windows users with a streamlined setup process and native installation support. We enhanced Salesforce operations with better revenue field detection, deployment safeguards, and smoother permission handling. Security was strengthened with automated secret scanning, and the platform now handles production environments more safely with improved read-only query support.",
+  "published_at": "2026-03-26T23:49:52.710Z",
   "week_start": "2026-03-23",
   "week_end": "2026-03-26",
   "has_breaking": false,
-  "total_commits": 90,
+  "total_commits": 93,
   "entries": [
     {
-      "category": "improved",
-      "plugin": "release-notes",
-      "headline": "Automated weekly release notes now available",
+      "category": "fixed",
+      "plugin": "opspal-core,opspal-salesforce",
+      "headline": "Improved safety for Salesforce data retrieval operations",
       "details": [
-        "Release notes are now automatically generated and updated daily with the latest platform improvements and fixes"
+        "Data retrieval commands now run safely without triggering production warnings",
+        "Better protection policies prevent accidental changes to live systems"
+      ],
+      "commits": [
+        "b4cb958"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "release-notes",
+      "headline": "Automated release notes system now generates weekly updates",
+      "details": [
+        "Release notes automatically compile and publish from development changes",
+        "Updates deploy daily to keep you informed of the latest improvements"
       ],
       "commits": [
         "f67a4b0"
@@ -22,18 +35,33 @@
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce permission workflows now complete properly",
+      "headline": "Salesforce permission management works more reliably",
       "details": null,
       "commits": [
         "8d52b09"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Simple Salesforce record lookups now work faster",
+      "category": "fixed",
+      "plugin": "core,salesforce",
+      "headline": "Resolved six cases where operations were blocked unnecessarily",
       "details": [
-        "Quick queries for single records or small result sets now run without additional processing overhead"
+        "Added bypass options for legitimate administrative tasks",
+        "Narrowed overly strict rules that prevented valid operations",
+        "Improved detection of safe versus risky commands"
+      ],
+      "commits": [
+        "17a2aae"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Simple record lookups now work without extra routing steps",
+      "details": [
+        "Single record queries by ID run directly for faster results",
+        "Short verification queries skip unnecessary complexity",
+        "Bounded result queries under 5 records streamlined"
       ],
       "commits": [
         "9281eba"
@@ -44,18 +72,31 @@
       "plugin": "bootstrap",
       "headline": "Windows setup now installs required tools automatically",
       "details": [
-        "Windows users can now get OpsPal running with automatic installation of Git, Node.js, and other dependencies"
+        "Claude Code installs natively on Windows systems",
+        "Node.js downloads and configures automatically",
+        "Streamlined installation reduces manual setup steps"
       ],
       "commits": [
         "4260f1a"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
+      "plugin": "bootstrap",
+      "headline": "Fixed Windows installation errors with search results",
+      "details": null,
+      "commits": [
+        "82de658"
+      ]
+    },
+    {
+      "category": "new",
       "plugin": "Core Platform",
-      "headline": "Better error detection when Salesforce connections fail",
+      "headline": "System now detects and reports connection problems automatically",
       "details": [
-        "OpsPal now detects and reports connection issues more clearly when working with Salesforce orgs"
+        "Identifies authentication issues with Salesforce orgs",
+        "Provides helpful context when operations fail",
+        "Validates connections before starting complex tasks"
       ],
       "commits": [
         "d57de97"
@@ -64,29 +105,29 @@
     {
       "category": "fixed",
       "plugin": "bootstrap",
-      "headline": "Windows PowerShell installation script works reliably",
+      "headline": "PowerShell installation script works with one-line commands",
       "details": [
-        "Fixed compatibility issues that prevented the Windows setup script from running correctly in all environments"
+        "Fixed syntax issues when running install commands from web",
+        "Prevents PowerShell window from closing unexpectedly",
+        "Improved error handling during automated installation"
       ],
       "commits": [
         "ffd4a80"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Read-only Salesforce queries now work on production orgs",
-      "details": [
-        "You can now safely run reporting queries against production Salesforce environments without restrictions"
-      ],
+      "headline": "Read-only queries now work safely on production Salesforce orgs",
+      "details": null,
       "commits": [
         "772d509"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Revenue assessment results now save properly for future reference",
+      "headline": "Revenue data context now saves properly in assessment reports",
       "details": null,
       "commits": [
         "43fb51a"
@@ -95,9 +136,11 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Brand gallery and templates can now be customized safely",
+      "headline": "New customization system lets you safely modify templates and galleries",
       "details": [
-        "You can now customize OpsPal's templates and branding elements without losing changes during platform updates"
+        "Store custom templates and brand elements that survive updates",
+        "Three-tier customization hierarchy supports team and organization settings",
+        "Built-in backup and restore prevents loss of customizations"
       ],
       "commits": [
         "c7ce394"
@@ -106,18 +149,20 @@
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "RevOps assessment now finds revenue fields and sales stages automatically",
+      "headline": "RevOps assessments now automatically detect your revenue fields",
       "details": [
-        "OpsPal automatically discovers your organization's revenue tracking fields and sales process stages for more accurate assessments"
+        "Identifies custom revenue fields like Net New ARR and Annual Contract Value",
+        "Segments sales processes based on your org's configuration",
+        "Adapts analysis to your specific revenue tracking setup"
       ],
       "commits": [
         "5de3435"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "onboarding",
-      "headline": "Windows setup prefers Git Bash for better compatibility",
+      "headline": "Windows users now get Git Bash instead of Linux subsystem",
       "details": null,
       "commits": [
         "e68ee1a"
@@ -135,16 +180,16 @@
     {
       "category": "new",
       "plugin": "onboarding",
-      "headline": "Windows PowerShell bootstrap available for easy setup",
+      "headline": "Added PowerShell setup option for Windows users",
       "details": null,
       "commits": [
         "487c124"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "onboarding",
-      "headline": "Setup experience improved with better guidance and detection",
+      "headline": "Improved setup experience and plugin detection reliability",
       "details": null,
       "commits": [
         "f10fc77"
@@ -153,9 +198,11 @@
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployment validation prevents common issues",
+      "headline": "New tools prevent problematic Salesforce deployments",
       "details": [
-        "New validation tools catch picklist, record type, and field history issues before they cause deployment failures"
+        "Validates picklist and record type configurations before deployment",
+        "Checks field history tracking limits to prevent failures",
+        "Merges duplicate settings automatically to avoid conflicts"
       ],
       "commits": [
         "aac0d4b"
@@ -164,7 +211,7 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Secret scanning now prevents accidental credential commits",
+      "headline": "Added automatic secret scanning to prevent credential leaks",
       "details": null,
       "commits": [
         "19c4196"
@@ -173,7 +220,7 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Continuous security scanning now monitors all code changes",
+      "headline": "Implemented secret scanning workflow for continuous security monitoring",
       "details": null,
       "commits": [
         "8dcd939"
@@ -182,7 +229,7 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Hardcoded credentials removed from all platform files",
+      "headline": "Removed embedded credentials from code for better security",
       "details": null,
       "commits": [
         "8acd03a"
