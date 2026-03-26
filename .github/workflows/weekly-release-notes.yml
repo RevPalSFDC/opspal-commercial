@@ -1,0 +1,73 @@
+name: Daily Release Notes
+
+on:
+  schedule:
+    - cron: '0 14 * * 1-5'   # Weekdays at 9am ET / 2pm UTC
+  workflow_dispatch:
+    inputs:
+      from_date:
+        description: 'Start date (YYYY-MM-DD)'
+        required: false
+      to_date:
+        description: 'End date (YYYY-MM-DD)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-deploy:
+    name: Generate and Deploy Release Notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate release notes JSON
+        env:
+          INPUT_FROM: ${{ github.event.inputs.from_date }}
+          INPUT_TO: ${{ github.event.inputs.to_date }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/generate-release-notes.js \
+            ${INPUT_FROM:+--from "$INPUT_FROM"} \
+            ${INPUT_TO:+--to "$INPUT_TO"} \
+            --out-dir website/release-notes
+
+      - name: Publish step summary
+        run: |
+          LATEST=$(ls -t website/release-notes/*.json 2>/dev/null | grep -v index | head -1)
+          if [ -n "$LATEST" ]; then
+            ENTRIES=$(node -e "const d=require('./$LATEST'); console.log(d.entries.length)")
+            echo "## Release Notes Generated" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "- File: \`$(basename "$LATEST")\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Customer-visible entries: $ENTRIES" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Commit release notes
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add website/release-notes/
+          git diff --cached --quiet || git commit -m "chore(release-notes): update release notes"
+          git push
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Deploy to Firebase
+        working-directory: website
+        run: npx firebase-tools deploy --only hosting --project revpalportal

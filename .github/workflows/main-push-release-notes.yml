@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   send-release-notes:
@@ -74,10 +75,9 @@ jobs:
 
       - name: Trigger release notes update
         env:
-          GH_TOKEN: ${{ secrets.COMMERCIAL }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh workflow run weekly-release-notes.yml \
-            --repo RevPalSFDC/opspal-plugin-internal-marketplace
+          gh workflow run weekly-release-notes.yml
 
       - name: Send release notes notification
         env:
