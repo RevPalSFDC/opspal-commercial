@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const readline = require('readline');
-const { resolveRoutingSemantics } = require('./routing-semantics');
+const { resolveHistoricalRoutingLogSemantics } = require('./routing-semantics');
 
 const LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
 const COMPLIANCE_LOG = path.join(LOG_DIR, 'compliance.jsonl');
@@ -114,10 +114,7 @@ function getComplianceRate() {
   const routingEntries = readRoutingLog();
   const complianceEntries = readComplianceLog();
 
-  const executionGatedDecisions = routingEntries.filter((entry) => resolveRoutingSemantics(entry, {
-    allowLegacy: true,
-    source: 'compliance-tracker'
-  }).executionBlockUntilCleared);
+  const executionGatedDecisions = routingEntries.filter((entry) => resolveHistoricalRoutingLogSemantics(entry).executionBlockUntilCleared);
 
   // Count violations (blocked but not using the required Agent route)
   const violations = complianceEntries.filter(e => e.violation === true);
@@ -150,10 +147,7 @@ function getStats() {
 
   const byGuidanceAction = {};
   routingEntries.forEach(entry => {
-    const guidanceAction = resolveRoutingSemantics(entry, {
-      allowLegacy: true,
-      source: 'compliance-tracker'
-    }).guidanceAction || 'unknown';
+    const guidanceAction = resolveHistoricalRoutingLogSemantics(entry).guidanceAction || 'unknown';
     byGuidanceAction[guidanceAction] = (byGuidanceAction[guidanceAction] || 0) + 1;
   });
 

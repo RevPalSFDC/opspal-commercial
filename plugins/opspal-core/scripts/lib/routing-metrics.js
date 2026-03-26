@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const readline = require('readline');
-const { resolveRoutingSemantics } = require('./routing-semantics');
+const { resolveHistoricalRoutingLogSemantics } = require('./routing-semantics');
 
 // =============================================================================
 // Configuration
@@ -139,10 +139,7 @@ function getRoutingOutput(entry = {}) {
 }
 
 function resolveEntrySemantics(entry = {}) {
-  return resolveRoutingSemantics(entry, {
-    allowLegacy: true,
-    source: 'routing-metrics'
-  });
+  return resolveHistoricalRoutingLogSemantics(entry);
 }
 
 function getResolvedAgent(entry = {}) {

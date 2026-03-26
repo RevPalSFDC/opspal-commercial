@@ -1,12 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-
-const LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
-const LEGACY_COMPAT_LOG = path.join(LOG_DIR, 'routing-legacy-compat.jsonl');
-
 const LEGACY_ACTION_SEMANTICS = {
   ALLOWED: {
     guidanceAction: 'recommend_specialist',
@@ -101,38 +94,6 @@ function firstNumber(...values) {
   return null;
 }
 
-function ensureLogDir() {
-  if (!fs.existsSync(LOG_DIR)) {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
-  }
-}
-
-function recordLegacyRoutingCompatibility({
-  source = 'unknown',
-  fields = [],
-  context = {}
-} = {}) {
-  const uniqueFields = [...new Set((fields || []).filter(Boolean))];
-  if (uniqueFields.length === 0) {
-    return [];
-  }
-
-  try {
-    ensureLogDir();
-    const entry = {
-      timestamp: new Date().toISOString(),
-      source,
-      fields: uniqueFields,
-      context
-    };
-    fs.appendFileSync(LEGACY_COMPAT_LOG, JSON.stringify(entry) + '\n');
-  } catch (_error) {
-    // Compatibility telemetry must never disrupt routing behavior.
-  }
-
-  return uniqueFields;
-}
-
 function getRoutingPayload(entry = {}) {
   if (entry && typeof entry.output === 'object' && entry.output !== null) {
     return entry.output;
@@ -146,10 +107,193 @@ function getLegacyActionSemantics(value) {
   return LEGACY_ACTION_SEMANTICS[normalized] || null;
 }
 
-function resolveRoutingSemantics(entry = {}, options = {}) {
-  const { allowLegacy = false, source = 'unknown' } = options;
+function finalizeRoutingSemantics({
+  payload,
+  requiredAgent = null,
+  suggestedAgent = null,
+  guidanceAction = null,
+  routeKind = null,
+  executionBlockUntilCleared = null,
+  promptGuidanceOnly = null,
+  promptBlocked = null,
+  requiresSpecialist = null,
+  routePendingClearance = null,
+  routeCleared = null,
+  clearanceStatus = null,
+  routingConfidence = null,
+  legacyFields = []
+} = {}) {
+  let resolvedExecutionBlockUntilCleared = executionBlockUntilCleared;
+  if (resolvedExecutionBlockUntilCleared === null) {
+    resolvedExecutionBlockUntilCleared = routePendingClearance === true;
+  }
+  if (resolvedExecutionBlockUntilCleared === null) {
+    resolvedExecutionBlockUntilCleared = false;
+  }
+
+  let resolvedGuidanceAction = guidanceAction;
+  if (!resolvedGuidanceAction) {
+    resolvedGuidanceAction = resolvedExecutionBlockUntilCleared ? 'require_specialist' : 'recommend_specialist';
+  }
+
+  let resolvedRouteKind = routeKind;
+  if (!resolvedRouteKind) {
+    if (resolvedGuidanceAction === 'require_intake') {
+      resolvedRouteKind = 'intake_specialist';
+    } else if (resolvedExecutionBlockUntilCleared) {
+      resolvedRouteKind = 'complexity_specialist';
+    } else if (requiredAgent || suggestedAgent) {
+      resolvedRouteKind = 'advisory';
+    }
+  }
+
+  let resolvedRequiresSpecialist = requiresSpecialist;
+  if (resolvedRequiresSpecialist === null) {
+    resolvedRequiresSpecialist = (
+      resolvedExecutionBlockUntilCleared ||
+      resolvedGuidanceAction === 'require_specialist' ||
+      resolvedGuidanceAction === 'require_intake'
+    );
+  }
+
+  let resolvedPromptGuidanceOnly = promptGuidanceOnly;
+  if (resolvedPromptGuidanceOnly === null) {
+    resolvedPromptGuidanceOnly = true;
+  }
+
+  const resolvedPromptBlocked = promptBlocked === null ? false : promptBlocked;
+
+  let resolvedRoutePendingClearance = routePendingClearance;
+  if (resolvedRoutePendingClearance === null) {
+    resolvedRoutePendingClearance = clearanceStatus === 'pending_clearance';
+  }
+
+  let resolvedRouteCleared = routeCleared;
+  if (resolvedRouteCleared === null) {
+    resolvedRouteCleared = clearanceStatus === 'cleared';
+  }
+
+  let resolvedClearanceStatus = clearanceStatus;
+  if (!resolvedClearanceStatus) {
+    if (resolvedRoutePendingClearance) {
+      resolvedClearanceStatus = 'pending_clearance';
+    } else if (resolvedRouteCleared) {
+      resolvedClearanceStatus = 'cleared';
+    } else {
+      resolvedClearanceStatus = null;
+    }
+  }
+
+  const uniqueLegacyFields = [...new Set((legacyFields || []).filter(Boolean))];
+
+  return {
+    payload,
+    routedAgent: requiredAgent || suggestedAgent || null,
+    requiredAgent,
+    suggestedAgent,
+    guidanceAction: resolvedGuidanceAction,
+    routeKind: resolvedRouteKind,
+    requiresSpecialist: resolvedRequiresSpecialist,
+    promptGuidanceOnly: resolvedPromptGuidanceOnly,
+    promptBlocked: resolvedPromptBlocked,
+    executionBlockUntilCleared: resolvedExecutionBlockUntilCleared,
+    routePendingClearance: resolvedRoutePendingClearance === true,
+    routeCleared: resolvedRouteCleared === true,
+    clearanceStatus: resolvedClearanceStatus,
+    routingConfidence: routingConfidence ?? 0,
+    legacyCompatibilityUsed: uniqueLegacyFields.length > 0,
+    legacyFields: uniqueLegacyFields
+  };
+}
+
+function resolveRoutingSemantics(entry = {}, _options = {}) {
   const payload = getRoutingPayload(entry);
-  const legacyFields = new Set();
+
+  return finalizeRoutingSemantics({
+    payload,
+    requiredAgent: firstNonEmpty(
+      payload.requiredAgent,
+      payload.required_agent,
+      entry.requiredAgent,
+      entry.required_agent
+    ),
+    suggestedAgent: firstNonEmpty(
+      payload.suggestedAgent,
+      payload.suggested_agent,
+      payload.selectedAgent,
+      payload.selected_agent,
+      payload.agent,
+      entry.suggestedAgent,
+      entry.suggested_agent,
+      entry.selectedAgent,
+      entry.selected_agent,
+      entry.agent
+    ),
+    guidanceAction: firstNonEmpty(
+      payload.guidanceAction,
+      payload.guidance_action,
+      entry.guidanceAction,
+      entry.guidance_action
+    ),
+    routeKind: firstNonEmpty(
+      payload.routeKind,
+      payload.route_kind,
+      entry.routeKind,
+      entry.route_kind
+    ),
+    executionBlockUntilCleared: firstBoolean(
+      payload.executionBlockUntilCleared,
+      payload.execution_block_until_cleared,
+      entry.executionBlockUntilCleared,
+      entry.execution_block_until_cleared
+    ),
+    promptGuidanceOnly: firstBoolean(
+      payload.promptGuidanceOnly,
+      payload.prompt_guidance_only,
+      entry.promptGuidanceOnly,
+      entry.prompt_guidance_only
+    ),
+    promptBlocked: firstBoolean(
+      payload.promptBlocked,
+      payload.prompt_blocked,
+      entry.promptBlocked,
+      entry.prompt_blocked
+    ),
+    requiresSpecialist: firstBoolean(
+      payload.requiresSpecialist,
+      payload.requires_specialist,
+      entry.requiresSpecialist,
+      entry.requires_specialist
+    ),
+    routePendingClearance: firstBoolean(
+      payload.routePendingClearance,
+      payload.route_pending_clearance,
+      entry.routePendingClearance,
+      entry.route_pending_clearance
+    ),
+    routeCleared: firstBoolean(
+      payload.routeCleared,
+      payload.route_cleared,
+      entry.routeCleared,
+      entry.route_cleared
+    ),
+    clearanceStatus: firstNonEmpty(
+      payload.clearanceStatus,
+      payload.clearance_status,
+      entry.clearanceStatus,
+      entry.clearance_status
+    ),
+    routingConfidence: firstNumber(
+      payload.routingConfidence,
+      payload.routing_confidence,
+      entry.routingConfidence,
+      entry.routing_confidence
+    )
+  });
+}
+
+function resolveHistoricalRoutingLogSemantics(entry = {}, _options = {}) {
+  const payload = getRoutingPayload(entry);
 
   const explicitRequiredAgent = firstNonEmpty(
     payload.requiredAgent,
@@ -169,20 +313,6 @@ function resolveRoutingSemantics(entry = {}, options = {}) {
     entry.selected_agent,
     entry.agent
   );
-
-  let legacyRecommendedAgent = null;
-  if (allowLegacy && (!explicitRequiredAgent || !explicitSuggestedAgent)) {
-    legacyRecommendedAgent = firstNonEmpty(
-      payload.recommendedAgent,
-      payload.recommended_agent,
-      entry.recommendedAgent,
-      entry.recommended_agent
-    );
-    if (legacyRecommendedAgent) {
-      legacyFields.add('recommended_agent');
-    }
-  }
-
   const explicitGuidanceAction = firstNonEmpty(
     payload.guidanceAction,
     payload.guidance_action,
@@ -244,8 +374,9 @@ function resolveRoutingSemantics(entry = {}, options = {}) {
     entry.routing_confidence
   );
 
+  const legacyFields = [];
   let legacyAction = null;
-  if (allowLegacy && (!explicitGuidanceAction || !explicitRouteKind || explicitExecutionBlock === null)) {
+  if (!explicitGuidanceAction || !explicitRouteKind || explicitExecutionBlock === null) {
     legacyAction = firstNonEmpty(
       payload.routingActionType,
       payload.routing_action_type,
@@ -253,11 +384,11 @@ function resolveRoutingSemantics(entry = {}, options = {}) {
       entry.routing_action_type
     );
     if (legacyAction) {
-      legacyFields.add('routingActionType');
+      legacyFields.push('routingActionType');
     } else {
       legacyAction = firstNonEmpty(payload.action, entry.action);
       if (legacyAction) {
-        legacyFields.add('action');
+        legacyFields.push('action');
       }
     }
   }
@@ -265,119 +396,37 @@ function resolveRoutingSemantics(entry = {}, options = {}) {
   const mappedLegacyAction = getLegacyActionSemantics(legacyAction);
 
   let executionBlockUntilCleared = explicitExecutionBlock;
-  if (executionBlockUntilCleared === null) {
-    if (explicitRoutePending === true) {
-      executionBlockUntilCleared = true;
-    } else if (mappedLegacyAction) {
-      executionBlockUntilCleared = mappedLegacyAction.executionBlockUntilCleared;
-    } else if (allowLegacy) {
-      const legacyBlocked = firstBoolean(payload.blocked, entry.blocked);
-      if (legacyBlocked !== null) {
-        executionBlockUntilCleared = legacyBlocked;
-        legacyFields.add('blocked');
-      }
-    }
+  if (executionBlockUntilCleared === null && mappedLegacyAction) {
+    executionBlockUntilCleared = mappedLegacyAction.executionBlockUntilCleared;
   }
   if (executionBlockUntilCleared === null) {
-    executionBlockUntilCleared = false;
-  }
-
-  let guidanceAction = explicitGuidanceAction || mappedLegacyAction?.guidanceAction || null;
-  let routeKind = explicitRouteKind || mappedLegacyAction?.routeKind || null;
-  let requiredAgent = explicitRequiredAgent;
-  let suggestedAgent = explicitSuggestedAgent;
-
-  if (!requiredAgent && legacyRecommendedAgent && executionBlockUntilCleared) {
-    requiredAgent = legacyRecommendedAgent;
-  }
-  if (!suggestedAgent) {
-    suggestedAgent = explicitRequiredAgent || legacyRecommendedAgent || null;
-  }
-
-  if (!guidanceAction) {
-    guidanceAction = executionBlockUntilCleared ? 'require_specialist' : 'recommend_specialist';
-  }
-  if (!routeKind) {
-    if (guidanceAction === 'require_intake') {
-      routeKind = 'intake_specialist';
-    } else if (executionBlockUntilCleared) {
-      routeKind = 'complexity_specialist';
-    } else if (requiredAgent || suggestedAgent) {
-      routeKind = 'advisory';
+    const legacyBlocked = firstBoolean(payload.blocked, entry.blocked);
+    if (legacyBlocked !== null) {
+      executionBlockUntilCleared = legacyBlocked;
+      legacyFields.push('blocked');
     }
   }
 
-  let requiresSpecialist = explicitRequiresSpecialist;
-  if (requiresSpecialist === null) {
-    requiresSpecialist = (
-      executionBlockUntilCleared ||
-      guidanceAction === 'require_specialist' ||
-      guidanceAction === 'require_intake'
-    );
-  }
-
-  let promptGuidanceOnly = explicitPromptGuidanceOnly;
-  if (promptGuidanceOnly === null) {
-    promptGuidanceOnly = true;
-  }
-
-  const promptBlocked = explicitPromptBlocked === null ? false : explicitPromptBlocked;
-
-  let routePendingClearance = explicitRoutePending;
-  if (routePendingClearance === null) {
-    routePendingClearance = explicitClearanceStatus === 'pending_clearance';
-  }
-
-  let routeCleared = explicitRouteCleared;
-  if (routeCleared === null) {
-    routeCleared = explicitClearanceStatus === 'cleared';
-  }
-
-  let clearanceStatus = explicitClearanceStatus;
-  if (!clearanceStatus) {
-    if (routePendingClearance) {
-      clearanceStatus = 'pending_clearance';
-    } else if (routeCleared) {
-      clearanceStatus = 'cleared';
-    } else {
-      clearanceStatus = null;
-    }
-  }
-
-  const routedAgent = requiredAgent || suggestedAgent || null;
-  const recordedLegacyFields = recordLegacyRoutingCompatibility({
-    source,
-    fields: [...legacyFields],
-    context: {
-      type: firstNonEmpty(entry.type, payload.type),
-      routeId: firstNonEmpty(entry.routeId, entry.route_id, payload.routeId, payload.route_id),
-      sessionKey: firstNonEmpty(entry.sessionKey, entry.session_key, payload.sessionKey, payload.session_key)
-    }
-  });
-
-  return {
+  return finalizeRoutingSemantics({
     payload,
-    routedAgent,
-    requiredAgent,
-    suggestedAgent,
-    guidanceAction,
-    routeKind,
-    requiresSpecialist,
-    promptGuidanceOnly,
-    promptBlocked,
+    requiredAgent: explicitRequiredAgent,
+    suggestedAgent: explicitSuggestedAgent || explicitRequiredAgent || null,
+    guidanceAction: explicitGuidanceAction || mappedLegacyAction?.guidanceAction || null,
+    routeKind: explicitRouteKind || mappedLegacyAction?.routeKind || null,
     executionBlockUntilCleared,
-    routePendingClearance: routePendingClearance === true,
-    routeCleared: routeCleared === true,
-    clearanceStatus,
-    routingConfidence: explicitRoutingConfidence ?? 0,
-    legacyCompatibilityUsed: recordedLegacyFields.length > 0,
-    legacyFields: recordedLegacyFields
-  };
+    promptGuidanceOnly: explicitPromptGuidanceOnly,
+    promptBlocked: explicitPromptBlocked,
+    requiresSpecialist: explicitRequiresSpecialist,
+    routePendingClearance: explicitRoutePending,
+    routeCleared: explicitRouteCleared,
+    clearanceStatus: explicitClearanceStatus,
+    routingConfidence: explicitRoutingConfidence,
+    legacyFields
+  });
 }
 
 module.exports = {
-  LEGACY_COMPAT_LOG,
-  recordLegacyRoutingCompatibility,
+  resolveHistoricalRoutingLogSemantics,
   resolveRoutingSemantics,
   toBoolean
 };

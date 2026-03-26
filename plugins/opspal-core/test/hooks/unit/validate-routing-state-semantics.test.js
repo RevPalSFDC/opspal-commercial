@@ -53,11 +53,38 @@ if (event.requiresSpecialist && !event.promptGuidanceOnly) {
 
   results.push(await runTest('Allows compatibility-layer files to keep isolated legacy translation logic', async () => {
     const violations = findLegacyRoutingFieldUsages(
-      'const legacy = entry.recommended_agent || entry.blocked || entry.action;',
+      'const legacy = entry.blocked || entry.action || entry.routingActionType;',
       'scripts/lib/routing-semantics.js'
     );
 
     assert.strictEqual(violations.length, 0, 'Compatibility files should be allowlisted');
+  }));
+
+  results.push(await runTest('Flags ambiguous recommendedAgent naming in task-router routing contexts', async () => {
+    const violations = findLegacyRoutingFieldUsages(
+      'return { recommendedAgent: "opspal-core:implementation-planner" };',
+      'scripts/lib/task-router.js'
+    );
+
+    assert(violations.some((violation) => violation.code === 'legacy_recommended_agent'), 'Should flag recommendedAgent in task-router.js');
+  }));
+
+  results.push(await runTest('Fails if the legacy prompt router artifact is reintroduced', async () => {
+    const violations = findLegacyRoutingFieldUsages(
+      '#!/bin/bash\necho legacy\n',
+      'hooks/user-prompt-router.sh'
+    );
+
+    assert(violations.some((violation) => violation.code === 'legacy_prompt_router_artifact'), 'Should flag the deleted prompt router artifact');
+  }));
+
+  results.push(await runTest('Flags stale references to the deleted prompt router', async () => {
+    const violations = findLegacyRoutingFieldUsages(
+      'const hook = ".claude-plugins/opspal-core/hooks/user-prompt-router.sh";',
+      'scripts/setup-auto-routing.sh'
+    );
+
+    assert(violations.some((violation) => violation.code === 'legacy_prompt_router_reference'), 'Should flag deleted prompt router references');
   }));
 
   results.push(await runTest('Validator passes against the current workspace', async () => {

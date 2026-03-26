@@ -22,7 +22,7 @@ NC='\033[0m' # No Color
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-HOOK_PATH="$PLUGIN_ROOT/hooks/user-prompt-router.sh"
+HOOK_PATH="$PLUGIN_ROOT/hooks/unified-router.sh"
 
 # Find Claude settings files
 HOME_DIR="${HOME}"
@@ -44,7 +44,7 @@ echo ""
 check_existing_hook() {
     local settings_file="$1"
     if [ -f "$settings_file" ]; then
-        if grep -q "user-prompt-submit" "$settings_file" 2>/dev/null; then
+        if grep -q "UserPromptSubmit" "$settings_file" 2>/dev/null; then
             return 0
         fi
     fi
@@ -65,7 +65,7 @@ backup_settings() {
 # Function to add hook to settings
 add_hook_to_settings() {
     local settings_file="$1"
-    local relative_hook_path="$2"
+    local hook_command="$2"
 
     # Create .claude directory if it doesn't exist
     mkdir -p "$(dirname "$settings_file")"
@@ -76,35 +76,29 @@ add_hook_to_settings() {
         if command -v jq >/dev/null 2>&1; then
             # Use jq for clean JSON manipulation
             local temp_file=$(mktemp)
-            jq --arg hook "$relative_hook_path" '.hooks."user-prompt-submit" = $hook' "$settings_file" > "$temp_file"
+            jq --arg command "$hook_command" '
+              .hooks = (.hooks // {}) |
+              .hooks.UserPromptSubmit = {
+                command: $command,
+                timeout: 10000,
+                description: "OpsPal unified routing hook"
+              }
+            ' "$settings_file" > "$temp_file"
             mv "$temp_file" "$settings_file"
         else
-            # Fallback: manual JSON manipulation
-            echo -e "${YELLOW}⚠${NC} jq not found - using manual JSON update"
-
-            # Remove closing brace
-            sed -i '$ d' "$settings_file"
-
-            # Check if hooks section exists
-            if grep -q '"hooks"' "$settings_file"; then
-                # Update hooks section
-                sed -i 's/"hooks": {/"hooks": {\n    "user-prompt-submit": "'"$relative_hook_path"'",/' "$settings_file"
-            else
-                # Add hooks section
-                echo '  "hooks": {' >> "$settings_file"
-                echo '    "user-prompt-submit": "'"$relative_hook_path"'"' >> "$settings_file"
-                echo '  }' >> "$settings_file"
-            fi
-
-            # Add closing brace
-            echo '}' >> "$settings_file"
+            echo -e "${RED}✗${NC} jq is required to update existing settings files safely"
+            exit 1
         fi
     else
         # File doesn't exist or is empty - create new
         cat > "$settings_file" << EOF
 {
   "hooks": {
-    "user-prompt-submit": "$relative_hook_path"
+    "UserPromptSubmit": {
+      "command": "$hook_command",
+      "timeout": 10000,
+      "description": "OpsPal unified routing hook"
+    }
   }
 }
 EOF
@@ -186,11 +180,11 @@ main() {
                     echo "Skipping project scope setup"
                 else
                     backup_settings "$PROJECT_SETTINGS"
-                    add_hook_to_settings "$PROJECT_SETTINGS" ".claude-plugins/opspal-core/hooks/user-prompt-router.sh"
+                    add_hook_to_settings "$PROJECT_SETTINGS" "bash .claude-plugins/opspal-core/hooks/unified-router.sh"
                 fi
             else
                 backup_settings "$PROJECT_SETTINGS"
-                add_hook_to_settings "$PROJECT_SETTINGS" ".claude-plugins/opspal-core/hooks/user-prompt-router.sh"
+                add_hook_to_settings "$PROJECT_SETTINGS" "bash .claude-plugins/opspal-core/hooks/unified-router.sh"
             fi
 
             create_env_file
@@ -207,11 +201,11 @@ main() {
                 else
                     backup_settings "$USER_SETTINGS"
                     # Use absolute path for user scope
-                    add_hook_to_settings "$USER_SETTINGS" "$HOOK_PATH"
+                    add_hook_to_settings "$USER_SETTINGS" "bash $HOOK_PATH"
                 fi
             else
                 backup_settings "$USER_SETTINGS"
-                add_hook_to_settings "$USER_SETTINGS" "$HOOK_PATH"
+                add_hook_to_settings "$USER_SETTINGS" "bash $HOOK_PATH"
             fi
             ;;
         3)
@@ -223,7 +217,7 @@ main() {
                 echo -e "${YELLOW}⚠${NC} Hook already configured in $PROJECT_SETTINGS"
             else
                 backup_settings "$PROJECT_SETTINGS"
-                add_hook_to_settings "$PROJECT_SETTINGS" ".claude-plugins/opspal-core/hooks/user-prompt-router.sh"
+                add_hook_to_settings "$PROJECT_SETTINGS" "bash .claude-plugins/opspal-core/hooks/unified-router.sh"
             fi
 
             # User scope
@@ -231,7 +225,7 @@ main() {
                 echo -e "${YELLOW}⚠${NC} Hook already configured in $USER_SETTINGS"
             else
                 backup_settings "$USER_SETTINGS"
-                add_hook_to_settings "$USER_SETTINGS" "$HOOK_PATH"
+                add_hook_to_settings "$USER_SETTINGS" "bash $HOOK_PATH"
             fi
 
             create_env_file

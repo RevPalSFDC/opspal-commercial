@@ -87,12 +87,11 @@ async function runAllTests() {
     }
   }));
 
-  results.push(await runTest('Normalizes legacy state reads through the compatibility layer and records telemetry', async () => {
+  results.push(await runTest('Does not infer explicit routing semantics from legacy-only state aliases', async () => {
     const home = createTempHome();
     const sessionKey = 'legacy-state';
     const stateDir = path.join(home, '.claude', 'routing-state');
     const stateFile = getStateFile(home, sessionKey);
-    const compatLog = path.join(home, '.claude', 'logs', 'routing-legacy-compat.jsonl');
 
     try {
       fs.mkdirSync(stateDir, { recursive: true });
@@ -108,11 +107,10 @@ async function runAllTests() {
       }, null, 2));
 
       const normalized = JSON.parse(runStateManager('get', sessionKey, { home }));
-      assert.strictEqual(normalized.required_agent, 'opspal-salesforce:sfdc-cpq-assessor', 'Legacy recommended_agent should normalize to required_agent');
-      assert.strictEqual(normalized.execution_block_until_cleared, true, 'Legacy blocked/action should normalize to execution_block_until_cleared');
-      assert.strictEqual(normalized.guidance_action, 'require_specialist', 'Legacy action should normalize to guidance_action');
-      assert.strictEqual(normalized.clearance_status, 'pending_clearance', 'Legacy status should normalize to clearance_status');
-      assert(fs.existsSync(compatLog), 'Compatibility reads should write telemetry');
+      assert.strictEqual(normalized.required_agent, null, 'Legacy recommended_agent should no longer normalize to required_agent');
+      assert.strictEqual(normalized.execution_block_until_cleared, false, 'Legacy blocked/action should no longer normalize to execution_block_until_cleared');
+      assert.strictEqual(normalized.guidance_action, 'recommend_specialist', 'Legacy action should no longer normalize to guidance_action');
+      assert.strictEqual(normalized.clearance_status, 'cleared', 'Legacy status alias should no longer normalize to clearance_status');
     } finally {
       fs.rmSync(home, { recursive: true, force: true });
     }

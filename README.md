@@ -1,6 +1,6 @@
 # OpsPal Commercial
 
-Commercial Claude Code marketplace for RevOps delivery across Salesforce, HubSpot, Marketo, GTM planning, and executive reporting. This repo currently ships 10 plugins with 302 agents, 273 commands, and 171 hooks.
+Commercial Claude Code marketplace for RevOps delivery across Salesforce, HubSpot, Marketo, GTM planning, and executive reporting. This repo currently ships 10 plugins with 302 agents, 273 commands, and 170 hooks.
 
 ## Install
 
@@ -34,7 +34,7 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.11 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.45.8 | active | 79 | 113 | 79 |
+| `opspal-core` | 2.45.9 | active | 79 | 113 | 78 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 1 | 1 |
 | `opspal-gtm-planning` | 2.3.4 | active | 13 | 16 | 4 |
 | `opspal-hubspot` | 3.9.14 | active | 59 | 33 | 14 |

@@ -14,11 +14,12 @@ This command performs a comprehensive health check of the automatic agent routin
 The routing health check validates:
 1. Hook configuration in settings.json
 2. Hook file exists and is executable
-3. Routing index is present and up-to-date
-4. Environment variables are configured
-5. Required scripts are available
-6. Test routing functionality
-7. Recent metrics (if available)
+3. Routing index is present and generated from the canonical registry
+4. Canonical routing integrity validation passes
+5. Environment variables are configured
+6. Required scripts are available
+7. Test routing functionality
+8. Recent metrics (if available)
 
 ## Health Check Steps
 
@@ -28,17 +29,26 @@ The routing health check validates:
 - Validate configuration values
 
 ### 2. File System Check
-- Hook file exists: `.claude-plugins/opspal-core/hooks/user-prompt-router.sh`
+- Hook file exists: `.claude-plugins/opspal-core/hooks/unified-router.sh`
 - Hook is executable
 - Routing index exists: `routing-index.json`
 - Required scripts present
+- Canonical routing validator available: `scripts/lib/validate-routing-integrity.js`
+- Routing-state semantics validator available: `scripts/lib/validate-routing-state-semantics.js`
+- Legacy prompt-router artifacts and references are absent
 
-### 3. Functionality Test
+### 3. Canonical Integrity Check
+- `routing-patterns.json` remains the routing authority
+- Routed targets resolve to real, fully qualified agents
+- Routable metadata and generated artifacts stay in sync
+- Routed agent bodies do not require undeclared tools
+
+### 4. Functionality Test
 - Run test routing: "Deploy to production"
 - Verify recommendation returned
 - Check confidence and complexity scores
 
-### 4. Metrics Check (if available)
+### 5. Metrics Check (if available)
 - Recent routing decisions (last 24 hours)
 - Auto-routing rate
 - Success rate
@@ -104,7 +114,7 @@ Top agent: sfdc-revops-auditor (12 uses)
 
 **Solution**:
 ```bash
-chmod +x .claude-plugins/opspal-core/hooks/user-prompt-router.sh
+chmod +x .claude-plugins/opspal-core/hooks/unified-router.sh
 ```
 
 ### Routing Index Missing
@@ -139,12 +149,15 @@ node "$(find_script "routing-index-builder.js")"
 **Solutions**:
 1. Rebuild index: `node scripts/lib/routing-index-builder.js`
 2. Check Node.js: `which node`
-3. Check logs: `tail -f /tmp/routing-hook.log`
+3. Run integrity validator: `node scripts/lib/validate-routing-integrity.js`
+4. Run routing-state semantics validator: `node scripts/lib/validate-routing-state-semantics.js`
+5. Check logs: `tail -f /tmp/routing-hook.log`
 
 ## Related Commands
 
 - `/route` - Manually analyze routing for a task
 - `/agents` - List all available agents
+- `node plugins/opspal-core/scripts/lib/validate-routing-integrity.js` - Validate route, metadata, and tool-fit integrity
 
 ## Implementation
 

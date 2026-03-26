@@ -12,20 +12,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const { resolveRoutingSemantics } = require('./routing-semantics');
+const { resolveHistoricalRoutingLogSemantics } = require('./routing-semantics');
 
 function isExecutionGated(event = {}) {
-    return resolveRoutingSemantics(event, {
-        allowLegacy: true,
-        source: 'routing-metrics-tracker'
-    }).executionBlockUntilCleared;
+    return resolveHistoricalRoutingLogSemantics(event).executionBlockUntilCleared;
 }
 
 function getRoutedAgent(event = {}) {
-    return resolveRoutingSemantics(event, {
-        allowLegacy: true,
-        source: 'routing-metrics-tracker'
-    }).routedAgent;
+    return resolveHistoricalRoutingLogSemantics(event).routedAgent;
 }
 
 class RoutingMetricsTracker {
@@ -41,10 +35,7 @@ class RoutingMetricsTracker {
      */
     recordRouting(event) {
         if (!this.enableTracking) return;
-        const semantics = resolveRoutingSemantics(event, {
-            allowLegacy: true,
-            source: 'routing-metrics-tracker'
-        });
+        const semantics = resolveHistoricalRoutingLogSemantics(event);
 
         const record = {
             timestamp: new Date().toISOString(),
@@ -103,10 +94,7 @@ class RoutingMetricsTracker {
      */
     recordValidation(event) {
         if (!this.enableTracking) return;
-        const semantics = resolveRoutingSemantics(event, {
-            allowLegacy: true,
-            source: 'routing-metrics-tracker'
-        });
+        const semantics = resolveHistoricalRoutingLogSemantics(event);
 
         const record = {
             timestamp: new Date().toISOString(),

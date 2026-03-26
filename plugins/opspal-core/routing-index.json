@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-25T18:01:30.731Z",
+  "buildDate": "2026-03-26T00:02:10.276Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
-  "totalHooks": 251,
+  "totalHooks": 250,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48458,13 +48458,6 @@
       },
       {
         "plugin": "opspal-core",
-        "name": "user-prompt-router",
-        "description": "",
-        "file": "opspal-core/hooks/user-prompt-router.sh",
-        "matcher": null
-      },
-      {
-        "plugin": "opspal-core",
         "name": "weekly-strategy-transfer",
         "description": "",
         "file": "opspal-core/hooks/weekly-strategy-transfer.sh",
@@ -49201,7 +49194,7 @@
     "totalAgents": 299,
     "totalAgentsFull": 302,
     "totalCommands": 273,
-    "totalHooks": 251,
+    "totalHooks": 250,
     "totalRoutingRules": 0,
     "totalKeywords": 2615,
     "totalKeywordsFull": 2615,
@@ -49223,7 +49216,7 @@
       "SubagentStop": 1,
       "TaskCompleted": 1,
       "Stop": 10,
-      "Unknown": 131,
+      "Unknown": 130,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,

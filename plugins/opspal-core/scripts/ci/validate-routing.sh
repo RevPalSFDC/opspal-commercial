@@ -36,6 +36,7 @@ TOTAL_CHECKS=0
 PASSED_CHECKS=0
 FAILED_CHECKS=0
 WARNING_CHECKS=0
+LEGACY_ROUTER_BASENAME="user-prompt""-router.sh"
 
 # Parse arguments
 for arg in "$@"; do
@@ -187,7 +188,7 @@ check_scripts() {
         "scripts/lib/routing-index-builder.js"
         "scripts/lib/routing-routability-audit.js"
         "scripts/lib/routing-metrics-tracker.js"
-        "hooks/user-prompt-router.sh"
+        "hooks/unified-router.sh"
     )
 
     local missing=0
@@ -323,10 +324,62 @@ check_routing_integrity() {
     fi
 }
 
-# Check 8: Verify routing index coverage
+# Check 8: Validate routing-state semantics and legacy guardrails
+check_routing_state_semantics() {
+    ((TOTAL_CHECKS+=1))
+    log_section "8. Routing State Semantics"
+
+    local validator="$PLUGIN_ROOT/scripts/lib/validate-routing-state-semantics.js"
+
+    if [ ! -f "$validator" ]; then
+        log_error "Routing state semantics validator not found"
+        return 1
+    fi
+
+    if node "$validator" >/dev/null 2>&1; then
+        log_success "Routing state semantics validator passed"
+    else
+        log_error "Routing state semantics validator failed"
+        if [ "$VERBOSE" = "1" ]; then
+            node "$validator" || true
+        fi
+        return 1
+    fi
+
+    local legacy_router_refs
+    legacy_router_refs=$(rg -n "user-prompt""-router\\.sh" \
+        "$PLUGIN_ROOT/AUTO_ROUTING_SETUP.md" \
+        "$PLUGIN_ROOT/commands" \
+        "$PLUGIN_ROOT/hooks/README.md" \
+        "$PLUGIN_ROOT/scripts/setup-auto-routing.sh" \
+        "$PLUGIN_ROOT/routing-index.json" 2>/dev/null || true)
+    if [ -z "$legacy_router_refs" ]; then
+        log_success "Legacy prompt router references removed"
+    else
+        log_error "Legacy prompt router references detected"
+        if [ "$VERBOSE" = "1" ]; then
+            echo "$legacy_router_refs"
+        fi
+        return 1
+    fi
+
+    local prompt_router_artifacts
+    prompt_router_artifacts=$(find "$PLUGIN_ROOT/hooks" -maxdepth 1 -type f \( -name "$LEGACY_ROUTER_BASENAME" -o -name '*prompt-router*.sh' \) ! -name 'unified-router.sh' -printf '%P\n' 2>/dev/null || true)
+    if [ -z "$prompt_router_artifacts" ]; then
+        log_success "No legacy prompt router artifacts present"
+    else
+        log_error "Legacy prompt router artifact detected in hooks/"
+        if [ "$VERBOSE" = "1" ]; then
+            echo "$prompt_router_artifacts"
+        fi
+        return 1
+    fi
+}
+
+# Check 9: Verify routing index coverage
 check_index_coverage() {
     ((TOTAL_CHECKS+=1))
-    log_section "7. Routing Index Coverage"
+    log_section "9. Routing Index Coverage"
 
     local index_file="$PLUGIN_ROOT/routing-index.json"
 
@@ -371,10 +424,10 @@ check_index_coverage() {
     fi
 }
 
-# Check 9: Validate keyword quality
+# Check 10: Validate keyword quality
 check_keyword_quality() {
     ((TOTAL_CHECKS+=1))
-    log_section "8. Keyword Quality"
+    log_section "10. Keyword Quality"
 
     local index_file="$PLUGIN_ROOT/routing-index.json"
 
@@ -410,10 +463,10 @@ check_keyword_quality() {
     fi
 }
 
-# Check 10: Guardrail against semver-prefixed agent leaks
+# Check 11: Guardrail against semver-prefixed agent leaks
 check_semver_guardrail() {
     ((TOTAL_CHECKS+=1))
-    log_section "9. Semver Prefix Guardrail"
+    log_section "11. Semver Prefix Guardrail"
 
     local index_file="$PLUGIN_ROOT/routing-index.json"
     local patterns_file="$PLUGIN_ROOT/config/routing-patterns.json"
@@ -460,10 +513,10 @@ check_semver_guardrail() {
     fi
 }
 
-# Check 11: Verify per-agent routability (not just index presence)
+# Check 12: Verify per-agent routability (not just index presence)
 check_agent_routability() {
     ((TOTAL_CHECKS+=1))
-    log_section "10. Agent Routability Audit"
+    log_section "12. Agent Routability Audit"
 
     local audit_script="$PLUGIN_ROOT/scripts/lib/routing-routability-audit.js"
 
@@ -522,6 +575,7 @@ main() {
     check_complexity_scorer
     check_validator
     check_routing_integrity
+    check_routing_state_semantics
     check_index_coverage
     check_keyword_quality
     check_semver_guardrail

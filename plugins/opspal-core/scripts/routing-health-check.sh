@@ -22,12 +22,12 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 HOOK_PATH="$PLUGIN_ROOT/hooks/unified-router.sh"
-LEGACY_HOOK_PATH="$PLUGIN_ROOT/hooks/user-prompt-router.sh"
 INDEX_PATH="$PLUGIN_ROOT/routing-index.json"
 TASK_ROUTER="$PLUGIN_ROOT/scripts/lib/task-router.js"
 METRICS_FILE_PRIMARY="$HOME/.claude/logs/routing-decisions.jsonl"
 METRICS_FILE_SECONDARY="$HOME/.claude/logs/routing.jsonl"
 METRICS_FILE_LEGACY="${TMPDIR:-/tmp}/routing-metrics.jsonl"
+LEGACY_ROUTER_BASENAME="user-prompt""-router.sh"
 
 # Options
 RUN_SYNTHETIC_PROBE=false
@@ -151,14 +151,21 @@ check_configuration() {
     # Check if hook is configured
     local project_settings=".claude/settings.json"
     local home_settings="$HOME/.claude/settings.json"
+    local configured_settings=""
 
     if [ -f "$project_settings" ] && jq -e '.hooks.UserPromptSubmit' "$project_settings" >/dev/null 2>&1; then
         log_pass "Hook configured: .claude/settings.json"
+        configured_settings="$project_settings"
     elif [ -f "$home_settings" ] && jq -e '.hooks.UserPromptSubmit' "$home_settings" >/dev/null 2>&1; then
         log_pass "Hook configured: ~/.claude/settings.json"
+        configured_settings="$home_settings"
     else
         log_fail "Hook not configured in settings.json"
         return
+    fi
+
+    if [ -n "$configured_settings" ] && jq -e '.. | strings | select(test("user-prompt""-router\\.sh"))' "$configured_settings" >/dev/null 2>&1; then
+        log_fail "Settings still reference the deleted legacy prompt router"
     fi
 
     # Check environment variables
@@ -188,17 +195,13 @@ check_filesystem() {
             log_fail "Hook file not executable"
             echo "  Fix: chmod +x $HOOK_PATH"
         fi
-    elif [ -f "$LEGACY_HOOK_PATH" ]; then
-        if [ -x "$LEGACY_HOOK_PATH" ]; then
-            log_warn "Using legacy hook file ($(basename "$LEGACY_HOOK_PATH"))"
-            HOOK_PATH="$LEGACY_HOOK_PATH"
-        else
-            log_fail "Legacy hook file not executable"
-            echo "  Fix: chmod +x $LEGACY_HOOK_PATH"
-        fi
     else
         log_fail "Hook file not found: $HOOK_PATH"
         return
+    fi
+
+    if [ -f "$PLUGIN_ROOT/hooks/$LEGACY_ROUTER_BASENAME" ]; then
+        log_fail "Deleted legacy prompt router artifact was reintroduced"
     fi
 
     # Check routing index

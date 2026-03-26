@@ -30,7 +30,9 @@ describe('TaskRouter', () => {
         it('should initialize keywords mapping', () => {
             expect(router.keywords).toBeDefined();
             expect(Object.keys(router.keywords).length).toBeGreaterThan(0);
-            expect(router.keywords['release-coordinator']).toContain('production');
+            expect(
+                router.keywords['opspal-core:release-coordinator'].some((keyword) => keyword.includes('prod'))
+            ).toBe(true);
         });
 
         it('should initialize complexity weights', () => {
@@ -121,7 +123,7 @@ describe('TaskRouter', () => {
         it('should find release-coordinator for production tasks', () => {
             const matches = router.findMatchingAgents('deploy to production');
             expect(matches.length).toBeGreaterThan(0);
-            expect(matches[0].agent).toBe('release-coordinator');
+            expect(matches[0].agent).toBe('opspal-core:release-coordinator');
         });
 
         it('should find sfdc-cpq-assessor for CPQ tasks', () => {
@@ -177,6 +179,14 @@ describe('TaskRouter', () => {
             const lowerMatches = router.findMatchingAgents('production deploy');
             const mixedMatches = router.findMatchingAgents('production deploy'.toLowerCase());
             expect(lowerMatches[0].agent).toBe(mixedMatches[0].agent);
+        });
+    });
+
+    describe('postAssessmentHandoff', () => {
+        it('uses explicit post-assessment metadata naming', () => {
+            const result = router.postAssessmentHandoff('revops_audit', [{ severity: 'high' }]);
+            expect(result.postAssessmentSuggestedAgent).toBe('implementation-planner');
+            expect(result).not.toHaveProperty('recommendedAgent');
         });
     });
 
@@ -453,7 +463,7 @@ describe('TaskRouter', () => {
 
         it('should handle special characters', () => {
             const result = router.analyze('deploy $@#$% to production!!!');
-            expect(result.agent).toBe('release-coordinator');
+            expect(result.agent).toBe('opspal-core:release-coordinator');
         });
 
         it('should handle very long input', () => {
@@ -464,7 +474,7 @@ describe('TaskRouter', () => {
 
         it('should handle unicode characters', () => {
             const result = router.analyze('部署到生产环境 deploy to production');
-            expect(result.agent).toBe('release-coordinator');
+            expect(result.agent).toBe('opspal-core:release-coordinator');
         });
     });
 

@@ -991,7 +991,7 @@ class TaskRouter {
         const findingsCount = Array.isArray(findings) ? findings.length : 0;
 
         return {
-            recommendedAgent: 'implementation-planner',
+            postAssessmentSuggestedAgent: 'implementation-planner',
             context: {
                 assessmentType,
                 findingsCount,

@@ -18,24 +18,18 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { resolveRoutingSemantics } = require('./routing-semantics');
+const { resolveHistoricalRoutingLogSemantics } = require('./routing-semantics');
 
 function getRoutingOutput(entry = {}) {
     return entry.output || entry;
 }
 
 function isExecutionGatedRoute(entry = {}) {
-    return resolveRoutingSemantics(entry, {
-        allowLegacy: true,
-        source: 'routing-learner'
-    }).executionBlockUntilCleared;
+    return resolveHistoricalRoutingLogSemantics(entry).executionBlockUntilCleared;
 }
 
 function getRoutedAgent(entry = {}) {
-    return resolveRoutingSemantics(entry, {
-        allowLegacy: true,
-        source: 'routing-learner'
-    }).routedAgent;
+    return resolveHistoricalRoutingLogSemantics(entry).routedAgent;
 }
 
 class RoutingLearner {

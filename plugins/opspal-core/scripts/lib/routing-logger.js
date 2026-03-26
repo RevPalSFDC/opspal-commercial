@@ -33,24 +33,18 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { resolveRoutingSemantics } = require('./routing-semantics');
+const { resolveHistoricalRoutingLogSemantics } = require('./routing-semantics');
 
 // Log file location
 const LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
 const LOG_FILE = path.join(LOG_DIR, 'routing.jsonl');
 
 function getAgent(entry = {}) {
-  return resolveRoutingSemantics(entry, {
-    allowLegacy: true,
-    source: 'routing-logger'
-  }).routedAgent;
+  return resolveHistoricalRoutingLogSemantics(entry).routedAgent;
 }
 
 function isExecutionGated(entry = {}) {
-  return resolveRoutingSemantics(entry, {
-    allowLegacy: true,
-    source: 'routing-logger'
-  }).executionBlockUntilCleared;
+  return resolveHistoricalRoutingLogSemantics(entry).executionBlockUntilCleared;
 }
 
 /**
@@ -140,10 +134,7 @@ function readRoutingLog(options = {}) {
 
     if (guidanceAction) {
       entries = entries.filter((entry) => {
-        const semantics = resolveRoutingSemantics(entry, {
-          allowLegacy: true,
-          source: 'routing-logger'
-        });
+        const semantics = resolveHistoricalRoutingLogSemantics(entry);
         return semantics.guidanceAction === guidanceAction;
       });
     }
@@ -193,10 +184,7 @@ function getRoutingStats(options = {}) {
   let confidenceCount = 0;
 
   for (const entry of entries) {
-    const semantics = resolveRoutingSemantics(entry, {
-      allowLegacy: true,
-      source: 'routing-logger'
-    });
+    const semantics = resolveHistoricalRoutingLogSemantics(entry);
     const guidanceAction = semantics.guidanceAction || 'UNKNOWN';
     stats.byAction[guidanceAction] = (stats.byAction[guidanceAction] || 0) + 1;
 

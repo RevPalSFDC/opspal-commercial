@@ -9,9 +9,9 @@
  * - prompt-time guidance semantics
  * - execution-time specialist enforcement semantics
  *
- * Ambiguous legacy fields such as blocked/action/recommended_agent are still
- * translated on read, but new state is written with explicit names so future
- * consumers cannot accidentally recreate prompt-time routing blocks.
+ * Routing state is explicit-only on disk. Legacy aliases are no longer
+ * normalized on read, so enforcement cannot silently depend on ambiguous
+ * compatibility fields.
  *
  * Usage:
  *   node routing-state-manager.js save <session-key>          # reads JSON from stdin
@@ -28,7 +28,6 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { recordLegacyRoutingCompatibility } = require('./routing-semantics');
 
 const LEGACY_STATE_FILE = path.join(os.homedir(), '.claude', 'routing-state.json');
 const STATE_DIR = path.join(os.homedir(), '.claude', 'routing-state');
@@ -83,65 +82,13 @@ function normalizeClearanceAgents(value, fallbackAgent = null) {
   return [...new Set(agents)];
 }
 
-function firstLegacyString(candidates, usedFields) {
-  for (const candidate of candidates) {
-    if (candidate.value === undefined || candidate.value === null) {
-      continue;
-    }
-
-    const normalized = String(candidate.value).trim();
-    if (!normalized) {
-      continue;
-    }
-
-    if (usedFields && candidate.field) {
-      usedFields.add(candidate.field);
-    }
-    return normalized;
-  }
-
-  return null;
-}
-
-function firstLegacyBoolean(candidates, usedFields) {
-  for (const candidate of candidates) {
-    if (candidate.value === undefined || candidate.value === null || candidate.value === '') {
-      continue;
-    }
-
-    if (usedFields && candidate.field) {
-      usedFields.add(candidate.field);
-    }
-    return toBoolean(candidate.value);
-  }
-
-  return null;
-}
-
-function recordLegacyStateUsage(sessionKey, fields, context = {}) {
-  const uniqueFields = [...new Set((fields || []).filter(Boolean))];
-  if (uniqueFields.length === 0) {
-    return;
-  }
-
-  recordLegacyRoutingCompatibility({
-    source: 'routing-state-manager',
-    fields: uniqueFields,
-    context: {
-      sessionKey: normalizeSessionKey(sessionKey),
-      ...context
-    }
-  });
-}
-
-function normalizeLegacyStatus(value) {
+function normalizeClearanceStatus(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (!normalized) {
     return '';
   }
 
   switch (normalized) {
-    case 'pending':
     case 'pending_clearance':
       return 'pending_clearance';
     case 'cleared':
@@ -153,23 +100,22 @@ function normalizeLegacyStatus(value) {
   }
 }
 
-function normalizeRouteKind(routeKind, legacyAction, mandatory, executionBlockUntilCleared) {
+function normalizeRouteKind(routeKind, guidanceAction, executionBlockUntilCleared, hasAgent) {
   const explicit = String(routeKind || '').trim();
   if (explicit) {
     return explicit;
   }
 
-  if (mandatory) {
-    return 'mandatory_specialist';
-  }
-
-  const action = String(legacyAction || '').trim().toUpperCase();
-  if (action === 'INTAKE_REQUIRED') {
+  if (String(guidanceAction || '').trim() === 'require_intake') {
     return 'intake_specialist';
   }
 
   if (executionBlockUntilCleared) {
     return 'complexity_specialist';
+  }
+
+  if (hasAgent) {
+    return 'advisory';
   }
 
   return 'advisory';
@@ -247,27 +193,22 @@ function normalizeAutoDelegation(state = {}, fallback = {}) {
 function normalizeState(sessionKey, state = {}, existing = null) {
   const timestamp = nowSeconds();
   const createdAt = Number.parseInt(state.created_at || state.createdAt || existing?.created_at || timestamp, 10);
-  const usedLegacyFields = new Set();
-  const explicitClearanceStatus = state.clearance_status || state.clearanceStatus || existing?.clearance_status || null;
-  const legacyStatus = normalizeLegacyStatus(
-    explicitClearanceStatus ||
-    firstLegacyString([
-      { value: state.status, field: 'status' },
-      { value: existing?.status, field: 'status' }
-    ], usedLegacyFields)
+  const explicitClearanceStatus = normalizeClearanceStatus(
+    state.clearance_status ||
+    state.clearanceStatus ||
+    existing?.clearance_status ||
+    existing?.clearanceStatus
   );
-  const explicitRequiredAgent = state.required_agent || state.requiredAgent || existing?.required_agent || null;
-  const legacyRequiredAgent = firstLegacyString([
-    { value: state.recommended_agent, field: 'recommended_agent' },
-    { value: state.recommendedAgent, field: 'recommended_agent' },
-    { value: state.agent, field: 'agent' },
-    { value: existing?.recommended_agent, field: 'recommended_agent' },
-    { value: existing?.recommendedAgent, field: 'recommended_agent' },
-    { value: existing?.agent, field: 'agent' }
-  ], usedLegacyFields);
-  const requiredAgent = explicitRequiredAgent || legacyRequiredAgent || null;
+  const requiredAgent = state.required_agent ||
+    state.requiredAgent ||
+    existing?.required_agent ||
+    existing?.requiredAgent ||
+    null;
   const clearanceAgents = normalizeClearanceAgents(
-    state.clearance_agents || state.clearanceAgents || existing?.clearance_agents,
+    state.clearance_agents ||
+    state.clearanceAgents ||
+    existing?.clearance_agents ||
+    existing?.clearanceAgents,
     requiredAgent
   );
   const ttlSeconds = Number.parseInt(state.ttl_seconds || state.ttlSeconds || existing?.ttl_seconds || STATE_TTL_SECONDS, 10);
@@ -275,95 +216,96 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     state.expires_at || state.expiresAt || existing?.expires_at || (timestamp + ttlSeconds),
     10
   );
-  const overrideApplied = toBoolean(state.override_applied ?? existing?.override_applied);
+  const overrideApplied = toBoolean(
+    state.override_applied ??
+    state.overrideApplied ??
+    existing?.override_applied ??
+    existing?.overrideApplied
+  );
   const routingConfidence = normalizeRoutingConfidence(
     state.routing_confidence ?? state.routingConfidence,
     existing?.routing_confidence ?? existing?.routingConfidence
   );
-  const explicitExecutionBlock = state.execution_block_until_cleared ?? state.executionBlockUntilCleared;
-  const legacyAction = firstLegacyString([
-    { value: state.action, field: 'action' },
-    { value: existing?.action, field: 'action' }
-  ], usedLegacyFields);
-  const legacyMandatory = firstLegacyBoolean([
-    { value: state.mandatory, field: 'mandatory' },
-    { value: existing?.mandatory, field: 'mandatory' }
-  ], usedLegacyFields) === true;
-  const legacyEnforcedBlock = firstLegacyBoolean([
-    { value: state.enforced_block, field: 'enforced_block' },
-    { value: state.hard_blocked, field: 'hard_blocked' },
-    { value: existing?.enforced_block, field: 'enforced_block' }
-  ], usedLegacyFields);
-  const legacyBlocked = firstLegacyBoolean([
-    { value: state.blocked, field: 'blocked' },
-    { value: existing?.blocked, field: 'blocked' }
-  ], usedLegacyFields);
-  const explicitExecutionBlockValue = explicitExecutionBlock === undefined
-    ? null
+  const explicitExecutionBlock = state.execution_block_until_cleared ??
+    state.executionBlockUntilCleared ??
+    existing?.execution_block_until_cleared ??
+    existing?.executionBlockUntilCleared;
+  const executionBlockUntilCleared = explicitExecutionBlock === undefined || explicitExecutionBlock === null
+    ? false
     : toBoolean(explicitExecutionBlock);
-  const executionBlockUntilCleared = explicitExecutionBlockValue !== null
-    ? explicitExecutionBlockValue
-    : (
-      toBoolean(state.execution_block_until_cleared ?? existing?.execution_block_until_cleared) ||
-      legacyEnforcedBlock === true ||
-      legacyBlocked === true ||
-      legacyMandatory ||
-      ['BLOCKED', 'INTAKE_REQUIRED', 'MANDATORY_BLOCKED', 'MANDATORY_ALERT'].includes(String(legacyAction || '').trim().toUpperCase())
-    );
+  const explicitGuidanceAction = state.guidance_action ||
+    state.guidanceAction ||
+    existing?.guidance_action ||
+    existing?.guidanceAction ||
+    null;
   const routeKind = normalizeRouteKind(
-    state.route_kind || state.routeKind || existing?.route_kind,
-    legacyAction,
-    legacyMandatory,
-    executionBlockUntilCleared
-  );
-  const clearanceStatus = legacyStatus || (executionBlockUntilCleared && !overrideApplied ? 'pending_clearance' : 'cleared');
-  const explicitRouteCleared = state.route_cleared ?? state.routeCleared ?? existing?.route_cleared;
-  const routeCleared = explicitRouteCleared === undefined || explicitRouteCleared === null
-    ? clearanceStatus === 'cleared'
-    : toBoolean(explicitRouteCleared);
-  const explicitRoutePending = state.route_pending_clearance ?? state.routePendingClearance ?? existing?.route_pending_clearance;
-  const routePendingClearance = explicitRoutePending === undefined || explicitRoutePending === null
-    ? clearanceStatus === 'pending_clearance'
-    : toBoolean(explicitRoutePending);
-  const requiresSpecialist = toBoolean(
-    state.requires_specialist ??
-    state.requiresSpecialist ??
-    existing?.requires_specialist ??
-    existing?.requiresSpecialist ??
-    executionBlockUntilCleared
+    state.route_kind || state.routeKind || existing?.route_kind || existing?.routeKind,
+    explicitGuidanceAction,
+    executionBlockUntilCleared,
+    Boolean(requiredAgent || clearanceAgents.length > 0)
   );
   const guidanceAction = normalizeGuidanceAction(
-    state.guidance_action || state.guidanceAction || existing?.guidance_action,
+    explicitGuidanceAction,
     routeKind,
     executionBlockUntilCleared
   );
-  recordLegacyStateUsage(sessionKey, [...usedLegacyFields], {
-    operation: existing ? 'normalize-existing-state' : 'normalize-incoming-state'
-  });
+  const clearanceStatus = explicitClearanceStatus || (executionBlockUntilCleared && !overrideApplied ? 'pending_clearance' : 'cleared');
+  const explicitRouteCleared = state.route_cleared ??
+    state.routeCleared ??
+    existing?.route_cleared ??
+    existing?.routeCleared;
+  const routeCleared = explicitRouteCleared === undefined || explicitRouteCleared === null
+    ? clearanceStatus === 'cleared'
+    : toBoolean(explicitRouteCleared);
+  const explicitRoutePending = state.route_pending_clearance ??
+    state.routePendingClearance ??
+    existing?.route_pending_clearance ??
+    existing?.routePendingClearance;
+  const routePendingClearance = explicitRoutePending === undefined || explicitRoutePending === null
+    ? clearanceStatus === 'pending_clearance'
+    : toBoolean(explicitRoutePending);
+  const explicitRequiresSpecialist = state.requires_specialist ??
+    state.requiresSpecialist ??
+    existing?.requires_specialist ??
+    existing?.requiresSpecialist;
+  const requiresSpecialist = explicitRequiresSpecialist === undefined || explicitRequiresSpecialist === null
+    ? (executionBlockUntilCleared || guidanceAction === 'require_specialist' || guidanceAction === 'require_intake')
+    : toBoolean(explicitRequiresSpecialist);
   const normalizedState = {
     session_key: normalizeSessionKey(sessionKey),
-    route_id: state.route_id || state.routeId || existing?.route_id || null,
+    route_id: state.route_id || state.routeId || existing?.route_id || existing?.routeId || null,
     route_kind: routeKind,
     guidance_action: guidanceAction,
-    routing_reason: state.routing_reason || state.routingReason || state.reason || existing?.routing_reason || existing?.reason || null,
+    routing_reason: state.routing_reason || state.routingReason || existing?.routing_reason || existing?.routingReason || null,
     required_agent: requiredAgent,
     clearance_agents: clearanceAgents,
     requires_specialist: requiresSpecialist,
-    prompt_guidance_only: toBoolean(state.prompt_guidance_only ?? state.promptGuidanceOnly ?? existing?.prompt_guidance_only ?? true),
-    prompt_blocked: toBoolean(state.prompt_blocked ?? state.promptBlocked ?? existing?.prompt_blocked),
+    prompt_guidance_only: toBoolean(
+      state.prompt_guidance_only ??
+      state.promptGuidanceOnly ??
+      existing?.prompt_guidance_only ??
+      existing?.promptGuidanceOnly ??
+      true
+    ),
+    prompt_blocked: toBoolean(
+      state.prompt_blocked ??
+      state.promptBlocked ??
+      existing?.prompt_blocked ??
+      existing?.promptBlocked
+    ),
     execution_block_until_cleared: executionBlockUntilCleared,
     route_pending_clearance: routePendingClearance,
     route_cleared: routeCleared,
     routing_confidence: routingConfidence,
     override_applied: overrideApplied,
     clearance_status: clearanceStatus,
-    user_message_preview: state.user_message_preview || state.userMessagePreview || existing?.user_message_preview || null,
-    handoff_prompt: state.handoff_prompt || state.handoffPrompt || existing?.handoff_prompt || null,
+    user_message_preview: state.user_message_preview || state.userMessagePreview || existing?.user_message_preview || existing?.userMessagePreview || null,
+    handoff_prompt: state.handoff_prompt || state.handoffPrompt || existing?.handoff_prompt || existing?.handoffPrompt || null,
     created_at: createdAt,
     updated_at: timestamp,
     expires_at: expiresAt,
     ttl_seconds: ttlSeconds,
-    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || null
+    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || existing?.lastResolvedAgent || null
   };
   normalizedState.auto_delegation = normalizeAutoDelegation(state, normalizedState);
 
@@ -424,7 +366,7 @@ function updateStateStatus(sessionKey, status, updates = {}) {
     return null;
   }
 
-  const nextClearanceStatus = normalizeLegacyStatus(status);
+  const nextClearanceStatus = normalizeClearanceStatus(status);
   let derivedStatusUpdates = {};
   if (nextClearanceStatus === 'pending_clearance') {
     derivedStatusUpdates = {
@@ -518,7 +460,7 @@ function checkState(sessionKey) {
     };
   }
 
-  const clearanceStatus = normalizeLegacyStatus(state.clearance_status) || 'cleared';
+  const clearanceStatus = normalizeClearanceStatus(state.clearance_status) || 'cleared';
   const lastResolvedAgent = state.last_resolved_agent || state.lastResolvedAgent || null;
   const routePendingClearance = toBoolean(state.route_pending_clearance) || ACTIVE_CLEARANCE_STATUSES.has(clearanceStatus);
   const routeCleared = toBoolean(state.route_cleared) || clearanceStatus === 'cleared';

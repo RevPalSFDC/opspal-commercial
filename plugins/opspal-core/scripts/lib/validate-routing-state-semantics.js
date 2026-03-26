@@ -48,11 +48,8 @@ const EXPLICIT_ROUTING_MARKERS = [
   'autoDelegation'
 ];
 const ALLOWLIST = new Set([
-  'hooks/user-prompt-router.sh',
-  'scripts/lib/canonical-routing-registry.js',
   'scripts/lib/validate-routing-state-semantics.js',
   'scripts/lib/routing-semantics.js',
-  'scripts/lib/routing-state-manager.js',
   'test/hooks/unit/routing-state-manager.test.js',
   'test/hooks/unit/validate-routing-state-semantics.test.js'
 ]);
@@ -91,6 +88,10 @@ function shouldScanFile(relativePath, content) {
   }
 
   if (
+    lower === 'scripts/setup-auto-routing.sh' ||
+    lower === 'scripts/ci/validate-routing.sh' ||
+    lower === 'scripts/lib/canonical-routing-registry.js' ||
+    lower === 'scripts/lib/task-router.js' ||
     lower === 'scripts/lib/compliance-tracker.js' ||
     lower === 'scripts/lib/routing-logger.js' ||
     lower === 'scripts/lib/routing-learner.js' ||
@@ -111,11 +112,23 @@ function shouldScanFile(relativePath, content) {
 }
 
 function findLegacyRoutingFieldUsages(content, relativePath) {
+  const violations = [];
+
+  if (relativePath === 'hooks/user-prompt-router.sh') {
+    violations.push({
+      code: 'legacy_prompt_router_artifact',
+      message: 'Legacy prompt router artifact must not be reintroduced.',
+      file: relativePath,
+      line: 1,
+      excerpt: ''
+    });
+    return violations;
+  }
+
   if (!shouldScanFile(relativePath, content)) {
     return [];
   }
 
-  const violations = [];
   const lines = String(content || '').split('\n');
 
   lines.forEach((line, index) => {
@@ -137,6 +150,10 @@ function findLegacyRoutingFieldUsages(content, relativePath) {
 
     if (/\brecommended_agent\b|\brecommendedAgent\b/.test(line)) {
       add('legacy_recommended_agent', 'Use required_agent or suggestedAgent instead of recommended_agent.');
+    }
+
+    if (/user-prompt-router\.sh/.test(line)) {
+      add('legacy_prompt_router_reference', 'Use unified-router.sh and do not reference the deleted legacy prompt router.');
     }
 
     if (/\broutingActionType\b|\brouting_action_type\b/.test(line)) {

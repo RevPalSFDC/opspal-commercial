@@ -44,7 +44,8 @@ This directory contains hooks for the OpsPal Core plugin that enhance Claude Cod
 | Hook | Status | Reason |
 |------|--------|---------|
 | `user-prompt-submit.sh.disabled` | ⚠️ DISABLED | Superseded by master-prompt-handler.sh |
-| `user-prompt-router.sh` | ⚠️ NOT REGISTERED | Superseded by master-prompt-handler.sh |
+
+The deleted legacy prompt-router artifact must not be reintroduced. Routing validation should fail if it comes back.
 
 ## Hook Architecture
 
