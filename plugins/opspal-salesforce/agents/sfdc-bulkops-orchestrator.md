@@ -7,6 +7,7 @@ actorType: orchestrator
 capabilities:
   - salesforce:data:bulk
   - salesforce:data:core:query
+  - salesforce:data:core:upsert
 tools:
   - Task
   - Read

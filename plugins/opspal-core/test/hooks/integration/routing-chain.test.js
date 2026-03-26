@@ -93,6 +93,19 @@ function assertNoStructuredDeny(result, message) {
   );
 }
 
+function assertStructuredRoutingDeny(result, reasonFragment, message) {
+  assert.strictEqual(result.exitCode, 0, `${message} should use structured deny semantics`);
+  assert.strictEqual(
+    result.output?.hookSpecificOutput?.permissionDecision,
+    'deny',
+    `${message} should deny tool execution`
+  );
+  assert(
+    (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes(reasonFragment),
+    `${message} should mention ${reasonFragment}`
+  );
+}
+
 async function assertPendingRouteLifecycle({
   name,
   prompt,
@@ -655,6 +668,124 @@ async function runAllTests() {
     });
     assert.strictEqual(allowedDirect.exitCode, 0, 'Procedural recommendation should not block direct operational tools');
     assertNoStructuredDeny(allowedDirect, 'Procedural recommendation should stay advisory');
+  }));
+
+  results.push(await runTest('Mixed Salesforce cleanup routing stays on the specialist path and blocks parent recovery', async () => {
+    const env = createIsolatedEnv();
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const validator = new HookTester(ROUTING_CHAIN[1]);
+    const pretool = new HookTester(PRETOOL_HOOK);
+    const prompt = 'Verify the accounts, count Contacts, generate a CSV, reparent 101 Contacts, and delete the duplicate Account in Salesforce';
+
+    const routed = await router.run({
+      input: { userPrompt: prompt },
+      env
+    });
+
+    assert.strictEqual(routed.exitCode, 0, 'Mixed cleanup routing prompt should succeed');
+    assert.strictEqual(
+      routed.output?.metadata?.suggestedAgent,
+      'opspal-salesforce:sfdc-orchestrator',
+      'Mixed cleanup workflow should route to the Salesforce orchestrator'
+    );
+    assert.strictEqual(routed.output?.metadata?.routeKind, 'mandatory_specialist', 'Mixed cleanup route should be mandatory');
+    assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, 'Mixed cleanup route should persist pending state');
+
+    const blockedBeforeClear = await pretool.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: env.CLAUDE_SESSION_ID,
+        input: {
+          command: 'sf data bulk update --sobject Contact --file ./contacts.csv --target-org sandbox'
+        }
+      },
+      env
+    });
+
+    assertStructuredRoutingDeny(blockedBeforeClear, 'ROUTING_REQUIRED_BEFORE_OPERATION', 'Pending mixed cleanup route');
+
+    const clearTask = await validator.run({
+      input: createAgentEvent({
+        subagent_type: 'opspal-salesforce:sfdc-orchestrator',
+        prompt
+      }),
+      env
+    });
+
+    assert.strictEqual(clearTask.exitCode, 0, 'Canonical cleanup orchestrator should clear the route');
+    assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', 'Cleanup orchestrator should clear pending state');
+
+    const parentFallback = await pretool.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: env.CLAUDE_SESSION_ID,
+        input: {
+          command: 'sf data bulk update --sobject Contact --file ./contacts.csv --target-org sandbox'
+        }
+      },
+      env
+    });
+
+    assertStructuredRoutingDeny(parentFallback, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Parent fallback after specialist clearance');
+  }));
+
+  results.push(await runTest('Merge/delete cleanup routing stays on the merge specialist path and blocks parent recovery', async () => {
+    const env = createIsolatedEnv();
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const validator = new HookTester(ROUTING_CHAIN[1]);
+    const pretool = new HookTester(PRETOOL_HOOK);
+    const prompt = 'Merge duplicate Contacts, delete the obsolete duplicate records, and clean up Salesforce follow-up tasks';
+
+    const routed = await router.run({
+      input: { userPrompt: prompt },
+      env
+    });
+
+    assert.strictEqual(routed.exitCode, 0, 'Merge/delete cleanup routing prompt should succeed');
+    assert.strictEqual(
+      routed.output?.metadata?.suggestedAgent,
+      'opspal-salesforce:sfdc-merge-orchestrator',
+      'Merge/delete cleanup should route to the merge orchestrator'
+    );
+    assert.strictEqual(routed.output?.metadata?.routeKind, 'mandatory_specialist', 'Merge/delete cleanup route should be mandatory');
+    assert.strictEqual(readRoutingState(env)?.route_pending_clearance, true, 'Merge/delete cleanup route should persist pending state');
+
+    const blockedBeforeClear = await pretool.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: env.CLAUDE_SESSION_ID,
+        input: {
+          command: 'sf data bulk update --sobject Contact --file ./merge-cleanup.csv --target-org sandbox'
+        }
+      },
+      env
+    });
+
+    assertStructuredRoutingDeny(blockedBeforeClear, 'ROUTING_REQUIRED_BEFORE_OPERATION', 'Pending merge cleanup route');
+
+    const clearTask = await validator.run({
+      input: createAgentEvent({
+        subagent_type: 'opspal-salesforce:sfdc-merge-orchestrator',
+        prompt
+      }),
+      env
+    });
+
+    assert.strictEqual(clearTask.exitCode, 0, 'Merge orchestrator should clear the route');
+    assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', 'Merge orchestrator should clear pending state');
+
+    const parentFallback = await pretool.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: env.CLAUDE_SESSION_ID,
+        input: {
+          command: 'sf data bulk update --sobject Contact --file ./merge-cleanup.csv --target-org sandbox'
+        }
+      },
+      env
+    });
+
+    assertStructuredRoutingDeny(parentFallback, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Parent fallback after merge specialist clearance');
   }));
 
   // Summary

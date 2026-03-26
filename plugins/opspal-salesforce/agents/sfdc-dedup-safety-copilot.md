@@ -21,6 +21,10 @@ disallowedTools:
   # Production merge protection
   - Bash(sf data merge --target-org production:*)
 governanceIntegration: true
+actorType: specialist
+capabilities:
+  - salesforce:data:bulk
+  - salesforce:data:core:query
 triggerKeywords:
   - sf
   - sfdc

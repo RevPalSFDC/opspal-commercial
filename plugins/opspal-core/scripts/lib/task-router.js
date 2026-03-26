@@ -75,9 +75,9 @@ class TaskRouter {
             'sfdc-reports-dashboards': ['report', 'dashboard', 'analytics', 'chart'],
             'revops-reporting-assistant': ['revops report', 'kpi report', 'metrics report', 'forecast report', 'kpi forecast', 'kpi alert', 'revenue report', 'arr report', 'mrr report', 'kpi', 'metrics', 'forecast', 'alert', 'threshold'],
             'implementation-planner': ['implementation plan', 'implementation planning', 'plan from spec', 'project plan', 'asana plan', 'implementation roadmap'],
-            'unified-orchestrator': ['cross-platform', 'both platforms', 'sf and hs', 'salesforce and hubspot'],
-            'unified-data-quality-validator': ['data quality', 'data consistency', 'validation', 'data integrity'],
-            'sequential-planner': ['complex', 'multi-step', 'unknown scope', 'plan carefully'],
+            'cross-platform-pipeline-orchestrator': ['cross-platform', 'both platforms', 'sf and hs', 'salesforce and hubspot'],
+            'revops-data-quality-orchestrator': ['data quality', 'data consistency', 'validation', 'data integrity'],
+            'task-graph-orchestrator': ['complex', 'multi-step', 'unknown scope', 'plan carefully'],
             'diagram-generator': ['diagram', 'flowchart', 'visualize', 'erd', 'architecture'],
             'hubspot-workflow-builder': ['hubspot workflow', 'hs workflow', 'automation'],
             'hubspot-data': ['hubspot property', 'hs property', 'contact property', 'company property'],
@@ -170,12 +170,17 @@ class TaskRouter {
                 capabilities: ['cpq audit', 'pricing analysis', 'configuration review', 'optimization recommendations'],
                 tier: 4
             },
-            'unified-orchestrator': {
+            'cross-platform-pipeline-orchestrator': {
                 description: 'Master orchestrator for cross-platform operations',
-                capabilities: ['multi-platform coordination', 'salesforce-hubspot sync', 'unified workflows'],
+                capabilities: ['multi-platform coordination', 'salesforce-hubspot sync', 'parallel orchestration'],
                 tier: 5
             },
-            'sequential-planner': {
+            'revops-data-quality-orchestrator': {
+                description: 'Master orchestrator for RevOps data quality operations across CRM systems',
+                capabilities: ['data quality', 'data integrity', 'cross-platform remediation'],
+                tier: 4
+            },
+            'task-graph-orchestrator': {
                 description: 'Complex problem-solving with adaptive planning',
                 capabilities: ['multi-step planning', 'revision capabilities', 'complex analysis', 'unknown scope handling'],
                 tier: 5
@@ -860,7 +865,7 @@ class TaskRouter {
         }
 
         // Preserve explicit "plan carefully" routing semantics.
-        if (/\bplan carefully\b|unknown scope/.test(text) && shortName === 'sequential-planner') {
+        if (/\bplan carefully\b|unknown scope/.test(text) && shortName === 'task-graph-orchestrator') {
             adjusted *= 1.6;
         }
 

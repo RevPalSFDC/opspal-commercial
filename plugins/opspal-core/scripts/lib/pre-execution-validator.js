@@ -49,7 +49,7 @@ class PreExecutionValidator {
             },
             {
                 pattern: /\bcross[-\s]platform\b.*\b(salesforce|hubspot)\b/i,
-                requiredAgent: 'unified-orchestrator',
+                requiredAgent: 'cross-platform-pipeline-orchestrator',
                 reason: 'Cross-platform operations require multi-system coordination',
                 severity: 'HIGH',
                 complexityScore: 0.8

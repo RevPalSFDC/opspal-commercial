@@ -81,6 +81,9 @@ function buildRoutingDecision(ruleId, defaults = {}, options = {}) {
   const requiredCapabilities = normalizeStringArray(
     rule?.required_capabilities || rule?.requiredCapabilities || defaults.requiredCapabilities
   );
+  const requiredTools = normalizeStringArray(
+    rule?.required_tools || rule?.requiredTools || defaults.requiredTools
+  );
   const allowedActorTypes = normalizeStringArray(
     rule?.allowed_actor_types || rule?.allowedActorTypes || defaults.allowedActorTypes
   );
@@ -91,6 +94,7 @@ function buildRoutingDecision(ruleId, defaults = {}, options = {}) {
   let clearanceAgents = getAgentsMatchingRequirements({
     preferredAgent,
     requiredCapabilities,
+    requiredTools,
     allowedActorTypes
   }, options.pluginRoot || PROJECT_ROOT);
 
@@ -105,6 +109,7 @@ function buildRoutingDecision(ruleId, defaults = {}, options = {}) {
     clearanceAgents,
     approvedAgents: clearanceAgents,
     requiredCapabilities,
+    requiredTools,
     allowedActorTypes,
     reason: defaults.reason || '',
     warningMessage: defaults.warningMessage || ''
@@ -347,8 +352,30 @@ function detectMarketoEnvironment(target, options = {}) {
   return environmentResult(environment, 'name-heuristic', { instance: candidate });
 }
 
+function splitShellCommandClauses(command) {
+  const raw = String(command || '').trim();
+
+  if (!raw) {
+    return [];
+  }
+
+  return raw
+    .split(/(?:&&|\|\||;|\n)+/)
+    .map((clause) => clause.trim())
+    .filter(Boolean);
+}
+
+function matchesAnyShellClause(command, ...patterns) {
+  const clauses = splitShellCommandClauses(command);
+  const candidates = clauses.length > 0 ? clauses : [String(command || '')];
+
+  return candidates.some((clause) => (
+    patterns.some((pattern) => pattern.test(clause))
+  ));
+}
+
 function isSalesforceCliCommand(command) {
-  return /^[\s]*(sf|sfdx)([\s]|$)/i.test(command || '');
+  return matchesAnyShellClause(command, /^[\s]*(sf|sfdx)([\s]|$)/i);
 }
 
 function extractSalesforceTargetAlias(command) {
@@ -357,26 +384,46 @@ function extractSalesforceTargetAlias(command) {
 }
 
 function isSfDataQueryCommand(command) {
-  return /^[\s]*(sf|sfdx)\s+data\s+query([\s]|$)/i.test(command || '') ||
-    /^[\s]*sfdx\s+force:data:soql:query([\s]|$)/i.test(command || '');
+  return matchesAnyShellClause(
+    command,
+    /^[\s]*(sf|sfdx)\s+data\s+query([\s]|$)/i,
+    /^[\s]*sfdx\s+force:data:soql:query([\s]|$)/i
+  );
 }
 
 function isSfDeployCommand(command) {
-  return /^[\s]*(sf|sfdx)\s+project\s+deploy([\s]|$)/i.test(command || '') ||
-    /^[\s]*sfdx\s+force:source:deploy([\s]|$)/i.test(command || '');
+  return matchesAnyShellClause(
+    command,
+    /^[\s]*(sf|sfdx)\s+project\s+deploy([\s]|$)/i,
+    /^[\s]*sfdx\s+force:source:deploy([\s]|$)/i
+  );
 }
 
 function usesSfBulkApiContract(command) {
-  return /^[\s]*(sf|sfdx)\s+data\s+(export|import)([\s]|$)/i.test(command || '') ||
-    /^[\s]*(sf|sfdx)\s+data\s+bulk\s+(create|update|upsert|delete)([\s]|$)/i.test(command || '') ||
-    /^[\s]*(sf|sfdx)\s+data\s+upsert\s+bulk([\s]|$)/i.test(command || '') ||
-    /^[\s]*sfdx\s+force:data:(bulk:(create|update|upsert|delete)|tree:import)([\s]|$)/i.test(command || '');
+  return matchesAnyShellClause(
+    command,
+    /^[\s]*(sf|sfdx)\s+data\s+(export|import)([\s]|$)/i,
+    /^[\s]*(sf|sfdx)\s+data\s+bulk\s+(create|update|upsert|delete)([\s]|$)/i,
+    /^[\s]*(sf|sfdx)\s+data\s+upsert\s+bulk([\s]|$)/i,
+    /^[\s]*sfdx\s+force:data:(bulk:(create|update|upsert|delete)|tree:import)([\s]|$)/i
+  );
+}
+
+function isSfBulkMutationCommand(command) {
+  return matchesAnyShellClause(
+    command,
+    /^[\s]*(sf|sfdx)\s+data\s+(bulk\s+(create|update|upsert|delete)|upsert\s+bulk)([\s]|$)/i,
+    /^[\s]*sfdx\s+force:data:bulk:(create|update|upsert|delete)([\s]|$)/i
+  );
 }
 
 function isSfWriteLikeCommand(command) {
   return isSfDeployCommand(command) ||
-    /^[\s]*(sf|sfdx)\s+data\s+(create|update|upsert|delete|record\s+create|record\s+update|record\s+upsert|record\s+delete|bulk\s+(create|update|upsert|delete))([\s]|$)/i.test(command || '') ||
-    /^[\s]*sfdx\s+force:data:record:(create|update|upsert|delete)([\s]|$)/i.test(command || '');
+    matchesAnyShellClause(
+      command,
+      /^[\s]*(sf|sfdx)\s+data\s+(create|update|upsert|delete|record\s+create|record\s+update|record\s+upsert|record\s+delete|bulk\s+(create|update|upsert|delete))([\s]|$)/i,
+      /^[\s]*sfdx\s+force:data:record:(create|update|upsert|delete)([\s]|$)/i
+    );
 }
 
 function classifySalesforceCommand(command, options = {}) {
@@ -385,25 +432,28 @@ function classifySalesforceCommand(command, options = {}) {
   let intent = 'unknown';
   let volume = 'single';
 
-  if (/^[\s]*(sf|sfdx)\s+org\s+(assign|user)\s+perm(set|ission)([\s]|$)/i.test(command || '')) {
+  if (matchesAnyShellClause(command, /^[\s]*(sf|sfdx)\s+org\s+(assign|user)\s+perm(set|ission)([\s]|$)/i)) {
     intent = 'permission';
   } else if (isSfDeployCommand(command)) {
     intent = 'deploy';
     volume = 'bounded';
-  } else if (/^[\s]*(sf|sfdx)\s+apex\s+tail([\s]|$)|^[\s]*sfdx\s+force:apex:log:tail([\s]|$)/i.test(command || '')) {
+  } else if (matchesAnyShellClause(command, /^[\s]*(sf|sfdx)\s+apex\s+tail([\s]|$)|^[\s]*sfdx\s+force:apex:log:tail([\s]|$)/i)) {
     intent = 'debug';
-  } else if (
-    isSfDataQueryCommand(command) ||
-    /^[\s]*(sf|sfdx)\s+(sobject\s+(describe|list)|org\s+(display|list)|data\s+(export|get))([\s]|$)/i.test(command || '') ||
-    /^[\s]*sfdx\s+force:(schema:sobject:list|sobject:describe)([\s]|$)/i.test(command || '')
-  ) {
-    intent = 'read';
-    volume = usesSfBulkApiContract(command) ? 'bulk' : 'single';
-  } else if (usesSfBulkApiContract(command) && !/^[\s]*(sf|sfdx)\s+data\s+export([\s]|$)/i.test(command || '')) {
+  } else if (usesSfBulkApiContract(command) && !matchesAnyShellClause(command, /^[\s]*(sf|sfdx)\s+data\s+export([\s]|$)/i)) {
     intent = 'bulk-mutate';
     volume = /\b(all|entire)\b/i.test(command || '') ? 'mass' : 'bulk';
   } else if (isSfWriteLikeCommand(command)) {
     intent = 'mutate';
+  } else if (
+    isSfDataQueryCommand(command) ||
+    matchesAnyShellClause(
+      command,
+      /^[\s]*(sf|sfdx)\s+(sobject\s+(describe|list)|org\s+(display|list)|data\s+(export|get))([\s]|$)/i,
+      /^[\s]*sfdx\s+force:(schema:sobject:list|sobject:describe)([\s]|$)/i
+    )
+  ) {
+    intent = 'read';
+    volume = usesSfBulkApiContract(command) ? 'bulk' : 'single';
   }
 
   return {
@@ -642,6 +692,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
       return buildRoutingDecision('sf_permission_security_write', {
         decision: 'block',
         requiredAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
+        requiredTools: ['Bash'],
         reason: 'Direct Salesforce permission/security write detected.'
       }, options);
     }
@@ -651,7 +702,17 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
     return buildRoutingDecision('sf_core_object_upsert', {
       decision: 'block',
       requiredAgent: 'opspal-salesforce:sfdc-upsert-orchestrator',
+      requiredTools: ['Bash'],
       reason: 'Direct lead/contact/account upsert-import workflow detected.'
+    }, options);
+  }
+
+  if (isSfBulkMutationCommand(normalizedCommand) && CORE_UPSERT_OBJECT_REGEX.test(normalizedCommand)) {
+    return buildRoutingDecision('sf_core_object_bulk_mutation', {
+      decision: 'block',
+      requiredAgent: 'opspal-salesforce:sfdc-bulkops-orchestrator',
+      requiredTools: ['Bash'],
+      reason: 'Direct Salesforce bulk mutation on a core object detected.'
     }, options);
   }
 
@@ -665,6 +726,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
       return buildRoutingDecision('sf_query_url_length_risk', {
         decision: 'block',
         requiredAgent: 'opspal-salesforce:sfdc-bulkops-orchestrator',
+        requiredTools: ['Bash'],
         reason: `SOQL query likely exceeds safe URL limits (command_len=${commandLength} query_len=${queryLength} in_items=${inClauseCount}). Use chunked/bulk extraction workflow.`
       }, options);
     }
@@ -674,6 +736,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
         return buildRoutingDecision('sf_core_object_query', {
           decision: 'warn',
           requiredAgent: 'opspal-salesforce:sfdc-data-operations',
+          requiredTools: ['Bash'],
           reason: 'Simple verification query on core object - allowed.',
           warningMessage: "[ROUTING INFO] Core-object verification query allowed. For complex queries, prefer Agent(subagent_type='opspal-salesforce:sfdc-query-specialist')."
         }, options);
@@ -682,6 +745,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
       return buildRoutingDecision('sf_core_object_query', {
         decision: 'block',
         requiredAgent: 'opspal-salesforce:sfdc-data-operations',
+        requiredTools: ['Bash'],
         reason: 'Direct Salesforce core-object data query detected.'
       }, options);
     }
@@ -690,6 +754,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
       return buildRoutingDecision('sf_permission_security_query', {
         decision: 'warn',
         requiredAgent: 'opspal-salesforce:sfdc-permission-assessor',
+        requiredTools: ['Bash'],
         reason: 'Permission/security query detected.',
         warningMessage: "[ROUTING WARNING] Permission/security query detected. Prefer the Agent tool with subagent_type='opspal-salesforce:sfdc-permission-assessor'."
       }, options);
@@ -700,6 +765,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
     return buildRoutingDecision('sf_territory_write', {
       decision: 'block',
       requiredAgent: 'opspal-salesforce:sfdc-territory-orchestrator',
+      requiredTools: ['Bash'],
       reason: 'Direct Salesforce territory write workflow detected.'
     }, options);
   }
@@ -708,6 +774,7 @@ function classifySalesforceRoutingRequirement(command, options = {}) {
     return buildRoutingDecision('sf_validation_rule_write', {
       decision: 'block',
       requiredAgent: 'opspal-salesforce:validation-rule-orchestrator',
+      requiredTools: ['Bash'],
       reason: 'Direct Salesforce validation rule write workflow detected.'
     }, options);
   }
@@ -925,8 +992,11 @@ function classifyMCPTool(toolName, toolInput = {}, config = loadMcpPolicyConfig(
 }
 
 function isSfUpsertOrImportCommand(command) {
-  return /^[\s]*(sf|sfdx)\s+data\s+(upsert|import|bulk\s+upsert)([\s]|$)/i.test(command || '') ||
-    /^[\s]*sfdx\s+force:data:(record:upsert|bulk:upsert|tree:import)([\s]|$)/i.test(command || '');
+  return matchesAnyShellClause(
+    command,
+    /^[\s]*(sf|sfdx)\s+data\s+(upsert|import|bulk\s+upsert)([\s]|$)/i,
+    /^[\s]*sfdx\s+force:data:(record:upsert|bulk:upsert|tree:import)([\s]|$)/i
+  );
 }
 
 function main() {
@@ -991,6 +1061,7 @@ module.exports = {
   inferNamespace,
   isReadOnly,
   isSalesforceCliCommand,
+  isSfBulkMutationCommand,
   isSfUpsertOrImportCommand,
   loadMcpPolicyConfig,
   loadRoutingCapabilityConfig,

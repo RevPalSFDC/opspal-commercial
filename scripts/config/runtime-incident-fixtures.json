@@ -4,6 +4,8 @@
       "label": "salesforce-deploy-incident",
       "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-deploy-incident.log",
       "expect": "fail",
+      "incidentClass": "flow_validation_scope_mismatch",
+      "sourceOfTruth": "hook-runtime",
       "failureSubstrings": [
         "Plain-text hook outputs exceeded budget",
         "Attached skills exceeded budget",
@@ -17,6 +19,8 @@
       "label": "read-path-failures",
       "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-read-path-failures.txt",
       "expect": "fail",
+      "incidentClass": "read_path_failure",
+      "sourceOfTruth": "hook-runtime",
       "failureSubstrings": [
         "Attached skills exceeded budget",
         "PreToolUse:Agent hook fanout exceeded budget",
@@ -26,6 +30,28 @@
       "minMissingFileReads": 2,
       "minDirectoryReads": 1,
       "minAgentHookFanout": 7
+    },
+    {
+      "label": "salesforce-tool-projection-mismatch",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.log",
+      "expect": "fail",
+      "incidentClass": "external_runtime_projection_loss",
+      "sourceOfTruth": "host-runtime",
+      "failureSubstrings": [
+        "Primary runtime failure detected: subagent_tool_projection_mismatch"
+      ],
+      "primaryFailureKind": "subagent_tool_projection_mismatch"
+    },
+    {
+      "label": "spawn-time-route-profile-mismatch",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-spawn-time-route-profile-mismatch.txt",
+      "expect": "fail",
+      "incidentClass": "spawn_time_route_profile_mismatch",
+      "sourceOfTruth": "routing-enforcement",
+      "failureSubstrings": [
+        "Primary runtime failure detected: spawn_time_route_profile_mismatch"
+      ],
+      "primaryFailureKind": "spawn_time_route_profile_mismatch"
     }
   ]
 }

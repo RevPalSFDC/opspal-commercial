@@ -266,6 +266,42 @@ agent_matches_route_requirements() {
     node "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
 }
 
+resolve_route_repair_candidate() {
+    local requirements_json="$1"
+    local current_agent="${2:-}"
+    local candidates_json="[]"
+
+    if [[ -z "$requirements_json" ]] || [[ "$requirements_json" == "{}" ]]; then
+        echo ""
+        return 0
+    fi
+
+    if [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &> /dev/null; then
+        echo ""
+        return 0
+    fi
+
+    candidates_json=$(node "$AGENT_TOOL_REGISTRY" resolve-requirements "$requirements_json" "$PLUGIN_ROOT" 2>/dev/null || echo "[]")
+    echo "$candidates_json" | jq -r --arg current "$current_agent" '
+      if type != "array" then
+        ""
+      else
+        (map(select(. != $current)) | .[0]) // ""
+      end
+    ' 2>/dev/null || echo ""
+}
+
+read_agent_metadata() {
+    local resolved_agent="$1"
+
+    if [[ -z "$resolved_agent" ]] || [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &> /dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$AGENT_TOOL_REGISTRY" metadata "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+}
+
 apply_runbook_cohort_requirements() {
     local input_json="$1"
     local workspace_root
@@ -860,17 +896,36 @@ main() {
             if ! agent_matches_route_requirements "$RESOLVED" "$ROUTE_REQUIREMENTS"; then
                 local required_capabilities
                 local allowed_actor_types
+                local required_tools
+                local actual_tools
+                local repair_agent
                 required_capabilities=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.requiredCapabilities // [] | join(", ")' 2>/dev/null || echo "")
                 allowed_actor_types=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.allowedActorTypes // [] | join(", ")' 2>/dev/null || echo "")
-                log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_capability_mismatch" "Resolved agent failed route capability fit"
-                emit_pretool_response \
-                  "deny" \
-                  "ROUTING_REQUIRED_CAPABILITY_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist} and the selected agent '${RESOLVED}' does not satisfy the route's actor/capability requirements. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}." \
-                  "" \
-                  "" \
-                  "ROUTING_REQUIRED_CAPABILITY_MISMATCH" \
-                  "ERROR"
-                exit 0
+                required_tools=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.requiredTools // [] | join(", ")' 2>/dev/null || echo "")
+                actual_tools=$(read_agent_metadata "$RESOLVED" | jq -r '.tools // [] | join(", ")' 2>/dev/null || echo "")
+                repair_agent=$(resolve_route_repair_candidate "$ROUTE_REQUIREMENTS" "$RESOLVED")
+
+                if [[ -n "$repair_agent" ]]; then
+                    local previous_resolved="$RESOLVED"
+                    RESOLVED="$repair_agent"
+                    FINAL_OUTPUT=$(echo "$FINAL_OUTPUT" | jq -c --arg resolved "$RESOLVED" '.subagent_type = $resolved')
+                    log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "false" "routing_profile_repair" "Repaired routed specialist to matching profile"
+                    if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                        ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_PROFILE_REPAIRED: '${previous_resolved}' did not satisfy the active route profile; rerouted to '${RESOLVED}'."
+                    else
+                        ADDITIONAL_CONTEXT="ROUTING_PROFILE_REPAIRED: '${previous_resolved}' did not satisfy the active route profile; rerouted to '${RESOLVED}'."
+                    fi
+                else
+                    log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_profile_mismatch" "Resolved agent failed active route profile fit"
+                    emit_pretool_response \
+                      "deny" \
+                      "ROUTING_REQUIRED_PROFILE_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist} and the selected agent '${RESOLVED}' does not satisfy the active route profile. Required tools: ${required_tools:-none}. Actual tools: ${actual_tools:-none}. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}." \
+                      "" \
+                      "" \
+                      "ROUTING_REQUIRED_PROFILE_MISMATCH" \
+                      "ERROR"
+                    exit 0
+                fi
             fi
             mark_routing_requirement_cleared "$SESSION_KEY" "$RESOLVED"
             if [ -n "$ADDITIONAL_CONTEXT" ]; then
@@ -880,19 +935,39 @@ main() {
             fi
         elif [[ "$AUTO_DELEGATION_ACTIVE" == "true" ]] && [[ -n "$AUTO_DELEGATION_AGENT" ]]; then
             local previous_resolved="$RESOLVED"
+            local repair_agent=""
             RESOLVED="$AUTO_DELEGATION_AGENT"
             ROUTING_AUTO_DELEGATED="true"
 
             if ! agent_matches_route_requirements "$RESOLVED" "$ROUTE_REQUIREMENTS"; then
-                log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "true" "routing_auto_delegation_capability_mismatch" "Auto-delegated agent failed route capability fit"
-                emit_pretool_response \
-                  "deny" \
-                  "ROUTING_AUTO_DELEGATION_CAPABILITY_MISMATCH: Pending ${ROUTE_KIND:-specialist} route attempted auto-delegation to '${RESOLVED}', but that agent does not satisfy the route's actor/capability requirements." \
-                  "" \
-                  "" \
-                  "ROUTING_AUTO_DELEGATION_CAPABILITY_MISMATCH" \
-                  "ERROR"
-                exit 0
+                repair_agent=$(resolve_route_repair_candidate "$ROUTE_REQUIREMENTS" "$RESOLVED")
+                if [[ -n "$repair_agent" ]]; then
+                    local auto_delegated_resolved="$RESOLVED"
+                    RESOLVED="$repair_agent"
+                    if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                        ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_PROFILE_REPAIRED: '${auto_delegated_resolved}' did not satisfy the active route profile; rerouted to '${RESOLVED}'."
+                    else
+                        ADDITIONAL_CONTEXT="ROUTING_PROFILE_REPAIRED: '${auto_delegated_resolved}' did not satisfy the active route profile; rerouted to '${RESOLVED}'."
+                    fi
+                else
+                    local required_capabilities
+                    local allowed_actor_types
+                    local required_tools
+                    local actual_tools
+                    required_capabilities=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.requiredCapabilities // [] | join(", ")' 2>/dev/null || echo "")
+                    allowed_actor_types=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.allowedActorTypes // [] | join(", ")' 2>/dev/null || echo "")
+                    required_tools=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.requiredTools // [] | join(", ")' 2>/dev/null || echo "")
+                    actual_tools=$(read_agent_metadata "$RESOLVED" | jq -r '.tools // [] | join(", ")' 2>/dev/null || echo "")
+                    log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "true" "routing_auto_delegation_profile_mismatch" "Auto-delegated agent failed active route profile fit"
+                    emit_pretool_response \
+                      "deny" \
+                      "ROUTING_AUTO_DELEGATION_PROFILE_MISMATCH: Pending ${ROUTE_KIND:-specialist} route attempted auto-delegation to '${RESOLVED}', but that agent does not satisfy the active route profile. Required tools: ${required_tools:-none}. Actual tools: ${actual_tools:-none}. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}." \
+                      "" \
+                      "" \
+                      "ROUTING_AUTO_DELEGATION_PROFILE_MISMATCH" \
+                      "ERROR"
+                    exit 0
+                fi
             fi
 
             FINAL_OUTPUT=$(echo "$FINAL_OUTPUT" | jq -c --arg resolved "$RESOLVED" '.subagent_type = $resolved')

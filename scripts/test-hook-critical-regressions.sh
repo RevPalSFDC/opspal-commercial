@@ -20,8 +20,10 @@ run_test "deploy-scope-resolver" node plugins/opspal-core/test/hooks/unit/deploy
 run_test "task-router-deployment-routing" node plugins/opspal-core/test/hooks/unit/task-router-deployment-routing.test.js
 run_test "claude-debug-log-analyzer" node plugins/opspal-core/test/hooks/unit/claude-debug-log-analyzer.test.js
 run_test "claude-runtime-replay-validator" node plugins/opspal-core/test/hooks/unit/claude-runtime-replay-validator.test.js
+run_test "runtime-incident-fixtures" node plugins/opspal-core/test/hooks/unit/runtime-incident-fixtures.test.js
 run_test "json-hook-contracts" node plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js
 run_test "agent-tool-registry" node plugins/opspal-core/test/hooks/unit/agent-tool-registry.test.js
+run_test "validate-routing-integrity" node plugins/opspal-core/test/hooks/unit/validate-routing-integrity.test.js
 run_test "subagent-start-context" node plugins/opspal-core/test/hooks/unit/subagent-start-context.test.js
 run_test "subagent-stop-capture" node plugins/opspal-core/test/hooks/unit/subagent-stop-capture.test.js
 run_test "task-completed-metrics" node plugins/opspal-core/test/hooks/unit/task-completed-metrics.test.js

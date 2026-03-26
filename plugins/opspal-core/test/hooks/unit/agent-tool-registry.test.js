@@ -15,6 +15,8 @@ const path = require('path');
 
 const {
   agentHasTool,
+  compareAgentMetadataSources,
+  deriveRouteRequirements,
   getAgentMetadata,
   normalizeStringArray,
   parseFrontmatter
@@ -80,6 +82,14 @@ async function runAllTests() {
       !agentHasTool('opspal-salesforce:sfdc-cpq-specialist', 'Bash', PLUGIN_ROOT),
       'Agents that do not declare Bash should not resolve Bash access'
     );
+    assert(
+      agentHasTool('opspal-salesforce:sfdc-data-operations', 'Bash', PLUGIN_ROOT),
+      'Salesforce data operations should resolve declared Bash access'
+    );
+    assert(
+      agentHasTool('opspal-salesforce:sfdc-bulkops-orchestrator', 'Bash', PLUGIN_ROOT),
+      'Salesforce bulkops orchestrator should resolve declared Bash access'
+    );
   }));
 
   results.push(await runTest('Captures current frontmatter for audited agents', async () => {
@@ -123,6 +133,45 @@ async function runAllTests() {
       mismatches,
       [],
       `Agents referencing Context7 must declare a Context7 tool. Found: ${mismatches.join(', ')}`
+    );
+  }));
+
+  results.push(await runTest('Keeps markdown and routing-index tool metadata in sync for critical Salesforce agents', async () => {
+    for (const agentId of [
+      'opspal-salesforce:sfdc-data-operations',
+      'opspal-salesforce:sfdc-bulkops-orchestrator',
+      'opspal-salesforce:sfdc-orchestrator'
+    ]) {
+      const comparison = compareAgentMetadataSources(agentId, PLUGIN_ROOT);
+      assert(comparison.markdown, `${agentId} should resolve from markdown`);
+      assert(comparison.routingIndex, `${agentId} should resolve from routing-index.json`);
+      assert.deepStrictEqual(
+        comparison.mismatches,
+        [],
+        `${agentId} should not drift between markdown and routing-index.json`
+      );
+    }
+  }));
+
+  results.push(await runTest('Derives Bash-required route requirements for Salesforce data specialists', async () => {
+    const dataOpsRequirements = deriveRouteRequirements(
+      'opspal-salesforce:sfdc-data-operations',
+      ['opspal-salesforce:sfdc-data-operations'],
+      PLUGIN_ROOT
+    );
+    const bulkopsRequirements = deriveRouteRequirements(
+      'opspal-salesforce:sfdc-bulkops-orchestrator',
+      ['opspal-salesforce:sfdc-bulkops-orchestrator'],
+      PLUGIN_ROOT
+    );
+
+    assert(
+      normalizeStringArray(dataOpsRequirements.requiredTools).includes('Bash'),
+      'Data operations route requirements should preserve Bash'
+    );
+    assert(
+      normalizeStringArray(bulkopsRequirements.requiredTools).includes('Bash'),
+      'Bulkops orchestrator route requirements should preserve Bash'
     );
   }));
 

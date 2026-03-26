@@ -731,6 +731,80 @@ derive_route_requirements_from_state() {
     node "$AGENT_TOOL_REGISTRY" route-requirements "$required_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
+read_agent_metadata_profile() {
+    local agent_name="$1"
+
+    if [[ -z "$agent_name" ]] || [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &>/dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$AGENT_TOOL_REGISTRY" metadata "$agent_name" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+}
+
+detect_cleared_route_projection_mismatch() {
+    local caller_agent="$1"
+    local session_key="${2:-}"
+    local tool_name="${3:-}"
+    local routing_state="{}"
+    local routing_cleared="false"
+    local route_pending="false"
+    local required_agent=""
+    local clearance_agents_json="[]"
+    local last_resolved_agent=""
+    local requirements_json="{}"
+    local required_tools=""
+    local expected_tools=""
+
+    if [[ -z "$session_key" ]] || [[ "$tool_name" != "Bash" ]]; then
+        echo '{}'
+        return 0
+    fi
+
+    routing_state="$(get_routing_state_check "$session_key")"
+    routing_cleared="$(echo "$routing_state" | jq -r '.routeCleared // .cleared // false' 2>/dev/null || echo "false")"
+    route_pending="$(echo "$routing_state" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")"
+
+    if [[ "$routing_cleared" != "true" ]] || [[ "$route_pending" == "true" ]]; then
+        echo '{}'
+        return 0
+    fi
+
+    required_agent="$(echo "$routing_state" | jq -r '.requiredAgent // .state.required_agent // ""' 2>/dev/null || echo "")"
+    clearance_agents_json="$(echo "$routing_state" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")"
+    last_resolved_agent="$(echo "$routing_state" | jq -r '.state.last_resolved_agent // .state.lastResolvedAgent // .lastResolvedAgent // .last_resolved_agent // ""' 2>/dev/null || echo "")"
+
+    if [[ -z "$last_resolved_agent" ]] || caller_matches_allowed_agents "$caller_agent" "$clearance_agents_json"; then
+        echo '{}'
+        return 0
+    fi
+
+    requirements_json="$(derive_route_requirements_from_state "$required_agent" "$clearance_agents_json")"
+    required_tools="$(echo "$requirements_json" | jq -r '.requiredTools // [] | join(", ")' 2>/dev/null || echo "")"
+    expected_tools="$(read_agent_metadata_profile "$last_resolved_agent" | jq -r '.tools // [] | join(", ")' 2>/dev/null || echo "")"
+    required_tools="${required_tools// /}"
+    expected_tools="${expected_tools// /}"
+
+    if [[ ",${required_tools}," != *",Bash,"* ]] || [[ ",${expected_tools}," != *",Bash,"* ]]; then
+        echo '{}'
+        return 0
+    fi
+
+    jq -nc \
+      --arg required_agent "$required_agent" \
+      --arg last_resolved_agent "$last_resolved_agent" \
+      --arg caller_agent "$caller_agent" \
+      --arg required_tools "$required_tools" \
+      --arg expected_tools "$expected_tools" \
+      '{
+        requiredAgent: $required_agent,
+        lastResolvedAgent: $last_resolved_agent,
+        callerAgent: $caller_agent,
+        requiredTools: $required_tools,
+        expectedTools: $expected_tools
+      }'
+}
+
 subagent_has_validated_route_clearance() {
     local caller_agent="$1"
     local session_key="${2:-}"
@@ -843,8 +917,10 @@ enforce_mandatory_routing() {
     local clearance_agents_display=""
     local required_capabilities_json="[]"
     local allowed_actor_types_json="[]"
+    local required_tools_json="[]"
     local required_capabilities_display=""
     local allowed_actor_types_display=""
+    local required_tools_display=""
     local reason=""
     local rule_id=""
     local routing_decision="{}"
@@ -877,6 +953,7 @@ enforce_mandatory_routing() {
                 clearance_agents_json="$(echo "$routing_decision" | jq -c '.clearanceAgents // .approvedAgents // []' 2>/dev/null || echo "[]")"
                 required_capabilities_json="$(echo "$routing_decision" | jq -c '.requiredCapabilities // []' 2>/dev/null || echo "[]")"
                 allowed_actor_types_json="$(echo "$routing_decision" | jq -c '.allowedActorTypes // []' 2>/dev/null || echo "[]")"
+                required_tools_json="$(echo "$routing_decision" | jq -c '.requiredTools // []' 2>/dev/null || echo "[]")"
                 reason="$(echo "$routing_decision" | jq -r '.reason // ""' 2>/dev/null || echo "")"
                 warning_message="$(echo "$routing_decision" | jq -r '.warningMessage // ""' 2>/dev/null || echo "")"
 
@@ -893,6 +970,7 @@ enforce_mandatory_routing() {
                 clearance_agents_json="$(echo "$routing_decision" | jq -c '.clearanceAgents // .approvedAgents // []' 2>/dev/null || echo "[]")"
                 required_capabilities_json="$(echo "$routing_decision" | jq -c '.requiredCapabilities // []' 2>/dev/null || echo "[]")"
                 allowed_actor_types_json="$(echo "$routing_decision" | jq -c '.allowedActorTypes // []' 2>/dev/null || echo "[]")"
+                required_tools_json="$(echo "$routing_decision" | jq -c '.requiredTools // []' 2>/dev/null || echo "[]")"
                 reason="$(echo "$routing_decision" | jq -r '.reason // ""' 2>/dev/null || echo "")"
             fi
             ;;
@@ -902,9 +980,11 @@ enforce_mandatory_routing() {
     if [ -n "$rule_id" ]; then
         local routing_reason_message=""
         local routing_context_message=""
+        local cleared_route_projection_mismatch="{}"
         clearance_agents_display=$(echo "$clearance_agents_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
         required_capabilities_display=$(echo "$required_capabilities_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
         allowed_actor_types_display=$(echo "$allowed_actor_types_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
+        required_tools_display=$(echo "$required_tools_json" | jq -r 'join(", ")' 2>/dev/null || echo "")
 
         if caller_matches_allowed_agents "$caller_agent" "$clearance_agents_json"; then
             emit_routing_event "allow" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
@@ -918,13 +998,30 @@ enforce_mandatory_routing() {
             return 0
         fi
 
+        cleared_route_projection_mismatch="$(detect_cleared_route_projection_mismatch "$caller_agent" "${SESSION_KEY:-}" "$tool")"
+        if [[ "$cleared_route_projection_mismatch" != "{}" ]]; then
+            local last_resolved_agent=""
+            local expected_tools=""
+            local mismatch_required_tools=""
+            last_resolved_agent="$(echo "$cleared_route_projection_mismatch" | jq -r '.lastResolvedAgent // ""' 2>/dev/null || echo "")"
+            expected_tools="$(echo "$cleared_route_projection_mismatch" | jq -r '.expectedTools // ""' 2>/dev/null || echo "")"
+            mismatch_required_tools="$(echo "$cleared_route_projection_mismatch" | jq -r '.requiredTools // ""' 2>/dev/null || echo "")"
+
+            emit_routing_event "block" "$rule_id" "$required_agent" "Cleared specialist route drifted back to parent or non-approved execution context." "$command" "$caller_agent" "$tool"
+            emit_pretool_decision \
+              "deny" \
+              "ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH: This workflow was already cleared to '${last_resolved_agent:-$required_agent}', whose active profile expects Bash-capable execution. Operational work is now being attempted from '${caller_agent:-main}' instead. Required tools: ${mismatch_required_tools:-Bash}. Loaded tools for cleared specialist: ${expected_tools:-unknown}." \
+              "Protected specialist workflow remains owned by '${last_resolved_agent:-$required_agent}'. Parent direct execution recovery is blocked; reroute only to a capable approved specialist or investigate tool projection / registry drift."
+            return 1
+        fi
+
         emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
 
         if [[ "$rule_id" == "sf_permission_security_write" ]]; then
-            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') so the canonical permission/security specialist keeps execution ownership end-to-end. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}."
+            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') so the canonical permission/security specialist keeps execution ownership end-to-end. Required tools: ${required_tools_display:-unspecified}. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}."
             routing_context_message="Permission/security writes stay on the specialist path after routing. Do not recover by having the parent context run a generated script."
         else
-            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') before operational execution. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}. Eligible agents: ${clearance_agents_display:-$required_agent}."
+            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') before operational execution. Required tools: ${required_tools_display:-unspecified}. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}. Eligible agents: ${clearance_agents_display:-$required_agent}."
             routing_context_message="Direct operational workflow blocked until an approved specialist agent is used."
         fi
 

@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-26T00:02:10.276Z",
+  "buildDate": "2026-03-26T12:33:11.088Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
@@ -1186,6 +1186,7 @@
     ],
     "profile": [
       "environment-profile-manager",
+      "sfdc-permission-orchestrator",
       "sfdc-security-admin"
     ],
     "core environment": [
@@ -8129,6 +8130,7 @@
     "assignment": [
       "sfdc-advocate-assignment",
       "sfdc-assignment-rules-manager",
+      "sfdc-permission-orchestrator",
       "sfdc-territory-assignment"
     ],
     "sfdc advocate": [
@@ -9165,6 +9167,19 @@
     "permission assessor": [
       "sfdc-permission-assessor"
     ],
+    "permission set": [
+      "sfdc-permission-orchestrator"
+    ],
+    "fls": [
+      "sfdc-permission-orchestrator"
+    ],
+    "sharing": [
+      "sfdc-permission-orchestrator"
+    ],
+    "role": [
+      "sfdc-permission-orchestrator",
+      "sfdc-security-admin"
+    ],
     "salesforce sfdc permission": [
       "sfdc-permission-orchestrator"
     ],
@@ -9363,9 +9378,6 @@
       "sfdc-sales-operations"
     ],
     "security": [
-      "sfdc-security-admin"
-    ],
-    "role": [
       "sfdc-security-admin"
     ],
     "sfdc security": [
@@ -11027,6 +11039,7 @@
     ],
     "profile": [
       "opspal-core:environment-profile-manager",
+      "opspal-salesforce:sfdc-permission-orchestrator",
       "opspal-salesforce:sfdc-security-admin"
     ],
     "core environment": [
@@ -17977,6 +17990,7 @@
     "assignment": [
       "opspal-salesforce:sfdc-advocate-assignment",
       "opspal-salesforce:sfdc-assignment-rules-manager",
+      "opspal-salesforce:sfdc-permission-orchestrator",
       "opspal-salesforce:sfdc-territory-assignment"
     ],
     "sfdc advocate": [
@@ -19013,6 +19027,19 @@
     "permission assessor": [
       "opspal-salesforce:sfdc-permission-assessor"
     ],
+    "permission set": [
+      "opspal-salesforce:sfdc-permission-orchestrator"
+    ],
+    "fls": [
+      "opspal-salesforce:sfdc-permission-orchestrator"
+    ],
+    "sharing": [
+      "opspal-salesforce:sfdc-permission-orchestrator"
+    ],
+    "role": [
+      "opspal-salesforce:sfdc-permission-orchestrator",
+      "opspal-salesforce:sfdc-security-admin"
+    ],
     "salesforce sfdc permission": [
       "opspal-salesforce:sfdc-permission-orchestrator"
     ],
@@ -19211,9 +19238,6 @@
       "opspal-salesforce:sfdc-sales-operations"
     ],
     "security": [
-      "opspal-salesforce:sfdc-security-admin"
-    ],
-    "role": [
       "opspal-salesforce:sfdc-security-admin"
     ],
     "sfdc security": [
@@ -29506,7 +29530,8 @@
       ],
       "capabilities": [
         "salesforce:data:bulk",
-        "salesforce:data:core:query"
+        "salesforce:data:core:query",
+        "salesforce:data:core:upsert"
       ],
       "triggerKeywords": [
         "bulkops",
@@ -29803,6 +29828,7 @@
       "description": "Automatically routes for CSV enrichment.",
       "model": "haiku",
       "color": "blue",
+      "actorType": "specialist",
       "tools": [
         "Agent",
         "mcp_salesforce",
@@ -29811,6 +29837,10 @@
         "Grep",
         "TodoWrite",
         "Bash"
+      ],
+      "capabilities": [
+        "salesforce:data:bulk",
+        "salesforce:data:core:query"
       ],
       "triggerKeywords": [
         "sf",
@@ -30180,11 +30210,16 @@
       "color": "blue",
       "version": "3.0.0",
       "tier": "5",
+      "actorType": "specialist",
       "tools": [
         "Bash",
         "Read",
         "Write",
         "Grep"
+      ],
+      "capabilities": [
+        "salesforce:data:bulk",
+        "salesforce:data:core:query"
       ],
       "triggerKeywords": [
         "sf",
@@ -30725,6 +30760,7 @@
       "description": "MUST BE USED for object or field merges.",
       "model": "sonnet",
       "color": "blue",
+      "actorType": "orchestrator",
       "tools": [
         "mcp_salesforce",
         "mcp_salesforce_metadata_deploy",
@@ -30736,6 +30772,11 @@
         "TodoWrite",
         "Agent",
         "Bash"
+      ],
+      "capabilities": [
+        "salesforce:data:bulk",
+        "salesforce:data:core:query",
+        "salesforce:data:core:upsert"
       ],
       "triggerKeywords": [
         "merge",
@@ -31086,7 +31127,7 @@
       "file": "sfdc-permission-orchestrator.md",
       "path": "opspal-salesforce/agents/sfdc-permission-orchestrator.md",
       "name": "sfdc-permission-orchestrator",
-      "description": "MUST BE USED for permission set management.",
+      "description": "MUST BE USED as the canonical entrypoint for Salesforce permission/security writes.",
       "model": "sonnet",
       "color": "blue",
       "version": "2.1.0",
@@ -31105,14 +31146,21 @@
       ],
       "capabilities": [
         "salesforce:permission:plan",
-        "salesforce:permission:read"
+        "salesforce:permission:read",
+        "salesforce:permission:write"
       ],
       "triggerKeywords": [
         "permission",
+        "permission set",
+        "assignment",
+        "fls",
         "sf",
         "sfdc",
         "merge",
         "orchestrator",
+        "profile",
+        "sharing",
+        "role",
         "deploy",
         "deployment",
         "manage",
@@ -31685,7 +31733,7 @@
       "file": "sfdc-security-admin.md",
       "path": "opspal-salesforce/agents/sfdc-security-admin.md",
       "name": "sfdc-security-admin",
-      "description": "MUST BE USED for Salesforce security operations.",
+      "description": "Salesforce security administration specialist for audits, profile/role/sharing work, and downstream permission orchestration support.",
       "model": "sonnet",
       "color": "blue",
       "version": "2.0.0",
@@ -41659,7 +41707,8 @@
       ],
       "capabilities": [
         "salesforce:data:bulk",
-        "salesforce:data:core:query"
+        "salesforce:data:core:query",
+        "salesforce:data:core:upsert"
       ],
       "triggerKeywords": [
         "bulkops",
@@ -41956,6 +42005,7 @@
       "description": "Automatically routes for CSV enrichment.",
       "model": "haiku",
       "color": "blue",
+      "actorType": "specialist",
       "tools": [
         "Agent",
         "mcp_salesforce",
@@ -41964,6 +42014,10 @@
         "Grep",
         "TodoWrite",
         "Bash"
+      ],
+      "capabilities": [
+        "salesforce:data:bulk",
+        "salesforce:data:core:query"
       ],
       "triggerKeywords": [
         "sf",
@@ -42333,11 +42387,16 @@
       "color": "blue",
       "version": "3.0.0",
       "tier": "5",
+      "actorType": "specialist",
       "tools": [
         "Bash",
         "Read",
         "Write",
         "Grep"
+      ],
+      "capabilities": [
+        "salesforce:data:bulk",
+        "salesforce:data:core:query"
       ],
       "triggerKeywords": [
         "sf",
@@ -42878,6 +42937,7 @@
       "description": "MUST BE USED for object or field merges.",
       "model": "sonnet",
       "color": "blue",
+      "actorType": "orchestrator",
       "tools": [
         "mcp_salesforce",
         "mcp_salesforce_metadata_deploy",
@@ -42889,6 +42949,11 @@
         "TodoWrite",
         "Agent",
         "Bash"
+      ],
+      "capabilities": [
+        "salesforce:data:bulk",
+        "salesforce:data:core:query",
+        "salesforce:data:core:upsert"
       ],
       "triggerKeywords": [
         "merge",
@@ -43239,7 +43304,7 @@
       "file": "sfdc-permission-orchestrator.md",
       "path": "opspal-salesforce/agents/sfdc-permission-orchestrator.md",
       "name": "sfdc-permission-orchestrator",
-      "description": "MUST BE USED for permission set management.",
+      "description": "MUST BE USED as the canonical entrypoint for Salesforce permission/security writes.",
       "model": "sonnet",
       "color": "blue",
       "version": "2.1.0",
@@ -43258,14 +43323,21 @@
       ],
       "capabilities": [
         "salesforce:permission:plan",
-        "salesforce:permission:read"
+        "salesforce:permission:read",
+        "salesforce:permission:write"
       ],
       "triggerKeywords": [
         "permission",
+        "permission set",
+        "assignment",
+        "fls",
         "sf",
         "sfdc",
         "merge",
         "orchestrator",
+        "profile",
+        "sharing",
+        "role",
         "deploy",
         "deployment",
         "manage",
@@ -43838,7 +43910,7 @@
       "file": "sfdc-security-admin.md",
       "path": "opspal-salesforce/agents/sfdc-security-admin.md",
       "name": "sfdc-security-admin",
-      "description": "MUST BE USED for Salesforce security operations.",
+      "description": "Salesforce security administration specialist for audits, profile/role/sharing work, and downstream permission orchestration support.",
       "model": "sonnet",
       "color": "blue",
       "version": "2.0.0",
@@ -49196,15 +49268,15 @@
     "totalCommands": 273,
     "totalHooks": 250,
     "totalRoutingRules": 0,
-    "totalKeywords": 2615,
-    "totalKeywordsFull": 2615,
+    "totalKeywords": 2618,
+    "totalKeywordsFull": 2618,
     "totalPlugins": 10,
     "duplicateShortNames": 3,
     "agentsWithKeywords": 299,
     "agentsWithKeywordsFull": 302,
     "agentsWithTools": 299,
     "agentsWithToolsFull": 302,
-    "avgKeywordsPerAgent": "15.28",
+    "avgKeywordsPerAgent": "15.30",
     "hooksByEvent": {
       "PostToolUse": 33,
       "UserPromptSubmit": 2,

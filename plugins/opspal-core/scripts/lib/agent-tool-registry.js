@@ -26,6 +26,26 @@ function unique(values) {
   return [...new Set(values.filter(Boolean))];
 }
 
+function intersectNormalizedArrays(collections = []) {
+  const groups = collections
+    .map((items) => unique(normalizeStringArray(items)))
+    .filter((items) => items.length > 0);
+
+  if (groups.length === 0) {
+    return [];
+  }
+
+  return groups[0].filter((candidate) => groups.every((items) => items.includes(candidate)));
+}
+
+function normalizeToolArray(value) {
+  return normalizeStringArray(value).map((tool) => tool === 'Task' ? 'Agent' : tool);
+}
+
+function normalizeComparableArray(value) {
+  return unique(normalizeStringArray(value)).sort((left, right) => left.localeCompare(right));
+}
+
 function normalizeStringArray(value) {
   if (!value) return [];
 
@@ -291,7 +311,13 @@ function normalizeAgentMetadata(metadata = {}, fallback = {}) {
   const plugin = String(metadata.plugin || fallback.plugin || '').trim();
   const actorType = normalizeActorType(metadata.actorType || metadata.actor_type || fallback.actorType || fallback.actor_type);
   const capabilities = unique(normalizeStringArray(metadata.capabilities || fallback.capabilities));
-  const tools = normalizeStringArray(metadata.tools || fallback.tools).map((tool) => tool === 'Task' ? 'Agent' : tool);
+  const tools = unique(normalizeToolArray(metadata.tools || fallback.tools));
+  const triggerKeywords = unique(normalizeStringArray(
+    metadata.triggerKeywords ||
+    metadata.trigger_keywords ||
+    fallback.triggerKeywords ||
+    fallback.trigger_keywords
+  ));
   const shortName = String(metadata.shortName || fallback.shortName || name).trim() || name;
   const fullName = String(metadata.fullName || fallback.fullName || (plugin && shortName ? `${plugin}:${shortName}` : '')).trim();
 
@@ -303,7 +329,8 @@ function normalizeAgentMetadata(metadata = {}, fallback = {}) {
     plugin: plugin || (fullName.includes(':') ? fullName.split(':', 1)[0] : ''),
     actorType,
     capabilities,
-    tools
+    tools,
+    triggerKeywords
   };
 }
 
@@ -325,6 +352,7 @@ function extractAgentMetadataFromFile(filePath) {
     actorType: data.actorType || data.actor_type || '',
     capabilities: data.capabilities || [],
     tools: data.tools || [],
+    triggerKeywords: data.triggerKeywords || data.trigger_keywords || [],
     filePath
   });
 }
@@ -440,18 +468,45 @@ function agentMatchesRequirements(agentName, requirements = {}, explicitPluginRo
     return false;
   }
 
+  const allowedAgents = unique(normalizeStringArray(
+    requirements.allowedAgents || requirements.allowed_agents
+  ));
   const requiredCapabilities = normalizeStringArray(
     requirements.requiredCapabilities || requirements.required_capabilities
   );
   const allowedActorTypes = normalizeStringArray(
     requirements.allowedActorTypes || requirements.allowed_actor_types
   ).map(normalizeActorType);
+  const requiredTools = normalizeToolArray(
+    requirements.requiredTools || requirements.required_tools
+  );
   const capabilityMatchMode = String(
     requirements.capabilityMatchMode || requirements.capability_match_mode || 'all'
   ).trim().toLowerCase();
+  const toolMatchMode = String(
+    requirements.toolMatchMode || requirements.tool_match_mode || 'all'
+  ).trim().toLowerCase();
+
+  if (allowedAgents.length > 0 && !allowedAgents.includes(agentName)) {
+    return false;
+  }
 
   if (allowedActorTypes.length > 0 && !allowedActorTypes.includes(normalizeActorType(metadata.actorType))) {
     return false;
+  }
+
+  if (requiredTools.length > 0) {
+    const matchedToolCount = requiredTools.filter((requiredTool) => (
+      metadata.tools.some((tool) => toolMatches(tool, requiredTool))
+    )).length;
+
+    if (toolMatchMode === 'any') {
+      if (matchedToolCount === 0) {
+        return false;
+      }
+    } else if (matchedToolCount !== requiredTools.length) {
+      return false;
+    }
   }
 
   if (requiredCapabilities.length === 0) {
@@ -467,6 +522,92 @@ function agentMatchesRequirements(agentName, requirements = {}, explicitPluginRo
   }
 
   return matchedCount === requiredCapabilities.length;
+}
+
+function deriveRouteRequirements(preferredAgent, clearanceAgents = [], explicitPluginRoot = '') {
+  const preferredAgentId = String(preferredAgent || '').trim();
+  const allowedAgents = unique([
+    preferredAgentId,
+    ...normalizeStringArray(clearanceAgents)
+  ]);
+  const metadataList = allowedAgents
+    .map((agentName) => getAgentMetadata(agentName, explicitPluginRoot))
+    .filter(Boolean);
+  const preferredMetadata = preferredAgentId
+    ? getAgentMetadata(preferredAgentId, explicitPluginRoot)
+    : null;
+
+  const sourceMetadata = metadataList.length > 0
+    ? metadataList
+    : (preferredMetadata ? [preferredMetadata] : []);
+
+  const unresolvedAgents = allowedAgents.filter((agentName) => !getAgentMetadata(agentName, explicitPluginRoot));
+  const requiredTools = intersectNormalizedArrays(
+    sourceMetadata.map((metadata) => normalizeToolArray(metadata.tools))
+  );
+  const requiredCapabilities = intersectNormalizedArrays(
+    sourceMetadata.map((metadata) => normalizeStringArray(metadata.capabilities))
+  );
+  const allowedActorTypes = unique(
+    sourceMetadata
+      .map((metadata) => normalizeActorType(metadata.actorType))
+      .filter(Boolean)
+  );
+
+  return {
+    preferredAgent: preferredAgentId,
+    allowedAgents,
+    allowedActorTypes,
+    requiredCapabilities,
+    requiredTools,
+    capabilityMatchMode: 'all',
+    toolMatchMode: 'all',
+    preferredActorType: normalizeActorType(preferredMetadata?.actorType || ''),
+    preferredCapabilities: unique(normalizeStringArray(preferredMetadata?.capabilities || [])),
+    preferredTools: unique(normalizeToolArray(preferredMetadata?.tools || [])),
+    unresolvedAgents,
+    sourceOfTruth: resolveAgentFilePath(preferredAgentId, explicitPluginRoot) ? 'agent-markdown' : 'routing-index'
+  };
+}
+
+function compareAgentMetadataSources(agentName, explicitPluginRoot = '') {
+  const markdown = extractAgentMetadataFromFile(resolveAgentFilePath(agentName, explicitPluginRoot));
+  const routingIndex = extractAgentMetadataFromRoutingIndex(agentName, explicitPluginRoot);
+  const mismatches = [];
+
+  if (!markdown || !routingIndex) {
+    return {
+      agentName,
+      markdown,
+      routingIndex,
+      active: markdown || routingIndex || null,
+      mismatches
+    };
+  }
+
+  [
+    ['actorType', [normalizeActorType(markdown.actorType)], [normalizeActorType(routingIndex.actorType)]],
+    ['capabilities', normalizeComparableArray(markdown.capabilities), normalizeComparableArray(routingIndex.capabilities)],
+    ['tools', normalizeComparableArray(normalizeToolArray(markdown.tools)), normalizeComparableArray(normalizeToolArray(routingIndex.tools))]
+  ].forEach(([field, markdownValues, indexValues]) => {
+    const left = Array.isArray(markdownValues) ? markdownValues : [markdownValues];
+    const right = Array.isArray(indexValues) ? indexValues : [indexValues];
+    if (JSON.stringify(left) !== JSON.stringify(right)) {
+      mismatches.push({
+        field,
+        markdown: left,
+        routingIndex: right
+      });
+    }
+  });
+
+  return {
+    agentName,
+    markdown,
+    routingIndex,
+    active: markdown,
+    mismatches
+  };
 }
 
 function getAgentsMatchingRequirements(requirements = {}, explicitPluginRoot = '') {
@@ -494,6 +635,8 @@ module.exports = {
   agentHasTool,
   agentMatchesRequirements,
   capabilityMatches,
+  compareAgentMetadataSources,
+  deriveRouteRequirements,
   getAgentsMatchingRequirements,
   getAgentMetadata,
   listAgentMetadata,
@@ -549,6 +692,20 @@ if (require.main === module) {
     process.exit(matches ? 0 : 1);
   }
 
+  if (command === 'route-requirements') {
+    let clearanceAgents = [];
+
+    try {
+      clearanceAgents = JSON.parse(toolName || '[]');
+    } catch (_error) {
+      process.stderr.write('Invalid clearance agents JSON\n');
+      process.exit(2);
+    }
+
+    process.stdout.write(`${JSON.stringify(deriveRouteRequirements(agentName, clearanceAgents, explicitPluginRoot || ''))}\n`);
+    process.exit(0);
+  }
+
   if (command === 'resolve-requirements') {
     let requirements = {};
 
@@ -563,6 +720,6 @@ if (require.main === module) {
     process.exit(0);
   }
 
-  process.stderr.write('Usage: agent-tool-registry.js <has-tool|has-capability|metadata|matches-requirements|resolve-requirements> <agentName|requirements> [toolName|requirements] [pluginRoot]\n');
+  process.stderr.write('Usage: agent-tool-registry.js <has-tool|has-capability|metadata|matches-requirements|route-requirements|resolve-requirements> <agentName|requirements> [toolName|requirements] [pluginRoot]\n');
   process.exit(2);
 }

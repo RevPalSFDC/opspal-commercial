@@ -16,6 +16,10 @@ disallowedTools:
   - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: haiku
+actorType: specialist
+capabilities:
+  - salesforce:data:bulk
+  - salesforce:data:core:query
 triggerKeywords:
   - sf
   - sfdc

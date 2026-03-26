@@ -1,0 +1,5 @@
+2026-03-26T14:18:02.010Z INFO Processing 10 enabled plugins
+2026-03-26T14:18:02.155Z INFO Total plugin commands loaded: 272
+2026-03-26T14:18:02.190Z INFO Total plugin skills loaded: 162
+2026-03-26T14:18:03.041Z INFO Routed to opspal-salesforce:sfdc-bulkops-orchestrator
+2026-03-26T14:18:03.422Z ERROR ROUTING_AUTO_DELEGATION_PROFILE_MISMATCH: Pending mandatory_specialist route attempted auto-delegation to 'opspal-salesforce:sfdc-cpq-specialist', but that agent does not satisfy the active route profile. Required tools: Bash. Actual tools: mcp_salesforce, mcp_salesforce_metadata_deploy, mcp_salesforce_field_create, mcp_salesforce_object_create, mcp_salesforce_flow_create, mcp__context7__*, Read, Write, Grep, TodoWrite. Required capabilities: salesforce:data:bulk, salesforce:data:core:upsert. Eligible actor types: orchestrator, specialist.

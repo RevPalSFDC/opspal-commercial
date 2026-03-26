@@ -687,6 +687,60 @@ async function runAllTests() {
     assert.strictEqual(state.route_pending_clearance, true, 'Denied Agent should not clear routing state');
   }));
 
+  results.push(await runTest('Repairs auto-delegation targets that do not satisfy the active route profile', async () => {
+    const env = createIsolatedEnv();
+    writeRoutingState(env, {
+      session_key: env.CLAUDE_SESSION_ID,
+      route_id: 'mixed-salesforce-data-cleanup',
+      route_kind: 'mandatory_specialist',
+      guidance_action: 'require_specialist',
+      required_agent: 'opspal-salesforce:sfdc-bulkops-orchestrator',
+      clearance_agents: [
+        'opspal-salesforce:sfdc-bulkops-orchestrator',
+        'opspal-salesforce:sfdc-data-export-manager'
+      ],
+      requires_specialist: true,
+      prompt_guidance_only: true,
+      prompt_blocked: false,
+      execution_block_until_cleared: true,
+      route_pending_clearance: true,
+      route_cleared: false,
+      routing_confidence: 0.98,
+      clearance_status: 'pending_clearance',
+      auto_delegation: {
+        active: true,
+        mode: 'agent_rewrite_bridge',
+        agent: 'opspal-salesforce:sfdc-cpq-specialist'
+      },
+      created_at: Math.floor(Date.now() / 1000),
+      updated_at: Math.floor(Date.now() / 1000),
+      expires_at: Math.floor(Date.now() / 1000) + 600
+    });
+
+    const result = await tester.run({
+      input: createAgentEvent({
+        subagent_type: 'Plan',
+        prompt: 'Verify records, generate CSV output, and bulk reparent 101 Contacts before duplicate account cleanup'
+      }),
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(
+      result.output?.hookSpecificOutput?.updatedInput?.subagent_type,
+      'opspal-salesforce:sfdc-bulkops-orchestrator',
+      'Invalid auto-delegation targets should be repaired to a profile-matching specialist'
+    );
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_PROFILE_REPAIRED'),
+      'Should explain that the route profile was repaired'
+    );
+    const state = readRoutingState(env);
+    assert(state, 'Routing state should persist after repair');
+    assert.strictEqual(state.clearance_status, 'cleared', 'Repaired specialist should clear the pending route');
+    assert.strictEqual(state.last_resolved_agent, 'opspal-salesforce:sfdc-bulkops-orchestrator', 'State should record the repaired specialist');
+  }));
+
   // Summary
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;

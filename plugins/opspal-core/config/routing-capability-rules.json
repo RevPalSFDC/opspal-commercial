@@ -7,6 +7,9 @@
         "required_capabilities": [
           "salesforce:permission:write"
         ],
+        "required_tools": [
+          "Bash"
+        ],
         "allowed_actor_types": [
           "orchestrator",
           "specialist"
@@ -19,6 +22,9 @@
         "required_capabilities": [
           "salesforce:data:core:upsert"
         ],
+        "required_tools": [
+          "Bash"
+        ],
         "allowed_actor_types": [
           "orchestrator",
           "specialist"
@@ -27,9 +33,28 @@
         "escalation": "block"
       },
       {
+        "rule_id": "sf_core_object_bulk_mutation",
+        "required_capabilities": [
+          "salesforce:data:bulk",
+          "salesforce:data:core:upsert"
+        ],
+        "required_tools": [
+          "Bash"
+        ],
+        "allowed_actor_types": [
+          "orchestrator",
+          "specialist"
+        ],
+        "preferred_agent": "opspal-salesforce:sfdc-bulkops-orchestrator",
+        "escalation": "block"
+      },
+      {
         "rule_id": "sf_query_url_length_risk",
         "required_capabilities": [
           "salesforce:data:bulk"
+        ],
+        "required_tools": [
+          "Bash"
         ],
         "allowed_actor_types": [
           "orchestrator",
@@ -43,6 +68,9 @@
         "required_capabilities": [
           "salesforce:data:core:query"
         ],
+        "required_tools": [
+          "Bash"
+        ],
         "allowed_actor_types": [
           "orchestrator",
           "specialist"
@@ -55,6 +83,9 @@
         "required_capabilities": [
           "salesforce:permission:read"
         ],
+        "required_tools": [
+          "Bash"
+        ],
         "allowed_actor_types": [
           "specialist"
         ],
@@ -65,6 +96,9 @@
         "rule_id": "sf_territory_write",
         "required_capabilities": [
           "salesforce:territory:write"
+        ],
+        "required_tools": [
+          "Bash"
         ],
         "allowed_actor_types": [
           "orchestrator",
@@ -77,6 +111,9 @@
         "rule_id": "sf_validation_rule_write",
         "required_capabilities": [
           "salesforce:metadata:validation-rule:write"
+        ],
+        "required_tools": [
+          "Bash"
         ],
         "allowed_actor_types": [
           "orchestrator"

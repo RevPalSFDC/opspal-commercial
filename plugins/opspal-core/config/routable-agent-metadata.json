@@ -1,0 +1,374 @@
+{
+  "version": "1.0.0",
+  "description": "Canonical actor/capability metadata for agents that participate in routing or capability enforcement.",
+  "agents": {
+    "opspal-core:account-expansion-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["revops:expansion:analyze", "revops:upsell:plan"]
+    },
+    "opspal-core:asana-task-manager": {
+      "actorType": "specialist",
+      "capabilities": ["asana:task:manage", "project:work-tracking"]
+    },
+    "opspal-core:board-pack-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["reporting:board-pack:create", "reporting:executive-review:prepare"]
+    },
+    "opspal-core:conversation-intelligence-aggregator": {
+      "actorType": "orchestrator",
+      "capabilities": ["conversation-intelligence:cross-platform:analyze", "meeting-intelligence:aggregate"]
+    },
+    "opspal-core:cross-platform-impact-analyzer": {
+      "actorType": "specialist",
+      "capabilities": ["cross-platform:impact:analyze", "change:blast-radius:assess"]
+    },
+    "opspal-core:cs-operations-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["customer-success:operations:orchestrate", "renewal-risk:analyze"]
+    },
+    "opspal-core:data-migration-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["cross-platform:data:migrate", "etl:plan:orchestrate"]
+    },
+    "opspal-core:diagram-generator": {
+      "actorType": "specialist",
+      "capabilities": ["documentation:diagram:create", "architecture:visualize"]
+    },
+    "opspal-core:field-dictionary-manager": {
+      "actorType": "specialist",
+      "capabilities": ["metadata:dictionary:manage", "field-context:document"]
+    },
+    "opspal-core:fireflies-integration-agent": {
+      "actorType": "specialist",
+      "capabilities": ["fireflies:integration:configure", "meeting-intelligence:crm:sync"]
+    },
+    "opspal-core:fireflies-meeting-intelligence-agent": {
+      "actorType": "specialist",
+      "capabilities": ["fireflies:transcript:analyze", "meeting-action-items:extract"]
+    },
+    "opspal-core:gong-competitive-intelligence-agent": {
+      "actorType": "specialist",
+      "capabilities": ["gong:competitive:analyze", "conversation-intelligence:competitive:extract"]
+    },
+    "opspal-core:gong-deal-intelligence-agent": {
+      "actorType": "specialist",
+      "capabilities": ["gong:deal-risk:analyze", "conversation-intelligence:deal-health:assess"]
+    },
+    "opspal-core:gong-integration-agent": {
+      "actorType": "specialist",
+      "capabilities": ["gong:integration:configure", "gong:auth:manage"]
+    },
+    "opspal-core:gong-sync-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["gong:data:sync", "conversation-intelligence:ingest:orchestrate"]
+    },
+    "opspal-core:implementation-planner": {
+      "actorType": "specialist",
+      "capabilities": ["implementation:project:plan", "remediation:task-breakdown"]
+    },
+    "opspal-core:intelligent-intake-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["project:intake:orchestrate", "requirements:classify"]
+    },
+    "opspal-core:multi-platform-campaign-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["campaign:cross-platform:orchestrate", "marketing:workflow:coordinate"]
+    },
+    "opspal-core:multi-platform-workflow-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["workflow:cross-platform:orchestrate", "automation:cross-platform:design"]
+    },
+    "opspal-core:notebooklm-knowledge-manager": {
+      "actorType": "specialist",
+      "capabilities": ["knowledge:client-context:curate", "notebook:sync"]
+    },
+    "opspal-core:pdf-generator": {
+      "actorType": "specialist",
+      "capabilities": ["document:pdf:generate", "report:pdf:export"]
+    },
+    "opspal-core:pipeline-intelligence-agent": {
+      "actorType": "specialist",
+      "capabilities": ["pipeline:health:analyze", "pipeline:bottleneck:identify"]
+    },
+    "opspal-core:release-coordinator": {
+      "actorType": "orchestrator",
+      "capabilities": ["release:production:orchestrate"]
+    },
+    "opspal-core:remediation-sequencer": {
+      "actorType": "orchestrator",
+      "capabilities": ["remediation:sequence:plan", "findings:prioritize"]
+    },
+    "opspal-core:revops-maturity-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["revops:maturity:assess", "cross-platform:assessment:orchestrate"]
+    },
+    "opspal-core:revops-query-agent": {
+      "actorType": "specialist",
+      "capabilities": ["revops:question:answer", "cross-platform:metrics:query"]
+    },
+    "opspal-core:revops-reporting-assistant": {
+      "actorType": "specialist",
+      "capabilities": ["revops:report:create", "kpi:forecast:analyze"]
+    },
+    "opspal-core:sales-enablement-coordinator": {
+      "actorType": "orchestrator",
+      "capabilities": ["sales-enablement:program:coordinate", "rep:onboarding:plan"]
+    },
+    "opspal-core:sales-playbook-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["sales-playbook:design", "deal-coaching:orchestrate"]
+    },
+    "opspal-core:uat-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["uat:test:orchestrate", "acceptance-testing:execute"]
+    },
+    "opspal-core:unified-exec-dashboard-agent": {
+      "actorType": "orchestrator",
+      "capabilities": ["executive-dashboard:unify", "board-reporting:aggregate"]
+    },
+    "opspal-core:web-viz-generator": {
+      "actorType": "specialist",
+      "capabilities": ["web:visualization:create", "interactive-report:build"]
+    },
+    "opspal-gtm-planning:forecast-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["gtm:forecast:orchestrate", "revenue:forecast:model"]
+    },
+    "opspal-gtm-planning:gtm-asana-bridge": {
+      "actorType": "orchestrator",
+      "capabilities": ["gtm:asana:sync", "planning:execution:track"]
+    },
+    "opspal-gtm-planning:gtm-market-intelligence": {
+      "actorType": "specialist",
+      "capabilities": ["gtm:market:intelligence", "tam:sam:som:analyze"]
+    },
+    "opspal-gtm-planning:gtm-retention-analyst": {
+      "actorType": "specialist",
+      "capabilities": ["gtm:retention:analyze", "revenue-mix:assess"]
+    },
+    "opspal-gtm-planning:gtm-revenue-modeler": {
+      "actorType": "specialist",
+      "capabilities": ["gtm:revenue:model", "pricing:capacity:model"]
+    },
+    "opspal-gtm-planning:gtm-strategic-reports-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["gtm:strategic-report:orchestrate", "go-to-market:report:compose"]
+    },
+    "opspal-gtm-planning:gtm-territory-designer": {
+      "actorType": "specialist",
+      "capabilities": ["gtm:territory:design", "quota-capacity:model"]
+    },
+    "opspal-hubspot:hubspot-analytics-reporter": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:analytics:report", "hubspot:metrics:analyze"]
+    },
+    "opspal-hubspot:hubspot-assessment-analyzer": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:portal:assess", "hubspot:health:audit"]
+    },
+    "opspal-hubspot:hubspot-contact-manager": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:contact:manage", "hubspot:crm:operate"]
+    },
+    "opspal-hubspot:hubspot-data-operations-manager": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:data:operate", "hubspot:import-export:manage"]
+    },
+    "opspal-hubspot:hubspot-integration-specialist": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:integration:configure", "hubspot:api:integrate"]
+    },
+    "opspal-hubspot:hubspot-marketing-automation": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:marketing:automate", "hubspot:email-campaign:build"]
+    },
+    "opspal-hubspot:hubspot-property-manager": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:property:manage", "hubspot:schema:configure"]
+    },
+    "opspal-hubspot:hubspot-workflow-auditor": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:workflow:audit", "hubspot:automation:analyze"]
+    },
+    "opspal-hubspot:hubspot-workflow-builder": {
+      "actorType": "specialist",
+      "capabilities": ["hubspot:workflow:build", "hubspot:automation:create"]
+    },
+    "opspal-marketo:marketo-analytics-assessor": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:analytics:assess", "marketo:metrics:report"]
+    },
+    "opspal-marketo:marketo-campaign-builder": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:campaign:build", "marketo:smart-campaign:create"]
+    },
+    "opspal-marketo:marketo-email-specialist": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:email:build", "marketo:template:manage"]
+    },
+    "opspal-marketo:marketo-instance-discovery": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:instance:discover", "marketo:configuration:inspect"]
+    },
+    "opspal-marketo:marketo-lead-manager": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:lead:lifecycle:manage", "marketo:lead:dedupe"]
+    },
+    "opspal-marketo:marketo-lead-quality-assessor": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:lead-quality:assess", "marketo:database:health:audit"]
+    },
+    "opspal-marketo:marketo-lead-scoring-architect": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:lead-scoring:design", "mql-threshold:define"]
+    },
+    "opspal-marketo:marketo-program-architect": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:program:design", "marketo:nurture:architect"]
+    },
+    "opspal-marketo:marketo-sfdc-sync-specialist": {
+      "actorType": "specialist",
+      "capabilities": ["marketo:salesforce:sync", "cross-platform:field-mapping:analyze"]
+    },
+    "opspal-mcp-client:mcp-benchmark-agent": {
+      "actorType": "specialist",
+      "capabilities": ["benchmark:query", "industry-metrics:research"]
+    },
+    "opspal-mcp-client:mcp-compute-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["compute:scenario:orchestrate", "quant:model:run"]
+    },
+    "opspal-mcp-client:mcp-scoring-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["scoring:model:orchestrate", "health-score:calculate"]
+    },
+    "opspal-okrs:okr-data-aggregator": {
+      "actorType": "specialist",
+      "capabilities": ["okr:data:aggregate", "strategic-metrics:rollup"]
+    },
+    "opspal-okrs:okr-generator": {
+      "actorType": "specialist",
+      "capabilities": ["okr:generate", "objective-drafting"]
+    },
+    "opspal-okrs:okr-initiative-evaluator": {
+      "actorType": "specialist",
+      "capabilities": ["okr:initiative:evaluate", "initiative:fit:assess"]
+    },
+    "opspal-okrs:okr-initiative-prioritizer": {
+      "actorType": "specialist",
+      "capabilities": ["okr:initiative:prioritize", "portfolio:rank"]
+    },
+    "opspal-okrs:okr-learning-engine": {
+      "actorType": "specialist",
+      "capabilities": ["okr:learning:synthesize", "okr:retrospective:analyze"]
+    },
+    "opspal-okrs:okr-plg-specialist": {
+      "actorType": "specialist",
+      "capabilities": ["okr:product-led-growth:design", "plg:metric:define"]
+    },
+    "opspal-okrs:okr-strategy-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["okr:strategy:orchestrate", "okr:cycle:plan"]
+    },
+    "opspal-salesforce:benchmark-research-agent": {
+      "actorType": "specialist",
+      "capabilities": ["benchmark:research", "industry:citation:collect"]
+    },
+    "opspal-salesforce:sfdc-apex-developer": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:apex:develop", "salesforce:trigger:build"]
+    },
+    "opspal-salesforce:sfdc-automation-auditor": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:automation:audit", "salesforce:flow:analyze"]
+    },
+    "opspal-salesforce:sfdc-automation-builder": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:automation:build", "salesforce:flow:create"]
+    },
+    "opspal-salesforce:sfdc-bulkops-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["salesforce:data:bulk", "salesforce:data:core:query"]
+    },
+    "opspal-salesforce:sfdc-cpq-assessor": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:cpq:assess", "salesforce:pricing:analyze"]
+    },
+    "opspal-salesforce:sfdc-conflict-resolver": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:deployment:conflict-resolve", "salesforce:metadata:dependency:analyze"]
+    },
+    "opspal-salesforce:sfdc-data-operations": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:data:bulk", "salesforce:data:core:query", "salesforce:data:core:upsert"]
+    },
+    "opspal-salesforce:sfdc-deployment-manager": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:deploy:production", "salesforce:deploy:sandbox", "salesforce:deploy:plan"]
+    },
+    "opspal-salesforce:sfdc-discovery": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:org:discover", "salesforce:configuration:inventory"]
+    },
+    "opspal-salesforce:sfdc-field-analyzer": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:field:analyze", "salesforce:field-dependency:inspect"]
+    },
+    "opspal-salesforce:sfdc-merge-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["salesforce:data:merge", "salesforce:dedupe:orchestrate"]
+    },
+    "opspal-salesforce:sfdc-metadata-manager": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:metadata:manage", "salesforce:metadata:destructive"]
+    },
+    "opspal-salesforce:sfdc-permission-assessor": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:permission:read"]
+    },
+    "opspal-salesforce:sfdc-permission-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["salesforce:permission:read", "salesforce:permission:write"]
+    },
+    "opspal-salesforce:sfdc-planner": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:implementation:plan", "salesforce:solution:design"]
+    },
+    "opspal-salesforce:sfdc-quality-auditor": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:data-quality:audit", "salesforce:integrity:assess"]
+    },
+    "opspal-salesforce:sfdc-query-specialist": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:data:core:query", "salesforce:data:bulk"]
+    },
+    "opspal-salesforce:sfdc-reports-dashboards": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:analytics:build", "salesforce:dashboard:create"]
+    },
+    "opspal-salesforce:sfdc-revops-auditor": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:revops:audit", "salesforce:pipeline:assess"]
+    },
+    "opspal-salesforce:sfdc-security-admin": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:permission:read", "salesforce:permission:write"]
+    },
+    "opspal-salesforce:sfdc-state-discovery": {
+      "actorType": "specialist",
+      "capabilities": ["salesforce:state:discover", "salesforce:schema:inspect"]
+    },
+    "opspal-salesforce:sfdc-territory-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["salesforce:territory:write"]
+    },
+    "opspal-salesforce:sfdc-upsert-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["salesforce:data:core:query", "salesforce:data:core:upsert"]
+    },
+    "opspal-salesforce:validation-rule-orchestrator": {
+      "actorType": "orchestrator",
+      "capabilities": ["salesforce:metadata:validation-rule:write"]
+    }
+  }
+}

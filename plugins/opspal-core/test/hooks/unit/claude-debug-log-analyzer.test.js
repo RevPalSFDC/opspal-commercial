@@ -21,6 +21,18 @@ const READ_FAILURE_FIXTURE = path.join(
   'fixtures',
   'claude-debug-read-path-failures.txt'
 );
+const TOOL_PROJECTION_FIXTURE = path.join(
+  __dirname,
+  '..',
+  'fixtures',
+  'claude-debug-salesforce-tool-projection-mismatch.log'
+);
+const ROUTE_PROFILE_FIXTURE = path.join(
+  __dirname,
+  '..',
+  'fixtures',
+  'claude-debug-spawn-time-route-profile-mismatch.txt'
+);
 
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
@@ -74,6 +86,48 @@ async function runAllTests() {
       analysis.readFailures.directories[0].path,
       '/mnt/c/Users/cnace/RevPal/workspace/orgs/lula/platforms/salesforce/staging/force-app/main/default/flows',
       'Should capture the directory path that was read'
+    );
+  }));
+
+  results.push(await runTest('Detects Salesforce sub-agent tool projection mismatches', async () => {
+    const analysis = analyzeClaudeDebugLogFile(TOOL_PROJECTION_FIXTURE);
+
+    assert.strictEqual(
+      analysis.primaryFailure?.kind,
+      'subagent_tool_projection_mismatch',
+      'Should classify Read/Write-only and no-Bash specialist failures as tool projection mismatches'
+    );
+    assert(analysis.events.subagentToolProjectionMismatch, 'Should capture the tool projection mismatch event');
+    assert.strictEqual(analysis.projectionMismatches.length >= 2, true, 'Should retain routed-agent projection mismatch details');
+    assert.strictEqual(
+      analysis.projectionMismatches[analysis.projectionMismatches.length - 1].agent,
+      'opspal-salesforce:sfdc-bulkops-orchestrator',
+      'Should associate the final mismatch with the last routed specialist'
+    );
+    assert(
+      analysis.projectionMismatches[0].actualTools.includes('Read') &&
+      analysis.projectionMismatches[0].actualTools.includes('Write'),
+      'Should retain the runtime tool set that was exposed by the host'
+    );
+  }));
+
+  results.push(await runTest('Separates spawn-time route/profile mismatches from host tool projection loss', async () => {
+    const analysis = analyzeClaudeDebugLogFile(ROUTE_PROFILE_FIXTURE);
+
+    assert.strictEqual(
+      analysis.primaryFailure?.kind,
+      'spawn_time_route_profile_mismatch',
+      'Route/profile mismatches should be classified independently from host projection loss'
+    );
+    assert.strictEqual(analysis.routeProfileMismatches.length, 1, 'Should capture structured route/profile mismatch details');
+    assert.strictEqual(
+      analysis.routeProfileMismatches[0].code,
+      'ROUTING_AUTO_DELEGATION_PROFILE_MISMATCH',
+      'Should preserve the specific mismatch code'
+    );
+    assert(
+      analysis.routeProfileMismatches[0].requiredTools.includes('Bash'),
+      'Should preserve required tools for route/profile mismatch triage'
     );
   }));
 

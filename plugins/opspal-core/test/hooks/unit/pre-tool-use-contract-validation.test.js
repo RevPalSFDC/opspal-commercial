@@ -556,6 +556,48 @@ async function runAllTests() {
     assertNoStructuredDeny(result, 'Capability-matched specialist should not be denied');
   }));
 
+  results.push(await runTest('Routes bulk core object mutations to the bulkops specialist family', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data bulk update --sobject Contact --file ./contacts.csv --target-org sandbox'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot
+      }
+    });
+
+    assertStructuredRoutingDeny(result, 'ROUTING_SPECIALIST_REQUIRED', 'Direct core object bulk mutation workflows');
+    assert(
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('sfdc-bulkops-orchestrator'),
+      'Should recommend the bulkops orchestrator for bulk mutations'
+    );
+  }));
+
+  results.push(await runTest('Allows bulk core object mutations for approved bulkops specialists', async () => {
+    const result = await tester.run({
+      input: {
+        tool: 'Bash',
+        input: {
+          command: 'sf data bulk update --sobject Contact --file ./contacts.csv --target-org sandbox'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-bulkops-orchestrator'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Approved bulkops specialists should be allowed');
+    assertNoStructuredDeny(result, 'Approved bulkops specialist should not emit a routing deny');
+  }));
+
   // Test 7: Blocks direct complex core object query workflows
   results.push(await runTest('Blocks direct complex core object data queries', async () => {
     const longProjection = Array.from({ length: 45 }, (_, i) => `CustomField${String(i).padStart(2, '0')}__c`).join(', ');
@@ -633,6 +675,43 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Capability-matched cleared sub-agent should be allowed');
     assertNoStructuredDeny(result, 'Capability-matched cleared sub-agent should not emit a routing deny');
+  }));
+
+  results.push(await runTest('Surfaces a tool-projection integrity error when a cleared specialist workflow drifts back to parent execution', async () => {
+    const sessionId = 'cleared-parent-fallback-route';
+    writeRoutingState(tempHome, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'mixed-salesforce-data-cleanup',
+      requiredAgent: 'opspal-salesforce:sfdc-bulkops-orchestrator',
+      clearanceAgents: [
+        'opspal-salesforce:sfdc-bulkops-orchestrator',
+        'opspal-salesforce:sfdc-data-export-manager'
+      ],
+      clearanceStatus: 'cleared',
+      lastResolvedAgent: 'opspal-salesforce:sfdc-bulkops-orchestrator'
+    }));
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        sessionKey: sessionId,
+        tool_input: {
+          command: 'sf data bulk update --sobject Contact --file ./contacts.csv --target-org sandbox'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_SESSION_ID: sessionId
+      }
+    });
+
+    assertStructuredRoutingDeny(result, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Cleared specialist parent fallback');
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('Parent direct execution recovery is blocked'),
+      'Integrity error should explain that parent recovery is not allowed'
+    );
   }));
 
   // Test 8: Allows core object queries for approved data/query agents

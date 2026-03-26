@@ -486,8 +486,8 @@ describe('TaskRouter', () => {
             { task: 'build salesforce report dashboard', expected: 'opspal-salesforce:sfdc-reports-dashboards' },
             { task: 'create flowchart diagram', expected: 'opspal-core:diagram-generator' },
             { task: 'hubspot workflow automation', expected: 'opspal-hubspot:hubspot-workflow-builder' },
-            { task: 'plan carefully complex task', expected: 'sequential-planner' },
-            { task: 'cross-platform sf and hs sync', expected: 'unified-orchestrator' },
+            { task: 'plan carefully complex task', expected: 'opspal-core:task-graph-orchestrator' },
+            { task: 'cross-platform sf and hs sync', expected: 'opspal-core:cross-platform-pipeline-orchestrator' },
         ];
 
         testCases.forEach(({ task, expected }) => {

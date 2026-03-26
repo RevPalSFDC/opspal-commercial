@@ -136,6 +136,9 @@ async function runAllTests() {
     const writeRule = classifySalesforceRoutingRequirement(
       'sf data upsert bulk --sobject Lead --file leads.csv --target-org sandbox'
     );
+    const bulkMutationRule = classifySalesforceRoutingRequirement(
+      'sf data bulk update --sobject Contact --file contacts.csv --target-org sandbox'
+    );
     const permissionRule = classifySalesforceRoutingRequirement(
       'sf data create record --sobject PermissionSetAssignment --values "AssigneeId=005xx PermissionSetId=0PSxx" --target-org sandbox'
     );
@@ -155,6 +158,22 @@ async function runAllTests() {
       ['salesforce:data:core:upsert'],
       'Routing rules should expose the required capability contract'
     );
+    assert(
+      writeRule.requiredTools.includes('Bash'),
+      'Capability-based routing should keep Bash in the active route profile'
+    );
+
+    assert.strictEqual(bulkMutationRule.decision, 'block');
+    assert.strictEqual(bulkMutationRule.ruleId, 'sf_core_object_bulk_mutation');
+    assert.strictEqual(bulkMutationRule.requiredAgent, 'opspal-salesforce:sfdc-bulkops-orchestrator');
+    assert(
+      bulkMutationRule.requiredTools.includes('Bash'),
+      'Bulk mutation routing should preserve Bash as a required tool'
+    );
+    assert(
+      bulkMutationRule.clearanceAgents.includes('opspal-salesforce:sfdc-data-operations'),
+      'Bulk mutation routing should still admit compatible data-operation specialists inside the approved family'
+    );
 
     assert.strictEqual(permissionRule.decision, 'block');
     assert.strictEqual(permissionRule.ruleId, 'sf_permission_security_write');
@@ -171,8 +190,30 @@ async function runAllTests() {
     assert.strictEqual(warnRule.decision, 'warn');
     assert.strictEqual(warnRule.ruleId, 'sf_core_object_query');
     assert(
+      warnRule.requiredTools.includes('Bash'),
+      'Query routing warnings should preserve Bash in the active route profile'
+    );
+    assert(
       warnRule.allowedActorTypes.includes('specialist'),
       'Routing warnings should expose actor-type eligibility'
+    );
+  }));
+
+  results.push(await runTest('Escalates mixed query-plus-bulk-mutation workflows to the bulk mutation route', async () => {
+    const mixedRule = classifySalesforceRoutingRequirement(
+      'sf data query --query "SELECT Id FROM Account WHERE Name LIKE \'Dup%\'" --target-org sandbox && sf data bulk update --sobject Contact --file contacts.csv --target-org sandbox'
+    );
+
+    assert.strictEqual(mixedRule.decision, 'block');
+    assert.strictEqual(mixedRule.ruleId, 'sf_core_object_bulk_mutation');
+    assert.strictEqual(mixedRule.requiredAgent, 'opspal-salesforce:sfdc-bulkops-orchestrator');
+    assert(
+      mixedRule.requiredTools.includes('Bash'),
+      'Mixed query/mutation routing should preserve Bash in the active route profile'
+    );
+    assert(
+      mixedRule.clearanceAgents.includes('opspal-salesforce:sfdc-data-operations'),
+      'Mixed query/mutation routing should still admit compatible approved specialists'
     );
   }));
 
