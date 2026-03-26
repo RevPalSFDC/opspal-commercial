@@ -21,6 +21,8 @@
  *   node routing-state-manager.js mark-cleared <session-key> [agent]
  *   node routing-state-manager.js mark-bypassed <session-key> [agent]
  *   node routing-state-manager.js clear-expired
+ *   node routing-state-manager.js record-projection-loss <session-key> <agent> [pattern]
+ *   node routing-state-manager.js projection-loss-count <session-key>
  *
  * @version 2.0.0
  */
@@ -305,7 +307,16 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     updated_at: timestamp,
     expires_at: expiresAt,
     ttl_seconds: ttlSeconds,
-    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || existing?.lastResolvedAgent || null
+    last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || existing?.lastResolvedAgent || null,
+    projection_loss_events: Array.isArray(state.projection_loss_events)
+      ? state.projection_loss_events
+      : Array.isArray(existing?.projection_loss_events)
+        ? existing.projection_loss_events
+        : [],
+    projection_loss_circuit_broken: toBoolean(
+      state.projection_loss_circuit_broken ??
+      existing?.projection_loss_circuit_broken
+    )
   };
   normalizedState.auto_delegation = normalizeAutoDelegation(state, normalizedState);
 
@@ -501,6 +512,40 @@ function checkState(sessionKey) {
   };
 }
 
+function recordProjectionLossEvent(sessionKey, agentName, pattern) {
+  const current = getState(sessionKey);
+  const events = current?.projection_loss_events ?? [];
+  events.push({
+    agent: agentName || 'unknown',
+    pattern: pattern || 'unknown',
+    timestamp: nowSeconds()
+  });
+  const updates = {
+    projection_loss_events: events
+  };
+  // Circuit-break: two or more events with different agent names
+  if (events.length >= 2) {
+    const uniqueAgents = new Set(events.map(e => e.agent).filter(a => a !== 'unknown'));
+    if (uniqueAgents.size >= 2) {
+      updates.projection_loss_circuit_broken = true;
+    }
+  }
+  if (current) {
+    const nextState = normalizeState(sessionKey, { ...current, ...updates }, current);
+    writeStateFile(getStateFile(sessionKey), nextState);
+    return nextState;
+  }
+  // No existing state — create minimal state with projection-loss data
+  const newState = normalizeState(sessionKey, updates);
+  writeStateFile(getStateFile(sessionKey), newState);
+  return newState;
+}
+
+function getProjectionLossCount(sessionKey) {
+  const current = getState(sessionKey);
+  return current?.projection_loss_events?.length ?? 0;
+}
+
 function readJsonFromStdin() {
   try {
     if (process.stdin.isTTY) {
@@ -579,9 +624,29 @@ if (require.main === module) {
       console.log(JSON.stringify(clearExpiredStates()));
       break;
 
+    case 'record-projection-loss': {
+      const sessionKey = args[1];
+      const agentName = args[2] || 'unknown';
+      const pattern = args[3] || 'unknown';
+      const updated = recordProjectionLossEvent(sessionKey, agentName, pattern);
+      console.log(JSON.stringify({
+        recorded: true,
+        count: updated?.projection_loss_events?.length ?? 1,
+        circuit_broken: updated?.projection_loss_circuit_broken ?? false
+      }));
+      break;
+    }
+
+    case 'projection-loss-count': {
+      const sessionKey = args[1];
+      const count = getProjectionLossCount(sessionKey);
+      console.log(JSON.stringify({ count }));
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired> [args]');
+      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|record-projection-loss|projection-loss-count> [args]');
       process.exit(1);
   }
 }
@@ -598,5 +663,7 @@ module.exports = {
   updateStateStatus,
   clearState,
   clearExpiredStates,
-  checkState
+  checkState,
+  recordProjectionLossEvent,
+  getProjectionLossCount
 };

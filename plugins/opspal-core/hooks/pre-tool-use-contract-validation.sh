@@ -765,6 +765,26 @@ detect_cleared_route_projection_mismatch() {
     routing_cleared="$(echo "$routing_state" | jq -r '.routeCleared // .cleared // false' 2>/dev/null || echo "false")"
     route_pending="$(echo "$routing_state" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")"
 
+    # Check for projection-loss circuit-break — blocks all Bash regardless of clearance state
+    local projection_circuit_broken
+    projection_circuit_broken="$(echo "$routing_state" | jq -r '.state.projection_loss_circuit_broken // .projection_loss_circuit_broken // false' 2>/dev/null || echo "false")"
+    if [[ "$projection_circuit_broken" == "true" ]]; then
+        required_agent="$(echo "$routing_state" | jq -r '.requiredAgent // .state.required_agent // ""' 2>/dev/null || echo "")"
+        last_resolved_agent="$(echo "$routing_state" | jq -r '.state.last_resolved_agent // .state.lastResolvedAgent // .lastResolvedAgent // .last_resolved_agent // ""' 2>/dev/null || echo "")"
+        jq -nc \
+          --arg required_agent "$required_agent" \
+          --arg last_resolved_agent "$last_resolved_agent" \
+          --arg caller_agent "$caller_agent" \
+          '{
+            requiredAgent: $required_agent,
+            lastResolvedAgent: $last_resolved_agent,
+            callerAgent: $caller_agent,
+            circuitBroken: true,
+            reason: "PROJECTION_LOSS_CIRCUIT_BREAK"
+          }'
+        return 0
+    fi
+
     if [[ "$routing_cleared" != "true" ]] || [[ "$route_pending" == "true" ]]; then
         echo '{}'
         return 0
@@ -897,6 +917,23 @@ if ! enforce_pending_route_gate "$TOOL_NAME" "$SESSION_KEY"; then
     exit 0
 fi
 
+# Projection-loss circuit-break — blocks Bash regardless of pending route state.
+# This fires after enforce_pending_route_gate because the circuit-broken state
+# may not have route_pending_clearance set (it's written by SubagentStop, not
+# by the router's UserPromptSubmit hook).
+if [ "$TOOL_NAME" = "Bash" ] && [ -n "$SESSION_KEY" ]; then
+    _plcb_state="$(get_routing_state_check "$SESSION_KEY")"
+    _plcb_broken="$(echo "$_plcb_state" | jq -r '.state.projection_loss_circuit_broken // .projection_loss_circuit_broken // false' 2>/dev/null || echo "false")"
+    if [ "$_plcb_broken" = "true" ]; then
+        emit_routing_event "block" "projection-loss-circuit-break" "" "Projection-loss circuit breaker active" "$(extract_bash_command 2>/dev/null || echo '')" "$(resolve_caller_agent unknown)" "$TOOL_NAME"
+        emit_pretool_decision \
+          "deny" \
+          "PROJECTION_LOSS_CIRCUIT_BREAK: Multiple specialists have reported Read/Write-only tool projection (no Bash). This is a runtime integrity failure — the host environment is not projecting declared tools into sub-agents. Do NOT attempt further specialist delegation or direct Bash recovery. Surface this to the user." \
+          "Projection-loss circuit breaker is active. No operational Bash execution is permitted until the runtime projection issue is resolved. Close and re-open the session to reset."
+        exit 0
+    fi
+fi
+
 if [ "$TOOL_NAME" = "Read" ]; then
     if ! enforce_read_target_preflight; then
         exit 0
@@ -1003,9 +1040,20 @@ enforce_mandatory_routing() {
             local last_resolved_agent=""
             local expected_tools=""
             local mismatch_required_tools=""
+            local is_circuit_broken=""
             last_resolved_agent="$(echo "$cleared_route_projection_mismatch" | jq -r '.lastResolvedAgent // ""' 2>/dev/null || echo "")"
             expected_tools="$(echo "$cleared_route_projection_mismatch" | jq -r '.expectedTools // ""' 2>/dev/null || echo "")"
             mismatch_required_tools="$(echo "$cleared_route_projection_mismatch" | jq -r '.requiredTools // ""' 2>/dev/null || echo "")"
+            is_circuit_broken="$(echo "$cleared_route_projection_mismatch" | jq -r '.circuitBroken // false' 2>/dev/null || echo "false")"
+
+            if [[ "$is_circuit_broken" == "true" ]]; then
+                emit_routing_event "block" "$rule_id" "$required_agent" "Projection-loss circuit breaker active — multiple specialists reported missing tools." "$command" "$caller_agent" "$tool"
+                emit_pretool_decision \
+                  "deny" \
+                  "PROJECTION_LOSS_CIRCUIT_BREAK: Multiple specialists have reported Read/Write-only tool projection (no Bash). This is a runtime integrity failure — the host environment is not projecting declared tools into sub-agents. Do NOT attempt further specialist delegation or direct Bash recovery. Surface this to the user." \
+                  "Projection-loss circuit breaker is active. No operational Bash execution is permitted until the runtime projection issue is resolved. Close and re-open the session to reset."
+                return 1
+            fi
 
             emit_routing_event "block" "$rule_id" "$required_agent" "Cleared specialist route drifted back to parent or non-approved execution context." "$command" "$caller_agent" "$tool"
             emit_pretool_decision \

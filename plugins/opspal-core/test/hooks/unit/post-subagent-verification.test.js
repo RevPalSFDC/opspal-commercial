@@ -102,6 +102,89 @@ async function runAllTests() {
     assert.notStrictEqual(result.exitCode, 0, 'Strict mode should fail without runbook evidence');
   }));
 
+  // =========================================================================
+  // Projection-loss detection tests
+  // =========================================================================
+
+  results.push(await runTest('Detects projection loss: "only has Read/Write tools"', async () => {
+    const home = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'subagent-verify-'));
+    const sessionId = `proj-loss-test-${Date.now()}`;
+    const output = [
+      'Routed to opspal-salesforce:sfdc-data-operations.',
+      'That agent couldn\'t execute the Salesforce CLI command — it only has Read/Write tools.',
+      'Attempting to fall back to direct execution.'
+    ].join('\n');
+
+    const result = await tester.run({
+      stdin: output,
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        CLAUDE_SESSION_ID: sessionId,
+        HOME: home
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit 0 (non-blocking)');
+    const stdout = result.stdout || '';
+    const parsed = (() => { try { return JSON.parse(stdout); } catch { return null; } })();
+    const context = parsed?.hookSpecificOutput?.additionalContext || '';
+    assert(
+      context.includes('SUBAGENT_PROJECTION_LOSS'),
+      `Should emit SUBAGENT_PROJECTION_LOSS in additionalContext, got: ${context.substring(0, 200)}`
+    );
+  }));
+
+  results.push(await runTest('Detects projection loss: tool enumeration without Bash', async () => {
+    const home = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'subagent-verify-'));
+    const sessionId = `proj-loss-enum-${Date.now()}`;
+    const output = 'The sub-agent has access to Read, Write, and TodoWrite tools but no Bash tool is available for executing CLI commands.';
+
+    const result = await tester.run({
+      stdin: output,
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        CLAUDE_SESSION_ID: sessionId,
+        HOME: home
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit 0');
+    const stdout = result.stdout || '';
+    const parsed = (() => { try { return JSON.parse(stdout); } catch { return null; } })();
+    const context = parsed?.hookSpecificOutput?.additionalContext || '';
+    assert(
+      context.includes('SUBAGENT_PROJECTION_LOSS') || context.includes('PROJECTION_LOSS'),
+      `Should detect projection loss from tool enumeration, got: ${context.substring(0, 200)}`
+    );
+  }));
+
+  results.push(await runTest('No false positive on clean output mentioning Read/Write', async () => {
+    const home = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'subagent-verify-'));
+    const sessionId = `proj-loss-clean-${Date.now()}`;
+    const output = [
+      'Successfully executed the query and returned 15 records.',
+      'Used Read tool to examine the schema and Write tool to save the CSV.',
+      'All operations completed without errors.'
+    ].join('\n');
+
+    const result = await tester.run({
+      stdin: output,
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        CLAUDE_SESSION_ID: sessionId,
+        HOME: home
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit 0');
+    const stdout = result.stdout || '';
+    // Should NOT contain projection loss signals
+    assert(
+      !stdout.includes('PROJECTION_LOSS'),
+      `Clean output should not trigger projection loss detection, got: ${stdout.substring(0, 200)}`
+    );
+  }));
+
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
 

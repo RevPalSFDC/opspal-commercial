@@ -30,6 +30,7 @@ const ROUTING_CHAIN = [
   'plugins/opspal-core/hooks/pre-task-agent-validator.sh'
 ];
 const PRETOOL_HOOK = 'plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh';
+const SUBAGENT_STOP_HOOK = 'plugins/opspal-core/hooks/post-subagent-verification.sh';
 
 // =============================================================================
 // Test Helpers
@@ -786,6 +787,146 @@ async function runAllTests() {
     });
 
     assertStructuredRoutingDeny(parentFallback, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Parent fallback after merge specialist clearance');
+  }));
+
+  // =========================================================================
+  // Vague opener / rich body routing tests
+  // =========================================================================
+
+  results.push(await runTest('Vague opener with rich embedded body routes to sfdc-orchestrator', async () => {
+    const env = createIsolatedEnv();
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const prompt = 'Fix 5 account naming issues\n\nStep 1: Verify accounts by running a SOQL query\nStep 2: Count contacts per account and generate a CSV\nStep 3: Reparent 103 contacts to the correct accounts\nStep 4: Delete the duplicate account records';
+
+    const routed = await router.run({
+      input: { userPrompt: prompt },
+      env
+    });
+
+    assert.strictEqual(routed.exitCode, 0, 'Router should complete');
+    const agent = routed.output?.metadata?.suggestedAgent;
+    assert.strictEqual(
+      agent,
+      'opspal-salesforce:sfdc-orchestrator',
+      `Rich body with compound cleanup signals should route to orchestrator, got: ${agent}`
+    );
+  }));
+
+  results.push(await runTest('Continuation prompt with embedded cleanup body routes to sfdc-orchestrator', async () => {
+    const env = createIsolatedEnv();
+    const router = new HookTester(ROUTING_CHAIN[0]);
+    const prompt = 'Resume the work using the appropriate opspal sub-agents\n\nThe remaining steps are:\n- Verify account names in Salesforce\n- Reparent contacts from duplicate account\n- Generate CSV of all affected contacts\n- Delete duplicate account record\n- Verify final contact count';
+
+    const routed = await router.run({
+      input: { userPrompt: prompt },
+      env
+    });
+
+    assert.strictEqual(routed.exitCode, 0, 'Router should complete');
+    const agent = routed.output?.metadata?.suggestedAgent;
+    assert.strictEqual(
+      agent,
+      'opspal-salesforce:sfdc-orchestrator',
+      `Continuation with compound cleanup body should route to orchestrator, got: ${agent}`
+    );
+  }));
+
+  // =========================================================================
+  // Projection-loss detection and circuit-breaker tests
+  // =========================================================================
+
+  results.push(await runTest('SubagentStop detects projection loss in specialist output', async () => {
+    const env = createIsolatedEnv();
+    const tester = new HookTester(SUBAGENT_STOP_HOOK);
+    const output = [
+      'Routed to opspal-salesforce:sfdc-data-operations.',
+      'That agent couldn\'t execute the Salesforce CLI command — it only has Read/Write tools.',
+      'Attempting to fall back to direct execution.'
+    ].join('\n');
+
+    const result = await tester.run({
+      stdin: output,
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        CLAUDE_SESSION_ID: env.CLAUDE_SESSION_ID,
+        HOME: env.HOME
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'SubagentStop hook should exit 0');
+    const context = result.output?.hookSpecificOutput?.additionalContext || '';
+    assert(
+      context.includes('SUBAGENT_PROJECTION_LOSS'),
+      `Should emit SUBAGENT_PROJECTION_LOSS, got: ${context.substring(0, 200)}`
+    );
+  }));
+
+  results.push(await runTest('Circuit breaker fires after second projection loss on different specialist', async () => {
+    const env = createIsolatedEnv();
+    const tester = new HookTester(SUBAGENT_STOP_HOOK);
+
+    // First projection loss
+    const output1 = 'Routed to opspal-salesforce:sfdc-data-operations. That agent only has Read/Write tools.';
+    await tester.run({
+      stdin: output1,
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        CLAUDE_SESSION_ID: env.CLAUDE_SESSION_ID,
+        HOME: env.HOME
+      }
+    });
+
+    // Second projection loss on different agent
+    const output2 = 'Routed to opspal-salesforce:sfdc-bulkops-orchestrator. That agent also couldn\'t execute — no Bash tool available.';
+    const result2 = await tester.run({
+      stdin: output2,
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        CLAUDE_SESSION_ID: env.CLAUDE_SESSION_ID,
+        HOME: env.HOME
+      }
+    });
+
+    assert.strictEqual(result2.exitCode, 0, 'SubagentStop hook should exit 0');
+    const context = result2.output?.hookSpecificOutput?.additionalContext || '';
+    assert(
+      context.includes('PROJECTION_LOSS_CIRCUIT_BREAK'),
+      `Second projection loss on different agent should trigger circuit break, got: ${context.substring(0, 200)}`
+    );
+  }));
+
+  results.push(await runTest('Parent Bash blocked after projection-loss circuit break', async () => {
+    const env = createIsolatedEnv();
+    const pretool = new HookTester(PRETOOL_HOOK);
+
+    // Seed circuit-broken state via CLI subprocess (uses test HOME)
+    const stateManagerPath = path.join(PLUGIN_ROOT, 'scripts/lib/routing-state-manager.js');
+    const { execSync } = require('child_process');
+    execSync(
+      `node "${stateManagerPath}" record-projection-loss "${env.CLAUDE_SESSION_ID}" "opspal-salesforce:sfdc-data-operations" "only has Read/Write"`,
+      { env: { ...process.env, HOME: env.HOME } }
+    );
+    execSync(
+      `node "${stateManagerPath}" record-projection-loss "${env.CLAUDE_SESSION_ID}" "opspal-salesforce:sfdc-bulkops-orchestrator" "no Bash"`,
+      { env: { ...process.env, HOME: env.HOME } }
+    );
+
+    // Verify circuit-broken state
+    const state = readRoutingState(env);
+    assert.strictEqual(state?.projection_loss_circuit_broken, true, 'State should be circuit-broken');
+
+    const bashResult = await pretool.run({
+      input: {
+        tool: 'Bash',
+        sessionKey: env.CLAUDE_SESSION_ID,
+        input: {
+          command: 'sf data query --query "SELECT Id FROM Account LIMIT 5" --target-org sandbox'
+        }
+      },
+      env
+    });
+
+    assertStructuredRoutingDeny(bashResult, 'PROJECTION_LOSS_CIRCUIT_BREAK', 'Bash should be blocked after circuit break');
   }));
 
   // Summary

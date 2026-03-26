@@ -736,6 +736,33 @@ class TaskRouter {
     }
 
     /**
+     * Detect compound Salesforce cleanup workflows by counting signal groups.
+     * Returns true when >= 3 of 6 signal groups are present, indicating
+     * the task is a multi-step cleanup that should route to sfdc-orchestrator.
+     * @param {string} task
+     * @returns {boolean}
+     */
+    detectCompoundCleanupShape(task) {
+        const text = String(task || '').toLowerCase();
+        let signalCount = 0;
+
+        // Signal group 1: account naming/verification
+        if (/account.*nam(e|ing)|nam(e|ing).*issue.*account|fix.*account.*name|rename.*account/.test(text)) signalCount++;
+        // Signal group 2: contact count/CSV
+        if (/count.*contact|contact.*count|csv.*contact|contact.*csv|generate.*csv/.test(text)) signalCount++;
+        // Signal group 3: reparent/transfer/reassign contacts
+        if (/reparent|transfer.*contact|reassign.*contact|move.*contact/.test(text)) signalCount++;
+        // Signal group 4: delete duplicate/cleanup
+        if (/delete.*duplicate|duplicate.*delete|duplicate.*account.*clean|clean.*duplicate|remove.*duplicate/.test(text)) signalCount++;
+        // Signal group 5: bulk update / 100+ records
+        if (/bulk.*update|\d{3,}.*contact|\d{3,}.*record|mass.*updat|update.*all.*contact/.test(text)) signalCount++;
+        // Signal group 6: verify account
+        if (/verify.*account|account.*verif|account.*audit|confirm.*account/.test(text)) signalCount++;
+
+        return signalCount >= 3;
+    }
+
+    /**
      * Infer platform from fully-qualified or short agent name.
      * @param {string} agentName
      * @returns {string|null}
@@ -1215,6 +1242,15 @@ class TaskRouter {
             if (matchCount > 0) {
                 rawScore = this.applyPlatformIntentWeight(rawScore, agent, platformIntent);
                 rawScore = this.applyIntentSpecificWeight(rawScore, agent, task, platformIntent);
+
+                // Compound cleanup shape boost: when the task has >= 3 cleanup
+                // signal groups and this is sfdc-orchestrator on a SF platform task,
+                // apply a strong boost so it outranks narrower specialists.
+                if (agent === 'opspal-salesforce:sfdc-orchestrator' &&
+                    platformIntent.has('salesforce') &&
+                    this.detectCompoundCleanupShape(task)) {
+                    rawScore *= 3.0;
+                }
 
                 // Filter weak incidental matches (e.g. single generic token collisions).
                 const minScore = strongMatches > 0 ? 0.22 : 0.32;

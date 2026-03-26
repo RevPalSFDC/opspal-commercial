@@ -29,6 +29,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 VERIFIER_SCRIPT="${PLUGIN_ROOT}/scripts/lib/subagent-result-verifier.js"
 COHORT_RUNBOOK_GUARD="${PLUGIN_ROOT}/scripts/lib/cohort-runbook-guard.js"
+ROUTING_STATE_MANAGER="${PLUGIN_ROOT}/scripts/lib/routing-state-manager.js"
 
 # Logging functions
 log_info() {
@@ -116,6 +117,74 @@ degradation_check() {
     done
 
     return 0
+}
+
+# Detect projection loss — sub-agent reports it lacks expected tools (e.g. Bash)
+# This is the primary signal for external_runtime_projection_loss incidents.
+projection_loss_check() {
+    local output="$1"
+
+    local projection_loss_patterns=(
+        "only has Read[/,]Write"
+        "couldn't execute.*no Bash"
+        "lacks Bash"
+        "no Bash tool"
+        "no Bash access"
+        "Read, Write, and TodoWrite"
+        "I (only|just) have.*Read.*Write"
+        "tools available.*Read.*Write(?!.*Bash)"
+    )
+
+    local matched_pattern=""
+    for pattern in "${projection_loss_patterns[@]}"; do
+        if echo "$output" | grep -qiP "$pattern" 2>/dev/null || echo "$output" | grep -qiE "$pattern" 2>/dev/null; then
+            matched_pattern="$pattern"
+            break
+        fi
+    done
+
+    if [[ -z "$matched_pattern" ]]; then
+        return 0
+    fi
+
+    log_info "Projection loss detected: matched pattern '$matched_pattern'"
+
+    # Extract agent name from output context
+    local detected_agent="unknown"
+    local agent_from_output
+    agent_from_output=$(echo "$output" | grep -oP "subagent_type=['\"]?opspal-salesforce:[a-z0-9-]+" | head -1 | sed "s/subagent_type=['\"]*//" || echo "")
+    if [[ -n "$agent_from_output" ]]; then
+        detected_agent="$agent_from_output"
+    else
+        # Try extracting from "Routed to ..." or "cleared to ..." patterns
+        agent_from_output=$(echo "$output" | grep -oiP "(routed to|cleared to|invoked|dispatched)\s+['\"]?opspal-salesforce:[a-z0-9-]+" | grep -oP "opspal-salesforce:[a-z0-9-]+" | head -1 || echo "")
+        if [[ -n "$agent_from_output" ]]; then
+            detected_agent="$agent_from_output"
+        fi
+    fi
+
+    # Record projection-loss event in routing state
+    local session_key="${CLAUDE_SESSION_ID:-}"
+    local loss_count=1
+    local circuit_broken="false"
+
+    if [[ -n "$session_key" ]] && [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
+        local record_result
+        record_result=$(node "$ROUTING_STATE_MANAGER" record-projection-loss "$session_key" "$detected_agent" "$matched_pattern" 2>/dev/null || echo '{"count":1,"circuit_broken":false}')
+        loss_count=$(echo "$record_result" | grep -oP '"count"\s*:\s*\K[0-9]+' || echo "1")
+        circuit_broken=$(echo "$record_result" | grep -oP '"circuit_broken"\s*:\s*\K(true|false)' || echo "false")
+    fi
+
+    log_info "Projection loss event #${loss_count} for agent=${detected_agent} circuit_broken=${circuit_broken}"
+
+    # Return non-zero to signal detection to caller
+    # Caller reads PROJECTION_LOSS_AGENT, PROJECTION_LOSS_COUNT, PROJECTION_LOSS_CIRCUIT_BROKEN
+    PROJECTION_LOSS_AGENT="$detected_agent"
+    PROJECTION_LOSS_PATTERN="$matched_pattern"
+    PROJECTION_LOSS_COUNT="$loss_count"
+    PROJECTION_LOSS_CIRCUIT_BROKEN="$circuit_broken"
+
+    return 1
 }
 
 # Emit structured JSON to stdout so parent agent receives the finding
@@ -226,6 +295,62 @@ main() {
     fi
 
     local parent_context_messages=()
+
+    # Check for projection loss — sub-agent reports missing tools (e.g. Bash)
+    # This MUST run before other checks as it supersedes generic error detection.
+    PROJECTION_LOSS_AGENT=""
+    PROJECTION_LOSS_PATTERN=""
+    PROJECTION_LOSS_COUNT="0"
+    PROJECTION_LOSS_CIRCUIT_BROKEN="false"
+
+    if ! projection_loss_check "$SUBAGENT_OUTPUT"; then
+        if [[ "$PROJECTION_LOSS_CIRCUIT_BROKEN" == "true" ]]; then
+            log_error "PROJECTION LOSS CIRCUIT BREAK: ${PROJECTION_LOSS_COUNT} specialists reported missing tools"
+
+            cat >&2 << EOF
+
+PROJECTION LOSS CIRCUIT BREAK
+===============================================================
+
+Two or more specialists have reported Read/Write-only tool projection
+(no Bash). This is a runtime integrity failure — the host environment
+is not projecting declared tools into sub-agents.
+
+Agent: ${PROJECTION_LOSS_AGENT}
+Pattern: ${PROJECTION_LOSS_PATTERN}
+Events: ${PROJECTION_LOSS_COUNT}
+
+Do NOT attempt further specialist delegation or direct Bash recovery.
+Surface this error to the user — it is a host/runtime projection bug,
+not a data or business logic failure.
+
+EOF
+
+            parent_context_messages+=("PROJECTION_LOSS_CIRCUIT_BREAK: ${PROJECTION_LOSS_COUNT} different specialists reported Read/Write-only tool projection (no Bash). Agents affected include '${PROJECTION_LOSS_AGENT}'. This is a runtime integrity failure. Do NOT attempt further specialist delegation or direct Bash recovery. Surface this to the user as a host runtime projection issue.")
+        else
+            log_info "Projection loss detected on agent=${PROJECTION_LOSS_AGENT} (event #${PROJECTION_LOSS_COUNT})"
+
+            cat >&2 << EOF
+
+SUBAGENT PROJECTION LOSS WARNING
+===============================================================
+
+The sub-agent reported it lacks expected tools (e.g. Bash).
+This is typically a host runtime projection issue, not a repo bug.
+
+Agent: ${PROJECTION_LOSS_AGENT}
+Pattern: ${PROJECTION_LOSS_PATTERN}
+Event #: ${PROJECTION_LOSS_COUNT}
+
+The specialist's repo-side definition includes Bash, but the runtime
+did not project it. A retry with the same specialist may succeed if
+this is transient, or try a different approved specialist.
+
+EOF
+
+            parent_context_messages+=("SUBAGENT_PROJECTION_LOSS: Agent '${PROJECTION_LOSS_AGENT}' reported only Read/Write tools (no Bash). Pattern: '${PROJECTION_LOSS_PATTERN}'. This is event #${PROJECTION_LOSS_COUNT}. The specialist's repo-side definition includes Bash — this is a runtime projection loss, not a business logic failure. Retry with the same specialist or escalate if this recurs.")
+        fi
+    fi
 
     # Check for degradation signals (cached/stale data usage)
     if ! degradation_check "$SUBAGENT_OUTPUT"; then

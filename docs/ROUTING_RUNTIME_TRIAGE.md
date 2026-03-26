@@ -36,3 +36,32 @@ Use this when a Salesforce workflow fails with specialist-routing or tool-projec
 - `markdown/index mismatch` + validator failures: fix repo metadata or regenerate `routing-index.json`.
 - `route/profile mismatch`: fix route derivation, allowed family, or spawn-time enforcement.
 - `runtime says no Bash` + repo validators pass: capture the debug log, keep the CI report, and escalate as host/runtime projection drift.
+
+## Projection-Loss Circuit-Break Protocol
+
+When two or more specialists report Read/Write-only projection in the same session:
+
+1. `post-subagent-verification.sh` detects the pattern via `projection_loss_check()` and records each event via `routing-state-manager.js record-projection-loss`.
+2. On the second event with a different agent name, the state is updated with `projection_loss_circuit_broken: true`.
+3. `post-subagent-verification.sh` emits `PROJECTION_LOSS_CIRCUIT_BREAK` in `additionalContext` to the parent.
+4. `pre-tool-use-contract-validation.sh` reads `projection_loss_circuit_broken` from routing state and blocks all parent Bash with reason `PROJECTION_LOSS_CIRCUIT_BREAK`.
+5. Do NOT attempt further specialist delegation or direct Bash recovery.
+6. Surface the error to the user: this is a host/runtime UI projection bug, not a data or business logic failure.
+7. To reset: close and re-open the Claude Code session to obtain a fresh agent spawn context.
+
+**Signs:** `PROJECTION_LOSS_CIRCUIT_BREAK` in hook output or logs, two or more `SUBAGENT_PROJECTION_LOSS` events with different agent names in routing state.
+
+**Distinguishing from other failures:**
+- Single projection loss (event count = 1): `SUBAGENT_PROJECTION_LOSS` — may be transient, retry is allowed.
+- Repeated projection loss (event count >= 2, different agents): `PROJECTION_LOSS_CIRCUIT_BREAK` — systemic, no retry.
+- Parent fallback after specialist clearance: `ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH` — route was cleared but parent is executing instead.
+
+## Compound Cleanup Routing
+
+Multi-step Salesforce cleanup workflows (account naming + contact reparent + CSV + duplicate delete) now route to `sfdc-orchestrator` via three mechanisms:
+
+1. **Mandatory patterns** (`routing-patterns.json`): `compound-salesforce-cleanup-indicators` catches common compound phrasing.
+2. **Full-body scan** (`unified-router.sh`): When the normalized opener misses, the router scans the full raw message body against all mandatory patterns.
+3. **Compound shape detection** (`unified-router.sh`): Counts 6 signal groups (naming, count/CSV, reparent, delete duplicate, bulk update, verify). If >= 3 match, forces `sfdc-orchestrator`.
+
+Additionally, `detect_continue_intent()` now treats compound cleanup signals (reparent, duplicate account delete, etc.) as high-risk actions, preventing continuation prompts from suppressing routing.

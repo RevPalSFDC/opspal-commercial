@@ -52,6 +52,19 @@
         "Primary runtime failure detected: spawn_time_route_profile_mismatch"
       ],
       "primaryFailureKind": "spawn_time_route_profile_mismatch"
+    },
+    {
+      "label": "repeated-specialist-projection-loss",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.log",
+      "expect": "fail",
+      "incidentClass": "external_runtime_projection_loss",
+      "sourceOfTruth": "host-runtime",
+      "failureSubstrings": [
+        "Primary runtime failure detected: subagent_tool_projection_mismatch"
+      ],
+      "primaryFailureKind": "subagent_tool_projection_mismatch",
+      "minProjectionMismatchCount": 2,
+      "requiresCircuitBreak": true
     }
   ]
 }

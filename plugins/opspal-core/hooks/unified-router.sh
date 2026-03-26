@@ -266,7 +266,7 @@ detect_continue_intent() {
         has_continue="true"
     fi
 
-    if echo "$msg_lower" | grep -qE '(deploy.*prod|production.*deploy|push.*production|delete.*bulk|bulk.*delete|mass.*delete|delete.*all|drop.*field|remove.*object|delete.*object|truncate|merge.*duplicate.*(account|contact|lead)|dedup(e|lication)?.*(account|contact|lead)|consolidate.*(account|contact|lead))'; then
+    if echo "$msg_lower" | grep -qE '(deploy.*prod|production.*deploy|push.*production|delete.*bulk|bulk.*delete|mass.*delete|delete.*all|drop.*field|remove.*object|delete.*object|truncate|merge.*duplicate.*(account|contact|lead)|dedup(e|lication)?.*(account|contact|lead)|consolidate.*(account|contact|lead)|reparent.*(contact|account)|duplicate.*(account|contact).*delete|count.*contact.*csv|bulk.*update.*contact|naming.*issue.*account.*contact)'; then
         has_high_risk_action="true"
     fi
 
@@ -876,6 +876,64 @@ mark_routing_state_bypassed() {
 }
 
 # =============================================================================
+# COMPOUND CLEANUP SHAPE DETECTION
+# Catches multi-step Salesforce cleanup workflows when individual mandatory
+# patterns do not fire (e.g., vague opener with rich embedded body).
+# Looks for >= 3 of 6 signal groups to trigger orchestrator routing.
+# =============================================================================
+
+detect_compound_cleanup_shape() {
+    local msg="$1"
+    local msg_lower
+    local signal_count=0
+
+    [[ -z "$msg" ]] && echo '{}' && return 1
+    msg_lower=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
+
+    # Signal group 1: account naming/verification
+    echo "$msg_lower" | grep -qE '(account.*nam(e|ing)|nam(e|ing).*issue.*account|fix.*account.*name|rename.*account)' && signal_count=$((signal_count + 1))
+
+    # Signal group 2: contact count/CSV
+    echo "$msg_lower" | grep -qE '(count.*contact|contact.*count|csv.*contact|contact.*csv|generate.*csv)' && signal_count=$((signal_count + 1))
+
+    # Signal group 3: reparent/transfer/reassign contacts
+    echo "$msg_lower" | grep -qE '(reparent|transfer.*contact|reassign.*contact|move.*contact)' && signal_count=$((signal_count + 1))
+
+    # Signal group 4: delete duplicate/cleanup
+    echo "$msg_lower" | grep -qE '(delete.*duplicate|duplicate.*delete|duplicate.*account.*clean|clean.*duplicate|remove.*duplicate)' && signal_count=$((signal_count + 1))
+
+    # Signal group 5: bulk update / 100+ records
+    echo "$msg_lower" | grep -qE '(bulk.*update|[0-9]{3,}.*contact|[0-9]{3,}.*record|mass.*updat|update.*all.*contact)' && signal_count=$((signal_count + 1))
+
+    # Signal group 6: verify account
+    echo "$msg_lower" | grep -qE '(verify.*account|account.*verif|account.*audit|confirm.*account)' && signal_count=$((signal_count + 1))
+
+    if [[ $signal_count -ge 3 ]]; then
+        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Compound cleanup shape detected: ${signal_count}/6 signal groups matched" >&2
+        jq -nc \
+          --arg route_id "compound-salesforce-cleanup" \
+          --arg agent "opspal-salesforce:sfdc-orchestrator" \
+          '{
+            routeId: $route_id,
+            agent: $agent,
+            clearanceAgents: [
+              "opspal-salesforce:sfdc-orchestrator",
+              "opspal-salesforce:sfdc-query-specialist",
+              "opspal-salesforce:sfdc-data-export-manager",
+              "opspal-salesforce:sfdc-csv-enrichment",
+              "opspal-salesforce:sfdc-bulkops-orchestrator",
+              "opspal-salesforce:sfdc-merge-orchestrator",
+              "opspal-salesforce:sfdc-dedup-safety-copilot"
+            ]
+          }'
+        return 0
+    fi
+
+    echo '{}'
+    return 1
+}
+
+# =============================================================================
 # MAIN ROUTING LOGIC
 # =============================================================================
 
@@ -887,6 +945,19 @@ fi
 # Check for mandatory blocking first
 MANDATORY_MATCH=$(check_mandatory_patterns "$USER_MESSAGE")
 MANDATORY_AGENT=$(echo "$MANDATORY_MATCH" | jq -r '.agent // ""' 2>/dev/null || echo "")
+
+# If the normalized opener missed a mandatory match, scan the full body.
+# Critical for continuation prompts with rich embedded instructions.
+if [[ -z "$MANDATORY_AGENT" ]] && [[ ${#RAW_USER_MESSAGE} -gt ${#USER_MESSAGE} ]]; then
+    MANDATORY_MATCH_BODY=$(check_mandatory_patterns "$RAW_USER_MESSAGE")
+    MANDATORY_AGENT_BODY=$(echo "$MANDATORY_MATCH_BODY" | jq -r '.agent // ""' 2>/dev/null || echo "")
+    if [[ -n "$MANDATORY_AGENT_BODY" ]]; then
+        MANDATORY_MATCH="$MANDATORY_MATCH_BODY"
+        MANDATORY_AGENT="$MANDATORY_AGENT_BODY"
+        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Mandatory pattern matched via full-body scan: $MANDATORY_AGENT" >&2
+    fi
+fi
+
 MANDATORY_ROUTE_ID=$(echo "$MANDATORY_MATCH" | jq -r '.routeId // ""' 2>/dev/null || echo "")
 MANDATORY_CLEARANCE_AGENTS=$(echo "$MANDATORY_MATCH" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
 IS_MANDATORY="false"
@@ -903,6 +974,20 @@ INTAKE_COMPLETENESS_SCORE="1"
 INTAKE_GATE_COMPLEXITY="0.6"
 ROUTE_ID=""
 CLEARANCE_AGENTS_JSON="[]"
+
+# If no mandatory pattern matched, try compound cleanup shape detection on full body
+if [[ -z "$MANDATORY_AGENT" ]]; then
+    COMPOUND_MATCH=$(detect_compound_cleanup_shape "$RAW_USER_MESSAGE")
+    COMPOUND_AGENT=$(echo "$COMPOUND_MATCH" | jq -r '.agent // ""' 2>/dev/null || echo "")
+    if [[ -n "$COMPOUND_AGENT" ]]; then
+        MANDATORY_AGENT="$COMPOUND_AGENT"
+        MANDATORY_MATCH="$COMPOUND_MATCH"
+        MANDATORY_ROUTE_ID=$(echo "$COMPOUND_MATCH" | jq -r '.routeId // ""' 2>/dev/null || echo "")
+        MANDATORY_CLEARANCE_AGENTS=$(echo "$COMPOUND_MATCH" | jq -c '.clearanceAgents // []' 2>/dev/null || echo "[]")
+        ROUTING_SOURCE="compound-shape-detection"
+        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Compound cleanup shape matched: $COMPOUND_AGENT" >&2
+    fi
+fi
 
 if [[ -n "$MANDATORY_AGENT" ]]; then
     IS_MANDATORY="true"
