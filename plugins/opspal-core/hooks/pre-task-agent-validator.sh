@@ -239,6 +239,27 @@ agent_clears_requirement() {
     ' >/dev/null 2>&1
 }
 
+# Extract platform family from a fully-qualified agent name for cross-family detection.
+# e.g., opspal-salesforce:sfdc-discovery -> salesforce
+extract_agent_family_sh() {
+    local agent_name="$1"
+
+    [[ -z "$agent_name" ]] && echo "" && return 0
+    [[ "$agent_name" != *:* ]] && echo "" && return 0
+
+    if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
+        local family
+        family=$(node -e "
+const { extractAgentFamily } = require('$ROUTING_STATE_MANAGER');
+process.stdout.write(extractAgentFamily('$agent_name') || '');
+" 2>/dev/null) && echo "$family" && return 0
+    fi
+
+    # Pure-bash fallback
+    local prefix="${agent_name%%:*}"
+    echo "${prefix#opspal-}"
+}
+
 derive_route_requirements() {
     local preferred_agent="$1"
     local clearance_agents_json="$2"
@@ -980,16 +1001,63 @@ main() {
             fi
         else
             local allowed_agents
+            local pending_family
+            local requested_family
+            local state_age_seconds
+            local same_workflow_threshold=300  # 5 minutes, mirrors routing-state-manager.js default
+
             allowed_agents=$(echo "$CLEARANCE_AGENTS" | jq -r 'join(", ")' 2>/dev/null || echo "")
-            log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_requirement_mismatch" "Pending route requires approved agent family"
-            emit_pretool_response \
-              "deny" \
-              "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}." \
-              "" \
-              "" \
-              "ROUTING_REQUIRED_AGENT_MISMATCH" \
-              "ERROR"
-            exit 0
+            pending_family=$(extract_agent_family_sh "${REQUIRED_AGENT:-}")
+            requested_family=$(extract_agent_family_sh "$RESOLVED")
+            state_age_seconds=$(echo "$ROUTING_STATE" | jq -r '.age // 0' 2>/dev/null || echo "0")
+
+            # Defense-in-depth: detect cross-family stale carryover at enforcement time.
+            # If the pending state's family differs from the requested agent's family AND
+            # the state is older than the same-workflow threshold, treat it as stale
+            # carryover and auto-clear rather than hard-blocking.
+            if [[ -n "$pending_family" ]] &&
+               [[ -n "$requested_family" ]] &&
+               [[ "$pending_family" != "$requested_family" ]] &&
+               [[ "$state_age_seconds" -ge "$same_workflow_threshold" ]]; then
+
+                log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "false" \
+                  "routing_stale_cross_family_carryover" \
+                  "Stale cross-family route auto-cleared: pending=$pending_family, requested=$requested_family, age=${state_age_seconds}s"
+
+                # Clear the stale state
+                if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
+                    node "$ROUTING_STATE_MANAGER" clear "$SESSION_KEY" >/dev/null 2>&1 || true
+                fi
+
+                if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                    ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_STALE_CROSS_FAMILY_CARRYOVER: Stale pending route for '${REQUIRED_AGENT:-unknown}' (family=${pending_family}) was auto-cleared; it was ${state_age_seconds}s old and does not apply to '${RESOLVED}' (family=${requested_family})."
+                else
+                    ADDITIONAL_CONTEXT="ROUTING_STALE_CROSS_FAMILY_CARRYOVER: Stale pending route for '${REQUIRED_AGENT:-unknown}' (family=${pending_family}) was auto-cleared; it was ${state_age_seconds}s old and does not apply to '${RESOLVED}' (family=${requested_family})."
+                fi
+                # Fall through - do NOT exit; let the agent proceed
+            else
+                # Same family or too recent: enforce the pending route
+                local mismatch_type
+                if [[ -z "$pending_family" ]] || [[ -z "$requested_family" ]]; then
+                    mismatch_type="unknown_family"
+                elif [[ "$pending_family" == "$requested_family" ]]; then
+                    mismatch_type="same_family_enforcement"
+                else
+                    mismatch_type="cross_family_recent"  # different family but too recent to auto-clear
+                fi
+
+                log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" \
+                  "routing_requirement_mismatch" \
+                  "Pending route requires approved agent family. mismatch_type=${mismatch_type}, pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
+                emit_pretool_response \
+                  "deny" \
+                  "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}]" \
+                  "" \
+                  "" \
+                  "ROUTING_REQUIRED_AGENT_MISMATCH" \
+                  "ERROR"
+                exit 0
+            fi
         fi
     fi
 

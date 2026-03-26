@@ -147,6 +147,102 @@ resolve_caller_agent() {
     fi
 }
 
+# Resolve caller identity from cleared routing state when the hook JSON payload
+# and environment variables do not provide agent identity. This handles the case
+# where a specialist (e.g., sfdc-orchestrator) was cleared to own the workflow
+# but the host runtime does not populate .agent_type in subsequent PreToolUse
+# hook payloads for that specialist's Bash calls.
+#
+# Returns the last_resolved_agent if:
+#   1. The route is cleared (route_cleared == true)
+#   2. last_resolved_agent is set (non-empty)
+#   3. The caller identity would otherwise be "unknown"
+#
+# This is a CONTEXT CONTINUITY recovery — it does NOT substitute for actual
+# host-runtime agent identity propagation. If the host correctly provides
+# .agent_type, this function is never needed.
+resolve_caller_from_cleared_route() {
+    local session_key="${1:-}"
+    local current_caller="${2:-unknown}"
+
+    # Only activate when caller is truly unknown
+    if [[ "$current_caller" != "unknown" ]] && [[ -n "$current_caller" ]]; then
+        echo "$current_caller"
+        return 0
+    fi
+
+    if [[ -z "$session_key" ]]; then
+        echo "$current_caller"
+        return 0
+    fi
+
+    local routing_state
+    routing_state="$(get_routing_state_check "$session_key" 2>/dev/null || echo "{}")"
+
+    local route_cleared
+    route_cleared="$(echo "$routing_state" | jq -r '.routeCleared // .cleared // false' 2>/dev/null || echo "false")"
+    if [[ "$route_cleared" != "true" ]]; then
+        echo "$current_caller"
+        return 0
+    fi
+
+    local last_resolved
+    last_resolved="$(echo "$routing_state" | jq -r '.state.last_resolved_agent // .state.lastResolvedAgent // .lastResolvedAgent // ""' 2>/dev/null || echo "")"
+    if [[ -n "$last_resolved" ]] && [[ "$last_resolved" != "null" ]]; then
+        CALLER_RESOLVED_FROM_CLEARED_ROUTE="true"
+        echo "$last_resolved"
+        return 0
+    fi
+
+    echo "$current_caller"
+}
+
+# Flag: set to "true" when caller identity was recovered from cleared route state
+# rather than from the hook JSON payload. Used for diagnostic classification.
+CALLER_RESOLVED_FROM_CLEARED_ROUTE="false"
+
+# Emit telemetry when caller identity is recovered from cleared route state.
+# This tracks how often the host runtime fails to propagate .agent_type in the
+# PreToolUse hook payload, requiring fallback to last_resolved_agent.
+# Output: one JSONL line to compliance.jsonl per recovery event.
+emit_context_continuity_telemetry() {
+    local recovered_agent="$1"
+    local session_key="$2"
+    local tool="$3"
+    local command="$4"
+    local bypass_type="${5:-cleared_route_context_continuity}"
+
+    local sanitized_command
+    sanitized_command="$(echo "${command:-}" | head -c 200 | tr '"' "'" 2>/dev/null || echo "")"
+
+    local has_agent_type="false"
+    local has_task_id="false"
+    local has_agent_name="false"
+    [[ -n "${CALLER_AGENT_FROM_HOOK:-}" ]] && has_agent_type="true"
+    [[ -n "${CLAUDE_TASK_ID:-}" ]] && has_task_id="true"
+    [[ -n "${CLAUDE_AGENT_NAME:-}${CLAUDE_SUBAGENT_NAME:-}" ]] && has_agent_name="true"
+
+    local entry
+    entry=$(jq -nc         --arg timestamp "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"         --arg type "context_continuity_recovery"         --arg recovered_agent "$recovered_agent"         --arg session_key "${session_key:-}"         --arg tool "${tool:-}"         --arg command "$sanitized_command"         --arg bypass_type "$bypass_type"         --arg hook_agent_type_present "$has_agent_type"         --arg claude_task_id_present "$has_task_id"         --arg claude_agent_name_present "$has_agent_name"         --arg raw_agent_type "${CALLER_AGENT_FROM_HOOK:-}"         '{
+            timestamp: $timestamp,
+            type: $type,
+            recovered_agent: $recovered_agent,
+            session_key: $session_key,
+            tool: $tool,
+            command: $command,
+            bypass_type: $bypass_type,
+            host_runtime_identity: {
+                agent_type_present: ($hook_agent_type_present == "true"),
+                claude_task_id_present: ($claude_task_id_present == "true"),
+                claude_agent_name_present: ($claude_agent_name_present == "true"),
+                raw_agent_type: $raw_agent_type
+            }
+        }') 2>/dev/null || return 0
+
+    local compliance_log="${HOOK_LOG_ROOT:-${HOME}/.claude/logs}/compliance.jsonl"
+    safe_append_jsonl "$entry" "$compliance_log"
+}
+
 append_jsonl_to_target() {
     local line="$1"
     local target_file="$2"
@@ -810,18 +906,33 @@ detect_cleared_route_projection_mismatch() {
         return 0
     fi
 
+    # Classify the failure type:
+    # A. CONTEXT_CONTINUITY_LOSS: caller is "unknown" but specialist profile includes Bash.
+    #    The specialist was correctly identified and is Bash-capable, but execution context
+    #    was lost — the host runtime did not propagate agent identity.
+    # B. EXTERNAL_PROJECTION_LOSS: caller is a known agent (not "unknown") but that agent
+    #    does not match the cleared specialist. This suggests the runtime projected the
+    #    specialist but tools were stripped or the execution drifted to a different agent.
+    # C. WRONG_ROUTE_MISMATCH: the cleared route does not match the current task context.
+    local failure_class="EXTERNAL_PROJECTION_LOSS"
+    if [[ "$caller_agent" == "unknown" ]] || [[ -z "$caller_agent" ]]; then
+        failure_class="CONTEXT_CONTINUITY_LOSS"
+    fi
+
     jq -nc \
       --arg required_agent "$required_agent" \
       --arg last_resolved_agent "$last_resolved_agent" \
       --arg caller_agent "$caller_agent" \
       --arg required_tools "$required_tools" \
       --arg expected_tools "$expected_tools" \
+      --arg failure_class "$failure_class" \
       '{
         requiredAgent: $required_agent,
         lastResolvedAgent: $last_resolved_agent,
         callerAgent: $caller_agent,
         requiredTools: $required_tools,
-        expectedTools: $expected_tools
+        expectedTools: $expected_tools,
+        failureClass: $failure_class
       }'
 }
 
@@ -964,12 +1075,35 @@ enforce_mandatory_routing() {
     local routing_action=""
     local warning_message=""
 
+    # Standard sub-agent bypass: if the hook payload or env vars identify a sub-agent,
+    # check whether it has validated route clearance.
     if [ -n "${CALLER_AGENT_FROM_HOOK}" ] || [ -n "${CLAUDE_TASK_ID:-}" ]; then
         if subagent_has_validated_route_clearance "$caller_agent" "${SESSION_KEY:-}"; then
             emit_routing_event "allow" "subagent_context_bypass" "" \
                 "Sub-agent context: validated route clearance present for caller" \
                 "$(extract_bash_command 2>/dev/null || echo '')" "$caller_agent" "$tool"
             return 0
+        fi
+    fi
+
+    # Execution-context continuity recovery: if caller_agent is "unknown" (host runtime
+    # did not populate .agent_type in the hook payload), attempt to recover identity from
+    # the cleared routing state. This preserves specialist ownership when the runtime
+    # fails to propagate agent identity through the hook JSON.
+    if [[ "$caller_agent" == "unknown" ]]; then
+        local recovered_caller
+        recovered_caller="$(resolve_caller_from_cleared_route "${SESSION_KEY:-}" "$caller_agent")"
+        if [[ "$recovered_caller" != "unknown" ]] && [[ -n "$recovered_caller" ]]; then
+            caller_agent="$recovered_caller"
+            # Re-check clearance with the recovered identity
+            if subagent_has_validated_route_clearance "$caller_agent" "${SESSION_KEY:-}"; then
+                emit_routing_event "allow" "cleared_route_context_continuity" "" \
+                    "Context continuity recovery: caller resolved from cleared route state as '$caller_agent'" \
+                    "$(extract_bash_command 2>/dev/null || echo '')" "$caller_agent" "$tool"
+                emit_context_continuity_telemetry "$caller_agent" "${SESSION_KEY:-}" "$tool" \
+                    "$(extract_bash_command 2>/dev/null || echo '')" "subagent_clearance_bypass"
+                return 0
+            fi
         fi
     fi
 
@@ -1035,6 +1169,17 @@ enforce_mandatory_routing() {
             return 0
         fi
 
+        # Context continuity recovery (second check): if caller was recovered from
+        # cleared route state, it already passed the first bypass. But if it didn't
+        # pass because the clearance_agents for THIS mandatory rule differ from the
+        # route's clearance_agents, try matching recovered identity against this
+        # rule's clearance list directly.
+        if [[ "$CALLER_RESOLVED_FROM_CLEARED_ROUTE" == "true" ]] && caller_matches_allowed_agents "$caller_agent" "$clearance_agents_json"; then
+            emit_routing_event "allow" "$rule_id" "$required_agent" "Context continuity: recovered caller matches rule clearance agents" "$command" "$caller_agent" "$tool"
+            emit_context_continuity_telemetry "$caller_agent" "${SESSION_KEY:-}" "$tool" "$command" "rule_clearance_match"
+            return 0
+        fi
+
         cleared_route_projection_mismatch="$(detect_cleared_route_projection_mismatch "$caller_agent" "${SESSION_KEY:-}" "$tool")"
         if [[ "$cleared_route_projection_mismatch" != "{}" ]]; then
             local last_resolved_agent=""
@@ -1055,10 +1200,22 @@ enforce_mandatory_routing() {
                 return 1
             fi
 
-            emit_routing_event "block" "$rule_id" "$required_agent" "Cleared specialist route drifted back to parent or non-approved execution context." "$command" "$caller_agent" "$tool"
+            local failure_class=""
+            failure_class="$(echo "$cleared_route_projection_mismatch" | jq -r '.failureClass // "EXTERNAL_PROJECTION_LOSS"' 2>/dev/null || echo "EXTERNAL_PROJECTION_LOSS")"
+
+            if [[ "$failure_class" == "CONTEXT_CONTINUITY_LOSS" ]]; then
+                emit_routing_event "block" "$rule_id" "$required_agent" "CONTEXT_CONTINUITY_LOSS: Specialist identity dropped to unknown after route clearance." "$command" "$caller_agent" "$tool"
+                emit_pretool_decision \
+                  "deny" \
+                  "CONTEXT_CONTINUITY_LOSS: This workflow was cleared to '${last_resolved_agent:-$required_agent}' (Bash-capable), but execution context was lost — the current caller is '${caller_agent:-unknown}'. The host runtime did not propagate specialist identity through the hook payload. This is NOT a tool projection failure (the specialist profile includes Bash). Re-invoke the specialist via Agent(subagent_type='${last_resolved_agent:-$required_agent}') to restore execution context." \
+                  "Specialist identity was lost between route clearance and operational execution. The cleared specialist '${last_resolved_agent:-$required_agent}' still owns this workflow. Re-delegate to restore context."
+                return 1
+            fi
+
+            emit_routing_event "block" "$rule_id" "$required_agent" "EXTERNAL_PROJECTION_LOSS: Cleared specialist route drifted to non-approved context." "$command" "$caller_agent" "$tool"
             emit_pretool_decision \
               "deny" \
-              "ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH: This workflow was already cleared to '${last_resolved_agent:-$required_agent}', whose active profile expects Bash-capable execution. Operational work is now being attempted from '${caller_agent:-main}' instead. Required tools: ${mismatch_required_tools:-Bash}. Loaded tools for cleared specialist: ${expected_tools:-unknown}." \
+              "EXTERNAL_PROJECTION_LOSS: This workflow was already cleared to '${last_resolved_agent:-$required_agent}', whose active profile expects Bash-capable execution. Operational work is now being attempted from '${caller_agent:-main}' instead. Required tools: ${mismatch_required_tools:-Bash}. Loaded tools for cleared specialist: ${expected_tools:-unknown}. [failureClass=${failure_class}]" \
               "Protected specialist workflow remains owned by '${last_resolved_agent:-$required_agent}'. Parent direct execution recovery is blocked; reroute only to a capable approved specialist or investigate tool projection / registry drift."
             return 1
         fi

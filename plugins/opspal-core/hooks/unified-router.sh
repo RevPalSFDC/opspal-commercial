@@ -324,6 +324,18 @@ fi
 
 TRANSCRIPT_NOISE_SCORE=$(compute_transcript_noise_score "$RAW_USER_MESSAGE")
 CONTINUE_INTENT=$(detect_continue_intent "$USER_MESSAGE")
+# Override token detection.
+# IMPORTANT: The override token (default: [ROUTING_OVERRIDE]) must appear in the
+# actual user message text visible to this hook. It is extracted from the hook's
+# stdin JSON payload (the user_message field). Tokens injected via system-reminder
+# tags, additional context, or other non-message fields are NOT visible here and
+# will NOT trigger a bypass.
+#
+# Supported bypass paths:
+#   1. Include [ROUTING_OVERRIDE] in the user message text (bypasses pending state)
+#   2. Set SKIP_AGENT_BLOCKING=1 environment variable (prevents blocking)
+#   3. Programmatic: node routing-state-manager.js mark-bypassed <session-key>
+#   4. Programmatic: node routing-state-manager.js clear <session-key>
 HAS_OVERRIDE="false"
 if [[ -n "$RAW_USER_MESSAGE$USER_MESSAGE" ]] && printf '%s\n%s' "$RAW_USER_MESSAGE" "$USER_MESSAGE" | grep -Fqi "$ROUTING_OVERRIDE_TOKEN"; then
     HAS_OVERRIDE="true"
@@ -875,6 +887,56 @@ mark_routing_state_bypassed() {
     node "$ROUTING_STATE_MANAGER" mark-bypassed "$ROUTING_SESSION_KEY" "${SUGGESTED_AGENT:-}" >/dev/null 2>&1 || true
 }
 
+# Extract platform family from a fully-qualified agent name.
+# e.g., opspal-salesforce:sfdc-discovery -> salesforce
+extract_suggested_agent_family() {
+    local agent_name="$1"
+
+    [[ -z "$agent_name" ]] && echo "" && return 0
+    [[ "$agent_name" != *:* ]] && echo "" && return 0
+
+    if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
+        local family
+        family=$(node -e "
+const { extractAgentFamily } = require('$ROUTING_STATE_MANAGER');
+process.stdout.write(extractAgentFamily('$agent_name') || '');
+" 2>/dev/null) && echo "$family" && return 0
+    fi
+
+    # Pure-bash fallback: extract prefix and strip opspal- to get family
+    local prefix="${agent_name%%:*}"
+    echo "${prefix#opspal-}"
+}
+
+# Attempt to clear stale cross-family routing state.
+# When a new prompt targets a different platform family than the pending route
+# and the pending state is old enough, clear it to prevent false blocks.
+clear_stale_cross_family_state() {
+    local suggested_family="$1"
+
+    CROSS_FAMILY_CLEARED="false"
+
+    [[ -z "${ROUTING_SESSION_KEY:-}" ]] && return 0
+    [[ -z "$suggested_family" ]] && return 0
+    [[ ! -f "$ROUTING_STATE_MANAGER" ]] && return 0
+    ! command -v node &>/dev/null && return 0
+
+    local result
+    result=$(node "$ROUTING_STATE_MANAGER" clear-stale "$ROUTING_SESSION_KEY" "$suggested_family" 2>/dev/null || echo '{"cleared":false}')
+
+    local was_cleared
+    was_cleared=$(echo "$result" | jq -r '.cleared // false' 2>/dev/null || echo "false")
+
+    if [[ "$was_cleared" == "true" ]]; then
+        CROSS_FAMILY_CLEARED="true"
+        local pending_family
+        local requested_family
+        pending_family=$(echo "$result" | jq -r '.pendingFamily // "unknown"' 2>/dev/null || echo "unknown")
+        requested_family=$(echo "$result" | jq -r '.requestedFamily // "unknown"' 2>/dev/null || echo "unknown")
+        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Cross-family stale state cleared: pending=$pending_family, requested=$requested_family" >&2
+    fi
+}
+
 # =============================================================================
 # COMPOUND CLEANUP SHAPE DETECTION
 # Catches multi-step Salesforce cleanup workflows when individual mandatory
@@ -908,8 +970,17 @@ detect_compound_cleanup_shape() {
     # Signal group 6: verify account
     echo "$msg_lower" | grep -qE '(verify.*account|account.*verif|account.*audit|confirm.*account)' && signal_count=$((signal_count + 1))
 
+    # Signal group 7: find/identify duplicates (vague opener pattern)
+    echo "$msg_lower" | grep -qE '(find.*duplicate|identify.*duplicate|locate.*duplicate|duplicate.*we.*created|check.*for.*duplicate|detect.*duplicate)' && signal_count=$((signal_count + 1))
+
+    # Signal group 8: query + validate pattern (discovery-cleanup compound)
+    echo "$msg_lower" | grep -qE '(query.*account.*validate|validate.*duplicate|check.*account.*date|account.*website.*match|compare.*account)' && signal_count=$((signal_count + 1))
+
+    # Signal group 9: cleanup/merge intent combined with discovery
+    echo "$msg_lower" | grep -qE '(clean.*up.*account|merge.*record|consolidate.*record|fix.*data.*quality|data.*cleanup|account.*cleanup)' && signal_count=$((signal_count + 1))
+
     if [[ $signal_count -ge 3 ]]; then
-        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Compound cleanup shape detected: ${signal_count}/6 signal groups matched" >&2
+        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Compound cleanup shape detected: ${signal_count}/9 signal groups matched" >&2
         jq -nc \
           --arg route_id "compound-salesforce-cleanup" \
           --arg agent "opspal-salesforce:sfdc-orchestrator" \
@@ -1310,6 +1381,12 @@ fi
 
 [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] RouteKind: $ROUTE_KIND, Guidance: $GUIDANCE_ACTION, RequiresSpecialist: $REQUIRES_SPECIALIST, ExecutionGate: $EXECUTION_BLOCK_UNTIL_CLEARED, RequestedPromptBlock: $PROMPT_BLOCK_REQUESTED, SuppressedPromptBlock: $PROMPT_BLOCK_SUPPRESSED, Override: $OVERRIDE_APPLIED, Adaptive: $ADAPTIVE_FALLBACK_APPLIED, AutoDelegation: $AUTO_DELEGATION_ELIGIBLE" >&2
 
+# Determine the family of the newly suggested agent (may be empty for no-agent routes)
+SUGGESTED_AGENT_FAMILY=""
+if [[ -n "${SUGGESTED_AGENT:-}" ]]; then
+    SUGGESTED_AGENT_FAMILY=$(extract_suggested_agent_family "$SUGGESTED_AGENT")
+fi
+
 if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
     if [[ "$OVERRIDE_APPLIED" == "true" ]]; then
         persist_routing_state "bypassed" "${BLOCK_OVERRIDE_REASON:-prompt_override_token}"
@@ -1320,6 +1397,13 @@ elif [[ "$HAS_OVERRIDE" == "true" ]] && routing_state_has_pending_requirement; t
     OVERRIDE_APPLIED="true"
     BLOCK_OVERRIDE_REASON="${BLOCK_OVERRIDE_REASON:-prompt_override_token}"
     mark_routing_state_bypassed
+elif [[ "$SHOULD_PERSIST_ROUTE" != "true" ]] && [[ -n "$SUGGESTED_AGENT_FAMILY" ]]; then
+    # Cross-family stale route detection:
+    # The new prompt scored AVAILABLE/RECOMMENDED (no enforcement needed), but a
+    # pending enforcement block from a different platform family may still be alive.
+    # If the pending state is old enough AND from a different family, clear it now
+    # so it does not bleed into the new prompt's agent invocation.
+    clear_stale_cross_family_state "$SUGGESTED_AGENT_FAMILY"
 fi
 
 # =============================================================================

@@ -116,6 +116,248 @@ async function runAllTests() {
     }
   }));
 
+  // =========================================================================
+  // Cross-family stale route detection tests
+  // =========================================================================
+
+  results.push(await runTest('extractAgentFamily returns correct families via clear-stale same_family response', async () => {
+    const home = createTempHome();
+    const sessionKey = 'family-extract-test';
+
+    try {
+      const oldTimestamp = Math.floor(Date.now() / 1000) - 600;
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-salesforce:sfdc-cpq-assessor',
+        clearance_agents: ['opspal-salesforce:sfdc-cpq-assessor'],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        clearance_status: 'pending_clearance',
+        created_at: oldTimestamp,
+        updated_at: oldTimestamp,
+        expires_at: oldTimestamp + 900
+      }));
+
+      const output = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, false, 'Same family should not be cleared');
+      assert.strictEqual(result.reason, 'same_family');
+      assert.strictEqual(result.pendingFamily, 'salesforce');
+      assert.strictEqual(result.requestedFamily, 'salesforce');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('clear-stale clears cross-family stale state when old enough', async () => {
+    const home = createTempHome();
+    const sessionKey = 'cross-family-clear-test';
+
+    try {
+      const oldTimestamp = Math.floor(Date.now() / 1000) - 600; // 10 minutes ago
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-marketo:marketo-data-operations',
+        clearance_agents: ['opspal-marketo:marketo-data-operations'],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        clearance_status: 'pending_clearance',
+        created_at: oldTimestamp,
+        updated_at: oldTimestamp,
+        expires_at: oldTimestamp + 900
+      }));
+
+      const output = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, true, 'Cross-family stale state should be cleared');
+      assert.strictEqual(result.reason, 'cross_family_stale_carryover');
+      assert.strictEqual(result.pendingFamily, 'marketo');
+      assert.strictEqual(result.requestedFamily, 'salesforce');
+      assert.ok(!fs.existsSync(stateFile), 'State file should have been deleted');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('clear-stale preserves same-family pending state', async () => {
+    const home = createTempHome();
+    const sessionKey = 'same-family-preserve-test';
+
+    try {
+      const oldTimestamp = Math.floor(Date.now() / 1000) - 600;
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-salesforce:sfdc-cpq-assessor',
+        clearance_agents: ['opspal-salesforce:sfdc-cpq-assessor'],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        clearance_status: 'pending_clearance',
+        created_at: oldTimestamp,
+        updated_at: oldTimestamp,
+        expires_at: oldTimestamp + 900
+      }));
+
+      const output = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, false);
+      assert.strictEqual(result.reason, 'same_family');
+      assert.ok(fs.existsSync(stateFile), 'State file should still exist');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('clear-stale preserves cross-family state when too recent', async () => {
+    const home = createTempHome();
+    const sessionKey = 'cross-family-recent-test';
+
+    try {
+      const recentTimestamp = Math.floor(Date.now() / 1000) - 60; // 1 minute ago
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-marketo:marketo-data-operations',
+        clearance_agents: ['opspal-marketo:marketo-data-operations'],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        clearance_status: 'pending_clearance',
+        created_at: recentTimestamp,
+        updated_at: recentTimestamp,
+        expires_at: recentTimestamp + 900
+      }));
+
+      const output = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, false, 'Recent cross-family state should not be cleared');
+      assert.strictEqual(result.reason, 'too_recent_for_auto_clear');
+      assert.ok(fs.existsSync(stateFile), 'State file should still exist');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('clear-stale returns no_state when no pending route exists', async () => {
+    const home = createTempHome();
+    const sessionKey = 'no-state-test';
+
+    try {
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      fs.mkdirSync(stateDir, { recursive: true });
+
+      const output = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, false);
+      assert.strictEqual(result.reason, 'no_state');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('clear-stale with custom threshold-seconds overrides default', async () => {
+    const home = createTempHome();
+    const sessionKey = 'custom-threshold-test';
+
+    try {
+      // State is 120 seconds old - default threshold (300s) would preserve it,
+      // but custom threshold of 60s should clear it
+      const timestamp = Math.floor(Date.now() / 1000) - 120;
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-marketo:marketo-data-operations',
+        clearance_agents: ['opspal-marketo:marketo-data-operations'],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        clearance_status: 'pending_clearance',
+        created_at: timestamp,
+        updated_at: timestamp,
+        expires_at: timestamp + 900
+      }));
+
+      const output = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce', '--threshold-seconds=60']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, true, 'Custom threshold should allow clearing');
+      assert.strictEqual(result.reason, 'cross_family_stale_carryover');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Regression: stale Marketo route does not block Salesforce after clear-stale', async () => {
+    const home = createTempHome();
+    const sessionKey = 'regression-marketo-sf-test';
+
+    try {
+      const oldTimestamp = Math.floor(Date.now() / 1000) - 600;
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-marketo:marketo-data-operations',
+        clearance_agents: ['opspal-marketo:marketo-data-operations'],
+        route_kind: 'complexity_specialist',
+        guidance_action: 'require_specialist',
+        requires_specialist: true,
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        route_cleared: false,
+        clearance_status: 'pending_clearance',
+        routing_confidence: 0.9,
+        created_at: oldTimestamp,
+        updated_at: oldTimestamp,
+        expires_at: oldTimestamp + 900
+      }));
+
+      // Step 1: clear-stale should remove Marketo state when Salesforce is requested
+      const clearOutput = runStateManager('clear-stale', sessionKey, {
+        home,
+        extraArgs: ['salesforce']
+      });
+      const clearResult = JSON.parse(clearOutput);
+      assert.strictEqual(clearResult.cleared, true, 'Stale Marketo state should be cleared for Salesforce');
+
+      // Step 2: check should now report no active state
+      const checkOutput = runStateManager('check', sessionKey, { home });
+      const checkResult = JSON.parse(checkOutput);
+      assert.strictEqual(checkResult.hasState, false, 'No state should remain after cross-family clear');
+      assert.strictEqual(checkResult.executionBlockActive, false, 'No execution block should be active');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.length - passed;
 

@@ -19,7 +19,7 @@
  *   RECOVERY_LOG_PATH - Override default recovery log path
  *
  * @module debugging-context-extractor
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 'use strict';
@@ -31,6 +31,19 @@ const os = require('os');
 // ============================================================================
 // CONSTANTS
 // ============================================================================
+
+// Lazy-load compliance tracker to avoid circular deps — loaded on first use
+let _complianceTracker = null;
+function getComplianceTracker() {
+  if (!_complianceTracker) {
+    try {
+      _complianceTracker = require('./compliance-tracker');
+    } catch (e) {
+      _complianceTracker = { getContextContinuityEvents: () => ({ total_events: 0, by_agent: {}, host_runtime_identity_gaps: {}, events: [] }) };
+    }
+  }
+  return _complianceTracker;
+}
 
 const DEFAULT_LOG_DIR = path.join(os.homedir(), '.claude', 'logs');
 const DEFAULT_TRACE_FILE = path.join(DEFAULT_LOG_DIR, 'traces.jsonl');
@@ -387,8 +400,21 @@ async function extractDebuggingContext(options = {}) {
   const recoveryEvents = extractRecoveryEvents({ ...options, timeWindowMinutes });
   const instrumentationGaps = analyzeInstrumentationGaps(traceSummary, logMetrics);
 
+  // Extract context continuity recovery events from compliance log.
+  // These track how often the host runtime fails to propagate .agent_type in
+  // PreToolUse hook payloads, requiring identity recovery from cleared route state.
+  let contextContinuityEvents = { total_events: 0, by_agent: {}, host_runtime_identity_gaps: {}, events: [] };
+  try {
+    const tracker = getComplianceTracker();
+    contextContinuityEvents = tracker.getContextContinuityEvents(timeWindowMinutes);
+  } catch (e) {
+    if (verbose) {
+      console.log(`[debugging-context] Could not extract context continuity events: ${e.message}`);
+    }
+  }
+
   if (verbose) {
-    console.log(`[debugging-context] Found ${traceSummary.span_summary.total_spans} spans, ${logMetrics.log_metrics.error_count} errors, ${recoveryEvents.length} recovery events`);
+    console.log(`[debugging-context] Found ${traceSummary.span_summary.total_spans} spans, ${logMetrics.log_metrics.error_count} errors, ${recoveryEvents.length} recovery events, ${contextContinuityEvents.total_events} context continuity recoveries`);
   }
 
   return {
@@ -397,7 +423,8 @@ async function extractDebuggingContext(options = {}) {
       span_summary: traceSummary.span_summary,
       correlation_ids: logMetrics.correlation_ids,
       log_metrics: logMetrics.log_metrics,
-      recovery_events: recoveryEvents
+      recovery_events: recoveryEvents,
+      context_continuity_events: contextContinuityEvents
     },
     instrumentation_gaps: instrumentationGaps,
     extraction_metadata: {

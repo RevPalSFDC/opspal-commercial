@@ -14,7 +14,7 @@
  *
  * Log file: ~/.claude/logs/compliance.jsonl
  *
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 const fs = require('fs');
@@ -252,6 +252,62 @@ function getRecentViolations(count = 10) {
   return entries.slice(-count).reverse();
 }
 
+/**
+ * Get context continuity recovery events within a time window.
+ * These events indicate the host runtime failed to propagate .agent_type in the
+ * PreToolUse hook payload, requiring fallback to last_resolved_agent from the
+ * cleared routing state.
+ *
+ * @param {number} windowMinutes - Time window in minutes (0 = all)
+ * @returns {Object} Context continuity summary
+ */
+function getContextContinuityEvents(windowMinutes = 60) {
+  const entries = readComplianceLog();
+  const cutoff = windowMinutes > 0
+    ? new Date(Date.now() - windowMinutes * 60 * 1000)
+    : new Date(0);
+
+  const recoveryEvents = entries.filter(e =>
+    e.type === 'context_continuity_recovery' &&
+    new Date(e.timestamp) >= cutoff
+  );
+
+  // Aggregate by recovered_agent
+  const byAgent = {};
+  for (const event of recoveryEvents) {
+    const agent = event.recovered_agent || 'unknown';
+    if (!byAgent[agent]) {
+      byAgent[agent] = { count: 0, bypass_types: {} };
+    }
+    byAgent[agent].count += 1;
+    const bt = event.bypass_type || 'unknown';
+    byAgent[agent].bypass_types[bt] = (byAgent[agent].bypass_types[bt] || 0) + 1;
+  }
+
+  // Aggregate host runtime identity gap signals
+  let agentTypeMissing = 0;
+  let taskIdMissing = 0;
+  let agentNameMissing = 0;
+  for (const event of recoveryEvents) {
+    const hri = event.host_runtime_identity || {};
+    if (!hri.agent_type_present) agentTypeMissing++;
+    if (!hri.claude_task_id_present) taskIdMissing++;
+    if (!hri.claude_agent_name_present) agentNameMissing++;
+  }
+
+  return {
+    total_events: recoveryEvents.length,
+    window_minutes: windowMinutes,
+    by_agent: byAgent,
+    host_runtime_identity_gaps: {
+      agent_type_missing: agentTypeMissing,
+      claude_task_id_missing: taskIdMissing,
+      claude_agent_name_missing: agentNameMissing
+    },
+    events: recoveryEvents.slice(-20) // Last 20 for detail
+  };
+}
+
 // CLI interface
 if (require.main === module) {
   const args = process.argv.slice(2);
@@ -283,15 +339,22 @@ if (require.main === module) {
       console.log(JSON.stringify(getComplianceRate(), null, 2));
       break;
 
+    case 'context-continuity': {
+      const ccWindow = parseInt(args[1]) || 60;
+      console.log(JSON.stringify(getContextContinuityEvents(ccWindow), null, 2));
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: compliance-tracker.js <log|stats|report|recent|rate> [args]');
+      console.error('Usage: compliance-tracker.js <log|stats|report|recent|rate|context-continuity> [args]');
       console.error('\nCommands:');
       console.error('  log <required> <actual> <guidance-action>  - Log a violation');
       console.error('  stats                                - Get detailed statistics');
       console.error('  report                               - Generate formatted report');
       console.error('  recent [count]                       - Get recent violations');
       console.error('  rate                                 - Get compliance rate');
+      console.error('  context-continuity [window-minutes]  - Get context continuity recovery events');
       process.exit(1);
   }
 }
@@ -304,6 +367,7 @@ module.exports = {
   getStats,
   generateReport,
   getRecentViolations,
+  getContextContinuityEvents,
   COMPLIANCE_LOG,
   ROUTING_LOG
 };

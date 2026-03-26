@@ -23,8 +23,9 @@
  *   node routing-state-manager.js clear-expired
  *   node routing-state-manager.js record-projection-loss <session-key> <agent> [pattern]
  *   node routing-state-manager.js projection-loss-count <session-key>
+ *   node routing-state-manager.js clear-stale <session-key> <requested-family> [--threshold-seconds=N]
  *
- * @version 2.0.0
+ * @version 2.1.0
  */
 
 const fs = require('fs');
@@ -54,6 +55,33 @@ function normalizeSessionKey(sessionKey) {
 
 function sanitizeSessionKey(sessionKey) {
   return normalizeSessionKey(sessionKey).replace(/[^A-Za-z0-9._-]+/g, '_');
+}
+
+// Agent family extraction — maps fully-qualified agent names (plugin:agent)
+// to platform family strings for cross-family stale route detection.
+const AGENT_FAMILY_MAP = {
+  'opspal-salesforce': 'salesforce',
+  'opspal-hubspot': 'hubspot',
+  'opspal-marketo': 'marketo',
+  'opspal-core': 'core',
+  'opspal-gtm-planning': 'gtm',
+  'opspal-okrs': 'okrs',
+  'opspal-monday': 'monday',
+  'opspal-data-hygiene': 'data-hygiene',
+  'opspal-mcp-client': 'mcp-client',
+  'opspal-ai-consult': 'ai-consult',
+};
+
+function extractAgentFamily(agentName) {
+  if (!agentName || typeof agentName !== 'string') {
+    return null;
+  }
+  const colonIdx = agentName.indexOf(':');
+  if (colonIdx === -1) {
+    return null;
+  }
+  const prefix = agentName.slice(0, colonIdx);
+  return AGENT_FAMILY_MAP[prefix] ?? prefix;
 }
 
 function ensureStateDir() {
@@ -417,6 +445,57 @@ function clearState(sessionKey) {
   }
 }
 
+// Cross-family stale route detection and clearing.
+// Clears pending routing state when:
+//   1. The pending state's agent family differs from the requested family
+//   2. The state is older than the same-workflow threshold (default 300s / 5 min)
+// This prevents stale routes from one platform (e.g., Marketo) from blocking
+// unrelated tasks in another platform (e.g., Salesforce).
+const CROSS_FAMILY_STALE_THRESHOLD_SECONDS = Number.parseInt(
+  process.env.ROUTING_CROSS_FAMILY_STALE_THRESHOLD_SECONDS || '300', 10
+);
+
+function clearStaleIfCrossFamily(sessionKey, requestedFamily, options = {}) {
+  const thresholdSeconds = options.thresholdSeconds ?? CROSS_FAMILY_STALE_THRESHOLD_SECONDS;
+  const state = getState(sessionKey);
+
+  if (!state) {
+    return { cleared: false, reason: 'no_state' };
+  }
+
+  const pendingAgent = state.required_agent || (state.clearance_agents || [])[0] || null;
+  const pendingFamily = extractAgentFamily(pendingAgent);
+
+  if (!pendingFamily || !requestedFamily) {
+    return { cleared: false, reason: 'family_unknown', pendingFamily, requestedFamily };
+  }
+
+  if (pendingFamily === requestedFamily) {
+    return { cleared: false, reason: 'same_family', pendingFamily, requestedFamily };
+  }
+
+  const stateAgeSeconds = nowSeconds() - Number.parseInt(state.created_at || 0, 10);
+  if (stateAgeSeconds < thresholdSeconds) {
+    return {
+      cleared: false,
+      reason: 'too_recent_for_auto_clear',
+      pendingFamily,
+      requestedFamily,
+      stateAgeSeconds,
+      thresholdSeconds
+    };
+  }
+
+  clearState(sessionKey);
+  return {
+    cleared: true,
+    reason: 'cross_family_stale_carryover',
+    pendingFamily,
+    requestedFamily,
+    stateAgeSeconds
+  };
+}
+
 function clearExpiredStates() {
   if (!fs.existsSync(STATE_DIR)) {
     return { cleared: 0 };
@@ -644,9 +723,20 @@ if (require.main === module) {
       break;
     }
 
+    case 'clear-stale': {
+      const sessionKey = args[1];
+      const requestedFamily = args[2] || null;
+      const thresholdArg = args.find(a => a.startsWith('--threshold-seconds='));
+      const thresholdSeconds = thresholdArg
+        ? Number.parseInt(thresholdArg.split('=')[1], 10)
+        : undefined;
+      console.log(JSON.stringify(clearStaleIfCrossFamily(sessionKey, requestedFamily, { thresholdSeconds })));
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|record-projection-loss|projection-loss-count> [args]');
+      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|record-projection-loss|projection-loss-count> [args]');
       process.exit(1);
   }
 }
@@ -655,13 +745,17 @@ module.exports = {
   LEGACY_STATE_FILE,
   STATE_DIR,
   STATE_TTL_SECONDS,
+  AGENT_FAMILY_MAP,
+  CROSS_FAMILY_STALE_THRESHOLD_SECONDS,
   sanitizeSessionKey,
   getStateFile,
+  extractAgentFamily,
   normalizeState,
   saveState,
   getState,
   updateStateStatus,
   clearState,
+  clearStaleIfCrossFamily,
   clearExpiredStates,
   checkState,
   recordProjectionLossEvent,

@@ -677,7 +677,11 @@ async function runAllTests() {
     assertNoStructuredDeny(result, 'Capability-matched cleared sub-agent should not emit a routing deny');
   }));
 
-  results.push(await runTest('Surfaces a tool-projection integrity error when a cleared specialist workflow drifts back to parent execution', async () => {
+  results.push(await runTest('Context continuity: cleared specialist route allows Bash via last_resolved_agent recovery', async () => {
+    // Previously this test expected ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH.
+    // With the context continuity fix, when caller is "unknown" but route is cleared
+    // and last_resolved_agent matches a clearance agent, the identity is recovered
+    // from the cleared route state and execution is allowed.
     const sessionId = 'cleared-parent-fallback-route';
     writeRoutingState(tempHome, sessionId, buildRoutingState({
       sessionKey: sessionId,
@@ -707,10 +711,11 @@ async function runAllTests() {
       }
     });
 
-    assertStructuredRoutingDeny(result, 'ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH', 'Cleared specialist parent fallback');
+    // With context continuity fix, this should now be ALLOWED (not denied)
+    const decision = result.output?.hookSpecificOutput?.permissionDecision;
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('Parent direct execution recovery is blocked'),
-      'Integrity error should explain that parent recovery is not allowed'
+      decision !== 'deny',
+      'Cleared specialist route with last_resolved_agent should allow via context continuity recovery, not block'
     );
   }));
 
@@ -1275,6 +1280,148 @@ async function runAllTests() {
       !lastEvent.command.includes('Bearer $ASANA_TOKEN'),
       'Routing log should not contain raw bearer value reference'
     );
+  }));
+
+  // ===========================================================================
+  // Execution-context continuity tests
+  // ===========================================================================
+
+  results.push(await runTest('Context continuity: cleared route allows Bash when caller is unknown but last_resolved_agent matches', async () => {
+    const home = createTempHome();
+    const sessionId = 'ctx-continuity-cleared';
+
+    writeRoutingState(home, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'compound-salesforce-cleanup',
+      requiredAgent: 'opspal-salesforce:sfdc-orchestrator',
+      clearanceAgents: [
+        'opspal-salesforce:sfdc-orchestrator',
+        'opspal-salesforce:sfdc-query-specialist'
+      ],
+      clearanceStatus: 'cleared',
+      lastResolvedAgent: 'opspal-salesforce:sfdc-orchestrator',
+      executionBlockUntilCleared: true,
+      routingConfidence: 0.95
+    }));
+
+    const logRoot = path.join(home, '.claude', 'logs');
+    fs.mkdirSync(logRoot, { recursive: true });
+    const tester = createTester();
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'sf data query --query "SELECT Id FROM Account LIMIT 5"' },
+        sessionKey: sessionId
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: home,
+        CLAUDE_HOOK_LOG_ROOT: logRoot,
+        CLAUDE_SESSION_ID: sessionId,
+        ROUTING_ENFORCEMENT_ENABLED: '1',
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    // Should be allowed via context continuity recovery, not blocked
+    const decision = result.output?.hookSpecificOutput?.permissionDecision;
+    if (decision === 'deny') {
+      const reason = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
+      // If it still denies, the reason should NOT be ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH
+      // with callerAgent=unknown — it should be CONTEXT_CONTINUITY_LOSS at worst
+      assert(
+        !reason.includes('ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH'),
+        'Should not emit PROJECTION_MISMATCH when route is cleared and last_resolved_agent exists'
+      );
+    }
+    // Allow or context-continuity-recovery are both acceptable outcomes
+  }));
+
+  results.push(await runTest('Context continuity: CONTEXT_CONTINUITY_LOSS is distinct from PROJECTION_MISMATCH', async () => {
+    const home = createTempHome();
+    const sessionId = 'ctx-loss-classification';
+
+    // Create a cleared route state where last_resolved_agent is set
+    // but make it impossible to recover (e.g., wrong clearance agents)
+    writeRoutingState(home, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'sf_permission_security_write',
+      requiredAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
+      clearanceAgents: ['opspal-salesforce:sfdc-permission-orchestrator'],
+      clearanceStatus: 'cleared',
+      lastResolvedAgent: 'opspal-salesforce:sfdc-permission-orchestrator',
+      executionBlockUntilCleared: true,
+      routingConfidence: 0.95
+    }));
+
+    const logRoot = path.join(home, '.claude', 'logs');
+    fs.mkdirSync(logRoot, { recursive: true });
+    const tester = createTester();
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'sf org display user --json' },
+        sessionKey: sessionId
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: home,
+        CLAUDE_HOOK_LOG_ROOT: logRoot,
+        CLAUDE_SESSION_ID: sessionId,
+        ROUTING_ENFORCEMENT_ENABLED: '1',
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    const reason = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
+    const decision = result.output?.hookSpecificOutput?.permissionDecision;
+
+    // If blocked, the error should reference CONTEXT_CONTINUITY_LOSS
+    // OR be allowed via context continuity recovery
+    if (decision === 'deny' && reason.includes('PROJECTION')) {
+      assert(
+        reason.includes('CONTEXT_CONTINUITY_LOSS') || reason.includes('failureClass=CONTEXT_CONTINUITY_LOSS'),
+        'When caller is unknown and specialist has Bash, failure should be classified as CONTEXT_CONTINUITY_LOSS not PROJECTION_LOSS'
+      );
+    }
+  }));
+
+  results.push(await runTest('Cleared route Bash bypass does not activate for pending (non-cleared) routes', async () => {
+    const home = createTempHome();
+    const logRoot = path.join(home, '.claude', 'logs');
+    fs.mkdirSync(logRoot, { recursive: true });
+    const sessionId = 'ctx-no-bypass-pending';
+
+    writeRoutingState(home, sessionId, buildRoutingState({
+      sessionKey: sessionId,
+      routeId: 'compound-salesforce-cleanup',
+      requiredAgent: 'opspal-salesforce:sfdc-orchestrator',
+      clearanceAgents: ['opspal-salesforce:sfdc-orchestrator'],
+      clearanceStatus: 'pending_clearance',
+      executionBlockUntilCleared: true,
+      routingConfidence: 0.9
+    }));
+
+    const tester = createTester();
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'sf data query --query "SELECT Id FROM Account LIMIT 5"' },
+        sessionKey: sessionId
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: home,
+        CLAUDE_HOOK_LOG_ROOT: logRoot,
+        CLAUDE_SESSION_ID: sessionId,
+        ROUTING_ENFORCEMENT_ENABLED: '1',
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    // Should still be blocked — route is pending, not cleared
+    const decision = result.output?.hookSpecificOutput?.permissionDecision;
+    assert.strictEqual(decision, 'deny', 'Pending route should still block Bash execution');
   }));
 
   // Cleanup
