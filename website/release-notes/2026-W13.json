@@ -1,34 +1,19 @@
 {
   "slug": "2026-W13",
-  "title": "Week of March 24, 2026",
-  "summary": "This week focused on improving platform reliability and making OpsPal easier to set up on Windows. We fixed multiple connection and data processing issues that were causing errors, and added native Windows support for automatic installation of required tools. These improvements make OpsPal more stable and accessible for teams working across different operating systems.",
-  "published_at": "2026-03-26T00:18:07.551Z",
-  "week_start": "2026-03-24",
+  "title": "Week of March 23, 2026",
+  "summary": "This week brought major improvements to OpsPal's Windows setup experience with native installation support for all required tools. We also enhanced Salesforce assessments with better revenue field detection and sales process analysis, helping RevOps teams get more accurate insights from their audits. Behind the scenes, we strengthened platform security and resolved numerous stability issues.",
+  "published_at": "2026-03-26T13:08:16.537Z",
+  "week_start": "2026-03-23",
   "week_end": "2026-03-26",
   "has_breaking": false,
-  "total_commits": 47,
+  "total_commits": 82,
   "entries": [
-    {
-      "category": "fixed",
-      "plugin": "core,salesforce",
-      "headline": "Fixed data sync errors between Salesforce and OpsPal",
-      "details": [
-        "Resolved 6 connection issues that were blocking automatic data updates",
-        "Data flows now work more reliably during bulk operations",
-        "Added backup options when primary connections fail"
-      ],
-      "commits": [
-        "17a2aae"
-      ]
-    },
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Simple record lookups now work faster",
+      "headline": "Faster record lookups for single records",
       "details": [
-        "Single record searches complete without unnecessary processing steps",
-        "Looking up individual records by ID now takes less time",
-        "Short queries with small result sets process more efficiently"
+        "You can now quickly verify individual records without routing delays for simple lookups and small result sets"
       ],
       "commits": [
         "9281eba"
@@ -37,61 +22,31 @@
     {
       "category": "new",
       "plugin": "bootstrap",
-      "headline": "Windows setup now installs required tools automatically",
+      "headline": "Native Windows setup installs all tools automatically",
       "details": [
-        "OpsPal setup automatically installs development tools on Windows",
-        "No more manual installation of Node.js and other dependencies",
-        "One-click installation process for Windows users"
+        "Windows users can now get OpsPal running with automatic installation of Git, Claude Code, and Node.js - no manual downloads needed"
       ],
       "commits": [
         "4260f1a"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Better error detection and reporting for background tasks",
-      "details": [
-        "OpsPal now catches connection problems earlier",
-        "Error messages include more helpful context about what went wrong",
-        "Background processes validate connections before starting work"
-      ],
-      "commits": [
-        "d57de97"
-      ]
-    },
-    {
       "category": "fixed",
       "plugin": "bootstrap",
-      "headline": "Windows installation script works with browser-based setup",
+      "headline": "Improved Windows installation compatibility",
       "details": [
-        "Fixed issues when running setup directly from browser",
-        "Installation no longer stops unexpectedly on Windows",
-        "Setup process handles different Windows configurations better"
+        "Fixed PowerShell script issues that could cause installation failures on some Windows systems"
       ],
       "commits": [
         "ffd4a80"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Salesforce data queries work better in production environments",
-      "details": [
-        "Read-only data access now works smoothly in live Salesforce orgs",
-        "Reduced restrictions on viewing production data for analysis"
-      ],
-      "commits": [
-        "772d509"
-      ]
-    },
-    {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Revenue analysis results save properly for future reference",
+      "headline": "Better revenue context tracking in Salesforce assessments",
       "details": [
-        "Assessment findings now include complete revenue context",
-        "Historical analysis data persists between sessions"
+        "Assessment results now properly capture revenue field information for more comprehensive reporting"
       ],
       "commits": [
         "43fb51a"
@@ -100,14 +55,89 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New customization system for templates and branding",
+      "headline": "Customizable templates and brand gallery",
       "details": [
-        "Add custom templates and brand elements that survive updates",
-        "Customize OpsPal interface while keeping core functionality intact",
-        "Changes persist automatically across different workspaces"
+        "You can now customize OpsPal's templates and branding elements while keeping them safe during platform updates"
       ],
       "commits": [
         "c7ce394"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Salesforce",
+      "headline": "Smarter revenue field detection in Salesforce assessments",
+      "details": [
+        "OpsPal now automatically finds your organization's revenue fields and analyzes sales processes for more accurate RevOps insights"
+      ],
+      "commits": [
+        "5de3435"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "onboarding",
+      "headline": "One-click Windows setup with PowerShell",
+      "details": [
+        "Windows users can now install OpsPal with a single PowerShell command for faster onboarding"
+      ],
+      "commits": [
+        "487c124"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "onboarding",
+      "headline": "Smoother setup experience and project detection",
+      "details": [
+        "Fixed issues with project initialization and improved the overall setup flow"
+      ],
+      "commits": [
+        "f10fc77"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Salesforce",
+      "headline": "Prevent risky Salesforce deployments before they happen",
+      "details": [
+        "New pre-deployment checks catch common configuration issues like restricted picklist values, duplicate settings, and field history limits"
+      ],
+      "commits": [
+        "aac0d4b"
+      ]
+    },
+    {
+      "category": "security",
+      "plugin": "General",
+      "headline": "Automatic secret scanning prevents credential exposure",
+      "details": [
+        "OpsPal now automatically scans your code for accidentally exposed credentials before commits and pushes"
+      ],
+      "commits": [
+        "19c4196"
+      ]
+    },
+    {
+      "category": "security",
+      "plugin": "General",
+      "headline": "Enhanced secret detection and monitoring",
+      "details": [
+        "Added comprehensive secret scanning configuration to catch more types of sensitive information"
+      ],
+      "commits": [
+        "8dcd939"
+      ]
+    },
+    {
+      "category": "security",
+      "plugin": "General",
+      "headline": "Removed hardcoded credentials from platform code",
+      "details": [
+        "All embedded credentials have been removed and replaced with secure configuration methods"
+      ],
+      "commits": [
+        "8acd03a"
       ]
     }
   ]
