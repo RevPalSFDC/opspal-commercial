@@ -13,7 +13,7 @@
     "plugins": 10,
     "agents": 302,
     "commands": 273,
-    "hooks": 170,
+    "hooks": 171,
     "skills": 1
   },
   "plugins": [
@@ -45,7 +45,7 @@
       "counts": {
         "agents": 79,
         "commands": 113,
-        "hooks": 78,
+        "hooks": 79,
         "skills": 0
       },
       "lifecycle": {
