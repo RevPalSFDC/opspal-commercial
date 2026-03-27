@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-27T12:29:45.939Z",
+  "buildDate": "2026-03-27T16:14:19.099Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
@@ -450,7 +450,6 @@
       "sfdc-apex",
       "sfdc-api-monitor",
       "sfdc-architecture-auditor",
-      "sfdc-automation-auditor",
       "sfdc-automation-builder",
       "sfdc-cli-executor",
       "sfdc-communication-manager",
@@ -1057,7 +1056,6 @@
     "migration": [
       "data-migration-orchestrator",
       "hubspot-data-operations-manager",
-      "sfdc-automation-auditor",
       "sfdc-dashboard-analyzer",
       "sfdc-dashboard-migrator",
       "sfdc-permission-assessor"
@@ -1890,7 +1888,6 @@
       "hubspot-workflow",
       "marketo-orchestrator",
       "sfdc-agent-governance",
-      "sfdc-automation-auditor",
       "sfdc-automation-builder"
     ],
     "orchestrator": [
@@ -3724,7 +3721,8 @@
     ],
     "automation audit": [
       "web-viz-generator",
-      "marketo-automation-auditor"
+      "marketo-automation-auditor",
+      "sfdc-automation-auditor"
     ],
     "automation diagnostics": [
       "web-viz-generator"
@@ -3942,7 +3940,6 @@
       "gtm-data-insights",
       "hubspot-workflow-auditor",
       "marketo-form-builder",
-      "sfdc-automation-auditor",
       "sfdc-automation-builder",
       "sfdc-csv-enrichment",
       "sfdc-deployment-manager",
@@ -4590,7 +4587,6 @@
       "hubspot-autonomous-operations",
       "hubspot-pipeline-manager",
       "sfdc-advocate-assignment",
-      "sfdc-automation-auditor",
       "sfdc-automation-builder",
       "sfdc-dashboard-analyzer",
       "sfdc-revops-auditor",
@@ -5324,7 +5320,6 @@
       "marketo-instance-discovery",
       "sfdc-agent-governance",
       "sfdc-architecture-auditor",
-      "sfdc-automation-auditor",
       "sfdc-compliance-officer",
       "sfdc-object-auditor",
       "sfdc-quality-auditor",
@@ -8431,9 +8426,20 @@
     "salesforce rules": [
       "sfdc-assignment-rules-manager"
     ],
-    "conflict": [
-      "sfdc-automation-auditor",
-      "sfdc-conflict-resolver"
+    "flow audit": [
+      "sfdc-automation-auditor"
+    ],
+    "trigger audit": [
+      "sfdc-automation-auditor"
+    ],
+    "automation conflict": [
+      "sfdc-automation-auditor"
+    ],
+    "process builder audit": [
+      "sfdc-automation-auditor"
+    ],
+    "workflow rule review": [
+      "sfdc-automation-auditor"
     ],
     "platform event": [
       "sfdc-automation-auditor"
@@ -8563,6 +8569,9 @@
     ],
     "office": [
       "sfdc-compliance-officer"
+    ],
+    "conflict": [
+      "sfdc-conflict-resolver"
     ],
     "resolver": [
       "sfdc-conflict-resolver"
@@ -10284,7 +10293,6 @@
       "opspal-salesforce:sfdc-apex",
       "opspal-salesforce:sfdc-api-monitor",
       "opspal-salesforce:sfdc-architecture-auditor",
-      "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-automation-builder",
       "opspal-salesforce:sfdc-cli-executor",
       "opspal-salesforce:sfdc-communication-manager",
@@ -10910,7 +10918,6 @@
     "migration": [
       "opspal-core:data-migration-orchestrator",
       "opspal-hubspot:hubspot-data-operations-manager",
-      "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-dashboard-analyzer",
       "opspal-salesforce:sfdc-dashboard-migrator",
       "opspal-salesforce:sfdc-permission-assessor"
@@ -11744,7 +11751,6 @@
       "opspal-hubspot:hubspot-workflow",
       "opspal-marketo:marketo-orchestrator",
       "opspal-salesforce:sfdc-agent-governance",
-      "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-automation-builder"
     ],
     "orchestrator": [
@@ -13584,7 +13590,8 @@
     ],
     "automation audit": [
       "opspal-core:web-viz-generator",
-      "opspal-marketo:marketo-automation-auditor"
+      "opspal-marketo:marketo-automation-auditor",
+      "opspal-salesforce:sfdc-automation-auditor"
     ],
     "automation diagnostics": [
       "opspal-core:web-viz-generator"
@@ -13802,7 +13809,6 @@
       "opspal-gtm-planning:gtm-data-insights",
       "opspal-hubspot:hubspot-workflow-auditor",
       "opspal-marketo:marketo-form-builder",
-      "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-automation-builder",
       "opspal-salesforce:sfdc-csv-enrichment",
       "opspal-salesforce:sfdc-deployment-manager",
@@ -14450,7 +14456,6 @@
       "opspal-hubspot:hubspot-autonomous-operations",
       "opspal-hubspot:hubspot-pipeline-manager",
       "opspal-salesforce:sfdc-advocate-assignment",
-      "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-automation-builder",
       "opspal-salesforce:sfdc-dashboard-analyzer",
       "opspal-salesforce:sfdc-revops-auditor",
@@ -15184,7 +15189,6 @@
       "opspal-marketo:marketo-instance-discovery",
       "opspal-salesforce:sfdc-agent-governance",
       "opspal-salesforce:sfdc-architecture-auditor",
-      "opspal-salesforce:sfdc-automation-auditor",
       "opspal-salesforce:sfdc-compliance-officer",
       "opspal-salesforce:sfdc-object-auditor",
       "opspal-salesforce:sfdc-quality-auditor",
@@ -18291,9 +18295,20 @@
     "salesforce rules": [
       "opspal-salesforce:sfdc-assignment-rules-manager"
     ],
-    "conflict": [
-      "opspal-salesforce:sfdc-automation-auditor",
-      "opspal-salesforce:sfdc-conflict-resolver"
+    "flow audit": [
+      "opspal-salesforce:sfdc-automation-auditor"
+    ],
+    "trigger audit": [
+      "opspal-salesforce:sfdc-automation-auditor"
+    ],
+    "automation conflict": [
+      "opspal-salesforce:sfdc-automation-auditor"
+    ],
+    "process builder audit": [
+      "opspal-salesforce:sfdc-automation-auditor"
+    ],
+    "workflow rule review": [
+      "opspal-salesforce:sfdc-automation-auditor"
     ],
     "platform event": [
       "opspal-salesforce:sfdc-automation-auditor"
@@ -18423,6 +18438,9 @@
     ],
     "office": [
       "opspal-salesforce:sfdc-compliance-officer"
+    ],
+    "conflict": [
+      "opspal-salesforce:sfdc-conflict-resolver"
     ],
     "resolver": [
       "opspal-salesforce:sfdc-conflict-resolver"
@@ -29439,16 +29457,12 @@
         "mcp__playwright__browser_tab_select"
       ],
       "triggerKeywords": [
-        "automation",
-        "audit",
-        "sf",
-        "validation",
-        "sfdc",
-        "process",
-        "conflict",
-        "workflow",
-        "migration",
-        "salesforce",
+        "automation audit",
+        "flow audit",
+        "trigger audit",
+        "automation conflict",
+        "process builder audit",
+        "workflow rule review",
         "platform event",
         "approval process",
         "duplicate rule",
@@ -29457,7 +29471,10 @@
         "sfdc automation",
         "sfdc automation auditor",
         "automation auditor",
+        "sfdc",
+        "automation",
         "auditor",
+        "salesforce",
         "salesforce sfdc",
         "sfdc salesforce",
         "salesforce automation",
@@ -41616,16 +41633,12 @@
         "mcp__playwright__browser_tab_select"
       ],
       "triggerKeywords": [
-        "automation",
-        "audit",
-        "sf",
-        "validation",
-        "sfdc",
-        "process",
-        "conflict",
-        "workflow",
-        "migration",
-        "salesforce",
+        "automation audit",
+        "flow audit",
+        "trigger audit",
+        "automation conflict",
+        "process builder audit",
+        "workflow rule review",
         "platform event",
         "approval process",
         "duplicate rule",
@@ -41634,7 +41647,10 @@
         "sfdc automation",
         "sfdc automation auditor",
         "automation auditor",
+        "sfdc",
+        "automation",
         "auditor",
+        "salesforce",
         "salesforce sfdc",
         "sfdc salesforce",
         "salesforce automation",
@@ -49275,15 +49291,15 @@
     "totalCommands": 273,
     "totalHooks": 251,
     "totalRoutingRules": 0,
-    "totalKeywords": 2618,
-    "totalKeywordsFull": 2618,
+    "totalKeywords": 2623,
+    "totalKeywordsFull": 2623,
     "totalPlugins": 10,
     "duplicateShortNames": 3,
     "agentsWithKeywords": 299,
     "agentsWithKeywordsFull": 302,
     "agentsWithTools": 299,
     "agentsWithToolsFull": 302,
-    "avgKeywordsPerAgent": "15.30",
+    "avgKeywordsPerAgent": "15.29",
     "hooksByEvent": {
       "PostToolUse": 33,
       "UserPromptSubmit": 2,
