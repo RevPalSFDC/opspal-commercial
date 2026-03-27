@@ -48,6 +48,9 @@ model: haiku
 # Live Validation Enforcement (STRICT - blocks responses without query evidence)
 @import ../../opspal-core/agents/shared/live-validation-enforcement.yaml
 
+# Execution Completion Contract (MANDATORY — prevents plan-only completion)
+@import ../../opspal-core/agents/shared/execution-completion-contract.md
+
 # Marketo Instance Discovery Agent
 
 ## Purpose

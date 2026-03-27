@@ -36,14 +36,17 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 
-# The receipt verifier is in the salesforce plugin
-SF_PLUGIN_SCRIPTS=""
+# Resolve receipt verifier — check opspal-core (canonical) first, then salesforce (compat)
+RECEIPT_LIB_DIR=""
 for candidate in \
+  "${PLUGIN_ROOT}/scripts/lib" \
   "${PLUGIN_ROOT}/../opspal-salesforce/scripts/lib" \
+  "${HOME}/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib" \
   "${HOME}/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-salesforce/scripts/lib" \
+  "${HOME}/.claude/plugins/cache/opspal-commercial/opspal-core/"*/scripts/lib \
   "${HOME}/.claude/plugins/cache/opspal-commercial/opspal-salesforce/"*/scripts/lib; do
   if [[ -f "${candidate}/execution-receipt.js" ]]; then
-    SF_PLUGIN_SCRIPTS="$candidate"
+    RECEIPT_LIB_DIR="$candidate"
     break
   fi
 done
@@ -59,7 +62,7 @@ fi
 # Detect which agent produced this output
 detect_agent_name() {
     local output="$1"
-    for agent in sfdc-automation-auditor sfdc-territory-discovery sfdc-discovery sfdc-state-discovery; do
+    for agent in sfdc-automation-auditor sfdc-territory-discovery sfdc-discovery sfdc-state-discovery hubspot-assessment-analyzer hubspot-workflow-auditor marketo-automation-auditor marketo-instance-discovery marketo-analytics-assessor marketo-lead-quality-assessor; do
         if echo "$output" | grep -qi "$agent" 2>/dev/null; then
             echo "$agent"
             return 0
@@ -75,7 +78,7 @@ fi
 
 # Only enforce for known investigation specialists
 case "$AGENT_NAME" in
-    sfdc-automation-auditor|sfdc-territory-discovery|sfdc-discovery|sfdc-state-discovery)
+    sfdc-automation-auditor|sfdc-territory-discovery|sfdc-discovery|sfdc-state-discovery|hubspot-assessment-analyzer|hubspot-workflow-auditor|marketo-automation-auditor|marketo-instance-discovery|marketo-analytics-assessor|marketo-lead-quality-assessor)
         ;;
     *)
         exit 0
@@ -91,9 +94,9 @@ RECEIPT_VALID="false"
 RECEIPT_CLASSIFICATION=""
 RECEIPT_REASON=""
 
-if [[ -n "$SF_PLUGIN_SCRIPTS" ]] && command -v node &>/dev/null; then
+if [[ -n "$RECEIPT_LIB_DIR" ]] && command -v node &>/dev/null; then
     # Run verifier — capture only the first line of stdout (the JSON result)
-    VERIFY_RESULT=$(echo "$SUBAGENT_OUTPUT" | node "$SF_PLUGIN_SCRIPTS/execution-receipt.js" verify 2>/dev/null || true)
+    VERIFY_RESULT=$(echo "$SUBAGENT_OUTPUT" | node "$RECEIPT_LIB_DIR/execution-receipt.js" verify 2>/dev/null || true)
 
     if [[ -n "$VERIFY_RESULT" ]] && echo "$VERIFY_RESULT" | grep -q '"classification"' 2>/dev/null; then
         RECEIPT_VALID=$(echo "$VERIFY_RESULT" | grep -oP '"valid"\s*:\s*\K(true|false)' 2>/dev/null || echo "false")
@@ -142,13 +145,13 @@ PLAN_ONLY_EVIDENCE=0
 if echo "$SUBAGENT_OUTPUT" | grep -qiE '(found|retrieved|returned|queried)\s+[0-9]+\s+(record|flow|trigger|rule|class|territor|object|component|process)'; then
     EXECUTION_EVIDENCE=$((EXECUTION_EVIDENCE + 2))
 fi
-if echo "$SUBAGENT_OUTPUT" | grep -qiE '"totalSize"\s*:\s*[0-9]+|"records"\s*:\s*\[|result\.records'; then
+if echo "$SUBAGENT_OUTPUT" | grep -qiE '"totalSize"\s*:\s*[0-9]+|"records"\s*:\s*\[|result\.records|"total"\s*:\s*[0-9]+|"results"\s*:\s*\[|"moreResult"|"paginationToken"'; then
     EXECUTION_EVIDENCE=$((EXECUTION_EVIDENCE + 2))
 fi
 if echo "$SUBAGENT_OUTPUT" | grep -qiE '(Success|completed).*[0-9]+\s+(record|row|result)'; then
     EXECUTION_EVIDENCE=$((EXECUTION_EVIDENCE + 2))
 fi
-if echo "$SUBAGENT_OUTPUT" | grep -qiE 'INVALID_FIELD|sObject type.*not supported|INSUFFICIENT_ACCESS|INVALID_TYPE|QUERY_TIMEOUT'; then
+if echo "$SUBAGENT_OUTPUT" | grep -qiE 'INVALID_FIELD|sObject type.*not supported|INSUFFICIENT_ACCESS|INVALID_TYPE|QUERY_TIMEOUT|401.*Unauthorized|403.*Forbidden|rate.limit|quota.exceeded|API_LIMIT|MARKETO_ERROR'; then
     EXECUTION_EVIDENCE=$((EXECUTION_EVIDENCE + 1))
 fi
 
