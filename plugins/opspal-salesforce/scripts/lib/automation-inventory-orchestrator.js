@@ -39,6 +39,8 @@ const AutomationRiskScorer = requireProtectedModule({
 const FlowStreamingQuery = require('./flow-streaming-query');
 const FlowMetadataRetriever = require('./flow-metadata-retriever');
 const MetadataCapabilityChecker = require('./metadata-capability-checker');
+const { safeExecSfCommand } = require('./safe-sf-result-parser');
+const { generateReceipt, formatReceiptBlock } = require('./execution-receipt');
 
 class AutomationInventoryOrchestrator {
     constructor(orgAlias, options = {}) {
@@ -65,6 +67,10 @@ class AutomationInventoryOrchestrator {
 
         // Capability validation results — populated in initialize()
         this.orgCapabilities = null;
+
+        // Harvest execution tracking — populated in harvestMetadata()
+        this.harvestBranches = [];
+        this.harvestReceipt = null;
 
         // Results storage
         this.rawData = {
@@ -152,7 +158,9 @@ class AutomationInventoryOrchestrator {
             return {
                 success: true,
                 duration: duration,
-                summary: this.getSummary()
+                summary: this.getSummary(),
+                harvestReceipt: this.harvestReceipt,
+                receiptBlock: this.harvestReceipt ? formatReceiptBlock(this.harvestReceipt) : null
             };
 
         } catch (error) {
@@ -313,15 +321,30 @@ class AutomationInventoryOrchestrator {
                 this.rawData.processes = await this.processExtractor.extractAllProcesses(
                     this.options.objects
                 );
-                // Distinguish real zero-count from unsupported-object zero-count
-                if (this.rawData.processes.length === 0 && fdvUnavailable) {
+                const count = this.rawData.processes.length;
+                const isConfirmedZero = count === 0 && !fdvUnavailable;
+                this.harvestBranches.push({
+                    name: 'ProcessBuilder',
+                    success: true,
+                    recordCount: count,
+                    usedFallback: fdvUnavailable,
+                    confirmedZero: count === 0 ? isConfirmedZero : undefined
+                });
+                if (count === 0 && fdvUnavailable) {
                     console.log(`    ⚠ Found 0 process(es) — FlowDefinitionView unavailable (not a confirmed zero-count)`);
                 } else {
-                    console.log(`    ✓ Found ${this.rawData.processes.length} process(es)`);
+                    console.log(`    ✓ Found ${count} process(es)`);
                 }
             } catch (error) {
                 console.warn(`    ⚠ Warning: ${error.message}`);
                 this.errors.push({ phase: 'harvest', type: 'ProcessBuilder', error: error.message });
+                this.harvestBranches.push({
+                    name: 'ProcessBuilder',
+                    success: false,
+                    recordCount: 0,
+                    failureType: 'extraction_failed',
+                    error: error.message
+                });
             }
         }
 
@@ -332,48 +355,135 @@ class AutomationInventoryOrchestrator {
                 this.rawData.workflows = await this.workflowExtractor.extractAllWorkflowRules(
                     this.options.objects
                 );
+                this.harvestBranches.push({
+                    name: 'WorkflowRule',
+                    success: true,
+                    recordCount: this.rawData.workflows.length
+                });
                 console.log(`    ✓ Found ${this.rawData.workflows.length} rule(s)`);
             } catch (error) {
                 console.warn(`    ⚠ Warning: ${error.message}`);
                 this.errors.push({ phase: 'harvest', type: 'WorkflowRule', error: error.message });
+                this.harvestBranches.push({
+                    name: 'WorkflowRule',
+                    success: false,
+                    recordCount: 0,
+                    failureType: 'extraction_failed',
+                    error: error.message
+                });
             }
         }
+
+        // Generate harvest-level execution receipt from all branch results
+        this._generateHarvestReceipt();
 
         // Save raw data
         this.saveRawData();
     }
 
     /**
-     * Harvest Apex Triggers
+     * Generate a harvest-level execution receipt from all branch results.
+     * This receipt proves the orchestrator actually executed org queries
+     * and is verifiable by the SubagentStop proof hook.
+     * @private
+     */
+    _generateHarvestReceipt() {
+        const succeeded = {};
+        const failed = {};
+        const fallbacks = [];
+
+        for (const branch of this.harvestBranches) {
+            if (branch.success) {
+                succeeded[branch.name] = {
+                    totalSize: branch.recordCount,
+                    records: [],
+                    usedFallback: branch.usedFallback || false
+                };
+                if (branch.usedFallback) {
+                    fallbacks.push({ name: branch.name, note: `${branch.name} used fallback path` });
+                }
+            } else {
+                failed[branch.name] = {
+                    error: branch.error || 'unknown',
+                    failureType: branch.failureType || 'unknown'
+                };
+            }
+        }
+
+        const succeededCount = Object.keys(succeeded).length;
+        const failedCount = Object.keys(failed).length;
+        const totalCount = this.harvestBranches.length;
+
+        let status;
+        if (totalCount === 0) status = 'failed';
+        else if (failedCount === 0) status = 'complete';
+        else if (succeededCount === 0) status = 'failed';
+        else status = 'partial';
+
+        const receiptInput = {
+            status,
+            orgAlias: this.orgAlias,
+            totalQueries: totalCount,
+            succeededCount,
+            failedCount,
+            succeeded,
+            failed,
+            fallbacks,
+            durationMs: 0
+        };
+
+        this.harvestReceipt = generateReceipt(receiptInput, {
+            helper: 'automation-inventory-orchestrator@harvest'
+        });
+
+        // Save receipt to output directory
+        const receiptPath = `${this.options.outputDir}/raw/harvest-execution-receipt.json`;
+        fs.writeFileSync(receiptPath, JSON.stringify(this.harvestReceipt, null, 2));
+
+        // Also save the formatted receipt block for agent output embedding
+        const blockPath = `${this.options.outputDir}/raw/harvest-receipt-block.txt`;
+        fs.writeFileSync(blockPath, formatReceiptBlock(this.harvestReceipt));
+
+        console.log(`  ✓ Harvest receipt generated: ${status} (${succeededCount}/${totalCount} branches)`);
+    }
+
+    /**
+     * Harvest Apex Triggers — uses receipt-enabled safe execution
      */
     async harvestApexTriggers() {
-        const query = `
-            SELECT Id, Name, TableEnumOrId, ApiVersion, Status,
-                   UsageBeforeInsert, UsageAfterInsert,
-                   UsageBeforeUpdate, UsageAfterUpdate,
-                   UsageBeforeDelete, UsageAfterDelete,
-                   UsageAfterUndelete,
-                   LastModifiedDate, LastModifiedBy.Name
-            FROM ApexTrigger
-            ${this.options.activeOnly ? "WHERE Status = 'Active'" : ''}
-            ORDER BY TableEnumOrId, Name
-        `;
+        const query = `SELECT Id, Name, TableEnumOrId, ApiVersion, Status, UsageBeforeInsert, UsageAfterInsert, UsageBeforeUpdate, UsageAfterUpdate, UsageBeforeDelete, UsageAfterDelete, UsageAfterUndelete, LastModifiedDate, LastModifiedBy.Name FROM ApexTrigger ${this.options.activeOnly ? "WHERE Status = 'Active'" : ''} ORDER BY TableEnumOrId, Name`;
 
-        const result = this.execSfCommand(
+        const result = safeExecSfCommand(
             `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
         );
 
-        return result?.result?.records || [];
+        this.harvestBranches.push({
+            name: 'ApexTrigger',
+            success: result.success,
+            recordCount: result.success ? (result.totalSize || 0) : 0,
+            failureType: result.failureType || null,
+            error: result.error || null
+        });
+
+        if (!result.success) {
+            console.warn(`    ⚠ ApexTrigger query failed: ${result.error}`);
+            return [];
+        }
+
+        return result.records || [];
     }
 
     /**
      * Harvest Apex Classes (with pagination and optional managed package filtering)
+     * Uses receipt-enabled safe execution.
      */
     async harvestApexClasses() {
         const batchSize = 2000;
         let offset = 0;
         let allRecords = [];
         let hasMore = true;
+        let pagesSucceeded = 0;
+        let pagesFailed = 0;
 
         // Build WHERE clause
         const whereClauses = [];
@@ -391,32 +501,40 @@ class AutomationInventoryOrchestrator {
 
         // Paginate through all classes
         while (hasMore) {
-            const query = `
-                SELECT Id, Name, ApiVersion, Status, NamespacePrefix,
-                       LastModifiedDate, LastModifiedBy.Name
-                FROM ApexClass
-                ${whereClause}
-                ORDER BY Name
-                LIMIT ${batchSize}
-                OFFSET ${offset}
-            `;
+            const query = `SELECT Id, Name, ApiVersion, Status, NamespacePrefix, LastModifiedDate, LastModifiedBy.Name FROM ApexClass ${whereClause} ORDER BY Name LIMIT ${batchSize} OFFSET ${offset}`;
 
-            const result = this.execSfCommand(
-                `sf data query --query "${query.replace(/\s+/g, ' ').trim()}" --use-tooling-api --json --target-org ${this.orgAlias}`
+            const result = safeExecSfCommand(
+                `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
             );
 
-            const records = result?.result?.records || [];
-            allRecords = allRecords.concat(records);
-
-            if (records.length < batchSize) {
+            if (!result.success) {
+                pagesFailed++;
+                console.warn(`    ⚠ ApexClass page ${offset / batchSize} failed: ${result.error}`);
                 hasMore = false;
             } else {
-                offset += batchSize;
-                if (this.options.verbose) {
-                    console.log(`      Retrieved ${allRecords.length} classes so far...`);
+                pagesSucceeded++;
+                const records = result.records || [];
+                allRecords = allRecords.concat(records);
+
+                if (records.length < batchSize) {
+                    hasMore = false;
+                } else {
+                    offset += batchSize;
+                    if (this.options.verbose) {
+                        console.log(`      Retrieved ${allRecords.length} classes so far...`);
+                    }
                 }
             }
         }
+
+        this.harvestBranches.push({
+            name: 'ApexClass',
+            success: pagesSucceeded > 0,
+            recordCount: allRecords.length,
+            failureType: pagesFailed > 0 ? 'partial_pagination' : null,
+            error: pagesFailed > 0 ? `${pagesFailed} page(s) failed during pagination` : null,
+            pages: { succeeded: pagesSucceeded, failed: pagesFailed }
+        });
 
         if (this.options.verbose) {
             console.log(`      Total Apex classes: ${allRecords.length}`);
@@ -441,8 +559,10 @@ class AutomationInventoryOrchestrator {
             });
             const log = retriever.getRetrievalLog();
 
+            const usedFallback = log.method === 'metadata_api';
+
             // Track retrieval method for audit reporting
-            if (log.method === 'metadata_api') {
+            if (usedFallback) {
                 this.errors.push({
                     type: 'Flow',
                     level: 'warning',
@@ -451,6 +571,14 @@ class AutomationInventoryOrchestrator {
                     recommendation: 'This is expected in some org types - no action needed'
                 });
             }
+
+            this.harvestBranches.push({
+                name: 'Flow',
+                success: true,
+                recordCount: flows.length,
+                usedFallback,
+                method: log.method || 'tooling_api'
+            });
 
             if (this.options.verbose) {
                 console.log(`    Retrieved ${flows.length} flows via ${log.method}`);
@@ -468,7 +596,14 @@ class AutomationInventoryOrchestrator {
                 recommendation: 'Check org connectivity and Flow permissions'
             });
 
-            // Return empty array to allow audit to continue
+            this.harvestBranches.push({
+                name: 'Flow',
+                success: false,
+                recordCount: 0,
+                failureType: 'retrieval_failed',
+                error: error.message
+            });
+
             return [];
         }
     }
@@ -746,7 +881,13 @@ class AutomationInventoryOrchestrator {
     }
 
     /**
-     * Execute SF CLI command
+     * Execute SF CLI command (DEPRECATED — prefer safeExecSfCommand for receipt coverage)
+     *
+     * This method does NOT generate execution receipts. It is retained for backward
+     * compatibility with sub-modules that haven't migrated yet. New harvest code
+     * should use the imported safeExecSfCommand() from safe-sf-result-parser.js.
+     *
+     * @deprecated Use safeExecSfCommand() for receipt-enabled execution
      */
     execSfCommand(command) {
         try {

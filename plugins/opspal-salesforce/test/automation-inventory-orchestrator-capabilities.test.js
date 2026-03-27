@@ -176,6 +176,147 @@ async function main() {
     );
   }));
 
+  // --- Section 6: Orchestrator receipt integration ---
+  console.log('');
+  console.log('[6] Orchestrator harvest receipt integration');
+
+  results.push(await runTest('imports safeExecSfCommand from safe-sf-result-parser', () => {
+    assert.ok(
+      source.includes("require('./safe-sf-result-parser')"),
+      'Should import safe-sf-result-parser'
+    );
+  }));
+
+  results.push(await runTest('imports generateReceipt from execution-receipt', () => {
+    assert.ok(
+      source.includes("require('./execution-receipt')"),
+      'Should import execution-receipt'
+    );
+  }));
+
+  results.push(await runTest('tracks harvestBranches array', () => {
+    assert.ok(
+      source.includes('this.harvestBranches'),
+      'Should have harvestBranches tracking array'
+    );
+  }));
+
+  results.push(await runTest('harvestApexTriggers pushes to harvestBranches', () => {
+    assert.ok(
+      source.includes("this.harvestBranches.push") && source.includes("name: 'ApexTrigger'"),
+      'harvestApexTriggers should push branch result'
+    );
+  }));
+
+  results.push(await runTest('harvestApexClasses pushes to harvestBranches', () => {
+    assert.ok(
+      source.includes("name: 'ApexClass'"),
+      'harvestApexClasses should push branch result'
+    );
+  }));
+
+  results.push(await runTest('harvestFlows pushes to harvestBranches', () => {
+    assert.ok(
+      source.includes("name: 'Flow'") && source.includes("this.harvestBranches.push"),
+      'harvestFlows should push branch result'
+    );
+  }));
+
+  results.push(await runTest('ProcessBuilder harvest pushes to harvestBranches', () => {
+    assert.ok(
+      source.includes("name: 'ProcessBuilder'"),
+      'ProcessBuilder harvest should push branch result'
+    );
+  }));
+
+  results.push(await runTest('WorkflowRule harvest pushes to harvestBranches', () => {
+    assert.ok(
+      source.includes("name: 'WorkflowRule'"),
+      'WorkflowRule harvest should push branch result'
+    );
+  }));
+
+  results.push(await runTest('_generateHarvestReceipt method exists', () => {
+    assert.ok(
+      source.includes('_generateHarvestReceipt'),
+      'Should have harvest receipt generation method'
+    );
+  }));
+
+  results.push(await runTest('saves harvest-execution-receipt.json', () => {
+    assert.ok(
+      source.includes('harvest-execution-receipt.json'),
+      'Should save receipt to output directory'
+    );
+  }));
+
+  results.push(await runTest('saves harvest-receipt-block.txt', () => {
+    assert.ok(
+      source.includes('harvest-receipt-block.txt'),
+      'Should save receipt block for agent embedding'
+    );
+  }));
+
+  results.push(await runTest('execute() returns harvestReceipt and receiptBlock', () => {
+    assert.ok(
+      source.includes('harvestReceipt: this.harvestReceipt') && source.includes('receiptBlock:'),
+      'execute() should return receipt in result'
+    );
+  }));
+
+  results.push(await runTest('harvestApexTriggers uses safeExecSfCommand not this.execSfCommand', () => {
+    // Find the harvestApexTriggers method and verify it calls safeExecSfCommand
+    const triggerMethodMatch = source.match(/async harvestApexTriggers[\s\S]*?(?=async harvest|$)/);
+    assert.ok(triggerMethodMatch, 'Should find harvestApexTriggers method');
+    const triggerMethod = triggerMethodMatch[0];
+    assert.ok(
+      triggerMethod.includes('safeExecSfCommand(') && !triggerMethod.includes('this.execSfCommand('),
+      'harvestApexTriggers should use safeExecSfCommand, not this.execSfCommand'
+    );
+  }));
+
+  results.push(await runTest('harvestApexClasses uses safeExecSfCommand not this.execSfCommand', () => {
+    const classMethodMatch = source.match(/async harvestApexClasses[\s\S]*?(?=async harvest|$)/);
+    assert.ok(classMethodMatch, 'Should find harvestApexClasses method');
+    const classMethod = classMethodMatch[0];
+    assert.ok(
+      classMethod.includes('safeExecSfCommand(') && !classMethod.includes('this.execSfCommand('),
+      'harvestApexClasses should use safeExecSfCommand, not this.execSfCommand'
+    );
+  }));
+
+  results.push(await runTest('execSfCommand is marked deprecated', () => {
+    assert.ok(
+      source.includes('@deprecated'),
+      'Old execSfCommand should be marked deprecated'
+    );
+  }));
+
+  // --- Section 7: Receipt structure verification ---
+  console.log('');
+  console.log('[7] Receipt structure from _generateHarvestReceipt');
+
+  results.push(await runTest('_generateHarvestReceipt calls generateReceipt', () => {
+    assert.ok(
+      source.includes('generateReceipt(receiptInput') || source.includes('generateReceipt({'),
+      'Should call generateReceipt to create receipt'
+    );
+  }));
+
+  results.push(await runTest('receipt input includes automation-inventory-orchestrator helper name', () => {
+    assert.ok(
+      source.includes('automation-inventory-orchestrator@harvest'),
+      'Receipt should identify the orchestrator as helper'
+    );
+  }));
+
+  results.push(await runTest('receipt tracks complete/partial/failed status', () => {
+    assert.ok(
+      source.includes("status = 'complete'") && source.includes("status = 'partial'") && source.includes("status = 'failed'"),
+      'Should set receipt status based on branch results'
+    );
+  }));
+
   // --- Summary ---
   console.log('');
   const passed = results.filter(r => r.passed).length;
