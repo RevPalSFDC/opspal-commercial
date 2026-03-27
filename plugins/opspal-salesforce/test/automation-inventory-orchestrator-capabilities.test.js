@@ -317,6 +317,110 @@ async function main() {
     );
   }));
 
+  // --- Section 8: Submodule receipt integration ---
+  console.log('');
+  console.log('[8] Submodule receipt integration');
+
+  results.push(await runTest('process-builder-extractor imports safeExecSfCommand', () => {
+    assert.ok(
+      pbSource.includes("require('./safe-sf-result-parser')"),
+      'PB extractor should import safe-sf-result-parser'
+    );
+  }));
+
+  results.push(await runTest('process-builder-extractor imports generateReceipt', () => {
+    assert.ok(
+      pbSource.includes("require('./execution-receipt')"),
+      'PB extractor should import execution-receipt'
+    );
+  }));
+
+  results.push(await runTest('process-builder-extractor has _buildReceipt method', () => {
+    assert.ok(
+      pbSource.includes('_buildReceipt'),
+      'PB extractor should have receipt builder'
+    );
+  }));
+
+  results.push(await runTest('process-builder-extractor has getLastReceipt method', () => {
+    assert.ok(
+      pbSource.includes('getLastReceipt'),
+      'PB extractor should expose receipt via getLastReceipt'
+    );
+  }));
+
+  results.push(await runTest('process-builder-extractor uses safeExecSfCommand in extractAllProcesses', () => {
+    const extractMethod = pbSource.match(/async extractAllProcesses[\s\S]*?(?=async extractProcess|_buildReceipt)/);
+    assert.ok(extractMethod, 'Should find extractAllProcesses method');
+    assert.ok(
+      extractMethod[0].includes('safeExecSfCommand('),
+      'extractAllProcesses should use safeExecSfCommand'
+    );
+  }));
+
+  results.push(await runTest('process-builder-extractor getFlowVersion uses safeExecSfCommand', () => {
+    const gfvMethod = pbSource.match(/async getFlowVersion[\s\S]*?return null;\s*\}/);
+    assert.ok(gfvMethod, 'Should find getFlowVersion method');
+    assert.ok(
+      gfvMethod[0].includes('safeExecSfCommand('),
+      'getFlowVersion should use safeExecSfCommand'
+    );
+  }));
+
+  results.push(await runTest('process-builder-extractor old execSfCommand marked deprecated', () => {
+    assert.ok(
+      pbSource.includes('@deprecated'),
+      'Old execSfCommand should be marked deprecated'
+    );
+  }));
+
+  results.push(await runTest('conflict-detector imports safeExecSfCommand', () => {
+    assert.ok(
+      conflictSource.includes("require('./safe-sf-result-parser')"),
+      'Conflict detector should import safe-sf-result-parser'
+    );
+  }));
+
+  results.push(await runTest('conflict-detector imports generateReceipt', () => {
+    assert.ok(
+      conflictSource.includes("require('./execution-receipt')"),
+      'Conflict detector should import execution-receipt'
+    );
+  }));
+
+  results.push(await runTest('conflict-detector has _buildReceipt and getLastReceipt', () => {
+    assert.ok(
+      conflictSource.includes('_buildReceipt') && conflictSource.includes('getLastReceipt'),
+      'Conflict detector should have receipt methods'
+    );
+  }));
+
+  results.push(await runTest('conflict-detector getOrgState uses safeExecSfCommand', () => {
+    const gosMethod = conflictSource.match(/async getOrgState[\s\S]*?(?=_buildReceipt)/);
+    assert.ok(gosMethod, 'Should find getOrgState method');
+    assert.ok(
+      gosMethod[0].includes('safeExecSfCommand('),
+      'getOrgState should use safeExecSfCommand'
+    );
+    // Verify NO raw execSync calls remain in getOrgState
+    const rawExecCount = (gosMethod[0].match(/execSync\(/g) || []).length;
+    assert.strictEqual(rawExecCount, 0, `getOrgState should have 0 raw execSync calls, found ${rawExecCount}`);
+  }));
+
+  results.push(await runTest('orchestrator captures ProcessBuilder child receipt hash', () => {
+    assert.ok(
+      source.includes('childReceiptHash') && source.includes('getLastReceipt'),
+      'Orchestrator should capture PB child receipt hash'
+    );
+  }));
+
+  results.push(await runTest('orchestrator saves child-receipt-hashes.json', () => {
+    assert.ok(
+      source.includes('child-receipt-hashes.json'),
+      'Orchestrator should save child receipt hashes'
+    );
+  }));
+
   // --- Summary ---
   console.log('');
   const passed = results.filter(r => r.passed).length;

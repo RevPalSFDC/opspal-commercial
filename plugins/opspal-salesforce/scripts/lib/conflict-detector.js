@@ -9,11 +9,14 @@
 const { execSync } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
+const { safeExecSfCommand } = require('./safe-sf-result-parser');
+const { generateReceipt } = require('./execution-receipt');
 
 class ConflictDetector {
   constructor(orgAlias) {
     this.orgAlias = orgAlias;
     this.conflicts = [];
+    this._lastReceipt = null;
   }
 
   /**
@@ -70,69 +73,97 @@ class ConflictDetector {
    * Get current org state for an object
    */
   async getOrgState(objectName) {
+    // Track execution branches for receipt generation
+    const branches = [];
+
     try {
-      const describeCmd = `sf sobject describe ${objectName} --target-org ${this.orgAlias} --json`;
-      const result = JSON.parse(execSync(describeCmd, { encoding: 'utf8' }));
-      
-      if (result.status !== 0) {
-        return { exists: false };
+      // Describe the object — use safeExecSfCommand for receipt coverage.
+      // NOTE: objectName is from internal caller configuration, not external user input.
+      const describeResult = safeExecSfCommand(
+        `sf sobject describe ${objectName} --target-org ${this.orgAlias} --json`
+      );
+
+      if (!describeResult.success) {
+        branches.push({ name: 'sobject-describe', status: 'failed', recordCount: 0, error: (describeResult.error || '').substring(0, 100) });
+        this._lastReceipt = this._buildReceipt(branches, 'failed', objectName);
+        return { exists: false, error: describeResult.error };
       }
-      
-      const objectDesc = result.result;
-      
-      // Each metadata query is isolated so one failure doesn't abort all queries.
-      // NOTE: objectName comes from the caller's internal configuration, not user input.
-      // The sf CLI resolves it against the authenticated org's schema.
+
+      branches.push({ name: 'sobject-describe', status: 'success', recordCount: 1 });
+      const objectDesc = describeResult.data?.result || describeResult.data;
+
+      // Each metadata query is isolated — one failure doesn't abort others.
 
       // Get validation rules
       let validationRules = [];
-      try {
-        const vrCmd = `sf data query --query "SELECT Id, Active, ErrorConditionFormula, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
-        const vrResult = JSON.parse(execSync(vrCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
-        validationRules = vrResult.result?.records || [];
-      } catch (vrError) {
-        console.warn(`    Warning: ValidationRule query failed for ${objectName}: ${vrError.message}`);
+      const vrResult = safeExecSfCommand(
+        `sf data query --query "SELECT Id, Active, ErrorConditionFormula, ErrorMessage FROM ValidationRule WHERE EntityDefinition.DeveloperName = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`
+      );
+      if (vrResult.success) {
+        validationRules = vrResult.records || [];
+        branches.push({ name: 'ValidationRule', status: 'success', recordCount: validationRules.length });
+      } else {
+        branches.push({ name: 'ValidationRule', status: 'failed', recordCount: 0, failureType: vrResult.failureType, error: (vrResult.error || '').substring(0, 100) });
+        console.warn(`    Warning: ValidationRule query failed for ${objectName}: ${vrResult.error}`);
       }
 
       // Get triggers
       let triggers = [];
-      try {
-        const trCmd = `sf data query --query "SELECT Id, Name, Status FROM ApexTrigger WHERE TableEnumOrId = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`;
-        const trResult = JSON.parse(execSync(trCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
-        triggers = trResult.result?.records || [];
-      } catch (trError) {
-        console.warn(`    Warning: ApexTrigger query failed for ${objectName}: ${trError.message}`);
+      const trResult = safeExecSfCommand(
+        `sf data query --query "SELECT Id, Name, Status FROM ApexTrigger WHERE TableEnumOrId = '${objectName}'" --target-org ${this.orgAlias} --use-tooling-api --json`
+      );
+      if (trResult.success) {
+        triggers = trResult.records || [];
+        branches.push({ name: 'ApexTrigger', status: 'success', recordCount: triggers.length });
+      } else {
+        branches.push({ name: 'ApexTrigger', status: 'failed', recordCount: 0, failureType: trResult.failureType, error: (trResult.error || '').substring(0, 100) });
+        console.warn(`    Warning: ApexTrigger query failed for ${objectName}: ${trResult.error}`);
       }
 
-      // Get flows — use DeveloperName (not ApiName which may not exist).
-      // TriggerType is NOT on FlowDefinitionView — it's on the Flow (version) object.
-      // Fall back to Flow object if FlowDefinitionView is unavailable.
+      // Get flows — DeveloperName (not ApiName). FDV → Flow fallback.
       let flows = [];
-      try {
-        const flCmd = `sf data query --query "SELECT Id, DeveloperName, ProcessType, IsActive FROM FlowDefinitionView WHERE IsActive = true" --target-org ${this.orgAlias} --use-tooling-api --json`;
-        const flResult = JSON.parse(execSync(flCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
-        flows = (flResult.result?.records || []).filter(f =>
+      const flResult = safeExecSfCommand(
+        `sf data query --query "SELECT Id, DeveloperName, ProcessType, IsActive FROM FlowDefinitionView WHERE IsActive = true" --target-org ${this.orgAlias} --use-tooling-api --json`
+      );
+      if (flResult.success) {
+        flows = (flResult.records || []).filter(f =>
           f.ProcessType === 'AutoLaunchedFlow' || f.ProcessType === 'Flow'
         );
-      } catch (fdvError) {
-        // FlowDefinitionView unavailable — fall back to Flow object
-        console.warn(`    Warning: FlowDefinitionView unavailable, trying Flow: ${fdvError.message}`);
-        try {
-          const fbCmd = `sf data query --query "SELECT Id, DefinitionId, ProcessType, TriggerType, Status FROM Flow WHERE Status = 'Active'" --target-org ${this.orgAlias} --use-tooling-api --json`;
-          const fbResult = JSON.parse(execSync(fbCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
-          flows = (fbResult.result?.records || []).filter(f =>
+        branches.push({ name: 'FlowDefinitionView', status: 'success', recordCount: flows.length });
+      } else {
+        branches.push({ name: 'FlowDefinitionView', status: 'failed', recordCount: 0, failureType: flResult.failureType, error: (flResult.error || '').substring(0, 100) });
+        console.warn(`    Warning: FlowDefinitionView unavailable, trying Flow: ${flResult.error}`);
+
+        // Fallback to Flow object
+        const fbResult = safeExecSfCommand(
+          `sf data query --query "SELECT Id, DefinitionId, ProcessType, TriggerType, Status FROM Flow WHERE Status = 'Active'" --target-org ${this.orgAlias} --use-tooling-api --json`
+        );
+        if (fbResult.success) {
+          flows = (fbResult.records || []).filter(f =>
             f.ProcessType === 'AutoLaunchedFlow' || f.ProcessType === 'Flow'
           );
-        } catch (flowError) {
-          console.warn(`    Warning: Flow query also failed: ${flowError.message}`);
+          branches.push({ name: 'Flow-fallback', status: 'success', recordCount: flows.length, usedFallback: true });
+        } else {
+          branches.push({ name: 'Flow-fallback', status: 'failed', recordCount: 0, failureType: fbResult.failureType, error: (fbResult.error || '').substring(0, 100) });
+          console.warn(`    Warning: Flow query also failed: ${fbResult.error}`);
         }
       }
+
+      // Determine overall status
+      const succeededBranches = branches.filter(b => b.status === 'success');
+      const failedBranches = branches.filter(b => b.status === 'failed');
+      let receiptStatus;
+      if (failedBranches.length === 0) receiptStatus = 'complete';
+      else if (succeededBranches.length <= 1) receiptStatus = 'failed'; // only describe succeeded
+      else receiptStatus = 'partial';
+
+      this._lastReceipt = this._buildReceipt(branches, receiptStatus, objectName);
 
       return {
         exists: true,
         name: objectDesc.name,
         label: objectDesc.label,
-        fields: objectDesc.fields.map(f => ({
+        fields: (objectDesc.fields || []).map(f => ({
           name: f.name,
           type: f.type,
           length: f.length,
@@ -149,10 +180,45 @@ class ConflictDetector {
         recordTypes: objectDesc.recordTypeInfos || []
       };
     } catch (error) {
-      // Only the initial sf sobject describe should reach this catch now
       console.error(`Error getting org state: ${error.message}`);
+      branches.push({ name: 'unexpected-error', status: 'failed', recordCount: 0, error: error.message });
+      this._lastReceipt = this._buildReceipt(branches, 'failed', objectName);
       return { exists: false, error: error.message };
     }
+  }
+
+  /**
+   * Build an execution receipt from branch results.
+   * @private
+   */
+  _buildReceipt(branches, status, objectName) {
+    const succeeded = {};
+    const failed = {};
+    for (const b of branches) {
+      if (b.status === 'success') {
+        succeeded[b.name] = { totalSize: b.recordCount || 0, records: [] };
+      } else if (b.status === 'failed') {
+        failed[b.name] = { error: b.error || 'unknown', failureType: b.failureType || 'unknown' };
+      }
+    }
+    return generateReceipt({
+      status,
+      orgAlias: this.orgAlias,
+      totalQueries: branches.length,
+      succeededCount: Object.keys(succeeded).length,
+      failedCount: Object.keys(failed).length,
+      succeeded,
+      failed,
+      fallbacks: branches.filter(b => b.usedFallback).map(b => ({ name: b.name, note: 'fallback used' })),
+      durationMs: 0
+    }, { helper: `conflict-detector@${objectName || 'unknown'}` });
+  }
+
+  /**
+   * Get the last execution receipt (available after getOrgState completes)
+   */
+  getLastReceipt() {
+    return this._lastReceipt || null;
   }
 
   /**

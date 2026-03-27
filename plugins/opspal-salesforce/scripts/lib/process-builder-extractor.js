@@ -22,6 +22,8 @@
 
 const { execSync } = require('child_process');
 const FlowDiscoveryMapper = require('./flow-discovery-mapper');
+const { safeExecSfCommand } = require('./safe-sf-result-parser');
+const { generateReceipt } = require('./execution-receipt');
 
 class ProcessBuilderExtractor {
     constructor(orgAlias) {
@@ -36,68 +38,118 @@ class ProcessBuilderExtractor {
     async extractAllProcesses(objectName = null) {
         console.log('  Extracting Process Builder processes...');
 
-        // Query Process Builder flows (ProcessType = 'Workflow' or 'AutoLaunchedFlow')
-        // Primary: FlowDefinitionView. Fallback: Flow object (if FDV unavailable).
-        const query = `
-            SELECT DurableId, ActiveVersionId, LatestVersionId,
-                   ProcessType, DeveloperName, NamespacePrefix,
-                   LastModifiedDate
-            FROM FlowDefinitionView
-            WHERE IsActive = true
-              AND ProcessType IN ('Workflow', 'AutoLaunchedFlow')
-            ORDER BY DeveloperName
-        `;
+        // Track execution branches for receipt
+        const branches = [];
+        let usedFallback = false;
 
-        let result = this.execSfCommand(
+        // Primary: FlowDefinitionView query via receipt-enabled helper
+        const query = `SELECT DurableId, ActiveVersionId, LatestVersionId, ProcessType, DeveloperName, NamespacePrefix, LastModifiedDate FROM FlowDefinitionView WHERE IsActive = true AND ProcessType IN ('Workflow', 'AutoLaunchedFlow') ORDER BY DeveloperName`;
+
+        let result = safeExecSfCommand(
             `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
         );
 
-        // If FlowDefinitionView failed (result is null), try the Flow object as fallback
-        if (!result) {
+        if (result.success) {
+            branches.push({ name: 'FlowDefinitionView', status: 'success', recordCount: result.totalSize || 0 });
+        } else {
+            branches.push({ name: 'FlowDefinitionView', status: 'failed', recordCount: 0, failureType: result.failureType, error: (result.error || '').substring(0, 100) });
+
+            // Fallback: Flow object
             console.log('    FlowDefinitionView query failed — trying Flow object fallback...');
-            const fallbackQuery = `
-                SELECT Id, DefinitionId, ProcessType, Status, VersionNumber
-                FROM Flow
-                WHERE Status = 'Active'
-                  AND ProcessType IN ('Workflow', 'AutoLaunchedFlow')
-                ORDER BY ProcessType
-            `;
-            result = this.execSfCommand(
+            usedFallback = true;
+            const fallbackQuery = `SELECT Id, DefinitionId, ProcessType, Status, VersionNumber FROM Flow WHERE Status = 'Active' AND ProcessType IN ('Workflow', 'AutoLaunchedFlow') ORDER BY ProcessType`;
+
+            result = safeExecSfCommand(
                 `sf data query --query "${fallbackQuery}" --use-tooling-api --json --target-org ${this.orgAlias}`
             );
 
-            if (!result?.result?.records) {
-                // Both primary and fallback failed — this is NOT a confirmed zero-count
+            if (result.success) {
+                branches.push({ name: 'Flow-fallback', status: 'success', recordCount: result.totalSize || 0, usedFallback: true });
+                console.log(`    ✓ Flow fallback succeeded`);
+            } else {
+                branches.push({ name: 'Flow-fallback', status: 'failed', recordCount: 0, failureType: result.failureType, error: (result.error || '').substring(0, 100) });
                 console.warn('    ⚠ Both FlowDefinitionView and Flow queries failed — cannot confirm process count');
-                console.warn('    ⚠ Returning empty array (query failure, not confirmed zero-count)');
+
+                // Generate failure receipt and return
+                this._lastReceipt = this._buildReceipt(branches, 'failed');
                 return [];
             }
-            console.log(`    ✓ Flow fallback succeeded`);
         }
 
-        if (!result?.result?.records || result.result.records.length === 0) {
+        const records = result.records || [];
+        if (records.length === 0) {
             console.log('    No Process Builder processes found (confirmed zero-count)');
+            this._lastReceipt = this._buildReceipt(branches, 'complete');
             return [];
         }
 
-        const definitions = result.result.records;
+        const definitions = records;
         console.log(`    Found ${definitions.length} Process Builder definition(s)`);
 
         // Extract detailed metadata for each process
         const processes = [];
+        let detailSucceeded = 0;
+        let detailFailed = 0;
         for (const def of definitions) {
             try {
-                const process = await this.extractProcess(def.ActiveVersionId || def.LatestVersionId);
+                const process = await this.extractProcess(def.ActiveVersionId || def.LatestVersionId || def.Id);
                 if (process && (!objectName || process.object === objectName)) {
                     processes.push(process);
+                    detailSucceeded++;
                 }
             } catch (error) {
-                console.warn(`    Warning: Failed to extract process ${def.DeveloperName}: ${error.message}`);
+                detailFailed++;
+                console.warn(`    Warning: Failed to extract process ${def.DeveloperName || def.Id}: ${error.message}`);
             }
         }
 
+        branches.push({
+            name: 'process-detail-extraction',
+            status: detailFailed === 0 ? 'success' : (detailSucceeded > 0 ? 'partial' : 'failed'),
+            recordCount: processes.length,
+            detailSucceeded,
+            detailFailed
+        });
+
+        const receiptStatus = detailFailed === 0 ? 'complete' : (detailSucceeded > 0 ? 'partial' : 'failed');
+        this._lastReceipt = this._buildReceipt(branches, receiptStatus);
+
         console.log(`    Extracted ${processes.length} Process Builder process(es)`);
         return processes;
+    }
+
+    /**
+     * Build an execution receipt from branch results.
+     * @private
+     */
+    _buildReceipt(branches, status) {
+        const succeeded = {};
+        const failed = {};
+        for (const b of branches) {
+            if (b.status === 'success' || b.status === 'partial') {
+                succeeded[b.name] = { totalSize: b.recordCount || 0, records: [] };
+            } else {
+                failed[b.name] = { error: b.error || 'unknown', failureType: b.failureType || 'unknown' };
+            }
+        }
+        return generateReceipt({
+            status,
+            orgAlias: this.orgAlias,
+            totalQueries: branches.length,
+            succeededCount: Object.keys(succeeded).length,
+            failedCount: Object.keys(failed).length,
+            succeeded,
+            failed,
+            fallbacks: branches.filter(b => b.usedFallback).map(b => ({ name: b.name, note: 'fallback used' })),
+            durationMs: 0
+        }, { helper: 'process-builder-extractor@1.0.0' });
+    }
+
+    /**
+     * Get the last execution receipt (available after extractAllProcesses completes)
+     */
+    getLastReceipt() {
+        return this._lastReceipt || null;
     }
 
     /**
@@ -190,23 +242,18 @@ class ProcessBuilderExtractor {
      * Get flow version metadata
      */
     async getFlowVersion(flowVersionId) {
-        const query = `
-            SELECT Id, DefinitionId, MasterLabel, ApiName, ProcessType,
-                   Status, VersionNumber, LastModifiedDate, Metadata
-            FROM Flow
-            WHERE Id = '${flowVersionId}'
-        `;
+        const query = `SELECT Id, DefinitionId, MasterLabel, ApiName, ProcessType, Status, VersionNumber, LastModifiedDate, Metadata FROM Flow WHERE Id = '${flowVersionId}'`;
 
-        try {
-            const result = this.execSfCommand(
-                `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
-            );
+        const result = safeExecSfCommand(
+            `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
+        );
 
-            if (result?.result?.records?.[0]) {
-                return result.result.records[0];
-            }
-        } catch (error) {
-            console.error(`Error fetching flow version: ${error.message}`);
+        if (result.success && result.records?.[0]) {
+            return result.records[0];
+        }
+
+        if (!result.success) {
+            console.error(`Error fetching flow version ${flowVersionId}: ${result.error}`);
         }
 
         return null;
@@ -539,6 +586,7 @@ class ProcessBuilderExtractor {
 
     /**
      * Execute SF CLI command
+     * @deprecated Use safeExecSfCommand from safe-sf-result-parser.js for receipt coverage
      */
     execSfCommand(command) {
         try {

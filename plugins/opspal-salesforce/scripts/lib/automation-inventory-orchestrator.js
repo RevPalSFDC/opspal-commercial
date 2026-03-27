@@ -323,12 +323,14 @@ class AutomationInventoryOrchestrator {
                 );
                 const count = this.rawData.processes.length;
                 const isConfirmedZero = count === 0 && !fdvUnavailable;
+                const pbChildReceipt = this.processExtractor.getLastReceipt?.() || null;
                 this.harvestBranches.push({
                     name: 'ProcessBuilder',
                     success: true,
                     recordCount: count,
                     usedFallback: fdvUnavailable,
-                    confirmedZero: count === 0 ? isConfirmedZero : undefined
+                    confirmedZero: count === 0 ? isConfirmedZero : undefined,
+                    childReceiptHash: pbChildReceipt?.integrityHash || null
                 });
                 if (count === 0 && fdvUnavailable) {
                     console.log(`    ⚠ Found 0 process(es) — FlowDefinitionView unavailable (not a confirmed zero-count)`);
@@ -392,6 +394,8 @@ class AutomationInventoryOrchestrator {
         const failed = {};
         const fallbacks = [];
 
+        const childReceiptHashes = {};
+
         for (const branch of this.harvestBranches) {
             if (branch.success) {
                 succeeded[branch.name] = {
@@ -407,6 +411,10 @@ class AutomationInventoryOrchestrator {
                     error: branch.error || 'unknown',
                     failureType: branch.failureType || 'unknown'
                 };
+            }
+            // Collect child receipt hashes for deterministic chain of proof
+            if (branch.childReceiptHash) {
+                childReceiptHashes[branch.name] = branch.childReceiptHash;
             }
         }
 
@@ -435,6 +443,12 @@ class AutomationInventoryOrchestrator {
         this.harvestReceipt = generateReceipt(receiptInput, {
             helper: 'automation-inventory-orchestrator@harvest'
         });
+
+        // Save child receipt hashes for chain-of-proof verification
+        if (Object.keys(childReceiptHashes).length > 0) {
+            const childHashPath = `${this.options.outputDir}/raw/child-receipt-hashes.json`;
+            fs.writeFileSync(childHashPath, JSON.stringify(childReceiptHashes, null, 2));
+        }
 
         // Save receipt to output directory
         const receiptPath = `${this.options.outputDir}/raw/harvest-execution-receipt.json`;
