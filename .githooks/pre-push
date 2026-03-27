@@ -6,32 +6,18 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 REMOTE_NAME="${1:-origin}"
 RUNTIME_FIDELITY_REGEX='^(plugins/[^/]+/(hooks|agents)/|plugins/[^/]+/\.claude-plugin/(hooks\.json|plugin\.json)$|plugins/opspal-core/scripts/|scripts/|\.github/workflows/|\.githooks/pre-push$|package(-lock)?\.json$)'
 CHANGED_FILES_FILE="$(mktemp "${TMPDIR:-/tmp}/opspal-pre-push-files.XXXXXX")"
+PUSH_REFS_FILE="$(mktemp "${TMPDIR:-/tmp}/opspal-pre-push-refs.XXXXXX")"
 
 cleanup() {
-  rm -f "$CHANGED_FILES_FILE"
+  rm -f "$CHANGED_FILES_FILE" "$PUSH_REFS_FILE"
 }
 
 trap cleanup EXIT
 
 cd "$REPO_ROOT"
+cat > "$PUSH_REFS_FILE"
 
 echo "Running commercial pre-push guardrails..."
-
-# Layer 1: Secret scanning (blocks push if secrets detected in commit range)
-GITLEAKS="$(command -v gitleaks 2>/dev/null || echo "$HOME/.local/bin/gitleaks")"
-if [ -x "$GITLEAKS" ]; then
-  echo "Scanning commits for secrets..."
-  "$GITLEAKS" detect --source "$REPO_ROOT" --config "$REPO_ROOT/.gitleaks.toml" --exit-code 1 --no-banner 2>/dev/null || {
-    echo ""
-    echo "BLOCKED: Secrets detected in commit history."
-    echo "  Run: gitleaks detect --source . --config .gitleaks.toml --verbose"
-    echo "  Fix the issues, then retry the push."
-    exit 1
-  }
-  echo "Secret scan passed."
-else
-  echo "WARNING: gitleaks not found — skipping pre-push secret scan"
-fi
 
 npm run docs:ci >/dev/null
 npm run verify:encrypted-assets >/dev/null
@@ -41,6 +27,61 @@ if git rev-parse --verify "${REMOTE_NAME}/main" >/dev/null 2>&1; then
   DEFAULT_BASE="$(git merge-base HEAD "${REMOTE_NAME}/main")"
 elif git rev-parse --verify HEAD^ >/dev/null 2>&1; then
   DEFAULT_BASE="$(git rev-parse HEAD^)"
+fi
+
+scan_commit_range_for_secrets() {
+  local base_ref="$1"
+  local head_ref="$2"
+  local log_opts="$head_ref"
+
+  if [ "$base_ref" != "$head_ref" ]; then
+    log_opts="${base_ref}..${head_ref}"
+  fi
+
+  "$GITLEAKS" detect --source "$REPO_ROOT" --config "$REPO_ROOT/.gitleaks.toml" --log-opts "$log_opts" --exit-code 1 --no-banner 2>/dev/null || {
+    echo ""
+    echo "BLOCKED: Secrets detected in outgoing commits."
+    echo "  Commit range: $log_opts"
+    echo "  Run: gitleaks detect --source . --config .gitleaks.toml --log-opts \"$log_opts\" --verbose"
+    echo "  Fix the issues, then retry the push."
+    exit 1
+  }
+}
+
+resolve_base_ref() {
+  local remote_sha="$1"
+
+  if [ -z "${remote_sha:-}" ] || [ "$remote_sha" = "$ZERO_SHA" ]; then
+    printf '%s\n' "$DEFAULT_BASE"
+    return
+  fi
+
+  printf '%s\n' "$remote_sha"
+}
+
+# Layer 1: Secret scanning (blocks push if secrets are detected in outgoing commits)
+GITLEAKS="$(command -v gitleaks 2>/dev/null || echo "$HOME/.local/bin/gitleaks")"
+if [ -x "$GITLEAKS" ]; then
+  echo "Scanning outgoing commits for secrets..."
+  ran_secret_scan="false"
+
+  while read -r local_ref local_sha remote_ref remote_sha; do
+    if [ -z "${local_sha:-}" ] || [ "$local_sha" = "$ZERO_SHA" ]; then
+      continue
+    fi
+
+    base_ref="$(resolve_base_ref "$remote_sha")"
+    scan_commit_range_for_secrets "$base_ref" "$local_sha"
+    ran_secret_scan="true"
+  done < "$PUSH_REFS_FILE"
+
+  if [ "$ran_secret_scan" != "true" ]; then
+    scan_commit_range_for_secrets "$DEFAULT_BASE" HEAD
+  fi
+
+  echo "Secret scan passed."
+else
+  echo "WARNING: gitleaks not found — skipping pre-push secret scan"
 fi
 
 ran_range_check="false"
@@ -57,16 +98,13 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     continue
   fi
 
-  base_ref="$remote_sha"
-  if [ -z "${base_ref:-}" ] || [ "$base_ref" = "$ZERO_SHA" ]; then
-    base_ref="$DEFAULT_BASE"
-  fi
+  base_ref="$(resolve_base_ref "$remote_sha")"
 
   node scripts/lib/verify-plugin-version-bumps.js --base "$base_ref" --head "$local_sha" >/dev/null
   node scripts/lib/verify-commercial-repo-boundaries.js --base "$base_ref" --head "$local_sha" >/dev/null
   record_changed_files "$base_ref" "$local_sha"
   ran_range_check="true"
-done
+done < "$PUSH_REFS_FILE"
 
 if [ "$ran_range_check" != "true" ]; then
   node scripts/lib/verify-plugin-version-bumps.js --base "$DEFAULT_BASE" --head HEAD >/dev/null
