@@ -1,20 +1,32 @@
 {
   "slug": "2026-W13",
   "title": "Week of March 23, 2026",
-  "summary": "This week brought major improvements to Windows users with a streamlined setup process and native installation support. We enhanced Salesforce operations with better revenue field detection, deployment safeguards, and smoother permission handling. Security was strengthened with automated secret scanning, and the platform now handles production environments more safely with improved read-only query support.",
-  "published_at": "2026-03-26T23:49:52.710Z",
+  "summary": "This week focused on making OpsPal more reliable and accessible for RevOps teams. We added automated release notes generation to keep you informed of platform improvements, introduced revenue field discovery to better assess your Salesforce revenue operations setup, and improved Windows installation to make getting started easier. Several stability fixes ensure your automations run smoothly without interruption.",
+  "published_at": "2026-03-27T00:02:40.005Z",
   "week_start": "2026-03-23",
-  "week_end": "2026-03-26",
+  "week_end": "2026-03-27",
   "has_breaking": false,
-  "total_commits": 93,
+  "total_commits": 108,
   "entries": [
     {
-      "category": "fixed",
-      "plugin": "opspal-core,opspal-salesforce",
-      "headline": "Improved safety for Salesforce data retrieval operations",
+      "category": "improved",
+      "plugin": "Salesforce",
+      "headline": "Salesforce automation tracking works more reliably",
       "details": [
-        "Data retrieval commands now run safely without triggering production warnings",
-        "Better protection policies prevent accidental changes to live systems"
+        "Improved tracking of automation changes in your Salesforce org",
+        "Better monitoring of flows, triggers, and classes during discovery"
+      ],
+      "commits": [
+        "c861ec9"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "opspal-core,opspal-salesforce",
+      "headline": "Production safety controls work better for read-only operations",
+      "details": [
+        "Read-only operations like retrieving metadata no longer trigger unnecessary production warnings",
+        "Clearer distinction between safe investigation tasks and risky changes"
       ],
       "commits": [
         "b4cb958"
@@ -23,10 +35,10 @@
     {
       "category": "new",
       "plugin": "release-notes",
-      "headline": "Automated release notes system now generates weekly updates",
+      "headline": "Automated release notes keep you informed of platform updates",
       "details": [
-        "Release notes automatically compile and publish from development changes",
-        "Updates deploy daily to keep you informed of the latest improvements"
+        "Weekly summaries automatically generated from development changes",
+        "Clear explanations of new features and improvements in plain language"
       ],
       "commits": [
         "f67a4b0"
@@ -34,34 +46,23 @@
     },
     {
       "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "Salesforce permission management works more reliably",
-      "details": null,
-      "commits": [
-        "8d52b09"
-      ]
-    },
-    {
-      "category": "fixed",
       "plugin": "core,salesforce",
-      "headline": "Resolved six cases where operations were blocked unnecessarily",
+      "headline": "Reduced false alarms from safety controls",
       "details": [
-        "Added bypass options for legitimate administrative tasks",
-        "Narrowed overly strict rules that prevented valid operations",
-        "Improved detection of safe versus risky commands"
+        "Fixed six cases where legitimate operations were blocked unnecessarily",
+        "Better recognition of safe tasks versus risky changes"
       ],
       "commits": [
         "17a2aae"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Simple record lookups now work without extra routing steps",
+      "headline": "Simple record lookups work faster",
       "details": [
-        "Single record queries by ID run directly for faster results",
-        "Short verification queries skip unnecessary complexity",
-        "Bounded result queries under 5 records streamlined"
+        "Quick record verification queries run without extra safety delays",
+        "Single record lookups and small result sets process more efficiently"
       ],
       "commits": [
         "9281eba"
@@ -70,33 +71,22 @@
     {
       "category": "new",
       "plugin": "bootstrap",
-      "headline": "Windows setup now installs required tools automatically",
+      "headline": "Windows installation now handles all dependencies automatically",
       "details": [
-        "Claude Code installs natively on Windows systems",
-        "Node.js downloads and configures automatically",
-        "Streamlined installation reduces manual setup steps"
+        "Automatic installation of required tools on Windows computers",
+        "No manual setup steps for Node.js and other dependencies"
       ],
       "commits": [
         "4260f1a"
       ]
     },
     {
-      "category": "fixed",
-      "plugin": "bootstrap",
-      "headline": "Fixed Windows installation errors with search results",
-      "details": null,
-      "commits": [
-        "82de658"
-      ]
-    },
-    {
-      "category": "new",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "System now detects and reports connection problems automatically",
+      "headline": "Better error reporting when Salesforce connections fail",
       "details": [
-        "Identifies authentication issues with Salesforce orgs",
-        "Provides helpful context when operations fail",
-        "Validates connections before starting complex tasks"
+        "Clearer error messages when org authentication problems occur",
+        "Automatic validation of Salesforce connections before starting work"
       ],
       "commits": [
         "d57de97"
@@ -105,30 +95,34 @@
     {
       "category": "fixed",
       "plugin": "bootstrap",
-      "headline": "PowerShell installation script works with one-line commands",
+      "headline": "Windows installation script works with all PowerShell environments",
       "details": [
-        "Fixed syntax issues when running install commands from web",
-        "Prevents PowerShell window from closing unexpectedly",
-        "Improved error handling during automated installation"
+        "Fixed compatibility issues with different PowerShell execution methods",
+        "More reliable installation process across Windows configurations"
       ],
       "commits": [
         "ffd4a80"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Read-only queries now work safely on production Salesforce orgs",
-      "details": null,
+      "headline": "Read-only queries work on production Salesforce orgs",
+      "details": [
+        "Safe data queries no longer blocked on production environments",
+        "Better balance between safety and functionality for investigation tasks"
+      ],
       "commits": [
         "772d509"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Revenue data context now saves properly in assessment reports",
-      "details": null,
+      "headline": "Revenue context saved in assessment results",
+      "details": [
+        "Assessment findings now include revenue-related context for future reference"
+      ],
       "commits": [
         "43fb51a"
       ]
@@ -136,11 +130,10 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New customization system lets you safely modify templates and galleries",
+      "headline": "Customization framework preserves your settings through updates",
       "details": [
-        "Store custom templates and brand elements that survive updates",
-        "Three-tier customization hierarchy supports team and organization settings",
-        "Built-in backup and restore prevents loss of customizations"
+        "Custom templates and branding survive platform upgrades",
+        "Organized storage for tenant-specific customizations"
       ],
       "commits": [
         "c7ce394"
@@ -149,11 +142,11 @@
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "RevOps assessments now automatically detect your revenue fields",
+      "headline": "Revenue field discovery automatically finds your org's revenue setup",
       "details": [
-        "Identifies custom revenue fields like Net New ARR and Annual Contract Value",
-        "Segments sales processes based on your org's configuration",
-        "Adapts analysis to your specific revenue tracking setup"
+        "Automatically detects which fields track revenue in your Salesforce org",
+        "Identifies active sales processes and revenue metrics",
+        "Works with custom revenue fields beyond standard Amount"
       ],
       "commits": [
         "5de3435"
@@ -162,16 +155,16 @@
     {
       "category": "fixed",
       "plugin": "onboarding",
-      "headline": "Windows users now get Git Bash instead of Linux subsystem",
+      "headline": "Windows setup prefers Git Bash for better compatibility",
       "details": null,
       "commits": [
         "e68ee1a"
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "onboarding",
-      "headline": "Setup process now installs required packages automatically",
+      "headline": "Setup process installs all required dependencies automatically",
       "details": null,
       "commits": [
         "3867463"
@@ -180,16 +173,16 @@
     {
       "category": "new",
       "plugin": "onboarding",
-      "headline": "Added PowerShell setup option for Windows users",
+      "headline": "One-click Windows setup with PowerShell installer",
       "details": null,
       "commits": [
         "487c124"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "onboarding",
-      "headline": "Improved setup experience and plugin detection reliability",
+      "headline": "Better setup experience with clearer instructions",
       "details": null,
       "commits": [
         "f10fc77"
@@ -198,11 +191,11 @@
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "New tools prevent problematic Salesforce deployments",
+      "headline": "Deployment safety tools prevent common Salesforce mistakes",
       "details": [
         "Validates picklist and record type configurations before deployment",
-        "Checks field history tracking limits to prevent failures",
-        "Merges duplicate settings automatically to avoid conflicts"
+        "Checks field history limits to prevent tracking failures",
+        "Merges duplicate value settings automatically"
       ],
       "commits": [
         "aac0d4b"
@@ -220,7 +213,7 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Implemented secret scanning workflow for continuous security monitoring",
+      "headline": "Continuous security scanning prevents credential exposure",
       "details": null,
       "commits": [
         "8dcd939"
@@ -229,10 +222,31 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Removed embedded credentials from code for better security",
+      "headline": "Removed hardcoded credentials for better security",
       "details": null,
       "commits": [
         "8acd03a"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "bootstrap",
+      "headline": "Installation now downloads from official hosted location",
+      "details": null,
+      "commits": [
+        "f45679c"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Salesforce deployment validation works more reliably",
+      "details": [
+        "Fixed three validation issues that caused deployment failures",
+        "Better logic analysis for flow decisions and field references"
+      ],
+      "commits": [
+        "714a52b"
       ]
     }
   ]
