@@ -31,7 +31,8 @@ function runGit(args, { allowFailure = false } = {}) {
   try {
     return execFileSync('git', args, {
       cwd: REPO_ROOT,
-      encoding: 'utf8'
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe']
     }).trim();
   } catch (error) {
     if (allowFailure) {
@@ -76,6 +77,10 @@ function getChangedPlugins(changedFiles) {
       })
       .filter(Boolean)
   )].sort();
+}
+
+function isVersionedPlugin(pluginName, headRef) {
+  return Boolean(readJsonAtRef(headRef, manifestPathFor(pluginName)));
 }
 
 function readJsonAtRef(ref, filePath) {
@@ -260,7 +265,8 @@ function main() {
   const headRef = resolveHeadRef(args.head);
   const baseRef = resolveBaseRef(args.base, headRef);
   const changedFiles = getChangedFiles(baseRef, headRef);
-  const changedPlugins = getChangedPlugins(changedFiles);
+  const changedPlugins = getChangedPlugins(changedFiles)
+    .filter((pluginName) => isVersionedPlugin(pluginName, headRef));
 
   if (changedPlugins.length === 0) {
     console.log(`No plugin directory changes detected between ${baseRef} and ${headRef}.`);
