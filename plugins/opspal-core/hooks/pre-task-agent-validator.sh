@@ -227,6 +227,18 @@ mark_routing_requirement_cleared() {
     node "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
 }
 
+clear_routing_requirement_for_explicit_override() {
+    local session_key="$1"
+    local resolved_agent="$2"
+
+    if [[ ! -f "$ROUTING_STATE_MANAGER" ]] || ! command -v node &> /dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    node "$ROUTING_STATE_MANAGER" clear-explicit-override "$session_key" "$resolved_agent" 2>/dev/null || echo '{}'
+}
+
 agent_clears_requirement() {
     local resolved_agent="$1"
     local clearance_agents_json="$2"
@@ -867,7 +879,13 @@ main() {
     fi
 
     if [[ -f "$AGENT_BOOT_INTEGRITY_VALIDATOR" ]]; then
-        BOOT_REPORT=$(read_agent_boot_integrity_report "$RESOLVED" "$FINAL_OUTPUT")
+        BOOT_PAYLOAD="$FINAL_OUTPUT"
+        if ! printf '%s' "$BOOT_PAYLOAD" | jq -e . >/dev/null 2>&1; then
+            BOOT_PAYLOAD="$TOOL_INPUT"
+        fi
+        BOOT_PAYLOAD="$(printf '%s' "$BOOT_PAYLOAD" | jq -c . 2>/dev/null || echo '{}')"
+
+        BOOT_REPORT=$(read_agent_boot_integrity_report "$RESOLVED" "$BOOT_PAYLOAD")
         if ! echo "$BOOT_REPORT" | jq -e . >/dev/null 2>&1; then
             log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_validator_failed" "Boot integrity validator returned invalid output"
             emit_pretool_response \
@@ -953,6 +971,17 @@ main() {
     fi
 
     # DEPLOYMENT_PARENT_CONTEXT_GUIDANCE removed — see Step 5b comment
+
+    EXPLICIT_OVERRIDE_RESULT=$(clear_routing_requirement_for_explicit_override "$SESSION_KEY" "$RESOLVED")
+    EXPLICIT_OVERRIDE_CLEARED=$(echo "$EXPLICIT_OVERRIDE_RESULT" | jq -r '.cleared // false' 2>/dev/null || echo "false")
+    if [[ "$EXPLICIT_OVERRIDE_CLEARED" == "true" ]]; then
+        EXPLICIT_OVERRIDE_REQUIRED=$(echo "$EXPLICIT_OVERRIDE_RESULT" | jq -r '.requiredAgent // ""' 2>/dev/null || echo "")
+        if [ -n "$ADDITIONAL_CONTEXT" ]; then
+            ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} ROUTING_EXPLICIT_OVERRIDE_CLEARED: Explicit agent '$RESOLVED' cleared pending route '${EXPLICIT_OVERRIDE_REQUIRED:-unknown}' because it is in the approved clearance family."
+        else
+            ADDITIONAL_CONTEXT="ROUTING_EXPLICIT_OVERRIDE_CLEARED: Explicit agent '$RESOLVED' cleared pending route '${EXPLICIT_OVERRIDE_REQUIRED:-unknown}' because it is in the approved clearance family."
+        fi
+    fi
 
     # Step 6: Clear or enforce pending routing requirements for this session.
     ROUTING_STATE=$(check_routing_requirement "$SESSION_KEY")

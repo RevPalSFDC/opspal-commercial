@@ -51,6 +51,7 @@ class QuickActionManager extends EnhancedMCPTool {
             description = '',
             actionType,
             targetObject,
+            targetParentField,
             flowApiName,
             lightningComponent,
             visualforcePage,
@@ -89,6 +90,7 @@ class QuickActionManager extends EnhancedMCPTool {
             description,
             actionType,
             targetObject,
+            targetParentField,
             flowApiName,
             lightningComponent,
             visualforcePage,
@@ -261,6 +263,7 @@ class QuickActionManager extends EnhancedMCPTool {
         description,
         actionType,
         targetObject,
+        targetParentField,
         flowApiName,
         lightningComponent,
         visualforcePage,
@@ -271,6 +274,19 @@ class QuickActionManager extends EnhancedMCPTool {
         const fullName = isGlobal ? scopedDeveloper : `${scopedObject}.${scopedDeveloper}`;
         const target = isGlobal ? '' : (targetObject ? withNamespace(targetObject, namespacePrefix) : scopedObject);
         const layoutXml = this.buildQuickActionLayout(actionType, fields);
+        const childCreateTargets = new Set(['Case', 'Contact', 'Opportunity']);
+
+        if (
+            actionType === 'Create' &&
+            targetObject &&
+            childCreateTargets.has(targetObject) &&
+            objectName &&
+            !targetParentField
+        ) {
+            throw new Error(
+                `Quick Action Create for ${objectName} -> ${targetObject} requires targetParentField to define the parent lookup field.`
+            );
+        }
 
         let actionSpecific = '';
         switch (actionType) {
@@ -291,11 +307,14 @@ class QuickActionManager extends EnhancedMCPTool {
         }
 
         const targetTag = !isGlobal ? `    <targetObject>${target}</targetObject>\n` : '';
+        const targetParentFieldTag = targetParentField
+            ? `    <targetParentField>${targetParentField}</targetParentField>\n`
+            : '';
         const optionsBlock = actionType === 'Update'
             ? `    <optionsCreateFeedItem>false</optionsCreateFeedItem>\n    <optionsShowQuickActionVfHeader>false</optionsShowQuickActionVfHeader>\n    <optionsShowSubmitter>false</optionsShowSubmitter>\n`
             : '';
 
-        return `<?xml version="1.0" encoding="UTF-8"?>\n<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">\n    <fullName>${fullName}</fullName>\n    <label>${label}</label>\n    <description>${description}</description>\n${optionsBlock}    <type>${actionType}</type>\n${targetTag}${actionSpecific}\n</QuickAction>`;
+        return `<?xml version="1.0" encoding="UTF-8"?>\n<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">\n    <fullName>${fullName}</fullName>\n    <label>${label}</label>\n    <description>${description}</description>\n${optionsBlock}    <type>${actionType}</type>\n${targetTag}${targetParentFieldTag}${actionSpecific}\n</QuickAction>`;
     }
 
     buildQuickActionLayout(actionType, fields = []) {

@@ -164,6 +164,68 @@ class DomainAwareMatcher {
     this._loadDomain(domain);
   }
 
+  normalizeDomain(value) {
+    if (!value || typeof value !== 'string') {
+      return null;
+    }
+
+    let normalized = value.trim().toLowerCase();
+    if (!normalized) {
+      return null;
+    }
+
+    if (normalized.includes('@')) {
+      normalized = normalized.split('@').pop();
+    }
+
+    normalized = normalized
+      .replace(/^[a-z]+:\/\//, '')
+      .replace(/^www\./, '')
+      .replace(/\/.*$/, '')
+      .replace(/:\d+$/, '')
+      .replace(/[)>.,;]+$/, '');
+
+    return normalized || null;
+  }
+
+  extractRecordDomains(record) {
+    if (!record || typeof record !== 'object') {
+      return [];
+    }
+
+    const domains = new Set();
+    const addDomain = (value) => {
+      if (Array.isArray(value)) {
+        value.forEach(addDomain);
+        return;
+      }
+
+      const normalized = this.normalizeDomain(value);
+      if (normalized) {
+        domains.add(normalized);
+      }
+    };
+
+    addDomain(record.domain);
+    addDomain(record.Domain);
+    addDomain(record.website);
+    addDomain(record.Website);
+    addDomain(record.email);
+    addDomain(record.Email);
+    addDomain(record.domains);
+    addDomain(record.emailDomains);
+    addDomain(record.contactEmailDomains);
+
+    if (Array.isArray(record.contacts)) {
+      for (const contact of record.contacts) {
+        addDomain(contact?.email);
+        addDomain(contact?.Email);
+      }
+    }
+
+    return Array.from(domains);
+  }
+
   /**
    * Expand abbreviations in text using domain dictionary
    * @param {string} text - Input text
@@ -444,6 +506,9 @@ class DomainAwareMatcher {
     const sourceNormalized = this.normalize(source);
     const sourceState = this.extractStateFromName(source);
     const expectedStates = this.REGION_STATES[options.region] || options.expectedStates || [];
+    const sourceDomains = Array.isArray(options.sourceDomains)
+      ? options.sourceDomains.map(domain => this.normalizeDomain(domain)).filter(Boolean)
+      : this.extractRecordDomains(options.sourceRecord || {});
 
     const matches = [];
 
@@ -487,16 +552,31 @@ class DomainAwareMatcher {
         { synonymMatch }
       );
 
-      if (confidence >= (options.minConfidence || this.matchingRules.minimumConfidence)) {
+      const targetDomains = this.extractRecordDomains(target);
+      const matchedDomains = sourceDomains.filter(domain => targetDomains.includes(domain));
+      let adjustedConfidence = confidence;
+      let adjustedReason = reason;
+      let domainMatch = 'NONE';
+
+      if (matchedDomains.length > 0) {
+        domainMatch = 'MULTI_DOMAIN_MATCH';
+        adjustedConfidence = Math.min(100, adjustedConfidence + (confidence > 0 ? 10 : 15));
+        adjustedReason = `${reason}; matched domain(s): ${matchedDomains.join(', ')}`;
+      }
+
+      if (adjustedConfidence >= (options.minConfidence || this.matchingRules.minimumConfidence)) {
         matches.push({
           target: target.name,
           targetId: target.id || target.Id,
           targetState,
           similarity: Math.round(similarity),
           stateMatch,
-          confidence,
+          confidence: adjustedConfidence,
           matchType,
-          reason,
+          reason: adjustedReason,
+          domainMatch,
+          matchedDomains,
+          targetDomains,
           domain: this.domain,
           expansions: {
             source: sourceNormalized.expansions,

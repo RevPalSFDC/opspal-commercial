@@ -187,6 +187,20 @@ if (targetFieldIsNew) {
 // 5. Verify and remove source field
 ```
 
+### Mandatory Contact Reparenting Pre-Check
+
+Before any Contact `AccountId` reparenting step:
+- Query the affected Contacts and verify every current owner is active.
+- Block the reparent if any `Owner.IsActive = false`.
+- Reassign ownership first, then resume the checkpointed merge flow.
+
+### Checkpoint Integration
+
+Use `scripts/lib/multi-phase-checkpoint.js` for any merge that spans discovery, reassignment, reparenting, cleanup, or rollback.
+- Create the checkpoint before the first write.
+- Mark each completed phase immediately after verification.
+- If the run stops mid-way, resume from the next pending phase instead of manually reconstructing state.
+
 ### Reference Documentation
 
 - **Complete OOO Spec**: `docs/SALESFORCE_ORDER_OF_OPERATIONS.md` (Section E, Rules 1 & 4)

@@ -12,6 +12,13 @@
 # Usage: Runs automatically before 'sf project deploy' commands
 # Can be disabled with: SKIP_FLOW_VALIDATION=1
 #
+# Hook environment isolation:
+# - `export SKIP_FLOW_VALIDATION=1` inside an interactive Bash session does not
+#   automatically reach separately spawned PreToolUse hook processes.
+# - To persist hook toggles, set them in `.claude/settings.local.json` under
+#   the hook environment block or inline them on the exact deploy command.
+# - Example: `SKIP_FLOW_VALIDATION=1 sf project deploy start ...`
+#
 # Exit Codes (standardized - see sf-exit-codes.sh):
 #   0 - Validation passed
 #   1 - Validation error (flow validation failed)
@@ -80,6 +87,53 @@ emit_block() {
     }' >&3
 }
 
+emit_allow_context() {
+    local message="$1"
+
+    jq -Rn --arg message "$message" '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "allow",
+        additionalContext: $message
+      }
+    }' >&3
+}
+
+extract_flag_value() {
+    local command="$1"
+    local flag="$2"
+
+    if [[ "$command" =~ ${flag}=([^[:space:]]+) ]]; then
+        printf '%s' "${BASH_REMATCH[1]}"
+        return 0
+    fi
+
+    if [[ "$command" =~ ${flag}[[:space:]]+([^[:space:]]+) ]]; then
+        printf '%s' "${BASH_REMATCH[1]}"
+        return 0
+    fi
+
+    printf '%s' ""
+}
+
+resolve_command_path() {
+    local raw_path="$1"
+    local base_dir="$2"
+
+    if [[ -z "$raw_path" ]]; then
+        printf '%s' ""
+        return 0
+    fi
+
+    if [[ "$raw_path" = /* ]]; then
+        printf '%s' "$raw_path"
+        return 0
+    fi
+
+    printf '%s' "$base_dir/$raw_path"
+}
+
 DEPLOY_COMMAND=$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")
 if [[ -z "$DEPLOY_COMMAND" ]] || ! is_deploy_scope_command "$DEPLOY_COMMAND"; then
     exit 0
@@ -93,8 +147,25 @@ VALIDATOR_SCRIPT="${PLUGIN_ROOT}/scripts/lib/flow-decision-logic-analyzer.js"
 STRUCTURAL_VALIDATOR="${PLUGIN_ROOT}/scripts/lib/flow-xml-validator.js"
 FIELD_REF_VALIDATOR="${PLUGIN_ROOT}/scripts/lib/flow-field-reference-validator.js"
 DEPLOY_SCOPE_RESOLVER="${PLUGIN_ROOT}/scripts/lib/deploy-scope-resolver.js"
+XML_ORDER_VALIDATOR="${PLUGIN_ROOT}/scripts/lib/xml-element-order-validator.js"
 HOOK_CWD=$(printf '%s' "$HOOK_INPUT" | jq -r '.cwd // empty' 2>/dev/null || echo "")
 [ -n "$HOOK_CWD" ] || HOOK_CWD="$(pwd)"
+HOOK_WARNINGS=()
+ORDERED_XML_FILES=()
+
+METADATA_DIR_RAW="$(extract_flag_value "$DEPLOY_COMMAND" '--metadata-dir')"
+METADATA_DIR_PATH="$(resolve_command_path "$METADATA_DIR_RAW" "$HOOK_CWD")"
+
+if [[ -n "$METADATA_DIR_PATH" ]]; then
+    if [[ ! -d "$METADATA_DIR_PATH" ]]; then
+        emit_block "CRITICAL [MDAPI_METADATA_DIR_INVALID]: --metadata-dir '$METADATA_DIR_RAW' does not exist."
+        exit 0
+    fi
+    if [[ ! -f "$METADATA_DIR_PATH/package.xml" ]]; then
+        emit_block "CRITICAL [MDAPI_PACKAGE_XML_MISSING]: --metadata-dir '$METADATA_DIR_RAW' must contain package.xml at the metadata root."
+        exit 0
+    fi
+fi
 
 SCOPE_ANALYSIS=""
 if [ -f "$DEPLOY_SCOPE_RESOLVER" ] && command -v node >/dev/null; then
@@ -118,6 +189,40 @@ else
     FLOW_FILES=$(find "$DEPLOY_DIR" -name "*.flow-meta.xml" 2>/dev/null || echo "")
 fi
 
+if [[ -n "${FLOW_FILES// }" ]]; then
+    HOOK_WARNINGS+=("Flow deploy detected. Deploying a Flow as Draft does not deactivate the currently active version. If you need a true deactivation, follow deploy with: sf data update record --sobject FlowDefinition --where \"DeveloperName='<FlowApiName>'\" --values \"ActiveVersionId=null\" --use-tooling-api --target-org ${TARGET_ORG:-<target-org>} --json")
+fi
+
+if [[ -n "$SCOPE_ANALYSIS" ]] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/null 2>&1; then
+    while IFS= read -r selected_path; do
+        [[ -z "$selected_path" ]] && continue
+        if [[ -d "$selected_path" ]]; then
+            while IFS= read -r xml_file; do
+                [[ -n "$xml_file" ]] && ORDERED_XML_FILES+=("$xml_file")
+            done < <(find "$selected_path" -type f \( -name '*.object-meta.xml' -o -name '*.profile-meta.xml' -o -name '*.permissionset-meta.xml' \) 2>/dev/null)
+        elif [[ "$selected_path" =~ \.(object-meta\.xml|profile-meta\.xml|permissionset-meta\.xml)$ ]]; then
+            ORDERED_XML_FILES+=("$selected_path")
+        fi
+
+        if [[ -f "$selected_path" ]] && grep -qE '<type>Picklist</type>|<valueSet>|<valueSettings>' "$selected_path" 2>/dev/null; then
+            HOOK_WARNINGS+=("Picklist metadata detected in deploy scope. If the standard CLI deploy is blocked by metadata safety hooks, use the low-risk REST Metadata API path documented in sfdc-metadata-manager instead of forcing the CLI deploy.")
+        fi
+    done < <(printf '%s' "$SCOPE_ANALYSIS" | jq -r '.selectedPaths[]?' 2>/dev/null)
+elif [[ -d "$DEPLOY_DIR" ]]; then
+    while IFS= read -r xml_file; do
+        [[ -n "$xml_file" ]] && ORDERED_XML_FILES+=("$xml_file")
+    done < <(find "$DEPLOY_DIR" -type f \( -name '*.object-meta.xml' -o -name '*.profile-meta.xml' -o -name '*.permissionset-meta.xml' \) 2>/dev/null)
+fi
+
+if [[ -f "$XML_ORDER_VALIDATOR" ]] && [[ "${#ORDERED_XML_FILES[@]}" -gt 0 ]]; then
+    for xml_file in "${ORDERED_XML_FILES[@]}"; do
+        ORDER_RESULT="$(node "$XML_ORDER_VALIDATOR" autofix "$xml_file" 2>/dev/null || true)"
+        if [[ -n "$ORDER_RESULT" ]] && printf '%s' "$ORDER_RESULT" | jq -e '.changed == true' >/dev/null 2>&1; then
+            HOOK_WARNINGS+=("Auto-fixed canonical XML element order for $(basename "$xml_file") before deploy.")
+        fi
+    done
+fi
+
 if [ "$SKIP_FLOW_VALIDATION" = "1" ] || [ "$COMMAND_SKIP" = "1" ]; then
     echo "⏭️  Flow validation skipped (SKIP_FLOW_VALIDATION=1)"
     exit 0
@@ -125,6 +230,10 @@ fi
 
 if [ -z "$FLOW_FILES" ]; then
     echo "✓ No flows to validate in deploy scope"
+    if [[ "${#HOOK_WARNINGS[@]}" -gt 0 ]]; then
+        WARNING_CONTEXT=$(printf '%s\n' "${HOOK_WARNINGS[@]}" | awk '!seen[$0]++')
+        emit_allow_context "$WARNING_CONTEXT"
+    fi
     exit 0
 fi
 
@@ -358,4 +467,8 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
 fi
 
 echo "✅ All flows validated successfully"
+if [[ "${#HOOK_WARNINGS[@]}" -gt 0 ]]; then
+    WARNING_CONTEXT=$(printf '%s\n' "${HOOK_WARNINGS[@]}" | awk '!seen[$0]++')
+    emit_allow_context "$WARNING_CONTEXT"
+fi
 exit $EXIT_SUCCESS

@@ -249,6 +249,44 @@ async function runAllTests() {
     assert.strictEqual(routingState.route_pending_clearance, true, 'Mandatory route should remain pending until Agent clears it');
   }));
 
+  results.push(await runTest('Destructive flow requests route to automation builder', async () => {
+    const chain = new HookChainTester(ROUTING_CHAIN);
+    const env = createIsolatedEnv();
+
+    const result = await chain.run({
+      input: {
+        userPrompt: 'delete flow Renewal_Subscription'
+      },
+      env
+    });
+
+    assert(result.allPassed, 'All hooks should pass');
+    assert.strictEqual(
+      result.results[0]?.output?.metadata?.suggestedAgent,
+      'opspal-salesforce:sfdc-automation-builder',
+      'Destructive automation prompts should route to the write-capable builder'
+    );
+  }));
+
+  results.push(await runTest('Automation audit prompts still route to automation auditor', async () => {
+    const chain = new HookChainTester(ROUTING_CHAIN);
+    const env = createIsolatedEnv();
+
+    const result = await chain.run({
+      input: {
+        userPrompt: 'run a flow audit for Account automation conflicts'
+      },
+      env
+    });
+
+    assert(result.allPassed, 'All hooks should pass');
+    assert.strictEqual(
+      result.results[0]?.output?.metadata?.suggestedAgent,
+      'opspal-salesforce:sfdc-automation-auditor',
+      'Qualified audit prompts should continue routing to the automation auditor'
+    );
+  }));
+
   results.push(await runTest('Production deployment planning routes to release coordinator without prompt rejection', async () => {
     const chain = new HookChainTester(ROUTING_CHAIN);
     const pretool = new HookTester(PRETOOL_HOOK);

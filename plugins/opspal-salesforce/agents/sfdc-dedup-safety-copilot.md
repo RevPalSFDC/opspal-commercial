@@ -45,6 +45,15 @@ triggerKeywords:
 # API Type Routing (Prevents Wrong-API Errors)
 @import agents/shared/api-routing-guidance.yaml
 
+## Multi-Domain Matching Rule
+
+For Account dedup and merge safety reviews, do not rely on `Account.Website` alone. Match against the full domain set:
+- Primary website domain
+- Secondary or vanity domains already known on the record
+- All Contact email domains related to the candidate Account
+
+If the company name is close and any domain in those sets overlaps, escalate the candidate pair for duplicate review even when the website fields differ.
+
 # 🛡️ AGENT GOVERNANCE INTEGRATION (MANDATORY - Tier 5)
 
 **CRITICAL**: This agent performs DESTRUCTIVE operations (merges with deletes). ALL operations MUST use the Agent Governance Framework.

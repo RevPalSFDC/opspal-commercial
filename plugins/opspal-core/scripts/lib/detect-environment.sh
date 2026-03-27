@@ -202,6 +202,54 @@ environment_list_contains() {
   printf ',%s,' "$normalized_csv" | grep -q ",${normalized_needle},"
 }
 
+discover_instance_path_for_alias() {
+  local org_alias=""
+  local base_root=""
+  local candidate=""
+
+  org_alias="$(strip_wrapping_quotes "${1:-}")"
+  base_root="$(strip_wrapping_quotes "${2:-${CLAUDE_PLUGIN_ROOT:-$(pwd)}}")"
+
+  if [ -z "$org_alias" ] || [ ! -d "$base_root" ]; then
+    printf '%s' ""
+    return 0
+  fi
+
+  while IFS= read -r candidate; do
+    [ -z "$candidate" ] && continue
+    if [ "$(basename "$candidate")" = "$org_alias" ]; then
+      printf '%s' "$candidate"
+      return 0
+    fi
+  done < <(
+    find "$base_root" \
+      \( -path '*/node_modules/*' -o -path '*/.git/*' \) -prune -o \
+      -type d \
+      \( -path '*/instances/*' -o -path '*/orgs/*/platforms/salesforce/*' \) \
+      -print 2>/dev/null
+  )
+
+  while IFS= read -r candidate; do
+    [ -z "$candidate" ] && continue
+    if [ -f "$candidate/ORG_CONTEXT.json" ] && grep -q "\"org\"[[:space:]]*:[[:space:]]*\"$org_alias\"" "$candidate/ORG_CONTEXT.json" 2>/dev/null; then
+      printf '%s' "$candidate"
+      return 0
+    fi
+    if [ -f "$candidate/configs/ORG_CONTEXT.json" ] && grep -q "\"org\"[[:space:]]*:[[:space:]]*\"$org_alias\"" "$candidate/configs/ORG_CONTEXT.json" 2>/dev/null; then
+      printf '%s' "$candidate"
+      return 0
+    fi
+  done < <(
+    find "$base_root" \
+      \( -path '*/node_modules/*' -o -path '*/.git/*' \) -prune -o \
+      -type d \
+      \( -path '*/instances/*' -o -path '*/orgs/*/platforms/salesforce/*' \) \
+      -print 2>/dev/null
+  )
+
+  printf '%s' ""
+}
+
 detect_hubspot_environment() {
   local candidate=""
   local normalized=""

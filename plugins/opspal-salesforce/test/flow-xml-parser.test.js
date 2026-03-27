@@ -118,6 +118,11 @@ async function runTests() {
         expect(result.elementCount).toBeGreaterThan(0);
     });
 
+    await test('Export Flow SOQL valid statuses for query validation', async () => {
+        expect(Array.isArray(FlowXMLParser.FLOW_SOQL_VALID_STATUSES)).toBe(true);
+        expect(FlowXMLParser.FLOW_SOQL_VALID_STATUSES.join(',')).toBe('Active,Draft,Obsolete');
+    });
+
     // === VALIDATION ERROR TESTS ===
     console.log('\n📦 Testing Validation Errors:');
 

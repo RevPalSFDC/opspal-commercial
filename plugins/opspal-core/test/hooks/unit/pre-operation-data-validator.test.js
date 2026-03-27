@@ -38,6 +38,57 @@ function createTempHome() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
 }
 
+function createFakeSfCli(rootDir) {
+  const binDir = path.join(rootDir, 'bin');
+  const scriptPath = path.join(binDir, 'sf');
+  fs.mkdirSync(binDir, { recursive: true });
+  fs.writeFileSync(
+    scriptPath,
+    `#!/usr/bin/env bash
+set -euo pipefail
+
+args="$*"
+if [[ "$args" == *"sobject describe"* ]]; then
+  if [[ -n "\${FAKE_SF_DESCRIBE_JSON:-}" ]]; then
+    printf '%s' "$FAKE_SF_DESCRIBE_JSON"
+  else
+    printf '%s' '{"result":{"fields":[]}}'
+  fi
+  exit 0
+fi
+if [[ "$args" == *"FROM Contact"* ]]; then
+  if [[ -n "\${FAKE_SF_CONTACT_QUERY_JSON:-}" ]]; then
+    printf '%s' "$FAKE_SF_CONTACT_QUERY_JSON"
+  else
+    printf '%s' '{"result":{"records":[]}}'
+  fi
+  exit 0
+fi
+if [[ "$args" == *"FROM Account"* ]]; then
+  if [[ -n "\${FAKE_SF_ACCOUNT_QUERY_JSON:-}" ]]; then
+    printf '%s' "$FAKE_SF_ACCOUNT_QUERY_JSON"
+  else
+    printf '%s' '{"result":{"records":[]}}'
+  fi
+  exit 0
+fi
+if [[ -n "\${FAKE_SF_DEFAULT_JSON:-}" ]]; then
+  printf '%s' "$FAKE_SF_DEFAULT_JSON"
+else
+  printf '%s' '{"result":{"records":[]}}'
+fi
+`,
+    'utf8'
+  );
+  fs.chmodSync(scriptPath, 0o755);
+  return binDir;
+}
+
+function writeJsonLinesFile(filePath, records) {
+  const content = records.map(record => JSON.stringify(record)).join('\n') + '\n';
+  fs.writeFileSync(filePath, content, 'utf8');
+}
+
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
   try {
@@ -153,7 +204,12 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 1, 'Should block merge with insufficient sample size');
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0 for structured deny');
+    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny insufficient merge samples');
+    assert(
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('sample too small'),
+      'Should explain the insufficient sample size'
+    );
   }));
 
   results.push(await runTest('Blocks low-confidence merge decisions', async () => {
@@ -182,7 +238,12 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 1, 'Should block merge with low confidence');
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0 for structured deny');
+    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny low-confidence merge decisions');
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('Average merge confidence'),
+      'Should surface the average merge confidence failure'
+    );
   }));
 
   results.push(await runTest('Allows merge decisions that meet confidence threshold', async () => {
@@ -212,6 +273,90 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should allow merge when confidence meets threshold');
+  }));
+
+  results.push(await runTest('Warns when DML input includes formula or rollup fields', async () => {
+    const fakePath = createFakeSfCli(tempHome);
+    const recordsFile = path.join(tempHome, 'account-upsert.jsonl');
+    writeJsonLinesFile(recordsFile, [
+      { Name: 'Acme Corporation', AnnualRevenue: 12345 }
+    ]);
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: `sf data upsert --sobject Account --file=${recordsFile} --target-org test-org --json`
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        DATA_VALIDATION_ENABLED: '1',
+        PATH: `${fakePath}:${process.env.PATH}`,
+        FAKE_SF_DESCRIBE_JSON: JSON.stringify({
+          result: {
+            fields: [
+              { name: 'Name', calculated: false, type: 'string' },
+              { name: 'AnnualRevenue', calculated: true, type: 'currency' }
+            ]
+          }
+        })
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should allow with warning context');
+    assert(
+      (result.output?.hookSpecificOutput?.additionalContext || '').includes('formula or rollup field'),
+      'Should surface the formula/rollup preflight warning'
+    );
+  }));
+
+  results.push(await runTest('Blocks Contact reparenting when owners are inactive', async () => {
+    const fakePath = createFakeSfCli(tempHome);
+    const recordsFile = path.join(tempHome, 'contact-reparent.jsonl');
+    writeJsonLinesFile(recordsFile, [
+      { Id: '003000000000001AAA', AccountId: '001000000000001AAA' }
+    ]);
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: `sf data update --sobject Contact --file=${recordsFile} --target-org test-org --json`
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        DATA_VALIDATION_ENABLED: '1',
+        PATH: `${fakePath}:${process.env.PATH}`,
+        FAKE_SF_DESCRIBE_JSON: JSON.stringify({ result: { fields: [] } }),
+        FAKE_SF_CONTACT_QUERY_JSON: JSON.stringify({
+          result: {
+            records: [
+              {
+                Id: '003000000000001AAA',
+                Owner: {
+                  Name: 'Inactive User',
+                  IsActive: false
+                }
+              }
+            ]
+          }
+        })
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0 for structured deny');
+    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny blocked reparenting');
+    assert(
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('inactive owners'),
+      'Should explain the inactive owner blocker'
+    );
   }));
 
   results.push(await runTest('Recognizes live Agent payloads without schema errors', async () => {

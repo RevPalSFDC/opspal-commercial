@@ -69,9 +69,18 @@ if [ ! -d "${SCRIPT_ROOT}/scripts/lib" ]; then
     fi
   done
 fi
+
+# Resolve the real instance directory from the org alias.
+# Do NOT assume instances/{alias} or instances/salesforce/{alias};
+# the actual folder may be sandbox/, staging/, production/, or org-centric.
+INSTANCE_PATH="$(source "${SCRIPT_ROOT}/../opspal-core/scripts/lib/detect-environment.sh" 2>/dev/null && discover_instance_path_for_alias "<org-alias>" "${SCRIPT_ROOT}/../..")"
+if [ -z "$INSTANCE_PATH" ]; then
+  echo "No existing instance directory matched the org alias; inspect orgs/*/platforms/salesforce/* and instances/* before creating artifacts."
+fi
 ```
 
 **⚠️ NEVER use parallel `find` commands to locate scripts** - this causes "Sibling tool call errored" when one fails.
+**⚠️ NEVER assume the org alias equals the directory name** - always resolve the path first, then read metadata inside that directory.
 
 ---
 

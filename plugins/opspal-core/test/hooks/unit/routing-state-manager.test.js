@@ -279,6 +279,86 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('clear-explicit-override clears pending route for approved explicit agents', async () => {
+    const home = createTempHome();
+    const sessionKey = 'explicit-override-clear-test';
+
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-salesforce:sfdc-automation-auditor',
+        clearance_agents: [
+          'opspal-salesforce:sfdc-automation-auditor',
+          'opspal-salesforce:sfdc-automation-builder'
+        ],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        route_cleared: false,
+        clearance_status: 'pending_clearance',
+        created_at: timestamp,
+        updated_at: timestamp,
+        expires_at: timestamp + 900
+      }));
+
+      const output = runStateManager('clear-explicit-override', sessionKey, {
+        home,
+        extraArgs: ['opspal-salesforce:sfdc-automation-builder']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, true, 'Approved explicit agent should clear pending state');
+      assert.strictEqual(result.reason, 'explicit_agent_override');
+      assert.strictEqual(result.clearedAgent, 'opspal-salesforce:sfdc-automation-builder');
+
+      const persisted = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+      assert.strictEqual(persisted.clearance_status, 'cleared', 'State should be marked cleared');
+      assert.strictEqual(persisted.last_resolved_agent, 'opspal-salesforce:sfdc-automation-builder', 'State should record the explicit override agent');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('clear-explicit-override preserves pending route when explicit agent lacks clearance', async () => {
+    const home = createTempHome();
+    const sessionKey = 'explicit-override-deny-test';
+
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const stateDir = path.join(home, '.claude', 'routing-state');
+      const stateFile = path.join(stateDir, `${sessionKey}.json`);
+      fs.mkdirSync(stateDir, { recursive: true });
+      fs.writeFileSync(stateFile, JSON.stringify({
+        session_key: sessionKey,
+        required_agent: 'opspal-salesforce:sfdc-automation-auditor',
+        clearance_agents: ['opspal-salesforce:sfdc-automation-auditor'],
+        execution_block_until_cleared: true,
+        route_pending_clearance: true,
+        route_cleared: false,
+        clearance_status: 'pending_clearance',
+        created_at: timestamp,
+        updated_at: timestamp,
+        expires_at: timestamp + 900
+      }));
+
+      const output = runStateManager('clear-explicit-override', sessionKey, {
+        home,
+        extraArgs: ['opspal-salesforce:sfdc-automation-builder']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.cleared, false, 'Non-cleared agents should not clear the route');
+      assert.strictEqual(result.reason, 'agent_not_in_clearance_list');
+
+      const persisted = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+      assert.strictEqual(persisted.clearance_status, 'pending_clearance', 'Pending state should remain active');
+      assert.strictEqual(persisted.route_pending_clearance, true, 'Pending clearance flag should remain true');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
   results.push(await runTest('clear-stale with custom threshold-seconds overrides default', async () => {
     const home = createTempHome();
     const sessionKey = 'custom-threshold-test';

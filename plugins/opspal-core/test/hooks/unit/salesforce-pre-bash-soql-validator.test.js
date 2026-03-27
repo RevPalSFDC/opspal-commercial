@@ -99,6 +99,93 @@ async function runAllTests() {
     );
   }));
 
+  results.push(await runTest('Blocks deprecated sf data query bulk flag usage', async () => {
+    if (!hasJq()) {
+      return;
+    }
+
+    const result = runHook({
+      tool_input: {
+        command: 'sf data query --bulk --query "SELECT Id FROM Account" --target-org test --json'
+      }
+    });
+
+    assert.strictEqual(result.status, 0, 'Should exit with 0 for structured deny');
+    const output = JSON.parse(result.stdout.trim());
+    assert.strictEqual(output.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny deprecated bulk query usage');
+    assert(
+      (output.hookSpecificOutput?.permissionDecisionReason || '').includes('SOQL_BULK_FLAG_DEPRECATED'),
+      'Should identify deprecated bulk flag usage'
+    );
+    assert(
+      (output.hookSpecificOutput?.additionalContext || '').includes('sf data export bulk'),
+      'Should suggest sf data export bulk as the replacement'
+    );
+  }));
+
+  results.push(await runTest('Blocks invalid Inactive Flow status filters', async () => {
+    if (!hasJq()) {
+      return;
+    }
+
+    const result = runHook({
+      tool_input: {
+        command: 'sf data query --query "SELECT Id FROM FlowDefinitionView WHERE Status = \'Inactive\'" --target-org test --use-tooling-api --json'
+      }
+    });
+
+    assert.strictEqual(result.status, 0, 'Should exit with 0 for structured deny');
+    const output = JSON.parse(result.stdout.trim());
+    assert.strictEqual(output.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny invalid Flow status filters');
+    assert(
+      (output.hookSpecificOutput?.permissionDecisionReason || '').includes('FLOW_VERSION_STATUS_INVALID'),
+      'Should identify invalid FlowVersionStatus usage'
+    );
+    assert(
+      (output.hookSpecificOutput?.additionalContext || '').includes('Active, Draft, Obsolete'),
+      'Should list valid FlowVersionStatus values'
+    );
+  }));
+
+  results.push(await runTest('Blocks unescaped apostrophes in SOQL string literals', async () => {
+    if (!hasJq()) {
+      return;
+    }
+
+    const result = runHook({
+      tool_input: {
+        command: 'sf data query --query "SELECT Id FROM Account WHERE Name IN (\'O\'Brien\')" --target-org test --json'
+      }
+    });
+
+    assert.strictEqual(result.status, 0, 'Should exit with 0 for structured deny');
+    const output = JSON.parse(result.stdout.trim());
+    assert.strictEqual(output.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny malformed apostrophe usage');
+    assert(
+      (output.hookSpecificOutput?.permissionDecisionReason || '').includes('SOQL_APOSTROPHE_ESCAPE'),
+      'Should identify the apostrophe escaping issue'
+    );
+    assert(
+      (output.hookSpecificOutput?.additionalContext || '').includes('O\\\'Brien'),
+      'Should provide an escaped remediation example'
+    );
+  }));
+
+  results.push(await runTest('Allows properly escaped apostrophes in SOQL string literals', async () => {
+    if (!hasJq()) {
+      return;
+    }
+
+    const result = runHook({
+      tool_input: {
+        command: 'sf data query --query "SELECT Id FROM Account WHERE Name IN (\'O\\\'Brien\')" --target-org test --json'
+      }
+    });
+
+    assert.strictEqual(result.status, 0, 'Should exit with 0');
+    assert.strictEqual(result.stdout.trim(), '', 'Should allow already-escaped apostrophes');
+  }));
+
   results.push(await runTest('Handles empty payload gracefully', async () => {
     if (!hasJq()) {
       return;

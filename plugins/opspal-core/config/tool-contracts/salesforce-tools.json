@@ -46,6 +46,28 @@
         "severity": "WARNING",
         "warning": "Query does not include LIMIT clause - may return large result set",
         "remediation": "Add LIMIT clause to prevent timeout or memory issues"
+      },
+      {
+        "name": "bulk_flag_deprecated_v2125",
+        "description": "sf data query --bulk was removed in SF CLI v2.125+",
+        "condition": {
+          "param": "query",
+          "pattern": ".*"
+        },
+        "severity": "CRITICAL",
+        "message": "Use sf data export bulk instead of sf data query --bulk on SF CLI v2.125+",
+        "remediation": "Replace sf data query --bulk with sf data export bulk --query ..."
+      },
+      {
+        "name": "flow_version_status_inactive_invalid",
+        "description": "FlowVersionStatus does not support Status = 'Inactive'",
+        "condition": {
+          "param": "query",
+          "pattern": "Status[[:space:]]*(=|IN)[[:space:]]*\\(?[[:space:]]*'Inactive'"
+        },
+        "severity": "CRITICAL",
+        "message": "FlowVersionStatus only supports Active, Draft, and Obsolete",
+        "remediation": "Replace 'Inactive' with Draft or use FlowDefinition tooling updates for deactivation"
       }
     ]
   },
@@ -126,7 +148,41 @@
         "severity": "WARNING",
         "warning": "Upsert operations should specify --external-id for matching records",
         "remediation": "Add --external-id parameter to specify matching field (default: Id)"
+      },
+      {
+        "name": "filter_non_writeable_field_types",
+        "description": "Filter formula and rollup fields before DML",
+        "condition": {
+          "param": "sobject",
+          "pattern": ".*"
+        },
+        "severity": "WARNING",
+        "warning": "Formula and rollup fields should be excluded from upsert payloads",
+        "remediation": "Describe the object first and exclude calculated or summary fields from the CSV"
       }
     ]
+  },
+  "sf_data_update_flow_definition": {
+    "description": "Salesforce Tooling API contract for FlowDefinition deactivation/reactivation",
+    "required": ["sobject", "use-tooling-api"],
+    "optional": ["where", "values", "target-org"],
+    "types": {
+      "sobject": "string",
+      "use-tooling-api": "boolean",
+      "where": "string",
+      "values": "string",
+      "target-org": "string"
+    }
+  },
+  "sf_project_deploy_mdapi": {
+    "description": "Salesforce MDAPI deployment contract",
+    "required": ["metadata-dir"],
+    "optional": ["target-org", "ignore-warnings", "dry-run"],
+    "types": {
+      "metadata-dir": "string",
+      "target-org": "string",
+      "ignore-warnings": "boolean",
+      "dry-run": "boolean"
+    }
   }
 }

@@ -148,6 +148,126 @@ log_interceptor_event() {
     fi
 }
 
+extract_sobject_from_query() {
+    local query="$1"
+
+    printf '%s' "$query" | node -e '
+const query = require("fs").readFileSync(0, "utf8");
+const match = query.match(/\bFROM\s+([A-Za-z0-9_.]+)/i);
+process.stdout.write(match ? match[1] : "");
+'
+}
+
+extract_where_fields() {
+    local query="$1"
+
+    printf '%s' "$query" | node -e '
+const query = require("fs").readFileSync(0, "utf8");
+const whereMatch = query.match(/\bWHERE\b([\s\S]+)/i);
+if (!whereMatch) {
+  process.exit(0);
+}
+const clause = whereMatch[1]
+  .replace(/\bORDER\s+BY\b[\s\S]*$/i, "")
+  .replace(/\bGROUP\s+BY\b[\s\S]*$/i, "")
+  .replace(/\bLIMIT\b[\s\S]*$/i, "")
+  .replace(/\bOFFSET\b[\s\S]*$/i, "");
+const fields = new Set();
+for (const match of clause.matchAll(/\b([A-Za-z_][A-Za-z0-9_.]*)\b\s*(=|!=|<>|<|>|<=|>=|\bLIKE\b|\bIN\b|\bNOT\s+IN\b|\bINCLUDES\b|\bEXCLUDES\b)/gi)) {
+  const field = match[1];
+  if (!/^(AND|OR|NOT)$/i.test(field)) {
+    fields.add(field);
+  }
+}
+process.stdout.write(Array.from(fields).join("\n"));
+'
+}
+
+escape_soql_apostrophes() {
+    local query="$1"
+
+    printf '%s' "$query" | node -e '
+const query = require("fs").readFileSync(0, "utf8");
+let output = "";
+let inString = false;
+
+for (let i = 0; i < query.length; i += 1) {
+  const ch = query[i];
+  const next = query[i + 1] || "";
+  const prev = query[i - 1] || "";
+
+  if (!inString) {
+    output += ch;
+    if (ch === "'\''") {
+      inString = true;
+    }
+    continue;
+  }
+
+  if (ch === "\\" && next === "'\''") {
+    output += ch + next;
+    i += 1;
+    continue;
+  }
+
+  if (ch === "'\''") {
+    if (prev !== "\\" && /[A-Za-z0-9]/.test(next)) {
+      output += "\\'\''";
+      continue;
+    }
+
+    inString = false;
+    output += ch;
+    continue;
+  }
+
+  output += ch;
+}
+
+process.stdout.write(output);
+'
+}
+
+detect_textarea_where_fields() {
+    local query="$1"
+    local current_org="$2"
+    local sobject="$3"
+
+    if [[ -z "$current_org" ]] || [[ -z "$sobject" ]] || ! command -v sf >/dev/null 2>&1; then
+        return 0
+    fi
+
+    local where_fields
+    where_fields="$(extract_where_fields "$query")"
+    if [[ -z "${where_fields// }" ]]; then
+        return 0
+    fi
+
+    local describe_json
+    describe_json="$(sf sobject describe --sobject "$sobject" --target-org "$current_org" --json 2>/dev/null || true)"
+    if [[ -z "$describe_json" ]]; then
+        return 0
+    fi
+
+    while IFS= read -r field_name; do
+        [[ -z "$field_name" ]] && continue
+        printf '%s' "$describe_json" | jq -r --arg field "$field_name" '
+          (
+            .result.fields // .fields // []
+          )
+          | map(select(
+              (.name == $field or .qualifiedApiName == $field)
+              and (
+                (.type // "" | ascii_downcase) == "textarea"
+                or (.type // "" | ascii_downcase) == "longtextarea"
+                or (.type // "" | ascii_downcase) == "richtextarea"
+              )
+            ))
+          | .[0].name // empty
+        ' 2>/dev/null || true
+    done <<< "$where_fields" | sed '/^$/d' | sort -u
+}
+
 LOG_DIR="$(resolve_log_root || true)"
 if [[ -n "$LOG_DIR" ]]; then
     HOOK_LOG_FILE="$LOG_DIR/soql-enhancer.jsonl"
@@ -336,6 +456,19 @@ fi
 if [[ -z "$SOQL_QUERY" ]]; then
     emit_command_output "$COMMAND"
     exit 0
+fi
+
+ESCAPED_SOQL_QUERY="$(escape_soql_apostrophes "$SOQL_QUERY")"
+if [[ "$ESCAPED_SOQL_QUERY" != "$SOQL_QUERY" ]]; then
+    COMMAND="${COMMAND//$SOQL_QUERY/$ESCAPED_SOQL_QUERY}"
+    SOQL_QUERY="$ESCAPED_SOQL_QUERY"
+    verbose_log "[SOQL Enhancer] Auto-escaped embedded apostrophes inside SOQL string literals."
+fi
+
+SOBJECT_NAME="$(extract_sobject_from_query "$SOQL_QUERY")"
+TEXTAREA_FIELDS="$(detect_textarea_where_fields "$SOQL_QUERY" "$CURRENT_ORG" "$SOBJECT_NAME" || true)"
+if [[ -n "${TEXTAREA_FIELDS// }" ]]; then
+    verbose_log "[SOQL Enhancer] ${CURRENT_ORG}: WHERE clause filters textarea field(s) $(printf '%s' "$TEXTAREA_FIELDS" | paste -sd ', ' -). Prefer formula/helper fields or Id-driven lookups."
 fi
 
 # Log enhancement attempt (if logging enabled)

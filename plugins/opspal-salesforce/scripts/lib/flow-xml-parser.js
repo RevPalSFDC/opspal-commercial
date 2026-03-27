@@ -21,6 +21,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const xml2js = require('xml2js');
 
+const FLOW_SOQL_VALID_STATUSES = ['Active', 'Draft', 'Obsolete'];
+
 class FlowXMLParser {
     constructor(options = {}) {
         this.verbose = options.verbose || false;
@@ -768,6 +770,7 @@ class FlowXMLParser {
 }
 
 module.exports = FlowXMLParser;
+module.exports.FLOW_SOQL_VALID_STATUSES = FLOW_SOQL_VALID_STATUSES;
 
 // CLI usage
 if (require.main === module) {

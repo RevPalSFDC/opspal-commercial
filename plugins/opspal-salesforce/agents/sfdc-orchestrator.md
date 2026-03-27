@@ -46,6 +46,23 @@ triggerKeywords:
 # Operational Playbooks & Frameworks
 @import agents/shared/playbook-reference.yaml
 
+## Checkpoint Protocol
+
+For any multi-phase operation that can partially succeed, create a checkpoint file before execution and update it after each phase.
+
+```javascript
+const { MultiPhaseCheckpoint } = require('./scripts/lib/multi-phase-checkpoint');
+const checkpoints = new MultiPhaseCheckpoint({ baseDir: process.cwd() });
+
+checkpoints.create(orgAlias, operationId, ['discover', 'deploy', 'verify'], {
+  operationType: 'salesforce-orchestration'
+});
+checkpoints.complete(orgAlias, operationId, 'discover');
+const resumeState = checkpoints.resume(orgAlias, operationId);
+```
+
+Store checkpoints under `instances/{org}/checkpoints/{operation-id}.json` and use them for resume and rollback planning.
+
 ## MANDATORY: Object Deployment Path Rule
 
 When deploying object metadata, always target the object root:

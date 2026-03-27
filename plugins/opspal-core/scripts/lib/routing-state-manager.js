@@ -477,6 +477,50 @@ function clearState(sessionKey) {
   }
 }
 
+function clearIfExplicitAgentOverridesRoute(sessionKey, explicitAgentId) {
+  const state = getState(sessionKey);
+  const normalizedAgent = String(explicitAgentId || '').trim();
+
+  if (!state) {
+    return { cleared: false, reason: 'no_state' };
+  }
+
+  if (!toBoolean(state.route_pending_clearance)) {
+    return { cleared: false, reason: 'route_not_pending', requiredAgent: state.required_agent || null };
+  }
+
+  if (!normalizedAgent) {
+    return { cleared: false, reason: 'missing_explicit_agent', requiredAgent: state.required_agent || null };
+  }
+
+  if ((state.required_agent || null) === normalizedAgent) {
+    return { cleared: false, reason: 'matches_required_agent', requiredAgent: state.required_agent || null };
+  }
+
+  const clearanceAgents = normalizeClearanceAgents(state.clearance_agents, state.required_agent);
+  if (!clearanceAgents.includes(normalizedAgent)) {
+    return {
+      cleared: false,
+      reason: 'agent_not_in_clearance_list',
+      requiredAgent: state.required_agent || null,
+      clearanceAgents
+    };
+  }
+
+  const updated = updateStateStatus(sessionKey, 'cleared', {
+    last_resolved_agent: normalizedAgent
+  });
+
+  return {
+    cleared: true,
+    reason: 'explicit_agent_override',
+    requiredAgent: state.required_agent || null,
+    clearedAgent: normalizedAgent,
+    clearanceAgents,
+    state: updated
+  };
+}
+
 // Cross-family stale route detection and clearing.
 // Clears pending routing state when:
 //   1. The pending state's agent family differs from the requested family
@@ -835,9 +879,16 @@ if (require.main === module) {
       break;
     }
 
+    case 'clear-explicit-override': {
+      const sessionKey = args[1];
+      const explicitAgentId = args[2] || null;
+      console.log(JSON.stringify(clearIfExplicitAgentOverridesRoute(sessionKey, explicitAgentId)));
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|record-projection-loss|record-integrity-stop|projection-loss-count> [args]');
+      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|clear-explicit-override|record-projection-loss|record-integrity-stop|projection-loss-count> [args]');
       process.exit(1);
   }
 }
@@ -856,6 +907,7 @@ module.exports = {
   getState,
   updateStateStatus,
   clearState,
+  clearIfExplicitAgentOverridesRoute,
   clearStaleIfCrossFamily,
   clearExpiredStates,
   checkState,

@@ -464,6 +464,34 @@ check_mandatory_patterns() {
     return 1
 }
 
+check_destructive_automation_prefilter() {
+    local msg="$1"
+    local msg_without_paths
+    local msg_lower
+
+    msg_without_paths=$(strip_path_like_tokens "$msg")
+    msg_lower=$(echo "$msg_without_paths" | tr '[:upper:]' '[:lower:]')
+
+    # Require a primary imperative/request verb near the start so informational
+    # prompts like "review how to delete a flow" do not route as destructive.
+    if echo "$msg_lower" | grep -qE '^[[:space:]]*((please|can you|could you|help me|we need to|i need to|i want to|let'"'"'s)[[:space:]]+)?(delete|remove|deactivate|disable)\b.{0,50}\b(flow|automation|trigger|validation[[:space:]]+rule)\b'; then
+        jq -nc \
+          '{
+            routeId: "automation-destructive",
+            agent: "opspal-salesforce:sfdc-automation-builder",
+            clearanceAgents: [
+              "opspal-salesforce:sfdc-automation-builder",
+              "opspal-salesforce:sfdc-deployment-manager",
+              "opspal-salesforce:sfdc-metadata-manager"
+            ]
+          }'
+        return 0
+    fi
+
+    echo '{}'
+    return 1
+}
+
 # =============================================================================
 # GUARDRAIL HELPERS
 # =============================================================================
@@ -1014,14 +1042,23 @@ if is_procedural_request "$USER_MESSAGE"; then
 fi
 
 # Check for mandatory blocking first
-MANDATORY_MATCH=$(check_mandatory_patterns "$USER_MESSAGE")
+MANDATORY_MATCH=$(check_destructive_automation_prefilter "$USER_MESSAGE")
 MANDATORY_AGENT=$(echo "$MANDATORY_MATCH" | jq -r '.agent // ""' 2>/dev/null || echo "")
+
+if [[ -z "$MANDATORY_AGENT" ]]; then
+    MANDATORY_MATCH=$(check_mandatory_patterns "$USER_MESSAGE")
+    MANDATORY_AGENT=$(echo "$MANDATORY_MATCH" | jq -r '.agent // ""' 2>/dev/null || echo "")
+fi
 
 # If the normalized opener missed a mandatory match, scan the full body.
 # Critical for continuation prompts with rich embedded instructions.
 if [[ -z "$MANDATORY_AGENT" ]] && [[ ${#RAW_USER_MESSAGE} -gt ${#USER_MESSAGE} ]]; then
-    MANDATORY_MATCH_BODY=$(check_mandatory_patterns "$RAW_USER_MESSAGE")
+    MANDATORY_MATCH_BODY=$(check_destructive_automation_prefilter "$RAW_USER_MESSAGE")
     MANDATORY_AGENT_BODY=$(echo "$MANDATORY_MATCH_BODY" | jq -r '.agent // ""' 2>/dev/null || echo "")
+    if [[ -z "$MANDATORY_AGENT_BODY" ]]; then
+        MANDATORY_MATCH_BODY=$(check_mandatory_patterns "$RAW_USER_MESSAGE")
+        MANDATORY_AGENT_BODY=$(echo "$MANDATORY_MATCH_BODY" | jq -r '.agent // ""' 2>/dev/null || echo "")
+    fi
     if [[ -n "$MANDATORY_AGENT_BODY" ]]; then
         MANDATORY_MATCH="$MANDATORY_MATCH_BODY"
         MANDATORY_AGENT="$MANDATORY_AGENT_BODY"

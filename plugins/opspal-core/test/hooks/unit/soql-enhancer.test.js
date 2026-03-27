@@ -55,6 +55,25 @@ function runHook(args, env) {
   });
 }
 
+function createFakeEnhancementRoot() {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-soql-engine-'));
+  const scriptDir = path.join(tempRoot, 'scripts/lib');
+  fs.mkdirSync(scriptDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(scriptDir, 'soql-enhancement-engine.js'),
+    `#!/usr/bin/env node
+'use strict';
+
+const [, , command, org, query] = process.argv;
+if (command === 'enhance') {
+  process.stdout.write(query || '');
+}
+`,
+    'utf8'
+  );
+  return tempRoot;
+}
+
 async function runAllTests() {
   console.log('\n[Tests] pre-tool-use/soql-enhancer.sh Tests\n');
 
@@ -145,6 +164,28 @@ async function runAllTests() {
       });
 
       assert.strictEqual(result.code, 0, 'Should exit with 0 instead of unbound variable failure');
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('Auto-escapes embedded apostrophes before enhancement', async () => {
+    const tempRoot = createFakeEnhancementRoot();
+    const command = 'sf data query --query "SELECT Id FROM Account WHERE Name IN (\'O\'Brien\')" --target-org sandbox --json';
+    try {
+      const result = await runHook(['Bash', command], {
+        CLAUDE_PLUGIN_ROOT: tempRoot,
+        ERROR_PREVENTION_ENABLED: 'false',
+        SOQL_ENHANCEMENT_ENABLED: 'true',
+        SOQL_LIVE_FIRST: 'false',
+        SF_TARGET_ORG: 'sandbox'
+      });
+
+      assert.strictEqual(result.code, 0, 'Should exit with 0');
+      assert(
+        result.stdout.trim().includes('O\\\'Brien'),
+        'Should rewrite the command with an escaped apostrophe before enhancement'
+      );
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }

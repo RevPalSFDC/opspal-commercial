@@ -133,11 +133,91 @@ fi
 DATA_QUALITY_MONITOR="$PLUGIN_DIR/scripts/lib/data-quality-monitor.js"
 OUTPUT_FORMATTER="$PLUGIN_DIR/scripts/lib/output-formatter.js"
 HOOK_LOGGER="$PLUGIN_DIR/scripts/lib/hook-logger.js"
+SALESFORCE_PLUGIN_DIR="$PROJECT_ROOT/plugins/opspal-salesforce"
+ACCOUNT_DEDUP_PRECHECK="$SALESFORCE_PLUGIN_DIR/scripts/lib/account-dedup-pre-check.js"
 DEFAULT_LOG_ROOT="${PROJECT_ROOT}/.claude/logs"
 LOG_ROOT="${CLAUDE_HOOK_LOG_ROOT:-$DEFAULT_LOG_ROOT}"
 FALLBACK_LOG_ROOT="/tmp/.claude/logs"
 LOG_FILE=""
 HOOK_NAME="pre-operation-data-validator"
+PRECHECK_WARNINGS=()
+
+append_precheck_warning() {
+    local message="$1"
+    PRECHECK_WARNINGS+=("$message")
+}
+
+extract_bash_command() {
+    echo "$TOOL_INPUT" | jq -r '.command // ""' 2>/dev/null || echo ""
+}
+
+extract_sf_target_org() {
+    local command="$1"
+
+    if [[ "$command" =~ --target-org[[:space:]]+([^[:space:]]+) ]]; then
+        printf '%s' "${BASH_REMATCH[1]}"
+        return 0
+    fi
+
+    printf '%s' "${SF_TARGET_ORG:-}"
+}
+
+extract_sf_sobject() {
+    local command="$1"
+
+    if [[ "$command" =~ --sobject[[:space:]]+([^[:space:]]+) ]]; then
+        printf '%s' "${BASH_REMATCH[1]}"
+        return 0
+    fi
+
+    printf '%s' ""
+}
+
+extract_sf_operation_verb() {
+    local command="$1"
+
+    if echo "$command" | grep -qE 'sf[[:space:]]+data[[:space:]]+create'; then
+        printf '%s' "create"
+        return 0
+    fi
+    if echo "$command" | grep -qE 'sf[[:space:]]+data[[:space:]]+upsert'; then
+        printf '%s' "upsert"
+        return 0
+    fi
+    if echo "$command" | grep -qE 'sf[[:space:]]+data[[:space:]]+update'; then
+        printf '%s' "update"
+        return 0
+    fi
+
+    printf '%s' ""
+}
+
+extract_csv_file_from_command() {
+    local command="$1"
+    local file=""
+
+    file="$(printf '%s' "$command" | sed -nE "s/.*(--file|-f)[ =]+\"?([^\" ]+)\"?.*/\\2/p" | head -1)"
+    if [[ -z "$file" ]]; then
+        file="$(printf '%s' "$command" | grep -oE '[^[:space:]]+\.csv' | head -1 || true)"
+    fi
+
+    if [[ -n "$file" ]] && [[ ! -f "$file" ]] && [[ -f "$PROJECT_ROOT/$file" ]]; then
+        file="$PROJECT_ROOT/$file"
+    fi
+
+    printf '%s' "$file"
+}
+
+csv_headers_from_file() {
+    local csv_file="$1"
+
+    if [[ -z "$csv_file" ]] || [[ ! -f "$csv_file" ]]; then
+        printf '%s' ""
+        return 0
+    fi
+
+    head -1 "$csv_file" 2>/dev/null | tr ',' '\n' | sed 's/\r$//'
+}
 
 resolve_log_root() {
     local primary="$LOG_ROOT"
@@ -397,10 +477,178 @@ if [ "$OPERATION_TYPE" = "merge_decision_data" ] && [ "$DATA_COUNT" -lt "$MERGE_
     exit 0
 fi
 
-# Run validation via Node.js data-quality-monitor
 TEMP_DATA=$(mktemp)
+trap 'rm -f "$TEMP_DATA"' EXIT
 echo "$DATA_TO_VALIDATE" > "$TEMP_DATA"
 
+RAW_BASH_COMMAND=""
+SF_TARGET_ORG_VALUE=""
+SF_SOBJECT_VALUE=""
+SF_OPERATION_VERB=""
+
+if [[ "$TOOL_NAME" == "Bash" ]]; then
+    RAW_BASH_COMMAND="$(extract_bash_command)"
+    SF_TARGET_ORG_VALUE="$(extract_sf_target_org "$RAW_BASH_COMMAND")"
+    SF_SOBJECT_VALUE="$(extract_sf_sobject "$RAW_BASH_COMMAND")"
+    SF_OPERATION_VERB="$(extract_sf_operation_verb "$RAW_BASH_COMMAND")"
+fi
+
+if [[ "$TOOL_NAME" == "Bash" ]] &&
+   [[ -n "$RAW_BASH_COMMAND" ]] &&
+   [[ -n "$SF_TARGET_ORG_VALUE" ]] &&
+   [[ -n "$SF_SOBJECT_VALUE" ]] &&
+   [[ "$SF_OPERATION_VERB" =~ ^(create|update|upsert)$ ]] &&
+   command -v sf >/dev/null 2>&1; then
+
+    DESCRIBE_JSON="$(sf sobject describe --sobject "$SF_SOBJECT_VALUE" --target-org "$SF_TARGET_ORG_VALUE" --json 2>/dev/null || true)"
+
+    if [[ -n "$DESCRIBE_JSON" ]]; then
+        NON_WRITABLE_FIELDS="$(
+            DESCRIBE_JSON="$DESCRIBE_JSON" node -e "
+const fs = require('fs');
+const records = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+const describe = JSON.parse(process.env.DESCRIBE_JSON || '{}');
+const sample = Array.isArray(records) ? records.find(record => record && typeof record === 'object') : null;
+const headers = sample ? Object.keys(sample) : [];
+const fields = (describe.result?.fields || describe.fields || [])
+  .filter(field => headers.includes(field.name) && (field.calculated === true || String(field.type || '').toLowerCase() === 'summary'))
+  .map(field => field.name);
+process.stdout.write(fields.join('\n'));
+" "$TEMP_DATA" 2>/dev/null || true
+        )"
+
+        if [[ -n "${NON_WRITABLE_FIELDS// }" ]]; then
+            append_precheck_warning "Detected formula or rollup field(s) in ${SF_SOBJECT_VALUE} DML input: $(printf '%s' "$NON_WRITABLE_FIELDS" | paste -sd ', ' -). Salesforce describe metadata can mark these as createable/updateable, but REST upsert rejects them. Re-check with: sf sobject describe --sobject ${SF_SOBJECT_VALUE} --target-org ${SF_TARGET_ORG_VALUE} --json | jq '.result.fields[] | select(.createable==true)'"
+        fi
+    fi
+
+    if [[ "$SF_SOBJECT_VALUE" == "Contact" ]]; then
+        CONTACT_REPARENT_IDS="$(
+            node -e "
+const fs = require('fs');
+const records = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+const ids = [];
+for (const record of (Array.isArray(records) ? records : [])) {
+  if (record && record.AccountId && record.Id) {
+    ids.push(record.Id);
+  }
+}
+process.stdout.write(ids.join('\n'));
+" "$TEMP_DATA" 2>/dev/null || true
+        )"
+
+        if [[ -n "${CONTACT_REPARENT_IDS// }" ]]; then
+            CONTACT_ID_LIST="$(printf '%s\n' "$CONTACT_REPARENT_IDS" | sed '/^$/d' | head -50 | sed "s/.*/'&'/" | paste -sd ',' -)"
+            if [[ -n "$CONTACT_ID_LIST" ]]; then
+                CONTACT_OWNER_QUERY="SELECT Id, Name, Owner.Name, Owner.IsActive FROM Contact WHERE Id IN (${CONTACT_ID_LIST})"
+                CONTACT_OWNER_RESULT="$(sf data query --query "$CONTACT_OWNER_QUERY" --target-org "$SF_TARGET_ORG_VALUE" --json 2>/dev/null || true)"
+                INACTIVE_CONTACT_OWNERS="$(
+                    printf '%s' "$CONTACT_OWNER_RESULT" | jq -r '
+                      (.result.records // [])
+                      | map(select(.Owner.IsActive == false))
+                      | map("\(.Id):\(.Owner.Name // "Unknown Owner")")
+                      | .[]
+                    ' 2>/dev/null || true
+                )"
+
+                if [[ -n "${INACTIVE_CONTACT_OWNERS// }" ]]; then
+                    emit_pretool_decision \
+                      "deny" \
+                      "DATA_VALIDATION_BLOCKED: Contact AccountId reparenting is blocked because one or more contacts have inactive owners." \
+                      "Inactive contact owners detected before Contact.AccountId update: $(printf '%s' "$INACTIVE_CONTACT_OWNERS" | paste -sd '; ' -). Reassign ownership before reparenting."
+                    exit 0
+                fi
+            fi
+        fi
+    fi
+
+    if [[ "$SF_SOBJECT_VALUE" == "Account" ]] && [[ "$SF_OPERATION_VERB" =~ ^(create|upsert)$ ]] && [[ -f "$ACCOUNT_DEDUP_PRECHECK" ]]; then
+        INPUT_ACCOUNTS_JSON="$(
+            node -e "
+const fs = require('fs');
+const records = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+const normalized = (Array.isArray(records) ? records : [])
+  .filter(record => record && record.Name)
+  .slice(0, 10)
+  .map(record => ({
+    Name: record.Name,
+    Website: record.Website || record.Domain || '',
+    emailDomains: [record.EmailDomain || record.Email || ''].filter(Boolean)
+  }));
+process.stdout.write(JSON.stringify(normalized));
+" "$TEMP_DATA" 2>/dev/null || echo "[]"
+        )"
+
+        if [[ "$INPUT_ACCOUNTS_JSON" != "[]" ]]; then
+            ACCOUNT_SEARCH_TOKENS="$(
+                node -e "
+const helper = require(process.argv[1]);
+const accounts = JSON.parse(process.argv[2]);
+const tokens = [...new Set(accounts.map(account => helper.getSearchToken(account.Name)).filter(Boolean))];
+process.stdout.write(tokens.join('\n'));
+" "$ACCOUNT_DEDUP_PRECHECK" "$INPUT_ACCOUNTS_JSON" 2>/dev/null || true
+            )"
+
+            EXISTING_ACCOUNT_RESULTS="[]"
+            while IFS= read -r token; do
+                [[ -z "$token" ]] && continue
+                SAFE_TOKEN="${token//\'/\\\'}"
+                ACCOUNT_QUERY="SELECT Id, Name, Website, (SELECT Email FROM Contacts LIMIT 25) FROM Account WHERE Name LIKE '%${SAFE_TOKEN}%' LIMIT 25"
+                ACCOUNT_RESULT="$(sf data query --query "$ACCOUNT_QUERY" --target-org "$SF_TARGET_ORG_VALUE" --json 2>/dev/null || true)"
+                EXISTING_ACCOUNT_RESULTS="$(EXISTING_ACCOUNT_RESULTS="$EXISTING_ACCOUNT_RESULTS" ACCOUNT_RESULT="$ACCOUNT_RESULT" node -e "
+const existing = JSON.parse(process.env.EXISTING_ACCOUNT_RESULTS || '[]');
+const incoming = JSON.parse(process.env.ACCOUNT_RESULT || '{}');
+const records = incoming.result?.records || [];
+for (const record of records) {
+  const contacts = record.Contacts?.records || [];
+  existing.push({
+    Id: record.Id,
+    Name: record.Name,
+    Website: record.Website || '',
+    contacts: contacts.map(contact => ({ Email: contact.Email }))
+  });
+}
+process.stdout.write(JSON.stringify(existing));
+" 2>/dev/null || echo "$EXISTING_ACCOUNT_RESULTS")"
+            done <<< "$ACCOUNT_SEARCH_TOKENS"
+
+            DUPLICATE_MATCHES="$(
+                node -e "
+const helper = require(process.argv[1]);
+const inputAccounts = JSON.parse(process.argv[2]);
+const existingAccounts = JSON.parse(process.argv[3]);
+const results = helper.findPotentialDuplicateAccounts(inputAccounts, existingAccounts, { threshold: 85 })
+  .filter(result => Array.isArray(result.matches) && result.matches.length > 0)
+  .map(result => ({
+    input: result.input.name,
+    matches: result.matches.slice(0, 3).map(match => ({
+      target: match.target,
+      confidence: match.confidence,
+      matchedDomains: match.matchedDomains || []
+    }))
+  }));
+process.stdout.write(JSON.stringify(results));
+" "$ACCOUNT_DEDUP_PRECHECK" "$INPUT_ACCOUNTS_JSON" "$EXISTING_ACCOUNT_RESULTS" 2>/dev/null || echo "[]"
+            )"
+
+            if [[ "$DUPLICATE_MATCHES" != "[]" ]]; then
+                DUPLICATE_SUMMARY="$(
+                    printf '%s' "$DUPLICATE_MATCHES" | jq -r '
+                      .[]
+                      | "\(.input) -> " + (.matches | map("\(.target) (\(.confidence)%)") | join(", "))
+                    ' 2>/dev/null || true
+                )"
+                emit_pretool_decision \
+                  "deny" \
+                  "DATA_VALIDATION_BLOCKED: Account create/upsert matched existing accounts at or above the 85% dedup threshold." \
+                  "Potential duplicate Accounts detected before write: $(printf '%s' "$DUPLICATE_SUMMARY" | paste -sd '; ' -). Run a dedup review before creating new Account records."
+                exit 0
+            fi
+        fi
+    fi
+fi
+
+# Run validation via Node.js data-quality-monitor
 VALIDATION_RESULT=$(node -e "
 const { BUILT_IN_RULES } = require('$DATA_QUALITY_MONITOR');
 const fs = require('fs');
@@ -665,6 +913,11 @@ VALID_COUNT=$(echo "$VALIDATION_RESULT" | jq '.validCount // 0' 2>/dev/null || e
 QUALITY_SCORE=$(echo "$VALIDATION_RESULT" | jq '.qualityScore // 0' 2>/dev/null || echo "0")
 QUALITY_CONFIDENCE=$(echo "$VALIDATION_RESULT" | jq '.qualityConfidence // null' 2>/dev/null || echo "null")
 STALE_HARD_VIOLATIONS=$(echo "$VALIDATION_RESULT" | jq '.staleHardGateViolations // 0' 2>/dev/null || echo "0")
+PRECHECK_WARNING_COUNT="${#PRECHECK_WARNINGS[@]}"
+PRECHECK_WARNING_TEXT=""
+if [ "$PRECHECK_WARNING_COUNT" -gt 0 ]; then
+    PRECHECK_WARNING_TEXT=$(printf '%s\n' "${PRECHECK_WARNINGS[@]}" | awk '!seen[$0]++')
+fi
 
 # Log validation result
 log_entry=$(jq -nc \
@@ -714,18 +967,23 @@ ${FIRST_ERRORS}"
 fi
 
 # Handle warnings
-if [ "$WARNING_COUNT" -gt 0 ]; then
+if [ "$WARNING_COUNT" -gt 0 ] || [ "$PRECHECK_WARNING_COUNT" -gt 0 ]; then
+    TOTAL_WARNING_COUNT=$((WARNING_COUNT + PRECHECK_WARNING_COUNT))
     if [ "$STRICT" == "1" ]; then
         FIRST_WARNINGS=$(echo "$VALIDATION_RESULT" | jq -r '.warnings[:3][] | "- Record \(.record): \(.field // "record"): \(.message)"' 2>/dev/null)
+        if [ -n "$PRECHECK_WARNING_TEXT" ]; then
+            FIRST_WARNINGS="${FIRST_WARNINGS}
+${PRECHECK_WARNING_TEXT}"
+        fi
 
         [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" warning "$HOOK_NAME" "Data validation warnings (STRICT mode)" \
-            "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
+            "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$TOTAL_WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
 
         if [ -f "$OUTPUT_FORMATTER" ]; then
             node "$OUTPUT_FORMATTER" warning \
                 "Data Validation Warnings (Strict Mode)" \
-                "$WARNING_COUNT warnings found - blocking due to STRICT mode" \
-                "Operation:$OPERATION_TYPE,Warnings:$WARNING_COUNT,Records:$RECORD_COUNT,QualityScore:$QUALITY_SCORE,QualityConfidence:$QUALITY_CONFIDENCE" \
+                "$TOTAL_WARNING_COUNT warnings found - blocking due to STRICT mode" \
+                "Operation:$OPERATION_TYPE,Warnings:$TOTAL_WARNING_COUNT,Records:$RECORD_COUNT,QualityScore:$QUALITY_SCORE,QualityConfidence:$QUALITY_CONFIDENCE" \
                 "Review warnings and fix if needed,Set DATA_VALIDATION_STRICT=0 to allow with warnings" \
                 "" 1>&2 2>/dev/null || true
         fi
@@ -735,18 +993,22 @@ ${FIRST_WARNINGS}"
 
         emit_pretool_decision \
           "deny" \
-          "DATA_VALIDATION_WARNINGS_STRICT: ${WARNING_COUNT} warnings found in ${RECORD_COUNT} records." \
+          "DATA_VALIDATION_WARNINGS_STRICT: ${TOTAL_WARNING_COUNT} warnings found in ${RECORD_COUNT} records." \
           "$WARNING_CONTEXT"
         exit 0
     else
-        WARNING_CONTEXT="Data validation warnings for ${OPERATION_TYPE}: ${WARNING_COUNT} warnings, ${VALID_COUNT}/${RECORD_COUNT} valid, quality score ${QUALITY_SCORE}."
+        WARNING_CONTEXT="Data validation warnings for ${OPERATION_TYPE}: ${TOTAL_WARNING_COUNT} warnings, ${VALID_COUNT}/${RECORD_COUNT} valid, quality score ${QUALITY_SCORE}."
+        if [ -n "$PRECHECK_WARNING_TEXT" ]; then
+            WARNING_CONTEXT="${WARNING_CONTEXT}
+${PRECHECK_WARNING_TEXT}"
+        fi
         [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed with warnings" \
-            "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
+            "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$TOTAL_WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
 
-        echo "Data validation: $VALID_COUNT/$RECORD_COUNT records valid ($WARNING_COUNT warnings, quality score $QUALITY_SCORE)" >&2
+        echo "Data validation: $VALID_COUNT/$RECORD_COUNT records valid ($TOTAL_WARNING_COUNT warnings, quality score $QUALITY_SCORE)" >&2
         emit_pretool_decision \
           "allow" \
-          "DATA_VALIDATION_WARNINGS: ${WARNING_COUNT} warnings found in ${RECORD_COUNT} records." \
+          "DATA_VALIDATION_WARNINGS: ${TOTAL_WARNING_COUNT} warnings found in ${RECORD_COUNT} records." \
           "$WARNING_CONTEXT"
         exit 0
     fi
@@ -755,6 +1017,14 @@ fi
 # All validation passed
 [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed" \
     "{\"operationType\":\"$OPERATION_TYPE\",\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE,\"staleHardViolations\":$STALE_HARD_VIOLATIONS}" 2>/dev/null || true
+
+if [ "$PRECHECK_WARNING_COUNT" -gt 0 ]; then
+    emit_pretool_decision \
+      "allow" \
+      "DATA_VALIDATION_WARNINGS: ${PRECHECK_WARNING_COUNT} preflight warning(s) detected for ${OPERATION_TYPE}." \
+      "$PRECHECK_WARNING_TEXT"
+    exit 0
+fi
 
 emit_pretool_noop
 exit 0

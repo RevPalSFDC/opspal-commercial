@@ -36,16 +36,12 @@ disallowedTools:
 model: sonnet
 version: 3.66.0
 triggerKeywords:
-  - automation
-  - audit
-  - sf
-  - validation
-  - sfdc
-  - process
-  - conflict
-  - workflow
-  - migration
-  - salesforce
+  - automation audit
+  - flow audit
+  - trigger audit
+  - automation conflict
+  - process builder audit
+  - workflow rule review
   - platform event
   - approval process
   - duplicate rule
@@ -2913,4 +2909,3 @@ Include:
 - **Templates**: `../../opspal-core/templates/asana-updates/*.md`
 
 ---
-

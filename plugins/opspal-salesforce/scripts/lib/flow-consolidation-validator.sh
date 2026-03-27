@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 # Flow Consolidation Validator
 #
@@ -23,22 +25,34 @@ fi
 validate_flow_consolidation() {
     local org="$1"
     local object="$2"
+    local flow_dir="${3:-}"
+    local required_types=("Renewal" "New Business" "Upsell" "Downgrade")
+    local missing_types=()
 
     # Validate command inputs
     if [ -z "$org" ] || [ -z "$object" ];  then
         echo "❌ Error: Missing required parameters"
-        echo "USAGE: $0 -o <org> -n <object>"
+        echo "USAGE: $0 -o <org> -n <object> [--flow-dir <dir>]"
         exit $EXIT_CONFIG_ERROR
     fi
 
-    # Check existing flows
-    echo "Checking existing flows for $object in $org"
+    echo "Checking flow consolidation coverage for $object in $org"
 
-    # Simulate flow count
-    local flow_count=0
+    if [ -n "$flow_dir" ] && [ -d "$flow_dir" ]; then
+        for opportunity_type in "${required_types[@]}"; do
+            if ! grep -Rqi -- "$opportunity_type" "$flow_dir"/*.flow-meta.xml 2>/dev/null; then
+                missing_types+=("$opportunity_type")
+            fi
+        done
 
-    if [ $flow_count -gt 1 ];  then
-        echo "⚠️ Multiple flows detected. Consider consolidation."
+        if ! grep -RqiE 'subscription|interval' "$flow_dir"/*.flow-meta.xml 2>/dev/null; then
+            echo "⚠️ No subscription interval stamping flows detected in $flow_dir"
+            exit $EXIT_VALIDATION_ERROR
+        fi
+    fi
+
+    if [ "${#missing_types[@]}" -gt 0 ]; then
+        echo "⚠️ Missing subscription interval coverage for: ${missing_types[*]}"
         exit $EXIT_VALIDATION_ERROR
     fi
 
@@ -59,6 +73,11 @@ while [ $# -gt 0 ];  do
             shift
             shift
             ;;
+        --flow-dir)
+            FLOW_DIR="$2"
+            shift
+            shift
+            ;;
         *)
             echo "Unknown parameter passed: $1"
             exit $EXIT_CONFIG_ERROR
@@ -66,4 +85,4 @@ while [ $# -gt 0 ];  do
     esac
 done
 
-validate_flow_consolidation "$ORG" "$OBJECT"
+validate_flow_consolidation "$ORG" "$OBJECT" "${FLOW_DIR:-}"

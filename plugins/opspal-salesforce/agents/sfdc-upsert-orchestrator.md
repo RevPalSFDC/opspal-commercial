@@ -171,6 +171,11 @@ What type of upsert operation?
 
 **Delegate to `sfdc-upsert-matcher`:**
 
+**Mandatory Account dedup gate**:
+- Before any Account create path, run a name-based dedup pre-check against existing Accounts.
+- Treat `85%` fuzzy confidence as the minimum duplicate-review threshold.
+- Include website and known email-domain evidence when available so vanity and secondary domains are considered, not just `Account.Website`.
+
 ```
 Task(
   subagent_type: 'opspal-salesforce:sfdc-upsert-matcher',
