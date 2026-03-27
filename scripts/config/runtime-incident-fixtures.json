@@ -2,7 +2,7 @@
   "fixtures": [
     {
       "label": "salesforce-deploy-incident",
-      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-deploy-incident.log",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-deploy-incident.txt",
       "expect": "fail",
       "incidentClass": "flow_validation_scope_mismatch",
       "sourceOfTruth": "hook-runtime",
@@ -33,7 +33,7 @@
     },
     {
       "label": "salesforce-tool-projection-mismatch",
-      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.log",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.txt",
       "expect": "fail",
       "incidentClass": "external_runtime_projection_loss",
       "sourceOfTruth": "host-runtime",
@@ -55,7 +55,7 @@
     },
     {
       "label": "repeated-specialist-projection-loss",
-      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.log",
+      "path": "plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.txt",
       "expect": "fail",
       "incidentClass": "external_runtime_projection_loss",
       "sourceOfTruth": "host-runtime",

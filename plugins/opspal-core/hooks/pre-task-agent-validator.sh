@@ -326,7 +326,11 @@ read_agent_metadata() {
 
 read_agent_boot_integrity_report() {
     local resolved_agent="$1"
-    local payload_json="${2:-{}}"
+    local payload_json="${2:-}"
+
+    if [[ -z "$payload_json" ]]; then
+        payload_json='{}'
+    fi
 
     if [[ -z "$resolved_agent" ]] || [[ ! -f "$AGENT_BOOT_INTEGRITY_VALIDATOR" ]] || ! command -v node &> /dev/null; then
         echo '{}'
@@ -566,9 +570,13 @@ persist_parent_context_deploy_clearance() {
 
 is_claude_internal_helper_agent() {
     local agent_name="$1"
-    local tool_input_json="${2:-{}}"
+    local tool_input_json="${2:-}"
     local description=""
     local allowlist_value
+
+    if [[ -z "$tool_input_json" ]]; then
+        tool_input_json='{}'
+    fi
 
     if [[ -z "$agent_name" ]] || [[ "$agent_name" == *:* ]]; then
         return 1

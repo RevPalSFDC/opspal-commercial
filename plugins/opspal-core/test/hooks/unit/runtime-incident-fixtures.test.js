@@ -20,7 +20,7 @@ const {
 
 const TOOL_PROJECTION_FIXTURE = path.join(
   PROJECT_ROOT,
-  'plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.log'
+  'plugins/opspal-core/test/hooks/fixtures/claude-debug-salesforce-tool-projection-mismatch.txt'
 );
 const ROUTE_PROFILE_FIXTURE = path.join(
   PROJECT_ROOT,

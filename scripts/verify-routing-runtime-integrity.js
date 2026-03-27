@@ -78,12 +78,12 @@ function buildCombinedReport() {
       failures: runtimeIncidentFixtures.failures,
       fixtures: runtimeIncidentFixtures.results.map((result) => ({
         label: result.label,
-        primaryFailure: result.analysis.primaryFailure?.kind || null,
-        incidentClass: result.classification.incidentClass,
-        sourceOfTruth: result.classification.sourceOfTruth,
-        summary: result.classification.summary,
-        diagnostics: result.classification.diagnostics,
-        detectedFailures: result.replayFailures.length
+        primaryFailure: result.analysis?.primaryFailure?.kind || null,
+        incidentClass: result.classification?.incidentClass || null,
+        sourceOfTruth: result.classification?.sourceOfTruth || null,
+        summary: result.classification?.summary || null,
+        diagnostics: result.classification?.diagnostics || null,
+        detectedFailures: Array.isArray(result.replayFailures) ? result.replayFailures.length : 0
       }))
     }
   };

@@ -1,0 +1,42 @@
+2026-03-20T19:30:48.010Z [DEBUG] Getting matching hook commands for SessionStart with query: clear
+2026-03-20T19:30:48.010Z [DEBUG] Matched 10 unique hooks for query "clear" (10 before deduplication)
+2026-03-20T19:30:48.043Z [DEBUG] Hook output does not start with {, treating as plain text
+2026-03-20T19:30:48.069Z [DEBUG] Hook SessionStart:clear (SessionStart) success:
+[INFO] Session starting for Marketo instance: default
+[WARN] Marketo not configured.
+2026-03-20T19:30:51.078Z [DEBUG] getPluginSkills: Processing 10 enabled plugins
+2026-03-20T19:30:51.092Z [DEBUG] Total plugin commands loaded: 272
+2026-03-20T19:30:51.095Z [DEBUG] Total plugin skills loaded: 162
+2026-03-20T19:31:14.461Z [DEBUG] Sending 439 skills via attachment (initial, 437 total sent)
+2026-03-20T19:30:56.993Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-03-20T19:30:56.994Z [DEBUG] Matched 15 unique hooks for query "Bash" (15 before deduplication)
+2026-03-20T19:30:57.012Z [DEBUG] Hook output does not start with {, treating as plain text
+2026-03-20T19:30:57.119Z [DEBUG] bashToolHasPermission: tree-sitter unavailable, using legacy shell-quote path
+2026-03-20T19:30:57.282Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-03-20T19:30:57.282Z [DEBUG] Matched 10 unique hooks for query "Bash" (10 before deduplication)
+2026-03-20T19:32:19.090Z [DEBUG] Hook PreToolUse:Bash (PreToolUse) error:
+DEPLOY BLOCKED: sf project deploy must be run through a deployment agent.
+Use: Agent(subagent_type='opspal-salesforce:sfdc-deployment-manager', prompt='<your deploy request>')
+2026-03-20T19:32:19.990Z [DEBUG] Hook PreToolUse:Bash (PreToolUse) success:
+Report Quality Gate output omitted
+2026-03-20T19:32:25.986Z [DEBUG] Hook PreToolUse:Bash (PreToolUse) success:
+PRE-DEPLOYMENT COMPREHENSIVE VALIDATION
+2026-03-20T19:33:03.996Z [DEBUG] Hook PreToolUse:Bash (PreToolUse) success:
+{
+  "suppressOutput": true,
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Flow validation failed: 492 logic error(s), 0 structural error(s), 956 duplicate assignment error(s), 0 field existence error(s). Fix issues or set SKIP_FLOW_VALIDATION=1 to bypass."
+  }
+}
+2026-03-20T19:33:03.997Z [INFO] Slow PreToolUse hooks: 44939ms for Bash (13 hooks)
+2026-03-20T19:36:04.275Z [DEBUG] Matched 1 unique hooks for query "opspal-core:instance-deployer" (1 before deduplication)
+2026-03-20T19:36:05.928Z [DEBUG] Read tool error (3ms): EISDIR: illegal operation on a directory, read '/mnt/c/Users/cnace/RevPal/workspace/orgs/lula/platforms/salesforce/staging'
+2026-03-20T19:43:22.039Z [DEBUG] Hook PreToolUse:Agent (PreToolUse) success:
+{"tool_input":{"description":"Deploy metadata to lula-staging","prompt":"Deploy the following metadata to lula-staging from project dir orgs/lula/platforms/salesforce/staging/:\n\nSource dirs:\n- force-app/objects/Account/quickActions\n- force-app/objects/Contact/quickActions\n- force-app/layouts\n\nThese are 2 Quick Action XML files and 4 layout files. NO FLOWS are being deployed.\n\nCRITICAL: The pre-deploy-flow-validation.sh PreToolUse hook is blocking sf project deploy commands because it scans existing flows in the force-app directory and finds pre-existing errors. Since this deploy contains ZERO flows, the validation is irrelevant.","subagent_type":"opspal-salesforce:sfdc-deployment-manager"}}
+2026-03-20T19:47:55.158Z [DEBUG] Hook PreToolUse (/home/revpal/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-salesforce/hooks/pre-deploy-flow-validation.sh) returned permissionDecision: deny (reason: Flow validation failed: 492 logic error(s), 0 structural error(s), 956 duplicate assignment error(s), 0 field existence error(s). Fix issues or set SKIP_FLOW_VALIDATION=1 to bypass.)
+2026-03-20T19:51:47.081Z [DEBUG] Hook output does not start with {, treating as plain text
+2026-03-20T19:51:47.081Z [DEBUG] PostToolUse:Agent hook error
+2026-03-20T19:52:05.971Z [DEBUG] Hook output does not start with {, treating as plain text
+2026-03-20T19:52:05.971Z [DEBUG] PostToolUse:Bash hook error

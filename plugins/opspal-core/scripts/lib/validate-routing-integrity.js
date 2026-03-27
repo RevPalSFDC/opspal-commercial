@@ -23,6 +23,7 @@ const {
 const {
   buildCanonicalKeywordMap,
   collectCanonicalAgentTargets,
+  getRoutingPatternsPath,
   loadRoutingPatterns,
   resolveCorePluginRoot
 } = require('./canonical-routing-registry');
@@ -31,12 +32,13 @@ const { TaskRouter } = require('./task-router');
 const { collectRoutingSemanticsViolations } = require('./validate-routing-state-semantics');
 
 const LOCAL_PLUGIN_ROOT = path.resolve(__dirname, '..', '..');
-const PLUGIN_ROOT = resolveCorePluginRoot(LOCAL_PLUGIN_ROOT) || resolvePluginRoot(LOCAL_PLUGIN_ROOT);
+const PLUGIN_ROOT = resolvePluginRoot(LOCAL_PLUGIN_ROOT) || LOCAL_PLUGIN_ROOT;
 const ROUTING_INDEX_PATH = path.join(PLUGIN_ROOT, 'routing-index.json');
+const ROUTING_PATTERNS_PATH = getRoutingPatternsPath(LOCAL_PLUGIN_ROOT);
 const ROUTING_CAPABILITY_RULES_PATH = path.join(PLUGIN_ROOT, 'config', 'routing-capability-rules.json');
 const AGENT_TOOL_REGISTRY_PATH = path.join(PLUGIN_ROOT, 'scripts', 'lib', 'agent-tool-registry.js');
 const AUTHORITY_FILES = [
-  path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'),
+  ROUTING_PATTERNS_PATH,
   path.join(PLUGIN_ROOT, 'scripts/lib/task-router.js'),
   path.join(PLUGIN_ROOT, 'scripts/lib/pre-execution-validator.js'),
   path.join(PLUGIN_ROOT, 'scripts/lib/__tests__/task-router.test.js')
@@ -130,6 +132,10 @@ function readJson(filePath) {
 
 function uniqueSorted(values = []) {
   return Array.from(new Set(values.filter(Boolean))).sort((left, right) => String(left).localeCompare(String(right)));
+}
+
+function loadResolvedRoutingPatterns() {
+  return loadRoutingPatterns(LOCAL_PLUGIN_ROOT);
 }
 
 function normalizeComparableValue(value) {
@@ -288,7 +294,7 @@ function addFailure(failures, code, message, details = {}) {
 function collectAuditedSalesforceAgents() {
   const agents = [...TARGETED_SALESFORCE_BASH_AGENTS];
   const capabilityConfig = readJson(ROUTING_CAPABILITY_RULES_PATH);
-  const routingPatterns = readJson(path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'));
+  const routingPatterns = loadResolvedRoutingPatterns();
 
   for (const rule of capabilityConfig?.salesforce?.rules || []) {
     const preferredAgent = String(rule.preferred_agent || rule.preferredAgent || '').trim();
@@ -516,7 +522,7 @@ function validateCapabilityRuleTargets(failures) {
 }
 
 function validateRouteRequirementDerivation(failures) {
-  const routingPatterns = readJson(path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'));
+  const routingPatterns = loadResolvedRoutingPatterns();
   const mixedCleanupPattern = (routingPatterns?.mandatoryPatterns?.patterns || []).find((pattern) => pattern.id === 'mixed-salesforce-data-cleanup');
   const mergePattern = (routingPatterns?.mandatoryPatterns?.patterns || []).find((pattern) => pattern.id === 'record-dedup-merge');
   const routeChecks = [
@@ -587,7 +593,7 @@ function validateRouteRequirementDerivation(failures) {
 }
 
 function validateMixedCleanupRouteContract(failures) {
-  const routingPatterns = readJson(path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'));
+  const routingPatterns = loadResolvedRoutingPatterns();
   const mixedCleanupPattern = (routingPatterns?.mandatoryPatterns?.patterns || []).find((pattern) => pattern.id === 'mixed-salesforce-data-cleanup');
   const expectedPreferredAgent = 'opspal-salesforce:sfdc-orchestrator';
   const expectedFamily = [
@@ -605,7 +611,7 @@ function validateMixedCleanupRouteContract(failures) {
       failures,
       'mixed_cleanup_route_missing',
       'Mandatory mixed-salesforce-data-cleanup route is missing from routing-patterns.json',
-      { file: path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'), routeId: 'mixed-salesforce-data-cleanup' }
+      { file: ROUTING_PATTERNS_PATH, routeId: 'mixed-salesforce-data-cleanup' }
     );
     return;
   }
@@ -616,7 +622,7 @@ function validateMixedCleanupRouteContract(failures) {
       'mixed_cleanup_route_wrong_preferred_agent',
       `mixed-salesforce-data-cleanup must remain orchestrator-led and target ${expectedPreferredAgent}`,
       {
-        file: path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'),
+        file: ROUTING_PATTERNS_PATH,
         routeId: 'mixed-salesforce-data-cleanup',
         expectedAgent: expectedPreferredAgent,
         actualAgent: mixedCleanupPattern.agent || null
@@ -633,7 +639,7 @@ function validateMixedCleanupRouteContract(failures) {
       'mixed_cleanup_route_family_drift',
       'mixed-salesforce-data-cleanup no longer preserves the orchestrator-led specialist family',
       {
-        file: path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json'),
+        file: ROUTING_PATTERNS_PATH,
         routeId: 'mixed-salesforce-data-cleanup',
         expectedFamily,
         actualFamily: currentFamily,
@@ -1036,14 +1042,14 @@ function writeReportFile(reportFile, report) {
 
 function validateRoutingIntegrity() {
   const failures = [];
-  const registry = loadRoutingPatterns(PLUGIN_ROOT);
+  const registry = loadResolvedRoutingPatterns();
 
   if (!registry || typeof registry !== 'object' || !registry.platformPatterns) {
     addFailure(
       failures,
       'invalid_routing_registry',
       'routing-patterns.json could not be loaded',
-      { file: path.join(PLUGIN_ROOT, 'config', 'routing-patterns.json') }
+      { file: ROUTING_PATTERNS_PATH }
     );
   } else {
     validateCanonicalTargets(failures);

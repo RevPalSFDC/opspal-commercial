@@ -1,0 +1,9 @@
+2026-03-25T09:12:01.100Z INFO Processing 10 enabled plugins
+2026-03-25T09:12:01.240Z INFO Total plugin commands loaded: 272
+2026-03-25T09:12:01.260Z INFO Total plugin skills loaded: 162
+2026-03-25T09:12:03.010Z INFO Routed to opspal-salesforce:sfdc-data-operations
+2026-03-25T09:12:03.220Z WARN That agent couldn't execute — it only has Read/Write tools.
+2026-03-25T09:12:03.640Z WARN ROUTING_SPECIALIST_REQUIRED: Direct Salesforce core-object data query detected.
+2026-03-25T09:12:04.030Z INFO Routed to opspal-salesforce:sfdc-bulkops-orchestrator
+2026-03-25T09:12:04.210Z WARN That agent also couldn't execute (no Bash).
+2026-03-25T09:12:04.490Z ERROR ROUTING_SPECIALIST_TOOL_PROJECTION_MISMATCH: This workflow was already cleared to 'opspal-salesforce:sfdc-bulkops-orchestrator', whose active profile expects Bash-capable execution.

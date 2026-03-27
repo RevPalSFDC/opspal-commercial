@@ -41,6 +41,7 @@
   "homepage": "https://github.com/RevPalSFDC/opspal-commercial#readme",
   "dependencies": {
     "dotenv": "~17.2.3",
+    "js-yaml": "~4.1.0",
     "playwright": "~1.57.0"
   }
 }

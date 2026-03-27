@@ -16,7 +16,7 @@ const DEPLOY_INCIDENT_FIXTURE = path.join(
   __dirname,
   '..',
   'fixtures',
-  'claude-debug-salesforce-deploy-incident.log'
+  'claude-debug-salesforce-deploy-incident.txt'
 );
 const READ_FAILURE_FIXTURE = path.join(
   __dirname,
@@ -28,7 +28,7 @@ const TOOL_PROJECTION_FIXTURE = path.join(
   __dirname,
   '..',
   'fixtures',
-  'claude-debug-salesforce-tool-projection-mismatch.log'
+  'claude-debug-salesforce-tool-projection-mismatch.txt'
 );
 const ROUTE_PROFILE_FIXTURE = path.join(
   __dirname,
