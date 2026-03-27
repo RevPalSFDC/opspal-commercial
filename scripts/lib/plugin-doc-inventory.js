@@ -56,13 +56,21 @@ function normalizeLifecycle(lifecycle = {}) {
   };
 }
 
+function isPluginDirectory(pluginsRoot, entry) {
+  if (!entry.isDirectory() || entry.name.startsWith('.') || !entry.name.startsWith('opspal-')) {
+    return false;
+  }
+
+  return fs.existsSync(path.join(pluginsRoot, entry.name, '.claude-plugin', 'plugin.json'));
+}
+
 function collectPluginInventory(repoRoot = path.resolve(__dirname, '..', '..')) {
   const pluginsRoot = path.join(repoRoot, 'plugins');
   const generatedAt = new Date().toISOString();
   const generatedDate = generatedAt.slice(0, 10);
 
   const pluginDirs = fs.readdirSync(pluginsRoot, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+    .filter((entry) => isPluginDirectory(pluginsRoot, entry))
     .map((entry) => entry.name)
     .sort();
 
@@ -115,5 +123,6 @@ module.exports = {
   MARKETPLACE_OWNER,
   MARKETPLACE_REPOSITORY,
   MARKETPLACE_REPOSITORY_SLUG,
-  collectPluginInventory
+  collectPluginInventory,
+  isPluginDirectory
 };
