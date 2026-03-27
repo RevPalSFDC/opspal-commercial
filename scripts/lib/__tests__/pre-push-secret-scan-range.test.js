@@ -14,7 +14,10 @@ function writeExecutable(filePath, contents) {
   fs.writeFileSync(filePath, contents, { mode: 0o755 });
 }
 
-test('pre-push scans only outgoing commit ranges with gitleaks log opts', () => {
+function runHook({
+  remoteSha = 'remote-old',
+  remoteShaExists = true
+} = {}) {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'pre-push-secret-range-'));
   const binDir = path.join(tempRoot, 'bin');
   const logPath = path.join(tempRoot, 'gitleaks.log');
@@ -38,10 +41,16 @@ case "$*" in
   "rev-parse --verify origin/main")
     exit 0
     ;;
+  "rev-parse --verify ${remoteSha}^{commit}")
+    if [ "${remoteShaExists ? '1' : '0'}" = "1" ]; then
+      exit 0
+    fi
+    exit 1
+    ;;
   "merge-base HEAD origin/main")
     printf '%s\\n' "merge-base-commit"
     ;;
-  "diff --name-only remote-old local-new")
+  "diff --name-only ${remoteShaExists ? remoteSha : 'merge-base-commit'} local-new")
     exit 0
     ;;
   *)
@@ -87,12 +96,22 @@ exit 0
         MOCK_REPO_ROOT: repoPath,
         GITLEAKS_LOG: logPath
       },
-      input: 'refs/heads/main local-new refs/heads/main remote-old\n'
+      input: `refs/heads/main local-new refs/heads/main ${remoteSha}\n`
     }
   );
 
-  const gitleaksCalls = fs.readFileSync(logPath, 'utf8');
+  return fs.readFileSync(logPath, 'utf8');
+}
+
+test('pre-push scans only outgoing commit ranges with gitleaks log opts', () => {
+  const gitleaksCalls = runHook();
   assert.match(gitleaksCalls, /--log-opts remote-old\.\.local-new/);
   assert.doesNotMatch(gitleaksCalls, /--log-opts HEAD\b/);
   assert.doesNotMatch(gitleaksCalls, /--log-opts merge-base-commit\.\.HEAD/);
+});
+
+test('pre-push falls back to a local merge-base when the negotiated remote sha is unavailable locally', () => {
+  const gitleaksCalls = runHook({ remoteSha: 'remote-missing', remoteShaExists: false });
+  assert.match(gitleaksCalls, /--log-opts merge-base-commit\.\.local-new/);
+  assert.doesNotMatch(gitleaksCalls, /remote-missing\.\.local-new/);
 });

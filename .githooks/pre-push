@@ -56,6 +56,11 @@ resolve_base_ref() {
     return
   fi
 
+  if ! git rev-parse --verify "${remote_sha}^{commit}" >/dev/null 2>&1; then
+    printf '%s\n' "$DEFAULT_BASE"
+    return
+  fi
+
   printf '%s\n' "$remote_sha"
 }
 
