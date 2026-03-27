@@ -215,6 +215,8 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]]; then
             process.exit(d.terminated === true ? 0 : 1);
         ' 2>/dev/null; then
             log_verbose "License terminated — wiping cache and blocking decryption"
+            # Server confirmed license termination - wipe active cache only.
+            # Do NOT remove license-cache.json.bak (preserved as recovery artifact).
             rm -f "$HOME/.opspal/license-cache.json" "$HOME/.opspal/license.key" 2>/dev/null || true
             LICENSE_TERMINATED=1
             MESSAGES+=("License terminated: decryption blocked. Contact support@gorevpal.com")

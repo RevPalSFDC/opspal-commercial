@@ -14,6 +14,8 @@ const DEFAULT_OFFLINE_GRACE_DAYS = parseInt(process.env.OPSPAL_OFFLINE_GRACE_DAY
 const HOME_DIR = process.env.HOME || os.homedir();
 const OPSPAL_DIR = path.join(HOME_DIR, '.opspal');
 const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
+const CACHE_BACKUP_FILE = path.join(OPSPAL_DIR, 'license-cache.json.bak');
+const CACHE_TERMINATED_MARKER_FILE = path.join(OPSPAL_DIR, 'license-cache.terminated');
 const LEGACY_LICENSE_KEY_FILE = path.join(OPSPAL_DIR, 'license.key');
 const SESSION_RUNTIME_DIR = path.join(HOME_DIR, '.claude', 'opspal-enc', 'runtime');
 const CURRENT_SESSION_POINTER = path.join(SESSION_RUNTIME_DIR, '.current-session');
@@ -69,6 +71,41 @@ function writeLicenseCache(payload) {
   const tempFile = `${CACHE_FILE}.tmp.${process.pid}`;
   fs.writeFileSync(tempFile, `${JSON.stringify(payload, null, 2)}\n`, { mode: 0o600 });
   fs.renameSync(tempFile, CACHE_FILE);
+  backupLicenseCache(payload);
+  clearTerminatedStateMarker();
+}
+
+function backupLicenseCache(payload = readLicenseCache()) {
+  if (!payload) {
+    return false;
+  }
+
+  ensureOpspalDir();
+
+  const tempFile = `${CACHE_BACKUP_FILE}.tmp.${process.pid}`;
+  fs.writeFileSync(tempFile, `${JSON.stringify(payload, null, 2)}\n`, { mode: 0o600 });
+  fs.renameSync(tempFile, CACHE_BACKUP_FILE);
+
+  return true;
+}
+
+function restoreLicenseCacheFromBackup() {
+  if (fs.existsSync(CACHE_FILE) || !fs.existsSync(CACHE_BACKUP_FILE) || fs.existsSync(CACHE_TERMINATED_MARKER_FILE)) {
+    return false;
+  }
+
+  const tempFile = `${CACHE_FILE}.tmp.${process.pid}`;
+
+  try {
+    ensureOpspalDir();
+    fs.copyFileSync(CACHE_BACKUP_FILE, tempFile);
+    fs.chmodSync(tempFile, 0o600);
+    fs.renameSync(tempFile, CACHE_FILE);
+    return true;
+  } catch {
+    removeFile(tempFile);
+    return false;
+  }
 }
 
 function removeFile(filePath) {
@@ -79,6 +116,18 @@ function removeFile(filePath) {
   } catch {
     // Best-effort cleanup only.
   }
+}
+
+function markTerminatedState() {
+  ensureOpspalDir();
+
+  const tempFile = `${CACHE_TERMINATED_MARKER_FILE}.tmp.${process.pid}`;
+  fs.writeFileSync(tempFile, `${JSON.stringify({ terminated_at: new Date().toISOString() })}\n`, { mode: 0o600 });
+  fs.renameSync(tempFile, CACHE_TERMINATED_MARKER_FILE);
+}
+
+function clearTerminatedStateMarker() {
+  removeFile(CACHE_TERMINATED_MARKER_FILE);
 }
 
 function clearRuntimeArtifacts() {
@@ -355,11 +404,14 @@ function buildInvalidSessionResponse(options = {}) {
 function buildLiveFailureResponse(err, cache) {
   const responseBody = err && err.response ? err.response : {};
   const terminated = responseBody.terminated === true;
-  const statusCode = err && err.statusCode ? err.statusCode : 0;
-  const shouldInvalidateCache = terminated || statusCode === 401 || statusCode === 403 || statusCode === 404;
+  const hasValidResponseBody = responseBody
+    && typeof responseBody === 'object'
+    && Object.keys(responseBody).length > 0;
+  const shouldInvalidateCache = terminated && hasValidResponseBody;
 
   if (shouldInvalidateCache) {
     clearLocalLicenseState({ clearKeyFiles: true });
+    markTerminatedState();
   }
 
   return {
@@ -375,6 +427,10 @@ function buildLiveFailureResponse(err, cache) {
 }
 
 async function sessionToken(options = {}) {
+  if (!fs.existsSync(CACHE_FILE)) {
+    restoreLicenseCacheFromBackup();
+  }
+
   const context = resolveActivationContext(options);
   const cache = context.cache;
 
@@ -479,8 +535,9 @@ async function pollStatus(options = {}) {
   });
 
   if (response.statusCode >= 400) {
-    if (response.statusCode === 401 || response.statusCode === 403 || response.statusCode === 404) {
+    if (response.body && response.body.terminated === true) {
       clearLocalLicenseState({ clearKeyFiles: true });
+      markTerminatedState();
     }
 
     return response.body;
@@ -541,6 +598,8 @@ async function deactivate(options = {}) {
   }
 
   clearLocalLicenseState({ clearKeyFiles: true });
+  clearTerminatedStateMarker();
+  removeFile(CACHE_BACKUP_FILE);
 
   return {
     success: true,
@@ -656,13 +715,17 @@ async function runCli(argv = process.argv.slice(2)) {
 }
 
 module.exports = {
+  CACHE_BACKUP_FILE,
   CACHE_FILE,
+  CACHE_TERMINATED_MARKER_FILE,
   CURRENT_SESSION_POINTER,
   DEFAULT_SERVER_URL,
   LEGACY_LICENSE_KEY_FILE,
   activate,
   activateLicenseRequest,
+  backupLicenseCache,
   clearLocalLicenseState,
+  deactivate,
   getLicenseCacheFile,
   getServerUrl,
   hasScopedKeyBundle,
@@ -671,13 +734,13 @@ module.exports = {
   readLicenseCache,
   requestJson,
   resolveActivationContext,
+  restoreLicenseCacheFromBackup,
   runCli,
   sessionToken,
   status,
   validateSessionPayload,
   verifyToken,
-  writeLicenseCache,
-  deactivate
+  writeLicenseCache
 };
 
 if (require.main === module) {

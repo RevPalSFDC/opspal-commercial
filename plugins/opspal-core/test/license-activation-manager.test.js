@@ -166,4 +166,50 @@ describe('license activation manager', () => {
       message: 'OpsPal premium assets remain locked until you activate with /activate-license <email> <license-key>.'
     });
   });
+
+  test('activate CLI output stays limited to the activation summary fields', async () => {
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const activateLicenseRequest = jest.fn().mockResolvedValue({
+      valid: true,
+      session_token: 'session-token',
+      tier: 'professional',
+      organization: 'Acme Corp',
+      allowed_asset_tiers: ['core', 'salesforce'],
+      tier_metadata: {},
+      blocked_domains: [],
+      key_bundle_version: 2,
+      grace_until: '2026-03-25T12:00:00.000Z',
+      key_bundle: {
+        version: 2,
+        keys: {
+          core: Buffer.alloc(32, 1).toString('base64')
+        }
+      }
+    });
+
+    jest.doMock('../scripts/lib/license-auth-client', () => ({
+      activate: activateLicenseRequest,
+      getLicenseCacheFile: () => '/tmp/license-cache.json',
+      getServerUrl: () => 'https://license.gorevpal.com',
+      status: jest.fn(() => ({ status: 'not_activated' })),
+      validateSessionPayload: jest.fn()
+    }));
+
+    const manager = require('../scripts/lib/license-activation-manager');
+    await manager.runCli(['activate', 'user@example.com', 'OPSPAL-PRO-demo', '--machine-id', 'machine-01']);
+
+    const lines = logSpy.mock.calls.map((call) => call[0]);
+    expect(lines).toEqual([
+      'Activated OPSPAL-PRO-demo for user@example.com',
+      'Server: https://license.gorevpal.com',
+      'Machine ID: machine-01',
+      'Tier: professional',
+      'Allowed domains: core, salesforce',
+      'Cache file: /tmp/license-cache.json'
+    ]);
+
+    const output = lines.join('\n');
+    expect(output).not.toContain('/encrypt-assets');
+    expect(output).not.toContain('/finishopspalupdate');
+  });
 });
