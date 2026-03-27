@@ -23,7 +23,7 @@
 | Plugin | Version | Status | Owner | Stability | Last Reviewed | Deprecation Date | Replaced By |
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.11 | `active` | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-core` | 2.46.2 | `active` | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-core` | 2.46.3 | `active` | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-data-hygiene` | 1.2.2 | `deprecated` | `revpal-platform` | `deprecated` | `2026-02-15` | `2026-02-15` | `opspal-core` |
 | `opspal-gtm-planning` | 2.3.4 | `active` | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-hubspot` | 3.9.14 | `active` | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
