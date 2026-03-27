@@ -5,15 +5,18 @@
  *
  * Tests the receipt-primary verification path:
  * - Valid receipt in output → pass
- * - Tampered receipt in output → fail with specific classification
- * - No receipt + plan-only text → fail
- * - No receipt + execution evidence → weak pass with warning
+ * - Tampered or malformed receipt in output → fail with specific classification
+ * - No receipt + plan-only text → hard fail
+ * - No receipt + fabricated execution narrative → hard fail
+ * - Missing proof records an integrity stop for parent execution
  * - Non-investigation agent → skip
  *
  * @copyright 2024-2026 RevPal Partners, LLC
  */
 
 const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
@@ -21,6 +24,8 @@ const HOOK_PATH = path.resolve(__dirname, '..', '..', '..', '..', '..',
   'plugins/opspal-core/hooks/post-investigation-execution-proof.sh');
 const RECEIPT_LIB = path.resolve(__dirname, '..', '..', '..', '..', '..',
   'plugins/opspal-salesforce/scripts/lib/execution-receipt.js');
+const { sanitizeSessionKey } = require(path.resolve(__dirname, '..', '..', '..', '..', '..',
+  'plugins/opspal-core/scripts/lib/routing-state-manager.js'));
 
 // Load the receipt library to generate test receipts
 const {
@@ -139,21 +144,21 @@ The suggested SOQL commands will inventory all automation.`;
       'Should flag execution proof missing');
   }));
 
-  // --- Section 4: No receipt + execution evidence → weak pass ---
+  // --- Section 4: Malformed receipt → fail ---
   console.log('');
-  console.log('[4] No receipt + execution evidence → heuristic pass with warning');
+  console.log('[4] Malformed receipt fails proof');
 
-  results.push(await runTest('execution evidence without receipt gives weak pass', () => {
+  results.push(await runTest('malformed receipt marker block is treated as invalid receipt', () => {
     const output = `sfdc-automation-auditor completed investigation.
-Found 47 flows in the org.
-Query returned "totalSize": 47 records.
-Success: 89 validation rules retrieved.`;
+<!-- EXECUTION_RECEIPT_V1
+{"version":"1.0","type":"investigation-execution-receipt","broken":true}
+Execution never closed this receipt block`;
     const r = runHook(output);
     assert.strictEqual(r.exitCode, 0);
-    // Should either pass silently or give a receipt-missing warning
-    if (r.stdout.includes('RECEIPT_MISSING_HEURISTIC_PASS')) {
-      assert.ok(true, 'Got expected heuristic pass warning');
-    }
+    assert.ok(
+      r.stdout.includes('INVESTIGATION_RECEIPT_INVALID') || r.stderr.includes('INVESTIGATION_RECEIPT_INVALID'),
+      'Malformed receipt should be treated as invalid, not missing'
+    );
   }));
 
   // --- Section 5: Non-investigation agent → skip ---
@@ -167,20 +172,64 @@ Success: 89 validation rules retrieved.`;
     assert.ok(!r.stdout.includes('EXECUTION_PROOF'), 'Should not check non-investigation agents');
   }));
 
-  // --- Section 6: Fabricated narrative without receipt → fail ---
+  // --- Section 6: Fabricated narrative without receipt → hard fail ---
   console.log('');
   console.log('[6] Fabricated narrative without receipt fails');
 
-  results.push(await runTest('plausible narrative with "found 47 flows" but no receipt gets warning', () => {
+  results.push(await runTest('plausible narrative with "found 47 flows" but no receipt fails hard', () => {
     const output = `sfdc-automation-auditor investigation report.
 Found 47 flows and 12 triggers.
-The org has 89 validation rules.
-Here are the recommended queries for deeper analysis.
-These should be run to get complete results.`;
+Query returned "totalSize": 47 records.
+The org has 89 validation rules.`;
     const r = runHook(output);
     assert.strictEqual(r.exitCode, 0);
-    // Has both execution evidence AND plan-only evidence, but no receipt
-    // Should at minimum warn about missing receipt
+    assert.ok(
+      r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+      r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+      'Fabricated narrative should no longer weak-pass'
+    );
+    assert.ok(!r.stdout.includes('INVESTIGATION_RECEIPT_MISSING_HEURISTIC_PASS'),
+      'Legacy heuristic-pass state must not be emitted');
+  }));
+
+  // --- Section 7: Missing proof records integrity stop ---
+  console.log('');
+  console.log('[7] Missing proof records integrity stop');
+
+  results.push(await runTest('missing receipt records an integrity stop for the session', () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'proof-hook-state-'));
+    const sessionId = 'receipt-proof-integrity-stop';
+    try {
+      const output = `sfdc-automation-auditor completed investigation.
+Found 47 flows in the org.
+Query returned "totalSize": 47 records.`;
+      const r = runHook(output, {
+        HOME: tempHome,
+        CLAUDE_SESSION_ID: sessionId
+      });
+      assert.strictEqual(r.exitCode, 0);
+      assert.ok(
+        r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+        r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+        'Missing receipt should emit a proof failure'
+      );
+
+      const statePath = path.join(
+        tempHome,
+        '.claude',
+        'routing-state',
+        `${sanitizeSessionKey(sessionId)}.json`
+      );
+      assert.ok(fs.existsSync(statePath), 'Proof failure should persist routing state');
+
+      const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+      assert.strictEqual(state.integrity_stop_active, true, 'Integrity stop should be active');
+      assert.strictEqual(state.integrity_stop_agent, 'sfdc-automation-auditor');
+      assert.strictEqual(state.integrity_stop_platform, 'salesforce');
+      assert.strictEqual(state.integrity_stop_reason, 'missing_receipt');
+    } finally {
+      fs.rmSync(tempHome, { recursive: true, force: true });
+    }
   }));
 
   // --- Summary ---

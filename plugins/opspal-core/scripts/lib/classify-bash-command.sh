@@ -18,7 +18,7 @@ bash_classifier_to_lower() {
 is_salesforce_cli_command() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
-  printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)([[:space:]]|$)'
+  printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)([[:space:]]|$)'
 }
 
 extract_salesforce_target_alias() {
@@ -34,6 +34,7 @@ extract_salesforce_target_alias() {
   target_alias="${target_alias%\"}"
   target_alias="${target_alias#\'}"
   target_alias="${target_alias%\'}"
+  target_alias="$(printf '%s' "$target_alias" | sed -E "s/^[\"'()]+//; s/[\"';)]+$//")"
 
   printf '%s' "$target_alias"
 }
@@ -78,11 +79,11 @@ is_sf_data_query_command() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:data:soql:query([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:data:soql:query([[:space:]]|$)'; then
     return 0
   fi
 
@@ -93,11 +94,11 @@ is_sf_deploy_command() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+project[[:space:]]+deploy([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:source:deploy([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:source:deploy([[:space:]]|$)'; then
     return 0
   fi
 
@@ -111,15 +112,15 @@ is_sf_retrieve_command() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+project[[:space:]]+retrieve([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+project[[:space:]]+retrieve([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:source:retrieve([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:source:retrieve([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+project[[:space:]]+generate[[:space:]]+manifest([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+project[[:space:]]+generate[[:space:]]+manifest([[:space:]]|$)'; then
     return 0
   fi
 
@@ -130,19 +131,19 @@ uses_sf_bulk_api_contract() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+(export|import)([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+(export|import)([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+bulk[[:space:]]+(create|update|upsert|delete)([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+bulk[[:space:]]+(create|update|upsert|delete)([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+upsert[[:space:]]+bulk([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+upsert[[:space:]]+bulk([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:data:(bulk:(create|update|upsert|delete)|tree:import)([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:data:(bulk:(create|update|upsert|delete)|tree:import)([[:space:]]|$)'; then
     return 0
   fi
 
@@ -153,11 +154,11 @@ is_sf_upsert_or_import_command() {
   local command_lower
   command_lower="$(bash_classifier_to_lower "$1")"
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+(upsert|import|bulk[[:space:]]+upsert)([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+(upsert|import|bulk[[:space:]]+upsert)([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:data:(record:upsert|bulk:upsert|tree:import)([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:data:(record:upsert|bulk:upsert|tree:import)([[:space:]]|$)'; then
     return 0
   fi
 
@@ -172,15 +173,92 @@ is_sf_write_like_command() {
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete|bulk[[:space:]]+(create|update|upsert|delete))([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+(create|update|upsert|delete|record[[:space:]]+create|record[[:space:]]+update|record[[:space:]]+upsert|record[[:space:]]+delete|bulk[[:space:]]+(create|update|upsert|delete))([[:space:]]|$)'; then
     return 0
   fi
 
-  if printf '%s' "$command_lower" | grep -qE '^[[:space:]]*sfdx[[:space:]]+force:data:record:(create|update|upsert|delete)([[:space:]]|$)'; then
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:data:record:(create|update|upsert|delete)([[:space:]]|$)'; then
     return 0
   fi
 
   return 1
+}
+
+command_has_shell_ambiguity() {
+  local command="${1:-}"
+
+  if printf '%s' "$command" | grep -qE '(^|[[:space:];|&])eval([[:space:]]|$)'; then
+    return 0
+  fi
+
+  if printf '%s' "$command" | grep -qE '(^|[[:space:];|&])xargs([[:space:]]|$)'; then
+    return 0
+  fi
+
+  if printf '%s' "$command" | grep -Fq '$('; then
+    return 0
+  fi
+
+  if printf '%s' "$command" | grep -Fq '`'; then
+    return 0
+  fi
+
+  if printf '%s' "$command" | grep -qE '\$\{![A-Za-z_][A-Za-z0-9_]*\}'; then
+    return 0
+  fi
+
+  return 1
+}
+
+classify_full_command_risk() {
+  local command="${1:-}"
+  local command_lower=""
+
+  if ! is_salesforce_cli_command "$command"; then
+    printf 'unknown'
+    return 0
+  fi
+
+  command_lower="$(bash_classifier_to_lower "$command")"
+
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+data[[:space:]]+(bulk[[:space:]]+(create|update|upsert|delete)|upsert[[:space:]]+bulk)([[:space:]]|$)|(^|[^[:alnum:]_])sfdx[[:space:]]+force:data:bulk:(create|update|upsert|delete)([[:space:]]|$)'; then
+    printf 'bulk-mutate'
+    return 0
+  fi
+
+  if is_sf_deploy_command "$command"; then
+    printf 'deploy'
+    return 0
+  fi
+
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+org[[:space:]]+(assign|user)[[:space:]]+perm(set|ission)([[:space:]]|$)'; then
+    printf 'permission'
+    return 0
+  fi
+
+  if is_sf_write_like_command "$command"; then
+    printf 'mutate'
+    return 0
+  fi
+
+  if is_sf_retrieve_command "$command"; then
+    printf 'retrieve'
+    return 0
+  fi
+
+  if printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+apex[[:space:]]+tail([[:space:]]|$)|(^|[^[:alnum:]_])sfdx[[:space:]]+force:apex:log:tail([[:space:]]|$)'; then
+    printf 'debug'
+    return 0
+  fi
+
+  if is_sf_data_query_command "$command" || \
+     printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])(sf|sfdx)[[:space:]]+(sobject[[:space:]]+(describe|list)|org[[:space:]]+(display|list)|data[[:space:]]+(export|get))([[:space:]]|$)' || \
+     printf '%s' "$command_lower" | grep -qE '(^|[^[:alnum:]_])sfdx[[:space:]]+force:(schema:sobject:list|sobject:describe)([[:space:]]|$)'; then
+    printf 'read'
+    return 0
+  fi
+
+  printf 'unknown'
 }
 
 classify_sf_command() {
@@ -392,6 +470,28 @@ classify_pipe_segments() {
   local highest="unknown"
   local segment=""
   local seg_class=""
+  local full_command_risk=""
+
+  full_command_risk="$(classify_full_command_risk "$command")"
+  if command_has_shell_ambiguity "$command"; then
+    case "$full_command_risk" in
+      bulk-mutate|deploy|mutate|permission|retrieve)
+        printf '%s' "$full_command_risk"
+        return 0
+        ;;
+      read|debug)
+        printf 'unknown'
+        return 0
+        ;;
+    esac
+  fi
+
+  case "$full_command_risk" in
+    bulk-mutate|deploy|mutate|permission|retrieve)
+      printf '%s' "$full_command_risk"
+      return 0
+      ;;
+  esac
 
   # Use awk to split on | (simple pipe, not ||)
   # Replace || with a placeholder first to avoid splitting on it
@@ -420,13 +520,35 @@ EOF
 classify_command_chain() {
   local command="${1:-}"
   local command_lower=""
+  local full_command_risk=""
 
   command_lower="$(bash_classifier_to_lower "$command")"
+  full_command_risk="$(classify_full_command_risk "$command")"
+
+  if command_has_shell_ambiguity "$command"; then
+    case "$full_command_risk" in
+      bulk-mutate|deploy|mutate|permission|retrieve)
+        printf '%s' "$full_command_risk"
+        return 0
+        ;;
+      read|debug)
+        printf 'unknown'
+        return 0
+        ;;
+    esac
+  fi
+
+  case "$full_command_risk" in
+    bulk-mutate|deploy|mutate|permission|retrieve)
+      printf '%s' "$full_command_risk"
+      return 0
+      ;;
+  esac
 
   # Fast path: no chain operators → delegate to single-command classifier
   if ! printf '%s' "$command_lower" | grep -qE '&&|;|\|\|'; then
     # Still check for pipe mutations within a single chain segment
-    if printf '%s' "$command_lower" | grep -q '|'; then
+    if [[ "$command_lower" == *"|"* ]]; then
       classify_pipe_segments "$command"
       return 0
     fi
@@ -451,7 +573,7 @@ classify_command_chain() {
     [ -z "$segment" ] && continue
 
     # Each segment might itself contain pipes
-    if printf '%s' "$segment" | grep -q '|'; then
+    if [[ "$segment" == *"|"* ]]; then
       seg_class="$(classify_pipe_segments "$segment")"
     else
       local stripped_seg

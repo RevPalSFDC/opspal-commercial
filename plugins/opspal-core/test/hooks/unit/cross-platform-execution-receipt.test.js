@@ -202,6 +202,11 @@ async function main() {
     assert.ok(hsAgent.includes('execution-completion-contract'));
   }));
 
+  const hsWorkflowAgent = fs.readFileSync(path.join(PROJECT_ROOT, 'plugins/opspal-hubspot/agents/hubspot-workflow-auditor.md'), 'utf8');
+  results.push(await runTest('hubspot-workflow-auditor imports execution contract', () => {
+    assert.ok(hsWorkflowAgent.includes('execution-completion-contract'));
+  }));
+
   const mkAutoAgent = fs.readFileSync(path.join(PROJECT_ROOT, 'plugins/opspal-marketo/agents/marketo-automation-auditor.md'), 'utf8');
   results.push(await runTest('marketo-automation-auditor imports execution contract', () => {
     assert.ok(mkAutoAgent.includes('execution-completion-contract'));
@@ -210,6 +215,16 @@ async function main() {
   const mkDiscAgent = fs.readFileSync(path.join(PROJECT_ROOT, 'plugins/opspal-marketo/agents/marketo-instance-discovery.md'), 'utf8');
   results.push(await runTest('marketo-instance-discovery imports execution contract', () => {
     assert.ok(mkDiscAgent.includes('execution-completion-contract'));
+  }));
+
+  const mkAnalyticsAgent = fs.readFileSync(path.join(PROJECT_ROOT, 'plugins/opspal-marketo/agents/marketo-analytics-assessor.md'), 'utf8');
+  results.push(await runTest('marketo-analytics-assessor imports execution contract', () => {
+    assert.ok(mkAnalyticsAgent.includes('execution-completion-contract'));
+  }));
+
+  const mkLeadQualityAgent = fs.readFileSync(path.join(PROJECT_ROOT, 'plugins/opspal-marketo/agents/marketo-lead-quality-assessor.md'), 'utf8');
+  results.push(await runTest('marketo-lead-quality-assessor imports execution contract', () => {
+    assert.ok(mkLeadQualityAgent.includes('execution-completion-contract'));
   }));
 
   // --- Section 5: Hook behavior with MCP receipts ---
@@ -251,6 +266,54 @@ async function main() {
     assert.ok(!r.stdout.includes('RECEIPT_INVALID'));
   }));
 
+  results.push(await runTest('valid HubSpot workflow-auditor receipt passes hook', () => {
+    const result = buildMcpInvestigationReceipt({
+      platform: 'hubspot',
+      orgIdentifier: 'portal-456',
+      helper: 'hubspot-workflow-auditor',
+      branches: [
+        { name: 'workflows', success: true, recordCount: 38, tool: 'workflow_get_all' },
+        { name: 'workflowDetails', success: true, recordCount: 38, tool: 'workflow_hydrate' }
+      ]
+    });
+    const output = `hubspot-workflow-auditor completed workflow audit.\n${result.receiptBlock}\n`;
+    const r = runHook(output);
+    assert.strictEqual(r.exitCode, 0);
+    assert.ok(!r.stdout.includes('RECEIPT_INVALID'));
+  }));
+
+  results.push(await runTest('valid Marketo analytics receipt passes hook', () => {
+    const result = buildMcpInvestigationReceipt({
+      platform: 'marketo',
+      orgIdentifier: 'mkt-analytics-001',
+      helper: 'marketo-analytics-assessor',
+      branches: [
+        { name: 'programs', success: true, recordCount: 12, tool: 'program_list' },
+        { name: 'analytics', success: true, recordCount: 12, tool: 'analytics_program_report' }
+      ]
+    });
+    const output = `marketo-analytics-assessor completed analysis.\n${result.receiptBlock}\n`;
+    const r = runHook(output);
+    assert.strictEqual(r.exitCode, 0);
+    assert.ok(!r.stdout.includes('RECEIPT_INVALID'));
+  }));
+
+  results.push(await runTest('valid Marketo lead-quality receipt passes hook', () => {
+    const result = buildMcpInvestigationReceipt({
+      platform: 'marketo',
+      orgIdentifier: 'mkt-lead-quality-001',
+      helper: 'marketo-lead-quality-assessor',
+      branches: [
+        { name: 'leadQuery', success: true, recordCount: 140, tool: 'lead_query' },
+        { name: 'activityAudit', success: true, recordCount: 52, tool: 'analytics_activities' }
+      ]
+    });
+    const output = `marketo-lead-quality-assessor completed lead quality assessment.\n${result.receiptBlock}\n`;
+    const r = runHook(output);
+    assert.strictEqual(r.exitCode, 0);
+    assert.ok(!r.stdout.includes('RECEIPT_INVALID'));
+  }));
+
   results.push(await runTest('plan-only HubSpot output without receipt fails', () => {
     const output = `hubspot-assessment-analyzer analysis complete.
 Here are the queries that should be executed against the portal:
@@ -259,6 +322,28 @@ Here are the queries that should be executed against the portal:
 These queries would need to be executed to complete the investigation.`;
     const r = runHook(output);
     assert.ok(r.stdout.includes('EXECUTION_PROOF'));
+  }));
+
+  results.push(await runTest('receipt-required cross-platform agents fail deterministically when receipt is absent', () => {
+    const missingReceiptOutputs = [
+      `hubspot-workflow-auditor completed workflow audit.\nFound 38 workflows in the portal.\nQuery returned "total": 38 results.`,
+      `marketo-analytics-assessor completed analytics review.\nFound 12 programs and 6 campaign reports.\nQuery returned "results": [].`,
+      `marketo-lead-quality-assessor completed database health audit.\nFound 140 leads with stale activity.\nQuery returned "moreResult": false.`
+    ];
+
+    for (const output of missingReceiptOutputs) {
+      const r = runHook(output);
+      assert.strictEqual(r.exitCode, 0);
+      assert.ok(
+        r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+        r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+        'Receipt-required agent should fail deterministically when receipt is missing'
+      );
+      assert.ok(
+        !r.stdout.includes('INVESTIGATION_RECEIPT_MISSING_HEURISTIC_PASS'),
+        'Legacy heuristic-pass state must not be emitted'
+      );
+    }
   }));
 
   // --- Section 6: CLI receipt generation adapter ---

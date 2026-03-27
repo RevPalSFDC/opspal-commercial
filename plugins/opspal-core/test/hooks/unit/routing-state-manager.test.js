@@ -358,6 +358,57 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('record-integrity-stop persists proof-failure execution block metadata', async () => {
+    const home = createTempHome();
+    const sessionKey = 'integrity-stop-record-test';
+
+    try {
+      const output = runStateManager('record-integrity-stop', sessionKey, {
+        home,
+        extraArgs: ['sfdc-automation-auditor', 'salesforce', 'missing_receipt', 'plan_only=2; execution=0']
+      });
+      const result = JSON.parse(output);
+      assert.strictEqual(result.recorded, true);
+      assert.strictEqual(result.integrity_stop_active, true);
+      assert.strictEqual(result.integrity_stop_agent, 'sfdc-automation-auditor');
+      assert.strictEqual(result.integrity_stop_platform, 'salesforce');
+      assert.strictEqual(result.integrity_stop_reason, 'missing_receipt');
+
+      const checkOutput = runStateManager('check', sessionKey, { home });
+      const checkResult = JSON.parse(checkOutput);
+      assert.strictEqual(checkResult.integrityStopActive, true, 'Check output should expose active integrity stop');
+      assert.strictEqual(checkResult.integrityStopAgent, 'sfdc-automation-auditor');
+      assert.strictEqual(checkResult.integrityStopPlatform, 'salesforce');
+      assert.strictEqual(checkResult.integrityStopReason, 'missing_receipt');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
+  results.push(await runTest('mark-cleared clears integrity-stop metadata for a re-delegated specialist', async () => {
+    const home = createTempHome();
+    const sessionKey = 'integrity-stop-clear-test';
+
+    try {
+      runStateManager('record-integrity-stop', sessionKey, {
+        home,
+        extraArgs: ['sfdc-automation-auditor', 'salesforce', 'missing_receipt', 'heuristic_execution=4; plan_only=0']
+      });
+
+      runStateManager('mark-cleared', sessionKey, {
+        home,
+        extraArgs: ['opspal-salesforce:sfdc-automation-auditor']
+      });
+
+      const checkOutput = runStateManager('check', sessionKey, { home });
+      const checkResult = JSON.parse(checkOutput);
+      assert.strictEqual(checkResult.integrityStopActive, false, 'mark-cleared should clear integrity stop');
+      assert.strictEqual(checkResult.routeCleared, true, 'Route should remain cleared after specialist re-delegation');
+    } finally {
+      fs.rmSync(home, { recursive: true, force: true });
+    }
+  }));
+
   const passed = results.filter((result) => result.passed).length;
   const failed = results.length - passed;
 

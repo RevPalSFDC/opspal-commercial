@@ -42,6 +42,12 @@ function stripWrappingQuotes(value) {
   return value.replace(/^["']|["']$/g, '');
 }
 
+function sanitizeShellToken(value) {
+  return stripWrappingQuotes(String(value || '').trim())
+    .replace(/^[("'`]+/, '')
+    .replace(/["';)`]+$/, '');
+}
+
 function loadRoutingCapabilityConfig(configPath = DEFAULT_ROUTING_CAPABILITY_CONFIG_PATH) {
   if (!ROUTING_CAPABILITY_CONFIG_CACHE.has(configPath)) {
     const raw = fs.readFileSync(configPath, 'utf8');
@@ -121,7 +127,7 @@ function toLower(value) {
 }
 
 function normalizeEnvironment(value, patterns = SALESFORCE_ALIAS_PATTERNS) {
-  const normalized = stripWrappingQuotes(String(value || '').trim());
+  const normalized = sanitizeShellToken(value);
   if (!normalized) {
     return 'unknown';
   }
@@ -157,7 +163,7 @@ function environmentResult(environment, source, metadata = {}) {
 }
 
 function getSalesforceCachePath(alias, options = {}) {
-  const targetAlias = stripWrappingQuotes(alias);
+  const targetAlias = sanitizeShellToken(alias);
   const tempDir = options.tempDir || process.env.TMPDIR || '/tmp';
 
   if (!targetAlias) {
@@ -248,7 +254,7 @@ function querySalesforceOrgInfo(alias, options = {}) {
 }
 
 function detectSalesforceEnvironment(target, options = {}) {
-  const alias = stripWrappingQuotes(
+  const alias = sanitizeShellToken(
     target ||
     options.alias ||
     process.env.SALESFORCE_ENVIRONMENT ||
@@ -294,7 +300,7 @@ function csvHasValue(csv, needle) {
 }
 
 function detectHubspotEnvironment(target, options = {}) {
-  const candidate = stripWrappingQuotes(
+  const candidate = sanitizeShellToken(
     target ||
     options.portalId ||
     options.baseUrl ||
@@ -324,7 +330,7 @@ function detectHubspotEnvironment(target, options = {}) {
 }
 
 function detectMarketoEnvironment(target, options = {}) {
-  const candidate = stripWrappingQuotes(
+  const candidate = sanitizeShellToken(
     target ||
     options.baseUrl ||
     options.instanceName ||
@@ -365,6 +371,20 @@ function splitShellCommandClauses(command) {
     .filter(Boolean);
 }
 
+function matchesAnywhere(command, ...patterns) {
+  const raw = String(command || '');
+  return patterns.some((pattern) => pattern.test(raw));
+}
+
+function hasShellAmbiguity(command) {
+  const raw = String(command || '');
+  return /(?:^|[\s;|&])eval(?:\s|$)/.test(raw) ||
+    /(?:^|[\s;|&])xargs(?:\s|$)/.test(raw) ||
+    /\$\(/.test(raw) ||
+    /`/.test(raw) ||
+    /\$\{![A-Za-z_][A-Za-z0-9_]*\}/.test(raw);
+}
+
 function matchesAnyShellClause(command, ...patterns) {
   const clauses = splitShellCommandClauses(command);
   const candidates = clauses.length > 0 ? clauses : [String(command || '')];
@@ -375,84 +395,128 @@ function matchesAnyShellClause(command, ...patterns) {
 }
 
 function isSalesforceCliCommand(command) {
-  return matchesAnyShellClause(command, /^[\s]*(sf|sfdx)([\s]|$)/i);
+  return matchesAnywhere(command, /(^|[^A-Za-z0-9_])(sf|sfdx)([\s]|$)/i);
 }
 
 function extractSalesforceTargetAlias(command) {
   const match = String(command || '').match(/(?:^|\s)(?:--target-org|--username|-u|-o)(?:=|\s+)("[^"]+"|'[^']+'|[^\s]+)/i);
-  return stripWrappingQuotes(match ? match[1] : '');
+  return sanitizeShellToken(match ? match[1] : '');
 }
 
 function isSfDataQueryCommand(command) {
-  return matchesAnyShellClause(
+  return matchesAnywhere(
     command,
-    /^[\s]*(sf|sfdx)\s+data\s+query([\s]|$)/i,
-    /^[\s]*sfdx\s+force:data:soql:query([\s]|$)/i
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+query([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:data:soql:query([\s]|$)/i
   );
 }
 
 function isSfDeployCommand(command) {
-  return matchesAnyShellClause(
+  return matchesAnywhere(
     command,
-    /^[\s]*(sf|sfdx)\s+project\s+deploy([\s]|$)/i,
-    /^[\s]*sfdx\s+force:source:deploy([\s]|$)/i
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+project\s+deploy([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:source:deploy([\s]|$)/i
+  );
+}
+
+function isSfRetrieveCommand(command) {
+  return matchesAnywhere(
+    command,
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+project\s+retrieve([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:source:retrieve([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+project\s+generate\s+manifest([\s]|$)/i
   );
 }
 
 function usesSfBulkApiContract(command) {
-  return matchesAnyShellClause(
+  return matchesAnywhere(
     command,
-    /^[\s]*(sf|sfdx)\s+data\s+(export|import)([\s]|$)/i,
-    /^[\s]*(sf|sfdx)\s+data\s+bulk\s+(create|update|upsert|delete)([\s]|$)/i,
-    /^[\s]*(sf|sfdx)\s+data\s+upsert\s+bulk([\s]|$)/i,
-    /^[\s]*sfdx\s+force:data:(bulk:(create|update|upsert|delete)|tree:import)([\s]|$)/i
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+(export|import)([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+bulk\s+(create|update|upsert|delete)([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+upsert\s+bulk([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:data:(bulk:(create|update|upsert|delete)|tree:import)([\s]|$)/i
   );
 }
 
 function isSfBulkMutationCommand(command) {
-  return matchesAnyShellClause(
+  return matchesAnywhere(
     command,
-    /^[\s]*(sf|sfdx)\s+data\s+(bulk\s+(create|update|upsert|delete)|upsert\s+bulk)([\s]|$)/i,
-    /^[\s]*sfdx\s+force:data:bulk:(create|update|upsert|delete)([\s]|$)/i
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+(bulk\s+(create|update|upsert|delete)|upsert\s+bulk)([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:data:bulk:(create|update|upsert|delete)([\s]|$)/i
   );
 }
 
 function isSfWriteLikeCommand(command) {
   return isSfDeployCommand(command) ||
-    matchesAnyShellClause(
+    matchesAnywhere(
       command,
-      /^[\s]*(sf|sfdx)\s+data\s+(create|update|upsert|delete|record\s+create|record\s+update|record\s+upsert|record\s+delete|bulk\s+(create|update|upsert|delete))([\s]|$)/i,
-      /^[\s]*sfdx\s+force:data:record:(create|update|upsert|delete)([\s]|$)/i
+      /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+(create|update|upsert|delete|record\s+create|record\s+update|record\s+upsert|record\s+delete|bulk\s+(create|update|upsert|delete))([\s]|$)/i,
+      /(^|[^A-Za-z0-9_])sfdx\s+force:data:record:(create|update|upsert|delete)([\s]|$)/i
     );
+}
+
+function classifySalesforceCommandLineRisk(command) {
+  if (!isSalesforceCliCommand(command)) {
+    return 'unknown';
+  }
+
+  if (matchesAnywhere(
+    command,
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+(bulk\s+(create|update|upsert|delete)|upsert\s+bulk)([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:data:bulk:(create|update|upsert|delete)([\s]|$)/i
+  )) {
+    return 'bulk-mutate';
+  }
+
+  if (isSfDeployCommand(command)) {
+    return 'deploy';
+  }
+
+  if (matchesAnywhere(command, /(^|[^A-Za-z0-9_])(sf|sfdx)\s+org\s+(assign|user)\s+perm(set|ission)([\s]|$)/i)) {
+    return 'permission';
+  }
+
+  if (isSfWriteLikeCommand(command)) {
+    return 'mutate';
+  }
+
+  if (isSfRetrieveCommand(command)) {
+    return 'retrieve';
+  }
+
+  if (matchesAnywhere(
+    command,
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+apex\s+tail([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:apex:log:tail([\s]|$)/i
+  )) {
+    return 'debug';
+  }
+
+  if (
+    isSfDataQueryCommand(command) ||
+    matchesAnywhere(
+      command,
+      /(^|[^A-Za-z0-9_])(sf|sfdx)\s+(sobject\s+(describe|list)|org\s+(display|list)|data\s+(export|get))([\s]|$)/i,
+      /(^|[^A-Za-z0-9_])sfdx\s+force:(schema:sobject:list|sobject:describe)([\s]|$)/i
+    )
+  ) {
+    return 'read';
+  }
+
+  return 'unknown';
 }
 
 function classifySalesforceCommand(command, options = {}) {
   const targetAlias = extractSalesforceTargetAlias(command);
   const target = detectSalesforceEnvironment(targetAlias, options);
-  let intent = 'unknown';
+  let intent = classifySalesforceCommandLineRisk(command);
   let volume = 'single';
 
-  if (matchesAnyShellClause(command, /^[\s]*(sf|sfdx)\s+org\s+(assign|user)\s+perm(set|ission)([\s]|$)/i)) {
-    intent = 'permission';
-  } else if (isSfDeployCommand(command)) {
-    intent = 'deploy';
+  if (intent === 'deploy') {
     volume = 'bounded';
-  } else if (matchesAnyShellClause(command, /^[\s]*(sf|sfdx)\s+apex\s+tail([\s]|$)|^[\s]*sfdx\s+force:apex:log:tail([\s]|$)/i)) {
-    intent = 'debug';
-  } else if (usesSfBulkApiContract(command) && !matchesAnyShellClause(command, /^[\s]*(sf|sfdx)\s+data\s+export([\s]|$)/i)) {
-    intent = 'bulk-mutate';
+  } else if (intent === 'bulk-mutate') {
     volume = /\b(all|entire)\b/i.test(command || '') ? 'mass' : 'bulk';
-  } else if (isSfWriteLikeCommand(command)) {
-    intent = 'mutate';
-  } else if (
-    isSfDataQueryCommand(command) ||
-    matchesAnyShellClause(
-      command,
-      /^[\s]*(sf|sfdx)\s+(sobject\s+(describe|list)|org\s+(display|list)|data\s+(export|get))([\s]|$)/i,
-      /^[\s]*sfdx\s+force:(schema:sobject:list|sobject:describe)([\s]|$)/i
-    )
-  ) {
-    intent = 'read';
+  } else if (intent === 'read') {
     volume = usesSfBulkApiContract(command) ? 'bulk' : 'single';
   }
 
@@ -805,7 +869,7 @@ function isReadOnly(classification = {}) {
     return true;
   }
 
-  return ['read', 'verify', 'debug', 'monitor'].includes(classification.intent);
+  return ['read', 'retrieve', 'verify', 'debug', 'monitor'].includes(classification.intent);
 }
 
 function requiresEscalation(classification = {}, environment) {
@@ -865,16 +929,29 @@ function classifyBashCommand(command, options = {}) {
   const rawCommand = String(command || '');
 
   if (isSalesforceCliCommand(rawCommand)) {
-    return finalizeClassification(classifySalesforceCommand(rawCommand, options));
+    const classification = classifySalesforceCommand(rawCommand, options);
+    if (hasShellAmbiguity(rawCommand) && ['read', 'retrieve', 'debug'].includes(classification.intent)) {
+      classification.intent = 'unknown';
+      classification.reversibility = inferReversibility('unknown', rawCommand);
+    }
+    return finalizeClassification(classification);
   }
 
   const hubspot = classifyHubspotCurl(rawCommand, options);
   if (hubspot) {
+    if (hasShellAmbiguity(rawCommand) && ['read', 'debug'].includes(hubspot.intent)) {
+      hubspot.intent = 'unknown';
+      hubspot.reversibility = inferReversibility('unknown', rawCommand);
+    }
     return finalizeClassification(hubspot);
   }
 
   const marketo = classifyMarketoCurl(rawCommand, options);
   if (marketo) {
+    if (hasShellAmbiguity(rawCommand) && ['read', 'debug'].includes(marketo.intent)) {
+      marketo.intent = 'unknown';
+      marketo.reversibility = inferReversibility('unknown', rawCommand);
+    }
     return finalizeClassification(marketo);
   }
 
@@ -992,10 +1069,10 @@ function classifyMCPTool(toolName, toolInput = {}, config = loadMcpPolicyConfig(
 }
 
 function isSfUpsertOrImportCommand(command) {
-  return matchesAnyShellClause(
+  return matchesAnywhere(
     command,
-    /^[\s]*(sf|sfdx)\s+data\s+(upsert|import|bulk\s+upsert)([\s]|$)/i,
-    /^[\s]*sfdx\s+force:data:(record:upsert|bulk:upsert|tree:import)([\s]|$)/i
+    /(^|[^A-Za-z0-9_])(sf|sfdx)\s+data\s+(upsert|import|bulk\s+upsert)([\s]|$)/i,
+    /(^|[^A-Za-z0-9_])sfdx\s+force:data:(record:upsert|bulk:upsert|tree:import)([\s]|$)/i
   );
 }
 

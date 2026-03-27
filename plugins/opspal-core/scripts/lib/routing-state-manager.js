@@ -22,10 +22,11 @@
  *   node routing-state-manager.js mark-bypassed <session-key> [agent]
  *   node routing-state-manager.js clear-expired
  *   node routing-state-manager.js record-projection-loss <session-key> <agent> [pattern]
+ *   node routing-state-manager.js record-integrity-stop <session-key> <agent> <platform> <reason> [detail]
  *   node routing-state-manager.js projection-loss-count <session-key>
  *   node routing-state-manager.js clear-stale <session-key> <requested-family> [--threshold-seconds=N]
  *
- * @version 2.1.0
+ * @version 2.2.0
  */
 
 const fs = require('fs');
@@ -301,6 +302,12 @@ function normalizeState(sessionKey, state = {}, existing = null) {
   const requiresSpecialist = explicitRequiresSpecialist === undefined || explicitRequiresSpecialist === null
     ? (executionBlockUntilCleared || guidanceAction === 'require_specialist' || guidanceAction === 'require_intake')
     : toBoolean(explicitRequiresSpecialist);
+  const integrityStopActive = toBoolean(
+    state.integrity_stop_active ??
+    state.integrityStopActive ??
+    existing?.integrity_stop_active ??
+    existing?.integrityStopActive
+  );
   const normalizedState = {
     session_key: normalizeSessionKey(sessionKey),
     route_id: state.route_id || state.routeId || existing?.route_id || existing?.routeId || null,
@@ -336,6 +343,19 @@ function normalizeState(sessionKey, state = {}, existing = null) {
     expires_at: expiresAt,
     ttl_seconds: ttlSeconds,
     last_resolved_agent: state.last_resolved_agent || state.lastResolvedAgent || existing?.last_resolved_agent || existing?.lastResolvedAgent || null,
+    integrity_stop_active: integrityStopActive,
+    integrity_stop_agent: state.integrity_stop_agent || state.integrityStopAgent || existing?.integrity_stop_agent || existing?.integrityStopAgent || null,
+    integrity_stop_platform: state.integrity_stop_platform || state.integrityStopPlatform || existing?.integrity_stop_platform || existing?.integrityStopPlatform || null,
+    integrity_stop_reason: state.integrity_stop_reason || state.integrityStopReason || existing?.integrity_stop_reason || existing?.integrityStopReason || null,
+    integrity_stop_detail: state.integrity_stop_detail || state.integrityStopDetail || existing?.integrity_stop_detail || existing?.integrityStopDetail || null,
+    integrity_stop_recorded_at: Number.parseInt(
+      state.integrity_stop_recorded_at ||
+      state.integrityStopRecordedAt ||
+      existing?.integrity_stop_recorded_at ||
+      existing?.integrityStopRecordedAt ||
+      (integrityStopActive ? timestamp : 0),
+      10
+    ) || null,
     projection_loss_events: Array.isArray(state.projection_loss_events)
       ? state.projection_loss_events
       : Array.isArray(existing?.projection_loss_events)
@@ -418,14 +438,26 @@ function updateStateStatus(sessionKey, status, updates = {}) {
     derivedStatusUpdates = {
       clearance_status: nextClearanceStatus,
       route_pending_clearance: false,
-      route_cleared: true
+      route_cleared: true,
+      integrity_stop_active: false,
+      integrity_stop_agent: null,
+      integrity_stop_platform: null,
+      integrity_stop_reason: null,
+      integrity_stop_detail: null,
+      integrity_stop_recorded_at: null
     };
   } else if (nextClearanceStatus === 'bypassed') {
     derivedStatusUpdates = {
       clearance_status: nextClearanceStatus,
       route_pending_clearance: false,
       route_cleared: false,
-      override_applied: true
+      override_applied: true,
+      integrity_stop_active: false,
+      integrity_stop_agent: null,
+      integrity_stop_platform: null,
+      integrity_stop_reason: null,
+      integrity_stop_detail: null,
+      integrity_stop_recorded_at: null
     };
   }
 
@@ -528,6 +560,12 @@ function checkState(sessionKey) {
       requiresSpecialist: false,
       executionBlockUntilCleared: false,
       executionBlockActive: false,
+      integrityStopActive: false,
+      integrityStopAgent: null,
+      integrityStopPlatform: null,
+      integrityStopReason: null,
+      integrityStopDetail: null,
+      integrityStopRecordedAt: null,
       routePendingClearance: false,
       routeCleared: false,
       clearanceStatus: null,
@@ -557,6 +595,7 @@ function checkState(sessionKey) {
   const overrideApplied = toBoolean(state.override_applied);
   const executionBlockUntilCleared = toBoolean(state.execution_block_until_cleared);
   const executionBlockActive = routePendingClearance && executionBlockUntilCleared && !overrideApplied;
+  const integrityStopActive = toBoolean(state.integrity_stop_active);
   const autoDelegation = normalizeAutoDelegation(state, {
     ...state,
     route_pending_clearance: routePendingClearance,
@@ -571,6 +610,12 @@ function checkState(sessionKey) {
     requiresSpecialist: toBoolean(state.requires_specialist),
     executionBlockUntilCleared,
     executionBlockActive,
+    integrityStopActive,
+    integrityStopAgent: state.integrity_stop_agent || null,
+    integrityStopPlatform: state.integrity_stop_platform || null,
+    integrityStopReason: state.integrity_stop_reason || null,
+    integrityStopDetail: state.integrity_stop_detail || null,
+    integrityStopRecordedAt: state.integrity_stop_recorded_at || null,
     routePendingClearance,
     routeCleared,
     bypassed: clearanceStatus === 'bypassed' || overrideApplied,
@@ -615,6 +660,45 @@ function recordProjectionLossEvent(sessionKey, agentName, pattern) {
     return nextState;
   }
   // No existing state — create minimal state with projection-loss data
+  const newState = normalizeState(sessionKey, updates);
+  writeStateFile(getStateFile(sessionKey), newState);
+  return newState;
+}
+
+function recordIntegrityStop(sessionKey, agentName, platform, reason, detail) {
+  const current = getState(sessionKey);
+  const timestamp = nowSeconds();
+  const requiredAgent = agentName || current?.required_agent || null;
+  const clearanceAgents = normalizeClearanceAgents(current?.clearance_agents, requiredAgent);
+  const updates = {
+    session_key: normalizeSessionKey(sessionKey),
+    required_agent: requiredAgent,
+    clearance_agents: clearanceAgents,
+    route_kind: current?.route_kind || 'investigation_integrity_stop',
+    guidance_action: current?.guidance_action || 'require_specialist',
+    routing_reason: reason || current?.routing_reason || 'investigation_integrity_stop',
+    requires_specialist: current?.requires_specialist ?? true,
+    prompt_guidance_only: current?.prompt_guidance_only ?? true,
+    prompt_blocked: current?.prompt_blocked ?? false,
+    execution_block_until_cleared: current?.execution_block_until_cleared ?? false,
+    route_pending_clearance: current?.route_pending_clearance ?? false,
+    route_cleared: current?.route_cleared ?? true,
+    clearance_status: current?.clearance_status || 'cleared',
+    last_resolved_agent: current?.last_resolved_agent || requiredAgent,
+    integrity_stop_active: true,
+    integrity_stop_agent: agentName || current?.integrity_stop_agent || requiredAgent,
+    integrity_stop_platform: platform || current?.integrity_stop_platform || null,
+    integrity_stop_reason: reason || current?.integrity_stop_reason || 'investigation_integrity_stop',
+    integrity_stop_detail: detail || current?.integrity_stop_detail || null,
+    integrity_stop_recorded_at: timestamp
+  };
+
+  if (current) {
+    const nextState = normalizeState(sessionKey, { ...current, ...updates }, current);
+    writeStateFile(getStateFile(sessionKey), nextState);
+    return nextState;
+  }
+
   const newState = normalizeState(sessionKey, updates);
   writeStateFile(getStateFile(sessionKey), newState);
   return newState;
@@ -723,6 +807,23 @@ if (require.main === module) {
       break;
     }
 
+    case 'record-integrity-stop': {
+      const sessionKey = args[1];
+      const agentName = args[2] || 'unknown';
+      const platform = args[3] || 'unknown';
+      const reason = args[4] || 'investigation_integrity_stop';
+      const detail = args[5] || '';
+      const updated = recordIntegrityStop(sessionKey, agentName, platform, reason, detail);
+      console.log(JSON.stringify({
+        recorded: true,
+        integrity_stop_active: updated?.integrity_stop_active ?? false,
+        integrity_stop_agent: updated?.integrity_stop_agent ?? null,
+        integrity_stop_platform: updated?.integrity_stop_platform ?? null,
+        integrity_stop_reason: updated?.integrity_stop_reason ?? null
+      }));
+      break;
+    }
+
     case 'clear-stale': {
       const sessionKey = args[1];
       const requestedFamily = args[2] || null;
@@ -736,7 +837,7 @@ if (require.main === module) {
 
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|record-projection-loss|projection-loss-count> [args]');
+      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|record-projection-loss|record-integrity-stop|projection-loss-count> [args]');
       process.exit(1);
   }
 }
@@ -758,6 +859,7 @@ module.exports = {
   clearStaleIfCrossFamily,
   clearExpiredStates,
   checkState,
+  recordIntegrityStop,
   recordProjectionLossEvent,
   getProjectionLossCount
 };

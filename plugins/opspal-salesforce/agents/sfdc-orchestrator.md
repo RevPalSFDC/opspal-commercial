@@ -1497,7 +1497,7 @@ Specialist fails to execute
 Investigation specialists using `investigation-fan-out.js` or `safeExecMultipleQueries` automatically produce an execution receipt (SHA-256-signed). The `post-investigation-execution-proof.sh` hook verifies this receipt on SubagentStop. When evaluating specialist results:
 - **Valid receipt** → accept the result as proven execution
 - **Invalid/tampered receipt** → reject, re-delegate or surface integrity failure
-- **Missing receipt** → treat with lower confidence; the hook falls back to text heuristics but warns
+- **Missing receipt** → treat as an integrity failure; heuristic text is diagnostic only and does not satisfy proof
 - **Never** accept plan-only output (no receipt, no execution evidence) as successful investigation
 
 ## 🎯 MANDATORY: Flow Architecture v2.0 Pattern Enforcement

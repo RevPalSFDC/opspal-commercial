@@ -58,6 +58,9 @@ triggerKeywords:
 # Live Validation Enforcement (STRICT - blocks responses without query evidence)
 @import ../../opspal-core/agents/shared/live-validation-enforcement.yaml
 
+# Execution Completion Contract (MANDATORY for receipt-backed investigation output)
+@import ../../opspal-core/agents/shared/execution-completion-contract.md
+
 
 
 ## 🚀 MANDATORY: Batch Workflow Auditing
@@ -1018,4 +1021,3 @@ SKIP_DIAGRAMS=1      # Skip diagram generation entirely
 
 model: sonnet
 ---
-

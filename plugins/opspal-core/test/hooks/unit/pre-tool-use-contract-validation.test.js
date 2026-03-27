@@ -265,6 +265,121 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Blocks sfdc-orchestrator from running specialist-owned Tooling API investigation queries directly', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf data query --query "SELECT Id FROM FlowDefinitionView LIMIT 5" --use-tooling-api --target-org sandbox --json'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-orchestrator',
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    assertStructuredRoutingDeny(result, 'ORCHESTRATOR_SPECIALIST_EXECUTION_REQUIRED', 'Orchestrator specialist-query block');
+  }));
+
+  results.push(await runTest('Allows sfdc-orchestrator coordination queries that are outside specialist investigation execution', async () => {
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf org display --target-org sandbox --json'
+        }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-orchestrator',
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Coordinator-safe command should pass');
+    assertNoStructuredDeny(result, 'Coordinator-safe command should not be denied');
+  }));
+
+  results.push(await runTest('Integrity stop blocks direct parent Salesforce execution after receipt-proof failure', async () => {
+    const sessionId = 'integrity-stop-salesforce-session';
+    writeRoutingState(tempHome, sessionId, {
+      ...buildRoutingState({
+        sessionKey: sessionId,
+        routeId: 'automation-audit',
+        requiredAgent: 'opspal-salesforce:sfdc-automation-auditor',
+        clearanceStatus: 'cleared',
+        lastResolvedAgent: 'opspal-salesforce:sfdc-automation-auditor',
+        executionBlockUntilCleared: true
+      }),
+      integrity_stop_active: true,
+      integrity_stop_agent: 'sfdc-automation-auditor',
+      integrity_stop_platform: 'salesforce',
+      integrity_stop_reason: 'missing_receipt',
+      integrity_stop_detail: 'plan_only=2; execution=0'
+    });
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        sessionKey: sessionId,
+        tool_input: { command: 'sf data query --query "SELECT Id FROM FlowDefinitionView LIMIT 5" --use-tooling-api --target-org sandbox --json' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_SESSION_ID: sessionId,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-orchestrator',
+        OPSPAL_BASH_BUDGET_ENABLED: '0'
+      }
+    });
+
+    assertStructuredRoutingDeny(result, 'INVESTIGATION_INTEGRITY_STOP', 'Integrity-stop parent execution block');
+  }));
+
+  results.push(await runTest('Integrity stop still allows aggregation/report-writing work', async () => {
+    const sessionId = 'integrity-stop-aggregation-session';
+    writeRoutingState(tempHome, sessionId, {
+      ...buildRoutingState({
+        sessionKey: sessionId,
+        routeId: 'automation-audit',
+        requiredAgent: 'opspal-salesforce:sfdc-automation-auditor',
+        clearanceStatus: 'cleared',
+        lastResolvedAgent: 'opspal-salesforce:sfdc-automation-auditor',
+        executionBlockUntilCleared: true
+      }),
+      integrity_stop_active: true,
+      integrity_stop_agent: 'sfdc-automation-auditor',
+      integrity_stop_platform: 'salesforce',
+      integrity_stop_reason: 'missing_receipt',
+      integrity_stop_detail: 'heuristic_execution=4; plan_only=0'
+    });
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Write',
+        sessionKey: sessionId,
+        tool_input: { file_path: path.join(tempHome, 'aggregated-report.md'), content: '# summary\n' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: tempHome,
+        CLAUDE_HOOK_LOG_ROOT: tempLogRoot,
+        CLAUDE_SESSION_ID: sessionId,
+        CLAUDE_AGENT_NAME: 'opspal-salesforce:sfdc-orchestrator'
+      }
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Aggregation/report-writing should still pass');
+    assertNoStructuredDeny(result, 'Aggregation/report-writing should not be denied by integrity stop');
+  }));
+
   results.push(await runTest('Denies missing Read targets with structured JSON', async () => {
     const missingRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-read-missing-'));
     try {

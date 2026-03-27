@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-26T12:33:11.088Z",
+  "buildDate": "2026-03-27T12:29:45.939Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
-  "totalHooks": 250,
+  "totalHooks": 251,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48222,6 +48222,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "post-investigation-execution-proof",
+        "description": "",
+        "file": "opspal-core/hooks/post-investigation-execution-proof.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "post-pdf-verification",
         "description": "",
         "file": "opspal-core/hooks/post-pdf-verification.sh",
@@ -49266,7 +49273,7 @@
     "totalAgents": 299,
     "totalAgentsFull": 302,
     "totalCommands": 273,
-    "totalHooks": 250,
+    "totalHooks": 251,
     "totalRoutingRules": 0,
     "totalKeywords": 2618,
     "totalKeywordsFull": 2618,
@@ -49288,7 +49295,7 @@
       "SubagentStop": 1,
       "TaskCompleted": 1,
       "Stop": 10,
-      "Unknown": 130,
+      "Unknown": 131,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,

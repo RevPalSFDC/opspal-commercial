@@ -99,6 +99,18 @@ async function runAllTests() {
     assert.strictEqual(requiresEscalation(classification), true, 'Production deploys should escalate');
   }));
 
+  results.push(await runTest('Classifies Salesforce retrieve commands as read-only retrieve operations', async () => {
+    const classification = classifyBashCommand(
+      'sf project retrieve start --metadata CustomObject:Account --target-org production'
+    );
+
+    assert.strictEqual(classification.platform, 'salesforce');
+    assert.strictEqual(classification.intent, 'retrieve');
+    assert.strictEqual(classification.target, 'production');
+    assert.strictEqual(isReadOnly(classification), true, 'Retrieve should stay read-only');
+    assert.strictEqual(requiresEscalation(classification), false, 'Retrieve should not escalate on production');
+  }));
+
   results.push(await runTest('Classifies HubSpot and Marketo curl commands correctly', async () => {
     const hubspotRead = classifyBashCommand(
       `curl -s -X POST https://api.hubapi.com/crm/v3/objects/contacts/search -d '{"filterGroups":[]}'`
@@ -215,6 +227,39 @@ async function runAllTests() {
       mixedRule.clearanceAgents.includes('opspal-salesforce:sfdc-data-operations'),
       'Mixed query/mutation routing should still admit compatible approved specialists'
     );
+  }));
+
+  results.push(await runTest('Detects disguised mutation inside a pipeline', async () => {
+    const classification = classifyBashCommand(
+      'sf data query --query "SELECT Id FROM Account" --target-org production --json | xargs sf data delete bulk --sobject Account --target-org production'
+    );
+
+    assert.strictEqual(classification.platform, 'salesforce');
+    assert.ok(
+      ['mutate', 'bulk-mutate'].includes(classification.intent),
+      `Pipeline-hidden mutation should classify as mutation, got ${classification.intent}`
+    );
+    assert.strictEqual(requiresEscalation(classification), true, 'Hidden mutation should escalate on production');
+  }));
+
+  results.push(await runTest('Detects eval-wrapped mutation intent across the full command line', async () => {
+    const classification = classifyBashCommand(
+      'CMD="sf data delete bulk --sobject Account --target-org production"; eval "$CMD"'
+    );
+
+    assert.strictEqual(classification.platform, 'salesforce');
+    assert.strictEqual(classification.intent, 'mutate');
+    assert.strictEqual(requiresEscalation(classification), true, 'eval-wrapped mutation should escalate');
+  }));
+
+  results.push(await runTest('Treats ambiguous command-substitution reads as non-read-only', async () => {
+    const classification = classifyBashCommand(
+      'RESULT=$(sf data query --query "SELECT Id FROM Account" --target-org production --json); echo "$RESULT"'
+    );
+
+    assert.strictEqual(classification.platform, 'salesforce');
+    assert.strictEqual(classification.intent, 'unknown');
+    assert.strictEqual(isReadOnly(classification), false, 'Ambiguous command substitution should not be read-only');
   }));
 
   results.push(await runTest('Loads deploy policy requirements for orchestrator and specialist enforcement', async () => {

@@ -549,6 +549,208 @@ classify_salesforce_mandatory_routing() {
     echo "$routing_json"
 }
 
+salesforce_investigation_query_targets_specialist_surface() {
+    local text="${1:-}"
+
+    printf '%s' "$text" | grep -qiE '\b(FlowDefinitionView|FlowVersionView|WorkflowRule|ValidationRule|ApexTrigger|ApexClass|DuplicateRule|DuplicateJobDefinition|AssignmentRule|EscalationRule|ProcessDefinition|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association|PermissionSetAssignment|ObjectPermissions|FieldPermissions|SetupEntityAccess|Profile|UserRole)\b'
+}
+
+caller_is_salesforce_orchestrator() {
+    local caller_agent="$1"
+
+    case "$caller_agent" in
+        opspal-salesforce:sfdc-orchestrator|sfdc-orchestrator)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+extract_salesforce_query_payload() {
+    local tool_name="$1"
+
+    case "$tool_name" in
+        Bash)
+            echo "$INPUT_DATA" | jq -r '.tool_input.command // ""' 2>/dev/null || echo ""
+            ;;
+        mcp_salesforce_data_query|mcp__salesforce__*query*)
+            echo "$INPUT_DATA" | jq -r '.tool_input.query // .tool_input.soql // ""' 2>/dev/null || echo ""
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+is_orchestrator_specialist_investigation_execution() {
+    local tool_name="$1"
+    local caller_agent="$2"
+    local command=""
+    local query_text=""
+
+    if ! caller_is_salesforce_orchestrator "$caller_agent"; then
+        return 1
+    fi
+
+    query_text="$(extract_salesforce_query_payload "$tool_name")"
+
+    case "$tool_name" in
+        Bash)
+            command="$(extract_bash_command)"
+            if ! is_sf_data_query_command "$command"; then
+                return 1
+            fi
+            if ! printf '%s' "$command" | grep -qiE -- '--use-tooling-api|FlowDefinitionView|FlowVersionView|WorkflowRule|ValidationRule|ApexTrigger|ApexClass|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association|PermissionSetAssignment|ObjectPermissions|FieldPermissions|SetupEntityAccess|Profile|UserRole'; then
+                return 1
+            fi
+            ;;
+        mcp_salesforce_data_query|mcp__salesforce__*query*)
+            if [[ -z "$query_text" ]]; then
+                return 1
+            fi
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
+    salesforce_investigation_query_targets_specialist_surface "${query_text:-$command}"
+}
+
+tool_targets_integrity_stop_platform() {
+    local tool_name="$1"
+    local platform="$2"
+    local command=""
+    local classification=""
+    local classified_platform="unknown"
+    local classified_intent="unknown"
+
+    case "$tool_name" in
+        Bash)
+            command="$(extract_bash_command)"
+            if [[ -z "$command" ]]; then
+                return 1
+            fi
+
+            if [[ -f "$OPERATION_CLASSIFIER" ]] && command -v node &>/dev/null; then
+                classification="$(node "$OPERATION_CLASSIFIER" bash "$command" 2>/dev/null || echo "")"
+                if [[ -n "$classification" ]] && echo "$classification" | jq -e . >/dev/null 2>&1; then
+                    classified_platform="$(echo "$classification" | jq -r '.platform // "unknown"' 2>/dev/null || echo "unknown")"
+                    classified_intent="$(echo "$classification" | jq -r '.intent // "unknown"' 2>/dev/null || echo "unknown")"
+                    if [[ "$classified_platform" == "$platform" ]] && [[ "$classified_intent" != "unknown" ]]; then
+                        return 0
+                    fi
+                fi
+            fi
+
+            if [[ "$platform" == "salesforce" ]]; then
+                case "$(classify_command_chain "$command" 2>/dev/null || echo 'unknown')" in
+                    read|retrieve|debug|mutate|deploy|bulk-mutate|permission)
+                        return 0
+                        ;;
+                esac
+            fi
+            return 1
+            ;;
+        mcp__*|mcp_*)
+            classify_mcp_tool_policy "$tool_name"
+            if [[ "$(echo "$PENDING_ROUTE_MCP_POLICY" | jq -r '.namespace // "unknown"' 2>/dev/null || echo "unknown")" == "$platform" ]]; then
+                return 0
+            fi
+            return 1
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+enforce_integrity_stop() {
+    local tool_name="$1"
+    local session_key="$2"
+    local routing_state integrity_active integrity_agent integrity_platform integrity_reason integrity_detail
+    local caller_agent command_summary
+
+    routing_state="$(get_routing_state_check "$session_key")"
+    integrity_active="$(echo "$routing_state" | jq -r '.integrityStopActive // false' 2>/dev/null || echo "false")"
+
+    if [[ "$integrity_active" != "true" ]]; then
+        return 0
+    fi
+
+    integrity_agent="$(echo "$routing_state" | jq -r '.integrityStopAgent // ""' 2>/dev/null || echo "")"
+    integrity_platform="$(echo "$routing_state" | jq -r '.integrityStopPlatform // "unknown"' 2>/dev/null || echo "unknown")"
+    integrity_reason="$(echo "$routing_state" | jq -r '.integrityStopReason // "investigation_integrity_stop"' 2>/dev/null || echo "investigation_integrity_stop")"
+    integrity_detail="$(echo "$routing_state" | jq -r '.integrityStopDetail // ""' 2>/dev/null || echo "")"
+
+    if ! tool_targets_integrity_stop_platform "$tool_name" "$integrity_platform"; then
+        return 0
+    fi
+
+    caller_agent="$(resolve_caller_agent unknown)"
+    case "$tool_name" in
+        Bash)
+            command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
+            ;;
+        *)
+            command_summary="$tool_name"
+            ;;
+    esac
+
+    emit_routing_event \
+      "block" \
+      "investigation-integrity-stop" \
+      "${integrity_agent:-unknown}" \
+      "Receipt-required specialist execution lost deterministic proof; direct parent execution remains blocked." \
+      "${command_summary:-$tool_name}" \
+      "$caller_agent" \
+      "$tool_name"
+
+    emit_pretool_decision \
+      "deny" \
+      "INVESTIGATION_INTEGRITY_STOP: Receipt-required work owned by '${integrity_agent:-unknown}' failed deterministic proof (${integrity_reason}). Direct ${integrity_platform:-platform} execution is blocked until you re-delegate to an approved specialist and obtain a valid execution receipt." \
+      "Integrity detail: ${integrity_detail:-not provided}. Planning, fan-out, aggregation, and report assembly may continue, but direct platform execution is blocked from the parent path."
+    return 1
+}
+
+enforce_orchestrator_specialist_execution_guard() {
+    local tool_name="$1"
+    local caller_agent="$2"
+    local query_payload=""
+    local command_summary=""
+
+    if ! is_orchestrator_specialist_investigation_execution "$tool_name" "$caller_agent"; then
+        return 0
+    fi
+
+    query_payload="$(extract_salesforce_query_payload "$tool_name")"
+    case "$tool_name" in
+        Bash)
+            command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
+            ;;
+        *)
+            command_summary="$(printf '%s' "$query_payload" | tr '\n' ' ' | cut -c1-240)"
+            ;;
+    esac
+
+    emit_routing_event \
+      "block" \
+      "orchestrator-specialist-execution-guard" \
+      "opspal-salesforce:sfdc-automation-auditor" \
+      "Salesforce orchestrator attempted specialist-only investigation execution." \
+      "${command_summary:-$tool_name}" \
+      "$caller_agent" \
+      "$tool_name"
+
+    emit_pretool_decision \
+      "deny" \
+      "ORCHESTRATOR_SPECIALIST_EXECUTION_REQUIRED: '${caller_agent}' may coordinate investigation work, but it may not execute specialist-owned Tooling/API audit queries directly. Delegate to a receipt-backed investigation specialist instead." \
+      "Blocked specialist-owned investigation surface: ${command_summary:-$tool_name}. Allowed coordinator behavior includes planning, fan-out, aggregation, and verified child-result handling. Direct audit query execution does not."
+    return 1
+}
+
 tool_requires_pending_route_clearance() {
     local tool_name="$1"
 
@@ -1028,6 +1230,10 @@ if ! enforce_pending_route_gate "$TOOL_NAME" "$SESSION_KEY"; then
     exit 0
 fi
 
+if ! enforce_integrity_stop "$TOOL_NAME" "$SESSION_KEY"; then
+    exit 0
+fi
+
 # Projection-loss circuit-break — blocks Bash regardless of pending route state.
 # This fires after enforce_pending_route_gate because the circuit-broken state
 # may not have route_pending_clearance set (it's written by SubagentStop, not
@@ -1049,6 +1255,11 @@ if [ "$TOOL_NAME" = "Read" ]; then
     if ! enforce_read_target_preflight; then
         exit 0
     fi
+fi
+
+CALLER_AGENT_CURRENT="$(resolve_caller_from_cleared_route "$SESSION_KEY" "$(resolve_caller_agent unknown)")"
+if ! enforce_orchestrator_specialist_execution_guard "$TOOL_NAME" "$CALLER_AGENT_CURRENT"; then
+    exit 0
 fi
 
 # ============================================================================

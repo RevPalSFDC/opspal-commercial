@@ -5,7 +5,7 @@
  *
  * Verifies that the execution-proof hook correctly:
  * - Detects plan-only output from investigation specialists
- * - Accepts output with actual execution evidence
+ * - Rejects narrative-only output even when it looks like execution evidence
  * - Skips non-investigation agents
  * - Produces structured context messages for the parent
  *
@@ -69,11 +69,11 @@ async function main() {
     assert.strictEqual(r.exitCode, 0);
   }));
 
-  // --- Section 2: Detect execution evidence ---
+  // --- Section 2: Narrative execution evidence still fails without receipt ---
   console.log('');
-  console.log('[2] Execution evidence detection');
+  console.log('[2] Narrative execution evidence still fails without receipt');
 
-  results.push(await runTest('accepts output with record counts from sfdc-automation-auditor', () => {
+  results.push(await runTest('record counts without receipt fail for sfdc-automation-auditor', () => {
     const output = `sfdc-automation-auditor completed analysis.
 Found 47 flows in the org.
 Found 12 triggers active.
@@ -82,26 +82,39 @@ Query returned totalSize: 47 with records array.
 Audit methodology: all queries executed successfully with 148 records retrieved.`;
     const r = runHook(output);
     assert.strictEqual(r.exitCode, 0);
-    assert.ok(!r.stdout.includes('EXECUTION_PROOF_MISSING'), 'Should not flag execution proof missing');
+    assert.ok(
+      r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+      r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+      'Narrative counts without receipt must fail proof'
+    );
   }));
 
-  results.push(await runTest('accepts output with totalSize JSON markers', () => {
+  results.push(await runTest('JSON markers without receipt still fail proof', () => {
     const output = `sfdc-territory-discovery completed.
 Territory2Model query returned "totalSize": 3
 "records": [ { "Id": "0MT..." } ]
 Found 3 territory models in the org.`;
     const r = runHook(output);
     assert.strictEqual(r.exitCode, 0);
-    assert.ok(!r.stdout.includes('EXECUTION_PROOF'), 'Should pass with JSON evidence');
+    assert.ok(
+      r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+      r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+      'Receipt-less JSON snippets must fail proof'
+    );
   }));
 
-  results.push(await runTest('accepts output with query error messages (proves execution attempted)', () => {
+  results.push(await runTest('query error messages without receipt still fail proof', () => {
     const output = `sfdc-automation-auditor attempted investigation.
 FlowDefinitionView query returned INVALID_TYPE error.
 Fell back to Flow object. Found 23 records.
 sObject type FlowDefinitionView is not supported in this org.`;
     const r = runHook(output);
     assert.strictEqual(r.exitCode, 0);
+    assert.ok(
+      r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+      r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+      'Execution-attempt narrative without receipt must fail proof'
+    );
   }));
 
   // --- Section 3: Detect plan-only output ---
@@ -155,7 +168,7 @@ The suggested approach would need to be run to get results.`;
   console.log('');
   console.log('[5] Mixed execution + planning output');
 
-  results.push(await runTest('accepts mixed output when execution evidence outweighs planning', () => {
+  results.push(await runTest('mixed execution/planning output still fails without receipt', () => {
     const output = `sfdc-automation-auditor investigation complete.
 Found 47 flows in the org. Query returned "totalSize": 47.
 Success: 89 validation rules retrieved.
@@ -163,9 +176,11 @@ Note: the following additional queries could be run for deeper analysis.
 These suggested queries would provide more detail.`;
     const r = runHook(output);
     assert.strictEqual(r.exitCode, 0);
-    // Execution evidence (score ~6) should outweigh plan-only (score ~2)
-    assert.ok(!r.stdout.includes('EXECUTION_PROOF_MISSING'),
-              'Should pass when execution evidence outweighs planning language');
+    assert.ok(
+      r.stdout.includes('INVESTIGATION_RECEIPT_REQUIRED_MISSING') ||
+      r.stdout.includes('INVESTIGATION_EXECUTION_PROOF_WEAK'),
+      'Mixed narrative without receipt must fail deterministically'
+    );
   }));
 
   // --- Summary ---

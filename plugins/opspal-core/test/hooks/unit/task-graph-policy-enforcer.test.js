@@ -175,6 +175,20 @@ async function runAllTests() {
     assert.strictEqual(result.status, 0, 'sobject describe on production should be allowed');
   }));
 
+  results.push(await runTest('Allows sf project retrieve on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: { command: 'sf project retrieve start --metadata CustomObject:Account --target-org production' }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 0, 'Retrieve on production should be allowed');
+  }));
+
   results.push(await runTest('Escalates sf project deploy on production org', async () => {
     const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
     const result = spawnSync('bash', [HOOK_PATH], {
@@ -216,6 +230,57 @@ async function runAllTests() {
     });
     fs.rmSync(tempHome, { recursive: true, force: true });
     assert.strictEqual(result.status, 0, 'Sandbox query should pass through without escalation');
+  }));
+
+  results.push(await runTest('Escalates disguised mutation hidden in a production pipeline', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'sf data query --query "SELECT Id FROM Account" --target-org production --json | xargs sf data delete bulk --sobject Account --target-org production'
+        }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 2, 'Pipeline-hidden mutation on production should escalate');
+    assert(result.stderr.includes('PRODUCTION_DETECTED'), 'Should report production detection for hidden mutation');
+  }));
+
+  results.push(await runTest('Escalates eval-wrapped mutation on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'CMD="sf data delete bulk --sobject Account --target-org production"; eval "$CMD"'
+        }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 2, 'eval-wrapped mutation on production should escalate');
+    assert(result.stderr.includes('PRODUCTION_DETECTED'), 'Should report production detection for eval-wrapped mutation');
+  }));
+
+  results.push(await runTest('Denies ambiguous command-substitution query on production org', async () => {
+    const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hook-test-home-'));
+    const result = spawnSync('bash', [HOOK_PATH], {
+      encoding: 'utf8',
+      input: JSON.stringify({
+        tool_name: 'Bash',
+        tool_input: {
+          command: 'RESULT=$(sf data query --query "SELECT Id FROM Account" --target-org production --json); echo "$RESULT"'
+        }
+      }),
+      env: { ...process.env, HOME: tempHome }
+    });
+    fs.rmSync(tempHome, { recursive: true, force: true });
+    assert.strictEqual(result.status, 2, 'Ambiguous wrapped query on production should not be allowed');
+    assert(result.stderr.includes('PRODUCTION_DETECTED'), 'Ambiguous wrapped query should be escalated at the higher-risk tier');
   }));
 
   const passed = results.filter(r => r.passed).length;
