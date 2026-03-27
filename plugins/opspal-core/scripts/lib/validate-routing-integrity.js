@@ -17,6 +17,10 @@ const {
   resolvePluginRoot
 } = require('./agent-tool-registry');
 const {
+  auditPluginPromptAssets,
+  validateAgentLaunch
+} = require('./agent-boot-integrity-validator');
+const {
   buildCanonicalKeywordMap,
   collectCanonicalAgentTargets,
   loadRoutingPatterns,
@@ -907,6 +911,65 @@ function validateRoutingStateSemantics(failures) {
   }
 }
 
+function validateAgentBootIntegrity(failures) {
+  const launchProbes = [
+    {
+      agentId: 'opspal-salesforce:sfdc-automation-builder',
+      payload: { prompt: 'Build campaign structure flow package' }
+    },
+    {
+      agentId: 'opspal-salesforce:sfdc-planner',
+      payload: { prompt: 'Plan a Salesforce automation rollout with safe deployment sequencing' }
+    }
+  ];
+
+  for (const probe of launchProbes) {
+    const report = validateAgentLaunch({
+      agentId: probe.agentId,
+      payload: probe.payload,
+      explicitPluginRoot: PLUGIN_ROOT
+    });
+
+    for (const issue of report.issues) {
+      addFailure(
+        failures,
+        issue.code,
+        issue.message,
+        {
+          agent: issue.agentId || probe.agentId,
+          file: issue.assetPath || null,
+          field: issue.field || null,
+          sourceOfTruth: issue.sourceOfTruth || null,
+          checkedSources: issue.checkedSources || [],
+          repairAction: issue.repairAction || null
+        }
+      );
+    }
+  }
+
+  for (const pluginName of ['opspal-salesforce', 'opspal-core']) {
+    const report = auditPluginPromptAssets(pluginName, PLUGIN_ROOT, {
+      includeContexts: pluginName === 'opspal-salesforce'
+    });
+
+    for (const issue of report.issues) {
+      addFailure(
+        failures,
+        issue.code,
+        issue.message,
+        {
+          agent: issue.agentId || null,
+          file: issue.assetPath || null,
+          field: issue.field || null,
+          sourceOfTruth: issue.sourceOfTruth || null,
+          checkedSources: issue.checkedSources || [],
+          repairAction: issue.repairAction || null
+        }
+      );
+    }
+  }
+}
+
 function formatDetailValue(value) {
   if (Array.isArray(value)) {
     return value.join(', ');
@@ -927,9 +990,13 @@ function formatRoutingIntegrityFailure(failure) {
     ['agent', failure.agent],
     ['rule', failure.ruleId],
     ['section', failure.section],
+    ['field', failure.field],
     ['fields', Array.isArray(failure.fields) ? failure.fields.join(', ') : failure.fields],
     ['expectedAgent', failure.expectedAgent],
     ['actualAgent', failure.actualAgent],
+    ['sourceOfTruth', failure.sourceOfTruth],
+    ['checkedSources', failure.checkedSources],
+    ['repairAction', failure.repairAction],
     ['expectedTools', failure.expectedTools],
     ['actualTools', failure.actualTools],
     ['requiredTools', failure.requiredTools],
@@ -991,6 +1058,7 @@ function validateRoutingIntegrity() {
     validateAuthorityFiles(failures);
     validatePromptRouting(failures);
     validateRoutingStateSemantics(failures);
+    validateAgentBootIntegrity(failures);
   }
 
   return {

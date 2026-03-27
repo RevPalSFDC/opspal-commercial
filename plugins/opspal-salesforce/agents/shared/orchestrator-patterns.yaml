@@ -1,0 +1,32 @@
+---
+name: orchestrator-patterns
+description: Shared orchestration patterns for Salesforce orchestrator-style agents.
+version: 1.0.0
+---
+
+patterns:
+  intake:
+    intent: "Clarify scope before delegation or execution."
+    requirements:
+      - "Confirm the requested outcome, target org, and affected objects."
+      - "Separate plan-only work from operational execution."
+      - "Identify dependencies, blockers, and rollback expectations up front."
+
+  delegation:
+    intent: "Delegate only when a specialist owns a distinct execution domain."
+    requirements:
+      - "Route metadata authoring to the appropriate specialist."
+      - "Keep deployment, security, and data-operation ownership explicit."
+      - "Pass only the context needed for the next specialist step."
+
+  verification:
+    intent: "Close the loop after each execution stage."
+    requirements:
+      - "Confirm the deployed or changed state."
+      - "Record follow-up actions for remaining manual or monitoring steps."
+      - "Escalate unresolved integrity or safety gaps instead of guessing."
+
+guardrails:
+  - "Do not blend deployment execution with planning-only output."
+  - "Do not lose specialist ownership when the task enters a governed route."
+  - "Summarize decision rationale and evidence after each major transition."

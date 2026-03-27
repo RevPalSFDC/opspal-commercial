@@ -24,6 +24,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 AGENT_RESOLVER="$PLUGIN_ROOT/scripts/lib/agent-alias-resolver.js"
 AGENT_TOOL_REGISTRY="$PLUGIN_ROOT/scripts/lib/agent-tool-registry.js"
+AGENT_BOOT_INTEGRITY_VALIDATOR="${AGENT_BOOT_INTEGRITY_VALIDATOR:-$PLUGIN_ROOT/scripts/lib/agent-boot-integrity-validator.js}"
 CROSS_PLUGIN_COORDINATOR="$PLUGIN_ROOT/scripts/lib/cross-plugin-coordinator.js"
 ROUTING_METRICS="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
@@ -321,6 +322,18 @@ read_agent_metadata() {
     fi
 
     node "$AGENT_TOOL_REGISTRY" metadata "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+}
+
+read_agent_boot_integrity_report() {
+    local resolved_agent="$1"
+    local payload_json="${2:-{}}"
+
+    if [[ -z "$resolved_agent" ]] || [[ ! -f "$AGENT_BOOT_INTEGRITY_VALIDATOR" ]] || ! command -v node &> /dev/null; then
+        echo '{}'
+        return 0
+    fi
+
+    printf '%s' "$payload_json" | node "$AGENT_BOOT_INTEGRITY_VALIDATOR" launch-report "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
 apply_runbook_cohort_requirements() {
@@ -843,6 +856,40 @@ main() {
         log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "false" "" ""
 
         FINAL_OUTPUT="$TOOL_INPUT"
+    fi
+
+    if [[ -f "$AGENT_BOOT_INTEGRITY_VALIDATOR" ]]; then
+        BOOT_REPORT=$(read_agent_boot_integrity_report "$RESOLVED" "$FINAL_OUTPUT")
+        if ! echo "$BOOT_REPORT" | jq -e . >/dev/null 2>&1; then
+            log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_validator_failed" "Boot integrity validator returned invalid output"
+            emit_pretool_response \
+              "deny" \
+              "AGENT_BOOT_INTEGRITY_ERROR: Launch validation for '$RESOLVED' failed because the boot integrity validator returned invalid output. Missing/invalid field: validator-output. Source of truth checked: launch validator. Suggested repair: repair $AGENT_BOOT_INTEGRITY_VALIDATOR and rerun launch validation before invoking the agent." \
+              "" \
+              "" \
+              "AGENT_BOOT_INTEGRITY_ERROR" \
+              "ERROR"
+            exit 0
+        fi
+
+        BOOT_PASS=$(echo "$BOOT_REPORT" | jq -r '.pass // false' 2>/dev/null || echo "false")
+        if [[ "$BOOT_PASS" != "true" ]]; then
+            BOOT_MESSAGE=$(echo "$BOOT_REPORT" | jq -r '.issues[0].message // "Agent boot integrity validation failed."' 2>/dev/null || echo "Agent boot integrity validation failed.")
+            BOOT_FIELD=$(echo "$BOOT_REPORT" | jq -r '.issues[0].field // "unknown"' 2>/dev/null || echo "unknown")
+            BOOT_SOURCE=$(echo "$BOOT_REPORT" | jq -r '.issues[0].sourceOfTruth // "unknown"' 2>/dev/null || echo "unknown")
+            BOOT_REPAIR=$(echo "$BOOT_REPORT" | jq -r '.issues[0].repairAction // "Repair the agent markdown, imported prompt fragments, launch payload, or generated routing artifact before launch."' 2>/dev/null || echo "Repair the agent markdown, imported prompt fragments, launch payload, or generated routing artifact before launch.")
+            BOOT_AGENT=$(echo "$BOOT_REPORT" | jq -r '.issues[0].agentId // empty' 2>/dev/null || echo "")
+
+            log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_error" "$BOOT_MESSAGE"
+            emit_pretool_response \
+              "deny" \
+              "AGENT_BOOT_INTEGRITY_ERROR: ${BOOT_MESSAGE} Agent: ${BOOT_AGENT:-$RESOLVED}. Missing/invalid field: ${BOOT_FIELD:-unknown}. Source of truth checked: ${BOOT_SOURCE:-unknown}. Suggested repair: ${BOOT_REPAIR}" \
+              "" \
+              "" \
+              "AGENT_BOOT_INTEGRITY_ERROR" \
+              "ERROR"
+            exit 0
+        fi
     fi
 
     # Step 4: Cross-plugin coordination check (P1-4)

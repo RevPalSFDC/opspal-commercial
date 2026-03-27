@@ -12,9 +12,57 @@ const crypto = require('crypto');
  */
 class PlaybookRegistry {
     constructor(options = {}) {
-        this.playbooksDir = options.playbooksDir || path.join(__dirname, '../../docs/playbooks');
+        this.playbooksDir = options.playbooksDir || this.resolveDocsDirectory();
         this.agentsDir = options.agentsDir || path.join(__dirname, '../../agents');
         this.registryPath = options.registryPath || path.join(this.agentsDir, 'shared/playbook-registry.yaml');
+    }
+
+    resolveDocsDirectory() {
+        const candidates = [
+            path.join(__dirname, '../../docs/runbooks'),
+            path.join(__dirname, '../../docs/playbooks')
+        ];
+
+        for (const candidate of candidates) {
+            if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) {
+                return candidate;
+            }
+        }
+
+        return candidates[0];
+    }
+
+    collectPlaybookFiles(rootDir) {
+        const files = [];
+
+        if (!fs.existsSync(rootDir)) {
+            return files;
+        }
+
+        const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = path.join(rootDir, entry.name);
+
+            if (entry.isDirectory()) {
+                files.push(...this.collectPlaybookFiles(fullPath));
+                continue;
+            }
+
+            if (!entry.isFile()) {
+                continue;
+            }
+
+            const lowerName = entry.name.toLowerCase();
+            if ((!lowerName.endsWith('.md') && !lowerName.endsWith('.yaml')) ||
+                lowerName.includes('readme') ||
+                lowerName.includes('inventory')) {
+                continue;
+            }
+
+            files.push(fullPath);
+        }
+
+        return files;
     }
 
     /**
@@ -32,15 +80,12 @@ class PlaybookRegistry {
             keywords: {}
         };
 
-        // Scan playbook directory for both .md and .yaml files
-        const files = fs.readdirSync(this.playbooksDir)
-            .filter(f => (f.endsWith('.md') || f.endsWith('.yaml')) && !f.includes('README') && !f.includes('INVENTORY'));
+        const files = this.collectPlaybookFiles(this.playbooksDir);
 
         for (const file of files) {
-            const filePath = path.join(this.playbooksDir, file);
             const playbook = file.endsWith('.yaml')
-                ? await this.parseYamlPlaybook(filePath)
-                : await this.parseMarkdownPlaybook(filePath);
+                ? await this.parseYamlPlaybook(file)
+                : await this.parseMarkdownPlaybook(file);
 
             if (playbook) {
                 registry.playbooks.push(playbook);
