@@ -22,6 +22,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const FlowXMLParser = require('./flow-xml-parser');
 const PackageXMLGenerator = require('./package-xml-generator');
+const { safeExecSfCommand } = require('./safe-sf-result-parser');
+const { generateReceipt } = require('./execution-receipt');
 
 class FlowMetadataRetriever {
     constructor(orgAlias, options = {}) {
@@ -38,6 +40,9 @@ class FlowMetadataRetriever {
             errors: [],
             warnings: []
         };
+
+        this._lastReceipt = null;
+        this._branches = [];
     }
 
     /**
@@ -60,6 +65,7 @@ class FlowMetadataRetriever {
             this.retrievalLog.method = 'tooling_api';
             this.retrievalLog.success = true;
             this.retrievalLog.flowCount = flows.length;
+            this._generateReceipt('complete');
 
             if (this.verbose) {
                 console.log(`   ✓ FlowDefinitionView query succeeded: ${flows.length} flows`);
@@ -88,6 +94,8 @@ class FlowMetadataRetriever {
                 this.retrievalLog.warnings.push(
                     'FlowDefinitionView unavailable - used Metadata API fallback'
                 );
+                this._branches.push({ name: 'metadata-api-fallback', status: 'success', recordCount: flows.length, usedFallback: true });
+                this._generateReceipt('complete');
 
                 if (this.verbose) {
                     console.log(`   ✓ Metadata API retrieval succeeded: ${flows.length} flows`);
@@ -102,6 +110,8 @@ class FlowMetadataRetriever {
                 });
 
                 this.retrievalLog.success = false;
+                this._branches.push({ name: 'metadata-api-fallback', status: 'failed', recordCount: 0, error: metadataError.message.substring(0, 100) });
+                this._generateReceipt('failed');
 
                 // Both methods failed - throw comprehensive error
                 throw new Error(
@@ -144,22 +154,20 @@ class FlowMetadataRetriever {
 
         const cmd = `sf data query --query "${query.replace(/\s+/g, ' ').trim()}" --use-tooling-api --json --target-org ${this.orgAlias}`;
 
-        try {
-            const result = JSON.parse(execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }));
+        const result = safeExecSfCommand(cmd);
 
-            if (result.status !== 0) {
-                throw new Error(result.message || 'Query failed with non-zero status');
-            }
-
-            return result.result?.records || [];
-
-        } catch (error) {
-            // Parse error message for common API issues
-            if (error.message.includes('sObject type') || error.message.includes('not supported')) {
-                throw new Error('FlowDefinitionView not available in this org (API limitation)');
-            }
-            throw error;
+        if (result.success) {
+            this._branches.push({ name: 'FlowDefinitionView-tooling', status: 'success', recordCount: result.totalSize || 0 });
+            return result.records || [];
         }
+
+        this._branches.push({ name: 'FlowDefinitionView-tooling', status: 'failed', recordCount: 0, failureType: result.failureType, error: (result.error || '').substring(0, 100) });
+
+        // Translate to thrown error for the fallback path
+        if (result.failureType === 'invalid_object') {
+            throw new Error('FlowDefinitionView not available in this org (API limitation)');
+        }
+        throw new Error(result.error || 'Query failed');
     }
 
     /**
@@ -364,6 +372,39 @@ class FlowMetadataRetriever {
      */
     getRetrievalLog() {
         return { ...this.retrievalLog };
+    }
+
+    /**
+     * Generate execution receipt from branch results
+     * @private
+     */
+    _generateReceipt(status) {
+        const succeeded = {};
+        const failed = {};
+        const fallbacks = [];
+        for (const b of this._branches) {
+            if (b.status === 'success') {
+                succeeded[b.name] = { totalSize: b.recordCount || 0, records: [] };
+                if (b.usedFallback) fallbacks.push({ name: b.name, note: 'metadata API fallback' });
+            } else if (b.status === 'failed') {
+                failed[b.name] = { error: b.error || 'unknown', failureType: b.failureType || 'unknown' };
+            }
+        }
+        this._lastReceipt = generateReceipt({
+            status,
+            orgAlias: this.orgAlias,
+            totalQueries: this._branches.length,
+            succeededCount: Object.keys(succeeded).length,
+            failedCount: Object.keys(failed).length,
+            succeeded, failed, fallbacks, durationMs: 0
+        }, { helper: 'flow-metadata-retriever@1.0.0' });
+    }
+
+    /**
+     * Get the last execution receipt (available after getAllFlows completes)
+     */
+    getLastReceipt() {
+        return this._lastReceipt || null;
     }
 }
 

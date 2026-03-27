@@ -421,6 +421,74 @@ async function main() {
     );
   }));
 
+  // --- Section 9: FlowMetadataRetriever receipt integration ---
+  console.log('');
+  console.log('[9] FlowMetadataRetriever receipt integration');
+
+  const fmrSource = fs.readFileSync(
+    path.resolve(__dirname, '..', 'scripts', 'lib', 'flow-metadata-retriever.js'), 'utf8'
+  );
+
+  results.push(await runTest('FlowMetadataRetriever imports safeExecSfCommand', () => {
+    assert.ok(fmrSource.includes("require('./safe-sf-result-parser')"));
+  }));
+
+  results.push(await runTest('FlowMetadataRetriever imports generateReceipt', () => {
+    assert.ok(fmrSource.includes("require('./execution-receipt')"));
+  }));
+
+  results.push(await runTest('FlowMetadataRetriever has getLastReceipt', () => {
+    assert.ok(fmrSource.includes('getLastReceipt'));
+  }));
+
+  results.push(await runTest('FlowMetadataRetriever tooling query uses safeExecSfCommand', () => {
+    const toolingMethod = fmrSource.match(/async queryFlowsViaTooling[\s\S]*?(?=async retrieveFlows)/);
+    assert.ok(toolingMethod, 'Should find queryFlowsViaTooling method');
+    assert.ok(toolingMethod[0].includes('safeExecSfCommand('), 'Should use safeExecSfCommand');
+  }));
+
+  results.push(await runTest('FlowMetadataRetriever tracks branches', () => {
+    assert.ok(fmrSource.includes('this._branches'));
+  }));
+
+  results.push(await runTest('orchestrator captures Flow child receipt hash', () => {
+    assert.ok(source.includes("retriever.getLastReceipt") || source.includes("flowChildReceipt"));
+  }));
+
+  // --- Section 10: WorkflowRuleExtractor receipt integration ---
+  console.log('');
+  console.log('[10] WorkflowRuleExtractor receipt integration');
+
+  const wreSource = fs.readFileSync(
+    path.resolve(__dirname, '..', 'scripts', 'lib', 'workflow-rule-extractor.js'), 'utf8'
+  );
+
+  results.push(await runTest('WorkflowRuleExtractor imports safeExecSfCommand', () => {
+    assert.ok(wreSource.includes("require('./safe-sf-result-parser')"));
+  }));
+
+  results.push(await runTest('WorkflowRuleExtractor imports generateReceipt', () => {
+    assert.ok(wreSource.includes("require('./execution-receipt')"));
+  }));
+
+  results.push(await runTest('WorkflowRuleExtractor has getLastReceipt', () => {
+    assert.ok(wreSource.includes('getLastReceipt'));
+  }));
+
+  results.push(await runTest('WorkflowRuleExtractor discovery uses safeExecSfCommand', () => {
+    const discoveryMethod = wreSource.match(/async getObjectsWithWorkflows[\s\S]*?(?=async extractWorkflow)/);
+    assert.ok(discoveryMethod, 'Should find getObjectsWithWorkflows method');
+    assert.ok(discoveryMethod[0].includes('safeExecSfCommand('));
+  }));
+
+  results.push(await runTest('WorkflowRuleExtractor tracks branches', () => {
+    assert.ok(wreSource.includes('this._branches'));
+  }));
+
+  results.push(await runTest('orchestrator captures WorkflowRule child receipt hash', () => {
+    assert.ok(source.includes("workflowExtractor.getLastReceipt") || source.includes("wfChildReceipt"));
+  }));
+
   // --- Summary ---
   console.log('');
   const passed = results.filter(r => r.passed).length;

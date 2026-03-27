@@ -357,10 +357,12 @@ class AutomationInventoryOrchestrator {
                 this.rawData.workflows = await this.workflowExtractor.extractAllWorkflowRules(
                     this.options.objects
                 );
+                const wfChildReceipt = this.workflowExtractor.getLastReceipt?.() || null;
                 this.harvestBranches.push({
                     name: 'WorkflowRule',
                     success: true,
-                    recordCount: this.rawData.workflows.length
+                    recordCount: this.rawData.workflows.length,
+                    childReceiptHash: wfChildReceipt?.integrityHash || null
                 });
                 console.log(`    ✓ Found ${this.rawData.workflows.length} rule(s)`);
             } catch (error) {
@@ -586,12 +588,14 @@ class AutomationInventoryOrchestrator {
                 });
             }
 
+            const flowChildReceipt = retriever.getLastReceipt?.() || null;
             this.harvestBranches.push({
                 name: 'Flow',
                 success: true,
                 recordCount: flows.length,
                 usedFallback,
-                method: log.method || 'tooling_api'
+                method: log.method || 'tooling_api',
+                childReceiptHash: flowChildReceipt?.integrityHash || null
             });
 
             if (this.options.verbose) {

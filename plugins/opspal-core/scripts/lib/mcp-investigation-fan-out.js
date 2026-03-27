@@ -123,11 +123,11 @@ function verifyMcpReceipt(receipt, options) {
   return verifyReceipt(receipt, options);
 }
 
-// CLI entry point
+// CLI entry point — supports both test mode and stdin receipt generation
 if (require.main === module) {
   const action = process.argv[2];
+
   if (action === 'test') {
-    // Generate a test receipt for verification testing
     const result = buildMcpInvestigationReceipt({
       platform: 'hubspot',
       orgIdentifier: 'test-portal-123',
@@ -140,8 +140,45 @@ if (require.main === module) {
       durationMs: 2345
     });
     console.log(result.receiptBlock);
+
+  } else if (action === 'generate') {
+    // Generate receipt from JSON on stdin.
+    // Input: { platform, orgIdentifier, helper, branches: [{name, success, recordCount, tool?, error?}] }
+    // Output: receipt block to stdout (embeddable in agent output)
+    let input = '';
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('data', chunk => { input += chunk; });
+    process.stdin.on('end', () => {
+      try {
+        const params = JSON.parse(input);
+        if (!params.branches || !Array.isArray(params.branches)) {
+          console.error('Error: Input must contain a "branches" array');
+          process.exit(1);
+        }
+        const result = buildMcpInvestigationReceipt(params);
+        // Output just the receipt block — agent embeds this in its output
+        process.stdout.write(result.receiptBlock);
+      } catch (e) {
+        console.error(`Error generating receipt: ${e.message}`);
+        process.exit(1);
+      }
+    });
+
   } else {
-    console.error('Usage: node mcp-investigation-fan-out.js test');
+    console.error(`Usage:
+  node mcp-investigation-fan-out.js test          Generate test receipt
+  echo '<json>' | node mcp-investigation-fan-out.js generate   Generate receipt from stdin JSON
+
+Stdin JSON format:
+  {
+    "platform": "hubspot|marketo",
+    "orgIdentifier": "portal-123",
+    "helper": "agent-name",
+    "branches": [
+      { "name": "contacts", "success": true, "recordCount": 250, "tool": "hubspot_search" },
+      { "name": "workflows", "success": false, "recordCount": 0, "error": "401 Unauthorized" }
+    ]
+  }`);
     process.exit(1);
   }
 }

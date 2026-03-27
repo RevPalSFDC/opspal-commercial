@@ -24,12 +24,16 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const xml2js = require('xml2js');
+const { safeExecSfCommand } = require('./safe-sf-result-parser');
+const { generateReceipt } = require('./execution-receipt');
 
 class WorkflowRuleExtractor {
     constructor(orgAlias) {
         this.orgAlias = orgAlias;
         this.cache = new Map();
         this.tempDir = path.join(__dirname, '../../.temp/workflow-extraction');
+        this._lastReceipt = null;
+        this._branches = [];
     }
 
     /**
@@ -59,8 +63,44 @@ class WorkflowRuleExtractor {
             }
         }
 
+        this._branches.push({
+            name: 'WorkflowRule-extraction',
+            status: allRules.length > 0 ? 'success' : (objects.length > 0 ? 'partial' : 'success'),
+            recordCount: allRules.length
+        });
+
+        // Generate receipt from branch results
+        const succeeded = {};
+        const failed = {};
+        for (const b of this._branches) {
+            if (b.status === 'success' || b.status === 'partial') {
+                succeeded[b.name] = { totalSize: b.recordCount || 0, records: [] };
+            } else {
+                failed[b.name] = { error: b.error || 'unknown', failureType: b.failureType || 'unknown' };
+            }
+        }
+        const failedCount = Object.keys(failed).length;
+        const succeededCount = Object.keys(succeeded).length;
+        const status = failedCount === 0 ? 'complete' : (succeededCount > 0 ? 'partial' : 'failed');
+        this._lastReceipt = generateReceipt({
+            status,
+            orgAlias: this.orgAlias,
+            totalQueries: this._branches.length,
+            succeededCount, failedCount,
+            succeeded, failed,
+            fallbacks: this._branches.filter(b => b.usedFallback).map(b => ({ name: b.name, note: 'fallback' })),
+            durationMs: 0
+        }, { helper: 'workflow-rule-extractor@1.0.0' });
+
         console.log(`    Extracted ${allRules.length} Workflow Rule(s)`);
         return allRules;
+    }
+
+    /**
+     * Get the last execution receipt (available after extractAllWorkflowRules completes)
+     */
+    getLastReceipt() {
+        return this._lastReceipt || null;
     }
 
     /**
@@ -76,17 +116,17 @@ class WorkflowRuleExtractor {
             GROUP BY TableEnumOrId
         `;
 
-        try {
-            const result = this.execSfCommand(
-                `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
-            );
+        const result = safeExecSfCommand(
+            `sf data query --query "${query}" --use-tooling-api --json --target-org ${this.orgAlias}`
+        );
 
-            if (result?.result?.records) {
-                return result.result.records.map(r => r.TableEnumOrId);
-            }
-        } catch (error) {
-            console.warn('Warning: Could not query workflow rules, will try metadata retrieval');
+        if (result.success && result.records) {
+            this._branches.push({ name: 'WorkflowRule-discovery', status: 'success', recordCount: result.records.length });
+            return result.records.map(r => r.TableEnumOrId);
         }
+
+        this._branches.push({ name: 'WorkflowRule-discovery', status: 'failed', recordCount: 0, failureType: result.failureType, error: (result.error || '').substring(0, 100) });
+        console.warn('Warning: Could not query workflow rules, will try metadata retrieval');
 
         // Fallback: try common objects
         return ['Account', 'Contact', 'Opportunity', 'Lead', 'Case'];

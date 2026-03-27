@@ -17,4 +17,16 @@
 - Return actual data, actual errors, actual record counts
 
 **Execution Receipt (deterministic proof):**
-After executing your investigation queries, use the MCP investigation receipt adapter (`mcp-investigation-fan-out.js` from opspal-core) or the platform-specific receipt helper to generate a SHA-256-signed execution receipt. Include the `receiptBlock` in your output so the SubagentStop verification hook can confirm real execution occurred.
+After executing your investigation queries, generate a SHA-256-signed execution receipt and include it in your output. The SubagentStop hook will verify it.
+
+For **Salesforce** specialists using `investigationFanOut()` or `safeExecMultipleQueries()`:
+- The receipt is generated automatically — include the `receiptBlock` from the result.
+
+For **HubSpot/Marketo** specialists using MCP tools:
+- After completing your MCP tool calls, generate a receipt via the CLI adapter:
+```bash
+echo '{"platform":"hubspot","orgIdentifier":"portal-123","helper":"your-agent-name","branches":[{"name":"contacts","success":true,"recordCount":250,"tool":"hubspot_search"},{"name":"deals","success":true,"recordCount":100,"tool":"hubspot_search"}]}' | node scripts/lib/mcp-investigation-fan-out.js generate
+```
+- The command outputs a receipt block — include it verbatim in your response.
+- Build the `branches` array from your actual MCP tool call results (record counts, success/failure, tool names).
+- The `scripts/lib/mcp-investigation-fan-out.js` path resolves from the opspal-core plugin root.

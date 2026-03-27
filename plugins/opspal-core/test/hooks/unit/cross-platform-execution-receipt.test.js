@@ -261,6 +261,71 @@ These queries would need to be executed to complete the investigation.`;
     assert.ok(r.stdout.includes('EXECUTION_PROOF'));
   }));
 
+  // --- Section 6: CLI receipt generation adapter ---
+  console.log('');
+  console.log('[6] CLI receipt generation adapter');
+
+  results.push(await runTest('CLI generate mode produces valid receipt block', () => {
+    const input = JSON.stringify({
+      platform: 'marketo',
+      orgIdentifier: 'mkt-test',
+      helper: 'marketo-instance-discovery',
+      branches: [
+        { name: 'programs', success: true, recordCount: 30, tool: 'program_list' },
+        { name: 'campaigns', success: true, recordCount: 45, tool: 'campaign_list' }
+      ]
+    });
+    const cliPath = path.join(CORE_LIB, 'mcp-investigation-fan-out.js');
+    const result = spawnSync('node', [cliPath, 'generate'], {
+      input,
+      encoding: 'utf8',
+      env: { ...process.env, PATH: process.env.PATH }
+    });
+    assert.strictEqual(result.status, 0, `CLI should exit 0: ${result.stderr}`);
+    assert.ok(result.stdout.includes('EXECUTION_RECEIPT_V1'), 'Should contain receipt marker');
+
+    // Verify the block is extractable and valid
+    const { extractReceiptFromOutput, verifyReceipt } = require(path.join(CORE_LIB, 'execution-receipt.js'));
+    const extracted = extractReceiptFromOutput(result.stdout);
+    assert.ok(extracted, 'Receipt should be extractable');
+    const v = verifyReceipt(extracted);
+    assert.strictEqual(v.valid, true, `Receipt should be valid: ${v.reason}`);
+  }));
+
+  results.push(await runTest('CLI generate mode with partial failure produces partial receipt', () => {
+    const input = JSON.stringify({
+      platform: 'hubspot',
+      orgIdentifier: 'portal-partial',
+      helper: 'hubspot-assessment-analyzer',
+      branches: [
+        { name: 'contacts', success: true, recordCount: 250, tool: 'hubspot_search' },
+        { name: 'workflows', success: false, recordCount: 0, error: '401 Unauthorized', tool: 'workflow_enumerate' }
+      ]
+    });
+    const cliPath = path.join(CORE_LIB, 'mcp-investigation-fan-out.js');
+    const result = spawnSync('node', [cliPath, 'generate'], {
+      input,
+      encoding: 'utf8',
+      env: { ...process.env, PATH: process.env.PATH }
+    });
+    assert.strictEqual(result.status, 0);
+    const { extractReceiptFromOutput, verifyReceipt } = require(path.join(CORE_LIB, 'execution-receipt.js'));
+    const extracted = extractReceiptFromOutput(result.stdout);
+    assert.ok(extracted);
+    const v = verifyReceipt(extracted);
+    assert.strictEqual(v.valid, true);
+    assert.strictEqual(v.classification, 'valid_partial');
+  }));
+
+  results.push(await runTest('execution-completion-contract includes CLI instructions', () => {
+    const contract = fs.readFileSync(
+      path.join(PROJECT_ROOT, 'plugins/opspal-core/agents/shared/execution-completion-contract.md'), 'utf8'
+    );
+    assert.ok(contract.includes('mcp-investigation-fan-out.js generate'));
+    assert.ok(contract.includes('branches'));
+    assert.ok(contract.includes('hubspot'));
+  }));
+
   // --- Summary ---
   console.log('');
   const passed = results.filter(r => r.passed).length;
