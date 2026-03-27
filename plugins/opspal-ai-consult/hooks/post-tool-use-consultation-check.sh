@@ -191,7 +191,7 @@ CHECK_DATA=$(jq -n \
   }')
 
 # Run consultation trigger check
-TRIGGER_RESULT=$(echo "$CHECK_DATA" | node "$CONSULTATION_TRIGGER" --all "$(echo "$CHECK_DATA")" 2>/dev/null || echo '{"shouldConsult": false}')
+TRIGGER_RESULT=$(node "$CONSULTATION_TRIGGER" --all "$CHECK_DATA" --json-only 2>/dev/null || echo '{"shouldConsult": false}')
 
 # Check if consultation is recommended
 SHOULD_CONSULT=$(echo "$TRIGGER_RESULT" | jq -r '.shouldConsult // false')

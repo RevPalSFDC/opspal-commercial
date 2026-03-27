@@ -26,6 +26,28 @@ fi
 
 log_info "Checking for Salesforce task patterns..."
 
+HOOK_INPUT=$(cat 2>/dev/null || true)
+
+extract_user_message() {
+    if command -v jq >/dev/null 2>&1 && [[ -n "$HOOK_INPUT" ]] && echo "$HOOK_INPUT" | jq -e . >/dev/null 2>&1; then
+        local stdin_message
+        stdin_message=$(echo "$HOOK_INPUT" | jq -r '
+            .user_message
+            // .userMessage
+            // .prompt
+            // .message
+            // ""
+        ' 2>/dev/null || true)
+
+        if [[ -n "$stdin_message" ]]; then
+            printf '%s' "$stdin_message"
+            return
+        fi
+    fi
+
+    printf '%s' "${CLAUDE_USER_MESSAGE:-}"
+}
+
 # Check if the user's request contains Salesforce-related keywords
 check_salesforce_keywords() {
     local input="$1"
@@ -96,9 +118,11 @@ suggest_agent() {
 }
 
 # Main validation logic
-if [ -n "$CLAUDE_USER_MESSAGE" ]; then
-    if check_salesforce_keywords "$CLAUDE_USER_MESSAGE"; then
-        suggested_agent=$(suggest_agent "$CLAUDE_USER_MESSAGE")
+USER_MESSAGE="$(extract_user_message)"
+
+if [[ -n "$USER_MESSAGE" ]]; then
+    if check_salesforce_keywords "$USER_MESSAGE"; then
+        suggested_agent=$(suggest_agent "$USER_MESSAGE")
 
         log_success "Salesforce task detected!"
         echo -e "${YELLOW}📌 Suggested agent: ${GREEN}${suggested_agent}${NC}" >&2

@@ -45,13 +45,22 @@ function ensureDependencies(serverDir) {
   process.exit(1);
 }
 
-function main() {
+function buildKnownPaths(env = process.env, baseDir = __dirname) {
+  return [
+    path.resolve(baseDir, '../../../../OpsPalMCP/index.js'),
+    path.resolve(baseDir, '../../../../../OpsPalMCP/index.js'),
+    path.resolve(env.HOME || '', 'Desktop/RevPal/Agents/OpsPalMCP/index.js')
+  ];
+}
+
+function resolveServerPath(env = process.env, baseDir = __dirname) {
   // Priority 1: Explicit path override
-  const explicitPath = resolveScriptPath(process.env.OPSPAL_MCP_PATH);
+  const explicitPath = resolveScriptPath(env.OPSPAL_MCP_PATH);
   if (explicitPath) {
-    ensureDependencies(path.dirname(explicitPath));
-    spawnServer(process.execPath, [explicitPath], process.env);
-    return;
+    return {
+      scriptPath: explicitPath,
+      source: 'env'
+    };
   }
 
   // Priority 2: Known locations relative to this resolver
@@ -59,21 +68,32 @@ function main() {
   // OpsPalMCP repo could be:
   //   - Sibling to the opspal-internal-plugins repo
   //   - Under the same Agents directory
-  const knownPaths = [
-    // Relative to opspal-internal-plugins repo root
-    path.resolve(__dirname, '../../../../OpsPalMCP/index.js'),
-    // Relative to Agents directory
-    path.resolve(__dirname, '../../../../../OpsPalMCP/index.js'),
-    // Home directory
-    path.resolve(process.env.HOME || '', 'Desktop/RevPal/Agents/OpsPalMCP/index.js'),
-  ];
+  const knownPaths = buildKnownPaths(env, baseDir);
 
   for (const candidate of knownPaths) {
     if (fs.existsSync(candidate)) {
-      ensureDependencies(path.dirname(candidate));
-      spawnServer(process.execPath, [candidate], process.env);
-      return;
+      return {
+        scriptPath: candidate,
+        source: 'known-path',
+        searchedPaths: knownPaths
+      };
     }
+  }
+
+  return {
+    scriptPath: null,
+    source: 'not-found',
+    searchedPaths: knownPaths
+  };
+}
+
+function main(env = process.env) {
+  const resolved = resolveServerPath(env);
+
+  if (resolved.scriptPath) {
+    ensureDependencies(path.dirname(resolved.scriptPath));
+    spawnServer(process.execPath, [resolved.scriptPath], env);
+    return resolved;
   }
 
   console.error('[opspal-mcp] Could not find OpsPal MCP server.');
@@ -83,8 +103,21 @@ function main() {
   console.error('  2. Clone OpsPalMCP as a sibling repo and run npm ci');
   console.error('');
   console.error('Searched paths:');
-  knownPaths.forEach((p) => console.error(`  - ${p}`));
+  resolved.searchedPaths.forEach((p) => console.error(`  - ${p}`));
   process.exit(1);
 }
 
-main();
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === __filename;
+
+if (isMain) {
+  main();
+}
+
+export {
+  buildKnownPaths,
+  ensureDependencies,
+  main,
+  resolveScriptPath,
+  resolveServerPath,
+  spawnServer
+};

@@ -24,6 +24,11 @@ const DEFAULT_CONFIG = {
   retryDelay: 1000
 };
 
+function isGeminiDisabled() {
+  const value = String(process.env.GEMINI_DISABLED || '').trim().toLowerCase();
+  return value === '1' || value === 'true' || value === 'yes';
+}
+
 /**
  * Check if Gemini CLI is installed and configured
  * @returns {object} Status object with installed, version, and apiKeySet properties
@@ -33,8 +38,15 @@ function checkGeminiStatus() {
     installed: false,
     version: null,
     apiKeySet: false,
+    disabled: false,
     error: null
   };
+
+  if (isGeminiDisabled()) {
+    status.disabled = true;
+    status.error = 'Gemini CLI disabled via GEMINI_DISABLED';
+    return status;
+  }
 
   try {
     const version = execSync('gemini --version 2>/dev/null', { encoding: 'utf8' }).trim();
@@ -267,6 +279,7 @@ module.exports = {
   invokeGemini,
   invokeWithFiles,
   checkGeminiStatus,
+  isGeminiDisabled,
   DEFAULT_CONFIG
 };
 

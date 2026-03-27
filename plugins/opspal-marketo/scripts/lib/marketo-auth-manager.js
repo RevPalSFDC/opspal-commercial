@@ -304,46 +304,50 @@ export function validateConfig(instanceName = 'default') {
   }
 }
 
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === __filename;
+
 // CLI handling
-const args = process.argv.slice(2);
-const command = args[0];
-const instanceName = args[1] || process.env.MARKETO_INSTANCE_NAME || 'default';
+if (isMain) {
+  const args = process.argv.slice(2);
+  const command = args[0];
+  const instanceName = args[1] || process.env.MARKETO_INSTANCE_NAME || 'default';
 
-if (command) {
-  (async () => {
-    switch (command) {
-      case 'test':
-        const testResult = await testAuth(instanceName);
-        process.exit(testResult.success ? 0 : 1);
-        break;
+  if (command) {
+    (async () => {
+      switch (command) {
+        case 'test':
+          const testResult = await testAuth(instanceName);
+          process.exit(testResult.success ? 0 : 1);
+          break;
 
-      case 'token':
-        const tokenInfo = getTokenInfo(instanceName);
-        console.log(JSON.stringify(tokenInfo, null, 2));
-        break;
+        case 'token':
+          const tokenInfo = getTokenInfo(instanceName);
+          console.log(JSON.stringify(tokenInfo, null, 2));
+          break;
 
-      case 'refresh':
-        try {
-          await refreshToken(instanceName);
-          console.log('Token refreshed successfully');
-        } catch (error) {
-          console.error(`Token refresh failed: ${error.message}`);
+        case 'refresh':
+          try {
+            await refreshToken(instanceName);
+            console.log('Token refreshed successfully');
+          } catch (error) {
+            console.error(`Token refresh failed: ${error.message}`);
+            process.exit(1);
+          }
+          break;
+
+        case 'validate':
+          const validation = validateConfig(instanceName);
+          console.log(JSON.stringify(validation, null, 2));
+          process.exit(validation.valid ? 0 : 1);
+          break;
+
+        default:
+          console.log('Usage: node marketo-auth-manager.js <command> [instance]');
+          console.log('Commands: test, token, refresh, validate');
           process.exit(1);
-        }
-        break;
-
-      case 'validate':
-        const validation = validateConfig(instanceName);
-        console.log(JSON.stringify(validation, null, 2));
-        process.exit(validation.valid ? 0 : 1);
-        break;
-
-      default:
-        console.log('Usage: node marketo-auth-manager.js <command> [instance]');
-        console.log('Commands: test, token, refresh, validate');
-        process.exit(1);
-    }
-  })();
+      }
+    })();
+  }
 }
 
 export default {

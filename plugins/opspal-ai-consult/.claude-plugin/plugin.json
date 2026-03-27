@@ -1,7 +1,7 @@
 {
   "name": "opspal-ai-consult",
   "description": "Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemini CLI invocation, Claude + Gemini response synthesis, alignment scoring, auto-consultation triggers, domain canonicalization for shadow duplicate detection, and ACE skill registry integration for learning from outcomes.",
-  "version": "1.4.11",
+  "version": "1.4.12",
   "author": {
     "name": "RevPal Engineering",
     "email": "engineering@gorevpal.com"

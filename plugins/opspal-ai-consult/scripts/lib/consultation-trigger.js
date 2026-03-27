@@ -67,6 +67,11 @@ const THRESHOLDS = {
   ]
 };
 
+function isGeminiDisabled() {
+  const value = String(process.env.GEMINI_DISABLED || '').trim().toLowerCase();
+  return value === '1' || value === 'true' || value === 'yes';
+}
+
 /**
  * Check if consultation should be triggered based on routing metrics
  * @param {object} routingData - Routing hook output
@@ -296,6 +301,17 @@ async function checkACEHistory(data) {
  * @returns {object} - Combined consultation recommendation
  */
 function checkAllTriggers(data) {
+  if (isGeminiDisabled()) {
+    return {
+      shouldConsult: false,
+      reasons: [],
+      urgency: 'low',
+      triggers: [],
+      suggestion: null,
+      disabled: true
+    };
+  }
+
   const results = [];
 
   if (data.routing) {
@@ -384,6 +400,7 @@ module.exports = {
   checkAllTriggersWithACE,
   checkACEHistory,
   formatConsultationSuggestion,
+  isGeminiDisabled,
   THRESHOLDS,
   aceIntegration
 };
@@ -391,6 +408,7 @@ module.exports = {
 // CLI interface
 if (require.main === module) {
   const args = process.argv.slice(2);
+  const jsonOnly = args.includes('--json-only');
 
   if (args.includes('--help')) {
     console.log(`
@@ -407,6 +425,7 @@ Options:
   --output TEXT      Check agent output for uncertainty
   --error JSON       Check error patterns
   --all JSON         Check all triggers combined
+  --json-only        Emit JSON only (suppress human-readable suggestion text)
   --thresholds       Show current thresholds
 
 Thresholds:
@@ -470,7 +489,7 @@ Thresholds:
 
   if (result) {
     console.log(JSON.stringify(result, null, 2));
-    if (result.suggestion) {
+    if (!jsonOnly && result.suggestion) {
       console.log(result.suggestion);
     }
   } else {
