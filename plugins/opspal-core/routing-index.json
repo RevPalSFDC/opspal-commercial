@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-27T16:14:19.099Z",
+  "buildDate": "2026-03-28T00:55:29.975Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
@@ -29492,6 +29492,7 @@
       "description": "Use PROACTIVELY for automation creation.",
       "model": "sonnet",
       "color": "blue",
+      "actorType": "builder",
       "tools": [
         "mcp_salesforce",
         "mcp__context7__*",
@@ -29500,6 +29501,11 @@
         "Grep",
         "TodoWrite",
         "Bash"
+      ],
+      "capabilities": [
+        "salesforce:automation:flow:create",
+        "salesforce:automation:flow:update",
+        "salesforce:automation:process:create"
       ],
       "triggerKeywords": [
         "automation",
@@ -41668,6 +41674,7 @@
       "description": "Use PROACTIVELY for automation creation.",
       "model": "sonnet",
       "color": "blue",
+      "actorType": "builder",
       "tools": [
         "mcp_salesforce",
         "mcp__context7__*",
@@ -41676,6 +41683,11 @@
         "Grep",
         "TodoWrite",
         "Bash"
+      ],
+      "capabilities": [
+        "salesforce:automation:flow:create",
+        "salesforce:automation:flow:update",
+        "salesforce:automation:process:create"
       ],
       "triggerKeywords": [
         "automation",

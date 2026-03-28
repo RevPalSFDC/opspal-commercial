@@ -2,6 +2,11 @@
 name: sfdc-automation-builder
 description: "Use PROACTIVELY for automation creation."
 color: blue
+actorType: builder
+capabilities:
+  - salesforce:automation:flow:create
+  - salesforce:automation:flow:update
+  - salesforce:automation:process:create
 tools:
   - mcp_salesforce
   - mcp__context7__*
