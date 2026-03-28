@@ -15,6 +15,13 @@ const {
   writeJson
 } = require('./utils');
 
+let telemetry;
+try {
+  telemetry = require('./ambient-telemetry');
+} catch (error) {
+  telemetry = null;
+}
+
 function resolveSubmitScript(submitScript) {
   return submitScript || path.resolve(__dirname, '../submit-reflection.js');
 }
@@ -67,6 +74,12 @@ function submitPayloads(payloads, options = {}) {
       });
     });
 
+    try {
+      if (telemetry) {
+        telemetry.recordShadowPayload(preparedPayloads.length, config, sessionId);
+      }
+    } catch (error) { /* telemetry must not block submission */ }
+
     return {
       mode,
       submitted: preparedPayloads.length,
@@ -98,9 +111,11 @@ function submitPayloads(payloads, options = {}) {
     fs.rmSync(tempFile, { force: true });
 
     if (result.status === 0) {
+      try { if (telemetry) { telemetry.recordSubmission({ ok: true }, config, sessionId); } } catch (e) { /* */ }
       return { ok: true, mode };
     }
 
+    try { if (telemetry) { telemetry.recordSubmission({ ok: false, queued: true }, config, sessionId); } } catch (e) { /* */ }
     appendJsonl(retryQueueFile, {
       queued_at: nowIso(),
       session_id: sessionId,

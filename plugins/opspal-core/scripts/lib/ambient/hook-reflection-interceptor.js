@@ -18,6 +18,13 @@ const {
   sanitizeString
 } = require('./utils');
 
+let telemetry;
+try {
+  telemetry = require('./ambient-telemetry');
+} catch (error) {
+  telemetry = null;
+}
+
 function crashSafeFilePath(config) {
   return path.join(config.paths?.ambientDir, config.hookReflection?.crashSafeFile || 'hook-reflection-crash-safe.jsonl');
 }
@@ -311,6 +318,16 @@ function hasSubmissionFailure(flushResult) {
   return Boolean(flushResult?.submission?.results?.some(result => result && result.ok === false));
 }
 
+function emitTelemetry(fn, ...args) {
+  try {
+    if (telemetry && typeof telemetry[fn] === 'function') {
+      telemetry[fn](...args);
+    }
+  } catch (error) {
+    // Telemetry must never block the hook path.
+  }
+}
+
 function interceptHookErrors(options = {}) {
   const config = options.config || loadConfig();
   const sessionId = resolveSessionId(options.sessionId);
@@ -331,6 +348,9 @@ function interceptHookErrors(options = {}) {
 
   try {
     crashSafe.replay = replayFromCrashSafe(config, sessionId);
+    if (crashSafe.replay.replayed > 0) {
+      emitTelemetry('recordCrashSafe', 'replay', config, sessionId);
+    }
   } catch (error) {
     crashSafe.replay = {
       replayed: 0,
@@ -363,7 +383,14 @@ function interceptHookErrors(options = {}) {
     };
   }
 
+  emitTelemetry('recordCandidatesCaptured', observed.length, 'hook_error', config, sessionId);
+  observed.forEach(candidate => {
+    emitTelemetry('recordHookError', candidate.priority === 'immediate', config, sessionId);
+  });
+
   const crossSession = suppressCrossSessionDuplicates(observed, config, sessionId);
+  emitTelemetry('recordDedupe', 0, crossSession.suppressed.length, config, sessionId);
+
   if (crossSession.accepted.length === 0) {
     return {
       candidates: [],
@@ -379,6 +406,7 @@ function interceptHookErrors(options = {}) {
 
   try {
     merged = dedupeWithinSession(buffer.list(), crossSession.accepted, config);
+    emitTelemetry('recordDedupe', merged.mergedCount, 0, config, sessionId);
     persistCandidates(buffer, escalateSeverity(merged.mergedCandidates));
   } catch (error) {
     crashSafe.write = writeCrashSafe(crossSession.accepted, config, {
@@ -386,6 +414,7 @@ function interceptHookErrors(options = {}) {
       step: 'buffer_write',
       error: error.message
     });
+    emitTelemetry('recordCrashSafe', 'write', config, sessionId);
 
     return {
       candidates: crossSession.accepted,
@@ -413,12 +442,16 @@ function interceptHookErrors(options = {}) {
       sessionId,
       trigger: 'hook_error_immediate'
     });
+    if (flushResult?.flushed) {
+      emitTelemetry('recordFlush', flushResult.reason || 'hook_error_immediate', config, sessionId);
+    }
   } catch (error) {
     crashSafe.write = writeCrashSafe(crossSession.accepted, config, {
       sessionId,
       step: 'flush',
       error: error.message
     });
+    emitTelemetry('recordCrashSafe', 'write', config, sessionId);
 
     return {
       candidates: crossSession.accepted,
@@ -435,6 +468,7 @@ function interceptHookErrors(options = {}) {
       step: 'submit',
       error: 'submit_failed'
     });
+    emitTelemetry('recordCrashSafe', 'write', config, sessionId);
   }
 
   return {

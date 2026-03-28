@@ -16,6 +16,13 @@ const {
   sanitizeString
 } = require('./utils');
 
+let telemetry;
+try {
+  telemetry = require('./ambient-telemetry');
+} catch (error) {
+  telemetry = null;
+}
+
 const TAXONOMY_RULES_PATH = path.resolve(__dirname, '../../../config/reflection-taxonomy-rules.json');
 
 function loadTaxonomyRules() {
@@ -360,6 +367,11 @@ function compileCandidates(candidates, options = {}) {
   const deduped = dedupeCandidates(candidates);
   const merged = mergeCandidates(deduped, config.compiler?.dedupeWindowMinutes || 10);
   const syntheticSkillCandidates = detectSkillCandidates(merged, { config, sessionId });
+  try {
+    if (telemetry && syntheticSkillCandidates.length > 0) {
+      telemetry.recordSkillCandidates(syntheticSkillCandidates.length, config, sessionId);
+    }
+  } catch (error) { /* telemetry must not block compilation */ }
   const classified = [...merged, ...syntheticSkillCandidates]
     .map(candidate => ({
       ...candidate,
@@ -441,6 +453,12 @@ function compileCandidates(candidates, options = {}) {
       impact_path: candidate.impact_path
     }))
   };
+
+  try {
+    if (telemetry) {
+      telemetry.recordCompilation(config, sessionId);
+    }
+  } catch (error) { /* telemetry must not block compilation */ }
 
   return [enforceDataQuality(reflection)];
 }
