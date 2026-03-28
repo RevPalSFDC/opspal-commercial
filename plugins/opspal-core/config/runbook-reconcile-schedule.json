@@ -1,0 +1,9 @@
+{
+  "name": "runbook-auto-reconcile",
+  "description": "Automatic runbook reconciliation — compacts entries, detects conflicts, promotes standards, refreshes projections. Runs every 6 hours.",
+  "type": "script",
+  "schedule": "0 */6 * * *",
+  "command": "node ${PLUGIN_ROOT}/scripts/lib/runbook-reconcile.js --org ${ORG_SLUG:-default} --compact --mark-stale --detect-conflicts --promote --rebuild-projections",
+  "enabled": true,
+  "install_instructions": "To activate scheduled reconciliation, run: /schedule-add --name=\"Runbook Reconcile\" --type=script --schedule=\"0 */6 * * *\" --command=\"node <plugin-root>/scripts/lib/runbook-reconcile.js --org <your-org> --all\""
+}

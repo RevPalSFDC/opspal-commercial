@@ -335,6 +335,175 @@ function processReflection(org, reflectionData, pluginRoot) {
   };
 }
 
+// ── Reflection Adapter ─────────────────────────────────────────────────────
+
+/**
+ * Adapt a raw SESSION_REFLECTION JSON to the bridge output format
+ * expected by processReflection / extractCandidatesFromReflection.
+ */
+function _adaptReflectionToBridgeFormat(rawReflection) {
+  const org = rawReflection.session_metadata?.org
+    || rawReflection.org
+    || rawReflection.org_alias
+    || 'unknown';
+
+  const issues = Array.isArray(rawReflection.issues)
+    ? rawReflection.issues
+    : Array.isArray(rawReflection.issues_identified)
+      ? rawReflection.issues_identified
+      : [];
+
+  const userFeedback = Array.isArray(rawReflection.user_feedback)
+    ? rawReflection.user_feedback
+    : [];
+
+  // Build known_exceptions from issues with frequency >= 2
+  const taxonomyCounts = {};
+  for (const issue of issues) {
+    const tax = issue.taxonomy || 'unknown';
+    taxonomyCounts[tax] = (taxonomyCounts[tax] || 0) + 1;
+  }
+
+  const known_exceptions = [];
+  const common_errors = [];
+
+  for (const [taxonomy, count] of Object.entries(taxonomyCounts)) {
+    const examples = issues
+      .filter(i => (i.taxonomy || 'unknown') === taxonomy)
+      .map(i => ({ id: i.id, description: i.root_cause || i.description || '', priority: i.priority || 'P3' }));
+
+    common_errors.push({ taxonomy, count, examples });
+
+    if (count >= 2) {
+      const firstExample = examples[0];
+      known_exceptions.push({
+        name: taxonomy.replace(/[/-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        context: firstExample?.description || '',
+        frequency: count,
+        recommendation: issues.find(i => (i.taxonomy || 'unknown') === taxonomy)?.agnostic_fix || ''
+      });
+    }
+  }
+
+  // Build manual workarounds from playbook
+  const manual_workarounds = [];
+  if (rawReflection.playbook && rawReflection.playbook.steps) {
+    manual_workarounds.push({
+      playbook: rawReflection.playbook.name || 'session-workaround',
+      steps: rawReflection.playbook.steps,
+      trigger: rawReflection.playbook.trigger || ''
+    });
+  }
+
+  // Build user interventions from feedback
+  const user_interventions = userFeedback
+    .filter(f => f.classification === 'suggestion' || f.classification === 'dissatisfaction')
+    .map(f => ({
+      comment: f.raw_comment || '',
+      classification: f.classification,
+      proposed_action: f.proposed_action || '',
+      linked_issue: f.linked_issue_id || null
+    }));
+
+  // Build recommendations from agnostic_fix fields
+  const recommendations = issues
+    .filter(i => i.agnostic_fix && i.agnostic_fix.length > 10)
+    .map(i => i.agnostic_fix)
+    .slice(0, 5);
+
+  return {
+    org,
+    reflections_analyzed: 1,
+    timeframe: {
+      start: rawReflection.session_metadata?.session_start || null,
+      end: rawReflection.session_metadata?.session_end || null
+    },
+    patterns: { common_errors, manual_workarounds, user_interventions },
+    known_exceptions,
+    recommendations
+  };
+}
+
+// ── CLI ────────────────────────────────────────────────────────────────────
+
+if (require.main === module) {
+  const fs = require('fs');
+  const args = process.argv.slice(2);
+  let org = null;
+  let obsFile = null;
+  let reflectionFile = null;
+  let pluginRoot = null;
+
+  for (let i = 0; i < args.length; i++) {
+    switch (args[i]) {
+      case '--org': org = args[++i]; break;
+      case '--obs-file': obsFile = args[++i]; break;
+      case '--reflection-file': reflectionFile = args[++i]; break;
+      case '--plugin-root': pluginRoot = args[++i]; break;
+      case '--help':
+        console.log('Usage:');
+        console.log('  runbook-incremental-updater.js --org <alias> --obs-file <path> [--plugin-root <path>]');
+        console.log('  runbook-incremental-updater.js --org <alias> --reflection-file <path> [--plugin-root <path>]');
+        process.exit(0);
+    }
+  }
+
+  if (!org) {
+    console.error('❌ --org is required');
+    process.exit(1);
+  }
+
+  try {
+    let result;
+    let source;
+
+    if (obsFile) {
+      if (!fs.existsSync(obsFile)) {
+        console.error(`❌ Observation file not found: ${obsFile}`);
+        process.exit(0); // Graceful exit — don't break hooks
+      }
+      const obs = JSON.parse(fs.readFileSync(obsFile, 'utf-8'));
+      result = processObservation(org, obs, pluginRoot);
+      source = 'observation';
+    } else if (reflectionFile) {
+      if (!fs.existsSync(reflectionFile)) {
+        console.error(`❌ Reflection file not found: ${reflectionFile}`);
+        process.exit(0);
+      }
+      const raw = JSON.parse(fs.readFileSync(reflectionFile, 'utf-8'));
+      const adapted = _adaptReflectionToBridgeFormat(raw);
+      result = processReflection(org, adapted, pluginRoot);
+      source = 'reflection';
+    } else {
+      console.error('❌ Either --obs-file or --reflection-file is required');
+      process.exit(1);
+    }
+
+    // Record automation status
+    try {
+      const { recordObservationProcessed, recordReflectionProcessed } = require('./runbook-automation-status');
+      if (source === 'observation') {
+        recordObservationProcessed(org, obsFile, result, pluginRoot);
+      } else {
+        recordReflectionProcessed(org, reflectionFile, result, pluginRoot);
+      }
+    } catch (err) {
+      // Status tracking module may not exist yet — non-fatal
+    }
+
+    console.log(JSON.stringify(result, null, 2));
+  } catch (err) {
+    // Record error if status module available
+    try {
+      const { recordError } = require('./runbook-automation-status');
+      recordError(org, obsFile ? 'observation' : 'reflection', err.message, pluginRoot);
+    } catch (_) { /* ignore */ }
+
+    console.error(`⚠️  Runbook auto-update failed: ${err.message}`);
+    process.exit(0); // Graceful — don't break hooks
+  }
+}
+
 // ── Exports ────────────────────────────────────────────────────────────────
 
 module.exports = {
@@ -343,5 +512,6 @@ module.exports = {
   processObservation,
   processReflection,
   // Exposed for testing
-  _applyToStore
+  _applyToStore,
+  _adaptReflectionToBridgeFormat
 };

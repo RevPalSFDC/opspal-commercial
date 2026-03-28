@@ -71,7 +71,7 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.12 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.46.5 | active | 79 | 113 | 79 |
+| `opspal-core` | 2.46.6 | active | 79 | 113 | 79 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 1 | 1 |
 | `opspal-gtm-planning` | 2.3.4 | active | 13 | 16 | 4 |
 | `opspal-hubspot` | 3.9.16 | active | 59 | 33 | 14 |
@@ -79,7 +79,7 @@ git pull origin main
 | `opspal-mcp-client` | 1.1.3 | active | 3 | 3 | 3 |
 | `opspal-monday` | 1.4.7 | experimental | 6 | 1 | 2 |
 | `opspal-okrs` | 3.0.8 | active | 14 | 14 | 4 |
-| `opspal-salesforce` | 3.86.12 | active | 94 | 59 | 42 |
+| `opspal-salesforce` | 3.86.13 | active | 94 | 59 | 42 |
 
 Deprecated compatibility note: `opspal-data-hygiene` remains published for compatibility, but new installs should prefer the deduplication commands in `opspal-core`.
 

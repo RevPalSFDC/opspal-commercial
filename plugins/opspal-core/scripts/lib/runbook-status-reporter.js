@@ -18,6 +18,7 @@ const { loadRegistry } = require('./runbook-registry');
 const { loadEntries } = require('./runbook-entry-store');
 const { loadPromotions } = require('./runbook-promotion-manager');
 const { loadConflicts, getUnresolvedConflicts } = require('./runbook-conflict-manager');
+const { getAutomationStatus } = require('./runbook-automation-status');
 
 /**
  * Get comprehensive runbook status for an org.
@@ -90,6 +91,18 @@ function getRunbookStatus(org, pluginRoot) {
   // Conflicts
   const unresolvedConflicts = getUnresolvedConflicts(org, pluginRoot);
 
+  // Automation status
+  const autoStatus = getAutomationStatus(org, pluginRoot);
+  const automation = {
+    lastObservationProcessed: autoStatus.lastObservationProcessed?.timestamp || null,
+    lastReflectionProcessed: autoStatus.lastReflectionProcessed?.timestamp || null,
+    lastReconciliation: autoStatus.lastReconciliation?.timestamp || null,
+    totalObservationsProcessed: autoStatus.totalObservationsProcessed || 0,
+    totalReflectionsProcessed: autoStatus.totalReflectionsProcessed || 0,
+    totalReconciliations: autoStatus.totalReconciliations || 0,
+    recentErrors: (autoStatus.errors || []).slice(-5)
+  };
+
   return {
     org,
     registeredRunbooks: registry.runbooks.length,
@@ -101,7 +114,8 @@ function getRunbookStatus(org, pluginRoot) {
     unresolvedConflicts,
     staleEntries,
     lowConfidenceActive,
-    topRunbooks: runbookStats.slice(0, 5)
+    topRunbooks: runbookStats.slice(0, 5),
+    automation
   };
 }
 

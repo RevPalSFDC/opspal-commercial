@@ -230,6 +230,14 @@ function reconcile(org, options = {}, pluginRoot) {
     }
   }
 
+  // Record reconciliation timestamp for observability
+  try {
+    const { recordReconciliation } = require('./runbook-automation-status');
+    recordReconciliation(org, result, pluginRoot);
+  } catch (err) {
+    // Status tracking module may not be available — non-fatal
+  }
+
   return result;
 }
 

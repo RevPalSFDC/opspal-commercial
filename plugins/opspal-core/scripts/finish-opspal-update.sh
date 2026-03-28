@@ -1960,6 +1960,109 @@ step10_customization_migration() {
   return 0
 }
 
+# ============================================================================
+# Step 11: Runbook automation enablement
+# ============================================================================
+
+step11_runbook_automation() {
+  local core_plugin_root
+  core_plugin_root="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd)"
+
+  local sf_plugin_root=""
+  for candidate_path in \
+      "$core_plugin_root/../opspal-salesforce" \
+      "$(dirname "$core_plugin_root")/opspal-salesforce"; do
+    if [ -d "$candidate_path/hooks" ]; then
+      sf_plugin_root="$(cd "$candidate_path" && pwd)"
+      break
+    fi
+  done
+
+  local checks_passed=0
+  local checks_total=0
+  local details=""
+
+  # Check 1: Incremental updater CLI exists
+  checks_total=$((checks_total + 1))
+  local updater="$core_plugin_root/scripts/lib/runbook-incremental-updater.js"
+  if [ -f "$updater" ]; then
+    checks_passed=$((checks_passed + 1))
+    details="${details}  ✅ Incremental updater module present\n"
+  else
+    details="${details}  ❌ Incremental updater module missing: $updater\n"
+  fi
+
+  # Check 2: Automation status module exists
+  checks_total=$((checks_total + 1))
+  local status_mod="$core_plugin_root/scripts/lib/runbook-automation-status.js"
+  if [ -f "$status_mod" ]; then
+    checks_passed=$((checks_passed + 1))
+    details="${details}  ✅ Automation status tracker present\n"
+  else
+    details="${details}  ❌ Automation status tracker missing: $status_mod\n"
+  fi
+
+  # Check 3: Post-operation hook has auto-runbook wiring
+  checks_total=$((checks_total + 1))
+  if [ -n "$sf_plugin_root" ]; then
+    local obs_hook="$sf_plugin_root/hooks/post-operation-observe.sh"
+    if [ -f "$obs_hook" ] && grep -q "ENABLE_AUTO_RUNBOOK" "$obs_hook" 2>/dev/null; then
+      checks_passed=$((checks_passed + 1))
+      details="${details}  ✅ Post-operation hook has runbook automation wiring\n"
+    else
+      details="${details}  ❌ Post-operation hook missing ENABLE_AUTO_RUNBOOK integration\n"
+    fi
+  else
+    details="${details}  ⏭️  Salesforce plugin not found — skipping hook check\n"
+  fi
+
+  # Check 4: Post-reflect hook has auto-runbook wiring
+  checks_total=$((checks_total + 1))
+  local reflect_hook="$core_plugin_root/hooks/reflection/post-reflect.sh"
+  if [ -f "$reflect_hook" ] && grep -q "ENABLE_AUTO_RUNBOOK" "$reflect_hook" 2>/dev/null; then
+    checks_passed=$((checks_passed + 1))
+    details="${details}  ✅ Post-reflect hook has runbook automation wiring\n"
+  else
+    details="${details}  ❌ Post-reflect hook missing ENABLE_AUTO_RUNBOOK integration\n"
+  fi
+
+  # Check 5: Reconciliation module exists
+  checks_total=$((checks_total + 1))
+  local reconcile_mod="$core_plugin_root/scripts/lib/runbook-reconcile.js"
+  if [ -f "$reconcile_mod" ]; then
+    checks_passed=$((checks_passed + 1))
+    details="${details}  ✅ Reconciliation engine present\n"
+  else
+    details="${details}  ❌ Reconciliation engine missing: $reconcile_mod\n"
+  fi
+
+  # Report ENABLE_AUTO_RUNBOOK status
+  local auto_runbook_status="${ENABLE_AUTO_RUNBOOK:-1}"
+  if [ "$auto_runbook_status" = "1" ]; then
+    details="${details}  ✅ ENABLE_AUTO_RUNBOOK=1 (automatic processing enabled)\n"
+  else
+    details="${details}  ⚠️  ENABLE_AUTO_RUNBOOK=$auto_runbook_status (automatic processing disabled)\n"
+  fi
+
+  echo -e "$details"
+
+  if [ "$checks_passed" -eq "$checks_total" ]; then
+    update_step_status "passed"
+    append_step_message "Runbook automation verified ($checks_passed/$checks_total checks passed, ENABLE_AUTO_RUNBOOK=${auto_runbook_status})"
+    echo ""
+    echo "  📔 Living Runbook System: ACTIVE"
+    echo "     Observations → auto-processed after each agent operation"
+    echo "     Reflections → auto-processed after each /reflect submission"
+    echo "     Disable: export ENABLE_AUTO_RUNBOOK=0"
+    echo "     Status: node $core_plugin_root/scripts/lib/runbook-status-reporter.js --org <your-org>"
+  else
+    update_step_status "degraded"
+    append_step_message "Runbook automation partially available ($checks_passed/$checks_total checks passed)"
+  fi
+
+  return 0
+}
+
 run_step "step1-plugin-validation" "Step 1: Plugin Validation" "🔧 Step 1: Running plugin validation..." step1_plugin_validation
 run_step "step2-clean-stale-hooks" "Step 2: Clean stale plugin hooks and activate statusline" "🧹 Step 2: Cleaning stale plugin hooks and activating the OpsPal statusline..." step2_clean_stale_hooks
 run_step "step3-runtime-reconciliation" "Step 3: Runtime reconciliation and routing validation" "🧭 Step 3: Reconciling installed runtime, refreshing routing artifacts, and validating hook health..." step3_runtime_reconciliation
@@ -1970,6 +2073,7 @@ run_step "step7-sync-claudemd" "Step 7: CLAUDE.md sync" "📝 Step 7: Syncing CL
 run_step "step8-routing-promotion" "Step 8: Routing promotion verification" "🚦 Step 8: Routing promotion verification & condensed routing pre-gen..." step8_routing_promotion
 run_step "step9-subagent-remediation" "Step 9: Sub-agent tool access remediation" "🔓 Step 9: Verifying sub-agent tool access configuration..." step9_subagent_remediation
 run_step "step10-customization-migration" "Step 10: Customization migration" "🎨 Step 10: Running customization migrations..." step10_customization_migration
+run_step "step11-runbook-automation" "Step 11: Runbook automation enablement" "📔 Step 11: Verifying runbook automation wiring..." step11_runbook_automation
 
 # Summary
 CURRENT_STEP="summary"

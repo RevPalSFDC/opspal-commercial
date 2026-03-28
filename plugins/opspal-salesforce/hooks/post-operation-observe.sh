@@ -369,6 +369,38 @@ done
 OBSERVER_EXIT=$?
 
 # ==============================================================================
+# Phase 3.2: Incremental Runbook Update (non-blocking)
+# ==============================================================================
+
+ENABLE_AUTO_RUNBOOK="${ENABLE_AUTO_RUNBOOK:-1}"
+if [[ "$ENABLE_AUTO_RUNBOOK" = "1" ]] && [[ $OBSERVER_EXIT -eq 0 ]]; then
+    # Find the observation file just written (most recent in the org's observations dir)
+    OBS_FILE=$(ls -t "$PLUGIN_ROOT/instances/$ORG_ALIAS/observations/"*.json 2>/dev/null | head -1)
+
+    # Locate the core plugin's incremental updater
+    CORE_PLUGIN=""
+    for candidate_path in \
+        "${CLAUDE_PLUGIN_ROOT%/*}/opspal-core" \
+        "$PLUGIN_ROOT/../../opspal-core" \
+        "$PLUGIN_ROOT/../opspal-core" \
+        "$(dirname "$PLUGIN_ROOT")/opspal-core"; do
+        if [[ -f "$candidate_path/scripts/lib/runbook-incremental-updater.js" ]]; then
+            CORE_PLUGIN="$candidate_path"
+            break
+        fi
+    done
+
+    if [[ -n "$CORE_PLUGIN" ]] && [[ -n "$OBS_FILE" ]]; then
+        UPDATER="$CORE_PLUGIN/scripts/lib/runbook-incremental-updater.js"
+        # Run in background with timeout, non-blocking, swallow errors
+        (timeout 10s node "$UPDATER" --org "$ORG_ALIAS" --obs-file "$OBS_FILE" --plugin-root "$CORE_PLUGIN" 2>/dev/null || true) &
+        if [[ "$DEBUG" = "1" ]]; then
+            echo -e "${CYAN:-}📔 Runbook auto-update triggered for $ORG_ALIAS${NC:-}"
+        fi
+    fi
+fi
+
+# ==============================================================================
 # Phase 3.1: Post-Flow Deployment State Verification
 # ==============================================================================
 

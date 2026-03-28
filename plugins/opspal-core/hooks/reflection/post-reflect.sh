@@ -220,6 +220,20 @@ SUBMIT_EXIT_CODE=$?
 
 if [[ $SUBMIT_EXIT_CODE -eq 0 ]]; then
     echo -e "${GREEN}✅ Submission successful${NC}"
+
+    # ── Incremental Runbook Update from reflection (non-blocking) ────────
+    ENABLE_AUTO_RUNBOOK="${ENABLE_AUTO_RUNBOOK:-1}"
+    if [[ "$ENABLE_AUTO_RUNBOOK" = "1" ]]; then
+        UPDATER="$PLUGIN_ROOT/scripts/lib/runbook-incremental-updater.js"
+        if [[ -f "$UPDATER" ]] && [[ -f "$REFLECTION_FILE" ]]; then
+            REFL_ORG=$(jq -r '.session_metadata.org // .org // .org_alias // empty' "$REFLECTION_FILE" 2>/dev/null)
+            if [[ -n "$REFL_ORG" ]]; then
+                (timeout 10s node "$UPDATER" --org "$REFL_ORG" --reflection-file "$REFLECTION_FILE" --plugin-root "$PLUGIN_ROOT" 2>/dev/null || true) &
+                echo -e "${CYAN}📔 Runbook auto-update from reflection triggered${NC}"
+            fi
+        fi
+    fi
+
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     exit 0
 else

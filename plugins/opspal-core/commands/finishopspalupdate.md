@@ -148,6 +148,15 @@ After execution, summarize the results to the user.
    - Writes a machine-readable finish report and clears the pending update session state
 
 10. **Sub-agent tool access remediation** - Ensures sub-agents can use their declared tools:
+
+11. **Runbook automation enablement** - Verifies the Living Runbook System automation is wired up:
+   - Checks incremental updater CLI module is present
+   - Checks automation status tracker is present
+   - Verifies post-operation hook has `ENABLE_AUTO_RUNBOOK` integration
+   - Verifies post-reflect hook has `ENABLE_AUTO_RUNBOOK` integration
+   - Checks reconciliation engine is present
+   - Reports `ENABLE_AUTO_RUNBOOK` status (default: enabled)
+   - Shows status command for verification: `node scripts/lib/runbook-status-reporter.js --org <your-org>`
    - Verifies the Bash permission contract is opt-in only (SUBAGENT_BASH_CONTRACT_ENABLED guard)
    - Confirms the deploy execution contract prompt injection is removed
    - Validates pre-deploy-agent-context-check.sh reads agent_type from hook JSON input
