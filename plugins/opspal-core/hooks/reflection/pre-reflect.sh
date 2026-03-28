@@ -82,6 +82,15 @@ if ! command -v node &> /dev/null; then
     exit 0
 fi
 
+AMBIENT_FLUSH_HOOK="$PLUGIN_ROOT/hooks/ambient-flush-trigger.sh"
+AMBIENT_STATE_DIR="$HOME/.claude/ambient-reflections"
+AMBIENT_HANDOFF_FILE="$AMBIENT_STATE_DIR/.last-manual-flush.json"
+if [[ -f "$AMBIENT_FLUSH_HOOK" ]]; then
+    mkdir -p "$AMBIENT_STATE_DIR" 2>/dev/null || true
+    FLUSH_RESULT="$(AMBIENT_REFLECT_FORCE_FLUSH=1 AMBIENT_REFLECT_CAPTURE_RESULT=1 bash "$AMBIENT_FLUSH_HOOK" manual_reflect 2>/dev/null || echo '{}')"
+    printf '%s\n' "${FLUSH_RESULT:-{}}" > "$AMBIENT_HANDOFF_FILE" 2>/dev/null || true
+fi
+
 # Build options for batch script
 BATCH_OPTIONS="--quick"  # Fast mode by default
 

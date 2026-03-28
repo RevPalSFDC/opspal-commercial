@@ -46,6 +46,12 @@ ERROR_LOG_FILE="${HOME}/.claude/logs/hook-errors.jsonl"
 ERROR_LOG_FALLBACK_FILE="/tmp/.claude/logs/hook-errors.jsonl"
 ENABLE_CENTRALIZED_LOGGING="${ENABLE_CENTRALIZED_LOGGING:-1}"
 HOOK_NAME="${HOOK_NAME:-unknown}"
+HOOK_PHASE="${HOOK_PHASE:-unknown}"
+HOOK_TRIGGERING_ACTION="${HOOK_TRIGGERING_ACTION:-}"
+HOOK_RETRY_COUNT="${HOOK_RETRY_COUNT:-0}"
+HOOK_RECOVERY_SUCCEEDED="${HOOK_RECOVERY_SUCCEEDED:-}"
+HOOK_LAST_EXIT_CODE="${HOOK_LAST_EXIT_CODE:-}"
+ENABLE_HOOK_STACK_TRACE="${ENABLE_HOOK_STACK_TRACE:-0}"
 
 resolve_log_file_path() {
     local preferred_file="$1"
@@ -84,6 +90,57 @@ append_jsonl_with_fallback() {
     return 0
 }
 
+escape_json_string() {
+    local value="${1:-}"
+    printf '%s' "$value" | sed 's/\\/\\\\/g; s/"/\\"/g' | tr '\n' ' '
+}
+
+normalize_integer() {
+    local value="${1:-0}"
+    if [[ "$value" =~ ^-?[0-9]+$ ]]; then
+        printf '%s' "$value"
+    else
+        printf '0'
+    fi
+}
+
+normalize_boolean_or_empty() {
+    local value="${1:-}"
+    case "${value,,}" in
+        true|1|yes|on)
+            printf 'true'
+            ;;
+        false|0|no|off)
+            printf 'false'
+            ;;
+        *)
+            printf '""'
+            ;;
+    esac
+}
+
+capture_hook_stack_trace() {
+    if [[ "${ENABLE_HOOK_STACK_TRACE:-0}" != "1" ]]; then
+        printf ''
+        return 0
+    fi
+
+    local frames=()
+    local idx=1
+    local max_frames=4
+
+    while [[ $idx -lt ${#FUNCNAME[@]} ]] && [[ ${#frames[@]} -lt $max_frames ]]; do
+        local fn_name="${FUNCNAME[$idx]:-main}"
+        local source_file="${BASH_SOURCE[$idx]:-unknown}"
+        local line_number="${BASH_LINENO[$((idx - 1))]:-0}"
+        frames+=("${fn_name}@$(basename "$source_file"):${line_number}")
+        idx=$((idx + 1))
+    done
+
+    local IFS=' | '
+    printf '%s' "${frames[*]}"
+}
+
 # =============================================================================
 # Core Functions
 # =============================================================================
@@ -105,6 +162,7 @@ handle_error() {
     local exit_code=$1
     local line_number=$2
     local command="$3"
+    HOOK_LAST_EXIT_CODE="$exit_code"
 
     log_error "Command failed: ${command}" "line_${line_number}" "exit_code=${exit_code}"
 
@@ -171,15 +229,28 @@ log_to_central() {
     local message="$2"
     local context="$3"
     local details="$4"
+    local stack_trace
+    local retry_count
+    local exit_code
+    local recovery_succeeded
+    local triggering_action
+    local hook_phase
 
-    # Escape special characters for JSON
-    message=$(echo "$message" | sed 's/"/\\"/g' | tr '\n' ' ')
-    context=$(echo "$context" | sed 's/"/\\"/g' | tr '\n' ' ')
-    details=$(echo "$details" | sed 's/"/\\"/g' | tr '\n' ' ')
+    stack_trace="$(capture_hook_stack_trace)"
+    retry_count="$(normalize_integer "$HOOK_RETRY_COUNT")"
+    exit_code="$(normalize_integer "$HOOK_LAST_EXIT_CODE")"
+    recovery_succeeded="$(normalize_boolean_or_empty "$HOOK_RECOVERY_SUCCEEDED")"
+    triggering_action="$(escape_json_string "$HOOK_TRIGGERING_ACTION")"
+    hook_phase="$(escape_json_string "$HOOK_PHASE")"
+
+    message="$(escape_json_string "$message")"
+    context="$(escape_json_string "$context")"
+    details="$(escape_json_string "$details")"
+    stack_trace="$(escape_json_string "$stack_trace")"
 
     # Write JSON line
     append_jsonl_with_fallback \
-        "{\"timestamp\":\"$(get_timestamp)\",\"level\":\"${level}\",\"hook\":\"${HOOK_NAME}\",\"message\":\"${message}\",\"context\":\"${context}\",\"details\":\"${details}\"}" \
+        "{\"timestamp\":\"$(get_timestamp)\",\"level\":\"$(escape_json_string "$level")\",\"hook\":\"$(escape_json_string "$HOOK_NAME")\",\"hook_phase\":\"${hook_phase}\",\"triggering_action\":\"${triggering_action}\",\"message\":\"${message}\",\"context\":\"${context}\",\"details\":\"${details}\",\"exit_code\":${exit_code},\"retry_count\":${retry_count},\"recovery_succeeded\":${recovery_succeeded},\"stack_trace\":\"${stack_trace}\"}" \
         "$ERROR_LOG_FILE" \
         "$ERROR_LOG_FALLBACK_FILE" \
         || true
@@ -194,6 +265,7 @@ exit_with_error() {
     local code="${1:-1}"
     local message="${2:-Unknown error}"
     local operation="${3:-}"
+    HOOK_LAST_EXIT_CODE="$code"
 
     log_error "$message" "$operation" "exit_code=$code"
     exit "$code"
@@ -769,6 +841,8 @@ export -f get_cached_context set_cached_context clear_cached_context
 export -f load_env_file load_project_env
 export -f calculate_complexity match_routing_pattern
 export -f find_reflection_file
+export -f escape_json_string normalize_integer normalize_boolean_or_empty capture_hook_stack_trace
+export HOOK_PHASE HOOK_TRIGGERING_ACTION HOOK_RETRY_COUNT HOOK_RECOVERY_SUCCEEDED HOOK_LAST_EXIT_CODE ENABLE_HOOK_STACK_TRACE
 
 # =============================================================================
 # End of Library

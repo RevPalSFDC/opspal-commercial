@@ -1,0 +1,43 @@
+{
+  "mode": "shadow_mode",
+  "buffer": {
+    "maxCandidates": 200,
+    "maxAgeMinutes": 120,
+    "flushIntervalSeconds": 60,
+    "taskCompletionFlushThreshold": 5,
+    "repeatedFrictionThreshold": 3,
+    "topicTransitionMinCandidates": 8,
+    "priorityImmediateThresholds": {
+      "hookFailures": 3,
+      "toolErrors": 5,
+      "retries": 4
+    }
+  },
+  "compiler": {
+    "minScoreToKeep": 0.3,
+    "dedupeWindowMinutes": 10,
+    "maxIssuesPerReflection": 25
+  },
+  "skillCandidate": {
+    "patternRepeatThreshold": 3,
+    "crossSessionWindowDays": 7,
+    "crossSessionSessionThreshold": 2
+  },
+  "hookObserver": {
+    "captureTimeouts": true,
+    "captureNonZeroExits": true
+  },
+  "hookReflection": {
+    "enabled": true,
+    "immediateFlushOnError": true,
+    "severityDefault": "high",
+    "captureStackTrace": false,
+    "crashSafeFile": "hook-reflection-crash-safe.jsonl",
+    "maxCrashSafeEntries": 100,
+    "dedupeWindowSeconds": 300,
+    "crossSessionWindowSeconds": 86400
+  },
+  "sanitization": {
+    "maxFieldLength": 200
+  }
+}

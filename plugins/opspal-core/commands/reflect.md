@@ -351,6 +351,8 @@ Provide output in this exact structure:
 ```json
 {
   "summary": "Brief description of what was attempted and outcome",
+  "source": "manual|hybrid",
+  "correlation_id": "uuid-or-null",
   "outcome": "success|partial|failure|blocked",
   "session_metadata": {
     "session_start": "ISO timestamp of first user message",
@@ -359,6 +361,14 @@ Provide output in this exact structure:
     "duration_source": "auto_captured|user_provided|estimated",
     "org": "org-alias if applicable",
     "focus_area": "primary focus taxonomy"
+  },
+  "ambient_context": {
+    "flushed": false,
+    "flush_reason": "manual_reflect|critical_failure|threshold|topic_transition|null",
+    "payload_count": 0,
+    "compiled_candidate_count": 0,
+    "source": "auto|manual|null",
+    "correlation_id": "uuid-or-null"
   },
   "session_context": {
     "files_edited": [{"path": "...", "operation": "UPDATE", "lines_changed": 45}],
@@ -614,6 +624,28 @@ node "$PLUGIN_ROOT/scripts/lib/debugging-context-extractor.js" extract --window=
 
 If the file exists and returns data, include the `debugging_context` and `instrumentation_gaps` sections in the reflection JSON.
 
+**Ambient Reflection Handoff** (NEW):
+If `~/.claude/ambient-reflections/.last-manual-flush.json` exists, load it before analyzing the session:
+
+```bash
+AMBIENT_HANDOFF_FILE="$HOME/.claude/ambient-reflections/.last-manual-flush.json"
+if [ -f "$AMBIENT_HANDOFF_FILE" ]; then
+    cat "$AMBIENT_HANDOFF_FILE"
+fi
+```
+
+Use this handoff to set the reflection source:
+- `source: "hybrid"` when the ambient handoff reports `flushed=true` and `payload_count > 0`
+- `source: "manual"` otherwise
+
+If ambient data was flushed, copy `correlation_id` into the reflection output and include an `ambient_context` object summarizing:
+- `flushed`
+- `flush_reason`
+- `payload_count`
+- `compiled_candidate_count`
+- `source` (`auto` or `manual` from the ambient system)
+- `correlation_id`
+
 ### Step 0b: Locate Plugin and Check for Pending Reflections
 BEFORE analyzing the current session, locate the plugin installation using multi-path discovery:
 
@@ -680,6 +712,8 @@ Use the Write tool to save the file.
 
 **IMPORTANT**: Ensure the JSON includes these required fields for Supabase submission:
 - `summary` (string): Brief description of session
+- `source` (string): `manual` or `hybrid`
+- `correlation_id` (string|null): Carry forward the ambient flush correlation ID when hybrid
 - `issues_identified` (array): Array of issue objects
 - `plugin_name` (string): Auto-detected from plugin.json
 - `plugin_version` (string): Auto-detected from plugin.json
@@ -721,6 +755,7 @@ node "$PLUGIN_ROOT/scripts/lib/submit-reflection.js" <reflection-path>
 ### Step 4: Report Status
 Inform the user:
 - Where the reflection was saved locally
+- Whether ambient context was flushed and attached
 - Submission status (succeeded, failed, or pending via hook)
 - How to query their reflections
 - Manual submission command if both attempts failed

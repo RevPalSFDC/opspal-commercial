@@ -103,6 +103,110 @@ const MANAGED_USER_PROMPT_HOOKS = [
     file: 'intake-suggestion.sh',
     timeout: 5000,
     description: 'Suggest /intake for project-level requests using complexity scoring and language detection'
+  },
+  {
+    key: 'ambient-user-prompt-candidate-extractor',
+    file: 'ambient-candidate-extractor.sh',
+    timeout: 3000,
+    description: 'Extract ambient reflection candidates from user correction and capability-request signals'
+  }
+];
+const MANAGED_USER_LEVEL_EVENT_HOOKS = [
+  {
+    event: 'SessionStart',
+    matcher: '*',
+    hooks: [
+      {
+        key: 'session-capture-init',
+        file: 'session-capture-init.sh',
+        timeout: 5000,
+        description: 'Initialize session capture and ambient reflection state for the current Claude session'
+      }
+    ]
+  },
+  {
+    event: 'PostToolUse',
+    matcher: '*',
+    hooks: [
+      {
+        key: 'ambient-post-tool-candidate-extractor',
+        file: 'ambient-candidate-extractor.sh',
+        timeout: 3000,
+        description: 'Extract ambient reflection candidates from PostToolUse events'
+      },
+      {
+        key: 'ambient-post-tool-hook-error-observer',
+        file: 'ambient-hook-error-observer.sh',
+        timeout: 3000,
+        description: 'Convert newly logged hook failures into ambient reflection candidates'
+      },
+      {
+        key: 'ambient-post-tool-flush-trigger',
+        file: 'ambient-flush-trigger.sh',
+        timeout: 3000,
+        description: 'Check ambient reflection flush thresholds after tool activity'
+      }
+    ]
+  },
+  {
+    event: 'PreCompact',
+    matcher: '*',
+    hooks: [
+      {
+        key: 'ambient-pre-compact-flush-trigger',
+        file: 'ambient-flush-trigger.sh',
+        timeout: 5000,
+        description: 'Flush ambient reflection candidates before context compaction'
+      }
+    ]
+  },
+  {
+    event: 'SubagentStop',
+    matcher: '*',
+    hooks: [
+      {
+        key: 'ambient-subagent-stop-candidate-extractor',
+        file: 'ambient-candidate-extractor.sh',
+        timeout: 3000,
+        description: 'Convert failed subagent telemetry into ambient reflection candidates'
+      }
+    ]
+  },
+  {
+    event: 'TaskCompleted',
+    matcher: '*',
+    hooks: [
+      {
+        key: 'ambient-task-completed-candidate-extractor',
+        file: 'ambient-candidate-extractor.sh',
+        timeout: 3000,
+        description: 'Extract ambient reflection candidates from TaskCompleted telemetry'
+      },
+      {
+        key: 'ambient-task-completed-flush-trigger',
+        file: 'ambient-flush-trigger.sh',
+        timeout: 3000,
+        description: 'Evaluate task-completion ambient reflection flush thresholds'
+      }
+    ]
+  },
+  {
+    event: 'Stop',
+    matcher: '*',
+    hooks: [
+      {
+        key: 'ambient-stop-hook-error-observer',
+        file: 'ambient-hook-error-observer.sh',
+        timeout: 3000,
+        description: 'Capture hook failures logged during Stop processing before session teardown finishes'
+      },
+      {
+        key: 'ambient-stop-flush-trigger',
+        file: 'ambient-flush-trigger.sh',
+        timeout: 5000,
+        description: 'Flush ambient reflection candidates at session end'
+      }
+    ]
   }
 ];
 const USER_LEVEL_PROJECT_OWNED_EVENTS = new Set(['SessionStart', 'PreToolUse', 'PostToolUse', 'Stop', 'SubagentStop']);
@@ -121,6 +225,27 @@ const CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS = [
   'scripts/lib/post-plugin-update-fixes.js',
   'scripts/lib/hook-merger.js',
   'scripts/lib/reconcile-hook-registration.js'
+];
+const AMBIENT_RUNTIME_ASSETS = [
+  'config/ambient-reflection-config.json',
+  'hooks/ambient-candidate-extractor.sh',
+  'hooks/ambient-flush-trigger.sh',
+  'hooks/ambient-hook-error-observer.sh',
+  'hooks/session-capture-init.sh',
+  'scripts/lib/ambient/ambient-reflection-submitter.js',
+  'scripts/lib/ambient/config-loader.js',
+  'scripts/lib/ambient/extractors/post-tool-extractor.js',
+  'scripts/lib/ambient/extractors/subagent-extractor.js',
+  'scripts/lib/ambient/extractors/task-completed-extractor.js',
+  'scripts/lib/ambient/extractors/user-prompt-extractor.js',
+  'scripts/lib/ambient/flush-trigger-engine.js',
+  'scripts/lib/ambient/hook-error-observer.js',
+  'scripts/lib/ambient/hook-reflection-interceptor.js',
+  'scripts/lib/ambient/reflection-candidate-buffer.js',
+  'scripts/lib/ambient/reflection-compiler.js',
+  'scripts/lib/ambient/shadow-validator.js',
+  'scripts/lib/ambient/skill-candidate-detector.js',
+  'scripts/lib/ambient/utils.js'
 ];
 
 // ============================================================================
@@ -226,6 +351,9 @@ class PostPluginUpdateFixes {
     if (!hook || typeof hook.command !== 'string') {
       return false;
     }
+    if (this.isManagedEventHook(eventName, hook)) {
+      return false;
+    }
 
     return USER_LEVEL_PROJECT_HOOK_PATTERNS.some((pattern) => hook.command.includes(pattern)) ||
       USER_LEVEL_OPSPAL_PLUGIN_HOOK_PATTERN.test(hook.command);
@@ -306,6 +434,57 @@ class PostPluginUpdateFixes {
     }
   }
 
+  reconcileManagedEventHooks(settings) {
+    for (const groupDefinition of MANAGED_USER_LEVEL_EVENT_HOOKS) {
+      const existingGroups = Array.isArray(settings?.hooks?.[groupDefinition.event])
+        ? settings.hooks[groupDefinition.event]
+        : [];
+      const resolved = this.resolveManagedEventHooks(groupDefinition, existingGroups);
+
+      if (resolved.error) {
+        return resolved;
+      }
+
+      const reconciledGroups = [];
+
+      for (const group of existingGroups) {
+        const hooks = this.getGroupHooks(group);
+        if (hooks.length === 0) {
+          continue;
+        }
+
+        const retainedHooks = hooks
+          .filter((hook) => !this.isManagedEventHook(groupDefinition.event, hook))
+          .map((hook) => ({ ...hook }));
+
+        if (retainedHooks.length === 0) {
+          continue;
+        }
+
+        const nextGroup = {
+          hooks: retainedHooks
+        };
+        const matcher = this.normalizeGroupMatcher(group?.matcher);
+        if (matcher !== undefined) {
+          nextGroup.matcher = matcher;
+        }
+        reconciledGroups.push(nextGroup);
+      }
+
+      const managedGroup = {
+        hooks: resolved.hooks
+      };
+      const matcher = this.normalizeGroupMatcher(groupDefinition.matcher);
+      if (matcher !== undefined) {
+        managedGroup.matcher = matcher;
+      }
+      reconciledGroups.push(managedGroup);
+      settings.hooks[groupDefinition.event] = reconciledGroups;
+    }
+
+    return { ok: true };
+  }
+
   // ==========================================================================
   // User-Level Hook Configuration
   // ==========================================================================
@@ -333,6 +512,20 @@ class PostPluginUpdateFixes {
     return null;
   }
 
+  getManagedEventHookKey(eventName, command) {
+    if (typeof command !== 'string' || command.trim() === '') return null;
+    const group = MANAGED_USER_LEVEL_EVENT_HOOKS.find((entry) => entry.event === eventName);
+    if (!group) return null;
+
+    for (const hookDef of group.hooks) {
+      if (command.includes(hookDef.file)) {
+        return hookDef.key;
+      }
+    }
+
+    return null;
+  }
+
   isManagedUserPromptHook(hook) {
     if (!hook || typeof hook !== 'object') return false;
     return this.getManagedHookKey(hook.command) !== null;
@@ -344,6 +537,11 @@ class PostPluginUpdateFixes {
       hook.command.includes('reminder.md') ||
       hook.command.includes('user-prompt-reminder.sh')
     );
+  }
+
+  isManagedEventHook(eventName, hook) {
+    if (!hook || typeof hook !== 'object') return false;
+    return this.getManagedEventHookKey(eventName, hook.command) !== null;
   }
 
   extractScriptPath(command) {
@@ -387,10 +585,14 @@ class PostPluginUpdateFixes {
 
   findCorePluginRoot() {
     const requiredHookPath = (root, file) => path.join(root, 'hooks', file);
+    const requiredHookFiles = [
+      ...MANAGED_USER_PROMPT_HOOKS.map((hookDef) => hookDef.file),
+      ...MANAGED_USER_LEVEL_EVENT_HOOKS.flatMap((group) => group.hooks.map((hookDef) => hookDef.file))
+    ];
 
     for (const candidate of this.getCorePluginCandidates()) {
-      const hasAllHooks = MANAGED_USER_PROMPT_HOOKS.every((hookDef) =>
-        fs.existsSync(requiredHookPath(candidate.root, hookDef.file))
+      const hasAllHooks = [...new Set(requiredHookFiles)].every((hookFile) =>
+        fs.existsSync(requiredHookPath(candidate.root, hookFile))
       );
       if (hasAllHooks) {
         return candidate.root;
@@ -840,6 +1042,7 @@ class PostPluginUpdateFixes {
       'hooks/pre-task-agent-validator.sh',
       'hooks/post-tool-use.sh',
       ...CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS,
+      ...AMBIENT_RUNTIME_ASSETS,
       'scripts/ci/validate-routing.sh',
       'scripts/lib/task-router.js',
       'scripts/lib/complexity-scorer.js',
@@ -1252,21 +1455,23 @@ class PostPluginUpdateFixes {
     return { fixed: totalRepaired > 0, count: totalRepaired };
   }
 
-  resolveManagedUserPromptHooks(existingGroups) {
+  resolveManagedHooks(hookDefinitions, existingGroups) {
     const hooksByKey = new Map();
     const corePluginRoot = this.findCorePluginRoot();
 
     for (const group of existingGroups) {
       for (const hook of this.getGroupHooks(group)) {
-        const key = this.getManagedHookKey(hook.command);
-        if (!key || hooksByKey.has(key)) continue;
+        const key = hookDefinitions.find((hookDef) => hook.command.includes(hookDef.file))?.key;
+        if (!key || hooksByKey.has(key)) {
+          continue;
+        }
         hooksByKey.set(key, hook.command);
       }
     }
 
     const resolvedHooks = [];
 
-    for (const hookDef of MANAGED_USER_PROMPT_HOOKS) {
+    for (const hookDef of hookDefinitions) {
       let command = null;
 
       if (corePluginRoot) {
@@ -1303,6 +1508,14 @@ class PostPluginUpdateFixes {
     }
 
     return { hooks: resolvedHooks };
+  }
+
+  resolveManagedUserPromptHooks(existingGroups) {
+    return this.resolveManagedHooks(MANAGED_USER_PROMPT_HOOKS, existingGroups);
+  }
+
+  resolveManagedEventHooks(groupDefinition, existingGroups) {
+    return this.resolveManagedHooks(groupDefinition.hooks, existingGroups);
   }
 
   evaluateUserPromptSubmit(settings, reminderPath) {
@@ -1424,6 +1637,91 @@ class PostPluginUpdateFixes {
     };
   }
 
+  evaluateManagedEventHooks(settings) {
+    const issues = [];
+    const missingManaged = [];
+    const managedPathDrift = new Set();
+    const timeoutMismatches = new Set();
+    const matcherDrift = new Set();
+    const duplicates = new Set();
+
+    for (const groupDefinition of MANAGED_USER_LEVEL_EVENT_HOOKS) {
+      const groups = Array.isArray(settings?.hooks?.[groupDefinition.event]) ? settings.hooks[groupDefinition.event] : [];
+      const resolvedHooks = this.resolveManagedEventHooks(groupDefinition, groups);
+      const expectedCommands = new Map();
+
+      if (!resolvedHooks.error) {
+        for (let index = 0; index < groupDefinition.hooks.length; index += 1) {
+          expectedCommands.set(groupDefinition.hooks[index].key, resolvedHooks.hooks[index].command.trim());
+        }
+      } else {
+        issues.push(`managed-event-unresolved:${groupDefinition.event}`);
+      }
+
+      for (const hookDef of groupDefinition.hooks) {
+        const matches = [];
+
+        for (const group of groups) {
+          for (const hook of this.getGroupHooks(group)) {
+            if (this.getManagedEventHookKey(groupDefinition.event, hook?.command) === hookDef.key) {
+              matches.push({ group, hook });
+            }
+          }
+        }
+
+        if (matches.length === 0) {
+          missingManaged.push(`${groupDefinition.event}:${hookDef.key}`);
+          continue;
+        }
+
+        if (matches.length > 1) {
+          duplicates.add(`${groupDefinition.event}:${hookDef.key}`);
+        }
+
+        const primary = matches[0];
+        const expectedMatcher = this.normalizeGroupMatcher(groupDefinition.matcher);
+        const actualMatcher = this.normalizeGroupMatcher(primary.group?.matcher);
+        if (expectedMatcher !== actualMatcher) {
+          matcherDrift.add(`${groupDefinition.event}:${hookDef.key}`);
+        }
+
+        if (primary.hook?.timeout !== hookDef.timeout) {
+          timeoutMismatches.add(`${groupDefinition.event}:${hookDef.key}`);
+        }
+
+        const expectedCommand = expectedCommands.get(hookDef.key);
+        if (!expectedCommand || typeof primary.hook?.command !== 'string' || primary.hook.command.trim() !== expectedCommand) {
+          managedPathDrift.add(`${groupDefinition.event}:${hookDef.key}`);
+        }
+      }
+    }
+
+    if (missingManaged.length > 0) {
+      issues.push('missing-managed-event-hooks');
+    }
+    if (duplicates.size > 0) {
+      issues.push('duplicate-managed-event-hooks');
+    }
+    if (managedPathDrift.size > 0) {
+      issues.push('managed-event-path-drift');
+    }
+    if (timeoutMismatches.size > 0) {
+      issues.push('managed-event-timeout-drift');
+    }
+    if (matcherDrift.size > 0) {
+      issues.push('managed-event-matcher-drift');
+    }
+
+    return {
+      issues,
+      missingManaged,
+      managedPathDrift: [...managedPathDrift],
+      timeoutMismatches: [...timeoutMismatches],
+      matcherDrift: [...matcherDrift],
+      duplicates: [...duplicates]
+    };
+  }
+
   inspectUserLevelHooksTarget(target) {
     const { claudeRoot, settingsPath } = target;
     const resultName = `UserPromptSubmit:${claudeRoot}`;
@@ -1441,10 +1739,11 @@ class PostPluginUpdateFixes {
       const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
       const reminderPath = this.findReminderFile();
       const analysis = this.evaluateUserPromptSubmit(settings, reminderPath);
+      const managedEventAnalysis = this.evaluateManagedEventHooks(settings);
       const projectHookAnalysis = this.evaluateProjectOwnedHookDrift(settings);
 
-      if (analysis.issues.length > 0 || projectHookAnalysis.issues.length > 0) {
-        const combinedIssues = [...analysis.issues, ...projectHookAnalysis.issues];
+      if (analysis.issues.length > 0 || managedEventAnalysis.issues.length > 0 || projectHookAnalysis.issues.length > 0) {
+        const combinedIssues = [...analysis.issues, ...managedEventAnalysis.issues, ...projectHookAnalysis.issues];
         this.results.userLevelHooks.checks.push({
           name: resultName,
           status: 'drifted',
@@ -1458,6 +1757,7 @@ class PostPluginUpdateFixes {
           needsFix: true,
           reason: combinedIssues[0],
           analysis,
+          managedEventAnalysis,
           projectHookAnalysis
         };
       }
@@ -1467,7 +1767,7 @@ class PostPluginUpdateFixes {
         status: 'valid',
         message: `${settingsPath} configured correctly`
       });
-      return { ...target, exists: true, settings, reminderPath, needsFix: false, analysis };
+      return { ...target, exists: true, settings, reminderPath, needsFix: false, analysis, managedEventAnalysis };
 
     } catch (error) {
       this.results.userLevelHooks.errors.push({
@@ -1577,6 +1877,15 @@ class PostPluginUpdateFixes {
 
       settings.hooks.UserPromptSubmit = reconciledGroups;
       this.reconcileNonUserPromptHooks(settings);
+      const managedEventResult = this.reconcileManagedEventHooks(settings);
+      if (managedEventResult?.error) {
+        this.results.userLevelHooks.errors.push({
+          name: settingsPath,
+          message: managedEventResult.error
+        });
+        this.log(`${icons.fail} ${managedEventResult.error}`);
+        return { fixed: false, reason: 'managed-event-hooks-unresolved' };
+      }
       sanitizeSettingsPermissions(settings);
 
       if (this.dryRun) {
@@ -1904,6 +2213,7 @@ class PostPluginUpdateFixes {
       'hooks/pre-task-agent-validator.sh',
       'hooks/post-tool-use.sh',
       ...CRITICAL_FINISH_UPDATE_RUNTIME_HELPERS,
+      ...AMBIENT_RUNTIME_ASSETS,
       'scripts/lib/hook-event-normalizer.js',
       'scripts/lib/hook-settings-normalizer.js',
       'scripts/lib/routing-context-refresher.js',

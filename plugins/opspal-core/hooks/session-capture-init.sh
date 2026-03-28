@@ -26,6 +26,7 @@ fi
 # Ensure session context directory exists
 SESSION_DIR="$HOME/.claude/session-context"
 mkdir -p "$SESSION_DIR"
+mkdir -p "$HOME/.claude/ambient-reflections"
 
 # Initialize session file
 SESSION_FILE="$SESSION_DIR/${CLAUDE_SESSION_ID}.json"
