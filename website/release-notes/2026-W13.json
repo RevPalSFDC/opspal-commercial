@@ -1,21 +1,30 @@
 {
   "slug": "2026-W13",
   "title": "Week of March 23, 2026",
-  "summary": "This week delivered major enhancements to automation discovery and analysis capabilities. OpsPal now automatically detects your organization's revenue fields and sales processes, providing more accurate RevOps assessments. We also introduced smart automation recommendations based on your existing Salesforce setup, and improved reliability across all platform connections.",
-  "published_at": "2026-03-28T00:59:57.447Z",
+  "summary": "This week brought major improvements to RevOps automation with smarter runbook generation that learns from your team's processes, enhanced revenue field detection for better Salesforce assessments, and streamlined Windows setup. We also added comprehensive deployment safety checks to prevent configuration errors and strengthened security with automated credential scanning.",
+  "published_at": "2026-03-28T01:08:49.129Z",
   "week_start": "2026-03-23",
   "week_end": "2026-03-28",
   "has_breaking": false,
-  "total_commits": 141,
+  "total_commits": 143,
   "entries": [
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Fixed Salesforce automation builder reliability issues",
+      "details": null,
+      "commits": [
+        "bb6f63f"
+      ]
+    },
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Smart automation recommendations learn from your existing setup",
+      "headline": "Intelligent runbook creation learns from your team's processes",
       "details": [
-        "OpsPal now analyzes your current automations and suggests improvements",
-        "Recommendations are tailored to your specific business processes and data structure",
-        "System automatically prioritizes suggestions based on potential impact"
+        "OpsPal now automatically generates step-by-step runbooks by observing how your team completes tasks",
+        "Creates reusable process documentation with confidence scoring",
+        "Builds a knowledge base that improves recommendations over time"
       ],
       "commits": [
         "406c435"
@@ -24,7 +33,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "More reliable Salesforce automation discovery",
+      "headline": "Salesforce automation routing works more reliably",
       "details": null,
       "commits": [
         "bb0484e"
@@ -32,20 +41,11 @@
     },
     {
       "category": "improved",
-      "plugin": "opspal-salesforce,opspal-core",
-      "headline": "Better tracking of automation analysis across all platforms",
-      "details": null,
-      "commits": [
-        "42d11df"
-      ]
-    },
-    {
-      "category": "new",
       "plugin": "Core Platform",
-      "headline": "Automation analysis now works across HubSpot and Marketo",
+      "headline": "HubSpot and Marketo operations now provide execution tracking",
       "details": [
-        "Same detailed automation insights now available for HubSpot and Marketo",
-        "Consistent analysis experience across all your revenue platforms"
+        "All platform operations now generate audit trails for compliance",
+        "Better visibility into what changes were made and when"
       ],
       "commits": [
         "8debc6b"
@@ -53,29 +53,11 @@
     },
     {
       "category": "improved",
-      "plugin": "Salesforce",
-      "headline": "More comprehensive Salesforce automation discovery",
-      "details": null,
-      "commits": [
-        "5a62d9a"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "Salesforce",
-      "headline": "Complete automation inventory now includes all Salesforce components",
-      "details": null,
-      "commits": [
-        "c861ec9"
-      ]
-    },
-    {
-      "category": "improved",
       "plugin": "opspal-core,opspal-salesforce",
-      "headline": "Safer analysis of production environments",
+      "headline": "Production environment safety controls enhanced",
       "details": [
-        "Read-only operations are now clearly separated from changes",
-        "Better protection against accidental modifications during analysis"
+        "Read-only operations no longer trigger unnecessary safety warnings",
+        "Clearer policies for different types of production activities"
       ],
       "commits": [
         "b4cb958"
@@ -84,29 +66,24 @@
     {
       "category": "new",
       "plugin": "release-notes",
-      "headline": "Automated release notes keep you informed of new features",
+      "headline": "Automated release notes keep you informed of platform updates",
       "details": [
-        "Release notes are now automatically generated and published",
-        "Get notified about new features and improvements as they ship"
+        "Weekly summaries of new features and improvements",
+        "Plain-language descriptions of technical changes that affect your work"
       ],
       "commits": [
         "f67a4b0"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "Salesforce",
-      "headline": "Better Salesforce permission analysis",
-      "details": null,
-      "commits": [
-        "8d52b09"
-      ]
-    },
-    {
       "category": "fixed",
       "plugin": "core,salesforce",
-      "headline": "Resolved connection issues with complex Salesforce setups",
-      "details": null,
+      "headline": "Salesforce permission management works more smoothly",
+      "details": [
+        "Reduced unnecessary validation blocks for routine operations",
+        "Better handling of permission set assignments",
+        "Improved automation for bulk data operations"
+      ],
       "commits": [
         "17a2aae"
       ]
@@ -114,19 +91,22 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Faster simple data lookups without extra routing",
-      "details": null,
+      "headline": "Simple Salesforce record lookups run faster",
+      "details": [
+        "Quick verification queries no longer require complex routing",
+        "Faster response times for single-record checks"
+      ],
       "commits": [
         "9281eba"
       ]
     },
     {
-      "category": "improved",
+      "category": "new",
       "plugin": "bootstrap",
-      "headline": "Easier Windows installation with automatic dependency setup",
+      "headline": "Windows setup now installs all required tools automatically",
       "details": [
-        "Windows users now get automatic installation of required tools",
-        "Simplified setup process handles Node.js and other dependencies"
+        "One-click installation of Claude Code, Node.js, and other dependencies",
+        "Streamlined onboarding experience for Windows users"
       ],
       "commits": [
         "4260f1a"
@@ -135,34 +115,19 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Better error detection and reporting during analysis",
-      "details": null,
+      "headline": "Better error detection and reporting for Salesforce connections",
+      "details": [
+        "Platform now detects authentication issues earlier",
+        "Clearer error messages when Salesforce connections fail"
+      ],
       "commits": [
         "d57de97"
       ]
     },
     {
-      "category": "fixed",
-      "plugin": "bootstrap",
-      "headline": "Improved Windows installation reliability",
-      "details": null,
-      "commits": [
-        "ffd4a80"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Read-only analysis now works reliably on production orgs",
-      "details": null,
-      "commits": [
-        "772d509"
-      ]
-    },
-    {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Assessment results now capture revenue context for better insights",
+      "headline": "Salesforce assessments now capture revenue context for better insights",
       "details": null,
       "commits": [
         "43fb51a"
@@ -171,10 +136,10 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Custom templates and branding persist through updates",
+      "headline": "Customizable templates and branding that survive platform updates",
       "details": [
-        "Your custom templates and brand gallery items are now preserved during platform updates",
-        "Customizations are stored safely and automatically restored"
+        "Create custom templates and brand assets that persist through upgrades",
+        "Flexible customization system for different teams and environments"
       ],
       "commits": [
         "c7ce394"
@@ -183,11 +148,11 @@
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "Automatic revenue field detection and sales process analysis",
+      "headline": "RevOps assessments automatically detect your revenue fields and sales stages",
       "details": [
-        "OpsPal automatically finds your organization's revenue fields and sales stages",
-        "Analysis adapts to your specific field names like Annual Contract Value or Net New ARR",
-        "More accurate RevOps assessments based on your actual revenue data structure"
+        "Identifies custom revenue fields beyond standard Amount",
+        "Analyzes sales process stages for better pipeline insights",
+        "Works with custom fields like ARR, ACV, and recurring revenue"
       ],
       "commits": [
         "5de3435"
@@ -196,34 +161,7 @@
     {
       "category": "improved",
       "plugin": "onboarding",
-      "headline": "Better Windows terminal experience with Git Bash",
-      "details": null,
-      "commits": [
-        "e68ee1a"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "onboarding",
-      "headline": "Automatic dependency installation during setup",
-      "details": null,
-      "commits": [
-        "3867463"
-      ]
-    },
-    {
-      "category": "new",
-      "plugin": "onboarding",
-      "headline": "One-click Windows installation script",
-      "details": null,
-      "commits": [
-        "487c124"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "onboarding",
-      "headline": "Smoother setup experience and better plugin detection",
+      "headline": "Smoother initial setup and project detection",
       "details": null,
       "commits": [
         "f10fc77"
@@ -232,11 +170,11 @@
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "Pre-deployment validation prevents common Salesforce errors",
+      "headline": "Advanced deployment safety checks prevent Salesforce configuration errors",
       "details": [
-        "Automatically checks picklist and record type configurations before deployment",
-        "Validates field history tracking limits to prevent deployment failures",
-        "Catches configuration conflicts before they cause problems"
+        "Validates picklist values against record types before deployment",
+        "Checks field history tracking limits to prevent data loss",
+        "Automatically merges duplicate configuration settings"
       ],
       "commits": [
         "aac0d4b"
@@ -245,7 +183,7 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Automatic secret scanning protects sensitive data",
+      "headline": "Automated scanning prevents accidental credential exposure",
       "details": null,
       "commits": [
         "19c4196"
@@ -254,7 +192,7 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Enhanced security scanning for all code changes",
+      "headline": "Enhanced security scanning integrated into development workflow",
       "details": null,
       "commits": [
         "8dcd939"
@@ -263,26 +201,21 @@
     {
       "category": "security",
       "plugin": "General",
-      "headline": "Removed hardcoded credentials for better security",
+      "headline": "Removed embedded credentials for improved security",
       "details": null,
       "commits": [
         "8acd03a"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "bootstrap",
-      "headline": "Simplified installer access",
-      "details": null,
-      "commits": [
-        "f45679c"
-      ]
-    },
-    {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Resolved deployment validation errors in complex Salesforce flows",
-      "details": null,
+      "headline": "Salesforce deployment validation works more accurately",
+      "details": [
+        "Fixed issues with flow logic analysis",
+        "Better detection of field reference problems",
+        "Improved validation of decision logic in automations"
+      ],
       "commits": [
         "714a52b"
       ]
