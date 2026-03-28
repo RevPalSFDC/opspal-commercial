@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-28T00:55:29.975Z",
+  "buildDate": "2026-03-28T23:50:02.807Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
-  "totalHooks": 251,
+  "totalHooks": 254,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48194,6 +48194,27 @@
     "Unknown": [
       {
         "plugin": "opspal-core",
+        "name": "ambient-candidate-extractor",
+        "description": "",
+        "file": "opspal-core/hooks/ambient-candidate-extractor.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "ambient-flush-trigger",
+        "description": "",
+        "file": "opspal-core/hooks/ambient-flush-trigger.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "ambient-hook-error-observer",
+        "description": "",
+        "file": "opspal-core/hooks/ambient-hook-error-observer.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "intake-suggestion",
         "description": "",
         "file": "opspal-core/hooks/intake-suggestion.sh",
@@ -49301,7 +49322,7 @@
     "totalAgents": 299,
     "totalAgentsFull": 302,
     "totalCommands": 273,
-    "totalHooks": 251,
+    "totalHooks": 254,
     "totalRoutingRules": 0,
     "totalKeywords": 2623,
     "totalKeywordsFull": 2623,
@@ -49323,7 +49344,7 @@
       "SubagentStop": 1,
       "TaskCompleted": 1,
       "Stop": 10,
-      "Unknown": 131,
+      "Unknown": 134,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
