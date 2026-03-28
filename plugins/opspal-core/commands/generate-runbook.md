@@ -69,6 +69,26 @@ If working directory doesn't clearly indicate an org, or to generate for a diffe
 /generate-runbook
 ```
 
+### Reconciliation Mode (Phase 3)
+
+Instead of a full synthesis rebuild, run incremental reconciliation on structured entry stores:
+
+```bash
+/generate-runbook reconcile                    # Run all reconciliation steps
+/generate-runbook reconcile --compact          # Deduplicate noisy entries
+/generate-runbook reconcile --backfill         # Process unrepresented observations
+/generate-runbook reconcile --mark-stale       # Mark old entries as stale/deprecated
+/generate-runbook reconcile --detect-conflicts # Surface contradictory guidance
+/generate-runbook reconcile --promote          # Promote durable entries to parent scopes
+/generate-runbook reconcile --rebuild-projections # Refresh markdown projections
+```
+
+**When to use reconciliation instead of full rebuild**:
+- Routine maintenance (weekly/after sessions)
+- When you want incremental freshness without full LLM synthesis
+- To compact accumulated entries after many observations
+- To surface conflicts and promote standards
+
 ## Examples
 
 ### Example 1: After Deployment Session
@@ -706,6 +726,30 @@ Running `/generate-runbook` multiple times:
 6. **Render runbook** (template + data)
 6.5. **Sync to NotebookLM** (optional, if configured for org)
 7. **Report metrics** (user feedback including version and NotebookLM status)
+7.5. **Reconcile** (if `reconcile` argument was passed — skip steps 2-7 and run reconciliation instead)
+
+**Detailed Step 7.5: Reconciliation Mode**
+
+If the user passed `reconcile` as the first argument:
+- Skip steps 2-6.5 (no full synthesis needed)
+- Parse optional flags: `--compact`, `--backfill`, `--mark-stale`, `--detect-conflicts`, `--promote`, `--rebuild-projections`
+- If no flags specified, run all steps (equivalent to `--all`)
+- Execute:
+
+```bash
+node scripts/lib/runbook-reconcile.js --org {org} \
+  [--compact] [--backfill] [--mark-stale] \
+  [--detect-conflicts] [--promote] [--rebuild-projections]
+```
+
+- Report reconciliation results:
+  - Entries compacted/merged
+  - Observations backfilled
+  - Entries marked stale/deprecated
+  - Conflicts detected
+  - Entries promoted to parent scopes
+  - Projections rebuilt
+- Show status: `node scripts/lib/runbook-status-reporter.js --org {org}`
 
 **Detailed Step 3: Version Snapshot**
 

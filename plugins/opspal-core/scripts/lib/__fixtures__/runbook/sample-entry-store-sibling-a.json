@@ -1,0 +1,57 @@
+{
+  "runbookId": "workflow-lead-routing-west",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "entryId": "known-exceptions-west001",
+      "section": "Known Exceptions",
+      "category": "known-exception",
+      "title": "Territory queue missing after sandbox refresh",
+      "summary": "Lead import fails when territory queues don't exist in sandbox environments after refresh. Queue West_Region_Queue must be recreated.",
+      "details": null,
+      "evidence": [
+        { "source": "obs-west-001.json", "text": "INVALID_CROSS_REFERENCE_KEY on Lead.OwnerId", "timestamp": "2026-03-10T14:00:00.000Z" },
+        { "source": "obs-west-002.json", "text": "Same error after March refresh", "timestamp": "2026-03-20T09:30:00.000Z" }
+      ],
+      "confidence": 0.85,
+      "recurrenceCount": 6,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-01T00:00:00.000Z",
+      "lastSeenAt": "2026-03-20T09:30:00.000Z",
+      "sourceAgents": ["sfdc-data-operations"],
+      "relatedObjects": ["Lead"],
+      "relatedWorkflow": "Lead Routing West",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "recommended-procedures-west001",
+      "section": "Recommended Procedures",
+      "category": "remediation-recipe",
+      "title": "Post-refresh queue recreation script",
+      "summary": "After sandbox refresh, run the queue setup script to recreate West_Region_Queue and East_Region_Queue before any lead import operations.",
+      "details": null,
+      "evidence": [
+        { "source": "obs-west-003.json", "text": "Queue recreation fixed the import issue", "timestamp": "2026-03-12T10:00:00.000Z" },
+        { "source": "obs-west-004.json", "text": "Script confirmed working after April refresh", "timestamp": "2026-03-22T08:00:00.000Z" }
+      ],
+      "confidence": 0.80,
+      "recurrenceCount": 4,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-05T00:00:00.000Z",
+      "lastSeenAt": "2026-03-22T08:00:00.000Z",
+      "sourceAgents": ["sfdc-data-operations", "sfdc-deployment-manager"],
+      "relatedObjects": ["Lead"],
+      "relatedWorkflow": "Lead Routing West",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    }
+  ],
+  "updatedAt": "2026-03-22T08:00:00.000Z"
+}

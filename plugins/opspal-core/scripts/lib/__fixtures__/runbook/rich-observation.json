@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-03-27T11:30:00.000Z",
+  "org": "acme-prod",
+  "agent": "sfdc-deployment-manager",
+  "operation": "deployment",
+  "platform": "salesforce",
+  "context": {
+    "objects": ["Account", "Contact", "Opportunity"],
+    "fields": ["Custom_Score__c", "Region__c"],
+    "workflows": ["Lead Routing", "Opportunity Assignment"],
+    "automations": ["Account Trigger"],
+    "metadata": {
+      "deploymentId": "0Af000000001234",
+      "componentCount": 15
+    }
+  },
+  "outcome": "failure",
+  "notes": "Deployment failed due to validation rule 'Account_Region_Required' blocking records where Region__c is blank. This affects all bulk operations on Account. Workaround: pre-populate Region__c with 'Unassigned' before deployment."
+}

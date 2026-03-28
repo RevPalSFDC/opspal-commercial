@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-03-27T14:00:00.000Z",
+  "org": "acme-prod",
+  "agent": "sfdc-data-operations",
+  "operation": "data-import",
+  "platform": "salesforce",
+  "context": {
+    "objects": ["Lead"],
+    "fields": ["Status", "Company", "Email"],
+    "workflows": ["Lead Assignment"],
+    "automations": [],
+    "metadata": {
+      "recordCount": 5000,
+      "batchSize": 200
+    }
+  },
+  "outcome": "failure",
+  "notes": "INVALID_CROSS_REFERENCE_KEY error on Lead.OwnerId when importing leads with territory-based assignment. The assignment rule expects a queue 'West_Region_Queue' that does not exist in sandbox. Fix: create the queue before import or use a default owner. This has happened 3 times this quarter."
+}

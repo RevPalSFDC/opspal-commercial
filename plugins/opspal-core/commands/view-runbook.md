@@ -60,6 +60,18 @@ thinking-mode: enabled
 /view-runbook recommendations  # Show only recommendations
 ```
 
+### Scoped Runbook Views (Phase 3)
+
+```bash
+/view-runbook scope workflow/lead-routing    # View scoped runbook projection
+/view-runbook scope platform/salesforce      # View platform-scoped projection
+/view-runbook conflicts                      # Show unresolved conflicts
+/view-runbook promoted                       # Show recent promotions
+/view-runbook registry                       # Show registry overview
+/view-runbook recent                         # Show recently updated entries across scopes
+/view-runbook status                         # Show comprehensive runbook system status
+```
+
 ## Examples
 
 ### Example 1: Full Runbook View
@@ -297,6 +309,36 @@ fi
 - Extract key metrics only
 - Display in compact format
 - Show last updated date
+
+**Scoped View** (if "scope <scopeType>/<scopeKey>" argument):
+- Load projection file at `instances/{org}/runbooks/projections/{scopeType}/{scopeType}-{scopeKey}.md`
+- Display it in full view format with visual separators
+- If not found: suggest running `/generate-runbook reconcile --rebuild-projections`
+
+**Conflicts View** (if "conflicts" keyword):
+- Run: `node scripts/lib/runbook-conflict-manager.js` or load `instances/{org}/runbooks/conflicts.json`
+- Filter to `status === 'detected'` or `status === 'reviewing'`
+- Display each ConflictRecord: type, severity, entries involved, reason
+- Show resolution options
+
+**Promoted View** (if "promoted" keyword):
+- Load `instances/{org}/runbooks/promotions.json`
+- Show last 10 PromotionRecords sorted by `promotedAt` descending
+- Display: source → target, type, reason, confidence
+
+**Registry View** (if "registry" keyword):
+- Run: `node scripts/lib/runbook-registry.js --org {org} --action stats`
+- Display formatted registry overview: scope types, counts, statuses
+
+**Recent View** (if "recent" keyword):
+- For each non-archived runbook, load entry store
+- Collect entries where `lastSeenAt` within last 14 days
+- Sort by `lastSeenAt` descending, show top 20
+- Display: runbookId, section, title, confidence, lastSeenAt
+
+**Status View** (if "status" keyword):
+- Run: `node scripts/lib/runbook-status-reporter.js --org {org}`
+- Display: registered runbooks, total entries, by-status breakdown, stale entries, conflicts, promotions
 
 ### 4) Format Output
 

@@ -1,0 +1,20 @@
+{
+  "org": "acme-prod",
+  "conflicts": [
+    {
+      "conflictId": "conflict-xyz9876543",
+      "entryIdA": "known-exceptions-a1b2c3d4e5",
+      "runbookIdA": "workflow-lead-routing",
+      "entryIdB": "known-exceptions-west001",
+      "runbookIdB": "workflow-lead-routing-west",
+      "conflictType": "scope-mismatch",
+      "reason": "Same guidance at workflow and workflow scope levels",
+      "severity": "low",
+      "status": "detected",
+      "detectedAt": "2026-03-26T10:00:00.000Z",
+      "resolvedAt": null,
+      "resolution": null
+    }
+  ],
+  "updatedAt": "2026-03-26T10:00:00.000Z"
+}

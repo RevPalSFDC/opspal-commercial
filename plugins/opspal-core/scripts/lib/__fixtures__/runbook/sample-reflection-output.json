@@ -1,0 +1,67 @@
+{
+  "org": "acme-prod",
+  "reflections_analyzed": 25,
+  "timeframe": {
+    "start": "2026-03-01T00:00:00.000Z",
+    "end": "2026-03-27T23:59:59.000Z"
+  },
+  "patterns": {
+    "common_errors": [
+      {
+        "taxonomy": "schema/parse",
+        "count": 5,
+        "examples": [
+          { "id": "err-001", "description": "JSON parse failure in flow metadata XML", "priority": "P2" },
+          { "id": "err-002", "description": "Malformed SOQL in report filter", "priority": "P3" }
+        ]
+      },
+      {
+        "taxonomy": "data-quality",
+        "count": 3,
+        "examples": [
+          { "id": "err-003", "description": "Duplicate lead records found during import", "priority": "P2" }
+        ]
+      },
+      {
+        "taxonomy": "auth/permissions",
+        "count": 2,
+        "examples": [
+          { "id": "err-004", "description": "Missing FLS on Custom_Score__c for integration user", "priority": "P1" }
+        ]
+      }
+    ],
+    "manual_workarounds": [
+      {
+        "playbook": "sandbox-refresh-workaround",
+        "steps": ["Manually reassign queue members", "Re-enable assignment rules", "Verify Named Credentials"],
+        "trigger": "Post-sandbox refresh"
+      }
+    ],
+    "user_interventions": [
+      {
+        "comment": "Stop using the old API endpoint for lead sync",
+        "classification": "suggestion",
+        "proposed_action": "Update integration to use v2 endpoint",
+        "linked_issue": "err-005"
+      }
+    ]
+  },
+  "known_exceptions": [
+    {
+      "name": "Territory Queue Missing in Sandbox",
+      "context": "Lead import fails when territory queues don't exist in sandbox environments",
+      "frequency": 4,
+      "recommendation": "Create queue stubs during sandbox refresh or use default owner fallback"
+    },
+    {
+      "name": "Flow DML Limit on Bulk Account Updates",
+      "context": "Account trigger flow hits DML limit when processing more than 200 records",
+      "frequency": 3,
+      "recommendation": "Batch Account updates in groups of 100 or use async processing"
+    }
+  ],
+  "recommendations": [
+    "Implement sandbox post-refresh scripts to create missing queues and assignment rules",
+    "Add bulk-safe guards to all Account-triggered flows to prevent DML limit exceptions"
+  ]
+}

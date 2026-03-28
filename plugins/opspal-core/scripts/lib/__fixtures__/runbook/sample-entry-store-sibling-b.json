@@ -1,0 +1,55 @@
+{
+  "runbookId": "workflow-lead-routing-east",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "entryId": "known-exceptions-east001",
+      "section": "Known Exceptions",
+      "category": "known-exception",
+      "title": "Territory queue missing after sandbox refresh in East region",
+      "summary": "Lead import fails when territory queues don't exist in sandbox after refresh. East_Region_Queue must be present before import.",
+      "details": null,
+      "evidence": [
+        { "source": "obs-east-001.json", "text": "Queue East_Region_Queue not found", "timestamp": "2026-03-11T14:00:00.000Z" }
+      ],
+      "confidence": 0.78,
+      "recurrenceCount": 3,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-05T00:00:00.000Z",
+      "lastSeenAt": "2026-03-18T09:00:00.000Z",
+      "sourceAgents": ["sfdc-data-operations"],
+      "relatedObjects": ["Lead"],
+      "relatedWorkflow": "Lead Routing East",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "recommended-procedures-east001",
+      "section": "Recommended Procedures",
+      "category": "remediation-recipe",
+      "title": "Post-refresh queue setup for East region",
+      "summary": "After sandbox refresh, recreate East_Region_Queue and verify assignment rules are active before importing leads.",
+      "details": null,
+      "evidence": [
+        { "source": "obs-east-002.json", "text": "Manual queue recreation resolved the issue", "timestamp": "2026-03-13T10:00:00.000Z" }
+      ],
+      "confidence": 0.75,
+      "recurrenceCount": 3,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-08T00:00:00.000Z",
+      "lastSeenAt": "2026-03-19T08:00:00.000Z",
+      "sourceAgents": ["sfdc-data-operations"],
+      "relatedObjects": ["Lead"],
+      "relatedWorkflow": "Lead Routing East",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    }
+  ],
+  "updatedAt": "2026-03-19T08:00:00.000Z"
+}

@@ -64,6 +64,17 @@ This will:
 - Compare current runbook against provided baseline
 - Show differences
 
+### Entry-Level and Lifecycle Diffs (Phase 3)
+
+```bash
+/diff-runbook entries          # Compare entry stores (new/removed/modified entries)
+/diff-runbook promotions       # Show recent promotions (last 30 days)
+/diff-runbook conflicts        # Show recently detected conflicts
+/diff-runbook deprecations     # Show recently deprecated entries
+```
+
+These modes inspect the structured entry stores rather than the flat RUNBOOK.md, providing more granular change tracking.
+
 ## Examples
 
 ### Example 1: Changes After Update
@@ -489,4 +500,16 @@ node scripts/lib/runbook-differ.js --org {org} --format summary
 - **First diff**: Offer to create baseline for future
 - **No changes**: Confirm stability, suggest more operations
 - **Major changes**: Highlight significant operational shifts
-- **Version history** (Phase 3): Allow comparison between any two versions
+- **Version history**: Allow comparison between any two versions
+
+**Entry-Level Diff Modes (Phase 3)**:
+
+If the user passes `entries`, `promotions`, `conflicts`, or `deprecations` as argument, use these alternative paths instead of the standard runbook-differ.js flow:
+
+**`entries`**: Load all entry stores for the org. For each runbook, compare current entries against a saved snapshot (if available) or simply list all entries with their status. Show new entries (created in last 30 days), modified entries, removed entries.
+
+**`promotions`**: Load `instances/{org}/runbooks/promotions.json`. Show PromotionRecords from the last 30 days, formatted as: `[date] sourceRunbookId → targetRunbookId: reason (confidence)`.
+
+**`conflicts`**: Load `instances/{org}/runbooks/conflicts.json`. Show recently detected conflicts (last 30 days), formatted as: `[conflictType] severity | entryA vs entryB | reason | status`.
+
+**`deprecations`**: Load all entry stores. Find entries where `validationStatus === 'deprecated'`. Show by runbook with title and last seen date.

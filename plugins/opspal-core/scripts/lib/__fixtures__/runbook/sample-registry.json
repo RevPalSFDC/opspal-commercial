@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "org": "acme-prod",
+  "runbooks": [
+    {
+      "id": "org-acme-prod",
+      "title": "Acme Prod Org Runbook",
+      "scopeType": "org",
+      "scopeKey": "acme-prod",
+      "parentRunbook": null,
+      "tags": ["salesforce", "production"],
+      "aliases": ["acme", "main"],
+      "linkedAgents": ["sfdc-orchestrator"],
+      "linkedWorkflows": [],
+      "linkedObjects": [],
+      "createdAt": "2026-03-01T00:00:00.000Z",
+      "updatedAt": "2026-03-25T12:00:00.000Z",
+      "status": "active",
+      "candidateCount": 12
+    },
+    {
+      "id": "workflow-lead-routing",
+      "title": "Lead Routing Workflow",
+      "scopeType": "workflow",
+      "scopeKey": "lead-routing",
+      "parentRunbook": "org-acme-prod",
+      "tags": ["routing", "leads"],
+      "aliases": ["lr", "lead-assignment"],
+      "linkedAgents": ["sfdc-data-operations", "sfdc-territory-orchestrator"],
+      "linkedWorkflows": ["Lead Assignment", "Lead Routing"],
+      "linkedObjects": ["Lead", "User"],
+      "createdAt": "2026-03-10T00:00:00.000Z",
+      "updatedAt": "2026-03-20T08:00:00.000Z",
+      "status": "active",
+      "candidateCount": 5
+    },
+    {
+      "id": "platform-salesforce",
+      "title": "Salesforce Platform",
+      "scopeType": "platform",
+      "scopeKey": "salesforce",
+      "parentRunbook": "org-acme-prod",
+      "tags": ["salesforce", "platform"],
+      "aliases": ["sf", "sfdc"],
+      "linkedAgents": ["sfdc-deployment-manager", "sfdc-automation-auditor"],
+      "linkedWorkflows": [],
+      "linkedObjects": ["Account", "Contact", "Opportunity", "Lead"],
+      "createdAt": "2026-03-05T00:00:00.000Z",
+      "updatedAt": "2026-03-22T15:00:00.000Z",
+      "status": "active",
+      "candidateCount": 8
+    }
+  ],
+  "updatedAt": "2026-03-25T12:00:00.000Z"
+}

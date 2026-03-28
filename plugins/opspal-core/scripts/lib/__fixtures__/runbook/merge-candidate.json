@@ -1,0 +1,24 @@
+{
+  "candidateId": "observation-merge001234",
+  "orgAlias": "acme-prod",
+  "platform": "salesforce",
+  "sourceType": "observation",
+  "sourceRef": "observations/data-import-2026-03-27.json",
+  "sourceAgent": "sfdc-data-operations",
+  "operationType": "data-import",
+  "relatedObjects": ["Lead"],
+  "relatedWorkflow": "Lead Assignment",
+  "relatedProject": null,
+  "category": "known-exception",
+  "summary": "Lead import fails when territory queues don't exist in sandbox environments. The assignment rule expects West_Region_Queue which is not present after refresh.",
+  "evidence": "INVALID_CROSS_REFERENCE_KEY on Lead.OwnerId — West_Region_Queue does not exist in sandbox",
+  "confidence": 0.75,
+  "durabilityScore": 0.70,
+  "recurrenceCount": 1,
+  "proposedScopes": [
+    { "scopeType": "workflow", "scopeKey": "lead-routing" },
+    { "scopeType": "org", "scopeKey": "acme-prod" }
+  ],
+  "extractedAt": "2026-03-27T14:30:00.000Z",
+  "validationStatus": "pending"
+}

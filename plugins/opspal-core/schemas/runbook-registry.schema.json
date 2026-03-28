@@ -1,0 +1,497 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/RevPalSFDC/opspal-commercial/schemas/runbook-registry.schema.json",
+  "title": "Runbook Registry",
+  "description": "Machine-readable registry of scoped runbooks per org instance",
+  "type": "object",
+  "required": ["version", "org", "runbooks", "updatedAt"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Registry schema version (semver)"
+    },
+    "org": {
+      "type": "string",
+      "description": "Org alias this registry belongs to"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp (ISO 8601)"
+    },
+    "runbooks": {
+      "type": "array",
+      "description": "Array of registered runbook entries",
+      "items": {
+        "$ref": "#/definitions/RunbookMetadata"
+      }
+    }
+  },
+  "definitions": {
+    "RunbookMetadata": {
+      "type": "object",
+      "required": ["id", "title", "scopeType", "scopeKey", "status", "createdAt", "updatedAt"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Deterministic slug: {scopeType}-{normalizedScopeKey}"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable runbook title"
+        },
+        "scopeType": {
+          "type": "string",
+          "enum": ["org", "platform", "project", "workflow", "solution", "sub-agent"],
+          "description": "The scope category this runbook covers"
+        },
+        "scopeKey": {
+          "type": "string",
+          "description": "The specific scope identifier, normalized"
+        },
+        "parentRunbook": {
+          "type": ["string", "null"],
+          "description": "ID of the parent runbook (null for org-level)"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Searchable tags for categorization"
+        },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Alternate lookup keys, normalized"
+        },
+        "linkedAgents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Agent names that contribute to or consume this runbook"
+        },
+        "linkedWorkflows": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Workflow names covered by this runbook"
+        },
+        "linkedObjects": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Object API names referenced by this runbook"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp (ISO 8601)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp (ISO 8601)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "draft", "archived"],
+          "default": "draft",
+          "description": "Lifecycle status"
+        },
+        "candidateCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of accepted candidates backing this runbook"
+        }
+      }
+    },
+    "ObservationCandidate": {
+      "type": "object",
+      "required": [
+        "candidateId", "orgAlias", "sourceType", "sourceRef",
+        "category", "summary", "confidence", "durabilityScore",
+        "extractedAt", "validationStatus"
+      ],
+      "properties": {
+        "candidateId": {
+          "type": "string",
+          "description": "Unique ID: {sourceType}-{sha256(sourceRef+summary)[0:12]}"
+        },
+        "orgAlias": {
+          "type": "string",
+          "description": "Org alias this candidate belongs to"
+        },
+        "platform": {
+          "type": ["string", "null"],
+          "description": "Platform (salesforce, hubspot, marketo, etc.)"
+        },
+        "sourceType": {
+          "type": "string",
+          "enum": ["observation", "reflection", "remediation", "agent-summary", "exception-pattern"],
+          "description": "What kind of source produced this candidate"
+        },
+        "sourceRef": {
+          "type": "string",
+          "description": "File path or ID of the source record"
+        },
+        "sourceAgent": {
+          "type": ["string", "null"],
+          "description": "Agent that produced or triggered the source"
+        },
+        "operationType": {
+          "type": ["string", "null"],
+          "description": "Operation type from the source (deployment, workflow-create, etc.)"
+        },
+        "relatedObjects": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Object API names related to this candidate"
+        },
+        "relatedWorkflow": {
+          "type": ["string", "null"],
+          "description": "Workflow name related to this candidate"
+        },
+        "relatedProject": {
+          "type": ["string", "null"],
+          "description": "Project slug related to this candidate"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "environment-quirk",
+            "workflow-nuance",
+            "known-exception",
+            "business-rule",
+            "troubleshooting-pattern",
+            "remediation-recipe",
+            "checklist-lesson",
+            "integration-note"
+          ],
+          "description": "Knowledge category classification"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Concise durable knowledge statement"
+        },
+        "evidence": {
+          "type": ["string", "null"],
+          "description": "Supporting detail from source"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence score (0.0-1.0)"
+        },
+        "durabilityScore": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How likely this knowledge is reusable across sessions (0.0-1.0)"
+        },
+        "recurrenceCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of times this knowledge has been observed"
+        },
+        "proposedScopes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["scopeType", "scopeKey"],
+            "properties": {
+              "scopeType": {
+                "type": "string",
+                "enum": ["org", "platform", "project", "workflow", "solution", "sub-agent"]
+              },
+              "scopeKey": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Suggested scopes where this candidate could belong"
+        },
+        "extractedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this candidate was extracted (ISO 8601)"
+        },
+        "validationStatus": {
+          "type": "string",
+          "enum": ["pending", "accepted", "rejected", "merged"],
+          "description": "Review status of this candidate"
+        }
+      }
+    },
+    "ScopeResolution": {
+      "type": "object",
+      "required": [
+        "candidateId", "resolvedRunbookId", "resolvedScope",
+        "matchType", "confidence", "registryUpdated"
+      ],
+      "properties": {
+        "candidateId": {
+          "type": "string",
+          "description": "The candidate that was resolved"
+        },
+        "resolvedRunbookId": {
+          "type": "string",
+          "description": "ID of the runbook that will own this candidate"
+        },
+        "resolvedScope": {
+          "type": "object",
+          "required": ["scopeType", "scopeKey"],
+          "properties": {
+            "scopeType": { "type": "string" },
+            "scopeKey": { "type": "string" }
+          },
+          "description": "The scope that was matched or created"
+        },
+        "matchType": {
+          "type": "string",
+          "enum": ["exact", "parent-scope", "created", "org-fallback"],
+          "description": "How the resolution was achieved"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Inherited from the candidate"
+        },
+        "registryUpdated": {
+          "type": "boolean",
+          "description": "Whether the registry was modified (true only on creation)"
+        },
+        "createdRunbook": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/RunbookMetadata" }
+          ],
+          "description": "The newly created runbook metadata, if matchType is 'created'"
+        }
+      }
+    },
+    "EvidenceRecord": {
+      "type": "object",
+      "required": ["source", "timestamp"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "File path or identifier of the source"
+        },
+        "text": {
+          "type": ["string", "null"],
+          "description": "Evidence text excerpt"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this evidence was recorded"
+        }
+      }
+    },
+    "RunbookEntry": {
+      "type": "object",
+      "required": [
+        "entryId", "section", "category", "title", "summary",
+        "confidence", "recurrenceCount", "validationStatus",
+        "lifecycleStatus", "firstSeenAt", "lastSeenAt"
+      ],
+      "properties": {
+        "entryId": {
+          "type": "string",
+          "description": "Deterministic ID: {normalizedSection}-{sha256(title+summary)[0:10]}"
+        },
+        "section": {
+          "type": "string",
+          "description": "Target section name from SECTION_MAP"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "environment-quirk", "workflow-nuance", "known-exception",
+            "business-rule", "troubleshooting-pattern", "remediation-recipe",
+            "checklist-lesson", "integration-note"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "Concise entry title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "1-3 sentence knowledge summary"
+        },
+        "details": {
+          "type": ["string", "null"],
+          "description": "Optional longer explanation"
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/EvidenceRecord" },
+          "description": "Provenance records supporting this entry"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "recurrenceCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of times this knowledge has been observed"
+        },
+        "validationStatus": {
+          "type": "string",
+          "enum": ["proposed", "active", "deprecated", "superseded"],
+          "description": "Review/promotion status"
+        },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["new", "confirmed", "stale"],
+          "description": "Freshness lifecycle status"
+        },
+        "firstSeenAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastSeenAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sourceAgents": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "relatedObjects": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "relatedWorkflow": {
+          "type": ["string", "null"]
+        },
+        "relatedProject": {
+          "type": ["string", "null"]
+        },
+        "supersedes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Entry IDs this entry supersedes"
+        },
+        "supersededBy": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Entry IDs that supersede this entry"
+        },
+        "conflictsWith": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Entry IDs that conflict with this entry"
+        }
+      }
+    },
+    "RunbookEntryStore": {
+      "type": "object",
+      "required": ["runbookId", "version", "entries", "updatedAt"],
+      "properties": {
+        "runbookId": {
+          "type": "string",
+          "description": "ID of the runbook these entries belong to"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Entry store schema version"
+        },
+        "entries": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RunbookEntry" }
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "PromotionRecord": {
+      "type": "object",
+      "required": [
+        "promotionId", "sourceEntryId", "sourceRunbookId",
+        "targetRunbookId", "targetEntryId", "promotionType",
+        "reason", "confidence", "promotedAt", "promotedBy"
+      ],
+      "properties": {
+        "promotionId": { "type": "string" },
+        "sourceEntryId": { "type": "string" },
+        "sourceRunbookId": { "type": "string" },
+        "targetRunbookId": { "type": "string" },
+        "targetEntryId": { "type": "string" },
+        "promotionType": {
+          "type": "string",
+          "enum": ["cross-scope", "standard-adoption", "preflight-guard"]
+        },
+        "reason": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "promotedAt": { "type": "string", "format": "date-time" },
+        "promotedBy": { "type": "string", "enum": ["auto", "user"] }
+      }
+    },
+    "ConflictRecord": {
+      "type": "object",
+      "required": [
+        "conflictId", "entryIdA", "runbookIdA",
+        "entryIdB", "runbookIdB", "conflictType",
+        "reason", "severity", "status", "detectedAt"
+      ],
+      "properties": {
+        "conflictId": { "type": "string" },
+        "entryIdA": { "type": "string" },
+        "runbookIdA": { "type": "string" },
+        "entryIdB": { "type": "string" },
+        "runbookIdB": { "type": "string" },
+        "conflictType": {
+          "type": "string",
+          "enum": ["contradictory-guidance", "stale-override", "diverging-workaround", "scope-mismatch"]
+        },
+        "reason": { "type": "string" },
+        "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+        "status": {
+          "type": "string",
+          "enum": ["detected", "reviewing", "resolved", "dismissed"]
+        },
+        "detectedAt": { "type": "string", "format": "date-time" },
+        "resolvedAt": { "type": ["string", "null"], "format": "date-time" },
+        "resolution": { "type": ["string", "null"] }
+      }
+    },
+    "PromotionsStore": {
+      "type": "object",
+      "required": ["org", "promotions", "updatedAt"],
+      "properties": {
+        "org": { "type": "string" },
+        "promotions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PromotionRecord" }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ConflictsStore": {
+      "type": "object",
+      "required": ["org", "conflicts", "updatedAt"],
+      "properties": {
+        "org": { "type": "string" },
+        "conflicts": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConflictRecord" }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

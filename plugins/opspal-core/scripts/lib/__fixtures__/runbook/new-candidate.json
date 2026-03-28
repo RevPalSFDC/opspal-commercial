@@ -1,0 +1,24 @@
+{
+  "candidateId": "observation-new0012345",
+  "orgAlias": "acme-prod",
+  "platform": "salesforce",
+  "sourceType": "observation",
+  "sourceRef": "observations/flow-operation-2026-03-27.json",
+  "sourceAgent": "sfdc-flow-builder",
+  "operationType": "flow-operation",
+  "relatedObjects": ["Case"],
+  "relatedWorkflow": "Case Escalation",
+  "relatedProject": null,
+  "category": "workflow-nuance",
+  "summary": "Case escalation flow skips priority check when origin is Email-to-Case and auto-assigns to Tier 2 support queue directly",
+  "evidence": "Flow bypasses the Priority__c evaluation node when Case.Origin equals 'Email' due to a decision branch ordering issue",
+  "confidence": 0.72,
+  "durabilityScore": 0.65,
+  "recurrenceCount": 1,
+  "proposedScopes": [
+    { "scopeType": "workflow", "scopeKey": "case-escalation" },
+    { "scopeType": "org", "scopeKey": "acme-prod" }
+  ],
+  "extractedAt": "2026-03-27T16:00:00.000Z",
+  "validationStatus": "pending"
+}

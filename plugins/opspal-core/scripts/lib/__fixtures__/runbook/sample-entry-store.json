@@ -1,0 +1,152 @@
+{
+  "runbookId": "workflow-lead-routing",
+  "version": "1.0.0",
+  "entries": [
+    {
+      "entryId": "known-exceptions-a1b2c3d4e5",
+      "section": "Known Exceptions",
+      "category": "known-exception",
+      "title": "Territory queue missing in sandbox environments",
+      "summary": "Lead import fails when territory queues don't exist in sandbox environments after refresh. The assignment rule expects queues that are not present.",
+      "details": null,
+      "evidence": [
+        { "source": "observations/data-import-2026-03-10.json", "text": "INVALID_CROSS_REFERENCE_KEY on Lead.OwnerId", "timestamp": "2026-03-10T14:00:00.000Z" },
+        { "source": "observations/data-import-2026-03-20.json", "text": "Same queue missing error after March refresh", "timestamp": "2026-03-20T09:30:00.000Z" }
+      ],
+      "confidence": 0.82,
+      "recurrenceCount": 4,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-10T14:00:00.000Z",
+      "lastSeenAt": "2026-03-20T09:30:00.000Z",
+      "sourceAgents": ["sfdc-data-operations"],
+      "relatedObjects": ["Lead"],
+      "relatedWorkflow": "Lead Assignment",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "known-exceptions-f6g7h8i9j0",
+      "section": "Known Exceptions",
+      "category": "known-exception",
+      "title": "DML limit on bulk Account trigger flow",
+      "summary": "Account trigger flow hits DML limit when processing more than 200 records in a single transaction.",
+      "details": "The flow performs a record update for each Account, which consumes one DML statement per record.",
+      "evidence": [
+        { "source": "reflection-exception-DML-Limit", "text": "Batch Account updates in groups of 100", "timestamp": "2026-03-15T10:00:00.000Z" }
+      ],
+      "confidence": 0.55,
+      "recurrenceCount": 2,
+      "validationStatus": "proposed",
+      "lifecycleStatus": "new",
+      "firstSeenAt": "2026-03-15T10:00:00.000Z",
+      "lastSeenAt": "2026-03-22T16:00:00.000Z",
+      "sourceAgents": ["sfdc-automation-auditor"],
+      "relatedObjects": ["Account"],
+      "relatedWorkflow": null,
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "workflow-nuances-k1l2m3n4o5",
+      "section": "Workflow Nuances",
+      "category": "workflow-nuance",
+      "title": "Lead routing uses round-robin with territory override",
+      "summary": "The lead routing workflow uses round-robin assignment by default but allows territory-based override when Region__c is populated.",
+      "details": null,
+      "evidence": [
+        { "source": "observations/workflow-create-2026-03-12.json", "text": "Round-robin with territory fallback", "timestamp": "2026-03-12T08:00:00.000Z" }
+      ],
+      "confidence": 0.75,
+      "recurrenceCount": 3,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-12T08:00:00.000Z",
+      "lastSeenAt": "2026-03-25T11:00:00.000Z",
+      "sourceAgents": ["sfdc-territory-orchestrator"],
+      "relatedObjects": ["Lead", "User"],
+      "relatedWorkflow": "Lead Routing",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "workflow-nuances-p6q7r8s9t0",
+      "section": "Workflow Nuances",
+      "category": "workflow-nuance",
+      "title": "Opportunity assignment requires stage change",
+      "summary": "Opportunity assignment only triggers when Stage changes, not on other field updates. Manual reassignment requires a stage bump.",
+      "details": null,
+      "evidence": [
+        { "source": "observations/workflow-create-2026-03-18.json", "text": null, "timestamp": "2026-03-18T14:00:00.000Z" }
+      ],
+      "confidence": 0.68,
+      "recurrenceCount": 1,
+      "validationStatus": "active",
+      "lifecycleStatus": "new",
+      "firstSeenAt": "2026-03-18T14:00:00.000Z",
+      "lastSeenAt": "2026-03-18T14:00:00.000Z",
+      "sourceAgents": ["sfdc-orchestrator"],
+      "relatedObjects": ["Opportunity"],
+      "relatedWorkflow": "Opportunity Assignment",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "business-rules-u1v2w3x4y5",
+      "section": "Business Rules",
+      "category": "business-rule",
+      "title": "Region__c must be populated before bulk operations",
+      "summary": "All Account records must have Region__c populated before any bulk data operation. Validation rule Account_Region_Required enforces this.",
+      "details": null,
+      "evidence": [
+        { "source": "observations/deployment-2026-03-05.json", "text": "Validation rule blocks blank Region__c", "timestamp": "2026-03-05T10:00:00.000Z" }
+      ],
+      "confidence": 0.70,
+      "recurrenceCount": 2,
+      "validationStatus": "active",
+      "lifecycleStatus": "stale",
+      "firstSeenAt": "2026-03-05T10:00:00.000Z",
+      "lastSeenAt": "2026-03-10T12:00:00.000Z",
+      "sourceAgents": ["sfdc-deployment-manager"],
+      "relatedObjects": ["Account"],
+      "relatedWorkflow": null,
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    },
+    {
+      "entryId": "recommended-procedures-z1a2b3c4d5",
+      "section": "Recommended Procedures",
+      "category": "remediation-recipe",
+      "title": "Post-sandbox refresh: recreate territory queues",
+      "summary": "After sandbox refresh, manually recreate territory queues (West_Region_Queue, East_Region_Queue) or run the queue setup script before importing leads.",
+      "details": null,
+      "evidence": [
+        { "source": "reflection-workaround-sandbox-refresh", "text": "Manually reassign queue members; Re-enable assignment rules", "timestamp": "2026-03-20T10:00:00.000Z" }
+      ],
+      "confidence": 0.78,
+      "recurrenceCount": 3,
+      "validationStatus": "active",
+      "lifecycleStatus": "confirmed",
+      "firstSeenAt": "2026-03-10T10:00:00.000Z",
+      "lastSeenAt": "2026-03-20T10:00:00.000Z",
+      "sourceAgents": [],
+      "relatedObjects": ["Lead"],
+      "relatedWorkflow": "Lead Assignment",
+      "relatedProject": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "conflictsWith": []
+    }
+  ],
+  "updatedAt": "2026-03-25T12:00:00.000Z"
+}
