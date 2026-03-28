@@ -50,7 +50,7 @@ if [[ "${AMBIENT_REFLECT_DEBUG:-0}" == "1" ]] && [[ -n "$RESULT" ]] && [[ "$RESU
 fi
 
 if [[ "${AMBIENT_REFLECT_CAPTURE_RESULT:-0}" == "1" ]]; then
-    printf '%s\n' "$RESULT"
+    printf '%s\n' "$RESULT" >&2
 fi
 
 exit 0
