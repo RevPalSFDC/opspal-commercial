@@ -252,7 +252,7 @@ echo ""
 
 # Log validation start
 [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Starting comprehensive deployment validation" \
-    "{\"targetOrg\":\"$TARGET_ORG\",\"deployDir\":\"$DEPLOY_DIR\",\"validationSteps\":8}"
+    "{\"targetOrg\":\"$TARGET_ORG\",\"deployDir\":\"$DEPLOY_DIR\",\"validationSteps\":11}"
 
 VALIDATION_FAILED=0
 TOTAL_CHECKS=0
@@ -264,7 +264,7 @@ SKIPPED_CHECKS=0
 # Step 1: Deployment Source Validation
 ##############################################################################
 
-echo "📦 Step 1/8: Deployment Source Validation"
+echo "📦 Step 1/11: Deployment Source Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 VALIDATOR="${SCRIPT_DIR}/../scripts/lib/deployment-source-validator.js"
@@ -286,7 +286,7 @@ echo ""
 # Step 2: Flow XML Validation (Enhanced with .null__NotFound detection)
 ##############################################################################
 
-echo "🌊 Step 2/8: Flow XML Validation"
+echo "🌊 Step 2/11: Flow XML Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 FLOW_VALIDATOR="${SCRIPT_DIR}/../scripts/lib/flow-xml-validator.js"
@@ -376,7 +376,7 @@ echo ""
 # Step 3: Field Dependency Analysis (Enhanced with blocking)
 ##############################################################################
 
-echo "🔗 Step 3/8: Field Dependency Analysis"
+echo "🔗 Step 3/11: Field Dependency Analysis"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 DEPENDENCY_ANALYZER="${SCRIPT_DIR}/../scripts/lib/metadata-dependency-analyzer.js"
@@ -477,7 +477,7 @@ echo ""
 # Step 4: CSV Data Validation
 ##############################################################################
 
-echo "📊 Step 4/8: CSV Data Validation"
+echo "📊 Step 4/11: CSV Data Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 CSV_PARSER="${SCRIPT_DIR}/../scripts/lib/csv-parser-safe.js"
@@ -527,7 +527,7 @@ echo ""
 # Step 5: Field History Tracking Limits
 ##############################################################################
 
-echo "📜 Step 5/8: Field History Tracking Limits"
+echo "📜 Step 5/11: Field History Tracking Limits"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 # Find objects with tracked fields in the deployment
@@ -609,7 +609,7 @@ echo ""
 # Step 6: Picklist Formula Validation
 ##############################################################################
 
-echo "📋 Step 6/8: Picklist Formula Validation"
+echo "📋 Step 6/11: Picklist Formula Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 # Find validation rules and formula fields
@@ -651,7 +651,7 @@ echo ""
 # Step 7: Deployment Order Validation (config/env cohort fix)
 ##############################################################################
 
-echo "📂 Step 7/8: Deployment Order Validation"
+echo "📂 Step 7/11: Deployment Order Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 ENV_CONFIG_VALIDATOR="$(resolve_sibling_asset 'scripts/lib/env-config-validator.js')"
@@ -749,7 +749,7 @@ echo ""
 # Step 8: Unified Pre-Operation Validation (Phase 2.1)
 ##############################################################################
 
-echo "🔄 Step 8/8: Unified Pre-Operation Validation"
+echo "🔄 Step 8/11: Unified Pre-Operation Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 PRE_OP_ORCHESTRATOR="$(resolve_sibling_asset 'scripts/lib/pre-operation-validation-orchestrator.js')"
@@ -820,6 +820,129 @@ else
 fi
 echo ""
 
+##############################################################################
+
+##############################################################################
+# Step 9: Lookup Delete Constraint Validation
+##############################################################################
+
+echo "🔗 Step 9/11: Lookup Delete Constraint Validation"
+TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+
+LOOKUP_CONSTRAINT_ERRORS=0
+while IFS= read -r field_file; do
+    [ -z "$field_file" ] && continue
+    if grep -q "<type>Lookup</type>" "$field_file" && \
+       grep -q "<required>true</required>" "$field_file" && \
+       grep -q "<deleteConstraint>SetNull</deleteConstraint>" "$field_file"; then
+        FIELD_LABEL=$(basename "$field_file" .field-meta.xml)
+        log_error "Required lookup '$FIELD_LABEL' has deleteConstraint=SetNull (use Restrict or Cascade)"
+        LOOKUP_CONSTRAINT_ERRORS=$((LOOKUP_CONSTRAINT_ERRORS + 1))
+    fi
+done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
+
+if [ "$LOOKUP_CONSTRAINT_ERRORS" -gt 0 ]; then
+    FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    VALIDATION_FAILED=1
+else
+    log_success "Lookup delete constraints valid"
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+fi
+echo ""
+
+##############################################################################
+# Step 10: Required Field Permissions in Permission Sets
+##############################################################################
+
+echo "🚫 Step 10/11: Required Field Permissions Validation"
+TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+
+PERM_DIR="$DEPLOY_DIR/force-app/main/default/permissionsets"
+REQ_FIELD_PERM_ERRORS=0
+
+while IFS= read -r field_file; do
+    [ -z "$field_file" ] && continue
+    if grep -q "<required>true</required>" "$field_file"; then
+        OBJECT_DIR=$(dirname "$(dirname "$field_file")")
+        OBJ_NAME=$(basename "$OBJECT_DIR")
+        FLD_NAME=$(basename "$field_file" .field-meta.xml)
+        REQ_FIELD_KEY="${OBJ_NAME}.${FLD_NAME}"
+        if [ -d "$PERM_DIR" ]; then
+            while IFS= read -r perm_file; do
+                [ -z "$perm_file" ] && continue
+                if grep -q "<field>${REQ_FIELD_KEY}</field>" "$perm_file" 2>/dev/null; then
+                    PERM_NAME=$(basename "$perm_file" .permissionset-meta.xml)
+                    log_error "Permission set '$PERM_NAME' has FLS entry for required field '$REQ_FIELD_KEY'"
+                    REQ_FIELD_PERM_ERRORS=$((REQ_FIELD_PERM_ERRORS + 1))
+                fi
+            done < <(find "$PERM_DIR" -name "*.permissionset-meta.xml" -type f 2>/dev/null)
+        fi
+    fi
+done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
+
+if [ "$REQ_FIELD_PERM_ERRORS" -gt 0 ]; then
+    FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    VALIDATION_FAILED=1
+else
+    log_success "No required field permissions found in permission sets"
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+fi
+echo ""
+
+##############################################################################
+# Step 11: Picklist Deactivation Impact Check
+##############################################################################
+
+echo "📋 Step 11/11: Picklist Deactivation Impact Check"
+TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+
+DEACTIVATED_PICKLIST_FILES=$(find "$DEPLOY_DIR" -name "*.field-meta.xml" \
+    -exec grep -l "<isActive>false</isActive>" {} \; 2>/dev/null | head -20)
+
+if [ "$HAS_TARGET_ORG" -eq 0 ]; then
+    log_info "Skipping picklist deactivation impact check (no target org)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ -z "$DEACTIVATED_PICKLIST_FILES" ]; then
+    log_info "No picklist deactivations detected in deployment"
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+else
+    PICKLIST_DEACT_ERRORS=0
+
+    while IFS= read -r field_file; do
+        [ -z "$field_file" ] && continue
+        OBJECT_NAME=$(echo "$field_file" | sed 's|.*/objects/\([^/]*\)/fields/.*|\1|')
+        FIELD_NAME=$(basename "$field_file" .field-meta.xml)
+        [ -z "$OBJECT_NAME" ] || [ "$OBJECT_NAME" = "$field_file" ] && continue
+
+        DEACTIVATED=$(awk '/<fullName>/{name=$0} /<isActive>false/{print name}' "$field_file" \
+            | sed 's|.*<fullName>\(.*\)</fullName>.*|\1|' | tr '\n' ',' | sed 's/,$//')
+        [ -z "$DEACTIVATED" ] && continue
+
+        log_info "Checking deactivation impact: $OBJECT_NAME.$FIELD_NAME (values: $DEACTIVATED)"
+        IFS=',' read -ra VALUE_ARRAY <<< "$DEACTIVATED"
+        for value in "${VALUE_ARRAY[@]}"; do
+            [ -z "$value" ] && continue
+            COUNT=$(sf data query \
+                --query "SELECT COUNT() FROM ${OBJECT_NAME} WHERE ${FIELD_NAME} = '${value}'" \
+                --target-org "$TARGET_ORG" --json 2>/dev/null \
+                | jq -r '.result.totalSize // 0' 2>/dev/null || echo "0")
+            if [ "$COUNT" -gt 0 ]; then
+                log_error "$COUNT record(s) on $OBJECT_NAME still hold value '$value' — deactivation blocked"
+                PICKLIST_DEACT_ERRORS=$((PICKLIST_DEACT_ERRORS + 1))
+            fi
+        done
+    done <<< "$DEACTIVATED_PICKLIST_FILES"
+
+    if [ "$PICKLIST_DEACT_ERRORS" -eq 0 ]; then
+        log_success "Picklist deactivation impact check passed"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        log_error "$PICKLIST_DEACT_ERRORS picklist value(s) blocked — records still reference them"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        VALIDATION_FAILED=1
+    fi
+fi
+echo ""
 ##############################################################################
 # Summary
 ##############################################################################

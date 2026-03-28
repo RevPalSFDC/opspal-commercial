@@ -114,6 +114,12 @@ class UnifiedPicklistManager extends PicklistManager {
                 updating: recordTypesToUpdate.length
             });
 
+            // Step 1.5: Pre-deactivation impact check
+            if (valuesToDeactivate && valuesToDeactivate.length > 0) {
+                const deactivationThreshold = parseInt(process.env.PICKLIST_DEACTIVATION_THRESHOLD || '0', 10);
+                await this.checkDeactivationImpact(objectName, fieldApiName, valuesToDeactivate, alias, deactivationThreshold);
+            }
+
             // Step 2: Update field metadata
             await this.updateFieldMetadata(objectName, fieldApiName, valuesToAdd, valuesToDeactivate, alias, apiVersion);
 
@@ -178,6 +184,123 @@ class UnifiedPicklistManager extends PicklistManager {
                 fieldApiName
             });
         }
+    }
+
+    /**
+     * Check whether deactivating the specified picklist values would affect existing records.
+     * Queries each value count against the live org and blocks if any count exceeds threshold.
+     *
+     * @param {string} objectName - Salesforce object API name
+     * @param {string} fieldApiName - Field API name
+     * @param {string[]} valuesToDeactivate - Picklist values being deactivated
+     * @param {string} alias - Org alias
+     * @param {number} [threshold=0] - Block if record count exceeds this
+     * @returns {Promise<void>} Throws if deactivation impact detected
+     * @private
+     */
+    async checkDeactivationImpact(objectName, fieldApiName, valuesToDeactivate, alias, threshold = 0) {
+        if (!valuesToDeactivate || valuesToDeactivate.length === 0) {
+            return;
+        }
+
+        this.logOperation('deactivation_impact_check_start', {
+            objectName, fieldApiName, valueCount: valuesToDeactivate.length
+        });
+
+        const violations = [];
+
+        for (const value of valuesToDeactivate) {
+            const escapedValue = value.replace(/'/g, "\\'");
+            const query = `SELECT COUNT() FROM ${objectName} WHERE ${fieldApiName} = '${escapedValue}'`;
+            const command = `sf data query --query "${query}" --target-org ${alias} --json`;
+
+            try {
+                const result = await this.executeCommand(command);
+                const parsed = this.parseJSON(result.stdout, {
+                    operation: 'checkDeactivationImpact', objectName, value
+                });
+                const count = parsed.result?.totalSize ?? 0;
+
+                if (count > threshold) {
+                    violations.push({
+                        value, count,
+                        message: `${count} record(s) on ${objectName} still hold picklist value '${value}'`
+                    });
+                }
+            } catch (error) {
+                this.logOperation('deactivation_impact_query_error', {
+                    objectName, fieldApiName, value, error: firstLine(error.message)
+                });
+            }
+        }
+
+        const flowViolations = await this.checkFlowReferences(fieldApiName, valuesToDeactivate);
+        if (flowViolations.length > 0) {
+            violations.push(...flowViolations);
+        }
+
+        if (violations.length > 0) {
+            const summary = violations.map(v => `  - ${v.message}`).join('\n');
+            throw this.enhanceError(
+                new Error(
+                    `Picklist deactivation blocked: ${violations.length} impact(s) found on ` +
+                    `${objectName}.${fieldApiName}:\n${summary}\n` +
+                    'Fix: Migrate records to new values before deactivating, or override with ' +
+                    'PICKLIST_DEACTIVATION_THRESHOLD env variable.'
+                ),
+                { operation: 'checkDeactivationImpact', objectName, fieldApiName }
+            );
+        }
+
+        this.logOperation('deactivation_impact_check_passed', {
+            objectName, fieldApiName, valueCount: valuesToDeactivate.length
+        });
+    }
+
+    /**
+     * Check active Flow XML files for string references to picklist values being deactivated.
+     *
+     * @param {string} fieldApiName - Field API name
+     * @param {string[]} values - Values being deactivated
+     * @returns {Promise<Array>} Array of violation objects
+     * @private
+     */
+    async checkFlowReferences(fieldApiName, values) {
+        const violations = [];
+        const flowDir = path.join(process.cwd(), 'force-app', 'main', 'default', 'flows');
+
+        if (!fs.existsSync(flowDir)) {
+            return violations;
+        }
+
+        let flowFiles;
+        try {
+            flowFiles = fs.readdirSync(flowDir)
+                .filter(f => f.endsWith('.flow-meta.xml'))
+                .map(f => path.join(flowDir, f));
+        } catch (err) {
+            return violations;
+        }
+
+        for (const value of values) {
+            for (const flowFile of flowFiles) {
+                try {
+                    const content = fs.readFileSync(flowFile, 'utf-8');
+                    if (content.includes(value)) {
+                        const flowName = path.basename(flowFile, '.flow-meta.xml');
+                        violations.push({
+                            value, count: 0,
+                            message: `Flow '${flowName}' references picklist value '${value}' — deactivating may break the flow`
+                        });
+                        break;
+                    }
+                } catch (err) {
+                    // skip unreadable files
+                }
+            }
+        }
+
+        return violations;
     }
 
     /**

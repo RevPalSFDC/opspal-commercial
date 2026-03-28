@@ -30,7 +30,9 @@ class SalesforcePreDeploymentValidator {
             dashboardPersonaContract: true,
             apiLimitations: true,
             permissionSetFieldAccess: true,
-            permissionSetStaleness: true
+            permissionSetStaleness: true,
+            lookupDeleteConstraint: true,
+            requiredFieldPermissions: true
         };
         
         // Load API limitation mappings
@@ -95,6 +97,16 @@ class SalesforcePreDeploymentValidator {
         // 9. Check permission set staleness (prevents destructive overwrites)
         if (this.checks.permissionSetStaleness) {
             await this.checkPermissionSetStaleness(deploymentPath);
+        }
+
+        // 10. Check deleteConstraint on required lookup fields
+        if (this.checks.lookupDeleteConstraint) {
+            await this.checkLookupDeleteConstraint(deploymentPath);
+        }
+
+        // 11. Check permission sets for required field permissions
+        if (this.checks.requiredFieldPermissions) {
+            await this.checkRequiredFieldPermissions(deploymentPath);
         }
 
         // Report results
@@ -725,6 +737,120 @@ class SalesforcePreDeploymentValidator {
         }
 
         console.log('  ✅ Permission set validation complete\n');
+    }
+
+    /**
+     * Validate deleteConstraint on required lookup fields.
+     * A required Lookup field must have deleteConstraint of Restrict or Cascade,
+     * never SetNull — SetNull is illegal on a required field and will fail deploy.
+     */
+    async checkLookupDeleteConstraint(deploymentPath) {
+        console.log('🔗 Checking deleteConstraint on required lookup fields...');
+
+        const scanPath = deploymentPath || process.cwd();
+        const fieldFiles = this.findFiles(scanPath, '.field-meta.xml');
+
+        fieldFiles.forEach(file => {
+            try {
+                const content = fs.readFileSync(file, 'utf-8');
+                const fieldType = this.extractXmlValue(content, 'type');
+                const required = this.extractXmlValue(content, 'required');
+
+                if (fieldType !== 'Lookup' || required !== 'true') {
+                    return;
+                }
+
+                const deleteConstraint = this.extractXmlValue(content, 'deleteConstraint');
+                if (deleteConstraint === 'SetNull') {
+                    const fieldLabel = this.extractXmlValue(content, 'label') || path.basename(file, '.field-meta.xml');
+                    this.errors.push({
+                        type: 'INVALID_DELETE_CONSTRAINT',
+                        message: `Required lookup field '${fieldLabel}' has deleteConstraint=SetNull. ` +
+                            'SetNull is invalid on a required field — use Restrict or Cascade.',
+                        file: file,
+                        severity: 'ERROR'
+                    });
+                }
+            } catch (err) {
+                // Malformed XML — not our concern here
+            }
+        });
+
+        console.log('  ✅ Lookup delete constraint check complete\n');
+    }
+
+    /**
+     * Validate that permission sets do not include explicit FieldPermissions entries
+     * for fields that are marked required=true. Salesforce ignores or errors on these
+     * because required fields are implicitly visible.
+     */
+    async checkRequiredFieldPermissions(deploymentPath) {
+        console.log('🚫 Checking permission sets for required field permissions...');
+
+        const scanPath = deploymentPath || process.cwd();
+
+        // Build index of required fields: 'Object.Field__c' -> true
+        const requiredFields = new Set();
+        const fieldFiles = this.findFiles(scanPath, '.field-meta.xml');
+
+        fieldFiles.forEach(file => {
+            try {
+                const content = fs.readFileSync(file, 'utf-8');
+                const required = this.extractXmlValue(content, 'required');
+                if (required !== 'true') return;
+
+                const parts = file.split(path.sep);
+                const fieldsIdx = parts.lastIndexOf('fields');
+                if (fieldsIdx < 2) return;
+                const objectName = parts[fieldsIdx - 1];
+                const fieldName = path.basename(file, '.field-meta.xml');
+                requiredFields.add(`${objectName}.${fieldName}`);
+            } catch (err) {
+                // skip
+            }
+        });
+
+        if (requiredFields.size === 0) {
+            console.log('  ℹ️  No required fields found in deployment scope\n');
+            return;
+        }
+
+        const permDir = path.join(scanPath, 'force-app', 'main', 'default', 'permissionsets');
+        if (!fs.existsSync(permDir)) {
+            console.log('  ℹ️  No permission sets directory found\n');
+            return;
+        }
+
+        const permFiles = this.findFiles(permDir, '.permissionset-meta.xml');
+
+        permFiles.forEach(file => {
+            try {
+                const content = fs.readFileSync(file, 'utf-8');
+                const permSetLabel = this.extractXmlValue(content, 'label') || path.basename(file, '.permissionset-meta.xml');
+                const fieldBlocks = content.match(/<fieldPermissions>[\s\S]*?<\/fieldPermissions>/g) || [];
+
+                fieldBlocks.forEach(block => {
+                    const fieldMatch = block.match(/<field>([^<]+)<\/field>/);
+                    if (!fieldMatch) return;
+
+                    const fullField = fieldMatch[1].trim();
+                    if (requiredFields.has(fullField)) {
+                        this.errors.push({
+                            type: 'REQUIRED_FIELD_PERMISSION',
+                            message: `Permission set '${permSetLabel}' has explicit FieldPermissions for ` +
+                                `'${fullField}', which is a required field. Salesforce blocks FLS on required fields. ` +
+                                'Remove this <fieldPermissions> entry.',
+                            file: file,
+                            severity: 'ERROR'
+                        });
+                    }
+                });
+            } catch (err) {
+                // skip
+            }
+        });
+
+        console.log('  ✅ Required field permission check complete\n');
     }
 
     /**

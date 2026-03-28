@@ -840,7 +840,14 @@ class FlowXMLValidator {
    * Return direct child element nodes.
    */
   getDirectChildElements(node) {
-    return Array.from(node.childNodes || []).filter(child => child.nodeType === 1);
+    const result = [];
+    const childNodes = node.childNodes;
+    if (childNodes) {
+      for (let i = 0; i < childNodes.length; i++) {
+        if (childNodes[i].nodeType === 1) result.push(childNodes[i]);
+      }
+    }
+    return result;
   }
 
   /**
@@ -889,7 +896,12 @@ class FlowXMLValidator {
       return flowXML;
     }
 
-    const originalChildNodes = Array.from(root.childNodes || []);
+    const originalChildNodes = [];
+    if (root.childNodes) {
+      for (let i = 0; i < root.childNodes.length; i++) {
+        originalChildNodes.push(root.childNodes[i]);
+      }
+    }
     const sortedElements = originalChildNodes
       .filter(node => node.nodeType === 1)
       .map((node, originalIndex) => ({

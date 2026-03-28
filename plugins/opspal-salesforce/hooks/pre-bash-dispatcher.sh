@@ -247,6 +247,7 @@ if is_deploy_scope_command; then
   run_child_hook env PRETOOLUSE_MODE=1 "${PLUGIN_ROOT}/hooks/pre-deployment-comprehensive-validation.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-flow-validation.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-report-quality-gate.sh"
+  run_child_hook "${PLUGIN_ROOT}/hooks/pre-picklist-dependency-validation.sh"
 fi
 
 if is_data_query_command; then
