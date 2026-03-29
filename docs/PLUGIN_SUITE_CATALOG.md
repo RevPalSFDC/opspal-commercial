@@ -6,7 +6,7 @@
 ## Summary
 
 - Marketplace: `opspal-commercial`
-- Generated: `2026-03-28`
+- Generated: `2026-03-29`
 - Plugins: 10
 - Agents: 302
 - Commands: 273
