@@ -39,6 +39,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/routing-context-refresher.sh",
             "timeout": 3000,
             "description": "Inject condensed routing reminder after context compaction or periodically"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from user prompt signals"
           }
         ]
       }
@@ -178,6 +184,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact.sh",
             "timeout": 10000,
             "description": "Backup conversation transcript before compaction to prevent data loss"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
+            "timeout": 10000,
+            "description": "Flush ambient reflections before context compaction"
           }
         ]
       }
@@ -369,6 +381,29 @@
             "description": "Extract skills from reflections and update routing confidence"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from tool results"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-hook-error-observer.sh",
+            "timeout": 5000,
+            "description": "Observe hook errors and create reflection candidates with immediate flush"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
+            "timeout": 5000,
+            "description": "Evaluate ambient reflection flush conditions"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -404,6 +439,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-repo-sync.sh",
             "timeout": 10000,
             "description": "Auto-pull project-connected git repos at session start (opt-out: ENABLE_GIT_SYNC=0)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-capture-init.sh",
+            "timeout": 5000,
+            "description": "Initialize session context for ambient reflection pipeline"
           }
         ]
       }
@@ -440,6 +481,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-investigation-execution-proof.sh",
             "timeout": 5000,
             "description": "Verify investigation specialists executed queries vs returning plans"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from subagent results"
           }
         ]
       }
@@ -452,6 +499,18 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-completed-metrics.sh",
             "timeout": 5000,
             "description": "Record subagent completion metrics for routing feedback loops"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from task completion"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
+            "timeout": 5000,
+            "description": "Evaluate flush on task completion"
           }
         ]
       }
@@ -483,6 +542,18 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-session-silent-failure-summary.sh",
             "timeout": 15000,
             "description": "Analyze session for silent failure patterns and update metrics baseline"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-hook-error-observer.sh",
+            "timeout": 5000,
+            "description": "Final hook error observation before session end"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
+            "timeout": 10000,
+            "description": "Session-end ambient reflection flush"
           }
         ]
       }

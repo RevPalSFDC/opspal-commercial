@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-28T23:50:02.807Z",
+  "buildDate": "2026-03-29T00:14:51.837Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
-  "totalHooks": 254,
+  "totalHooks": 255,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -47600,6 +47600,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "*"
+      },
+      {
+        "plugin": "opspal-core",
         "name": "post-tool-capture",
         "description": "",
         "file": "opspal-core/hooks/post-tool-capture.sh",
@@ -49322,7 +49329,7 @@
     "totalAgents": 299,
     "totalAgentsFull": 302,
     "totalCommands": 273,
-    "totalHooks": 254,
+    "totalHooks": 255,
     "totalRoutingRules": 0,
     "totalKeywords": 2623,
     "totalKeywordsFull": 2623,
@@ -49334,7 +49341,7 @@
     "agentsWithToolsFull": 302,
     "avgKeywordsPerAgent": "15.29",
     "hooksByEvent": {
-      "PostToolUse": 33,
+      "PostToolUse": 34,
       "UserPromptSubmit": 2,
       "PreToolUse": 39,
       "PermissionRequest": 1,
