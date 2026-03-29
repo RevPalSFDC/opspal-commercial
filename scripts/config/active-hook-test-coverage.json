@@ -38,6 +38,9 @@
     ]
   },
   "allowedUntested": {
+    "plugins/opspal-core/hooks/ambient-candidate-extractor.sh": "Side-effect ambient hook. Core JS logic covered by test/ambient/extractors.test.js and test/ambient/ambient-comprehensive.test.js (44 Jest tests).",
+    "plugins/opspal-core/hooks/ambient-hook-error-observer.sh": "Side-effect ambient hook. Core JS logic covered by test/ambient/hook-error-observer.test.js, hook-reflection-interceptor.test.js, and ambient-comprehensive.test.js.",
+    "plugins/opspal-core/hooks/ambient-flush-trigger.sh": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js.",
     "plugins/opspal-core/hooks/post-fireflies-sync.sh": "Requires a hermetic Fireflies MCP/post-tool harness with external credentials and transcript fixtures.",
     "plugins/opspal-core/hooks/post-gong-sync.sh": "Requires a hermetic Gong MCP/post-tool harness with external credentials and recording fixtures.",
     "plugins/opspal-core/hooks/post-task-runbook-compliance-check.sh": "Depends on multi-hook Agent and TaskCompleted chain state; pending a dedicated compliance chain harness.",
