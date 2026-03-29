@@ -6,8 +6,8 @@
       "reason": "Current layered agent-governance stack; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
     },
     "SessionStart :: *": {
-      "max": 11,
-      "reason": "Global startup hooks are intentionally broad today; hold the line until domain gating is implemented."
+      "max": 12,
+      "reason": "Global startup hooks are intentionally broad today; includes session-capture-init for ambient reflection pipeline."
     },
     "PostToolUse :: Agent": {
       "max": 10,
@@ -18,8 +18,8 @@
       "reason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, and Marketo plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
     },
     "UserPromptSubmit :: *": {
-      "max": 7,
-      "reason": "Prompt-time routing and deprecation notices are global today; keep the current ceiling including the data-hygiene deprecation warning hook."
+      "max": 8,
+      "reason": "Prompt-time routing, deprecation notices, and ambient candidate extraction are global today."
     },
     "PreToolUse :: Write": {
       "max": 5,
@@ -30,8 +30,24 @@
       "reason": "Post-Bash hooks are now dispatched per domain; fail any attempt to reintroduce broad Bash post-hook fan-out."
     },
     "Stop :: *": {
+      "max": 6,
+      "reason": "Global stop hooks include ambient hook-error observer and flush trigger for session-end reflection."
+    },
+    "SubagentStop :: *": {
       "max": 4,
-      "reason": "Global stop hooks are capped until session-stop behavior is consolidated."
+      "reason": "SubagentStop now includes ambient candidate extraction alongside verification hooks."
+    },
+    "PostToolUse :: *": {
+      "max": 3,
+      "reason": "PostToolUse catch-all includes ambient candidate extractor, hook-error observer, and flush trigger."
+    },
+    "TaskCompleted :: *": {
+      "max": 3,
+      "reason": "TaskCompleted now includes ambient candidate extraction and flush trigger alongside metrics."
+    },
+    "PreCompact :: *": {
+      "max": 2,
+      "reason": "PreCompact includes transcript backup and ambient flush trigger."
     }
   }
 }
