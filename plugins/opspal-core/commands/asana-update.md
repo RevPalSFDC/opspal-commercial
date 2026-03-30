@@ -1,4 +1,5 @@
 ---
+name: asana-update
 description: Update or create Asana tasks based on work completed in linked project (platform-agnostic)
 argument-hint: "[options]"
 allowed-tools:

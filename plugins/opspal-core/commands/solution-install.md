@@ -1,4 +1,5 @@
 ---
+name: solution-install
 description: Install a solution from the shared catalog to your local plugin installation
 argument-hint: "<solution-name> [--force] [--version <version>] [--dry-run]"
 ---

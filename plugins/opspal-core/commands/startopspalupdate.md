@@ -1,4 +1,5 @@
 ---
+name: startopspalupdate
 description: Force refresh marketplace and update all installed OpsPal plugins to latest versions
 argument-hint: "[--dry-run] [--skip-confirm] [--only plugin1,plugin2] [--history] [--verbose] [--mode external|manual|legacy] [--emit-script-only] [--workspace path] [--claude-root path] [--preflight] [--json]"
 allowed_tools:

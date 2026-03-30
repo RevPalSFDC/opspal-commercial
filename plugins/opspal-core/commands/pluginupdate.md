@@ -1,4 +1,5 @@
 ---
+name: pluginupdate
 description: Run post-installation and post-update tasks for all installed plugins
 argument-hint: "[--plugin <name>] [--check-only] [--fix] [--verbose]"
 ---

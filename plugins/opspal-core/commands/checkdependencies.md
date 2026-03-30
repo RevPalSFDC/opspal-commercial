@@ -1,4 +1,5 @@
 ---
+name: checkdependencies
 description: Check and install missing npm dependencies across all plugins
 argument-hint: "[--fix] [--plugin <name>] [--verbose]"
 ---

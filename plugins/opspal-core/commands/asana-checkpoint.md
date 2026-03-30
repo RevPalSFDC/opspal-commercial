@@ -1,4 +1,5 @@
 ---
+name: asana-checkpoint
 description: Post intermediate progress checkpoint to Asana task
 argument-hint: "[options]"
 telemetry-contract: opspal-command-telemetry-v1

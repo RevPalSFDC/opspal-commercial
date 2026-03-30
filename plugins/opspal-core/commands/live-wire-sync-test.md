@@ -1,4 +1,5 @@
 ---
+name: live-wire-sync-test
 description: Test bidirectional sync between Salesforce and HubSpot using probe fields
 argument-hint: "--account-selectors \"001XXXXX,domain:acme.com\" --sla-seconds 300 --dry-run"
 allowed-tools:

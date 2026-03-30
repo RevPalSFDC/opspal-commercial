@@ -1,4 +1,5 @@
 ---
+name: gong-auth
 description: Validate and manage Gong API credentials
 argument-hint: "[validate|check|status]"
 ---

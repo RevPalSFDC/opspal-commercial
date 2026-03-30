@@ -1,8 +1,8 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-30T12:58:15.369Z",
-  "totalAgents": 299,
-  "totalAgentsFull": 302,
+  "buildDate": "2026-03-30T15:44:07.948Z",
+  "totalAgents": 300,
+  "totalAgentsFull": 303,
   "totalCommands": 273,
   "totalHooks": 258,
   "byKeyword": {
@@ -176,6 +176,7 @@
       "uat-orchestrator",
       "ui-documentation-generator",
       "unified-exec-dashboard-agent",
+      "unified-reporting-aggregator",
       "visual-regression-tester"
     ],
     "core account": [
@@ -848,6 +849,7 @@
     ],
     "aggregator": [
       "conversation-intelligence-aggregator",
+      "unified-reporting-aggregator",
       "okr-data-aggregator"
     ],
     "core conversation": [
@@ -868,7 +870,8 @@
       "pipeline-intelligence-agent"
     ],
     "core aggregator": [
-      "conversation-intelligence-aggregator"
+      "conversation-intelligence-aggregator",
+      "unified-reporting-aggregator"
     ],
     "cross platform": [
       "cross-platform-impact-analyzer",
@@ -3068,11 +3071,13 @@
     ],
     "reporting": [
       "revops-reporting-assistant",
+      "unified-reporting-aggregator",
       "hubspot-reporting-builder",
       "marketo-analytics-assessor"
     ],
     "core reporting": [
-      "revops-reporting-assistant"
+      "revops-reporting-assistant",
+      "unified-reporting-aggregator"
     ],
     "sales enablement": [
       "sales-enablement-coordinator"
@@ -3629,22 +3634,37 @@
       "unified-exec-dashboard-agent"
     ],
     "unified": [
-      "unified-exec-dashboard-agent"
+      "unified-exec-dashboard-agent",
+      "unified-reporting-aggregator"
     ],
     "exec": [
       "unified-exec-dashboard-agent"
     ],
     "core unified": [
-      "unified-exec-dashboard-agent"
+      "unified-exec-dashboard-agent",
+      "unified-reporting-aggregator"
     ],
     "unified core": [
-      "unified-exec-dashboard-agent"
+      "unified-exec-dashboard-agent",
+      "unified-reporting-aggregator"
     ],
     "core exec": [
       "unified-exec-dashboard-agent"
     ],
     "exec core": [
       "unified-exec-dashboard-agent"
+    ],
+    "unified reporting": [
+      "unified-reporting-aggregator"
+    ],
+    "unified reporting aggregator": [
+      "unified-reporting-aggregator"
+    ],
+    "reporting aggregator": [
+      "unified-reporting-aggregator"
+    ],
+    "reporting core": [
+      "unified-reporting-aggregator"
     ],
     "visual regression": [
       "visual-regression-tester"
@@ -10017,6 +10037,7 @@
       "opspal-core:uat-orchestrator",
       "opspal-core:ui-documentation-generator",
       "opspal-core:unified-exec-dashboard-agent",
+      "opspal-core:unified-reporting-aggregator",
       "opspal-core:visual-regression-tester"
     ],
     "core account": [
@@ -10709,6 +10730,7 @@
     ],
     "aggregator": [
       "opspal-core:conversation-intelligence-aggregator",
+      "opspal-core:unified-reporting-aggregator",
       "opspal-okrs:okr-data-aggregator"
     ],
     "core conversation": [
@@ -10729,7 +10751,8 @@
       "opspal-core:pipeline-intelligence-agent"
     ],
     "core aggregator": [
-      "opspal-core:conversation-intelligence-aggregator"
+      "opspal-core:conversation-intelligence-aggregator",
+      "opspal-core:unified-reporting-aggregator"
     ],
     "cross platform": [
       "opspal-core:cross-platform-impact-analyzer",
@@ -12933,11 +12956,13 @@
     ],
     "reporting": [
       "opspal-core:revops-reporting-assistant",
+      "opspal-core:unified-reporting-aggregator",
       "opspal-hubspot:hubspot-reporting-builder",
       "opspal-marketo:marketo-analytics-assessor"
     ],
     "core reporting": [
-      "opspal-core:revops-reporting-assistant"
+      "opspal-core:revops-reporting-assistant",
+      "opspal-core:unified-reporting-aggregator"
     ],
     "sales enablement": [
       "opspal-core:sales-enablement-coordinator"
@@ -13498,22 +13523,37 @@
       "opspal-core:unified-exec-dashboard-agent"
     ],
     "unified": [
-      "opspal-core:unified-exec-dashboard-agent"
+      "opspal-core:unified-exec-dashboard-agent",
+      "opspal-core:unified-reporting-aggregator"
     ],
     "exec": [
       "opspal-core:unified-exec-dashboard-agent"
     ],
     "core unified": [
-      "opspal-core:unified-exec-dashboard-agent"
+      "opspal-core:unified-exec-dashboard-agent",
+      "opspal-core:unified-reporting-aggregator"
     ],
     "unified core": [
-      "opspal-core:unified-exec-dashboard-agent"
+      "opspal-core:unified-exec-dashboard-agent",
+      "opspal-core:unified-reporting-aggregator"
     ],
     "core exec": [
       "opspal-core:unified-exec-dashboard-agent"
     ],
     "exec core": [
       "opspal-core:unified-exec-dashboard-agent"
+    ],
+    "unified reporting": [
+      "opspal-core:unified-reporting-aggregator"
+    ],
+    "unified reporting aggregator": [
+      "opspal-core:unified-reporting-aggregator"
+    ],
+    "reporting aggregator": [
+      "opspal-core:unified-reporting-aggregator"
+    ],
+    "reporting core": [
+      "opspal-core:unified-reporting-aggregator"
     ],
     "visual regression": [
       "opspal-core:visual-regression-tester"
@@ -19798,6 +19838,7 @@
       "uat-orchestrator",
       "ui-documentation-generator",
       "unified-exec-dashboard-agent",
+      "unified-reporting-aggregator",
       "visual-regression-tester",
       "web-viz-generator"
     ],
@@ -20122,6 +20163,7 @@
       "opspal-core:uat-orchestrator",
       "opspal-core:ui-documentation-generator",
       "opspal-core:unified-exec-dashboard-agent",
+      "opspal-core:unified-reporting-aggregator",
       "opspal-core:visual-regression-tester",
       "opspal-core:web-viz-generator"
     ],
@@ -23566,6 +23608,41 @@
       ],
       "shortName": "unified-exec-dashboard-agent",
       "fullName": "opspal-core:unified-exec-dashboard-agent"
+    },
+    "unified-reporting-aggregator": {
+      "plugin": "opspal-core",
+      "file": "unified-reporting-aggregator.md",
+      "path": "opspal-core/agents/unified-reporting-aggregator.md",
+      "name": "unified-reporting-aggregator",
+      "description": "Aggregates reporting data from Salesforce, HubSpot, and Marketo into unified cross-platform views for executive dashboards and funnel analysis.",
+      "model": "sonnet",
+      "color": "purple",
+      "tools": [
+        "Read",
+        "Write",
+        "Bash",
+        "TodoWrite",
+        "Agent",
+        "mcp_salesforce_data_query",
+        "mcp__hubspot-v4__search_contacts",
+        "mcp__hubspot-v4__search_companies"
+      ],
+      "triggerKeywords": [
+        "unified reporting",
+        "unified reporting aggregator",
+        "reporting aggregator",
+        "unified",
+        "reporting",
+        "aggregator",
+        "core",
+        "core unified",
+        "unified core",
+        "core reporting",
+        "reporting core",
+        "core aggregator"
+      ],
+      "shortName": "unified-reporting-aggregator",
+      "fullName": "opspal-core:unified-reporting-aggregator"
     },
     "visual-regression-tester": {
       "plugin": "opspal-core",
@@ -35640,6 +35717,41 @@
       "shortName": "unified-exec-dashboard-agent",
       "fullName": "opspal-core:unified-exec-dashboard-agent"
     },
+    "opspal-core:unified-reporting-aggregator": {
+      "plugin": "opspal-core",
+      "file": "unified-reporting-aggregator.md",
+      "path": "opspal-core/agents/unified-reporting-aggregator.md",
+      "name": "unified-reporting-aggregator",
+      "description": "Aggregates reporting data from Salesforce, HubSpot, and Marketo into unified cross-platform views for executive dashboards and funnel analysis.",
+      "model": "sonnet",
+      "color": "purple",
+      "tools": [
+        "Read",
+        "Write",
+        "Bash",
+        "TodoWrite",
+        "Agent",
+        "mcp_salesforce_data_query",
+        "mcp__hubspot-v4__search_contacts",
+        "mcp__hubspot-v4__search_companies"
+      ],
+      "triggerKeywords": [
+        "unified reporting",
+        "unified reporting aggregator",
+        "reporting aggregator",
+        "unified",
+        "reporting",
+        "aggregator",
+        "core",
+        "core unified",
+        "unified core",
+        "core reporting",
+        "reporting core",
+        "core aggregator"
+      ],
+      "shortName": "unified-reporting-aggregator",
+      "fullName": "opspal-core:unified-reporting-aggregator"
+    },
     "opspal-core:visual-regression-tester": {
       "plugin": "opspal-core",
       "file": "visual-regression-tester.md",
@@ -44917,6 +45029,9 @@
     "unified-exec-dashboard-agent": [
       "opspal-core:unified-exec-dashboard-agent"
     ],
+    "unified-reporting-aggregator": [
+      "opspal-core:unified-reporting-aggregator"
+    ],
     "visual-regression-tester": [
       "opspal-core:visual-regression-tester"
     ],
@@ -48115,6 +48230,41 @@
         "description": "",
         "file": null,
         "matcher": null
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "sfdc-discovery"
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "sfdc-state-discovery"
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "sfdc-revops-auditor"
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "sfdc-cpq-assessor"
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "sfdc-automation-auditor"
       }
     ],
     "TaskCompleted": [
@@ -48161,41 +48311,6 @@
         "description": "",
         "file": "opspal-core/hooks/subagent-stop-capture.sh",
         "matcher": null
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "sfdc-discovery"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "sfdc-state-discovery"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "sfdc-revops-auditor"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "sfdc-cpq-assessor"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "sfdc-automation-auditor"
       }
     ],
     "Unknown": [
@@ -49347,20 +49462,20 @@
   },
   "routingRules": [],
   "stats": {
-    "totalAgents": 299,
-    "totalAgentsFull": 302,
+    "totalAgents": 300,
+    "totalAgentsFull": 303,
     "totalCommands": 273,
     "totalHooks": 258,
     "totalRoutingRules": 0,
-    "totalKeywords": 2623,
-    "totalKeywordsFull": 2623,
+    "totalKeywords": 2627,
+    "totalKeywordsFull": 2627,
     "totalPlugins": 10,
     "duplicateShortNames": 3,
-    "agentsWithKeywords": 299,
-    "agentsWithKeywordsFull": 302,
-    "agentsWithTools": 299,
-    "agentsWithToolsFull": 302,
-    "avgKeywordsPerAgent": "15.29",
+    "agentsWithKeywords": 300,
+    "agentsWithKeywordsFull": 303,
+    "agentsWithTools": 300,
+    "agentsWithToolsFull": 303,
+    "avgKeywordsPerAgent": "15.28",
     "hooksByEvent": {
       "PostToolUse": 34,
       "UserPromptSubmit": 2,
@@ -49369,9 +49484,9 @@
       "PreCompact": 1,
       "SessionStart": 6,
       "SubagentStart": 1,
-      "SubagentStop": 1,
+      "SubagentStop": 6,
       "TaskCompleted": 1,
-      "Stop": 10,
+      "Stop": 5,
       "Unknown": 137,
       "PostTask": 5,
       "PreCommit": 1,

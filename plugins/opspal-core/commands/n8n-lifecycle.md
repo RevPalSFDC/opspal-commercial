@@ -1,4 +1,5 @@
 ---
+name: n8n-lifecycle
 description: Manage n8n workflow lifecycle (activate, deactivate, status, execute)
 argument-hint: "<action> [workflow-id] [options]"
 ---

@@ -1,4 +1,5 @@
 ---
+name: finishopspalupdate
 description: Run post-update validation, routing health checks, cache prune, and documentation sync
 argument-hint: "[--skip-fix] [--verbose] [--no-cache-prune] [--strict] [--workspace path] [--claude-root path] [--json]"
 allowed_tools:

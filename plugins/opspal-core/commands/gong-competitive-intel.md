@@ -1,4 +1,5 @@
 ---
+name: gong-competitive-intel
 description: Generate competitive intelligence report from Gong tracker data
 argument-hint: "[--period 2026-Q1|90d] [--competitors 'A,B,C'] [--output <path>]"
 ---

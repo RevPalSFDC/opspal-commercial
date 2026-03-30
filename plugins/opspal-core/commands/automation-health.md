@@ -1,4 +1,5 @@
 ---
+name: automation-health
 description: Show unified automation health signals across Marketo, HubSpot, Salesforce, and browser workflows
 argument-hint: "[--platform marketo|hubspot|salesforce|all] [--window 15m|1h|24h] [--format markdown|json]"
 ---

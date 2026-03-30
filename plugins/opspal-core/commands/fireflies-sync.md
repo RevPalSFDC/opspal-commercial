@@ -1,4 +1,5 @@
 ---
+name: fireflies-sync
 description: Sync Fireflies transcripts to CRM (Salesforce or HubSpot)
 argument-hint: "[--mode calls|insights] [--since 7d|24h|30d] [--target salesforce|hubspot] [--org <alias>] [--dry-run]"
 ---

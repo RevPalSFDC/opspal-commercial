@@ -1,4 +1,5 @@
 ---
+name: solution-info
 description: View detailed information about a solution including components and parameters
 argument-hint: "<solution-name> [--format text|json|markdown]"
 ---

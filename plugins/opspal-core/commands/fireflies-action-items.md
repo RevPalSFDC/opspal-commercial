@@ -1,4 +1,5 @@
 ---
+name: fireflies-action-items
 description: Extract and track action items from Fireflies transcripts
 argument-hint: "[--period 7d|30d] [--assignee <name>] [--status open|overdue|completed|all] [--meeting-id <id>]"
 ---

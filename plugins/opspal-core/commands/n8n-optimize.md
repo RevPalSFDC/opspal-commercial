@@ -1,4 +1,5 @@
 ---
+name: n8n-optimize
 description: Analyze n8n workflow performance and generate optimization recommendations
 argument-hint: "<workflow-id> [--quick] [--json]"
 ---

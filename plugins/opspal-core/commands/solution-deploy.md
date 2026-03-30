@@ -1,4 +1,5 @@
 ---
+name: solution-deploy
 description: Deploy a solution template to a target environment with parameter resolution
 argument-hint: "<solution-name> --env <environment> [--validate-only] [--dry-run]"
 ---

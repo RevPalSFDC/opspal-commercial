@@ -1,4 +1,5 @@
 ---
+name: initialize
 description: Initialize project structure with folders, CLAUDE.md, and .gitignore based on installed plugins
 argument-hint: "[--project-dir=<path>] [--force]"
 ---

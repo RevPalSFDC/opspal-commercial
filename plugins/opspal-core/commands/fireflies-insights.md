@@ -1,4 +1,5 @@
 ---
+name: fireflies-insights
 description: Analyze Fireflies meeting data for health, engagement, and risk signals
 argument-hint: "[--period 30d|90d] [--pipeline <name>] [--min-amount <number>] [--participants <emails>]"
 ---

@@ -1,4 +1,5 @@
 ---
+name: ace-maintenance
 description: Run ACE Framework maintenance tasks (health check, confidence decay, cache cleanup, metrics)
 argument-hint: "[--task health|decay|cleanup|report]"
 telemetry-contract: opspal-command-telemetry-v1

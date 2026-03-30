@@ -1,4 +1,5 @@
 ---
+name: dedup-companies
 description: Execute complete Company/Account deduplication workflow between HubSpot and Salesforce
 argument-hint: "[--config <path>] [--output-dir <path>] [--resume <session>]"
 ---

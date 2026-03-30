@@ -1,4 +1,5 @@
 ---
+name: googlelogin
 description: Authenticate Google Workspace CLI (gws) for Drive, Sheets, Gmail, Calendar, Docs, Slides, and Tasks access
 argument-hint: "[check|login|status]"
 allowed-tools:

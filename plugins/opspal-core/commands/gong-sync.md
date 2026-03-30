@@ -1,4 +1,5 @@
 ---
+name: gong-sync
 description: Sync Gong conversation data to Salesforce Events or HubSpot Engagements
 argument-hint: "[--mode calls|insights] [--since 24h|7d] [--target salesforce|hubspot] [--dry-run]"
 ---

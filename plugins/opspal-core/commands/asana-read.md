@@ -1,4 +1,5 @@
 ---
+name: asana-read
 description: Read and parse assigned Asana tasks into agent-friendly format
 argument-hint: "[project-gid] [--project <name>]"
 allowed-tools:

@@ -1,4 +1,5 @@
 ---
+name: routing-compliance
 description: Display routing compliance statistics and analyze agent utilization patterns
 argument-hint: "[stats|recent|rate]"
 ---

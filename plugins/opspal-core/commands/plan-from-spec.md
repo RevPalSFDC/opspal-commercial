@@ -1,4 +1,5 @@
 ---
+name: plan-from-spec
 description: Parse specification document and generate executable Asana project plan
 argument-hint: "<spec_file> [--project-id <gid>] [--execute] [--dry-run]"
 ---

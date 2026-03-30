@@ -1,4 +1,5 @@
 ---
+name: solution-publish
 description: Publish a local solution template to the shared catalog for distribution
 argument-hint: "<solution-path> [--message <message>] [--dry-run]"
 ---

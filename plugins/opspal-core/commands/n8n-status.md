@@ -1,4 +1,5 @@
 ---
+name: n8n-status
 description: Check n8n connection status and display workflow summary
 argument-hint: "[--workflows] [--executions] [--health]"
 ---

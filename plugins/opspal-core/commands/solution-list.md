@@ -1,4 +1,5 @@
 ---
+name: solution-list
 description: List available solution templates with metadata and status information
 argument-hint: "[--platform <name>] [--tag <tag>] [--format table|json|markdown]"
 ---

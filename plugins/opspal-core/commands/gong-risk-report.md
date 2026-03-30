@@ -1,4 +1,5 @@
 ---
+name: gong-risk-report
 description: Analyze open deals for conversation-based risk signals from Gong data
 argument-hint: "[--pipeline <name>] [--min-amount <n>] [--output <path>]"
 ---

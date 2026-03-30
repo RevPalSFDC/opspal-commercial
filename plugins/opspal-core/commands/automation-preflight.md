@@ -1,4 +1,5 @@
 ---
+name: automation-preflight
 description: Run cross-platform automation preflight checks for API/UI/hybrid operations
 argument-hint: "[--platform marketo|hubspot|salesforce] [--mode api|ui|hybrid] [--operation <name>] [--instance <alias>]"
 ---

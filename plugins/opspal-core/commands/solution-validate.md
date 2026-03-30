@@ -1,4 +1,5 @@
 ---
+name: solution-validate
 description: Validate solution template structure, parameters, and dependencies without deploying
 argument-hint: "<solution-path> [--env <environment>] [--strict]"
 ---

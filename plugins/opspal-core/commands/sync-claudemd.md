@@ -1,4 +1,5 @@
 ---
+name: sync-claudemd
 description: Dynamically discover and sync plugin metadata to CLAUDE.md routing tables
 argument-hint: "[--dry-run] [--verbose] [--project-dir=<path>]"
 allowed_tools:

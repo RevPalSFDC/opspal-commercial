@@ -1,4 +1,5 @@
 ---
+name: fireflies-auth
 description: Configure or verify Fireflies authentication and API budget status
 argument-hint: "[validate|check|status]"
 ---

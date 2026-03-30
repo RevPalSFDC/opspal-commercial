@@ -1,4 +1,5 @@
 ---
+name: solution-catalog
 description: Browse and search the shared solution catalog to discover available templates
 argument-hint: "[--search <query>] [--platform <name>] [--tag <tag>]"
 ---

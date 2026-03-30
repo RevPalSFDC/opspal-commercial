@@ -1,4 +1,5 @@
 ---
+name: asana-link
 description: Link Asana project(s) to current working directory (platform-agnostic)
 argument-hint: "[options]"
 allowed-tools:

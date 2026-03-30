@@ -1,4 +1,5 @@
 ---
+name: solution-rollback
 description: Rollback a solution deployment to a previous checkpoint state
 argument-hint: "[--checkpoint <id>] [--deployment <id>] [--list]"
 ---
