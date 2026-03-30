@@ -54,7 +54,7 @@ systemMessage back to Claude (Suggestion or Block)
   - Complexity ≥ 70% → Auto-invoke
   - High success rate (>80%) → Auto-invoke
 
-#### 3. Configuration (`/.claude/agent-triggers.json`)
+#### 3. Configuration (`/.claude-plugin/agent-triggers.json`)
 - **Mandatory Patterns**: Operations that BLOCK without agent
   - Production deploys → release-coordinator
   - Bulk operations (1000+ records) → sfdc-data-operations
@@ -147,7 +147,7 @@ node scripts/auto-agent-router.js config
 
 #### Adding New Patterns
 
-Edit `.claude/agent-triggers.json`:
+Edit `.claude-plugin/agent-triggers.json`:
 
 ```json
 {
@@ -283,7 +283,7 @@ Recent Auto-Invocations:
 }
 ```
 
-### `.claude/agent-triggers.json` (Routing rules)
+### `.claude-plugin/agent-triggers.json` (Routing rules)
 - 20 patterns total
 - 15 specialized agents
 - Mandatory + recommended + keywords
@@ -349,7 +349,7 @@ node scripts/auto-agent-router.js init
 
 ### For Plugin Developers
 
-1. **Add patterns for new agents**: Update agent-triggers.json when creating new agents
+1. **Add patterns for new agents**: Update `.claude-plugin/agent-triggers.json` when creating new agents
 2. **Set appropriate confidence**: 1.0 for mandatory, 0.7-0.9 for recommended
 3. **Test before deploying**: Use `node auto-agent-router.js test`
 4. **Monitor analytics**: Check success rates weekly

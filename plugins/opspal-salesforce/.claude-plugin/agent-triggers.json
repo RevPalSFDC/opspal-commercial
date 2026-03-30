@@ -1,0 +1,51 @@
+{
+  "triggers": {
+    "mandatory": {
+      "patterns": [
+        {
+          "pattern": "(production|prod).*(deploy|deployment|release)|(deploy|deployment|release).*(production|prod)",
+          "agent": "sfdc-orchestrator",
+          "message": "Production deployments require orchestration and release coordination."
+        },
+        {
+          "pattern": "((permission|profile|security|access|sharing|role|fls).*(deploy|deployment|package))|((deploy|deployment|package).*(permission|profile|security|access|sharing|role|fls))",
+          "agent": "sfdc-orchestrator",
+          "message": "Mixed security and deployment work must be coordinated through the Salesforce orchestrator."
+        },
+        {
+          "pattern": "((deploy|deployment|package).*(populate|seed|update|verify|query|junction))|((populate|seed|update|verify|query|junction).*(deploy|deployment|package))",
+          "agent": "sfdc-orchestrator",
+          "message": "Deploy-plus-data or verification workflows require orchestration across specialists."
+        }
+      ]
+    },
+    "keywords": {
+      "mappings": {
+        "field level security|\\bfls\\b|permission set|profile access|sharing rule|security write": [
+          "sfdc-permission-orchestrator"
+        ],
+        "deploy|deployment|package|release": [
+          "sfdc-deployment-manager"
+        ],
+        "populate|seed|bulk update|data update|import|export|upsert": [
+          "sfdc-data-operations"
+        ],
+        "verify|verification|junction|query|soql": [
+          "sfdc-query-specialist"
+        ]
+      }
+    },
+    "auto_invoke": {
+      "rules": [
+        {
+          "agent": "sfdc-orchestrator"
+        }
+      ],
+      "thresholds": {
+        "auto_invoke_confidence": 0.9,
+        "auto_invoke_complexity": 0.7,
+        "mandatory_confidence": 1.0
+      }
+    }
+  }
+}

@@ -140,6 +140,7 @@ This is the canonical specialist entrypoint for Salesforce permission/security w
 
 - Parent and main-context routing should start here for permission set creation, assignment, FLS/object access writes, and other permission/security mutations.
 - If the workflow needs profile-default changes, role hierarchy work, sharing rules, or other UI-heavy security operations, keep ownership here and delegate internally to `sfdc-security-admin` only when needed.
+- If the workflow also includes `sf project deploy`, data seeding, or post-deploy verification, do not keep the whole run inside this specialist. Route the parent task through `sfdc-orchestrator`, keep permission/FLS ownership here, and let `sfdc-deployment-manager`, `sfdc-data-operations`, and `sfdc-query-specialist` own their execution slices.
 - Normal execution should complete inside the specialist path. Do not hand execution back to the parent through generated scripts unless a clearly documented runtime or policy restriction makes specialist completion impossible.
 
 ## Capabilities

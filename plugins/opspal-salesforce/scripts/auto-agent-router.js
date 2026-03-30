@@ -25,14 +25,50 @@ const colors = {
 
 class AutoAgentRouter {
     constructor() {
-        // Use CLAUDE_PLUGIN_ROOT if available, otherwise fallback to relative path
-        const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
-        this.configPath = path.join(pluginRoot, '.claude/agent-triggers.json');
-        this.analyticsPath = path.join(pluginRoot, '.claude/agent-usage-data.json');
+        this.pluginRoot = this.resolvePluginRoot();
+        this.configPath = this.resolveConfigPath();
+        this.analyticsPath = path.join(this.pluginRoot, '.claude/agent-usage-data.json');
         this.config = this.loadConfig();
         this.analytics = this.loadAnalytics();
         this.complexityThreshold = 0.7;
         this.autoInvokeEnabled = true;
+    }
+
+    resolvePluginRoot() {
+        const scriptRoot = path.resolve(path.join(__dirname, '..'));
+        const configuredRoot = process.env.CLAUDE_PLUGIN_ROOT
+            ? path.resolve(process.env.CLAUDE_PLUGIN_ROOT)
+            : null;
+
+        if (!configuredRoot) {
+            return scriptRoot;
+        }
+
+        const configuredRouter = path.join(configuredRoot, 'scripts', 'auto-agent-router.js');
+        if (configuredRouter === __filename) {
+            return configuredRoot;
+        }
+
+        if (scriptRoot.startsWith(configuredRoot + path.sep)) {
+            return configuredRoot;
+        }
+
+        return scriptRoot;
+    }
+
+    resolveConfigPath() {
+        const candidates = [
+            path.join(this.pluginRoot, '.claude', 'agent-triggers.json'),
+            path.join(this.pluginRoot, '.claude-plugin', 'agent-triggers.json')
+        ];
+
+        for (const candidate of candidates) {
+            if (fs.existsSync(candidate)) {
+                return candidate;
+            }
+        }
+
+        return candidates[0];
     }
 
     loadConfig() {
@@ -109,7 +145,97 @@ class AutoAgentRouter {
             score += 0.3;
         }
 
+        const coordinationProfile = this.detectCoordinationWorkflow(operation);
+        if (coordinationProfile.needsOrchestration) {
+            score += Math.min(0.45, 0.15 * coordinationProfile.domains.length);
+        }
+
+        if (coordinationProfile.actionCount >= 3) {
+            score += 0.2;
+        }
+
         return Math.min(score, 1.0); // Cap at 1.0
+    }
+
+    detectOperationDomains(operation) {
+        const domains = new Set();
+
+        if (/\bdeploy|deployment|package|release\b/i.test(operation)) {
+            domains.add('deploy');
+        }
+
+        if (/\bpermission|profile|security|access|sharing|role|field[- ]level security|\bfls\b/i.test(operation)) {
+            domains.add('permission');
+        }
+
+        if (/\bdata|populate|seed|import|export|bulk|upsert|insert|update|record(s)?\b/i.test(operation)) {
+            domains.add('data');
+        }
+
+        if (/\bverify|verification|validate|validation|confirm|check|query|soql|junction\b/i.test(operation)) {
+            domains.add('verification');
+        }
+
+        if (/\bflow|workflow|automation\b/i.test(operation)) {
+            domains.add('automation');
+        }
+
+        if (/\bmetadata|field|object|validation rule|record type|picklist|permission set\b/i.test(operation)) {
+            domains.add('metadata');
+        }
+
+        return Array.from(domains);
+    }
+
+    countDistinctActionVerbs(operation) {
+        const actionPatterns = [
+            { name: 'deploy', pattern: /\bdeploy|release\b/i },
+            { name: 'grant', pattern: /\bgrant|assign|enable\b/i },
+            { name: 'populate', pattern: /\bpopulate|seed|fill\b/i },
+            { name: 'update', pattern: /\bupdate|upsert|modify\b/i },
+            { name: 'verify', pattern: /\bverify|confirm|check\b/i },
+            { name: 'query', pattern: /\bquery|inspect|look up\b/i }
+        ];
+
+        return actionPatterns.filter(({ pattern }) => pattern.test(operation)).length;
+    }
+
+    detectCoordinationWorkflow(operation) {
+        const domains = this.detectOperationDomains(operation);
+        const actionCount = this.countDistinctActionVerbs(operation);
+        const hasExplicitSequencing = /\b(and then|then|after that|afterwards|followed by)\b/i.test(operation);
+        const mentionsMultipleSteps = /,| and /i.test(operation);
+        const mixesDeployAndPermission = domains.includes('deploy') && domains.includes('permission');
+        const mixesDeployAndData = domains.includes('deploy') && domains.includes('data');
+        const mixesDataAndVerification = domains.includes('data') && domains.includes('verification');
+        const needsOrchestration = (
+            domains.length >= 3 ||
+            mixesDeployAndPermission ||
+            mixesDeployAndData ||
+            (mixesDataAndVerification && domains.length >= 2)
+        ) && (actionCount >= 2 || hasExplicitSequencing || mentionsMultipleSteps);
+
+        return {
+            domains,
+            actionCount,
+            needsOrchestration
+        };
+    }
+
+    detectSequentialMetadataDeploymentWorkflow(operation) {
+        const hasCreateIntent = /\b(create|add|build|generate|modify|update|extend|new)\b/i.test(operation);
+        const hasDeployIntent = /\bdeploy|deployment|package\b/i.test(operation);
+        const hasMetadataIntent = /\bfield|object|metadata|validation rule|record type|picklist\b/i.test(operation);
+        const hasExplicitParallel = /\b(in parallel|concurrently|simultaneously|all at once)\b/i.test(operation);
+        const hasMultiTargetSignal = /,.*\b(field|object|metadata)\b.*,\s*|\ball \d+\b/i.test(operation);
+        const mentionsDistinctVerificationOrDataWork = /\bverify|query|populate|seed|junction\b/i.test(operation);
+
+        return hasCreateIntent &&
+            hasDeployIntent &&
+            hasMetadataIntent &&
+            !hasExplicitParallel &&
+            !hasMultiTargetSignal &&
+            !mentionsDistinctVerificationOrDataWork;
     }
 
     /**
@@ -140,6 +266,10 @@ class AutoAgentRouter {
      * Detect parallelizable patterns
      */
     hasParallelizablePattern(operation) {
+        if (this.detectSequentialMetadataDeploymentWorkflow(operation)) {
+            return false;
+        }
+
         // Explicit parallelization
         const explicitParallel = /\b(in parallel|concurrently|simultaneously|all at once)\b/i.test(operation);
 
@@ -166,6 +296,23 @@ class AutoAgentRouter {
                 agent: 'supervisor-auditor',
                 confidence: 1.0,
                 reason: 'Explicit [SUPERVISOR] flag detected'
+            };
+        }
+
+        if (this.detectSequentialMetadataDeploymentWorkflow(operation)) {
+            return {
+                agent: 'sfdc-orchestrator',
+                confidence: 0.9,
+                reason: 'Metadata creation plus deployment should stay inside Salesforce orchestration'
+            };
+        }
+
+        const coordinationProfile = this.detectCoordinationWorkflow(operation);
+        if (coordinationProfile.needsOrchestration) {
+            return {
+                agent: 'sfdc-orchestrator',
+                confidence: 0.92,
+                reason: `Cross-domain workflow requires orchestration (${coordinationProfile.domains.join(', ')})`
             };
         }
 

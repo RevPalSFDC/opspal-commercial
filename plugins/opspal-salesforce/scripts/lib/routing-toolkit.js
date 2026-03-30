@@ -54,9 +54,15 @@ class RoutingToolkit {
 
   loadPatterns() {
     try {
-      const patternsPath = path.join(this.pluginRoot, '.claude/agent-triggers.json');
-      if (fs.existsSync(patternsPath)) {
-        return JSON.parse(fs.readFileSync(patternsPath, 'utf8'));
+      const candidatePaths = [
+        path.join(this.pluginRoot, '.claude/agent-triggers.json'),
+        path.join(this.pluginRoot, '.claude-plugin/agent-triggers.json')
+      ];
+
+      for (const patternsPath of candidatePaths) {
+        if (fs.existsSync(patternsPath)) {
+          return JSON.parse(fs.readFileSync(patternsPath, 'utf8'));
+        }
       }
     } catch (error) {
       this.warn('Could not load patterns:', error.message);

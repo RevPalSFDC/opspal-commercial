@@ -713,6 +713,23 @@ node "${SCRIPT_ROOT}/scripts/lib/org-metadata-cache.js" init <org>
 
 **Prevention:** The `sfdc-query-specialist`, `sfdc-discovery`, and `sfdc-state-discovery` agents now include Script Path Resolution guidance that prevents this issue.
 
+### Multi-Step Salesforce Execution Routing
+
+Do not hand a single specialist a workflow that spans security writes, metadata deploys, data mutation, and verification.
+
+Use this split instead:
+
+1. `sfdc-orchestrator` coordinates the overall workflow.
+2. `sfdc-permission-orchestrator` owns permission/FLS preparation.
+3. `sfdc-deployment-manager` executes `sf project deploy` work.
+4. `sfdc-data-operations` performs record updates or seeding.
+5. `sfdc-query-specialist` verifies the post-deploy state.
+
+Example:
+- "Grant `State__c` FLS, deploy Auto_Assign to staging, populate four `State__c` values, verify junction creation" must route through `sfdc-orchestrator`.
+- "Grant `State__c` FLS only" stays with `sfdc-permission-orchestrator`.
+- "Deploy Auto_Assign flow only" stays with `sfdc-deployment-manager`.
+
 ### "No source-backed components present"
 ```bash
 node scripts/lib/deployment-source-validator.js validate-source ./force-app

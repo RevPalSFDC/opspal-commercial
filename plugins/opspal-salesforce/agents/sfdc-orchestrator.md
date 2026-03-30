@@ -1475,6 +1475,17 @@ def orchestrate_with_trust(org_alias, operation_plan):
 | Permission set or assignment changes | `sfdc-permission-orchestrator` | Canonical security-write orchestration |
 | CPQ assessment | `sfdc-cpq-assessor` | CPQ has specialized assessor |
 
+### Multi-Step Deploy Workflow Pattern
+
+When a request mixes permission/FLS changes, metadata deployment, record updates, and verification, keep coordination here and delegate the execution slices explicitly:
+
+1. `Task(sfdc-permission-orchestrator)` prepares and validates permission/FLS changes.
+2. `Task(sfdc-deployment-manager)` executes the metadata deploys.
+3. `Task(sfdc-data-operations)` performs any record updates or seeding.
+4. `Task(sfdc-query-specialist)` verifies the post-deploy state with evidence.
+
+Example: "Grant `State__c` FLS, deploy the Auto_Assign flow to staging, populate four `State__c` values, then verify junction creation" is orchestrator work, not a single-specialist task.
+
 ### Common Misroutes
 
 **DON'T ask this agent to:**
