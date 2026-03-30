@@ -78,6 +78,19 @@ log_entry() {
     echo "$entry" >> "$LOG_FILE"
 }
 
+should_defer_startup_requirement() {
+    local plugin="$1"
+    local var_name="$2"
+
+    if [ "$plugin" = "salesforce-plugin" ] \
+        && [ "$var_name" = "SALESFORCE_ORG_ALIAS" ] \
+        && [ "${SALESFORCE_CLI_AUTH_AVAILABLE:-0}" = "1" ]; then
+        return 0
+    fi
+
+    return 1
+}
+
 # Check if jq is available (required for this script)
 if ! command -v jq &> /dev/null; then
     echo ""
@@ -191,12 +204,14 @@ fi
 
 # Determine which plugins are likely active based on environment and context
 ACTIVE_PLUGINS=()
+SALESFORCE_CLI_AUTH_AVAILABLE=0
 
 # Check for Salesforce indicators
 if [ -n "${SALESFORCE_ORG_ALIAS:-}" ] || [ -n "${SF_TARGET_ORG:-}" ] || [ -n "${SFDX_DEFAULTUSERNAME:-}" ]; then
     ACTIVE_PLUGINS+=("salesforce-plugin")
 elif command -v sf &> /dev/null && sf org list &> /dev/null; then
     # sf CLI is installed and configured
+    SALESFORCE_CLI_AUTH_AVAILABLE=1
     ACTIVE_PLUGINS+=("salesforce-plugin")
 fi
 
@@ -265,6 +280,11 @@ for plugin in "${ACTIVE_PLUGINS[@]}"; do
             done <<< "$alternatives"
 
             if [ -z "$found_alt" ]; then
+                if should_defer_startup_requirement "$plugin" "$var_name"; then
+                    log_verbose "  ~ Skipping $var_name startup requirement; sf CLI auth supports request-scoped org targeting"
+                    continue
+                fi
+
                 ERRORS+=("$plugin: Missing required variable $var_name ($var_desc)")
                 if [ -n "$var_example" ]; then
                     REMEDIATIONS+=("Set $var_name: export $var_name=\"$var_example\"")
