@@ -11,9 +11,9 @@
   },
   "totals": {
     "plugins": 10,
-    "agents": 302,
+    "agents": 303,
     "commands": 273,
-    "hooks": 174,
+    "hooks": 177,
     "skills": 1
   },
   "plugins": [
@@ -39,13 +39,13 @@
     },
     {
       "name": "opspal-core",
-      "version": "2.47.2",
+      "version": "2.48.0",
       "source": "./plugins/opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
       "counts": {
-        "agents": 79,
+        "agents": 80,
         "commands": 113,
-        "hooks": 82,
+        "hooks": 83,
         "skills": 0
       },
       "lifecycle": {
@@ -119,13 +119,13 @@
     },
     {
       "name": "opspal-marketo",
-      "version": "2.6.26",
+      "version": "2.6.27",
       "source": "./plugins/opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
       "counts": {
         "agents": 30,
         "commands": 30,
-        "hooks": 21,
+        "hooks": 23,
         "skills": 0
       },
       "lifecycle": {
@@ -139,7 +139,7 @@
     },
     {
       "name": "opspal-mcp-client",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "source": "./plugins/opspal-mcp-client",
       "description": "OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server. Includes scoring orchestrator, benchmark agent, compute orchestrator, client-side validation hooks, and usage tracking.",
       "counts": {
@@ -199,7 +199,7 @@
     },
     {
       "name": "opspal-salesforce",
-      "version": "3.86.13",
+      "version": "3.86.14",
       "source": "./plugins/opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
       "counts": {

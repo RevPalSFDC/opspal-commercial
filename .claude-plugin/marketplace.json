@@ -17,7 +17,7 @@
       "name": "opspal-core",
       "source": "./plugins/opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.47.2"
+      "version": "2.48.0"
     },
     {
       "name": "opspal-data-hygiene",
@@ -41,13 +41,13 @@
       "name": "opspal-marketo",
       "source": "./plugins/opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
-      "version": "2.6.26"
+      "version": "2.6.27"
     },
     {
       "name": "opspal-mcp-client",
       "source": "./plugins/opspal-mcp-client",
       "description": "OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server. Includes scoring orchestrator, benchmark agent, compute orchestrator, client-side validation hooks, and usage tracking.",
-      "version": "1.1.3"
+      "version": "1.1.4"
     },
     {
       "name": "opspal-monday",
@@ -65,7 +65,7 @@
       "name": "opspal-salesforce",
       "source": "./plugins/opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-      "version": "3.86.13"
+      "version": "3.86.14"
     }
   ],
   "_stats": {
