@@ -206,7 +206,12 @@ LICENSE_TERMINATED=0
 
 if [[ -f "$LICENSE_AUTH_CLIENT" ]]; then
     log_verbose "Checking license for tier-gated decryption..."
-    LICENSE_RESULT=$(node "$LICENSE_AUTH_CLIENT" session-token 2>/dev/null) || true
+    _LICENSE_STDERR_TMP=$(mktemp 2>/dev/null || echo "/tmp/_opspal_license_stderr_$$")
+    LICENSE_RESULT=$(node "$LICENSE_AUTH_CLIENT" session-token 2>"$_LICENSE_STDERR_TMP") || true
+    if [[ -s "$_LICENSE_STDERR_TMP" ]]; then
+        log_verbose "License client stderr: $(head -5 "$_LICENSE_STDERR_TMP")"
+    fi
+    rm -f "$_LICENSE_STDERR_TMP" 2>/dev/null || true
 
     if [[ -n "$LICENSE_RESULT" ]]; then
         # Check for termination signal
@@ -430,7 +435,11 @@ decrypt_plugin_assets() {
         }
 
         console.log(JSON.stringify({ plugin: pluginName, results }));
-    ' 2>/dev/null || echo '{"plugin":"unknown","results":[]}'
+    ' 2>/tmp/_opspal_decrypt_stderr_$$ || {
+        _decrypt_err=$(head -1 /tmp/_opspal_decrypt_stderr_$$ 2>/dev/null | tr '"' "'")
+        echo "{\"plugin\":\"unknown\",\"results\":[],\"error\":\"${_decrypt_err:-decryption process failed}\"}"
+    }
+    rm -f /tmp/_opspal_decrypt_stderr_$$ 2>/dev/null || true
 }
 
 # Main processing loop

@@ -111,7 +111,9 @@ class ContinuousLoopManager {
     let changes = [];
     try {
       changes = JSON.parse(await fs.readFile(changesPath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[continuous-loop-manager] Failed to read changes.json in recordImplementation:', e.message);
+    }
     changes.push(record);
     await fs.writeFile(changesPath, JSON.stringify(changes, null, 2));
 
@@ -279,7 +281,9 @@ class ContinuousLoopManager {
 
     try {
       measurements = JSON.parse(await fs.readFile(measurementsPath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[continuous-loop-manager] Failed to read impact-measurements.json:', e.message);
+    }
 
     measurements.push(measurement);
     await fs.writeFile(measurementsPath, JSON.stringify(measurements, null, 2));
@@ -289,7 +293,9 @@ class ContinuousLoopManager {
     let changes = [];
     try {
       changes = JSON.parse(await fs.readFile(changesPath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[continuous-loop-manager] Failed to read changes.json in storeMeasurement:', e.message);
+    }
 
     const changeIndex = changes.findIndex(c => c.id === implementationId);
     if (changeIndex >= 0) {
@@ -369,7 +375,9 @@ class ContinuousLoopManager {
     let changes = [];
     try {
       changes = JSON.parse(await fs.readFile(changesPath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[continuous-loop-manager] Failed to read changes.json in getLearningSummary:', e.message);
+    }
 
     // Group by type
     const byType = {};

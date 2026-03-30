@@ -389,6 +389,7 @@ function readStateFile(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
   } catch (_error) {
+    process.stderr.write(`[routing-state-manager] State file parse failed at ${filePath}: ${_error.message}\n`);
     return null;
   }
 }

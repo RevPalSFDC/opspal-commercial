@@ -83,13 +83,7 @@ if [ -f "$CROSS_PLATFORM_ROOT/scripts/lib/data-quality-gate.js" ]; then
 
         # Check for improbable zero count
         if [ "$TOTAL" = "0" ]; then
-            # Log to structured logger if available
-            if [ -f "$CROSS_PLATFORM_ROOT/scripts/lib/structured-logger.js" ]; then
-                node "$CROSS_PLATFORM_ROOT/scripts/lib/structured-logger.js" log \
-                    --level warning \
-                    --message "Query returned 0 records" \
-                    --context '{"tool":"sf data query","hook":"post-sf-query-validation"}' 2>/dev/null || true
-            fi
+            log_verbose "Query returned 0 records"
         fi
     fi
 fi

@@ -17,6 +17,7 @@ let yaml = null;
 try {
   yaml = require('js-yaml');
 } catch (_error) {
+  process.stderr.write('[agent-tool-registry] js-yaml not available; complex YAML agent files may not parse correctly.\n');
   yaml = null;
 }
 

@@ -10,6 +10,7 @@ function readStdin() {
   try {
     return fs.readFileSync(0, 'utf8');
   } catch (_error) {
+    process.stderr.write(`[hook-event-normalizer] Failed to read stdin: ${_error.message}\n`);
     return '';
   }
 }
@@ -31,6 +32,7 @@ function parseJson(value) {
   try {
     return JSON.parse(trimmed);
   } catch (_error) {
+    process.stderr.write(`[hook-event-normalizer] JSON parse failed: ${_error.message}\n`);
     return null;
   }
 }

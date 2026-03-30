@@ -58,7 +58,7 @@
         ]
       }
     ],
-    "Stop": [
+    "SubagentStop": [
       {
         "matcher": "sfdc-discovery",
         "hooks": [

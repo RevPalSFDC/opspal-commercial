@@ -48,8 +48,7 @@ function ensureDependencies(serverDir) {
 function buildKnownPaths(env = process.env, baseDir = __dirname) {
   return [
     path.resolve(baseDir, '../../../../OpsPalMCP/index.js'),
-    path.resolve(baseDir, '../../../../../OpsPalMCP/index.js'),
-    path.resolve(env.HOME || '', 'Desktop/RevPal/Agents/OpsPalMCP/index.js')
+    path.resolve(baseDir, '../../../../../OpsPalMCP/index.js')
   ];
 }
 

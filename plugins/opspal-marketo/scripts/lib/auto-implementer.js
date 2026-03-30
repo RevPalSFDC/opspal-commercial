@@ -385,7 +385,17 @@ class AutoImplementer {
     let log = [];
     try {
       log = JSON.parse(await fs.readFile(logPath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[auto-implementer] Failed to parse', logPath, '-', e.message);
+      try {
+        const raw = await fs.readFile(logPath, 'utf8').catch(() => null);
+        if (raw) {
+          const backupPath = logPath + '.corrupt-' + Date.now();
+          await fs.writeFile(backupPath, raw);
+          console.error('[auto-implementer] Corrupted file preserved at', backupPath);
+        }
+      } catch (_) { /* best-effort preservation */ }
+    }
 
     log.push({
       id: `auto-${Date.now()}`,
@@ -405,7 +415,17 @@ class AutoImplementer {
     let log = [];
     try {
       log = JSON.parse(await fs.readFile(logPath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[auto-implementer] Failed to parse', logPath, '-', e.message);
+      try {
+        const raw = await fs.readFile(logPath, 'utf8').catch(() => null);
+        if (raw) {
+          const backupPath = logPath + '.corrupt-' + Date.now();
+          await fs.writeFile(backupPath, raw);
+          console.error('[auto-implementer] Corrupted file preserved at', backupPath);
+        }
+      } catch (_) { /* best-effort preservation */ }
+    }
 
     log.push({
       id: `rollback-${Date.now()}`,
@@ -427,7 +447,17 @@ class AutoImplementer {
     let queue = [];
     try {
       queue = JSON.parse(await fs.readFile(queuePath, 'utf8'));
-    } catch (e) {}
+    } catch (e) {
+      console.error('[auto-implementer] Failed to parse', queuePath, '-', e.message);
+      try {
+        const raw = await fs.readFile(queuePath, 'utf8').catch(() => null);
+        if (raw) {
+          const backupPath = queuePath + '.corrupt-' + Date.now();
+          await fs.writeFile(backupPath, raw);
+          console.error('[auto-implementer] Corrupted file preserved at', backupPath);
+        }
+      } catch (_) { /* best-effort preservation */ }
+    }
 
     queue.push({
       id: `pending-${Date.now()}`,

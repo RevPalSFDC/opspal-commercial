@@ -83,10 +83,12 @@ function loadJsonCandidate(candidates) {
     try {
       return JSON.parse(fs.readFileSync(candidate, 'utf8'));
     } catch (_error) {
+      process.stderr.write(`[canonical-routing-registry] Failed to load routing candidate "${candidate}": ${_error.message}\n`);
       continue;
     }
   }
 
+  process.stderr.write('[canonical-routing-registry] All routing index candidates exhausted; routing unavailable.\n');
   return null;
 }
 

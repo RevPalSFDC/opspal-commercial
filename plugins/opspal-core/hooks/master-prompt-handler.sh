@@ -74,24 +74,5 @@ if [ "$PREVENTION_ENABLED" == "1" ]; then
   fi
 fi
 
-# Step 2: Run Sub-Agent Utilization Booster (routing guidance)
-if [ "$SUBAGENT_ENABLED" == "1" ]; then
-  if [ -f "$SCRIPT_DIR/subagent-utilization-booster.sh" ]; then
-    # CRITICAL: Don't redirect stderr (2>&1) - the routing banner goes to stderr
-    # for user visibility, while JSON goes to stdout for Claude Code parsing.
-    # Using 2>&1 would mix banner text with JSON, breaking Claude Code's parser.
-    BOOSTER_OUTPUT=$(echo "$USER_PROMPT" | timeout 8 bash "$SCRIPT_DIR/subagent-utilization-booster.sh" 2>/dev/null || true)
-    BOOSTER_EXIT=$?
-
-    # Show booster output (JSON only - banner already went to stderr)
-    if [ -n "$BOOSTER_OUTPUT" ]; then
-      echo "$BOOSTER_OUTPUT"
-    fi
-
-    # Exit with booster's exit code
-    exit $BOOSTER_EXIT
-  fi
-fi
-
 # If we get here, all hooks passed
 exit 0
