@@ -49,6 +49,18 @@ backups/
 state/
 reports/
 
+# Local reports, plans, and analysis docs
+ADVERSARIAL_QA_FINDINGS.md
+docs/*ANALYSIS*.md
+docs/*AUDIT*.md
+docs/*FINDINGS*.md
+docs/*PLAN*.md
+docs/*REMEDIATION*.md
+docs/HOOK_DEVELOPMENT_GUIDE.md
+docs/HOOK_SYSTEM_CATALOG.md
+docs/TESTING_GUIDE.md
+docs/WIRING_SANITY_CHECK.md
+
 # Plugin runtime artifacts
 plugins/.claude/
 plugins/*/node_modules/
@@ -64,9 +76,30 @@ plugins/*/.recovery-logs/
 plugins/*/.fix-plans/
 plugins/*/.agent-decisions/
 plugins/*/.requirements/
+plugins/*/hooks/.requirements/
 plugins/*/.wire-test-ledger/
 plugins/*/.test-results/
 plugins/*/scripts/mcp/*/node_modules/
+plugins/*/export_*
+
+# Local test scaffolding and fixtures
+plugins/*/test/
+plugins/*/scripts/lib/__tests__/
+plugins/*/scripts/mcp/**/__tests__/
+
+# Local maintainer-only files
+plugins/opspal-ai-consult/package.json
+plugins/opspal-marketo/package.json
+plugins/opspal-mcp-client/package.json
+plugins/opspal-monday/package.json
+plugins/opspal-core/config/skip-registry.json
+scripts/lib/hook-lint.js
+
+# Website/dev deployment artifacts
+website/.firebase/
+website/.firebaserc
+website/samples/
+website/testing-harness.html
 
 # Generated files and ledgers
 **/agent-alias-cache.json

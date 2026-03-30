@@ -33,9 +33,9 @@ read_stdin_json() {
         data=$(cat)
     fi
     if [ -n "$data" ] && is_json "$data"; then
-        echo "$data"
+        echo "$data" >&2
     else
-        echo ""
+        echo "" >&2
     fi
 }
 
@@ -69,6 +69,7 @@ ROUTING_REFLECTION_LOG="${LOG_ROOT}/routing-reflection-candidates.jsonl"
 MCP_TOOL_POLICY_LOG="${LOG_ROOT}/mcp-tool-policy.jsonl"
 # PreToolUse block semantics: exit 2 blocks tool execution.
 HOOK_BLOCK_EXIT_CODE="${HOOK_BLOCK_EXIT_CODE:-2}"
+NODE_TIMEOUT_SECONDS="${PRE_TOOL_USE_CONTRACT_VALIDATOR_NODE_TIMEOUT_SECONDS:-2}"
 DEFAULT_HARDENED_CHANNEL_ID="${OPSPAL_HARDENED_ENFORCED_CHANNEL_ID:-C0AGVQFDB18}"
 BASH_BUDGET_ENABLED="${OPSPAL_BASH_BUDGET_ENABLED:-1}"
 BASH_BUDGET_WINDOW_SECONDS="${OPSPAL_BASH_BUDGET_WINDOW_SECONDS:-180}"
@@ -82,17 +83,29 @@ PENDING_ROUTE_MCP_POLICY_MUTABILITY=""
 PENDING_ROUTE_MCP_POLICY_MATCHED=""
 PENDING_ROUTE_MCP_POLICY_NOTE=""
 
+run_node_with_timeout() {
+    local timeout_seconds="$1"
+    shift
+
+    if command -v timeout >/dev/null 2>&1; then
+        timeout "$timeout_seconds" node "$@"
+        return $?
+    fi
+
+    node "$@"
+}
+
 # shellcheck source=/dev/null
 source "$BASH_CLASSIFIER_LIB"
 
 # Parse tool name and input from stdin (or env fallback)
-RAW_INPUT_DATA=$(read_stdin_json)
+RAW_INPUT_DATA="$(read_stdin_json 2>&1)"
 
 if [ -f "$HOOK_EVENT_NORMALIZER" ] && command -v node >/dev/null 2>&1; then
     if [ -n "$RAW_INPUT_DATA" ]; then
-        INPUT_DATA=$(printf '%s' "$RAW_INPUT_DATA" | node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
+        INPUT_DATA=$(printf '%s' "$RAW_INPUT_DATA" | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
     else
-        INPUT_DATA=$(node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
+        INPUT_DATA=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
     fi
 else
     INPUT_DATA="$RAW_INPUT_DATA"
@@ -141,9 +154,9 @@ CALLER_AGENT_IDENTITY="${CALLER_AGENT_FROM_HOOK:-${CLAUDE_AGENT_NAME:-${CLAUDE_S
 resolve_caller_agent() {
     local default_value="${1:-unknown}"
     if [ -n "$CALLER_AGENT_IDENTITY" ] && [ "$CALLER_AGENT_IDENTITY" != "null" ]; then
-        printf '%s' "$CALLER_AGENT_IDENTITY"
+        printf '%s' "$CALLER_AGENT_IDENTITY" >&2
     else
-        printf '%s' "$default_value"
+        printf '%s' "$default_value" >&2
     fi
 }
 
@@ -167,12 +180,12 @@ resolve_caller_from_cleared_route() {
 
     # Only activate when caller is truly unknown
     if [[ "$current_caller" != "unknown" ]] && [[ -n "$current_caller" ]]; then
-        echo "$current_caller"
+        echo "$current_caller" >&2
         return 0
     fi
 
     if [[ -z "$session_key" ]]; then
-        echo "$current_caller"
+        echo "$current_caller" >&2
         return 0
     fi
 
@@ -182,7 +195,7 @@ resolve_caller_from_cleared_route() {
     local route_cleared
     route_cleared="$(echo "$routing_state" | jq -r '.routeCleared // .cleared // false' 2>/dev/null || echo "false")"
     if [[ "$route_cleared" != "true" ]]; then
-        echo "$current_caller"
+        echo "$current_caller" >&2
         return 0
     fi
 
@@ -190,11 +203,11 @@ resolve_caller_from_cleared_route() {
     last_resolved="$(echo "$routing_state" | jq -r '.state.last_resolved_agent // .state.lastResolvedAgent // .lastResolvedAgent // ""' 2>/dev/null || echo "")"
     if [[ -n "$last_resolved" ]] && [[ "$last_resolved" != "null" ]]; then
         CALLER_RESOLVED_FROM_CLEARED_ROUTE="true"
-        echo "$last_resolved"
+        echo "$last_resolved" >&2
         return 0
     fi
 
-    echo "$current_caller"
+    echo "$current_caller" >&2
 }
 
 # Flag: set to "true" when caller identity was recovered from cleared route state
@@ -275,7 +288,7 @@ emit_routing_event() {
     local tool="$7"
 
     local sanitized_command
-    sanitized_command="$(sanitize_command_for_log "$command")"
+    sanitized_command="$(sanitize_command_for_log "$command" 2>&1)"
 
     local event
     event=$(jq -nc \
@@ -314,7 +327,7 @@ sanitize_command_for_log() {
     sanitized="$(printf '%s' "$sanitized" \
         | sed -E 's/\b([A-Za-z_][A-Za-z0-9_]*(TOKEN|SECRET|PASSWORD|API_KEY|ACCESS_KEY|PRIVATE_KEY|CLIENT_SECRET|PAT))[[:space:]]*=[[:space:]]*[^[:space:];|&]+/\1=[REDACTED]/g')"
 
-    printf '%s' "$sanitized" | tr '\n' ' ' | cut -c1-600
+    printf '%s' "$sanitized" | tr '\n' ' ' | cut -c1-600 >&2
 }
 
 extract_channel_id() {
@@ -345,23 +358,23 @@ extract_session_key() {
     ' 2>/dev/null)"
 
     if [ -n "$extracted" ] && [ "$extracted" != "null" ]; then
-        echo "$extracted"
+        echo "$extracted" >&2
         return 0
     fi
 
     if [ -n "${CLAUDE_SESSION_ID:-}" ]; then
-        echo "${CLAUDE_SESSION_ID}"
+        echo "${CLAUDE_SESSION_ID}" >&2
         return 0
     fi
 
-    echo "unknown-session"
+    echo "unknown-session" >&2
 }
 
 extract_budget_scope_key() {
     local session_key caller_agent session_safe agent_safe
 
-    session_key="$(extract_session_key)"
-    caller_agent="$(resolve_caller_agent main)"
+    session_key="$(extract_session_key 2>&1)"
+    caller_agent="$(resolve_caller_agent main 2>&1)"
 
     if [ -z "$caller_agent" ] || [ "$caller_agent" = "unknown" ]; then
         caller_agent="main"
@@ -370,7 +383,7 @@ extract_budget_scope_key() {
     session_safe="$(printf '%s' "$session_key" | sed -E 's/[^A-Za-z0-9._-]+/_/g')"
     agent_safe="$(printf '%s' "$caller_agent" | sed -E 's/[^A-Za-z0-9._-]+/_/g')"
 
-    printf '%s__%s' "$session_safe" "$agent_safe"
+    printf '%s__%s' "$session_safe" "$agent_safe" >&2
 }
 
 emit_pretool_decision() {
@@ -415,14 +428,14 @@ extract_effective_cwd() {
     ' 2>/dev/null)"
 
     if [ -z "$extracted" ] || [ "$extracted" = "null" ]; then
-        echo "$PWD"
+        echo "$PWD" >&2
         return 0
     fi
 
     if [[ "$extracted" = /* ]]; then
-        echo "$extracted"
+        echo "$extracted" >&2
     else
-        echo "$PWD/$extracted"
+        echo "$PWD/$extracted" >&2
     fi
 }
 
@@ -431,9 +444,9 @@ resolve_candidate_path() {
     local candidate="$2"
 
     if [[ "$candidate" = /* ]]; then
-        echo "$candidate"
+        echo "$candidate" >&2
     else
-        echo "$base_dir/$candidate"
+        echo "$base_dir/$candidate" >&2
     fi
 }
 
@@ -449,8 +462,8 @@ enforce_read_target_preflight() {
         return 1
     fi
 
-    effective_cwd="$(extract_effective_cwd)"
-    resolved_path="$(resolve_candidate_path "$effective_cwd" "$requested_path")"
+    effective_cwd="$(extract_effective_cwd 2>&1)"
+    resolved_path="$(resolve_candidate_path "$effective_cwd" "$requested_path" 2>&1)"
 
     if [ -d "$resolved_path" ]; then
         emit_pretool_decision \
@@ -487,7 +500,7 @@ get_routing_state_check() {
         return 0
     fi
 
-    node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo '{}'
 }
 
 classify_mcp_tool_policy() {
@@ -495,7 +508,7 @@ classify_mcp_tool_policy() {
     local policy_json=""
 
     if [[ -f "$MCP_TOOL_POLICY_RESOLVER" ]] && [[ -f "$MCP_TOOL_POLICY_CONFIG" ]] && command -v node &>/dev/null; then
-        policy_json=$(MCP_TOOL_POLICY_CONFIG="$MCP_TOOL_POLICY_CONFIG" node "$MCP_TOOL_POLICY_RESOLVER" classify "$tool_name" 2>/dev/null || echo "")
+        policy_json=$(MCP_TOOL_POLICY_CONFIG="$MCP_TOOL_POLICY_CONFIG" run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$MCP_TOOL_POLICY_RESOLVER" classify "$tool_name" 2>/dev/null || echo "")
     fi
 
     if [[ -z "$policy_json" ]] || ! echo "$policy_json" | jq -e . >/dev/null 2>&1; then
@@ -538,7 +551,7 @@ classify_salesforce_mandatory_routing() {
     local routing_json=""
 
     if [[ -f "$OPERATION_CLASSIFIER" ]] && command -v node &>/dev/null; then
-        routing_json=$(node "$OPERATION_CLASSIFIER" routing "$command" 2>/dev/null || echo "")
+        routing_json=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$OPERATION_CLASSIFIER" routing "$command" 2>/dev/null || echo "")
     fi
 
     if [[ -z "$routing_json" ]] || ! echo "$routing_json" | jq -e . >/dev/null 2>&1; then
@@ -546,13 +559,13 @@ classify_salesforce_mandatory_routing() {
         return 0
     fi
 
-    echo "$routing_json"
+    echo "$routing_json" >&2
 }
 
 salesforce_investigation_query_targets_specialist_surface() {
     local text="${1:-}"
 
-    printf '%s' "$text" | grep -qiE '\b(FlowDefinitionView|FlowVersionView|WorkflowRule|ValidationRule|ApexTrigger|ApexClass|DuplicateRule|DuplicateJobDefinition|AssignmentRule|EscalationRule|ProcessDefinition|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association|PermissionSetAssignment|ObjectPermissions|FieldPermissions|SetupEntityAccess|Profile|UserRole)\b'
+    printf '%s' "$text" | grep -qiE '\b(FlowDefinitionView|FlowVersionView|WorkflowRule|ValidationRule|ApexTrigger|ApexClass|DuplicateRule|DuplicateJobDefinition|AssignmentRule|EscalationRule|ProcessDefinition|Territory2Model|Territory2Type|UserTerritory2Association|ObjectTerritory2Association|PermissionSetAssignment|ObjectPermissions|FieldPermissions|SetupEntityAccess|Profile|UserRole)\b' >&2
 }
 
 caller_is_salesforce_orchestrator() {
@@ -579,7 +592,7 @@ extract_salesforce_query_payload() {
             echo "$INPUT_DATA" | jq -r '.tool_input.query // .tool_input.soql // ""' 2>/dev/null || echo ""
             ;;
         *)
-            echo ""
+            echo "" >&2
             ;;
     esac
 }
@@ -594,7 +607,7 @@ is_orchestrator_specialist_investigation_execution() {
         return 1
     fi
 
-    query_text="$(extract_salesforce_query_payload "$tool_name")"
+    query_text="$(extract_salesforce_query_payload "$tool_name" 2>&1)"
 
     case "$tool_name" in
         Bash)
@@ -635,7 +648,7 @@ tool_targets_integrity_stop_platform() {
             fi
 
             if [[ -f "$OPERATION_CLASSIFIER" ]] && command -v node &>/dev/null; then
-                classification="$(node "$OPERATION_CLASSIFIER" bash "$command" 2>/dev/null || echo "")"
+                classification="$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$OPERATION_CLASSIFIER" bash "$command" 2>/dev/null || echo "")"
                 if [[ -n "$classification" ]] && echo "$classification" | jq -e . >/dev/null 2>&1; then
                     classified_platform="$(echo "$classification" | jq -r '.platform // "unknown"' 2>/dev/null || echo "unknown")"
                     classified_intent="$(echo "$classification" | jq -r '.intent // "unknown"' 2>/dev/null || echo "unknown")"
@@ -689,10 +702,10 @@ enforce_integrity_stop() {
         return 0
     fi
 
-    caller_agent="$(resolve_caller_agent unknown)"
+    caller_agent="$(resolve_caller_agent unknown 2>&1)"
     case "$tool_name" in
         Bash)
-            command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
+            command_summary="$(sanitize_command_for_log "$(extract_bash_command)" 2>&1)"
             ;;
         *)
             command_summary="$tool_name"
@@ -725,10 +738,10 @@ enforce_orchestrator_specialist_execution_guard() {
         return 0
     fi
 
-    query_payload="$(extract_salesforce_query_payload "$tool_name")"
+    query_payload="$(extract_salesforce_query_payload "$tool_name" 2>&1)"
     case "$tool_name" in
         Bash)
-            command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
+            command_summary="$(sanitize_command_for_log "$(extract_bash_command)" 2>&1)"
             ;;
         *)
             command_summary="$(printf '%s' "$query_payload" | tr '\n' ' ' | cut -c1-240)"
@@ -807,7 +820,7 @@ enforce_pending_route_gate() {
 
     case "$tool_name" in
         Bash)
-            command_summary="$(sanitize_command_for_log "$(extract_bash_command)")"
+            command_summary="$(sanitize_command_for_log "$(extract_bash_command)" 2>&1)"
             ;;
         Write|Edit|MultiEdit)
             command_summary=$(echo "$INPUT_DATA" | jq -r '.tool_input.file_path // .tool_input.path // ""' 2>/dev/null || echo "")
@@ -823,7 +836,7 @@ enforce_pending_route_gate() {
       "${required_agent:-unknown}" \
       "Pending routing requirement not cleared before operational tool execution." \
       "${command_summary:-$tool_name}" \
-      "$(resolve_caller_agent unknown)" \
+      "$(resolve_caller_agent unknown 2>&1)" \
       "$tool_name"
 
     additional_context="Execution-time routing requirement is still pending for this session."
@@ -913,7 +926,7 @@ enforce_bash_loop_budget() {
     # channel_in_hardening_scope gate removed — was causing budget to skip
     # in sub-agent context where no Slack channel ID is present.
 
-    budget_scope="$(extract_budget_scope_key)"
+    budget_scope="$(extract_budget_scope_key 2>&1)"
     now="$(date +%s)"
 
     mkdir -p "$BUDGET_STATE_DIR" 2>/dev/null || mkdir -p "${FALLBACK_LOG_ROOT}/hook-state" 2>/dev/null || true
@@ -987,7 +1000,7 @@ command_is_discovery_heavy_context() {
     local caller_agent=""
     local sf_classification=""
 
-    caller_agent="$(resolve_caller_agent main)"
+    caller_agent="$(resolve_caller_agent main 2>&1)"
     if printf '%s' "$caller_agent" | grep -qE '(^|:)(sfdc-state-discovery|sfdc-discovery|sfdc-planner|sfdc-field-analyzer)$'; then
         return 0
     fi
@@ -997,7 +1010,7 @@ command_is_discovery_heavy_context() {
         return 1
     fi
 
-    printf '%s' "$command" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+(data[[:space:]]+query|sobject[[:space:]]+(describe|list)|org[[:space:]]+(display|list))|sfdx[[:space:]]+force:(data:soql:query|schema:sobject:(describe|list)|org:(display|list)))([[:space:]]|$)'
+    printf '%s' "$command" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+(data[[:space:]]+query|sobject[[:space:]]+(describe|list)|org[[:space:]]+(display|list))|sfdx[[:space:]]+force:(data:soql:query|schema:sobject:(describe|list)|org:(display|list)))([[:space:]]|$)' >&2
 }
 
 caller_matches_allowed_agents() {
@@ -1026,7 +1039,7 @@ derive_route_requirements_from_state() {
         return 0
     fi
 
-    node "$AGENT_TOOL_REGISTRY" route-requirements "$required_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" route-requirements "$required_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
 read_agent_metadata_profile() {
@@ -1037,7 +1050,7 @@ read_agent_metadata_profile() {
         return 0
     fi
 
-    node "$AGENT_TOOL_REGISTRY" metadata "$agent_name" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" metadata "$agent_name" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
 detect_cleared_route_projection_mismatch() {
@@ -1172,7 +1185,7 @@ subagent_has_validated_route_clearance() {
 
     requirements_json="$(derive_route_requirements_from_state "$required_agent" "$clearance_agents_json")"
     if [[ "$requirements_json" != "{}" ]] && [[ -f "$AGENT_TOOL_REGISTRY" ]] && command -v node &>/dev/null; then
-        node "$AGENT_TOOL_REGISTRY" matches-requirements "$caller_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
+        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" matches-requirements "$caller_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
         return $?
     fi
 
@@ -1191,40 +1204,40 @@ map_tool_to_contract() {
             local cmd
             cmd=$(extract_bash_command)
             if is_sf_data_query_command "$cmd"; then
-                echo "sf-data-query"
+                echo "sf-data-query" >&2
             elif is_sf_deploy_command "$cmd"; then
-                echo "sf-project-deploy"
+                echo "sf-project-deploy" >&2
             elif uses_sf_bulk_api_contract "$cmd"; then
-                echo "sf-bulk-api"
+                echo "sf-bulk-api" >&2
             elif [[ "$cmd" =~ npx[[:space:]]+md-to-pdf|npx[[:space:]]+@mermaid-js/mermaid-cli ]]; then
-                echo "pdf-direct-invocation"
+                echo "pdf-direct-invocation" >&2
             else
-                echo "bash-command"
+                echo "bash-command" >&2
             fi
             ;;
         "Read"|"Write"|"Edit")
-            echo "file-operation"
+            echo "file-operation" >&2
             ;;
         "mcp__salesforce__*"|"mcp_salesforce_*")
             if [[ "$tool" =~ query ]]; then
-                echo "sf-data-query"
+                echo "sf-data-query" >&2
             elif [[ "$tool" =~ deploy ]]; then
-                echo "sf-project-deploy"
+                echo "sf-project-deploy" >&2
             else
-                echo "salesforce-api"
+                echo "salesforce-api" >&2
             fi
             ;;
         "mcp__hubspot__*"|"mcp_hubspot_*")
-            echo "hubspot-api"
+            echo "hubspot-api" >&2
             ;;
         *)
-            echo "$tool"
+            echo "$tool" >&2
             ;;
     esac
 }
 
-CONTRACT_NAME=$(map_tool_to_contract "$TOOL_NAME")
-SESSION_KEY="$(extract_session_key)"
+CONTRACT_NAME="$(map_tool_to_contract "$TOOL_NAME" 2>&1)"
+SESSION_KEY="$(extract_session_key 2>&1)"
 
 if ! enforce_pending_route_gate "$TOOL_NAME" "$SESSION_KEY"; then
     exit 0
@@ -1242,7 +1255,7 @@ if [ "$TOOL_NAME" = "Bash" ] && [ -n "$SESSION_KEY" ]; then
     _plcb_state="$(get_routing_state_check "$SESSION_KEY")"
     _plcb_broken="$(echo "$_plcb_state" | jq -r '.state.projection_loss_circuit_broken // .projection_loss_circuit_broken // false' 2>/dev/null || echo "false")"
     if [ "$_plcb_broken" = "true" ]; then
-        emit_routing_event "block" "projection-loss-circuit-break" "" "Projection-loss circuit breaker active" "$(extract_bash_command 2>/dev/null || echo '')" "$(resolve_caller_agent unknown)" "$TOOL_NAME"
+        emit_routing_event "block" "projection-loss-circuit-break" "" "Projection-loss circuit breaker active" "$(extract_bash_command 2>/dev/null || echo '')" "$(resolve_caller_agent unknown 2>&1)" "$TOOL_NAME"
         emit_pretool_decision \
           "deny" \
           "PROJECTION_LOSS_CIRCUIT_BREAK: Multiple specialists have reported Read/Write-only tool projection (no Bash). This is a runtime integrity failure — the host environment is not projecting declared tools into sub-agents. Do NOT attempt further specialist delegation or direct Bash recovery. Surface this to the user." \
@@ -1257,7 +1270,7 @@ if [ "$TOOL_NAME" = "Read" ]; then
     fi
 fi
 
-CALLER_AGENT_CURRENT="$(resolve_caller_from_cleared_route "$SESSION_KEY" "$(resolve_caller_agent unknown)")"
+CALLER_AGENT_CURRENT="$(resolve_caller_from_cleared_route "$SESSION_KEY" "$(resolve_caller_agent unknown 2>&1)" 2>&1)"
 if ! enforce_orchestrator_specialist_execution_guard "$TOOL_NAME" "$CALLER_AGENT_CURRENT"; then
     exit 0
 fi
@@ -1269,7 +1282,7 @@ fi
 
 enforce_mandatory_routing() {
     local tool="$1"
-    local caller_agent="$(resolve_caller_agent unknown)"
+    local caller_agent="$(resolve_caller_agent unknown 2>&1)"
     local command=""
     local required_agent=""
     local clearance_agents_json="[]"
@@ -1303,7 +1316,7 @@ enforce_mandatory_routing() {
     # fails to propagate agent identity through the hook JSON.
     if [[ "$caller_agent" == "unknown" ]]; then
         local recovered_caller
-        recovered_caller="$(resolve_caller_from_cleared_route "${SESSION_KEY:-}" "$caller_agent")"
+        recovered_caller="$(resolve_caller_from_cleared_route "${SESSION_KEY:-}" "$caller_agent" 2>&1)"
         if [[ "$recovered_caller" != "unknown" ]] && [[ -n "$recovered_caller" ]]; then
             caller_agent="$recovered_caller"
             # Re-check clearance with the recovered identity
@@ -1326,7 +1339,7 @@ enforce_mandatory_routing() {
     case "$tool" in
         "Bash")
             command="$(extract_bash_command)"
-            routing_decision="$(classify_salesforce_mandatory_routing "$command")"
+            routing_decision="$(classify_salesforce_mandatory_routing "$command" 2>&1)"
             routing_action="$(echo "$routing_decision" | jq -r '.decision // "none"' 2>/dev/null || echo "none")"
 
             if [ "$routing_action" = "warn" ]; then
@@ -1483,7 +1496,7 @@ check_api_routing() {
 
             # Only check Salesforce CLI commands
             if [[ "$cmd" =~ ^(sf|sfdx)\ (data|project|apex|api) ]]; then
-                suggestion=$(node "$API_ROUTER" check "$cmd" 2>/dev/null || true)
+                suggestion=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$API_ROUTER" check "$cmd" 2>/dev/null || true)
             fi
             ;;
 
@@ -1505,7 +1518,7 @@ check_api_routing() {
                 pseudo_cmd="sf data create --records=$count"
             fi
 
-            suggestion=$(node "$API_ROUTER" check "$pseudo_cmd" 2>/dev/null || true)
+            suggestion=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$API_ROUTER" check "$pseudo_cmd" 2>/dev/null || true)
             ;;
     esac
 
@@ -1607,7 +1620,7 @@ if [ -f "$VALIDATOR_SCRIPT" ]; then
     TEMP_INPUT=$(mktemp)
     echo "$TOOL_INPUT" > "$TEMP_INPUT"
 
-    VALIDATION_RESULT=$(node -e "
+    VALIDATION_RESULT=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
         const fs = require('fs');
 
         let contracts = {};

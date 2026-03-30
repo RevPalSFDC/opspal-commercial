@@ -41,12 +41,16 @@ if [[ -z "${CONTEXT// }" ]]; then
   exit 0
 fi
 
-jq -n \
-  --arg context "$CONTEXT" \
-  '{
-    suppressOutput: true,
-    hookSpecificOutput: {
-      hookEventName: "UserPromptSubmit",
-      additionalContext: ($context | gsub("\\s+"; " ") | sub("\\s+$"; ""))
-    }
-  }'
+if command -v jq &>/dev/null; then
+  jq -n \
+    --arg context "$CONTEXT" \
+    '{
+      suppressOutput: true,
+      hookSpecificOutput: {
+        hookEventName: "UserPromptSubmit",
+        additionalContext: ($context | gsub("\\s+"; " ") | sub("\\s+$"; ""))
+      }
+    }'
+else
+  printf '{}\n'
+fi

@@ -90,7 +90,20 @@ TASK_ROUTER_SCRIPT="$PLUGIN_ROOT/scripts/lib/task-router.js"
 ROUTING_METRICS_SCRIPT="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 INTAKE_COMPLETENESS_SCORER="$PLUGIN_ROOT/scripts/lib/intake/intake-completeness-scorer.js"
+NODE_TIMEOUT_SECONDS="${UNIFIED_ROUTER_NODE_TIMEOUT_SECONDS:-3}"
 START_TIME_MS=$(date +%s%3N 2>/dev/null || echo "0")
+
+run_node_with_timeout() {
+    local timeout_seconds="$1"
+    shift
+
+    if command -v timeout >/dev/null 2>&1; then
+        timeout "$timeout_seconds" node "$@"
+        return $?
+    fi
+
+    node "$@"
+}
 
 # Prevent duplicate execution
 LOCK_FILE="${TMPDIR:-/tmp}/unified-router-$$"
@@ -157,17 +170,17 @@ extract_latest_user_intent_segment() {
 
     original_prompt=$(printf '%s\n' "$msg" | sed -nE 's/^[[:space:]]*[Oo]riginal [Pp]rompt:[[:space:]]*(.+)[[:space:]]*$/\1/p' | head -n 1)
     if [[ -n "${original_prompt// }" ]]; then
-        printf '%s' "$original_prompt"
+        printf '%s' "$original_prompt" >&2
         return 0
     fi
 
     first_clean_line=$(strip_transcript_noise_lines "$msg" | head -n 1)
     if [[ -n "${first_clean_line// }" ]]; then
-        printf '%s' "$first_clean_line"
+        printf '%s' "$first_clean_line" >&2
         return 0
     fi
 
-    printf '%s' "$msg" | awk '
+    printf '%s' "$msg" | awk ' >&2
         {
             line = $0;
             sub(/^[[:space:]]+/, "", line);
@@ -191,7 +204,7 @@ normalize_user_message() {
         normalized=$(strip_transcript_noise_lines "$msg" | paste -sd' ' - | sed -E 's/[[:space:]]+/ /g; s/^[[:space:]]+//; s/[[:space:]]+$//')
     fi
 
-    printf '%s' "$normalized"
+    printf '%s' "$normalized" >&2
 }
 
 compute_transcript_noise_score() {
@@ -199,6 +212,7 @@ compute_transcript_noise_score() {
     local counts
     local noisy_lines
     local total_lines
+    local result
 
     counts=$(printf '%s\n' "$msg" | awk '
         function ltrim(s) {
@@ -245,13 +259,15 @@ compute_transcript_noise_score() {
     [[ -z "$noisy_lines" ]] && noisy_lines=0
     [[ -z "$total_lines" ]] && total_lines=0
 
-    awk -v noisy="$noisy_lines" -v total="$total_lines" 'BEGIN {
+    result="$(awk -v noisy="$noisy_lines" -v total="$total_lines" 'BEGIN {
         if (total <= 0) {
-            printf "%.3f", 0;
+            print sprintf("%.3f", 0);
         } else {
-            printf "%.3f", noisy / total;
+            print sprintf("%.3f", noisy / total);
         }
-    }'
+    }')"
+
+    printf '%s' "$result" >&2
 }
 
 detect_continue_intent() {
@@ -271,9 +287,9 @@ detect_continue_intent() {
     fi
 
     if [[ "$has_continue" == "true" ]] && [[ "$has_high_risk_action" != "true" ]]; then
-        echo "true"
+        echo "true" >&2
     else
-        echo "false"
+        echo "false" >&2
     fi
 }
 
@@ -294,23 +310,23 @@ extract_routing_session_key() {
     ' 2>/dev/null || echo "")
 
     if [[ -n "${session_key// }" ]] && [[ "$session_key" != "null" ]]; then
-        printf '%s' "$session_key"
+        printf '%s' "$session_key" >&2
         return 0
     fi
 
     if [[ -n "${CLAUDE_SESSION_ID:-}" ]]; then
-        printf '%s' "$CLAUDE_SESSION_ID"
+        printf '%s' "$CLAUDE_SESSION_ID" >&2
         return 0
     fi
 
-    printf '%s' "default-session"
+    printf '%s' "default-session" >&2
 }
 
 # Read hook input
 HOOK_INPUT=$(cat)
-ROUTING_SESSION_KEY=$(extract_routing_session_key "$HOOK_INPUT")
+ROUTING_SESSION_KEY="$(extract_routing_session_key "$HOOK_INPUT" 2>&1)"
 RAW_USER_MESSAGE=$(extract_primary_user_message "$HOOK_INPUT")
-NORMALIZED_MESSAGE=$(normalize_user_message "$RAW_USER_MESSAGE")
+NORMALIZED_MESSAGE="$(normalize_user_message "$RAW_USER_MESSAGE" 2>&1)"
 
 if [[ -z "${NORMALIZED_MESSAGE// }" ]]; then
     NORMALIZED_MESSAGE="$RAW_USER_MESSAGE"
@@ -322,8 +338,8 @@ if [[ "$USER_MESSAGE" != "$RAW_USER_MESSAGE" ]]; then
     NORMALIZATION_CHANGED="true"
 fi
 
-TRANSCRIPT_NOISE_SCORE=$(compute_transcript_noise_score "$RAW_USER_MESSAGE")
-CONTINUE_INTENT=$(detect_continue_intent "$USER_MESSAGE")
+TRANSCRIPT_NOISE_SCORE="$(compute_transcript_noise_score "$RAW_USER_MESSAGE" 2>&1)"
+CONTINUE_INTENT="$(detect_continue_intent "$USER_MESSAGE" 2>&1)"
 # Override token detection.
 # IMPORTANT: The override token (default: [ROUTING_OVERRIDE]) must appear in the
 # actual user message text visible to this hook. It is extracted from the hook's
@@ -523,11 +539,15 @@ clamp_decimal() {
     local value="$1"
     local min="$2"
     local max="$3"
-    awk -v v="$value" -v lo="$min" -v hi="$max" 'BEGIN {
+    local result
+
+    result="$(awk -v v="$value" -v lo="$min" -v hi="$max" 'BEGIN {
         if (v < lo) v = lo;
         if (v > hi) v = hi;
-        printf "%.3f", v;
-    }'
+        print sprintf("%.3f", v);
+    }')"
+
+    printf '%s' "$result" >&2
 }
 
 float_ge() {
@@ -545,15 +565,15 @@ sanitize_intake_mode() {
     normalized=$(echo "${mode:-}" | tr '[:upper:]' '[:lower:]')
     case "$normalized" in
         suggest|recommend|require)
-            echo "$normalized"
+            echo "$normalized" >&2
             ;;
         *)
-            echo "recommend"
+            echo "recommend" >&2
             ;;
     esac
 }
 
-ACTIVE_INTAKE_MODE=$(sanitize_intake_mode "$ACTIVE_INTAKE_MODE")
+ACTIVE_INTAKE_MODE="$(sanitize_intake_mode "$ACTIVE_INTAKE_MODE" 2>&1)"
 
 # =============================================================================
 # ACTIVE INTAKE GATE HELPERS
@@ -627,19 +647,19 @@ calculate_project_signal() {
     msg_lower=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
 
     # Strong project signals (+2 each)
-    echo "$msg_lower" | grep -qE '\b(redesign|overhaul|rebuild|restructure|revamp)\b' && signal=$((signal + 2))
-    echo "$msg_lower" | grep -qE '\b(implement|build out|set up|stand up|create a new)\b.{10,}' && signal=$((signal + 2))
-    echo "$msg_lower" | grep -qE '\b(migrate|migration)\b' && signal=$((signal + 2))
-    echo "$msg_lower" | grep -qE '\b(cpq|quote.to.cash|billing|renewal|subscription)\b' && signal=$((signal + 2))
-    echo "$msg_lower" | grep -qE '\bwe need to\b.{15,}' && signal=$((signal + 2))
-    echo "$msg_lower" | grep -qE '\bi want to\b.{15,}' && signal=$((signal + 2))
+    echo "$msg_lower" | grep -qE '\b(redesign|overhaul|rebuild|restructure|revamp)\b' && signal=$((signal + 2)) >&2
+    echo "$msg_lower" | grep -qE '\b(implement|build out|set up|stand up|create a new)\b.{10,}' && signal=$((signal + 2)) >&2
+    echo "$msg_lower" | grep -qE '\b(migrate|migration)\b' && signal=$((signal + 2)) >&2
+    echo "$msg_lower" | grep -qE '\b(cpq|quote.to.cash|billing|renewal|subscription)\b' && signal=$((signal + 2)) >&2
+    echo "$msg_lower" | grep -qE '\bwe need to\b.{15,}' && signal=$((signal + 2)) >&2
+    echo "$msg_lower" | grep -qE '\bi want to\b.{15,}' && signal=$((signal + 2)) >&2
 
     # Medium project signals (+1 each)
-    echo "$msg_lower" | grep -qE '\b(with|including|that supports|along with)\b' && signal=$((signal + 1))
-    echo "$msg_lower" | grep -qE '\b(across|all|every|multiple|several)\b.*(object|team|record type|department)' && signal=$((signal + 1))
-    echo "$msg_lower" | grep -qE '\b(approval|workflow|routing|scoring|assignment)\b.*\b(chain|rule|logic|model)\b' && signal=$((signal + 1))
-    echo "$msg_lower" | grep -qE '\b(territory|lead routing|opportunity stage|pipeline)\b' && signal=$((signal + 1))
-    echo "$msg_lower" | grep -qE '\b(phase|rollout|rollback|uat|testing plan)\b' && signal=$((signal + 1))
+    echo "$msg_lower" | grep -qE '\b(with|including|that supports|along with)\b' && signal=$((signal + 1)) >&2
+    echo "$msg_lower" | grep -qE '\b(across|all|every|multiple|several)\b.*(object|team|record type|department)' && signal=$((signal + 1)) >&2
+    echo "$msg_lower" | grep -qE '\b(approval|workflow|routing|scoring|assignment)\b.*\b(chain|rule|logic|model)\b' && signal=$((signal + 1)) >&2
+    echo "$msg_lower" | grep -qE '\b(territory|lead routing|opportunity stage|pipeline)\b' && signal=$((signal + 1)) >&2
+    echo "$msg_lower" | grep -qE '\b(phase|rollout|rollback|uat|testing plan)\b' && signal=$((signal + 1)) >&2
 
     # Length signal
     if [[ ${#msg} -gt 150 ]]; then
@@ -649,7 +669,7 @@ calculate_project_signal() {
         signal=$((signal + 1))
     fi
 
-    echo "$signal"
+    echo "$signal" >&2
 }
 
 score_intake_completeness() {
@@ -657,14 +677,14 @@ score_intake_completeness() {
     local fallback_score="1.0"
 
     if [[ ! -f "$INTAKE_COMPLETENESS_SCORER" ]] || ! command -v node &>/dev/null; then
-        echo "$fallback_score"
+        echo "$fallback_score" >&2
         return 0
     fi
 
     local scorer_output
-    scorer_output=$(timeout 3 node "$INTAKE_COMPLETENESS_SCORER" --json "$msg" 2>/dev/null || echo "")
+    scorer_output=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$INTAKE_COMPLETENESS_SCORER" --json "$msg" 2>/dev/null || echo "")
     if [[ -z "$scorer_output" ]] || ! echo "$scorer_output" | jq -e . >/dev/null 2>&1; then
-        echo "$fallback_score"
+        echo "$fallback_score" >&2
         return 0
     fi
 
@@ -682,35 +702,35 @@ evaluate_active_intake_gate() {
     local completeness_max="$4"
 
     if should_skip_intake_gate "$msg"; then
-        echo "false|0|1|skip_conditions"
+        echo "false|0|1|skip_conditions" >&2
         return 0
     fi
 
     local project_signal
-    project_signal=$(calculate_project_signal "$msg")
+    project_signal="$(calculate_project_signal "$msg" 2>&1)"
     if [[ -z "$project_signal" ]]; then
         project_signal=0
     fi
 
     if (( project_signal < signal_min )); then
-        echo "false|$project_signal|1|low_project_signal"
+        echo "false|$project_signal|1|low_project_signal" >&2
         return 0
     fi
 
     local completeness_score
-    completeness_score=$(score_intake_completeness "$msg")
+    completeness_score="$(score_intake_completeness "$msg" 2>&1)"
 
     if ! float_gt "$completeness_max" "$completeness_score"; then
-        echo "false|$project_signal|$completeness_score|sufficient_detail"
+        echo "false|$project_signal|$completeness_score|sufficient_detail" >&2
         return 0
     fi
 
     if [[ "$mode" == "suggest" ]]; then
-        echo "true|$project_signal|$completeness_score|suggest_mode"
+        echo "true|$project_signal|$completeness_score|suggest_mode" >&2
     elif [[ "$mode" == "require" ]]; then
-        echo "true|$project_signal|$completeness_score|require_mode"
+        echo "true|$project_signal|$completeness_score|require_mode" >&2
     else
-        echo "true|$project_signal|$completeness_score|recommend_mode"
+        echo "true|$project_signal|$completeness_score|recommend_mode" >&2
     fi
 }
 
@@ -725,9 +745,9 @@ message_matches_keyword() {
     [[ -z "$keyword" ]] && return 1
 
     if [[ "$keyword" =~ ^[[:alnum:]]{2,4}$ ]]; then
-        printf '%s' "$msg" | grep -qE "(^|[^[:alnum:]_])${keyword}([^[:alnum:]_]|$)"
+        printf '%s' "$msg" | grep -qE "(^|[^[:alnum:]_])${keyword}([^[:alnum:]_]|$)" >&2
     else
-        printf '%s' "$msg" | grep -qE "$keyword"
+        printf '%s' "$msg" | grep -qE "$keyword" >&2
     fi
 }
 
@@ -887,7 +907,7 @@ persist_routing_state() {
       }' 2>/dev/null || echo "")
 
     if [[ -n "$payload" ]]; then
-        printf '%s' "$payload" | node "$ROUTING_STATE_MANAGER" save "$ROUTING_SESSION_KEY" >/dev/null 2>&1 || true
+        printf '%s' "$payload" | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" save "$ROUTING_SESSION_KEY" >/dev/null 2>&1 || true
     fi
 }
 
@@ -900,7 +920,7 @@ routing_state_has_pending_requirement() {
         return 1
     fi
 
-    node "$ROUTING_STATE_MANAGER" check "$ROUTING_SESSION_KEY" 2>/dev/null | jq -e '.routePendingClearance == true and .executionBlockActive == true' >/dev/null 2>&1
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" check "$ROUTING_SESSION_KEY" 2>/dev/null | jq -e '.routePendingClearance == true and .executionBlockActive == true' >/dev/null 2>&1
 }
 
 mark_routing_state_bypassed() {
@@ -912,7 +932,7 @@ mark_routing_state_bypassed() {
         return 0
     fi
 
-    node "$ROUTING_STATE_MANAGER" mark-bypassed "$ROUTING_SESSION_KEY" "${SUGGESTED_AGENT:-}" >/dev/null 2>&1 || true
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" mark-bypassed "$ROUTING_SESSION_KEY" "${SUGGESTED_AGENT:-}" >/dev/null 2>&1 || true
 }
 
 # Extract platform family from a fully-qualified agent name.
@@ -925,7 +945,7 @@ extract_suggested_agent_family() {
 
     if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
         local family
-        family=$(node -e "
+        family=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const { extractAgentFamily } = require('$ROUTING_STATE_MANAGER');
 process.stdout.write(extractAgentFamily('$agent_name') || '');
 " 2>/dev/null) && echo "$family" && return 0
@@ -933,7 +953,7 @@ process.stdout.write(extractAgentFamily('$agent_name') || '');
 
     # Pure-bash fallback: extract prefix and strip opspal- to get family
     local prefix="${agent_name%%:*}"
-    echo "${prefix#opspal-}"
+    echo "${prefix#opspal-}" >&2
 }
 
 # Attempt to clear stale cross-family routing state.
@@ -950,7 +970,7 @@ clear_stale_cross_family_state() {
     ! command -v node &>/dev/null && return 0
 
     local result
-    result=$(node "$ROUTING_STATE_MANAGER" clear-stale "$ROUTING_SESSION_KEY" "$suggested_family" 2>/dev/null || echo '{"cleared":false}')
+    result=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" clear-stale "$ROUTING_SESSION_KEY" "$suggested_family" 2>/dev/null || echo '{"cleared":false}')
 
     local was_cleared
     was_cleared=$(echo "$result" | jq -r '.cleared // false' 2>/dev/null || echo "false")
@@ -981,31 +1001,31 @@ detect_compound_cleanup_shape() {
     msg_lower=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
 
     # Signal group 1: account naming/verification
-    echo "$msg_lower" | grep -qE '(account.*nam(e|ing)|nam(e|ing).*issue.*account|fix.*account.*name|rename.*account)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(account.*nam(e|ing)|nam(e|ing).*issue.*account|fix.*account.*name|rename.*account)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 2: contact count/CSV
-    echo "$msg_lower" | grep -qE '(count.*contact|contact.*count|csv.*contact|contact.*csv|generate.*csv)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(count.*contact|contact.*count|csv.*contact|contact.*csv|generate.*csv)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 3: reparent/transfer/reassign contacts
-    echo "$msg_lower" | grep -qE '(reparent|transfer.*contact|reassign.*contact|move.*contact)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(reparent|transfer.*contact|reassign.*contact|move.*contact)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 4: delete duplicate/cleanup
-    echo "$msg_lower" | grep -qE '(delete.*duplicate|duplicate.*delete|duplicate.*account.*clean|clean.*duplicate|remove.*duplicate)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(delete.*duplicate|duplicate.*delete|duplicate.*account.*clean|clean.*duplicate|remove.*duplicate)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 5: bulk update / 100+ records
-    echo "$msg_lower" | grep -qE '(bulk.*update|[0-9]{3,}.*contact|[0-9]{3,}.*record|mass.*updat|update.*all.*contact)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(bulk.*update|[0-9]{3,}.*contact|[0-9]{3,}.*record|mass.*updat|update.*all.*contact)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 6: verify account
-    echo "$msg_lower" | grep -qE '(verify.*account|account.*verif|account.*audit|confirm.*account)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(verify.*account|account.*verif|account.*audit|confirm.*account)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 7: find/identify duplicates (vague opener pattern)
-    echo "$msg_lower" | grep -qE '(find.*duplicate|identify.*duplicate|locate.*duplicate|duplicate.*we.*created|check.*for.*duplicate|detect.*duplicate)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(find.*duplicate|identify.*duplicate|locate.*duplicate|duplicate.*we.*created|check.*for.*duplicate|detect.*duplicate)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 8: query + validate pattern (discovery-cleanup compound)
-    echo "$msg_lower" | grep -qE '(query.*account.*validate|validate.*duplicate|check.*account.*date|account.*website.*match|compare.*account)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(query.*account.*validate|validate.*duplicate|check.*account.*date|account.*website.*match|compare.*account)' && signal_count=$((signal_count + 1)) >&2
 
     # Signal group 9: cleanup/merge intent combined with discovery
-    echo "$msg_lower" | grep -qE '(clean.*up.*account|merge.*record|consolidate.*record|fix.*data.*quality|data.*cleanup|account.*cleanup)' && signal_count=$((signal_count + 1))
+    echo "$msg_lower" | grep -qE '(clean.*up.*account|merge.*record|consolidate.*record|fix.*data.*quality|data.*cleanup|account.*cleanup)' && signal_count=$((signal_count + 1)) >&2
 
     if [[ $signal_count -ge 3 ]]; then
         [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Compound cleanup shape detected: ${signal_count}/9 signal groups matched" >&2
@@ -1105,12 +1125,12 @@ if [[ -n "$MANDATORY_AGENT" ]]; then
     CLEARANCE_AGENTS_JSON="$MANDATORY_CLEARANCE_AGENTS"
     [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Mandatory pattern matched: $MANDATORY_AGENT" >&2
 else
-    INTAKE_GATE_RESULT=$(evaluate_active_intake_gate "$USER_MESSAGE" "$ACTIVE_INTAKE_MODE" "$ACTIVE_INTAKE_PROJECT_SIGNAL_MIN" "$ACTIVE_INTAKE_COMPLETENESS_MAX")
+    INTAKE_GATE_RESULT="$(evaluate_active_intake_gate "$USER_MESSAGE" "$ACTIVE_INTAKE_MODE" "$ACTIVE_INTAKE_PROJECT_SIGNAL_MIN" "$ACTIVE_INTAKE_COMPLETENESS_MAX" 2>&1)"
     INTAKE_ELIGIBLE=$(echo "$INTAKE_GATE_RESULT" | cut -d'|' -f1)
     INTAKE_PROJECT_SIGNAL=$(echo "$INTAKE_GATE_RESULT" | cut -d'|' -f2)
     INTAKE_COMPLETENESS_SCORE=$(echo "$INTAKE_GATE_RESULT" | cut -d'|' -f3)
     INTAKE_REASON=$(echo "$INTAKE_GATE_RESULT" | cut -d'|' -f4)
-    INTAKE_COMPLETENESS_SCORE=$(clamp_decimal "$INTAKE_COMPLETENESS_SCORE" "0" "1")
+    INTAKE_COMPLETENESS_SCORE="$(clamp_decimal "$INTAKE_COMPLETENESS_SCORE" "0" "1" 2>&1)"
 
     if [[ "$ACTIVE_INTAKE_VERBOSE" == "1" ]] || [[ "$VERBOSE" == "1" ]]; then
         echo "[ROUTER] Intake gate mode=$ACTIVE_INTAKE_MODE eligible=$INTAKE_ELIGIBLE signal=$INTAKE_PROJECT_SIGNAL completeness=$INTAKE_COMPLETENESS_SCORE reason=$INTAKE_REASON" >&2
@@ -1141,7 +1161,7 @@ fi
 # Normalize empty values
 [[ "$SUGGESTED_AGENT" == "null" ]] && SUGGESTED_AGENT=""
 [[ -z "$COMPLEXITY" ]] && COMPLEXITY="0"
-COMPLEXITY=$(clamp_decimal "$COMPLEXITY" "0" "1")
+COMPLEXITY="$(clamp_decimal "$COMPLEXITY" "0" "1" 2>&1)"
 
 if [[ "$IS_MANDATORY" == "true" ]]; then
     ROUTING_CONFIDENCE="1.0"
@@ -1178,7 +1198,7 @@ try_task_router_fallback() {
     if [[ -z "${fallback_input// }" ]]; then
         fallback_input="$USER_MESSAGE"
     fi
-    fallback_json=$(node "$TASK_ROUTER_SCRIPT" --json "$fallback_input" 2>/dev/null || echo "")
+    fallback_json=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$TASK_ROUTER_SCRIPT" --json "$fallback_input" 2>/dev/null || echo "")
     if [[ -z "$fallback_json" ]] || ! echo "$fallback_json" | jq -e . >/dev/null 2>&1; then
         return 0
     fi
@@ -1192,8 +1212,8 @@ try_task_router_fallback() {
     [[ "$fallback_agent" == "null" ]] && fallback_agent=""
     [[ -z "$fallback_agent" ]] && return 0
 
-    fallback_confidence=$(clamp_decimal "$fallback_confidence" "0" "1")
-    fallback_complexity=$(clamp_decimal "$fallback_complexity" "0" "1")
+    fallback_confidence="$(clamp_decimal "$fallback_confidence" "0" "1" 2>&1)"
+    fallback_complexity="$(clamp_decimal "$fallback_complexity" "0" "1" 2>&1)"
 
     if ! float_ge "$fallback_confidence" "$FALLBACK_MIN_CONFIDENCE"; then
         return 0
@@ -1421,7 +1441,7 @@ fi
 # Determine the family of the newly suggested agent (may be empty for no-agent routes)
 SUGGESTED_AGENT_FAMILY=""
 if [[ -n "${SUGGESTED_AGENT:-}" ]]; then
-    SUGGESTED_AGENT_FAMILY=$(extract_suggested_agent_family "$SUGGESTED_AGENT")
+    SUGGESTED_AGENT_FAMILY="$(extract_suggested_agent_family "$SUGGESTED_AGENT" 2>&1)"
 fi
 
 if [[ "$SHOULD_PERSIST_ROUTE" == "true" ]] && [[ -n "$SUGGESTED_AGENT" ]]; then
@@ -1733,7 +1753,7 @@ if [[ -f "$ROUTING_METRICS_SCRIPT" ]] && command -v node &>/dev/null; then
             autoRouted: ($agent != "")
         }' 2>/dev/null || echo '{}')
 
-    (node "$ROUTING_METRICS_SCRIPT" log "$METRICS_EVENT" >/dev/null 2>&1 &)
+    (run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_METRICS_SCRIPT" log "$METRICS_EVENT" >/dev/null 2>&1 &)
 fi
 
 # =============================================================================

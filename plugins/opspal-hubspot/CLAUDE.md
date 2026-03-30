@@ -339,6 +339,23 @@ All runbooks are automatically referenced by relevant agents:
 - Zapier connections
 - Custom API integrations
 
+## Agent Routing by Task Type
+
+Use specialist agents for these patterns:
+
+| Task Pattern | Agent |
+|-------------|-------|
+| Complex / multi-step / coordinate | `hubspot-orchestrator` |
+| Workflow / automation / trigger | `hubspot-workflow-builder` |
+| Contact / list / segment | `hubspot-contact-manager` |
+| Pipeline / deal / forecast | `hubspot-pipeline-manager` |
+| Property / field / custom field | `hubspot-property-manager` |
+| Email / campaign / nurture | `hubspot-marketing-automation` |
+| Report / dashboard / analytics | `hubspot-reporting-builder` |
+| Clean / dedupe / quality | `hubspot-data-hygiene-specialist` |
+| CMS / content / blog | `hubspot-cms-content-manager` |
+| HubDB / dynamic content | `hubspot-cms-hubdb-manager` |
+
 ## Available Agents
 
 ### Core Orchestration

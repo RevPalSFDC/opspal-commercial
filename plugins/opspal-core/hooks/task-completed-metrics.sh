@@ -143,7 +143,7 @@ if [[ -f "$ROUTING_ENGINE" ]] && command -v node &> /dev/null; then
         *)                TASK_TYPE="general" ;;
     esac
 
-    node "$ROUTING_ENGINE" record "$AGENT_NAME" "$TOKENS" "$DURATION" "$TOOL_USES" "$SUCCESS" 2>/dev/null || true
+    node "$ROUTING_ENGINE" record "$AGENT_NAME" "$TOKENS" "$DURATION" "$TOOL_USES" "$SUCCESS" >/dev/null 2>&1 || true
 fi
 
 exit 0

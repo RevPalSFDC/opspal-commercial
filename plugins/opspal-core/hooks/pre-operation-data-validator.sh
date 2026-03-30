@@ -40,6 +40,12 @@
 
 set -euo pipefail
 
+# Hook debug support (all output to stderr)
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "[hook-debug] $(basename "$0") starting (pid=$$)" >&2
+fi
+
 is_json() {
     echo "$1" | jq -e . >/dev/null 2>&1
 }
@@ -58,9 +64,9 @@ read_stdin_json() {
         data=$(cat)
     fi
     if [ -n "$data" ] && is_json "$data"; then
-        echo "$data"
+        echo "$data" >&2
     else
-        echo ""
+        echo "" >&2
     fi
 }
 
@@ -108,6 +114,7 @@ MAX_STALE_DAYS="${DATA_VALIDATION_MAX_STALE_DAYS:-90}"
 WARN_STALE_DAYS="${DATA_VALIDATION_WARN_STALE_DAYS:-30}"
 HARD_STALE_DAYS="${DATA_VALIDATION_HARD_STALE_DAYS:-180}"
 HARD_STALE_ENABLED="${DATA_VALIDATION_HARD_STALE_ENABLED:-1}"
+NODE_TIMEOUT_SECONDS="${PRE_OPERATION_DATA_VALIDATOR_NODE_TIMEOUT_SECONDS:-3}"
 
 if ! is_positive_int "$MERGE_MIN_SAMPLE_SIZE"; then
     MERGE_MIN_SAMPLE_SIZE="2"
@@ -142,6 +149,18 @@ LOG_FILE=""
 HOOK_NAME="pre-operation-data-validator"
 PRECHECK_WARNINGS=()
 
+run_node_with_timeout() {
+    local timeout_seconds="$1"
+    shift
+
+    if command -v timeout >/dev/null 2>&1; then
+        timeout "$timeout_seconds" node "$@"
+        return $?
+    fi
+
+    node "$@"
+}
+
 append_precheck_warning() {
     local message="$1"
     PRECHECK_WARNINGS+=("$message")
@@ -155,41 +174,41 @@ extract_sf_target_org() {
     local command="$1"
 
     if [[ "$command" =~ --target-org[[:space:]]+([^[:space:]]+) ]]; then
-        printf '%s' "${BASH_REMATCH[1]}"
+        printf '%s' "${BASH_REMATCH[1]}" >&2
         return 0
     fi
 
-    printf '%s' "${SF_TARGET_ORG:-}"
+    printf '%s' "${SF_TARGET_ORG:-}" >&2
 }
 
 extract_sf_sobject() {
     local command="$1"
 
     if [[ "$command" =~ --sobject[[:space:]]+([^[:space:]]+) ]]; then
-        printf '%s' "${BASH_REMATCH[1]}"
+        printf '%s' "${BASH_REMATCH[1]}" >&2
         return 0
     fi
 
-    printf '%s' ""
+    printf '%s' "" >&2
 }
 
 extract_sf_operation_verb() {
     local command="$1"
 
     if echo "$command" | grep -qE 'sf[[:space:]]+data[[:space:]]+create'; then
-        printf '%s' "create"
+        printf '%s' "create" >&2
         return 0
     fi
     if echo "$command" | grep -qE 'sf[[:space:]]+data[[:space:]]+upsert'; then
-        printf '%s' "upsert"
+        printf '%s' "upsert" >&2
         return 0
     fi
     if echo "$command" | grep -qE 'sf[[:space:]]+data[[:space:]]+update'; then
-        printf '%s' "update"
+        printf '%s' "update" >&2
         return 0
     fi
 
-    printf '%s' ""
+    printf '%s' "" >&2
 }
 
 extract_csv_file_from_command() {
@@ -205,14 +224,14 @@ extract_csv_file_from_command() {
         file="$PROJECT_ROOT/$file"
     fi
 
-    printf '%s' "$file"
+    printf '%s' "$file" >&2
 }
 
 csv_headers_from_file() {
     local csv_file="$1"
 
     if [[ -z "$csv_file" ]] || [[ ! -f "$csv_file" ]]; then
-        printf '%s' ""
+        printf '%s' "" >&2
         return 0
     fi
 
@@ -224,16 +243,16 @@ resolve_log_root() {
     local fallback="$FALLBACK_LOG_ROOT"
 
     if mkdir -p "$primary" 2>/dev/null && [ -w "$primary" ]; then
-        echo "$primary"
+        echo "$primary" >&2
         return 0
     fi
 
     if mkdir -p "$fallback" 2>/dev/null && [ -w "$fallback" ]; then
-        echo "$fallback"
+        echo "$fallback" >&2
         return 0
     fi
 
-    echo ""
+    echo "" >&2
     return 1
 }
 
@@ -245,7 +264,7 @@ safe_append_jsonl() {
     printf '%s\n' "$line" >> "$LOG_FILE" 2>/dev/null || true
 }
 
-RESOLVED_LOG_ROOT="$(resolve_log_root || true)"
+RESOLVED_LOG_ROOT="$(resolve_log_root 2>&1 || true)"
 if [ -n "$RESOLVED_LOG_ROOT" ]; then
     LOG_FILE="${RESOLVED_LOG_ROOT}/data-validation.jsonl"
 fi
@@ -264,7 +283,7 @@ if [ ! -f "$DATA_QUALITY_MONITOR" ]; then
 fi
 
 # Parse input from stdin (Claude passes tool invocation as JSON)
-INPUT_DATA=$(read_stdin_json)
+INPUT_DATA="$(read_stdin_json 2>&1)"
 
 if [ -z "$INPUT_DATA" ]; then
     emit_pretool_noop
@@ -301,13 +320,13 @@ is_data_operation() {
 
     # MCP Salesforce data operations
     if [[ "$tool" =~ ^mcp.*salesforce.*(query|create|update|upsert|delete) ]]; then
-        echo "salesforce_data"
+        echo "salesforce_data" >&2
         return 0
     fi
 
     # MCP HubSpot data operations
     if [[ "$tool" =~ ^mcp.*hubspot.*(create|update|batch) ]]; then
-        echo "hubspot_data"
+        echo "hubspot_data" >&2
         return 0
     fi
 
@@ -315,16 +334,16 @@ is_data_operation() {
     if [[ "$tool" == "Bash" ]]; then
         local cmd=$(echo "$input" | jq -r '.command // ""' 2>/dev/null)
         if [[ "$cmd" =~ (bulk-merge-executor|bulk-merge-executor-parallel|salesforce-native-merger|generic-record-merger|merge-executor|dedup) ]]; then
-            echo "merge_decision_data"
+            echo "merge_decision_data" >&2
             return 0
         fi
         if [[ "$cmd" =~ sf\ data\ (upsert|import|bulk|update|create) ]]; then
-            echo "sf_cli_data"
+            echo "sf_cli_data" >&2
             return 0
         fi
         # CSV processing — only for write/upsert/import commands, not reads
         if [[ "$cmd" =~ \.csv ]] && echo "$cmd" | grep -qiE 'upsert|import|create|update|insert|load|bulk'; then
-            echo "csv_processing"
+            echo "csv_processing" >&2
             return 0
         fi
     fi
@@ -333,7 +352,7 @@ is_data_operation() {
     if [[ "$tool" == "Write" ]]; then
         local filepath=$(echo "$input" | jq -r '.file_path // ""' 2>/dev/null)
         if [[ "$filepath" =~ \.(csv|json|xml)$ ]]; then
-            echo "file_data"
+            echo "file_data" >&2
             return 0
         fi
     fi
@@ -342,7 +361,7 @@ is_data_operation() {
     if [[ "$tool" == "Agent" ]]; then
         local subagent=$(echo "$input" | jq -r '.subagent_type // .agent_type // ""' 2>/dev/null)
         if [[ "$subagent" =~ (data-import|data-export|data-operations|csv) ]]; then
-            echo "agent_data"
+            echo "agent_data" >&2
             return 0
         fi
     fi
@@ -372,7 +391,7 @@ extract_data_for_validation() {
                 # Read file content (limited to first 1000 records for performance)
                 head -1001 "$file" 2>/dev/null | jq -sc '.' 2>/dev/null || echo "[]"
             else
-                echo "[]"
+                echo "[]" >&2
             fi
             ;;
         merge_decision_data)
@@ -392,7 +411,7 @@ extract_data_for_validation() {
             if [ -n "$decisions_file" ] && [ -f "$decisions_file" ]; then
                 jq -c 'if type == "array" then . else (.decisions // .records // .items // .results // []) end' "$decisions_file" 2>/dev/null || echo "[]"
             else
-                echo "[]"
+                echo "[]" >&2
             fi
             ;;
         csv_processing)
@@ -406,7 +425,7 @@ reader = csv.DictReader(sys.stdin)
 print(json.dumps(list(reader)))
 " 2>/dev/null || echo "[]"
             else
-                echo "[]"
+                echo "[]" >&2
             fi
             ;;
         file_data)
@@ -416,13 +435,13 @@ print(json.dumps(list(reader)))
             if [[ "$filepath" =~ \.json$ ]]; then
                 echo "$content" | jq -sc '.' 2>/dev/null || echo "[]"
             elif [[ "$filepath" =~ \.csv$ ]]; then
-                echo "$content" | head -101 | python3 -c "
+                echo "$content" | head -101 | python3 -c " >&2
 import csv, json, sys
 reader = csv.DictReader(sys.stdin)
 print(json.dumps(list(reader)))
 " 2>/dev/null || echo "[]"
             else
-                echo "[]"
+                echo "[]" >&2
             fi
             ;;
         agent_data)
@@ -430,13 +449,13 @@ print(json.dumps(list(reader)))
             echo "$input" | jq -c '.data // .records // []' 2>/dev/null || echo "[]"
             ;;
         *)
-            echo "[]"
+            echo "[]" >&2
             ;;
     esac
 }
 
 # Main validation logic
-OPERATION_TYPE=$(is_data_operation "$TOOL_NAME" "$TOOL_INPUT" 2>/dev/null || true)
+OPERATION_TYPE="$(is_data_operation "$TOOL_NAME" "$TOOL_INPUT" 2>&1 || true)"
 
 if [ -z "$OPERATION_TYPE" ]; then
     # Not a data operation, skip validation
@@ -445,14 +464,14 @@ if [ -z "$OPERATION_TYPE" ]; then
 fi
 
 # Extract data to validate
-DATA_TO_VALIDATE=$(extract_data_for_validation "$TOOL_NAME" "$TOOL_INPUT" "$OPERATION_TYPE")
+DATA_TO_VALIDATE="$(extract_data_for_validation "$TOOL_NAME" "$TOOL_INPUT" "$OPERATION_TYPE" 2>&1)"
 
 # Check if we have data to validate
 DATA_COUNT=$(echo "$DATA_TO_VALIDATE" | jq 'if type == "array" then length else 0 end' 2>/dev/null || echo "0")
 
 if [ "$DATA_COUNT" == "0" ] || [ "$DATA_COUNT" == "null" ]; then
     if [ "$OPERATION_TYPE" = "merge_decision_data" ]; then
-        [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Merge validation blocked - no decision data extracted" \
+        [ -f "$HOOK_LOGGER" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_LOGGER" error "$HOOK_NAME" "Merge validation blocked - no decision data extracted" \
             "{\"operationType\":\"$OPERATION_TYPE\",\"tool\":\"$TOOL_NAME\"}" 2>/dev/null || true
         echo "Data validation blocked: unable to extract merge decision records (expected --decisions JSON)." >&2
         emit_pretool_decision \
@@ -467,7 +486,7 @@ if [ "$DATA_COUNT" == "0" ] || [ "$DATA_COUNT" == "null" ]; then
 fi
 
 if [ "$OPERATION_TYPE" = "merge_decision_data" ] && [ "$DATA_COUNT" -lt "$MERGE_MIN_SAMPLE_SIZE" ]; then
-    [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Merge validation blocked - insufficient sample size" \
+    [ -f "$HOOK_LOGGER" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_LOGGER" error "$HOOK_NAME" "Merge validation blocked - insufficient sample size" \
         "{\"operationType\":\"$OPERATION_TYPE\",\"recordCount\":$DATA_COUNT,\"requiredMin\":$MERGE_MIN_SAMPLE_SIZE}" 2>/dev/null || true
     echo "Data validation blocked: merge decision sample too small ($DATA_COUNT records, requires >= $MERGE_MIN_SAMPLE_SIZE)." >&2
     emit_pretool_decision \
@@ -488,9 +507,9 @@ SF_OPERATION_VERB=""
 
 if [[ "$TOOL_NAME" == "Bash" ]]; then
     RAW_BASH_COMMAND="$(extract_bash_command)"
-    SF_TARGET_ORG_VALUE="$(extract_sf_target_org "$RAW_BASH_COMMAND")"
-    SF_SOBJECT_VALUE="$(extract_sf_sobject "$RAW_BASH_COMMAND")"
-    SF_OPERATION_VERB="$(extract_sf_operation_verb "$RAW_BASH_COMMAND")"
+    SF_TARGET_ORG_VALUE="$(extract_sf_target_org "$RAW_BASH_COMMAND" 2>&1)"
+    SF_SOBJECT_VALUE="$(extract_sf_sobject "$RAW_BASH_COMMAND" 2>&1)"
+    SF_OPERATION_VERB="$(extract_sf_operation_verb "$RAW_BASH_COMMAND" 2>&1)"
 fi
 
 if [[ "$TOOL_NAME" == "Bash" ]] &&
@@ -504,7 +523,7 @@ if [[ "$TOOL_NAME" == "Bash" ]] &&
 
     if [[ -n "$DESCRIBE_JSON" ]]; then
         NON_WRITABLE_FIELDS="$(
-            DESCRIBE_JSON="$DESCRIBE_JSON" node -e "
+            DESCRIBE_JSON="$DESCRIBE_JSON" run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const fs = require('fs');
 const records = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
 const describe = JSON.parse(process.env.DESCRIBE_JSON || '{}');
@@ -524,7 +543,7 @@ process.stdout.write(fields.join('\n'));
 
     if [[ "$SF_SOBJECT_VALUE" == "Contact" ]]; then
         CONTACT_REPARENT_IDS="$(
-            node -e "
+            run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const fs = require('fs');
 const records = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
 const ids = [];
@@ -564,7 +583,7 @@ process.stdout.write(ids.join('\n'));
 
     if [[ "$SF_SOBJECT_VALUE" == "Account" ]] && [[ "$SF_OPERATION_VERB" =~ ^(create|upsert)$ ]] && [[ -f "$ACCOUNT_DEDUP_PRECHECK" ]]; then
         INPUT_ACCOUNTS_JSON="$(
-            node -e "
+            run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const fs = require('fs');
 const records = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
 const normalized = (Array.isArray(records) ? records : [])
@@ -581,7 +600,7 @@ process.stdout.write(JSON.stringify(normalized));
 
         if [[ "$INPUT_ACCOUNTS_JSON" != "[]" ]]; then
             ACCOUNT_SEARCH_TOKENS="$(
-                node -e "
+                run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const helper = require(process.argv[1]);
 const accounts = JSON.parse(process.argv[2]);
 const tokens = [...new Set(accounts.map(account => helper.getSearchToken(account.Name)).filter(Boolean))];
@@ -595,7 +614,7 @@ process.stdout.write(tokens.join('\n'));
                 SAFE_TOKEN="${token//\'/\\\'}"
                 ACCOUNT_QUERY="SELECT Id, Name, Website, (SELECT Email FROM Contacts LIMIT 25) FROM Account WHERE Name LIKE '%${SAFE_TOKEN}%' LIMIT 25"
                 ACCOUNT_RESULT="$(sf data query --query "$ACCOUNT_QUERY" --target-org "$SF_TARGET_ORG_VALUE" --json 2>/dev/null || true)"
-                EXISTING_ACCOUNT_RESULTS="$(EXISTING_ACCOUNT_RESULTS="$EXISTING_ACCOUNT_RESULTS" ACCOUNT_RESULT="$ACCOUNT_RESULT" node -e "
+                EXISTING_ACCOUNT_RESULTS="$(EXISTING_ACCOUNT_RESULTS="$EXISTING_ACCOUNT_RESULTS" ACCOUNT_RESULT="$ACCOUNT_RESULT" run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const existing = JSON.parse(process.env.EXISTING_ACCOUNT_RESULTS || '[]');
 const incoming = JSON.parse(process.env.ACCOUNT_RESULT || '{}');
 const records = incoming.result?.records || [];
@@ -613,7 +632,7 @@ process.stdout.write(JSON.stringify(existing));
             done <<< "$ACCOUNT_SEARCH_TOKENS"
 
             DUPLICATE_MATCHES="$(
-                node -e "
+                run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const helper = require(process.argv[1]);
 const inputAccounts = JSON.parse(process.argv[2]);
 const existingAccounts = JSON.parse(process.argv[3]);
@@ -649,7 +668,7 @@ process.stdout.write(JSON.stringify(results));
 fi
 
 # Run validation via Node.js data-quality-monitor
-VALIDATION_RESULT=$(node -e "
+VALIDATION_RESULT=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const { BUILT_IN_RULES } = require('$DATA_QUALITY_MONITOR');
 const fs = require('fs');
 
@@ -939,11 +958,11 @@ if [ "$ERROR_COUNT" -gt 0 ]; then
     FIRST_ERRORS=$(echo "$VALIDATION_RESULT" | jq -r '.errors[:3][] | "- Record \(.record): \(.field // "record"): \(.message)"' 2>/dev/null)
 
     # Log to hook logger if available
-    [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" error "$HOOK_NAME" "Data validation failed - $ERROR_COUNT errors in $RECORD_COUNT records" \
+    [ -f "$HOOK_LOGGER" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_LOGGER" error "$HOOK_NAME" "Data validation failed - $ERROR_COUNT errors in $RECORD_COUNT records" \
         "{\"operationType\":\"$OPERATION_TYPE\",\"errorCount\":$ERROR_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE,\"staleHardViolations\":$STALE_HARD_VIOLATIONS}" 2>/dev/null || true
 
     if [ -f "$OUTPUT_FORMATTER" ]; then
-        node "$OUTPUT_FORMATTER" error \
+        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$OUTPUT_FORMATTER" error \
             "Data Validation Failed" \
             "$ERROR_COUNT validation errors found in $RECORD_COUNT records" \
             "Operation:$OPERATION_TYPE,Errors:$ERROR_COUNT,Records:$RECORD_COUNT,Valid:$VALID_COUNT,QualityScore:$QUALITY_SCORE,QualityConfidence:$QUALITY_CONFIDENCE" \
@@ -976,11 +995,11 @@ if [ "$WARNING_COUNT" -gt 0 ] || [ "$PRECHECK_WARNING_COUNT" -gt 0 ]; then
 ${PRECHECK_WARNING_TEXT}"
         fi
 
-        [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" warning "$HOOK_NAME" "Data validation warnings (STRICT mode)" \
+        [ -f "$HOOK_LOGGER" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_LOGGER" warning "$HOOK_NAME" "Data validation warnings (STRICT mode)" \
             "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$TOTAL_WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
 
         if [ -f "$OUTPUT_FORMATTER" ]; then
-            node "$OUTPUT_FORMATTER" warning \
+            run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$OUTPUT_FORMATTER" warning \
                 "Data Validation Warnings (Strict Mode)" \
                 "$TOTAL_WARNING_COUNT warnings found - blocking due to STRICT mode" \
                 "Operation:$OPERATION_TYPE,Warnings:$TOTAL_WARNING_COUNT,Records:$RECORD_COUNT,QualityScore:$QUALITY_SCORE,QualityConfidence:$QUALITY_CONFIDENCE" \
@@ -1002,7 +1021,7 @@ ${FIRST_WARNINGS}"
             WARNING_CONTEXT="${WARNING_CONTEXT}
 ${PRECHECK_WARNING_TEXT}"
         fi
-        [ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed with warnings" \
+        [ -f "$HOOK_LOGGER" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed with warnings" \
             "{\"operationType\":\"$OPERATION_TYPE\",\"warningCount\":$TOTAL_WARNING_COUNT,\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE}" 2>/dev/null || true
 
         echo "Data validation: $VALID_COUNT/$RECORD_COUNT records valid ($TOTAL_WARNING_COUNT warnings, quality score $QUALITY_SCORE)" >&2
@@ -1015,7 +1034,7 @@ ${PRECHECK_WARNING_TEXT}"
 fi
 
 # All validation passed
-[ -f "$HOOK_LOGGER" ] && node "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed" \
+[ -f "$HOOK_LOGGER" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_LOGGER" info "$HOOK_NAME" "Data validation passed" \
     "{\"operationType\":\"$OPERATION_TYPE\",\"recordCount\":$RECORD_COUNT,\"qualityScore\":$QUALITY_SCORE,\"qualityConfidence\":$QUALITY_CONFIDENCE,\"staleHardViolations\":$STALE_HARD_VIOLATIONS}" 2>/dev/null || true
 
 if [ "$PRECHECK_WARNING_COUNT" -gt 0 ]; then

@@ -22,6 +22,11 @@
 
 set -euo pipefail
 
+if ! command -v jq &>/dev/null; then
+    printf '{}\n'
+    exit 0
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
@@ -102,44 +107,11 @@ if [[ "${SUBAGENT_ORG_PREFLIGHT:-1}" == "1" ]]; then
     fi
 fi
 
-# ─── 1. Runbook Reminder ───────────────────────────────────────────────────
-if [[ "${RUNBOOK_REMINDER_ENABLED:-1}" == "1" ]]; then
-    ORG_SLUG="${ORG_SLUG:-}"
-    SF_TARGET_ORG="${SF_TARGET_ORG:-}"
-    ORG="${ORG_SLUG:-$SF_TARGET_ORG}"
+# ─── 1. Runbook & branding reminders migrated to CLAUDE.md ─────────────────
+# Runbook path reminders and "Use RevPal branding" instructions are now in
+# per-plugin CLAUDE.md files. Only runtime-dynamic context remains here.
 
-    if [[ -n "$ORG" ]]; then
-        # Search for runbook in standard locations
-        RUNBOOK_PATHS=(
-            "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/production/configs/RUNBOOK.md"
-            "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/production/RUNBOOK.md"
-            "$PROJECT_ROOT/orgs/$ORG/RUNBOOK.md"
-        )
-
-        for rb_path in "${RUNBOOK_PATHS[@]}"; do
-            if [[ -f "$rb_path" ]]; then
-                # Extract key sections (first 500 chars)
-                SUMMARY=$(head -c 500 "$rb_path" 2>/dev/null || true)
-                CONTEXT_PARTS+=("RUNBOOK ($ORG): Review before proceeding. Path: $rb_path")
-                break
-            fi
-        done
-    fi
-fi
-
-# ─── 2. Template/Branding Injection ────────────────────────────────────────
-if [[ "${TEMPLATE_INJECTION_ENABLED:-1}" == "1" ]]; then
-    REGISTRY="${PLUGIN_ROOT}/config/master-template-registry.json"
-    if [[ -f "$REGISTRY" ]] && command -v jq &> /dev/null; then
-        # Check if agent has template recommendations
-        TEMPLATES=$(jq -r --arg agent "$AGENT_NAME" '.agents[$agent] // empty' "$REGISTRY" 2>/dev/null)
-        if [[ -n "$TEMPLATES" ]]; then
-            CONTEXT_PARTS+=("TEMPLATES: Use RevPal branding. See config/master-template-registry.json for agent-specific templates.")
-        fi
-    fi
-fi
-
-# ─── 3. Field Dictionary Injection ─────────────────────────────────────────
+# ─── 2. Field Dictionary Injection ─────────────────────────────────────────
 if [[ "${FIELD_DICT_INJECTION_ENABLED:-1}" == "1" ]]; then
     ORG_SLUG="${ORG_SLUG:-}"
 

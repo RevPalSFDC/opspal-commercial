@@ -10,14 +10,26 @@ set -euo pipefail
 # Adapted from SFDC pre-task-agent-validator.sh
 ##
 
+# Hook debug support (all output to stderr)
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "[hook-debug] $(basename "$0") starting (pid=$$)" >&2
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Source error handler — try plugin-local lib first, then cross-plugin fallback
-if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
-    source "${SCRIPT_DIR}/lib/error-handler.sh"
-elif [[ -f "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" ]]; then
-    source "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
+# Source error handler — try plugin-local lib first, then resolve core plugin
+_EH="${SCRIPT_DIR}/lib/error-handler.sh"
+if [[ ! -f "$_EH" ]]; then
+    for _candidate in \
+        "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" \
+        "${CLAUDE_PLUGIN_ROOT:-/nonexistent}/opspal-core/hooks/lib/error-handler.sh" \
+        "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/hooks/lib/error-handler.sh"; do
+        if [[ -f "$_candidate" ]]; then _EH="$_candidate"; break; fi
+    done
 fi
+[[ -f "$_EH" ]] && source "$_EH"
+unset _EH _candidate
 
 if declare -f set_lenient_mode &>/dev/null; then
     HOOK_NAME="pre-task-agent-validator"

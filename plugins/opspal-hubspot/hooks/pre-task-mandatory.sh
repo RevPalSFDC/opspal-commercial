@@ -12,13 +12,19 @@ if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     echo "DEBUG: [pre-task-mandatory] starting" >&2
 fi
 
-# Source error handler — try plugin-local lib first, then cross-plugin fallback
+# Source error handler — try plugin-local lib first, then resolve core plugin
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/lib/error-handler.sh" ]]; then
-    source "${SCRIPT_DIR}/lib/error-handler.sh"
-elif [[ -f "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" ]]; then
-    source "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
+_EH="${SCRIPT_DIR}/lib/error-handler.sh"
+if [[ ! -f "$_EH" ]]; then
+    for _candidate in \
+        "${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh" \
+        "${CLAUDE_PLUGIN_ROOT:-/nonexistent}/opspal-core/hooks/lib/error-handler.sh" \
+        "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/hooks/lib/error-handler.sh"; do
+        if [[ -f "$_candidate" ]]; then _EH="$_candidate"; break; fi
+    done
 fi
+[[ -f "$_EH" ]] && source "$_EH"
+unset _EH _candidate
 HOOK_NAME="pre-task-mandatory-hubspot"
 # Keep strict mode for security-critical hook
 
@@ -230,70 +236,9 @@ check_bypass_attempt() {
     return 1
 }
 
-# Function to suggest agents for medium-risk operations
-suggest_for_medium_risk() {
-    local task="$1"
-    local suggested_agents=()
-
-    # Pattern matching for agent suggestions
-    declare -A AGENT_PATTERNS=(
-        ["hubspot-orchestrator"]="complex|multi.*step|coordinate"
-        ["hubspot-workflow-builder"]="workflow|automation|trigger"
-        ["hubspot-contact-manager"]="contact|list|segment"
-        ["hubspot-pipeline-manager"]="pipeline|deal|forecast"
-        ["hubspot-property-manager"]="property|field|custom.*field"
-        ["hubspot-marketing-automation"]="email|campaign|nurture"
-        ["hubspot-reporting-builder"]="report|dashboard|analytic"
-        ["hubspot-data-hygiene-specialist"]="clean|dedupe|quality"
-    )
-
-    for agent in "${!AGENT_PATTERNS[@]}"; do
-        local pattern="${AGENT_PATTERNS[$agent]}"
-        if echo "$task" | grep -iE "$pattern" > /dev/null; then
-            suggested_agents+=("$agent")
-        fi
-    done
-
-    if [ ${#suggested_agents[@]} -gt 0 ]; then
-        echo "" >&2
-        echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}" >&2
-        echo -e "${YELLOW}║      💡 AGENT RECOMMENDATION (Medium Risk) 💡          ║${NC}" >&2
-        echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}" >&2
-        echo "" >&2
-
-        echo -e "${BLUE}Suggested agents for this task:${NC}" >&2
-        for agent in "${suggested_agents[@]}"; do
-            echo -e "  ${GREEN}▸${NC} ${PURPLE}$agent${NC}" >&2
-        done
-
-        echo "" >&2
-        echo -e "${YELLOW}While not mandatory, using an agent will:${NC}" >&2
-        echo "  • Handle pagination automatically (100% data coverage)" >&2
-        echo "  • Manage API rate limits properly" >&2
-        echo "  • Reduce errors by 80%" >&2
-        echo "  • Save 60-90% time" >&2
-        echo "  • Ensure best practices" >&2
-
-        log_event "MEDIUM_RISK_SUGGESTED" "$task: ${suggested_agents[*]}"
-    fi
-}
-
-# Function to track agent usage decision
-track_decision() {
-    local task="$1"
-    local decision="$2"
-    local reason="${3:-none}"
-
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$timestamp] DECISION: $decision | TASK: $task | REASON: $reason" >> "$LOG_FILE"
-
-    # Update analytics if available
-    if [ -f "${PROJECT_ROOT:-/path/to/project}/legacy/HS/.claude/agent-analytics.js" ]; then
-        if [ "$decision" = "SKIPPED" ]; then
-            node "${PROJECT_ROOT:-/path/to/project}/legacy/HS/.claude/agent-analytics.js" missed "$task" "suggested" "$reason" 2>/dev/null
-        fi
-    fi
-}
+# Medium-risk agent suggestions moved to CLAUDE.md (opspal-hubspot).
+# The routing table there covers workflow→hubspot-workflow-builder,
+# contact→hubspot-contact-manager, etc. without per-prompt shell overhead.
 
 # Main execution
 main() {
@@ -328,15 +273,9 @@ main() {
           "HUBSPOT_AGENT_REQUIRED: High-risk HubSpot operation requires agent '${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'." \
           "Risk category: ${RISK_CATEGORY}. Route through the required HubSpot specialist before retrying."
         exit 0
-    else
-        # Not high-risk, but check for suggestions
-        suggest_for_medium_risk "$TASK_INPUT"
-
-        # Non-blocking path for medium/low-risk operations.
-        if [ -n "$TASK_INPUT" ]; then
-            track_decision "$TASK_INPUT" "ALLOWED" "non_high_risk"
-        fi
     fi
+    # Non-high-risk operations pass through.
+    # Medium-risk agent suggestions are in CLAUDE.md.
 }
 
 # Run main function

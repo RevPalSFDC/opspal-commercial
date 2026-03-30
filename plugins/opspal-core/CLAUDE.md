@@ -478,6 +478,8 @@ Schedule Claude prompts and scripts:
 
 ### Intelligent Intake System
 
+When a user's request involves 3+ work streams, production deployments, cross-team coordination, unknown scope, or project-level planning language, proactively suggest `/intake` before proceeding. Intake is especially valuable for L3+ complexity requests.
+
 Classify natural language requests, generate implementation plans, and create Asana tasks — all from a plain English description.
 
 ```bash

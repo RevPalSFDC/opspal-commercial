@@ -16,6 +16,12 @@
 set -euo pipefail
 
 # Configuration
+# Hook debug support (all output to stderr)
+if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+    set -x
+    echo "[hook-debug] $(basename "$0") starting (pid=$$)" >&2
+fi
+
 HOOK_NAME="pre-task-agent-validator"
 VERBOSE="${TASK_VALIDATOR_VERBOSE:-0}"
 
@@ -31,6 +37,7 @@ COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
 ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 HOOK_EVENT_NORMALIZER="$PLUGIN_ROOT/scripts/lib/hook-event-normalizer.js"
 ROUTING_CAPABILITY_RULES="$PLUGIN_ROOT/config/routing-capability-rules.json"
+NODE_TIMEOUT_SECONDS="${PRE_TASK_AGENT_VALIDATOR_NODE_TIMEOUT_SECONDS:-2}"
 
 # Log file for debugging
 LOG_FILE="${TASK_VALIDATOR_LOG:-/tmp/task-validator-hook.log}"
@@ -46,6 +53,18 @@ RUNBOOK_ENFORCEMENT_MESSAGE=""
 PERMISSION_FALLBACK_GUIDANCE=""
 # DEPLOYMENT_PARENT_CONTEXT_GUIDANCE removed — deploy contract was removed
 CLAUDE_INTERNAL_AGENT_ALLOWLIST="${CLAUDE_INTERNAL_AGENT_ALLOWLIST:-statusline-setup,Explore,Plan,General-purpose,Other,Bash,Claude Code Guide}"
+
+run_node_with_timeout() {
+    local timeout_seconds="$1"
+    shift
+
+    if command -v timeout >/dev/null 2>&1; then
+        timeout "$timeout_seconds" node "$@"
+        return $?
+    fi
+
+    node "$@"
+}
 
 # Function to log messages
 log() {
@@ -173,7 +192,7 @@ log_routing_metric() {
       }' 2>/dev/null || echo "{}")
 
     # Log asynchronously to avoid slowing down the hook
-    (node "$ROUTING_METRICS" log "$event_json" >/dev/null 2>&1 &)
+    (run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_METRICS" log "$event_json" >/dev/null 2>&1 &)
 }
 
 extract_session_key() {
@@ -193,16 +212,16 @@ extract_session_key() {
     ' 2>/dev/null || echo "")
 
     if [[ -n "${session_key// }" ]] && [[ "$session_key" != "null" ]]; then
-        printf '%s' "$session_key"
+        printf '%s' "$session_key" >&2
         return 0
     fi
 
     if [[ -n "${CLAUDE_SESSION_ID:-}" ]]; then
-        printf '%s' "$CLAUDE_SESSION_ID"
+        printf '%s' "$CLAUDE_SESSION_ID" >&2
         return 0
     fi
 
-    printf '%s' "default-session"
+    printf '%s' "default-session" >&2
 }
 
 check_routing_requirement() {
@@ -213,7 +232,7 @@ check_routing_requirement() {
         return 0
     fi
 
-    node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo '{}'
 }
 
 mark_routing_requirement_cleared() {
@@ -224,7 +243,7 @@ mark_routing_requirement_cleared() {
         return 0
     fi
 
-    node "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
 }
 
 clear_routing_requirement_for_explicit_override() {
@@ -236,7 +255,7 @@ clear_routing_requirement_for_explicit_override() {
         return 0
     fi
 
-    node "$ROUTING_STATE_MANAGER" clear-explicit-override "$session_key" "$resolved_agent" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" clear-explicit-override "$session_key" "$resolved_agent" 2>/dev/null || echo '{}'
 }
 
 agent_clears_requirement() {
@@ -262,7 +281,7 @@ extract_agent_family_sh() {
 
     if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
         local family
-        family=$(node -e "
+        family=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" -e "
 const { extractAgentFamily } = require('$ROUTING_STATE_MANAGER');
 process.stdout.write(extractAgentFamily('$agent_name') || '');
 " 2>/dev/null) && echo "$family" && return 0
@@ -270,7 +289,7 @@ process.stdout.write(extractAgentFamily('$agent_name') || '');
 
     # Pure-bash fallback
     local prefix="${agent_name%%:*}"
-    echo "${prefix#opspal-}"
+    echo "${prefix#opspal-}" >&2
 }
 
 derive_route_requirements() {
@@ -282,7 +301,7 @@ derive_route_requirements() {
         return 0
     fi
 
-    node "$AGENT_TOOL_REGISTRY" route-requirements "$preferred_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" route-requirements "$preferred_agent" "$clearance_agents_json" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
 agent_matches_route_requirements() {
@@ -297,7 +316,7 @@ agent_matches_route_requirements() {
         return 0
     fi
 
-    node "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1
 }
 
 resolve_route_repair_candidate() {
@@ -306,16 +325,16 @@ resolve_route_repair_candidate() {
     local candidates_json="[]"
 
     if [[ -z "$requirements_json" ]] || [[ "$requirements_json" == "{}" ]]; then
-        echo ""
+        echo "" >&2
         return 0
     fi
 
     if [[ ! -f "$AGENT_TOOL_REGISTRY" ]] || ! command -v node &> /dev/null; then
-        echo ""
+        echo "" >&2
         return 0
     fi
 
-    candidates_json=$(node "$AGENT_TOOL_REGISTRY" resolve-requirements "$requirements_json" "$PLUGIN_ROOT" 2>/dev/null || echo "[]")
+    candidates_json=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" resolve-requirements "$requirements_json" "$PLUGIN_ROOT" 2>/dev/null || echo "[]")
     echo "$candidates_json" | jq -r --arg current "$current_agent" '
       if type != "array" then
         ""
@@ -333,7 +352,7 @@ read_agent_metadata() {
         return 0
     fi
 
-    node "$AGENT_TOOL_REGISTRY" metadata "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" metadata "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
 read_agent_boot_integrity_report() {
@@ -349,7 +368,7 @@ read_agent_boot_integrity_report() {
         return 0
     fi
 
-    printf '%s' "$payload_json" | node "$AGENT_BOOT_INTEGRITY_VALIDATOR" launch-report "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
+    printf '%s' "$payload_json" | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_BOOT_INTEGRITY_VALIDATOR" launch-report "$resolved_agent" "$PLUGIN_ROOT" 2>/dev/null || echo '{}'
 }
 
 apply_runbook_cohort_requirements() {
@@ -358,28 +377,28 @@ apply_runbook_cohort_requirements() {
     workspace_root="$(cd "$PLUGIN_ROOT/../.." && pwd)"
 
     if [ "$RUNBOOK_COHORT_ENFORCEMENT" != "1" ]; then
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
     if [ ! -f "$COHORT_RUNBOOK_GUARD" ]; then
         log "Cohort runbook guard not found, skipping runbook enforcement"
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
     if ! command -v node &> /dev/null; then
         log "node not available, skipping runbook enforcement"
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
     local analysis
-    analysis=$(echo "$input_json" | node "$COHORT_RUNBOOK_GUARD" assess-task --workspace-root "$workspace_root" 2>/dev/null || echo "")
+    analysis=$(echo "$input_json" | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$COHORT_RUNBOOK_GUARD" assess-task --workspace-root "$workspace_root" 2>/dev/null || echo "")
 
     if [ -z "$analysis" ] || ! echo "$analysis" | jq -e . >/dev/null 2>&1; then
         log "Cohort runbook guard analysis failed, skipping"
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
@@ -387,7 +406,7 @@ apply_runbook_cohort_requirements() {
     cohort_count=$(echo "$analysis" | jq -r '.matched_cohorts | length' 2>/dev/null || echo "0")
 
     if [ "$cohort_count" -eq 0 ]; then
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
@@ -424,7 +443,7 @@ apply_runbook_cohort_requirements() {
         log "Runbook requirements injected for cohorts: $matched"
     fi
 
-    echo "$enriched_input"
+    echo "$enriched_input" >&2
     return 0
 }
 
@@ -438,7 +457,7 @@ apply_subagent_permission_contract() {
     # even when Bash was actually available to them.
     # Enable with: export SUBAGENT_BASH_CONTRACT_ENABLED=1
     if [ "${SUBAGENT_BASH_CONTRACT_ENABLED:-0}" != "1" ]; then
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
@@ -448,14 +467,14 @@ apply_subagent_permission_contract() {
     local bash_required_agents='sfdc-data-operations|sfdc-query-specialist|sfdc-bulkops-orchestrator|sfdc-upsert-orchestrator|sfdc-deployment-manager|instance-deployer|marketo-data-operations|marketo-observability-orchestrator|hubspot-data-operations-manager'
     local requires_bash_contract="false"
 
-    if [ -n "$resolved_agent" ] && [ -f "$AGENT_TOOL_REGISTRY" ] && node "$AGENT_TOOL_REGISTRY" has-tool "$resolved_agent" "Bash" "$PLUGIN_ROOT" >/dev/null 2>&1; then
+    if [ -n "$resolved_agent" ] && [ -f "$AGENT_TOOL_REGISTRY" ] && run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" has-tool "$resolved_agent" "Bash" "$PLUGIN_ROOT" >/dev/null 2>&1; then
         requires_bash_contract="true"
     elif [ -n "$resolved_agent" ] && echo "$resolved_agent" | grep -qiE "$bash_required_agents"; then
         requires_bash_contract="true"
     fi
 
     if [ -z "$resolved_agent" ] || [ "$requires_bash_contract" != "true" ]; then
-        echo "$input_json"
+        echo "$input_json" >&2
         return 0
     fi
 
@@ -474,7 +493,7 @@ apply_subagent_permission_contract() {
 
     PERMISSION_FALLBACK_GUIDANCE="PERMISSION_HINT: '$resolved_agent' may require Bash access. If blocked, require explicit marker SUBAGENT_BASH_PERMISSION_BLOCKED and keep ownership inside the specialist path."
 
-    echo "$input_json"
+    echo "$input_json" >&2
     return 0
 }
 
@@ -530,7 +549,7 @@ persist_parent_context_deploy_clearance() {
     fi
 
     if [[ -n "$requirements_json" ]] && [[ "$requirements_json" != "{}" ]] && [[ -f "$AGENT_TOOL_REGISTRY" ]] && command -v node &> /dev/null; then
-        if ! node "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1; then
+        if ! run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_TOOL_REGISTRY" matches-requirements "$resolved_agent" "$requirements_json" "$PLUGIN_ROOT" >/dev/null 2>&1; then
             return 0
         fi
     else
@@ -549,11 +568,11 @@ persist_parent_context_deploy_clearance() {
         return 0
     fi
 
-    existing_state=$(node "$ROUTING_STATE_MANAGER" get "$session_key" 2>/dev/null || echo '{"state":null}')
+    existing_state=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" get "$session_key" 2>/dev/null || echo '{"state":null}')
     has_existing_state=$(echo "$existing_state" | jq -r 'if has("state") then (.state != null) else true end' 2>/dev/null || echo "false")
 
     if [[ "$has_existing_state" == "true" ]]; then
-        node "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
+        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" mark-cleared "$session_key" "$resolved_agent" >/dev/null 2>&1 || true
         return 0
     fi
 
@@ -577,7 +596,7 @@ persist_parent_context_deploy_clearance() {
         clearance_status: "cleared",
         last_resolved_agent: $agent
       }' \
-      | node "$ROUTING_STATE_MANAGER" save "$session_key" >/dev/null 2>&1 || true
+      | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" save "$session_key" >/dev/null 2>&1 || true
 }
 
 is_claude_internal_helper_agent() {
@@ -637,16 +656,16 @@ reroute_salesforce_deployment_specialist() {
     local normalized_agent="${resolved_agent##*:}"
 
     if [[ "$normalized_agent" != "instance-deployer" ]]; then
-        printf '%s' "$resolved_agent"
+        printf '%s' "$resolved_agent" >&2
         return 0
     fi
 
     if is_salesforce_deploy_request "$input_json"; then
-        printf '%s' "opspal-salesforce:sfdc-deployment-manager"
+        printf '%s' "opspal-salesforce:sfdc-deployment-manager" >&2
         return 0
     fi
 
-    printf '%s' "$resolved_agent"
+    printf '%s' "$resolved_agent" >&2
 }
 
 # Main validation logic
@@ -683,7 +702,7 @@ main() {
     fi
 
     local normalized_hook_input
-    normalized_hook_input=$(printf '%s' "$HOOK_INPUT" | node "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "{}")
+    normalized_hook_input=$(printf '%s' "$HOOK_INPUT" | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "{}")
     if [[ -z "$normalized_hook_input" ]] || ! echo "$normalized_hook_input" | jq -e . >/dev/null 2>&1; then
         log "Could not normalize hook input, skipping"
         echo '{}'
@@ -716,7 +735,7 @@ main() {
     fi
 
     ADDITIONAL_CONTEXT=""
-    SESSION_KEY=$(extract_session_key "$normalized_hook_input")
+    SESSION_KEY="$(extract_session_key "$normalized_hook_input" 2>&1)"
     PENDING_ROUTING_STATE=$(check_routing_requirement "$SESSION_KEY")
     PENDING_ROUTE_ACTIVE=$(echo "$PENDING_ROUTING_STATE" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")
     PENDING_EXECUTION_GATE=$(echo "$PENDING_ROUTING_STATE" | jq -r '.executionBlockActive // false' 2>/dev/null || echo "false")
@@ -748,12 +767,12 @@ main() {
     if [[ -n "$FORCED_RESOLUTION" ]]; then
         IS_AMBIGUOUS="false"
     else
-        IS_AMBIGUOUS=$(node "$AGENT_RESOLVER" is-ambiguous "$AGENT_NAME" 2>/dev/null || echo "false")
+        IS_AMBIGUOUS=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" is-ambiguous "$AGENT_NAME" 2>/dev/null || echo "false")
     fi
 
     if [ "$IS_AMBIGUOUS" = "true" ]; then
         # Get detailed info about the conflict
-        AMBIG_INFO=$(node "$AGENT_RESOLVER" ambiguous-info "$AGENT_NAME" 2>/dev/null || true)
+        AMBIG_INFO=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" ambiguous-info "$AGENT_NAME" 2>/dev/null || true)
 
         log "Cross-type conflict detected: $AGENT_NAME"
 
@@ -772,14 +791,14 @@ main() {
         IS_COMMAND="false"
         IS_AGENT="$FORCED_RESOLUTION"
     else
-        IS_COMMAND=$(node "$AGENT_RESOLVER" is-command "$AGENT_NAME" 2>/dev/null || echo "false")
-        IS_AGENT=$(node "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null || true)
+        IS_COMMAND=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" is-command "$AGENT_NAME" 2>/dev/null || echo "false")
+        IS_AGENT=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null || true)
     fi
 
     # Only block if it's a command but NOT an agent
     if [ "$IS_COMMAND" = "true" ] && [ -z "$IS_AGENT" ]; then
         # Get the correct invocation info
-        COMMAND_INFO=$(node "$AGENT_RESOLVER" command-info "$AGENT_NAME" 2>/dev/null || true)
+        COMMAND_INFO=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" command-info "$AGENT_NAME" 2>/dev/null || true)
 
         log_error "'$AGENT_NAME' is a COMMAND, not an agent"
 
@@ -802,7 +821,7 @@ main() {
         RESOLVE_EXIT_CODE=0
     else
         set +e
-        RESOLVED=$(node "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null)
+        RESOLVED=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" resolve "$AGENT_NAME" 2>/dev/null)
         RESOLVE_EXIT_CODE=$?
         set -e
     fi
@@ -826,8 +845,8 @@ main() {
 
         # Get suggestions using the last part of the name
             SEARCH_TERM="${AGENT_NAME##*-}"
-            SUGGESTIONS=$(node "$AGENT_RESOLVER" search "$SEARCH_TERM" 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
-            EXAMPLE_AGENTS=$(node "$AGENT_RESOLVER" list 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
+            SUGGESTIONS=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" search "$SEARCH_TERM" 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
+            EXAMPLE_AGENTS=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$AGENT_RESOLVER" list 2>/dev/null | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
 
         # Log metric: agent not found
             log_routing_metric "$AGENT_NAME" "" "false" "true" "agent_not_found" "Agent not found in any plugin"
@@ -843,7 +862,7 @@ main() {
         fi
     fi
 
-    REROUTED_AGENT=$(reroute_salesforce_deployment_specialist "$RESOLVED" "$TOOL_INPUT")
+    REROUTED_AGENT="$(reroute_salesforce_deployment_specialist "$RESOLVED" "$TOOL_INPUT" 2>&1)"
     if [ "$REROUTED_AGENT" != "$RESOLVED" ]; then
         log "Rerouted Salesforce deployment task: $RESOLVED -> $REROUTED_AGENT"
         if [ -n "$ADDITIONAL_CONTEXT" ]; then
@@ -925,7 +944,7 @@ main() {
         TARGET_PLUGIN="${RESOLVED%%:*}"
 
         # Check for known cross-plugin workflows
-        WORKFLOW_INFO=$(node "$CROSS_PLUGIN_COORDINATOR" workflows --json 2>/dev/null | \
+        WORKFLOW_INFO=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$CROSS_PLUGIN_COORDINATOR" workflows --json 2>/dev/null | \
             jq -r --arg agent "$RESOLVED" '.[] | select(.steps[].agent == ($agent | split(":")[1])) | .name' 2>/dev/null | head -1 || true)
 
         if [ -n "$WORKFLOW_INFO" ]; then
@@ -939,7 +958,7 @@ main() {
     fi
 
     # Step 5: Inject runbook cohort requirements before execution
-    FINAL_OUTPUT=$(apply_runbook_cohort_requirements "$FINAL_OUTPUT")
+    FINAL_OUTPUT="$(apply_runbook_cohort_requirements "$FINAL_OUTPUT" 2>&1)"
 
     # Step 5b: Deploy contract injection removed — sfdc-deployment-manager now has
     # adaptive Bash execution logic and pre-deploy-agent-context-check allows any
@@ -947,7 +966,7 @@ main() {
     # own behavior and creating a deadlock.
 
     # Step 5c: Inject permission fallback contract for Bash-required sub-agents
-    FINAL_OUTPUT=$(apply_subagent_permission_contract "$FINAL_OUTPUT" "$RESOLVED")
+    FINAL_OUTPUT="$(apply_subagent_permission_contract "$FINAL_OUTPUT" "$RESOLVED" 2>&1)"
 
     # Strict mode: block with visible guidance when required runbook artifacts are missing
     if [ -n "$RUNBOOK_ENFORCEMENT_MESSAGE" ]; then
@@ -1008,7 +1027,7 @@ main() {
                 allowed_actor_types=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.allowedActorTypes // [] | join(", ")' 2>/dev/null || echo "")
                 required_tools=$(echo "$ROUTE_REQUIREMENTS" | jq -r '.requiredTools // [] | join(", ")' 2>/dev/null || echo "")
                 actual_tools=$(read_agent_metadata "$RESOLVED" | jq -r '.tools // [] | join(", ")' 2>/dev/null || echo "")
-                repair_agent=$(resolve_route_repair_candidate "$ROUTE_REQUIREMENTS" "$RESOLVED")
+                repair_agent="$(resolve_route_repair_candidate "$ROUTE_REQUIREMENTS" "$RESOLVED" 2>&1)"
 
                 if [[ -n "$repair_agent" ]]; then
                     local previous_resolved="$RESOLVED"
@@ -1045,7 +1064,7 @@ main() {
             ROUTING_AUTO_DELEGATED="true"
 
             if ! agent_matches_route_requirements "$RESOLVED" "$ROUTE_REQUIREMENTS"; then
-                repair_agent=$(resolve_route_repair_candidate "$ROUTE_REQUIREMENTS" "$RESOLVED")
+                repair_agent="$(resolve_route_repair_candidate "$ROUTE_REQUIREMENTS" "$RESOLVED" 2>&1)"
                 if [[ -n "$repair_agent" ]]; then
                     local auto_delegated_resolved="$RESOLVED"
                     RESOLVED="$repair_agent"
@@ -1091,8 +1110,8 @@ main() {
             local same_workflow_threshold=300  # 5 minutes, mirrors routing-state-manager.js default
 
             allowed_agents=$(echo "$CLEARANCE_AGENTS" | jq -r 'join(", ")' 2>/dev/null || echo "")
-            pending_family=$(extract_agent_family_sh "${REQUIRED_AGENT:-}")
-            requested_family=$(extract_agent_family_sh "$RESOLVED")
+            pending_family="$(extract_agent_family_sh "${REQUIRED_AGENT:-}" 2>&1)"
+            requested_family="$(extract_agent_family_sh "$RESOLVED" 2>&1)"
             state_age_seconds=$(echo "$ROUTING_STATE" | jq -r '.age // 0' 2>/dev/null || echo "0")
 
             # Defense-in-depth: detect cross-family stale carryover at enforcement time.
@@ -1110,7 +1129,7 @@ main() {
 
                 # Clear the stale state
                 if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
-                    node "$ROUTING_STATE_MANAGER" clear "$SESSION_KEY" >/dev/null 2>&1 || true
+                    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" clear "$SESSION_KEY" >/dev/null 2>&1 || true
                 fi
 
                 if [ -n "$ADDITIONAL_CONTEXT" ]; then

@@ -1,5 +1,17 @@
 # Data Hygiene Plugin - User Guide
 
+## DEPRECATED
+
+opspal-data-hygiene is deprecated as of v1.2.2. Use the following replacements:
+- **Deduplication**: `opspal-core` `/deduplicate` or `opspal-salesforce` `/dedup`
+- **HubSpot data hygiene**: `opspal-hubspot` `/hsdedup` or `hubspot-data-hygiene-specialist` agent
+- **Salesforce dedup**: `opspal-salesforce` `/dedup` or `sfdc-dedup-safety-copilot` agent
+- **Company merge**: `opspal-hubspot` `hubspot-company-merge-strategy` skill
+
+To uninstall: `/plugin uninstall opspal-data-hygiene`
+
+---
+
 This file provides guidance when using the Data Hygiene Plugin with Claude Code.
 
 ## Plugin Overview

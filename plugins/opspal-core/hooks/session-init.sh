@@ -59,6 +59,32 @@ add_message() {
     INIT_MESSAGES+=("$1")
 }
 
+collect_platform_message() {
+    local raw_output="$1"
+    local system_message=""
+    local additional_context=""
+
+    if [[ -z "${raw_output//[[:space:]]/}" ]]; then
+        return
+    fi
+
+    if command -v jq >/dev/null 2>&1 && printf '%s' "$raw_output" | jq -e . >/dev/null 2>&1; then
+        system_message="$(printf '%s' "$raw_output" | jq -r '.systemMessage // empty' 2>/dev/null || true)"
+        if [[ -n "$system_message" ]]; then
+            add_message "$system_message"
+            return
+        fi
+
+        additional_context="$(printf '%s' "$raw_output" | jq -r '.hookSpecificOutput.additionalContext // empty' 2>/dev/null || true)"
+        if [[ -n "$additional_context" ]]; then
+            add_message "$additional_context"
+        fi
+        return
+    fi
+
+    add_message "$raw_output"
+}
+
 reset_task_scope_state() {
     if [[ "$RESET_TASK_SCOPE_STATE" != "1" ]]; then
         return
@@ -96,6 +122,7 @@ load_scratchpad() {
 # =============================================================================
 
 ENV_CONFIG_TMPFILE="${TMPDIR:-/tmp}/session-init-envconfig-$$.txt"
+PLATFORM_INIT_OUTPUT_DIR="${TMPDIR:-/tmp}/session-init-platform-$$"
 
 check_env_config() {
     if [[ "$SKIP_ENV_CHECK" = "1" ]]; then
@@ -135,44 +162,49 @@ check_version_compatibility() {
 # =============================================================================
 
 initialize_platform() {
-    # Detect platform
-    local platform="unknown"
-    if type detect_platform &>/dev/null; then
-        platform=$(detect_platform)
-    else
-        # Simple detection
-        if [[ -n "${SF_TARGET_ORG:-}" ]] || [[ -f "sfdx-project.json" ]]; then
-            platform="salesforce"
-        elif [[ -n "${HUBSPOT_PORTAL_ID:-}" ]]; then
-            platform="hubspot"
-        elif [[ -n "${MARKETO_INSTANCE:-}" ]]; then
-            platform="marketo"
+    # Run all platform context loaders in parallel.
+    # Each loader checks its own env/config and no-ops if unconfigured.
+    # SF agent-reminder must complete before SF context-loader (exports SF_TARGET_ORG).
+    local plugins_root="${PLUGIN_ROOT}/.."
+
+    mkdir -p "$PLATFORM_INIT_OUTPUT_DIR" 2>/dev/null || true
+
+    run_loader_if_exists() {
+        local script="$1"
+        local plugin_name=""
+        local output_file=""
+        if [[ -f "$script" ]]; then
+            plugin_name="$(basename "$(dirname "$(dirname "$script")")")"
+            output_file="${PLATFORM_INIT_OUTPUT_DIR}/${plugin_name}-$(basename "$script").out"
+            bash "$script" </dev/null >"$output_file" 2>/dev/null || true
         fi
-    fi
+    }
 
-    log_verbose "Detected platform: $platform"
+    # SF pair: sequential (agent-reminder exports SF_TARGET_ORG for context-loader)
+    (run_loader_if_exists "${plugins_root}/opspal-salesforce/hooks/session-start-agent-reminder.sh" && \
+     run_loader_if_exists "${plugins_root}/opspal-salesforce/hooks/pre-task-context-loader.sh") &
 
-    # Run platform-specific init
-    case "$platform" in
-        salesforce)
-            local sf_init="${PLUGIN_ROOT}/../salesforce-plugin/hooks/session-start-sf.sh"
-            if [[ -f "$sf_init" ]] && [[ -x "$sf_init" ]]; then
-                bash "$sf_init" >/dev/null 2>&1 || true
-            fi
-            ;;
-        hubspot)
-            local hs_init="${PLUGIN_ROOT}/../hubspot-plugin/hooks/session-start-hs.sh"
-            if [[ -f "$hs_init" ]] && [[ -x "$hs_init" ]]; then
-                bash "$hs_init" >/dev/null 2>&1 || true
-            fi
-            ;;
-        marketo)
-            local mkto_init="${PLUGIN_ROOT}/../marketo-plugin/hooks/session-start-marketo.sh"
-            if [[ -f "$mkto_init" ]] && [[ -x "$mkto_init" ]]; then
-                bash "$mkto_init" >/dev/null 2>&1 || true
-            fi
-            ;;
-    esac
+    # Independent loaders: all parallel
+    run_loader_if_exists "${plugins_root}/opspal-hubspot/hooks/pre-task-context-loader.sh" &
+    run_loader_if_exists "${plugins_root}/opspal-marketo/hooks/session-start-marketo.sh" &
+    run_loader_if_exists "${plugins_root}/opspal-gtm-planning/hooks/session-start-gtm-context-loader.sh" &
+    run_loader_if_exists "${plugins_root}/opspal-okrs/hooks/session-start-okr-context-loader.sh" &
+
+    wait
+    log_verbose "Platform initialization complete"
+}
+
+collect_platform_init_messages() {
+    local output_file=""
+
+    for output_file in "$PLATFORM_INIT_OUTPUT_DIR"/*.out; do
+        if [[ ! -f "$output_file" ]]; then
+            continue
+        fi
+        collect_platform_message "$(cat "$output_file" 2>/dev/null || true)"
+    done
+
+    rm -rf "$PLATFORM_INIT_OUTPUT_DIR" 2>/dev/null || true
 }
 
 # =============================================================================
@@ -243,6 +275,48 @@ check_agent_teams_flag() {
     fi
 }
 
+emit_session_start_output() {
+    local combined_message=""
+    local message=""
+
+    if [[ ${#INIT_MESSAGES[@]} -eq 0 ]]; then
+        printf '{}\n'
+        return
+    fi
+
+    for message in "${INIT_MESSAGES[@]}"; do
+        if [[ -z "${message//[[:space:]]/}" ]]; then
+            continue
+        fi
+
+        if [[ -n "$combined_message" ]]; then
+            combined_message="${combined_message}"$'\n\n'"${message}"
+        else
+            combined_message="$message"
+        fi
+    done
+
+    if [[ -z "$combined_message" ]]; then
+        printf '{}\n'
+        return
+    fi
+
+    if command -v jq >/dev/null 2>&1; then
+        jq -n \
+          --arg msg "$combined_message" \
+          '{
+            systemMessage: $msg,
+            hookSpecificOutput: {
+              hookEventName: "SessionStart",
+              additionalContext: $msg
+            }
+          }'
+        return
+    fi
+
+    printf '{}\n'
+}
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -265,6 +339,8 @@ if [[ -f "$ENV_CONFIG_TMPFILE" ]]; then
     rm -f "$ENV_CONFIG_TMPFILE"
 fi
 
+collect_platform_init_messages
+
 # Run lightweight steps that use add_message sequentially
 check_org_skills
 check_auto_memory_precedence
@@ -272,12 +348,5 @@ check_agent_teams_flag
 
 log_verbose "Session initialization complete"
 
-# Build output
-if [[ ${#INIT_MESSAGES[@]} -gt 0 ]]; then
-    # Output initialization messages
-    printf '%s\n' "${INIT_MESSAGES[@]}" >&2
-fi
-
-# Return empty JSON (session init is informational)
-echo '{}'
+emit_session_start_output
 exit 0
