@@ -1,0 +1,406 @@
+# HubSpot Plugin - Shared Library Reference
+# Version: 1.1.0
+# Last Updated: 2026-03-30
+#
+# This file documents commonly used scripts available to all HubSpot agents.
+# All paths relative to: .claude-plugins/opspal-hubspot/scripts/lib/
+
+---
+
+# Data Operations
+data:
+  company_fetcher:
+    path: hubspot-company-fetcher.js
+    purpose: Fetch associated company records for contacts
+    capabilities:
+      - Caching to avoid repeat API calls
+      - Handles multiple company associations
+      - Network retry logic for resilience
+      - Fail-fast error handling (No-Mocks compliant)
+    usage: |
+      const HubSpotCompanyFetcher = require('./hubspot-company-fetcher');
+      const fetcher = new HubSpotCompanyFetcher({ enableCache: true });
+      const companies = await fetcher.fetchAssociatedCompanies(contactId);
+
+  data_operations:
+    path: hubspot-data-operations-manager.js
+    purpose: Bulk data operations with validation
+    capabilities:
+      - Large-scale data imports/updates
+      - Validation and quality checks
+      - Error handling and rollback
+    usage: "node hubspot-data-operations-manager.js --operation upsert --object contacts --file data.csv"
+
+  imports_api:
+    path: imports-api-wrapper.js
+    purpose: Advanced CRM Imports V3 API with multi-file support
+    capabilities:
+      - Single and multi-file imports with associations
+      - Marketing contact flag during import
+      - Auto-create static lists from imports
+      - Column mapping and date format control
+      - Error retrieval for failed rows
+    usage: |
+      const { HubSpotImporter } = require('./imports-api-wrapper');
+      const importer = new HubSpotImporter(apiKey);
+      await importer.importRecordsAdvanced({
+        objectType: 'contacts',
+        records: data,
+        mode: 'UPSERT',
+        marketableContactImport: true,
+        createContactListFromImport: true
+      });
+    added: v3.6.0
+
+# Workflow Management
+workflows:
+  workflow_builder:
+    path: hubspot-workflow-builder.js
+    purpose: Create and manage HubSpot workflows
+    capabilities:
+      - Workflow creation from templates
+      - Trigger configuration
+      - Action definition
+    usage: "node hubspot-workflow-builder.js --create --template lead-nurture --portal myPortal"
+
+  automation_actions:
+    path: automation-actions-v4-wrapper.js
+    purpose: Custom workflow actions via Automation Actions V4 API
+    capabilities:
+      - Custom action definitions for workflow editor
+      - Action functions (PRE_ACTION_EXECUTION, PRE_FETCH_OPTIONS, POST_FETCH_OPTIONS)
+      - External options fetching (dynamic dropdowns)
+      - Async execution with BLOCK state
+      - Multi-language label support (14 languages)
+    usage: |
+      const AutomationActionsV4Wrapper = require('./automation-actions-v4-wrapper');
+      const wrapper = new AutomationActionsV4Wrapper(accessToken, appId);
+      const action = await wrapper.createAction({
+        actionUrl: 'https://your-service.com/webhook',
+        objectTypes: ['CONTACT', 'DEAL'],
+        inputFields: [{ name: 'email', type: 'string', required: true }],
+        labels: { en: { actionName: 'My Action' } }
+      });
+    added: v3.6.0
+
+  callback_manager:
+    path: callback-state-manager.js
+    purpose: Manage async workflow callback completion
+    capabilities:
+      - Register callbacks from webhook payloads
+      - Complete callbacks with output fields
+      - Expiration duration management
+    usage: |
+      const CallbackStateManager = require('./callback-state-manager');
+      const manager = new CallbackStateManager({ accessToken });
+      await manager.completeCallback('callback-123', { status: 'success' });
+    added: v3.6.0
+
+# Rate Limiting & API Safety
+rate_limiting:
+  request_throttle:
+    path: hubspot-request-throttle.js
+    purpose: Centralized request coordination (singleton) for all API calls
+    capabilities:
+      - Global request coordination across all batch wrappers
+      - Adaptive throttling from response headers
+      - Circuit breaker (opens after 3 consecutive 429s, recovers after 60s)
+      - Tier detection from response headers
+      - Priority queue for high-priority requests
+    usage: |
+      const { getThrottle, throttledFetch } = require('./hubspot-request-throttle');
+      const throttle = getThrottle({ tier: 'starter', verbose: true });
+      const response = await throttle.enqueue(() => fetch(url, options));
+    added: v3.5.0
+
+  rate_limit_parser:
+    path: hubspot-rate-limit-parser.js
+    purpose: Parse HubSpot rate limit response headers
+    capabilities:
+      - Parses X-HubSpot-RateLimit-Max, Remaining, Daily, Daily-Remaining
+      - Parses Retry-After on 429 responses
+      - Tier-aware limit detection
+    usage: "Internal — consumed by hubspot-request-throttle.js"
+    added: v3.5.0
+
+  api_safeguard:
+    path: hubspot-api-safeguard.js
+    purpose: Tier-aware rate limits with exponential backoff
+    capabilities:
+      - Per-tier limit enforcement (Free 100, Pro 190, Enterprise 190, OAuth 110 per 10s)
+      - Exponential backoff on 429 errors
+      - Daily limit tracking
+    usage: |
+      const HubSpotAPISafeguard = require('./hubspot-api-safeguard');
+      const safeguard = new HubSpotAPISafeguard({ tier: 'professional' });
+    added: v3.5.0
+
+# CMS Operations
+cms:
+  blog_posts_manager:
+    path: hubspot-cms-blog-posts-manager.js
+    purpose: Blog post CRUD, draft management, publishing, scheduling
+    capabilities:
+      - Create, read, update, delete blog posts
+      - Draft and revision management
+      - Scheduling and publishing control
+    usage: "Invoked via hubspot-cms-blog-post-manager agent"
+    added: v3.6.0
+
+  blog_authors_manager:
+    path: hubspot-cms-blog-authors-manager.js
+    purpose: Blog author profile management
+    capabilities:
+      - Author CRUD operations
+      - Bio, avatar, social links management
+      - Multi-language variant support
+    usage: "Invoked via hubspot-cms-blog-author-manager agent"
+    added: v3.6.0
+
+  domains_manager:
+    path: hubspot-cms-domains-manager.js
+    purpose: Domain listing, health checks, HTTPS status
+    capabilities:
+      - Domain enumeration and status checking
+      - HTTPS certificate monitoring
+      - Primary domain tracking
+    usage: "Invoked via hubspot-cms-domain-monitor agent"
+    added: v3.6.0
+
+  hubdb_manager:
+    path: hubspot-cms-hubdb-manager.js
+    purpose: HubDB table and row operations for dynamic content
+    capabilities:
+      - Table and row CRUD
+      - Schema management
+      - Dynamic page generation support
+      - Batch row operations
+    usage: "Invoked via hubspot-cms-hubdb-manager agent"
+    added: v3.6.0
+
+# Goals & Quotas
+goals:
+  goals_api:
+    path: goals-api-wrapper.js
+    purpose: Sales goal targets retrieval via V3 API
+    capabilities:
+      - Goal targets retrieval by user and period
+      - Quota attainment tracking
+      - Goal progress monitoring with status assessment
+    usage: |
+      const GoalsAPIWrapper = require('./goals-api-wrapper');
+      const goals = new GoalsAPIWrapper(accessToken);
+      const targets = await goals.getGoalTargets({ userId, period: 'Q1' });
+    added: v3.6.0
+
+# Error Handling & Data Integrity
+utilities:
+  data_access_error:
+    path: ../../opspal-core/scripts/lib/data-access-error.js
+    purpose: |
+      **CRITICAL - No-Mocks Policy Enforcement**: Fail-fast error class for data access failures.
+      MANDATORY for all data query/fetch operations to prevent silent failures and empty array returns.
+    capabilities:
+      - Explicit error throwing when data unavailable
+      - Structured error context with source, message, and metadata
+      - Prevents misleading empty returns
+      - Security: Blocks unimplemented features from returning fake data
+    usage: |
+      const { DataAccessError } = require('../../opspal-core/scripts/lib/data-access-error');
+
+      // Throw when data unavailable
+      if (!response.ok) {
+        throw new DataAccessError(
+          'HubSpot_API',
+          'Failed to fetch contacts',
+          {
+            endpoint: '/contacts/search',
+            statusCode: response.status,
+            workaround: 'Check portal API permissions'
+          }
+        );
+      }
+
+      // Throw for unimplemented features
+      throw new DataAccessError(
+        'Feature_Name',
+        'Feature not yet implemented',
+        {
+          status: 'not_implemented',
+          tracking_issue: 'https://github.com/.../issues/123'
+        }
+      );
+    mandatory_for:
+      - All agents that query HubSpot data
+      - All agents that fetch external data
+      - All unimplemented data retrieval methods
+    added: v1.4.0 (Phase 1 No-Mocks enforcement)
+
+# Analytics & Reporting
+analytics:
+  pdf_generation_helper:
+    path: ../../opspal-core/scripts/lib/pdf-generation-helper.js
+    purpose: |
+      **MANDATORY PDF Deliverable Generation**: All assessment, audit, and report agents MUST produce PDF outputs.
+      Provides professional PDF generation with branded covers and multi-document compilation.
+    capabilities:
+      - Professional branded PDF covers (8 templates available)
+      - Multi-document compilation (multiple MD files → single PDF)
+      - Automatic table of contents
+      - Metadata embedding (title, author, version, date)
+      - Cover templates: hubspot-assessment, data-quality, executive-report, etc.
+    usage: |
+      const PDFGenerationHelper = require('../../opspal-core/scripts/lib/pdf-generation-helper');
+
+      // Generate multi-report PDF
+      await PDFGenerationHelper.generateMultiReportPDF({
+        orgAlias: 'my-portal',
+        outputDir: './reports',
+        documents: [
+          { path: 'summary.md', title: 'Executive Summary', order: 0 },
+          { path: 'analysis.md', title: 'Detailed Analysis', order: 1 },
+          { path: 'recommendations.md', title: 'Recommendations', order: 2 }
+        ],
+        coverTemplate: 'hubspot-assessment',
+        metadata: {
+          title: 'HubSpot Workflow Assessment - MyPortal',
+          version: '1.0.0',
+          date: '2026-03-30'
+        }
+      });
+
+      // Available cover templates:
+      // - default, hubspot-assessment, security-audit, executive-report
+      // - data-quality, cross-platform-integration
+    mandatory_for:
+      - All audit agents (*-auditor)
+      - All assessment agents (*-assessment, *-analyzer)
+      - All report generation agents (*-report*, *-reporting)
+      - Workflow, data hygiene, and analytics agents
+    validation: |
+      # Validate PDF integration compliance:
+      node ../../opspal-core/scripts/validate-pdf-integration.js --all
+    added: v1.4.0 (Mandatory PDF deliverables standard)
+
+# Portal Management
+portal:
+  quirks_detector:
+    path: portal-quirks-detector.js
+    purpose: Auto-detect portal-specific customizations
+    capabilities:
+      - Property naming pattern detection
+      - Custom object detection
+      - Integration detection (not yet implemented)
+    usage: "node portal-quirks-detector.js detect --portal myPortal"
+
+  metadata_cache:
+    path: hubspot-metadata-cache.js
+    purpose: Cache HubSpot metadata for performance
+    capabilities:
+      - Property caching (throws DataAccessError - not yet implemented)
+      - Workflow caching (throws DataAccessError - not yet implemented)
+      - Pipeline caching (throws DataAccessError - not yet implemented)
+    usage: "const cache = new HubSpotMetadataCache(portalId); await cache.loadAll();"
+    note: "Most caching methods not yet implemented - will throw DataAccessError"
+
+---
+
+# Integration with Asana
+
+All agents that interact with Asana for project management MUST follow:
+- **Asana Agent Playbook**: @import ../../opspal-core/docs/ASANA_AGENT_PLAYBOOK.md
+- **Update Templates**: Use templates from ../../opspal-core/templates/asana-updates/
+- **Brevity Standard**: All updates < 100 words
+- **Format**: Progress/Blockers/Next Steps pattern
+
+---
+
+# Common Patterns
+
+# Pattern 1: Contact Data Operations
+#   1. Fetch contacts with company data
+#   2. Enrich with classification
+#   3. Update properties
+#   4. Generate PDF report
+
+# Pattern 2: Workflow Assessment
+#   1. Analyze active workflows
+#   2. Detect conflicts and issues
+#   3. Generate recommendations
+#   4. Produce PDF deliverable
+
+# Pattern 3: Portal Audit
+#   1. Detect portal quirks
+#   2. Analyze data quality
+#   3. Review integrations
+#   4. Generate comprehensive PDF report
+
+# Pattern 4: Bulk Import with Rate Limiting
+#   1. Initialize throttle with portal tier
+#   2. Batch records (100/batch)
+#   3. Use imports-api-wrapper for V3 API
+#   4. Monitor rate limit headers
+#   5. Generate import summary PDF
+
+---
+
+# Notes for Agents
+
+# Script Locations:
+# - All scripts: .claude-plugins/opspal-hubspot/scripts/lib/
+# - Run from plugin root: node scripts/lib/<script-name>
+# - Cross-platform tools: ../../opspal-core/scripts/lib/
+
+# Common Flags:
+# --portal <id>        : Target HubSpot portal
+# --output <path>      : Output file path
+# --dry-run            : Simulate without making changes
+# --verbose            : Detailed logging
+# --help               : Show usage information
+
+# Error Handling:
+# - All scripts return exit code 0 on success, non-zero on failure
+# - Error messages written to stderr
+# - JSON output includes "status": "success" or "error"
+# - MANDATORY: Use DataAccessError for data fetch failures (No-Mocks policy)
+
+# Integration with Agents:
+# - Use Bash tool to execute scripts
+# - Parse JSON output for structured data
+# - Check exit codes for success/failure
+# - Use --verbose for debugging
+# - Always throw DataAccessError when data unavailable
+
+# PDF Deliverables:
+# - MANDATORY: All assessment/audit agents must produce PDF outputs
+# - Use PDFGenerationHelper for professional branded reports
+# - Include table of contents and metadata
+# - Use appropriate cover template (hubspot-assessment recommended)
+
+# Rate Limiting:
+# - All API operations MUST go through hubspot-request-throttle.js
+# - Set HUBSPOT_TIER env var to match portal tier (starter/professional/enterprise)
+# - Circuit breaker auto-recovers after 60s cooldown
+# - Batch wrappers use throttle by default
+
+---
+
+# Version History
+
+# v1.1.0 (2026-03-30):
+# - Added rate limiting section (throttle, parser, safeguard) from v3.5.0
+# - Added CMS operations (blog posts, authors, domains, HubDB) from v3.6.0
+# - Added imports API wrapper (V3 multi-file imports) from v3.6.0
+# - Added automation actions V4 wrapper and callback manager from v3.6.0
+# - Added goals API wrapper from v3.6.0
+# - Added bulk import pattern
+# - Added rate limiting notes for agents
+# - Restored from .backup/agents_20251108 after accidental deletion
+
+# v1.0.0 (2025-10-26):
+# - Initial library reference for HubSpot plugin
+# - Added DataAccessError (No-Mocks policy enforcement)
+# - Added PDFGenerationHelper (Mandatory PDF deliverables)
+# - Documented core HubSpot data operations
+# - Integrated Asana playbook reference
+# - Cross-platform tool integration
