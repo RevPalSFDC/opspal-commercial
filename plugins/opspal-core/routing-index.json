@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-29T00:14:51.837Z",
+  "buildDate": "2026-03-30T12:58:15.369Z",
   "totalAgents": 299,
   "totalAgentsFull": 302,
   "totalCommands": 273,
-  "totalHooks": 255,
+  "totalHooks": 258,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48341,6 +48341,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "pre-agent-plugin-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/pre-agent-plugin-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "pre-compact",
         "description": "",
         "file": "opspal-core/hooks/pre-compact.sh",
@@ -48740,6 +48747,13 @@
       },
       {
         "plugin": "opspal-marketo",
+        "name": "post-marketo-dispatcher",
+        "description": "",
+        "file": "opspal-marketo/hooks/post-marketo-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-marketo",
         "name": "post-operation-verification",
         "description": "",
         "file": "opspal-marketo/hooks/post-operation-verification.sh",
@@ -48799,6 +48813,13 @@
         "name": "pre-lead-merge",
         "description": "",
         "file": "opspal-marketo/hooks/pre-lead-merge.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-marketo",
+        "name": "pre-marketo-mutating-dispatcher",
+        "description": "",
+        "file": "opspal-marketo/hooks/pre-marketo-mutating-dispatcher.sh",
         "matcher": null
       },
       {
@@ -49329,7 +49350,7 @@
     "totalAgents": 299,
     "totalAgentsFull": 302,
     "totalCommands": 273,
-    "totalHooks": 255,
+    "totalHooks": 258,
     "totalRoutingRules": 0,
     "totalKeywords": 2623,
     "totalKeywordsFull": 2623,
@@ -49351,7 +49372,7 @@
       "SubagentStop": 1,
       "TaskCompleted": 1,
       "Stop": 10,
-      "Unknown": 134,
+      "Unknown": 137,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
