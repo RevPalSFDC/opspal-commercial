@@ -13,7 +13,7 @@
     "plugins": 10,
     "agents": 303,
     "commands": 273,
-    "hooks": 174,
+    "hooks": 177,
     "skills": 1
   },
   "plugins": [
@@ -45,7 +45,7 @@
       "counts": {
         "agents": 80,
         "commands": 113,
-        "hooks": 82,
+        "hooks": 83,
         "skills": 0
       },
       "lifecycle": {
@@ -99,7 +99,7 @@
     },
     {
       "name": "opspal-hubspot",
-      "version": "3.9.17",
+      "version": "3.9.18",
       "source": "./plugins/opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
       "counts": {
@@ -125,7 +125,7 @@
       "counts": {
         "agents": 30,
         "commands": 30,
-        "hooks": 21,
+        "hooks": 23,
         "skills": 0
       },
       "lifecycle": {
