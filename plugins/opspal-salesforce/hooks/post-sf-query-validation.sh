@@ -80,12 +80,8 @@ if [ -f "$CROSS_PLATFORM_ROOT/scripts/lib/data-quality-gate.js" ]; then
     if echo "$TOOL_OUTPUT" | jq -e '.records' > /dev/null 2>&1; then
         RECORDS=$(echo "$TOOL_OUTPUT" | jq -c '.records')
         TOTAL=$(echo "$TOOL_OUTPUT" | jq -r '.totalSize // 0')
-
-        # Check for improbable zero count
-        if [ "$TOTAL" = "0" ]; then
-            log_verbose "Query returned 0 records"
-        fi
     fi
+
 fi
 
 # Build response
