@@ -23,10 +23,10 @@
 | Plugin | Version | Status | Owner | Stability | Last Reviewed | Deprecation Date | Replaced By |
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.12 | `active` | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-core` | 2.47.1 | `active` | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-data-hygiene` | 1.2.2 | `deprecated` | `revpal-platform` | `deprecated` | `2026-02-15` | `2026-02-15` | `opspal-core` |
+| `opspal-core` | 2.47.2 | `active` | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-data-hygiene` | 1.2.3 | `deprecated` | `revpal-platform` | `deprecated` | `2026-02-15` | `2026-02-15` | `opspal-core` |
 | `opspal-gtm-planning` | 2.3.4 | `active` | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-hubspot` | 3.9.16 | `active` | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-hubspot` | 3.9.17 | `active` | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-marketo` | 2.6.26 | `active` | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-mcp-client` | 1.1.3 | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ |
 | `opspal-monday` | 1.4.7 | `experimental` | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |

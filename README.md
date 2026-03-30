@@ -71,10 +71,10 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.12 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.47.1 | active | 79 | 113 | 83 |
-| `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 1 | 1 |
+| `opspal-core` | 2.47.2 | active | 79 | 113 | 83 |
+| `opspal-data-hygiene` | 1.2.3 | deprecated | 2 | 1 | 1 |
 | `opspal-gtm-planning` | 2.3.4 | active | 13 | 16 | 4 |
-| `opspal-hubspot` | 3.9.16 | active | 59 | 33 | 14 |
+| `opspal-hubspot` | 3.9.17 | active | 59 | 33 | 14 |
 | `opspal-marketo` | 2.6.26 | active | 30 | 30 | 23 |
 | `opspal-mcp-client` | 1.1.3 | active | 3 | 3 | 3 |
 | `opspal-monday` | 1.4.7 | experimental | 6 | 1 | 2 |
