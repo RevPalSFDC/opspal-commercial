@@ -107,11 +107,33 @@ if [[ "${SUBAGENT_ORG_PREFLIGHT:-1}" == "1" ]]; then
     fi
 fi
 
-# ─── 1. Runbook & branding reminders migrated to CLAUDE.md ─────────────────
-# Runbook path reminders and "Use RevPal branding" instructions are now in
-# per-plugin CLAUDE.md files. Only runtime-dynamic context remains here.
+# ─── 1. Runbook Reminder ───────────────────────────────────────────────────
+# Keep org-specific runbook injection at runtime so sub-agents always receive
+# the exact org path without depending on static CLAUDE.md guidance.
+if [[ "${RUNBOOK_REMINDER_ENABLED:-1}" == "1" ]]; then
+    ORG_SLUG="${ORG_SLUG:-}"
+    SF_TARGET_ORG="${SF_TARGET_ORG:-}"
+    ORG="${ORG_SLUG:-$SF_TARGET_ORG}"
 
-# ─── 2. Field Dictionary Injection ─────────────────────────────────────────
+    if [[ -n "$ORG" ]]; then
+        RUNBOOK_PATHS=(
+            "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/production/configs/RUNBOOK.md"
+            "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/production/RUNBOOK.md"
+            "$PROJECT_ROOT/orgs/$ORG/RUNBOOK.md"
+        )
+
+        for rb_path in "${RUNBOOK_PATHS[@]}"; do
+            if [[ -f "$rb_path" ]]; then
+                CONTEXT_PARTS+=("RUNBOOK ($ORG): Review before proceeding. Path: $rb_path")
+                break
+            fi
+        done
+    fi
+fi
+
+# ─── 2. Branding reminders live in CLAUDE.md; keep runtime context dynamic ─
+
+# ─── 3. Field Dictionary Injection ─────────────────────────────────────────
 if [[ "${FIELD_DICT_INJECTION_ENABLED:-1}" == "1" ]]; then
     ORG_SLUG="${ORG_SLUG:-}"
 
