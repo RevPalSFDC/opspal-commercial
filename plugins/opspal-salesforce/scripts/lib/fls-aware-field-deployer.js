@@ -24,6 +24,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { XMLParser, XMLBuilder } = require('fast-xml-parser');
+const { createTempSalesforceProject } = require('./temp-salesforce-project');
 
 class FLSAwareFieldDeployer {
     constructor(options = {}) {
@@ -474,46 +475,45 @@ class FLSAwareFieldDeployer {
      * Deploy field + permission set in single transaction
      */
     async deployBundled(objectName, fieldMetadata, fieldXML, permSetXML) {
-        try {
-            // Create temporary deployment directory
-            const deployDir = path.join(process.cwd(), '.fls-field-deploy', Date.now().toString());
+        let project = null;
 
-            // Field path
-            const fieldDir = path.join(deployDir, 'force-app', 'main', 'default', 'objects', objectName, 'fields');
-            fs.mkdirSync(fieldDir, { recursive: true });
+        try {
+            project = createTempSalesforceProject('fls-field-deploy');
 
             const fieldFileName = `${fieldMetadata.fullName || fieldMetadata.name}.field-meta.xml`;
-            fs.writeFileSync(path.join(fieldDir, fieldFileName), fieldXML);
-
-            // Permission set path
-            const permSetDir = path.join(deployDir, 'force-app', 'main', 'default', 'permissionsets');
-            fs.mkdirSync(permSetDir, { recursive: true });
+            project.writeMetadataFile(
+                path.join('objects', objectName, 'fields', fieldFileName),
+                fieldXML
+            );
 
             const permSetFileName = `${this.agentPermissionSet}.permissionset-meta.xml`;
-            fs.writeFileSync(path.join(permSetDir, permSetFileName), permSetXML);
+            project.writeMetadataFile(
+                path.join('permissionsets', permSetFileName),
+                permSetXML
+            );
 
             if (this.dryRun) {
                 this.log('[DRY RUN] Would deploy field + permission set');
-                this.log(`Field XML written to: ${path.join(fieldDir, fieldFileName)}`);
-                this.log(`PermissionSet XML written to: ${path.join(permSetDir, permSetFileName)}`);
+                this.log(`Field XML written to: ${path.join(project.metadataDir, 'objects', objectName, 'fields', fieldFileName)}`);
+                this.log(`PermissionSet XML written to: ${path.join(project.metadataDir, 'permissionsets', permSetFileName)}`);
 
                 // Don't clean up in dry run so user can inspect
                 return {
                     success: true,
                     dryRun: true,
-                    deployDir
+                    deployDir: project.rootDir
                 };
             }
 
             // Deploy using sf CLI
-            const deployCmd = `sf project deploy start --source-dir ${deployDir} --target-org ${this.orgAlias} --wait 10 --json`;
+            const deployCmd = `sf project deploy start --source-dir ${project.sourceDir} --target-org ${this.orgAlias} --wait 10 --json`;
             this.log(`Executing: ${deployCmd}`);
 
-            const deployOutput = execSync(deployCmd, { encoding: 'utf8' });
+            const deployOutput = execSync(deployCmd, {
+                cwd: project.rootDir,
+                encoding: 'utf8'
+            });
             const deployResult = JSON.parse(deployOutput);
-
-            // Clean up temp directory
-            fs.rmSync(deployDir, { recursive: true, force: true });
 
             if (deployResult.status === 0 && deployResult.result?.deployedSource) {
                 return {
@@ -533,6 +533,10 @@ class FLSAwareFieldDeployer {
                 success: false,
                 error: error.message
             };
+        } finally {
+            if (!this.dryRun && project) {
+                project.cleanup();
+            }
         }
     }
 

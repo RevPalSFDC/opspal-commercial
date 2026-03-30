@@ -84,6 +84,7 @@ const { promisify } = require('util');
 const execAsync = promisify(exec);
 const FlowTaskContext = require('./flow-task-context');
 const FlowErrorTaxonomy = require('./flow-error-taxonomy');
+const { createTempSalesforceProject } = require('./temp-salesforce-project');
 
 class FlowDeploymentManager {
     constructor(orgAlias, options = {}) {
@@ -468,9 +469,11 @@ class FlowDeploymentManager {
      * Execute deployment via SF CLI
      */
     async executeDeploy(flowPath, options) {
-        const flowDir = path.dirname(flowPath);
+        const flowFileName = path.basename(flowPath);
+        const project = createTempSalesforceProject('flow-deploy');
+        project.copyMetadataFile(flowPath, path.join('flows', flowFileName));
 
-        let cmd = `sf project deploy start --source-dir ${flowDir} --target-org ${this.orgAlias}`;
+        let cmd = `sf project deploy start --source-dir ${project.sourceDir} --target-org ${this.orgAlias}`;
 
         if (options.runTests) {
             cmd += ' --test-level RunLocalTests';
@@ -481,7 +484,7 @@ class FlowDeploymentManager {
         }
 
         try {
-            const { stdout, stderr } = await execAsync(cmd);
+            const { stdout, stderr } = await execAsync(cmd, { cwd: project.rootDir });
 
             if (stderr && !stderr.includes('Warning')) {
                 throw new Error(stderr);
@@ -490,6 +493,8 @@ class FlowDeploymentManager {
             return { success: true, output: stdout };
         } catch (error) {
             throw new Error(`Deployment command failed: ${error.message}`);
+        } finally {
+            project.cleanup();
         }
     }
 

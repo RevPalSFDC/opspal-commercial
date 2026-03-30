@@ -9,6 +9,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { createTempSalesforceProject } = require('./temp-salesforce-project');
 
 // Import our utility modules
 const AutoFLSConfigurator = require('./auto-fls-configurator');
@@ -234,45 +235,42 @@ class FieldDeploymentManager {
      * Deploy field metadata
      */
     async deployFieldMetadata(objectName, fieldMetadata) {
+        let project = null;
+
         try {
             console.log('  Creating deployment package...');
 
-            // Create temporary deployment directory
-            const deployDir = path.join(process.cwd(), '.field-deploy-temp', Date.now().toString());
-            const metadataDir = path.join(deployDir, 'force-app', 'main', 'default', 'objects', objectName, 'fields');
-
-            // Create directory structure
-            fs.mkdirSync(metadataDir, { recursive: true });
+            project = createTempSalesforceProject('field-deploy');
 
             // Write field metadata
             const fieldFileName = `${fieldMetadata.fullName || fieldMetadata.name}.field-meta.xml`;
-            const fieldPath = path.join(metadataDir, fieldFileName);
-
             const xmlContent = this.generateFieldXML(fieldMetadata);
-            fs.writeFileSync(fieldPath, xmlContent);
+            const fieldPath = project.writeMetadataFile(
+                path.join('objects', objectName, 'fields', fieldFileName),
+                xmlContent
+            );
 
             console.log('  Deploying to Salesforce...');
 
             if (this.dryRun) {
                 console.log('  [DRY RUN] Would deploy field to Salesforce');
 
-                // Clean up
-                fs.rmSync(deployDir, { recursive: true, force: true });
-
                 return {
                     success: true,
                     dryRun: true,
-                    message: 'Dry run completed'
+                    message: 'Dry run completed',
+                    deployDir: project.rootDir,
+                    fieldPath
                 };
             }
 
             // Deploy using sf CLI
-            const deployCmd = `sf project deploy start --source-dir ${deployDir} --target-org ${this.orgAlias} --wait 10 --json`;
-            const deployResult = execSync(deployCmd, { encoding: 'utf8' });
+            const deployCmd = `sf project deploy start --source-dir ${project.sourceDir} --target-org ${this.orgAlias} --wait 10 --json`;
+            const deployResult = execSync(deployCmd, {
+                cwd: project.rootDir,
+                encoding: 'utf8'
+            });
             const deployData = JSON.parse(deployResult);
-
-            // Clean up temporary directory
-            fs.rmSync(deployDir, { recursive: true, force: true });
 
             if (deployData.status === 0) {
                 return {
@@ -292,6 +290,10 @@ class FieldDeploymentManager {
                 success: false,
                 error: error.message
             };
+        } finally {
+            if (!this.dryRun && project) {
+                project.cleanup();
+            }
         }
     }
 
@@ -327,6 +329,13 @@ class FieldDeploymentManager {
 
         console.log('  Running verification checks...');
 
+        const fieldExists = await this.verifyFieldViaSchema(objectName, fieldName);
+        verifications.checks.push({ name: 'Field Exists', passed: fieldExists });
+
+        if (!fieldExists) {
+            verifications.success = false;
+        }
+
         // Verify field is queryable
         try {
             const query = `SELECT ${fieldName} FROM ${objectName} LIMIT 1`;
@@ -334,7 +343,6 @@ class FieldDeploymentManager {
             verifications.checks.push({ name: 'Field Queryable', passed: true });
         } catch {
             verifications.checks.push({ name: 'Field Queryable', passed: false });
-            verifications.success = false;
         }
 
         // Verify field is writable
@@ -364,6 +372,17 @@ class FieldDeploymentManager {
         });
 
         return verifications;
+    }
+
+    async verifyFieldViaSchema(objectName, fieldName) {
+        try {
+            const cmd = `sf sobject describe --sobject ${objectName} --target-org ${this.orgAlias} --json`;
+            const result = JSON.parse(execSync(cmd, { encoding: 'utf8', stdio: 'pipe' }));
+            return Array.isArray(result.result?.fields) &&
+                result.result.fields.some(field => field.name === fieldName);
+        } catch {
+            return false;
+        }
     }
 
     /**
