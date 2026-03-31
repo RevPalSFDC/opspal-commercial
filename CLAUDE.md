@@ -1,6 +1,6 @@
 # OpsPal Commercial Marketplace
 
-This repository is the commercial OpsPal marketplace. It publishes 10 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
+This repository is the commercial OpsPal marketplace. It publishes 9 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
 
 ## Installation
 
@@ -22,10 +22,9 @@ This repository is the commercial OpsPal marketplace. It publishes 10 plugins an
 | `opspal-gtm-planning` | 2.3.5 | active |
 | `opspal-hubspot` | 3.9.19 | active |
 | `opspal-marketo` | 2.6.29 | active |
-| `opspal-mcp-client` | 1.1.5 | active |
 | `opspal-monday` | 1.4.8 | experimental |
 | `opspal-okrs` | 3.0.9 | active |
-| `opspal-salesforce` | 3.86.18 | active |
+| `opspal-salesforce` | 3.86.19 | active |
 
 ## Updating
 

@@ -78,7 +78,7 @@ git pull origin main
 | `opspal-marketo` | 2.6.29 | active | 30 | 30 | 23 |
 | `opspal-monday` | 1.4.8 | experimental | 6 | 1 | 2 |
 | `opspal-okrs` | 3.0.9 | active | 14 | 14 | 4 |
-| `opspal-salesforce` | 3.86.18 | active | 94 | 59 | 42 |
+| `opspal-salesforce` | 3.86.19 | active | 94 | 59 | 42 |
 
 Deprecated compatibility note: `opspal-data-hygiene` remains published for compatibility, but new installs should prefer the deduplication commands in `opspal-core`.
 
