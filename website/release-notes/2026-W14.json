@@ -1,17 +1,17 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on critical stability improvements across OpsPal's platform. We fixed several connection issues that were preventing HubSpot automations from running and resolved deployment problems that could interrupt multi-step Salesforce workflows. These fixes ensure your revenue operations run smoothly without unexpected interruptions.",
-  "published_at": "2026-03-31T14:39:11.349Z",
+  "summary": "This week focused on critical stability improvements across your Salesforce and HubSpot integrations. We fixed several issues that were preventing workflows from running properly and restored full functionality to HubSpot connections that had stopped working.",
+  "published_at": "2026-03-31T16:18:07.901Z",
   "week_start": "2026-03-30",
   "week_end": "2026-03-31",
   "has_breaking": false,
-  "total_commits": 19,
+  "total_commits": 21,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce multi-step workflows now deploy reliably",
+      "headline": "Salesforce workflows now run reliably end-to-end",
       "details": null,
       "commits": [
         "a1075f7"
@@ -20,7 +20,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations work properly again",
+      "headline": "HubSpot connections work again after recent outage",
       "details": null,
       "commits": [
         "c53235d"
