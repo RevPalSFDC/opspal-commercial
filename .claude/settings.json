@@ -1,0 +1,1103 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-ai-consult/hooks/post-tool-use-consultation-check.sh",
+            "timeout": 5000,
+            "description": "Monitor agent outputs for struggle signals, suggest Gemini consultation, and log outcomes to ACE"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-assessment-work-index.sh",
+            "timeout": 5000,
+            "description": "Auto-capture work request entries after assessment agents complete",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-audit-bluf-generator.sh",
+            "timeout": 10000,
+            "description": "Auto-generate BLUF+4 executive summary after audit/assessment completion"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-win-loss-calibration.sh",
+            "timeout": 15000,
+            "description": "Feed win/loss outcomes into deal-score-calibrator for Bayesian weight learning",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-task-stall-check.sh",
+            "timeout": 5000,
+            "description": "Check for stalls during multi-agent operations",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
+            "timeout": 5000,
+            "description": "Capture GTM planning agent telemetry to gtm-telemetry.jsonl",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh",
+            "timeout": 5000,
+            "description": "Capture OKR agent telemetry to okr-telemetry.jsonl",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-task-runbook-compliance-check.sh",
+            "timeout": 5000,
+            "description": "Verify operational agents respected runbook policies in field selections (Runbook Policy Infrastructure)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ],
+        "matcher": "Agent"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-bash-dispatcher.sh",
+            "timeout": 30000,
+            "description": "Dispatch Salesforce deploy and query post-processing with structured output"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-reflect-strategy-update.sh",
+            "timeout": 15000,
+            "description": "Extract skills from reflections and update routing confidence"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ],
+        "matcher": "Write"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-todowrite-scratchpad.sh",
+            "timeout": 5000,
+            "description": "Persist TodoWrite state for session continuity"
+          }
+        ],
+        "matcher": "TodoWrite"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-gong-sync.sh",
+            "timeout": 5000,
+            "description": "Log Gong sync events and trigger work-index auto-capture",
+            "async": true
+          }
+        ],
+        "matcher": "^mcp__gong.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-fireflies-sync.sh",
+            "timeout": 5000,
+            "description": "Log Fireflies sync events and trigger work-index auto-capture",
+            "async": true
+          }
+        ],
+        "matcher": "^mcp__fireflies.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          }
+        ],
+        "matcher": "Edit"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ],
+        "matcher": "^mcp__salesforce.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ],
+        "matcher": "^mcp__hubspot.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use.sh",
+            "timeout": 5000,
+            "description": "Validate tool execution results to catch errors before propagation"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool outputs against contracts and data quality gates"
+          }
+        ],
+        "matcher": "^mcp__marketo.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/post-campaign-create.sh",
+            "timeout": 15000,
+            "description": "Verify Marketo campaign create and clone results"
+          }
+        ],
+        "matcher": "mcp__marketo__campaign_create|mcp__marketo__campaign_clone"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/post-bulk-import.sh",
+            "timeout": 15000,
+            "description": "Summarize completed Marketo bulk import results"
+          }
+        ],
+        "matcher": "mcp__marketo__bulk_lead_import_status"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/post-extract-complete.sh",
+            "timeout": 30000,
+            "description": "Trigger normalization and analysis after export completes"
+          }
+        ],
+        "matcher": "mcp__marketo__bulk_lead_export_status|mcp__marketo__bulk_activity_export_status|mcp__marketo__bulk_program_member_export_status"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/post-portal-authentication.sh",
+            "timeout": 15000,
+            "description": "Auto-detect portal customizations after authentication"
+          }
+        ],
+        "matcher": "mcp__hubspot.*__.*auth.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/post-portal-switch.sh",
+            "timeout": 10000,
+            "description": "Update context after portal switch"
+          }
+        ],
+        "matcher": "mcp__hubspot.*__.*portal.*switch.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh",
+            "timeout": 5000,
+            "description": "Notify after CMS page publish"
+          }
+        ],
+        "matcher": "mcp__hubspot.*__.*cms.*publish.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/post-instance-authentication.sh",
+            "timeout": 30000,
+            "description": "Auto-detect instance customizations after authentication"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/post-operation-verification.sh",
+            "timeout": 15000,
+            "description": "Verify operation success and capture metrics"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/api-limit-monitor.sh",
+            "timeout": 10000,
+            "description": "Track API usage and warn on thresholds"
+          }
+        ],
+        "matcher": "mcp__marketo__.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/sync-error-monitor.sh",
+            "timeout": 15000,
+            "description": "Monitor Salesforce sync errors"
+          }
+        ],
+        "matcher": "mcp__marketo__sync_.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/observability-quota-monitor.sh",
+            "timeout": 10000,
+            "description": "Monitor bulk export quota usage and alert on thresholds"
+          }
+        ],
+        "matcher": "mcp__marketo__bulk_.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/campaign-diagnostic-reminder.sh",
+            "timeout": 10000,
+            "description": "Suggest /diagnose-campaign when campaign issues detected"
+          }
+        ],
+        "matcher": "mcp__marketo__campaign_.*|mcp__marketo__lead_activities"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-monday/hooks/post-tool-use-monday-audit.sh",
+            "timeout": 5000,
+            "description": "Classify Monday MCP calls as read or mutating and write audit telemetry"
+          }
+        ],
+        "matcher": "mcp__monday__.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from tool results",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-hook-error-observer.sh",
+            "timeout": 5000,
+            "description": "Observe hook errors and create reflection candidates with immediate flush",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+            "timeout": 5000,
+            "description": "Evaluate ambient reflection flush conditions",
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=1 ENABLE_INTAKE_HARD_BLOCKING=0 /home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/unified-router.sh",
+            "timeout": 10000,
+            "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-task-graph-trigger.sh",
+            "timeout": 5000,
+            "description": "Detect when Task Graph orchestration is needed based on complexity"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from user prompt signals"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/user-prompt-first-run.sh",
+            "timeout": 4000,
+            "description": "Guide first-run activation and workspace initialization before normal OpsPal work"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/task-scope-selector.sh",
+            "timeout": 5000,
+            "description": "Persist a minimal plugin and skill scope for the current task and inject a concise allowlist reminder"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/intake-suggestion.sh",
+            "timeout": 5000,
+            "description": "Suggest /intake for project-level requests using complexity scoring and language detection"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/routing-context-refresher.sh",
+            "timeout": 3000,
+            "description": "Inject condensed routing reminder after context compaction or periodically"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
+            "timeout": 5000,
+            "description": "Warn that opspal-data-hygiene is deprecated and redirect to opspal-core/hubspot/salesforce replacements"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-task-agent-validator.sh",
+            "timeout": 5000,
+            "description": "Validate and resolve agent names - detects commands mistakenly invoked as agents, auto-resolves short names to fully-qualified"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh",
+            "timeout": 10000,
+            "description": "Enforce runbook policy retrieval for operational agents before field selection (Runbook Policy Infrastructure)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-gtm-planning/hooks/pre-task-gtm-approval-gate.sh",
+            "timeout": 8000,
+            "description": "Enforce 7-phase GTM planning methodology — check prerequisite phase completion before allowing agent execution"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/universal-agent-governance.sh",
+            "timeout": 8000,
+            "description": "Universal agent governance — risk scoring, bulk operation protection, approval gates for HubSpot operations"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-task-agent-validator.sh",
+            "timeout": 5000,
+            "description": "Validate agent selection for tasks"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-task-mandatory.sh",
+            "timeout": 5000,
+            "description": "Mandatory pre-task validation checks"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/universal-agent-governance.sh",
+            "timeout": 8000,
+            "description": "Universal agent governance for Marketo bulk, sync, and destructive workflows"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-intelligence-analysis.sh",
+            "timeout": 8000,
+            "description": "Validate observability export freshness before Marketo analysis agents execute"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-monday/hooks/universal-agent-governance.sh",
+            "timeout": 5000,
+            "description": "Govern Monday agent launches for destructive or large-scale workflows"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-okrs/hooks/pre-task-okr-approval-gate.sh",
+            "timeout": 5000,
+            "description": "Enforce OKR lifecycle sequencing before specialized agent launches"
+          }
+        ],
+        "matcher": "Agent"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/task-graph-policy-enforcer.sh",
+            "timeout": 5000,
+            "description": "Enforce risk-based tool policies for Task Graph tasks"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+            "timeout": 8000,
+            "description": "Detect direct HubSpot API curl calls and route mutating work through approved HubSpot specialists",
+            "if": "Bash(curl *)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+            "timeout": 8000,
+            "description": "Detect direct Marketo API curl calls and route mutating work through approved Marketo specialists",
+            "if": "Bash(curl *)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh",
+            "timeout": 15000,
+            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Fast-exits non-SF commands in ~1ms. 15s budget covers deploy validation chain."
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-gtm-planning/hooks/pre-write-gtm-path-validator.sh",
+            "timeout": 5000,
+            "description": "Validate GTM output paths follow orgs/*/platforms/gtm-planning/*/ convention"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-write-path-validator.sh",
+            "timeout": 5000,
+            "description": "Validate write paths for HubSpot operations"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-property-write-validation.sh",
+            "timeout": 5000,
+            "description": "Validate property naming conventions (snake_case) and reserved names"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-okrs/hooks/pre-write-okr-path-validator.sh",
+            "timeout": 5000,
+            "description": "Validate OKR output paths follow orgs/*/platforms/okr/*/ convention"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ],
+        "matcher": "Write"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-gong-api-call.sh",
+            "timeout": 5000,
+            "description": "Validate Gong credentials and check daily API budget before Gong API calls"
+          }
+        ],
+        "matcher": "^mcp__gong.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-fireflies-api-call.sh",
+            "timeout": 5000,
+            "description": "Validate Fireflies credentials and check daily API budget before Fireflies API calls"
+          }
+        ],
+        "matcher": "^mcp__fireflies.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ],
+        "matcher": "^mcp__salesforce.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ],
+        "matcher": "^mcp__hubspot.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+            "timeout": 8000,
+            "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          }
+        ],
+        "matcher": "^mcp__marketo.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-campaign-activation.sh",
+            "timeout": 10000,
+            "description": "Validate campaignId, check API rate limits, and enforce deactivation cooldown before campaign activation"
+          }
+        ],
+        "matcher": "mcp__marketo__campaign_activate"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-campaign-clone.sh",
+            "timeout": 30000,
+            "description": "Validate campaign clone source, name, and destination before execution"
+          }
+        ],
+        "matcher": "mcp__marketo__campaign_clone"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-campaign-delete.sh",
+            "timeout": 30000,
+            "description": "Validate campaign deletion safety before execution"
+          }
+        ],
+        "matcher": "mcp__marketo__campaign_delete"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-bulk-operation.sh",
+            "timeout": 30000,
+            "description": "Validate bulk lead operations"
+          }
+        ],
+        "matcher": "mcp__marketo__lead_create|mcp__marketo__lead_update|mcp__marketo__lead_delete"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-lead-merge.sh",
+            "timeout": 30000,
+            "description": "Validate lead merge operation"
+          }
+        ],
+        "matcher": "mcp__marketo__lead_merge"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-orchestration.sh",
+            "timeout": 30000,
+            "description": "Validate Marketo program clone orchestration inputs before execution"
+          }
+        ],
+        "matcher": "mcp__marketo__program_clone"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-bulk-export.sh",
+            "timeout": 30000,
+            "description": "Validate bulk export date ranges, activity types, and quota before execution"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-observability-extract.sh",
+            "timeout": 30000,
+            "description": "Validate quota and date range before bulk export"
+          }
+        ],
+        "matcher": "mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-hubspot-api-call.sh",
+            "timeout": 5000,
+            "description": "Validate HubSpot API requests before execution"
+          }
+        ],
+        "matcher": "mcp__hubspot.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-company-merge.sh",
+            "timeout": 8000,
+            "description": "Validate company merge prerequisites — SF sync check, canonical selection, backup verification"
+          }
+        ],
+        "matcher": "mcp__hubspot.*__.*merge.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-cms-publish-validation.sh",
+            "timeout": 8000,
+            "description": "Validate CMS content before publishing — required fields, SEO, broken links"
+          }
+        ],
+        "matcher": "mcp__hubspot.*__.*cms.*publish.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-workflow-list-validation.sh",
+            "timeout": 5000,
+            "description": "Validate workflow list associations before modification"
+          }
+        ],
+        "matcher": "mcp__hubspot.*__.*workflow.*list.*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh",
+            "timeout": 5000,
+            "description": "Validate tool inputs against contracts before execution"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/permission-request-handler.sh",
+            "timeout": 2000,
+            "description": "Async audit logger for permission requests (static allow rules moved to permissions block)",
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-compact.sh",
+            "timeout": 10000,
+            "description": "Backup conversation transcript before compaction to prevent data loss"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+            "timeout": 10000,
+            "description": "Flush ambient reflections before context compaction"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-start-first-run.sh",
+            "timeout": 5000,
+            "description": "Detect missing license activation or workspace initialization and guide first-run onboarding"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-init.sh",
+            "timeout": 15000,
+            "description": "Unified session initialization (scratchpad, env, platform context)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-session-silent-failure-check.sh",
+            "timeout": 10000,
+            "description": "Detect silent failure conditions (env bypass, circuit breakers, stale cache) before session begins"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-start-envcheck.sh",
+            "timeout": 5000,
+            "description": "Fast environment preflight: detect expired tokens, missing deps, MCP issues at session start"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-start-repo-sync.sh",
+            "timeout": 10000,
+            "description": "Auto-pull project-connected git repos at session start (opt-out: ENABLE_GIT_SYNC=0)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-capture-init.sh",
+            "timeout": 5000,
+            "description": "Initialize session context for ambient reflection pipeline"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-gtm-planning/hooks/session-start-gtm-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load active GTM planning cycle context from org directory"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-hubspot/hooks/pre-task-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load portal context from environment"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/session-start-marketo.sh",
+            "timeout": 10000,
+            "description": "Load Marketo instance context and validate authentication"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-okrs/hooks/session-start-okr-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load active OKR cycle context from org directory"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh",
+            "timeout": 5000,
+            "description": "Initialize session with temp directories and agent reminders"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-task-context-loader.sh",
+            "timeout": 10000,
+            "description": "Load org context from working directory, config files, and environment"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/subagent-start-context.sh",
+            "timeout": 10000,
+            "description": "Inject runbook/template/field/work context into spawned subagents"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh",
+            "timeout": 60000,
+            "description": "Generate field dictionary after org discovery completes"
+          }
+        ],
+        "matcher": "sfdc-discovery"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh",
+            "timeout": 60000,
+            "description": "Generate field dictionary after state discovery completes"
+          }
+        ],
+        "matcher": "sfdc-state-discovery"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30000,
+            "description": "QA-005: Trigger implementation planning after RevOps assessment"
+          }
+        ],
+        "matcher": "sfdc-revops-auditor"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30000,
+            "description": "QA-005: Trigger implementation planning after CPQ assessment"
+          }
+        ],
+        "matcher": "sfdc-cpq-assessor"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30000,
+            "description": "QA-005: Trigger implementation planning after automation audit"
+          }
+        ],
+        "matcher": "sfdc-automation-auditor"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/subagent-stop-capture.sh",
+            "timeout": 3000,
+            "description": "Capture failed subagent runs and log feedback signals",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-subagent-verification.sh",
+            "timeout": 10000,
+            "description": "Verify subagent claims and surface hidden-error patterns"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-investigation-execution-proof.sh",
+            "timeout": 5000,
+            "description": "Verify investigation specialists executed queries vs returning plans"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from subagent results",
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/task-completed-metrics.sh",
+            "timeout": 5000,
+            "description": "Record subagent completion metrics for routing feedback loops",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+            "timeout": 5000,
+            "description": "Extract ambient reflection candidates from task completion",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+            "timeout": 5000,
+            "description": "Evaluate flush on task completion",
+            "async": true
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-stop-org-verification.sh",
+            "timeout": 5000,
+            "description": "Verify org-state claims have query evidence (STRICT mode by default)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-end.sh",
+            "timeout": 10000,
+            "description": "Unified session cleanup (scratchpad, cache, logs)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-end-reliability.sh",
+            "timeout": 60000,
+            "description": "Auto-reliability checks: retry failed submissions, refresh stale skill data, trigger processreflections if threshold reached",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/stop-session-silent-failure-summary.sh",
+            "timeout": 15000,
+            "description": "Analyze session for silent failure patterns and update metrics baseline",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-hook-error-observer.sh",
+            "timeout": 5000,
+            "description": "Final hook error observation before session end",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+            "timeout": 10000,
+            "description": "Session-end ambient reflection flush",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-bash-error-handler.sh",
+            "timeout": 5000,
+            "description": "Provide recovery guidance after failed Salesforce Bash operations"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [],
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch",
+      "TaskList",
+      "TaskGet",
+      "Bash(sf data query *)",
+      "Bash(sfdx data query *)",
+      "Bash(sf org display *)",
+      "Bash(sfdx org display *)",
+      "Bash(sf org list *)",
+      "Bash(sfdx org list *)",
+      "Bash(ls *)",
+      "Bash(echo *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(pwd)",
+      "Bash(git log *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(git show *)",
+      "mcp__salesforce__*_query",
+      "mcp__salesforce__*_describe",
+      "mcp__salesforce__*_list",
+      "mcp__hubspot*__*search*",
+      "mcp__hubspot*__*get*",
+      "mcp__hubspot*__*list*",
+      "mcp__marketo__*_list",
+      "mcp__marketo__*_get",
+      "mcp__marketo__*_query",
+      "mcp__marketo__*_describe"
+    ]
+  }
+}
