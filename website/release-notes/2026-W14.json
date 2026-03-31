@@ -1,32 +1,31 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought significant improvements to Salesforce automation reliability, including better handling of state and country field configurations that previously caused deployment issues. We also resolved several platform stability problems that were preventing automations from launching properly across all connected systems.",
-  "published_at": "2026-03-31T17:52:23.531Z",
+  "summary": "This week focused on improving platform stability and Salesforce integration reliability. We enhanced our Salesforce deployment process to better handle complex workflows and fixed detection of State/Country picklist configurations that could cause setup issues. Several backend improvements ensure smoother operations across all connected systems.",
+  "published_at": "2026-03-31T19:30:15.636Z",
   "week_start": "2026-03-30",
   "week_end": "2026-03-31",
   "has_breaking": false,
-  "total_commits": 33,
+  "total_commits": 36,
   "entries": [
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Better detection of Salesforce state and country field issues",
+      "headline": "Better Salesforce State/Country picklist detection and deployment reliability",
       "details": [
-        "OpsPal now automatically identifies when Salesforce state and country fields are configured in ways that could break your automations",
-        "Deployments are more reliable when working with address-related fields"
+        "OpsPal now automatically detects when Salesforce orgs use State/Country picklists, preventing configuration conflicts",
+        "Improved deployment process validation to catch permission issues before they cause failures",
+        "Enhanced reliability for complex Salesforce setup workflows"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "More reliable Salesforce deployments for complex workflows",
-      "details": [
-        "Multi-step Salesforce automations now run more smoothly with better error handling"
-      ],
+      "headline": "Improved Salesforce deployment workflow management",
+      "details": null,
       "commits": [
         "a1075f7"
       ]
@@ -34,10 +33,8 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Resolved HubSpot automation launch failures",
-      "details": [
-        "Fixed an issue that was preventing HubSpot automations from starting properly"
-      ],
+      "headline": "Restored HubSpot connection stability",
+      "details": null,
       "commits": [
         "c53235d"
       ]
