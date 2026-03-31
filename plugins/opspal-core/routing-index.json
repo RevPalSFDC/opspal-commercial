@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-31T16:30:26.354Z",
-  "totalAgents": 300,
-  "totalAgentsFull": 303,
-  "totalCommands": 273,
-  "totalHooks": 258,
+  "buildDate": "2026-03-31T17:38:09.199Z",
+  "totalAgents": 297,
+  "totalAgentsFull": 300,
+  "totalCommands": 270,
+  "totalHooks": 252,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -546,8 +546,7 @@
     ],
     "benchmark": [
       "benchmark-research-agent",
-      "marketo-analytics-assessor",
-      "mcp-benchmark-agent"
+      "marketo-analytics-assessor"
     ],
     "industry average": [
       "benchmark-research-agent"
@@ -667,10 +666,7 @@
       "client-notebook-orchestrator"
     ],
     "client": [
-      "client-notebook-orchestrator",
-      "mcp-benchmark-agent",
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
+      "client-notebook-orchestrator"
     ],
     "notebook": [
       "client-notebook-orchestrator",
@@ -2466,10 +2462,7 @@
       "validation-rule-orchestrator"
     ],
     "mcp": [
-      "plugin-doctor",
-      "mcp-benchmark-agent",
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
+      "plugin-doctor"
     ],
     "hook": [
       "plugin-doctor"
@@ -5401,8 +5394,7 @@
       "hubspot-lead-scoring-specialist",
       "marketo-analytics-assessor",
       "marketo-lead-manager",
-      "marketo-lead-scoring-architect",
-      "mcp-scoring-orchestrator"
+      "marketo-lead-scoring-architect"
     ],
     "dev": [
       "hubspot-lead-scoring-specialist",
@@ -7143,73 +7135,6 @@
     ],
     "marketo marketo webinar": [
       "marketo-webinar-orchestrator"
-    ],
-    "mcp benchmark": [
-      "mcp-benchmark-agent"
-    ],
-    "mcp mcp": [
-      "mcp-benchmark-agent",
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
-    ],
-    "benchmark mcp": [
-      "mcp-benchmark-agent"
-    ],
-    "client mcp": [
-      "mcp-benchmark-agent",
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
-    ],
-    "mcp client": [
-      "mcp-benchmark-agent",
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
-    ],
-    "client benchmark": [
-      "mcp-benchmark-agent"
-    ],
-    "benchmark client": [
-      "mcp-benchmark-agent"
-    ],
-    "mcp mcp benchmark": [
-      "mcp-benchmark-agent"
-    ],
-    "mcp compute": [
-      "mcp-compute-orchestrator"
-    ],
-    "compute": [
-      "mcp-compute-orchestrator"
-    ],
-    "compute mcp": [
-      "mcp-compute-orchestrator"
-    ],
-    "client compute": [
-      "mcp-compute-orchestrator"
-    ],
-    "compute client": [
-      "mcp-compute-orchestrator"
-    ],
-    "mcp mcp compute": [
-      "mcp-compute-orchestrator"
-    ],
-    "mcp operations": [
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
-    ],
-    "mcp scoring": [
-      "mcp-scoring-orchestrator"
-    ],
-    "scoring mcp": [
-      "mcp-scoring-orchestrator"
-    ],
-    "client scoring": [
-      "mcp-scoring-orchestrator"
-    ],
-    "scoring client": [
-      "mcp-scoring-orchestrator"
-    ],
-    "mcp mcp scoring": [
-      "mcp-scoring-orchestrator"
     ],
     "bulk monday": [
       "monday-batch-operator"
@@ -10410,7 +10335,6 @@
     "benchmark": [
       "opspal-core:benchmark-research-agent",
       "opspal-marketo:marketo-analytics-assessor",
-      "opspal-mcp-client:mcp-benchmark-agent",
       "opspal-salesforce:benchmark-research-agent"
     ],
     "industry average": [
@@ -10538,10 +10462,7 @@
       "opspal-core:client-notebook-orchestrator"
     ],
     "client": [
-      "opspal-core:client-notebook-orchestrator",
-      "opspal-mcp-client:mcp-benchmark-agent",
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
+      "opspal-core:client-notebook-orchestrator"
     ],
     "notebook": [
       "opspal-core:client-notebook-orchestrator",
@@ -12351,10 +12272,7 @@
       "opspal-salesforce:validation-rule-orchestrator"
     ],
     "mcp": [
-      "opspal-core:plugin-doctor",
-      "opspal-mcp-client:mcp-benchmark-agent",
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
+      "opspal-core:plugin-doctor"
     ],
     "hook": [
       "opspal-core:plugin-doctor"
@@ -15290,8 +15208,7 @@
       "opspal-hubspot:hubspot-lead-scoring-specialist",
       "opspal-marketo:marketo-analytics-assessor",
       "opspal-marketo:marketo-lead-manager",
-      "opspal-marketo:marketo-lead-scoring-architect",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
+      "opspal-marketo:marketo-lead-scoring-architect"
     ],
     "dev": [
       "opspal-hubspot:hubspot-lead-scoring-specialist",
@@ -17032,73 +16949,6 @@
     ],
     "marketo marketo webinar": [
       "opspal-marketo:marketo-webinar-orchestrator"
-    ],
-    "mcp benchmark": [
-      "opspal-mcp-client:mcp-benchmark-agent"
-    ],
-    "mcp mcp": [
-      "opspal-mcp-client:mcp-benchmark-agent",
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "benchmark mcp": [
-      "opspal-mcp-client:mcp-benchmark-agent"
-    ],
-    "client mcp": [
-      "opspal-mcp-client:mcp-benchmark-agent",
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "mcp client": [
-      "opspal-mcp-client:mcp-benchmark-agent",
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "client benchmark": [
-      "opspal-mcp-client:mcp-benchmark-agent"
-    ],
-    "benchmark client": [
-      "opspal-mcp-client:mcp-benchmark-agent"
-    ],
-    "mcp mcp benchmark": [
-      "opspal-mcp-client:mcp-benchmark-agent"
-    ],
-    "mcp compute": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "compute": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "compute mcp": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "client compute": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "compute client": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "mcp mcp compute": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "mcp operations": [
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "mcp scoring": [
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "scoring mcp": [
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "client scoring": [
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "scoring client": [
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
-    "mcp mcp scoring": [
-      "opspal-mcp-client:mcp-scoring-orchestrator"
     ],
     "bulk monday": [
       "opspal-monday:monday-batch-operator"
@@ -19954,11 +19804,6 @@
       "marketo-smart-campaign-api-specialist",
       "marketo-webinar-orchestrator"
     ],
-    "opspal-mcp-client": [
-      "mcp-benchmark-agent",
-      "mcp-compute-orchestrator",
-      "mcp-scoring-orchestrator"
-    ],
     "opspal-monday": [
       "monday-batch-operator",
       "monday-board-analyzer",
@@ -20278,11 +20123,6 @@
       "opspal-marketo:marketo-sfdc-sync-specialist",
       "opspal-marketo:marketo-smart-campaign-api-specialist",
       "opspal-marketo:marketo-webinar-orchestrator"
-    ],
-    "opspal-mcp-client": [
-      "opspal-mcp-client:mcp-benchmark-agent",
-      "opspal-mcp-client:mcp-compute-orchestrator",
-      "opspal-mcp-client:mcp-scoring-orchestrator"
     ],
     "opspal-monday": [
       "opspal-monday:monday-batch-operator",
@@ -28089,121 +27929,6 @@
       ],
       "shortName": "marketo-webinar-orchestrator",
       "fullName": "opspal-marketo:marketo-webinar-orchestrator"
-    },
-    "mcp-benchmark-agent": {
-      "plugin": "opspal-mcp-client",
-      "file": "mcp-benchmark-agent.md",
-      "path": "opspal-mcp-client/agents/mcp-benchmark-agent.md",
-      "name": "mcp-benchmark-agent",
-      "description": "Use PROACTIVELY for industry benchmark retrieval and comparison.",
-      "model": "sonnet",
-      "color": "cyan",
-      "tools": [
-        "Read",
-        "Write",
-        "mcp__opspal__get_funnel_benchmarks",
-        "mcp__opspal__get_retention_benchmarks",
-        "mcp__opspal__get_gtm_benchmarks",
-        "mcp__opspal__get_kpi_definitions",
-        "mcp__opspal__get_revops_framework"
-      ],
-      "triggerKeywords": [
-        "mcp benchmark",
-        "mcp",
-        "benchmark",
-        "mcp mcp",
-        "benchmark mcp",
-        "client",
-        "client mcp",
-        "mcp client",
-        "client benchmark",
-        "benchmark client",
-        "mcp mcp benchmark"
-      ],
-      "shortName": "mcp-benchmark-agent",
-      "fullName": "opspal-mcp-client:mcp-benchmark-agent"
-    },
-    "mcp-compute-orchestrator": {
-      "plugin": "opspal-mcp-client",
-      "file": "mcp-compute-orchestrator.md",
-      "path": "opspal-mcp-client/agents/mcp-compute-orchestrator.md",
-      "name": "mcp-compute-orchestrator",
-      "description": "Use PROACTIVELY for OpsPal proprietary compute operations.",
-      "model": "sonnet",
-      "color": "yellow",
-      "tools": [
-        "Read",
-        "Write",
-        "Bash",
-        "Grep",
-        "TodoWrite",
-        "mcp__opspal__compute_revenue_model",
-        "mcp__opspal__run_scenario_planning",
-        "mcp__opspal__compute_market_sizing",
-        "mcp__opspal__get_ramp_curves",
-        "mcp__opspal__get_seasonality_factors",
-        "mcp__opspal__generate_bluf_summary"
-      ],
-      "triggerKeywords": [
-        "mcp compute",
-        "mcp",
-        "compute",
-        "mcp mcp",
-        "compute mcp",
-        "client",
-        "client mcp",
-        "mcp client",
-        "client compute",
-        "compute client",
-        "mcp mcp compute",
-        "mcp operations"
-      ],
-      "shortName": "mcp-compute-orchestrator",
-      "fullName": "opspal-mcp-client:mcp-compute-orchestrator"
-    },
-    "mcp-scoring-orchestrator": {
-      "plugin": "opspal-mcp-client",
-      "file": "mcp-scoring-orchestrator.md",
-      "path": "opspal-mcp-client/agents/mcp-scoring-orchestrator.md",
-      "name": "mcp-scoring-orchestrator",
-      "description": "MUST BE USED for OpsPal proprietary scoring operations.",
-      "model": "sonnet",
-      "color": "magenta",
-      "tools": [
-        "Agent",
-        "Read",
-        "Write",
-        "Bash",
-        "Grep",
-        "TodoWrite",
-        "mcp__opspal__score_customer_health",
-        "mcp__opspal__score_churn_risk",
-        "mcp__opspal__score_deal_win_probability",
-        "mcp__opspal__score_lead_quality",
-        "mcp__opspal__run_smart_scorer",
-        "mcp__opspal__get_funnel_benchmarks",
-        "mcp__opspal__get_retention_benchmarks",
-        "mcp__opspal__get_gtm_benchmarks",
-        "mcp__opspal__get_kpi_definitions",
-        "mcp__opspal__get_revops_framework",
-        "mcp__opspal__generate_bluf_summary"
-      ],
-      "triggerKeywords": [
-        "mcp scoring",
-        "mcp",
-        "scoring",
-        "mcp mcp",
-        "scoring mcp",
-        "client",
-        "client mcp",
-        "mcp client",
-        "client scoring",
-        "scoring client",
-        "mcp mcp scoring",
-        "mcp operations"
-      ],
-      "shortName": "mcp-scoring-orchestrator",
-      "fullName": "opspal-mcp-client:mcp-scoring-orchestrator"
     },
     "monday-batch-operator": {
       "plugin": "opspal-monday",
@@ -40367,121 +40092,6 @@
       "shortName": "marketo-webinar-orchestrator",
       "fullName": "opspal-marketo:marketo-webinar-orchestrator"
     },
-    "opspal-mcp-client:mcp-benchmark-agent": {
-      "plugin": "opspal-mcp-client",
-      "file": "mcp-benchmark-agent.md",
-      "path": "opspal-mcp-client/agents/mcp-benchmark-agent.md",
-      "name": "mcp-benchmark-agent",
-      "description": "Use PROACTIVELY for industry benchmark retrieval and comparison.",
-      "model": "sonnet",
-      "color": "cyan",
-      "tools": [
-        "Read",
-        "Write",
-        "mcp__opspal__get_funnel_benchmarks",
-        "mcp__opspal__get_retention_benchmarks",
-        "mcp__opspal__get_gtm_benchmarks",
-        "mcp__opspal__get_kpi_definitions",
-        "mcp__opspal__get_revops_framework"
-      ],
-      "triggerKeywords": [
-        "mcp benchmark",
-        "mcp",
-        "benchmark",
-        "mcp mcp",
-        "benchmark mcp",
-        "client",
-        "client mcp",
-        "mcp client",
-        "client benchmark",
-        "benchmark client",
-        "mcp mcp benchmark"
-      ],
-      "shortName": "mcp-benchmark-agent",
-      "fullName": "opspal-mcp-client:mcp-benchmark-agent"
-    },
-    "opspal-mcp-client:mcp-compute-orchestrator": {
-      "plugin": "opspal-mcp-client",
-      "file": "mcp-compute-orchestrator.md",
-      "path": "opspal-mcp-client/agents/mcp-compute-orchestrator.md",
-      "name": "mcp-compute-orchestrator",
-      "description": "Use PROACTIVELY for OpsPal proprietary compute operations.",
-      "model": "sonnet",
-      "color": "yellow",
-      "tools": [
-        "Read",
-        "Write",
-        "Bash",
-        "Grep",
-        "TodoWrite",
-        "mcp__opspal__compute_revenue_model",
-        "mcp__opspal__run_scenario_planning",
-        "mcp__opspal__compute_market_sizing",
-        "mcp__opspal__get_ramp_curves",
-        "mcp__opspal__get_seasonality_factors",
-        "mcp__opspal__generate_bluf_summary"
-      ],
-      "triggerKeywords": [
-        "mcp compute",
-        "mcp",
-        "compute",
-        "mcp mcp",
-        "compute mcp",
-        "client",
-        "client mcp",
-        "mcp client",
-        "client compute",
-        "compute client",
-        "mcp mcp compute",
-        "mcp operations"
-      ],
-      "shortName": "mcp-compute-orchestrator",
-      "fullName": "opspal-mcp-client:mcp-compute-orchestrator"
-    },
-    "opspal-mcp-client:mcp-scoring-orchestrator": {
-      "plugin": "opspal-mcp-client",
-      "file": "mcp-scoring-orchestrator.md",
-      "path": "opspal-mcp-client/agents/mcp-scoring-orchestrator.md",
-      "name": "mcp-scoring-orchestrator",
-      "description": "MUST BE USED for OpsPal proprietary scoring operations.",
-      "model": "sonnet",
-      "color": "magenta",
-      "tools": [
-        "Agent",
-        "Read",
-        "Write",
-        "Bash",
-        "Grep",
-        "TodoWrite",
-        "mcp__opspal__score_customer_health",
-        "mcp__opspal__score_churn_risk",
-        "mcp__opspal__score_deal_win_probability",
-        "mcp__opspal__score_lead_quality",
-        "mcp__opspal__run_smart_scorer",
-        "mcp__opspal__get_funnel_benchmarks",
-        "mcp__opspal__get_retention_benchmarks",
-        "mcp__opspal__get_gtm_benchmarks",
-        "mcp__opspal__get_kpi_definitions",
-        "mcp__opspal__get_revops_framework",
-        "mcp__opspal__generate_bluf_summary"
-      ],
-      "triggerKeywords": [
-        "mcp scoring",
-        "mcp",
-        "scoring",
-        "mcp mcp",
-        "scoring mcp",
-        "client",
-        "client mcp",
-        "mcp client",
-        "client scoring",
-        "scoring client",
-        "mcp mcp scoring",
-        "mcp operations"
-      ],
-      "shortName": "mcp-scoring-orchestrator",
-      "fullName": "opspal-mcp-client:mcp-scoring-orchestrator"
-    },
     "opspal-monday:monday-batch-operator": {
       "plugin": "opspal-monday",
       "file": "monday-batch-operator.md",
@@ -45532,15 +45142,6 @@
     "marketo-webinar-orchestrator": [
       "opspal-marketo:marketo-webinar-orchestrator"
     ],
-    "mcp-benchmark-agent": [
-      "opspal-mcp-client:mcp-benchmark-agent"
-    ],
-    "mcp-compute-orchestrator": [
-      "opspal-mcp-client:mcp-compute-orchestrator"
-    ],
-    "mcp-scoring-orchestrator": [
-      "opspal-mcp-client:mcp-scoring-orchestrator"
-    ],
     "monday-batch-operator": [
       "opspal-monday:monday-batch-operator"
     ],
@@ -47268,27 +46869,6 @@
       "triggerKeywords": [],
       "filePath": "opspal-marketo/commands/sync-program-to-sfdc.md"
     },
-    "opspal-mcp-client:opspal-benchmark": {
-      "plugin": "opspal-mcp-client",
-      "name": "opspal-benchmark",
-      "description": "",
-      "triggerKeywords": [],
-      "filePath": "opspal-mcp-client/commands/opspal-benchmark.md"
-    },
-    "opspal-mcp-client:opspal-compute": {
-      "plugin": "opspal-mcp-client",
-      "name": "opspal-compute",
-      "description": "",
-      "triggerKeywords": [],
-      "filePath": "opspal-mcp-client/commands/opspal-compute.md"
-    },
-    "opspal-mcp-client:opspal-score": {
-      "plugin": "opspal-mcp-client",
-      "name": "opspal-score",
-      "description": "",
-      "triggerKeywords": [],
-      "filePath": "opspal-mcp-client/commands/opspal-score.md"
-    },
     "opspal-monday:monday-files": {
       "plugin": "opspal-monday",
       "name": "monday-files",
@@ -48014,13 +47594,6 @@
         "matcher": "mcp__marketo__campaign_*|mcp__marketo__lead_activities"
       },
       {
-        "plugin": "opspal-mcp-client",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "mcp__opspal__.*"
-      },
-      {
         "plugin": "opspal-monday",
         "name": "unknown",
         "description": "",
@@ -48282,20 +47855,6 @@
         "description": "",
         "file": null,
         "matcher": "mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create"
-      },
-      {
-        "plugin": "opspal-mcp-client",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "mcp__opspal__score_customer_health|mcp__opspal__score_churn_risk|mcp__opspal__score_deal_win_probability|mcp__opspal__score_lead_quality|mcp__opspal__run_smart_scorer"
-      },
-      {
-        "plugin": "opspal-mcp-client",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "mcp__opspal__compute_revenue_model|mcp__opspal__run_scenario_planning|mcp__opspal__compute_market_sizing"
       },
       {
         "plugin": "opspal-monday",
@@ -49161,27 +48720,6 @@
         "matcher": null
       },
       {
-        "plugin": "opspal-mcp-client",
-        "name": "post-opspal-usage",
-        "description": "",
-        "file": "opspal-mcp-client/hooks/post-opspal-usage.sh",
-        "matcher": null
-      },
-      {
-        "plugin": "opspal-mcp-client",
-        "name": "pre-opspal-compute",
-        "description": "",
-        "file": "opspal-mcp-client/hooks/pre-opspal-compute.sh",
-        "matcher": null
-      },
-      {
-        "plugin": "opspal-mcp-client",
-        "name": "pre-opspal-scoring",
-        "description": "",
-        "file": "opspal-mcp-client/hooks/pre-opspal-scoring.sh",
-        "matcher": null
-      },
-      {
         "plugin": "opspal-monday",
         "name": "universal-agent-governance",
         "description": "",
@@ -49650,24 +49188,24 @@
   },
   "routingRules": [],
   "stats": {
-    "totalAgents": 300,
-    "totalAgentsFull": 303,
-    "totalCommands": 273,
-    "totalHooks": 258,
+    "totalAgents": 297,
+    "totalAgentsFull": 300,
+    "totalCommands": 270,
+    "totalHooks": 252,
     "totalRoutingRules": 0,
-    "totalKeywords": 2627,
-    "totalKeywordsFull": 2627,
-    "totalPlugins": 10,
+    "totalKeywords": 2607,
+    "totalKeywordsFull": 2607,
+    "totalPlugins": 9,
     "duplicateShortNames": 3,
-    "agentsWithKeywords": 300,
-    "agentsWithKeywordsFull": 303,
-    "agentsWithTools": 300,
-    "agentsWithToolsFull": 303,
-    "avgKeywordsPerAgent": "15.28",
+    "agentsWithKeywords": 297,
+    "agentsWithKeywordsFull": 300,
+    "agentsWithTools": 297,
+    "agentsWithToolsFull": 300,
+    "avgKeywordsPerAgent": "15.32",
     "hooksByEvent": {
-      "PostToolUse": 34,
+      "PostToolUse": 33,
       "UserPromptSubmit": 2,
-      "PreToolUse": 39,
+      "PreToolUse": 37,
       "PermissionRequest": 1,
       "PreCompact": 1,
       "SessionStart": 6,
@@ -49675,7 +49213,7 @@
       "SubagentStop": 6,
       "TaskCompleted": 1,
       "Stop": 5,
-      "Unknown": 137,
+      "Unknown": 134,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,

@@ -1,0 +1,1466 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "3.5.0",
+  "description": "CANONICAL ROUTING REGISTRY - Single source of truth for all agent routing rules. Used by unified-router.sh, pre-task-agent-validator.sh, and auto-generates CLAUDE.md routing tables and docs/routing-help.md.",
+  "lastUpdated": "2026-03-27",
+  "canonicalSource": true,
+  "generatesDocumentation": [
+    "docs/routing-help.md (routing table)",
+    "CLAUDE.md (routing table)",
+    "plugins/*/CLAUDE.md (plugin-specific routing)"
+  ],
+  "mandatoryPatterns": {
+    "description": "Patterns that trigger hard blocking (exit code 1) - destructive operations",
+    "patterns": [
+      {
+        "id": "prod-deploy",
+        "keywords": [
+          "deploy.*prod",
+          "production.*deploy",
+          "push.*production"
+        ],
+        "agent": "opspal-core:release-coordinator",
+        "clearanceAgents": [
+          "opspal-core:release-coordinator",
+          "opspal-salesforce:sfdc-deployment-manager"
+        ],
+        "reason": "Production deployments require orchestration"
+      },
+      {
+        "id": "bulk-delete",
+        "keywords": [
+          "delete.*bulk",
+          "bulk.*delete",
+          "mass.*delete",
+          "delete.*all"
+        ],
+        "agent": "opspal-salesforce:sfdc-data-operations",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-data-operations",
+          "opspal-salesforce:sfdc-query-specialist",
+          "opspal-salesforce:sfdc-bulkops-orchestrator",
+          "opspal-salesforce:sfdc-upsert-orchestrator",
+          "opspal-salesforce:sfdc-data-export-manager"
+        ],
+        "reason": "Bulk deletions require safety checks"
+      },
+      {
+        "id": "compound-salesforce-cleanup-indicators",
+        "keywords": [
+          "fix.*account.*naming.*contact",
+          "account.*naming.*reparent",
+          "naming.*issue.*duplicate.*account",
+          "resume.*reparent.*contact.*duplicate",
+          "continue.*contact.*cleanup.*account",
+          "fix.*duplicate.*account.*contact",
+          "account.*contact.*reparent.*delete"
+        ],
+        "agent": "opspal-salesforce:sfdc-orchestrator",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-orchestrator",
+          "opspal-salesforce:sfdc-query-specialist",
+          "opspal-salesforce:sfdc-data-export-manager",
+          "opspal-salesforce:sfdc-csv-enrichment",
+          "opspal-salesforce:sfdc-bulkops-orchestrator",
+          "opspal-salesforce:sfdc-merge-orchestrator",
+          "opspal-salesforce:sfdc-dedup-safety-copilot"
+        ],
+        "reason": "Compound account/contact cleanup workflows require orchestrated multi-step execution."
+      },
+      {
+        "id": "mixed-salesforce-data-cleanup",
+        "keywords": [
+          "reparent.*contacts?.*duplicate.*account",
+          "duplicate.*account.*reparent.*contacts?",
+          "reparent.*contacts?.*delete.*duplicate.*account",
+          "delete.*duplicate.*account.*reparent.*contacts?",
+          "count.*contacts?.*csv.*reparent.*duplicate.*account",
+          "cleanup.*duplicate.*account.*contacts?"
+        ],
+        "agent": "opspal-salesforce:sfdc-orchestrator",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-orchestrator",
+          "opspal-salesforce:sfdc-query-specialist",
+          "opspal-salesforce:sfdc-data-export-manager",
+          "opspal-salesforce:sfdc-csv-enrichment",
+          "opspal-salesforce:sfdc-bulkops-orchestrator",
+          "opspal-salesforce:sfdc-merge-orchestrator",
+          "opspal-salesforce:sfdc-dedup-safety-copilot"
+        ],
+        "reason": "Mixed Salesforce cleanup workflows require orchestrated verification, CSV generation, bulk reparenting, and duplicate cleanup."
+      },
+      {
+        "id": "salesforce-duplicate-discovery-cleanup",
+        "keywords": [
+          "find.*duplicate.*account.*query",
+          "find.*duplicate.*account.*validate",
+          "find.*duplicate.*account.*clean",
+          "find.*duplicate.*account.*merge",
+          "find.*duplicate.*account.*created",
+          "identify.*duplicate.*account.*cleanup",
+          "detect.*duplicate.*account.*merge",
+          "duplicate.*account.*finder",
+          "duplicate.*account.*discovery"
+        ],
+        "agent": "opspal-salesforce:sfdc-orchestrator",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-orchestrator",
+          "opspal-salesforce:sfdc-query-specialist",
+          "opspal-salesforce:sfdc-data-export-manager",
+          "opspal-salesforce:sfdc-csv-enrichment",
+          "opspal-salesforce:sfdc-bulkops-orchestrator",
+          "opspal-salesforce:sfdc-merge-orchestrator",
+          "opspal-salesforce:sfdc-dedup-safety-copilot"
+        ],
+        "reason": "Duplicate account discovery workflows with embedded cleanup/validation steps require orchestrated multi-step execution."
+      },
+      {
+        "id": "automation-destructive",
+        "keywords": [
+          "delete.*flow",
+          "remove.*flow",
+          "deactivate.*flow",
+          "disable.*flow",
+          "delete.*automation",
+          "remove.*automation",
+          "deactivate.*trigger",
+          "delete.*validation.*rule"
+        ],
+        "agent": "opspal-salesforce:sfdc-automation-builder",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-automation-builder",
+          "opspal-salesforce:sfdc-deployment-manager",
+          "opspal-salesforce:sfdc-metadata-manager"
+        ],
+        "reason": "Destructive automation changes require a write-capable automation specialist with deployment clearance."
+      },
+      {
+        "id": "permission-security-write",
+        "keywords": [
+          "create.*permission set",
+          "update.*permission set",
+          "modify.*permission set",
+          "assign.*permission set",
+          "permission set.*assignment",
+          "grant.*field.*access",
+          "grant.*object.*access",
+          "field level security",
+          "profile.*permission",
+          "sharing rule",
+          "role hierarchy"
+        ],
+        "agent": "opspal-salesforce:sfdc-permission-orchestrator",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-permission-orchestrator"
+        ],
+        "reason": "Permission/security writes must start with the canonical permission orchestrator"
+      },
+      {
+        "id": "prod-permissions",
+        "keywords": [
+          "permission.*prod",
+          "profile.*change.*prod",
+          "update.*permission.*prod"
+        ],
+        "agent": "opspal-salesforce:sfdc-permission-orchestrator",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-permission-orchestrator"
+        ],
+        "reason": "Production permission/security changes require canonical orchestration and audit"
+      },
+      {
+        "id": "destructive-metadata",
+        "keywords": [
+          "drop.*field",
+          "remove.*object",
+          "delete.*object",
+          "truncate"
+        ],
+        "agent": "opspal-salesforce:sfdc-metadata-manager",
+        "reason": "Destructive metadata operations require rollback plan"
+      },
+      {
+        "id": "prod-merge",
+        "keywords": [
+          "merge.*prod",
+          "merge.*main",
+          "merge.*master"
+        ],
+        "agent": "opspal-core:release-coordinator",
+        "reason": "Production merges require release coordination"
+      },
+      {
+        "id": "record-dedup-merge",
+        "keywords": [
+          "merge.*duplicate.*(account|contact|lead)",
+          "dedup(e|lication)?.*(account|contact|lead)",
+          "consolidate.*(account|contact|lead)"
+        ],
+        "agent": "opspal-salesforce:sfdc-merge-orchestrator",
+        "clearanceAgents": [
+          "opspal-salesforce:sfdc-merge-orchestrator",
+          "opspal-salesforce:sfdc-dedup-safety-copilot"
+        ],
+        "reason": "Record merge/dedup operations require controlled orchestration"
+      }
+    ]
+  },
+  "platformPatterns": {
+    "salesforce": {
+      "description": "Salesforce-specific routing patterns",
+      "patterns": [
+        {
+          "id": "cpq-assessment",
+          "keywords": [
+            "cpq",
+            "quote.*pricing",
+            "pricing.*config",
+            "q2c",
+            "quote.*cash"
+          ],
+          "agent": "opspal-salesforce:sfdc-cpq-assessor",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "revops-assessment",
+          "keywords": [
+            "revops.*assessment",
+            "assessment.*revops",
+            "revops.*audit",
+            "audit.*revops",
+            "pipeline.*assessment",
+            "forecast.*audit"
+          ],
+          "agent": "opspal-salesforce:sfdc-revops-auditor",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "revops-reporting",
+          "keywords": [
+            "revops.*report",
+            "pipeline.*health.*report",
+            "kpi.*report",
+            "metrics.*report",
+            "generate.*revops.*report"
+          ],
+          "agent": "opspal-core:revops-reporting-assistant",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "automation-audit",
+          "keywords": [
+            "automation audit",
+            "flow audit",
+            "trigger audit",
+            "automation conflict",
+            "process builder audit",
+            "workflow rule review"
+          ],
+          "agent": "opspal-salesforce:sfdc-automation-auditor",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "permission-set-field-maintenance",
+          "keywords": [
+            "add.*field.*permission set",
+            "update.*field.*permission set",
+            "modify.*permission set",
+            "grant.*field.*access.*permission set",
+            "permission set.*field.*access",
+            "account taxonomy permission set"
+          ],
+          "agent": "opspal-salesforce:sfdc-permission-orchestrator",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "permission-set",
+          "keywords": [
+            "permission set",
+            "permission.*create",
+            "profile.*permission",
+            "fls"
+          ],
+          "agent": "opspal-salesforce:sfdc-permission-orchestrator",
+          "clearanceAgents": [
+            "opspal-salesforce:sfdc-permission-orchestrator"
+          ],
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "reports-dashboards",
+          "keywords": [
+            "report.*create",
+            "dashboard.*create",
+            "create.*report",
+            "create.*dashboard",
+            "build.*salesforce.*report",
+            "salesforce.*report.*dashboard"
+          ],
+          "agent": "opspal-salesforce:sfdc-reports-dashboards",
+          "clearanceAgents": [
+            "opspal-salesforce:sfdc-reports-dashboards"
+          ],
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "report-template-extraction",
+          "keywords": [
+            "extract.*report",
+            "user.*report.*template",
+            "report.*template",
+            "extract.*dashboard"
+          ],
+          "agent": "opspal-salesforce:sfdc-reports-dashboards",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "revops-audit",
+          "keywords": [
+            "revops",
+            "revenue ops",
+            "pipeline",
+            "forecast",
+            "sales metrics"
+          ],
+          "agent": "opspal-salesforce:sfdc-revops-auditor",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "data-operations",
+          "keywords": [
+            "import.*data",
+            "export.*data",
+            "data.*import",
+            "data.*export",
+            "bulk.*data"
+          ],
+          "agent": "opspal-salesforce:sfdc-data-operations",
+          "clearanceAgents": [
+            "opspal-salesforce:sfdc-data-operations",
+            "opspal-salesforce:sfdc-query-specialist",
+            "opspal-salesforce:sfdc-bulkops-orchestrator",
+            "opspal-salesforce:sfdc-upsert-orchestrator",
+            "opspal-salesforce:sfdc-data-export-manager",
+            "opspal-salesforce:sfdc-csv-enrichment"
+          ],
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "territory",
+          "keywords": [
+            "territory",
+            "territory2",
+            "territory.*model",
+            "territory.*assignment"
+          ],
+          "agent": "opspal-salesforce:sfdc-territory-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "deployment",
+          "keywords": [
+            "deploy.*metadata",
+            "sf.*deploy",
+            "metadata.*deploy",
+            "sf project deploy"
+          ],
+          "agent": "opspal-salesforce:sfdc-deployment-manager",
+          "clearanceAgents": [
+            "opspal-salesforce:sfdc-deployment-manager",
+            "opspal-core:release-coordinator"
+          ],
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "discovery",
+          "keywords": [
+            "discover.*org",
+            "org.*analysis",
+            "sfdc.*discovery",
+            "salesforce.*explore",
+            "inventory.*salesforce",
+            "permission.*inventory",
+            "flow.*inventory"
+          ],
+          "agent": "opspal-salesforce:sfdc-discovery",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "state-discovery",
+          "keywords": [
+            "inspect.*org",
+            "schema.*inspect",
+            "describe.*(object|sobject)",
+            "object.*relationship",
+            "how.*configured.*salesforce",
+            "capture.*org.*state",
+            "metadata.*drift",
+            "pre.*change.*state"
+          ],
+          "agent": "opspal-salesforce:sfdc-state-discovery",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "implementation-planning",
+          "keywords": [
+            "plan.*salesforce.*implementation",
+            "implementation.*plan.*salesforce",
+            "salesforce.*implementation.*plan",
+            "design.*salesforce.*solution",
+            "salesforce.*lead.*assignment.*plan",
+            "lead.*assignment.*change",
+            "current.*state.*salesforce",
+            "what.*should.*change.*salesforce",
+            "rollout.*salesforce",
+            "pre.*build.*analysis"
+          ],
+          "agent": "opspal-salesforce:sfdc-planner",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "field-analysis",
+          "keywords": [
+            "pricing.*field",
+            "field.*usage.*audit",
+            "field.*population.*analysis",
+            "validation.*rule.*depend",
+            "field.*dependenc",
+            "rollup.*summary",
+            "illegal assignment.*datetime.*date",
+            "datetime.*date.*rollup",
+            "schedule item.*rollup"
+          ],
+          "agent": "opspal-salesforce:sfdc-field-analyzer",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "data-quality-audit",
+          "keywords": [
+            "salesforce.*data.*quality",
+            "data.*quality.*salesforce",
+            "audit.*data.*quality.*object",
+            "orphan.*contact",
+            "related.*data.*integrity"
+          ],
+          "agent": "opspal-salesforce:sfdc-quality-auditor",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "apex-development",
+          "keywords": [
+            "apex.*class",
+            "apex.*trigger",
+            "write.*apex",
+            "create.*apex"
+          ],
+          "agent": "opspal-salesforce:sfdc-apex-developer",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "deployment-conflict-resolution",
+          "keywords": [
+            "deployment.*conflict",
+            "metadata.*conflict",
+            "resolve.*deployment.*error",
+            "deployment failed due to metadata error",
+            "resolve.*metadata.*deploy"
+          ],
+          "agent": "opspal-salesforce:sfdc-conflict-resolver",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "flow-creation",
+          "keywords": [
+            "create.*salesforce.*flow",
+            "build.*salesforce.*flow",
+            "(salesforce|sfdc).*flow.*builder",
+            "record.*triggered.*flow"
+          ],
+          "agent": "opspal-salesforce:sfdc-automation-builder",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "validation-rule",
+          "keywords": [
+            "validation.*rule",
+            "create.*validation"
+          ],
+          "agent": "opspal-salesforce:validation-rule-orchestrator",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "query",
+          "keywords": [
+            "soql",
+            "query.*salesforce",
+            "sf.*query"
+          ],
+          "agent": "opspal-salesforce:sfdc-query-specialist",
+          "complexity": 0.3,
+          "blocking": false
+        }
+      ]
+    },
+    "hubspot": {
+      "description": "HubSpot-specific routing patterns",
+      "patterns": [
+        {
+          "id": "workflow-audit",
+          "keywords": [
+            "hubspot.*workflow.*audit",
+            "audit.*hubspot.*workflow",
+            "workflow.*analysis.*hubspot",
+            "automation.*issue.*hubspot",
+            "workflow.*evidence.*hubspot"
+          ],
+          "agent": "opspal-hubspot:hubspot-workflow-auditor",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "workflow",
+          "keywords": [
+            "hubspot.*workflow",
+            "workflow.*hubspot",
+            "hs.*workflow",
+            "create.*hubspot.*workflow",
+            "build.*hubspot.*workflow"
+          ],
+          "agent": "opspal-hubspot:hubspot-workflow-builder",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "contact-management",
+          "keywords": [
+            "hubspot.*contact",
+            "contact.*hubspot",
+            "hs.*contact",
+            "manage.*contact"
+          ],
+          "agent": "opspal-hubspot:hubspot-contact-manager",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "data-operations",
+          "keywords": [
+            "hubspot.*import",
+            "hubspot.*export",
+            "hs.*data",
+            "portal.*data"
+          ],
+          "agent": "opspal-hubspot:hubspot-data-operations-manager",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "property-management",
+          "keywords": [
+            "hubspot.*property",
+            "property.*hubspot",
+            "custom.*property",
+            "hs.*property"
+          ],
+          "agent": "opspal-hubspot:hubspot-property-manager",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "integration",
+          "keywords": [
+            "hubspot.*integration",
+            "hubspot.*api",
+            "hs.*webhook",
+            "connect.*hubspot"
+          ],
+          "agent": "opspal-hubspot:hubspot-integration-specialist",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "analytics",
+          "keywords": [
+            "hubspot.*report",
+            "hubspot.*analytics",
+            "hs.*metrics",
+            "portal.*analytics"
+          ],
+          "agent": "opspal-hubspot:hubspot-analytics-reporter",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "marketing",
+          "keywords": [
+            "hubspot.*email",
+            "hubspot.*campaign",
+            "hs.*marketing",
+            "email.*campaign"
+          ],
+          "agent": "opspal-hubspot:hubspot-marketing-automation",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "assessment",
+          "keywords": [
+            "hubspot.*assessment",
+            "hubspot.*audit",
+            "portal.*health",
+            "hs.*review"
+          ],
+          "agent": "opspal-hubspot:hubspot-assessment-analyzer",
+          "complexity": 0.7,
+          "blocking": true
+        }
+      ]
+    },
+    "marketo": {
+      "description": "Marketo-specific routing patterns",
+      "patterns": [
+        {
+          "id": "campaign",
+          "keywords": [
+            "marketo.*campaign",
+            "campaign.*marketo",
+            "smart.*campaign",
+            "trigger.*campaign"
+          ],
+          "agent": "opspal-marketo:marketo-campaign-builder",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "lead-scoring-architect",
+          "keywords": [
+            "lead.*scoring.*model",
+            "scoring.*model",
+            "model.*lead.*scoring",
+            "mql.*threshold",
+            "score.*decay",
+            "scoring.*rules"
+          ],
+          "agent": "opspal-marketo:marketo-lead-scoring-architect",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "lead-management",
+          "keywords": [
+            "marketo.*lead",
+            "lead.*marketo",
+            "mkto.*lead",
+            "lead.*lifecycle",
+            "lead.*dedup"
+          ],
+          "agent": "opspal-marketo:marketo-lead-manager",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "program",
+          "keywords": [
+            "marketo.*program",
+            "program.*marketo",
+            "create.*program"
+          ],
+          "agent": "opspal-marketo:marketo-program-architect",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "email",
+          "keywords": [
+            "marketo.*email",
+            "email.*marketo",
+            "email.*template"
+          ],
+          "agent": "opspal-marketo:marketo-email-specialist",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "analytics",
+          "keywords": [
+            "marketo.*analytics",
+            "marketo.*report",
+            "mkto.*metrics"
+          ],
+          "agent": "opspal-marketo:marketo-analytics-assessor",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "discovery",
+          "keywords": [
+            "marketo.*discover",
+            "marketo.*explore",
+            "instance.*analysis"
+          ],
+          "agent": "opspal-marketo:marketo-instance-discovery",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "lead-quality",
+          "keywords": [
+            "lead.*quality",
+            "database.*health",
+            "marketo.*audit"
+          ],
+          "agent": "opspal-marketo:marketo-lead-quality-assessor",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "sfdc-sync",
+          "keywords": [
+            "marketo.*salesforce",
+            "sfdc.*sync",
+            "sync.*error",
+            "field.*mapping"
+          ],
+          "agent": "opspal-marketo:marketo-sfdc-sync-specialist",
+          "complexity": 0.7,
+          "blocking": true
+        }
+      ]
+    },
+    "okrs": {
+      "description": "OKR strategy and lifecycle routing patterns",
+      "patterns": [
+        {
+          "id": "okr-strategy",
+          "keywords": [
+            "okr",
+            "objective",
+            "key result",
+            "strategic.*okr",
+            "okr.*cycle"
+          ],
+          "agent": "opspal-okrs:okr-strategy-orchestrator",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "okr-initiative-scoring",
+          "keywords": [
+            "score.*initiative",
+            "initiative.*priorit",
+            "okr.*priorit",
+            "initiative.*backlog"
+          ],
+          "agent": "opspal-okrs:okr-initiative-prioritizer",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "okr-data-collection",
+          "keywords": [
+            "okr.*snapshot",
+            "revenue.*snapshot",
+            "okr.*data",
+            "baseline.*okr"
+          ],
+          "agent": "opspal-okrs:okr-data-aggregator",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "okr-generation",
+          "keywords": [
+            "generate.*okr",
+            "draft.*okr",
+            "create.*okr",
+            "okr.*target"
+          ],
+          "agent": "opspal-okrs:okr-generator",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "okr-learning",
+          "keywords": [
+            "okr.*retrospective",
+            "okr.*history",
+            "okr.*learning",
+            "okr.*calibration"
+          ],
+          "agent": "opspal-okrs:okr-learning-engine",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "okr-plg",
+          "keywords": [
+            "okr.*plg",
+            "plg.*signal",
+            "pql.*signal",
+            "product.*led.*okr",
+            "hybrid.*okr"
+          ],
+          "agent": "opspal-okrs:okr-plg-specialist",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "okr-benchmark",
+          "keywords": [
+            "okr.*benchmark",
+            "benchmark.*okr",
+            "okr.*peer.*comparison"
+          ],
+          "agent": "opspal-okrs:okr-initiative-evaluator",
+          "complexity": 0.5,
+          "blocking": false
+        }
+      ]
+    },
+    "crossPlatform": {
+      "description": "Cross-platform routing patterns",
+      "patterns": [
+        {
+          "id": "diagram",
+          "keywords": [
+            "diagram",
+            "flowchart",
+            "erd",
+            "sequence.*diagram",
+            "visualize",
+            "architecture.*diagram"
+          ],
+          "agent": "opspal-core:diagram-generator",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "release",
+          "keywords": [
+            "release",
+            "deploy.*prod",
+            "production.*deploy",
+            "tag.*version"
+          ],
+          "agent": "opspal-core:release-coordinator",
+          "clearanceAgents": [
+            "opspal-core:release-coordinator",
+            "opspal-salesforce:sfdc-deployment-manager"
+          ],
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "benchmark",
+          "keywords": [
+            "benchmark",
+            "industry.*average",
+            "typical.*rate",
+            "peer.*comparison"
+          ],
+          "agent": "opspal-salesforce:benchmark-research-agent",
+          "complexity": 0.4,
+          "blocking": false
+        },
+        {
+          "id": "pdf-generation",
+          "keywords": [
+            "pdf",
+            "generate.*pdf",
+            "export.*pdf",
+            "pdf.*report"
+          ],
+          "agent": "opspal-core:pdf-generator",
+          "complexity": 0.3,
+          "blocking": false
+        },
+        {
+          "id": "web-viz",
+          "keywords": [
+            "dashboard.*create",
+            "interactive.*chart",
+            "web.*viz",
+            "kpi.*dashboard"
+          ],
+          "agent": "opspal-core:web-viz-generator",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "asana",
+          "keywords": [
+            "asana",
+            "task.*asana",
+            "project.*asana",
+            "asana.*update"
+          ],
+          "agent": "opspal-core:asana-task-manager",
+          "complexity": 0.4,
+          "blocking": false
+        },
+        {
+          "id": "intake",
+          "keywords": [
+            "intake",
+            "project.*intake",
+            "new.*project",
+            "requirements.*gathering",
+            "classify.*request",
+            "plan.*project",
+            "smart.*intake",
+            "scope.*document",
+            "kickoff"
+          ],
+          "agent": "opspal-core:intelligent-intake-orchestrator",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "uat-testing",
+          "keywords": [
+            "uat",
+            "acceptance.*test",
+            "test.*cases",
+            "uat.*build"
+          ],
+          "agent": "opspal-core:uat-orchestrator",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "pipeline-intelligence",
+          "keywords": [
+            "pipeline.*health",
+            "pipeline.*deal.*risk",
+            "(salesforce|sfdc).*deal.*risk",
+            "bottleneck",
+            "stuck.*deals"
+          ],
+          "agent": "opspal-core:pipeline-intelligence-agent",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "sales-playbook",
+          "keywords": [
+            "playbook",
+            "next.*best.*action",
+            "sales.*guidance",
+            "deal.*coaching"
+          ],
+          "agent": "opspal-core:sales-playbook-orchestrator",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "account-expansion",
+          "keywords": [
+            "expansion",
+            "upsell",
+            "cross.*sell",
+            "account.*growth",
+            "whitespace"
+          ],
+          "agent": "opspal-core:account-expansion-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "cs-operations",
+          "keywords": [
+            "customer.*success",
+            "qbr",
+            "health.*score",
+            "renewal",
+            "churn.*prevention"
+          ],
+          "agent": "opspal-core:cs-operations-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "sales-enablement",
+          "keywords": [
+            "enablement",
+            "sales.*training",
+            "skill.*gap",
+            "rep.*onboarding"
+          ],
+          "agent": "opspal-core:sales-enablement-coordinator",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "multi-platform-campaign",
+          "keywords": [
+            "campaign.*orchestration",
+            "multi.*platform.*campaign",
+            "cross.*platform.*marketing"
+          ],
+          "agent": "opspal-core:multi-platform-campaign-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "unified-exec-dashboard",
+          "keywords": [
+            "executive.*dashboard",
+            "unified.*dashboard",
+            "c.*level.*report",
+            "board.*report"
+          ],
+          "agent": "opspal-core:unified-exec-dashboard-agent",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "multi-platform-workflow",
+          "keywords": [
+            "multi.*platform.*workflow",
+            "cross.*platform.*automation",
+            "workflow.*orchestration"
+          ],
+          "agent": "opspal-core:multi-platform-workflow-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "data-migration",
+          "keywords": [
+            "data.*migration",
+            "platform.*migration",
+            "etl",
+            "data.*sync"
+          ],
+          "agent": "opspal-core:data-migration-orchestrator",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "field-dictionary",
+          "keywords": [
+            "field.*dictionary",
+            "data.*dictionary",
+            "field.*context",
+            "metadata.*dictionary"
+          ],
+          "agent": "opspal-core:field-dictionary-manager",
+          "complexity": 0.4,
+          "blocking": false
+        },
+        {
+          "id": "notebooklm",
+          "keywords": [
+            "notebook",
+            "knowledge.*base",
+            "client.*context",
+            "briefing",
+            "360.*view"
+          ],
+          "agent": "opspal-core:notebooklm-knowledge-manager",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "gong-deal-risk",
+          "keywords": [
+            "gong.*risk",
+            "deal.*risk.*gong",
+            "conversation.*health",
+            "going.*dark",
+            "call.*coverage.*gong"
+          ],
+          "agent": "opspal-core:gong-deal-intelligence-agent",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "gong-sync",
+          "keywords": [
+            "sync.*gong",
+            "gong.*sync",
+            "import.*gong.*call",
+            "gong.*batch"
+          ],
+          "agent": "opspal-core:gong-sync-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "gong-competitive",
+          "keywords": [
+            "gong.*competi",
+            "competi.*intel.*gong",
+            "gong.*tracker",
+            "battlecard.*gong"
+          ],
+          "agent": "opspal-core:gong-competitive-intelligence-agent",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "gong-auth",
+          "keywords": [
+            "gong.*auth",
+            "gong.*credential",
+            "gong.*api.*key"
+          ],
+          "agent": "opspal-core:gong-integration-agent",
+          "complexity": 0.3,
+          "blocking": false
+        },
+        {
+          "id": "conversation-intelligence-aggregation",
+          "keywords": [
+            "gong.*and.*fireflies",
+            "fireflies.*and.*gong",
+            "combined.*conversation.*intelligence",
+            "cross.*platform.*transcript",
+            "unified.*meeting.*analysis"
+          ],
+          "agent": "opspal-core:conversation-intelligence-aggregator",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "fireflies-meeting-intelligence",
+          "keywords": [
+            "fireflies.*transcript",
+            "fireflies.*meeting",
+            "meeting.*transcript",
+            "transcript.*action.*item",
+            "identify.*action.*item",
+            "meeting.*health.*fireflies",
+            "fireflies.*analysis",
+            "fireflies.*action.*item"
+          ],
+          "agent": "opspal-core:fireflies-meeting-intelligence-agent",
+          "complexity": 0.5,
+          "blocking": false
+        },
+        {
+          "id": "fireflies-integration",
+          "keywords": [
+            "sync.*fireflies",
+            "fireflies.*sync",
+            "fireflies.*salesforce",
+            "fireflies.*hubspot",
+            "configure.*fireflies",
+            "fireflies.*auth"
+          ],
+          "agent": "opspal-core:fireflies-integration-agent",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "revops-maturity",
+          "keywords": [
+            "revops.*maturity",
+            "maturity.*assessment",
+            "platform.*health",
+            "revops.*score",
+            "how.*mature",
+            "revops.*readiness",
+            "full.*assessment",
+            "cross.*platform.*assessment",
+            "new.*client.*audit"
+          ],
+          "agent": "opspal-core:revops-maturity-orchestrator",
+          "complexity": 0.9,
+          "blocking": true
+        },
+        {
+          "id": "remediation",
+          "keywords": [
+            "remediation.*plan",
+            "fix.*roadmap",
+            "implementation.*plan.*remediation",
+            "implementation.*plan.*findings",
+            "what.*fix.*first",
+            "prioritize.*findings",
+            "action.*plan.*audit",
+            "remediation.*sequence"
+          ],
+          "agent": "opspal-core:remediation-sequencer",
+          "complexity": 0.7,
+          "blocking": false
+        },
+        {
+          "id": "board-pack",
+          "keywords": [
+            "qbr",
+            "board.*pack",
+            "quarterly.*review",
+            "board.*meeting",
+            "executive.*deck",
+            "qbr.*prep",
+            "quarterly.*business.*review"
+          ],
+          "agent": "opspal-core:board-pack-orchestrator",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "impact-analysis",
+          "keywords": [
+            "impact.*analysis",
+            "what.*breaks",
+            "field.*change.*impact",
+            "cross.*platform.*impact",
+            "blast.*radius",
+            "before.*change"
+          ],
+          "agent": "opspal-core:cross-platform-impact-analyzer",
+          "complexity": 0.6,
+          "blocking": false
+        },
+        {
+          "id": "revops-query",
+          "keywords": [
+            "what.*is.*our",
+            "how.*many",
+            "show.*me.*pipeline",
+            "revenue.*situation",
+            "pipeline.*question",
+            "quick.*question.*revops"
+          ],
+          "agent": "opspal-core:revops-query-agent",
+          "complexity": 0.5,
+          "blocking": false
+        }
+      ]
+    },
+    "gtmPlanning": {
+      "description": "GTM Planning routing patterns",
+      "patterns": [
+        {
+          "id": "strategic-reports",
+          "keywords": [
+            "strategic.*report",
+            "gtm.*report",
+            "arr.*waterfall",
+            "revenue.*model"
+          ],
+          "agent": "opspal-gtm-planning:gtm-strategic-reports-orchestrator",
+          "complexity": 0.8,
+          "blocking": true
+        },
+        {
+          "id": "revenue-modeler",
+          "keywords": [
+            "revenue.*model",
+            "arr.*projection",
+            "scenario.*planning",
+            "capacity.*model"
+          ],
+          "agent": "opspal-gtm-planning:gtm-revenue-modeler",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "retention-analyst",
+          "keywords": [
+            "nrr",
+            "ndr",
+            "retention.*analysis",
+            "churn",
+            "grr",
+            "revenue.*mix"
+          ],
+          "agent": "opspal-gtm-planning:gtm-retention-analyst",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "market-intelligence",
+          "keywords": [
+            "tam",
+            "sam",
+            "som",
+            "market.*size",
+            "icp.*analysis",
+            "segment.*analysis"
+          ],
+          "agent": "opspal-gtm-planning:gtm-market-intelligence",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "forecast-orchestrator",
+          "keywords": [
+            "forecast",
+            "revenue.*prediction",
+            "booking.*forecast",
+            "pipeline.*forecast"
+          ],
+          "agent": "opspal-gtm-planning:forecast-orchestrator",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "territory-planning",
+          "keywords": [
+            "territory.*design",
+            "quota.*model",
+            "capacity.*planning",
+            "territory.*balance"
+          ],
+          "agent": "opspal-gtm-planning:gtm-territory-designer",
+          "complexity": 0.7,
+          "blocking": true
+        },
+        {
+          "id": "gtm-asana",
+          "keywords": [
+            "gtm.*asana",
+            "planning.*asana",
+            "sync.*territories.*asana",
+            "gtm.*execution.*tracking"
+          ],
+          "agent": "opspal-gtm-planning:gtm-asana-bridge",
+          "complexity": 0.6,
+          "blocking": false
+        }
+      ]
+    }
+  },
+  "deploymentHierarchy": {
+    "rules": [
+      "1. 'deploy to production' / 'production deploy' -> release-coordinator (mandatoryPatterns)",
+      "2. 'sf project deploy' / 'deploy metadata' -> sfdc-deployment-manager (platform-level)",
+      "3. release-coordinator delegates to sfdc-deployment-manager for actual SF deploys",
+      "4. sfdc-deployment-manager NEVER calls release-coordinator (prevents circular)"
+    ]
+  },
+  "complexityRules": {
+    "description": "Rules for calculating complexity scores",
+    "highComplexityKeywords": {
+      "score": 0.3,
+      "keywords": [
+        "production",
+        "prod deploy",
+        "merge.*main",
+        "release",
+        "audit",
+        "assessment",
+        "comprehensive",
+        "migrate",
+        "bulk",
+        "mass",
+        "delete all"
+      ]
+    },
+    "mediumComplexityKeywords": {
+      "score": 0.2,
+      "keywords": [
+        "create",
+        "build",
+        "new",
+        "implement",
+        "workflow",
+        "flow",
+        "automation",
+        "trigger",
+        "permission",
+        "security",
+        "profile"
+      ]
+    },
+    "lowComplexityKeywords": {
+      "score": 0.1,
+      "keywords": [
+        "query",
+        "search",
+        "find",
+        "list",
+        "show",
+        "check",
+        "validate",
+        "verify",
+        "test"
+      ]
+    }
+  },
+  "blockingThresholds": {
+    "mandatory": 1.0,
+    "high": 0.7,
+    "recommended": 0.5,
+    "available": 0.0
+  },
+  "settings": {
+    "enableMandatoryBlocking": true,
+    "enableComplexityBlocking": true,
+    "defaultTimeout": 10000,
+    "verboseLogging": false
+  },
+  "exclusiveKeywords": {
+    "description": "Keywords that must route to exactly ONE agent. Any overlap triggers validation error.",
+    "mappings": {
+      "cpq": "opspal-salesforce:sfdc-cpq-assessor",
+      "q2c": "opspal-salesforce:sfdc-cpq-assessor",
+      "revops": "opspal-salesforce:sfdc-revops-auditor",
+      "territory": "opspal-salesforce:sfdc-territory-orchestrator",
+      "permission.*set": "opspal-salesforce:sfdc-permission-orchestrator",
+      "nrr": "opspal-gtm-planning:gtm-retention-analyst",
+      "ndr": "opspal-gtm-planning:gtm-retention-analyst",
+      "tam": "opspal-gtm-planning:gtm-market-intelligence",
+      "sam": "opspal-gtm-planning:gtm-market-intelligence",
+      "som": "opspal-gtm-planning:gtm-market-intelligence",
+      "okr": "opspal-okrs:okr-strategy-orchestrator"
+    }
+  },
+  "commandToAgentMapping": {
+    "description": "Maps slash commands to their underlying agents for validation",
+    "mappings": {
+      "/okr-generate": "opspal-okrs:okr-strategy-orchestrator",
+      "/okr-snapshot": "opspal-okrs:okr-data-aggregator",
+      "/okr-score-initiative": "opspal-okrs:okr-initiative-evaluator",
+      "/okr-prioritize": "opspal-okrs:okr-initiative-prioritizer",
+      "/okr-status": "opspal-okrs:okr-progress-tracker",
+      "/okr-report": "opspal-okrs:okr-executive-reporter",
+      "/okr-approve": "opspal-okrs:okr-strategy-orchestrator",
+      "/okr-plg-signals": "opspal-okrs:okr-plg-specialist",
+      "/okr-retrospective": "opspal-okrs:okr-learning-engine",
+      "/okr-benchmark": "opspal-okrs:okr-initiative-evaluator",
+      "/okr-history": "opspal-okrs:okr-learning-engine",
+      "/okr-dashboard": "opspal-okrs:okr-dashboard-generator",
+      "/okr-cadence": "opspal-okrs:okr-cadence-manager",
+      "/okr-align-check": "opspal-okrs:okr-alignment-auditor",
+      "/cpq-preflight": "opspal-salesforce:sfdc-cpq-assessor",
+      "/audit-automation": "opspal-salesforce:sfdc-automation-auditor",
+      "/q2c-audit": "opspal-salesforce:sfdc-cpq-assessor",
+      "/territory-discovery": "opspal-salesforce:sfdc-territory-discovery",
+      "/diagram": "opspal-core:diagram-generator",
+      "/intake": "opspal-core:intelligent-intake-orchestrator",
+      "/work-index": "opspal-core:work-index-manager",
+      "/extract-user-reports": "opspal-salesforce:sfdc-reports-dashboards",
+      "/capabilities": "opspal-core:capabilities",
+      "/revops-maturity": "opspal-core:revops-maturity-orchestrator",
+      "/qbr": "opspal-core:board-pack-orchestrator",
+      "/impact-analysis": "opspal-core:cross-platform-impact-analyzer",
+      "/integration-health": "opspal-core:live-wire-sync-test-orchestrator",
+      "/gtm-start": "opspal-gtm-planning:gtm-planning-orchestrator"
+    }
+  }
+}
