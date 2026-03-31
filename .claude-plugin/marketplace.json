@@ -44,12 +44,6 @@
       "version": "2.6.29"
     },
     {
-      "name": "opspal-mcp-client",
-      "source": "./plugins/opspal-mcp-client",
-      "description": "OpsPal MCP Client - Orchestrates 27 proprietary scoring, benchmark, assessment, and compute tools via the OpsPal MCP server. Includes scoring orchestrator, benchmark agent, compute orchestrator, client-side validation hooks, and usage tracking.",
-      "version": "1.1.5"
-    },
-    {
       "name": "opspal-monday",
       "source": "./plugins/opspal-monday",
       "description": "[EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export, and cross-board operations.",
@@ -69,7 +63,7 @@
     }
   ],
   "_stats": {
-    "total_plugins": 10,
+    "total_plugins": 9,
     "last_updated": "2026-03-31",
     "generated_at": "2026-03-31"
   }
