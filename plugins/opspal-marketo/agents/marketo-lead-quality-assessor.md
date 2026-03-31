@@ -19,7 +19,6 @@ disallowedTools:
   - mcp__marketo__lead_create
   - mcp__marketo__lead_update
   - mcp__marketo__lead_merge
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

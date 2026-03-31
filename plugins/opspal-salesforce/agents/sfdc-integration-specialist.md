@@ -11,8 +11,6 @@ tools:
   - TodoWrite
   - WebFetch
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
 triggerKeywords:

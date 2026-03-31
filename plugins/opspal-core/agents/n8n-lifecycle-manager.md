@@ -23,6 +23,7 @@ routing:
   confidence_threshold: 0.7
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

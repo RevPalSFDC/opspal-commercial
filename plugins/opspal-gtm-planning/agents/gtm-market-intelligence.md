@@ -4,6 +4,7 @@ description: "Provides market sizing, segmentation analysis, and ICP performance
 model: sonnet
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

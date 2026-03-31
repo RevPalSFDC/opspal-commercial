@@ -14,7 +14,6 @@ disallowedTools:
   - mcp__salesforce__*_create
   - mcp__salesforce__*_update
   - mcp__salesforce__*_delete
-  - Bash(sf project deploy:*)
 model: sonnet
 triggerKeywords:
   - create template

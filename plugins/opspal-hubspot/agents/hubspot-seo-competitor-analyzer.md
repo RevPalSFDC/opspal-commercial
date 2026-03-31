@@ -7,6 +7,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - WebSearch
   - WebFetch
 version: 1.0.0

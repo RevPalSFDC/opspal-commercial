@@ -11,6 +11,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 ---
 
 # OKR Generator Agent

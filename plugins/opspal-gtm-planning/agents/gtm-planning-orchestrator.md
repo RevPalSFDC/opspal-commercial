@@ -13,6 +13,7 @@ tools:
   - TaskList
   - TaskGet
   - Bash
+  - Grep
 triggerKeywords:
   - plan
   - planning

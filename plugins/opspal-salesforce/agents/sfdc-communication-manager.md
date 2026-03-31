@@ -4,13 +4,12 @@ description: "Use PROACTIVELY for communication features."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite
   - mcp_salesforce
 disallowedTools:
-  - Bash(sf data delete:*)
-  - Bash(sf project deploy --metadata-dir:*)
   - mcp__salesforce__*_delete
 model: sonnet
 tier: 4

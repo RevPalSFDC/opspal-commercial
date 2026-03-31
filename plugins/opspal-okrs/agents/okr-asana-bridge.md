@@ -12,6 +12,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 ---
 
 # OKR Asana Bridge Agent

@@ -5,6 +5,7 @@ description: "Use PROACTIVELY for compensation planning."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

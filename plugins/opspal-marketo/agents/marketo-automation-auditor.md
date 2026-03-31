@@ -21,7 +21,6 @@ disallowedTools:
   - mcp__marketo__campaign_deactivate
   - mcp__marketo__campaign_schedule
   - mcp__marketo__campaign_request
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

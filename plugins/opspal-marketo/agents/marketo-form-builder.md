@@ -18,8 +18,6 @@ tools:
   - mcp__marketo__form_list
   - mcp__marketo__form_add_field
   - mcp__marketo__form_approve
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

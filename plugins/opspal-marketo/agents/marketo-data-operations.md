@@ -59,7 +59,6 @@ tools:
 disallowedTools:
   - mcp__marketo__campaign_activate
   - mcp__marketo__campaign_deactivate
-  - Bash(rm -rf:*)
 version: 2.0.0
 created: 2025-12-05
 updated: 2026-01-13

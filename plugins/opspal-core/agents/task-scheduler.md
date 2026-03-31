@@ -4,6 +4,7 @@ description: "Use PROACTIVELY for scheduling automated tasks."
 color: indigo
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

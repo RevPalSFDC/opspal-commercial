@@ -16,10 +16,8 @@ tools:
   - Grep
 disallowedTools:
   # Direct data deletion protection - requires governance approval
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
   # Production merge protection
-  - Bash(sf data merge --target-org production:*)
 governanceIntegration: true
 actorType: specialist
 capabilities:

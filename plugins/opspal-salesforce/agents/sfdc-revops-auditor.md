@@ -8,6 +8,7 @@ tools:
   - Read
   - TodoWrite
   - Bash
+  - Grep
   - Task
   - mcp__playwright__browser_navigate
   - mcp__playwright__browser_snapshot
@@ -22,11 +23,6 @@ disallowedTools:
   - Write
   - Edit
   - NotebookEdit
-  - Bash(sf project deploy:*)
-  - Bash(sf data upsert:*)
-  - Bash(sf data delete:*)
-  - Bash(sf data update:*)
-  - Bash(sf force source deploy:*)
   - mcp__salesforce__*_create
   - mcp__salesforce__*_update
   - mcp__salesforce__*_delete

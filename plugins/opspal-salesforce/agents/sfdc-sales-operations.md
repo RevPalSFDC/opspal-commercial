@@ -4,6 +4,7 @@ description: "Use PROACTIVELY for sales operations."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite
@@ -11,8 +12,6 @@ tools:
   - mcp_salesforce
   - mcp_salesforce_data_query
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: haiku
 triggerKeywords:

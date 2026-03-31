@@ -21,9 +21,6 @@ tools:
   - mcp_salesforce_data_create
   - mcp_salesforce_data_update
   - mcp_salesforce_data_delete
-disallowedTools:
-  - Bash(sf project deploy:*)
-  - Bash(sf force source deploy:*)
 triggerKeywords:
   - bulkops
   - bulk operation

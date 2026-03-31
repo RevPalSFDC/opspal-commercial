@@ -18,6 +18,7 @@ tools:
   - Write
   - Edit
   - Bash
+  - Grep
 integrations:
   - trigger-complexity-calculator
   - trigger-orchestrator

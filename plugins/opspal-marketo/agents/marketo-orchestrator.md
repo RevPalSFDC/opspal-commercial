@@ -14,7 +14,6 @@ tools:
   - mcp__marketo__campaign_list
   - mcp__marketo__program_list
 disallowedTools:
-  - Bash(rm -rf:*)
   - Write(/etc/*)
 version: 1.0.0
 created: 2025-12-05

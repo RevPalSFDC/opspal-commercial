@@ -11,8 +11,6 @@ tools:
   - Write
   - Grep
   - TodoWrite
-disallowedTools:
-  - Bash(sf data delete:bulk*)
 version: 1.0.0
 created: 2025-12-12
 model: sonnet

@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-30T15:44:07.948Z",
+  "buildDate": "2026-03-31T16:30:26.354Z",
   "totalAgents": 300,
   "totalAgentsFull": 303,
   "totalCommands": 273,
@@ -20548,6 +20548,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -20732,6 +20733,7 @@
         "Write",
         "TodoWrite",
         "Bash",
+        "Grep",
         "TaskCreate",
         "TaskUpdate",
         "TaskList",
@@ -20882,6 +20884,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -21048,6 +21051,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -21077,6 +21081,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -21727,6 +21732,7 @@
       "color": "indigo",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -21883,6 +21889,7 @@
       "version": "1.0.0",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "Agent"
@@ -21922,6 +21929,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -21957,6 +21965,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -22075,6 +22084,7 @@
       "version": "1.0.0",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -22119,6 +22129,7 @@
       "version": "1.0.0",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -22302,6 +22313,7 @@
         "Write",
         "Bash",
         "Glob",
+        "Grep",
         "TodoWrite",
         "mcp__playwright__browser_navigate",
         "mcp__playwright__browser_snapshot",
@@ -22335,6 +22347,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp_salesforce_data_query"
       ],
@@ -22507,6 +22520,7 @@
         "Write",
         "Bash",
         "Glob",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -22970,6 +22984,7 @@
         "Write",
         "TodoWrite",
         "Bash",
+        "Grep",
         "TaskCreate",
         "TaskUpdate",
         "TaskList",
@@ -23090,6 +23105,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -23158,6 +23174,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -23188,6 +23205,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -23453,6 +23471,7 @@
       "color": "indigo",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -23586,6 +23605,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -23621,6 +23641,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -23764,6 +23785,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -23793,7 +23815,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "gtm asana",
@@ -23822,6 +23845,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -23859,6 +23883,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -23897,6 +23922,7 @@
       "tools": [
         "Agent",
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -23935,6 +23961,7 @@
       "color": "cyan",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -23978,7 +24005,8 @@
         "TaskUpdate",
         "TaskList",
         "TaskGet",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "plan",
@@ -24008,6 +24036,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -24042,6 +24071,7 @@
       "color": "green",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -24076,6 +24106,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -24113,7 +24144,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "gtm strategic",
@@ -24142,6 +24174,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -24175,6 +24208,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -24960,7 +24994,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "publish",
@@ -25035,6 +25070,7 @@
       "color": "orange",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -25919,6 +25955,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "WebSearch",
         "WebFetch"
       ],
@@ -26166,6 +26203,7 @@
       "color": "orange",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "Agent",
@@ -26219,6 +26257,7 @@
         "Write",
         "TodoWrite",
         "Bash",
+        "Grep",
         "WebFetch",
         "Agent"
       ],
@@ -26292,7 +26331,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "hubspot",
@@ -26769,7 +26809,8 @@
         "Read",
         "Write",
         "Bash",
-        "Glob"
+        "Glob",
+        "Grep"
       ],
       "triggerKeywords": [
         "normalize data",
@@ -27609,6 +27650,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -28093,6 +28135,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp__opspal__compute_revenue_model",
         "mcp__opspal__run_scenario_planning",
@@ -28131,6 +28174,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp__opspal__score_customer_health",
         "mcp__opspal__score_churn_risk",
@@ -28173,6 +28217,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "mcp__monday__*"
       ],
       "triggerKeywords": [
@@ -28241,6 +28286,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "mcp__monday__*"
       ],
       "triggerKeywords": [
@@ -28351,6 +28397,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "mcp__monday__*"
       ],
       "triggerKeywords": [
@@ -28384,7 +28431,8 @@
         "Agent",
         "Read",
         "Write",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr alignment",
@@ -28416,7 +28464,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr asana",
@@ -28448,7 +28497,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr cadence",
@@ -28476,7 +28526,8 @@
         "Agent",
         "Read",
         "Write",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr dashboard",
@@ -28505,7 +28556,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr data",
@@ -28537,7 +28589,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr executive",
@@ -28569,7 +28622,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr funnel",
@@ -28600,7 +28654,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr",
@@ -28624,7 +28679,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr initiative",
@@ -28656,7 +28712,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr initiative",
@@ -28688,7 +28745,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr learning",
@@ -28720,7 +28778,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr plg",
@@ -28749,7 +28808,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr progress",
@@ -28785,7 +28845,8 @@
         "TaskUpdate",
         "TaskList",
         "TaskGet",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr strategy",
@@ -28865,6 +28926,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp_salesforce_data_query"
       ],
@@ -29026,6 +29088,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -29059,6 +29122,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -29166,6 +29230,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -29223,7 +29288,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "sf",
@@ -29695,6 +29761,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -29732,6 +29799,7 @@
       "tier": "4",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -30014,6 +30082,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -30054,6 +30123,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent"
       ],
       "capabilities": [
@@ -30140,7 +30210,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -30222,7 +30293,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -30262,16 +30334,16 @@
       "color": "blue",
       "actorType": "specialist",
       "tools": [
-        "Bash",
-        "Grep",
-        "Read",
-        "TodoWrite",
-        "Write",
-        "mcp__context7__*",
-        "mcp_salesforce_data_create",
-        "mcp_salesforce_data_delete",
         "mcp_salesforce_data_query",
-        "mcp_salesforce_data_update"
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update",
+        "mcp_salesforce_data_delete",
+        "mcp__context7__*",
+        "Read",
+        "Write",
+        "Grep",
+        "TodoWrite",
+        "Bash"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -30639,6 +30711,7 @@
       "tools": [
         "Read",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -30672,6 +30745,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -30711,6 +30785,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -30751,7 +30826,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "convert lead",
@@ -31071,6 +31147,7 @@
         "TodoWrite",
         "ExitPlanMode",
         "Bash",
+        "Grep",
         "SlashCommand",
         "TaskCreate",
         "TaskUpdate",
@@ -31372,6 +31449,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "capabilities": [
@@ -31448,7 +31526,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "import",
@@ -31484,6 +31563,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -31518,6 +31598,7 @@
       "tools": [
         "Read",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -31557,6 +31638,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -31721,6 +31803,7 @@
         "Read",
         "TodoWrite",
         "Bash",
+        "Grep",
         "Agent",
         "mcp__playwright__browser_navigate",
         "mcp__playwright__browser_snapshot",
@@ -31766,6 +31849,7 @@
       "tools": [
         "Agent",
         "Bash",
+        "Grep",
         "mcp_salesforce_data_query",
         "mcp_salesforce",
         "mcp__playwright__*",
@@ -31802,6 +31886,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -31974,7 +32059,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "territory assignment",
@@ -32211,6 +32297,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -32302,6 +32389,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -32349,7 +32437,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "capabilities": [
         "salesforce:data:core:query",
@@ -32441,7 +32530,8 @@
         "Read",
         "Write",
         "Edit",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "trigger segmentation",
@@ -32517,6 +32607,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -32554,6 +32645,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp_salesforce_data_query"
       ],
@@ -32657,6 +32749,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -32841,6 +32934,7 @@
         "Write",
         "TodoWrite",
         "Bash",
+        "Grep",
         "TaskCreate",
         "TaskUpdate",
         "TaskList",
@@ -32991,6 +33085,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -33157,6 +33252,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -33186,6 +33282,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -33836,6 +33933,7 @@
       "color": "indigo",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -33992,6 +34090,7 @@
       "version": "1.0.0",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "Agent"
@@ -34031,6 +34130,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -34066,6 +34166,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -34184,6 +34285,7 @@
       "version": "1.0.0",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -34228,6 +34330,7 @@
       "version": "1.0.0",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -34411,6 +34514,7 @@
         "Write",
         "Bash",
         "Glob",
+        "Grep",
         "TodoWrite",
         "mcp__playwright__browser_navigate",
         "mcp__playwright__browser_snapshot",
@@ -34444,6 +34548,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp_salesforce_data_query"
       ],
@@ -34616,6 +34721,7 @@
         "Write",
         "Bash",
         "Glob",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -35079,6 +35185,7 @@
         "Write",
         "TodoWrite",
         "Bash",
+        "Grep",
         "TaskCreate",
         "TaskUpdate",
         "TaskList",
@@ -35199,6 +35306,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -35267,6 +35375,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -35297,6 +35406,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -35562,6 +35672,7 @@
       "color": "indigo",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -35695,6 +35806,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -35730,6 +35842,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query",
@@ -35873,6 +35986,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -35910,6 +36024,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -35947,6 +36062,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent",
         "mcp_salesforce_data_query"
@@ -35976,7 +36092,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "gtm asana",
@@ -36005,6 +36122,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -36042,6 +36160,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -36080,6 +36199,7 @@
       "tools": [
         "Agent",
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -36118,6 +36238,7 @@
       "color": "cyan",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -36161,7 +36282,8 @@
         "TaskUpdate",
         "TaskList",
         "TaskGet",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "plan",
@@ -36191,6 +36313,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -36225,6 +36348,7 @@
       "color": "green",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -36259,6 +36383,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -36296,7 +36421,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "gtm strategic",
@@ -36325,6 +36451,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -36358,6 +36485,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -37143,7 +37271,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "publish",
@@ -37218,6 +37347,7 @@
       "color": "orange",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -38102,6 +38232,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "WebSearch",
         "WebFetch"
       ],
@@ -38349,6 +38480,7 @@
       "color": "orange",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "Agent",
@@ -38402,6 +38534,7 @@
         "Write",
         "TodoWrite",
         "Bash",
+        "Grep",
         "WebFetch",
         "Agent"
       ],
@@ -38475,7 +38608,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "hubspot",
@@ -38952,7 +39086,8 @@
         "Read",
         "Write",
         "Bash",
-        "Glob"
+        "Glob",
+        "Grep"
       ],
       "triggerKeywords": [
         "normalize data",
@@ -39792,6 +39927,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -40276,6 +40412,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp__opspal__compute_revenue_model",
         "mcp__opspal__run_scenario_planning",
@@ -40314,6 +40451,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp__opspal__score_customer_health",
         "mcp__opspal__score_churn_risk",
@@ -40356,6 +40494,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "mcp__monday__*"
       ],
       "triggerKeywords": [
@@ -40424,6 +40563,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "mcp__monday__*"
       ],
       "triggerKeywords": [
@@ -40534,6 +40674,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "mcp__monday__*"
       ],
       "triggerKeywords": [
@@ -40567,7 +40708,8 @@
         "Agent",
         "Read",
         "Write",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr alignment",
@@ -40599,7 +40741,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr asana",
@@ -40631,7 +40774,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr cadence",
@@ -40659,7 +40803,8 @@
         "Agent",
         "Read",
         "Write",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr dashboard",
@@ -40688,7 +40833,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr data",
@@ -40720,7 +40866,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr executive",
@@ -40752,7 +40899,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr funnel",
@@ -40783,7 +40931,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr",
@@ -40807,7 +40956,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr initiative",
@@ -40839,7 +40989,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr initiative",
@@ -40871,7 +41022,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr learning",
@@ -40903,7 +41055,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr plg",
@@ -40932,7 +41085,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr progress",
@@ -40968,7 +41122,8 @@
         "TaskUpdate",
         "TaskList",
         "TaskGet",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "okr strategy",
@@ -41083,6 +41238,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp_salesforce_data_query"
       ],
@@ -41244,6 +41400,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -41277,6 +41434,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -41384,6 +41542,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -41441,7 +41600,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "sf",
@@ -41913,6 +42073,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite"
@@ -41950,6 +42111,7 @@
       "tier": "4",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -42232,6 +42394,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -42272,6 +42435,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent"
       ],
       "capabilities": [
@@ -42358,7 +42522,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -42440,7 +42605,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -42480,16 +42646,16 @@
       "color": "blue",
       "actorType": "specialist",
       "tools": [
-        "Bash",
-        "Grep",
-        "Read",
-        "TodoWrite",
-        "Write",
-        "mcp__context7__*",
-        "mcp_salesforce_data_create",
-        "mcp_salesforce_data_delete",
         "mcp_salesforce_data_query",
-        "mcp_salesforce_data_update"
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_update",
+        "mcp_salesforce_data_delete",
+        "mcp__context7__*",
+        "Read",
+        "Write",
+        "Grep",
+        "TodoWrite",
+        "Bash"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -42857,6 +43023,7 @@
       "tools": [
         "Read",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -42890,6 +43057,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -42929,6 +43097,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "Agent",
         "TodoWrite"
       ],
@@ -42969,7 +43138,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "convert lead",
@@ -43289,6 +43459,7 @@
         "TodoWrite",
         "ExitPlanMode",
         "Bash",
+        "Grep",
         "SlashCommand",
         "TaskCreate",
         "TaskUpdate",
@@ -43590,6 +43761,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "capabilities": [
@@ -43666,7 +43838,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "import",
@@ -43702,6 +43875,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -43736,6 +43910,7 @@
       "tools": [
         "Read",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -43775,6 +43950,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -43939,6 +44115,7 @@
         "Read",
         "TodoWrite",
         "Bash",
+        "Grep",
         "Agent",
         "mcp__playwright__browser_navigate",
         "mcp__playwright__browser_snapshot",
@@ -43984,6 +44161,7 @@
       "tools": [
         "Agent",
         "Bash",
+        "Grep",
         "mcp_salesforce_data_query",
         "mcp_salesforce",
         "mcp__playwright__*",
@@ -44020,6 +44198,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -44192,7 +44371,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "territory assignment",
@@ -44429,6 +44609,7 @@
       "color": "blue",
       "tools": [
         "Bash",
+        "Grep",
         "Read",
         "Write",
         "TodoWrite",
@@ -44520,6 +44701,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite"
       ],
       "triggerKeywords": [
@@ -44567,7 +44749,8 @@
         "Read",
         "Write",
         "TodoWrite",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "capabilities": [
         "salesforce:data:core:query",
@@ -44659,7 +44842,8 @@
         "Read",
         "Write",
         "Edit",
-        "Bash"
+        "Bash",
+        "Grep"
       ],
       "triggerKeywords": [
         "trigger segmentation",
@@ -44735,6 +44919,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "Agent"
       ],
@@ -44772,6 +44957,7 @@
         "Read",
         "Write",
         "Bash",
+        "Grep",
         "TodoWrite",
         "mcp_salesforce_data_query"
       ],

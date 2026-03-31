@@ -5,6 +5,7 @@ description: "Use PROACTIVELY for territory design."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

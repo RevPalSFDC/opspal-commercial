@@ -9,10 +9,8 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 disallowedTools:
-  - Bash(sf project deploy:*)
-  - Bash(sf force source deploy:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: haiku
 actorType: specialist

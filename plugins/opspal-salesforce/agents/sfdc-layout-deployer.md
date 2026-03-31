@@ -6,10 +6,10 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - Task
 disallowedTools:
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
 triggerKeywords:

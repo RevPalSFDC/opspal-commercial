@@ -11,6 +11,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
 ---
 
 # OKR Dashboard Generator

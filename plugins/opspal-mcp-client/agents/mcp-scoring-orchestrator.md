@@ -11,6 +11,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - mcp__opspal__score_customer_health
   - mcp__opspal__score_churn_risk

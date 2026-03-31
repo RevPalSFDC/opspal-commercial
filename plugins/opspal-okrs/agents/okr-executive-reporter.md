@@ -12,6 +12,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 ---
 
 # BLUF+4 Executive Summary Integration

@@ -17,8 +17,6 @@ tools:
   - mcp__marketo__program_list
   - mcp__marketo__program_get
   - mcp__marketo__lead_query
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

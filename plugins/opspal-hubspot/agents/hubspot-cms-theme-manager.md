@@ -4,6 +4,7 @@ description: "Use PROACTIVELY for CMS theme management."
 color: orange
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

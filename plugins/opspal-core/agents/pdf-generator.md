@@ -8,6 +8,7 @@ tools:
   - Write
   - Bash
   - Glob
+  - Grep
   - TodoWrite
   - mcp__playwright__browser_navigate
   - mcp__playwright__browser_snapshot

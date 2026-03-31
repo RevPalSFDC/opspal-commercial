@@ -4,6 +4,7 @@ description: "Use PROACTIVELY for SF sync analysis."
 color: orange
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - Task

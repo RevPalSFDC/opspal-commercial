@@ -6,6 +6,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
 color: indigo
 ---

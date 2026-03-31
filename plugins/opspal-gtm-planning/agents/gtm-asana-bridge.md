@@ -12,6 +12,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 ---
 
 # GTM Asana Bridge Agent

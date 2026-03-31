@@ -6,6 +6,7 @@ color: blue
 tools:
   - Task
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

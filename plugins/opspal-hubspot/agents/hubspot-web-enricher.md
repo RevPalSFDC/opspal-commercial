@@ -12,6 +12,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 triggerKeywords: [hubspot, analysis, data, enricher, api]
 model: haiku
 ---

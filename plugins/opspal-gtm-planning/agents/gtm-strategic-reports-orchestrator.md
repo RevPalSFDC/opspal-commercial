@@ -8,6 +8,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 color: purple
 ---
 

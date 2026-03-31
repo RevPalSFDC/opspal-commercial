@@ -9,6 +9,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - Task
   - TodoWrite
 triggerKeywords:

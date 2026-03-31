@@ -41,9 +41,6 @@ tools:
   - mcp__marketo__static_list_leads
   - mcp__marketo__program_list
   - mcp__marketo__program_get
-disallowedTools:
-  - Bash(rm -rf:*)
-  - Bash(curl:*)
 version: 1.0.0
 created: 2026-01-13
 triggerKeywords:

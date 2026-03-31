@@ -16,6 +16,7 @@ tools:
   - TaskList
   - TaskGet
   - Bash
+  - Grep
 ---
 
 # OKR Strategy Orchestrator Agent

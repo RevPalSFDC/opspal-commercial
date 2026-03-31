@@ -7,6 +7,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - Task
 tags:

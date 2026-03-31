@@ -24,6 +24,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - Task
   - TodoWrite
 version: 1.0.0

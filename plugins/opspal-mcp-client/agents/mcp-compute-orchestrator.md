@@ -10,6 +10,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - mcp__opspal__compute_revenue_model
   - mcp__opspal__run_scenario_planning

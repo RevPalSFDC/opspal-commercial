@@ -8,6 +8,7 @@ tools:
   - Write
   - Bash
   - Glob
+  - Grep
 version: 1.0.0
 created: 2025-01-13
 triggerKeywords:

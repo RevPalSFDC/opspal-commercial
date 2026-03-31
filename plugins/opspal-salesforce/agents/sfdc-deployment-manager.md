@@ -12,10 +12,6 @@ tools:
   - Bash
   - Task
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sfdx project deploy --target-org production:*)
-  - Bash(sf data delete:*)
-  - Bash(sfdx data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
 actorType: specialist

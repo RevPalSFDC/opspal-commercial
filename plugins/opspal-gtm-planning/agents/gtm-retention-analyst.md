@@ -4,6 +4,7 @@ description: "Analyzes retention, expansion, and revenue conversion metrics for 
 model: sonnet
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

@@ -5,6 +5,7 @@ description: "Use PROACTIVELY for GTM strategy."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

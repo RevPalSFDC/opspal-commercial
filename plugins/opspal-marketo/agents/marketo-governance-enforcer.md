@@ -24,7 +24,6 @@ disallowedTools:
   - mcp__marketo__campaign_deactivate
   - mcp__marketo__email_approve
   - mcp__marketo__email_unapprove
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

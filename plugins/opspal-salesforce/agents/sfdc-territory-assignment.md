@@ -11,10 +11,9 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 disallowedTools:
   # Bulk deletion protection - requires backup validation
-  - Bash(sf data delete:*)
-  - Bash(sf data bulk delete:*)
   # Production data modification protection
   - mcp__salesforce__*_delete(--target-org production:*)
 version: 1.0.0

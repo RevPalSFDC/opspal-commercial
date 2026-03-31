@@ -8,6 +8,7 @@ tools:
   - Write
   - Bash
   - Glob
+  - Grep
   - TodoWrite
 triggerKeywords: [pptx, powerpoint, deck, slides, presentation]
 ---

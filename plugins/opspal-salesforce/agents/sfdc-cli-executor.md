@@ -4,12 +4,11 @@ description: "Automatically routes for SF CLI execution."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: haiku
 triggerKeywords:

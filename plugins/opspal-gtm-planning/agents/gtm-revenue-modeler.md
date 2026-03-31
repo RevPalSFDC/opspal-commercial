@@ -4,6 +4,7 @@ description: "Generates multi-year revenue projections, scenario models, and ARR
 model: sonnet
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

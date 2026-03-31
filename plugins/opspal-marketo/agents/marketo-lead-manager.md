@@ -16,8 +16,6 @@ tools:
   - mcp__marketo__lead_activities
   - mcp__marketo__lead_partitions
   - mcp__marketo__program_members
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

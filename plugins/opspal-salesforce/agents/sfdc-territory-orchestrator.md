@@ -12,7 +12,6 @@ tools:
   - mcp_salesforce
   - mcp_salesforce_data_query
 disallowedTools:
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
 tier: 3

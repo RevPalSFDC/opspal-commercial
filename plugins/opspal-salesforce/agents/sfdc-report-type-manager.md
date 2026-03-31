@@ -10,11 +10,9 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
 disallowedTools:
-  - Bash(sf project deploy:*)
-  - Bash(sf force source deploy:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: haiku
 triggerKeywords:

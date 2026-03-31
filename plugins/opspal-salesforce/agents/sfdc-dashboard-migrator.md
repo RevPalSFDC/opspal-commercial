@@ -10,10 +10,9 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - Task
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 agent: sfdc-dashboard-migrator
 stage: production

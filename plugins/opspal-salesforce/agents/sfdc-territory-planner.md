@@ -9,8 +9,6 @@ tools:
   - TodoWrite
   - Task
 disallowedTools:
-  - Bash(sf data:*)
-  - Bash(sf project deploy:*)
   - mcp__salesforce__*_create
   - mcp__salesforce__*_update
   - mcp__salesforce__*_delete

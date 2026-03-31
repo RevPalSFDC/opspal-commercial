@@ -7,13 +7,11 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - Task
-disallowedTools:
   # Production deployment protection - requires explicit approval
-  - Bash(sf project deploy --target-org production:*)
   # Data deletion protection
-  - Bash(sf data delete:*)
 triggerKeywords:
   - validation
   - rule

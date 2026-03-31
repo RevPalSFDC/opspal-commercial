@@ -25,8 +25,6 @@ tools:
   - mcp__marketo__static_list_get
   - mcp__marketo__analytics_activities
   - mcp__marketo__analytics_activity_types
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

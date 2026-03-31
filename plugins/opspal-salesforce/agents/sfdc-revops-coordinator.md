@@ -5,6 +5,7 @@ color: blue
 tools:
   - Task
   - Bash
+  - Grep
   - mcp_salesforce_data_query
   - mcp_salesforce
   - mcp__playwright__*
@@ -13,8 +14,6 @@ tools:
   - Read
   - Write
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: opus
 triggerKeywords:

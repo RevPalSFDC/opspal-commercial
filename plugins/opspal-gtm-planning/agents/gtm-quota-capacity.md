@@ -5,6 +5,7 @@ description: "Use PROACTIVELY for quota modeling."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

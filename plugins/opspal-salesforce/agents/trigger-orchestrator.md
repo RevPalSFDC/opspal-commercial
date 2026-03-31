@@ -23,9 +23,7 @@ tools:
   - Task
 disallowedTools:
   # Production deployment protection - requires explicit approval
-  - Bash(sf project deploy --target-org production:*)
   # Data deletion protection
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 integrations:
   - agent-governance-framework

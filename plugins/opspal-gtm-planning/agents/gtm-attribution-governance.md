@@ -5,6 +5,7 @@ description: "Use PROACTIVELY for attribution governance."
 color: blue
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

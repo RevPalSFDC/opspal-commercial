@@ -17,8 +17,6 @@ tools:
   - mcp__hubspot__contact_get
   - mcp__hubspot__contact_create
   - mcp__hubspot__contact_update
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

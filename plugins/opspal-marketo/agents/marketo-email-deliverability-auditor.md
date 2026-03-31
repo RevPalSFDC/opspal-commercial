@@ -20,7 +20,6 @@ disallowedTools:
   - mcp__marketo__email_approve
   - mcp__marketo__email_unapprove
   - mcp__marketo__email_send_sample
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

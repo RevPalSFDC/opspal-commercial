@@ -6,6 +6,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - Task
   - mcp_salesforce_data_query

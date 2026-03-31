@@ -10,7 +10,6 @@ tools:
 disallowedTools:
   - Write
   - Edit
-  - Bash(sf data:*)
   - mcp__salesforce__*_create
   - mcp__salesforce__*_update
   - mcp__salesforce__*_delete

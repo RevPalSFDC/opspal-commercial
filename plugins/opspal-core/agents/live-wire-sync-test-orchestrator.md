@@ -4,6 +4,7 @@ description: "Automatically routes for sync testing."
 color: indigo
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - Task

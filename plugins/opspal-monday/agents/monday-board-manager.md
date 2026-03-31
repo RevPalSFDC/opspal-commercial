@@ -6,6 +6,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - mcp__monday__*
 model: sonnet
 ---

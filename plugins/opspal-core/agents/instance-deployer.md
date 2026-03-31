@@ -5,6 +5,7 @@ description: "Automatically routes for SF deployments."
 color: indigo
 tools:
   - Bash
+  - Grep
   - Read
   - Write
   - TodoWrite

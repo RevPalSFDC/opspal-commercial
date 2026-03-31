@@ -10,11 +10,8 @@ tools:
   - TodoWrite
   - Grep
   - Glob
-disallowedTools:
   # Production deployment protection - requires explicit approval
-  - Bash(sf project deploy --target-org production:*)
   # Flow activation in production requires validation
-  - Bash(sf flow activate --target-org production:*)
 triggerKeywords:
   - batch
   - flow

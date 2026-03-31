@@ -33,7 +33,6 @@ disallowedTools:
   - mcp__marketo__list_add_leads
   - mcp__marketo__list_remove_leads
   - mcp__marketo__program_members
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2026-02-12
 triggerKeywords:

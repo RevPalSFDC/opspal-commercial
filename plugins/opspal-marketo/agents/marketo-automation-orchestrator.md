@@ -70,7 +70,6 @@ tools:
   - mcp__marketo__static_list_remove_leads
   - mcp__marketo__static_list_leads
 disallowedTools:
-  - Bash(rm -rf:*)
   - Write(/etc/*)
 version: 1.0.0
 created: 2026-01-13

@@ -18,8 +18,6 @@ tools:
   - mcp__marketo__sync_lead
   - mcp__salesforce__query
   - mcp__salesforce__describe
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

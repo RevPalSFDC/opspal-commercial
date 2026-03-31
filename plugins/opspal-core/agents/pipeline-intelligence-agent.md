@@ -6,6 +6,7 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
   - mcp_salesforce_data_query
 color: yellow

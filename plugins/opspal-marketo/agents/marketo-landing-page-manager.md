@@ -16,8 +16,6 @@ tools:
   - mcp__marketo__landing_page_get
   - mcp__marketo__landing_page_list
   - mcp__marketo__landing_page_approve
-disallowedTools:
-  - Bash(rm -rf:*)
 version: 1.0.0
 created: 2025-12-05
 triggerKeywords:

@@ -7,6 +7,7 @@ tools:
   - Write
   - TodoWrite
   - Bash
+  - Grep
 triggerKeywords:
   - publish
   - hubspot

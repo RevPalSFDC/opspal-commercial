@@ -10,8 +10,6 @@ tools:
   - TodoWrite
   - Bash
 disallowedTools:
-  - Bash(sf data delete:*)
-  - Bash(sf project deploy --metadata-dir:*)
   - mcp__salesforce__*_delete
 model: opus
 tier: 4

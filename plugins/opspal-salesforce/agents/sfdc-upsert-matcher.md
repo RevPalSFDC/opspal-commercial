@@ -10,10 +10,9 @@ tools:
   - Read
   - Write
   - Bash
+  - Grep
   - TodoWrite
 disallowedTools:
-  - Bash(sf data delete:*)
-  - Bash(sf project deploy:*)
   - mcp__salesforce__*_delete
 triggerKeywords:
   - match records
