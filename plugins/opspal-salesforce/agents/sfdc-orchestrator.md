@@ -1518,6 +1518,15 @@ Specialist fails to execute
 → Orchestrator NEVER runs the specialist's core investigation queries
 ```
 
+**Infrastructure failure pattern (Task/Agent tool returns internal error):**
+```
+Task/Agent launch returns "[Tool result missing due to internal error]" or similar infrastructure error
+→ This is a TRANSIENT platform error, not a hook denial or specialist behavioral failure
+→ Retry the Task/Agent launch ONCE with the same parameters
+→ If retry also returns an infrastructure error → report to user with the specific error text
+→ Do NOT treat infrastructure errors as permanent — they are distinct from hook denials
+```
+
 **Execution Receipt Verification:**
 Investigation specialists using `investigation-fan-out.js` or `safeExecMultipleQueries` automatically produce an execution receipt (SHA-256-signed). The `post-investigation-execution-proof.sh` hook verifies this receipt on SubagentStop. When evaluating specialist results:
 - **Valid receipt** → accept the result as proven execution
@@ -1714,8 +1723,13 @@ const validatedOrchestrationOperation = await withValidationAwareErrorRecovery(a
     return await executeValidatedOrchestration(orchestrationConfig);
 }, {
     validationFramework: 'comprehensive',
-    retryPatterns: ['validation-temporary-failure'],
+    retryPatterns: ['validation-temporary-failure', 'agent-launch-infrastructure-error'],
     // 'agent-validation-error' removed — hook denials are authoritative, not transient.
+    // 'agent-launch-infrastructure-error' added — transient platform errors
+    //   (e.g., "[Tool result missing due to internal error]") should retry once
+    //   before escalating. Detect via: result contains "internal error" or
+    //   "Tool result missing". Retry the Task/Agent launch once. If retry also
+    //   fails, report the specific error to the user with full context.
     autoFix: ['validation-inconsistency', 'orchestration-validation-drift'],
     escalation: ['validation-framework-failure', 'critical-validation-compromise'],
     rollback: ['validation-integrity-lost', 'agent-validation-chain-broken']

@@ -391,6 +391,32 @@ function saveToCache(orgAlias, quirksData) {
 // COMPREHENSIVE DETECTION (NEW)
 // =============================================================================
 
+/**
+ * Detect if State/Country Picklists are enabled on the org.
+ *
+ * When enabled, BillingState/ShippingState become read-only display labels
+ * (returning full names like "Florida"). BillingStateCode/ShippingStateCode
+ * are the writable 2-letter code fields. This is a critical org quirk that
+ * affects flow field references, upsert operations, and data imports.
+ *
+ * Detection: If BillingStateCode appears in Account describe, picklists are enabled.
+ */
+function detectStateCountryPicklists(orgAlias) {
+  try {
+    const cmd = `sf sobject describe --sobject Account --target-org ${orgAlias} --json`;
+    const output = execSync(cmd, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+    const describeResult = JSON.parse(output);
+
+    if (describeResult.status === 0 && describeResult.result) {
+      const hasStateCode = describeResult.result.fields.some(f => f.name === 'BillingStateCode');
+      return hasStateCode;
+    }
+  } catch (error) {
+    console.error(`   Could not check State/Country Picklists: ${error.message}`);
+  }
+  return false;
+}
+
 function detectAllQuirks(orgAlias, options = {}) {
   console.log(`\n📊 Running comprehensive quirks detection for ${orgAlias}...\n`);
 
@@ -426,6 +452,17 @@ function detectAllQuirks(orgAlias, options = {}) {
   // 3. Detect field customizations (limited to key objects)
   console.log('\n3️⃣  Field Customizations:');
   allQuirks.field_customizations = detectFieldCustomizations(orgAlias);
+
+  // 3.5. Detect State/Country Picklist enablement
+  console.log('\n3.5️⃣  State/Country Picklists:');
+  allQuirks.stateCountryPicklistsEnabled = detectStateCountryPicklists(orgAlias);
+  if (allQuirks.stateCountryPicklistsEnabled) {
+    console.log('   ⚠️  State/Country Picklists ENABLED');
+    console.log('   → Use BillingStateCode/ShippingStateCode for write operations');
+    console.log('   → BillingState/ShippingState are read-only display labels');
+  } else {
+    console.log('   ✅ State/Country Picklists not enabled');
+  }
 
   // 4. Build summary
   allQuirks.summary = {
@@ -833,6 +870,7 @@ module.exports = {
   detectLabelCustomizations,
   detectRecordTypeCustomizations,
   detectFieldCustomizations,
+  detectStateCountryPicklists,
   detectAllQuirks,
 
   // Learning functions

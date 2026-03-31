@@ -22,6 +22,7 @@ Error recovery procedures for upsert operations.
 | `INVALID_CROSS_REFERENCE_KEY` | Bad lookup ID | Validate references |
 | `STRING_TOO_LONG` | Field value too long | Truncate or reject |
 | `INVALID_EMAIL_ADDRESS` | Bad email format | Validate before upsert |
+| `FIELD_INTEGRITY_EXCEPTION` | Field value rejected by org constraints | See State/Country Picklist resolution below |
 
 ### Permission Errors (Escalate)
 
@@ -220,6 +221,45 @@ async function handleStringTooLong(record, error) {
     // Truncate with ellipsis
     if (record[field]?.length > maxLength) {
         record[field] = record[field].substring(0, maxLength - 3) + '...';
+        return await retry(record);
+    }
+}
+```
+
+### FIELD_INTEGRITY_EXCEPTION
+
+**Cause:** Field value rejected by org constraints. Most commonly occurs with address fields when State/Country Picklists are enabled.
+
+**State/Country Picklist Context:** When State/Country Picklists are enabled:
+- `BillingState`/`ShippingState` become **read-only display labels** (return full names like "Florida")
+- `BillingStateCode`/`ShippingStateCode` are the **writable 2-letter code fields**
+- Writing a 2-letter code ("FL") to `BillingState` triggers `FIELD_INTEGRITY_EXCEPTION`
+
+**Detection:**
+```bash
+# Check if State/Country Picklists are enabled
+sf sobject describe --sobject Account --target-org <org> --json | jq '.result.fields[] | select(.name == "BillingStateCode")'
+# If this returns a result, picklists are enabled
+```
+
+**Resolution:**
+```javascript
+async function handleFieldIntegrityException(record, error) {
+    const field = error.fields[0];
+    const addressLabelToCode = {
+        'BillingState': 'BillingStateCode',
+        'ShippingState': 'ShippingStateCode',
+        'MailingState': 'MailingStateCode',
+        'OtherState': 'OtherStateCode',
+        'BillingCountry': 'BillingCountryCode',
+        'ShippingCountry': 'ShippingCountryCode'
+    };
+
+    if (addressLabelToCode[field]) {
+        // Remap to the Code field
+        const codeField = addressLabelToCode[field];
+        record[codeField] = record[field];
+        delete record[field];
         return await retry(record);
     }
 }

@@ -206,6 +206,11 @@ class FlowFieldReferenceValidator {
         result.errors.push(...confusions.errors);
         result.suggestions.push(...confusions.suggestions);
 
+        // Check for State/Country Picklist field misuse (requires live org describe)
+        const stateCountryConfusions = await this.checkStateCountryPicklistConfusions(fieldRefs);
+        result.errors.push(...stateCountryConfusions.errors);
+        result.suggestions.push(...stateCountryConfusions.suggestions);
+
         // Determine overall validity
         result.valid = result.errors.length === 0;
 
@@ -357,6 +362,112 @@ class FlowFieldReferenceValidator {
                     field: fieldRef.field,
                     object: fieldRef.object,
                     suggestion: 'Use TotalPrice instead (Quantity × UnitPrice)'
+                });
+            }
+        }
+
+        return { errors, suggestions };
+    }
+
+    /**
+     * Check for State/Country Picklist field misuse
+     *
+     * When State/Country Picklists are enabled, fields like BillingState become
+     * read-only display labels. The writable fields are BillingStateCode, etc.
+     * This check detects flows that reference the label fields in write positions
+     * (assignments, formulas, update elements) when the org has picklists enabled.
+     *
+     * Detection: If BillingStateCode exists on Account describe, picklists are enabled.
+     *
+     * @param {Array} fieldRefs - Field references from the flow
+     * @returns {Promise<Object>} { errors: [], suggestions: [] }
+     */
+    async checkStateCountryPicklistConfusions(fieldRefs) {
+        const errors = [];
+        const suggestions = [];
+
+        // Address label fields that become read-only when State/Country Picklists are enabled
+        const labelToCodeMap = {
+            'BillingState': 'BillingStateCode',
+            'ShippingState': 'ShippingStateCode',
+            'MailingState': 'MailingStateCode',
+            'OtherState': 'OtherStateCode',
+            'BillingCountry': 'BillingCountryCode',
+            'ShippingCountry': 'ShippingCountryCode',
+            'MailingCountry': 'MailingCountryCode',
+            'OtherCountry': 'OtherCountryCode'
+        };
+
+        // Objects that have address fields
+        const addressObjects = ['Account', 'Contact', 'Lead', 'Order', 'Contract'];
+
+        // Find field refs that use label fields in write-position elements
+        const suspectRefs = fieldRefs.filter(ref =>
+            ref.field && labelToCodeMap[ref.field] &&
+            ref.object && addressObjects.includes(ref.object) &&
+            ['assignment', 'formula', 'filter'].includes(ref.elementType)
+        );
+
+        if (suspectRefs.length === 0) {
+            return { errors, suggestions };
+        }
+
+        // Check if the org has State/Country Picklists enabled by describing Account
+        // and looking for BillingStateCode
+        let picklistsEnabled = false;
+        try {
+            const describeObj = suspectRefs[0].object || 'Account';
+            const cacheKey = `${describeObj}.BillingStateCode`;
+
+            if (this.fieldCache.has(cacheKey)) {
+                picklistsEnabled = true;
+            } else {
+                const cmd = `sf sobject describe --sobject ${describeObj} --target-org ${this.orgAlias} --json`;
+                const output = execSync(cmd, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+                const describeResult = JSON.parse(output);
+
+                if (describeResult.status === 0 && describeResult.result) {
+                    const codeField = describeResult.result.fields.find(f => f.name === 'BillingStateCode');
+                    if (codeField) {
+                        picklistsEnabled = true;
+                    }
+                    // Cache all fields for later use
+                    for (const field of describeResult.result.fields) {
+                        this.fieldCache.set(`${describeObj}.${field.name}`, field);
+                    }
+                }
+            }
+        } catch (error) {
+            if (this.verbose) {
+                console.warn(`Warning: Could not check State/Country Picklist status: ${error.message}`);
+            }
+            // If we can't determine, still emit a suggestion for safety
+            for (const ref of suspectRefs) {
+                suggestions.push({
+                    type: 'STATE_COUNTRY_PICKLIST_CHECK',
+                    message: `Field ${ref.field} on ${ref.object} may be read-only if State/Country Picklists are enabled. Verify org configuration.`,
+                    severity: 'WARNING',
+                    field: ref.field,
+                    object: ref.object,
+                    element: ref.element,
+                    suggestion: `If State/Country Picklists are enabled, use ${labelToCodeMap[ref.field]} instead of ${ref.field}`
+                });
+            }
+            return { errors, suggestions };
+        }
+
+        if (picklistsEnabled) {
+            for (const ref of suspectRefs) {
+                const codeField = labelToCodeMap[ref.field];
+                errors.push({
+                    type: 'STATE_COUNTRY_PICKLIST_MISUSE',
+                    message: `State/Country Picklists are enabled — ${ref.field} on ${ref.object} is read-only. Use ${codeField} instead.`,
+                    severity: 'CRITICAL',
+                    field: ref.field,
+                    object: ref.object,
+                    element: ref.element,
+                    correctField: codeField,
+                    suggestion: `Replace ${ref.field} with ${codeField} in this flow element. ${ref.field} returns full names (e.g., "Florida") and is not writable when State/Country Picklists are enabled.`
                 });
             }
         }
@@ -1889,7 +2000,7 @@ class FlowFieldReferenceValidator {
      * This preserves warnings while only blocking on invalid field/object references.
      */
     toExistenceOnlyResult(result) {
-        const blockingTypes = new Set(['FIELD_NOT_FOUND', 'WRONG_OBJECT']);
+        const blockingTypes = new Set(['FIELD_NOT_FOUND', 'WRONG_OBJECT', 'STATE_COUNTRY_PICKLIST_MISUSE', 'PERMISSION_DENIED']);
         const filteredErrors = result.errors.filter(error => blockingTypes.has(error.type));
         const referencedFields = Array.from(new Set(
             filteredErrors
@@ -1933,7 +2044,8 @@ Commands:
 
 Options:
   --org <alias>      Salesforce org alias for live validation
-  --existence-only   Only block on FIELD_NOT_FOUND and WRONG_OBJECT
+  --existence-only   Only block on FIELD_NOT_FOUND, WRONG_OBJECT, and STATE_COUNTRY_PICKLIST_MISUSE
+  --check-permissions  Enable field writability checks (blocks on non-writable fields in assignments)
   --verbose, -v    Enable verbose output
   --json           Output as JSON
   --help, -h       Show this help
@@ -1951,6 +2063,7 @@ Examples:
     const verbose = args.includes('--verbose') || args.includes('-v');
     const jsonOutput = args.includes('--json');
     const existenceOnly = args.includes('--existence-only');
+    const checkPermissionsFlag = args.includes('--check-permissions');
 
     const getOptionValue = (flag) => {
         const index = args.indexOf(flag);
@@ -2000,7 +2113,7 @@ Examples:
                     const validator = new FlowFieldReferenceValidator(orgAlias, {
                         verbose: effectiveVerbose,
                         checkPopulation: !existenceOnly,
-                        checkPermissions: false,
+                        checkPermissions: checkPermissionsFlag,
                         checkPicklistValues: false,
                         checkRelationships: !existenceOnly
                     });

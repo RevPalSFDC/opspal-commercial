@@ -49,6 +49,21 @@
       "recommendation": "Use OwnerId for ownership/assignment logic, CreatedById for audit only"
     },
 
+    "state_country_picklist_fields": {
+      "description": "BillingState vs BillingStateCode when State/Country Picklists are enabled",
+      "confusion": "Using BillingState/ShippingState for write operations when State/Country Picklists are enabled",
+      "reality": "When State/Country Picklists are enabled, BillingState/ShippingState become read-only display labels returning full names. BillingStateCode/ShippingStateCode are the writable 2-letter code fields.",
+      "detection": "If sf sobject describe Account returns BillingStateCode as a field, State/Country Picklists are enabled",
+      "affected_fields": ["BillingState", "ShippingState", "BillingCountry", "ShippingCountry", "MailingState", "MailingCountry", "OtherState", "OtherCountry"],
+      "code_fields": ["BillingStateCode", "ShippingStateCode", "BillingCountryCode", "ShippingCountryCode", "MailingStateCode", "MailingCountryCode", "OtherStateCode", "OtherCountryCode"],
+      "correct_usage": {
+        "write_operations": "Use *StateCode/*CountryCode fields for all DML and upsert operations",
+        "read_display": "BillingState/ShippingState return full names for display only",
+        "flow_references": "Use {!$Record.BillingStateCode} not {!$Record.BillingState} in assignments and formulas"
+      },
+      "recommendation": "Always check for BillingStateCode presence on Account describe. If present, use *Code fields for all write operations and flow field references."
+    },
+
     "price_fields": {
       "description": "Price field selection on OpportunityLineItem",
       "confusion": "Using Net_Price__c or custom price fields",

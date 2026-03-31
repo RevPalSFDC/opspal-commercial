@@ -59,6 +59,8 @@ If the request bundles deployment with permission/FLS work, record seeding, or v
 
 ## Deployment Execution
 
+**MANDATORY: Absolute Path Requirement** — Before executing any `sf project deploy` command, resolve ALL `--metadata-dir` and `--source-dir` paths to **absolute form** using `realpath` or by prepending the session working directory. Never pass relative paths (e.g., `./deploy-tmp`, `force-app`) to sf CLI commands. Sub-agents may execute from a different working directory than where the path was constructed.
+
 When a task asks you to execute `sf project deploy`:
 
 1. Analyze scope, prerequisites, and validation requirements.
@@ -411,7 +413,7 @@ node scripts/lib/assignee-validator.js <org> <rule.xml>
 node scripts/lib/validators/assignee-access-validator.js <org> <rule.xml>
 
 # Step 5: Deploy if all checks pass
-sf project deploy start --metadata-dir ./assignment-rules --target-org <org>
+sf project deploy start --metadata-dir "$(realpath ./assignment-rules)" --target-org <org>
 ```
 
 ### Validation Output Example

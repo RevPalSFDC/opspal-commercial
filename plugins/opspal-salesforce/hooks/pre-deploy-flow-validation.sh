@@ -158,7 +158,11 @@ METADATA_DIR_PATH="$(resolve_command_path "$METADATA_DIR_RAW" "$HOOK_CWD")"
 
 if [[ -n "$METADATA_DIR_PATH" ]]; then
     if [[ ! -d "$METADATA_DIR_PATH" ]]; then
-        emit_block "CRITICAL [MDAPI_METADATA_DIR_INVALID]: --metadata-dir '$METADATA_DIR_RAW' does not exist."
+        local suggestion=""
+        if [[ -n "$HOOK_CWD" && -d "$HOOK_CWD/$METADATA_DIR_RAW" ]]; then
+            suggestion=" Suggested absolute path: $HOOK_CWD/$METADATA_DIR_RAW"
+        fi
+        emit_block "CRITICAL [MDAPI_METADATA_DIR_INVALID]: --metadata-dir '$METADATA_DIR_RAW' does not exist. Always use absolute paths for --metadata-dir.${suggestion}"
         exit 0
     fi
     if [[ ! -f "$METADATA_DIR_PATH/package.xml" ]]; then
@@ -357,7 +361,7 @@ while IFS= read -r flow_file; do
 
     # Phase 2.3: Live field existence validation
     if [ -n "$TARGET_ORG" ] && [ -f "$FIELD_REF_VALIDATOR" ]; then
-        EXISTENCE_RESULT=$(node "$FIELD_REF_VALIDATOR" validate "$flow_file" --org "$TARGET_ORG" --existence-only --json 2>/dev/null || true)
+        EXISTENCE_RESULT=$(node "$FIELD_REF_VALIDATOR" validate "$flow_file" --org "$TARGET_ORG" --existence-only --check-permissions --json 2>/dev/null || true)
         if [ -z "$EXISTENCE_RESULT" ]; then
             EXISTENCE_RESULT='{"valid":true,"errors":[],"warnings":[],"summary":{"blockingErrors":0,"fields":[]}}'
         fi

@@ -140,7 +140,7 @@ if [ -n "$ORG_ALIAS" ]; then
         # Create validator instance and validate with org connection
         VALIDATION_SCRIPT="
 const FlowFieldReferenceValidator = require('$PLUGIN_ROOT/scripts/lib/flow-field-reference-validator.js');
-const validator = new FlowFieldReferenceValidator('$ORG_ALIAS', { verbose: false, checkPopulation: true });
+const validator = new FlowFieldReferenceValidator('$ORG_ALIAS', { verbose: false, checkPopulation: true, checkPermissions: true });
 
 (async () => {
     try {
