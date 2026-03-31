@@ -1,21 +1,20 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on improving platform stability and Salesforce integration reliability. We enhanced our Salesforce deployment process to better handle complex workflows and fixed detection of State/Country picklist configurations that could cause setup issues. Several backend improvements ensure smoother operations across all connected systems.",
-  "published_at": "2026-03-31T19:30:15.636Z",
+  "summary": "This week focused on improving reliability and preventing errors across all your revenue operations automations. OpsPal now better handles Salesforce state and country field configurations that commonly cause deployment issues, and fixed several behind-the-scenes problems that were preventing automations from running properly in HubSpot and other platforms.",
+  "published_at": "2026-03-31T21:26:44.140Z",
   "week_start": "2026-03-30",
   "week_end": "2026-03-31",
   "has_breaking": false,
-  "total_commits": 36,
+  "total_commits": 40,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce State/Country picklist detection and deployment reliability",
+      "headline": "Better detection of Salesforce state and country field issues",
       "details": [
-        "OpsPal now automatically detects when Salesforce orgs use State/Country picklists, preventing configuration conflicts",
-        "Improved deployment process validation to catch permission issues before they cause failures",
-        "Enhanced reliability for complex Salesforce setup workflows"
+        "OpsPal now automatically detects when Salesforce state and country fields might cause deployment problems",
+        "Improved validation checks prevent common field reference errors before they break your workflows"
       ],
       "commits": [
         "fcad945"
@@ -24,7 +23,7 @@
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Improved Salesforce deployment workflow management",
+      "headline": "More reliable Salesforce deployments for complex workflows",
       "details": null,
       "commits": [
         "a1075f7"
@@ -33,7 +32,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot connection stability",
+      "headline": "Fixed HubSpot automations failing to start",
       "details": null,
       "commits": [
         "c53235d"
