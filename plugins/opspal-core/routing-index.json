@@ -1,9 +1,9 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-31T17:38:09.199Z",
+  "buildDate": "2026-03-31T21:06:18.553Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
-  "totalCommands": 270,
+  "totalCommands": 271,
   "totalHooks": 252,
   "byKeyword": {
     "gemini": [
@@ -45616,6 +45616,13 @@
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/checkdependencies.md"
     },
+    "opspal-core:clear-route": {
+      "plugin": "opspal-core",
+      "name": "clear-route",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/clear-route.md"
+    },
     "opspal-core:complexity": {
       "plugin": "opspal-core",
       "name": "complexity",
@@ -49190,7 +49197,7 @@
   "stats": {
     "totalAgents": 297,
     "totalAgentsFull": 300,
-    "totalCommands": 270,
+    "totalCommands": 271,
     "totalHooks": 252,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
