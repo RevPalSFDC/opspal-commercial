@@ -35,7 +35,7 @@ const os = require('os');
 
 const LEGACY_STATE_FILE = path.join(os.homedir(), '.claude', 'routing-state.json');
 const STATE_DIR = path.join(os.homedir(), '.claude', 'routing-state');
-const STATE_TTL_SECONDS = Number.parseInt(process.env.ROUTING_STATE_TTL_SECONDS || '900', 10);
+const STATE_TTL_SECONDS = Number.parseInt(process.env.ROUTING_STATE_TTL_SECONDS || '300', 10);
 const ACTIVE_CLEARANCE_STATUSES = new Set(['pending_clearance']);
 const AUTO_DELEGATION_MIN_CONFIDENCE = Number.parseFloat(
   process.env.ROUTING_AUTO_DELEGATION_MIN_CONFIDENCE || '0.95'

@@ -978,6 +978,51 @@ clear_stale_cross_family_state() {
     fi
 }
 
+# Clear stale same-session routing state when a new prompt matches NO routing
+# pattern at all. Prevents abandoned routing requirements from blocking
+# unrelated follow-up prompts for the full TTL duration.
+clear_stale_same_session_state() {
+    local threshold="${ROUTING_APPROACH_CHANGE_THRESHOLD_SECONDS:-120}"
+
+    SAME_SESSION_CLEARED="false"
+
+    [[ -z "${ROUTING_SESSION_KEY:-}" ]] && return 0
+    [[ ! -f "$ROUTING_STATE_MANAGER" ]] && return 0
+    ! command -v node &>/dev/null && return 0
+
+    local state_check
+    state_check=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" check "$ROUTING_SESSION_KEY" 2>/dev/null || echo '{"hasState":false}')
+
+    local has_state pending age
+    has_state=$(echo "$state_check" | jq -r '.hasState // false' 2>/dev/null || echo "false")
+    pending=$(echo "$state_check" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")
+    age=$(echo "$state_check" | jq -r '.age // 0' 2>/dev/null || echo "0")
+
+    if [[ "$has_state" == "true" ]] && [[ "$pending" == "true" ]] && [[ "$age" -ge "$threshold" ]]; then
+        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" clear "$ROUTING_SESSION_KEY" >/dev/null 2>&1 || true
+        SAME_SESSION_CLEARED="true"
+
+        local log_entry
+        log_entry=$(jq -n \
+          --arg ts "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
+          --arg session "$ROUTING_SESSION_KEY" \
+          --arg age "$age" \
+          --arg threshold "$threshold" \
+          '{
+            timestamp: $ts,
+            event: "approach_change_auto_clear",
+            session_key: $session,
+            age_seconds: ($age | tonumber),
+            threshold_seconds: ($threshold | tonumber),
+            reason: "No routing pattern matched on new prompt; stale pending state cleared"
+          }' 2>/dev/null || echo '{}')
+        local enforcement_file="$LOG_DIR/routing-enforcement.jsonl"
+        append_log_with_fallback "$log_entry" "$enforcement_file"
+
+        [[ "$VERBOSE" = "1" ]] && echo "[ROUTER] Same-session stale state cleared: age=${age}s, threshold=${threshold}s" >&2
+    fi
+}
+
 # =============================================================================
 # COMPOUND CLEANUP SHAPE DETECTION
 # Catches multi-step Salesforce cleanup workflows when individual mandatory
@@ -1454,6 +1499,12 @@ elif [[ "$SHOULD_PERSIST_ROUTE" != "true" ]] && [[ -n "$SUGGESTED_AGENT_FAMILY" 
     # If the pending state is old enough AND from a different family, clear it now
     # so it does not bleed into the new prompt's agent invocation.
     clear_stale_cross_family_state "$SUGGESTED_AGENT_FAMILY"
+elif [[ "$SHOULD_PERSIST_ROUTE" != "true" ]] && [[ -z "$SUGGESTED_AGENT" ]]; then
+    # No routing match at all — the user's prompt did not trigger any pattern.
+    # If a stale pending state exists from a previous prompt in this session and
+    # is older than the approach-change threshold, clear it to prevent abandoned
+    # routes from blocking unrelated follow-up work.
+    clear_stale_same_session_state
 fi
 
 # =============================================================================

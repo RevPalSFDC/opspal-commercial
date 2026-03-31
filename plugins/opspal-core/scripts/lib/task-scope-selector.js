@@ -8,7 +8,29 @@ const path = require('path');
 const { TaskKeywordExtractor } = require('./task-keyword-extractor');
 
 const DEFAULT_STATE_FILE = path.join(os.homedir(), '.claude', 'session-context', 'task-scope.json');
+const ROUTING_STATE_DIR = path.join(os.homedir(), '.claude', 'routing-state');
 const MAX_CONTEXT_ASSET_NAMES = 6;
+
+/**
+ * Read pending routing state for a session to prevent scope suppression
+ * of the plugin family that routing enforcement requires.
+ */
+function readPendingRoutingState(sessionKey) {
+  if (!sessionKey) return null;
+  const sanitized = String(sessionKey).replace(/[^A-Za-z0-9._-]+/g, '_');
+  const stateFile = path.join(ROUTING_STATE_DIR, `${sanitized}.json`);
+  try {
+    if (!fs.existsSync(stateFile)) return null;
+    const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+    const now = Math.floor(Date.now() / 1000);
+    if (state.expires_at && now >= state.expires_at) return null;
+    if (!state.route_pending_clearance && state.clearance_status !== 'pending_clearance') return null;
+    if (state.override_applied) return null;
+    return state;
+  } catch (_e) {
+    return null;
+  }
+}
 
 const PLUGIN_POLICIES = {
   'opspal-core': {
@@ -482,6 +504,21 @@ function buildScope(input = {}, options = {}) {
   const sessionKey = input.sessionKey || 'default-session';
   const keywordSummary = new TaskKeywordExtractor(task, agentName).extract();
   const selectedPlugins = selectPlugins(task, agentName, keywordSummary);
+
+  // Respect pending routing enforcement — never suppress the plugin family
+  // that routing requires. This prevents deadlocks where task-scope-selector
+  // suppresses a plugin while unified-router requires an agent from it.
+  const pendingRoute = readPendingRoutingState(sessionKey);
+  if (pendingRoute && pendingRoute.required_agent) {
+    const colonIdx = pendingRoute.required_agent.indexOf(':');
+    if (colonIdx !== -1) {
+      const enforcedPlugin = pendingRoute.required_agent.slice(0, colonIdx);
+      if (enforcedPlugin && !selectedPlugins.includes(enforcedPlugin)) {
+        selectedPlugins.push(enforcedPlugin);
+      }
+    }
+  }
+
   const suppressedPlugins = ALL_PLUGINS.filter((pluginName) => !selectedPlugins.includes(pluginName));
   const { selectedAssets, totals, caps } = selectAssets(selectedPlugins, task, agentName, keywordSummary, options);
 
