@@ -36,6 +36,7 @@ ROUTING_METRICS="$PLUGIN_ROOT/scripts/lib/routing-metrics.js"
 COHORT_RUNBOOK_GUARD="$PLUGIN_ROOT/scripts/lib/cohort-runbook-guard.js"
 ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 HOOK_EVENT_NORMALIZER="$PLUGIN_ROOT/scripts/lib/hook-event-normalizer.js"
+SESSION_KEY_RESOLVER_LIB="$PLUGIN_ROOT/hooks/lib/session-key-resolver.sh"
 ROUTING_CAPABILITY_RULES="$PLUGIN_ROOT/config/routing-capability-rules.json"
 NODE_TIMEOUT_SECONDS="${PRE_TASK_AGENT_VALIDATOR_NODE_TIMEOUT_SECONDS:-2}"
 
@@ -53,6 +54,9 @@ RUNBOOK_ENFORCEMENT_MESSAGE=""
 PERMISSION_FALLBACK_GUIDANCE=""
 # DEPLOYMENT_PARENT_CONTEXT_GUIDANCE removed — deploy contract was removed
 CLAUDE_INTERNAL_AGENT_ALLOWLIST="${CLAUDE_INTERNAL_AGENT_ALLOWLIST:-statusline-setup,Explore,Plan,General-purpose,Other,Bash,Claude Code Guide}"
+
+# shellcheck source=/dev/null
+source "$SESSION_KEY_RESOLVER_LIB"
 
 run_node_with_timeout() {
     local timeout_seconds="$1"
@@ -210,18 +214,7 @@ extract_session_key() {
       // .context.sessionId
       // ""
     ' 2>/dev/null || echo "")
-
-    if [[ -n "${session_key// }" ]] && [[ "$session_key" != "null" ]]; then
-        printf '%s' "$session_key" >&2
-        return 0
-    fi
-
-    if [[ -n "${CLAUDE_SESSION_ID:-}" ]]; then
-        printf '%s' "$CLAUDE_SESSION_ID" >&2
-        return 0
-    fi
-
-    printf '%s' "default-session" >&2
+    resolve_session_key_with_runtime_fallback "$session_key" "default-session" >&2
 }
 
 check_routing_requirement() {

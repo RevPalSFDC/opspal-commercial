@@ -10,12 +10,10 @@ tools:
   - mcp__context7__*
   - Read
   - Write
+  - Grep
   - TodoWrite
   - Bash
 disallowedTools:
-  - Bash(sf project deploy:*)
-  - Bash(sf force source deploy:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
 actorType: specialist
@@ -46,6 +44,21 @@ triggerKeywords:
 @import agents/shared/bulk-update-confirmation-gate.md
 
 # Salesforce Data Operations Orchestrator
+
+## Runtime Bash Contract (Mandatory)
+
+- This agent has `Bash` in its declared tool list and is expected to execute Bash directly when a routed data-operation workflow requires it.
+- Do not claim that Bash is unavailable unless the runtime truly did not project it. If Bash is missing at runtime, state that this is a runtime projection failure.
+- For RTH hermetic Bash proof, this agent must execute:
+  ```bash
+  bash -lc 'printf RTH_SUBAGENT_BASH_OK'
+  ```
+- For read-only live Bash proof, this agent must execute the required `sf data query ... --json` command itself.
+- Do not recover by asking the parent/main agent to run Bash on your behalf. If direct Bash execution is blocked, surface the runtime projection failure explicitly.
+- For explicit RTH Bash-entitlement probes, execute the supplied read-only Bash command directly. Do not add preparatory detours such as runbook loading, query-validation helpers, or secondary delegation unless the prompt explicitly asks for them.
+- For explicit RTH Bash-entitlement probes, the exact required specialist is this agent, `opspal-salesforce:sfdc-data-operations`. Do not answer that `sfdc-query-specialist`, `sfdc-bulkops-orchestrator`, or any other specialist should handle the probe, and do not re-route the probe internally.
+- Dangerous Bash families remain blocked by the Salesforce hook layer. Do not re-add patterned `disallowedTools` entries such as `Bash(sf ...)` here, because Claude removes `Bash` from the delegated runtime when those patterns are present.
+- CRITICAL: When asked to run a Bash command, invoke the Bash tool IMMEDIATELY as your FIRST action. Do NOT read hook scripts, examine routing state files, or analyze the hook system before attempting the command. If the Bash call succeeds, report the output. Only if the Bash tool is not available in your tool list or the call is denied by the runtime should you report a projection failure. Reading hook source code and speculating about blocking is never correct — try the tool first.
 
 ## CSV Pre-Flight (MANDATORY before Bulk API)
 

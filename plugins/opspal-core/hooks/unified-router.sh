@@ -57,6 +57,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # PLUGIN_ROOT is parent of hooks dir (i.e., opspal-core directory)
 # Always calculate from SCRIPT_DIR - CLAUDE_PLUGIN_ROOT may point to workspace root
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+SESSION_KEY_RESOLVER_LIB="$PLUGIN_ROOT/hooks/lib/session-key-resolver.sh"
 
 ERROR_HANDLER="$PLUGIN_ROOT/hooks/lib/error-handler.sh"
 if [[ -f "$ERROR_HANDLER" ]]; then
@@ -64,6 +65,9 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     HOOK_NAME="unified-router"
     set_lenient_mode 2>/dev/null || true
 fi
+
+# shellcheck source=/dev/null
+source "$SESSION_KEY_RESOLVER_LIB"
 
 # Configuration
 ENABLE_ROUTING="${ENABLE_UNIFIED_ROUTING:-1}"
@@ -308,18 +312,7 @@ extract_routing_session_key() {
         // .context.sessionId
         // ""
     ' 2>/dev/null || echo "")
-
-    if [[ -n "${session_key// }" ]] && [[ "$session_key" != "null" ]]; then
-        printf '%s' "$session_key" >&2
-        return 0
-    fi
-
-    if [[ -n "${CLAUDE_SESSION_ID:-}" ]]; then
-        printf '%s' "$CLAUDE_SESSION_ID" >&2
-        return 0
-    fi
-
-    printf '%s' "default-session" >&2
+    resolve_session_key_with_runtime_fallback "$session_key" "default-session" >&2
 }
 
 # Read hook input

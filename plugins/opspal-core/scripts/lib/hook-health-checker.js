@@ -366,10 +366,12 @@ class HookHealthChecker {
   async discoverHookConfigs() {
     const stage = 1;
     const stageName = 'Configuration Discovery';
+    let discoveredSettingsHooks = false;
 
     // Check project-level hooks.json
     const projectHooksPath = path.join(this.projectRoot, '.claude', 'hooks', 'hooks.json');
-    if (fs.existsSync(projectHooksPath)) {
+    const projectHooksExists = fs.existsSync(projectHooksPath);
+    if (projectHooksExists) {
       try {
         const content = JSON.parse(fs.readFileSync(projectHooksPath, 'utf8'));
         this.hookConfigs.push({
@@ -390,15 +392,6 @@ class HookHealthChecker {
           { path: projectHooksPath, error: e.message, fix: `Fix JSON syntax in ${projectHooksPath}` }
         ));
       }
-    } else {
-      this.results.push(new CheckResult(
-        stage, stageName, HEALTH_STATUS.DEGRADED,
-        `No project-level hooks.json found`,
-        {
-          expectedPath: projectHooksPath,
-          fix: `Create ${projectHooksPath} with hook configurations`
-        }
-      ));
     }
 
     // Check project-level settings.json for hooks
@@ -424,6 +417,7 @@ class HookHealthChecker {
             `settings.json: ${Object.keys(settings.hooks).length} event types, ${totalHooks} hooks`,
             { path: settingsPath, eventTypes: Object.keys(settings.hooks), totalHooks }
           ));
+          discoveredSettingsHooks = true;
         }
       } catch (e) {
         this.results.push(new CheckResult(
@@ -457,12 +451,37 @@ class HookHealthChecker {
             `global settings.json: ${Object.keys(globalSettings.hooks).length} event types, ${totalHooks} hooks`,
             { path: globalSettingsPath, eventTypes: Object.keys(globalSettings.hooks), totalHooks }
           ));
+          discoveredSettingsHooks = true;
         }
       } catch (e) {
         this.results.push(new CheckResult(
           stage, stageName, HEALTH_STATUS.DEGRADED,
           `global settings.json parse error`,
           { path: globalSettingsPath, error: e.message }
+        ));
+      }
+    }
+
+    if (!projectHooksExists) {
+      if (discoveredSettingsHooks) {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.HEALTHY,
+          'No project-level hooks.json found (settings-based hook configuration is present)',
+          {
+            expectedPath: projectHooksPath,
+            coveredBy: this.hookConfigs
+              .filter((entry) => entry.source === 'settings.json' || entry.source === 'global-settings.json')
+              .map((entry) => entry.source)
+          }
+        ));
+      } else {
+        this.results.push(new CheckResult(
+          stage, stageName, HEALTH_STATUS.DEGRADED,
+          'No project-level hooks.json found',
+          {
+            expectedPath: projectHooksPath,
+            fix: `Create ${projectHooksPath} with hook configurations`
+          }
         ));
       }
     }
@@ -1399,7 +1418,7 @@ class HookHealthChecker {
     }
 
     // Check for duplicate registrations
-    const commandCounts = {};
+    const commandRegistrations = new Map();
     for (const configEntry of this.hookConfigs) {
       const hooks = configEntry.config.hooks || {};
 
@@ -1408,20 +1427,59 @@ class HookHealthChecker {
 
         for (const hookDef of hooksList) {
           const hooksToCheck = hookDef.hooks || [hookDef];
+          const matcher = typeof hookDef.matcher === 'string' ? hookDef.matcher : '*';
 
           for (const hook of hooksToCheck) {
             const command = hook.command;
             if (!command) continue;
 
-            const key = `${hookType}:${command}`;
-            commandCounts[key] = (commandCounts[key] || 0) + 1;
+            const key = `${hookType}:${matcher}:${command}`;
+            if (!commandRegistrations.has(key)) {
+              commandRegistrations.set(key, {
+                hookType,
+                matcher,
+                command,
+                count: 0,
+                sources: new Set()
+              });
+            }
+            const registration = commandRegistrations.get(key);
+            registration.count += 1;
+            registration.sources.add(configEntry.source);
           }
         }
       }
     }
 
-    const duplicates = Object.entries(commandCounts).filter(([_, count]) => count > 1);
-    if (duplicates.length > 0) {
+    const duplicateRegistrations = [...commandRegistrations.entries()]
+      .filter(([_, registration]) => registration.count > 1)
+      .map(([key, registration]) => ({ key, ...registration }));
+    const expectedDualSourceDuplicates = duplicateRegistrations.filter((registration) => (
+      registration.hookType === 'UserPromptSubmit' &&
+      registration.sources.size === 2 &&
+      registration.sources.has('settings.json') &&
+      registration.sources.has('global-settings.json')
+    ));
+    const unexpectedDuplicates = duplicateRegistrations.filter((registration) => (
+      !expectedDualSourceDuplicates.includes(registration)
+    ));
+
+    if (expectedDualSourceDuplicates.length > 0) {
+      this.results.push(new CheckResult(
+        stage, stageName, HEALTH_STATUS.HEALTHY,
+        `${expectedDualSourceDuplicates.length} user-level output hooks intentionally mirrored in project and global settings`,
+        {
+          duplicates: expectedDualSourceDuplicates.map((registration) => ({
+            key: registration.key,
+            count: registration.count,
+            sources: [...registration.sources]
+          })),
+          note: 'UserPromptSubmit hooks may be intentionally duplicated at the user level to preserve output injection.'
+        }
+      ));
+    }
+
+    if (unexpectedDuplicates.length > 0) {
       // Check if duplicates are from symlinked directories (.claude-plugins/ <-> plugins/)
       // This is expected when both directories are scanned and one is a symlink
       const hasSymlinkStructure =
@@ -1432,26 +1490,30 @@ class HookHealthChecker {
         // Duplicates are expected from symlink structure - report as INFO, no score penalty
         this.results.push(new CheckResult(
           stage, stageName, HEALTH_STATUS.HEALTHY,
-          `${duplicates.length} hook(s) registered via symlink structure (expected)`,
+          `${unexpectedDuplicates.length} hook(s) registered via symlink structure (expected)`,
           {
             note: 'Duplicates are from .claude-plugins/ and plugins/ directories (symlinked)',
-            count: duplicates.length
+            count: unexpectedDuplicates.length
           }
         ));
       } else {
         // Real duplicates - report as warning
         this.results.push(new CheckResult(
           stage, stageName, HEALTH_STATUS.DEGRADED,
-          `${duplicates.length} duplicate hook registration(s)`,
+          `${unexpectedDuplicates.length} duplicate hook registration(s)`,
           {
-            duplicates: duplicates.map(([key, count]) => ({ key, count })),
+            duplicates: unexpectedDuplicates.map((registration) => ({
+              key: registration.key,
+              count: registration.count,
+              sources: [...registration.sources]
+            })),
             fix: 'Remove duplicate entries from hooks.json files'
           }
         ));
       }
     }
 
-    if (orphaned.length === 0 && duplicates.length === 0) {
+    if (orphaned.length === 0 && unexpectedDuplicates.length === 0) {
       this.results.push(new CheckResult(
         stage, stageName, HEALTH_STATUS.HEALTHY,
         'Hook configurations are consistent',

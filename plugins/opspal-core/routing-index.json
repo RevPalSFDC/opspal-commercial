@@ -30262,15 +30262,16 @@
       "color": "blue",
       "actorType": "specialist",
       "tools": [
-        "mcp_salesforce_data_query",
-        "mcp_salesforce_data_create",
-        "mcp_salesforce_data_update",
-        "mcp_salesforce_data_delete",
-        "mcp__context7__*",
+        "Bash",
+        "Grep",
         "Read",
-        "Write",
         "TodoWrite",
-        "Bash"
+        "Write",
+        "mcp__context7__*",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_delete",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_update"
       ],
       "capabilities": [
         "salesforce:data:bulk",
@@ -42479,15 +42480,16 @@
       "color": "blue",
       "actorType": "specialist",
       "tools": [
-        "mcp_salesforce_data_query",
-        "mcp_salesforce_data_create",
-        "mcp_salesforce_data_update",
-        "mcp_salesforce_data_delete",
-        "mcp__context7__*",
+        "Bash",
+        "Grep",
         "Read",
-        "Write",
         "TodoWrite",
-        "Bash"
+        "Write",
+        "mcp__context7__*",
+        "mcp_salesforce_data_create",
+        "mcp_salesforce_data_delete",
+        "mcp_salesforce_data_query",
+        "mcp_salesforce_data_update"
       ],
       "capabilities": [
         "salesforce:data:bulk",

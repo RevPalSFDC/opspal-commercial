@@ -50,6 +50,12 @@ function writeRoutingState(home, sessionId, state) {
   fs.writeFileSync(filePath, JSON.stringify(state, null, 2));
 }
 
+function writeCurrentSession(home, sessionId) {
+  const sessionDir = path.join(home, '.claude', 'session-context');
+  fs.mkdirSync(sessionDir, { recursive: true });
+  fs.writeFileSync(path.join(sessionDir, '.current_session'), `export CLAUDE_SESSION_ID=${sessionId}\n`, 'utf8');
+}
+
 function buildRoutingState({
   sessionKey,
   routeId,
@@ -196,6 +202,37 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
     assert.deepStrictEqual(result.output, {}, 'Should emit a JSON no-op envelope');
+  }));
+
+  results.push(await runTest('Uses active runtime session file when normalized payload carries a stale env session id', async () => {
+    const isolatedHome = createTempHome();
+    const isolatedLogRoot = path.join(isolatedHome, '.claude/logs');
+    const runtimeSessionId = `pretool-runtime-${Date.now()}`;
+    writeCurrentSession(isolatedHome, runtimeSessionId);
+    writeRoutingState(isolatedHome, runtimeSessionId, buildRoutingState({
+      sessionKey: runtimeSessionId,
+      routeId: 'reports-dashboards',
+      requiredAgent: 'opspal-salesforce:sfdc-reports-dashboards'
+    }));
+
+    const result = await tester.run({
+      input: {
+        tool_name: 'Bash',
+        tool_input: { command: 'echo "try direct execution"' }
+      },
+      env: {
+        CLAUDE_PLUGIN_ROOT: PLUGIN_ROOT,
+        HOME: isolatedHome,
+        CLAUDE_HOOK_LOG_ROOT: isolatedLogRoot,
+        CLAUDE_SESSION_ID: 'stale-pretool-session'
+      }
+    });
+
+    assertStructuredRoutingDeny(
+      result,
+      'ROUTING_REQUIRED_BEFORE_OPERATION',
+      'Active runtime session routing should override the stale env session id'
+    );
   }));
 
   results.push(await runTest('Denies operational tools while routing requirement is pending', async () => {

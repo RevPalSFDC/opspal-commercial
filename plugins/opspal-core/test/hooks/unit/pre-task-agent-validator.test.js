@@ -84,6 +84,21 @@ function readRoutingState(env) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function getRoutingStatePathForSession(homeDir, sessionId) {
+  return path.join(
+    homeDir,
+    '.claude',
+    'routing-state',
+    `${sanitizeSessionKey(sessionId)}.json`
+  );
+}
+
+function writeCurrentSession(homeDir, sessionId) {
+  const sessionDir = path.join(homeDir, '.claude', 'session-context');
+  fs.mkdirSync(sessionDir, { recursive: true });
+  fs.writeFileSync(path.join(sessionDir, '.current_session'), `export CLAUDE_SESSION_ID=${sessionId}\n`, 'utf8');
+}
+
 async function runTest(name, testFn) {
   process.stdout.write(`  ${name}... `);
   try {
@@ -125,6 +140,52 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.deepStrictEqual(result.output, {}, 'Should emit empty JSON for pass-through');
+  }));
+
+  results.push(await runTest('Clears pending routing state using active runtime session when env session id is stale', async () => {
+    const env = createIsolatedEnv({
+      CLAUDE_SESSION_ID: 'stale-task-validator-session'
+    });
+    const runtimeSessionId = `task-validator-runtime-${Date.now()}`;
+    writeCurrentSession(env.HOME, runtimeSessionId);
+
+    const runtimeStatePath = getRoutingStatePathForSession(env.HOME, runtimeSessionId);
+    fs.mkdirSync(path.dirname(runtimeStatePath), { recursive: true });
+    fs.writeFileSync(runtimeStatePath, JSON.stringify({
+      session_key: runtimeSessionId,
+      route_id: 'data-operations',
+      route_kind: 'complexity_specialist',
+      guidance_action: 'require_specialist',
+      required_agent: 'opspal-salesforce:sfdc-data-operations',
+      clearance_agents: [
+        'opspal-salesforce:sfdc-data-operations'
+      ],
+      requires_specialist: true,
+      prompt_guidance_only: true,
+      prompt_blocked: false,
+      execution_block_until_cleared: true,
+      route_pending_clearance: true,
+      route_cleared: false,
+      routing_confidence: 0.92,
+      clearance_status: 'pending_clearance',
+      created_at: Math.floor(Date.now() / 1000),
+      updated_at: Math.floor(Date.now() / 1000),
+      expires_at: Math.floor(Date.now() / 1000) + 600
+    }, null, 2));
+
+    const result = await tester.run({
+      input: createAgentEvent({
+        subagent_type: 'opspal-salesforce:sfdc-data-operations',
+        prompt: 'Run the approved data-operation route'
+      }),
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const runtimeState = JSON.parse(fs.readFileSync(runtimeStatePath, 'utf8'));
+    assert.strictEqual(runtimeState.clearance_status, 'cleared', 'Active runtime session should be cleared');
+    assert.strictEqual(runtimeState.last_resolved_agent, 'opspal-salesforce:sfdc-data-operations', 'Should record the clearing specialist');
+    assert.strictEqual(fs.existsSync(getRoutingStatePath(env)), false, 'Should not create stale-session routing state');
   }));
 
   // Test 3: Already fully-qualified non-Bash agent passes through

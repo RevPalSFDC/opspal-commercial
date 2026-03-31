@@ -16,8 +16,6 @@ tools:
   - TodoWrite
   - Bash
 disallowedTools:
-  - Bash(sf project deploy --target-org production:*)
-  - Bash(sf data delete:*)
   - mcp__salesforce__*_delete
 model: sonnet
 triggerKeywords:
@@ -41,6 +39,18 @@ triggerKeywords:
 
 # Operational Playbooks & Frameworks
 @import agents/shared/playbook-reference.yaml
+
+## Runtime Bash Contract (Mandatory)
+
+- This agent has `Bash` in its declared tool list and is expected to execute Bash directly for required automation-local workflows.
+- Do not claim that Bash is unavailable unless the runtime truly did not project it. If Bash is missing at runtime, state that this is a runtime projection failure.
+- For RTH hermetic Bash proof, this agent must execute:
+  ```bash
+  bash -lc 'printf RTH_SUBAGENT_BASH_OK'
+  ```
+- For RTH live Bash proof, this agent must execute the required feasibility analyzer or other read-only/local Bash workflow itself.
+- Do not recover by asking the parent/main agent to run Bash on your behalf. If direct Bash execution is blocked, surface the runtime projection failure explicitly.
+- Dangerous Bash families remain blocked by the Salesforce hook layer. Do not re-add patterned `disallowedTools` entries such as `Bash(sf ...)` here, because Claude removes `Bash` from the delegated runtime when those patterns are present.
 
 ## 🎯 Phase 1 Automation Feasibility Analyzer (v3.43.0 - MANDATORY)
 

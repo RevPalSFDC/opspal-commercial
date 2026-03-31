@@ -3,10 +3,14 @@
 /**
  * Sync disallowedTools to tools field
  *
- * CRITICAL: The `tools` field is the only field Claude Code enforces (allowlist).
- * The `disallowedTools` field is documentation only (feature request #6005).
+ * Claude Code enforces both `tools` and `disallowedTools`.
+ * Patterned `disallowedTools` entries such as `Bash(sf ...)` are runtime-active
+ * deny rules, not documentation. For Bash-critical agents, those patterns can
+ * shadow the entire Bash tool from delegated subagent context.
  *
- * This script ensures the `tools` allowlist excludes any tools in `disallowedTools`.
+ * This script keeps the explicit `tools` allowlist aligned with concrete
+ * disallowed tool names. It must not be used to justify patterned Bash denies
+ * on Bash-contract agents.
  *
  * Usage:
  *   node scripts/sync-disallowed-tools.js [--dry-run] [--plugin <name>]

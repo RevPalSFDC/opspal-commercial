@@ -60,6 +60,7 @@ AGENT_TOOL_REGISTRY="${PLUGIN_ROOT}/scripts/lib/agent-tool-registry.js"
 MCP_TOOL_POLICY_CONFIG="${PLUGIN_ROOT}/config/mcp-tool-policies.json"
 MCP_TOOL_POLICY_RESOLVER="${PLUGIN_ROOT}/scripts/lib/mcp-tool-policy-resolver.js"
 HOOK_EVENT_NORMALIZER="${PLUGIN_ROOT}/scripts/lib/hook-event-normalizer.js"
+SESSION_KEY_RESOLVER_LIB="${PLUGIN_ROOT}/hooks/lib/session-key-resolver.sh"
 DEFAULT_LOG_ROOT="${PROJECT_ROOT}/.claude/logs"
 LOG_ROOT="${CLAUDE_HOOK_LOG_ROOT:-$DEFAULT_LOG_ROOT}"
 FALLBACK_LOG_ROOT="/tmp/.claude/logs"
@@ -97,6 +98,8 @@ run_node_with_timeout() {
 
 # shellcheck source=/dev/null
 source "$BASH_CLASSIFIER_LIB"
+# shellcheck source=/dev/null
+source "$SESSION_KEY_RESOLVER_LIB"
 
 # Parse tool name and input from stdin (or env fallback)
 RAW_INPUT_DATA="$(read_stdin_json 2>&1)"
@@ -356,18 +359,7 @@ extract_session_key() {
         // .context.session_id
         // ""
     ' 2>/dev/null)"
-
-    if [ -n "$extracted" ] && [ "$extracted" != "null" ]; then
-        echo "$extracted" >&2
-        return 0
-    fi
-
-    if [ -n "${CLAUDE_SESSION_ID:-}" ]; then
-        echo "${CLAUDE_SESSION_ID}" >&2
-        return 0
-    fi
-
-    echo "unknown-session" >&2
+    resolve_session_key_with_runtime_fallback "$extracted" "unknown-session" >&2
 }
 
 extract_budget_scope_key() {

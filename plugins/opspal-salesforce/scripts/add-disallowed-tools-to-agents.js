@@ -31,6 +31,10 @@ const DRY_RUN = args.includes('--dry-run');
 const VERBOSE = args.includes('--verbose');
 const pluginIndex = args.indexOf('--plugin');
 const TARGET_PLUGIN = pluginIndex >= 0 ? args[pluginIndex + 1] : null;
+const BASH_CONTRACT_AGENT_EXCLUSIONS = new Set([
+  'sfdc-data-operations',
+  'sfdc-automation-builder'
+]);
 
 // Tier-based tool restrictions
 const TIER_RESTRICTIONS = {
@@ -196,7 +200,9 @@ function addDisallowedTools(content, agentName, tier) {
 
   // Build new frontmatter with disallowedTools
   const newYaml = { ...frontmatter.yaml };
-  newYaml.disallowedTools = restrictions.disallowedTools;
+  newYaml.disallowedTools = BASH_CONTRACT_AGENT_EXCLUSIONS.has(agentName)
+    ? restrictions.disallowedTools.filter((tool) => !/^Bash\(/.test(tool))
+    : restrictions.disallowedTools;
 
   // Reconstruct YAML
   let yamlString = '---\n';

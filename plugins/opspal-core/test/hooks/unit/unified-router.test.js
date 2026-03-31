@@ -65,6 +65,21 @@ function readRoutingState(env) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function getRoutingStatePath(homeDir, sessionId) {
+  return path.join(
+    homeDir,
+    '.claude',
+    'routing-state',
+    `${sanitizeSessionKey(sessionId)}.json`
+  );
+}
+
+function writeCurrentSession(homeDir, sessionId) {
+  const sessionDir = path.join(homeDir, '.claude', 'session-context');
+  fs.mkdirSync(sessionDir, { recursive: true });
+  fs.writeFileSync(path.join(sessionDir, '.current_session'), `export CLAUDE_SESSION_ID=${sessionId}\n`, 'utf8');
+}
+
 function assertPendingExecutionRoute(state, expectedAgent) {
   assert(state, 'Should persist routing state');
   assert.strictEqual(state.required_agent, expectedAgent, 'Should persist the required specialist');
@@ -140,6 +155,28 @@ async function runAllTests() {
     // The router should return some form of output
     assert(result.stdout.length > 0, 'Should produce output');
     assert.strictEqual(readRoutingState(env), null, 'Should not persist routing state for non-blocking prompts');
+  }));
+
+  results.push(await runTest('Uses active runtime session file when env session id is stale', async () => {
+    const env = createIsolatedEnv({
+      CLAUDE_SESSION_ID: 'stale-router-session'
+    });
+    const runtimeSessionId = `router-runtime-${Date.now()}`;
+    writeCurrentSession(env.HOME, runtimeSessionId);
+
+    const result = await tester.run({
+      input: { userPrompt: 'Run a CPQ assessment for our org' },
+      env
+    });
+
+    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+    const runtimeStatePath = getRoutingStatePath(env.HOME, runtimeSessionId);
+    const staleStatePath = getRoutingStatePath(env.HOME, env.CLAUDE_SESSION_ID);
+    assert(fs.existsSync(runtimeStatePath), 'Should persist routing state under the active runtime session');
+    assert.strictEqual(fs.existsSync(staleStatePath), false, 'Should not persist routing state under the stale env session');
+
+    const runtimeState = JSON.parse(fs.readFileSync(runtimeStatePath, 'utf8'));
+    assertPendingExecutionRoute(runtimeState, 'opspal-salesforce:sfdc-cpq-assessor');
   }));
 
   // Test 3: CPQ keyword detection should enforce specialist routing without hard-blocking by default

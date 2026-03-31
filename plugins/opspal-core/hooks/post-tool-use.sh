@@ -21,6 +21,7 @@
 #
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SESSION_KEY_RESOLVER_LIB="${SCRIPT_DIR}/lib/session-key-resolver.sh"
 
 # Source standardized error handler for centralized logging
 if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
@@ -35,6 +36,9 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     # Lenient mode - tool validation should not block on internal errors
     set_lenient_mode 2>/dev/null || true
 fi
+
+# shellcheck source=/dev/null
+source "$SESSION_KEY_RESOLVER_LIB"
 
 # NOTE: Do NOT set -euo pipefail here — lenient mode is intentional
 # to prevent internal hook errors from blocking tool execution
@@ -729,9 +733,7 @@ check_routing_compliance() {
     // ""
   ' 2>/dev/null || echo "")
 
-  if [ -z "${session_key// }" ] || [ "$session_key" = "null" ]; then
-    session_key="${CLAUDE_SESSION_ID:-default-session}"
-  fi
+  session_key="$(resolve_session_key_with_runtime_fallback "$session_key" "default-session")"
 
   routing_state=$(node "$ROUTING_STATE_MANAGER" check "$session_key" 2>/dev/null || echo "{}")
   pending=$(echo "$routing_state" | jq -r '.routePendingClearance // false' 2>/dev/null || echo "false")

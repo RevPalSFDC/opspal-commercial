@@ -74,6 +74,33 @@ fi
 
 TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
+matches_safe_sf_cli_read() {
+    local command="$1"
+    local binary_pattern='((sf|sfdx)|"[^"]*/(sf|sfdx)")'
+
+    echo "$command" | grep -qiE "^[[:space:]]*${binary_pattern}[[:space:]]+data[[:space:]]+query([[:space:]]|$)"
+}
+
+matches_safe_sf_org_read() {
+    local command="$1"
+    local binary_pattern='((sf|sfdx)|"[^"]*/(sf|sfdx)")'
+
+    echo "$command" | grep -qiE "^[[:space:]]*${binary_pattern}[[:space:]]+org[[:space:]]+(display|list)([[:space:]]|$)"
+}
+
+matches_rth_hermetic_probe() {
+    local command="$1"
+
+    echo "$command" | grep -qiE "^[[:space:]]*bash[[:space:]]+-lc[[:space:]]+['\"]printf[[:space:]]+RTH_[A-Z0-9_]+['\"][[:space:]]*$"
+}
+
+matches_automation_feasibility_probe() {
+    local command="$1"
+
+    echo "$command" | grep -qiE '^[[:space:]]*node[[:space:]]+.*automation-feasibility-analyzer\.js([[:space:]]|$)' \
+      && echo "$command" | grep -q -- '--analyze-request'
+}
+
 # Determine auto-approve
 case "$TOOL_NAME" in
     Read|Glob|Grep|WebSearch|WebFetch|LS|TaskList|TaskGet)
@@ -81,12 +108,18 @@ case "$TOOL_NAME" in
         REASON="read-only tool"
         ;;
     Bash)
-        if echo "$COMMAND" | grep -qiE '^[[:space:]]*(sf|sfdx)[[:space:]]+data[[:space:]]+query([[:space:]]|$)'; then
+        if matches_rth_hermetic_probe "$COMMAND"; then
+            DECISION="allow"
+            REASON="safe hermetic bash entitlement probe"
+        elif matches_safe_sf_cli_read "$COMMAND"; then
             DECISION="allow"
             REASON="safe sf data query read"
-        elif echo "$COMMAND" | grep -qiE '^[[:space:]]*(sf|sfdx)[[:space:]]+org[[:space:]]+(display|list)([[:space:]]|$)'; then
+        elif matches_safe_sf_org_read "$COMMAND"; then
             DECISION="allow"
             REASON="safe sf org status read"
+        elif [[ "$AGENT_NAME" =~ (^|:)sfdc-automation-builder$ ]] && matches_automation_feasibility_probe "$COMMAND"; then
+            DECISION="allow"
+            REASON="safe automation feasibility analyzer"
         elif echo "$COMMAND" | grep -qiE '^[[:space:]]*(ls|echo|cat|head|tail|wc|pwd)([[:space:]]|$)'; then
             DECISION="allow"
             REASON="safe shell read command"
