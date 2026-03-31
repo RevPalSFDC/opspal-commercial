@@ -1,0 +1,30 @@
+{
+  "slug": "2026-W14",
+  "title": "Week of March 30, 2026",
+  "summary": "This week focused on critical stability improvements across all integrations. We fixed major issues that were preventing HubSpot automations from starting and resolved deployment problems in Salesforce workflows. These fixes ensure your revenue operations run smoothly without interruption.",
+  "published_at": "2026-03-31T17:11:30.664Z",
+  "week_start": "2026-03-30",
+  "week_end": "2026-03-31",
+  "has_breaking": false,
+  "total_commits": 26,
+  "entries": [
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Salesforce multi-step deployments now work reliably",
+      "details": null,
+      "commits": [
+        "a1075f7"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "HubSpot",
+      "headline": "HubSpot automations start properly again",
+      "details": null,
+      "commits": [
+        "c53235d"
+      ]
+    }
+  ]
+}
