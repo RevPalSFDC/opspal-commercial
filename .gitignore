@@ -51,15 +51,7 @@ reports/
 
 # Local reports, plans, and analysis docs
 ADVERSARIAL_QA_FINDINGS.md
-docs/*ANALYSIS*.md
-docs/*AUDIT*.md
-docs/*FINDINGS*.md
-docs/*PLAN*.md
-docs/*REMEDIATION*.md
-docs/HOOK_DEVELOPMENT_GUIDE.md
-docs/HOOK_SYSTEM_CATALOG.md
-docs/TESTING_GUIDE.md
-docs/WIRING_SANITY_CHECK.md
+docs/
 
 # Plugin runtime artifacts
 plugins/.claude/
