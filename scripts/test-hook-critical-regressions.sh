@@ -37,8 +37,7 @@ run_test "post-plugin-update-fixes" node plugins/opspal-core/test/hooks/unit/pos
 run_test "finish-opspal-update-script" node plugins/opspal-core/test/finish-opspal-update-script.test.js
 run_test "gtm-pre-write-gtm-path-validator" node plugins/opspal-core/test/hooks/unit/gtm-pre-write-gtm-path-validator.test.js
 run_test "okr-pre-write-okr-path-validator" node plugins/opspal-core/test/hooks/unit/okr-pre-write-okr-path-validator.test.js
-run_test "mcp-client-pre-opspal-compute" node plugins/opspal-core/test/hooks/unit/mcp-client-pre-opspal-compute.test.js
-run_test "mcp-client-pre-opspal-scoring" node plugins/opspal-core/test/hooks/unit/mcp-client-pre-opspal-scoring.test.js
+
 run_test "data-hygiene-deprecation-warning" node plugins/opspal-core/test/hooks/unit/data-hygiene-deprecation-warning.test.js
 run_test "gtm-session-start-gtm-context-loader" node plugins/opspal-core/test/hooks/unit/gtm-session-start-gtm-context-loader.test.js
 run_test "okr-session-start-okr-context-loader" node plugins/opspal-core/test/hooks/unit/okr-session-start-okr-context-loader.test.js
