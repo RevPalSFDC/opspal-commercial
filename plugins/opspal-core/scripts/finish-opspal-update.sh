@@ -18,12 +18,13 @@ source "$COMMON_HELPER"
 
 show_usage() {
   cat <<EOF
-Usage: $0 [--skip-fix] [--verbose] [--no-cache-prune] [--strict] [--workspace path] [--claude-root path] [--json] [--help]
+Usage: $0 [--skip-fix] [--verbose] [--no-cache-prune] [--no-pull] [--strict] [--workspace path] [--claude-root path] [--json] [--help]
 
 Options:
   --skip-fix         Run validation in check-only mode
   --verbose          Show detailed diagnostics
   --no-cache-prune   Skip stale plugin cache pruning
+  --no-pull          Skip marketplace git pull (use whatever is on disk)
   --strict           Keep fewer cache versions during prune
   --workspace <path> Run validation against a specific workspace root
   --claude-root <path> Use a specific ~/.claude root instead of auto-detecting
@@ -36,6 +37,7 @@ EOF
 SKIP_FIX=false
 VERBOSE_FLAG=""
 CACHE_PRUNE=true
+MARKETPLACE_PULL=true
 STRICT_MODE=false
 STRICT_FLAG=""
 JSON_OUTPUT=false
@@ -53,6 +55,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --no-cache-prune)
       CACHE_PRUNE=false
+      shift
+      ;;
+    --no-pull)
+      MARKETPLACE_PULL=false
       shift
       ;;
     --strict)
@@ -897,6 +903,65 @@ prune_marketplace_cache_versions() {
   done
 
   echo "$PRUNED_TOTAL|$SCANNED_TOTAL"
+}
+
+step0_marketplace_refresh() {
+  if [ "$MARKETPLACE_PULL" != true ]; then
+    echo "   Skipped (--no-pull)"
+    append_step_message "Marketplace pull skipped (--no-pull)"
+    return 0
+  fi
+
+  local refreshed=0
+  local failed=0
+  local claude_roots=("$HOME/.claude")
+
+  # WSL-aware: add Windows .claude path
+  if [ -n "${WSL_DISTRO_NAME:-}" ] || [ -n "${WSL_INTEROP:-}" ]; then
+    if [ -n "${USERPROFILE:-}" ] && command -v wslpath >/dev/null 2>&1; then
+      local win_profile
+      win_profile="$(wslpath -u "$USERPROFILE" 2>/dev/null || true)"
+      [ -n "$win_profile" ] && [ -d "$win_profile/.claude" ] && claude_roots+=("$win_profile/.claude")
+    fi
+  fi
+  [ -n "${CLAUDE_HOME:-}" ] && [ -d "$CLAUDE_HOME" ] && claude_roots+=("$CLAUDE_HOME")
+  [ -n "${CLAUDE_CONFIG_DIR:-}" ] && [ -d "$CLAUDE_CONFIG_DIR" ] && claude_roots+=("$CLAUDE_CONFIG_DIR")
+
+  for claude_root in "${claude_roots[@]}"; do
+    local mp_base="$claude_root/plugins/marketplaces"
+    [ -d "$mp_base" ] || continue
+
+    for mp_dir in "$mp_base"/*/; do
+      [ -d "$mp_dir/.git" ] || continue
+      local mp_name
+      mp_name=$(basename "$mp_dir")
+      echo -n "   $mp_name... "
+
+      if git -C "$mp_dir" pull --ff-only --quiet 2>/dev/null; then
+        echo "updated"
+        refreshed=$((refreshed + 1))
+      elif git -C "$mp_dir" fetch --quiet 2>/dev/null && git -C "$mp_dir" reset --hard origin/main --quiet 2>/dev/null; then
+        echo "force-synced"
+        refreshed=$((refreshed + 1))
+      else
+        echo "FAILED (offline or auth issue)"
+        failed=$((failed + 1))
+      fi
+    done
+  done
+
+  if [ $refreshed -gt 0 ]; then
+    append_step_message "Refreshed $refreshed marketplace(s)"
+  fi
+  if [ $failed -gt 0 ]; then
+    append_step_message "WARNING: $failed marketplace(s) could not be refreshed"
+  fi
+  if [ $refreshed -eq 0 ] && [ $failed -eq 0 ]; then
+    echo "   No marketplace checkouts found"
+    append_step_message "No marketplace checkouts found"
+  fi
+
+  return 0
 }
 
 step1_plugin_validation() {
@@ -2063,6 +2128,7 @@ step11_runbook_automation() {
   return 0
 }
 
+run_step "step0-marketplace-refresh" "Step 0: Marketplace refresh" "🔄 Step 0: Pulling latest from marketplace..." step0_marketplace_refresh
 run_step "step1-plugin-validation" "Step 1: Plugin Validation" "🔧 Step 1: Running plugin validation..." step1_plugin_validation
 run_step "step2-clean-stale-hooks" "Step 2: Clean stale plugin hooks and activate statusline" "🧹 Step 2: Cleaning stale plugin hooks and activating the OpsPal statusline..." step2_clean_stale_hooks
 run_step "step3-runtime-reconciliation" "Step 3: Runtime reconciliation and routing validation" "🧭 Step 3: Reconciling installed runtime, refreshing routing artifacts, and validating hook health..." step3_runtime_reconciliation

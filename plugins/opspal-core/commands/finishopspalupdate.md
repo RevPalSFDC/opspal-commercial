@@ -1,7 +1,7 @@
 ---
 name: finishopspalupdate
 description: Run post-update validation, routing health checks, cache prune, and documentation sync
-argument-hint: "[--skip-fix] [--verbose] [--no-cache-prune] [--strict] [--workspace path] [--claude-root path] [--json]"
+argument-hint: "[--skip-fix] [--verbose] [--no-cache-prune] [--no-pull] [--strict] [--workspace path] [--claude-root path] [--json]"
 allowed_tools:
   - Bash
 tags:
@@ -87,6 +87,12 @@ After execution, summarize the results to the user.
 ---
 
 ## What This Command Does
+
+0. **Pulls latest from marketplace** - Runs `git pull --ff-only` on all marketplace checkouts:
+   - WSL-aware: checks both Linux and Windows `.claude` paths
+   - Falls back to `git fetch && git reset --hard origin/main` if fast-forward fails
+   - Skippable with `--no-pull`
+   - This ensures `/finishopspalupdate` alone brings everything to latest without needing `/startopspalupdate` first
 
 1. **Runs `/pluginupdate --fix`** - Validates all plugin configurations and auto-fixes issues:
    - System dependencies (jq, node, sf CLI)
@@ -190,6 +196,14 @@ Shows detailed output for validation, routing checks, and sync steps.
 
 Skips removal of old cached plugin versions.
 
+### Skip Marketplace Pull
+
+```bash
+/finishopspalupdate --no-pull
+```
+
+Skips the Step 0 marketplace `git pull`. Useful when you've already run `/startopspalupdate` or want to validate current disk state only.
+
 ### Explicit Workspace / Claude Root
 
 ```bash
@@ -206,14 +220,20 @@ Runs finish validation against a specific workspace or Claude runtime root. If o
 
 Emits the final finish report JSON to stdout for wrappers and CI automation.
 
-## Two-Command Workflow
+## One-Command or Two-Command Workflow
 
-This command is the second step of a two-command workflow:
+`/finishopspalupdate` is now self-contained — it pulls latest from marketplace (Step 0), then validates and reconciles everything. You can use it standalone:
 
 ```
-/startopspalupdate          ← Pulls latest from marketplace
+/finishopspalupdate         ← Pulls latest + repairs runtime + validates + routing health + cache prune + syncs
+```
+
+Or use the traditional two-command workflow for more control:
+
+```
+/startopspalupdate          ← Pulls latest from marketplace (with dry-run, plugin filtering)
          ↓
-/finishopspalupdate         ← You are here (repairs runtime + validates + routing health + cache prune + syncs)
+/finishopspalupdate --no-pull  ← Skip the pull, just validate and reconcile
 ```
 
 ### Complete Workflow Example
@@ -434,6 +454,12 @@ Run with verbose to see details:
 | `/checkdependencies` | NPM dependency check only |
 
 ## Version History
+
+- **v1.9.0** (2026-03-31) - Added marketplace refresh as Step 0
+  - `/finishopspalupdate` now pulls latest from marketplace before validating (self-contained)
+  - WSL-aware marketplace discovery across all CLAUDE_ROOTS
+  - Falls back to `git fetch + reset --hard` when fast-forward fails
+  - Skippable with `--no-pull` flag
 
 - **v1.8.0** (2026-03-21) - Added sub-agent tool access remediation (Step 9)
   - Verifies Bash permission contract is opt-in (SUBAGENT_BASH_CONTRACT_ENABLED guard)
