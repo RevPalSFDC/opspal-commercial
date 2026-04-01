@@ -68,6 +68,121 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Deploy to Firebase
-        working-directory: website
-        run: npx firebase-tools deploy --only hosting --project revpalportal
+      - name: Deploy release notes to Firebase (incremental)
+        run: |
+          set -euo pipefail
+
+          # Get access token from gcloud auth
+          ACCESS_TOKEN=$(gcloud auth print-access-token)
+          SITE="revpalportal"
+          API="https://firebasehosting.googleapis.com/v1beta1"
+
+          # 1. Get the current live version to clone from
+          LIVE_VERSION=$(curl -sfS \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            "$API/sites/$SITE/channels/live" \
+            | node -e "
+              let d='';
+              process.stdin.on('data',c=>d+=c);
+              process.stdin.on('end',()=>{
+                const j=JSON.parse(d);
+                console.log(j.release?.version?.name || '');
+              })
+            ")
+
+          if [ -z "$LIVE_VERSION" ]; then
+            echo "::error::Could not determine current live version. Is the site deployed?"
+            exit 1
+          fi
+          echo "Current live version: $LIVE_VERSION"
+
+          # 2. Create a new version (clones config from live)
+          NEW_VERSION=$(curl -sfS -X POST \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"config\":{\"headers\":[{\"glob\":\"**/*.json\",\"headers\":{\"Cache-Control\":\"public, max-age=0, must-revalidate\",\"Access-Control-Allow-Origin\":\"*\"}}]}}" \
+            "$API/sites/$SITE/versions" \
+            | node -e "
+              let d='';
+              process.stdin.on('data',c=>d+=c);
+              process.stdin.on('end',()=>console.log(JSON.parse(d).name))
+            ")
+          echo "New version: $NEW_VERSION"
+
+          # 3. Clone the live version's files into the new version
+          curl -sfS -X POST \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"sourceVersion\":\"$LIVE_VERSION\"}" \
+            "$API/$NEW_VERSION:clone" > /dev/null
+
+          # 4. Populate the new version with updated release-notes files
+          # Build the files map: /release-notes/<file> -> sha256 hash
+          FILES_JSON="{"
+          FIRST=true
+          for f in website/release-notes/*.json; do
+            HASH=$(gzip -c "$f" | sha256sum | cut -d' ' -f1)
+            RELPATH="/release-notes/$(basename "$f")"
+            if [ "$FIRST" = true ]; then FIRST=false; else FILES_JSON+=","; fi
+            FILES_JSON+="\"$RELPATH\":\"$HASH\""
+          done
+          FILES_JSON+="}"
+
+          # Request upload URLs for files that changed
+          POPULATE_RESPONSE=$(curl -sfS -X POST \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"files\":$FILES_JSON}" \
+            "$API/$NEW_VERSION:populateFiles")
+
+          # 5. Upload any files that Firebase doesn't already have
+          UPLOAD_URL=$(echo "$POPULATE_RESPONSE" | node -e "
+            let d='';
+            process.stdin.on('data',c=>d+=c);
+            process.stdin.on('end',()=>{
+              const j=JSON.parse(d);
+              console.log(j.uploadUrl || '');
+            })
+          ")
+
+          UPLOAD_HASHES=$(echo "$POPULATE_RESPONSE" | node -e "
+            let d='';
+            process.stdin.on('data',c=>d+=c);
+            process.stdin.on('end',()=>{
+              const j=JSON.parse(d);
+              const hashes=j.uploadRequiredHashes||[];
+              console.log(JSON.stringify(hashes));
+            })
+          ")
+
+          if [ "$UPLOAD_HASHES" != "[]" ] && [ -n "$UPLOAD_URL" ]; then
+            for f in website/release-notes/*.json; do
+              HASH=$(gzip -c "$f" | sha256sum | cut -d' ' -f1)
+              if echo "$UPLOAD_HASHES" | grep -q "$HASH"; then
+                echo "Uploading $(basename "$f")..."
+                gzip -c "$f" | curl -sfS -X POST \
+                  -H "Authorization: Bearer $ACCESS_TOKEN" \
+                  -H "Content-Type: application/octet-stream" \
+                  --data-binary @- \
+                  "$UPLOAD_URL/$HASH" > /dev/null
+              fi
+            done
+          else
+            echo "All files already cached by Firebase — no uploads needed."
+          fi
+
+          # 6. Finalize the version
+          curl -sfS -X PATCH \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"FINALIZED"}' \
+            "$API/$NEW_VERSION?updateMask=status" > /dev/null
+
+          # 7. Release the version to the live channel
+          curl -sfS -X POST \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"message\":\"Release notes update $(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" \
+            "$API/sites/$SITE/channels/live/releases?versionName=$NEW_VERSION" > /dev/null
+
+          echo "Successfully deployed release notes to https://opspal.gorevpal.com/release-notes.html"
