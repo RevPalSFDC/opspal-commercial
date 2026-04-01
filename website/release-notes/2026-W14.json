@@ -1,19 +1,21 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on critical stability improvements for Salesforce integrations. OpsPal now better handles complex Salesforce configurations including State/Country picklists and multi-step deployments, while fixing several connection issues that were preventing HubSpot automations from running properly.",
-  "published_at": "2026-04-01T12:29:10.558Z",
+  "summary": "This week focused on improving platform reliability and Salesforce connectivity. Key fixes include better handling of Salesforce state and country data fields, enhanced deployment reliability, and resolved connection issues that were preventing some automations from running properly.",
+  "published_at": "2026-04-01T13:34:20.745Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 51,
+  "total_commits": 58,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce automations work better with State/Country picklists",
+      "headline": "Salesforce state and country field handling works more reliably",
       "details": [
-        "OpsPal now automatically detects when your Salesforce org uses State/Country picklists and adjusts field mapping accordingly. Multi-step deployments also run more reliably with improved retry logic."
+        "OpsPal now better detects when Salesforce uses special state and country dropdown lists",
+        "Deployment validation runs more consistently",
+        "System automatically retries failed operations"
       ],
       "commits": [
         "fcad945"
@@ -31,7 +33,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations start properly again",
+      "headline": "HubSpot automations launch successfully again",
       "details": null,
       "commits": [
         "c53235d"
