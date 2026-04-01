@@ -1,0 +1,1276 @@
+{
+  "generatedAt": "2026-04-01T14:20:53.343Z",
+  "totals": {
+    "activeHooks": 98,
+    "coveredHooks": 83,
+    "allowlistedUntested": 12,
+    "missingCoverage": 3
+  },
+  "missingCoverage": [
+    {
+      "hookPath": "plugins/opspal-core/hooks/session-start-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "SessionStart",
+      "matcher": "*"
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/stop-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "Stop",
+      "matcher": "*"
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/subagent-stop-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "SubagentStop",
+      "matcher": "*"
+    }
+  ],
+  "allowlistedUntested": [
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "reason": "Side-effect ambient hook. Core JS logic covered by test/ambient/extractors.test.js and test/ambient/ambient-comprehensive.test.js (44 Jest tests)."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+      "plugin": "opspal-core",
+      "eventType": "TaskCompleted",
+      "matcher": "*",
+      "reason": "Side-effect ambient hook. Core JS logic covered by test/ambient/extractors.test.js and test/ambient/ambient-comprehensive.test.js (44 Jest tests)."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreCompact",
+      "matcher": "*",
+      "reason": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "reason": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+      "plugin": "opspal-core",
+      "eventType": "TaskCompleted",
+      "matcher": "*",
+      "reason": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-hook-error-observer.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "reason": "Side-effect ambient hook. Core JS logic covered by test/ambient/hook-error-observer.test.js, hook-reflection-interceptor.test.js, and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-fireflies-sync.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__fireflies.*$",
+      "reason": "Requires a hermetic Fireflies MCP/post-tool harness with external credentials and transcript fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-gong-sync.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__gong.*$",
+      "reason": "Requires a hermetic Gong MCP/post-tool harness with external credentials and recording fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-fireflies-api-call.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__fireflies.*$",
+      "reason": "Credentialed Fireflies API preflight still needs a service-stub harness."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-gong-api-call.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__gong.*$",
+      "reason": "Credentialed Gong API preflight still needs a service-stub harness."
+    },
+    {
+      "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
+      "plugin": "opspal-gtm-planning",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "reason": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh",
+      "plugin": "opspal-okrs",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "reason": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
+    }
+  ],
+  "staleConfiguration": [
+    {
+      "hookPath": "plugins/opspal-core/hooks/session-start-envcheck.sh",
+      "reason": "manualCoverage entry does not point to an active hook"
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-task-runbook-compliance-check.sh",
+      "reason": "allowedUntested entry does not point to an active hook"
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-win-loss-calibration.sh",
+      "reason": "allowedUntested entry does not point to an active hook"
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/session-start-repo-sync.sh",
+      "reason": "allowedUntested entry does not point to an active hook"
+    }
+  ],
+  "entries": [
+    {
+      "hookPath": "plugins/opspal-ai-consult/hooks/post-tool-use-consultation-check.sh",
+      "plugin": "opspal-ai-consult",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Side-effect ambient hook. Core JS logic covered by test/ambient/extractors.test.js and test/ambient/ambient-comprehensive.test.js (44 Jest tests)."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+      "plugin": "opspal-core",
+      "eventType": "TaskCompleted",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Side-effect ambient hook. Core JS logic covered by test/ambient/extractors.test.js and test/ambient/ambient-comprehensive.test.js (44 Jest tests)."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreCompact",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+      "plugin": "opspal-core",
+      "eventType": "TaskCompleted",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/ambient-hook-error-observer.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Side-effect ambient hook. Core JS logic covered by test/ambient/hook-error-observer.test.js, hook-reflection-interceptor.test.js, and ambient-comprehensive.test.js."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/permission-request-handler.sh",
+      "plugin": "opspal-core",
+      "eventType": "PermissionRequest",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/permission-request-handler.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-fireflies-sync.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__fireflies.*$",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Requires a hermetic Fireflies MCP/post-tool harness with external credentials and transcript fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-gong-sync.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__gong.*$",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Requires a hermetic Gong MCP/post-tool harness with external credentials and recording fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-reflect-strategy-update.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-reflect-strategy-update.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-reflect.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-todowrite-scratchpad.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "TodoWrite",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-todowrite-scratchpad.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use-agent-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__salesforce.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__hubspot.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__marketo.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "Edit",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__salesforce.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__hubspot.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/post-tool-use.sh",
+      "plugin": "opspal-core",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__marketo.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-compact.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreCompact",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/pre-compact.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-fireflies-api-call.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__fireflies.*$",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Credentialed Fireflies API preflight still needs a service-stub harness."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-gong-api-call.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__gong.*$",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Credentialed Gong API preflight still needs a service-stub harness."
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-operation-data-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-operation-data-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__salesforce.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-operation-data-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__hubspot.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-operation-data-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__marketo.*$",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-operation-data-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-task-agent-validator.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-task-agent-validator.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-task-agent-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/pre-task-runbook-policy-enforcer.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/pre-tool-use-contract-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/session-start-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/stop-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "Stop",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/subagent-start-context.sh",
+      "plugin": "opspal-core",
+      "eventType": "SubagentStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/subagent-start-context.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/subagent-stop-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "SubagentStop",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/task-completed-metrics.sh",
+      "plugin": "opspal-core",
+      "eventType": "TaskCompleted",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/task-completed-metrics.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/task-graph-policy-enforcer.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/user-prompt-dispatcher.sh",
+      "plugin": "opspal-core",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/user-prompt-dispatcher.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
+      "plugin": "opspal-data-hygiene",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/data-hygiene-deprecation-warning.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
+      "plugin": "opspal-gtm-planning",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-gtm-planning/hooks/pre-task-gtm-approval-gate.sh",
+      "plugin": "opspal-gtm-planning",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/gtm-pre-task-gtm-approval-gate.test.js",
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-gtm-planning/hooks/pre-write-gtm-path-validator.sh",
+      "plugin": "opspal-gtm-planning",
+      "eventType": "PreToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/gtm-pre-write-gtm-path-validator.test.js",
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-gtm-planning/hooks/session-start-gtm-context-loader.sh",
+      "plugin": "opspal-gtm-planning",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/gtm-session-start-gtm-context-loader.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__hubspot*__*cms*publish*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-post-cms-publish-notification.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/post-portal-authentication.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__hubspot*__*auth*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-post-portal-authentication.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/post-portal-switch.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__hubspot*__*portal*switch*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-post-portal-switch.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-bash-hubspot-api.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-cms-publish-validation.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*__*cms*publish*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-cms-publish-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-company-merge.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*__*merge*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-company-merge.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-hubspot-api-call.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-hubspot-api-call.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-hubspot-api-call.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-property-write-validation.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-task-agent-validator.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-task-agent-validator.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-task-agent-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-task-context-loader.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-task-context-loader.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-task-context-loader.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-task-mandatory.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-task-mandatory.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-task-mandatory.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-workflow-list-validation.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*__*workflow*list*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-workflow-list-validation.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-workflow-list-validation.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/pre-write-path-validator.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-write-path-validator.test.js",
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-write-path-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/universal-agent-governance.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js",
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/monday-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance-cross-plugin.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/api-limit-monitor.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-api-limit-monitor.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/campaign-diagnostic-reminder.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__campaign_*|mcp__marketo__lead_activities",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-campaign-diagnostic-reminder.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/observability-quota-monitor.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__bulk_*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-observability-quota-monitor.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/post-bulk-import.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__bulk_lead_import_status",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-post-bulk-import.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/post-campaign-create.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__campaign_create|mcp__marketo__campaign_clone",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-post-campaign-create.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/post-extract-complete.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__bulk_lead_export_status|mcp__marketo__bulk_activity_export_status|mcp__marketo__bulk_program_member_export_status",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-post-extract-complete.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/post-instance-authentication.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-post-instance-authentication.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/post-operation-verification.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-post-operation-verification.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-bash-marketo-api.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-bulk-export.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-bulk-export.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-bulk-export.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-bulk-operation.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__lead_create|mcp__marketo__lead_update|mcp__marketo__lead_delete",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-bulk-operation.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-campaign-activation.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__campaign_activate",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-campaign-activation.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-campaign-clone.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__campaign_clone",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-campaign-clone.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-campaign-delete.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__campaign_delete",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-campaign-delete.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-intelligence-analysis.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-intelligence-analysis.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-lead-merge.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__lead_merge",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-lead-merge.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-observability-extract.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-observability-extract.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/pre-orchestration.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__program_clone",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-pre-orchestration.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/session-start-marketo.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-session-start-marketo.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/sync-error-monitor.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__sync_*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-sync-error-monitor.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/universal-agent-governance.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js",
+        "plugins/opspal-core/test/hooks/unit/monday-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance-cross-plugin.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-monday/hooks/post-tool-use-monday-audit.sh",
+      "plugin": "opspal-monday",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__monday__*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/monday-post-tool-use-monday-audit.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-monday/hooks/universal-agent-governance.sh",
+      "plugin": "opspal-monday",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/monday-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance-cross-plugin.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh",
+      "plugin": "opspal-okrs",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
+    },
+    {
+      "hookPath": "plugins/opspal-okrs/hooks/pre-task-okr-approval-gate.sh",
+      "plugin": "opspal-okrs",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/okr-pre-task-okr-approval-gate.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-okrs/hooks/pre-write-okr-path-validator.sh",
+      "plugin": "opspal-okrs",
+      "eventType": "PreToolUse",
+      "matcher": "Write",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js",
+        "plugins/opspal-core/test/hooks/unit/okr-pre-write-okr-path-validator.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-okrs/hooks/session-start-okr-context-loader.sh",
+      "plugin": "opspal-okrs",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/okr-session-start-okr-context-loader.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-revops-auditor",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-cpq-assessor",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-automation-auditor",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-bash-dispatcher.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "PostToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce-post-bash-dispatcher.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-bash-error-handler.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "PostToolUseFailure",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/error-handler.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce-post-bash-error-handler.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-discovery",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-discovery-field-dictionary.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-state-discovery",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/post-discovery-field-dictionary.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce-pre-bash-dispatcher.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/pre-task-context-loader.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot-pre-task-context-loader.test.js",
+        "plugins/opspal-core/test/hooks/unit/pre-task-context-loader.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js",
+        "plugins/opspal-core/test/hooks/unit/session-start-agent-reminder.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    }
+  ]
+}

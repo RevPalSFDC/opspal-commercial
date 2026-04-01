@@ -703,7 +703,7 @@ async function runAllTests() {
     assert.strictEqual(state.last_resolved_agent, 'opspal-core:release-coordinator', 'Should record the auto-delegated specialist');
   }));
 
-  results.push(await runTest('Denies Agent when pending routing requires a different agent family', async () => {
+  results.push(await runTest('Accepts same-family Agent when pending routing requires a different specialist', async () => {
     const env = createIsolatedEnv();
     writeRoutingState(env, {
       session_key: env.CLAUDE_SESSION_ID,
@@ -728,24 +728,20 @@ async function runAllTests() {
     const result = await tester.run({
       input: createAgentEvent({
         subagent_type: 'sfdc-cpq-assessor',
-        prompt: 'Try the wrong agent first'
+        prompt: 'Same-family agent should be accepted'
       }),
       env
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(
-      result.output?.hookSpecificOutput?.permissionDecision,
-      'deny',
-      'Wrong Agent family should be denied while routing requirement is pending'
-    );
+    // Same-family agents are accepted as valid substitutes to prevent deadlocks
+    // where routing locks onto one specialist but a different same-family agent
+    // is the correct handler for the actual task.
+    const decision = result.output?.hookSpecificOutput?.permissionDecision;
     assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ROUTING_REQUIRED_AGENT_MISMATCH'),
-      'Should explain the routing-family mismatch'
+      decision === 'allow' || decision === undefined,
+      'Same-family agent should be accepted (was: ' + decision + ')'
     );
-    const state = readRoutingState(env);
-    assert(state, 'Pending state should remain after denied Agent');
-    assert.strictEqual(state.route_pending_clearance, true, 'Denied Agent should not clear routing state');
   }));
 
   results.push(await runTest('Repairs auto-delegation targets that do not satisfy the active route profile', async () => {

@@ -1,8 +1,5 @@
 {
   "manualCoverage": {
-    "plugins/opspal-core/hooks/session-start-envcheck.sh": [
-      "plugins/opspal-core/test/hooks/unit/session-start-env-config.test.js"
-    ],
     "plugins/opspal-core/hooks/pre-operation-data-validator.sh": [
       "plugins/opspal-core/test/hooks/unit/json-hook-contracts.test.js"
     ],
@@ -43,11 +40,8 @@
     "plugins/opspal-core/hooks/ambient-flush-trigger.sh": "Side-effect ambient hook. Core JS logic covered by test/ambient/flush-trigger-engine.test.js and ambient-comprehensive.test.js.",
     "plugins/opspal-core/hooks/post-fireflies-sync.sh": "Requires a hermetic Fireflies MCP/post-tool harness with external credentials and transcript fixtures.",
     "plugins/opspal-core/hooks/post-gong-sync.sh": "Requires a hermetic Gong MCP/post-tool harness with external credentials and recording fixtures.",
-    "plugins/opspal-core/hooks/post-task-runbook-compliance-check.sh": "Depends on multi-hook Agent and TaskCompleted chain state; pending a dedicated compliance chain harness.",
-    "plugins/opspal-core/hooks/post-win-loss-calibration.sh": "Relies on cross-hook assessment artifacts and calibration fixtures that are not yet isolated.",
     "plugins/opspal-core/hooks/pre-fireflies-api-call.sh": "Credentialed Fireflies API preflight still needs a service-stub harness.",
     "plugins/opspal-core/hooks/pre-gong-api-call.sh": "Credentialed Gong API preflight still needs a service-stub harness.",
-    "plugins/opspal-core/hooks/session-start-repo-sync.sh": "Touches git/worktree state and needs an isolated repository fixture to test safely.",
     "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures.",
     "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
   },

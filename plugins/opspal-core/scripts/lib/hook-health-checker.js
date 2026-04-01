@@ -71,7 +71,7 @@ const PRE_TOOL_DECISION_HOOKS = ['PreToolUse'];
 const PERMISSION_REQUEST_DECISION_HOOKS = ['PermissionRequest'];
 
 // Hook type classification for context injection analysis
-const CONTEXT_INJECTING_HOOKS = ['UserPromptSubmit', 'SessionStart', 'SubagentStart', 'PreCompact'];
+const CONTEXT_INJECTING_HOOKS = ['UserPromptSubmit', 'SessionStart', 'SubagentStart', 'SubagentStop', 'Stop', 'TaskCompleted', 'PreCompact'];
 const DECISION_HOOKS = ['PreToolUse', 'PermissionRequest'];
 const FEEDBACK_HOOKS = ['PostToolUse', 'PostToolUseFailure'];
 const SIDE_EFFECT_HOOKS = ['Stop', 'SubagentStop', 'TaskCompleted', 'PreCommit', 'PostCommit', 'Setup'];
