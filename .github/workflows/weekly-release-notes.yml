@@ -72,117 +72,146 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Get access token from gcloud auth
           ACCESS_TOKEN=$(gcloud auth print-access-token)
           SITE="revpalportal"
           API="https://firebasehosting.googleapis.com/v1beta1"
 
-          # 1. Get the current live version to clone from
+          # Helper: parse JSON field from stdin
+          parse() { node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(d);const v=$1;console.log(v??'')}catch(e){console.error('Parse error:',d.slice(0,200));process.exit(1)}})"; }
+
+          # 1. Get current live version
           LIVE_VERSION=$(curl -sfS \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             "$API/sites/$SITE/channels/live" \
-            | node -e "
-              let d='';
-              process.stdin.on('data',c=>d+=c);
-              process.stdin.on('end',()=>{
-                const j=JSON.parse(d);
-                console.log(j.release?.version?.name || '');
-              })
-            ")
+            | parse "j.release?.version?.name")
 
           if [ -z "$LIVE_VERSION" ]; then
-            echo "::error::Could not determine current live version. Is the site deployed?"
+            echo "::error::Could not determine current live version"
             exit 1
           fi
-          echo "Current live version: $LIVE_VERSION"
+          echo "Live version: $LIVE_VERSION"
 
-          # 2. Create a new version (clones config from live)
+          # 2. Get file listing from the live version
+          LIVE_FILES=$(curl -sfS \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            "$API/$LIVE_VERSION/files?pageSize=1000" \
+            | parse "JSON.stringify((j.files||[]).reduce((m,f)=>{m[f.path]=f.hash;return m},{}))")
+          echo "Live files: $(echo "$LIVE_FILES" | parse "Object.keys(j).length") files"
+
+          # 3. Create a new empty version
           NEW_VERSION=$(curl -sfS -X POST \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"config\":{\"headers\":[{\"glob\":\"**/*.json\",\"headers\":{\"Cache-Control\":\"public, max-age=0, must-revalidate\",\"Access-Control-Allow-Origin\":\"*\"}}]}}" \
+            -d '{}' \
             "$API/sites/$SITE/versions" \
-            | node -e "
-              let d='';
-              process.stdin.on('data',c=>d+=c);
-              process.stdin.on('end',()=>console.log(JSON.parse(d).name))
-            ")
+            | parse "j.name")
           echo "New version: $NEW_VERSION"
 
-          # 3. Clone the live version's files into the new version
-          curl -sfS -X POST \
-            -H "Authorization: Bearer $ACCESS_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"sourceVersion\":\"$LIVE_VERSION\"}" \
-            "$API/$NEW_VERSION:clone" > /dev/null
+          # 4. Build merged file map: all live files + updated release-notes
+          MERGED_FILES=$(node -e "
+            const fs = require('fs');
+            const crypto = require('crypto');
+            const zlib = require('zlib');
 
-          # 4. Populate the new version with updated release-notes files
-          # Build the files map: /release-notes/<file> -> sha256 hash
-          FILES_JSON="{"
-          FIRST=true
-          for f in website/release-notes/*.json; do
-            HASH=$(gzip -c "$f" | sha256sum | cut -d' ' -f1)
-            RELPATH="/release-notes/$(basename "$f")"
-            if [ "$FIRST" = true ]; then FIRST=false; else FILES_JSON+=","; fi
-            FILES_JSON+="\"$RELPATH\":\"$HASH\""
-          done
-          FILES_JSON+="}"
+            // Start with all live files
+            const files = $LIVE_FILES;
 
-          # Request upload URLs for files that changed
+            // Add/replace release-notes JSON files
+            const dir = 'website/release-notes';
+            for (const name of fs.readdirSync(dir)) {
+              if (!name.endsWith('.json')) continue;
+              const content = fs.readFileSync(dir + '/' + name);
+              const gzipped = zlib.gzipSync(content);
+              const hash = crypto.createHash('sha256').update(gzipped).digest('hex');
+              files['/release-notes/' + name] = hash;
+            }
+
+            console.log(JSON.stringify(files));
+          ")
+          echo "Merged files: $(echo "$MERGED_FILES" | parse "Object.keys(j).length") files"
+
+          # 5. Populate the new version with the merged file map
           POPULATE_RESPONSE=$(curl -sfS -X POST \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"files\":$FILES_JSON}" \
+            -d "{\"files\":$MERGED_FILES}" \
             "$API/$NEW_VERSION:populateFiles")
 
-          # 5. Upload any files that Firebase doesn't already have
-          UPLOAD_URL=$(echo "$POPULATE_RESPONSE" | node -e "
-            let d='';
-            process.stdin.on('data',c=>d+=c);
-            process.stdin.on('end',()=>{
-              const j=JSON.parse(d);
-              console.log(j.uploadUrl || '');
-            })
-          ")
+          UPLOAD_URL=$(echo "$POPULATE_RESPONSE" | parse "j.uploadUrl")
+          UPLOAD_HASHES=$(echo "$POPULATE_RESPONSE" | parse "JSON.stringify(j.uploadRequiredHashes||[])")
 
-          UPLOAD_HASHES=$(echo "$POPULATE_RESPONSE" | node -e "
-            let d='';
-            process.stdin.on('data',c=>d+=c);
-            process.stdin.on('end',()=>{
-              const j=JSON.parse(d);
-              const hashes=j.uploadRequiredHashes||[];
-              console.log(JSON.stringify(hashes));
-            })
-          ")
-
+          # 6. Upload any files Firebase doesn't already have (only release-notes change)
           if [ "$UPLOAD_HASHES" != "[]" ] && [ -n "$UPLOAD_URL" ]; then
-            for f in website/release-notes/*.json; do
-              HASH=$(gzip -c "$f" | sha256sum | cut -d' ' -f1)
-              if echo "$UPLOAD_HASHES" | grep -q "$HASH"; then
-                echo "Uploading $(basename "$f")..."
-                gzip -c "$f" | curl -sfS -X POST \
-                  -H "Authorization: Bearer $ACCESS_TOKEN" \
-                  -H "Content-Type: application/octet-stream" \
-                  --data-binary @- \
-                  "$UPLOAD_URL/$HASH" > /dev/null
-              fi
-            done
+            node -e "
+              const fs = require('fs');
+              const zlib = require('zlib');
+              const crypto = require('crypto');
+              const https = require('https');
+              const url = require('url');
+
+              const needed = new Set($UPLOAD_HASHES);
+              const uploadUrl = '$UPLOAD_URL';
+              const dir = 'website/release-notes';
+
+              const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
+              let uploaded = 0;
+
+              function uploadFile(name) {
+                return new Promise((resolve, reject) => {
+                  const content = fs.readFileSync(dir + '/' + name);
+                  const gzipped = zlib.gzipSync(content);
+                  const hash = crypto.createHash('sha256').update(gzipped).digest('hex');
+
+                  if (!needed.has(hash)) { resolve(); return; }
+
+                  const parsed = new URL(uploadUrl + '/' + hash);
+                  const req = https.request({
+                    hostname: parsed.hostname,
+                    path: parsed.pathname + parsed.search,
+                    method: 'POST',
+                    headers: {
+                      'Authorization': 'Bearer $ACCESS_TOKEN',
+                      'Content-Type': 'application/octet-stream',
+                      'Content-Length': gzipped.length
+                    }
+                  }, (res) => {
+                    let body = '';
+                    res.on('data', c => body += c);
+                    res.on('end', () => {
+                      if (res.statusCode >= 200 && res.statusCode < 300) {
+                        console.log('Uploaded: ' + name);
+                        uploaded++;
+                        resolve();
+                      } else {
+                        reject(new Error('Upload failed for ' + name + ': ' + res.statusCode + ' ' + body.slice(0,200)));
+                      }
+                    });
+                  });
+                  req.on('error', reject);
+                  req.end(gzipped);
+                });
+              }
+
+              Promise.all(files.map(uploadFile))
+                .then(() => console.log('Uploaded ' + uploaded + ' file(s)'))
+                .catch(e => { console.error(e.message); process.exit(1); });
+            "
           else
-            echo "All files already cached by Firebase — no uploads needed."
+            echo "All files already cached — no uploads needed."
           fi
 
-          # 6. Finalize the version
+          # 7. Finalize the version
           curl -sfS -X PATCH \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{"status":"FINALIZED"}' \
             "$API/$NEW_VERSION?updateMask=status" > /dev/null
 
-          # 7. Release the version to the live channel
+          # 8. Release to live channel
           curl -sfS -X POST \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"message\":\"Release notes update $(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" \
             "$API/sites/$SITE/channels/live/releases?versionName=$NEW_VERSION" > /dev/null
 
-          echo "Successfully deployed release notes to https://opspal.gorevpal.com/release-notes.html"
+          echo "Deployed release notes to https://opspal.gorevpal.com/release-notes.html"
