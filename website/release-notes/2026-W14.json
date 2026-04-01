@@ -1,40 +1,31 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on platform stability improvements that ensure more reliable Salesforce deployments and automation workflows. We enhanced Salesforce deployment validation to better detect configuration issues and improved the overall reliability of platform updates and integrations.",
-  "published_at": "2026-04-01T19:04:45.559Z",
+  "summary": "This week focused on platform stability improvements that make OpsPal more reliable for your daily RevOps work. We fixed several issues that were causing automation failures in Salesforce and HubSpot, and resolved problems with system updates that could interrupt your workflows.",
+  "published_at": "2026-04-01T23:53:13.173Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 74,
+  "total_commits": 79,
   "entries": [
     {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Platform updates now include latest marketplace features",
-      "details": null,
-      "commits": [
-        "d4d0188"
-      ]
-    },
-    {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce deployment validation and error detection",
+      "headline": "Salesforce automations now handle state and country fields more reliably",
       "details": [
-        "Automatically detects State and Country field configuration issues that could break workflows",
-        "Improved deployment validation checks prevent common setup problems",
-        "Enhanced error recovery for more reliable deployments"
+        "OpsPal now automatically detects when Salesforce organizations use special state and country field settings, preventing automation failures that could occur when these fields are configured differently than expected."
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "More reliable Salesforce multi-step deployments",
-      "details": null,
+      "headline": "Multi-step Salesforce deployments now run more smoothly",
+      "details": [
+        "Complex Salesforce configuration changes that require multiple steps now execute more reliably, reducing the chance of partial deployments or stuck processes."
+      ],
       "commits": [
         "a1075f7"
       ]
@@ -42,8 +33,10 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Resolved HubSpot automation startup issues",
-      "details": null,
+      "headline": "HubSpot automations work again after recent outage",
+      "details": [
+        "Restored HubSpot functionality that was temporarily broken, ensuring all your HubSpot-related automations and data syncing work as expected."
+      ],
       "commits": [
         "c53235d"
       ]
