@@ -33,6 +33,14 @@ if [ "$ENABLE" = "0" ]; then
   exit 0
 fi
 
+# Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.
+# When run standalone (no dispatcher context and stdin is a terminal),
+# exit cleanly rather than firing against ambient terminal input.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
   HOOK_INPUT=$(cat)
@@ -172,7 +180,7 @@ fi
 
 # Fallback: hardcoded minimal reminder
 if [ -z "$ROUTING_TEXT" ]; then
-  ROUTING_TEXT="ROUTING REMINDER: For revops/audit use opspal-salesforce:sfdc-revops-auditor, cpq/quote use opspal-salesforce:sfdc-cpq-assessor, automation audit use opspal-salesforce:sfdc-automation-auditor, hubspot assessment use opspal-hubspot:hubspot-assessment-analyzer. Always invoke via Agent(subagent_type='<fully-qualified-agent>', prompt=<request>). Use fully-qualified names only and never generic labels like Explore."
+  ROUTING_TEXT="Note: Routing guidance — revops/audit → sfdc-revops-auditor, cpq/quote → sfdc-cpq-assessor, automation audit → sfdc-automation-auditor, hubspot assessment → hubspot-assessment-analyzer. Use Agent(subagent_type='plugin:agent-name', prompt=<request>) when delegating."
 fi
 
 # Escape for JSON

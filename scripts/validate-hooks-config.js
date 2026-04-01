@@ -213,6 +213,58 @@ for (const { name: pluginName, root: pluginRoot } of pluginPaths) {
   }
 }
 
+// Phase 3: Check for advisory-vs-governance contradictions across plugins.
+// For each PreToolUse hook that redirects to a named agent, verify that no
+// UserPromptSubmit hook could suppress that agent's plugin.
+for (const { name: pluginName, root: pluginRoot } of pluginPaths) {
+  const hooksPath = path.join(pluginRoot, '.claude-plugin', 'hooks.json');
+  if (!fs.existsSync(hooksPath)) continue;
+
+  let hooksJson;
+  try {
+    hooksJson = JSON.parse(fs.readFileSync(hooksPath, 'utf8'));
+  } catch (_e) {
+    continue;
+  }
+  if (!hooksJson.hooks) continue;
+
+  // Collect agent names referenced in PreToolUse hook scripts (deny+redirect)
+  const protectedPlugins = new Set();
+  for (const entry of (hooksJson.hooks.PreToolUse || [])) {
+    for (const hook of (entry.hooks || [])) {
+      if (!hook.command) continue;
+      const cmdPath = (extractCommandPath(hook.command) || hook.command.split(/\s+/)[0])
+        .replace('${CLAUDE_PLUGIN_ROOT}', pluginRoot);
+      try {
+        if (!fs.existsSync(cmdPath)) continue;
+        const src = fs.readFileSync(cmdPath, 'utf8');
+        // Match agent references like opspal-salesforce:sfdc-deployment-manager
+        const agentRefs = src.match(/opspal-[a-z-]+:[a-z-]+/g) || [];
+        for (const ref of agentRefs) {
+          const colonIdx = ref.indexOf(':');
+          if (colonIdx > 0) protectedPlugins.add(ref.slice(0, colonIdx));
+        }
+      } catch (_e) { /* skip unreadable */ }
+    }
+  }
+
+  // Check if any UPS hook description uses suppression language for protected plugins
+  for (const entry of (hooksJson.hooks.UserPromptSubmit || [])) {
+    for (const hook of (entry.hooks || [])) {
+      const desc = (hook.description || '').toLowerCase();
+      if (/suppress|block|restrict|reject/i.test(desc)) {
+        for (const protectedPlugin of protectedPlugins) {
+          warnings.push(
+            `${pluginName}: UPS hook "${hook.description?.slice(0, 60)}..." uses suppression language ` +
+            `while PreToolUse hooks protect agents from ${protectedPlugin}. ` +
+            `Verify scope selection cannot contradict governance redirects.`
+          );
+        }
+      }
+    }
+  }
+}
+
 if (errors.length) {
   console.error('❌ Hook configuration errors:');
   errors.forEach(item => console.error(`  - ${item}`));

@@ -13,7 +13,7 @@
     "plugins": 9,
     "agents": 300,
     "commands": 271,
-    "hooks": 174,
+    "hooks": 175,
     "skills": 1
   },
   "plugins": [
@@ -39,13 +39,13 @@
     },
     {
       "name": "opspal-core",
-      "version": "2.49.3",
+      "version": "2.50.0",
       "source": "./plugins/opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
       "counts": {
         "agents": 80,
         "commands": 114,
-        "hooks": 83,
+        "hooks": 84,
         "skills": 0
       },
       "lifecycle": {

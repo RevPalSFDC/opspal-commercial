@@ -6,45 +6,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-first-run.sh",
-            "timeout": 4,
-            "description": "Guide first-run activation and workspace initialization before normal OpsPal work"
-          },
-          {
-            "type": "command",
-            "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh",
-            "timeout": 10,
-            "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-scope-selector.sh",
-            "timeout": 5,
-            "description": "Persist a minimal plugin and skill scope for the current task and inject a concise allowlist reminder"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-graph-trigger.sh",
-            "timeout": 5,
-            "description": "Detect when Task Graph orchestration is needed based on complexity"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/intake-suggestion.sh",
-            "timeout": 5,
-            "description": "Suggest /intake for project-level requests using complexity scoring and language detection"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/routing-context-refresher.sh",
-            "timeout": 3,
-            "description": "Inject condensed routing reminder after context compaction or periodically"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5,
-            "description": "Extract ambient reflection candidates from user prompt signals"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-dispatcher.sh",
+            "timeout": 30,
+            "description": "Sequential UPS dispatcher: first-run → task-graph → routing-refresher → unified-router → task-scope (ambient extractor runs async)"
           }
         ]
       }

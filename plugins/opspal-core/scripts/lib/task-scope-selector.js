@@ -490,15 +490,15 @@ function buildScopeSummary(scope) {
   const topAssets = flattenTopAssetNames(scope.selectedAssets);
 
   const userPromptContext = [
-    `TASK SCOPE: Prefer ${selected} for this request.`,
-    suppressed ? `De-prioritize ${suppressed} unless the task requires them or a governance hook routes to an agent from those plugins.` : '',
-    topAssets.length > 0 ? `Most relevant prompt assets: ${topAssets.join(', ')}.` : ''
+    `Context: Active plugins for this session: ${selected}.`,
+    suppressed ? `Other plugins (${suppressed}) available if needed.` : '',
+    topAssets.length > 0 ? `Relevant assets: ${topAssets.join(', ')}.` : ''
   ].filter(Boolean).join(' ');
 
   const subagentContext = [
-    `TASK SCOPE: Active plugin preference is ${selected}.`,
-    suppressed ? `De-prioritize ${suppressed} unless the task clearly requires cross-platform work or a routing directive specifies an agent from those plugins.` : '',
-    topAssets.length > 0 ? `Relevant skills/commands: ${topAssets.join(', ')}.` : ''
+    `Context: Active plugins: ${selected}.`,
+    suppressed ? `Other plugins (${suppressed}) available if the task requires them.` : '',
+    topAssets.length > 0 ? `Relevant: ${topAssets.join(', ')}.` : ''
   ].filter(Boolean).join(' ');
 
   return {

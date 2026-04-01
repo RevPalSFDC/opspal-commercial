@@ -12,6 +12,14 @@ if [[ -f "$ERROR_HANDLER" ]]; then
     set_lenient_mode 2>/dev/null || true
 fi
 
+# Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.
+# When run standalone (no dispatcher context and stdin is a terminal),
+# exit cleanly rather than firing against ambient terminal input.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
 if ! command -v node >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
     exit 0
 fi

@@ -69,6 +69,14 @@ fi
 # shellcheck source=/dev/null
 source "$SESSION_KEY_RESOLVER_LIB"
 
+# Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.
+# When run standalone (no dispatcher context and stdin is a terminal),
+# exit cleanly rather than firing against ambient terminal input.
+if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
+  echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  exit 0
+fi
+
 # Configuration
 ENABLE_ROUTING="${ENABLE_UNIFIED_ROUTING:-1}"
 ENABLE_BLOCKING="${ENABLE_AGENT_BLOCKING:-1}"
@@ -1869,9 +1877,7 @@ Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', pr
 Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE.
 This is prompt-time guidance only; direct execution is not blocked by routing state for this advisory route."
     else
-        CONTEXT_MESSAGE="ROUTING: Use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task. Complexity: ${COMPLEXITY_PCT}%.
-REMINDER: Use the EXACT fully-qualified agent name shown above.
-This is prompt-time guidance only; direct execution is not blocked by routing state for this advisory route."
+        CONTEXT_MESSAGE="Routing suggestion: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) is well-suited for this task (complexity: ${COMPLEXITY_PCT}%). Direct execution is also possible."
     fi
 fi
 
