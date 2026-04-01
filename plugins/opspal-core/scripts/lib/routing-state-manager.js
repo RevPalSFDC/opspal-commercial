@@ -721,6 +721,19 @@ function recordProjectionLossEvent(sessionKey, agentName, pattern) {
   return newState;
 }
 
+function resetProjectionLoss(sessionKey) {
+  const current = getState(sessionKey);
+  if (!current) {
+    return null;
+  }
+  const nextState = normalizeState(sessionKey, {
+    ...current,
+    projection_loss_circuit_broken: false,
+    projection_loss_events: []
+  }, current);
+  return writeStateFile(getStateFile(sessionKey), nextState);
+}
+
 function recordIntegrityStop(sessionKey, agentName, platform, reason, detail) {
   const current = getState(sessionKey);
   const timestamp = nowSeconds();
@@ -828,6 +841,17 @@ if (require.main === module) {
       break;
     }
 
+    case 'reset-projection-loss': {
+      const sessionKey = args[1];
+      const updated = resetProjectionLoss(sessionKey);
+      console.log(JSON.stringify({
+        reset: updated !== null,
+        projection_loss_circuit_broken: updated?.projection_loss_circuit_broken ?? false,
+        projection_loss_events_cleared: updated?.projection_loss_events?.length === 0
+      }));
+      break;
+    }
+
     case 'mark-bypassed': {
       const sessionKey = args[1];
       const resolvedAgent = args[2] || null;
@@ -900,7 +924,7 @@ if (require.main === module) {
 
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|clear-explicit-override|record-projection-loss|record-integrity-stop|projection-loss-count> [args]');
+      console.error('Usage: routing-state-manager.js <save|get|clear|check|mark-cleared|mark-bypassed|clear-expired|clear-stale|clear-explicit-override|record-projection-loss|reset-projection-loss|record-integrity-stop|projection-loss-count> [args]');
       process.exit(1);
   }
 }
@@ -925,5 +949,6 @@ module.exports = {
   checkState,
   recordIntegrityStop,
   recordProjectionLossEvent,
+  resetProjectionLoss,
   getProjectionLossCount
 };

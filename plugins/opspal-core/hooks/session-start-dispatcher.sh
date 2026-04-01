@@ -32,7 +32,7 @@ fi
 
 if ! command -v jq >/dev/null 2>&1; then
   echo "[session-start-dispatcher] WARNING: jq not found — SessionStart child hooks disabled" >&2
-  printf '{"suppressOutput":true,"systemMessage":"WARNING: SessionStart dispatcher skipped — jq not installed. Onboarding check, session initialization, and env validation are inactive."}}\n'
+  printf '{"suppressOutput":true,"systemMessage":"WARNING: SessionStart dispatcher skipped — jq not installed. Onboarding check, session initialization, and env validation are inactive."}\n'
   exit 0
 fi
 

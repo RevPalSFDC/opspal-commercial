@@ -705,19 +705,19 @@ enforce_integrity_stop() {
     esac
 
     emit_routing_event \
-      "block" \
+      "warn" \
       "investigation-integrity-stop" \
       "${integrity_agent:-unknown}" \
-      "Receipt-required specialist execution lost deterministic proof; direct parent execution remains blocked." \
+      "Receipt-required specialist execution lost deterministic proof (advisory only)." \
       "${command_summary:-$tool_name}" \
       "$caller_agent" \
       "$tool_name"
 
     emit_pretool_decision \
-      "deny" \
-      "INVESTIGATION_INTEGRITY_STOP: Receipt-required work owned by '${integrity_agent:-unknown}' failed deterministic proof (${integrity_reason}). Direct ${integrity_platform:-platform} execution is blocked until you re-delegate to an approved specialist and obtain a valid execution receipt." \
-      "Integrity detail: ${integrity_detail:-not provided}. Planning, fan-out, aggregation, and report assembly may continue, but direct platform execution is blocked from the parent path."
-    return 1
+      "allow" \
+      "" \
+      "INTEGRITY_ADVISORY: Receipt-required work owned by '${integrity_agent:-unknown}' — ${integrity_reason}. Consider re-delegating to the specialist for deterministic proof. Detail: ${integrity_detail:-not provided}."
+    return 0
 }
 
 enforce_orchestrator_specialist_execution_guard() {
@@ -741,19 +741,19 @@ enforce_orchestrator_specialist_execution_guard() {
     esac
 
     emit_routing_event \
-      "block" \
+      "warn" \
       "orchestrator-specialist-execution-guard" \
       "opspal-salesforce:sfdc-automation-auditor" \
-      "Salesforce orchestrator attempted specialist-only investigation execution." \
+      "Salesforce orchestrator attempted specialist-only investigation execution (advisory only)." \
       "${command_summary:-$tool_name}" \
       "$caller_agent" \
       "$tool_name"
 
     emit_pretool_decision \
-      "deny" \
-      "ORCHESTRATOR_SPECIALIST_EXECUTION_REQUIRED: '${caller_agent}' may coordinate investigation work, but it may not execute specialist-owned Tooling/API audit queries directly. Delegate to a receipt-backed investigation specialist instead." \
-      "Blocked specialist-owned investigation surface: ${command_summary:-$tool_name}. Allowed coordinator behavior includes planning, fan-out, aggregation, and verified child-result handling. Direct audit query execution does not."
-    return 1
+      "allow" \
+      "" \
+      "ROUTING_ADVISORY: '${caller_agent}' is executing specialist-owned queries directly. Consider delegating to a receipt-backed investigation specialist for deterministic proof."
+    return 0
 }
 
 tool_requires_pending_route_clearance() {
@@ -823,33 +823,26 @@ enforce_pending_route_gate() {
     esac
 
     emit_routing_event \
-      "block" \
+      "warn" \
       "${route_id:-pending-routing-required}" \
       "${required_agent:-unknown}" \
-      "Pending routing requirement not cleared before operational tool execution." \
+      "Pending routing requirement not cleared (advisory only)." \
       "${command_summary:-$tool_name}" \
       "$(resolve_caller_agent unknown 2>&1)" \
       "$tool_name"
 
-    additional_context="Execution-time routing requirement is still pending for this session."
+    additional_context="Specialist '${required_agent:-unknown}' was recommended for this workflow."
     if [[ "$auto_delegation_active" == "true" ]] && [[ -n "$required_agent" ]]; then
-        additional_context="${additional_context} Internal specialist handoff is staged for '${required_agent}' via ${auto_delegation_mode:-agent_rewrite_bridge}; direct operational tools remain gated until that route is cleared."
+        additional_context="${additional_context} Internal specialist handoff is staged for '${required_agent}' via ${auto_delegation_mode:-agent_rewrite_bridge}."
     elif [[ -n "$route_kind" ]]; then
         additional_context="${additional_context} Active route kind=${route_kind}."
     fi
-    if [[ "$tool_name" == mcp__* || "$tool_name" == mcp_* ]]; then
-        if [[ "$PENDING_ROUTE_MCP_POLICY_MATCHED" == "true" ]]; then
-            additional_context="${additional_context} MCP policy: ${PENDING_ROUTE_MCP_POLICY_MUTABILITY:-unknown} via ${PENDING_ROUTE_MCP_POLICY_NOTE:-configured rule}."
-        else
-            additional_context="${additional_context} MCP tool mutability is not yet explicitly classified; defaulting to deny until this tool is added to the registry."
-        fi
-    fi
 
     emit_pretool_decision \
-      "deny" \
-      "ROUTING_REQUIRED_BEFORE_OPERATION: This workflow is still staged for '${required_agent:-unknown}'. Continue through that specialist route before operational execution. Current guidanceAction=${action:-unknown}." \
-      "$additional_context"
-    return 1
+      "allow" \
+      "" \
+      "ROUTING_ADVISORY: ${additional_context}"
+    return 0
 }
 
 normalize_command_fingerprint() {
@@ -1239,20 +1232,17 @@ if ! enforce_integrity_stop "$TOOL_NAME" "$SESSION_KEY"; then
     exit 0
 fi
 
-# Projection-loss circuit-break — blocks Bash regardless of pending route state.
-# This fires after enforce_pending_route_gate because the circuit-broken state
-# may not have route_pending_clearance set (it's written by SubagentStop, not
-# by the router's UserPromptSubmit hook).
+# Projection-loss circuit-break — advisory only.
+# Previously this blocked all Bash permanently when projection_loss_circuit_broken=true.
+# Now it emits a warning for observability but does not deny tool execution.
+# Agents must be able to use their declared tools to complete their assigned roles.
 if [ "$TOOL_NAME" = "Bash" ] && [ -n "$SESSION_KEY" ]; then
     _plcb_state="$(get_routing_state_check "$SESSION_KEY")"
     _plcb_broken="$(echo "$_plcb_state" | jq -r '.state.projection_loss_circuit_broken // .projection_loss_circuit_broken // false' 2>/dev/null || echo "false")"
     if [ "$_plcb_broken" = "true" ]; then
-        emit_routing_event "block" "projection-loss-circuit-break" "" "Projection-loss circuit breaker active" "$(extract_bash_command 2>/dev/null || echo '')" "$(resolve_caller_agent unknown 2>&1)" "$TOOL_NAME"
-        emit_pretool_decision \
-          "deny" \
-          "PROJECTION_LOSS_CIRCUIT_BREAK: Multiple specialists have reported Read/Write-only tool projection (no Bash). This is a runtime integrity failure — the host environment is not projecting declared tools into sub-agents. Do NOT attempt further specialist delegation or direct Bash recovery. Surface this to the user." \
-          "Projection-loss circuit breaker is active. No operational Bash execution is permitted until the runtime projection issue is resolved. Close and re-open the session to reset."
-        exit 0
+        emit_routing_event "warn" "projection-loss-circuit-break" "" \
+          "Projection-loss circuit breaker active (advisory only)" \
+          "$(extract_bash_command 2>/dev/null || echo '')" "$(resolve_caller_agent unknown 2>&1)" "$TOOL_NAME"
     fi
 fi
 
@@ -1408,49 +1398,46 @@ enforce_mandatory_routing() {
             is_circuit_broken="$(echo "$cleared_route_projection_mismatch" | jq -r '.circuitBroken // false' 2>/dev/null || echo "false")"
 
             if [[ "$is_circuit_broken" == "true" ]]; then
-                emit_routing_event "block" "$rule_id" "$required_agent" "Projection-loss circuit breaker active — multiple specialists reported missing tools." "$command" "$caller_agent" "$tool"
-                emit_pretool_decision \
-                  "deny" \
-                  "PROJECTION_LOSS_CIRCUIT_BREAK: Multiple specialists have reported Read/Write-only tool projection (no Bash). This is a runtime integrity failure — the host environment is not projecting declared tools into sub-agents. Do NOT attempt further specialist delegation or direct Bash recovery. Surface this to the user." \
-                  "Projection-loss circuit breaker is active. No operational Bash execution is permitted until the runtime projection issue is resolved. Close and re-open the session to reset."
-                return 1
+                emit_routing_event "warn" "$rule_id" "$required_agent" \
+                  "Projection-loss circuit breaker active (advisory only)" "$command" "$caller_agent" "$tool"
+                # Advisory only — do not deny. Agents must be able to use their declared tools.
             fi
 
             local failure_class=""
             failure_class="$(echo "$cleared_route_projection_mismatch" | jq -r '.failureClass // "EXTERNAL_PROJECTION_LOSS"' 2>/dev/null || echo "EXTERNAL_PROJECTION_LOSS")"
 
             if [[ "$failure_class" == "CONTEXT_CONTINUITY_LOSS" ]]; then
-                emit_routing_event "block" "$rule_id" "$required_agent" "CONTEXT_CONTINUITY_LOSS: Specialist identity dropped to unknown after route clearance." "$command" "$caller_agent" "$tool"
+                emit_routing_event "warn" "$rule_id" "$required_agent" \
+                  "CONTEXT_CONTINUITY_LOSS: Specialist identity dropped to unknown (advisory only)." "$command" "$caller_agent" "$tool"
                 emit_pretool_decision \
-                  "deny" \
-                  "CONTEXT_CONTINUITY_LOSS: This workflow was cleared to '${last_resolved_agent:-$required_agent}' (Bash-capable), but execution context was lost — the current caller is '${caller_agent:-unknown}'. The host runtime did not propagate specialist identity through the hook payload. This is NOT a tool projection failure (the specialist profile includes Bash). Re-invoke the specialist via Agent(subagent_type='${last_resolved_agent:-$required_agent}') to restore execution context." \
-                  "Specialist identity was lost between route clearance and operational execution. The cleared specialist '${last_resolved_agent:-$required_agent}' still owns this workflow. Re-delegate to restore context."
-                return 1
+                  "allow" \
+                  "" \
+                  "ROUTING_ADVISORY: Specialist identity '${last_resolved_agent:-$required_agent}' was lost. Consider re-delegating via Agent(subagent_type='${last_resolved_agent:-$required_agent}')."
+                return 0
             fi
 
-            emit_routing_event "block" "$rule_id" "$required_agent" "EXTERNAL_PROJECTION_LOSS: Cleared specialist route drifted to non-approved context." "$command" "$caller_agent" "$tool"
+            emit_routing_event "warn" "$rule_id" "$required_agent" \
+              "EXTERNAL_PROJECTION_LOSS: Cleared specialist route drifted (advisory only)." "$command" "$caller_agent" "$tool"
             emit_pretool_decision \
-              "deny" \
-              "EXTERNAL_PROJECTION_LOSS: This workflow was already cleared to '${last_resolved_agent:-$required_agent}', whose active profile expects Bash-capable execution. Operational work is now being attempted from '${caller_agent:-main}' instead. Required tools: ${mismatch_required_tools:-Bash}. Loaded tools for cleared specialist: ${expected_tools:-unknown}. [failureClass=${failure_class}]" \
-              "Protected specialist workflow remains owned by '${last_resolved_agent:-$required_agent}'. Parent direct execution recovery is blocked; reroute only to a capable approved specialist or investigate tool projection / registry drift."
-            return 1
+              "allow" \
+              "" \
+              "ROUTING_ADVISORY: Specialist route drifted from '${last_resolved_agent:-$required_agent}'. Consider re-delegating to the cleared specialist."
+            return 0
         fi
 
-        emit_routing_event "block" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
+        emit_routing_event "warn" "$rule_id" "$required_agent" "$reason" "$command" "$caller_agent" "$tool"
 
         if [[ "$rule_id" == "sf_permission_security_write" ]]; then
-            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') so the canonical permission/security specialist keeps execution ownership end-to-end. Required tools: ${required_tools_display:-unspecified}. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}."
-            routing_context_message="Permission/security writes stay on the specialist path after routing. Do not recover by having the parent context run a generated script."
+            routing_reason_message="ROUTING_ADVISORY: $reason Consider using Agent(subagent_type='${required_agent}') for permission/security specialist ownership. Eligible agents: ${clearance_agents_display:-$required_agent}."
         else
-            routing_reason_message="ROUTING_SPECIALIST_REQUIRED: $reason Continue with Agent(subagent_type='${required_agent}') before operational execution. Required tools: ${required_tools_display:-unspecified}. Required capabilities: ${required_capabilities_display:-unspecified}. Eligible actor types: ${allowed_actor_types_display:-any}. Eligible agents: ${clearance_agents_display:-$required_agent}."
-            routing_context_message="Direct operational workflow blocked until an approved specialist agent is used."
+            routing_reason_message="ROUTING_ADVISORY: $reason Consider using Agent(subagent_type='${required_agent}'). Eligible agents: ${clearance_agents_display:-$required_agent}."
         fi
 
         emit_pretool_decision \
-          "deny" \
-          "$routing_reason_message" \
-          "$routing_context_message"
-        return 1
+          "allow" \
+          "" \
+          "$routing_reason_message"
+        return 0
     fi
 
     return 0

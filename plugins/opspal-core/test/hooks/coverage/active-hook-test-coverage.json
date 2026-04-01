@@ -1,31 +1,12 @@
 {
-  "generatedAt": "2026-04-01T14:20:53.343Z",
+  "generatedAt": "2026-04-01T17:56:01.040Z",
   "totals": {
     "activeHooks": 98,
-    "coveredHooks": 83,
+    "coveredHooks": 86,
     "allowlistedUntested": 12,
-    "missingCoverage": 3
+    "missingCoverage": 0
   },
-  "missingCoverage": [
-    {
-      "hookPath": "plugins/opspal-core/hooks/session-start-dispatcher.sh",
-      "plugin": "opspal-core",
-      "eventType": "SessionStart",
-      "matcher": "*"
-    },
-    {
-      "hookPath": "plugins/opspal-core/hooks/stop-dispatcher.sh",
-      "plugin": "opspal-core",
-      "eventType": "Stop",
-      "matcher": "*"
-    },
-    {
-      "hookPath": "plugins/opspal-core/hooks/subagent-stop-dispatcher.sh",
-      "plugin": "opspal-core",
-      "eventType": "SubagentStop",
-      "matcher": "*"
-    }
-  ],
+  "missingCoverage": [],
   "allowlistedUntested": [
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
@@ -112,24 +93,7 @@
       "reason": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
     }
   ],
-  "staleConfiguration": [
-    {
-      "hookPath": "plugins/opspal-core/hooks/session-start-envcheck.sh",
-      "reason": "manualCoverage entry does not point to an active hook"
-    },
-    {
-      "hookPath": "plugins/opspal-core/hooks/post-task-runbook-compliance-check.sh",
-      "reason": "allowedUntested entry does not point to an active hook"
-    },
-    {
-      "hookPath": "plugins/opspal-core/hooks/post-win-loss-calibration.sh",
-      "reason": "allowedUntested entry does not point to an active hook"
-    },
-    {
-      "hookPath": "plugins/opspal-core/hooks/session-start-repo-sync.sh",
-      "reason": "allowedUntested entry does not point to an active hook"
-    }
-  ],
+  "staleConfiguration": [],
   "entries": [
     {
       "hookPath": "plugins/opspal-ai-consult/hooks/post-tool-use-consultation-check.sh",
@@ -527,8 +491,10 @@
       "plugin": "opspal-core",
       "eventType": "SessionStart",
       "matcher": "*",
-      "matchedTests": [],
-      "covered": false,
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/session-start-dispatcher.test.js"
+      ],
+      "covered": true,
       "allowReason": null
     },
     {
@@ -536,8 +502,11 @@
       "plugin": "opspal-core",
       "eventType": "Stop",
       "matcher": "*",
-      "matchedTests": [],
-      "covered": false,
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/stop-dispatcher.test.js",
+        "plugins/opspal-core/test/hooks/unit/subagent-stop-dispatcher.test.js"
+      ],
+      "covered": true,
       "allowReason": null
     },
     {
@@ -556,8 +525,11 @@
       "plugin": "opspal-core",
       "eventType": "SubagentStop",
       "matcher": "*",
-      "matchedTests": [],
-      "covered": false,
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/stop-dispatcher.test.js",
+        "plugins/opspal-core/test/hooks/unit/subagent-stop-dispatcher.test.js"
+      ],
+      "covered": true,
       "allowReason": null
     },
     {

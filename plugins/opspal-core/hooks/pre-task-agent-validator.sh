@@ -1177,9 +1177,11 @@ main() {
                     fi
 
                     if [[ "$circuit_broken" == "true" ]]; then
-                        # Circuit-breaker triggered: auto-clear and allow agent through
+                        # Circuit-breaker triggered: auto-clear and reset projection-loss state
                         run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
                           mark-cleared "$SESSION_KEY" "$RESOLVED" >/dev/null 2>&1 || true
+                        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
+                          reset-projection-loss "$SESSION_KEY" >/dev/null 2>&1 || true
 
                         log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "false" \
                           "deadlock_circuit_break" \
