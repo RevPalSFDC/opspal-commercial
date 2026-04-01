@@ -1,20 +1,21 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on improving reliability and preventing errors across all your revenue operations automations. OpsPal now better handles Salesforce state and country field configurations that commonly cause deployment issues, and fixed several behind-the-scenes problems that were preventing automations from running properly in HubSpot and other platforms.",
-  "published_at": "2026-03-31T21:26:44.140Z",
+  "summary": "This week focused on improving platform reliability and Salesforce integration robustness. Key improvements include better handling of Salesforce State/Country picklist configurations and enhanced deployment workflows, ensuring smoother data syncing and reduced setup complications for RevOps teams.",
+  "published_at": "2026-04-01T00:40:17.731Z",
   "week_start": "2026-03-30",
-  "week_end": "2026-03-31",
+  "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 40,
+  "total_commits": 45,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Better detection of Salesforce state and country field issues",
+      "headline": "Improved Salesforce State/Country field detection and deployment reliability",
       "details": [
-        "OpsPal now automatically detects when Salesforce state and country fields might cause deployment problems",
-        "Improved validation checks prevent common field reference errors before they break your workflows"
+        "OpsPal now automatically detects when Salesforce orgs use State/Country picklists, preventing common field mapping errors",
+        "Enhanced deployment validation ensures your Salesforce configurations deploy successfully",
+        "Improved retry logic handles temporary connection issues during complex deployments"
       ],
       "commits": [
         "fcad945"
@@ -22,17 +23,8 @@
     },
     {
       "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "More reliable Salesforce deployments for complex workflows",
-      "details": null,
-      "commits": [
-        "a1075f7"
-      ]
-    },
-    {
-      "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Fixed HubSpot automations failing to start",
+      "headline": "Restored HubSpot automation functionality",
       "details": null,
       "commits": [
         "c53235d"
