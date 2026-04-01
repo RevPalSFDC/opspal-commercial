@@ -80,35 +80,10 @@ const CONFIG = {
 
 const MANAGED_USER_PROMPT_HOOKS = [
   {
-    key: 'unified-router',
-    file: 'unified-router.sh',
-    timeout: 10000,
-    description: 'Unified agent routing with complexity analysis (replaces 5-script chain)',
-    env: {
-      ROUTING_ADAPTIVE_CONTINUE: '1',
-      ENABLE_HARD_BLOCKING: '0',
-      ENABLE_COMPLEXITY_HARD_BLOCKING: '0',
-      USER_PROMPT_MANDATORY_HARD_BLOCKING: '0',
-      ENABLE_INTAKE_HARD_BLOCKING: '0'
-    }
-  },
-  {
-    key: 'pre-task-graph-trigger',
-    file: 'pre-task-graph-trigger.sh',
-    timeout: 5000,
-    description: 'Detect when Task Graph orchestration is needed based on complexity'
-  },
-  {
-    key: 'intake-suggestion',
-    file: 'intake-suggestion.sh',
-    timeout: 5000,
-    description: 'Suggest /intake for project-level requests using complexity scoring and language detection'
-  },
-  {
-    key: 'ambient-user-prompt-candidate-extractor',
-    file: 'ambient-candidate-extractor.sh',
-    timeout: 3000,
-    description: 'Extract ambient reflection candidates from user correction and capability-request signals'
+    key: 'user-prompt-dispatcher',
+    file: 'user-prompt-dispatcher.sh',
+    timeout: 30,
+    description: 'Sequential UPS dispatcher: first-run, task-graph, routing-refresher, unified-router, task-scope (ambient extractor runs async)'
   }
 ];
 // Ambient hooks are now registered in hooks.json and dispatched by the plugin
@@ -894,24 +869,10 @@ class PostPluginUpdateFixes {
 
     const unifiedRouterHook = userPromptGroups
       .flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : [])
-      .find((hook) => typeof hook?.command === 'string' && hook.command.includes('unified-router.sh'));
+      .find((hook) => typeof hook?.command === 'string' && hook.command.includes('user-prompt-dispatcher.sh'));
 
     if (!unifiedRouterHook) {
-      issues.push('UserPromptSubmit missing unified-router hook');
-    } else {
-      const command = unifiedRouterHook.command;
-      const requiredEnv = [
-        'ROUTING_ADAPTIVE_CONTINUE=1',
-        'ENABLE_HARD_BLOCKING=0',
-        'ENABLE_COMPLEXITY_HARD_BLOCKING=0',
-        'USER_PROMPT_MANDATORY_HARD_BLOCKING=0',
-        'ENABLE_INTAKE_HARD_BLOCKING=0'
-      ];
-      for (const envKey of requiredEnv) {
-        if (!command.includes(envKey)) {
-          issues.push(`unified-router missing ${envKey}`);
-        }
-      }
+      issues.push('UserPromptSubmit missing user-prompt-dispatcher hook');
     }
 
     const wildcardGatePresent = preToolGroups.some((group) => (
@@ -942,7 +903,7 @@ class PostPluginUpdateFixes {
     const pluginJsonPath = path.join(installPath, '.claude-plugin', 'plugin.json');
     const hooksJsonPath = path.join(installPath, '.claude-plugin', 'hooks.json');
     const requiredFiles = [
-      'hooks/unified-router.sh',
+      'hooks/user-prompt-dispatcher.sh',
       'hooks/pre-tool-use-contract-validation.sh',
       'hooks/pre-task-agent-validator.sh',
       'hooks/post-tool-use.sh',
@@ -2025,15 +1986,13 @@ class PostPluginUpdateFixes {
   // ==========================================================================
 
   /**
-   * Ensures the plugin-level hooks.json in ~/.claude/plugins/cache/ has the
-   * correct env overrides on the unified-router command. Without these, stale
-   * installs can still re-enable prompt-time routing blocks.
+   * Checks that the plugin-level hooks.json in ~/.claude/plugins/cache/ has
+   * the user-prompt-dispatcher registered. Env vars are managed internally
+   * by the dispatcher and no longer need to be set on the hooks.json command.
    */
   fixPluginCacheHooksJson() {
     this.log(`\n${colors.bold}## Plugin Cache hooks.json${colors.reset}`);
 
-    const requiredEnvPrefix = 'env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ';
-    const bareCommand = '${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh';
     let totalFixed = 0;
 
     for (const claudeRoot of this.getClaudeRoots()) {
@@ -2055,38 +2014,23 @@ class PostPluginUpdateFixes {
             const upsGroups = hooksConfig?.hooks?.UserPromptSubmit;
             if (!Array.isArray(upsGroups)) continue;
 
-            for (const group of upsGroups) {
-              const hooks = Array.isArray(group.hooks) ? group.hooks : [];
-              for (const hook of hooks) {
-                if (typeof hook.command !== 'string') continue;
-                if (!hook.command.includes('unified-router.sh')) continue;
+            const hasDispatcher = upsGroups
+              .flatMap((group) => Array.isArray(group.hooks) ? group.hooks : [])
+              .some((hook) => typeof hook.command === 'string' && hook.command.includes('user-prompt-dispatcher.sh'));
 
-                if (hook.command.includes('ENABLE_HARD_BLOCKING=0') &&
-                    hook.command.includes('ENABLE_COMPLEXITY_HARD_BLOCKING=0') &&
-                    hook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0') &&
-                    hook.command.includes('ENABLE_INTAKE_HARD_BLOCKING=0') &&
-                    hook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1')) {
-                  this.log(`${icons.pass} Cache ${entry}: hooks.json already has env overrides`);
-                  continue;
-                }
-
-                const newCommand = requiredEnvPrefix + bareCommand;
-                if (this.dryRun) {
-                  this.log(`${icons.info} [DRY RUN] Would patch ${entry} hooks.json`);
-                } else {
-                  hook.command = newCommand;
-                  modified = true;
-                }
-              }
+            if (hasDispatcher) {
+              this.log(`${icons.pass} Cache ${entry}: hooks.json has user-prompt-dispatcher`);
+            } else {
+              this.log(`${icons.warn} Cache ${entry}: hooks.json missing user-prompt-dispatcher (will be fixed on next plugin sync)`);
             }
 
             if (modified) {
               fs.writeFileSync(hooksJsonPath, JSON.stringify(hooksConfig, null, 2));
-              this.log(`${icons.fix} Patched cache ${entry}/.claude-plugin/hooks.json with env overrides`);
+              this.log(`${icons.fix} Normalized cache ${entry}/.claude-plugin/hooks.json`);
               totalFixed++;
             }
           } catch (err) {
-            this.log(`${icons.fail} Failed to patch ${entry}: ${err.message}`);
+            this.log(`${icons.fail} Failed to check ${entry}: ${err.message}`);
             this.results.pluginCacheAssets.errors.push({
               name: `cache-hooks-${entry}`,
               message: err.message
@@ -2111,7 +2055,7 @@ class PostPluginUpdateFixes {
     const assets = [
       '.claude-plugin/hooks.json',
       'docs/reminder.md',
-      'hooks/unified-router.sh',
+      'hooks/user-prompt-dispatcher.sh',
       'hooks/permission-request-handler.sh',
       'hooks/pre-operation-data-validator.sh',
       'hooks/pre-tool-use-contract-validation.sh',
