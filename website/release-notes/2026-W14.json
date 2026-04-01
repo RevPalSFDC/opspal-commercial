@@ -1,20 +1,19 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought significant improvements to Salesforce deployments and data management. OpsPal now better handles State/Country picklists and complex deployment workflows, reducing setup errors and deployment failures. Several behind-the-scenes fixes ensure more reliable platform performance across all integrations.",
-  "published_at": "2026-04-01T12:15:16.503Z",
+  "summary": "This week focused on critical stability improvements for Salesforce integrations. OpsPal now better handles complex Salesforce configurations including State/Country picklists and multi-step deployments, while fixing several connection issues that were preventing HubSpot automations from running properly.",
+  "published_at": "2026-04-01T12:29:10.558Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 48,
+  "total_commits": 51,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce State/Country picklist handling and deployment reliability",
+      "headline": "Salesforce automations work better with State/Country picklists",
       "details": [
-        "OpsPal now automatically detects State/Country picklist configurations that could cause deployment issues",
-        "Deployment workflows are more reliable with improved validation and retry capabilities"
+        "OpsPal now automatically detects when your Salesforce org uses State/Country picklists and adjusts field mapping accordingly. Multi-step deployments also run more reliably with improved retry logic."
       ],
       "commits": [
         "fcad945"
@@ -23,7 +22,7 @@
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Improved Salesforce deployment workflow management",
+      "headline": "Multi-step Salesforce deployments run more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -32,7 +31,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot integration functionality",
+      "headline": "HubSpot automations start properly again",
       "details": null,
       "commits": [
         "c53235d"
