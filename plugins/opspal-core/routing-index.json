@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-01T17:51:11.154Z",
+  "buildDate": "2026-04-01T23:49:46.149Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
   "totalCommands": 271,
-  "totalHooks": 257,
+  "totalHooks": 258,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -49029,6 +49029,13 @@
       },
       {
         "plugin": "opspal-salesforce",
+        "name": "session-start-sf-context",
+        "description": "",
+        "file": "opspal-salesforce/hooks/session-start-sf-context.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-salesforce",
         "name": "universal-agent-governance",
         "description": "",
         "file": "opspal-salesforce/hooks/universal-agent-governance.sh",
@@ -49233,7 +49240,7 @@
     "totalAgents": 297,
     "totalAgentsFull": 300,
     "totalCommands": 271,
-    "totalHooks": 257,
+    "totalHooks": 258,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
     "totalKeywordsFull": 2607,
@@ -49255,7 +49262,7 @@
       "SubagentStop": 6,
       "TaskCompleted": 1,
       "Stop": 7,
-      "Unknown": 136,
+      "Unknown": 137,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
