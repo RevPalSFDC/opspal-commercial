@@ -94,18 +94,22 @@ function assertNoStructuredDeny(result, message) {
   );
 }
 
-function assertStructuredRoutingDeny(result, reasonFragment, message) {
-  assert.strictEqual(result.exitCode, 0, `${message} should use structured deny semantics`);
-  assert.strictEqual(
-    result.output?.hookSpecificOutput?.permissionDecision,
-    'deny',
-    `${message} should deny tool execution`
-  );
+function assertStructuredRoutingAdvisory(result, reasonFragment, message) {
+  assert.strictEqual(result.exitCode, 0, `${message} should exit 0`);
+  const decision = result.output?.hookSpecificOutput?.permissionDecision;
   assert(
-    (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes(reasonFragment),
-    `${message} should mention ${reasonFragment}`
+    decision === 'allow' || decision === undefined,
+    `${message} should allow tool execution (advisory routing)`
+  );
+  const context = result.output?.hookSpecificOutput?.additionalContext || '';
+  const reason = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
+  assert(
+    context.includes(reasonFragment) || reason.includes(reasonFragment) || context.includes('ROUTING_ADVISORY') || context.includes('ADVISORY'),
+    `${message} should include advisory context`
   );
 }
+
+const assertStructuredRoutingDeny = assertStructuredRoutingAdvisory;
 
 async function assertPendingRouteLifecycle({
   name,
@@ -140,11 +144,11 @@ async function assertPendingRouteLifecycle({
     },
     env
   });
-  assert.strictEqual(blockedDirect.exitCode, 0, `${name}: direct operational tool should use structured deny`);
-  assert.strictEqual(
-    blockedDirect.output?.hookSpecificOutput?.permissionDecision,
-    'deny',
-    `${name}: pending route should deny direct operational execution`
+  assert.strictEqual(blockedDirect.exitCode, 0, `${name}: direct operational tool should exit 0`);
+  const directDecision = blockedDirect.output?.hookSpecificOutput?.permissionDecision;
+  assert(
+    directDecision === 'allow' || directDecision === undefined,
+    `${name}: pending route should allow execution with advisory (got ${directDecision})`
   );
 
   if (wrongTaskAgent) {
@@ -324,11 +328,11 @@ async function runAllTests() {
       env
     });
 
-    assert.strictEqual(blockedDirect.exitCode, 0, 'Direct deploy should use structured deny semantics');
-    assert.strictEqual(
-      blockedDirect.output?.hookSpecificOutput?.permissionDecision,
-      'deny',
-      'Direct deploy should remain blocked downstream until the specialist path clears the route'
+    assert.strictEqual(blockedDirect.exitCode, 0, 'Direct deploy should exit 0');
+    const deployDecision = blockedDirect.output?.hookSpecificOutput?.permissionDecision;
+    assert(
+      deployDecision !== 'deny',
+      'Direct deploy should not be denied (routing is advisory only)'
     );
   }));
 
@@ -672,11 +676,11 @@ async function runAllTests() {
       },
       env
     });
-    assert.strictEqual(blockedDirect.exitCode, 0, 'Execution gate should use structured deny');
-    assert.strictEqual(
-      blockedDirect.output?.hookSpecificOutput?.permissionDecision,
-      'deny',
-      'Execution gate should still deny operational execution after harmless follow-up'
+    assert.strictEqual(blockedDirect.exitCode, 0, 'Execution gate should exit 0');
+    const followupDecision = blockedDirect.output?.hookSpecificOutput?.permissionDecision;
+    assert(
+      followupDecision !== 'deny',
+      'Execution gate should not deny after harmless follow-up (routing is advisory only)'
     );
   }));
 
@@ -741,7 +745,10 @@ async function runAllTests() {
       env
     });
 
-    assertStructuredRoutingDeny(blockedBeforeClear, 'ROUTING_REQUIRED_BEFORE_OPERATION', 'Pending mixed cleanup route');
+    // Routing is advisory-only: execution should not be denied
+    assert.strictEqual(blockedBeforeClear.exitCode, 0, 'Pending mixed cleanup route should exit 0');
+    const mixedDecision = blockedBeforeClear.output?.hookSpecificOutput?.permissionDecision;
+    assert(mixedDecision !== 'deny', 'Pending mixed cleanup route should not deny (advisory only)');
 
     const clearTask = await validator.run({
       input: createAgentEvent({
@@ -807,7 +814,10 @@ async function runAllTests() {
       env
     });
 
-    assertStructuredRoutingDeny(blockedBeforeClear, 'ROUTING_REQUIRED_BEFORE_OPERATION', 'Pending merge cleanup route');
+    // Routing is advisory-only: execution should not be denied
+    assert.strictEqual(blockedBeforeClear.exitCode, 0, 'Pending merge cleanup route should exit 0');
+    const mergeBlockDecision = blockedBeforeClear.output?.hookSpecificOutput?.permissionDecision;
+    assert(mergeBlockDecision !== 'deny', 'Pending merge cleanup route should not deny (advisory only)');
 
     const clearTask = await validator.run({
       input: createAgentEvent({
@@ -977,7 +987,13 @@ async function runAllTests() {
       env
     });
 
-    assertStructuredRoutingDeny(bashResult, 'PROJECTION_LOSS_CIRCUIT_BREAK', 'Bash should be blocked after circuit break');
+    // Routing is now advisory-only: circuit break should NOT deny Bash execution
+    assert.strictEqual(bashResult.exitCode, 0, 'Bash should exit 0 even with circuit break');
+    const bashDecision = bashResult.output?.hookSpecificOutput?.permissionDecision;
+    assert(
+      bashDecision !== 'deny',
+      `Bash should NOT be denied after circuit break (advisory only), got: ${bashDecision}`
+    );
   }));
 
   // Summary

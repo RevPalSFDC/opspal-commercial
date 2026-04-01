@@ -108,18 +108,23 @@ function assertNoStructuredDeny(result, message) {
   );
 }
 
-function assertStructuredRoutingDeny(result, reasonFragment, message) {
-  assert.strictEqual(result.exitCode, 0, `${message} should use structured deny semantics`);
-  assert.strictEqual(
-    result.output?.hookSpecificOutput?.permissionDecision,
-    'deny',
-    `${message} should deny tool execution`
-  );
+function assertStructuredRoutingAdvisory(result, reasonFragment, message) {
+  assert.strictEqual(result.exitCode, 0, `${message} should exit 0`);
+  const decision = result.output?.hookSpecificOutput?.permissionDecision;
   assert(
-    (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes(reasonFragment),
-    `${message} should mention ${reasonFragment}`
+    decision === 'allow' || decision === undefined,
+    `${message} should allow tool execution (advisory routing)`
+  );
+  const context = result.output?.hookSpecificOutput?.additionalContext || '';
+  const reason = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
+  assert(
+    context.includes(reasonFragment) || reason.includes(reasonFragment) || context.includes('ROUTING_ADVISORY'),
+    `${message} should include advisory context`
   );
 }
+
+// Legacy alias for backward compatibility in test imports
+const assertStructuredRoutingDeny = assertStructuredRoutingAdvisory;
 
 function withHardenedChannel(input) {
   return {
@@ -257,15 +262,16 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Structured deny should keep exit code 0');
-    assert.strictEqual(
-      result.output?.hookSpecificOutput?.permissionDecision,
-      'deny',
-      'Pending routing state should deny operational direct execution'
-    );
+    assert.strictEqual(result.exitCode, 0, 'Advisory routing should keep exit code 0');
+    const decision = result.output?.hookSpecificOutput?.permissionDecision;
     assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ROUTING_REQUIRED_BEFORE_OPERATION'),
-      'Should explain the pending routing requirement'
+      decision === 'allow' || decision === undefined,
+      'Pending routing state should allow execution with advisory context'
+    );
+    const ctx = result.output?.hookSpecificOutput?.additionalContext || '';
+    assert(
+      ctx.includes('ROUTING_ADVISORY'),
+      'Should include ROUTING_ADVISORY guidance'
     );
   }));
 

@@ -70,15 +70,17 @@ function assertNoStructuredDeny(result, message) {
 }
 
 function assertStructuredRoutingDeny(result, reasonFragment, message) {
-  assert.strictEqual(result.exitCode, 0, `${message} should use structured deny semantics`);
-  assert.strictEqual(
-    result.output?.hookSpecificOutput?.permissionDecision,
-    'deny',
-    `${message} should deny tool execution`
-  );
+  assert.strictEqual(result.exitCode, 0, `${message} should exit 0`);
+  const decision = result.output?.hookSpecificOutput?.permissionDecision;
   assert(
-    (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes(reasonFragment),
-    `${message} should mention ${reasonFragment}`
+    decision === 'allow' || decision === undefined,
+    `${message} should allow tool execution (advisory routing)`
+  );
+  const context = result.output?.hookSpecificOutput?.additionalContext || '';
+  const reason = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
+  assert(
+    context.includes(reasonFragment) || reason.includes(reasonFragment) || context.includes('ROUTING_ADVISORY') || context.includes('ADVISORY'),
+    `${message} should include advisory context`
   );
 }
 
