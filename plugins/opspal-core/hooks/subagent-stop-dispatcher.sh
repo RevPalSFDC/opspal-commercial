@@ -30,7 +30,7 @@ fi
 
 if ! command -v jq >/dev/null 2>&1; then
   echo "[subagent-stop-dispatcher] WARNING: jq not found — SubagentStop child hooks disabled" >&2
-  printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"SubagentStop","additionalContext":"WARNING: SubagentStop dispatcher skipped — jq not installed. Sub-agent failure capture, verification, and ambient extraction are inactive."}}\n'
+  printf '{"suppressOutput":true,"stopReason":"WARNING: SubagentStop dispatcher skipped — jq not installed. Sub-agent failure capture, verification, and ambient extraction are inactive."}}\n'
   exit 0
 fi
 
@@ -67,20 +67,17 @@ merge_hook_json() {
       --argjson current "$LAST_JSON" \
       --argjson next "$next_json" \
       '
-        def ctx($v): $v.hookSpecificOutput.additionalContext // "";
+        def ctx($v): $v.stopReason // "";
         {
           suppressOutput: true,
-          hookSpecificOutput: {
-            hookEventName: "SubagentStop",
-            additionalContext: (
-              [ctx($current), ctx($next)]
-              | map(select(length > 0))
-              | join("\n\n---\n\n")
-            )
-          }
+          stopReason: (
+            [ctx($current), ctx($next)]
+            | map(select(length > 0))
+            | join("\n\n---\n\n")
+          )
         }
-        | if (.hookSpecificOutput.additionalContext == "")
-          then del(.hookSpecificOutput.additionalContext)
+        | if (.stopReason == "")
+          then del(.stopReason)
           else .
           end
       ' 2>/dev/null || printf '%s' "$next_json"

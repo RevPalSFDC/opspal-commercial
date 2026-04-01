@@ -32,7 +32,7 @@ fi
 
 if ! command -v jq >/dev/null 2>&1; then
   echo "[session-start-dispatcher] WARNING: jq not found — SessionStart child hooks disabled" >&2
-  printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"WARNING: SessionStart dispatcher skipped — jq not installed. Onboarding check, session initialization, and env validation are inactive."}}\n'
+  printf '{"suppressOutput":true,"systemMessage":"WARNING: SessionStart dispatcher skipped — jq not installed. Onboarding check, session initialization, and env validation are inactive."}}\n'
   exit 0
 fi
 
@@ -69,20 +69,17 @@ merge_hook_json() {
       --argjson current "$LAST_JSON" \
       --argjson next "$next_json" \
       '
-        def ctx($v): $v.hookSpecificOutput.additionalContext // "";
+        def ctx($v): $v.systemMessage // "";
         {
           suppressOutput: true,
-          hookSpecificOutput: {
-            hookEventName: "SessionStart",
-            additionalContext: (
-              [ctx($current), ctx($next)]
-              | map(select(length > 0))
-              | join("\n\n---\n\n")
-            )
-          }
+          systemMessage: (
+            [ctx($current), ctx($next)]
+            | map(select(length > 0))
+            | join("\n\n---\n\n")
+          )
         }
-        | if (.hookSpecificOutput.additionalContext == "")
-          then del(.hookSpecificOutput.additionalContext)
+        | if (.systemMessage == "")
+          then del(.systemMessage)
           else .
           end
       ' 2>/dev/null || printf '%s' "$next_json"
