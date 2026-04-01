@@ -164,45 +164,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-work-index.sh",
-            "timeout": 5,
-            "description": "Auto-capture work request entries after assessment agents complete"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-runbook-compliance-check.sh",
-            "timeout": 5,
-            "description": "Verify operational agents respected runbook policies in field selections (Runbook Policy Infrastructure)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5,
-            "description": "Validate tool execution results to catch errors before propagation"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5,
-            "description": "Validate tool outputs against contracts and data quality gates"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-audit-bluf-generator.sh",
-            "timeout": 10,
-            "description": "Auto-generate BLUF+4 executive summary after audit/assessment completion"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-win-loss-calibration.sh",
-            "timeout": 15,
-            "description": "Feed win/loss outcomes into deal-score-calibrator for Bayesian weight learning"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-stall-check.sh",
-            "timeout": 5,
-            "description": "Check for stalls during multi-agent operations"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-agent-dispatcher.sh",
+            "timeout": 30,
+            "description": "Sequential PostToolUse/Agent dispatcher: work-index → runbook-compliance → tool-use → contract → bluf → win-loss → stall-check"
           }
         ]
       },
@@ -376,39 +340,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-first-run.sh",
-            "timeout": 5,
-            "description": "Detect missing license activation or workspace initialization and guide first-run onboarding"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-init.sh",
-            "timeout": 15,
-            "description": "Unified session initialization (scratchpad, env, platform context)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-session-silent-failure-check.sh",
-            "timeout": 10,
-            "description": "Detect silent failure conditions (env bypass, circuit breakers, stale cache) before session begins"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-envcheck.sh",
-            "timeout": 5,
-            "description": "Fast environment preflight: detect expired tokens, missing deps, MCP issues at session start"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-repo-sync.sh",
-            "timeout": 10,
-            "description": "Auto-pull project-connected git repos at session start (opt-out: ENABLE_GIT_SYNC=0)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-capture-init.sh",
-            "timeout": 5,
-            "description": "Initialize session context for ambient reflection pipeline"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-dispatcher.sh",
+            "timeout": 30,
+            "description": "Sequential SessionStart dispatcher: first-run → init → silent-failure-check → envcheck → repo-sync → capture-init"
           }
         ]
       }
@@ -430,27 +364,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-stop-capture.sh",
-            "timeout": 3,
-            "description": "Capture failed subagent runs and log feedback signals"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-subagent-verification.sh",
-            "timeout": 10,
-            "description": "Verify subagent claims and surface hidden-error patterns"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-investigation-execution-proof.sh",
-            "timeout": 5,
-            "description": "Verify investigation specialists executed queries vs returning plans"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5,
-            "description": "Extract ambient reflection candidates from subagent results"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-stop-dispatcher.sh",
+            "timeout": 20,
+            "description": "Sequential SubagentStop dispatcher: capture → verification → execution-proof → ambient-extraction"
           }
         ]
       }
@@ -485,39 +401,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-stop-org-verification.sh",
-            "timeout": 5,
-            "description": "Verify org-state claims have query evidence (STRICT mode by default)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-end.sh",
-            "timeout": 10,
-            "description": "Unified session cleanup (scratchpad, cache, logs)"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-end-reliability.sh",
-            "timeout": 60,
-            "description": "Auto-reliability checks: retry failed submissions, refresh stale skill data, trigger processreflections if threshold reached"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-session-silent-failure-summary.sh",
-            "timeout": 15,
-            "description": "Analyze session for silent failure patterns and update metrics baseline"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-hook-error-observer.sh",
-            "timeout": 5,
-            "description": "Final hook error observation before session end"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
-            "timeout": 10,
-            "description": "Session-end ambient reflection flush"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-dispatcher.sh",
+            "timeout": 90,
+            "description": "Sequential Stop dispatcher: org-verification → session-end → reliability → silent-failure-summary → error-observer → ambient-flush"
           }
         ]
       }

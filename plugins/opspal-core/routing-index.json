@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-01T13:20:49.289Z",
+  "buildDate": "2026-04-01T14:20:42.281Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
   "totalCommands": 271,
-  "totalHooks": 253,
+  "totalHooks": 257,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -47504,6 +47504,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "post-tool-use-agent-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/post-tool-use-agent-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "post-tool-use-contract-validation",
         "description": "",
         "file": "opspal-core/hooks/post-tool-use-contract-validation.sh",
@@ -48054,6 +48061,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "stop-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/stop-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "stop-session-silent-failure-summary",
         "description": "",
         "file": "opspal-core/hooks/stop-session-silent-failure-summary.sh",
@@ -48064,6 +48078,13 @@
         "name": "subagent-stop-capture",
         "description": "",
         "file": "opspal-core/hooks/subagent-stop-capture.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "subagent-stop-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/subagent-stop-dispatcher.sh",
         "matcher": null
       }
     ],
@@ -48360,6 +48381,13 @@
         "name": "session-start-asset-decryptor",
         "description": "",
         "file": "opspal-core/hooks/session-start-asset-decryptor.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "session-start-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/session-start-dispatcher.sh",
         "matcher": null
       },
       {
@@ -49205,7 +49233,7 @@
     "totalAgents": 297,
     "totalAgentsFull": 300,
     "totalCommands": 271,
-    "totalHooks": 253,
+    "totalHooks": 257,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
     "totalKeywordsFull": 2607,
@@ -49217,7 +49245,7 @@
     "agentsWithToolsFull": 300,
     "avgKeywordsPerAgent": "15.32",
     "hooksByEvent": {
-      "PostToolUse": 33,
+      "PostToolUse": 34,
       "UserPromptSubmit": 2,
       "PreToolUse": 37,
       "PermissionRequest": 1,
@@ -49226,8 +49254,8 @@
       "SubagentStart": 1,
       "SubagentStop": 6,
       "TaskCompleted": 1,
-      "Stop": 5,
-      "Unknown": 135,
+      "Stop": 7,
+      "Unknown": 136,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
