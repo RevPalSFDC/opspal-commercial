@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+#
+# DEPRECATED: This hook is no longer registered in hooks.json as of v2.50.0.
+# Active intake gating is handled by unified-router.sh (called via user-prompt-dispatcher.sh).
+# This file is retained for backward compatibility but is not invoked at runtime.
+# Safe to delete in a future release.
+#
 # =============================================================================
 # Intake Suggestion Hook
 # =============================================================================

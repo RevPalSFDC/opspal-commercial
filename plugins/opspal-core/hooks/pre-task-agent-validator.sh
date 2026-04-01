@@ -1132,55 +1132,78 @@ main() {
                 fi
                 # Fall through - do NOT exit; let the agent proceed
             else
-                # Same family or too recent: enforce the pending route
+                # Same family or too recent to auto-clear as stale
                 local mismatch_type
                 if [[ -z "$pending_family" ]] || [[ -z "$requested_family" ]]; then
                     mismatch_type="unknown_family"
                 elif [[ "$pending_family" == "$requested_family" ]]; then
-                    mismatch_type="same_family_enforcement"
+                    mismatch_type="same_family_accepted"
                 else
                     mismatch_type="cross_family_recent"  # different family but too recent to auto-clear
                 fi
 
-                # Deadlock circuit-breaker: record projection-loss event and check
-                # if repeated mismatches from different agents indicate a deadlock.
-                # If 2+ different agents have been denied, auto-clear and allow through.
-                local circuit_broken="false"
-                if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
-                    run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
-                      record-projection-loss "$SESSION_KEY" "$RESOLVED" "agent_mismatch" >/dev/null 2>&1 || true
-
-                    circuit_broken=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
-                      check "$SESSION_KEY" 2>/dev/null | jq -r '.state.projection_loss_circuit_broken // false' 2>/dev/null || echo "false")
-                fi
-
-                if [[ "$circuit_broken" == "true" ]]; then
-                    # Circuit-breaker triggered: auto-clear and allow agent through
+                # Same-family agents are acceptable substitutes.
+                # A deploy that includes a permission set should be handled by
+                # sfdc-deployment-manager, not blocked because routing matched
+                # sfdc-permission-orchestrator on a keyword. Any agent in the
+                # same plugin family can satisfy the route.
+                if [[ "$mismatch_type" == "same_family_accepted" ]]; then
                     run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
                       mark-cleared "$SESSION_KEY" "$RESOLVED" >/dev/null 2>&1 || true
 
                     log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "false" \
-                      "deadlock_circuit_break" \
-                      "Projection-loss circuit-breaker fired: 2+ different agents denied. Auto-clearing pending route and allowing '$RESOLVED' through. pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
+                      "same_family_accepted" \
+                      "Same-family agent accepted: '${RESOLVED}' (family=${requested_family}) satisfies pending route for '${REQUIRED_AGENT:-unknown}' (family=${pending_family})"
 
                     if [ -n "$ADDITIONAL_CONTEXT" ]; then
-                        ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} DEADLOCK_CIRCUIT_BREAK: Pending route for '${REQUIRED_AGENT:-unknown}' auto-cleared after repeated agent mismatches. '${RESOLVED}' is now allowed through."
+                        ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} SAME_FAMILY_ACCEPTED: '${RESOLVED}' accepted as same-family substitute for '${REQUIRED_AGENT:-unknown}'. Route cleared."
                     else
-                        ADDITIONAL_CONTEXT="DEADLOCK_CIRCUIT_BREAK: Pending route for '${REQUIRED_AGENT:-unknown}' auto-cleared after repeated agent mismatches. '${RESOLVED}' is now allowed through."
+                        ADDITIONAL_CONTEXT="SAME_FAMILY_ACCEPTED: '${RESOLVED}' accepted as same-family substitute for '${REQUIRED_AGENT:-unknown}'. Route cleared."
                     fi
-                    # Fall through - do NOT exit; let the agent proceed
+                    # Fall through - let the agent proceed
                 else
-                    log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" \
-                      "routing_requirement_mismatch" \
-                      "Pending route requires approved agent family. mismatch_type=${mismatch_type}, pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
-                    emit_pretool_response \
-                      "deny" \
-                      "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}]" \
-                      "" \
-                      "" \
-                      "ROUTING_REQUIRED_AGENT_MISMATCH" \
-                      "ERROR"
-                    exit 0
+                    # Cross-family recent: enforce strictly, but with circuit-breaker
+
+                    # Deadlock circuit-breaker: record projection-loss event and check
+                    # if repeated mismatches from different agents indicate a deadlock.
+                    # If 2+ different agents have been denied, auto-clear and allow through.
+                    local circuit_broken="false"
+                    if [[ -f "$ROUTING_STATE_MANAGER" ]] && command -v node &>/dev/null; then
+                        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
+                          record-projection-loss "$SESSION_KEY" "$RESOLVED" "agent_mismatch" >/dev/null 2>&1 || true
+
+                        circuit_broken=$(run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
+                          check "$SESSION_KEY" 2>/dev/null | jq -r '.state.projection_loss_circuit_broken // false' 2>/dev/null || echo "false")
+                    fi
+
+                    if [[ "$circuit_broken" == "true" ]]; then
+                        # Circuit-breaker triggered: auto-clear and allow agent through
+                        run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$ROUTING_STATE_MANAGER" \
+                          mark-cleared "$SESSION_KEY" "$RESOLVED" >/dev/null 2>&1 || true
+
+                        log_routing_metric "$AGENT_NAME" "$RESOLVED" "true" "false" \
+                          "deadlock_circuit_break" \
+                          "Projection-loss circuit-breaker fired: 2+ different agents denied. Auto-clearing pending route and allowing '$RESOLVED' through. pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
+
+                        if [ -n "$ADDITIONAL_CONTEXT" ]; then
+                            ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} DEADLOCK_CIRCUIT_BREAK: Pending route for '${REQUIRED_AGENT:-unknown}' auto-cleared after repeated agent mismatches. '${RESOLVED}' is now allowed through."
+                        else
+                            ADDITIONAL_CONTEXT="DEADLOCK_CIRCUIT_BREAK: Pending route for '${REQUIRED_AGENT:-unknown}' auto-cleared after repeated agent mismatches. '${RESOLVED}' is now allowed through."
+                        fi
+                        # Fall through - let the agent proceed
+                    else
+                        log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" \
+                          "routing_requirement_mismatch" \
+                          "Pending route requires approved agent family. mismatch_type=${mismatch_type}, pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
+                        emit_pretool_response \
+                          "deny" \
+                          "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}]" \
+                          "" \
+                          "" \
+                          "ROUTING_REQUIRED_AGENT_MISMATCH" \
+                          "ERROR"
+                        exit 0
+                    fi
                 fi
             fi
         fi
