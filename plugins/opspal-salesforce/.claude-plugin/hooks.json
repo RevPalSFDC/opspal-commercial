@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-dispatcher.sh",
-            "timeout": 60000,
+            "timeout": 60,
             "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher — dispatcher fast-exits for non-SF commands within ~1ms"
           }
         ]
@@ -20,13 +20,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-agent-reminder.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Initialize session with temp directories and agent reminders"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-context-loader.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Load org context from working directory, config files, and environment"
           }
         ]
@@ -39,7 +39,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-dispatcher.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Dispatch Salesforce deploy and query post-processing with structured output"
           }
         ]
@@ -52,7 +52,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Provide recovery guidance after failed Salesforce Bash operations"
           }
         ]
@@ -65,7 +65,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
-            "timeout": 60000,
+            "timeout": 60,
             "description": "Generate field dictionary after org discovery completes"
           }
         ]
@@ -76,7 +76,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
-            "timeout": 60000,
+            "timeout": 60,
             "description": "Generate field dictionary after state discovery completes"
           }
         ]
@@ -87,7 +87,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "QA-005: Trigger implementation planning after RevOps assessment"
           }
         ]
@@ -98,7 +98,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "QA-005: Trigger implementation planning after CPQ assessment"
           }
         ]
@@ -109,7 +109,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "QA-005: Trigger implementation planning after automation audit"
           }
         ]

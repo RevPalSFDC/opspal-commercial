@@ -141,7 +141,7 @@ if [[ ${#VALIDATION_ERRORS[@]} -gt 0 ]]; then
     echo "  1. Verify source campaign ID exists"
     echo "  2. Verify target folder ID and type"
     echo "  3. Ensure name is unique in target folder"
-    jq -nc --arg msg "Campaign clone blocked: validation errors found. Check campaign ID, target folder ID/type, and that the new name is unique in the target folder." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    jq -nc --arg msg "Campaign clone blocked: validation errors found. Check campaign ID, target folder ID/type, and that the new name is unique in the target folder." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 fi
 

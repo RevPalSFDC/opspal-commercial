@@ -82,7 +82,7 @@ main() {
     if [ "$DATE_RANGE_DAYS" -gt "$MAX_DATE_RANGE_DAYS" ]; then
         echo "ERROR: Date range of ${DATE_RANGE_DAYS} days exceeds maximum ${MAX_DATE_RANGE_DAYS} days" >&2
         echo "Suggestion: Split the export into smaller date ranges" >&2
-        jq -nc --arg msg "Date range of ${DATE_RANGE_DAYS} days exceeds maximum ${MAX_DATE_RANGE_DAYS}" '{"blockExecution": true, "blockMessage": $msg}' >&3
+        jq -nc --arg msg "Date range of ${DATE_RANGE_DAYS} days exceeds maximum ${MAX_DATE_RANGE_DAYS}" '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
         exit 0
     fi
 
@@ -102,7 +102,7 @@ main() {
     if [ "$(echo "$USAGE_PERCENT >= $CRITICAL_THRESHOLD_PERCENT" | bc 2>/dev/null)" = "1" ]; then
         echo "ERROR: Daily quota at ${USAGE_PERCENT}% - critical threshold exceeded" >&2
         echo "Quota resets at midnight UTC" >&2
-        jq -nc --arg msg "Daily quota at ${USAGE_PERCENT}% - critical threshold exceeded. Resets at midnight UTC." '{"blockExecution": true, "blockMessage": $msg}' >&3
+        jq -nc --arg msg "Daily quota at ${USAGE_PERCENT}% - critical threshold exceeded. Resets at midnight UTC." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
         exit 0
     fi
 

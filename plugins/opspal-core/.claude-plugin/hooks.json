@@ -7,43 +7,43 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user-prompt-first-run.sh",
-            "timeout": 4000,
+            "timeout": 4,
             "description": "Guide first-run activation and workspace initialization before normal OpsPal work"
           },
           {
             "type": "command",
             "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=0 ENABLE_INTAKE_HARD_BLOCKING=0 ${CLAUDE_PLUGIN_ROOT}/hooks/unified-router.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-scope-selector.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Persist a minimal plugin and skill scope for the current task and inject a concise allowlist reminder"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-graph-trigger.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Detect when Task Graph orchestration is needed based on complexity"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/intake-suggestion.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Suggest /intake for project-level requests using complexity scoring and language detection"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/routing-context-refresher.sh",
-            "timeout": 3000,
+            "timeout": 3,
             "description": "Inject condensed routing reminder after context compaction or periodically"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Extract ambient reflection candidates from user prompt signals"
           }
         ]
@@ -56,13 +56,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-agent-validator.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate and resolve agent names - detects commands mistakenly invoked as agents, auto-resolves short names to fully-qualified"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-runbook-policy-enforcer.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Enforce runbook policy retrieval for operational agents before field selection (Runbook Policy Infrastructure)"
           }
         ]
@@ -73,13 +73,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-graph-policy-enforcer.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Enforce risk-based tool policies for Task Graph tasks"
           }
         ]
@@ -90,7 +90,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
           }
         ]
@@ -101,7 +101,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
           }
         ]
@@ -112,7 +112,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
           }
         ]
@@ -123,7 +123,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-operation-data-validator.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
           }
         ]
@@ -134,7 +134,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool inputs against contracts before execution"
           }
         ]
@@ -145,7 +145,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-gong-api-call.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate Gong credentials and check daily API budget before Gong API calls"
           }
         ]
@@ -156,7 +156,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-fireflies-api-call.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate Fireflies credentials and check daily API budget before Fireflies API calls"
           }
         ]
@@ -169,7 +169,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/permission-request-handler.sh",
-            "timeout": 2000,
+            "timeout": 2,
             "description": "Auto-approve safe read/query permission requests and log an audit trail"
           }
         ]
@@ -182,13 +182,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Backup conversation transcript before compaction to prevent data loss"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Flush ambient reflections before context compaction"
           }
         ]
@@ -201,43 +201,43 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-work-index.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Auto-capture work request entries after assessment agents complete"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-runbook-compliance-check.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Verify operational agents respected runbook policies in field selections (Runbook Policy Infrastructure)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool outputs against contracts and data quality gates"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-audit-bluf-generator.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Auto-generate BLUF+4 executive summary after audit/assessment completion"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-win-loss-calibration.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Feed win/loss outcomes into deal-score-calibrator for Bayesian weight learning"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-stall-check.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Check for stalls during multi-agent operations"
           }
         ]
@@ -248,13 +248,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool outputs against contracts and data quality gates"
           }
         ]
@@ -265,13 +265,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool outputs against contracts and data quality gates"
           }
         ]
@@ -282,7 +282,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           }
         ]
@@ -293,7 +293,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-todowrite-scratchpad.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Persist TodoWrite state for session continuity"
           }
         ]
@@ -304,13 +304,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool outputs against contracts and data quality gates"
           }
         ]
@@ -321,13 +321,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool outputs against contracts and data quality gates"
           }
         ]
@@ -338,13 +338,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool execution results to catch errors before propagation"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate tool outputs against contracts and data quality gates"
           }
         ]
@@ -355,7 +355,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-gong-sync.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Log Gong sync events and trigger work-index auto-capture"
           }
         ]
@@ -366,7 +366,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-fireflies-sync.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Log Fireflies sync events and trigger work-index auto-capture"
           }
         ]
@@ -377,7 +377,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-reflect-strategy-update.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Extract skills from reflections and update routing confidence"
           }
         ]
@@ -388,19 +388,19 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Extract ambient reflection candidates from tool results"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-hook-error-observer.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Observe hook errors and create reflection candidates with immediate flush"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Evaluate ambient reflection flush conditions"
           }
         ]
@@ -413,37 +413,37 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-first-run.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Detect missing license activation or workspace initialization and guide first-run onboarding"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-init.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Unified session initialization (scratchpad, env, platform context)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-session-silent-failure-check.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Detect silent failure conditions (env bypass, circuit breakers, stale cache) before session begins"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-envcheck.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Fast environment preflight: detect expired tokens, missing deps, MCP issues at session start"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-repo-sync.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Auto-pull project-connected git repos at session start (opt-out: ENABLE_GIT_SYNC=0)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-capture-init.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Initialize session context for ambient reflection pipeline"
           }
         ]
@@ -455,7 +455,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start-context.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Inject runbook/template/field/work context into spawned subagents"
           }
         ]
@@ -467,25 +467,25 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-stop-capture.sh",
-            "timeout": 3000,
+            "timeout": 3,
             "description": "Capture failed subagent runs and log feedback signals"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-subagent-verification.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Verify subagent claims and surface hidden-error patterns"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-investigation-execution-proof.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Verify investigation specialists executed queries vs returning plans"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Extract ambient reflection candidates from subagent results"
           }
         ]
@@ -497,19 +497,19 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/task-completed-metrics.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Record subagent completion metrics for routing feedback loops"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Extract ambient reflection candidates from task completion"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Evaluate flush on task completion"
           }
         ]
@@ -522,37 +522,37 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-stop-org-verification.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Verify org-state claims have query evidence (STRICT mode by default)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-end.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Unified session cleanup (scratchpad, cache, logs)"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-end-reliability.sh",
-            "timeout": 60000,
+            "timeout": 60,
             "description": "Auto-reliability checks: retry failed submissions, refresh stale skill data, trigger processreflections if threshold reached"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-session-silent-failure-summary.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Analyze session for silent failure patterns and update metrics baseline"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-hook-error-observer.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Final hook error observation before session end"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ambient-flush-trigger.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Session-end ambient reflection flush"
           }
         ]

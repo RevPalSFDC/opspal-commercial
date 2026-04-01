@@ -60,19 +60,25 @@ merge_hook_json() {
       '
         def context($value): $value.hookSpecificOutput.additionalContext // "";
         def updated($value): $value.hookSpecificOutput.updatedInput // {};
+        # Translate legacy blockExecution to canonical permissionDecision
+        (if ($next.hookSpecificOutput.permissionDecision // $current.hookSpecificOutput.permissionDecision) != null
+         then ($next.hookSpecificOutput.permissionDecision // $current.hookSpecificOutput.permissionDecision)
+         elif ($next.blockExecution // $current.blockExecution // false) == true then "deny"
+         else null end) as $decision |
+        (if ($next.hookSpecificOutput.permissionDecisionReason // $current.hookSpecificOutput.permissionDecisionReason) != null
+         then ($next.hookSpecificOutput.permissionDecisionReason // $current.hookSpecificOutput.permissionDecisionReason)
+         elif ($next.blockMessage // $current.blockMessage // null) != null then ($next.blockMessage // $current.blockMessage)
+         else null end) as $reason |
         {
           suppressOutput: true,
-          blockExecution: ($next.blockExecution // $current.blockExecution // false),
-          blockMessage: ($next.blockMessage // $current.blockMessage // null),
           hookSpecificOutput: {
             hookEventName: "PreToolUse",
-            permissionDecision: ($next.hookSpecificOutput.permissionDecision // $current.hookSpecificOutput.permissionDecision),
-            permissionDecisionReason: ($next.hookSpecificOutput.permissionDecisionReason // $current.hookSpecificOutput.permissionDecisionReason),
+            permissionDecision: $decision,
+            permissionDecisionReason: $reason,
             additionalContext: ([context($current), context($next)] | map(select(length > 0)) | join("\n\n")),
             updatedInput: (updated($current) + updated($next))
           }
         }
-        | if (.blockExecution != true) then del(.blockExecution, .blockMessage) else . end
         | if (.hookSpecificOutput.additionalContext == "") then del(.hookSpecificOutput.additionalContext) else . end
         | if (.hookSpecificOutput.updatedInput == {}) then del(.hookSpecificOutput.updatedInput) else . end
         | if (.hookSpecificOutput.permissionDecision == null) then del(.hookSpecificOutput.permissionDecision, .hookSpecificOutput.permissionDecisionReason) else . end
@@ -96,9 +102,8 @@ handle_child_output() {
       local block_execution=""
 
       permission_decision="$(printf '%s' "$LAST_JSON" | jq -r '.hookSpecificOutput.permissionDecision // empty' 2>/dev/null || echo "")"
-      block_execution="$(printf '%s' "$LAST_JSON" | jq -r '.blockExecution // false' 2>/dev/null || echo "false")"
 
-      if [ "$permission_decision" = "deny" ] || [ "$block_execution" = "true" ]; then
+      if [ "$permission_decision" = "deny" ]; then
         printf '%s\n' "$LAST_JSON"
         exit 0
       fi

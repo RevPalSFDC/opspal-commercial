@@ -108,7 +108,7 @@ Example: For 60 days of data, create two exports:
 • Export 2: Days 32-60
 
 EOF
-                jq -nc --arg msg "Export date range exceeds the maximum of ${MAX_DATE_RANGE_DAYS} days. Split the export into multiple jobs, each covering up to ${MAX_DATE_RANGE_DAYS} days." '{"blockExecution": true, "blockMessage": $msg}' >&3
+                jq -nc --arg msg "Export date range exceeds the maximum of ${MAX_DATE_RANGE_DAYS} days. Split the export into multiple jobs, each covering up to ${MAX_DATE_RANGE_DAYS} days." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
                 exit 0
             fi
         fi
@@ -138,7 +138,7 @@ Common activity type IDs:
 Use mcp__marketo__activity_types_list() to get all types.
 
 EOF
-            jq -nc --arg msg "Activity exports require activityTypeIds parameter. Use mcp__marketo__activity_types_list() to get all type IDs." '{"blockExecution": true, "blockMessage": $msg}' >&3
+            jq -nc --arg msg "Activity exports require activityTypeIds parameter. Use mcp__marketo__activity_types_list() to get all type IDs." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
             exit 0
         fi
     fi
@@ -199,7 +199,7 @@ Current time: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
 EOF
     # Block if quota truly exhausted
     if [[ "$QUOTA_REMAINING_MB" -le 0 ]]; then
-        jq -nc --arg msg "Daily export quota exhausted (${QUOTA_REMAINING_MB} MB remaining). Wait until midnight UTC for quota reset." '{"blockExecution": true, "blockMessage": $msg}' >&3
+        jq -nc --arg msg "Daily export quota exhausted (${QUOTA_REMAINING_MB} MB remaining). Wait until midnight UTC for quota reset." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
         exit 0
     fi
 fi

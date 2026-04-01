@@ -158,6 +158,15 @@ for (const { name: pluginName, root: pluginRoot } of pluginPaths) {
           continue;
         }
 
+        // Guard: reject ms-like timeout values. Claude hook timeout is in SECONDS.
+        // Values > 120 are almost certainly milliseconds (e.g. 5000 = 83 minutes).
+        if (typeof hook.timeout === 'number' && hook.timeout > 120) {
+          errors.push(
+            `${pluginName}: ${hookName} timeout=${hook.timeout} looks like milliseconds — Claude expects seconds. ` +
+            `Did you mean ${Math.round(hook.timeout / 1000)}?`
+          );
+        }
+
         if (!hook.command.includes('${CLAUDE_PLUGIN_ROOT}')) {
           warnings.push(`${pluginName}: ${hookName} command missing \${CLAUDE_PLUGIN_ROOT}`);
         }

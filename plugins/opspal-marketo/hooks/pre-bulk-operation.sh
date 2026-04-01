@@ -149,7 +149,7 @@ Or reduce the batch size below ${HIGH_VOLUME_THRESHOLD} records.
 
 EOF
         if [[ "${MARKETO_CONFIRM_BULK_DELETE:-0}" != "1" ]]; then
-            jq -nc --arg msg "Bulk delete of ${RECORD_COUNT} records requires explicit confirmation. Set MARKETO_CONFIRM_BULK_DELETE=1 or reduce batch below ${HIGH_VOLUME_THRESHOLD} records." '{"blockExecution": true, "blockMessage": $msg}' >&3
+            jq -nc --arg msg "Bulk delete of ${RECORD_COUNT} records requires explicit confirmation. Set MARKETO_CONFIRM_BULK_DELETE=1 or reduce batch below ${HIGH_VOLUME_THRESHOLD} records." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
             exit 0
         fi
     fi

@@ -117,7 +117,7 @@ if [[ ${#VALIDATION_ERRORS[@]} -gt 0 ]]; then
     echo "  1. Deactivate the campaign first if it is active"
     echo "  2. Check if other campaigns depend on this one"
     echo "  3. Consider archiving (rename/move) instead of deleting"
-    jq -nc --arg msg "Campaign deletion blocked: validation errors found. Deactivate the campaign first, check for dependent campaigns, or consider archiving instead." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    jq -nc --arg msg "Campaign deletion blocked: validation errors found. Deactivate the campaign first, check for dependent campaigns, or consider archiving instead." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 fi
 

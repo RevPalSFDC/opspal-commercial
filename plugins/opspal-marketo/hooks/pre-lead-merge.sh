@@ -140,7 +140,7 @@ EOF
     done
     echo ""
     echo "Please fix the errors above before proceeding with the merge."
-    jq -nc --arg msg "Lead merge blocked: validation errors found. Winner ID or loser IDs are missing or invalid. Please fix before proceeding." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    jq -nc --arg msg "Lead merge blocked: validation errors found. Winner ID or loser IDs are missing or invalid. Please fix before proceeding." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 fi
 
@@ -160,7 +160,7 @@ EOF
 
     if [[ "$STRICT_MODE" == "1" ]]; then
         echo "Strict mode enabled - blocking merge due to warnings"
-        jq -nc --arg msg "Lead merge blocked in strict mode: warnings present. Merging ${LOSER_COUNT} leads is a large operation. Disable strict mode (MARKETO_STRICT_MERGE=0) to proceed." '{"blockExecution": true, "blockMessage": $msg}' >&3
+        jq -nc --arg msg "Lead merge blocked in strict mode: warnings present. Merging ${LOSER_COUNT} leads is a large operation. Disable strict mode (MARKETO_STRICT_MERGE=0) to proceed." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
         exit 0
     fi
 fi

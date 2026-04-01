@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-context-loader.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Load portal context from environment"
           }
         ]
@@ -20,7 +20,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-hubspot-api.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Detect direct HubSpot API curl calls and route mutating work through approved HubSpot specialists"
           }
         ]
@@ -31,19 +31,19 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Universal agent governance — risk scoring, bulk operation protection, approval gates for HubSpot operations"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-agent-validator.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate agent selection for tasks"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-mandatory.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Mandatory pre-task validation checks"
           }
         ]
@@ -54,13 +54,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-path-validator.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate write paths for HubSpot operations"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-property-write-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate property naming conventions (snake_case) and reserved names"
           }
         ]
@@ -71,7 +71,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-hubspot-api-call.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate HubSpot API requests before execution"
           }
         ]
@@ -82,7 +82,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-company-merge.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate company merge prerequisites — SF sync check, canonical selection, backup verification"
           }
         ]
@@ -93,7 +93,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-cms-publish-validation.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate CMS content before publishing — required fields, SEO, broken links"
           }
         ]
@@ -104,7 +104,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-workflow-list-validation.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate workflow list associations before modification"
           }
         ]
@@ -117,7 +117,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-portal-authentication.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Auto-detect portal customizations after authentication"
           }
         ]
@@ -128,7 +128,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-portal-switch.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Update context after portal switch"
           }
         ]
@@ -139,7 +139,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-cms-publish-notification.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Notify after CMS page publish"
           }
         ]

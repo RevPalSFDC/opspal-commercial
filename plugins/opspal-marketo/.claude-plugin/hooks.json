@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-marketo.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Load Marketo instance context and validate authentication"
           }
         ]
@@ -20,7 +20,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-marketo-api.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Detect direct Marketo API curl calls and route mutating work through approved Marketo specialists"
           }
         ]
@@ -31,13 +31,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Universal agent governance for Marketo bulk, sync, and destructive workflows"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-intelligence-analysis.sh",
-            "timeout": 8000,
+            "timeout": 8,
             "description": "Validate observability export freshness before Marketo analysis agents execute"
           }
         ]
@@ -48,7 +48,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-activation.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Validate campaignId, check API rate limits, and enforce deactivation cooldown before campaign activation"
           }
         ]
@@ -59,7 +59,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-clone.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate campaign clone source, name, and destination before execution"
           }
         ]
@@ -70,7 +70,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-campaign-delete.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate campaign deletion safety before execution"
           }
         ]
@@ -81,7 +81,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bulk-operation.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate bulk lead operations"
           }
         ]
@@ -92,7 +92,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-lead-merge.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate lead merge operation"
           }
         ]
@@ -103,7 +103,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-orchestration.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate Marketo program clone orchestration inputs before execution"
           }
         ]
@@ -114,13 +114,13 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bulk-export.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate bulk export date ranges, activity types, and quota before execution"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-observability-extract.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Validate quota and date range before bulk export"
           }
         ]
@@ -133,7 +133,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-campaign-create.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Verify Marketo campaign create and clone results"
           }
         ]
@@ -144,7 +144,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bulk-import.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Summarize completed Marketo bulk import results"
           }
         ]
@@ -155,19 +155,19 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-instance-authentication.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Auto-detect instance customizations after authentication"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-operation-verification.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Verify operation success and capture metrics"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/api-limit-monitor.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Track API usage and warn on thresholds"
           }
         ]
@@ -178,7 +178,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sync-error-monitor.sh",
-            "timeout": 15000,
+            "timeout": 15,
             "description": "Monitor Salesforce sync errors"
           }
         ]
@@ -189,7 +189,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-extract-complete.sh",
-            "timeout": 30000,
+            "timeout": 30,
             "description": "Trigger normalization and analysis after export completes"
           }
         ]
@@ -200,7 +200,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/observability-quota-monitor.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Monitor bulk export quota usage and alert on thresholds"
           }
         ]
@@ -211,7 +211,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/campaign-diagnostic-reminder.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Suggest /diagnose-campaign when campaign issues detected"
           }
         ]

@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/universal-agent-governance.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Govern Monday agent launches for destructive or large-scale workflows"
           }
         ]
@@ -20,7 +20,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use-monday-audit.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Classify Monday MCP calls as read or mutating and write audit telemetry"
           }
         ]

@@ -15,11 +15,14 @@
 # Input (via stdin for UserPromptSubmit):
 #   {"message": "User's message text"}
 #
-# Output (JSON to stdout):
+# Output (JSON to stdout — canonical PreToolUse format):
 #   {
-#     "systemMessage": "Message prepended to prompt",
-#     "blockExecution": false,
-#     "blockMessage": "Reason for blocking"
+#     "suppressOutput": true,
+#     "hookSpecificOutput": {
+#       "hookEventName": "PreToolUse",
+#       "permissionDecision": "allow",
+#       "additionalContext": "Context for Claude"
+#     }
 #   }
 #
 # Exit Codes:
@@ -111,18 +114,20 @@ output_success() {
 EOF
 }
 
-# Output blocking response
+# Output blocking response (canonical PreToolUse deny format)
 output_block() {
   local reason="$1"
-  local message="${2:-}"
+  local message="${2:-$reason}"
 
-  cat <<EOF
-{
-  "blockExecution": true,
-  "blockMessage": "$reason",
-  "systemMessage": "$message"
-}
-EOF
+  jq -nc --arg reason "$reason" --arg context "$message" '{
+    "suppressOutput": true,
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": $reason,
+      "additionalContext": $context
+    }
+  }'
 }
 
 # Output empty response (no modification)

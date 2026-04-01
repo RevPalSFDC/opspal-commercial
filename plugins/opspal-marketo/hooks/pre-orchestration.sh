@@ -94,7 +94,7 @@ Required parameters for program clone:
 • folder - Target folder { id: number, type: 'Folder' }
 
 EOF
-    jq -nc --arg msg "Program clone blocked: missing required parameters (${MISSING_PARAMS%,*}). Required: programId, name, folder {id, type: Folder}." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    jq -nc --arg msg "Program clone blocked: missing required parameters (${MISSING_PARAMS%,*}). Required: programId, name, folder {id, type: Folder}." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 fi
 
@@ -115,7 +115,7 @@ This is a common Marketo API limitation.
 Programs cannot be cloned into other programs.
 
 EOF
-    jq -nc --arg msg "Program clone blocked: target folder type must be Folder not Program. Programs cannot be cloned into other programs. Change folder type from Program to Folder." '{"blockExecution": true, "blockMessage": $msg}' >&3
+    jq -nc --arg msg "Program clone blocked: target folder type must be Folder not Program. Programs cannot be cloned into other programs. Change folder type from Program to Folder." '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 fi
 

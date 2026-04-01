@@ -49,7 +49,7 @@ set -e
 
 HOOK_INPUT=""
 if ! command -v jq &>/dev/null; then
-    echo "[pre-deploy-flow-validation] jq not found, skipping" >&2
+    echo "[pre-deploy-flow-validation] WARNING: jq not found — flow validation skipped. Install jq for deploy-time flow safety checks." >&2
     exit 0
 fi
 
@@ -158,7 +158,7 @@ METADATA_DIR_PATH="$(resolve_command_path "$METADATA_DIR_RAW" "$HOOK_CWD")"
 
 if [[ -n "$METADATA_DIR_PATH" ]]; then
     if [[ ! -d "$METADATA_DIR_PATH" ]]; then
-        local suggestion=""
+        suggestion=""
         if [[ -n "$HOOK_CWD" && -d "$HOOK_CWD/$METADATA_DIR_RAW" ]]; then
             suggestion=" Suggested absolute path: $HOOK_CWD/$METADATA_DIR_RAW"
         fi

@@ -396,7 +396,18 @@ function readStateFile(filePath) {
 
 function writeStateFile(filePath, state) {
   ensureStateDir();
-  fs.writeFileSync(filePath, JSON.stringify(state, null, 2));
+  // Atomic write: write to temp file, fsync, then rename to avoid partial reads
+  // from concurrent hook processes racing on the same session key.
+  const tmpPath = `${filePath}.tmp.${process.pid}`;
+  const data = JSON.stringify(state, null, 2);
+  const fd = fs.openSync(tmpPath, 'w');
+  try {
+    fs.writeSync(fd, data);
+    fs.fsyncSync(fd);
+  } finally {
+    fs.closeSync(fd);
+  }
+  fs.renameSync(tmpPath, filePath);
   return state;
 }
 

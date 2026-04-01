@@ -18,10 +18,7 @@ pass() {
 
 emit_block() {
     local message="$1"
-    local escaped
-
-    escaped="$(printf '%s' "$message" | sed 's/\\/\\\\/g; s/"/\\"/g')"
-    printf '{"blockExecution":true,"blockMessage":"%s"}\n' "$escaped" >&3
+    jq -nc --arg msg "$message" '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 }
 

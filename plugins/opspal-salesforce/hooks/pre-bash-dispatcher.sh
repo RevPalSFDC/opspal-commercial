@@ -3,7 +3,9 @@
 set -euo pipefail
 
 if ! command -v jq &>/dev/null; then
-    echo "[pre-bash-dispatcher] WARNING: jq not found — Salesforce deploy/query hooks disabled for this call" >&2
+    echo "[pre-bash-dispatcher] WARNING: jq not found — Salesforce deploy/query hooks disabled for this call. Install jq for full protection." >&2
+    # Emit structured warning so missing-dep is observable, not silent.
+    printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","additionalContext":"WARNING: Salesforce Bash dispatcher skipped — jq not installed. Deploy validation, SOQL correction, and deploy governance were NOT evaluated."}}\n'
     exit 0
 fi
 

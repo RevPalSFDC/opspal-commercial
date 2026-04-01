@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-okr-context-loader.sh",
-            "timeout": 10000,
+            "timeout": 10,
             "description": "Load active OKR cycle context from org directory"
           }
         ]
@@ -20,7 +20,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-okr-approval-gate.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Enforce OKR lifecycle sequencing before specialized agent launches"
           }
         ]
@@ -31,7 +31,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-write-okr-path-validator.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Validate OKR output paths follow orgs/*/platforms/okr/*/ convention"
           }
         ]
@@ -44,7 +44,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-task-okr-telemetry.sh",
-            "timeout": 5000,
+            "timeout": 5,
             "description": "Capture OKR agent telemetry to okr-telemetry.jsonl"
           }
         ]

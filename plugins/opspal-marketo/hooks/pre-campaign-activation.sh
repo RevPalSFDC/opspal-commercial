@@ -19,7 +19,7 @@ fi
 #
 # Output (fd3):
 # Pass:  {} (empty object)
-# Block: {"blockExecution": true, "blockMessage": "<reason>"}
+# Block: {"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "<reason>"}}
 #
 # Environment:
 # MARKETO_CAMPAIGN_VALIDATION      — set to "0" to skip all checks (default: 1)
@@ -58,7 +58,7 @@ pass() { printf '{}' >&3; exit 0; }
 block() {
     local reason="$1"
     echo "[pre-campaign-activation] BLOCKED: ${reason}" >&2
-    jq -nc --arg msg "$reason" '{"blockExecution": true, "blockMessage": $msg}' >&3
+    jq -nc --arg msg "$reason" '{"suppressOutput": true, "hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": $msg}}' >&3
     exit 0
 }
 
