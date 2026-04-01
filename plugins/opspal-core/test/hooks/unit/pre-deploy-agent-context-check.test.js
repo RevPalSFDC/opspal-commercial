@@ -90,8 +90,9 @@ async function runAllTests() {
         env
       });
 
-      assert.strictEqual(result.exitCode, 0, 'Hook should exit 0 with JSON blockExecution (not exit 2)');
-      assert(result.stdout.includes('blockExecution'), 'Should emit blockExecution JSON to stdout');
+      assert.strictEqual(result.exitCode, 0, 'Hook should exit 0 with JSON deny (not exit 2)');
+      assert(result.stdout.includes('"permissionDecision"'), 'Should emit canonical PreToolUse JSON to stdout');
+      assert(result.stdout.includes('"deny"'), 'Should emit permissionDecision deny');
       assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the direct deploy block');
       assert(
         result.stderr.includes('parent-context deployment handoff'),
@@ -200,7 +201,8 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Planning-only orchestrators should still use structured block semantics');
-    assert(result.stdout.includes('blockExecution'), 'Should emit a structured deploy block');
+    assert(result.stdout.includes('"permissionDecision"'), 'Should emit a structured deploy block');
+    assert(result.stdout.includes('"deny"'), 'Should emit permissionDecision deny');
     assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the blocked direct deploy');
   }));
 
@@ -309,7 +311,7 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Sub-agent context should bypass deploy routing checks');
-    assert(!result.stdout.includes('blockExecution'), 'Sub-agent bypass should not emit a deploy block');
+    assert(!result.stdout.includes('"deny"'), 'Sub-agent bypass should not emit a deploy block');
   }));
 
   const passed = results.filter((result) => result.passed).length;
