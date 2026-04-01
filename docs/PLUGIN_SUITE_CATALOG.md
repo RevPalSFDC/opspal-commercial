@@ -10,7 +10,7 @@
 - Plugins: 9
 - Agents: 300
 - Commands: 271
-- Hooks: 179
+- Hooks: 180
 
 ## Plugins
 
@@ -24,6 +24,6 @@
 | `opspal-marketo` | 2.6.30 | active | 30 | 30 | 23 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic au... |
 | `opspal-monday` | 1.4.9 | experimental | 6 | 1 | 2 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export,... |
 | `opspal-okrs` | 3.0.10 | active | 14 | 14 | 4 | Data-driven OKR generation from live revenue data |
-| `opspal-salesforce` | 3.86.22 | active | 94 | 59 | 42 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with a... |
+| `opspal-salesforce` | 3.86.22 | active | 94 | 59 | 43 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with a... |
 
 _End of auto-generated suite catalog._
