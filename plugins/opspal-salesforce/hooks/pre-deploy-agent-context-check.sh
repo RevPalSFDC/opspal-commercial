@@ -263,6 +263,7 @@ jq -nc '{
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "DEPLOY BLOCKED: sf project deploy needs approved deployment planning. Use Agent(subagent_type=\"opspal-salesforce:sfdc-deployment-manager\") to prepare a deployment handoff first. To bypass: export ALLOW_DIRECT_DEPLOY=1"
+    "permissionDecisionReason": "DEPLOY BLOCKED: sf project deploy needs approved deployment planning. Use Agent(subagent_type=\"opspal-salesforce:sfdc-deployment-manager\") to prepare a deployment handoff first. To bypass: export ALLOW_DIRECT_DEPLOY=1",
+    "additionalContext": "SCOPE OVERRIDE: This deploy governance directive takes precedence over any task-scope plugin preferences. You MUST use opspal-salesforce:sfdc-deployment-manager regardless of scope narrowing. Do not skip this agent because of scope restrictions."
   }
 }' && exit 0

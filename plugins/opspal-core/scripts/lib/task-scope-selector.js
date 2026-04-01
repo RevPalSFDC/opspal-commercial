@@ -12,8 +12,13 @@ const ROUTING_STATE_DIR = path.join(os.homedir(), '.claude', 'routing-state');
 const MAX_CONTEXT_ASSET_NAMES = 6;
 
 /**
- * Read pending routing state for a session to prevent scope suppression
+ * Read active routing state for a session to prevent scope suppression
  * of the plugin family that routing enforcement requires.
+ *
+ * Previously this only checked pending_clearance state, which missed cases
+ * where routing had already resolved (cleared/bypassed) but still referenced
+ * a required agent. Any non-expired routing state with a required_agent should
+ * protect that agent's plugin from scope suppression.
  */
 function readPendingRoutingState(sessionKey) {
   if (!sessionKey) return null;
@@ -24,9 +29,12 @@ function readPendingRoutingState(sessionKey) {
     const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
     const now = Math.floor(Date.now() / 1000);
     if (state.expires_at && now >= state.expires_at) return null;
-    if (!state.route_pending_clearance && state.clearance_status !== 'pending_clearance') return null;
-    if (state.override_applied) return null;
-    return state;
+    // Return any non-expired state that references a required agent —
+    // regardless of clearance status. This prevents the deadlock where
+    // scope selector suppresses the plugin that a PreToolUse governance
+    // hook (e.g. deploy-agent-context-check) will later require.
+    if (state.required_agent || state.last_resolved_agent) return state;
+    return null;
   } catch (_e) {
     return null;
   }
@@ -50,7 +58,9 @@ const PLUGIN_POLICIES = {
     maxCommands: 10,
     keywords: [
       'salesforce', 'sfdc', 'apex', 'flow', 'validation rule', 'quick action', 'soql',
-      'lwc', 'territory', 'cpq', 'quote', 'record type', 'metadata', 'force-app'
+      'lwc', 'territory', 'cpq', 'quote', 'record type', 'metadata', 'force-app',
+      'deploy', 'target-org', 'source-dir', 'metadata-dir', 'sf project', 'sandbox',
+      'staging', 'production org', 'permission set', 'field-level security'
     ],
     agentPatterns: [
       /^opspal-salesforce:/, /^sfdc-/, /^salesforce-/, /^flow-/, /^validation-rule-/,
@@ -480,14 +490,14 @@ function buildScopeSummary(scope) {
   const topAssets = flattenTopAssetNames(scope.selectedAssets);
 
   const userPromptContext = [
-    `TASK SCOPE: Prefer ${selected} only for this request.`,
-    suppressed ? `Suppress ${suppressed} unless the user explicitly expands scope.` : '',
+    `TASK SCOPE: Prefer ${selected} for this request.`,
+    suppressed ? `De-prioritize ${suppressed} unless the task requires them or a governance hook routes to an agent from those plugins.` : '',
     topAssets.length > 0 ? `Most relevant prompt assets: ${topAssets.join(', ')}.` : ''
   ].filter(Boolean).join(' ');
 
   const subagentContext = [
-    `TASK SCOPE: Active plugin allowlist is ${selected}.`,
-    suppressed ? `Ignore ${suppressed} unless the task clearly becomes multi-platform.` : '',
+    `TASK SCOPE: Active plugin preference is ${selected}.`,
+    suppressed ? `De-prioritize ${suppressed} unless the task clearly requires cross-platform work or a routing directive specifies an agent from those plugins.` : '',
     topAssets.length > 0 ? `Relevant skills/commands: ${topAssets.join(', ')}.` : ''
   ].filter(Boolean).join(' ');
 
@@ -505,16 +515,25 @@ function buildScope(input = {}, options = {}) {
   const keywordSummary = new TaskKeywordExtractor(task, agentName).extract();
   const selectedPlugins = selectPlugins(task, agentName, keywordSummary);
 
-  // Respect pending routing enforcement — never suppress the plugin family
-  // that routing requires. This prevents deadlocks where task-scope-selector
-  // suppresses a plugin while unified-router requires an agent from it.
+  // Respect routing enforcement — never suppress the plugin family that
+  // routing requires. This prevents deadlocks where task-scope-selector
+  // suppresses a plugin while a routing/governance hook requires an agent
+  // from it (e.g. deploy-agent-context-check → sfdc-deployment-manager).
   const pendingRoute = readPendingRoutingState(sessionKey);
-  if (pendingRoute && pendingRoute.required_agent) {
-    const colonIdx = pendingRoute.required_agent.indexOf(':');
-    if (colonIdx !== -1) {
-      const enforcedPlugin = pendingRoute.required_agent.slice(0, colonIdx);
-      if (enforcedPlugin && !selectedPlugins.includes(enforcedPlugin)) {
-        selectedPlugins.push(enforcedPlugin);
+  if (pendingRoute) {
+    const routeAgents = [
+      pendingRoute.required_agent,
+      pendingRoute.last_resolved_agent,
+      ...(pendingRoute.clearance_agents || [])
+    ].filter(Boolean);
+
+    for (const agent of routeAgents) {
+      const colonIdx = agent.indexOf(':');
+      if (colonIdx !== -1) {
+        const enforcedPlugin = agent.slice(0, colonIdx);
+        if (enforcedPlugin && !selectedPlugins.includes(enforcedPlugin)) {
+          selectedPlugins.push(enforcedPlugin);
+        }
       }
     }
   }
