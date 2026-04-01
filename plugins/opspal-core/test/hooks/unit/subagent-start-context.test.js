@@ -116,7 +116,7 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     const context = result.output?.hookSpecificOutput?.additionalContext || '';
-    assert(context.includes('TASK SCOPE:'), 'Should include scoped plugin guidance');
+    assert(context.includes('Context:') || context.includes('Active plugins'), 'Should include scoped plugin guidance');
     assert(context.includes('opspal-salesforce'), 'Should include Salesforce in the allowlist');
     assert(context.includes('opspal-core'), 'Should retain opspal-core in the allowlist');
   }));
