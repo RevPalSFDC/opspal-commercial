@@ -512,8 +512,34 @@ function buildScope(input = {}, options = {}) {
   const agentName = normalizeAgentName(input.agentName);
   const cwd = input.cwd || process.cwd();
   const sessionKey = input.sessionKey || 'default-session';
+  const stateFile = options.stateFile || DEFAULT_STATE_FILE;
   const keywordSummary = new TaskKeywordExtractor(task, agentName).extract();
   const selectedPlugins = selectPlugins(task, agentName, keywordSummary);
+
+  // Session stickiness: retain plugins from previous scope selection.
+  // This prevents the catch-22 where:
+  //   Turn 1: "deploy to staging" → includes opspal-salesforce
+  //   Turn 2: "go ahead" → no SF keywords → drops opspal-salesforce → deadlock
+  // Previously-selected plugins stay in scope until session ends or the user
+  // explicitly changes topic to a different platform domain.
+  const STICKY_EXPIRY_SECONDS = toNumber(process.env.TASK_SCOPE_STICKY_TTL, 600);
+  try {
+    const previousScope = loadScope(stateFile);
+    if (previousScope && Array.isArray(previousScope.selectedPlugins)) {
+      const prevTimestamp = previousScope.timestamp ? new Date(previousScope.timestamp).getTime() : 0;
+      const ageSeconds = prevTimestamp > 0 ? (Date.now() - prevTimestamp) / 1000 : Infinity;
+
+      if (ageSeconds < STICKY_EXPIRY_SECONDS) {
+        for (const prevPlugin of previousScope.selectedPlugins) {
+          if (prevPlugin !== 'opspal-core' && !selectedPlugins.includes(prevPlugin)) {
+            selectedPlugins.push(prevPlugin);
+          }
+        }
+      }
+    }
+  } catch (_e) {
+    // Previous scope missing or corrupt — proceed without stickiness
+  }
 
   // Respect routing enforcement — never suppress the plugin family that
   // routing requires. This prevents deadlocks where task-scope-selector
@@ -638,7 +664,8 @@ function main() {
   }
 
   const scope = buildScope(input, {
-    pluginsRoot: args['plugins-root']
+    pluginsRoot: args['plugins-root'],
+    stateFile
   });
 
   if (args.save === '1' || args.save === 'true') {
