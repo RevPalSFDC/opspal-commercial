@@ -1,21 +1,21 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on improving platform reliability and Salesforce connectivity. Key fixes include better handling of Salesforce state and country data fields, enhanced deployment reliability, and resolved connection issues that were preventing some automations from running properly.",
-  "published_at": "2026-04-01T13:34:20.745Z",
+  "summary": "This week brought significant improvements to Salesforce automation reliability, with better handling of state and country picklists and more robust deployment workflows. We also resolved critical issues that were preventing HubSpot automations from starting properly and improved overall platform stability.",
+  "published_at": "2026-04-01T14:32:28.089Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 58,
+  "total_commits": 62,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce state and country field handling works more reliably",
+      "headline": "Salesforce automations better handle state and country fields",
       "details": [
-        "OpsPal now better detects when Salesforce uses special state and country dropdown lists",
-        "Deployment validation runs more consistently",
-        "System automatically retries failed operations"
+        "OpsPal now automatically detects when Salesforce uses state and country picklists instead of text fields",
+        "Your deployment workflows run more reliably with improved permission checking",
+        "Field mapping works more accurately when referencing location-based data"
       ],
       "commits": [
         "fcad945"
@@ -24,7 +24,7 @@
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Multi-step Salesforce deployments run more reliably",
+      "headline": "Salesforce multi-step deployments run more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -33,7 +33,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations launch successfully again",
+      "headline": "HubSpot automations start properly again",
       "details": null,
       "commits": [
         "c53235d"
