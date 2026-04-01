@@ -71,7 +71,7 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.13 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.49.2 | active | 80 | 114 | 83 |
+| `opspal-core` | 2.49.3 | active | 80 | 114 | 83 |
 | `opspal-data-hygiene` | 1.2.5 | deprecated | 2 | 1 | 1 |
 | `opspal-gtm-planning` | 2.3.6 | active | 13 | 16 | 4 |
 | `opspal-hubspot` | 3.9.20 | active | 59 | 33 | 14 |
