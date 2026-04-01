@@ -9,7 +9,7 @@ const MARKETPLACE_CORE_PATH = process.env.HOME
       '.claude',
       'plugins',
       'marketplaces',
-      'revpal-internal-plugins',
+      'opspal-commercial',
       'plugins',
       'opspal-core'
     )

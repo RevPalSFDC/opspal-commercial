@@ -165,7 +165,7 @@ fi
 
 # Add absolute fallback paths
 SUBMIT_LOCATIONS+=(
-    "/home/revpal/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/lib/submit-reflection.js"
+    "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib/submit-reflection.js"
     "$HOME/.claude-plugins/opspal-core/scripts/lib/submit-reflection.js"
 )
 

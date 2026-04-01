@@ -39,7 +39,7 @@ find_enhancer_script() {
     "${CLAUDE_PLUGIN_ROOT:-}/scripts/lib/routing-clarity-enhancer.js"
     "plugins/opspal-core/scripts/lib/routing-clarity-enhancer.js"
     ".claude-plugins/opspal-core/scripts/lib/routing-clarity-enhancer.js"
-    "$HOME/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/routing-clarity-enhancer.js"
+    "$HOME/.claude/plugins/opspal-core@opspal-commercial/scripts/lib/routing-clarity-enhancer.js"
   )
 
   for path in "${candidates[@]}"; do

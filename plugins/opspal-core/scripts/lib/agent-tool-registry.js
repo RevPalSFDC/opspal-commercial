@@ -229,7 +229,7 @@ function resolvePluginRoot(explicitPluginRoot = '') {
     path.resolve(process.cwd(), 'plugins', 'opspal-core'),
     path.resolve(process.cwd(), '.claude-plugins', 'opspal-core'),
     process.env.HOME
-      ? path.join(process.env.HOME, '.claude', 'plugins', 'marketplaces', 'revpal-internal-plugins', 'plugins', 'opspal-core')
+      ? path.join(process.env.HOME, '.claude', 'plugins', 'marketplaces', 'opspal-commercial', 'plugins', 'opspal-core')
       : null
   ]);
 
@@ -262,7 +262,7 @@ function getRoutingIndexCandidates(explicitPluginRoot = '') {
     path.join(process.cwd(), 'routing-index.json'),
     path.join(process.cwd(), '.claude-plugins', 'opspal-core', 'routing-index.json'),
     home
-      ? path.join(home, '.claude', 'plugins', 'marketplaces', 'revpal-internal-plugins', 'plugins', 'opspal-core', 'routing-index.json')
+      ? path.join(home, '.claude', 'plugins', 'marketplaces', 'opspal-commercial', 'plugins', 'opspal-core', 'routing-index.json')
       : null
   ]);
 }

@@ -20,7 +20,7 @@ const candidatePaths = [
   // Installed plugin path
   path.resolve(__dirname, '../../../../.claude-plugins/opspal-core/scripts/lib/submit-reflection.js'),
   // Marketplace path
-  path.resolve(process.env.HOME || '', '.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/submit-reflection.js'),
+  path.resolve(process.env.HOME || '', '.claude/plugins/opspal-core@opspal-commercial/scripts/lib/submit-reflection.js'),
 ];
 
 let canonicalPath;

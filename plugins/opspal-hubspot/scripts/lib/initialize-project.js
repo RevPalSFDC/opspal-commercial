@@ -91,7 +91,7 @@ class ProjectInitializer {
     // Fall back to legacy paths if not found in cache
     if (!this.installedPlugins.salesforce || !this.installedPlugins.hubspot) {
       const legacyDirs = [
-        path.join(process.env.HOME || process.env.USERPROFILE || '', '.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins'),
+        path.join(process.env.HOME || process.env.USERPROFILE || '', '.claude/plugins/marketplaces/opspal-commercial/.claude-plugins'),
         path.join(process.cwd(), '.claude-plugins')
       ];
 
@@ -229,8 +229,8 @@ class ProjectInitializer {
 
     // Legacy paths
     possiblePaths.push(
-      path.join(home, `.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins/opspal-${plugin}/templates/${templateName}`),
-      path.join(home, `.claude/plugins/marketplaces/revpal-internal-plugins/.claude-plugins/${plugin}-plugin/templates/${templateName}`),
+      path.join(home, `.claude/plugins/marketplaces/opspal-commercial/.claude-plugins/opspal-${plugin}/templates/${templateName}`),
+      path.join(home, `.claude/plugins/marketplaces/opspal-commercial/.claude-plugins/${plugin}-plugin/templates/${templateName}`),
       path.join(process.cwd(), `.claude-plugins/opspal-${plugin}/templates/${templateName}`),
       path.join(process.cwd(), `.claude-plugins/${plugin}-plugin/templates/${templateName}`),
       path.join(__dirname, `../../templates/${templateName}`)
