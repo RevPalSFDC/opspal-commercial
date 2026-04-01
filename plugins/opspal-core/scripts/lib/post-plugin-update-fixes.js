@@ -1484,11 +1484,8 @@ class PostPluginUpdateFixes {
       issues.push('managed-timeout-drift');
     }
 
-    if (!reminderPresent) {
-      issues.push(reminderPath ? 'missing-reminder-hook' : 'missing-reminder-hook-and-file');
-    } else if (reminderPathDrift) {
-      issues.push('reminder-path-drift');
-    }
+    // Reminder hook is no longer required — dispatcher handles routing context.
+    // Its absence is expected and not an issue.
 
     return {
       issues,
@@ -1706,36 +1703,12 @@ class PostPluginUpdateFixes {
         reconciledGroups.push(nextGroup);
       }
 
-      const reminderPath = target.reminderPath || this.findReminderFile();
-      if (!reminderPath) {
-        this.log(`${icons.fail} Could not find reminder.md in any known location`);
-        this.results.userLevelHooks.errors.push({
-          name: settingsPath,
-          message: 'Could not find reminder.md - searched local and installed plugin locations'
-        });
-        return { fixed: false, reason: 'reminder-not-found' };
-      }
-
-      const corePluginRoot = this.findCorePluginRoot();
-      if (!corePluginRoot) {
-        this.results.userLevelHooks.errors.push({
-          name: settingsPath,
-          message: 'Could not resolve opspal-core plugin root for structured reminder hook'
-        });
-        return { fixed: false, reason: 'core-plugin-root-not-found' };
-      }
-
-      const reminderHookPath = path.join(corePluginRoot, 'hooks', 'user-prompt-reminder.sh');
-      this.log(`${icons.info} Found reminder at: ${reminderPath}`, 'verbose');
-      reconciledGroups.unshift({
-        hooks: [
-          {
-            type: 'command',
-            command: `env REMINDER_PATH=${JSON.stringify(reminderPath)} bash ${JSON.stringify(reminderHookPath)}`,
-            timeout: 5000
-          }
-        ]
-      });
+      // Reminder hook (user-prompt-reminder.sh) is no longer injected into settings.json.
+      // The user-prompt-dispatcher.sh (registered in hooks.json) handles routing context
+      // via routing-context-refresher.sh. The standalone reminder was a separate imperative
+      // routing table that ran on every prompt and caused governance deadlocks by conflicting
+      // with the dispatcher's informational scope/routing output.
+      // Any existing reminder hook entries are stripped by the retainedHooks filter above.
 
       reconciledGroups.push({
         hooks: resolvedManagedHooks.hooks
