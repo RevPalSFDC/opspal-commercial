@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-03-31T21:06:18.553Z",
+  "buildDate": "2026-04-01T13:20:49.289Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
   "totalCommands": 271,
-  "totalHooks": 252,
+  "totalHooks": 253,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48455,6 +48455,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "user-prompt-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/user-prompt-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "user-prompt-first-run",
         "description": "",
         "file": "opspal-core/hooks/user-prompt-first-run.sh",
@@ -49198,7 +49205,7 @@
     "totalAgents": 297,
     "totalAgentsFull": 300,
     "totalCommands": 271,
-    "totalHooks": 252,
+    "totalHooks": 253,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
     "totalKeywordsFull": 2607,
@@ -49220,7 +49227,7 @@
       "SubagentStop": 6,
       "TaskCompleted": 1,
       "Stop": 5,
-      "Unknown": 134,
+      "Unknown": 135,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
