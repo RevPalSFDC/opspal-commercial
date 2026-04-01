@@ -713,10 +713,11 @@ enforce_integrity_stop() {
       "$caller_agent" \
       "$tool_name"
 
-    emit_pretool_decision \
-      "allow" \
-      "" \
-      "INTEGRITY_ADVISORY: Receipt-required work owned by '${integrity_agent:-unknown}' — ${integrity_reason}. Consider re-delegating to the specialist for deterministic proof. Detail: ${integrity_detail:-not provided}."
+    # Advisory only — log for observability, no structured output to avoid double-JSON
+
+
+
+
     return 0
 }
 
@@ -749,10 +750,11 @@ enforce_orchestrator_specialist_execution_guard() {
       "$caller_agent" \
       "$tool_name"
 
-    emit_pretool_decision \
-      "allow" \
-      "" \
-      "ROUTING_ADVISORY: '${caller_agent}' is executing specialist-owned queries directly. Consider delegating to a receipt-backed investigation specialist for deterministic proof."
+    # Advisory only — no structured output to avoid double-JSON
+
+
+
+
     return 0
 }
 
@@ -838,10 +840,11 @@ enforce_pending_route_gate() {
         additional_context="${additional_context} Active route kind=${route_kind}."
     fi
 
-    emit_pretool_decision \
-      "allow" \
-      "" \
-      "ROUTING_ADVISORY: ${additional_context}"
+    # Advisory only — no structured output to avoid double-JSON with downstream enforcement
+
+
+
+
     return 0
 }
 
@@ -1409,19 +1412,21 @@ enforce_mandatory_routing() {
             if [[ "$failure_class" == "CONTEXT_CONTINUITY_LOSS" ]]; then
                 emit_routing_event "warn" "$rule_id" "$required_agent" \
                   "CONTEXT_CONTINUITY_LOSS: Specialist identity dropped to unknown (advisory only)." "$command" "$caller_agent" "$tool"
-                emit_pretool_decision \
-                  "allow" \
-                  "" \
-                  "ROUTING_ADVISORY: Specialist identity '${last_resolved_agent:-$required_agent}' was lost. Consider re-delegating via Agent(subagent_type='${last_resolved_agent:-$required_agent}')."
+                # Advisory only — no structured output
+
+
+
+
                 return 0
             fi
 
             emit_routing_event "warn" "$rule_id" "$required_agent" \
               "EXTERNAL_PROJECTION_LOSS: Cleared specialist route drifted (advisory only)." "$command" "$caller_agent" "$tool"
-            emit_pretool_decision \
-              "allow" \
-              "" \
-              "ROUTING_ADVISORY: Specialist route drifted from '${last_resolved_agent:-$required_agent}'. Consider re-delegating to the cleared specialist."
+            # Advisory only — no structured output
+
+
+
+
             return 0
         fi
 
@@ -1433,10 +1438,11 @@ enforce_mandatory_routing() {
             routing_reason_message="ROUTING_ADVISORY: $reason Consider using Agent(subagent_type='${required_agent}'). Eligible agents: ${clearance_agents_display:-$required_agent}."
         fi
 
-        emit_pretool_decision \
-          "allow" \
-          "" \
-          "$routing_reason_message"
+        # Advisory only — no structured output to avoid double-JSON
+
+
+
+
         return 0
     fi
 
