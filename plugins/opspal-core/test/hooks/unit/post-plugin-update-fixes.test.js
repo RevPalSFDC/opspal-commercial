@@ -129,19 +129,12 @@ function assertInstalledRuntimeRepair(tempHome, marketplaceName) {
   );
   const userPromptHooks = cachedHooks.hooks.UserPromptSubmit
     .flatMap((group) => Array.isArray(group?.hooks) ? group.hooks : []);
-  const unifiedRouterHook = userPromptHooks.find((hook) => hook?.command?.includes('unified-router.sh'));
-  assert(unifiedRouterHook, 'Repaired cache bundle should contain unified-router hook');
+  // After dispatcher consolidation, UPS has a single dispatcher entry
+  const dispatcherHook = userPromptHooks.find((hook) => hook?.command?.includes('user-prompt-dispatcher.sh'));
+  assert(dispatcherHook, 'Repaired cache bundle should contain UPS dispatcher hook');
   assert(
-    unifiedRouterHook.command.includes('ROUTING_ADAPTIVE_CONTINUE=1'),
-    'Repaired cache bundle should preserve unified-router env overrides'
-  );
-  assert(
-    unifiedRouterHook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=0'),
-    'Repaired cache bundle should keep prompt-time mandatory routing non-blocking'
-  );
-  assert(
-    !unifiedRouterHook.command.includes('USER_PROMPT_MANDATORY_HARD_BLOCKING=1'),
-    'Repaired cache bundle should not re-enable prompt-time mandatory routing blocks'
+    dispatcherHook.timeout <= 60,
+    'Dispatcher timeout should be in seconds (not ms)'
   );
 
   const wildcardGate = cachedHooks.hooks.PreToolUse.some((group) => (
