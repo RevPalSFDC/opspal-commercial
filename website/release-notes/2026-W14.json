@@ -1,31 +1,32 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought critical stability improvements to OpsPal's Salesforce and HubSpot integrations. We fixed issues that were preventing some automations from launching and improved how OpsPal handles complex Salesforce deployments, especially those involving state and country data validation.",
-  "published_at": "2026-04-01T17:53:46.230Z",
+  "summary": "This week focused on fixing critical issues that were preventing automations from working properly. We resolved problems with Salesforce deployments getting stuck and HubSpot automations failing to start, plus improved how the platform handles complex multi-step workflows to make them more reliable.",
+  "published_at": "2026-04-01T17:58:28.791Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 67,
+  "total_commits": 69,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now detect state and country field conflicts",
+      "headline": "Salesforce automations now handle state and country fields more reliably",
       "details": [
-        "OpsPal now automatically identifies when Salesforce state and country picklist settings might conflict with your automation workflows",
-        "Deployments are more reliable with improved validation and automatic retry capabilities"
+        "OpsPal now automatically detects when your Salesforce org uses state and country picklists instead of text fields",
+        "Prevents automation failures when working with address-related data flows"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now run more reliably",
+      "headline": "Complex Salesforce deployments now run more smoothly",
       "details": [
-        "Multi-step Salesforce automations now use improved coordination to prevent deployment failures"
+        "Multi-step deployment workflows are now handled through our improved processing system",
+        "Reduces timeouts and failures when deploying large or complex automation changes"
       ],
       "commits": [
         "a1075f7"
@@ -34,9 +35,10 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations launch successfully again",
+      "headline": "HubSpot automations start properly again",
       "details": [
-        "Resolved an issue that was preventing HubSpot automations from starting properly"
+        "Restored missing configuration that was preventing HubSpot automations from launching",
+        "All HubSpot workflows should now initialize without errors"
       ],
       "commits": [
         "c53235d"
