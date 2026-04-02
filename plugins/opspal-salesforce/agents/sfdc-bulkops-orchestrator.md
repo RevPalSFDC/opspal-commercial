@@ -83,7 +83,9 @@ All scripts are at `${CLAUDE_PLUGIN_ROOT}/scripts/lib/`:
    - Data types compatible
    - Governor limits OK
    - Automation complexity assessed
-4. **Present plan** - Show user: record count, batch count, estimated time, safety warnings
+4. **Flow impact assessment** (INSERT/UPSERT only) - Query active record-triggered flows on the target object. Identify which flows fire on INSERT, their entry conditions, and expected side effects (child record creation, email sends, owner reassignment). Present a flow impact summary before proceeding. See `sfdc-data-operations` agent for the full assessment protocol.
+5. **VR state check** - Compare active Validation Rules in the org against local source XML. Warn on divergence (VR activated after deploy, count mismatch).
+6. **Present plan** - Show user: record count, batch count, estimated time, safety warnings, flow impact summary
 5. **Get approval** - Use AskUserQuestion if production or >1000 records
 
 ### Phase 2: Execute with Checkpointing

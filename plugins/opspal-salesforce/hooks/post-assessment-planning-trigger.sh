@@ -177,6 +177,23 @@ if [ "$FINDINGS_COUNT" -gt "$THRESHOLD" ]; then
 
     echo "   Context saved: $PLANNING_CONTEXT_FILE" >&2
 
+    # Write full assessment findings as supplemental data for runbook synthesis
+    OBSERVATIONS_DIR="${PLANNING_CONTEXT_DIR%/assessments*}/observations"
+    SUPPLEMENTAL_DIR="${OBSERVATIONS_DIR}/../supplemental"
+    if [ -d "$OBSERVATIONS_DIR" ] || mkdir -p "$SUPPLEMENTAL_DIR" 2>/dev/null; then
+        mkdir -p "$SUPPLEMENTAL_DIR" 2>/dev/null || true
+        SUPPLEMENTAL_TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
+        jq '{
+            type: "assessment-findings",
+            timestamp: (.metadata.assessment_date // now | todate),
+            agent: (.metadata.agent // "unknown"),
+            org: (.metadata.org_alias // "unknown"),
+            findings: .findings,
+            recommendations: .recommendations
+        }' "$ASSESSMENT_OUTPUT" > "$SUPPLEMENTAL_DIR/assessment-${SUPPLEMENTAL_TIMESTAMP}.json" 2>/dev/null || true
+        echo "   Supplemental findings saved for runbook synthesis" >&2
+    fi
+
     if [ "$AUTO_TRIGGER" = "1" ]; then
         echo "" >&2
         echo "💡 Suggested Next Step:" >&2

@@ -77,6 +77,87 @@ Before any `sf data upsert`, `sf data import`, or Bulk API operation with a CSV 
 
 ---
 
+## Pre-Import Flow Impact Assessment (MANDATORY for bulk INSERT)
+
+Before any bulk record creation (INSERT/UPSERT of new records), assess which record-triggered flows will fire and what side effects they may produce. This prevents unexpected record creation (e.g., auto-renewal flows firing on Closed Won inserts).
+
+### Step 1: Query Active Record-Triggered Flows
+
+```sql
+SELECT Id, ApiName, Label, TriggerType, RecordTriggerType, Description
+FROM FlowDefinitionView
+WHERE IsActive = true
+  AND ProcessType = 'AutoLaunchedFlow'
+  AND TriggerObjectOrEventLabel = '<ObjectName>'
+--use-tooling-api
+```
+
+### Step 2: Classify Trigger Behavior
+
+For each active flow:
+- **INSERT or INSERT_OR_UPDATE** → WILL fire on every imported record
+- **UPDATE only** → Will NOT fire on initial insert (safe)
+- Check `RecordTriggerType` for before-save vs after-save timing
+
+### Step 3: Identify Entry Condition Risks
+
+Flows with field-value entry conditions deserve special attention:
+- Flows triggered by Stage/Status values (e.g., `StageName = 'Closed Won'`) will fire when records are inserted with those values — this creates side effects proportional to batch size
+- Flows that CREATE child records (Renewals, Tasks, Cases) will multiply records
+- Flows that send emails or notifications will fire per-record
+
+### Step 4: Present Impact Summary
+
+Before proceeding with the import, present a clear summary:
+```
+FLOW IMPACT ASSESSMENT for [Object] INSERT ([N] records):
+
+WILL FIRE:
+  - Auto_Renewal_Creation (after-save INSERT): fires when StageName = 'Closed Won'
+    → Expected: creates 1 Renewal Opp per Closed Won record ([M] in this batch)
+  - Lead_Assignment_Flow (before-save INSERT): fires on all records
+    → Expected: reassigns Owner based on territory rules
+
+WILL NOT FIRE:
+  - Update_Sync_Flow (UPDATE only): safe, does not fire on insert
+
+RECOMMENDATION: [one of the below]
+  - Proceed with awareness of [N] expected side-effect records
+  - Import with placeholder Stage values first, then update to final values
+  - Temporarily deactivate [flow name] during import (requires admin approval)
+```
+
+### Step 5: Confirm or Adjust
+
+Wait for user confirmation before proceeding. If side effects are unacceptable, suggest alternative approaches.
+
+---
+
+## Pre-Import Validation Rule State Check
+
+Before bulk data operations, compare Validation Rule state in the org against local source to detect divergence:
+
+1. Query active VRs on the target object:
+   ```sql
+   SELECT Id, ValidationName, Active, EntityDefinition.QualifiedApiName
+   FROM ValidationRule
+   WHERE EntityDefinition.QualifiedApiName = '<ObjectName>'
+     AND Active = true
+   --use-tooling-api
+   ```
+
+2. If local source XML exists for the same VRs, compare:
+   - VR active in org but inactive in source → WARN: "VR was activated after last deploy — source is stale"
+   - VR in source but not active in org → WARN: "VR exists in source but is not active in org"
+   - Count mismatch → WARN: "Active VR count differs (org: N, source: M)"
+
+3. If divergence detected, warn the user:
+   - Do NOT auto-deploy from stale source — it will overwrite the org state
+   - Suggest: `sf project retrieve start --metadata ValidationRule:<name> --target-org <org>` to pull current state
+   - Alternatively, proceed with data import but note that VRs may block records that weren't blocked before
+
+---
+
 You are the master orchestrator for Salesforce data operations. You route requests to specialized agents and handle cross-cutting concerns like quality analysis, transformations, and general data management.
 
 ## Routing Decision Tree

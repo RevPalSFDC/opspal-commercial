@@ -326,10 +326,42 @@ Return matching results in this structure:
 | `EXTERNAL_ID_EXACT` | External ID match | 1.0 | UPDATE |
 | `EMAIL_EXACT` | Email address match | 1.0 | UPDATE |
 | `COMPOSITE_EXACT` | Company+State+Phone | 0.85-0.95 | UPDATE |
-| `FUZZY_HIGH` | Fuzzy match >0.85 | 0.85-0.95 | UPDATE (with verification) |
-| `FUZZY_MEDIUM` | Fuzzy match 0.75-0.85 | 0.75-0.85 | MANUAL_REVIEW |
+| `FUZZY_HIGH` | Fuzzy match >=0.90 | 0.90-0.95 | UPDATE (with verification) |
+| `FUZZY_MEDIUM` | Fuzzy match 0.75-0.89 | 0.75-0.89 | MANUAL_REVIEW |
 | `DOMAIN_MATCH` | Email domain → Account | 0.70-0.80 | CREATE_CONTACT |
 | `NO_MATCH` | No matches found | 0.0 | CREATE_NEW |
+
+---
+
+## Industry-Aware Matching Rules
+
+Industries with formulaic naming patterns (property management, real estate, financial services) produce false positives at the default 0.75 threshold because many companies share common words.
+
+### Pre-Match Domain Detection
+
+Before running fuzzy matching on Account names, detect the industry domain:
+1. Sample the first 10-20 Account names from the import file
+2. If >30% contain "Property", "Management", "Realty", "Real Estate", or "Residential": set `domain: "property-management"` on the FuzzyMatcher constructor
+3. If >30% contain "Financial", "Capital", "Advisors", "Wealth", "Insurance": set `domain: "financial"`
+4. This activates `DomainAwareMatcher` with industry-specific suffix stripping and higher thresholds
+
+### Property Management / Real Estate Rules
+
+When the detected domain is `property-management`:
+- **Strip common suffixes** before matching: "LLC", "Inc", "Corp", "Group", "Services", "Management", "Properties", "Property Management", "Real Estate", "Realty", "Residential"
+- **Require fuzzy threshold >= 0.90** (not 0.75) for names containing "Property", "Management", "Realty", or "Real Estate"
+- **ALWAYS output a match report** for human review before any bulk import — no auto-match
+- Pass `autoDetectDomain: true` to FuzzyMatcher constructor to activate these rules automatically
+
+### General Threshold Guidance
+
+| Confidence | Classification | Action |
+|------------|---------------|--------|
+| >= 0.90 | FUZZY_HIGH | Auto-match with verification |
+| 0.75 - 0.89 | FUZZY_MEDIUM | Manual review queue — never auto-match |
+| < 0.75 | NO_MATCH | Create new record |
+
+For industry-sensitive domains, FUZZY_MEDIUM records should be surfaced to the user with a side-by-side comparison before any action is taken.
 
 ---
 

@@ -336,7 +336,7 @@ node scripts/lib/runbook-reflection-bridge.js \
 ### 4) Synthesize Intelligence
 
 ```bash
-# With reflections
+# With reflections (supplemental data auto-detected from instances/{org}/supplemental/)
 node scripts/lib/runbook-synthesizer.js \
   --org {org} \
   --reflection-sections instances/{org}/reflection-sections.json \
@@ -346,7 +346,15 @@ node scripts/lib/runbook-synthesizer.js \
 node scripts/lib/runbook-synthesizer.js \
   --org {org} \
   --output instances/{org}/synthesis.json
+
+# With explicit supplemental directory (assessment findings, audit details)
+node scripts/lib/runbook-synthesizer.js \
+  --org {org} \
+  --supplemental instances/salesforce/{org}/supplemental \
+  --output instances/{org}/synthesis.json
 ```
+
+The synthesizer automatically checks `instances/salesforce/{org}/supplemental/` for additional JSON files (assessment findings, field audit data, etc.) written by assessment hooks. Pass `--supplemental <dir>` to override the default path.
 
 **Report synthesis metrics**:
 - Platform description length

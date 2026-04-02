@@ -749,7 +749,8 @@ function parseArgs() {
     org: null,
     output: null,
     reflectionSections: null,
-    generatePrompts: false
+    generatePrompts: false,
+    supplementalDir: null
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -776,6 +777,11 @@ function parseArgs() {
         break;
       case '--generate-prompts':
         options.generatePrompts = true;
+        break;
+      case '--supplemental':
+      case '--supplemental-dir':
+        options.supplementalDir = next;
+        i++;
         break;
       case '--help':
         printUsage();
@@ -967,6 +973,7 @@ function printUsage() {
   console.log('  --output <file>              Save synthesis output to JSON file');
   console.log('  --reflection-sections <file> Load reflection sections from JSON');
   console.log('  --generate-prompts           Include LLM prompts in output for manual review');
+  console.log('  --supplemental <dir>         Load supplemental data files (assessment findings, audit details)');
   console.log('');
   console.log('Examples:');
   console.log('  # Synthesize runbook content for delta-sandbox');
@@ -1024,6 +1031,31 @@ async function main() {
       process.exit(0);
     }
 
+    // Load supplemental data (detailed assessment findings, audit data, etc.)
+    let supplementalData = [];
+    const supplementalDir = options.supplementalDir ||
+      path.join(workspaceRoot, 'instances', 'salesforce', options.org, 'supplemental');
+    if (fs.existsSync(supplementalDir)) {
+      try {
+        const files = fs.readdirSync(supplementalDir)
+          .filter(f => f.endsWith('.json'))
+          .sort();
+        for (const file of files) {
+          try {
+            const data = JSON.parse(fs.readFileSync(path.join(supplementalDir, file), 'utf8'));
+            supplementalData.push({ source: file, ...data });
+          } catch (e) {
+            console.error(`Warning: Could not parse supplemental file ${file}: ${e.message}`);
+          }
+        }
+        if (supplementalData.length > 0) {
+          console.log(`📎 Loaded ${supplementalData.length} supplemental data file(s) from ${supplementalDir}`);
+        }
+      } catch (e) {
+        console.error(`Warning: Could not read supplemental directory: ${e.message}`);
+      }
+    }
+
     // Synthesize content
     const synthesis = synthesizeRunbookContent(
       options.org,
@@ -1031,6 +1063,11 @@ async function main() {
       options.reflectionSections,
       { generatePrompts: options.generatePrompts, workspaceRoot }
     );
+
+    // Merge supplemental findings into synthesis output
+    if (supplementalData.length > 0) {
+      synthesis.supplemental_findings = supplementalData;
+    }
 
     console.log('✅ Synthesis complete');
     console.log('');
