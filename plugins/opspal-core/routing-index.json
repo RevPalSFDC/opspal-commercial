@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-01T23:49:46.149Z",
+  "buildDate": "2026-04-02T21:24:01.117Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
   "totalCommands": 271,
-  "totalHooks": 258,
+  "totalHooks": 261,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48026,6 +48026,13 @@
         "description": "",
         "file": null,
         "matcher": "sfdc-automation-auditor"
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "unknown",
+        "description": "",
+        "file": null,
+        "matcher": "sfdc-deployment-manager"
       }
     ],
     "TaskCompleted": [
@@ -48085,6 +48092,13 @@
         "name": "subagent-stop-dispatcher",
         "description": "",
         "file": "opspal-core/hooks/subagent-stop-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-salesforce",
+        "name": "post-deploy-manager-stop",
+        "description": "",
+        "file": "opspal-salesforce/hooks/post-deploy-manager-stop.sh",
         "matcher": null
       }
     ],
@@ -48931,6 +48945,13 @@
       },
       {
         "plugin": "opspal-salesforce",
+        "name": "pre-deploy-queued-check",
+        "description": "",
+        "file": "opspal-salesforce/hooks/pre-deploy-queued-check.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-salesforce",
         "name": "pre-deploy-report-quality-gate",
         "description": "",
         "file": "opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh",
@@ -49240,7 +49261,7 @@
     "totalAgents": 297,
     "totalAgentsFull": 300,
     "totalCommands": 271,
-    "totalHooks": 258,
+    "totalHooks": 261,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
     "totalKeywordsFull": 2607,
@@ -49259,10 +49280,10 @@
       "PreCompact": 1,
       "SessionStart": 6,
       "SubagentStart": 1,
-      "SubagentStop": 6,
+      "SubagentStop": 7,
       "TaskCompleted": 1,
-      "Stop": 7,
-      "Unknown": 137,
+      "Stop": 8,
+      "Unknown": 138,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
