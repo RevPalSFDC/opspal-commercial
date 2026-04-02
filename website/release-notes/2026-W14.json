@@ -1,12 +1,12 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on improving platform reliability and data handling capabilities. We enhanced data import resilience to better handle unexpected data formats, improved Salesforce deployment recovery when errors occur, and strengthened our ability to detect and work around Salesforce configuration quirks like State/Country picklists. Several behind-the-scenes fixes ensure smoother automation execution and more consistent platform performance.",
-  "published_at": "2026-04-02T22:17:48.828Z",
+  "summary": "This week brought major improvements to data import reliability and Salesforce deployment stability. We enhanced error recovery across the platform, making your automation workflows more resilient when unexpected issues occur. Several critical fixes ensure HubSpot integrations work properly and Salesforce deployments handle complex scenarios more smoothly.",
+  "published_at": "2026-04-02T22:56:45.804Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 107,
+  "total_commits": 109,
   "entries": [
     {
       "category": "improved",
@@ -18,9 +18,9 @@
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now automatically recover from errors",
+      "headline": "Salesforce deployments now recover automatically from errors",
       "details": null,
       "commits": [
         "48d4393"
@@ -47,10 +47,11 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better detection of Salesforce State and Country picklist configurations",
+      "headline": "Better Salesforce state and country field detection with retry logic",
       "details": [
-        "OpsPal now identifies when your Salesforce org uses State/Country picklists and adjusts validation accordingly",
-        "Deployment workflows are more reliable with improved permission checking and retry logic"
+        "Now automatically detects when Salesforce state and country picklists might cause deployment issues",
+        "Enhanced permission checking during deployments",
+        "Added automatic retry capability for failed operations"
       ],
       "commits": [
         "fcad945"
@@ -59,7 +60,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce multi-step deployments now run more reliably",
+      "headline": "Complex Salesforce deployments now use enhanced workflow routing",
       "details": null,
       "commits": [
         "a1075f7"
@@ -68,7 +69,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Resolved HubSpot connection issues preventing automation launches",
+      "headline": "Restored HubSpot integration functionality after critical file recovery",
       "details": null,
       "commits": [
         "c53235d"
