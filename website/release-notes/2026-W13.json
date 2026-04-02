@@ -76,7 +76,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "opspal-salesforce,opspal-core",
+      "plugin": "Salesforce",
       "headline": "Salesforce operations now track completion across all automation types",
       "details": [
         "Added verification for workflow rules and flow operations",
@@ -124,7 +124,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "opspal-core,opspal-salesforce",
+      "plugin": "Core Platform",
       "headline": "Production org safeguards allow safe data retrieval operations",
       "details": [
         "You can now safely retrieve and examine Salesforce metadata in production",
@@ -136,7 +136,7 @@
     },
     {
       "category": "new",
-      "plugin": "release-notes",
+      "plugin": "Core Platform",
       "headline": "Automated release notes keep you informed of platform updates",
       "details": [
         "Weekly summaries highlight changes that impact your RevOps workflows",
@@ -157,7 +157,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "core,salesforce",
+      "plugin": "Core Platform",
       "headline": "Salesforce operations work more reliably with fewer false blocking errors",
       "details": [
         "Reduced unnecessary routing restrictions that prevented valid operations",
@@ -181,7 +181,7 @@
     },
     {
       "category": "new",
-      "plugin": "bootstrap",
+      "plugin": "Getting Started",
       "headline": "Windows setup now installs all required tools automatically",
       "details": [
         "One-step installation handles Claude Code, Node.js, and other dependencies",
@@ -193,7 +193,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "bootstrap",
+      "plugin": "Getting Started",
       "headline": "Windows installation handles multiple software versions correctly",
       "details": null,
       "commits": [
@@ -202,7 +202,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "core,salesforce",
+      "plugin": "Core Platform",
       "headline": "Platform reliability improvements resolve task completion issues",
       "details": [
         "Better detection of successful operations vs. error conditions",
@@ -226,7 +226,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "bootstrap",
+      "plugin": "Getting Started",
       "headline": "Windows installation works reliably when run from web browsers",
       "details": [
         "PowerShell setup script handles browser-based installation correctly",
@@ -238,7 +238,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "salesforce,core",
+      "plugin": "Salesforce",
       "headline": "Platform reliability improvements with expanded testing coverage",
       "details": [
         "Enhanced validation across 21 different operation types",
@@ -250,7 +250,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "core,salesforce,hubspot,ai-consult",
+      "plugin": "Core Platform",
       "headline": "Operation reliability improvements across all platform integrations",
       "details": [
         "Fixed execution issues in Salesforce, HubSpot, and AI consultation workflows",
@@ -304,7 +304,7 @@
     },
     {
       "category": "fixed",
-      "plugin": "onboarding",
+      "plugin": "Getting Started",
       "headline": "Windows setup prefers Git Bash for better compatibility",
       "details": null,
       "commits": [
@@ -313,7 +313,7 @@
     },
     {
       "category": "improved",
-      "plugin": "onboarding",
+      "plugin": "Getting Started",
       "headline": "Setup automatically installs required dependencies",
       "details": null,
       "commits": [
@@ -322,7 +322,7 @@
     },
     {
       "category": "new",
-      "plugin": "onboarding",
+      "plugin": "Getting Started",
       "headline": "Windows users get dedicated PowerShell setup experience",
       "details": null,
       "commits": [
@@ -331,7 +331,7 @@
     },
     {
       "category": "improved",
-      "plugin": "onboarding",
+      "plugin": "Getting Started",
       "headline": "Better onboarding experience with improved setup detection",
       "details": null,
       "commits": [

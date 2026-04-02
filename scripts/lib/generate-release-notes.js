@@ -174,13 +174,27 @@ const PLUGIN_LABELS = {
   'opspal-ai-consult': 'AI Consult',
   'ai-consult': 'AI Consult',
   'opspal-mcp-client': 'MCP Client',
-  'mcp-client': 'MCP Client'
+  'mcp-client': 'MCP Client',
+  'bootstrap': 'Getting Started',
+  'onboarding': 'Getting Started',
+  'release-notes': 'Core Platform',
+  'encryption': 'Core Platform',
+  'security': 'Core Platform',
+  'catalog': 'Core Platform',
+  'ci': 'Core Platform'
 };
 
 function pluginLabel(scope) {
   if (!scope) return 'General';
+  // Handle comma-separated multi-scopes: "core,salesforce" or "opspal-salesforce,opspal-core"
+  if (scope.includes(',')) {
+    const parts = scope.split(',').map((s) => s.trim().toLowerCase());
+    for (const part of parts) {
+      if (PLUGIN_LABELS[part]) return PLUGIN_LABELS[part];
+    }
+  }
   const lower = scope.toLowerCase();
-  return PLUGIN_LABELS[lower] || scope;
+  return PLUGIN_LABELS[lower] || capitalizeFirst(lower);
 }
 
 // ---------------------------------------------------------------------------
