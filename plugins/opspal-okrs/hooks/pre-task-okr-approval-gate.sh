@@ -120,6 +120,12 @@ if [[ -z "$REQUIRED_STATES" ]]; then
   exit 0
 fi
 
+# Fallback: read from shared state file if env var is empty (O3 fix)
+if [[ -z "${OKR_ACTIVE_CYCLE:-}" ]]; then
+    _STATE="${HOME}/.claude/session-state/session-init-state.env"
+    # shellcheck disable=SC1090
+    [[ -f "$_STATE" ]] && source "$_STATE" 2>/dev/null || true
+fi
 ORG_SLUG_VALUE="${ORG_SLUG:-$(extract_flag_value "$PROMPT" '--org')}"
 CYCLE_VALUE="${OKR_ACTIVE_CYCLE:-$(extract_flag_value "$PROMPT" '--cycle')}"
 

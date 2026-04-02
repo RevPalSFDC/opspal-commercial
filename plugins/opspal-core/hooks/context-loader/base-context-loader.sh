@@ -260,6 +260,12 @@ if [[ "$LIVE_FIRST" != "true" ]]; then
         export PLATFORM_CONTEXT="$CACHED_CONTEXT"
         export DETECTED_PLATFORM=$(echo "$CACHED_CONTEXT" | jq -r '.platform // "unknown"' 2>/dev/null || echo "unknown")
 
+        # Dual-write DETECTED_PLATFORM to shared state file (O3 fix)
+        _STATE_DIR="${HOME}/.claude/session-state"
+        mkdir -p "$_STATE_DIR" 2>/dev/null || true
+        printf 'DETECTED_PLATFORM=%s\n' "$DETECTED_PLATFORM" \
+            >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
+
         # Output for hook system
         echo '{}'
         exit 0
@@ -272,6 +278,12 @@ fi
 PLATFORM=$(detect_current_platform)
 log_verbose "Detected platform: $PLATFORM"
 export DETECTED_PLATFORM="$PLATFORM"
+
+# Dual-write DETECTED_PLATFORM to shared state file (O3 fix)
+_STATE_DIR="${HOME}/.claude/session-state"
+mkdir -p "$_STATE_DIR" 2>/dev/null || true
+printf 'DETECTED_PLATFORM=%s\n' "$PLATFORM" \
+    >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
 
 # Load common context
 COMMON_CONTEXT=$(load_common_context)

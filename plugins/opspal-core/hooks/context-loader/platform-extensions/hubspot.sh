@@ -105,19 +105,22 @@ get_portal_info() {
 
     # Check for cached portal info
     local cache_file="${TMPDIR:-/tmp}/hs-portal-info-${portal_id}.json"
-    local cache_ttl=3600  # 1 hour
+    local cache_ttl="${HS_CONTEXT_CACHE_TTL:-300}"  # 5 min (O9: aligned with platform plugin TTL)
 
-    if [[ -f "$cache_file" ]]; then
-        local cache_time now age
-        cache_time=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null || echo 0)
-        now=$(date +%s)
-        age=$((now - cache_time))
-
-        if [[ "$age" -lt "$cache_ttl" ]]; then
-            cat "$cache_file"
-            return
+    # O6: Check platform plugin cache first, then extension-specific cache
+    local platform_cache="${TMPDIR:-/tmp}/hs-portal-context.json"
+    for _cf in "$platform_cache" "$cache_file"; do
+        if [[ -f "$_cf" ]]; then
+            local cache_time now age
+            cache_time=$(stat -c %Y "$_cf" 2>/dev/null || stat -f %m "$_cf" 2>/dev/null || echo 0)
+            now=$(date +%s)
+            age=$((now - cache_time))
+            if [[ "$age" -lt "$cache_ttl" ]]; then
+                cat "$_cf"
+                return
+            fi
         fi
-    fi
+    done
 
     # For HubSpot, we need API access to get portal details
     # This would typically be done via MCP or direct API call

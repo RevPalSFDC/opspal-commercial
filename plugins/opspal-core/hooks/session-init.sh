@@ -325,6 +325,11 @@ log_verbose "Session initialization starting..."
 
 reset_task_scope_state
 
+# Clear shared state file from any previous session before loaders append to it (O3 fix)
+_SHARED_STATE="${HOME}/.claude/session-state/session-init-state.env"
+mkdir -p "$(dirname "$_SHARED_STATE")" 2>/dev/null || true
+: > "$_SHARED_STATE" 2>/dev/null || true
+
 # Run heavy subprocesses in parallel (writes to temp files, not arrays)
 load_scratchpad &
 check_version_compatibility &
@@ -332,6 +337,13 @@ initialize_platform &
 load_context &
 check_env_config &
 wait
+
+# Source shared state written by platform loaders — makes GTM_ACTIVE_CYCLE,
+# OKR_ACTIVE_CYCLE, DETECTED_PLATFORM, etc. available for sequential steps below (O3 fix)
+if [[ "${SESSION_INIT_SHARED_STATE:-1}" == "1" ]] && [[ -s "$_SHARED_STATE" ]]; then
+    # shellcheck disable=SC1090
+    source "$_SHARED_STATE" 2>/dev/null || true
+fi
 
 # Collect env config warnings from temp file (backgrounded check_env_config writes here)
 if [[ -f "$ENV_CONFIG_TMPFILE" ]]; then

@@ -105,19 +105,22 @@ get_instance_info() {
 
     # Check for cached instance info
     local cache_file="${TMPDIR:-/tmp}/mkto-instance-info-${instance}.json"
-    local cache_ttl=3600  # 1 hour
+    local cache_ttl="${MKTO_CONTEXT_CACHE_TTL:-300}"  # 5 min (O9: aligned with platform plugin TTL)
 
-    if [[ -f "$cache_file" ]]; then
-        local cache_time now age
-        cache_time=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null || echo 0)
-        now=$(date +%s)
-        age=$((now - cache_time))
-
-        if [[ "$age" -lt "$cache_ttl" ]]; then
-            cat "$cache_file"
-            return
+    # O6: Check platform plugin cache first, then extension-specific cache
+    local platform_cache="${TMPDIR:-/tmp}/mkto-instance-context.json"
+    for _cf in "$platform_cache" "$cache_file"; do
+        if [[ -f "$_cf" ]]; then
+            local cache_time now age
+            cache_time=$(stat -c %Y "$_cf" 2>/dev/null || stat -f %m "$_cf" 2>/dev/null || echo 0)
+            now=$(date +%s)
+            age=$((now - cache_time))
+            if [[ "$age" -lt "$cache_ttl" ]]; then
+                cat "$_cf"
+                return
+            fi
         fi
-    fi
+    done
 
     # For Marketo, return basic structure
     instance_info=$(jq -n \

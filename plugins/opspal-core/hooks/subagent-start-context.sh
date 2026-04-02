@@ -79,8 +79,20 @@ if [[ "${SUBAGENT_ORG_PREFLIGHT:-1}" == "1" ]]; then
 
             if [[ -n "$PROMPT_ORG" ]] && command -v sf &>/dev/null; then
                 # Quick check: does this alias exist in authenticated orgs?
-                # Use timeout to avoid blocking if sf is slow
-                ORG_LIST=$(timeout 5 sf org list --json 2>/dev/null || echo '{"result":[]}')
+                # Use cached org list (60s TTL) to avoid 5s CLI call per subagent launch (O5 optimization)
+                _ORG_LIST_CACHE="${TMPDIR:-/tmp}/sf-org-list-cache.json"
+                _ORG_LIST_TTL=60
+                _USE_CACHE=0
+                if [[ -f "$_ORG_LIST_CACHE" ]]; then
+                    _CACHE_AGE=$(( $(date +%s) - $(stat -c %Y "$_ORG_LIST_CACHE" 2>/dev/null || stat -f %m "$_ORG_LIST_CACHE" 2>/dev/null || echo 0) ))
+                    [[ "$_CACHE_AGE" -lt "$_ORG_LIST_TTL" ]] && _USE_CACHE=1
+                fi
+                if [[ "$_USE_CACHE" == "1" ]]; then
+                    ORG_LIST=$(cat "$_ORG_LIST_CACHE" 2>/dev/null || echo '{"result":[]}')
+                else
+                    ORG_LIST=$(timeout 5 sf org list --json 2>/dev/null || echo '{"result":[]}')
+                    echo "$ORG_LIST" > "$_ORG_LIST_CACHE" 2>/dev/null || true
+                fi
                 ALIAS_EXISTS=$(echo "$ORG_LIST" | jq -r --arg alias "$PROMPT_ORG" '
                     [.result[]? | select(.alias == $alias or .username == $alias)] | length
                 ' 2>/dev/null || echo "0")

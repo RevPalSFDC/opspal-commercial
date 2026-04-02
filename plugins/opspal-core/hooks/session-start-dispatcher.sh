@@ -149,6 +149,15 @@ run_child_hook "${PLUGIN_ROOT}/hooks/session-start-first-run.sh"
 # Phase 2: Primary session initialization
 run_child_hook "${PLUGIN_ROOT}/hooks/session-init.sh"
 
+# Phase 2b: Source shared state written by session-init.sh's platform loaders (O3 fix).
+# Propagates GTM_ACTIVE_CYCLE, OKR_ACTIVE_CYCLE, DETECTED_PLATFORM, etc.
+# to all subsequent child hooks in this dispatcher (envcheck, repo-sync, capture-init).
+_SHARED_STATE="${HOME}/.claude/session-state/session-init-state.env"
+if [[ "${SESSION_INIT_SHARED_STATE:-1}" == "1" ]] && [[ -s "$_SHARED_STATE" ]]; then
+    # shellcheck disable=SC1090
+    source "$_SHARED_STATE" 2>/dev/null || true
+fi
+
 # Phase 3: Early warning systems — detect failures before proceeding
 run_child_hook "${PLUGIN_ROOT}/hooks/pre-session-silent-failure-check.sh"
 

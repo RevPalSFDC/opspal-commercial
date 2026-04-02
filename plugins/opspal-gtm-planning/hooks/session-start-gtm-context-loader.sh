@@ -66,6 +66,15 @@ fi
 export GTM_ACTIVE_CYCLE="$ACTIVE_CYCLE"
 export GTM_ACTIVE_PHASE="$ACTIVE_PHASE"
 
+# Dual-write to shared state file (O3 fix, 2026-04-01)
+# Env export only reaches this subshell; file survives process boundary
+# so PreToolUse/PostToolUse hooks can read it later in the session.
+_STATE_DIR="${HOME}/.claude/session-state"
+mkdir -p "$_STATE_DIR" 2>/dev/null || true
+printf 'GTM_ACTIVE_CYCLE=%s\nGTM_ACTIVE_PHASE=%s\n' \
+    "$ACTIVE_CYCLE" "$ACTIVE_PHASE" \
+    >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
+
 # Print context banner
 echo "GTM Planning Context: org=${ORG_SLUG} | cycle=${ACTIVE_CYCLE} | phase=${ACTIVE_PHASE} | path=${ACTIVE_CYCLE_DIR}"
 

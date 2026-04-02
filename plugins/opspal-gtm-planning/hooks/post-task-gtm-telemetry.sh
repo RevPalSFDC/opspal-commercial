@@ -40,6 +40,12 @@ TELEMETRY_FILE="$TELEMETRY_DIR/gtm-telemetry.jsonl"
 
 # Build telemetry record
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+# Fallback: read from shared state file if env vars are empty (O3 fix)
+if [[ -z "${GTM_ACTIVE_CYCLE:-}" ]]; then
+    _STATE="${HOME}/.claude/session-state/session-init-state.env"
+    # shellcheck disable=SC1090
+    [[ -f "$_STATE" ]] && source "$_STATE" 2>/dev/null || true
+fi
 CYCLE="${GTM_ACTIVE_CYCLE:-unknown}"
 PHASE="${GTM_ACTIVE_PHASE:-unknown}"
 

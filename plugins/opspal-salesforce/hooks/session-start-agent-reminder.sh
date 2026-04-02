@@ -60,8 +60,8 @@ if command -v node &>/dev/null && [ -f "$ORG_CONTEXT_SCRIPT" ]; then
                 export SF_TARGET_ORG="$DETECTED_ORG"
                 export SF_ORG_SOURCE="$ORG_SOURCE"
 
-                # Save to temp file for cross-process access
-                echo "{\"alias\":\"$DETECTED_ORG\",\"source\":\"$ORG_SOURCE\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > "${_TMPDIR}/sf-org-context.json"
+                # Note: /tmp/sf-org-context.json is written by session-start-sf-context.sh
+                # Writing here was redundant and created a race condition (O8 optimization, 2026-04-01).
 
                 # Log detection (only in verbose mode)
                 if [ "${VERBOSE:-0}" = "1" ]; then

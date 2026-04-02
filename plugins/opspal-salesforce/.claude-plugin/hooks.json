@@ -8,7 +8,7 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-dispatcher.sh",
             "timeout": 60,
-            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher — dispatcher fast-exits for non-SF commands within ~1ms"
+            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher \u2014 dispatcher fast-exits for non-SF commands within ~1ms"
           }
         ]
       }
@@ -19,15 +19,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-agent-reminder.sh",
-            "timeout": 5,
-            "description": "Initialize session with temp directories and agent reminders"
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-context-loader.sh",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-sf-context.sh",
             "timeout": 10,
-            "description": "Load org context from working directory, config files, and environment"
+            "description": "Canonical SF org detection \u2014 writes /tmp/sf-org-context.json (O1 consolidation)"
           }
         ]
       }

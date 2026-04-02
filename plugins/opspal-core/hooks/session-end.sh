@@ -123,6 +123,12 @@ clear_session_cache() {
 # =============================================================================
 
 platform_cleanup() {
+    # Fallback: read from shared state file if env var is empty (O3 fix)
+    if [[ -z "${DETECTED_PLATFORM:-}" ]]; then
+        _STATE="${HOME}/.claude/session-state/session-init-state.env"
+        # shellcheck disable=SC1090
+        [[ -f "$_STATE" ]] && source "$_STATE" 2>/dev/null || true
+    fi
     local platform="${DETECTED_PLATFORM:-unknown}"
 
     case "$platform" in
@@ -160,7 +166,7 @@ write_session_summary() {
     # Write minimal session summary
     jq -n \
         --arg end_time "$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S')" \
-        --arg platform "${DETECTED_PLATFORM:-unknown}" \
+        --arg platform "${platform:-${DETECTED_PLATFORM:-unknown}}" \
         --arg project_root "${PWD}" \
         '{
             endTime: $end_time,
@@ -184,6 +190,9 @@ cleanup_temp_files
 clear_session_cache
 platform_cleanup
 write_session_summary
+
+# Clean up shared state file from this session (O3 fix)
+rm -f "${HOME}/.claude/session-state/session-init-state.env" 2>/dev/null || true
 
 log_verbose "Session cleanup complete"
 

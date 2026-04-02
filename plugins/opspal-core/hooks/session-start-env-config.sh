@@ -434,41 +434,34 @@ fi
 # ORG_SLUG AUTO-DETECTION FROM WORKING DIRECTORY
 # ============================================================================
 
-# Auto-detect ORG_SLUG from working directory if not already set
+# Primary ORG_SLUG detection now happens in session-start-dispatcher.sh (O4 fix,
+# 2026-04-01) where the export runs in the parent process. This block is a fallback
+# for non-dispatcher execution contexts only.
 if [ -z "${ORG_SLUG:-}" ] && [ -z "${CLIENT_ORG:-}" ]; then
     CURRENT_DIR="$(pwd)"
-
-    # Pattern: .../orgs/<org-name>/... or .../orgs/<org-name>
     if [[ "$CURRENT_DIR" =~ /orgs/([^/]+) ]]; then
         DETECTED_ORG="${BASH_REMATCH[1]}"
-
-        # Validate: check if org directory exists
         ORG_DIR="${CURRENT_DIR%%/orgs/${DETECTED_ORG}*}/orgs/${DETECTED_ORG}"
-
         if [ -d "$ORG_DIR" ]; then
             export ORG_SLUG="$DETECTED_ORG"
             export CLIENT_ORG="$DETECTED_ORG"
-            echo "" >&2
-            echo "✨ Auto-detected client: $DETECTED_ORG" >&2
-            echo "   Work-index auto-capture enabled for this session." >&2
-            echo "" >&2
+            log_verbose "Fallback ORG_SLUG detection: $DETECTED_ORG"
         fi
     fi
-fi
-
-# Only show tip if ORG_SLUG still not set after auto-detection
-if [ -z "${ORG_SLUG:-}" ] && [ -z "${CLIENT_ORG:-}" ]; then
-    echo "" >&2
-    echo "💡 TIP: Set ORG_SLUG to enable work-index auto-capture:" >&2
-    echo "   export ORG_SLUG=<client-org-name>" >&2
-    echo "   Or navigate to orgs/<client>/ for auto-detection." >&2
-    echo "" >&2
 fi
 
 # Export validation state for use by other scripts
 export ENV_VALIDATION_ERROR_COUNT="$ERROR_COUNT"
 export ENV_VALIDATION_WARNING_COUNT="$WARNING_COUNT"
 export ENV_VALIDATION_PASSED=$( [ $ERROR_COUNT -eq 0 ] && echo "true" || echo "false" )
+
+# Dual-write validation state to shared state file (O3 fix, 2026-04-01)
+_STATE_DIR="${HOME}/.claude/session-state"
+mkdir -p "$_STATE_DIR" 2>/dev/null || true
+printf 'ENV_VALIDATION_ERROR_COUNT=%s\nENV_VALIDATION_WARNING_COUNT=%s\nENV_VALIDATION_PASSED=%s\n' \
+    "$ERROR_COUNT" "$WARNING_COUNT" \
+    "$( [ $ERROR_COUNT -eq 0 ] && echo "true" || echo "false" )" \
+    >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
 
 # Log success if verbose
 if [ $ERROR_COUNT -eq 0 ] && [ "$VERBOSE" == "1" ]; then

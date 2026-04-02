@@ -54,8 +54,13 @@ CONTEXT_FILE="${MARKETO_PLUGIN_ROOT}/portals/${INSTANCE_NAME}/INSTANCE_CONTEXT.j
 if [ -f "$CONTEXT_FILE" ]; then
     log_info "Loaded context for instance: ${INSTANCE_NAME}"
 
-    # Export context for agents
-    export MARKETO_INSTANCE_CONTEXT="$CONTEXT_FILE"
+    # Export context as JSON blob (aligned with SF_ORG_CONTEXT and PORTAL_CONTEXT convention).
+    # Previously exported the file path string; normalized to JSON in O10 optimization (2026-04-01).
+    CONTEXT_JSON=$(cat "$CONTEXT_FILE" 2>/dev/null || echo '{}')
+    export MARKETO_INSTANCE_CONTEXT="$CONTEXT_JSON"
+
+    # Also write to shared cache for cross-process access
+    echo "$CONTEXT_JSON" > "${TMPDIR:-/tmp}/mkto-instance-context.json" 2>/dev/null || true
 fi
 
 # Validate authentication (unless skipped)

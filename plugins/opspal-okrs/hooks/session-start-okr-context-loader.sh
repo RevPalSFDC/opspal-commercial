@@ -53,6 +53,12 @@ fi
 # Export for downstream agents
 export OKR_ACTIVE_CYCLE="$ACTIVE_CYCLE"
 
+# Dual-write to shared state file (O3 fix, 2026-04-01)
+_STATE_DIR="${HOME}/.claude/session-state"
+mkdir -p "$_STATE_DIR" 2>/dev/null || true
+printf 'OKR_ACTIVE_CYCLE=%s\n' "$ACTIVE_CYCLE" \
+    >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
+
 # Print context banner
 echo "OKR Context: org=${ORG_SLUG} | active_cycle=${ACTIVE_CYCLE} | path=${ACTIVE_CYCLE_DIR}"
 

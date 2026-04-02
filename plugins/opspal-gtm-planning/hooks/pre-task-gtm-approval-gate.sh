@@ -120,6 +120,13 @@ fi
 # Find cycle state
 GTM_BASE="${CLAUDE_PROJECT_ROOT:-$(pwd)}/orgs/${ORG_SLUG}/platforms/gtm-planning"
 CYCLE_DIR="${GTM_ACTIVE_CYCLE:-}"
+# Fallback: read from shared state file if env var is empty (O3 fix)
+if [[ -z "$CYCLE_DIR" ]]; then
+    _STATE="${HOME}/.claude/session-state/session-init-state.env"
+    # shellcheck disable=SC1090
+    [[ -f "$_STATE" ]] && source "$_STATE" 2>/dev/null || true
+    CYCLE_DIR="${GTM_ACTIVE_CYCLE:-}"
+fi
 STATE_FILE=""
 
 if [[ -n "$CYCLE_DIR" ]] && [[ -f "$GTM_BASE/$CYCLE_DIR/cycle-state.json" ]]; then
