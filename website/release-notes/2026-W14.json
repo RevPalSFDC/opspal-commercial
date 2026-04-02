@@ -1,17 +1,17 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on platform stability improvements that make OpsPal more reliable for your daily workflows. We fixed several issues that were preventing Salesforce and HubSpot automations from running properly, and improved how the system handles complex deployment processes. These behind-the-scenes fixes ensure your revenue operations run smoothly without interruption.",
-  "published_at": "2026-04-02T00:58:57.190Z",
+  "summary": "This week focused on critical infrastructure improvements that enhance platform reliability. We restored access to historical weeks W12 and W13, fixed deployment issues that were blocking Salesforce workflows, and resolved a critical problem that prevented HubSpot automations from launching properly.",
+  "published_at": "2026-04-02T01:15:44.337Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 88,
+  "total_commits": 92,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Restored missing historical data from weeks 12 and 13",
+      "headline": "Restored access to historical weeks W12 and W13",
       "details": null,
       "commits": [
         "fe104ff"
@@ -22,18 +22,18 @@
       "plugin": "Salesforce",
       "headline": "Improved Salesforce field validation and deployment reliability",
       "details": [
-        "Better detection of State/Country picklist configurations that can cause workflow errors",
-        "Enhanced permission checking during Salesforce deployments",
-        "More reliable handling of complex deployment processes"
+        "Better detection of State/Country field configuration issues",
+        "Enhanced permission checking during deployments",
+        "More reliable workflow deployment process"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Enhanced Salesforce deployment workflow management",
+      "headline": "Enhanced Salesforce multi-step deployment workflows",
       "details": null,
       "commits": [
         "a1075f7"
@@ -42,8 +42,10 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Resolved HubSpot automation startup issues",
-      "details": null,
+      "headline": "Restored HubSpot automation functionality",
+      "details": [
+        "Fixed critical issue preventing HubSpot automations from launching"
+      ],
       "commits": [
         "c53235d"
       ]
