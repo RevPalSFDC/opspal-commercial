@@ -105,6 +105,35 @@ async function runAllTests() {
     }
   }));
 
+  results.push(await runTest('Finds staging runbook via WORKSPACE_ROOT', async () => {
+    const orgSlug = `hook-staging-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const orgRoot = path.join(PROJECT_ROOT, 'orgs', orgSlug);
+    const stagingDir = path.join(orgRoot, 'platforms', 'salesforce', 'staging');
+
+    fs.mkdirSync(stagingDir, { recursive: true });
+    fs.writeFileSync(path.join(stagingDir, 'RUNBOOK.md'), '# Staging Runbook\nOpportunity Type rules.\n', 'utf8');
+
+    try {
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'SubagentStart',
+          agent_type: 'opspal-core:solution-runbook-generator'
+        },
+        env: {
+          ORG_SLUG: orgSlug,
+          WORKSPACE_ROOT: PROJECT_ROOT
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      const context = result.output?.hookSpecificOutput?.additionalContext || '';
+      assert(context.includes(`RUNBOOK (${orgSlug})`), 'Should find staging runbook');
+      assert(context.includes('staging/RUNBOOK.md'), 'Should reference staging path');
+    } finally {
+      fs.rmSync(orgRoot, { recursive: true, force: true });
+    }
+  }));
+
   results.push(await runTest('Injects scoped plugin guidance for Salesforce agents', async () => {
     const result = await tester.run({
       input: {

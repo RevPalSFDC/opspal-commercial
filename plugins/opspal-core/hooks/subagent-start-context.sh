@@ -16,9 +16,10 @@
 #
 # Timeout: 10000ms
 #
-# Version: 1.1.0
+# Version: 1.2.0
 # Created: 2026-02-06
-# Updated: 2026-03-24 - Added org alias pre-flight validation
+# Updated: 2026-04-02 - Fix workspace detection (was resolving to marketplace dir),
+#                        auto-detect ORG_SLUG from CWD, add staging/ runbook paths
 
 set -euo pipefail
 
@@ -29,8 +30,31 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
 TASK_SCOPE_SELECTOR="$PLUGIN_ROOT/scripts/lib/task-scope-selector.js"
+
+# Resolve workspace root: prefer explicit env, fall back to CWD.
+# The old PROJECT_ROOT derived from plugin install path pointed to the
+# marketplace directory, not the user's workspace where orgs/ lives.
+if [[ -n "${WORKSPACE_ROOT:-}" ]]; then
+    PROJECT_ROOT="$WORKSPACE_ROOT"
+elif [[ -d "$PWD/orgs" ]]; then
+    PROJECT_ROOT="$PWD"
+else
+    # Walk up from CWD to find nearest directory containing orgs/
+    _walk="$PWD"
+    PROJECT_ROOT=""
+    while [[ "$_walk" != "/" ]]; do
+        if [[ -d "$_walk/orgs" ]]; then
+            PROJECT_ROOT="$_walk"
+            break
+        fi
+        _walk="$(dirname "$_walk")"
+    done
+    # Final fallback: marketplace-relative (legacy behavior)
+    if [[ -z "$PROJECT_ROOT" ]]; then
+        PROJECT_ROOT="$(cd "$PLUGIN_ROOT/../.." && pwd)"
+    fi
+fi
 
 emit_noop_json() {
   printf '{}\n'
@@ -127,16 +151,24 @@ if [[ "${RUNBOOK_REMINDER_ENABLED:-1}" == "1" ]]; then
     SF_TARGET_ORG="${SF_TARGET_ORG:-}"
     ORG="${ORG_SLUG:-$SF_TARGET_ORG}"
 
+    # Auto-detect org slug from CWD path if not explicitly set.
+    # Matches patterns like /orgs/<slug>/ or /orgs/<slug> at end of path.
+    if [[ -z "$ORG" ]]; then
+        ORG=$(echo "$PWD" | grep -oP '(?<=/orgs/)[^/]+' | head -1 || true)
+    fi
+
     if [[ -n "$ORG" ]]; then
         RUNBOOK_PATHS=(
             "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/production/configs/RUNBOOK.md"
             "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/production/RUNBOOK.md"
+            "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/staging/configs/RUNBOOK.md"
+            "$PROJECT_ROOT/orgs/$ORG/platforms/salesforce/staging/RUNBOOK.md"
             "$PROJECT_ROOT/orgs/$ORG/RUNBOOK.md"
         )
 
         for rb_path in "${RUNBOOK_PATHS[@]}"; do
             if [[ -f "$rb_path" ]]; then
-                CONTEXT_PARTS+=("RUNBOOK ($ORG): Review before proceeding. Path: $rb_path")
+                CONTEXT_PARTS+=("RUNBOOK ($ORG): Review before proceeding — contains org-specific field definitions, opportunity type rules, and renewal determination logic. Path: $rb_path")
                 break
             fi
         done
@@ -147,7 +179,7 @@ fi
 
 # ─── 3. Field Dictionary Injection ─────────────────────────────────────────
 if [[ "${FIELD_DICT_INJECTION_ENABLED:-1}" == "1" ]]; then
-    ORG_SLUG="${ORG_SLUG:-}"
+    ORG_SLUG="${ORG_SLUG:-$ORG}"
 
     # Only inject for reporting/assessment agents
     REPORTING_AGENTS="sfdc-reports-dashboards|sfdc-report-designer|pipeline-intelligence|unified-exec-dashboard|gtm-strategic-reports|gtm-retention-analyst|sfdc-revops-auditor|sfdc-cpq-assessor|sfdc-dashboard-designer"
@@ -162,7 +194,7 @@ fi
 
 # ─── 4. Work Context ──────────────────────────────────────────────────────
 if [[ "${WORK_CONTEXT_ENABLED:-1}" == "1" ]]; then
-    ORG_SLUG="${ORG_SLUG:-}"
+    ORG_SLUG="${ORG_SLUG:-$ORG}"
 
     if [[ -n "$ORG_SLUG" ]]; then
         WORK_INDEX="$PROJECT_ROOT/orgs/$ORG_SLUG/WORK_INDEX.yaml"

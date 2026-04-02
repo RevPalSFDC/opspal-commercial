@@ -1073,6 +1073,10 @@ function isStalePluginHook(cmd) {
   const matchesPluginHook = pluginHookPatterns.some((pattern) => pattern.test(cmd));
   if (!matchesPluginHook) return false;
   if (strict) return true;
+  // Hooks from the deprecated revpal-internal-plugins marketplace are always
+  // stale, even when env-prefixed (they were registered via the old plugin's
+  // hooks.json and point to paths that no longer exist).
+  if (/revpal-internal-plugins/.test(cmd)) return true;
   return !cmd.startsWith('env ');
 }
 
