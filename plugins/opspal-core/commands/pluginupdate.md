@@ -19,7 +19,7 @@ find_plugin_script() {
   local search_paths=(
     "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/lib/$script_name}"
     "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib/$script_name"
-    "$HOME/.claude/plugins/marketplaces/revpal-internal-plugins/plugins/opspal-core/scripts/lib/$script_name"
+    "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib/$script_name"
     "$PWD/plugins/opspal-core/scripts/lib/$script_name"
     "$PWD/.claude-plugins/opspal-core/scripts/lib/$script_name"
     "./plugins/opspal-core/scripts/lib/$script_name"

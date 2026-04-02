@@ -8,7 +8,7 @@
 ```bash
 # Install
 /plugin marketplace add RevPalSFDC/opspal-plugin-internal-marketplace
-/plugin install opspal-core@revpal-internal-plugins
+/plugin install opspal-core@opspal-commercial
 
 # Verify
 /agents | grep -E "diagram|asana|funnel"

@@ -24,7 +24,7 @@ find_migration_script() {
     "${CLAUDE_PLUGIN_ROOT:-}/../../scripts/migrate-to-client-centric.js"
     "plugins/opspal-core/scripts/migrate-to-client-centric.js"
     ".claude-plugins/opspal-core/scripts/migrate-to-client-centric.js"
-    "$HOME/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/migrate-to-client-centric.js"
+    "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/migrate-to-client-centric.js"
   )
   for path in "${search_paths[@]}"; do
     [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0

@@ -30,8 +30,8 @@ find_init_script() {
     "plugins/opspal-hubspot/scripts/lib/initialize-project.js"
     ".claude-plugins/opspal-salesforce/scripts/lib/initialize-project.js"
     ".claude-plugins/opspal-hubspot/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-salesforce@revpal-internal-plugins/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-hubspot@revpal-internal-plugins/scripts/lib/initialize-project.js"
+    "$HOME/.claude/plugins/opspal-salesforce@opspal-commercial/scripts/lib/initialize-project.js"
+    "$HOME/.claude/plugins/opspal-hubspot@opspal-commercial/scripts/lib/initialize-project.js"
   )
   for path in "${search_paths[@]}"; do
     [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0
@@ -266,8 +266,8 @@ SCRIPT_PATHS=(
     "plugins/opspal-hubspot/scripts/lib/initialize-project.js"
     ".claude-plugins/opspal-salesforce/scripts/lib/initialize-project.js"
     ".claude-plugins/opspal-hubspot/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-salesforce@revpal-internal-plugins/scripts/lib/initialize-project.js"
-    "$HOME/.claude/plugins/opspal-hubspot@revpal-internal-plugins/scripts/lib/initialize-project.js"
+    "$HOME/.claude/plugins/opspal-salesforce@opspal-commercial/scripts/lib/initialize-project.js"
+    "$HOME/.claude/plugins/opspal-hubspot@opspal-commercial/scripts/lib/initialize-project.js"
 )
 
 for path in "${SCRIPT_PATHS[@]}"; do
@@ -289,9 +289,9 @@ After initialization:
 No plugins are installed. Install first:
 ```bash
 # Run in a regular terminal (outside Claude Code session)
-claude plugin install salesforce-plugin@revpal-internal-plugins
+claude plugin install opspal-salesforce@opspal-commercial
 # or
-claude plugin install hubspot-plugin@revpal-internal-plugins
+claude plugin install opspal-hubspot@opspal-commercial
 ```
 
 ### "CLAUDE.md already exists"

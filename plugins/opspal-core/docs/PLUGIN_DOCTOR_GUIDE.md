@@ -68,7 +68,7 @@ Fast validation of plugins and MCP connectivity (< 2 seconds).
 
 ✅ **After Plugin Installation**
 ```bash
-/plugin install opspal-salesforce@revpal-internal-plugins
+/plugin install opspal-salesforce@opspal-commercial
 /plugindr --quick
 ```
 
@@ -465,7 +465,7 @@ echo "✅ Plugin health check passed"
 /plugin list
 
 # Reinstall if needed
-/plugin install opspal-core@revpal-internal-plugins
+/plugin install opspal-core@opspal-commercial
 
 # Verify installation
 /agents | grep plugin-doctor

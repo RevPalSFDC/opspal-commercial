@@ -240,7 +240,7 @@ This ensures infrastructure problems are tracked, prioritized, and resolved quic
 ### Example 1: Post-Installation Check
 ```bash
 # After installing a new plugin
-/plugin install opspal-salesforce@revpal-internal-plugins
+/plugin install opspal-salesforce@opspal-commercial
 
 # Verify installation
 /plugindr --quick
@@ -301,7 +301,7 @@ This ensures infrastructure problems are tracked, prioritized, and resolved quic
 /plugin list
 
 # Reinstall if needed
-/plugin install opspal-core@revpal-internal-plugins
+/plugin install opspal-core@opspal-commercial
 ```
 
 ### Diagnostics Fail to Run

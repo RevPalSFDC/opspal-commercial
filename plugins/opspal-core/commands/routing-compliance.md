@@ -42,7 +42,7 @@ find_plugin_script() {
     "${CLAUDE_PLUGIN_ROOT:-}/scripts/lib/$script_name"
     "plugins/opspal-core/scripts/lib/$script_name"
     ".claude-plugins/opspal-core/scripts/lib/$script_name"
-    "$HOME/.claude/plugins/opspal-core@revpal-internal-plugins/scripts/lib/$script_name"
+    "$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/scripts/lib/$script_name"
   )
   for path in "${search_paths[@]}"; do
     [ -n "$path" ] && [ -f "$path" ] && echo "$path" && return 0

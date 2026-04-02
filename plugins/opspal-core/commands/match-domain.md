@@ -47,7 +47,7 @@ Match data using industry-specific abbreviation dictionaries. The system automat
 RESOLVE_SCRIPT=""
 for _candidate in \
   "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
-  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/cache/opspal-commercial/opspal-core"/*/scripts/resolve-script.sh \
   "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
   "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
   "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do

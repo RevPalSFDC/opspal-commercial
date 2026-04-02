@@ -775,7 +775,7 @@ This ensures infrastructure issues are:
 
 ```bash
 # After installing a new plugin
-/plugin install opspal-salesforce@revpal-internal-plugins
+/plugin install opspal-salesforce@opspal-commercial
 
 # Verify installation
 /doctor --quick

@@ -21,7 +21,7 @@ Show where plugins are actually installed. Use this when scripts fail with `MODU
 RESOLVE_SCRIPT=""
 for _candidate in \
   "${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/resolve-script.sh}" \
-  "$HOME/.claude/plugins/cache/revpal-internal-plugins/opspal-core"/*/scripts/resolve-script.sh \
+  "$HOME/.claude/plugins/cache/opspal-commercial/opspal-core"/*/scripts/resolve-script.sh \
   "$HOME/.claude/plugins/marketplaces"/*/plugins/opspal-core/scripts/resolve-script.sh \
   "$PWD/plugins/opspal-core/scripts/resolve-script.sh" \
   "$PWD/.claude-plugins/opspal-core/scripts/resolve-script.sh"; do
@@ -82,7 +82,7 @@ Workspace paths:
   plugins/opspal-salesforce    -> /home/user/project/plugins/opspal-salesforce
 
 Cache paths:
-  opspal-core/2.39.1           -> ~/.claude/plugins/cache/revpal-internal-plugins/opspal-core/2.39.1
+  opspal-core/2.39.1           -> ~/.claude/plugins/cache/opspal-commercial/opspal-core/2.39.1
 
 Environment:
   CLAUDE_PLUGIN_ROOT: /home/user/project/plugins/opspal-core

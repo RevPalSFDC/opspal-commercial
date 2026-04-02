@@ -675,7 +675,7 @@ fi
 
 # Marketplace and relative fallbacks
 SCRIPT_PATHS+=(
-    "${HOME}/.claude/plugins/opspal-core@revpal-internal-plugins"
+    "${HOME}/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core"
     "./plugins/opspal-core"
     "./.claude-plugins/opspal-core"
 )
@@ -733,7 +733,7 @@ node "$PLUGIN_ROOT/scripts/lib/submit-reflection.js" <reflection-path>
 
 **Path Resolution**:
 - PLUGIN_ROOT was set in Step 0 and contains the plugin installation directory
-- Works in both development (.claude-plugins/opspal-core/) and marketplace installations (~/.claude/plugins/opspal-core@revpal-internal-plugins/)
+- Works in both development (.claude-plugins/opspal-core/) and marketplace installations (~/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/)
 - Never use hardcoded paths - always use $PLUGIN_ROOT for portability
 
 **If submission succeeds**:
