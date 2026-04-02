@@ -24,6 +24,6 @@
 | `opspal-marketo` | 2.6.31 | active | 30 | 30 | 23 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic au... |
 | `opspal-monday` | 1.4.9 | experimental | 6 | 1 | 2 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export,... |
 | `opspal-okrs` | 3.0.11 | active | 14 | 14 | 4 | Data-driven OKR generation from live revenue data |
-| `opspal-salesforce` | 3.86.23 | active | 94 | 59 | 45 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with a... |
+| `opspal-salesforce` | 3.87.0 | active | 94 | 59 | 45 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with a... |
 
 _End of auto-generated suite catalog._

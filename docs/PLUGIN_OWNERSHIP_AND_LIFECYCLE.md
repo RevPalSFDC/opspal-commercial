@@ -30,6 +30,6 @@
 | `opspal-marketo` | 2.6.31 | `active` | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-monday` | 1.4.9 | `experimental` | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-okrs` | 3.0.11 | `active` | `revpal-strategy` | `experimental` | `2026-03-10` | _unset_ | _unset_ |
-| `opspal-salesforce` | 3.86.23 | `active` | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-salesforce` | 3.87.0 | `active` | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 
 _End of auto-generated ownership and lifecycle report._
