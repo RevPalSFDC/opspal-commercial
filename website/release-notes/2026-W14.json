@@ -1,13 +1,22 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on improving system reliability and fixing issues that were preventing smooth operations. We enhanced data import resilience, fixed display consistency issues across plugins, and resolved several Salesforce deployment problems. Most importantly, we restored missing functionality in HubSpot that was blocking automation launches and improved error recovery for Salesforce deployments.",
-  "published_at": "2026-04-02T23:37:39.861Z",
+  "summary": "This week brought significant improvements to data reliability and platform stability. OpsPal now offers enhanced Salesforce deployment recovery capabilities and better data import resilience, ensuring your revenue operations workflows run more smoothly even when unexpected issues arise. The platform also expanded its skill catalog and improved deployment handling across all integrated systems.",
+  "published_at": "2026-04-02T23:58:54.403Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 111,
+  "total_commits": 113,
   "entries": [
+    {
+      "category": "new",
+      "plugin": "Core Platform",
+      "headline": "Expanded skill catalog with 683 available skills across 25 categories",
+      "details": null,
+      "commits": [
+        "ef2ee1a"
+      ]
+    },
     {
       "category": "improved",
       "plugin": "General",
@@ -18,9 +27,9 @@
       ]
     },
     {
-      "category": "improved",
+      "category": "new",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now recover better from errors",
+      "headline": "Salesforce deployments now automatically recover from errors",
       "details": null,
       "commits": [
         "48d4393"
@@ -29,7 +38,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Plugin names now display consistently across the platform",
+      "headline": "Plugin labels now display consistently across the platform",
       "details": null,
       "commits": [
         "510f9cc"
@@ -38,16 +47,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Headlines now format properly in all views",
-      "details": null,
-      "commits": [
-        "67a2961"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Restored missing historical data from previous weeks",
+      "headline": "Historical data from weeks 12 and 13 is now accessible again",
       "details": null,
       "commits": [
         "fe104ff"
@@ -56,11 +56,11 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce field validation and deployment permissions",
+      "headline": "Better Salesforce state and country field detection with improved deployment validation",
       "details": [
-        "Now detects State/Country picklist configuration issues",
-        "Improved validation checks before deploying changes",
-        "Enhanced retry logic for failed operations"
+        "Automatically detects state and country picklist configurations",
+        "Enhanced deployment permission checking",
+        "Improved workflow retry capabilities"
       ],
       "commits": [
         "fcad945"
@@ -69,7 +69,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now run more reliably",
+      "headline": "Multi-step Salesforce deployments now follow optimized workflow paths",
       "details": null,
       "commits": [
         "a1075f7"
@@ -78,28 +78,10 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot automation launches after system failure",
+      "headline": "HubSpot workflows now launch properly without configuration errors",
       "details": null,
       "commits": [
         "c53235d"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "Resolved Salesforce validation errors during data queries",
-      "details": null,
-      "commits": [
-        "fb2b10d"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Restored workflow context for sub-processes",
-      "details": null,
-      "commits": [
-        "614c752"
       ]
     }
   ]
