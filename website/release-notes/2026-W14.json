@@ -1,17 +1,26 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought significant improvements to Salesforce deployment reliability, with new error recovery features and better handling of complex workflows. We also enhanced platform stability across all integrations and fixed several issues that were preventing smooth operation of HubSpot and other connections.",
-  "published_at": "2026-04-02T21:30:03.658Z",
+  "summary": "This week focused on improving platform reliability and data handling capabilities. We enhanced data import resilience to better handle unexpected data formats, improved Salesforce deployment recovery when errors occur, and strengthened our ability to detect and work around Salesforce configuration quirks like State/Country picklists. Several behind-the-scenes fixes ensure smoother automation execution and more consistent platform performance.",
+  "published_at": "2026-04-02T22:17:48.828Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 105,
+  "total_commits": 107,
   "entries": [
+    {
+      "category": "improved",
+      "plugin": "General",
+      "headline": "Enhanced data import reliability and workflow enrichment",
+      "details": null,
+      "commits": [
+        "b8f0ed3"
+      ]
+    },
     {
       "category": "new",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments automatically recover from errors",
+      "headline": "Salesforce deployments now automatically recover from errors",
       "details": null,
       "commits": [
         "48d4393"
@@ -20,7 +29,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Plugin names display consistently across the platform",
+      "headline": "Plugin names now display consistently across the platform",
       "details": null,
       "commits": [
         "510f9cc"
@@ -29,27 +38,28 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Historical data from weeks 12 and 13 now accessible again",
+      "headline": "Restored missing historical data from weeks 12 and 13",
       "details": null,
       "commits": [
         "fe104ff"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments handle state and country fields better",
+      "headline": "Better detection of Salesforce State and Country picklist configurations",
       "details": [
-        "OpsPal now detects when Salesforce orgs use state and country picklists and adjusts deployment processes accordingly"
+        "OpsPal now identifies when your Salesforce org uses State/Country picklists and adjusts validation accordingly",
+        "Deployment workflows are more reliable with improved permission checking and retry logic"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments run more reliably",
+      "headline": "Salesforce multi-step deployments now run more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -58,7 +68,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations launch successfully again",
+      "headline": "Resolved HubSpot connection issues preventing automation launches",
       "details": null,
       "commits": [
         "c53235d"
