@@ -1,7 +1,7 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": null,
+  "summary": "Resilient deployment error recovery, data import safety improvements, and platform stability fixes across Salesforce, HubSpot, and Core.",
   "published_at": "2026-04-02T22:54:57.035Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
@@ -10,97 +10,54 @@
   "entries": [
     {
       "category": "new",
-      "plugin": "General",
-      "headline": "Address reflection gaps — data import resilience, runbook enrichment, GWS auth",
-      "details": null,
+      "plugin": "Salesforce",
+      "headline": "Resilient deployment error recovery",
+      "details": [
+        "Deploy commands now have a process-level timeout guard (300s default) to prevent indefinite hangs",
+        "Pre-deploy check detects in-progress or queued deployments on the target org before starting a new one",
+        "Deployment manager uses async polling instead of synchronous waits for all deploy operations",
+        "Five new deploy-specific error patterns (timeout, metadata lock, component failure, test failure, queued) with actionable recovery guidance",
+        "SOQL field errors now propagate warnings to downstream deploy attempts on the same object",
+        "Orphaned deployments are detected and surfaced when the deployment agent stops unexpectedly"
+      ],
+      "commits": [
+        "48d4393"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Salesforce",
+      "headline": "Smarter data import safety checks",
+      "details": [
+        "Pre-import flow impact assessment identifies record-triggered flows that will fire on bulk INSERT and estimates side effects",
+        "Validation Rule state divergence check compares active VRs in the org against local source XML before imports",
+        "Industry-aware fuzzy matching raises thresholds to 0.90+ for property management and similar industries with formulaic company names"
+      ],
       "commits": [
         "b8f0ed3"
       ]
     },
     {
       "category": "new",
-      "plugin": "Salesforce",
-      "headline": "Resilient deployment error recovery",
-      "details": null,
-      "commits": [
-        "48d4393"
-      ]
-    },
-    {
-      "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fix runbook injection and stale hook cleanup (v2.50.8)",
-      "details": null,
-      "commits": [
-        "cdfc24d"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Normalize plugin labels for display consistency",
-      "details": null,
-      "commits": [
-        "510f9cc"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Ensure headline capitalization after LLM rewrite",
-      "details": null,
-      "commits": [
-        "67a2961"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Restore historical weeks W12 and W13",
-      "details": null,
-      "commits": [
-        "fe104ff"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Critical",
-      "headline": "Replace all hardcoded revpal-internal-plugins paths with opspal-commercial",
+      "headline": "Runbook enrichment with assessment findings",
       "details": [
-        "canonical-routing-registry.js (1) — MARKETPLACE_CORE_PATH constant",
-        "agent-tool-registry.js (2) — resolvePluginRoot + routing index candidates",
-        "resolve-script.sh (3) — find_script, find_ci_script, find_hook"
+        "Runbook synthesizer now accepts supplemental data (--supplemental flag) for detailed assessment findings",
+        "Assessment hooks automatically write findings to a supplemental directory for richer runbook synthesis",
+        "Google Workspace auth pre-flight check prevents mid-operation token expiry failures"
       ],
       "commits": [
-        "2842042"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Update plugin-update-fixes to expect dispatcher instead of unified-router",
-      "details": null,
-      "commits": [
-        "8101d28"
-      ]
-    },
-    {
-      "category": "new",
-      "plugin": "Core Platform",
-      "headline": "Add marketplace pull to /finishopspalupdate (v2.48.4)",
-      "details": null,
-      "commits": [
-        "d4d0188"
+        "b8f0ed3"
       ]
     },
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "State/Country picklist detection, deploy path enforcement, orchestrator retry (v3.86.19)",
+      "headline": "State/Country picklist detection and deploy path enforcement",
       "details": [
-        "Add State/Country Picklist confusion detection to flow-field-reference-validator",
-        "Enable checkPermissions in both deploy hooks (pre-deploy-flow-validation.sh,",
-        "Add detectStateCountryPicklists to org-quirks-detector.js"
+        "Flow field reference validator now detects State/Country picklist confusion",
+        "Deploy hooks enforce permission checks consistently",
+        "Orchestrator retry logic improved for multi-step workflows"
       ],
       "commits": [
         "fcad945"
@@ -108,59 +65,43 @@
     },
     {
       "category": "fixed",
-      "plugin": "All-plugins",
-      "headline": "Add Grep to Bash-entitled agents, remove patterned Bash disallowedTools",
+      "plugin": "Core Platform",
+      "headline": "Routing and hook stability improvements",
       "details": [
-        "Added Grep to 94 agents that had Bash but not Grep in their tools list.",
-        "Removed patterned Bash(pattern:*) disallowedTools entries from 103 agents."
+        "All routing enforcement converted to advisory-only — hooks provide guidance but never block tool execution",
+        "Stale marketplace path references replaced across all plugins",
+        "Runbook context injection and subagent context loading restored",
+        "Startup no longer requires Salesforce CLI alias to be pre-configured"
       ],
       "commits": [
-        "a9921c2"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "Route multi-step deploy workflows through orchestrator",
-      "details": null,
-      "commits": [
-        "a1075f7"
+        "f668c4a",
+        "2842042",
+        "cdfc24d",
+        "614c752",
+        "2e016e5"
       ]
     },
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restore missing library-reference.yaml breaking all agent launches",
-      "details": null,
+      "headline": "Restore agent launch configuration",
+      "details": [
+        "Fixed missing library-reference.yaml that was preventing HubSpot agent launches"
+      ],
       "commits": [
         "c53235d"
       ]
     },
     {
       "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "Remove undefined log_verbose call in query validation hook",
-      "details": null,
+      "plugin": "All Plugins",
+      "headline": "Agent tooling consistency",
+      "details": [
+        "Added Grep capability to 94 agents that previously only had Bash",
+        "Removed legacy patterned Bash restrictions from 103 agents"
+      ],
       "commits": [
-        "fb2b10d"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Defer sf alias startup requirement",
-      "details": null,
-      "commits": [
-        "2e016e5"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Restore subagent runbook context",
-      "details": null,
-      "commits": [
-        "614c752"
+        "a9921c2"
       ]
     }
   ]
