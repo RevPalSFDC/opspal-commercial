@@ -1,31 +1,48 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on stability improvements across OpsPal's platform. We fixed critical issues with Salesforce deployments that were causing failures, restored HubSpot automation capabilities that had stopped working, and improved how the platform handles complex multi-system workflows. These fixes ensure your revenue operations run more reliably.",
-  "published_at": "2026-04-02T14:33:59.130Z",
+  "summary": "This week focused on platform stability and reliability improvements. We resolved critical issues affecting Salesforce and HubSpot integrations that were preventing some automations from running properly. We also improved how the platform handles multi-step deployment workflows and enhanced detection of complex Salesforce field configurations.",
+  "published_at": "2026-04-02T19:59:48.734Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 96,
+  "total_commits": 99,
   "entries": [
     {
       "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restored missing data from weeks 12 and 13",
+      "details": null,
+      "commits": [
+        "fe104ff"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Enhanced platform update process",
+      "details": null,
+      "commits": [
+        "d4d0188"
+      ]
+    },
+    {
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Fixed Salesforce deployment failures with country picklists",
+      "headline": "Better Salesforce field validation and deployment reliability",
       "details": [
-        "OpsPal now properly detects when Salesforce orgs use State and Country picklists, preventing deployment errors that could break your automations."
+        "OpsPal now automatically detects when Salesforce uses State and Country picklists, preventing common configuration errors",
+        "Deployment processes are more reliable with enhanced permission checking and retry capabilities"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Improved reliability of complex Salesforce deployments",
-      "details": [
-        "Multi-step Salesforce deployments now run more smoothly with better error handling and retry logic."
-      ],
+      "headline": "More reliable Salesforce multi-step deployments",
+      "details": null,
       "commits": [
         "a1075f7"
       ]
@@ -33,10 +50,8 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot automations that stopped working",
-      "details": [
-        "Fixed a critical issue that prevented HubSpot automations from launching properly."
-      ],
+      "headline": "Resolved HubSpot integration startup issues",
+      "details": null,
       "commits": [
         "c53235d"
       ]
