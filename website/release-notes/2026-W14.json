@@ -1,39 +1,30 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on critical platform stability improvements that restore full functionality across all OpsPal integrations. Teams can now reliably deploy Salesforce workflows without interruption, and HubSpot automations are working properly again. The platform update system also received enhancements to ensure smoother future releases.",
-  "published_at": "2026-04-02T00:23:31.502Z",
+  "summary": "This week focused on platform stability improvements that make OpsPal more reliable for your daily workflows. We fixed several issues that were preventing Salesforce and HubSpot automations from running properly, and improved how the system handles complex deployment processes. These behind-the-scenes fixes ensure your revenue operations run smoothly without interruption.",
+  "published_at": "2026-04-02T00:58:57.190Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 86,
+  "total_commits": 88,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Release notes now display complete history for weeks 12 and 13",
+      "headline": "Restored missing historical data from weeks 12 and 13",
       "details": null,
       "commits": [
         "fe104ff"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Platform updates now include latest marketplace features automatically",
-      "details": null,
-      "commits": [
-        "d4d0188"
-      ]
-    },
-    {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now detect regional settings and retry failed operations",
+      "headline": "Improved Salesforce field validation and deployment reliability",
       "details": [
-        "OpsPal now automatically detects when your Salesforce org uses state and country picklists",
-        "Failed deployment steps now retry automatically to handle temporary connection issues",
-        "Deployment validation checks permissions before making changes to prevent errors"
+        "Better detection of State/Country picklist configurations that can cause workflow errors",
+        "Enhanced permission checking during Salesforce deployments",
+        "More reliable handling of complex deployment processes"
       ],
       "commits": [
         "fcad945"
@@ -42,7 +33,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now run more reliably",
+      "headline": "Enhanced Salesforce deployment workflow management",
       "details": null,
       "commits": [
         "a1075f7"
@@ -51,7 +42,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations work properly again after critical fix",
+      "headline": "Resolved HubSpot automation startup issues",
       "details": null,
       "commits": [
         "c53235d"
