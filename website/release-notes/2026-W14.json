@@ -1,19 +1,21 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on platform stability improvements that make OpsPal more reliable for your daily RevOps work. We fixed several issues that were causing automation failures in Salesforce and HubSpot, and resolved problems with system updates that could interrupt your workflows.",
-  "published_at": "2026-04-01T23:53:13.173Z",
+  "summary": "This week focused on platform stability improvements, with major fixes to Salesforce automation workflows and HubSpot connectivity issues. OpsPal now better handles complex Salesforce deployments and country/state field configurations, while resolving critical connection problems that were preventing HubSpot automations from running properly.",
+  "published_at": "2026-04-02T00:00:03.626Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-01",
   "has_breaking": false,
-  "total_commits": 79,
+  "total_commits": 81,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce automations now handle state and country fields more reliably",
+      "headline": "Salesforce automations now handle country and state fields more reliably",
       "details": [
-        "OpsPal now automatically detects when Salesforce organizations use special state and country field settings, preventing automation failures that could occur when these fields are configured differently than expected."
+        "OpsPal now automatically detects when your Salesforce org uses special country and state field configurations",
+        "Deployment workflows include better permission checking to prevent failures",
+        "Automation runs are more reliable when working with complex field setups"
       ],
       "commits": [
         "fcad945"
@@ -22,10 +24,8 @@
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Multi-step Salesforce deployments now run more smoothly",
-      "details": [
-        "Complex Salesforce configuration changes that require multiple steps now execute more reliably, reducing the chance of partial deployments or stuck processes."
-      ],
+      "headline": "Complex Salesforce deployment workflows now run more smoothly",
+      "details": null,
       "commits": [
         "a1075f7"
       ]
@@ -33,10 +33,8 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations work again after recent outage",
-      "details": [
-        "Restored HubSpot functionality that was temporarily broken, ensuring all your HubSpot-related automations and data syncing work as expected."
-      ],
+      "headline": "HubSpot automations work again after connection issue resolved",
+      "details": null,
       "commits": [
         "c53235d"
       ]
