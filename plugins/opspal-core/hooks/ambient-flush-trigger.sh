@@ -16,6 +16,11 @@ if ! command -v node >/dev/null 2>&1; then
     exit 0
 fi
 
+# Skip in subagent context — flush evaluation only valuable at main session level.
+if [[ -n "${CLAUDE_AGENT_CONTEXT:-}" ]] || [[ -n "${CLAUDE_SUBAGENT_NAME:-}" ]]; then
+    exit 0
+fi
+
 INPUT="$(cat 2>/dev/null || true)"
 TRIGGER="${1:-}"
 FORCE_ARGS=()

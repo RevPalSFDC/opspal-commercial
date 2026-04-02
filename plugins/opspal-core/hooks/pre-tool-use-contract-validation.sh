@@ -104,7 +104,11 @@ source "$SESSION_KEY_RESOLVER_LIB"
 # Parse tool name and input from stdin (or env fallback)
 RAW_INPUT_DATA="$(read_stdin_json 2>&1)"
 
-if [ -f "$HOOK_EVENT_NORMALIZER" ] && command -v node >/dev/null 2>&1; then
+# Try jq-only extraction first to avoid node spawn (~100-300ms savings).
+# Fall back to hook-event-normalizer.js for edge-case payloads.
+if [ -n "$RAW_INPUT_DATA" ] && echo "$RAW_INPUT_DATA" | jq -e '.tool_name' >/dev/null 2>&1; then
+    INPUT_DATA="$RAW_INPUT_DATA"
+elif [ -f "$HOOK_EVENT_NORMALIZER" ] && command -v node >/dev/null 2>&1; then
     if [ -n "$RAW_INPUT_DATA" ]; then
         INPUT_DATA=$(printf '%s' "$RAW_INPUT_DATA" | run_node_with_timeout "$NODE_TIMEOUT_SECONDS" "$HOOK_EVENT_NORMALIZER" 2>/dev/null || echo "")
     else

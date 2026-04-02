@@ -20,6 +20,12 @@ if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
   exit 0
 fi
 
+# Skip in subagent context — reflection extraction only valuable at main session level.
+# Saves ~100-300ms node spawn overhead per subagent tool call.
+if [[ -n "${CLAUDE_AGENT_CONTEXT:-}" ]] || [[ -n "${CLAUDE_SUBAGENT_NAME:-}" ]]; then
+  exit 0
+fi
+
 if ! command -v node >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
     exit 0
 fi

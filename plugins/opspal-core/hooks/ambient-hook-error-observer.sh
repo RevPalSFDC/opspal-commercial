@@ -17,6 +17,11 @@ if ! command -v node >/dev/null 2>&1; then
     exit 0
 fi
 
+# Skip in subagent context — error observation only valuable at main session level.
+if [[ -n "${CLAUDE_AGENT_CONTEXT:-}" ]] || [[ -n "${CLAUDE_SUBAGENT_NAME:-}" ]]; then
+    exit 0
+fi
+
 cat >/dev/null 2>/dev/null || true
 
 INTERCEPTOR="$PLUGIN_ROOT/scripts/lib/ambient/hook-reflection-interceptor.js"

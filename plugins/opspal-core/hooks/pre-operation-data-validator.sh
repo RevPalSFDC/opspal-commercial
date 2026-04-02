@@ -313,6 +313,16 @@ if [ -z "$TOOL_NAME" ]; then
     exit 0
 fi
 
+# Fast-exit for Bash commands that cannot be data operations.
+# Avoids the is_data_operation regex chain for simple shell commands.
+if [[ "$TOOL_NAME" == "Bash" ]]; then
+    BASH_CMD=$(echo "$TOOL_INPUT" | jq -r '.command // ""' 2>/dev/null || echo "")
+    if [[ -n "$BASH_CMD" ]] && ! echo "$BASH_CMD" | grep -qiE 'sf |sfdx |data |upsert|import|export|bulk|merge|dedup|\.csv'; then
+        emit_pretool_noop
+        exit 0
+    fi
+fi
+
 # Determine if this is a data operation that needs validation
 is_data_operation() {
     local tool="$1"
