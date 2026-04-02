@@ -1,0 +1,142 @@
+{
+  "slug": "2026-W12",
+  "title": "Week of March 17, 2026",
+  "summary": "This week brought major improvements to Salesforce RevOps assessments with automatic revenue field detection and sales process analysis, making it easier to evaluate your revenue operations setup. We also enhanced the OKR generation process with strategic context layers to create more aligned objectives, and strengthened platform security with comprehensive credential protection.",
+  "published_at": "2026-03-24T14:25:38.152Z",
+  "week_start": "2026-03-17",
+  "week_end": "2026-03-25",
+  "has_breaking": false,
+  "total_commits": 93,
+  "entries": [
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Brand Gallery and Templates now preserve customizations during updates",
+      "details": [
+        "Your customized templates and branding remain intact when OpsPal updates",
+        "Changes are safely stored and automatically applied to new versions"
+      ],
+      "commits": [
+        "c7ce394"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Salesforce",
+      "headline": "RevOps assessments now automatically detect revenue fields and sales processes",
+      "details": [
+        "Assessments identify your organization's primary revenue tracking fields",
+        "Analysis includes contract values, annual recurring revenue, and net new revenue metrics",
+        "Sales process segmentation provides targeted recommendations based on your setup"
+      ],
+      "commits": [
+        "5de3435"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "onboarding",
+      "headline": "Windows setup process now works seamlessly with PowerShell",
+      "details": null,
+      "commits": [
+        "487c124"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "onboarding",
+      "headline": "Initial setup experience runs more smoothly with better error handling",
+      "details": null,
+      "commits": [
+        "f10fc77"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Salesforce",
+      "headline": "Salesforce deployments now prevent common configuration errors",
+      "details": [
+        "Pre-deployment checks catch picklist and record type conflicts",
+        "Field history tracking limits are validated before deployment",
+        "Duplicate value settings are automatically merged to prevent failures"
+      ],
+      "commits": [
+        "aac0d4b"
+      ]
+    },
+    {
+      "category": "security",
+      "plugin": "General",
+      "headline": "Automatic credential scanning prevents accidental exposure of sensitive data",
+      "details": null,
+      "commits": [
+        "19c4196"
+      ]
+    },
+    {
+      "category": "security",
+      "plugin": "General",
+      "headline": "Continuous monitoring now scans for exposed credentials and secrets",
+      "details": null,
+      "commits": [
+        "8dcd939"
+      ]
+    },
+    {
+      "category": "security",
+      "plugin": "General",
+      "headline": "All hardcoded credentials removed for enhanced security",
+      "details": null,
+      "commits": [
+        "8acd03a"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Salesforce deployment validation now works correctly in all scenarios",
+      "details": [
+        "Flow logic analysis properly handles complex decision trees",
+        "Field reference validation correctly identifies issues across all flow branches",
+        "Deployment failures from validation cascades are now prevented"
+      ],
+      "commits": [
+        "714a52b"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "General",
+      "headline": "Marketo campaign validation now prevents activation errors",
+      "details": [
+        "Campaign validation checks run before activation to catch issues early",
+        "Rate limit monitoring prevents campaigns from failing due to usage caps"
+      ],
+      "commits": [
+        "25f5de7"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Core Platform",
+      "headline": "Status displays now show OpsPal branding and environment information",
+      "details": null,
+      "commits": [
+        "378d8ba"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "OKRs",
+      "headline": "OKR generation now incorporates strategic context for better alignment",
+      "details": [
+        "Strategic objectives are analyzed before generating specific OKRs",
+        "Theme selection prioritizes initiatives that align with business strategy",
+        "Three-phase generation process ensures objectives support overall goals"
+      ],
+      "commits": [
+        "7a3a5ca"
+      ]
+    }
+  ]
+}
