@@ -478,7 +478,7 @@ async function rewriteWithLlm(entries, title) {
     result.push({
       category: rw.category || original.category,
       plugin: original.plugin,
-      headline: rw.headline || original.headline,
+      headline: capitalizeFirst(rw.headline || original.headline),
       details: rw.details || null,
       commits: original.commits
     });
