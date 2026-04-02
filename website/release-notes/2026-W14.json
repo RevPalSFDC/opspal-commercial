@@ -1,8 +1,8 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on critical platform stability improvements that restore full functionality across all OpsPal integrations. Teams can now reliably deploy Salesforce workflows without interruption, and HubSpot automations are working properly again. The platform update system also received enhancements to ensure smoother future releases.",
-  "published_at": "2026-04-02T00:23:31.502Z",
+  "summary": "This week focused on critical infrastructure improvements that enhance platform stability and reliability. Key fixes included resolving Salesforce deployment issues with better state and country picklist detection, and addressing platform startup problems that were affecting system performance. These behind-the-scenes improvements ensure smoother operations for your RevOps workflows.",
+  "published_at": "2026-04-02T00:49:16.164Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
@@ -10,40 +10,22 @@
   "entries": [
     {
       "category": "fixed",
-      "plugin": "release-notes",
-      "headline": "Release notes now display complete history for weeks 12 and 13",
-      "details": null,
-      "commits": [
-        "fe104ff"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Platform updates now include latest marketplace features automatically",
-      "details": null,
-      "commits": [
-        "d4d0188"
-      ]
-    },
-    {
-      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now detect regional settings and retry failed operations",
+      "headline": "Better Salesforce state and country field detection",
       "details": [
-        "OpsPal now automatically detects when your Salesforce org uses state and country picklists",
-        "Failed deployment steps now retry automatically to handle temporary connection issues",
-        "Deployment validation checks permissions before making changes to prevent errors"
+        "OpsPal now automatically detects when you're using Salesforce state and country picklists, preventing deployment errors and ensuring your field mappings work correctly."
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now run more reliably",
-      "details": null,
+      "headline": "More reliable Salesforce multi-step deployments",
+      "details": [
+        "Complex Salesforce deployments now process more reliably through improved workflow coordination."
+      ],
       "commits": [
         "a1075f7"
       ]
@@ -51,10 +33,23 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations work properly again after critical fix",
-      "details": null,
+      "headline": "Restored HubSpot automation capabilities",
+      "details": [
+        "Fixed a critical issue that was preventing HubSpot automations from starting properly."
+      ],
       "commits": [
         "c53235d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Faster platform startup times",
+      "details": [
+        "Improved system startup speed by removing unnecessary connection requirements."
+      ],
+      "commits": [
+        "2e016e5"
       ]
     }
   ]
