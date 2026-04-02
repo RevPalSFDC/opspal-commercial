@@ -1,12 +1,12 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought major improvements to data import reliability and Salesforce deployment stability. We enhanced error recovery across the platform, making your automation workflows more resilient when unexpected issues occur. Several critical fixes ensure HubSpot integrations work properly and Salesforce deployments handle complex scenarios more smoothly.",
-  "published_at": "2026-04-02T22:56:45.804Z",
+  "summary": "This week focused on improving system reliability and fixing issues that were preventing smooth operations. We enhanced data import resilience, fixed display consistency issues across plugins, and resolved several Salesforce deployment problems. Most importantly, we restored missing functionality in HubSpot that was blocking automation launches and improved error recovery for Salesforce deployments.",
+  "published_at": "2026-04-02T23:37:39.861Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-02",
   "has_breaking": false,
-  "total_commits": 109,
+  "total_commits": 111,
   "entries": [
     {
       "category": "improved",
@@ -20,7 +20,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now recover automatically from errors",
+      "headline": "Salesforce deployments now recover better from errors",
       "details": null,
       "commits": [
         "48d4393"
@@ -38,7 +38,16 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Restored missing historical data from weeks 12 and 13",
+      "headline": "Headlines now format properly in all views",
+      "details": null,
+      "commits": [
+        "67a2961"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restored missing historical data from previous weeks",
       "details": null,
       "commits": [
         "fe104ff"
@@ -47,11 +56,11 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce state and country field detection with retry logic",
+      "headline": "Better Salesforce field validation and deployment permissions",
       "details": [
-        "Now automatically detects when Salesforce state and country picklists might cause deployment issues",
-        "Enhanced permission checking during deployments",
-        "Added automatic retry capability for failed operations"
+        "Now detects State/Country picklist configuration issues",
+        "Improved validation checks before deploying changes",
+        "Enhanced retry logic for failed operations"
       ],
       "commits": [
         "fcad945"
@@ -60,7 +69,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now use enhanced workflow routing",
+      "headline": "Complex Salesforce deployments now run more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -69,10 +78,28 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot integration functionality after critical file recovery",
+      "headline": "Restored HubSpot automation launches after system failure",
       "details": null,
       "commits": [
         "c53235d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Resolved Salesforce validation errors during data queries",
+      "details": null,
+      "commits": [
+        "fb2b10d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restored workflow context for sub-processes",
+      "details": null,
+      "commits": [
+        "614c752"
       ]
     }
   ]
