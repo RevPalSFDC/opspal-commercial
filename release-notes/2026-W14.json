@@ -1,0 +1,167 @@
+{
+  "slug": "2026-W14",
+  "title": "Week of March 30, 2026",
+  "summary": null,
+  "published_at": "2026-04-02T22:54:57.035Z",
+  "week_start": "2026-03-30",
+  "week_end": "2026-04-02",
+  "has_breaking": false,
+  "total_commits": 107,
+  "entries": [
+    {
+      "category": "new",
+      "plugin": "General",
+      "headline": "Address reflection gaps — data import resilience, runbook enrichment, GWS auth",
+      "details": null,
+      "commits": [
+        "b8f0ed3"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Salesforce",
+      "headline": "Resilient deployment error recovery",
+      "details": null,
+      "commits": [
+        "48d4393"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Fix runbook injection and stale hook cleanup (v2.50.8)",
+      "details": null,
+      "commits": [
+        "cdfc24d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Normalize plugin labels for display consistency",
+      "details": null,
+      "commits": [
+        "510f9cc"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Ensure headline capitalization after LLM rewrite",
+      "details": null,
+      "commits": [
+        "67a2961"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restore historical weeks W12 and W13",
+      "details": null,
+      "commits": [
+        "fe104ff"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Critical",
+      "headline": "Replace all hardcoded revpal-internal-plugins paths with opspal-commercial",
+      "details": [
+        "canonical-routing-registry.js (1) — MARKETPLACE_CORE_PATH constant",
+        "agent-tool-registry.js (2) — resolvePluginRoot + routing index candidates",
+        "resolve-script.sh (3) — find_script, find_ci_script, find_hook"
+      ],
+      "commits": [
+        "2842042"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Update plugin-update-fixes to expect dispatcher instead of unified-router",
+      "details": null,
+      "commits": [
+        "8101d28"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Core Platform",
+      "headline": "Add marketplace pull to /finishopspalupdate (v2.48.4)",
+      "details": null,
+      "commits": [
+        "d4d0188"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "State/Country picklist detection, deploy path enforcement, orchestrator retry (v3.86.19)",
+      "details": [
+        "Add State/Country Picklist confusion detection to flow-field-reference-validator",
+        "Enable checkPermissions in both deploy hooks (pre-deploy-flow-validation.sh,",
+        "Add detectStateCountryPicklists to org-quirks-detector.js"
+      ],
+      "commits": [
+        "fcad945"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "All-plugins",
+      "headline": "Add Grep to Bash-entitled agents, remove patterned Bash disallowedTools",
+      "details": [
+        "Added Grep to 94 agents that had Bash but not Grep in their tools list.",
+        "Removed patterned Bash(pattern:*) disallowedTools entries from 103 agents."
+      ],
+      "commits": [
+        "a9921c2"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Route multi-step deploy workflows through orchestrator",
+      "details": null,
+      "commits": [
+        "a1075f7"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "HubSpot",
+      "headline": "Restore missing library-reference.yaml breaking all agent launches",
+      "details": null,
+      "commits": [
+        "c53235d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Remove undefined log_verbose call in query validation hook",
+      "details": null,
+      "commits": [
+        "fb2b10d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Defer sf alias startup requirement",
+      "details": null,
+      "commits": [
+        "2e016e5"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restore subagent runbook context",
+      "details": null,
+      "commits": [
+        "614c752"
+      ]
+    }
+  ]
+}
