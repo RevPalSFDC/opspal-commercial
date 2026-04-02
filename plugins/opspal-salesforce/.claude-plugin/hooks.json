@@ -107,6 +107,17 @@
             "description": "QA-005: Trigger implementation planning after automation audit"
           }
         ]
+      },
+      {
+        "matcher": "sfdc-deployment-manager",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-deploy-manager-stop.sh",
+            "timeout": 15,
+            "description": "Detect orphaned in-flight deployments when deployment manager stops unexpectedly"
+          }
+        ]
       }
     ]
   }

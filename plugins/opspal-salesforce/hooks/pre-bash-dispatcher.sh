@@ -99,6 +99,20 @@ is_deploy_scope_command() {
   printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+project[[:space:]]+deploy[[:space:]]+(start|validate|preview)|sfdx[[:space:]]+force:source:deploy)([[:space:]]|$)'
 }
 
+wrap_deploy_with_timeout() {
+  local timeout_s="${SFDC_DEPLOY_TIMEOUT_SECS:-300}"
+  # Skip if command already has a timeout wrapper or uses --async
+  if printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])timeout[[:space:]]'; then
+    return
+  fi
+  if printf '%s' "$COMMAND" | grep -qE '\-\-async'; then
+    return
+  fi
+  local wrapped_cmd="timeout --preserve-status ${timeout_s} ${COMMAND}"
+  update_hook_input_command "$wrapped_cmd"
+  merge_hook_json "$(emit_pretool_context "Deploy timeout guard active: process will be killed after ${timeout_s}s if unresponsive. Override with SFDC_DEPLOY_TIMEOUT_SECS. If killed, check status: sf project deploy report --use-most-recent")"
+}
+
 is_data_query_command() {
   printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])((sf|sfdx)[[:space:]]+data[[:space:]]+query|sfdx[[:space:]]+force:data:soql:query)([[:space:]]|$)'
 }
@@ -245,11 +259,13 @@ if is_salesforce_cli_command && has_pipeline_without_pipefail && (uses_jq || use
 fi
 
 if is_deploy_scope_command; then
+  run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-queued-check.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-agent-context-check.sh"
   run_child_hook env PRETOOLUSE_MODE=1 "${PLUGIN_ROOT}/hooks/pre-deployment-comprehensive-validation.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-flow-validation.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-report-quality-gate.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-picklist-dependency-validation.sh"
+  wrap_deploy_with_timeout
 fi
 
 if is_data_query_command; then

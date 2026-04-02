@@ -57,6 +57,63 @@ You are the **designated planning, validation, and execution agent for Salesforc
 
 If the request bundles deployment with permission/FLS work, record seeding, or verification queries, the parent task should route through `sfdc-orchestrator`. This specialist still owns the actual deploy execution slice, but it is not the coordinator for cross-domain post-deploy work.
 
+## Deploy Execution Pattern (MANDATORY)
+
+**NEVER use `sf project deploy start --wait N` for N > 5.** Synchronous waits block the session if Salesforce queues or delays the deployment. A hung deploy leaves the user with zero feedback and no cancellation path.
+
+**Required pattern for all deployments:**
+```bash
+# 1. Submit async — returns immediately with a job ID
+JOB_JSON=$(sf project deploy start \
+  --manifest "$manifest" \
+  --target-org "$target_org" \
+  --async --json 2>&1)
+JOB_ID=$(echo "$JOB_JSON" | jq -r '.result.id // empty')
+
+if [ -z "$JOB_ID" ]; then
+  echo "ERROR: Deploy submit failed. Output: $JOB_JSON"
+  exit 1
+fi
+
+# 2. Write state marker for crash recovery
+mkdir -p "${PROJECT_ROOT:-.}/.claude/deploy-error-state" 2>/dev/null
+echo "$target_org" > "${PROJECT_ROOT:-.}/.claude/deploy-error-state/last-deploy-org.txt"
+
+echo "Deploy submitted: job $JOB_ID — polling for completion..."
+
+# 3. Poll with bounded timeout (20 polls × 15s = 5 min max)
+MAX_POLLS=20; POLL_SECS=15
+for i in $(seq 1 $MAX_POLLS); do
+  sleep $POLL_SECS
+  REPORT=$(sf project deploy report --job-id "$JOB_ID" --target-org "$target_org" --json 2>/dev/null)
+  STATUS=$(echo "$REPORT" | jq -r '.result.status // "Unknown"')
+  echo "Poll $i/$MAX_POLLS: $STATUS"
+  case "$STATUS" in
+    Succeeded) echo "Deploy succeeded."; break ;;
+    Failed|Canceled)
+      echo "Deploy $STATUS."
+      echo "$REPORT" | jq -r '.result.details.componentFailures[]? | "\(.problemType): \(.fullName) - \(.problem)"' 2>/dev/null
+      exit 1 ;;
+  esac
+done
+
+if [ "$STATUS" != "Succeeded" ]; then
+  echo "Deploy not complete after $((MAX_POLLS * POLL_SECS))s. Job: $JOB_ID"
+  echo "Cancel with: sf project deploy cancel --job-id $JOB_ID --target-org $target_org"
+  echo "Check status: sf project deploy report --job-id $JOB_ID --target-org $target_org"
+  exit 124
+fi
+```
+
+**For validation deploys**, use `sf project deploy validate --async` with the same poll pattern.
+
+**For complex deployments**, use `node scripts/lib/resilient-deployer.js` which wraps async+poll, has `reattachMostRecent()` for crash recovery, and handles "Report is Obsolete" edge cases.
+
+**Cancel orphaned deploys**: If a previous deploy is stuck, cancel it first:
+```bash
+sf project deploy cancel --use-most-recent --target-org "$target_org"
+```
+
 ## Deployment Execution
 
 **MANDATORY: Absolute Path Requirement** — Before executing any `sf project deploy` command, resolve ALL `--metadata-dir` and `--source-dir` paths to **absolute form** using `realpath` or by prepending the session working directory. Never pass relative paths (e.g., `./deploy-tmp`, `force-app`) to sf CLI commands. Sub-agents may execute from a different working directory than where the path was constructed.
@@ -1372,14 +1429,15 @@ node scripts/lib/preflight-validator.js validate deployment \
   --check-dependencies \
   --verify-coverage
 
-# STEP 3: Run deployment simulation
+# STEP 3: Run deployment simulation (async + poll)
 sf project deploy validate \
   --manifest [package.xml] \
   --target-org [org-alias] \
   --verbose \
-  --wait 30
+  --async --json
+# Then poll: sf project deploy report --job-id <id> --target-org [org-alias]
 
-# STEP 3A: Include test classes for code coverage when deploying Apex
+# STEP 3A: Include test classes for code coverage when deploying Apex (async + poll)
 sf project deploy validate \
   --manifest [package.xml] \
   --target-org [org-alias] \
@@ -1389,7 +1447,8 @@ sf project deploy validate \
   --coverage-formatters text \
   --results-dir deploy-test-results \
   --verbose \
-  --wait 30
+  --async --json
+# Then poll: sf project deploy report --job-id <id> --target-org [org-alias]
 
 # Notes:
 # - Add new test classes to the manifest when they are introduced in the deploy.
@@ -1647,17 +1706,42 @@ validate_deployment() {
         fi
     fi
 
-    # STEP 5: Validation deployment
+    # STEP 5: Validation deployment (async + poll)
     echo "🚀 Running validation deployment..."
-    local job_id
-    job_id=$(sf project deploy validate \
+    local job_json job_id
+    job_json=$(sf project deploy validate \
         --manifest "$manifest" \
         --target-org "$target_org" \
-        --wait 30 \
-        --json | jq -r '.result.id')
+        --async \
+        --json 2>&1)
+    job_id=$(echo "$job_json" | jq -r '.result.id // empty')
 
-    if [[ "$job_id" == "null" || -z "$job_id" ]]; then
-        echo "❌ Validation deployment failed"
+    if [[ -z "$job_id" ]]; then
+        echo "❌ Validation deployment submission failed"
+        echo "$job_json"
+        return 1
+    fi
+
+    # Poll for validation completion (20 polls × 15s = 5 min max)
+    echo "Validation submitted: job $job_id — polling..."
+    local status="Unknown"
+    for i in $(seq 1 20); do
+        sleep 15
+        local report
+        report=$(sf project deploy report --job-id "$job_id" --target-org "$target_org" --json 2>/dev/null)
+        status=$(echo "$report" | jq -r '.result.status // "Unknown"')
+        echo "Poll $i/20: $status"
+        case "$status" in
+            Succeeded) break ;;
+            Failed|Canceled)
+                echo "❌ Validation $status"
+                echo "$report" | jq -r '.result.details.componentFailures[]? | "\(.problemType): \(.fullName) - \(.problem)"' 2>/dev/null
+                return 1 ;;
+        esac
+    done
+    if [[ "$status" != "Succeeded" ]]; then
+        echo "❌ Validation timed out. Job: $job_id"
+        echo "Cancel: sf project deploy cancel --job-id $job_id --target-org $target_org"
         return 1
     fi
 
@@ -1742,11 +1826,39 @@ deploy_to_production() {
     local validation_id
     validation_id=$(cat ".deployment-cache/${target_org}-validation-id")
 
-    if ! sf project deploy quick \
+    local quick_json quick_job_id
+    quick_json=$(sf project deploy quick \
         --job-id "$validation_id" \
         --target-org "$target_org" \
-        --wait 30; then
-        echo "❌ Quick deployment failed"
+        --async --json 2>&1)
+    quick_job_id=$(echo "$quick_json" | jq -r '.result.id // empty')
+
+    if [[ -z "$quick_job_id" ]]; then
+        echo "❌ Quick deployment submission failed"
+        echo "$quick_json"
+        trigger_rollback "$manifest" "$target_org"
+        exit 1
+    fi
+
+    # Poll for quick deploy completion (20 polls × 15s = 5 min max)
+    echo "Quick deploy submitted: job $quick_job_id — polling..."
+    local qstatus="Unknown"
+    for i in $(seq 1 20); do
+        sleep 15
+        local qreport
+        qreport=$(sf project deploy report --job-id "$quick_job_id" --target-org "$target_org" --json 2>/dev/null)
+        qstatus=$(echo "$qreport" | jq -r '.result.status // "Unknown"')
+        echo "Poll $i/20: $qstatus"
+        case "$qstatus" in
+            Succeeded) break ;;
+            Failed|Canceled)
+                echo "❌ Quick deployment $qstatus"
+                trigger_rollback "$manifest" "$target_org"
+                exit 1 ;;
+        esac
+    done
+    if [[ "$qstatus" != "Succeeded" ]]; then
+        echo "❌ Quick deployment timed out. Job: $quick_job_id"
         trigger_rollback "$manifest" "$target_org"
         exit 1
     fi
@@ -1809,18 +1921,52 @@ deploy_with_monitoring() {
         --manifest "$manifest" &
     local monitor_pid=$!
 
-    # Execute deployment
-    if sf project deploy start \
+    # Execute deployment (async + poll)
+    local deploy_json deploy_job_id
+    deploy_json=$(sf project deploy start \
         --manifest "$manifest" \
-        --targetusername "$target_org" \
-        --wait 30 \
-        --verbose; then
+        --target-org "$target_org" \
+        --async --json 2>&1)
+    deploy_job_id=$(echo "$deploy_json" | jq -r '.result.id // empty')
 
+    if [[ -z "$deploy_job_id" ]]; then
+        kill $monitor_pid 2>/dev/null
+        echo "❌ Deploy submission failed: $deploy_json"
+        trigger_deployment_recovery
+        return 1
+    fi
+
+    # Write state marker for crash recovery
+    mkdir -p "${PROJECT_ROOT:-.}/.claude/deploy-error-state" 2>/dev/null
+    echo "$target_org" > "${PROJECT_ROOT:-.}/.claude/deploy-error-state/last-deploy-org.txt"
+
+    echo "Deploy submitted: job $deploy_job_id — polling..."
+    local dstatus="Unknown"
+    for i in $(seq 1 20); do
+        sleep 15
+        local dreport
+        dreport=$(sf project deploy report --job-id "$deploy_job_id" --target-org "$target_org" --json 2>/dev/null)
+        dstatus=$(echo "$dreport" | jq -r '.result.status // "Unknown"')
+        echo "Poll $i/20: $dstatus"
+        case "$dstatus" in
+            Succeeded) break ;;
+            Failed|Canceled)
+                kill $monitor_pid 2>/dev/null
+                echo "❌ Deployment $dstatus"
+                echo "$dreport" | jq -r '.result.details.componentFailures[]? | "\(.problemType): \(.fullName) - \(.problem)"' 2>/dev/null
+                trigger_deployment_recovery
+                return 1 ;;
+        esac
+    done
+
+    if [[ "$dstatus" == "Succeeded" ]]; then
         # Stop monitoring successfully
         kill $monitor_pid 2>/dev/null
         echo "✅ Deployment successful"
         return 0
     else
+        echo "❌ Deployment timed out. Job: $deploy_job_id"
+        echo "Cancel: sf project deploy cancel --job-id $deploy_job_id --target-org $target_org"
         # Stop monitoring and trigger recovery
         kill $monitor_pid 2>/dev/null
         echo "❌ Deployment failed, triggering recovery..."

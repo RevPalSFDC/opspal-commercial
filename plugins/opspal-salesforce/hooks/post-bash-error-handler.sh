@@ -72,6 +72,22 @@ classify_error() {
         echo "DESCRIBE_FAILURE"
         return
     fi
+    if echo "$result" | grep -qi "timed out\|DEPLOY_TIMEOUT\|timeout.*deploy\|deploy.*timeout"; then
+        echo "DEPLOY_TIMEOUT"
+        return
+    fi
+    if echo "$result" | grep -qi "in progress\|metadata.*lock\|ALREADY_IN_PROGRESS\|concurrent.*deploy"; then
+        echo "DEPLOY_LOCKED"
+        return
+    fi
+    if echo "$result" | grep -qi "component failure\|failed component\|INVALID_TYPE\|Cannot modify managed"; then
+        echo "DEPLOY_COMPONENT_FAILURE"
+        return
+    fi
+    if echo "$result" | grep -qi "test failure\|failing test\|insufficient code coverage"; then
+        echo "DEPLOY_TEST_FAILURE"
+        return
+    fi
     echo "UNKNOWN_ERROR"
 }
 
@@ -136,6 +152,14 @@ if echo "$RESULT" | grep -qi "INVALID_FIELD\|invalid field\|No such column"; the
     GUIDANCE+="1. Run: sf sobject describe <Object> | jq '.fields[].name' to list valid fields\n"
     GUIDANCE+="2. Verify field exists and is accessible\n"
     GUIDANCE+="3. Check if field requires --use-tooling-api flag"
+
+    # Write error state marker so downstream deploy hooks can warn
+    MARKER_DIR="${PROJECT_ROOT:-.}/.claude/deploy-error-state"
+    mkdir -p "$MARKER_DIR" 2>/dev/null || true
+    SOQL_OBJECT=$(echo "$COMMAND" | grep -oiP 'FROM\s+\K\w+' 2>/dev/null | head -1)
+    jq -nc --arg obj "${SOQL_OBJECT:-unknown}" --arg ts "$(date +%s)" \
+      '{object: $obj, timestamp: $ts, error: "INVALID_FIELD"}' \
+      > "$MARKER_DIR/last-field-error.json" 2>/dev/null || true
 fi
 
 # jq exit code 5 (parse error)
@@ -187,6 +211,58 @@ if echo "$RESULT" | grep -qi "INVALID_SESSION_ID\|expired\|unauthorized\|authent
     GUIDANCE+="1. Re-authenticate: sf org login web -a <alias>\n"
     GUIDANCE+="2. Check current org: sf org display\n"
     GUIDANCE+="3. List available orgs: sf org list"
+fi
+
+# Deploy timeout (process-level or CLI timeout)
+if [ -z "$GUIDANCE" ] && echo "$RESULT" | grep -qi "timed out\|DEPLOY_TIMEOUT\|timeout.*deploy\|deploy.*timeout"; then
+    GUIDANCE="[Deploy Timeout Recovery]\n"
+    GUIDANCE+="The deployment timed out waiting for Salesforce.\n\n"
+    GUIDANCE+="**Recovery steps:**\n"
+    GUIDANCE+="1. Check deployment status: sf project deploy report --use-most-recent\n"
+    GUIDANCE+="2. Cancel if stuck: sf project deploy cancel --use-most-recent\n"
+    GUIDANCE+="3. Re-run with --async flag and poll manually\n"
+    GUIDANCE+="4. Check Setup > Deployment Status in the org for queued jobs"
+fi
+
+# Metadata lock / concurrent deployment
+if [ -z "$GUIDANCE" ] && echo "$RESULT" | grep -qi "in progress\|metadata.*lock\|ALREADY_IN_PROGRESS\|concurrent.*deploy"; then
+    GUIDANCE="[Deploy Lock Recovery]\n"
+    GUIDANCE+="Another deployment is already in progress on this org.\n\n"
+    GUIDANCE+="**Recovery steps:**\n"
+    GUIDANCE+="1. Check current deploy: sf project deploy report --use-most-recent\n"
+    GUIDANCE+="2. Wait for it to finish, or cancel: sf project deploy cancel --use-most-recent\n"
+    GUIDANCE+="3. Check Setup > Deployment Status for change sets or other deploys"
+fi
+
+# Component failure (most common deploy error)
+if [ -z "$GUIDANCE" ] && echo "$RESULT" | grep -qi "component failure\|failed component\|INVALID_TYPE\|Cannot modify managed"; then
+    GUIDANCE="[Deploy Component Failure]\n"
+    GUIDANCE+="One or more components failed to deploy.\n\n"
+    GUIDANCE+="**Recovery steps:**\n"
+    GUIDANCE+="1. Review failed components: sf project deploy report --use-most-recent\n"
+    GUIDANCE+="2. Check field/object dependencies exist in target org\n"
+    GUIDANCE+="3. Verify API version compatibility\n"
+    GUIDANCE+="4. For managed package conflicts, check installed package versions"
+fi
+
+# Test failure blocking deploy
+if [ -z "$GUIDANCE" ] && echo "$RESULT" | grep -qi "test failure\|failing test\|insufficient code coverage"; then
+    GUIDANCE="[Deploy Test Failure]\n"
+    GUIDANCE+="Apex test failures are blocking the deployment.\n\n"
+    GUIDANCE+="**Recovery steps:**\n"
+    GUIDANCE+="1. Run tests standalone: sf apex test run --target-org <org> --wait 10\n"
+    GUIDANCE+="2. Deploy with specific tests: --test-level RunSpecifiedTests --tests <TestClass>\n"
+    GUIDANCE+="3. For non-production, consider: --test-level NoTestRun"
+fi
+
+# Deploy queued (not failed, but slow)
+if [ -z "$GUIDANCE" ] && echo "$RESULT" | grep -qi "Queued\|PENDING\|InProgress" && echo "$COMMAND" | grep -qi "deploy"; then
+    GUIDANCE="[Deploy Status: Queued/In-Progress]\n"
+    GUIDANCE+="The deployment was submitted but hasn't completed yet.\n\n"
+    GUIDANCE+="**This is not necessarily an error.** Recovery steps:\n"
+    GUIDANCE+="1. Poll status: sf project deploy report --use-most-recent\n"
+    GUIDANCE+="2. If stuck, cancel: sf project deploy cancel --use-most-recent\n"
+    GUIDANCE+="3. Use --async flag to avoid blocking the session"
 fi
 
 # Output guidance if found
