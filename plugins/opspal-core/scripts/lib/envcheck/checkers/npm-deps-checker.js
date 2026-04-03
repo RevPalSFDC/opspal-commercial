@@ -14,6 +14,8 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+const stripAnsi = (s) => s.replace(/\x1b\[[0-9;]*m/g, '');
+
 module.exports = {
   name: 'NPM Dependencies',
 
@@ -36,11 +38,14 @@ module.exports = {
 
     try {
       // Run the checker in JSON-like mode (capture exit code)
-      const result = execSync(`node "${checkerPath}"`, {
+      const rawResult = execSync(`node "${checkerPath}"`, {
         stdio: 'pipe',
         timeout: 30000,
         cwd: path.resolve(pluginRoot, '../../'), // plugins parent dir
       }).toString();
+
+      // Strip ANSI color codes before parsing
+      const result = stripAnsi(rawResult);
 
       // Parse output for missing count
       const missingMatch = result.match(/Packages missing:\s*(\d+)/);
@@ -67,8 +72,8 @@ module.exports = {
         durationMs: Date.now() - startMs,
       };
     } catch (err) {
-      // Exit code 1 means missing deps
-      const output = (err.stdout || '').toString();
+      // Exit code 1 means missing deps — strip ANSI before parsing
+      const output = stripAnsi((err.stdout || '').toString());
       const missingMatch = output.match(/Packages missing:\s*(\d+)/);
       const missing = missingMatch ? parseInt(missingMatch[1], 10) : 'unknown';
 

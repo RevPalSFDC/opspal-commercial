@@ -22,16 +22,20 @@ const { execSync, spawnSync } = require('child_process');
 // ANSI Colors
 // ============================================================================
 
-const colors = {
-  reset: '\x1b[0m',
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  cyan: '\x1b[36m',
-  gray: '\x1b[90m',
-  bold: '\x1b[1m'
-};
+const noColor = 'NO_COLOR' in process.env || !process.stdout.isTTY;
+
+const colors = noColor
+  ? { reset: '', green: '', red: '', yellow: '', blue: '', cyan: '', gray: '', bold: '' }
+  : {
+    reset: '\x1b[0m',
+    green: '\x1b[32m',
+    red: '\x1b[31m',
+    yellow: '\x1b[33m',
+    blue: '\x1b[34m',
+    cyan: '\x1b[36m',
+    gray: '\x1b[90m',
+    bold: '\x1b[1m'
+  };
 
 const icons = {
   pass: `${colors.green}✓${colors.reset}`,
