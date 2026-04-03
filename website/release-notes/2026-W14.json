@@ -1,17 +1,17 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought significant improvements to OpsPal's automation capabilities. You can now promote skills directly through a new command, and OpsPal has expanded its knowledge base to include 683 automation skills across 25 categories. We also strengthened Salesforce deployment reliability and fixed several issues that were preventing proper data imports and workflow execution.",
-  "published_at": "2026-04-03T01:53:26.805Z",
+  "summary": "This week brought significant improvements to OpsPal's automation capabilities with a new skills catalog containing 683 automated skills across 25 categories, plus enhanced Salesforce deployment reliability. We also fixed several platform issues that improve overall stability and resolved critical connectivity problems affecting HubSpot integrations.",
+  "published_at": "2026-04-03T14:22:32.686Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-03",
   "has_breaking": false,
-  "total_commits": 122,
+  "total_commits": 123,
   "entries": [
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New promote skills command available",
+      "headline": "New command to promote automation skills",
       "details": null,
       "commits": [
         "5af9bf4"
@@ -20,7 +20,7 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Expanded skill catalog now includes 683 automation skills across 25 categories",
+      "headline": "Expanded skills catalog now includes 683 automation skills across 25 categories",
       "details": null,
       "commits": [
         "ef2ee1a"
@@ -29,7 +29,7 @@
     {
       "category": "improved",
       "plugin": "General",
-      "headline": "Enhanced data import reliability and workflow guidance",
+      "headline": "Enhanced data import reliability and authentication improvements",
       "details": null,
       "commits": [
         "b8f0ed3"
@@ -45,21 +45,22 @@
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce state and country picklist validation now works correctly",
+      "headline": "Better Salesforce setup detection and deployment validation",
       "details": [
-        "OpsPal now properly detects state and country picklist configurations in Salesforce flows",
-        "Deployment validation checks permissions more thoroughly before making changes"
+        "Automatically detects country and state picklist configurations",
+        "Validates deployment paths before executing changes",
+        "Improved retry logic for failed operations"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Multi-step Salesforce deployments now complete successfully",
+      "headline": "Salesforce multi-step deployments now run more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -68,7 +69,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automation workflows now launch properly",
+      "headline": "Restored HubSpot automation capabilities that stopped working",
       "details": null,
       "commits": [
         "c53235d"
