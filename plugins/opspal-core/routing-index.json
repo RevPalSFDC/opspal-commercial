@@ -1,9 +1,9 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-02T23:57:52.040Z",
+  "buildDate": "2026-04-03T00:59:36.066Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
-  "totalCommands": 271,
+  "totalCommands": 272,
   "totalHooks": 261,
   "byKeyword": {
     "gemini": [
@@ -46043,6 +46043,13 @@
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/project-connect.md"
     },
+    "opspal-core:promote-skills": {
+      "plugin": "opspal-core",
+      "name": "promote-skills",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/promote-skills.md"
+    },
     "opspal-core:qbr": {
       "plugin": "opspal-core",
       "name": "qbr",
@@ -49260,7 +49267,7 @@
   "stats": {
     "totalAgents": 297,
     "totalAgentsFull": 300,
-    "totalCommands": 271,
+    "totalCommands": 272,
     "totalHooks": 261,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
