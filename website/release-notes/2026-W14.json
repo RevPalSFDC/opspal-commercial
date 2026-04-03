@@ -1,17 +1,17 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought significant improvements to OpsPal's automation capabilities with a new skills catalog containing 683 automated skills across 25 categories, plus enhanced Salesforce deployment reliability. We also fixed several platform issues that improve overall stability and resolved critical connectivity problems affecting HubSpot integrations.",
-  "published_at": "2026-04-03T14:22:32.686Z",
+  "summary": "This week focused on platform stability improvements that ensure your OpsPal workspace runs smoothly. We enhanced Salesforce deployment reliability with better error recovery and improved data validation to catch potential issues before they impact your workflows. Additionally, we expanded our skill catalog to 683 available automation skills across 25 categories, giving you more options for customizing your RevOps processes.",
+  "published_at": "2026-04-03T23:32:55.662Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-03",
   "has_breaking": false,
-  "total_commits": 123,
+  "total_commits": 126,
   "entries": [
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New command to promote automation skills",
+      "headline": "New skill promotion feature available",
       "details": null,
       "commits": [
         "5af9bf4"
@@ -20,7 +20,7 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Expanded skills catalog now includes 683 automation skills across 25 categories",
+      "headline": "Expanded skill catalog now includes 683 automation skills across 25 categories",
       "details": null,
       "commits": [
         "ef2ee1a"
@@ -29,7 +29,7 @@
     {
       "category": "improved",
       "plugin": "General",
-      "headline": "Enhanced data import reliability and authentication improvements",
+      "headline": "Enhanced data import reliability and process documentation",
       "details": null,
       "commits": [
         "b8f0ed3"
@@ -45,13 +45,39 @@
       ]
     },
     {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Plugin names now display consistently throughout the platform",
+      "details": null,
+      "commits": [
+        "510f9cc"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Historical activity data for weeks 12 and 13 now displays correctly",
+      "details": null,
+      "commits": [
+        "fe104ff"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Platform updates now include latest marketplace features",
+      "details": null,
+      "commits": [
+        "d4d0188"
+      ]
+    },
+    {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce setup detection and deployment validation",
+      "headline": "Better Salesforce validation catches state and country field configuration issues",
       "details": [
-        "Automatically detects country and state picklist configurations",
-        "Validates deployment paths before executing changes",
-        "Improved retry logic for failed operations"
+        "Automatically detects when state and country fields might cause deployment problems",
+        "Validates field references before making changes to prevent errors"
       ],
       "commits": [
         "fcad945"
@@ -60,7 +86,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce multi-step deployments now run more reliably",
+      "headline": "Complex Salesforce deployments now run more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -69,7 +95,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot automation capabilities that stopped working",
+      "headline": "HubSpot automations now launch without errors",
       "details": null,
       "commits": [
         "c53235d"
