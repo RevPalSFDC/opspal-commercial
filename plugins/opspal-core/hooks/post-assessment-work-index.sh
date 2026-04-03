@@ -113,9 +113,14 @@ if [ -z "$HOOK_INPUT" ]; then
 fi
 
 # Extract agent name from input (JSON structure expected)
+# PostToolUse/Agent events place the sub-agent type in .tool_input.subagent_type
+# Also check CLAUDE_AGENT_NAME env var (set by Claude Code in sub-agent context)
+# and fall back to .agent_type / .subagent_type for SubagentStop-style events.
 AGENT_NAME=""
-if command -v jq &> /dev/null; then
-    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent_name // .tool_name // empty' 2>/dev/null || true)
+if [ -n "${CLAUDE_AGENT_NAME:-}" ]; then
+    AGENT_NAME="$CLAUDE_AGENT_NAME"
+elif command -v jq &> /dev/null; then
+    AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .agent_type // .subagent_type // .agent_name // empty' 2>/dev/null || true)
 fi
 
 # Try to load classification from external config file first (if jq available)

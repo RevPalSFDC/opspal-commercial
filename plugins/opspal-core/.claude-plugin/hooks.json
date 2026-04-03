@@ -28,6 +28,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-runbook-policy-enforcer.sh",
             "timeout": 10,
             "description": "Enforce runbook policy retrieval for operational agents before field selection (Runbook Policy Infrastructure)"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-task-work-context.sh",
+            "timeout": 5,
+            "description": "Load client work history and inject project memory context before agent execution"
           }
         ]
       },
