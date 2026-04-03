@@ -1,17 +1,17 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought significant enhancements to OpsPal's skill discovery capabilities, with a comprehensive skill catalog now featuring 683 skills across 25 categories to help you identify automation opportunities. Salesforce deployments became more reliable with improved error recovery and better handling of complex configurations. Multiple stability fixes ensure smoother operations across all your RevOps workflows.",
-  "published_at": "2026-04-03T01:03:07.711Z",
+  "summary": "This week brought significant improvements to OpsPal's automation capabilities. You can now promote skills directly through a new command, and OpsPal has expanded its knowledge base to include 683 automation skills across 25 categories. We also strengthened Salesforce deployment reliability and fixed several issues that were preventing proper data imports and workflow execution.",
+  "published_at": "2026-04-03T01:53:26.805Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-03",
   "has_breaking": false,
-  "total_commits": 118,
+  "total_commits": 122,
   "entries": [
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New command to promote discovered skills for automation",
+      "headline": "New promote skills command available",
       "details": null,
       "commits": [
         "5af9bf4"
@@ -20,7 +20,7 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Comprehensive skill catalog with 683 automation opportunities across 25 categories",
+      "headline": "Expanded skill catalog now includes 683 automation skills across 25 categories",
       "details": null,
       "commits": [
         "ef2ee1a"
@@ -29,7 +29,7 @@
     {
       "category": "improved",
       "plugin": "General",
-      "headline": "Enhanced data import reliability and workflow documentation",
+      "headline": "Enhanced data import reliability and workflow guidance",
       "details": null,
       "commits": [
         "b8f0ed3"
@@ -46,48 +46,20 @@
     },
     {
       "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Plugin names now display consistently throughout the platform",
-      "details": null,
-      "commits": [
-        "510f9cc"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Headlines now display with proper capitalization",
-      "details": null,
-      "commits": [
-        "67a2961"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Restored access to historical data from weeks 12 and 13",
-      "details": null,
-      "commits": [
-        "fe104ff"
-      ]
-    },
-    {
-      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce field validation and deployment reliability",
+      "headline": "Salesforce state and country picklist validation now works correctly",
       "details": [
-        "Detects potential State/Country picklist configuration issues",
-        "Improved validation for complex field references",
-        "More reliable deployment process with automatic retries"
+        "OpsPal now properly detects state and country picklist configurations in Salesforce flows",
+        "Deployment validation checks permissions more thoroughly before making changes"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now use enhanced workflow management",
+      "headline": "Multi-step Salesforce deployments now complete successfully",
       "details": null,
       "commits": [
         "a1075f7"
@@ -96,7 +68,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot workflows now launch properly after configuration issue",
+      "headline": "HubSpot automation workflows now launch properly",
       "details": null,
       "commits": [
         "c53235d"
