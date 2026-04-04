@@ -37,7 +37,7 @@ node plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js re-encrypt --plug
 
 **Re-encrypt all plugins:**
 ```bash
-for plugin in opspal-core opspal-salesforce opspal-hubspot opspal-marketo opspal-gtm-planning opspal-data-hygiene; do
+for plugin in opspal-core opspal-salesforce opspal-hubspot opspal-marketo opspal-gtm-planning; do
   echo "=== $plugin ==="
   node plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js re-encrypt --plugin "$plugin"
 done
@@ -45,7 +45,7 @@ done
 
 **Verify all assets:**
 ```bash
-for plugin in opspal-core opspal-salesforce opspal-hubspot opspal-marketo opspal-gtm-planning opspal-data-hygiene; do
+for plugin in opspal-core opspal-salesforce opspal-hubspot opspal-marketo opspal-gtm-planning; do
   echo "=== $plugin ==="
   node plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js verify --plugin "$plugin"
 done
@@ -53,7 +53,7 @@ done
 
 **Show encryption status:**
 ```bash
-for plugin in opspal-core opspal-salesforce opspal-hubspot opspal-marketo opspal-gtm-planning opspal-data-hygiene; do
+for plugin in opspal-core opspal-salesforce opspal-hubspot opspal-marketo opspal-gtm-planning; do
   echo "=== $plugin ==="
   node plugins/opspal-core/scripts/lib/plugin-asset-encryptor.js status --plugin "$plugin"
   echo ""

@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-04T15:37:18.133Z",
+  "buildDate": "2026-04-04T15:49:53.256Z",
   "totalAgents": 297,
-  "totalAgentsFull": 300,
-  "totalCommands": 283,
-  "totalHooks": 266,
+  "totalAgentsFull": 298,
+  "totalCommands": 282,
+  "totalHooks": 264,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -789,6 +789,16 @@
     "core contact dedup": [
       "contact-dedup-orchestrator"
     ],
+    "core workflow": [
+      "contact-dedup-orchestrator",
+      "fireflies-sync-orchestrator",
+      "gong-sync-orchestrator",
+      "multi-platform-workflow-orchestrator",
+      "n8n-lifecycle-manager",
+      "n8n-optimizer",
+      "n8n-workflow-builder",
+      "ui-documentation-generator"
+    ],
     "conversation intelligence": [
       "conversation-intelligence-aggregator",
       "gong-integration-agent",
@@ -1013,8 +1023,6 @@
       "instance-deployer",
       "instance-sync",
       "revops-data-quality-orchestrator",
-      "contact-dedup-orchestrator",
-      "sfdc-hubspot-dedup-orchestrator",
       "gtm-attribution-governance",
       "gtm-data-insights",
       "gtm-planning-orchestrator",
@@ -1425,15 +1433,6 @@
     ],
     "core fireflies sync": [
       "fireflies-sync-orchestrator"
-    ],
-    "core workflow": [
-      "fireflies-sync-orchestrator",
-      "gong-sync-orchestrator",
-      "multi-platform-workflow-orchestrator",
-      "n8n-lifecycle-manager",
-      "n8n-optimizer",
-      "n8n-workflow-builder",
-      "ui-documentation-generator"
     ],
     "competitor mentioned": [
       "gong-competitive-intelligence-agent"
@@ -3813,51 +3812,6 @@
     "quality score": [
       "web-viz-generator"
     ],
-    "data contact": [
-      "contact-dedup-orchestrator"
-    ],
-    "contact data": [
-      "contact-dedup-orchestrator"
-    ],
-    "data dedup": [
-      "contact-dedup-orchestrator",
-      "sfdc-hubspot-dedup-orchestrator"
-    ],
-    "dedup data": [
-      "contact-dedup-orchestrator"
-    ],
-    "hygiene": [
-      "contact-dedup-orchestrator",
-      "hubspot-data-hygiene-specialist"
-    ],
-    "hygiene contact": [
-      "contact-dedup-orchestrator"
-    ],
-    "hygiene dedup": [
-      "contact-dedup-orchestrator"
-    ],
-    "data sfdc": [
-      "sfdc-hubspot-dedup-orchestrator"
-    ],
-    "sfdc data": [
-      "sfdc-hubspot-dedup-orchestrator",
-      "sfdc-data-export-manager",
-      "sfdc-data-generator",
-      "sfdc-data-import-manager",
-      "sfdc-data-operations"
-    ],
-    "data hubspot": [
-      "sfdc-hubspot-dedup-orchestrator",
-      "hubspot-data-hygiene-specialist",
-      "hubspot-data-operations-manager",
-      "hubspot-data"
-    ],
-    "hubspot data": [
-      "sfdc-hubspot-dedup-orchestrator",
-      "hubspot-data-hygiene-specialist",
-      "hubspot-data-operations-manager",
-      "hubspot-data"
-    ],
     "forecast": [
       "forecast-orchestrator"
     ],
@@ -5210,6 +5164,9 @@
     "hubspot hubspot custom": [
       "hubspot-custom-action-builder"
     ],
+    "hygiene": [
+      "hubspot-data-hygiene-specialist"
+    ],
     "merge": [
       "hubspot-data-hygiene-specialist",
       "sfdc-merge-orchestrator",
@@ -5219,12 +5176,22 @@
       "hubspot-data-hygiene-specialist",
       "marketo-lead-manager"
     ],
+    "hubspot data": [
+      "hubspot-data-hygiene-specialist",
+      "hubspot-data-operations-manager",
+      "hubspot-data"
+    ],
     "hubspot data hygiene": [
       "hubspot-data-hygiene-specialist"
     ],
     "data hygiene": [
       "hubspot-data-hygiene-specialist",
       "marketo-lead-quality-assessor"
+    ],
+    "data hubspot": [
+      "hubspot-data-hygiene-specialist",
+      "hubspot-data-operations-manager",
+      "hubspot-data"
     ],
     "hubspot hygiene": [
       "hubspot-data-hygiene-specialist"
@@ -8661,6 +8628,12 @@
     "data dump": [
       "sfdc-data-export-manager"
     ],
+    "sfdc data": [
+      "sfdc-data-export-manager",
+      "sfdc-data-generator",
+      "sfdc-data-import-manager",
+      "sfdc-data-operations"
+    ],
     "sfdc data export": [
       "sfdc-data-export-manager"
     ],
@@ -10096,7 +10069,6 @@
       "opspal-core:live-wire-sync-test-orchestrator",
       "opspal-core:platform-instance-manager",
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-data-hygiene-specialist",
       "opspal-hubspot:hubspot-sfdc-sync-scraper",
       "opspal-salesforce:apex-debug-analyst",
@@ -10228,7 +10200,6 @@
       "opspal-core:live-wire-sync-test-orchestrator",
       "opspal-core:platform-instance-manager",
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-sfdc-sync-scraper",
       "opspal-salesforce:flow-batch-operator",
       "opspal-salesforce:flow-segmentation-specialist",
@@ -10536,36 +10507,28 @@
       "opspal-core:compensation-calculator"
     ],
     "contact dedup": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "deduplicate contacts": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "merge contacts": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "duplicate contacts": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "contact hygiene": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "lead dedup": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "deduplicate leads": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "contact": [
       "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator",
       "opspal-hubspot:hubspot-contact-manager",
       "opspal-marketo:marketo-lead-manager"
     ],
@@ -10573,8 +10536,6 @@
       "opspal-core:contact-dedup-orchestrator",
       "opspal-core:revops-dedup-specialist",
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-salesforce:sfdc-dedup-safety-copilot"
     ],
     "core contact": [
@@ -10594,6 +10555,16 @@
     ],
     "core contact dedup": [
       "opspal-core:contact-dedup-orchestrator"
+    ],
+    "core workflow": [
+      "opspal-core:contact-dedup-orchestrator",
+      "opspal-core:fireflies-sync-orchestrator",
+      "opspal-core:gong-sync-orchestrator",
+      "opspal-core:multi-platform-workflow-orchestrator",
+      "opspal-core:n8n-lifecycle-manager",
+      "opspal-core:n8n-optimizer",
+      "opspal-core:n8n-workflow-builder",
+      "opspal-core:ui-documentation-generator"
     ],
     "conversation intelligence": [
       "opspal-core:conversation-intelligence-aggregator",
@@ -10734,8 +10705,7 @@
       "opspal-core:cross-platform-pipeline-orchestrator",
       "opspal-core:n8n-integration-orchestrator",
       "opspal-core:sales-funnel-diagnostic",
-      "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
+      "opspal-core:sfdc-hubspot-dedup-orchestrator"
     ],
     "multi-platform": [
       "opspal-core:cross-platform-pipeline-orchestrator",
@@ -10820,8 +10790,6 @@
       "opspal-core:instance-deployer",
       "opspal-core:instance-sync",
       "opspal-core:revops-data-quality-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-gtm-planning:gtm-attribution-governance",
       "opspal-gtm-planning:gtm-data-insights",
       "opspal-gtm-planning:gtm-planning-orchestrator",
@@ -11233,15 +11201,6 @@
     "core fireflies sync": [
       "opspal-core:fireflies-sync-orchestrator"
     ],
-    "core workflow": [
-      "opspal-core:fireflies-sync-orchestrator",
-      "opspal-core:gong-sync-orchestrator",
-      "opspal-core:multi-platform-workflow-orchestrator",
-      "opspal-core:n8n-lifecycle-manager",
-      "opspal-core:n8n-optimizer",
-      "opspal-core:n8n-workflow-builder",
-      "opspal-core:ui-documentation-generator"
-    ],
     "competitor mentioned": [
       "opspal-core:gong-competitive-intelligence-agent"
     ],
@@ -11477,7 +11436,6 @@
       "opspal-core:project-connect",
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
       "opspal-core:task-graph-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-orchestrator",
       "opspal-marketo:marketo-orchestrator",
       "opspal-salesforce:sfdc-dashboard-migrator",
@@ -11700,7 +11658,6 @@
     "orchestrator": [
       "opspal-core:live-wire-sync-test-orchestrator",
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-gtm-planning:gtm-planning-orchestrator",
       "opspal-hubspot:hubspot-orchestrator",
       "opspal-marketo:marketo-orchestrator",
@@ -12118,7 +12075,6 @@
     "hubspot": [
       "opspal-core:platform-instance-manager",
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-admin-specialist",
       "opspal-hubspot:hubspot-adoption-tracker",
       "opspal-hubspot:hubspot-ai-revenue-intelligence",
@@ -12987,7 +12943,6 @@
     ],
     "sfdc": [
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-sfdc-sync-scraper",
       "opspal-marketo:marketo-sfdc-sync-specialist",
       "opspal-salesforce:sfdc-advocate-assignment",
@@ -13070,16 +13025,13 @@
     ],
     "sfdc hubspot": [
       "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
       "opspal-hubspot:hubspot-sfdc-sync-scraper"
     ],
     "sfdc hubspot dedup": [
-      "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
+      "opspal-core:sfdc-hubspot-dedup-orchestrator"
     ],
     "hubspot dedup": [
-      "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
+      "opspal-core:sfdc-hubspot-dedup-orchestrator"
     ],
     "core sfdc": [
       "opspal-core:sfdc-hubspot-dedup-orchestrator"
@@ -13626,51 +13578,6 @@
     ],
     "quality score": [
       "opspal-core:web-viz-generator"
-    ],
-    "data contact": [
-      "opspal-data-hygiene:contact-dedup-orchestrator"
-    ],
-    "contact data": [
-      "opspal-data-hygiene:contact-dedup-orchestrator"
-    ],
-    "data dedup": [
-      "opspal-data-hygiene:contact-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
-    ],
-    "dedup data": [
-      "opspal-data-hygiene:contact-dedup-orchestrator"
-    ],
-    "hygiene": [
-      "opspal-data-hygiene:contact-dedup-orchestrator",
-      "opspal-hubspot:hubspot-data-hygiene-specialist"
-    ],
-    "hygiene contact": [
-      "opspal-data-hygiene:contact-dedup-orchestrator"
-    ],
-    "hygiene dedup": [
-      "opspal-data-hygiene:contact-dedup-orchestrator"
-    ],
-    "data sfdc": [
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
-    ],
-    "sfdc data": [
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
-      "opspal-salesforce:sfdc-data-export-manager",
-      "opspal-salesforce:sfdc-data-generator",
-      "opspal-salesforce:sfdc-data-import-manager",
-      "opspal-salesforce:sfdc-data-operations"
-    ],
-    "data hubspot": [
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
-      "opspal-hubspot:hubspot-data-hygiene-specialist",
-      "opspal-hubspot:hubspot-data-operations-manager",
-      "opspal-hubspot:hubspot-data"
-    ],
-    "hubspot data": [
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator",
-      "opspal-hubspot:hubspot-data-hygiene-specialist",
-      "opspal-hubspot:hubspot-data-operations-manager",
-      "opspal-hubspot:hubspot-data"
     ],
     "forecast": [
       "opspal-gtm-planning:forecast-orchestrator"
@@ -15024,6 +14931,9 @@
     "hubspot hubspot custom": [
       "opspal-hubspot:hubspot-custom-action-builder"
     ],
+    "hygiene": [
+      "opspal-hubspot:hubspot-data-hygiene-specialist"
+    ],
     "merge": [
       "opspal-hubspot:hubspot-data-hygiene-specialist",
       "opspal-salesforce:sfdc-merge-orchestrator",
@@ -15033,12 +14943,22 @@
       "opspal-hubspot:hubspot-data-hygiene-specialist",
       "opspal-marketo:marketo-lead-manager"
     ],
+    "hubspot data": [
+      "opspal-hubspot:hubspot-data-hygiene-specialist",
+      "opspal-hubspot:hubspot-data-operations-manager",
+      "opspal-hubspot:hubspot-data"
+    ],
     "hubspot data hygiene": [
       "opspal-hubspot:hubspot-data-hygiene-specialist"
     ],
     "data hygiene": [
       "opspal-hubspot:hubspot-data-hygiene-specialist",
       "opspal-marketo:marketo-lead-quality-assessor"
+    ],
+    "data hubspot": [
+      "opspal-hubspot:hubspot-data-hygiene-specialist",
+      "opspal-hubspot:hubspot-data-operations-manager",
+      "opspal-hubspot:hubspot-data"
     ],
     "hubspot hygiene": [
       "opspal-hubspot:hubspot-data-hygiene-specialist"
@@ -18475,6 +18395,12 @@
     "data dump": [
       "opspal-salesforce:sfdc-data-export-manager"
     ],
+    "sfdc data": [
+      "opspal-salesforce:sfdc-data-export-manager",
+      "opspal-salesforce:sfdc-data-generator",
+      "opspal-salesforce:sfdc-data-import-manager",
+      "opspal-salesforce:sfdc-data-operations"
+    ],
     "sfdc data export": [
       "opspal-salesforce:sfdc-data-export-manager"
     ],
@@ -19692,10 +19618,6 @@
       "visual-regression-tester",
       "web-viz-generator"
     ],
-    "opspal-data-hygiene": [
-      "contact-dedup-orchestrator",
-      "sfdc-hubspot-dedup-orchestrator"
-    ],
     "opspal-gtm-planning": [
       "forecast-orchestrator",
       "gtm-asana-bridge",
@@ -20011,10 +19933,6 @@
       "opspal-core:unified-reporting-aggregator",
       "opspal-core:visual-regression-tester",
       "opspal-core:web-viz-generator"
-    ],
-    "opspal-data-hygiene": [
-      "opspal-data-hygiene:contact-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
     ],
     "opspal-gtm-planning": [
       "opspal-gtm-planning:forecast-orchestrator",
@@ -20717,9 +20635,9 @@
       "file": "contact-dedup-orchestrator.md",
       "path": "opspal-core/agents/contact-dedup-orchestrator.md",
       "name": "contact-dedup-orchestrator",
-      "description": "\"**DEPRECATED** - Use opspal-data-hygiene:contact-dedup-orchestrator instead.",
+      "description": "Orchestrates contact and lead deduplication workflows across HubSpot and Salesforce.",
       "model": "sonnet",
-      "color": "gray",
+      "color": "orange",
       "tools": [
         "Read",
         "Write",
@@ -20743,7 +20661,8 @@
         "contact core",
         "core dedup",
         "dedup core",
-        "core contact dedup"
+        "core contact dedup",
+        "core workflow"
       ],
       "shortName": "contact-dedup-orchestrator",
       "fullName": "opspal-core:contact-dedup-orchestrator"
@@ -23038,9 +22957,9 @@
       "file": "sfdc-hubspot-dedup-orchestrator.md",
       "path": "opspal-core/agents/sfdc-hubspot-dedup-orchestrator.md",
       "name": "sfdc-hubspot-dedup-orchestrator",
-      "description": "\"**DEPRECATED** - Use opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator instead.",
+      "description": "Orchestrates Company/Account deduplication workflows across HubSpot and Salesforce.",
       "model": "sonnet",
-      "color": "gray",
+      "color": "orange",
       "tools": [
         "Read",
         "Write",
@@ -32803,9 +32722,9 @@
       "file": "contact-dedup-orchestrator.md",
       "path": "opspal-core/agents/contact-dedup-orchestrator.md",
       "name": "contact-dedup-orchestrator",
-      "description": "\"**DEPRECATED** - Use opspal-data-hygiene:contact-dedup-orchestrator instead.",
+      "description": "Orchestrates contact and lead deduplication workflows across HubSpot and Salesforce.",
       "model": "sonnet",
-      "color": "gray",
+      "color": "orange",
       "tools": [
         "Read",
         "Write",
@@ -32829,7 +32748,8 @@
         "contact core",
         "core dedup",
         "dedup core",
-        "core contact dedup"
+        "core contact dedup",
+        "core workflow"
       ],
       "shortName": "contact-dedup-orchestrator",
       "fullName": "opspal-core:contact-dedup-orchestrator"
@@ -35124,9 +35044,9 @@
       "file": "sfdc-hubspot-dedup-orchestrator.md",
       "path": "opspal-core/agents/sfdc-hubspot-dedup-orchestrator.md",
       "name": "sfdc-hubspot-dedup-orchestrator",
-      "description": "\"**DEPRECATED** - Use opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator instead.",
+      "description": "Orchestrates Company/Account deduplication workflows across HubSpot and Salesforce.",
       "model": "sonnet",
-      "color": "gray",
+      "color": "orange",
       "tools": [
         "Read",
         "Write",
@@ -35698,82 +35618,6 @@
       ],
       "shortName": "web-viz-generator",
       "fullName": "opspal-core:web-viz-generator"
-    },
-    "opspal-data-hygiene:contact-dedup-orchestrator": {
-      "plugin": "opspal-data-hygiene",
-      "file": "contact-dedup-orchestrator.md",
-      "path": "opspal-data-hygiene/agents/contact-dedup-orchestrator.md",
-      "name": "contact-dedup-orchestrator",
-      "description": "MUST BE USED for Contact/Lead deduplication.",
-      "model": "sonnet",
-      "color": "teal",
-      "tools": [
-        "Read",
-        "Write",
-        "Bash",
-        "Grep",
-        "Agent",
-        "TodoWrite"
-      ],
-      "triggerKeywords": [
-        "contact dedup",
-        "deduplicate contacts",
-        "merge contacts",
-        "duplicate contacts",
-        "contact hygiene",
-        "lead dedup",
-        "deduplicate leads",
-        "contact",
-        "dedup",
-        "data",
-        "data contact",
-        "contact data",
-        "data dedup",
-        "dedup data",
-        "hygiene",
-        "hygiene contact",
-        "hygiene dedup"
-      ],
-      "shortName": "contact-dedup-orchestrator",
-      "fullName": "opspal-data-hygiene:contact-dedup-orchestrator"
-    },
-    "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator": {
-      "plugin": "opspal-data-hygiene",
-      "file": "sfdc-hubspot-dedup-orchestrator.md",
-      "path": "opspal-data-hygiene/agents/sfdc-hubspot-dedup-orchestrator.md",
-      "name": "sfdc-hubspot-dedup-orchestrator",
-      "description": "MUST BE USED for cross-platform deduplication.",
-      "model": "sonnet",
-      "color": "teal",
-      "tools": [
-        "Read",
-        "Write",
-        "Bash",
-        "Grep",
-        "Agent",
-        "TodoWrite"
-      ],
-      "triggerKeywords": [
-        "sf",
-        "hubspot",
-        "sfdc",
-        "salesforce",
-        "dedup",
-        "orchestrator",
-        "orchestrate",
-        "cross-platform",
-        "sfdc hubspot",
-        "sfdc hubspot dedup",
-        "hubspot dedup",
-        "data",
-        "data sfdc",
-        "sfdc data",
-        "data hubspot",
-        "hubspot data",
-        "data dedup"
-      ],
-      "shortName": "sfdc-hubspot-dedup-orchestrator",
-      "fullName": "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
     },
     "opspal-gtm-planning:forecast-orchestrator": {
       "plugin": "opspal-gtm-planning",
@@ -44622,8 +44466,7 @@
       "opspal-core:compensation-calculator"
     ],
     "contact-dedup-orchestrator": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
+      "opspal-core:contact-dedup-orchestrator"
     ],
     "conversation-intelligence-aggregator": [
       "opspal-core:conversation-intelligence-aggregator"
@@ -44794,8 +44637,7 @@
       "opspal-core:sales-playbook-orchestrator"
     ],
     "sfdc-hubspot-dedup-orchestrator": [
-      "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
+      "opspal-core:sfdc-hubspot-dedup-orchestrator"
     ],
     "solution-analyzer": [
       "opspal-core:solution-analyzer"
@@ -45483,14 +45325,6 @@
     ]
   },
   "duplicateShortNames": {
-    "contact-dedup-orchestrator": [
-      "opspal-core:contact-dedup-orchestrator",
-      "opspal-data-hygiene:contact-dedup-orchestrator"
-    ],
-    "sfdc-hubspot-dedup-orchestrator": [
-      "opspal-core:sfdc-hubspot-dedup-orchestrator",
-      "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
-    ],
     "benchmark-research-agent": [
       "opspal-core:benchmark-research-agent",
       "opspal-salesforce:benchmark-research-agent"
@@ -46399,13 +46233,6 @@
       "description": "",
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/workflow-orchestrate.md"
-    },
-    "opspal-data-hygiene:dedup-companies": {
-      "plugin": "opspal-data-hygiene",
-      "name": "dedup-companies",
-      "description": "",
-      "triggerKeywords": [],
-      "filePath": "opspal-data-hygiene/commands/dedup-companies.md"
     },
     "opspal-gtm-planning:forecast": {
       "plugin": "opspal-gtm-planning",
@@ -47727,13 +47554,6 @@
         "description": "",
         "file": null,
         "matcher": "*"
-      },
-      {
-        "plugin": "opspal-data-hygiene",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "*"
       }
     ],
     "PreToolUse": [
@@ -48643,13 +48463,6 @@
         "matcher": null
       },
       {
-        "plugin": "opspal-data-hygiene",
-        "name": "deprecation-warning",
-        "description": "",
-        "file": "opspal-data-hygiene/hooks/deprecation-warning.sh",
-        "matcher": null
-      },
-      {
         "plugin": "opspal-gtm-planning",
         "name": "pre-write-gtm-path-validator",
         "description": "",
@@ -49378,22 +49191,22 @@
   "routingRules": [],
   "stats": {
     "totalAgents": 297,
-    "totalAgentsFull": 300,
-    "totalCommands": 283,
-    "totalHooks": 266,
+    "totalAgentsFull": 298,
+    "totalCommands": 282,
+    "totalHooks": 264,
     "totalRoutingRules": 0,
-    "totalKeywords": 2607,
-    "totalKeywordsFull": 2607,
-    "totalPlugins": 9,
-    "duplicateShortNames": 3,
+    "totalKeywords": 2600,
+    "totalKeywordsFull": 2600,
+    "totalPlugins": 8,
+    "duplicateShortNames": 1,
     "agentsWithKeywords": 297,
-    "agentsWithKeywordsFull": 300,
+    "agentsWithKeywordsFull": 298,
     "agentsWithTools": 297,
-    "agentsWithToolsFull": 300,
+    "agentsWithToolsFull": 298,
     "avgKeywordsPerAgent": "15.32",
     "hooksByEvent": {
       "PostToolUse": 34,
-      "UserPromptSubmit": 2,
+      "UserPromptSubmit": 1,
       "PreToolUse": 37,
       "PermissionRequest": 1,
       "PreCompact": 1,
@@ -49402,7 +49215,7 @@
       "SubagentStop": 7,
       "TaskCompleted": 1,
       "Stop": 8,
-      "Unknown": 143,
+      "Unknown": 142,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,

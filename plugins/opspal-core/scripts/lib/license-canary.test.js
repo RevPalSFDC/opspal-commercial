@@ -27,7 +27,7 @@ test('parseArgs reads expect-tier and server flags', () => {
 test('expectedAllowedTiersForTier maps enterprise correctly', () => {
   assert.deepStrictEqual(
     expectedAllowedTiersForTier('enterprise'),
-    ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene']
+    ['core', 'salesforce', 'hubspot', 'marketo', 'gtm']
   );
 });
 
@@ -117,7 +117,7 @@ test('validateCanaryResults surfaces asset decryption failures', () => {
     session: {
       valid: true,
       tier: 'enterprise',
-      allowed_asset_tiers: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene'],
+      allowed_asset_tiers: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm'],
       key_bundle_version: 2,
       key_bundle: {
         version: 2,
@@ -126,21 +126,20 @@ test('validateCanaryResults surfaces asset decryption failures', () => {
           salesforce: 'b',
           hubspot: 'c',
           marketo: 'd',
-          gtm: 'e',
-          'data-hygiene': 'f'
+          gtm: 'e'
         }
       }
     },
     status: {
       status: 'valid',
-      allowed_asset_tiers: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene'],
+      allowed_asset_tiers: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm'],
       key_bundle_version: 2,
       has_scoped_key_bundle: true
     },
     verify: {
       valid: true,
       tier: 'enterprise',
-      allowed_asset_tiers: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene'],
+      allowed_asset_tiers: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm'],
       key_bundle_version: 2
     },
     assetValidation: {

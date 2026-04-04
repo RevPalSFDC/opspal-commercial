@@ -68,7 +68,6 @@ const AGENT_FAMILY_MAP = {
   'opspal-gtm-planning': 'gtm',
   'opspal-okrs': 'okrs',
   'opspal-monday': 'monday',
-  'opspal-data-hygiene': 'data-hygiene',
   'opspal-mcp-client': 'mcp-client',
   'opspal-ai-consult': 'ai-consult',
 };

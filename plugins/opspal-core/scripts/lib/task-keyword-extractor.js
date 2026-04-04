@@ -45,9 +45,6 @@ class TaskKeywordExtractor {
         'gtm', 'go-to-market', 'quota', 'capacity', 'territory plan', 'arr', 'mrr',
         'revenue model', 'market size'
       ],
-      'data-hygiene': [
-        'dedup', 'deduplicate', 'duplicate', 'merge', 'data hygiene', 'data quality', 'cleanup'
-      ],
       'ai-consult': [
         'ai consult', 'ai strategy', 'consulting memo', 'strategy assessment'
       ],

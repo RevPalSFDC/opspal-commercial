@@ -418,12 +418,6 @@
             "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/routing-context-refresher.sh",
             "timeout": 3000,
             "description": "Inject condensed routing reminder after context compaction or periodically"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
-            "timeout": 5000,
-            "description": "Warn that opspal-data-hygiene is deprecated and redirect to opspal-core/hubspot/salesforce replacements"
           }
         ]
       }

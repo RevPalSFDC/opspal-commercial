@@ -55,7 +55,6 @@ PLUGINS=(
 
 # Deprecated plugins — listed but not installed
 DEPRECATED_PLUGINS=(
-  "opspal-data-hygiene"
 )
 
 # ─── Defaults ────────────────────────────────────────────────────────────────

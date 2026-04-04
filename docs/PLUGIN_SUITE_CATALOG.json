@@ -10,10 +10,10 @@
     }
   },
   "totals": {
-    "plugins": 9,
-    "agents": 300,
-    "commands": 283,
-    "hooks": 187,
+    "plugins": 8,
+    "agents": 298,
+    "commands": 282,
+    "hooks": 186,
     "skills": 1
   },
   "plugins": [
@@ -55,26 +55,6 @@
         "last_reviewed_at": "2026-02-15",
         "deprecation_date": null,
         "replaced_by": null
-      }
-    },
-    {
-      "name": "opspal-data-hygiene",
-      "version": "1.2.6",
-      "source": "./plugins/opspal-data-hygiene",
-      "description": "[DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functionality has been consolidated into opspal-core. Use /dedup-companies or /deduplicate commands instead.",
-      "counts": {
-        "agents": 2,
-        "commands": 1,
-        "hooks": 1,
-        "skills": 0
-      },
-      "lifecycle": {
-        "status": "deprecated",
-        "owner": "revpal-platform",
-        "stability": "deprecated",
-        "last_reviewed_at": "2026-02-15",
-        "deprecation_date": "2026-02-15",
-        "replaced_by": "opspal-core"
       }
     },
     {

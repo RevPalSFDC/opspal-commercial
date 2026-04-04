@@ -816,7 +816,7 @@ Task({
 
 ```javascript
 Task({
-  subagent_type: 'opspal-data-hygiene:data-quality-validator',
+  subagent_type: 'opspal-core:data-quality-audit',
   prompt: `Validate migration data quality: ${validationRules}`
 });
 ```

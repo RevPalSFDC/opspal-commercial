@@ -96,7 +96,6 @@ async function runAllTests() {
       assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
       assert(scope.selectedPlugins.includes('opspal-salesforce'), 'Should include Salesforce for cross-platform sync');
       assert(scope.selectedPlugins.includes('opspal-hubspot'), 'Should include HubSpot for cross-platform sync');
-      assert(scope.selectedPlugins.includes('opspal-data-hygiene'), 'Should include data-hygiene sidecar for dedup tasks');
     } finally {
       fs.rmSync(home, { recursive: true, force: true });
     }

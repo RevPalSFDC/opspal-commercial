@@ -34,7 +34,7 @@ const EXPECTED_ALLOWED_TIERS = {
   hubspot: ['core', 'hubspot'],
   marketo: ['core', 'marketo'],
   professional: ['core', 'salesforce', 'hubspot'],
-  enterprise: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene']
+  enterprise: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm']
 };
 
 const RESET = '\x1b[0m';

@@ -10,7 +10,7 @@
  *   Offset  Size  Content
  *   0-3     4B    Magic  "OENC" (0x4F454E43)
  *   4       1B    Version (0x02 tier-scoped)
- *   5       1B    Key slot (1=core, 2=salesforce, 3=hubspot, 4=marketo, 5=gtm, 6=data-hygiene; 0=legacy v1)
+ *   5       1B    Key slot (1=core, 2=salesforce, 3=hubspot, 4=marketo, 5=gtm; 0=legacy v1)
  *   6-7     2B    Reserved flags
  *   8-23    16B   HKDF salt
  *   24-35   12B   GCM nonce
@@ -57,8 +57,7 @@ const DOMAIN_ENV_KEYS = {
   salesforce:     'OPSPAL_KEY_DOMAIN_SALESFORCE',
   hubspot:        'OPSPAL_KEY_DOMAIN_HUBSPOT',
   marketo:        'OPSPAL_KEY_DOMAIN_MARKETO',
-  gtm:            'OPSPAL_KEY_DOMAIN_GTM',
-  'data-hygiene': 'OPSPAL_KEY_DOMAIN_DATA_HYGIENE'
+  gtm:            'OPSPAL_KEY_DOMAIN_GTM'
 };
 
 // Domain-scoped key files (one per plugin domain)
@@ -67,8 +66,7 @@ const DOMAIN_KEY_FILES = {
   salesforce: path.join(KEY_DIR, 'salesforce.key'),
   hubspot: path.join(KEY_DIR, 'hubspot.key'),
   marketo: path.join(KEY_DIR, 'marketo.key'),
-  gtm: path.join(KEY_DIR, 'gtm.key'),
-  'data-hygiene': path.join(KEY_DIR, 'data-hygiene.key')
+  gtm: path.join(KEY_DIR, 'gtm.key')
 };
 
 // Wire format key slot mapping (domain → slot byte)
@@ -77,8 +75,7 @@ const KEY_SLOT_BY_DOMAIN = {
   salesforce: 2,
   hubspot: 3,
   marketo: 4,
-  gtm: 5,
-  'data-hygiene': 6
+  gtm: 5
 };
 
 // Reverse mapping (slot byte → domain)
@@ -88,8 +85,7 @@ const DOMAIN_BY_KEY_SLOT = {
   2: 'salesforce',
   3: 'hubspot',
   4: 'marketo',
-  5: 'gtm',
-  6: 'data-hygiene'
+  5: 'gtm'
 };
 
 // Backward-compat aliases (old tier names → domain names)

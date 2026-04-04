@@ -95,13 +95,6 @@ const PLUGIN_POLICIES = {
     keywords: ['gtm', 'go-to-market', 'quota', 'capacity', 'arr', 'mrr', 'market size'],
     agentPatterns: [/^opspal-gtm-planning:/, /^gtm-/]
   },
-  'opspal-data-hygiene': {
-    priority: 560,
-    maxSkills: 4,
-    maxCommands: 4,
-    keywords: ['dedup', 'duplicate', 'merge', 'cleanup', 'data quality', 'data hygiene'],
-    agentPatterns: [/^opspal-data-hygiene:/]
-  },
   'opspal-ai-consult': {
     priority: 500,
     maxSkills: 4,
@@ -318,10 +311,6 @@ function selectPlugins(taskText, agentName, keywordSummary) {
     }
 
     score += pluginKeywordHits(pluginName, normalizedTask) * 40;
-
-    if (pluginName === 'opspal-data-hygiene' && keywordSummary.domains.includes('hygiene')) {
-      score += 120;
-    }
 
     if (pluginName === 'opspal-ai-consult' && normalizedTask.includes('consult')) {
       score += 120;

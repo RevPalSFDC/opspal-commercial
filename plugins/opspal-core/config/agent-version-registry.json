@@ -865,32 +865,6 @@
         }
       ]
     },
-    "opspal-data-hygiene:contact-dedup-orchestrator": {
-      "currentVersion": "1.0.0",
-      "plugin": "opspal-data-hygiene",
-      "shortName": "contact-dedup-orchestrator",
-      "firstTracked": "2026-01-31T22:32:09.868Z",
-      "history": [
-        {
-          "version": "1.0.0",
-          "date": "2026-01-31T22:32:09.868Z",
-          "description": "Initial tracking"
-        }
-      ]
-    },
-    "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator": {
-      "currentVersion": "1.0.0",
-      "plugin": "opspal-data-hygiene",
-      "shortName": "sfdc-hubspot-dedup-orchestrator",
-      "firstTracked": "2026-01-31T22:32:09.868Z",
-      "history": [
-        {
-          "version": "1.0.0",
-          "date": "2026-01-31T22:32:09.868Z",
-          "description": "Initial tracking"
-        }
-      ]
-    },
     "opspal-gtm-planning:forecast-orchestrator": {
       "currentVersion": "1.0.0",
       "plugin": "opspal-gtm-planning",

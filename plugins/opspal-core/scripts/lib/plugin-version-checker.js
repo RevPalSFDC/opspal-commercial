@@ -33,7 +33,6 @@ const PLUGINS_TO_CHECK = [
   'salesforce-plugin',
   'hubspot-plugin',
   'opspal-core',
-  'data-hygiene-plugin',
   'developer-tools-plugin',
   'gtm-planning-plugin',
   'ai-consult-plugin'

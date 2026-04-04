@@ -33,8 +33,8 @@ const TIER_INFO = {
   },
   enterprise: {
     label: 'Enterprise',
-    domains: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm', 'data-hygiene'],
-    description: 'Full access: all domains including Marketo lead quality, GTM benchmarks, dedup clustering, and canonical selectors'
+    domains: ['core', 'salesforce', 'hubspot', 'marketo', 'gtm'],
+    description: 'Full access: all domains including Marketo lead quality, GTM benchmarks, and canonical selectors'
   },
   trial: {
     label: 'Trial',
@@ -49,8 +49,7 @@ const DOMAIN_ASSET_COUNTS = {
   salesforce: 16,
   hubspot: 4,
   marketo: 4,
-  gtm: 1,
-  'data-hygiene': 5
+  gtm: 1
 };
 const TOTAL_ASSETS = Object.values(DOMAIN_ASSET_COUNTS).reduce((a, b) => a + b, 0);
 

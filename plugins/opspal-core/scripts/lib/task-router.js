@@ -808,7 +808,7 @@ class TaskRouter {
             return score;
         }
 
-        const neutralPlatforms = new Set(['core', 'data-hygiene', 'ai-consult']);
+        const neutralPlatforms = new Set(['core', 'ai-consult']);
 
         if (platformIntent.size === 1) {
             const [target] = [...platformIntent];

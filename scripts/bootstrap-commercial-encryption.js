@@ -31,8 +31,7 @@ const PLUGIN_DOMAIN_MAP = {
   'opspal-salesforce': 'salesforce',
   'opspal-hubspot': 'hubspot',
   'opspal-marketo': 'marketo',
-  'opspal-gtm-planning': 'gtm',
-  'opspal-data-hygiene': 'data-hygiene'
+  'opspal-gtm-planning': 'gtm'
 };
 
 function parseArgs(argv) {

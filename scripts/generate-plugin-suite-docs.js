@@ -242,8 +242,6 @@ function buildReadme() {
 
   lines.push(
     '',
-    'Deprecated compatibility note: `opspal-data-hygiene` remains published for compatibility, but new installs should prefer the deduplication commands in `opspal-core`.',
-    '',
     '## Support',
     '',
     '- Product site: https://opspal.gorevpal.com',

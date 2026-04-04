@@ -58,7 +58,6 @@ const PLUGIN_DIR_NAMES = {
   'opspal-marketo': ['opspal-marketo', 'marketo-plugin'],
   'opspal-core': ['opspal-core', 'core'],
   'opspal-gtm-planning': ['opspal-gtm-planning', 'gtm-planning-plugin'],
-  'opspal-data-hygiene': ['opspal-data-hygiene', 'data-hygiene-plugin'],
   'opspal-monday': ['opspal-monday', 'monday-plugin'],
   'opspal-ai-consult': ['opspal-ai-consult', 'ai-consult-plugin']
 };

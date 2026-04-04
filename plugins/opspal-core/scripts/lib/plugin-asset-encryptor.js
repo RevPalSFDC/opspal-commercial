@@ -498,14 +498,14 @@ function main() {
     info('Commands:');
     info('  key-setup                          Generate domain-scoped keys (6 domains)');
     info('  init      --plugin <name>          Create encryption.json manifest');
-    info('  encrypt   --plugin <name> --file <path> [--domain <core|salesforce|hubspot|marketo|gtm|data-hygiene>]');
-    info('  encrypt   --plugin <name> --dir <path> [--domain <core|salesforce|hubspot|marketo|gtm|data-hygiene>]');
+    info('  encrypt   --plugin <name> --file <path> [--domain <core|salesforce|hubspot|marketo|gtm>]');
+    info('  encrypt   --plugin <name> --dir <path> [--domain <core|salesforce|hubspot|marketo|gtm>]');
     info('  decrypt   --plugin <name> --file <path> [--output-dir <dir>]');
     info('  verify    --plugin <name>          Verify all encrypted assets');
     info('  re-encrypt --plugin <name> [--rotate-key] [--domain <domain>]  Re-encrypt all assets');
     info('  status    --plugin <name>          Show encryption status');
     info('');
-    info('Domains: core, salesforce, hubspot, marketo, gtm, data-hygiene');
+    info('Domains: core, salesforce, hubspot, marketo, gtm');
     info('(Legacy --tier flags are accepted and mapped to domains)');
     process.exit(0);
   }
@@ -524,8 +524,7 @@ const PLUGIN_DOMAIN_MAP = {
   'opspal-salesforce': 'salesforce',
   'opspal-hubspot': 'hubspot',
   'opspal-marketo': 'marketo',
-  'opspal-gtm-planning': 'gtm',
-  'opspal-data-hygiene': 'data-hygiene'
+  'opspal-gtm-planning': 'gtm'
 };
 
 // ─── encryptForCommercial ────────────────────────────────────────────────────

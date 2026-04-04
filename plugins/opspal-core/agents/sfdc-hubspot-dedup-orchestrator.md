@@ -1,10 +1,9 @@
 ---
 name: sfdc-hubspot-dedup-orchestrator
 model: sonnet
-description: "\"**DEPRECATED** - Use opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator instead."
-color: gray
-deprecated: true
-deprecation_target: "opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
+description: "Orchestrates Company/Account deduplication workflows across HubSpot and Salesforce."
+color: orange
+deprecated: false
 tools:
   - Read
   - Write

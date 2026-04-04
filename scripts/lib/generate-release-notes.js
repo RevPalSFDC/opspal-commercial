@@ -167,8 +167,6 @@ const PLUGIN_LABELS = {
   'gtm': 'GTM Planning',
   'opspal-okrs': 'OKRs',
   'okrs': 'OKRs',
-  'opspal-data-hygiene': 'Data Hygiene',
-  'data-hygiene': 'Data Hygiene',
   'opspal-monday': 'Monday.com',
   'monday': 'Monday.com',
   'opspal-ai-consult': 'AI Consult',

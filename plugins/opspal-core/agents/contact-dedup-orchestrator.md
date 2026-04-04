@@ -1,10 +1,9 @@
 ---
 name: contact-dedup-orchestrator
 model: sonnet
-description: "\"**DEPRECATED** - Use opspal-data-hygiene:contact-dedup-orchestrator instead."
-color: gray
-deprecated: true
-deprecation_target: "opspal-data-hygiene:contact-dedup-orchestrator"
+description: "Orchestrates contact and lead deduplication workflows across HubSpot and Salesforce."
+color: orange
+deprecated: false
 tools:
   - Read
   - Write
